@@ -1,56 +1,64 @@
 /**
- * Constante que define a tabela de pontuação UMA.
- * A regra de negócio do Riichi Mahjong aplica bônus/penalidades baseadas 
- * em quantos jogadores terminaram acima da pontuação base (30.000).
+ * RIICHI TOURNAMENT PRO - MOTOR FINAL (VENTOS E OPONENTES PERFEITOS)
  */
+
 const REGRAS_PONTUACAO = { 
     UMA: { 
-        0: [8, 4, -4, -8], // 0 jogadores acima de 30k
-        1: [12, -1, -3, -8], // 1 jogador acima de 30k
-        2: [8, 4, -4, -8], // 2 jogadores acima de 30k (Padrão)
-        3: [8, 3, 1, -12], // 3 jogadores acima de 30k
-        4: [8, 4, -4, -8]  // Todos acima de 30k
+        0: [8, 4, -4, -8], 1: [12, -1, -3, -8], 2: [8, 4, -4, -8], 3: [8, 3, 1, -12], 4: [8, 4, -4, -8] 
     } 
 };
 
-/**
- * Embaralha um array de forma aleatória usando o algoritmo Fisher-Yates.
- * Essencial para garantir que o início do torneio seja imparcial.
- * * @param {Array} lista - A lista de jogadores a ser embaralhada.
- * @returns {Array} A lista embaralhada.
- */
-function embaralharJogadores(lista) {
-    for (let i = lista.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [lista[i], lista[j]] = [lista[j], lista[i]];
-    }
-    return lista;
-}
-
-/**
- * Gera o chaveamento do torneio para 4 rodadas.
- * Aplica uma rotação matemática para garantir que cada jogador passe por todos 
- * os ventos (Leste, Sul, Oeste, Norte) exatamente uma vez.
- * * @param {Array} nomesDosJogadores - Lista de nomes já embaralhada.
- * @returns {Array} Estrutura contendo rodadas, mesas e assentos.
- */
 function gerarChaveamentoTorneio(nomesDosJogadores) {
-    const totalJogadores = nomesDosJogadores.length;
+    const n = nomesDosJogadores.length;
     const nomesDosVentos = ["Leste", "Sul", "Oeste", "Norte"];
     let gradeDoTorneio = [];
 
-    for (let rodada = 0; rodada < 4; rodada++) {
+    // ====================================================================
+    // CASO ESPECIAL: 8 JOGADORES (A Matriz Perfeita)
+    // Garante 0% de repetição de ventos e máximo de 2 encontros por pessoa.
+    // ====================================================================
+    if (n === 8) {
+        const matrizPerfeita = [
+            [ [0, 1, 2, 3], [4, 5, 6, 7] ], // Rodada 1
+            [ [5, 4, 0, 1], [2, 3, 7, 6] ], // Rodada 2
+            [ [6, 0, 4, 2], [1, 7, 3, 5] ], // Rodada 3
+            [ [3, 6, 5, 0], [7, 2, 1, 4] ]  // Rodada 4
+        ];
+
+        for (let rIdx = 0; rIdx < 4; rIdx++) {
+            let mesasDaRodada = [];
+            matrizPerfeita[rIdx].forEach(mesaIndices => {
+                let jogadoresNaMesa = mesaIndices.map((pIdx, vIdx) => {
+                    return {
+                        nome: nomesDosJogadores[pIdx],
+                        vento: nomesDosVentos[vIdx] // A cadeira física dita o vento
+                    };
+                });
+                mesasDaRodada.push(jogadoresNaMesa);
+            });
+            gradeDoTorneio.push(mesasDaRodada);
+        }
+        return gradeDoTorneio;
+    }
+
+    // ====================================================================
+    // CASO GERAL: 12, 16, 20+ JOGADORES (Motor de Rotação)
+    // Garante ventos únicos e mistura avançada de mesas.
+    // ====================================================================
+    for (let rIdx = 0; rIdx < 4; rIdx++) {
         let mesasDaRodada = [];
-        for (let mesaIdx = 0; mesaIdx < totalJogadores / 4; mesaIdx++) {
+        let nPorMesa = n / 4; 
+        
+        for (let m = 0; m < nPorMesa; m++) {
             let jogadoresNaMesa = [];
-            for (let ventoIdx = 0; ventoIdx < 4; ventoIdx++) {
-                // Cálculo de Rotação Scramble:
-                // Garante que o jogador mude de mesa e de assento a cada rodada.
-                let indiceDoJogador = (mesaIdx * 4 + ventoIdx + rodada) % totalJogadores;
-                
+            for (let v = 0; v < 4; v++) {
+                let grupoFonte = (v + rIdx) % 4;
+                let deslocamento = (m + rIdx * (v + 1)) % nPorMesa;
+                let pIdx = (grupoFonte * nPorMesa) + deslocamento;
+
                 jogadoresNaMesa.push({
-                    nome: nomesDosJogadores[indiceDoJogador],
-                    vento: nomesDosVentos[ventoIdx]
+                    nome: nomesDosJogadores[pIdx],
+                    vento: nomesDosVentos[v] 
                 });
             }
             mesasDaRodada.push(jogadoresNaMesa);
@@ -60,30 +68,22 @@ function gerarChaveamentoTorneio(nomesDosJogadores) {
     return gradeDoTorneio;
 }
 
-/**
- * Calcula a pontuação final de uma mesa após o término da partida.
- * Converte a pontuação bruta em pontos de torneio seguindo a regra da UMA.
- * * @param {Array} pontuacoesBrutas - Array de objetos {nome, score}.
- * @returns {Array} Array com {nome, pontosDeTorneio}.
- */
+function embaralharJogadores(lista) {
+    for (let i = lista.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [lista[i], lista[j]] = [lista[j], lista[i]];
+    }
+    return lista;
+}
+
 function calcularPontosDaPartida(pontuacoesBrutas) {
-    // Ordena do maior score para o menor
     let ordenados = [...pontuacoesBrutas].sort((a, b) => b.score - a.score);
-    
-    // Regra de negócio: conta quantos fizeram 30.000 ou mais
     const jogadoresAcimaDoBase = ordenados.filter(p => p.score >= 30000).length;
     const tabelaUmaSelecionada = REGRAS_PONTUACAO.UMA[jogadoresAcimaDoBase];
 
-    return ordenados.map((jogador, posicao) => {
-        // Cálculo: (Score - 30.000) / 1000 + Bônus da UMA
-        let pontosDeTorneio = ((jogador.score - 30000) / 1000) + tabelaUmaSelecionada[posicao];
-        
-        // Penalidade 'Tobi': Se o jogador ficou negativo, perde 3 pontos extras
-        if (jogador.score < 0) pontosDeTorneio -= 3;
-        
-        return { 
-            nome: jogador.nome, 
-            pontos: parseFloat(pontosDeTorneio.toFixed(1)) 
-        };
+    return ordenados.map((jogador, posicaoIdx) => {
+        let pontosTorneio = ((jogador.score - 30000) / 1000) + tabelaUmaSelecionada[posicaoIdx];
+        if (jogador.score < 0) pontosTorneio -= 3;
+        return { nome: jogador.nome, pontos: parseFloat(pontosTorneio.toFixed(1)) };
     });
 }
