@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riichi Tournament Pro</title>
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <span class="material-icons" style="font-size: 48px;">emoji_events</span>
+        <h1 style="margin:0">Riichi Tournament Pro</h1>
+    </header>
+
+    <main>
+        <section id="setup" class="card">
+            <h3><span class="material-icons">settings</span> Configuração do Torneio</h3>
+            <div class="alert-info">
+                <span class="material-icons">info</span>
+                Regra: Mínimo de 8 jogadores e sempre múltiplo de 4.
+            </div>
+            <textarea id="playerList" placeholder="Digite os nomes (um por linha)..."></textarea>
+            <div class="actions">
+                <button onclick="iniciarTorneio()" class="btn-primary"><span class="material-icons">casino</span> INICIAR TORNEIO</button>
+                <button onclick="resetarTudo()" class="btn-outline"><span class="material-icons">refresh</span> REINICIAR</button>
+            </div>
+        </section>
+
+        <section id="championship" class="hidden">
+            <h3><span class="material-icons">grid_view</span> Grade de Rodadas</h3>
+            <div id="roundsContainer" class="round-section"></div>
+        </section>
+
+        <section id="results" class="card">
+            <h3><span class="material-icons">leaderboard</span> Classificação Geral</h3>
+            <button onclick="gerarPDF()" class="btn-secondary">
+                <span class="material-icons">download</span> EXPORTAR PDF
+            </button>
+            <table id="rankingTable">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Pos</th>
+                        <th>Jogador</th>
+                        <th style="text-align: right;">Pontos</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="scripts/engine.js"></script>
+    <script src="scripts/ui.js"></script>
+</body>
+</html>
