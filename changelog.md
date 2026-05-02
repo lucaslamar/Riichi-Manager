@@ -17,3 +17,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 ### Modificado
 - Entrada Flexível de Jogadores: O sistema agora aceita nomes separados tanto por quebras de linha quanto por vírgulas. Isso facilita a colagem de listas vindas de apps de mensagens ou planilhas.
 - Auto-Formatação de Nomes (Capitalização): Implementada lógica para garantir que nomes próprios sejam exibidos corretamente.
+
+## [1.2.0] - 2026-01-15
+### Adiconado
+- Coloca gerador de PDF para resultados do torneio.
