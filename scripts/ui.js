@@ -9,23 +9,41 @@ let bancoDeDados = JSON.parse(localStorage.getItem('mahjong_pro_db')) || {
 
 /**
  * Inicia o processo de criação do torneio.
- * Valida a regra de negócio de mínimo 8 jogadores e múltiplos de 4.
+ * Tratamento de dados:
+ * 1. Separa nomes por quebra de linha ou vírgula.
+ * 2. Formata nomes (Primeira Letra Maiúscula, demais minúsculas).
+ * 3. Valida regras de negócio (Mínimo 8 jogadores e múltiplo de 4).
  */
 function iniciarTorneio() {
     const campoTexto = document.getElementById('playerList');
-    const nomesValidos = campoTexto.value.split('\n')
-        .map(n => n.trim())
-        .filter(n => n !== "");
     
-    if (nomesValidos.length < 8) {
-        return alert("Erro: Um torneio profissional exige pelo menos 8 jogadores (2 mesas).");
+    // REGEX: Separa por vírgula (,) OU quebra de linha (\n)
+    const nomesBrutos = campoTexto.value.split(/,|\n/);
+    
+    const nomesProcessados = nomesBrutos
+        .map(nome => {
+            // Remove espaços extras no início e fim
+            let n = nome.trim();
+            if (n === "") return null;
+
+            // FORMATAÇÃO: Primeira letra maiúscula de cada palavra (Title Case)
+            // Ex: "kitos mio" -> "Kitos Mio", "LAMAR" -> "Lamar"
+            return n.toLowerCase().replace(/(?:^|\s)\S/g, function(a) {
+                return a.toUpperCase();
+            });
+        })
+        .filter(n => n !== null); // Remove entradas vazias
+
+    // Validação de Regra de Negócio
+    if (nomesProcessados.length < 8) {
+        return alert("Erro: O torneio precisa de pelo menos 8 jogadores.");
     }
-    if (nomesValidos.length % 4 !== 0) {
-        return alert("Erro: O total de jogadores deve ser múltiplo de 4 para que não haja mesas incompletas.");
+    if (nomesProcessados.length % 4 !== 0) {
+        return alert(`Erro: Tens ${nomesProcessados.length} jogadores. O total deve ser múltiplo de 4.`);
     }
 
-    // Preparação dos dados
-    const nomesEmbaralhados = embaralharJogadores(nomesValidos);
+    // Preparação e Chaveamento
+    const nomesEmbaralhados = embaralharJogadores(nomesProcessados);
     bancoDeDados.jogadores = nomesEmbaralhados;
     bancoDeDados.classificacao = {};
     
