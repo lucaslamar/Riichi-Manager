@@ -8,7 +8,6 @@ let bancoDeDados = storage.load();
 
 /**
  * Alterna a visibilidade entre a tela de configuração (Setup) e a tela do Torneio.
- * @param {boolean} torneioAtivo - Define se o torneio já começou.
  */
 const alternarInterface = (torneioAtivo) => {
     const setupContainer = document.getElementById('setupContainer');
@@ -24,7 +23,7 @@ const alternarInterface = (torneioAtivo) => {
 };
 
 /**
- * Inicializa o torneio: valida jogadores, embaralha, gera o chaveamento e salva o estado inicial.
+ * Inicializa o torneio: valida jogadores, embaralha e gera o chaveamento.
  */
 function iniciarTorneio() {
     const campoTexto = document.getElementById('playerList');
@@ -32,10 +31,10 @@ function iniciarTorneio() {
     .split(/,|\n/)
     .map(nome => {
         return nome.trim()
-            .toLowerCase() // Primeiro deixa tudo minúsculo
-            .split(/\s+/)  // Divide se houver nome e sobrenome (espaço)
-            .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1)) // Capitaliza cada palavra
-            .join(' ');    // Junta de novo com espaço
+            .toLowerCase()
+            .split(/\s+/)
+            .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+            .join(' ');
     })
     .filter(nome => nome !== "");
 
@@ -43,16 +42,12 @@ function iniciarTorneio() {
         return alert("Erro: Mínimo 8 jogadores e o total deve ser múltiplo de 4. \nQuantidade: " + nomesValidos.length);
     }
 
-    // Preparação do banco de dados inicial
     bancoDeDados.jogadores = embaralharJogadores(nomesValidos);
     bancoDeDados.classificacao = {};
     bancoDeDados.mesasConcluidas = {};
     bancoDeDados.pontosDasMesas = {};
     
-    // Inicializa ranking com zero para todos
     bancoDeDados.jogadores.forEach(nome => bancoDeDados.classificacao[nome] = 0);
-    
-    // Gera a Matriz Perfeita ou Rotação
     bancoDeDados.chaveamento = gerarChaveamentoTorneio(bancoDeDados.jogadores);
 
     storage.save(bancoDeDados);
@@ -62,11 +57,6 @@ function iniciarTorneio() {
 
 /**
  * Renderiza visualmente todas as rodadas e mesas do torneio.
- * Utiliza as cores vibrantes e estilos da MAIN.
- */
-/**
- * Renderiza visualmente todas as rodadas e mesas do torneio.
- * Utiliza as cores vibrantes e estilos da MAIN.
  */
 function renderizarInterfaceDoTorneio() {
     const container = document.getElementById('roundsContainer');
@@ -131,24 +121,29 @@ function renderizarInterfaceDoTorneio() {
 }
 
 /**
- * Coleta os pontos da mesa, calcula os pontos de torneio e atualiza o ranking.
- * @param {number} rIdx - Índice da Rodada.
- * @param {number} mIdx - Índice da Mesa.
- * @param {Array} dadosJogadores - Array com os objetos dos jogadores da mesa.
+ * Coleta os pontos, formata para o confirm e salva os resultados.
  */
 function registrarResultadoDaMesa(rIdx, mIdx, dadosJogadores) {
     const mesaKey = `${rIdx}_${mIdx}`;
     if (bancoDeDados.mesasConcluidas[mesaKey]) return;
 
     let resumoParaConfirmacao = "";
+    
     const pontuacoesBrutas = dadosJogadores.map((jogador, index) => {
-        const inputValor = document.getElementById(`score_${rIdx}_${mIdx}_${index}`).value;
-        resumoParaConfirmacao += `\n${jogador.nome}: ${inputValor}`;
+        const inputElement = document.getElementById(`score_${rIdx}_${mIdx}_${index}`);
+        const valorRaw = inputElement.value;
+
+        // Limpa separadores para o cálculo matemático
+        const valorLimpo = parseInt(valorRaw.replace(/[\.,]/g, '')) || 0;
+
+        // Formata visualmente para 30.000 no alert
+        const valorFormatado = valorLimpo.toLocaleString('pt-BR');
+        resumoParaConfirmacao += `\n${jogador.nome}: ${valorFormatado}`;
         
         return { 
             nome: jogador.nome, 
-            score: parseInt(inputValor.replace(/[\.,]/g, '')) || 0,
-            textoOriginal: inputValor
+            score: valorLimpo, 
+            textoOriginal: valorFormatado 
         };
     });
 
@@ -157,12 +152,10 @@ function registrarResultadoDaMesa(rIdx, mIdx, dadosJogadores) {
     if (confirmar) {
         const resultadosProcessados = calcularPontosDaPartida(pontuacoesBrutas);
         
-        // Atualiza o ranking acumulado
         resultadosProcessados.forEach(res => {
             bancoDeDados.classificacao[res.nome] += res.pontos;
         });
 
-        // Trava a mesa e salva os dados
         bancoDeDados.mesasConcluidas[mesaKey] = true;
         bancoDeDados.pontosDasMesas[mesaKey] = pontuacoesBrutas.map(p => p.textoOriginal);
         
@@ -172,7 +165,7 @@ function registrarResultadoDaMesa(rIdx, mIdx, dadosJogadores) {
 }
 
 /**
- * Atualiza o corpo da tabela de ranking no HTML, ordenando do maior para o menor.
+ * Atualiza a tabela de ranking.
  */
 function atualizarTabelaDeRanking() {
     const corpoTabela = document.querySelector('#rankingTable tbody');
@@ -192,37 +185,6 @@ function atualizarTabelaDeRanking() {
     `).join('');
 }
 
-/**
- * Gera e baixa o PDF da classificação atual.
- */
-function gerarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const dataAtual = `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
-
-    doc.setFontSize(18);
-    doc.text("Classificação Geral - Riichi Tournament Pro", 14, 20);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Exportado em: ${dataAtual}`, 14, 28);
-
-    const linhasTabela = Object.entries(bancoDeDados.classificacao)
-        .sort((a, b) => b[1] - a[1])
-        .map(([nome, pontos], i) => [`${i + 1}º`, nome, pontos.toFixed(1)]);
-
-    doc.autoTable({
-        startY: 35,
-        head: [['Pos', 'Jogador', 'Pontos PT']],
-        body: linhasTabela,
-        theme: 'striped',
-        headStyles: { fillColor: [33, 150, 243] }
-    });
-
-    doc.save(`ranking_mahjong_${new Date().getTime()}.pdf`);
-}
-
-// Inicialização ao carregar a página
 window.onload = () => {
     const possuiTorneioAtivo = bancoDeDados.chaveamento && bancoDeDados.jogadores.length > 0;
     
@@ -234,9 +196,7 @@ window.onload = () => {
     }
 };
 
-// Exposição de funções para o HTML
 window.ui = {
     iniciarTorneio,
-    resetarTudo: () => storage.clear(),
-    gerarPDF
+    resetarTudo: () => storage.clear()
 };

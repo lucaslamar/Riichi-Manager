@@ -72,7 +72,7 @@ function gerarChaveamentoTorneio(jogadores) {
 
 function calcularPontosDaPartida(resultados) {
     const ordenados = [...resultados].sort((a, b) => b.score - a.score);
-    const cavalos = [15, 5, -5, -15];
+    const cavalos = [8, 4, -4, -8];
 
     return ordenados.map((res, index) => {
         const pontosBase = (res.score - 30000) / 1000;
