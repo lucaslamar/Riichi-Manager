@@ -18,4 +18,11 @@
 ### Adicionado
  - Melhoria no design e com diferenciação cromática por rodada para evitar confusão visual.
 
+## [2.0.0] - 2026-05-03
+- Motor de Ventos "Carrossel": Implementação de rotação física de mesa por shift de array, garantindo matematicamente zero repetições de ventos em 4 rodadas.
+- Algoritmo Social Golfer (16p): Integração de matriz fixa para 16 jogadores, eliminando 100% das colisões de oponentes (12 adversários únicos por jogador).  
+- Algoritmo de Saltos Primos (20p+): Distribuição dinâmica para grandes grupos, priorizando a rotação de ventos sobre a repetição mínima de oponentes.  
 
+### Corrigido
+- Bug da "Cadeira Fixa": Resolvido o problema onde IDs específicos ficavam presos no Norte ou Leste devido a colisões de permutação.
+- Estabilidade de Dados: Refatoração da função de chaveamento para evitar objetos nulos em mesas incompletas.

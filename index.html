@@ -1,88 +1,106 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riichi Tournament Pro</title>
+
     <!-- Fontes e Ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Arquivo de Estilos Unificado -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Bibliotecas PDF -->
+    <!-- Dependências Externas (PDF) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
-
 <body>
 
-    <!-- Cabeçalho com temática de Mahjong e espaçamento -->
-    <header style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 40px 0 60px 0;">
-        <div style="background: white; border: 2px solid #ccc; border-radius: 5px; width: 45px; height: 60px; display: flex; justify-content: center; align-items: center; box-shadow: 3px 3px 0px #e0e0e0; font-size: 2rem; color: #d32f2f; font-weight: bold;">
-            中
-        </div>
-        <h1 style="color: #2196F3; font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: -1px; margin: 0;">
-            Riichi Tournament Pro
-        </h1>
+    <!-- Cabeçalho Principal (Visual da Main) -->
+    <header class="main-header">
+        <div class="mahjong-tile">中</div>
+        <h1 class="main-title">Riichi Tournament Pro</h1>
     </header>
 
-    <main style="margin-top: 20px;">
-        <!-- TELA DE CONFIGURAÇÃO -->
+    <main class="content-wrapper">
+
+        <!-- TELA DE CONFIGURAÇÃO (SETUP) -->
         <section id="setupContainer" class="card">
-            <h3 style="color: #1a3a5a;"><i class="fas fa-cog"></i> Configuração do Torneio</h3>
-            <div class="alert-info">
-                <i class="fas fa-info-circle"></i> Regra: Mínimo de 8 jogadores e sempre múltiplo de 4.
+            <div class="section-title-container">
+                <i class="fas fa-cog section-icon"></i>
+                <h3>Configuração do Torneio</h3>
             </div>
-            <textarea id="playerList" placeholder="Digite os nomes (um por linha)..."></textarea>
+
+            <div class="alert-info">
+                <i class="fas fa-info-circle"></i>
+                Regra: Mínimo de 8 jogadores e sempre múltiplo de 4 para mesas completas.
+            </div>
+
+            <textarea id="playerList" 
+                placeholder="Digite os nomes dos jogadores (um por linha ou separados por vírgula)..."></textarea>
+
             <div class="actions">
-                <button onclick="iniciarTorneio()" class="btn-primary">
+                <button onclick="ui.iniciarTorneio()" class="btn-primary">
                     <i class="fas fa-dice"></i> INICIAR TORNEIO
                 </button>
             </div>
         </section>
 
-        <!-- TELA DE RANKING -->
+        <!-- TELA DE RANKING (CLASSIFICAÇÃO) -->
         <section id="championship" class="card hidden">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-                <i class="fas fa-chart-bar" style="color: #1a3a5a; font-size: 1.5rem; line-height: 1;"></i>
-                <h3 style="margin: 0; color: #1a3a5a; border: none; padding: 0; line-height: 1;">Classificação Geral</h3>
+            <div class="section-title-container">
+                <i class="fas fa-chart-bar section-icon"></i>
+                <h3>Classificação Geral</h3>
             </div>
 
-            <button onclick="gerarPDF()" class="btn-primary" style="background: #4a4a4a; margin-bottom: 25px; border-radius: 4px;">
-                <i class="fas fa-download"></i> EXPORTAR PDF
-            </button>
+            <div class="actions" style="margin-bottom: 20px;">
+                <button onclick="ui.gerarPDF()" class="btn-primary" style="background: #4a4a4a;">
+                    <i class="fas fa-download"></i> EXPORTAR PDF
+                </button>
+            </div>
 
             <table id="rankingTable">
                 <thead>
-                    <tr style="border-bottom: 2px solid #eee;">
-                        <th style="text-align: left; color: #666;">Raking</th>
-                        <th style="text-align: left; color: #666;">Jogador</th>
-                        <th style="text-align: right; color: #666;">Pontos</th>
+                    <tr class="table-header-row">
+                        <th>Rank</th>
+                        <th>Jogador</th>
+                        <th style="text-align: right;">Pontos PT</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Gerado pelo JS -->
+                    <!-- Injetado dinamicamente via ui.js -->
                 </tbody>
             </table>
 
-            <button onclick="resetarTudo()" class="btn-outline" style="margin-top: 30px; color: #ef5350; border-color: #ef5350;">
-                <i class="fas fa-undo"></i> REINICIAR TORNEIO
-            </button>
+            <div class="actions" style="margin-top: 30px;">
+                <button onclick="ui.resetarTudo()" class="btn-outline" style="color: #ef5350; border-color: #ef5350;">
+                    <i class="fas fa-undo"></i> REINICIAR TORNEIO
+                </button>
+            </div>
         </section>
 
-        <!-- GRADE DE RODADAS -->
+        <!-- GRADE DE RODADAS E MESAS -->
         <div id="tablesContainer" class="hidden">
-            <div style="display: flex; align-items: center; gap: 12px; margin: 30px 0 15px 10px;">
-                <i class="fas fa-th-large" style="color: #1a3a5a; line-height: 1;"></i>
-                <h3 style="margin: 0; color: #1a3a5a; border: none; padding: 0; line-height: 1;">Grade de Rodadas</h3>
+            <div class="section-title-container" style="margin-top: 30px;">
+                <i class="fas fa-th-large section-icon"></i>
+                <h3>Grade de Rodadas</h3>
             </div>
-            <div id="roundsContainer" class="round-section"></div>
+
+            <!-- Container onde o Motor de Rotação injetará as Mesas -->
+            <div id="roundsContainer" class="rounds-container">
+                <!-- Gerado dinamicamente via ui.js -->
+            </div>
         </div>
+
     </main>
 
-    <script src="scripts/engine.js"></script>
+    <!-- Scripts do Sistema (Ordem de Dependência) -->
     <script src="scripts/storage.js"></script>
+    <script src="scripts/engine.js"></script>
+    <script src="scripts/pdf.js"></script>
     <script src="scripts/ui.js"></script>
+
 </body>
 </html>
