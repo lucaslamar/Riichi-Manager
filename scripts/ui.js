@@ -65,6 +65,12 @@ function renderizarInterfaceDoTorneio() {
     const coresVivas = ['#2196F3', '#4CAF50', '#FF9800', '#E91E63'];
     const nomesDosVentos = ["Leste", "Sul", "Oeste", "Norte"];
 
+    // 1. Limpa e configura o container pai para ser um GRID
+    container.style.display = "grid";
+    container.style.gridTemplateColumns = "repeat(auto-fit, minmax(320px, 1fr))";
+    container.style.gap = "20px";
+    container.style.alignItems = "stretch";
+
     container.innerHTML = bancoDeDados.chaveamento.map((rodada, rIdx) => {
         const corRodada = coresVivas[rIdx % coresVivas.length];
 
@@ -74,8 +80,8 @@ function renderizarInterfaceDoTorneio() {
             const pontosSalvos = bancoDeDados.pontosDasMesas[mesaKey] || ["30.000", "30.000", "30.000", "30.000"];
 
             return `
-                <div class="mesa-box" style="border-top: 4px solid ${corRodada};">
-                    <div class="mesa-header" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <div class="mesa-box" style="border-top: 4px solid ${corRodada}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+                    <div class="mesa-header" style="display: flex; justify-content: space-between; margin-bottom: 15px; flex-shrink: 0;">
                         <span style="color: white; background: ${corRodada}; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem;">
                             RODADA ${rIdx + 1}
                         </span>
@@ -84,30 +90,33 @@ function renderizarInterfaceDoTorneio() {
                         </span>
                     </div>
 
-                    ${mesa.map((jogador, jIdx) => `
-                        <div class="player-row" style="display: flex; align-items: center; margin-bottom: 8px;">
-                            <span class="vento-tag" style="background-color: ${coresVivas[jIdx]};">
-                                ${nomesDosVentos[jIdx]}
-                            </span>
-                            <span style="flex-grow: 1; font-weight: 700; color: #444; margin-left: 10px;">
-                                ${jogador.nome}
-                            </span>
-                            <input type="text" 
-                                inputmode="numeric" 
-                                pattern="[0-9]*"
-                                id="score_${rIdx}_${mIdx}_${jIdx}" 
-                                value="${pontosSalvos[jIdx]}" 
-                                class="${estaTravada ? 'input-locked' : ''}"
-                                ${estaTravada ? 'disabled' : ''}
-                                onfocus="if(this.value=='30.000'){this.value=''}"
-                                onblur="if(this.value==''){this.value='30.000'}"
-                                oninput="this.value = this.value.replace(/[^-0-9.,]/g, '')">
-                        </div>
-                    `).join('')}
+                    <div style="flex-grow: 1;">
+                        ${mesa.map((jogador, jIdx) => `
+                            <div class="player-row" style="display: flex; align-items: center; margin-bottom: 8px; gap: 5px;">
+                                <span class="vento-tag" style="background-color: ${coresVivas[jIdx]}; flex-shrink: 0;">
+                                    ${nomesDosVentos[jIdx]}
+                                </span>
+                                <span style="flex-grow: 1; font-weight: 700; color: #444; margin-left: 5px; min-height: 2.4em; display: flex; align-items: center; line-height: 1.1; font-size: 0.85rem; overflow: hidden;">
+                                    ${jogador.nome}
+                                </span>
+                                <input type="text" 
+                                    inputmode="numeric" 
+                                    pattern="[0-9]*"
+                                    id="score_${rIdx}_${mIdx}_${jIdx}" 
+                                    value="${pontosSalvos[jIdx]}" 
+                                    class="${estaTravada ? 'input-locked' : ''}"
+                                    ${estaTravada ? 'disabled' : ''}
+                                    style="width: 70px; flex-shrink: 0;"
+                                    onfocus="if(this.value=='30.000'){this.value=''}"
+                                    onblur="if(this.value==''){this.value='30.000'}"
+                                    oninput="this.value = this.value.replace(/[^-0-9.,]/g, '')">
+                            </div>
+                        `).join('')}
+                    </div>
 
                     <button onclick='registrarResultadoDaMesa(${rIdx}, ${mIdx}, ${JSON.stringify(mesa)})' 
                             class="btn-primary ${estaTravada ? 'btn-locked' : ''}" 
-                            style="background: ${estaTravada ? '#999' : corRodada}; width: 100%; margin-top: 10px;">
+                            style="background: ${estaTravada ? '#999' : corRodada}; width: 100%; margin-top: 15px; flex-shrink: 0;">
                         ${estaTravada 
                             ? '<i class="fas fa-check-circle"></i> MESA ARQUIVADA' 
                             : '<i class="fas fa-save"></i> GUARDAR MESA'}

@@ -65,4 +65,7 @@ function gerarPDF() {
     // Usa um timestamp no nome para evitar arquivos duplicados com o mesmo nome
     const timestamp = new Date().getTime();
     documento.save(`ranking_mahjong_${timestamp}.pdf`);
+
+    // No final do arquivo pdf.js (referência imagem_e11e42.png)
+    window.ui.gerarPDF = gerarPDF;
 }
