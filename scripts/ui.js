@@ -1,40 +1,30 @@
-/**
- * Estado global da aplicação, carregado do armazenamento local (LocalStorage).
- */
+
+// Estado global carregado do armazenamento local
 let bancoDeDados = JSON.parse(localStorage.getItem('mahjong_pro_db')) || { 
     jogadores: [], 
     classificacao: {}, 
-    chaveamento: null 
+    chaveamento: null,
+    mesasConcluidas: {}, // Armazena se a mesa está travada
+    pontosDasMesas: {}   // Armazena os valores (incluindo negativos) para exibição
 };
 
 /**
  * Inicia o processo de criação do torneio.
- * Tratamento de dados:
- * 1. Separa nomes por quebra de linha ou vírgula.
- * 2. Formata nomes (Primeira Letra Maiúscula, demais minúsculas).
- * 3. Valida regras de negócio (Mínimo 8 jogadores e múltiplo de 4).
  */
 function iniciarTorneio() {
     const campoTexto = document.getElementById('playerList');
-    
-    // REGEX: Separa por vírgula (,) OU quebra de linha (\n)
     const nomesBrutos = campoTexto.value.split(/,|\n/);
     
     const nomesProcessados = nomesBrutos
         .map(nome => {
-            // Remove espaços extras no início e fim
             let n = nome.trim();
             if (n === "") return null;
-
-            // FORMATAÇÃO: Primeira letra maiúscula de cada palavra (Title Case)
-            // Ex: "kitos mio" -> "Kitos Mio", "LAMAR" -> "Lamar"
             return n.toLowerCase().replace(/(?:^|\s)\S/g, function(a) {
                 return a.toUpperCase();
             });
         })
-        .filter(n => n !== null); // Remove entradas vazias
+        .filter(n => n !== null);
 
-    // Validação de Regra de Negócio
     if (nomesProcessados.length < 8) {
         return alert("Erro: O torneio precisa de pelo menos 8 jogadores.");
     }
@@ -42,10 +32,12 @@ function iniciarTorneio() {
         return alert(`Erro: Tens ${nomesProcessados.length} jogadores. O total deve ser múltiplo de 4.`);
     }
 
-    // Preparação e Chaveamento
+    // Reset de estado para novo torneio
     const nomesEmbaralhados = embaralharJogadores(nomesProcessados);
     bancoDeDados.jogadores = nomesEmbaralhados;
     bancoDeDados.classificacao = {};
+    bancoDeDados.mesasConcluidas = {};
+    bancoDeDados.pontosDasMesas = {}; 
     
     nomesEmbaralhados.forEach(nome => {
         bancoDeDados.classificacao[nome] = 0;
@@ -61,32 +53,53 @@ function iniciarTorneio() {
 }
 
 /**
- * Regista os resultados de uma mesa específica e atualiza o ranking.
- * * @param {number} rodadaIdx - Índice da rodada atual.
- * @param {number} mesaIdx - Índice da mesa dentro da rodada.
- * @param {Array} dadosDaMesa - Lista de jogadores daquela mesa.
+ * Regista os resultados de uma mesa, aceitando valores negativos.
  */
 function registrarResultadoDaMesa(rodadaIdx, mesaIdx, dadosDaMesa) {
+    const mesaKey = `${rodadaIdx}_${mesaIdx}`;
+
+    if (bancoDeDados.mesasConcluidas[mesaKey]) return;
+
     let pontuacoesDigitadas = dadosDaMesa.map((jogador, i) => {
         const input = document.getElementById(`score_${rodadaIdx}_${mesaIdx}_${i}`);
-        // Limpa pontos e vírgulas para converter em número inteiro
-        const valorLimpo = parseInt(input.value.replace(/[\.,]/g, '')) || 0;
-        return { nome: jogador.nome, score: valorLimpo };
+        
+        // Remove pontos e vírgulas, mas preserva o sinal de menos (-)
+        let valorLimpo = input.value.replace(/[\.,]/g, ''); 
+        let scoreFinal = parseInt(valorLimpo) || 0;
+
+        return { 
+            nome: jogador.nome, 
+            score: scoreFinal,
+            valorTexto: input.value 
+        };
     });
 
-    const pontosCalculados = calcularPontosDaPartida(pontuacoesDigitadas);
-    
-    // Atualiza o ranking global acumulado
-    pontosCalculados.forEach(resultado => {
-        bancoDeDados.classificacao[resultado.nome] += resultado.pontos;
+    // Resumo para conferência antes de travar
+    let resumo = "CONFIRMAR PONTUAÇÕES DA MESA:\n\n";
+    pontuacoesDigitadas.forEach(p => {
+        resumo += `${p.nome}: ${p.valorTexto}\n`;
     });
 
-    salvarDadosNoNavegador();
-    alert("Resultados da mesa guardados com sucesso!");
+    if (confirm(resumo + "\nAs pontuações estão corretas? A mesa será travada permanentemente.")) {
+        
+        const pontosCalculados = calcularPontosDaPartida(pontuacoesDigitadas);
+        
+        pontosCalculados.forEach(resultado => {
+            bancoDeDados.classificacao[resultado.nome] += resultado.pontos;
+        });
+
+        // Salva metadados para persistência
+        bancoDeDados.mesasConcluidas[mesaKey] = true;
+        bancoDeDados.pontosDasMesas[mesaKey] = pontuacoesDigitadas.map(p => p.valorTexto);
+
+        salvarDadosNoNavegador();
+        renderizarInterfaceDoTorneio(); 
+        alert("Mesa aprovada!");
+    }
 }
 
 /**
- * Constrói visualmente as mesas e rodadas no HTML.
+ * Constrói a interface das mesas com validação de caracteres em tempo real.
  */
 function renderizarInterfaceDoTorneio() {
     const contentorRodadas = document.getElementById('roundsContainer');
@@ -98,7 +111,12 @@ function renderizarInterfaceDoTorneio() {
         contentorRodadas.innerHTML += `<div class="round-header">RODADA ${rIdx + 1}</div>`;
         
         rodada.forEach((mesa, mIdx) => {
-            let htmlMesa = `<div class="mesa-box"><strong>MESA ${mIdx + 1}</strong><br><br>`;
+            const mesaKey = `${rIdx}_${mIdx}`;
+            const isTravada = bancoDeDados.mesasConcluidas[mesaKey] || false;
+            const pontosSalvos = bancoDeDados.pontosDasMesas[mesaKey] || ["30.000", "30.000", "30.000", "30.000"];
+            
+            let htmlMesa = `<div class="mesa-box" style="${isTravada ? 'border-left: 5px solid #607d8b;' : ''}">
+                                <strong>MESA ${mIdx + 1}</strong><br><br>`;
             
             mesa.forEach((jogador, jIdx) => {
                 htmlMesa += `
@@ -107,13 +125,26 @@ function renderizarInterfaceDoTorneio() {
                             <span class="vento-tag v-${jogador.vento}">${jogador.vento}</span> 
                             <strong>${jogador.nome}</strong>
                         </div>
-                        <input type="text" id="score_${rIdx}_${mIdx}_${jIdx}" value="30.000" onclick="this.select()">
+                        <input type="text" 
+                               id="score_${rIdx}_${mIdx}_${jIdx}" 
+                               value="${pontosSalvos[jIdx]}" 
+                               ${isTravada ? 'readonly' : ''}
+                               style="${isTravada ? 'background:#f8f9fa; color:#555; font-weight:bold; pointer-events:none;' : ''}"
+                               oninput="this.value = this.value.replace(/[^-0-9.,]/g, '')" 
+                               onclick="this.select()">
                     </div>`;
             });
             
+            const btnLabel = isTravada ? 'APROVADO' : 'GUARDAR MESA';
+            const btnIcon = isTravada ? 'lock' : 'save';
+            const btnStyle = isTravada ? 'background:#607d8b; cursor:not-allowed' : '';
+
             htmlMesa += `
-                <button onclick='registrarResultadoDaMesa(${rIdx}, ${mIdx}, ${JSON.stringify(mesa)})' class="btn-primary" style="width:100%; justify-content:center; margin-top:10px">
-                    <span class="material-icons">save</span> GUARDAR MESA
+                <button onclick='registrarResultadoDaMesa(${rIdx}, ${mIdx}, ${JSON.stringify(mesa)})' 
+                        class="btn-primary" 
+                        ${isTravada ? 'disabled' : ''}
+                        style="width:100%; justify-content:center; margin-top:10px; ${btnStyle}">
+                    <span class="material-icons">${btnIcon}</span> ${btnLabel}
                 </button></div>`;
                 
             contentorRodadas.innerHTML += htmlMesa;
@@ -123,13 +154,13 @@ function renderizarInterfaceDoTorneio() {
 }
 
 /**
- * Atualiza a tabela visual de classificação geral por ordem de pontos.
+ * Atualiza a tabela de classificação geral.
  */
 function atualizarTabelaDeRanking() {
     const corpoTabela = document.querySelector('#rankingTable tbody');
+    if(!corpoTabela) return;
     corpoTabela.innerHTML = "";
     
-    // Converte objeto em array e ordena do maior para o menor ponto
     const rankingOrdenado = Object.entries(bancoDeDados.classificacao)
         .sort((a, b) => b[1] - a[1]);
 
@@ -144,7 +175,7 @@ function atualizarTabelaDeRanking() {
 }
 
 /**
- * Guarda o estado atual do banco de dados no LocalStorage do navegador.
+ * Salva o estado atual no LocalStorage.
  */
 function salvarDadosNoNavegador() {
     localStorage.setItem('mahjong_pro_db', JSON.stringify(bancoDeDados));
@@ -152,7 +183,7 @@ function salvarDadosNoNavegador() {
 }
 
 /**
- * Limpa todos os dados e recarrega a página.
+ * Reinicia o torneio e limpa o armazenamento.
  */
 function resetarTudo() {
     if(confirm("Tem a certeza que deseja reiniciar o torneio? Todos os dados serão perdidos.")) {
@@ -161,80 +192,46 @@ function resetarTudo() {
     }
 }
 
-// Inicialização automática caso já existam dados salvos
+// Inicialização automática
 if(bancoDeDados.jogadores.length >= 8) {
     renderizarInterfaceDoTorneio();
     document.getElementById('championship').classList.remove('hidden');
 }
 
 /**
- * Gera um arquivo PDF profissional com o ranking atual do torneio.
- * Utiliza as bibliotecas jsPDF e jsPDF-AutoTable.
+ * Gera o PDF com os resultados atuais.
  */
 function gerarPDF() {
     try {
-        // 1. Inicializa o documento PDF (formato A4)
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-
-        // 2. Configurações de Estilo e Cabeçalho
         const dataHoje = new Date().toLocaleDateString('pt-BR');
+        
         doc.setFont("helvetica", "bold");
         doc.setFontSize(20);
-        doc.setTextColor(33, 150, 243); // Azul Primário
+        doc.setTextColor(33, 150, 243); 
         doc.text("Riichi Tournament Pro", 14, 22);
         
         doc.setFontSize(12);
         doc.setTextColor(100);
-        doc.setFont("helvetica", "normal");
         doc.text(`Relatório Oficial de Ranking - Gerado em: ${dataHoje}`, 14, 30);
 
-        // 3. Preparação dos Dados da Tabela
-        // Convertemos o objeto de classificação num array ordenado para o PDF
         const dadosParaTabela = Object.entries(bancoDeDados.classificacao)
             .sort((a, b) => b[1] - a[1])
-            .map((item, index) => [
-                `${index + 1}º`, // Posição
-                item[0],        // Nome do Jogador
-                item[1].toFixed(1) // Pontuação Acumulada
-            ]);
+            .map((item, index) => [`${index + 1}º`, item[0], item[1].toFixed(1)]);
 
-        // 4. Criação da Tabela usando o Plugin AutoTable
         doc.autoTable({
             startY: 40,
             head: [['Posição', 'Nome do Jogador', 'Pontos de Torneio']],
             body: dadosParaTabela,
             theme: 'striped',
-            headStyles: {
-                fillColor: [33, 150, 243],
-                textColor: [255, 255, 255],
-                fontSize: 12,
-                halign: 'center'
-            },
-            columnStyles: {
-                0: { halign: 'center', cellWidth: 30 }, // Pos
-                1: { halign: 'left' },                 // Nome
-                2: { halign: 'right', fontStyle: 'bold' } // Pontos
-            },
-            styles: {
-                font: "helvetica",
-                fontSize: 11,
-                cellPadding: 5
-            },
-            didDrawPage: function (data) {
-                // Rodapé com numeração de página
-                const str = "Página " + doc.internal.getNumberOfPages();
-                doc.setFontSize(10);
-                doc.text(str, data.settings.margin.left, doc.internal.pageSize.height - 10);
-            }
+            headStyles: { fillColor: [33, 150, 243], textColor: [255, 255, 255], halign: 'center' },
+            columnStyles: { 0: { halign: 'center' }, 2: { halign: 'right', fontStyle: 'bold' } }
         });
 
-        // 5. Nome do arquivo baseado na data e download
-        const nomeArquivo = `Ranking_Riichi_Torneio_${dataHoje.replace(/\//g, '-')}.pdf`;
-        doc.save(nomeArquivo);
+        doc.save(`Ranking_Riichi_Torneio_${dataHoje.replace(/\//g, '-')}.pdf`);
 
     } catch (erro) {
-        console.error("Erro ao gerar PDF:", erro);
-        alert("Não foi possível gerar o PDF. Certifique-se de que está ligado à internet para carregar as bibliotecas de exportação.");
+        alert("Erro ao gerar PDF. Verifique sua conexão.");
     }
 }
