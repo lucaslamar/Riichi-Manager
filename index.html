@@ -1,63 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riichi Tournament Pro</title>
-    
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Bibliotecas PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    
-    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-    <header>
-        <span class="material-icons" style="font-size: 48px;">emoji_events</span>
-        <h1 style="margin:0">Riichi Tournament Pro</h1>
+    <!-- Cabeçalho com temática de Mahjong e espaçamento -->
+    <header style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 40px 0 60px 0;">
+        <div style="background: white; border: 2px solid #ccc; border-radius: 5px; width: 45px; height: 60px; display: flex; justify-content: center; align-items: center; box-shadow: 3px 3px 0px #e0e0e0; font-size: 2rem; color: #d32f2f; font-weight: bold;">
+            中
+        </div>
+        <h1 style="color: #2196F3; font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: -1px; margin: 0;">
+            Riichi Tournament Pro
+        </h1>
     </header>
 
-    <main>
-        <section id="setup" class="card">
-            <h3><span class="material-icons">settings</span> Configuração do Torneio</h3>
+    <main style="margin-top: 20px;">
+        <!-- TELA DE CONFIGURAÇÃO -->
+        <section id="setupContainer" class="card">
+            <h3 style="color: #1a3a5a;"><i class="fas fa-cog"></i> Configuração do Torneio</h3>
             <div class="alert-info">
-                <span class="material-icons">info</span>
-                Regra: Mínimo de 8 jogadores e sempre múltiplo de 4.
+                <i class="fas fa-info-circle"></i> Regra: Mínimo de 8 jogadores e sempre múltiplo de 4.
             </div>
-            <textarea id="playerList" placeholder="Digite os nomes (um por linha ou separados por virgula)."></textarea>
+            <textarea id="playerList" placeholder="Digite os nomes (um por linha)..."></textarea>
             <div class="actions">
-                <button onclick="iniciarTorneio()" class="btn-primary"><span class="material-icons">casino</span> INICIAR TORNEIO</button>
-                <button onclick="resetarTudo()" class="btn-outline"><span class="material-icons">refresh</span> REINICIAR</button>
+                <button onclick="iniciarTorneio()" class="btn-primary">
+                    <i class="fas fa-dice"></i> INICIAR TORNEIO
+                </button>
             </div>
         </section>
 
-        <section id="championship" class="hidden">
-            <h3><span class="material-icons">grid_view</span> Grade de Rodadas</h3>
-            <div id="roundsContainer" class="round-section"></div>
-        </section>
+        <!-- TELA DE RANKING -->
+        <section id="championship" class="card hidden">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <i class="fas fa-chart-bar" style="color: #1a3a5a; font-size: 1.5rem; line-height: 1;"></i>
+                <h3 style="margin: 0; color: #1a3a5a; border: none; padding: 0; line-height: 1;">Classificação Geral</h3>
+            </div>
 
-        <section id="results" class="card">
-            <h3><span class="material-icons">leaderboard</span> Classificação Geral</h3>
-            <button onclick="gerarPDF()" class="btn-secondary">
-                <span class="material-icons">download</span> EXPORTAR PDF
+            <button onclick="gerarPDF()" class="btn-primary" style="background: #4a4a4a; margin-bottom: 25px; border-radius: 4px;">
+                <i class="fas fa-download"></i> EXPORTAR PDF
             </button>
+
             <table id="rankingTable">
                 <thead>
-                    <tr>
-                        <th style="width: 80px;">Raking</th>
-                        <th>Jogador</th>
-                        <th style="text-align: right;">Pontos</th>
+                    <tr style="border-bottom: 2px solid #eee;">
+                        <th style="text-align: left; color: #666;">Raking</th>
+                        <th style="text-align: left; color: #666;">Jogador</th>
+                        <th style="text-align: right; color: #666;">Pontos</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <!-- Gerado pelo JS -->
+                </tbody>
             </table>
+
+            <button onclick="resetarTudo()" class="btn-outline" style="margin-top: 30px; color: #ef5350; border-color: #ef5350;">
+                <i class="fas fa-undo"></i> REINICIAR TORNEIO
+            </button>
         </section>
+
+        <!-- GRADE DE RODADAS -->
+        <div id="tablesContainer" class="hidden">
+            <div style="display: flex; align-items: center; gap: 12px; margin: 30px 0 15px 10px;">
+                <i class="fas fa-th-large" style="color: #1a3a5a; line-height: 1;"></i>
+                <h3 style="margin: 0; color: #1a3a5a; border: none; padding: 0; line-height: 1;">Grade de Rodadas</h3>
+            </div>
+            <div id="roundsContainer" class="round-section"></div>
+        </div>
     </main>
 
     <script src="scripts/engine.js"></script>
+    <script src="scripts/storage.js"></script>
     <script src="scripts/ui.js"></script>
 </body>
 </html>
