@@ -56,19 +56,35 @@ main {
     display: none !important;
 }
 
-/* --- HEADER PRINCIPAL (CENTRALIZADO) --- */
+/* Container principal - Garante que nada empilhe */
 .main-header {
-    display: flex;
-    flex-direction: column;
+    padding: 60px 0 40px 0;
+    display: flex !important; /* Força o flex */
+    flex-direction: row !important; /* Força ficar LADO A LADO */
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    padding: 50px 0 30px 0;
-    text-align: center;
+    width: 100%;
 }
 
+/* Container interno que segura a peça e o texto */
+.header-content {
+    display: flex !important;
+    flex-direction: row !important; /* Lado a lado */
+    align-items: center;
+    gap: 25px; /* Espaço entre a peça e o texto */
+}
+
+/* Container que segura Versão + Título (este sim fica um em cima do outro) */
+.title-container {
+    display: flex !important;
+    flex-direction: column !important; /* Versão em cima, Título embaixo */
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* Ajuste da peça para garantir que ela não suma nem mude de forma */
 .mahjong-tile {
-    background: var(--white);
+    background: white;
     border: 2px solid #ccc;
     border-radius: 8px;
     width: 50px;
@@ -80,14 +96,14 @@ main {
     font-size: 2.2rem;
     color: #d32f2f;
     font-weight: bold;
+    flex-shrink: 0; /* Impede que ela seja espremida */
 }
 
 .main-title {
-    color: var(--primary);
-    font-weight: 800;
-    font-size: 2.5rem;
-    letter-spacing: -1px;
     margin: 0;
+    line-height: 1;
+    white-space: nowrap; /* Impede que o título quebre linha */
+    color: var(--primary); /* Garanta que está assim */
 }
 
 /* --- COMPONENTES (CARDS) --- */
@@ -206,7 +222,13 @@ button {
     margin: 20px 0;
 }
 
-#rankingTable th,
+#rankingTable th {
+      padding: 15px 10px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--primary);
+}
+
 #rankingTable td {
     padding: 15px 10px;
     text-align: left;
