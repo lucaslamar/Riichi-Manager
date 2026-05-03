@@ -1,4 +1,4 @@
-# Riichi Tournament Pro 🀄
+# [Riichi Tournament Pro](https://lucaslamar.github.io/Riichi-Manager/) 🀄
 
 Gerenciador de torneios de Mahjong Riichi focado em equilíbrio matemático e rotação justa de jogadores.
 
