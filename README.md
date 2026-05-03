@@ -16,7 +16,7 @@ Para garantir um torneio justo, o sistema não utiliza sorteios puramente aleat�
 
 - **Cálculo de UMA:** Pontuação final convertida automaticamente para o padrão de torneios.
 - **Dobon Penalty:** Jogadores que terminam com pontuação bruta negativa recebem uma penalidade fixa de **-3.0 pontos** na tabela geral.
-- **Escalabilidade:** Otimizado para 8 jogadores, com variância zero de oponentes recomendada para grupos de 16 ou mais[cite: 4].
+- **Escalabilidade:** Otimizado para 8 jogadores, com variância zero de oponentes recomendada para grupos de 16 ou mais.
 
 ## 🚀 Como Usar
 
