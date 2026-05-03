@@ -8,8 +8,14 @@
 - **Cálculo de Pontuação Profissional**: Sistema de conversão de pontos baseado em UMA e penalidades de saldo negativo.
 - **Interface Base**: Layout responsivo em cartões com suporte a exportação de resultados em PDF.
 
-## [1.0.1] - 2026-05-02
+## [1.0.1] - 2026-05-03
 ### Adicionado
 -  Sistema de interface com suporte a pontuação negativa e somente numeros.
 - Persistência de dados.
 - Travamento de mesa pós validação.
+
+## [1.2.0] - 2026-05-03
+### Adicionado
+ - Melhoria no design e com diferenciação cromática por rodada para evitar confusão visual.
+
+
