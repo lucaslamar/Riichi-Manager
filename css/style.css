@@ -106,6 +106,43 @@ main {
     color: var(--primary); /* Garanta que está assim */
 }
 
+/* --- AJUSTES RESPONSIVOS (CELULAR E TABLET) --- */
+@media (max-width: 768px) {
+    /* Reduz o respiro lateral do corpo para ganhar espaço */
+    body {
+        padding: 0 10px 40px 10px;
+    }
+
+    /* Reduz o espaço do cabeçalho no mobile */
+    .main-header {
+        padding: 30px 0 20px 0;
+    }
+
+    /* Diminui o espaço entre a peça de Mahjong e o texto */
+    .header-content {
+        gap: 15px;
+    }
+
+    /* Permite que o título quebre linha e reduz o tamanho da fonte */
+    .main-title {
+        white-space: normal; /* Permite quebrar linha se necessário */
+        font-size: 1.5rem;   /* Reduz o tamanho da letra no celular */
+        text-align: left;
+    }
+
+    /* Ajusta a peça de Mahjong para não ocupar tanto espaço */
+    .mahjong-tile {
+        width: 40px;
+        height: 55px;
+        font-size: 1.8rem;
+    }
+
+    /* Ajusta as tabelas/cards para não colarem na borda */
+    .content-wrapper, main {
+        width: 100%;
+    }
+}
+
 /* --- COMPONENTES (CARDS) --- */
 .card {
     background: var(--white);
