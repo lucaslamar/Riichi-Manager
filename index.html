@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,8 @@
     <!-- Fontes e Ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23d32f2f%22>中</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23d32f2f%22>中</text></svg>">
     <!-- Arquivo de Estilos Unificado -->
     <link rel="stylesheet" href="css/style.css">
 
@@ -16,17 +18,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
+
 <body>
 
-  <header class="main-header">
-    <div class="header-content">
-        <div class="mahjong-tile">中</div>
-        <div class="title-container">
-            <span class="version-tag">v2.0.0</span>
-            <h1 class="main-title">Riichi Tournament Pro</h1>
+    <header class="main-header">
+        <div class="header-content">
+            <div class="mahjong-tile">中</div>
+            <div class="title-container">
+                <span class="version-tag">v2.0.0</span>
+                <h1 class="main-title">Riichi Tournament Pro</h1>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
     <main class="content-wrapper">
 
         <!-- TELA DE CONFIGURAÇÃO (SETUP) -->
@@ -41,7 +44,7 @@
                 Regra: Mínimo de 8 jogadores e sempre múltiplo de 4 para mesas completas.
             </div>
 
-            <textarea id="playerList" 
+            <textarea id="playerList"
                 placeholder="Digite os nomes dos jogadores (um por linha ou separados por vírgula)..."></textarea>
 
             <div class="actions">
@@ -100,10 +103,13 @@
     </main>
 
     <!-- Scripts do Sistema (Ordem de Dependência) -->
+    <!-- Scripts de Lógica e Dados -->
     <script src="scripts/storage.js"></script>
     <script src="scripts/engine.js"></script>
-    <script src="scripts/pdf.js"></script>
-    <script src="scripts/ui.js"></script>
+    <script src="scripts/pontos.js"></script>
 
+    <!-- Script de Interface (Sempre por último) -->
+    <script src="scripts/ui.js"></script>
 </body>
+
 </html>
