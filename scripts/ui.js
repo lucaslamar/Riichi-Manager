@@ -208,5 +208,8 @@ window.onload = () => {
 
 window.ui = {
     iniciarTorneio,
-    resetarTudo: () => storage.clear()
+    resetarTudo: () => {
+        storage.clear(); // 1. Limpa os dados
+        window.location.href = './index.html'; // 2. Recarrega de forma segura e relativa
+    }
 };
