@@ -1,6 +1,6 @@
 /**
- * Módulo de Interface do Usuário (UI).
- * Responsável por renderizar a grade do torneio, ranking e gerenciar interações.
+ * @file ui.js
+ * @description Interface do torneio Riichi Mahjong.
  */
 
 // Estado global sincronizado com o storage
@@ -41,6 +41,7 @@ function iniciarTorneio() {
     if (nomesValidos.length < 8 || nomesValidos.length % 4 !== 0) {
         return alert("Erro: Mínimo 8 jogadores e o total deve ser múltiplo de 4. \nQuantidade: " + nomesValidos.length);
     }
+    console.log("Gerando chaveamento otimizado...");
 
     bancoDeDados.jogadores = embaralharJogadores(nomesValidos);
     bancoDeDados.classificacao = {};
