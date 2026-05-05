@@ -1,4 +1,4 @@
-import './style.css'
+import './styles/style.css'
 import { bindEvents } from "./app/events";
 import { renderApp } from "./app/render";
 
