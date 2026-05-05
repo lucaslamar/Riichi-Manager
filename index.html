@@ -25,7 +25,7 @@
         <div class="header-content">
             <div class="mahjong-tile">中</div>
             <div class="title-container">
-                <span class="version-tag">v2.0.0</span>
+                <span class="version-tag">v2.1.0</span>
                 <h1 class="main-title">Riichi Tournament Pro</h1>
             </div>
         </div>
@@ -102,15 +102,16 @@
 
     </main>
 
-    <!-- Scripts do Sistema (Ordem de Dependência) -->
-    <!-- Scripts de Lógica e Dados -->
-    <script src="scripts/storage.js"></script>
-    <script src="scripts/engine.js"></script>
-    <script src="scripts/pontos.js"></script>
-    <script src="scripts/pdf.js"></script>
+<!-- 1. BASE (dados) -->
+<script src="scripts/storage.js"></script>
 
-    <!-- Script de Interface (Sempre por último) -->
-    <script src="scripts/ui.js"></script>
-</body>
+<!-- 4. ENGINE PRINCIPAL -->
+<script src="scripts/engine/engine.js"></script>
+
+<!-- 5. FEATURES -->
+<script src="scripts/features/pontos.js"></script>
+<script src="scripts/features/pdf.js"></script>
+
+<script src="scripts/ui.js"></script>
 
 </html>
