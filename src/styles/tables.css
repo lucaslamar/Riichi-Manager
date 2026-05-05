@@ -114,12 +114,28 @@
   white-space: nowrap;
 }
 
+.table-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .save-button {
   width: 100%;
-  margin-top: 15px;
   background: var(--round-color);
 }
 
 .save-button:hover {
   background: var(--round-color);
+}
+
+.table-time-button {
+  width: 100%;
+  border-color: var(--round-color);
+  color: var(--round-color);
+}
+
+.table-time-button:hover {
+  border-color: var(--round-color);
+  background: color-mix(in srgb, var(--round-color) 10%, var(--white));
 }

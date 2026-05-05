@@ -3,21 +3,27 @@ import { getTournament } from "./state";
 import { renderHeader } from "../components/Header";
 import { renderQualityPanel } from "../components/QualityPanel";
 import { renderRanking } from "../components/RankingTable";
+import { renderTimerRodada } from "../components/RoundTimer";
 import { renderRoundGrid } from "../components/RoundGrid";
 import { renderSetupCard } from "../components/SetupCard";
 
-// Compoe a pagina a partir de componentes pequenos e do estado atual.
+/**
+ * Compoe a pagina a partir dos componentes pequenos e do estado atual.
+ *
+ * @param app - Elemento raiz onde todo o HTML do aplicativo sera redesenhado.
+ */
 export function renderApp(app: HTMLDivElement): void {
-  const tournament = getTournament();
-  const active = isTournamentActive(tournament);
+  const torneio = getTournament();
+  const torneioAtivo = isTournamentActive(torneio);
 
   app.innerHTML = `
     ${renderHeader()}
     <main class="content-wrapper">
-      ${renderSetupCard(active)}
-      ${renderRanking(active, tournament)}
-      ${active && tournament.quality ? renderQualityPanel(tournament.quality) : ""}
-      ${active ? renderRoundGrid(tournament.schedule, tournament) : ""}
+      ${renderSetupCard(torneioAtivo)}
+      ${renderRanking(torneioAtivo, torneio)}
+      ${torneioAtivo ? renderTimerRodada(torneio) : ""}
+      ${torneioAtivo && torneio.quality ? renderQualityPanel(torneio.quality) : ""}
+      ${torneioAtivo ? renderRoundGrid(torneio.schedule, torneio) : ""}
     </main>
   `;
 }

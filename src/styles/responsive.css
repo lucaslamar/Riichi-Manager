@@ -44,6 +44,15 @@
     margin-left: 0;
   }
 
+  .timer-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .timer-display {
+    width: 100%;
+  }
+
   .quality-panel .section-title-container {
     flex-wrap: wrap;
   }
