@@ -1,0 +1,125 @@
+.rounds-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.mesa-box {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 6px solid var(--round-color);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.round-1 {
+  --round-color: #2196f3;
+}
+
+.round-2 {
+  --round-color: #4caf50;
+}
+
+.round-3 {
+  --round-color: #ff9800;
+}
+
+.round-4 {
+  --round-color: #e91e63;
+}
+
+.mesa-box header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+  color: var(--round-color);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.mesa-box header span {
+  border-radius: 6px;
+  padding: 5px 10px;
+  background: var(--round-color);
+  color: var(--white);
+}
+
+.seat-list {
+  display: grid;
+  flex-grow: 1;
+  gap: 8px;
+}
+
+.player-row {
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fcfcfc;
+}
+
+.vento-tag {
+  width: 68px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  padding: 5px 8px;
+  color: var(--white);
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.leste {
+  background: var(--leste);
+}
+
+.sul {
+  background: var(--sul);
+}
+
+.oeste {
+  background: var(--oeste);
+}
+
+.norte {
+  background: var(--norte);
+}
+
+.player-name {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  overflow: hidden;
+  color: #444444;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.save-button {
+  width: 100%;
+  margin-top: 15px;
+  background: var(--round-color);
+}
+
+.save-button:hover {
+  background: var(--round-color);
+}

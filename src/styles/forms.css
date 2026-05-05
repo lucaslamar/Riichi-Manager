@@ -1,0 +1,48 @@
+.player-list {
+  display: grid;
+  gap: 8px;
+}
+
+.player-list span {
+  color: var(--dark);
+  font-weight: 800;
+}
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+  margin-bottom: 15px;
+  border: 2px solid #dde1e7;
+  border-radius: 8px;
+  padding: 15px;
+  color: #253445;
+  background: var(--white);
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.player-row input {
+  width: 78px;
+  min-height: 42px;
+  flex-shrink: 0;
+  border: 2px solid #eeeeee;
+  border-radius: 6px;
+  padding: 8px;
+  color: #111111;
+  background: var(--white);
+  font-weight: 800;
+  text-align: right;
+}
+
+.input-locked {
+  border-color: #dddddd !important;
+  background: #f5f5f5 !important;
+  color: #999999 !important;
+  pointer-events: none;
+}

@@ -1,0 +1,76 @@
+@media (max-width: 768px) {
+  body {
+    padding: 0 10px 40px;
+  }
+
+  .main-header {
+    padding: 30px 0 20px;
+  }
+
+  .header-content {
+    gap: 15px;
+  }
+
+  .mahjong-tile {
+    width: 40px;
+    height: 55px;
+    font-size: 1.8rem;
+  }
+
+  .main-title {
+    font-size: 1.5rem;
+    white-space: normal;
+  }
+
+  .card,
+  .mesa-box {
+    padding: 20px;
+  }
+
+  .content-wrapper,
+  main {
+    width: 100%;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rounds-container {
+    grid-template-columns: 1fr;
+  }
+
+  .status-pill {
+    margin-left: 0;
+  }
+
+  .quality-panel .section-title-container {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .actions {
+    display: grid;
+  }
+
+  .btn-primary,
+  .btn-outline {
+    width: 100%;
+  }
+
+  .player-row {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .vento-tag {
+    width: 62px;
+    font-size: 0.68rem;
+  }
+
+  .player-row input {
+    width: 72px;
+    font-size: 0.92rem;
+  }
+}

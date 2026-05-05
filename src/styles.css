@@ -1,0 +1,9 @@
+@import "./styles/base.css";
+@import "./styles/header.css";
+@import "./styles/cards.css";
+@import "./styles/forms.css";
+@import "./styles/buttons.css";
+@import "./styles/ranking.css";
+@import "./styles/quality.css";
+@import "./styles/tables.css";
+@import "./styles/responsive.css";
