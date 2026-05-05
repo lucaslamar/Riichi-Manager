@@ -41,6 +41,22 @@ export type PairingCandidate = {
   quality: QualityReport;
 };
 
+/** Estado persistido do relogio da rodada atual. */
+export type RoundTimerState = {
+  /** Duracao total planejada para a rodada, ja incluindo acrescimos. */
+  totalSeconds: number;
+  /** Tempo restante salvo no ultimo render ou pausa. */
+  remainingSeconds: number;
+  /** Indice da rodada que esta sendo cronometrada. */
+  roundIndex: number;
+  /** Indica se o relogio deve continuar correndo entre renders/reloads. */
+  isRunning: boolean;
+  /** Momento em epoch milliseconds em que a contagem foi iniciada ou retomada. */
+  startedAt: number | null;
+  /** Quantos acrescimos de 5 minutos foram dados por mesa. */
+  tableExtensions: Record<string, number>;
+};
+
 export type TournamentState = {
   players: string[];
   schedule: Round[];
@@ -48,6 +64,7 @@ export type TournamentState = {
   classification: Record<string, number>;
   completedTables: Record<string, boolean>;
   tableScores: Record<string, string[]>;
+  roundTimer: RoundTimerState;
 };
 
 export type PdfDocument = {

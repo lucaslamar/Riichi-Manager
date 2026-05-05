@@ -1,0 +1,66 @@
+.timer-card {
+  border-left: 6px solid var(--primary);
+}
+
+.timer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.timer-kicker {
+  display: block;
+  color: #738295;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.timer-display {
+  min-width: 180px;
+  border-radius: 14px;
+  padding: 14px 18px;
+  background: #102a43;
+  color: var(--white);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.timer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+
+.timer-round-picker {
+  display: grid;
+  gap: 6px;
+  color: #516173;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.timer-round-picker select {
+  min-height: 48px;
+  border: 2px solid #dde1e7;
+  border-radius: 8px;
+  padding: 0 14px;
+  background: var(--white);
+  color: var(--dark);
+  font-weight: 800;
+}
+
+.timer-help {
+  margin: 14px 0 0;
+  color: #607080;
+  font-size: 0.9rem;
+  font-weight: 600;
+}

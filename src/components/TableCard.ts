@@ -1,58 +1,80 @@
+import { TABLE_EXTENSION_SECONDS } from "../tournament/constants";
 import { getTableKey } from "../tournament/tableKeys";
 import type { Round, Table, TournamentState } from "../tournament/types";
 import { escapeHtml, formatScore } from "../utils/format";
 
-// Renderiza uma mesa. O estado completed decide se inputs e botao ficam travados.
+/**
+ * Renderiza uma mesa com assentos, inputs de pontuacao e controles de acrescimo.
+ *
+ * @param rodada - Rodada oficial da grade.
+ * @param mesa - Mesa que sera exibida.
+ * @param indiceRodada - Indice baseado em zero usado nos IDs do DOM.
+ * @param indiceMesa - Indice baseado em zero usado nos IDs do DOM.
+ * @param torneio - Estado completo usado para saber se a mesa esta arquivada.
+ * @returns HTML do cartao da mesa.
+ */
 export function renderTableCard(
-  round: Round,
-  table: Table,
-  roundIndex: number,
-  tableIndex: number,
-  tournament: TournamentState,
+  rodada: Round,
+  mesa: Table,
+  indiceRodada: number,
+  indiceMesa: number,
+  torneio: TournamentState,
 ): string {
-  const colorClass = `round-${round.id}`;
-  const tableStorageKey = getTableKey(roundIndex, tableIndex);
-  const completed = Boolean(tournament.completedTables[tableStorageKey]);
-  const savedScores = tournament.tableScores[tableStorageKey];
+  const classeCor = `round-${rodada.id}`;
+  const chaveMesa = getTableKey(indiceRodada, indiceMesa);
+  const concluida = Boolean(torneio.completedTables[chaveMesa]);
+  const pontuacoesSalvas = torneio.tableScores[chaveMesa];
+  const totalAcrescimos = torneio.roundTimer.tableExtensions[chaveMesa] ?? 0;
 
   return `
-    <article class="mesa-box ${colorClass}">
+    <article class="mesa-box ${classeCor}">
       <header>
-        <span>Rodada ${round.id}</span>
-        <strong>Mesa ${table.id}</strong>
+        <span>Rodada ${rodada.id}</span>
+        <strong>Mesa ${mesa.id}</strong>
       </header>
       <div class="seat-list">
-        ${table.seats
-          .map((seat, seatIndex) => {
-            const value = savedScores?.[seatIndex] ?? formatScore(seat.score);
+        ${mesa.seats
+          .map((assento, indiceAssento) => {
+            const valor = pontuacoesSalvas?.[indiceAssento] ?? formatScore(assento.score);
 
             return `
               <div class="player-row">
-                <span class="vento-tag ${seat.wind.toLowerCase()}">${seat.wind}</span>
-                <strong class="player-name">${escapeHtml(seat.player)}</strong>
+                <span class="vento-tag ${assento.wind.toLowerCase()}">${assento.wind}</span>
+                <strong class="player-name">${escapeHtml(assento.player)}</strong>
                 <input
-                  id="score_${roundIndex}_${tableIndex}_${seatIndex}"
+                  id="score_${indiceRodada}_${indiceMesa}_${indiceAssento}"
                   inputmode="numeric"
                   pattern="[0-9]*"
-                  aria-label="Pontuacao de ${escapeHtml(seat.player)}"
-                  value="${value}"
-                  class="${completed ? "input-locked" : ""}"
-                  ${completed ? "disabled" : ""}
+                  aria-label="Pontuacao de ${escapeHtml(assento.player)}"
+                  value="${valor}"
+                  class="${concluida ? "input-locked" : ""}"
+                  ${concluida ? "disabled" : ""}
                 />
               </div>
             `;
           })
           .join("")}
       </div>
-      <button
-        class="btn-primary save-button ${completed ? "btn-locked" : ""}"
-        data-round="${roundIndex}"
-        data-table="${tableIndex}"
-        type="button"
-      >
-        <i class="fas ${completed ? "fa-check-circle" : "fa-save"}" aria-hidden="true"></i>
-        ${completed ? "Mesa arquivada" : "Guardar mesa"}
-      </button>
+      <div class="table-actions">
+        <button
+          class="btn-outline table-time-button"
+          data-round="${indiceRodada}"
+          data-table="${indiceMesa}"
+          type="button"
+        >
+          <i class="fas fa-clock" aria-hidden="true"></i>
+          +${TABLE_EXTENSION_SECONDS / 60} min mesa${totalAcrescimos > 0 ? ` (${totalAcrescimos}x)` : ""}
+        </button>
+        <button
+          class="btn-primary save-button ${concluida ? "btn-locked" : ""}"
+          data-round="${indiceRodada}"
+          data-table="${indiceMesa}"
+          type="button"
+        >
+          <i class="fas ${concluida ? "fa-check-circle" : "fa-save"}" aria-hidden="true"></i>
+          ${concluida ? "Mesa arquivada" : "Guardar mesa"}
+        </button>
+      </div>
     </article>
   `;
 }
