@@ -5,16 +5,22 @@ import type { RoundTimerState, TournamentState } from "../tournament/types";
  * Cria o relogio padrao de uma rodada.
  *
  * @param indiceRodada - Rodada exibida no cronometro, com indice baseado em zero.
- * @returns Estado inicial do cronometro parado em 90 minutos.
+ * @param segundosBase - Duracao base escolhida pelo juiz para a rodada.
+ * @param acrescimosPorMesa - Mapa com os acrescimos individuais ja registrados.
+ * @returns Estado inicial do cronometro parado na duracao escolhida.
  */
-export function criarTimerRodadaVazio(indiceRodada = 0): RoundTimerState {
+export function criarTimerRodadaVazio(
+  indiceRodada = 0,
+  segundosBase = DEFAULT_ROUND_SECONDS,
+  acrescimosPorMesa: Record<string, number> = {},
+): RoundTimerState {
   return {
-    totalSeconds: DEFAULT_ROUND_SECONDS,
-    remainingSeconds: DEFAULT_ROUND_SECONDS,
+    totalSeconds: segundosBase,
+    remainingSeconds: segundosBase,
     roundIndex: indiceRodada,
     isRunning: false,
     startedAt: null,
-    tableExtensions: {},
+    tableExtensions: acrescimosPorMesa,
   };
 }
 

@@ -1,10 +1,10 @@
-import { TABLE_EXTENSION_SECONDS } from "../tournament/constants";
+import { ROUND_TIMER_OPTIONS, TABLE_EXTENSION_SECONDS } from "../tournament/constants";
 import type { TournamentState } from "../tournament/types";
 import { formatarDuracao } from "../utils/format";
 import { calcularSegundosRestantes } from "../app/actions";
 
 /**
- * Renderiza o cronometro global da rodada.
+ * Renderiza o cronometro base da rodada.
  *
  * @param torneio - Estado atual com rodadas e timer persistido.
  * @returns HTML dos controles de tempo ou string vazia quando nao ha torneio ativo.
@@ -18,12 +18,13 @@ export function renderTimerRodada(torneio: TournamentState): string {
   const segundosRestantes = calcularSegundosRestantes(timerRodada);
   const textoBotaoPrincipal = timerRodada.isRunning ? "Pausar" : "Iniciar";
   const iconeBotaoPrincipal = timerRodada.isRunning ? "fa-pause" : "fa-play";
+  const duracaoTemOpcao = ROUND_TIMER_OPTIONS.some((opcao) => opcao.seconds === timerRodada.totalSeconds);
 
   return `
-    <section class="card timer-card" aria-label="Timer global da rodada">
+    <section class="card timer-card" aria-label="Timer base da rodada">
       <div class="timer-header">
         <div>
-          <span class="timer-kicker">Timer global</span>
+          <span class="timer-kicker">Timer base</span>
           <h2>Rodada ${timerRodada.roundIndex + 1}</h2>
         </div>
         <output class="timer-display" id="roundTimerDisplay" aria-live="polite">
@@ -32,7 +33,7 @@ export function renderTimerRodada(torneio: TournamentState): string {
       </div>
 
       <div class="timer-controls">
-        <label class="timer-round-picker">
+        <label class="timer-picker">
           Rodada
           <select id="roundTimerSelect" aria-label="Escolher rodada do timer">
             ${torneio.schedule
@@ -44,6 +45,23 @@ export function renderTimerRodada(torneio: TournamentState): string {
                 `,
               )
               .join("")}
+          </select>
+        </label>
+        <label class="timer-picker">
+          Tempo inicial
+          <select id="roundTimerDurationSelect" aria-label="Escolher tempo inicial da rodada">
+            ${ROUND_TIMER_OPTIONS.map(
+              (opcao) => `
+                <option value="${opcao.seconds}" ${opcao.seconds === timerRodada.totalSeconds ? "selected" : ""}>
+                  ${opcao.label}
+                </option>
+              `,
+            ).join("")}
+            ${
+              duracaoTemOpcao
+                ? ""
+                : `<option value="${timerRodada.totalSeconds}" selected>Atual (${formatarDuracao(timerRodada.totalSeconds)})</option>`
+            }
           </select>
         </label>
         <button class="btn-primary" id="toggleRoundTimerButton" type="button">
@@ -61,7 +79,7 @@ export function renderTimerRodada(torneio: TournamentState): string {
       </div>
 
       <p class="timer-help">
-        Use o +5 min da mesa quando uma mesa precisar de acrescimo de campeonato; o tempo entra no timer global e fica registrado no cartao da mesa.
+        O timer base vale para mesas sem acrescimo. O +5 min da mesa nao muda este relogio; ele aparece apenas no cartao da mesa que recebeu tempo extra.
       </p>
     </section>
   `;

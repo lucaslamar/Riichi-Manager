@@ -3,6 +3,7 @@ import { defaultScoreText } from "../utils/format";
 import {
   adicionarCincoMinutosGlobais,
   adicionarCincoMinutosParaMesa,
+  alterarDuracaoTimerRodada,
   alternarTimerRodada,
   resetTournament,
   reiniciarTimerRodada,
@@ -70,6 +71,15 @@ export function bindEvents(renderizar: () => void): void {
       const seletorRodada = evento.currentTarget as HTMLSelectElement;
 
       selecionarRodadaDoTimer(Number(seletorRodada.value));
+      renderizar();
+    },
+  );
+  document.querySelector<HTMLSelectElement>("#roundTimerDurationSelect")?.addEventListener(
+    "change",
+    (evento) => {
+      const seletorDuracao = evento.currentTarget as HTMLSelectElement;
+
+      alterarDuracaoTimerRodada(Number(seletorDuracao.value));
       renderizar();
     },
   );

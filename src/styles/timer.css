@@ -39,7 +39,7 @@
   gap: 12px;
 }
 
-.timer-round-picker {
+.timer-picker {
   display: grid;
   gap: 6px;
   color: #516173;
@@ -48,7 +48,7 @@
   text-transform: uppercase;
 }
 
-.timer-round-picker select {
+.timer-picker select {
   min-height: 48px;
   border: 2px solid #dde1e7;
   border-radius: 8px;

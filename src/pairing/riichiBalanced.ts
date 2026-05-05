@@ -155,7 +155,8 @@ export function generateRiichiBalancedSchedule(players: string[]): PairingCandid
       best.quality.maxPairRepeats <= 2 &&
       best.quality.twicePairCount <= best.quality.idealRepeatedPairCount + 2 &&
       best.quality.fullTableRepeats === 0 &&
-      best.quality.windRepeats === 0
+      best.quality.windRepeats === 0 &&
+      best.quality.repeatedOpponentOverload.length === 0
     ) {
       break;
     }
