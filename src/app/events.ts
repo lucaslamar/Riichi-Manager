@@ -3,7 +3,9 @@ import { defaultScoreText } from "../utils/format";
 import {
   adicionarCincoMinutosGlobais,
   adicionarCincoMinutosParaMesa,
+  alterarDuracaoTimerRodada,
   alternarTimerRodada,
+  refazerSorteio,
   resetTournament,
   reiniciarTimerRodada,
   saveTableScores,
@@ -43,6 +45,22 @@ export function bindEvents(renderizar: () => void): void {
     "click",
     () => exportRankingPdf(getTournament()),
   );
+  document.querySelector<HTMLButtonElement>("#rerollScheduleButton")?.addEventListener(
+    "click",
+    () => {
+      const confirmou = window.confirm(
+        "Refazer o sorteio mantendo os mesmos nomes?\n" +
+          "Isso apaga resultados, ranking e acrescimos da grade atual.",
+      );
+
+      if (!confirmou) {
+        return;
+      }
+
+      refazerSorteio();
+      renderizar();
+    },
+  );
   document.querySelector<HTMLButtonElement>("#toggleRoundTimerButton")?.addEventListener(
     "click",
     () => {
@@ -70,6 +88,15 @@ export function bindEvents(renderizar: () => void): void {
       const seletorRodada = evento.currentTarget as HTMLSelectElement;
 
       selecionarRodadaDoTimer(Number(seletorRodada.value));
+      renderizar();
+    },
+  );
+  document.querySelector<HTMLSelectElement>("#roundTimerDurationSelect")?.addEventListener(
+    "change",
+    (evento) => {
+      const seletorDuracao = evento.currentTarget as HTMLSelectElement;
+
+      alterarDuracaoTimerRodada(Number(seletorDuracao.value));
       renderizar();
     },
   );

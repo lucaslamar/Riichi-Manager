@@ -29,11 +29,20 @@ export type QualityReport = {
   exactEast: boolean;
   windRepeats: number;
   fullTableRepeats: number;
+  repeatedOpponentLimit: number | null;
+  maxRepeatedOpponentsByPlayer: number;
+  repeatedOpponentOverload: PlayerRepeatedOpponents[];
 };
 
 export type PairRepeat = {
   players: [string, string];
   count: number;
+};
+
+export type PlayerRepeatedOpponents = {
+  player: string;
+  count: number;
+  opponents: string[];
 };
 
 export type PairingCandidate = {
@@ -43,7 +52,7 @@ export type PairingCandidate = {
 
 /** Estado persistido do relogio da rodada atual. */
 export type RoundTimerState = {
-  /** Duracao total planejada para a rodada, ja incluindo acrescimos. */
+  /** Duracao do timer base da rodada, incluindo apenas acrescimos globais. */
   totalSeconds: number;
   /** Tempo restante salvo no ultimo render ou pausa. */
   remainingSeconds: number;
@@ -53,7 +62,7 @@ export type RoundTimerState = {
   isRunning: boolean;
   /** Momento em epoch milliseconds em que a contagem foi iniciada ou retomada. */
   startedAt: number | null;
-  /** Quantos acrescimos de 5 minutos foram dados por mesa. */
+  /** Quantos acrescimos individuais de 5 minutos foram dados por mesa. */
   tableExtensions: Record<string, number>;
 };
 

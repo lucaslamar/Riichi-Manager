@@ -49,6 +49,38 @@ export function startTournament(jogadoresDigitados: string): string | null {
   return null;
 }
 
+
+/**
+ * Refaz apenas o sorteio das mesas usando os mesmos jogadores ja cadastrados.
+ * Ranking, resultados salvos e acrescimos por mesa sao limpos porque pertencem
+ * a grade antiga; a duracao base escolhida pelo juiz e preservada.
+ *
+ * @returns true quando um novo sorteio foi gerado; false quando nao ha torneio ativo.
+ */
+export function refazerSorteio(): boolean {
+  const torneioAtual = getTournament();
+
+  if (!isTournamentActive(torneioAtual)) {
+    return false;
+  }
+
+  const jogadoresEmbaralhados = shuffle(torneioAtual.players);
+  const gradeCandidata = generateRiichiBalancedSchedule(jogadoresEmbaralhados);
+
+  setTournament({
+    ...torneioAtual,
+    players: jogadoresEmbaralhados,
+    schedule: gradeCandidata.rounds,
+    quality: gradeCandidata.quality,
+    classification: Object.fromEntries(jogadoresEmbaralhados.map((jogador) => [jogador, 0])),
+    completedTables: {},
+    tableScores: {},
+    roundTimer: criarTimerRodadaVazio(0, torneioAtual.roundTimer.totalSeconds),
+  });
+
+  return true;
+}
+
 /** Reinicia o estado em memoria e remove o save do navegador. */
 export function resetTournament(): void {
   resetTournamentState();
@@ -98,24 +130,60 @@ export function alternarTimerRodada(): void {
   });
 }
 
-/** Volta o timer da rodada selecionada para o tempo padrao. */
+/** Volta o timer da rodada selecionada para a duracao base escolhida pelo juiz. */
 export function reiniciarTimerRodada(): void {
-  updateTournament((torneioAtual): TournamentState => ({
-    ...torneioAtual,
-    roundTimer: criarTimerRodadaVazio(torneioAtual.roundTimer.roundIndex),
-  }));
+  updateTournament((torneioAtual): TournamentState => {
+    const timerAtual = torneioAtual.roundTimer;
+
+    return {
+      ...torneioAtual,
+      roundTimer: criarTimerRodadaVazio(
+        timerAtual.roundIndex,
+        timerAtual.totalSeconds,
+        timerAtual.tableExtensions,
+      ),
+    };
+  });
 }
 
 /**
- * Troca qual rodada o timer esta controlando e reinicia o relogio em 90 minutos.
+ * Troca qual rodada o timer esta controlando e reinicia o relogio na duracao escolhida.
  *
  * @param indiceRodada - Indice baseado em zero recebido do select da tela.
  */
 export function selecionarRodadaDoTimer(indiceRodada: number): void {
-  updateTournament((torneioAtual): TournamentState => ({
-    ...torneioAtual,
-    roundTimer: criarTimerRodadaVazio(indiceRodada),
-  }));
+  updateTournament((torneioAtual): TournamentState => {
+    const timerAtual = torneioAtual.roundTimer;
+
+    return {
+      ...torneioAtual,
+      roundTimer: criarTimerRodadaVazio(
+        indiceRodada,
+        timerAtual.totalSeconds,
+        timerAtual.tableExtensions,
+      ),
+    };
+  });
+}
+
+/**
+ * Altera a duracao inicial da rodada e reinicia o timer com esse novo tempo base.
+ *
+ * @param segundosBase - Novo tempo base escolhido pelo juiz.
+ */
+export function alterarDuracaoTimerRodada(segundosBase: number): void {
+  updateTournament((torneioAtual): TournamentState => {
+    const timerAtual = torneioAtual.roundTimer;
+
+    return {
+      ...torneioAtual,
+      roundTimer: criarTimerRodadaVazio(
+        timerAtual.roundIndex,
+        segundosBase,
+        timerAtual.tableExtensions,
+      ),
+    };
+  });
 }
 
 /** Adiciona 5 minutos ao timer global sem associar a uma mesa especifica. */
@@ -124,7 +192,7 @@ export function adicionarCincoMinutosGlobais(): void {
 }
 
 /**
- * Adiciona 5 minutos ao timer global e registra qual mesa recebeu o acrescimo.
+ * Registra 5 minutos extras apenas para uma mesa, sem alterar o timer global.
  *
  * @param indiceRodada - Indice baseado em zero da rodada da mesa.
  * @param indiceMesa - Indice baseado em zero da mesa.
@@ -132,7 +200,32 @@ export function adicionarCincoMinutosGlobais(): void {
 export function adicionarCincoMinutosParaMesa(indiceRodada: number, indiceMesa: number): void {
   const chaveMesa = getTableKey(indiceRodada, indiceMesa);
 
-  adicionarSegundosAoTimer(TABLE_EXTENSION_SECONDS, chaveMesa);
+  updateTournament((torneioAtual): TournamentState => ({
+    ...torneioAtual,
+    roundTimer: {
+      ...torneioAtual.roundTimer,
+      tableExtensions: {
+        ...torneioAtual.roundTimer.tableExtensions,
+        [chaveMesa]: (torneioAtual.roundTimer.tableExtensions[chaveMesa] ?? 0) + 1,
+      },
+    },
+  }));
+}
+
+/**
+ * Calcula o tempo restante especifico da mesa somando o acrescimo individual dela.
+ *
+ * @param timerRodada - Estado persistido do timer.
+ * @param chaveMesa - Chave da mesa usada no armazenamento.
+ * @returns Tempo restante da mesa, considerando timer global + acrescimos da mesa.
+ */
+export function calcularSegundosRestantesMesa(
+  timerRodada: RoundTimerState,
+  chaveMesa: string,
+): number {
+  const quantidadeAcrescimos = timerRodada.tableExtensions[chaveMesa] ?? 0;
+
+  return calcularSegundosRestantes(timerRodada) + quantidadeAcrescimos * TABLE_EXTENSION_SECONDS;
 }
 
 /**
@@ -163,9 +256,8 @@ export function sincronizarTimerExpirado(): void {
  * Soma segundos ao timer preservando a contagem em andamento.
  *
  * @param segundosExtras - Quantidade de segundos acrescentada.
- * @param chaveMesa - Chave opcional usada para auditar acrescimos por mesa.
  */
-function adicionarSegundosAoTimer(segundosExtras: number, chaveMesa?: string): void {
+function adicionarSegundosAoTimer(segundosExtras: number): void {
   updateTournament((torneioAtual): TournamentState => {
     const timerAtual = torneioAtual.roundTimer;
     const segundosRestantes = calcularSegundosRestantes(timerAtual) + segundosExtras;
@@ -177,12 +269,6 @@ function adicionarSegundosAoTimer(segundosExtras: number, chaveMesa?: string): v
         totalSeconds: timerAtual.totalSeconds + segundosExtras,
         remainingSeconds: segundosRestantes,
         startedAt: timerAtual.isRunning ? Date.now() : null,
-        tableExtensions: chaveMesa
-          ? {
-              ...timerAtual.tableExtensions,
-              [chaveMesa]: (timerAtual.tableExtensions[chaveMesa] ?? 0) + 1,
-            }
-          : timerAtual.tableExtensions,
       },
     };
   });

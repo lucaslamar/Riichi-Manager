@@ -27,6 +27,10 @@ export function renderQualityPanel(quality: QualityReport): string {
           <dd>${quality.twicePairCount}/${quality.idealRepeatedPairCount}</dd>
         </div>
         <div>
+          <dt>Jogador com pares 2x</dt>
+          <dd>${renderRepeatedOpponentMetric(quality)}</dd>
+        </div>
+        <div>
           <dt>Pares 3x+</dt>
           <dd>${quality.triplePairCount}</dd>
         </div>
@@ -35,8 +39,52 @@ export function renderQualityPanel(quality: QualityReport): string {
           <dd>${quality.fullTableRepeats}</dd>
         </div>
       </dl>
+      <div class="quality-actions">
+        <p>Nota ruim ou mesa monotona? Gere outro sorteio com os mesmos nomes.</p>
+        <button class="btn-outline" id="rerollScheduleButton" type="button">
+          <i class="fas fa-shuffle" aria-hidden="true"></i>
+          Refazer sorteio
+        </button>
+      </div>
+      ${renderRepeatedOpponentWarning(quality)}
       ${renderRepeatedPairs(repeatedPairs)}
     </section>
+  `;
+}
+
+function renderRepeatedOpponentMetric(quality: QualityReport): string {
+  if (quality.repeatedOpponentLimit === null) {
+    return `${quality.maxRepeatedOpponentsByPlayer}`;
+  }
+
+  return `${quality.maxRepeatedOpponentsByPlayer}/${quality.repeatedOpponentLimit}`;
+}
+
+function renderRepeatedOpponentWarning(quality: QualityReport): string {
+  if (quality.repeatedOpponentOverload.length === 0) {
+    return "";
+  }
+
+  return `
+    <div class="pair-details repeated-opponent-warning">
+      <h3>Jogadores com repeticao concentrada</h3>
+      <p>
+        Para torneios com 20+ jogadores, o alvo e cada jogador repetir no maximo
+        ${quality.repeatedOpponentLimit} adversario. Isso evita mesas monotonas.
+      </p>
+      <div class="pair-list">
+        ${quality.repeatedOpponentOverload
+          .map(
+            (player) => `
+              <span class="pair-chip danger">
+                ${escapeHtml(player.player)} repetiu ${player.count} jogadores
+                <strong>${escapeHtml(player.opponents.join(", "))}</strong>
+              </span>
+            `,
+          )
+          .join("")}
+      </div>
+    </div>
   `;
 }
 

@@ -1,7 +1,8 @@
 import { TABLE_EXTENSION_SECONDS } from "../tournament/constants";
 import { getTableKey } from "../tournament/tableKeys";
 import type { Round, Table, TournamentState } from "../tournament/types";
-import { escapeHtml, formatScore } from "../utils/format";
+import { escapeHtml, formatarDuracao, formatScore } from "../utils/format";
+import { calcularSegundosRestantesMesa } from "../app/actions";
 
 /**
  * Renderiza uma mesa com assentos, inputs de pontuacao e controles de acrescimo.
@@ -25,6 +26,8 @@ export function renderTableCard(
   const concluida = Boolean(torneio.completedTables[chaveMesa]);
   const pontuacoesSalvas = torneio.tableScores[chaveMesa];
   const totalAcrescimos = torneio.roundTimer.tableExtensions[chaveMesa] ?? 0;
+  const minutosExtras = totalAcrescimos * (TABLE_EXTENSION_SECONDS / 60);
+  const segundosRestantesMesa = calcularSegundosRestantesMesa(torneio.roundTimer, chaveMesa);
 
   return `
     <article class="mesa-box ${classeCor}">
@@ -32,6 +35,11 @@ export function renderTableCard(
         <span>Rodada ${rodada.id}</span>
         <strong>Mesa ${mesa.id}</strong>
       </header>
+      <div class="table-time-summary">
+        <span>Tempo da mesa</span>
+        <strong>${formatarDuracao(segundosRestantesMesa)}</strong>
+        <small>Acréscimo: +${minutosExtras} min</small>
+      </div>
       <div class="seat-list">
         ${mesa.seats
           .map((assento, indiceAssento) => {

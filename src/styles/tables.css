@@ -53,6 +53,33 @@
   color: var(--white);
 }
 
+
+.table-time-summary {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 12px;
+  border: 1px solid color-mix(in srgb, var(--round-color) 25%, #f0f0f0);
+  border-radius: 10px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--round-color) 8%, var(--white));
+}
+
+.table-time-summary span,
+.table-time-summary small {
+  color: #607080;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.table-time-summary strong {
+  color: var(--round-color);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .seat-list {
   display: grid;
   flex-grow: 1;
