@@ -6,7 +6,16 @@ import {
 } from "./storage";
 import type { TournamentState } from "../tournament/types";
 
+export type AppScreen =
+  | "home"
+  | "fastSetup"
+  | "swiss"
+  | "calculator"
+  | "handValidator"
+  | "yakuReference";
+
 let tournament = loadTournament();
+let appScreen: AppScreen = "home";
 
 // Estado em memoria. Sempre que muda, persistimos via set/update.
 export function getTournament(): TournamentState {
@@ -27,4 +36,24 @@ export function updateTournament(
 export function resetTournamentState(): void {
   removeTournament();
   tournament = createEmptyTournament();
+}
+
+export function getAppScreen(): AppScreen {
+  return appScreen;
+}
+
+export function setAppScreen(nextScreen: AppScreen): void {
+  appScreen = nextScreen;
+}
+
+export function isQuickSetupVisible(): boolean {
+  return appScreen === "fastSetup";
+}
+
+export function showQuickSetup(): void {
+  appScreen = "fastSetup";
+}
+
+export function hideQuickSetup(): void {
+  appScreen = "home";
 }

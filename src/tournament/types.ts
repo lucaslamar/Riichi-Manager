@@ -29,6 +29,9 @@ export type QualityReport = {
   exactEast: boolean;
   windRepeats: number;
   fullTableRepeats: number;
+  repeatedOpponentLimit: number | null;
+  maxRepeatedOpponentsByPlayer: number;
+  repeatedOpponentOverload: PlayerRepeatedOpponents[];
 };
 
 export type PairRepeat = {
@@ -36,9 +39,31 @@ export type PairRepeat = {
   count: number;
 };
 
+export type PlayerRepeatedOpponents = {
+  player: string;
+  count: number;
+  opponents: string[];
+};
+
 export type PairingCandidate = {
   rounds: Round[];
   quality: QualityReport;
+};
+
+/** Estado persistido do relogio da rodada atual. */
+export type RoundTimerState = {
+  /** Duracao do timer base da rodada, incluindo apenas acrescimos globais. */
+  totalSeconds: number;
+  /** Tempo restante salvo no ultimo render ou pausa. */
+  remainingSeconds: number;
+  /** Indice da rodada que esta sendo cronometrada. */
+  roundIndex: number;
+  /** Indica se o relogio deve continuar correndo entre renders/reloads. */
+  isRunning: boolean;
+  /** Momento em epoch milliseconds em que a contagem foi iniciada ou retomada. */
+  startedAt: number | null;
+  /** Quantos acrescimos individuais de 5 minutos foram dados por mesa. */
+  tableExtensions: Record<string, number>;
 };
 
 export type TournamentState = {
@@ -48,6 +73,7 @@ export type TournamentState = {
   classification: Record<string, number>;
   completedTables: Record<string, boolean>;
   tableScores: Record<string, string[]>;
+  roundTimer: RoundTimerState;
 };
 
 export type PdfDocument = {

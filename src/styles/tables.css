@@ -53,6 +53,33 @@
   color: var(--white);
 }
 
+
+.table-time-summary {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 12px;
+  border: 1px solid color-mix(in srgb, var(--round-color) 25%, #f0f0f0);
+  border-radius: 10px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--round-color) 8%, var(--white));
+}
+
+.table-time-summary span,
+.table-time-summary small {
+  color: #607080;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.table-time-summary strong {
+  color: var(--round-color);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .seat-list {
   display: grid;
   flex-grow: 1;
@@ -114,12 +141,42 @@
   white-space: nowrap;
 }
 
+.table-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .save-button {
   width: 100%;
-  margin-top: 15px;
   background: var(--round-color);
 }
 
 .save-button:hover {
   background: var(--round-color);
+}
+
+.table-time-button {
+  width: 100%;
+  border-color: var(--round-color);
+  color: var(--round-color);
+}
+
+.table-time-button:hover {
+  border-color: var(--round-color);
+  background: color-mix(in srgb, var(--round-color) 10%, var(--white));
+}
+
+.table-time-summary-muted {
+  border-color: #e4e9f0;
+  background: #f8fafc;
+}
+
+.table-time-summary-muted strong {
+  color: #607080;
+}
+
+.table-time-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }

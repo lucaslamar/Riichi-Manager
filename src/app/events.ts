@@ -1,68 +1,172 @@
 import { exportRankingPdf } from "../tournament/pdf";
 import { defaultScoreText } from "../utils/format";
-import { resetTournament, saveTableScores, startTournament } from "./actions";
-import { getTournament } from "./state";
+import {
+  adicionarCincoMinutosGlobais,
+  adicionarCincoMinutosParaMesa,
+  alterarDuracaoTimerRodada,
+  alternarTimerRodada,
+  resetTournament,
+  reiniciarTimerRodada,
+  selecionarRodadaDoTimer,
+} from "./actions";
+import {
+  iniciarTorneioFast,
+  refazerSorteioFast,
+  salvarPontuacoesMesaFast,
+} from "../fast/actions";
+import { getTournament, hideQuickSetup, setAppScreen, showQuickSetup } from "./state";
 
-// Este arquivo conhece o DOM. A regra de torneio fica em actions/tournament/pairing.
-export function bindEvents(render: () => void): void {
+/**
+ * Conecta os eventos do DOM ao codigo de regra do torneio.
+ *
+ * @param renderizar - Funcao que redesenha a tela depois de cada alteracao de estado.
+ */
+export function bindEvents(renderizar: () => void): void {
+  document.querySelector<HTMLButtonElement>("#quickTournamentButton")?.addEventListener(
+    "click",
+    () => {
+      showQuickSetup();
+      renderizar();
+    },
+  );
+  document.querySelectorAll<HTMLButtonElement>(".app-screen-button").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      const tela = botao.dataset.screen;
+
+      if (tela === "swiss" || tela === "calculator" || tela === "handValidator" || tela === "yakuReference") {
+        setAppScreen(tela);
+        renderizar();
+      }
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>("#backToHomeButton, .home-back-button").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      hideQuickSetup();
+      renderizar();
+    });
+  });
   document.querySelector<HTMLButtonElement>("#startButton")?.addEventListener(
     "click",
     () => {
-      const input = document.querySelector<HTMLTextAreaElement>("#playerList");
-      const validationError = startTournament(input?.value ?? "");
+      const campoJogadores = document.querySelector<HTMLTextAreaElement>("#playerList");
+      const erroValidacao = iniciarTorneioFast(campoJogadores?.value ?? "");
 
-      if (validationError) {
-        window.alert(validationError);
+      if (erroValidacao) {
+        window.alert(erroValidacao);
         return;
       }
 
-      render();
+      hideQuickSetup();
+      renderizar();
     },
   );
   document.querySelector<HTMLButtonElement>("#resetButton")?.addEventListener(
     "click",
     () => {
       resetTournament();
-      render();
+      hideQuickSetup();
+      renderizar();
     },
   );
   document.querySelector<HTMLButtonElement>("#exportPdfButton")?.addEventListener(
     "click",
     () => exportRankingPdf(getTournament()),
   );
-  document.querySelectorAll<HTMLButtonElement>(".save-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      const roundIndex = Number(button.dataset.round);
-      const tableIndex = Number(button.dataset.table);
-
-      // Injeta funcoes de leitura/confirmacao para a action nao depender de seletores.
-      saveTableScores(
-        roundIndex,
-        tableIndex,
-        (seatIndex) =>
-          document.querySelector<HTMLInputElement>(
-            `#score_${roundIndex}_${tableIndex}_${seatIndex}`,
-          )?.value ?? defaultScoreText(),
-        (summary) =>
-          window.confirm(`Confirmar resultados da Mesa ${tableIndex + 1}?\n${summary}`),
+  document.querySelector<HTMLButtonElement>("#rerollScheduleButton")?.addEventListener(
+    "click",
+    () => {
+      const confirmou = window.confirm(
+        "Refazer o sorteio mantendo os mesmos nomes?\n" +
+          "Isso apaga resultados, ranking e acrescimos da grade atual.",
       );
-      render();
+
+      if (!confirmou) {
+        return;
+      }
+
+      refazerSorteioFast();
+      renderizar();
+    },
+  );
+  document.querySelector<HTMLButtonElement>("#toggleRoundTimerButton")?.addEventListener(
+    "click",
+    () => {
+      alternarTimerRodada();
+      renderizar();
+    },
+  );
+  document.querySelector<HTMLButtonElement>("#addGlobalTimeButton")?.addEventListener(
+    "click",
+    () => {
+      adicionarCincoMinutosGlobais();
+      renderizar();
+    },
+  );
+  document.querySelector<HTMLButtonElement>("#resetRoundTimerButton")?.addEventListener(
+    "click",
+    () => {
+      reiniciarTimerRodada();
+      renderizar();
+    },
+  );
+  document.querySelector<HTMLSelectElement>("#roundTimerSelect")?.addEventListener(
+    "change",
+    (evento) => {
+      const seletorRodada = evento.currentTarget as HTMLSelectElement;
+
+      selecionarRodadaDoTimer(Number(seletorRodada.value));
+      renderizar();
+    },
+  );
+  document.querySelector<HTMLSelectElement>("#roundTimerDurationSelect")?.addEventListener(
+    "change",
+    (evento) => {
+      const seletorDuracao = evento.currentTarget as HTMLSelectElement;
+
+      alterarDuracaoTimerRodada(Number(seletorDuracao.value));
+      renderizar();
+    },
+  );
+  document.querySelectorAll<HTMLButtonElement>(".table-time-button").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      const indiceRodada = Number(botao.dataset.round);
+      const indiceMesa = Number(botao.dataset.table);
+
+      adicionarCincoMinutosParaMesa(indiceRodada, indiceMesa);
+      renderizar();
     });
   });
-  document.querySelectorAll<HTMLInputElement>(".player-row input").forEach((input) => {
-    // Mantem o comportamento do projeto original: 30.000 some ao focar e volta se vazio.
-    input.addEventListener("focus", () => {
-      if (input.value === defaultScoreText()) {
-        input.value = "";
+  document.querySelectorAll<HTMLButtonElement>(".save-button").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      const indiceRodada = Number(botao.dataset.round);
+      const indiceMesa = Number(botao.dataset.table);
+
+      salvarPontuacoesMesaFast(
+        indiceRodada,
+        indiceMesa,
+        (indiceAssento) =>
+          document.querySelector<HTMLInputElement>(
+            `#score_${indiceRodada}_${indiceMesa}_${indiceAssento}`,
+          )?.value ?? defaultScoreText(),
+        (resumo) =>
+          window.confirm(`Confirmar resultados da Mesa ${indiceMesa + 1}?\n${resumo}`),
+      );
+      renderizar();
+    });
+  });
+  document.querySelectorAll<HTMLInputElement>(".player-row input").forEach((campoPontuacao) => {
+    campoPontuacao.addEventListener("focus", () => {
+      if (campoPontuacao.value === defaultScoreText()) {
+        campoPontuacao.value = "";
       }
     });
-    input.addEventListener("blur", () => {
-      if (input.value.trim() === "") {
-        input.value = defaultScoreText();
+    campoPontuacao.addEventListener("blur", () => {
+      if (campoPontuacao.value.trim() === "") {
+        campoPontuacao.value = defaultScoreText();
       }
     });
-    input.addEventListener("input", () => {
-      input.value = input.value.replace(/[^-0-9.,]/g, "");
+    campoPontuacao.addEventListener("input", () => {
+      campoPontuacao.value = campoPontuacao.value.replace(/[^-0-9.,]/g, "");
     });
   });
 }
