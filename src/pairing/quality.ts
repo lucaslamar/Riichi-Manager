@@ -1,5 +1,15 @@
-import { WINDS } from "../tournament/constants";
-import type { PairKey, PairRepeat, QualityReport, Round } from "../tournament/types";
+import {
+  MAX_REPEATED_OPPONENTS_PER_PLAYER,
+  REPEATED_OPPONENT_SPREAD_MIN_PLAYERS,
+  WINDS,
+} from "../tournament/constants";
+import type {
+  PairKey,
+  PairRepeat,
+  PlayerRepeatedOpponents,
+  QualityReport,
+  Round,
+} from "../tournament/types";
 
 export function pairKey(playerA: string, playerB: string): PairKey {
   return [playerA, playerB].sort((a, b) => a.localeCompare(b)).join("::");
@@ -47,6 +57,55 @@ export function getWindCounts(rounds: Round[]): Map<string, Map<string, number>>
   }
 
   return counts;
+}
+
+/**
+ * Calcula quantos adversarios repetidos cada jogador teve.
+ *
+ * @param repeatedPairs - Pares que se encontraram mais de uma vez na grade.
+ * @returns Lista ordenada dos jogadores que tiveram pelo menos um adversario repetido.
+ */
+function buildRepeatedOpponentsByPlayer(
+  repeatedPairs: PairRepeat[],
+): PlayerRepeatedOpponents[] {
+  const opponentsByPlayer = new Map<string, Set<string>>();
+
+  for (const pair of repeatedPairs) {
+    const [playerA, playerB] = pair.players;
+    const playerAOpponents = opponentsByPlayer.get(playerA) ?? new Set<string>();
+    const playerBOpponents = opponentsByPlayer.get(playerB) ?? new Set<string>();
+
+    playerAOpponents.add(playerB);
+    playerBOpponents.add(playerA);
+    opponentsByPlayer.set(playerA, playerAOpponents);
+    opponentsByPlayer.set(playerB, playerBOpponents);
+  }
+
+  return [...opponentsByPlayer.entries()]
+    .map(([player, opponents]) => ({
+      player,
+      count: opponents.size,
+      opponents: [...opponents].sort((opponentA, opponentB) =>
+        opponentA.localeCompare(opponentB),
+      ),
+    }))
+    .sort(
+      (playerA, playerB) =>
+        playerB.count - playerA.count || playerA.player.localeCompare(playerB.player),
+    );
+}
+
+/**
+ * Define quando a grade deve espalhar repeticoes para evitar mesas monotonas.
+ * Em torneios pequenos, repeticao e inevitavel demais para impor esse limite.
+ *
+ * @param playerCount - Quantidade de participantes do torneio.
+ * @returns Limite por jogador ou null quando o criterio nao deve ser aplicado.
+ */
+function repeatedOpponentLimit(playerCount: number): number | null {
+  return playerCount >= REPEATED_OPPONENT_SPREAD_MIN_PLAYERS
+    ? MAX_REPEATED_OPPONENTS_PER_PLAYER
+    : null;
 }
 
 export function evaluateSchedule(rounds: Round[]): QualityReport {
@@ -102,6 +161,18 @@ export function evaluateSchedule(rounds: Round[]): QualityReport {
     }
   }
 
+  const repeatedOpponentsByPlayer = buildRepeatedOpponentsByPlayer(repeatedPairs);
+  const repeatedOpponentLimitValue = repeatedOpponentLimit(playerCount);
+  const repeatedOpponentOverload = repeatedOpponentLimitValue === null
+    ? []
+    : repeatedOpponentsByPlayer.filter(
+        (player) => player.count > repeatedOpponentLimitValue,
+      );
+  const repeatedOpponentOverloadPenalty = repeatedOpponentOverload.reduce(
+    (total, player) => total + (player.count - (repeatedOpponentLimitValue ?? 0)),
+    0,
+  );
+  const maxRepeatedOpponentsByPlayer = repeatedOpponentsByPlayer[0]?.count ?? 0;
   const fullTableRepeats = [...tableCounts.values()].filter((count) => count > 1)
     .length;
   const exactEast = [...windCounts.values()].every(
@@ -111,6 +182,7 @@ export function evaluateSchedule(rounds: Round[]): QualityReport {
     // Problemas graves recebem peso alto para perderem de grades com repeticoes leves.
     triplePairCount * 12000 +
     Math.max(0, maxPairRepeats - 2) * 6000 +
+    repeatedOpponentOverloadPenalty * 3500 +
     twicePairCount * 85 +
     repeatedPairCount * 30 +
     fullTableRepeats * 900 +
@@ -131,11 +203,18 @@ export function evaluateSchedule(rounds: Round[]): QualityReport {
     exactEast,
     windRepeats,
     fullTableRepeats,
+    repeatedOpponentLimit: repeatedOpponentLimitValue,
+    maxRepeatedOpponentsByPlayer,
+    repeatedOpponentOverload,
   };
 }
 
 export function qualityLabel(quality: QualityReport): string {
-  if (quality.triplePairCount > 0 || quality.windRepeats > 0) {
+  if (
+    quality.triplePairCount > 0 ||
+    quality.windRepeats > 0 ||
+    quality.repeatedOpponentOverload.length > 0
+  ) {
     return "Precisa melhorar";
   }
 
