@@ -1,38 +1,47 @@
 /**
- * Renderiza o menu inicial de modos do app.
+ * Renderiza o menu inicial de modulos do ecossistema Riichi Manager.
  *
- * @returns HTML do menu inicial com o fluxo rapido disponivel e os proximos modos sinalizados.
+ * @returns HTML do menu inicial com torneio rapido disponivel e futuros modulos sinalizados.
  */
 export function renderHomeMenu(): string {
   return `
     <section class="card home-menu" aria-label="Menu inicial">
       <div class="home-menu-hero">
-        <span class="home-menu-kicker">Riichi Manager</span>
-        <h2>Escolha o tipo de torneio</h2>
+        <span class="home-menu-kicker">Ecossistema para clubes de mahjong</span>
+        <h2>Riichi Manager</h2>
         <p>
-          Comece pelo torneio rapido atual ou prepare o caminho para o sistema suico competitivo.
+          Organize torneios, acompanhe partidas e evolua para ferramentas de estudo,
+          calculadora e referencia de yaku no mesmo lugar.
         </p>
       </div>
 
       <div class="home-menu-actions">
         <button class="btn-primary home-menu-button" id="quickTournamentButton" type="button">
           <i class="fas fa-bolt" aria-hidden="true"></i>
-          Torneio rapido
+          Torneio fast
         </button>
         <button class="btn-outline home-menu-button" type="button" disabled>
           <i class="fas fa-trophy" aria-hidden="true"></i>
           Sistema suico em breve
         </button>
         <button class="btn-outline home-menu-button" type="button" disabled>
-          <i class="fas fa-upload" aria-hidden="true"></i>
-          Importar checkpoint em breve
+          <i class="fas fa-calculator" aria-hidden="true"></i>
+          Calculadora de mao em breve
+        </button>
+        <button class="btn-outline home-menu-button" type="button" disabled>
+          <i class="fas fa-check-circle" aria-hidden="true"></i>
+          Validador de mao em breve
+        </button>
+        <button class="btn-outline home-menu-button" type="button" disabled>
+          <i class="fas fa-book" aria-hidden="true"></i>
+          Referencia de yaku em breve
         </button>
       </div>
 
       <ul class="home-menu-notes">
-        <li>Torneio rapido: sorteia todas as rodadas antes e controla ventos.</li>
+        <li>Torneio fast: sorteia todas as rodadas antes, controla ventos e deixa a grade inteira visivel.</li>
         <li>Sistema suico: primeira rodada aleatoria; depois melhores contra melhores por ranking.</li>
-        <li>Checkpoint JSON: exportar/importar o andamento para continuar em outro computador.</li>
+        <li>Checkpoint JSON fica dentro do sistema suico, porque esse modo pode durar varios dias.</li>
       </ul>
     </section>
   `;
