@@ -1,5 +1,5 @@
-import type { Round, TournamentState } from "../tournament/types";
-import { renderTableCard } from "./TableCard";
+import type { Round, TournamentState } from "../../tournament/types";
+import { renderFastTableCard } from "./FastTableCard";
 
 /**
  * Renderiza todas as mesas do torneio fast para auditoria de ventos e pessoas.
@@ -8,7 +8,7 @@ import { renderTableCard } from "./TableCard";
  * @param tournament - Estado atual, incluindo a rodada selecionada no timer.
  * @returns HTML da grade completa do torneio fast.
  */
-export function renderRoundGrid(rounds: Round[], tournament: TournamentState): string {
+export function renderFastRoundGrid(rounds: Round[], tournament: TournamentState): string {
   const activeRound = rounds[tournament.roundTimer.roundIndex] ?? rounds[0];
 
   return `
@@ -27,7 +27,7 @@ export function renderRoundGrid(rounds: Round[], tournament: TournamentState): s
           .map((round, roundIndex) =>
             round.tables
               .map((table, tableIndex) =>
-                renderTableCard(round, table, roundIndex, tableIndex, tournament),
+                renderFastTableCard(round, table, roundIndex, tableIndex, tournament),
               )
               .join(""),
           )

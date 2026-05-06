@@ -1,8 +1,8 @@
-import { TABLE_EXTENSION_SECONDS } from "../tournament/constants";
-import { getTableKey } from "../tournament/tableKeys";
-import type { Round, Table, TournamentState } from "../tournament/types";
-import { escapeHtml, formatarDuracao, formatScore } from "../utils/format";
-import { calcularSegundosRestantesMesa } from "../app/actions";
+import { TABLE_EXTENSION_SECONDS } from "../../tournament/constants";
+import { getTableKey } from "../../tournament/tableKeys";
+import type { Round, Table, TournamentState } from "../../tournament/types";
+import { escapeHtml, formatarDuracao, formatScore } from "../../utils/format";
+import { calcularSegundosRestantesMesa } from "../../app/actions";
 
 /**
  * Renderiza uma mesa com assentos, inputs de pontuacao e controles de acrescimo.
@@ -14,7 +14,7 @@ import { calcularSegundosRestantesMesa } from "../app/actions";
  * @param torneio - Estado completo usado para saber se a mesa esta arquivada.
  * @returns HTML do cartao da mesa.
  */
-export function renderTableCard(
+export function renderFastTableCard(
   rodada: Round,
   mesa: Table,
   indiceRodada: number,

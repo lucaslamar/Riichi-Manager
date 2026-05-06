@@ -1,9 +1,9 @@
-import { qualityLabel } from "../pairing/quality";
-import type { QualityReport } from "../tournament/types";
-import { escapeHtml } from "../utils/format";
+import { qualityLabel } from "../../pairing/quality";
+import type { QualityReport } from "../../tournament/types";
+import { escapeHtml } from "../../utils/format";
 
 // Painel de auditoria do chaveamento: mostra por que uma grade e boa ou suspeita.
-export function renderQualityPanel(quality: QualityReport): string {
+export function renderFastQualityPanel(quality: QualityReport): string {
   const repeatedPairs = quality.repeatedPairs ?? [];
 
   return `

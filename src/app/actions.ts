@@ -1,13 +1,8 @@
-import { generateRiichiBalancedSchedule } from "../pairing/riichiBalanced";
-import { STARTING_SCORE, TABLE_EXTENSION_SECONDS } from "../tournament/constants";
-import { parsePlayers, validatePlayers } from "../tournament/players";
-import { calculateMatchPoints } from "../tournament/scoring";
+import { TABLE_EXTENSION_SECONDS } from "../tournament/constants";
 import { getTableKey } from "../tournament/tableKeys";
 import type { RoundTimerState, TournamentState } from "../tournament/types";
-import { formatScore, parseScore } from "../utils/format";
-import { shuffle } from "../utils/random";
 import { criarTimerRodadaVazio } from "./storage";
-import { getTournament, resetTournamentState, setTournament, updateTournament } from "./state";
+import { getTournament, resetTournamentState, updateTournament } from "./state";
 
 /**
  * Informa se ja existe uma grade de mesas carregada.
@@ -17,68 +12,6 @@ import { getTournament, resetTournamentState, setTournament, updateTournament } 
  */
 export function isTournamentActive(torneio = getTournament()): boolean {
   return torneio.schedule.length > 0 && torneio.players.length > 0;
-}
-
-/**
- * Cria um torneio novo a partir da lista digitada, sem depender de botoes de quantidade.
- *
- * @param jogadoresDigitados - Texto com nomes separados por linha ou virgula.
- * @returns Mensagem de erro de validacao ou null quando o torneio foi criado.
- */
-export function startTournament(jogadoresDigitados: string): string | null {
-  const jogadores = parsePlayers(jogadoresDigitados);
-  const erroValidacao = validatePlayers(jogadores);
-
-  if (erroValidacao) {
-    return erroValidacao;
-  }
-
-  const jogadoresEmbaralhados = shuffle(jogadores);
-  const gradeCandidata = generateRiichiBalancedSchedule(jogadoresEmbaralhados);
-
-  setTournament({
-    players: jogadoresEmbaralhados,
-    schedule: gradeCandidata.rounds,
-    quality: gradeCandidata.quality,
-    classification: Object.fromEntries(jogadoresEmbaralhados.map((jogador) => [jogador, 0])),
-    completedTables: {},
-    tableScores: {},
-    roundTimer: criarTimerRodadaVazio(),
-  });
-
-  return null;
-}
-
-
-/**
- * Refaz apenas o sorteio das mesas usando os mesmos jogadores ja cadastrados.
- * Ranking, resultados salvos e acrescimos por mesa sao limpos porque pertencem
- * a grade antiga; a duracao base escolhida pelo juiz e preservada.
- *
- * @returns true quando um novo sorteio foi gerado; false quando nao ha torneio ativo.
- */
-export function refazerSorteio(): boolean {
-  const torneioAtual = getTournament();
-
-  if (!isTournamentActive(torneioAtual)) {
-    return false;
-  }
-
-  const jogadoresEmbaralhados = shuffle(torneioAtual.players);
-  const gradeCandidata = generateRiichiBalancedSchedule(jogadoresEmbaralhados);
-
-  setTournament({
-    ...torneioAtual,
-    players: jogadoresEmbaralhados,
-    schedule: gradeCandidata.rounds,
-    quality: gradeCandidata.quality,
-    classification: Object.fromEntries(jogadoresEmbaralhados.map((jogador) => [jogador, 0])),
-    completedTables: {},
-    tableScores: {},
-    roundTimer: criarTimerRodadaVazio(0, torneioAtual.roundTimer.totalSeconds),
-  });
-
-  return true;
 }
 
 /** Reinicia o estado em memoria e remove o save do navegador. */
@@ -269,72 +202,6 @@ function adicionarSegundosAoTimer(segundosExtras: number): void {
         totalSeconds: timerAtual.totalSeconds + segundosExtras,
         remainingSeconds: segundosRestantes,
         startedAt: timerAtual.isRunning ? Date.now() : null,
-      },
-    };
-  });
-}
-
-/**
- * Salva a pontuacao final de uma mesa, atualiza o ranking e trava novos lancamentos nela.
- *
- * @param indiceRodada - Indice baseado em zero da rodada.
- * @param indiceMesa - Indice baseado em zero da mesa.
- * @param lerPontuacao - Funcao que le o input de cada assento no DOM.
- * @param confirmarSalvamento - Funcao que pede confirmacao antes de arquivar a mesa.
- */
-export function saveTableScores(
-  indiceRodada: number,
-  indiceMesa: number,
-  lerPontuacao: (indiceAssento: number) => string,
-  confirmarSalvamento: (resumo: string) => boolean,
-): void {
-  const torneio = getTournament();
-  const mesa = torneio.schedule[indiceRodada]?.tables[indiceMesa];
-
-  if (!mesa) {
-    return;
-  }
-
-  const chaveMesa = getTableKey(indiceRodada, indiceMesa);
-
-  if (torneio.completedTables[chaveMesa]) {
-    return;
-  }
-
-  const pontuacoesLidas = mesa.seats.map((assento, indiceAssento) => {
-    const pontuacao = parseScore(lerPontuacao(indiceAssento) || String(STARTING_SCORE));
-
-    return {
-      player: assento.player,
-      score: pontuacao,
-      text: formatScore(pontuacao),
-    };
-  });
-  const resumo = pontuacoesLidas
-    .map((resultado) => `${resultado.player}: ${resultado.text}`)
-    .join("\n");
-
-  if (!confirmarSalvamento(resumo)) {
-    return;
-  }
-
-  updateTournament((torneioAtual): TournamentState => {
-    const classificacao = { ...torneioAtual.classification };
-
-    for (const resultado of calculateMatchPoints(pontuacoesLidas)) {
-      classificacao[resultado.player] = (classificacao[resultado.player] ?? 0) + resultado.points;
-    }
-
-    return {
-      ...torneioAtual,
-      classification: classificacao,
-      completedTables: {
-        ...torneioAtual.completedTables,
-        [chaveMesa]: true,
-      },
-      tableScores: {
-        ...torneioAtual.tableScores,
-        [chaveMesa]: pontuacoesLidas.map((resultado) => resultado.text),
       },
     };
   });

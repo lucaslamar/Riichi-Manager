@@ -1,6 +1,6 @@
-import { DEFAULT_PLAYERS } from "../tournament/constants";
+import { DEFAULT_PLAYERS } from "../../tournament/constants";
 
-export function renderSetupCard(active: boolean, visible = true): string {
+export function renderFastSetupCard(active: boolean, visible = true): string {
   return `
     <section id="setupContainer" class="card ${active || !visible ? "hidden" : ""}" aria-label="Configuracao do torneio">
       <div class="section-title-container">

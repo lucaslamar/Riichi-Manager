@@ -5,13 +5,15 @@ import {
   adicionarCincoMinutosParaMesa,
   alterarDuracaoTimerRodada,
   alternarTimerRodada,
-  refazerSorteio,
   resetTournament,
   reiniciarTimerRodada,
-  saveTableScores,
   selecionarRodadaDoTimer,
-  startTournament,
 } from "./actions";
+import {
+  iniciarTorneioFast,
+  refazerSorteioFast,
+  salvarPontuacoesMesaFast,
+} from "../fast/actions";
 import { getTournament, hideQuickSetup, showQuickSetup } from "./state";
 
 /**
@@ -38,7 +40,7 @@ export function bindEvents(renderizar: () => void): void {
     "click",
     () => {
       const campoJogadores = document.querySelector<HTMLTextAreaElement>("#playerList");
-      const erroValidacao = startTournament(campoJogadores?.value ?? "");
+      const erroValidacao = iniciarTorneioFast(campoJogadores?.value ?? "");
 
       if (erroValidacao) {
         window.alert(erroValidacao);
@@ -73,7 +75,7 @@ export function bindEvents(renderizar: () => void): void {
         return;
       }
 
-      refazerSorteio();
+      refazerSorteioFast();
       renderizar();
     },
   );
@@ -130,7 +132,7 @@ export function bindEvents(renderizar: () => void): void {
       const indiceRodada = Number(botao.dataset.round);
       const indiceMesa = Number(botao.dataset.table);
 
-      saveTableScores(
+      salvarPontuacoesMesaFast(
         indiceRodada,
         indiceMesa,
         (indiceAssento) =>

@@ -2,11 +2,11 @@ import { isTournamentActive } from "./actions";
 import { getTournament, isQuickSetupVisible } from "./state";
 import { renderHeader } from "../components/Header";
 import { renderHomeMenu } from "../components/HomeMenu";
-import { renderQualityPanel } from "../components/QualityPanel";
-import { renderRanking } from "../components/RankingTable";
+import { renderFastQualityPanel } from "../fast/components/FastQualityPanel";
+import { renderFastRanking } from "../fast/components/FastRankingTable";
 import { renderTimerRodada } from "../components/RoundTimer";
-import { renderRoundGrid } from "../components/RoundGrid";
-import { renderSetupCard } from "../components/SetupCard";
+import { renderFastRoundGrid } from "../fast/components/FastRoundGrid";
+import { renderFastSetupCard } from "../fast/components/FastSetupCard";
 
 /**
  * Compoe a pagina a partir dos componentes pequenos e do estado atual.
@@ -22,11 +22,11 @@ export function renderApp(app: HTMLDivElement): void {
     ${renderHeader()}
     <main class="content-wrapper">
       ${!torneioAtivo && !configuracaoRapidaVisivel ? renderHomeMenu() : ""}
-      ${renderSetupCard(torneioAtivo, configuracaoRapidaVisivel)}
-      ${renderRanking(torneioAtivo, torneio)}
+      ${renderFastSetupCard(torneioAtivo, configuracaoRapidaVisivel)}
+      ${renderFastRanking(torneioAtivo, torneio)}
       ${torneioAtivo ? renderTimerRodada(torneio) : ""}
-      ${torneioAtivo && torneio.quality ? renderQualityPanel(torneio.quality) : ""}
-      ${torneioAtivo ? renderRoundGrid(torneio.schedule, torneio) : ""}
+      ${torneioAtivo && torneio.quality ? renderFastQualityPanel(torneio.quality) : ""}
+      ${torneioAtivo ? renderFastRoundGrid(torneio.schedule, torneio) : ""}
     </main>
   `;
 }
