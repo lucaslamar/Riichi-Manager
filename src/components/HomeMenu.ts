@@ -7,8 +7,7 @@ export function renderHomeMenu(): string {
   return `
     <section class="card home-menu" aria-label="Menu inicial">
       <div class="home-menu-hero">
-        <span class="home-menu-kicker">Ecossistema para clubes de mahjong</span>
-        <h2>Riichi Manager</h2>
+        <h2>Um ecossistema para clubes de Riichi Mahjong</h2>
         <p>
           Organize torneios, acompanhe partidas e evolua para ferramentas de estudo,
           calculadora e referencia de yaku no mesmo lugar.
