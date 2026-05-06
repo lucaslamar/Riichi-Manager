@@ -49,6 +49,38 @@ export function startTournament(jogadoresDigitados: string): string | null {
   return null;
 }
 
+
+/**
+ * Refaz apenas o sorteio das mesas usando os mesmos jogadores ja cadastrados.
+ * Ranking, resultados salvos e acrescimos por mesa sao limpos porque pertencem
+ * a grade antiga; a duracao base escolhida pelo juiz e preservada.
+ *
+ * @returns true quando um novo sorteio foi gerado; false quando nao ha torneio ativo.
+ */
+export function refazerSorteio(): boolean {
+  const torneioAtual = getTournament();
+
+  if (!isTournamentActive(torneioAtual)) {
+    return false;
+  }
+
+  const jogadoresEmbaralhados = shuffle(torneioAtual.players);
+  const gradeCandidata = generateRiichiBalancedSchedule(jogadoresEmbaralhados);
+
+  setTournament({
+    ...torneioAtual,
+    players: jogadoresEmbaralhados,
+    schedule: gradeCandidata.rounds,
+    quality: gradeCandidata.quality,
+    classification: Object.fromEntries(jogadoresEmbaralhados.map((jogador) => [jogador, 0])),
+    completedTables: {},
+    tableScores: {},
+    roundTimer: criarTimerRodadaVazio(0, torneioAtual.roundTimer.totalSeconds),
+  });
+
+  return true;
+}
+
 /** Reinicia o estado em memoria e remove o save do navegador. */
 export function resetTournament(): void {
   resetTournamentState();

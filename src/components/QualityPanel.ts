@@ -39,6 +39,13 @@ export function renderQualityPanel(quality: QualityReport): string {
           <dd>${quality.fullTableRepeats}</dd>
         </div>
       </dl>
+      <div class="quality-actions">
+        <p>Nota ruim ou mesa monotona? Gere outro sorteio com os mesmos nomes.</p>
+        <button class="btn-outline" id="rerollScheduleButton" type="button">
+          <i class="fas fa-shuffle" aria-hidden="true"></i>
+          Refazer sorteio
+        </button>
+      </div>
       ${renderRepeatedOpponentWarning(quality)}
       ${renderRepeatedPairs(repeatedPairs)}
     </section>

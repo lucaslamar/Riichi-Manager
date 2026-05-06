@@ -5,6 +5,7 @@ import {
   adicionarCincoMinutosParaMesa,
   alterarDuracaoTimerRodada,
   alternarTimerRodada,
+  refazerSorteio,
   resetTournament,
   reiniciarTimerRodada,
   saveTableScores,
@@ -43,6 +44,22 @@ export function bindEvents(renderizar: () => void): void {
   document.querySelector<HTMLButtonElement>("#exportPdfButton")?.addEventListener(
     "click",
     () => exportRankingPdf(getTournament()),
+  );
+  document.querySelector<HTMLButtonElement>("#rerollScheduleButton")?.addEventListener(
+    "click",
+    () => {
+      const confirmou = window.confirm(
+        "Refazer o sorteio mantendo os mesmos nomes?\n" +
+          "Isso apaga resultados, ranking e acrescimos da grade atual.",
+      );
+
+      if (!confirmou) {
+        return;
+      }
+
+      refazerSorteio();
+      renderizar();
+    },
   );
   document.querySelector<HTMLButtonElement>("#toggleRoundTimerButton")?.addEventListener(
     "click",
