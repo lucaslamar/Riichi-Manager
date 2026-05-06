@@ -1,7 +1,7 @@
-import type { TournamentState } from "../tournament/types";
-import { escapeHtml } from "../utils/format";
+import type { TournamentState } from "../../tournament/types";
+import { escapeHtml } from "../../utils/format";
 
-export function renderRanking(active: boolean, tournament: TournamentState): string {
+export function renderFastRanking(active: boolean, tournament: TournamentState): string {
   return `
     <section id="championship" class="card ${active ? "" : "hidden"}" aria-label="Classificacao geral">
       <div class="section-title-container">
@@ -25,7 +25,7 @@ export function renderRanking(active: boolean, tournament: TournamentState): str
           </tr>
         </thead>
         <tbody>
-          ${renderRankingRows(tournament)}
+          ${renderFastRankingRows(tournament)}
         </tbody>
       </table>
 
@@ -39,7 +39,7 @@ export function renderRanking(active: boolean, tournament: TournamentState): str
   `;
 }
 
-function renderRankingRows(tournament: TournamentState): string {
+function renderFastRankingRows(tournament: TournamentState): string {
   return Object.entries(tournament.classification)
     .sort(([, pointsA], [, pointsB]) => pointsB - pointsA)
     .map(

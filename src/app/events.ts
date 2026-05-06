@@ -5,14 +5,16 @@ import {
   adicionarCincoMinutosParaMesa,
   alterarDuracaoTimerRodada,
   alternarTimerRodada,
-  refazerSorteio,
   resetTournament,
   reiniciarTimerRodada,
-  saveTableScores,
   selecionarRodadaDoTimer,
-  startTournament,
 } from "./actions";
-import { getTournament } from "./state";
+import {
+  iniciarTorneioFast,
+  refazerSorteioFast,
+  salvarPontuacoesMesaFast,
+} from "../fast/actions";
+import { getTournament, hideQuickSetup, setAppScreen, showQuickSetup } from "./state";
 
 /**
  * Conecta os eventos do DOM ao codigo de regra do torneio.
@@ -20,17 +22,41 @@ import { getTournament } from "./state";
  * @param renderizar - Funcao que redesenha a tela depois de cada alteracao de estado.
  */
 export function bindEvents(renderizar: () => void): void {
+  document.querySelector<HTMLButtonElement>("#quickTournamentButton")?.addEventListener(
+    "click",
+    () => {
+      showQuickSetup();
+      renderizar();
+    },
+  );
+  document.querySelectorAll<HTMLButtonElement>(".app-screen-button").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      const tela = botao.dataset.screen;
+
+      if (tela === "swiss" || tela === "handTools" || tela === "yakuReference") {
+        setAppScreen(tela);
+        renderizar();
+      }
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>("#backToHomeButton, .home-back-button").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      hideQuickSetup();
+      renderizar();
+    });
+  });
   document.querySelector<HTMLButtonElement>("#startButton")?.addEventListener(
     "click",
     () => {
       const campoJogadores = document.querySelector<HTMLTextAreaElement>("#playerList");
-      const erroValidacao = startTournament(campoJogadores?.value ?? "");
+      const erroValidacao = iniciarTorneioFast(campoJogadores?.value ?? "");
 
       if (erroValidacao) {
         window.alert(erroValidacao);
         return;
       }
 
+      hideQuickSetup();
       renderizar();
     },
   );
@@ -38,6 +64,7 @@ export function bindEvents(renderizar: () => void): void {
     "click",
     () => {
       resetTournament();
+      hideQuickSetup();
       renderizar();
     },
   );
@@ -57,7 +84,7 @@ export function bindEvents(renderizar: () => void): void {
         return;
       }
 
-      refazerSorteio();
+      refazerSorteioFast();
       renderizar();
     },
   );
@@ -114,7 +141,7 @@ export function bindEvents(renderizar: () => void): void {
       const indiceRodada = Number(botao.dataset.round);
       const indiceMesa = Number(botao.dataset.table);
 
-      saveTableScores(
+      salvarPontuacoesMesaFast(
         indiceRodada,
         indiceMesa,
         (indiceAssento) =>
