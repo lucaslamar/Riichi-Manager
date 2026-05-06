@@ -1,8 +1,8 @@
-import { TABLE_EXTENSION_SECONDS } from "../tournament/constants";
-import { getTableKey } from "../tournament/tableKeys";
-import type { Round, Table, TournamentState } from "../tournament/types";
-import { escapeHtml, formatarDuracao, formatScore } from "../utils/format";
-import { calcularSegundosRestantesMesa } from "../app/actions";
+import { TABLE_EXTENSION_SECONDS } from "../../tournament/constants";
+import { getTableKey } from "../../tournament/tableKeys";
+import type { Round, Table, TournamentState } from "../../tournament/types";
+import { escapeHtml, formatarDuracao, formatScore } from "../../utils/format";
+import { calcularSegundosRestantesMesa } from "../../app/actions";
 
 /**
  * Renderiza uma mesa com assentos, inputs de pontuacao e controles de acrescimo.
@@ -14,7 +14,7 @@ import { calcularSegundosRestantesMesa } from "../app/actions";
  * @param torneio - Estado completo usado para saber se a mesa esta arquivada.
  * @returns HTML do cartao da mesa.
  */
-export function renderTableCard(
+export function renderFastTableCard(
   rodada: Round,
   mesa: Table,
   indiceRodada: number,
@@ -27,6 +27,7 @@ export function renderTableCard(
   const pontuacoesSalvas = torneio.tableScores[chaveMesa];
   const totalAcrescimos = torneio.roundTimer.tableExtensions[chaveMesa] ?? 0;
   const minutosExtras = totalAcrescimos * (TABLE_EXTENSION_SECONDS / 60);
+  const rodadaComTimerAtivo = indiceRodada === torneio.roundTimer.roundIndex;
   const segundosRestantesMesa = calcularSegundosRestantesMesa(torneio.roundTimer, chaveMesa);
 
   return `
@@ -35,10 +36,16 @@ export function renderTableCard(
         <span>Rodada ${rodada.id}</span>
         <strong>Mesa ${mesa.id}</strong>
       </header>
-      <div class="table-time-summary">
-        <span>Tempo da mesa</span>
-        <strong>${formatarDuracao(segundosRestantesMesa)}</strong>
-        <small>Acréscimo: +${minutosExtras} min</small>
+      <div class="table-time-summary ${rodadaComTimerAtivo ? "" : "table-time-summary-muted"}">
+        <span>${rodadaComTimerAtivo ? "Tempo da mesa" : "Timer de outra rodada"}</span>
+        <strong>${rodadaComTimerAtivo ? formatarDuracao(segundosRestantesMesa) : `Rodada ${rodada.id}`}</strong>
+        <small>
+          ${
+            rodadaComTimerAtivo
+              ? `Acréscimo: +${minutosExtras} min`
+              : `Selecione a Rodada ${rodada.id} no timer para iniciar ou dar acrescimo.`
+          }
+        </small>
       </div>
       <div class="seat-list">
         ${mesa.seats
@@ -69,6 +76,7 @@ export function renderTableCard(
           data-round="${indiceRodada}"
           data-table="${indiceMesa}"
           type="button"
+          ${rodadaComTimerAtivo ? "" : "disabled"}
         >
           <i class="fas fa-clock" aria-hidden="true"></i>
           +${TABLE_EXTENSION_SECONDS / 60} min mesa${totalAcrescimos > 0 ? ` (${totalAcrescimos}x)` : ""}

@@ -16,13 +16,4 @@ export const ROUND_TIMER_OPTIONS = [
   { label: "2h", seconds: 120 * 60 },
 ];
 
-export const DEFAULT_PLAYERS = [
-  "Ari",
-  "Lamar",
-  "Magalhaes",
-  "Dani Boy",
-  "Visoni",
-  "Santiago",
-  "99 SAX",
-  "Bell",
-];
+export const DEFAULT_PLAYERS = [];

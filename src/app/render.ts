@@ -1,11 +1,13 @@
 import { isTournamentActive } from "./actions";
-import { getTournament } from "./state";
+import { getAppScreen, getTournament } from "./state";
+import { renderFeaturePlaceholder } from "../components/FeaturePlaceholder";
 import { renderHeader } from "../components/Header";
-import { renderQualityPanel } from "../components/QualityPanel";
-import { renderRanking } from "../components/RankingTable";
+import { renderHomeMenu } from "../components/HomeMenu";
+import { renderFastQualityPanel } from "../fast/components/FastQualityPanel";
+import { renderFastRanking } from "../fast/components/FastRankingTable";
 import { renderTimerRodada } from "../components/RoundTimer";
-import { renderRoundGrid } from "../components/RoundGrid";
-import { renderSetupCard } from "../components/SetupCard";
+import { renderFastRoundGrid } from "../fast/components/FastRoundGrid";
+import { renderFastSetupCard } from "../fast/components/FastSetupCard";
 
 /**
  * Compoe a pagina a partir dos componentes pequenos e do estado atual.
@@ -15,15 +17,18 @@ import { renderSetupCard } from "../components/SetupCard";
 export function renderApp(app: HTMLDivElement): void {
   const torneio = getTournament();
   const torneioAtivo = isTournamentActive(torneio);
+  const telaAtual = getAppScreen();
 
   app.innerHTML = `
     ${renderHeader()}
     <main class="content-wrapper">
-      ${renderSetupCard(torneioAtivo)}
-      ${renderRanking(torneioAtivo, torneio)}
+      ${!torneioAtivo && telaAtual === "home" ? renderHomeMenu() : ""}
+      ${!torneioAtivo && telaAtual === "fastSetup" ? renderFastSetupCard(torneioAtivo, true) : ""}
+      ${!torneioAtivo ? renderFeaturePlaceholder(telaAtual) : ""}
+      ${renderFastRanking(torneioAtivo, torneio)}
       ${torneioAtivo ? renderTimerRodada(torneio) : ""}
-      ${torneioAtivo && torneio.quality ? renderQualityPanel(torneio.quality) : ""}
-      ${torneioAtivo ? renderRoundGrid(torneio.schedule, torneio) : ""}
+      ${torneioAtivo && torneio.quality ? renderFastQualityPanel(torneio.quality) : ""}
+      ${torneioAtivo ? renderFastRoundGrid(torneio.schedule, torneio) : ""}
     </main>
   `;
 }

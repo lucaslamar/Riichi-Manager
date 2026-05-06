@@ -1,8 +1,8 @@
-import { DEFAULT_PLAYERS } from "../tournament/constants";
+import { DEFAULT_PLAYERS } from "../../tournament/constants";
 
-export function renderSetupCard(active: boolean): string {
+export function renderFastSetupCard(active: boolean, visible = true): string {
   return `
-    <section id="setupContainer" class="card ${active ? "hidden" : ""}" aria-label="Configuracao do torneio">
+    <section id="setupContainer" class="card ${active || !visible ? "hidden" : ""}" aria-label="Configuracao do torneio">
       <div class="section-title-container">
         <i class="fas fa-cog section-icon" aria-hidden="true"></i>
         <h2>Configuracao do Torneio</h2>
@@ -20,6 +20,10 @@ export function renderSetupCard(active: boolean): string {
       >${DEFAULT_PLAYERS.join("\n")}</textarea>
 
       <div class="actions">
+        <button class="btn-outline" id="backToHomeButton" type="button">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          Voltar
+        </button>
         <button class="btn-primary" id="startButton" type="button">
           <i class="fas fa-dice" aria-hidden="true"></i>
           Iniciar torneio

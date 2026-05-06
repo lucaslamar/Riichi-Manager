@@ -166,3 +166,17 @@
   border-color: var(--round-color);
   background: color-mix(in srgb, var(--round-color) 10%, var(--white));
 }
+
+.table-time-summary-muted {
+  border-color: #e4e9f0;
+  background: #f8fafc;
+}
+
+.table-time-summary-muted strong {
+  color: #607080;
+}
+
+.table-time-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
