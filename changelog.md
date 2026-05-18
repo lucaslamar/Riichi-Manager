@@ -19,3 +19,10 @@
 -  Migra front para `React` e Back para `TypeScript`.
  - Melhoria no design e com diferenciação cromática por rodada para evitar confusão visual.
 - Lança validador de Yaku e calculadora de mão;
+
+## [2.0.1] - 2026-05-18
+### Corrigido
+- Kans — a conversão para string da lib não está tratando kans corretamente.
+- Vento da rodada — só Leste e Sul (regra correta para riichi padrão).
+- Cores dos melds — chii/pon/kan aberto/kan fechado com cores distintas + label pequeno.
+- Uradora — mover para ao lado do Riichi.

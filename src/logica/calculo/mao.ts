@@ -1,237 +1,179 @@
 /**
  * @fileoverview Tipos e lógica de cálculo de pontos de uma mão de mahjong.
  *
- * Este módulo é uma "ponte" para a biblioteca `riichi` (github:1Computer1/riichi),
- * que faz o trabalho pesado de detectar yaku e calcular han/fu.
- *
- * Nosso papel aqui é:
- * 1. Definir tipos legíveis em TypeScript para o estado da mão.
- * 2. Converter o estado do nosso formato para o formato de string da biblioteca.
- * 3. Converter o resultado de volta para um formato útil para os componentes React.
+ * Ponte para a biblioteca `riichi` (github:1Computer1/riichi).
+ * Referência do formato de string aceito pela lib:
+ *   123m456p789s11z+7z+r12   (pedras + agari + modificadores)
+ *   +111m  = pon/chii aberto
+ *   +1111m = kan aberto
+ *   +11m   = kan FECHADO (só 2 pedras, não 4!)
  */
 
 import Riichi from 'riichi'
 
-// ─── Tipos de pedra ───────────────────────────────────────────────────────────
+// ─── Tipos ────────────────────────────────────────────────────────────────────
 
-/** Naipe das pedras numéricas. m = manzu, p = pinzu, s = souzu. */
-export type Naipe = 'm' | 'p' | 's'
-
-/** Letras de honra. */
-export type Honra = 'z'
-
-/**
- * Código de uma pedra.
- * Usamos `string` simples para evitar template literal types problemáticos no Vite.
- * Exemplos válidos: "1m", "5p", "3z", "0m" (akadora).
- */
-export type CodigoPedra = string
-
-/** Uma sequência aberta (chii/pon) ou um kan. */
-export type Meld =
-  | { tipo: 'chiipon'; pedras: CodigoPedra[] }
-  | { tipo: 'kan'; fechado: boolean; pedras: CodigoPedra[] }
-
-/** Vento da mão: '1'=Leste, '2'=Sul, '3'=Oeste, '4'=Norte. */
+export type CodigoPedra = string  // ex: "1m", "5p", "3z"
 export type VentoMao = '1' | '2' | '3' | '4'
 
-// ─── Estado da mão ────────────────────────────────────────────────────────────
+export type Meld =
+  | { tipo: 'chii';         pedras: CodigoPedra[] }   // sequência
+  | { tipo: 'pon';          pedras: CodigoPedra[] }   // trinca aberta
+  | { tipo: 'kanAberto';    pedras: CodigoPedra[] }   // kan declarado (aberto)
+  | { tipo: 'kanFechado';   pedras: CodigoPedra[] }   // kan concealed (fechado)
 
-/**
- * Estado completo de uma mão sendo calculada.
- * Gerenciado via `useImmer` no componente PaginaCalculadora.
- */
 export interface Mao {
-  /** Pedras na mão (incluindo a pedra de agari). */
   pedras: CodigoPedra[]
-  /** Sequências abertas ou kans. */
   melds: Meld[]
-  /** Índice da pedra de agari dentro de `pedras`. */
   indiceAgari: number
-  /** Tipo de ganho: tsumo (auto-draw) ou ron (roubo). */
   agari: 'ron' | 'tsumo'
-  /** Indicadores de dora. */
   dora: CodigoPedra[]
-  /** Indicadores de uradora (revelados ao fazer riichi). */
   uradora: CodigoPedra[]
-  /** Pedras Kita (nukidora, sanma). */
-  nukidora: number
-  /** Han extras de yaku manuais. */
-  hanYakuExtra: number
-  /** Han extras de dora manual. */
-  hanDoraExtra: number
-  /** Yakuman extras. */
-  yakumanExtra: number
-  /** Estado do riichi: null se não fez. */
   riichi: { duplo: boolean; ippatsu: boolean } | null
-  /** Tenhou/Chihou — bênção do céu/terra. */
   bencao: boolean
-  /** Haitei/Houtei — última pedra. */
   ultimaPedra: boolean
-  /** Rinshan/Chankan — depois de kan. */
-  kan: boolean
-  /** Vento da rodada atual. */
+  kan: boolean          // rinshan (tsumo após kan) ou chankan (ron em kan)
   ventoRodada: VentoMao
-  /** Vento do assento do jogador. */
   ventoAssento: VentoMao
 }
 
-// ─── Ação em andamento ────────────────────────────────────────────────────────
-
-/**
- * Ação que aguarda a próxima pedra clicada.
- * Ex.: se `acao = { tipo: 'pon' }`, a próxima pedra clicada forma um pon.
- */
 export type Acao =
-  | { tipo: 'chii'; pedras: CodigoPedra[] }
+  | { tipo: 'chii';       pedras: CodigoPedra[] }
   | { tipo: 'pon' }
-  | { tipo: 'kan' }
+  | { tipo: 'kanAberto' }
   | { tipo: 'kanFechado' }
   | { tipo: 'dora' }
   | { tipo: 'uradora' }
 
-/**
- * Cria a ação padrão para um tipo.
- *
- * @param tipo - Tipo da ação.
- * @returns Objeto Acao pronto.
- */
 export function criarAcao(tipo: Acao['tipo']): Acao {
   if (tipo === 'chii') return { tipo, pedras: [] }
   return { tipo } as Acao
 }
 
-// ─── Resultado de cálculo ─────────────────────────────────────────────────────
+// ─── Configuração ─────────────────────────────────────────────────────────────
 
-/** Pontos calculados para tsumo. */
-type PontosTsumo = {
-  agari: 'tsumo'
-  pontos: { total: number; oya: { ko: number }; ko: { oya: number; ko: number } }
-}
-
-/** Pontos calculados para ron. */
-type PontosRon = {
-  agari: 'ron'
-  pontos: { total: number; oya: { ron: number }; ko: { ron: number } }
-}
-
-/** Mão inválida ou sem yaku. */
-type SemAgari = { agari: null }
-
-/** União dos três casos possíveis de resultado. */
-export type PontosCalculados = PontosTsumo | PontosRon | SemAgari
-
-/** Resultado completo com yaku, han, fu e pontos. */
-export type ResultadoMao = PontosCalculados & {
-  isOya: boolean
-  yakuman: number
-  yaku: [string, number, boolean][]
-  semYaku: boolean
-  han: number
-  fu: number
-  nome: string | null
-}
-
-// ─── Configurações da calculadora ─────────────────────────────────────────────
-
-/** Configurações de regras que afetam o cálculo. */
 export interface ConfiguracaoCalculo {
-  semYakuFu: boolean
-  semYakuDora: boolean
   tanyaoAberto: boolean
-  ryuuiisouHatsu: boolean
   multiYakuman: boolean
   yakumanDuplo: boolean
   kiriageMangan: boolean
   kazoeYakuman: boolean
   fuVentosDuplo: boolean
   fuRinshan: boolean
-  sanma: 'perda' | 'divisao' | null
-  yakuhaiNorte: boolean
   akadora: boolean
-  yakuDesativados: string[]
-  yakuLocaisAtivos: string[]
 }
 
-/** Configuração padrão para o jogo normal (EMA/JMA). */
 export const configuracaoPadrao: ConfiguracaoCalculo = {
-  semYakuFu: false,
-  semYakuDora: false,
   tanyaoAberto: true,
-  ryuuiisouHatsu: false,
   multiYakuman: true,
   yakumanDuplo: true,
   kiriageMangan: false,
   kazoeYakuman: true,
   fuVentosDuplo: true,
   fuRinshan: true,
-  sanma: null,
-  yakuhaiNorte: false,
   akadora: true,
-  yakuDesativados: [],
-  yakuLocaisAtivos: [],
 }
 
-// ─── Nomes de yaku em português ───────────────────────────────────────────────
+// ─── Tradução de yaku ─────────────────────────────────────────────────────────
 
-/** Mapa de nome interno (biblioteca) → nome em português. */
-const NOMES_YAKU: Record<string, string> = {
-  riichi: 'Riichi',
-  ippatsu: 'Ippatsu',
-  tanyao: 'Tanyao',
-  pinfu: 'Pinfu',
-  iipeiko: 'Iipeiko',
-  haitei: 'Haitei',
-  houtei: 'Houtei',
-  rinshan: 'Rinshan Kaihou',
-  chankan: 'Chankan',
-  menzen_tsumo: 'Menzen Tsumo',
-  yakuhai: 'Yakuhai',
-  chiitoi: 'Chiitoitsu',
-  sanshoku: 'Sanshoku Doukou',
-  ittsu: 'Ittsu',
-  chanta: 'Chanta',
-  sanshoku_doujun: 'Sanshoku Doujun',
-  toitoi: 'Toitoihou',
-  sananko: 'San Ankou',
-  honroutou: 'Honroutou',
-  shousangen: 'Shousangen',
-  double_riichi: 'Double Riichi',
-  honitsu: 'Honitsu',
-  junchan: 'Junchan',
-  ryanpeiko: 'Ryanpeiko',
-  chinitsu: 'Chinitsu',
-  tsuiso: 'Tsuuiisou',
-  chinroto: 'Chinroutou',
-  ryuuiisou: 'Ryuuiisou',
-  daisangen: 'Daisangen',
-  tenhou: 'Tenhou',
-  chiihou: 'Chiihou',
-  suuankou: 'Suuankou',
-  suukantsu: 'Suukantsu',
-  kokushi: 'Kokushi Musou',
-  shosuushi: 'Shousuushii',
-  daisuushi: 'Daisuushii',
+/**
+ * Mapa de nomes da biblioteca (inglês/japonês) → português.
+ * A lib retorna as chaves em japonês (ex: "役牌白"), mas o campo `name`
+ * que usamos via `yaku` está em inglês.
+ */
+const TRADUCAO_YAKU: Record<string, string> = {
+  // Yaku normais
+  'Riichi':                       'Riichi',
+  'Double Riichi':                'Double Riichi',
+  'Ippatsu':                      'Ippatsu',
+  'Fully Concealed Hand':         'Menzen Tsumo',
+  'Pinfu':                        'Pinfu',
+  'Pure Double Sequence':         'Iipeiko',
+  'All Simples':                  'Tanyao',
+  'Mixed Triple Sequence':        'Sanshoku Doujun',
+  'Pure Straight':                'Ittsu (Sequência Pura)',
+  'Half Outside Hand':            'Chanta',
+  'Pure Triple Sequence':         'Sanshoku Doukou',
+  'All Triplets':                 'Toitoihou',
+  'Three Concealed Triplets':     'San Ankou',
+  'Three Quads':                  'Sankantsu',
+  'Three Little Dragons':         'Shousangen',
+  'All Terminals and Honors':     'Honroutou',
+  'Half Flush':                   'Honitsu',
+  'Fully Outside Hand':           'Junchan',
+  'Twice Pure Double Sequence':   'Ryanpeiko',
+  'Full Flush':                   'Chinitsu',
+  'After a Kan':                  'Rinshan Kaihou',
+  'Robbing a Kan':                'Chankan',
+  'Under the Sea':                'Haitei Raoyue',
+  'Under the River':              'Houtei Raoyui',
+  'Yakuhai (Dragons)':            'Yakuhai (Dragão)',
+  'Yakuhai (Winds)':              'Yakuhai (Vento)',
+  'White Dragon':                 'Haku',
+  'Green Dragon':                 'Hatsu',
+  'Red Dragon':                   'Chun',
+  'Prevalent Wind (East)':        'Vento da Rodada (Leste)',
+  'Prevalent Wind (South)':       'Vento da Rodada (Sul)',
+  'Prevalent Wind (West)':        'Vento da Rodada (Oeste)',
+  'Prevalent Wind (North)':       'Vento da Rodada (Norte)',
+  'Seat Wind (East)':             'Vento do Assento (Leste)',
+  'Seat Wind (South)':            'Vento do Assento (Sul)',
+  'Seat Wind (West)':             'Vento do Assento (Oeste)',
+  'Seat Wind (North)':            'Vento do Assento (Norte)',
+  'Seven Pairs':                  'Chiitoitsu',
+  'Dora':                         'Dora',
+  'Uradora':                      'Uradora',
+  'Red Fives':                    'Akadora',
+  // Yakuman
+  'Thirteen Orphans':             'Kokushi Musou',
+  'Thirteen-Wait Thirteen Orphans': 'Kokushi (13 esperas)',
+  'Nine Gates':                   'Chuuren Poutou',
+  'True Nine Gates':              'Chuuren (9 esperas)',
+  'Four Concealed Triplets':      'Suuankou',
+  'Single-Wait Four Concealed Triplets': 'Suuankou (espera tanki)',
+  'Four Big Winds':               'Daisuushii',
+  'Four Little Winds':            'Shousuushii',
+  'Three Big Dragons':            'Daisangen',
+  'All Honors':                   'Tsuuiisou',
+  'All Green':                    'Ryuuiisou',
+  'All Terminals':                'Chinroutou',
+  'Four Quads':                   'Suukantsu',
+  'Blessing of Heaven':           'Tenhou',
+  'Blessing of Earth':            'Chiihou',
+  'Big Seven Stars':              'Daichiishin',
 }
 
-/** Ordem de exibição dos yaku. */
 const ORDEM_YAKU: Record<string, number> = Object.fromEntries(
-  Object.keys(NOMES_YAKU).map((k, i) => [k, i]),
+  Object.keys(TRADUCAO_YAKU).map((k, i) => [k, i])
 )
 
 /**
- * Traduz o nome interno de um yaku para português.
- *
- * @param nomeInterno - Nome retornado pela biblioteca.
- * @returns Nome em português.
+ * Traduz o nome de um yaku da biblioteca para português.
+ * Se não houver tradução, retorna o nome original.
  */
-export function traduzirYaku(nomeInterno: string): string {
-  return NOMES_YAKU[nomeInterno] ?? nomeInterno
+export function traduzirYaku(nome: string): string {
+  return TRADUCAO_YAKU[nome] ?? nome
 }
 
-// ─── Conversão de mão para string ─────────────────────────────────────────────
+/** Traduz nomes especiais de patamar (満貫, 役満, etc.) para português. */
+export function traduzirPatamares(nome: string): string {
+  const mapa: Record<string, string> = {
+    '満貫': 'Mangan',
+    '跳満': 'Haneman',
+    '倍満': 'Baiman',
+    '三倍満': 'Sanbaiman',
+    '数え役満': 'Yakuman Contado',
+    '役満': 'Yakuman',
+  }
+  // Yakuman múltiplos: "2役満", "3役満" etc.
+  const m = nome.match(/^(\d+)役満$/)
+  if (m) return `${m[1]}× Yakuman`
+  return mapa[nome] ?? nome
+}
 
-/** Agrupa pedras por naipe para montar a string da biblioteca. */
+// ─── Conversão para string ────────────────────────────────────────────────────
+
+/** Agrupa pedras por naipe: ["1m","3m","2p"] → [["m","13"],["p","2"]] */
 function agruparPorNaipe(pedras: CodigoPedra[]): [string, string][] {
   const grupos: Record<string, string[]> = { m: [], p: [], s: [], z: [] }
   for (const pedra of pedras) {
@@ -243,7 +185,7 @@ function agruparPorNaipe(pedras: CodigoPedra[]): [string, string][] {
     .map(([naipe, nums]) => [naipe, nums.join('')])
 }
 
-/** Calcula a próxima dora a partir do indicador. */
+/** Calcula a pedra dora real a partir do indicador. */
 function proximaDora(pedra: CodigoPedra, sanma: boolean): CodigoPedra {
   const num = Number(pedra[0]) || 5
   const naipe = pedra[1]
@@ -256,40 +198,51 @@ function proximaDora(pedra: CodigoPedra, sanma: boolean): CodigoPedra {
 }
 
 /**
- * Converte o estado de uma mão para a string de entrada da biblioteca `riichi`.
+ * Converte o estado da mão para a string de entrada da biblioteca `riichi`.
  *
- * @param mao - Estado completo da mão.
- * @returns String no formato da biblioteca.
+ * Formato: pedras_em_mao + agari + melds + dora + modificadores
+ * Exemplo: "123m456p+7p+111m+11z+r12"
+ *   - +7p  = agari por ron na pedra 7p
+ *   - +111m = pon de 1m
+ *   - +11z  = kan fechado de 1z (apenas 2 pedras!)
+ *   - +r12  = riichi, vento rodada=1, vento assento=2
+ *
+ * IMPORTANTE sobre kans:
+ *   - Kan aberto  (+1111m): 4 pedras
+ *   - Kan fechado (+11m):   apenas 2 pedras! (a lib deduz que é kan pelo contexto)
  */
 function converterMaoParaString(mao: Mao): string {
   let s = ''
-  const sanma = mao.ventoRodada !== '4'
+  const sanma = false // padrão: yonma (4 jogadores)
 
-  // Pedras em mão (exceto agari)
+  // 1. Pedras em mão (exceto a de agari)
   const pedrasSemAgari = mao.pedras.filter((_, i) => i !== mao.indiceAgari)
   for (const [naipe, nums] of agruparPorNaipe(pedrasSemAgari)) {
     s += nums + naipe
   }
 
-  // Pedra de agari
-  if (mao.agari === 'ron') s += '+'
-  if (mao.indiceAgari >= 0 && mao.pedras[mao.indiceAgari]) {
-    s += mao.pedras[mao.indiceAgari]
+  // 2. Pedra de agari (prefixo '+' apenas para ron)
+  const pedraAgari = mao.pedras[mao.indiceAgari]
+  if (pedraAgari) {
+    if (mao.agari === 'ron') s += '+'
+    s += pedraAgari
   }
 
-  // Melds abertos
+  // 3. Melds
   for (const meld of mao.melds) {
     s += '+'
-    if (meld.tipo === 'chiipon' || (meld.tipo === 'kan' && !meld.fechado)) {
-      for (const pedra of meld.pedras) s += pedra[0]
+    if (meld.tipo === 'chii' || meld.tipo === 'pon' || meld.tipo === 'kanAberto') {
+      // Chii, pon e kan aberto: todas as pedras
+      for (const p of meld.pedras) s += p[0]
       s += meld.pedras[0][1]
     } else {
-      // Kan fechado: biblioteca usa apenas duas pedras
+      // Kan FECHADO: a lib espera apenas 2 pedras (1ª e 2ª)
+      // Usar as duas primeiras para não duplicar akadora
       s += meld.pedras[0][0] + meld.pedras[1][0] + meld.pedras[0][1]
     }
   }
 
-  // Dora
+  // 4. Dora (indicadores → lib converte para a pedra real internamente)
   if (mao.dora.length) {
     s += '+d'
     for (const [naipe, nums] of agruparPorNaipe(mao.dora.map((d) => proximaDora(d, sanma)))) {
@@ -297,7 +250,7 @@ function converterMaoParaString(mao: Mao): string {
     }
   }
 
-  // Uradora
+  // 5. Uradora
   if (mao.uradora.length) {
     s += '+u'
     for (const [naipe, nums] of agruparPorNaipe(mao.uradora.map((d) => proximaDora(d, sanma)))) {
@@ -305,26 +258,51 @@ function converterMaoParaString(mao: Mao): string {
     }
   }
 
-  // Modificadores
+  // 6. Modificadores
   s += '+'
-  if (mao.riichi) s += mao.riichi.duplo ? 'w' : 'r'
+  if (mao.riichi)          s += mao.riichi.duplo ? 'w' : 'r'
   if (mao.riichi?.ippatsu) s += 'i'
-  if (mao.bencao) s += 't'
-  if (mao.ultimaPedra) s += 'h'
-  if (mao.kan) s += 'k'
+  if (mao.bencao)          s += 't'
+  if (mao.ultimaPedra)     s += 'h'
+  if (mao.kan)             s += 'k'
   s += mao.ventoRodada + mao.ventoAssento
 
   return s
 }
 
+// ─── Tipos de resultado ───────────────────────────────────────────────────────
+
+type PontosTsumo = {
+  agari: 'tsumo'
+  pontos: { total: number; oya: { ko: number }; ko: { oya: number; ko: number } }
+}
+type PontosRon = {
+  agari: 'ron'
+  pontos: { total: number; oya: { ron: number }; ko: { ron: number } }
+}
+type SemAgari = { agari: null }
+export type PontosCalculados = PontosTsumo | PontosRon | SemAgari
+
+export type ResultadoMao = PontosCalculados & {
+  isOya: boolean
+  yakuman: number
+  /** [nome traduzido, valor han, é yakuman?] */
+  yaku: [string, number, boolean][]
+  semYaku: boolean
+  han: number
+  fu: number
+  /** Nome do patamar traduzido (Mangan, Haneman, etc.) */
+  nome: string | null
+}
+
 // ─── Cálculo principal ────────────────────────────────────────────────────────
 
 /**
- * Calcula os pontos de uma mão completa usando a biblioteca `riichi`.
+ * Calcula os pontos de uma mão completa.
  *
- * @param mao - Estado completo da mão (deve ter exatamente 14 pedras).
+ * @param mao - Estado completo da mão (14 pedras contando melds).
  * @param config - Configurações de regras.
- * @returns ResultadoMao com yaku, han, fu e pontos.
+ * @returns Resultado com yaku, han, fu e pontos.
  */
 export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
   const stringMao = converterMaoParaString(mao)
@@ -333,43 +311,30 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     multiYakuman: config.multiYakuman,
     wyakuman: config.yakumanDuplo,
     kuitan: config.tanyaoAberto,
-    ryuuiisouHatsu: config.ryuuiisouHatsu,
-    noYakuFu: config.semYakuFu,
-    noYakuDora: config.semYakuDora,
     kiriageMangan: config.kiriageMangan,
     kazoeYakuman: config.kazoeYakuman,
     doubleWindFu: config.fuVentosDuplo,
     rinshanFu: config.fuRinshan,
-    sanma: config.sanma !== null,
-    sanmaBisection: config.sanma === 'divisao',
-    otakazePei: config.yakuhaiNorte,
     aka: config.akadora,
-    disabledYaku: config.yakuDesativados,
-    localYaku: config.yakuLocaisAtivos,
   })
 
-  const resultado = riichi.calc()
-
+  const res = riichi.calc()
   const isOya = mao.ventoAssento === '1'
-  const yakuman = resultado.yakuman ?? 0
+  const yakuman = res.yakuman ?? 0
 
-  const pontos: PontosCalculados = !resultado.isAgari
+  const pontos: PontosCalculados = !res.isAgari
     ? { agari: null }
     : mao.agari === 'ron'
     ? {
         agari: 'ron',
-        pontos: {
-          total: resultado.ten,
-          oya: { ron: resultado.oya[0] },
-          ko: { ron: resultado.ko[0] },
-        },
+        pontos: { total: res.ten, oya: { ron: res.oya[0] }, ko: { ron: res.ko[0] } },
       }
     : {
         agari: 'tsumo',
         pontos: {
-          total: resultado.ten,
-          oya: { ko: resultado.oya[0] },
-          ko: { oya: resultado.ko[0], ko: resultado.ko[1] },
+          total: res.ten,
+          oya: { ko: res.oya[0] },
+          ko: { oya: res.ko[0], ko: res.ko[1] },
         },
       }
 
@@ -377,7 +342,7 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     ...pontos,
     isOya,
     yakuman,
-    yaku: Object.entries(resultado.yaku ?? {})
+    yaku: Object.entries(res.yaku ?? {})
       .sort((a, b) => (ORDEM_YAKU[a[0]] ?? 99) - (ORDEM_YAKU[b[0]] ?? 99))
       .map(([nome, valor]) => {
         const traduzido = traduzirYaku(nome)
@@ -387,45 +352,21 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
           : Number(/\d+/.exec(String(valor))?.[0]) || 0
         return [traduzido, han, ehYakuman] as [string, number, boolean]
       }),
-    semYaku: resultado.noYaku ?? false,
-    han: resultado.han ?? 0,
-    fu: resultado.fu ?? 0,
-    nome: resultado.name ? traduzirNomeMao(resultado.name) : null,
+    semYaku: res.noYaku ?? false,
+    han: res.han ?? 0,
+    fu: res.fu ?? 0,
+    nome: res.name ? traduzirPatamares(res.name) : null,
   }
 }
 
-/** Traduz nomes especiais de mãos para português. */
-function traduzirNomeMao(nome: string): string {
-  const mapa: Record<string, string> = {
-    '満貫': 'Mangan',
-    '跳満': 'Haneman',
-    '倍満': 'Baiman',
-    '三倍満': 'Sanbaiman',
-    '数え役満': 'Yakuman Contado',
-    '役満': 'Yakuman',
-  }
-  return mapa[nome] ?? nome
-}
+// ─── Calculadora rápida ───────────────────────────────────────────────────────
 
-// ─── Calculadora rápida (Han/Fu manual) ──────────────────────────────────────
-
-/**
- * Arredonda para cima na centena mais próxima.
- *
- * @param n - Número a arredondar.
- * @returns Número arredondado para cima na centena.
- */
 export function arredondar100(n: number): number {
   return Math.ceil(n / 100) * 100
 }
 
 /**
- * Calcula pontos manualmente a partir de han e fu, sem montar uma mão completa.
- *
- * @param han - Número de han.
- * @param fu - Número de fu.
- * @param config - Configurações de regras.
- * @returns Tabela com os quatro valores base (tsumo oya/ko, ron oya/ko).
+ * Calcula pontos diretamente de han+fu sem precisar montar uma mão.
  */
 export function calcularHanFu(
   han: number,
@@ -433,8 +374,6 @@ export function calcularHanFu(
   config: ConfiguracaoCalculo,
 ): { tsumoOya: number; tsumoKo: number; ronOya: number; ronKo: number } {
   let base = fu * Math.pow(2, han + 2)
-
-  // Limites especiais
   if (config.kiriageMangan ? base >= 1920 : base > 2000) {
     if (config.kazoeYakuman && han >= 13) base = 8000
     else if (han >= 11) base = 6000
@@ -442,7 +381,6 @@ export function calcularHanFu(
     else if (han >= 6) base = 3000
     else base = 2000
   }
-
   return {
     tsumoOya: arredondar100(base * 2),
     tsumoKo: arredondar100(base),
@@ -451,83 +389,81 @@ export function calcularHanFu(
   }
 }
 
-/**
- * Mapa de han → fu válidos para cada tipo de agari.
- * Usado para popular os seletores da calculadora rápida.
- *
- * @param agari - Tipo de ganho.
- * @returns Map de han → lista de fu válidos.
- */
 export function fuValidos(agari: 'tsumo' | 'ron'): Map<number, number[]> {
-  const quando = (cond: boolean, val: number) => (cond ? [val] : [])
-  return new Map<number, number[]>([
+  const q = (c: boolean, v: number) => (c ? [v] : [])
+  return new Map([
     [1, [30, 40, 50, 60, 70, 80, 90, 100, 110]],
-    [2, [...quando(agari === 'tsumo', 20), ...quando(agari === 'ron', 25), 30, 40, 50, 60, 70, 80, 90, 100, 110]],
-    [3, [...quando(agari === 'tsumo', 20), 25, 30, 40, 50, 60]],
-    [4, [...quando(agari === 'tsumo', 20), 25, 30]],
+    [2, [...q(agari === 'tsumo', 20), ...q(agari === 'ron', 25), 30, 40, 50, 60, 70, 80, 90, 100, 110]],
+    [3, [...q(agari === 'tsumo', 20), 25, 30, 40, 50, 60]],
+    [4, [...q(agari === 'tsumo', 20), 25, 30]],
   ])
 }
 
-/**
- * Monta o resultado de pontos para exibição na calculadora rápida.
- *
- * @param isOya - True se o jogador é o Leste (dealer).
- * @param agari - Tipo de ganho.
- * @param tabela - Resultado de `calcularHanFu`.
- * @returns PontosCalculados prontos para exibição.
- */
 export function montarPontosRapidos(
   isOya: boolean,
   agari: 'tsumo' | 'ron',
   tabela: ReturnType<typeof calcularHanFu>,
-): Exclude<PontosCalculados, { agari: null }> {
+): Exclude<PontosCalculados, SemAgari> {
   const { tsumoOya, tsumoKo, ronOya, ronKo } = tabela
   return agari === 'ron'
-    ? {
-        agari: 'ron',
-        pontos: {
-          total: isOya ? ronOya : ronKo,
-          oya: { ron: ronOya },
-          ko: { ron: ronKo },
-        },
-      }
-    : {
-        agari: 'tsumo',
-        pontos: {
-          total: isOya ? tsumoOya * 3 : tsumoOya + tsumoKo * 2,
-          oya: { ko: tsumoOya },
-          ko: { oya: tsumoOya, ko: tsumoKo },
-        },
-      }
+    ? { agari: 'ron', pontos: { total: isOya ? ronOya : ronKo, oya: { ron: ronOya }, ko: { ron: ronKo } } }
+    : { agari: 'tsumo', pontos: { total: isOya ? tsumoOya * 3 : tsumoOya + tsumoKo * 2, oya: { ko: tsumoOya }, ko: { oya: tsumoOya, ko: tsumoKo } } }
 }
 
-// ─── Ordenação de pedras ──────────────────────────────────────────────────────
+// ─── Ordenação ────────────────────────────────────────────────────────────────
 
 const ORDEM_NAIPE: Record<string, number> = { m: 0, p: 1, s: 2, z: 3 }
 
-/**
- * Ordena pedras por naipe e número (mutável — altera o array original).
- *
- * @param pedras - Array de pedras a ordenar.
- * @returns O mesmo array, ordenado.
- */
 export function ordenarPedras(pedras: CodigoPedra[]): CodigoPedra[] {
-  return pedras.sort((a, b) => {
-    const na = a[1] ?? '', nb = b[1] ?? ''
-    return (ORDEM_NAIPE[na] ?? 9) - (ORDEM_NAIPE[nb] ?? 9)
-      || (Number(a[0]) || 4.9) - (Number(b[0]) || 4.9)
-  })
+  return pedras.sort((a, b) =>
+    (ORDEM_NAIPE[a[1]] ?? 9) - (ORDEM_NAIPE[b[1]] ?? 9)
+    || (Number(a[0]) || 4.9) - (Number(b[0]) || 4.9)
+  )
+}
+
+export function ordenarMelds(melds: Meld[]): Meld[] {
+  return melds.sort((a, b) =>
+    (ORDEM_NAIPE[a.pedras[0]?.[1] ?? ''] ?? 9) - (ORDEM_NAIPE[b.pedras[0]?.[1] ?? ''] ?? 9)
+  )
 }
 
 /**
- * Ordena melds por naipe da primeira pedra (mutável).
- *
- * @param melds - Array de melds a ordenar.
- * @returns O mesmo array, ordenado.
+ * Conta o total de pedras da mão para fins de exibição.
+ * Kans têm 4 pedras físicas mas só ocupam 3 "slots" na estrutura de 14.
  */
-export function ordenarMelds(melds: Meld[]): Meld[] {
-  return melds.sort((a, b) => {
-    const na = a.pedras[0]?.[1] ?? '', nb = b.pedras[0]?.[1] ?? ''
-    return (ORDEM_NAIPE[na] ?? 9) - (ORDEM_NAIPE[nb] ?? 9)
-  })
+export function contarPedrasTotais(mao: Pick<Mao, 'pedras' | 'melds'>): number {
+  return mao.pedras.length + mao.melds.reduce((s, m) => s + m.pedras.length, 0)
+}
+
+/**
+ * Conta os "slots" lógicos ocupados — kans ocupam 3 slots (como trinca),
+ * mas têm 4 pedras físicas. Usado para saber se a mão está completa (14 slots).
+ *
+ * Estrutura de uma mão completa:
+ *   - Normal: 4 grupos×3 + 1 par = 14 pedras
+ *   - Com 1 kan: 3 grupos×3 + 1 kan×4 + 1 par = 15 pedras físicas, mas 14 slots
+ *   - Com 4 kans: 4 kans×4 + 1 par = 18 pedras físicas, mas 14 slots
+ *
+ * @param mao - Estado da mão.
+ * @returns Número de slots lógicos (meta = 14).
+ */
+export function contarSlotsLogicos(mao: Pick<Mao, 'pedras' | 'melds'>): number {
+  const slotsEmMelds = mao.melds.reduce((s, m) => {
+    // Kan tem 4 pedras físicas mas ocupa 3 slots (como uma trinca)
+    const ehKan = m.tipo === 'kanAberto' || m.tipo === 'kanFechado'
+    return s + (ehKan ? 3 : m.pedras.length)
+  }, 0)
+  return mao.pedras.length + slotsEmMelds
+}
+
+/**
+ * Conta quantas pedras físicas ainda cabem na mão.
+ * Leva em conta que kans adicionam 4 pedras físicas por 3 slots.
+ *
+ * @param mao - Estado da mão.
+ * @returns Número de pedras que ainda podem ser adicionadas à mão.
+ */
+export function pedrasFisicasRestantes(mao: Pick<Mao, 'pedras' | 'melds'>): number {
+  const slotsLivres = 14 - contarSlotsLogicos(mao)
+  return slotsLivres  // 1 slot = 1 pedra na mão (melds já foram contados)
 }
