@@ -41,4 +41,24 @@
 - Honras, ventos e dragões agora ficam bloqueados durante a seleção de `Chi`.
 
 
+## 2.2.0 - 2026-05-19
 
+### Adicionado
+- Modal **Regras** na calculadora de mão com opções da biblioteca `riichi` em PT-BR.
+- Controles para `aka dora`, `tanyao aberto`, `par de vento duplo`, `fu em rinshan`, `kiriage mangan`, `kazoe yakuman`, `yakuman duplo` e `yakuman acumulado`.
+- Pedras de **aka dora** no teclado da calculadora usando `0m`, `0p` e `0s`, renderizadas com as imagens vermelhas do pacote de tiles.
+
+### Alterado
+- Atualizada a dependência `riichi` no `package-lock.json` para o commit atual do `master`
+- O padrão de cálculo do par de vento duplo agora usa `2 fu`, alinhado com regras competitivas modernas, mantendo a opção de alternar para `4 fu`.
+- A calculadora rápida e a calculadora completa agora usam as regras escolhidas no modal em vez de uma configuração fixa.
+- O Haku/dragão branco ganhou contorno e fundo de destaque para ficar mais visível.
+- Menu inicial reorganizado para exibir: calculadora, torneio fast, sistema suíço e referência de yaku.
+- A calculadora de mão agora é o botão principal destacado no menu inicial.
+- Reiniciar torneio agora leva direto para o cadastro de jogadores do torneio fast.
+- No celular, a área de configurações da calculadora mostra um resumo fixo da mão, doras e uradoras durante a rolagem.
+
+### Corrigido
+- Ordenação e limite de quantidade das pedras agora tratam aka dora como cinco vermelho sem permitir mais de quatro pedras do mesmo valor.
+- Kan fechado não pode mais ser adicionado quando a mão já está completa ou sem slots livres suficientes.
+- O resultado da calculadora agora mostra a origem dos fu quando a biblioteca fornece o detalhamento.

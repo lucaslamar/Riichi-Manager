@@ -9,6 +9,12 @@
  */
 
 declare module 'riichi' {
+  type PadraoFu =
+    | { t: 'base' | 'chiitoi' | 'pinfuTsumo' | 'closedRon' | 'rinshanTsumo' | 'tsumo' | 'openPinfu'; fu: number }
+    | { t: 'yakuhaiPair'; double: boolean; fu: number; v: string | string[] }
+    | { t: 'quad' | 'triplet'; yaochuu: boolean; open: boolean; fu: number; v: string | string[] }
+    | { t: 'wait'; w: 'ryanmen' | 'shanpon' | 'kanchan' | 'penchan' | 'tanki'; fu: number; v: string | string[] }
+
   /** Opções de configuração de regras passadas ao construtor. */
   interface OpcoesRiichi {
     multiYakuman?: boolean
@@ -41,6 +47,8 @@ declare module 'riichi' {
     han: number
     /** Fu totais. */
     fu: number
+    /** Detalhamento dos fu usados na melhor decomposição. */
+    pattern?: PadraoFu[]
     /** Número de yakuman (0 se não for yakuman). */
     yakuman: number
     /** Nome especial da mão (満貫, 役満, etc.) ou undefined. */

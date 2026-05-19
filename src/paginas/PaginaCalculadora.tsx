@@ -25,6 +25,8 @@ import {
   type Meld,
   type Acao,
   type VentoMao,
+  type ConfiguracaoCalculo,
+  type DetalheFu,
 } from '../logica/calculo/mao'
 
 // ─── Constantes de UI ─────────────────────────────────────────────────────────
@@ -51,10 +53,26 @@ const NOMES_ARQUIVOS_PEDRAS: Record<string, string> = {
 function arquivoPedra(pedra: CodigoPedra): string {
   const valor = pedra[0]
   const naipe = pedra[1]
+  if (valor === '0' && naipe === 'm') return 'Man5-Dora'
+  if (valor === '0' && naipe === 'p') return 'Pin5-Dora'
+  if (valor === '0' && naipe === 's') return 'Sou5-Dora'
   if (naipe === 'm') return `Man${valor}`
   if (naipe === 'p') return `Pin${valor}`
   if (naipe === 's') return `Sou${valor}`
   return NOMES_ARQUIVOS_PEDRAS[pedra] ?? 'Blank'
+}
+
+function codigoBase(pedra: CodigoPedra): CodigoPedra {
+  return pedra[0] === '0' ? `5${pedra[1]}` : pedra
+}
+
+function valorPedra(pedra: CodigoPedra): number {
+  return pedra[0] === '0' ? 5 : Number(pedra[0])
+}
+
+function expandirGrupoMesmoValor(pedra: CodigoPedra, tamanho: number): CodigoPedra[] {
+  if (pedra[0] !== '0') return Array(tamanho).fill(pedra)
+  return [pedra, ...Array(tamanho - 1).fill(codigoBase(pedra))]
 }
 
 function urlPedra(nomeArquivo: string, formato: 'png' | 'svg'): string {
@@ -71,7 +89,7 @@ function podeAdicionarAoChii(selecionadas: CodigoPedra[], pedra: CodigoPedra): b
   if (selecionadas.length >= 3) return false
   if (selecionadas.some((p) => !ehPedraNumerada(p) || p[1] !== pedra[1])) return false
 
-  const numeros = [...selecionadas, pedra].map((p) => Number(p[0]))
+  const numeros = [...selecionadas, pedra].map(valorPedra)
   if (new Set(numeros).size !== numeros.length) return false
 
   return [1, 2, 3, 4, 5, 6, 7].some((inicio) =>
@@ -101,6 +119,71 @@ const MAO_VAZIA: Mao = {
   ventoRodada: '1', ventoAssento: '1',
 }
 
+const CONFIGURACOES_REGRAS: {
+  chave: keyof ConfiguracaoCalculo
+  titulo: string
+  ligado: string
+  desligado: string
+  ajuda: string
+}[] = [
+  {
+    chave: 'akadora',
+    titulo: 'Aka dora',
+    ligado: 'Ativar',
+    desligado: 'Desativar',
+    ajuda: 'Permite contar os cincos vermelhos como dora. Quando ativado, o teclado mostra um 5 vermelho para cada naipe.',
+  },
+  {
+    chave: 'tanyaoAberto',
+    titulo: 'Tanyao aberto',
+    ligado: 'Permitido',
+    desligado: 'Fechado apenas',
+    ajuda: 'Define se Tanyao vale com chamadas abertas. É comum em regras japonesas modernas, mas alguns grupos usam kuitan nashi.',
+  },
+  {
+    chave: 'fuVentosDuplo',
+    titulo: 'Par de vento duplo',
+    ligado: '4 fu',
+    desligado: '2 fu',
+    ajuda: 'Quando o par é ao mesmo tempo vento da rodada e do assento, algumas regras somam 4 fu. Em regras competitivas modernas costuma ser 2 fu.',
+  },
+  {
+    chave: 'fuRinshan',
+    titulo: 'Fu em Rinshan',
+    ligado: '+2 fu',
+    desligado: 'Sem +2 fu',
+    ajuda: 'Define se uma vitória por Rinshan Kaihou recebe também os 2 fu de tsumo.',
+  },
+  {
+    chave: 'kiriageMangan',
+    titulo: 'Kiriage mangan',
+    ligado: 'Ativar',
+    desligado: 'Desativar',
+    ajuda: 'Arredonda 4 han 30 fu e 3 han 60 fu para mangan quando a regra da mesa usa kiriage.',
+  },
+  {
+    chave: 'kazoeYakuman',
+    titulo: 'Kazoe yakuman',
+    ligado: 'Yakuman',
+    desligado: 'Sanbaiman',
+    ajuda: 'Define se 13 ou mais han sem yakuman natural contam como yakuman contado ou param em Sanbaiman.',
+  },
+  {
+    chave: 'yakumanDuplo',
+    titulo: 'Yakuman duplo',
+    ligado: 'Permitir',
+    desligado: 'Simples',
+    ajuda: 'Permite formas especiais como Suuankou tanki ou Kokushi 13 esperas valerem yakuman duplo.',
+  },
+  {
+    chave: 'multiYakuman',
+    titulo: 'Yakuman acumulado',
+    ligado: 'Permitir',
+    desligado: 'Um so',
+    ajuda: 'Permite somar múltiplos yakuman na mesma mão, por exemplo Daisuushii junto com Tsuuiisou.',
+  },
+]
+
 // ─── Cores dos melds ──────────────────────────────────────────────────────────
 
 /**
@@ -123,6 +206,8 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
   const [mao, atualizarMao] = useImmer<Mao>(MAO_VAZIA)
   const [acaoPendente, setAcaoPendente] = useState<Acao | null>(null)
   const [modo, setModo] = useState<'completo' | 'rapido'>('completo')
+  const [configuracao, setConfiguracao] = useState<ConfiguracaoCalculo>(configuracaoPadrao)
+  const [modalRegrasAberto, setModalRegrasAberto] = useState(false)
 
   // Estado para a calculadora rápida
   const [han, setHan] = useState(1)
@@ -139,33 +224,38 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
     ...mao.melds.flatMap((m) => m.pedras),
     ...(acaoPendente?.tipo === 'chii' ? acaoPendente.pedras : []),
   ]
-  const contarCodigo = (c: CodigoPedra) => todasPedras.filter((p) => p === c).length
+  const contarCodigo = (c: CodigoPedra) => todasPedras.filter((p) => codigoBase(p) === codigoBase(c)).length
+  const contarAka = (c: CodigoPedra) => todasPedras.filter((p) => p === c).length
   const podeAdicionarPedras = (pedras: CodigoPedra[]) =>
-    pedras.every((pedra) => contarCodigo(pedra) + pedras.filter((p) => p === pedra).length <= 4)
+    pedras.every((pedra) =>
+      contarCodigo(pedra) + pedras.filter((p) => codigoBase(p) === codigoBase(pedra)).length <= 4
+      && (pedra[0] !== '0' || contarAka(pedra) + pedras.filter((p) => p === pedra).length <= 1)
+    )
   const podeSelecionarPedra = (pedra: CodigoPedra): boolean => {
     if (!acaoPendente) return podeAdicionarPedras([pedra])
     switch (acaoPendente.tipo) {
       case 'dora':
       case 'uradora':
+        if (pedra[0] === '0') return false
         return podeAdicionarPedras([pedra])
       case 'pon':
-        return podeAdicionarPedras([pedra, pedra, pedra])
+        return podeAdicionarPedras(expandirGrupoMesmoValor(pedra, 3))
       case 'kanAberto':
       case 'kanFechado':
-        return podeAdicionarPedras([pedra, pedra, pedra, pedra])
+        return podeAdicionarPedras(expandirGrupoMesmoValor(pedra, 4))
       case 'chii':
         return podeAdicionarAoChii(acaoPendente.pedras, pedra) && podeAdicionarPedras([pedra])
     }
   }
 
   // Calculadora rápida
-  const tabelaRapida = calcularHanFu(han, fu, configuracaoPadrao)
+  const tabelaRapida = calcularHanFu(han, fu, configuracao)
   const resultadoRapido = montarPontosRapidos(mao.ventoAssento === '1', mao.agari, tabelaRapida)
   const fuDisponiveis = fuValidos(mao.agari)
 
   // Resultado completo (calculado ao vivo quando a mão está completa)
   const resultado = maoCompleta
-    ? (() => { try { return calcularMao(mao, configuracaoPadrao) } catch { return null } })()
+    ? (() => { try { return calcularMao(mao, configuracao) } catch { return null } })()
     : null
 
   // ── Handlers ────────────────────────────────────────────────────────────────
@@ -185,41 +275,52 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
 
     switch (acaoPendente.tipo) {
       case 'dora':
+        if (pedra[0] === '0') return
         if (!podeAdicionarPedras([pedra])) return
         atualizarMao((r) => { r.dora.push(pedra) })
         setAcaoPendente(null)
         return
       case 'uradora':
+        if (pedra[0] === '0') return
         if (!podeAdicionarPedras([pedra])) return
         atualizarMao((r) => { r.uradora.push(pedra) })
         setAcaoPendente(null)
         return
       case 'pon':
-        if (!podeAdicionarPedras([pedra, pedra, pedra])) return
+        {
+        const pedras = expandirGrupoMesmoValor(pedra, 3)
+        if (!podeAdicionarPedras(pedras)) return
         atualizarMao((r) => {
-          r.melds.push({ tipo: 'pon', pedras: [pedra, pedra, pedra] })
+          r.melds.push({ tipo: 'pon', pedras })
           ordenarMelds(r.melds)
           r.riichi = null
         })
         setAcaoPendente(null)
         return
+        }
       case 'kanAberto':
-        if (!podeAdicionarPedras([pedra, pedra, pedra, pedra])) return
+        {
+        const pedras = expandirGrupoMesmoValor(pedra, 4)
+        if (!podeAdicionarPedras(pedras)) return
         atualizarMao((r) => {
-          r.melds.push({ tipo: 'kanAberto', pedras: [pedra, pedra, pedra, pedra] })
+          r.melds.push({ tipo: 'kanAberto', pedras })
           ordenarMelds(r.melds)
           r.riichi = null
         })
         setAcaoPendente(null)
         return
+        }
       case 'kanFechado':
-        if (!podeAdicionarPedras([pedra, pedra, pedra, pedra])) return
+        {
+        const pedras = expandirGrupoMesmoValor(pedra, 4)
+        if (!podeAdicionarPedras(pedras)) return
         atualizarMao((r) => {
-          r.melds.push({ tipo: 'kanFechado', pedras: [pedra, pedra, pedra, pedra] })
+          r.melds.push({ tipo: 'kanFechado', pedras })
           ordenarMelds(r.melds)
         })
         setAcaoPendente(null)
         return
+        }
       case 'chii': {
         if (!podeAdicionarAoChii(acaoPendente.pedras, pedra)) return
         if (!podeAdicionarPedras([pedra])) return
@@ -259,6 +360,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
   // Para adicionar um meld, precisamos de slots suficientes:
   // chii/pon = 3 slots, kan = 3 slots (kans contam como 3 na estrutura lógica)
   const podeMeld = mao.riichi === null && !mao.bencao && slotsLivres >= 3
+  const podeKanFechado = mao.riichi === null && !mao.bencao && slotsLivres >= 3
   const maoAberta = mao.melds.some((m) => m.tipo !== 'kanFechado')
 
   // ── Render ───────────────────────────────────────────────────────────────────
@@ -271,6 +373,15 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
           <i className="fas fa-arrow-left" /> Voltar
         </button>
         <h2 style={{ margin:0, flex:1 }}>Calculadora de Mão</h2>
+        <button
+          className="btn-contorno"
+          type="button"
+          onClick={() => setModalRegrasAberto(true)}
+          title="Configurar regras de cálculo"
+          style={{ minHeight:40, padding:'8px 16px' }}
+        >
+          <i className="fas fa-sliders-h" /> Regras
+        </button>
         <button
           className={modo === 'rapido' ? 'btn-primario' : 'btn-contorno'}
           type="button"
@@ -391,7 +502,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
               <BotaoAcao tipo="chii"       rotulo="Chii"        cor="#4caf50" ativo={acaoPendente?.tipo === 'chii'}       desabilitado={!podeMeld} aoClicar={() => alternarAcao('chii')} />
               <BotaoAcao tipo="pon"        rotulo="Pon"         cor="#2196f3" ativo={acaoPendente?.tipo === 'pon'}        desabilitado={!podeMeld} aoClicar={() => alternarAcao('pon')} />
               <BotaoAcao tipo="kanAberto"  rotulo="Kan (aberto)"  cor="#ff9800" ativo={acaoPendente?.tipo === 'kanAberto'}  desabilitado={!podeMeld} aoClicar={() => alternarAcao('kanAberto')} />
-              <BotaoAcao tipo="kanFechado" rotulo="Kan (fechado)" cor="#9c27b0" ativo={acaoPendente?.tipo === 'kanFechado'} desabilitado={false}      aoClicar={() => alternarAcao('kanFechado')} />
+              <BotaoAcao tipo="kanFechado" rotulo="Kan (fechado)" cor="#9c27b0" ativo={acaoPendente?.tipo === 'kanFechado'} desabilitado={!podeKanFechado} aoClicar={() => alternarAcao('kanFechado')} />
               <BotaoAcao tipo="dora"       rotulo="+ Dora"      cor="#e65100" ativo={acaoPendente?.tipo === 'dora'}       desabilitado={mao.dora.length >= 5} aoClicar={() => alternarAcao('dora')} />
             </div>
 
@@ -416,6 +527,24 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                         </button>
                       )
                     })}
+                    {configuracao.akadora && (() => {
+                      const codigo = `0${naipe}`
+                      const esgotada = contarAka(codigo) >= 1 || contarCodigo(codigo) >= 4
+                      const cheiaESemAcao = maoCompleta && !acaoPendente
+                      const invalidaParaAcao = !podeSelecionarPedra(codigo)
+                      return (
+                        <button
+                          key={codigo}
+                          className="btn-pedra btn-pedra-aka"
+                          type="button"
+                          title="5 vermelho (aka dora)"
+                          disabled={esgotada || cheiaESemAcao || invalidaParaAcao}
+                          onClick={() => adicionarPedra(codigo)}
+                        >
+                          <PedraSvg pedra={codigo} />
+                        </button>
+                      )
+                    })()}
                   </div>
                 </div>
               ))}
@@ -438,6 +567,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
 
           {/* Card 2: opções da mão */}
           <div className="card">
+            <ResumoMaoFixo mao={mao} totalPedras={totalPedras} slotsUsados={slotsUsados} />
             <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
             <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
 
@@ -530,11 +660,129 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
           </div>
         </>
       )}
+
+      {modalRegrasAberto && (
+        <ModalRegras
+          configuracao={configuracao}
+          aoMudar={setConfiguracao}
+          aoFechar={() => setModalRegrasAberto(false)}
+        />
+      )}
     </div>
   )
 }
 
 // ─── Sub-componentes ──────────────────────────────────────────────────────────
+
+function ModalRegras({ configuracao, aoMudar, aoFechar }: {
+  configuracao: ConfiguracaoCalculo
+  aoMudar: (config: ConfiguracaoCalculo) => void
+  aoFechar: () => void
+}) {
+  const alternar = (chave: keyof ConfiguracaoCalculo) => {
+    aoMudar({ ...configuracao, [chave]: !configuracao[chave] })
+  }
+
+  return (
+    <div className="modal-regras-fundo" role="presentation" onMouseDown={aoFechar}>
+      <div
+        className="modal-regras"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-regras"
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        <div className="modal-regras-cabecalho">
+          <div>
+            <h3 id="titulo-regras">Regras de cálculo</h3>
+            <p>Escolha as variações usadas pela mesa.</p>
+          </div>
+          <button className="btn-icone" type="button" onClick={aoFechar} aria-label="Fechar regras">
+            <i className="fas fa-times" />
+          </button>
+        </div>
+
+        <div className="lista-regras">
+          {CONFIGURACOES_REGRAS.map((regra) => {
+            const ativo = configuracao[regra.chave]
+            return (
+              <div className="linha-regra" key={regra.chave}>
+                <div className="texto-regra">
+                  <strong>{regra.titulo}</strong>
+                  <span>{regra.ajuda}</span>
+                </div>
+                <div className="controle-regra" aria-label={regra.titulo}>
+                  <button
+                    type="button"
+                    className={ativo ? 'ativo' : ''}
+                    onClick={() => { if (!ativo) alternar(regra.chave) }}
+                  >
+                    {regra.ligado}
+                  </button>
+                  <button
+                    type="button"
+                    className={!ativo ? 'ativo' : ''}
+                    onClick={() => { if (ativo) alternar(regra.chave) }}
+                  >
+                    {regra.desligado}
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="modal-regras-rodape">
+          <button type="button" className="btn-contorno" onClick={() => aoMudar(configuracaoPadrao)}>
+            Restaurar padrao
+          </button>
+          <button type="button" className="btn-primario" onClick={aoFechar}>
+            Aplicar
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ResumoMaoFixo({ mao, totalPedras, slotsUsados }: {
+  mao: Mao
+  totalPedras: number
+  slotsUsados: number
+}) {
+  if (totalPedras === 0 && mao.dora.length === 0 && mao.uradora.length === 0) return null
+
+  return (
+    <div className="resumo-mao-fixo" aria-label="Resumo da mão">
+      <div className="resumo-mao-linha">
+        <strong>Mão</strong>
+        <span>{totalPedras} pedras · {slotsUsados}/14 slots</span>
+      </div>
+      <div className="resumo-mao-pedras">
+        {mao.pedras.map((pedra, i) => (
+          <span key={`mao-${i}`} className={`chip-pedra mini ${i === mao.indiceAgari ? 'agari' : ''}`}>
+            <PedraSvg pedra={pedra} />
+          </span>
+        ))}
+        {mao.melds.map((meld, i) => (
+          <span key={`meld-resumo-${i}`} className="resumo-meld">
+            <PedrasMeld meld={meld} />
+          </span>
+        ))}
+      </div>
+      {(mao.dora.length > 0 || mao.uradora.length > 0) && (
+        <div className="resumo-mao-doras">
+          {mao.dora.length > 0 && (
+            <span><strong>Dora</strong> {mao.dora.map((p, i) => <PedraSvg key={`d-${i}`} pedra={p} />)}</span>
+          )}
+          {mao.uradora.length > 0 && (
+            <span><strong>Uradora</strong> {mao.uradora.map((p, i) => <PedraSvg key={`u-${i}`} pedra={p} />)}</span>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 
 function PedraSvg({ pedra, virada = false, deLado = false }: {
   pedra?: CodigoPedra
@@ -555,7 +803,7 @@ function PedraSvg({ pedra, virada = false, deLado = false }: {
 
   return (
     <img
-      className={`tile-img ${deLado ? 'tile-img-lado' : ''}`}
+      className={`tile-img ${pedra === '5z' ? 'tile-img-haku' : ''} ${deLado ? 'tile-img-lado' : ''}`}
       src={urlPedra(nomeArquivo, formato)}
       alt=""
       aria-label={alt}
@@ -804,6 +1052,23 @@ function ExibicaoCompleta({ resultado }: { resultado: any }) {
             {resultado.yaku.map(([nome, valor, ehYakuman]: [string, number, boolean], i: number) => (
               <span key={i} className="chip-yaku">
                 {nome} <strong>{ehYakuman ? `${valor}× YM` : `${valor}han`}</strong>
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+      {resultado.fuDetalhes?.length > 0 && resultado.yakuman === 0 && (
+        <>
+          <div style={{ borderTop:'1px solid rgba(255,255,255,0.15)', margin:'14px 0 10px' }} />
+          <div style={{ fontSize:'0.78rem', color:'rgba(255,255,255,0.5)', fontWeight:800, textTransform:'uppercase', marginBottom:8 }}>
+            Fu
+          </div>
+          <div className="lista-fu">
+            {resultado.fuDetalhes.map((detalhe: DetalheFu, i: number) => (
+              <span key={i} className="chip-fu">
+                <strong>{detalhe.fu} fu</strong>
+                <span>{detalhe.tipo}</span>
+                <small>{detalhe.descricao}</small>
               </span>
             ))}
           </div>

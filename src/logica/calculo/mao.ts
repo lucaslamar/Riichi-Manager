@@ -69,7 +69,7 @@ export const configuracaoPadrao: ConfiguracaoCalculo = {
   yakumanDuplo: true,
   kiriageMangan: false,
   kazoeYakuman: true,
-  fuVentosDuplo: true,
+  fuVentosDuplo: false,
   fuRinshan: true,
   akadora: true,
 }
@@ -239,6 +239,78 @@ export function traduzirPatamares(nome: string): string {
   return mapa[nome] ?? nome
 }
 
+function rotuloPedraFu(valor: string | string[] | undefined): string {
+  const lista = Array.isArray(valor) ? valor : valor ? [valor] : []
+  const nomes: Record<string, string> = {
+    '1z': 'Leste',
+    '2z': 'Sul',
+    '3z': 'Oeste',
+    '4z': 'Norte',
+    '5z': 'Haku',
+    '6z': 'Hatsu',
+    '7z': 'Chun',
+  }
+  const naipes: Record<string, string> = { m: 'man', p: 'pin', s: 'sou' }
+  return lista
+    .map((pedra) => nomes[pedra] ?? `${pedra[0]} ${naipes[pedra[1]] ?? pedra[1] ?? ''}`.trim())
+    .join(', ')
+}
+
+function traduzirDetalhesFu(padroes: Array<Record<string, any>>): DetalheFu[] {
+  return padroes
+    .filter((padrao) => Number(padrao.fu) > 0)
+    .map((padrao) => {
+      const fu = Number(padrao.fu)
+      const pedra = rotuloPedraFu(padrao.v)
+      switch (padrao.t) {
+        case 'base':
+          return { tipo: 'Base', descricao: 'Fu base de toda mão vencedora', fu }
+        case 'chiitoi':
+          return { tipo: 'Chiitoitsu', descricao: 'Sete pares usa valor fixo de 25 fu', fu }
+        case 'pinfuTsumo':
+          return { tipo: 'Pinfu tsumo', descricao: 'Mão fechada de Pinfu vencida por tsumo', fu }
+        case 'closedRon':
+          return { tipo: 'Ron fechado', descricao: 'Mão fechada vencida por descarte', fu }
+        case 'rinshanTsumo':
+          return { tipo: 'Rinshan', descricao: 'Tsumo após kan, conforme a regra selecionada', fu }
+        case 'tsumo':
+          return { tipo: 'Tsumo', descricao: 'Vitória por compra própria', fu }
+        case 'openPinfu':
+          return { tipo: 'Mão aberta sem fu', descricao: 'Arredondamento mínimo para mão aberta sem outro fu', fu }
+        case 'yakuhaiPair':
+          return {
+            tipo: 'Par de yakuhai',
+            descricao: `${pedra || 'Par de valor'}${padrao.double ? ' como vento da rodada e do assento' : ''}`,
+            fu,
+          }
+        case 'triplet':
+          return {
+            tipo: padrao.open ? 'Trinca aberta' : 'Trinca fechada',
+            descricao: `${pedra || 'Trinca'}${padrao.yaochuu ? ' de terminal/honra' : ' de simples'}`,
+            fu,
+          }
+        case 'quad':
+          return {
+            tipo: padrao.open ? 'Kan aberto' : 'Kan fechado',
+            descricao: `${pedra || 'Kan'}${padrao.yaochuu ? ' de terminal/honra' : ' de simples'}`,
+            fu,
+          }
+        case 'wait': {
+          const esperas: Record<string, string> = {
+            ryanmen: 'espera aberta dos dois lados',
+            shanpon: 'espera em par para formar trinca',
+            kanchan: 'espera fechada no meio',
+            penchan: 'espera de ponta',
+            tanki: 'espera no par',
+          }
+          return { tipo: 'Espera', descricao: esperas[padrao.w] ?? 'Tipo de espera', fu }
+        }
+        default:
+          return { tipo: String(padrao.t ?? 'Fu'), descricao: 'Detalhe retornado pela biblioteca', fu }
+      }
+    })
+}
+
 // ─── Conversão para string ────────────────────────────────────────────────────
 
 /** Agrupa pedras por naipe: ["1m","3m","2p"] → [["m","13"],["p","2"]] */
@@ -356,11 +428,18 @@ export type ResultadoMao = PontosCalculados & {
   yakuman: number
   /** [nome traduzido, valor han, é yakuman?] */
   yaku: [string, number, boolean][]
+  fuDetalhes: DetalheFu[]
   semYaku: boolean
   han: number
   fu: number
   /** Nome do patamar traduzido (Mangan, Haneman, etc.) */
   nome: string | null
+}
+
+export type DetalheFu = {
+  tipo: string
+  descricao: string
+  fu: number
 }
 
 // ─── Cálculo principal ────────────────────────────────────────────────────────
@@ -420,6 +499,7 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
           : Number(/\d+/.exec(String(valor))?.[0]) || 0
         return [traduzido, han, ehYakuman] as [string, number, boolean]
       }),
+    fuDetalhes: traduzirDetalhesFu(res.pattern ?? []),
     semYaku: res.noYaku ?? false,
     han: res.han ?? 0,
     fu: res.fu ?? 0,
@@ -483,9 +563,10 @@ export function montarPontosRapidos(
 const ORDEM_NAIPE: Record<string, number> = { m: 0, p: 1, s: 2, z: 3 }
 
 export function ordenarPedras(pedras: CodigoPedra[]): CodigoPedra[] {
+  const valorOrdenacao = (pedra: CodigoPedra) => pedra[0] === '0' ? 5 : (Number(pedra[0]) || 4.9)
   return pedras.sort((a, b) =>
     (ORDEM_NAIPE[a[1]] ?? 9) - (ORDEM_NAIPE[b[1]] ?? 9)
-    || (Number(a[0]) || 4.9) - (Number(b[0]) || 4.9)
+    || valorOrdenacao(a) - valorOrdenacao(b)
   )
 }
 

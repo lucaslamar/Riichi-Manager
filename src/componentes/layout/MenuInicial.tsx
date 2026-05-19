@@ -38,9 +38,16 @@ export default function MenuInicial({ aoClicarTorneioFast, aoNavegar }: PropsMen
       </div>
 
       <div className="menu-inicial-acoes">
-        {/* onClick recebe uma função anônima (arrow function) */}
         <button
           className="btn-primario botao-menu"
+          type="button"
+          onClick={() => aoNavegar('calculadora')}
+        >
+          <i className="fas fa-calculator" aria-hidden="true" /> Calculadora de mão
+        </button>
+
+        <button
+          className="btn-contorno botao-menu"
           type="button"
           onClick={aoClicarTorneioFast}
         >
@@ -53,14 +60,6 @@ export default function MenuInicial({ aoClicarTorneioFast, aoNavegar }: PropsMen
           onClick={() => aoNavegar('suico')}
         >
           <i className="fas fa-trophy" aria-hidden="true" /> Sistema suíço
-        </button>
-
-        <button
-          className="btn-contorno botao-menu"
-          type="button"
-          onClick={() => aoNavegar('calculadora')}
-        >
-          <i className="fas fa-calculator" aria-hidden="true" /> Calculadora de mão
         </button>
 
         <button

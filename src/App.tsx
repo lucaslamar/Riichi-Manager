@@ -86,13 +86,13 @@ export default function App() {
   }, [])
 
   /**
-   * Reinicia o torneio para o estado vazio e volta ao menu.
+   * Reinicia o torneio para o estado vazio e volta ao cadastro.
    */
   const reiniciarTorneio = useCallback(() => {
     const vazio = criarTorneioVazio()
     setTorneioInterno(vazio)
     salvarTorneio(vazio)
-    setTela('inicio')
+    setTela('configuracaoTorneio')
   }, [])
 
   /**
