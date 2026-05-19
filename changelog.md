@@ -27,7 +27,7 @@
 - Cores dos melds — chii/pon/kan aberto/kan fechado com cores distintas + label pequeno.
 - Uradora — mover para ao lado do Riichi.
 
-## 2.2.0 - 2026-05-18
+## [2.2.0] - 2026-05-18
 
 ### Adicionado
 - Adicionadas imagens de pedras de Riichi Mahjong a partir do projeto `fluffystuff/riichi-mahjong-tiles`.
@@ -41,7 +41,7 @@
 - Honras, ventos e dragões agora ficam bloqueados durante a seleção de `Chi`.
 
 
-## 2.2.0 - 2026-05-19
+## [2.3.0] - 2026-05-19
 
 ### Adicionado
 - Modal **Regras** na calculadora de mão com opções da biblioteca `riichi` em PT-BR.
@@ -62,3 +62,10 @@
 - Ordenação e limite de quantidade das pedras agora tratam aka dora como cinco vermelho sem permitir mais de quatro pedras do mesmo valor.
 - Kan fechado não pode mais ser adicionado quando a mão já está completa ou sem slots livres suficientes.
 - O resultado da calculadora agora mostra a origem dos fu quando a biblioteca fornece o detalhamento.
+
+## [2.3.1] - 2026-05-19
+### Corrigido
+corrigi tamanho modal do navegador mobile.
+Inclui desfalque de botao na contagem (dora/ura dora);
+Botão Houtei estava faltando.
+Mão inválida (sem yaku) mostrava 0 em vez de "Sem yaku — mão inválida.

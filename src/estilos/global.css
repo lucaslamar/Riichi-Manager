@@ -727,13 +727,16 @@ textarea:focus { border-color: var(--primario); outline: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px;
+  padding: 16px;
   background: rgba(16, 42, 67, 0.58);
+  /* Garante que ocupa a área visual real (sem barra do navegador mobile) */
+  min-height: 100dvh;
 }
 
 .modal-regras {
   width: min(860px, 100%);
-  max-height: min(760px, calc(100vh - 36px));
+  /* dvh = dynamic viewport height — exclui a barra do navegador mobile */
+  max-height: min(760px, calc(100dvh - 32px));
   overflow: hidden;
   display: flex;
   flex-direction: column;
