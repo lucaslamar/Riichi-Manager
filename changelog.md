@@ -1,4 +1,4 @@
-# Changelog - Riichi Tournament Pro
+# Changelog - Riichi Manager
 
 ## [1.0.0] - 2026-05-02
 
