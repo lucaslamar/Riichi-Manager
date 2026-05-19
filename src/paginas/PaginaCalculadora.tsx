@@ -38,6 +38,47 @@ const NAIPES = [
 const HONRAS: CodigoPedra[] = ['1z', '2z', '3z', '4z', '5z', '6z', '7z']
 const NOMES_HONRAS = ['Ton', 'Nan', 'Sha', 'Pei', 'Haku', 'Hatsu', 'Chun']
 
+const NOMES_ARQUIVOS_PEDRAS: Record<string, string> = {
+  '1z': 'Ton',
+  '2z': 'Nan',
+  '3z': 'Shaa',
+  '4z': 'Pei',
+  '5z': 'Haku',
+  '6z': 'Hatsu',
+  '7z': 'Chun',
+}
+
+function arquivoPedra(pedra: CodigoPedra): string {
+  const valor = pedra[0]
+  const naipe = pedra[1]
+  if (naipe === 'm') return `Man${valor}`
+  if (naipe === 'p') return `Pin${valor}`
+  if (naipe === 's') return `Sou${valor}`
+  return NOMES_ARQUIVOS_PEDRAS[pedra] ?? 'Blank'
+}
+
+function urlPedra(nomeArquivo: string, formato: 'png' | 'svg'): string {
+  const pasta = formato === 'png' ? 'regular-png' : 'regular'
+  return `tiles/${pasta}/${nomeArquivo}.${formato}?v=2`
+}
+
+function ehPedraNumerada(pedra: CodigoPedra): boolean {
+  return ['m', 'p', 's'].includes(pedra[1])
+}
+
+function podeAdicionarAoChii(selecionadas: CodigoPedra[], pedra: CodigoPedra): boolean {
+  if (!ehPedraNumerada(pedra)) return false
+  if (selecionadas.length >= 3) return false
+  if (selecionadas.some((p) => !ehPedraNumerada(p) || p[1] !== pedra[1])) return false
+
+  const numeros = [...selecionadas, pedra].map((p) => Number(p[0]))
+  if (new Set(numeros).size !== numeros.length) return false
+
+  return [1, 2, 3, 4, 5, 6, 7].some((inicio) =>
+    numeros.every((n) => n >= inicio && n <= inicio + 2)
+  )
+}
+
 /** Vento da RODADA: só Leste e Sul (regras padrão de riichi). */
 const VENTOS_RODADA: { valor: VentoMao; nome: string }[] = [
   { valor: '1', nome: 'Leste' },
@@ -68,8 +109,8 @@ const MAO_VAZIA: Mao = {
 const ESTILO_MELD: Record<Meld['tipo'], { fundo: string; borda: string; rotulo: string }> = {
   chii:       { fundo: '#e8f5e9', borda: '#4caf50', rotulo: 'Chi' },
   pon:        { fundo: '#e3f2fd', borda: '#2196f3', rotulo: 'Pon' },
-  kanAberto:  { fundo: '#fff3e0', borda: '#ff9800', rotulo: 'Kan ↗' },
-  kanFechado: { fundo: '#f3e5f5', borda: '#9c27b0', rotulo: 'Kan ■' },
+  kanAberto:  { fundo: '#fff3e0', borda: '#ff9800', rotulo: 'Kan aberto' },
+  kanFechado: { fundo: '#f3e5f5', borda: '#9c27b0', rotulo: 'Kan fechado' },
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
@@ -99,6 +140,23 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
     ...(acaoPendente?.tipo === 'chii' ? acaoPendente.pedras : []),
   ]
   const contarCodigo = (c: CodigoPedra) => todasPedras.filter((p) => p === c).length
+  const podeAdicionarPedras = (pedras: CodigoPedra[]) =>
+    pedras.every((pedra) => contarCodigo(pedra) + pedras.filter((p) => p === pedra).length <= 4)
+  const podeSelecionarPedra = (pedra: CodigoPedra): boolean => {
+    if (!acaoPendente) return podeAdicionarPedras([pedra])
+    switch (acaoPendente.tipo) {
+      case 'dora':
+      case 'uradora':
+        return podeAdicionarPedras([pedra])
+      case 'pon':
+        return podeAdicionarPedras([pedra, pedra, pedra])
+      case 'kanAberto':
+      case 'kanFechado':
+        return podeAdicionarPedras([pedra, pedra, pedra, pedra])
+      case 'chii':
+        return podeAdicionarAoChii(acaoPendente.pedras, pedra) && podeAdicionarPedras([pedra])
+    }
+  }
 
   // Calculadora rápida
   const tabelaRapida = calcularHanFu(han, fu, configuracaoPadrao)
@@ -116,6 +174,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
     if (!acaoPendente) {
       // Bloqueia se a mão já está completa (14 slots)
       if (maoCompleta) return
+      if (!podeAdicionarPedras([pedra])) return
       atualizarMao((r) => {
         r.pedras.push(pedra)
         ordenarPedras(r.pedras)
@@ -126,14 +185,17 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
 
     switch (acaoPendente.tipo) {
       case 'dora':
+        if (!podeAdicionarPedras([pedra])) return
         atualizarMao((r) => { r.dora.push(pedra) })
         setAcaoPendente(null)
         return
       case 'uradora':
+        if (!podeAdicionarPedras([pedra])) return
         atualizarMao((r) => { r.uradora.push(pedra) })
         setAcaoPendente(null)
         return
       case 'pon':
+        if (!podeAdicionarPedras([pedra, pedra, pedra])) return
         atualizarMao((r) => {
           r.melds.push({ tipo: 'pon', pedras: [pedra, pedra, pedra] })
           ordenarMelds(r.melds)
@@ -142,6 +204,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
         setAcaoPendente(null)
         return
       case 'kanAberto':
+        if (!podeAdicionarPedras([pedra, pedra, pedra, pedra])) return
         atualizarMao((r) => {
           r.melds.push({ tipo: 'kanAberto', pedras: [pedra, pedra, pedra, pedra] })
           ordenarMelds(r.melds)
@@ -150,6 +213,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
         setAcaoPendente(null)
         return
       case 'kanFechado':
+        if (!podeAdicionarPedras([pedra, pedra, pedra, pedra])) return
         atualizarMao((r) => {
           r.melds.push({ tipo: 'kanFechado', pedras: [pedra, pedra, pedra, pedra] })
           ordenarMelds(r.melds)
@@ -157,12 +221,15 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
         setAcaoPendente(null)
         return
       case 'chii': {
+        if (!podeAdicionarAoChii(acaoPendente.pedras, pedra)) return
+        if (!podeAdicionarPedras([pedra])) return
         const novasPedras = [...acaoPendente.pedras, pedra]
         if (novasPedras.length < 3) {
           setAcaoPendente({ tipo: 'chii', pedras: novasPedras })
         } else {
+          const pedrasChii = ordenarPedras([...novasPedras])
           atualizarMao((r) => {
-            r.melds.push({ tipo: 'chii', pedras: ordenarPedras(novasPedras) })
+            r.melds.push({ tipo: 'chii', pedras: [...pedrasChii] })
             ordenarMelds(r.melds)
             r.riichi = null
           })
@@ -255,7 +322,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                   title={i === mao.indiceAgari ? 'Pedra de agari — clique para remover' : 'Clique para remover'}
                   onClick={() => removerPedra(i)}
                 >
-                  {pedra}
+                  <PedraSvg pedra={pedra} />
                 </button>
               ))}
 
@@ -278,7 +345,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                     <span style={{ fontSize: '0.65rem', fontWeight: 900, color: estilo.borda, marginRight: 2, letterSpacing: 0 }}>
                       {estilo.rotulo}
                     </span>
-                    {meld.pedras.map((p, j) => <span key={j}>{p}</span>)}
+                    <PedrasMeld meld={meld} />
                   </button>
                 )
               })}
@@ -299,7 +366,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                     {mao.dora.map((p, i) => (
                       <button key={i} className="chip-pedra dora" type="button"
                         onClick={() => atualizarMao((r) => { r.dora.splice(i, 1) })}>
-                        {p}
+                        <PedraSvg pedra={p} />
                       </button>
                     ))}
                   </div>
@@ -311,7 +378,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                       <button key={i} className="chip-pedra dora" type="button"
                         style={{ borderColor:'#9c27b0', background:'#f3e5f5' }}
                         onClick={() => atualizarMao((r) => { r.uradora.splice(i, 1) })}>
-                        {p}
+                        <PedraSvg pedra={p} />
                       </button>
                     ))}
                   </div>
@@ -340,11 +407,12 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                       const codigo = `${n}${naipe}`
                       const esgotada = contarCodigo(codigo) >= 4
                       const cheiaESemAcao = maoCompleta && !acaoPendente
+                      const invalidaParaAcao = !podeSelecionarPedra(codigo)
                       return (
                         <button key={codigo} className="btn-pedra" type="button"
-                          disabled={esgotada || cheiaESemAcao}
+                          disabled={esgotada || cheiaESemAcao || invalidaParaAcao}
                           onClick={() => adicionarPedra(codigo)}>
-                          {n}{naipe.toUpperCase()}
+                          <PedraSvg pedra={codigo} />
                         </button>
                       )
                     })}
@@ -358,9 +426,9 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                 <div className="linha-naipe">
                   {HONRAS.map((codigo, i) => (
                     <button key={codigo} className="btn-pedra" type="button"
-                      disabled={contarCodigo(codigo) >= 4 || (maoCompleta && !acaoPendente)}
+                      disabled={contarCodigo(codigo) >= 4 || (maoCompleta && !acaoPendente) || !podeSelecionarPedra(codigo)}
                       onClick={() => adicionarPedra(codigo)}>
-                      {NOMES_HONRAS[i]}
+                      <PedraSvg pedra={codigo} />
                     </button>
                   ))}
                 </div>
@@ -467,6 +535,56 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
 }
 
 // ─── Sub-componentes ──────────────────────────────────────────────────────────
+
+function PedraSvg({ pedra, virada = false, deLado = false }: {
+  pedra?: CodigoPedra
+  virada?: boolean
+  deLado?: boolean
+}) {
+  const [formato, setFormato] = useState<'png' | 'svg' | 'texto'>('png')
+  const nomeArquivo = virada ? 'Back' : pedra ? arquivoPedra(pedra) : 'Blank'
+  const alt = virada ? 'Pedra virada' : pedra ?? 'Pedra vazia'
+
+  if (formato === 'texto') {
+    return (
+      <span className={`tile-img tile-fallback ${deLado ? 'tile-img-lado' : ''}`} aria-label={alt}>
+        {virada ? '' : pedra}
+      </span>
+    )
+  }
+
+  return (
+    <img
+      className={`tile-img ${deLado ? 'tile-img-lado' : ''}`}
+      src={urlPedra(nomeArquivo, formato)}
+      alt=""
+      aria-label={alt}
+      draggable={false}
+      onError={() => setFormato(formato === 'png' ? 'svg' : 'texto')}
+    />
+  )
+}
+
+function PedrasMeld({ meld }: { meld: Meld }) {
+  if (meld.tipo === 'kanFechado') {
+    return (
+      <span className="meld-pedras">
+        <PedraSvg virada />
+        <PedraSvg pedra={meld.pedras[1]} />
+        <PedraSvg pedra={meld.pedras[2]} />
+        <PedraSvg virada />
+      </span>
+    )
+  }
+
+  return (
+    <span className="meld-pedras">
+      {meld.pedras.map((p, j) => (
+        <PedraSvg key={j} pedra={p} deLado={j === 0} />
+      ))}
+    </span>
+  )
+}
 
 /** Seletor de vento da rodada (Leste/Sul) e do assento (todos os 4). */
 function SeletorVentos({ mao, atualizarMao }: { mao: Mao; atualizarMao: any }) {
