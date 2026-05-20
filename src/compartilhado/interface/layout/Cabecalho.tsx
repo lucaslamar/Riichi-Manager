@@ -22,7 +22,7 @@ export default function Cabecalho() {
         </div>
 
         <div className="container-titulo">
-          <span className="tag-versao">v2.3.2</span>
+          <span className="tag-versao">v2.4.0</span>
           {/* clamp() no CSS faz a fonte se adaptar ao tamanho da tela */}
           <h1 className="titulo-principal">Riichi Manager</h1>
         </div>
