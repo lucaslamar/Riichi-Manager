@@ -2,6 +2,8 @@
 
 Gerenciador de torneios de Riichi Mahjong com calculadora de pontos integrada.
 
+App publicado: [Riichi Manager no GitHub Pages](https://lucaslamar.github.io/Riichi-Manager/)
+
 ## Estado atual
 
 O projeto está na versão `2.3.2` e roda como app estático no navegador, pronto para GitHub Pages.
@@ -89,6 +91,8 @@ Extensões recomendadas em `.vscode/extensions.json`:
 ## Deploy GitHub Pages
 
 O `vite.config.ts` já usa `base: "/Riichi-Manager/"` e gera a build em `dist/`.
+
+URL de produção: [https://lucaslamar.github.io/Riichi-Manager/](https://lucaslamar.github.io/Riichi-Manager/)
 
 ```bash
 npm run build
