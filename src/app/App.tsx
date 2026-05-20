@@ -28,7 +28,7 @@ import {
   TimerRodada,
   PainelQualidade,
   GradeRodadas,
-} from '@/dominios/torneio-fast/interface/componentes/ComponentesTorneio'
+} from '@/dominios/torneio-fast/interface/componentes'
 import PaginaCalculadora from '@/dominios/calculadora/interface/paginas/PaginaCalculadora'
 
 // ─── Tipo de telas ────────────────────────────────────────────────────────────

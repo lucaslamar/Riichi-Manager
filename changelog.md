@@ -8,6 +8,8 @@
 - Separados os domínios `calculadora` e `torneio-fast`, cada um com `interface` como front do domínio e `logica` como back do domínio rodando no navegador.
 - Removidas estruturas prematuras para backend/mobile; por enquanto o projeto foca no app estático do GitHub Pages.
 - Fragmentado o CSS global em arquivos menores: base, layout, componentes compartilhados e estilos por domínio.
+- Quebrados os arquivos grandes de interface da calculadora e do torneio fast em componentes menores por responsabilidade.
+- Dividida a lógica da calculadora de mão em arquivos focados: tipos, configuração, cálculo, conversão para `riichi`, tradução, calculadora rápida e ordenação.
 - Atualizado o README com o estado atual do projeto e a nova arquitetura.
 
 ### Adicionado

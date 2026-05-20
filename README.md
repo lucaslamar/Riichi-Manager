@@ -6,7 +6,7 @@ App publicado: [Riichi Manager no GitHub Pages](https://lucaslamar.github.io/Rii
 
 ## Estado atual
 
-O projeto está na versão `2.3.2` e roda como app estático no navegador, pronto para GitHub Pages.
+O projeto está na versão `2.4.0` e roda como app estático no navegador, pronto para GitHub Pages.
 
 Módulos funcionais:
 
@@ -32,10 +32,15 @@ src/
         index.css               # Importa todos os fragmentos
   dominios/
     calculadora/
-      interface/                # Página e componentes React da calculadora
-      logica/                   # Regras puras e ponte para lib riichi
+      interface/
+        componentes/            # Partes visuais da calculadora
+        hooks/                  # Estado e ações de interface da calculadora
+        paginas/                # Página que orquestra estado e handlers
+        constantes.ts           # Constantes/helpers de UI da calculadora
+      logica/                   # Tipos, cálculo, conversão para riichi e tradução
     torneio-fast/
-      interface/                # Componentes React do torneio
+      interface/
+        componentes/            # Configuração, ranking, timer, qualidade e grade
       logica/                   # Sorteio, pareamento, timer, pontuação e tipos
       persistencia/             # localStorage e integrações do navegador
 public/
@@ -53,6 +58,7 @@ public/
 
 - Domínios separados por assunto: `calculadora` e `torneio-fast`.
 - Regras de negócio ficam fora do React sempre que possível: primeiro na `logica`, depois consumidas pela `interface`.
+- Páginas devem compor a tela; hooks guardam estado/ações; componentes cuidam de blocos visuais específicos.
 - Variáveis, tipos e comentários seguem português.
 - Variáveis monossilábicas devem ser evitadas. Use nomes que ensinem a intenção do código; nomes como `i`, `j`, `a`, `b`, `x` e `y` ficam reservados para índices, comparadores e coordenadas muito locais.
 - Funções principais recebem JSDoc para explicar intenção e contrato.
