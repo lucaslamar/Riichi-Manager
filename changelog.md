@@ -69,3 +69,6 @@ corrigi tamanho modal do navegador mobile.
 Inclui desfalque de botao na contagem (dora/ura dora);
 Botão Houtei estava faltando.
 Mão inválida (sem yaku) mostrava 0 em vez de "Sem yaku — mão inválida.
+
+## [2.3.2] - 2026-05-19
+- Corrigi validação dos yakus para aceitar yakumans e condiçoes especias;

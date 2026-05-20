@@ -647,7 +647,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                 <i className="fas fa-calculator" style={{ fontSize:'2rem', marginBottom:8, display:'block' }} />
                 Monte 14 slots (kans contam como 3) para calcular
               </div>
-            ) : resultado?.agari != null && !resultado?.semYaku && (resultado?.pontos?.total ?? 0) > 0 ? (
+            ) : resultado?.agari != null && (resultado?.pontos?.total ?? 0) > 0 ? (
               <ExibicaoCompleta resultado={resultado} />
             ) : (
               <div>
@@ -658,7 +658,7 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
                     ? 'A mão não tem yaku válido (ex: Ron sem Haitei/Houtei).'
                     : resultado == null
                       ? 'A combinação de pedras não forma uma mão válida.'
-                      : 'Ron sem yaku: adicione Riichi, Tanyao ou outro yaku.'}
+                      : 'Mão sem yaku: adicione Riichi, Tanyao ou outro yaku.'}
                 </p>
               </div>
             )}
