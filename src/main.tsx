@@ -10,8 +10,8 @@
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './estilos/global.css'
-import App from './App'
+import './compartilhado/interface/estilos/index.css'
+import App from './app/App'
 
 // Seleciona o elemento raiz. O `!` diz ao TypeScript que temos certeza que ele existe.
 const elementoRaiz = document.getElementById('app')!

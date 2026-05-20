@@ -1,0 +1,40 @@
+﻿/* ─── Reset básico ───────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 20px 40px;
+  background: var(--fundo);
+  color: var(--escuro);
+  line-height: 1.6;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+h2 {
+  color: var(--escuro);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.conteudo-principal,
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+}

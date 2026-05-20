@@ -1,0 +1,305 @@
+﻿/* ─── Ranking ────────────────────────────────────────────────────────────── */
+#tabelaRanking {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+}
+
+#tabelaRanking th,
+#tabelaRanking td {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 15px 10px;
+  text-align: left;
+}
+
+#tabelaRanking th {
+  color: var(--primario);
+  font-weight: 800;
+}
+#tabelaRanking th:last-child,
+#tabelaRanking td:last-child {
+  color: var(--primario);
+  font-weight: 900;
+  text-align: right;
+}
+/* ─── Qualidade da grade ─────────────────────────────────────────────────── */
+.pilula-status {
+  margin-left: auto;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: var(--escuro);
+  color: var(--branco);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.metricas div {
+  min-height: 82px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fcfcfc;
+}
+
+.metricas dt {
+  min-height: 34px;
+  color: #607080;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.metricas dd {
+  margin: 6px 0 0;
+  color: var(--primario);
+  font-size: 1.45rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.chip-par {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dfe7ef;
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: #f8fbfd;
+  color: #35485f;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.chip-par.perigo {
+  border-color: #ffcdd2;
+  background: #fff5f5;
+}
+.chip-par strong {
+  color: var(--primario);
+  font-weight: 900;
+}
+.chip-par.perigo strong {
+  color: var(--leste);
+}
+
+.acoes-qualidade {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  border: 1px dashed #c9d8e8;
+  border-radius: 10px;
+  padding: 12px;
+  background: #f8fbfd;
+}
+/* ─── Timer ──────────────────────────────────────────────────────────────── */
+.card-timer {
+  border-left: 6px solid var(--primario);
+}
+
+.cabecalho-timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.display-timer {
+  min-width: 180px;
+  border-radius: 14px;
+  padding: 14px 18px;
+  background: #102a43;
+  color: var(--branco);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.controles-timer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+
+.seletor-timer {
+  display: grid;
+  gap: 6px;
+  color: #516173;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.seletor-timer select {
+  min-height: 48px;
+  border: 2px solid #dde1e7;
+  border-radius: 8px;
+  padding: 0 14px;
+  background: var(--branco);
+  color: var(--escuro);
+  font-weight: 800;
+}
+
+.ajuda-timer {
+  margin: 14px 0 0;
+  color: #607080;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+/* ─── Mesas / Grade ──────────────────────────────────────────────────────── */
+.grade-rodadas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.caixa-mesa {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 6px solid var(--cor-rodada, var(--primario));
+  border-radius: var(--raio);
+  padding: 20px;
+  background: var(--branco);
+  box-shadow: var(--sombra);
+}
+
+.caixa-mesa header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+  color: var(--cor-rodada, var(--primario));
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.caixa-mesa header span {
+  border-radius: 6px;
+  padding: 5px 10px;
+  background: var(--cor-rodada, var(--primario));
+  color: var(--branco);
+}
+
+.resumo-tempo-mesa {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 12px;
+  border: 1px solid color-mix(in srgb, var(--cor-rodada, var(--primario)) 25%, #f0f0f0);
+  border-radius: 10px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--cor-rodada, var(--primario)) 8%, var(--branco));
+}
+
+.resumo-tempo-mesa span,
+.resumo-tempo-mesa small {
+  color: #607080;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.resumo-tempo-mesa strong {
+  color: var(--cor-rodada, var(--primario));
+  font-variant-numeric: tabular-nums;
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.resumo-tempo-mudo {
+  border-color: #e4e9f0;
+  background: #f8fafc;
+}
+.resumo-tempo-mudo strong {
+  color: #607080;
+}
+
+.lista-assentos {
+  display: grid;
+  flex-grow: 1;
+  gap: 8px;
+}
+
+.linha-jogador {
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fcfcfc;
+}
+
+.tag-vento {
+  width: 68px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  padding: 5px 8px;
+  color: var(--branco);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.vento-leste {
+  background: var(--leste);
+}
+.vento-sul {
+  background: var(--sul);
+}
+.vento-oeste {
+  background: var(--oeste);
+}
+.vento-norte {
+  background: var(--norte);
+}
+
+.nome-jogador {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: #444;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.acoes-mesa {
+  display: grid;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-tempo-mesa {
+  width: 100%;
+  border-color: var(--cor-rodada, var(--primario));
+  color: var(--cor-rodada, var(--primario));
+}
+
+.btn-salvar-mesa {
+  width: 100%;
+  background: var(--cor-rodada, var(--primario));
+  color: var(--branco);
+  border: 0;
+}

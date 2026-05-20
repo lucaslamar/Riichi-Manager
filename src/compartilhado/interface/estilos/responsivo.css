@@ -1,0 +1,72 @@
+﻿/* ─── Responsivo ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  body {
+    padding: 0 10px 40px;
+  }
+  .cabecalho-principal {
+    padding: 30px 0 20px;
+  }
+  .conteudo-cabecalho {
+    gap: 15px;
+  }
+  .pedra-mahjong {
+    width: 40px;
+    height: 55px;
+    font-size: 1.8rem;
+  }
+  .titulo-principal {
+    font-size: 1.5rem;
+    white-space: normal;
+  }
+  .card,
+  .caixa-mesa {
+    padding: 20px;
+  }
+  .metricas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grade-rodadas {
+    grid-template-columns: 1fr;
+  }
+  .cabecalho-timer {
+    flex-direction: column;
+  }
+  .display-timer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .acoes {
+    display: grid;
+  }
+  .btn-primario,
+  .btn-contorno {
+    width: 100%;
+  }
+  .resumo-mao-fixo {
+    display: block;
+    position: sticky;
+    top: 8px;
+    z-index: 5;
+    box-shadow: 0 10px 22px rgba(16, 42, 67, 0.1);
+  }
+  .linha-regra {
+    grid-template-columns: 1fr;
+  }
+  .modal-regras-rodape {
+    flex-direction: column;
+  }
+  .linha-jogador {
+    gap: 6px;
+    padding: 8px;
+  }
+  .tag-vento {
+    width: 62px;
+    font-size: 0.68rem;
+  }
+  .input-pontuacao {
+    width: 72px;
+    font-size: 0.92rem;
+  }
+}

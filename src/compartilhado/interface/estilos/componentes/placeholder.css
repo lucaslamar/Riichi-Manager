@@ -1,0 +1,19 @@
+﻿/* ─── Feature placeholder ────────────────────────────────────────────────── */
+.placeholder-funcionalidade {
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  text-align: center;
+}
+
+.placeholder-icone {
+  display: inline-flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: var(--info-fundo);
+  color: var(--primario);
+  font-size: 1.5rem;
+}

@@ -1,0 +1,34 @@
+﻿/* ─── Menu inicial ───────────────────────────────────────────────────────── */
+.menu-inicial {
+  display: grid;
+  gap: 22px;
+  text-align: center;
+}
+
+.menu-inicial-hero {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+.menu-inicial-hero p {
+  max-width: 620px;
+  margin: 0;
+  color: #607080;
+  font-weight: 700;
+}
+
+.menu-inicial-acoes {
+  display: grid;
+  max-width: 420px;
+  gap: 12px;
+  justify-self: center;
+  width: 100%;
+}
+
+.botao-menu {
+  width: 100%;
+}
+.botao-menu:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}

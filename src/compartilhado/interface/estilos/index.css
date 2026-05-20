@@ -1,0 +1,11 @@
+﻿@import './base/tokens.css';
+@import './base/reset.css';
+@import './layout/cabecalho.css';
+@import './layout/menu-inicial.css';
+@import './componentes/card.css';
+@import './componentes/botoes.css';
+@import './componentes/formularios.css';
+@import './componentes/placeholder.css';
+@import './dominios/torneio-fast.css';
+@import './dominios/calculadora.css';
+@import './responsivo.css';

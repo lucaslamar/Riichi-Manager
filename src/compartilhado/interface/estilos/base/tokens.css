@@ -1,0 +1,30 @@
+﻿/* ─── Variáveis de design (tokens) ──────────────────────────────────────── */
+:root {
+  --primario: #2196f3;
+  --primario-escuro: #1976d2;
+  --secundario: #4caf50;
+  --escuro: #2c3e50;
+  --fundo: #eef2f7;
+  --branco: #ffffff;
+  --leste: #d32f2f;
+  --sul: #2e7d32;
+  --oeste: #ff9800;
+  --norte: #2196f3;
+  --bloqueado: #607d8b;
+  --info-fundo: #e3f2fd;
+  --info-texto: #0d47a1;
+  --sombra: 0 4px 12px rgb(0 0 0 / 8%);
+  --raio: 12px;
+  color: var(--escuro);
+  background: var(--fundo);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}

@@ -1,0 +1,51 @@
+﻿/* ─── Header ─────────────────────────────────────────────────────────────── */
+.cabecalho-principal {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0 40px;
+}
+
+.conteudo-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.pedra-mahjong {
+  display: flex;
+  width: 50px;
+  height: 65px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #cccccc;
+  border-radius: 8px;
+  background: var(--branco);
+  box-shadow: 4px 4px 0 #d0d0d0;
+  color: var(--leste);
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.container-titulo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tag-versao {
+  color: #738295;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.titulo-principal {
+  margin: 0;
+  color: var(--primario);
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1;
+  white-space: nowrap;
+}

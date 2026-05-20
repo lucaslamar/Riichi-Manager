@@ -1,0 +1,64 @@
+﻿/* ─── Botões ─────────────────────────────────────────────────────────────── */
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-primario,
+.btn-contorno {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+
+.btn-primario {
+  border: 0;
+  background: var(--primario);
+  color: var(--branco);
+}
+
+.btn-primario:hover {
+  background: var(--primario-escuro);
+  transform: translateY(-1px);
+}
+.btn-primario:disabled {
+  background: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-contorno {
+  border: 2px solid #dde1e7;
+  background: var(--branco);
+  color: var(--escuro);
+}
+
+.btn-contorno:hover {
+  border-color: #ccd0d5;
+  background: #f8f9fa;
+}
+.btn-contorno:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-perigo {
+  color: #ef5350;
+  border-color: #ef5350;
+}
+.btn-bloqueado {
+  background: #999 !important;
+  cursor: not-allowed;
+  transform: none !important;
+}
