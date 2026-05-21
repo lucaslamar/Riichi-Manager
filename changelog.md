@@ -1,5 +1,20 @@
 # Changelog - Riichi Manager
 
+## [2.6.0] - 2026-05-21
+
+### Adicionado
+
+- Suporte a melds utilizando pedras diretamente da mão.
+- Contador manual de doras para cálculo personalizado.
+
+### Corrigido
+
+- Correção do cálculo de dora para dragões.
+- Ajustes visuais [cores] em indicadores e destaques de dora e pedras para batida.
+- Correção do bloco da mão agora ele se mexe no mobile, permitindo ver e editar ao mesmo tempo que escolhe configs [riichi, ipatsu etc].
+
+---
+
 ## [2.5.3] - 2026-05-21
 
 ### Alterado
