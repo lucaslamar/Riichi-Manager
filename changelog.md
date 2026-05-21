@@ -1,5 +1,14 @@
 # Changelog - Riichi Manager
 
+## [2.5.1] - 2026-05-21
+
+### Corrigido
+
+- Calculadora rápida agora usa apenas `Vento da Rodada` (Leste/Sul) e remove o seletor de `Assento` dessa tela.
+- Pontuação rápida passa a seguir o `Vento da Rodada` selecionado, pagando mais para o Oya (Leste).
+
+---
+
 ## [2.5.0] - 2026-05-21
 
 ### Adicionado

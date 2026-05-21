@@ -87,7 +87,7 @@ export function useCalculadoraMao() {
 
   // Calculadora rápida
   const tabelaRapida = calcularHanFu(han, fu, configuracao)
-  const resultadoRapido = montarPontosRapidos(mao.ventoAssento === '1', mao.agari, tabelaRapida)
+  const resultadoRapido = montarPontosRapidos(mao.ventoRodada === '1', mao.agari, tabelaRapida)
   const fuDisponiveis = fuValidos(mao.agari)
 
   // Resultado completo (calculado ao vivo quando a mão está completa)

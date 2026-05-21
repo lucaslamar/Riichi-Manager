@@ -12,7 +12,7 @@ export default function ModoRapidoCalculadora({ estado }: PropsModoRapido) {
 
   return (
     <div className="card">
-      <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
+      <SeletorVentos mao={mao} atualizarMao={atualizarMao} mostrarAssento={false} />
       <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
 
       <div
@@ -36,7 +36,7 @@ export default function ModoRapidoCalculadora({ estado }: PropsModoRapido) {
 
       <ExibicaoRapida
         resultado={resultadoRapido}
-        isOya={mao.ventoAssento === '1'}
+        isOya={mao.ventoRodada === '1'}
         agari={mao.agari}
         han={han}
         fu={fu}
