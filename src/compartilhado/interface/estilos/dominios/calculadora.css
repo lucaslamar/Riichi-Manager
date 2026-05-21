@@ -70,12 +70,59 @@
   border-top: 1px solid #edf0f4;
 }
 
+.mao-editor-fixo {
+  margin-bottom: 10px;
+  background: var(--branco);
+}
+
+.cabecalho-mao-editor {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.titulo-mao-editor {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: #607080;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.btn-limpar-mao {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-height: 24px;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #ef5350;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.btn-limpar-mao:hover {
+  border-color: #ffcdd2;
+  background: #fff5f5;
+}
+
 .pedras-selecionadas {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
   min-height: 40px;
-  padding: 8px;
+  padding: 8px 62px 8px 8px;
   background: #f8f9fa;
   border: 1px solid #f0f0f0;
   border-radius: 8px;

@@ -1,6 +1,5 @@
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { BotaoAcao, BotaoToggle } from './Botoes'
-import ResumoMaoFixo from './ResumoMaoFixo'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
@@ -10,14 +9,12 @@ interface PropsOpcoesMao {
 
 /** Controles de riichi, uradora e condições especiais da vitória. */
 export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
-  const { mao, atualizarMao, acaoPendente, totalPedras, slotsUsados, alternarAcao, maoAberta } =
-    estado
+  const { mao, atualizarMao, acaoPendente, alternarAcao, maoAberta } = estado
 
   return (
     <>
       {/* Card 2: opções da mão */}
       <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-        <ResumoMaoFixo mao={mao} totalPedras={totalPedras} slotsUsados={slotsUsados} />
         <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
         <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
 

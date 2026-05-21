@@ -37,100 +37,82 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     <>
       {/* Card 1: construtor de mão */}
       <div className={embutido ? undefined : 'card'}>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
-          <h3
-            style={{
-              margin: 0,
-              flex: 1,
-              fontSize: '0.88rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              color: '#607080',
-            }}
-          >
-            <i className="fas fa-layer-group" style={{ marginRight: 6 }} />
-            Mão ({totalPedras} pedras · {slotsUsados}/14 slots)
-          </h3>
-          {totalPedras > 0 && (
-            <button
-              className="btn-contorno"
-              type="button"
-              onClick={limpar}
-              style={{
-                minHeight: 34,
-                padding: '4px 12px',
-                fontSize: '0.82rem',
-                color: '#ef5350',
-                borderColor: '#ef5350',
-              }}
-            >
-              Limpar
-            </button>
-          )}
-        </div>
+        <div className="mao-editor-fixo">
+          <div className="cabecalho-mao-editor">
+            <h3 className="titulo-mao-editor">
+              <i className="fas fa-layer-group" style={{ marginRight: 6 }} />
+              Mão ({totalPedras} pedras · {slotsUsados}/14 slots)
+            </h3>
+          </div>
 
-        {/* Área de pedras e melds */}
-        <div className="pedras-selecionadas">
-          {mao.pedras.map((pedra, i) => (
-            <button
-              key={i}
-              className={`chip-pedra ${i === mao.indiceAgari ? 'agari' : ''}`}
-              type="button"
-              title={
-                i === mao.indiceAgari
-                  ? 'Pedra de agari — clique para remover'
-                  : 'Clique para remover'
-              }
-              onClick={() => removerPedra(i)}
-            >
-              <PedraSvg pedra={pedra} />
-            </button>
-          ))}
-
-          {/* Melds com cores distintas e rótulo de tipo */}
-          {mao.melds.map((meld, i) => {
-            const estilo = ESTILO_MELD[meld.tipo]
-            return (
+          {/* Área de pedras e melds */}
+          <div className="pedras-selecionadas">
+            {totalPedras > 0 && (
+              <button className="btn-limpar-mao" type="button" onClick={limpar}>
+                Limpar
+              </button>
+            )}
+            {mao.pedras.map((pedra, i) => (
               <button
-                key={`meld-${i}`}
+                key={i}
+                className={`chip-pedra ${i === mao.indiceAgari ? 'agari' : ''}`}
                 type="button"
-                title={`${estilo.rotulo} — clique para remover`}
-                onClick={() => removerMeld(i)}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  padding: '3px 8px',
-                  borderRadius: 6,
-                  border: `2px solid ${estilo.borda}`,
-                  background: '#ffffff',
-                  fontWeight: 900,
-                  fontFamily: 'monospace',
-                  fontSize: '0.82rem',
-                  cursor: 'pointer',
-                }}
+                title={
+                  i === mao.indiceAgari
+                    ? 'Pedra de agari — clique para remover'
+                    : 'Clique para remover'
+                }
+                onClick={() => removerPedra(i)}
               >
-                <span
+                <PedraSvg pedra={pedra} />
+              </button>
+            ))}
+
+            {/* Melds com cores distintas e rótulo de tipo */}
+            {mao.melds.map((meld, i) => {
+              const estilo = ESTILO_MELD[meld.tipo]
+              return (
+                <button
+                  key={`meld-${i}`}
+                  type="button"
+                  title={`${estilo.rotulo} — clique para remover`}
+                  onClick={() => removerMeld(i)}
                   style={{
-                    fontSize: '0.65rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    padding: '3px 8px',
+                    borderRadius: 6,
+                    border: `2px solid ${estilo.borda}`,
+                    background: '#ffffff',
                     fontWeight: 900,
-                    color: estilo.borda,
-                    marginRight: 2,
-                    letterSpacing: 0,
+                    fontFamily: 'monospace',
+                    fontSize: '0.82rem',
+                    cursor: 'pointer',
                   }}
                 >
-                  {estilo.rotulo}
-                </span>
-                <PedrasMeld meld={meld} />
-              </button>
-            )
-          })}
+                  <span
+                    style={{
+                      fontSize: '0.65rem',
+                      fontWeight: 900,
+                      color: estilo.borda,
+                      marginRight: 2,
+                      letterSpacing: 0,
+                    }}
+                  >
+                    {estilo.rotulo}
+                  </span>
+                  <PedrasMeld meld={meld} />
+                </button>
+              )
+            })}
 
-          {totalPedras === 0 && (
-            <span style={{ color: '#bbb', fontSize: '0.85rem', alignSelf: 'center' }}>
-              Clique nas pedras abaixo para montar a mão
-            </span>
-          )}
+            {totalPedras === 0 && (
+              <span style={{ color: '#bbb', fontSize: '0.85rem', alignSelf: 'center' }}>
+                Clique nas pedras abaixo para montar a mão
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Dora e Uradora exibidos */}
