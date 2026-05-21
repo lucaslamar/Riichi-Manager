@@ -241,7 +241,6 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
               <div className="linha-naipe">
                 {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) => {
                   const codigo = `${numero}${naipe}`
-                  const esgotada = contarCodigo(codigo) >= 4
                   const cheiaESemAcao = maoCompleta && !acaoPendente
                   const invalidaParaAcao = !podeSelecionarPedra(codigo)
                   const ehDoraReal = dorasReais.has(codigoBase(codigo))
@@ -250,7 +249,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                       key={codigo}
                       className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''}`}
                       type="button"
-                      disabled={esgotada || cheiaESemAcao || invalidaParaAcao}
+                      disabled={cheiaESemAcao || invalidaParaAcao}
                       onClick={() => adicionarPedra(codigo)}
                     >
                       <PedraSvg pedra={codigo} />
@@ -261,7 +260,6 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                   mao.doraManual === 0 &&
                   (() => {
                     const codigo = `0${naipe}`
-                    const esgotada = contarAka(codigo) >= 1 || contarCodigo(codigo) >= 4
                     const cheiaESemAcao = maoCompleta && !acaoPendente
                     const invalidaParaAcao = !podeSelecionarPedra(codigo)
                     const ehDoraReal = dorasReais.has(codigoBase(codigo))
@@ -271,7 +269,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                         className={`btn-pedra btn-pedra-aka ${ehDoraReal ? 'dora-real' : ''}`}
                         type="button"
                         title="5 vermelho (aka dora)"
-                        disabled={esgotada || cheiaESemAcao || invalidaParaAcao}
+                        disabled={cheiaESemAcao || invalidaParaAcao}
                         onClick={() => adicionarPedra(codigo)}
                       >
                         <PedraSvg pedra={codigo} />
@@ -301,11 +299,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                     key={codigo}
                     className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''}`}
                     type="button"
-                    disabled={
-                      contarCodigo(codigo) >= 4 ||
-                      (maoCompleta && !acaoPendente) ||
-                      !podeSelecionarPedra(codigo)
-                    }
+                    disabled={(maoCompleta && !acaoPendente) || !podeSelecionarPedra(codigo)}
                     onClick={() => adicionarPedra(codigo)}
                   >
                     <PedraSvg pedra={codigo} />

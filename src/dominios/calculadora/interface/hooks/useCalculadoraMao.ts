@@ -286,7 +286,7 @@ export function useCalculadoraMao() {
   }
 
   const podeMeld = mao.riichi === null && !mao.bencao && slotsUsados < 14
-  const podeKanFechado = !mao.bencao && slotsUsados < 14
+  const podeKanFechado = !mao.bencao
   const maoAberta = mao.melds.some((meld) => meld.tipo !== 'kanFechado')
 
   return {
