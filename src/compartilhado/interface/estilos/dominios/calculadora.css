@@ -50,6 +50,84 @@
   border-top: 1px solid #edf0f4;
 }
 
+.seletores-vento-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 14px;
+}
+
+.seletores-rapidos-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 14px;
+}
+
+.campo-vento-mao {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.campo-vento-mao span {
+  color: #607080;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.select-vento-mao {
+  min-height: 42px;
+  border: 2px solid #dde1e7;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: white;
+  font-weight: 800;
+}
+
+.campo-vitoria-mao {
+  display: flex;
+  width: fit-content;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.campo-vitoria-mao > span {
+  color: #607080;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.toggle-agari-mao {
+  display: flex;
+  min-width: 224px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f0f0f0;
+}
+
+.toggle-agari-mao button {
+  flex: 1;
+  min-height: 38px;
+  padding: 8px 24px;
+  border: 0;
+  background: transparent;
+  color: var(--escuro);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+
+.toggle-agari-mao button.ativo {
+  background: var(--primario);
+  color: white;
+}
+
 .btn-acao-mao {
   min-height: 38px;
   padding: 7px 12px;

@@ -15,7 +15,10 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
     <>
       <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
         <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
-        <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
+        <div className="campo-vitoria-mao">
+          <span>Vitória</span>
+          <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
+        </div>
 
         <div
           style={{

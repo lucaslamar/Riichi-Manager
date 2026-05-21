@@ -12,50 +12,32 @@ export default function ModoRapidoCalculadora({ estado }: PropsModoRapido) {
 
   return (
     <div className="card">
-      <div style={{ display: 'flex', gap: 24, marginBottom: 14, flexWrap: 'wrap' }}>
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <span
-            style={{
-              fontSize: '0.78rem',
-              fontWeight: 900,
-              color: '#607080',
-              textTransform: 'uppercase',
-            }}
-          >
-            É leste?
-          </span>
-          <select
-            value={mao.ventoRodada}
-            style={{
-              minHeight: 42,
-              border: '2px solid #dde1e7',
-              borderRadius: 8,
-              padding: '0 12px',
-              fontWeight: 800,
-              background: 'white',
-            }}
-            onChange={(evento) =>
-              atualizarMao((rascunho) => {
-                rascunho.ventoRodada = evento.target.value as '1' | '2'
-              })
-            }
-          >
-            <option value="1">Leste</option>
-            <option value="2">Não leste</option>
-          </select>
-        </label>
+      <div className="seletores-rapidos-mao">
+        <div className="campo-vitoria-mao">
+          <span>É leste?</span>
+          <div className="toggle-agari-mao">
+            {[
+              { valor: '1' as const, rotulo: 'Leste' },
+              { valor: '2' as const, rotulo: 'Não leste' },
+            ].map((opcao) => (
+              <button
+                key={opcao.valor}
+                type="button"
+                className={mao.ventoRodada === opcao.valor ? 'ativo' : undefined}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.ventoRodada = opcao.valor
+                  })
+                }
+              >
+                {opcao.rotulo}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <span
-            style={{
-              fontSize: '0.78rem',
-              fontWeight: 900,
-              color: '#607080',
-              textTransform: 'uppercase',
-            }}
-          >
-            Vitória
-          </span>
+        <div className="campo-vitoria-mao">
+          <span>Vitória</span>
           <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
         </div>
       </div>

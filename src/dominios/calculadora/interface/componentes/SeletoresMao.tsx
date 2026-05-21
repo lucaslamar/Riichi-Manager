@@ -15,30 +15,13 @@ export function SeletorVentos({
   mostrarAssento?: boolean
 }) {
   return (
-    <div style={{ display: 'flex', gap: 24, marginBottom: 14, flexWrap: 'wrap' }}>
+    <div className="seletores-vento-mao">
       {mostrarVentoRodada && (
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <span
-            style={{
-              fontSize: '0.78rem',
-              fontWeight: 900,
-              color: '#607080',
-              textTransform: 'uppercase',
-            }}
-          >
-            Vento da Rodada
-          </span>
-          {/* Só Leste e Sul — regra padrão de riichi yonma */}
+        <label className="campo-vento-mao">
+          <span>Vento da Rodada</span>
           <select
             value={mao.ventoRodada}
-            style={{
-              minHeight: 42,
-              border: '2px solid #dde1e7',
-              borderRadius: 8,
-              padding: '0 12px',
-              fontWeight: 800,
-              background: 'white',
-            }}
+            className="select-vento-mao"
             onChange={(evento) =>
               atualizarMao((rascunho: Mao) => {
                 rascunho.ventoRodada = evento.target.value as VentoMao
@@ -55,28 +38,11 @@ export function SeletorVentos({
       )}
 
       {mostrarAssento && (
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <span
-            style={{
-              fontSize: '0.78rem',
-              fontWeight: 900,
-              color: '#607080',
-              textTransform: 'uppercase',
-            }}
-          >
-            Assento
-          </span>
-          {/* Assento tem os 4 ventos */}
+        <label className="campo-vento-mao">
+          <span>Assento</span>
           <select
             value={mao.ventoAssento}
-            style={{
-              minHeight: 42,
-              border: '2px solid #dde1e7',
-              borderRadius: 8,
-              padding: '0 12px',
-              fontWeight: 800,
-              background: 'white',
-            }}
+            className="select-vento-mao"
             onChange={(evento) =>
               atualizarMao((rascunho: Mao) => {
                 rascunho.ventoAssento = evento.target.value as VentoMao
@@ -98,30 +64,12 @@ export function SeletorVentos({
 /** Toggle Tsumo / Ron. */
 export function ToggleAgari({ mao, atualizarMao }: { mao: Mao; atualizarMao: AtualizarMao }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        background: '#f0f0f0',
-        borderRadius: 8,
-        overflow: 'hidden',
-        width: 'fit-content',
-        marginBottom: 4,
-      }}
-    >
+    <div className="toggle-agari-mao">
       {(['tsumo', 'ron'] as const).map((tipo) => (
         <button
           key={tipo}
           type="button"
-          style={{
-            padding: '8px 24px',
-            fontWeight: 900,
-            border: 'none',
-            background: mao.agari === tipo ? 'var(--primario)' : 'transparent',
-            color: mao.agari === tipo ? 'white' : 'var(--escuro)',
-            cursor: 'pointer',
-            textTransform: 'uppercase',
-            fontSize: '0.9rem',
-          }}
+          className={mao.agari === tipo ? 'ativo' : undefined}
           onClick={() =>
             atualizarMao((rascunho: Mao) => {
               rascunho.agari = tipo
@@ -134,5 +82,3 @@ export function ToggleAgari({ mao, atualizarMao }: { mao: Mao; atualizarMao: Atu
     </div>
   )
 }
-
-/** Botão de ação de meld/dora com cor própria. */

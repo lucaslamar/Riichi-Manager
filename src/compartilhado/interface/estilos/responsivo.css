@@ -58,6 +58,45 @@
     font-size: 0.82rem;
     line-height: 1.25;
   }
+  .seletores-vento-mao {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .seletores-rapidos-mao {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .campo-vento-mao {
+    min-width: 0;
+  }
+  .campo-vento-mao span {
+    font-size: 0.72rem;
+    line-height: 1.2;
+  }
+  .select-vento-mao {
+    width: 100%;
+    min-height: 42px;
+    padding-inline: 10px;
+    font-size: 0.88rem;
+  }
+  .campo-vitoria-mao {
+    width: 100%;
+  }
+  .campo-vitoria-mao > span {
+    font-size: 0.72rem;
+    line-height: 1.2;
+  }
+  .toggle-agari-mao {
+    min-width: 0;
+    width: 100%;
+  }
+  .toggle-agari-mao button {
+    min-height: 42px;
+    padding-inline: 10px;
+    font-size: 0.88rem;
+  }
   .acoes-construtor-mao {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
