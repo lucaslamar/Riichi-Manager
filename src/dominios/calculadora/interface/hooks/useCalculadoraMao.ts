@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useImmer } from 'use-immer'
 import {
   calcularMao,
@@ -11,7 +11,6 @@ import {
   contarPedrasTotais,
   contarSlotsLogicos,
   configuracaoPadrao,
-  analisarCaminhosYaku,
   calcularEsperasPossiveis,
   type Mao,
   type CodigoPedra,
@@ -33,7 +32,6 @@ export function useCalculadoraMao() {
   const [modo, setModo] = useState<'completo' | 'rapido'>('completo')
   const [configuracao, setConfiguracao] = useState<ConfiguracaoCalculo>(configuracaoPadrao)
   const [modalRegrasAberto, setModalRegrasAberto] = useState(false)
-  const [caminhosAtivos, setCaminhosAtivos] = useState(false)
   const [esperasPossiveis, setEsperasPossiveis] = useState<EsperaPossivel[]>([])
   const [calculandoEsperas, setCalculandoEsperas] = useState(false)
 
@@ -142,11 +140,6 @@ export function useCalculadoraMao() {
         }
       })()
     : null
-
-  const orientacao = useMemo(
-    () => analisarCaminhosYaku(mao, configuracao, slotsUsados),
-    [mao, configuracao, slotsUsados],
-  )
 
   useEffect(() => {
     setEsperasPossiveis([])
@@ -276,15 +269,6 @@ export function useCalculadoraMao() {
   const alternarAcao = (tipo: Acao['tipo']) =>
     setAcaoPendente(acaoPendente?.tipo === tipo ? null : criarAcao(tipo))
 
-  const calcularEsperas = () => {
-    if (slotsUsados !== 13 || calculandoEsperas || esperasPossiveis.length > 0) return
-    setCalculandoEsperas(true)
-    window.setTimeout(() => {
-      setEsperasPossiveis(calcularEsperasPossiveis(mao, configuracao, slotsUsados))
-      setCalculandoEsperas(false)
-    }, 0)
-  }
-
   const podeMeld = mao.riichi === null && !mao.bencao && slotsUsados < 14
   const podeKanFechado = !mao.bencao
   const maoAberta = mao.melds.some((meld) => meld.tipo !== 'kanFechado')
@@ -299,8 +283,6 @@ export function useCalculadoraMao() {
     setConfiguracao,
     modalRegrasAberto,
     setModalRegrasAberto,
-    caminhosAtivos,
-    setCaminhosAtivos,
     han,
     setHan,
     fu,
@@ -314,10 +296,8 @@ export function useCalculadoraMao() {
     resultadoRapido,
     fuDisponiveis,
     resultado,
-    orientacao,
     esperasPossiveis,
     calculandoEsperas,
-    calcularEsperas,
     adicionarPedra,
     removerPedra,
     removerMeld,

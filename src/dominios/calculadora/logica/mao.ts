@@ -22,5 +22,5 @@ export {
 } from './ordenacao'
 export { traduzirPatamares, traduzirYaku } from './traducoes'
 export { converterMaoParaString } from './conversor-riichi'
-export type { CaminhoYaku, EsperaPossivel, OrientacaoYaku } from './orientacao-yaku'
-export { analisarCaminhosYaku, calcularEsperasPossiveis } from './orientacao-yaku'
+export type { EsperaPossivel } from './esperas'
+export { calcularEsperasPossiveis } from './esperas'

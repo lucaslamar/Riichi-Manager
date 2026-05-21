@@ -22,10 +22,8 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
     <div>
       <BarraCalculadora
         modo={calculadora.modo}
-        caminhosAtivos={calculadora.caminhosAtivos}
         aoVoltar={aoVoltar}
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
-        aoAlternarCaminhos={() => calculadora.setCaminhosAtivos((ativo) => !ativo)}
         aoAlternarModo={() =>
           calculadora.setModo(calculadora.modo === 'completo' ? 'rapido' : 'completo')
         }
