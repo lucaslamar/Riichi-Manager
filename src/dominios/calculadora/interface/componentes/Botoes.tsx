@@ -14,21 +14,16 @@ export function BotaoAcao({
 }) {
   return (
     <button
+      className="btn-acao-mao"
       type="button"
       disabled={desabilitado}
       onClick={aoClicar}
       style={{
-        minHeight: 36,
-        padding: '7px 14px',
-        fontSize: '0.85rem',
-        fontWeight: 900,
         border: `2px solid ${ativo ? cor : '#dde1e7'}`,
-        borderRadius: 8,
         cursor: desabilitado ? 'not-allowed' : 'pointer',
         background: ativo ? cor : 'white',
         color: ativo ? 'white' : desabilitado ? '#bbb' : cor,
         opacity: desabilitado ? 0.45 : 1,
-        transition: 'all 0.15s',
       }}
     >
       {rotulo}

@@ -58,6 +58,13 @@
     font-size: 0.82rem;
     line-height: 1.25;
   }
+  .acoes-construtor-mao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .btn-acao-mao {
+    min-height: 42px;
+    padding-inline: 8px;
+  }
   .linha-regra {
     grid-template-columns: 1fr;
   }

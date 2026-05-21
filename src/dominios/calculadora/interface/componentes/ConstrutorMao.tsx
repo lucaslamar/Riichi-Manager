@@ -28,10 +28,12 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     alternarAcao,
     podeMeld,
     podeKanFechado,
+    esperasPossiveis,
   } = estado
   const dorasReais = new Set(
     [...mao.dora, ...mao.uradora].map((indicador) => codigoBase(proximaDoraIndicada(indicador))),
   )
+  const temEsperaValida = esperasPossiveis.some((espera) => !espera.semYaku)
 
   return (
     <>
@@ -46,7 +48,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
           </div>
 
           {/* Área de pedras e melds */}
-          <div className="pedras-selecionadas">
+          <div className={`pedras-selecionadas ${temEsperaValida ? 'alerta-tenpai' : ''}`}>
             {totalPedras > 0 && (
               <button className="btn-limpar-mao" type="button" onClick={limpar}>
                 Limpar
@@ -117,12 +119,10 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
 
         {/* Dora e Uradora exibidos */}
         {(mao.dora.length > 0 || mao.uradora.length > 0) && (
-          <div style={{ display: 'flex', gap: 16, marginBottom: 10, flexWrap: 'wrap' }}>
+          <div className="indicadores-dora-selecionados">
             {mao.dora.length > 0 && (
-              <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#be185d' }}>
-                  INDICADOR DE DORA:
-                </span>
+              <div className="grupo-indicador-dora">
+                <span>Dora</span>
                 {mao.dora.map((pedraDora, i) => (
                   <button
                     key={i}
@@ -140,10 +140,8 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
               </div>
             )}
             {mao.uradora.length > 0 && (
-              <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#be185d' }}>
-                  INDICADOR DE URADORA:
-                </span>
+              <div className="grupo-indicador-dora">
+                <span>Uradora</span>
                 {mao.uradora.map((pedraUradora, i) => (
                   <button
                     key={i}
@@ -164,7 +162,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         )}
 
         {/* Botões de ação com cores distintas */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+        <div className="acoes-construtor-mao">
           <BotaoAcao
             tipo="chii"
             rotulo="Chii"
@@ -199,11 +197,19 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
           />
           <BotaoAcao
             tipo="dora"
-            rotulo="Indicador de Dora"
+            rotulo="Dora"
             cor="#ec4899"
             ativo={acaoPendente?.tipo === 'dora'}
             desabilitado={mao.dora.length >= 5}
             aoClicar={() => alternarAcao('dora')}
+          />
+          <BotaoAcao
+            tipo="uradora"
+            rotulo="Uradora"
+            cor="#ec4899"
+            ativo={acaoPendente?.tipo === 'uradora'}
+            desabilitado={mao.riichi === null || mao.uradora.length >= 5}
+            aoClicar={() => alternarAcao('uradora')}
           />
         </div>
 

@@ -1,5 +1,5 @@
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
-import { BotaoAcao, BotaoToggle } from './Botoes'
+import { BotaoToggle } from './Botoes'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
@@ -7,18 +7,16 @@ interface PropsOpcoesMao {
   embutido?: boolean
 }
 
-/** Controles de riichi, uradora e condições especiais da vitória. */
+/** Controles de riichi e condicoes especiais da vitoria. */
 export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
-  const { mao, atualizarMao, acaoPendente, alternarAcao, maoAberta } = estado
+  const { mao, atualizarMao, maoAberta } = estado
 
   return (
     <>
-      {/* Card 2: opções da mão */}
       <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
         <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
         <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
 
-        {/* Linha de opções: Riichi + Uradora juntos */}
         <div
           style={{
             display: 'flex',
@@ -41,17 +39,6 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               })
             }
           />
-          {/* Uradora ao lado do Riichi (só liberado com riichi) */}
-          <BotaoAcao
-            tipo="uradora"
-            rotulo="Indicador de Uradora"
-            cor="#ec4899"
-            ativo={acaoPendente?.tipo === 'uradora'}
-            desabilitado={mao.riichi === null || mao.uradora.length >= 5}
-            aoClicar={() => alternarAcao('uradora')}
-          />
-          {/* Separador visual */}
-          <div style={{ width: 1, height: 32, background: '#e0e0e0', margin: '0 4px' }} />
           <BotaoToggle
             rotulo="Ippatsu"
             ativo={mao.riichi?.ippatsu ?? false}
