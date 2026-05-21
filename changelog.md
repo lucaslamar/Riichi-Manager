@@ -1,5 +1,30 @@
 # Changelog - Riichi Manager
 
+## [2.5.3] - 2026-05-21
+
+### Alterado
+
+- Indicadores de dora e uradora agora ficam com nome explicito, modo continuo de selecao e destaque rosa da pedra real correspondente no teclado.
+- Acoes de `Chii`, `Pon`, `Kan aberto` e `Kan fechado` agora continuam ativas para montar chamadas em sequencia enquanto houver slots livres.
+- Blocos de montagem da mao e opcoes da calculadora foram unidos em um unico card, mantendo uso amigavel no celular.
+- Visual de melds e resultado ficou mais legivel: pedras separadas, fundo branco, contorno por tipo de chamada, `Kan aberto` em roxo claro, `Riichi` e pedra de agari em laranja.
+
+### Corrigido
+
+- Aka dora (`0m`, `0p`, `0s`) agora pode ser usado como indicador de dora/uradora e entra corretamente no limite fisico de quatro copias do cinco.
+- Previa de esperas agora prioriza yakuman retornado pela biblioteca, evitando mostrar `sem yaku` ou apenas `han/fu` em esperas como `Suuankou Tanki`.
+
+---
+
+## [2.5.2] - 2026-05-21
+
+### Corrigido
+
+- Calculadora rapida agora pergunta explicitamente se o vencedor e `Leste` ou `Nao leste`.
+- Campo de vitoria da calculadora rapida ficou identificado como `Tsumo`/`Ron`, alinhado ao calculo de pontos exibido.
+
+---
+
 ## [2.5.1] - 2026-05-21
 
 ### Corrigido

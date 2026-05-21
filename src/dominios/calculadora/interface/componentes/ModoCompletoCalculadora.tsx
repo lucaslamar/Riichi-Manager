@@ -12,8 +12,10 @@ interface PropsModoCompleto {
 export default function ModoCompletoCalculadora({ estado }: PropsModoCompleto) {
   return (
     <>
-      <ConstrutorMao estado={estado} />
-      <OpcoesMao estado={estado} />
+      <div className="card card-mao-completa">
+        <ConstrutorMao estado={estado} embutido />
+        <OpcoesMao estado={estado} embutido />
+      </div>
       <ResultadoMaoCalculada estado={estado} />
       {estado.caminhosAtivos && <OrientacaoYaku estado={estado} />}
     </>

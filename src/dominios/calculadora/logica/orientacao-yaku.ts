@@ -17,6 +17,8 @@ export interface EsperaPossivel {
   yakus: string[]
   han: number
   fu: number
+  yakuman: number
+  nome: string | null
   semYaku: boolean
 }
 
@@ -154,16 +156,20 @@ export function calcularEsperasPossiveis(
       riichi.setHairi(false)
       const resultado = riichi.calc()
       if (!resultado.isAgari) return []
+      const yakus = Object.keys(resultado.yaku ?? {})
+        .map(traduzirYaku)
+        .filter((nome) => !['Dora', 'Uradora', 'Akadora'].includes(nome))
+      const yakuman = resultado.yakuman ?? 0
 
       return [
         {
           pedra,
-          yakus: Object.keys(resultado.yaku ?? {})
-            .map(traduzirYaku)
-            .filter((nome) => !['Dora', 'Uradora', 'Akadora'].includes(nome)),
+          yakus,
           han: resultado.han ?? 0,
           fu: resultado.fu ?? 0,
-          semYaku: resultado.noYaku ?? false,
+          yakuman,
+          nome: resultado.name ?? null,
+          semYaku: yakuman === 0 && yakus.length === 0 && (resultado.noYaku ?? false),
         },
       ]
     } catch {

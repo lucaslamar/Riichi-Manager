@@ -19,7 +19,7 @@ export function BotaoAcao({
       onClick={aoClicar}
       style={{
         minHeight: 36,
-        padding: '4px 12px',
+        padding: '7px 14px',
         fontSize: '0.85rem',
         fontWeight: 900,
         border: `2px solid ${ativo ? cor : '#dde1e7'}`,
@@ -41,11 +41,13 @@ export function BotaoToggle({
   rotulo,
   ativo,
   desabilitado,
+  corAtiva,
   aoClicar,
 }: {
   rotulo: string
   ativo: boolean
   desabilitado: boolean
+  corAtiva?: string
   aoClicar: () => void
 }) {
   return (
@@ -55,8 +57,11 @@ export function BotaoToggle({
       disabled={desabilitado}
       style={{
         minHeight: 36,
-        padding: '4px 14px',
+        padding: '7px 14px',
         fontSize: '0.85rem',
+        borderColor: ativo && corAtiva ? corAtiva : undefined,
+        background: ativo && corAtiva ? corAtiva : undefined,
+        color: ativo && corAtiva ? 'white' : undefined,
         opacity: desabilitado ? 0.35 : 1,
       }}
       onClick={aoClicar}

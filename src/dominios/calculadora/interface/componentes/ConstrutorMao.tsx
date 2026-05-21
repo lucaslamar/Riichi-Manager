@@ -1,14 +1,15 @@
-import { ESTILO_MELD, HONRAS, NAIPES } from '../constantes'
+import { ESTILO_MELD, HONRAS, NAIPES, codigoBase, proximaDoraIndicada } from '../constantes'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { BotaoAcao } from './Botoes'
 import { PedraSvg, PedrasMeld } from './PedraSvg'
 
 interface PropsConstrutorMao {
   estado: EstadoCalculadoraMao
+  embutido?: boolean
 }
 
 /** Área para montar a mão completa pedra por pedra. */
-export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
+export default function ConstrutorMao({ estado, embutido = false }: PropsConstrutorMao) {
   const {
     mao,
     atualizarMao,
@@ -28,11 +29,14 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
     podeMeld,
     podeKanFechado,
   } = estado
+  const dorasReais = new Set(
+    [...mao.dora, ...mao.uradora].map((indicador) => codigoBase(proximaDoraIndicada(indicador))),
+  )
 
   return (
     <>
       {/* Card 1: construtor de mão */}
-      <div className="card">
+      <div className={embutido ? undefined : 'card'}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
           <h3
             style={{
@@ -99,7 +103,7 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
                   padding: '3px 8px',
                   borderRadius: 6,
                   border: `2px solid ${estilo.borda}`,
-                  background: estilo.fundo,
+                  background: '#ffffff',
                   fontWeight: 900,
                   fontFamily: 'monospace',
                   fontSize: '0.82rem',
@@ -134,8 +138,8 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
           <div style={{ display: 'flex', gap: 16, marginBottom: 10, flexWrap: 'wrap' }}>
             {mao.dora.length > 0 && (
               <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#e65100' }}>
-                  DORA:
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#be185d' }}>
+                  INDICADOR DE DORA:
                 </span>
                 {mao.dora.map((pedraDora, i) => (
                   <button
@@ -155,15 +159,14 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
             )}
             {mao.uradora.length > 0 && (
               <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#7b1fa2' }}>
-                  URADORA:
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#be185d' }}>
+                  INDICADOR DE URADORA:
                 </span>
                 {mao.uradora.map((pedraUradora, i) => (
                   <button
                     key={i}
                     className="chip-pedra dora"
                     type="button"
-                    style={{ borderColor: '#9c27b0', background: '#f3e5f5' }}
                     onClick={() =>
                       atualizarMao((rascunho) => {
                         rascunho.uradora.splice(i, 1)
@@ -199,7 +202,7 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
           <BotaoAcao
             tipo="kanAberto"
             rotulo="Kan (aberto)"
-            cor="#ff9800"
+            cor="#ba68c8"
             ativo={acaoPendente?.tipo === 'kanAberto'}
             desabilitado={!podeMeld}
             aoClicar={() => alternarAcao('kanAberto')}
@@ -214,8 +217,8 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
           />
           <BotaoAcao
             tipo="dora"
-            rotulo="+ Dora"
-            cor="#e65100"
+            rotulo="Indicador de Dora"
+            cor="#ec4899"
             ativo={acaoPendente?.tipo === 'dora'}
             desabilitado={mao.dora.length >= 5}
             aoClicar={() => alternarAcao('dora')}
@@ -243,10 +246,11 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
                   const esgotada = contarCodigo(codigo) >= 4
                   const cheiaESemAcao = maoCompleta && !acaoPendente
                   const invalidaParaAcao = !podeSelecionarPedra(codigo)
+                  const ehDoraReal = dorasReais.has(codigoBase(codigo))
                   return (
                     <button
                       key={codigo}
-                      className="btn-pedra"
+                      className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''}`}
                       type="button"
                       disabled={esgotada || cheiaESemAcao || invalidaParaAcao}
                       onClick={() => adicionarPedra(codigo)}
@@ -261,10 +265,11 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
                     const esgotada = contarAka(codigo) >= 1 || contarCodigo(codigo) >= 4
                     const cheiaESemAcao = maoCompleta && !acaoPendente
                     const invalidaParaAcao = !podeSelecionarPedra(codigo)
+                    const ehDoraReal = dorasReais.has(codigoBase(codigo))
                     return (
                       <button
                         key={codigo}
-                        className="btn-pedra btn-pedra-aka"
+                        className={`btn-pedra btn-pedra-aka ${ehDoraReal ? 'dora-real' : ''}`}
                         type="button"
                         title="5 vermelho (aka dora)"
                         disabled={esgotada || cheiaESemAcao || invalidaParaAcao}
@@ -290,21 +295,24 @@ export default function ConstrutorMao({ estado }: PropsConstrutorMao) {
               Honras (Jihai / Kazehai)
             </div>
             <div className="linha-naipe">
-              {HONRAS.map((codigo) => (
-                <button
-                  key={codigo}
-                  className="btn-pedra"
-                  type="button"
-                  disabled={
-                    contarCodigo(codigo) >= 4 ||
-                    (maoCompleta && !acaoPendente) ||
-                    !podeSelecionarPedra(codigo)
-                  }
-                  onClick={() => adicionarPedra(codigo)}
-                >
-                  <PedraSvg pedra={codigo} />
-                </button>
-              ))}
+              {HONRAS.map((codigo) => {
+                const ehDoraReal = dorasReais.has(codigoBase(codigo))
+                return (
+                  <button
+                    key={codigo}
+                    className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''}`}
+                    type="button"
+                    disabled={
+                      contarCodigo(codigo) >= 4 ||
+                      (maoCompleta && !acaoPendente) ||
+                      !podeSelecionarPedra(codigo)
+                    }
+                    onClick={() => adicionarPedra(codigo)}
+                  >
+                    <PedraSvg pedra={codigo} />
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>

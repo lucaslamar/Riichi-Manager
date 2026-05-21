@@ -11,6 +11,7 @@
 }
 
 .btn-pedra {
+  position: relative;
   width: 42px;
   height: 56px;
   padding: 2px;
@@ -34,6 +35,39 @@
 .btn-pedra-aka {
   border-color: #ef5350;
   background: #fff5f5;
+}
+
+.btn-pedra.dora-real {
+  border-color: #ec4899;
+  background: #fdf2f8;
+  box-shadow:
+    inset 0 0 0 3px rgba(251, 207, 232, 0.95),
+    0 0 0 1px rgba(236, 72, 153, 0.22);
+}
+
+.btn-pedra.dora-real::after {
+  content: 'Dora';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 1px 4px;
+  border-radius: 5px;
+  background: rgba(251, 207, 232, 0.96);
+  color: #9d174d;
+  font-size: 0.56rem;
+  font-weight: 900;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.card-mao-completa {
+  display: grid;
+  gap: 18px;
+}
+
+.opcoes-mao-embutidas {
+  padding-top: 16px;
+  border-top: 1px solid #edf0f4;
 }
 
 .pedras-selecionadas {
@@ -66,12 +100,13 @@
   border-color: #ef5350;
 }
 .chip-pedra.agari {
-  border-color: var(--primario);
-  background: var(--info-fundo);
+  border-color: #f97316;
+  background: #fff7ed;
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.18);
 }
 .chip-pedra.dora {
-  border-color: #e65100;
-  background: #fff8e1;
+  border-color: #ec4899;
+  background: #fdf2f8;
 }
 .chip-pedra.mini {
   width: 24px;
@@ -123,7 +158,24 @@
 .meld-pedras {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
+}
+
+.meld-tile {
+  width: 30px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+  border: 1px solid #d7dde6;
+  border-radius: 5px;
+  background: #ffffff;
+}
+
+.meld-tile.de-lado {
+  width: 40px;
+  height: 30px;
 }
 
 .meld-pedras .tile-img {
@@ -351,15 +403,65 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 4px;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 14px;
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.resumo-meld.resultado {
-  border-color: rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.1);
+.resultado-grupo-mao {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.resultado-pedra {
+  width: 34px;
+  height: 46px;
+  cursor: default;
+}
+
+.resultado-meld {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 52px;
+  padding: 4px 8px;
+  border: 1.5px solid;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.resultado-meld-rotulo {
+  flex: 0 0 auto;
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+.resultado-meld .meld-pedras .tile-img {
+  width: 34px;
+  height: 46px;
+}
+
+.resultado-meld .meld-pedras .tile-img-lado {
+  width: 46px;
+  height: 34px;
+}
+
+.resultado-meld .meld-tile {
+  width: 34px;
+  height: 46px;
+}
+
+.resultado-meld .meld-tile.de-lado {
+  width: 46px;
+  height: 34px;
 }
 
 .resultado-esperas {

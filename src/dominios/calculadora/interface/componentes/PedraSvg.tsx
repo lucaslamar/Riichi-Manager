@@ -36,22 +36,38 @@ export function PedraSvg({
 }
 
 export function PedrasMeld({ meld }: { meld: Meld }) {
+  const renderizarPedra = ({
+    chave,
+    pedra,
+    virada = false,
+    deLado = false,
+  }: {
+    chave: string | number
+    pedra?: CodigoPedra
+    virada?: boolean
+    deLado?: boolean
+  }) => (
+    <span key={chave} className={`meld-tile ${deLado ? 'de-lado' : ''}`}>
+      <PedraSvg pedra={pedra} virada={virada} deLado={deLado} />
+    </span>
+  )
+
   if (meld.tipo === 'kanFechado') {
     return (
       <span className="meld-pedras">
-        <PedraSvg virada />
-        <PedraSvg pedra={meld.pedras[1]} />
-        <PedraSvg pedra={meld.pedras[2]} />
-        <PedraSvg virada />
+        {renderizarPedra({ chave: 'back-left', virada: true })}
+        {renderizarPedra({ chave: 'middle-left', pedra: meld.pedras[1] })}
+        {renderizarPedra({ chave: 'middle-right', pedra: meld.pedras[2] })}
+        {renderizarPedra({ chave: 'back-right', virada: true })}
       </span>
     )
   }
 
   return (
     <span className="meld-pedras">
-      {meld.pedras.map((pedra, j) => (
-        <PedraSvg key={j} pedra={pedra} deLado={j === 0} />
-      ))}
+      {meld.pedras.map((pedra, j) =>
+        renderizarPedra({ chave: j, pedra, deLado: j === 0 }),
+      )}
     </span>
   )
 }

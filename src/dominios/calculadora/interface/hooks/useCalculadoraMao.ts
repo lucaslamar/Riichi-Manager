@@ -73,7 +73,6 @@ export function useCalculadoraMao() {
     switch (acaoPendente.tipo) {
       case 'dora':
       case 'uradora':
-        if (pedra[0] === '0') return false
         return podeAdicionarPedras([pedra])
       case 'pon':
         return podeAdicionarPedras(expandirGrupoMesmoValor(pedra, 3))
@@ -123,6 +122,8 @@ export function useCalculadoraMao() {
   // ── Handlers ────────────────────────────────────────────────────────────────
 
   const adicionarPedra = (pedra: CodigoPedra) => {
+    const manterAcaoMeld = () => setAcaoPendente(slotsLivres >= 6 ? criarAcao(acaoPendente!.tipo) : null)
+
     if (!acaoPendente) {
       // Bloqueia se a mão já está completa (14 slots)
       if (maoCompleta) return
@@ -137,22 +138,23 @@ export function useCalculadoraMao() {
 
     switch (acaoPendente.tipo) {
       case 'dora':
-        if (pedra[0] === '0') return
+        if (mao.dora.length >= 5) return
         if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
           rascunho.dora.push(pedra)
         })
-        setAcaoPendente(null)
+        if (mao.dora.length + 1 >= 5) setAcaoPendente(null)
         return
       case 'uradora':
-        if (pedra[0] === '0') return
+        if (mao.uradora.length >= 5) return
         if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
           rascunho.uradora.push(pedra)
         })
-        setAcaoPendente(null)
+        if (mao.uradora.length + 1 >= 5) setAcaoPendente(null)
         return
       case 'pon': {
+        if (slotsLivres < 3) return
         const pedras = expandirGrupoMesmoValor(pedra, 3)
         if (!podeAdicionarPedras(pedras)) return
         atualizarMao((rascunho) => {
@@ -160,10 +162,11 @@ export function useCalculadoraMao() {
           ordenarMelds(rascunho.melds)
           rascunho.riichi = null
         })
-        setAcaoPendente(null)
+        manterAcaoMeld()
         return
       }
       case 'kanAberto': {
+        if (slotsLivres < 3) return
         const pedras = expandirGrupoMesmoValor(pedra, 4)
         if (!podeAdicionarPedras(pedras)) return
         atualizarMao((rascunho) => {
@@ -171,20 +174,22 @@ export function useCalculadoraMao() {
           ordenarMelds(rascunho.melds)
           rascunho.riichi = null
         })
-        setAcaoPendente(null)
+        manterAcaoMeld()
         return
       }
       case 'kanFechado': {
+        if (slotsLivres < 3) return
         const pedras = expandirGrupoMesmoValor(pedra, 4)
         if (!podeAdicionarPedras(pedras)) return
         atualizarMao((rascunho) => {
           rascunho.melds.push({ tipo: 'kanFechado', pedras })
           ordenarMelds(rascunho.melds)
         })
-        setAcaoPendente(null)
+        manterAcaoMeld()
         return
       }
       case 'chii': {
+        if (slotsLivres < 3) return
         if (!podeAdicionarAoChii(acaoPendente.pedras, pedra)) return
         if (!podeAdicionarPedras([pedra])) return
         const novasPedras = [...acaoPendente.pedras, pedra]
@@ -197,7 +202,7 @@ export function useCalculadoraMao() {
             ordenarMelds(rascunho.melds)
             rascunho.riichi = null
           })
-          setAcaoPendente(null)
+          setAcaoPendente(slotsLivres >= 6 ? criarAcao('chii') : null)
         }
         return
       }

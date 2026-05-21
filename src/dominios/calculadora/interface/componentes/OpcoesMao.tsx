@@ -5,17 +5,18 @@ import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
   estado: EstadoCalculadoraMao
+  embutido?: boolean
 }
 
 /** Controles de riichi, uradora e condições especiais da vitória. */
-export default function OpcoesMao({ estado }: PropsOpcoesMao) {
+export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
   const { mao, atualizarMao, acaoPendente, totalPedras, slotsUsados, alternarAcao, maoAberta } =
     estado
 
   return (
     <>
       {/* Card 2: opções da mão */}
-      <div className="card">
+      <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
         <ResumoMaoFixo mao={mao} totalPedras={totalPedras} slotsUsados={slotsUsados} />
         <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
         <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
@@ -34,6 +35,7 @@ export default function OpcoesMao({ estado }: PropsOpcoesMao) {
             rotulo="Riichi"
             ativo={mao.riichi !== null}
             desabilitado={maoAberta}
+            corAtiva="#f97316"
             aoClicar={() =>
               atualizarMao((rascunho) => {
                 rascunho.riichi = rascunho.riichi ? null : { duplo: false, ippatsu: false }
@@ -45,8 +47,8 @@ export default function OpcoesMao({ estado }: PropsOpcoesMao) {
           {/* Uradora ao lado do Riichi (só liberado com riichi) */}
           <BotaoAcao
             tipo="uradora"
-            rotulo="+ Uradora"
-            cor="#9c27b0"
+            rotulo="Indicador de Uradora"
+            cor="#ec4899"
             ativo={acaoPendente?.tipo === 'uradora'}
             desabilitado={mao.riichi === null || mao.uradora.length >= 5}
             aoClicar={() => alternarAcao('uradora')}

@@ -67,12 +67,15 @@ export default function OrientacaoYaku({ estado }: PropsOrientacaoYaku) {
                         <strong>
                           {espera.semYaku
                             ? 'Fecha forma, mas sem yaku'
-                            : espera.yakus.slice(0, 2).join(' + ') || 'Yaku por opcao marcada'}
+                            : espera.yakus.slice(0, 2).join(' + ') ||
+                              (espera.yakuman > 0 ? `${espera.yakuman}x Yakuman` : 'Yaku por opcao marcada')}
                         </strong>
                         <small>
                           {espera.semYaku
                             ? 'Procure Riichi, Tsumo, Yakuhai ou outra condicao.'
-                            : `${espera.han} han / ${espera.fu} fu antes de bonus finais`}
+                            : espera.yakuman > 0
+                              ? `${espera.yakuman}x Yakuman`
+                              : `${espera.han} han / ${espera.fu} fu antes de bonus finais`}
                         </small>
                       </div>
                     </div>

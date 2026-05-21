@@ -71,6 +71,22 @@ export function podeAdicionarAoChii(selecionadas: CodigoPedra[], pedra: CodigoPe
   )
 }
 
+export function proximaDoraIndicada(pedra: CodigoPedra): CodigoPedra {
+  const base = codigoBase(pedra)
+  const valor = Number(base[0])
+  const naipe = base[1]
+
+  if (naipe === 'm' || naipe === 'p' || naipe === 's') {
+    return `${valor === 9 ? 1 : valor + 1}${naipe}`
+  }
+
+  if (['1', '2', '3', '4'].includes(base[0])) {
+    return `${valor === 4 ? 1 : valor + 1}z`
+  }
+
+  return `${valor === 7 ? 5 : valor + 1}z`
+}
+
 /** Vento da RODADA: só Leste e Sul (regras padrão de riichi). */
 export const VENTOS_RODADA: { valor: VentoMao; nome: string }[] = [
   { valor: '1', nome: 'Leste' },
@@ -180,7 +196,7 @@ export const CONFIGURACOES_REGRAS: {
 export const ESTILO_MELD: Record<Meld['tipo'], { fundo: string; borda: string; rotulo: string }> = {
   chii: { fundo: '#e8f5e9', borda: '#4caf50', rotulo: 'Chi' },
   pon: { fundo: '#e3f2fd', borda: '#2196f3', rotulo: 'Pon' },
-  kanAberto: { fundo: '#fff3e0', borda: '#ff9800', rotulo: 'Kan aberto' },
+  kanAberto: { fundo: '#f8edfb', borda: '#ba68c8', rotulo: 'Kan aberto' },
   kanFechado: { fundo: '#f3e5f5', borda: '#9c27b0', rotulo: 'Kan fechado' },
 }
 

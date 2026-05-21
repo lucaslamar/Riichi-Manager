@@ -1,4 +1,5 @@
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
+import { ESTILO_MELD } from '../constantes'
 import ExibicaoCompleta from './ExibicaoCompleta'
 import { PedraSvg, PedrasMeld } from './PedraSvg'
 
@@ -28,7 +29,13 @@ export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
                       <span className="chip-pedra mini">
                         <PedraSvg pedra={espera.pedra} />
                       </span>
-                      <small>{espera.semYaku ? 'sem yaku' : `${espera.han} han`}</small>
+                      <small>
+                        {espera.semYaku
+                          ? 'sem yaku'
+                          : espera.yakuman > 0
+                            ? `${espera.yakuman}x Yakuman`
+                            : `${espera.han} han`}
+                      </small>
                     </span>
                   ))}
                 </div>
@@ -53,16 +60,30 @@ export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
         ) : resultado?.agari != null && (resultado?.pontos?.total ?? 0) > 0 ? (
           <>
             <div className="mao-calculada">
-              {mao.pedras.map((pedra, indice) => (
-                <span
-                  key={`${pedra}-${indice}`}
-                  className={`chip-pedra mini ${indice === mao.indiceAgari ? 'agari' : ''}`}
-                >
-                  <PedraSvg pedra={pedra} />
-                </span>
-              ))}
+              {mao.pedras.length > 0 && (
+                <div className="resultado-grupo-mao" aria-label="Pedras da mao">
+                  {mao.pedras.map((pedra, indice) => (
+                    <span
+                      key={`${pedra}-${indice}`}
+                      className={`chip-pedra resultado-pedra ${indice === mao.indiceAgari ? 'agari' : ''}`}
+                    >
+                      <PedraSvg pedra={pedra} />
+                    </span>
+                  ))}
+                </div>
+              )}
               {mao.melds.map((meld, indice) => (
-                <span key={`${meld.tipo}-${indice}`} className="resumo-meld resultado">
+                <span
+                  key={`${meld.tipo}-${indice}`}
+                  className="resultado-meld"
+                  style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
+                >
+                  <span
+                    className="resultado-meld-rotulo"
+                    style={{ color: ESTILO_MELD[meld.tipo].borda }}
+                  >
+                    {ESTILO_MELD[meld.tipo].rotulo}
+                  </span>
                   <PedrasMeld meld={meld} />
                 </span>
               ))}
