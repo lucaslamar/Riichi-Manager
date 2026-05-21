@@ -258,6 +258,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                   )
                 })}
                 {configuracao.akadora &&
+                  mao.doraManual === 0 &&
                   (() => {
                     const codigo = `0${naipe}`
                     const esgotada = contarAka(codigo) >= 1 || contarCodigo(codigo) >= 4
