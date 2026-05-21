@@ -20,7 +20,7 @@ function proximaDora(pedra: CodigoPedra, sanma: boolean): CodigoPedra {
   const naipe = pedra[1]
   if (naipe === 'z') {
     if (num <= 4) return `${(num % 4) + 1}z`
-    return `${((num - 5) % 3) + 5}z`
+    return `${num === 7 ? 5 : num + 1}z`
   }
   if (sanma && naipe === 'm') return num === 1 ? '9m' : '1m'
   return `${(num % 9) + 1}${naipe}`
