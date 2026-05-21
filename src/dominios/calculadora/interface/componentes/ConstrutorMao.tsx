@@ -31,7 +31,11 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     esperasPossiveis,
   } = estado
   const dorasReais = new Set(
-    [...mao.dora, ...mao.uradora].map((indicador) => codigoBase(proximaDoraIndicada(indicador))),
+    mao.doraManual > 0
+      ? []
+      : [...mao.dora, ...mao.uradora].map((indicador) =>
+          codigoBase(proximaDoraIndicada(indicador)),
+        ),
   )
   const temEsperaValida = esperasPossiveis.some((espera) => !espera.semYaku)
 
@@ -118,8 +122,14 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         </div>
 
         {/* Dora e Uradora exibidos */}
-        {(mao.dora.length > 0 || mao.uradora.length > 0) && (
-          <div className="indicadores-dora-selecionados">
+        {(mao.dora.length > 0 || mao.uradora.length > 0 || mao.doraManual > 0) && (
+          <div className={`indicadores-dora-selecionados ${mao.doraManual > 0 ? 'ignorado' : ''}`}>
+            {mao.doraManual > 0 && (
+              <div className="grupo-indicador-dora">
+                <span>Dora manual</span>
+                <strong>{mao.doraManual}</strong>
+              </div>
+            )}
             {mao.dora.length > 0 && (
               <div className="grupo-indicador-dora">
                 <span>Dora</span>
@@ -200,7 +210,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             rotulo="Dora"
             cor="#ec4899"
             ativo={acaoPendente?.tipo === 'dora'}
-            desabilitado={mao.dora.length >= 5}
+            desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
             aoClicar={() => alternarAcao('dora')}
           />
           <BotaoAcao
@@ -208,7 +218,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             rotulo="Uradora"
             cor="#ec4899"
             ativo={acaoPendente?.tipo === 'uradora'}
-            desabilitado={mao.riichi === null || mao.uradora.length >= 5}
+            desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
             aoClicar={() => alternarAcao('uradora')}
           />
         </div>

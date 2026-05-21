@@ -72,7 +72,7 @@ export function converterMaoParaString(mao: Mao): string {
   }
 
   // 4. Dora (indicadores → lib converte para a pedra real internamente)
-  if (mao.dora.length) {
+  if (mao.doraManual === 0 && mao.dora.length) {
     stringMao += '+d'
     for (const [naipe, nums] of agruparPorNaipe(
       mao.dora.map((indicadorDora) => proximaDora(indicadorDora, sanma)),
@@ -82,7 +82,7 @@ export function converterMaoParaString(mao: Mao): string {
   }
 
   // 5. Uradora
-  if (mao.uradora.length) {
+  if (mao.doraManual === 0 && mao.uradora.length) {
     stringMao += '+u'
     for (const [naipe, nums] of agruparPorNaipe(
       mao.uradora.map((indicadorUradora) => proximaDora(indicadorUradora, sanma)),

@@ -4,17 +4,17 @@ import type { Mao } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
 import type { PontosCalculados, ResultadoMao } from './resultado'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
-
-// ─── Cálculo principal ────────────────────────────────────────────────────────
+import { calcularHanFu, montarPontosRapidos } from './calculadora-rapida'
 
 /**
- * Calcula os pontos de uma mão completa.
+ * Calcula os pontos de uma mao completa.
  *
- * @param mao - Estado completo da mão (14 pedras contando melds).
- * @param config - Configurações de regras.
+ * @param mao - Estado completo da mao (14 pedras contando melds).
+ * @param config - Configuracoes de regras.
  * @returns Resultado com yaku, han, fu e pontos.
  */
 export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
+  const usaDoraManual = mao.doraManual > 0
   const stringMao = converterMaoParaString(mao)
 
   const riichi = new Riichi(stringMao, {
@@ -25,14 +25,21 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     kazoeYakuman: config.kazoeYakuman,
     doubleWindFu: config.fuVentosDuplo,
     rinshanFu: config.fuRinshan,
-    aka: config.akadora,
+    aka: usaDoraManual ? false : config.akadora,
   })
 
   const resultadoBiblioteca = riichi.calc()
   const isOya = mao.ventoAssento === '1'
   const yakuman = resultadoBiblioteca.yakuman ?? 0
+  const semYaku = resultadoBiblioteca.noYaku ?? false
+  const hanBase = resultadoBiblioteca.han ?? 0
+  const fu = resultadoBiblioteca.fu ?? 0
+  const hanFinal =
+    usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku
+      ? hanBase + mao.doraManual
+      : hanBase
 
-  const pontos: PontosCalculados = !resultadoBiblioteca.isAgari
+  const pontosBiblioteca: PontosCalculados = !resultadoBiblioteca.isAgari
     ? { agari: null }
     : mao.agari === 'ron'
       ? {
@@ -52,24 +59,38 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
           },
         }
 
+  const pontos: PontosCalculados =
+    usaDoraManual &&
+    yakuman === 0 &&
+    resultadoBiblioteca.isAgari &&
+    !semYaku
+      ? montarPontosRapidos(isOya, mao.agari, calcularHanFu(hanFinal, fu, config))
+      : pontosBiblioteca
+
+  const yaku = Object.entries(resultadoBiblioteca.yaku ?? {})
+    .sort((a, b) => (ORDEM_YAKU[a[0]] ?? 99) - (ORDEM_YAKU[b[0]] ?? 99))
+    .map(([nome, valor]) => {
+      const traduzido = traduzirYaku(nome)
+      const ehYakuman = String(valor).endsWith('役満')
+      const han = ehYakuman
+        ? parseInt(String(valor), 10) || 1
+        : Number(/\d+/.exec(String(valor))?.[0]) || 0
+      return [traduzido, han, ehYakuman] as [string, number, boolean]
+    })
+
+  if (usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku) {
+    yaku.push(['Dora manual', mao.doraManual, false])
+  }
+
   return {
     ...pontos,
     isOya,
     yakuman,
-    yaku: Object.entries(resultadoBiblioteca.yaku ?? {})
-      .sort((a, b) => (ORDEM_YAKU[a[0]] ?? 99) - (ORDEM_YAKU[b[0]] ?? 99))
-      .map(([nome, valor]) => {
-        const traduzido = traduzirYaku(nome)
-        const ehYakuman = String(valor).endsWith('役満')
-        const han = ehYakuman
-          ? parseInt(String(valor), 10) || 1
-          : Number(/\d+/.exec(String(valor))?.[0]) || 0
-        return [traduzido, han, ehYakuman] as [string, number, boolean]
-      }),
+    yaku,
     fuDetalhes: traduzirDetalhesFu(resultadoBiblioteca.pattern ?? []),
-    semYaku: resultadoBiblioteca.noYaku ?? false,
-    han: resultadoBiblioteca.han ?? 0,
-    fu: resultadoBiblioteca.fu ?? 0,
+    semYaku,
+    han: hanFinal,
+    fu,
     nome: resultadoBiblioteca.name ? traduzirPatamares(resultadoBiblioteca.name) : null,
   }
 }

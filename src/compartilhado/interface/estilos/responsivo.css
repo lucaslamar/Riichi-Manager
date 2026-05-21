@@ -104,6 +104,13 @@
     min-height: 42px;
     padding-inline: 8px;
   }
+  .contador-dora-manual {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .contador-dora-manual > div {
+    flex: 0 0 auto;
+  }
   .linha-regra {
     grid-template-columns: 1fr;
   }

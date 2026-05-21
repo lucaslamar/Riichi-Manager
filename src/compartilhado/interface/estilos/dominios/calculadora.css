@@ -137,6 +137,60 @@
   transition: all 0.15s;
 }
 
+.contador-dora-manual {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 7px 5px 10px;
+  border: 2px solid #fbcfe8;
+  border-radius: 8px;
+  background: #fdf2f8;
+  box-shadow: inset 0 0 0 1px rgba(251, 207, 232, 0.5);
+}
+
+.contador-dora-manual > span {
+  color: #be185d;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.contador-dora-manual > div {
+  display: inline-flex;
+  min-height: 34px;
+  overflow: hidden;
+  border: 2px solid #f9a8d4;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+.contador-dora-manual button {
+  width: 34px;
+  border: 0;
+  background: transparent;
+  color: #be185d;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.contador-dora-manual button:disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.contador-dora-manual strong {
+  display: inline-flex;
+  min-width: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-inline: 1px solid #fbcfe8;
+  color: #102a43;
+  font-size: 0.98rem;
+  text-align: center;
+}
+
 .mao-editor-fixo {
   margin-bottom: 10px;
   background: var(--branco);
@@ -249,6 +303,16 @@
   font-size: 0.7rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.grupo-indicador-dora strong {
+  min-width: 24px;
+  color: #be185d;
+  text-align: center;
+}
+
+.indicadores-dora-selecionados.ignorado .grupo-indicador-dora:not(:first-child) {
+  opacity: 0.45;
 }
 
 .acoes-construtor-mao {

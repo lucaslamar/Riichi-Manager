@@ -62,6 +62,38 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               })
             }
           />
+          <div className="contador-dora-manual">
+            <span>Doras na mão</span>
+            <div>
+              <button
+                type="button"
+                disabled={mao.doraManual <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{mao.doraManual}</strong>
+              <button
+                type="button"
+                disabled={mao.doraManual >= 13}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
+                    if (rascunho.doraManual > 0) {
+                      rascunho.dora = []
+                      rascunho.uradora = []
+                    }
+                  })
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
           <div style={{ width: 1, height: 32, background: '#e0e0e0', margin: '0 4px' }} />
           <BotaoToggle
             rotulo="Tenhou / Chiihou"

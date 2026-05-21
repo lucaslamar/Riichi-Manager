@@ -20,6 +20,7 @@ export interface Mao {
   agari: 'ron' | 'tsumo'
   dora: CodigoPedra[]
   uradora: CodigoPedra[]
+  doraManual: number
   riichi: { duplo: boolean; ippatsu: boolean } | null
   bencao: boolean
   ultimaPedra: boolean

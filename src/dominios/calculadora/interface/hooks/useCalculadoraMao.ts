@@ -51,8 +51,8 @@ export function useCalculadoraMao() {
   const todasPedras = [
     ...mao.pedras,
     ...mao.melds.flatMap((meld) => meld.pedras),
-    ...mao.dora,
-    ...mao.uradora,
+    ...(mao.doraManual === 0 ? mao.dora : []),
+    ...(mao.doraManual === 0 ? mao.uradora : []),
     ...(acaoPendente?.tipo === 'chii' ? acaoPendente.pedras : []),
   ]
   const contarCodigo = (codigo: CodigoPedra) =>
@@ -122,7 +122,8 @@ export function useCalculadoraMao() {
   // ── Handlers ────────────────────────────────────────────────────────────────
 
   const adicionarPedra = (pedra: CodigoPedra) => {
-    const manterAcaoMeld = () => setAcaoPendente(slotsLivres >= 6 ? criarAcao(acaoPendente!.tipo) : null)
+    const manterAcaoMeld = () =>
+      setAcaoPendente(slotsLivres >= 6 ? criarAcao(acaoPendente!.tipo) : null)
 
     if (!acaoPendente) {
       // Bloqueia se a mão já está completa (14 slots)
@@ -138,6 +139,7 @@ export function useCalculadoraMao() {
 
     switch (acaoPendente.tipo) {
       case 'dora':
+        if (mao.doraManual > 0) return
         if (mao.dora.length >= 5) return
         if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
@@ -146,6 +148,7 @@ export function useCalculadoraMao() {
         if (mao.dora.length + 1 >= 5) setAcaoPendente(null)
         return
       case 'uradora':
+        if (mao.doraManual > 0) return
         if (mao.uradora.length >= 5) return
         if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
