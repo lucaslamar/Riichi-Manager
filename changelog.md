@@ -1,5 +1,13 @@
 # Changelog - Riichi Manager
 
+## [2.5.0] - 2026-05-21
+
+### Adicionado
+
+- Possibilidades de caminhos de yaku na calculadora de mão, com esperas que validam a mão e orientações em PT-BR para iniciantes.
+
+---
+
 ## [2.4.0] - 2026-05-20
 
 ### Adicionado

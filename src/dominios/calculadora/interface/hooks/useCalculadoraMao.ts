@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useImmer } from 'use-immer'
 import {
   calcularMao,
@@ -11,10 +11,13 @@ import {
   contarPedrasTotais,
   contarSlotsLogicos,
   configuracaoPadrao,
+  analisarCaminhosYaku,
+  calcularEsperasPossiveis,
   type Mao,
   type CodigoPedra,
   type Acao,
   type ConfiguracaoCalculo,
+  type EsperaPossivel,
 } from '../../logica/mao'
 import { MAO_VAZIA, codigoBase, expandirGrupoMesmoValor, podeAdicionarAoChii } from '../constantes'
 
@@ -30,6 +33,9 @@ export function useCalculadoraMao() {
   const [modo, setModo] = useState<'completo' | 'rapido'>('completo')
   const [configuracao, setConfiguracao] = useState<ConfiguracaoCalculo>(configuracaoPadrao)
   const [modalRegrasAberto, setModalRegrasAberto] = useState(false)
+  const [caminhosAtivos, setCaminhosAtivos] = useState(false)
+  const [esperasPossiveis, setEsperasPossiveis] = useState<EsperaPossivel[]>([])
+  const [calculandoEsperas, setCalculandoEsperas] = useState(false)
 
   // Estado para a calculadora rápida
   const [han, setHan] = useState(1)
@@ -94,6 +100,25 @@ export function useCalculadoraMao() {
         }
       })()
     : null
+
+  const orientacao = useMemo(
+    () => analisarCaminhosYaku(mao, configuracao, slotsUsados),
+    [mao, configuracao, slotsUsados],
+  )
+
+  useEffect(() => {
+    setEsperasPossiveis([])
+    setCalculandoEsperas(false)
+    if (slotsUsados !== 13) return
+
+    setCalculandoEsperas(true)
+    const id = window.setTimeout(() => {
+      setEsperasPossiveis(calcularEsperasPossiveis(mao, configuracao, slotsUsados))
+      setCalculandoEsperas(false)
+    }, 0)
+
+    return () => window.clearTimeout(id)
+  }, [mao, configuracao, slotsUsados])
 
   // ── Handlers ────────────────────────────────────────────────────────────────
 
@@ -202,6 +227,15 @@ export function useCalculadoraMao() {
   const alternarAcao = (tipo: Acao['tipo']) =>
     setAcaoPendente(acaoPendente?.tipo === tipo ? null : criarAcao(tipo))
 
+  const calcularEsperas = () => {
+    if (slotsUsados !== 13 || calculandoEsperas || esperasPossiveis.length > 0) return
+    setCalculandoEsperas(true)
+    window.setTimeout(() => {
+      setEsperasPossiveis(calcularEsperasPossiveis(mao, configuracao, slotsUsados))
+      setCalculandoEsperas(false)
+    }, 0)
+  }
+
   const slotsLivres = 14 - slotsUsados
   // Para adicionar um meld, precisamos de slots suficientes:
   // chii/pon = 3 slots, kan = 3 slots (kans contam como 3 na estrutura lógica)
@@ -219,6 +253,8 @@ export function useCalculadoraMao() {
     setConfiguracao,
     modalRegrasAberto,
     setModalRegrasAberto,
+    caminhosAtivos,
+    setCaminhosAtivos,
     han,
     setHan,
     fu,
@@ -232,6 +268,10 @@ export function useCalculadoraMao() {
     resultadoRapido,
     fuDisponiveis,
     resultado,
+    orientacao,
+    esperasPossiveis,
+    calculandoEsperas,
+    calcularEsperas,
     adicionarPedra,
     removerPedra,
     removerMeld,

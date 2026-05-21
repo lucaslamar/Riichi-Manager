@@ -77,6 +77,7 @@ declare module 'riichi' {
    */
   class Riichi {
     constructor(mao: string, opcoes?: OpcoesRiichi)
+    setHairi(ativo: boolean): void
     calc(): ResultadoRiichi
   }
 
