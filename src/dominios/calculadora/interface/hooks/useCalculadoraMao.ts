@@ -59,6 +59,44 @@ export function useCalculadoraMao() {
     todasPedras.filter((pedraVisivel) => codigoBase(pedraVisivel) === codigoBase(codigo)).length
   const contarAka = (codigo: CodigoPedra) =>
     todasPedras.filter((pedraVisivel) => pedraVisivel === codigo).length
+  const indicesPedrasNaMaoPara = (pedras: CodigoPedra[]) => {
+    const indicesUsados = new Set<number>()
+    for (const pedra of pedras) {
+      let indice = mao.pedras.findIndex(
+        (pedraMao, i) => !indicesUsados.has(i) && pedraMao === pedra,
+      )
+      if (indice < 0) {
+        indice = mao.pedras.findIndex(
+          (pedraMao, i) => !indicesUsados.has(i) && codigoBase(pedraMao) === codigoBase(pedra),
+        )
+      }
+      if (indice >= 0) indicesUsados.add(indice)
+    }
+    return [...indicesUsados]
+  }
+  const podeFormarMeldComMao = (pedras: CodigoPedra[], slotsMeld = 3) => {
+    const indicesRemovidos = indicesPedrasNaMaoPara(pedras)
+    const slotsLiquidos = slotsMeld - indicesRemovidos.length
+    if (slotsUsados + slotsLiquidos > 14) return false
+
+    const pedrasRestantes = mao.pedras.filter((_pedra, i) => !indicesRemovidos.includes(i))
+    const visiveisAposMeld = [
+      ...pedrasRestantes,
+      ...mao.melds.flatMap((meld) => meld.pedras),
+      ...(mao.doraManual === 0 ? mao.dora : []),
+      ...(mao.doraManual === 0 ? mao.uradora : []),
+      ...pedras,
+    ]
+
+    return pedras.every((pedra) => {
+      const totalBase = visiveisAposMeld.filter(
+        (pedraVisivel) => codigoBase(pedraVisivel) === codigoBase(pedra),
+      ).length
+      const totalAka =
+        pedra[0] === '0' ? visiveisAposMeld.filter((visivel) => visivel === pedra).length : 0
+      return totalBase <= 4 && totalAka <= 1
+    })
+  }
   const podeAdicionarPedras = (pedras: CodigoPedra[]) =>
     pedras.every(
       (pedra) =>
@@ -75,12 +113,17 @@ export function useCalculadoraMao() {
       case 'uradora':
         return podeAdicionarPedras([pedra])
       case 'pon':
-        return podeAdicionarPedras(expandirGrupoMesmoValor(pedra, 3))
+        return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 3))
       case 'kanAberto':
       case 'kanFechado':
-        return podeAdicionarPedras(expandirGrupoMesmoValor(pedra, 4))
-      case 'chii':
-        return podeAdicionarAoChii(acaoPendente.pedras, pedra) && podeAdicionarPedras([pedra])
+        return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4))
+      case 'chii': {
+        const pedrasChii = [...acaoPendente.pedras, pedra]
+        return (
+          podeAdicionarAoChii(acaoPendente.pedras, pedra) &&
+          (pedrasChii.length < 3 || podeFormarMeldComMao(pedrasChii))
+        )
+      }
     }
   }
 
@@ -123,7 +166,28 @@ export function useCalculadoraMao() {
 
   const adicionarPedra = (pedra: CodigoPedra) => {
     const manterAcaoMeld = () =>
-      setAcaoPendente(slotsLivres >= 6 ? criarAcao(acaoPendente!.tipo) : null)
+      setAcaoPendente(slotsUsados <= 11 ? criarAcao(acaoPendente!.tipo) : null)
+    const aplicarMeld = (
+      tipo: 'chii' | 'pon' | 'kanAberto' | 'kanFechado',
+      pedras: CodigoPedra[],
+      abrirMao: boolean,
+    ) => {
+      if (!podeFormarMeldComMao(pedras)) return false
+      const indicesRemovidos = indicesPedrasNaMaoPara(pedras)
+      atualizarMao((rascunho) => {
+        for (const indice of [...indicesRemovidos].sort((a, b) => b - a)) {
+          rascunho.pedras.splice(indice, 1)
+          if (rascunho.indiceAgari >= indice) rascunho.indiceAgari--
+        }
+        if (rascunho.indiceAgari >= rascunho.pedras.length) {
+          rascunho.indiceAgari = rascunho.pedras.length - 1
+        }
+        rascunho.melds.push({ tipo, pedras })
+        ordenarMelds(rascunho.melds)
+        if (abrirMao) rascunho.riichi = null
+      })
+      return true
+    }
 
     if (!acaoPendente) {
       // Bloqueia se a mão já está completa (14 slots)
@@ -157,55 +221,32 @@ export function useCalculadoraMao() {
         if (mao.uradora.length + 1 >= 5) setAcaoPendente(null)
         return
       case 'pon': {
-        if (slotsLivres < 3) return
         const pedras = expandirGrupoMesmoValor(pedra, 3)
-        if (!podeAdicionarPedras(pedras)) return
-        atualizarMao((rascunho) => {
-          rascunho.melds.push({ tipo: 'pon', pedras })
-          ordenarMelds(rascunho.melds)
-          rascunho.riichi = null
-        })
+        if (!aplicarMeld('pon', pedras, true)) return
         manterAcaoMeld()
         return
       }
       case 'kanAberto': {
-        if (slotsLivres < 3) return
         const pedras = expandirGrupoMesmoValor(pedra, 4)
-        if (!podeAdicionarPedras(pedras)) return
-        atualizarMao((rascunho) => {
-          rascunho.melds.push({ tipo: 'kanAberto', pedras })
-          ordenarMelds(rascunho.melds)
-          rascunho.riichi = null
-        })
+        if (!aplicarMeld('kanAberto', pedras, true)) return
         manterAcaoMeld()
         return
       }
       case 'kanFechado': {
-        if (slotsLivres < 3) return
         const pedras = expandirGrupoMesmoValor(pedra, 4)
-        if (!podeAdicionarPedras(pedras)) return
-        atualizarMao((rascunho) => {
-          rascunho.melds.push({ tipo: 'kanFechado', pedras })
-          ordenarMelds(rascunho.melds)
-        })
+        if (!aplicarMeld('kanFechado', pedras, false)) return
         manterAcaoMeld()
         return
       }
       case 'chii': {
-        if (slotsLivres < 3) return
         if (!podeAdicionarAoChii(acaoPendente.pedras, pedra)) return
-        if (!podeAdicionarPedras([pedra])) return
         const novasPedras = [...acaoPendente.pedras, pedra]
         if (novasPedras.length < 3) {
           setAcaoPendente({ tipo: 'chii', pedras: novasPedras })
         } else {
           const pedrasChii = ordenarPedras([...novasPedras])
-          atualizarMao((rascunho) => {
-            rascunho.melds.push({ tipo: 'chii', pedras: [...pedrasChii] })
-            ordenarMelds(rascunho.melds)
-            rascunho.riichi = null
-          })
-          setAcaoPendente(slotsLivres >= 6 ? criarAcao('chii') : null)
+          if (!aplicarMeld('chii', [...pedrasChii], true)) return
+          setAcaoPendente(slotsUsados <= 11 ? criarAcao('chii') : null)
         }
         return
       }
@@ -244,11 +285,8 @@ export function useCalculadoraMao() {
     }, 0)
   }
 
-  const slotsLivres = 14 - slotsUsados
-  // Para adicionar um meld, precisamos de slots suficientes:
-  // chii/pon = 3 slots, kan = 3 slots (kans contam como 3 na estrutura lógica)
-  const podeMeld = mao.riichi === null && !mao.bencao && slotsLivres >= 3
-  const podeKanFechado = mao.riichi === null && !mao.bencao && slotsLivres >= 3
+  const podeMeld = mao.riichi === null && !mao.bencao && slotsUsados < 14
+  const podeKanFechado = !mao.bencao && slotsUsados < 14
   const maoAberta = mao.melds.some((meld) => meld.tipo !== 'kanFechado')
 
   return {
