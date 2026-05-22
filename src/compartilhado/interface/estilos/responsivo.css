@@ -309,6 +309,20 @@
   .contador-dora-manual > div {
     flex: 0 0 auto;
   }
+  .grupos-opcoes-mao {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .linha-opcoes-mao {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .linha-opcoes-mao .btn-primario,
+  .linha-opcoes-mao .btn-contorno {
+    width: 100%;
+  }
   .linha-regra {
     grid-template-columns: 1fr;
   }

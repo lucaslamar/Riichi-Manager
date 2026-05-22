@@ -317,6 +317,37 @@
   text-align: center;
 }
 
+.grupos-opcoes-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-top: 14px;
+}
+
+.grupo-opcoes-mao {
+  display: grid;
+  gap: 6px;
+}
+
+.grupo-opcoes-dora {
+  align-self: stretch;
+}
+
+.rotulo-bloco-opcoes {
+  color: #607080;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.linha-opcoes-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
 .mao-editor-fixo {
   margin-bottom: 10px;
   background: var(--branco);
