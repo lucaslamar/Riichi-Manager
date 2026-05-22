@@ -12,32 +12,13 @@ export function SeletorHan({
   aoMudarFu: (fu: number) => void
 }) {
   return (
-    <div style={{ textAlign: 'center' }}>
-      <div
-        style={{
-          fontSize: '0.78rem',
-          fontWeight: 900,
-          color: '#607080',
-          textTransform: 'uppercase',
-          marginBottom: 8,
-        }}
-      >
-        Han
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 6,
-          justifyContent: 'center',
-          maxWidth: 300,
-        }}
-      >
+    <div className="seletor-rapido">
+      <div className="rotulo-seletor-rapido">Han</div>
+      <div className="botoes-seletor-rapido">
         {[...fuDisponiveis.keys()].map((hanDisponivel) => (
           <button
             key={hanDisponivel}
             className={han === hanDisponivel ? 'btn-primario' : 'btn-contorno'}
-            style={{ minHeight: 40, padding: '6px 14px' }}
             onClick={() => {
               aoMudarHan(hanDisponivel)
               const fus = fuDisponiveis.get(hanDisponivel)!
@@ -52,7 +33,6 @@ export function SeletorHan({
           <button
             key={`sp${hanEspecial}`}
             className={han === hanEspecial ? 'btn-primario' : 'btn-contorno'}
-            style={{ minHeight: 40, padding: '6px 14px' }}
             onClick={() => aoMudarHan(hanEspecial)}
           >
             {rotularHan(hanEspecial)}
@@ -77,35 +57,16 @@ export function SeletorFu({
 }) {
   const opcoes = fuDisponiveis.get(han) ?? []
   return (
-    <div style={{ textAlign: 'center' }}>
-      <div
-        style={{
-          fontSize: '0.78rem',
-          fontWeight: 900,
-          color: '#607080',
-          textTransform: 'uppercase',
-          marginBottom: 8,
-        }}
-      >
-        Fu
-      </div>
+    <div className="seletor-rapido">
+      <div className="rotulo-seletor-rapido">Fu</div>
       {han >= 5 ? (
         <span style={{ color: '#aaa', fontSize: '0.9rem' }}>— {rotularHan(han)} não usa fu —</span>
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 6,
-            justifyContent: 'center',
-            maxWidth: 300,
-          }}
-        >
+        <div className="botoes-seletor-rapido">
           {opcoes.map((fuDisponivel) => (
             <button
               key={fuDisponivel}
               className={fu === fuDisponivel ? 'btn-primario' : 'btn-contorno'}
-              style={{ minHeight: 40, padding: '6px 14px' }}
               onClick={() => aoMudarFu(fuDisponivel)}
             >
               {fuDisponivel} Fu
@@ -134,7 +95,7 @@ export function ExibicaoRapida({
   const pts = resultado?.pontos
   if (!pts) return null
   return (
-    <div className="resultado-calculadora" style={{ marginTop: 16 }}>
+    <div className="resultado-calculadora resultado-rapido">
       <div
         style={{
           fontSize: '0.85rem',

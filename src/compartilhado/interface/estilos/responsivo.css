@@ -22,6 +22,25 @@
   .caixa-mesa {
     padding: 20px;
   }
+  .cabecalho-calculadora {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .titulo-calculadora {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+  }
+  .acoes-calculadora {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+  .cabecalho-calculadora-rapido .acoes-calculadora .btn-primario {
+    display: none;
+  }
   .metricas {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -67,6 +86,82 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+  .card-calculadora-rapida {
+    padding: 20px;
+  }
+  .card-calculadora-rapida .seletores-rapidos-mao {
+    order: 2;
+  }
+  .card-calculadora-rapida .resultado-rapido {
+    position: sticky;
+    top: 8px;
+    z-index: 5;
+    order: 1;
+    margin: 0 0 14px;
+    box-shadow: 0 12px 24px rgba(16, 42, 67, 0.18);
+  }
+  .grade-calculadora-rapida {
+    order: 3;
+  }
+  .card-calculadora-rapida .seletores-rapidos-mao,
+  .grade-calculadora-rapida {
+    width: 100%;
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+  .card-calculadora-rapida .campo-vitoria-mao,
+  .card-calculadora-rapida .toggle-agari-mao {
+    width: 100%;
+  }
+  .card-calculadora-rapida .seletores-rapidos-mao .campo-vitoria-mao {
+    width: calc(100% - 36px);
+    max-width: 330px;
+    margin-inline: auto;
+  }
+  .grade-calculadora-rapida {
+    width: 100%;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .seletor-rapido {
+    width: 100%;
+    justify-items: stretch;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .seletor-rapido .rotulo-seletor-rapido {
+    text-align: center;
+  }
+  .botoes-seletor-rapido {
+    width: calc(100% - 36px);
+    max-width: 320px;
+    margin-inline: auto;
+    grid-template-columns: 1fr;
+  }
+  .botoes-seletor-rapido .btn-primario,
+  .botoes-seletor-rapido .btn-contorno {
+    width: 100%;
+    min-height: 42px;
+  }
+  .resultado-rapido {
+    width: 100%;
+    padding: 24px;
+  }
+  .botao-flutuante-modo-completo {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 7;
+    display: inline-flex;
+    width: auto;
+    min-height: 48px;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    box-shadow: 0 14px 28px rgba(16, 42, 67, 0.26);
   }
   .campo-vento-mao {
     min-width: 0;

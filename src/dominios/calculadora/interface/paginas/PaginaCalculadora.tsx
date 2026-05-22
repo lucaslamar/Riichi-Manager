@@ -17,22 +17,23 @@ interface PropsPagina {
 
 export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
   const calculadora = useCalculadoraMao()
+  const cabecalho = (
+    <BarraCalculadora
+      modo={calculadora.modo}
+      aoVoltar={aoVoltar}
+      aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
+      aoAlternarModo={() =>
+        calculadora.setModo(calculadora.modo === 'completo' ? 'rapido' : 'completo')
+      }
+    />
+  )
 
   return (
     <div>
-      <BarraCalculadora
-        modo={calculadora.modo}
-        aoVoltar={aoVoltar}
-        aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
-        aoAlternarModo={() =>
-          calculadora.setModo(calculadora.modo === 'completo' ? 'rapido' : 'completo')
-        }
-      />
-
       {calculadora.modo === 'rapido' ? (
-        <ModoRapidoCalculadora estado={calculadora} />
+        <ModoRapidoCalculadora estado={calculadora} cabecalho={cabecalho} />
       ) : (
-        <ModoCompletoCalculadora estado={calculadora} />
+        <ModoCompletoCalculadora estado={calculadora} cabecalho={cabecalho} />
       )}
 
       {calculadora.modalRegrasAberto && (

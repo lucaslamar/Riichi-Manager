@@ -1,24 +1,35 @@
+import type { ReactNode } from 'react'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { ExibicaoRapida, SeletorFu, SeletorHan } from './CalculadoraRapida'
 import { ToggleAgari } from './SeletoresMao'
 
 interface PropsModoRapido {
   estado: EstadoCalculadoraMao
+  cabecalho: ReactNode
 }
 
-/** Renderiza a calculadora por han/fu, sem montar a mão pedra por pedra. */
-export default function ModoRapidoCalculadora({ estado }: PropsModoRapido) {
+/** Renderiza a calculadora por han/fu, sem montar a mao pedra por pedra. */
+export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRapido) {
   const { mao, atualizarMao, han, setHan, fu, setFu, fuDisponiveis, resultadoRapido } = estado
 
   return (
-    <div className="card">
+    <div className="card card-calculadora-rapida">
+      {cabecalho}
+      <ExibicaoRapida
+        resultado={resultadoRapido}
+        isOya={mao.ventoRodada === '1'}
+        agari={mao.agari}
+        han={han}
+        fu={fu}
+      />
+
       <div className="seletores-rapidos-mao">
         <div className="campo-vitoria-mao">
           <span>É leste?</span>
           <div className="toggle-agari-mao">
             {[
-              { valor: '1' as const, rotulo: 'Leste' },
-              { valor: '2' as const, rotulo: 'Não leste' },
+              { valor: '1' as const, rotulo: 'Sim' },
+              { valor: '2' as const, rotulo: 'Não' },
             ].map((opcao) => (
               <button
                 key={opcao.valor}
@@ -42,15 +53,7 @@ export default function ModoRapidoCalculadora({ estado }: PropsModoRapido) {
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: 32,
-          justifyContent: 'center',
-          margin: '24px 0',
-          flexWrap: 'wrap',
-        }}
-      >
+      <div className="grade-calculadora-rapida">
         <SeletorHan
           han={han}
           fu={fu}
@@ -61,13 +64,13 @@ export default function ModoRapidoCalculadora({ estado }: PropsModoRapido) {
         <SeletorFu han={han} fu={fu} fuDisponiveis={fuDisponiveis} aoMudarFu={setFu} />
       </div>
 
-      <ExibicaoRapida
-        resultado={resultadoRapido}
-        isOya={mao.ventoRodada === '1'}
-        agari={mao.agari}
-        han={han}
-        fu={fu}
-      />
+      <button
+        className="btn-primario botao-flutuante-modo-completo"
+        type="button"
+        onClick={() => estado.setModo('completo')}
+      >
+        <i className="fas fa-chess-board" /> Modo Completo
+      </button>
     </div>
   )
 }
