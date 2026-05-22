@@ -36,6 +36,10 @@
   gap: 10px;
 }
 
+.menu-acoes-mobile {
+  display: none;
+}
+
 .teclado-pedras {
   display: flex;
   flex-direction: column;
@@ -446,6 +450,10 @@
 
 .acoes-construtor-mao .btn-acao-mao {
   width: 100%;
+}
+
+.menu-acoes-mao-mobile {
+  display: none;
 }
 
 .chip-pedra.mini {

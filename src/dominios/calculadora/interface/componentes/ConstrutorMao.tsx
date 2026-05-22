@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { ESTILO_MELD, HONRAS, NAIPES, codigoBase, proximaDoraIndicada } from '../constantes'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { BotaoAcao } from './Botoes'
@@ -10,6 +11,9 @@ interface PropsConstrutorMao {
 
 /** Área para montar a mão completa pedra por pedra. */
 export default function ConstrutorMao({ estado, embutido = false }: PropsConstrutorMao) {
+  const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
+  const [maoEditorGrudado, setMaoEditorGrudado] = useState(false)
+  const [menuAcoesMaoAberto, setMenuAcoesMaoAberto] = useState(false)
   const {
     mao,
     atualizarMao,
@@ -38,12 +42,45 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         ),
   )
   const temEsperaValida = esperasPossiveis.some((espera) => !espera.semYaku)
+  const acaoMobileAtiva =
+    acaoPendente == null
+      ? null
+      : {
+          chii: { rotulo: 'Chii', cor: '#4caf50' },
+          pon: { rotulo: 'Pon', cor: '#2196f3' },
+          kanAberto: { rotulo: 'Kan aberto', cor: '#ba68c8' },
+          kanFechado: { rotulo: 'Kan fechado', cor: '#9c27b0' },
+          dora: { rotulo: 'Dora', cor: '#ec4899' },
+          uradora: { rotulo: 'Uradora', cor: '#ec4899' },
+        }[acaoPendente.tipo]
+  const alternarAcaoMao = (tipo: Parameters<typeof alternarAcao>[0]) => {
+    alternarAcao(tipo)
+    setMenuAcoesMaoAberto(false)
+  }
+
+  useEffect(() => {
+    const atualizarEstadoSticky = () => {
+      const sentinela = sentinelaStickyRef.current
+      if (!sentinela) return
+      setMaoEditorGrudado(sentinela.getBoundingClientRect().top < 8)
+    }
+
+    atualizarEstadoSticky()
+    window.addEventListener('scroll', atualizarEstadoSticky, { passive: true })
+    window.addEventListener('resize', atualizarEstadoSticky)
+
+    return () => {
+      window.removeEventListener('scroll', atualizarEstadoSticky)
+      window.removeEventListener('resize', atualizarEstadoSticky)
+    }
+  }, [])
 
   return (
     <>
       {/* Card 1: construtor de mão */}
       <div className={embutido ? undefined : 'card'}>
-        <div className="mao-editor-fixo">
+        <div ref={sentinelaStickyRef} aria-hidden="true" />
+        <div className={`mao-editor-fixo ${maoEditorGrudado ? 'grudado' : ''}`}>
           <div className="cabecalho-mao-editor">
             <h3 className="titulo-mao-editor">
               <i className="fas fa-layer-group" style={{ marginRight: 6 }} />
@@ -119,6 +156,75 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
               </span>
             )}
           </div>
+          <div className={`menu-acoes-mao-mobile ${menuAcoesMaoAberto ? 'aberto' : ''}`}>
+            <button
+              className={`btn-contorno btn-menu-acoes-mao ${acaoMobileAtiva ? 'ativo' : ''}`}
+              type="button"
+              aria-expanded={menuAcoesMaoAberto}
+              style={
+                acaoMobileAtiva
+                  ? {
+                      borderColor: acaoMobileAtiva.cor,
+                      background: acaoMobileAtiva.cor,
+                      color: '#ffffff',
+                    }
+                  : undefined
+              }
+              onClick={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
+            >
+              {acaoMobileAtiva?.rotulo ?? 'Ações'}
+            </button>
+            <div className="opcoes-acoes-mao-mobile">
+              <BotaoAcao
+                tipo="chii"
+                rotulo="Chii"
+                cor="#4caf50"
+                ativo={acaoPendente?.tipo === 'chii'}
+                desabilitado={!podeMeld}
+                aoClicar={() => alternarAcaoMao('chii')}
+              />
+              <BotaoAcao
+                tipo="pon"
+                rotulo="Pon"
+                cor="#2196f3"
+                ativo={acaoPendente?.tipo === 'pon'}
+                desabilitado={!podeMeld}
+                aoClicar={() => alternarAcaoMao('pon')}
+              />
+              <BotaoAcao
+                tipo="kanAberto"
+                rotulo="Kan aberto"
+                cor="#ba68c8"
+                ativo={acaoPendente?.tipo === 'kanAberto'}
+                desabilitado={!podeMeld}
+                aoClicar={() => alternarAcaoMao('kanAberto')}
+              />
+              <BotaoAcao
+                tipo="kanFechado"
+                rotulo="Kan fechado"
+                cor="#9c27b0"
+                ativo={acaoPendente?.tipo === 'kanFechado'}
+                desabilitado={!podeKanFechado}
+                aoClicar={() => alternarAcaoMao('kanFechado')}
+              />
+              <BotaoAcao
+                tipo="dora"
+                rotulo="Dora"
+                cor="#ec4899"
+                ativo={acaoPendente?.tipo === 'dora'}
+                desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
+                aoClicar={() => alternarAcaoMao('dora')}
+              />
+              <BotaoAcao
+                tipo="uradora"
+                rotulo="Uradora"
+                cor="#ec4899"
+                ativo={acaoPendente?.tipo === 'uradora'}
+                desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
+                aoClicar={() => alternarAcaoMao('uradora')}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Dora e Uradora exibidos */}
@@ -179,7 +285,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             cor="#4caf50"
             ativo={acaoPendente?.tipo === 'chii'}
             desabilitado={!podeMeld}
-            aoClicar={() => alternarAcao('chii')}
+            aoClicar={() => alternarAcaoMao('chii')}
           />
           <BotaoAcao
             tipo="pon"
@@ -187,7 +293,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             cor="#2196f3"
             ativo={acaoPendente?.tipo === 'pon'}
             desabilitado={!podeMeld}
-            aoClicar={() => alternarAcao('pon')}
+            aoClicar={() => alternarAcaoMao('pon')}
           />
           <BotaoAcao
             tipo="kanAberto"
@@ -195,7 +301,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             cor="#ba68c8"
             ativo={acaoPendente?.tipo === 'kanAberto'}
             desabilitado={!podeMeld}
-            aoClicar={() => alternarAcao('kanAberto')}
+            aoClicar={() => alternarAcaoMao('kanAberto')}
           />
           <BotaoAcao
             tipo="kanFechado"
@@ -203,7 +309,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             cor="#9c27b0"
             ativo={acaoPendente?.tipo === 'kanFechado'}
             desabilitado={!podeKanFechado}
-            aoClicar={() => alternarAcao('kanFechado')}
+            aoClicar={() => alternarAcaoMao('kanFechado')}
           />
           <BotaoAcao
             tipo="dora"
@@ -211,7 +317,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             cor="#ec4899"
             ativo={acaoPendente?.tipo === 'dora'}
             desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
-            aoClicar={() => alternarAcao('dora')}
+            aoClicar={() => alternarAcaoMao('dora')}
           />
           <BotaoAcao
             tipo="uradora"
@@ -219,7 +325,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             cor="#ec4899"
             ativo={acaoPendente?.tipo === 'uradora'}
             desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
-            aoClicar={() => alternarAcao('uradora')}
+            aoClicar={() => alternarAcaoMao('uradora')}
           />
         </div>
 

@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 interface PropsBarraCalculadora {
   modo: 'completo' | 'rapido'
   aoVoltar: () => void
@@ -13,6 +15,7 @@ export default function BarraCalculadora({
   aoAlternarModo,
 }: PropsBarraCalculadora) {
   const iconeModo = modo === 'rapido' ? 'fa-chess-board' : 'fa-bolt'
+  const [menuMobileAberto, setMenuMobileAberto] = useState(false)
 
   return (
     <div className={`cabecalho-secao cabecalho-calculadora cabecalho-calculadora-${modo}`}>
@@ -28,8 +31,8 @@ export default function BarraCalculadora({
         </div>
       </div>
 
-      <div className="acoes-calculadora">
-        <button className="btn-contorno" type="button" onClick={aoVoltar}>
+        <div className="acoes-calculadora">
+        <button className="btn-contorno btn-voltar-calculadora" type="button" onClick={aoVoltar}>
           <i className="fas fa-arrow-left" /> Voltar
         </button>
         {modo === 'completo' && (
@@ -46,11 +49,63 @@ export default function BarraCalculadora({
           className={modo === 'rapido' ? 'btn-primario' : 'btn-contorno'}
           type="button"
           onClick={aoAlternarModo}
+          title={modo === 'rapido' ? 'Modo completo' : 'Modo rápido'}
+          aria-label={modo === 'rapido' ? 'Modo completo' : 'Modo rápido'}
         >
           <i className={`fas ${iconeModo}`} />
           {modo === 'rapido' ? ' Modo Completo' : ' Modo Rápido'}
         </button>
       </div>
+
+      {modo === 'completo' && (
+        <div className={`menu-acoes-mobile ${menuMobileAberto ? 'aberto' : ''}`}>
+          <button
+            className="btn-acao-flutuante opcao-regras"
+            type="button"
+            title="Regras"
+            aria-label="Regras"
+            onClick={() => {
+              setMenuMobileAberto(false)
+              aoAbrirRegras()
+            }}
+          >
+            <i className="fas fa-sliders-h" />
+          </button>
+          <button
+            className="btn-acao-flutuante opcao-voltar"
+            type="button"
+            title="Voltar"
+            aria-label="Voltar"
+            onClick={() => {
+              setMenuMobileAberto(false)
+              aoVoltar()
+            }}
+          >
+            <i className="fas fa-arrow-left" />
+          </button>
+          <button
+            className="btn-acao-flutuante opcao-modo"
+            type="button"
+            title="Modo rápido"
+            aria-label="Modo rápido"
+            onClick={() => {
+              setMenuMobileAberto(false)
+              aoAlternarModo()
+            }}
+          >
+            <i className="fas fa-bolt" />
+          </button>
+          <button
+            className="btn-primario btn-menu-acoes"
+            type="button"
+            aria-expanded={menuMobileAberto}
+            aria-label="Ações da calculadora"
+            onClick={() => setMenuMobileAberto((aberto) => !aberto)}
+          >
+            <i className="fas fa-calculator" />
+          </button>
+        </div>
+      )}
     </div>
   )
 }
