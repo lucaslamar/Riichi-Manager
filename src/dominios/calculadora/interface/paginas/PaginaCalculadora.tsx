@@ -22,9 +22,14 @@ export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
       modo={calculadora.modo}
       aoVoltar={aoVoltar}
       aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
-      aoAlternarModo={() =>
-        calculadora.setModo(calculadora.modo === 'completo' ? 'rapido' : 'completo')
-      }
+      aoAlternarModo={() => {
+        if (calculadora.modo === 'completo') {
+          calculadora.limpar()
+          calculadora.setModo('rapido')
+        } else {
+          calculadora.setModo('completo')
+        }
+      }}
     />
   )
 

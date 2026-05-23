@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { ESTILO_MELD } from '../constantes'
 import ExibicaoCompleta from './ExibicaoCompleta'
@@ -22,14 +23,73 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
   const mostrarEsperas = slotsUsados === 13
   const temEsperaComYaku = esperasPossiveis.some((espera) => !espera.semYaku)
   const temFuriten = esperasPossiveis.some((espera) => !espera.semYaku && espera.furiten)
+  const resultadoValido = resultado?.agari != null && (resultado?.pontos?.total ?? 0) > 0 && !furitenRonCompleto
+  const assinaturaResultado = resultadoValido
+    ? JSON.stringify({
+        pedras: mao.pedras,
+        melds: mao.melds,
+        agari: mao.agari,
+        indiceAgari: mao.indiceAgari,
+        honba: mao.honba,
+        doraManual: mao.doraManual,
+        dora: mao.dora,
+        uradora: mao.uradora,
+        ventoRodada: mao.ventoRodada,
+        ventoAssento: mao.ventoAssento,
+        total: resultado.pontos.total,
+      })
+    : null
+  const [modalResultadoAberto, setModalResultadoAberto] = useState(false)
+  const [ultimoModalAberto, setUltimoModalAberto] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!assinaturaResultado || assinaturaResultado === ultimoModalAberto) return
+    setModalResultadoAberto(true)
+    setUltimoModalAberto(assinaturaResultado)
+  }, [assinaturaResultado, ultimoModalAberto])
+
+  const pedraAgari = mao.pedras[mao.indiceAgari]
+  const pedrasFechadas = mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
+
+  const maoRenderizada = (
+    <div className="mao-calculada resultado-composicao-mao">
+      {mao.pedras.length > 0 && (
+        <div className="resultado-grupo-mao resultado-grupo-fechado" aria-label="Pedras da mao">
+          {pedrasFechadas.map((pedra, indice) => (
+            <span
+              key={`${pedra}-${indice}`}
+              className="chip-pedra resultado-pedra"
+            >
+              <PedraSvg pedra={pedra} />
+            </span>
+          ))}
+          {pedraAgari && (
+            <span className="chip-pedra resultado-pedra agari">
+              <PedraSvg pedra={pedraAgari} />
+            </span>
+          )}
+        </div>
+      )}
+      {mao.melds.map((meld, indice) => (
+        <span
+          key={`${meld.tipo}-${indice}`}
+          className={`resultado-meld resultado-meld-${meld.tipo}`}
+          style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
+          aria-label={ESTILO_MELD[meld.tipo].rotulo}
+        >
+          <PedrasMeld meld={meld} />
+        </span>
+      ))}
+    </div>
+  )
 
   return (
     <>
       {/* Card 3: resultado */}
       <div
-        className={`resultado-calculadora ${embutido ? 'resultado-calculadora-embutido' : ''} ${
+        className={`resultado-calculadora resultado-principal ${embutido ? 'resultado-calculadora-embutido' : ''} ${
           furitenRonCompleto ? 'resultado-furiten-chombo' : ''
-        }`}
+        } ${!mostrarEsperas && !maoCompleta ? 'resultado-montagem' : ''}`}
       >
         {mostrarEsperas ? (
           <div className="resultado-esperas">
@@ -74,44 +134,13 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
             )}
           </div>
         ) : !maoCompleta ? (
-          <div style={{ opacity: 0.5 }}>
-            <i
-              className="fas fa-calculator"
-              style={{ fontSize: '2rem', marginBottom: 8, display: 'block' }}
-            />
-            Monte 14 slots (kans contam como 3) para calcular
+          <div className="resultado-montagem-conteudo">
+            <strong>{slotsUsados}/14 slots</strong>
+            <span>Monte a mão para calcular</span>
           </div>
         ) : resultado?.agari != null && (resultado?.pontos?.total ?? 0) > 0 ? (
           <>
-            <div className="mao-calculada">
-              {mao.pedras.length > 0 && (
-                <div className="resultado-grupo-mao" aria-label="Pedras da mao">
-                  {mao.pedras.map((pedra, indice) => (
-                    <span
-                      key={`${pedra}-${indice}`}
-                      className={`chip-pedra resultado-pedra ${indice === mao.indiceAgari ? 'agari' : ''}`}
-                    >
-                      <PedraSvg pedra={pedra} />
-                    </span>
-                  ))}
-                </div>
-              )}
-              {mao.melds.map((meld, indice) => (
-                <span
-                  key={`${meld.tipo}-${indice}`}
-                  className="resultado-meld"
-                  style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
-                >
-                  <span
-                    className="resultado-meld-rotulo"
-                    style={{ color: ESTILO_MELD[meld.tipo].borda }}
-                  >
-                    {ESTILO_MELD[meld.tipo].rotulo}
-                  </span>
-                  <PedrasMeld meld={meld} />
-                </span>
-              ))}
-            </div>
+            {maoRenderizada}
             {furitenRonCompleto ? (
               <div className="resultado-chombo-furiten">
                 <strong>Chombo por Ron em furiten</strong>
@@ -122,7 +151,7 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
                 </span>
               </div>
             ) : (
-              <ExibicaoCompleta resultado={resultado} />
+              <ExibicaoCompleta resultado={resultado} mao={mao} />
             )}
           </>
         ) : (
@@ -142,6 +171,36 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
           </div>
         )}
       </div>
+
+      {resultadoValido && modalResultadoAberto && (
+        <div
+          className="modal-resultado-mobile-fundo"
+          role="presentation"
+          onClick={() => setModalResultadoAberto(false)}
+        >
+          <div
+            className="modal-resultado-mobile"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-resultado-mobile"
+            onClick={(evento) => evento.stopPropagation()}
+          >
+            <div className="modal-resultado-mobile-cabecalho">
+              <strong id="titulo-resultado-mobile">Resultado</strong>
+              <button
+                className="btn-fechar-resultado-mobile"
+                type="button"
+                aria-label="Fechar resultado"
+                onClick={() => setModalResultadoAberto(false)}
+              >
+                ×
+              </button>
+            </div>
+            {maoRenderizada}
+            <ExibicaoCompleta resultado={resultado} mao={mao} />
+          </div>
+        </div>
+      )}
     </>
   )
 }

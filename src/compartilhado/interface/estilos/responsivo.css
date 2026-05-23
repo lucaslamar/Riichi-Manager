@@ -321,31 +321,221 @@
     display: none;
   }
   .menu-acoes-mao-mobile {
-    display: grid;
-    gap: 8px;
-    margin-top: 8px;
+    display: block;
+    margin: 4px -2px 8px;
   }
   .btn-menu-acoes-mao {
-    width: 100%;
-    min-height: 36px;
-    padding: 6px 10px;
+    display: none;
   }
   .opcoes-acoes-mao-mobile {
-    display: none;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-    padding: 8px;
-    border: 1px solid #edf0f4;
-    border-radius: 8px;
-    background: #ffffff;
-    box-shadow: 0 8px 18px rgba(16, 42, 67, 0.08);
-  }
-  .menu-acoes-mao-mobile.aberto .opcoes-acoes-mao-mobile {
     display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+    padding: 0;
+    background: transparent;
   }
   .btn-acao-mao {
-    min-height: 42px;
-    padding-inline: 8px;
+    width: 100%;
+    min-height: 38px;
+    padding: 6px 5px;
+    border-radius: 8px;
+    background-clip: padding-box;
+    font-size: 0.74rem;
+    line-height: 1.12;
+    white-space: normal;
+  }
+  .teclado-pedras {
+    gap: 4px;
+  }
+  .grupo-teclado-naipe {
+    display: block;
+  }
+  .rotulo-naipe-teclado {
+    display: none;
+  }
+  .linha-naipe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  .teclado-pedras .btn-pedra {
+    width: 42px;
+    height: 56px;
+    min-height: 0;
+    padding: 1px;
+  }
+  .resultado-calculadora.resultado-calculadora-embutido.resultado-montagem {
+    margin: -4px 0 2px;
+    padding: 8px 10px;
+    border-radius: 8px;
+  }
+  .resultado-calculadora.resultado-principal {
+    display: none;
+  }
+  .resultado-montagem-conteudo {
+    font-size: 0.78rem;
+    line-height: 1.15;
+  }
+  .modal-resultado-mobile-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 12px 56px;
+    background: rgba(16, 42, 67, 0.36);
+  }
+  .modal-resultado-mobile {
+    width: min(100%, 420px);
+    max-height: calc(100dvh - 88px);
+    overflow: auto;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #102a43;
+    box-shadow: 0 20px 44px rgba(16, 42, 67, 0.24);
+  }
+  .modal-resultado-mobile-cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .modal-resultado-mobile-cabecalho strong {
+    flex: 1;
+    color: #607080;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  .btn-fechar-resultado-mobile {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #f8fafc;
+    color: #102a43;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .modal-resultado-mobile .mao-calculada {
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom-color: #e5e7eb;
+  }
+  .modal-resultado-mobile .resultado-grupo-mao {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    border: 0;
+    background: transparent;
+  }
+  .modal-resultado-mobile .resultado-pedra,
+  .modal-resultado-mobile .resultado-meld .meld-tile {
+    width: 32px;
+    height: 43px;
+  }
+  .modal-resultado-mobile .resultado-pedra.agari {
+    margin-left: 8px;
+  }
+  .modal-resultado-mobile .resultado-meld .meld-tile.de-lado {
+    width: 43px;
+    height: 32px;
+  }
+  .modal-resultado-mobile .resultado-meld .meld-pedras .tile-img {
+    width: 32px;
+    height: 43px;
+  }
+  .modal-resultado-mobile .resultado-meld .meld-pedras .tile-img-lado {
+    width: 43px;
+    height: 32px;
+  }
+  .modal-resultado-mobile .resultado-meld {
+    min-height: 0;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 0;
+    border: 0 !important;
+    background: transparent;
+  }
+  .modal-resultado-mobile .pontos-totais {
+    font-size: 2.5rem;
+  }
+  .modal-resultado-mobile .nome-mao {
+    color: var(--primario);
+    font-size: 1.2rem;
+    font-style: normal;
+  }
+  .modal-resultado-mobile .resumo-yakuman,
+  .modal-resultado-mobile .resumo-han-fu,
+  .modal-resultado-mobile .detalhe-pontos {
+    color: #607080;
+  }
+  .modal-resultado-mobile .divisor-resultado {
+    border-top-color: #e5e7eb;
+  }
+  .modal-resultado-mobile .rotulo-lista-resultado {
+    color: var(--primario);
+  }
+  .modal-resultado-mobile .chip-yaku {
+    background: #eef6ff;
+    color: #102a43;
+  }
+  .modal-resultado-mobile .chip-yaku strong {
+    color: var(--primario);
+  }
+  .modal-resultado-mobile .detalhes-contexto-resultado span {
+    background: #eef6ff;
+    color: #1d4ed8;
+  }
+  .modal-resultado-mobile .indicadores-resultado {
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f8fafc;
+  }
+  .modal-resultado-mobile .linha-indicadores-resultado {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 6px;
+    padding: 0;
+    background: transparent;
+  }
+  .modal-resultado-mobile .indicadores-resultado strong {
+    color: #607080;
+  }
+  .modal-resultado-mobile .tiles-indicadores-resultado {
+    justify-content: flex-start;
+  }
+  .modal-resultado-mobile .tiles-indicadores-resultado .chip-pedra {
+    width: 28px;
+    height: 38px;
+  }
+  .modal-resultado-mobile .tiles-indicadores-resultado .indicador-fechado {
+    opacity: 0.72;
+  }
+  .modal-resultado-mobile .chip-fu {
+    border-color: #e5e7eb;
+    background: #f8fafc;
+    color: #102a43;
+  }
+  .modal-resultado-mobile .chip-fu strong {
+    color: #4fc3f7;
+  }
+  .modal-resultado-mobile .chip-fu small {
+    color: #607080;
   }
   .contador-dora-manual {
     width: 100%;

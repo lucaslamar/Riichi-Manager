@@ -256,7 +256,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             <div className="opcoes-acoes-mao-mobile">
               <BotaoAcao
                 tipo="chii"
-                rotulo="Chii"
+                rotulo="Chi"
                 cor="#4caf50"
                 ativo={acaoPendente?.tipo === 'chii'}
                 desabilitado={!podeMeld}
@@ -272,7 +272,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
               />
               <BotaoAcao
                 tipo="kanAberto"
-                rotulo="Kan aberto"
+                rotulo="Kan"
                 cor="#ba68c8"
                 ativo={acaoPendente?.tipo === 'kanAberto'}
                 desabilitado={!podeMeld}
@@ -280,7 +280,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
               />
               <BotaoAcao
                 tipo="kanFechado"
-                rotulo="Kan fechado"
+                rotulo="K. fechado"
                 cor="#9c27b0"
                 ativo={acaoPendente?.tipo === 'kanFechado'}
                 desabilitado={!podeKanFechado}
@@ -444,16 +444,8 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         {/* Teclado de pedras */}
         <div className="teclado-pedras">
           {NAIPES.map(({ naipe, rotulo }) => (
-            <div key={naipe}>
-              <div
-                style={{
-                  fontSize: '0.72rem',
-                  fontWeight: 900,
-                  color: '#aaa',
-                  textTransform: 'uppercase',
-                  marginBottom: 4,
-                }}
-              >
+            <div key={naipe} className={`grupo-teclado-naipe grupo-teclado-${naipe}`}>
+              <div className="rotulo-naipe-teclado" data-mobile-label={naipe === 'm' ? '万' : naipe === 'p' ? '筒' : '索'}>
                 {rotulo}
               </div>
               <div className="linha-naipe">
@@ -530,16 +522,8 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
               </div>
             </div>
           ))}
-          <div>
-            <div
-              style={{
-                fontSize: '0.72rem',
-                fontWeight: 900,
-                color: '#aaa',
-                textTransform: 'uppercase',
-                marginBottom: 4,
-              }}
-            >
+          <div className="grupo-teclado-naipe grupo-teclado-honras">
+            <div className="rotulo-naipe-teclado" data-mobile-label="字">
               Honras (Jihai / Kazehai)
             </div>
             <div className="linha-naipe">
