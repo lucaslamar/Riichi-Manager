@@ -12,6 +12,8 @@
  *
  * @returns JSX do cabeçalho com logo e título.
  */
+import packageJson from '../../../../package.json'
+
 export default function Cabecalho() {
   return (
     <header className="cabecalho-principal">
@@ -22,7 +24,7 @@ export default function Cabecalho() {
         </div>
 
         <div className="container-titulo">
-          <span className="tag-versao">v2.7.0</span>
+          <span className="tag-versao">v{packageJson.version}</span>
           {/* clamp() no CSS faz a fonte se adaptar ao tamanho da tela */}
           <h1 className="titulo-principal">Riichi Manager</h1>
         </div>

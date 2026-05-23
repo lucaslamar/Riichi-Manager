@@ -1,5 +1,49 @@
 # Changelog - Riichi Manager
 
+## [2.8.0] - 2026-05-23
+
+### Adicionado
+
+- Seletores de vento da rodada e de vento do jogador em formato de pedras clicáveis, substituindo os campos de seleção tradicionais.
+- Controle de Honba na seção `Doras e Honbas`, integrado ao cálculo de pontuação.
+- Ajuda contextual para `Doras na mão`, com tooltip no desktop e modal leve no mobile.
+- Seleção de melds diretamente pelas pedras da mão durante modos de `Chi`, `Pon`, `Kan aberto` e `Kan fechado`.
+- Autocompletar inteligente de `Chi` quando há apenas uma sequência válida ou quando a escolha pode ser inferida.
+- Indicação de esperas diretamente no teclado em tenpai, exibindo han, furiten ou ausência de yaku nas pedras relevantes.
+- Feedback textual na área da mão para `Tenpai`, `Furiten` e `Sem yaku`.
+
+### Alterado
+
+- Os seletores de vento foram reposicionados para a área de configurações da mão, reduzindo confusão com as honras usadas na montagem da mão.
+- O menu flutuante da calculadora foi padronizado entre modo completo e mobile.
+- No modo rápido, o botão flutuante agora retorna diretamente para a calculadora completa, sem abrir menu de ações.
+- A área de condições da calculadora foi compactada no mobile para reduzir rolagem.
+- O bloco de resultado e esperas foi reposicionado para ficar entre a mão e as condições, aproximando o feedback principal da montagem da mão.
+- Waits válidos agora usam destaque verde, enquanto `Furiten` e `Sem yaku` usam alerta vermelho por representarem situações de mão inválida ou penalidade em Ron.
+
+### Corrigido
+
+- Corrigido o estado `NaN` no contador de Honba.
+- Corrigido o cálculo para considerar Honba sem interferir na validação da mão.
+- Ajustada a comunicação visual de `Sem yaku` e `Furiten` para evitar aparência de mão válida.
+
+## [2.7.0] - 2026-05-21
+
+### Adicionado
+
+- Marcação de descartes próprios na calculadora de mão.
+- Detecção de furiten nas esperas da mão.
+- Alerta de chombo para Ron em furiten, com destaque de -8.000 pontos.
+- Menu flutuante de ações da calculadora no mobile.
+- Menu compacto de ações da mão no mobile.
+
+### Alterado
+
+- Removido o botão e a funcionalidade de Caminhos.
+- Melhorado o layout da calculadora rápida no desktop e no mobile.
+- Ajustado o bloco da mão no mobile para acompanhar a rolagem.
+- Reorganizadas as opções da mão por vitória, doras, riichi e condições especiais.
+
 ## [2.6.0] - 2026-05-21
 
 ### Adicionado
