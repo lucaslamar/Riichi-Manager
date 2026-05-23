@@ -401,16 +401,21 @@
   .grupos-opcoes-mao {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 8px;
   }
   .linha-opcoes-mao {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
   }
   .linha-opcoes-mao .btn-primario,
   .linha-opcoes-mao .btn-contorno {
     width: 100%;
+    min-height: 34px;
+    padding: 5px 6px;
+    font-size: 0.74rem;
+    line-height: 1.15;
+    white-space: normal;
   }
   .linha-regra {
     grid-template-columns: 1fr;
