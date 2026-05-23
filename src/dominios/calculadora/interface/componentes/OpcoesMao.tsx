@@ -13,7 +13,6 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
 
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-      <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
       <div className="campo-vitoria-mao">
         <span>Vitória</span>
         <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
@@ -56,6 +55,11 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
       </section>
 
       <div className="grupos-opcoes-mao">
+        <section className="grupo-opcoes-mao grupo-opcoes-ventos">
+          <span className="rotulo-bloco-opcoes">Configuração de ventos</span>
+          <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
+        </section>
+
         <section className="grupo-opcoes-mao">
           <span className="rotulo-bloco-opcoes">Riichi</span>
           <div className="linha-opcoes-mao">

@@ -107,8 +107,8 @@
   }
   .seletores-vento-mao {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
   .seletores-rapidos-mao {
     display: grid;
@@ -250,11 +250,15 @@
     font-size: 0.72rem;
     line-height: 1.2;
   }
-  .select-vento-mao {
-    width: 100%;
-    min-height: 42px;
-    padding-inline: 10px;
-    font-size: 0.88rem;
+  .pedras-vento-mao {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .campo-vento-mao:nth-child(2) .pedras-vento-mao {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .btn-vento-pedra {
+    min-width: 0;
   }
   .campo-vitoria-mao {
     width: 100%;

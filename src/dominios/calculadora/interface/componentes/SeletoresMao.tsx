@@ -1,5 +1,6 @@
 import type { Mao, VentoMao } from '../../logica/mao'
 import { VENTOS_ASSENTO, VENTOS_RODADA } from '../constantes'
+import { PedraSvg } from './PedraSvg'
 
 export type AtualizarMao = (receita: (rascunho: Mao) => void) => void
 
@@ -14,49 +15,54 @@ export function SeletorVentos({
   mostrarVentoRodada?: boolean
   mostrarAssento?: boolean
 }) {
+  const renderizarSeletor = (
+    titulo: string,
+    valorAtual: VentoMao,
+    opcoes: { valor: VentoMao; nome: string }[],
+    aoSelecionar: (rascunho: Mao, valor: VentoMao) => void,
+  ) => (
+    <div className="campo-vento-mao">
+      <span>{titulo}</span>
+      <div className="pedras-vento-mao" role="group" aria-label={titulo}>
+        {opcoes.map((vento) => {
+          const selecionado = valorAtual === vento.valor
+          const ventoIgual = mao.ventoRodada === mao.ventoAssento && selecionado
+
+          return (
+            <button
+              key={vento.valor}
+              type="button"
+              className={`btn-vento-pedra ${selecionado ? 'ativo' : ''} ${
+                ventoIgual ? 'vento-igual' : ''
+              }`}
+              aria-pressed={selecionado}
+              title={vento.nome}
+              onClick={() =>
+                atualizarMao((rascunho: Mao) => {
+                  aoSelecionar(rascunho, vento.valor)
+                })
+              }
+            >
+              <PedraSvg pedra={`${vento.valor}z`} />
+              <small>{vento.nome}</small>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+
   return (
     <div className="seletores-vento-mao">
-      {mostrarVentoRodada && (
-        <label className="campo-vento-mao">
-          <span>Vento da Rodada</span>
-          <select
-            value={mao.ventoRodada}
-            className="select-vento-mao"
-            onChange={(evento) =>
-              atualizarMao((rascunho: Mao) => {
-                rascunho.ventoRodada = evento.target.value as VentoMao
-              })
-            }
-          >
-            {VENTOS_RODADA.map((vento) => (
-              <option key={vento.valor} value={vento.valor}>
-                {vento.nome}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
+      {mostrarVentoRodada &&
+        renderizarSeletor('Vento da rodada', mao.ventoRodada, VENTOS_RODADA, (rascunho, valor) => {
+          rascunho.ventoRodada = valor
+        })}
 
-      {mostrarAssento && (
-        <label className="campo-vento-mao">
-          <span>Assento</span>
-          <select
-            value={mao.ventoAssento}
-            className="select-vento-mao"
-            onChange={(evento) =>
-              atualizarMao((rascunho: Mao) => {
-                rascunho.ventoAssento = evento.target.value as VentoMao
-              })
-            }
-          >
-            {VENTOS_ASSENTO.map((vento) => (
-              <option key={vento.valor} value={vento.valor}>
-                {vento.nome}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
+      {mostrarAssento &&
+        renderizarSeletor('Seu vento', mao.ventoAssento, VENTOS_ASSENTO, (rascunho, valor) => {
+          rascunho.ventoAssento = valor
+        })}
     </div>
   )
 }

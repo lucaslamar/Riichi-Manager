@@ -203,13 +203,57 @@
   text-transform: uppercase;
 }
 
-.select-vento-mao {
-  min-height: 42px;
+.pedras-vento-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn-vento-pedra {
+  display: inline-grid;
+  min-width: 48px;
+  justify-items: center;
+  gap: 3px;
+  padding: 5px 5px 4px;
   border: 2px solid #dde1e7;
   border-radius: 8px;
-  padding: 0 12px;
-  background: white;
-  font-weight: 800;
+  background: #ffffff;
+  color: #607080;
+  cursor: pointer;
+  font-weight: 900;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.btn-vento-pedra .tile-img {
+  width: 30px;
+  height: 40px;
+}
+
+.btn-vento-pedra small {
+  font-size: 0.66rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.btn-vento-pedra:hover {
+  border-color: var(--primario);
+  background: var(--info-fundo);
+}
+
+.btn-vento-pedra.ativo {
+  border-color: var(--primario);
+  background: #eff6ff;
+  color: var(--primario);
+  box-shadow: inset 0 0 0 1px rgba(33, 150, 243, 0.2);
+}
+
+.btn-vento-pedra.vento-igual {
+  box-shadow:
+    inset 0 0 0 1px rgba(33, 150, 243, 0.22),
+    0 0 0 3px rgba(255, 213, 79, 0.34);
 }
 
 .campo-vitoria-mao {
@@ -332,6 +376,10 @@
 
 .grupo-opcoes-dora {
   align-self: stretch;
+}
+
+.grupo-opcoes-ventos .seletores-vento-mao {
+  margin-bottom: 0;
 }
 
 .rotulo-bloco-opcoes {
