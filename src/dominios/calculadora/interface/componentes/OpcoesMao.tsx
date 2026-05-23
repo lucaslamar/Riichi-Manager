@@ -24,6 +24,11 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
         <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
       </div>
 
+      <section className="grupo-opcoes-mao grupo-opcoes-ventos">
+        <span className="rotulo-bloco-opcoes">Configuração de ventos</span>
+        <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
+      </section>
+
       <section className="grupo-opcoes-mao grupo-opcoes-dora">
         <span className="rotulo-bloco-opcoes">Doras e Honbas</span>
         <div className="contadores-dora-honba">
@@ -105,11 +110,6 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
       </section>
 
       <div className="grupos-opcoes-mao">
-        <section className="grupo-opcoes-mao grupo-opcoes-ventos">
-          <span className="rotulo-bloco-opcoes">Configuração de ventos</span>
-          <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
-        </section>
-
         <section className="grupo-opcoes-mao">
           <span className="rotulo-bloco-opcoes">Riichi</span>
           <div className="linha-opcoes-mao">
