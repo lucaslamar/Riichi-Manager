@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { BotaoToggle } from './Botoes'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
+
+const TEXTO_AJUDA_DORAS_MANUAIS =
+  'Ao definir doras manualmente, a calculadora ignora doras, aka doras e ura doras detectadas automaticamente na construção manual da mão, usando somente o valor informado aqui. Os indicadores de dora e aka doras ainda podem aparecer visualmente na mão, mas não alteram o cálculo enquanto este campo estiver ativo.'
 
 interface PropsOpcoesMao {
   estado: EstadoCalculadoraMao
@@ -10,6 +14,7 @@ interface PropsOpcoesMao {
 /** Controles de riichi e condicoes especiais da vitoria. */
 export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
   const { mao, atualizarMao, maoAberta } = estado
+  const [ajudaDoraAberta, setAjudaDoraAberta] = useState(false)
   const honba = Number.isFinite(mao.honba) ? mao.honba : 0
 
   return (
@@ -23,7 +28,18 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
         <span className="rotulo-bloco-opcoes">Doras e Honbas</span>
         <div className="contadores-dora-honba">
           <div className="contador-dora-manual">
-            <span>Doras na mão</span>
+            <span className="rotulo-contador-com-ajuda">
+              Doras na mão
+              <button
+                type="button"
+                className="icone-ajuda-dora"
+                title={TEXTO_AJUDA_DORAS_MANUAIS}
+                aria-label="Ajuda sobre doras manuais"
+                onClick={() => setAjudaDoraAberta(true)}
+              >
+                i
+              </button>
+            </span>
             <div>
               <button
                 type="button"
@@ -184,6 +200,34 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
           </div>
         </section>
       </div>
+      {ajudaDoraAberta && (
+        <div
+          className="ajuda-dora-mobile-fundo"
+          role="presentation"
+          onClick={() => setAjudaDoraAberta(false)}
+        >
+          <div
+            className="ajuda-dora-mobile"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-ajuda-dora"
+            onClick={(evento) => evento.stopPropagation()}
+          >
+            <div className="ajuda-dora-mobile-cabecalho">
+              <strong id="titulo-ajuda-dora">Doras na mão</strong>
+              <button
+                className="btn-icone"
+                type="button"
+                aria-label="Fechar ajuda"
+                onClick={() => setAjudaDoraAberta(false)}
+              >
+                ×
+              </button>
+            </div>
+            <p>{TEXTO_AJUDA_DORAS_MANUAIS}</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
