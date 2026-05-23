@@ -438,6 +438,11 @@
   background: #fdf2f8;
 }
 
+.chip-pedra.descarte {
+  border-color: #111827;
+  background: #f8fafc;
+}
+
 .indicadores-dora-selecionados {
   display: flex;
   flex-wrap: wrap;
@@ -470,6 +475,26 @@
 
 .indicadores-dora-selecionados.ignorado .grupo-indicador-dora:not(:first-child) {
   opacity: 0.45;
+}
+
+.descartes-selecionados {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.descartes-selecionados span {
+  color: #111827;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .acoes-construtor-mao {

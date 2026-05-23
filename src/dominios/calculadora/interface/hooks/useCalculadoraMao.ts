@@ -49,6 +49,7 @@ export function useCalculadoraMao() {
   const todasPedras = [
     ...mao.pedras,
     ...mao.melds.flatMap((meld) => meld.pedras),
+    ...mao.descartes,
     ...(mao.doraManual === 0 ? mao.dora : []),
     ...(mao.doraManual === 0 ? mao.uradora : []),
     ...(acaoPendente?.tipo === 'chii' ? acaoPendente.pedras : []),
@@ -81,6 +82,7 @@ export function useCalculadoraMao() {
     const visiveisAposMeld = [
       ...pedrasRestantes,
       ...mao.melds.flatMap((meld) => meld.pedras),
+      ...mao.descartes,
       ...(mao.doraManual === 0 ? mao.dora : []),
       ...(mao.doraManual === 0 ? mao.uradora : []),
       ...pedras,
@@ -109,6 +111,7 @@ export function useCalculadoraMao() {
     switch (acaoPendente.tipo) {
       case 'dora':
       case 'uradora':
+      case 'descarte':
         return podeAdicionarPedras([pedra])
       case 'pon':
         return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 3))
@@ -213,6 +216,13 @@ export function useCalculadoraMao() {
         })
         if (mao.uradora.length + 1 >= 5) setAcaoPendente(null)
         return
+      case 'descarte':
+        if (!podeAdicionarPedras([pedra])) return
+        atualizarMao((rascunho) => {
+          rascunho.descartes.push(pedra)
+          ordenarPedras(rascunho.descartes)
+        })
+        return
       case 'pon': {
         const pedras = expandirGrupoMesmoValor(pedra, 3)
         if (!aplicarMeld('pon', pedras, true)) return
@@ -261,6 +271,13 @@ export function useCalculadoraMao() {
     setAcaoPendente(null)
   }
 
+  const removerDescarte = (indiceDescarte: number) => {
+    atualizarMao((rascunho) => {
+      rascunho.descartes.splice(indiceDescarte, 1)
+    })
+    setAcaoPendente(null)
+  }
+
   const limpar = () => {
     atualizarMao(MAO_VAZIA)
     setAcaoPendente(null)
@@ -301,6 +318,7 @@ export function useCalculadoraMao() {
     adicionarPedra,
     removerPedra,
     removerMeld,
+    removerDescarte,
     limpar,
     alternarAcao,
     podeMeld,

@@ -26,12 +26,12 @@ export default function BarraCalculadora({
           <p className="subtitulo-secao">
             {modo === 'rapido'
               ? 'Calcule pontos direto por han e fu.'
-              : 'Monte a mão, configure a vitória e acompanhe o valor em tempo real.'}
+              : 'Monte a mão,e acompanhe o valor em tempo real.'}
           </p>
         </div>
       </div>
 
-        <div className="acoes-calculadora">
+      <div className="acoes-calculadora">
         <button className="btn-contorno btn-voltar-calculadora" type="button" onClick={aoVoltar}>
           <i className="fas fa-arrow-left" /> Voltar
         </button>

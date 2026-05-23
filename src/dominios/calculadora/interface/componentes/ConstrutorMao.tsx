@@ -28,6 +28,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     adicionarPedra,
     removerPedra,
     removerMeld,
+    removerDescarte,
     limpar,
     alternarAcao,
     podeMeld,
@@ -52,6 +53,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
           kanFechado: { rotulo: 'Kan fechado', cor: '#9c27b0' },
           dora: { rotulo: 'Dora', cor: '#ec4899' },
           uradora: { rotulo: 'Uradora', cor: '#ec4899' },
+          descarte: { rotulo: 'Descartes', cor: '#111827' },
         }[acaoPendente.tipo]
   const alternarAcaoMao = (tipo: Parameters<typeof alternarAcao>[0]) => {
     alternarAcao(tipo)
@@ -223,6 +225,14 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                 desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
                 aoClicar={() => alternarAcaoMao('uradora')}
               />
+              <BotaoAcao
+                tipo="descarte"
+                rotulo="Descartes"
+                cor="#111827"
+                ativo={acaoPendente?.tipo === 'descarte'}
+                desabilitado={false}
+                aoClicar={() => alternarAcaoMao('descarte')}
+              />
             </div>
           </div>
         </div>
@@ -278,6 +288,23 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         )}
 
         {/* Botões de ação com cores distintas */}
+        {mao.descartes.length > 0 && (
+          <div className="descartes-selecionados">
+            <span>Descartes</span>
+            {mao.descartes.map((pedraDescarte, i) => (
+              <button
+                key={`${pedraDescarte}-${i}`}
+                className="chip-pedra descarte"
+                type="button"
+                title="Descarte proprio - clique para remover"
+                onClick={() => removerDescarte(i)}
+              >
+                <PedraSvg pedra={pedraDescarte} />
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="acoes-construtor-mao">
           <BotaoAcao
             tipo="chii"
@@ -326,6 +353,14 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             ativo={acaoPendente?.tipo === 'uradora'}
             desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
             aoClicar={() => alternarAcaoMao('uradora')}
+          />
+          <BotaoAcao
+            tipo="descarte"
+            rotulo="Descartes"
+            cor="#111827"
+            ativo={acaoPendente?.tipo === 'descarte'}
+            desabilitado={false}
+            aoClicar={() => alternarAcaoMao('descarte')}
           />
         </div>
 

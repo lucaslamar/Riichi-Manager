@@ -20,6 +20,7 @@ export interface Mao {
   agari: 'ron' | 'tsumo'
   dora: CodigoPedra[]
   uradora: CodigoPedra[]
+  descartes: CodigoPedra[]
   doraManual: number
   riichi: { duplo: boolean; ippatsu: boolean } | null
   bencao: boolean
@@ -36,6 +37,7 @@ export type Acao =
   | { tipo: 'kanFechado' }
   | { tipo: 'dora' }
   | { tipo: 'uradora' }
+  | { tipo: 'descarte' }
 
 export function criarAcao(tipo: Acao['tipo']): Acao {
   if (tipo === 'chii') return { tipo, pedras: [] }

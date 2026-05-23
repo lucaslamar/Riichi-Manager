@@ -109,6 +109,7 @@ export const MAO_VAZIA: Mao = {
   agari: 'tsumo',
   dora: [],
   uradora: [],
+  descartes: [],
   doraManual: 0,
   riichi: null,
   bencao: false,
