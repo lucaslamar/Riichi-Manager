@@ -365,16 +365,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 24px 16px 72px;
     background: rgba(16, 42, 67, 0.3);
   }
   .ajuda-dora-mobile {
-    width: min(100%, 360px);
-    padding: 16px;
+    width: min(100%, 380px);
+    max-height: calc(100dvh - 120px);
+    overflow: auto;
+    padding: 18px;
     border: 1px solid #fbcfe8;
     border-radius: 8px;
     background: #ffffff;
     box-shadow: 0 18px 40px rgba(16, 42, 67, 0.24);
+    transform: translateY(-4vh);
   }
   .ajuda-dora-mobile-cabecalho {
     display: flex;

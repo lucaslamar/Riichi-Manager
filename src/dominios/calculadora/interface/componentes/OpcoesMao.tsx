@@ -37,7 +37,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
                 aria-label="Ajuda sobre doras manuais"
                 onClick={() => setAjudaDoraAberta(true)}
               >
-                i
+                ⓘ
               </button>
             </span>
             <div>
