@@ -4,38 +4,7 @@ import type { Mao } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
 import type { PontosCalculados, ResultadoMao } from './resultado'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
-import { calcularHanFu, calcularPatamarHanFu, montarPontosRapidos } from './calculadora-rapida'
-
-function aplicarHonba(pontos: PontosCalculados, honba: number): PontosCalculados {
-  const honbaValida = Number.isFinite(honba) ? honba : 0
-  if (pontos.agari === null || honbaValida <= 0) return pontos
-
-  const bonusRon = honbaValida * 300
-  const bonusTsumo = honbaValida * 100
-
-  if (pontos.agari === 'ron') {
-    return {
-      agari: 'ron',
-      pontos: {
-        total: pontos.pontos.total + bonusRon,
-        oya: { ron: pontos.pontos.oya.ron + bonusRon },
-        ko: { ron: pontos.pontos.ko.ron + bonusRon },
-      },
-    }
-  }
-
-  return {
-    agari: 'tsumo',
-    pontos: {
-      total: pontos.pontos.total + bonusTsumo * 3,
-      oya: { ko: pontos.pontos.oya.ko + bonusTsumo },
-      ko: {
-        oya: pontos.pontos.ko.oya + bonusTsumo,
-        ko: pontos.pontos.ko.ko + bonusTsumo,
-      },
-    },
-  }
-}
+import { aplicarHonba, calcularHanFu, calcularPatamarHanFu, montarPontosRapidos } from './calculadora-rapida'
 
 /**
  * Calcula os pontos de uma mao completa.

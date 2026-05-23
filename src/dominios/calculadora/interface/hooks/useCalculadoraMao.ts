@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useImmer } from 'use-immer'
 import {
+  aplicarHonba,
   calcularMao,
   calcularHanFu,
   calcularPatamarHanFu,
@@ -170,7 +171,10 @@ export function useCalculadoraMao() {
   }
 
   const tabelaRapida = calcularHanFu(han, fu, configuracao)
-  const resultadoRapido = montarPontosRapidos(mao.ventoRodada === '1', mao.agari, tabelaRapida)
+  const resultadoRapido = aplicarHonba(
+    montarPontosRapidos(mao.ventoRodada === '1', mao.agari, tabelaRapida),
+    mao.honba,
+  )
   const patamarRapido = calcularPatamarHanFu(han, fu, configuracao)
   const fuDisponiveis = fuValidos(mao.agari)
 

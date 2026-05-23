@@ -41,6 +41,37 @@ export function calcularHanFu(
   }
 }
 
+export function aplicarHonba(pontos: PontosCalculados, honba: number): PontosCalculados {
+  const honbaValida = Number.isFinite(honba) ? honba : 0
+  if (pontos.agari === null || honbaValida <= 0) return pontos
+
+  const bonusRon = honbaValida * 300
+  const bonusTsumo = honbaValida * 100
+
+  if (pontos.agari === 'ron') {
+    return {
+      agari: 'ron',
+      pontos: {
+        total: pontos.pontos.total + bonusRon,
+        oya: { ron: pontos.pontos.oya.ron + bonusRon },
+        ko: { ron: pontos.pontos.ko.ron + bonusRon },
+      },
+    }
+  }
+
+  return {
+    agari: 'tsumo',
+    pontos: {
+      total: pontos.pontos.total + bonusTsumo * 3,
+      oya: { ko: pontos.pontos.oya.ko + bonusTsumo },
+      ko: {
+        oya: pontos.pontos.ko.oya + bonusTsumo,
+        ko: pontos.pontos.ko.ko + bonusTsumo,
+      },
+    },
+  }
+}
+
 export function fuValidos(agari: 'tsumo' | 'ron'): Map<number, number[]> {
   const incluirSe = (condicao: boolean, valor: number) => (condicao ? [valor] : [])
   return new Map([

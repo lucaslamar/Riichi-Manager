@@ -22,6 +22,7 @@ export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRa
     patamarRapido,
     configuracao,
   } = estado
+  const honba = Number.isFinite(mao.honba) ? mao.honba : 0
 
   return (
     <div className="card card-calculadora-rapida">
@@ -62,6 +63,37 @@ export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRa
         <div className="campo-vitoria-mao">
           <span>Vitória</span>
           <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
+        </div>
+
+        <div className="contador-dora-manual contador-honba contador-honba-rapido">
+          <span>Honba</span>
+          <div>
+            <button
+              type="button"
+              disabled={honba <= 0}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                  rascunho.honba = Math.max(0, atual - 1)
+                })
+              }
+            >
+              -
+            </button>
+            <strong>{honba}</strong>
+            <button
+              type="button"
+              disabled={honba >= 99}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                  rascunho.honba = Math.min(99, atual + 1)
+                })
+              }
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
 

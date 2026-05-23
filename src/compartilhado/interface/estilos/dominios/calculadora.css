@@ -168,9 +168,9 @@
 .card-calculadora-rapida .seletores-rapidos-mao {
   order: 1;
   display: grid;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
   gap: 16px;
-  max-width: 620px;
+  max-width: 720px;
   margin: 0 auto 26px;
 }
 
@@ -181,6 +181,11 @@
 .card-calculadora-rapida .toggle-agari-mao {
   width: 100%;
   min-width: 0;
+}
+
+.contador-honba-rapido {
+  width: 100%;
+  justify-content: space-between;
 }
 
 .grade-calculadora-rapida {

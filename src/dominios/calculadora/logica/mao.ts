@@ -13,6 +13,7 @@ export { configuracaoPadrao } from './configuracao'
 export type { DetalheFu, PontosCalculados, ResultadoMao } from './resultado'
 export { calcularMao } from './calculo-mao'
 export {
+  aplicarHonba,
   calcularHanFu,
   calcularPatamarHanFu,
   fuValidos,
