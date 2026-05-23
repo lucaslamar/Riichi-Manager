@@ -1,5 +1,37 @@
 # Changelog - Riichi Manager
 
+# Changelog
+
+## [2.9.0] - 2026-05-23
+
+### Adicionado
+
+- Modal de resultado no mobile ao fechar uma mão válida.
+- Renderização da mão vencedora dentro do modal, com a pedra de agari separada visualmente.
+- Exibição de indicadores de Dora e Ura Dora no modal, incluindo pedras fechadas restantes.
+- Alerta de `Chombo` ao tentar vencer por Ron em uma espera marcada como `Furiten`.
+- Retorno automático para tenpai ao fechar o modal de resultado, removendo a 14ª pedra.
+
+### Alterado
+
+- No mobile, o resultado completo deixou de ocupar a viewport principal durante a montagem da mão.
+- O modal de resultado foi redesenhado como uma ficha clara de resultado, com visual mais próximo de uma mão real de Mahjong.
+- A seção de `Yaku` no modal passou a usar linhas completas, seguindo o padrão visual da seção de `Fu`.
+- Ações da mão no mobile foram integradas ao teclado, reduzindo a sensação de formulário.
+- Labels dos naipes foram removidos do teclado mobile, mantendo separação por fileiras.
+- Botões de `Riichi` e condições especiais passaram a ficar empilhados no mobile.
+- No modo rápido, o controle de `Honba` foi adicionado ao cálculo e à interface compacta.
+- O modo rápido foi simplificado para manter apenas um botão flutuante de retorno ao modo completo.
+- A aplicação das regras configuráveis da mesa foi revisada para manter consistência entre cálculo, valor final e label exibida.
+
+### Corrigido
+
+- Corrigido caso em que uma espera `Furiten` podia abrir resultado pontuado em vez de alertar `Chombo`.
+- Corrigido reaparecimento indevido do modal ao alternar entre modo completo e modo rápido.
+- Corrigida a exibição visual do botão de fechar do modal de resultado.
+- Corrigida a indicação visual da pedra vencedora no modal.
+- Corrigida a apresentação de `Aka Dora` para permanecer como yaku em vez de chip contextual separado.
+
 ## [2.8.0] - 2026-05-23
 
 ### Adicionado
