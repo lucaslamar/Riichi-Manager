@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
-import { ESTILO_MELD } from '../constantes'
+import { ESTILO_MELD, codigoBase } from '../constantes'
 import ExibicaoCompleta from './ExibicaoCompleta'
 import { PedraSvg, PedrasMeld } from './PedraSvg'
 
@@ -13,6 +13,7 @@ interface PropsResultadoMao {
 export default function ResultadoMaoCalculada({ estado, embutido = false }: PropsResultadoMao) {
   const {
     mao,
+    atualizarMao,
     maoCompleta,
     resultado,
     furitenRonCompleto,
@@ -23,8 +24,15 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
   const mostrarEsperas = slotsUsados === 13
   const temEsperaComYaku = esperasPossiveis.some((espera) => !espera.semYaku)
   const temFuriten = esperasPossiveis.some((espera) => !espera.semYaku && espera.furiten)
-  const resultadoValido = resultado?.agari != null && (resultado?.pontos?.total ?? 0) > 0 && !furitenRonCompleto
-  const assinaturaResultado = resultadoValido
+  const agariEmFuriten =
+    maoCompleta &&
+    mao.agari === 'ron' &&
+    mao.indiceAgari >= 0 &&
+    mao.descartes.some((descarte) => codigoBase(descarte) === codigoBase(mao.pedras[mao.indiceAgari]))
+  const chomboFuriten = agariEmFuriten || !!furitenRonCompleto
+  const totalResultado = resultado?.agari != null ? resultado.pontos.total : 0
+  const resultadoValido = totalResultado > 0 && !chomboFuriten
+  const assinaturaResultado = resultadoValido || chomboFuriten
     ? JSON.stringify({
         pedras: mao.pedras,
         melds: mao.melds,
@@ -36,7 +44,8 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
         uradora: mao.uradora,
         ventoRodada: mao.ventoRodada,
         ventoAssento: mao.ventoAssento,
-        total: resultado.pontos.total,
+        total: totalResultado,
+        chomboFuriten,
       })
     : null
   const [modalResultadoAberto, setModalResultadoAberto] = useState(false)
@@ -47,6 +56,15 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
     setModalResultadoAberto(true)
     setUltimoModalAberto(assinaturaResultado)
   }, [assinaturaResultado, ultimoModalAberto])
+
+  const fecharModalResultado = () => {
+    setModalResultadoAberto(false)
+    if (!maoCompleta || mao.indiceAgari < 0) return
+    atualizarMao((rascunho) => {
+      rascunho.pedras.splice(rascunho.indiceAgari, 1)
+      rascunho.indiceAgari = -1
+    })
+  }
 
   const pedraAgari = mao.pedras[mao.indiceAgari]
   const pedrasFechadas = mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
@@ -80,6 +98,16 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
           <PedrasMeld meld={meld} />
         </span>
       ))}
+    </div>
+  )
+  const chomboOya = mao.ventoAssento === '1'
+  const avisoChombo = (
+    <div className="resultado-chombo-furiten resultado-chombo-modal">
+      <strong>Chombo por Ron em furiten</strong>
+      <div className="pontos-chombo">{chomboOya ? '-12.000' : '-8.000'}</div>
+      <span>
+        Ron em furiten nao vence a mao. Penalidade: {chomboOya ? '4.000 para cada jogador' : '4.000 para o oya e 2.000 para cada outro jogador'}.
+      </span>
     </div>
   )
 
@@ -138,18 +166,11 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
             <strong>{slotsUsados}/14 slots</strong>
             <span>Monte a mão para calcular</span>
           </div>
-        ) : resultado?.agari != null && (resultado?.pontos?.total ?? 0) > 0 ? (
+        ) : chomboFuriten || (resultado?.agari != null && (resultado?.pontos?.total ?? 0) > 0) ? (
           <>
             {maoRenderizada}
             {furitenRonCompleto ? (
-              <div className="resultado-chombo-furiten">
-                <strong>Chombo por Ron em furiten</strong>
-                <div className="pontos-chombo">-8.000</div>
-                <span>
-                  Uma das esperas esta no seu descarte. Ron em furiten nao vence a mao e gera
-                  penalidade de chombo pela regra da mesa.
-                </span>
-              </div>
+              avisoChombo
             ) : (
               <ExibicaoCompleta resultado={resultado} mao={mao} />
             )}
@@ -172,32 +193,32 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
         )}
       </div>
 
-      {resultadoValido && modalResultadoAberto && (
+      {(resultadoValido || chomboFuriten) && modalResultadoAberto && (
         <div
-          className="modal-resultado-mobile-fundo"
+          className={`modal-resultado-mobile-fundo ${chomboFuriten ? 'modal-chombo-furiten-fundo' : ''}`}
           role="presentation"
-          onClick={() => setModalResultadoAberto(false)}
+          onClick={fecharModalResultado}
         >
           <div
-            className="modal-resultado-mobile"
+            className={`modal-resultado-mobile ${chomboFuriten ? 'modal-chombo-furiten' : ''}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="titulo-resultado-mobile"
             onClick={(evento) => evento.stopPropagation()}
           >
             <div className="modal-resultado-mobile-cabecalho">
-              <strong id="titulo-resultado-mobile">Resultado</strong>
+              <strong id="titulo-resultado-mobile">{chomboFuriten ? 'Alerta' : 'Resultado'}</strong>
               <button
                 className="btn-fechar-resultado-mobile"
                 type="button"
                 aria-label="Fechar resultado"
-                onClick={() => setModalResultadoAberto(false)}
+                onClick={fecharModalResultado}
               >
                 ×
               </button>
             </div>
             {maoRenderizada}
-            <ExibicaoCompleta resultado={resultado} mao={mao} />
+            {chomboFuriten ? avisoChombo : <ExibicaoCompleta resultado={resultado} mao={mao} />}
           </div>
         </div>
       )}

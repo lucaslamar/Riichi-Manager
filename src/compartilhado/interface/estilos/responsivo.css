@@ -397,6 +397,14 @@
     color: #102a43;
     box-shadow: 0 20px 44px rgba(16, 42, 67, 0.24);
   }
+  .modal-resultado-mobile.modal-chombo-furiten {
+    border-color: #fecaca;
+    background: #fff7f7;
+    box-shadow: 0 20px 44px rgba(127, 29, 29, 0.22);
+  }
+  .modal-resultado-mobile.modal-chombo-furiten .modal-resultado-mobile-cabecalho strong {
+    color: #b91c1c;
+  }
   .modal-resultado-mobile-cabecalho {
     display: flex;
     align-items: center;
@@ -537,6 +545,27 @@
   .modal-resultado-mobile .chip-fu small {
     color: #607080;
   }
+  .modal-resultado-mobile .resultado-chombo-modal {
+    justify-items: start;
+    max-width: none;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fee2e2;
+    color: #7f1d1d;
+  }
+  .modal-resultado-mobile .resultado-chombo-modal strong {
+    color: #991b1b;
+  }
+  .modal-resultado-mobile .resultado-chombo-modal span {
+    max-width: none;
+    color: #7f1d1d;
+  }
+  .modal-resultado-mobile .resultado-chombo-modal .pontos-chombo {
+    color: #dc2626;
+    text-shadow: none;
+  }
   .contador-dora-manual {
     width: 100%;
     justify-content: space-between;
@@ -598,7 +627,7 @@
   }
   .linha-opcoes-mao {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 6px;
   }
   .linha-opcoes-mao .btn-primario,

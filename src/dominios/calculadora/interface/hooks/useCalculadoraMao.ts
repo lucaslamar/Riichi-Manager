@@ -248,10 +248,15 @@ export function useCalculadoraMao() {
       // Bloqueia se a mão já está completa (14 slots)
       if (maoCompleta) return
       if (!podeAdicionarPedras([pedra])) return
+      const esperaClicada =
+        slotsUsados === 13
+          ? esperasPossiveis.find((espera) => codigoBase(espera.pedra) === codigoBase(pedra))
+          : null
       atualizarMao((rascunho) => {
         rascunho.pedras.push(pedra)
         ordenarPedras(rascunho.pedras)
         rascunho.indiceAgari = rascunho.pedras.lastIndexOf(pedra)
+        if (esperaClicada?.furiten) rascunho.agari = 'ron'
       })
       return
     }
