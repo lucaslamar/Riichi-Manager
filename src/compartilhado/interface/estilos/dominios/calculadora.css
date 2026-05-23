@@ -307,6 +307,12 @@
   transition: all 0.15s;
 }
 
+.contadores-dora-honba {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .contador-dora-manual {
   display: inline-flex;
   min-height: 42px;
@@ -319,11 +325,21 @@
   box-shadow: inset 0 0 0 1px rgba(251, 207, 232, 0.5);
 }
 
+.contador-honba {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  box-shadow: inset 0 0 0 1px rgba(191, 219, 254, 0.58);
+}
+
 .contador-dora-manual > span {
   color: #be185d;
   font-size: 0.76rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.contador-honba > span {
+  color: #1d4ed8;
 }
 
 .contador-dora-manual > div {
@@ -335,6 +351,10 @@
   background: #ffffff;
 }
 
+.contador-honba > div {
+  border-color: #93c5fd;
+}
+
 .contador-dora-manual button {
   width: 34px;
   border: 0;
@@ -342,6 +362,10 @@
   color: #be185d;
   cursor: pointer;
   font-weight: 900;
+}
+
+.contador-honba button {
+  color: #1d4ed8;
 }
 
 .contador-dora-manual button:disabled {
@@ -359,6 +383,10 @@
   color: #102a43;
   font-size: 0.98rem;
   text-align: center;
+}
+
+.contador-honba strong {
+  border-inline-color: #bfdbfe;
 }
 
 .grupos-opcoes-mao {

@@ -310,6 +310,10 @@
     width: 100%;
     justify-content: space-between;
   }
+  .contadores-dora-honba {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
   .contador-dora-manual > div {
     flex: 0 0 auto;
   }

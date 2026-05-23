@@ -10,6 +10,7 @@ interface PropsOpcoesMao {
 /** Controles de riichi e condicoes especiais da vitoria. */
 export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
   const { mao, atualizarMao, maoAberta } = estado
+  const honba = Number.isFinite(mao.honba) ? mao.honba : 0
 
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
@@ -19,37 +20,70 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
       </div>
 
       <section className="grupo-opcoes-mao grupo-opcoes-dora">
-        <span className="rotulo-bloco-opcoes">Doras</span>
-        <div className="contador-dora-manual">
-          <span>Doras na mão</span>
-          <div>
-            <button
-              type="button"
-              disabled={mao.doraManual <= 0}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
-                })
-              }
-            >
-              -
-            </button>
-            <strong>{mao.doraManual}</strong>
-            <button
-              type="button"
-              disabled={mao.doraManual >= 13}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
-                  if (rascunho.doraManual > 0) {
-                    rascunho.dora = []
-                    rascunho.uradora = []
-                  }
-                })
-              }
-            >
-              +
-            </button>
+        <span className="rotulo-bloco-opcoes">Doras e Honbas</span>
+        <div className="contadores-dora-honba">
+          <div className="contador-dora-manual">
+            <span>Doras na mão</span>
+            <div>
+              <button
+                type="button"
+                disabled={mao.doraManual <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{mao.doraManual}</strong>
+              <button
+                type="button"
+                disabled={mao.doraManual >= 13}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
+                    if (rascunho.doraManual > 0) {
+                      rascunho.dora = []
+                      rascunho.uradora = []
+                    }
+                  })
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div className="contador-dora-manual contador-honba">
+            <span>Honba</span>
+            <div>
+              <button
+                type="button"
+                disabled={honba <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.max(0, atual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{honba}</strong>
+              <button
+                type="button"
+                disabled={honba >= 99}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.min(99, atual + 1)
+                  })
+                }
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
       </section>
