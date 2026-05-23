@@ -129,6 +129,45 @@ export function useCalculadoraMao() {
   }
 
   // Calculadora rápida
+  const sequenciasChiiPossiveis = (pedras: CodigoPedra[]): CodigoPedra[][] => {
+    if (pedras.length === 0 || pedras.length > 3) return []
+
+    const bases = pedras.map(codigoBase)
+    const naipe = bases[0][1]
+    if (!['m', 'p', 's'].includes(naipe) || bases.some((pedraBase) => pedraBase[1] !== naipe)) {
+      return []
+    }
+
+    const numeros = bases.map((pedraBase) => Number(pedraBase[0]))
+    if (new Set(numeros).size !== numeros.length) return []
+
+    return [1, 2, 3, 4, 5, 6, 7]
+      .filter((inicio) => numeros.every((numero) => numero >= inicio && numero <= inicio + 2))
+      .map((inicio) => [inicio, inicio + 1, inicio + 2].map((numero) => `${numero}${naipe}`))
+      .filter((sequencia) => podeFormarMeldComMao(sequencia))
+  }
+  const escolherSequenciaChii = (
+    pedrasSelecionadas: CodigoPedra[],
+    sequencias: CodigoPedra[][],
+  ) => {
+    if (sequencias.length === 1) return sequencias[0]
+    if (pedrasSelecionadas.length < 2) return null
+
+    const primeira = Number(codigoBase(pedrasSelecionadas[0])[0])
+    const ultima = Number(codigoBase(pedrasSelecionadas[pedrasSelecionadas.length - 1])[0])
+    const naipe = codigoBase(pedrasSelecionadas[0])[1]
+    const inicioNatural = ultima > primeira ? primeira : ultima - 2
+    const sequenciaNatural = [inicioNatural, inicioNatural + 1, inicioNatural + 2].map(
+      (numero) => `${numero}${naipe}`,
+    )
+
+    return (
+      sequencias.find((sequencia) =>
+        sequencia.every((pedraSequencia, indice) => pedraSequencia === sequenciaNatural[indice]),
+      ) ?? null
+    )
+  }
+
   const tabelaRapida = calcularHanFu(han, fu, configuracao)
   const resultadoRapido = montarPontosRapidos(mao.ventoRodada === '1', mao.agari, tabelaRapida)
   const fuDisponiveis = fuValidos(mao.agari)
@@ -258,7 +297,12 @@ export function useCalculadoraMao() {
       case 'chii': {
         if (!podeAdicionarAoChii(acaoPendente.pedras, pedra)) return
         const novasPedras = [...acaoPendente.pedras, pedra]
-        if (novasPedras.length < 3) {
+        const sequenciasPossiveis = sequenciasChiiPossiveis(novasPedras)
+        const sequenciaEscolhida = escolherSequenciaChii(novasPedras, sequenciasPossiveis)
+        if (sequenciaEscolhida) {
+          if (!aplicarMeld('chii', [...sequenciaEscolhida], true)) return
+          setAcaoPendente(slotsUsados <= 11 ? criarAcao('chii') : null)
+        } else if (novasPedras.length < 3) {
           setAcaoPendente({ tipo: 'chii', pedras: novasPedras })
         } else {
           const pedrasChii = ordenarPedras([...novasPedras])
