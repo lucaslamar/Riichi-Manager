@@ -31,17 +31,25 @@ export default function BarraCalculadora({
       </div>
 
       <div className="acoes-calculadora">
-        <button className="btn-contorno btn-voltar-calculadora" type="button" onClick={aoVoltar}>
-          <i className="fas fa-arrow-left" /> Voltar
-        </button>
-        <button
-          className="btn-contorno"
-          type="button"
-          onClick={aoAbrirRegras}
-          title="Configurar regras de cálculo"
-        >
-          <i className="fas fa-sliders-h" /> Regras
-        </button>
+        {modo === 'completo' && (
+          <>
+            <button
+              className="btn-contorno btn-voltar-calculadora"
+              type="button"
+              onClick={aoVoltar}
+            >
+              <i className="fas fa-arrow-left" /> Voltar
+            </button>
+            <button
+              className="btn-contorno"
+              type="button"
+              onClick={aoAbrirRegras}
+              title="Configurar regras de cálculo"
+            >
+              <i className="fas fa-sliders-h" /> Regras
+            </button>
+          </>
+        )}
         <button
           className={modo === 'rapido' ? 'btn-primario' : 'btn-contorno'}
           type="button"
