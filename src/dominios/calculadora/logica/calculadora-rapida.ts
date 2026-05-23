@@ -7,6 +7,23 @@ export function arredondar100(valor: number): number {
   return Math.ceil(valor / 100) * 100
 }
 
+export function calcularPatamarHanFu(
+  han: number,
+  fu: number,
+  config: ConfiguracaoCalculo,
+): { base: number; nome: string | null; yakuman: number } {
+  const base = fu * Math.pow(2, han + 2)
+  if (!(config.kiriageMangan ? base >= 1920 : base > 2000)) {
+    return { base, nome: null, yakuman: 0 }
+  }
+
+  if (config.kazoeYakuman && han >= 13) return { base: 8000, nome: 'Kazoe Yakuman', yakuman: 1 }
+  if (han >= 11) return { base: 6000, nome: 'Sanbaiman', yakuman: 0 }
+  if (han >= 8) return { base: 4000, nome: 'Baiman', yakuman: 0 }
+  if (han >= 6) return { base: 3000, nome: 'Haneman', yakuman: 0 }
+  return { base: 2000, nome: 'Mangan', yakuman: 0 }
+}
+
 /**
  * Calcula pontos diretamente de han+fu sem precisar montar uma mão.
  */
@@ -15,14 +32,7 @@ export function calcularHanFu(
   fu: number,
   config: ConfiguracaoCalculo,
 ): { tsumoOya: number; tsumoKo: number; ronOya: number; ronKo: number } {
-  let base = fu * Math.pow(2, han + 2)
-  if (config.kiriageMangan ? base >= 1920 : base > 2000) {
-    if (config.kazoeYakuman && han >= 13) base = 8000
-    else if (han >= 11) base = 6000
-    else if (han >= 8) base = 4000
-    else if (han >= 6) base = 3000
-    else base = 2000
-  }
+  const { base } = calcularPatamarHanFu(han, fu, config)
   return {
     tsumoOya: arredondar100(base * 2),
     tsumoKo: arredondar100(base),

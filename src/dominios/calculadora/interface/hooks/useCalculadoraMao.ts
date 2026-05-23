@@ -3,6 +3,7 @@ import { useImmer } from 'use-immer'
 import {
   calcularMao,
   calcularHanFu,
+  calcularPatamarHanFu,
   montarPontosRapidos,
   fuValidos,
   ordenarPedras,
@@ -170,6 +171,7 @@ export function useCalculadoraMao() {
 
   const tabelaRapida = calcularHanFu(han, fu, configuracao)
   const resultadoRapido = montarPontosRapidos(mao.ventoRodada === '1', mao.agari, tabelaRapida)
+  const patamarRapido = calcularPatamarHanFu(han, fu, configuracao)
   const fuDisponiveis = fuValidos(mao.agari)
 
   // Resultado completo (calculado ao vivo quando a mão está completa)
@@ -369,6 +371,7 @@ export function useCalculadoraMao() {
     contarAka,
     podeSelecionarPedra,
     resultadoRapido,
+    patamarRapido,
     fuDisponiveis,
     resultado,
     furitenRonCompleto,

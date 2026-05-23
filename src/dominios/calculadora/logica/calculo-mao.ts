@@ -4,7 +4,7 @@ import type { Mao } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
 import type { PontosCalculados, ResultadoMao } from './resultado'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
-import { calcularHanFu, montarPontosRapidos } from './calculadora-rapida'
+import { calcularHanFu, calcularPatamarHanFu, montarPontosRapidos } from './calculadora-rapida'
 
 function aplicarHonba(pontos: PontosCalculados, honba: number): PontosCalculados {
   const honbaValida = Number.isFinite(honba) ? honba : 0
@@ -69,6 +69,11 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku
       ? hanBase + mao.doraManual
       : hanBase
+  const patamarManual =
+    usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku
+      ? calcularPatamarHanFu(hanFinal, fu, config)
+      : null
+  const yakumanFinal = patamarManual?.yakuman ?? yakuman
 
   const pontosBiblioteca: PontosCalculados = !resultadoBiblioteca.isAgari
     ? { agari: null }
@@ -117,12 +122,14 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
   return {
     ...pontos,
     isOya,
-    yakuman,
+    yakuman: yakumanFinal,
     yaku,
     fuDetalhes: traduzirDetalhesFu(resultadoBiblioteca.pattern ?? []),
     semYaku,
     han: hanFinal,
     fu,
-    nome: resultadoBiblioteca.name ? traduzirPatamares(resultadoBiblioteca.name) : null,
+    nome:
+      patamarManual?.nome ??
+      (resultadoBiblioteca.name ? traduzirPatamares(resultadoBiblioteca.name) : null),
   }
 }

@@ -2,12 +2,14 @@ export function SeletorHan({
   han,
   fu,
   fuDisponiveis,
+  kazoeYakuman,
   aoMudarHan,
   aoMudarFu,
 }: {
   han: number
   fu: number
   fuDisponiveis: Map<number, number[]>
+  kazoeYakuman: boolean
   aoMudarHan: (han: number) => void
   aoMudarFu: (fu: number) => void
 }) {
@@ -35,7 +37,7 @@ export function SeletorHan({
             className={han === hanEspecial ? 'btn-primario' : 'btn-contorno'}
             onClick={() => aoMudarHan(hanEspecial)}
           >
-            {rotularHan(hanEspecial)}
+            {rotularHan(hanEspecial, kazoeYakuman)}
           </button>
         ))}
       </div>
@@ -48,11 +50,13 @@ export function SeletorFu({
   han,
   fu,
   fuDisponiveis,
+  patamar,
   aoMudarFu,
 }: {
   han: number
   fu: number
   fuDisponiveis: Map<number, number[]>
+  patamar: string | null
   aoMudarFu: (fu: number) => void
 }) {
   const opcoes = fuDisponiveis.get(han) ?? []
@@ -60,7 +64,9 @@ export function SeletorFu({
     <div className="seletor-rapido">
       <div className="rotulo-seletor-rapido">Fu</div>
       {han >= 5 ? (
-        <span style={{ color: '#aaa', fontSize: '0.9rem' }}>— {rotularHan(han)} não usa fu —</span>
+        <span style={{ color: '#aaa', fontSize: '0.9rem' }}>
+          — {patamar ?? rotularHan(han, true)} não usa fu —
+        </span>
       ) : (
         <div className="botoes-seletor-rapido">
           {opcoes.map((fuDisponivel) => (
@@ -85,12 +91,14 @@ export function ExibicaoRapida({
   agari,
   han,
   fu,
+  patamar,
 }: {
   resultado: any
   isOya: boolean
   agari: 'ron' | 'tsumo'
   han: number
   fu: number
+  patamar: string | null
 }) {
   const pts = resultado?.pontos
   if (!pts) return null
@@ -104,7 +112,7 @@ export function ExibicaoRapida({
           fontWeight: 800,
         }}
       >
-        {han >= 5 ? rotularHan(han) : `${han} Han ${fu} Fu`}
+        {patamar ?? `${han} Han ${fu} Fu`}
       </div>
       <div className="pontos-totais">{pts.total.toLocaleString('pt-BR')}</div>
       <div className="detalhe-pontos">
@@ -121,8 +129,8 @@ export function ExibicaoRapida({
 }
 
 /** Rótulo legível para patamar especial de han. */
-function rotularHan(han: number): string {
-  if (han >= 13) return 'Yakuman'
+function rotularHan(han: number, kazoeYakuman: boolean): string {
+  if (han >= 13) return kazoeYakuman ? 'Kazoe Yakuman' : 'Sanbaiman'
   if (han >= 11) return 'Sanbaiman'
   if (han >= 8) return 'Baiman'
   if (han >= 6) return 'Haneman'

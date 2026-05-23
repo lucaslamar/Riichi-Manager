@@ -10,7 +10,18 @@ interface PropsModoRapido {
 
 /** Renderiza a calculadora por han/fu, sem montar a mao pedra por pedra. */
 export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRapido) {
-  const { mao, atualizarMao, han, setHan, fu, setFu, fuDisponiveis, resultadoRapido } = estado
+  const {
+    mao,
+    atualizarMao,
+    han,
+    setHan,
+    fu,
+    setFu,
+    fuDisponiveis,
+    resultadoRapido,
+    patamarRapido,
+    configuracao,
+  } = estado
 
   return (
     <div className="card card-calculadora-rapida">
@@ -21,6 +32,7 @@ export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRa
         agari={mao.agari}
         han={han}
         fu={fu}
+        patamar={patamarRapido.nome}
       />
 
       <div className="seletores-rapidos-mao">
@@ -58,10 +70,17 @@ export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRa
           han={han}
           fu={fu}
           fuDisponiveis={fuDisponiveis}
+          kazoeYakuman={configuracao.kazoeYakuman}
           aoMudarHan={setHan}
           aoMudarFu={setFu}
         />
-        <SeletorFu han={han} fu={fu} fuDisponiveis={fuDisponiveis} aoMudarFu={setFu} />
+        <SeletorFu
+          han={han}
+          fu={fu}
+          fuDisponiveis={fuDisponiveis}
+          patamar={patamarRapido.nome}
+          aoMudarFu={setFu}
+        />
       </div>
     </div>
   )

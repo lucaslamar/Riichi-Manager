@@ -12,7 +12,13 @@ export type { ConfiguracaoCalculo } from './configuracao'
 export { configuracaoPadrao } from './configuracao'
 export type { DetalheFu, PontosCalculados, ResultadoMao } from './resultado'
 export { calcularMao } from './calculo-mao'
-export { calcularHanFu, fuValidos, montarPontosRapidos, arredondar100 } from './calculadora-rapida'
+export {
+  calcularHanFu,
+  calcularPatamarHanFu,
+  fuValidos,
+  montarPontosRapidos,
+  arredondar100,
+} from './calculadora-rapida'
 export {
   ordenarPedras,
   ordenarMelds,
