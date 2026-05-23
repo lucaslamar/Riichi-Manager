@@ -43,6 +43,29 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         ),
   )
   const temEsperaValida = esperasPossiveis.some((espera) => !espera.semYaku)
+  const temEsperaSemYaku = esperasPossiveis.some((espera) => espera.semYaku)
+  const temEsperaFuriten = esperasPossiveis.some((espera) => !espera.semYaku && espera.furiten)
+  const statusTenpai = temEsperaFuriten
+    ? 'Furiten'
+    : temEsperaValida
+      ? 'Tenpai'
+      : temEsperaSemYaku
+        ? 'Sem yaku'
+        : null
+  const filtrarTecladoPorEspera = slotsUsados === 13 && !acaoPendente && temEsperaValida
+  const esperasPorPedra = new Map(
+    esperasPossiveis.map((espera) => [codigoBase(espera.pedra), espera]),
+  )
+  const rotuloEsperaTeclado = (espera: (typeof esperasPossiveis)[number]) => {
+    if (espera.semYaku) return 'sem yaku'
+    if (espera.yakuman > 0) return `${espera.yakuman}x`
+    return `${espera.han} han`
+  }
+  const classeEsperaTeclado = (espera?: (typeof esperasPossiveis)[number]) => {
+    if (!espera) return ''
+    if (espera.semYaku) return 'espera-sem-yaku'
+    return espera.furiten ? 'espera-valida espera-furiten' : 'espera-valida'
+  }
   const acaoMobileAtiva =
     acaoPendente == null
       ? null
@@ -127,14 +150,27 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
           )}
 
           <div
-            className={`pedras-selecionadas ${temEsperaValida ? 'alerta-tenpai' : ''} ${
-              acaoMeldAtiva ? 'modo-meld-ativo' : ''
-            }`}
+            className={`pedras-selecionadas ${
+              temEsperaFuriten || temEsperaSemYaku
+                ? 'tenpai-alerta'
+                : temEsperaValida
+                  ? 'tenpai-valido'
+                  : ''
+            } ${acaoMeldAtiva ? 'modo-meld-ativo' : ''}`}
           >
             {totalPedras > 0 && (
               <button className="btn-limpar-mao" type="button" onClick={limpar}>
                 Limpar
               </button>
+            )}
+            {statusTenpai && (
+              <span
+                className={`status-tenpai-mao ${
+                  temEsperaFuriten ? 'furiten' : temEsperaValida ? 'valido' : 'sem-yaku'
+                }`}
+              >
+                {statusTenpai}
+              </span>
             )}
             {mao.pedras.map((pedra, i) => (
               <button
@@ -426,15 +462,31 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                   const cheiaESemAcao = maoCompleta && !acaoPendente
                   const invalidaParaAcao = !podeSelecionarPedra(codigo)
                   const ehDoraReal = dorasReais.has(codigoBase(codigo))
+                  const espera = esperasPorPedra.get(codigoBase(codigo))
+                  const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
                   return (
                     <button
                       key={codigo}
-                      className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''}`}
+                      className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''} ${classeEsperaTeclado(espera)}`}
                       type="button"
-                      disabled={cheiaESemAcao || invalidaParaAcao}
+                      title={
+                        espera
+                          ? `${rotuloEsperaTeclado(espera)}${espera.furiten ? ' - furiten' : ''}`
+                          : undefined
+                      }
+                      disabled={cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera}
                       onClick={() => adicionarPedra(codigo)}
                     >
                       <PedraSvg pedra={codigo} />
+                      {espera && (
+                        <span
+                          className={`badge-espera-teclado ${
+                            espera.semYaku ? 'sem-yaku' : espera.furiten ? 'furiten' : ''
+                          }`}
+                        >
+                          {rotuloEsperaTeclado(espera)}
+                        </span>
+                      )}
                     </button>
                   )
                 })}
@@ -445,16 +497,33 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
                     const cheiaESemAcao = maoCompleta && !acaoPendente
                     const invalidaParaAcao = !podeSelecionarPedra(codigo)
                     const ehDoraReal = dorasReais.has(codigoBase(codigo))
+                    const espera = esperasPorPedra.get(codigoBase(codigo))
+                    const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
                     return (
                       <button
                         key={codigo}
-                        className={`btn-pedra btn-pedra-aka ${ehDoraReal ? 'dora-real' : ''}`}
+                        className={`btn-pedra btn-pedra-aka ${ehDoraReal ? 'dora-real' : ''} ${classeEsperaTeclado(espera)}`}
                         type="button"
-                        title="5 vermelho (aka dora)"
-                        disabled={cheiaESemAcao || invalidaParaAcao}
+                        title={
+                          espera
+                            ? `5 vermelho (aka dora) - ${rotuloEsperaTeclado(espera)}${
+                                espera.furiten ? ' - furiten' : ''
+                              }`
+                            : '5 vermelho (aka dora)'
+                        }
+                        disabled={cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera}
                         onClick={() => adicionarPedra(codigo)}
                       >
                         <PedraSvg pedra={codigo} />
+                        {espera && (
+                          <span
+                            className={`badge-espera-teclado ${
+                              espera.semYaku ? 'sem-yaku' : espera.furiten ? 'furiten' : ''
+                            }`}
+                          >
+                            {rotuloEsperaTeclado(espera)}
+                          </span>
+                        )}
                       </button>
                     )
                   })()}
@@ -476,15 +545,35 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             <div className="linha-naipe">
               {HONRAS.map((codigo) => {
                 const ehDoraReal = dorasReais.has(codigoBase(codigo))
+                const espera = esperasPorPedra.get(codigoBase(codigo))
+                const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
                 return (
                   <button
                     key={codigo}
-                    className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''}`}
+                    className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''} ${classeEsperaTeclado(espera)}`}
                     type="button"
-                    disabled={(maoCompleta && !acaoPendente) || !podeSelecionarPedra(codigo)}
+                    title={
+                      espera
+                        ? `${rotuloEsperaTeclado(espera)}${espera.furiten ? ' - furiten' : ''}`
+                        : undefined
+                    }
+                    disabled={
+                      (maoCompleta && !acaoPendente) ||
+                      !podeSelecionarPedra(codigo) ||
+                      bloqueadaPorEspera
+                    }
                     onClick={() => adicionarPedra(codigo)}
                   >
                     <PedraSvg pedra={codigo} />
+                    {espera && (
+                      <span
+                        className={`badge-espera-teclado ${
+                          espera.semYaku ? 'sem-yaku' : espera.furiten ? 'furiten' : ''
+                        }`}
+                      >
+                        {rotuloEsperaTeclado(espera)}
+                      </span>
+                    )}
                   </button>
                 )
               })}
