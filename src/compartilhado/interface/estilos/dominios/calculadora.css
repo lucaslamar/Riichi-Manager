@@ -857,6 +857,9 @@
   text-align: center;
   margin-top: 16px;
 }
+.resultado-calculadora.resultado-calculadora-embutido {
+  margin-top: 0;
+}
 
 .resultado-calculadora.resultado-furiten-chombo {
   background: linear-gradient(180deg, #7f1d1d 0%, #5f1515 100%);

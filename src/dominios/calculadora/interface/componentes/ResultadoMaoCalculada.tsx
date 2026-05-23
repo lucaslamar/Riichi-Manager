@@ -5,10 +5,11 @@ import { PedraSvg, PedrasMeld } from './PedraSvg'
 
 interface PropsResultadoMao {
   estado: EstadoCalculadoraMao
+  embutido?: boolean
 }
 
 /** Resultado da mão montada, incluindo yaku, fu e mensagem de invalidez. */
-export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
+export default function ResultadoMaoCalculada({ estado, embutido = false }: PropsResultadoMao) {
   const {
     mao,
     maoCompleta,
@@ -25,7 +26,11 @@ export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
   return (
     <>
       {/* Card 3: resultado */}
-      <div className={`resultado-calculadora ${furitenRonCompleto ? 'resultado-furiten-chombo' : ''}`}>
+      <div
+        className={`resultado-calculadora ${embutido ? 'resultado-calculadora-embutido' : ''} ${
+          furitenRonCompleto ? 'resultado-furiten-chombo' : ''
+        }`}
+      >
         {mostrarEsperas ? (
           <div className="resultado-esperas">
             <strong>Esperas que validam a mao</strong>
