@@ -14,7 +14,6 @@ export default function BarraCalculadora({
   aoAbrirRegras,
   aoAlternarModo,
 }: PropsBarraCalculadora) {
-  const iconeModo = modo === 'rapido' ? 'fa-chess-board' : 'fa-bolt'
   const [menuMobileAberto, setMenuMobileAberto] = useState(false)
 
   return (
@@ -35,16 +34,14 @@ export default function BarraCalculadora({
         <button className="btn-contorno btn-voltar-calculadora" type="button" onClick={aoVoltar}>
           <i className="fas fa-arrow-left" /> Voltar
         </button>
-        {modo === 'completo' && (
-          <button
-            className="btn-contorno"
-            type="button"
-            onClick={aoAbrirRegras}
-            title="Configurar regras de cálculo"
-          >
-            <i className="fas fa-sliders-h" /> Regras
-          </button>
-        )}
+        <button
+          className="btn-contorno"
+          type="button"
+          onClick={aoAbrirRegras}
+          title="Configurar regras de cálculo"
+        >
+          <i className="fas fa-sliders-h" /> Regras
+        </button>
         <button
           className={modo === 'rapido' ? 'btn-primario' : 'btn-contorno'}
           type="button"
@@ -52,12 +49,24 @@ export default function BarraCalculadora({
           title={modo === 'rapido' ? 'Modo completo' : 'Modo rápido'}
           aria-label={modo === 'rapido' ? 'Modo completo' : 'Modo rápido'}
         >
-          <i className={`fas ${iconeModo}`} />
+          <i className={`fas ${modo === 'rapido' ? 'fa-chess-board' : 'fa-bolt'}`} />
           {modo === 'rapido' ? ' Modo Completo' : ' Modo Rápido'}
         </button>
       </div>
 
-      {modo === 'completo' && (
+      {modo === 'rapido' ? (
+        <div className="menu-acoes-mobile menu-acoes-mobile-direto">
+          <button
+            className="btn-primario btn-menu-acoes"
+            type="button"
+            title="Modo completo"
+            aria-label="Modo completo"
+            onClick={aoAlternarModo}
+          >
+            <i className="fas fa-chess-board" />
+          </button>
+        </div>
+      ) : (
         <div className={`menu-acoes-mobile ${menuMobileAberto ? 'aberto' : ''}`}>
           <button
             className="btn-acao-flutuante opcao-regras"

@@ -50,8 +50,63 @@
   .cabecalho-calculadora-completo .acoes-calculadora > button:not(:first-child) {
     display: none;
   }
+  .cabecalho-calculadora-rapido .acoes-calculadora > button {
+    display: none;
+  }
   .cabecalho-calculadora-rapido .acoes-calculadora .btn-primario {
     display: none;
+  }
+  .menu-acoes-mobile {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 7;
+    display: block;
+    width: 58px;
+    height: 58px;
+  }
+  .btn-menu-acoes,
+  .btn-acao-flutuante {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    box-shadow: 0 14px 28px rgba(16, 42, 67, 0.24);
+  }
+  .btn-menu-acoes {
+    width: 58px;
+    min-height: 58px;
+    padding: 0;
+    font-size: 1.1rem;
+  }
+  .btn-acao-flutuante {
+    width: 46px;
+    min-height: 46px;
+    border: 2px solid #dfe7ef;
+    background: #ffffff;
+    color: #102a43;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(0, 0) scale(0.82);
+    transition:
+      opacity 0.16s,
+      transform 0.16s;
+  }
+  .menu-acoes-mobile.aberto .btn-acao-flutuante {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .menu-acoes-mobile.aberto .opcao-regras {
+    transform: translate(-62px, -8px) scale(1);
+  }
+  .menu-acoes-mobile.aberto .opcao-voltar {
+    transform: translate(-48px, -48px) scale(1);
+  }
+  .menu-acoes-mobile.aberto .opcao-modo {
+    transform: translate(-8px, -62px) scale(1);
   }
   .metricas {
     grid-template-columns: repeat(2, 1fr);
@@ -176,20 +231,6 @@
   .resultado-rapido {
     width: 100%;
     padding: 24px;
-  }
-  .botao-flutuante-modo-completo {
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    z-index: 7;
-    display: inline-flex;
-    width: auto;
-    min-height: 48px;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 18px;
-    border-radius: 999px;
-    box-shadow: 0 14px 28px rgba(16, 42, 67, 0.26);
   }
   .menu-acoes-mobile {
     position: fixed;

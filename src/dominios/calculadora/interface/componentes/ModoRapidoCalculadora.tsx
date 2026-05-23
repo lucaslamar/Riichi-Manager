@@ -63,14 +63,6 @@ export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRa
         />
         <SeletorFu han={han} fu={fu} fuDisponiveis={fuDisponiveis} aoMudarFu={setFu} />
       </div>
-
-      <button
-        className="btn-primario botao-flutuante-modo-completo"
-        type="button"
-        onClick={() => estado.setModo('completo')}
-      >
-        <i className="fas fa-chess-board" /> Modo Completo
-      </button>
     </div>
   )
 }

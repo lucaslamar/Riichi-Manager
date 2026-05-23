@@ -186,10 +186,6 @@
   padding: 34px 48px;
 }
 
-.botao-flutuante-modo-completo {
-  display: none;
-}
-
 .campo-vento-mao {
   display: flex;
   flex-direction: column;
