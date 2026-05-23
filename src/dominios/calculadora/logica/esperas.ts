@@ -12,6 +12,7 @@ export interface EsperaPossivel {
   yakuman: number
   nome: string | null
   semYaku: boolean
+  furiten: boolean
 }
 
 const TODAS_PEDRAS: CodigoPedra[] = [
@@ -56,7 +57,7 @@ function base(pedra: CodigoPedra): CodigoPedra {
 }
 
 function pedrasVisiveis(mao: Mao): CodigoPedra[] {
-  return [...mao.pedras, ...mao.melds.flatMap((meld) => meld.pedras)]
+  return [...mao.pedras, ...mao.melds.flatMap((meld) => meld.pedras), ...mao.descartes]
 }
 
 function contar(pedras: CodigoPedra[]): Map<CodigoPedra, number> {
@@ -91,6 +92,7 @@ export function calcularEsperasPossiveis(
   if (slotsUsados !== 13) return []
 
   const contagem = contar([...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora])
+  const descartes = new Set(mao.descartes.map(base))
 
   return TODAS_PEDRAS.flatMap((pedra) => {
     if ((contagem.get(pedra) ?? 0) >= 4) return []
@@ -120,6 +122,7 @@ export function calcularEsperasPossiveis(
           yakuman,
           nome: resultado.name ?? null,
           semYaku: yakuman === 0 && yakus.length === 0 && (resultado.noYaku ?? false),
+          furiten: descartes.has(base(pedra)),
         },
       ]
     } catch {

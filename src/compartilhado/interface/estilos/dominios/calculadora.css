@@ -443,6 +443,21 @@
   background: #f8fafc;
 }
 
+.espera-resultado.furiten {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.16);
+}
+
+.espera-resultado.furiten .chip-pedra {
+  border-color: #ef4444;
+}
+
+.aviso-furiten {
+  margin-top: 8px;
+  color: #fecaca;
+  font-weight: 800;
+}
+
 .indicadores-dora-selecionados {
   display: flex;
   flex-wrap: wrap;

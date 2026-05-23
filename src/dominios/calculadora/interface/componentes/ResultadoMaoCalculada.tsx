@@ -11,6 +11,8 @@ interface PropsResultadoMao {
 export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
   const { mao, maoCompleta, resultado, slotsUsados, esperasPossiveis, calculandoEsperas } = estado
   const mostrarEsperas = slotsUsados === 13
+  const temEsperaComYaku = esperasPossiveis.some((espera) => !espera.semYaku)
+  const temFuriten = esperasPossiveis.some((espera) => !espera.semYaku && espera.furiten)
 
   return (
     <>
@@ -25,25 +27,34 @@ export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
               <>
                 <div className="lista-esperas-resultado">
                   {esperasPossiveis.map((espera) => (
-                    <span key={espera.pedra} className="espera-resultado">
+                    <span
+                      key={espera.pedra}
+                      className={`espera-resultado ${espera.furiten ? 'furiten' : ''}`}
+                    >
                       <span className="chip-pedra mini">
                         <PedraSvg pedra={espera.pedra} />
                       </span>
                       <small>
                         {espera.semYaku
                           ? 'sem yaku'
-                          : espera.yakuman > 0
-                            ? `${espera.yakuman}x Yakuman`
-                            : `${espera.han} han`}
+                          : `${espera.yakuman > 0 ? `${espera.yakuman}x Yakuman` : `${espera.han} han`}${
+                              espera.furiten ? ' - furiten' : ''
+                            }`}
                       </small>
                     </span>
                   ))}
                 </div>
                 <p>
-                  {esperasPossiveis.some((espera) => !espera.semYaku)
+                  {temEsperaComYaku
                     ? 'Essas pedras fecham uma mao valida com yaku nas opcoes atuais.'
                     : 'Essas pedras fecham a forma, mas ainda falta yaku para vencer.'}
                 </p>
+                {temFuriten && (
+                  <p className="aviso-furiten">
+                    Furiten: esperas que ja estao no seu descarte nao podem vencer por Ron. Se
+                    declarar Ron nelas, confira a penalidade de chombo da mesa.
+                  </p>
+                )}
               </>
             ) : (
               <p>Nenhuma pedra restante fecha uma mao valida agora.</p>
