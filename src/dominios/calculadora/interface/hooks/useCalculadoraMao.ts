@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useImmer } from 'use-immer'
 import {
   calcularMao,
@@ -143,6 +143,20 @@ export function useCalculadoraMao() {
         }
       })()
     : null
+  const furitenRonCompleto = useMemo(() => {
+    if (!maoCompleta || mao.agari !== 'ron' || mao.descartes.length === 0) return null
+    if (mao.indiceAgari < 0 || mao.indiceAgari >= mao.pedras.length) return null
+
+    const maoBase: Mao = {
+      ...mao,
+      pedras: mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari),
+      indiceAgari: -1,
+    }
+    const esperas = calcularEsperasPossiveis(maoBase, configuracao, 13)
+    const esperasFuriten = esperas.filter((espera) => !espera.semYaku && espera.furiten)
+
+    return esperasFuriten.length > 0 ? esperasFuriten : null
+  }, [mao, maoCompleta, configuracao])
 
   useEffect(() => {
     setEsperasPossiveis([])
@@ -313,6 +327,7 @@ export function useCalculadoraMao() {
     resultadoRapido,
     fuDisponiveis,
     resultado,
+    furitenRonCompleto,
     esperasPossiveis,
     calculandoEsperas,
     adicionarPedra,

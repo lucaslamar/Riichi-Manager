@@ -9,7 +9,15 @@ interface PropsResultadoMao {
 
 /** Resultado da mão montada, incluindo yaku, fu e mensagem de invalidez. */
 export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
-  const { mao, maoCompleta, resultado, slotsUsados, esperasPossiveis, calculandoEsperas } = estado
+  const {
+    mao,
+    maoCompleta,
+    resultado,
+    furitenRonCompleto,
+    slotsUsados,
+    esperasPossiveis,
+    calculandoEsperas,
+  } = estado
   const mostrarEsperas = slotsUsados === 13
   const temEsperaComYaku = esperasPossiveis.some((espera) => !espera.semYaku)
   const temFuriten = esperasPossiveis.some((espera) => !espera.semYaku && espera.furiten)
@@ -17,7 +25,7 @@ export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
   return (
     <>
       {/* Card 3: resultado */}
-      <div className="resultado-calculadora">
+      <div className={`resultado-calculadora ${furitenRonCompleto ? 'resultado-furiten-chombo' : ''}`}>
         {mostrarEsperas ? (
           <div className="resultado-esperas">
             <strong>Esperas que validam a mao</strong>
@@ -99,7 +107,18 @@ export default function ResultadoMaoCalculada({ estado }: PropsResultadoMao) {
                 </span>
               ))}
             </div>
-            <ExibicaoCompleta resultado={resultado} />
+            {furitenRonCompleto ? (
+              <div className="resultado-chombo-furiten">
+                <strong>Chombo por Ron em furiten</strong>
+                <div className="pontos-chombo">-8.000</div>
+                <span>
+                  Uma das esperas esta no seu descarte. Ron em furiten nao vence a mao e gera
+                  penalidade de chombo pela regra da mesa.
+                </span>
+              </div>
+            ) : (
+              <ExibicaoCompleta resultado={resultado} />
+            )}
           </>
         ) : (
           <div>
