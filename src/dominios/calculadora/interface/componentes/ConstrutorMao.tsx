@@ -55,9 +55,33 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
           uradora: { rotulo: 'Uradora', cor: '#ec4899' },
           descarte: { rotulo: 'Descartes', cor: '#111827' },
         }[acaoPendente.tipo]
+  const acaoMeldAtiva =
+    acaoPendente?.tipo === 'chii' ||
+    acaoPendente?.tipo === 'pon' ||
+    acaoPendente?.tipo === 'kanAberto' ||
+    acaoPendente?.tipo === 'kanFechado'
+      ? acaoPendente
+      : null
+  const indicesSelecionadosChii = new Set<number>()
+  if (acaoPendente?.tipo === 'chii') {
+    for (const pedraSelecionada of acaoPendente.pedras) {
+      const indice = mao.pedras.findIndex(
+        (pedraMao, i) =>
+          !indicesSelecionadosChii.has(i) && codigoBase(pedraMao) === codigoBase(pedraSelecionada),
+      )
+      if (indice >= 0) indicesSelecionadosChii.add(indice)
+    }
+  }
   const alternarAcaoMao = (tipo: Parameters<typeof alternarAcao>[0]) => {
     alternarAcao(tipo)
     setMenuAcoesMaoAberto(false)
+  }
+  const clicarPedraDaMao = (indicePedra: number) => {
+    if (acaoMeldAtiva) {
+      adicionarPedra(mao.pedras[indicePedra])
+      return
+    }
+    removerPedra(indicePedra)
   }
 
   useEffect(() => {
@@ -91,7 +115,22 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
           </div>
 
           {/* Área de pedras e melds */}
-          <div className={`pedras-selecionadas ${temEsperaValida ? 'alerta-tenpai' : ''}`}>
+          {acaoMeldAtiva && (
+            <button
+              className="chip-acao-meld-ativa"
+              type="button"
+              style={{ borderColor: acaoMobileAtiva?.cor, color: acaoMobileAtiva?.cor }}
+              onClick={() => alternarAcao(acaoMeldAtiva.tipo)}
+            >
+              {acaoMobileAtiva?.rotulo} ativo x
+            </button>
+          )}
+
+          <div
+            className={`pedras-selecionadas ${temEsperaValida ? 'alerta-tenpai' : ''} ${
+              acaoMeldAtiva ? 'modo-meld-ativo' : ''
+            }`}
+          >
             {totalPedras > 0 && (
               <button className="btn-limpar-mao" type="button" onClick={limpar}>
                 Limpar
@@ -100,14 +139,16 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
             {mao.pedras.map((pedra, i) => (
               <button
                 key={i}
-                className={`chip-pedra ${i === mao.indiceAgari ? 'agari' : ''}`}
+                className={`chip-pedra ${i === mao.indiceAgari ? 'agari' : ''} ${
+                  indicesSelecionadosChii.has(i) ? 'selecionada-meld' : ''
+                }`}
                 type="button"
                 title={
                   i === mao.indiceAgari
                     ? 'Pedra de agari — clique para remover'
                     : 'Clique para remover'
                 }
-                onClick={() => removerPedra(i)}
+                onClick={() => clicarPedraDaMao(i)}
               >
                 <PedraSvg pedra={pedra} />
               </button>
