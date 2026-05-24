@@ -22,8 +22,11 @@ interface PropsMaoAtual {
   temEsperaValida: boolean
   temEsperaSemYaku: boolean
   temEsperaFuriten: boolean
-  podeMeld: boolean
+  podeChii: boolean
+  podePon: boolean
+  podeKanAberto: boolean
   podeKanFechado: boolean
+  maoInvalida: boolean
   aoAbrirMenuAcoes: () => void
   aoAlternarAcao: (tipo: Acao['tipo']) => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
@@ -91,8 +94,11 @@ export function MaoAtual({
   temEsperaValida,
   temEsperaSemYaku,
   temEsperaFuriten,
-  podeMeld,
+  podeChii,
+  podePon,
+  podeKanAberto,
   podeKanFechado,
+  maoInvalida,
   aoAbrirMenuAcoes,
   aoAlternarAcao,
   aoAdicionarPedra,
@@ -130,25 +136,29 @@ export function MaoAtual({
 
       <div
         className={`pedras-selecionadas ${
-          temEsperaFuriten || temEsperaSemYaku
+          maoInvalida || temEsperaFuriten || temEsperaSemYaku
             ? 'tenpai-alerta'
             : temEsperaValida
               ? 'tenpai-valido'
               : ''
-        } ${acaoMeldAtiva ? 'modo-meld-ativo' : ''}`}
+        } ${maoInvalida ? 'mao-invalida' : ''} ${acaoMeldAtiva ? 'modo-meld-ativo' : ''}`}
       >
         {totalPedras > 0 && (
           <button className="btn-limpar-mao" type="button" onClick={aoLimpar}>
             Limpar
           </button>
         )}
-        {statusTenpai && (
+        {(maoInvalida || statusTenpai) && (
           <span
             className={`status-tenpai-mao ${
-              temEsperaFuriten ? 'furiten' : temEsperaValida ? 'valido' : 'sem-yaku'
+              maoInvalida || temEsperaFuriten
+                ? 'furiten'
+                : temEsperaValida
+                  ? 'valido'
+                  : 'sem-yaku'
             }`}
           >
-            {statusTenpai}
+            {maoInvalida ? 'Sem yaku' : statusTenpai}
           </span>
         )}
         {mao.pedras.map((pedra, indicePedra) => (
@@ -156,7 +166,7 @@ export function MaoAtual({
             key={indicePedra}
             className={`chip-pedra ${indicePedra === mao.indiceAgari ? 'agari' : ''} ${
               indicesSelecionadosChii.has(indicePedra) ? 'selecionada-meld' : ''
-            }`}
+            } ${maoInvalida && indicePedra === mao.indiceAgari ? 'chombo' : ''}`}
             type="button"
             title={
               indicePedra === mao.indiceAgari
@@ -205,7 +215,9 @@ export function MaoAtual({
           <AcoesConstrutorMao
             mao={mao}
             acaoPendente={acaoPendente}
-            podeMeld={podeMeld}
+            podeChii={podeChii}
+            podePon={podePon}
+            podeKanAberto={podeKanAberto}
             podeKanFechado={podeKanFechado}
             aoAlternarAcao={aoAlternarAcao}
             compacto

@@ -16,8 +16,8 @@ export default function ModoCompletoCalculadora({ estado, cabecalho }: PropsModo
       <div className="card card-mao-completa">
         {cabecalho}
         <ConstrutorMao estado={estado} embutido />
-        <ResultadoMaoCalculada estado={estado} embutido />
         <OpcoesMao estado={estado} embutido />
+        <ResultadoMaoCalculada estado={estado} embutido />
       </div>
     </>
   )

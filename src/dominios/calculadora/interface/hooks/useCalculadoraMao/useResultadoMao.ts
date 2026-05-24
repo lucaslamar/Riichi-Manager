@@ -17,6 +17,7 @@ interface ParametrosResultadoMao {
   han: number
   fu: number
   maoCompleta: boolean
+  deveCalcularMao: boolean
 }
 
 /**
@@ -34,6 +35,7 @@ export function useResultadoMao({
   han,
   fu,
   maoCompleta,
+  deveCalcularMao,
 }: ParametrosResultadoMao) {
   const tabelaRapida = calcularHanFu(han, fu, configuracao)
   const resultadoRapido = aplicarHonba(
@@ -43,7 +45,7 @@ export function useResultadoMao({
   const patamarRapido = calcularPatamarHanFu(han, fu, configuracao)
   const fuDisponiveis = fuValidos(mao.agari)
 
-  const resultado = maoCompleta
+  const resultado = maoCompleta && deveCalcularMao
     ? (() => {
         try {
           return calcularMao(mao, configuracao)
@@ -58,7 +60,9 @@ export function useResultadoMao({
    * Para isso removemos temporariamente a pedra de agari e recalculamos as esperas da base.
    */
   const furitenRonCompleto = useMemo(() => {
-    if (!maoCompleta || mao.agari !== 'ron' || mao.descartes.length === 0) return null
+    if (!deveCalcularMao || !maoCompleta || mao.agari !== 'ron' || mao.descartes.length === 0) {
+      return null
+    }
     if (mao.indiceAgari < 0 || mao.indiceAgari >= mao.pedras.length) return null
 
     const maoBase: Mao = {
@@ -70,7 +74,7 @@ export function useResultadoMao({
     const esperasFuriten = esperas.filter((espera) => !espera.semYaku && espera.furiten)
 
     return esperasFuriten.length > 0 ? esperasFuriten : null
-  }, [mao, maoCompleta, configuracao])
+  }, [mao, maoCompleta, configuracao, deveCalcularMao])
 
   return {
     resultadoRapido,

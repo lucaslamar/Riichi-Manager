@@ -46,6 +46,10 @@ export interface AcoesMeldsCalculadora {
   podeFormarMeldComMao: (pedras: CodigoPedra[], slotsMeld?: number) => boolean
   podeAdicionarPedras: (pedras: CodigoPedra[]) => boolean
   podeSelecionarPedra: (pedra: CodigoPedra) => boolean
+  podeChii: boolean
+  podePon: boolean
+  podeKanAberto: boolean
+  podeKanFechado: boolean
   sequenciasChiiPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
   escolherSequenciaChii: (
     pedrasSelecionadas: CodigoPedra[],

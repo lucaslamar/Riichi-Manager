@@ -82,10 +82,35 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+.btn-pedra.indisponivel {
+  opacity: 0.26;
+  cursor: not-allowed;
+  filter: grayscale(0.9) saturate(0.35);
+}
+.btn-pedra.indisponivel:hover,
+.btn-pedra.indisponivel:active {
+  border-color: #dde1e7;
+  background: var(--branco);
+  box-shadow: none;
+  transform: none;
+}
+.btn-pedra.indisponivel.dora-real,
+.btn-pedra.indisponivel.espera-valida,
+.btn-pedra.indisponivel.espera-furiten,
+.btn-pedra.indisponivel.espera-sem-yaku {
+  border-color: #d1d5db;
+  background: #f3f4f6;
+  box-shadow: none;
+}
 .btn-pedra.espera-valida:disabled,
 .btn-pedra.espera-furiten:disabled,
 .btn-pedra.espera-sem-yaku:disabled {
   opacity: 0.76;
+}
+.btn-pedra.indisponivel.espera-valida:disabled,
+.btn-pedra.indisponivel.espera-furiten:disabled,
+.btn-pedra.indisponivel.espera-sem-yaku:disabled {
+  opacity: 0.26;
 }
 .btn-pedra.dora-real {
   border-color: #ec4899;
@@ -150,6 +175,66 @@
 .opcoes-mao-embutidas {
   padding-top: 16px;
   border-top: 1px solid #edf0f4;
+}
+
+.acao-calcular-mao {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) 1fr;
+  align-items: center;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.btn-calcular-mao {
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  background: #16a34a;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.98rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 0 10px 20px rgba(22, 163, 74, 0.18);
+  transition:
+    background 0.15s,
+    opacity 0.15s,
+    transform 0.15s;
+}
+
+.btn-calcular-mao:hover:not(:disabled) {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+.btn-calcular-mao:disabled {
+  background: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.texto-calcular-pronto,
+.texto-calcular-incompleto {
+  color: #607080;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.texto-calcular-pronto {
+  color: #166534;
+}
+
+.microfeedback-tenpai {
+  justify-self: start;
+  margin-top: -8px;
+  padding: 6px 10px;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  background: #f0fdf4;
+  color: #166534;
+  font-size: 0.76rem;
+  font-weight: 900;
 }
 
 .seletores-vento-mao {

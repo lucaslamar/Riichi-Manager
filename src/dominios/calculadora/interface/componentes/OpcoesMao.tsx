@@ -126,28 +126,32 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
                 })
               }
             />
-            <BotaoToggle
-              rotulo="Ippatsu"
-              ativo={mao.riichi?.ippatsu ?? false}
-              desabilitado={mao.riichi === null}
-              corAtiva="#f97316"
-              aoClicar={() =>
-                atualizarMao((rascunho) => {
-                  if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
-                })
-              }
-            />
-            <BotaoToggle
-              rotulo="Double Riichi"
-              ativo={mao.riichi?.duplo ?? false}
-              desabilitado={mao.riichi === null}
-              corAtiva="#f97316"
-              aoClicar={() =>
-                atualizarMao((rascunho) => {
-                  if (rascunho.riichi) rascunho.riichi.duplo = !rascunho.riichi.duplo
-                })
-              }
-            />
+            {mao.riichi && (
+              <>
+                <BotaoToggle
+                  rotulo="Ippatsu"
+                  ativo={mao.riichi.ippatsu}
+                  desabilitado={false}
+                  corAtiva="#f97316"
+                  aoClicar={() =>
+                    atualizarMao((rascunho) => {
+                      if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
+                    })
+                  }
+                />
+                <BotaoToggle
+                  rotulo="Double Riichi"
+                  ativo={mao.riichi.duplo}
+                  desabilitado={false}
+                  corAtiva="#f97316"
+                  aoClicar={() =>
+                    atualizarMao((rascunho) => {
+                      if (rascunho.riichi) rascunho.riichi.duplo = !rascunho.riichi.duplo
+                    })
+                  }
+                />
+              </>
+            )}
           </div>
         </section>
 

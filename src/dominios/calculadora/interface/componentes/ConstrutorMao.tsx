@@ -49,8 +49,11 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     removerDescarte,
     limpar,
     alternarAcao,
-    podeMeld,
+    podeChii,
+    podePon,
+    podeKanAberto,
     podeKanFechado,
+    resultadoMaoInvalida,
     esperasPossiveis,
   } = estado
 
@@ -168,8 +171,11 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         temEsperaValida={temEsperaValida}
         temEsperaSemYaku={temEsperaSemYaku}
         temEsperaFuriten={temEsperaFuriten}
-        podeMeld={podeMeld}
+        podeChii={podeChii}
+        podePon={podePon}
+        podeKanAberto={podeKanAberto}
         podeKanFechado={podeKanFechado}
+        maoInvalida={resultadoMaoInvalida}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}
         aoAdicionarPedra={adicionarPedra}
@@ -185,7 +191,9 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         <AcoesConstrutorMao
           mao={mao}
           acaoPendente={acaoPendente}
-          podeMeld={podeMeld}
+          podeChii={podeChii}
+          podePon={podePon}
+          podeKanAberto={podeKanAberto}
           podeKanFechado={podeKanFechado}
           aoAlternarAcao={alternarAcaoMao}
         />

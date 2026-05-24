@@ -196,6 +196,27 @@
   .resultado-calculadora.resultado-principal {
     display: none;
   }
+  .resultado-calculadora.resultado-principal.resultado-mao-invalida {
+    display: block;
+    padding: 16px 14px;
+    border-radius: 8px;
+  }
+  .acao-calcular-mao {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .btn-calcular-mao {
+    width: 100%;
+    min-height: 48px;
+  }
+  .texto-calcular-pronto,
+  .texto-calcular-incompleto {
+    text-align: center;
+  }
+  .microfeedback-tenpai {
+    justify-self: center;
+    margin-top: -4px;
+  }
   .resultado-montagem-conteudo {
     font-size: 0.78rem;
     line-height: 1.15;
@@ -212,7 +233,8 @@
   }
   .modal-resultado-mobile {
     width: min(100%, 420px);
-    max-height: calc(100dvh - 88px);
+    height: min(90dvh, 680px);
+    max-height: 90dvh;
     overflow: auto;
     padding: 16px;
     border: 1px solid #e5e7eb;

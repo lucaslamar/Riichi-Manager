@@ -4,7 +4,9 @@ import { BotaoAcao } from '../Botoes'
 interface PropsAcoesConstrutorMao {
   mao: Mao
   acaoPendente: Acao | null
-  podeMeld: boolean
+  podeChii: boolean
+  podePon: boolean
+  podeKanAberto: boolean
   podeKanFechado: boolean
   aoAlternarAcao: (tipo: Acao['tipo']) => void
   compacto?: boolean
@@ -17,7 +19,9 @@ interface PropsAcoesConstrutorMao {
 export function AcoesConstrutorMao({
   mao,
   acaoPendente,
-  podeMeld,
+  podeChii,
+  podePon,
+  podeKanAberto,
   podeKanFechado,
   aoAlternarAcao,
   compacto = false,
@@ -29,7 +33,7 @@ export function AcoesConstrutorMao({
         rotulo={compacto ? 'Chi' : 'Chii'}
         cor="#4caf50"
         ativo={acaoPendente?.tipo === 'chii'}
-        desabilitado={!podeMeld}
+        desabilitado={!podeChii}
         aoClicar={() => aoAlternarAcao('chii')}
       />
       <BotaoAcao
@@ -37,7 +41,7 @@ export function AcoesConstrutorMao({
         rotulo="Pon"
         cor="#2196f3"
         ativo={acaoPendente?.tipo === 'pon'}
-        desabilitado={!podeMeld}
+        desabilitado={!podePon}
         aoClicar={() => aoAlternarAcao('pon')}
       />
       <BotaoAcao
@@ -45,7 +49,7 @@ export function AcoesConstrutorMao({
         rotulo={compacto ? 'Kan' : 'Kan (aberto)'}
         cor="#ba68c8"
         ativo={acaoPendente?.tipo === 'kanAberto'}
-        desabilitado={!podeMeld}
+        desabilitado={!podeKanAberto}
         aoClicar={() => aoAlternarAcao('kanAberto')}
       />
       <BotaoAcao
@@ -64,14 +68,16 @@ export function AcoesConstrutorMao({
         desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
         aoClicar={() => aoAlternarAcao('dora')}
       />
-      <BotaoAcao
-        tipo="uradora"
-        rotulo="Uradora"
-        cor="#ec4899"
-        ativo={acaoPendente?.tipo === 'uradora'}
-        desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
-        aoClicar={() => aoAlternarAcao('uradora')}
-      />
+      {mao.riichi && (
+        <BotaoAcao
+          tipo="uradora"
+          rotulo="Uradora"
+          cor="#ec4899"
+          ativo={acaoPendente?.tipo === 'uradora'}
+          desabilitado={mao.doraManual > 0 || mao.uradora.length >= 5}
+          aoClicar={() => aoAlternarAcao('uradora')}
+        />
+      )}
       <BotaoAcao
         tipo="descarte"
         rotulo="Descartes"

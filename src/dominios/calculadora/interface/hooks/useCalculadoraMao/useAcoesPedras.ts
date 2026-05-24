@@ -71,6 +71,22 @@ export function useAcoesPedras({
     ) => {
       if (!podeFormarMeldComMao(pedras)) return false
       const indicesRemovidos = indicesPedrasNaMaoPara(pedras)
+      const pedrasMeld = [...pedras]
+      const posicoesAtualizadas = new Set<number>()
+
+      for (const indiceRemovido of indicesRemovidos) {
+        const pedraReal = mao.pedras[indiceRemovido]
+        const posicao = pedrasMeld.findIndex(
+          (pedraMeld, indicePedraMeld) =>
+            !posicoesAtualizadas.has(indicePedraMeld) &&
+            codigoBase(pedraMeld) === codigoBase(pedraReal),
+        )
+        if (posicao >= 0) {
+          pedrasMeld[posicao] = pedraReal
+          posicoesAtualizadas.add(posicao)
+        }
+      }
+
       atualizarMao((rascunho: Mao) => {
         for (const indice of [...indicesRemovidos].sort((a, b) => b - a)) {
           rascunho.pedras.splice(indice, 1)
@@ -79,7 +95,7 @@ export function useAcoesPedras({
         if (rascunho.indiceAgari >= rascunho.pedras.length) {
           rascunho.indiceAgari = rascunho.pedras.length - 1
         }
-        rascunho.melds.push({ tipo, pedras })
+        rascunho.melds.push({ tipo, pedras: pedrasMeld })
         ordenarMelds(rascunho.melds)
         if (abrirMao) rascunho.riichi = null
       })
@@ -135,18 +151,21 @@ export function useAcoesPedras({
         return
       case 'pon': {
         const pedras = expandirGrupoMesmoValor(pedra, 3)
+        if (indicesPedrasNaMaoPara(pedras).length < 3) return
         if (!aplicarMeld('pon', pedras, true)) return
         manterAcaoMeld()
         return
       }
       case 'kanAberto': {
         const pedras = expandirGrupoMesmoValor(pedra, 4)
+        if (indicesPedrasNaMaoPara(pedras).length < 4) return
         if (!aplicarMeld('kanAberto', pedras, true)) return
         manterAcaoMeld()
         return
       }
       case 'kanFechado': {
         const pedras = expandirGrupoMesmoValor(pedra, 4)
+        if (indicesPedrasNaMaoPara(pedras).length < 4) return
         if (!aplicarMeld('kanFechado', pedras, false)) return
         manterAcaoMeld()
         return

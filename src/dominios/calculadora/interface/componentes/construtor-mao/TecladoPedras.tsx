@@ -60,8 +60,10 @@ export function TecladoPedras({
     const ehDoraReal = dorasReais.has(codigoBase(codigo))
     const espera = esperasPorPedra.get(codigoBase(codigo))
     const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
-    const rotuloEspera = espera
-      ? `${rotuloEsperaTeclado(espera)}${espera.furiten ? ' - furiten' : ''}`
+    const indisponivel = cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera
+    const esperaVisivel = invalidaParaAcao ? undefined : espera
+    const rotuloEspera = esperaVisivel
+      ? `${rotuloEsperaTeclado(esperaVisivel)}${esperaVisivel.furiten ? ' - furiten' : ''}`
       : undefined
 
     return (
@@ -69,18 +71,18 @@ export function TecladoPedras({
         key={codigo}
         className={`btn-pedra ${codigo[0] === '0' ? 'btn-pedra-aka' : ''} ${
           ehDoraReal ? 'dora-real' : ''
-        } ${classeEsperaTeclado(espera)}`}
+        } ${classeEsperaTeclado(esperaVisivel)} ${indisponivel ? 'indisponivel' : ''}`}
         type="button"
         title={
           tituloPadrao && rotuloEspera
             ? `${tituloPadrao} - ${rotuloEspera}`
             : rotuloEspera ?? tituloPadrao
         }
-        disabled={cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera}
+        disabled={indisponivel}
         onClick={() => aoAdicionarPedra(codigo)}
       >
         <PedraSvg pedra={codigo} />
-        {renderizarBadgeEspera(espera)}
+        {renderizarBadgeEspera(esperaVisivel)}
       </button>
     )
   }
