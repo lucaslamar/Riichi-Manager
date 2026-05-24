@@ -5,7 +5,8 @@
 ### Melhorias
 
 - Adicionado fluxo progressivo nas opções da mão: primeiro **Vitória**, depois **Ventos**, depois **Riichi** e **Condições especiais**.
-- O botão **Calcular** agora só aparece quando a mão está pronta e a configuração obrigatória foi definida.
+- O fluxo da calculadora agora termina no botão **Calcular**, exibido após a mão ficar pronta e a configuração obrigatória ser definida.
+- A modal de resultado agora abre somente pelo botão **Calcular**, sem abrir automaticamente ao completar a mão.
 - Reposicionado o botão **Dora** para a barra de ações da mão, logo após **Descartes**.
 - **Ura dora** continua aparecendo na barra de ações apenas quando **Riichi** está ativo.
 - Mantidos **Honba** e **Doras na mão** na área de configuração da vitória.

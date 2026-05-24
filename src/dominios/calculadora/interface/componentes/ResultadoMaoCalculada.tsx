@@ -57,19 +57,20 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
     : null
   const [modalResultadoAberto, setModalResultadoAberto] = useState(false)
   const [ultimoModalAberto, setUltimoModalAberto] = useState<string | null>(null)
-  const [tentativasCalculo, setTentativasCalculo] = useState(0)
+  const [modalResultadoSolicitado, setModalResultadoSolicitado] = useState(false)
   const [microfeedbackTenpai, setMicrofeedbackTenpai] = useState(false)
 
   useEffect(() => {
-    if (tentativasCalculo === 0 || !deveCalcularMao || !assinaturaResultado) return
+    if (!modalResultadoSolicitado || !deveCalcularMao || !assinaturaResultado) return
     if (assinaturaResultado === ultimoModalAberto && modalResultadoAberto) return
     setModalResultadoAberto(true)
     setUltimoModalAberto(assinaturaResultado)
+    setModalResultadoSolicitado(false)
   }, [
     assinaturaResultado,
     deveCalcularMao,
     modalResultadoAberto,
-    tentativasCalculo,
+    modalResultadoSolicitado,
     ultimoModalAberto,
   ])
 
@@ -81,7 +82,7 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
 
   const acionarCalculo = () => {
     calcularMaoAtual()
-    setTentativasCalculo((total) => total + 1)
+    setModalResultadoSolicitado(true)
   }
 
   const fecharModalResultado = () => {
