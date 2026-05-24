@@ -71,6 +71,47 @@
   gap: 4px;
 }
 
+.opcoes-mao-embutidas {
+  display: grid;
+  gap: 0;
+}
+
+.etapa-opcoes-mao {
+  overflow: hidden;
+  transition:
+    max-height 0.28s ease,
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    margin 0.22s ease,
+    padding 0.22s ease;
+}
+
+.etapa-opcoes-ativa {
+  max-height: 280px;
+  margin-bottom: 8px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.etapa-opcoes-discreta {
+  max-height: 0;
+  padding: 0;
+  border-width: 0;
+  margin: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+}
+
+.grupo-opcoes-ventos.etapa-opcoes-discreta {
+  padding: 0;
+  border-width: 0;
+}
+
+.etapa-opcoes-discreta > * {
+  visibility: hidden;
+}
+
 .campo-vitoria-mao > span {
   color: #607080;
   font-size: 0.78rem;
@@ -236,14 +277,31 @@
 .grupos-opcoes-mao {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   align-items: flex-end;
-  margin-top: 14px;
+  margin-top: 8px;
+  overflow: hidden;
+  transition:
+    max-height 0.28s ease,
+    margin 0.22s ease,
+    opacity 0.22s ease;
+}
+
+.grupos-opcoes-discretos {
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.grupos-opcoes-ativos {
+  max-height: 120px;
+  opacity: 1;
 }
 
 .grupo-opcoes-mao {
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
 
 .grupo-opcoes-dora {
@@ -251,7 +309,7 @@
 }
 
 .grupo-opcoes-ventos {
-  padding: 8px 0 10px;
+  padding: 6px 0 8px;
   border-block: 1px solid #edf0f4;
 }
 
@@ -269,6 +327,13 @@
 .linha-opcoes-mao {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etapa-opcoes-mao,
+  .grupos-opcoes-mao {
+    transition: none;
+  }
 }

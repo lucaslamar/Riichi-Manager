@@ -169,12 +169,12 @@
 
 .card-mao-completa {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .opcoes-mao-embutidas {
-  padding-top: 16px;
-  border-top: 1px solid #edf0f4;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .acao-calcular-mao {
@@ -182,7 +182,27 @@
   grid-template-columns: minmax(160px, 220px) 1fr;
   align-items: center;
   gap: 10px;
+  overflow: hidden;
   padding-top: 2px;
+  transition:
+    max-height 0.28s ease,
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    padding 0.22s ease;
+}
+
+.acao-calcular-mao-discreta {
+  max-height: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+}
+
+.acao-calcular-mao-ativa {
+  max-height: 90px;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .btn-calcular-mao {
@@ -212,6 +232,16 @@
   color: #6b7280;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+.acao-calcular-mao-discreta .btn-calcular-mao {
+  min-height: 34px;
+  background: #e5e7eb;
+  box-shadow: none;
+}
+
+.acao-calcular-mao-discreta .texto-calcular-incompleto {
+  font-size: 0.76rem;
 }
 
 .texto-calcular-pronto,
@@ -249,4 +279,10 @@
   flex-wrap: wrap;
   gap: 24px;
   margin-bottom: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acao-calcular-mao {
+    transition: none;
+  }
 }

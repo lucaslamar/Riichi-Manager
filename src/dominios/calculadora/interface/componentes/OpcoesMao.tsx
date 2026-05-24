@@ -13,23 +13,16 @@ interface PropsOpcoesMao {
 
 /** Controles de riichi e condicoes especiais da vitoria. */
 export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
-  const { mao, atualizarMao, maoAberta } = estado
+  const { mao, atualizarMao, maoAberta, slotsUsados } = estado
   const [ajudaDoraAberta, setAjudaDoraAberta] = useState(false)
   const honba = Number.isFinite(mao.honba) ? mao.honba : 0
+  const mostrarOpcoesTenpai = slotsUsados >= 13
+  const classeEtapa = (ativa: boolean) =>
+    `etapa-opcoes-mao ${ativa ? 'etapa-opcoes-ativa' : 'etapa-opcoes-discreta'}`
 
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-      <div className="campo-vitoria-mao">
-        <span>Vitória</span>
-        <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
-      </div>
-
-      <section className="grupo-opcoes-mao grupo-opcoes-ventos">
-        <span className="rotulo-bloco-opcoes">Configuração de ventos</span>
-        <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
-      </section>
-
-      <section className="grupo-opcoes-mao grupo-opcoes-dora">
+      <section className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarOpcoesTenpai)}`}>
         <span className="rotulo-bloco-opcoes">Doras e Honbas</span>
         <div className="contadores-dora-honba">
           <div className="contador-dora-manual">
@@ -109,8 +102,22 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
         </div>
       </section>
 
-      <div className="grupos-opcoes-mao">
-        <section className="grupo-opcoes-mao">
+      <div className={`campo-vitoria-mao ${classeEtapa(mostrarOpcoesTenpai)}`}>
+        <span>Vitória</span>
+        <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
+      </div>
+
+      <section className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarOpcoesTenpai)}`}>
+        <span className="rotulo-bloco-opcoes">Configuração de ventos</span>
+        <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
+      </section>
+
+      <div
+        className={`grupos-opcoes-mao ${
+          mostrarOpcoesTenpai ? 'grupos-opcoes-ativos' : 'grupos-opcoes-discretos'
+        }`}
+      >
+        <section className={`grupo-opcoes-mao ${classeEtapa(mostrarOpcoesTenpai)}`}>
           <span className="rotulo-bloco-opcoes">Riichi</span>
           <div className="linha-opcoes-mao">
             <BotaoToggle
@@ -155,7 +162,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
           </div>
         </section>
 
-        <section className="grupo-opcoes-mao">
+        <section className={`grupo-opcoes-mao ${classeEtapa(mostrarOpcoesTenpai)}`}>
           <span className="rotulo-bloco-opcoes">Condições especiais</span>
           <div className="linha-opcoes-mao">
             <BotaoToggle

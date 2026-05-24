@@ -149,7 +149,11 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
 
   return (
     <>
-      <div className="acao-calcular-mao">
+      <div
+        className={`acao-calcular-mao ${
+          podeCalcularMao ? 'acao-calcular-mao-ativa' : 'acao-calcular-mao-discreta'
+        }`}
+      >
         <button
           className="btn-calcular-mao"
           type="button"
