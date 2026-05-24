@@ -1,0 +1,167 @@
+﻿/* ─── Calculadora ────────────────────────────────────────────────────────── */
+.cabecalho-calculadora {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.acoes-calculadora .btn-contorno,
+.acoes-calculadora .btn-primario {
+  min-height: 40px;
+  padding: 8px 16px;
+}
+
+.titulo-calculadora {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.titulo-calculadora h2 {
+  margin: 0;
+}
+
+.titulo-calculadora .subtitulo-secao {
+  margin-top: 2px;
+}
+
+.acoes-calculadora {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-acoes-mobile {
+  display: none;
+}
+
+.teclado-pedras {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rotulo-naipe-teclado {
+  margin-bottom: 4px;
+  color: #aaa;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.linha-naipe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.btn-pedra {
+  position: relative;
+  width: 42px;
+  height: 56px;
+  padding: 2px;
+  border: 2px solid #dde1e7;
+  border-radius: 6px;
+  background: var(--branco);
+  font-weight: 900;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.btn-pedra:hover:not(:disabled) {
+  background: var(--info-fundo);
+  border-color: var(--primario);
+}
+.btn-pedra:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.btn-pedra.espera-valida:disabled,
+.btn-pedra.espera-furiten:disabled,
+.btn-pedra.espera-sem-yaku:disabled {
+  opacity: 0.76;
+}
+.btn-pedra.dora-real {
+  border-color: #ec4899;
+  background: #fdf2f8;
+  box-shadow:
+    inset 0 0 0 3px rgba(251, 207, 232, 0.95),
+    0 0 0 1px rgba(236, 72, 153, 0.22);
+}
+.btn-pedra.espera-valida {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  box-shadow:
+    inset 0 0 0 2px rgba(187, 247, 208, 0.9),
+    0 0 0 1px rgba(34, 197, 94, 0.24);
+}
+.btn-pedra.espera-furiten {
+  border-color: #ef4444;
+  background: #fef2f2;
+  box-shadow:
+    inset 0 0 0 2px rgba(254, 202, 202, 0.9),
+    0 0 0 1px rgba(239, 68, 68, 0.28);
+}
+.btn-pedra.espera-sem-yaku {
+  border-color: #ef4444;
+  background: #fef2f2;
+  box-shadow:
+    inset 0 0 0 2px rgba(254, 202, 202, 0.9),
+    0 0 0 1px rgba(239, 68, 68, 0.28);
+}
+.badge-espera-teclado {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  left: 2px;
+  display: flex;
+  min-height: 13px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: #16a34a;
+  color: #fff;
+  font-size: 0.52rem;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+.badge-espera-teclado.furiten {
+  background: #dc2626;
+}
+.badge-espera-teclado.sem-yaku {
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 0.48rem;
+}
+
+.card-mao-completa {
+  display: grid;
+  gap: 18px;
+}
+
+.opcoes-mao-embutidas {
+  padding-top: 16px;
+  border-top: 1px solid #edf0f4;
+}
+
+.seletores-vento-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 14px;
+}
+
+.seletores-rapidos-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 14px;
+}

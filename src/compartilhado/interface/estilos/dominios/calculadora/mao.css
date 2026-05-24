@@ -1,0 +1,255 @@
+.mao-editor-fixo {
+  margin-bottom: 10px;
+  background: var(--branco);
+}
+
+.cabecalho-mao-editor {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.titulo-mao-editor {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: #607080;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.btn-limpar-mao {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-height: 24px;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #ef5350;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.btn-limpar-mao:hover {
+  border-color: #ffcdd2;
+  background: #fff5f5;
+}
+
+.status-tenpai-mao {
+  position: absolute;
+  top: 34px;
+  right: 8px;
+  max-width: 70px;
+  padding: 3px 6px;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  background: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+.status-tenpai-mao.valido {
+  color: #16a34a;
+}
+.status-tenpai-mao.furiten,
+.status-tenpai-mao.sem-yaku {
+  color: #ef4444;
+}
+
+.pedras-selecionadas {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 40px;
+  padding: 8px 62px 8px 8px;
+  background: #f8f9fa;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.chip-acao-meld-ativa {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 30px;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  border: 2px solid;
+  border-radius: 999px;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.pedras-selecionadas.modo-meld-ativo {
+  border-color: #93c5fd;
+  background: #f8fbff;
+  box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.3);
+}
+
+.chip-pedra {
+  width: 34px;
+  height: 46px;
+  padding: 1px;
+  border-radius: 6px;
+  border: 1.5px solid #ddd;
+  background: var(--branco);
+  font-weight: 900;
+  font-family: monospace;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.chip-pedra:hover {
+  border-color: #ef5350;
+}
+
+.pedras-selecionadas.modo-meld-ativo .chip-pedra:hover {
+  border-color: var(--primario);
+  background: var(--info-fundo);
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.16);
+}
+
+.chip-pedra.selecionada-meld {
+  border-color: var(--primario);
+  background: var(--info-fundo);
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.22);
+}
+.chip-pedra.agari {
+  border-color: #f97316;
+  background: #fff7ed;
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.18);
+}
+.pedras-selecionadas.tenpai-valido {
+  border-color: rgba(34, 197, 94, 0.38);
+  background: #f0fdf4;
+}
+.pedras-selecionadas.tenpai-valido .chip-pedra {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.2);
+}
+.pedras-selecionadas.tenpai-alerta {
+  border-color: rgba(239, 83, 80, 0.34);
+  background: #fff5f5;
+}
+.pedras-selecionadas.tenpai-alerta .chip-pedra {
+  border-color: #ef5350;
+  box-shadow: 0 0 0 1px rgba(239, 83, 80, 0.2);
+}
+.chip-pedra.dora {
+  border-color: #ec4899;
+  background: #fdf2f8;
+}
+
+.chip-pedra.descarte {
+  border-color: #111827;
+  background: #f8fafc;
+}
+
+.espera-resultado.furiten {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.16);
+}
+
+.espera-resultado.furiten .chip-pedra {
+  border-color: #ef4444;
+}
+
+.aviso-furiten {
+  margin-top: 8px;
+  color: #fecaca;
+  font-weight: 800;
+}
+
+.indicadores-dora-selecionados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.grupo-indicador-dora {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 6px;
+  border: 1px solid #fbcfe8;
+  border-radius: 8px;
+  background: #fdf2f8;
+}
+
+.grupo-indicador-dora span {
+  color: #be185d;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.grupo-indicador-dora strong {
+  min-width: 24px;
+  color: #be185d;
+  text-align: center;
+}
+
+.indicadores-dora-selecionados.ignorado .grupo-indicador-dora:not(:first-child) {
+  opacity: 0.45;
+}
+
+.descartes-selecionados {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.descartes-selecionados span {
+  color: #111827;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.acoes-construtor-mao {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.acoes-construtor-mao .btn-acao-mao {
+  width: 100%;
+}
+
+.menu-acoes-mao-mobile {
+  display: none;
+}
+
+.chip-pedra.mini {
+  width: 24px;
+  height: 32px;
+  display: inline-flex;
+  cursor: default;
+}

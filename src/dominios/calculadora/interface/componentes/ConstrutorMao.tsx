@@ -1,15 +1,35 @@
-import { useEffect, useRef, useState } from 'react'
-import { ESTILO_MELD, HONRAS, NAIPES, codigoBase, proximaDoraIndicada } from '../constantes'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { codigoBase, proximaDoraIndicada } from '../constantes'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
-import { BotaoAcao } from './Botoes'
-import { PedraSvg, PedrasMeld } from './PedraSvg'
+import { AcoesConstrutorMao } from './construtor-mao/AcoesConstrutorMao'
+import { DescartesMao } from './construtor-mao/DescartesMao'
+import { IndicadoresDora } from './construtor-mao/IndicadoresDora'
+import { MaoAtual } from './construtor-mao/MaoAtual'
+import { TecladoPedras } from './construtor-mao/TecladoPedras'
 
 interface PropsConstrutorMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
 }
 
-/** Área para montar a mão completa pedra por pedra. */
+const ROTULOS_ACAO_MOBILE = {
+  chii: { rotulo: 'Chii', cor: '#4caf50' },
+  pon: { rotulo: 'Pon', cor: '#2196f3' },
+  kanAberto: { rotulo: 'Kan aberto', cor: '#ba68c8' },
+  kanFechado: { rotulo: 'Kan fechado', cor: '#9c27b0' },
+  dora: { rotulo: 'Dora', cor: '#ec4899' },
+  uradora: { rotulo: 'Uradora', cor: '#ec4899' },
+  descarte: { rotulo: 'Descartes', cor: '#111827' },
+}
+
+/**
+ * Área para montar a mão completa pedra por pedra.
+ *
+ * Como ler este componente:
+ * - aqui ficam apenas estados de interface local, como sticky e menu mobile;
+ * - dados derivados leves são preparados e repassados para subcomponentes;
+ * - a edição real da mão continua no hook `useCalculadoraMao`.
+ */
 export default function ConstrutorMao({ estado, embutido = false }: PropsConstrutorMao) {
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
   const [maoEditorGrudado, setMaoEditorGrudado] = useState(false)
@@ -22,8 +42,6 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     totalPedras,
     slotsUsados,
     maoCompleta,
-    contarCodigo,
-    contarAka,
     podeSelecionarPedra,
     adicionarPedra,
     removerPedra,
@@ -35,13 +53,23 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     podeKanFechado,
     esperasPossiveis,
   } = estado
-  const dorasReais = new Set(
-    mao.doraManual > 0
-      ? []
-      : [...mao.dora, ...mao.uradora].map((indicador) =>
-          codigoBase(proximaDoraIndicada(indicador)),
-        ),
+
+  /**
+   * Converte indicadores escolhidos em doras reais para destacar o teclado.
+   * Quando há dora manual, indicadores visuais são ignorados pelo cálculo.
+   */
+  const dorasReais = useMemo(
+    () =>
+      new Set(
+        mao.doraManual > 0
+          ? []
+          : [...mao.dora, ...mao.uradora].map((indicador) =>
+              codigoBase(proximaDoraIndicada(indicador)),
+            ),
+      ),
+    [mao.dora, mao.doraManual, mao.uradora],
   )
+
   const temEsperaValida = esperasPossiveis.some((espera) => !espera.semYaku)
   const temEsperaSemYaku = esperasPossiveis.some((espera) => espera.semYaku)
   const temEsperaFuriten = esperasPossiveis.some((espera) => !espera.semYaku && espera.furiten)
@@ -53,31 +81,26 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         ? 'Sem yaku'
         : null
   const filtrarTecladoPorEspera = slotsUsados === 13 && !acaoPendente && temEsperaValida
-  const esperasPorPedra = new Map(
-    esperasPossiveis.map((espera) => [codigoBase(espera.pedra), espera]),
+  const esperasPorPedra = useMemo(
+    () => new Map(esperasPossiveis.map((espera) => [codigoBase(espera.pedra), espera])),
+    [esperasPossiveis],
   )
+
+  /** Texto curto exibido dentro do badge de espera no teclado. */
   const rotuloEsperaTeclado = (espera: (typeof esperasPossiveis)[number]) => {
     if (espera.semYaku) return 'sem yaku'
     if (espera.yakuman > 0) return `${espera.yakuman}x`
     return `${espera.han} han`
   }
+
+  /** Classe visual que separa espera válida, furiten e espera sem yaku. */
   const classeEsperaTeclado = (espera?: (typeof esperasPossiveis)[number]) => {
     if (!espera) return ''
     if (espera.semYaku) return 'espera-sem-yaku'
     return espera.furiten ? 'espera-valida espera-furiten' : 'espera-valida'
   }
-  const acaoMobileAtiva =
-    acaoPendente == null
-      ? null
-      : {
-          chii: { rotulo: 'Chii', cor: '#4caf50' },
-          pon: { rotulo: 'Pon', cor: '#2196f3' },
-          kanAberto: { rotulo: 'Kan aberto', cor: '#ba68c8' },
-          kanFechado: { rotulo: 'Kan fechado', cor: '#9c27b0' },
-          dora: { rotulo: 'Dora', cor: '#ec4899' },
-          uradora: { rotulo: 'Uradora', cor: '#ec4899' },
-          descarte: { rotulo: 'Descartes', cor: '#111827' },
-        }[acaoPendente.tipo]
+
+  const acaoMobileAtiva = acaoPendente ? ROTULOS_ACAO_MOBILE[acaoPendente.tipo] : null
   const acaoMeldAtiva =
     acaoPendente?.tipo === 'chii' ||
     acaoPendente?.tipo === 'pon' ||
@@ -85,26 +108,30 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     acaoPendente?.tipo === 'kanFechado'
       ? acaoPendente
       : null
-  const indicesSelecionadosChii = new Set<number>()
-  if (acaoPendente?.tipo === 'chii') {
+
+  /**
+   * Marca na mão fechada as pedras já escolhidas durante uma ação de chii.
+   * A comparação usa código base para tratar aka dora como equivalente ao 5 normal.
+   */
+  const indicesSelecionadosChii = useMemo(() => {
+    const indicesSelecionados = new Set<number>()
+    if (acaoPendente?.tipo !== 'chii') return indicesSelecionados
+
     for (const pedraSelecionada of acaoPendente.pedras) {
       const indice = mao.pedras.findIndex(
-        (pedraMao, i) =>
-          !indicesSelecionadosChii.has(i) && codigoBase(pedraMao) === codigoBase(pedraSelecionada),
+        (pedraMao, indicePedra) =>
+          !indicesSelecionados.has(indicePedra) &&
+          codigoBase(pedraMao) === codigoBase(pedraSelecionada),
       )
-      if (indice >= 0) indicesSelecionadosChii.add(indice)
+      if (indice >= 0) indicesSelecionados.add(indice)
     }
-  }
+    return indicesSelecionados
+  }, [acaoPendente, mao.pedras])
+
+  /** Troca o modo do próximo clique e fecha o menu mobile para manter feedback imediato. */
   const alternarAcaoMao = (tipo: Parameters<typeof alternarAcao>[0]) => {
     alternarAcao(tipo)
     setMenuAcoesMaoAberto(false)
-  }
-  const clicarPedraDaMao = (indicePedra: number) => {
-    if (acaoMeldAtiva) {
-      adicionarPedra(mao.pedras[indicePedra])
-      return
-    }
-    removerPedra(indicePedra)
   }
 
   useEffect(() => {
@@ -125,446 +152,58 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
   }, [])
 
   return (
-    <>
-      {/* Card 1: construtor de mão */}
-      <div className={embutido ? undefined : 'card'}>
-        <div ref={sentinelaStickyRef} aria-hidden="true" />
-        <div className={`mao-editor-fixo ${maoEditorGrudado ? 'grudado' : ''}`}>
-          <div className="cabecalho-mao-editor">
-            <h3 className="titulo-mao-editor">
-              <i className="fas fa-layer-group" style={{ marginRight: 6 }} />
-              Mão ({totalPedras} pedras · {slotsUsados}/14 slots)
-            </h3>
-          </div>
+    <div className={embutido ? undefined : 'card'}>
+      <div ref={sentinelaStickyRef} aria-hidden="true" />
+      <MaoAtual
+        mao={mao}
+        acaoPendente={acaoPendente}
+        acaoMeldAtiva={acaoMeldAtiva}
+        acaoMobileAtiva={acaoMobileAtiva}
+        totalPedras={totalPedras}
+        slotsUsados={slotsUsados}
+        maoEditorGrudado={maoEditorGrudado}
+        menuAcoesMaoAberto={menuAcoesMaoAberto}
+        indicesSelecionadosChii={indicesSelecionadosChii}
+        statusTenpai={statusTenpai}
+        temEsperaValida={temEsperaValida}
+        temEsperaSemYaku={temEsperaSemYaku}
+        temEsperaFuriten={temEsperaFuriten}
+        podeMeld={podeMeld}
+        podeKanFechado={podeKanFechado}
+        aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
+        aoAlternarAcao={alternarAcaoMao}
+        aoAdicionarPedra={adicionarPedra}
+        aoRemoverPedra={removerPedra}
+        aoRemoverMeld={removerMeld}
+        aoLimpar={limpar}
+      />
 
-          {/* Área de pedras e melds */}
-          {acaoMeldAtiva && (
-            <button
-              className="chip-acao-meld-ativa"
-              type="button"
-              style={{ borderColor: acaoMobileAtiva?.cor, color: acaoMobileAtiva?.cor }}
-              onClick={() => alternarAcao(acaoMeldAtiva.tipo)}
-            >
-              {acaoMobileAtiva?.rotulo} ativo x
-            </button>
-          )}
+      <IndicadoresDora mao={mao} atualizarMao={atualizarMao} />
+      <DescartesMao descartes={mao.descartes} aoRemoverDescarte={removerDescarte} />
 
-          <div
-            className={`pedras-selecionadas ${
-              temEsperaFuriten || temEsperaSemYaku
-                ? 'tenpai-alerta'
-                : temEsperaValida
-                  ? 'tenpai-valido'
-                  : ''
-            } ${acaoMeldAtiva ? 'modo-meld-ativo' : ''}`}
-          >
-            {totalPedras > 0 && (
-              <button className="btn-limpar-mao" type="button" onClick={limpar}>
-                Limpar
-              </button>
-            )}
-            {statusTenpai && (
-              <span
-                className={`status-tenpai-mao ${
-                  temEsperaFuriten ? 'furiten' : temEsperaValida ? 'valido' : 'sem-yaku'
-                }`}
-              >
-                {statusTenpai}
-              </span>
-            )}
-            {mao.pedras.map((pedra, i) => (
-              <button
-                key={i}
-                className={`chip-pedra ${i === mao.indiceAgari ? 'agari' : ''} ${
-                  indicesSelecionadosChii.has(i) ? 'selecionada-meld' : ''
-                }`}
-                type="button"
-                title={
-                  i === mao.indiceAgari
-                    ? 'Pedra de agari — clique para remover'
-                    : 'Clique para remover'
-                }
-                onClick={() => clicarPedraDaMao(i)}
-              >
-                <PedraSvg pedra={pedra} />
-              </button>
-            ))}
-
-            {/* Melds com cores distintas e rótulo de tipo */}
-            {mao.melds.map((meld, i) => {
-              const estilo = ESTILO_MELD[meld.tipo]
-              return (
-                <button
-                  key={`meld-${i}`}
-                  type="button"
-                  title={`${estilo.rotulo} — clique para remover`}
-                  onClick={() => removerMeld(i)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    padding: '3px 8px',
-                    borderRadius: 6,
-                    border: `2px solid ${estilo.borda}`,
-                    background: '#ffffff',
-                    fontWeight: 900,
-                    fontFamily: 'monospace',
-                    fontSize: '0.82rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: '0.65rem',
-                      fontWeight: 900,
-                      color: estilo.borda,
-                      marginRight: 2,
-                      letterSpacing: 0,
-                    }}
-                  >
-                    {estilo.rotulo}
-                  </span>
-                  <PedrasMeld meld={meld} />
-                </button>
-              )
-            })}
-
-            {totalPedras === 0 && (
-              <span style={{ color: '#bbb', fontSize: '0.85rem', alignSelf: 'center' }}>
-                Clique nas pedras abaixo para montar a mão
-              </span>
-            )}
-          </div>
-          <div className={`menu-acoes-mao-mobile ${menuAcoesMaoAberto ? 'aberto' : ''}`}>
-            <button
-              className={`btn-contorno btn-menu-acoes-mao ${acaoMobileAtiva ? 'ativo' : ''}`}
-              type="button"
-              aria-expanded={menuAcoesMaoAberto}
-              style={
-                acaoMobileAtiva
-                  ? {
-                      borderColor: acaoMobileAtiva.cor,
-                      background: acaoMobileAtiva.cor,
-                      color: '#ffffff',
-                    }
-                  : undefined
-              }
-              onClick={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
-            >
-              {acaoMobileAtiva?.rotulo ?? 'Ações'}
-            </button>
-            <div className="opcoes-acoes-mao-mobile">
-              <BotaoAcao
-                tipo="chii"
-                rotulo="Chi"
-                cor="#4caf50"
-                ativo={acaoPendente?.tipo === 'chii'}
-                desabilitado={!podeMeld}
-                aoClicar={() => alternarAcaoMao('chii')}
-              />
-              <BotaoAcao
-                tipo="pon"
-                rotulo="Pon"
-                cor="#2196f3"
-                ativo={acaoPendente?.tipo === 'pon'}
-                desabilitado={!podeMeld}
-                aoClicar={() => alternarAcaoMao('pon')}
-              />
-              <BotaoAcao
-                tipo="kanAberto"
-                rotulo="Kan"
-                cor="#ba68c8"
-                ativo={acaoPendente?.tipo === 'kanAberto'}
-                desabilitado={!podeMeld}
-                aoClicar={() => alternarAcaoMao('kanAberto')}
-              />
-              <BotaoAcao
-                tipo="kanFechado"
-                rotulo="K. fechado"
-                cor="#9c27b0"
-                ativo={acaoPendente?.tipo === 'kanFechado'}
-                desabilitado={!podeKanFechado}
-                aoClicar={() => alternarAcaoMao('kanFechado')}
-              />
-              <BotaoAcao
-                tipo="dora"
-                rotulo="Dora"
-                cor="#ec4899"
-                ativo={acaoPendente?.tipo === 'dora'}
-                desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
-                aoClicar={() => alternarAcaoMao('dora')}
-              />
-              <BotaoAcao
-                tipo="uradora"
-                rotulo="Uradora"
-                cor="#ec4899"
-                ativo={acaoPendente?.tipo === 'uradora'}
-                desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
-                aoClicar={() => alternarAcaoMao('uradora')}
-              />
-              <BotaoAcao
-                tipo="descarte"
-                rotulo="Descartes"
-                cor="#111827"
-                ativo={acaoPendente?.tipo === 'descarte'}
-                desabilitado={false}
-                aoClicar={() => alternarAcaoMao('descarte')}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Dora e Uradora exibidos */}
-        {(mao.dora.length > 0 || mao.uradora.length > 0 || mao.doraManual > 0) && (
-          <div className={`indicadores-dora-selecionados ${mao.doraManual > 0 ? 'ignorado' : ''}`}>
-            {mao.doraManual > 0 && (
-              <div className="grupo-indicador-dora">
-                <span>Dora manual</span>
-                <strong>{mao.doraManual}</strong>
-              </div>
-            )}
-            {mao.dora.length > 0 && (
-              <div className="grupo-indicador-dora">
-                <span>Dora</span>
-                {mao.dora.map((pedraDora, i) => (
-                  <button
-                    key={i}
-                    className="chip-pedra dora"
-                    type="button"
-                    onClick={() =>
-                      atualizarMao((rascunho) => {
-                        rascunho.dora.splice(i, 1)
-                      })
-                    }
-                  >
-                    <PedraSvg pedra={pedraDora} />
-                  </button>
-                ))}
-              </div>
-            )}
-            {mao.uradora.length > 0 && (
-              <div className="grupo-indicador-dora">
-                <span>Uradora</span>
-                {mao.uradora.map((pedraUradora, i) => (
-                  <button
-                    key={i}
-                    className="chip-pedra dora"
-                    type="button"
-                    onClick={() =>
-                      atualizarMao((rascunho) => {
-                        rascunho.uradora.splice(i, 1)
-                      })
-                    }
-                  >
-                    <PedraSvg pedra={pedraUradora} />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Botões de ação com cores distintas */}
-        {mao.descartes.length > 0 && (
-          <div className="descartes-selecionados">
-            <span>Descartes</span>
-            {mao.descartes.map((pedraDescarte, i) => (
-              <button
-                key={`${pedraDescarte}-${i}`}
-                className="chip-pedra descarte"
-                type="button"
-                title="Descarte proprio - clique para remover"
-                onClick={() => removerDescarte(i)}
-              >
-                <PedraSvg pedra={pedraDescarte} />
-              </button>
-            ))}
-          </div>
-        )}
-
-        <div className="acoes-construtor-mao">
-          <BotaoAcao
-            tipo="chii"
-            rotulo="Chii"
-            cor="#4caf50"
-            ativo={acaoPendente?.tipo === 'chii'}
-            desabilitado={!podeMeld}
-            aoClicar={() => alternarAcaoMao('chii')}
-          />
-          <BotaoAcao
-            tipo="pon"
-            rotulo="Pon"
-            cor="#2196f3"
-            ativo={acaoPendente?.tipo === 'pon'}
-            desabilitado={!podeMeld}
-            aoClicar={() => alternarAcaoMao('pon')}
-          />
-          <BotaoAcao
-            tipo="kanAberto"
-            rotulo="Kan (aberto)"
-            cor="#ba68c8"
-            ativo={acaoPendente?.tipo === 'kanAberto'}
-            desabilitado={!podeMeld}
-            aoClicar={() => alternarAcaoMao('kanAberto')}
-          />
-          <BotaoAcao
-            tipo="kanFechado"
-            rotulo="Kan (fechado)"
-            cor="#9c27b0"
-            ativo={acaoPendente?.tipo === 'kanFechado'}
-            desabilitado={!podeKanFechado}
-            aoClicar={() => alternarAcaoMao('kanFechado')}
-          />
-          <BotaoAcao
-            tipo="dora"
-            rotulo="Dora"
-            cor="#ec4899"
-            ativo={acaoPendente?.tipo === 'dora'}
-            desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
-            aoClicar={() => alternarAcaoMao('dora')}
-          />
-          <BotaoAcao
-            tipo="uradora"
-            rotulo="Uradora"
-            cor="#ec4899"
-            ativo={acaoPendente?.tipo === 'uradora'}
-            desabilitado={mao.doraManual > 0 || mao.riichi === null || mao.uradora.length >= 5}
-            aoClicar={() => alternarAcaoMao('uradora')}
-          />
-          <BotaoAcao
-            tipo="descarte"
-            rotulo="Descartes"
-            cor="#111827"
-            ativo={acaoPendente?.tipo === 'descarte'}
-            desabilitado={false}
-            aoClicar={() => alternarAcaoMao('descarte')}
-          />
-        </div>
-
-        {/* Teclado de pedras */}
-        <div className="teclado-pedras">
-          {NAIPES.map(({ naipe, rotulo }) => (
-            <div key={naipe} className={`grupo-teclado-naipe grupo-teclado-${naipe}`}>
-              <div className="rotulo-naipe-teclado" data-mobile-label={naipe === 'm' ? '万' : naipe === 'p' ? '筒' : '索'}>
-                {rotulo}
-              </div>
-              <div className="linha-naipe">
-                {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) => {
-                  const codigo = `${numero}${naipe}`
-                  const cheiaESemAcao = maoCompleta && !acaoPendente
-                  const invalidaParaAcao = !podeSelecionarPedra(codigo)
-                  const ehDoraReal = dorasReais.has(codigoBase(codigo))
-                  const espera = esperasPorPedra.get(codigoBase(codigo))
-                  const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
-                  return (
-                    <button
-                      key={codigo}
-                      className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''} ${classeEsperaTeclado(espera)}`}
-                      type="button"
-                      title={
-                        espera
-                          ? `${rotuloEsperaTeclado(espera)}${espera.furiten ? ' - furiten' : ''}`
-                          : undefined
-                      }
-                      disabled={cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera}
-                      onClick={() => adicionarPedra(codigo)}
-                    >
-                      <PedraSvg pedra={codigo} />
-                      {espera && (
-                        <span
-                          className={`badge-espera-teclado ${
-                            espera.semYaku ? 'sem-yaku' : espera.furiten ? 'furiten' : ''
-                          }`}
-                        >
-                          {rotuloEsperaTeclado(espera)}
-                        </span>
-                      )}
-                    </button>
-                  )
-                })}
-                {configuracao.akadora &&
-                  mao.doraManual === 0 &&
-                  (() => {
-                    const codigo = `0${naipe}`
-                    const cheiaESemAcao = maoCompleta && !acaoPendente
-                    const invalidaParaAcao = !podeSelecionarPedra(codigo)
-                    const ehDoraReal = dorasReais.has(codigoBase(codigo))
-                    const espera = esperasPorPedra.get(codigoBase(codigo))
-                    const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
-                    return (
-                      <button
-                        key={codigo}
-                        className={`btn-pedra btn-pedra-aka ${ehDoraReal ? 'dora-real' : ''} ${classeEsperaTeclado(espera)}`}
-                        type="button"
-                        title={
-                          espera
-                            ? `5 vermelho (aka dora) - ${rotuloEsperaTeclado(espera)}${
-                                espera.furiten ? ' - furiten' : ''
-                              }`
-                            : '5 vermelho (aka dora)'
-                        }
-                        disabled={cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera}
-                        onClick={() => adicionarPedra(codigo)}
-                      >
-                        <PedraSvg pedra={codigo} />
-                        {espera && (
-                          <span
-                            className={`badge-espera-teclado ${
-                              espera.semYaku ? 'sem-yaku' : espera.furiten ? 'furiten' : ''
-                            }`}
-                          >
-                            {rotuloEsperaTeclado(espera)}
-                          </span>
-                        )}
-                      </button>
-                    )
-                  })()}
-              </div>
-            </div>
-          ))}
-          <div className="grupo-teclado-naipe grupo-teclado-honras">
-            <div className="rotulo-naipe-teclado" data-mobile-label="字">
-              Honras (Jihai / Kazehai)
-            </div>
-            <div className="linha-naipe">
-              {HONRAS.map((codigo) => {
-                const ehDoraReal = dorasReais.has(codigoBase(codigo))
-                const espera = esperasPorPedra.get(codigoBase(codigo))
-                const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
-                return (
-                  <button
-                    key={codigo}
-                    className={`btn-pedra ${ehDoraReal ? 'dora-real' : ''} ${classeEsperaTeclado(espera)}`}
-                    type="button"
-                    title={
-                      espera
-                        ? `${rotuloEsperaTeclado(espera)}${espera.furiten ? ' - furiten' : ''}`
-                        : undefined
-                    }
-                    disabled={
-                      (maoCompleta && !acaoPendente) ||
-                      !podeSelecionarPedra(codigo) ||
-                      bloqueadaPorEspera
-                    }
-                    onClick={() => adicionarPedra(codigo)}
-                  >
-                    <PedraSvg pedra={codigo} />
-                    {espera && (
-                      <span
-                        className={`badge-espera-teclado ${
-                          espera.semYaku ? 'sem-yaku' : espera.furiten ? 'furiten' : ''
-                        }`}
-                      >
-                        {rotuloEsperaTeclado(espera)}
-                      </span>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </div>
+      <div className="acoes-construtor-mao">
+        <AcoesConstrutorMao
+          mao={mao}
+          acaoPendente={acaoPendente}
+          podeMeld={podeMeld}
+          podeKanFechado={podeKanFechado}
+          aoAlternarAcao={alternarAcaoMao}
+        />
       </div>
-    </>
+
+      <TecladoPedras
+        acaoPendente={acaoPendente}
+        configuracao={configuracao}
+        doraManual={mao.doraManual}
+        dorasReais={dorasReais}
+        esperasPorPedra={esperasPorPedra}
+        filtrarTecladoPorEspera={filtrarTecladoPorEspera}
+        maoCompleta={maoCompleta}
+        podeSelecionarPedra={podeSelecionarPedra}
+        rotuloEsperaTeclado={rotuloEsperaTeclado}
+        classeEsperaTeclado={classeEsperaTeclado}
+        aoAdicionarPedra={adicionarPedra}
+      />
+    </div>
   )
 }

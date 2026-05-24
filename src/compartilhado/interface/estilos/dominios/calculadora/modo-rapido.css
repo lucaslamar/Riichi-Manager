@@ -1,0 +1,85 @@
+.card-calculadora-rapida {
+  display: flex;
+  flex-direction: column;
+  max-width: 860px;
+  margin-inline: auto;
+  padding: 28px;
+}
+
+.card-calculadora-rapida .seletores-rapidos-mao {
+  order: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto 26px;
+}
+
+.card-calculadora-rapida .campo-vitoria-mao {
+  width: 100%;
+}
+
+.card-calculadora-rapida .toggle-agari-mao {
+  width: 100%;
+  min-width: 0;
+}
+
+.contador-honba-rapido {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.grade-calculadora-rapida {
+  order: 2;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(240px, 0.82fr);
+  gap: 18px;
+  align-items: start;
+  max-width: 720px;
+  margin: 0 auto 20px;
+}
+
+.seletor-rapido {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  padding: 16px;
+  border: 1px solid #edf0f4;
+  border-radius: 8px;
+  background: #f8fbff;
+}
+
+.rotulo-seletor-rapido {
+  color: #607080;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.botoes-seletor-rapido {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.botoes-seletor-rapido .btn-primario,
+.botoes-seletor-rapido .btn-contorno {
+  min-height: 40px;
+  padding: 6px 10px;
+  white-space: normal;
+}
+
+.seletor-rapido > span {
+  color: #9aa6b2;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.resultado-rapido {
+  order: 3;
+  width: min(100%, 640px);
+  margin: 0 auto;
+  padding: 34px 48px;
+}

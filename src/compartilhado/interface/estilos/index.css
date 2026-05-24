@@ -7,5 +7,5 @@
 @import './componentes/formularios.css';
 @import './componentes/placeholder.css';
 @import './dominios/torneio-fast.css';
-@import './dominios/calculadora.css';
+@import './dominios/calculadora/index.css';
 @import './responsivo.css';
