@@ -48,12 +48,9 @@ export function BotaoToggle({
   return (
     <button
       type="button"
-      className={ativo ? 'btn-primario' : 'btn-contorno'}
+      className={`btn-toggle-mao ${ativo ? 'btn-primario ativo' : 'btn-contorno'}`}
       disabled={desabilitado}
       style={{
-        minHeight: 36,
-        padding: '7px 14px',
-        fontSize: '0.85rem',
         borderColor: ativo && corAtiva ? corAtiva : undefined,
         background: ativo && corAtiva ? corAtiva : undefined,
         color: ativo && corAtiva ? 'white' : undefined,

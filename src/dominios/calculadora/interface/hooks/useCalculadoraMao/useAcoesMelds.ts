@@ -30,7 +30,6 @@ export function useAcoesMelds({
   acaoPendente,
   slotsUsados,
 }: ParametrosAcoesMelds): AcoesMeldsCalculadora {
-  const montagemDiretaDeMeld = mao.pedras.length === 0
   const todasPedras = useMemo(
     () => [
       ...mao.pedras,
@@ -53,29 +52,6 @@ export function useAcoesMelds({
   const contarAka = useCallback(
     (codigo: CodigoPedra) => todasPedras.filter((pedraVisivel) => pedraVisivel === codigo).length,
     [todasPedras],
-  )
-
-  const contarNaMaoPorBase = useCallback(
-    (codigo: CodigoPedra) =>
-      mao.pedras.filter((pedraMao) => codigoBase(pedraMao) === codigoBase(codigo)).length,
-    [mao.pedras],
-  )
-
-  const maoTemGrupo = useCallback(
-    (pedras: CodigoPedra[]) => {
-      const indicesUsados = new Set<number>()
-
-      return pedras.every((pedra) => {
-        const indice = mao.pedras.findIndex(
-          (pedraMao, indicePedra) =>
-            !indicesUsados.has(indicePedra) && codigoBase(pedraMao) === codigoBase(pedra),
-        )
-        if (indice < 0) return false
-        indicesUsados.add(indice)
-        return true
-      })
-    },
-    [mao.pedras],
   )
 
   const indicesPedrasNaMaoPara = useCallback(
@@ -101,7 +77,6 @@ export function useAcoesMelds({
   const podeFormarMeldComMao = useCallback(
     (pedras: CodigoPedra[], slotsMeld = 3) => {
       const indicesRemovidos = indicesPedrasNaMaoPara(pedras)
-      if (!montagemDiretaDeMeld && indicesRemovidos.length !== pedras.length) return false
 
       const slotsLiquidos = slotsMeld - indicesRemovidos.length
       if (slotsUsados + slotsLiquidos > 14) return false
@@ -127,7 +102,7 @@ export function useAcoesMelds({
         return totalBase <= 4 && totalAka <= 1
       })
     },
-    [indicesPedrasNaMaoPara, mao, montagemDiretaDeMeld, slotsUsados],
+    [indicesPedrasNaMaoPara, mao, slotsUsados],
   )
 
   const podeAdicionarPedras = useCallback(
@@ -162,13 +137,9 @@ export function useAcoesMelds({
       return [1, 2, 3, 4, 5, 6, 7]
         .filter((inicio) => numeros.every((numero) => numero >= inicio && numero <= inicio + 2))
         .map((inicio) => [inicio, inicio + 1, inicio + 2].map((numero) => `${numero}${naipe}`))
-        .filter(
-          (sequencia) =>
-            (montagemDiretaDeMeld || maoTemGrupo(sequencia)) &&
-            podeFormarMeldComMao(ordenarPedras([...sequencia])),
-        )
+        .filter((sequencia) => podeFormarMeldComMao(ordenarPedras([...sequencia])))
     },
-    [maoTemGrupo, montagemDiretaDeMeld, podeFormarMeldComMao],
+    [podeFormarMeldComMao],
   )
 
   const sequenciasChiiDisponiveis = useMemo(() => {
@@ -179,44 +150,39 @@ export function useAcoesMelds({
         const sequencia = [inicio, inicio + 1, inicio + 2].map(
           (numero) => `${numero}${naipe}`,
         )
-        if (
-          (montagemDiretaDeMeld || maoTemGrupo(sequencia)) &&
-          podeFormarMeldComMao(ordenarPedras([...sequencia]))
-        ) {
+        if (podeFormarMeldComMao(ordenarPedras([...sequencia]))) {
           sequencias.push(sequencia)
         }
       }
     }
 
     return sequencias
-  }, [maoTemGrupo, montagemDiretaDeMeld, podeFormarMeldComMao])
+  }, [podeFormarMeldComMao])
 
   const podeChii = sequenciasChiiDisponiveis.length > 0
   const podePon = useMemo(
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
         const pedras = expandirGrupoMesmoValor(codigo, 3)
-        return (montagemDiretaDeMeld || maoTemGrupo(pedras)) && podeFormarMeldComMao(pedras)
+        return podeFormarMeldComMao(pedras)
       }),
-    [maoTemGrupo, montagemDiretaDeMeld, podeFormarMeldComMao],
+    [podeFormarMeldComMao],
   )
   const podeKanAberto = useMemo(
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
         const pedras = expandirGrupoMesmoValor(codigo, 4)
-        return (montagemDiretaDeMeld || maoTemGrupo(pedras)) && podeFormarMeldComMao(pedras)
+        return podeFormarMeldComMao(pedras)
       }),
-    [maoTemGrupo, montagemDiretaDeMeld, podeFormarMeldComMao],
+    [podeFormarMeldComMao],
   )
   const podeKanFechado = useMemo(
     () =>
-      montagemDiretaDeMeld ||
-      mao.pedras.some(
-        (pedra) =>
-          contarNaMaoPorBase(pedra) >= 4 &&
-          podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4)),
-      ),
-    [contarNaMaoPorBase, mao.pedras, montagemDiretaDeMeld, podeFormarMeldComMao],
+      CODIGOS_BASE_MELD.some((codigo) => {
+        const pedras = expandirGrupoMesmoValor(codigo, 4)
+        return podeFormarMeldComMao(pedras)
+      }),
+    [podeFormarMeldComMao],
   )
 
   const podeSelecionarPedra = useCallback(
@@ -228,20 +194,11 @@ export function useAcoesMelds({
         case 'descarte':
           return podeAdicionarPedras([pedra])
         case 'pon':
-          return (
-            (montagemDiretaDeMeld || maoTemGrupo(expandirGrupoMesmoValor(pedra, 3))) &&
-            podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 3))
-          )
+          return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 3))
         case 'kanAberto':
-          return (
-            (montagemDiretaDeMeld || maoTemGrupo(expandirGrupoMesmoValor(pedra, 4))) &&
-            podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4))
-          )
+          return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4))
         case 'kanFechado':
-          return (
-            (montagemDiretaDeMeld || contarNaMaoPorBase(pedra) >= 4) &&
-            podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4))
-          )
+          return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4))
         case 'chii': {
           const pedrasChii = [...acaoPendente.pedras, pedra]
           return (
@@ -253,9 +210,6 @@ export function useAcoesMelds({
     },
     [
       acaoPendente,
-      contarNaMaoPorBase,
-      maoTemGrupo,
-      montagemDiretaDeMeld,
       podeAdicionarPedras,
       podeFormarMeldComMao,
       sequenciasChiiPossiveis,

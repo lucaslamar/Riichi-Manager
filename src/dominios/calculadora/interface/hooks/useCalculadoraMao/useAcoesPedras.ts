@@ -57,7 +57,6 @@ export function useAcoesPedras({
    * O contrato é nunca ultrapassar limite físico de pedras nem completar além de 14 slots.
    */
   const adicionarPedra = (pedra: CodigoPedra) => {
-    const montagemDiretaDeMeld = mao.pedras.length === 0
     const manterAcaoMeld = () =>
       setAcaoPendente(slotsUsados <= 11 ? criarAcao(acaoPendente!.tipo) : null)
 
@@ -152,21 +151,18 @@ export function useAcoesPedras({
         return
       case 'pon': {
         const pedras = expandirGrupoMesmoValor(pedra, 3)
-        if (!montagemDiretaDeMeld && indicesPedrasNaMaoPara(pedras).length < 3) return
         if (!aplicarMeld('pon', pedras, true)) return
         manterAcaoMeld()
         return
       }
       case 'kanAberto': {
         const pedras = expandirGrupoMesmoValor(pedra, 4)
-        if (!montagemDiretaDeMeld && indicesPedrasNaMaoPara(pedras).length < 4) return
         if (!aplicarMeld('kanAberto', pedras, true)) return
         manterAcaoMeld()
         return
       }
       case 'kanFechado': {
         const pedras = expandirGrupoMesmoValor(pedra, 4)
-        if (!montagemDiretaDeMeld && indicesPedrasNaMaoPara(pedras).length < 4) return
         if (!aplicarMeld('kanFechado', pedras, false)) return
         manterAcaoMeld()
         return

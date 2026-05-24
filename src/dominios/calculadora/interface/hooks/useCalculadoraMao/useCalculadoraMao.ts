@@ -40,6 +40,11 @@ export function useCalculadoraMao() {
     maoCompleta,
   } = estado
   const [assinaturaCalculo, setAssinaturaCalculo] = useState<string | null>(null)
+  const [fluxoOpcoes, setFluxoOpcoes] = useState({
+    vitoriaDefinida: false,
+    ventoRodadaDefinido: false,
+    ventoAssentoDefinido: false,
+  })
   const assinaturaMaoAtual = useMemo(
     () =>
       JSON.stringify({
@@ -100,10 +105,37 @@ export function useCalculadoraMao() {
     !resultados.furitenRonCompleto &&
     !resultadoComYakuValido
   const podeCalcularMao = slotsUsados >= 14
+  const fluxoConfiguracaoCompleto =
+    fluxoOpcoes.vitoriaDefinida &&
+    fluxoOpcoes.ventoRodadaDefinido &&
+    fluxoOpcoes.ventoAssentoDefinido
   const calcularMaoAtual = () => {
-    if (!podeCalcularMao) return
+    if (!podeCalcularMao || !fluxoConfiguracaoCompleto) return
     setAssinaturaCalculo(assinaturaMaoAtual)
   }
+
+  const marcarVitoriaDefinida = () =>
+    setFluxoOpcoes((fluxoAtual) => ({ ...fluxoAtual, vitoriaDefinida: true }))
+
+  const marcarVentoRodadaDefinido = () =>
+    setFluxoOpcoes((fluxoAtual) => ({ ...fluxoAtual, ventoRodadaDefinido: true }))
+
+  const marcarVentoAssentoDefinido = () =>
+    setFluxoOpcoes((fluxoAtual) => ({ ...fluxoAtual, ventoAssentoDefinido: true }))
+
+  useEffect(() => {
+    if (slotsUsados >= 13) return
+
+    setAcaoPendente((acaoAtual) =>
+      acaoAtual?.tipo === 'dora' || acaoAtual?.tipo === 'uradora' ? null : acaoAtual,
+    )
+    setFluxoOpcoes({
+      vitoriaDefinida: false,
+      ventoRodadaDefinido: false,
+      ventoAssentoDefinido: false,
+    })
+    setAssinaturaCalculo(null)
+  }, [setAcaoPendente, slotsUsados])
 
   useEffect(() => {
     if (!acaoPendente) return
@@ -134,10 +166,15 @@ export function useCalculadoraMao() {
     podeSelecionarPedra: acoesMelds.podeSelecionarPedra,
     ...resultados,
     deveCalcularMao,
-    podeCalcularMao,
+    podeCalcularMao: podeCalcularMao && fluxoConfiguracaoCompleto,
     calcularMaoAtual,
     resultadoComYakuValido,
     resultadoMaoInvalida,
+    fluxoOpcoes,
+    fluxoConfiguracaoCompleto,
+    marcarVitoriaDefinida,
+    marcarVentoRodadaDefinido,
+    marcarVentoAssentoDefinido,
     esperasPossiveis,
     calculandoEsperas,
     ...acoesPedras,

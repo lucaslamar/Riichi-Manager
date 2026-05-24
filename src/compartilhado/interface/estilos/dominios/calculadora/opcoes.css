@@ -12,17 +12,20 @@
 }
 
 .pedras-vento-mao {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(76px, 1fr));
   gap: 6px;
 }
 
 .btn-vento-pedra {
-  display: inline-grid;
-  min-width: 48px;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 78px;
+  align-content: center;
   justify-items: center;
   gap: 3px;
-  padding: 5px 5px 4px;
+  padding: 6px;
   border: 2px solid #dde1e7;
   border-radius: 8px;
   background: #ffffff;
@@ -41,14 +44,22 @@
 }
 
 .btn-vento-pedra small {
+  max-width: 100%;
   font-size: 0.66rem;
   line-height: 1;
+  overflow-wrap: anywhere;
+  text-align: center;
   text-transform: uppercase;
 }
 
 .btn-vento-pedra:hover {
   border-color: var(--primario);
   background: var(--info-fundo);
+}
+
+.btn-vento-pedra:focus-visible {
+  outline: 3px solid rgba(33, 150, 243, 0.28);
+  outline-offset: 2px;
 }
 
 .btn-vento-pedra.ativo {
@@ -66,7 +77,7 @@
 
 .campo-vitoria-mao {
   display: flex;
-  width: fit-content;
+  width: min(100%, 320px);
   flex-direction: column;
   gap: 4px;
 }
@@ -87,8 +98,8 @@
 }
 
 .etapa-opcoes-ativa {
-  max-height: 280px;
-  margin-bottom: 8px;
+  max-height: 360px;
+  margin-bottom: 10px;
   opacity: 1;
   transform: translateY(0);
 }
@@ -121,7 +132,8 @@
 
 .toggle-agari-mao {
   display: flex;
-  min-width: 224px;
+  width: 100%;
+  min-width: 0;
   margin-bottom: 4px;
   overflow: hidden;
   border-radius: 8px;
@@ -157,9 +169,10 @@
 }
 
 .contadores-dora-honba {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, max-content));
   gap: 8px;
+  align-items: stretch;
 }
 
 .contador-dora-manual {
@@ -275,10 +288,10 @@
 }
 
 .grupos-opcoes-mao {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, max-content));
   gap: 10px;
-  align-items: flex-end;
+  align-items: start;
   margin-top: 8px;
   overflow: hidden;
   transition:
@@ -295,7 +308,7 @@
 }
 
 .grupos-opcoes-ativos {
-  max-height: 120px;
+  max-height: 240px;
   opacity: 1;
 }
 
@@ -325,10 +338,39 @@
 }
 
 .linha-opcoes-mao {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(108px, 1fr));
   gap: 6px;
   align-items: center;
+}
+
+.linha-opcoes-compacta {
+  grid-template-columns: repeat(2, minmax(96px, 1fr));
+}
+
+.linha-condicoes-especiais {
+  grid-template-columns: minmax(160px, 1fr);
+}
+
+.btn-toggle-mao {
+  display: inline-flex;
+  width: 100%;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
+}
+
+.btn-toggle-mao:focus-visible {
+  outline: 3px solid rgba(33, 150, 243, 0.24);
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

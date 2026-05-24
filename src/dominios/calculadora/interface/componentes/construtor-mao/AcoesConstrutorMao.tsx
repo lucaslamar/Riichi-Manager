@@ -61,6 +61,14 @@ export function AcoesConstrutorMao({
         aoClicar={() => aoAlternarAcao('kanFechado')}
       />
       <BotaoAcao
+        tipo="descarte"
+        rotulo="Descartes"
+        cor="#111827"
+        ativo={acaoPendente?.tipo === 'descarte'}
+        desabilitado={false}
+        aoClicar={() => aoAlternarAcao('descarte')}
+      />
+      <BotaoAcao
         tipo="dora"
         rotulo="Dora"
         cor="#ec4899"
@@ -71,21 +79,13 @@ export function AcoesConstrutorMao({
       {mao.riichi && (
         <BotaoAcao
           tipo="uradora"
-          rotulo="Uradora"
+          rotulo={compacto ? 'Ura' : 'Ura dora'}
           cor="#ec4899"
           ativo={acaoPendente?.tipo === 'uradora'}
           desabilitado={mao.doraManual > 0 || mao.uradora.length >= 5}
           aoClicar={() => aoAlternarAcao('uradora')}
         />
       )}
-      <BotaoAcao
-        tipo="descarte"
-        rotulo="Descartes"
-        cor="#111827"
-        ativo={acaoPendente?.tipo === 'descarte'}
-        desabilitado={false}
-        aoClicar={() => aoAlternarAcao('descarte')}
-      />
     </>
   )
 }

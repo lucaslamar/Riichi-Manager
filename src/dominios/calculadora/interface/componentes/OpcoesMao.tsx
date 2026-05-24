@@ -11,20 +11,76 @@ interface PropsOpcoesMao {
   embutido?: boolean
 }
 
-/** Controles de riichi e condicoes especiais da vitoria. */
+/** Controles progressivos de contexto da vitória. */
 export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
-  const { mao, atualizarMao, maoAberta, slotsUsados } = estado
+  const {
+    mao,
+    atualizarMao,
+    maoAberta,
+    slotsUsados,
+    fluxoOpcoes,
+    marcarVitoriaDefinida,
+    marcarVentoRodadaDefinido,
+    marcarVentoAssentoDefinido,
+  } = estado
   const [ajudaDoraAberta, setAjudaDoraAberta] = useState(false)
   const honba = Number.isFinite(mao.honba) ? mao.honba : 0
   const mostrarOpcoesTenpai = slotsUsados >= 13
+  const mostrarConfiguracaoBasica = mostrarOpcoesTenpai
+  const mostrarVentos = mostrarConfiguracaoBasica && fluxoOpcoes.vitoriaDefinida
+  const mostrarEtapaRiichi =
+    mostrarVentos && fluxoOpcoes.ventoRodadaDefinido && fluxoOpcoes.ventoAssentoDefinido
+  const mostrarRiichi = mostrarEtapaRiichi && !maoAberta && !mao.bencao
+  const mostrarCondicoes = mostrarEtapaRiichi
   const classeEtapa = (ativa: boolean) =>
     `etapa-opcoes-mao ${ativa ? 'etapa-opcoes-ativa' : 'etapa-opcoes-discreta'}`
 
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-      <section className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarOpcoesTenpai)}`}>
-        <span className="rotulo-bloco-opcoes">Doras e Honbas</span>
+      <div className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}>
+        <span>Vitória</span>
+        <ToggleAgari
+          mao={mao}
+          atualizarMao={atualizarMao}
+          definido={fluxoOpcoes.vitoriaDefinida}
+          aoDefinir={marcarVitoriaDefinida}
+        />
+      </div>
+
+      <section className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}>
+        <span className="rotulo-bloco-opcoes">Honba e doras</span>
         <div className="contadores-dora-honba">
+          <div className="contador-dora-manual contador-honba">
+            <span>Honba</span>
+            <div>
+              <button
+                type="button"
+                disabled={honba <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.max(0, atual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{honba}</strong>
+              <button
+                type="button"
+                disabled={honba >= 99}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.min(99, atual + 1)
+                  })
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+
           <div className="contador-dora-manual">
             <span className="rotulo-contador-com-ajuda">
               Doras na mão
@@ -68,103 +124,76 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               </button>
             </div>
           </div>
-
-          <div className="contador-dora-manual contador-honba">
-            <span>Honba</span>
-            <div>
-              <button
-                type="button"
-                disabled={honba <= 0}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.max(0, atual - 1)
-                  })
-                }
-              >
-                -
-              </button>
-              <strong>{honba}</strong>
-              <button
-                type="button"
-                disabled={honba >= 99}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.min(99, atual + 1)
-                  })
-                }
-              >
-                +
-              </button>
-            </div>
-          </div>
         </div>
       </section>
 
-      <div className={`campo-vitoria-mao ${classeEtapa(mostrarOpcoesTenpai)}`}>
-        <span>Vitória</span>
-        <ToggleAgari mao={mao} atualizarMao={atualizarMao} />
-      </div>
-
-      <section className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarOpcoesTenpai)}`}>
+      <section className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}>
         <span className="rotulo-bloco-opcoes">Configuração de ventos</span>
-        <SeletorVentos mao={mao} atualizarMao={atualizarMao} />
+        <SeletorVentos
+          mao={mao}
+          atualizarMao={atualizarMao}
+          ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
+          ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
+          aoDefinirVentoRodada={marcarVentoRodadaDefinido}
+          aoDefinirVentoAssento={marcarVentoAssentoDefinido}
+        />
       </section>
 
       <div
         className={`grupos-opcoes-mao ${
-          mostrarOpcoesTenpai ? 'grupos-opcoes-ativos' : 'grupos-opcoes-discretos'
+          mostrarEtapaRiichi ? 'grupos-opcoes-ativos' : 'grupos-opcoes-discretos'
         }`}
       >
-        <section className={`grupo-opcoes-mao ${classeEtapa(mostrarOpcoesTenpai)}`}>
-          <span className="rotulo-bloco-opcoes">Riichi</span>
-          <div className="linha-opcoes-mao">
-            <BotaoToggle
-              rotulo="Riichi"
-              ativo={mao.riichi !== null}
-              desabilitado={maoAberta}
-              corAtiva="#f97316"
-              aoClicar={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.riichi = rascunho.riichi ? null : { duplo: false, ippatsu: false }
-                  if (rascunho.riichi) rascunho.bencao = false
-                  else rascunho.uradora = []
-                })
-              }
-            />
-            {mao.riichi && (
-              <>
-                <BotaoToggle
-                  rotulo="Ippatsu"
-                  ativo={mao.riichi.ippatsu}
-                  desabilitado={false}
-                  corAtiva="#f97316"
-                  aoClicar={() =>
-                    atualizarMao((rascunho) => {
-                      if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
-                    })
-                  }
-                />
-                <BotaoToggle
-                  rotulo="Double Riichi"
-                  ativo={mao.riichi.duplo}
-                  desabilitado={false}
-                  corAtiva="#f97316"
-                  aoClicar={() =>
-                    atualizarMao((rascunho) => {
-                      if (rascunho.riichi) rascunho.riichi.duplo = !rascunho.riichi.duplo
-                    })
-                  }
-                />
-              </>
-            )}
-          </div>
-        </section>
+        {mostrarRiichi && (
+          <section className={`grupo-opcoes-mao ${classeEtapa(mostrarRiichi)}`}>
+            <span className="rotulo-bloco-opcoes">Riichi</span>
+            <div className="linha-opcoes-mao">
+              <BotaoToggle
+                rotulo="Riichi"
+                ativo={mao.riichi !== null}
+                desabilitado={maoAberta}
+                corAtiva="#f97316"
+                aoClicar={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.riichi = rascunho.riichi ? null : { duplo: false, ippatsu: false }
+                    if (rascunho.riichi) rascunho.bencao = false
+                    else rascunho.uradora = []
+                  })
+                }
+              />
+              {mao.riichi && (
+                <>
+                  <BotaoToggle
+                    rotulo="Ippatsu"
+                    ativo={mao.riichi.ippatsu}
+                    desabilitado={false}
+                    corAtiva="#f97316"
+                    aoClicar={() =>
+                      atualizarMao((rascunho) => {
+                        if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
+                      })
+                    }
+                  />
+                  <BotaoToggle
+                    rotulo="Double Riichi"
+                    ativo={mao.riichi.duplo}
+                    desabilitado={false}
+                    corAtiva="#f97316"
+                    aoClicar={() =>
+                      atualizarMao((rascunho) => {
+                        if (rascunho.riichi) rascunho.riichi.duplo = !rascunho.riichi.duplo
+                      })
+                    }
+                  />
+                </>
+              )}
+            </div>
+          </section>
+        )}
 
-        <section className={`grupo-opcoes-mao ${classeEtapa(mostrarOpcoesTenpai)}`}>
+        <section className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}>
           <span className="rotulo-bloco-opcoes">Condições especiais</span>
-          <div className="linha-opcoes-mao">
+          <div className="linha-opcoes-mao linha-condicoes-especiais">
             <BotaoToggle
               rotulo="Tenhou / Chiihou"
               ativo={mao.bencao}

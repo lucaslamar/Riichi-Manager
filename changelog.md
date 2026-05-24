@@ -1,5 +1,23 @@
 # Changelog - Riichi Manager
 
+## [3.0.1] - 2026-05-24
+
+### Melhorias
+
+- Adicionado fluxo progressivo nas opções da mão: primeiro **Vitória**, depois **Ventos**, depois **Riichi** e **Condições especiais**.
+- O botão **Calcular** agora só aparece quando a mão está pronta e a configuração obrigatória foi definida.
+- Reposicionado o botão **Dora** para a barra de ações da mão, logo após **Descartes**.
+- **Ura dora** continua aparecendo na barra de ações apenas quando **Riichi** está ativo.
+- Mantidos **Honba** e **Doras na mão** na área de configuração da vitória.
+- Ajustado o layout de **Condições especiais** para exibir os botões um abaixo do outro.
+- Melhorado o visual dos seletores de vento e botões de opções para evitar quebra ou aperto em telas menores.
+
+### Corrigido
+
+- Corrigido o destaque inicial de **Tsumo/Ron** e dos ventos para só marcar visualmente depois que o jogador escolher.
+- Ajustada a validação das ações **Chi**, **Pon**, **Kan aberto** e **Kan fechado** para permitir montar chamadas pelo teclado respeitando slots e limite físico das pedras.
+- Ao voltar para menos de 13 slots, o fluxo de configuração e ações de dora/uradora pendentes são resetados.
+
 ## [3.0.0] - 2026-05-24
 
 ## Correções

@@ -131,11 +131,13 @@
   .pedras-vento-mao {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
   }
   .campo-vento-mao:nth-child(2) .pedras-vento-mao {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .btn-vento-pedra {
+    min-height: 74px;
     min-width: 0;
   }
   .campo-vitoria-mao {
@@ -473,17 +475,20 @@
   }
   .linha-opcoes-mao {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
   }
-  .linha-opcoes-mao .btn-primario,
-  .linha-opcoes-mao .btn-contorno {
+  .linha-opcoes-mao .btn-toggle-mao {
     width: 100%;
-    min-height: 34px;
-    padding: 5px 6px;
-    font-size: 0.74rem;
+    min-height: 40px;
+    padding: 7px 6px;
+    font-size: 0.76rem;
     line-height: 1.15;
     white-space: normal;
+  }
+  .linha-opcoes-mao .btn-toggle-mao:first-child:last-child,
+  .linha-opcoes-mao .btn-toggle-mao:nth-child(3) {
+    grid-column: 1 / -1;
   }
   .linha-regra {
     grid-template-columns: 1fr;

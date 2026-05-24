@@ -149,29 +149,20 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
 
   return (
     <>
-      <div
-        className={`acao-calcular-mao ${
-          podeCalcularMao ? 'acao-calcular-mao-ativa' : 'acao-calcular-mao-discreta'
-        }`}
-      >
-        <button
-          className="btn-calcular-mao"
-          type="button"
-          disabled={!podeCalcularMao}
-          onClick={acionarCalculo}
-        >
-          Calcular
-        </button>
-        <span className={podeCalcularMao ? 'texto-calcular-pronto' : 'texto-calcular-incompleto'}>
-          {podeCalcularMao
-            ? deveCalcularMao
+      {podeCalcularMao && (
+        <div className="acao-calcular-mao acao-calcular-mao-ativa">
+          <button className="btn-calcular-mao" type="button" onClick={acionarCalculo}>
+            Calcular
+          </button>
+          <span className="texto-calcular-pronto">
+            {deveCalcularMao
               ? resultadoMaoInvalida
                 ? 'Mao invalida. Revise os yaku antes de vencer.'
                 : 'Resultado calculado para a configuracao atual.'
-              : 'Mao pronta. Revise as opcoes e calcule.'
-            : `${slotsUsados}/14 slots para calcular`}
-        </span>
-      </div>
+              : 'Mao pronta. Revise as opcoes e calcule.'}
+          </span>
+        </div>
+      )}
       {microfeedbackTenpai && <div className="microfeedback-tenpai">Voltou para tenpai</div>}
 
       {/* Card 3: resultado */}
