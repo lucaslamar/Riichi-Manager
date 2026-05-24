@@ -1,6 +1,20 @@
 # Changelog - Riichi Manager
 
-# Changelog
+## [3.0.0] - 2026-05-24
+
+## Correções
+
+- Corrigida a calculadora para não calcular automaticamente ao completar 14 tiles; o cálculo agora acontece somente ao clicar em **Calcular**.
+- Corrigida a disponibilidade das ações **Chi**, **Pon**, **Kan** e **Kan fechado** para respeitar combinações reais na mão fechada, inclusive em mãos fechadas completas com 14 tiles.
+- Corrigido o estado visual de tiles indisponíveis, incluindo aka dora já usado na mão, melds, doras ou descartes.
+- Corrigido o caso de mão sem yaku para abrir modal de alerta/chombo em vez de mostrar apenas um card inline.
+- Corrigido o fechamento da modal de resultado para remover apenas a pedra de agari e preservar ventos, honba, doras, riichi, vitória e condições especiais.
+
+## Melhorias
+
+- Adicionado botão principal **Calcular** após as opções da mão.
+- Melhorado o feedback visual para mão inválida, sem yaku e chombo.
+- Ajustado o fluxo de ações para cancelar automaticamente modos como Pon/Chi/Kan quando deixam de ter opções válidas.
 
 ## [2.9.0] - 2026-05-23
 
