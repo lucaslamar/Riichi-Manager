@@ -1,19 +1,4 @@
-/**
- * @fileoverview Componente raiz da aplicação — App.tsx
- *
- * O App é o "gerente" de tudo:
- * - Mantém o estado global do torneio (persistido no localStorage).
- * - Controla qual tela está sendo exibida (roteamento manual sem biblioteca).
- * - Passa dados e callbacks para os componentes filhos via props.
- *
- * Conceitos React demonstrados:
- * - `useState`: estado local que dispara re-render ao mudar.
- * - `useCallback`: memoiza funções passadas como props para evitar re-renders desnecessários.
- * - "Lifting state up": o estado vive no nível mais alto que precisa dele.
- * - Prop drilling controlado: passamos apenas o que cada componente precisa.
- */
-
-import { useState, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   carregarTorneio,
   salvarTorneio,
@@ -21,7 +6,8 @@ import {
 } from '@/dominios/torneio-fast/persistencia/armazenamento'
 import type { EstadoTorneio } from '@/dominios/torneio-fast/logica/tipos'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
-import MenuInicial from '@/compartilhado/interface/layout/MenuInicial'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
 import {
   ConfiguracaoTorneio,
   RankingGeral,
@@ -30,62 +16,39 @@ import {
   GradeRodadas,
 } from '@/dominios/torneio-fast/interface/componentes'
 import PaginaCalculadora from '@/dominios/calculadora/interface/paginas/PaginaCalculadora'
+import packageJson from '../../package.json'
 
-// ─── Tipo de telas ────────────────────────────────────────────────────────────
-
-/**
- * Todas as telas possíveis da aplicação.
- * Exportado para que outros componentes possam tipificar callbacks de navegação.
- */
 export type TelaPrincipal =
-  | 'inicio'
-  | 'configuracaoTorneio'
   | 'calculadora'
-  | 'suico'
-  | 'referenciaYaku'
+  | 'calculadoraRapida'
+  | 'configuracaoTorneio'
+  | 'regras'
+  | 'sobre'
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
-
-/** Retorna true se o torneio tem jogadores e grade montada. */
 function torneioAtivo(torneioAtual: EstadoTorneio): boolean {
   return torneioAtual.jogadores.length > 0 && torneioAtual.grade.length > 0
 }
 
-// ─── Componente raiz ──────────────────────────────────────────────────────────
-
 /**
- * Componente raiz — montado uma única vez no index.html via main.tsx.
- * Toda a árvore de componentes vive dentro deste.
+ * Componente raiz da aplicacao.
  *
- * @returns JSX de toda a aplicação.
+ * A calculadora e a porta de entrada quando nao ha torneio salvo em andamento.
+ * O Torneio Fast continua preservado no mesmo estado global/localStorage, mas
+ * fica acessivel pelo menu global em vez de dominar o primeiro acesso.
  */
 export default function App() {
-  // ── Estado global do torneio ────────────────────────────────────────────────
-  // `useState` aceita uma função de inicialização (lazy init) — `carregarTorneio`
-  // só é chamada uma vez, na primeira renderização.
+  const { t } = useI18n()
   const [torneio, setTorneioInterno] = useState<EstadoTorneio>(carregarTorneio)
+  const [tela, setTela] = useState<TelaPrincipal>(() =>
+    torneioAtivo(torneio) ? 'configuracaoTorneio' : 'calculadora',
+  )
+  const ativo = torneioAtivo(torneio)
 
-  // ── Tela atual ──────────────────────────────────────────────────────────────
-  const [tela, setTela] = useState<TelaPrincipal>('inicio')
-
-  // ── Callbacks memoizados ────────────────────────────────────────────────────
-  // `useCallback` evita recriar a função a cada render — importante quando
-  // a função é passada como prop para componentes que usam React.memo.
-
-  /**
-   * Substitui o torneio completo e persiste no localStorage.
-   * Usado quando o estado novo não depende do estado anterior.
-   */
   const definirTorneio = useCallback((proximo: EstadoTorneio) => {
     setTorneioInterno(proximo)
     salvarTorneio(proximo)
   }, [])
 
-  /**
-   * Atualiza o torneio via função transformadora.
-   * Padrão funcional: recebe o estado atual, devolve o novo.
-   * Garante que atualizações rápidas não percam dados (sem race conditions).
-   */
   const atualizarTorneio = useCallback(
     (transformar: (torneioAtual: EstadoTorneio) => EstadoTorneio) => {
       setTorneioInterno((anterior) => {
@@ -97,9 +60,6 @@ export default function App() {
     [],
   )
 
-  /**
-   * Reinicia o torneio para o estado vazio e volta ao cadastro.
-   */
   const reiniciarTorneio = useCallback(() => {
     const vazio = criarTorneioVazio()
     setTorneioInterno(vazio)
@@ -107,159 +67,216 @@ export default function App() {
     setTela('configuracaoTorneio')
   }, [])
 
-  /**
-   * Callback chamado pela ConfiguracaoTorneio quando a grade é gerada.
-   */
   const aoIniciarTorneio = useCallback(
     (torneioGerado: EstadoTorneio) => {
       definirTorneio(torneioGerado)
-      setTela('inicio')
+      setTela('configuracaoTorneio')
     },
     [definirTorneio],
   )
 
   const exportarPdf = useCallback(() => {
-    // jsPDF é carregado via CDN no index.html e fica disponível em window.jspdf
     const janela = window as any
     const jsPDF = janela.jspdf?.jsPDF
     if (!jsPDF) {
-      alert('jsPDF não carregou. Verifique a conexão.')
+      alert('jsPDF nao carregou. Verifique a conexao.')
       return
     }
 
     const doc = new jsPDF()
     doc.setFontSize(18)
-    doc.text('Ranking — Riichi Manager', 14, 20)
+    doc.text(`Ranking - ${t('global.appName')}`, 14, 20)
     doc.setFontSize(11)
 
     const linhas = Object.entries(torneio.classificacao)
-      .sort(([, a], [, b]) => b - a)
-      .map(([jogador, pts], i) => [`${i + 1}º`, jogador, `${pts > 0 ? '+' : ''}${pts.toFixed(1)}`])
+      .sort(([, pontosA], [, pontosB]) => pontosB - pontosA)
+      .map(([jogador, pontos], indice) => [
+        `${indice + 1}o`,
+        jogador,
+        `${pontos > 0 ? '+' : ''}${pontos.toFixed(1)}`,
+      ])
 
     doc.autoTable({ head: [['Pos.', 'Jogador', 'PT']], body: linhas, startY: 30 })
     doc.save('ranking-riichi.pdf')
-  }, [torneio])
-
-  // ── Render ──────────────────────────────────────────────────────────────────
-
-  const ativo = torneioAtivo(torneio)
+  }, [torneio, t])
 
   return (
-    // Fragment (<>) agrupa elementos sem criar um nó DOM extra.
     <>
-      <Cabecalho />
+      <Cabecalho telaAtual={tela} torneioAtivo={ativo} aoNavegar={setTela} />
 
-      {/*
-        Roteamento manual: exibe o componente certo com base no estado `tela`.
-        Em projetos maiores usaríamos React Router, mas para este app é suficiente.
-      */}
       <main className="conteudo-principal">
-        {/* ── Calculadora (disponível sempre, independente de torneio) ── */}
-        {tela === 'calculadora' && <PaginaCalculadora aoVoltar={() => setTela('inicio')} />}
-
-        {/* ── Telas sem torneio ativo ── */}
-        {tela !== 'calculadora' && !ativo && (
-          <>
-            {tela === 'inicio' && (
-              <MenuInicial
-                aoClicarTorneioFast={() => setTela('configuracaoTorneio')}
-                aoNavegar={setTela}
-              />
-            )}
-
-            {tela === 'configuracaoTorneio' && (
-              <ConfiguracaoTorneio
-                aoIniciar={aoIniciarTorneio}
-                aoVoltar={() => setTela('inicio')}
-              />
-            )}
-
-            {/* Telas em desenvolvimento */}
-            {(tela === 'suico' || tela === 'referenciaYaku') && (
-              <PlaceholderFuncionalidade tela={tela} aoVoltar={() => setTela('inicio')} />
-            )}
-          </>
+        {(tela === 'calculadora' || tela === 'calculadoraRapida') && (
+          <PaginaCalculadora modoInicial={tela === 'calculadoraRapida' ? 'rapido' : 'completo'} />
         )}
 
-        {/* ── Torneio em andamento ── */}
-        {tela !== 'calculadora' && ativo && (
-          <>
-            <RankingGeral
+        {tela === 'configuracaoTorneio' &&
+          (ativo ? (
+            <PainelTorneioAtivo
               torneio={torneio}
-              aoReiniciar={reiniciarTorneio}
-              aoExportarPdf={exportarPdf}
+              atualizarTorneio={atualizarTorneio}
+              reiniciarTorneio={reiniciarTorneio}
+              exportarPdf={exportarPdf}
             />
+          ) : (
+            <ConfiguracaoTorneio aoIniciar={aoIniciarTorneio} aoVoltar={() => setTela('calculadora')} />
+          ))}
 
-            <TimerRodada torneio={torneio} atualizarTorneio={atualizarTorneio} />
-
-            <PainelQualidade torneio={torneio} atualizarTorneio={atualizarTorneio} />
-
-            <GradeRodadas torneio={torneio} atualizarTorneio={atualizarTorneio} />
-
-            {/* Botão flutuante para abrir a calculadora durante o torneio */}
-            <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 100 }}>
-              <button
-                className="btn-primario"
-                type="button"
-                style={{
-                  borderRadius: '50px',
-                  padding: '14px 20px',
-                  boxShadow: '0 4px 16px rgba(33,150,243,0.4)',
-                }}
-                onClick={() => setTela('calculadora')}
-                title="Abrir calculadora"
-              >
-                <i className="fas fa-calculator" /> Calculadora
-              </button>
-            </div>
-          </>
-        )}
+        {tela === 'regras' && <PaginaRegrasConfiguracoes />}
+        {tela === 'sobre' && <PaginaSobre />}
       </main>
     </>
   )
 }
 
-// ─── Placeholder de funcionalidade futura ─────────────────────────────────────
-
-const CONFIG_PLACEHOLDER: Record<string, { icone: string; titulo: string; descricao: string }> = {
-  suico: {
-    icone: 'fa-trophy',
-    titulo: 'Sistema Suíço',
-    descricao:
-      'Módulo de torneio suíço com múltiplas rodadas e emparelhamento dinâmico. Em desenvolvimento.',
-  },
-  referenciaYaku: {
-    icone: 'fa-book',
-    titulo: 'Referência de Yaku',
-    descricao:
-      'Guia visual completo de todos os yaku com exemplos e valor em han. Em desenvolvimento.',
-  },
+function PainelTorneioAtivo({
+  torneio,
+  atualizarTorneio,
+  reiniciarTorneio,
+  exportarPdf,
+}: {
+  torneio: EstadoTorneio
+  atualizarTorneio: (transformar: (torneioAtual: EstadoTorneio) => EstadoTorneio) => void
+  reiniciarTorneio: () => void
+  exportarPdf: () => void
+}) {
+  return (
+    <>
+      <RankingGeral torneio={torneio} aoReiniciar={reiniciarTorneio} aoExportarPdf={exportarPdf} />
+      <TimerRodada torneio={torneio} atualizarTorneio={atualizarTorneio} />
+      <PainelQualidade torneio={torneio} atualizarTorneio={atualizarTorneio} />
+      <GradeRodadas torneio={torneio} atualizarTorneio={atualizarTorneio} />
+    </>
+  )
 }
 
-function PlaceholderFuncionalidade({
-  tela,
-  aoVoltar,
-}: {
-  tela: TelaPrincipal
-  aoVoltar: () => void
-}) {
-  const config = CONFIG_PLACEHOLDER[tela]
-  if (!config) return null
+function PaginaRegrasConfiguracoes() {
+  const { t, idioma, idiomas, alterarIdioma } = useI18n()
+  const [altoContraste, setAltoContraste] = useState(
+    () => window.localStorage.getItem('riichi-manager-alto-contraste') === 'true',
+  )
+  const [modoCompacto, setModoCompacto] = useState(
+    () => window.localStorage.getItem('riichi-manager-modo-compacto') === 'true',
+  )
+  const [toqueAmpliado, setToqueAmpliado] = useState(
+    () => window.localStorage.getItem('riichi-manager-toque-ampliado') === 'true',
+  )
+
+  useEffect(() => {
+    document.body.classList.toggle('alto-contraste', altoContraste)
+    document.body.classList.toggle('modo-compacto', modoCompacto)
+    document.body.classList.toggle('toque-ampliado', toqueAmpliado)
+    window.localStorage.setItem('riichi-manager-alto-contraste', String(altoContraste))
+    window.localStorage.setItem('riichi-manager-modo-compacto', String(modoCompacto))
+    window.localStorage.setItem('riichi-manager-toque-ampliado', String(toqueAmpliado))
+  }, [altoContraste, modoCompacto, toqueAmpliado])
 
   return (
-    <section className="card placeholder-funcionalidade">
-      <div className="placeholder-icone">
-        <i className={`fas ${config.icone}`} />
+    <section className="card pagina-estatica">
+      <div className="cabecalho-secao">
+        <i className="fas fa-sliders-h icone-secao" aria-hidden="true" />
+        <div>
+          <h2>{t('pages.rulesTitle')}</h2>
+          <p className="subtitulo-secao">{t('pages.rulesText')}</p>
+        </div>
       </div>
-      <div>
-        <h2>{config.titulo}</h2>
-        <p style={{ color: '#607080', fontWeight: 700, margin: '8px 0 0' }}>{config.descricao}</p>
-      </div>
-      <div className="acoes" style={{ justifyContent: 'center' }}>
-        <button className="btn-contorno" type="button" onClick={aoVoltar}>
-          <i className="fas fa-arrow-left" /> Voltar
-        </button>
+      <div className="grupo-configuracoes-usuario">
+        <label className="seletor-idioma">
+          <span>
+            <i className="fas fa-globe" aria-hidden="true" />
+            {t('menu.language')}
+          </span>
+          <select
+            value={idioma}
+            aria-label={t('menu.language')}
+            onChange={(evento) => alterarIdioma(evento.target.value as typeof idioma)}
+          >
+            {idiomas.map((opcaoIdioma) => (
+              <option key={opcaoIdioma} value={opcaoIdioma}>
+                {ROTULOS_IDIOMA[opcaoIdioma]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <OpcaoPreferencia
+          titulo={t('pages.highContrast')}
+          descricao={t('pages.highContrastHelp')}
+          marcado={altoContraste}
+          aoMudar={setAltoContraste}
+        />
+        <OpcaoPreferencia
+          titulo={t('pages.compactMode')}
+          descricao={t('pages.compactModeHelp')}
+          marcado={modoCompacto}
+          aoMudar={setModoCompacto}
+        />
+        <OpcaoPreferencia
+          titulo={t('pages.largeTouchTargets')}
+          descricao={t('pages.largeTouchTargetsHelp')}
+          marcado={toqueAmpliado}
+          aoMudar={setToqueAmpliado}
+        />
       </div>
     </section>
+  )
+}
+
+function PaginaSobre() {
+  const { t } = useI18n()
+  const linkApoio = ''
+
+  return (
+    <section className="card pagina-estatica">
+      <div className="cabecalho-secao">
+        <i className="fas fa-info-circle icone-secao" aria-hidden="true" />
+        <div>
+          <h2>{t('pages.aboutTitle')}</h2>
+          <p className="subtitulo-secao">{t('pages.aboutText')}</p>
+        </div>
+      </div>
+      <div className="grupo-sobre">
+        <span className="chip-sobre">{t('pages.version', { version: packageJson.version })}</span>
+        <span className="chip-sobre">{t('pages.author')}</span>
+      </div>
+      <div className="acoes-sobre">
+        <a className="btn-contorno" href="https://github.com/lucaslamar/Riichi-Manager" target="_blank" rel="noreferrer">
+          <i className="fab fa-github" aria-hidden="true" /> GitHub
+        </a>
+        <a
+          className="btn-contorno"
+          href="https://github.com/lucaslamar/Riichi-Manager/issues/new"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <i className="fas fa-bug" aria-hidden="true" /> {t('pages.reportIssue')}
+        </a>
+        {linkApoio && (
+          <a className="btn-primario" href={linkApoio} target="_blank" rel="noreferrer">
+            <i className="fas fa-mug-hot" aria-hidden="true" /> {t('pages.supportProject')}
+          </a>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function OpcaoPreferencia({
+  titulo,
+  descricao,
+  marcado,
+  aoMudar,
+}: {
+  titulo: string
+  descricao: string
+  marcado: boolean
+  aoMudar: (marcado: boolean) => void
+}) {
+  return (
+    <label className="opcao-configuracao-usuario">
+      <span>
+        <strong>{titulo}</strong>
+        <span>{descricao}</span>
+      </span>
+      <input type="checkbox" checked={marcado} onChange={(evento) => aoMudar(evento.target.checked)} />
+    </label>
   )
 }

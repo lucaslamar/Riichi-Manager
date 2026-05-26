@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { CodigoPedra, Meld } from '../../logica/mao'
-import { arquivoPedra, urlPedra } from '../constantes'
+import { arquivoPedra, nomePedraAcessivel, urlPedra } from '../constantes'
 
 export function PedraSvg({
   pedra,
@@ -13,7 +13,7 @@ export function PedraSvg({
 }) {
   const [formato, setFormato] = useState<'png' | 'svg' | 'texto'>('png')
   const nomeArquivo = virada ? 'Back' : pedra ? arquivoPedra(pedra) : 'Blank'
-  const alt = virada ? 'Pedra virada' : (pedra ?? 'Pedra vazia')
+  const alt = virada ? 'Pedra virada' : nomePedraAcessivel(pedra)
 
   if (formato === 'texto') {
     return (
@@ -27,27 +27,28 @@ export function PedraSvg({
     <img
       className={`tile-img ${pedra === '5z' ? 'tile-img-haku' : ''} ${deLado ? 'tile-img-lado' : ''}`}
       src={urlPedra(nomeArquivo, formato)}
-      alt=""
-      aria-label={alt}
+      alt={alt}
       draggable={false}
       onError={() => setFormato(formato === 'png' ? 'svg' : 'texto')}
     />
   )
 }
 
-export function PedrasMeld({ meld }: { meld: Meld }) {
+export function PedrasMeld({ meld, indiceAgari }: { meld: Meld; indiceAgari?: number }) {
   const renderizarPedra = ({
     chave,
     pedra,
     virada = false,
     deLado = false,
+    agari = false,
   }: {
     chave: string | number
     pedra?: CodigoPedra
     virada?: boolean
     deLado?: boolean
+    agari?: boolean
   }) => (
-    <span key={chave} className={`meld-tile ${deLado ? 'de-lado' : ''}`}>
+    <span key={chave} className={`meld-tile ${deLado ? 'de-lado' : ''} ${agari ? 'agari' : ''}`}>
       <PedraSvg pedra={pedra} virada={virada} deLado={deLado} />
     </span>
   )
@@ -55,10 +56,10 @@ export function PedrasMeld({ meld }: { meld: Meld }) {
   if (meld.tipo === 'kanFechado') {
     return (
       <span className="meld-pedras">
-        {renderizarPedra({ chave: 'back-left', virada: true })}
-        {renderizarPedra({ chave: 'middle-left', pedra: meld.pedras[1] })}
-        {renderizarPedra({ chave: 'middle-right', pedra: meld.pedras[2] })}
-        {renderizarPedra({ chave: 'back-right', virada: true })}
+        {renderizarPedra({ chave: 'back-left', virada: true, agari: indiceAgari === 0 })}
+        {renderizarPedra({ chave: 'middle-left', pedra: meld.pedras[1], agari: indiceAgari === 1 })}
+        {renderizarPedra({ chave: 'middle-right', pedra: meld.pedras[2], agari: indiceAgari === 2 })}
+        {renderizarPedra({ chave: 'back-right', virada: true, agari: indiceAgari === 3 })}
       </span>
     )
   }
@@ -66,7 +67,7 @@ export function PedrasMeld({ meld }: { meld: Meld }) {
   return (
     <span className="meld-pedras">
       {meld.pedras.map((pedra, j) =>
-        renderizarPedra({ chave: j, pedra, deLado: j === 0 }),
+        renderizarPedra({ chave: j, pedra, deLado: j === 0, agari: indiceAgari === j }),
       )}
     </span>
   )

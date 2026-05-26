@@ -1,4 +1,4 @@
-import type { CodigoPedra, Mao } from './tipos'
+import type { CodigoPedra, Mao, Meld } from './tipos'
 
 // ─── Conversão para string ────────────────────────────────────────────────────
 
@@ -43,22 +43,43 @@ function proximaDora(pedra: CodigoPedra, sanma: boolean): CodigoPedra {
 export function converterMaoParaString(mao: Mao): string {
   let stringMao = ''
   const sanma = false // padrão: yonma (4 jogadores)
+  const meldAgari = mao.agariMeld ? mao.melds[mao.agariMeld.indiceMeld] : null
+  let pedrasCalculo = mao.pedras
+  let indiceAgariCalculo = mao.indiceAgari
+  let meldsCalculo: Meld[] = mao.melds
+
+  if (mao.agariMeld && meldAgari) {
+    const pedrasGrupo = [...meldAgari.pedras]
+    let indicePedraAgari = Math.min(mao.agariMeld.indicePedra, pedrasGrupo.length - 1)
+
+    if ((meldAgari.tipo === 'kanAberto' || meldAgari.tipo === 'kanFechado') && pedrasGrupo.length > 3) {
+      const indiceRemover = pedrasGrupo.findIndex((_pedra, indice) => indice !== indicePedraAgari)
+      if (indiceRemover >= 0) {
+        pedrasGrupo.splice(indiceRemover, 1)
+        if (indiceRemover < indicePedraAgari) indicePedraAgari--
+      }
+    }
+
+    pedrasCalculo = [...mao.pedras, ...pedrasGrupo]
+    indiceAgariCalculo = mao.pedras.length + indicePedraAgari
+    meldsCalculo = mao.melds.filter((_meld, indice) => indice !== mao.agariMeld?.indiceMeld)
+  }
 
   // 1. Pedras em mão (exceto a de agari)
-  const pedrasSemAgari = mao.pedras.filter((_pedra, i) => i !== mao.indiceAgari)
+  const pedrasSemAgari = pedrasCalculo.filter((_pedra, i) => i !== indiceAgariCalculo)
   for (const [naipe, nums] of agruparPorNaipe(pedrasSemAgari)) {
     stringMao += nums + naipe
   }
 
   // 2. Pedra de agari (prefixo '+' apenas para ron)
-  const pedraAgari = mao.pedras[mao.indiceAgari]
+  const pedraAgari = pedrasCalculo[indiceAgariCalculo]
   if (pedraAgari) {
     if (mao.agari === 'ron') stringMao += '+'
     stringMao += pedraAgari
   }
 
   // 3. Melds
-  for (const meld of mao.melds) {
+  for (const meld of meldsCalculo) {
     stringMao += '+'
     if (meld.tipo === 'chii' || meld.tipo === 'pon' || meld.tipo === 'kanAberto') {
       // Chii, pon e kan aberto: todas as pedras

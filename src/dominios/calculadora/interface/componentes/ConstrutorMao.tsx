@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { codigoBase, proximaDoraIndicada } from '../constantes'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { AcoesConstrutorMao } from './construtor-mao/AcoesConstrutorMao'
@@ -10,16 +11,9 @@ import { TecladoPedras } from './construtor-mao/TecladoPedras'
 interface PropsConstrutorMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
-}
-
-const ROTULOS_ACAO_MOBILE = {
-  chii: { rotulo: 'Chii', cor: '#4caf50' },
-  pon: { rotulo: 'Pon', cor: '#2196f3' },
-  kanAberto: { rotulo: 'Kan aberto', cor: '#ba68c8' },
-  kanFechado: { rotulo: 'Kan fechado', cor: '#9c27b0' },
-  dora: { rotulo: 'Dora', cor: '#ec4899' },
-  uradora: { rotulo: 'Uradora', cor: '#ec4899' },
-  descarte: { rotulo: 'Descartes', cor: '#111827' },
+  contexto?: 'montagem' | 'finalizacao'
+  aoAbrirRegras?: () => void
+  acoesCabecalho?: ReactNode
 }
 
 /**
@@ -30,7 +24,14 @@ const ROTULOS_ACAO_MOBILE = {
  * - dados derivados leves são preparados e repassados para subcomponentes;
  * - a edição real da mão continua no hook `useCalculadoraMao`.
  */
-export default function ConstrutorMao({ estado, embutido = false }: PropsConstrutorMao) {
+export default function ConstrutorMao({
+  estado,
+  embutido = false,
+  contexto = 'montagem',
+  aoAbrirRegras,
+  acoesCabecalho,
+}: PropsConstrutorMao) {
+  const { t } = useI18n()
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
   const [maoEditorGrudado, setMaoEditorGrudado] = useState(false)
   const [menuAcoesMaoAberto, setMenuAcoesMaoAberto] = useState(false)
@@ -77,11 +78,11 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
   const temEsperaSemYaku = esperasPossiveis.some((espera) => espera.semYaku)
   const temEsperaFuriten = esperasPossiveis.some((espera) => !espera.semYaku && espera.furiten)
   const statusTenpai = temEsperaFuriten
-    ? 'Furiten'
+    ? t('calculator.furiten')
     : temEsperaValida
-      ? 'Tenpai'
+      ? t('calculator.tenpai')
       : temEsperaSemYaku
-        ? 'Sem yaku'
+        ? t('calculator.noYaku')
         : null
   const filtrarTecladoPorEspera = slotsUsados === 13 && !acaoPendente && temEsperaValida
   const esperasPorPedra = useMemo(
@@ -91,7 +92,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
 
   /** Texto curto exibido dentro do badge de espera no teclado. */
   const rotuloEsperaTeclado = (espera: (typeof esperasPossiveis)[number]) => {
-    if (espera.semYaku) return 'sem yaku'
+    if (espera.semYaku) return t('calculator.noYaku')
     if (espera.yakuman > 0) return `${espera.yakuman}x`
     return `${espera.han} han`
   }
@@ -103,7 +104,16 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     return espera.furiten ? 'espera-valida espera-furiten' : 'espera-valida'
   }
 
-  const acaoMobileAtiva = acaoPendente ? ROTULOS_ACAO_MOBILE[acaoPendente.tipo] : null
+  const rotulosAcaoMobile = {
+    chii: { rotulo: t('melds.chii'), cor: '#4caf50' },
+    pon: { rotulo: t('melds.pon'), cor: '#2196f3' },
+    kanAberto: { rotulo: t('melds.kanAberto'), cor: '#ba68c8' },
+    kanFechado: { rotulo: t('melds.kanFechado'), cor: '#9c27b0' },
+    dora: { rotulo: t('melds.dora'), cor: '#d97706' },
+    uradora: { rotulo: t('melds.uradora'), cor: '#d97706' },
+    descarte: { rotulo: t('melds.discards'), cor: '#111827' },
+  }
+  const acaoMobileAtiva = acaoPendente ? rotulosAcaoMobile[acaoPendente.tipo] : null
   const acaoMeldAtiva =
     acaoPendente?.tipo === 'chii' ||
     acaoPendente?.tipo === 'pon' ||
@@ -111,6 +121,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
     acaoPendente?.tipo === 'kanFechado'
       ? acaoPendente
       : null
+  const mostrarTeclado = contexto === 'montagem' || !!acaoPendente
 
   /**
    * Marca na mão fechada as pedras já escolhidas durante uma ação de chii.
@@ -155,7 +166,7 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
   }, [])
 
   return (
-    <div className={embutido ? undefined : 'card'}>
+    <div className={`${embutido ? '' : 'card'} construtor-mao construtor-mao-${contexto}`.trim()}>
       <div ref={sentinelaStickyRef} aria-hidden="true" />
       <MaoAtual
         mao={mao}
@@ -176,6 +187,8 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         podeKanAberto={podeKanAberto}
         podeKanFechado={podeKanFechado}
         maoInvalida={resultadoMaoInvalida}
+        contexto={contexto}
+        acoesCabecalho={acoesCabecalho}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}
         aoAdicionarPedra={adicionarPedra}
@@ -184,34 +197,61 @@ export default function ConstrutorMao({ estado, embutido = false }: PropsConstru
         aoLimpar={limpar}
       />
 
-      <IndicadoresDora mao={mao} atualizarMao={atualizarMao} />
-      <DescartesMao descartes={mao.descartes} aoRemoverDescarte={removerDescarte} />
+      {contexto === 'montagem' && (
+        <>
+          <IndicadoresDora mao={mao} atualizarMao={atualizarMao} />
+          <DescartesMao descartes={mao.descartes} aoRemoverDescarte={removerDescarte} />
 
-      <div className="acoes-construtor-mao">
-        <AcoesConstrutorMao
-          mao={mao}
-          acaoPendente={acaoPendente}
-          podeChii={podeChii}
-          podePon={podePon}
-          podeKanAberto={podeKanAberto}
-          podeKanFechado={podeKanFechado}
-          aoAlternarAcao={alternarAcaoMao}
-        />
-      </div>
+          <div className="acoes-construtor-mao">
+            <AcoesConstrutorMao
+              mao={mao}
+              acaoPendente={acaoPendente}
+              podeChii={podeChii}
+              podePon={podePon}
+              podeKanAberto={podeKanAberto}
+              podeKanFechado={podeKanFechado}
+              aoAlternarAcao={alternarAcaoMao}
+            />
+          </div>
 
-      <TecladoPedras
-        acaoPendente={acaoPendente}
-        configuracao={configuracao}
-        doraManual={mao.doraManual}
-        dorasReais={dorasReais}
-        esperasPorPedra={esperasPorPedra}
-        filtrarTecladoPorEspera={filtrarTecladoPorEspera}
-        maoCompleta={maoCompleta}
-        podeSelecionarPedra={podeSelecionarPedra}
-        rotuloEsperaTeclado={rotuloEsperaTeclado}
-        classeEsperaTeclado={classeEsperaTeclado}
-        aoAdicionarPedra={adicionarPedra}
-      />
+        </>
+      )}
+
+      {mostrarTeclado && (
+        <div className="painel-teclado-calculadora">
+          {contexto === 'montagem' && (
+            <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
+              <div className="opcoes-acoes-mao-mobile">
+                <AcoesConstrutorMao
+                  mao={mao}
+                  acaoPendente={acaoPendente}
+                  podeChii={podeChii}
+                  podePon={podePon}
+                  podeKanAberto={podeKanAberto}
+                  podeKanFechado={podeKanFechado}
+                  aoAlternarAcao={alternarAcaoMao}
+                  compacto
+                />
+              </div>
+            </div>
+          )}
+          <TecladoPedras
+            acaoPendente={acaoPendente}
+            configuracao={configuracao}
+            doraManual={mao.doraManual}
+            dorasReais={dorasReais}
+            esperasPorPedra={esperasPorPedra}
+            filtrarTecladoPorEspera={filtrarTecladoPorEspera}
+            maoCompleta={maoCompleta}
+            podeSelecionarPedra={podeSelecionarPedra}
+            rotuloEsperaTeclado={rotuloEsperaTeclado}
+            classeEsperaTeclado={classeEsperaTeclado}
+            contexto={contexto}
+            aoAbrirRegras={contexto === 'montagem' ? aoAbrirRegras : undefined}
+            aoAdicionarPedra={adicionarPedra}
+          />
+        </div>
+      )}
     </div>
   )
 }

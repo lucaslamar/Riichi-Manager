@@ -31,7 +31,10 @@ export default function ResumoMaoFixo({
         ))}
         {mao.melds.map((meld, i) => (
           <span key={`meld-resumo-${i}`} className="resumo-meld">
-            <PedrasMeld meld={meld} />
+            <PedrasMeld
+              meld={meld}
+              indiceAgari={mao.agariMeld?.indiceMeld === i ? mao.agariMeld.indicePedra : undefined}
+            />
           </span>
         ))}
       </div>

@@ -4,12 +4,14 @@ import { useAcoesPedras } from './useAcoesPedras'
 import { useEsperasMao } from './useEsperasMao'
 import { useEstadoMao } from './useEstadoMao'
 import { useResultadoMao } from './useResultadoMao'
+import { ordenarPedras } from '../../../logica/mao'
 
 const YAKU_APENAS_BONUS = new Set(['Dora', 'Uradora', 'Akadora', 'Dora manual'])
 
 function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['resultado']) {
-  if (!resultado || resultado.agari == null || resultado.semYaku) return false
+  if (!resultado || resultado.agari == null) return false
   if (resultado.yakuman > 0) return true
+  if (resultado.semYaku) return false
   return resultado.yaku.some(([nome, _han, yakuman]) => yakuman || !YAKU_APENAS_BONUS.has(nome))
 }
 
@@ -109,17 +111,55 @@ export function useCalculadoraMao() {
     fluxoOpcoes.vitoriaDefinida &&
     fluxoOpcoes.ventoRodadaDefinido &&
     fluxoOpcoes.ventoAssentoDefinido
+  /**
+   * Dispara o calculo final somente quando a mao e as opcoes obrigatorias estao prontas.
+   *
+   * Chamado pelo botao Calcular na etapa Finalizar Mao. Nao altera a mao e nao abre
+   * modal diretamente; apenas congela a assinatura usada por `useResultadoMao`.
+   */
   const calcularMaoAtual = () => {
     if (!podeCalcularMao || !fluxoConfiguracaoCompleto) return
     setAssinaturaCalculo(assinaturaMaoAtual)
   }
 
+  /**
+   * Remove apenas a pedra vencedora e retorna a calculadora para a montagem em tenpai.
+   *
+   * Chamado pelo botao "Voltar para montagem" da etapa de finalizacao. Preserva ventos,
+   * honba, doras, riichi e condicoes especiais para reaproveitar configuracoes ao escolher
+   * outra espera. Nao toca nas regras de calculo.
+   */
+  const voltarParaMontagem = () => {
+    if (!maoCompleta || (mao.indiceAgari < 0 && !mao.agariMeld)) return
+    atualizarMao((rascunho) => {
+      if (rascunho.agariMeld) {
+        const agariMeld = rascunho.agariMeld
+        rascunho.melds.splice(agariMeld.indiceMeld, 1)
+        rascunho.pedras.push(...agariMeld.pedrasConsumidasMao)
+        ordenarPedras(rascunho.pedras)
+        rascunho.agariMeld = null
+      } else {
+        rascunho.pedras.splice(rascunho.indiceAgari, 1)
+      }
+      rascunho.indiceAgari = -1
+    })
+    setAssinaturaCalculo(null)
+  }
+
+  /**
+   * Registra que o usuario escolheu Ron ou Tsumo.
+   *
+   * Chamado pelos botoes de vitoria na etapa Finalizar Mao. Afeta o calculo de pontos
+   * e as condicoes especiais disponiveis, mas nao recalcula ate o botao Calcular.
+   */
   const marcarVitoriaDefinida = () =>
     setFluxoOpcoes((fluxoAtual) => ({ ...fluxoAtual, vitoriaDefinida: true }))
 
+  /** Marca que o vento da rodada foi revisado na etapa de finalizacao. */
   const marcarVentoRodadaDefinido = () =>
     setFluxoOpcoes((fluxoAtual) => ({ ...fluxoAtual, ventoRodadaDefinido: true }))
 
+  /** Marca que o vento do jogador foi revisado na etapa de finalizacao. */
   const marcarVentoAssentoDefinido = () =>
     setFluxoOpcoes((fluxoAtual) => ({ ...fluxoAtual, ventoAssentoDefinido: true }))
 
@@ -168,6 +208,7 @@ export function useCalculadoraMao() {
     deveCalcularMao,
     podeCalcularMao: podeCalcularMao && fluxoConfiguracaoCompleto,
     calcularMaoAtual,
+    voltarParaMontagem,
     resultadoComYakuValido,
     resultadoMaoInvalida,
     fluxoOpcoes,

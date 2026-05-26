@@ -3,48 +3,22 @@
 @media (max-width: 768px) {
 
   .cabecalho-calculadora {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
   }
   .titulo-calculadora {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 6px;
-    text-align: center;
-  }
-  .acoes-calculadora {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 1fr;
-  }
-  .cabecalho-calculadora-completo .acoes-calculadora {
-    grid-template-columns: 1fr;
-  }
-  .cabecalho-calculadora-completo .acoes-calculadora > button:first-child {
-    grid-column: 1 / -1;
-  }
-  .cabecalho-calculadora-completo .acoes-calculadora .btn-voltar-calculadora {
-    display: none;
-  }
-  .cabecalho-calculadora-completo .acoes-calculadora > button:not(:first-child) {
-    display: none;
-  }
-  .cabecalho-calculadora-rapido .acoes-calculadora > button {
-    display: none;
-  }
-  .cabecalho-calculadora-rapido .acoes-calculadora .btn-primario {
-    display: none;
+    text-align: left;
   }
 }
 
 @media (max-width: 420px) {
-
   .mao-editor-fixo {
     position: sticky;
-    top: 14px;
+    top: 52px;
     z-index: 5;
-    margin: 0 0 10px;
+    margin: 0 0 3px;
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -67,8 +41,28 @@
     opacity: 1;
   }
   .titulo-mao-editor {
-    font-size: 0.82rem;
-    line-height: 1.25;
+    font-size: 0.76rem;
+    line-height: 1.1;
+  }
+  .cabecalho-mao-editor {
+    margin-bottom: 3px;
+  }
+  .estado-vazio-mao {
+    font-size: 0.74rem;
+    line-height: 1.15;
+  }
+  .btn-limpar-mao {
+    top: 4px;
+    right: 5px;
+    min-height: 20px;
+    padding: 1px 5px;
+    font-size: 0.58rem;
+  }
+  .status-tenpai-mao {
+    top: 26px;
+    right: 5px;
+    padding: 2px 5px;
+    font-size: 0.56rem;
   }
   .seletores-vento-mao {
     display: grid;
@@ -88,9 +82,9 @@
   }
   .card-calculadora-rapida .resultado-rapido {
     position: sticky;
-    top: 8px;
+    top: 48px;
     z-index: 5;
-    order: 1;
+    order: 0;
     margin: 0 0 14px;
     box-shadow: 0 12px 24px rgba(16, 42, 67, 0.18);
   }
@@ -160,35 +154,57 @@
     display: none;
   }
   .menu-acoes-mao-mobile {
-    display: block;
-    margin: 4px -2px 8px;
+    display: none;
+  }
+  .menu-acoes-mao-mobile::-webkit-scrollbar {
+    display: none;
   }
   .opcoes-acoes-mao-mobile {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 5px;
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    gap: 4px;
     padding: 0;
     background: transparent;
   }
   .teclado-pedras {
-    gap: 4px;
+    gap: 3px;
+    padding: 4px;
+    border-radius: 7px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: visible;
   }
   .grupo-teclado-naipe {
     display: block;
+    position: relative;
   }
   .rotulo-naipe-teclado {
-    display: none;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 2;
+    display: block;
+    margin: 0;
+    border-radius: 4px;
+    padding: 1px 3px;
+    background: rgba(248, 250, 252, 0.88);
+    font-size: 0.52rem;
+    line-height: 1;
   }
   .linha-naipe {
     display: flex;
     flex-wrap: wrap;
-    gap: 3px;
+    gap: 2px;
   }
   .teclado-pedras .btn-pedra {
-    width: 42px;
-    height: 56px;
+    width: clamp(30px, 8.4vw, 34px);
+    height: clamp(40px, 11.2vw, 45px);
     min-height: 0;
     padding: 1px;
+    border-width: 1px;
+    border-radius: 5px;
   }
   .resultado-calculadora.resultado-calculadora-embutido.resultado-montagem {
     margin: -4px 0 2px;
@@ -633,13 +649,935 @@
     display: none;
   }
   .btn-acao-mao {
-    width: 100%;
-    min-height: 38px;
-    padding: 6px 5px;
-    border-radius: 8px;
+    width: auto;
+    min-width: 0;
+    flex: 1 1 0;
+    min-height: 28px;
+    padding: 3px 5px;
+    border-width: 0 !important;
+    border-radius: 6px;
     background-clip: padding-box;
-    font-size: 0.74rem;
+    font-size: 0.7rem;
     line-height: 1.12;
-    white-space: normal;
+    white-space: nowrap;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout-montagem-calculadora,
+  .layout-finalizacao-calculadora {
+    grid-template-columns: 1fr;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: contents;
+  }
+
+  .layout-montagem-calculadora.com-esperas .mao-editor-fixo {
+    order: 1;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .resultado-esperas-compacto {
+    order: 2;
+  }
+
+  .layout-montagem-calculadora.com-esperas .indicadores-dora-selecionados {
+    order: 3;
+  }
+
+  .layout-montagem-calculadora.com-esperas .descartes-selecionados {
+    order: 4;
+  }
+
+  .layout-montagem-calculadora.com-esperas .acoes-construtor-mao {
+    order: 5;
+  }
+
+  .layout-montagem-calculadora.com-esperas .teclado-pedras {
+    order: 6;
+  }
+
+  .cabecalho-etapa-calculadora {
+    display: grid;
+  }
+}
+
+@media (max-width: 640px) {
+  .card-mao-completa {
+    gap: 5px;
+  }
+
+  .calculadora-etapa {
+    gap: 4px;
+  }
+
+  .construtor-mao {
+    gap: 4px;
+  }
+
+  .fluxo-calculadora {
+    gap: 5px;
+    padding: 6px;
+    border-radius: 8px;
+  }
+
+  .cabecalho-calculadora {
+    display: none;
+  }
+
+  .titulo-calculadora {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .titulo-calculadora .subtitulo-secao {
+    display: none;
+  }
+
+  .fab-calculadora-padrao {
+    top: 8px;
+    right: 8px;
+    transform: scale(0.88);
+    transform-origin: top right;
+  }
+
+  .fab-calculadora-teclado {
+    top: -38px;
+    right: 2px;
+  }
+
+  .card-calculadora-rapida .fab-calculadora {
+    display: none;
+  }
+
+  .fab-calculadora-padrao.aberto .acao-fab:nth-child(1) {
+    transform: translate(-46px, 0) scale(1);
+  }
+
+  .fab-calculadora-padrao.aberto .acao-fab:nth-child(2) {
+    transform: translate(-38px, 38px) scale(1);
+  }
+
+  .fab-calculadora-padrao.aberto .acao-fab:nth-child(3) {
+    transform: translate(0, 48px) scale(1);
+  }
+
+  .fab-calculadora-padrao.aberto .acao-fab:nth-child(4) {
+    transform: translate(-72px, 32px) scale(1);
+  }
+
+  .cabecalho-etapa-calculadora h3 {
+    font-size: 0.94rem;
+  }
+
+  .cabecalho-etapa-calculadora p {
+    font-size: 0.76rem;
+  }
+
+  .pedras-selecionadas {
+    min-height: 36px;
+    margin-bottom: 4px;
+    gap: 3px;
+    padding: 4px 52px 4px 6px;
+  }
+
+  .construtor-mao-finalizacao .pedras-selecionadas {
+    padding-right: 8px;
+  }
+
+  .grupo-teclado-naipe {
+    display: block;
+  }
+
+  .rotulo-naipe-teclado {
+    display: block;
+    margin: 0 0 3px;
+    font-size: 0.68rem;
+  }
+
+  .linha-naipe {
+    gap: 4px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 40px;
+    height: 53px;
+  }
+
+  .resultado-esperas {
+    gap: 8px;
+  }
+
+  .resultado-esperas p {
+    font-size: 0.78rem;
+  }
+
+  .acao-calcular-mao {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-voltar-montagem {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .teclado-pedras {
+    gap: 3px;
+    padding: 4px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  .mao-editor-fixo,
+  .menu-acoes-mao-mobile {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .grupo-teclado-naipe {
+    position: relative;
+  }
+
+  .rotulo-naipe-teclado {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 2;
+    display: block;
+    margin: 0;
+    border-radius: 4px;
+    padding: 1px 3px;
+    background: rgba(248, 250, 252, 0.88);
+    font-size: 0.52rem;
+    line-height: 1;
+  }
+
+  .linha-naipe {
+    gap: 1px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: clamp(30px, 8vw, 34px);
+    height: clamp(40px, 10.7vw, 45px);
+    min-height: 0;
+    padding: 1px;
+    border-width: 1px;
+    border-radius: 5px;
+  }
+}
+
+@media (max-width: 640px) and (orientation: portrait) {
+  body {
+    padding-bottom: 6px;
+  }
+
+  .conteudo-principal {
+    display: grid;
+    min-height: calc(100dvh - 46px);
+  }
+
+  .conteudo-principal > div {
+    display: grid;
+    min-height: 100%;
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    display: flex;
+    height: calc(100dvh - 46px);
+    min-height: 0;
+    flex-direction: column;
+    margin-bottom: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+  }
+
+  .calculadora-etapa-montagem,
+  .layout-montagem-calculadora,
+  .construtor-mao-montagem {
+    min-height: 0;
+  }
+
+  .calculadora-etapa-montagem {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .layout-montagem-calculadora,
+  .layout-montagem-calculadora.sem-esperas,
+  .layout-montagem-calculadora.com-esperas {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: flex;
+  }
+
+  .construtor-mao-montagem {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .construtor-mao-montagem .estado-vazio-mao {
+    display: none;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    position: static;
+    top: auto;
+    z-index: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-bottom: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo::-webkit-scrollbar {
+    display: none;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo::before {
+    display: none;
+    content: none;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas {
+    min-height: 0;
+    margin-bottom: 0;
+    padding: 0 0 8px;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    flex: 0 0 auto;
+    min-height: 0;
+    margin-top: auto;
+  }
+
+  .teclado-pedras {
+    display: grid;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    align-content: stretch;
+    gap: clamp(8px, 1.4dvh, 14px);
+    padding: 10px 6px calc(10px + env(safe-area-inset-bottom));
+    overflow: visible;
+  }
+
+  .botao-configuracao-teclado {
+    top: 5px;
+    right: 5px;
+  }
+
+  .grupo-teclado-naipe {
+    display: flex;
+    min-height: 0;
+    align-items: center;
+  }
+
+  .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  .linha-naipe {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    align-items: start;
+    justify-content: start;
+    gap: 2px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 1 / 1;
+    padding: 2px;
+    border-radius: 6px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 920px) {
+  .layout-montagem-calculadora,
+  .layout-finalizacao-calculadora {
+    grid-template-columns: minmax(0, 1fr) minmax(290px, 0.9fr);
+  }
+
+  .layout-montagem-calculadora.sem-esperas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .construtor-mao-montagem {
+    grid-template-columns: minmax(220px, 0.5fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 8px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo,
+  .construtor-mao-montagem .indicadores-dora-selecionados,
+  .construtor-mao-montagem .descartes-selecionados,
+  .construtor-mao-montagem .acoes-construtor-mao {
+    grid-column: 1;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    grid-column: 2;
+    grid-row: 1 / span 5;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 0;
+  }
+
+  .fluxo-calculadora {
+    padding: 10px;
+  }
+
+  .cabecalho-calculadora {
+    display: none;
+  }
+
+  .mao-editor-fixo {
+    position: static;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 34px;
+    height: 45px;
+  }
+
+  .btn-acao-mao {
+    min-height: 32px;
+    padding: 4px 6px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 640px) {
+  body:has(.card-mao-completa.etapa-finalizacao) {
+    padding: 0;
+    background: #ffffff;
+  }
+
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) main {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  .cabecalho-finalizacao {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    gap: 8px;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding: 8px 10px 14px;
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .calculadora-etapa-finalizacao {
+    gap: 8px;
+  }
+
+  .cabecalho-etapa-calculadora.cabecalho-finalizacao {
+    margin: 0;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .cabecalho-finalizacao h3 {
+    font-size: 0.9rem;
+  }
+
+  .acoes-finalizacao-calculadora {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 2px;
+    border-color: transparent;
+    padding: 0;
+    background: transparent;
+  }
+
+  .acao-finalizacao {
+    width: 30px;
+    min-height: 30px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: 8px;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes {
+    gap: 8px;
+  }
+
+  .construtor-mao-finalizacao {
+    gap: 6px;
+  }
+
+  .construtor-mao-finalizacao .cabecalho-mao-editor {
+    min-height: 30px;
+  }
+
+  .construtor-mao-finalizacao .mao-editor-fixo,
+  .opcoes-mao-embutidas {
+    background: transparent;
+  }
+
+  .construtor-mao-finalizacao .pedras-selecionadas {
+    display: grid;
+    gap: 6px;
+    border-color: transparent;
+    padding: 4px 0;
+    background: transparent;
+  }
+
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    gap: 3px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #edf2f7;
+  }
+
+  .construtor-mao-finalizacao .melds-finalizacao-coluna {
+    gap: 6px;
+  }
+
+  .construtor-mao-finalizacao .chip-meld-mao {
+    width: 100%;
+    min-height: 42px;
+    padding: 3px 5px !important;
+    background: transparent !important;
+  }
+
+  .construtor-mao-finalizacao .chip-pedra.agari {
+    box-shadow:
+      0 0 0 2px rgba(249, 115, 22, 0.22),
+      inset 0 0 0 1px rgba(253, 186, 116, 0.38);
+  }
+
+  .opcoes-mao-embutidas {
+    gap: 0;
+  }
+
+  .campo-vitoria-mao {
+    width: 100%;
+  }
+
+  .grupo-opcoes-mao {
+    gap: 4px;
+  }
+
+  .grupo-opcoes-dora {
+    margin-bottom: 6px;
+  }
+
+  .grupo-opcoes-dora .indicadores-dora-selecionados {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .grupo-opcoes-dora .grupo-indicador-dora {
+    padding: 5px 6px;
+  }
+
+  .toggle-agari-mao,
+  .linha-opcoes-mao {
+    border-radius: 9px;
+    padding: 3px;
+    background: #eef2f6;
+  }
+
+  .toggle-agari-mao button,
+  .linha-opcoes-mao .btn-toggle-mao {
+    border-width: 0 !important;
+    border-radius: 7px;
+    box-shadow: none;
+  }
+
+  .descartes-finalizacao {
+    margin: -2px 0 8px;
+  }
+
+  .cabecalho-descartes-finalizacao {
+    min-height: 32px;
+    padding: 4px 7px;
+    background: #f8fafc;
+  }
+
+  .grade-descartes-finalizacao {
+    grid-template-columns: repeat(5, 30px);
+    gap: 3px;
+  }
+
+  .descarte-finalizacao.chip-pedra {
+    width: 30px;
+    height: 40px;
+  }
+
+  .teclado-pedras {
+    align-content: start;
+    gap: 2px;
+    padding: 5px 5px calc(6px + env(safe-area-inset-bottom));
+    border-color: #d7e1ea;
+    border-radius: 0 0 10px 10px;
+    background: #f2f4f7;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    touch-action: manipulation;
+    user-select: none;
+  }
+
+  .mao-editor-fixo > .menu-acoes-mao-mobile {
+    display: none;
+  }
+
+  .menu-acoes-teclado-mobile {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    touch-action: manipulation;
+    user-select: none;
+  }
+
+  .menu-acoes-teclado-mobile::-webkit-scrollbar {
+    display: none;
+  }
+
+  .teclado-pedras .botao-configuracao-teclado {
+    position: static;
+    order: 5;
+    align-self: end;
+    width: 34px;
+    min-height: 34px;
+    margin-top: 1px;
+    border-color: transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: #155b98;
+    box-shadow: none;
+  }
+
+  .teclado-pedras .botao-configuracao-teclado:hover,
+  .teclado-pedras .botao-configuracao-teclado:focus-visible {
+    border-color: transparent;
+    background: rgba(21, 91, 152, 0.08);
+  }
+
+  .grupo-teclado-naipe {
+    display: block;
+    min-height: 0;
+  }
+
+  .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  .linha-naipe {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    justify-content: start;
+    gap: 1px;
+    touch-action: manipulation;
+  }
+
+  .teclado-pedras .btn-pedra {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 0;
+    padding: 1px;
+    border-width: 1px;
+    border-radius: 6px;
+    touch-action: manipulation;
+  }
+
+  .chip-acao-meld-ativa {
+    margin-bottom: 3px;
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 640px) and (orientation: portrait) {
+  html:has(.card-mao-completa.etapa-montagem),
+  body:has(.card-mao-completa.etapa-montagem) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) {
+    padding-bottom: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    flex: 0 0 auto;
+    min-height: 0;
+    margin-top: 0;
+    margin-inline: -10px;
+    margin-bottom: 0;
+    width: calc(100% + 20px);
+    max-width: none;
+    border-inline: 0;
+    border-bottom: 0;
+    border-radius: 0;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile {
+    order: 20;
+    flex: 0 0 auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-inline: -10px;
+    width: calc(100% + 20px);
+    border-top: 1px solid #d7e1ea;
+    border-radius: 10px 10px 0 0;
+    background: #f2f4f7;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    order: 21;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile {
+    justify-content: space-between;
+    gap: 2px;
+    padding: 0;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao {
+    min-height: 40px;
+    border-radius: 0;
+    font-size: 0.86rem;
+    font-weight: 800;
+    touch-action: manipulation;
+  }
+
+  .teclado-pedras {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) and (orientation: portrait) {
+  html:has(.card-mao-completa.etapa-montagem),
+  body:has(.card-mao-completa.etapa-montagem) {
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) {
+    padding: 0;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-montagem) main {
+    width: 100%;
+    max-width: none;
+    min-height: calc(100dvh - 46px);
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    background: #ffffff;
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    padding: 8px 12px 6px;
+    background: #ffffff;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas.modo-meld-ativo {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    order: 20;
+    display: flex;
+    width: 100%;
+    flex: 0 0 auto;
+    flex-direction: column;
+    margin: auto 0 0;
+    border: 0;
+    border-top: 1px solid #d8e1ea;
+    border-radius: 12px 12px 0 0;
+    padding: 6px 2px calc(5px + env(safe-area-inset-bottom));
+    background: #eef2f6;
+    box-shadow: none;
+    touch-action: manipulation;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile {
+    order: 1;
+    width: 100%;
+    margin: 0 0 5px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: stretch;
+    justify-content: stretch;
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid #d8e1ea;
+    border-radius: 9px;
+    padding: 2px;
+    background: #f8fafc;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 34px;
+    border: 0 !important;
+    border-left: 1px solid #e2e8f0 !important;
+    border-radius: 0;
+    background: transparent !important;
+    color: #40566d !important;
+    font-size: 0.78rem;
+    font-weight: 900;
+    background-clip: padding-box;
+    box-shadow: none;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao:first-child {
+    border-left: 0 !important;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao[aria-pressed='true'] {
+    border-left-color: transparent !important;
+    border-radius: 7px;
+    background: #155b98 !important;
+    color: #ffffff !important;
+  }
+
+  .construtor-mao-montagem
+    .menu-acoes-teclado-mobile
+    .btn-acao-mao[aria-pressed='true']
+    + .btn-acao-mao {
+    border-left-color: transparent !important;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao:disabled {
+    color: #94a3b8 !important;
+    opacity: 0.55 !important;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    order: 2;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0 0 9px 9px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .construtor-mao-montagem .linha-naipe {
+    gap: 1px;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    aspect-ratio: 0.84 / 1;
+    overflow: hidden;
+    padding: 1px;
+    border-width: 1px;
+    border-color: #d9e0e8;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .tile-img,
+  .construtor-mao-montagem .teclado-pedras .tile-fallback {
+    width: 106%;
+    height: 106%;
+    margin: -3%;
+  }
+
+  .construtor-mao-montagem .badge-espera-teclado {
+    right: 2px;
+    bottom: 2px;
+    left: 2px;
+    min-height: 12px;
+    border-radius: 4px;
+    font-size: 0.5rem;
+    line-height: 12px;
+  }
+
+  .layout-montagem-calculadora.com-esperas
+    .painel-teclado-calculadora
+    .menu-acoes-teclado-mobile {
+    order: 1;
+  }
+
+  .layout-montagem-calculadora.com-esperas .painel-teclado-calculadora .teclado-pedras {
+    order: 2;
+  }
+
+  .teclado-pedras .botao-configuracao-teclado {
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
+    width: 34px;
+    min-height: 34px;
+    margin: 0;
+  }
+
+  .status-tenpai-cabecalho {
+    min-height: 20px;
+    border-width: 1px;
+    padding: 2px 6px;
+    background: #ffffff;
+    font-size: 0.56rem;
   }
 }

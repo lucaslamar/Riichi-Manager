@@ -1,5 +1,33 @@
 # Changelog - Riichi Manager
 
+## [4.0.0] - 2026-05-26
+
+### Melhorias
+
+- Redesenhada a Calculadora de Mão no mobile para ter sensação de tela full-screen de app, reduzindo a aparência de card centralizado dentro de página.
+- Refinado o teclado de pedras no mobile com painel mais integrado, maior aproveitamento da largura, tiles maiores, mais quadradas e com espaçamento compacto.
+- Transformada a barra de ações **Chi**, **Pon**, **Kan**, **K.F.**, **Desc.** e **Dora** em um controle mais unificado, com destaque principal no modo ativo.
+- Removidos rótulos visuais de naipes no teclado mobile, preservando acessibilidade por textos invisíveis e aria-labels.
+- Reposicionada a engrenagem de **Regras de cálculo** para ficar mais discreta e integrada ao teclado.
+- Reorganizada a tela de **Finalização da mão** para reduzir containers aninhados, remover título duplicado e deixar **MÃO COMPLETA 14/14** como cabeçalho principal da seção.
+- Separada a mão principal dos melds na Finalização, mantendo **Chi**, **Pon** e **Kan** organizados em coluna para melhorar leitura no mobile.
+- Adicionada seção compacta de **Descartes / Furiten** na Finalização, com agrupamento por tipo de pedra e contador quando houver descartes repetidos.
+- Melhorada a responsividade entre mobile e desktop, mantendo navegação lateral nos dois contextos e evitando que o desktop pareça uma tela mobile estreita.
+- Adicionada indicação compacta de modo ativo também para **Descartes** e **Dora**, seguindo o mesmo padrão de feedback usado em **Chi**, **Pon** e **Kan**.
+
+### Corrigido
+
+- Corrigida a detecção de tenpai e esperas em mãos com melds **Chi**, **Pon**, **Kan aberto** e **Kan fechado**.
+- Corrigido o fluxo em que, após formar um meld e chegar a 13 slots, o modo ativo permanecia ligado e impedia clicar corretamente na espera vencedora.
+- Corrigida a finalização de mãos em que a tile vencedora completa um meld, evitando que o app fique preso na montagem.
+- Corrigida a pedra vencedora errada na Finalização quando a batida acontecia dentro de um meld; agora a tile clicada é preservada explicitamente.
+- Corrigido o destaque laranja para aparecer no grupo correto quando a tile vencedora completa **Chi**, **Pon** ou **Kan**, sem marcar par ou pedra solta por engano.
+- Corrigido o retorno da Finalização para a montagem para desfazer corretamente o meld de batida e restaurar as pedras consumidas, sem trocar a espera anterior.
+- Corrigido o cálculo e a exibição de han das esperas em mãos com melds, preservando casos com yaku válido, sem yaku e furiten.
+- Corrigidos os botões de ação da Finalização (**editar**, **regras/configurações** e **limpar**) para permanecerem clicáveis e acessíveis.
+- Corrigida a contagem de yakuman como yaku válido, evitando que mãos de yakuman sejam tratadas como sem yaku.
+- Removida linha fina/artefato visual que aparecia abaixo de **MÃO X/14** ao ativar modos como **Chi**, **Pon** ou **Kan**.
+
 ## [3.0.1] - 2026-05-24
 
 ### Melhorias

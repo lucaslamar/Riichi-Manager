@@ -13,10 +13,19 @@ export type Meld =
   | { tipo: 'kanAberto'; pedras: CodigoPedra[] } // kan declarado (aberto)
   | { tipo: 'kanFechado'; pedras: CodigoPedra[] } // kan concealed (fechado)
 
+export interface AgariMeld {
+  indiceMeld: number
+  indicePedra: number
+  pedra: CodigoPedra
+  tipo: Meld['tipo']
+  pedrasConsumidasMao: CodigoPedra[]
+}
+
 export interface Mao {
   pedras: CodigoPedra[]
   melds: Meld[]
   indiceAgari: number
+  agariMeld: AgariMeld | null
   agari: 'ron' | 'tsumo'
   dora: CodigoPedra[]
   uradora: CodigoPedra[]

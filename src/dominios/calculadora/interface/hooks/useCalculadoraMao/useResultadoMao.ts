@@ -63,13 +63,22 @@ export function useResultadoMao({
     if (!deveCalcularMao || !maoCompleta || mao.agari !== 'ron' || mao.descartes.length === 0) {
       return null
     }
-    if (mao.indiceAgari < 0 || mao.indiceAgari >= mao.pedras.length) return null
+    if (!mao.agariMeld && (mao.indiceAgari < 0 || mao.indiceAgari >= mao.pedras.length)) return null
 
-    const maoBase: Mao = {
-      ...mao,
-      pedras: mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari),
-      indiceAgari: -1,
-    }
+    const maoBase: Mao = mao.agariMeld
+      ? {
+          ...mao,
+          pedras: [...mao.pedras, ...mao.agariMeld.pedrasConsumidasMao],
+          melds: mao.melds.filter((_meld, indice) => indice !== mao.agariMeld?.indiceMeld),
+          indiceAgari: -1,
+          agariMeld: null,
+        }
+      : {
+          ...mao,
+          pedras: mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari),
+          indiceAgari: -1,
+          agariMeld: null,
+        }
     const esperas = calcularEsperasPossiveis(maoBase, configuracao, 13)
     const esperasFuriten = esperas.filter((espera) => !espera.semYaku && espera.furiten)
 

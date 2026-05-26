@@ -1,18 +1,25 @@
 import { useState } from 'react'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
+import { codigoBase, nomePedraAcessivel } from '../constantes'
 import { BotaoToggle } from './Botoes'
+import { IndicadoresDora } from './construtor-mao/IndicadoresDora'
+import { PedraSvg } from './PedraSvg'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
-
-const TEXTO_AJUDA_DORAS_MANUAIS =
-  'Ao definir doras manualmente, a calculadora ignora doras, aka doras e ura doras detectadas automaticamente na construção manual da mão, usando somente o valor informado aqui. Os indicadores de dora e aka doras ainda podem aparecer visualmente na mão, mas não alteram o cálculo enquanto este campo estiver ativo.'
 
 interface PropsOpcoesMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
 }
 
-/** Controles progressivos de contexto da vitória. */
+/**
+ * Controles progressivos de contexto da vitoria.
+ *
+ * Cada botao apenas altera estado de configuracao. O calculo final continua
+ * concentrado no botao Calcular para preservar previsibilidade do fluxo mobile.
+ */
 export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) {
+  const { t } = useI18n()
   const {
     mao,
     atualizarMao,
@@ -24,6 +31,16 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
     marcarVentoAssentoDefinido,
   } = estado
   const [ajudaDoraAberta, setAjudaDoraAberta] = useState(false)
+  const [descartesExpandidos, setDescartesExpandidos] = useState(false)
+  const descartesUnicos = mao.descartes.reduce<
+    Array<{ chave: string; pedra: (typeof mao.descartes)[number]; quantidade: number }>
+  >((lista, pedra) => {
+    const chave = codigoBase(pedra)
+    const existente = lista.find((item) => item.chave === chave)
+    if (existente) existente.quantidade += 1
+    else lista.push({ chave, pedra, quantidade: 1 })
+    return lista
+  }, [])
   const honba = Number.isFinite(mao.honba) ? mao.honba : 0
   const mostrarOpcoesTenpai = slotsUsados >= 13
   const mostrarConfiguracaoBasica = mostrarOpcoesTenpai
@@ -38,7 +55,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
       <div className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}>
-        <span>Vitória</span>
+        <span>{t('calculator.victory')}</span>
         <ToggleAgari
           mao={mao}
           atualizarMao={atualizarMao}
@@ -48,13 +65,14 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
       </div>
 
       <section className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}>
-        <span className="rotulo-bloco-opcoes">Honba e doras</span>
+        <span className="rotulo-bloco-opcoes">{t('calculator.honbaAndDora')}</span>
         <div className="contadores-dora-honba">
           <div className="contador-dora-manual contador-honba">
-            <span>Honba</span>
+            <span>{t('calculator.honba')}</span>
             <div>
               <button
                 type="button"
+                aria-label={`${t('calculator.honba')} -`}
                 disabled={honba <= 0}
                 onClick={() =>
                   atualizarMao((rascunho) => {
@@ -68,6 +86,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               <strong>{honba}</strong>
               <button
                 type="button"
+                aria-label={`${t('calculator.honba')} +`}
                 disabled={honba >= 99}
                 onClick={() =>
                   atualizarMao((rascunho) => {
@@ -83,20 +102,21 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
 
           <div className="contador-dora-manual">
             <span className="rotulo-contador-com-ajuda">
-              Doras na mão
+              {t('calculator.manualDora')}
               <button
                 type="button"
                 className="icone-ajuda-dora"
-                title={TEXTO_AJUDA_DORAS_MANUAIS}
-                aria-label="Ajuda sobre doras manuais"
+                title={t('calculator.manualDoraHelp')}
+                aria-label={t('calculator.manualDoraHelpTitle')}
                 onClick={() => setAjudaDoraAberta(true)}
               >
-                ⓘ
+                i
               </button>
             </span>
             <div>
               <button
                 type="button"
+                aria-label={`${t('calculator.manualDora')} -`}
                 disabled={mao.doraManual <= 0}
                 onClick={() =>
                   atualizarMao((rascunho) => {
@@ -109,6 +129,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               <strong>{mao.doraManual}</strong>
               <button
                 type="button"
+                aria-label={`${t('calculator.manualDora')} +`}
                 disabled={mao.doraManual >= 13}
                 onClick={() =>
                   atualizarMao((rascunho) => {
@@ -125,10 +146,47 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
             </div>
           </div>
         </div>
+        <IndicadoresDora mao={mao} atualizarMao={atualizarMao} />
       </section>
 
+      {descartesUnicos.length > 0 && (
+        <section className="descartes-finalizacao">
+          <button
+            className="cabecalho-descartes-finalizacao"
+            type="button"
+            aria-expanded={descartesExpandidos}
+            onClick={() => setDescartesExpandidos((expandido) => !expandido)}
+          >
+            <span>{t('calculator.discardsFuriten')}</span>
+            <strong>{mao.descartes.length}</strong>
+            <i
+              className={`fas ${descartesExpandidos ? 'fa-chevron-up' : 'fa-chevron-down'}`}
+              aria-hidden="true"
+            />
+          </button>
+          <div
+            className={`grade-descartes-finalizacao ${
+              descartesExpandidos ? 'grade-descartes-expandida' : 'grade-descartes-compacta'
+            }`}
+          >
+            {(descartesExpandidos ? descartesUnicos : descartesUnicos.slice(0, 5)).map(
+              ({ chave, pedra, quantidade }) => (
+                <span
+                  key={chave}
+                  className="chip-pedra descarte descarte-finalizacao"
+                  aria-label={`${nomePedraAcessivel(pedra)} x${quantidade}`}
+                >
+                  <PedraSvg pedra={pedra} />
+                  {quantidade > 1 && <span className="contador-descarte-finalizacao">x{quantidade}</span>}
+                </span>
+              ),
+            )}
+          </div>
+        </section>
+      )}
+
       <section className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}>
-        <span className="rotulo-bloco-opcoes">Configuração de ventos</span>
+        <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
         <SeletorVentos
           mao={mao}
           atualizarMao={atualizarMao}
@@ -146,10 +204,10 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
       >
         {mostrarRiichi && (
           <section className={`grupo-opcoes-mao ${classeEtapa(mostrarRiichi)}`}>
-            <span className="rotulo-bloco-opcoes">Riichi</span>
+            <span className="rotulo-bloco-opcoes">{t('calculator.riichi')}</span>
             <div className="linha-opcoes-mao">
               <BotaoToggle
-                rotulo="Riichi"
+                rotulo={t('calculator.riichi')}
                 ativo={mao.riichi !== null}
                 desabilitado={maoAberta}
                 corAtiva="#f97316"
@@ -164,7 +222,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               {mao.riichi && (
                 <>
                   <BotaoToggle
-                    rotulo="Ippatsu"
+                    rotulo={t('calculator.ippatsu')}
                     ativo={mao.riichi.ippatsu}
                     desabilitado={false}
                     corAtiva="#f97316"
@@ -175,7 +233,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
                     }
                   />
                   <BotaoToggle
-                    rotulo="Double Riichi"
+                    rotulo={t('calculator.doubleRiichi')}
                     ativo={mao.riichi.duplo}
                     desabilitado={false}
                     corAtiva="#f97316"
@@ -192,10 +250,10 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
         )}
 
         <section className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}>
-          <span className="rotulo-bloco-opcoes">Condições especiais</span>
+          <span className="rotulo-bloco-opcoes">{t('calculator.specialConditions')}</span>
           <div className="linha-opcoes-mao linha-condicoes-especiais">
             <BotaoToggle
-              rotulo="Tenhou / Chiihou"
+              rotulo={t('calculator.tenhouChiihou')}
               ativo={mao.bencao}
               desabilitado={mao.melds.length > 0}
               aoClicar={() =>
@@ -210,7 +268,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               }
             />
             <BotaoToggle
-              rotulo={mao.agari === 'ron' ? 'Chankan' : 'Rinshan'}
+              rotulo={mao.agari === 'ron' ? t('calculator.chankan') : t('calculator.rinshan')}
               ativo={mao.kan}
               desabilitado={false}
               aoClicar={() =>
@@ -224,7 +282,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               }
             />
             <BotaoToggle
-              rotulo={mao.agari === 'ron' ? 'Houtei' : 'Haitei'}
+              rotulo={mao.agari === 'ron' ? t('calculator.houtei') : t('calculator.haitei')}
               ativo={mao.ultimaPedra}
               desabilitado={false}
               aoClicar={() =>
@@ -254,17 +312,17 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
             onClick={(evento) => evento.stopPropagation()}
           >
             <div className="ajuda-dora-mobile-cabecalho">
-              <strong id="titulo-ajuda-dora">Doras na mão</strong>
+              <strong id="titulo-ajuda-dora">{t('calculator.manualDoraHelpTitle')}</strong>
               <button
                 className="btn-icone"
                 type="button"
-                aria-label="Fechar ajuda"
+                aria-label={t('actions.close')}
                 onClick={() => setAjudaDoraAberta(false)}
               >
-                ×
+                x
               </button>
             </div>
-            <p>{TEXTO_AJUDA_DORAS_MANUAIS}</p>
+            <p>{t('calculator.manualDoraHelp')}</p>
           </div>
         </div>
       )}

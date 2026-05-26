@@ -1,40 +1,22 @@
-/**
- * @fileoverview Menu inicial da aplicação.
- *
- * Conceitos React demonstrados aqui:
- * - Props: dados passados do componente pai para o filho (como parâmetros de função).
- * - Tipagem de props com TypeScript: garante que o pai passe os dados corretos.
- */
-
 import type { TelaPrincipal } from '@/app/App'
 
-/**
- * Props (propriedades) do MenuInicial.
- * O TypeScript verifica que quem usar este componente passe exatamente esses dados.
- */
 interface PropsMenuInicial {
-  /** Chamada quando o usuário clica em "Torneio Fast". */
   aoClicarTorneioFast: () => void
-  /** Chamada para navegar para outras telas. */
   aoNavegar: (tela: TelaPrincipal) => void
 }
 
 /**
- * Menu inicial com os quatro módulos do app.
- * Recebe callbacks do App.tsx para navegar entre telas.
+ * Menu legado mantido para reuso eventual.
  *
- * @param props - aoClicarTorneioFast e aoNavegar.
- * @returns JSX do card de menu.
+ * O app agora abre direto na calculadora; este componente mostra apenas modulos
+ * prontos e nao expoe Sistema Suico ou Referencia de Yaku.
  */
 export default function MenuInicial({ aoClicarTorneioFast, aoNavegar }: PropsMenuInicial) {
   return (
     <section className="card menu-inicial" aria-label="Menu principal">
       <div className="menu-inicial-hero">
-        <h2>Um ecossistema para clubes de Riichi Mahjong</h2>
-        <p>
-          Organize torneios fast, acompanhe partidas em tempo real e use a calculadora de pontos
-          integrada — tudo em um só lugar.
-        </p>
+        <h2>Riichi Manager</h2>
+        <p>Escolha um modulo pronto do ecossistema.</p>
       </div>
 
       <div className="menu-inicial-acoes">
@@ -43,27 +25,19 @@ export default function MenuInicial({ aoClicarTorneioFast, aoNavegar }: PropsMen
           type="button"
           onClick={() => aoNavegar('calculadora')}
         >
-          <i className="fas fa-calculator" aria-hidden="true" /> Calculadora de mão
+          <i className="fas fa-calculator" aria-hidden="true" /> Calculadora de mao
+        </button>
+
+        <button
+          className="btn-contorno botao-menu"
+          type="button"
+          onClick={() => aoNavegar('calculadoraRapida')}
+        >
+          <i className="fas fa-bolt" aria-hidden="true" /> Calculadora de Han e Fu
         </button>
 
         <button className="btn-contorno botao-menu" type="button" onClick={aoClicarTorneioFast}>
-          <i className="fas fa-bolt" aria-hidden="true" /> Torneio fast
-        </button>
-
-        <button
-          className="btn-contorno botao-menu"
-          type="button"
-          onClick={() => aoNavegar('suico')}
-        >
-          <i className="fas fa-trophy" aria-hidden="true" /> Sistema suíço
-        </button>
-
-        <button
-          className="btn-contorno botao-menu"
-          type="button"
-          onClick={() => aoNavegar('referenciaYaku')}
-        >
-          <i className="fas fa-book" aria-hidden="true" /> Referência de yaku
+          <i className="fas fa-table" aria-hidden="true" /> Torneio fast
         </button>
       </div>
     </section>

@@ -57,8 +57,8 @@ export function useAcoesPedras({
    * O contrato é nunca ultrapassar limite físico de pedras nem completar além de 14 slots.
    */
   const adicionarPedra = (pedra: CodigoPedra) => {
-    const manterAcaoMeld = () =>
-      setAcaoPendente(slotsUsados <= 11 ? criarAcao(acaoPendente!.tipo) : null)
+    const atualizarAcaoAposMeld = (tipo: TipoMeldCalculadora, slotsAposMeld: number) =>
+      setAcaoPendente(slotsAposMeld < 13 ? criarAcao(tipo) : null)
 
     /**
      * Move da mão fechada as pedras que já estavam disponíveis e registra o meld final.
@@ -68,9 +68,13 @@ export function useAcoesPedras({
       tipo: TipoMeldCalculadora,
       pedras: CodigoPedra[],
       abrirMao: boolean,
+      pedraAgari?: CodigoPedra,
     ) => {
-      if (!podeFormarMeldComMao(pedras)) return false
+      const slotsMeld = 3
+      if (!podeFormarMeldComMao(pedras, slotsMeld)) return null
       const indicesRemovidos = indicesPedrasNaMaoPara(pedras)
+      const pedrasConsumidasMao = indicesRemovidos.map((indice) => mao.pedras[indice])
+      const slotsAposMeld = slotsUsados + slotsMeld - indicesRemovidos.length
       const pedrasMeld = [...pedras]
       const posicoesAtualizadas = new Set<number>()
 
@@ -95,11 +99,28 @@ export function useAcoesPedras({
         if (rascunho.indiceAgari >= rascunho.pedras.length) {
           rascunho.indiceAgari = rascunho.pedras.length - 1
         }
-        rascunho.melds.push({ tipo, pedras: pedrasMeld })
+        const meldCriado = { tipo, pedras: pedrasMeld }
+        rascunho.melds.push(meldCriado)
         ordenarMelds(rascunho.melds)
+        if (slotsAposMeld >= 14 && pedraAgari) {
+          const indiceMeld = rascunho.melds.indexOf(meldCriado)
+          let indicePedra = pedrasMeld.findIndex((pedraMeld) => pedraMeld === pedraAgari)
+          if (indicePedra < 0) {
+            indicePedra = pedrasMeld.findIndex((pedraMeld) => codigoBase(pedraMeld) === codigoBase(pedraAgari))
+          }
+          rascunho.indiceAgari = -1
+          rascunho.agariMeld = {
+            indiceMeld,
+            indicePedra: Math.max(indicePedra, 0),
+            pedra: pedraAgari,
+            tipo,
+            pedrasConsumidasMao,
+          }
+          if (abrirMao) rascunho.agari = 'ron'
+        }
         if (abrirMao) rascunho.riichi = null
       })
-      return true
+      return slotsAposMeld
     }
 
     if (!acaoPendente) {
@@ -116,7 +137,8 @@ export function useAcoesPedras({
       atualizarMao((rascunho) => {
         rascunho.pedras.push(pedra)
         ordenarPedras(rascunho.pedras)
-        rascunho.indiceAgari = rascunho.pedras.lastIndexOf(pedra)
+        rascunho.indiceAgari = slotsUsados === 13 ? rascunho.pedras.lastIndexOf(pedra) : -1
+        rascunho.agariMeld = null
         if (esperaClicada?.furiten) rascunho.agari = 'ron'
       })
       return
@@ -151,20 +173,23 @@ export function useAcoesPedras({
         return
       case 'pon': {
         const pedras = expandirGrupoMesmoValor(pedra, 3)
-        if (!aplicarMeld('pon', pedras, true)) return
-        manterAcaoMeld()
+        const slotsAposMeld = aplicarMeld('pon', pedras, true, pedra)
+        if (slotsAposMeld === null) return
+        atualizarAcaoAposMeld('pon', slotsAposMeld)
         return
       }
       case 'kanAberto': {
         const pedras = expandirGrupoMesmoValor(pedra, 4)
-        if (!aplicarMeld('kanAberto', pedras, true)) return
-        manterAcaoMeld()
+        const slotsAposMeld = aplicarMeld('kanAberto', pedras, true, pedra)
+        if (slotsAposMeld === null) return
+        atualizarAcaoAposMeld('kanAberto', slotsAposMeld)
         return
       }
       case 'kanFechado': {
         const pedras = expandirGrupoMesmoValor(pedra, 4)
-        if (!aplicarMeld('kanFechado', pedras, false)) return
-        manterAcaoMeld()
+        const slotsAposMeld = aplicarMeld('kanFechado', pedras, false, pedra)
+        if (slotsAposMeld === null) return
+        atualizarAcaoAposMeld('kanFechado', slotsAposMeld)
         return
       }
       case 'chii': {
@@ -177,14 +202,16 @@ export function useAcoesPedras({
         const sequenciasPossiveis = sequenciasChiiPossiveis(novasPedras)
         const sequenciaEscolhida = escolherSequenciaChii(novasPedras, sequenciasPossiveis)
         if (sequenciaEscolhida) {
-          if (!aplicarMeld('chii', [...sequenciaEscolhida], true)) return
-          setAcaoPendente(slotsUsados <= 11 ? criarAcao('chii') : null)
+          const slotsAposMeld = aplicarMeld('chii', [...sequenciaEscolhida], true, pedra)
+          if (slotsAposMeld === null) return
+          atualizarAcaoAposMeld('chii', slotsAposMeld)
         } else if (novasPedras.length < 3) {
           setAcaoPendente({ tipo: 'chii', pedras: novasPedras })
         } else {
           const pedrasChii = ordenarPedras([...novasPedras])
-          if (!aplicarMeld('chii', [...pedrasChii], true)) return
-          setAcaoPendente(slotsUsados <= 11 ? criarAcao('chii') : null)
+          const slotsAposMeld = aplicarMeld('chii', [...pedrasChii], true, pedra)
+          if (slotsAposMeld === null) return
+          atualizarAcaoAposMeld('chii', slotsAposMeld)
         }
         return
       }
@@ -196,6 +223,7 @@ export function useAcoesPedras({
     atualizarMao((rascunho) => {
       rascunho.pedras.splice(indicePedra, 1)
       if (rascunho.indiceAgari >= indicePedra) rascunho.indiceAgari--
+      rascunho.agariMeld = null
     })
     setAcaoPendente(null)
   }
@@ -204,6 +232,7 @@ export function useAcoesPedras({
   const removerMeld = (indiceMeld: number) => {
     atualizarMao((rascunho) => {
       rascunho.melds.splice(indiceMeld, 1)
+      rascunho.agariMeld = null
     })
     setAcaoPendente(null)
   }

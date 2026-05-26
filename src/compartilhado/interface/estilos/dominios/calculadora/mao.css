@@ -7,7 +7,8 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
+  margin-bottom: 6px;
 }
 
 .titulo-mao-editor {
@@ -18,6 +19,32 @@
   font-size: 0.88rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.acoes-cabecalho-mao {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-limpar-mao-cabecalho {
+  display: inline-flex;
+  width: 28px;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #ef5350;
+  cursor: pointer;
+  font-size: 0.76rem;
+}
+
+.btn-limpar-mao-cabecalho:hover {
+  border-color: #ffcdd2;
+  background: #fff5f5;
 }
 
 .btn-limpar-mao {
@@ -80,21 +107,67 @@
   margin-bottom: 10px;
 }
 
+.chip-meld-mao {
+  background-clip: padding-box;
+  color: #334155;
+}
+
+.chip-meld-mao:hover {
+  background: rgba(248, 250, 252, 0.78) !important;
+}
+
+.chip-meld-mao .meld-pedras {
+  gap: 2px;
+}
+
+.chip-meld-mao .meld-tile {
+  border-color: #dbe3ec;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.mao-principal-finalizacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+}
+
+.melds-finalizacao-coluna {
+  display: grid;
+  width: 100%;
+  gap: 5px;
+}
+
+.melds-finalizacao-coluna .chip-meld-mao {
+  width: fit-content;
+  max-width: 100%;
+  justify-content: flex-start;
+}
+
 .chip-acao-meld-ativa {
   display: inline-flex;
   width: fit-content;
-  min-height: 30px;
+  min-height: 24px;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-  padding: 5px 10px;
-  border: 2px solid;
+  gap: 4px;
+  margin: 0;
+  padding: 2px 7px;
+  border: 1px solid;
   border-radius: 999px;
   background: #ffffff;
   cursor: pointer;
-  font-size: 0.78rem;
+  font-size: 0.64rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+.status-tenpai-cabecalho {
+  position: static;
+  max-width: none;
+  min-height: 22px;
+  padding: 3px 7px;
+  font-size: 0.58rem;
+  white-space: nowrap;
 }
 
 .pedras-selecionadas.modo-meld-ativo {
@@ -104,6 +177,7 @@
 }
 
 .chip-pedra {
+  position: relative;
   width: 34px;
   height: 46px;
   padding: 1px;
@@ -115,6 +189,13 @@
   font-size: 0.85rem;
   cursor: pointer;
   transition: border-color 0.15s;
+}
+
+span.chip-pedra {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
 }
 
 .chip-pedra:hover {
@@ -135,7 +216,24 @@
 .chip-pedra.agari {
   border-color: #f97316;
   background: #fff7ed;
-  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.18);
+  box-shadow:
+    0 0 0 2px rgba(249, 115, 22, 0.2),
+    inset 0 0 0 2px rgba(253, 186, 116, 0.35);
+}
+
+.badge-pedra-agari {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  left: 1px;
+  min-height: 11px;
+  border-radius: 3px;
+  background: #f97316;
+  color: #ffffff;
+  font-size: 0.45rem;
+  font-weight: 900;
+  line-height: 11px;
+  text-transform: uppercase;
 }
 .pedras-selecionadas.tenpai-valido {
   border-color: rgba(34, 197, 94, 0.38);
@@ -169,8 +267,8 @@
     inset 0 0 0 1px rgba(220, 38, 38, 0.2);
 }
 .chip-pedra.dora {
-  border-color: #ec4899;
-  background: #fdf2f8;
+  border-color: #d97706;
+  background: #fffbeb;
 }
 
 .chip-pedra.descarte {
@@ -247,6 +345,24 @@
   text-transform: uppercase;
 }
 
+.estado-vazio-mao {
+  align-self: center;
+  color: #94a3b8;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.construtor-mao-finalizacao .mao-editor-fixo {
+  margin-bottom: 0;
+}
+
+.construtor-mao-finalizacao .pedras-selecionadas {
+  min-height: 0;
+  margin-bottom: 0;
+  padding: 8px;
+  background: #f8fafc;
+}
+
 .acoes-construtor-mao {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
@@ -259,6 +375,10 @@
 }
 
 .menu-acoes-mao-mobile {
+  display: none;
+}
+
+.menu-acoes-teclado-mobile {
   display: none;
 }
 

@@ -1,5 +1,7 @@
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import type { ReactNode } from 'react'
 import type { Acao, CodigoPedra, Mao, Meld } from '../../../logica/mao'
-import { ESTILO_MELD } from '../../constantes'
+import { ESTILO_MELD, nomePedraAcessivel } from '../../constantes'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
 import { PedraSvg, PedrasMeld } from '../PedraSvg'
 
@@ -27,6 +29,8 @@ interface PropsMaoAtual {
   podeKanAberto: boolean
   podeKanFechado: boolean
   maoInvalida: boolean
+  contexto: 'montagem' | 'finalizacao'
+  acoesCabecalho?: ReactNode
   aoAbrirMenuAcoes: () => void
   aoAlternarAcao: (tipo: Acao['tipo']) => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
@@ -35,50 +39,63 @@ interface PropsMaoAtual {
   aoLimpar: () => void
 }
 
-function ChipMeld({ meld, indiceMeld, aoRemoverMeld }: {
+function ChipMeld({
+  meld,
+  indiceMeld,
+  indiceAgari,
+  aoRemoverMeld,
+}: {
   meld: Meld
   indiceMeld: number
+  indiceAgari?: number
   aoRemoverMeld: (indiceMeld: number) => void
 }) {
+  const { t } = useI18n()
   const estilo = ESTILO_MELD[meld.tipo]
+
   return (
     <button
+      className={`chip-meld-mao chip-meld-mao-${meld.tipo}`}
       type="button"
-      title={`${estilo.rotulo} — clique para remover`}
+      title={t('calculator.removeMeld', { meld: estilo.rotulo })}
+      aria-label={t('calculator.removeMeld', { meld: estilo.rotulo })}
       onClick={() => aoRemoverMeld(indiceMeld)}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 4,
-        padding: '3px 8px',
-        borderRadius: 6,
-        border: `2px solid ${estilo.borda}`,
-        background: '#ffffff',
+        gap: 3,
+        padding: '2px 5px',
+        borderRadius: 7,
+        border: `1.5px solid ${estilo.borda}`,
+        background: 'transparent',
+        boxShadow: 'none',
         fontWeight: 900,
         fontFamily: 'monospace',
-        fontSize: '0.82rem',
+        fontSize: '0.78rem',
         cursor: 'pointer',
       }}
     >
       <span
         style={{
-          fontSize: '0.65rem',
+          fontSize: '0.58rem',
           fontWeight: 900,
           color: estilo.borda,
-          marginRight: 2,
+          marginRight: 1,
           letterSpacing: 0,
         }}
       >
         {estilo.rotulo}
       </span>
-      <PedrasMeld meld={meld} />
+      <PedrasMeld meld={meld} indiceAgari={indiceAgari} />
     </button>
   )
 }
 
 /**
- * Renderiza a mão em edição, os melds já formados e o menu compacto de ações.
- * O clique nas pedras da mão remove ou alimenta uma ação de meld ativa.
+ * Renderiza a mao em edicao, os melds formados e o menu compacto de acoes.
+ *
+ * Clique em tile da mao remove a pedra, exceto quando uma acao de meld esta ativa;
+ * nesse caso o clique alimenta a acao escolhida. A regra segue no hook principal.
  */
 export function MaoAtual({
   mao,
@@ -99,6 +116,8 @@ export function MaoAtual({
   podeKanAberto,
   podeKanFechado,
   maoInvalida,
+  contexto,
+  acoesCabecalho,
   aoAbrirMenuAcoes,
   aoAlternarAcao,
   aoAdicionarPedra,
@@ -106,6 +125,11 @@ export function MaoAtual({
   aoRemoverMeld,
   aoLimpar,
 }: PropsMaoAtual) {
+  const { t } = useI18n()
+  const tituloMao =
+    contexto === 'finalizacao'
+      ? `${t('calculator.completeHand')} ${slotsUsados}/14`
+      : t('calculator.buildTitle', { total: totalPedras })
   const clicarPedraDaMao = (indicePedra: number) => {
     if (acaoMeldAtiva) {
       aoAdicionarPedra(mao.pedras[indicePedra])
@@ -113,26 +137,66 @@ export function MaoAtual({
     }
     aoRemoverPedra(indicePedra)
   }
+  const renderizarPedrasMaoFinalizacao = () =>
+    mao.pedras.map((pedra, indicePedra) => {
+      const tile = nomePedraAcessivel(pedra)
+      const ehAgari = indicePedra === mao.indiceAgari
+      const classe = `chip-pedra ${ehAgari ? 'agari' : ''} ${maoInvalida && ehAgari ? 'chombo' : ''}`
+
+      return (
+        <span key={indicePedra} className={classe} aria-label={tile}>
+          <PedraSvg pedra={pedra} />
+        </span>
+      )
+    })
 
   return (
     <div className={`mao-editor-fixo ${maoEditorGrudado ? 'grudado' : ''}`}>
       <div className="cabecalho-mao-editor">
         <h3 className="titulo-mao-editor">
-          <i className="fas fa-layer-group" style={{ marginRight: 6 }} />
-          Mão ({totalPedras} pedras · {slotsUsados}/14 slots)
+          <i className="fas fa-layer-group" style={{ marginRight: 6 }} aria-hidden="true" />
+          {tituloMao}
         </h3>
+        <div className="acoes-cabecalho-mao">
+          {acoesCabecalho}
+          {(maoInvalida || statusTenpai) && (
+            <span
+              className={`status-tenpai-mao status-tenpai-cabecalho ${
+                maoInvalida || temEsperaFuriten
+                  ? 'furiten'
+                  : temEsperaValida
+                    ? 'valido'
+                    : 'sem-yaku'
+              }`}
+            >
+              {maoInvalida ? t('calculator.noYaku') : statusTenpai}
+            </span>
+          )}
+          {acaoPendente && acaoMobileAtiva && (
+            <button
+              className="chip-acao-meld-ativa"
+              type="button"
+              style={{ borderColor: acaoMobileAtiva?.cor, color: acaoMobileAtiva?.cor }}
+              onClick={() => aoAlternarAcao(acaoPendente.tipo)}
+              aria-label={t('calculator.meldActive', { action: acaoMobileAtiva?.rotulo ?? '' })}
+            >
+              {acaoMobileAtiva?.rotulo ?? ''}
+              <span aria-hidden="true">x</span>
+            </button>
+          )}
+          {contexto === 'montagem' && totalPedras > 0 && (
+            <button
+              className="btn-limpar-mao-cabecalho"
+              type="button"
+              onClick={aoLimpar}
+              aria-label={t('actions.clear')}
+              title={t('actions.clear')}
+            >
+              <i className="fas fa-trash" aria-hidden="true" />
+            </button>
+          )}
+        </div>
       </div>
-
-      {acaoMeldAtiva && (
-        <button
-          className="chip-acao-meld-ativa"
-          type="button"
-          style={{ borderColor: acaoMobileAtiva?.cor, color: acaoMobileAtiva?.cor }}
-          onClick={() => aoAlternarAcao(acaoMeldAtiva.tipo)}
-        >
-          {acaoMobileAtiva?.rotulo} ativo x
-        </button>
-      )}
 
       <div
         className={`pedras-selecionadas ${
@@ -143,57 +207,77 @@ export function MaoAtual({
               : ''
         } ${maoInvalida ? 'mao-invalida' : ''} ${acaoMeldAtiva ? 'modo-meld-ativo' : ''}`}
       >
-        {totalPedras > 0 && (
-          <button className="btn-limpar-mao" type="button" onClick={aoLimpar}>
-            Limpar
-          </button>
+        {contexto === 'finalizacao' && (
+          <>
+            <div className="mao-principal-finalizacao">{renderizarPedrasMaoFinalizacao()}</div>
+            {mao.melds.length > 0 && (
+              <div className="melds-finalizacao-coluna">
+                {mao.melds.map((meld, indiceMeld) => (
+                  <ChipMeld
+                    key={`meld-${indiceMeld}`}
+                    meld={meld}
+                    indiceMeld={indiceMeld}
+                    indiceAgari={
+                      mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
+                    }
+                    aoRemoverMeld={aoRemoverMeld}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
-        {(maoInvalida || statusTenpai) && (
-          <span
-            className={`status-tenpai-mao ${
-              maoInvalida || temEsperaFuriten
-                ? 'furiten'
-                : temEsperaValida
-                  ? 'valido'
-                  : 'sem-yaku'
-            }`}
-          >
-            {maoInvalida ? 'Sem yaku' : statusTenpai}
-          </span>
-        )}
-        {mao.pedras.map((pedra, indicePedra) => (
-          <button
-            key={indicePedra}
-            className={`chip-pedra ${indicePedra === mao.indiceAgari ? 'agari' : ''} ${
-              indicesSelecionadosChii.has(indicePedra) ? 'selecionada-meld' : ''
-            } ${maoInvalida && indicePedra === mao.indiceAgari ? 'chombo' : ''}`}
-            type="button"
-            title={
-              indicePedra === mao.indiceAgari
-                ? 'Pedra de agari — clique para remover'
-                : 'Clique para remover'
-            }
-            onClick={() => clicarPedraDaMao(indicePedra)}
-          >
-            <PedraSvg pedra={pedra} />
-          </button>
-        ))}
+        {contexto !== 'finalizacao' && (
+          <>
+        {mao.pedras.map((pedra, indicePedra) => {
+          const tile = nomePedraAcessivel(pedra)
+          const ehAgari = indicePedra === mao.indiceAgari
+
+          const classe = `chip-pedra ${ehAgari ? 'agari' : ''} ${
+            indicesSelecionadosChii.has(indicePedra) ? 'selecionada-meld' : ''
+          } ${maoInvalida && ehAgari ? 'chombo' : ''}`
+
+          return (
+            <button
+              key={indicePedra}
+              className={classe}
+              type="button"
+              title={
+                ehAgari
+                  ? t('calculator.removeWinningTile', { tile })
+                  : t('calculator.removeTile', { tile })
+              }
+              aria-label={
+                ehAgari
+                  ? t('calculator.removeWinningTile', { tile })
+                  : t('calculator.removeTile', { tile })
+              }
+              onClick={() => clicarPedraDaMao(indicePedra)}
+            >
+              <PedraSvg pedra={pedra} />
+              {ehAgari && <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>}
+            </button>
+          )
+        })}
         {mao.melds.map((meld, indiceMeld) => (
           <ChipMeld
             key={`meld-${indiceMeld}`}
             meld={meld}
             indiceMeld={indiceMeld}
+            indiceAgari={
+              mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
+            }
             aoRemoverMeld={aoRemoverMeld}
           />
         ))}
-        {totalPedras === 0 && (
-          <span style={{ color: '#bbb', fontSize: '0.85rem', alignSelf: 'center' }}>
-            Clique nas pedras abaixo para montar a mão
-          </span>
+          </>
+        )}
+        {contexto === 'montagem' && totalPedras === 0 && (
+          <span className="estado-vazio-mao">{t('calculator.emptyHand')}</span>
         )}
       </div>
 
-      <div className={`menu-acoes-mao-mobile ${menuAcoesMaoAberto ? 'aberto' : ''}`}>
+      {contexto === 'montagem' && <div className={`menu-acoes-mao-mobile ${menuAcoesMaoAberto ? 'aberto' : ''}`}>
         <button
           className={`btn-contorno btn-menu-acoes-mao ${acaoMobileAtiva ? 'ativo' : ''}`}
           type="button"
@@ -209,7 +293,7 @@ export function MaoAtual({
           }
           onClick={aoAbrirMenuAcoes}
         >
-          {acaoMobileAtiva?.rotulo ?? 'Ações'}
+          {acaoMobileAtiva?.rotulo ?? t('calculator.actionsMenu')}
         </button>
         <div className="opcoes-acoes-mao-mobile">
           <AcoesConstrutorMao
@@ -223,7 +307,7 @@ export function MaoAtual({
             compacto
           />
         </div>
-      </div>
+      </div>}
     </div>
   )
 }

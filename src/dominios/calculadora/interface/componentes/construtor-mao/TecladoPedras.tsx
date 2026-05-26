@@ -1,5 +1,6 @@
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { Acao, CodigoPedra, ConfiguracaoCalculo, EsperaPossivel } from '../../../logica/mao'
-import { HONRAS, NAIPES, codigoBase } from '../../constantes'
+import { HONRAS, NAIPES, codigoBase, nomePedraAcessivel } from '../../constantes'
 import { PedraSvg } from '../PedraSvg'
 
 interface PropsTecladoPedras {
@@ -13,17 +14,16 @@ interface PropsTecladoPedras {
   podeSelecionarPedra: (pedra: CodigoPedra) => boolean
   rotuloEsperaTeclado: (espera: EsperaPossivel) => string
   classeEsperaTeclado: (espera?: EsperaPossivel) => string
+  contexto: 'montagem' | 'finalizacao'
+  aoAbrirRegras?: () => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
 }
 
 /**
- * Renderiza o teclado de pedras e aplica os bloqueios visuais de tenpai, furiten e limite físico.
- * Não decide regras de negócio; apenas consulta as funções recebidas do hook principal.
+ * Renderiza o teclado de pedras e aplica bloqueios visuais de tenpai, furiten e limite fisico.
  *
- * Como ler este componente:
- * - `renderizarBotaoPedra` concentra a lógica comum de disabled, título e badges;
- * - o JSX final só organiza naipes, aka doras e honras;
- * - qualquer mudança de regra deve entrar no hook, não aqui.
+ * Botao de tile chama `adicionarPedra`; o significado do clique vem de `acaoPendente`
+ * (mao, descarte, indicador de dora ou meld). Regras ficam fora do JSX.
  */
 export function TecladoPedras({
   acaoPendente,
@@ -36,9 +36,12 @@ export function TecladoPedras({
   podeSelecionarPedra,
   rotuloEsperaTeclado,
   classeEsperaTeclado,
+  contexto,
+  aoAbrirRegras,
   aoAdicionarPedra,
 }: PropsTecladoPedras) {
-  /** Badge compacto usado quando uma pedra representa uma espera possível. */
+  const { t } = useI18n()
+
   const renderizarBadgeEspera = (espera?: EsperaPossivel) =>
     espera ? (
       <span
@@ -50,10 +53,23 @@ export function TecladoPedras({
       </span>
     ) : null
 
-  /**
-   * Monta um botão de pedra com todos os estados visuais relevantes.
-   * Recebe título opcional para casos especiais, como aka dora.
-   */
+  const labelBotaoPedra = (codigo: CodigoPedra, indisponivel: boolean) => {
+    const tile = nomePedraAcessivel(codigo)
+    if (indisponivel) return t('calculator.disabledTile', { tile })
+    if (acaoPendente?.tipo === 'descarte') return t('calculator.addTileToDiscards', { tile })
+    if (acaoPendente?.tipo === 'dora') return t('calculator.selectDoraIndicator', { tile })
+    if (acaoPendente?.tipo === 'uradora') return t('calculator.selectUraDoraIndicator', { tile })
+    if (
+      acaoPendente?.tipo === 'chii' ||
+      acaoPendente?.tipo === 'pon' ||
+      acaoPendente?.tipo === 'kanAberto' ||
+      acaoPendente?.tipo === 'kanFechado'
+    ) {
+      return t('calculator.chooseMeldTile', { tile, meld: t(`melds.${acaoPendente.tipo}`) })
+    }
+    return t('calculator.addTileToHand', { tile })
+  }
+
   const renderizarBotaoPedra = (codigo: CodigoPedra, tituloPadrao?: string) => {
     const cheiaESemAcao = maoCompleta && !acaoPendente
     const invalidaParaAcao = !podeSelecionarPedra(codigo)
@@ -63,7 +79,7 @@ export function TecladoPedras({
     const indisponivel = cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera
     const esperaVisivel = invalidaParaAcao ? undefined : espera
     const rotuloEspera = esperaVisivel
-      ? `${rotuloEsperaTeclado(esperaVisivel)}${esperaVisivel.furiten ? ' - furiten' : ''}`
+      ? `${rotuloEsperaTeclado(esperaVisivel)}${esperaVisivel.furiten ? ` - ${t('calculator.furiten')}` : ''}`
       : undefined
 
     return (
@@ -76,8 +92,9 @@ export function TecladoPedras({
         title={
           tituloPadrao && rotuloEspera
             ? `${tituloPadrao} - ${rotuloEspera}`
-            : rotuloEspera ?? tituloPadrao
+            : rotuloEspera ?? tituloPadrao ?? nomePedraAcessivel(codigo)
         }
+        aria-label={labelBotaoPedra(codigo, indisponivel)}
         disabled={indisponivel}
         onClick={() => aoAdicionarPedra(codigo)}
       >
@@ -88,32 +105,55 @@ export function TecladoPedras({
   }
 
   return (
-    <div className="teclado-pedras">
-      {NAIPES.map(({ naipe, rotulo }) => (
-        <div key={naipe} className={`grupo-teclado-naipe grupo-teclado-${naipe}`}>
+    <div className={`teclado-pedras teclado-pedras-${contexto}`} aria-label={t('calculator.keyboard')}>
+      {contexto === 'montagem' && aoAbrirRegras && (
+        <button
+          className="botao-configuracao-teclado"
+          type="button"
+          aria-label={t('rulesModal.open')}
+          title={t('rulesModal.open')}
+          onClick={aoAbrirRegras}
+        >
+          <i className="fas fa-gear" aria-hidden="true" />
+        </button>
+      )}
+      {NAIPES.map(({ naipe }) => {
+        const rotulo =
+          naipe === 'm'
+            ? t('calculator.suitMan')
+            : naipe === 'p'
+              ? t('calculator.suitPin')
+              : t('calculator.suitSou')
+
+        return (
           <div
-            className="rotulo-naipe-teclado"
-            data-mobile-label={naipe === 'm' ? '万' : naipe === 'p' ? '筒' : '索'}
+            key={naipe}
+            className={`grupo-teclado-naipe grupo-teclado-${naipe}`}
+            role="group"
+            aria-label={rotulo}
           >
-            {rotulo}
+            <div
+              className="rotulo-naipe-teclado"
+              data-mobile-label={naipe === 'm' ? 'Man' : naipe === 'p' ? 'Pin' : 'Sou'}
+            >
+              {rotulo}
+            </div>
+            <div className="linha-naipe">
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) =>
+                renderizarBotaoPedra(`${numero}${naipe}`),
+              )}
+              {configuracao.akadora &&
+                doraManual === 0 &&
+                renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))}
+            </div>
           </div>
-          <div className="linha-naipe">
-            {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) =>
-              renderizarBotaoPedra(`${numero}${naipe}`),
-            )}
-            {configuracao.akadora &&
-              doraManual === 0 &&
-              renderizarBotaoPedra(`0${naipe}`, '5 vermelho (aka dora)')}
-          </div>
+        )
+      })}
+      <div className="grupo-teclado-naipe grupo-teclado-honras" role="group" aria-label={t('calculator.honors')}>
+        <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
+          {t('calculator.honors')}
         </div>
-      ))}
-      <div className="grupo-teclado-naipe grupo-teclado-honras">
-        <div className="rotulo-naipe-teclado" data-mobile-label="字">
-          Honras (Jihai / Kazehai)
-        </div>
-        <div className="linha-naipe">
-          {HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}
-        </div>
+        <div className="linha-naipe">{HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}</div>
       </div>
     </div>
   )

@@ -5,40 +5,43 @@
  * do domínio de interface para facilitar leitura e manutenção.
  */
 
+import { useEffect } from 'react'
 import BarraCalculadora from '../componentes/BarraCalculadora'
 import ModalRegras from '../componentes/ModalRegras'
 import ModoCompletoCalculadora from '../componentes/ModoCompletoCalculadora'
 import ModoRapidoCalculadora from '../componentes/ModoRapidoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
+import type { ModoCalculadora } from '../hooks/useCalculadoraMao/tipos'
 
 interface PropsPagina {
-  aoVoltar: () => void
+  modoInicial: ModoCalculadora
 }
 
-export default function PaginaCalculadora({ aoVoltar }: PropsPagina) {
+export default function PaginaCalculadora({ modoInicial }: PropsPagina) {
   const calculadora = useCalculadoraMao()
+  const { setModo } = calculadora
+
+  useEffect(() => {
+    setModo(modoInicial)
+  }, [modoInicial, setModo])
+
   const cabecalho = (
-    <BarraCalculadora
-      modo={calculadora.modo}
-      aoVoltar={aoVoltar}
-      aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
-      aoAlternarModo={() => {
-        if (calculadora.modo === 'completo') {
-          calculadora.limpar()
-          calculadora.setModo('rapido')
-        } else {
-          calculadora.setModo('completo')
-        }
-      }}
-    />
+    <BarraCalculadora modo={calculadora.modo} />
   )
 
   return (
     <div>
       {calculadora.modo === 'rapido' ? (
-        <ModoRapidoCalculadora estado={calculadora} cabecalho={cabecalho} />
+        <ModoRapidoCalculadora
+          estado={calculadora}
+          cabecalho={cabecalho}
+        />
       ) : (
-        <ModoCompletoCalculadora estado={calculadora} cabecalho={cabecalho} />
+        <ModoCompletoCalculadora
+          estado={calculadora}
+          cabecalho={cabecalho}
+          aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
+        />
       )}
 
       {calculadora.modalRegrasAberto && (

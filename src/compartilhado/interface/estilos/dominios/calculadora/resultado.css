@@ -10,6 +10,41 @@
   margin-top: 0;
 }
 
+.resultado-esperas-compacto {
+  display: grid;
+  gap: 8px;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 12px;
+  background: #eff6ff;
+  color: #102a43;
+}
+
+.resultado-esperas-compacto .resultado-esperas {
+  justify-items: start;
+  gap: 8px;
+}
+
+.resultado-esperas-compacto .resultado-esperas strong {
+  color: #155b98;
+  font-size: 0.84rem;
+  text-transform: uppercase;
+}
+
+.resultado-esperas-compacto .resultado-esperas p {
+  max-width: none;
+  color: #40566d;
+  font-size: 0.8rem;
+}
+
+.resultado-esperas-compacto .lista-esperas-resultado {
+  justify-content: flex-start;
+}
+
+.resultado-esperas-compacto .espera-resultado small {
+  color: #40566d;
+}
+
 .resultado-montagem-conteudo {
   display: flex;
   align-items: center;

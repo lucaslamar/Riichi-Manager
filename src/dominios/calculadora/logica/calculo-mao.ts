@@ -31,7 +31,7 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
   const resultadoBiblioteca = riichi.calc()
   const isOya = mao.ventoAssento === '1'
   const yakuman = resultadoBiblioteca.yakuman ?? 0
-  const semYaku = resultadoBiblioteca.noYaku ?? false
+  const semYaku = yakuman === 0 && (resultadoBiblioteca.noYaku ?? false)
   const hanBase = resultadoBiblioteca.han ?? 0
   const fu = resultadoBiblioteca.fu ?? 0
   const hanFinal =
@@ -77,10 +77,11 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     .sort((a, b) => (ORDEM_YAKU[a[0]] ?? 99) - (ORDEM_YAKU[b[0]] ?? 99))
     .map(([nome, valor]) => {
       const traduzido = traduzirYaku(nome)
-      const ehYakuman = String(valor).endsWith('役満')
+      const textoValor = String(valor)
+      const ehYakuman = textoValor.endsWith('役満') || textoValor.endsWith('倍役満')
       const han = ehYakuman
-        ? parseInt(String(valor), 10) || 1
-        : Number(/\d+/.exec(String(valor))?.[0]) || 0
+        ? parseInt(textoValor, 10) || 1
+        : Number(/\d+/.exec(textoValor)?.[0]) || 0
       return [traduzido, han, ehYakuman] as [string, number, boolean]
     })
 

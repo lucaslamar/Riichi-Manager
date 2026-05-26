@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
 import { ESTILO_MELD, codigoBase } from '../constantes'
 import ExibicaoCompleta from './ExibicaoCompleta'
@@ -7,13 +8,17 @@ import { PedraSvg, PedrasMeld } from './PedraSvg'
 interface PropsResultadoMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
+  modoFluxo?: 'montagem' | 'finalizacao'
 }
 
-/** Resultado da mão montada, incluindo yaku, fu e mensagem de invalidez. */
-export default function ResultadoMaoCalculada({ estado, embutido = false }: PropsResultadoMao) {
+/** Resultado da mao montada, incluindo esperas, botao Calcular e modal final. */
+export default function ResultadoMaoCalculada({
+  estado,
+  modoFluxo = 'montagem',
+}: PropsResultadoMao) {
+  const { t } = useI18n()
   const {
     mao,
-    atualizarMao,
     maoCompleta,
     resultado,
     furitenRonCompleto,
@@ -33,32 +38,36 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
     deveCalcularMao &&
     maoCompleta &&
     mao.agari === 'ron' &&
-    mao.indiceAgari >= 0 &&
-    mao.descartes.some((descarte) => codigoBase(descarte) === codigoBase(mao.pedras[mao.indiceAgari]))
+    (mao.indiceAgari >= 0 || !!mao.agariMeld) &&
+    mao.descartes.some((descarte) =>
+      codigoBase(descarte) === codigoBase(mao.agariMeld?.pedra ?? mao.pedras[mao.indiceAgari]),
+    )
   const chomboFuriten = agariEmFuriten || !!furitenRonCompleto
   const totalResultado = resultado?.agari != null ? resultado.pontos.total : 0
   const resultadoValido = totalResultado > 0 && resultadoComYakuValido && !chomboFuriten
-  const assinaturaResultado = resultadoValido || chomboFuriten || resultadoMaoInvalida
-    ? JSON.stringify({
-        pedras: mao.pedras,
-        melds: mao.melds,
-        agari: mao.agari,
-        indiceAgari: mao.indiceAgari,
-        honba: mao.honba,
-        doraManual: mao.doraManual,
-        dora: mao.dora,
-        uradora: mao.uradora,
-        ventoRodada: mao.ventoRodada,
-        ventoAssento: mao.ventoAssento,
-        total: totalResultado,
-        chomboFuriten,
-        resultadoMaoInvalida,
-      })
-    : null
+  const assinaturaResultado =
+    resultadoValido || chomboFuriten || resultadoMaoInvalida
+      ? JSON.stringify({
+          pedras: mao.pedras,
+          melds: mao.melds,
+          agari: mao.agari,
+          indiceAgari: mao.indiceAgari,
+          agariMeld: mao.agariMeld,
+          honba: mao.honba,
+          doraManual: mao.doraManual,
+          dora: mao.dora,
+          uradora: mao.uradora,
+          ventoRodada: mao.ventoRodada,
+          ventoAssento: mao.ventoAssento,
+          total: totalResultado,
+          chomboFuriten,
+          resultadoMaoInvalida,
+        })
+      : null
   const [modalResultadoAberto, setModalResultadoAberto] = useState(false)
   const [ultimoModalAberto, setUltimoModalAberto] = useState<string | null>(null)
   const [modalResultadoSolicitado, setModalResultadoSolicitado] = useState(false)
-  const [microfeedbackTenpai, setMicrofeedbackTenpai] = useState(false)
+  const modalRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (!modalResultadoSolicitado || !deveCalcularMao || !assinaturaResultado) return
@@ -75,11 +84,13 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
   ])
 
   useEffect(() => {
-    if (!microfeedbackTenpai) return
-    const timeout = window.setTimeout(() => setMicrofeedbackTenpai(false), 2200)
-    return () => window.clearTimeout(timeout)
-  }, [microfeedbackTenpai])
+    if (modalResultadoAberto) modalRef.current?.focus()
+  }, [modalResultadoAberto])
 
+  /**
+   * Chamado pelo botao Calcular da etapa Finalizar Mao.
+   * Registra a assinatura para o hook de resultado e solicita abertura da modal.
+   */
   const acionarCalculo = () => {
     calcularMaoAtual()
     setModalResultadoSolicitado(true)
@@ -87,26 +98,34 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
 
   const fecharModalResultado = () => {
     setModalResultadoAberto(false)
-    if (!maoCompleta || mao.indiceAgari < 0) return
-    atualizarMao((rascunho) => {
-      rascunho.pedras.splice(rascunho.indiceAgari, 1)
-      rascunho.indiceAgari = -1
-    })
-    setMicrofeedbackTenpai(true)
   }
 
-  const pedraAgari = mao.pedras[mao.indiceAgari]
-  const pedrasFechadas = mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
+  const descreverResultado = () => {
+    if (chomboFuriten) return t('calculator.invalidFuritenAnnounce')
+    if (resultadoMaoInvalida || !resultado) return t('calculator.invalidNoYakuAnnounce')
+    const yaku =
+      resultado.yaku?.map(([nome]: [string, number, boolean]) => nome).join(', ') ||
+      t('calculator.noYaku')
+    return t('calculator.resultAnnounce', {
+      agari: mao.agari === 'ron' ? t('calculator.ron') : t('calculator.tsumo'),
+      han: resultado.han,
+      fu: resultado.fu,
+      points: totalResultado.toLocaleString('pt-BR'),
+      yaku,
+    })
+  }
+
+  const pedraAgari = mao.agariMeld ? null : mao.pedras[mao.indiceAgari]
+  const pedrasFechadas = mao.agariMeld
+    ? mao.pedras
+    : mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
 
   const maoRenderizada = (
     <div className="mao-calculada resultado-composicao-mao">
       {mao.pedras.length > 0 && (
-        <div className="resultado-grupo-mao resultado-grupo-fechado" aria-label="Pedras da mao">
+        <div className="resultado-grupo-mao resultado-grupo-fechado" aria-label={t('calculator.closedHand')}>
           {pedrasFechadas.map((pedra, indice) => (
-            <span
-              key={`${pedra}-${indice}`}
-              className="chip-pedra resultado-pedra"
-            >
+            <span key={`${pedra}-${indice}`} className="chip-pedra resultado-pedra">
               <PedraSvg pedra={pedra} />
             </span>
           ))}
@@ -124,7 +143,10 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
           style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
           aria-label={ESTILO_MELD[meld.tipo].rotulo}
         >
-          <PedrasMeld meld={meld} />
+          <PedrasMeld
+            meld={meld}
+            indiceAgari={mao.agariMeld?.indiceMeld === indice ? mao.agariMeld.indicePedra : undefined}
+          />
         </span>
       ))}
     </div>
@@ -132,127 +154,73 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
   const chomboOya = mao.ventoAssento === '1'
   const avisoChombo = (
     <div className="resultado-chombo-furiten resultado-chombo-modal">
-      <strong>Chombo por Ron em furiten</strong>
+      <strong>{t('calculator.furitenChomboTitle')}</strong>
       <div className="pontos-chombo">{chomboOya ? '-12.000' : '-8.000'}</div>
       <span>
-        Ron em furiten nao vence a mao. Penalidade: {chomboOya ? '4.000 para cada jogador' : '4.000 para o oya e 2.000 para cada outro jogador'}.
+        {chomboOya
+          ? t('calculator.furitenChomboTextDealer')
+          : t('calculator.furitenChomboTextNonDealer')}
       </span>
     </div>
   )
   const avisoSemYaku = (
     <div className="resultado-chombo-furiten resultado-chombo-modal">
-      <strong>Sem Yaku — Mão inválida</strong>
+      <strong>{t('calculator.noYakuTitle')}</strong>
       <div className="pontos-chombo">-12.000</div>
-      <span>A mão não tem yaku válido.</span>
-      <span>Penalidade de chombo: 4.000 para cada jogador.</span>
+      <span>{t('calculator.invalidNoYakuAnnounce')}</span>
+      <span>{t('calculator.noYakuPenalty')}</span>
     </div>
   )
+  const textoBotao =
+    deveCalcularMao
+      ? resultadoMaoInvalida
+        ? t('calculator.invalidNoYakuReview')
+        : t('calculator.calculatedForCurrentOptions')
+      : podeCalcularMao
+        ? t('calculator.readyToCalculate')
+        : t('calculator.missingPrefix', {
+            items: [
+              !estado.fluxoOpcoes.vitoriaDefinida ? t('calculator.missingVictory') : null,
+              !estado.fluxoOpcoes.ventoRodadaDefinido ? t('calculator.missingRoundWind') : null,
+              !estado.fluxoOpcoes.ventoAssentoDefinido ? t('calculator.missingSeatWind') : null,
+            ]
+              .filter(Boolean)
+              .join(', '),
+          })
+  const resumoEsperasAcessivel = calculandoEsperas
+    ? t('calculator.waitsCalculating')
+    : esperasPossiveis.length > 0
+      ? t('calculator.waitsAccessibleSummary', {
+          count: esperasPossiveis.length,
+          status: temFuriten
+            ? t('calculator.furiten')
+            : temEsperaComYaku
+              ? t('calculator.tenpai')
+              : t('calculator.noYaku'),
+        })
+      : t('calculator.waitsNone')
 
   return (
     <>
-      {podeCalcularMao && (
+      {modoFluxo === 'finalizacao' && (
         <div className="acao-calcular-mao acao-calcular-mao-ativa">
-          <button className="btn-calcular-mao" type="button" onClick={acionarCalculo}>
-            Calcular
+          <button
+            className="btn-calcular-mao"
+            type="button"
+            disabled={!podeCalcularMao}
+            onClick={acionarCalculo}
+          >
+            {t('actions.calculate')}
           </button>
-          <span className="texto-calcular-pronto">
-            {deveCalcularMao
-              ? resultadoMaoInvalida
-                ? 'Mao invalida. Revise os yaku antes de vencer.'
-                : 'Resultado calculado para a configuracao atual.'
-              : 'Mao pronta. Revise as opcoes e calcule.'}
-          </span>
+          <span className="texto-calcular-pronto">{textoBotao}</span>
         </div>
       )}
-      {microfeedbackTenpai && <div className="microfeedback-tenpai">Voltou para tenpai</div>}
 
-      {/* Card 3: resultado */}
-      <div
-        className={`resultado-calculadora resultado-principal ${embutido ? 'resultado-calculadora-embutido' : ''} ${
-          furitenRonCompleto ? 'resultado-furiten-chombo' : ''
-        } ${resultadoMaoInvalida ? 'resultado-mao-invalida' : ''} ${
-          deveCalcularMao ? 'resultado-calculado' : ''
-        } ${!mostrarEsperas && !maoCompleta ? 'resultado-montagem' : ''}`}
-      >
-        {mostrarEsperas ? (
-          <div className="resultado-esperas">
-            <strong>Esperas que validam a mao</strong>
-            {calculandoEsperas ? (
-              <p>Calculando pedras vencedoras...</p>
-            ) : esperasPossiveis.length > 0 ? (
-              <>
-                <div className="lista-esperas-resultado">
-                  {esperasPossiveis.map((espera) => (
-                    <span
-                      key={espera.pedra}
-                      className={`espera-resultado ${espera.furiten ? 'furiten' : ''}`}
-                    >
-                      <span className="chip-pedra mini">
-                        <PedraSvg pedra={espera.pedra} />
-                      </span>
-                      <small>
-                        {espera.semYaku
-                          ? 'sem yaku'
-                          : `${espera.yakuman > 0 ? `${espera.yakuman}x Yakuman` : `${espera.han} han`}${
-                              espera.furiten ? ' - furiten' : ''
-                            }`}
-                      </small>
-                    </span>
-                  ))}
-                </div>
-                <p>
-                  {temEsperaComYaku
-                    ? 'Essas pedras fecham uma mao valida com yaku nas opcoes atuais.'
-                    : 'Essas pedras fecham a forma, mas ainda falta yaku para vencer.'}
-                </p>
-                {temFuriten && (
-                  <p className="aviso-furiten">
-                    Furiten: esperas que ja estao no seu descarte nao podem vencer por Ron. Se
-                    declarar Ron nelas, confira a penalidade de chombo da mesa.
-                  </p>
-                )}
-              </>
-            ) : (
-              <p>Nenhuma pedra restante fecha uma mao valida agora.</p>
-            )}
-          </div>
-        ) : !maoCompleta ? (
-          <div className="resultado-montagem-conteudo">
-            <strong>{slotsUsados}/14 slots</strong>
-            <span>Monte a mão para calcular</span>
-          </div>
-        ) : !deveCalcularMao ? (
-          <div className="resultado-montagem-conteudo">
-            <strong>{slotsUsados}/14 slots</strong>
-            <span>Ajuste as opcoes e toque em Calcular</span>
-          </div>
-        ) : chomboFuriten || resultadoValido ? (
-          <>
-            {maoRenderizada}
-            {furitenRonCompleto ? (
-              avisoChombo
-            ) : (
-              <ExibicaoCompleta resultado={resultado} mao={mao} />
-            )}
-          </>
-        ) : (
-          <div className="resultado-invalido-conteudo">
-            <span className="badge-chombo">SEM YAKU</span>
-            <i
-              className="fas fa-times-circle"
-              style={{ fontSize: '2rem', color: '#ef5350', marginBottom: 8, display: 'block' }}
-            />
-            <strong>Sem Yaku — Mão inválida</strong>
-            <p style={{ opacity: 0.7, margin: '4px 0 0', fontSize: '0.9rem' }}>
-              {resultado?.semYaku
-                ? 'A mão não tem yaku válido (ex: Ron sem Haitei/Houtei).'
-                : resultado == null
-                  ? 'A combinação de pedras não forma uma mão válida.'
-                  : 'Mão sem yaku: adicione Riichi, Tanyao ou outro yaku.'}
-            </p>
-          </div>
-        )}
-      </div>
+      {modoFluxo === 'montagem' && mostrarEsperas && (
+        <div className="sr-only" aria-live="polite">
+          {resumoEsperasAcessivel}
+        </div>
+      )}
 
       {(resultadoValido || chomboFuriten || resultadoMaoInvalida) && modalResultadoAberto && (
         <div
@@ -263,26 +231,35 @@ export default function ResultadoMaoCalculada({ estado, embutido = false }: Prop
           onClick={fecharModalResultado}
         >
           <div
+            ref={modalRef}
             className={`modal-resultado-mobile ${
               chomboFuriten || resultadoMaoInvalida ? 'modal-chombo-furiten' : ''
             }`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="titulo-resultado-mobile"
+            tabIndex={-1}
             onClick={(evento) => evento.stopPropagation()}
           >
             <div className="modal-resultado-mobile-cabecalho">
               <strong id="titulo-resultado-mobile">
-                {resultadoMaoInvalida ? 'Sem Yaku — Mão inválida' : chomboFuriten ? 'Alerta' : 'Resultado'}
+                {resultadoMaoInvalida
+                  ? t('calculator.noYakuTitle')
+                  : chomboFuriten
+                    ? t('calculator.alert')
+                    : t('calculator.result')}
               </strong>
               <button
                 className="btn-fechar-resultado-mobile"
                 type="button"
-                aria-label="Fechar resultado"
+                aria-label={t('actions.close')}
                 onClick={fecharModalResultado}
               >
-                ×
+                x
               </button>
+            </div>
+            <div className="sr-only" aria-live="polite">
+              {descreverResultado()}
             </div>
             {maoRenderizada}
             {resultadoMaoInvalida ? (

@@ -45,7 +45,32 @@ export function expandirGrupoMesmoValor(pedra: CodigoPedra, tamanho: number): Co
 
 export function urlPedra(nomeArquivo: string, formato: 'png' | 'svg'): string {
   const pasta = formato === 'png' ? 'regular-png' : 'regular'
-  return `tiles/${pasta}/${nomeArquivo}.${formato}?v=2`
+  return `${import.meta.env.BASE_URL}tiles/${pasta}/${nomeArquivo}.${formato}?v=2`
+}
+
+export function nomePedraAcessivel(pedra?: CodigoPedra): string {
+  if (!pedra) return 'Pedra vazia'
+  if (pedra === '0m') return '5 vermelho de Man'
+  if (pedra === '0p') return '5 vermelho de Pin'
+  if (pedra === '0s') return '5 vermelho de Sou'
+
+  const valor = pedra[0]
+  const naipe = pedra[1]
+  if (naipe === 'm') return `${valor} de Man`
+  if (naipe === 'p') return `${valor} de Pin`
+  if (naipe === 's') return `${valor} de Sou`
+
+  const nomesHonras: Record<string, string> = {
+    '1z': 'Vento Leste',
+    '2z': 'Vento Sul',
+    '3z': 'Vento Oeste',
+    '4z': 'Vento Norte',
+    '5z': 'Dragão branco',
+    '6z': 'Dragão verde',
+    '7z': 'Dragão vermelho',
+  }
+
+  return nomesHonras[pedra] ?? pedra
 }
 
 export function ehPedraNumerada(pedra: CodigoPedra): boolean {
@@ -106,6 +131,7 @@ export const MAO_VAZIA: Mao = {
   pedras: [],
   melds: [],
   indiceAgari: -1,
+  agariMeld: null,
   agari: 'tsumo',
   dora: [],
   uradora: [],

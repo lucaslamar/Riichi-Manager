@@ -1,9 +1,11 @@
 .card-calculadora-rapida {
+  position: relative;
   display: flex;
   flex-direction: column;
   max-width: 860px;
   margin-inline: auto;
   padding: 28px;
+  overflow: visible;
 }
 
 .card-calculadora-rapida .seletores-rapidos-mao {
@@ -78,8 +80,12 @@
 }
 
 .resultado-rapido {
-  order: 3;
+  position: sticky;
+  top: 82px;
+  z-index: 4;
+  order: 0;
   width: min(100%, 640px);
-  margin: 0 auto;
+  margin: 0 auto 20px;
   padding: 34px 48px;
+  box-shadow: 0 16px 34px rgba(16, 42, 67, 0.18);
 }

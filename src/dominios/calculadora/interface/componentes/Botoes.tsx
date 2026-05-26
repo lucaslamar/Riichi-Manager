@@ -17,6 +17,8 @@ export function BotaoAcao({
       className="btn-acao-mao"
       type="button"
       disabled={desabilitado}
+      aria-pressed={ativo}
+      aria-label={rotulo}
       onClick={aoClicar}
       style={{
         border: `2px solid ${ativo ? cor : '#dde1e7'}`,
@@ -50,6 +52,8 @@ export function BotaoToggle({
       type="button"
       className={`btn-toggle-mao ${ativo ? 'btn-primario ativo' : 'btn-contorno'}`}
       disabled={desabilitado}
+      aria-pressed={ativo}
+      aria-label={rotulo}
       style={{
         borderColor: ativo && corAtiva ? corAtiva : undefined,
         background: ativo && corAtiva ? corAtiva : undefined,

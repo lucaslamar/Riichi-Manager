@@ -1,8 +1,13 @@
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { Mao, VentoMao } from '../../logica/mao'
 import { VENTOS_ASSENTO, VENTOS_RODADA } from '../constantes'
 import { PedraSvg } from './PedraSvg'
 
 export type AtualizarMao = (receita: (rascunho: Mao) => void) => void
+
+function chaveVento(valor: VentoMao) {
+  return valor === '1' ? 'winds.east' : valor === '2' ? 'winds.south' : valor === '3' ? 'winds.west' : 'winds.north'
+}
 
 export function SeletorVentos({
   mao,
@@ -23,6 +28,8 @@ export function SeletorVentos({
   aoDefinirVentoRodada?: () => void
   aoDefinirVentoAssento?: () => void
 }) {
+  const { t } = useI18n()
+
   const renderizarSeletor = (
     titulo: string,
     valorAtual: VentoMao,
@@ -35,6 +42,7 @@ export function SeletorVentos({
       <span>{titulo}</span>
       <div className="pedras-vento-mao" role="group" aria-label={titulo}>
         {opcoes.map((vento) => {
+          const nomeVento = t(chaveVento(vento.valor))
           const selecionado = valorDefinido && valorAtual === vento.valor
           const ventoIgual =
             ventoRodadaDefinido &&
@@ -50,7 +58,12 @@ export function SeletorVentos({
                 ventoIgual ? 'vento-igual' : ''
               }`}
               aria-pressed={selecionado}
-              title={vento.nome}
+              aria-label={
+                titulo === t('calculator.roundWind')
+                  ? t('calculator.chooseRoundWind', { wind: nomeVento })
+                  : t('calculator.chooseSeatWind', { wind: nomeVento })
+              }
+              title={nomeVento}
               onClick={() => {
                 atualizarMao((rascunho: Mao) => {
                   aoSelecionar(rascunho, vento.valor)
@@ -59,7 +72,7 @@ export function SeletorVentos({
               }}
             >
               <PedraSvg pedra={`${vento.valor}z`} />
-              <small>{vento.nome}</small>
+              <small>{nomeVento}</small>
             </button>
           )
         })}
@@ -71,7 +84,7 @@ export function SeletorVentos({
     <div className="seletores-vento-mao">
       {mostrarVentoRodada &&
         renderizarSeletor(
-          'Vento da rodada',
+          t('calculator.roundWind'),
           mao.ventoRodada,
           ventoRodadaDefinido,
           VENTOS_RODADA,
@@ -83,7 +96,7 @@ export function SeletorVentos({
 
       {mostrarAssento &&
         renderizarSeletor(
-          'Seu vento',
+          t('calculator.seatWind'),
           mao.ventoAssento,
           ventoAssentoDefinido,
           VENTOS_ASSENTO,
@@ -108,24 +121,30 @@ export function ToggleAgari({
   definido?: boolean
   aoDefinir?: () => void
 }) {
+  const { t } = useI18n()
+
   return (
     <div className="toggle-agari-mao">
-      {(['tsumo', 'ron'] as const).map((tipo) => (
-        <button
-          key={tipo}
-          type="button"
-          className={definido && mao.agari === tipo ? 'ativo' : undefined}
-          aria-pressed={definido && mao.agari === tipo}
-          onClick={() => {
-            atualizarMao((rascunho: Mao) => {
-              rascunho.agari = tipo
-            })
-            aoDefinir?.()
-          }}
-        >
-          {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
-        </button>
-      ))}
+      {(['tsumo', 'ron'] as const).map((tipo) => {
+        const ativo = definido && mao.agari === tipo
+        return (
+          <button
+            key={tipo}
+            type="button"
+            className={ativo ? 'ativo' : undefined}
+            aria-pressed={ativo}
+            aria-label={tipo === 'ron' ? t('calculator.chooseRon') : t('calculator.chooseTsumo')}
+            onClick={() => {
+              atualizarMao((rascunho: Mao) => {
+                rascunho.agari = tipo
+              })
+              aoDefinir?.()
+            }}
+          >
+            {tipo === 'ron' ? t('calculator.ron') : t('calculator.tsumo')}
+          </button>
+        )
+      })}
     </div>
   )
 }

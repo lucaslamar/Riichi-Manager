@@ -1,4 +1,5 @@
 import type { Acao, Mao } from '../../../logica/mao'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { BotaoAcao } from '../Botoes'
 
 interface PropsAcoesConstrutorMao {
@@ -26,11 +27,13 @@ export function AcoesConstrutorMao({
   aoAlternarAcao,
   compacto = false,
 }: PropsAcoesConstrutorMao) {
+  const { t } = useI18n()
+
   return (
     <>
       <BotaoAcao
         tipo="chii"
-        rotulo={compacto ? 'Chi' : 'Chii'}
+        rotulo={t('melds.chii')}
         cor="#4caf50"
         ativo={acaoPendente?.tipo === 'chii'}
         desabilitado={!podeChii}
@@ -38,7 +41,7 @@ export function AcoesConstrutorMao({
       />
       <BotaoAcao
         tipo="pon"
-        rotulo="Pon"
+        rotulo={t('melds.pon')}
         cor="#2196f3"
         ativo={acaoPendente?.tipo === 'pon'}
         desabilitado={!podePon}
@@ -46,7 +49,7 @@ export function AcoesConstrutorMao({
       />
       <BotaoAcao
         tipo="kanAberto"
-        rotulo={compacto ? 'Kan' : 'Kan (aberto)'}
+        rotulo={compacto ? t('melds.kanCompact') : t('melds.kanAberto')}
         cor="#ba68c8"
         ativo={acaoPendente?.tipo === 'kanAberto'}
         desabilitado={!podeKanAberto}
@@ -54,7 +57,7 @@ export function AcoesConstrutorMao({
       />
       <BotaoAcao
         tipo="kanFechado"
-        rotulo={compacto ? 'K. fechado' : 'Kan (fechado)'}
+        rotulo={compacto ? t('melds.kanClosedCompact') : t('melds.kanFechado')}
         cor="#9c27b0"
         ativo={acaoPendente?.tipo === 'kanFechado'}
         desabilitado={!podeKanFechado}
@@ -62,7 +65,7 @@ export function AcoesConstrutorMao({
       />
       <BotaoAcao
         tipo="descarte"
-        rotulo="Descartes"
+        rotulo={compacto ? t('melds.discardsCompact') : t('melds.discards')}
         cor="#111827"
         ativo={acaoPendente?.tipo === 'descarte'}
         desabilitado={false}
@@ -70,8 +73,8 @@ export function AcoesConstrutorMao({
       />
       <BotaoAcao
         tipo="dora"
-        rotulo="Dora"
-        cor="#ec4899"
+        rotulo={compacto ? t('melds.doraCompact') : t('melds.dora')}
+        cor="#d97706"
         ativo={acaoPendente?.tipo === 'dora'}
         desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
         aoClicar={() => aoAlternarAcao('dora')}
@@ -79,8 +82,8 @@ export function AcoesConstrutorMao({
       {mao.riichi && (
         <BotaoAcao
           tipo="uradora"
-          rotulo={compacto ? 'Ura' : 'Ura dora'}
-          cor="#ec4899"
+          rotulo={compacto ? 'Ura' : t('melds.uradora')}
+          cor="#d97706"
           ativo={acaoPendente?.tipo === 'uradora'}
           desabilitado={mao.doraManual > 0 || mao.uradora.length >= 5}
           aoClicar={() => aoAlternarAcao('uradora')}

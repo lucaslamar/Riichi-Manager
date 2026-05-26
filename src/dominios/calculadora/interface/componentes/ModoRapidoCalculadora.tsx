@@ -9,7 +9,10 @@ interface PropsModoRapido {
 }
 
 /** Renderiza a calculadora por han/fu, sem montar a mao pedra por pedra. */
-export default function ModoRapidoCalculadora({ estado, cabecalho }: PropsModoRapido) {
+export default function ModoRapidoCalculadora({
+  estado,
+  cabecalho,
+}: PropsModoRapido) {
   const {
     mao,
     atualizarMao,
