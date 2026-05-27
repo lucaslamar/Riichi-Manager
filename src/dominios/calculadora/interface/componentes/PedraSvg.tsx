@@ -54,11 +54,16 @@ export function PedrasMeld({ meld, indiceAgari }: { meld: Meld; indiceAgari?: nu
   )
 
   if (meld.tipo === 'kanFechado') {
+    const pedraAka = meld.pedras.find((pedra) => pedra.startsWith('0'))
+    const pedrasCentrais = pedraAka
+      ? [pedraAka, meld.pedras.find((pedra) => pedra !== pedraAka) ?? meld.pedras[1]]
+      : [meld.pedras[1], meld.pedras[2]]
+
     return (
       <span className="meld-pedras">
         {renderizarPedra({ chave: 'back-left', virada: true, agari: indiceAgari === 0 })}
-        {renderizarPedra({ chave: 'middle-left', pedra: meld.pedras[1], agari: indiceAgari === 1 })}
-        {renderizarPedra({ chave: 'middle-right', pedra: meld.pedras[2], agari: indiceAgari === 2 })}
+        {renderizarPedra({ chave: 'middle-left', pedra: pedrasCentrais[0], agari: indiceAgari === 1 })}
+        {renderizarPedra({ chave: 'middle-right', pedra: pedrasCentrais[1], agari: indiceAgari === 2 })}
         {renderizarPedra({ chave: 'back-right', virada: true, agari: indiceAgari === 3 })}
       </span>
     )
