@@ -56,6 +56,8 @@ export default function ConstrutorMao({
     podeKanFechado,
     resultadoMaoInvalida,
     esperasPossiveis,
+    maoProntaParaFinalizar,
+    finalizarMao,
   } = estado
 
   /**
@@ -219,6 +221,11 @@ export default function ConstrutorMao({
 
       {mostrarTeclado && (
         <div className="painel-teclado-calculadora">
+          <span className="sr-only" aria-live="polite">
+            {contexto === 'montagem' && maoProntaParaFinalizar
+              ? t('calculator.readyToFinalizeAnnouncement')
+              : ''}
+          </span>
           {contexto === 'montagem' && (
             <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
               <div className="opcoes-acoes-mao-mobile">
@@ -247,8 +254,10 @@ export default function ConstrutorMao({
             rotuloEsperaTeclado={rotuloEsperaTeclado}
             classeEsperaTeclado={classeEsperaTeclado}
             contexto={contexto}
+            maoProntaParaFinalizar={contexto === 'montagem' && maoProntaParaFinalizar}
             aoAbrirRegras={contexto === 'montagem' ? aoAbrirRegras : undefined}
             aoAdicionarPedra={adicionarPedra}
+            aoFinalizarMao={finalizarMao}
           />
         </div>
       )}

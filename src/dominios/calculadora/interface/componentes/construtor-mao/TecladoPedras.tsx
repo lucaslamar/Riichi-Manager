@@ -15,8 +15,10 @@ interface PropsTecladoPedras {
   rotuloEsperaTeclado: (espera: EsperaPossivel) => string
   classeEsperaTeclado: (espera?: EsperaPossivel) => string
   contexto: 'montagem' | 'finalizacao'
+  maoProntaParaFinalizar?: boolean
   aoAbrirRegras?: () => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
+  aoFinalizarMao?: () => void
 }
 
 /**
@@ -37,8 +39,10 @@ export function TecladoPedras({
   rotuloEsperaTeclado,
   classeEsperaTeclado,
   contexto,
+  maoProntaParaFinalizar = false,
   aoAbrirRegras,
   aoAdicionarPedra,
+  aoFinalizarMao,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
 
@@ -92,7 +96,7 @@ export function TecladoPedras({
         title={
           tituloPadrao && rotuloEspera
             ? `${tituloPadrao} - ${rotuloEspera}`
-            : rotuloEspera ?? tituloPadrao ?? nomePedraAcessivel(codigo)
+            : (rotuloEspera ?? tituloPadrao ?? nomePedraAcessivel(codigo))
         }
         aria-label={labelBotaoPedra(codigo, indisponivel)}
         disabled={indisponivel}
@@ -105,8 +109,13 @@ export function TecladoPedras({
   }
 
   return (
-    <div className={`teclado-pedras teclado-pedras-${contexto}`} aria-label={t('calculator.keyboard')}>
-      {contexto === 'montagem' && aoAbrirRegras && (
+    <div
+      className={`teclado-pedras teclado-pedras-${contexto} ${
+        maoProntaParaFinalizar ? 'teclado-mao-pronta' : ''
+      }`}
+      aria-label={t('calculator.keyboard')}
+    >
+      {contexto === 'montagem' && aoAbrirRegras && !maoProntaParaFinalizar && (
         <button
           className="botao-configuracao-teclado"
           type="button"
@@ -149,12 +158,39 @@ export function TecladoPedras({
           </div>
         )
       })}
-      <div className="grupo-teclado-naipe grupo-teclado-honras" role="group" aria-label={t('calculator.honors')}>
+      <div
+        className="grupo-teclado-naipe grupo-teclado-honras"
+        role="group"
+        aria-label={t('calculator.honors')}
+      >
         <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
           {t('calculator.honors')}
         </div>
         <div className="linha-naipe">{HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}</div>
       </div>
+      {contexto === 'montagem' && maoProntaParaFinalizar && aoFinalizarMao && (
+        <div className="rodape-teclado-finalizacao">
+          <button
+            className="botao-finalizar-mao-teclado"
+            type="button"
+            aria-label={t('calculator.goToHandFinalization')}
+            onClick={aoFinalizarMao}
+          >
+            {t('calculator.goToHandFinalization')}
+          </button>
+          {aoAbrirRegras && (
+            <button
+              className="botao-configuracao-teclado botao-configuracao-teclado-rodape"
+              type="button"
+              aria-label={t('rulesModal.open')}
+              title={t('rulesModal.open')}
+              onClick={aoAbrirRegras}
+            >
+              <i className="fas fa-gear" aria-hidden="true" />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

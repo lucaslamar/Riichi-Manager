@@ -12,12 +12,15 @@ export default function ResumoMaoFixo({
 }) {
   if (totalPedras === 0 && mao.dora.length === 0 && mao.uradora.length === 0) return null
 
+  const slotsEstruturais = Math.min(slotsUsados, 14)
+  const contagemFisica = totalPedras !== slotsUsados ? ` · ${totalPedras} físicas` : ''
+
   return (
     <div className="resumo-mao-fixo" aria-label="Resumo da mão">
       <div className="resumo-mao-linha">
         <strong>Mão</strong>
         <span>
-          {totalPedras} pedras · {slotsUsados}/14 slots
+          {slotsEstruturais}/14 slots{contagemFisica}
         </span>
       </div>
       <div className="resumo-mao-pedras">

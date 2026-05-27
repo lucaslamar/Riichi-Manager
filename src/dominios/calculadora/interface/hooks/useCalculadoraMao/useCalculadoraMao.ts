@@ -42,6 +42,7 @@ export function useCalculadoraMao() {
     maoCompleta,
   } = estado
   const [assinaturaCalculo, setAssinaturaCalculo] = useState<string | null>(null)
+  const [etapaFinalizacaoAtiva, setEtapaFinalizacaoAtiva] = useState(false)
   const [fluxoOpcoes, setFluxoOpcoes] = useState({
     vitoriaDefinida: false,
     ventoRodadaDefinido: false,
@@ -107,6 +108,7 @@ export function useCalculadoraMao() {
     !resultados.furitenRonCompleto &&
     !resultadoComYakuValido
   const podeCalcularMao = slotsUsados >= 14
+  const maoProntaParaFinalizar = maoCompleta && (mao.indiceAgari >= 0 || !!mao.agariMeld)
   const fluxoConfiguracaoCompleto =
     fluxoOpcoes.vitoriaDefinida &&
     fluxoOpcoes.ventoRodadaDefinido &&
@@ -122,6 +124,12 @@ export function useCalculadoraMao() {
     setAssinaturaCalculo(assinaturaMaoAtual)
   }
 
+  /** Avanca da montagem para a etapa de finalizacao somente por decisao explicita do usuario. */
+  const finalizarMao = () => {
+    if (!maoProntaParaFinalizar) return
+    setEtapaFinalizacaoAtiva(true)
+  }
+
   /**
    * Remove apenas a pedra vencedora e retorna a calculadora para a montagem em tenpai.
    *
@@ -131,6 +139,7 @@ export function useCalculadoraMao() {
    */
   const voltarParaMontagem = () => {
     if (!maoCompleta || (mao.indiceAgari < 0 && !mao.agariMeld)) return
+    setEtapaFinalizacaoAtiva(false)
     atualizarMao((rascunho) => {
       if (rascunho.agariMeld) {
         const agariMeld = rascunho.agariMeld
@@ -174,8 +183,16 @@ export function useCalculadoraMao() {
       ventoRodadaDefinido: false,
       ventoAssentoDefinido: false,
     })
+    setEtapaFinalizacaoAtiva(false)
     setAssinaturaCalculo(null)
   }, [setAcaoPendente, slotsUsados])
+
+  useEffect(() => {
+    if (maoProntaParaFinalizar) return
+
+    setEtapaFinalizacaoAtiva(false)
+    setAssinaturaCalculo(null)
+  }, [maoProntaParaFinalizar])
 
   useEffect(() => {
     if (!acaoPendente) return
@@ -206,8 +223,11 @@ export function useCalculadoraMao() {
     podeSelecionarPedra: acoesMelds.podeSelecionarPedra,
     ...resultados,
     deveCalcularMao,
+    etapaFinalizacaoAtiva,
+    maoProntaParaFinalizar,
     podeCalcularMao: podeCalcularMao && fluxoConfiguracaoCompleto,
     calcularMaoAtual,
+    finalizarMao,
     voltarParaMontagem,
     resultadoComYakuValido,
     resultadoMaoInvalida,

@@ -126,10 +126,15 @@ export function MaoAtual({
   aoLimpar,
 }: PropsMaoAtual) {
   const { t } = useI18n()
+  const slotsEstruturais = Math.min(slotsUsados, 14)
+  const sufixoFisico =
+    totalPedras !== slotsUsados
+      ? ` • ${t('calculator.physicalTilesShort', { total: totalPedras })}`
+      : ''
   const tituloMao =
     contexto === 'finalizacao'
-      ? `${t('calculator.completeHand')} ${slotsUsados}/14`
-      : t('calculator.buildTitle', { total: totalPedras })
+      ? `${t('calculator.completeHand')} ${slotsEstruturais}/14${sufixoFisico}`
+      : `${t('calculator.buildTitle', { total: slotsEstruturais })}${sufixoFisico}`
   const clicarPedraDaMao = (indicePedra: number) => {
     if (acaoMeldAtiva) {
       aoAdicionarPedra(mao.pedras[indicePedra])

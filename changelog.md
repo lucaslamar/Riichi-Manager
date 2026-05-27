@@ -1,6 +1,13 @@
 # Changelog - Riichi Manager
 
-## [4.0.0] - 2026-05-26
+## [4.0.2] - 2026-05-27
+
+### Corrigido
+
+- Corrigida a exibição de **kan fechado com aka dora**.
+- Adiciona botao de finalizar a mao.
+
+## [4.0.1] - 2026-05-26
 
 ### Adicionado
 

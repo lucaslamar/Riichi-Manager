@@ -1573,6 +1573,14 @@
     margin: 0;
   }
 
+  .teclado-pedras .botao-configuracao-teclado-rodape {
+    position: static;
+    right: auto;
+    bottom: auto;
+    width: 34px;
+    min-height: 34px;
+  }
+
   .status-tenpai-cabecalho {
     min-height: 20px;
     border-width: 1px;

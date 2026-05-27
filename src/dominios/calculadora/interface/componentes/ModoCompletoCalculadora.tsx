@@ -23,8 +23,14 @@ export default function ModoCompletoCalculadora({
 }: PropsModoCompleto) {
   const { t } = useI18n()
   const cardRef = useRef<HTMLDivElement | null>(null)
-  const finalizandoMao = estado.maoCompleta && (estado.mao.indiceAgari >= 0 || !!estado.mao.agariMeld)
+  const finalizandoMao = estado.etapaFinalizacaoAtiva && estado.maoProntaParaFinalizar
   const mostrandoEsperas = estado.slotsUsados === 13
+  const slotsEstruturais = Math.min(estado.slotsUsados, 14)
+  const sufixoFisico =
+    estado.totalPedras !== estado.slotsUsados
+      ? ` • ${t('calculator.physicalTilesShort', { total: estado.totalPedras })}`
+      : ''
+  const rotuloMaoFinalizacao = `${t('calculator.completeHand')} ${slotsEstruturais}/14${sufixoFisico}`
   const acoesContextuais = [
     ...(finalizandoMao
       ? [
@@ -71,7 +77,7 @@ export default function ModoCompletoCalculadora({
       ) : (
         <section className="calculadora-etapa calculadora-etapa-finalizacao" aria-labelledby="titulo-etapa-finalizacao">
           <h3 id="titulo-etapa-finalizacao" className="sr-only">
-            {t('calculator.completeHand')} {estado.slotsUsados}/14
+            {rotuloMaoFinalizacao}
           </h3>
           <div className="layout-finalizacao-calculadora">
             <div className="coluna-finalizacao-mao">
