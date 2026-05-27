@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { createPortal } from 'react-dom'
 import type { TelaPrincipal } from '@/app/App'
 import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
@@ -29,6 +29,17 @@ const APP_MENU: ItemMenuGlobal[] = [
 ]
 
 const TODOS_ITENS = [...MODULOS_MENU, ...APP_MENU]
+const LIMIAR_GESTO_DRAWER = 64
+const BORDA_GESTO_DRAWER = 28
+
+type ModoGestoDrawer = 'abrir' | 'fechar'
+
+interface EstadoGestoDrawer {
+  modo: ModoGestoDrawer
+  inicioX: number
+  inicioY: number
+  ativo: boolean
+}
 
 function elementosFocaveis(container: HTMLElement) {
   return Array.from(
@@ -47,8 +58,11 @@ function elementosFocaveis(container: HTMLElement) {
 export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsCabecalho) {
   const { t, idioma, idiomas, alterarIdioma } = useI18n()
   const [menuAberto, setMenuAberto] = useState(false)
+  const [deslocamentoDrawer, setDeslocamentoDrawer] = useState(0)
   const drawerRef = useRef<HTMLDivElement | null>(null)
   const botaoMenuRef = useRef<HTMLButtonElement | null>(null)
+  const gestoDrawerRef = useRef<EstadoGestoDrawer | null>(null)
+  const deslocamentoDrawerRef = useRef(0)
   const itemAtual =
     TODOS_ITENS.find((item) => item.tela === telaAtual) ??
     (torneioAtivo ? MODULOS_MENU[2] : MODULOS_MENU[0])
@@ -56,6 +70,65 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
   const navegar = (tela: TelaPrincipal) => {
     aoNavegar(tela)
     setMenuAberto(false)
+  }
+
+  const iniciarGestoDrawer = (modo: ModoGestoDrawer, evento: ReactPointerEvent<HTMLElement>) => {
+    if (evento.pointerType === 'mouse') return
+
+    if (modo === 'abrir' && evento.clientX > BORDA_GESTO_DRAWER) return
+
+    gestoDrawerRef.current = {
+      modo,
+      inicioX: evento.clientX,
+      inicioY: evento.clientY,
+      ativo: false,
+    }
+    evento.currentTarget.setPointerCapture(evento.pointerId)
+  }
+
+  const moverGestoDrawer = (evento: ReactPointerEvent<HTMLElement>) => {
+    const gesto = gestoDrawerRef.current
+    if (!gesto) return
+
+    const deltaX = evento.clientX - gesto.inicioX
+    const deltaY = evento.clientY - gesto.inicioY
+
+    if (!gesto.ativo) {
+      if (Math.abs(deltaY) > 18 && Math.abs(deltaY) > Math.abs(deltaX)) {
+        gestoDrawerRef.current = null
+        return
+      }
+
+      gesto.ativo = Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY)
+    }
+
+    if (!gesto.ativo) return
+
+    if (gesto.modo === 'abrir' && deltaX > LIMIAR_GESTO_DRAWER) {
+      setMenuAberto(true)
+      gestoDrawerRef.current = null
+      return
+    }
+
+    if (gesto.modo === 'fechar') {
+      const deslocamento = Math.min(0, deltaX)
+      deslocamentoDrawerRef.current = deslocamento
+      setDeslocamentoDrawer(deslocamento)
+    }
+  }
+
+  const finalizarGestoDrawer = () => {
+    const gesto = gestoDrawerRef.current
+    if (!gesto) return
+
+    const deveFechar =
+      gesto.modo === 'fechar' && deslocamentoDrawerRef.current <= -LIMIAR_GESTO_DRAWER
+
+    gestoDrawerRef.current = null
+    deslocamentoDrawerRef.current = 0
+    setDeslocamentoDrawer(0)
+
+    if (deveFechar) setMenuAberto(false)
   }
 
   useEffect(() => {
@@ -154,6 +227,10 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
           <div
             className="drawer-global-overlay"
             role="presentation"
+            onPointerDown={(evento) => iniciarGestoDrawer('fechar', evento)}
+            onPointerMove={moverGestoDrawer}
+            onPointerCancel={finalizarGestoDrawer}
+            onPointerUp={finalizarGestoDrawer}
             onMouseDown={(evento) => {
               if (evento.target === evento.currentTarget) setMenuAberto(false)
             }}
@@ -165,6 +242,7 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
               role="dialog"
               aria-modal="true"
               aria-labelledby="titulo-drawer-global"
+              style={{ transform: deslocamentoDrawer ? `translateX(${deslocamentoDrawer}px)` : undefined }}
             >
               <div className="drawer-cabecalho">
                 <div>
@@ -220,6 +298,17 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
             </div>
           </div>,
           document.body,
+        )}
+
+        {!menuAberto && (
+          <div
+            className="zona-gesto-drawer"
+            aria-hidden="true"
+            onPointerDown={(evento) => iniciarGestoDrawer('abrir', evento)}
+            onPointerMove={moverGestoDrawer}
+            onPointerCancel={finalizarGestoDrawer}
+            onPointerUp={finalizarGestoDrawer}
+          />
         )}
       </div>
     </header>

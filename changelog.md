@@ -2,6 +2,12 @@
 
 ## [4.0.0] - 2026-05-26
 
+### Adicionado
+
+- A sidebar global agora pode ser aberta deslizando da borda esquerda e fechada arrastando para a esquerda em telas touch.
+
+## [4.0.0] - 2026-05-26
+
 ### Melhorias
 
 - Redesenhada a Calculadora de Mão no mobile para ter sensação de tela full-screen de app, reduzindo a aparência de card centralizado dentro de página.
