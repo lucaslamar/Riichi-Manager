@@ -2,7 +2,7 @@
 
 ## 4.0.3 - Refatoração estrutural dos domínios de calculadora
 
-### Refector
+### Refatoração
 
 - Separa a antiga calculadora em dois domínios independentes:
   - `calculadora-mao`, responsável pela montagem, finalização e cálculo completo da mão.
@@ -20,16 +20,13 @@
 - Mantém o lápis como único caminho para voltar à montagem e editar a estrutura da mão.
 - Separa a contagem estrutural da contagem física em mãos com Kan, evitando exibições como `15/14`.
 
-### Corrigido
+### Correções
 
-- Corrige o clique em tiles `1` no mobile removendo a faixa invisível de gesto do menu lateral que cobria a primeira coluna do teclado.
-- Impede que o botão de avanço para finalização ou a engrenagem cubram tiles do teclado.
-- Impede que cliques em Chi, Pon ou Kan na finalização removam melds ou voltem para edição estrutural.
-- Preserva explicitamente a pedra da batida escolhida ao avançar para finalização e ao calcular a mão.
-
-### Documentação
-
-- Atualiza README e docs de arquitetura, fluxo da calculadora e regras de negócio para refletir a nova organização.
+- Corrige a indicação visual de esperas em furiten no teclado.
+- Quando qualquer espera atual aparece nos descartes do próprio jogador, todas as esperas válidas passam a ser marcadas como bloqueadas por furiten para Ron.
+- Esperas bloqueadas por furiten deixam de aparecer como verdes válidas para Ron e passam a usar o estado visual de furiten.
+- Mantém o han potencial acessível no tooltip, mas exibe o badge **Furiten** para deixar claro que Ron está bloqueado.
+- Preserva Tsumo como vitória permitida: ao escolher Tsumo, as esperas podem voltar a aparecer como válidas.
 
 ## [4.0.2] - 2026-05-27
 

@@ -94,7 +94,7 @@ export function calcularEsperasPossiveis(
   const contagem = contar([...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora])
   const descartes = new Set(mao.descartes.map(base))
 
-  return TODAS_PEDRAS.flatMap((pedra) => {
+  const esperas = TODAS_PEDRAS.flatMap((pedra) => {
     if ((contagem.get(pedra) ?? 0) >= 4) return []
 
     const candidata: Mao = {
@@ -122,11 +122,18 @@ export function calcularEsperasPossiveis(
           yakuman,
           nome: resultado.name ?? null,
           semYaku: yakuman === 0 && yakus.length === 0 && (resultado.noYaku ?? false),
-          furiten: descartes.has(base(pedra)),
+          furiten: false,
         },
       ]
     } catch {
       return []
     }
   })
+  const ronBloqueadoPorFuriten =
+    esperas.some((espera) => !espera.semYaku && descartes.has(base(espera.pedra)))
+
+  return esperas.map((espera) => ({
+    ...espera,
+    furiten: ronBloqueadoPorFuriten && !espera.semYaku,
+  }))
 }

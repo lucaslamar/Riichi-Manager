@@ -18,6 +18,7 @@ interface PropsTecladoPedras {
   dorasReais: Set<string>
   esperasPorPedra: Map<string, EsperaPossivel>
   filtrarTecladoPorEspera: boolean
+  furitenBloqueiaRon: boolean
   maoCompleta: boolean
   podeSelecionarPedra: (pedra: CodigoPedra) => boolean
   rotuloEsperaTeclado: (espera: Pick<EsperaPossivel, 'semYaku' | 'yakuman' | 'han'>) => string
@@ -47,6 +48,7 @@ export function TecladoPedras({
   dorasReais,
   esperasPorPedra,
   filtrarTecladoPorEspera,
+  furitenBloqueiaRon,
   maoCompleta,
   podeSelecionarPedra,
   rotuloEsperaTeclado,
@@ -70,10 +72,12 @@ export function TecladoPedras({
     espera ? (
       <span
         className={`badge-espera-teclado ${
-          espera.semYaku ? 'sem-yaku' : espera.furiten ? 'furiten' : ''
+          espera.semYaku ? 'sem-yaku' : espera.furiten && furitenBloqueiaRon ? 'furiten' : ''
         }`}
       >
-        {rotuloEsperaTeclado(espera)}
+        {espera.furiten && furitenBloqueiaRon && !espera.semYaku
+          ? t('calculator.furiten')
+          : rotuloEsperaTeclado(espera)}
       </span>
     ) : null
 
@@ -104,7 +108,15 @@ export function TecladoPedras({
     const indisponivel = selecionandoPedraAgari
       ? !candidataAgari
       : cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera
-    const esperaVisivel = selecionandoPedraAgari ? candidataAgari : invalidaParaAcao ? undefined : espera
+    const esperaVisivelBase = selecionandoPedraAgari
+      ? candidataAgari
+      : invalidaParaAcao
+        ? undefined
+        : espera
+    const esperaVisivel =
+      esperaVisivelBase?.furiten && !furitenBloqueiaRon
+        ? { ...esperaVisivelBase, furiten: false }
+        : esperaVisivelBase
     const rotuloEspera = esperaVisivel
       ? `${rotuloEsperaTeclado(esperaVisivel)}${esperaVisivel.furiten ? ` - ${t('calculator.furiten')}` : ''}`
       : undefined

@@ -100,9 +100,7 @@ export function useCalculadoraMao() {
           han: resultado.han,
           yakuman: resultado.yakuman,
           semYaku: resultado.semYaku,
-          furiten:
-            maoCandidata.agari === 'ron' &&
-            mao.descartes.some((descarte) => codigoBase(descarte) === chave),
+          furiten: false,
         })
       } catch {
         // Nem toda tile visivel precisa ser uma batida calculavel; ela apenas nao vira candidata no teclado.
@@ -135,6 +133,18 @@ export function useCalculadoraMao() {
         })
       })
     })
+
+    const ronBloqueadoPorFuriten =
+      [...candidatas.entries()].some(
+        ([chave, candidata]) =>
+          !candidata.semYaku && mao.descartes.some((descarte) => codigoBase(descarte) === chave),
+      )
+
+    if (ronBloqueadoPorFuriten) {
+      candidatas.forEach((candidata) => {
+        if (!candidata.semYaku) candidata.furiten = true
+      })
+    }
 
     return candidatas
   }, [configuracao, mao, maoCompleta])

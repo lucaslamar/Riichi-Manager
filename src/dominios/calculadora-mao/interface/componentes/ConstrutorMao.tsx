@@ -60,6 +60,7 @@ export default function ConstrutorMao({
     selecionandoPedraAgari,
     mensagemFinalizacao,
     candidatasPedraAgari,
+    fluxoOpcoes,
     finalizarMao,
     alternarSelecaoPedraAgari,
     escolherPedraAgariMao,
@@ -94,6 +95,7 @@ export default function ConstrutorMao({
         ? t('calculator.noYaku')
         : null
   const filtrarTecladoPorEspera = slotsUsados === 13 && !acaoPendente && temEsperaValida
+  const furitenBloqueiaRonNoTeclado = mao.agari === 'ron' || !fluxoOpcoes.vitoriaDefinida
   const esperasPorPedra = useMemo(
     () => new Map(esperasPossiveis.map((espera) => [codigoBase(espera.pedra), espera])),
     [esperasPossiveis],
@@ -264,6 +266,7 @@ export default function ConstrutorMao({
             dorasReais={dorasReais}
             esperasPorPedra={esperasPorPedra}
             filtrarTecladoPorEspera={filtrarTecladoPorEspera}
+            furitenBloqueiaRon={furitenBloqueiaRonNoTeclado}
             maoCompleta={maoCompleta}
             podeSelecionarPedra={podeSelecionarPedra}
             rotuloEsperaTeclado={rotuloEsperaTeclado}
