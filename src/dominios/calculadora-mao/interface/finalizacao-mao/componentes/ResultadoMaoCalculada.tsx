@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
-import { ESTILO_MELD, codigoBase } from '../constantes'
+import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
+import { ESTILO_MELD, codigoBase } from '../../constantes'
 import ExibicaoCompleta from './ExibicaoCompleta'
-import { PedraSvg, PedrasMeld } from './PedraSvg'
+import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 
 interface PropsResultadoMao {
   estado: EstadoCalculadoraMao

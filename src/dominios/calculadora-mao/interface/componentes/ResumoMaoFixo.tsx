@@ -1,5 +1,5 @@
 import type { Mao } from '../../logica/mao'
-import { PedraSvg, PedrasMeld } from './PedraSvg'
+import { PedraSvg, PedrasMeld } from '../compartilhado/componentes/PedraSvg'
 
 export default function ResumoMaoFixo({
   mao,

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { Acao, CodigoPedra, Mao, Meld } from '../../../logica/mao'
 import { ESTILO_MELD, nomePedraAcessivel } from '../../constantes'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
-import { PedraSvg, PedrasMeld } from '../PedraSvg'
+import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 
 interface AcaoMobileAtiva {
   rotulo: string

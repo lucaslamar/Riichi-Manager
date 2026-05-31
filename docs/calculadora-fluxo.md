@@ -4,7 +4,9 @@
 
 ### 1. Montagem
 
-Arquivo principal: `src/dominios/calculadora-mao/interface/componentes/ModoCompletoCalculadora.tsx`.
+Arquivo principal: `src/dominios/calculadora-mao/interface/montagem-mao/paginas/PaginaMontagemMao.tsx`.
+
+O fluxo completo e composto por `src/dominios/calculadora-mao/interface/compartilhado/componentes/ModoCompletoCalculadora.tsx`, que escolhe entre montagem e finalizacao.
 
 O usuario monta a mao pelo teclado. Com 13 slots, `useEsperasMao` calcula esperas possiveis. A tela mostra:
 
@@ -31,7 +33,9 @@ Esta etapa mostra:
 - condicoes especiais;
 - botao Calcular.
 
-O botao "Voltar para montagem" chama `voltarParaMontagem` e remove apenas a pedra vencedora, preservando configuracoes reaproveitaveis.
+Na finalizacao, clicar em uma tile visivel apenas troca a pedra vencedora e atualiza o destaque laranja. Clicar em Chi/Pon/Kan nao remove meld nem volta para edicao; uma tile especifica do meld pode ser escolhida como batida.
+
+O botao de lapis chama `voltarParaMontagem` e e o caminho explicito para edicao estrutural da mao. Ele remove apenas a pedra vencedora, preservando configuracoes reaproveitaveis.
 
 ### 3. Resultado
 

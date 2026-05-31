@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
-import { codigoBase, nomePedraAcessivel } from '../constantes'
-import { BotaoToggle } from './Botoes'
-import { IndicadoresDora } from './construtor-mao/IndicadoresDora'
-import { PedraSvg } from './PedraSvg'
+import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
+import { codigoBase, nomePedraAcessivel } from '../../constantes'
+import { BotaoToggle } from '../../compartilhado/componentes/Botoes'
+import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora'
+import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {

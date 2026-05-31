@@ -1,7 +1,7 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { Acao, CodigoPedra, ConfiguracaoCalculo, EsperaPossivel } from '../../../logica/mao'
 import { HONRAS, NAIPES, codigoBase, nomePedraAcessivel } from '../../constantes'
-import { PedraSvg } from '../PedraSvg'
+import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
 interface CandidataPedraAgariTeclado {
   pedra: CodigoPedra

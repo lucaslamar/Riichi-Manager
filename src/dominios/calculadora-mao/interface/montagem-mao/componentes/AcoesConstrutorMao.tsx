@@ -1,6 +1,6 @@
 import type { Acao, Mao } from '../../../logica/mao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { BotaoAcao } from '../Botoes'
+import { BotaoAcao } from '../../compartilhado/componentes/Botoes'
 
 interface PropsAcoesConstrutorMao {
   mao: Mao

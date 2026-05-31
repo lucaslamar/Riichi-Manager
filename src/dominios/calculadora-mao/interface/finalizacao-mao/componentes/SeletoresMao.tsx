@@ -1,7 +1,7 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { Mao, VentoMao } from '../../logica/mao'
-import { VENTOS_ASSENTO, VENTOS_RODADA } from '../constantes'
-import { PedraSvg } from './PedraSvg'
+import type { Mao, VentoMao } from '../../../logica/mao'
+import { VENTOS_ASSENTO, VENTOS_RODADA } from '../../constantes'
+import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
 export type AtualizarMao = (receita: (rascunho: Mao) => void) => void
 

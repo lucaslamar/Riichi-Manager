@@ -1,5 +1,5 @@
-import type { DetalheFu, Mao } from '../../logica/mao'
-import { PedraSvg } from './PedraSvg'
+import type { DetalheFu, Mao } from '../../../logica/mao'
+import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
 export default function ExibicaoCompleta({ resultado, mao }: { resultado: any; mao?: Mao }) {
   const pts = resultado.pontos

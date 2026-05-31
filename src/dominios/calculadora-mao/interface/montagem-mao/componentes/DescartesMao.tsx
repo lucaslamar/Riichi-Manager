@@ -1,7 +1,7 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { CodigoPedra } from '../../../logica/mao'
 import { nomePedraAcessivel } from '../../constantes'
-import { PedraSvg } from '../PedraSvg'
+import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
 interface PropsDescartesMao {
   descartes: CodigoPedra[]

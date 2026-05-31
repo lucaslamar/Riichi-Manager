@@ -1,10 +1,9 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import AdSlot from '@/compartilhado/interface/componentes/AdSlot'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
-import ConstrutorMao from './ConstrutorMao'
-import OpcoesMao from './OpcoesMao'
-import ResultadoMaoCalculada from './ResultadoMaoCalculada'
+import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
+import { PaginaFinalizacaoMao } from '../../finalizacao-mao/paginas/PaginaFinalizacaoMao'
+import { PaginaMontagemMao } from '../../montagem-mao/paginas/PaginaMontagemMao'
 
 interface PropsModoCompleto {
   estado: EstadoCalculadoraMao
@@ -64,50 +63,36 @@ export default function ModoCompletoCalculadora({
       {!finalizandoMao ? (
         <section className="calculadora-etapa calculadora-etapa-montagem" aria-labelledby="titulo-etapa-montagem">
           <h3 id="titulo-etapa-montagem" className="sr-only">{t('calculator.stepBuild')}</h3>
-          <div className={`layout-montagem-calculadora ${mostrandoEsperas ? 'com-esperas' : 'sem-esperas'}`}>
-            <ConstrutorMao
-              estado={estado}
-              embutido
-              contexto="montagem"
-              aoAbrirRegras={aoAbrirRegras}
-            />
-            <ResultadoMaoCalculada estado={estado} embutido modoFluxo="montagem" />
-          </div>
+          <PaginaMontagemMao
+            estado={estado}
+            mostrandoEsperas={mostrandoEsperas}
+            aoAbrirRegras={aoAbrirRegras}
+          />
         </section>
       ) : (
         <section className="calculadora-etapa calculadora-etapa-finalizacao" aria-labelledby="titulo-etapa-finalizacao">
           <h3 id="titulo-etapa-finalizacao" className="sr-only">
             {rotuloMaoFinalizacao}
           </h3>
-          <div className="layout-finalizacao-calculadora">
-            <div className="coluna-finalizacao-mao">
-              <ConstrutorMao
-                estado={estado}
-                embutido
-                contexto="finalizacao"
-                acoesCabecalho={
-                  <div className="acoes-finalizacao-calculadora" aria-label={t('calculator.actionsMenu')}>
-                    {acoesContextuais.map((acao) => (
-                      <button
-                        key={acao.chave}
-                        className={acao.destaque ? 'acao-finalizacao destaque' : 'acao-finalizacao'}
-                        type="button"
-                        title={acao.rotulo}
-                        aria-label={acao.rotulo}
-                        onClick={acao.aoClicar}
-                      >
-                        <i className={`fas ${acao.icone}`} aria-hidden="true" />
-                      </button>
-                    ))}
-                  </div>
-                }
-              />
-            </div>
-            <div className="coluna-finalizacao-opcoes">
-              <OpcoesMao estado={estado} embutido />
-              <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" />
-            </div>
-          </div>
+          <PaginaFinalizacaoMao
+            estado={estado}
+            acoesCabecalho={
+              <div className="acoes-finalizacao-calculadora" aria-label={t('calculator.actionsMenu')}>
+                {acoesContextuais.map((acao) => (
+                  <button
+                    key={acao.chave}
+                    className={acao.destaque ? 'acao-finalizacao destaque' : 'acao-finalizacao'}
+                    type="button"
+                    title={acao.rotulo}
+                    aria-label={acao.rotulo}
+                    onClick={acao.aoClicar}
+                  >
+                    <i className={`fas ${acao.icone}`} aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+            }
+          />
         </section>
       )}
 

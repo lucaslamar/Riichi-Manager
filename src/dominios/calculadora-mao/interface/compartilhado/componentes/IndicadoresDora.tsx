@@ -2,7 +2,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { Updater } from 'use-immer'
 import type { Mao } from '../../../logica/mao'
 import { nomePedraAcessivel } from '../../constantes'
-import { PedraSvg } from '../PedraSvg'
+import { PedraSvg } from './PedraSvg'
 
 interface PropsIndicadoresDora {
   mao: Mao

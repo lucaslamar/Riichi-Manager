@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { codigoBase, proximaDoraIndicada } from '../constantes'
-import type { EstadoCalculadoraMao } from '../hooks/useCalculadoraMao'
-import { AcoesConstrutorMao } from './construtor-mao/AcoesConstrutorMao'
-import { DescartesMao } from './construtor-mao/DescartesMao'
-import { IndicadoresDora } from './construtor-mao/IndicadoresDora'
-import { MaoAtual } from './construtor-mao/MaoAtual'
-import { TecladoPedras } from './construtor-mao/TecladoPedras'
+import { codigoBase, proximaDoraIndicada } from '../../constantes'
+import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
+import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora'
+import { AcoesConstrutorMao } from './AcoesConstrutorMao'
+import { DescartesMao } from './DescartesMao'
+import { MaoAtual } from './MaoAtual'
+import { TecladoPedras } from './TecladoPedras'
 
 interface PropsConstrutorMao {
   estado: EstadoCalculadoraMao
@@ -210,8 +210,8 @@ export default function ConstrutorMao({
         aoAdicionarPedra={adicionarPedra}
         aoEscolherPedraAgariMao={escolherPedraAgariMao}
         aoEscolherPedraAgariMeld={escolherPedraAgariMeld}
-        aoRemoverPedra={removerPedra}
-        aoRemoverMeld={removerMeld}
+        aoRemoverPedra={contexto === 'montagem' ? removerPedra : () => undefined}
+        aoRemoverMeld={contexto === 'montagem' ? removerMeld : () => undefined}
         aoLimpar={limpar}
       />
 

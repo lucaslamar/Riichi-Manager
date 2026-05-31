@@ -7,7 +7,7 @@
 
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
 import ModalRegras from '../componentes/ModalRegras'
-import ModoCompletoCalculadora from '../componentes/ModoCompletoCalculadora'
+import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
 
 export default function PaginaCalculadoraMao() {

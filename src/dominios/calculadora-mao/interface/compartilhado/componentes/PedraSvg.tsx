@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import type { CodigoPedra, Meld } from '../../logica/mao'
-import { arquivoPedra, nomePedraAcessivel, urlPedra } from '../constantes'
+import type { CodigoPedra, Meld } from '../../../logica/mao'
+import { arquivoPedra, nomePedraAcessivel, urlPedra } from '../../constantes'
 
 export function PedraSvg({
   pedra,
