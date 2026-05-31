@@ -232,7 +232,11 @@ export function useAcoesPedras({
   const removerMeld = (indiceMeld: number) => {
     atualizarMao((rascunho) => {
       rascunho.melds.splice(indiceMeld, 1)
-      rascunho.agariMeld = null
+      if (rascunho.agariMeld?.indiceMeld === indiceMeld) {
+        rascunho.agariMeld = null
+      } else if (rascunho.agariMeld && rascunho.agariMeld.indiceMeld > indiceMeld) {
+        rascunho.agariMeld.indiceMeld--
+      }
     })
     setAcaoPendente(null)
   }

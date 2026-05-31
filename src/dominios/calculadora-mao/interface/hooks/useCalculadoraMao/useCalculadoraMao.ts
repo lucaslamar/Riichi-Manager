@@ -4,9 +4,18 @@ import { useAcoesPedras } from './useAcoesPedras'
 import { useEsperasMao } from './useEsperasMao'
 import { useEstadoMao } from './useEstadoMao'
 import { useResultadoMao } from './useResultadoMao'
-import { ordenarPedras } from '../../../logica/mao'
+import { calcularMao, ordenarPedras, type CodigoPedra } from '../../../logica/mao'
+import { codigoBase } from '../../constantes'
 
 const YAKU_APENAS_BONUS = new Set(['Dora', 'Uradora', 'Akadora', 'Dora manual'])
+
+interface CandidataPedraAgari {
+  pedra: CodigoPedra
+  han: number
+  yakuman: number
+  semYaku: boolean
+  furiten: boolean
+}
 
 function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['resultado']) {
   if (!resultado || resultado.agari == null) return false
@@ -41,6 +50,8 @@ export function useCalculadoraMao() {
   } = estado
   const [assinaturaCalculo, setAssinaturaCalculo] = useState<string | null>(null)
   const [etapaFinalizacaoAtiva, setEtapaFinalizacaoAtiva] = useState(false)
+  const [selecionandoPedraAgari, setSelecionandoPedraAgari] = useState(false)
+  const [mensagemFinalizacao, setMensagemFinalizacao] = useState<string | null>(null)
   const [fluxoOpcoes, setFluxoOpcoes] = useState({
     vitoriaDefinida: false,
     ventoRodadaDefinido: false,
@@ -73,6 +84,60 @@ export function useCalculadoraMao() {
     maoCompleta,
     deveCalcularMao,
   })
+  const candidatasPedraAgari = useMemo(() => {
+    if (!maoCompleta) return new Map<string, CandidataPedraAgari>()
+
+    const candidatas = new Map<string, CandidataPedraAgari>()
+    const registrarCandidata = (pedra: CodigoPedra, maoCandidata: typeof mao) => {
+      const chave = codigoBase(pedra)
+      if (candidatas.has(chave)) return
+
+      try {
+        const resultado = calcularMao(maoCandidata, configuracao)
+        if (resultado.agari == null) return
+        candidatas.set(chave, {
+          pedra,
+          han: resultado.han,
+          yakuman: resultado.yakuman,
+          semYaku: resultado.semYaku,
+          furiten:
+            maoCandidata.agari === 'ron' &&
+            mao.descartes.some((descarte) => codigoBase(descarte) === chave),
+        })
+      } catch {
+        // Nem toda tile visivel precisa ser uma batida calculavel; ela apenas nao vira candidata no teclado.
+      }
+    }
+
+    mao.pedras.forEach((pedra, indiceAgari) => {
+      registrarCandidata(pedra, {
+        ...mao,
+        indiceAgari,
+        agariMeld: null,
+      })
+    })
+
+    mao.melds.forEach((meld, indiceMeld) => {
+      meld.pedras.forEach((pedra, indicePedra) => {
+        registrarCandidata(pedra, {
+          ...mao,
+          indiceAgari: -1,
+          agariMeld: {
+            indiceMeld,
+            indicePedra,
+            pedra,
+            tipo: meld.tipo,
+            pedrasConsumidasMao:
+              mao.agariMeld?.indiceMeld === indiceMeld
+                ? mao.agariMeld.pedrasConsumidasMao
+                : meld.pedras.filter((_pedraMeld, indice) => indice !== indicePedra),
+          },
+        })
+      })
+    })
+
+    return candidatas
+  }, [configuracao, mao, maoCompleta])
   const acoesPedras = useAcoesPedras({
     estado: {
       mao,
@@ -122,8 +187,81 @@ export function useCalculadoraMao() {
 
   /** Avanca da montagem para a etapa de finalizacao somente por decisao explicita do usuario. */
   const finalizarMao = () => {
-    if (!maoProntaParaFinalizar) return
+    if (!maoProntaParaFinalizar) {
+      setMensagemFinalizacao('Escolha a pedra da batida.')
+      return
+    }
+    setSelecionandoPedraAgari(false)
+    setMensagemFinalizacao(null)
     setEtapaFinalizacaoAtiva(true)
+  }
+
+  const alternarSelecaoPedraAgari = () => {
+    if (!maoCompleta) return
+    setSelecionandoPedraAgari((selecionando) => {
+      const proximo = !selecionando
+      setMensagemFinalizacao(proximo ? 'Escolha a pedra da batida.' : null)
+      return proximo
+    })
+  }
+
+  const escolherPedraAgariMao = (indicePedra: number) => {
+    if (!maoCompleta || indicePedra < 0 || indicePedra >= mao.pedras.length) return
+
+    atualizarMao((rascunho) => {
+      rascunho.indiceAgari = indicePedra
+      rascunho.agariMeld = null
+    })
+    setSelecionandoPedraAgari(false)
+    setMensagemFinalizacao('Pedra da batida selecionada.')
+    setAssinaturaCalculo(null)
+  }
+
+  const escolherPedraAgariMeld = (indiceMeld: number, indicePedra: number) => {
+    if (!maoCompleta) return
+    const meld = mao.melds[indiceMeld]
+    const pedra = meld?.pedras[indicePedra]
+    if (!meld || !pedra) return
+
+    atualizarMao((rascunho) => {
+      const meldAtual = rascunho.melds[indiceMeld]
+      const pedraAtual = meldAtual?.pedras[indicePedra]
+      if (!meldAtual || !pedraAtual) return
+
+      rascunho.indiceAgari = -1
+      rascunho.agariMeld = {
+        indiceMeld,
+        indicePedra,
+        pedra: pedraAtual,
+        tipo: meldAtual.tipo,
+        pedrasConsumidasMao:
+          rascunho.agariMeld?.indiceMeld === indiceMeld
+            ? rascunho.agariMeld.pedrasConsumidasMao
+            : meldAtual.pedras.filter((_pedraMeld, indice) => indice !== indicePedra),
+      }
+    })
+    setSelecionandoPedraAgari(false)
+    setMensagemFinalizacao('Pedra da batida selecionada.')
+    setAssinaturaCalculo(null)
+  }
+
+  const escolherPedraAgariPorCodigo = (pedra: CodigoPedra) => {
+    if (!maoCompleta) return
+    const chave = codigoBase(pedra)
+    const indicePedra = mao.pedras.findIndex((pedraMao) => codigoBase(pedraMao) === chave)
+    if (indicePedra >= 0) {
+      escolherPedraAgariMao(indicePedra)
+      return
+    }
+
+    const indiceMeld = mao.melds.findIndex((meld) =>
+      meld.pedras.some((pedraMeld) => codigoBase(pedraMeld) === chave),
+    )
+    if (indiceMeld < 0) return
+    const indicePedraMeld = mao.melds[indiceMeld].pedras.findIndex(
+      (pedraMeld) => codigoBase(pedraMeld) === chave,
+    )
+    escolherPedraAgariMeld(indiceMeld, indicePedraMeld)
   }
 
   /**
@@ -136,6 +274,7 @@ export function useCalculadoraMao() {
   const voltarParaMontagem = () => {
     if (!maoCompleta || (mao.indiceAgari < 0 && !mao.agariMeld)) return
     setEtapaFinalizacaoAtiva(false)
+    setSelecionandoPedraAgari(false)
     atualizarMao((rascunho) => {
       if (rascunho.agariMeld) {
         const agariMeld = rascunho.agariMeld
@@ -180,6 +319,7 @@ export function useCalculadoraMao() {
       ventoAssentoDefinido: false,
     })
     setEtapaFinalizacaoAtiva(false)
+    setSelecionandoPedraAgari(false)
     setAssinaturaCalculo(null)
   }, [setAcaoPendente, slotsUsados])
 
@@ -187,6 +327,7 @@ export function useCalculadoraMao() {
     if (maoProntaParaFinalizar) return
 
     setEtapaFinalizacaoAtiva(false)
+    setSelecionandoPedraAgari(false)
     setAssinaturaCalculo(null)
   }, [maoProntaParaFinalizar])
 
@@ -220,10 +361,17 @@ export function useCalculadoraMao() {
     ...resultados,
     deveCalcularMao,
     etapaFinalizacaoAtiva,
+    selecionandoPedraAgari,
+    mensagemFinalizacao,
+    candidatasPedraAgari,
     maoProntaParaFinalizar,
     podeCalcularMao: podeCalcularMao && fluxoConfiguracaoCompleto,
     calcularMaoAtual,
     finalizarMao,
+    alternarSelecaoPedraAgari,
+    escolherPedraAgariMao,
+    escolherPedraAgariMeld,
+    escolherPedraAgariPorCodigo,
     voltarParaMontagem,
     resultadoComYakuValido,
     resultadoMaoInvalida,

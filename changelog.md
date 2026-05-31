@@ -11,6 +11,22 @@
 - Remove a dependência da Calculadora de Han e Fu sobre hooks e componentes específicos da Calculadora de Mão.
 - Atualiza a navegação global para importar cada calculadora pelo seu domínio próprio.
 
+### Melhorias
+
+- Altera o avanço da montagem para a Finalização de Mão: escolher uma espera agora marca a pedra da batida e mantém o usuário na montagem até clicar em **Ir para finalização de mão**.
+- Adiciona o fluxo de **Mudar batida** na montagem, permitindo revisar e corrigir a pedra vencedora antes de avançar.
+- Exibe candidatas à batida no teclado com badge de han, sem yaku ou furiten quando disponível.
+- Permite trocar a pedra da batida diretamente na tela de finalização ao clicar em uma tile visível da mão ou dos melds.
+- Mantém o lápis como único caminho para voltar à montagem e editar a estrutura da mão.
+- Separa a contagem estrutural da contagem física em mãos com Kan, evitando exibições como `15/14`.
+
+### Corrigido
+
+- Corrige o clique em tiles `1` no mobile removendo a faixa invisível de gesto do menu lateral que cobria a primeira coluna do teclado.
+- Impede que o botão de avanço para finalização ou a engrenagem cubram tiles do teclado.
+- Impede que cliques em Chi, Pon ou Kan na finalização removam melds ou voltem para edição estrutural.
+- Preserva explicitamente a pedra da batida escolhida ao avançar para finalização e ao calcular a mão.
+
 ### Documentação
 
 - Atualiza README e docs de arquitetura, fluxo da calculadora e regras de negócio para refletir a nova organização.

@@ -29,11 +29,14 @@ interface PropsMaoAtual {
   podeKanAberto: boolean
   podeKanFechado: boolean
   maoInvalida: boolean
+  selecionandoPedraAgari: boolean
   contexto: 'montagem' | 'finalizacao'
   acoesCabecalho?: ReactNode
   aoAbrirMenuAcoes: () => void
   aoAlternarAcao: (tipo: Acao['tipo']) => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
+  aoEscolherPedraAgariMao: (indicePedra: number) => void
+  aoEscolherPedraAgariMeld: (indiceMeld: number, indicePedra: number) => void
   aoRemoverPedra: (indicePedra: number) => void
   aoRemoverMeld: (indiceMeld: number) => void
   aoLimpar: () => void
@@ -43,15 +46,105 @@ function ChipMeld({
   meld,
   indiceMeld,
   indiceAgari,
+  selecionandoPedraAgari,
+  selecionarPedraAgariDireto = false,
+  aoEscolherPedraAgariMeld,
   aoRemoverMeld,
 }: {
   meld: Meld
   indiceMeld: number
   indiceAgari?: number
+  selecionandoPedraAgari: boolean
+  selecionarPedraAgariDireto?: boolean
+  aoEscolherPedraAgariMeld: (indiceMeld: number, indicePedra: number) => void
   aoRemoverMeld: (indiceMeld: number) => void
 }) {
   const { t } = useI18n()
   const estilo = ESTILO_MELD[meld.tipo]
+  const renderizarPedraSelecionavel = ({
+    chave,
+    indicePedra,
+    pedra,
+    virada = false,
+    deLado = false,
+  }: {
+    chave: string | number
+    indicePedra: number
+    pedra?: CodigoPedra
+    virada?: boolean
+    deLado?: boolean
+  }) => {
+    const ehAgari = indiceAgari === indicePedra
+    const tile = virada ? t('calculator.hiddenTile') : nomePedraAcessivel(pedra)
+
+    return (
+      <button
+        key={chave}
+        className={`meld-tile seletor-agari-meld ${deLado ? 'de-lado' : ''} ${
+          ehAgari ? 'agari' : ''
+        }`}
+        type="button"
+        title={t('calculator.selectWinningTile', { tile })}
+        aria-label={t('calculator.selectWinningTile', { tile })}
+        onClick={() => aoEscolherPedraAgariMeld(indiceMeld, indicePedra)}
+      >
+        <PedraSvg pedra={pedra} virada={virada} deLado={deLado} />
+      </button>
+    )
+  }
+
+  if (selecionandoPedraAgari || selecionarPedraAgariDireto) {
+    const pedrasSelecionaveis =
+      meld.tipo === 'kanFechado'
+        ? (() => {
+            const pedraAka = meld.pedras.find((pedra) => pedra.startsWith('0'))
+            const pedrasCentrais = pedraAka
+              ? [pedraAka, meld.pedras.find((pedra) => pedra !== pedraAka) ?? meld.pedras[1]]
+              : [meld.pedras[1], meld.pedras[2]]
+
+            return [
+              renderizarPedraSelecionavel({
+                chave: 'back-left',
+                indicePedra: 0,
+                pedra: meld.pedras[0],
+                virada: true,
+              }),
+              renderizarPedraSelecionavel({
+                chave: 'middle-left',
+                indicePedra: 1,
+                pedra: pedrasCentrais[0],
+              }),
+              renderizarPedraSelecionavel({
+                chave: 'middle-right',
+                indicePedra: 2,
+                pedra: pedrasCentrais[1],
+              }),
+              renderizarPedraSelecionavel({
+                chave: 'back-right',
+                indicePedra: 3,
+                pedra: meld.pedras[3],
+                virada: true,
+              }),
+            ]
+          })()
+        : meld.pedras.map((pedra, indicePedra) =>
+            renderizarPedraSelecionavel({
+              chave: indicePedra,
+              indicePedra,
+              pedra,
+              deLado: indicePedra === 0,
+            }),
+          )
+
+    return (
+      <span className={`chip-meld-mao chip-meld-mao-${meld.tipo} chip-meld-seletor-agari`}>
+        <span className="rotulo-meld-seletor" style={{ color: estilo.borda }}>
+          {estilo.rotulo}
+        </span>
+        <span className="meld-pedras">{pedrasSelecionaveis}</span>
+      </span>
+    )
+  }
 
   return (
     <button
@@ -116,11 +209,14 @@ export function MaoAtual({
   podeKanAberto,
   podeKanFechado,
   maoInvalida,
+  selecionandoPedraAgari,
   contexto,
   acoesCabecalho,
   aoAbrirMenuAcoes,
   aoAlternarAcao,
   aoAdicionarPedra,
+  aoEscolherPedraAgariMao,
+  aoEscolherPedraAgariMeld,
   aoRemoverPedra,
   aoRemoverMeld,
   aoLimpar,
@@ -136,6 +232,14 @@ export function MaoAtual({
       ? `${t('calculator.completeHand')} ${slotsEstruturais}/14${sufixoFisico}`
       : `${t('calculator.buildTitle', { total: slotsEstruturais })}${sufixoFisico}`
   const clicarPedraDaMao = (indicePedra: number) => {
+    if (contexto === 'finalizacao') {
+      aoEscolherPedraAgariMao(indicePedra)
+      return
+    }
+    if (selecionandoPedraAgari) {
+      aoEscolherPedraAgariMao(indicePedra)
+      return
+    }
     if (acaoMeldAtiva) {
       aoAdicionarPedra(mao.pedras[indicePedra])
       return
@@ -149,9 +253,17 @@ export function MaoAtual({
       const classe = `chip-pedra ${ehAgari ? 'agari' : ''} ${maoInvalida && ehAgari ? 'chombo' : ''}`
 
       return (
-        <span key={indicePedra} className={classe} aria-label={tile}>
+        <button
+          key={indicePedra}
+          className={classe}
+          type="button"
+          title={t('calculator.selectWinningTile', { tile })}
+          aria-label={t('calculator.selectWinningTile', { tile })}
+          onClick={() => aoEscolherPedraAgariMao(indicePedra)}
+        >
           <PedraSvg pedra={pedra} />
-        </span>
+          {ehAgari && <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>}
+        </button>
       )
     })
 
@@ -210,7 +322,9 @@ export function MaoAtual({
             : temEsperaValida
               ? 'tenpai-valido'
               : ''
-        } ${maoInvalida ? 'mao-invalida' : ''} ${acaoMeldAtiva ? 'modo-meld-ativo' : ''}`}
+        } ${maoInvalida ? 'mao-invalida' : ''} ${acaoMeldAtiva ? 'modo-meld-ativo' : ''} ${
+          selecionandoPedraAgari ? 'modo-agari-ativo' : ''
+        }`}
       >
         {contexto === 'finalizacao' && (
           <>
@@ -225,6 +339,9 @@ export function MaoAtual({
                     indiceAgari={
                       mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
                     }
+                    selecionandoPedraAgari={false}
+                    selecionarPedraAgariDireto
+                    aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
                     aoRemoverMeld={aoRemoverMeld}
                   />
                 ))}
@@ -248,14 +365,18 @@ export function MaoAtual({
               className={classe}
               type="button"
               title={
-                ehAgari
-                  ? t('calculator.removeWinningTile', { tile })
-                  : t('calculator.removeTile', { tile })
+                selecionandoPedraAgari
+                  ? t('calculator.selectWinningTile', { tile })
+                  : ehAgari
+                    ? t('calculator.removeWinningTile', { tile })
+                    : t('calculator.removeTile', { tile })
               }
               aria-label={
-                ehAgari
-                  ? t('calculator.removeWinningTile', { tile })
-                  : t('calculator.removeTile', { tile })
+                selecionandoPedraAgari
+                  ? t('calculator.selectWinningTile', { tile })
+                  : ehAgari
+                    ? t('calculator.removeWinningTile', { tile })
+                    : t('calculator.removeTile', { tile })
               }
               onClick={() => clicarPedraDaMao(indicePedra)}
             >
@@ -272,6 +393,9 @@ export function MaoAtual({
             indiceAgari={
               mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
             }
+            selecionandoPedraAgari={selecionandoPedraAgari}
+            selecionarPedraAgariDireto={false}
+            aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
             aoRemoverMeld={aoRemoverMeld}
           />
         ))}

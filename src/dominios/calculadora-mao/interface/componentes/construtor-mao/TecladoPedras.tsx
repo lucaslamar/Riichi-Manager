@@ -3,6 +3,14 @@ import type { Acao, CodigoPedra, ConfiguracaoCalculo, EsperaPossivel } from '../
 import { HONRAS, NAIPES, codigoBase, nomePedraAcessivel } from '../../constantes'
 import { PedraSvg } from '../PedraSvg'
 
+interface CandidataPedraAgariTeclado {
+  pedra: CodigoPedra
+  han: number
+  yakuman: number
+  semYaku: boolean
+  furiten: boolean
+}
+
 interface PropsTecladoPedras {
   acaoPendente: Acao | null
   configuracao: ConfiguracaoCalculo
@@ -12,13 +20,18 @@ interface PropsTecladoPedras {
   filtrarTecladoPorEspera: boolean
   maoCompleta: boolean
   podeSelecionarPedra: (pedra: CodigoPedra) => boolean
-  rotuloEsperaTeclado: (espera: EsperaPossivel) => string
-  classeEsperaTeclado: (espera?: EsperaPossivel) => string
+  rotuloEsperaTeclado: (espera: Pick<EsperaPossivel, 'semYaku' | 'yakuman' | 'han'>) => string
+  classeEsperaTeclado: (espera?: Pick<EsperaPossivel, 'semYaku' | 'furiten'>) => string
   contexto: 'montagem' | 'finalizacao'
   maoProntaParaFinalizar?: boolean
+  mensagemFinalizacao?: string | null
+  selecionandoPedraAgari?: boolean
+  candidatasPedraAgari?: Map<string, CandidataPedraAgariTeclado>
   aoAbrirRegras?: () => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
   aoFinalizarMao?: () => void
+  aoAlternarSelecaoPedraAgari?: () => void
+  aoEscolherPedraAgariPorCodigo?: (pedra: CodigoPedra) => void
 }
 
 /**
@@ -40,13 +53,20 @@ export function TecladoPedras({
   classeEsperaTeclado,
   contexto,
   maoProntaParaFinalizar = false,
+  mensagemFinalizacao,
+  selecionandoPedraAgari = false,
+  candidatasPedraAgari = new Map(),
   aoAbrirRegras,
   aoAdicionarPedra,
   aoFinalizarMao,
+  aoAlternarSelecaoPedraAgari,
+  aoEscolherPedraAgariPorCodigo,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
 
-  const renderizarBadgeEspera = (espera?: EsperaPossivel) =>
+  const renderizarBadgeEspera = (
+    espera?: Pick<EsperaPossivel, 'semYaku' | 'furiten' | 'yakuman' | 'han'>,
+  ) =>
     espera ? (
       <span
         className={`badge-espera-teclado ${
@@ -75,16 +95,24 @@ export function TecladoPedras({
   }
 
   const renderizarBotaoPedra = (codigo: CodigoPedra, tituloPadrao?: string) => {
-    const cheiaESemAcao = maoCompleta && !acaoPendente
+    const candidataAgari = candidatasPedraAgari.get(codigoBase(codigo))
+    const cheiaESemAcao = maoCompleta && !acaoPendente && !selecionandoPedraAgari
     const invalidaParaAcao = !podeSelecionarPedra(codigo)
     const ehDoraReal = dorasReais.has(codigoBase(codigo))
     const espera = esperasPorPedra.get(codigoBase(codigo))
     const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
-    const indisponivel = cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera
-    const esperaVisivel = invalidaParaAcao ? undefined : espera
+    const indisponivel = selecionandoPedraAgari
+      ? !candidataAgari
+      : cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera
+    const esperaVisivel = selecionandoPedraAgari ? candidataAgari : invalidaParaAcao ? undefined : espera
     const rotuloEspera = esperaVisivel
       ? `${rotuloEsperaTeclado(esperaVisivel)}${esperaVisivel.furiten ? ` - ${t('calculator.furiten')}` : ''}`
       : undefined
+    const label = selecionandoPedraAgari
+      ? candidataAgari
+        ? t('calculator.selectWinningTile', { tile: nomePedraAcessivel(codigo) })
+        : t('calculator.disabledTile', { tile: nomePedraAcessivel(codigo) })
+      : labelBotaoPedra(codigo, indisponivel)
 
     return (
       <button
@@ -98,9 +126,13 @@ export function TecladoPedras({
             ? `${tituloPadrao} - ${rotuloEspera}`
             : (rotuloEspera ?? tituloPadrao ?? nomePedraAcessivel(codigo))
         }
-        aria-label={labelBotaoPedra(codigo, indisponivel)}
+        aria-label={label}
         disabled={indisponivel}
-        onClick={() => aoAdicionarPedra(codigo)}
+        onClick={() =>
+          selecionandoPedraAgari
+            ? aoEscolherPedraAgariPorCodigo?.(codigo)
+            : aoAdicionarPedra(codigo)
+        }
       >
         <PedraSvg pedra={codigo} />
         {renderizarBadgeEspera(esperaVisivel)}
@@ -170,14 +202,32 @@ export function TecladoPedras({
       </div>
       {contexto === 'montagem' && maoProntaParaFinalizar && aoFinalizarMao && (
         <div className="rodape-teclado-finalizacao">
+          {aoAlternarSelecaoPedraAgari && (
+            <button
+              className={`botao-mudar-batida-teclado ${selecionandoPedraAgari ? 'ativo' : ''}`}
+              type="button"
+              aria-label={t('calculator.changeWinningTile')}
+              aria-pressed={selecionandoPedraAgari}
+              onClick={aoAlternarSelecaoPedraAgari}
+            >
+              <span className="texto-batida-completo">{t('calculator.changeWinningTile')}</span>
+              <span className="texto-batida-curto">{t('calculator.changeWinningTileShort')}</span>
+            </button>
+          )}
           <button
             className="botao-finalizar-mao-teclado"
             type="button"
             aria-label={t('calculator.goToHandFinalization')}
+            disabled={selecionandoPedraAgari}
             onClick={aoFinalizarMao}
           >
             {t('calculator.goToHandFinalization')}
           </button>
+          {mensagemFinalizacao && (
+            <span className="mensagem-finalizacao-teclado" role="status">
+              {mensagemFinalizacao}
+            </span>
+          )}
           {aoAbrirRegras && (
             <button
               className="botao-configuracao-teclado botao-configuracao-teclado-rodape"

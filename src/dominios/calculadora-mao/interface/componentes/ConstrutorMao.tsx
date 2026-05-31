@@ -57,7 +57,14 @@ export default function ConstrutorMao({
     resultadoMaoInvalida,
     esperasPossiveis,
     maoProntaParaFinalizar,
+    selecionandoPedraAgari,
+    mensagemFinalizacao,
+    candidatasPedraAgari,
     finalizarMao,
+    alternarSelecaoPedraAgari,
+    escolherPedraAgariMao,
+    escolherPedraAgariMeld,
+    escolherPedraAgariPorCodigo,
   } = estado
 
   /**
@@ -93,14 +100,18 @@ export default function ConstrutorMao({
   )
 
   /** Texto curto exibido dentro do badge de espera no teclado. */
-  const rotuloEsperaTeclado = (espera: (typeof esperasPossiveis)[number]) => {
+  const rotuloEsperaTeclado = (
+    espera: Pick<(typeof esperasPossiveis)[number], 'semYaku' | 'yakuman' | 'han'>,
+  ) => {
     if (espera.semYaku) return t('calculator.noYaku')
     if (espera.yakuman > 0) return `${espera.yakuman}x`
     return `${espera.han} han`
   }
 
   /** Classe visual que separa espera válida, furiten e espera sem yaku. */
-  const classeEsperaTeclado = (espera?: (typeof esperasPossiveis)[number]) => {
+  const classeEsperaTeclado = (
+    espera?: Pick<(typeof esperasPossiveis)[number], 'semYaku' | 'furiten'>,
+  ) => {
     if (!espera) return ''
     if (espera.semYaku) return 'espera-sem-yaku'
     return espera.furiten ? 'espera-valida espera-furiten' : 'espera-valida'
@@ -189,11 +200,14 @@ export default function ConstrutorMao({
         podeKanAberto={podeKanAberto}
         podeKanFechado={podeKanFechado}
         maoInvalida={resultadoMaoInvalida}
+        selecionandoPedraAgari={selecionandoPedraAgari}
         contexto={contexto}
         acoesCabecalho={acoesCabecalho}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}
         aoAdicionarPedra={adicionarPedra}
+        aoEscolherPedraAgariMao={escolherPedraAgariMao}
+        aoEscolherPedraAgariMeld={escolherPedraAgariMeld}
         aoRemoverPedra={removerPedra}
         aoRemoverMeld={removerMeld}
         aoLimpar={limpar}
@@ -222,9 +236,10 @@ export default function ConstrutorMao({
       {mostrarTeclado && (
         <div className="painel-teclado-calculadora">
           <span className="sr-only" aria-live="polite">
-            {contexto === 'montagem' && maoProntaParaFinalizar
-              ? t('calculator.readyToFinalizeAnnouncement')
-              : ''}
+            {mensagemFinalizacao ??
+              (contexto === 'montagem' && maoProntaParaFinalizar
+                ? t('calculator.readyToFinalizeAnnouncement')
+                : '')}
           </span>
           {contexto === 'montagem' && (
             <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
@@ -255,9 +270,14 @@ export default function ConstrutorMao({
             classeEsperaTeclado={classeEsperaTeclado}
             contexto={contexto}
             maoProntaParaFinalizar={contexto === 'montagem' && maoProntaParaFinalizar}
+            mensagemFinalizacao={mensagemFinalizacao}
+            selecionandoPedraAgari={selecionandoPedraAgari}
+            candidatasPedraAgari={candidatasPedraAgari}
             aoAbrirRegras={contexto === 'montagem' ? aoAbrirRegras : undefined}
             aoAdicionarPedra={adicionarPedra}
             aoFinalizarMao={finalizarMao}
+            aoAlternarSelecaoPedraAgari={alternarSelecaoPedraAgari}
+            aoEscolherPedraAgariPorCodigo={escolherPedraAgariPorCodigo}
           />
         </div>
       )}

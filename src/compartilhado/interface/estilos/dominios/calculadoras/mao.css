@@ -176,6 +176,12 @@
   box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.3);
 }
 
+.pedras-selecionadas.modo-agari-ativo {
+  border-color: #fdba74;
+  background: #fff7ed;
+  box-shadow: inset 0 0 0 1px rgba(249, 115, 22, 0.2);
+}
+
 .chip-pedra {
   position: relative;
   width: 34px;
@@ -208,6 +214,12 @@ span.chip-pedra {
   box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.16);
 }
 
+.pedras-selecionadas.modo-agari-ativo .chip-pedra:hover {
+  border-color: #f97316;
+  background: #ffedd5;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.18);
+}
+
 .chip-pedra.selecionada-meld {
   border-color: var(--primario);
   background: var(--info-fundo);
@@ -219,6 +231,38 @@ span.chip-pedra {
   box-shadow:
     0 0 0 2px rgba(249, 115, 22, 0.2),
     inset 0 0 0 2px rgba(253, 186, 116, 0.35);
+}
+
+.chip-meld-seletor-agari {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 5px;
+  border: 1.5px solid #fdba74;
+  border-radius: 7px;
+  background: #fff7ed;
+  font-family: monospace;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.rotulo-meld-seletor {
+  margin-right: 1px;
+  font-size: 0.58rem;
+  font-weight: 900;
+}
+
+.seletor-agari-meld {
+  padding: 0;
+  cursor: pointer;
+}
+
+.seletor-agari-meld:hover {
+  border-color: #f97316;
+  background: #ffedd5;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.18);
 }
 
 .badge-pedra-agari {

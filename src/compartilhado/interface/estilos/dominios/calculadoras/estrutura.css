@@ -70,6 +70,11 @@
   outline-offset: 2px;
 }
 
+.botao-mudar-batida-teclado:focus-visible {
+  outline: 3px solid rgba(249, 115, 22, 0.35);
+  outline-offset: 2px;
+}
+
 .grupo-teclado-naipe {
   display: grid;
   grid-template-columns: 62px 1fr;
@@ -220,6 +225,32 @@
   margin-left: auto;
 }
 
+.botao-mudar-batida-teclado {
+  grid-column: 1;
+  justify-self: end;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #ea580c;
+  border-radius: 7px;
+  background: #f97316;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.18);
+}
+
+.botao-mudar-batida-teclado:hover,
+.botao-mudar-batida-teclado.ativo {
+  border-color: #c2410c;
+  background: #ea580c;
+}
+
+.texto-batida-curto {
+  display: none;
+}
+
 .botao-finalizar-mao-teclado {
   grid-column: 2;
   flex: 0 1 auto;
@@ -239,6 +270,22 @@
 .botao-finalizar-mao-teclado:hover {
   border-color: #166534;
   background: #15803d;
+}
+
+.botao-finalizar-mao-teclado:disabled {
+  border-color: #cbd5e1;
+  background: #e5e7eb;
+  color: #64748b;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.mensagem-finalizacao-teclado {
+  grid-column: 1 / 4;
+  justify-self: center;
+  color: #c2410c;
+  font-size: 0.76rem;
+  font-weight: 900;
 }
 
 .card-mao-completa {
@@ -610,6 +657,29 @@
 @media (prefers-reduced-motion: reduce) {
   .acao-calcular-mao {
     transition: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .rodape-teclado-finalizacao {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+    gap: 6px;
+  }
+
+  .botao-mudar-batida-teclado,
+  .botao-finalizar-mao-teclado {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 8px;
+    font-size: 0.74rem;
+  }
+
+  .texto-batida-completo {
+    display: none;
+  }
+
+  .texto-batida-curto {
+    display: inline;
   }
 }
 
