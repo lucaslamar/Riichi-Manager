@@ -1,5 +1,20 @@
 # Changelog - Riichi Manager
 
+## 4.0.3 - Refatoração estrutural dos domínios de calculadora
+
+### Refector
+
+- Separa a antiga calculadora em dois domínios independentes:
+  - `calculadora-mao`, responsável pela montagem, finalização e cálculo completo da mão.
+  - `calculadora-han-fu`, responsável pela pontuação direta por han/fu.
+- Move funções e tipos puros de pontuação para `src/compartilhado/mahjong/pontuacao`.
+- Remove a dependência da Calculadora de Han e Fu sobre hooks e componentes específicos da Calculadora de Mão.
+- Atualiza a navegação global para importar cada calculadora pelo seu domínio próprio.
+
+### Documentação
+
+- Atualiza README e docs de arquitetura, fluxo da calculadora e regras de negócio para refletir a nova organização.
+
 ## [4.0.2] - 2026-05-27
 
 ### Corrigido

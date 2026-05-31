@@ -9,9 +9,12 @@ O Riichi Manager e um app estatico React + TypeScript. Ele deve continuar funcio
 - `src/app`: navegacao manual e composicao dos modulos.
 - `src/compartilhado/i18n`: carregamento de `public/locales/*.json`, fallback para `pt-BR` e helper `t`.
 - `src/compartilhado/interface`: layout, componentes genericos, tokens e CSS.
-- `src/dominios/calculadora/logica`: regras de Mahjong, tipos puros, conversao para a lib `riichi`, esperas, furiten, pontuacao e Calculadora de Han e Fu.
-- `src/dominios/calculadora/interface`: estado de tela, acoes de usuario e componentes da calculadora.
-- `src/dominios/torneio-fast`: dominio do Torneio Fast, separado da calculadora.
+- `src/compartilhado/mahjong/pontuacao`: tipos e funcoes puras de pontuacao por han/fu, ron/tsumo, dealer/leste e honba.
+- `src/dominios/calculadora-mao/logica`: montagem e calculo completo de mao, incluindo tiles, esperas, furiten, dora, melds, yaku/fu e conversao para a lib `riichi`.
+- `src/dominios/calculadora-mao/interface`: estado de tela, acoes de usuario e componentes da Calculadora de Mao.
+- `src/dominios/calculadora-han-fu/logica`: porta de entrada do dominio Han/Fu para a pontuacao direta compartilhada.
+- `src/dominios/calculadora-han-fu/interface`: estado e componentes da Calculadora de Han e Fu, sem depender da interface ou do estado da Calculadora de Mao.
+- `src/dominios/torneio-fast`: dominio do Torneio Fast, separado das calculadoras.
 
 ## Regras para evolucao
 
@@ -20,6 +23,7 @@ O Riichi Manager e um app estatico React + TypeScript. Ele deve continuar funcio
 - Persistencia fica em `persistencia`, hoje apenas `localStorage`.
 - Textos visiveis novos devem ir para `public/locales/pt-BR.json`.
 - AdSlot existe como ponto isolado para publicidade futura e deve permanecer fora de areas criticas da calculadora.
+- A Calculadora de Mao e a Calculadora de Han e Fu podem compartilhar pontuacao pura, mas nao devem compartilhar hooks ou componentes especificos de montagem de mao.
 
 ## GitHub Pages
 

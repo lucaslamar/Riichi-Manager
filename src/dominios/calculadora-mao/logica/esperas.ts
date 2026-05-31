@@ -1,5 +1,5 @@
 import Riichi from 'riichi'
-import type { ConfiguracaoCalculo } from './configuracao'
+import type { ConfiguracaoCalculo } from '@/compartilhado/mahjong/pontuacao'
 import { converterMaoParaString } from './conversor-riichi'
 import type { CodigoPedra, Mao } from './tipos'
 import { traduzirYaku } from './traducoes'

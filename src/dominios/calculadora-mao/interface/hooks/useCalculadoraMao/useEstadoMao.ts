@@ -9,7 +9,7 @@ import {
   type ConfiguracaoCalculo,
 } from '../../../logica/mao'
 import { MAO_VAZIA } from '../../constantes'
-import type { ModoCalculadora, EstadoMaoCalculadora } from './tipos'
+import type { EstadoMaoCalculadora } from './tipos'
 
 /**
  * Mantém o estado editável da calculadora em um ponto único.
@@ -21,11 +21,8 @@ import type { ModoCalculadora, EstadoMaoCalculadora } from './tipos'
 export function useEstadoMao(): EstadoMaoCalculadora {
   const [mao, atualizarMao] = useImmer<Mao>(MAO_VAZIA)
   const [acaoPendente, setAcaoPendente] = useState<Acao | null>(null)
-  const [modo, setModo] = useState<ModoCalculadora>('completo')
   const [configuracao, setConfiguracao] = useState<ConfiguracaoCalculo>(configuracaoPadrao)
   const [modalRegrasAberto, setModalRegrasAberto] = useState(false)
-  const [han, setHan] = useState(1)
-  const [fu, setFu] = useState(30)
 
   const totalPedras = contarPedrasTotais(mao)
   const slotsUsados = contarSlotsLogicos(mao)
@@ -36,16 +33,10 @@ export function useEstadoMao(): EstadoMaoCalculadora {
     atualizarMao,
     acaoPendente,
     setAcaoPendente,
-    modo,
-    setModo,
     configuracao,
     setConfiguracao,
     modalRegrasAberto,
     setModalRegrasAberto,
-    han,
-    setHan,
-    fu,
-    setFu,
     totalPedras,
     slotsUsados,
     maoCompleta,

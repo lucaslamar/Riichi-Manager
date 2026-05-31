@@ -5,9 +5,7 @@ interface PropsBarraCalculadora {
 }
 
 /** Cabecalho compacto da calculadora; a navegacao entre modulos fica no menu global. */
-export default function BarraCalculadora({
-  modo,
-}: PropsBarraCalculadora) {
+export default function BarraCalculadora({ modo }: PropsBarraCalculadora) {
   const { t } = useI18n()
 
   return (

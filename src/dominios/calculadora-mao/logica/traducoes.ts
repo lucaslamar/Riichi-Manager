@@ -1,4 +1,4 @@
-import type { DetalheFu } from './resultado'
+import type { DetalheFu } from '@/compartilhado/mahjong/pontuacao'
 
 // ─── Tradução de yaku ─────────────────────────────────────────────────────────
 

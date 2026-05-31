@@ -1,10 +1,9 @@
 import Riichi from 'riichi'
-import type { ConfiguracaoCalculo } from './configuracao'
 import type { Mao } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
-import type { PontosCalculados, ResultadoMao } from './resultado'
+import type { ConfiguracaoCalculo, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
-import { aplicarHonba, calcularHanFu, calcularPatamarHanFu, montarPontosRapidos } from './calculadora-rapida'
+import { aplicarHonba, calcularHanFu, calcularPatamarHanFu, montarPontosRapidos } from '@/compartilhado/mahjong/pontuacao'
 
 /**
  * Calcula os pontos de uma mao completa.

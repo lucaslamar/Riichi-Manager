@@ -36,8 +36,6 @@ export function useCalculadoraMao() {
     acaoPendente,
     setAcaoPendente,
     configuracao,
-    han,
-    fu,
     slotsUsados,
     maoCompleta,
   } = estado
@@ -72,8 +70,6 @@ export function useCalculadoraMao() {
   const resultados = useResultadoMao({
     mao,
     configuracao,
-    han,
-    fu,
     maoCompleta,
     deveCalcularMao,
   })

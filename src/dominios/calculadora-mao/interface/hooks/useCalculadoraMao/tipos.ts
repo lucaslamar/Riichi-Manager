@@ -8,7 +8,6 @@ import type {
   Mao,
 } from '../../../logica/mao'
 
-export type ModoCalculadora = 'completo' | 'rapido'
 export type TipoMeldCalculadora = 'chii' | 'pon' | 'kanAberto' | 'kanFechado'
 
 /**
@@ -20,16 +19,10 @@ export interface EstadoMaoCalculadora {
   atualizarMao: Updater<Mao>
   acaoPendente: Acao | null
   setAcaoPendente: Dispatch<SetStateAction<Acao | null>>
-  modo: ModoCalculadora
-  setModo: Dispatch<SetStateAction<ModoCalculadora>>
   configuracao: ConfiguracaoCalculo
   setConfiguracao: Dispatch<SetStateAction<ConfiguracaoCalculo>>
   modalRegrasAberto: boolean
   setModalRegrasAberto: Dispatch<SetStateAction<boolean>>
-  han: number
-  setHan: Dispatch<SetStateAction<number>>
-  fu: number
-  setFu: Dispatch<SetStateAction<number>>
   totalPedras: number
   slotsUsados: number
   maoCompleta: boolean

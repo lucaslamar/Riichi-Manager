@@ -4,7 +4,7 @@
 
 ### 1. Montagem
 
-Arquivo principal: `src/dominios/calculadora/interface/componentes/ModoCompletoCalculadora.tsx`.
+Arquivo principal: `src/dominios/calculadora-mao/interface/componentes/ModoCompletoCalculadora.tsx`.
 
 O usuario monta a mao pelo teclado. Com 13 slots, `useEsperasMao` calcula esperas possiveis. A tela mostra:
 
@@ -48,7 +48,7 @@ Fechar a modal apenas fecha a modal. A mao finalizada e as opcoes permanecem na 
 | Tile do teclado com Ind. Dora | `adicionarPedra(pedra)` | `mao.dora` | dora em `calculo-mao.ts` / conversao para `riichi` |
 | Tile do teclado com Ura dora | `adicionarPedra(pedra)` | `mao.uradora` | ura dora quando `riichi` esta ativo |
 | Chi/Pon/Kan | `alternarAcao(tipo)` e depois `adicionarPedra` | `mao.melds`, `mao.pedras`, `riichi` | melds em `useAcoesMelds.ts` e `useAcoesPedras.ts` |
-| Ron/Tsumo | `marcarVitoriaDefinida` + `atualizarMao` | `mao.agari` | pontuacao em `calculadora-rapida.ts` e `calculo-mao.ts` |
+| Ron/Tsumo | `marcarVitoriaDefinida` + `atualizarMao` | `mao.agari` | pontuacao em `src/compartilhado/mahjong/pontuacao` e `calculo-mao.ts` |
 | Vento da rodada | `marcarVentoRodadaDefinido` + `atualizarMao` | `mao.ventoRodada` | yaku/fu de vento em `calculo-mao.ts` |
 | Vento do jogador | `marcarVentoAssentoDefinido` + `atualizarMao` | `mao.ventoAssento` | oya e fu em `calculo-mao.ts` |
 | Riichi/Ippatsu/Double | `atualizarMao` | `mao.riichi` | yaku e ura dora em `calculo-mao.ts` |
@@ -56,6 +56,10 @@ Fechar a modal apenas fecha a modal. A mao finalizada e as opcoes permanecem na 
 | Calcular | `calcularMaoAtual()` | `assinaturaCalculo` | `useResultadoMao.ts` chama `calcularMao` |
 | Fechar modal | `fecharModalResultado()` | somente estado da modal | nao altera regra de Mahjong |
 | Voltar para montagem | `voltarParaMontagem()` | remove `indiceAgari` da mao | preserva opcoes para escolher outra espera |
+
+## Calculadora de Han e Fu
+
+A Calculadora de Han e Fu fica em `src/dominios/calculadora-han-fu`. Ela recebe apenas han, fu, tipo de vitoria, dealer/leste e honba. Ela nao monta tiles, nao calcula esperas e nao consome hooks ou componentes especificos da Calculadora de Mao.
 
 ## Acessibilidade
 

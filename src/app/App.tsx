@@ -15,7 +15,8 @@ import {
   PainelQualidade,
   GradeRodadas,
 } from '@/dominios/torneio-fast/interface/componentes'
-import PaginaCalculadora from '@/dominios/calculadora/interface/paginas/PaginaCalculadora'
+import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
+import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import packageJson from '../../package.json'
 
 export type TelaPrincipal =
@@ -105,9 +106,8 @@ export default function App() {
       <Cabecalho telaAtual={tela} torneioAtivo={ativo} aoNavegar={setTela} />
 
       <main className="conteudo-principal">
-        {(tela === 'calculadora' || tela === 'calculadoraRapida') && (
-          <PaginaCalculadora modoInicial={tela === 'calculadoraRapida' ? 'rapido' : 'completo'} />
-        )}
+        {tela === 'calculadora' && <PaginaCalculadoraMao />}
+        {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
 
         {tela === 'configuracaoTorneio' &&
           (ativo ? (

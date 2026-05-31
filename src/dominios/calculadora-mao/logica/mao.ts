@@ -8,9 +8,8 @@
 
 export type { Acao, CodigoPedra, Mao, Meld, VentoMao } from './tipos'
 export { criarAcao } from './tipos'
-export type { ConfiguracaoCalculo } from './configuracao'
-export { configuracaoPadrao } from './configuracao'
-export type { DetalheFu, PontosCalculados, ResultadoMao } from './resultado'
+export type { ConfiguracaoCalculo, DetalheFu, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
+export { configuracaoPadrao } from '@/compartilhado/mahjong/pontuacao'
 export { calcularMao } from './calculo-mao'
 export {
   aplicarHonba,
@@ -19,7 +18,7 @@ export {
   fuValidos,
   montarPontosRapidos,
   arredondar100,
-} from './calculadora-rapida'
+} from '@/compartilhado/mahjong/pontuacao'
 export {
   ordenarPedras,
   ordenarMelds,

@@ -1,12 +1,7 @@
 import { useMemo } from 'react'
 import {
-  aplicarHonba,
   calcularEsperasPossiveis,
-  calcularHanFu,
   calcularMao,
-  calcularPatamarHanFu,
-  fuValidos,
-  montarPontosRapidos,
   type ConfiguracaoCalculo,
   type Mao,
 } from '../../../logica/mao'
@@ -14,8 +9,6 @@ import {
 interface ParametrosResultadoMao {
   mao: Mao
   configuracao: ConfiguracaoCalculo
-  han: number
-  fu: number
   maoCompleta: boolean
   deveCalcularMao: boolean
 }
@@ -25,26 +18,15 @@ interface ParametrosResultadoMao {
  * Mantém juntos o modo rápido, o modo completo e a checagem de furiten por descarte próprio.
  *
  * Como ler este arquivo:
- * - bloco rápido: han/fu manual vira tabela de pontos.
  * - bloco completo: mão montada tenta passar pelo motor de cálculo.
  * - bloco furiten: reconstrói a mão de 13 pedras para descobrir se o Ron final é inválido.
  */
 export function useResultadoMao({
   mao,
   configuracao,
-  han,
-  fu,
   maoCompleta,
   deveCalcularMao,
 }: ParametrosResultadoMao) {
-  const tabelaRapida = calcularHanFu(han, fu, configuracao)
-  const resultadoRapido = aplicarHonba(
-    montarPontosRapidos(mao.ventoRodada === '1', mao.agari, tabelaRapida),
-    mao.honba,
-  )
-  const patamarRapido = calcularPatamarHanFu(han, fu, configuracao)
-  const fuDisponiveis = fuValidos(mao.agari)
-
   const resultado = maoCompleta && deveCalcularMao
     ? (() => {
         try {
@@ -86,9 +68,6 @@ export function useResultadoMao({
   }, [mao, maoCompleta, configuracao, deveCalcularMao])
 
   return {
-    resultadoRapido,
-    patamarRapido,
-    fuDisponiveis,
     resultado,
     furitenRonCompleto,
   }
