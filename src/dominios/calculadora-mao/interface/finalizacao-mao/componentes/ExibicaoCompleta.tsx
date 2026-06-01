@@ -31,6 +31,7 @@ export default function ExibicaoCompleta({ resultado, mao }: { resultado: any; m
           <span>{mao.agari === 'tsumo' ? 'Tsumo' : 'Ron'}</span>
           {mao.honba > 0 && <span>{mao.honba} Honba</span>}
           {mao.doraManual > 0 && <span>Dora manual: {mao.doraManual}</span>}
+          {mao.riichi && mao.uradoraManual > 0 && <span>Ura dora: {mao.uradoraManual}</span>}
         </div>
       )}
       {mao && (mao.dora.length > 0 || mao.uradora.length > 0) && (

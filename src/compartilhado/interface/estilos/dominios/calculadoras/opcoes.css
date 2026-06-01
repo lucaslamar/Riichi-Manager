@@ -160,12 +160,20 @@
 }
 
 .btn-acao-mao {
+  display: inline-flex;
   min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   padding: 7px 12px;
   border-radius: 8px;
   font-size: 0.84rem;
   font-weight: 900;
   transition: all 0.15s;
+}
+
+.btn-acao-mao i {
+  font-size: 0.88em;
 }
 
 .contadores-dora-honba {
@@ -321,6 +329,10 @@
   align-self: stretch;
 }
 
+.grupo-opcoes-dora.etapa-opcoes-ativa {
+  max-height: 760px;
+}
+
 .grupo-opcoes-dora .indicadores-dora-selecionados {
   width: 100%;
   margin-bottom: 0;
@@ -330,6 +342,11 @@
   width: 100%;
   min-width: 0;
   justify-content: flex-start;
+}
+
+.grupo-opcoes-dora .grupo-indicador-dora span {
+  flex: 0 0 96px;
+  line-height: 1.08;
 }
 
 .grupo-opcoes-ventos {
@@ -343,6 +360,7 @@
 
 .descartes-finalizacao {
   display: grid;
+  grid-template-columns: 1fr auto;
   gap: 5px;
   margin: -2px 0 10px;
   padding: 0;
@@ -387,11 +405,54 @@
 }
 
 .grade-descartes-finalizacao {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(5, 28px);
+  grid-column: 1 / -1;
   justify-content: start;
   gap: 3px;
-  padding: 0 2px;
+  min-height: 40px;
+  padding: 0 34px 0 2px;
+}
+
+.grade-descartes-finalizacao .btn-limpar-grupo-pedras {
+  position: absolute;
+  top: 0;
+  right: 2px;
+}
+
+.painel-contextual-finalizacao {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  background: #f8fafc;
+}
+
+.painel-contextual-descartes {
+  grid-column: 1 / -1;
+}
+
+.painel-teclado-contextual-finalizacao {
+  padding: 0;
+}
+
+.linha-opcoes-indicadores {
+  grid-template-columns: 1fr;
+}
+
+.acao-finalizacao-descartes {
+  min-height: 34px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  padding: 5px 8px;
+  background: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
 }
 
 .descarte-finalizacao.chip-pedra {
@@ -408,15 +469,15 @@
 
 .contador-descarte-finalizacao {
   position: absolute;
-  right: -4px;
-  bottom: -3px;
-  min-width: 16px;
+  right: 2px;
+  bottom: 2px;
+  min-width: 14px;
   border: 1px solid #ffffff;
   border-radius: 999px;
-  padding: 1px 3px;
-  background: #111827;
-  color: #ffffff;
-  font-size: 0.52rem;
+  padding: 1px 2px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 0.48rem;
   font-weight: 900;
   line-height: 1;
   text-align: center;

@@ -159,7 +159,7 @@ export function useCalculadoraMao() {
     },
     esperasPossiveis,
     podeAdicionarPedras: acoesMelds.podeAdicionarPedras,
-    podeFormarMeldComMao: acoesMelds.podeFormarMeldComMao,
+    podeCriarMeld: acoesMelds.podeCriarMeld,
     indicesPedrasNaMaoPara: acoesMelds.indicesPedrasNaMaoPara,
     sequenciasChiiPossiveis: acoesMelds.sequenciasChiiPossiveis,
     escolherSequenciaChii: acoesMelds.escolherSequenciaChii,
@@ -178,8 +178,8 @@ export function useCalculadoraMao() {
     (!!resultados.resultado || resultados.resultado === null) &&
     !resultados.furitenRonCompleto &&
     !resultadoComYakuValido
-  const podeCalcularMao = slotsUsados >= 14
   const maoProntaParaFinalizar = maoCompleta && (mao.indiceAgari >= 0 || !!mao.agariMeld)
+  const podeCalcularMao = maoProntaParaFinalizar
   const fluxoConfiguracaoCompleto =
     fluxoOpcoes.vitoriaDefinida &&
     fluxoOpcoes.ventoRodadaDefinido &&
@@ -342,6 +342,15 @@ export function useCalculadoraMao() {
   }, [maoProntaParaFinalizar])
 
   useEffect(() => {
+    if (mao.riichi || (mao.uradora.length === 0 && mao.uradoraManual === 0)) return
+
+    atualizarMao((rascunho) => {
+      rascunho.uradora = []
+      rascunho.uradoraManual = 0
+    })
+  }, [atualizarMao, mao.riichi, mao.uradora.length, mao.uradoraManual])
+
+  useEffect(() => {
     if (!acaoPendente) return
 
     const acaoAindaPodeContinuar =
@@ -350,7 +359,7 @@ export function useCalculadoraMao() {
       (acaoPendente.tipo === 'kanAberto' && podeKanAberto) ||
       (acaoPendente.tipo === 'kanFechado' && podeKanFechado) ||
       acaoPendente.tipo === 'dora' ||
-      acaoPendente.tipo === 'uradora' ||
+      (acaoPendente.tipo === 'uradora' && !!mao.riichi) ||
       acaoPendente.tipo === 'descarte'
 
     if (!acaoAindaPodeContinuar) setAcaoPendente(null)
@@ -361,7 +370,21 @@ export function useCalculadoraMao() {
     podeKanFechado,
     podePon,
     setAcaoPendente,
+    mao.riichi,
   ])
+
+  const alternarAcaoCalculadora = (tipo: Parameters<typeof acoesPedras.alternarAcao>[0]) => {
+    const acaoEstrutural =
+      tipo === 'chii' || tipo === 'pon' || tipo === 'kanAberto' || tipo === 'kanFechado'
+
+    if (acaoEstrutural && acaoPendente?.tipo !== tipo) {
+      setSelecionandoPedraAgari(false)
+      setMensagemFinalizacao(null)
+      setAssinaturaCalculo(null)
+    }
+
+    acoesPedras.alternarAcao(tipo)
+  }
 
   return {
     ...estado,
@@ -393,6 +416,7 @@ export function useCalculadoraMao() {
     esperasPossiveis,
     calculandoEsperas,
     ...acoesPedras,
+    alternarAcao: alternarAcaoCalculadora,
     podeMeld,
     podeChii,
     podePon,

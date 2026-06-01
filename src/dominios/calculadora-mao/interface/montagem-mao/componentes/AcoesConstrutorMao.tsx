@@ -18,7 +18,6 @@ interface PropsAcoesConstrutorMao {
  * É usado tanto na barra desktop quanto no menu compacto mobile.
  */
 export function AcoesConstrutorMao({
-  mao,
   acaoPendente,
   podeChii,
   podePon,
@@ -65,30 +64,12 @@ export function AcoesConstrutorMao({
       />
       <BotaoAcao
         tipo="descarte"
-        rotulo={compacto ? t('melds.discardsCompact') : t('melds.discards')}
+        rotulo={compacto ? t('melds.discardsAction') : t('melds.discards')}
         cor="#111827"
         ativo={acaoPendente?.tipo === 'descarte'}
         desabilitado={false}
         aoClicar={() => aoAlternarAcao('descarte')}
       />
-      <BotaoAcao
-        tipo="dora"
-        rotulo={compacto ? t('melds.doraCompact') : t('melds.dora')}
-        cor="#d97706"
-        ativo={acaoPendente?.tipo === 'dora'}
-        desabilitado={mao.doraManual > 0 || mao.dora.length >= 5}
-        aoClicar={() => aoAlternarAcao('dora')}
-      />
-      {mao.riichi && (
-        <BotaoAcao
-          tipo="uradora"
-          rotulo={compacto ? 'Ura' : t('melds.uradora')}
-          cor="#d97706"
-          ativo={acaoPendente?.tipo === 'uradora'}
-          desabilitado={mao.doraManual > 0 || mao.uradora.length >= 5}
-          aoClicar={() => aoAlternarAcao('uradora')}
-        />
-      )}
     </>
   )
 }

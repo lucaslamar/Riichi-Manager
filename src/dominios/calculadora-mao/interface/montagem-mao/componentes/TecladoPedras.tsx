@@ -14,7 +14,6 @@ interface CandidataPedraAgariTeclado {
 interface PropsTecladoPedras {
   acaoPendente: Acao | null
   configuracao: ConfiguracaoCalculo
-  doraManual: number
   dorasReais: Set<string>
   esperasPorPedra: Map<string, EsperaPossivel>
   filtrarTecladoPorEspera: boolean
@@ -44,7 +43,6 @@ interface PropsTecladoPedras {
 export function TecladoPedras({
   acaoPendente,
   configuracao,
-  doraManual,
   dorasReais,
   esperasPorPedra,
   filtrarTecladoPorEspera,
@@ -102,6 +100,11 @@ export function TecladoPedras({
     const candidataAgari = candidatasPedraAgari.get(codigoBase(codigo))
     const cheiaESemAcao = maoCompleta && !acaoPendente && !selecionandoPedraAgari
     const invalidaParaAcao = !podeSelecionarPedra(codigo)
+    const modoMeldAtivo =
+      acaoPendente?.tipo === 'chii' ||
+      acaoPendente?.tipo === 'pon' ||
+      acaoPendente?.tipo === 'kanAberto' ||
+      acaoPendente?.tipo === 'kanFechado'
     const ehDoraReal = dorasReais.has(codigoBase(codigo))
     const espera = esperasPorPedra.get(codigoBase(codigo))
     const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
@@ -112,7 +115,9 @@ export function TecladoPedras({
       ? candidataAgari
       : invalidaParaAcao
         ? undefined
-        : espera
+        : modoMeldAtivo
+          ? undefined
+          : espera
     const esperaVisivel =
       esperaVisivelBase?.furiten && !furitenBloqueiaRon
         ? { ...esperaVisivelBase, furiten: false }
@@ -195,9 +200,7 @@ export function TecladoPedras({
               {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) =>
                 renderizarBotaoPedra(`${numero}${naipe}`),
               )}
-              {configuracao.akadora &&
-                doraManual === 0 &&
-                renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))}
+              {configuracao.akadora && renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))}
             </div>
           </div>
         )

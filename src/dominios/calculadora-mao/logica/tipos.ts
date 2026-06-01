@@ -31,6 +31,7 @@ export interface Mao {
   uradora: CodigoPedra[]
   descartes: CodigoPedra[]
   doraManual: number
+  uradoraManual: number
   honba: number
   riichi: { duplo: boolean; ippatsu: boolean } | null
   bencao: boolean

@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
-import { codigoBase, nomePedraAcessivel } from '../../constantes'
+import { codigoBase, nomePedraAcessivel, proximaDoraIndicada } from '../../constantes'
 import { BotaoToggle } from '../../compartilhado/componentes/Botoes'
 import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import { TecladoPedras } from '../../montagem-mao/componentes/TecladoPedras'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
@@ -23,6 +24,12 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
   const {
     mao,
     atualizarMao,
+    configuracao,
+    acaoPendente,
+    alternarAcao,
+    adicionarPedra,
+    removerDescarte,
+    podeSelecionarPedra,
     maoAberta,
     slotsUsados,
     fluxoOpcoes,
@@ -32,6 +39,72 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
   } = estado
   const [ajudaDoraAberta, setAjudaDoraAberta] = useState(false)
   const [descartesExpandidos, setDescartesExpandidos] = useState(false)
+  const [painelContextualAberto, setPainelContextualAberto] = useState<
+    'dora' | 'descartes' | null
+  >(null)
+  const pedrasFisicasMao = [...mao.pedras, ...mao.melds.flatMap((meld) => meld.pedras)]
+  const dorasAutomaticasAka = configuracao.akadora
+    ? pedrasFisicasMao.filter((pedra) => pedra[0] === '0').length
+    : 0
+  const contarDorasPorIndicadores = (indicadores: typeof mao.dora) =>
+    indicadores.reduce((total, indicador) => {
+      const doraReal = proximaDoraIndicada(indicador)
+      return (
+        total +
+        pedrasFisicasMao.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length
+      )
+    }, 0)
+  const dorasPorIndicadores = contarDorasPorIndicadores(mao.dora)
+  const dorasAutomaticas = dorasAutomaticasAka + dorasPorIndicadores
+  const dorasNaMaoTotal = Math.min(13, dorasAutomaticas + mao.doraManual)
+  const ajudaDoraContador =
+    dorasAutomaticas === 0
+      ? null
+      : dorasAutomaticasAka > 0 && dorasPorIndicadores > 0
+        ? `Inclui ${dorasAutomaticasAka} aka dora e ${dorasPorIndicadores} por indicadores.`
+        : dorasAutomaticasAka > 0
+          ? `Inclui ${dorasAutomaticasAka} aka dora da mão.`
+          : `Inclui ${dorasPorIndicadores} doras encontradas pelos indicadores.`
+  const ajudaDoraContadorVisivel = dorasAutomaticas === 0 ? null : ajudaDoraContador
+  const dorasReais = useMemo(
+    () =>
+      new Set(mao.dora.map((indicador) => codigoBase(proximaDoraIndicada(indicador)))),
+    [mao.dora],
+  )
+  const mapaEsperasVazio = useMemo(() => new Map(), [])
+  const rotuloEsperaTeclado = () => ''
+  const classeEsperaTeclado = () => ''
+  const alternarPainelContextual = (painel: 'dora' | 'descartes') => {
+    const tipoAcao = painel === 'descartes' ? 'descarte' : 'dora'
+    const fechandoPainel = painelContextualAberto === painel
+    setPainelContextualAberto(fechandoPainel ? null : painel)
+    if (fechandoPainel) {
+      if (acaoPendente?.tipo === tipoAcao) alternarAcao(tipoAcao)
+      return
+    }
+    if (acaoPendente?.tipo !== tipoAcao) alternarAcao(tipoAcao)
+    if (painel === 'descartes') {
+      setDescartesExpandidos(true)
+    }
+  }
+  const tecladoContextual = (
+    <div className="painel-teclado-calculadora painel-teclado-contextual-finalizacao">
+      <TecladoPedras
+        acaoPendente={acaoPendente}
+        configuracao={configuracao}
+        dorasReais={dorasReais}
+        esperasPorPedra={mapaEsperasVazio}
+        filtrarTecladoPorEspera={false}
+        furitenBloqueiaRon={false}
+        maoCompleta={false}
+        podeSelecionarPedra={podeSelecionarPedra}
+        rotuloEsperaTeclado={rotuloEsperaTeclado}
+        classeEsperaTeclado={classeEsperaTeclado}
+        contexto="finalizacao"
+        aoAdicionarPedra={adicionarPedra}
+      />
+    </div>
+  )
   const descartesUnicos = mao.descartes.reduce<
     Array<{ chave: string; pedra: (typeof mao.descartes)[number]; quantidade: number }>
   >((lista, pedra) => {
@@ -126,64 +199,119 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               >
                 -
               </button>
-              <strong>{mao.doraManual}</strong>
+              <strong>{dorasNaMaoTotal}</strong>
               <button
                 type="button"
                 aria-label={`${t('calculator.manualDora')} +`}
-                disabled={mao.doraManual >= 13}
+                disabled={dorasNaMaoTotal >= 13}
                 onClick={() =>
                   atualizarMao((rascunho) => {
                     rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
-                    if (rascunho.doraManual > 0) {
-                      rascunho.dora = []
-                      rascunho.uradora = []
-                    }
                   })
                 }
               >
                 +
               </button>
             </div>
+            {ajudaDoraContadorVisivel && (
+              <small className="texto-ajuda-contador-dora">{ajudaDoraContadorVisivel}</small>
+            )}
           </div>
         </div>
-        <IndicadoresDora mao={mao} atualizarMao={atualizarMao} />
+        <div className="linha-opcoes-mao linha-opcoes-indicadores">
+          <BotaoToggle
+            rotulo={`${t('calculator.doraUraIndicators')} (${mao.dora.length})`}
+            ativo={painelContextualAberto === 'dora'}
+            corAtiva="#e6007e"
+            desabilitado={false}
+            aoClicar={() => alternarPainelContextual('dora')}
+          />
+        </div>
+        {painelContextualAberto === 'dora' && (
+          <div className="painel-contextual-finalizacao">
+            {tecladoContextual}
+            <IndicadoresDora
+              mao={mao}
+              atualizarMao={atualizarMao}
+              tipo="dora"
+              aoLimparIndicadores={() =>
+                atualizarMao((rascunho) => {
+                  rascunho.dora = []
+                })
+              }
+            />
+          </div>
+        )}
       </section>
 
-      {descartesUnicos.length > 0 && (
-        <section className="descartes-finalizacao">
+      <section className="descartes-finalizacao">
           <button
             className="cabecalho-descartes-finalizacao"
             type="button"
-            aria-expanded={descartesExpandidos}
-            onClick={() => setDescartesExpandidos((expandido) => !expandido)}
+            aria-expanded={painelContextualAberto === 'descartes'}
+            onClick={() => alternarPainelContextual('descartes')}
           >
             <span>{t('calculator.discardsFuriten')}</span>
             <strong>{mao.descartes.length}</strong>
             <i
-              className={`fas ${descartesExpandidos ? 'fa-chevron-up' : 'fa-chevron-down'}`}
+              className={`fas ${painelContextualAberto === 'descartes' ? 'fa-chevron-up' : 'fa-chevron-down'}`}
               aria-hidden="true"
             />
           </button>
-          <div
-            className={`grade-descartes-finalizacao ${
-              descartesExpandidos ? 'grade-descartes-expandida' : 'grade-descartes-compacta'
-            }`}
+          <button
+            className="acao-finalizacao-descartes"
+            type="button"
+            aria-pressed={acaoPendente?.tipo === 'descarte'}
+            onClick={() => alternarPainelContextual('descartes')}
           >
-            {(descartesExpandidos ? descartesUnicos : descartesUnicos.slice(0, 5)).map(
-              ({ chave, pedra, quantidade }) => (
-                <span
-                  key={chave}
-                  className="chip-pedra descarte descarte-finalizacao"
-                  aria-label={`${nomePedraAcessivel(pedra)} x${quantidade}`}
-                >
-                  <PedraSvg pedra={pedra} />
-                  {quantidade > 1 && <span className="contador-descarte-finalizacao">x{quantidade}</span>}
-                </span>
-              ),
-            )}
-          </div>
+            {acaoPendente?.tipo === 'descarte' ? 'Concluir' : 'Editar'}
+          </button>
+          {painelContextualAberto === 'descartes' && (
+            <div className="painel-contextual-finalizacao painel-contextual-descartes">
+              {tecladoContextual}
+              <div
+                className={`grade-descartes-finalizacao ${
+                  descartesExpandidos ? 'grade-descartes-expandida' : 'grade-descartes-compacta'
+                }`}
+              >
+                {(descartesExpandidos ? descartesUnicos : descartesUnicos.slice(0, 5)).map(
+                  ({ chave, pedra, quantidade }) => (
+                    <button
+                      key={chave}
+                      className="chip-pedra descarte descarte-finalizacao"
+                      aria-label={`${nomePedraAcessivel(pedra)} x${quantidade}`}
+                      type="button"
+                      onClick={() => {
+                        const indice = mao.descartes.findIndex(
+                          (descarte) => codigoBase(descarte) === chave,
+                        )
+                        if (indice >= 0) removerDescarte(indice)
+                      }}
+                    >
+                      <PedraSvg pedra={pedra} />
+                      {quantidade > 1 && <span className="contador-descarte-finalizacao">x{quantidade}</span>}
+                    </button>
+                  ),
+                )}
+                {mao.descartes.length > 0 && (
+                  <button
+                    className="btn-limpar-grupo-pedras"
+                    type="button"
+                    aria-label={t('calculator.clearDiscards')}
+                    title={t('calculator.clearDiscards')}
+                    onClick={() =>
+                      atualizarMao((rascunho) => {
+                        rascunho.descartes = []
+                      })
+                    }
+                  >
+                    <i className="fas fa-broom" aria-hidden="true" />
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </section>
-      )}
 
       <section className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}>
         <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
@@ -208,43 +336,46 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
             <div className="linha-opcoes-mao">
               <BotaoToggle
                 rotulo={t('calculator.riichi')}
-                ativo={mao.riichi !== null}
+                ativo={!!mao.riichi}
                 desabilitado={maoAberta}
                 corAtiva="#f97316"
                 aoClicar={() =>
                   atualizarMao((rascunho) => {
-                    rascunho.riichi = rascunho.riichi ? null : { duplo: false, ippatsu: false }
-                    if (rascunho.riichi) rascunho.bencao = false
-                    else rascunho.uradora = []
+                    if (rascunho.riichi) {
+                      rascunho.riichi = null
+                      rascunho.uradora = []
+                      rascunho.uradoraManual = 0
+                    } else {
+                      rascunho.riichi = { duplo: false, ippatsu: false }
+                      rascunho.bencao = false
+                    }
                   })
                 }
               />
-              {mao.riichi && (
-                <>
-                  <BotaoToggle
-                    rotulo={t('calculator.ippatsu')}
-                    ativo={mao.riichi.ippatsu}
-                    desabilitado={false}
-                    corAtiva="#f97316"
-                    aoClicar={() =>
-                      atualizarMao((rascunho) => {
-                        if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
-                      })
-                    }
-                  />
-                  <BotaoToggle
-                    rotulo={t('calculator.doubleRiichi')}
-                    ativo={mao.riichi.duplo}
-                    desabilitado={false}
-                    corAtiva="#f97316"
-                    aoClicar={() =>
-                      atualizarMao((rascunho) => {
-                        if (rascunho.riichi) rascunho.riichi.duplo = !rascunho.riichi.duplo
-                      })
-                    }
-                  />
-                </>
-              )}
+              <BotaoToggle
+                rotulo={t('calculator.doubleRiichi')}
+                ativo={!!mao.riichi?.duplo}
+                desabilitado={maoAberta}
+                corAtiva="#f97316"
+                aoClicar={() =>
+                  atualizarMao((rascunho) => {
+                    if (!rascunho.riichi) return
+                    rascunho.riichi = { duplo: !rascunho.riichi.duplo, ippatsu: rascunho.riichi.ippatsu }
+                    rascunho.bencao = false
+                  })
+                }
+              />
+              <BotaoToggle
+                rotulo={t('calculator.ippatsu')}
+                ativo={!!mao.riichi?.ippatsu}
+                desabilitado={!mao.riichi}
+                corAtiva="#f97316"
+                aoClicar={() =>
+                  atualizarMao((rascunho) => {
+                    if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
+                  })
+                }
+              />
             </div>
           </section>
         )}
@@ -261,6 +392,8 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
                   rascunho.bencao = !rascunho.bencao
                   if (rascunho.bencao) {
                     rascunho.riichi = null
+                    rascunho.uradora = []
+                    rascunho.uradoraManual = 0
                     rascunho.ultimaPedra = false
                     rascunho.kan = false
                   }

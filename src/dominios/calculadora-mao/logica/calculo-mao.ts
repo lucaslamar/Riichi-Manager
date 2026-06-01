@@ -5,6 +5,45 @@ import type { ConfiguracaoCalculo, PontosCalculados, ResultadoMao } from '@/comp
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
 import { aplicarHonba, calcularHanFu, calcularPatamarHanFu, montarPontosRapidos } from '@/compartilhado/mahjong/pontuacao'
 
+function codigoBase(pedra: string): string {
+  return pedra[0] === '0' ? `5${pedra[1]}` : pedra
+}
+
+function proximaDora(indicador: string): string {
+  const base = codigoBase(indicador)
+  const valor = Number(base[0])
+  const naipe = base[1]
+
+  if (naipe === 'm' || naipe === 'p' || naipe === 's') {
+    return `${valor === 9 ? 1 : valor + 1}${naipe}`
+  }
+
+  if (['1', '2', '3', '4'].includes(base[0])) {
+    return `${valor === 4 ? 1 : valor + 1}z`
+  }
+
+  return `${valor === 7 ? 5 : valor + 1}z`
+}
+
+function pedrasDaMaoFisica(mao: Mao): string[] {
+  return [...mao.pedras, ...mao.melds.flatMap((meld) => meld.pedras)]
+}
+
+function contarAkaDora(mao: Mao): number {
+  return pedrasDaMaoFisica(mao).filter((pedra) => pedra[0] === '0').length
+}
+
+function contarDorasPorIndicadores(mao: Mao, indicadores: string[]): number {
+  const pedrasFisicas = pedrasDaMaoFisica(mao)
+  return indicadores.reduce((total, indicador) => {
+    const doraReal = proximaDora(indicador)
+    return (
+      total +
+      pedrasFisicas.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length
+    )
+  }, 0)
+}
+
 /**
  * Calcula os pontos de uma mao completa.
  *
@@ -13,7 +52,14 @@ import { aplicarHonba, calcularHanFu, calcularPatamarHanFu, montarPontosRapidos 
  * @returns Resultado com yaku, han, fu e pontos.
  */
 export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
-  const usaDoraManual = mao.doraManual > 0
+  const dorasAutomaticasAka = config.akadora ? contarAkaDora(mao) : 0
+  const dorasPorIndicadores = contarDorasPorIndicadores(mao, mao.dora)
+  const dorasNaMaoTotal = Math.min(13, dorasAutomaticasAka + dorasPorIndicadores + mao.doraManual)
+  const uradorasTotal = mao.riichi
+    ? contarDorasPorIndicadores(mao, mao.uradora) + mao.uradoraManual
+    : 0
+  const dorasBonusTotal = dorasNaMaoTotal + uradorasTotal
+  const usaDoraManual = dorasBonusTotal > 0
   const stringMao = converterMaoParaString(mao)
 
   const riichi = new Riichi(stringMao, {
@@ -35,7 +81,7 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
   const fu = resultadoBiblioteca.fu ?? 0
   const hanFinal =
     usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku
-      ? hanBase + mao.doraManual
+      ? hanBase + dorasBonusTotal
       : hanBase
   const patamarManual =
     usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku
@@ -85,7 +131,8 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     })
 
   if (usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku) {
-    yaku.push(['Dora manual', mao.doraManual, false])
+    if (dorasNaMaoTotal > 0) yaku.push(['Dora manual', dorasNaMaoTotal, false])
+    if (uradorasTotal > 0) yaku.push(['Uradora', uradorasTotal, false])
   }
 
   return {

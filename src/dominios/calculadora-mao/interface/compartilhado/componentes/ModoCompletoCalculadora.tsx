@@ -43,7 +43,7 @@ export default function ModoCompletoCalculadora({
         ]
       : []),
     { chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-gear', aoClicar: aoAbrirRegras },
-    { chave: 'limpar', rotulo: t('actions.clear'), icone: 'fa-trash', aoClicar: estado.limpar },
+    { chave: 'limpar', rotulo: t('actions.clear'), icone: 'fa-broom', aoClicar: estado.limpar },
   ]
 
   useEffect(() => {

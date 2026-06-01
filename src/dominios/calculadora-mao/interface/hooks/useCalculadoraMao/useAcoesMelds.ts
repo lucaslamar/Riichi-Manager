@@ -5,7 +5,7 @@ import {
   type CodigoPedra,
   type Mao,
 } from '../../../logica/mao'
-import { codigoBase, expandirGrupoMesmoValor, podeAdicionarAoChii } from '../../constantes'
+import { codigoBase, ehPedraNumerada, expandirGrupoMesmoValor, valorPedra } from '../../constantes'
 import type { AcoesMeldsCalculadora } from './tipos'
 
 interface ParametrosAcoesMelds {
@@ -21,6 +21,9 @@ const CODIGOS_BASE_MELD: CodigoPedra[] = [
   ...[1, 2, 3, 4, 5, 6, 7].map((numero) => `${numero}z`),
 ]
 
+const criarSequenciaChii = (inicio: number, naipe: string): CodigoPedra[] =>
+  [inicio, inicio + 1, inicio + 2].map((numero) => `${numero}${naipe}` as CodigoPedra)
+
 /**
  * Centraliza as regras de selecao visual e formacao de melds.
  * O contrato principal e proteger o limite fisico de quatro copias por pedra.
@@ -35,8 +38,6 @@ export function useAcoesMelds({
       ...mao.pedras,
       ...mao.melds.flatMap((meld) => meld.pedras),
       ...mao.descartes,
-      ...(mao.doraManual === 0 ? mao.dora : []),
-      ...(mao.doraManual === 0 ? mao.uradora : []),
       ...(acaoPendente?.tipo === 'chii' ? acaoPendente.pedras : []),
     ],
     [acaoPendente, mao],
@@ -52,6 +53,12 @@ export function useAcoesMelds({
   const contarAka = useCallback(
     (codigo: CodigoPedra) => todasPedras.filter((pedraVisivel) => pedraVisivel === codigo).length,
     [todasPedras],
+  )
+
+  const contarCodigoNaMao = useCallback(
+    (codigo: CodigoPedra) =>
+      mao.pedras.filter((pedraMao) => codigoBase(pedraMao) === codigoBase(codigo)).length,
+    [mao.pedras],
   )
 
   const indicesPedrasNaMaoPara = useCallback(
@@ -74,11 +81,12 @@ export function useAcoesMelds({
     [mao.pedras],
   )
 
-  const podeFormarMeldComMao = useCallback(
-    (pedras: CodigoPedra[], slotsMeld = 3) => {
-      const indicesRemovidos = indicesPedrasNaMaoPara(pedras)
+  const podeCriarMeld = useCallback(
+    (pedrasMeld: CodigoPedra[], pedrasConsumir: CodigoPedra[] = [], slotsLogicosMeld = 3) => {
+      const indicesRemovidos = indicesPedrasNaMaoPara(pedrasConsumir)
+      if (indicesRemovidos.length !== pedrasConsumir.length) return false
 
-      const slotsLiquidos = slotsMeld - indicesRemovidos.length
+      const slotsLiquidos = slotsLogicosMeld - indicesRemovidos.length
       if (slotsUsados + slotsLiquidos > 14) return false
 
       const pedrasRestantes = mao.pedras.filter(
@@ -88,21 +96,48 @@ export function useAcoesMelds({
         ...pedrasRestantes,
         ...mao.melds.flatMap((meld) => meld.pedras),
         ...mao.descartes,
-        ...(mao.doraManual === 0 ? mao.dora : []),
-        ...(mao.doraManual === 0 ? mao.uradora : []),
-        ...pedras,
       ]
 
-      return pedras.every((pedra) => {
-        const totalBase = visiveisAposMeld.filter(
-          (pedraVisivel) => codigoBase(pedraVisivel) === codigoBase(pedra),
-        ).length
+      return pedrasMeld.every((pedra) => {
+        const totalBase =
+          visiveisAposMeld.filter(
+            (pedraVisivel) => codigoBase(pedraVisivel) === codigoBase(pedra),
+          ).length +
+          pedrasMeld.filter(
+            (pedraVisivel) => codigoBase(pedraVisivel) === codigoBase(pedra),
+          ).length
         const totalAka =
-          pedra[0] === '0' ? visiveisAposMeld.filter((visivel) => visivel === pedra).length : 0
+          pedra[0] === '0'
+            ? visiveisAposMeld.filter((visivel) => visivel === pedra).length +
+              pedrasMeld.filter((visivel) => visivel === pedra).length
+            : 0
         return totalBase <= 4 && totalAka <= 1
       })
     },
     [indicesPedrasNaMaoPara, mao, slotsUsados],
+  )
+
+  const podeCriarKanFechadoDireto = useCallback(
+    (codigo: CodigoPedra) => podeCriarMeld(expandirGrupoMesmoValor(codigo, 4), [], 3),
+    [podeCriarMeld],
+  )
+
+  const podeCriarKanFechadoDaMao = useCallback(
+    (codigo: CodigoPedra) => {
+      const quantidade = Math.min(contarCodigoNaMao(codigo), 4)
+      if (quantidade < 3) return false
+      return podeCriarMeld(
+        expandirGrupoMesmoValor(codigo, 4),
+        expandirGrupoMesmoValor(codigo, quantidade),
+        3,
+      )
+    },
+    [contarCodigoNaMao, podeCriarMeld],
+  )
+
+  const podeFormarMeldComMao = useCallback(
+    (pedras: CodigoPedra[], slotsMeld = 3) => podeCriarMeld(pedras, pedras, slotsMeld),
+    [podeCriarMeld],
   )
 
   const podeAdicionarPedras = useCallback(
@@ -123,66 +158,70 @@ export function useAcoesMelds({
 
   const sequenciasChiiPossiveis = useCallback(
     (pedras: CodigoPedra[]): CodigoPedra[][] => {
-      if (pedras.length === 0 || pedras.length > 3) return []
+      const chamada = pedras[pedras.length - 1]
+      if (!chamada || !ehPedraNumerada(chamada)) return []
 
-      const bases = pedras.map(codigoBase)
-      const naipe = bases[0][1]
-      if (!['m', 'p', 's'].includes(naipe) || bases.some((pedraBase) => pedraBase[1] !== naipe)) {
-        return []
-      }
+      const naipe = codigoBase(chamada)[1]
+      const numeroChamada = valorPedra(chamada)
 
-      const numeros = bases.map((pedraBase) => Number(pedraBase[0]))
-      if (new Set(numeros).size !== numeros.length) return []
-
-      return [1, 2, 3, 4, 5, 6, 7]
-        .filter((inicio) => numeros.every((numero) => numero >= inicio && numero <= inicio + 2))
-        .map((inicio) => [inicio, inicio + 1, inicio + 2].map((numero) => `${numero}${naipe}`))
-        .filter((sequencia) => podeFormarMeldComMao(ordenarPedras([...sequencia])))
+      return [numeroChamada - 2, numeroChamada - 1, numeroChamada]
+        .filter((inicio) => inicio >= 1 && inicio <= 7)
+        .map((inicio) => criarSequenciaChii(inicio, naipe))
+        .filter((sequencia) => {
+          const pedrasDaMao = sequencia.filter(
+            (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(chamada),
+          )
+          const consumo = ordenarPedras(pedrasDaMao)
+          return (
+            podeCriarMeld(sequencia, sequencia, 3) ||
+            (consumo.length === 2 && podeCriarMeld(sequencia, consumo, 3)) ||
+            podeCriarMeld(sequencia, [], 3)
+          )
+        })
     },
-    [podeFormarMeldComMao],
+    [podeCriarMeld],
   )
 
   const sequenciasChiiDisponiveis = useMemo(() => {
-    const sequencias: CodigoPedra[][] = []
-
-    for (const naipe of ['m', 'p', 's']) {
-      for (let inicio = 1; inicio <= 7; inicio++) {
-        const sequencia = [inicio, inicio + 1, inicio + 2].map(
-          (numero) => `${numero}${naipe}`,
-        )
-        if (podeFormarMeldComMao(ordenarPedras([...sequencia]))) {
-          sequencias.push(sequencia)
-        }
-      }
+    for (const codigo of CODIGOS_BASE_MELD) {
+      if (sequenciasChiiPossiveis([codigo]).length > 0) return true
     }
+    return false
+  }, [sequenciasChiiPossiveis])
 
-    return sequencias
-  }, [podeFormarMeldComMao])
-
-  const podeChii = sequenciasChiiDisponiveis.length > 0
+  const podeChii = sequenciasChiiDisponiveis
   const podePon = useMemo(
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
-        const pedras = expandirGrupoMesmoValor(codigo, 3)
-        return podeFormarMeldComMao(pedras)
+        const pedrasMeld = expandirGrupoMesmoValor(codigo, 3)
+        const pedrasMao = expandirGrupoMesmoValor(codigo, 2)
+        return (
+          podeCriarMeld(pedrasMeld, pedrasMeld, 3) ||
+          podeCriarMeld(pedrasMeld, pedrasMao, 3) ||
+          podeCriarMeld(pedrasMeld, [], 3)
+        )
       }),
-    [podeFormarMeldComMao],
+    [podeCriarMeld],
   )
   const podeKanAberto = useMemo(
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
-        const pedras = expandirGrupoMesmoValor(codigo, 4)
-        return podeFormarMeldComMao(pedras)
+        const pedrasMeld = expandirGrupoMesmoValor(codigo, 4)
+        const pedrasMao = expandirGrupoMesmoValor(codigo, 3)
+        return (
+          podeCriarMeld(pedrasMeld, pedrasMeld, 3) ||
+          podeCriarMeld(pedrasMeld, pedrasMao, 3) ||
+          podeCriarMeld(pedrasMeld, [], 3)
+        )
       }),
-    [podeFormarMeldComMao],
+    [podeCriarMeld],
   )
   const podeKanFechado = useMemo(
     () =>
-      CODIGOS_BASE_MELD.some((codigo) => {
-        const pedras = expandirGrupoMesmoValor(codigo, 4)
-        return podeFormarMeldComMao(pedras)
-      }),
-    [podeFormarMeldComMao],
+      CODIGOS_BASE_MELD.some(
+        (codigo) => podeCriarKanFechadoDaMao(codigo) || podeCriarKanFechadoDireto(codigo),
+      ),
+    [podeCriarKanFechadoDaMao, podeCriarKanFechadoDireto],
   )
 
   const podeSelecionarPedra = useCallback(
@@ -190,50 +229,45 @@ export function useAcoesMelds({
       if (!acaoPendente) return podeAdicionarPedras([pedra])
       switch (acaoPendente.tipo) {
         case 'dora':
+          return mao.dora.length < 10
         case 'uradora':
+          return !!mao.riichi && mao.uradora.length < 5
         case 'descarte':
           return podeAdicionarPedras([pedra])
         case 'pon':
-          return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 3))
-        case 'kanAberto':
-          return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4))
-        case 'kanFechado':
-          return podeFormarMeldComMao(expandirGrupoMesmoValor(pedra, 4))
-        case 'chii': {
-          const pedrasChii = [...acaoPendente.pedras, pedra]
           return (
-            podeAdicionarAoChii(acaoPendente.pedras, pedra) &&
-            sequenciasChiiPossiveis(pedrasChii).length > 0
+            podeCriarMeld(expandirGrupoMesmoValor(pedra, 3), expandirGrupoMesmoValor(pedra, 3), 3) ||
+            podeCriarMeld(expandirGrupoMesmoValor(pedra, 3), expandirGrupoMesmoValor(pedra, 2), 3) ||
+            podeCriarMeld(expandirGrupoMesmoValor(pedra, 3), [], 3)
           )
-        }
+        case 'kanAberto':
+          return (
+            podeCriarMeld(expandirGrupoMesmoValor(pedra, 4), expandirGrupoMesmoValor(pedra, 4), 3) ||
+            podeCriarMeld(expandirGrupoMesmoValor(pedra, 4), expandirGrupoMesmoValor(pedra, 3), 3) ||
+            podeCriarMeld(expandirGrupoMesmoValor(pedra, 4), [], 3)
+          )
+        case 'kanFechado':
+          return podeCriarKanFechadoDaMao(pedra) || podeCriarKanFechadoDireto(pedra)
+        case 'chii':
+          return sequenciasChiiPossiveis([pedra]).length > 0
       }
     },
     [
       acaoPendente,
+      mao.dora.length,
+      mao.riichi,
+      mao.uradora.length,
+      podeCriarKanFechadoDaMao,
+      podeCriarKanFechadoDireto,
       podeAdicionarPedras,
-      podeFormarMeldComMao,
+      podeCriarMeld,
       sequenciasChiiPossiveis,
     ],
   )
 
   const escolherSequenciaChii = useCallback(
-    (pedrasSelecionadas: CodigoPedra[], sequencias: CodigoPedra[][]) => {
-      if (sequencias.length === 1) return sequencias[0]
-      if (pedrasSelecionadas.length < 2) return null
-
-      const primeira = Number(codigoBase(pedrasSelecionadas[0])[0])
-      const ultima = Number(codigoBase(pedrasSelecionadas[pedrasSelecionadas.length - 1])[0])
-      const naipe = codigoBase(pedrasSelecionadas[0])[1]
-      const inicioNatural = ultima > primeira ? primeira : ultima - 2
-      const sequenciaNatural = [inicioNatural, inicioNatural + 1, inicioNatural + 2].map(
-        (numero) => `${numero}${naipe}`,
-      )
-
-      return (
-        sequencias.find((sequencia) =>
-          sequencia.every((pedraSequencia, indice) => pedraSequencia === sequenciaNatural[indice]),
-        ) ?? null
-      )
+    (_pedrasSelecionadas: CodigoPedra[], sequencias: CodigoPedra[][]) => {
+      return sequencias[0] ?? null
     },
     [],
   )
@@ -242,6 +276,7 @@ export function useAcoesMelds({
     contarCodigo,
     contarAka,
     indicesPedrasNaMaoPara,
+    podeCriarMeld,
     podeFormarMeldComMao,
     podeAdicionarPedras,
     podeSelecionarPedra,

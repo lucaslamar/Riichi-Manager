@@ -36,6 +36,11 @@ export interface AcoesMeldsCalculadora {
   contarCodigo: (codigo: CodigoPedra) => number
   contarAka: (codigo: CodigoPedra) => number
   indicesPedrasNaMaoPara: (pedras: CodigoPedra[]) => number[]
+  podeCriarMeld: (
+    pedrasMeld: CodigoPedra[],
+    pedrasConsumir?: CodigoPedra[],
+    slotsLogicosMeld?: number,
+  ) => boolean
   podeFormarMeldComMao: (pedras: CodigoPedra[], slotsMeld?: number) => boolean
   podeAdicionarPedras: (pedras: CodigoPedra[]) => boolean
   podeSelecionarPedra: (pedra: CodigoPedra) => boolean

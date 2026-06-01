@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { codigoBase, proximaDoraIndicada } from '../../constantes'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
-import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
 import { DescartesMao } from './DescartesMao'
 import { MaoAtual } from './MaoAtual'
@@ -37,7 +36,6 @@ export default function ConstrutorMao({
   const [menuAcoesMaoAberto, setMenuAcoesMaoAberto] = useState(false)
   const {
     mao,
-    atualizarMao,
     acaoPendente,
     configuracao,
     totalPedras,
@@ -75,13 +73,11 @@ export default function ConstrutorMao({
   const dorasReais = useMemo(
     () =>
       new Set(
-        mao.doraManual > 0
-          ? []
-          : [...mao.dora, ...mao.uradora].map((indicador) =>
-              codigoBase(proximaDoraIndicada(indicador)),
-            ),
+        [...mao.dora, ...mao.uradora].map((indicador) =>
+          codigoBase(proximaDoraIndicada(indicador)),
+        ),
       ),
-    [mao.dora, mao.doraManual, mao.uradora],
+    [mao.dora, mao.uradora],
   )
 
   const temEsperaValida = esperasPossiveis.some((espera) => !espera.semYaku)
@@ -136,7 +132,9 @@ export default function ConstrutorMao({
     acaoPendente?.tipo === 'kanFechado'
       ? acaoPendente
       : null
-  const mostrarTeclado = contexto === 'montagem' || !!acaoPendente
+  const mostrarTeclado = contexto === 'montagem'
+  const mostrarFinalizacaoNoTeclado =
+    contexto === 'montagem' && maoProntaParaFinalizar && !acaoMeldAtiva
 
   /**
    * Marca na mão fechada as pedras já escolhidas durante uma ação de chii.
@@ -217,8 +215,15 @@ export default function ConstrutorMao({
 
       {contexto === 'montagem' && (
         <>
-          <IndicadoresDora mao={mao} atualizarMao={atualizarMao} />
-          <DescartesMao descartes={mao.descartes} aoRemoverDescarte={removerDescarte} />
+          <DescartesMao
+            descartes={mao.descartes}
+            aoRemoverDescarte={removerDescarte}
+            aoLimparDescartes={() =>
+              estado.atualizarMao((rascunho) => {
+                rascunho.descartes = []
+              })
+            }
+          />
 
           <div className="acoes-construtor-mao">
             <AcoesConstrutorMao
@@ -239,7 +244,7 @@ export default function ConstrutorMao({
         <div className="painel-teclado-calculadora">
           <span className="sr-only" aria-live="polite">
             {mensagemFinalizacao ??
-              (contexto === 'montagem' && maoProntaParaFinalizar
+              (mostrarFinalizacaoNoTeclado
                 ? t('calculator.readyToFinalizeAnnouncement')
                 : '')}
           </span>
@@ -262,7 +267,6 @@ export default function ConstrutorMao({
           <TecladoPedras
             acaoPendente={acaoPendente}
             configuracao={configuracao}
-            doraManual={mao.doraManual}
             dorasReais={dorasReais}
             esperasPorPedra={esperasPorPedra}
             filtrarTecladoPorEspera={filtrarTecladoPorEspera}
@@ -272,7 +276,7 @@ export default function ConstrutorMao({
             rotuloEsperaTeclado={rotuloEsperaTeclado}
             classeEsperaTeclado={classeEsperaTeclado}
             contexto={contexto}
-            maoProntaParaFinalizar={contexto === 'montagem' && maoProntaParaFinalizar}
+            maoProntaParaFinalizar={mostrarFinalizacaoNoTeclado}
             mensagemFinalizacao={mensagemFinalizacao}
             selecionandoPedraAgari={selecionandoPedraAgari}
             candidatasPedraAgari={candidatasPedraAgari}

@@ -14,18 +14,6 @@ function agruparPorNaipe(pedras: CodigoPedra[]): [string, string][] {
     .map(([naipe, nums]) => [naipe, nums.join('')])
 }
 
-/** Calcula a pedra dora real a partir do indicador. */
-function proximaDora(pedra: CodigoPedra, sanma: boolean): CodigoPedra {
-  const num = Number(pedra[0]) || 5
-  const naipe = pedra[1]
-  if (naipe === 'z') {
-    if (num <= 4) return `${(num % 4) + 1}z`
-    return `${num === 7 ? 5 : num + 1}z`
-  }
-  if (sanma && naipe === 'm') return num === 1 ? '9m' : '1m'
-  return `${(num % 9) + 1}${naipe}`
-}
-
 /**
  * Converte o estado da mão para a string de entrada da biblioteca `riichi`.
  *
@@ -42,7 +30,6 @@ function proximaDora(pedra: CodigoPedra, sanma: boolean): CodigoPedra {
  */
 export function converterMaoParaString(mao: Mao): string {
   let stringMao = ''
-  const sanma = false // padrão: yonma (4 jogadores)
   const meldAgari = mao.agariMeld ? mao.melds[mao.agariMeld.indiceMeld] : null
   let pedrasCalculo = mao.pedras
   let indiceAgariCalculo = mao.indiceAgari
@@ -92,27 +79,7 @@ export function converterMaoParaString(mao: Mao): string {
     }
   }
 
-  // 4. Dora (indicadores → lib converte para a pedra real internamente)
-  if (mao.doraManual === 0 && mao.dora.length) {
-    stringMao += '+d'
-    for (const [naipe, nums] of agruparPorNaipe(
-      mao.dora.map((indicadorDora) => proximaDora(indicadorDora, sanma)),
-    )) {
-      stringMao += nums + naipe
-    }
-  }
-
-  // 5. Uradora
-  if (mao.doraManual === 0 && mao.uradora.length) {
-    stringMao += '+u'
-    for (const [naipe, nums] of agruparPorNaipe(
-      mao.uradora.map((indicadorUradora) => proximaDora(indicadorUradora, sanma)),
-    )) {
-      stringMao += nums + naipe
-    }
-  }
-
-  // 6. Modificadores
+  // 4. Modificadores
   stringMao += '+'
   if (mao.riichi) stringMao += mao.riichi.duplo ? 'w' : 'r'
   if (mao.riichi?.ippatsu) stringMao += 'i'

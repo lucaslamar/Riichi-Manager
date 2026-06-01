@@ -8,13 +8,11 @@
 }
 
 .tile-img-haku {
-  border: 1px solid #4fc3f7;
+  box-sizing: border-box;
+  border: 1px solid #d7dde6;
   border-radius: 5px;
-  background: linear-gradient(#ffffff, #f1f8ff);
-  box-shadow:
-    inset 0 0 0 2px rgba(255, 255, 255, 0.95),
-    0 0 0 1px rgba(16, 42, 67, 0.18),
-    0 0 0 3px rgba(79, 195, 247, 0.22);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px rgba(248, 250, 252, 0.95);
 }
 
 .tile-fallback {

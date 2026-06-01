@@ -1,5 +1,65 @@
 # Changelog - Riichi Manager
 
+## 4.0.4 - Revisão do fluxo de montagem, finalização e doras
+
+### Melhorias
+
+- Mantém a mão 14/14 editável, permitindo montar todas as pedras primeiro e depois declarar **Chi**, **Pon**, **Kan aberto**, **Kan fechado** e pedra da batida.
+- Adiciona botões de ação na montagem para **Mudar batida** e **Ir para finalização de mão** quando a mão estiver pronta.
+- Mantém **Descartes / Furiten** na montagem para permitir análise de furiten durante a escolha das esperas.
+- Adiciona **Descartes / Furiten** também na Finalização de Mão, permitindo revisar e corrigir descartes esquecidos antes do cálculo.
+- Agrupa descartes repetidos em formato compacto com contador, como `2x`, `3x` ou `4x`.
+- Remove o botão **Dora** da barra principal da montagem, deixando a configuração de doras concentrada na Finalização de Mão.
+- Unifica **Indicadores de Dora** e **Indicadores de Ura Dora** em um único fluxo de indicadores na finalização.
+- Remove a seção separada de **Ura Dora**, simplificando a tela de finalização.
+- Ajusta a seção de indicadores para deixar claro que ela representa **Dora** e **Ura Dora**, com suporte visual para até 10 indicadores.
+- Ajusta o contador **Doras na mão** para considerar automaticamente aka dora e doras identificadas pelos indicadores, mantendo ajuste manual quando necessário.
+- Altera a configuração padrão para **Aka dora ativa**.
+- Garante que a configuração de aka dora venha das regras globais da calculadora, sem botão local de ativar/desativar na finalização.
+- Renomeia visualmente `K.F.` para **Kan fechado**.
+- Ajusta a barra da montagem para manter **Chi**, **Pon**, **Kan**, **Kan fechado** e **Descartes**.
+- Troca o botão de descarte para ícone compacto de lixeira, evitando texto grande na barra.
+- Padroniza ações de limpeza geral com ícone de vassoura, diferenciando-as do descarte.
+- Posiciona lixeiras vermelhas dentro dos blocos correspondentes, como **Descartes / Furiten** e **Indicadores de Dora / Ura Dora**.
+- Remove textos explicativos fixos que poluíam a Finalização, como o aviso permanente de aka dora desativada.
+- Ajusta o controle de Riichi para voltar a ser uma opção simples de marcado/desmarcado, removendo o botão visual separado **Sem Riichi**.
+- Permite declarar **Kan aberto** a partir de uma trinca solta, adicionando a quarta pedra como chamada externa.
+- Permite declarar **Kan fechado** a partir de uma trinca solta no contexto da calculadora, adicionando a quarta pedra implícita ao meld.
+- Mantém diferença visual e de regra entre **Kan aberto** e **Kan fechado**:
+  - Kan aberto abre a mão.
+  - Kan fechado preserva a mão fechada.
+- Preserva aka dora ao formar Kan, mantendo códigos como `0m`, `0p` e `0s` no meld criado.
+- Mantém o modo ativo após criar um meld quando ainda houver outras ações possíveis do mesmo tipo, facilitando organizar várias chamadas em sequência.
+
+### Correções
+
+- Corrige o furiten na Finalização para ser recalculado a partir da mão completa menos a pedra da batida escolhida.
+- Corrige o caso em que o usuário montava 14/14 manualmente e o app não conseguia reconstruir corretamente as esperas para validar furiten.
+- Corrige a perda ou troca indevida da pedra da batida ao voltar para montagem e reorganizar a mão.
+- Corrige o comportamento em que ações estruturais podiam ser bloqueadas indevidamente quando a mão estava 14/14.
+- Corrige o comportamento em que a Finalização podia continuar disponível após alteração estrutural sem revalidar a mão.
+- Corrige o fluxo para que criar **Chi**, **Pon**, **Kan aberto** ou **Kan fechado** não seja confundido com escolha da pedra da batida.
+- Corrige o caso em que criar um meld podia abrir ou liberar a finalização automaticamente.
+- Corrige a disponibilidade de ações estruturais em tenpai.
+- Corrige a disponibilidade de ações estruturais em mão 14/14.
+- Corrige o caso em que botões ficavam desabilitados mesmo quando ainda havia ações possíveis.
+- Corrige a reorganização de mãos completas em melds sucessivos, recalculando a estrutura e as possibilidades restantes após cada ação.
+- Corrige a formação de **Kan aberto** para seguir a mesma lógica prática de entrada direta de Chi e Pon.
+- Corrige a formação de **Kan fechado** a partir de trinca solta no fluxo da calculadora.
+- Corrige o caso em que **Kan fechado** com aka dora não preservava corretamente a tile vermelha.
+- Corrige a renderização de **Kan fechado** com aka dora, mantendo o Kan fechado visualmente e exibindo a aka no centro.
+- Corrige a lógica que podia fabricar ou perder pedras indevidamente ao criar Kan.
+- Corrige a tela branca causada por estados inválidos ao tentar usar Kan fechado.
+- Corrige a renderização do dragão branco em alguns contextos da Finalização e dos melds.
+- Corrige o problema em que indicadores de Dora ou Ura Dora bloqueavam tiles da mão.
+- Corrige a contagem automática de doras para evitar dupla contagem entre aka, indicadores e ajuste manual.
+- Corrige o visual do contador de descartes na montagem, removendo o badge preto pesado.
+- Corrige a invasão visual do botão de descarte sobre **Kan fechado**.
+- Corrige a sobreposição em que Kan fechado podia invadir a área de descartes.
+- Corrige o posicionamento dos painéis contextuais para abrirem abaixo da seção acionada.
+- Corrige o comportamento para manter apenas um painel contextual aberto por vez.
+- Corrige o layout das lixeiras de **Descartes / Furiten** e **Indicadores de Dora / Ura Dora**, mantendo-as dentro dos respectivos blocos.
+
 ## 4.0.3 - Refatoração estrutural dos domínios de calculadora
 
 ### Refatoração

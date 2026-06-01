@@ -55,6 +55,7 @@ export default function ResultadoMaoCalculada({
           agariMeld: mao.agariMeld,
           honba: mao.honba,
           doraManual: mao.doraManual,
+          uradoraManual: mao.uradoraManual,
           dora: mao.dora,
           uradora: mao.uradora,
           ventoRodada: mao.ventoRodada,

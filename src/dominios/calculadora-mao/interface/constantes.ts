@@ -137,6 +137,7 @@ export const MAO_VAZIA: Mao = {
   uradora: [],
   descartes: [],
   doraManual: 0,
+  uradoraManual: 0,
   honba: 0,
   riichi: null,
   bencao: false,

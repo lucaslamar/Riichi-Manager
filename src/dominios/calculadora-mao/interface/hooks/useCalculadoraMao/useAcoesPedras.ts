@@ -11,7 +11,6 @@ import {
   MAO_VAZIA,
   codigoBase,
   expandirGrupoMesmoValor,
-  podeAdicionarAoChii,
 } from '../../constantes'
 import type { EstadoMaoCalculadora, TipoMeldCalculadora } from './tipos'
 
@@ -22,7 +21,11 @@ interface ParametrosAcoesPedras {
   >
   esperasPossiveis: EsperaPossivel[]
   podeAdicionarPedras: (pedras: CodigoPedra[]) => boolean
-  podeFormarMeldComMao: (pedras: CodigoPedra[], slotsMeld?: number) => boolean
+  podeCriarMeld: (
+    pedrasMeld: CodigoPedra[],
+    pedrasConsumir?: CodigoPedra[],
+    slotsLogicosMeld?: number,
+  ) => boolean
   indicesPedrasNaMaoPara: (pedras: CodigoPedra[]) => number[]
   sequenciasChiiPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
   escolherSequenciaChii: (
@@ -45,12 +48,29 @@ export function useAcoesPedras({
   estado,
   esperasPossiveis,
   podeAdicionarPedras,
-  podeFormarMeldComMao,
+  podeCriarMeld,
   indicesPedrasNaMaoPara,
   sequenciasChiiPossiveis,
   escolherSequenciaChii,
 }: ParametrosAcoesPedras) {
   const { mao, atualizarMao, acaoPendente, setAcaoPendente, slotsUsados, maoCompleta } = estado
+
+  const invalidarBatida = (rascunho: Mao) => {
+    rascunho.indiceAgari = -1
+    rascunho.agariMeld = null
+  }
+
+  const voltarBatidaParaMontagem = (rascunho: Mao) => {
+    if (rascunho.agariMeld) {
+      const agariMeld = rascunho.agariMeld
+      rascunho.melds.splice(agariMeld.indiceMeld, 1)
+      rascunho.pedras.push(...agariMeld.pedrasConsumidasMao)
+      ordenarPedras(rascunho.pedras)
+    } else if (rascunho.indiceAgari >= 0) {
+      rascunho.pedras.splice(rascunho.indiceAgari, 1)
+    }
+    invalidarBatida(rascunho)
+  }
 
   /**
    * Recebe uma pedra clicada no teclado e interpreta o clique conforme a ação ativa.
@@ -58,7 +78,7 @@ export function useAcoesPedras({
    */
   const adicionarPedra = (pedra: CodigoPedra) => {
     const atualizarAcaoAposMeld = (tipo: TipoMeldCalculadora, slotsAposMeld: number) =>
-      setAcaoPendente(slotsAposMeld < 13 ? criarAcao(tipo) : null)
+      setAcaoPendente(slotsAposMeld <= 14 ? criarAcao(tipo) : null)
 
     /**
      * Move da mão fechada as pedras que já estavam disponíveis e registra o meld final.
@@ -66,16 +86,16 @@ export function useAcoesPedras({
      */
     const aplicarMeld = (
       tipo: TipoMeldCalculadora,
-      pedras: CodigoPedra[],
+      pedrasMeldBase: CodigoPedra[],
+      pedrasConsumir: CodigoPedra[],
       abrirMao: boolean,
-      pedraAgari?: CodigoPedra,
     ) => {
       const slotsMeld = 3
-      if (!podeFormarMeldComMao(pedras, slotsMeld)) return null
-      const indicesRemovidos = indicesPedrasNaMaoPara(pedras)
-      const pedrasConsumidasMao = indicesRemovidos.map((indice) => mao.pedras[indice])
+      if (!podeCriarMeld(pedrasMeldBase, pedrasConsumir, slotsMeld)) return null
+      const indicesRemovidos = indicesPedrasNaMaoPara(pedrasConsumir)
+      if (indicesRemovidos.length !== pedrasConsumir.length) return null
       const slotsAposMeld = slotsUsados + slotsMeld - indicesRemovidos.length
-      const pedrasMeld = [...pedras]
+      const pedrasMeld = [...pedrasMeldBase]
       const posicoesAtualizadas = new Set<number>()
 
       for (const indiceRemovido of indicesRemovidos) {
@@ -102,22 +122,7 @@ export function useAcoesPedras({
         const meldCriado = { tipo, pedras: pedrasMeld }
         rascunho.melds.push(meldCriado)
         ordenarMelds(rascunho.melds)
-        if (slotsAposMeld >= 14 && pedraAgari) {
-          const indiceMeld = rascunho.melds.indexOf(meldCriado)
-          let indicePedra = pedrasMeld.findIndex((pedraMeld) => pedraMeld === pedraAgari)
-          if (indicePedra < 0) {
-            indicePedra = pedrasMeld.findIndex((pedraMeld) => codigoBase(pedraMeld) === codigoBase(pedraAgari))
-          }
-          rascunho.indiceAgari = -1
-          rascunho.agariMeld = {
-            indiceMeld,
-            indicePedra: Math.max(indicePedra, 0),
-            pedra: pedraAgari,
-            tipo,
-            pedrasConsumidasMao,
-          }
-          if (abrirMao) rascunho.agari = 'ron'
-        }
+        invalidarBatida(rascunho)
         if (abrirMao) rascunho.riichi = null
       })
       return slotsAposMeld
@@ -146,19 +151,15 @@ export function useAcoesPedras({
 
     switch (acaoPendente.tipo) {
       case 'dora':
-        // Indicadores de dora deixam de ser editáveis quando o usuário usa dora manual.
-        if (mao.doraManual > 0) return
-        if (mao.dora.length >= 5) return
-        if (!podeAdicionarPedras([pedra])) return
+        if (mao.dora.length >= 10) return
         atualizarMao((rascunho) => {
           rascunho.dora.push(pedra)
         })
-        if (mao.dora.length + 1 >= 5) setAcaoPendente(null)
+        if (mao.dora.length + 1 >= 10) setAcaoPendente(null)
         return
       case 'uradora':
-        if (mao.doraManual > 0) return
+        if (!mao.riichi) return
         if (mao.uradora.length >= 5) return
-        if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
           rascunho.uradora.push(pedra)
         })
@@ -172,47 +173,74 @@ export function useAcoesPedras({
         })
         return
       case 'pon': {
-        const pedras = expandirGrupoMesmoValor(pedra, 3)
-        const slotsAposMeld = aplicarMeld('pon', pedras, true, pedra)
+        const pedrasMeld = expandirGrupoMesmoValor(pedra, 3)
+        const consumoTrinca = expandirGrupoMesmoValor(pedra, 3)
+        const consumoPar = expandirGrupoMesmoValor(pedra, 2)
+        const pedrasConsumir = podeCriarMeld(pedrasMeld, consumoTrinca, 3)
+          ? consumoTrinca
+          : podeCriarMeld(pedrasMeld, consumoPar, 3)
+            ? consumoPar
+            : []
+        const slotsAposMeld = aplicarMeld('pon', pedrasMeld, pedrasConsumir, true)
         if (slotsAposMeld === null) return
         atualizarAcaoAposMeld('pon', slotsAposMeld)
         return
       }
       case 'kanAberto': {
-        const pedras = expandirGrupoMesmoValor(pedra, 4)
-        const slotsAposMeld = aplicarMeld('kanAberto', pedras, true, pedra)
+        const pedrasMeld = expandirGrupoMesmoValor(pedra, 4)
+        const consumoQuadra = expandirGrupoMesmoValor(pedra, 4)
+        const consumoTrinca = expandirGrupoMesmoValor(pedra, 3)
+        const pedrasConsumir = podeCriarMeld(pedrasMeld, consumoQuadra, 3)
+          ? consumoQuadra
+          : podeCriarMeld(pedrasMeld, consumoTrinca, 3)
+            ? consumoTrinca
+            : []
+        const slotsAposMeld = aplicarMeld('kanAberto', pedrasMeld, pedrasConsumir, true)
         if (slotsAposMeld === null) return
         atualizarAcaoAposMeld('kanAberto', slotsAposMeld)
         return
       }
       case 'kanFechado': {
-        const pedras = expandirGrupoMesmoValor(pedra, 4)
-        const slotsAposMeld = aplicarMeld('kanFechado', pedras, false, pedra)
+        const pedrasConsumir = mao.pedras
+          .filter((pedraMao) => codigoBase(pedraMao) === codigoBase(pedra))
+          .slice(0, 4)
+        if (pedrasConsumir.length > 0 && pedrasConsumir.length < 3) {
+          return
+        }
+        if (pedrasConsumir.some((pedraMao) => codigoBase(pedraMao) !== codigoBase(pedra))) return
+        const pedrasMeld =
+          pedrasConsumir.length >= 3
+            ? ([
+                ...pedrasConsumir,
+                ...Array(4 - pedrasConsumir.length).fill(codigoBase(pedra)),
+              ] as CodigoPedra[])
+            : expandirGrupoMesmoValor(pedra, 4)
+        if (pedrasMeld.length !== 4) return
+        if (!podeCriarMeld(pedrasMeld, pedrasConsumir, 3)) return
+        const slotsAposMeld = aplicarMeld('kanFechado', pedrasMeld, pedrasConsumir, false)
         if (slotsAposMeld === null) return
         atualizarAcaoAposMeld('kanFechado', slotsAposMeld)
         return
       }
       case 'chii': {
         /*
-         * Chii é a única ação em etapas: o usuário pode clicar uma ou duas pedras
-         * e a sequência final é inferida quando existir uma única opção natural.
+         * Em Chii, a pedra clicada representa a chamada; as outras duas precisam existir na mao.
          */
-        if (!podeAdicionarAoChii(acaoPendente.pedras, pedra)) return
-        const novasPedras = [...acaoPendente.pedras, pedra]
-        const sequenciasPossiveis = sequenciasChiiPossiveis(novasPedras)
-        const sequenciaEscolhida = escolherSequenciaChii(novasPedras, sequenciasPossiveis)
-        if (sequenciaEscolhida) {
-          const slotsAposMeld = aplicarMeld('chii', [...sequenciaEscolhida], true, pedra)
-          if (slotsAposMeld === null) return
-          atualizarAcaoAposMeld('chii', slotsAposMeld)
-        } else if (novasPedras.length < 3) {
-          setAcaoPendente({ tipo: 'chii', pedras: novasPedras })
-        } else {
-          const pedrasChii = ordenarPedras([...novasPedras])
-          const slotsAposMeld = aplicarMeld('chii', [...pedrasChii], true, pedra)
-          if (slotsAposMeld === null) return
-          atualizarAcaoAposMeld('chii', slotsAposMeld)
-        }
+        if (!podeAdicionarPedras([pedra])) return
+        const sequenciasPossiveis = sequenciasChiiPossiveis([pedra])
+        const sequenciaEscolhida = escolherSequenciaChii([pedra], sequenciasPossiveis)
+        if (!sequenciaEscolhida) return
+        const pedrasConsumir = sequenciaEscolhida.filter(
+          (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(pedra),
+        )
+        const consumoChii = podeCriarMeld(sequenciaEscolhida, sequenciaEscolhida, 3)
+          ? sequenciaEscolhida
+          : podeCriarMeld(sequenciaEscolhida, pedrasConsumir, 3)
+            ? pedrasConsumir
+            : []
+        const slotsAposMeld = aplicarMeld('chii', sequenciaEscolhida, consumoChii, true)
+        if (slotsAposMeld === null) return
+        atualizarAcaoAposMeld('chii', slotsAposMeld)
         return
       }
     }
@@ -222,7 +250,7 @@ export function useAcoesPedras({
   const removerPedra = (indicePedra: number) => {
     atualizarMao((rascunho) => {
       rascunho.pedras.splice(indicePedra, 1)
-      if (rascunho.indiceAgari >= indicePedra) rascunho.indiceAgari--
+      rascunho.indiceAgari = -1
       rascunho.agariMeld = null
     })
     setAcaoPendente(null)
@@ -232,11 +260,8 @@ export function useAcoesPedras({
   const removerMeld = (indiceMeld: number) => {
     atualizarMao((rascunho) => {
       rascunho.melds.splice(indiceMeld, 1)
-      if (rascunho.agariMeld?.indiceMeld === indiceMeld) {
-        rascunho.agariMeld = null
-      } else if (rascunho.agariMeld && rascunho.agariMeld.indiceMeld > indiceMeld) {
-        rascunho.agariMeld.indiceMeld--
-      }
+      rascunho.indiceAgari = -1
+      rascunho.agariMeld = null
     })
     setAcaoPendente(null)
   }
@@ -256,8 +281,19 @@ export function useAcoesPedras({
   }
 
   /** Liga/desliga o significado especial do próximo clique no teclado. */
-  const alternarAcao = (tipo: Acao['tipo']) =>
-    setAcaoPendente(acaoPendente?.tipo === tipo ? null : criarAcao(tipo))
+  const alternarAcao = (tipo: Acao['tipo']) => {
+    const desligandoAcaoAtual = acaoPendente?.tipo === tipo
+    const acaoEstrutural =
+      tipo === 'chii' || tipo === 'pon' || tipo === 'kanAberto' || tipo === 'kanFechado'
+
+    if (!desligandoAcaoAtual && acaoEstrutural && (mao.indiceAgari >= 0 || mao.agariMeld)) {
+      atualizarMao((rascunho) => {
+        voltarBatidaParaMontagem(rascunho)
+      })
+    }
+
+    setAcaoPendente(desligandoAcaoAtual ? null : criarAcao(tipo))
+  }
 
   return {
     adicionarPedra,

@@ -1,4 +1,5 @@
 export function BotaoAcao({
+  tipo,
   rotulo,
   cor,
   ativo,
@@ -14,7 +15,7 @@ export function BotaoAcao({
 }) {
   return (
     <button
-      className="btn-acao-mao"
+      className={`btn-acao-mao btn-acao-${tipo}`}
       type="button"
       disabled={desabilitado}
       aria-pressed={ativo}
@@ -28,7 +29,8 @@ export function BotaoAcao({
         opacity: desabilitado ? 0.45 : 1,
       }}
     >
-      {rotulo}
+      {tipo === 'descarte' && <i className="fas fa-trash" aria-hidden="true" />}
+      <span>{rotulo}</span>
     </button>
   )
 }

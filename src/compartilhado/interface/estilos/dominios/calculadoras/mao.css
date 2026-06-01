@@ -98,7 +98,9 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 4px;
+  overflow: visible;
   min-height: 40px;
   padding: 8px 62px 8px 8px;
   background: #f8f9fa;
@@ -343,13 +345,19 @@ span.chip-pedra {
 }
 
 .grupo-indicador-dora {
+  position: relative;
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 4px;
-  padding: 5px 6px;
+  padding: 5px 34px 5px 6px;
   border: 1px solid #fbcfe8;
   border-radius: 8px;
   background: #fdf2f8;
+}
+
+.grupo-indicador-dora .chip-pedra {
+  flex: 0 0 34px;
 }
 
 .grupo-indicador-dora span {
@@ -365,18 +373,51 @@ span.chip-pedra {
   text-align: center;
 }
 
+.btn-limpar-grupo-pedras {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  margin-left: auto;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 0.72rem;
+}
+
+.grupo-indicador-dora .btn-limpar-grupo-pedras,
+.descartes-selecionados .btn-limpar-grupo-pedras {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.btn-limpar-grupo-pedras:hover,
+.btn-limpar-grupo-pedras:focus-visible {
+  background: #fee2e2;
+  outline: none;
+}
+
 .indicadores-dora-selecionados.ignorado .grupo-indicador-dora:not(:first-child) {
   opacity: 0.45;
 }
 
 .descartes-selecionados {
+  position: relative;
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
+  clear: both;
   gap: 6px;
   width: 100%;
+  min-height: 38px;
   margin-bottom: 10px;
-  padding: 6px;
+  padding: 6px 34px 6px 6px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   background: #f8fafc;

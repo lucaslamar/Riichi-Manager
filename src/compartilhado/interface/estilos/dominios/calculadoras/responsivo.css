@@ -939,8 +939,9 @@
     position: static;
     top: auto;
     z-index: auto;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-height: 0;
+    max-height: min(34dvh, 260px);
     margin-bottom: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -1211,6 +1212,14 @@
     padding: 5px 6px;
   }
 
+  .grupo-opcoes-dora .grupo-indicador-dora span {
+    flex-basis: 94px;
+  }
+
+  .grupo-opcoes-dora .grupo-indicador-dora .chip-pedra {
+    flex-basis: 34px;
+  }
+
   .toggle-agari-mao,
   .linha-opcoes-mao {
     border-radius: 9px;
@@ -1372,7 +1381,9 @@
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile {
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 0.8fr 0.8fr 0.8fr 1.32fr 0.88fr;
+    justify-content: stretch;
     gap: 2px;
     padding: 0;
   }
@@ -1460,7 +1471,8 @@
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile {
-    display: flex;
+    display: grid;
+    grid-template-columns: 0.8fr 0.8fr 0.8fr 1.32fr 0.88fr;
     width: 100%;
     min-width: 0;
     align-items: stretch;
@@ -1474,7 +1486,7 @@
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao {
-    flex: 1 1 0;
+    flex: initial;
     min-width: 0;
     min-height: 34px;
     border: 0 !important;
@@ -1484,8 +1496,27 @@
     color: #40566d !important;
     font-size: 0.78rem;
     font-weight: 900;
+    overflow: hidden;
     background-clip: padding-box;
     box-shadow: none;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-descarte {
+    gap: 4px;
+  }
+
+  .construtor-mao-montagem
+    .menu-acoes-teclado-mobile
+    .btn-acao-descarte
+    span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao:first-child {

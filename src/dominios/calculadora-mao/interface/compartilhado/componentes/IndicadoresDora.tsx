@@ -7,27 +7,38 @@ import { PedraSvg } from './PedraSvg'
 interface PropsIndicadoresDora {
   mao: Mao
   atualizarMao: Updater<Mao>
+  tipo?: 'dora' | 'uradora' | 'todos'
+  aoLimparIndicadores?: () => void
 }
 
 /**
  * Exibe indicadores de dora/uradora escolhidos e permite remocao.
  * O texto deixa claro que o usuario seleciona indicadores, nao a dora real.
  */
-export function IndicadoresDora({ mao, atualizarMao }: PropsIndicadoresDora) {
+export function IndicadoresDora({
+  mao,
+  atualizarMao,
+  tipo = 'todos',
+  aoLimparIndicadores,
+}: PropsIndicadoresDora) {
   const { t } = useI18n()
-  if (mao.dora.length === 0 && mao.uradora.length === 0 && mao.doraManual === 0) return null
+  const mostrarDora = tipo === 'todos' || tipo === 'dora'
+  const mostrarUradora = tipo === 'todos' || tipo === 'uradora'
+  if ((mostrarDora ? mao.dora.length : 0) === 0 && (mostrarUradora ? mao.uradora.length : 0) === 0) {
+    return (
+      <div className="indicadores-dora-selecionados">
+        <div className="grupo-indicador-dora grupo-indicador-vazio">
+          <span>{t('calculator.noDoraIndicatorSelected')}</span>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className={`indicadores-dora-selecionados ${mao.doraManual > 0 ? 'ignorado' : ''}`}>
-      {mao.doraManual > 0 && (
+    <div className="indicadores-dora-selecionados">
+      {mostrarDora && mao.dora.length > 0 && (
         <div className="grupo-indicador-dora">
-          <span>{t('calculator.manualDoraShort')}</span>
-          <strong>{mao.doraManual}</strong>
-        </div>
-      )}
-      {mao.dora.length > 0 && (
-        <div className="grupo-indicador-dora">
-          <span>{t('calculator.doraIndicators')}</span>
+          <span>{t('calculator.doraUraIndicators')}</span>
           {mao.dora.map((pedraDora, indiceDora) => (
             <button
               key={indiceDora}
@@ -47,7 +58,18 @@ export function IndicadoresDora({ mao, atualizarMao }: PropsIndicadoresDora) {
           ))}
         </div>
       )}
-      {mao.uradora.length > 0 && (
+      {aoLimparIndicadores && (
+        <button
+          className="btn-limpar-grupo-pedras"
+          type="button"
+          aria-label={t('calculator.clearDoraIndicators')}
+          title={t('calculator.clearDoraIndicators')}
+          onClick={aoLimparIndicadores}
+        >
+          <i className="fas fa-broom" aria-hidden="true" />
+        </button>
+      )}
+      {mostrarUradora && mao.uradora.length > 0 && (
         <div className="grupo-indicador-dora">
           <span>{t('calculator.uraDoraIndicators')}</span>
           {mao.uradora.map((pedraUradora, indiceUradora) => (
