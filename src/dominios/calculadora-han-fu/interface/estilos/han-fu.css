@@ -679,10 +679,18 @@
     text-align: left;
   }
 
+  .linha-referencia-han-fu > .celula-referencia-han-fu:last-child,
+  .linha-referencia-han-fu > .celula-referencia-han-fu:last-of-type {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
   .celula-referencia-vazia {
-    min-height: 34px;
-    border-top: 1px solid #edf0f4;
-    border-left: 0;
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    padding: 0 !important;
   }
 
   .fu-celula-referencia {

@@ -49,7 +49,10 @@ export function ControleNumericoHanFu({
   const maisDesabilitado = desabilitarControle || (desabilitarMais ?? valor >= maximo)
 
   return (
-    <section className={`controle-han-fu ${desabilitarControle ? 'desabilitado' : ''}`} aria-label={rotulo}>
+    <section
+      className={`controle-han-fu ${desabilitarControle ? 'desabilitado' : ''}`}
+      aria-label={rotulo}
+    >
       <span className="controle-han-fu-rotulo">{rotulo}</span>
       <div className="controle-han-fu-corpo">
         <button
@@ -175,9 +178,13 @@ export function CardResultadoHanFu({ resultado }: { resultado: ResultadoPontuaca
     <section className="resultado-han-fu" aria-live="polite" aria-label={t('hanFu.result')}>
       <div className="resultado-han-fu-topo">
         <span>{resultado.descricao}</span>
-        {resultado.honba > 0 ? <span>{t('hanFu.honbaCount', { count: resultado.honba })}</span> : null}
+        {resultado.honba > 0 ? (
+          <span>{t('hanFu.honbaCount', { count: resultado.honba })}</span>
+        ) : null}
       </div>
-      {resultado.modoYakuman ? <span className="resultado-yakuman-han-fu">{resultado.nomeCategoria}</span> : null}
+      {resultado.modoYakuman ? (
+        <span className="resultado-yakuman-han-fu">{resultado.nomeCategoria}</span>
+      ) : null}
       <strong>{resultado.totalFormatado}</strong>
       <span className="resultado-han-fu-pontos">{t('hanFu.pointsSuffix')}</span>
       <div className="detalhe-han-fu">{detalhe}</div>
@@ -247,11 +254,7 @@ export function SeletorTipoVitoria({
   )
 }
 
-export function TabelaReferenciaRapida({
-  referencia,
-}: {
-  referencia: ReferenciaRapidaHanFu
-}) {
+export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaRapidaHanFu }) {
   const { t } = useI18n()
 
   return (
@@ -264,17 +267,28 @@ export function TabelaReferenciaRapida({
         <small className="legenda-referencia-han-fu">{t('hanFu.quickReferenceLegend')}</small>
       </div>
       <div id="conteudo-referencia-han-fu" className="conteudo-referencia-han-fu">
-        <div className="tabela-referencia-han-fu" role="table" aria-label={t('hanFu.quickReference')}>
+        <div
+          className="tabela-referencia-han-fu"
+          role="table"
+          aria-label={t('hanFu.quickReference')}
+        >
           <div className="linha-referencia-han-fu cabecalho" role="row">
             <span role="columnheader">{t('hanFu.referenceCorner')}</span>
-            {referencia.linhas[0]?.celulas.map((celula) => (
-              <span key={celula.fu} role="columnheader">
-                {celula.fu}
-              </span>
-            ))}
+            {(referencia.linhas.find((l) => l.han === 2) ?? referencia.linhas[0])?.celulas.map(
+              (celula) => (
+                <span key={celula.fu} role="columnheader">
+                  {celula.fu}
+                </span>
+              ),
+            )}
           </div>
           {referencia.linhas.map((linha) => (
-            <div className="linha-referencia-han-fu" role="row" key={linha.han}>
+            <div
+              className="linha-referencia-han-fu"
+              role="row"
+              key={linha.han}
+              data-han={linha.han}
+            >
               <strong role="rowheader">{rotularHan(linha.han, t)}</strong>
               {linha.celulas.map((celula) => (
                 <CelulaReferencia key={`${linha.han}-${celula.fu}`} celula={celula} />
@@ -286,7 +300,11 @@ export function TabelaReferenciaRapida({
           <h4>{t('hanFu.limitReference')}</h4>
           <div className="limites-referencia-han-fu">
             {referencia.limites.map((limite) => (
-              <LimiteReferencia key={limite.faixa} limite={limite} nome={rotularLimite(limite.han, t)} />
+              <LimiteReferencia
+                key={limite.faixa}
+                limite={limite}
+                nome={rotularLimite(limite.han, t)}
+              />
             ))}
           </div>
         </section>
@@ -298,7 +316,11 @@ export function TabelaReferenciaRapida({
 function CelulaReferencia({ celula }: { celula: CelulaReferenciaHanFu }) {
   if (!celula.disponivel || !celula.pagamentos) {
     return (
-      <span className="celula-referencia-vazia" role="cell" aria-label={`${celula.han} han ${celula.fu} fu indisponivel`}>
+      <span
+        className="celula-referencia-vazia"
+        role="cell"
+        aria-label={`${celula.han} han ${celula.fu} fu indisponivel`}
+      >
         –
       </span>
     )
