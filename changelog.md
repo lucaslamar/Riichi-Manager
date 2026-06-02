@@ -1,5 +1,37 @@
 # Changelog - Riichi Manager
 
+## 4.1.0 - - 2026-06-02
+
+### Melhorias
+
+- Refaz a antiga Calculadora Rápida como **Calculadora de Han e Fu**, com identidade própria e fluxo mais claro.
+- Reorganiza a tela para destacar primeiro o resultado da pontuação e depois os controles de ajuste.
+- Ajusta a interface mobile para seguir o padrão visual do Riichi Manager, sem alterar as cores primárias do app.
+- Adiciona controles de **Han**, **Fu** e **Honba** com botões de menos e mais.
+- Coloca **Han** e **Fu** lado a lado no mobile, com **Honba** logo abaixo para reduzir rolagem.
+- Melhora a área de toque dos botões de menos e mais, mantendo o visual compacto e aumentando a área clicável invisível.
+- Adiciona referência rápida expansível para consulta da tabela de pontuação.
+- Melhora a referência rápida no mobile para evitar depender de rolagem horizontal como forma principal de leitura.
+- Adiciona bloco de limites de pontuação, incluindo **Mangan**, **Haneman**, **Baiman**, **Sanbaiman** e **Yakuman**.
+- Adiciona suporte a Yakuman múltiplo de `2Y` até `6Y`.
+- Ajusta o controle de Han para avançar de `13 Han` diretamente para `2Y`, evitando duplicar `13 Han` e `1Y`.
+- Exibe que **Fu não é usado em Yakuman** quando a seleção estiver em `13 Han` ou Yakuman múltiplo.
+- Mantém **Honba** aplicado corretamente ao resultado de Ron e Tsumo.
+
+### Correções
+
+- Revisa a Calculadora de Han e Fu para seguir a tabela de pontuação de Riichi Mahjong em combinações de Leste/Não leste, Ron/Tsumo, Han/Fu e limites.
+- Corrige o resultado de Tsumo para mostrar pagamentos separados entre **Leste** e **Não leste** quando necessário.
+- Corrige o cálculo de Honba:
+  - Ron recebe `+300` por honba.
+  - Tsumo recebe `+100` de cada pagador por honba.
+- Corrige o fluxo de Yakuman para não passar por `1Y` após `13 Han`.
+- Corrige a exibição de Fu em resultados de Yakuman, impedindo que Fu pareça influenciar o cálculo.
+- Corrige o layout dos controles de Han, Fu e Honba no mobile.
+- Corrige os botões de incremento e decremento para manterem visual compacto com área de toque confortável.
+- Corrige a referência rápida para destacar corretamente a configuração atual.
+- Corrige estilos da Calculadora de Han e Fu para não dependerem da Calculadora de Mão nem sobrescreverem cores globais do app.
+
 ## 4.0.5 - 2026-06-01
 
 ## Alterado

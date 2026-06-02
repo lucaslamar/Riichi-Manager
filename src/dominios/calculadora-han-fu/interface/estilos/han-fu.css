@@ -1,0 +1,625 @@
+.calculadora-han-fu {
+  display: grid;
+  gap: 18px;
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  border-radius: var(--raio);
+  padding: 20px;
+  background: var(--branco);
+  color: var(--escuro);
+  box-shadow: var(--sombra);
+}
+
+.calculadora-han-fu .cabecalho-calculadora {
+  display: flex;
+  margin: 0;
+  border-bottom: 2px solid #f0f4f8;
+  padding: 0 0 14px;
+}
+
+.calculadora-han-fu .titulo-calculadora {
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.painel-principal-han-fu {
+  display: grid;
+  gap: 14px;
+}
+
+.seletores-topo-han-fu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.grupo-seletor-han-fu {
+  display: grid;
+  gap: 5px;
+}
+
+.grupo-seletor-han-fu > span {
+  color: #607080;
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.seletor-segmentado-han-fu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  min-height: 48px;
+  border: 1px solid #d7e3f0;
+  border-radius: 8px;
+  padding: 4px;
+  background: #f8fafc;
+}
+
+.seletor-segmentado-han-fu button,
+.botao-stepper-han-fu,
+.linha-referencia-han-fu button {
+  border: 0;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.seletor-segmentado-han-fu button {
+  min-width: 0;
+  min-height: 40px;
+  border-radius: 7px;
+  background: transparent;
+  color: #607080;
+}
+
+.seletor-segmentado-han-fu button.ativo {
+  background: var(--primario);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(33, 150, 243, 0.18);
+}
+
+.controles-principais-han-fu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.controle-honba-linha-han-fu {
+  display: grid;
+}
+
+.controle-han-fu {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  min-height: 132px;
+  border: 1px solid #dfe7ef;
+  border-radius: 8px;
+  padding: 16px;
+  background: #f8fbff;
+}
+
+.controle-honba-linha-han-fu .controle-han-fu {
+  min-height: 108px;
+  background: #ffffff;
+}
+
+.controle-han-fu.desabilitado {
+  background: #f3f6f9;
+  color: #7b8794;
+}
+
+.controle-han-fu-rotulo {
+  color: #607080;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.controle-han-fu-corpo {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 46px;
+  align-items: center;
+  gap: 8px;
+}
+
+.controle-han-fu-corpo strong {
+  color: var(--primario-escuro);
+  font-size: 2.6rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.controle-han-fu.desabilitado .controle-han-fu-corpo strong {
+  color: #607080;
+}
+
+.botao-stepper-han-fu {
+  display: inline-flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--primario-escuro);
+  padding: 0;
+  font-size: 1.05rem;
+}
+
+.botao-stepper-han-fu span {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cfe2f5;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--primario-escuro);
+  box-shadow: 0 5px 12px rgba(16, 42, 67, 0.08);
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1;
+  transition:
+    background 0.14s,
+    border-color 0.14s,
+    color 0.14s,
+    transform 0.12s;
+}
+
+.botao-stepper-han-fu:hover:not(:disabled) span,
+.botao-stepper-han-fu:focus-visible span {
+  background: var(--info-fundo);
+  border-color: #93c5fd;
+}
+
+.botao-stepper-han-fu:active:not(:disabled) span {
+  transform: scale(0.94);
+}
+
+.botao-stepper-han-fu:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.botao-stepper-han-fu:disabled span {
+  border-color: #d7dee8;
+  background: #f3f6f9;
+  color: #9aa6b2;
+  box-shadow: none;
+}
+
+.aviso-fu-han-fu {
+  color: #607080;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.resultado-han-fu {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-height: 162px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 24px 18px;
+  background: var(--info-fundo);
+  color: var(--info-texto);
+  box-shadow: 0 14px 26px rgba(33, 150, 243, 0.12);
+}
+
+.resultado-han-fu-topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  color: #40566d;
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.resultado-han-fu strong {
+  color: var(--primario-escuro);
+  font-size: clamp(2.9rem, 12vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.resultado-han-fu-pontos {
+  margin-top: -2px;
+  color: #607080;
+  font-weight: 900;
+}
+
+.resultado-yakuman-han-fu {
+  color: #c2410c;
+  font-size: 0.98rem;
+  font-weight: 900;
+}
+
+.detalhe-han-fu {
+  color: #102a43;
+  font-size: 0.96rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.badge-limite-han-fu {
+  margin-top: 6px;
+  border-radius: 999px;
+  padding: 5px 11px;
+  background: #fff7ed;
+  color: #c2410c;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.referencia-han-fu {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cabecalho-referencia-han-fu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  border: 1px solid #dfe7ef;
+  border-radius: 8px;
+  padding: 12px;
+  background: #ffffff;
+  color: #102a43;
+  text-align: left;
+}
+
+.cabecalho-referencia-han-fu > span {
+  display: grid;
+  gap: 2px;
+}
+
+.cabecalho-referencia-han-fu strong {
+  margin: 0;
+  color: #102a43;
+  font-size: 1.02rem;
+}
+
+.cabecalho-referencia-han-fu small {
+  color: #607080;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.conteudo-referencia-han-fu {
+  display: grid;
+  gap: 10px;
+}
+
+.conteudo-referencia-han-fu[hidden] {
+  display: none;
+}
+
+.tabela-referencia-han-fu {
+  display: grid;
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid #dfe7ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.linha-referencia-han-fu {
+  display: grid;
+  grid-template-columns: 82px repeat(11, minmax(68px, 1fr));
+  min-width: 830px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.linha-referencia-han-fu:last-child {
+  border-bottom: 0;
+}
+
+.linha-referencia-han-fu > strong,
+.linha-referencia-han-fu > span,
+.linha-referencia-han-fu button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  color: #40566d;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.linha-referencia-han-fu > strong,
+.linha-referencia-han-fu.cabecalho > span {
+  background: #f8fafc;
+  color: #607080;
+  font-weight: 900;
+}
+
+.linha-referencia-han-fu button {
+  border-left: 1px solid #edf0f4;
+  background: transparent;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fu-celula-referencia {
+  display: none;
+  color: #607080;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.linha-referencia-han-fu button.limite {
+  color: #c2410c;
+}
+
+.linha-referencia-han-fu button.ativo {
+  background: var(--info-fundo);
+  color: var(--info-texto);
+  box-shadow: inset 0 0 0 2px var(--primario);
+}
+
+.linha-referencia-han-fu button:disabled {
+  color: #b7c1cc;
+  cursor: not-allowed;
+}
+
+.limites-referencia-han-fu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 8px;
+}
+
+.bloco-limites-han-fu {
+  display: grid;
+  gap: 8px;
+}
+
+.bloco-limites-han-fu h4 {
+  margin: 4px 0 0;
+  color: #102a43;
+  font-size: 0.92rem;
+}
+
+.limites-referencia-han-fu div {
+  display: grid;
+  gap: 2px;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff7ed;
+}
+
+.limites-referencia-han-fu strong {
+  color: #c2410c;
+  font-size: 0.78rem;
+}
+
+.limites-referencia-han-fu span {
+  color: #40566d;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.limites-referencia-han-fu small {
+  color: var(--primario-escuro);
+  font-size: 0.92rem;
+  font-weight: 900;
+}
+
+.calculadora-han-fu button:focus-visible {
+  outline: 3px solid rgba(33, 150, 243, 0.35);
+  outline-offset: 2px;
+}
+
+@media (min-width: 760px) {
+  .calculadora-han-fu {
+    padding: 24px;
+  }
+
+  .painel-principal-han-fu {
+    grid-template-columns: minmax(340px, 0.86fr) minmax(360px, 1fr);
+    align-items: stretch;
+  }
+
+  .seletores-topo-han-fu,
+  .controles-principais-han-fu,
+  .controle-honba-linha-han-fu {
+    grid-column: 1;
+  }
+
+  .resultado-han-fu {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-content: center;
+    min-height: 100%;
+  }
+}
+
+@media (min-width: 1120px) {
+  .painel-principal-han-fu {
+    grid-template-columns: minmax(540px, 1fr) minmax(380px, 0.72fr);
+  }
+
+  .controle-honba-linha-han-fu {
+    width: min(100%, 360px);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .calculadora-han-fu {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .calculadora-han-fu .cabecalho-calculadora {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .calculadora-han-fu .titulo-calculadora {
+    gap: 6px;
+  }
+
+  .calculadora-han-fu .icone-secao {
+    width: 18px;
+    font-size: 0.92rem;
+  }
+
+  .calculadora-han-fu .titulo-calculadora h2 {
+    font-size: 0.95rem;
+    line-height: 1.1;
+  }
+
+  .calculadora-han-fu .subtitulo-secao {
+    display: none;
+  }
+
+  .painel-principal-han-fu {
+    gap: 10px;
+  }
+
+  .seletores-topo-han-fu {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .grupo-seletor-han-fu {
+    gap: 3px;
+  }
+
+  .grupo-seletor-han-fu > span {
+    font-size: 0.68rem;
+  }
+
+  .seletor-segmentado-han-fu {
+    min-height: 42px;
+  }
+
+  .seletor-segmentado-han-fu button {
+    min-height: 34px;
+  }
+
+  .resultado-han-fu {
+    min-height: 128px;
+    padding: 16px 12px;
+  }
+
+  .resultado-han-fu strong {
+    font-size: clamp(2.35rem, 11vw, 3.5rem);
+  }
+
+  .detalhe-han-fu {
+    font-size: 0.86rem;
+  }
+
+  .controles-principais-han-fu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .controle-han-fu {
+    gap: 6px;
+    min-height: 94px;
+    padding: 10px 8px;
+  }
+
+  .controle-honba-linha-han-fu .controle-han-fu {
+    min-height: 84px;
+  }
+
+  .controle-han-fu-rotulo {
+    font-size: 0.72rem;
+  }
+
+  .controle-han-fu-corpo {
+    grid-template-columns: minmax(40px, 0.72fr) minmax(0, 1fr) minmax(40px, 0.72fr);
+    gap: 5px;
+  }
+
+  .controle-han-fu-corpo strong {
+    font-size: 2rem;
+  }
+
+  .botao-stepper-han-fu {
+    min-height: 46px;
+    font-size: 1rem;
+  }
+
+  .botao-stepper-han-fu span {
+    width: 34px;
+    height: 34px;
+  }
+
+  .aviso-fu-han-fu {
+    font-size: 0.68rem;
+    line-height: 1.15;
+  }
+
+  .cabecalho-referencia-han-fu {
+    padding: 10px;
+  }
+
+  .cabecalho-referencia-han-fu strong {
+    font-size: 0.94rem;
+  }
+
+  .cabecalho-referencia-han-fu small {
+    font-size: 0.72rem;
+  }
+
+  .tabela-referencia-han-fu {
+    display: grid;
+    gap: 10px;
+    border: 0;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .linha-referencia-han-fu.cabecalho {
+    display: none;
+  }
+
+  .linha-referencia-han-fu {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-width: 0;
+    border: 1px solid #dfe7ef;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .linha-referencia-han-fu > strong {
+    justify-content: flex-start;
+    min-height: 38px;
+    padding-inline: 10px;
+    background: #f8fafc;
+  }
+
+  .linha-referencia-han-fu button {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    min-height: 38px;
+    justify-items: start;
+    border-top: 1px solid #edf0f4;
+    border-left: 0;
+    padding: 8px 10px;
+  }
+
+  .fu-celula-referencia {
+    display: inline;
+  }
+}
