@@ -305,7 +305,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
                       })
                     }
                   >
-                    <i className="fas fa-broom" aria-hidden="true" />
+                    <i className="fas fa-trash" aria-hidden="true" />
                   </button>
                 )}
               </div>

@@ -102,7 +102,7 @@ export default function ConstrutorMao({
     espera: Pick<(typeof esperasPossiveis)[number], 'semYaku' | 'yakuman' | 'han'>,
   ) => {
     if (espera.semYaku) return t('calculator.noYaku')
-    if (espera.yakuman > 0) return `${espera.yakuman}x`
+    if (espera.yakuman > 0) return `${espera.yakuman}Y`
     return `${espera.han} han`
   }
 

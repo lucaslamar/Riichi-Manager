@@ -309,7 +309,7 @@ export function MaoAtual({
               aria-label={t('actions.clear')}
               title={t('actions.clear')}
             >
-              <i className="fas fa-broom" aria-hidden="true" />
+              <i className="fas fa-trash" aria-hidden="true" />
             </button>
           )}
         </div>

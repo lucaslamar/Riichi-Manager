@@ -47,7 +47,7 @@ export function DescartesMao({ descartes, aoRemoverDescarte, aoLimparDescartes }
         title={t('calculator.clearDiscards')}
         onClick={aoLimparDescartes}
       >
-        <i className="fas fa-broom" aria-hidden="true" />
+        <i className="fas fa-trash" aria-hidden="true" />
       </button>
     </div>
   )

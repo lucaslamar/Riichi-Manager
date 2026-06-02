@@ -99,10 +99,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  align-content: flex-start;
   gap: 4px;
   overflow: visible;
   min-height: 40px;
-  padding: 8px 62px 8px 8px;
+  padding: 8px 62px 10px 8px;
   background: #f8f9fa;
   border: 1px solid #f0f0f0;
   border-radius: 8px;
@@ -110,6 +111,7 @@
 }
 
 .chip-meld-mao {
+  max-width: 100%;
   background-clip: padding-box;
   color: #334155;
 }
@@ -119,6 +121,8 @@
 }
 
 .chip-meld-mao .meld-pedras {
+  flex: 0 0 auto;
+  max-width: 100%;
   gap: 2px;
 }
 
@@ -138,6 +142,8 @@
 .melds-finalizacao-coluna {
   display: grid;
   width: 100%;
+  align-items: start;
+  justify-items: start;
   gap: 5px;
 }
 
@@ -444,7 +450,7 @@ span.chip-pedra {
 .construtor-mao-finalizacao .pedras-selecionadas {
   min-height: 0;
   margin-bottom: 0;
-  padding: 8px;
+  padding: 8px 8px 12px;
   background: #f8fafc;
 }
 

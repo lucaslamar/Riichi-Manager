@@ -43,7 +43,13 @@ export default function ModoCompletoCalculadora({
         ]
       : []),
     { chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-gear', aoClicar: aoAbrirRegras },
-    { chave: 'limpar', rotulo: t('actions.clear'), icone: 'fa-broom', aoClicar: estado.limpar },
+    {
+      chave: 'limpar',
+      rotulo: t('actions.clear'),
+      icone: 'fa-trash',
+      aoClicar: estado.limpar,
+      destrutiva: true,
+    },
   ]
 
   useEffect(() => {
@@ -81,7 +87,9 @@ export default function ModoCompletoCalculadora({
                 {acoesContextuais.map((acao) => (
                   <button
                     key={acao.chave}
-                    className={acao.destaque ? 'acao-finalizacao destaque' : 'acao-finalizacao'}
+                    className={`acao-finalizacao ${acao.destaque ? 'destaque' : ''} ${
+                      acao.destrutiva ? 'destrutiva' : ''
+                    }`.trim()}
                     type="button"
                     title={acao.rotulo}
                     aria-label={acao.rotulo}

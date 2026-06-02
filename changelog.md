@@ -1,6 +1,17 @@
 # Changelog - Riichi Manager
 
-## 4.0.4 - Revisão do fluxo de montagem, finalização e doras
+## 4.0.5 - 2026-06-01
+
+## Alterado
+
+- Indicadores de Dora e Ura Dora agora entram na contagem física de 4 cópias por pedra.
+- Teclado bloqueia indicadores indisponíveis quando a pedra já atingiu o limite físico.
+- Ajustado layout da mão para evitar corte visual ao exibir 4 kans.
+- Ícone de descartes/furiten trocado de lixeira para bloqueio.
+- Ícones de limpeza/remover trocados de pincel para lixeira.
+- Badge de espera yakuman no teclado agora usa `Y` em vez de `x`, exemplo: `3Y`.
+
+## 4.0.4 - 2026-06-01
 
 ### Melhorias
 
@@ -60,7 +71,7 @@
 - Corrige o comportamento para manter apenas um painel contextual aberto por vez.
 - Corrige o layout das lixeiras de **Descartes / Furiten** e **Indicadores de Dora / Ura Dora**, mantendo-as dentro dos respectivos blocos.
 
-## 4.0.3 - Refatoração estrutural dos domínios de calculadora
+## 4.0.3 - 2026-05-31
 
 ### Refatoração
 

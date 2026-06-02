@@ -38,6 +38,8 @@ export function useAcoesMelds({
       ...mao.pedras,
       ...mao.melds.flatMap((meld) => meld.pedras),
       ...mao.descartes,
+      ...mao.dora,
+      ...mao.uradora,
       ...(acaoPendente?.tipo === 'chii' ? acaoPendente.pedras : []),
     ],
     [acaoPendente, mao],
@@ -96,6 +98,8 @@ export function useAcoesMelds({
         ...pedrasRestantes,
         ...mao.melds.flatMap((meld) => meld.pedras),
         ...mao.descartes,
+        ...mao.dora,
+        ...mao.uradora,
       ]
 
       return pedrasMeld.every((pedra) => {
@@ -229,9 +233,9 @@ export function useAcoesMelds({
       if (!acaoPendente) return podeAdicionarPedras([pedra])
       switch (acaoPendente.tipo) {
         case 'dora':
-          return mao.dora.length < 10
+          return mao.dora.length < 10 && podeAdicionarPedras([pedra])
         case 'uradora':
-          return !!mao.riichi && mao.uradora.length < 5
+          return !!mao.riichi && mao.uradora.length < 5 && podeAdicionarPedras([pedra])
         case 'descarte':
           return podeAdicionarPedras([pedra])
         case 'pon':

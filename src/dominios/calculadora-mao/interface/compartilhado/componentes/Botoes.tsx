@@ -13,13 +13,16 @@ export function BotaoAcao({
   desabilitado: boolean
   aoClicar: () => void
 }) {
+  const rotuloAcessivel = tipo === 'descarte' ? 'Bloqueios / descartes / furiten' : rotulo
+
   return (
     <button
       className={`btn-acao-mao btn-acao-${tipo}`}
       type="button"
       disabled={desabilitado}
       aria-pressed={ativo}
-      aria-label={rotulo}
+      aria-label={rotuloAcessivel}
+      title={rotuloAcessivel}
       onClick={aoClicar}
       style={{
         border: `2px solid ${ativo ? cor : '#dde1e7'}`,
@@ -29,7 +32,7 @@ export function BotaoAcao({
         opacity: desabilitado ? 0.45 : 1,
       }}
     >
-      {tipo === 'descarte' && <i className="fas fa-trash" aria-hidden="true" />}
+      {tipo === 'descarte' && <i className="fas fa-ban" aria-hidden="true" />}
       <span>{rotulo}</span>
     </button>
   )

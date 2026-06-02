@@ -66,7 +66,7 @@ export function IndicadoresDora({
           title={t('calculator.clearDoraIndicators')}
           onClick={aoLimparIndicadores}
         >
-          <i className="fas fa-broom" aria-hidden="true" />
+          <i className="fas fa-trash" aria-hidden="true" />
         </button>
       )}
       {mostrarUradora && mao.uradora.length > 0 && (

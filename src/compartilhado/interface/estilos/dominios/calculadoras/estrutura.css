@@ -501,6 +501,16 @@
   color: #0f766e;
 }
 
+.acao-finalizacao.destrutiva {
+  color: #ef4444;
+}
+
+.acao-finalizacao.destrutiva:hover,
+.acao-finalizacao.destrutiva:focus-visible {
+  border-color: #fecaca;
+  background: #fff5f5;
+}
+
 .layout-montagem-calculadora {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);

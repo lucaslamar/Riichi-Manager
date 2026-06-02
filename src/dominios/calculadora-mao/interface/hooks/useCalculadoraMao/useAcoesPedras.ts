@@ -152,6 +152,7 @@ export function useAcoesPedras({
     switch (acaoPendente.tipo) {
       case 'dora':
         if (mao.dora.length >= 10) return
+        if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
           rascunho.dora.push(pedra)
         })
@@ -160,6 +161,7 @@ export function useAcoesPedras({
       case 'uradora':
         if (!mao.riichi) return
         if (mao.uradora.length >= 5) return
+        if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
           rascunho.uradora.push(pedra)
         })
