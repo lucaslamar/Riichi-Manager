@@ -3,12 +3,13 @@ import {
   HAN_MAXIMO,
   HAN_MINIMO,
   HONBA_MAXIMO,
-  calcularPontuacaoHanFu,
   formatarPontos,
   obterYakumanMultiplo,
-  type LinhaReferenciaHanFu,
+  type CelulaReferenciaHanFu,
+  type LimiteReferenciaHanFu,
+  type PagamentosReferenciaHanFu,
+  type ReferenciaRapidaHanFu,
   type ResultadoPontuacaoHanFu,
-  type TipoVitoriaHanFu,
 } from '../../logica'
 
 interface PropsControleNumerico {
@@ -247,27 +248,11 @@ export function SeletorTipoVitoria({
 }
 
 export function TabelaReferenciaRapida({
-  linhas,
-  isOya,
-  agari,
+  referencia,
 }: {
-  linhas: LinhaReferenciaHanFu[]
-  isOya: boolean
-  agari: TipoVitoriaHanFu
+  referencia: ReferenciaRapidaHanFu
 }) {
   const { t } = useI18n()
-  const limites = [
-    [t('hanFu.limitMangan'), '5 Han', 5],
-    [t('hanFu.limitHaneman'), '6-7 Han', 6],
-    [t('hanFu.limitBaiman'), '8-10 Han', 8],
-    [t('hanFu.limitSanbaiman'), '11-12 Han', 11],
-    [t('hanFu.limitYakuman'), '13 Han', 13],
-    [t('hanFu.limitDoubleYakuman'), '2Y', 14],
-    [t('hanFu.limitTripleYakuman'), '3Y', 15],
-    [t('hanFu.limitQuadrupleYakuman'), '4Y', 16],
-    [t('hanFu.limitQuintupleYakuman'), '5Y', 17],
-    [t('hanFu.limitSextupleYakuman'), '6Y', 18],
-  ] as const
 
   return (
     <section className="referencia-han-fu" aria-labelledby="referencia-han-fu-titulo">
@@ -276,31 +261,23 @@ export function TabelaReferenciaRapida({
           <strong id="referencia-han-fu-titulo">{t('hanFu.quickReference')}</strong>
           <small>{t('hanFu.quickReferenceHint')}</small>
         </span>
+        <small className="legenda-referencia-han-fu">{t('hanFu.quickReferenceLegend')}</small>
       </div>
       <div id="conteudo-referencia-han-fu" className="conteudo-referencia-han-fu">
         <div className="tabela-referencia-han-fu" role="table" aria-label={t('hanFu.quickReference')}>
           <div className="linha-referencia-han-fu cabecalho" role="row">
             <span role="columnheader">{t('hanFu.referenceCorner')}</span>
-            {linhas[0]?.celulas.map((celula) => (
+            {referencia.linhas[0]?.celulas.map((celula) => (
               <span key={celula.fu} role="columnheader">
                 {celula.fu}
               </span>
             ))}
           </div>
-          {linhas.map((linha) => (
+          {referencia.linhas.map((linha) => (
             <div className="linha-referencia-han-fu" role="row" key={linha.han}>
               <strong role="rowheader">{rotularHan(linha.han, t)}</strong>
               {linha.celulas.map((celula) => (
-                <button
-                  key={`${linha.han}-${celula.fu}`}
-                  type="button"
-                  className={`${celula.ativa ? 'ativo' : ''} ${celula.categoria !== 'normal' ? 'limite' : ''}`}
-                  disabled={celula.rotulo === '-'}
-                  aria-label={`${linha.han} han ${celula.fu} fu: ${celula.rotulo}`}
-                >
-                  <span className="fu-celula-referencia">{celula.fu} Fu</span>
-                  <span>{celula.rotulo}</span>
-                </button>
+                <CelulaReferencia key={`${linha.han}-${celula.fu}`} celula={celula} />
               ))}
             </div>
           ))}
@@ -308,12 +285,8 @@ export function TabelaReferenciaRapida({
         <section className="bloco-limites-han-fu" aria-label={t('hanFu.limitReference')}>
           <h4>{t('hanFu.limitReference')}</h4>
           <div className="limites-referencia-han-fu">
-            {limites.map(([nome, faixa, hanLimite]) => (
-              <div key={faixa}>
-                <strong>{faixa}</strong>
-                <span>{nome}</span>
-                <small>{formatarLimite(hanLimite, isOya, agari)}</small>
-              </div>
+            {referencia.limites.map((limite) => (
+              <LimiteReferencia key={limite.faixa} limite={limite} nome={rotularLimite(limite.han, t)} />
             ))}
           </div>
         </section>
@@ -322,18 +295,72 @@ export function TabelaReferenciaRapida({
   )
 }
 
-function formatarLimite(han: number, isOya: boolean, agari: TipoVitoriaHanFu): string {
-  const resultado = calcularPontuacaoHanFu({
-    han,
-    fu: 30,
-    ehDealer: isOya,
-    tipoVitoria: agari,
-    honba: 0,
-  })
+function CelulaReferencia({ celula }: { celula: CelulaReferenciaHanFu }) {
+  if (!celula.disponivel || !celula.pagamentos) {
+    return (
+      <span className="celula-referencia-vazia" role="cell" aria-label={`${celula.han} han ${celula.fu} fu indisponivel`}>
+        –
+      </span>
+    )
+  }
 
-  if (resultado.tipoVitoria === 'ron') return formatarPontos(resultado.principal)
-  if (resultado.ehDealer) return `${formatarPontos(resultado.tsumo?.all ?? 0)} todos`
-  return `${formatarPontos(resultado.tsumo?.dealer ?? 0)} / ${formatarPontos(resultado.tsumo?.nonDealer ?? 0)}`
+  return (
+    <div
+      className={`celula-referencia-han-fu ${celula.ativa ? 'ativo' : ''} ${
+        celula.categoria !== 'normal' ? 'limite' : ''
+      }`}
+      role="cell"
+      aria-label={`${celula.han} han ${celula.fu} fu`}
+    >
+      <span className="fu-celula-referencia">{celula.fu} Fu</span>
+      <PagamentosReferencia pagamentos={celula.pagamentos} />
+    </div>
+  )
+}
+
+function LimiteReferencia({ limite, nome }: { limite: LimiteReferenciaHanFu; nome: string }) {
+  return (
+    <div className={limite.ativo ? 'ativo' : undefined}>
+      <strong>{limite.faixa}</strong>
+      <span>{nome}</span>
+      <PagamentosReferencia pagamentos={limite.pagamentos} compacto />
+    </div>
+  )
+}
+
+function PagamentosReferencia({
+  pagamentos,
+  compacto = false,
+}: {
+  pagamentos: PagamentosReferenciaHanFu
+  compacto?: boolean
+}) {
+  return (
+    <dl className={`pagamentos-referencia-han-fu ${compacto ? 'compacto' : ''}`}>
+      <div>
+        <dt>Ron</dt>
+        <dd>
+          <span>
+            <abbr title="Nao leste">子</abbr> {pagamentos.ronNaoLeste}
+          </span>
+          <span>
+            <abbr title="Leste">東</abbr> {pagamentos.ronLeste}
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt>Tsumo</dt>
+        <dd>
+          <span>
+            <abbr title="Nao leste">子</abbr> {pagamentos.tsumoNaoLeste}
+          </span>
+          <span>
+            <abbr title="Leste">東</abbr> {pagamentos.tsumoLeste}
+          </span>
+        </dd>
+      </div>
+    </dl>
+  )
 }
 
 function rotularHan(
@@ -342,4 +369,20 @@ function rotularHan(
 ): string {
   if (han >= 5) return traduzir('hanFu.fivePlusHan')
   return `${han} Han`
+}
+
+function rotularLimite(
+  han: number,
+  traduzir: (chave: string, parametros?: Record<string, string | number>) => string,
+): string {
+  if (han === 5) return traduzir('hanFu.limitMangan')
+  if (han === 6) return traduzir('hanFu.limitHaneman')
+  if (han === 8) return traduzir('hanFu.limitBaiman')
+  if (han === 11) return traduzir('hanFu.limitSanbaiman')
+  if (han === 13) return traduzir('hanFu.limitYakuman')
+  if (han === 14) return traduzir('hanFu.limitDoubleYakuman')
+  if (han === 15) return traduzir('hanFu.limitTripleYakuman')
+  if (han === 16) return traduzir('hanFu.limitQuadrupleYakuman')
+  if (han === 17) return traduzir('hanFu.limitQuintupleYakuman')
+  return traduzir('hanFu.limitSextupleYakuman')
 }

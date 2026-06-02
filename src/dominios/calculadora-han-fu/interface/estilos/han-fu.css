@@ -59,9 +59,8 @@
 
 .seletor-segmentado-han-fu button,
 .botao-stepper-han-fu,
-.linha-referencia-han-fu button {
+.celula-referencia-han-fu {
   border: 0;
-  cursor: pointer;
   font-weight: 900;
 }
 
@@ -297,6 +296,11 @@
   font-weight: 800;
 }
 
+.legenda-referencia-han-fu {
+  justify-self: end;
+  white-space: nowrap;
+}
+
 .conteudo-referencia-han-fu {
   display: grid;
   gap: 10px;
@@ -317,8 +321,8 @@
 
 .linha-referencia-han-fu {
   display: grid;
-  grid-template-columns: 82px repeat(11, minmax(68px, 1fr));
-  min-width: 830px;
+  grid-template-columns: 82px repeat(11, minmax(94px, 1fr));
+  min-width: 1130px;
   border-bottom: 1px solid #edf0f4;
 }
 
@@ -328,15 +332,21 @@
 
 .linha-referencia-han-fu > strong,
 .linha-referencia-han-fu > span,
-.linha-referencia-han-fu button {
+.celula-referencia-han-fu,
+.celula-referencia-vazia {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 74px;
   align-items: center;
   justify-content: center;
   padding: 6px;
   color: #40566d;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   text-align: center;
+}
+
+.linha-referencia-han-fu > strong,
+.linha-referencia-han-fu.cabecalho > span {
+  min-height: 44px;
 }
 
 .linha-referencia-han-fu > strong,
@@ -346,11 +356,12 @@
   font-weight: 900;
 }
 
-.linha-referencia-han-fu button {
+.celula-referencia-han-fu,
+.celula-referencia-vazia {
   border-left: 1px solid #edf0f4;
   background: transparent;
   flex-direction: column;
-  gap: 2px;
+  gap: 5px;
 }
 
 .fu-celula-referencia {
@@ -360,19 +371,60 @@
   font-weight: 900;
 }
 
-.linha-referencia-han-fu button.limite {
+.celula-referencia-han-fu.limite {
   color: #c2410c;
 }
 
-.linha-referencia-han-fu button.ativo {
+.celula-referencia-han-fu.ativo {
   background: var(--info-fundo);
   color: var(--info-texto);
   box-shadow: inset 0 0 0 2px var(--primario);
 }
 
-.linha-referencia-han-fu button:disabled {
+.celula-referencia-vazia {
   color: #b7c1cc;
-  cursor: not-allowed;
+}
+
+.pagamentos-referencia-han-fu {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  margin: 0;
+}
+
+.pagamentos-referencia-han-fu div {
+  display: grid;
+  gap: 1px;
+}
+
+.pagamentos-referencia-han-fu dt {
+  color: #607080;
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.pagamentos-referencia-han-fu dd {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  color: #102a43;
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.pagamentos-referencia-han-fu abbr {
+  color: #0f172a;
+  text-decoration: none;
+}
+
+.pagamentos-referencia-han-fu.compacto {
+  gap: 6px;
+}
+
+.pagamentos-referencia-han-fu.compacto dd {
+  font-size: 0.78rem;
 }
 
 .limites-referencia-han-fu {
@@ -392,13 +444,19 @@
   font-size: 0.92rem;
 }
 
-.limites-referencia-han-fu div {
+.limites-referencia-han-fu > div {
   display: grid;
-  gap: 2px;
+  gap: 6px;
   border: 1px solid #fed7aa;
   border-radius: 8px;
   padding: 10px;
   background: #fff7ed;
+}
+
+.limites-referencia-han-fu > div.ativo {
+  border-color: var(--primario);
+  background: var(--info-fundo);
+  box-shadow: inset 0 0 0 1px var(--primario);
 }
 
 .limites-referencia-han-fu strong {
@@ -409,12 +467,6 @@
 .limites-referencia-han-fu span {
   color: #40566d;
   font-size: 0.82rem;
-  font-weight: 900;
-}
-
-.limites-referencia-han-fu small {
-  color: var(--primario-escuro);
-  font-size: 0.92rem;
   font-weight: 900;
 }
 
@@ -569,6 +621,9 @@
   }
 
   .cabecalho-referencia-han-fu {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
     padding: 10px;
   }
 
@@ -580,9 +635,13 @@
     font-size: 0.72rem;
   }
 
+  .legenda-referencia-han-fu {
+    justify-self: start;
+  }
+
   .tabela-referencia-han-fu {
     display: grid;
-    gap: 10px;
+    gap: 8px;
     border: 0;
     overflow: visible;
     background: transparent;
@@ -609,17 +668,38 @@
     background: #f8fafc;
   }
 
-  .linha-referencia-han-fu button {
+  .celula-referencia-han-fu {
     display: grid;
-    grid-template-columns: 72px minmax(0, 1fr);
-    min-height: 38px;
-    justify-items: start;
+    grid-template-columns: minmax(54px, 0.22fr) minmax(0, 1fr);
+    align-items: start;
+    min-height: 64px;
     border-top: 1px solid #edf0f4;
     border-left: 0;
-    padding: 8px 10px;
+    padding: 7px 9px;
+    text-align: left;
+  }
+
+  .celula-referencia-vazia {
+    min-height: 34px;
+    border-top: 1px solid #edf0f4;
+    border-left: 0;
   }
 
   .fu-celula-referencia {
     display: inline;
+    padding-top: 2px;
+  }
+
+  .pagamentos-referencia-han-fu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .pagamentos-referencia-han-fu dd {
+    font-size: 0.76rem;
+  }
+
+  .limites-referencia-han-fu {
+    grid-template-columns: 1fr;
   }
 }

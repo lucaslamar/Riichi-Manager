@@ -45,15 +45,36 @@ export interface ResultadoPontuacaoHanFu {
   modoYakuman: boolean
 }
 
+export interface PagamentosReferenciaHanFu {
+  ronNaoLeste: string
+  ronLeste: string
+  tsumoNaoLeste: string
+  tsumoLeste: string
+}
+
 export interface CelulaReferenciaHanFu {
   han: number
   fu: number
-  rotulo: string
   categoria: CategoriaPontuacaoHanFu
   ativa: boolean
+  disponivel: boolean
+  pagamentos: PagamentosReferenciaHanFu | null
 }
 
 export interface LinhaReferenciaHanFu {
   han: number
   celulas: CelulaReferenciaHanFu[]
+}
+
+export interface LimiteReferenciaHanFu {
+  han: number
+  faixa: string
+  categoria: CategoriaPontuacaoHanFu
+  pagamentos: PagamentosReferenciaHanFu
+  ativo: boolean
+}
+
+export interface ReferenciaRapidaHanFu {
+  linhas: LinhaReferenciaHanFu[]
+  limites: LimiteReferenciaHanFu[]
 }

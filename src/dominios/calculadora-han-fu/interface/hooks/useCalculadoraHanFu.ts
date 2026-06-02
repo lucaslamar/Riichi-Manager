@@ -34,11 +34,8 @@ export function useCalculadoraHanFu() {
       montarReferenciaRapida({
         han,
         fu: fuNormalizado,
-        ehDealer: isOya,
-        tipoVitoria: agari,
-        honba,
       }),
-    [agari, fuNormalizado, han, honba, isOya],
+    [fuNormalizado, han],
   )
 
   const mudarHan = (proximoHan: number) => {

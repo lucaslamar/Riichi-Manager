@@ -48,7 +48,7 @@ export default function PaginaCalculadoraHanFu() {
         </div>
       </section>
 
-      <TabelaReferenciaRapida linhas={referenciaRapida} isOya={isOya} agari={agari} />
+      <TabelaReferenciaRapida referencia={referenciaRapida} />
     </main>
   )
 }
