@@ -29,7 +29,9 @@ export function useMontagemMao(estado: EstadoCalculadoraMao) {
     podeKanFechado: estado.podeKanFechado,
     esperasPossiveis: estado.esperasPossiveis,
     maoProntaParaFinalizar: estado.maoProntaParaFinalizar,
+    maoProntaParaEscolherBatida: estado.maoProntaParaEscolherBatida,
     selecionandoPedraAgari: estado.selecionandoPedraAgari,
+    escolhaChiiPendente: estado.escolhaChiiPendente,
     mensagemFinalizacao: estado.mensagemFinalizacao,
     candidatasPedraAgari: estado.candidatasPedraAgari,
     fluxoOpcoes: estado.fluxoOpcoes,
@@ -38,6 +40,7 @@ export function useMontagemMao(estado: EstadoCalculadoraMao) {
     escolherPedraAgariMao: estado.escolherPedraAgariMao,
     escolherPedraAgariMeld: estado.escolherPedraAgariMeld,
     escolherPedraAgariPorCodigo: estado.escolherPedraAgariPorCodigo,
+    escolherChiiPendente: estado.escolherChiiPendente,
     resultadoMaoInvalida: estado.resultadoMaoInvalida,
   }
 }

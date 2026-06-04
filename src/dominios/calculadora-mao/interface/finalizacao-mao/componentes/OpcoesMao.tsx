@@ -245,27 +245,15 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
       </section>
 
       <section className="descartes-finalizacao">
-          <button
-            className="cabecalho-descartes-finalizacao"
-            type="button"
-            aria-expanded={painelContextualAberto === 'descartes'}
-            onClick={() => alternarPainelContextual('descartes')}
-          >
-            <span>{t('calculator.discardsFuriten')}</span>
-            <strong>{mao.descartes.length}</strong>
-            <i
-              className={`fas ${painelContextualAberto === 'descartes' ? 'fa-chevron-up' : 'fa-chevron-down'}`}
-              aria-hidden="true"
-            />
-          </button>
-          <button
-            className="acao-finalizacao-descartes"
-            type="button"
-            aria-pressed={acaoPendente?.tipo === 'descarte'}
-            onClick={() => alternarPainelContextual('descartes')}
-          >
-            {acaoPendente?.tipo === 'descarte' ? 'Concluir' : 'Editar'}
-          </button>
+        <div className="linha-opcoes-mao linha-opcoes-indicadores">
+          <BotaoToggle
+            rotulo={`${t('calculator.discardsFuriten')} (${mao.descartes.length})`}
+            ativo={painelContextualAberto === 'descartes'}
+            corAtiva="#111827"
+            desabilitado={false}
+            aoClicar={() => alternarPainelContextual('descartes')}
+          />
+        </div>
           {painelContextualAberto === 'descartes' && (
             <div className="painel-contextual-finalizacao painel-contextual-descartes">
               {tecladoContextual}

@@ -52,6 +52,8 @@ const TODAS_PEDRAS: CodigoPedra[] = [
   '7z',
 ]
 
+const AKAS: CodigoPedra[] = ['0m', '0p', '0s']
+
 function base(pedra: CodigoPedra): CodigoPedra {
   return pedra[0] === '0' ? `5${pedra[1]}` : pedra
 }
@@ -65,6 +67,15 @@ function contar(pedras: CodigoPedra[]): Map<CodigoPedra, number> {
   for (const pedra of pedras) {
     const chave = base(pedra)
     mapa.set(chave, (mapa.get(chave) ?? 0) + 1)
+  }
+  return mapa
+}
+
+function contarAka(pedras: CodigoPedra[]): Map<CodigoPedra, number> {
+  const mapa = new Map<CodigoPedra, number>()
+  for (const pedra of pedras) {
+    if (pedra[0] !== '0') continue
+    mapa.set(pedra, (mapa.get(pedra) ?? 0) + 1)
   }
   return mapa
 }
@@ -91,11 +102,15 @@ export function calcularEsperasPossiveis(
 ): EsperaPossivel[] {
   if (slotsUsados !== 13) return []
 
-  const contagem = contar([...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora])
+  const visiveis = [...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora]
+  const contagem = contar(visiveis)
+  const contagemAka = contarAka(visiveis)
   const descartes = new Set(mao.descartes.map(base))
+  const candidatas = config.akadora ? [...TODAS_PEDRAS, ...AKAS] : TODAS_PEDRAS
 
-  const esperas = TODAS_PEDRAS.flatMap((pedra) => {
-    if ((contagem.get(pedra) ?? 0) >= 4) return []
+  const esperas = candidatas.flatMap((pedra) => {
+    if ((contagem.get(base(pedra)) ?? 0) >= 4) return []
+    if (pedra[0] === '0' && (contagemAka.get(pedra) ?? 0) >= 1) return []
 
     const candidata: Mao = {
       ...mao,

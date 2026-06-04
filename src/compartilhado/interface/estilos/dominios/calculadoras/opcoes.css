@@ -360,55 +360,16 @@
 
 .descartes-finalizacao {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   gap: 5px;
   margin: -2px 0 10px;
   padding: 0;
-}
-
-.cabecalho-descartes-finalizacao {
-  display: grid;
-  width: 100%;
-  min-height: 34px;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: 8px;
-  border: 0;
-  border-radius: 7px;
-  padding: 5px 8px;
-  background: #f8fafc;
-  color: #40566d;
-  cursor: pointer;
-  text-align: left;
-}
-
-.cabecalho-descartes-finalizacao span {
-  font-size: 0.72rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.cabecalho-descartes-finalizacao strong {
-  min-width: 22px;
-  border-radius: 999px;
-  padding: 2px 6px;
-  background: #e2e8f0;
-  color: #334155;
-  font-size: 0.68rem;
-  line-height: 1;
-  text-align: center;
-}
-
-.cabecalho-descartes-finalizacao i {
-  color: #64748b;
-  font-size: 0.72rem;
 }
 
 .grade-descartes-finalizacao {
   position: relative;
   display: grid;
   grid-template-columns: repeat(5, 28px);
-  grid-column: 1 / -1;
   justify-content: start;
   gap: 3px;
   min-height: 40px;
@@ -432,7 +393,7 @@
 }
 
 .painel-contextual-descartes {
-  grid-column: 1 / -1;
+  grid-column: 1;
 }
 
 .painel-teclado-contextual-finalizacao {
@@ -443,17 +404,6 @@
   grid-template-columns: 1fr;
 }
 
-.acao-finalizacao-descartes {
-  min-height: 34px;
-  border: 1px solid #d1d5db;
-  border-radius: 7px;
-  padding: 5px 8px;
-  background: #ffffff;
-  color: #111827;
-  cursor: pointer;
-  font-size: 0.72rem;
-  font-weight: 900;
-}
 
 .descarte-finalizacao.chip-pedra {
   position: relative;

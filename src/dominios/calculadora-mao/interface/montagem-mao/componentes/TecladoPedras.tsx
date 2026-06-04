@@ -11,6 +11,11 @@ interface CandidataPedraAgariTeclado {
   furiten: boolean
 }
 
+interface EscolhaChiiPendenteTeclado {
+  chamada: CodigoPedra
+  opcoes: CodigoPedra[][]
+}
+
 interface PropsTecladoPedras {
   acaoPendente: Acao | null
   configuracao: ConfiguracaoCalculo
@@ -24,14 +29,17 @@ interface PropsTecladoPedras {
   classeEsperaTeclado: (espera?: Pick<EsperaPossivel, 'semYaku' | 'furiten'>) => string
   contexto: 'montagem' | 'finalizacao'
   maoProntaParaFinalizar?: boolean
+  batidaDefinida?: boolean
   mensagemFinalizacao?: string | null
   selecionandoPedraAgari?: boolean
   candidatasPedraAgari?: Map<string, CandidataPedraAgariTeclado>
+  escolhaChiiPendente?: EscolhaChiiPendenteTeclado | null
   aoAbrirRegras?: () => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
   aoFinalizarMao?: () => void
   aoAlternarSelecaoPedraAgari?: () => void
   aoEscolherPedraAgariPorCodigo?: (pedra: CodigoPedra) => void
+  aoEscolherChiiPendente?: (chamada: CodigoPedra, sequencia: CodigoPedra[]) => void
 }
 
 /**
@@ -53,14 +61,17 @@ export function TecladoPedras({
   classeEsperaTeclado,
   contexto,
   maoProntaParaFinalizar = false,
+  batidaDefinida = maoProntaParaFinalizar,
   mensagemFinalizacao,
   selecionandoPedraAgari = false,
   candidatasPedraAgari = new Map(),
+  escolhaChiiPendente,
   aoAbrirRegras,
   aoAdicionarPedra,
   aoFinalizarMao,
   aoAlternarSelecaoPedraAgari,
   aoEscolherPedraAgariPorCodigo,
+  aoEscolherChiiPendente,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
 
@@ -97,7 +108,7 @@ export function TecladoPedras({
   }
 
   const renderizarBotaoPedra = (codigo: CodigoPedra, tituloPadrao?: string) => {
-    const candidataAgari = candidatasPedraAgari.get(codigoBase(codigo))
+    const candidataAgari = candidatasPedraAgari.get(codigo)
     const cheiaESemAcao = maoCompleta && !acaoPendente && !selecionandoPedraAgari
     const invalidaParaAcao = !podeSelecionarPedra(codigo)
     const modoMeldAtivo =
@@ -106,7 +117,7 @@ export function TecladoPedras({
       acaoPendente?.tipo === 'kanAberto' ||
       acaoPendente?.tipo === 'kanFechado'
     const ehDoraReal = dorasReais.has(codigoBase(codigo))
-    const espera = esperasPorPedra.get(codigoBase(codigo))
+    const espera = esperasPorPedra.get(codigo)
     const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
     const indisponivel = selecionandoPedraAgari
       ? !candidataAgari
@@ -157,6 +168,35 @@ export function TecladoPedras({
     )
   }
 
+  const renderizarOpcaoChii = (sequencia: CodigoPedra[], indice: number) => {
+    const sequenciaFisica = sequencia.map((pedraSequencia) =>
+      codigoBase(pedraSequencia) === codigoBase(escolhaChiiPendente?.chamada ?? pedraSequencia)
+        ? (escolhaChiiPendente?.chamada ?? pedraSequencia)
+        : pedraSequencia,
+    )
+    const rotulo = sequenciaFisica.map((pedra) => nomePedraAcessivel(pedra)).join(', ')
+
+    return (
+      <button
+        key={`${sequencia.join('-')}-${indice}`}
+        className="opcao-chii-pendente"
+        type="button"
+        aria-label={t('calculator.chooseChiiSequenceOption', { sequence: rotulo })}
+        title={t('calculator.chooseChiiSequenceOption', { sequence: rotulo })}
+        onClick={() =>
+          escolhaChiiPendente &&
+          aoEscolherChiiPendente?.(escolhaChiiPendente.chamada, sequencia)
+        }
+      >
+        {sequenciaFisica.map((pedra) => (
+          <span key={pedra} className="chip-pedra mini">
+            <PedraSvg pedra={pedra} />
+          </span>
+        ))}
+      </button>
+    )
+  }
+
   return (
     <div
       className={`teclado-pedras teclado-pedras-${contexto} ${
@@ -174,6 +214,12 @@ export function TecladoPedras({
         >
           <i className="fas fa-gear" aria-hidden="true" />
         </button>
+      )}
+      {contexto === 'montagem' && escolhaChiiPendente && (
+        <div className="seletor-chii-pendente" role="group" aria-label={t('calculator.chooseChiiSequence')}>
+          <span>{t('calculator.chooseChiiSequence')}</span>
+          <div>{escolhaChiiPendente.opcoes.map(renderizarOpcaoChii)}</div>
+        </div>
       )}
       {NAIPES.map(({ naipe }) => {
         const rotulo =
@@ -233,7 +279,7 @@ export function TecladoPedras({
             className="botao-finalizar-mao-teclado"
             type="button"
             aria-label={t('calculator.goToHandFinalization')}
-            disabled={selecionandoPedraAgari}
+            disabled={selecionandoPedraAgari || !batidaDefinida}
             onClick={aoFinalizarMao}
           >
             {t('calculator.goToHandFinalization')}
