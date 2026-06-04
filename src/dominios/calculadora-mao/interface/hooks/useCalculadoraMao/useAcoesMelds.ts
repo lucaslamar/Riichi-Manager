@@ -186,6 +186,32 @@ export function useAcoesMelds({
     [podeCriarMeld],
   )
 
+  const sequenciasChiiDaMaoPossiveis = useCallback(
+    (pedras: CodigoPedra[]): CodigoPedra[][] => {
+      const chamada = pedras[pedras.length - 1]
+      if (!chamada || !ehPedraNumerada(chamada)) return []
+
+      const naipe = codigoBase(chamada)[1]
+      const numeroChamada = valorPedra(chamada)
+
+      return [numeroChamada - 2, numeroChamada - 1, numeroChamada]
+        .filter((inicio) => inicio >= 1 && inicio <= 7)
+        .map((inicio) => criarSequenciaChii(inicio, naipe))
+        .filter((sequencia) => {
+          const pedrasDaMao = sequencia.filter(
+            (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(chamada),
+          )
+          const consumo = ordenarPedras(pedrasDaMao)
+          // Requer que as pedras companheiras existam na mão; não aceita chi direto sem tiles da mão.
+          return (
+            podeCriarMeld(sequencia, sequencia, 3) ||
+            (consumo.length === 2 && podeCriarMeld(sequencia, consumo, 3))
+          )
+        })
+    },
+    [podeCriarMeld],
+  )
+
   const sequenciasChiiDisponiveis = useMemo(() => {
     for (const codigo of CODIGOS_BASE_MELD) {
       if (sequenciasChiiPossiveis([codigo]).length > 0) return true
@@ -269,13 +295,6 @@ export function useAcoesMelds({
     ],
   )
 
-  const escolherSequenciaChii = useCallback(
-    (_pedrasSelecionadas: CodigoPedra[], sequencias: CodigoPedra[][]) => {
-      return sequencias[0] ?? null
-    },
-    [],
-  )
-
   return {
     contarCodigo,
     contarAka,
@@ -289,6 +308,6 @@ export function useAcoesMelds({
     podeKanAberto,
     podeKanFechado,
     sequenciasChiiPossiveis,
-    escolherSequenciaChii,
+    sequenciasChiiDaMaoPossiveis,
   }
 }

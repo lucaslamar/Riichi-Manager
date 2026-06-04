@@ -34,7 +34,7 @@ interface PropsMaoAtual {
   acoesCabecalho?: ReactNode
   aoAbrirMenuAcoes: () => void
   aoAlternarAcao: (tipo: Acao['tipo']) => void
-  aoAdicionarPedra: (pedra: CodigoPedra) => void
+  aoAdicionarPedraDaMao: (pedra: CodigoPedra) => void
   aoEscolherPedraAgariMao: (indicePedra: number) => void
   aoEscolherPedraAgariMeld: (indiceMeld: number, indicePedra: number) => void
   aoRemoverPedra: (indicePedra: number) => void
@@ -47,6 +47,7 @@ function ChipMeld({
   indiceMeld,
   indiceAgari,
   selecionandoPedraAgari,
+  permitirSelecaoAgariMeld = false,
   selecionarPedraAgariDireto = false,
   aoEscolherPedraAgariMeld,
   aoRemoverMeld,
@@ -55,6 +56,7 @@ function ChipMeld({
   indiceMeld: number
   indiceAgari?: number
   selecionandoPedraAgari: boolean
+  permitirSelecaoAgariMeld?: boolean
   selecionarPedraAgariDireto?: boolean
   aoEscolherPedraAgariMeld: (indiceMeld: number, indicePedra: number) => void
   aoRemoverMeld: (indiceMeld: number) => void
@@ -93,7 +95,7 @@ function ChipMeld({
     )
   }
 
-  if (selecionandoPedraAgari || selecionarPedraAgariDireto) {
+  if ((selecionandoPedraAgari && permitirSelecaoAgariMeld) || selecionarPedraAgariDireto) {
     const pedrasSelecionaveis =
       meld.tipo === 'kanFechado'
         ? (() => {
@@ -214,7 +216,7 @@ export function MaoAtual({
   acoesCabecalho,
   aoAbrirMenuAcoes,
   aoAlternarAcao,
-  aoAdicionarPedra,
+  aoAdicionarPedraDaMao,
   aoEscolherPedraAgariMao,
   aoEscolherPedraAgariMeld,
   aoRemoverPedra,
@@ -241,7 +243,7 @@ export function MaoAtual({
       return
     }
     if (acaoMeldAtiva) {
-      aoAdicionarPedra(mao.pedras[indicePedra])
+      aoAdicionarPedraDaMao(mao.pedras[indicePedra])
       return
     }
     aoRemoverPedra(indicePedra)
@@ -340,6 +342,7 @@ export function MaoAtual({
                       mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
                     }
                     selecionandoPedraAgari={false}
+                    permitirSelecaoAgariMeld
                     selecionarPedraAgariDireto
                     aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
                     aoRemoverMeld={aoRemoverMeld}
@@ -394,6 +397,7 @@ export function MaoAtual({
               mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
             }
             selecionandoPedraAgari={selecionandoPedraAgari}
+            permitirSelecaoAgariMeld={false}
             selecionarPedraAgariDireto={false}
             aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
             aoRemoverMeld={aoRemoverMeld}

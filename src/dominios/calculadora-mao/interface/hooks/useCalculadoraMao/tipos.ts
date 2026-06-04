@@ -10,6 +10,11 @@ import type {
 
 export type TipoMeldCalculadora = 'chii' | 'pon' | 'kanAberto' | 'kanFechado'
 
+export interface EscolhaChiiPendente {
+  chamada: CodigoPedra
+  opcoes: CodigoPedra[][]
+}
+
 /**
  * Estado bruto e setters compartilhados entre os hooks especializados.
  * Mantém o tipo explícito para facilitar manutenção sem precisar abrir o hook orquestrador.
@@ -49,10 +54,7 @@ export interface AcoesMeldsCalculadora {
   podeKanAberto: boolean
   podeKanFechado: boolean
   sequenciasChiiPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
-  escolherSequenciaChii: (
-    pedrasSelecionadas: CodigoPedra[],
-    sequencias: CodigoPedra[][],
-  ) => CodigoPedra[] | null
+  sequenciasChiiDaMaoPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
 }
 
 /** Resultado do cálculo assíncrono de esperas para mãos com 13 slots. */

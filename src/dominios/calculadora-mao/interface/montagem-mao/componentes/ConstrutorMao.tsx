@@ -43,6 +43,7 @@ export default function ConstrutorMao({
     maoCompleta,
     podeSelecionarPedra,
     adicionarPedra,
+    adicionarPedraDaMao,
     removerPedra,
     removerMeld,
     removerDescarte,
@@ -55,7 +56,9 @@ export default function ConstrutorMao({
     resultadoMaoInvalida,
     esperasPossiveis,
     maoProntaParaFinalizar,
+    maoProntaParaEscolherBatida,
     selecionandoPedraAgari,
+    escolhaChiiPendente,
     mensagemFinalizacao,
     candidatasPedraAgari,
     fluxoOpcoes,
@@ -64,6 +67,7 @@ export default function ConstrutorMao({
     escolherPedraAgariMao,
     escolherPedraAgariMeld,
     escolherPedraAgariPorCodigo,
+    escolherChiiPendente,
   } = estado
 
   /**
@@ -93,7 +97,7 @@ export default function ConstrutorMao({
   const filtrarTecladoPorEspera = slotsUsados === 13 && !acaoPendente && temEsperaValida
   const furitenBloqueiaRonNoTeclado = mao.agari === 'ron' || !fluxoOpcoes.vitoriaDefinida
   const esperasPorPedra = useMemo(
-    () => new Map(esperasPossiveis.map((espera) => [codigoBase(espera.pedra), espera])),
+    () => new Map(esperasPossiveis.map((espera) => [espera.pedra, espera])),
     [esperasPossiveis],
   )
 
@@ -134,7 +138,7 @@ export default function ConstrutorMao({
       : null
   const mostrarTeclado = contexto === 'montagem'
   const mostrarFinalizacaoNoTeclado =
-    contexto === 'montagem' && maoProntaParaFinalizar && !acaoMeldAtiva
+    contexto === 'montagem' && maoProntaParaEscolherBatida && !acaoMeldAtiva
 
   /**
    * Marca na mão fechada as pedras já escolhidas durante uma ação de chii.
@@ -205,7 +209,7 @@ export default function ConstrutorMao({
         acoesCabecalho={acoesCabecalho}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}
-        aoAdicionarPedra={adicionarPedra}
+        aoAdicionarPedraDaMao={adicionarPedraDaMao}
         aoEscolherPedraAgariMao={escolherPedraAgariMao}
         aoEscolherPedraAgariMeld={escolherPedraAgariMeld}
         aoRemoverPedra={contexto === 'montagem' ? removerPedra : () => undefined}
@@ -277,14 +281,17 @@ export default function ConstrutorMao({
             classeEsperaTeclado={classeEsperaTeclado}
             contexto={contexto}
             maoProntaParaFinalizar={mostrarFinalizacaoNoTeclado}
+            batidaDefinida={maoProntaParaFinalizar}
             mensagemFinalizacao={mensagemFinalizacao}
             selecionandoPedraAgari={selecionandoPedraAgari}
             candidatasPedraAgari={candidatasPedraAgari}
+            escolhaChiiPendente={escolhaChiiPendente}
             aoAbrirRegras={contexto === 'montagem' ? aoAbrirRegras : undefined}
             aoAdicionarPedra={adicionarPedra}
             aoFinalizarMao={finalizarMao}
             aoAlternarSelecaoPedraAgari={alternarSelecaoPedraAgari}
             aoEscolherPedraAgariPorCodigo={escolherPedraAgariPorCodigo}
+            aoEscolherChiiPendente={escolherChiiPendente}
           />
         </div>
       )}

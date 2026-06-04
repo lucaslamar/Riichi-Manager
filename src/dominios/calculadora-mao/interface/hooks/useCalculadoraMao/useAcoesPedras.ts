@@ -12,7 +12,7 @@ import {
   codigoBase,
   expandirGrupoMesmoValor,
 } from '../../constantes'
-import type { EstadoMaoCalculadora, TipoMeldCalculadora } from './tipos'
+import type { EscolhaChiiPendente, EstadoMaoCalculadora, TipoMeldCalculadora } from './tipos'
 
 interface ParametrosAcoesPedras {
   estado: Pick<
@@ -28,10 +28,8 @@ interface ParametrosAcoesPedras {
   ) => boolean
   indicesPedrasNaMaoPara: (pedras: CodigoPedra[]) => number[]
   sequenciasChiiPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
-  escolherSequenciaChii: (
-    pedrasSelecionadas: CodigoPedra[],
-    sequencias: CodigoPedra[][],
-  ) => CodigoPedra[] | null
+  sequenciasChiiDaMaoPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
+  setEscolhaChiiPendente: (escolha: EscolhaChiiPendente | null) => void
 }
 
 /**
@@ -40,6 +38,7 @@ interface ParametrosAcoesPedras {
  *
  * Como ler este arquivo:
  * - `adicionarPedra` é a porta de entrada de quase todo clique no teclado.
+ * - `adicionarPedraDaMao` é usada quando o clique vem da área da mão em modo Chi.
  * - quando não há `acaoPendente`, o clique adiciona uma pedra à mão fechada.
  * - quando há `acaoPendente`, o mesmo clique passa a significar dora, descarte ou meld.
  * - funções de remoção sempre cancelam a ação pendente para evitar estados ambíguos.
@@ -51,7 +50,8 @@ export function useAcoesPedras({
   podeCriarMeld,
   indicesPedrasNaMaoPara,
   sequenciasChiiPossiveis,
-  escolherSequenciaChii,
+  sequenciasChiiDaMaoPossiveis,
+  setEscolhaChiiPendente,
 }: ParametrosAcoesPedras) {
   const { mao, atualizarMao, acaoPendente, setAcaoPendente, slotsUsados, maoCompleta } = estado
 
@@ -72,62 +72,80 @@ export function useAcoesPedras({
     invalidarBatida(rascunho)
   }
 
+  const atualizarAcaoAposMeld = (tipo: TipoMeldCalculadora, slotsAposMeld: number) =>
+    setAcaoPendente(slotsAposMeld < 14 ? criarAcao(tipo) : null)
+
+  /**
+   * Move da mão fechada as pedras que já estavam disponíveis e registra o meld final.
+   * Para meld aberto, remove riichi porque a mão deixou de ser fechada.
+   */
+  const aplicarMeld = (
+    tipo: TipoMeldCalculadora,
+    pedrasMeldBase: CodigoPedra[],
+    pedrasConsumir: CodigoPedra[],
+    abrirMao: boolean,
+  ) => {
+    const slotsMeld = 3
+    if (!podeCriarMeld(pedrasMeldBase, pedrasConsumir, slotsMeld)) return null
+    const indicesRemovidos = indicesPedrasNaMaoPara(pedrasConsumir)
+    if (indicesRemovidos.length !== pedrasConsumir.length) return null
+    const slotsAposMeld = slotsUsados + slotsMeld - indicesRemovidos.length
+    const pedrasMeld = [...pedrasMeldBase]
+    const posicoesAtualizadas = new Set<number>()
+
+    for (const indiceRemovido of indicesRemovidos) {
+      const pedraReal = mao.pedras[indiceRemovido]
+      const posicao = pedrasMeld.findIndex(
+        (pedraMeld, indicePedraMeld) =>
+          !posicoesAtualizadas.has(indicePedraMeld) &&
+          codigoBase(pedraMeld) === codigoBase(pedraReal),
+      )
+      if (posicao >= 0) {
+        pedrasMeld[posicao] = pedraReal
+        posicoesAtualizadas.add(posicao)
+      }
+    }
+
+    atualizarMao((rascunho: Mao) => {
+      for (const indice of [...indicesRemovidos].sort((a, b) => b - a)) {
+        rascunho.pedras.splice(indice, 1)
+        if (rascunho.indiceAgari >= indice) rascunho.indiceAgari--
+      }
+      if (rascunho.indiceAgari >= rascunho.pedras.length) {
+        rascunho.indiceAgari = rascunho.pedras.length - 1
+      }
+      const meldCriado = { tipo, pedras: pedrasMeld }
+      rascunho.melds.push(meldCriado)
+      ordenarMelds(rascunho.melds)
+      invalidarBatida(rascunho)
+      if (abrirMao) rascunho.riichi = null
+    })
+    return slotsAposMeld
+  }
+
+  const aplicarChii = (chamada: CodigoPedra, sequencia: CodigoPedra[]) => {
+    const sequenciaComChamadaReal = sequencia.map((pedraSequencia) =>
+      codigoBase(pedraSequencia) === codigoBase(chamada) ? chamada : pedraSequencia,
+    )
+    const pedrasConsumir = sequenciaComChamadaReal.filter(
+      (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(chamada),
+    )
+    const consumoChii = podeCriarMeld(sequenciaComChamadaReal, sequenciaComChamadaReal, 3)
+      ? sequenciaComChamadaReal
+      : podeCriarMeld(sequenciaComChamadaReal, pedrasConsumir, 3)
+        ? pedrasConsumir
+        : []
+    const slotsAposMeld = aplicarMeld('chii', sequenciaComChamadaReal, consumoChii, true)
+    if (slotsAposMeld === null) return
+    atualizarAcaoAposMeld('chii', slotsAposMeld)
+    setEscolhaChiiPendente(null)
+  }
+
   /**
    * Recebe uma pedra clicada no teclado e interpreta o clique conforme a ação ativa.
    * O contrato é nunca ultrapassar limite físico de pedras nem completar além de 14 slots.
    */
   const adicionarPedra = (pedra: CodigoPedra) => {
-    const atualizarAcaoAposMeld = (tipo: TipoMeldCalculadora, slotsAposMeld: number) =>
-      setAcaoPendente(slotsAposMeld <= 14 ? criarAcao(tipo) : null)
-
-    /**
-     * Move da mão fechada as pedras que já estavam disponíveis e registra o meld final.
-     * Para meld aberto, remove riichi porque a mão deixou de ser fechada.
-     */
-    const aplicarMeld = (
-      tipo: TipoMeldCalculadora,
-      pedrasMeldBase: CodigoPedra[],
-      pedrasConsumir: CodigoPedra[],
-      abrirMao: boolean,
-    ) => {
-      const slotsMeld = 3
-      if (!podeCriarMeld(pedrasMeldBase, pedrasConsumir, slotsMeld)) return null
-      const indicesRemovidos = indicesPedrasNaMaoPara(pedrasConsumir)
-      if (indicesRemovidos.length !== pedrasConsumir.length) return null
-      const slotsAposMeld = slotsUsados + slotsMeld - indicesRemovidos.length
-      const pedrasMeld = [...pedrasMeldBase]
-      const posicoesAtualizadas = new Set<number>()
-
-      for (const indiceRemovido of indicesRemovidos) {
-        const pedraReal = mao.pedras[indiceRemovido]
-        const posicao = pedrasMeld.findIndex(
-          (pedraMeld, indicePedraMeld) =>
-            !posicoesAtualizadas.has(indicePedraMeld) &&
-            codigoBase(pedraMeld) === codigoBase(pedraReal),
-        )
-        if (posicao >= 0) {
-          pedrasMeld[posicao] = pedraReal
-          posicoesAtualizadas.add(posicao)
-        }
-      }
-
-      atualizarMao((rascunho: Mao) => {
-        for (const indice of [...indicesRemovidos].sort((a, b) => b - a)) {
-          rascunho.pedras.splice(indice, 1)
-          if (rascunho.indiceAgari >= indice) rascunho.indiceAgari--
-        }
-        if (rascunho.indiceAgari >= rascunho.pedras.length) {
-          rascunho.indiceAgari = rascunho.pedras.length - 1
-        }
-        const meldCriado = { tipo, pedras: pedrasMeld }
-        rascunho.melds.push(meldCriado)
-        ordenarMelds(rascunho.melds)
-        invalidarBatida(rascunho)
-        if (abrirMao) rascunho.riichi = null
-      })
-      return slotsAposMeld
-    }
-
     if (!acaoPendente) {
       /*
        * Caso base: clique normal no teclado.
@@ -226,26 +244,91 @@ export function useAcoesPedras({
       }
       case 'chii': {
         /*
-         * Em Chii, a pedra clicada representa a chamada; as outras duas precisam existir na mao.
+         * Em Chii pelo teclado, mostra todas as sequências possíveis incluindo chi direto.
          */
         if (!podeAdicionarPedras([pedra])) return
         const sequenciasPossiveis = sequenciasChiiPossiveis([pedra])
-        const sequenciaEscolhida = escolherSequenciaChii([pedra], sequenciasPossiveis)
-        if (!sequenciaEscolhida) return
-        const pedrasConsumir = sequenciaEscolhida.filter(
-          (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(pedra),
-        )
-        const consumoChii = podeCriarMeld(sequenciaEscolhida, sequenciaEscolhida, 3)
-          ? sequenciaEscolhida
-          : podeCriarMeld(sequenciaEscolhida, pedrasConsumir, 3)
-            ? pedrasConsumir
-            : []
-        const slotsAposMeld = aplicarMeld('chii', sequenciaEscolhida, consumoChii, true)
-        if (slotsAposMeld === null) return
-        atualizarAcaoAposMeld('chii', slotsAposMeld)
+        if (sequenciasPossiveis.length === 1) {
+          aplicarChii(pedra, sequenciasPossiveis[0])
+          return
+        }
+        if (sequenciasPossiveis.length > 1) {
+          setEscolhaChiiPendente({ chamada: pedra, opcoes: sequenciasPossiveis })
+        }
         return
       }
     }
+  }
+
+  /**
+   * Variante de adicionarPedra para cliques na área da mão em modo Chi.
+   * Usa apenas sequências possíveis com as pedras reais existentes na mão,
+   * sem aceitar chi direto genérico.
+   */
+  const adicionarPedraDaMao = (pedra: CodigoPedra) => {
+    if (acaoPendente?.tipo !== 'chii') {
+      adicionarPedra(pedra)
+      return
+    }
+    const sequenciasPossiveis = sequenciasChiiDaMaoPossiveis([pedra])
+    if (sequenciasPossiveis.length === 0) return
+    if (sequenciasPossiveis.length === 1) {
+      aplicarChii(pedra, sequenciasPossiveis[0])
+      return
+    }
+    setEscolhaChiiPendente({ chamada: pedra, opcoes: sequenciasPossiveis })
+  }
+
+  const escolherChiiPendente = (chamada: CodigoPedra, sequencia: CodigoPedra[]) => {
+    if (acaoPendente?.tipo !== 'chii') return
+    const sequenciaComChamadaReal = sequencia.map((pedraSequencia) =>
+      codigoBase(pedraSequencia) === codigoBase(chamada) ? chamada : pedraSequencia,
+    )
+    const pedrasConsumir = sequenciaComChamadaReal.filter(
+      (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(chamada),
+    )
+    const consumoChii = podeCriarMeld(sequenciaComChamadaReal, sequenciaComChamadaReal, 3)
+      ? sequenciaComChamadaReal
+      : podeCriarMeld(sequenciaComChamadaReal, pedrasConsumir, 3)
+        ? pedrasConsumir
+        : []
+
+    const slotsMeld = 3
+    if (!podeCriarMeld(sequenciaComChamadaReal, consumoChii, slotsMeld)) return
+    const indicesRemovidos = indicesPedrasNaMaoPara(consumoChii)
+    if (indicesRemovidos.length !== consumoChii.length) return
+    const slotsAposMeld = slotsUsados + slotsMeld - indicesRemovidos.length
+    const pedrasMeld = [...sequenciaComChamadaReal]
+    const posicoesAtualizadas = new Set<number>()
+
+    for (const indiceRemovido of indicesRemovidos) {
+      const pedraReal = mao.pedras[indiceRemovido]
+      const posicao = pedrasMeld.findIndex(
+        (pedraMeld, indicePedraMeld) =>
+          !posicoesAtualizadas.has(indicePedraMeld) &&
+          codigoBase(pedraMeld) === codigoBase(pedraReal),
+      )
+      if (posicao >= 0) {
+        pedrasMeld[posicao] = pedraReal
+        posicoesAtualizadas.add(posicao)
+      }
+    }
+
+    atualizarMao((rascunho: Mao) => {
+      for (const indice of [...indicesRemovidos].sort((a, b) => b - a)) {
+        rascunho.pedras.splice(indice, 1)
+        if (rascunho.indiceAgari >= indice) rascunho.indiceAgari--
+      }
+      if (rascunho.indiceAgari >= rascunho.pedras.length) {
+        rascunho.indiceAgari = rascunho.pedras.length - 1
+      }
+      rascunho.melds.push({ tipo: 'chii', pedras: pedrasMeld })
+      ordenarMelds(rascunho.melds)
+      invalidarBatida(rascunho)
+      rascunho.riichi = null
+    })
+    setAcaoPendente(slotsAposMeld < 14 ? criarAcao('chii') : null)
+    setEscolhaChiiPendente(null)
   }
 
   /** Remove uma pedra da mão fechada e ajusta o índice da pedra de agari quando necessário. */
@@ -255,6 +338,7 @@ export function useAcoesPedras({
       rascunho.indiceAgari = -1
       rascunho.agariMeld = null
     })
+    setEscolhaChiiPendente(null)
     setAcaoPendente(null)
   }
 
@@ -265,6 +349,7 @@ export function useAcoesPedras({
       rascunho.indiceAgari = -1
       rascunho.agariMeld = null
     })
+    setEscolhaChiiPendente(null)
     setAcaoPendente(null)
   }
 
@@ -273,12 +358,14 @@ export function useAcoesPedras({
     atualizarMao((rascunho) => {
       rascunho.descartes.splice(indiceDescarte, 1)
     })
+    setEscolhaChiiPendente(null)
     setAcaoPendente(null)
   }
 
   /** Restaura a mão vazia padrão e cancela qualquer modo de clique em andamento. */
   const limpar = () => {
     atualizarMao(MAO_VAZIA)
+    setEscolhaChiiPendente(null)
     setAcaoPendente(null)
   }
 
@@ -294,11 +381,14 @@ export function useAcoesPedras({
       })
     }
 
+    setEscolhaChiiPendente(null)
     setAcaoPendente(desligandoAcaoAtual ? null : criarAcao(tipo))
   }
 
   return {
     adicionarPedra,
+    adicionarPedraDaMao,
+    escolherChiiPendente,
     removerPedra,
     removerMeld,
     removerDescarte,
