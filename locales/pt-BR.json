@@ -121,6 +121,8 @@
     "selectDoraIndicator": "Selecionar {{tile}} como indicador de dora / ura dora",
     "selectUraDoraIndicator": "Selecionar {{tile}} como indicador de ura dora",
     "chooseMeldTile": "Selecionar {{tile}} para {{meld}}",
+    "chooseChiiSequence": "Escolha o Chi",
+    "chooseChiiSequenceOption": "Escolher Chi: {{sequence}}",
     "disabledTile": "{{tile}} indisponível neste momento",
     "removeDoraIndicator": "Remover indicador de dora / ura dora {{tile}}",
     "removeUraDoraIndicator": "Remover indicador de ura dora {{tile}}",
@@ -143,7 +145,8 @@
     "addYakuHint": "Mão sem yaku: adicione Riichi, Tanyao ou outro yaku.",
     "resultAnnounce": "Resultado: {{agari}}. {{han}} han, {{fu}} fu. Pontuação: {{points}} pontos. Yakus: {{yaku}}.",
     "invalidFuritenAnnounce": "Resultado inválido: Furiten. Você descartou uma das suas esperas.",
-    "invalidNoYakuAnnounce": "Resultado inválido: Sem yaku. Esta mão não possui yaku válido."
+    "invalidNoYakuAnnounce": "Resultado inválido: Sem yaku. Esta mão não possui yaku válido.",
+    "notEnoughTiles": "Tiles insuficientes para calcular."
   },
   "hanFu": {
     "isDealer": "É leste?",
