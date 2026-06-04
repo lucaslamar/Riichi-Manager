@@ -145,7 +145,8 @@
     "addYakuHint": "Mão sem yaku: adicione Riichi, Tanyao ou outro yaku.",
     "resultAnnounce": "Resultado: {{agari}}. {{han}} han, {{fu}} fu. Pontuação: {{points}} pontos. Yakus: {{yaku}}.",
     "invalidFuritenAnnounce": "Resultado inválido: Furiten. Você descartou uma das suas esperas.",
-    "invalidNoYakuAnnounce": "Resultado inválido: Sem yaku. Esta mão não possui yaku válido."
+    "invalidNoYakuAnnounce": "Resultado inválido: Sem yaku. Esta mão não possui yaku válido.",
+    "notEnoughTiles": "Tiles insuficientes para calcular."
   },
   "hanFu": {
     "isDealer": "É leste?",

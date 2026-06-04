@@ -1,5 +1,16 @@
 # Changelog - Riichi Manager
 
+## 4.1.1 - 2026-06-04
+
+### Melhorias
+
+- Simplifica a seção **Descartes / Furiten** na finalização, substituindo o par de botões separados (cabeçalho + "Editar/Concluir") por um único toggle no mesmo padrão dos **Indicadores de Dora**.
+- Seletor de doras com teclado de peças recolhível
+
+### Correções
+
+- Corrige a detecção de **Chi** para diferenciar sequências formadas por pedras livres das que usariam pedras já comprometidas na mão.
+
 ## 4.1.0 - - 2026-06-02
 
 ### Melhorias

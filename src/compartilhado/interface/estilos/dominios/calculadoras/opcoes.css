@@ -244,6 +244,55 @@
   outline: none;
 }
 
+.btn-expandir-indicadores-dora {
+  position: relative;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1.5px solid #f9a8d4;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #be185d;
+  cursor: pointer;
+  font-size: 0.76rem;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-expandir-indicadores-dora:hover,
+.btn-expandir-indicadores-dora:focus-visible {
+  border-color: #be185d;
+  background: #fdf2f8;
+  outline: none;
+}
+
+.btn-expandir-indicadores-dora.ativo {
+  border-color: #db2777;
+  background: #fce7f3;
+}
+
+.badge-indicadores-dora {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: inline-flex;
+  min-width: 14px;
+  height: 14px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+  border-radius: 999px;
+  background: #db2777;
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .ajuda-dora-mobile-fundo {
   display: none;
 }
@@ -481,4 +530,555 @@
   .grupos-opcoes-mao {
     transition: none;
   }
+}
+
+/* ─── Barra de resumo fixo da mão ───────────────────────────────────────────── */
+
+.barra-resumo-mao {
+  display: grid;
+  gap: 5px;
+  padding: 8px 18px 9px;
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.barra-resumo-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  min-height: 22px;
+}
+
+.barra-resumo-rotulo {
+  min-width: 56px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.barra-resumo-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+}
+
+.barra-resumo-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.barra-resumo-tile .tile-img {
+  width: 18px;
+  height: 24px;
+  display: block;
+}
+
+.barra-resumo-tile-agari {
+  background: #FF8C00;
+  border-color: #e07800;
+}
+
+.barra-resumo-tile-agari .tile-img {
+  opacity: 0.92;
+}
+
+.barra-resumo-tile-inline {
+  margin-left: 3px;
+}
+
+/* Tile menor para uso dentro do chip de meld */
+.barra-resumo-tile-sm .tile-img {
+  width: 14px;
+  height: 19px;
+}
+
+/* Chip compacto representando um meld (Chi/Pon/Kan) */
+.barra-resumo-chip-meld {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 3px;
+  padding: 1px 4px 1px 1px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background: #f8fafc;
+}
+
+.barra-resumo-chip-meld-agari {
+  border-color: #e07800;
+  background: #fff4e0;
+}
+
+.barra-resumo-rotulo-meld {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.45);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.barra-resumo-separador-meld {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.15);
+  margin: 0 3px;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.barra-resumo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.barra-resumo-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.barra-resumo-chip-azul {
+  background: #E6F1FB;
+  color: #0C447C;
+}
+
+.barra-resumo-chip-verde {
+  background: #E1F5EE;
+  color: #085041;
+}
+
+.barra-resumo-chip-aviso {
+  background: #FAEEDA;
+  color: #633806;
+}
+
+.barra-resumo-chip-neutro {
+  background: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.barra-resumo-texto-secundario {
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 11px;
+}
+
+/* ─── Página de finalização ─────────────────────────────────────────────────── */
+
+.pagina-finalizacao-mao {
+  display: grid;
+  gap: 0;
+}
+
+.pagina-finalizacao-mao > .layout-finalizacao-calculadora {
+  margin-top: 8px;
+}
+
+/* Wrapper sticky que agrupa barra de progresso + resumo contextual.
+   top = altura do cabecalho-principal (sticky do app):
+   mobile ≤640px → 46px, desktop → 74px */
+.cabecalho-sticky-finalizacao {
+  position: sticky;
+  top: 74px;
+  z-index: 10;
+  background: #ffffff;
+  margin: 0 -18px;
+}
+
+@media (max-width: 640px) {
+  .cabecalho-sticky-finalizacao {
+    top: 46px;
+  }
+}
+
+/* ─── Barra de progresso da finalização ─────────────────────────────────────── */
+
+.barra-progresso-finalizacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 18px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.barra-progresso-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.barra-progresso-separador {
+  color: rgba(0, 0, 0, 0.25);
+  font-size: 10px;
+  margin: 0 2px;
+  user-select: none;
+}
+
+.barra-progresso-etapa {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  transition: color 0.15s;
+}
+
+.barra-progresso-etapa-concluida {
+  color: #185FA5;
+  cursor: pointer;
+}
+
+.barra-progresso-etapa-concluida:hover {
+  background: #E6F1FB;
+}
+
+.barra-progresso-etapa-atual {
+  color: #185FA5;
+  font-weight: 600;
+  cursor: default;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.barra-progresso-etapa-pendente {
+  color: rgba(0, 0, 0, 0.3);
+  cursor: default;
+}
+
+.barra-progresso-check {
+  font-size: 9px;
+  line-height: 1;
+}
+
+@media (min-width: 1024px) {
+  .cabecalho-sticky-finalizacao {
+    margin: 0 -24px;
+  }
+
+  .barra-progresso-finalizacao {
+    padding: 8px 24px;
+  }
+
+  .barra-resumo-mao {
+    padding: 8px 24px 9px;
+  }
+}
+
+/* ── DorasNaMao ─────────────────────────────────────────────── */
+
+.doras-na-mao {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 2px solid #f4a7c0;
+  border-radius: 10px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.doras-na-mao-linha {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px 6px 10px;
+}
+
+.doras-na-mao-rotulo {
+  flex: 1;
+  color: #c0336a;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.doras-na-mao-acoes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.doras-na-mao-tooltip-wrapper {
+  position: relative;
+}
+
+.doras-na-mao-btn-info {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1.5px solid #f4a7c0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #c0336a;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 900;
+  line-height: 1;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.doras-na-mao-btn-info:hover,
+.doras-na-mao-btn-info:focus-visible {
+  border-color: #c0336a;
+  background: #fdf2f8;
+  outline: none;
+}
+
+.doras-na-mao-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  width: 240px;
+  padding: 10px 12px;
+  border: 1.5px solid #f4a7c0;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(192, 51, 106, 0.14);
+  color: #4b1b32;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.doras-na-mao-tooltip p {
+  margin: 0 0 6px;
+}
+
+.doras-na-mao-tooltip p:last-child {
+  margin-bottom: 0;
+}
+
+.doras-na-mao-tooltip strong {
+  color: #c0336a;
+}
+
+.doras-na-mao-tooltip-fechar {
+  float: right;
+  margin: -4px -4px 4px 6px;
+  padding: 0 4px;
+  border: none;
+  background: transparent;
+  color: #c0336a;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.doras-na-mao-btn-teclado {
+  position: relative;
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1.5px solid #f4a7c0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #c0336a;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.doras-na-mao-btn-teclado:hover,
+.doras-na-mao-btn-teclado:focus-visible {
+  border-color: #c0336a;
+  background: #fdf2f8;
+  outline: none;
+}
+
+.doras-na-mao-btn-teclado.ativo {
+  border-color: #c0336a;
+  background: #fdf2f8;
+}
+
+.doras-na-mao-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: inline-flex;
+  min-width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: #c0336a;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.doras-na-mao-contador {
+  display: inline-flex;
+  height: 32px;
+  overflow: hidden;
+  border: 1.5px solid #f4a7c0;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+.doras-na-mao-contador button {
+  width: 30px;
+  border: none;
+  background: transparent;
+  color: #c0336a;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 900;
+  transition: background 0.12s;
+}
+
+.doras-na-mao-contador button:hover:not(:disabled) {
+  background: #fdf2f8;
+}
+
+.doras-na-mao-contador button:disabled {
+  color: #f4a7c0;
+  cursor: not-allowed;
+}
+
+.doras-na-mao-contador strong {
+  display: inline-flex;
+  min-width: 30px;
+  align-items: center;
+  justify-content: center;
+  border-inline: 1px solid #f4a7c0;
+  color: #c0336a;
+  font-size: 0.95rem;
+}
+
+/* teclado expandido */
+
+.doras-na-mao-teclado {
+  border-top: 1.5px solid #f4a7c0;
+  background: #fff9fc;
+}
+
+.doras-na-mao-abas {
+  display: flex;
+  border-bottom: 1px solid #f4a7c0;
+}
+
+.doras-na-mao-aba {
+  flex: 1;
+  padding: 5px 2px;
+  border: none;
+  background: transparent;
+  color: #c0336a;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: background 0.12s;
+}
+
+.doras-na-mao-aba:hover {
+  background: #fdf2f8;
+}
+
+.doras-na-mao-aba.ativa {
+  background: #fdf2f8;
+  border-bottom: 2px solid #c0336a;
+}
+
+.doras-na-mao-grade {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+}
+
+.doras-na-mao-pedra {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.doras-na-mao-pedra .tile-img {
+  width: 28px;
+  height: 38px;
+  pointer-events: none;
+}
+
+.doras-na-mao-pedra:hover {
+  border-color: #f4a7c0;
+  background: #fdf2f8;
+}
+
+.doras-na-mao-pedra.selecionada {
+  border-color: #c0336a;
+  background: #fce7f3;
+  box-shadow: 0 0 0 1px rgba(192, 51, 106, 0.18);
+}
+
+.doras-na-mao-barra-selecionadas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 8px 8px;
+  border-top: 1px solid #f4a7c0;
+  background: #fdf2f8;
+}
+
+.doras-na-mao-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: 1.5px solid #f4a7c0;
+  border-radius: 5px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.doras-na-mao-chip .tile-img {
+  width: 24px;
+  height: 32px;
+  pointer-events: none;
+}
+
+.doras-na-mao-chip:hover {
+  border-color: #c0336a;
+  background: #fce7f3;
 }

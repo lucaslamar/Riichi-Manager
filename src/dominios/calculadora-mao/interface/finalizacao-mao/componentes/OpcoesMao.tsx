@@ -127,7 +127,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
 
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-      <div className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}>
+      <div id="secao-vitoria" className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}>
         <span>{t('calculator.victory')}</span>
         <ToggleAgari
           mao={mao}
@@ -179,11 +179,23 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               <button
                 type="button"
                 className="icone-ajuda-dora"
-                title={t('calculator.manualDoraHelp')}
+                title="Abre explicação sobre Dora e Ura Dora"
                 aria-label={t('calculator.manualDoraHelpTitle')}
                 onClick={() => setAjudaDoraAberta(true)}
               >
                 i
+              </button>
+              <button
+                type="button"
+                className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
+                aria-label={t('calculator.doraUraIndicators')}
+                aria-expanded={painelContextualAberto === 'dora'}
+                onClick={() => alternarPainelContextual('dora')}
+              >
+                <i className="fas fa-border-all" aria-hidden="true" />
+                {mao.dora.length > 0 && (
+                  <span className="badge-indicadores-dora">{mao.dora.length}</span>
+                )}
               </button>
             </span>
             <div>
@@ -217,15 +229,6 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
               <small className="texto-ajuda-contador-dora">{ajudaDoraContadorVisivel}</small>
             )}
           </div>
-        </div>
-        <div className="linha-opcoes-mao linha-opcoes-indicadores">
-          <BotaoToggle
-            rotulo={`${t('calculator.doraUraIndicators')} (${mao.dora.length})`}
-            ativo={painelContextualAberto === 'dora'}
-            corAtiva="#e6007e"
-            desabilitado={false}
-            aoClicar={() => alternarPainelContextual('dora')}
-          />
         </div>
         {painelContextualAberto === 'dora' && (
           <div className="painel-contextual-finalizacao">
@@ -301,7 +304,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
           )}
         </section>
 
-      <section className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}>
+      <section id="secao-ventos" className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}>
         <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
         <SeletorVentos
           mao={mao}
@@ -319,7 +322,7 @@ export default function OpcoesMao({ estado, embutido = false }: PropsOpcoesMao) 
         }`}
       >
         {mostrarRiichi && (
-          <section className={`grupo-opcoes-mao ${classeEtapa(mostrarRiichi)}`}>
+          <section id="secao-riichi" className={`grupo-opcoes-mao ${classeEtapa(mostrarRiichi)}`}>
             <span className="rotulo-bloco-opcoes">{t('calculator.riichi')}</span>
             <div className="linha-opcoes-mao">
               <BotaoToggle

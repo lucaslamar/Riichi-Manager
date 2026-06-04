@@ -173,13 +173,15 @@ export default function ResultadoMaoCalculada({
     </div>
   )
   const textoBotao =
-    deveCalcularMao
-      ? resultadoMaoInvalida
-        ? t('calculator.invalidNoYakuReview')
-        : t('calculator.calculatedForCurrentOptions')
-      : podeCalcularMao
-        ? t('calculator.readyToCalculate')
-        : t('calculator.missingPrefix', {
+    !maoCompleta
+      ? t('calculator.notEnoughTiles')
+      : deveCalcularMao
+        ? resultadoMaoInvalida
+          ? t('calculator.invalidNoYakuReview')
+          : t('calculator.calculatedForCurrentOptions')
+        : podeCalcularMao
+          ? t('calculator.readyToCalculate')
+          : t('calculator.missingPrefix', {
             items: [
               !estado.fluxoOpcoes.vitoriaDefinida ? t('calculator.missingVictory') : null,
               !estado.fluxoOpcoes.ventoRodadaDefinido ? t('calculator.missingRoundWind') : null,
@@ -204,7 +206,7 @@ export default function ResultadoMaoCalculada({
   return (
     <>
       {modoFluxo === 'finalizacao' && (
-        <div className="acao-calcular-mao acao-calcular-mao-ativa">
+        <div id="secao-calcular" className="acao-calcular-mao acao-calcular-mao-ativa">
           <button
             className="btn-calcular-mao"
             type="button"
