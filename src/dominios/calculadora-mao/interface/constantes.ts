@@ -112,10 +112,12 @@ export function proximaDoraIndicada(pedra: CodigoPedra): CodigoPedra {
   return `${valor === 7 ? 5 : valor + 1}z`
 }
 
-/** Vento da RODADA: só Leste e Sul (regras padrão de riichi). */
+/** Vento da RODADA: Leste, Sul, Oeste e Norte (Enchousen). */
 export const VENTOS_RODADA: { valor: VentoMao; nome: string }[] = [
   { valor: '1', nome: 'Leste' },
   { valor: '2', nome: 'Sul' },
+  { valor: '3', nome: 'Oeste' },
+  { valor: '4', nome: 'Norte' },
 ]
 
 /** Vento do ASSENTO: todos os quatro. */

@@ -114,6 +114,10 @@
   transform: translateY(-6px);
 }
 
+.grupo-opcoes-ventos.etapa-opcoes-ativa {
+  max-height: 560px;
+}
+
 .grupo-opcoes-ventos.etapa-opcoes-discreta {
   padding: 0;
   border-width: 0;
