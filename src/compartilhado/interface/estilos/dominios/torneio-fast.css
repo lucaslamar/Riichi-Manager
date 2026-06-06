@@ -26,29 +26,34 @@
 .card-diagnostico,
 .card-timer-colapsavel {
   width: 100%;
+  max-width: 100%;
   margin-bottom: 16px;
   border: 1px solid #e4e9f0;
   border-radius: var(--raio);
   background: var(--branco);
   box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .card-timer-colapsavel {
-  border-left: 6px solid var(--primario);
+  border-left: 5px solid var(--primario);
 }
 
 .cabecalho-diagnostico,
 .cabecalho-timer-colapsavel {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
+  max-width: 100%;
   border: none;
   background: none;
-  padding: 14px 16px;
+  padding: 12px 14px;
   cursor: pointer;
   text-align: left;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .cabecalho-diagnostico:hover,
@@ -79,14 +84,15 @@
 
 /* ─── Qualidade da grade ─────────────────────────────────────────────────── */
 .pilula-status {
-  margin-left: auto;
-  border-radius: 8px;
-  padding: 6px 10px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  padding: 4px 8px;
   background: var(--escuro);
   color: var(--branco);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 900;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .metricas {
@@ -110,9 +116,9 @@
   text-transform: uppercase;
 }
 .metricas dd {
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   color: var(--primario);
-  font-size: 1.45rem;
+  font-size: 1.25rem;
   font-weight: 900;
   line-height: 1;
 }
@@ -120,13 +126,13 @@
 .chip-par {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   border: 1px solid #dfe7ef;
-  border-radius: 8px;
-  padding: 7px 10px;
+  border-radius: 6px;
+  padding: 3px 8px;
   background: #f8fbfd;
   color: #35485f;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 800;
 }
 
@@ -155,69 +161,94 @@
   background: #f8fbfd;
 }
 /* ─── Timer ──────────────────────────────────────────────────────────────── */
+.timer-conteudo {
+  padding: 0 14px 14px;
+  box-sizing: border-box;
+}
+
 .label-timer-base {
   display: block;
   color: #738295;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .display-timer {
+  display: block;
   width: 100%;
-  border-radius: 14px;
-  padding: 14px 18px;
+  max-width: 100%;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  padding: 12px 10px;
   background: #0f172a;
   color: var(--branco);
   font-variant-numeric: tabular-nums;
-  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-size: clamp(1.8rem, 8vw, 3rem);
   font-weight: 900;
   line-height: 1;
   text-align: center;
+  box-sizing: border-box;
 }
 
+/* Selects em grid 2 colunas com min-width: 0 para não estourar */
 .controles-timer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: 12px;
-  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .seletor-timer {
   display: grid;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
   color: #516173;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .seletor-timer select {
-  min-height: 40px;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
   border: 2px solid #dde1e7;
-  border-radius: 8px;
-  padding: 0 14px;
+  border-radius: 6px;
+  padding: 0 8px;
   background: var(--branco);
   color: var(--escuro);
   font-weight: 800;
+  box-sizing: border-box;
 }
 
 .btn-timer-iniciar {
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .acoes-timer-secundarias {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+/* Botões compactos no timer */
+.acoes-timer-secundarias .btn-contorno {
+  width: 100%;
+  min-height: 38px;
+  padding: 6px 8px;
+  font-size: 0.74rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ajuda-timer {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
   color: #607080;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 /* ─── Abas de filtro da grade ────────────────────────────────────────────── */
@@ -254,25 +285,36 @@
 }
 
 /* ─── Mesas / Grade ──────────────────────────────────────────────────────── */
+/* Mobile-first: 1 coluna base, 2 colunas em telas maiores */
 .grade-rodadas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 12px;
   align-items: start;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-@media (max-width: 420px) {
+@media (min-width: 640px) {
   .grade-rodadas {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .grade-rodadas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
   }
 }
 
 .caixa-mesa {
   display: flex;
   flex-direction: column;
-  border-top: 6px solid var(--cor-rodada, var(--primario));
+  border-top: 4px solid var(--cor-rodada, var(--primario));
   border-radius: var(--raio);
-  padding: 12px 14px;
+  padding: 8px 10px;
   background: var(--branco);
   box-shadow: var(--sombra);
 }
@@ -281,79 +323,82 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 6px;
   color: var(--cor-rodada, var(--primario));
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .caixa-mesa header span {
-  border-radius: 6px;
-  padding: 5px 10px;
+  border-radius: 4px;
+  padding: 2px 7px;
   background: var(--cor-rodada, var(--primario));
   color: var(--branco);
 }
 
+/* Bloco de tempo — rodada ativa */
 .resumo-tempo-mesa {
-  display: grid;
-  gap: 2px;
-  margin-bottom: 8px;
-  border: 1px solid color-mix(in srgb, var(--cor-rodada, var(--primario)) 25%, #f0f0f0);
-  border-radius: 8px;
-  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  border: 1px solid color-mix(in srgb, var(--cor-rodada, var(--primario)) 30%, #e8eef4);
+  border-radius: 5px;
+  padding: 4px 8px;
   background: color-mix(in srgb, var(--cor-rodada, var(--primario)) 8%, var(--branco));
 }
 
 .resumo-tempo-mesa span,
 .resumo-tempo-mesa small {
   color: #607080;
-  font-size: 0.75rem;
-  font-weight: 900;
+  font-size: 0.67rem;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
 .resumo-tempo-mesa strong {
   color: var(--cor-rodada, var(--primario));
   font-variant-numeric: tabular-nums;
-  font-size: 1.35rem;
+  font-size: 1rem;
   font-weight: 900;
   line-height: 1;
 }
 
-.resumo-tempo-mudo {
-  border-color: #e4e9f0;
-  background: #f8fafc;
-}
-.resumo-tempo-mudo strong {
-  color: #607080;
+/* Aviso compacto para rodadas inativas */
+.aviso-rodada-inativa {
+  margin: 0 0 6px;
+  color: #8fa0b0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .lista-assentos {
   display: grid;
-  gap: 6px;
+  gap: 3px;
 }
 
 .linha-jogador {
   display: flex;
-  height: 48px;
+  height: 40px;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
-  padding: 0 10px;
-  background: #fcfcfc;
+  gap: 6px;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  padding: 0 8px;
+  background: #fafafa;
 }
 
 .tag-vento {
-  width: 68px;
+  width: 54px;
   flex-shrink: 0;
-  border-radius: 4px;
-  padding: 5px 8px;
+  border-radius: 3px;
+  padding: 2px 5px;
   color: var(--branco);
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 900;
   text-align: center;
   text-transform: uppercase;
@@ -385,8 +430,16 @@
 
 .acoes-mesa {
   display: grid;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+/* Botões compactos dentro dos cards de mesa */
+.acoes-mesa .btn-contorno,
+.acoes-mesa .btn-primario {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 0.77rem;
 }
 
 .btn-tempo-mesa {

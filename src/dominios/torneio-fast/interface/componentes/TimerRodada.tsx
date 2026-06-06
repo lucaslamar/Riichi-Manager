@@ -68,9 +68,9 @@ export function TimerRodada({ torneio, atualizarTorneio }: PropsComAtualizacao) 
       </button>
 
       <div className={`painel-colapsavel ${aberto ? 'painel-aberto' : ''}`}>
-        <div style={{ padding: '0 16px 16px' }}>
+        <div className="timer-conteudo">
         {/* Display escuro com o tempo */}
-        <output className="display-timer" aria-live="polite" style={{ display: 'block', marginBottom: 16 }}>
+        <output className="display-timer" aria-live="polite">
           {formatarDuracao(segundos)}
         </output>
 

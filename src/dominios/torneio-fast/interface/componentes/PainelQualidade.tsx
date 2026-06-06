@@ -52,8 +52,8 @@ export function PainelQualidade({ torneio, atualizarTorneio }: PropsComAtualizac
         onClick={() => setAberto((a) => !a)}
         aria-expanded={aberto}
       >
-        <i className="fas fa-clipboard-check" style={{ color: '#1a3a5a', fontSize: '1.1rem' }} aria-hidden="true" />
-        <h2 style={{ flex: 1, margin: 0, fontSize: '1rem', fontWeight: 800 }}>Diagnóstico da Grade</h2>
+        <i className="fas fa-clipboard-check" style={{ color: '#1a3a5a', fontSize: '1rem', flexShrink: 0 }} aria-hidden="true" />
+        <h2 style={{ flex: 1, margin: 0, fontSize: '0.95rem', fontWeight: 800, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Diagnóstico da Grade</h2>
         <span className="pilula-status">{rotuloQualidade(qualidade)}</span>
         <i className="fas fa-chevron-down icone-chevron" aria-hidden="true" />
       </button>

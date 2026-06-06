@@ -170,22 +170,20 @@ export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao)
                   <strong style={{ color: corRodada }}>Mesa {mesa.id}</strong>
                 </header>
 
-                {/* Resumo de tempo da mesa */}
-                <div
-                  className={`resumo-tempo-mesa ${estaRodandoEstaRodada ? '' : 'resumo-tempo-mudo'}`}
-                >
-                  <span>{estaRodandoEstaRodada ? 'Tempo da mesa' : `Outra rodada`}</span>
-                  <strong>
-                    {estaRodandoEstaRodada ? formatarDuracao(segundosMesa) : `Rodada ${rodada.id}`}
-                  </strong>
-                  {estaRodandoEstaRodada ? (
-                    acrescimos > 0 && (
-                      <small>{`Acréscimo: +${acrescimos * (SEGUNDOS_ACRESCIMO_MESA / 60)} min`}</small>
-                    )
-                  ) : (
-                    <small>{`Selecione Rodada ${rodada.id} no timer para habilitar.`}</small>
-                  )}
-                </div>
+                {/* Tempo só aparece na rodada ativa; inativas mostram um aviso compacto */}
+                {estaRodandoEstaRodada ? (
+                  <div className="resumo-tempo-mesa">
+                    <span>Tempo</span>
+                    <strong>{formatarDuracao(segundosMesa)}</strong>
+                    {acrescimos > 0 && (
+                      <small style={{ marginLeft: 'auto' }}>+{acrescimos * (SEGUNDOS_ACRESCIMO_MESA / 60)} min</small>
+                    )}
+                  </div>
+                ) : (
+                  <p className="aviso-rodada-inativa">
+                    Selecione Rodada {rodada.id} no timer para habilitar
+                  </p>
+                )}
 
                 {/* Lista de assentos com inputs de pontuação */}
                 <div className="lista-assentos">

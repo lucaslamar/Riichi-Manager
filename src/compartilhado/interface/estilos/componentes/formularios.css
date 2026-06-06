@@ -19,16 +19,23 @@ textarea:focus {
 }
 
 .input-pontuacao {
-  width: 78px;
-  min-height: 42px;
+  width: 72px;
+  height: 30px;
   flex-shrink: 0;
-  border: 2px solid #eeeeee;
-  border-radius: 6px;
-  padding: 8px;
+  border: 2px solid #c8d4e0;
+  border-radius: 5px;
+  padding: 0 5px;
   color: #111;
-  background: var(--branco);
+  background: #f0f4f8;
+  font-size: 0.85rem;
   font-weight: 800;
   text-align: right;
+}
+
+.input-pontuacao:focus {
+  border-color: var(--primario);
+  background: var(--branco);
+  outline: none;
 }
 
 .input-bloqueado {

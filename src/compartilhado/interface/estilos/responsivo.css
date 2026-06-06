@@ -1,63 +1,76 @@
 ﻿/* ─── Responsivo ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-
-
   body {
     padding: 0 0 24px;
     background: #ffffff;
     line-height: 1.4;
   }
+
   .card,
   .caixa-mesa {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     border-radius: 0;
-    padding: 12px 10px;
+    padding: 10px;
     background: transparent;
     box-shadow: none;
   }
+
+  /* Cards colapsáveis do torneio — mantêm aparência de card no mobile */
+  .card-diagnostico,
+  .card-timer-colapsavel {
+    margin-bottom: 8px;
+    border-radius: 8px;
+    max-width: 100%;
+    width: 100%;
+  }
+
   .caixa-mesa,
   .opcao-configuracao-usuario,
   .metricas div {
     border-color: #e2e8f0;
     box-shadow: none;
   }
+
   .metricas {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .grade-rodadas {
-    grid-template-columns: 1fr;
-  }
-  .cabecalho-timer {
-    flex-direction: column;
-  }
-  .display-timer {
-    width: 100%;
-  }
+
+  /* grade-rodadas já é mobile-first 1fr — não sobrescrever aqui */
 }
 
-
-
 @media (max-width: 420px) {
-
-
   .acoes {
     display: grid;
   }
-  .btn-primario,
-  .btn-contorno {
+
+  /* Botões full-width apenas em .acoes, não globalmente para não quebrar o timer */
+  .acoes .btn-primario,
+  .acoes .btn-contorno {
     width: 100%;
   }
-  .linha-jogador {
-    gap: 6px;
-    padding: 8px;
-  }
+
   .tag-vento {
-    width: 62px;
-    font-size: 0.68rem;
+    width: 50px;
+    font-size: 0.62rem;
   }
+
   .input-pontuacao {
-    width: 72px;
-    font-size: 0.92rem;
+    width: 68px;
+  }
+
+  /* Timer: selects empilham em telas muito estreitas */
+  .controles-timer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .controles-timer {
+    grid-template-columns: 1fr;
+  }
+
+  .acoes-timer-secundarias {
+    grid-template-columns: 1fr;
   }
 }
 
