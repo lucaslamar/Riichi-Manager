@@ -1,6 +1,12 @@
 # Changelog - Riichi Manager
 
-## 4.1.2 - 2026-06-06
+## 4.2.0 - 2026-06-06
+
+### Adicionado
+
+- Adiciona sorteador de ventos totalmente aleatorio.
+
+## 4.1.3 - 2026-06-06
 
 ### Adicionado
 

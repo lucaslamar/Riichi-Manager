@@ -20,6 +20,7 @@ interface ItemMenuGlobal {
 const MODULOS_MENU: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'fa-chess-board' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'fa-wind' },
   { tela: 'configuracaoTorneio', chave: 'menu.fastTournament', icone: 'fa-trophy' },
 ]
 
@@ -134,7 +135,8 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
   useEffect(() => {
     if (!menuAberto) return
 
-    const focoAnterior = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const focoAnterior =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null
     const drawer = drawerRef.current
     document.body.classList.add('drawer-global-aberto')
 
@@ -224,81 +226,83 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
 
         {menuAberto &&
           createPortal(
-          <div
-            className="drawer-global-overlay"
-            role="presentation"
-            onPointerDown={(evento) => iniciarGestoDrawer('fechar', evento)}
-            onPointerMove={moverGestoDrawer}
-            onPointerCancel={finalizarGestoDrawer}
-            onPointerUp={finalizarGestoDrawer}
-            onMouseDown={(evento) => {
-              if (evento.target === evento.currentTarget) setMenuAberto(false)
-            }}
-          >
             <div
-              ref={drawerRef}
-              id="drawer-global"
-              className="drawer-global"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="titulo-drawer-global"
-              style={{ transform: deslocamentoDrawer ? `translateX(${deslocamentoDrawer}px)` : undefined }}
+              className="drawer-global-overlay"
+              role="presentation"
+              onPointerDown={(evento) => iniciarGestoDrawer('fechar', evento)}
+              onPointerMove={moverGestoDrawer}
+              onPointerCancel={finalizarGestoDrawer}
+              onPointerUp={finalizarGestoDrawer}
+              onMouseDown={(evento) => {
+                if (evento.target === evento.currentTarget) setMenuAberto(false)
+              }}
             >
-              <div className="drawer-cabecalho">
-                <div>
-                  <strong id="titulo-drawer-global">{t('global.appName')}</strong>
-                  <span>{t('global.tagline')}</span>
+              <div
+                ref={drawerRef}
+                id="drawer-global"
+                className="drawer-global"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="titulo-drawer-global"
+                style={{
+                  transform: deslocamentoDrawer ? `translateX(${deslocamentoDrawer}px)` : undefined,
+                }}
+              >
+                <div className="drawer-cabecalho">
+                  <div>
+                    <strong id="titulo-drawer-global">{t('global.appName')}</strong>
+                    <span>{t('global.tagline')}</span>
+                  </div>
+                  <button
+                    className="botao-fechar-drawer"
+                    type="button"
+                    aria-label={t('global.closeMenu')}
+                    onClick={() => setMenuAberto(false)}
+                  >
+                    <i className="fas fa-xmark" aria-hidden="true" />
+                  </button>
                 </div>
-                <button
-                  className="botao-fechar-drawer"
-                  type="button"
-                  aria-label={t('global.closeMenu')}
-                  onClick={() => setMenuAberto(false)}
-                >
-                  <i className="fas fa-xmark" aria-hidden="true" />
-                </button>
+
+                <nav className="drawer-navegacao" aria-label={t('global.navigation')}>
+                  <MenuSecao
+                    titulo={t('menu.modules')}
+                    itens={MODULOS_MENU}
+                    telaAtual={telaAtual}
+                    aoNavegar={navegar}
+                    t={t}
+                  />
+                  <MenuSecao
+                    titulo={t('menu.app')}
+                    itens={APP_MENU}
+                    telaAtual={telaAtual}
+                    aoNavegar={navegar}
+                    t={t}
+                  />
+                </nav>
+
+                <label className="seletor-idioma seletor-idioma-drawer">
+                  <span>
+                    <i className="fas fa-globe" aria-hidden="true" />
+                    {t('menu.language')}
+                  </span>
+                  <select
+                    value={idioma}
+                    aria-label={t('menu.language')}
+                    onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
+                  >
+                    {idiomas.map((opcaoIdioma) => (
+                      <option key={opcaoIdioma} value={opcaoIdioma}>
+                        {ROTULOS_IDIOMA[opcaoIdioma]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <div className="drawer-rodape">v{packageJson.version}</div>
               </div>
-
-              <nav className="drawer-navegacao" aria-label={t('global.navigation')}>
-                <MenuSecao
-                  titulo={t('menu.modules')}
-                  itens={MODULOS_MENU}
-                  telaAtual={telaAtual}
-                  aoNavegar={navegar}
-                  t={t}
-                />
-                <MenuSecao
-                  titulo={t('menu.app')}
-                  itens={APP_MENU}
-                  telaAtual={telaAtual}
-                  aoNavegar={navegar}
-                  t={t}
-                />
-              </nav>
-
-              <label className="seletor-idioma seletor-idioma-drawer">
-                <span>
-                  <i className="fas fa-globe" aria-hidden="true" />
-                  {t('menu.language')}
-                </span>
-                <select
-                  value={idioma}
-                  aria-label={t('menu.language')}
-                  onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
-                >
-                  {idiomas.map((opcaoIdioma) => (
-                    <option key={opcaoIdioma} value={opcaoIdioma}>
-                      {ROTULOS_IDIOMA[opcaoIdioma]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <div className="drawer-rodape">v{packageJson.version}</div>
-            </div>
-          </div>,
-          document.body,
-        )}
+            </div>,
+            document.body,
+          )}
 
         {!menuAberto && (
           <div

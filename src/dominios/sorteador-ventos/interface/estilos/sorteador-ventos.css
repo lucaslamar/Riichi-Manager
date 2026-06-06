@@ -1,0 +1,200 @@
+.sorteador-ventos {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  width: min(100%, 600px);
+  margin-inline: auto;
+  border-radius: var(--raio);
+  padding: 16px;
+  background: var(--branco);
+  color: var(--escuro);
+  box-shadow: var(--sombra);
+}
+
+/* neutraliza margin-bottom e borda global do cabecalho-secao */
+.sorteador-ventos__cabecalho {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* ── Grade de cards ──────────────────────────────────────── */
+
+.sorteador-ventos__grade {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+/* ── Card individual ─────────────────────────────────────── */
+
+.card-vento {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 3px;
+  min-height: 100px;
+  border: 2px solid #dfe7ef;
+  border-radius: 10px;
+  padding: 12px 10px;
+  background: #f8fbff;
+  text-align: center;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    box-shadow 0.15s,
+    transform 0.12s;
+  overflow: hidden;
+}
+
+.card-vento__kanji {
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.card-vento__nome {
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.card-vento__status {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #607080;
+}
+
+.card-vento__ordem {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #607080;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+/* ── Estados por cor de vento ────────────────────────────── */
+
+.card-vento--leste .card-vento__kanji { color: var(--leste); }
+.card-vento--sul .card-vento__kanji   { color: var(--sul); }
+.card-vento--oeste .card-vento__kanji { color: var(--oeste); }
+.card-vento--norte .card-vento__kanji { color: var(--norte); }
+
+/* ── Estado: disponível (default) ────────────────────────── */
+
+.card-vento--disponivel {
+  cursor: default;
+}
+
+/* ── Estado: animando ────────────────────────────────────── */
+
+.card-vento--animando {
+  border-color: var(--primario);
+  background: var(--info-fundo);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.22);
+  transform: scale(1.04);
+}
+
+/* ── Estado: sorteado ────────────────────────────────────── */
+
+.card-vento--sorteado {
+  border-color: #c9d4df;
+  background: #f1f5f9;
+  opacity: 0.72;
+}
+
+.card-vento--sorteado .card-vento__kanji {
+  color: #8a9bb0;
+}
+
+.card-vento--sorteado .card-vento__nome {
+  color: #7b8794;
+}
+
+/* ── Botões de ação ──────────────────────────────────────── */
+
+.sorteador-ventos__acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sorteador-ventos__btn-sortear,
+.sorteador-ventos__btn-reiniciar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sorteador-ventos__btn-sortear {
+  min-height: 52px;
+  font-size: 1rem;
+}
+
+.sorteador-ventos__btn-reiniciar {
+  min-height: 46px;
+}
+
+/* ── Focus ───────────────────────────────────────────────── */
+
+.sorteador-ventos button:focus-visible {
+  outline: 3px solid rgba(33, 150, 243, 0.35);
+  outline-offset: 2px;
+}
+
+/* ── Responsivo: desktop ─────────────────────────────────── */
+
+@media (min-width: 560px) {
+  .sorteador-ventos {
+    gap: 14px;
+    padding: 24px;
+  }
+
+  .sorteador-ventos__grade {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .card-vento {
+    min-height: 130px;
+  }
+
+  .card-vento__kanji {
+    font-size: 3rem;
+  }
+}
+
+/* ── Responsivo: mobile pequeno ──────────────────────────── */
+
+@media (max-width: 380px) {
+  .sorteador-ventos {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .card-vento {
+    min-height: 88px;
+    padding: 10px 8px;
+  }
+
+  .card-vento__kanji {
+    font-size: 2rem;
+  }
+
+  .card-vento__nome {
+    font-size: 0.76rem;
+  }
+}

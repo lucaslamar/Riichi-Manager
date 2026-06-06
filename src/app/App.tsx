@@ -21,11 +21,13 @@ import {
 } from '@/dominios/torneio-fast/interface/componentes'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
+import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import packageJson from '../../package.json'
 
 export type TelaPrincipal =
   | 'calculadora'
   | 'calculadoraRapida'
+  | 'sorteadorVentos'
   | 'configuracaoTorneio'
   | 'regras'
   | 'sobre'
@@ -112,6 +114,7 @@ export default function App() {
       <main className="conteudo-principal">
         {tela === 'calculadora' && <PaginaCalculadoraMao />}
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
+        {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
 
         {tela === 'configuracaoTorneio' &&
           (ativo ? (
