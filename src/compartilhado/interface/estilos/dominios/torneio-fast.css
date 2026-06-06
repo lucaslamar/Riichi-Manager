@@ -22,6 +22,33 @@
   font-weight: 900;
   text-align: right;
 }
+/* ─── Cabeçalho colapsável ───────────────────────────────────────────────── */
+.cabecalho-colapsavel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cabecalho-colapsavel h2 {
+  font-size: inherit;
+}
+
+.painel-colapsavel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.painel-aberto {
+  max-height: 2000px;
+}
+
 /* ─── Qualidade da grade ─────────────────────────────────────────────────── */
 .pilula-status {
   margin-left: auto;
@@ -159,6 +186,39 @@
   font-size: 0.9rem;
   font-weight: 600;
 }
+/* ─── Abas de filtro da grade ────────────────────────────────────────────── */
+.abas-grade {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  scrollbar-width: none;
+}
+
+.abas-grade::-webkit-scrollbar {
+  display: none;
+}
+
+.aba-grade {
+  flex-shrink: 0;
+  border: 2px solid #dde1e7;
+  border-radius: 20px;
+  padding: 6px 16px;
+  background: var(--branco);
+  color: #607080;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.aba-grade.aba-ativa {
+  border-color: var(--primario);
+  background: var(--primario);
+  color: var(--branco);
+}
+
 /* ─── Mesas / Grade ──────────────────────────────────────────────────────── */
 .grade-rodadas {
   display: grid;
