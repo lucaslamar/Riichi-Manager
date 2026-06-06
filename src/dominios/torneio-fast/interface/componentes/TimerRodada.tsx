@@ -53,21 +53,22 @@ export function TimerRodada({ torneio, atualizarTorneio }: PropsComAtualizacao) 
   const handleToggle = useCallback(() => setAberto((a) => !a), [])
 
   return (
-    <section className="card card-timer" aria-label="Timer da rodada">
+    <section className="card-timer-colapsavel" aria-label="Timer da rodada">
       <button
-        className="cabecalho-secao cabecalho-colapsavel"
+        className="cabecalho-timer-colapsavel"
         type="button"
         onClick={handleToggle}
         aria-expanded={aberto}
       >
         <div style={{ flex: 1, textAlign: 'left' }}>
           <span className="label-timer-base">Timer base</span>
-          <h2 style={{ margin: 0 }}>Rodada {timer.indiceRodada + 1}</h2>
+          <h2 style={{ margin: 0, fontSize: '1rem', fontWeight: 800 }}>Rodada {timer.indiceRodada + 1}</h2>
         </div>
         <i className="fas fa-chevron-down icone-chevron" aria-hidden="true" />
       </button>
 
       <div className={`painel-colapsavel ${aberto ? 'painel-aberto' : ''}`}>
+        <div style={{ padding: '0 16px 16px' }}>
         {/* Display escuro com o tempo */}
         <output className="display-timer" aria-live="polite" style={{ display: 'block', marginBottom: 16 }}>
           {formatarDuracao(segundos)}
@@ -151,6 +152,7 @@ export function TimerRodada({ torneio, atualizarTorneio }: PropsComAtualizacao) 
           O timer base vale para todas as mesas. Acréscimos individuais (+5 min) aparecem apenas no
           cartão da mesa correspondente.
         </p>
+        </div>
       </div>
     </section>
   )

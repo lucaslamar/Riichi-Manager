@@ -45,21 +45,21 @@ export function PainelQualidade({ torneio, atualizarTorneio }: PropsComAtualizac
       : `${qualidade.maxRepetidosPorJogador}/${qualidade.limiteRepetidosPorJogador}`
 
   return (
-    <section className="card" aria-label="Qualidade da grade">
+    <section className="card-diagnostico" aria-label="Qualidade da grade">
       <button
-        className="cabecalho-secao cabecalho-colapsavel"
+        className="cabecalho-diagnostico"
         type="button"
         onClick={() => setAberto((a) => !a)}
         aria-expanded={aberto}
       >
-        <i className="fas fa-clipboard-check icone-secao" aria-hidden="true" />
-        <h2 style={{ flex: 1 }}>Diagnóstico da Grade</h2>
+        <i className="fas fa-clipboard-check" style={{ color: '#1a3a5a', fontSize: '1.1rem' }} aria-hidden="true" />
+        <h2 style={{ flex: 1, margin: 0, fontSize: '1rem', fontWeight: 800 }}>Diagnóstico da Grade</h2>
         <span className="pilula-status">{rotuloQualidade(qualidade)}</span>
         <i className="fas fa-chevron-down icone-chevron" aria-hidden="true" />
       </button>
 
       <div className={`painel-colapsavel ${aberto ? 'painel-aberto' : ''}`}>
-        <dl className="metricas" style={{ marginTop: 16 }}>
+        <dl className="metricas" style={{ marginTop: 12 }}>
           <div>
             <dt>Leste exato</dt>
             <dd>{qualidade.lesteExato ? 'Sim' : 'Não'}</dd>
@@ -128,4 +128,5 @@ export function PainelQualidade({ torneio, atualizarTorneio }: PropsComAtualizac
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // GRADE DE RODADAS E MESAS
+
 // ═══════════════════════════════════════════════════════════════════════════════
