@@ -19,6 +19,7 @@
     "handCalculator": "Calculadora de Mão",
     "quickCalculator": "Calculadora de Han e Fu",
     "fastTournament": "Torneio",
+    "windDraw": "Sorteador de Ventos",
     "rules": "Regras / Configurações",
     "about": "Sobre / versão"
   },
@@ -301,6 +302,26 @@
     "compactModeHelp": "Reduz espaçamentos para mostrar mais mão e teclado na tela.",
     "largeTouchTargets": "Área de toque ampliada",
     "largeTouchTargetsHelp": "Aumenta botões e tiles para uso com mais conforto no toque."
+  },
+  "windDraw": {
+    "title": "Sorteador de Ventos",
+    "subtitle": "Sorteie os ventos da mesa um por vez.",
+    "draw": "Sortear vento",
+    "restart": "Reiniciar sorteio",
+    "result": "Resultado",
+    "available": "Disponível",
+    "drawn": "Sorteado",
+    "lastWind": "Último vento",
+    "east": "Leste",
+    "south": "Sul",
+    "west": "Oeste",
+    "north": "Norte",
+    "windDrawn": "Vento sorteado",
+    "drawComplete": "Sorteio completo",
+    "drawOrder": "{{order}}º sorteado",
+    "drawButtonLabel": "Sortear próximo vento",
+    "restartButtonLabel": "Reiniciar sorteio",
+    "cardLabel": "Vento {{wind}}, {{status}}"
   },
   "ad": {
     "label": "Publicidade",
