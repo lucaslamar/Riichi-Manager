@@ -37,7 +37,7 @@ export default function MenuInicial({ aoClicarTorneioFast, aoNavegar }: PropsMen
         </button>
 
         <button className="btn-contorno botao-menu" type="button" onClick={aoClicarTorneioFast}>
-          <i className="fas fa-table" aria-hidden="true" /> Torneio
+          <i className="fas fa-trophy" aria-hidden="true" /> Torneio
         </button>
       </div>
     </section>
