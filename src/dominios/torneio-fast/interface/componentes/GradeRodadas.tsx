@@ -27,9 +27,9 @@ const CORES_RODADA = ['#2196f3', '#4caf50', '#ff9800', '#e91e63']
  * @param props - torneio e atualizarTorneio.
  */
 export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao) {
-  // Estado local: pontuações digitadas mas ainda não confirmadas.
-  // A chave é "rodada_mesa_assento", o valor é o texto do input.
   const [pontuacoes, setPontuacoes] = useState<Record<string, string>>({})
+  // -1 = "Todas as mesas"; 0+ = índice da rodada específica
+  const [abaAtiva, setAbaAtiva] = useState<number>(-1)
 
   const getPontuacao = (indiceRodada: number, indiceMesa: number, indiceAssento: number) =>
     pontuacoes[`${indiceRodada}_${indiceMesa}_${indiceAssento}`] ??
@@ -56,7 +56,6 @@ export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao)
     const chave = chaveMesa(indiceRodada, indiceMesa)
     if (torneio.mesasConcluidas[chave]) return
 
-    // Monta os resultados com as pontuações digitadas.
     const resultados = mesa.assentos.map((assento, indiceAssento) => ({
       jogador: assento.jogador,
       pontuacao: parsePontuacao(
@@ -69,30 +68,49 @@ export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao)
       .join('\n')
     if (!window.confirm(`Confirmar resultados da Mesa ${indiceMesa + 1}?\n${resumo}`)) return
 
-    // Atualiza a classificação e marca a mesa como concluída.
     atualizarTorneio((torneioAtual) => {
       const classificacao = { ...torneioAtual.classificacao }
       for (const pts of calcularPontosPartida(resultados)) {
         classificacao[pts.jogador] = (classificacao[pts.jogador] ?? 0) + pts.pontos
       }
+      const novasMesasConcluidas = { ...torneioAtual.mesasConcluidas, [chave]: true }
+
+      // Verifica se todas as mesas da rodada atual foram concluídas para avançar.
+      const rodadaAtual = torneioAtual.grade[indiceRodada]
+      const todasConcluidas =
+        rodadaAtual?.mesas.every((_, iM) =>
+          iM === indiceMesa ? true : Boolean(novasMesasConcluidas[chaveMesa(indiceRodada, iM)]),
+        ) ?? false
+      const proximaRodada = indiceRodada + 1
+      const temProximaRodada = proximaRodada < torneioAtual.grade.length
+      const timerAtualizado =
+        todasConcluidas && temProximaRodada && torneioAtual.timer.indiceRodada === indiceRodada
+          ? { ...torneioAtual.timer, indiceRodada: proximaRodada, rodando: false }
+          : torneioAtual.timer
+
       return {
         ...torneioAtual,
         classificacao,
-        mesasConcluidas: { ...torneioAtual.mesasConcluidas, [chave]: true },
+        mesasConcluidas: novasMesasConcluidas,
         pontuacoesPorMesa: {
           ...torneioAtual.pontuacoesPorMesa,
           [chave]: resultados.map((resultado) => formatarPontuacao(resultado.pontuacao)),
         },
+        timer: timerAtualizado,
       }
     })
   }
+
+  const mesasFiltradas = torneio.grade.flatMap((rodada, iRodada) =>
+    rodada.mesas.map((mesa, iMesa) => ({ rodada, iRodada, mesa, iMesa })),
+  ).filter(({ iRodada }) => abaAtiva === -1 || iRodada === abaAtiva)
 
   return (
     <section aria-label="Grade de rodadas">
       <div
         style={{
           marginTop: 30,
-          marginBottom: 20,
+          marginBottom: 12,
           borderBottom: '2px solid #f0f0f0',
           paddingBottom: 12,
           display: 'flex',
@@ -109,9 +127,29 @@ export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao)
         </div>
       </div>
 
+      {/* Abas de filtro por rodada */}
+      <div className="abas-grade">
+        <button
+          className={`aba-grade ${abaAtiva === -1 ? 'aba-ativa' : ''}`}
+          type="button"
+          onClick={() => setAbaAtiva(-1)}
+        >
+          Todas
+        </button>
+        {torneio.grade.map((rodada, iRodada) => (
+          <button
+            key={rodada.id}
+            className={`aba-grade ${abaAtiva === iRodada ? 'aba-ativa' : ''}`}
+            type="button"
+            onClick={() => setAbaAtiva(iRodada)}
+          >
+            Rodada {rodada.id}
+          </button>
+        ))}
+      </div>
+
       <div className="grade-rodadas">
-        {torneio.grade.map((rodada, iRodada) =>
-          rodada.mesas.map((mesa, iMesa) => {
+        {mesasFiltradas.map(({ rodada, iRodada, mesa, iMesa }) => {
             const chave = chaveMesa(iRodada, iMesa)
             const concluida = Boolean(torneio.mesasConcluidas[chave])
             const pontuacoesSalvas = torneio.pontuacoesPorMesa[chave]
@@ -208,9 +246,11 @@ export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao)
                   </button>
 
                   <button
-                    className={`btn-primario btn-salvar-mesa ${concluida ? 'btn-bloqueado' : ''}`}
+                    className={`btn-primario btn-salvar-mesa ${concluida || !estaRodandoEstaRodada ? 'btn-bloqueado' : ''}`}
                     type="button"
+                    disabled={concluida || !estaRodandoEstaRodada}
                     onClick={() => handleSalvar(iRodada, iMesa)}
+                    title={!estaRodandoEstaRodada ? `Selecione Rodada ${rodada.id} no timer para habilitar` : undefined}
                   >
                     <i className={`fas ${concluida ? 'fa-check-circle' : 'fa-save'}`} />
                     {concluida ? ' Mesa arquivada' : ' Guardar mesa'}
@@ -218,8 +258,7 @@ export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao)
                 </div>
               </article>
             )
-          }),
-        )}
+          })}
       </div>
     </section>
   )
