@@ -1,5 +1,16 @@
 # Changelog - Riichi Manager
 
+## 4.1.2 - 2026-06-06
+
+### Adicionado
+
+- Suporte às rodadas Oeste (西) e Norte (北) como Enchousen (延長戦).
+- Corrigi chombo, não-Leste paga 8.000 (Leste +4k, outros +2k cada). Leste paga 12.000 (todos os outros +4k cada)Add west north rounds
+
+### Corrigido
+
+-
+
 ## 4.1.1 - 2026-06-04
 
 ### Melhorias
@@ -11,7 +22,7 @@
 
 - Corrige a detecção de **Chi** para diferenciar sequências formadas por pedras livres das que usariam pedras já comprometidas na mão.
 
-## 4.1.0 - - 2026-06-02
+## 4.1.0 - 2026-06-02
 
 ### Melhorias
 

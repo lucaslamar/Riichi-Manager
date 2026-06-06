@@ -167,9 +167,9 @@ export default function ResultadoMaoCalculada({
   const avisoSemYaku = (
     <div className="resultado-chombo-furiten resultado-chombo-modal">
       <strong>{t('calculator.noYakuTitle')}</strong>
-      <div className="pontos-chombo">-12.000</div>
+      <div className="pontos-chombo">{chomboOya ? '-12.000' : '-8.000'}</div>
       <span>{t('calculator.invalidNoYakuAnnounce')}</span>
-      <span>{t('calculator.noYakuPenalty')}</span>
+      <span>{chomboOya ? t('calculator.noYakuPenaltyDealer') : t('calculator.noYakuPenaltyNonDealer')}</span>
     </div>
   )
   const textoBotao =
