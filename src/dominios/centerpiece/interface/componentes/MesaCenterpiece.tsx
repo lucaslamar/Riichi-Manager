@@ -34,21 +34,36 @@ export default function MesaCenterpiece({
   aoDesfazer,
   aoReiniciar,
 }: PropsMesaCenterpiece) {
+  const norte = estado.jogadores.find((j) => j.vento === 'norte')
+  const sul = estado.jogadores.find((j) => j.vento === 'sul')
+  const oeste = estado.jogadores.find((j) => j.vento === 'oeste')
+  const leste = estado.jogadores.find((j) => j.vento === 'leste')
+
   return (
     <div className="centerpiece-mesa">
-      <div className="centerpiece-grade-jogadores">
-        {estado.jogadores.map((jogador) => (
-          <CardJogadorMesa key={jogador.id} jogador={jogador} />
-        ))}
+      <div className="cp-compass">
+        <div className="cp-area-norte">
+          {norte && <CardJogadorMesa jogador={norte} />}
+        </div>
+        <div className="cp-area-oeste">
+          {oeste && <CardJogadorMesa jogador={oeste} />}
+        </div>
+        <div className="cp-area-centro">
+          <PainelCentralMesa
+            estado={estado}
+            podDesfazer={estado.historico.length > 0}
+            aoAbrirModal={aoAbrirModal}
+            aoDesfazer={aoDesfazer}
+            aoReiniciar={aoReiniciar}
+          />
+        </div>
+        <div className="cp-area-leste">
+          {leste && <CardJogadorMesa jogador={leste} />}
+        </div>
+        <div className="cp-area-sul">
+          {sul && <CardJogadorMesa jogador={sul} />}
+        </div>
       </div>
-
-      <PainelCentralMesa
-        estado={estado}
-        podDesfazer={estado.historico.length > 0}
-        aoAbrirModal={aoAbrirModal}
-        aoDesfazer={aoDesfazer}
-        aoReiniciar={aoReiniciar}
-      />
 
       {modalAberto === 'batida' && (
         <ModalRegistrarBatida

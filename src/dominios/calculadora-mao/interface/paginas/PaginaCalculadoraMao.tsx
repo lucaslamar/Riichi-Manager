@@ -9,13 +9,25 @@ import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalcula
 import ModalRegras from '../componentes/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
+import type { ResultadoCalculoParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
+import { converterMaoParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
 
-export default function PaginaCalculadoraMao() {
+interface PropsPaginaCalculadoraMao {
+  aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
+}
+
+export default function PaginaCalculadoraMao({ aoUsarResultado }: PropsPaginaCalculadoraMao = {}) {
   const calculadora = useCalculadoraMao()
 
   const cabecalho = (
     <BarraCalculadora modo="completo" />
   )
+
+  const handleUsarResultado = () => {
+    if (!aoUsarResultado || !calculadora.resultado) return
+    const convertido = converterMaoParaCenterpiece(calculadora.resultado)
+    if (convertido) aoUsarResultado(convertido)
+  }
 
   return (
     <div>
@@ -31,6 +43,19 @@ export default function PaginaCalculadoraMao() {
           aoMudar={calculadora.setConfiguracao}
           aoFechar={() => calculadora.setModalRegrasAberto(false)}
         />
+      )}
+
+      {aoUsarResultado && calculadora.resultadoComYakuValido && (
+        <div className="cp-barra-usar-resultado">
+          <button
+            type="button"
+            className="btn-primario cp-btn-usar-resultado"
+            onClick={handleUsarResultado}
+          >
+            <i className="fas fa-check" aria-hidden="true" />
+            Usar resultado no Centerpiece
+          </button>
+        </div>
       )}
     </div>
   )

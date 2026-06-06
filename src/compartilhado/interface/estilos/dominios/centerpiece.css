@@ -113,9 +113,6 @@
 
 /* Mesa principal */
 .centerpiece-mesa {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -126,12 +123,61 @@
   box-sizing: border-box;
 }
 
-/* Grade de jogadores - 2x2 no mobile */
-.centerpiece-grade-jogadores {
+/* ─── Compass Layout ─── */
+
+/* Mobile: norte full-width, oeste|leste, sul full-width, centro full-width */
+.cp-compass {
   display: grid;
+  grid-template-areas:
+    "norte norte"
+    "oeste leste"
+    "sul sul"
+    "centro centro";
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-rows: auto auto auto auto;
+  gap: 8px;
   width: 100%;
+}
+
+.cp-area-norte { grid-area: norte; }
+.cp-area-sul   { grid-area: sul; }
+.cp-area-oeste { grid-area: oeste; }
+.cp-area-leste { grid-area: leste; }
+.cp-area-centro { grid-area: centro; }
+
+/* Landscape/Desktop: true compass  */
+@media (min-width: 600px) and (orientation: landscape),
+       (min-width: 800px) {
+  .cp-compass {
+    grid-template-areas:
+      ". norte ."
+      "oeste centro leste"
+      ". sul .";
+    grid-template-columns: minmax(140px, 1fr) minmax(180px, 2fr) minmax(140px, 1fr);
+    grid-template-rows: auto 1fr auto;
+    gap: 12px;
+    min-height: calc(100dvh - 120px);
+  }
+
+  .cp-area-norte,
+  .cp-area-sul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cp-area-oeste,
+  .cp-area-leste {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cp-area-centro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* Card de jogador */
@@ -670,13 +716,8 @@
   margin: 0;
 }
 
-/* Desktop: grade 2x2 maior */
+/* Desktop: cards maiores */
 @media (min-width: 600px) {
-  .centerpiece-grade-jogadores {
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
   .centerpiece-card-jogador {
     padding: 20px 16px;
   }
@@ -692,4 +733,171 @@
   .painel-btn-acao {
     flex: 0 1 auto;
   }
+}
+
+/* ─── Setup — textarea de nomes ─── */
+.setup-names-hint {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  color: var(--bloqueado);
+}
+
+.centerpiece-nomes-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid #dde1e7;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.6;
+  color: var(--escuro);
+  background: var(--branco);
+  min-height: 110px;
+}
+
+.centerpiece-nomes-textarea:focus {
+  outline: none;
+  border-color: var(--primario);
+}
+
+.centerpiece-nomes-textarea.erro {
+  border-color: #e53935;
+}
+
+.setup-names-erro {
+  margin: 6px 0 0;
+  color: #e53935;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Opções de cálculo no modal — lista vertical */
+.modal-opcoes-calcular {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opcao-calc {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  min-height: 52px;
+}
+
+/* ─── Overlay de calculadora ─── */
+.cp-calc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--fundo, #f0f2f5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cp-calc-overlay-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--branco);
+  border-bottom: 1px solid #e8e8e8;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.cp-calc-voltar {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cp-calc-titulo {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--escuro);
+  flex: 1;
+  min-width: 0;
+}
+
+.cp-calc-conteudo {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Botão "Usar resultado no Centerpiece" */
+.cp-btn-usar-resultado {
+  width: 100%;
+  margin-top: 8px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Barra sticky para calculadora de mão */
+.cp-barra-usar-resultado {
+  position: sticky;
+  bottom: 0;
+  padding: 12px 16px;
+  background: var(--branco);
+  border-top: 1px solid #e8e8e8;
+  z-index: 10;
+}
+
+.cp-barra-usar-resultado .cp-btn-usar-resultado {
+  margin-top: 0;
+}
+
+/* ─── Confirmação resumo ─── */
+.cp-confirmacao-resumo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: #f5f9ff;
+  border-radius: 10px;
+  border: 1.5px solid #dde1e7;
+}
+
+.cp-confirmacao-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cp-confirmacao-linha.destaque .cp-conf-valor {
+  font-size: 1.15rem;
+  color: var(--primario);
+}
+
+.cp-conf-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--bloqueado);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.cp-conf-valor {
+  font-weight: 700;
+  color: var(--escuro);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: right;
+}
+
+.cp-conf-valor .kanji-vento {
+  font-size: 1.1rem;
 }

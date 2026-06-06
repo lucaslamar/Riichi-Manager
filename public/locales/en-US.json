@@ -14,6 +14,12 @@
       "subtitle": "Enter players and draw winds to start.",
       "playerNames": "Player names",
       "player": "Player {{n}}",
+      "namesHint": "One name per line, exactly 4 players",
+      "namesPlaceholder": "Alice\nBob\nCarol\nDave",
+      "namesError": {
+        "tooFew": "Add {{n}} more player(s)",
+        "tooMany": "Remove {{n}} player(s) — only 4 allowed"
+      },
       "initialPoints": "Starting points",
       "custom": "Custom",
       "start": "Draw winds & start"
@@ -45,6 +51,7 @@
       "payer": "Who paid? (Ron)",
       "calcMethod": "Calculation method",
       "byHanFu": "Han & Fu",
+      "byMao": "Hand Calculator",
       "manual": "Manual value",
       "han": "Han",
       "fu": "Fu",
@@ -52,7 +59,10 @@
       "valueDealer": "Dealer payment",
       "valueNonDealer": "Non-dealer payment",
       "confirm": "Confirm Win",
-      "next": "Next"
+      "next": "Next",
+      "summaryTitle": "Confirm result",
+      "applyResult": "Apply result",
+      "recalculate": "Recalculate"
     },
     "riichi": {
       "title": "Declare Riichi",

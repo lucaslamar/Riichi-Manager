@@ -16,21 +16,38 @@ export default function SetupCenterpiece({
   aoRetomar,
 }: PropsSetupCenterpiece) {
   const { t } = useI18n()
-  const [nomes, setNomes] = useState<[string, string, string, string]>(['', '', '', ''])
+  const [texto, setTexto] = useState('')
   const [pontosIniciais, setPontosIniciais] = useState(25000)
   const [pontosCustom, setPontosCustom] = useState('')
   const [usarCustom, setUsarCustom] = useState(false)
+  const [erro, setErro] = useState<string | null>(null)
 
   const pontosFinais = usarCustom ? (parseInt(pontosCustom, 10) || 25000) : pontosIniciais
 
-  const aoMudarNome = (indice: number, valor: string) => {
-    const novosNomes: [string, string, string, string] = [...nomes] as [string, string, string, string]
-    novosNomes[indice] = valor
-    setNomes(novosNomes)
+  const parsearNomes = (): [string, string, string, string] | null => {
+    const linhas = texto
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l.length > 0)
+
+    if (linhas.length !== 4) {
+      const diff = linhas.length < 4 ? 4 - linhas.length : linhas.length - 4
+      if (linhas.length < 4) {
+        setErro(t('centerpiece.setup.namesError.tooFew', { n: diff }))
+      } else {
+        setErro(t('centerpiece.setup.namesError.tooMany', { n: diff }))
+      }
+      return null
+    }
+
+    setErro(null)
+    return linhas as [string, string, string, string]
   }
 
   const aoSubmeter = (evento: React.FormEvent<HTMLFormElement>) => {
     evento.preventDefault()
+    const nomes = parsearNomes()
+    if (!nomes) return
     aoIniciar({ nomes, pontosIniciais: pontosFinais })
   }
 
@@ -57,21 +74,16 @@ export default function SetupCenterpiece({
       <form onSubmit={aoSubmeter} className="centerpiece-form">
         <fieldset>
           <legend>{t('centerpiece.setup.playerNames')}</legend>
-          <div className="centerpiece-nomes-grade">
-            {nomes.map((nome, i) => (
-              <label key={i} className="campo-nome-jogador">
-                <span>{t('centerpiece.setup.player', { n: i + 1 })}</span>
-                <input
-                  type="text"
-                  value={nome}
-                  onChange={(evento) => aoMudarNome(i, evento.target.value)}
-                  placeholder={t('centerpiece.setup.player', { n: i + 1 })}
-                  maxLength={20}
-                  aria-label={t('centerpiece.setup.player', { n: i + 1 })}
-                />
-              </label>
-            ))}
-          </div>
+          <p className="setup-names-hint">{t('centerpiece.setup.namesHint')}</p>
+          <textarea
+            className={`centerpiece-nomes-textarea${erro ? ' erro' : ''}`}
+            value={texto}
+            onChange={(evento) => { setTexto(evento.target.value); setErro(null) }}
+            placeholder={t('centerpiece.setup.namesPlaceholder')}
+            rows={4}
+            aria-label={t('centerpiece.setup.playerNames')}
+          />
+          {erro && <p className="setup-names-erro" role="alert">{erro}</p>}
         </fieldset>
 
         <fieldset>

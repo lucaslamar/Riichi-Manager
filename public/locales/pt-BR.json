@@ -334,6 +334,12 @@
       "subtitle": "Informe os jogadores e sorteia os ventos para iniciar.",
       "playerNames": "Nomes dos jogadores",
       "player": "Jogador {{n}}",
+      "namesHint": "Um nome por linha, exatamente 4 jogadores",
+      "namesPlaceholder": "Ana\nBruno\nCarla\nDavi",
+      "namesError": {
+        "tooFew": "Adicione mais {{n}} jogador(es)",
+        "tooMany": "Remova {{n}} jogador(es) — só 4 permitidos"
+      },
       "initialPoints": "Pontuação inicial",
       "custom": "Outro valor",
       "start": "Sortear ventos e iniciar"
@@ -365,6 +371,7 @@
       "payer": "Quem pagou? (Ron)",
       "calcMethod": "Método de cálculo",
       "byHanFu": "Han e Fu",
+      "byMao": "Calculadora de Mão",
       "manual": "Valor manual",
       "han": "Han",
       "fu": "Fu",
@@ -372,7 +379,10 @@
       "valueDealer": "Pago pelo Leste",
       "valueNonDealer": "Pago por não-Leste",
       "confirm": "Confirmar Batida",
-      "next": "Próximo"
+      "next": "Próximo",
+      "summaryTitle": "Confirmar resultado",
+      "applyResult": "Aplicar resultado",
+      "recalculate": "Recalcular"
     },
     "riichi": {
       "title": "Declarar Riichi",

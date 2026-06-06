@@ -9,12 +9,20 @@ import {
 
 export type AgariHanFu = TipoVitoriaHanFu
 
-export function useCalculadoraHanFu() {
-  const [han, setHan] = useState(1)
-  const [fu, setFu] = useState(30)
-  const [agari, setAgari] = useState<AgariHanFu>('ron')
-  const [isOya, setIsOya] = useState(false)
-  const [honba, setHonba] = useState(0)
+interface OpcionsIniciaisCalculadoraHanFu {
+  initialHan?: number
+  initialFu?: number
+  initialAgari?: AgariHanFu
+  initialIsOya?: boolean
+  initialHonba?: number
+}
+
+export function useCalculadoraHanFu(opcoes?: OpcionsIniciaisCalculadoraHanFu) {
+  const [han, setHan] = useState(opcoes?.initialHan ?? 1)
+  const [fu, setFu] = useState(opcoes?.initialFu ?? 30)
+  const [agari, setAgari] = useState<AgariHanFu>(opcoes?.initialAgari ?? 'ron')
+  const [isOya, setIsOya] = useState(opcoes?.initialIsOya ?? false)
+  const [honba, setHonba] = useState(opcoes?.initialHonba ?? 0)
 
   const fuDisponiveis = useMemo(() => obterFuValidos(han), [han])
   const fuNormalizado = useMemo(() => normalizarFu(han, fu), [han, fu])
