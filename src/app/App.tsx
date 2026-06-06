@@ -22,6 +22,7 @@ import {
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
+import PaginaCenterpiece from '@/dominios/centerpiece/interface/paginas/PaginaCenterpiece'
 import packageJson from '../../package.json'
 
 export type TelaPrincipal =
@@ -29,6 +30,7 @@ export type TelaPrincipal =
   | 'calculadoraRapida'
   | 'sorteadorVentos'
   | 'configuracaoTorneio'
+  | 'centerpiece'
   | 'regras'
   | 'sobre'
 
@@ -115,6 +117,7 @@ export default function App() {
         {tela === 'calculadora' && <PaginaCalculadoraMao />}
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
+        {tela === 'centerpiece' && <PaginaCenterpiece />}
 
         {tela === 'configuracaoTorneio' &&
           (ativo ? (

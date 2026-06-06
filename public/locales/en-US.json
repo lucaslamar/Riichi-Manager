@@ -4,5 +4,76 @@
   },
   "global": {
     "appName": "Riichi Manager"
+  },
+  "menu": {
+    "centerpiece": "Centerpiece"
+  },
+  "centerpiece": {
+    "setup": {
+      "title": "Table Setup",
+      "subtitle": "Enter players and draw winds to start.",
+      "playerNames": "Player names",
+      "player": "Player {{n}}",
+      "initialPoints": "Starting points",
+      "custom": "Custom",
+      "start": "Draw winds & start"
+    },
+    "continue": {
+      "title": "Game in progress",
+      "resume": "Continue",
+      "restart": "New Game"
+    },
+    "round": {
+      "leste": "East",
+      "sul": "South"
+    },
+    "mesa": {
+      "honba": "Honba",
+      "riichiSticks": "Riichi sticks",
+      "registerWin": "Register Win",
+      "riichi": "Riichi",
+      "draw": "Draw",
+      "chombo": "Chombo",
+      "undo": "Undo",
+      "newGame": "New Game",
+      "confirmNewGame": "End current game and start a new table?"
+    },
+    "win": {
+      "title": "Register Win",
+      "type": "Victory type",
+      "winner": "Who won?",
+      "payer": "Who paid? (Ron)",
+      "calcMethod": "Calculation method",
+      "byHanFu": "Han & Fu",
+      "manual": "Manual value",
+      "han": "Han",
+      "fu": "Fu",
+      "value": "Total value (pts)",
+      "valueDealer": "Dealer payment",
+      "valueNonDealer": "Non-dealer payment",
+      "confirm": "Confirm Win",
+      "next": "Next"
+    },
+    "riichi": {
+      "title": "Declare Riichi",
+      "player": "Player declaring Riichi",
+      "confirm": "Confirm Riichi",
+      "notEnough": "Not enough points for riichi"
+    },
+    "ryukyoku": {
+      "title": "Draw / Ryukyoku",
+      "tenpai": "Who was in Tenpai?",
+      "confirm": "Confirm Draw",
+      "noPayment": "No point exchange (0 or 4 tenpai)."
+    },
+    "chombo": {
+      "title": "Chombo / Invalid Hand",
+      "player": "Who committed chombo?",
+      "penalty": "Penalty",
+      "preset": "Standard mangan",
+      "custom": "Per player value",
+      "valuePerPlayer": "Amount paid to each player (pts)",
+      "confirm": "Apply Chombo"
+    }
   }
 }

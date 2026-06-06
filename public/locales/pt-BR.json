@@ -20,6 +20,7 @@
     "quickCalculator": "Calculadora de Han e Fu",
     "fastTournament": "Torneio",
     "windDraw": "Sorteador de Ventos",
+    "centerpiece": "Centerpiece",
     "rules": "Regras / Configurações",
     "about": "Sobre / versão"
   },
@@ -326,5 +327,73 @@
   "ad": {
     "label": "Publicidade",
     "placeholder": "Espaço reservado para publicidade"
+  },
+  "centerpiece": {
+    "setup": {
+      "title": "Configurar Mesa",
+      "subtitle": "Informe os jogadores e sorteia os ventos para iniciar.",
+      "playerNames": "Nomes dos jogadores",
+      "player": "Jogador {{n}}",
+      "initialPoints": "Pontuação inicial",
+      "custom": "Outro valor",
+      "start": "Sortear ventos e iniciar"
+    },
+    "continue": {
+      "title": "Partida em andamento",
+      "resume": "Continuar",
+      "restart": "Nova Mesa"
+    },
+    "round": {
+      "leste": "Leste",
+      "sul": "Sul"
+    },
+    "mesa": {
+      "honba": "Honba",
+      "riichiSticks": "Riichi sticks",
+      "registerWin": "Registrar Batida",
+      "riichi": "Riichi",
+      "draw": "Empate",
+      "chombo": "Chombo",
+      "undo": "Desfazer",
+      "newGame": "Nova Mesa",
+      "confirmNewGame": "Encerrar partida atual e começar nova mesa?"
+    },
+    "win": {
+      "title": "Registrar Batida",
+      "type": "Tipo de vitória",
+      "winner": "Quem venceu?",
+      "payer": "Quem pagou? (Ron)",
+      "calcMethod": "Método de cálculo",
+      "byHanFu": "Han e Fu",
+      "manual": "Valor manual",
+      "han": "Han",
+      "fu": "Fu",
+      "value": "Valor total (pts)",
+      "valueDealer": "Pago pelo Leste",
+      "valueNonDealer": "Pago por não-Leste",
+      "confirm": "Confirmar Batida",
+      "next": "Próximo"
+    },
+    "riichi": {
+      "title": "Declarar Riichi",
+      "player": "Jogador em Riichi",
+      "confirm": "Confirmar Riichi",
+      "notEnough": "Pontuação insuficiente para riichi"
+    },
+    "ryukyoku": {
+      "title": "Empate / Ryukyoku",
+      "tenpai": "Quem estava em Tenpai?",
+      "confirm": "Confirmar Empate",
+      "noPayment": "Nenhuma troca de pontos (0 ou 4 tenpai)."
+    },
+    "chombo": {
+      "title": "Chombo / Mão Inválida",
+      "player": "Quem cometeu chombo?",
+      "penalty": "Penalidade",
+      "preset": "Mangan padrão",
+      "custom": "Valor por jogador",
+      "valuePerPlayer": "Valor pago a cada jogador (pts)",
+      "confirm": "Aplicar Chombo"
+    }
   }
 }

@@ -8,4 +8,5 @@
 @import './componentes/placeholder.css';
 @import './dominios/torneio-fast.css';
 @import './dominios/calculadoras/index.css';
+@import './dominios/centerpiece.css';
 @import './responsivo.css';
