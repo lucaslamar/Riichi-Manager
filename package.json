@@ -1,6 +1,6 @@
 {
   "name": "riichi-manager",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "private": true,
   "type": "module",
   "description": "Um app feito para ajudar jogadores e clubes de Riichi Mahjong a calcular mãos, organizar partidas e testar ideias de torneio, levando Riichi Mahjong para todos.",
