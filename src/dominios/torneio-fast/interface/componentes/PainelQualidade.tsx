@@ -53,13 +53,9 @@ export function PainelQualidade({ torneio, atualizarTorneio }: PropsComAtualizac
         aria-expanded={aberto}
       >
         <i className="fas fa-clipboard-check icone-secao" aria-hidden="true" />
-        <h2 style={{ flex: 1, margin: 0 }}>Diagnóstico da Grade</h2>
+        <h2 style={{ flex: 1 }}>Diagnóstico da Grade</h2>
         <span className="pilula-status">{rotuloQualidade(qualidade)}</span>
-        <i
-          className={`fas fa-chevron-${aberto ? 'up' : 'down'}`}
-          aria-hidden="true"
-          style={{ marginLeft: 8, color: '#607080' }}
-        />
+        <i className="fas fa-chevron-down icone-chevron" aria-hidden="true" />
       </button>
 
       <div className={`painel-colapsavel ${aberto ? 'painel-aberto' : ''}`}>
