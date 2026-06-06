@@ -5,6 +5,10 @@ import {
   criarTorneioVazio,
 } from '@/dominios/torneio-fast/persistencia/armazenamento'
 import type { EstadoTorneio } from '@/dominios/torneio-fast/logica/tipos'
+import {
+  segundosRestantesBase,
+  sincronizarTimerExpirado,
+} from '@/dominios/torneio-fast/logica/acoes'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
@@ -118,7 +122,10 @@ export default function App() {
               exportarPdf={exportarPdf}
             />
           ) : (
-            <ConfiguracaoTorneio aoIniciar={aoIniciarTorneio} aoVoltar={() => setTela('calculadora')} />
+            <ConfiguracaoTorneio
+              aoIniciar={aoIniciarTorneio}
+              aoVoltar={() => setTela('calculadora')}
+            />
           ))}
 
         {tela === 'regras' && <PaginaRegrasConfiguracoes />}
@@ -139,13 +146,31 @@ function PainelTorneioAtivo({
   reiniciarTorneio: () => void
   exportarPdf: () => void
 }) {
+  const [agora, setAgora] = useState(Date.now)
+
+  useEffect(() => {
+    setAgora(Date.now())
+    if (!torneio.timer.rodando) return
+
+    const intervalo = window.setInterval(() => {
+      const proximoAgora = Date.now()
+      setAgora(proximoAgora)
+
+      if (segundosRestantesBase(torneio.timer, proximoAgora) === 0) {
+        atualizarTorneio(sincronizarTimerExpirado)
+      }
+    }, 500)
+
+    return () => window.clearInterval(intervalo)
+  }, [torneio.timer, atualizarTorneio])
+
   return (
-    <>
+    <div className="torneio-fast">
       <RankingGeral torneio={torneio} aoReiniciar={reiniciarTorneio} aoExportarPdf={exportarPdf} />
-      <TimerRodada torneio={torneio} atualizarTorneio={atualizarTorneio} />
+      <TimerRodada torneio={torneio} atualizarTorneio={atualizarTorneio} agora={agora} />
       <PainelQualidade torneio={torneio} atualizarTorneio={atualizarTorneio} />
-      <GradeRodadas torneio={torneio} atualizarTorneio={atualizarTorneio} />
-    </>
+      <GradeRodadas torneio={torneio} atualizarTorneio={atualizarTorneio} agora={agora} />
+    </div>
   )
 }
 
@@ -238,7 +263,12 @@ function PaginaSobre() {
         <span className="chip-sobre">{t('pages.author')}</span>
       </div>
       <div className="acoes-sobre">
-        <a className="btn-contorno" href="https://github.com/lucaslamar/Riichi-Manager" target="_blank" rel="noreferrer">
+        <a
+          className="btn-contorno"
+          href="https://github.com/lucaslamar/Riichi-Manager"
+          target="_blank"
+          rel="noreferrer"
+        >
           <i className="fab fa-github" aria-hidden="true" /> GitHub
         </a>
         <a
@@ -276,7 +306,11 @@ function OpcaoPreferencia({
         <strong>{titulo}</strong>
         <span>{descricao}</span>
       </span>
-      <input type="checkbox" checked={marcado} onChange={(evento) => aoMudar(evento.target.checked)} />
+      <input
+        type="checkbox"
+        checked={marcado}
+        onChange={(evento) => aoMudar(evento.target.checked)}
+      />
     </label>
   )
 }

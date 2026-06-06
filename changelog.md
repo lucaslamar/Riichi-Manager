@@ -9,7 +9,24 @@
 
 ### Corrigido
 
--
+- Move o botão de **Gerar PDF** para abaixo da ação de **Reiniciar Torneio**, deixando o topo da Classificação Geral mais limpo no mobile.
+- Mantém o tempo do **Timer Base** visível mesmo quando o painel está recolhido.
+- Reforça o visual dos cards da grade de mesas, deixando-os mais encorpados, legíveis e confortáveis para toque no mobile.
+- Preserva o contador superior das mesas como elemento principal de leitura rápida.
+- Ajusta a navegação entre rodadas para exibir até três botões principais por vez, com rolagem lateral para as demais rodadas.
+- Adiciona indicação visual de que existem mais rodadas disponíveis fora da área visível.
+- Melhora a hierarquia visual da Classificação Geral, Timer Base, Diagnóstico da Grade e Grade Completa de Rodadas.
+- Ajusta botões, cards e seções do Torneio Fast para respeitarem melhor a largura da tela no mobile.
+- Corrige estouros horizontais no Torneio Fast em telas mobile.
+- Corrige cards, botões, timer e seções da grade para não ultrapassarem a largura da tela.
+- Corrige o comportamento das abas de rodada para evitar rolagem horizontal global da página.
+- Corrige os timers das mesas para acompanharem o **Timer Base** da rodada ativa.
+- Corrige o problema em que os timers das mesas ficavam congelados.
+- Corrige o acréscimo de **+5 min mesa**, mantendo a diferença individual da mesa em relação ao Timer Base.
+- Corrige o acréscimo de **+5 min global** para refletir corretamente em todas as mesas.
+- Corrige o Timer Base recolhido para continuar atualizando o tempo em tela.
+- Corrige o comportamento de pausa e retomada para manter Timer Base e timers das mesas sincronizados.
+- Corrige o fluxo para evitar timers independentes por mesa, usando o tempo da mesa como valor derivado do Timer Base mais o acréscimo individual.
 
 ## 4.1.1 - 2026-06-04
 

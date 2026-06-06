@@ -28,12 +28,19 @@ import type { EstadoTorneio, TimerRodada } from './tipos'
  * @param timer - Estado atual do cronômetro.
  * @returns Segundos restantes (mínimo 0).
  */
-export function segundosRestantesBase(timer: TimerRodada): number {
+export function segundosRestantesBase(timer: TimerRodada, agora = Date.now()): number {
   if (!timer.rodando || timer.iniciadoEm === null) {
     return timer.segundosRestantes
   }
-  const decorridos = Math.floor((Date.now() - timer.iniciadoEm) / 1000)
+  const decorridos = Math.max(0, Math.floor((agora - timer.iniciadoEm) / 1000))
   return Math.max(0, timer.segundosRestantes - decorridos)
+}
+
+export function calcularTempoRestanteMesa(
+  tempoRestanteRodada: number,
+  acrescimoMesaSegundos: number,
+): number {
+  return Math.max(0, tempoRestanteRodada + acrescimoMesaSegundos)
 }
 
 /**
@@ -49,10 +56,14 @@ export function segundosRestantesMesa(
   timer: TimerRodada,
   indiceRodada: number,
   indiceMesa: number,
+  agora = Date.now(),
 ): number {
   const chave = chaveMesa(indiceRodada, indiceMesa)
   const acrescimos = timer.acrescimosPorMesa[chave] ?? 0
-  return segundosRestantesBase(timer) + acrescimos * SEGUNDOS_ACRESCIMO_MESA
+  return calcularTempoRestanteMesa(
+    segundosRestantesBase(timer, agora),
+    acrescimos * SEGUNDOS_ACRESCIMO_MESA,
+  )
 }
 
 // ─── Ações do timer ───────────────────────────────────────────────────────────
@@ -200,7 +211,6 @@ function adicionarSegundosAoTimer(estado: EstadoTorneio, extra: number): EstadoT
     ...estado,
     timer: {
       ...timer,
-      totalSegundos: timer.totalSegundos + extra,
       segundosRestantes: restantes,
       // Se o timer estava rodando, atualiza o timestamp de início para não "perder" o extra.
       iniciadoEm: timer.rodando ? Date.now() : null,

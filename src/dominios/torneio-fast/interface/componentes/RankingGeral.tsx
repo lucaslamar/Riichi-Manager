@@ -20,41 +20,35 @@ export function RankingGeral({ torneio, aoReiniciar, aoExportarPdf }: PropsRanki
       <div className="cabecalho-secao">
         <i className="fas fa-chart-bar icone-secao" aria-hidden="true" />
         <h2>Classificação Geral</h2>
-        <button
-          className="btn-contorno"
-          type="button"
-          onClick={aoExportarPdf}
-          style={{ marginLeft: 'auto' }}
-        >
-          <i className="fas fa-download" /> PDF
-        </button>
       </div>
 
-      <table id="tabelaRanking">
-        <thead>
-          <tr>
-            <th>Pos.</th>
-            <th>Jogador</th>
-            <th style={{ textAlign: 'right' }}>PT</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* `.map()` transforma o array em elementos JSX — equivale a um for loop */}
-          {ordenados.map(([jogador, pontos], i) => (
-            // `key` é obrigatório em listas React para identificar elementos únicos.
-            <tr key={jogador}>
-              <td>{i + 1}º</td>
-              <td>{jogador}</td>
-              <td style={{ textAlign: 'right', fontWeight: 900, color: 'var(--primario)' }}>
-                {pontos > 0 ? '+' : ''}
-                {pontos.toFixed(1)}
-              </td>
+      <div className="tabela-ranking-responsiva">
+        <table id="tabelaRanking">
+          <thead>
+            <tr>
+              <th>Pos.</th>
+              <th>Jogador</th>
+              <th style={{ textAlign: 'right' }}>PT</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {/* `.map()` transforma o array em elementos JSX — equivale a um for loop */}
+            {ordenados.map(([jogador, pontos], i) => (
+              // `key` é obrigatório em listas React para identificar elementos únicos.
+              <tr key={jogador}>
+                <td>{i + 1}º</td>
+                <td>{jogador}</td>
+                <td style={{ textAlign: 'right', fontWeight: 900, color: 'var(--primario)' }}>
+                  {pontos > 0 ? '+' : ''}
+                  {pontos.toFixed(1)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <div className="acoes" style={{ marginTop: 20 }}>
+      <div className="acoes-ranking">
         <button
           className="btn-contorno btn-perigo"
           type="button"
@@ -65,6 +59,9 @@ export function RankingGeral({ torneio, aoReiniciar, aoExportarPdf }: PropsRanki
           }}
         >
           <i className="fas fa-undo" /> Reiniciar torneio
+        </button>
+        <button className="btn-contorno" type="button" onClick={aoExportarPdf}>
+          <i className="fas fa-file-pdf" /> Gerar PDF
         </button>
       </div>
     </section>
