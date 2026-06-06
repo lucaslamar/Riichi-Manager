@@ -178,11 +178,13 @@ export function GradeRodadas({ torneio, atualizarTorneio }: PropsComAtualizacao)
                   <strong>
                     {estaRodandoEstaRodada ? formatarDuracao(segundosMesa) : `Rodada ${rodada.id}`}
                   </strong>
-                  <small>
-                    {estaRodandoEstaRodada
-                      ? `Acréscimo: +${acrescimos * (SEGUNDOS_ACRESCIMO_MESA / 60)} min`
-                      : `Selecione Rodada ${rodada.id} no timer para acrescentar tempo.`}
-                  </small>
+                  {estaRodandoEstaRodada ? (
+                    acrescimos > 0 && (
+                      <small>{`Acréscimo: +${acrescimos * (SEGUNDOS_ACRESCIMO_MESA / 60)} min`}</small>
+                    )
+                  ) : (
+                    <small>{`Selecione Rodada ${rodada.id} no timer para habilitar.`}</small>
+                  )}
                 </div>
 
                 {/* Lista de assentos com inputs de pontuação */}
