@@ -9,6 +9,10 @@ interface PropsModoCompleto {
   estado: EstadoCalculadoraMao
   cabecalho: ReactNode
   aoAbrirRegras: () => void
+  aoUsarMao?: () => void
+  ocultarOpcoesMao?: boolean
+  aoCalcularDireto?: () => void
+  aoVoltar?: () => void
 }
 
 /**
@@ -19,6 +23,10 @@ export default function ModoCompletoCalculadora({
   estado,
   cabecalho,
   aoAbrirRegras,
+  aoUsarMao,
+  ocultarOpcoesMao,
+  aoCalcularDireto,
+  aoVoltar,
 }: PropsModoCompleto) {
   const { t } = useI18n()
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -73,6 +81,8 @@ export default function ModoCompletoCalculadora({
             estado={estado}
             mostrandoEsperas={mostrandoEsperas}
             aoAbrirRegras={aoAbrirRegras}
+            aoCalcularDireto={aoCalcularDireto}
+            aoVoltar={aoVoltar}
           />
         </section>
       ) : (
@@ -82,6 +92,8 @@ export default function ModoCompletoCalculadora({
           </h3>
           <PaginaFinalizacaoMao
             estado={estado}
+            aoUsarMao={aoUsarMao}
+            ocultarOpcoesMao={ocultarOpcoesMao}
             acoesCabecalho={
               <div className="acoes-finalizacao-calculadora" aria-label={t('calculator.actionsMenu')}>
                 {acoesContextuais.map((acao) => (

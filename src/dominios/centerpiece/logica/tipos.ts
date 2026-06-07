@@ -1,12 +1,13 @@
 export type Vento = 'leste' | 'sul' | 'oeste' | 'norte'
+export type PosicaoMesa = 'topo' | 'direita' | 'baixo' | 'esquerda'
 export type TipoVitoria = 'ron' | 'tsumo'
-export type MetodoCalculo = 'hanFu' | 'manual'
 export type RodadaVento = 'leste' | 'sul'
 
 export interface JogadorCenterpiece {
   id: string
   nome: string
   pontos: number
+  posicao: PosicaoMesa
   vento: Vento
   riichi: boolean
 }

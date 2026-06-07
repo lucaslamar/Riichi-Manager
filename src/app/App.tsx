@@ -23,6 +23,7 @@ import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/P
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import PaginaCenterpiece from '@/dominios/centerpiece/interface/paginas/PaginaCenterpiece'
+import { temMesaAtiva } from '@/dominios/centerpiece/persistencia/storageCenterpiece'
 import packageJson from '../../package.json'
 
 export type TelaPrincipal =
@@ -48,9 +49,10 @@ function torneioAtivo(torneioAtual: EstadoTorneio): boolean {
 export default function App() {
   const { t } = useI18n()
   const [torneio, setTorneioInterno] = useState<EstadoTorneio>(carregarTorneio)
-  const [tela, setTela] = useState<TelaPrincipal>(() =>
-    torneioAtivo(torneio) ? 'configuracaoTorneio' : 'calculadora',
-  )
+  const [tela, setTela] = useState<TelaPrincipal>(() => {
+    if (temMesaAtiva()) return 'centerpiece'
+    return torneioAtivo(torneio) ? 'configuracaoTorneio' : 'calculadora'
+  })
   const ativo = torneioAtivo(torneio)
 
   const definirTorneio = useCallback((proximo: EstadoTorneio) => {

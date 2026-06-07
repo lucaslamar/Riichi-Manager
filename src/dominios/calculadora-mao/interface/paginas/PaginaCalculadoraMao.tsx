@@ -1,33 +1,61 @@
-/**
- * @fileoverview Página da calculadora de pontos de mão.
- *
- * A página apenas compõe os modos e o modal. Estado e handlers ficam no hook
- * do domínio de interface para facilitar leitura e manutenção.
- */
-
+import { useEffect } from 'react'
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
 import ModalRegras from '../componentes/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
+import type { VentoMao } from '../../logica/mao'
 import type { ResultadoCalculoParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
 import { converterMaoParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
 
-interface PropsPaginaCalculadoraMao {
-  aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
+interface ContextoCenterpieceMao {
+  tipoVitoria: 'ron' | 'tsumo'
+  ventoRodada: VentoMao
+  ventoAssento: VentoMao
+  honba: number
 }
 
-export default function PaginaCalculadoraMao({ aoUsarResultado }: PropsPaginaCalculadoraMao = {}) {
-  const calculadora = useCalculadoraMao()
+interface PropsPaginaCalculadoraMao {
+  aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
+  contextoCenterpiece?: ContextoCenterpieceMao
+  aoVoltar?: () => void
+}
 
-  const cabecalho = (
-    <BarraCalculadora modo="completo" />
+export default function PaginaCalculadoraMao({
+  aoUsarResultado,
+  contextoCenterpiece,
+  aoVoltar,
+}: PropsPaginaCalculadoraMao = {}) {
+  const calculadora = useCalculadoraMao(
+    contextoCenterpiece
+      ? {
+          initialMao: {
+            agari: contextoCenterpiece.tipoVitoria,
+            ventoRodada: contextoCenterpiece.ventoRodada,
+            ventoAssento: contextoCenterpiece.ventoAssento,
+            honba: contextoCenterpiece.honba,
+          },
+          fluxoCompleto: true,
+        }
+      : undefined,
   )
 
-  const handleUsarResultado = () => {
-    if (!aoUsarResultado || !calculadora.resultado) return
+  // No contexto centerpiece: usa o resultado automaticamente ao calcular, sem mostrar tela de resultado
+  useEffect(() => {
+    if (!contextoCenterpiece || !calculadora.resultado || !aoUsarResultado) return
     const convertido = converterMaoParaCenterpiece(calculadora.resultado)
     if (convertido) aoUsarResultado(convertido)
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calculadora.resultado])
+
+  const cabecalho = contextoCenterpiece ? null : <BarraCalculadora modo="completo" />
+
+  const aoUsarMao = aoUsarResultado && !contextoCenterpiece
+    ? () => {
+        if (!calculadora.resultado) return
+        const convertido = converterMaoParaCenterpiece(calculadora.resultado)
+        if (convertido) aoUsarResultado(convertido)
+      }
+    : undefined
 
   return (
     <div>
@@ -35,6 +63,10 @@ export default function PaginaCalculadoraMao({ aoUsarResultado }: PropsPaginaCal
         estado={calculadora}
         cabecalho={cabecalho}
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
+        aoUsarMao={aoUsarMao}
+        ocultarOpcoesMao={!!contextoCenterpiece}
+        aoCalcularDireto={contextoCenterpiece ? calculadora.calcularMaoAtual : undefined}
+        aoVoltar={contextoCenterpiece ? aoVoltar : undefined}
       />
 
       {calculadora.modalRegrasAberto && (
@@ -43,19 +75,6 @@ export default function PaginaCalculadoraMao({ aoUsarResultado }: PropsPaginaCal
           aoMudar={calculadora.setConfiguracao}
           aoFechar={() => calculadora.setModalRegrasAberto(false)}
         />
-      )}
-
-      {aoUsarResultado && calculadora.resultadoComYakuValido && (
-        <div className="cp-barra-usar-resultado">
-          <button
-            type="button"
-            className="btn-primario cp-btn-usar-resultado"
-            onClick={handleUsarResultado}
-          >
-            <i className="fas fa-check" aria-hidden="true" />
-            Usar resultado no Centerpiece
-          </button>
-        </div>
       )}
     </div>
   )

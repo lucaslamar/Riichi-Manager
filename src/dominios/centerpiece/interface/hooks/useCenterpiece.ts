@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { EstadoCenterpiece, EntradaSetupCenterpiece, ResultadoRon, ResultadoTsumo } from '../../logica/tipos'
 import { criarMesaVazia } from '../../logica/criarMesa'
 import { sortearVentosJogadores } from '../../logica/sortearVentosJogadores'
@@ -15,6 +15,7 @@ export type ModalCenterpiece = 'batida' | 'riichi' | 'ryukyoku' | 'chombo' | nul
 export function useCenterpiece() {
   const [estado, setEstadoInterno] = useState<EstadoCenterpiece>(carregarMesa)
   const [modalAberto, setModalAberto] = useState<ModalCenterpiece>(null)
+  const [mensagemDesfazer, setMensagemDesfazer] = useState<string | null>(null)
 
   const definirEstado = useCallback((proximo: EstadoCenterpiece) => {
     setEstadoInterno(proximo)
@@ -83,9 +84,18 @@ export function useCenterpiece() {
     [estado, definirEstado],
   )
 
+  const timeoutDesfazerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const desfazer = useCallback(() => {
     definirEstado(desfazerUltimaAcao(estado))
+    setMensagemDesfazer('Última ação desfeita.')
+    if (timeoutDesfazerRef.current) clearTimeout(timeoutDesfazerRef.current)
+    timeoutDesfazerRef.current = setTimeout(() => setMensagemDesfazer(null), 2500)
   }, [estado, definirEstado])
+
+  useEffect(() => () => {
+    if (timeoutDesfazerRef.current) clearTimeout(timeoutDesfazerRef.current)
+  }, [])
 
   const reiniciarMesa = useCallback(() => {
     apagarMesaSalva()
@@ -96,6 +106,7 @@ export function useCenterpiece() {
     estado,
     modalAberto,
     setModalAberto,
+    mensagemDesfazer,
     iniciarMesa,
     registrarRon,
     registrarTsumo,

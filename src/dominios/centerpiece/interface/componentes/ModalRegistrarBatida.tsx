@@ -2,36 +2,58 @@ import { useState } from 'react'
 import type { EstadoCenterpiece, TipoVitoria, ResultadoRon, ResultadoTsumo } from '../../logica/tipos'
 import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
-import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
+import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import IndicadorVento from './IndicadorVento'
+import { KANJI_VENTO, NOME_VENTO } from './ventoVisual'
+
+export interface ContextoCalcMao {
+  tipoVitoria: TipoVitoria
+  ventoRodada: VentoMao
+  ventoAssento: VentoMao
+  honba: number
+}
+
+const VENTO_PARA_MAO: Record<string, VentoMao> = {
+  leste: '1', sul: '2', oeste: '3', norte: '4',
+}
 
 interface PropsModalRegistrarBatida {
   estado: EstadoCenterpiece
   aoRegistrarRon: (r: ResultadoRon) => void
   aoRegistrarTsumo: (r: ResultadoTsumo) => void
   aoFechar: () => void
+  aoAbrirCalculadoraMao: (contexto: ContextoCalcMao, aoReceberResultado: (r: ResultadoCalculoParaCenterpiece) => void) => void
+  initialVencedorId?: string
+  initialTipoVitoria?: TipoVitoria
 }
 
-const KANJI_VENTO: Record<string, string> = {
-  leste: '東', sul: '南', oeste: '西', norte: '北',
-}
-
-type Passo = 'tipo' | 'vencedor' | 'pagador' | 'calculo' | 'calculadoraHanFu' | 'calculadoraMao' | 'manual' | 'confirmacao'
+type Passo =
+  | 'tipo'
+  | 'vencedor'
+  | 'pagador'
+  | 'calculo'
+  | 'calculadoraHanFu'
+  | 'confirmacao'
 
 export default function ModalRegistrarBatida({
   estado,
   aoRegistrarRon,
   aoRegistrarTsumo,
   aoFechar,
+  aoAbrirCalculadoraMao,
+  initialVencedorId,
+  initialTipoVitoria,
 }: PropsModalRegistrarBatida) {
   const { t } = useI18n()
-  const [tipoVitoria, setTipoVitoria] = useState<TipoVitoria>('ron')
-  const [vencedorId, setVencedorId] = useState<string>('')
+  const [tipoVitoria, setTipoVitoria] = useState<TipoVitoria>(initialTipoVitoria ?? 'ron')
+  const [vencedorId, setVencedorId] = useState<string>(initialVencedorId ?? '')
   const [pagadorId, setPagadorId] = useState<string>('')
-  const [passo, setPasso] = useState<Passo>('tipo')
+  const [passo, setPasso] = useState<Passo>(() => {
+    if (!initialVencedorId) return 'tipo'
+    return (initialTipoVitoria ?? 'ron') === 'tsumo' ? 'calculo' : 'pagador'
+  })
   const [resultadoCalculo, setResultadoCalculo] = useState<ResultadoCalculoParaCenterpiece | null>(null)
-  const [valorManual, setValorManual] = useState('')
-  const [valorManualDealer, setValorManualDealer] = useState('')
 
   const vencedor = estado.jogadores.find((j) => j.id === vencedorId)
   const pagador = estado.jogadores.find((j) => j.id === pagadorId)
@@ -47,7 +69,7 @@ export default function ModalRegistrarBatida({
     const idx = fluxo.indexOf(passo)
     if (idx > 0) {
       setPasso(fluxo[idx - 1])
-    } else if (passo === 'calculadoraHanFu' || passo === 'calculadoraMao' || passo === 'manual') {
+    } else if (passo === 'calculadoraHanFu') {
       setPasso('calculo')
     } else if (passo === 'confirmacao') {
       setPasso('calculo')
@@ -63,33 +85,41 @@ export default function ModalRegistrarBatida({
     setPasso('confirmacao')
   }
 
+  const abrirCalculadoraMao = () => {
+    aoAbrirCalculadoraMao(
+      {
+        tipoVitoria,
+        ventoRodada: VENTO_PARA_MAO[estado.rodadaVento] ?? '1',
+        ventoAssento: VENTO_PARA_MAO[vencedor?.vento ?? 'leste'] ?? '1',
+        honba: estado.honba,
+      },
+      receberResultado,
+    )
+  }
+
   const confirmar = () => {
     if (tipoVitoria === 'ron') {
-      let pontos = resultadoCalculo?.pontosRon ?? parseInt(valorManual, 10)
+      const pontos = resultadoCalculo?.pontosRon
       if (!pontos || !vencedorId || !pagadorId) return
       aoRegistrarRon({ vencedorId, pagadorId, pontos })
     } else {
-      let pagDealer = resultadoCalculo?.pagamentoDealer ?? parseInt(valorManualDealer, 10)
-      let pagNaoDealer = resultadoCalculo?.pagamentoNaoDealer ?? parseInt(valorManual, 10)
+      const pagDealer = resultadoCalculo?.pagamentoDealer
+      const pagNaoDealer = resultadoCalculo?.pagamentoNaoDealer
       if (pagDealer == null || !pagNaoDealer || !vencedorId) return
       aoRegistrarTsumo({ vencedorId, pagamentoDealer: pagDealer, pagamentoNaoDealer: pagNaoDealer })
     }
   }
 
-  const confirmarManual = () => {
-    if (tipoVitoria === 'ron') {
-      const pontos = parseInt(valorManual, 10)
-      if (!pontos || !vencedorId || !pagadorId) return
-      aoRegistrarRon({ vencedorId, pagadorId, pontos })
-    } else {
-      const pagDealer = parseInt(valorManualDealer, 10) || 0
-      const pagNaoDealer = parseInt(valorManual, 10) || 0
-      if (!pagNaoDealer || !vencedorId) return
-      aoRegistrarTsumo({ vencedorId, pagamentoDealer: pagDealer, pagamentoNaoDealer: pagNaoDealer })
-    }
-  }
+  const bonusRiichi = estado.riichiSticks * 1000
+  const totalTsumo =
+    resultadoCalculo?.tipoVitoria === 'tsumo'
+      ? ehDealer
+        ? (resultadoCalculo.pagamentoNaoDealer ?? 0) * 3
+        : (resultadoCalculo.pagamentoDealer ?? 0) +
+          (resultadoCalculo.pagamentoNaoDealer ?? 0) * 2
+      : 0
 
-  const mostrarOverlayCalc = passo === 'calculadoraHanFu' || passo === 'calculadoraMao'
+  const mostrarOverlayCalc = passo === 'calculadoraHanFu'
 
   return (
     <>
@@ -140,8 +170,8 @@ export default function ModalRegistrarBatida({
                       className={`opcao-jogador ${vencedorId === j.id ? 'ativa' : ''}`}
                       onClick={() => setVencedorId(j.id)}
                     >
-                      <span className={`kanji-vento vento-${j.vento}`}>{KANJI_VENTO[j.vento]}</span>
-                      <span>{j.nome}</span>
+                      <IndicadorVento vento={j.vento} />
+                      <span>{j.nome} • {NOME_VENTO[j.vento]}</span>
                       <span className="pontos-jogador">{j.pontos.toLocaleString('pt-BR')}</span>
                     </button>
                   ))}
@@ -166,8 +196,8 @@ export default function ModalRegistrarBatida({
                       className={`opcao-jogador ${pagadorId === j.id ? 'ativa' : ''}`}
                       onClick={() => setPagadorId(j.id)}
                     >
-                      <span className={`kanji-vento vento-${j.vento}`}>{KANJI_VENTO[j.vento]}</span>
-                      <span>{j.nome}</span>
+                      <IndicadorVento vento={j.vento} />
+                      <span>{j.nome} • {NOME_VENTO[j.vento]}</span>
                       <span className="pontos-jogador">{j.pontos.toLocaleString('pt-BR')}</span>
                     </button>
                   ))}
@@ -189,71 +219,13 @@ export default function ModalRegistrarBatida({
                     <i className="fas fa-calculator" aria-hidden="true" />
                     {t('centerpiece.win.byHanFu')}
                   </button>
-                  <button type="button" className="opcao-vitoria opcao-calc" onClick={() => irPara('calculadoraMao')}>
+                  <button type="button" className="opcao-vitoria opcao-calc" onClick={abrirCalculadoraMao}>
                     <i className="fas fa-hand" aria-hidden="true" />
                     {t('centerpiece.win.byMao')}
                   </button>
-                  <button type="button" className="opcao-vitoria opcao-calc" onClick={() => irPara('manual')}>
-                    <i className="fas fa-pencil" aria-hidden="true" />
-                    {t('centerpiece.win.manual')}
-                  </button>
                 </div>
                 <div className="modal-rodape-acoes">
                   <button type="button" className="btn-contorno" onClick={voltar}>{t('actions.back')}</button>
-                </div>
-              </div>
-            )}
-
-            {passo === 'manual' && (
-              <div className="modal-secao">
-                <p className="modal-label">
-                  {vencedor?.nome} — {tipoVitoria === 'ron' ? 'Ron' : 'Tsumo'}
-                </p>
-                {tipoVitoria === 'ron' ? (
-                  <label className="campo-manual">
-                    <span>{t('centerpiece.win.value')}</span>
-                    <input
-                      type="number"
-                      value={valorManual}
-                      onChange={(evento) => setValorManual(evento.target.value)}
-                      placeholder="8000"
-                      min={0}
-                    />
-                  </label>
-                ) : (
-                  <>
-                    <label className="campo-manual">
-                      <span>{t('centerpiece.win.valueDealer')}</span>
-                      <input
-                        type="number"
-                        value={valorManualDealer}
-                        onChange={(evento) => setValorManualDealer(evento.target.value)}
-                        placeholder="4000"
-                        min={0}
-                      />
-                    </label>
-                    <label className="campo-manual">
-                      <span>{t('centerpiece.win.valueNonDealer')}</span>
-                      <input
-                        type="number"
-                        value={valorManual}
-                        onChange={(evento) => setValorManual(evento.target.value)}
-                        placeholder="2000"
-                        min={0}
-                      />
-                    </label>
-                  </>
-                )}
-                <div className="modal-rodape-acoes">
-                  <button type="button" className="btn-contorno" onClick={voltar}>{t('actions.back')}</button>
-                  <button
-                    type="button"
-                    className="btn-primario"
-                    onClick={confirmarManual}
-                    disabled={tipoVitoria === 'ron' ? !valorManual : !valorManual && !valorManualDealer}
-                  >
-                    {t('centerpiece.win.confirm')}
-                  </button>
                 </div>
               </div>
             )}
@@ -265,7 +237,7 @@ export default function ModalRegistrarBatida({
                   <div className="cp-confirmacao-linha">
                     <span className="cp-conf-label">{t('centerpiece.win.winner')}</span>
                     <span className="cp-conf-valor">
-                      <span className={`kanji-vento vento-${vencedor?.vento}`}>{vencedor ? KANJI_VENTO[vencedor.vento] : ''}</span>
+                      {vencedor && <IndicadorVento vento={vencedor.vento} tamanho="pequeno" />}
                       {vencedor?.nome}
                     </span>
                   </div>
@@ -277,7 +249,7 @@ export default function ModalRegistrarBatida({
                     <div className="cp-confirmacao-linha">
                       <span className="cp-conf-label">{t('centerpiece.win.payer')}</span>
                       <span className="cp-conf-valor">
-                        <span className={`kanji-vento vento-${pagador.vento}`}>{KANJI_VENTO[pagador.vento]}</span>
+                        <IndicadorVento vento={pagador.vento} tamanho="pequeno" />
                         {pagador.nome}
                       </span>
                     </div>
@@ -295,10 +267,22 @@ export default function ModalRegistrarBatida({
                     </div>
                   )}
                   {tipoVitoria === 'ron' && resultadoCalculo.pontosRon != null && (
-                    <div className="cp-confirmacao-linha destaque">
-                      <span className="cp-conf-label">{t('centerpiece.win.value')}</span>
-                      <span className="cp-conf-valor">{resultadoCalculo.pontosRon.toLocaleString('pt-BR')} pts</span>
-                    </div>
+                    <>
+                      <div className="cp-confirmacao-linha">
+                        <span className="cp-conf-label">{t('centerpiece.win.handValue')}</span>
+                        <span className="cp-conf-valor">{resultadoCalculo.pontosRon.toLocaleString('pt-BR')} pts</span>
+                      </div>
+                      <div className="cp-confirmacao-linha">
+                        <span className="cp-conf-label">{t('centerpiece.win.payerLoses')}</span>
+                        <span className="cp-conf-valor">-{resultadoCalculo.pontosRon.toLocaleString('pt-BR')} pts</span>
+                      </div>
+                      <div className="cp-confirmacao-linha destaque">
+                        <span className="cp-conf-label">{t('centerpiece.win.totalReceived')}</span>
+                        <span className="cp-conf-valor">
+                          {(resultadoCalculo.pontosRon + bonusRiichi).toLocaleString('pt-BR')} pts
+                        </span>
+                      </div>
+                    </>
                   )}
                   {tipoVitoria === 'tsumo' && (
                     <>
@@ -314,6 +298,12 @@ export default function ModalRegistrarBatida({
                           <span className="cp-conf-valor">{resultadoCalculo.pagamentoNaoDealer.toLocaleString('pt-BR')} pts</span>
                         </div>
                       )}
+                      <div className="cp-confirmacao-linha destaque">
+                        <span className="cp-conf-label">{t('centerpiece.win.totalReceived')}</span>
+                        <span className="cp-conf-valor">
+                          {(totalTsumo + bonusRiichi).toLocaleString('pt-BR')} pts
+                        </span>
+                      </div>
                     </>
                   )}
                   {estado.riichiSticks > 0 && (
@@ -344,25 +334,22 @@ export default function ModalRegistrarBatida({
               <i className="fas fa-arrow-left" aria-hidden="true" />
               {t('actions.back')}
             </button>
-            <span className="cp-calc-titulo">
-              {passo === 'calculadoraHanFu' ? t('centerpiece.win.byHanFu') : t('centerpiece.win.byMao')}
-              {vencedor && (
-                <> — {vencedor.nome} ({tipoVitoria === 'ron' ? 'Ron' : 'Tsumo'}){ehDealer ? ' · Leste' : ''}</>
-              )}
-            </span>
+            <div className="cp-calc-info">
+              <span className="cp-calc-titulo">
+                {vencedor?.nome ?? '—'} · {tipoVitoria === 'ron' ? 'Ron' : 'Tsumo'}{ehDealer ? ' (Leste)' : ''}
+              </span>
+              <span className="cp-calc-subtitulo">
+                {KANJI_VENTO[estado.rodadaVento]} R{estado.rodadaNumero} · Honba {estado.honba}
+              </span>
+            </div>
           </div>
           <div className="cp-calc-conteudo">
-            {passo === 'calculadoraHanFu' && (
-              <PaginaCalculadoraHanFu
-                aoUsarResultado={receberResultado}
-                initialIsOya={ehDealer}
-                initialAgari={tipoVitoria}
-                initialHonba={estado.honba}
-              />
-            )}
-            {passo === 'calculadoraMao' && (
-              <PaginaCalculadoraMao aoUsarResultado={receberResultado} />
-            )}
+            <PaginaCalculadoraHanFu
+              aoUsarResultado={receberResultado}
+              initialIsOya={ehDealer}
+              initialAgari={tipoVitoria}
+              initialHonba={estado.honba}
+            />
           </div>
         </div>
       )}

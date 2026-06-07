@@ -22,13 +22,13 @@ export default function SetupCenterpiece({
   const [usarCustom, setUsarCustom] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
-  const pontosFinais = usarCustom ? (parseInt(pontosCustom, 10) || 25000) : pontosIniciais
+  const pontosFinais = usarCustom ? parseInt(pontosCustom, 10) : pontosIniciais
 
   const parsearNomes = (): [string, string, string, string] | null => {
     const linhas = texto
       .split('\n')
-      .map((l) => l.trim())
-      .filter((l) => l.length > 0)
+      .map((linha) => linha.trim())
+      .filter((linha) => linha.length > 0)
 
     if (linhas.length !== 4) {
       const diff = linhas.length < 4 ? 4 - linhas.length : linhas.length - 4
@@ -48,6 +48,10 @@ export default function SetupCenterpiece({
     evento.preventDefault()
     const nomes = parsearNomes()
     if (!nomes) return
+    if (!Number.isInteger(pontosFinais) || pontosFinais < 1000) {
+      setErro(t('centerpiece.setup.customPointsError'))
+      return
+    }
     aoIniciar({ nomes, pontosIniciais: pontosFinais })
   }
 

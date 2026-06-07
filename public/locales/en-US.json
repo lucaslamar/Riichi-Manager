@@ -8,6 +8,11 @@
   "menu": {
     "centerpiece": "Centerpiece"
   },
+  "actions": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back"
+  },
   "centerpiece": {
     "setup": {
       "title": "Table Setup",
@@ -17,11 +22,12 @@
       "namesHint": "One name per line, exactly 4 players",
       "namesPlaceholder": "Alice\nBob\nCarol\nDave",
       "namesError": {
-        "tooFew": "Add {{n}} more player(s)",
-        "tooMany": "Remove {{n}} player(s) — only 4 allowed"
+        "tooFew": "Enter 4 players.",
+        "tooMany": "Enter only 4 players."
       },
       "initialPoints": "Starting points",
       "custom": "Custom",
+      "customPointsError": "Enter a valid starting score.",
       "start": "Draw winds & start"
     },
     "continue": {
@@ -38,11 +44,12 @@
       "riichiSticks": "Riichi sticks",
       "registerWin": "Register Win",
       "riichi": "Riichi",
+      "riichiAtivo": "Riichi active",
       "draw": "Draw",
       "chombo": "Chombo",
       "undo": "Undo",
       "newGame": "New Game",
-      "confirmNewGame": "End current game and start a new table?"
+      "confirmNewGame": "This will erase the current table. Continue?"
     },
     "win": {
       "title": "Register Win",
@@ -52,17 +59,22 @@
       "calcMethod": "Calculation method",
       "byHanFu": "Han & Fu",
       "byMao": "Hand Calculator",
-      "manual": "Manual value",
-      "han": "Han",
-      "fu": "Fu",
-      "value": "Total value (pts)",
       "valueDealer": "Dealer payment",
       "valueNonDealer": "Non-dealer payment",
-      "confirm": "Confirm Win",
+      "handValue": "Hand value",
+      "payerLoses": "Payer loses",
+      "totalReceived": "Total received",
       "next": "Next",
       "summaryTitle": "Confirm result",
       "applyResult": "Apply result",
       "recalculate": "Recalculate"
+    },
+    "menu": {
+      "acoes": "Player actions",
+      "ganhouRon": "Won by Ron",
+      "ganhouTsumo": "Won by Tsumo",
+      "deuChombo": "Committed Chombo",
+      "declararRiichi": "Declare Riichi"
     },
     "riichi": {
       "title": "Declare Riichi",
@@ -84,6 +96,13 @@
       "custom": "Per player value",
       "valuePerPlayer": "Amount paid to each player (pts)",
       "confirm": "Apply Chombo"
+    },
+    "timer": {
+      "label": "Table timer",
+      "reiniciar": "Reset timer",
+      "esgotado": "Time's up",
+      "pausar": "Pause timer",
+      "retomar": "Resume timer"
     }
   }
 }

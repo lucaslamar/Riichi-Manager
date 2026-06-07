@@ -37,6 +37,7 @@ interface PropsTecladoPedras {
   aoAbrirRegras?: () => void
   aoAdicionarPedra: (pedra: CodigoPedra) => void
   aoFinalizarMao?: () => void
+  aoCalcularDireto?: () => void
   aoAlternarSelecaoPedraAgari?: () => void
   aoEscolherPedraAgariPorCodigo?: (pedra: CodigoPedra) => void
   aoEscolherChiiPendente?: (chamada: CodigoPedra, sequencia: CodigoPedra[]) => void
@@ -69,6 +70,7 @@ export function TecladoPedras({
   aoAbrirRegras,
   aoAdicionarPedra,
   aoFinalizarMao,
+  aoCalcularDireto,
   aoAlternarSelecaoPedraAgari,
   aoEscolherPedraAgariPorCodigo,
   aoEscolherChiiPendente,
@@ -261,7 +263,7 @@ export function TecladoPedras({
         </div>
         <div className="linha-naipe">{HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}</div>
       </div>
-      {contexto === 'montagem' && maoProntaParaFinalizar && aoFinalizarMao && (
+      {contexto === 'montagem' && maoProntaParaFinalizar && (aoFinalizarMao || aoCalcularDireto) && (
         <div className="rodape-teclado-finalizacao">
           {aoAlternarSelecaoPedraAgari && (
             <button
@@ -275,15 +277,27 @@ export function TecladoPedras({
               <span className="texto-batida-curto">{t('calculator.changeWinningTileShort')}</span>
             </button>
           )}
-          <button
-            className="botao-finalizar-mao-teclado"
-            type="button"
-            aria-label={t('calculator.goToHandFinalization')}
-            disabled={selecionandoPedraAgari || !batidaDefinida}
-            onClick={aoFinalizarMao}
-          >
-            {t('calculator.goToHandFinalization')}
-          </button>
+          {aoCalcularDireto ? (
+            <button
+              className="botao-finalizar-mao-teclado"
+              type="button"
+              aria-label={t('actions.calculate')}
+              disabled={selecionandoPedraAgari || !batidaDefinida}
+              onClick={aoCalcularDireto}
+            >
+              {t('actions.calculate')}
+            </button>
+          ) : aoFinalizarMao ? (
+            <button
+              className="botao-finalizar-mao-teclado"
+              type="button"
+              aria-label={t('calculator.goToHandFinalization')}
+              disabled={selecionandoPedraAgari || !batidaDefinida}
+              onClick={aoFinalizarMao}
+            >
+              {t('calculator.goToHandFinalization')}
+            </button>
+          ) : null}
           {mensagemFinalizacao && (
             <span className="mensagem-finalizacao-teclado" role="status">
               {mensagemFinalizacao}

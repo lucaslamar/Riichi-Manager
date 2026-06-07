@@ -55,10 +55,12 @@ export default function PaginaCalculadoraHanFu({
   return (
     <main className="calculadora-han-fu">
       <section className="painel-principal-han-fu">
-        <div className="seletores-topo-han-fu">
-          <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
-          <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />
-        </div>
+        {!aoUsarResultado && (
+          <div className="seletores-topo-han-fu">
+            <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
+            <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />
+          </div>
+        )}
 
         <CardResultadoHanFu resultado={resultado} />
 
@@ -84,7 +86,7 @@ export default function PaginaCalculadoraHanFu({
         )}
       </section>
 
-      <TabelaReferenciaRapida referencia={referenciaRapida} />
+      <TabelaReferenciaRapida referencia={referenciaRapida} recolhidaPorPadrao={!!aoUsarResultado} />
     </main>
   )
 }

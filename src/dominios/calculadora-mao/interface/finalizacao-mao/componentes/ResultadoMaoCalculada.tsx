@@ -9,12 +9,14 @@ interface PropsResultadoMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
   modoFluxo?: 'montagem' | 'finalizacao'
+  aoUsarMao?: () => void
 }
 
 /** Resultado da mao montada, incluindo esperas, botao Calcular e modal final. */
 export default function ResultadoMaoCalculada({
   estado,
   modoFluxo = 'montagem',
+  aoUsarMao,
 }: PropsResultadoMao) {
   const { t } = useI18n()
   const {
@@ -270,7 +272,19 @@ export default function ResultadoMaoCalculada({
             ) : chomboFuriten ? (
               avisoChombo
             ) : (
-              <ExibicaoCompleta resultado={resultado} mao={mao} />
+              <>
+                <ExibicaoCompleta resultado={resultado} mao={mao} />
+                {resultadoValido && aoUsarMao && (
+                  <button
+                    type="button"
+                    className="btn-primario cp-btn-usar-resultado"
+                    onClick={aoUsarMao}
+                  >
+                    <i className="fas fa-check" aria-hidden="true" />
+                    Usar resultado no Centerpiece
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>

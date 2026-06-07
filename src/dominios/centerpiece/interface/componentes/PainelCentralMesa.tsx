@@ -1,5 +1,6 @@
 import type { EstadoCenterpiece } from '../../logica/tipos'
 import type { ModalCenterpiece } from '../hooks/useCenterpiece'
+import TimerMesaGlobal from './TimerMesaGlobal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 
 const KANJI_RODADA: Record<string, string> = {
@@ -10,6 +11,7 @@ const KANJI_RODADA: Record<string, string> = {
 interface PropsPainelCentralMesa {
   estado: EstadoCenterpiece
   podDesfazer: boolean
+  mensagemDesfazer: string | null
   aoAbrirModal: (modal: ModalCenterpiece) => void
   aoDesfazer: () => void
   aoReiniciar: () => void
@@ -18,6 +20,7 @@ interface PropsPainelCentralMesa {
 export default function PainelCentralMesa({
   estado,
   podDesfazer,
+  mensagemDesfazer,
   aoAbrirModal,
   aoDesfazer,
   aoReiniciar,
@@ -47,6 +50,8 @@ export default function PainelCentralMesa({
         </div>
       </div>
 
+      <TimerMesaGlobal />
+
       <button
         type="button"
         className="btn-primario painel-btn-batida"
@@ -57,15 +62,14 @@ export default function PainelCentralMesa({
         {t('centerpiece.mesa.registerWin')}
       </button>
 
+      {mensagemDesfazer && (
+        <p className="painel-msg-desfazer" role="status" aria-live="polite">
+          <i className="fas fa-rotate-left" aria-hidden="true" />
+          {mensagemDesfazer}
+        </p>
+      )}
+
       <div className="painel-acoes-secundarias">
-        <button
-          type="button"
-          className="btn-contorno painel-btn-acao"
-          onClick={() => aoAbrirModal('riichi')}
-        >
-          <i className="fas fa-flag" aria-hidden="true" />
-          {t('centerpiece.mesa.riichi')}
-        </button>
         <button
           type="button"
           className="btn-contorno painel-btn-acao"
@@ -73,14 +77,6 @@ export default function PainelCentralMesa({
         >
           <i className="fas fa-equals" aria-hidden="true" />
           {t('centerpiece.mesa.draw')}
-        </button>
-        <button
-          type="button"
-          className="btn-contorno painel-btn-acao btn-perigo"
-          onClick={() => aoAbrirModal('chombo')}
-        >
-          <i className="fas fa-triangle-exclamation" aria-hidden="true" />
-          {t('centerpiece.mesa.chombo')}
         </button>
         <button
           type="button"

@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAcoesMelds } from './useAcoesMelds'
 import { useAcoesPedras } from './useAcoesPedras'
 import { useEsperasMao } from './useEsperasMao'
 import { useEstadoMao } from './useEstadoMao'
 import { useResultadoMao } from './useResultadoMao'
-import { calcularMao, ordenarPedras, type CodigoPedra } from '../../../logica/mao'
+import { calcularMao, ordenarPedras, type CodigoPedra, type Mao } from '../../../logica/mao'
 import { codigoBase } from '../../constantes'
 import type { EscolhaChiiPendente } from './tipos'
 
@@ -25,6 +25,11 @@ function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['r
   return resultado.yaku.some(([nome, _han, yakuman]) => yakuman || !YAKU_APENAS_BONUS.has(nome))
 }
 
+interface OpcionsCalculadoraMao {
+  initialMao?: Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba'>>
+  fluxoCompleto?: boolean
+}
+
 /**
  * Orquestra estado, ações e resultados da calculadora de mão.
  * Componentes devem depender deste hook público, enquanto regras internas ficam nos hooks especializados.
@@ -38,8 +43,8 @@ function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['r
  * A API retornada aqui é a superfície pública da interface da calculadora.
  * Evite mudar nomes sem revisar todos os componentes consumidores.
  */
-export function useCalculadoraMao() {
-  const estado = useEstadoMao()
+export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
+  const estado = useEstadoMao(opcoes?.initialMao)
   const {
     mao,
     atualizarMao,
@@ -54,10 +59,11 @@ export function useCalculadoraMao() {
   const [selecionandoPedraAgari, setSelecionandoPedraAgari] = useState(false)
   const [escolhaChiiPendente, setEscolhaChiiPendente] = useState<EscolhaChiiPendente | null>(null)
   const [mensagemFinalizacao, setMensagemFinalizacao] = useState<string | null>(null)
+  const fluxoPreconfiguradoRef = useRef(opcoes?.fluxoCompleto ?? false)
   const [fluxoOpcoes, setFluxoOpcoes] = useState({
-    vitoriaDefinida: false,
-    ventoRodadaDefinido: false,
-    ventoAssentoDefinido: false,
+    vitoriaDefinida: fluxoPreconfiguradoRef.current,
+    ventoRodadaDefinido: fluxoPreconfiguradoRef.current,
+    ventoAssentoDefinido: fluxoPreconfiguradoRef.current,
   })
   const assinaturaMaoAtual = useMemo(
     () =>
@@ -325,9 +331,9 @@ export function useCalculadoraMao() {
       acaoAtual?.tipo === 'dora' || acaoAtual?.tipo === 'uradora' ? null : acaoAtual,
     )
     setFluxoOpcoes({
-      vitoriaDefinida: false,
-      ventoRodadaDefinido: false,
-      ventoAssentoDefinido: false,
+      vitoriaDefinida: fluxoPreconfiguradoRef.current,
+      ventoRodadaDefinido: fluxoPreconfiguradoRef.current,
+      ventoAssentoDefinido: fluxoPreconfiguradoRef.current,
     })
     setEtapaFinalizacaoAtiva(false)
     setSelecionandoPedraAgari(false)

@@ -18,8 +18,10 @@ import type { EstadoMaoCalculadora } from './tipos'
  * Este arquivo deve continuar simples: ele cria estado, calcula totais e devolve tudo.
  * Regras de clique, resultado e esperas pertencem aos hooks vizinhos.
  */
-export function useEstadoMao(): EstadoMaoCalculadora {
-  const [mao, atualizarMao] = useImmer<Mao>(MAO_VAZIA)
+type InitialMaoOverrides = Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba'>>
+
+export function useEstadoMao(initialMao?: InitialMaoOverrides): EstadoMaoCalculadora {
+  const [mao, atualizarMao] = useImmer<Mao>(initialMao ? { ...MAO_VAZIA, ...initialMao } : MAO_VAZIA)
   const [acaoPendente, setAcaoPendente] = useState<Acao | null>(null)
   const [configuracao, setConfiguracao] = useState<ConfiguracaoCalculo>(configuracaoPadrao)
   const [modalRegrasAberto, setModalRegrasAberto] = useState(false)

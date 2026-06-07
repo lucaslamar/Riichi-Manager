@@ -28,6 +28,7 @@
     "back": "Voltar",
     "backToBuild": "Voltar para montagem",
     "calculate": "Calcular",
+    "cancel": "Cancelar",
     "close": "Fechar",
     "clear": "Limpar",
     "editHand": "Editar mão",
@@ -337,11 +338,12 @@
       "namesHint": "Um nome por linha, exatamente 4 jogadores",
       "namesPlaceholder": "Ana\nBruno\nCarla\nDavi",
       "namesError": {
-        "tooFew": "Adicione mais {{n}} jogador(es)",
-        "tooMany": "Remova {{n}} jogador(es) — só 4 permitidos"
+        "tooFew": "Informe 4 jogadores.",
+        "tooMany": "Informe apenas 4 jogadores."
       },
       "initialPoints": "Pontuação inicial",
       "custom": "Outro valor",
+      "customPointsError": "Informe uma pontuação inicial válida.",
       "start": "Sortear ventos e iniciar"
     },
     "continue": {
@@ -358,11 +360,12 @@
       "riichiSticks": "Riichi sticks",
       "registerWin": "Registrar Batida",
       "riichi": "Riichi",
+      "riichiAtivo": "Riichi ativo",
       "draw": "Empate",
       "chombo": "Chombo",
       "undo": "Desfazer",
       "newGame": "Nova Mesa",
-      "confirmNewGame": "Encerrar partida atual e começar nova mesa?"
+      "confirmNewGame": "Isso vai apagar a mesa atual. Deseja continuar?"
     },
     "win": {
       "title": "Registrar Batida",
@@ -372,17 +375,22 @@
       "calcMethod": "Método de cálculo",
       "byHanFu": "Han e Fu",
       "byMao": "Calculadora de Mão",
-      "manual": "Valor manual",
-      "han": "Han",
-      "fu": "Fu",
-      "value": "Valor total (pts)",
       "valueDealer": "Pago pelo Leste",
       "valueNonDealer": "Pago por não-Leste",
-      "confirm": "Confirmar Batida",
+      "handValue": "Valor da mão",
+      "payerLoses": "Pagador perde",
+      "totalReceived": "Total recebido",
       "next": "Próximo",
       "summaryTitle": "Confirmar resultado",
       "applyResult": "Aplicar resultado",
       "recalculate": "Recalcular"
+    },
+    "menu": {
+      "acoes": "Ações do jogador",
+      "ganhouRon": "Venceu por Ron",
+      "ganhouTsumo": "Venceu por Tsumo",
+      "deuChombo": "Deu Chombo",
+      "declararRiichi": "Declarar Riichi"
     },
     "riichi": {
       "title": "Declarar Riichi",
@@ -404,6 +412,13 @@
       "custom": "Valor por jogador",
       "valuePerPlayer": "Valor pago a cada jogador (pts)",
       "confirm": "Aplicar Chombo"
+    },
+    "timer": {
+      "label": "Tempo da mesa",
+      "reiniciar": "Reiniciar tempo",
+      "esgotado": "Tempo esgotado",
+      "pausar": "Pausar timer",
+      "retomar": "Retomar timer"
     }
   }
 }

@@ -2,16 +2,15 @@ import { useState } from 'react'
 import type { EstadoCenterpiece } from '../../logica/tipos'
 import { calcularChomboDealer } from '../../logica/aplicarChombo'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import IndicadorVento from './IndicadorVento'
+import { NOME_VENTO } from './ventoVisual'
 
 interface PropsModalChombo {
   estado: EstadoCenterpiece
   aoConfirmarPadrao: (jogadorId: string) => void
   aoConfirmarManual: (jogadorId: string, valorPorJogador: number) => void
   aoFechar: () => void
-}
-
-const KANJI_VENTO: Record<string, string> = {
-  leste: '東', sul: '南', oeste: '西', norte: '北',
+  initialJogadorId?: string
 }
 
 export default function ModalChombo({
@@ -19,9 +18,10 @@ export default function ModalChombo({
   aoConfirmarPadrao,
   aoConfirmarManual,
   aoFechar,
+  initialJogadorId,
 }: PropsModalChombo) {
   const { t } = useI18n()
-  const [jogadorId, setJogadorId] = useState<string>('')
+  const [jogadorId, setJogadorId] = useState<string>(initialJogadorId ?? '')
   const [tipoPenalidade, setTipoPenalidade] = useState<'padrao' | 'manual'>('padrao')
   const [valorCustom, setValorCustom] = useState('')
 
@@ -60,8 +60,8 @@ export default function ModalChombo({
                 className={`opcao-jogador ${jogadorId === j.id ? 'ativa' : ''}`}
                 onClick={() => setJogadorId(j.id)}
               >
-                <span className={`kanji-vento vento-${j.vento}`}>{KANJI_VENTO[j.vento]}</span>
-                <span>{j.nome}</span>
+                <IndicadorVento vento={j.vento} />
+                <span>{j.nome} • {NOME_VENTO[j.vento]}</span>
                 <span className="pontos-jogador">{j.pontos.toLocaleString('pt-BR')}</span>
               </button>
             ))}

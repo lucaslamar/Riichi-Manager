@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import type { EstadoCenterpiece } from '../../logica/tipos'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import IndicadorVento from './IndicadorVento'
+import { NOME_VENTO } from './ventoVisual'
 
 interface PropsModalRiichi {
   estado: EstadoCenterpiece
   aoConfirmar: (jogadorId: string) => void
   aoFechar: () => void
-}
-
-const KANJI_VENTO: Record<string, string> = {
-  leste: '東', sul: '南', oeste: '西', norte: '北',
 }
 
 export default function ModalRiichi({ estado, aoConfirmar, aoFechar }: PropsModalRiichi) {
@@ -42,8 +40,8 @@ export default function ModalRiichi({ estado, aoConfirmar, aoFechar }: PropsModa
                   disabled={bloqueado}
                   title={j.riichi ? 'Já em riichi' : j.pontos < 1000 ? t('centerpiece.riichi.notEnough') : undefined}
                 >
-                  <span className={`kanji-vento vento-${j.vento}`}>{KANJI_VENTO[j.vento]}</span>
-                  <span>{j.nome}</span>
+                  <IndicadorVento vento={j.vento} />
+                  <span>{j.nome} • {NOME_VENTO[j.vento]}</span>
                   <span className="pontos-jogador">{j.pontos.toLocaleString('pt-BR')}</span>
                   {j.riichi && <span className="badge-riichi">Riichi</span>}
                 </button>

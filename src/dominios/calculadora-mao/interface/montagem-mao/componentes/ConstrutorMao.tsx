@@ -13,6 +13,8 @@ interface PropsConstrutorMao {
   contexto?: 'montagem' | 'finalizacao'
   aoAbrirRegras?: () => void
   acoesCabecalho?: ReactNode
+  aoCalcularDireto?: () => void
+  aoVoltar?: () => void
 }
 
 /**
@@ -29,6 +31,8 @@ export default function ConstrutorMao({
   contexto = 'montagem',
   aoAbrirRegras,
   acoesCabecalho,
+  aoCalcularDireto,
+  aoVoltar,
 }: PropsConstrutorMao) {
   const { t } = useI18n()
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
@@ -207,6 +211,7 @@ export default function ConstrutorMao({
         selecionandoPedraAgari={selecionandoPedraAgari}
         contexto={contexto}
         acoesCabecalho={acoesCabecalho}
+        aoVoltar={aoVoltar}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}
         aoAdicionarPedraDaMao={adicionarPedraDaMao}
@@ -288,7 +293,8 @@ export default function ConstrutorMao({
             escolhaChiiPendente={escolhaChiiPendente}
             aoAbrirRegras={contexto === 'montagem' ? aoAbrirRegras : undefined}
             aoAdicionarPedra={adicionarPedra}
-            aoFinalizarMao={finalizarMao}
+            aoFinalizarMao={aoCalcularDireto ? undefined : finalizarMao}
+            aoCalcularDireto={aoCalcularDireto}
             aoAlternarSelecaoPedraAgari={alternarSelecaoPedraAgari}
             aoEscolherPedraAgariPorCodigo={escolherPedraAgariPorCodigo}
             aoEscolherChiiPendente={escolherChiiPendente}

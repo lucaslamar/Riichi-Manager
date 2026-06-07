@@ -72,15 +72,15 @@
 
 .centerpiece-pontos-opcoes {
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .opcao-pontos {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 12px 16px;
   border: 2px solid #dde1e7;
   border-radius: 8px;
   cursor: pointer;
@@ -88,6 +88,8 @@
   font-weight: 600;
   color: var(--escuro);
   transition: border-color 0.15s, background 0.15s;
+  width: 100%;
+  min-height: 48px;
 }
 
 .opcao-pontos input[type='radio'] {
@@ -116,6 +118,7 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  padding-top: 12px;
 }
 
 .centerpiece-mesa,
@@ -125,49 +128,223 @@
 
 /* ─── Compass Layout ─── */
 
-/* Mobile: norte full-width, oeste|leste, sul full-width, centro full-width */
+/* Base (mobile portrait): compass real — centro entre os jogadores */
 .cp-compass {
   display: grid;
   grid-template-areas:
-    "norte norte"
-    "oeste leste"
-    "sul sul"
-    "centro centro";
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto auto auto;
-  gap: 8px;
+    "topo topo topo"
+    "esquerda centro direita"
+    "baixo baixo baixo";
+  grid-template-columns: minmax(82px, 0.9fr) minmax(150px, 1.25fr) minmax(82px, 0.9fr);
+  grid-template-rows: auto auto auto;
+  gap: 5px;
   width: 100%;
+  align-items: center;
+  align-content: center;
 }
 
-.cp-area-norte { grid-area: norte; }
-.cp-area-sul   { grid-area: sul; }
-.cp-area-oeste { grid-area: oeste; }
-.cp-area-leste { grid-area: leste; }
+.cp-area-topo { grid-area: topo; }
+.cp-area-baixo { grid-area: baixo; }
+.cp-area-esquerda { grid-area: esquerda; }
+.cp-area-direita { grid-area: direita; }
 .cp-area-centro { grid-area: centro; }
 
-/* Landscape/Desktop: true compass  */
+/* Mobile portrait: cards compactos e painel central ajustado */
+@media (max-width: 799px) {
+  .cp-area-topo,
+  .cp-area-baixo {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Norte/Sul: layout horizontal (aproveitam a largura total) */
+  .cp-area-topo .centerpiece-card-jogador,
+  .cp-area-baixo .centerpiece-card-jogador {
+    flex-direction: row;
+    align-items: center;
+    width: min(210px, 100%);
+    min-height: 72px;
+    padding: 8px;
+    gap: 7px;
+  }
+
+  .cp-area-topo .card-jogador-vento,
+  .cp-area-baixo .card-jogador-vento {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .cp-area-topo .card-jogador-info,
+  .cp-area-baixo .card-jogador-info {
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+    gap: 1px;
+  }
+
+  .cp-area-topo .card-jogador-nome,
+  .cp-area-baixo .card-jogador-nome,
+  .cp-area-esquerda .card-jogador-nome,
+  .cp-area-direita .card-jogador-nome {
+    font-size: 0.78rem;
+  }
+
+  .cp-area-topo .card-jogador-vento-nome,
+  .cp-area-baixo .card-jogador-vento-nome,
+  .cp-area-esquerda .card-jogador-vento-nome,
+  .cp-area-direita .card-jogador-vento-nome {
+    font-size: 0.62rem;
+  }
+
+  .cp-area-topo .card-jogador-pontos,
+  .cp-area-baixo .card-jogador-pontos,
+  .cp-area-esquerda .card-jogador-pontos,
+  .cp-area-direita .card-jogador-pontos {
+    font-size: 1rem;
+  }
+
+  .cp-area-topo .card-jogador-btn-riichi,
+  .cp-area-baixo .card-jogador-btn-riichi,
+  .cp-area-esquerda .card-jogador-btn-riichi,
+  .cp-area-direita .card-jogador-btn-riichi {
+    font-size: 0.66rem;
+    min-height: 25px;
+    padding: 3px 5px;
+  }
+
+  .cp-area-topo .card-jogador-btn-riichi,
+  .cp-area-baixo .card-jogador-btn-riichi {
+    width: auto;
+    flex-shrink: 0;
+    min-width: 50px;
+    margin-top: 0;
+  }
+
+  .cp-area-topo .card-jogador-riichi,
+  .cp-area-baixo .card-jogador-riichi {
+    flex-shrink: 0;
+    margin-top: 0;
+  }
+
+  /* Oeste/Leste: vertical compacto — align-self: center evita estender com o centro */
+  .cp-area-esquerda,
+  .cp-area-direita {
+    display: flex;
+    align-self: center;
+  }
+
+  .cp-area-esquerda .centerpiece-card-jogador,
+  .cp-area-direita .centerpiece-card-jogador {
+    min-height: 136px;
+    padding: 9px 6px;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .cp-area-esquerda .card-jogador-vento,
+  .cp-area-direita .card-jogador-vento {
+    font-size: 1.4rem;
+  }
+
+  /* Painel central compacto */
+  .cp-area-centro .centerpiece-painel-central {
+    padding: 9px 8px;
+    gap: 5px;
+  }
+
+  .cp-area-centro .painel-rodada-info {
+    gap: 8px;
+  }
+
+  .cp-area-centro .painel-rodada-kanji {
+    font-size: 1.7rem;
+  }
+
+  .cp-area-centro .painel-rodada-texto {
+    font-size: 0.8rem;
+  }
+
+  .cp-area-centro .painel-honba-sticks {
+    font-size: 0.7rem;
+    gap: 8px;
+  }
+
+  .cp-area-centro .painel-btn-batida {
+    font-size: 0.82rem;
+    min-height: 40px;
+    padding: 0 6px;
+  }
+
+  .cp-area-centro .painel-btn-acao {
+    font-size: 0.72rem;
+    padding: 7px 6px;
+    min-height: 34px;
+    gap: 5px;
+  }
+
+  /* Timer compacto: exibe em linha no mobile */
+  .cp-area-centro .cp-timer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 0;
+    gap: 6px;
+  }
+
+  .cp-area-centro .cp-timer-display {
+    width: 44px;
+    height: 44px;
+  }
+
+  .cp-area-centro .cp-timer-svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .cp-area-centro .cp-timer-numero {
+    font-size: 0.85rem;
+  }
+
+  .cp-area-centro .cp-timer-btn-pausar {
+    width: 26px;
+    height: 26px;
+    font-size: 0.65rem;
+  }
+
+  .cp-area-centro .cp-timer-label {
+    font-size: 0.6rem;
+  }
+
+  .cp-area-centro .cp-timer-esgotado-msg {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Landscape/Desktop: compass aberto */
 @media (min-width: 600px) and (orientation: landscape),
        (min-width: 800px) {
   .cp-compass {
     grid-template-areas:
-      ". norte ."
-      "oeste centro leste"
-      ". sul .";
+      ". topo ."
+      "esquerda centro direita"
+      ". baixo .";
     grid-template-columns: minmax(140px, 1fr) minmax(180px, 2fr) minmax(140px, 1fr);
     grid-template-rows: auto 1fr auto;
     gap: 12px;
     min-height: calc(100dvh - 120px);
   }
 
-  .cp-area-norte,
-  .cp-area-sul {
+  .cp-area-topo,
+  .cp-area-baixo {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .cp-area-oeste,
-  .cp-area-leste {
+  .cp-area-esquerda,
+  .cp-area-direita {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -194,6 +371,7 @@
   transition: border-color 0.2s, background 0.2s;
   position: relative;
   min-width: 0;
+  width: 100%;
 }
 
 .centerpiece-card-jogador.eh-dealer {
@@ -201,7 +379,8 @@
 }
 
 .centerpiece-card-jogador.em-riichi {
-  background: #fff8e1;
+  background: #fffdf5;
+  border-color: #f57c00;
 }
 
 .card-jogador-vento {
@@ -210,10 +389,39 @@
   font-weight: 700;
 }
 
-.vento-leste .card-jogador-vento { color: var(--leste); }
-.vento-sul .card-jogador-vento { color: var(--sul); }
-.vento-oeste .card-jogador-vento { color: var(--oeste); }
-.vento-norte .card-jogador-vento { color: var(--norte); }
+.indicador-vento {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.indicador-vento--pequeno {
+  font-size: 1.1rem;
+}
+
+.indicador-vento--medio {
+  min-width: 1.8rem;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.indicador-vento--grande {
+  font-size: 2rem;
+}
+
+.indicador-vento--leste { color: var(--leste); }
+.indicador-vento--sul { color: var(--sul); }
+.indicador-vento--oeste { color: var(--oeste); }
+.indicador-vento--norte { color: var(--norte); }
+
+.indicador-vento-texto {
+  color: var(--bloqueado);
+  font-size: 0.68em;
+  font-weight: 700;
+}
 
 .card-jogador-info {
   display: flex;
@@ -261,6 +469,50 @@
   margin-top: 2px;
 }
 
+/* Card clicável */
+.centerpiece-card-jogador.clicavel {
+  cursor: pointer;
+}
+
+.centerpiece-card-jogador.clicavel:hover,
+.centerpiece-card-jogador.clicavel:focus-visible {
+  border-color: var(--primario);
+  background: #f5f9ff;
+  outline: none;
+}
+
+/* Botão de Riichi no card do jogador */
+.card-jogador-btn-riichi {
+  width: 100%;
+  margin-top: 4px;
+  padding: 4px 6px;
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1.5px solid #dde1e7;
+  border-radius: 6px;
+  background: var(--branco);
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--escuro);
+  transition: border-color 0.15s, background 0.15s;
+  min-height: 26px;
+  line-height: 1;
+}
+
+.card-jogador-btn-riichi:hover:not(:disabled) {
+  border-color: #f57c00;
+  background: #fff8f0;
+  color: #f57c00;
+}
+
+.card-jogador-btn-riichi:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 /* Painel central */
 .centerpiece-painel-central {
   display: flex;
@@ -281,7 +533,7 @@
 .painel-rodada-kanji {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--primario);
+  color: #243746;
   line-height: 1;
 }
 
@@ -318,22 +570,176 @@
   justify-content: center;
 }
 
+.painel-msg-desfazer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 12px;
+  background: #e8f5e9;
+  border-radius: 8px;
+  color: var(--sul);
+  font-size: 0.85rem;
+  font-weight: 600;
+  animation: cp-fadeout 2.5s ease forwards;
+}
+
+@keyframes cp-fadeout {
+  0%, 60% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 .painel-acoes-secundarias {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .painel-btn-acao {
-  flex: 1 1 calc(50% - 4px);
-  min-width: 0;
-  font-size: 0.8rem;
+  width: 100%;
+  font-size: 0.85rem;
   padding: 10px 8px;
-  min-height: 44px;
+  min-height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+}
+
+/* ─── Timer global da mesa ─── */
+.cp-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0 4px;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cp-timer-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--bloqueado);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cp-timer-controles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cp-timer-display {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  transition: opacity 0.15s;
+}
+
+.cp-timer-display:hover {
+  opacity: 0.8;
+}
+
+.cp-timer-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.cp-timer-trilha {
+  fill: none;
+  stroke: #e8e8e8;
+  stroke-width: 2.8;
+}
+
+.cp-timer-progresso {
+  fill: none;
+  stroke: var(--primario);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.8s linear, stroke 0.4s;
+}
+
+.cp-timer-progresso.alerta {
+  stroke: #f57c00;
+}
+
+.cp-timer-progresso.urgente {
+  stroke: #e53935;
+}
+
+.cp-timer-numero {
+  position: relative;
+  z-index: 1;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--escuro);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.cp-timer-numero.alerta {
+  color: #f57c00;
+}
+
+.cp-timer-numero.urgente {
+  color: #e53935;
+}
+
+.cp-timer-btn-pausar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid #dde1e7;
+  background: var(--branco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.7rem;
+  color: var(--escuro);
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cp-timer-btn-pausar:hover {
+  border-color: var(--primario);
+  background: #f5f9ff;
+  color: var(--primario);
+}
+
+.cp-timer-esgotado .cp-timer-display {
+  animation: cp-timer-pulse 0.6s ease infinite alternate;
+}
+
+.cp-timer-rodando .cp-timer-btn-pausar {
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+@keyframes cp-timer-pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+.cp-timer-esgotado-msg {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #e53935;
+  letter-spacing: 0.03em;
 }
 
 /* Modais */
@@ -538,6 +944,120 @@
   flex: 1;
 }
 
+/* ─── Menu contextual do jogador ─── */
+.centerpiece-menu-jogador {
+  background: var(--branco);
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+}
+
+@media (min-width: 480px) {
+  .centerpiece-menu-jogador {
+    border-radius: var(--raio);
+    max-width: 340px;
+  }
+}
+
+.menu-jogador-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-jogador-kanji {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.menu-jogador-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menu-jogador-info strong {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--escuro);
+}
+
+.menu-jogador-info span {
+  font-size: 0.85rem;
+  color: var(--bloqueado);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.menu-jogador-acoes {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-jogador-acao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--escuro);
+  border-bottom: 1px solid #f5f5f5;
+  transition: background 0.1s;
+}
+
+.menu-jogador-acao:hover {
+  background: #f5f9ff;
+}
+
+.menu-jogador-acao.acao-perigo {
+  color: #c62828;
+}
+
+.menu-jogador-acao.acao-perigo:hover {
+  background: #fff5f5;
+}
+
+.menu-jogador-acao i {
+  width: 18px;
+  text-align: center;
+  color: var(--primario);
+  flex-shrink: 0;
+}
+
+.menu-jogador-acao.acao-perigo i {
+  color: #c62828;
+}
+
+.menu-jogador-cancelar {
+  display: block;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--bloqueado);
+  text-align: center;
+  transition: background 0.1s;
+}
+
+.menu-jogador-cancelar:hover {
+  background: #ebebeb;
+}
+
 /* Han/Fu dentro do modal */
 .hanfu-controles {
   display: grid;
@@ -729,10 +1249,6 @@
   .card-jogador-pontos {
     font-size: 1.5rem;
   }
-
-  .painel-btn-acao {
-    flex: 0 1 auto;
-  }
 }
 
 /* ─── Setup — textarea de nomes ─── */
@@ -787,7 +1303,7 @@
   min-height: 52px;
 }
 
-/* ─── Overlay de calculadora ─── */
+/* ─── Overlay de calculadora han-fu ─── */
 .cp-calc-overlay {
   position: fixed;
   inset: 0;
@@ -801,29 +1317,55 @@
 .cp-calc-overlay-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
+  gap: 10px;
+  padding: 8px 12px;
   background: var(--branco);
   border-bottom: 1px solid #e8e8e8;
   flex-shrink: 0;
-  flex-wrap: wrap;
 }
 
 .cp-calc-voltar {
   flex-shrink: 0;
-  padding: 8px 14px;
-  font-size: 0.9rem;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  font-size: 0.8rem;
+  color: var(--escuro);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.cp-calc-voltar:hover {
+  opacity: 1;
+  background: transparent;
+  border-color: transparent;
+}
+
+.cp-calc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
 }
 
 .cp-calc-titulo {
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--escuro);
-  flex: 1;
-  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cp-calc-subtitulo {
+  font-size: 0.75rem;
+  color: var(--bloqueado);
+  font-weight: 600;
 }
 
 .cp-calc-conteudo {
@@ -832,28 +1374,39 @@
   overflow-x: hidden;
 }
 
+/* Seta de voltar no topo da calculadora de mão (contexto centerpiece) */
+.cp-calc-voltar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--escuro);
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin: 6px 0 0 8px;
+  padding: 2px 4px;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.cp-calc-voltar-btn:hover {
+  opacity: 1;
+}
+
 /* Botão "Usar resultado no Centerpiece" */
 .cp-btn-usar-resultado {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 12px;
   justify-content: center;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* Barra sticky para calculadora de mão */
-.cp-barra-usar-resultado {
-  position: sticky;
-  bottom: 0;
-  padding: 12px 16px;
-  background: var(--branco);
-  border-top: 1px solid #e8e8e8;
-  z-index: 10;
-}
-
-.cp-barra-usar-resultado .cp-btn-usar-resultado {
-  margin-top: 0;
+/* Offset sticky dentro do overlay han-fu (sem header global) */
+.cp-calc-conteudo .cabecalho-sticky-finalizacao {
+  top: 0;
 }
 
 /* ─── Confirmação resumo ─── */

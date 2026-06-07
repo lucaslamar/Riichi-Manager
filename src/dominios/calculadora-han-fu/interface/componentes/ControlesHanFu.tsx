@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import {
   HAN_MAXIMO,
@@ -254,19 +255,36 @@ export function SeletorTipoVitoria({
   )
 }
 
-export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaRapidaHanFu }) {
+export function TabelaReferenciaRapida({
+  referencia,
+  recolhidaPorPadrao = false,
+}: {
+  referencia: ReferenciaRapidaHanFu
+  recolhidaPorPadrao?: boolean
+}) {
   const { t } = useI18n()
+  const [recolhida, setRecolhida] = useState(recolhidaPorPadrao)
 
   return (
     <section className="referencia-han-fu" aria-labelledby="referencia-han-fu-titulo">
-      <div className="cabecalho-referencia-han-fu">
+      <button
+        type="button"
+        className="cabecalho-referencia-han-fu cabecalho-referencia-toggle"
+        onClick={() => setRecolhida((prev) => !prev)}
+        aria-expanded={!recolhida}
+        aria-controls="conteudo-referencia-han-fu"
+      >
         <span>
           <strong id="referencia-han-fu-titulo">{t('hanFu.quickReference')}</strong>
           <small>{t('hanFu.quickReferenceHint')}</small>
         </span>
-        <small className="legenda-referencia-han-fu">{t('hanFu.quickReferenceLegend')}</small>
-      </div>
-      <div id="conteudo-referencia-han-fu" className="conteudo-referencia-han-fu">
+        <i className={`fas fa-chevron-${recolhida ? 'down' : 'up'}`} aria-hidden="true" />
+      </button>
+      <div
+        id="conteudo-referencia-han-fu"
+        className="conteudo-referencia-han-fu"
+        hidden={recolhida}
+      >
         <div
           className="tabela-referencia-han-fu"
           role="table"

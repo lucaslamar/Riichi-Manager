@@ -1,18 +1,36 @@
-import type { EstadoCenterpiece, Vento } from './tipos'
+import type { EstadoCenterpiece, JogadorCenterpiece, Vento } from './tipos'
 
-const ROTACAO_VENTO: Record<Vento, Vento> = {
-  leste: 'norte',
-  sul: 'leste',
-  oeste: 'sul',
-  norte: 'oeste',
+/**
+ * Retorna o vento do jogador após um giro para a direita (passagem de dealer).
+ * Leste → Norte → Oeste → Sul → Leste
+ *
+ * POSIÇÃO FÍSICA NUNCA MUDA. Só o vento muda.
+ */
+export function ventoDepoisDoGiroParaDireita(vento: Vento): Vento {
+  switch (vento) {
+    case 'leste': return 'norte'
+    case 'norte': return 'oeste'
+    case 'oeste': return 'sul'
+    case 'sul':   return 'leste'
+  }
+}
+
+/**
+ * Gira os ventos de todos os jogadores para a direita.
+ * NÃO altera posicao, id, nome, pontos nem riichi — só vento.
+ */
+export function girarVentosParaDireita(
+  jogadores: JogadorCenterpiece[],
+): JogadorCenterpiece[] {
+  return jogadores.map((j) => ({
+    ...j,
+    vento: ventoDepoisDoGiroParaDireita(j.vento),
+    riichi: false,
+  }))
 }
 
 export function avancarRodada(estado: EstadoCenterpiece): EstadoCenterpiece {
-  const jogadores = estado.jogadores.map((j) => ({
-    ...j,
-    vento: ROTACAO_VENTO[j.vento],
-    riichi: false,
-  }))
+  const jogadores = girarVentosParaDireita(estado.jogadores)
 
   let novaRodadaNumero = estado.rodadaNumero as 1 | 2 | 3 | 4
   let novaRodadaVento = estado.rodadaVento

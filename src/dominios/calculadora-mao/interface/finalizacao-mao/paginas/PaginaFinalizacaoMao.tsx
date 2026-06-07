@@ -8,9 +8,13 @@ import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 export function PaginaFinalizacaoMao({
   estado,
   acoesCabecalho,
+  aoUsarMao,
+  ocultarOpcoesMao,
 }: {
   estado: EstadoCalculadoraMao
   acoesCabecalho?: ReactNode
+  aoUsarMao?: () => void
+  ocultarOpcoesMao?: boolean
 }) {
   const maoRef = useRef<HTMLDivElement>(null)
   const [maoVisivelNaTela, setMaoVisivelNaTela] = useState(true)
@@ -45,8 +49,8 @@ export function PaginaFinalizacaoMao({
           />
         </div>
         <div className="coluna-finalizacao-opcoes">
-          <OpcoesMao estado={estado} embutido />
-          <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" />
+          {!ocultarOpcoesMao && <OpcoesMao estado={estado} embutido />}
+          <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" aoUsarMao={aoUsarMao} />
         </div>
       </div>
     </div>
