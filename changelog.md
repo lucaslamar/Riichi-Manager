@@ -1,5 +1,21 @@
 # Changelog - Riichi Manager
 
+## 4.3.0 - 2026-06-06
+
+### Corrigido
+
+- Corrige o Centerpiece para manter os jogadores fixos em suas posições físicas durante toda a partida
+- Corrige a renderização dos cards para usar `posicao` (cadeira física), não `vento` (estado da rodada)
+- Garante que a rotação de ventos altere apenas o campo `vento` dos jogadores, sem tocar em `posicao`, `id`, `nome`, `pontos` ou `riichi`
+- Corrige o destaque de dealer para acompanhar o vento Leste sem mover o card de lugar
+- Descarta automaticamente estados salvos no formato antigo (onde a posição podia ter sido atribuída com base no vento) ao abrir o app, evitando layout corrompido
+
+### Melhorado
+
+- Seta de voltar da calculadora de mão (modo Centerpiece) reposicionada ao lado do título da mão ("← MÃO X/14"), em vez de fluxar sozinha acima do card
+- Setas de voltar (calculadora de mão e overlay de han-fu) redesenhadas: menores, sem fundo ou borda, estilo sutil com hover de opacidade
+- Adicionado espaçamento superior na mesa do Centerpiece para evitar que o card do jogador do topo fique colado ao cabeçalho do app
+
 ## 4.2.0 - 2026-06-06
 
 ### Adicionado
