@@ -17,6 +17,8 @@ interface PropsPaginaCalculadoraHanFu {
   initialIsOya?: boolean
   initialAgari?: AgariHanFu
   initialHonba?: number
+  vencedorId?: string
+  pagadorId?: string
 }
 
 /** Renderiza a calculadora direta por Han/Fu, sem montar a mao pedra por pedra. */
@@ -25,6 +27,8 @@ export default function PaginaCalculadoraHanFu({
   initialIsOya,
   initialAgari,
   initialHonba,
+  vencedorId,
+  pagadorId,
 }: PropsPaginaCalculadoraHanFu = {}) {
   const {
     agari,
@@ -49,7 +53,13 @@ export default function PaginaCalculadoraHanFu({
 
   const handleUsarResultado = () => {
     if (!aoUsarResultado || !resultado) return
-    aoUsarResultado(converterHanFuParaCenterpiece(resultado))
+    aoUsarResultado(
+      converterHanFuParaCenterpiece(resultado, {
+        vencedorId,
+        pagadorId,
+        vencedorEhLeste: isOya,
+      }),
+    )
   }
 
   return (

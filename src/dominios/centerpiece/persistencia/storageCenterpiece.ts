@@ -13,39 +13,37 @@ const CHAVE_STORAGE = 'riichi-manager-centerpiece'
  * Incrementar quando o formato do estado mudar de forma incompatível.
  * Isso força a limpeza de estados antigos que podem ter posicao baseada em vento.
  */
-const SCHEMA_VERSION = 2
+const SCHEMA_VERSION = 3
 
 const POSICOES_MESA: PosicaoMesa[] = ['topo', 'direita', 'baixo', 'esquerda']
 
-/**
- * Mapeia um vento para a posicao que o código ANTIGO atribuía a ele.
- * Ventos não são posições — mas versões antigas podiam ter feito esse mapeamento.
- * Usado para detectar e corrigir estados legados.
- */
-const POSICAO_LEGADA_POR_VENTO: Record<string, PosicaoMesa> = {
-  leste:  'topo',
-  sul:    'baixo',
-  oeste:  'esquerda',
-  norte:  'direita',
+/** Orientação inicial correta dos assentos vista na tela. */
+const POSICAO_CANONICA_POR_VENTO: Record<string, PosicaoMesa> = {
+  leste: 'esquerda',
+  sul: 'baixo',
+  oeste: 'direita',
+  norte: 'topo',
 }
 
-function migrarJogadores(jogadores: JogadorCenterpiece[] | undefined): JogadorCenterpiece[] {
+function migrarJogadores(
+  jogadores: JogadorCenterpiece[] | undefined,
+  corrigirOrientacao: boolean,
+): JogadorCenterpiece[] {
   if (!Array.isArray(jogadores)) return []
 
   return jogadores.map((jogador, indice) => {
-    // Se a posicao armazenada é válida E não corresponde à posicao legada baseada em vento,
-    // mantém. Se corresponde à posicao legada (posicao foi definida por vento no passado),
-    // corrige pela posição de índice.
     const posicaoValida = POSICOES_MESA.includes(jogador.posicao)
-    const posicaoEraBaseadaEmVento =
-      posicaoValida && POSICAO_LEGADA_POR_VENTO[jogador.vento] === jogador.posicao
+    if (corrigirOrientacao) {
+      return {
+        ...jogador,
+        posicao: POSICAO_CANONICA_POR_VENTO[jogador.vento] ?? jogador.posicao,
+      }
+    }
 
-    if (posicaoValida && !posicaoEraBaseadaEmVento) {
-      // Posicao válida e não é o mapeamento vento→posicao antigo: manter.
+    if (posicaoValida) {
       return jogador
     }
 
-    // Posicao inválida OU era baseada em vento: atribuir pela ordem do array.
     return {
       ...jogador,
       posicao: POSICOES_MESA[indice] ?? 'topo',
@@ -53,11 +51,14 @@ function migrarJogadores(jogadores: JogadorCenterpiece[] | undefined): JogadorCe
   })
 }
 
-function migrarHistorico(historico: SnapshotCenterpiece[] | undefined): SnapshotCenterpiece[] {
+function migrarHistorico(
+  historico: SnapshotCenterpiece[] | undefined,
+  corrigirOrientacao: boolean,
+): SnapshotCenterpiece[] {
   if (!Array.isArray(historico)) return []
   return historico.map((snapshot) => ({
     ...snapshot,
-    jogadores: migrarJogadores(snapshot.jogadores),
+    jogadores: migrarJogadores(snapshot.jogadores, corrigirOrientacao),
   }))
 }
 
@@ -68,18 +69,20 @@ export function carregarMesa(): EstadoCenterpiece {
   try {
     const lido = JSON.parse(salvo) as Partial<EstadoCenterpiece> & { _schemaVersion?: number }
 
-    // Schema incompatível: descartar estado antigo para evitar layout por vento.
-    if ((lido._schemaVersion ?? 1) < SCHEMA_VERSION) {
+    const versaoSalva = lido._schemaVersion ?? 1
+
+    if (versaoSalva < 2) {
       window.localStorage.removeItem(CHAVE_STORAGE)
       return criarMesaVazia()
     }
 
+    const corrigirOrientacao = versaoSalva < SCHEMA_VERSION
     const base = criarMesaVazia()
     return {
       ...base,
       ...lido,
-      jogadores: migrarJogadores(lido.jogadores),
-      historico: migrarHistorico(lido.historico),
+      jogadores: migrarJogadores(lido.jogadores, corrigirOrientacao),
+      historico: migrarHistorico(lido.historico, corrigirOrientacao),
     }
   } catch {
     return criarMesaVazia()

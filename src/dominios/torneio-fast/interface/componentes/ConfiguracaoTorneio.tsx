@@ -43,7 +43,7 @@ export function ConfiguracaoTorneio({ aoIniciar }: PropsConfiguracaoTorneio) {
   }, [texto, aoIniciar, valido, jogadores])
 
   return (
-    <section className="card" aria-label="Configurar torneio">
+    <section className="card configuracao-torneio-page" aria-label="Configurar torneio">
       <div className="cabecalho-secao">
         <i className="fas fa-bolt icone-secao" aria-hidden="true" />
         <div>

@@ -1,18 +1,28 @@
-.sorteador-ventos {
-  display: grid;
-  align-content: start;
-  gap: 10px;
+body:has(.sorteador-ventos-page) {
+  padding-bottom: 0;
+}
+
+.sorteador-ventos-page {
+  display: flex;
+  height: calc(100dvh - 46px);
+  max-height: calc(100dvh - 46px);
   width: min(100%, 600px);
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(8px, 1.5dvh, 12px);
   margin-inline: auto;
   border-radius: var(--raio);
-  padding: 16px;
+  padding: clamp(12px, 2dvh, 16px) 16px calc(12px + env(safe-area-inset-bottom));
   background: var(--branco);
   color: var(--escuro);
   box-shadow: var(--sombra);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* neutraliza margin-bottom e borda global do cabecalho-secao */
 .sorteador-ventos__cabecalho {
+  flex: 0 0 auto;
   margin-bottom: 0;
   padding-bottom: 0;
   border-bottom: none;
@@ -22,6 +32,7 @@
 
 .sorteador-ventos__grade {
   display: grid;
+  flex: 0 1 auto;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
@@ -34,7 +45,7 @@
   justify-items: center;
   align-content: center;
   gap: 3px;
-  min-height: 100px;
+  min-height: clamp(88px, 14dvh, 104px);
   border: 2px solid #dfe7ef;
   border-radius: 10px;
   padding: 12px 10px;
@@ -126,8 +137,9 @@
 
 .sorteador-ventos__acoes {
   display: flex;
+  flex: 0 0 auto;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .sorteador-ventos__btn-sortear,
@@ -150,7 +162,7 @@
 
 /* ── Focus ───────────────────────────────────────────────── */
 
-.sorteador-ventos button:focus-visible {
+.sorteador-ventos-page button:focus-visible {
   outline: 3px solid rgba(33, 150, 243, 0.35);
   outline-offset: 2px;
 }
@@ -158,9 +170,9 @@
 /* ── Responsivo: desktop ─────────────────────────────────── */
 
 @media (min-width: 560px) {
-  .sorteador-ventos {
-    gap: 14px;
-    padding: 24px;
+  .sorteador-ventos-page {
+    gap: clamp(10px, 1.8dvh, 16px);
+    padding: clamp(18px, 3dvh, 24px);
   }
 
   .sorteador-ventos__grade {
@@ -177,12 +189,27 @@
   }
 }
 
+@media (min-width: 641px) and (max-width: 1023px) {
+  .sorteador-ventos-page {
+    height: calc(100dvh - 74px);
+    max-height: calc(100dvh - 74px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .sorteador-ventos-page {
+    height: calc(100dvh - 68px);
+    max-height: calc(100dvh - 68px);
+    margin-bottom: 0;
+  }
+}
+
 /* ── Responsivo: mobile pequeno ──────────────────────────── */
 
 @media (max-width: 380px) {
-  .sorteador-ventos {
+  .sorteador-ventos-page {
     gap: 8px;
-    padding: 12px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
   }
 
   .card-vento {
@@ -196,5 +223,13 @@
 
   .card-vento__nome {
     font-size: 0.76rem;
+  }
+}
+
+@media (max-height: 640px) {
+  .sorteador-ventos-page {
+    justify-content: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }

@@ -27,15 +27,14 @@ interface PropsMesaCenterpiece {
 }
 
 /**
- * Encontra o jogador pela POSIÇÃO FÍSICA na mesa.
- * Posição nunca muda durante a partida — só o vento muda.
- * NUNCA usar vento para decidir onde renderizar.
+ * Posição visual determinada pelo vento atual:
+ *   Leste → direita | Sul → topo | Oeste → esquerda | Norte → baixo
  */
-function jogadorNaPosicao(
+function jogadorComVento(
   jogadores: EstadoCenterpiece['jogadores'],
-  posicao: EstadoCenterpiece['jogadores'][number]['posicao'],
+  vento: EstadoCenterpiece['jogadores'][number]['vento'],
 ) {
-  return jogadores.find((j) => j.posicao === posicao)
+  return jogadores.find((j) => j.vento === vento)
 }
 
 export default function MesaCenterpiece({
@@ -53,10 +52,10 @@ export default function MesaCenterpiece({
   aoReiniciar,
   aoAbrirCalculadoraMao,
 }: PropsMesaCenterpiece) {
-  const topo     = jogadorNaPosicao(estado.jogadores, 'topo')
-  const direita  = jogadorNaPosicao(estado.jogadores, 'direita')
-  const baixo    = jogadorNaPosicao(estado.jogadores, 'baixo')
-  const esquerda = jogadorNaPosicao(estado.jogadores, 'esquerda')
+  const direita  = jogadorComVento(estado.jogadores, 'leste')
+  const topo     = jogadorComVento(estado.jogadores, 'sul')
+  const esquerda = jogadorComVento(estado.jogadores, 'oeste')
+  const baixo    = jogadorComVento(estado.jogadores, 'norte')
 
   const [jogadorMenuId, setJogadorMenuId] = useState<string | null>(null)
   const [batidaInicial, setBatidaInicial] = useState<{ vencedorId: string; tipoVitoria: TipoVitoria } | null>(null)

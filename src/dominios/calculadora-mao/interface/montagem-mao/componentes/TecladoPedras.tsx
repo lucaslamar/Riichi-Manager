@@ -291,11 +291,11 @@ export function TecladoPedras({
             <button
               className="botao-finalizar-mao-teclado"
               type="button"
-              aria-label={t('calculator.goToHandFinalization')}
+              aria-label={t('calculator.finalTitle')}
               disabled={selecionandoPedraAgari || !batidaDefinida}
               onClick={aoFinalizarMao}
             >
-              {t('calculator.goToHandFinalization')}
+              {t('calculator.finalTitle')}
             </button>
           ) : null}
           {mensagemFinalizacao && (

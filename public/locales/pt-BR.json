@@ -336,15 +336,28 @@
       "playerNames": "Nomes dos jogadores",
       "player": "Jogador {{n}}",
       "namesHint": "Um nome por linha, exatamente 4 jogadores",
-      "namesPlaceholder": "Ana\nBruno\nCarla\nDavi",
+      "namesPlaceholder": "Daniel\nVisoni\nSantiago\nMagalhães",
       "namesError": {
         "tooFew": "Informe 4 jogadores.",
         "tooMany": "Informe apenas 4 jogadores."
       },
       "initialPoints": "Pontuação inicial",
+      "windAssignment": {
+        "title": "Definição dos ventos",
+        "aleatorio": {
+          "label": "Aleatório",
+          "help": "Sorteia os ventos entre os jogadores."
+        },
+        "ordemNomes": {
+          "label": "Ordem dos nomes",
+          "help": "1º Leste, 2º Sul, 3º Oeste, 4º Norte."
+        }
+      },
       "custom": "Outro valor",
       "customPointsError": "Informe uma pontuação inicial válida.",
-      "start": "Sortear ventos e iniciar"
+      "start": "Sortear ventos e iniciar",
+      "startRandom": "Sortear ventos e iniciar",
+      "startOrdered": "Iniciar mesa"
     },
     "continue": {
       "title": "Partida em andamento",

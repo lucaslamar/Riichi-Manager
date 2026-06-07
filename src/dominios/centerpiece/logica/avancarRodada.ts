@@ -1,12 +1,13 @@
 import type { EstadoCenterpiece, JogadorCenterpiece, Vento } from './tipos'
 
 /**
- * Retorna o vento do jogador após um giro para a direita (passagem de dealer).
+ * Rotação padrão de Riichi Mahjong ao passar o dealer:
  * Leste → Norte → Oeste → Sul → Leste
  *
- * POSIÇÃO FÍSICA NUNCA MUDA. Só o vento muda.
+ * A posição visual é derivada do vento (não da cadeira física):
+ *   Leste → direita | Sul → topo | Oeste → esquerda | Norte → baixo
  */
-export function ventoDepoisDoGiroParaDireita(vento: Vento): Vento {
+function proximoVento(vento: Vento): Vento {
   switch (vento) {
     case 'leste': return 'norte'
     case 'norte': return 'oeste'
@@ -15,18 +16,10 @@ export function ventoDepoisDoGiroParaDireita(vento: Vento): Vento {
   }
 }
 
-/**
- * Gira os ventos de todos os jogadores para a direita.
- * NÃO altera posicao, id, nome, pontos nem riichi — só vento.
- */
 export function girarVentosParaDireita(
   jogadores: JogadorCenterpiece[],
 ): JogadorCenterpiece[] {
-  return jogadores.map((j) => ({
-    ...j,
-    vento: ventoDepoisDoGiroParaDireita(j.vento),
-    riichi: false,
-  }))
+  return jogadores.map((j) => ({ ...j, vento: proximoVento(j.vento), riichi: false }))
 }
 
 export function avancarRodada(estado: EstadoCenterpiece): EstadoCenterpiece {

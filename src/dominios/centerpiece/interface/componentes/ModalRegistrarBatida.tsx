@@ -12,6 +12,12 @@ export interface ContextoCalcMao {
   ventoRodada: VentoMao
   ventoAssento: VentoMao
   honba: number
+  rodadaNumero: number
+  vencedorId: string
+  pagadorId?: string
+  vencedorEhLeste: boolean
+  vencedorNome?: string
+  jogadorRiichi: boolean
 }
 
 const VENTO_PARA_MAO: Record<string, VentoMao> = {
@@ -92,6 +98,12 @@ export default function ModalRegistrarBatida({
         ventoRodada: VENTO_PARA_MAO[estado.rodadaVento] ?? '1',
         ventoAssento: VENTO_PARA_MAO[vencedor?.vento ?? 'leste'] ?? '1',
         honba: estado.honba,
+        rodadaNumero: estado.rodadaNumero,
+        vencedorId,
+        pagadorId: tipoVitoria === 'ron' ? pagadorId : undefined,
+        vencedorEhLeste: ehDealer,
+        vencedorNome: vencedor?.nome,
+        jogadorRiichi: !!vencedor?.riichi,
       },
       receberResultado,
     )
@@ -349,6 +361,8 @@ export default function ModalRegistrarBatida({
               initialIsOya={ehDealer}
               initialAgari={tipoVitoria}
               initialHonba={estado.honba}
+              vencedorId={vencedorId}
+              pagadorId={tipoVitoria === 'ron' ? pagadorId : undefined}
             />
           </div>
         </div>

@@ -9,12 +9,21 @@ export function PaginaFinalizacaoMao({
   estado,
   acoesCabecalho,
   aoUsarMao,
-  ocultarOpcoesMao,
+  contextoCenterpiece,
 }: {
   estado: EstadoCalculadoraMao
   acoesCabecalho?: ReactNode
   aoUsarMao?: () => void
-  ocultarOpcoesMao?: boolean
+  contextoCenterpiece?: {
+    tipoVitoria: 'ron' | 'tsumo'
+    ventoRodada: string
+    ventoAssento: string
+    honba: number
+    rodadaNumero?: number
+    vencedorNome?: string
+    vencedorEhLeste?: boolean
+    jogadorRiichi?: boolean
+  }
 }) {
   const maoRef = useRef<HTMLDivElement>(null)
   const [maoVisivelNaTela, setMaoVisivelNaTela] = useState(true)
@@ -49,8 +58,8 @@ export function PaginaFinalizacaoMao({
           />
         </div>
         <div className="coluna-finalizacao-opcoes">
-          {!ocultarOpcoesMao && <OpcoesMao estado={estado} embutido />}
-          <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" aoUsarMao={aoUsarMao} />
+          <OpcoesMao estado={estado} embutido contextoCenterpiece={contextoCenterpiece} />
+          <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" aoUsarMao={aoUsarMao} contextoCenterpiece={contextoCenterpiece} />
         </div>
       </div>
     </div>

@@ -38,7 +38,22 @@ export default function PaginaCenterpiece() {
   }
 
   const aoUsarResultadoCalc = (resultado: ResultadoCalculoParaCenterpiece) => {
-    calcMaoAberta?.aoReceberResultado(resultado)
+    const contexto = calcMaoAberta?.contexto
+    if (contexto) {
+      if (resultado.tipoVitoria === 'ron') {
+        const pontos = resultado.pontosRon
+        if (pontos != null && contexto.vencedorId && contexto.pagadorId) {
+          registrarRon({ vencedorId: contexto.vencedorId, pagadorId: contexto.pagadorId, pontos })
+          setModalAberto(null)
+        }
+      } else {
+        const { pagamentoDealer, pagamentoNaoDealer } = resultado
+        if (pagamentoDealer != null && pagamentoNaoDealer != null && contexto.vencedorId) {
+          registrarTsumo({ vencedorId: contexto.vencedorId, pagamentoDealer, pagamentoNaoDealer })
+          setModalAberto(null)
+        }
+      }
+    }
     setCalcMaoAberta(null)
   }
 

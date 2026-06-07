@@ -2,7 +2,11 @@ import type { ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import type { ResultadoPontuacaoHanFu } from '@/dominios/calculadora-han-fu/logica/tipos'
 
 export interface ResultadoCalculoParaCenterpiece {
+  origem?: 'calculadora-mao' | 'calculadora-han-fu'
   tipoVitoria: 'ron' | 'tsumo'
+  vencedorId?: string
+  pagadorId?: string
+  vencedorEhLeste?: boolean
   pontosRon?: number
   pagamentoDealer?: number
   pagamentoNaoDealer?: number
@@ -10,17 +14,29 @@ export interface ResultadoCalculoParaCenterpiece {
   fu?: number
   yakuman?: number
   categoria?: string
+  honbaUsado?: number
   incluiHonba: boolean
+}
+
+interface MetadadosCenterpiece {
+  vencedorId?: string
+  pagadorId?: string
+  vencedorEhLeste?: boolean
+  honbaUsado?: number
 }
 
 export function converterHanFuParaCenterpiece(
   resultado: ResultadoPontuacaoHanFu,
+  metadados: MetadadosCenterpiece = {},
 ): ResultadoCalculoParaCenterpiece {
   const base = {
+    origem: 'calculadora-han-fu' as const,
+    ...metadados,
     han: resultado.han,
     fu: resultado.fu,
     yakuman: resultado.yakumanMultiplo,
     categoria: resultado.nomeCategoria ?? undefined,
+    honbaUsado: resultado.honba,
     incluiHonba: true,
   }
 
@@ -47,14 +63,18 @@ export function converterHanFuParaCenterpiece(
 
 export function converterMaoParaCenterpiece(
   resultado: ResultadoMao,
+  metadados: MetadadosCenterpiece = {},
 ): ResultadoCalculoParaCenterpiece | null {
   if (!resultado.agari) return null
 
   const base = {
+    origem: 'calculadora-mao' as const,
+    ...metadados,
     han: resultado.han,
     fu: resultado.fu,
     yakuman: resultado.yakuman,
     categoria: resultado.nome ?? undefined,
+    honbaUsado: metadados.honbaUsado ?? 0,
     incluiHonba: true,
   }
 

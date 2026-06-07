@@ -2,19 +2,48 @@
 
 ## 4.3.0 - 2026-06-06
 
+### Adicionado
+
+- Adicionada configuração no setup do **Centerpiece** para definir como os ventos iniciais serão atribuídos.
+- Agora é possível escolher entre:
+  - **Aleatório**, mantendo o sorteio justo dos ventos;
+  - **Ordem dos nomes**, onde o 1º jogador vira Leste, o 2º Sul, o 3º Oeste e o 4º Norte.
+- Adicionada finalização reduzida da **Calculadora de Mão** quando usada dentro do Centerpiece.
+- A finalização reduzida mantém opções importantes como:
+  - Doras na mão;
+  - Indicadores de Dora / Ura Dora;
+  - Condições especiais;
+  - Riichi/Ippatsu;
+  - Rinshan, Chankan, Haitei/Houtei e demais opções da mão.
+
+### Alterado
+
+- Ajustada a integração do **Centerpiece** com a **Calculadora de Han e Fu** para enviar corretamente:
+  - Ron ou Tsumo;
+  - se o vencedor é Leste ou não;
+  - Honba atual.
+- Ajustada a integração do **Centerpiece** com a **Calculadora de Mão** para enviar corretamente:
+  - tipo de vitória;
+  - vento do vencedor;
+  - vento da rodada;
+  - Honba;
+  - estado de Riichi, quando aplicável.
+- A Calculadora de Mão em modo Centerpiece não exige mais que o usuário preencha novamente Ron/Tsumo, ventos e Honba.
+- O botão da montagem da mão em modo Centerpiece passa a levar para uma finalização reduzida, focada apenas nas opções que ainda precisam ser informadas.
+- O botão inicial do setup do Centerpiece passa a refletir melhor o modo escolhido de definição dos ventos.
+
 ### Corrigido
 
-- Corrige o Centerpiece para manter os jogadores fixos em suas posições físicas durante toda a partida
-- Corrige a renderização dos cards para usar `posicao` (cadeira física), não `vento` (estado da rodada)
-- Garante que a rotação de ventos altere apenas o campo `vento` dos jogadores, sem tocar em `posicao`, `id`, `nome`, `pontos` ou `riichi`
-- Corrige o destaque de dealer para acompanhar o vento Leste sem mover o card de lugar
-- Descarta automaticamente estados salvos no formato antigo (onde a posição podia ter sido atribuída com base no vento) ao abrir o app, evitando layout corrompido
-
-### Melhorado
-
-- Seta de voltar da calculadora de mão (modo Centerpiece) reposicionada ao lado do título da mão ("← MÃO X/14"), em vez de fluxar sozinha acima do card
-- Setas de voltar (calculadora de mão e overlay de han-fu) redesenhadas: menores, sem fundo ou borda, estilo sutil com hover de opacidade
-- Adicionado espaçamento superior na mesa do Centerpiece para evitar que o card do jogador do topo fique colado ao cabeçalho do app
+- Corrige o cálculo de pagamento no Centerpiece para considerar corretamente se o vencedor é **Leste** ou **não Leste**.
+- Corrige o cálculo de pagamento para diferenciar corretamente **Ron** e **Tsumo**.
+- Corrige pagamentos de Tsumo para aplicar:
+  - pagamento igual de todos quando o vencedor é Leste;
+  - pagamento maior do Leste e menor dos não Leste quando o vencedor não é Leste.
+- Corrige a integração para não usar a posição visual do jogador como critério de dealer.
+- Garante que o dealer seja identificado pelo vento atual do jogador, usando `vento === 'leste'`.
+- Evita dupla contagem de Honba ao aplicar resultados vindos das calculadoras.
+- Garante que os Riichi sticks continuem sendo aplicados apenas pelo Centerpiece, e não pelas calculadoras.
+- Corrige o fluxo integrado da Calculadora de Mão para não pular Doras e condições especiais antes do cálculo.
 
 ## 4.2.0 - 2026-06-06
 

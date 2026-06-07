@@ -18,7 +18,7 @@ export default function PaginaSorteadorVentos() {
   const botaoDesabilitado = sorteando || sorteioCompleto
 
   return (
-    <main className="sorteador-ventos">
+    <section className="sorteador-ventos-page">
       <div className="cabecalho-secao sorteador-ventos__cabecalho">
         <i className="fas fa-wind icone-secao" aria-hidden="true" />
         <div>
@@ -62,6 +62,6 @@ export default function PaginaSorteadorVentos() {
           {t('windDraw.restart')}
         </button>
       </div>
-    </main>
+    </section>
   )
 }

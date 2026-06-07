@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
 import ModalRegras from '../componentes/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
@@ -12,6 +11,12 @@ interface ContextoCenterpieceMao {
   ventoRodada: VentoMao
   ventoAssento: VentoMao
   honba: number
+  rodadaNumero?: number
+  vencedorId?: string
+  pagadorId?: string
+  vencedorEhLeste?: boolean
+  vencedorNome?: string
+  jogadorRiichi?: boolean
 }
 
 interface PropsPaginaCalculadoraMao {
@@ -33,26 +38,26 @@ export default function PaginaCalculadoraMao({
             ventoRodada: contextoCenterpiece.ventoRodada,
             ventoAssento: contextoCenterpiece.ventoAssento,
             honba: contextoCenterpiece.honba,
+            riichi: contextoCenterpiece.jogadorRiichi
+              ? { duplo: false, ippatsu: false }
+              : null,
           },
           fluxoCompleto: true,
         }
       : undefined,
   )
 
-  // No contexto centerpiece: usa o resultado automaticamente ao calcular, sem mostrar tela de resultado
-  useEffect(() => {
-    if (!contextoCenterpiece || !calculadora.resultado || !aoUsarResultado) return
-    const convertido = converterMaoParaCenterpiece(calculadora.resultado)
-    if (convertido) aoUsarResultado(convertido)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [calculadora.resultado])
-
   const cabecalho = contextoCenterpiece ? null : <BarraCalculadora modo="completo" />
 
-  const aoUsarMao = aoUsarResultado && !contextoCenterpiece
+  const aoUsarMao = aoUsarResultado
     ? () => {
         if (!calculadora.resultado) return
-        const convertido = converterMaoParaCenterpiece(calculadora.resultado)
+        const convertido = converterMaoParaCenterpiece(calculadora.resultado, {
+          vencedorId: contextoCenterpiece?.vencedorId,
+          pagadorId: contextoCenterpiece?.pagadorId,
+          vencedorEhLeste: contextoCenterpiece?.vencedorEhLeste,
+          honbaUsado: contextoCenterpiece?.honba,
+        })
         if (convertido) aoUsarResultado(convertido)
       }
     : undefined
@@ -64,8 +69,7 @@ export default function PaginaCalculadoraMao({
         cabecalho={cabecalho}
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
         aoUsarMao={aoUsarMao}
-        ocultarOpcoesMao={!!contextoCenterpiece}
-        aoCalcularDireto={contextoCenterpiece ? calculadora.calcularMaoAtual : undefined}
+        contextoCenterpiece={contextoCenterpiece}
         aoVoltar={contextoCenterpiece ? aoVoltar : undefined}
       />
 

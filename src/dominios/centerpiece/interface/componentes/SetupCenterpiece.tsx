@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { EntradaSetupCenterpiece } from '../../logica/tipos'
+import type { EntradaSetupCenterpiece, ModoAtribuicaoVentos } from '../../logica/tipos'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 
 interface PropsSetupCenterpiece {
@@ -20,6 +20,8 @@ export default function SetupCenterpiece({
   const [pontosIniciais, setPontosIniciais] = useState(25000)
   const [pontosCustom, setPontosCustom] = useState('')
   const [usarCustom, setUsarCustom] = useState(false)
+  const [modoAtribuicaoVentos, setModoAtribuicaoVentos] =
+    useState<ModoAtribuicaoVentos>('aleatorio')
   const [erro, setErro] = useState<string | null>(null)
 
   const pontosFinais = usarCustom ? parseInt(pontosCustom, 10) : pontosIniciais
@@ -52,7 +54,7 @@ export default function SetupCenterpiece({
       setErro(t('centerpiece.setup.customPointsError'))
       return
     }
-    aoIniciar({ nomes, pontosIniciais: pontosFinais })
+    aoIniciar({ nomes, pontosIniciais: pontosFinais, modoAtribuicaoVentos })
   }
 
   return (
@@ -88,6 +90,32 @@ export default function SetupCenterpiece({
             aria-label={t('centerpiece.setup.playerNames')}
           />
           {erro && <p className="setup-names-erro" role="alert">{erro}</p>}
+        </fieldset>
+
+        <fieldset>
+          <legend>{t('centerpiece.setup.windAssignment.title')}</legend>
+          <div className="centerpiece-modo-ventos-opcoes">
+            {(['aleatorio', 'ordemNomes'] as const).map((modo) => (
+              <label
+                key={modo}
+                className={`opcao-pontos opcao-modo-vento ${
+                  modoAtribuicaoVentos === modo ? 'ativa' : ''
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="modoAtribuicaoVentos"
+                  value={modo}
+                  checked={modoAtribuicaoVentos === modo}
+                  onChange={() => setModoAtribuicaoVentos(modo)}
+                />
+                <span>
+                  <strong>{t(`centerpiece.setup.windAssignment.${modo}.label`)}</strong>
+                  <small>{t(`centerpiece.setup.windAssignment.${modo}.help`)}</small>
+                </span>
+              </label>
+            ))}
+          </div>
         </fieldset>
 
         <fieldset>
@@ -132,7 +160,11 @@ export default function SetupCenterpiece({
         <div className="acoes">
           <button type="submit" className="btn-primario">
             <i className="fas fa-dice" aria-hidden="true" />
-            {t('centerpiece.setup.start')}
+            {t(
+              modoAtribuicaoVentos === 'aleatorio'
+                ? 'centerpiece.setup.startRandom'
+                : 'centerpiece.setup.startOrdered',
+            )}
           </button>
         </div>
       </form>

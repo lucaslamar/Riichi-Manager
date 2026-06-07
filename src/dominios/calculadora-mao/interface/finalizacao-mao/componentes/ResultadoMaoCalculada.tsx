@@ -5,11 +5,29 @@ import { ESTILO_MELD, codigoBase } from '../../constantes'
 import ExibicaoCompleta from './ExibicaoCompleta'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 
+const NOME_VENTO_RESULTADO: Record<string, string> = {
+  '1': 'Leste', '2': 'Sul', '3': 'Oeste', '4': 'Norte',
+}
+
+const KANJI_VENTO_RESULTADO: Record<string, string> = {
+  '1': '東', '2': '南', '3': '西', '4': '北',
+}
+
+interface ContextoCenterpiece {
+  tipoVitoria: 'ron' | 'tsumo'
+  ventoRodada: string
+  ventoAssento: string
+  honba: number
+  rodadaNumero?: number
+  vencedorNome?: string
+}
+
 interface PropsResultadoMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
   modoFluxo?: 'montagem' | 'finalizacao'
   aoUsarMao?: () => void
+  contextoCenterpiece?: ContextoCenterpiece
 }
 
 /** Resultado da mao montada, incluindo esperas, botao Calcular e modal final. */
@@ -17,6 +35,7 @@ export default function ResultadoMaoCalculada({
   estado,
   modoFluxo = 'montagem',
   aoUsarMao,
+  contextoCenterpiece,
 }: PropsResultadoMao) {
   const { t } = useI18n()
   const {
@@ -273,7 +292,7 @@ export default function ResultadoMaoCalculada({
               avisoChombo
             ) : (
               <>
-                <ExibicaoCompleta resultado={resultado} mao={mao} />
+                <ExibicaoCompleta resultado={resultado} mao={mao} contextoCenterpiece={contextoCenterpiece} />
                 {resultadoValido && aoUsarMao && (
                   <button
                     type="button"

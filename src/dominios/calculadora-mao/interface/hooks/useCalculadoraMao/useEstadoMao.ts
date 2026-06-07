@@ -18,7 +18,9 @@ import type { EstadoMaoCalculadora } from './tipos'
  * Este arquivo deve continuar simples: ele cria estado, calcula totais e devolve tudo.
  * Regras de clique, resultado e esperas pertencem aos hooks vizinhos.
  */
-type InitialMaoOverrides = Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba'>>
+type InitialMaoOverrides = Partial<
+  Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi'>
+>
 
 export function useEstadoMao(initialMao?: InitialMaoOverrides): EstadoMaoCalculadora {
   const [mao, atualizarMao] = useImmer<Mao>(initialMao ? { ...MAO_VAZIA, ...initialMao } : MAO_VAZIA)

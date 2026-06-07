@@ -21,8 +21,8 @@ const MODULOS_MENU: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'fa-chess-board' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'fa-wind' },
-  { tela: 'configuracaoTorneio', chave: 'menu.fastTournament', icone: 'fa-trophy' },
   { tela: 'centerpiece', chave: 'menu.centerpiece', icone: 'fa-table' },
+  { tela: 'configuracaoTorneio', chave: 'menu.fastTournament', icone: 'fa-trophy' },
 ]
 
 const APP_MENU: ItemMenuGlobal[] = [

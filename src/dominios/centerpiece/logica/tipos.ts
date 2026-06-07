@@ -2,6 +2,7 @@ export type Vento = 'leste' | 'sul' | 'oeste' | 'norte'
 export type PosicaoMesa = 'topo' | 'direita' | 'baixo' | 'esquerda'
 export type TipoVitoria = 'ron' | 'tsumo'
 export type RodadaVento = 'leste' | 'sul'
+export type ModoAtribuicaoVentos = 'aleatorio' | 'ordemNomes'
 
 export interface JogadorCenterpiece {
   id: string
@@ -37,6 +38,7 @@ export interface EstadoCenterpiece {
 export interface EntradaSetupCenterpiece {
   nomes: [string, string, string, string]
   pontosIniciais: number
+  modoAtribuicaoVentos: ModoAtribuicaoVentos
 }
 
 export interface ResultadoRon {
