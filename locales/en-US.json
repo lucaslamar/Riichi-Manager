@@ -4,5 +4,105 @@
   },
   "global": {
     "appName": "Riichi Manager"
+  },
+  "menu": {
+    "centerpiece": "Centerpiece"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back"
+  },
+  "centerpiece": {
+    "setup": {
+      "title": "Table Setup",
+      "subtitle": "Enter players and draw winds to start.",
+      "playerNames": "Player names",
+      "player": "Player {{n}}",
+      "namesHint": "One name per line, exactly 4 players",
+      "namesPlaceholder": "Alice\nBob\nCarol\nDave",
+      "namesError": {
+        "tooFew": "Enter 4 players.",
+        "tooMany": "Enter only 4 players."
+      },
+      "initialPoints": "Starting points",
+      "custom": "Custom",
+      "customPointsError": "Enter a valid starting score.",
+      "start": "Draw winds & start"
+    },
+    "continue": {
+      "title": "Game in progress",
+      "resume": "Continue",
+      "restart": "New Game"
+    },
+    "round": {
+      "leste": "East",
+      "sul": "South"
+    },
+    "mesa": {
+      "honba": "Honba",
+      "riichiSticks": "Riichi sticks",
+      "registerWin": "Register Win",
+      "riichi": "Riichi",
+      "riichiAtivo": "Riichi active",
+      "draw": "Draw",
+      "chombo": "Chombo",
+      "undo": "Undo",
+      "newGame": "New Game",
+      "confirmNewGame": "This will erase the current table. Continue?"
+    },
+    "win": {
+      "title": "Register Win",
+      "type": "Victory type",
+      "winner": "Who won?",
+      "payer": "Who paid? (Ron)",
+      "calcMethod": "Calculation method",
+      "byHanFu": "Han & Fu",
+      "byMao": "Hand Calculator",
+      "valueDealer": "Dealer payment",
+      "valueNonDealer": "Non-dealer payment",
+      "handValue": "Hand value",
+      "payerLoses": "Payer loses",
+      "totalReceived": "Total received",
+      "next": "Next",
+      "summaryTitle": "Confirm result",
+      "applyResult": "Apply result",
+      "recalculate": "Recalculate"
+    },
+    "menu": {
+      "acoes": "Player actions",
+      "ganhouRon": "Won by Ron",
+      "ganhouTsumo": "Won by Tsumo",
+      "deuChombo": "Committed Chombo",
+      "declararRiichi": "Declare Riichi"
+    },
+    "riichi": {
+      "title": "Declare Riichi",
+      "player": "Player declaring Riichi",
+      "confirm": "Confirm Riichi",
+      "notEnough": "Not enough points for riichi"
+    },
+    "ryukyoku": {
+      "title": "Draw / Ryukyoku",
+      "tenpai": "Who was in Tenpai?",
+      "confirm": "Confirm Draw",
+      "noPayment": "No point exchange (0 or 4 tenpai)."
+    },
+    "chombo": {
+      "title": "Chombo / Invalid Hand",
+      "player": "Who committed chombo?",
+      "penalty": "Penalty",
+      "preset": "Standard mangan",
+      "custom": "Per player value",
+      "valuePerPlayer": "Amount paid to each player (pts)",
+      "confirm": "Apply Chombo"
+    },
+    "timer": {
+      "label": "Table timer",
+      "reiniciar": "Reset timer",
+      "esgotado": "Time's up",
+      "pausar": "Pause timer",
+      "retomar": "Resume timer"
+    }
   }
 }
