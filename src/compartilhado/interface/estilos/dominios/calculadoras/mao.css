@@ -28,6 +28,7 @@
   gap: 5px;
 }
 
+.btn-configuracao-mao-cabecalho,
 .btn-limpar-mao-cabecalho {
   display: inline-flex;
   width: 28px;
@@ -40,6 +41,16 @@
   color: #ef5350;
   cursor: pointer;
   font-size: 0.76rem;
+}
+
+.btn-configuracao-mao-cabecalho {
+  display: none;
+  color: #155b98;
+}
+
+.btn-configuracao-mao-cabecalho:hover {
+  border-color: #bfdbfe;
+  background: #eff6ff;
 }
 
 .btn-limpar-mao-cabecalho:hover {

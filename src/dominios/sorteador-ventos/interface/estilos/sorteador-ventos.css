@@ -233,3 +233,79 @@ body:has(.sorteador-ventos-page) {
     overflow-y: auto;
   }
 }
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  .sorteador-ventos-page {
+    display: grid;
+    width: min(100%, 720px);
+    height: calc(100dvh - 38px);
+    max-height: calc(100dvh - 38px);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    align-content: center;
+    justify-content: stretch;
+    gap: 8px;
+    margin-inline: auto;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    box-shadow: none;
+  }
+
+  .sorteador-ventos__cabecalho {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .sorteador-ventos__cabecalho h2 {
+    font-size: 0.98rem;
+    line-height: 1.1;
+  }
+
+  .sorteador-ventos__cabecalho .subtitulo-secao {
+    display: none;
+  }
+
+  .sorteador-ventos__grade {
+    display: grid;
+    min-height: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .card-vento {
+    min-height: 0;
+    gap: 2px;
+    padding: 8px 7px;
+    border-width: 1.5px;
+    border-radius: 8px;
+  }
+
+  .card-vento__kanji {
+    font-size: clamp(2rem, 8dvh, 2.7rem);
+  }
+
+  .card-vento__nome {
+    font-size: 0.72rem;
+  }
+
+  .card-vento__status {
+    font-size: 0.62rem;
+  }
+
+  .sorteador-ventos__acoes {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(140px, 0.7fr);
+    gap: 8px;
+  }
+
+  .sorteador-ventos__btn-sortear,
+  .sorteador-ventos__btn-reiniciar {
+    min-height: 38px;
+  }
+
+  .sorteador-ventos__btn-sortear {
+    font-size: 0.9rem;
+  }
+}

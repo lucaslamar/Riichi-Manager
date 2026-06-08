@@ -187,7 +187,11 @@ export default function ConstrutorMao({
   }, [])
 
   return (
-    <div className={`${embutido ? '' : 'card'} construtor-mao construtor-mao-${contexto}`.trim()}>
+    <div
+      className={`${embutido ? '' : 'card'} construtor-mao construtor-mao-${contexto} ${
+        selecionandoPedraAgari ? 'selecionando-batida' : ''
+      }`.trim()}
+    >
       <div ref={sentinelaStickyRef} aria-hidden="true" />
       <MaoAtual
         mao={mao}
@@ -211,6 +215,7 @@ export default function ConstrutorMao({
         selecionandoPedraAgari={selecionandoPedraAgari}
         contexto={contexto}
         acoesCabecalho={acoesCabecalho}
+        aoAbrirRegras={aoAbrirRegras}
         aoVoltar={aoVoltar}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}

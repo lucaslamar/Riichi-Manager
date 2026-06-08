@@ -1,0 +1,906 @@
+/* Ajustes isolados para calculadoras em mobile horizontal. */
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  body:has(.card-mao-completa.etapa-montagem),
+  body:has(.card-mao-completa.etapa-finalizacao) {
+    padding: 0;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-montagem) main,
+  body:has(.card-mao-completa.etapa-finalizacao) main {
+    width: 100%;
+    max-width: none;
+    min-height: calc(100dvh - 40px);
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .card-mao-completa.fluxo-calculadora {
+    width: 100%;
+    height: calc(100dvh - 40px);
+    min-height: 0;
+    margin: 0;
+    gap: 5px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    padding: 5px 8px calc(5px + env(safe-area-inset-bottom));
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .cabecalho-calculadora,
+  .trilha-etapas-calculadora,
+  .cabecalho-etapa-calculadora p,
+  .construtor-mao-montagem .estado-vazio-mao {
+    display: none;
+  }
+
+  .calculadora-etapa {
+    min-height: 0;
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .cabecalho-etapa-calculadora {
+    min-height: 0;
+  }
+
+  .cabecalho-etapa-calculadora h3 {
+    font-size: 0.84rem;
+    line-height: 1.08;
+  }
+
+  .fab-calculadora-padrao {
+    top: auto;
+    bottom: 5px;
+    right: 6px;
+    transform: scale(0.78);
+    transform-origin: bottom right;
+  }
+
+  .fab-calculadora-teclado {
+    top: auto;
+    bottom: 3px;
+    right: 3px;
+  }
+
+  .layout-montagem-calculadora,
+  .layout-montagem-calculadora.com-esperas,
+  .layout-montagem-calculadora.sem-esperas {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: flex;
+  }
+
+  .construtor-mao,
+  .construtor-mao-montagem {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .construtor-mao-montagem {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo,
+  .construtor-mao-montagem .descartes-selecionados,
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: calc(100% + 8px);
+    max-width: none;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    position: static;
+    flex: 1 1 auto;
+    min-height: clamp(42px, 11dvh, 64px);
+    max-height: none;
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    background: transparent;
+  }
+
+  .cabecalho-mao-editor {
+    min-height: 20px;
+    margin-bottom: 2px;
+  }
+
+  .acoes-cabecalho-mao {
+    gap: 4px;
+    align-items: center;
+  }
+
+  .btn-configuracao-mao-cabecalho {
+    display: inline-flex;
+    width: 28px;
+    min-height: 28px;
+    border-color: transparent;
+    background: transparent;
+    font-size: 0.74rem;
+  }
+
+  .btn-limpar-mao-cabecalho {
+    width: 28px;
+    min-height: 28px;
+  }
+
+  .titulo-mao-editor {
+    font-size: 0.68rem;
+    line-height: 1.05;
+  }
+
+  .status-tenpai-cabecalho {
+    min-height: 18px;
+    padding: 2px 5px;
+    font-size: 0.52rem;
+  }
+
+  .pedras-selecionadas {
+    min-height: 0;
+    margin-bottom: 0;
+    gap: 2px;
+    padding: 3px 38px 4px 4px;
+    overflow-y: auto;
+  }
+
+  /* Esconde o container quando a mão está vazia (sem tiles nem melds) */
+  .pedras-selecionadas:not(:has(.chip-pedra)):not(:has(.chip-meld-mao)) {
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .chip-pedra {
+    width: 29px;
+    height: 38px;
+    border-radius: 5px;
+  }
+
+  .chip-meld-mao {
+    min-height: 0;
+    padding: 2px 4px !important;
+  }
+
+  .chip-meld-mao .meld-pedras {
+    gap: 1px;
+  }
+
+  .chip-meld-mao .meld-tile,
+  .chip-meld-mao .meld-pedras .tile-img {
+    width: 29px;
+    height: 38px;
+  }
+
+  .chip-meld-mao .meld-tile.de-lado,
+  .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: 38px;
+    height: 29px;
+  }
+
+  .indicadores-dora-selecionados,
+  .descartes-selecionados {
+    min-height: 0;
+    margin-bottom: 0;
+    gap: 3px;
+    padding-block: 3px;
+  }
+
+  .grupo-indicador-dora {
+    padding: 3px 28px 3px 5px;
+  }
+
+  .grupo-indicador-dora span,
+  .descartes-selecionados span {
+    font-size: 0.6rem;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .acoes-construtor-mao {
+    display: grid;
+    flex: 0 0 auto;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 3px;
+    margin-bottom: 0;
+    order: 10;
+  }
+
+  .btn-acao-mao {
+    min-width: 0;
+    min-height: 26px;
+    padding: 3px 4px;
+    border-radius: 6px;
+    font-size: 0.62rem;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+
+  .painel-teclado-calculadora {
+    box-sizing: border-box;
+    display: flex;
+    width: calc(100% + 8px);
+    max-width: none;
+    min-width: 0;
+    min-height: 0;
+    flex: 0 0 clamp(128px, 44dvh, 200px);
+    flex-direction: column;
+    order: 20;
+    overflow: hidden;
+    /* Estende até a borda direita interna do app, neutralizando o padding do card */
+    margin-right: -8px;
+  }
+
+  .menu-acoes-teclado-mobile {
+    display: none;
+  }
+
+  .teclado-pedras {
+    box-sizing: border-box;
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex: 1 1 auto;
+    grid-template-rows: repeat(4, minmax(0, 1fr)) auto;
+    align-content: stretch;
+    gap: 3px;
+    overflow: hidden;
+    /* Borda e raio apenas no lado esquerdo — a direita encosta na borda da tela */
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
+    padding: 4px;
+  }
+
+  .grupo-teclado-naipe {
+    display: grid;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .rotulo-naipe-teclado {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .linha-naipe {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 2px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-height: clamp(28px, 9dvh, 44px);
+    padding: 1px;
+    border-width: 1px;
+    border-radius: 5px;
+  }
+
+  .teclado-pedras .tile-img,
+  .teclado-pedras .tile-fallback {
+    width: 106%;
+    height: 106%;
+    margin: -3%;
+  }
+
+  .badge-espera-teclado {
+    min-height: 10px;
+    font-size: 0.44rem;
+    line-height: 10px;
+  }
+
+  /* Quando "Escolha o Chi" está visível: chi ocupa altura natural (auto),
+     as 4 linhas de naipes dividem o restante igualmente. */
+  .teclado-pedras:has(.seletor-chii-pendente) {
+    grid-template-rows: auto repeat(4, minmax(0, 1fr));
+  }
+
+  .seletor-chii-pendente {
+    padding: 3px 5px;
+    gap: 2px;
+    border-radius: 6px;
+  }
+
+  .seletor-chii-pendente > span {
+    font-size: 0.58rem;
+  }
+
+  .opcao-chii-pendente {
+    min-height: 28px;
+    padding: 2px 5px;
+    gap: 2px;
+    border-radius: 6px;
+  }
+
+  .chip-pedra.mini {
+    width: 19px;
+    height: 25px;
+  }
+
+  .botao-configuracao-teclado {
+    width: 30px;
+    min-height: 30px;
+  }
+
+  /* No horizontal o teclado encosta na borda direita — âncora o botão de config lá */
+  .teclado-pedras .botao-configuracao-teclado {
+    display: none;
+  }
+
+  .rodape-teclado-finalizacao {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: end;
+    gap: 4px;
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .botao-mudar-batida-teclado,
+  .botao-finalizar-mao-teclado {
+    width: 100%;
+    min-height: 28px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.64rem;
+    line-height: 1.05;
+  }
+
+  .botao-mudar-batida-teclado.ativo {
+    border-color: #9a3412;
+    background: #c2410c;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+  }
+
+  .texto-batida-completo {
+    display: none;
+  }
+
+  .texto-batida-curto {
+    display: inline;
+  }
+
+  .mensagem-finalizacao-teclado {
+    grid-column: 1 / 3;
+    width: 100%;
+    min-height: 16px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: #fff7ed;
+    font-size: 0.58rem;
+    line-height: 1.15;
+    text-align: center;
+  }
+
+  .construtor-mao-montagem.selecionando-batida .rodape-teclado-finalizacao {
+    grid-template-rows: minmax(28px, auto) 18px;
+  }
+
+  .construtor-mao-montagem.selecionando-batida .painel-teclado-calculadora {
+    flex-basis: clamp(140px, 46dvh, 205px);
+  }
+
+  .construtor-mao-montagem.selecionando-batida .teclado-pedras {
+    grid-template-rows: repeat(4, minmax(0, 1fr)) minmax(46px, auto);
+  }
+
+  .resultado-esperas-compacto {
+    flex: 0 0 auto;
+    max-height: 74px;
+    overflow-y: auto;
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .resultado-esperas-compacto .resultado-esperas {
+    gap: 4px;
+  }
+
+  .resultado-esperas-compacto .resultado-esperas p {
+    font-size: 0.68rem;
+    line-height: 1.15;
+  }
+
+  .espera-resultado .chip-pedra {
+    width: 27px;
+    height: 36px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    padding-top: 4px;
+  }
+
+  .pagina-finalizacao-mao,
+  .calculadora-etapa-finalizacao {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .cabecalho-sticky-finalizacao {
+    position: static;
+    margin: 0 -8px;
+  }
+
+  .barra-progresso-finalizacao {
+    gap: 1px;
+    padding: 3px 8px;
+  }
+
+  .barra-progresso-etapa {
+    padding: 1px 4px;
+    font-size: 0.56rem;
+    line-height: 1.2;
+  }
+
+  .barra-progresso-separador {
+    margin-inline: 0;
+    font-size: 0.56rem;
+  }
+
+  .barra-resumo-mao {
+    gap: 2px;
+    padding: 4px 8px;
+  }
+
+  .barra-resumo-linha {
+    min-height: 18px;
+    gap: 3px;
+  }
+
+  .barra-resumo-rotulo,
+  .barra-resumo-chip,
+  .barra-resumo-texto-secundario {
+    font-size: 0.58rem;
+  }
+
+  .barra-resumo-tile .tile-img {
+    width: 15px;
+    height: 20px;
+  }
+
+  .layout-finalizacao-calculadora {
+    display: grid;
+    min-height: 0;
+    height: 100%;
+    grid-template-columns: minmax(240px, 0.9fr) minmax(340px, 1.1fr);
+    gap: 8px;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes {
+    min-height: 0;
+    gap: 6px;
+  }
+
+  .coluna-finalizacao-mao {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding-right: 2px;
+  }
+
+  /* A coluna de opções não rola como um todo — só as opções internas rolam,
+     para que o botão Calcular fique sempre visível na base. */
+  .coluna-finalizacao-opcoes {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-right: 4px;
+  }
+
+  .coluna-finalizacao-opcoes .opcoes-mao-embutidas {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+
+  .construtor-mao-finalizacao .mao-editor-fixo,
+  .opcoes-mao-embutidas {
+    background: transparent;
+  }
+
+  .construtor-mao-finalizacao .pedras-selecionadas {
+    display: grid;
+    gap: 4px;
+    padding: 4px;
+    border-color: #edf2f7;
+  }
+
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    gap: 2px;
+  }
+
+  .construtor-mao-finalizacao .melds-finalizacao-coluna {
+    gap: 4px;
+  }
+
+  .campo-vitoria-mao {
+    width: 100%;
+  }
+
+  .campo-vitoria-mao > span,
+  .campo-vento-mao span,
+  .rotulo-bloco-opcoes,
+  .doras-na-mao-rotulo {
+    font-size: 0.64rem;
+    line-height: 1.1;
+  }
+
+  .toggle-agari-mao {
+    margin-bottom: 2px;
+  }
+
+  .toggle-agari-mao button,
+  .linha-opcoes-mao .btn-toggle-mao {
+    min-height: 30px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    line-height: 1.08;
+  }
+
+  .contadores-dora-honba {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .contador-dora-manual {
+    min-width: 0;
+    min-height: 34px;
+    gap: 5px;
+    padding: 4px 5px 4px 7px;
+  }
+
+  .contador-dora-manual > span {
+    min-width: 0;
+    font-size: 0.62rem;
+    line-height: 1.05;
+  }
+
+  .contador-dora-manual > div,
+  .doras-na-mao-contador {
+    min-height: 28px;
+  }
+
+  .contador-dora-manual button,
+  .contador-dora-manual strong,
+  .doras-na-mao-contador button,
+  .doras-na-mao-contador strong {
+    width: 28px;
+    min-width: 28px;
+  }
+
+  .doras-na-mao-linha {
+    gap: 4px;
+    padding: 4px 6px;
+  }
+
+  .doras-na-mao-btn-info,
+  .doras-na-mao-btn-teclado {
+    width: 26px;
+    height: 26px;
+  }
+
+  .doras-na-mao-grade {
+    gap: 2px;
+    padding: 5px;
+  }
+
+  .doras-na-mao-pedra .tile-img {
+    width: 24px;
+    height: 32px;
+  }
+
+  .grupo-opcoes-dora {
+    margin-bottom: 4px;
+  }
+
+  .grupo-opcoes-dora .indicadores-dora-selecionados {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .grupo-opcoes-dora .grupo-indicador-dora span {
+    flex-basis: 76px;
+  }
+
+  .grupos-opcoes-mao {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 5px;
+  }
+
+  .grupos-opcoes-ativos,
+  .grupo-opcoes-ventos.etapa-opcoes-ativa,
+  .grupo-opcoes-dora.etapa-opcoes-ativa,
+  .etapa-opcoes-ativa {
+    max-height: none;
+  }
+
+  .grupo-opcoes-mao {
+    gap: 4px;
+  }
+
+  .grupo-opcoes-ventos {
+    padding-block: 4px;
+  }
+
+  .seletores-vento-mao {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 0;
+  }
+
+  .pedras-vento-mao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+  }
+
+  .btn-vento-pedra {
+    min-height: 44px;
+    gap: 1px;
+    padding: 3px;
+    border-width: 1px;
+    border-radius: 6px;
+  }
+
+  .btn-vento-pedra .tile-img {
+    width: 21px;
+    height: 28px;
+  }
+
+  .btn-vento-pedra small {
+    font-size: 0.53rem;
+  }
+
+  .linha-opcoes-mao {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .linha-opcoes-compacta,
+  .linha-condicoes-especiais {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .descartes-finalizacao {
+    margin-bottom: 5px;
+  }
+
+  .grade-descartes-finalizacao {
+    grid-template-columns: repeat(5, 25px);
+    min-height: 34px;
+    gap: 2px;
+  }
+
+  .descarte-finalizacao.chip-pedra {
+    width: 25px;
+    height: 33px;
+  }
+
+  .acao-calcular-mao {
+    position: sticky;
+    bottom: 0;
+    grid-template-columns: minmax(120px, 180px) minmax(0, 1fr);
+    gap: 6px;
+    padding: 5px 0 0;
+    background: #ffffff;
+  }
+
+  .btn-calcular-mao {
+    min-height: 34px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+  }
+
+  .texto-calcular-pronto,
+  .texto-calcular-incompleto {
+    font-size: 0.68rem;
+    line-height: 1.15;
+  }
+
+  .btn-voltar-montagem {
+    min-height: 32px;
+    padding: 5px 8px;
+    font-size: 0.72rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  .modal-resultado-mobile-fundo {
+    align-items: center;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .modal-resultado-mobile {
+    width: min(92vw, 720px);
+    max-height: calc(100dvh - 16px - env(safe-area-inset-bottom));
+    padding: 12px;
+    border-radius: 8px;
+    overflow-y: auto;
+  }
+
+  .modal-resultado-mobile-cabecalho {
+    position: sticky;
+    top: -12px;
+    z-index: 2;
+    margin: -12px -12px 8px;
+    padding: 8px 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .modal-chombo-furiten .modal-resultado-mobile-cabecalho {
+    background: #fff7f7;
+  }
+
+  .btn-fechar-resultado-mobile {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+  }
+
+  .modal-resultado-mobile .mao-calculada {
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+
+  .modal-resultado-mobile .resultado-grupo-mao {
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .modal-resultado-mobile .resultado-pedra,
+  .modal-resultado-mobile .resultado-meld .meld-tile,
+  .modal-resultado-mobile .resultado-meld .meld-pedras .tile-img {
+    width: 28px;
+    height: 38px;
+  }
+
+  .modal-resultado-mobile .resultado-meld .meld-tile.de-lado,
+  .modal-resultado-mobile .resultado-meld .meld-pedras .tile-img-lado {
+    width: 38px;
+    height: 28px;
+  }
+
+  .modal-resultado-mobile .resultado-meld {
+    min-height: 0;
+    gap: 3px;
+    padding: 2px 4px;
+  }
+
+  .modal-resultado-mobile .pontos-totais,
+  .modal-resultado-mobile .pontos-chombo {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+
+  .modal-resultado-mobile .nome-mao {
+    margin-bottom: 4px;
+    font-size: 1.05rem;
+  }
+
+  .modal-resultado-mobile .resumo-han-fu,
+  .modal-resultado-mobile .detalhe-pontos {
+    font-size: 0.82rem;
+  }
+
+  .modal-resultado-mobile .lista-yaku,
+  .modal-resultado-mobile .lista-fu {
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .modal-resultado-mobile .chip-yaku,
+  .modal-resultado-mobile .chip-fu {
+    padding: 6px 8px;
+    font-size: 0.76rem;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado {
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .modal-resultado-mobile .linha-indicadores-resultado {
+    padding: 6px;
+  }
+
+  .modal-resultado-mobile .tiles-indicadores-resultado {
+    justify-content: center;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 380px) and (max-width: 1000px) {
+  .card-mao-completa.fluxo-calculadora {
+    height: calc(100dvh - 38px);
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-montagem) main,
+  body:has(.card-mao-completa.etapa-finalizacao) main {
+    min-height: calc(100dvh - 38px);
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    min-height: clamp(36px, 10dvh, 52px);
+  }
+
+  .painel-teclado-calculadora {
+    flex-basis: clamp(112px, 46dvh, 165px);
+  }
+
+  .teclado-pedras {
+    gap: 2px;
+    padding: 3px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    border-radius: 4px;
+  }
+
+  .btn-acao-mao {
+    min-height: 24px;
+    font-size: 0.58rem;
+  }
+
+  .layout-finalizacao-calculadora {
+    grid-template-columns: minmax(220px, 0.82fr) minmax(320px, 1.18fr);
+    gap: 6px;
+  }
+
+  .btn-vento-pedra {
+    min-height: 38px;
+  }
+
+  .btn-vento-pedra .tile-img {
+    width: 18px;
+    height: 24px;
+  }
+}

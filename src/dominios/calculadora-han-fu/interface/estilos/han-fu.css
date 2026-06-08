@@ -721,3 +721,109 @@ button.cabecalho-referencia-toggle:hover {
     grid-template-columns: 1fr;
   }
 }
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  .calculadora-han-fu {
+    width: min(100%, 900px);
+    height: calc(100dvh - 38px);
+    margin-inline: auto;
+    gap: 8px;
+    overflow-y: auto;
+    border: 0;
+    border-radius: 0;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    box-shadow: none;
+  }
+
+  .calculadora-han-fu .cabecalho-calculadora {
+    display: none;
+  }
+
+  .painel-principal-han-fu {
+    grid-template-columns: minmax(360px, 1fr) minmax(260px, 0.72fr);
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .seletores-topo-han-fu,
+  .controles-principais-han-fu,
+  .controle-honba-linha-han-fu {
+    grid-column: 1;
+  }
+
+  .seletores-topo-han-fu {
+    gap: 6px;
+  }
+
+  .seletor-segmentado-han-fu {
+    min-height: 36px;
+    padding: 3px;
+  }
+
+  .seletor-segmentado-han-fu button {
+    min-height: 30px;
+    font-size: 0.78rem;
+  }
+
+  .controles-principais-han-fu {
+    gap: 8px;
+  }
+
+  .controle-han-fu {
+    min-height: 86px;
+    gap: 5px;
+    padding: 8px;
+  }
+
+  .controle-honba-linha-han-fu .controle-han-fu {
+    min-height: 72px;
+  }
+
+  .controle-han-fu-rotulo,
+  .grupo-seletor-han-fu > span {
+    font-size: 0.66rem;
+  }
+
+  .controle-han-fu-corpo {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    gap: 5px;
+  }
+
+  .controle-han-fu-corpo strong {
+    font-size: 1.85rem;
+  }
+
+  .botao-stepper-han-fu {
+    min-height: 36px;
+  }
+
+  .botao-stepper-han-fu span {
+    width: 28px;
+    height: 28px;
+  }
+
+  .resultado-han-fu {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-content: center;
+    min-height: 0;
+    padding: 14px 12px;
+  }
+
+  .resultado-han-fu strong {
+    font-size: clamp(2.1rem, 7vw, 3.35rem);
+  }
+
+  .resultado-han-fu-topo,
+  .detalhe-han-fu {
+    font-size: 0.76rem;
+  }
+
+  .referencia-han-fu {
+    gap: 6px;
+  }
+
+  .cabecalho-referencia-han-fu {
+    padding: 8px 10px;
+  }
+}

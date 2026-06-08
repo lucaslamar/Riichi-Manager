@@ -1,0 +1,187 @@
+/*
+ * riichi-landscape.css
+ * CSS exclusivo para mobile horizontal com altura muito reduzida (≤ 500px).
+ * Carregado de forma lazy via useLandscapeMobile — nunca afeta portrait ou desktop.
+ * Usa !important onde necessário para sobrepor regras inline ou de alta especificidade.
+ */
+
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  /* ─── Scrollbars finas globais ─────────────────────────────────────────── */
+  * {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(0, 0, 0, 0.18) transparent !important;
+  }
+
+  *::-webkit-scrollbar {
+    width: 3px !important;
+    height: 3px !important;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18) !important;
+    border-radius: 3px !important;
+  }
+
+  /* ─── Navbar ────────────────────────────────────────────────────────────── */
+  .cabecalho-principal {
+    padding: 1px 0 !important;
+  }
+
+  .barra-marca-aplicacao {
+    min-height: 34px !important;
+    padding: 1px 8px !important;
+  }
+
+  .titulo-principal {
+    font-size: 0.9rem !important;
+  }
+
+  /* ─── Teclado de pedras — naipe e botões ────────────────────────────────── */
+  .linha-naipe {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .linha-naipe::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .rotulo-naipe-teclado {
+    writing-mode: vertical-rl !important;
+    text-orientation: mixed !important;
+    font-size: 0.55rem !important;
+    padding: 2px 1px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 32px !important;
+    height: 40px !important;
+    flex-shrink: 0 !important;
+    padding: 1px !important;
+  }
+
+  /* ─── Chips da mão montada ──────────────────────────────────────────────── */
+  .chip-pedra {
+    width: 26px !important;
+    height: 34px !important;
+  }
+
+  .chip-meld-mao .meld-tile,
+  .chip-meld-mao .meld-pedras .tile-img {
+    width: 26px !important;
+    height: 34px !important;
+  }
+
+  .chip-meld-mao .meld-tile.de-lado,
+  .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: 34px !important;
+    height: 26px !important;
+  }
+
+  /* ─── Botões de ação da mão (Chi, Pon, Kan, Descarte) ──────────────────── */
+  .btn-acao-mao {
+    min-height: 24px !important;
+    padding: 2px 3px !important;
+    font-size: 0.58rem !important;
+    line-height: 1.05 !important;
+  }
+
+  /* ─── Rodapé do teclado (Mudar batida / Finalizar mão / Engrenagem) ─────── */
+  .rodape-teclado-finalizacao {
+    gap: 3px !important;
+    padding-top: 0 !important;
+  }
+
+  .botao-mudar-batida-teclado,
+  .botao-finalizar-mao-teclado {
+    min-height: 26px !important;
+    padding: 3px 5px !important;
+    font-size: 0.6rem !important;
+  }
+
+  .botao-configuracao-teclado {
+    width: 28px !important;
+    min-height: 28px !important;
+  }
+
+  /* ─── Tela de vitória / resultado ───────────────────────────────────────── */
+  .modal-resultado-mobile {
+    width: min(96vw, 680px) !important;
+    max-height: calc(100dvh - 10px - env(safe-area-inset-bottom)) !important;
+    padding: 8px !important;
+  }
+
+  .modal-resultado-mobile .pontos-totais,
+  .modal-resultado-mobile .pontos-chombo {
+    font-size: clamp(1.75rem, 6vw, 2.6rem) !important;
+  }
+
+  .modal-resultado-mobile .nome-mao {
+    font-size: 0.95rem !important;
+    margin-bottom: 3px !important;
+  }
+
+  /* ─── Calculadora han-fu ────────────────────────────────────────────────── */
+  .calculadora-han-fu {
+    height: calc(100dvh - 34px) !important;
+    padding: 6px 10px calc(6px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .resultado-han-fu strong {
+    font-size: clamp(1.9rem, 6.5vw, 2.9rem) !important;
+  }
+
+  .controle-han-fu {
+    min-height: 72px !important;
+    padding: 6px !important;
+  }
+
+  /* ─── Configuração de ventos ────────────────────────────────────────────── */
+  .sorteador-ventos-page {
+    height: calc(100dvh - 34px) !important;
+    padding: 6px 10px calc(6px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .sorteador-ventos__grade {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .card-vento {
+    padding: 6px 5px !important;
+  }
+
+  .card-vento__kanji {
+    font-size: clamp(1.7rem, 7dvh, 2.3rem) !important;
+  }
+
+  /* ─── Centerpiece / placar ──────────────────────────────────────────────── */
+  .centerpiece-mesa {
+    height: calc(100dvh - 34px) !important;
+    padding: 3px 6px calc(3px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .cp-timer-display,
+  .cp-timer-svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .centerpiece-card-jogador {
+    padding: 4px 5px !important;
+  }
+
+  .card-jogador-pontos {
+    font-size: 0.88rem !important;
+  }
+
+  /* ─── Setup do Centerpiece ──────────────────────────────────────────────── */
+  .centerpiece-setup {
+    height: calc(100dvh - 34px) !important;
+    padding: 6px 10px calc(6px + env(safe-area-inset-bottom)) !important;
+  }
+}

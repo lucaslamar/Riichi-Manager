@@ -32,6 +32,7 @@ interface PropsMaoAtual {
   selecionandoPedraAgari: boolean
   contexto: 'montagem' | 'finalizacao'
   acoesCabecalho?: ReactNode
+  aoAbrirRegras?: () => void
   aoVoltar?: () => void
   aoAbrirMenuAcoes: () => void
   aoAlternarAcao: (tipo: Acao['tipo']) => void
@@ -215,6 +216,7 @@ export function MaoAtual({
   selecionandoPedraAgari,
   contexto,
   acoesCabecalho,
+  aoAbrirRegras,
   aoVoltar,
   aoAbrirMenuAcoes,
   aoAlternarAcao,
@@ -285,6 +287,17 @@ export function MaoAtual({
         </h3>
         <div className="acoes-cabecalho-mao">
           {acoesCabecalho}
+          {contexto === 'montagem' && aoAbrirRegras && (
+            <button
+              className="btn-configuracao-mao-cabecalho"
+              type="button"
+              onClick={aoAbrirRegras}
+              aria-label={t('rulesModal.open')}
+              title={t('rulesModal.open')}
+            >
+              <i className="fas fa-gear" aria-hidden="true" />
+            </button>
+          )}
           {(maoInvalida || statusTenpai) && (
             <span
               className={`status-tenpai-mao status-tenpai-cabecalho ${
