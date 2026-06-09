@@ -1,7 +1,6 @@
 /* Responsivo especifico da calculadora. */
 
 @media (max-width: 768px) {
-
   .cabecalho-calculadora {
     gap: 8px;
   }
@@ -515,7 +514,6 @@
 }
 
 @media (max-width: 768px) {
-
   .menu-acoes-mobile {
     position: fixed;
     right: 18px;
@@ -571,7 +569,6 @@
 }
 
 @media (max-width: 420px) {
-
   .seletor-rapido {
     width: 100%;
     justify-items: stretch;
@@ -1188,7 +1185,7 @@
   }
 
   .opcoes-mao-embutidas {
-    gap: 0;
+    gap: 8px;
   }
 
   .campo-vitoria-mao {
@@ -1236,10 +1233,10 @@
   }
 
   .descartes-finalizacao {
-    margin: -2px 0 8px;
+    margin: 0;
   }
 
-.grade-descartes-finalizacao {
+  .grade-descartes-finalizacao {
     grid-template-columns: repeat(5, 30px);
     gap: 3px;
   }
@@ -1502,10 +1499,7 @@
     gap: 4px;
   }
 
-  .construtor-mao-montagem
-    .menu-acoes-teclado-mobile
-    .btn-acao-descarte
-    span {
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-descarte span {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -1580,9 +1574,7 @@
     line-height: 12px;
   }
 
-  .layout-montagem-calculadora.com-esperas
-    .painel-teclado-calculadora
-    .menu-acoes-teclado-mobile {
+  .layout-montagem-calculadora.com-esperas .painel-teclado-calculadora .menu-acoes-teclado-mobile {
     order: 1;
   }
 

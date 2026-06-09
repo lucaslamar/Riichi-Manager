@@ -83,10 +83,15 @@
 }
 
 .opcoes-mao-embutidas {
-  display: grid;
-  gap: 0;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
 }
 
+.opcoes-mao-embutidas > * {
+  flex: 0 0 auto;
+}
 
 .etapa-opcoes-mao {
   overflow: hidden;
@@ -263,7 +268,9 @@
   color: #be185d;
   cursor: pointer;
   font-size: 0.76rem;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
   flex-shrink: 0;
 }
 
@@ -413,11 +420,15 @@
 }
 
 .descartes-finalizacao {
-  display: grid;
-  grid-template-columns: 1fr;
+  position: static;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
   gap: 5px;
-  margin: -2px 0 10px;
+  margin: 0;
   padding: 0;
+  z-index: auto;
 }
 
 .grade-descartes-finalizacao {
@@ -446,18 +457,26 @@
   background: #f8fafc;
 }
 
-.painel-contextual-descartes {
-  grid-column: 1;
+.editor-descartes-finalizacao {
+  position: static;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  padding: 4px 0;
+  transform: none;
+  z-index: auto;
 }
 
 .painel-teclado-contextual-finalizacao {
+  display: block;
   padding: 0;
 }
 
 .linha-opcoes-indicadores {
   grid-template-columns: 1fr;
 }
-
 
 .descarte-finalizacao.chip-pedra {
   position: relative;
@@ -589,7 +608,7 @@
 }
 
 .barra-resumo-tile-agari {
-  background: #FF8C00;
+  background: #ff8c00;
   border-color: #e07800;
 }
 
@@ -661,17 +680,17 @@
 }
 
 .barra-resumo-chip-azul {
-  background: #E6F1FB;
-  color: #0C447C;
+  background: #e6f1fb;
+  color: #0c447c;
 }
 
 .barra-resumo-chip-verde {
-  background: #E1F5EE;
+  background: #e1f5ee;
   color: #085041;
 }
 
 .barra-resumo-chip-aviso {
-  background: #FAEEDA;
+  background: #faeeda;
   color: #633806;
 }
 
@@ -753,16 +772,16 @@
 }
 
 .barra-progresso-etapa-concluida {
-  color: #185FA5;
+  color: #185fa5;
   cursor: pointer;
 }
 
 .barra-progresso-etapa-concluida:hover {
-  background: #E6F1FB;
+  background: #e6f1fb;
 }
 
 .barra-progresso-etapa-atual {
-  color: #185FA5;
+  color: #185fa5;
   font-weight: 600;
   cursor: default;
   text-decoration: underline;
@@ -848,7 +867,9 @@
   font-size: 0.8rem;
   font-weight: 900;
   line-height: 1;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .doras-na-mao-btn-info:hover,
@@ -913,7 +934,9 @@
   color: #c0336a;
   cursor: pointer;
   font-size: 0.82rem;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .doras-na-mao-btn-teclado:hover,
@@ -1036,7 +1059,9 @@
   border-radius: 6px;
   background: transparent;
   cursor: pointer;
-  transition: border-color 0.12s, background 0.12s;
+  transition:
+    border-color 0.12s,
+    background 0.12s;
 }
 
 .doras-na-mao-pedra .tile-img {
@@ -1074,7 +1099,9 @@
   border-radius: 5px;
   background: #ffffff;
   cursor: pointer;
-  transition: border-color 0.12s, background 0.12s;
+  transition:
+    border-color 0.12s,
+    background 0.12s;
 }
 
 .doras-na-mao-chip .tile-img {
@@ -1086,4 +1113,39 @@
 .doras-na-mao-chip:hover {
   border-color: #c0336a;
   background: #fce7f3;
+}
+
+/* ─── Teclado compacto no editor de descartes (portrait / telas sem landscape-css) ── */
+
+@media (orientation: portrait) {
+  .editor-descartes-finalizacao .teclado-pedras {
+    gap: 3px;
+    padding: 5px;
+    border-radius: 7px;
+  }
+
+  .editor-descartes-finalizacao .grupo-teclado-naipe {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    align-items: stretch;
+  }
+
+  .editor-descartes-finalizacao .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  .editor-descartes-finalizacao .linha-naipe {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    flex-wrap: unset;
+    gap: 2px;
+  }
+
+  .editor-descartes-finalizacao .teclado-pedras .btn-pedra {
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+    padding: 1px;
+    border-radius: 5px;
+  }
 }

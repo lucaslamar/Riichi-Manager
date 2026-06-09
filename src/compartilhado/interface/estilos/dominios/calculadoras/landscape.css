@@ -670,31 +670,32 @@
 
   .seletores-vento-mao {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 6px;
     margin-bottom: 0;
   }
 
   .pedras-vento-mao {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 3px;
   }
 
   .btn-vento-pedra {
-    min-height: 44px;
-    gap: 1px;
-    padding: 3px;
+    min-height: 40px;
+    gap: 2px;
+    padding: 4px 3px;
     border-width: 1px;
     border-radius: 6px;
   }
 
   .btn-vento-pedra .tile-img {
-    width: 21px;
-    height: 28px;
+    width: 20px;
+    height: 27px;
   }
 
   .btn-vento-pedra small {
-    font-size: 0.53rem;
+    font-size: 0.52rem;
+    line-height: 1.1;
   }
 
   .linha-opcoes-mao {
@@ -747,6 +748,64 @@
     min-height: 32px;
     padding: 5px 8px;
     font-size: 0.72rem;
+  }
+
+  /* ─── Ações do cabeçalho da mão: remove caixa cinza ─────────────────── */
+
+  .acoes-finalizacao-calculadora {
+    gap: 1px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* ─── Painel contextual (Dora / Descartes): corrige overflow do teclado ── */
+
+  /* Usa a classe específica do teclado contextual para evitar conflitos de
+     especificidade com a regra geral de .painel-teclado-calculadora.
+     O teclado herdava width: calc(100%+8px) e margin-right: -8px do contexto
+     de montagem, causando overflow dentro do painel de finalização. */
+  .painel-teclado-contextual-finalizacao {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    height: 118px;
+    max-height: 118px;
+    min-height: 0;
+    flex: none;
+    order: 0;
+    margin-right: 0;
+    overflow: hidden;
+  }
+
+  /* Teclado de pedras dentro do painel contextual */
+  .painel-teclado-contextual-finalizacao .teclado-pedras {
+    height: 100%;
+    max-height: 118px;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    border-right: 1px solid #e2e8f0;
+    border-radius: 7px;
+  }
+
+  /* Botões de pedra menores no teclado contextual */
+  .painel-teclado-contextual-finalizacao .btn-pedra {
+    max-height: 22px;
+    height: 22px;
+  }
+
+  /* Editor expandido de descartes: ocupa o espaço disponível, grade com scroll se necessário */
+  .editor-descartes-finalizacao {
+    gap: 5px;
+    padding: 2px 0;
+  }
+
+  .editor-descartes-finalizacao .grade-descartes-finalizacao {
+    overflow-x: auto;
+    overscroll-behavior: contain;
   }
 }
 
@@ -896,11 +955,212 @@
   }
 
   .btn-vento-pedra {
-    min-height: 38px;
+    min-height: 34px;
   }
 
   .btn-vento-pedra .tile-img {
-    width: 18px;
-    height: 24px;
+    width: 17px;
+    height: 23px;
+  }
+}
+
+/* Finalizacao horizontal: preserva a hierarquia vertical do portrait. */
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1200px) {
+  .layout-finalizacao-calculadora {
+    min-height: 0;
+    grid-template-columns: minmax(260px, 0.9fr) minmax(360px, 1.1fr);
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .coluna-finalizacao-mao {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+
+  .construtor-mao-finalizacao {
+    display: flex;
+    min-height: min-content;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  .construtor-mao-finalizacao .mao-editor-fixo {
+    position: static;
+    width: 100%;
+    margin: 0;
+  }
+
+  .construtor-mao-finalizacao .cabecalho-mao-editor {
+    position: static;
+    min-height: 30px;
+    align-items: center;
+    margin: 0 0 6px;
+  }
+
+  .construtor-mao-finalizacao .titulo-mao-editor {
+    font-size: 0.72rem;
+    line-height: 1.1;
+  }
+
+  .construtor-mao-finalizacao .acoes-cabecalho-mao {
+    align-self: center;
+  }
+
+  .coluna-finalizacao-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+    scrollbar-width: thin;
+  }
+
+  .coluna-finalizacao-opcoes .opcoes-mao-embutidas {
+    flex: 0 0 auto;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .coluna-finalizacao-opcoes .acao-calcular-mao {
+    position: static;
+    bottom: auto;
+    flex: 0 0 auto;
+    width: 100%;
+    margin: 0;
+    padding: 8px 0 4px;
+    background: #ffffff;
+  }
+
+  .modal-resultado-mobile-fundo {
+    align-items: center;
+    padding: 10px 16px;
+  }
+
+  .modal-resultado-mobile {
+    display: block;
+    width: min(92vw, 760px);
+    height: auto;
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+    padding: 16px;
+    scrollbar-gutter: stable both-edges;
+    text-align: center;
+  }
+
+  .modal-resultado-mobile-cabecalho {
+    position: static;
+    top: auto;
+    z-index: auto;
+    margin: 0 0 10px;
+    padding: 0;
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  .modal-resultado-mobile .mao-calculada {
+    justify-content: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+
+  .modal-resultado-mobile .pontos-totais {
+    color: #4fc3f7;
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+    text-align: center;
+  }
+
+  .modal-resultado-mobile .nome-mao {
+    color: var(--primario);
+    font-size: 1.15rem;
+    font-style: normal;
+  }
+
+  .modal-resultado-mobile .resumo-yakuman,
+  .modal-resultado-mobile .resumo-han-fu,
+  .modal-resultado-mobile .detalhe-pontos {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .divisor-resultado {
+    border-top-color: #e5e7eb;
+  }
+
+  .modal-resultado-mobile .rotulo-lista-resultado {
+    color: var(--primario);
+    text-align: left;
+  }
+
+  .modal-resultado-mobile .lista-yaku,
+  .modal-resultado-mobile .lista-fu {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .modal-resultado-mobile .chip-yaku {
+    background: #eef6ff;
+    color: #102a43;
+  }
+
+  .modal-resultado-mobile .chip-yaku strong {
+    color: var(--primario);
+  }
+
+  .modal-resultado-mobile .chip-fu {
+    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    color: #102a43;
+  }
+
+  .modal-resultado-mobile .chip-fu strong {
+    color: #4fc3f7;
+  }
+
+  .modal-resultado-mobile .chip-fu small {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .detalhes-contexto-resultado span {
+    background: #eef6ff;
+    color: #1d4ed8;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f8fafc;
+  }
+
+  .modal-resultado-mobile .linha-indicadores-resultado {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    padding: 0;
+    background: transparent;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado strong {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .tiles-indicadores-resultado {
+    justify-content: flex-start;
   }
 }
