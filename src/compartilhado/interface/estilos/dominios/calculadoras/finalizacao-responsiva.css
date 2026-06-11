@@ -1,0 +1,249 @@
+/* Finalizacao mobile-first, usando os breakpoints de referencia do Tailwind CSS v1. */
+
+.card-mao-completa.etapa-finalizacao {
+  --finalizacao-espaco-xs: 4px;
+  --finalizacao-espaco-sm: 8px;
+  --finalizacao-espaco-md: 12px;
+  --finalizacao-tile-largura: clamp(29px, 9vw, 34px);
+  --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
+
+  width: min(100%, 100vw);
+  max-width: 100%;
+  margin-inline: auto;
+  overflow-x: clip;
+}
+
+.pagina-finalizacao-mao,
+.layout-finalizacao-calculadora,
+.coluna-finalizacao-mao,
+.coluna-finalizacao-opcoes,
+.construtor-mao-finalizacao,
+.opcoes-mao-embutidas {
+  min-width: 0;
+}
+
+.pagina-finalizacao-mao > .layout-finalizacao-calculadora {
+  margin-top: var(--finalizacao-espaco-sm);
+}
+
+.layout-finalizacao-calculadora {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--finalizacao-espaco-sm);
+}
+
+.coluna-finalizacao-mao,
+.coluna-finalizacao-opcoes,
+.opcoes-mao-embutidas {
+  gap: var(--finalizacao-espaco-sm);
+}
+
+.construtor-mao-finalizacao .pedras-selecionadas {
+  max-width: 100%;
+  gap: var(--finalizacao-espaco-xs);
+  overflow: hidden;
+}
+
+.construtor-mao-finalizacao .mao-principal-finalizacao {
+  gap: 3px;
+}
+
+.construtor-mao-finalizacao .mao-principal-finalizacao > .chip-pedra {
+  width: var(--finalizacao-tile-largura);
+  height: var(--finalizacao-tile-altura);
+  flex: 0 0 var(--finalizacao-tile-largura);
+}
+
+.construtor-mao-finalizacao .melds-finalizacao-coluna {
+  gap: var(--finalizacao-espaco-xs);
+}
+
+.construtor-mao-finalizacao .chip-meld-mao {
+  max-width: 100%;
+  min-height: 0;
+}
+
+.contadores-dora-honba,
+.seletores-vento-mao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--finalizacao-espaco-sm);
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.contador-dora-manual {
+  width: 100%;
+  min-width: 0;
+  justify-content: space-between;
+}
+
+.contador-dora-manual > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.contador-dora-manual > div {
+  flex: 0 0 auto;
+}
+
+.campo-vento-mao {
+  min-width: 0;
+}
+
+.pedras-vento-mao,
+.campo-vento-mao:nth-child(2) .pedras-vento-mao {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.btn-vento-pedra {
+  min-width: 0;
+  min-height: 64px;
+  padding: 5px;
+}
+
+.btn-vento-pedra .tile-img {
+  width: 26px;
+  height: 35px;
+}
+
+.grupo-opcoes-ventos {
+  padding-block: var(--finalizacao-espaco-xs) var(--finalizacao-espaco-sm);
+}
+
+.descartes-finalizacao,
+.editor-descartes-finalizacao,
+.painel-contextual-finalizacao {
+  max-width: 100%;
+}
+
+.acao-calcular-mao {
+  position: static;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin: 0;
+}
+
+.btn-calcular-mao {
+  width: 100%;
+}
+
+.texto-calcular-pronto,
+.texto-calcular-incompleto {
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .card-mao-completa.etapa-finalizacao {
+    max-width: 720px;
+    padding: 16px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: var(--finalizacao-espaco-md);
+  }
+
+  .contadores-dora-honba,
+  .seletores-vento-mao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .contador-dora-manual {
+    align-content: center;
+  }
+
+  .btn-vento-pedra {
+    min-height: 62px;
+  }
+
+  .acao-calcular-mao {
+    grid-template-columns: minmax(180px, 0.42fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .texto-calcular-pronto,
+  .texto-calcular-incompleto {
+    text-align: left;
+  }
+}
+
+@media (min-width: 768px) {
+  .card-mao-completa.etapa-finalizacao {
+    --finalizacao-espaco-sm: 10px;
+    --finalizacao-espaco-md: 14px;
+    --finalizacao-tile-largura: 34px;
+
+    max-width: 920px;
+    padding: 20px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: 16px;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes,
+  .opcoes-mao-embutidas {
+    gap: 10px;
+  }
+
+  .btn-vento-pedra {
+    min-height: 70px;
+  }
+
+  .btn-vento-pedra .tile-img {
+    width: 28px;
+    height: 38px;
+  }
+}
+
+@media (min-width: 1024px) {
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) main {
+    width: calc(100% - 280px);
+    max-width: calc(100% - 280px);
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    max-width: 760px;
+    padding: 24px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: 20px;
+  }
+
+  .contadores-dora-honba,
+  .seletores-vento-mao {
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    max-width: 1120px;
+  }
+
+  .layout-finalizacao-calculadora {
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 1fr);
+  }
+
+  .contador-dora-manual {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    justify-items: stretch;
+    gap: 4px;
+  }
+
+  .contador-dora-manual > span {
+    width: 100%;
+    overflow-wrap: normal;
+  }
+
+  .contador-dora-manual > div {
+    justify-self: end;
+  }
+}
