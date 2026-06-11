@@ -110,8 +110,8 @@
   }
 
   .construtor-mao-montagem .painel-teclado-calculadora {
-    width: calc(100% + 8px);
-    max-width: none;
+    width: 100%;
+    max-width: 100%;
   }
 
   .construtor-mao-montagem .mao-editor-fixo {
@@ -223,6 +223,9 @@
   .construtor-mao-montagem .acoes-construtor-mao,
   .acoes-construtor-mao {
     display: grid;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     flex: 0 0 auto;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 3px;
@@ -231,6 +234,7 @@
   }
 
   .btn-acao-mao {
+    max-width: 100%;
     min-width: 0;
     min-height: 26px;
     padding: 3px 4px;
@@ -243,16 +247,15 @@
   .painel-teclado-calculadora {
     box-sizing: border-box;
     display: flex;
-    width: calc(100% + 8px);
-    max-width: none;
+    width: 100%;
+    max-width: 100%;
     min-width: 0;
     min-height: 0;
     flex: 0 0 clamp(128px, 44dvh, 200px);
     flex-direction: column;
     order: 20;
     overflow: hidden;
-    /* Estende até a borda direita interna do app, neutralizando o padding do card */
-    margin-right: -8px;
+    margin-right: 0;
   }
 
   .menu-acoes-teclado-mobile {
@@ -263,6 +266,7 @@
     box-sizing: border-box;
     display: grid;
     width: 100%;
+    max-width: 100%;
     min-width: 0;
     min-height: 0;
     flex: 1 1 auto;
@@ -270,14 +274,15 @@
     align-content: stretch;
     gap: 3px;
     overflow: hidden;
-    /* Borda e raio apenas no lado esquerdo — a direita encosta na borda da tela */
-    border-right: 0;
-    border-radius: 8px 0 0 8px;
+    border-radius: 8px;
     padding: 4px;
   }
 
   .grupo-teclado-naipe {
     display: grid;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: 0;
     grid-template-columns: minmax(0, 1fr);
     align-items: stretch;
@@ -297,13 +302,22 @@
   .linha-naipe {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
     align-items: stretch;
     gap: 2px;
+    overflow: visible;
+  }
+
+  .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
   .teclado-pedras .btn-pedra {
+    box-sizing: border-box;
     width: 100%;
+    max-width: 100%;
     height: 100%;
     min-width: 0;
     min-height: 0;
@@ -315,9 +329,9 @@
 
   .teclado-pedras .tile-img,
   .teclado-pedras .tile-fallback {
-    width: 106%;
-    height: 106%;
-    margin: -3%;
+    width: 100%;
+    height: 100%;
+    margin: 0;
   }
 
   .badge-espera-teclado {
@@ -762,10 +776,7 @@
 
   /* ─── Painel contextual (Dora / Descartes): corrige overflow do teclado ── */
 
-  /* Usa a classe específica do teclado contextual para evitar conflitos de
-     especificidade com a regra geral de .painel-teclado-calculadora.
-     O teclado herdava width: calc(100%+8px) e margin-right: -8px do contexto
-     de montagem, causando overflow dentro do painel de finalização. */
+  /* Mantém o teclado contextual limitado ao painel de finalização. */
   .painel-teclado-contextual-finalizacao {
     display: flex;
     flex-direction: column;

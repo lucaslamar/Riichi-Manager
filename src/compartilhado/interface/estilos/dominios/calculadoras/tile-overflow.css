@@ -1,0 +1,228 @@
+/*
+ * Tile rows keep their natural tile size on narrow screens. When they no
+ * longer fit, the row scrolls and retains a visible inset after the last tile.
+ * This file is loaded after responsive/landscape rules so those variants share
+ * the same overflow contract.
+ */
+
+.card-mao-completa,
+.card-mao-completa.etapa-finalizacao,
+.pagina-finalizacao-mao,
+.layout-finalizacao-calculadora,
+.coluna-finalizacao-mao,
+.coluna-finalizacao-opcoes,
+.construtor-mao,
+.mao-editor-fixo,
+.opcoes-mao-embutidas,
+.resultado-calculadora,
+.modal-resultado-mobile {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.card-mao-completa,
+.card-mao-completa.etapa-finalizacao,
+.construtor-mao,
+.mao-editor-fixo,
+.opcoes-mao-embutidas {
+  overflow-x: visible;
+}
+
+.pedras-selecionadas,
+.mao-principal-finalizacao,
+.melds-finalizacao-coluna,
+.indicadores-dora-selecionados,
+.grupo-indicador-dora,
+.descartes-selecionados,
+.grade-descartes-finalizacao,
+.barra-resumo-tiles,
+.resumo-mao-pedras,
+.resumo-mao-doras,
+.mao-calculada,
+.resultado-grupo-mao,
+.tiles-indicadores-resultado,
+.doras-na-mao-grade,
+.doras-na-mao-barra-selecionadas {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.pedras-selecionadas,
+.mao-principal-finalizacao,
+.grupo-indicador-dora,
+.descartes-selecionados,
+.barra-resumo-tiles,
+.resumo-mao-pedras,
+.resumo-mao-doras,
+.mao-calculada,
+.resultado-grupo-mao,
+.tiles-indicadores-resultado,
+.doras-na-mao-grade,
+.doras-na-mao-barra-selecionadas {
+  overflow-x: auto;
+  overflow-y: visible;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.pedras-selecionadas::-webkit-scrollbar,
+.mao-principal-finalizacao::-webkit-scrollbar,
+.grupo-indicador-dora::-webkit-scrollbar,
+.descartes-selecionados::-webkit-scrollbar,
+.grade-descartes-finalizacao::-webkit-scrollbar,
+.barra-resumo-tiles::-webkit-scrollbar,
+.resumo-mao-pedras::-webkit-scrollbar,
+.resumo-mao-doras::-webkit-scrollbar,
+.mao-calculada::-webkit-scrollbar,
+.resultado-grupo-mao::-webkit-scrollbar,
+.tiles-indicadores-resultado::-webkit-scrollbar,
+.doras-na-mao-grade::-webkit-scrollbar,
+.doras-na-mao-barra-selecionadas::-webkit-scrollbar {
+  display: none;
+}
+
+.pedras-selecionadas {
+  flex-wrap: nowrap;
+  padding-inline: 8px 52px;
+  scroll-padding-inline: 8px 52px;
+}
+
+.pedras-selecionadas > .chip-pedra,
+.pedras-selecionadas > .chip-meld-mao,
+.mao-principal-finalizacao > .chip-pedra,
+.grupo-indicador-dora > .chip-pedra,
+.descartes-selecionados > .chip-pedra,
+.barra-resumo-tiles > *,
+.resumo-mao-pedras > *,
+.resumo-mao-doras > *,
+.resultado-grupo-mao > *,
+.tiles-indicadores-resultado > *,
+.doras-na-mao-grade > *,
+.doras-na-mao-barra-selecionadas > * {
+  flex-shrink: 0;
+}
+
+.construtor-mao-finalizacao .pedras-selecionadas {
+  overflow: visible;
+  padding-inline: 0;
+}
+
+.mao-principal-finalizacao,
+.melds-finalizacao-coluna {
+  width: 100%;
+  padding-inline: 8px 12px;
+  scroll-padding-inline: 8px 12px;
+}
+
+.mao-principal-finalizacao {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.mao-principal-finalizacao::-webkit-scrollbar {
+  display: none;
+}
+
+.melds-finalizacao-coluna {
+  overflow: visible;
+}
+
+.melds-finalizacao-coluna .chip-meld-mao {
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: none;
+}
+
+.indicadores-dora-selecionados {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.grupo-indicador-dora {
+  flex-wrap: nowrap;
+  padding-inline: 8px 40px;
+  scroll-padding-inline: 8px 40px;
+}
+
+.descartes-selecionados {
+  flex-wrap: nowrap;
+  padding-inline: 8px 42px;
+  scroll-padding-inline: 8px 42px;
+}
+
+.grade-descartes-finalizacao {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding-inline: 8px 42px;
+  scroll-padding-inline: 8px 42px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.barra-resumo-tiles,
+.resumo-mao-pedras,
+.resumo-mao-doras {
+  flex-wrap: nowrap;
+  width: 100%;
+  padding-inline: 4px 12px;
+  scroll-padding-inline: 4px 12px;
+}
+
+.mao-calculada {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  padding-inline: 8px 12px;
+  scroll-padding-inline: 8px 12px;
+}
+
+.resultado-grupo-mao,
+.tiles-indicadores-resultado {
+  flex-wrap: nowrap;
+}
+
+.linha-indicadores-resultado {
+  min-width: 0;
+}
+
+.tiles-indicadores-resultado {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  padding-inline: 4px 12px;
+  scroll-padding-inline: 4px 12px;
+}
+
+.doras-na-mao-grade,
+.doras-na-mao-barra-selecionadas {
+  flex-wrap: nowrap;
+  padding-inline: 8px 12px;
+  scroll-padding-inline: 8px 12px;
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1200px) {
+  .card-mao-completa,
+  .card-mao-completa.etapa-finalizacao,
+  .construtor-mao,
+  .mao-editor-fixo,
+  .opcoes-mao-embutidas {
+    overflow-x: visible;
+  }
+
+  .pedras-selecionadas,
+  .mao-principal-finalizacao,
+  .grupo-indicador-dora,
+  .descartes-selecionados,
+  .grade-descartes-finalizacao,
+  .mao-calculada,
+  .tiles-indicadores-resultado {
+    overflow-x: auto;
+  }
+}

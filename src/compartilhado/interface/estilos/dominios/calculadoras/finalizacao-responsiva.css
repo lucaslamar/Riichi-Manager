@@ -10,7 +10,7 @@
   width: min(100%, 100vw);
   max-width: 100%;
   margin-inline: auto;
-  overflow-x: clip;
+  overflow-x: visible;
 }
 
 .pagina-finalizacao-mao,
@@ -40,7 +40,7 @@
 .construtor-mao-finalizacao .pedras-selecionadas {
   max-width: 100%;
   gap: var(--finalizacao-espaco-xs);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .construtor-mao-finalizacao .mao-principal-finalizacao {
