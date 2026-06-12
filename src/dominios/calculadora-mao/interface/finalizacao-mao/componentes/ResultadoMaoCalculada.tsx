@@ -227,16 +227,26 @@ export default function ResultadoMaoCalculada({
   return (
     <>
       {modoFluxo === 'finalizacao' && (
-        <div id="secao-calcular" className="acao-calcular-mao acao-calcular-mao-ativa">
+        <div
+          id="secao-calcular"
+          className="acao-calcular-mao acao-calcular-mao-ativa rodape-finalizacao-mao"
+        >
           <button
-            className="btn-calcular-mao"
+            className="btn-calcular-mao botao-calcular-finalizacao"
             type="button"
             disabled={!podeCalcularMao}
             onClick={acionarCalculo}
           >
             {t('actions.calculate')}
           </button>
-          <span className="texto-calcular-pronto">{textoBotao}</span>
+          <span
+            className={`status-finalizacao-mao ${
+              podeCalcularMao ? 'texto-calcular-pronto' : 'texto-calcular-incompleto'
+            }`}
+            role="status"
+          >
+            {textoBotao}
+          </span>
         </div>
       )}
 

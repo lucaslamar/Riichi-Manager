@@ -744,25 +744,32 @@
     height: 33px;
   }
 
-  .acao-calcular-mao {
+  .acao-calcular-mao.rodape-finalizacao-mao {
     position: sticky;
     bottom: 0;
-    grid-template-columns: minmax(120px, 180px) minmax(0, 1fr);
-    gap: 6px;
-    padding: 5px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    max-height: none;
+    margin-top: 8px;
+    padding: 5px 0 calc(10px + env(safe-area-inset-bottom));
+    overflow: visible;
     background: #ffffff;
   }
 
-  .btn-calcular-mao {
-    min-height: 34px;
-    border-radius: 7px;
+  .botao-calcular-finalizacao {
+    width: 100%;
+    max-width: none;
+    min-height: 38px;
+    border-radius: 8px;
     font-size: 0.8rem;
   }
 
-  .texto-calcular-pronto,
-  .texto-calcular-incompleto {
-    font-size: 0.68rem;
-    line-height: 1.15;
+  .status-finalizacao-mao {
+    font-size: 0.7rem;
+    line-height: 1.2;
+    text-align: center;
   }
 
   .btn-voltar-montagem {
@@ -1053,13 +1060,17 @@
     overflow: visible;
   }
 
-  .coluna-finalizacao-opcoes .acao-calcular-mao {
+  .coluna-finalizacao-opcoes .acao-calcular-mao.rodape-finalizacao-mao {
     position: static;
     bottom: auto;
     flex: 0 0 auto;
+    flex-direction: column;
+    align-items: stretch;
     width: 100%;
-    margin: 0;
-    padding: 8px 0 4px;
+    max-height: none;
+    margin: 8px 0 0;
+    padding: 8px 0 calc(10px + env(safe-area-inset-bottom));
+    overflow: visible;
     background: #ffffff;
   }
 

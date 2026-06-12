@@ -127,21 +127,40 @@
   max-width: 100%;
 }
 
-.acao-calcular-mao {
+.acao-calcular-mao.rodape-finalizacao-mao {
   position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
-  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
-  margin: 0;
+  max-height: none;
+  margin: 10px 0 0;
+  padding: 0 0 8px;
+  overflow: visible;
 }
 
-.btn-calcular-mao {
+.botao-calcular-finalizacao {
   width: 100%;
+  max-width: none;
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 800;
+  text-align: center;
 }
 
-.texto-calcular-pronto,
-.texto-calcular-incompleto {
+.status-finalizacao-mao {
+  min-width: 0;
+  color: #607080;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
   text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.texto-calcular-pronto.status-finalizacao-mao {
+  color: #147a3b;
 }
 
 @media (min-width: 640px) {
@@ -170,16 +189,6 @@
 
   .grupo-opcoes-ventos .botao-vento-finalizacao {
     min-height: 62px;
-  }
-
-  .acao-calcular-mao {
-    grid-template-columns: minmax(180px, 0.42fr) minmax(0, 1fr);
-    align-items: center;
-  }
-
-  .texto-calcular-pronto,
-  .texto-calcular-incompleto {
-    text-align: left;
   }
 }
 
@@ -238,6 +247,23 @@
   .contadores-dora-honba,
   .seletores-vento-mao {
     gap: 12px;
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 700px) {
+  .acao-calcular-mao.rodape-finalizacao-mao {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .botao-calcular-finalizacao {
+    width: 220px;
+    flex: 0 0 220px;
+  }
+
+  .status-finalizacao-mao {
+    text-align: left;
   }
 }
 
