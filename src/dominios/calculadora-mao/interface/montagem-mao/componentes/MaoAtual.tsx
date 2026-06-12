@@ -311,7 +311,7 @@ export function MaoAtual({
               {maoInvalida ? t('calculator.noYaku') : statusTenpai}
             </span>
           )}
-          {acaoPendente && acaoMobileAtiva && (
+          {contexto === 'montagem' && acaoPendente && acaoMobileAtiva && (
             <button
               className="chip-acao-meld-ativa"
               type="button"
