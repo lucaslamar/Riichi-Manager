@@ -110,33 +110,55 @@
   padding-inline: 0;
 }
 
-.mao-principal-finalizacao,
-.melds-finalizacao-coluna {
+.secao-melds-finalizacao,
+.mao-principal-finalizacao {
   width: 100%;
   padding-inline: 8px 12px;
-  scroll-padding-inline: 8px 12px;
 }
 
 .mao-principal-finalizacao {
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(6, var(--finalizacao-tile-largura, 34px));
+  justify-content: start;
+  overflow-x: visible;
   overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
 }
 
-.mao-principal-finalizacao::-webkit-scrollbar {
-  display: none;
+.secao-melds-finalizacao {
+  padding-top: 4px;
+  border-top: 1px solid #e2e8f0;
 }
 
 .melds-finalizacao-coluna {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
   overflow: visible;
 }
 
 .melds-finalizacao-coluna .chip-meld-mao {
   flex: 0 0 auto;
-  width: max-content;
-  max-width: none;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-chii {
+  background: #e8f5e9 !important;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-pon {
+  background: #e3f2fd !important;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-kanAberto {
+  background: #f8edfb !important;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-kanFechado {
+  background: #f3e5f5 !important;
 }
 
 .indicadores-dora-selecionados {
@@ -217,12 +239,21 @@
   }
 
   .pedras-selecionadas,
-  .mao-principal-finalizacao,
   .grupo-indicador-dora,
   .descartes-selecionados,
   .grade-descartes-finalizacao,
   .mao-calculada,
   .tiles-indicadores-resultado {
     overflow-x: auto;
+  }
+
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    overflow-x: visible;
+  }
+}
+
+@media (min-width: 640px) {
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    grid-template-columns: repeat(auto-fit, var(--finalizacao-tile-largura, 34px));
   }
 }

@@ -277,7 +277,12 @@ export function MaoAtual({
     <div className={`mao-editor-fixo ${maoEditorGrudado ? 'grudado' : ''}`}>
       <div className="cabecalho-mao-editor">
         {aoVoltar && (
-          <button type="button" className="cp-calc-voltar-btn" onClick={aoVoltar} aria-label="Voltar">
+          <button
+            type="button"
+            className="cp-calc-voltar-btn"
+            onClick={aoVoltar}
+            aria-label="Voltar"
+          >
             <i className="fas fa-arrow-left" aria-hidden="true" />
           </button>
         )}
@@ -352,77 +357,89 @@ export function MaoAtual({
           <>
             <div className="mao-principal-finalizacao">{renderizarPedrasMaoFinalizacao()}</div>
             {mao.melds.length > 0 && (
-              <div className="melds-finalizacao-coluna">
-                {mao.melds.map((meld, indiceMeld) => (
-                  <ChipMeld
-                    key={`meld-${indiceMeld}`}
-                    meld={meld}
-                    indiceMeld={indiceMeld}
-                    indiceAgari={
-                      mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
-                    }
-                    selecionandoPedraAgari={false}
-                    permitirSelecaoAgariMeld
-                    selecionarPedraAgariDireto
-                    aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
-                    aoRemoverMeld={aoRemoverMeld}
-                  />
-                ))}
-              </div>
+              <section
+                className="secao-melds-finalizacao"
+                aria-labelledby="titulo-melds-finalizacao"
+              >
+                <h4 id="titulo-melds-finalizacao" className="titulo-melds-finalizacao">
+                  CONJUNTOS
+                </h4>
+                <div className="melds-finalizacao-coluna">
+                  {mao.melds.map((meld, indiceMeld) => (
+                    <ChipMeld
+                      key={`meld-${indiceMeld}`}
+                      meld={meld}
+                      indiceMeld={indiceMeld}
+                      indiceAgari={
+                        mao.agariMeld?.indiceMeld === indiceMeld
+                          ? mao.agariMeld.indicePedra
+                          : undefined
+                      }
+                      selecionandoPedraAgari={false}
+                      permitirSelecaoAgariMeld
+                      selecionarPedraAgariDireto
+                      aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
+                      aoRemoverMeld={aoRemoverMeld}
+                    />
+                  ))}
+                </div>
+              </section>
             )}
           </>
         )}
         {contexto !== 'finalizacao' && (
           <>
-        {mao.pedras.map((pedra, indicePedra) => {
-          const tile = nomePedraAcessivel(pedra)
-          const ehAgari = indicePedra === mao.indiceAgari
+            {mao.pedras.map((pedra, indicePedra) => {
+              const tile = nomePedraAcessivel(pedra)
+              const ehAgari = indicePedra === mao.indiceAgari
 
-          const classe = `chip-pedra ${ehAgari ? 'agari' : ''} ${
-            indicesSelecionadosChii.has(indicePedra) ? 'selecionada-meld' : ''
-          } ${maoInvalida && ehAgari ? 'chombo' : ''}`
+              const classe = `chip-pedra ${ehAgari ? 'agari' : ''} ${
+                indicesSelecionadosChii.has(indicePedra) ? 'selecionada-meld' : ''
+              } ${maoInvalida && ehAgari ? 'chombo' : ''}`
 
-          return (
-            <button
-              key={indicePedra}
-              className={classe}
-              type="button"
-              title={
-                selecionandoPedraAgari
-                  ? t('calculator.selectWinningTile', { tile })
-                  : ehAgari
-                    ? t('calculator.removeWinningTile', { tile })
-                    : t('calculator.removeTile', { tile })
-              }
-              aria-label={
-                selecionandoPedraAgari
-                  ? t('calculator.selectWinningTile', { tile })
-                  : ehAgari
-                    ? t('calculator.removeWinningTile', { tile })
-                    : t('calculator.removeTile', { tile })
-              }
-              onClick={() => clicarPedraDaMao(indicePedra)}
-            >
-              <PedraSvg pedra={pedra} />
-              {ehAgari && <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>}
-            </button>
-          )
-        })}
-        {mao.melds.map((meld, indiceMeld) => (
-          <ChipMeld
-            key={`meld-${indiceMeld}`}
-            meld={meld}
-            indiceMeld={indiceMeld}
-            indiceAgari={
-              mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
-            }
-            selecionandoPedraAgari={selecionandoPedraAgari}
-            permitirSelecaoAgariMeld={false}
-            selecionarPedraAgariDireto={false}
-            aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
-            aoRemoverMeld={aoRemoverMeld}
-          />
-        ))}
+              return (
+                <button
+                  key={indicePedra}
+                  className={classe}
+                  type="button"
+                  title={
+                    selecionandoPedraAgari
+                      ? t('calculator.selectWinningTile', { tile })
+                      : ehAgari
+                        ? t('calculator.removeWinningTile', { tile })
+                        : t('calculator.removeTile', { tile })
+                  }
+                  aria-label={
+                    selecionandoPedraAgari
+                      ? t('calculator.selectWinningTile', { tile })
+                      : ehAgari
+                        ? t('calculator.removeWinningTile', { tile })
+                        : t('calculator.removeTile', { tile })
+                  }
+                  onClick={() => clicarPedraDaMao(indicePedra)}
+                >
+                  <PedraSvg pedra={pedra} />
+                  {ehAgari && (
+                    <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>
+                  )}
+                </button>
+              )
+            })}
+            {mao.melds.map((meld, indiceMeld) => (
+              <ChipMeld
+                key={`meld-${indiceMeld}`}
+                meld={meld}
+                indiceMeld={indiceMeld}
+                indiceAgari={
+                  mao.agariMeld?.indiceMeld === indiceMeld ? mao.agariMeld.indicePedra : undefined
+                }
+                selecionandoPedraAgari={selecionandoPedraAgari}
+                permitirSelecaoAgariMeld={false}
+                selecionarPedraAgariDireto={false}
+                aoEscolherPedraAgariMeld={aoEscolherPedraAgariMeld}
+                aoRemoverMeld={aoRemoverMeld}
+              />
+            ))}
           </>
         )}
         {contexto === 'montagem' && totalPedras === 0 && (
@@ -430,37 +447,39 @@ export function MaoAtual({
         )}
       </div>
 
-      {contexto === 'montagem' && <div className={`menu-acoes-mao-mobile ${menuAcoesMaoAberto ? 'aberto' : ''}`}>
-        <button
-          className={`btn-contorno btn-menu-acoes-mao ${acaoMobileAtiva ? 'ativo' : ''}`}
-          type="button"
-          aria-expanded={menuAcoesMaoAberto}
-          style={
-            acaoMobileAtiva
-              ? {
-                  borderColor: acaoMobileAtiva.cor,
-                  background: acaoMobileAtiva.cor,
-                  color: '#ffffff',
-                }
-              : undefined
-          }
-          onClick={aoAbrirMenuAcoes}
-        >
-          {acaoMobileAtiva?.rotulo ?? t('calculator.actionsMenu')}
-        </button>
-        <div className="opcoes-acoes-mao-mobile">
-          <AcoesConstrutorMao
-            mao={mao}
-            acaoPendente={acaoPendente}
-            podeChii={podeChii}
-            podePon={podePon}
-            podeKanAberto={podeKanAberto}
-            podeKanFechado={podeKanFechado}
-            aoAlternarAcao={aoAlternarAcao}
-            compacto
-          />
+      {contexto === 'montagem' && (
+        <div className={`menu-acoes-mao-mobile ${menuAcoesMaoAberto ? 'aberto' : ''}`}>
+          <button
+            className={`btn-contorno btn-menu-acoes-mao ${acaoMobileAtiva ? 'ativo' : ''}`}
+            type="button"
+            aria-expanded={menuAcoesMaoAberto}
+            style={
+              acaoMobileAtiva
+                ? {
+                    borderColor: acaoMobileAtiva.cor,
+                    background: acaoMobileAtiva.cor,
+                    color: '#ffffff',
+                  }
+                : undefined
+            }
+            onClick={aoAbrirMenuAcoes}
+          >
+            {acaoMobileAtiva?.rotulo ?? t('calculator.actionsMenu')}
+          </button>
+          <div className="opcoes-acoes-mao-mobile">
+            <AcoesConstrutorMao
+              mao={mao}
+              acaoPendente={acaoPendente}
+              podeChii={podeChii}
+              podePon={podePon}
+              podeKanAberto={podeKanAberto}
+              podeKanFechado={podeKanFechado}
+              aoAlternarAcao={aoAlternarAcao}
+              compacto
+            />
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   )
 }

@@ -38,9 +38,13 @@ export function SeletorVentos({
     aoSelecionar: (rascunho: Mao, valor: VentoMao) => void,
     aoDefinir?: () => void,
   ) => (
-    <div className="campo-vento-mao">
+    <div className="campo-vento-mao secao-vento-finalizacao">
       <span>{titulo}</span>
-      <div className="pedras-vento-mao" role="group" aria-label={titulo}>
+      <div
+        className="pedras-vento-mao grade-ventos-finalizacao"
+        role="group"
+        aria-label={titulo}
+      >
         {opcoes.map((vento) => {
           const nomeVento = t(chaveVento(vento.valor))
           const selecionado = valorDefinido && valorAtual === vento.valor
@@ -54,7 +58,7 @@ export function SeletorVentos({
             <button
               key={vento.valor}
               type="button"
-              className={`btn-vento-pedra ${selecionado ? 'ativo' : ''} ${
+              className={`btn-vento-pedra botao-vento-finalizacao ${selecionado ? 'ativo' : ''} ${
                 ventoIgual ? 'vento-igual' : ''
               }`}
               aria-pressed={selecionado}
@@ -72,7 +76,7 @@ export function SeletorVentos({
               }}
             >
               <PedraSvg pedra={`${vento.valor}z`} />
-              <small>{nomeVento}</small>
+              <small className="label-vento">{nomeVento}</small>
             </button>
           )
         })}

@@ -44,7 +44,9 @@
 }
 
 .construtor-mao-finalizacao .mao-principal-finalizacao {
+  grid-template-columns: repeat(6, var(--finalizacao-tile-largura));
   gap: 3px;
+  justify-content: start;
 }
 
 .construtor-mao-finalizacao .mao-principal-finalizacao > .chip-pedra {
@@ -54,7 +56,7 @@
 }
 
 .construtor-mao-finalizacao .melds-finalizacao-coluna {
-  gap: var(--finalizacao-espaco-xs);
+  gap: 6px;
 }
 
 .construtor-mao-finalizacao .chip-meld-mao {
@@ -90,21 +92,29 @@
   min-width: 0;
 }
 
-.pedras-vento-mao,
-.campo-vento-mao:nth-child(2) .pedras-vento-mao {
+.grupo-opcoes-ventos .grade-ventos-finalizacao {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 5px;
+  gap: 6px;
+  width: 100%;
 }
 
-.btn-vento-pedra {
+.grupo-opcoes-ventos .botao-vento-finalizacao {
   min-width: 0;
   min-height: 64px;
-  padding: 5px;
+  gap: 3px;
+  padding: 6px 8px;
+  border-radius: 8px;
 }
 
-.btn-vento-pedra .tile-img {
+.grupo-opcoes-ventos .botao-vento-finalizacao .tile-img {
   width: 26px;
   height: 35px;
+}
+
+.grupo-opcoes-ventos .botao-vento-finalizacao .label-vento {
+  margin-top: 3px;
+  font-size: 0.65rem;
+  line-height: 1;
 }
 
 .grupo-opcoes-ventos {
@@ -144,6 +154,10 @@
     gap: var(--finalizacao-espaco-md);
   }
 
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    grid-template-columns: repeat(auto-fit, var(--finalizacao-tile-largura));
+  }
+
   .contadores-dora-honba,
   .seletores-vento-mao {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -154,7 +168,7 @@
     align-content: center;
   }
 
-  .btn-vento-pedra {
+  .grupo-opcoes-ventos .botao-vento-finalizacao {
     min-height: 62px;
   }
 
@@ -189,13 +203,19 @@
     gap: 10px;
   }
 
-  .btn-vento-pedra {
+  .grupo-opcoes-ventos .botao-vento-finalizacao {
     min-height: 70px;
   }
 
-  .btn-vento-pedra .tile-img {
+  .grupo-opcoes-ventos .botao-vento-finalizacao .tile-img {
     width: 28px;
     height: 38px;
+  }
+}
+
+@media (min-width: 900px) and (min-height: 600px) {
+  .grupo-opcoes-ventos .grade-ventos-finalizacao {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
