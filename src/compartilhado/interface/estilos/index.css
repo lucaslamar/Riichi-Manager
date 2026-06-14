@@ -1,4 +1,4 @@
-﻿@import './base/tokens.css';
+@import './base/tokens.css';
 @import './base/reset.css';
 @import './layout/cabecalho.css';
 @import './layout/menu-inicial.css';
@@ -10,4 +10,3 @@
 @import './dominios/calculadoras/index.css';
 @import './dominios/centerpiece.css';
 @import './responsivo.css';
-@import './horizontal.css';

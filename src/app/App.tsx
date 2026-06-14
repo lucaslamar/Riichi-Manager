@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useLandscapeMobile } from '@/hooks/useLandscapeMobile'
 import {
   carregarTorneio,
   salvarTorneio,
@@ -48,7 +47,6 @@ function torneioAtivo(torneioAtual: EstadoTorneio): boolean {
  * fica acessivel pelo menu global em vez de dominar o primeiro acesso.
  */
 export default function App() {
-  useLandscapeMobile()
   const { t } = useI18n()
   const [torneio, setTorneioInterno] = useState<EstadoTorneio>(carregarTorneio)
   const [tela, setTela] = useState<TelaPrincipal>(() => {
