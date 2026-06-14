@@ -3295,6 +3295,49 @@
   background: #f3e5f5 !important;
 }
 
+@media (max-width: 640px) and (orientation: portrait) {
+  .construtor-mao-montagem {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .construtor-mao-montagem .cabecalho-mao-editor {
+    flex: 0 0 auto;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 0 10px;
+    scroll-padding: 0;
+    overscroll-behavior: contain;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas > .chip-meld-mao {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    flex: 0 0 auto;
+    margin-top: 0;
+  }
+}
+
 .indicadores-dora-selecionados {
   position: relative;
   width: 100%;
