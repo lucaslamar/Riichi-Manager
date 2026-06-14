@@ -5,12 +5,18 @@ import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
 interface PropsDescartesMao {
   descartes: CodigoPedra[]
+  temEsperaFuriten?: boolean
   aoRemoverDescarte: (indiceDescarte: number) => void
-  aoLimparDescartes: () => void
+  aoLimparDescartes?: () => void
 }
 
 /** Lista os descartes proprios usados pela checagem de furiten. */
-export function DescartesMao({ descartes, aoRemoverDescarte, aoLimparDescartes }: PropsDescartesMao) {
+export function DescartesMao({
+  descartes,
+  temEsperaFuriten,
+  aoRemoverDescarte,
+  aoLimparDescartes,
+}: PropsDescartesMao) {
   const { t } = useI18n()
   if (descartes.length === 0) return null
   const descartesAgrupados = descartes.reduce<
@@ -23,32 +29,47 @@ export function DescartesMao({ descartes, aoRemoverDescarte, aoLimparDescartes }
   }, [])
 
   return (
-    <div className="descartes-selecionados">
-      <span>{t('calculator.discardsFuriten')}</span>
-      {descartesAgrupados.map(({ chave, pedra, quantidade, primeiroIndice }) => (
+    <div className="descartes-selecionados descartes-furiten-row">
+      <div className="descartes-furiten-header">
+        <span className="descartes-furiten-label">
+          DESCARTES <span className="descartes-contador">{descartes.length}/18</span>
+        </span>
+        {temEsperaFuriten && (
+          <span className="chip-furiten-ativo">FURITEN</span>
+        )}
+      </div>
+      <div className="descartes-furiten-scroll">
+        <div className="descartes-furiten-list">
+          {descartesAgrupados.map(({ chave, pedra, quantidade, primeiroIndice }) => (
+            <button
+              key={chave}
+              className="chip-pedra descarte"
+              type="button"
+              title={t('calculator.removeDiscard', { tile: nomePedraAcessivel(pedra) })}
+              aria-label={t('calculator.removeDiscard', {
+                tile: `${nomePedraAcessivel(pedra)}, quantidade ${quantidade}`,
+              })}
+              onClick={() => aoRemoverDescarte(primeiroIndice)}
+            >
+              <PedraSvg pedra={pedra} />
+              {quantidade > 1 && (
+                <span className="contador-descarte-finalizacao">{quantidade}x</span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+      {aoLimparDescartes && (
         <button
-          key={chave}
-          className="chip-pedra descarte"
+          className="descartes-trash-button"
           type="button"
-          title={t('calculator.removeDiscard', { tile: nomePedraAcessivel(pedra) })}
-          aria-label={t('calculator.removeDiscard', {
-            tile: `${nomePedraAcessivel(pedra)}, quantidade ${quantidade}`,
-          })}
-          onClick={() => aoRemoverDescarte(primeiroIndice)}
+          onClick={aoLimparDescartes}
+          aria-label={t('calculator.clearDiscards')}
+          title={t('calculator.clearDiscards')}
         >
-          <PedraSvg pedra={pedra} />
-          {quantidade > 1 && <span className="contador-descarte-finalizacao">{quantidade}x</span>}
+          <i className="fas fa-trash" aria-hidden="true" />
         </button>
-      ))}
-      <button
-        className="btn-limpar-grupo-pedras"
-        type="button"
-        aria-label={t('calculator.clearDiscards')}
-        title={t('calculator.clearDiscards')}
-        onClick={aoLimparDescartes}
-      >
-        <i className="fas fa-trash" aria-hidden="true" />
-      </button>
+      )}
     </div>
   )
 }

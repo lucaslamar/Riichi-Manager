@@ -3633,3 +3633,23 @@
     padding: 6px !important;
   }
 }
+
+/*
+ * O rótulo e o scroll de descartes são separados para manter a lixeira no
+ * cabeçalho e impedir que a linha aumente a largura da página.
+ */
+.descartes-selecionados.descartes-furiten-row {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  max-width: 100%;
+  min-width: 0;
+  padding-inline: 6px;
+  overflow: hidden;
+  scroll-padding-inline: 0;
+}
+
+.descartes-furiten-scroll {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}

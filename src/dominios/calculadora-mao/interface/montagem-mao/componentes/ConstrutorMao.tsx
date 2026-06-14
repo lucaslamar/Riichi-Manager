@@ -169,6 +169,12 @@ export default function ConstrutorMao({
     setMenuAcoesMaoAberto(false)
   }
 
+  const limparDescartes = () => {
+    estado.atualizarMao((rascunho) => {
+      rascunho.descartes = []
+    })
+  }
+
   useEffect(() => {
     const atualizarEstadoSticky = () => {
       const sentinela = sentinelaStickyRef.current
@@ -231,12 +237,9 @@ export default function ConstrutorMao({
         <>
           <DescartesMao
             descartes={mao.descartes}
+            temEsperaFuriten={temEsperaFuriten}
             aoRemoverDescarte={removerDescarte}
-            aoLimparDescartes={() =>
-              estado.atualizarMao((rascunho) => {
-                rascunho.descartes = []
-              })
-            }
+            aoLimparDescartes={limparDescartes}
           />
 
           <div className="acoes-construtor-mao">
@@ -250,7 +253,6 @@ export default function ConstrutorMao({
               aoAlternarAcao={alternarAcaoMao}
             />
           </div>
-
         </>
       )}
 
@@ -258,9 +260,7 @@ export default function ConstrutorMao({
         <div className="painel-teclado-calculadora">
           <span className="sr-only" aria-live="polite">
             {mensagemFinalizacao ??
-              (mostrarFinalizacaoNoTeclado
-                ? t('calculator.readyToFinalizeAnnouncement')
-                : '')}
+              (mostrarFinalizacaoNoTeclado ? t('calculator.readyToFinalizeAnnouncement') : '')}
           </span>
           {contexto === 'montagem' && (
             <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
