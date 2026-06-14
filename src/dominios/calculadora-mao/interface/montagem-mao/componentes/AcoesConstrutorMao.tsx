@@ -33,7 +33,6 @@ export function AcoesConstrutorMao({
       <BotaoAcao
         tipo="chii"
         rotulo={t('melds.chii')}
-        cor="#4caf50"
         ativo={acaoPendente?.tipo === 'chii'}
         desabilitado={!podeChii}
         aoClicar={() => aoAlternarAcao('chii')}
@@ -41,7 +40,6 @@ export function AcoesConstrutorMao({
       <BotaoAcao
         tipo="pon"
         rotulo={t('melds.pon')}
-        cor="#2196f3"
         ativo={acaoPendente?.tipo === 'pon'}
         desabilitado={!podePon}
         aoClicar={() => aoAlternarAcao('pon')}
@@ -49,7 +47,6 @@ export function AcoesConstrutorMao({
       <BotaoAcao
         tipo="kanAberto"
         rotulo={compacto ? t('melds.kanCompact') : t('melds.kanAberto')}
-        cor="#ba68c8"
         ativo={acaoPendente?.tipo === 'kanAberto'}
         desabilitado={!podeKanAberto}
         aoClicar={() => aoAlternarAcao('kanAberto')}
@@ -57,7 +54,6 @@ export function AcoesConstrutorMao({
       <BotaoAcao
         tipo="kanFechado"
         rotulo={compacto ? t('melds.kanClosedCompact') : t('melds.kanFechado')}
-        cor="#9c27b0"
         ativo={acaoPendente?.tipo === 'kanFechado'}
         desabilitado={!podeKanFechado}
         aoClicar={() => aoAlternarAcao('kanFechado')}
@@ -65,7 +61,6 @@ export function AcoesConstrutorMao({
       <BotaoAcao
         tipo="descarte"
         rotulo={compacto ? t('melds.discardsAction') : t('melds.discards')}
-        cor="#111827"
         ativo={acaoPendente?.tipo === 'descarte'}
         desabilitado={false}
         aoClicar={() => aoAlternarAcao('descarte')}

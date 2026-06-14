@@ -1,5 +1,30 @@
 # Changelog - Riichi Manager
 
+## 4.4.0 - 2026-06-14
+
+## Ajustado
+
+- Ajustado o layout do teclado de pedras no modo landscape para ocupar melhor toda a largura disponível da tela.
+- Corrigido o comportamento em que o teclado ficava centralizado e estreito demais no modo horizontal.
+- Melhorada a distribuição horizontal das pedras no teclado, evitando que o conteúdo fique comprimido no centro.
+- Integradas as ações `Chi`, `Pon`, `Kan`, `Kan fechado` e `Descartes / Furiten` ao topo do teclado no landscape.
+- Alterado o visual das ações no landscape para funcionar como uma barra segmentada, seguindo o estilo da referência mobile.
+- Reduzido o espaçamento visual entre a barra de ações e o teclado, deixando os dois elementos com aparência de componente único.
+- Mantida a proposta mobile-first, sem criar CSS específico para modelos de celular.
+
+## Corrigido
+
+- Corrigida a inconsistência visual dos botões de ação no modo landscape.
+- Corrigido o uso excessivo de compactação no teclado, que fazia o layout desperdiçar espaço horizontal.
+- Evitado que o teclado use `fit-content` ou comportamento semelhante no landscape quando isso reduz a largura do componente.
+- Preservado o layout portrait sem alterações visuais intencionais.
+
+## Técnico
+
+- As regras responsivas continuam baseadas em tamanho de tela, altura disponível e orientação.
+- Não foram criadas regras específicas para aparelhos como iPhone SE, iPhone XR, Pixel 7 ou Galaxy.
+- Não houve alteração nas regras de cálculo, ordem das pedras, traduções ou lógica de Mahjong.
+
 ## 4.3.0 - 2026-06-06
 
 ### Adicionado

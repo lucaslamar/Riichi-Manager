@@ -7,12 +7,10 @@ import {
   type EsperaPossivel,
   type Mao,
 } from '../../../logica/mao'
-import {
-  MAO_VAZIA,
-  codigoBase,
-  expandirGrupoMesmoValor,
-} from '../../constantes'
+import { MAO_VAZIA, codigoBase, expandirGrupoMesmoValor } from '../../constantes'
 import type { EscolhaChiiPendente, EstadoMaoCalculadora, TipoMeldCalculadora } from './tipos'
+
+const MAXIMO_DESCARTES = 18
 
 interface ParametrosAcoesPedras {
   estado: Pick<
@@ -186,8 +184,10 @@ export function useAcoesPedras({
         if (mao.uradora.length + 1 >= 5) setAcaoPendente(null)
         return
       case 'descarte':
+        if (mao.descartes.length >= MAXIMO_DESCARTES) return
         if (!podeAdicionarPedras([pedra])) return
         atualizarMao((rascunho) => {
+          if (rascunho.descartes.length >= MAXIMO_DESCARTES) return
           rascunho.descartes.push(pedra)
           ordenarPedras(rascunho.descartes)
         })

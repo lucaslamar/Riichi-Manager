@@ -1,7 +1,24 @@
+/*
+ * Estrategia responsiva
+ * ---------------------
+ * As calculadoras continuam mobile-first: os estilos base atendem o menor viewport e
+ * estas regras refinam o layout conforme espaco disponivel, nunca por modelo de
+ * dispositivo. Os comportamentos sao organizados em:
+ * - telefones pequenos: larguras ate 420px/360px;
+ * - telefones regulares: larguras ate 640px/768px;
+ * - telefone horizontal: orientation + largura e altura disponiveis;
+ * - tablets: faixas intermediarias a partir de 640px/768px;
+ * - desktop: espaco amplo a partir de 1024px.
+ *
+ * A ordem interna preserva a cascata anterior. Overrides mais especificos de
+ * orientacao ou pouca altura aparecem depois das regras gerais que refinam.
+ */
+
+/* Telefones pequenos e regulares: montagem, finalizacao e controles. */
+
 /* Responsivo especifico da calculadora. */
 
 @media (max-width: 768px) {
-
   .cabecalho-calculadora {
     gap: 8px;
   }
@@ -126,9 +143,6 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
-  }
-  .campo-vento-mao:nth-child(2) .pedras-vento-mao {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .btn-vento-pedra {
     min-height: 74px;
@@ -515,7 +529,6 @@
 }
 
 @media (max-width: 768px) {
-
   .menu-acoes-mobile {
     position: fixed;
     right: 18px;
@@ -571,7 +584,6 @@
 }
 
 @media (max-width: 420px) {
-
   .seletor-rapido {
     width: 100%;
     justify-items: stretch;
@@ -654,7 +666,7 @@
     flex: 1 1 0;
     min-height: 28px;
     padding: 3px 5px;
-    border-width: 0 !important;
+    border-width: 1px;
     border-radius: 6px;
     background-clip: padding-box;
     font-size: 0.7rem;
@@ -1188,7 +1200,7 @@
   }
 
   .opcoes-mao-embutidas {
-    gap: 0;
+    gap: 8px;
   }
 
   .campo-vitoria-mao {
@@ -1236,10 +1248,10 @@
   }
 
   .descartes-finalizacao {
-    margin: -2px 0 8px;
+    margin: 0;
   }
 
-.grade-descartes-finalizacao {
+  .grade-descartes-finalizacao {
     grid-template-columns: repeat(5, 30px);
     gap: 3px;
   }
@@ -1403,6 +1415,7 @@
   body:has(.card-mao-completa.etapa-montagem) {
     width: 100%;
     height: 100dvh;
+    min-height: 100dvh;
     overflow: hidden;
     background: #ffffff;
   }
@@ -1415,17 +1428,34 @@
   body:has(.card-mao-completa.etapa-montagem) main {
     width: 100%;
     max-width: none;
-    min-height: calc(100dvh - 46px);
+    height: calc(100dvh - 46px);
+    min-height: 0;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     background: #ffffff;
   }
 
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal > div,
+  body:has(.card-mao-completa.etapa-montagem) main > div {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
     background: #ffffff;
     border: 0;
     padding: 0;
+    overflow: hidden;
     box-shadow: none;
+  }
+
+  .construtor-mao-montagem > .acoes-construtor-mao {
+    display: none;
   }
 
   .construtor-mao-montagem .mao-editor-fixo {
@@ -1472,11 +1502,11 @@
     min-width: 0;
     align-items: stretch;
     justify-content: stretch;
-    gap: 0;
-    overflow: hidden;
+    gap: 3px;
+    overflow: visible;
     border: 1px solid #d8e1ea;
-    border-radius: 9px;
-    padding: 2px;
+    border-radius: 11px;
+    padding: 3px;
     background: #f8fafc;
   }
 
@@ -1484,11 +1514,8 @@
     flex: initial;
     min-width: 0;
     min-height: 34px;
-    border: 0 !important;
-    border-left: 1px solid #e2e8f0 !important;
-    border-radius: 0;
-    background: transparent !important;
-    color: #40566d !important;
+    border: 1px solid var(--action-color);
+    border-radius: 10px;
     font-size: 0.78rem;
     font-weight: 900;
     overflow: hidden;
@@ -1502,10 +1529,7 @@
     gap: 4px;
   }
 
-  .construtor-mao-montagem
-    .menu-acoes-teclado-mobile
-    .btn-acao-descarte
-    span {
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-descarte span {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -1515,26 +1539,15 @@
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao:first-child {
-    border-left: 0 !important;
+    border-left-width: 1px;
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao[aria-pressed='true'] {
-    border-left-color: transparent !important;
     border-radius: 7px;
-    background: #155b98 !important;
-    color: #ffffff !important;
-  }
-
-  .construtor-mao-montagem
-    .menu-acoes-teclado-mobile
-    .btn-acao-mao[aria-pressed='true']
-    + .btn-acao-mao {
-    border-left-color: transparent !important;
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao:disabled {
-    color: #94a3b8 !important;
-    opacity: 0.55 !important;
+    opacity: 0.45;
   }
 
   .construtor-mao-montagem .teclado-pedras {
@@ -1580,9 +1593,7 @@
     line-height: 12px;
   }
 
-  .layout-montagem-calculadora.com-esperas
-    .painel-teclado-calculadora
-    .menu-acoes-teclado-mobile {
+  .layout-montagem-calculadora.com-esperas .painel-teclado-calculadora .menu-acoes-teclado-mobile {
     order: 1;
   }
 
@@ -1614,4 +1625,2031 @@
     background: #ffffff;
     font-size: 0.56rem;
   }
+}
+
+/*
+ * Tablets e desktop: expansao progressiva da finalizacao.
+ * Mantido aqui antes do landscape para preservar a cascata original.
+ */
+
+/* Finalizacao mobile-first, usando os breakpoints de referencia do Tailwind CSS v1. */
+
+.card-mao-completa.etapa-finalizacao {
+  --finalizacao-espaco-xs: 4px;
+  --finalizacao-espaco-sm: 8px;
+  --finalizacao-espaco-md: 12px;
+  --finalizacao-tile-largura: clamp(29px, 9vw, 34px);
+  --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
+
+  width: min(100%, 100vw);
+  max-width: 100%;
+  margin-inline: auto;
+  overflow-x: visible;
+}
+
+.pagina-finalizacao-mao,
+.layout-finalizacao-calculadora,
+.coluna-finalizacao-mao,
+.coluna-finalizacao-opcoes,
+.construtor-mao-finalizacao,
+.opcoes-mao-embutidas {
+  min-width: 0;
+}
+
+.pagina-finalizacao-mao > .layout-finalizacao-calculadora {
+  margin-top: var(--finalizacao-espaco-sm);
+}
+
+.layout-finalizacao-calculadora {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--finalizacao-espaco-sm);
+}
+
+.coluna-finalizacao-mao,
+.coluna-finalizacao-opcoes,
+.opcoes-mao-embutidas {
+  gap: var(--finalizacao-espaco-sm);
+}
+
+.construtor-mao-finalizacao .pedras-selecionadas {
+  max-width: 100%;
+  gap: var(--finalizacao-espaco-xs);
+  overflow: visible;
+}
+
+.construtor-mao-finalizacao .mao-principal-finalizacao {
+  grid-template-columns: repeat(6, var(--finalizacao-tile-largura));
+  gap: 3px;
+  justify-content: start;
+}
+
+.construtor-mao-finalizacao .mao-principal-finalizacao > .chip-pedra {
+  width: var(--finalizacao-tile-largura);
+  height: var(--finalizacao-tile-altura);
+  flex: 0 0 var(--finalizacao-tile-largura);
+}
+
+.construtor-mao-finalizacao .melds-finalizacao-coluna {
+  gap: 6px;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao {
+  max-width: 100%;
+  min-height: 0;
+}
+
+.contadores-dora-honba,
+.seletores-vento-mao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--finalizacao-espaco-sm);
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.contador-dora-manual {
+  width: 100%;
+  min-width: 0;
+  justify-content: space-between;
+}
+
+.contador-dora-manual > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.contador-dora-manual > div {
+  flex: 0 0 auto;
+}
+
+.campo-vento-mao {
+  min-width: 0;
+}
+
+.grupo-opcoes-ventos .grade-ventos-finalizacao {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+
+.grupo-opcoes-ventos .botao-vento-finalizacao {
+  min-width: 0;
+  min-height: 64px;
+  gap: 3px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.grupo-opcoes-ventos .botao-vento-finalizacao .tile-img {
+  width: 26px;
+  height: 35px;
+}
+
+.grupo-opcoes-ventos .botao-vento-finalizacao .label-vento {
+  margin-top: 3px;
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+.grupo-opcoes-ventos {
+  padding-block: var(--finalizacao-espaco-xs) var(--finalizacao-espaco-sm);
+}
+
+.descartes-finalizacao,
+.editor-descartes-finalizacao,
+.painel-contextual-finalizacao {
+  max-width: 100%;
+}
+
+.acao-calcular-mao.rodape-finalizacao-mao {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 6px;
+  max-height: none;
+  margin: 10px 0 0;
+  padding: 0 0 8px;
+  overflow: visible;
+}
+
+.botao-calcular-finalizacao {
+  width: 100%;
+  max-width: none;
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.status-finalizacao-mao {
+  min-width: 0;
+  color: #607080;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.texto-calcular-pronto.status-finalizacao-mao {
+  color: #147a3b;
+}
+
+@media (min-width: 640px) {
+  .card-mao-completa.etapa-finalizacao {
+    max-width: 720px;
+    padding: 16px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: var(--finalizacao-espaco-md);
+  }
+
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    grid-template-columns: repeat(auto-fit, var(--finalizacao-tile-largura));
+  }
+
+  .contadores-dora-honba,
+  .seletores-vento-mao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .contador-dora-manual {
+    align-content: center;
+  }
+
+  .grupo-opcoes-ventos .botao-vento-finalizacao {
+    min-height: 62px;
+  }
+}
+
+@media (min-width: 768px) {
+  .card-mao-completa.etapa-finalizacao {
+    --finalizacao-espaco-sm: 10px;
+    --finalizacao-espaco-md: 14px;
+    --finalizacao-tile-largura: 34px;
+
+    max-width: 920px;
+    padding: 20px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: 16px;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes,
+  .opcoes-mao-embutidas {
+    gap: 10px;
+  }
+
+  .grupo-opcoes-ventos .botao-vento-finalizacao {
+    min-height: 70px;
+  }
+
+  .grupo-opcoes-ventos .botao-vento-finalizacao .tile-img {
+    width: 28px;
+    height: 38px;
+  }
+}
+
+@media (min-width: 900px) and (min-height: 600px) {
+  .grupo-opcoes-ventos .grade-ventos-finalizacao {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) main {
+    width: calc(100% - 280px);
+    max-width: calc(100% - 280px);
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    max-width: 760px;
+    padding: 24px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: 20px;
+  }
+
+  .contadores-dora-honba,
+  .seletores-vento-mao {
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 700px) {
+  .acao-calcular-mao.rodape-finalizacao-mao {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .botao-calcular-finalizacao {
+    width: 220px;
+    flex: 0 0 220px;
+  }
+
+  .status-finalizacao-mao {
+    text-align: left;
+  }
+}
+
+@media (min-width: 1280px) {
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    max-width: 1120px;
+  }
+
+  .layout-finalizacao-calculadora {
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 1fr);
+  }
+
+  .contador-dora-manual {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    justify-items: stretch;
+    gap: 4px;
+  }
+
+  .contador-dora-manual > span {
+    width: 100%;
+    overflow-wrap: normal;
+  }
+
+  .contador-dora-manual > div {
+    justify-self: end;
+  }
+}
+
+/* Telefone horizontal: calculadora compacta conforme altura disponivel. */
+
+/* Ajustes isolados para calculadoras em mobile horizontal. */
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  body:has(.card-mao-completa.etapa-montagem),
+  body:has(.card-mao-completa.etapa-finalizacao) {
+    padding: 0;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-montagem) main,
+  body:has(.card-mao-completa.etapa-finalizacao) main {
+    width: 100%;
+    max-width: none;
+    min-height: calc(100dvh - 40px);
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .card-mao-completa.fluxo-calculadora {
+    width: 100%;
+    height: calc(100dvh - 40px);
+    min-height: 0;
+    margin: 0;
+    gap: 5px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    padding: 5px 8px calc(5px + env(safe-area-inset-bottom));
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .cabecalho-calculadora,
+  .trilha-etapas-calculadora,
+  .cabecalho-etapa-calculadora p,
+  .construtor-mao-montagem .estado-vazio-mao {
+    display: none;
+  }
+
+  .calculadora-etapa {
+    min-height: 0;
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .cabecalho-etapa-calculadora {
+    min-height: 0;
+  }
+
+  .cabecalho-etapa-calculadora h3 {
+    font-size: 0.84rem;
+    line-height: 1.08;
+  }
+
+  .fab-calculadora-padrao {
+    top: auto;
+    bottom: 5px;
+    right: 6px;
+    transform: scale(0.78);
+    transform-origin: bottom right;
+  }
+
+  .fab-calculadora-teclado {
+    top: auto;
+    bottom: 3px;
+    right: 3px;
+  }
+
+  .layout-montagem-calculadora,
+  .layout-montagem-calculadora.com-esperas,
+  .layout-montagem-calculadora.sem-esperas {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: flex;
+  }
+
+  .construtor-mao,
+  .construtor-mao-montagem {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .construtor-mao-montagem {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo,
+  .construtor-mao-montagem .descartes-selecionados,
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    position: static;
+    flex: 1 1 0;
+    min-height: 72px;
+    max-height: none;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    background: transparent;
+  }
+
+  .cabecalho-mao-editor {
+    min-height: 20px;
+    margin-bottom: 2px;
+  }
+
+  .acoes-cabecalho-mao {
+    gap: 4px;
+    align-items: center;
+  }
+
+  .btn-configuracao-mao-cabecalho {
+    display: inline-flex;
+    width: 28px;
+    min-height: 28px;
+    border-color: transparent;
+    background: transparent;
+    font-size: 0.74rem;
+  }
+
+  .btn-limpar-mao-cabecalho {
+    width: 28px;
+    min-height: 28px;
+  }
+
+  .titulo-mao-editor {
+    font-size: 0.68rem;
+    line-height: 1.05;
+  }
+
+  .status-tenpai-cabecalho {
+    min-height: 18px;
+    padding: 2px 5px;
+    font-size: 0.52rem;
+  }
+
+  .pedras-selecionadas {
+    min-height: 0;
+    margin-bottom: 0;
+    gap: 2px;
+    padding: 3px 38px 4px 4px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Esconde o container quando a mão está vazia (sem tiles nem melds) */
+  .pedras-selecionadas:not(:has(.chip-pedra)):not(:has(.chip-meld-mao)) {
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .chip-pedra {
+    width: 29px;
+    height: 38px;
+    border-radius: 5px;
+  }
+
+  .chip-meld-mao {
+    min-height: 42px;
+    padding: 2px 4px !important;
+  }
+
+  .chip-meld-mao .meld-pedras {
+    gap: 1px;
+  }
+
+  .chip-meld-mao .meld-tile,
+  .chip-meld-mao .meld-pedras .tile-img {
+    width: 29px;
+    height: 38px;
+  }
+
+  .chip-meld-mao .meld-tile.de-lado,
+  .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: 38px;
+    height: 29px;
+  }
+
+  .indicadores-dora-selecionados,
+  .descartes-selecionados {
+    min-height: 0;
+    margin-bottom: 0;
+    gap: 3px;
+    padding-block: 3px;
+  }
+
+  .grupo-indicador-dora {
+    padding: 3px 28px 3px 5px;
+  }
+
+  .grupo-indicador-dora span,
+  .descartes-selecionados span {
+    font-size: 0.6rem;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .acoes-construtor-mao {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 0 0 auto;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 3px;
+    margin-bottom: 0;
+    order: 10;
+  }
+
+  .btn-acao-mao {
+    max-width: 100%;
+    min-width: 0;
+    min-height: 28px;
+    padding: 3px 4px;
+    border-radius: 6px;
+    font-size: 0.64rem;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+
+  .painel-teclado-calculadora {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex: 0 0 auto;
+    flex-direction: column;
+    order: 20;
+    overflow: hidden;
+    margin-right: 0;
+  }
+
+  .menu-acoes-teclado-mobile {
+    display: none;
+  }
+
+  .teclado-pedras {
+    box-sizing: border-box;
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex: 0 0 auto;
+    grid-template-rows: repeat(4, clamp(34px, 8dvh, 40px)) auto;
+    align-content: start;
+    gap: 3px;
+    overflow: hidden;
+    border-radius: 8px;
+    padding: 4px;
+  }
+
+  .grupo-teclado-naipe {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .rotulo-naipe-teclado {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .linha-naipe {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 2px;
+    overflow: visible;
+  }
+
+  .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .teclado-pedras .btn-pedra {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    height: clamp(34px, 8dvh, 40px);
+    min-width: 0;
+    min-height: 34px;
+    max-height: 40px;
+    padding: 1px;
+    border-width: 1px;
+    border-radius: 5px;
+  }
+
+  .teclado-pedras .tile-img,
+  .teclado-pedras .tile-fallback {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  .badge-espera-teclado {
+    min-height: 10px;
+    font-size: 0.44rem;
+    line-height: 10px;
+  }
+
+  /* Quando "Escolha o Chi" está visível: chi ocupa altura natural (auto),
+     as 4 linhas de naipes dividem o restante igualmente. */
+  .teclado-pedras:has(.seletor-chii-pendente) {
+    grid-template-rows: auto repeat(4, minmax(0, 1fr));
+  }
+
+  .seletor-chii-pendente {
+    padding: 3px 5px;
+    gap: 2px;
+    border-radius: 6px;
+  }
+
+  .seletor-chii-pendente > span {
+    font-size: 0.58rem;
+  }
+
+  .opcao-chii-pendente {
+    min-height: 28px;
+    padding: 2px 5px;
+    gap: 2px;
+    border-radius: 6px;
+  }
+
+  .chip-pedra.mini {
+    width: 19px;
+    height: 25px;
+  }
+
+  .botao-configuracao-teclado {
+    width: 30px;
+    min-height: 30px;
+  }
+
+  /* No horizontal o teclado encosta na borda direita — âncora o botão de config lá */
+  .teclado-pedras .botao-configuracao-teclado {
+    display: none;
+  }
+
+  .rodape-teclado-finalizacao {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    flex: 0 0 32px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: stretch;
+    gap: 4px;
+    min-height: 32px;
+    padding-top: 0;
+    background: #f8fafc;
+  }
+
+  .botao-mudar-batida-teclado,
+  .botao-finalizar-mao-teclado {
+    width: 100%;
+    height: 32px;
+    min-height: 32px;
+    padding: 3px 7px;
+    border-radius: 7px;
+    font-size: 0.7rem;
+    line-height: 1;
+  }
+
+  .botao-mudar-batida-teclado.ativo {
+    border-color: #9a3412;
+    background: #c2410c;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+  }
+
+  .texto-batida-completo {
+    display: none;
+  }
+
+  .texto-batida-curto {
+    display: inline;
+  }
+
+  .mensagem-finalizacao-teclado {
+    grid-column: 1 / 3;
+    width: 100%;
+    min-height: 16px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: #fff7ed;
+    font-size: 0.58rem;
+    line-height: 1.15;
+    text-align: center;
+  }
+
+  .construtor-mao-montagem.selecionando-batida .rodape-teclado-finalizacao {
+    grid-template-rows: 32px 18px;
+  }
+
+  .construtor-mao-montagem.selecionando-batida .teclado-pedras {
+    min-height: 0;
+    grid-template-rows: repeat(4, clamp(34px, 8dvh, 40px)) 53px;
+  }
+
+  .resultado-esperas-compacto {
+    flex: 0 0 auto;
+    max-height: 74px;
+    overflow-y: auto;
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .resultado-esperas-compacto .resultado-esperas {
+    gap: 4px;
+  }
+
+  .resultado-esperas-compacto .resultado-esperas p {
+    font-size: 0.68rem;
+    line-height: 1.15;
+  }
+
+  .espera-resultado .chip-pedra {
+    width: 27px;
+    height: 36px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    padding-top: 4px;
+  }
+
+  .pagina-finalizacao-mao,
+  .calculadora-etapa-finalizacao {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .cabecalho-sticky-finalizacao {
+    position: static;
+    margin: 0 -8px;
+  }
+
+  .barra-progresso-finalizacao {
+    gap: 1px;
+    padding: 3px 8px;
+  }
+
+  .barra-progresso-etapa {
+    padding: 1px 4px;
+    font-size: 0.56rem;
+    line-height: 1.2;
+  }
+
+  .barra-progresso-separador {
+    margin-inline: 0;
+    font-size: 0.56rem;
+  }
+
+  .barra-resumo-mao {
+    gap: 2px;
+    padding: 4px 8px;
+  }
+
+  .barra-resumo-linha {
+    min-height: 18px;
+    gap: 3px;
+  }
+
+  .barra-resumo-rotulo,
+  .barra-resumo-chip,
+  .barra-resumo-texto-secundario {
+    font-size: 0.58rem;
+  }
+
+  .barra-resumo-tile .tile-img {
+    width: 15px;
+    height: 20px;
+  }
+
+  .layout-finalizacao-calculadora {
+    display: grid;
+    min-height: 0;
+    height: 100%;
+    grid-template-columns: minmax(240px, 0.9fr) minmax(340px, 1.1fr);
+    gap: 8px;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes {
+    min-height: 0;
+    gap: 6px;
+  }
+
+  .coluna-finalizacao-mao {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding-right: 2px;
+  }
+
+  /* A coluna de opções não rola como um todo — só as opções internas rolam,
+     para que o botão Calcular fique sempre visível na base. */
+  .coluna-finalizacao-opcoes {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-right: 4px;
+  }
+
+  .coluna-finalizacao-opcoes .opcoes-mao-embutidas {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+
+  .construtor-mao-finalizacao .mao-editor-fixo,
+  .opcoes-mao-embutidas {
+    background: transparent;
+  }
+
+  .construtor-mao-finalizacao .pedras-selecionadas {
+    display: grid;
+    gap: 4px;
+    padding: 4px;
+    border-color: #edf2f7;
+  }
+
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    gap: 2px;
+  }
+
+  .construtor-mao-finalizacao .melds-finalizacao-coluna {
+    gap: 4px;
+  }
+
+  .campo-vitoria-mao {
+    width: 100%;
+  }
+
+  .campo-vitoria-mao > span,
+  .campo-vento-mao span,
+  .rotulo-bloco-opcoes,
+  .doras-na-mao-rotulo {
+    font-size: 0.64rem;
+    line-height: 1.1;
+  }
+
+  .toggle-agari-mao {
+    margin-bottom: 2px;
+  }
+
+  .toggle-agari-mao button,
+  .linha-opcoes-mao .btn-toggle-mao {
+    min-width: 0;
+    min-height: 36px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .contadores-dora-honba {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .contador-dora-manual {
+    min-width: 0;
+    min-height: 34px;
+    gap: 5px;
+    padding: 4px 5px 4px 7px;
+  }
+
+  .contador-dora-manual > span {
+    min-width: 0;
+    font-size: 0.62rem;
+    line-height: 1.05;
+  }
+
+  .contador-dora-manual > div,
+  .doras-na-mao-contador {
+    min-height: 28px;
+  }
+
+  .contador-dora-manual button,
+  .contador-dora-manual strong,
+  .doras-na-mao-contador button,
+  .doras-na-mao-contador strong {
+    width: 28px;
+    min-width: 28px;
+  }
+
+  .doras-na-mao-linha {
+    gap: 4px;
+    padding: 4px 6px;
+  }
+
+  .doras-na-mao-btn-info,
+  .doras-na-mao-btn-teclado {
+    width: 26px;
+    height: 26px;
+  }
+
+  .doras-na-mao-grade {
+    gap: 2px;
+    padding: 5px;
+  }
+
+  .doras-na-mao-pedra .tile-img {
+    width: 24px;
+    height: 32px;
+  }
+
+  .grupo-opcoes-dora {
+    margin-bottom: 4px;
+  }
+
+  .grupo-opcoes-dora .indicadores-dora-selecionados {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .grupo-opcoes-dora .grupo-indicador-dora span {
+    flex-basis: 76px;
+  }
+
+  .grupos-opcoes-mao {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 5px;
+  }
+
+  .grupos-opcoes-ativos,
+  .grupo-opcoes-ventos.etapa-opcoes-ativa,
+  .grupo-opcoes-dora.etapa-opcoes-ativa,
+  .etapa-opcoes-ativa {
+    max-height: none;
+  }
+
+  .grupo-opcoes-mao {
+    gap: 4px;
+  }
+
+  .grupo-opcoes-ventos {
+    padding-block: 4px;
+  }
+
+  .seletores-vento-mao {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-bottom: 0;
+  }
+
+  .pedras-vento-mao {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3px;
+  }
+
+  .btn-vento-pedra {
+    min-height: 40px;
+    gap: 2px;
+    padding: 4px 3px;
+    border-width: 1px;
+    border-radius: 6px;
+  }
+
+  .btn-vento-pedra .tile-img {
+    width: 20px;
+    height: 27px;
+  }
+
+  .btn-vento-pedra small {
+    font-size: 0.52rem;
+    line-height: 1.1;
+  }
+
+  .linha-opcoes-mao {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+  }
+
+  .linha-opcoes-compacta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .linha-condicoes-especiais {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .descartes-finalizacao {
+    margin-bottom: 5px;
+  }
+
+  .grade-descartes-finalizacao {
+    grid-template-columns: repeat(5, 25px);
+    min-height: 34px;
+    gap: 2px;
+  }
+
+  .descarte-finalizacao.chip-pedra {
+    width: 25px;
+    height: 33px;
+  }
+
+  .acao-calcular-mao.rodape-finalizacao-mao {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    max-height: none;
+    margin-top: 8px;
+    padding: 5px 0 calc(10px + env(safe-area-inset-bottom));
+    overflow: visible;
+    background: #ffffff;
+  }
+
+  .botao-calcular-finalizacao {
+    width: 100%;
+    max-width: none;
+    min-height: 38px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
+
+  .status-finalizacao-mao {
+    font-size: 0.7rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .btn-voltar-montagem {
+    min-height: 32px;
+    padding: 5px 8px;
+    font-size: 0.72rem;
+  }
+
+  /* ─── Ações do cabeçalho da mão: remove caixa cinza ─────────────────── */
+
+  .acoes-finalizacao-calculadora {
+    gap: 1px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* ─── Painel contextual (Dora / Descartes): corrige overflow do teclado ── */
+
+  /* Mantém o teclado contextual limitado ao painel de finalização. */
+  .painel-teclado-contextual-finalizacao {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    height: 118px;
+    max-height: 118px;
+    min-height: 0;
+    flex: none;
+    order: 0;
+    margin-right: 0;
+    overflow: hidden;
+  }
+
+  /* Teclado de pedras dentro do painel contextual */
+  .painel-teclado-contextual-finalizacao .teclado-pedras {
+    height: 100%;
+    max-height: 118px;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    border-right: 1px solid #e2e8f0;
+    border-radius: 7px;
+  }
+
+  /* Botões de pedra menores no teclado contextual */
+  .painel-teclado-contextual-finalizacao .btn-pedra {
+    max-height: 22px;
+    height: 22px;
+  }
+
+  /* Editor expandido de descartes: ocupa o espaço disponível, grade com scroll se necessário */
+  .editor-descartes-finalizacao {
+    gap: 5px;
+    padding: 2px 0;
+  }
+
+  .editor-descartes-finalizacao .grade-descartes-finalizacao {
+    overflow-x: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
+  .modal-resultado-mobile-fundo {
+    align-items: center;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .modal-resultado-mobile {
+    width: min(92vw, 720px);
+    max-height: calc(100dvh - 16px - env(safe-area-inset-bottom));
+    padding: 12px;
+    border-radius: 8px;
+    overflow-y: auto;
+  }
+
+  .modal-resultado-mobile-cabecalho {
+    position: sticky;
+    top: -12px;
+    z-index: 2;
+    margin: -12px -12px 8px;
+    padding: 8px 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .modal-chombo-furiten .modal-resultado-mobile-cabecalho {
+    background: #fff7f7;
+  }
+
+  .btn-fechar-resultado-mobile {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+  }
+
+  .modal-resultado-mobile .mao-calculada {
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+
+  .modal-resultado-mobile .resultado-grupo-mao {
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .modal-resultado-mobile .resultado-pedra,
+  .modal-resultado-mobile .resultado-meld .meld-tile,
+  .modal-resultado-mobile .resultado-meld .meld-pedras .tile-img {
+    width: 28px;
+    height: 38px;
+  }
+
+  .modal-resultado-mobile .resultado-meld .meld-tile.de-lado,
+  .modal-resultado-mobile .resultado-meld .meld-pedras .tile-img-lado {
+    width: 38px;
+    height: 28px;
+  }
+
+  .modal-resultado-mobile .resultado-meld {
+    min-height: 0;
+    gap: 3px;
+    padding: 2px 4px;
+  }
+
+  .modal-resultado-mobile .pontos-totais,
+  .modal-resultado-mobile .pontos-chombo {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+
+  .modal-resultado-mobile .nome-mao {
+    margin-bottom: 4px;
+    font-size: 1.05rem;
+  }
+
+  .modal-resultado-mobile .resumo-han-fu,
+  .modal-resultado-mobile .detalhe-pontos {
+    font-size: 0.82rem;
+  }
+
+  .modal-resultado-mobile .lista-yaku,
+  .modal-resultado-mobile .lista-fu {
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .modal-resultado-mobile .chip-yaku,
+  .modal-resultado-mobile .chip-fu {
+    padding: 6px 8px;
+    font-size: 0.76rem;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado {
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .modal-resultado-mobile .linha-indicadores-resultado {
+    padding: 6px;
+  }
+
+  .modal-resultado-mobile .tiles-indicadores-resultado {
+    justify-content: center;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 380px) and (max-width: 1000px) {
+  .card-mao-completa.fluxo-calculadora {
+    height: calc(100dvh - 38px);
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-montagem) main,
+  body:has(.card-mao-completa.etapa-finalizacao) main {
+    min-height: calc(100dvh - 38px);
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    min-height: 52px;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    min-height: min-content;
+    flex-basis: auto;
+    flex-shrink: 0;
+  }
+
+  .teclado-pedras {
+    gap: 2px;
+    padding: 3px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    border-radius: 4px;
+  }
+
+  .btn-acao-mao {
+    min-height: 24px;
+    font-size: 0.58rem;
+  }
+
+  .layout-finalizacao-calculadora {
+    grid-template-columns: minmax(220px, 0.82fr) minmax(320px, 1.18fr);
+    gap: 6px;
+  }
+
+  .btn-vento-pedra {
+    min-height: 34px;
+  }
+
+  .btn-vento-pedra .tile-img {
+    width: 17px;
+    height: 23px;
+  }
+}
+
+/* Finalizacao horizontal: preserva a hierarquia vertical do portrait. */
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1200px) {
+  .layout-finalizacao-calculadora {
+    min-height: 0;
+    grid-template-columns: minmax(260px, 0.9fr) minmax(360px, 1.1fr);
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .coluna-finalizacao-mao {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+
+  .construtor-mao-finalizacao {
+    display: flex;
+    min-height: min-content;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  .construtor-mao-finalizacao .mao-editor-fixo {
+    position: static;
+    width: 100%;
+    margin: 0;
+  }
+
+  .construtor-mao-finalizacao .cabecalho-mao-editor {
+    position: static;
+    min-height: 30px;
+    align-items: center;
+    margin: 0 0 6px;
+  }
+
+  .construtor-mao-finalizacao .titulo-mao-editor {
+    font-size: 0.72rem;
+    line-height: 1.1;
+  }
+
+  .construtor-mao-finalizacao .acoes-cabecalho-mao {
+    align-self: center;
+  }
+
+  .coluna-finalizacao-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+    scrollbar-width: thin;
+  }
+
+  .coluna-finalizacao-opcoes .opcoes-mao-embutidas {
+    flex: 0 0 auto;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .coluna-finalizacao-opcoes .acao-calcular-mao.rodape-finalizacao-mao {
+    position: static;
+    bottom: auto;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-height: none;
+    margin: 8px 0 0;
+    padding: 8px 0 calc(10px + env(safe-area-inset-bottom));
+    overflow: visible;
+    background: #ffffff;
+  }
+
+  .modal-resultado-mobile-fundo {
+    align-items: center;
+    padding: 10px 16px;
+  }
+
+  .modal-resultado-mobile {
+    display: block;
+    width: min(92vw, 760px);
+    height: auto;
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+    padding: 16px;
+    scrollbar-gutter: stable both-edges;
+    text-align: center;
+  }
+
+  .modal-resultado-mobile-cabecalho {
+    position: static;
+    top: auto;
+    z-index: auto;
+    margin: 0 0 10px;
+    padding: 0;
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  .modal-resultado-mobile .mao-calculada {
+    justify-content: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+
+  .modal-resultado-mobile .pontos-totais {
+    color: #4fc3f7;
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+    text-align: center;
+  }
+
+  .modal-resultado-mobile .nome-mao {
+    color: var(--primario);
+    font-size: 1.15rem;
+    font-style: normal;
+  }
+
+  .modal-resultado-mobile .resumo-yakuman,
+  .modal-resultado-mobile .resumo-han-fu,
+  .modal-resultado-mobile .detalhe-pontos {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .divisor-resultado {
+    border-top-color: #e5e7eb;
+  }
+
+  .modal-resultado-mobile .rotulo-lista-resultado {
+    color: var(--primario);
+    text-align: left;
+  }
+
+  .modal-resultado-mobile .lista-yaku,
+  .modal-resultado-mobile .lista-fu {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .modal-resultado-mobile .chip-yaku {
+    background: #eef6ff;
+    color: #102a43;
+  }
+
+  .modal-resultado-mobile .chip-yaku strong {
+    color: var(--primario);
+  }
+
+  .modal-resultado-mobile .chip-fu {
+    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    color: #102a43;
+  }
+
+  .modal-resultado-mobile .chip-fu strong {
+    color: #4fc3f7;
+  }
+
+  .modal-resultado-mobile .chip-fu small {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .detalhes-contexto-resultado span {
+    background: #eef6ff;
+    color: #1d4ed8;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f8fafc;
+  }
+
+  .modal-resultado-mobile .linha-indicadores-resultado {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    padding: 0;
+    background: transparent;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado strong {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .tiles-indicadores-resultado {
+    justify-content: flex-start;
+  }
+}
+
+/*
+ * Overflow de pedras em qualquer viewport.
+ * Este contrato fica depois dos layouts responsivos para manter tiles naturais
+ * e permitir rolagem somente quando o espaco disponivel acabar.
+ */
+
+/*
+ * Tile rows keep their natural tile size on narrow screens. When they no
+ * longer fit, the row scrolls and retains a visible inset after the last tile.
+ * This file is loaded after responsive/landscape rules so those variants share
+ * the same overflow contract.
+ */
+
+.card-mao-completa,
+.card-mao-completa.etapa-finalizacao,
+.pagina-finalizacao-mao,
+.layout-finalizacao-calculadora,
+.coluna-finalizacao-mao,
+.coluna-finalizacao-opcoes,
+.construtor-mao,
+.mao-editor-fixo,
+.opcoes-mao-embutidas,
+.resultado-calculadora,
+.modal-resultado-mobile {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.card-mao-completa,
+.card-mao-completa.etapa-finalizacao,
+.construtor-mao,
+.mao-editor-fixo,
+.opcoes-mao-embutidas {
+  overflow-x: visible;
+}
+
+.pedras-selecionadas,
+.mao-principal-finalizacao,
+.melds-finalizacao-coluna,
+.indicadores-dora-selecionados,
+.grupo-indicador-dora,
+.descartes-selecionados,
+.grade-descartes-finalizacao,
+.barra-resumo-tiles,
+.resumo-mao-pedras,
+.resumo-mao-doras,
+.mao-calculada,
+.resultado-grupo-mao,
+.tiles-indicadores-resultado,
+.doras-na-mao-grade,
+.doras-na-mao-barra-selecionadas {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.pedras-selecionadas,
+.mao-principal-finalizacao,
+.grupo-indicador-dora,
+.descartes-selecionados,
+.barra-resumo-tiles,
+.resumo-mao-pedras,
+.resumo-mao-doras,
+.mao-calculada,
+.resultado-grupo-mao,
+.tiles-indicadores-resultado,
+.doras-na-mao-grade,
+.doras-na-mao-barra-selecionadas {
+  overflow-x: auto;
+  overflow-y: visible;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.pedras-selecionadas::-webkit-scrollbar,
+.mao-principal-finalizacao::-webkit-scrollbar,
+.grupo-indicador-dora::-webkit-scrollbar,
+.descartes-selecionados::-webkit-scrollbar,
+.grade-descartes-finalizacao::-webkit-scrollbar,
+.barra-resumo-tiles::-webkit-scrollbar,
+.resumo-mao-pedras::-webkit-scrollbar,
+.resumo-mao-doras::-webkit-scrollbar,
+.mao-calculada::-webkit-scrollbar,
+.resultado-grupo-mao::-webkit-scrollbar,
+.tiles-indicadores-resultado::-webkit-scrollbar,
+.doras-na-mao-grade::-webkit-scrollbar,
+.doras-na-mao-barra-selecionadas::-webkit-scrollbar {
+  display: none;
+}
+
+.pedras-selecionadas {
+  flex-wrap: nowrap;
+  padding-inline: 8px 52px;
+  scroll-padding-inline: 8px 52px;
+}
+
+.pedras-selecionadas > .chip-pedra,
+.pedras-selecionadas > .chip-meld-mao,
+.mao-principal-finalizacao > .chip-pedra,
+.grupo-indicador-dora > .chip-pedra,
+.descartes-selecionados > .chip-pedra,
+.barra-resumo-tiles > *,
+.resumo-mao-pedras > *,
+.resumo-mao-doras > *,
+.resultado-grupo-mao > *,
+.tiles-indicadores-resultado > *,
+.doras-na-mao-grade > *,
+.doras-na-mao-barra-selecionadas > * {
+  flex-shrink: 0;
+}
+
+.construtor-mao-finalizacao .pedras-selecionadas {
+  overflow: visible;
+  padding-inline: 0;
+}
+
+.secao-melds-finalizacao,
+.mao-principal-finalizacao {
+  width: 100%;
+  padding-inline: 8px 12px;
+}
+
+.mao-principal-finalizacao {
+  display: grid;
+  grid-template-columns: repeat(6, var(--finalizacao-tile-largura, 34px));
+  justify-content: start;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+.secao-melds-finalizacao {
+  padding-top: 4px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.melds-finalizacao-coluna {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  overflow: visible;
+}
+
+.melds-finalizacao-coluna .chip-meld-mao {
+  flex: 0 0 auto;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-chii {
+  background: #e8f5e9 !important;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-pon {
+  background: #e3f2fd !important;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-kanAberto {
+  background: #f8edfb !important;
+}
+
+.construtor-mao-finalizacao .chip-meld-mao-kanFechado {
+  background: #f3e5f5 !important;
+}
+
+@media (max-width: 640px) and (orientation: portrait) {
+  .construtor-mao-montagem {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .construtor-mao-montagem .cabecalho-mao-editor {
+    flex: 0 0 auto;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 0 10px;
+    scroll-padding: 0;
+    overscroll-behavior: contain;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas > .chip-meld-mao {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    flex: 0 0 auto;
+    margin-top: 0;
+  }
+}
+
+.indicadores-dora-selecionados {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.grupo-indicador-dora {
+  flex-wrap: nowrap;
+  padding-inline: 8px 40px;
+  scroll-padding-inline: 8px 40px;
+}
+
+.descartes-selecionados {
+  flex-wrap: nowrap;
+  padding-inline: 8px 42px;
+  scroll-padding-inline: 8px 42px;
+}
+
+.grade-descartes-finalizacao {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding-inline: 8px 42px;
+  scroll-padding-inline: 8px 42px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.barra-resumo-tiles,
+.resumo-mao-pedras,
+.resumo-mao-doras {
+  flex-wrap: nowrap;
+  width: 100%;
+  padding-inline: 4px 12px;
+  scroll-padding-inline: 4px 12px;
+}
+
+.mao-calculada {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  padding-inline: 8px 12px;
+  scroll-padding-inline: 8px 12px;
+}
+
+.resultado-grupo-mao,
+.tiles-indicadores-resultado {
+  flex-wrap: nowrap;
+}
+
+.linha-indicadores-resultado {
+  min-width: 0;
+}
+
+.tiles-indicadores-resultado {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  padding-inline: 4px 12px;
+  scroll-padding-inline: 4px 12px;
+}
+
+.doras-na-mao-grade,
+.doras-na-mao-barra-selecionadas {
+  flex-wrap: nowrap;
+  padding-inline: 8px 12px;
+  scroll-padding-inline: 8px 12px;
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (max-width: 1200px) {
+  .card-mao-completa,
+  .card-mao-completa.etapa-finalizacao,
+  .construtor-mao,
+  .mao-editor-fixo,
+  .opcoes-mao-embutidas {
+    overflow-x: visible;
+  }
+
+  .pedras-selecionadas,
+  .grupo-indicador-dora,
+  .descartes-selecionados,
+  .grade-descartes-finalizacao,
+  .mao-calculada,
+  .tiles-indicadores-resultado {
+    overflow-x: auto;
+  }
+
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    overflow-x: visible;
+  }
+}
+
+@media (min-width: 640px) {
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    grid-template-columns: repeat(auto-fit, var(--finalizacao-tile-largura, 34px));
+  }
+}
+
+/*
+ * Telefone horizontal curto: a barra de acoes e o teclado formam um unico
+ * componente de largura total. As colunas distribuem o espaco disponivel, mas
+ * cada pedra conserva suas proporcoes e fica centralizada dentro da celula.
+ */
+@media (orientation: landscape) and (max-height: 600px) and (max-width: 1000px) {
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: 100%;
+    max-width: 100%;
+    align-items: stretch;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+    justify-items: stretch;
+    align-content: start;
+    gap: 3px;
+    padding: 4px;
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .construtor-mao-montagem .grupo-teclado-naipe {
+    width: 100%;
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .construtor-mao-montagem .linha-naipe {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    justify-content: stretch;
+    gap: 2px;
+    overflow: visible;
+  }
+
+  .construtor-mao-montagem .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    width: 100%;
+    height: clamp(34px, 8dvh, 40px);
+    min-height: 34px;
+    max-height: 40px;
+    justify-self: stretch;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .acoes-construtor-mao {
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    justify-content: stretch;
+    gap: 0;
+    margin-bottom: -4px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+    background: #f8fafc;
+  }
+
+  .acoes-construtor-mao .btn-acao-mao {
+    width: 100%;
+    min-width: 0;
+    min-height: 28px;
+    padding: 3px 4px;
+    border: 1px solid var(--action-color);
+    border-radius: 0;
+    font-size: 0.66rem;
+    line-height: 1.05;
+  }
+
+  .acoes-construtor-mao .btn-acao-mao:last-child {
+    border-right-width: 1px;
+  }
+}
+
+/*
+ * Telefone horizontal muito baixo (ate 500px).
+ * Overrides finais conservam a precedencia do antigo carregamento lazy.
+ */
+@media screen and (orientation: landscape) and (max-height: 500px) and (max-width: 1000px) {
+  /* ─── Teclado de pedras — naipe e botões ────────────────────────────────── */
+  .linha-naipe {
+    flex-wrap: nowrap !important;
+    overflow: visible !important;
+    scrollbar-width: none !important;
+  }
+
+  .linha-naipe::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .rotulo-naipe-teclado {
+    writing-mode: vertical-rl !important;
+    text-orientation: mixed !important;
+    font-size: 0.55rem !important;
+    padding: 2px 1px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 100% !important;
+    height: 34px !important;
+    flex-shrink: 0 !important;
+    padding: 1px !important;
+  }
+
+  /* ─── Chips da mão montada ──────────────────────────────────────────────── */
+  .chip-pedra {
+    width: 26px !important;
+    height: 34px !important;
+  }
+
+  .chip-meld-mao .meld-tile,
+  .chip-meld-mao .meld-pedras .tile-img {
+    width: 26px !important;
+    height: 34px !important;
+  }
+
+  .chip-meld-mao .meld-tile.de-lado,
+  .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: 34px !important;
+    height: 26px !important;
+  }
+
+  /* ─── Botões de ação da mão (Chi, Pon, Kan, Descarte) ──────────────────── */
+  .btn-acao-mao {
+    min-height: 28px !important;
+    padding: 3px 4px !important;
+    font-size: 0.62rem !important;
+    line-height: 1.05 !important;
+  }
+
+  /* ─── Rodapé do teclado (Mudar batida / Finalizar mão / Engrenagem) ─────── */
+  .rodape-teclado-finalizacao {
+    gap: 3px !important;
+    padding-top: 0 !important;
+  }
+
+  .botao-mudar-batida-teclado,
+  .botao-finalizar-mao-teclado {
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 3px 7px !important;
+    font-size: 0.68rem !important;
+  }
+
+  .botao-configuracao-teclado {
+    width: 28px !important;
+    min-height: 28px !important;
+  }
+
+  /* ─── Tela de vitória / resultado ───────────────────────────────────────── */
+  .modal-resultado-mobile {
+    width: min(96vw, 680px) !important;
+    max-height: calc(100dvh - 10px - env(safe-area-inset-bottom)) !important;
+    padding: 8px !important;
+  }
+
+  .modal-resultado-mobile .pontos-totais,
+  .modal-resultado-mobile .pontos-chombo {
+    font-size: clamp(1.75rem, 6vw, 2.6rem) !important;
+  }
+
+  .modal-resultado-mobile .nome-mao {
+    font-size: 0.95rem !important;
+    margin-bottom: 3px !important;
+  }
+
+  /* ─── Calculadora han-fu ────────────────────────────────────────────────── */
+  .calculadora-han-fu {
+    height: calc(100dvh - 34px) !important;
+    padding: 6px 10px calc(6px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .resultado-han-fu strong {
+    font-size: clamp(1.9rem, 6.5vw, 2.9rem) !important;
+  }
+
+  .controle-han-fu {
+    min-height: 72px !important;
+    padding: 6px !important;
+  }
+}
+
+/*
+ * O rótulo e o scroll de descartes são separados para manter a lixeira no
+ * cabeçalho e impedir que a linha aumente a largura da página.
+ */
+.descartes-selecionados.descartes-furiten-row {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  max-width: 100%;
+  min-width: 0;
+  padding-inline: 6px;
+  overflow: hidden;
+  scroll-padding-inline: 0;
+}
+
+.descartes-furiten-scroll {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
