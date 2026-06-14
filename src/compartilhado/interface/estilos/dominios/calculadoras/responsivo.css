@@ -2048,10 +2048,11 @@
 
   .construtor-mao-montagem .mao-editor-fixo {
     position: static;
-    flex: 1 1 auto;
-    min-height: clamp(42px, 11dvh, 64px);
+    flex: 1 1 0;
+    min-height: 72px;
     max-height: none;
     margin: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
@@ -2098,6 +2099,7 @@
     margin-bottom: 0;
     gap: 2px;
     padding: 3px 38px 4px 4px;
+    overflow-x: hidden;
     overflow-y: auto;
   }
 
@@ -2115,7 +2117,7 @@
   }
 
   .chip-meld-mao {
-    min-height: 0;
+    min-height: 42px;
     padding: 2px 4px !important;
   }
 
@@ -2168,10 +2170,10 @@
   .btn-acao-mao {
     max-width: 100%;
     min-width: 0;
-    min-height: 26px;
+    min-height: 28px;
     padding: 3px 4px;
     border-radius: 6px;
-    font-size: 0.62rem;
+    font-size: 0.64rem;
     line-height: 1.05;
     white-space: nowrap;
   }
@@ -2183,7 +2185,7 @@
     max-width: 100%;
     min-width: 0;
     min-height: 0;
-    flex: 0 0 clamp(128px, 44dvh, 200px);
+    flex: 0 0 auto;
     flex-direction: column;
     order: 20;
     overflow: hidden;
@@ -2201,9 +2203,9 @@
     max-width: 100%;
     min-width: 0;
     min-height: 0;
-    flex: 1 1 auto;
-    grid-template-rows: repeat(4, minmax(0, 1fr)) auto;
-    align-content: stretch;
+    flex: 0 0 auto;
+    grid-template-rows: repeat(4, clamp(34px, 8dvh, 40px)) auto;
+    align-content: start;
     gap: 3px;
     overflow: hidden;
     border-radius: 8px;
@@ -2250,10 +2252,10 @@
     box-sizing: border-box;
     width: 100%;
     max-width: 100%;
-    height: 100%;
+    height: clamp(34px, 8dvh, 40px);
     min-width: 0;
-    min-height: 0;
-    max-height: clamp(28px, 9dvh, 44px);
+    min-height: 34px;
+    max-height: 40px;
     padding: 1px;
     border-width: 1px;
     border-radius: 5px;
@@ -2311,21 +2313,27 @@
   }
 
   .rodape-teclado-finalizacao {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    flex: 0 0 32px;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-    align-items: end;
+    align-items: stretch;
     gap: 4px;
-    min-height: 0;
+    min-height: 32px;
     padding-top: 0;
+    background: #f8fafc;
   }
 
   .botao-mudar-batida-teclado,
   .botao-finalizar-mao-teclado {
     width: 100%;
-    min-height: 28px;
-    padding: 4px 6px;
-    border-radius: 6px;
-    font-size: 0.64rem;
-    line-height: 1.05;
+    height: 32px;
+    min-height: 32px;
+    padding: 3px 7px;
+    border-radius: 7px;
+    font-size: 0.7rem;
+    line-height: 1;
   }
 
   .botao-mudar-batida-teclado.ativo {
@@ -2355,15 +2363,12 @@
   }
 
   .construtor-mao-montagem.selecionando-batida .rodape-teclado-finalizacao {
-    grid-template-rows: minmax(28px, auto) 18px;
-  }
-
-  .construtor-mao-montagem.selecionando-batida .painel-teclado-calculadora {
-    flex-basis: clamp(140px, 46dvh, 205px);
+    grid-template-rows: 32px 18px;
   }
 
   .construtor-mao-montagem.selecionando-batida .teclado-pedras {
-    grid-template-rows: repeat(4, minmax(0, 1fr)) minmax(46px, auto);
+    min-height: 0;
+    grid-template-rows: repeat(4, clamp(34px, 8dvh, 40px)) 53px;
   }
 
   .resultado-esperas-compacto {
@@ -2885,11 +2890,13 @@
   }
 
   .construtor-mao-montagem .mao-editor-fixo {
-    min-height: clamp(36px, 10dvh, 52px);
+    min-height: 52px;
   }
 
-  .painel-teclado-calculadora {
-    flex-basis: clamp(112px, 46dvh, 165px);
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    min-height: min-content;
+    flex-basis: auto;
+    flex-shrink: 0;
   }
 
   .teclado-pedras {
@@ -3452,7 +3459,7 @@
     max-width: 100%;
     align-self: stretch;
     justify-items: stretch;
-    align-content: stretch;
+    align-content: start;
     gap: 3px;
     padding: 4px;
     border-top: 0;
@@ -3480,8 +3487,9 @@
 
   .construtor-mao-montagem .teclado-pedras .btn-pedra {
     width: 100%;
-    height: clamp(37px, 10dvh, 44px);
-    max-height: 44px;
+    height: clamp(34px, 8dvh, 40px);
+    min-height: 34px;
+    max-height: 40px;
     justify-self: stretch;
   }
 
@@ -3504,8 +3512,8 @@
   .acoes-construtor-mao .btn-acao-mao {
     width: 100%;
     min-width: 0;
-    min-height: 30px;
-    padding: 3px 5px;
+    min-height: 28px;
+    padding: 3px 4px;
     border: 1px solid var(--action-color);
     border-radius: 0;
     font-size: 0.66rem;
@@ -3543,7 +3551,7 @@
 
   .teclado-pedras .btn-pedra {
     width: 100% !important;
-    height: 40px !important;
+    height: 34px !important;
     flex-shrink: 0 !important;
     padding: 1px !important;
   }
@@ -3568,9 +3576,9 @@
 
   /* ─── Botões de ação da mão (Chi, Pon, Kan, Descarte) ──────────────────── */
   .btn-acao-mao {
-    min-height: 24px !important;
-    padding: 2px 3px !important;
-    font-size: 0.58rem !important;
+    min-height: 28px !important;
+    padding: 3px 4px !important;
+    font-size: 0.62rem !important;
     line-height: 1.05 !important;
   }
 
@@ -3582,9 +3590,10 @@
 
   .botao-mudar-batida-teclado,
   .botao-finalizar-mao-teclado {
-    min-height: 26px !important;
-    padding: 3px 5px !important;
-    font-size: 0.6rem !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 3px 7px !important;
+    font-size: 0.68rem !important;
   }
 
   .botao-configuracao-teclado {
