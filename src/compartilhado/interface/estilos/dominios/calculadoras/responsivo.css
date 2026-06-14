@@ -666,7 +666,7 @@
     flex: 1 1 0;
     min-height: 28px;
     padding: 3px 5px;
-    border-width: 0 !important;
+    border-width: 1px;
     border-radius: 6px;
     background-clip: padding-box;
     font-size: 0.7rem;
@@ -1502,11 +1502,11 @@
     min-width: 0;
     align-items: stretch;
     justify-content: stretch;
-    gap: 0;
-    overflow: hidden;
+    gap: 3px;
+    overflow: visible;
     border: 1px solid #d8e1ea;
-    border-radius: 9px;
-    padding: 2px;
+    border-radius: 11px;
+    padding: 3px;
     background: #f8fafc;
   }
 
@@ -1514,11 +1514,8 @@
     flex: initial;
     min-width: 0;
     min-height: 34px;
-    border: 0 !important;
-    border-left: 1px solid #e2e8f0 !important;
-    border-radius: 0;
-    background: transparent !important;
-    color: #40566d !important;
+    border: 1px solid var(--action-color);
+    border-radius: 10px;
     font-size: 0.78rem;
     font-weight: 900;
     overflow: hidden;
@@ -1542,26 +1539,15 @@
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao:first-child {
-    border-left: 0 !important;
+    border-left-width: 1px;
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao[aria-pressed='true'] {
-    border-left-color: transparent !important;
     border-radius: 7px;
-    background: #155b98 !important;
-    color: #ffffff !important;
-  }
-
-  .construtor-mao-montagem
-    .menu-acoes-teclado-mobile
-    .btn-acao-mao[aria-pressed='true']
-    + .btn-acao-mao {
-    border-left-color: transparent !important;
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao:disabled {
-    color: #94a3b8 !important;
-    opacity: 0.55 !important;
+    opacity: 0.45;
   }
 
   .construtor-mao-montagem .teclado-pedras {
@@ -3477,15 +3463,14 @@
     min-width: 0;
     min-height: 30px;
     padding: 3px 5px;
-    border: 0 !important;
-    border-right: 1px solid #e2e8f0 !important;
+    border: 1px solid var(--action-color);
     border-radius: 0;
     font-size: 0.66rem;
     line-height: 1.05;
   }
 
   .acoes-construtor-mao .btn-acao-mao:last-child {
-    border-right: 0 !important;
+    border-right-width: 1px;
   }
 }
 

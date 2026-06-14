@@ -182,6 +182,48 @@
   transition: all 0.15s;
 }
 
+.action-tab {
+  border: 1px solid var(--action-color);
+  background: #ffffff;
+  color: var(--action-color);
+  cursor: pointer;
+}
+
+.action-tab--chi.active,
+.action-tab--pon.active,
+.action-tab--kan-open.active,
+.action-tab--kan-closed.active,
+.action-tab--discard.active {
+  border-color: var(--action-color);
+  background: var(--action-color);
+  color: #ffffff;
+}
+
+.action-tab--chi {
+  --action-color: #43a047;
+}
+
+.action-tab--pon {
+  --action-color: #1565c0;
+}
+
+.action-tab--kan-open {
+  --action-color: #ab47bc;
+}
+
+.action-tab--kan-closed {
+  --action-color: #8e24aa;
+}
+
+.action-tab--discard {
+  --action-color: #263238;
+}
+
+.action-tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .btn-acao-mao i {
   font-size: 0.88em;
 }
