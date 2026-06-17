@@ -1252,8 +1252,10 @@
   }
 
   .grade-descartes-finalizacao {
-    grid-template-columns: repeat(5, 30px);
-    gap: 3px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 0 34px 4px 2px;
   }
 
   .descarte-finalizacao.chip-pedra {
@@ -2727,28 +2729,21 @@
 
   /* ─── Painel contextual (Dora / Descartes): corrige overflow do teclado ── */
 
-  /* Mantém o teclado contextual limitado ao painel de finalização. */
+  /* Teclado contextual: sem altura fixa, rola junto com a coluna. */
   .painel-teclado-contextual-finalizacao {
-    display: flex;
-    flex-direction: column;
+    display: block;
     width: 100%;
     max-width: 100%;
-    height: 118px;
-    max-height: 118px;
-    min-height: 0;
-    flex: none;
-    order: 0;
-    margin-right: 0;
-    overflow: hidden;
+    max-height: none;
+    overflow: visible;
   }
 
   /* Teclado de pedras dentro do painel contextual */
   .painel-teclado-contextual-finalizacao .teclado-pedras {
-    height: 100%;
-    max-height: 118px;
+    height: auto;
+    max-height: none;
     min-height: 0;
-    flex: 1 1 auto;
-    overflow: hidden;
+    overflow: visible;
     border-right: 1px solid #e2e8f0;
     border-radius: 7px;
   }
@@ -3652,4 +3647,16 @@
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+/* ─── Finalization screen: dora/ura-dora panel wrapping ────────────────────── */
+
+.painel-contextual-finalizacao .grupo-indicador-dora {
+  overflow-x: hidden;
+  overflow-y: visible;
+  flex-wrap: wrap;
+}
+
+.painel-contextual-finalizacao .grupo-indicador-dora > .chip-pedra {
+  flex-shrink: 0;
 }

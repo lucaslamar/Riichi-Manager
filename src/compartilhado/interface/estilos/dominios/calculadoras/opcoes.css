@@ -104,7 +104,7 @@
 }
 
 .etapa-opcoes-ativa {
-  max-height: 360px;
+  max-height: 480px;
   margin-bottom: 10px;
   opacity: 1;
   transform: translateY(0);
@@ -475,12 +475,15 @@
 
 .grade-descartes-finalizacao {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(5, 28px);
-  justify-content: start;
-  gap: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
   min-height: 40px;
-  padding: 0 34px 0 2px;
+  padding: 0 34px 4px 2px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .grade-descartes-finalizacao .btn-limpar-grupo-pedras {
@@ -1190,4 +1193,44 @@
     padding: 1px;
     border-radius: 5px;
   }
+}
+
+/* ─── Dora/Ura Dora panel in finalization: wrap tiles instead of scrolling ── */
+
+.painel-contextual-finalizacao .indicadores-dora-selecionados {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  margin-bottom: 0;
+}
+
+.painel-contextual-finalizacao .grupo-indicador-dora {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.painel-contextual-finalizacao .grupo-indicador-dora > .chip-pedra {
+  flex-shrink: 0;
+}
+
+/* Discard tile chips: consistent size */
+.grade-descartes-finalizacao > .chip-pedra {
+  flex-shrink: 0;
+}
+
+/* Discard clear button stays anchored top-right */
+.grade-descartes-finalizacao > .btn-limpar-grupo-pedras {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  flex-shrink: 0;
 }
