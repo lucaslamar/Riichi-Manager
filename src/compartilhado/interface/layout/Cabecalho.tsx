@@ -30,6 +30,15 @@ const APP_MENU: ItemMenuGlobal[] = [
   { tela: 'sobre', chave: 'menu.about', icone: 'fa-info-circle' },
 ]
 
+const NAVEGACAO_TABLET: ItemMenuGlobal[] = [
+  { tela: 'centerpiece', chave: 'menu.centerpiece', icone: 'fa-table' },
+  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'fa-chess-board' },
+  { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
+  { tela: 'configuracaoTorneio', chave: 'menu.fastTournament', icone: 'fa-trophy' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'fa-wind' },
+  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
+]
+
 const TODOS_ITENS = [...MODULOS_MENU, ...APP_MENU]
 const LIMIAR_GESTO_DRAWER = 64
 const BORDA_GESTO_DRAWER = 28
@@ -65,10 +74,6 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
   const botaoMenuRef = useRef<HTMLButtonElement | null>(null)
   const gestoDrawerRef = useRef<EstadoGestoDrawer | null>(null)
   const deslocamentoDrawerRef = useRef(0)
-  const itemAtual =
-    TODOS_ITENS.find((item) => item.tela === telaAtual) ??
-    (torneioAtivo ? MODULOS_MENU[2] : MODULOS_MENU[0])
-
   const navegar = (tela: TelaPrincipal) => {
     aoNavegar(tela)
     setMenuAberto(false)
@@ -179,144 +184,157 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
     }
   }, [menuAberto])
 
-  return (
-    <header className="cabecalho-principal">
-      <div className="conteudo-cabecalho">
-        <div className="barra-marca-aplicacao">
+  const barraInferior = createPortal(
+    <nav className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
+      {NAVEGACAO_TABLET.map((item) => {
+        const ativo = item.tela === telaAtual
+        return (
           <button
-            ref={botaoMenuRef}
-            className="botao-menu-global"
+            key={item.tela}
+            className={`item-tab-inferior ${ativo ? 'ativo' : ''}`}
             type="button"
-            aria-label={menuAberto ? t('global.closeMenu') : t('global.openMenu')}
-            aria-expanded={menuAberto}
-            aria-controls="drawer-global"
-            onClick={() => setMenuAberto((aberto) => !aberto)}
+            aria-current={ativo ? 'page' : undefined}
+            aria-label={t(item.chave)}
+            title={t(item.chave)}
+            onClick={() => aoNavegar(item.tela)}
           >
-            <i className={`fas ${menuAberto ? 'fa-xmark' : 'fa-bars'}`} aria-hidden="true" />
+            <i className={`fas ${item.icone}`} aria-hidden="true" />
+            <span>{t(item.chave)}</span>
           </button>
+        )
+      })}
+    </nav>,
+    document.body,
+  )
 
-          <div className="marca-aplicacao">
-            <div className="pedra-mahjong" aria-hidden="true">
-              中
-            </div>
-            <div className="container-titulo">
+  return (
+    <>
+      <header className="cabecalho-principal">
+        <div className="conteudo-cabecalho">
+          <div className="barra-marca-aplicacao">
+            <button
+              ref={botaoMenuRef}
+              className="botao-menu-global"
+              type="button"
+              aria-label={menuAberto ? t('global.closeMenu') : t('global.openMenu')}
+              aria-expanded={menuAberto}
+              aria-controls="drawer-global"
+              onClick={() => setMenuAberto((aberto) => !aberto)}
+            >
+              <i className={`fas ${menuAberto ? 'fa-xmark' : 'fa-bars'}`} aria-hidden="true" />
+            </button>
+
+            <div className="marca-aplicacao">
               <h1 className="titulo-principal">{t('global.appName')}</h1>
-              <span className="modulo-atual" aria-label={t('global.currentModule')}>
-                {t(itemAtual.chave)}
-              </span>
             </div>
+
+            <nav className="sidebar-navegacao-desktop" aria-label={t('global.navigation')}>
+              <MenuSecao
+                titulo={t('menu.app')}
+                itens={NAVEGACAO_TABLET}
+                telaAtual={telaAtual}
+                aoNavegar={aoNavegar}
+                t={t}
+              />
+            </nav>
           </div>
 
-          <nav className="sidebar-navegacao-desktop" aria-label={t('global.navigation')}>
-            <MenuSecao
-              titulo={t('menu.modules')}
-              itens={MODULOS_MENU}
-              telaAtual={telaAtual}
-              aoNavegar={aoNavegar}
-              t={t}
-            />
-            <MenuSecao
-              titulo={t('menu.app')}
-              itens={APP_MENU}
-              telaAtual={telaAtual}
-              aoNavegar={aoNavegar}
-              t={t}
-            />
-          </nav>
-        </div>
+          {menuAberto &&
+            createPortal(
+              <div
+                className="drawer-global-overlay"
+                role="presentation"
+                onPointerDown={(evento) => iniciarGestoDrawer('fechar', evento)}
+                onPointerMove={moverGestoDrawer}
+                onPointerCancel={finalizarGestoDrawer}
+                onPointerUp={finalizarGestoDrawer}
+                onMouseDown={(evento) => {
+                  if (evento.target === evento.currentTarget) setMenuAberto(false)
+                }}
+              >
+                <div
+                  ref={drawerRef}
+                  id="drawer-global"
+                  className="drawer-global"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="titulo-drawer-global"
+                  style={{
+                    transform: deslocamentoDrawer
+                      ? `translateX(${deslocamentoDrawer}px)`
+                      : undefined,
+                  }}
+                >
+                  <div className="drawer-cabecalho">
+                    <div>
+                      <strong id="titulo-drawer-global">{t('global.appName')}</strong>
+                      <span>{t('global.tagline')}</span>
+                    </div>
+                    <button
+                      className="botao-fechar-drawer"
+                      type="button"
+                      aria-label={t('global.closeMenu')}
+                      onClick={() => setMenuAberto(false)}
+                    >
+                      <i className="fas fa-xmark" aria-hidden="true" />
+                    </button>
+                  </div>
 
-        {menuAberto &&
-          createPortal(
+                  <nav className="drawer-navegacao" aria-label={t('global.navigation')}>
+                    <MenuSecao
+                      titulo={t('menu.modules')}
+                      itens={MODULOS_MENU}
+                      telaAtual={telaAtual}
+                      aoNavegar={navegar}
+                      t={t}
+                    />
+                    <MenuSecao
+                      titulo={t('menu.app')}
+                      itens={APP_MENU}
+                      telaAtual={telaAtual}
+                      aoNavegar={navegar}
+                      t={t}
+                    />
+                  </nav>
+
+                  <label className="seletor-idioma seletor-idioma-drawer">
+                    <span>
+                      <i className="fas fa-globe" aria-hidden="true" />
+                      {t('menu.language')}
+                    </span>
+                    <select
+                      value={idioma}
+                      aria-label={t('menu.language')}
+                      onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
+                    >
+                      {idiomas.map((opcaoIdioma) => (
+                        <option key={opcaoIdioma} value={opcaoIdioma}>
+                          {ROTULOS_IDIOMA[opcaoIdioma]}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <div className="drawer-rodape">v{packageJson.version}</div>
+                </div>
+              </div>,
+              document.body,
+            )}
+
+          {!menuAberto && (
             <div
-              className="drawer-global-overlay"
-              role="presentation"
-              onPointerDown={(evento) => iniciarGestoDrawer('fechar', evento)}
+              className="zona-gesto-drawer"
+              aria-hidden="true"
+              onPointerDown={(evento) => iniciarGestoDrawer('abrir', evento)}
               onPointerMove={moverGestoDrawer}
               onPointerCancel={finalizarGestoDrawer}
               onPointerUp={finalizarGestoDrawer}
-              onMouseDown={(evento) => {
-                if (evento.target === evento.currentTarget) setMenuAberto(false)
-              }}
-            >
-              <div
-                ref={drawerRef}
-                id="drawer-global"
-                className="drawer-global"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="titulo-drawer-global"
-                style={{
-                  transform: deslocamentoDrawer ? `translateX(${deslocamentoDrawer}px)` : undefined,
-                }}
-              >
-                <div className="drawer-cabecalho">
-                  <div>
-                    <strong id="titulo-drawer-global">{t('global.appName')}</strong>
-                    <span>{t('global.tagline')}</span>
-                  </div>
-                  <button
-                    className="botao-fechar-drawer"
-                    type="button"
-                    aria-label={t('global.closeMenu')}
-                    onClick={() => setMenuAberto(false)}
-                  >
-                    <i className="fas fa-xmark" aria-hidden="true" />
-                  </button>
-                </div>
-
-                <nav className="drawer-navegacao" aria-label={t('global.navigation')}>
-                  <MenuSecao
-                    titulo={t('menu.modules')}
-                    itens={MODULOS_MENU}
-                    telaAtual={telaAtual}
-                    aoNavegar={navegar}
-                    t={t}
-                  />
-                  <MenuSecao
-                    titulo={t('menu.app')}
-                    itens={APP_MENU}
-                    telaAtual={telaAtual}
-                    aoNavegar={navegar}
-                    t={t}
-                  />
-                </nav>
-
-                <label className="seletor-idioma seletor-idioma-drawer">
-                  <span>
-                    <i className="fas fa-globe" aria-hidden="true" />
-                    {t('menu.language')}
-                  </span>
-                  <select
-                    value={idioma}
-                    aria-label={t('menu.language')}
-                    onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
-                  >
-                    {idiomas.map((opcaoIdioma) => (
-                      <option key={opcaoIdioma} value={opcaoIdioma}>
-                        {ROTULOS_IDIOMA[opcaoIdioma]}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <div className="drawer-rodape">v{packageJson.version}</div>
-              </div>
-            </div>,
-            document.body,
+            />
           )}
-
-        {!menuAberto && (
-          <div
-            className="zona-gesto-drawer"
-            aria-hidden="true"
-            onPointerDown={(evento) => iniciarGestoDrawer('abrir', evento)}
-            onPointerMove={moverGestoDrawer}
-            onPointerCancel={finalizarGestoDrawer}
-            onPointerUp={finalizarGestoDrawer}
-          />
-        )}
-      </div>
-    </header>
+        </div>
+      </header>
+      {barraInferior}
+    </>
   )
 }
 

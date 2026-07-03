@@ -3660,3 +3660,518 @@
 .painel-contextual-finalizacao .grupo-indicador-dora > .chip-pedra {
   flex-shrink: 0;
 }
+
+/*
+ * Tablet layouts are intentionally scoped from 768px upward so the existing
+ * phone experience remains controlled by the earlier mobile rules.
+ */
+@media (min-width: 768px) and (max-width: 1023px) and (min-height: 600px) {
+  .conteudo-principal,
+  main {
+    max-width: none;
+    padding-inline: clamp(18px, 3vw, 32px);
+  }
+
+  .card-mao-completa.fluxo-calculadora {
+    width: min(100%, 960px);
+    max-width: none;
+    margin-inline: auto;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .cabecalho-calculadora {
+    margin-bottom: 2px;
+    padding-right: 0;
+  }
+
+  .calculadora-etapa,
+  .construtor-mao,
+  .construtor-mao-montagem {
+    gap: 10px;
+  }
+
+  .layout-montagem-calculadora,
+  .layout-montagem-calculadora.sem-esperas,
+  .layout-montagem-calculadora.com-esperas {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: grid;
+  }
+
+  .layout-montagem-calculadora.com-esperas .mao-editor-fixo {
+    order: 1;
+  }
+
+  .layout-montagem-calculadora.com-esperas .descartes-selecionados,
+  .layout-montagem-calculadora.com-esperas .indicadores-dora-selecionados {
+    order: 2;
+  }
+
+  .layout-montagem-calculadora.com-esperas .acoes-construtor-mao {
+    order: 3;
+  }
+
+  .layout-montagem-calculadora.com-esperas .painel-teclado-calculadora {
+    order: 4;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .resultado-esperas-compacto {
+    order: 5;
+  }
+
+  .mao-editor-fixo {
+    position: static;
+    margin-bottom: 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+
+  .pedras-selecionadas {
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow: visible;
+    padding-inline: 0;
+    scroll-padding-inline: 0;
+  }
+
+  .descartes-selecionados,
+  .indicadores-dora-selecionados {
+    padding-block: 6px;
+  }
+
+  .acoes-construtor-mao {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 0;
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+  }
+
+  .acoes-construtor-mao .btn-acao-mao {
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    padding: 5px 6px;
+    border-radius: 8px;
+    font-size: clamp(0.7rem, 1.45vw, 0.84rem);
+    line-height: 1.08;
+    white-space: normal;
+  }
+
+  /* Keyboard fixed at the bottom, docked above the persistent tablet tab bar */
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    position: fixed;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    left: 0;
+    right: 0;
+    z-index: 30;
+    padding: 0;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -4px 16px rgba(16, 42, 67, 0.08);
+  }
+
+  .painel-teclado-calculadora {
+    display: block;
+    width: 100%;
+  }
+
+  /* Show Chi/Pon/Kan bar inside the keyboard container */
+  .menu-acoes-teclado-mobile {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px;
+    padding: 6px 8px 4px;
+    scrollbar-width: none;
+  }
+
+  .menu-acoes-teclado-mobile::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile {
+    display: flex;
+    gap: 6px;
+  }
+
+  .menu-acoes-teclado-mobile .btn-acao-mao {
+    min-height: 34px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  /* Hide the duplicate actions bar outside the keyboard */
+  .acoes-construtor-mao {
+    display: none;
+  }
+
+  /* Push scrollable content above the fixed keyboard */
+  .card-mao-completa.fluxo-calculadora {
+    padding-bottom: 240px;
+  }
+
+  .teclado-pedras {
+    width: 100%;
+    max-width: none;
+    gap: 5px;
+    padding: 6px 8px 8px;
+    border-radius: 0;
+    background: #f8fafc;
+  }
+
+  /* Remove label column — tiles fill 100% width */
+  .grupo-teclado-naipe {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  .linha-naipe {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .teclado-pedras .btn-pedra {
+    aspect-ratio: 1 / 1.18;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 2px;
+    border-width: 1px;
+    border-radius: 7px;
+  }
+
+  .teclado-pedras .tile-img,
+  .teclado-pedras .tile-fallback {
+    width: 108%;
+    height: 108%;
+    margin: -4%;
+  }
+
+  .teclado-pedras .botao-configuracao-teclado {
+    top: auto;
+    right: 6px;
+    bottom: 6px;
+    width: 34px;
+    min-height: 34px;
+  }
+}
+
+/*
+ * iPad Mini and other small tablets in portrait: this is the hand-building
+ * step only (.etapa-montagem — the finalization step has no keyboard and
+ * keeps the generic tablet rules above). The previous attempt kept the
+ * keyboard in normal flow, which left it floating with dead space below it
+ * whenever the hand was short. A phone app doesn't do that: the keyboard is
+ * docked to the screen's bottom edge and the hand fills everything above it.
+ * This mirrors the `(max-width: 640px) and (orientation: portrait)` phone
+ * recipe elsewhere in this file — a fixed-height app shell (header + hand
+ * flex:1 + keyboard flex:0-auto) instead of page scroll — sized for the
+ * tablet's taller sticky header (67px) and persistent bottom tab bar (56px).
+ */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  html:has(.card-mao-completa.etapa-montagem),
+  body:has(.card-mao-completa.etapa-montagem) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) main.conteudo-principal {
+    height: calc(100dvh - 67px - 56px - env(safe-area-inset-bottom, 0px));
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) main.conteudo-principal > div {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    display: flex;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .etapa-montagem .calculadora-etapa-montagem,
+  .etapa-montagem .layout-montagem-calculadora,
+  .etapa-montagem .layout-montagem-calculadora.sem-esperas,
+  .etapa-montagem .layout-montagem-calculadora.com-esperas,
+  .etapa-montagem .construtor-mao-montagem {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .etapa-montagem .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: flex;
+  }
+
+  .etapa-montagem .cabecalho-calculadora {
+    flex: 0 0 auto;
+    margin: 8px 12px 0;
+  }
+
+  .etapa-montagem .trilha-etapas-calculadora {
+    flex: 0 0 auto;
+    margin-inline: 12px;
+  }
+
+  /* Hand fills every pixel above the keyboard instead of leaving it empty */
+  .construtor-mao-montagem .mao-editor-fixo {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-bottom: 0;
+    padding: 10px 14px 8px;
+    overflow-y: auto;
+  }
+
+  .construtor-mao-montagem .descartes-selecionados,
+  .construtor-mao-montagem .indicadores-dora-selecionados {
+    flex: 0 0 auto;
+    margin-inline: 12px;
+  }
+
+  .construtor-mao-montagem > .acoes-construtor-mao {
+    display: none;
+  }
+
+  /* Keyboard docked to the bottom edge, full width, no centering container */
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    position: static;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    border-top: 1px solid #e2e8f0;
+    border-radius: 0;
+    background: #f8fafc;
+    box-shadow: 0 -4px 16px rgba(16, 42, 67, 0.08);
+  }
+
+  .menu-acoes-teclado-mobile {
+    overflow: visible;
+    padding: 8px 10px 6px;
+  }
+
+  /* Single toolbar row: Chi | Pon | Kan | Kan fechado | Descartes | ⚙, wraps only if too narrow */
+  .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .menu-acoes-teclado-mobile .btn-acao-mao {
+    flex: 1 1 0;
+    min-width: 76px;
+    min-height: 48px;
+    padding-inline: 6px;
+    font-size: 0.82rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  /* Settings button integrated as the last item of the toolbar row */
+  .menu-acoes-teclado-mobile .botao-configuracao-toolbar {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 48px;
+    min-height: 48px;
+  }
+
+  /* The corner gear on the keyboard itself is replaced by the toolbar one above */
+  .teclado-pedras .botao-configuracao-teclado {
+    display: none;
+  }
+
+  .teclado-pedras {
+    flex: 0 0 auto;
+    gap: 6px;
+    padding: 6px 8px 10px;
+  }
+
+  /* Flex instead of the shared tablet grid — packs tiles tightly with no
+     leftover per-column space, which is what made the keyboard feel stretched */
+  .linha-naipe {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+    gap: 5px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 50px;
+    height: 62px;
+    aspect-ratio: auto;
+  }
+
+  .teclado-pedras .tile-img,
+  .teclado-pedras .tile-fallback {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) and (min-height: 600px) {
+  .card-mao-completa.fluxo-calculadora {
+    width: min(100%, 1040px);
+    padding-block: 14px;
+  }
+
+  .mao-editor-fixo {
+    padding-block: 10px;
+  }
+
+  .teclado-pedras {
+    gap: 4px;
+    padding: 7px;
+  }
+
+  .linha-naipe {
+    gap: 3px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    aspect-ratio: 1 / 1.04;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) {
+  .card-mao-completa.fluxo-calculadora {
+    width: min(100%, 1040px);
+    max-width: none;
+    margin-inline: auto;
+    padding: 18px 22px;
+    gap: 14px;
+  }
+
+  .layout-montagem-calculadora,
+  .layout-montagem-calculadora.sem-esperas,
+  .layout-montagem-calculadora.com-esperas {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: grid;
+  }
+
+  .construtor-mao-montagem {
+    gap: 12px;
+  }
+
+  .mao-editor-fixo {
+    margin-bottom: 0;
+    padding: 14px 16px;
+    border-radius: 10px;
+  }
+
+  .pedras-selecionadas {
+    flex-wrap: wrap;
+    overflow: visible;
+    padding-inline: 0;
+  }
+
+  .acoes-construtor-mao {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+  }
+
+  .acoes-construtor-mao .btn-acao-mao {
+    min-width: 0;
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: 0.82rem;
+    line-height: 1.1;
+    white-space: normal;
+  }
+
+  .painel-teclado-calculadora {
+    display: block;
+  }
+
+  .menu-acoes-teclado-mobile {
+    display: none;
+  }
+
+  .teclado-pedras {
+    gap: 6px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .grupo-teclado-naipe {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .linha-naipe {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .teclado-pedras .btn-pedra {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    padding: 2px;
+    border-width: 1px;
+    border-radius: 8px;
+  }
+
+  .teclado-pedras .tile-img,
+  .teclado-pedras .tile-fallback {
+    width: 108%;
+    height: 108%;
+    margin: -4%;
+  }
+}

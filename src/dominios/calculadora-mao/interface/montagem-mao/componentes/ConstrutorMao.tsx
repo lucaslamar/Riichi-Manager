@@ -275,6 +275,17 @@ export default function ConstrutorMao({
                   aoAlternarAcao={alternarAcaoMao}
                   compacto
                 />
+                {aoAbrirRegras && !mostrarFinalizacaoNoTeclado && (
+                  <button
+                    className="botao-configuracao-toolbar"
+                    type="button"
+                    aria-label={t('rulesModal.open')}
+                    title={t('rulesModal.open')}
+                    onClick={aoAbrirRegras}
+                  >
+                    <i className="fas fa-gear" aria-hidden="true" />
+                  </button>
+                )}
               </div>
             </div>
           )}
