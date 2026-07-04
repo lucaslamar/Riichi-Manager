@@ -221,6 +221,17 @@ export function TecladoPedras({
         <div className="seletor-chii-pendente" role="group" aria-label={t('calculator.chooseChiiSequence')}>
           <span>{t('calculator.chooseChiiSequence')}</span>
           <div>{escolhaChiiPendente.opcoes.map(renderizarOpcaoChii)}</div>
+          {aoAbrirRegras && !maoProntaParaFinalizar && (
+            <button
+              className="botao-configuracao-chii"
+              type="button"
+              aria-label={t('rulesModal.open')}
+              title={t('rulesModal.open')}
+              onClick={aoAbrirRegras}
+            >
+              <i className="fas fa-gear" aria-hidden="true" />
+            </button>
+          )}
         </div>
       )}
       {NAIPES.map(({ naipe }) => {

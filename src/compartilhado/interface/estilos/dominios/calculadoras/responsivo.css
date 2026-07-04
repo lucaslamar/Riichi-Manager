@@ -4175,3 +4175,181 @@
     margin: -4%;
   }
 }
+
+/*
+ * Same tier as the block above, restricted to landscape (that one has no
+ * orientation guard and also happens to match an odd portrait case — a
+ * 1024x1366 tablet in portrait — so it's left untouched to avoid changing
+ * portrait behavior; this block only adds to it for landscape).
+ *
+ * Two things landscape needs that portrait doesn't: the card should fill
+ * its area edge-to-edge instead of floating like a card on a background,
+ * and the MAN/PIN/SOU/HONRAS label column should give its width back to
+ * the tiles instead of sitting next to them.
+ */
+@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
+  .card-mao-completa.fluxo-calculadora {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 20px 24px;
+  }
+
+  /* Propagate the card's full height down to the keyboard so it can reach
+     the bottom edge instead of stopping short and leaving empty card space. */
+  .calculadora-etapa-montagem,
+  .layout-montagem-calculadora,
+  .layout-montagem-calculadora.sem-esperas,
+  .layout-montagem-calculadora.com-esperas,
+  .construtor-mao-montagem {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: flex;
+  }
+
+  .construtor-mao-montagem {
+    gap: 10px;
+    /* Safety net: if the hand ever grows too tall to shrink any further
+       (see .mao-editor-fixo) and the total still doesn't fit — e.g. a very
+       full hand plus the Chi picker at the 700px height floor — scroll the
+       whole column instead of letting the keyboard's fixed-size rows push
+       past the card's bottom edge. */
+    overflow-y: auto;
+  }
+
+  /* Hand area: this is the one region whose content genuinely varies in
+     height (0 to many tiles), so it's the one that absorbs whatever space
+     the keyboard below doesn't need — that keeps the keyboard's own row
+     spacing constant instead of stretching to fill leftover height. Tiles
+     are noticeably bigger below so the freed room reads as "more legible
+     hand", not just blank padding. The meld preview tiles ("Chi X" / "Pon
+     X") scale with it, keeping their own aspect ratio. Scoped to the
+     montagem step only, since .chip-pedra/.meld-tile are shared with the
+     finalization screen too.
+  */
+  .mao-editor-fixo {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 20px 22px;
+  }
+
+  .construtor-mao-montagem .chip-pedra:not(.mini) {
+    width: 56px;
+    height: 76px;
+  }
+
+  .construtor-mao-montagem .chip-meld-mao .meld-tile {
+    width: 50px;
+    height: 66px;
+  }
+
+  .construtor-mao-montagem .chip-meld-mao .meld-tile.de-lado {
+    width: 66px;
+    height: 50px;
+  }
+
+  .descartes-selecionados {
+    flex: 0 0 auto;
+  }
+
+  .acoes-construtor-mao {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+  }
+
+  /* The keyboard is sized to its own content (not stretched to fill
+     leftover height — see .mao-editor-fixo above), so its row spacing is
+     always the same tight gap whether or not the Chi picker is showing
+     above it; only the picker's own presence changes, never the grid below
+     it. Because .mao-editor-fixo is the flex item that grows, this box
+     still ends up flush with the card's bottom edge — the hand area above
+     it takes up exactly whatever height this one and the actions row don't
+     need. */
+  .painel-teclado-calculadora {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+  }
+
+  .teclado-pedras {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .seletor-chii-pendente {
+    padding: 10px 12px;
+  }
+
+  .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  .grupo-teclado-naipe {
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .linha-naipe {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  /*
+   * Honors only have 7 tiles, but reusing the 10-column template (instead of
+   * a 7-column one) keeps each column — and therefore each tile — the same
+   * width as MAN/PIN/SOU. A 7-column template would give honors 10/7 more
+   * width per tile, which is exactly what made that row look oversized.
+   * The row simply ends after 7 columns instead of stretching to fill it.
+   */
+  .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+
+  /* Settings gear no longer floats above the keyboard at all: it moves up
+     to the header row, grouped with the trash/clear icon next to "MÃO
+     X/14" (the button already exists for this, just hidden elsewhere).
+     When the Chi picker is open it also gets its own gear anchored to the
+     picker's bottom-right corner, so the corner one in the keyboard itself
+     is never shown in this breakpoint. */
+  .teclado-pedras > .botao-configuracao-teclado {
+    display: none;
+  }
+
+  .btn-configuracao-mao-cabecalho {
+    display: inline-flex;
+  }
+
+  .btn-configuracao-mao-cabecalho,
+  .btn-limpar-mao-cabecalho {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    font-size: 0.86rem;
+  }
+
+  .seletor-chii-pendente {
+    position: relative;
+  }
+
+  .botao-configuracao-chii {
+    display: inline-flex;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 32px;
+    min-height: 32px;
+  }
+}

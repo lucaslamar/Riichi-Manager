@@ -87,6 +87,30 @@
   outline-offset: 2px;
 }
 
+/* Settings button anchored to the Chi picker itself: hidden by default,
+   shown only in tablet-landscape, where it replaces the corner gear so it
+   doesn't sit over the picker's top edge (see responsivo.css). */
+.botao-configuracao-chii {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d7e3f0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #155b98;
+  cursor: pointer;
+}
+
+.botao-configuracao-chii:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.botao-configuracao-chii:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.45);
+  outline-offset: 2px;
+}
+
 .botao-configuracao-teclado:focus-visible,
 .botao-finalizar-mao-teclado:focus-visible {
   outline: 3px solid rgba(37, 99, 235, 0.45);

@@ -691,6 +691,22 @@
 }
 
 /*
+ * Tablet horizontal (iPad Mini 1024x768 e similares, ate 1366px de largura):
+ * a sidebar continua exatamente como no desktop (nao mexemos nela aqui). O
+ * cartao da calculadora (ver calculadoras/responsivo.css) passa a preencher
+ * essa area por completo, entao `main` nao pode mais ter padding proprio —
+ * qualquer valor ali reaparece como uma faixa de fundo visivel ao redor do
+ * cartao, exatamente o "encaixotado" que estamos removendo.
+ */
+@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
+  .conteudo-principal,
+  main {
+    padding: 0;
+    min-height: 100dvh;
+  }
+}
+
+/*
  * Telefone horizontal muito baixo (ate 500px).
  * Antes carregado de forma lazy; permanece no fim para conservar a precedencia.
  */
