@@ -1,5 +1,31 @@
 # Changelog - Riichi Manager
 
+## 4.4.1 - 2026-07-04
+
+## Ajustado
+
+- Reformulado o layout da Calculadora de Mão em modo retrato (portrait) para tablets (iPad Mini e similares), aproximando a experiência de um app nativo: navegação por barra inferior, cartão ocupando a tela inteira e teclado de pedras compacto e legível.
+- Reformulado o layout da Calculadora de Mão em modo paisagem (landscape) para tablets: o conteúdo principal agora ocupa a tela por completo, sem a moldura de fundo que aparecia ao redor do cartão.
+- Removidos os rótulos de texto "MAN", "PIN", "SOU" e "HONRAS" do teclado de pedras em paisagem, usando o espaço liberado para aumentar o tamanho das pedras.
+- Padronizado o tamanho das pedras de honra (Ventos e Dragões) para ficarem do mesmo tamanho das demais pedras do teclado (antes ficavam visivelmente maiores).
+- Aumentado o tamanho das pedras da mão em construção e das prévias de sequência/trinca (Chi, Pon) em paisagem, para ficarem legíveis no tablet.
+- Ajustada a distribuição vertical da tela em paisagem: os botões de ação (Chi, Pon, Kan aberto, Kan fechado, Descartes/Furiten) ficam colados ao teclado, e o teclado se estende até o rodapé da tela, sem espaços vazios.
+- Aumentado o tamanho e o espaçamento interno do painel "Escolha o Chi" em tablets, incluindo as pedras de prévia de cada opção.
+- Reposicionado o ícone de engrenagem (regras de cálculo): agora aparece ao lado do ícone de lixeira, no cabeçalho da mão, em vez de flutuar sozinho sobre o teclado.
+
+## Corrigido
+
+- Corrigida sobreposição do painel "Escolha o Chi" sobre os botões de ação e o teclado de pedras em paisagem.
+- Corrigido espaço vazio que sobrava no topo da tela em paisagem quando o painel "Escolha o Chi" não estava em exibição.
+- Corrigida inconsistência no espaçamento entre as fileiras do teclado (MAN/PIN/SOU/HONRAS), que variava conforme o painel "Escolha o Chi" estivesse visível ou não.
+- Removida a linha divisória entre as fileiras de naipes no teclado em paisagem, mantendo apenas o espaçamento como separação visual.
+
+## Técnico
+
+- Todos os ajustes de paisagem foram feitos em uma faixa de tela dedicada (tablets e notebooks pequenos em modo horizontal), sem alterar breakpoints, componentes ou estilos usados no modo retrato.
+- Testado o modo retrato após cada alteração para garantir que permanece pixel a pixel igual ao comportamento anterior.
+- Nenhuma alteração nas regras de cálculo, ordem das pedras, traduções ou lógica de Mahjong.
+
 ## 4.4.0 - 2026-06-14
 
 ## Ajustado
