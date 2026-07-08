@@ -56,6 +56,22 @@
   /* grade-rodadas já é mobile-first 1fr — não sobrescrever aqui */
 }
 
+/*
+ * Gap entre o breakpoint mobile (ate 768px) e o desktop com sidebar
+ * (a partir de 1024px): tablets como o iPad Air em retrato (820px) caiam no
+ * reset.css padrao (padding lateral de 20px + fundo --fundo), reaparecendo
+ * como uma moldura/gutter ao redor do card branco. Aqui repetimos apenas o
+ * padding/fundo do body ja usado no bloco mobile acima, sem tocar nas demais
+ * regras daquele bloco (.card, .caixa-mesa etc. ja tem seus proprios
+ * breakpoints de tablet em outros arquivos).
+ */
+@media (min-width: 769px) and (max-width: 1023px) {
+  body {
+    padding: 0 0 24px;
+    background: #ffffff;
+  }
+}
+
 @media (max-width: 420px) {
   .acoes {
     display: grid;
