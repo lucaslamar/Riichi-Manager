@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import type { CodigoPedra } from '../../../logica/mao'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
-import { ESTILO_MELD, codigoBase } from '../../constantes'
+import { ESTILO_MELD, HONRAS, NAIPES, codigoBase } from '../../constantes'
 import ExibicaoCompleta from './ExibicaoCompleta'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 
@@ -211,6 +212,37 @@ export default function ResultadoMaoCalculada({
               .filter(Boolean)
               .join(', '),
           })
+  /**
+   * Rodape de referencia de pedras (MAN/PIN/SOU/HONRAS), so exibido na faixa
+   * horizontal do iPad Air/Pro. Fica escondido (display:none) em todos os
+   * outros breakpoints via CSS, entao nao altera o retrato nem o iPad Mini.
+   */
+  const rodapeReferenciaPedras = (
+    <div className="modal-resultado-rodape-pedras" aria-hidden="true">
+      {NAIPES.map(({ naipe, rotulo }) => (
+        <div key={naipe} className="rodape-pedras-linha">
+          <span className="rodape-pedras-rotulo">{rotulo.replace(/\s*\(.*\)\s*/, '')}</span>
+          <div className="rodape-pedras-tiles">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((numero) => (
+              <span key={numero} className="rodape-pedra-ref">
+                <PedraSvg pedra={`${numero}${naipe}` as CodigoPedra} />
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div className="rodape-pedras-linha">
+        <span className="rodape-pedras-rotulo">Honras</span>
+        <div className="rodape-pedras-tiles">
+          {HONRAS.map((pedra) => (
+            <span key={pedra} className="rodape-pedra-ref">
+              <PedraSvg pedra={pedra} />
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
   const resumoEsperasAcessivel = calculandoEsperas
     ? t('calculator.waitsCalculating')
     : esperasPossiveis.length > 0
@@ -315,6 +347,7 @@ export default function ResultadoMaoCalculada({
                 )}
               </>
             )}
+            {rodapeReferenciaPedras}
           </div>
         </div>
       )}

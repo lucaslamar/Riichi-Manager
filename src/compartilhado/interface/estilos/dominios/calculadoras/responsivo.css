@@ -3129,6 +3129,163 @@
 }
 
 /*
+ * Modal de resultado em tablets grandes na horizontal (iPad Air/Pro: larguras
+ * 1180-1366, alturas 820-1024). Sem esta regra o modal so recebia o tamanho
+ * base (max-width 720px) com cores pensadas para o fundo escuro do resultado
+ * embutido, entao ficava com texto branco sobre o fundo branco do modal e a
+ * lista de fu se espalhava em varias colunas.
+ * min-width:1100px exclui de proposito o iPad Mini na horizontal (1024x768),
+ * que compartilha a faixa 1024-1366px usada por outras regras deste arquivo
+ * (linha 4076+) mas deve continuar sem alteracoes aqui.
+ */
+@media (orientation: landscape) and (min-width: 1100px) and (max-width: 1366px) and (min-height: 700px) {
+  .modal-resultado-mobile {
+    width: min(90vw, 520px);
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    /* Rodape gruda na base sem folga: zera o padding inferior do modal para
+       o rodape sticky encostar na borda e o conteudo rolar por baixo dele. */
+    padding-bottom: 0;
+    text-align: center;
+  }
+
+  /* Referencia de pedras: barra fixa colada na base do modal (como um
+     "teclado"). O modal e o container de rolagem; sendo o ultimo filho com
+     position:sticky/bottom:0, ela permanece ancorada enquanto o conteudo
+     acima rola. Margem lateral negativa sangra ate as bordas do modal. */
+  .modal-resultado-rodape-pedras {
+    display: block;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    margin: 10px -20px 0;
+    padding: 6px 12px calc(6px + env(safe-area-inset-bottom));
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0 0 10px 10px;
+    background: #ffffff;
+    text-align: left;
+  }
+
+  .modal-chombo-furiten .modal-resultado-rodape-pedras {
+    background: #fff7f7;
+    border-top-color: #fecaca;
+  }
+
+  .rodape-pedras-linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rodape-pedras-linha + .rodape-pedras-linha {
+    margin-top: 2px;
+  }
+
+  .rodape-pedras-rotulo {
+    flex: 0 0 42px;
+    color: #607080;
+    font-size: 0.54rem;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .rodape-pedras-tiles {
+    display: flex;
+    flex: 1 1 auto;
+    gap: 2px;
+  }
+
+  .rodape-pedra-ref {
+    display: inline-flex;
+    width: 100%;
+    max-width: 19px;
+  }
+
+  .rodape-pedra-ref .tile-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  .modal-resultado-mobile .mao-calculada {
+    justify-content: center;
+  }
+
+  .modal-resultado-mobile .nome-mao {
+    color: var(--primario);
+    font-style: normal;
+  }
+
+  .modal-resultado-mobile .resumo-yakuman,
+  .modal-resultado-mobile .resumo-han-fu,
+  .modal-resultado-mobile .detalhe-pontos {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .divisor-resultado {
+    border-top-color: #e5e7eb;
+  }
+
+  .modal-resultado-mobile .rotulo-lista-resultado {
+    color: var(--primario);
+    text-align: left;
+  }
+
+  .modal-resultado-mobile .lista-yaku,
+  .modal-resultado-mobile .lista-fu {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .modal-resultado-mobile .chip-yaku {
+    background: #eef6ff;
+    color: #102a43;
+  }
+
+  .modal-resultado-mobile .chip-yaku strong {
+    color: var(--primario);
+  }
+
+  .modal-resultado-mobile .chip-fu {
+    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    color: #102a43;
+  }
+
+  .modal-resultado-mobile .chip-fu strong {
+    color: #4fc3f7;
+  }
+
+  .modal-resultado-mobile .chip-fu small {
+    color: #607080;
+  }
+
+  .modal-resultado-mobile .detalhes-contexto-resultado span {
+    background: #eef6ff;
+    color: #1d4ed8;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f8fafc;
+  }
+
+  .modal-resultado-mobile .linha-indicadores-resultado {
+    padding: 0;
+    background: transparent;
+  }
+
+  .modal-resultado-mobile .indicadores-resultado strong {
+    color: #607080;
+  }
+}
+
+/*
  * Overflow de pedras em qualquer viewport.
  * Este contrato fica depois dos layouts responsivos para manter tiles naturais
  * e permitir rolagem somente quando o espaco disponivel acabar.
@@ -4351,5 +4508,261 @@
     bottom: 8px;
     width: 32px;
     min-height: 32px;
+  }
+}
+
+/*
+ * Large tablets in portrait (iPad Pro 12.9" 1024x1366 and wider): the
+ * hand-building step only (.etapa-montagem). Without this block these
+ * viewports fall into the generic large-tablet block above (min-width:1024px,
+ * no orientation guard), which lays the keyboard out as a floating rounded
+ * card in a grid — leaving the page half empty with the keyboard stranded in
+ * the middle and oversized 85px tiles. That reads as "a desktop page squeezed
+ * onto a tablet", not a native app.
+ *
+ * This mirrors the iPad Air portrait recipe (the reference UX, in the
+ * `(min-width:768px) and (max-width:1023px) and (orientation:portrait)` block
+ * earlier in this file): a fixed-height app shell (67px sticky header + hand
+ * area flex:1 + keyboard docked flush to the 56px bottom tab bar), full-width
+ * keyboard with no card chrome, a single action toolbar (Chi | Pon | Kan | Kan
+ * fechado | Descartes | gear), and compact tiles kept at their small size —
+ * the extra width becomes even spacing (rows centered), never bigger tiles or
+ * dead space. It sits after the generic block above so it wins the cascade for
+ * portrait; landscape keeps its own block and is untouched.
+ */
+@media (min-width: 1024px) and (orientation: portrait) {
+  html:has(.card-mao-completa.etapa-montagem),
+  body:has(.card-mao-completa.etapa-montagem) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) main.conteudo-principal {
+    /* 76px reserves the enlarged iPad Pro bottom tab bar (its actual rendered
+       height; see the override in layout/cabecalho.css) so the docked keyboard
+       sits flush above it rather than behind it. */
+    height: calc(100dvh - 67px - 76px - env(safe-area-inset-bottom, 0px));
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) main.conteudo-principal > div {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* The card fills the shell edge-to-edge instead of floating on a background */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    display: flex;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+  }
+
+  .etapa-montagem .calculadora-etapa-montagem,
+  .etapa-montagem .layout-montagem-calculadora,
+  .etapa-montagem .layout-montagem-calculadora.sem-esperas,
+  .etapa-montagem .layout-montagem-calculadora.com-esperas,
+  .etapa-montagem .construtor-mao-montagem {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .etapa-montagem .layout-montagem-calculadora.com-esperas > .construtor-mao-montagem {
+    display: flex;
+  }
+
+  .etapa-montagem .cabecalho-calculadora {
+    flex: 0 0 auto;
+    margin: 10px 16px 0;
+  }
+
+  .etapa-montagem .trilha-etapas-calculadora {
+    flex: 0 0 auto;
+    margin-inline: 16px;
+  }
+
+  /* Hand fills every pixel above the keyboard instead of leaving it empty */
+  .construtor-mao-montagem .mao-editor-fixo {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-bottom: 0;
+    padding: 14px 20px 10px;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+
+  .construtor-mao-montagem .descartes-selecionados,
+  .construtor-mao-montagem .indicadores-dora-selecionados {
+    flex: 0 0 auto;
+    margin-inline: 16px;
+  }
+
+  /* The standalone actions grid is replaced by the docked toolbar below */
+  .construtor-mao-montagem > .acoes-construtor-mao {
+    display: none;
+  }
+
+  /* Keyboard docked to the bottom edge, full width, no centering card */
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    position: static;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    border-radius: 0;
+    background: #f8fafc;
+    box-shadow: 0 -4px 16px rgba(16, 42, 67, 0.08);
+  }
+
+  .painel-teclado-calculadora .menu-acoes-teclado-mobile {
+    display: block;
+    overflow: visible;
+    padding: 10px 16px 6px;
+  }
+
+  /* Single toolbar row: Chi | Pon | Kan | Kan fechado | Descartes | gear */
+  .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .menu-acoes-teclado-mobile .btn-acao-mao {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 60px;
+    padding-inline: 12px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  /* Gear integrated as the last item of the toolbar row, on the far right */
+  .menu-acoes-teclado-mobile .botao-configuracao-toolbar {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 60px;
+    min-height: 60px;
+    font-size: 1.15rem;
+  }
+
+  /* The corner gear on the keyboard is replaced by the toolbar one above */
+  .teclado-pedras .botao-configuracao-teclado {
+    display: none;
+  }
+
+  .teclado-pedras {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px 16px 14px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .grupo-teclado-naipe {
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  /* Flex tiles like the iPad Air keyboard, enlarged to actually use the Pro's
+     extra width instead of leaving it as dead space: the 10-tile MAN/PIN/SOU
+     rows now span most of the keyboard, with even gaps and only a small
+     symmetric margin. Each tile is well past the 48x48 minimum touch target. */
+  .linha-naipe {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .teclado-pedras .btn-pedra {
+    width: 80px;
+    height: 98px;
+    min-width: 0;
+    aspect-ratio: auto;
+    padding: 2px;
+    border-radius: 10px;
+  }
+
+  .teclado-pedras .tile-img,
+  .teclado-pedras .tile-fallback {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  /* The hand is the primary content on this screen, so its tiles are the
+     largest controls here: sized as big finger targets that use the tall Pro
+     portrait canvas. The tile image is object-fit:contain, so this box only
+     scales it up (never stretches it). The container flex-wraps, so a full
+     14-tile hand simply flows onto a second row; the hand area (flex:1,
+     overflow-y:auto) absorbs the extra height and scrolls if a meld-heavy
+     hand ever grows past it, never clipping. */
+  .construtor-mao-montagem .mao-editor-fixo .pedras-selecionadas {
+    gap: 8px;
+    padding-block: 4px 14px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo .chip-pedra:not(.mini) {
+    width: 76px;
+    height: 100px;
+    border-radius: 8px;
+  }
+
+  /* Melds already in the hand and the Chi/Pon/Kan previews, scaled to match */
+  .construtor-mao-montagem .chip-meld-mao .meld-tile,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img {
+    width: 76px;
+    height: 100px;
+  }
+
+  .construtor-mao-montagem .chip-meld-mao .meld-tile.de-lado,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: 100px;
+    height: 76px;
+  }
+
+  /* Chi sequence previews (the pending-chii selector above the keyboard) get
+     the same enlargement so they are easy to inspect before choosing. */
+  .seletor-chii-pendente .opcao-chii-pendente .chip-pedra.mini {
+    width: 76px;
+    height: 100px;
+  }
+
+  /* Fonts nudged up just enough to match the larger controls */
+  .etapa-montagem .cabecalho-etapa-calculadora h3,
+  .construtor-mao-montagem .titulo-mao-editor {
+    font-size: 1.05rem;
   }
 }

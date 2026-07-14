@@ -108,6 +108,24 @@
   box-shadow: 0 24px 60px rgba(16, 42, 67, 0.28);
 }
 
+/*
+ * iPad Pro 12.9" portrait: the 760px cap above was tuned for shorter screens,
+ * but here the viewport is ~1366px tall, so a full result (rich hands with a
+ * dora-indicator block plus the Yaku and Fu breakdowns run ~800px) got capped
+ * at 760px and had to scroll — hiding the score breakdown below the fold. This
+ * viewport has the room, so lift the cap to 92dvh and trim the padding: the
+ * whole result — hand value, yaku and fu — is visible without scrolling, while
+ * max-height still keeps short hands compact and guarantees the modal never
+ * exceeds the viewport. Scoped to >=1024px portrait, so iPad Air / Mini
+ * (768–1023) and desktop (landscape) keep the 760px cap untouched.
+ */
+@media (min-width: 1024px) and (orientation: portrait) {
+  .modal-resultado-mobile {
+    max-height: 92dvh;
+    padding: 16px;
+  }
+}
+
 .modal-resultado-mobile.modal-chombo-furiten {
   border-color: #fecaca;
   background: #fff7f7;
@@ -151,6 +169,16 @@
 
 .modal-resultado-mobile .mao-calculada {
   border-bottom-color: #e5e7eb;
+}
+
+/*
+ * Rodape de referencia de pedras: existe no DOM do modal em todos os
+ * breakpoints, mas so e revelado na faixa horizontal do iPad Air/Pro
+ * (ver responsivo.css). Escondido por padrao aqui para nao alterar retrato,
+ * iPad Mini nem qualquer outro breakpoint.
+ */
+.modal-resultado-rodape-pedras {
+  display: none;
 }
 
 .modal-resultado-mobile .resultado-chombo-modal {

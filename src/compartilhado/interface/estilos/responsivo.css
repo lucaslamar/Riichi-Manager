@@ -58,14 +58,20 @@
 
 /*
  * Gap entre o breakpoint mobile (ate 768px) e o desktop com sidebar
- * (a partir de 1024px): tablets como o iPad Air em retrato (820px) caiam no
- * reset.css padrao (padding lateral de 20px + fundo --fundo), reaparecendo
- * como uma moldura/gutter ao redor do card branco. Aqui repetimos apenas o
- * padding/fundo do body ja usado no bloco mobile acima, sem tocar nas demais
- * regras daquele bloco (.card, .caixa-mesa etc. ja tem seus proprios
- * breakpoints de tablet em outros arquivos).
+ * (a partir de 1024px em paisagem): tablets como o iPad Air em retrato
+ * (820px) caiam no reset.css padrao (padding lateral de 20px + fundo
+ * --fundo), reaparecendo como uma moldura/gutter ao redor do card branco.
+ * Aqui repetimos apenas o padding/fundo do body ja usado no bloco mobile
+ * acima, sem tocar nas demais regras daquele bloco (.card, .caixa-mesa etc.
+ * ja tem seus proprios breakpoints de tablet em outros arquivos).
+ *
+ * A segunda condicao cobre tablets grandes em retrato (iPad Pro 12.9",
+ * 1024x1366): como a sidebar de desktop (reset.css) agora exige paisagem,
+ * esses tablets tambem caem nesse mesmo gap quando estao em pe, e precisam
+ * do mesmo reset de padding/fundo do body.
  */
-@media (min-width: 769px) and (max-width: 1023px) {
+@media (min-width: 769px) and (max-width: 1023px),
+  (min-width: 1024px) and (orientation: portrait) {
   body {
     padding: 0 0 24px;
     background: #ffffff;

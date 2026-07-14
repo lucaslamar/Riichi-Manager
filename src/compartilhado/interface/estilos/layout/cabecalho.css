@@ -400,7 +400,15 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+/*
+ * Faixa "tablet" da navegacao: barra superior + navegacao inferior, sem
+ * sidebar. Cobre tanto tablets pequenos (768-1023, qualquer orientacao)
+ * quanto tablets grandes em retrato (iPad Pro 12.9" e maiores, 1024px+),
+ * que caso contrario cairiam na regra de sidebar de desktop abaixo so por
+ * terem largura >=1024px mesmo sem espaco horizontal de paisagem.
+ */
+@media (min-width: 768px) and (max-width: 1023px),
+  (min-width: 1024px) and (orientation: portrait) {
   .cabecalho-principal {
     padding: 8px 0;
   }
@@ -421,7 +429,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (orientation: landscape) {
   .cabecalho-principal {
     position: fixed;
     inset: 0 auto 0 0;
@@ -501,7 +509,8 @@
   display: none;
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1023px),
+  (min-width: 1024px) and (orientation: portrait) {
   .barra-navegacao-inferior {
     display: flex;
     flex-direction: row;
@@ -559,6 +568,46 @@
 
   body {
     padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/*
+ * iPad Pro 12.9" portrait only: the persistent tab bar is the primary
+ * navigation on this large canvas, so its controls are enlarged — a taller
+ * bar with bigger icons and labels and a clearer active state. Scoped to
+ * >=1024px portrait so iPad Air / Mini (768–1023, the shared block above)
+ * keep the compact bar untouched. The taller bar's reserved space is matched
+ * by the body padding-bottom override here and by the montagem shell height
+ * (`100dvh - 67px - 76px`) in dominios/calculadoras/responsivo.css, so the
+ * docked keyboard still sits flush above the bar instead of behind it. 76px is
+ * the bar's actual rendered height (min-height 72 grows to ~75 once the 28px
+ * icon, gap and label are added), not the 72px min-height.
+ */
+@media (min-width: 1024px) and (orientation: portrait) {
+  .item-tab-inferior {
+    min-height: 72px;
+    gap: 6px;
+    padding: 12px 10px;
+    font-size: 0.85rem;
+  }
+
+  .item-tab-inferior i {
+    font-size: 1.75rem;
+  }
+
+  .item-tab-inferior span {
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+
+  .item-tab-inferior.ativo {
+    color: #155b98;
+    background: rgba(21, 91, 152, 0.08);
+    border-radius: 10px;
+  }
+
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 

@@ -3,6 +3,7 @@
 ## Não Lançado
 
 - Ajusta tela de construção de mão para Ipad air vertical e horizontal;
+- Ajusta tela de construção de mão para Ipad pro air vertical e horizontal;
 
 ## 4.4.1 - 2026-07-04
 

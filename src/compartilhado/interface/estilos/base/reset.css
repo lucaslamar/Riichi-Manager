@@ -52,7 +52,12 @@ main {
   box-sizing: border-box;
 }
 
-@media (min-width: 1024px) {
+/*
+ * Sidebar de desktop: exige paisagem para nao capturar tablets grandes em
+ * retrato (ex.: iPad Pro 12.9", 1024x1366), que devem continuar com a
+ * navegacao de tablet (topo + barra inferior) igual ao iPad Mini/Air em pe.
+ */
+@media (min-width: 1024px) and (orientation: landscape) {
   body {
     padding: 0;
   }
