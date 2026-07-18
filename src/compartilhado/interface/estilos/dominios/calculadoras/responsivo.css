@@ -4766,3 +4766,28 @@
     font-size: 1.05rem;
   }
 }
+
+/*
+ * Portrait phones (>=375px; the iPhone SE at ~320px is excluded and keeps the
+ * hamburger drawer with the keyboard flush to the screen edge): the persistent
+ * 56px bottom tab bar is now the primary navigation, mirroring the small-tablet
+ * portrait recipe above. On the hand-building step the fixed app shell must be
+ * shortened by the bar so the bottom-docked keyboard (margin-top:auto) lands
+ * flush above the bar instead of behind it — same idea as the tablet blocks,
+ * only with the phone's 46px header. Both min-height (set for every screen in
+ * the <=640px portrait block) and height are overridden so the shell can
+ * actually shrink. This block sits last so it wins the cascade for this range.
+ */
+@media (min-width: 375px) and (max-width: 640px) and (orientation: portrait) {
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-montagem) main {
+    min-height: calc(100dvh - 46px - 56px - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - 46px - 56px - env(safe-area-inset-bottom, 0px));
+  }
+
+  /* The keyboard no longer touches the screen edge (the tab bar does), so its
+     safe-area bottom padding would only leave a dead gap above the bar. */
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    padding-bottom: 5px;
+  }
+}

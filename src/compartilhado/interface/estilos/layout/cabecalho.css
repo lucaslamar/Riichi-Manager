@@ -509,8 +509,17 @@
   display: none;
 }
 
+/*
+ * The persistent bottom tab bar covers the small-tablet band and, since a
+ * native-style tab bar beats a hidden drawer on a phone too, portrait phones
+ * from 375px up. The iPhone SE (~320px) is excluded on purpose: its short
+ * canvas can't spare a permanent bar, so it keeps the hamburger drawer. The
+ * hamburger is hidden and the body reserves the bar height in the same band
+ * (see the `.botao-menu-global` hide rule just below).
+ */
 @media (min-width: 768px) and (max-width: 1023px),
-  (min-width: 1024px) and (orientation: portrait) {
+  (min-width: 1024px) and (orientation: portrait),
+  (min-width: 375px) and (max-width: 767px) and (orientation: portrait) {
   .barra-navegacao-inferior {
     display: flex;
     flex-direction: row;
@@ -568,6 +577,20 @@
 
   body {
     padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/*
+ * Portrait phones (>=375px) use the bottom tab bar as their primary
+ * navigation, so the hamburger button and its edge-swipe zone are removed and
+ * the top bar collapses to just the logo/title. The iPhone SE (~320px) is
+ * below this band and keeps the drawer. Header spacing is intentionally left
+ * to the existing phone rules — only the hamburger is dropped.
+ */
+@media (min-width: 375px) and (max-width: 767px) and (orientation: portrait) {
+  .botao-menu-global,
+  .zona-gesto-drawer {
+    display: none;
   }
 }
 

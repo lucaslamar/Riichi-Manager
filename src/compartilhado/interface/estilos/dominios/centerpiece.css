@@ -175,6 +175,25 @@ body:has(.centerpiece-mesa) {
   }
 }
 
+/*
+ * Portrait phones (>=375px) show the persistent 56px bottom tab bar, so the
+ * table shell is shortened by both the 46px header and the bar. Without this
+ * the centered compass keeps its full 100dvh-46px height and the bar overlaps
+ * the bottom (South) player card. The iPhone SE (~320px) is excluded and keeps
+ * the hamburger, so its table is untouched. Body padding-bottom is cleared here
+ * (the shell already reserves the bar) to avoid an extra scroll of empty space.
+ */
+@media (min-width: 375px) and (max-width: 767px) and (orientation: portrait) {
+  .centerpiece-mesa {
+    height: calc(100dvh - 46px - 56px - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - 46px - 56px - env(safe-area-inset-bottom, 0px));
+  }
+
+  body:has(.centerpiece-mesa) {
+    padding-bottom: 0 !important;
+  }
+}
+
 @media (max-height: 640px) {
   .centerpiece-mesa {
     align-content: start;

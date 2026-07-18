@@ -2,8 +2,20 @@
 
 ## Não Lançado
 
+### Ajustado
+
 - Ajusta tela de construção de mão para Ipad air vertical e horizontal;
 - Ajusta tela de construção de mão para Ipad pro air vertical e horizontal;
+- Celulares em modo retrato (largura a partir de 375px) agora usam uma barra de navegação inferior fixa (estilo app nativo), no lugar do menu sanduíche, dando acesso direto aos módulos sem abrir gaveta: Centerpiece, Calculadora de Mão, Calculadora de Han e Fu, Torneio, Sorteador de Ventos e Regras / Configurações.
+- Removido o botão de menu sanduíche (e o gesto de abrir a gaveta) no topo em celulares retrato, deixando o cabeçalho mais limpo, apenas com o logo/título.
+- O teclado de pedras na construção da mão passa a ficar encaixado logo acima da barra de navegação, sem ficar escondido atrás dela.
+- A mesa do Centerpiece e as páginas roláveis reservam o espaço da barra inferior, garantindo que nenhum conteúdo (como o card do jogador Sul) fique escondido atrás dela.
+
+### Técnico
+
+- O iPhone SE (e telas equivalentes, por volta de 320px) foi mantido de propósito com o menu sanduíche e a gaveta, por causa do espaço vertical reduzido.
+- Alteração feita apenas em CSS, em uma faixa dedicada de celular retrato (`min-width: 375px` e `max-width: 767px`, `orientation: portrait`); reaproveita a barra inferior que já existia para tablets, sem mexer em componentes, lógica ou traduções.
+- Desktop, tablets e o modo paisagem permanecem inalterados.
 
 ## 4.4.1 - 2026-07-04
 
