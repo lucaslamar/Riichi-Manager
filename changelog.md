@@ -10,11 +10,13 @@
 - Removido o botão de menu sanduíche (e o gesto de abrir a gaveta) no topo em celulares retrato, deixando o cabeçalho mais limpo, apenas com o logo/título.
 - O teclado de pedras na construção da mão passa a ficar encaixado logo acima da barra de navegação, sem ficar escondido atrás dela.
 - A mesa do Centerpiece e as páginas roláveis reservam o espaço da barra inferior, garantindo que nenhum conteúdo (como o card do jogador Sul) fique escondido atrás dela.
+- O botão de configuração (engrenagem) da Calculadora de Mão em celulares retrato saiu do canto do teclado e passou para a barra de ações do cabeçalho, ao lado dos demais botões, liberando largura para o teclado e deixando o mesmo posicionamento já usado em paisagem, tablets e desktop.
 
 ### Técnico
 
 - O iPhone SE (e telas equivalentes, por volta de 320px) foi mantido de propósito com o menu sanduíche e a gaveta, por causa do espaço vertical reduzido.
 - Alteração feita apenas em CSS, em uma faixa dedicada de celular retrato (`min-width: 375px` e `max-width: 767px`, `orientation: portrait`); reaproveita a barra inferior que já existia para tablets, sem mexer em componentes, lógica ou traduções.
+- A realocação da engrenagem foi feita apenas em CSS (`max-width: 767px` e `orientation: portrait`): reaproveita o botão do cabeçalho já renderizado e oculta o do teclado, seguindo o mesmo padrão do modo paisagem, sem alterar componentes, lógica ou traduções.
 - Desktop, tablets e o modo paisagem permanecem inalterados.
 
 ## 4.4.1 - 2026-07-04

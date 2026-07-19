@@ -1630,6 +1630,27 @@
 }
 
 /*
+ * Telefones em retrato (<768px): o botão de configuração sai do teclado e vai
+ * para a barra de ações do cabeçalho, igual ao landscape/tablet/desktop. Isso
+ * libera a largura do teclado e evita o gear disputando espaço com as pedras.
+ */
+@media (max-width: 767px) and (orientation: portrait) {
+  .btn-configuracao-mao-cabecalho {
+    display: inline-flex;
+    width: 28px;
+    min-height: 28px;
+    border-color: transparent;
+    background: transparent;
+    font-size: 0.74rem;
+  }
+
+  /* Remove o gear do teclado (canto e rodapé) — agora vive no cabeçalho. */
+  .teclado-pedras .botao-configuracao-teclado {
+    display: none;
+  }
+}
+
+/*
  * Tablets e desktop: expansao progressiva da finalizacao.
  * Mantido aqui antes do landscape para preservar a cascata original.
  */
