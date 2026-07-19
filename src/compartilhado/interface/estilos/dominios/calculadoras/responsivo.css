@@ -1029,7 +1029,7 @@
   }
 }
 
-@media (orientation: landscape) and (max-height: 560px) and (max-width: 920px) {
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 950px) {
   .layout-montagem-calculadora,
   .layout-finalizacao-calculadora {
     grid-template-columns: minmax(0, 1fr) minmax(290px, 0.9fr);
@@ -1515,7 +1515,7 @@
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao {
     flex: initial;
     min-width: 0;
-    min-height: 34px;
+    min-height: 40px;
     border: 1px solid var(--action-color);
     border-radius: 10px;
     font-size: 0.78rem;
@@ -1565,11 +1565,11 @@
   }
 
   .construtor-mao-montagem .linha-naipe {
-    gap: 1px;
+    gap: 2px;
   }
 
   .construtor-mao-montagem .teclado-pedras .btn-pedra {
-    aspect-ratio: 0.84 / 1;
+    aspect-ratio: 0.78 / 1;
     overflow: hidden;
     padding: 1px;
     border-width: 1px;
@@ -1637,11 +1637,13 @@
 @media (max-width: 767px) and (orientation: portrait) {
   .btn-configuracao-mao-cabecalho {
     display: inline-flex;
-    width: 28px;
-    min-height: 28px;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    min-height: 32px;
     border-color: transparent;
     background: transparent;
-    font-size: 0.74rem;
+    font-size: 0.8rem;
   }
 
   /* Remove o gear do teclado (canto e rodapé) — agora vive no cabeçalho. */
@@ -4798,8 +4800,14 @@
  * only with the phone's 46px header. Both min-height (set for every screen in
  * the <=640px portrait block) and height are overridden so the shell can
  * actually shrink. This block sits last so it wins the cascade for this range.
+ *
+ * The second clause adds the Galaxy Z Fold 5 cover screen (<375px wide, very
+ * tall aspect ratio), which now shows the same bottom tab bar and would
+ * otherwise let the docked keyboard slide behind it. iPhone SE (~0.56 ratio)
+ * never matches the aspect guard, so it keeps its edge-flush keyboard.
  */
-@media (min-width: 375px) and (max-width: 640px) and (orientation: portrait) {
+@media (min-width: 375px) and (max-width: 640px) and (orientation: portrait),
+  (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
   body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
   body:has(.card-mao-completa.etapa-montagem) main {
     min-height: calc(100dvh - 46px - 56px - env(safe-area-inset-bottom, 0px));

@@ -1,6 +1,6 @@
 # Changelog - Riichi Manager
 
-## Não Lançado
+## 4.4.2 - 2026-07-19
 
 ### Ajustado
 
@@ -11,13 +11,22 @@
 - O teclado de pedras na construção da mão passa a ficar encaixado logo acima da barra de navegação, sem ficar escondido atrás dela.
 - A mesa do Centerpiece e as páginas roláveis reservam o espaço da barra inferior, garantindo que nenhum conteúdo (como o card do jogador Sul) fique escondido atrás dela.
 - O botão de configuração (engrenagem) da Calculadora de Mão em celulares retrato saiu do canto do teclado e passou para a barra de ações do cabeçalho, ao lado dos demais botões, liberando largura para o teclado e deixando o mesmo posicionamento já usado em paisagem, tablets e desktop.
+- Teclado de pedras em celulares retrato levemente ampliado para melhor conforto de toque: pedras um pouco maiores e mais altas, mais espaçamento entre elas e botões de ação (Chi, Pon, Kan, Kan fechado, Descartes) e engrenagem com área de toque maior. O iPhone SE, tablets, desktop e o modo paisagem permanecem inalterados.
+- Celulares em modo paisagem (iPhone XR, 12 Pro, 14, 14 Pro Max e a tela de capa do Galaxy Z Fold 5) passam a usar o menu sanduíche (navegação estilo desktop) no lugar da barra inferior, que não fazia sentido na horizontal.
+- O menu sanduíche em paisagem foi aproximado da borda lateral (antes ficava afastado por herdar o espaçamento de cabeçalho dos tablets).
+- Galaxy Z Fold 5: a tela de capa (estreita) em modo retrato passa a usar a barra de navegação inferior, igual aos demais celulares, no lugar do menu sanduíche.
+- No Galaxy Z Fold 5 (tela de capa) em retrato, o teclado de pedras passou a ficar encaixado acima da barra inferior, que antes cobria as pedras de honra.
 
 ### Técnico
 
 - O iPhone SE (e telas equivalentes, por volta de 320px) foi mantido de propósito com o menu sanduíche e a gaveta, por causa do espaço vertical reduzido.
 - Alteração feita apenas em CSS, em uma faixa dedicada de celular retrato (`min-width: 375px` e `max-width: 767px`, `orientation: portrait`); reaproveita a barra inferior que já existia para tablets, sem mexer em componentes, lógica ou traduções.
 - A realocação da engrenagem foi feita apenas em CSS (`max-width: 767px` e `orientation: portrait`): reaproveita o botão do cabeçalho já renderizado e oculta o do teclado, seguindo o mesmo padrão do modo paisagem, sem alterar componentes, lógica ou traduções.
-- Desktop, tablets e o modo paisagem permanecem inalterados.
+- Ampliação do teclado feita só em CSS, nos blocos de retrato já existentes (`aspect-ratio` das pedras, `gap` das fileiras e `min-height` dos botões), sem novos breakpoints e sem mexer em componentes, lógica ou traduções.
+- Navegação em paisagem: reaproveita a faixa `orientation: landscape` + `max-height: 560px`, com `max-width` estendido de 920px para 950px para incluir o iPhone 14 Pro Max (932px de largura); tablets continuam de fora por terem altura de paisagem ≥768px.
+- A tela de capa do Galaxy Z Fold 5 é identificada por `max-width: 374px` + `max-aspect-ratio: 1 / 2` (proporção muito alta, ~0,39), que exclui de propósito todos os iPhone SE (~0,56) — assim o SE nunca é afetado, independentemente da largura exata.
+- Todas as trocas de navegação são só de CSS (os três sistemas — sanduíche, barra inferior e sidebar — já são sempre renderizados); menu sanduíche e barra inferior nunca aparecem juntos.
+- Desktop, tablets, o iPhone SE e a tela desdobrada do Galaxy Z Fold 5 permanecem inalterados.
 
 ## 4.4.1 - 2026-07-04
 

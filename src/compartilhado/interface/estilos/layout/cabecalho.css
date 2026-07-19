@@ -516,10 +516,17 @@
  * canvas can't spare a permanent bar, so it keeps the hamburger drawer. The
  * hamburger is hidden and the body reserves the bar height in the same band
  * (see the `.botao-menu-global` hide rule just below).
+ *
+ * The last clause adds the Galaxy Z Fold 5 cover screen: a very narrow but very
+ * tall portrait canvas (<375px wide) that otherwise falls below the phone band
+ * and would keep the drawer. It is keyed by a strict tall aspect ratio
+ * (<=1/2, ~0.39 on the Fold cover) so no iPhone SE (~0.56) ever matches,
+ * leaving every SE untouched regardless of its exact width.
  */
 @media (min-width: 768px) and (max-width: 1023px),
   (min-width: 1024px) and (orientation: portrait),
-  (min-width: 375px) and (max-width: 767px) and (orientation: portrait) {
+  (min-width: 375px) and (max-width: 767px) and (orientation: portrait),
+  (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
   .barra-navegacao-inferior {
     display: flex;
     flex-direction: row;
@@ -587,7 +594,8 @@
  * below this band and keeps the drawer. Header spacing is intentionally left
  * to the existing phone rules — only the hamburger is dropped.
  */
-@media (min-width: 375px) and (max-width: 767px) and (orientation: portrait) {
+@media (min-width: 375px) and (max-width: 767px) and (orientation: portrait),
+  (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
   .botao-menu-global,
   .zona-gesto-drawer {
     display: none;
@@ -634,21 +642,48 @@
   }
 }
 
-@media (orientation: landscape) and (max-height: 560px) and (max-width: 920px) {
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 950px) {
   .cabecalho-principal {
     padding: 4px 0;
+  }
+
+  /*
+   * Phones in landscape fall inside the 768–1023 tablet band, which pads the
+   * header with clamp(18px,3vw,32px) — ~28px — pushing the hamburger far from
+   * the edge. Pull it back to the side so it reads as a phone control, not a
+   * tablet one.
+   */
+  .conteudo-cabecalho {
+    padding-inline: 6px;
   }
 
   .barra-marca-aplicacao {
     min-height: 38px;
     gap: 8px;
-    padding: 3px 10px 3px 4px;
+    padding: 3px 10px 3px 6px;
   }
 
+  /*
+   * Phones in landscape (iPhone XR/12 Pro/14, Galaxy Z Fold 5 cover screen)
+   * fall inside the 768–1023 "tablet" band by width alone, which would hide the
+   * hamburger and show the bottom tab bar. Their short canvas (<=560px tall) is
+   * really a phone, so restore the desktop-style drawer: show the hamburger,
+   * drop the bottom bar and its reserved height. Tablets in landscape are >=768
+   * tall and never match this block.
+   */
   .botao-menu-global {
+    display: inline-flex;
     width: 32px;
     min-height: 32px;
     border-radius: 7px;
+  }
+
+  .barra-navegacao-inferior {
+    display: none;
+  }
+
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
   .zona-gesto-drawer {

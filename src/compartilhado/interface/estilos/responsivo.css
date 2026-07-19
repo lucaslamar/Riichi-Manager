@@ -114,7 +114,7 @@
   }
 }
 
-@media (orientation: landscape) and (max-height: 560px) and (max-width: 920px) {
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 950px) {
   body {
     padding: 0 8px 24px;
   }
