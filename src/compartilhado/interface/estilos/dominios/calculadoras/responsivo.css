@@ -1653,6 +1653,57 @@
 }
 
 /*
+ * Ergonomia de toque em celulares retrato maiores que o iPhone SE.
+ * ----------------------------------------------------------------
+ * Modelos modernos (iPhone XR/11/12/13/14/15, Pixel, Galaxy S/A) têm bastante
+ * altura sobrando acima do teclado. O iPhone SE (667px de altura) e telas mais
+ * baixas ficam de fora via `min-height: 700px`; tablets/desktop saem por
+ * `max-width: 640px` e o horizontal/paisagem por `orientation: portrait`.
+ *
+ * O layout não muda: apenas aproveitamos o espaço em branco superior para deixar
+ * pedras e botões um pouco maiores e menos comprimidos, melhorando o toque. As
+ * pedras seguem presas à grade de 10 colunas (a largura é limitada pela grade),
+ * então o ganho vem da altura das pedras, do espaçamento vertical e da altura dos
+ * botões de ação.
+ */
+@media (max-width: 640px) and (orientation: portrait) and (min-height: 700px) {
+  /* Usa parte do espaço em branco acima para o teclado respirar sem descolar.
+     Só o topo cresce: o padding-bottom fica a cargo do layout da barra inferior. */
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    padding-top: 10px;
+  }
+
+  /* Mais respiro entre a barra de ações e a grade de pedras. */
+  .construtor-mao-montagem .menu-acoes-teclado-mobile {
+    margin-bottom: 8px;
+  }
+
+  /* Botões de ação (Chi/Pon/Kan/Kan fechado/descartes) mais altos e fáceis de tocar. */
+  .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao {
+    min-height: 46px;
+  }
+
+  /* Espaçamento vertical entre as linhas de naipe (+2px). */
+  .construtor-mao-montagem .teclado-pedras {
+    gap: 4px;
+  }
+
+  /* Espaçamento horizontal entre as pedras (+1px) sem comprimir a largura útil. */
+  .construtor-mao-montagem .linha-naipe {
+    gap: 3px;
+  }
+
+  /*
+   * Pedras mais altas (~+8%): a proporção mais alongada cresce a altura usando o
+   * espaço vertical extra, mantendo a grade de 10 colunas. A área de toque passa
+   * dos 48px de altura sem quebrar o layout.
+   */
+  .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    aspect-ratio: 0.7 / 1;
+  }
+}
+
+/*
  * Tablets e desktop: expansao progressiva da finalizacao.
  * Mantido aqui antes do landscape para preservar a cascata original.
  */
