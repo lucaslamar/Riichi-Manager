@@ -173,8 +173,8 @@ function ChipMeld({
       }}
     >
       <span
+        className="rotulo-meld-chip"
         style={{
-          fontSize: '0.58rem',
           fontWeight: 900,
           color: estilo.borda,
           marginRight: 1,

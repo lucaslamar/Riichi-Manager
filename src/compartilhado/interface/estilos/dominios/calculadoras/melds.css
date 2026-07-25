@@ -42,6 +42,15 @@
   gap: 3px;
 }
 
+/*
+ * Rótulo do meld ("Kan aberto", "Kan fechado", etc.) exibido ao lado das
+ * pedras. O tamanho base (antes um estilo inline no componente) fica aqui para
+ * que os breakpoints do iPad Pro possam ampliá-lo sem afetar telefones/desktop.
+ */
+.rotulo-meld-chip {
+  font-size: 0.58rem;
+}
+
 .meld-tile {
   width: 30px;
   height: 40px;

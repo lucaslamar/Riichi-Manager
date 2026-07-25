@@ -1,5 +1,26 @@
 # Changelog - Riichi Manager
 
+## 4.4.3 - 2026-07-25
+
+### Ajustado
+
+- Tipografia da Calculadora de Mão ampliada no iPad Pro (11", 12.9"/13"), em retrato e paisagem, ~10–20% maior para leitura confortável: selo "MÃO X/14", rótulos da navegação lateral (sidebar) e da barra inferior, botões de meld (Chi, Pon, Kan, Kan fechado), botões utilitários (Finalizar mão / Mudar pedra da batida) e textos auxiliares. Pedras, melds, teclado e ícones mantêm o tamanho.
+- Rótulo do meld ("Kan aberto", "Kan fechado", "Chi", "Pon") agora legível em todos os tablets e iPads (Mini, Air e Pro), bem maior que antes — no iPad Pro fica ainda mais destacado. Telefones permanecem inalterados.
+- Selo "MÃO X/14" do cabeçalho aumentado no iPad Pro.
+- Ícone de lixeira (limpar mão) aumentado nos iPads/tablets, com área de toque mais confortável (antes ficava minúsculo).
+- Valor da espera em tenpai (selo "3 HAN", "2Y", "SEM YAKU" sobre cada pedra candidata do teclado) aumentado nos tablets e iPads, e maior ainda no iPad Pro, onde antes era quase ilegível ao lado das pedras grandes.
+- Pedras do teclado aumentadas no iPad Mini/Air (e demais tablets pequenos) em retrato, ficando mais proporcionais à mão, que já usa pedras grandes. As pedras da mão não mudam.
+- Botões "Mudar pedra da batida" e "Finalizar mão" agora grandes e fáceis de tocar nos tablets/iPads em retrato — ocupam a largura toda (lado a lado), mais altos e com texto maior, no mesmo espírito do layout de celular.
+
+### Técnico
+
+- Alteração feita apenas em CSS, concentrada em `src/compartilhado/interface/estilos/responsivo.css` (última folha na cascata), sem tocar em componentes, lógica ou traduções. Exceção: o rótulo do meld teve seu tamanho tirado de um estilo inline no componente e movido para a classe `.rotulo-meld-chip`, com o tamanho base preservado em `melds.css`, para permitir ampliá-lo por breakpoint sem afetar telefones/desktop.
+- Escopo do iPad Pro por viewport: `min-width: 834px` (retrato) e `min-width: 1194px` (paisagem) incluem só os tamanhos Pro e excluem iPad Air (820/1180) e Mini (744/1133); o guarda `any-pointer: coarse` mantém desktop e notebooks com mouse (ex.: 1366×768) de fora, casando ainda com qualquer iPad.
+- Legibilidade compartilhada de tablets (rótulo do meld, selo de ação ativa e valor da espera) usa `min-width: 700px` + `min-height: 600px`, incluindo o iPad Mini de 744px e excluindo telefones (inclusive em paisagem, onde a altura fica abaixo de 600px).
+- Pedras do teclado e lixeira do iPad Mini/Air ficam na faixa existente `768–1023px` retrato (mesma receita atual); as 10 pedras por linha continuam cabendo já no iPad Mini de 768px.
+- Botões de finalização em retrato de tablet trocam para grade de duas colunas de largura total; a engrenagem do rodapé já fica oculta nessa faixa, então as colunas são exclusivas dos dois botões.
+- Verificado no preview em larguras de iPad Mini, Air e Pro (retrato e paisagem) e em telefones, confirmando ampliação dos textos/controles, ausência de estouro e telefones/desktop inalterados.
+
 ## 4.4.2 - 2026-07-19
 
 ### Ajustado

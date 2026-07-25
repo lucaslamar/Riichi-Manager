@@ -321,14 +321,11 @@ span.chip-pedra {
   line-height: 11px;
   text-transform: uppercase;
 }
-.pedras-selecionadas.tenpai-valido {
-  border-color: rgba(34, 197, 94, 0.38);
-  background: #f0fdf4;
-}
-.pedras-selecionadas.tenpai-valido .chip-pedra {
-  border-color: #22c55e;
-  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.2);
-}
+/*
+ * Tenpai no longer tints the hand container green. The valid-wait state is
+ * indicated solely by the TENPAI badge in the header, so .tenpai-valido keeps
+ * the normal (transparent) background here and on every breakpoint.
+ */
 .pedras-selecionadas.tenpai-alerta {
   border-color: rgba(239, 83, 80, 0.34);
   background: #fff5f5;

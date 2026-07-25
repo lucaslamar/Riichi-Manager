@@ -4126,6 +4126,16 @@
     margin: 8px 12px 0;
   }
 
+  /* Keep the clear/trash button at the same comfortable size (and touch
+     target) it has in landscape instead of shrinking to the base 28px in
+     this portrait breakpoint. Matches the 32px landscape sizing. */
+  .btn-limpar-mao-cabecalho {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    font-size: 0.86rem;
+  }
+
   .etapa-montagem .trilha-etapas-calculadora {
     flex: 0 0 auto;
     margin-inline: 12px;
@@ -4138,6 +4148,41 @@
     margin-bottom: 0;
     padding: 10px 14px 8px;
     overflow-y: auto;
+  }
+
+  /* Hand tiles use the same large size as the iPad Pro portrait recipe: the
+     hand is the primary content, and the tile image is object-fit:contain so
+     this only scales it up (never stretches). The container flex-wraps and the
+     hand area (flex:1, overflow-y:auto) absorbs the extra height and scrolls if
+     a meld-heavy hand grows past it, so nothing clips on the narrower canvas. */
+  .construtor-mao-montagem .mao-editor-fixo .pedras-selecionadas {
+    gap: 8px;
+    padding-block: 4px 14px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo .chip-pedra:not(.mini) {
+    width: 76px;
+    height: 100px;
+    border-radius: 8px;
+  }
+
+  /* Melds already in the hand and the Chi/Pon/Kan previews, scaled to match */
+  .construtor-mao-montagem .chip-meld-mao .meld-tile,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img {
+    width: 76px;
+    height: 100px;
+  }
+
+  .construtor-mao-montagem .chip-meld-mao .meld-tile.de-lado,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: 100px;
+    height: 76px;
+  }
+
+  /* Chi sequence previews (the pending-chii selector) get the same enlargement */
+  .seletor-chii-pendente .opcao-chii-pendente .chip-pedra.mini {
+    width: 76px;
+    height: 100px;
   }
 
   .construtor-mao-montagem .descartes-selecionados,

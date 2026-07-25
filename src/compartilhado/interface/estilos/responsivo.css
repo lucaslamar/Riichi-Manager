@@ -808,3 +808,280 @@
     padding: 6px 10px calc(6px + env(safe-area-inset-bottom)) !important;
   }
 }
+
+/* ============================================================================
+ * Tipografia do iPad Pro (11", 12.9"/13") — retrato e paisagem
+ * ----------------------------------------------------------------------------
+ * Apenas o TAMANHO do texto de interface sobe ~10–20% para leitura confortável
+ * na tela grande do Pro. Nenhuma medida de caixa é alterada aqui: pedras,
+ * melds, teclado, ícones, altura de botão, espaçamentos e grid mantêm as
+ * receitas existentes do Pro exatamente como estão — só a fonte muda.
+ *
+ * Escopo por dispositivo (só é possível aproximar o modelo pela viewport):
+ *   - Pro 11"   : 834×1194  → retrato 834,  paisagem 1194
+ *   - Pro 12.9" : 1024×1366 → retrato 1024, paisagem 1366
+ *   iPad Air (820 / 1180) e iPad Mini (744 / 1133) ficam logo abaixo desses
+ *   limiares, então `min-width: 834px` (retrato) e `min-width: 1194px`
+ *   (paisagem) incluem apenas os tamanhos Pro e excluem Air/Mini. O guarda
+ *   `any-pointer: coarse` mantém desktop e notebooks com mouse (ex.: 1366×768)
+ *   totalmente de fora, mas ainda casa com qualquer iPad (a touchscreen é
+ *   sempre um ponteiro grosseiro). Estes blocos carregam por último (ver
+ *   index.css), vencendo a cascata sobre os blocos de layout do Pro sem tocar
+ *   em nenhuma métrica de caixa.
+ * ========================================================================== */
+
+/* Texto compartilhado da calculadora — iPad Pro em retrato (11" + 12.9"/13") */
+@media (min-width: 834px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse) {
+  /* Cabeçalho da mão: "MÃO 14/14 • 18 FÍSICAS" e o selo tenpai ao lado.
+     O segundo seletor iguala a especificidade da regra existente
+     `.construtor-mao-montagem .titulo-mao-editor` (Pro 12.9" retrato), que
+     senão venceria e travaria o texto menor. */
+  .titulo-mao-editor,
+  .construtor-mao-montagem .titulo-mao-editor {
+    font-size: 1.22rem;
+  }
+
+  .status-tenpai-cabecalho {
+    font-size: 0.7rem;
+  }
+
+  /* Botões utilitários do rodapé do teclado (Finalizar mão / Mudar pedra) */
+  .botao-mudar-batida-teclado {
+    font-size: 0.9rem;
+  }
+
+  .botao-finalizar-mao-teclado {
+    font-size: 0.95rem;
+  }
+
+  /* Texto auxiliar e rótulos informativos pequenos */
+  .mensagem-finalizacao-teclado {
+    font-size: 0.86rem;
+  }
+
+  .estado-vazio-mao {
+    font-size: 0.94rem;
+  }
+
+  .titulo-melds-finalizacao {
+    font-size: 0.7rem;
+  }
+
+  /* Ícones do cabeçalho da mão (lixeira/limpar e engrenagem): maiores e com
+     alvo de toque mais generoso, mantidos iguais entre si.
+     (O rótulo do meld e o selo de ação ativa são ampliados no bloco de tablets
+     mais abaixo, que cobre também iPad Mini/Air.) */
+  .btn-limpar-mao-cabecalho,
+  .btn-configuracao-mao-cabecalho {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    min-height: 46px;
+    font-size: 1.35rem;
+  }
+}
+
+/* Texto da calculadora + rótulos da sidebar — iPad Pro em paisagem (11" + 12.9"/13") */
+@media (min-width: 1194px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) and (any-pointer: coarse) {
+  /* Rótulos da navegação lateral (sidebar) e cabeçalhos de seção */
+  .sidebar-navegacao-desktop .item-menu-global {
+    font-size: 1rem;
+  }
+
+  .sidebar-navegacao-desktop .drawer-secao h2 {
+    font-size: 0.76rem;
+  }
+
+  /* Cabeçalho da mão */
+  .titulo-mao-editor,
+  .construtor-mao-montagem .titulo-mao-editor {
+    font-size: 1.22rem;
+  }
+
+  .status-tenpai-cabecalho {
+    font-size: 0.7rem;
+  }
+
+  /* Botões de meld (Chi, Pon, Kan, Kan fechado) na grade de ações em paisagem */
+  .acoes-construtor-mao .btn-acao-mao {
+    font-size: 0.94rem;
+  }
+
+  /* Botões utilitários do rodapé do teclado */
+  .botao-mudar-batida-teclado {
+    font-size: 0.9rem;
+  }
+
+  .botao-finalizar-mao-teclado {
+    font-size: 0.95rem;
+  }
+
+  /* Texto auxiliar e rótulos informativos pequenos */
+  .mensagem-finalizacao-teclado {
+    font-size: 0.86rem;
+  }
+
+  .estado-vazio-mao {
+    font-size: 0.94rem;
+  }
+
+  .titulo-melds-finalizacao {
+    font-size: 0.7rem;
+  }
+
+  /* Ícones do cabeçalho da mão (lixeira/limpar e engrenagem)
+     (o rótulo do meld e o selo de ação ativa vêm do bloco de tablets abaixo) */
+  .btn-limpar-mao-cabecalho,
+  .btn-configuracao-mao-cabecalho {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    min-height: 46px;
+    font-size: 1.35rem;
+  }
+}
+
+/*
+ * Navegação inferior + barra de melds — iPad Pro 11" em retrato apenas.
+ * O 11" (834px) cai na faixa compacta de tablets pequenos (768–1023), então
+ * seus rótulos ficam anormalmente miúdos; aqui só a fonte sobe, sem mexer na
+ * altura da barra (56px) nem no tamanho dos ícones (1.28rem). Air (820) e Mini
+ * (744) ficam abaixo do min-width e permanecem intactos.
+ */
+@media (min-width: 834px) and (max-width: 1023px) and (orientation: portrait) and (any-pointer: coarse) {
+  .item-tab-inferior {
+    font-size: 0.74rem;
+  }
+
+  .item-tab-inferior span {
+    font-size: 0.74rem;
+  }
+
+  /* Barra de ações de meld acoplada ao teclado (Chi/Pon/Kan/Kan fechado) */
+  .menu-acoes-teclado-mobile .btn-acao-mao {
+    font-size: 0.94rem;
+  }
+}
+
+/*
+ * Navegação inferior — iPad Pro 12.9"/13" em retrato (faixa já ampliada).
+ * A barra já vem com controles maiores (72px, ícone 1.75rem); aqui só o rótulo
+ * ganha o incremento de leitura, mantendo altura e ícone inalterados.
+ */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse) {
+  .item-tab-inferior {
+    font-size: 0.95rem;
+  }
+
+  .item-tab-inferior span {
+    font-size: 0.95rem;
+  }
+}
+
+/*
+ * Rótulo do meld ("Kan aberto/fechado") legível em TODOS os tablets e iPads,
+ * não só no Pro. `min-width: 700px` inclui o iPad Mini (744px em retrato) e
+ * todos os demais tablets/iPads; `min-height: 600px` mantém os telefones de
+ * fora — inclusive em paisagem, onde a altura fica bem abaixo de 600px. Os
+ * telefones conservam o tamanho base (0.58rem, ver melds.css), evitando que o
+ * rótulo estoure nas pedras minúsculas da mão no celular.
+ */
+@media (min-width: 700px) and (min-height: 600px) {
+  .rotulo-meld-chip {
+    font-size: 0.95rem;
+  }
+
+  .chip-acao-meld-ativa {
+    font-size: 0.9rem;
+  }
+
+  /*
+   * Valor da espera em tenpai — o selo (ex.: "3 HAN", "2Y", "SEM YAKU") que
+   * aparece em cada pedra candidata do teclado. No base ficava em 0.52rem
+   * (~8px), praticamente ilegível ao lado das pedras grandes do tablet/iPad.
+   * Aqui cresce para leitura confortável, com o selo um pouco mais alto.
+   */
+  .badge-espera-teclado {
+    min-height: 17px;
+    font-size: 0.7rem;
+    line-height: 1.05;
+  }
+
+  .badge-espera-teclado.sem-yaku {
+    font-size: 0.6rem;
+  }
+}
+
+/*
+ * Selo de valor da espera AINDA maior no iPad Pro, onde as pedras do teclado
+ * são bem maiores (~80px), então sobra espaço para o valor da mão em tenpai
+ * ficar claramente legível sem forçar a vista. Vem depois do bloco de tablets
+ * acima para vencer a cascata (mesma especificidade); assim iPad Mini/Air
+ * conservam o 0.7rem daquele bloco e só o Pro recebe este tamanho.
+ */
+@media (min-width: 834px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse),
+  (min-width: 1194px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) and (any-pointer: coarse) {
+  .badge-espera-teclado {
+    min-height: 22px;
+    font-size: 0.95rem;
+  }
+
+  .badge-espera-teclado.sem-yaku {
+    font-size: 0.82rem;
+  }
+}
+
+/*
+ * iPad Mini / Air (e demais tablets pequenos) em retrato: nesta faixa a mão usa
+ * pedras grandes (76×100), mas o teclado ficava em 50×62 — desproporcional. Aqui
+ * as pedras do teclado sobem um pouco (60×74) para casar melhor com a mão, e a
+ * lixeira do cabeçalho — antes 32px, minúscula — cresce para um alvo confortável.
+ * Sem tocar no tamanho das pedras da mão. Faixa idêntica à receita existente
+ * (768–1023 retrato), então iPad Pro 12.9" (>=1024) e telefones não são afetados.
+ * As 10 pedras por linha continuam cabendo com folga (10×60 + 9×5 = 645px < ~752px
+ * úteis já no iPad Mini de 768px).
+ */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .teclado-pedras .btn-pedra {
+    width: 60px;
+    height: 74px;
+  }
+
+  .btn-limpar-mao-cabecalho {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    min-height: 44px;
+    font-size: 1.2rem;
+  }
+}
+
+/*
+ * Botões "Mudar pedra da batida" / "Finalizar mão" grandes e fáceis de tocar
+ * nos tablets/iPads em retrato — como no layout do iPhone: ocupam a largura
+ * toda (duas colunas), mais altos e com texto maior. A engrenagem do rodapé já
+ * fica oculta nesta faixa (foi para a barra/cabeçalho), então as duas colunas
+ * são exclusivas dos dois botões. Telefones (<768px) e paisagem conservam o
+ * layout próprio deles.
+ */
+@media (min-width: 768px) and (orientation: portrait) {
+  .rodape-teclado-finalizacao {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    min-height: 52px;
+  }
+
+  .botao-mudar-batida-teclado,
+  .botao-finalizar-mao-teclado {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 16px;
+    border-radius: 9px;
+    font-size: 1rem;
+  }
+
+  .mensagem-finalizacao-teclado {
+    grid-column: 1 / 3;
+    font-size: 0.86rem;
+  }
+}
