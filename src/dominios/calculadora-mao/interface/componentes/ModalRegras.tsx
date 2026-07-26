@@ -89,13 +89,27 @@ export default function ModalRegras({
   }, [aoFechar])
 
   /**
+   * Trava a rolagem da pagina enquanto o modal esta aberto, para que apenas a
+   * lista de regras role e o conteudo atras nunca se mova. Restaura o valor
+   * anterior ao fechar. Nao altera nenhuma regra de calculo.
+   */
+  useEffect(() => {
+    const overflowAnterior = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = overflowAnterior
+    }
+  }, [])
+
+  /**
    * Prende o foco dentro da modal de regras e devolve o foco ao botao que a abriu.
    *
    * Chamado quando a engrenagem do teclado ou a acao Regras da finalizacao abre
    * as configuracoes. Nao altera regra de Mahjong; apenas controla acessibilidade.
    */
   useEffect(() => {
-    focoAnteriorRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    focoAnteriorRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null
     botaoFecharRef.current?.focus()
 
     const aoPressionarTecla = (evento: KeyboardEvent) => {

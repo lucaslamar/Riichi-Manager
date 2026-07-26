@@ -1,7 +1,9 @@
 .modal-regras-fundo {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  /* Acima do cabeçalho (80) e da barra de navegação inferior (50) para que o
+     rodapé com "Aplicar" nunca fique coberto pela barra inferior. */
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,12 +11,17 @@
   background: rgba(16, 42, 67, 0.58);
   /* Garante que ocupa a área visual real (sem barra do navegador mobile) */
   min-height: 100dvh;
+  /* Evita que o gesto de rolagem "vaze" para a página atrás do modal. */
+  overscroll-behavior: contain;
 }
 
 .modal-regras {
   width: min(860px, 100%);
-  /* dvh = dynamic viewport height — exclui a barra do navegador mobile */
-  max-height: min(760px, calc(100dvh - 32px));
+  /* Nunca ultrapassa a largura do viewport → sem rolagem horizontal. */
+  max-width: calc(100vw - 32px);
+  /* dvh = dynamic viewport height — exclui a barra do navegador mobile.
+     90dvh mantém cabeçalho e rodapé sempre visíveis dentro da tela. */
+  max-height: min(760px, 90dvh);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -24,6 +31,8 @@
 }
 
 .modal-regras-cabecalho {
+  /* Cabeçalho fixo: nunca encolhe; só a lista de regras rola. */
+  flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
   gap: 16px;

@@ -1,11 +1,18 @@
 .lista-regras {
-  overflow: auto;
+  /* Única área rolável do modal (cabeçalho e rodapé ficam fixos). */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
   padding: 6px 20px 14px;
 }
 
 .linha-regra {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(260px, 320px);
+  /* Colunas flexíveis: o texto pode encolher até 0 e o controle nunca
+     empurra o conteúdo além do modal → sem rolagem horizontal. */
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
   gap: 16px;
   align-items: center;
   padding: 14px 0;
@@ -49,6 +56,8 @@
 }
 
 .modal-regras-rodape {
+  /* Rodapé fixo: sempre visível, com "Restaurar padrão" e "Aplicar". */
+  flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
