@@ -1,27 +1,14 @@
 # Changelog - Riichi Manager
 
-## Não lançado
+## 4.4.4 - 2026-07-25
 
 ### Ajustado
 
-- Modal "Regras de cálculo" agora é totalmente responsivo em todos os aparelhos, sem redesenhar o modal (mesma ordem de opções, cores e comportamento das regras).
-- Nunca mais há rolagem horizontal: o modal sempre cabe na largura da tela. Antes, em telas de 421–600px (iPhone 14 Pro Max, Surface Duo) as duas colunas estouravam e apareciam barras de rolagem lateral.
-- Cabeçalho (título e fechar) e rodapé (Restaurar padrão / Aplicar) ficam sempre visíveis: só a lista de regras rola, e a página atrás do modal não se mexe.
-- Telefones (iPhone SE, 12 Pro, Galaxy S8+ e similares): rótulo e controle empilhados, espaçamentos compactos, botões do rodapé em largura total e o "Aplicar" sempre alcançável, sem ficar escondido atrás da barra de navegação inferior. Área de toque mínima de 48px preservada.
-- Telas baixas (ex.: iPhone SE, 667px de altura): respiro vertical reduzido para caber sem cortar, mantendo os controles fáceis de tocar.
-- Tablets grandes (iPad Pro, Surface Pro 7): escala visual bem maior (título, descrições, rótulos, botões segmentados e do rodapé, além dos espaçamentos), para o modal não parecer uma janelinha e o texto ficar confortável de ler.
-- Surface Duo: proporções equilibradas (layout compacto de telefone), sem controles gigantes nem margens exageradas.
+- Modal "Regras de cálculo" responsivo em todos os aparelhos, sem rolagem horizontal e com "Aplicar" sempre acessível.
+- Cabeçalho e rodapé (Restaurar padrão / Aplicar) fixos; só a lista de regras rola e a página atrás não se mexe.
+- Celulares: layout empilhado e compacto; em telas baixas (paisagem) o modal cabe sem cortar o topo e mostra ao menos 2–3 regras de uma vez.
+- Tablets (iPad Pro, Surface Pro 7): textos e controles maiores, mais confortáveis de ler.
 - Desktop permanece inalterado.
-
-### Técnico
-
-- Altura do modal limitada a `min(760px, 90dvh)` e largura a `min(860px, calc(100vw - 32px))`, garantindo cabeçalho/rodapé sempre visíveis e sem estouro horizontal (`modal.css`).
-- Cabeçalho e rodapé viram `flex: 0 0 auto` (fixos) e a lista de regras `flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden` — o rodapé "grudado" é resultado do layout flex, não de rolagem (`modal.css`, `regras.css`).
-- Corrigida a causa da rolagem horizontal: a grade de cada linha mudou de `minmax(220px, 1fr) minmax(260px, 320px)` para `minmax(0, 1fr) minmax(220px, 300px)` (`regras.css`).
-- `z-index` do fundo do modal subiu de 50 para 100 (a barra de navegação inferior também é 50), para o rodapé com "Aplicar" nunca ficar coberto por ela (`modal.css`).
-- Novos breakpoints por espaço disponível em `responsivo.css`: telefones `≤600px` (empilha e compacta), `≤600px` + `≤740px` de altura (compacta ainda mais), afastamento da barra inferior nas faixas em que ela aparece e tablets `768–1024px` (escala ampliada, 2 colunas mantidas).
-- Trava de rolagem da página enquanto o modal está aberto via `useEffect` em `ModalRegras.tsx` (define `document.body.style.overflow = 'hidden'` e restaura o valor anterior ao fechar); não altera nenhuma regra de cálculo.
-- Verificado no preview em Desktop, iPhone 14 Pro Max (430), iPhone SE (375×667), iPad Pro (1024), Surface Pro 7 (912) e Surface Duo (540): ausência de estouro horizontal, "Aplicar" sempre acessível (inclusive validado por hit-test), cabeçalho/rodapé fixos e desktop inalterado.
 
 ## 4.4.3 - 2026-07-25
 

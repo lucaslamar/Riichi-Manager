@@ -585,15 +585,27 @@
 }
 
 /*
- * Afasta o modal da barra de navegação inferior nas faixas em que ela aparece
- * (mesma condição de exibição da barra), centralizando-o no espaço útil acima
- * dela. O fundo já fica acima da barra (z-index), isto é só para conforto.
+ * Afasta o modal da barra de navegação inferior SÓ nas faixas em que ela
+ * realmente aparece. Além de reservar o espaço embaixo, a altura máxima também
+ * desconta a barra: sem isso, em telas baixas (iPhone SE em retrato) o modal a
+ * 90dvh ficava mais alto que o espaço restante e, ao centralizar, transbordava
+ * e colava no topo, cortando o cabeçalho. Descontando a barra, ele cabe e
+ * centraliza corretamente.
+ *
+ * As condições espelham a exibição da barra (cabecalho.css): retrato de 375px
+ * para cima e tablets. A paisagem curta de celular (<=560px de altura) fica de
+ * fora porque ali a barra é ocultada e o menu sanduíche assume — reservar
+ * espaço ali empurrava o modal para cima, deixando-o "colado no teto".
  */
 @media (min-width: 375px) and (max-width: 767px) and (orientation: portrait),
-  (min-width: 768px) and (max-width: 1023px),
+  (min-width: 768px) and (max-width: 1023px) and (orientation: portrait),
+  (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) and (min-height: 561px),
   (min-width: 1024px) and (orientation: portrait) {
   .modal-regras-fundo {
     padding-bottom: calc(16px + 72px + env(safe-area-inset-bottom));
+  }
+  .modal-regras {
+    max-height: min(760px, calc(100dvh - 104px - env(safe-area-inset-bottom)));
   }
 }
 
@@ -647,6 +659,63 @@
     min-height: 58px;
     padding: 14px 26px;
     font-size: 1.15rem;
+  }
+}
+
+/*
+ * Telas baixas (celular em paisagem, foldables, janelas curtas — altura
+ * <=600px): o cabeçalho e o rodapé consomem quase toda a altura e sobra espaço
+ * para uma única regra. Pior ainda quando a largura cai na faixa de tablet
+ * (768–1023px), onde o scale-up amplia tudo. Aqui compactamos topo, rodapé e
+ * espaçamento das linhas (sobrescrevendo o scale-up) para caber ao menos 3–4
+ * regras na área rolável, mantendo o toque confortável (>=44px). Vem depois do
+ * bloco de tablets de propósito, para vencê-lo na cascata em telas baixas.
+ */
+@media (max-height: 600px) {
+  .modal-regras-cabecalho {
+    padding: 10px 20px;
+  }
+  .modal-regras-cabecalho h3 {
+    font-size: 1.15rem;
+  }
+  /* Oculta o subtítulo de ajuda para ganhar altura; o título já explica. */
+  .modal-regras-cabecalho p {
+    display: none;
+  }
+
+  .lista-regras {
+    padding: 2px 20px 8px;
+  }
+
+  .linha-regra {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    gap: 14px;
+    padding: 9px 0;
+  }
+
+  .texto-regra strong {
+    font-size: 1rem;
+  }
+  .texto-regra span {
+    font-size: 0.82rem;
+    line-height: 1.3;
+  }
+
+  .controle-regra button {
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  .modal-regras-rodape {
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px 20px;
+  }
+  .modal-regras-rodape button {
+    width: auto;
+    min-height: 44px;
+    padding: 8px 18px;
+    font-size: 0.9rem;
   }
 }
 
