@@ -1,5 +1,9 @@
 # Changelog - Riichi Manager
 
+## Não lançado
+
+- Ajusta botoes esticados na finalização de mão.
+
 ## 4.4.4 - 2026-07-25
 
 ### Ajustado
