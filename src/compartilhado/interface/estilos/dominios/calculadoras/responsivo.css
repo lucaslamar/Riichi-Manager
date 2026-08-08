@@ -1089,6 +1089,24 @@
     min-height: 100%;
   }
 
+  /* Correção do "esticar" durante a rolagem na tela de finalização.
+     A área rolável usa min-height: calc(100dvh - 46px). Em celulares o
+     100dvh CRESCE quando a barra de endereços recolhe durante a rolagem,
+     então o cartão fica mais alto que o conteúdo. Como esses contêineres
+     são grid com align-content: normal (= stretch), o espaço extra era
+     distribuído nas linhas — esticando as seções (mão, opções, ventos…)
+     enquanto o usuário rola. Com align-content: start as seções mantêm a
+     altura natural e o espaço extra fica no fim (fundo branco), então nada
+     muda de tamanho durante a rolagem. Escopo: apenas finalização/mobile. */
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal > div,
+  .card-mao-completa.etapa-finalizacao,
+  .card-mao-completa.etapa-finalizacao .calculadora-etapa-finalizacao,
+  .card-mao-completa.etapa-finalizacao .pagina-finalizacao-mao,
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora {
+    align-content: start;
+  }
+
   .card-mao-completa.fluxo-calculadora.etapa-montagem {
     display: flex;
     height: calc(100dvh - 46px);
@@ -1343,6 +1361,27 @@
   .coluna-finalizacao-mao,
   .coluna-finalizacao-opcoes {
     gap: 8px;
+  }
+
+  /* Impede que qualquer bloco da finalização force largura maior que o
+     viewport. O <main> usa overflow-x: hidden, então um filho que não
+     consegue encolher (min-width: auto padrão de itens flex/grid) não gera
+     rolagem — ele é CORTADO à direita, dando a impressão de "esticado".
+     Deixar os contêineres encolherem (min-width: 0) mantém tudo dentro da
+     tela em qualquer estado, sem alterar o visual quando já cabe. */
+  .pagina-finalizacao-mao,
+  .layout-finalizacao-calculadora,
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes,
+  .opcoes-mao-embutidas,
+  .grupo-opcoes-mao,
+  .contadores-dora-honba,
+  .contador-dora-manual,
+  .seletores-vento-mao,
+  .mao-editor-fixo,
+  .pedras-selecionadas {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .construtor-mao-finalizacao {
@@ -5105,5 +5144,48 @@
      safe-area bottom padding would only leave a dead gap above the bar. */
   .construtor-mao-montagem .painel-teclado-calculadora {
     padding-bottom: 5px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Blindagem de largura para telas MUITO estreitas (iPhone SE ~375px, Galaxy
+   S8/S8+ ~360px) na tela de Finalização, retrato.
+
+   Objetivo: garantir que NENHUM componente calcule largura maior que a área de
+   conteúdo, mesmo em navegadores que não suportam :has() (Safari < 15.4, Chrome
+   antigo do Android/Samsung Internet). Por isso usa SÓ seletores diretos de
+   classe (não depende de body:has(...)).
+
+   Não é "fake fix": não usa overflow-x: hidden. Apenas deixa os contêineres
+   flex/grid encolherem (min-width: 0), força o layout a UMA coluna e mantém os
+   grids de vento em colunas que podem encolher (minmax(0,1fr)). Onde já cabe,
+   nada muda visualmente. Especificidade alta (.card-mao-completa.etapa-finalizacao
+   .X = 0,3,0) para vencer o cascade independentemente da ordem no build.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 400px) and (orientation: portrait) {
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card-mao-completa.etapa-finalizacao .pedras-vento-mao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card-mao-completa.etapa-finalizacao .pagina-finalizacao-mao,
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora,
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-mao,
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-opcoes,
+  .card-mao-completa.etapa-finalizacao .opcoes-mao-embutidas,
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-mao,
+  .card-mao-completa.etapa-finalizacao .contadores-dora-honba,
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual,
+  .card-mao-completa.etapa-finalizacao .seletores-vento-mao,
+  .card-mao-completa.etapa-finalizacao .campo-vento-mao,
+  .card-mao-completa.etapa-finalizacao .btn-vento-pedra,
+  .card-mao-completa.etapa-finalizacao .descartes-finalizacao,
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual button {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }

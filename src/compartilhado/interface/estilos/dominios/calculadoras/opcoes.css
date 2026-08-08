@@ -774,6 +774,17 @@
 @media (max-width: 640px) {
   .cabecalho-sticky-finalizacao {
     top: 46px;
+    /* Em celulares o card de finalização usa padding horizontal de 10px
+       (.card-mao-completa.fluxo-calculadora.etapa-finalizacao). A sangria
+       precisa acompanhar esse valor: com -18px a barra ultrapassava o
+       viewport e "esticava" a tela ao rolar, pois a barra só aparece
+       durante a rolagem. */
+    margin: 0 -10px;
+  }
+
+  .barra-progresso-finalizacao,
+  .barra-resumo-mao {
+    padding-inline: 10px;
   }
 }
 
