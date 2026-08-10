@@ -3,6 +3,7 @@
 ## Não lançado
 
 - Ajusta botoes esticados na finalização de mão.
+- ajusta doras
 
 ## 4.4.4 - 2026-07-25
 
