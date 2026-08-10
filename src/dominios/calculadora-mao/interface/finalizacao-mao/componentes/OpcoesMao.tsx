@@ -78,15 +78,6 @@ export default function OpcoesMao({
   const dorasPorIndicadores = contarDorasPorIndicadores(mao.dora)
   const dorasAutomaticas = dorasAutomaticasAka + dorasPorIndicadores
   const dorasNaMaoTotal = Math.min(13, dorasAutomaticas + mao.doraManual)
-  const ajudaDoraContador =
-    dorasAutomaticas === 0
-      ? null
-      : dorasAutomaticasAka > 0 && dorasPorIndicadores > 0
-        ? `Inclui ${dorasAutomaticasAka} aka dora e ${dorasPorIndicadores} por indicadores.`
-        : dorasAutomaticasAka > 0
-          ? `Inclui ${dorasAutomaticasAka} aka dora da mão.`
-          : `Inclui ${dorasPorIndicadores} doras encontradas pelos indicadores.`
-  const ajudaDoraContadorVisivel = dorasAutomaticas === 0 ? null : ajudaDoraContador
   const dorasReais = useMemo(
     () => new Set(mao.dora.map((indicador) => codigoBase(proximaDoraIndicada(indicador)))),
     [mao.dora],
@@ -256,9 +247,6 @@ export default function OpcoesMao({
                 +
               </button>
             </div>
-            {ajudaDoraContadorVisivel && (
-              <small className="texto-ajuda-contador-dora">{ajudaDoraContadorVisivel}</small>
-            )}
           </div>
         </div>
         {painelContextualAberto === 'dora' && (
@@ -488,6 +476,7 @@ export default function OpcoesMao({
               </button>
             </div>
             <p>{t('calculator.manualDoraHelp')}</p>
+            <p>{t('calculator.manualDoraHelpIndicadores')}</p>
           </div>
         </div>
       )}
