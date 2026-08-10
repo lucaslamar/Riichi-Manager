@@ -3,7 +3,8 @@
 ## Não lançado
 
 - Ajusta botoes esticados na finalização de mão.
-- ajusta doras
+- ajusta doras.
+- Opções da finalização de mão padronizadas no celular: RIICHI e CONDIÇÕES ESPECIAIS empilham uma abaixo da outra (não mais lado a lado), incluindo iPhone Pro Max, e ambas usam grade de 2 colunas com o terceiro botão ocupando a linha inteira.
 
 ## 4.4.4 - 2026-07-25
 

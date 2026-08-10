@@ -1402,6 +1402,16 @@
     margin-bottom: 6px;
   }
 
+  /*
+   * Celular (qualquer largura ate 640px, incluindo iPhone Pro Max ~430px):
+   * RIICHI e CONDICOES ESPECIAIS empilham em coluna unica, um abaixo do outro,
+   * em vez de lado a lado. O layout de 2 colunas lado a lado so vale em telas
+   * largas (tablet/desktop), onde ha espaco horizontal.
+   */
+  .grupos-opcoes-mao {
+    grid-template-columns: 1fr;
+  }
+
   .grupo-opcoes-dora .indicadores-dora-selecionados {
     display: grid;
     grid-template-columns: 1fr;
@@ -2919,6 +2929,14 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 4px;
     width: 100%;
+  }
+
+  /*
+   * Paisagem baixo: espaco vertical escasso, entao os tres botoes voltam a uma
+   * unica linha de 3 colunas. Anula o span de linha inteira definido na base.
+   */
+  .linha-opcoes-mao .btn-toggle-mao:nth-child(3) {
+    grid-column: auto;
   }
 
   .linha-opcoes-compacta {

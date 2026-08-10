@@ -608,17 +608,24 @@
 
 .linha-opcoes-mao {
   display: grid;
-  grid-template-columns: repeat(3, minmax(108px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
   align-items: center;
 }
 
-.linha-opcoes-compacta {
-  grid-template-columns: repeat(2, minmax(96px, 1fr));
+/*
+ * RIICHI e CONDICOES ESPECIAIS: grade de 2 colunas com o terceiro botao
+ * (IPPATSU / HAITEI) ocupando a linha inteira. Aproveita o espaco horizontal,
+ * mantem areas de toque confortaveis e evita a pilha vertical de um botao por
+ * linha. O layout de 3 colunas so volta no paisagem baixo, onde o espaco
+ * vertical e escasso (ver responsivo.css).
+ */
+.linha-opcoes-mao .btn-toggle-mao:nth-child(3) {
+  grid-column: 1 / -1;
 }
 
-.linha-condicoes-especiais {
-  grid-template-columns: minmax(160px, 1fr);
+.linha-opcoes-compacta {
+  grid-template-columns: repeat(2, minmax(96px, 1fr));
 }
 
 .btn-toggle-mao {
