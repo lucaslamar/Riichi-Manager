@@ -5,6 +5,8 @@
 - Ajusta botoes esticados na finalização de mão.
 - ajusta doras.
 - Opções da finalização de mão padronizadas no celular: RIICHI e CONDIÇÕES ESPECIAIS empilham uma abaixo da outra (não mais lado a lado), incluindo iPhone Pro Max, e ambas usam grade de 2 colunas com o terceiro botão ocupando a linha inteira.
+- Pedras da finalização de mão maiores no celular, deixando o rótulo "Batida" legível sem esforço (mais destaque no iPhone 16 Pro Max).
+- Áreas de toque da finalização padronizadas em 48px (Tsumo/Ron, Riichi, condições, Descartes, Calcular) e contadores de Honba/Doras maiores.
 
 ## 4.4.4 - 2026-07-25
 

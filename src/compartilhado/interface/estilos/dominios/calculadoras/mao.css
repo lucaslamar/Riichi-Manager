@@ -321,6 +321,18 @@ span.chip-pedra {
   line-height: 11px;
   text-transform: uppercase;
 }
+
+/*
+ * Na finalizacao o rotulo "Batida" acompanha o tamanho da pedra (variavel
+ * --finalizacao-tile-largura). Como a pedra cresce em telas grandes, a fonte
+ * cresce junto e o texto deixa de exigir esforco para ler — sem afetar a
+ * montagem, onde a variavel nao existe e o badge mantem 0.45rem.
+ */
+.card-mao-completa.etapa-finalizacao .badge-pedra-agari {
+  min-height: calc(var(--finalizacao-tile-largura, 34px) * 0.33);
+  font-size: calc(var(--finalizacao-tile-largura, 34px) * 0.21);
+  line-height: 1.3;
+}
 /*
  * Tenpai no longer tints the hand container green. The valid-wait state is
  * indicated solely by the TENPAI badge in the header, so .tenpai-valido keeps

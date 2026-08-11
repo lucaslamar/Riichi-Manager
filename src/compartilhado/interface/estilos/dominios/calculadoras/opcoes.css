@@ -152,7 +152,7 @@
 
 .toggle-agari-mao button {
   flex: 1;
-  min-height: 38px;
+  min-height: 48px;
   padding: 8px 24px;
   border: 0;
   background: transparent;
@@ -237,7 +237,7 @@
 
 .contador-dora-manual {
   display: inline-flex;
-  min-height: 42px;
+  min-height: 48px;
   align-items: center;
   gap: 8px;
   padding: 5px 7px 5px 10px;
@@ -401,7 +401,7 @@
 
 .contador-dora-manual > div {
   display: inline-flex;
-  min-height: 34px;
+  min-height: 40px;
   overflow: hidden;
   border: 2px solid #f9a8d4;
   border-radius: 7px;
@@ -467,7 +467,12 @@
 }
 
 .grupos-opcoes-ativos {
-  max-height: 240px;
+  /* Teto do accordion: apenas limite de animacao, nunca do conteudo real
+     (a altura renderizada para de crescer na altura do conteudo). Em telas
+     estreitas (<=420px) as secoes Riichi e Condicoes empilham em coluna unica
+     e, com area de toque de 48px, o conteudo passa de 240px. Teto folgado
+     evita cortar a ultima linha sem afetar o desktop (conteudo ~128px). */
+  max-height: 400px;
   opacity: 1;
 }
 
@@ -631,7 +636,7 @@
 .btn-toggle-mao {
   display: inline-flex;
   width: 100%;
-  min-height: 38px;
+  min-height: 48px;
   align-items: center;
   justify-content: center;
   padding: 7px 10px;
