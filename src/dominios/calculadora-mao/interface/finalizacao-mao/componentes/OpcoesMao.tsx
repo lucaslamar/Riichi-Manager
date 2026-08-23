@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import { codigoBase, nomePedraAcessivel, proximaDoraIndicada } from '../../constantes'
 import { BotaoToggle } from '../../compartilhado/componentes/Botoes'
@@ -138,22 +139,35 @@ export default function OpcoesMao({
   const classeEtapa = (ativa: boolean) =>
     `etapa-opcoes-mao ${ativa ? 'etapa-opcoes-ativa' : 'etapa-opcoes-discreta'}`
 
+  // No layout por assunto do tablet, quando a mão está aberta (a seção Riichi
+  // não existe) a coluna direita ficaria só com Condições e sobraria espaço.
+  // Nesse caso a Vitória (Tsumo/Ron) sobe para o topo da coluna direita,
+  // equilibrando as duas colunas. Fora disso ela fica no topo, largura total.
+  // (A faixa espelha o @media do layout por assunto em responsivo.css.)
+  const tabletPorAssunto = useMediaQuery(
+    '(min-width: 768px) and (max-width: 1279px) and (min-height: 600px)',
+  )
+  const vitoriaNaColunaDireita =
+    tabletPorAssunto && !modoCenterpiece && mostrarConfiguracaoBasica && !mostrarRiichi
+
+  const campoVitoria = modoCenterpiece ? null : (
+    <div
+      id="secao-vitoria"
+      className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}
+    >
+      <span>{t('calculator.victory')}</span>
+      <ToggleAgari
+        mao={mao}
+        atualizarMao={atualizarMao}
+        definido={fluxoOpcoes.vitoriaDefinida}
+        aoDefinir={marcarVitoriaDefinida}
+      />
+    </div>
+  )
+
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-      {!modoCenterpiece && (
-        <div
-          id="secao-vitoria"
-          className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}
-        >
-          <span>{t('calculator.victory')}</span>
-          <ToggleAgari
-            mao={mao}
-            atualizarMao={atualizarMao}
-            definido={fluxoOpcoes.vitoriaDefinida}
-            aoDefinir={marcarVitoriaDefinida}
-          />
-        </div>
-      )}
+      {!vitoriaNaColunaDireita && campoVitoria}
 
       <section
         className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}
@@ -325,131 +339,138 @@ export default function OpcoesMao({
         )}
       </section>
 
-      {!modoCenterpiece && (
-        <section
-          id="secao-ventos"
-          className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}
-        >
-          <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
-          <SeletorVentos
-            mao={mao}
-            atualizarMao={atualizarMao}
-            ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
-            ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
-            aoDefinirVentoRodada={marcarVentoRodadaDefinido}
-            aoDefinirVentoAssento={marcarVentoAssentoDefinido}
-          />
-        </section>
-      )}
+      {/* Em tablets, as opções se agrupam por assunto em duas colunas:
+          esquerda = ventos (Vento da Rodada + Seu Vento), direita = Riichi +
+          Condições Especiais. No celular/desktop o wrapper é display:contents e
+          o layout anterior é preservado. */}
+      <div className="colunas-assuntos-finalizacao">
+        {!modoCenterpiece && (
+          <section
+            id="secao-ventos"
+            className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}
+          >
+            <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
+            <SeletorVentos
+              mao={mao}
+              atualizarMao={atualizarMao}
+              ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
+              ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
+              aoDefinirVentoRodada={marcarVentoRodadaDefinido}
+              aoDefinirVentoAssento={marcarVentoAssentoDefinido}
+            />
+          </section>
+        )}
 
-      <div
-        className={`grupos-opcoes-mao ${
-          mostrarEtapaRiichi ? 'grupos-opcoes-ativos' : 'grupos-opcoes-discretos'
-        }`}
-      >
-        {mostrarRiichi && (
-          <section id="secao-riichi" className={`grupo-opcoes-mao ${classeEtapa(mostrarRiichi)}`}>
-            <span className="rotulo-bloco-opcoes">{t('calculator.riichi')}</span>
-            <div className="linha-opcoes-mao">
+        <div
+          className={`grupos-opcoes-mao ${
+            mostrarEtapaRiichi ? 'grupos-opcoes-ativos' : 'grupos-opcoes-discretos'
+          }`}
+        >
+          {vitoriaNaColunaDireita && campoVitoria}
+          {mostrarRiichi && (
+            <section id="secao-riichi" className={`grupo-opcoes-mao ${classeEtapa(mostrarRiichi)}`}>
+              <span className="rotulo-bloco-opcoes">{t('calculator.riichi')}</span>
+              <div className="linha-opcoes-mao">
+                <BotaoToggle
+                  rotulo={t('calculator.riichi')}
+                  ativo={!!mao.riichi}
+                  desabilitado={maoAberta}
+                  corAtiva="#f97316"
+                  aoClicar={() =>
+                    atualizarMao((rascunho) => {
+                      if (rascunho.riichi) {
+                        rascunho.riichi = null
+                        rascunho.uradora = []
+                        rascunho.uradoraManual = 0
+                      } else {
+                        rascunho.riichi = { duplo: false, ippatsu: false }
+                        rascunho.bencao = false
+                      }
+                    })
+                  }
+                />
+                <BotaoToggle
+                  rotulo={t('calculator.doubleRiichi')}
+                  ativo={!!mao.riichi?.duplo}
+                  desabilitado={maoAberta}
+                  corAtiva="#f97316"
+                  aoClicar={() =>
+                    atualizarMao((rascunho) => {
+                      if (!rascunho.riichi) return
+                      rascunho.riichi = {
+                        duplo: !rascunho.riichi.duplo,
+                        ippatsu: rascunho.riichi.ippatsu,
+                      }
+                      rascunho.bencao = false
+                    })
+                  }
+                />
+                <BotaoToggle
+                  rotulo={t('calculator.ippatsu')}
+                  ativo={!!mao.riichi?.ippatsu}
+                  desabilitado={!mao.riichi}
+                  corAtiva="#f97316"
+                  aoClicar={() =>
+                    atualizarMao((rascunho) => {
+                      if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
+                    })
+                  }
+                />
+              </div>
+            </section>
+          )}
+
+          <section className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}>
+            <span className="rotulo-bloco-opcoes">{t('calculator.specialConditions')}</span>
+            <div className="linha-opcoes-mao linha-condicoes-especiais">
               <BotaoToggle
-                rotulo={t('calculator.riichi')}
-                ativo={!!mao.riichi}
-                desabilitado={maoAberta}
-                corAtiva="#f97316"
+                rotulo={t('calculator.tenhouChiihou')}
+                ativo={mao.bencao}
+                desabilitado={mao.melds.length > 0}
                 aoClicar={() =>
                   atualizarMao((rascunho) => {
-                    if (rascunho.riichi) {
+                    rascunho.bencao = !rascunho.bencao
+                    if (rascunho.bencao) {
                       rascunho.riichi = null
                       rascunho.uradora = []
                       rascunho.uradoraManual = 0
-                    } else {
-                      rascunho.riichi = { duplo: false, ippatsu: false }
+                      rascunho.ultimaPedra = false
+                      rascunho.kan = false
+                    }
+                  })
+                }
+              />
+              <BotaoToggle
+                rotulo={mao.agari === 'ron' ? t('calculator.chankan') : t('calculator.rinshan')}
+                ativo={mao.kan}
+                desabilitado={false}
+                aoClicar={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.kan = !rascunho.kan
+                    if (rascunho.kan) {
                       rascunho.bencao = false
+                      rascunho.ultimaPedra = false
                     }
                   })
                 }
               />
               <BotaoToggle
-                rotulo={t('calculator.doubleRiichi')}
-                ativo={!!mao.riichi?.duplo}
-                desabilitado={maoAberta}
-                corAtiva="#f97316"
+                rotulo={mao.agari === 'ron' ? t('calculator.houtei') : t('calculator.haitei')}
+                ativo={mao.ultimaPedra}
+                desabilitado={false}
                 aoClicar={() =>
                   atualizarMao((rascunho) => {
-                    if (!rascunho.riichi) return
-                    rascunho.riichi = {
-                      duplo: !rascunho.riichi.duplo,
-                      ippatsu: rascunho.riichi.ippatsu,
+                    rascunho.ultimaPedra = !rascunho.ultimaPedra
+                    if (rascunho.ultimaPedra) {
+                      rascunho.bencao = false
+                      rascunho.kan = false
                     }
-                    rascunho.bencao = false
-                  })
-                }
-              />
-              <BotaoToggle
-                rotulo={t('calculator.ippatsu')}
-                ativo={!!mao.riichi?.ippatsu}
-                desabilitado={!mao.riichi}
-                corAtiva="#f97316"
-                aoClicar={() =>
-                  atualizarMao((rascunho) => {
-                    if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
                   })
                 }
               />
             </div>
           </section>
-        )}
-
-        <section className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}>
-          <span className="rotulo-bloco-opcoes">{t('calculator.specialConditions')}</span>
-          <div className="linha-opcoes-mao linha-condicoes-especiais">
-            <BotaoToggle
-              rotulo={t('calculator.tenhouChiihou')}
-              ativo={mao.bencao}
-              desabilitado={mao.melds.length > 0}
-              aoClicar={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.bencao = !rascunho.bencao
-                  if (rascunho.bencao) {
-                    rascunho.riichi = null
-                    rascunho.uradora = []
-                    rascunho.uradoraManual = 0
-                    rascunho.ultimaPedra = false
-                    rascunho.kan = false
-                  }
-                })
-              }
-            />
-            <BotaoToggle
-              rotulo={mao.agari === 'ron' ? t('calculator.chankan') : t('calculator.rinshan')}
-              ativo={mao.kan}
-              desabilitado={false}
-              aoClicar={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.kan = !rascunho.kan
-                  if (rascunho.kan) {
-                    rascunho.bencao = false
-                    rascunho.ultimaPedra = false
-                  }
-                })
-              }
-            />
-            <BotaoToggle
-              rotulo={mao.agari === 'ron' ? t('calculator.houtei') : t('calculator.haitei')}
-              ativo={mao.ultimaPedra}
-              desabilitado={false}
-              aoClicar={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.ultimaPedra = !rascunho.ultimaPedra
-                  if (rascunho.ultimaPedra) {
-                    rascunho.bencao = false
-                    rascunho.kan = false
-                  }
-                })
-              }
-            />
-          </div>
-        </section>
+        </div>
       </div>
       {ajudaDoraAberta && (
         <div

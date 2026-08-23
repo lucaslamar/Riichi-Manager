@@ -2138,13 +2138,21 @@
   }
 }
 
-@media (min-width: 1024px) {
+/*
+ * A sangria de 280px é só para a sidebar de desktop, que existe apenas em
+ * paisagem (ver reset.css). Em retrato ≥1024 (iPad Pro 12.9" em pé) a navegação
+ * é a barra inferior, sem sidebar; sem o guard de orientação, o main ficava
+ * estreitado e centralizado, deixando ~140px de vazio de cada lado.
+ */
+@media (min-width: 1024px) and (orientation: landscape) {
   body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
   body:has(.card-mao-completa.etapa-finalizacao) main {
     width: calc(100% - 280px);
     max-width: calc(100% - 280px);
   }
+}
 
+@media (min-width: 1024px) {
   .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
     max-width: 760px;
     padding: 24px;
@@ -2201,6 +2209,77 @@
 
   .contador-dora-manual > div {
     justify-self: end;
+  }
+}
+
+/*
+ * Wrapper das opções agrupadas por assunto (ventos | riichi+condições).
+ * Por padrão é transparente ao layout (display:contents): no celular e no
+ * desktop as seções fluem como antes. Só nos tablets (bloco abaixo) ele vira
+ * uma grade de 2 colunas.
+ */
+.colunas-assuntos-finalizacao {
+  display: contents;
+}
+
+/*
+ * ── Tablets: layout unificado da finalização ────────────────────────────────
+ * Uma única regra para iPad Mini/Air/Pro, Surface, tablets Android e foldables
+ * em modo tablet — retrato e paisagem — em vez de ajustes por modelo. O card
+ * ocupa a área útil (sem virar um card estreito "flutuante" de desktop) e as
+ * opções se agrupam POR ASSUNTO em duas colunas:
+ *   - esquerda: Ventos (Vento da Rodada em cima, Seu Vento embaixo);
+ *   - direita:  Riichi (em cima) e Condições Especiais (embaixo).
+ * Cada seção mantém seus botões internos em 2 colunas (o 3º ocupa a linha —
+ * Ippatsu/Haitei).
+ *
+ * Faixa: 768px até o desktop de 2 colunas (1280px). Celulares (<768px) e desktop
+ * (≥1280px) não são afetados. min-height:600 exclui celulares em paisagem, que
+ * têm regras próprias mais abaixo neste arquivo.
+ */
+@media (min-width: 768px) and (max-width: 1279px) and (min-height: 600px) {
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    max-width: min(100%, 1000px);
+    margin-inline: auto;
+  }
+
+  .colunas-assuntos-finalizacao {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 16px;
+    align-items: start;
+  }
+
+  /* Coluna esquerda: os dois seletores de vento empilhados (um assunto só). */
+  .colunas-assuntos-finalizacao .seletores-vento-mao {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* A seção de ventos deixa de ser uma faixa com bordas horizontais: agora é
+     apenas a coluna esquerda da grade. */
+  .colunas-assuntos-finalizacao .grupo-opcoes-ventos {
+    padding-block: 0;
+    border-block: 0;
+  }
+
+  /* Coluna direita: Riichi e Condições Especiais empilhados (um assunto só). */
+  .colunas-assuntos-finalizacao .grupos-opcoes-mao {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Mão aberta: a Vitória (Tsumo/Ron) migra para o topo da coluna direita
+     (acima de Condições) e preenche a largura da coluna, em vez do limite de
+     320px que usa no topo. */
+  .colunas-assuntos-finalizacao .grupos-opcoes-mao .campo-vitoria-mao {
+    width: 100%;
+  }
+
+  /* Sem o retângulo cinza em volta de editar/config/excluir (igual ao celular):
+     os ícones ficam soltos no cabeçalho da mão. */
+  .acoes-finalizacao-calculadora {
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
   }
 }
 
@@ -4111,7 +4190,11 @@
     padding-inline: clamp(18px, 3vw, 32px);
   }
 
-  .card-mao-completa.fluxo-calculadora {
+  /* Escopo em .etapa-montagem: a finalização tem seu próprio dimensionamento de
+     card (bloco `.card-mao-completa.etapa-finalizacao` mais acima). Sem o escopo,
+     estas larguras/margens de montagem vazavam para a finalização e a faziam
+     parecer um card de desktop flutuante. */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
     width: min(100%, 960px);
     max-width: none;
     margin-inline: auto;
@@ -4558,7 +4641,8 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) {
-  .card-mao-completa.fluxo-calculadora {
+  /* Escopo em .etapa-montagem (ver comentário no bloco 768–1023 acima). */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
     width: min(100%, 1040px);
     max-width: none;
     margin-inline: auto;
@@ -4672,7 +4756,11 @@
  * the tiles instead of sitting next to them.
  */
 @media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
-  .card-mao-completa.fluxo-calculadora {
+  /* Escopo em .etapa-montagem: sem ele, o card da finalização era forçado a
+     display:flex + height:100dvh (vazio enorme abaixo do Calcular) e margin:0
+     (alinhado à esquerda, deixando a faixa do fundo do app à direita — o
+     "container azul/cinza"). A finalização usa seu próprio bloco responsivo. */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
     display: flex;
     flex-direction: column;
     width: 100%;

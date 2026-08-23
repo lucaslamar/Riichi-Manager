@@ -1,4 +1,5 @@
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
+import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import ModalRegras from '../componentes/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
@@ -30,6 +31,14 @@ export default function PaginaCalculadoraMao({
   contextoCenterpiece,
   aoVoltar,
 }: PropsPaginaCalculadoraMao = {}) {
+  /**
+   * Em telas grandes (tablets/desktop, ≥768px) todas as opções da finalização
+   * aparecem de uma vez, com os padrões já marcados — o usuário escolhe em
+   * qualquer ordem e só clica em Calcular. No celular mantém-se o fluxo por
+   * etapas (mais guiado no espaço estreito).
+   */
+  const telaGrande = useMediaQuery('(min-width: 768px)')
+
   const calculadora = useCalculadoraMao(
     contextoCenterpiece
       ? {
@@ -38,13 +47,11 @@ export default function PaginaCalculadoraMao({
             ventoRodada: contextoCenterpiece.ventoRodada,
             ventoAssento: contextoCenterpiece.ventoAssento,
             honba: contextoCenterpiece.honba,
-            riichi: contextoCenterpiece.jogadorRiichi
-              ? { duplo: false, ippatsu: false }
-              : null,
+            riichi: contextoCenterpiece.jogadorRiichi ? { duplo: false, ippatsu: false } : null,
           },
           fluxoCompleto: true,
         }
-      : undefined,
+      : { fluxoCompleto: telaGrande },
   )
 
   const cabecalho = contextoCenterpiece ? null : <BarraCalculadora modo="completo" />

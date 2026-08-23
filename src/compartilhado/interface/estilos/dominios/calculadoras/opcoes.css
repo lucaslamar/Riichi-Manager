@@ -481,6 +481,13 @@
   gap: 5px;
 }
 
+/* Mão aberta: a seção Riichi some (não há riichi com a mão aberta) e sobra só
+   "Condições Especiais". Sozinha, ela ocupa a linha inteira em vez de metade da
+   grade de 2 colunas — evita o vazio à direita nos tablets/desktop. */
+.grupos-opcoes-mao > .grupo-opcoes-mao:only-child {
+  grid-column: 1 / -1;
+}
+
 .grupo-opcoes-dora {
   align-self: stretch;
 }
