@@ -62,8 +62,8 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   const fluxoPreconfiguradoRef = useRef(opcoes?.fluxoCompleto ?? false)
   const [fluxoOpcoes, setFluxoOpcoes] = useState({
     vitoriaDefinida: fluxoPreconfiguradoRef.current,
-    ventoRodadaDefinido: fluxoPreconfiguradoRef.current,
-    ventoAssentoDefinido: fluxoPreconfiguradoRef.current,
+    ventoRodadaDefinido: true,
+    ventoAssentoDefinido: true,
   })
   const assinaturaMaoAtual = useMemo(
     () =>
@@ -332,8 +332,8 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     )
     setFluxoOpcoes({
       vitoriaDefinida: fluxoPreconfiguradoRef.current,
-      ventoRodadaDefinido: fluxoPreconfiguradoRef.current,
-      ventoAssentoDefinido: fluxoPreconfiguradoRef.current,
+      ventoRodadaDefinido: true,
+      ventoAssentoDefinido: true,
     })
     setEtapaFinalizacaoAtiva(false)
     setSelecionandoPedraAgari(false)

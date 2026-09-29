@@ -86,18 +86,6 @@ export function SeletorVentos({
 
   return (
     <div className="seletores-vento-mao">
-      {mostrarVentoRodada &&
-        renderizarSeletor(
-          t('calculator.roundWind'),
-          mao.ventoRodada,
-          ventoRodadaDefinido,
-          VENTOS_RODADA,
-          (rascunho, valor) => {
-            rascunho.ventoRodada = valor
-          },
-          aoDefinirVentoRodada,
-        )}
-
       {mostrarAssento &&
         renderizarSeletor(
           t('calculator.seatWind'),
@@ -108,6 +96,18 @@ export function SeletorVentos({
             rascunho.ventoAssento = valor
           },
           aoDefinirVentoAssento,
+        )}
+
+      {mostrarVentoRodada &&
+        renderizarSeletor(
+          t('calculator.roundWind'),
+          mao.ventoRodada,
+          ventoRodadaDefinido,
+          VENTOS_RODADA,
+          (rascunho, valor) => {
+            rascunho.ventoRodada = valor
+          },
+          aoDefinirVentoRodada,
         )}
     </div>
   )

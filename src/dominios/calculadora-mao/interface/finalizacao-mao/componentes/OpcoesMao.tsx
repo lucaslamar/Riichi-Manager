@@ -341,7 +341,7 @@ export default function OpcoesMao({
       </section>
 
       {/* Em tablets, as opções se agrupam por assunto em duas colunas:
-          esquerda = ventos (Vento da Rodada + Seu Vento), direita = Riichi +
+          esquerda = ventos (Seu Vento + Vento da Rodada), direita = Riichi +
           Condições Especiais. No celular/desktop o wrapper é display:contents e
           o layout anterior é preservado. */}
       <div className="colunas-assuntos-finalizacao">
