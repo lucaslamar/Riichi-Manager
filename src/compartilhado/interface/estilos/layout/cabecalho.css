@@ -642,7 +642,12 @@
   }
 }
 
-@media (orientation: landscape) and (max-height: 560px) and (max-width: 950px) {
+/*
+ * Upper bound is 1023px (not 950px) so the iPhone Pro Max / Plus in landscape
+ * (956×440 / 932×430) also get the drawer instead of the tablet bottom bar.
+ * The max-height keeps every tablet out regardless of width.
+ */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
   .cabecalho-principal {
     padding: 4px 0;
   }
