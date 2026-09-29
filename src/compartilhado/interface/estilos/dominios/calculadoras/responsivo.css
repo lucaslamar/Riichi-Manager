@@ -5731,3 +5731,56 @@
     box-sizing: border-box;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Densidade da Finalização em telefones largos (iPhone Pro Max ~440px, Android
+   ~412-480px), retrato.
+
+   Até 420px o bloco "@media (max-width: 420px)" compacta rótulos, título da mão
+   e gaps; acima disso a finalização caía nos valores base (mais altos), deixando
+   o Pro Max mais "profundo" que o iPhone 16. Aqui replicamos só essas diferenças,
+   com escopo na finalização. Peças, botões e larguras seguem o fluxo normal;
+   tablets (>= 768px) não são afetados.
+   ───────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 421px) and (max-width: 480px) and (orientation: portrait) {
+  .card-mao-completa.etapa-finalizacao .cabecalho-mao-editor {
+    margin-bottom: 3px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .titulo-mao-editor {
+    font-size: 0.76rem;
+    line-height: 1.1;
+  }
+
+  .card-mao-completa.etapa-finalizacao .campo-vitoria-mao > span,
+  .card-mao-completa.etapa-finalizacao .campo-vento-mao span {
+    font-size: 0.72rem;
+    line-height: 1.2;
+  }
+
+  .card-mao-completa.etapa-finalizacao .grupos-opcoes-mao {
+    gap: 8px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .linha-opcoes-mao .btn-toggle-mao {
+    padding: 7px 6px;
+    font-size: 0.76rem;
+    line-height: 1.15;
+  }
+}
+
+/* Montagem em telefones largos e altos (iPhone Pro Max 440×956, Plus 430×932).
+   O teclado fica preso à barra inferior e a área da mão absorve a altura
+   restante; como as peças já ocupam toda a largura, a altura extra desses
+   aparelhos virava só espaço vazio entre a mão e o teclado. Aqui as peças do
+   teclado ficam mais altas e as linhas um pouco mais espaçadas, para o vazio
+   ficar próximo ao do iPhone 16. Telefones até 420px e tablets não mudam. */
+@media (min-width: 421px) and (max-width: 480px) and (orientation: portrait) and (min-height: 880px) {
+  .construtor-mao-montagem .teclado-pedras {
+    gap: 7px;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    aspect-ratio: 0.6 / 1;
+  }
+}
