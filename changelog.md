@@ -1,6 +1,6 @@
 # Changelog - Riichi Manager
 
-## Não lançado
+## 4.4.5
 
 - Ajusta botoes esticados na finalização de mão.
 - ajusta doras.
@@ -8,6 +8,7 @@
 - Pedras da finalização de mão maiores no celular, deixando o rótulo "Batida" legível sem esforço (mais destaque no iPhone 16 Pro Max).
 - Áreas de toque da finalização padronizadas em 48px (Tsumo/Ron, Riichi, condições, Descartes, Calcular) e contadores de Honba/Doras maiores.
 - alguns ajustes ipad mini vertical
+- muda as ordems dos ventos.
 
 ## 4.4.4 - 2026-07-25
 
