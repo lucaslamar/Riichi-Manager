@@ -139,16 +139,17 @@ export default function OpcoesMao({
   const classeEtapa = (ativa: boolean) =>
     `etapa-opcoes-mao ${ativa ? 'etapa-opcoes-ativa' : 'etapa-opcoes-discreta'}`
 
-  // No layout por assunto do tablet, quando a mão está aberta (a seção Riichi
-  // não existe) a coluna direita ficaria só com Condições e sobraria espaço.
-  // Nesse caso a Vitória (Tsumo/Ron) sobe para o topo da coluna direita,
-  // equilibrando as duas colunas. Fora disso ela fica no topo, largura total.
+  // No layout por assunto do tablet, a Vitória (Tsumo/Ron) sobe para o topo da
+  // coluna direita, logo acima de Riichi/Condições, equilibrando as duas colunas
+  // (esquerda = Ventos, direita = Vitória + Riichi + Condições). Assim o Descarte
+  // pode ocupar o topo (onde a Vitória ficava) — ver a regra `order` em
+  // responsivo.css. No celular/desktop ela permanece no topo, largura total.
   // (A faixa espelha o @media do layout por assunto em responsivo.css.)
   const tabletPorAssunto = useMediaQuery(
     '(min-width: 768px) and (max-width: 1279px) and (min-height: 600px)',
   )
   const vitoriaNaColunaDireita =
-    tabletPorAssunto && !modoCenterpiece && mostrarConfiguracaoBasica && !mostrarRiichi
+    tabletPorAssunto && !modoCenterpiece && mostrarConfiguracaoBasica
 
   const campoVitoria = modoCenterpiece ? null : (
     <div

@@ -1238,9 +1238,12 @@
   background: #fce7f3;
 }
 
-/* ─── Teclado compacto no editor de descartes (portrait / telas sem landscape-css) ── */
+/* ─── Teclado compacto no editor de descartes (SÓ celular em retrato) ─────────
+   Em tablets (>=768px) o teclado de descartes usa o mesmo tamanho do painel de
+   Dora (pedras em retrato, não achatadas) — ver o bloco de tablet em
+   responsivo.css. Aqui fica só o compacto de celular. */
 
-@media (orientation: portrait) {
+@media (orientation: portrait) and (max-width: 767px) {
   .editor-descartes-finalizacao .teclado-pedras {
     gap: 3px;
     padding: 5px;

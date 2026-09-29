@@ -2241,6 +2241,13 @@
   .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
     max-width: min(100%, 1000px);
     margin-inline: auto;
+    /* Card plano nos tablets: sem sombra nem cantos arredondados. O fundo branco
+       do card funde com o fundo branco da página, então a borda deixa de aparecer
+       e a tela vira uma superfície única do app — em vez de um "container"
+       flutuante. No iPad Mini o conteúdo já preenchia a tela e a borda não
+       aparecia; no Air/Pro, onde sobra espaço abaixo, a sombra denunciava o card. */
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .colunas-assuntos-finalizacao {
@@ -2248,6 +2255,83 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 12px 16px;
     align-items: start;
+  }
+
+  /* Descartes sobe para o topo da coluna de opções (onde ficava a Vitória, que
+     agora migra para o topo da coluna direita — ver OpcoesMao.tsx). A coluna é
+     flex-column, então basta reordenar: Descartes, depois Honba/Doras, depois a
+     grade de assuntos (Ventos | Vitória+Riichi+Condições). */
+  .opcoes-mao-embutidas .descartes-finalizacao {
+    order: -1;
+  }
+
+  /* Editor de descartes com o mesmo "retângulo" do painel de Dora (borda + fundo
+     claro + cantos), para as duas seções contextuais ficarem visualmente iguais.
+     Base: .painel-contextual-finalizacao em opcoes.css. */
+  .editor-descartes-finalizacao {
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f8fafc;
+  }
+
+  /* A seção de Ventos tem um teto de altura (max-height: 560px) usado na animação
+     de revelação. Com botões de vento maiores nos tablets, as 4 linhas passavam
+     de 560px e o "SEU VENTO" era CORTADO (overflow: hidden). Sobe o teto para os
+     ventos caberem inteiros. Prefixo .card... para vencer a base (opcoes.css). */
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-ventos.etapa-opcoes-ativa {
+    max-height: 820px;
+  }
+
+  /* Teclado dos painéis Dora/Descartes: pedras em tamanho MÉDIO fixo, alinhadas
+     à esquerda — em vez de esticadas para preencher a largura, o que a 1024px as
+     inflava para ~80px ("gigantes"). Vale para os dois painéis (mesma classe). */
+  .painel-teclado-contextual-finalizacao .linha-naipe {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+
+  .painel-teclado-contextual-finalizacao .teclado-pedras .btn-pedra {
+    flex: 0 0 auto;
+    width: 46px;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 0.78 / 1;
+  }
+
+  /* Contadores Honba/Doras: passos −/+ e número maiores em TODOS os tablets (não
+     só nos altos), como pedido — os alvos de toque no iPad estavam pequenos.
+     Agrupados e compactos à esquerda (largura do conteúdo), não esticados. */
+  .card-mao-completa.etapa-finalizacao .contadores-dora-honba {
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    justify-content: start;
+    gap: 14px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual {
+    min-height: 60px;
+    padding: 8px 12px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual > div {
+    gap: 6px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual > div > button {
+    min-width: 46px;
+    min-height: 46px;
+    padding: 4px 10px;
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual > div > strong {
+    min-width: 1.6em;
+    font-size: 1.3rem;
+    text-align: center;
   }
 
   /* Coluna esquerda: os dois seletores de vento empilhados (um assunto só). */
@@ -2267,9 +2351,9 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  /* Mão aberta: a Vitória (Tsumo/Ron) migra para o topo da coluna direita
-     (acima de Condições) e preenche a largura da coluna, em vez do limite de
-     320px que usa no topo. */
+  /* A Vitória (Tsumo/Ron) migra para o topo da coluna direita (acima de Riichi/
+     Condições) e preenche a largura da coluna, em vez do limite de 320px que usa
+     no topo. */
   .colunas-assuntos-finalizacao .grupos-opcoes-mao .campo-vitoria-mao {
     width: 100%;
   }
@@ -2280,6 +2364,371 @@
     padding: 0;
     border-color: transparent;
     background: transparent;
+  }
+
+  /* Ventos sempre em 2 colunas (Leste|Sul / Oeste|Norte) dentro da coluna de
+     assuntos, igual ao iPad Mini — sobrepõe a regra de 4 colunas (min-width:900),
+     que só faz sentido quando os ventos ocupam a largura toda (desktop >=1280).
+     Sem isto, o iPad Pro (1024) espalhava os ventos numa única linha de 4,
+     destoando da composição do Mini. */
+  .colunas-assuntos-finalizacao .grupo-opcoes-ventos .grade-ventos-finalizacao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Tamanho-base das pedras nos tablets. 40px é o piso seguro para o iPad Mini
+     (1024px de altura): pedras maiores empurram o CALCULAR para trás da barra de
+     navegação fixa. Tablets mais altos (Air/Pro) sobem a escala nos blocos por
+     ALTURA logo abaixo — o limite real é o espaço vertical, não a largura. Melds
+     acompanham (calc sobre a mesma variável) para ficarem proporcionais à mão.
+     Escopo 768–1279 preserva o desktop (>=1280). */
+  .card-mao-completa.etapa-finalizacao {
+    --finalizacao-tile-largura: 40px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .melds-finalizacao-coluna .meld-tile,
+  .card-mao-completa.etapa-finalizacao .melds-finalizacao-coluna .meld-pedras .tile-img {
+    width: calc(var(--finalizacao-tile-largura) * 0.82);
+    height: calc(var(--finalizacao-tile-altura) * 0.82);
+  }
+
+  .card-mao-completa.etapa-finalizacao .melds-finalizacao-coluna .meld-tile.de-lado,
+  .card-mao-completa.etapa-finalizacao .melds-finalizacao-coluna .meld-pedras .tile-img-lado {
+    width: calc(var(--finalizacao-tile-altura) * 0.82);
+    height: calc(var(--finalizacao-tile-largura) * 0.82);
+  }
+
+  /*
+   * Densidade vertical unificada nos tablets (Air/Pro/Surface). O bloco >=1024
+   * afrouxava tudo no iPad Pro (gaps 20/12px, padding 24px), deixando as seções
+   * "longe" umas das outras. Aqui aproximamos todos os tablets da densidade
+   * compacta do Mini, um pouco mais apertada, para as seções ficarem agrupadas
+   * como uma única tela — sobrepondo os gaps maiores do >=1024. */
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    padding: 16px 20px;
+  }
+
+  .pagina-finalizacao-mao > .layout-finalizacao-calculadora {
+    margin-top: 6px;
+  }
+
+  .layout-finalizacao-calculadora {
+    gap: 12px;
+  }
+
+  .coluna-finalizacao-mao,
+  .coluna-finalizacao-opcoes,
+  .opcoes-mao-embutidas {
+    gap: 8px;
+  }
+
+  .contadores-dora-honba,
+  .seletores-vento-mao {
+    gap: 8px;
+  }
+
+  /* Calcular volta a ser a barra verde de largura total (como no iPad Air/Mini),
+     em vez do botão estreito de 220px alinhado à esquerda que o >=1024 aplicava —
+     ele parecia pequeno e desconectado, reforçando a sensação de "espalhado". */
+  .acao-calcular-mao.rodape-finalizacao-mao {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 6px;
+  }
+
+  .botao-calcular-finalizacao {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .status-finalizacao-mao {
+    text-align: center;
+  }
+}
+
+/*
+ * iPad Mini em retrato (~1024px de altura) e afins: com a Vitória migrada para a
+ * coluna direita, o conteúdo encurtou e abriu ~90px de vazio embaixo. O Mini tem
+ * pouca folga vertical, então o botão de vento sobe só um pouco (a coluna de
+ * Ventos dita a altura da grade) — o suficiente para reaproximar o CALCULAR da
+ * barra sem empurrá-lo para trás dela. NÃO mexe nas pedras (mantém 40px). Tiers
+ * mais altos (>=1120 e >=1300) sobrescrevem com valores maiores logo abaixo.
+ */
+@media (min-width: 768px) and (max-width: 1279px) and (min-height: 1000px) {
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-ventos .botao-vento-finalizacao {
+    min-height: 84px;
+  }
+}
+
+/*
+ * Tablets altos (iPad Air em retrato ~1180px e acima): há espaço vertical de
+ * sobra acima da barra, então as pedras sobem de 40px → 46px. O gate é por
+ * ALTURA (>=1120px) de propósito: o iPad Mini (1024px de altura) fica de fora e
+ * mantém os 40px, evitando que o CALCULAR seja empurrado para trás da barra.
+ * Melds acompanham via o calc do bloco base. Escopo 768–1279 preserva o desktop.
+ */
+@media (min-width: 768px) and (max-width: 1279px) and (min-height: 1120px) {
+  .card-mao-completa.etapa-finalizacao {
+    --finalizacao-tile-largura: 46px;
+  }
+
+  /* Com a Vitória migrada para a coluna direita, o conteúdo encurtou e abriu um
+     vazio embaixo também no Air (~1180px). Botões de vento um pouco mais altos
+     (a coluna de Ventos dita a altura) e gaps maiores recuperam a altura sem
+     esticar. Tablets ainda mais altos (>=1300) sobrescrevem com valores maiores
+     no bloco abaixo. */
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-ventos .botao-vento-finalizacao {
+    min-height: 88px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .opcoes-mao-embutidas,
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-opcoes {
+    gap: 18px;
+  }
+}
+
+/*
+ * iPad Pro 12.9"/13" e maiores em retrato (>=1024×1366): a tela é muito maior,
+ * então o conteúdo no tamanho do Air ficava "pequeno" e perdido — um app de
+ * celular centralizado num tablet, com ~112px de vazio de cada lado. Aqui o app
+ * assume a largura do tablet (card ~940px, respiro simétrico), sobe a tipografia
+ * dos rótulos/título para escala de tablet e agrupa Honba/Doras lado a lado para
+ * a largura extra virar app coeso — não seções espalhadas nem espaço morto.
+ * Gate por largura (>=1024) E altura (>=1300) isola o Pro 12.9 — tablets mais
+ * baixos/estreitos (Air, Pro 11", Surface) ficam no tier de 46px, e o desktop
+ * (>=1280) permanece intacto.
+ */
+@media (min-width: 1024px) and (max-width: 1279px) and (min-height: 1300px) {
+  /* Com o card quase da largura do tablet (abaixo) a mão de 14 pedras cabe numa
+     linha só a 58px, então as pedras crescem bastante em vez de encolher. */
+  .card-mao-completa.etapa-finalizacao {
+    --finalizacao-tile-largura: 58px;
+  }
+
+  /* Botões de vento em escala de tablet: mais altos e com a pedra maior. */
+  .grupo-opcoes-ventos .botao-vento-finalizacao {
+    min-height: 96px;
+  }
+
+  .grupo-opcoes-ventos .botao-vento-finalizacao .tile-img {
+    width: 38px;
+    height: 52px;
+  }
+
+  /* O card assume a largura do tablet em vez de ficar preso a 800px (que deixava
+     ~112px de vazio de cada lado, com cara de "app de celular centralizado").
+     min(100% - 44px, 980px) preenche a área com um respiro simétrico pequeno,
+     sem colar nas bordas, e protege larguras maiores da faixa. */
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    max-width: min(100% - 44px, 980px);
+  }
+
+  /* Honba e Doras voltam a colunas que encolhem para o conteúdo (o bloco >=640
+     as esticava a 1fr, jogando um contador em cada extremo da linha larga). Com
+     max-content elas ficam agrupadas à esquerda, lado a lado — seção coesa. */
+  .card-mao-completa.etapa-finalizacao .contadores-dora-honba {
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    justify-content: start;
+    gap: 14px;
+  }
+
+  /* Tipografia dos rótulos/título centralizada no bloco compartilhado de tablets
+     altos (mais abaixo), para valer igual no Pro e no Surface. */
+
+  /* Controles com dimensão de tablet grande: alvos de toque maiores e texto
+     legível que ajudam o conteúdo a PREENCHER a altura do 12.9", em vez dos
+     48px/13px que pareciam pequenos e "distantes" numa tela tão alta. */
+  .card-mao-completa.etapa-finalizacao .campo-vitoria-mao .toggle-agari-mao button,
+  .card-mao-completa.etapa-finalizacao .linha-opcoes-mao .btn-toggle-mao {
+    min-height: 62px;
+    font-size: 1.02rem;
+  }
+
+  .card-mao-completa.etapa-finalizacao .descartes-finalizacao button {
+    min-height: 62px;
+    font-size: 1.02rem;
+  }
+
+  /* Barra CALCULAR proeminente, à altura da superfície de tablet. */
+  .card-mao-completa.etapa-finalizacao .botao-calcular-finalizacao {
+    min-height: 66px;
+    font-size: 1.18rem;
+  }
+
+  .card-mao-completa.etapa-finalizacao .status-finalizacao-mao {
+    font-size: 0.94rem;
+  }
+
+  /* Densidade PROPORCIONAL ao tamanho grande das pedras (58px) e dos controles:
+     não é o compacto do Mini (que ficaria minúsculo aqui, deixando um vazio
+     enorme embaixo e cara de "app pequeno e distante"), nem os gaps cavernosos
+     de 24/20px que afastavam as seções. Estes gaps crescem junto com os
+     elementos, então a proporção gap/elemento é a MESMA do Mini — agrupado, não
+     "profundo" — e o conjunto maior preenche a altura da tela. */
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    padding: 24px 24px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora {
+    gap: 24px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-mao,
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-opcoes,
+  .card-mao-completa.etapa-finalizacao .opcoes-mao-embutidas {
+    gap: 22px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .colunas-assuntos-finalizacao {
+    gap: 22px 20px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .acao-calcular-mao.rodape-finalizacao-mao {
+    margin-top: 20px;
+  }
+}
+
+/*
+ * Tablets ALTOS porém ESTREITOS em retrato (768–1023px de largura e >=1300px de
+ * altura: Surface Pro, tablets Android grandes e afins). Ficavam de fora do tier
+ * do iPad Pro (que exige >=1024) e só recebiam pedras 46px + controles no
+ * tamanho-base, então preenchiam só ~73% da altura — um vazio enorme embaixo,
+ * com cara de "app pequeno e distante". Aqui o conteúdo cresce para preencher a
+ * altura como no iPad Mini, igual ao tier do iPad Pro, mas com as pedras a 54px
+ * (o máximo que a mão de 14 cabe numa linha a ~912px; o Pro usa 58px porque tem
+ * a largura). Alvos de toque maiores e mais próximos, seções agrupadas.
+ */
+@media (min-width: 768px) and (max-width: 1023px) and (min-height: 1300px) {
+  /* Pedras no maior tamanho que a mão de 14 cabe numa linha à largura disponível:
+     ~54px a 912px, encolhendo até 46px lá pelos 768px para nunca estourar a
+     largura (14 pedras + gaps). O Pro usa 58px fixo porque tem >=1024. Melds
+     acompanham via o calc do bloco base de tablets (768–1279). */
+  .card-mao-completa.etapa-finalizacao {
+    --finalizacao-tile-largura: clamp(44px, 5.4vw, 50px);
+  }
+
+  /* Botões de vento em escala de tablet, como no Pro. */
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-ventos .botao-vento-finalizacao {
+    min-height: 96px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-ventos .botao-vento-finalizacao .tile-img {
+    width: 36px;
+    height: 50px;
+  }
+
+  /* Controles com altura de tablet grande — o principal motor do preenchimento
+     nesta largura, já que as pedras não podem crescer tanto quanto no Pro. */
+  .card-mao-completa.etapa-finalizacao .campo-vitoria-mao .toggle-agari-mao button,
+  .card-mao-completa.etapa-finalizacao .linha-opcoes-mao .btn-toggle-mao,
+  .card-mao-completa.etapa-finalizacao .descartes-finalizacao button {
+    min-height: 62px;
+    font-size: 1.02rem;
+  }
+
+  .card-mao-completa.etapa-finalizacao .botao-calcular-finalizacao {
+    min-height: 66px;
+    font-size: 1.18rem;
+  }
+
+  .card-mao-completa.etapa-finalizacao .status-finalizacao-mao {
+    font-size: 0.94rem;
+  }
+
+  /* Tipografia dos rótulos/título centralizada no bloco compartilhado de tablets
+     altos (mais abaixo), para valer igual no Pro e no Surface. */
+
+  /* Espaçamento proporcional aos elementos maiores (agrupado, não "profundo"),
+     ajudando a preencher a altura junto com os controles. */
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    padding: 24px 22px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora {
+    gap: 24px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-mao,
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-opcoes,
+  .card-mao-completa.etapa-finalizacao .opcoes-mao-embutidas {
+    gap: 22px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .colunas-assuntos-finalizacao {
+    gap: 22px 18px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .acao-calcular-mao.rodape-finalizacao-mao {
+    margin-top: 20px;
+  }
+}
+
+/*
+ * Vitória / Honba / Doras em tablets ALTOS (>=1300px de altura: iPad Pro,
+ * Surface Pro e afins) — vale para os dois tiers acima (largura >=1024 e
+ * 768–1023). Estes controles eram os menores da tela: os passos −/+ dos
+ * contadores tinham só 34×36px e a Vitória parecia um pill fino perto dos
+ * botões de vento (96px), ficando "difíceis de ver e clicar" numa tela grande.
+ * Aqui eles ganham corpo e alvos de toque confortáveis, à altura do restante.
+ */
+@media (min-width: 768px) and (max-width: 1279px) and (min-height: 1300px) {
+  /* Com a Vitória agora dentro da coluna direita (não mais uma faixa de largura
+     total acima), o conteúdo encurtou e sobrava um vazio embaixo. A coluna de
+     Ventos (esquerda) é a mais alta e dita a altura da grade de assuntos, então
+     botões de vento mais altos (com a pedra maior para não ficarem "ocos")
+     recuperam essa altura e voltam a preencher a tela — alvos de toque ainda
+     maiores, de brinde. O espaçamento entre as seções também cresce um pouco. */
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-ventos .botao-vento-finalizacao {
+    min-height: 114px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .grupo-opcoes-ventos .botao-vento-finalizacao .tile-img {
+    width: 42px;
+    height: 57px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .opcoes-mao-embutidas,
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-opcoes {
+    gap: 28px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora {
+    gap: 28px;
+  }
+
+  /* Contadores Honba/Doras (agrupamento + passos −/+ maiores) agora ficam no
+     bloco de TODOS os tablets (min-width: 768) mais acima — não repetidos aqui. */
+
+  /* Vitória (Tsumo/Ron) um pouco mais alto para não parecer um pill fino ao
+     lado dos controles grandes. */
+  .card-mao-completa.etapa-finalizacao .campo-vitoria-mao .toggle-agari-mao button {
+    min-height: 66px;
+    font-size: 1.06rem;
+  }
+
+  /*
+   * Títulos e rótulos de seção em escala de tablet grande. Ficavam em 0.78–0.9rem
+   * (12–14px) — minúsculos perto dos controles agora maiores, difíceis de ler à
+   * distância de uso de um tablet. Consolidado aqui para valer nos dois tiers
+   * (iPad Pro >=1024 e Surface 768–1023). Inclui os rótulos que eram <span> sem
+   * classe (VITÓRIA, VENTO DA RODADA, SEU VENTO), antes intocados.
+   */
+  .card-mao-completa.etapa-finalizacao .titulo-mao-editor {
+    font-size: 1.35rem;
+  }
+
+  /* Rótulos de seção: HONBA E DORAS, CONFIGURAÇÃO DE VENTOS, RIICHI, CONDIÇÕES
+     ESPECIAIS, e o rótulo VITÓRIA (um <span> sem classe). */
+  .card-mao-completa.etapa-finalizacao .rotulo-bloco-opcoes,
+  .card-mao-completa.etapa-finalizacao .campo-vitoria-mao > span {
+    font-size: 1.05rem;
+  }
+
+  /* Sub-rótulos dentro de Ventos (VENTO DA RODADA / SEU VENTO) e os rótulos dos
+     contadores (HONBA, DORAS NA MÃO): um degrau abaixo dos rótulos de seção. */
+  .card-mao-completa.etapa-finalizacao .campo-vento-mao > span,
+  .card-mao-completa.etapa-finalizacao .rotulo-contador-com-ajuda,
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual > span {
+    font-size: 0.95rem;
   }
 }
 
@@ -4336,8 +4785,11 @@
     display: none;
   }
 
-  /* Push scrollable content above the fixed keyboard */
-  .card-mao-completa.fluxo-calculadora {
+  /* Push scrollable content above the fixed keyboard. Escopo em .etapa-montagem:
+     só a montagem tem o teclado fixo (position:fixed acima). A finalização não
+     tem teclado fixo, então sem o escopo essa folga vira espaço morto que deixa
+     o card "vazio" e esticado nos tablets mais altos (iPad Air/Mini). */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
     padding-bottom: 240px;
   }
 
