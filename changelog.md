@@ -1,5 +1,9 @@
 # Changelog - Riichi Manager
 
+### Não Lançado
+
+- transpõe tabela rápida de Han e Fu no celular deitado
+
 ## 4.4.5
 
 - Ajusta botoes esticados na finalização de mão.
