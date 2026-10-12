@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import {
   HAN_MAXIMO,
   HAN_MINIMO,
@@ -255,6 +256,9 @@ export function SeletorTipoVitoria({
   )
 }
 
+const CONSULTA_TABELA_TRANSPOSTA =
+  '(orientation: landscape) and (min-width: 561px) and (max-width: 1000px) and (max-height: 500px)'
+
 export function TabelaReferenciaRapida({
   referencia,
   recolhidaPorPadrao = false,
@@ -264,6 +268,12 @@ export function TabelaReferenciaRapida({
 }) {
   const { t } = useI18n()
   const [recolhida, setRecolhida] = useState(recolhidaPorPadrao)
+  // Celular deitado: eixos trocados (Fu nas linhas, Han nas colunas). A faixa
+  // espelha o @media de `.tabela-referencia-han-fu.transposta` em han-fu.css.
+  const transposta = useMediaQuery(CONSULTA_TABELA_TRANSPOSTA)
+  const fus = (referencia.linhas.find((linha) => linha.han === 2) ?? referencia.linhas[0])?.celulas.map(
+    (celula) => celula.fu,
+  ) ?? []
 
   return (
     <section className="referencia-han-fu" aria-labelledby="referencia-han-fu-titulo">
@@ -286,33 +296,57 @@ export function TabelaReferenciaRapida({
         hidden={recolhida}
       >
         <div
-          className="tabela-referencia-han-fu"
+          className={`tabela-referencia-han-fu ${transposta ? 'transposta' : ''}`}
           role="table"
           aria-label={t('hanFu.quickReference')}
         >
-          <div className="linha-referencia-han-fu cabecalho" role="row">
-            <span role="columnheader">{t('hanFu.referenceCorner')}</span>
-            {(referencia.linhas.find((l) => l.han === 2) ?? referencia.linhas[0])?.celulas.map(
-              (celula) => (
-                <span key={celula.fu} role="columnheader">
-                  {celula.fu}
-                </span>
-              ),
-            )}
-          </div>
-          {referencia.linhas.map((linha) => (
-            <div
-              className="linha-referencia-han-fu"
-              role="row"
-              key={linha.han}
-              data-han={linha.han}
-            >
-              <strong role="rowheader">{rotularHan(linha.han, t)}</strong>
-              {linha.celulas.map((celula) => (
-                <CelulaReferencia key={`${linha.han}-${celula.fu}`} celula={celula} />
+          {transposta ? (
+            <>
+              <div className="linha-referencia-han-fu cabecalho" role="row">
+                <span role="columnheader">{t('hanFu.referenceCorner')}</span>
+                {referencia.linhas.map((linha) => (
+                  <span key={linha.han} role="columnheader">
+                    {rotularHan(linha.han, t)}
+                  </span>
+                ))}
+              </div>
+              {fus.map((fu) => (
+                <div className="linha-referencia-han-fu" role="row" key={fu} data-fu={fu}>
+                  <strong role="rowheader">{fu} Fu</strong>
+                  {referencia.linhas.map((linha) => {
+                    const celula = linha.celulas.find((item) => item.fu === fu)
+                    return celula ? (
+                      <CelulaReferencia key={`${linha.han}-${fu}`} celula={celula} />
+                    ) : null
+                  })}
+                </div>
               ))}
-            </div>
-          ))}
+            </>
+          ) : (
+            <>
+              <div className="linha-referencia-han-fu cabecalho" role="row">
+                <span role="columnheader">{t('hanFu.referenceCorner')}</span>
+                {fus.map((fu) => (
+                  <span key={fu} role="columnheader">
+                    {fu}
+                  </span>
+                ))}
+              </div>
+              {referencia.linhas.map((linha) => (
+                <div
+                  className="linha-referencia-han-fu"
+                  role="row"
+                  key={linha.han}
+                  data-han={linha.han}
+                >
+                  <strong role="rowheader">{rotularHan(linha.han, t)}</strong>
+                  {linha.celulas.map((celula) => (
+                    <CelulaReferencia key={`${linha.han}-${celula.fu}`} celula={celula} />
+                  ))}
+                </div>
+              ))}
+            </>
+          )}
         </div>
         <section className="bloco-limites-han-fu" aria-label={t('hanFu.limitReference')}>
           <h4>{t('hanFu.limitReference')}</h4>

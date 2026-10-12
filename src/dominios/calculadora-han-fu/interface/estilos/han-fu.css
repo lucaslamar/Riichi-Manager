@@ -827,3 +827,26 @@ button.cabecalho-referencia-toggle:hover {
     padding: 8px 10px;
   }
 }
+
+/*
+ * Tabela rapida transposta no celular deitado: Fu nas linhas, Han nas colunas.
+ * A faixa espelha CONSULTA_TABELA_TRANSPOSTA em ControlesHanFu.tsx; a altura
+ * maxima de 500px deixa tablets e desktops de fora mesmo em paisagem.
+ */
+@media (orientation: landscape) and (min-width: 561px) and (max-width: 1000px) and (max-height: 500px) {
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu {
+    grid-template-columns: 64px repeat(4, minmax(118px, 1fr));
+    min-width: 536px;
+  }
+
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu > strong,
+  .tabela-referencia-han-fu.transposta .celula-referencia-han-fu,
+  .tabela-referencia-han-fu.transposta .celula-referencia-vazia {
+    min-height: 58px;
+  }
+
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho > span,
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu > strong {
+    min-height: 36px;
+  }
+}
