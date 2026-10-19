@@ -1,5 +1,12 @@
 # Changelog - Mojoca
 
+## Não lançado
+
+### Alterado
+
+- Teclado da montagem no celular em pé: as Honras ficam centralizadas abaixo dos naipes, como nos tablets. Sem aka dora, os naipes de 9 pedras também ficam centralizados, sem a coluna vazia à direita. As pedras mantêm o mesmo tamanho.
+- Teclado da montagem no celular deitado sem aka dora: os naipes de 9 pedras ocupam toda a largura, sem a coluna vazia à direita.
+
 ## 5.0.0 - 2026-10-19
 
 ### Novo nome

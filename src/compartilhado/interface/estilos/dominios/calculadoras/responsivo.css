@@ -1424,7 +1424,8 @@
   }
 
   .construtor-mao-montagem .linha-naipe {
-    gap: 2px;
+    --gap-pedra-celular: 2px;
+    gap: var(--gap-pedra-celular);
   }
 
   .construtor-mao-montagem .teclado-pedras .btn-pedra {
@@ -1549,7 +1550,8 @@
 
   /* Espaçamento horizontal entre as pedras (+1px) sem comprimir a largura útil. */
   .construtor-mao-montagem .linha-naipe {
-    gap: 3px;
+    --gap-pedra-celular: 3px;
+    gap: var(--gap-pedra-celular);
   }
 
   /*
@@ -3700,6 +3702,15 @@
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
+  /* Sem aka dora os naipes têm 9 pedras: ocupam toda a largura, sem coluna vazia. */
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .linha-naipe {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
   .construtor-mao-montagem .teclado-pedras .btn-pedra {
     width: 100%;
     height: clamp(34px, 8dvh, 40px);
@@ -5081,5 +5092,36 @@
     height: calc(var(--largura-pedra) * 1.225);
     min-width: 0;
     aspect-ratio: auto;
+  }
+}
+
+/*
+ * Teclado de pedras no celular retrato: mesma disposição do tablet.
+ * ------------------------------------------------------------------
+ * Cada pedra mantém a largura de uma coluna da grade de 10 (mesmo tamanho de
+ * antes), mas as linhas que têm menos de 10 pedras ficam centralizadas em vez
+ * de deixar espaço vazio à direita. `--gap-pedra-celular` vem das regras de
+ * `.construtor-mao-montagem .linha-naipe` acima (2px, ou 3px com min-height 700px).
+ */
+@media (max-width: 640px) and (orientation: portrait) {
+  .construtor-mao-montagem .teclado-pedras .linha-naipe {
+    --largura-coluna-pedra: calc((100% - 9 * var(--gap-pedra-celular, 2px)) / 10);
+  }
+
+  /* Sem aka dora: naipes com 9 pedras e Honras centralizados. */
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .linha-naipe {
+    grid-template-columns: repeat(9, var(--largura-coluna-pedra));
+    justify-content: center;
+  }
+
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, var(--largura-coluna-pedra));
+  }
+
+  /* EXPERIMENTAL — com aka dora: só as Honras centralizadas sob os naipes de 10.
+     Para reverter, basta remover esta regra. */
+  .construtor-mao-montagem .teclado-pedras:has(.btn-pedra-aka) .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, var(--largura-coluna-pedra));
+    justify-content: center;
   }
 }
