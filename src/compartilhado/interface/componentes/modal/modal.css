@@ -1,0 +1,181 @@
+/*
+ * Modal base. Layout único e fluido para todas as telas: tamanhos com min()/
+ * clamp() em vez de regras por aparelho. Cada modal específica só ajusta o
+ * próprio conteúdo pela classe que passa em `className` (ou pelas variáveis
+ * abaixo) — nunca o esqueleto.
+ *
+ * Variáveis que uma modal específica pode sobrescrever:
+ *   --modal-largura     largura máxima (definida pelo tamanho)
+ *   --modal-altura      altura máxima
+ *   --modal-fundo       cor de fundo
+ *   --modal-borda       cor da borda e dos divisores
+ *   --modal-cor-titulo  cor do título
+ */
+
+.modal-fundo {
+  position: fixed;
+  inset: 0;
+  /* Acima do cabeçalho (80) e da barra de navegação inferior (50). */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(10px, 3vmin, 24px);
+  padding-bottom: max(clamp(10px, 3vmin, 24px), env(safe-area-inset-bottom));
+  background: rgba(16, 42, 67, 0.5);
+  overscroll-behavior: contain;
+}
+
+.modal {
+  --modal-largura: 560px;
+  --modal-altura: 760px;
+  --modal-fundo: var(--branco);
+  --modal-borda: #e5e7eb;
+  --modal-cor-titulo: var(--escuro);
+  --modal-espaco: clamp(14px, 2.4vmin + 6px, 24px);
+
+  display: flex;
+  flex-direction: column;
+  width: min(var(--modal-largura), 100%);
+  max-height: min(var(--modal-altura), 100%);
+  overflow: hidden;
+  border: 1px solid var(--modal-borda);
+  border-radius: 12px;
+  background: var(--modal-fundo);
+  color: #102a43;
+  box-shadow: 0 24px 60px rgba(16, 42, 67, 0.28);
+}
+
+.modal--pequena {
+  --modal-largura: 400px;
+}
+
+.modal--media {
+  --modal-largura: 560px;
+}
+
+.modal--grande {
+  --modal-largura: 860px;
+}
+
+.modal--alerta {
+  --modal-fundo: #fff7f7;
+  --modal-borda: #fecaca;
+  --modal-cor-titulo: #b91c1c;
+  box-shadow: 0 24px 60px rgba(127, 29, 29, 0.24);
+}
+
+/* ─── Cabeçalho (fixo) ────────────────────────────────────────────────────── */
+.modal-cabecalho {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: var(--modal-espaco) var(--modal-espaco) calc(var(--modal-espaco) * 0.6);
+}
+
+.modal--titulo-titulo .modal-cabecalho {
+  padding-bottom: var(--modal-espaco);
+  border-bottom: 1px solid var(--modal-borda);
+}
+
+.modal-titulos {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: center;
+}
+
+.modal-titulo {
+  margin: 0;
+  color: var(--modal-cor-titulo);
+  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.modal--titulo-rotulo .modal-titulo {
+  font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.modal--padrao.modal--titulo-rotulo {
+  --modal-cor-titulo: #607080;
+}
+
+.modal-subtitulo {
+  margin: 4px 0 0;
+  color: #607080;
+  font-size: clamp(0.88rem, 0.82rem + 0.35vw, 1.15rem);
+  line-height: 1.4;
+}
+
+.modal-fechar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #102a43;
+  cursor: pointer;
+  font-size: 1.05rem;
+}
+
+.modal-fechar:hover,
+.modal-fechar:focus-visible {
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+/* ─── Corpo (única área rolável) ──────────────────────────────────────────── */
+.modal-corpo {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--modal-espaco) var(--modal-espaco);
+  /* Permite ao conteúdo de cada modal se adaptar à largura da própria modal
+     (@container / unidades cqw), em vez da largura da tela. */
+  container-type: inline-size;
+}
+
+.modal--titulo-titulo .modal-corpo {
+  padding-top: calc(var(--modal-espaco) * 0.5);
+}
+
+/* ─── Rodapé (fixo, opcional) ─────────────────────────────────────────────── */
+.modal-rodape {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: calc(var(--modal-espaco) * 0.75) var(--modal-espaco);
+  border-top: 1px solid var(--modal-borda);
+  background: var(--modal-fundo);
+}
+
+/*
+ * Telas baixas (celular deitado, janelas curtas): cabeçalho e rodapé
+ * encolhem e o subtítulo some, para sobrar altura para o conteúdo.
+ */
+@media (max-height: 600px) {
+  .modal {
+    --modal-espaco: 12px;
+  }
+
+  .modal-subtitulo {
+    display: none;
+  }
+
+  .modal-fechar {
+    width: 34px;
+    height: 34px;
+  }
+}

@@ -1,42 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { CodigoPedra } from '../../../logica/mao'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
-import { ESTILO_MELD, HONRAS, NAIPES, codigoBase } from '../../constantes'
-import ExibicaoCompleta from './ExibicaoCompleta'
-import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
-
-const NOME_VENTO_RESULTADO: Record<string, string> = {
-  '1': 'Leste', '2': 'Sul', '3': 'Oeste', '4': 'Norte',
-}
-
-const KANJI_VENTO_RESULTADO: Record<string, string> = {
-  '1': '東', '2': '南', '3': '西', '4': '北',
-}
-
-interface ContextoCenterpiece {
-  tipoVitoria: 'ron' | 'tsumo'
-  ventoRodada: string
-  ventoAssento: string
-  honba: number
-  rodadaNumero?: number
-  vencedorNome?: string
-}
+import { codigoBase } from '../../constantes'
+import ModalResultado from '../../modais/resultado/ModalResultado'
 
 interface PropsResultadoMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
   modoFluxo?: 'montagem' | 'finalizacao'
-  aoUsarMao?: () => void
-  contextoCenterpiece?: ContextoCenterpiece
 }
 
 /** Resultado da mao montada, incluindo esperas, botao Calcular e modal final. */
 export default function ResultadoMaoCalculada({
   estado,
   modoFluxo = 'montagem',
-  aoUsarMao,
-  contextoCenterpiece,
 }: PropsResultadoMao) {
   const { t } = useI18n()
   const {
@@ -90,7 +67,6 @@ export default function ResultadoMaoCalculada({
   const [modalResultadoAberto, setModalResultadoAberto] = useState(false)
   const [ultimoModalAberto, setUltimoModalAberto] = useState<string | null>(null)
   const [modalResultadoSolicitado, setModalResultadoSolicitado] = useState(false)
-  const modalRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (!modalResultadoSolicitado || !deveCalcularMao || !assinaturaResultado) return
@@ -105,10 +81,6 @@ export default function ResultadoMaoCalculada({
     modalResultadoSolicitado,
     ultimoModalAberto,
   ])
-
-  useEffect(() => {
-    if (modalResultadoAberto) modalRef.current?.focus()
-  }, [modalResultadoAberto])
 
   /**
    * Chamado pelo botao Calcular da etapa Finalizar Mao.
@@ -138,62 +110,6 @@ export default function ResultadoMaoCalculada({
     })
   }
 
-  const pedraAgari = mao.agariMeld ? null : mao.pedras[mao.indiceAgari]
-  const pedrasFechadas = mao.agariMeld
-    ? mao.pedras
-    : mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
-
-  const maoRenderizada = (
-    <div className="mao-calculada resultado-composicao-mao">
-      {mao.pedras.length > 0 && (
-        <div className="resultado-grupo-mao resultado-grupo-fechado" aria-label={t('calculator.closedHand')}>
-          {pedrasFechadas.map((pedra, indice) => (
-            <span key={`${pedra}-${indice}`} className="chip-pedra resultado-pedra">
-              <PedraSvg pedra={pedra} />
-            </span>
-          ))}
-          {pedraAgari && (
-            <span className="chip-pedra resultado-pedra agari">
-              <PedraSvg pedra={pedraAgari} />
-            </span>
-          )}
-        </div>
-      )}
-      {mao.melds.map((meld, indice) => (
-        <span
-          key={`${meld.tipo}-${indice}`}
-          className={`resultado-meld resultado-meld-${meld.tipo}`}
-          style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
-          aria-label={ESTILO_MELD[meld.tipo].rotulo}
-        >
-          <PedrasMeld
-            meld={meld}
-            indiceAgari={mao.agariMeld?.indiceMeld === indice ? mao.agariMeld.indicePedra : undefined}
-          />
-        </span>
-      ))}
-    </div>
-  )
-  const chomboOya = mao.ventoAssento === '1'
-  const avisoChombo = (
-    <div className="resultado-chombo-furiten resultado-chombo-modal">
-      <strong>{t('calculator.furitenChomboTitle')}</strong>
-      <div className="pontos-chombo">{chomboOya ? '-12.000' : '-8.000'}</div>
-      <span>
-        {chomboOya
-          ? t('calculator.furitenChomboTextDealer')
-          : t('calculator.furitenChomboTextNonDealer')}
-      </span>
-    </div>
-  )
-  const avisoSemYaku = (
-    <div className="resultado-chombo-furiten resultado-chombo-modal">
-      <strong>{t('calculator.noYakuTitle')}</strong>
-      <div className="pontos-chombo">{chomboOya ? '-12.000' : '-8.000'}</div>
-      <span>{t('calculator.invalidNoYakuAnnounce')}</span>
-      <span>{chomboOya ? t('calculator.noYakuPenaltyDealer') : t('calculator.noYakuPenaltyNonDealer')}</span>
-    </div>
-  )
   const textoBotao =
     !maoCompleta
       ? t('calculator.notEnoughTiles')
@@ -212,37 +128,6 @@ export default function ResultadoMaoCalculada({
               .filter(Boolean)
               .join(', '),
           })
-  /**
-   * Rodape de referencia de pedras (MAN/PIN/SOU/HONRAS), so exibido na faixa
-   * horizontal do iPad Air/Pro. Fica escondido (display:none) em todos os
-   * outros breakpoints via CSS, entao nao altera o retrato nem o iPad Mini.
-   */
-  const rodapeReferenciaPedras = (
-    <div className="modal-resultado-rodape-pedras" aria-hidden="true">
-      {NAIPES.map(({ naipe, rotulo }) => (
-        <div key={naipe} className="rodape-pedras-linha">
-          <span className="rodape-pedras-rotulo">{rotulo.replace(/\s*\(.*\)\s*/, '')}</span>
-          <div className="rodape-pedras-tiles">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((numero) => (
-              <span key={numero} className="rodape-pedra-ref">
-                <PedraSvg pedra={`${numero}${naipe}` as CodigoPedra} />
-              </span>
-            ))}
-          </div>
-        </div>
-      ))}
-      <div className="rodape-pedras-linha">
-        <span className="rodape-pedras-rotulo">Honras</span>
-        <div className="rodape-pedras-tiles">
-          {HONRAS.map((pedra) => (
-            <span key={pedra} className="rodape-pedra-ref">
-              <PedraSvg pedra={pedra} />
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
   const resumoEsperasAcessivel = calculandoEsperas
     ? t('calculator.waitsCalculating')
     : esperasPossiveis.length > 0
@@ -289,67 +174,14 @@ export default function ResultadoMaoCalculada({
       )}
 
       {(resultadoValido || chomboFuriten || resultadoMaoInvalida) && modalResultadoAberto && (
-        <div
-          className={`modal-resultado-mobile-fundo ${
-            chomboFuriten || resultadoMaoInvalida ? 'modal-chombo-furiten-fundo' : ''
-          }`}
-          role="presentation"
-          onClick={fecharModalResultado}
-        >
-          <div
-            ref={modalRef}
-            className={`modal-resultado-mobile ${
-              chomboFuriten || resultadoMaoInvalida ? 'modal-chombo-furiten' : ''
-            }`}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="titulo-resultado-mobile"
-            tabIndex={-1}
-            onClick={(evento) => evento.stopPropagation()}
-          >
-            <div className="modal-resultado-mobile-cabecalho">
-              <strong id="titulo-resultado-mobile">
-                {resultadoMaoInvalida
-                  ? t('calculator.noYakuTitle')
-                  : chomboFuriten
-                    ? t('calculator.alert')
-                    : t('calculator.result')}
-              </strong>
-              <button
-                className="btn-fechar-resultado-mobile"
-                type="button"
-                aria-label={t('actions.close')}
-                onClick={fecharModalResultado}
-              >
-                x
-              </button>
-            </div>
-            <div className="sr-only" aria-live="polite">
-              {descreverResultado()}
-            </div>
-            {maoRenderizada}
-            {resultadoMaoInvalida ? (
-              avisoSemYaku
-            ) : chomboFuriten ? (
-              avisoChombo
-            ) : (
-              <>
-                <ExibicaoCompleta resultado={resultado} mao={mao} contextoCenterpiece={contextoCenterpiece} />
-                {resultadoValido && aoUsarMao && (
-                  <button
-                    type="button"
-                    className="btn-primario cp-btn-usar-resultado"
-                    onClick={aoUsarMao}
-                  >
-                    <i className="fas fa-check" aria-hidden="true" />
-                    Usar resultado no Centerpiece
-                  </button>
-                )}
-              </>
-            )}
-            {rodapeReferenciaPedras}
-          </div>
-        </div>
+        <ModalResultado
+          mao={mao}
+          resultado={resultado}
+          chomboFuriten={chomboFuriten}
+          maoInvalida={resultadoMaoInvalida}
+          descricaoAcessivel={descreverResultado()}
+          aoFechar={fecharModalResultado}
+        />
       )}
     </>
   )

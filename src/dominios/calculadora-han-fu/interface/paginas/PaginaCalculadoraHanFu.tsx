@@ -7,29 +7,11 @@ import {
   SeletorTipoVitoria,
   TabelaReferenciaRapida,
 } from '../componentes/ControlesHanFu'
-import { useCalculadoraHanFu, type AgariHanFu } from '../hooks/useCalculadoraHanFu'
-import type { ResultadoCalculoParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
-import { converterHanFuParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
+import { useCalculadoraHanFu } from '../hooks/useCalculadoraHanFu'
 import '../estilos/han-fu.css'
 
-interface PropsPaginaCalculadoraHanFu {
-  aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
-  initialIsOya?: boolean
-  initialAgari?: AgariHanFu
-  initialHonba?: number
-  vencedorId?: string
-  pagadorId?: string
-}
-
 /** Renderiza a calculadora direta por Han/Fu, sem montar a mao pedra por pedra. */
-export default function PaginaCalculadoraHanFu({
-  aoUsarResultado,
-  initialIsOya,
-  initialAgari,
-  initialHonba,
-  vencedorId,
-  pagadorId,
-}: PropsPaginaCalculadoraHanFu = {}) {
+export default function PaginaCalculadoraHanFu() {
   const {
     agari,
     setAgari,
@@ -44,33 +26,15 @@ export default function PaginaCalculadoraHanFu({
     setIsOya,
     referenciaRapida,
     resultado,
-  } = useCalculadoraHanFu({ initialIsOya, initialAgari, initialHonba })
-
-  const podeUsar =
-    !!aoUsarResultado &&
-    resultado != null &&
-    (agari === 'ron' ? resultado.ron != null : resultado.tsumo != null)
-
-  const handleUsarResultado = () => {
-    if (!aoUsarResultado || !resultado) return
-    aoUsarResultado(
-      converterHanFuParaCenterpiece(resultado, {
-        vencedorId,
-        pagadorId,
-        vencedorEhLeste: isOya,
-      }),
-    )
-  }
+  } = useCalculadoraHanFu()
 
   return (
     <main className="calculadora-han-fu">
       <section className="painel-principal-han-fu">
-        {!aoUsarResultado && (
-          <div className="seletores-topo-han-fu">
-            <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
-            <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />
-          </div>
-        )}
+        <div className="seletores-topo-han-fu">
+          <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
+          <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />
+        </div>
 
         <CardResultadoHanFu resultado={resultado} />
 
@@ -82,21 +46,9 @@ export default function PaginaCalculadoraHanFu({
         <div className="controle-honba-linha-han-fu">
           <ControleHonba honba={honba} aoMudarHonba={setHonba} />
         </div>
-
-        {aoUsarResultado && (
-          <button
-            type="button"
-            className="btn-primario cp-btn-usar-resultado"
-            onClick={handleUsarResultado}
-            disabled={!podeUsar}
-          >
-            <i className="fas fa-check" aria-hidden="true" />
-            Usar resultado no Centerpiece
-          </button>
-        )}
       </section>
 
-      <TabelaReferenciaRapida referencia={referenciaRapida} recolhidaPorPadrao={!!aoUsarResultado} />
+      <TabelaReferenciaRapida referencia={referenciaRapida} />
     </main>
   )
 }

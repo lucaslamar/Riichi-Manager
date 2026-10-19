@@ -24,8 +24,7 @@
     line-height: 1.4;
   }
 
-  .card,
-  .caixa-mesa {
+  .card {
     margin-bottom: 8px;
     border-radius: 0;
     padding: 10px;
@@ -33,27 +32,10 @@
     box-shadow: none;
   }
 
-  /* Cards colapsáveis do torneio — mantêm aparência de card no mobile */
-  .card-diagnostico,
-  .card-timer-colapsavel {
-    margin-bottom: 8px;
-    border-radius: 8px;
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .caixa-mesa,
-  .opcao-configuracao-usuario,
-  .metricas div {
+  .opcao-configuracao-usuario {
     border-color: #e2e8f0;
     box-shadow: none;
   }
-
-  .metricas {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* grade-rodadas já é mobile-first 1fr — não sobrescrever aqui */
 }
 
 /*
@@ -185,16 +167,12 @@
 }
 
 @media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
-  body:has(.centerpiece-setup),
-  body:has(.centerpiece-mesa),
   body:has(.calculadora-han-fu),
   body:has(.sorteador-ventos-page) {
     padding: 0;
     overflow: hidden;
   }
 
-  body:has(.centerpiece-setup) .conteudo-principal,
-  body:has(.centerpiece-mesa) .conteudo-principal,
   body:has(.calculadora-han-fu) .conteudo-principal,
   body:has(.sorteador-ventos-page) .conteudo-principal {
     width: 100%;
@@ -203,296 +181,6 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-  }
-}
-
-@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
-  .centerpiece-setup {
-    display: grid;
-    width: min(100%, 780px);
-    height: calc(100dvh - 38px);
-    max-width: none;
-    margin-inline: auto;
-    gap: 6px;
-    overflow-y: auto;
-    border: 0;
-    border-radius: 0;
-    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-    box-shadow: none;
-  }
-
-  .centerpiece-setup .cabecalho-secao {
-    margin-bottom: 0;
-    padding-bottom: 2px;
-    border-bottom: 0;
-  }
-
-  .centerpiece-setup .cabecalho-secao h2 {
-    font-size: 0.96rem;
-    line-height: 1.08;
-  }
-
-  .centerpiece-setup .subtitulo-secao,
-  .setup-names-hint {
-    display: none;
-  }
-
-  .centerpiece-form {
-    display: grid;
-    grid-template-columns: minmax(280px, 1.1fr) minmax(260px, 0.9fr);
-    gap: 8px 10px;
-    align-items: start;
-  }
-
-  .centerpiece-form fieldset {
-    display: grid;
-    gap: 5px;
-    margin: 0;
-    min-width: 0;
-  }
-
-  .centerpiece-form legend {
-    margin-bottom: 0;
-    color: #607080;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-  }
-
-  .centerpiece-form fieldset:first-child {
-    grid-row: span 2;
-  }
-
-  .centerpiece-nomes-textarea {
-    min-height: 118px;
-    resize: none;
-    padding: 10px;
-    font-size: 0.88rem;
-    line-height: 1.45;
-  }
-
-  .centerpiece-modo-ventos-opcoes,
-  .centerpiece-pontos-opcoes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 5px;
-  }
-
-  .centerpiece-pontos-opcoes {
-    display: grid;
-  }
-
-  .opcao-pontos {
-    min-height: 38px;
-    gap: 6px;
-    padding: 7px 9px;
-    border-width: 1px;
-    font-size: 0.82rem;
-  }
-
-  .opcao-modo-vento strong {
-    font-size: 0.78rem;
-  }
-
-  .opcao-modo-vento small {
-    display: none;
-  }
-
-  .centerpiece-input-custom {
-    max-width: none;
-    margin-top: 5px;
-    min-height: 36px;
-    padding: 7px 9px;
-    font-size: 0.86rem;
-  }
-
-  .centerpiece-form .acoes {
-    grid-column: 1 / -1;
-    justify-content: center;
-    margin-top: 0;
-  }
-
-  .centerpiece-form .acoes .btn-primario {
-    width: min(100%, 360px);
-    min-height: 38px;
-    justify-content: center;
-  }
-}
-
-@media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
-  .centerpiece-mesa {
-    height: calc(100dvh - 38px);
-    max-height: calc(100dvh - 38px);
-    align-content: center;
-    padding: 5px 8px calc(5px + env(safe-area-inset-bottom));
-    overflow: hidden;
-  }
-
-  .cp-compass {
-    grid-template-areas:
-      '. topo .'
-      'esquerda centro direita'
-      '. baixo .';
-    grid-template-columns: minmax(130px, 0.95fr) minmax(160px, 0.78fr) minmax(130px, 0.95fr);
-    grid-template-rows: minmax(58px, auto) minmax(120px, 1fr) minmax(58px, auto);
-    gap: 5px;
-    min-height: 0;
-    height: 100%;
-    align-items: center;
-    align-content: center;
-  }
-
-  .cp-area-topo,
-  .cp-area-baixo,
-  .cp-area-esquerda,
-  .cp-area-direita,
-  .cp-area-centro {
-    display: flex;
-    min-width: 0;
-    min-height: 0;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .centerpiece-card-jogador {
-    width: 100%;
-    min-height: 0;
-    gap: 2px;
-    padding: 6px 7px;
-    border-width: 1.5px;
-    border-radius: 8px;
-    box-shadow: 0 6px 14px rgba(16, 42, 67, 0.08);
-  }
-
-  .cp-area-topo .centerpiece-card-jogador,
-  .cp-area-baixo .centerpiece-card-jogador {
-    width: min(270px, 100%);
-    min-height: 56px;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .cp-area-esquerda .centerpiece-card-jogador,
-  .cp-area-direita .centerpiece-card-jogador {
-    min-height: 112px;
-  }
-
-  .card-jogador-vento,
-  .indicador-vento--grande {
-    font-size: 1.55rem;
-  }
-
-  .card-jogador-nome {
-    font-size: 0.74rem;
-  }
-
-  .card-jogador-vento-nome {
-    font-size: 0.56rem;
-  }
-
-  .card-jogador-pontos {
-    font-size: 0.98rem;
-  }
-
-  .card-jogador-riichi {
-    padding: 1px 6px;
-    font-size: 0.6rem;
-  }
-
-  .card-jogador-btn-riichi {
-    min-height: 24px;
-    margin-top: 2px;
-    padding: 3px 5px;
-    font-size: 0.62rem;
-  }
-
-  .centerpiece-painel-central {
-    width: min(100%, 178px);
-    gap: 3px;
-    padding: 5px;
-    border-radius: 8px;
-    box-shadow: 0 6px 14px rgba(16, 42, 67, 0.08);
-  }
-
-  .cp-area-centro .centerpiece-painel-central {
-    gap: 3px;
-    padding: 5px;
-  }
-
-  .painel-rodada-info {
-    gap: 5px;
-    justify-content: center;
-  }
-
-  .painel-rodada-kanji {
-    font-size: 1.3rem;
-  }
-
-  .painel-rodada-texto {
-    font-size: 0.68rem;
-  }
-
-  .painel-honba-sticks {
-    gap: 5px;
-    font-size: 0.58rem;
-  }
-
-  .cp-timer {
-    display: none;
-  }
-
-  .cp-timer-label {
-    display: none;
-  }
-
-  .cp-timer-display,
-  .cp-timer-svg {
-    width: 30px;
-    height: 30px;
-  }
-
-  .cp-area-centro .cp-timer-display,
-  .cp-area-centro .cp-timer-svg {
-    width: 30px;
-    height: 30px;
-  }
-
-  .cp-timer-numero {
-    font-size: 0.62rem;
-  }
-
-  .cp-area-centro .cp-timer-numero {
-    font-size: 0.62rem;
-  }
-
-  .cp-timer-btn-pausar {
-    width: 20px;
-    height: 20px;
-    font-size: 0.54rem;
-  }
-
-  .cp-area-centro .cp-timer-btn-pausar {
-    width: 20px;
-    height: 20px;
-    font-size: 0.54rem;
-  }
-
-  .cp-area-centro .painel-btn-batida,
-  .painel-btn-batida {
-    min-height: 28px;
-    padding: 4px 6px;
-    font-size: 0.68rem;
-  }
-
-  .painel-acoes-secundarias {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-
-  .cp-area-centro .painel-btn-acao,
-  .painel-btn-acao {
-    min-height: 24px;
-    padding: 3px 5px;
-    font-size: 0.62rem;
   }
 }
 
@@ -678,33 +366,10 @@
 }
 
 @media (orientation: landscape) and (max-height: 380px) and (max-width: 1000px) {
-  .centerpiece-setup,
-  .centerpiece-mesa,
   .calculadora-han-fu,
   .sorteador-ventos-page {
     height: calc(100dvh - 36px);
     max-height: calc(100dvh - 36px);
-  }
-
-  .cp-compass {
-    grid-template-columns: minmax(120px, 0.95fr) minmax(148px, 0.72fr) minmax(120px, 0.95fr);
-    gap: 4px;
-  }
-
-  .centerpiece-painel-central {
-    width: min(100%, 172px);
-    gap: 4px;
-    padding: 6px;
-  }
-
-  .cp-area-esquerda .centerpiece-card-jogador,
-  .cp-area-direita .centerpiece-card-jogador {
-    min-height: 98px;
-  }
-
-  .card-jogador-vento,
-  .indicador-vento--grande {
-    font-size: 1.35rem;
   }
 
   .sorteador-ventos__grade {
@@ -780,32 +445,6 @@
 
   .card-vento__kanji {
     font-size: clamp(1.7rem, 7dvh, 2.3rem) !important;
-  }
-
-  /* ─── Centerpiece / placar ──────────────────────────────────────────────── */
-  .centerpiece-mesa {
-    height: calc(100dvh - 34px) !important;
-    padding: 3px 6px calc(3px + env(safe-area-inset-bottom)) !important;
-  }
-
-  .cp-timer-display,
-  .cp-timer-svg {
-    width: 28px !important;
-    height: 28px !important;
-  }
-
-  .centerpiece-card-jogador {
-    padding: 4px 5px !important;
-  }
-
-  .card-jogador-pontos {
-    font-size: 0.88rem !important;
-  }
-
-  /* ─── Setup do Centerpiece ──────────────────────────────────────────────── */
-  .centerpiece-setup {
-    height: calc(100dvh - 34px) !important;
-    padding: 6px 10px calc(6px + env(safe-area-inset-bottom)) !important;
   }
 }
 

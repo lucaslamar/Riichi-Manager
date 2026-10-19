@@ -68,6 +68,11 @@
   margin: 0;
   color: #1a4a8a;
   font-size: 1.08rem;
+  /* Nome como logotipo: maiúsculas só no visual (o texto segue "Mojoca" para
+     a aba do navegador e leitores de tela), espaçadas e com peso forte. */
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   line-height: 1.05;
   white-space: nowrap;
 }
@@ -225,6 +230,18 @@
 
 .item-menu-global i {
   text-align: center;
+}
+
+/* Ícones próprios em SVG (1 Pin, catavento): mesmo tamanho e cor dos do Font Awesome. */
+.icone-svg-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.icone-svg-menu svg {
+  display: block;
 }
 
 .seletor-idioma {
@@ -706,3 +723,18 @@
   }
 }
 
+
+/*
+ * Seta de voltar da Han e Fu (aberta pelo atalho da Calculadora de Mão). Ocupa
+ * o lugar do hambúrguer e, ao contrário dele, aparece também no retrato, onde
+ * a barra inferior não tem a Han e Fu. No desktop a sidebar já resolve.
+ */
+.botao-menu-global.botao-voltar-global {
+  display: inline-flex;
+}
+
+@media (min-width: 1024px) and (orientation: landscape) {
+  .botao-menu-global.botao-voltar-global {
+    display: none;
+  }
+}

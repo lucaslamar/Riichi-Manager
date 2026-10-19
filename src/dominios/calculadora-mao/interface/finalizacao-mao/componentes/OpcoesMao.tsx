@@ -7,21 +7,12 @@ import { BotaoToggle } from '../../compartilhado/componentes/Botoes'
 import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import { TecladoPedras } from '../../montagem-mao/componentes/TecladoPedras'
+import ModalAjudaDoras from '../../modais/ajuda-doras/ModalAjudaDoras'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
-  contextoCenterpiece?: {
-    tipoVitoria: 'ron' | 'tsumo'
-    ventoRodada: string
-    ventoAssento: string
-    honba: number
-    rodadaNumero?: number
-    vencedorNome?: string
-    vencedorEhLeste?: boolean
-    jogadorRiichi?: boolean
-  }
 }
 
 /**
@@ -40,7 +31,6 @@ const NOME_VENTO_MAO: Record<string, string> = {
 export default function OpcoesMao({
   estado,
   embutido = false,
-  contextoCenterpiece,
 }: PropsOpcoesMao) {
   const { t } = useI18n()
   const {
@@ -128,12 +118,10 @@ export default function OpcoesMao({
   }, [])
   const honba = Number.isFinite(mao.honba) ? mao.honba : 0
   const mostrarOpcoesTenpai = slotsUsados >= 13
-  const modoCenterpiece = !!contextoCenterpiece
-  const mostrarConfiguracaoBasica = modoCenterpiece || mostrarOpcoesTenpai
-  const mostrarVentos = !modoCenterpiece && mostrarConfiguracaoBasica && fluxoOpcoes.vitoriaDefinida
+  const mostrarConfiguracaoBasica = mostrarOpcoesTenpai
+  const mostrarVentos = mostrarConfiguracaoBasica && fluxoOpcoes.vitoriaDefinida
   const mostrarEtapaRiichi =
-    modoCenterpiece ||
-    (mostrarVentos && fluxoOpcoes.ventoRodadaDefinido && fluxoOpcoes.ventoAssentoDefinido)
+    mostrarVentos && fluxoOpcoes.ventoRodadaDefinido && fluxoOpcoes.ventoAssentoDefinido
   const mostrarRiichi = mostrarEtapaRiichi && !maoAberta && !mao.bencao
   const mostrarCondicoes = mostrarEtapaRiichi
   const classeEtapa = (ativa: boolean) =>
@@ -148,10 +136,9 @@ export default function OpcoesMao({
   const tabletPorAssunto = useMediaQuery(
     '(min-width: 768px) and (max-width: 1279px) and (min-height: 600px)',
   )
-  const vitoriaNaColunaDireita =
-    tabletPorAssunto && !modoCenterpiece && mostrarConfiguracaoBasica
+  const vitoriaNaColunaDireita = tabletPorAssunto && mostrarConfiguracaoBasica
 
-  const campoVitoria = modoCenterpiece ? null : (
+  const campoVitoria = (
     <div
       id="secao-vitoria"
       className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}
@@ -175,40 +162,38 @@ export default function OpcoesMao({
       >
         <span className="rotulo-bloco-opcoes">{t('calculator.honbaAndDora')}</span>
         <div className="contadores-dora-honba">
-          {!modoCenterpiece && (
-            <div className="contador-dora-manual contador-honba">
-              <span>{t('calculator.honba')}</span>
-              <div>
-                <button
-                  type="button"
-                  aria-label={`${t('calculator.honba')} -`}
-                  disabled={honba <= 0}
-                  onClick={() =>
-                    atualizarMao((rascunho) => {
-                      const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                      rascunho.honba = Math.max(0, atual - 1)
-                    })
-                  }
-                >
-                  -
-                </button>
-                <strong>{honba}</strong>
-                <button
-                  type="button"
-                  aria-label={`${t('calculator.honba')} +`}
-                  disabled={honba >= 99}
-                  onClick={() =>
-                    atualizarMao((rascunho) => {
-                      const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                      rascunho.honba = Math.min(99, atual + 1)
-                    })
-                  }
-                >
-                  +
-                </button>
-              </div>
+          <div className="contador-dora-manual contador-honba">
+            <span>{t('calculator.honba')}</span>
+            <div>
+              <button
+                type="button"
+                aria-label={`${t('calculator.honba')} -`}
+                disabled={honba <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.max(0, atual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{honba}</strong>
+              <button
+                type="button"
+                aria-label={`${t('calculator.honba')} +`}
+                disabled={honba >= 99}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.min(99, atual + 1)
+                  })
+                }
+              >
+                +
+              </button>
             </div>
-          )}
+          </div>
 
           <div className="contador-dora-manual">
             <span className="rotulo-contador-com-ajuda">
@@ -345,22 +330,20 @@ export default function OpcoesMao({
           Condições Especiais. No celular/desktop o wrapper é display:contents e
           o layout anterior é preservado. */}
       <div className="colunas-assuntos-finalizacao">
-        {!modoCenterpiece && (
-          <section
-            id="secao-ventos"
-            className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}
-          >
-            <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
-            <SeletorVentos
-              mao={mao}
-              atualizarMao={atualizarMao}
-              ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
-              ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
-              aoDefinirVentoRodada={marcarVentoRodadaDefinido}
-              aoDefinirVentoAssento={marcarVentoAssentoDefinido}
-            />
-          </section>
-        )}
+        <section
+          id="secao-ventos"
+          className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}
+        >
+          <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
+          <SeletorVentos
+            mao={mao}
+            atualizarMao={atualizarMao}
+            ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
+            ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
+            aoDefinirVentoRodada={marcarVentoRodadaDefinido}
+            aoDefinirVentoAssento={marcarVentoAssentoDefinido}
+          />
+        </section>
 
         <div
           className={`grupos-opcoes-mao ${
@@ -473,35 +456,7 @@ export default function OpcoesMao({
           </section>
         </div>
       </div>
-      {ajudaDoraAberta && (
-        <div
-          className="ajuda-dora-mobile-fundo"
-          role="presentation"
-          onClick={() => setAjudaDoraAberta(false)}
-        >
-          <div
-            className="ajuda-dora-mobile"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="titulo-ajuda-dora"
-            onClick={(evento) => evento.stopPropagation()}
-          >
-            <div className="ajuda-dora-mobile-cabecalho">
-              <strong id="titulo-ajuda-dora">{t('calculator.manualDoraHelpTitle')}</strong>
-              <button
-                className="btn-icone"
-                type="button"
-                aria-label={t('actions.close')}
-                onClick={() => setAjudaDoraAberta(false)}
-              >
-                x
-              </button>
-            </div>
-            <p>{t('calculator.manualDoraHelp')}</p>
-            <p>{t('calculator.manualDoraHelpIndicadores')}</p>
-          </div>
-        </div>
-      )}
+      {ajudaDoraAberta && <ModalAjudaDoras aoFechar={() => setAjudaDoraAberta(false)} />}
     </div>
   )
 }

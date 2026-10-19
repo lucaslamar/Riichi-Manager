@@ -2,7 +2,7 @@
 
 ## Visao geral
 
-O Riichi Manager e um app estatico React + TypeScript. Ele deve continuar funcionando em GitHub Pages, sem backend e sem servicos obrigatorios.
+O Mojoca e um app estatico React + TypeScript. Ele deve continuar funcionando em GitHub Pages, sem backend e sem servicos obrigatorios.
 
 ## Fronteiras principais
 
@@ -12,12 +12,13 @@ O Riichi Manager e um app estatico React + TypeScript. Ele deve continuar funcio
 - `src/compartilhado/mahjong/pontuacao`: tipos e funcoes puras de pontuacao por han/fu, ron/tsumo, dealer/leste e honba.
 - `src/dominios/calculadora-mao/logica`: montagem e calculo completo de mao, incluindo tiles, esperas, furiten, dora, melds, yaku/fu e conversao para a lib `riichi`.
 - `src/dominios/calculadora-mao/interface`: estado de tela, acoes de usuario e componentes da Calculadora de Mao.
-  - `montagem-mao`: construcao e edicao estrutural da mao, incluindo teclado, Chi/Pon/Kan/Kan fechado, descartes/furiten, doras e escolha inicial da pedra da batida.
-  - `finalizacao-mao`: revisao da mao completa, troca nao destrutiva da pedra da batida, configuracao de vitoria, honba, doras, ventos, riichi/condicoes especiais e calculo/modal de resultado.
+  - `montagem-mao`: construcao e edicao estrutural da mao, incluindo teclado, Chi/Pon/Kan/Kan fechado, atalho para a Calculadora de Han e Fu, doras e escolha inicial da pedra da batida.
+  - `finalizacao-mao`: revisao da mao completa, troca nao destrutiva da pedra da batida, configuracao de vitoria, honba, doras, descartes/furiten, ventos, riichi/condicoes especiais e calculo/modal de resultado.
+  - `modais`: uma pasta por modal (`resultado`, `regras`, `ajuda-doras`), cada uma com componente e CSS proprios, todas construidas sobre a Modal base `src/compartilhado/interface/componentes/modal` (cabecalho, corpo rolavel, rodape opcional, tamanhos `pequena`/`media`/`grande`, tom `alerta`). Funcionalidades de uma modal ficam so na pasta dela.
   - `compartilhado`: componentes visuais e orquestradores sem regra destrutiva propria, como renderizacao de tiles e melds.
 - `src/dominios/calculadora-han-fu/logica`: porta de entrada do dominio Han/Fu para a pontuacao direta compartilhada.
 - `src/dominios/calculadora-han-fu/interface`: estado e componentes da Calculadora de Han e Fu, sem depender da interface ou do estado da Calculadora de Mao.
-- `src/dominios/torneio-fast`: dominio do Torneio Fast, separado das calculadoras.
+- `src/dominios/sorteador-ventos`: sorteio dos ventos/assentos da mesa.
 
 ## Regras para evolucao
 

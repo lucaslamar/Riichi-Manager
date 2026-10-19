@@ -1,184 +1,54 @@
 import { useCallback, useEffect, useState } from 'react'
-import {
-  carregarTorneio,
-  salvarTorneio,
-  criarTorneioVazio,
-} from '@/dominios/torneio-fast/persistencia/armazenamento'
-import type { EstadoTorneio } from '@/dominios/torneio-fast/logica/tipos'
-import {
-  segundosRestantesBase,
-  sincronizarTimerExpirado,
-} from '@/dominios/torneio-fast/logica/acoes'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
-import {
-  ConfiguracaoTorneio,
-  RankingGeral,
-  TimerRodada,
-  PainelQualidade,
-  GradeRodadas,
-} from '@/dominios/torneio-fast/interface/componentes'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
-import PaginaCenterpiece from '@/dominios/centerpiece/interface/paginas/PaginaCenterpiece'
-import { temMesaAtiva } from '@/dominios/centerpiece/persistencia/storageCenterpiece'
 import packageJson from '../../package.json'
 
 export type TelaPrincipal =
   | 'calculadora'
   | 'calculadoraRapida'
   | 'sorteadorVentos'
-  | 'configuracaoTorneio'
-  | 'centerpiece'
   | 'regras'
   | 'sobre'
 
-function torneioAtivo(torneioAtual: EstadoTorneio): boolean {
-  return torneioAtual.jogadores.length > 0 && torneioAtual.grade.length > 0
-}
-
 /**
- * Componente raiz da aplicacao.
- *
- * A calculadora e a porta de entrada quando nao ha torneio salvo em andamento.
- * O Torneio Fast continua preservado no mesmo estado global/localStorage, mas
- * fica acessivel pelo menu global em vez de dominar o primeiro acesso.
+ * Componente raiz da aplicacao. A Calculadora de Mao e a porta de entrada.
  */
 export default function App() {
-  const { t } = useI18n()
-  const [torneio, setTorneioInterno] = useState<EstadoTorneio>(carregarTorneio)
-  const [tela, setTela] = useState<TelaPrincipal>(() => {
-    if (temMesaAtiva()) return 'centerpiece'
-    return torneioAtivo(torneio) ? 'configuracaoTorneio' : 'calculadora'
-  })
-  const ativo = torneioAtivo(torneio)
+  const [tela, setTela] = useState<TelaPrincipal>('calculadora')
+  /** Tela de origem quando a Han e Fu é aberta pelo atalho da Calculadora de Mão. */
+  const [telaRetorno, setTelaRetorno] = useState<TelaPrincipal | null>(null)
 
-  const definirTorneio = useCallback((proximo: EstadoTorneio) => {
-    setTorneioInterno(proximo)
-    salvarTorneio(proximo)
+  const navegar = useCallback((proxima: TelaPrincipal) => {
+    setTelaRetorno(null)
+    setTela(proxima)
   }, [])
 
-  const atualizarTorneio = useCallback(
-    (transformar: (torneioAtual: EstadoTorneio) => EstadoTorneio) => {
-      setTorneioInterno((anterior) => {
-        const proximo = transformar(anterior)
-        salvarTorneio(proximo)
-        return proximo
-      })
-    },
-    [],
-  )
-
-  const reiniciarTorneio = useCallback(() => {
-    const vazio = criarTorneioVazio()
-    setTorneioInterno(vazio)
-    salvarTorneio(vazio)
-    setTela('configuracaoTorneio')
+  const abrirCalculadoraRapida = useCallback(() => {
+    setTelaRetorno('calculadora')
+    setTela('calculadoraRapida')
   }, [])
 
-  const aoIniciarTorneio = useCallback(
-    (torneioGerado: EstadoTorneio) => {
-      definirTorneio(torneioGerado)
-      setTela('configuracaoTorneio')
-    },
-    [definirTorneio],
-  )
-
-  const exportarPdf = useCallback(() => {
-    const janela = window as any
-    const jsPDF = janela.jspdf?.jsPDF
-    if (!jsPDF) {
-      alert('jsPDF nao carregou. Verifique a conexao.')
-      return
-    }
-
-    const doc = new jsPDF()
-    doc.setFontSize(18)
-    doc.text(`Ranking - ${t('global.appName')}`, 14, 20)
-    doc.setFontSize(11)
-
-    const linhas = Object.entries(torneio.classificacao)
-      .sort(([, pontosA], [, pontosB]) => pontosB - pontosA)
-      .map(([jogador, pontos], indice) => [
-        `${indice + 1}o`,
-        jogador,
-        `${pontos > 0 ? '+' : ''}${pontos.toFixed(1)}`,
-      ])
-
-    doc.autoTable({ head: [['Pos.', 'Jogador', 'PT']], body: linhas, startY: 30 })
-    doc.save('ranking-riichi.pdf')
-  }, [torneio, t])
+  const voltar =
+    telaRetorno && tela === 'calculadoraRapida' ? () => navegar(telaRetorno) : undefined
 
   return (
     <>
-      <Cabecalho telaAtual={tela} torneioAtivo={ativo} aoNavegar={setTela} />
+      <Cabecalho telaAtual={tela} aoNavegar={navegar} aoVoltar={voltar} />
 
       <main className="conteudo-principal">
-        {tela === 'calculadora' && <PaginaCalculadoraMao />}
+        {tela === 'calculadora' && (
+          <PaginaCalculadoraMao aoAbrirCalculadoraRapida={abrirCalculadoraRapida} />
+        )}
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
-        {tela === 'centerpiece' && <PaginaCenterpiece />}
-
-        {tela === 'configuracaoTorneio' &&
-          (ativo ? (
-            <PainelTorneioAtivo
-              torneio={torneio}
-              atualizarTorneio={atualizarTorneio}
-              reiniciarTorneio={reiniciarTorneio}
-              exportarPdf={exportarPdf}
-            />
-          ) : (
-            <ConfiguracaoTorneio
-              aoIniciar={aoIniciarTorneio}
-              aoVoltar={() => setTela('calculadora')}
-            />
-          ))}
-
         {tela === 'regras' && <PaginaRegrasConfiguracoes />}
         {tela === 'sobre' && <PaginaSobre />}
       </main>
     </>
-  )
-}
-
-function PainelTorneioAtivo({
-  torneio,
-  atualizarTorneio,
-  reiniciarTorneio,
-  exportarPdf,
-}: {
-  torneio: EstadoTorneio
-  atualizarTorneio: (transformar: (torneioAtual: EstadoTorneio) => EstadoTorneio) => void
-  reiniciarTorneio: () => void
-  exportarPdf: () => void
-}) {
-  const [agora, setAgora] = useState(Date.now)
-
-  useEffect(() => {
-    setAgora(Date.now())
-    if (!torneio.timer.rodando) return
-
-    const intervalo = window.setInterval(() => {
-      const proximoAgora = Date.now()
-      setAgora(proximoAgora)
-
-      if (segundosRestantesBase(torneio.timer, proximoAgora) === 0) {
-        atualizarTorneio(sincronizarTimerExpirado)
-      }
-    }, 500)
-
-    return () => window.clearInterval(intervalo)
-  }, [torneio.timer, atualizarTorneio])
-
-  return (
-    <div className="torneio-fast">
-      <RankingGeral torneio={torneio} aoReiniciar={reiniciarTorneio} aoExportarPdf={exportarPdf} />
-      <TimerRodada torneio={torneio} atualizarTorneio={atualizarTorneio} agora={agora} />
-      <PainelQualidade torneio={torneio} atualizarTorneio={atualizarTorneio} />
-      <GradeRodadas torneio={torneio} atualizarTorneio={atualizarTorneio} agora={agora} />
-    </div>
   )
 }
 

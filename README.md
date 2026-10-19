@@ -1,4 +1,4 @@
-# Riichi Manager
+# Mojoca
 
 App web estatico para Riichi Mahjong, feito com React + TypeScript e publicado no GitHub Pages.
 
@@ -12,7 +12,7 @@ Modulos publicos:
 
 - Calculadora de Mao: entrada principal do app, com montagem por tiles, esperas, furiten, dora, riichi, ventos, honba e resultado em modal.
 - Calculadora de Han e Fu: pontuacao direta por han/fu, tipo de vitoria, dealer/leste e honba.
-- Torneio Fast: cadastro, grade, timer, qualidade das mesas, ranking e persistencia em localStorage.
+- Sorteador de Ventos: sorteio dos assentos da mesa.
 - Regras / Configuracoes e Sobre / versao: acessos globais compactos.
 
 O app nao tem backend, banco de dados, autenticacao ou API externa obrigatoria.
@@ -66,11 +66,6 @@ Deploy:
             hooks/                 # Estado isolado de han, fu, leste, ron/tsumo e honba
             componentes/           # Controles e resultado Han/Fu
             paginas/               # Pagina da Calculadora de Han e Fu
-
-        torneio-fast/
-          logica/                  # Sorteio, qualidade, chaves e tipos
-          interface/               # Telas do torneio
-          persistencia/            # localStorage
 
     public/
       locales/                     # pt-BR default e estrutura para outros idiomas
@@ -134,7 +129,7 @@ Ao alterar telas, valide pelo menos:
 - aria-labels dos botoes novos;
 - resultado da Calculadora de Mao em Ron e Tsumo;
 - Calculadora de Han e Fu;
-- Torneio Fast ainda acessivel pelo menu global;
+- atalho Han e Fu na barra do teclado da Calculadora de Mao (com seta de voltar);
 - compatibilidade com GitHub Pages.
 
 ## Cuidados importantes
@@ -145,7 +140,7 @@ Mudancas visuais devem preservar o fluxo existente. Evite duplicar informacoes, 
 
 ## Objetivo do projeto
 
-O Riichi Manager busca ser um ecossistema simples, acessivel e funcional para jogadores e clubes de Riichi Mahjong.
+O Mojoca busca ser um ecossistema simples, acessivel e funcional para jogadores e clubes de Riichi Mahjong.
 
 Prioridades atuais:
 
@@ -154,5 +149,4 @@ Prioridades atuais:
 - boa experiencia visual com tiles;
 - acessibilidade;
 - suporte futuro a multiplos idiomas;
-- Torneio Fast preservado;
 - compatibilidade com GitHub Pages.

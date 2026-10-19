@@ -1,11 +1,33 @@
-# Changelog - Riichi Manager
+# Changelog - Mojoca
 
-### Não Lançado
+## 5.0.0 - 2026-10-19
+
+### Novo nome
+
+- O app passa a se chamar **Mojoca** (antes Riichi Manager). O endereço de acesso continua o mesmo por enquanto.
+
+### Removido
+
+- Centerpiece e Torneio saíram do app por enquanto (ainda faltava UX e responsividade). O código foi guardado fora do projeto para voltar no futuro.
+- O app fica com: Calculadora de Mão, Calculadora de Han e Fu, Sorteador de Ventos e Regras / Configurações.
+
+### Alterado
+
+- Barra inferior agora tem só Calculadora de Mão, Sorteador de Ventos e Regras.
+- Novos ícones: pedra 1 Pin para a Calculadora de Mão e catavento para o Sorteador de Ventos.
+- No teclado da montagem, o botão de Descartes virou o atalho "Han e Fu", que abre a Calculadora de Han e Fu. Descartes / Furiten continuam na finalização da mão.
+- Ao abrir a Han e Fu pelo atalho, aparece uma seta de voltar no topo para retornar à Calculadora de Mão.
+- Todas as janelas (Resultado, Regras de cálculo e ajuda das Doras) agora seguem um mesmo modelo, com o mesmo visual e o mesmo botão de fechar em qualquer tela.
+- Teclado da montagem nos iPads/tablets em pé (Mini, Air, Pro 11) com a mesma distribuição do iPad Pro 13: botões numa linha só ocupando a largura e pedras centralizadas, com as Honras no meio.
+
+### Corrigido
+
+- Janela de Resultado no iPad Mini: textos como "Han / Fu", pontos por jogador e os títulos Yaku e Fu ficavam invisíveis (branco no branco).
+- Pedras do resultado agora cabem numa linha só no iPad.
+
+### Também nesta versão
 
 - transpõe tabela rápida de Han e Fu no celular deitado
-
-## 4.4.5
-
 - Ajusta botoes esticados na finalização de mão.
 - ajusta doras.
 - Opções da finalização de mão padronizadas no celular: RIICHI e CONDIÇÕES ESPECIAIS empilham uma abaixo da outra (não mais lado a lado), incluindo iPhone Pro Max, e ambas usam grade de 2 colunas com o terceiro botão ocupando a linha inteira.

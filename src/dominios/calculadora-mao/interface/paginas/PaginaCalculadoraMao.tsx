@@ -1,35 +1,15 @@
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
-import ModalRegras from '../componentes/ModalRegras'
+import ModalRegras from '../modais/regras/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
-import type { VentoMao } from '../../logica/mao'
-import type { ResultadoCalculoParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
-import { converterMaoParaCenterpiece } from '@/dominios/centerpiece/logica/tipos-integracao'
-
-interface ContextoCenterpieceMao {
-  tipoVitoria: 'ron' | 'tsumo'
-  ventoRodada: VentoMao
-  ventoAssento: VentoMao
-  honba: number
-  rodadaNumero?: number
-  vencedorId?: string
-  pagadorId?: string
-  vencedorEhLeste?: boolean
-  vencedorNome?: string
-  jogadorRiichi?: boolean
-}
 
 interface PropsPaginaCalculadoraMao {
-  aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
-  contextoCenterpiece?: ContextoCenterpieceMao
-  aoVoltar?: () => void
+  aoAbrirCalculadoraRapida?: () => void
 }
 
 export default function PaginaCalculadoraMao({
-  aoUsarResultado,
-  contextoCenterpiece,
-  aoVoltar,
+  aoAbrirCalculadoraRapida,
 }: PropsPaginaCalculadoraMao = {}) {
   /**
    * Em telas grandes (tablets/desktop, ≥768px) todas as opções da finalização
@@ -39,45 +19,15 @@ export default function PaginaCalculadoraMao({
    */
   const telaGrande = useMediaQuery('(min-width: 768px)')
 
-  const calculadora = useCalculadoraMao(
-    contextoCenterpiece
-      ? {
-          initialMao: {
-            agari: contextoCenterpiece.tipoVitoria,
-            ventoRodada: contextoCenterpiece.ventoRodada,
-            ventoAssento: contextoCenterpiece.ventoAssento,
-            honba: contextoCenterpiece.honba,
-            riichi: contextoCenterpiece.jogadorRiichi ? { duplo: false, ippatsu: false } : null,
-          },
-          fluxoCompleto: true,
-        }
-      : { fluxoCompleto: telaGrande },
-  )
-
-  const cabecalho = contextoCenterpiece ? null : <BarraCalculadora modo="completo" />
-
-  const aoUsarMao = aoUsarResultado
-    ? () => {
-        if (!calculadora.resultado) return
-        const convertido = converterMaoParaCenterpiece(calculadora.resultado, {
-          vencedorId: contextoCenterpiece?.vencedorId,
-          pagadorId: contextoCenterpiece?.pagadorId,
-          vencedorEhLeste: contextoCenterpiece?.vencedorEhLeste,
-          honbaUsado: contextoCenterpiece?.honba,
-        })
-        if (convertido) aoUsarResultado(convertido)
-      }
-    : undefined
+  const calculadora = useCalculadoraMao({ fluxoCompleto: telaGrande })
 
   return (
     <div>
       <ModoCompletoCalculadora
         estado={calculadora}
-        cabecalho={cabecalho}
+        cabecalho={<BarraCalculadora modo="completo" />}
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
-        aoUsarMao={aoUsarMao}
-        contextoCenterpiece={contextoCenterpiece}
-        aoVoltar={contextoCenterpiece ? aoVoltar : undefined}
+        aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida}
       />
 
       {calculadora.modalRegrasAberto && (

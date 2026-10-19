@@ -8,22 +8,9 @@ import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 export function PaginaFinalizacaoMao({
   estado,
   acoesCabecalho,
-  aoUsarMao,
-  contextoCenterpiece,
 }: {
   estado: EstadoCalculadoraMao
   acoesCabecalho?: ReactNode
-  aoUsarMao?: () => void
-  contextoCenterpiece?: {
-    tipoVitoria: 'ron' | 'tsumo'
-    ventoRodada: string
-    ventoAssento: string
-    honba: number
-    rodadaNumero?: number
-    vencedorNome?: string
-    vencedorEhLeste?: boolean
-    jogadorRiichi?: boolean
-  }
 }) {
   const maoRef = useRef<HTMLDivElement>(null)
   const [maoVisivelNaTela, setMaoVisivelNaTela] = useState(true)
@@ -58,8 +45,8 @@ export function PaginaFinalizacaoMao({
           />
         </div>
         <div className="coluna-finalizacao-opcoes">
-          <OpcoesMao estado={estado} embutido contextoCenterpiece={contextoCenterpiece} />
-          <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" aoUsarMao={aoUsarMao} contextoCenterpiece={contextoCenterpiece} />
+          <OpcoesMao estado={estado} embutido />
+          <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" />
         </div>
       </div>
     </div>

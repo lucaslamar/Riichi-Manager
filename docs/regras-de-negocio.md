@@ -59,4 +59,3 @@ Preserve:
 - Fechar resultado preserva finalizacao.
 - Voltar para montagem preserva ventos, honba, doras e riichi quando fizer sentido.
 - Calculadora de Han e Fu atualiza resultado ao mudar han, fu, Ron/Tsumo, leste/dealer e honba.
-- Torneio Fast continua acessivel pelo menu global.

@@ -1,0 +1,310 @@
+/*
+ * Modal de Resultado — só o conteúdo. Esqueleto, tamanho e tom vêm da Modal
+ * base (compartilhado/interface/componentes/modal). Um único visual claro para
+ * todas as telas; os tamanhos escalam com clamp().
+ */
+
+.modal-resultado {
+  --resultado-destaque: var(--primario);
+  --resultado-texto-suave: #607080;
+  --resultado-cartao: #eef6ff;
+  --resultado-cartao-neutro: #f8fafc;
+}
+
+.modal-resultado .modal-corpo {
+  /* 14 pedras numa linha quando a modal tem largura; senão quebra em duas
+     linhas com pedras de no mínimo 32px (cqw = largura do corpo da modal). */
+  --pedra-resultado: clamp(32px, calc(100cqw / 14 - 3.5px), 40px);
+  text-align: center;
+}
+
+/* ─── Mão calculada ───────────────────────────────────────────────────────── */
+.modal-resultado .mao-calculada {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--modal-borda);
+}
+
+.modal-resultado .resultado-grupo-mao {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+}
+
+.modal-resultado .resultado-pedra,
+.modal-resultado .resultado-meld .meld-tile,
+.modal-resultado .resultado-meld .meld-pedras .tile-img {
+  width: var(--pedra-resultado);
+  height: calc(var(--pedra-resultado) * 1.34);
+  cursor: default;
+}
+
+.modal-resultado .resultado-meld .meld-tile.de-lado,
+.modal-resultado .resultado-meld .meld-pedras .tile-img-lado {
+  width: calc(var(--pedra-resultado) * 1.34);
+  height: var(--pedra-resultado);
+}
+
+.modal-resultado .resultado-pedra.agari {
+  margin-left: 6px;
+}
+
+.modal-resultado .resultado-meld {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* ─── Pontuação ───────────────────────────────────────────────────────────── */
+.modal-resultado .nome-mao {
+  margin-bottom: 6px;
+  color: var(--resultado-destaque);
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+}
+
+.modal-resultado .resumo-yakuman {
+  margin-bottom: 4px;
+  color: #b45309;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.modal-resultado .resumo-han-fu,
+.modal-resultado .detalhe-pontos {
+  color: var(--resultado-texto-suave);
+  font-size: clamp(0.9rem, 0.84rem + 0.3vw, 1.05rem);
+}
+
+.modal-resultado .resumo-han-fu {
+  margin-bottom: 4px;
+}
+
+.modal-resultado .pontos-totais {
+  color: #4fc3f7;
+  font-size: clamp(2.5rem, 2rem + 2vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.modal-resultado .detalhe-pontos {
+  margin-top: 6px;
+}
+
+.modal-resultado .detalhes-contexto-resultado {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.modal-resultado .detalhes-contexto-resultado span {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--resultado-cartao);
+  color: #1d4ed8;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+/* ─── Indicadores de Dora / Ura Dora ──────────────────────────────────────── */
+.modal-resultado .indicadores-resultado {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid var(--modal-borda);
+  border-radius: 8px;
+  background: var(--resultado-cartao-neutro);
+  text-align: left;
+}
+
+.modal-resultado .linha-indicadores-resultado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 10px;
+}
+
+.modal-resultado .indicadores-resultado strong {
+  color: var(--resultado-texto-suave);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.modal-resultado .tiles-indicadores-resultado {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.modal-resultado .tiles-indicadores-resultado .chip-pedra {
+  width: 28px;
+  height: 38px;
+}
+
+.modal-resultado .tiles-indicadores-resultado .indicador-fechado {
+  opacity: 0.72;
+}
+
+/* ─── Listas de Yaku e Fu ─────────────────────────────────────────────────── */
+.modal-resultado .divisor-resultado {
+  margin: 14px 0 10px;
+  border-top: 1px solid var(--modal-borda);
+}
+
+.modal-resultado .rotulo-lista-resultado {
+  margin-bottom: 8px;
+  color: var(--resultado-destaque);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.modal-resultado .lista-yaku {
+  display: grid;
+  gap: 8px;
+}
+
+.modal-resultado .chip-yaku {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: var(--resultado-cartao);
+  color: #102a43;
+  font-size: clamp(0.85rem, 0.8rem + 0.25vw, 0.98rem);
+  font-weight: 700;
+  text-align: left;
+}
+
+.modal-resultado .chip-yaku strong {
+  color: var(--resultado-destaque);
+  font-weight: 900;
+}
+
+.modal-resultado .lista-fu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  text-align: left;
+}
+
+.modal-resultado .chip-fu {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--modal-borda);
+  border-radius: 8px;
+  background: var(--resultado-cartao-neutro);
+  color: #102a43;
+}
+
+.modal-resultado .chip-fu strong {
+  color: #0284c7;
+  font-size: 0.9rem;
+}
+
+.modal-resultado .chip-fu span {
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.modal-resultado .chip-fu small {
+  color: var(--resultado-texto-suave);
+  line-height: 1.25;
+}
+
+/* ─── Aviso de chombo / sem yaku (tom de alerta) ──────────────────────────── */
+.modal-resultado .resultado-chombo {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #7f1d1d;
+  text-align: left;
+}
+
+.modal-resultado .resultado-chombo strong {
+  color: #991b1b;
+  font-size: 1rem;
+}
+
+.modal-resultado .resultado-chombo span {
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.modal-resultado .pontos-chombo {
+  color: #dc2626;
+  font-size: clamp(2.5rem, 2rem + 2vw, 3rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* ─── Funcionalidade própria: referência de pedras no rodapé ──────────────────
+ * Só em tablets largos deitados (iPad Air/Pro), onde sobra largura para a
+ * tabela inteira sem roubar altura do resultado. Nas demais telas o rodapé
+ * da modal não aparece.
+ */
+.modal-resultado .modal-rodape {
+  display: none;
+}
+
+@media (orientation: landscape) and (min-width: 1100px) and (max-width: 1366px) and (min-height: 700px) {
+  .modal-resultado .modal-rodape {
+    display: block;
+    padding-block: 6px;
+  }
+
+  .modal-resultado .rodape-pedras-linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .modal-resultado .rodape-pedras-linha + .rodape-pedras-linha {
+    margin-top: 2px;
+  }
+
+  .modal-resultado .rodape-pedras-rotulo {
+    flex: 0 0 42px;
+    color: var(--resultado-texto-suave);
+    font-size: 0.54rem;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .modal-resultado .rodape-pedras-tiles {
+    display: flex;
+    flex: 1 1 auto;
+    gap: 2px;
+  }
+
+  .modal-resultado .rodape-pedra-ref {
+    display: inline-flex;
+    width: 100%;
+    max-width: 19px;
+  }
+
+  .modal-resultado .rodape-pedra-ref .tile-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+}

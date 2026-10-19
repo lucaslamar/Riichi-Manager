@@ -1,26 +1,12 @@
 import type { DetalheFu, Mao } from '../../../logica/mao'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
-const KANJI_VENTO_EX: Record<string, string> = { '1': '東', '2': '南', '3': '西', '4': '北' }
-const NOME_VENTO_EX: Record<string, string> = { '1': 'Leste', '2': 'Sul', '3': 'Oeste', '4': 'Norte' }
-
-interface ContextoCenterpieceEx {
-  tipoVitoria: 'ron' | 'tsumo'
-  ventoRodada: string
-  ventoAssento: string
-  honba: number
-  rodadaNumero?: number
-  vencedorNome?: string
-}
-
 export default function ExibicaoCompleta({
   resultado,
   mao,
-  contextoCenterpiece,
 }: {
   resultado: any
   mao?: Mao
-  contextoCenterpiece?: ContextoCenterpieceEx
 }) {
   const pts = resultado.pontos
   const completarIndicadores = (quantidade: number) => Math.max(0, 5 - quantidade)
@@ -35,19 +21,6 @@ export default function ExibicaoCompleta({
         <div className="resumo-han-fu">
           {resultado.han} Han {resultado.fu} Fu
           {mao && mao.honba > 0 && <> · Honba {mao.honba}</>}
-        </div>
-      )}
-      {contextoCenterpiece && (
-        <div className="detalhes-contexto-resultado">
-          <span>
-            {contextoCenterpiece.vencedorNome ?? 'Jogador'}{' '}
-            {KANJI_VENTO_EX[contextoCenterpiece.ventoAssento] ?? contextoCenterpiece.ventoAssento}
-          </span>
-          <span>{contextoCenterpiece.tipoVitoria === 'ron' ? 'Ron' : 'Tsumo'}</span>
-          <span>
-            {NOME_VENTO_EX[contextoCenterpiece.ventoRodada] ?? contextoCenterpiece.ventoRodada}
-            {contextoCenterpiece.rodadaNumero != null ? ` ${contextoCenterpiece.rodadaNumero}` : ''}
-          </span>
         </div>
       )}
       <div className="pontos-totais">{pts.total.toLocaleString('pt-BR')}</div>

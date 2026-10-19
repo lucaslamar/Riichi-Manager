@@ -1,0 +1,88 @@
+/*
+ * Modal de Regras de cálculo — só o conteúdo. Esqueleto, cabeçalho, rodapé e
+ * tamanho vêm da Modal base. A linha da regra empilha texto e controle quando
+ * a própria modal fica estreita (container query), não por aparelho.
+ */
+
+.modal-regras .modal-rodape button {
+  min-height: clamp(44px, 2.4vw + 30px, 58px);
+  padding-inline: clamp(16px, 1.6vw + 8px, 26px);
+  font-size: clamp(0.95rem, 0.88rem + 0.3vw, 1.15rem);
+}
+
+.linha-regra {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 340px);
+  gap: clamp(14px, 2vw, 26px);
+  align-items: center;
+  padding: clamp(10px, 1.6vw + 4px, 22px) 0;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.linha-regra:last-child {
+  border-bottom: 0;
+}
+
+.texto-regra {
+  display: grid;
+  gap: 4px;
+}
+
+.texto-regra strong {
+  color: var(--escuro);
+  font-size: clamp(1rem, 0.9rem + 0.45vw, 1.28rem);
+}
+
+.texto-regra span {
+  color: #607080;
+  font-size: clamp(0.85rem, 0.8rem + 0.3vw, 1.1rem);
+  line-height: 1.4;
+}
+
+.controle-regra {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border: 1px solid #d7dde6;
+  border-radius: 8px;
+  background: #eef2f6;
+}
+
+.controle-regra button {
+  min-height: clamp(44px, 2.4vw + 30px, 58px);
+  border: 0;
+  background: transparent;
+  color: #607080;
+  cursor: pointer;
+  font-size: clamp(0.9rem, 0.85rem + 0.3vw, 1.15rem);
+  font-weight: 900;
+}
+
+.controle-regra button.ativo {
+  background: var(--primario);
+  color: var(--branco);
+}
+
+/* Modal estreita (celular em pé): texto em cima, controle embaixo. */
+@container (max-width: 520px) {
+  .linha-regra {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .controle-regra button {
+    min-height: 48px;
+  }
+}
+
+/* Telas baixas: linhas mais justas para caber 3–4 regras na área rolável. */
+@media (max-height: 600px) {
+  .linha-regra {
+    padding: 9px 0;
+  }
+
+  .controle-regra button,
+  .modal-regras .modal-rodape button {
+    min-height: 44px;
+  }
+}

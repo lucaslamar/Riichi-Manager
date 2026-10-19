@@ -14,7 +14,7 @@ interface PropsConstrutorMao {
   aoAbrirRegras?: () => void
   acoesCabecalho?: ReactNode
   aoCalcularDireto?: () => void
-  aoVoltar?: () => void
+  aoAbrirCalculadoraRapida?: () => void
 }
 
 /**
@@ -32,7 +32,7 @@ export default function ConstrutorMao({
   aoAbrirRegras,
   acoesCabecalho,
   aoCalcularDireto,
-  aoVoltar,
+  aoAbrirCalculadoraRapida,
 }: PropsConstrutorMao) {
   const { t } = useI18n()
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
@@ -222,7 +222,7 @@ export default function ConstrutorMao({
         contexto={contexto}
         acoesCabecalho={acoesCabecalho}
         aoAbrirRegras={aoAbrirRegras}
-        aoVoltar={aoVoltar}
+        aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}
         aoAdicionarPedraDaMao={adicionarPedraDaMao}
@@ -251,6 +251,7 @@ export default function ConstrutorMao({
               podeKanAberto={podeKanAberto}
               podeKanFechado={podeKanFechado}
               aoAlternarAcao={alternarAcaoMao}
+              aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida}
             />
           </div>
         </>
@@ -273,6 +274,7 @@ export default function ConstrutorMao({
                   podeKanAberto={podeKanAberto}
                   podeKanFechado={podeKanFechado}
                   aoAlternarAcao={alternarAcaoMao}
+                  aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida}
                   compacto
                 />
                 {aoAbrirRegras && !mostrarFinalizacaoNoTeclado && (

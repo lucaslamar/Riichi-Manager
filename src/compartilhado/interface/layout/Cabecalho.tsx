@@ -3,26 +3,28 @@ import { createPortal } from 'react-dom'
 import type { TelaPrincipal } from '@/app/App'
 import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
+import { IconeMenu } from './IconeMenu'
 import packageJson from '../../../../package.json'
 
 interface PropsCabecalho {
   telaAtual: TelaPrincipal
-  torneioAtivo: boolean
   aoNavegar: (tela: TelaPrincipal) => void
+  /** Quando definido, a seta de voltar ocupa o lugar do hambúrguer (inclusive no retrato). */
+  aoVoltar?: () => void
 }
 
 interface ItemMenuGlobal {
   tela: TelaPrincipal
   chave: string
   icone: string
+  /** Rótulo curto para a barra inferior, onde o nome completo seria cortado. */
+  chaveCurta?: string
 }
 
 const MODULOS_MENU: ItemMenuGlobal[] = [
-  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'fa-chess-board' },
+  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'fa-wind' },
-  { tela: 'centerpiece', chave: 'menu.centerpiece', icone: 'fa-table' },
-  { tela: 'configuracaoTorneio', chave: 'menu.fastTournament', icone: 'fa-trophy' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'catavento' },
 ]
 
 const APP_MENU: ItemMenuGlobal[] = [
@@ -30,13 +32,21 @@ const APP_MENU: ItemMenuGlobal[] = [
   { tela: 'sobre', chave: 'menu.about', icone: 'fa-info-circle' },
 ]
 
-const NAVEGACAO_TABLET: ItemMenuGlobal[] = [
-  { tela: 'centerpiece', chave: 'menu.centerpiece', icone: 'fa-table' },
-  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'fa-chess-board' },
+const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
+  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
-  { tela: 'configuracaoTorneio', chave: 'menu.fastTournament', icone: 'fa-trophy' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'fa-wind' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'catavento' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
+]
+
+/**
+ * Barra inferior (celular/tablet). A Han e Fu é aberta pelo atalho na
+ * Calculadora de Mão, então não ocupa espaço aqui.
+ */
+const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
+  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'catavento' },
+  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h', chaveCurta: 'menu.rulesShort' },
 ]
 
 const TODOS_ITENS = [...MODULOS_MENU, ...APP_MENU]
@@ -66,7 +76,11 @@ function elementosFocaveis(container: HTMLElement) {
  * O drawer concentra navegacao entre modulos, idioma e versao. Quando aberto,
  * prende foco, fecha com Escape e fecha ao selecionar item ou clicar no overlay.
  */
-export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsCabecalho) {
+export default function Cabecalho({
+  telaAtual,
+  aoNavegar,
+  aoVoltar,
+}: PropsCabecalho) {
   const { t, idioma, idiomas, alterarIdioma } = useI18n()
   const [menuAberto, setMenuAberto] = useState(false)
   const [deslocamentoDrawer, setDeslocamentoDrawer] = useState(0)
@@ -186,7 +200,7 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
 
   const barraInferior = createPortal(
     <nav className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
-      {NAVEGACAO_TABLET.map((item) => {
+      {NAVEGACAO_INFERIOR.map((item) => {
         const ativo = item.tela === telaAtual
         return (
           <button
@@ -198,8 +212,8 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
             title={t(item.chave)}
             onClick={() => aoNavegar(item.tela)}
           >
-            <i className={`fas ${item.icone}`} aria-hidden="true" />
-            <span>{t(item.chave)}</span>
+            <IconeMenu icone={item.icone} />
+            <span>{t(item.chaveCurta ?? item.chave)}</span>
           </button>
         )
       })}
@@ -212,17 +226,29 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
       <header className="cabecalho-principal">
         <div className="conteudo-cabecalho">
           <div className="barra-marca-aplicacao">
-            <button
-              ref={botaoMenuRef}
-              className="botao-menu-global"
-              type="button"
-              aria-label={menuAberto ? t('global.closeMenu') : t('global.openMenu')}
-              aria-expanded={menuAberto}
-              aria-controls="drawer-global"
-              onClick={() => setMenuAberto((aberto) => !aberto)}
-            >
-              <i className={`fas ${menuAberto ? 'fa-xmark' : 'fa-bars'}`} aria-hidden="true" />
-            </button>
+            {aoVoltar ? (
+              <button
+                className="botao-menu-global botao-voltar-global"
+                type="button"
+                aria-label={t('actions.back')}
+                title={t('actions.back')}
+                onClick={aoVoltar}
+              >
+                <i className="fas fa-arrow-left" aria-hidden="true" />
+              </button>
+            ) : (
+              <button
+                ref={botaoMenuRef}
+                className="botao-menu-global"
+                type="button"
+                aria-label={menuAberto ? t('global.closeMenu') : t('global.openMenu')}
+                aria-expanded={menuAberto}
+                aria-controls="drawer-global"
+                onClick={() => setMenuAberto((aberto) => !aberto)}
+              >
+                <i className={`fas ${menuAberto ? 'fa-xmark' : 'fa-bars'}`} aria-hidden="true" />
+              </button>
+            )}
 
             <div className="marca-aplicacao">
               <h1 className="titulo-principal">{t('global.appName')}</h1>
@@ -231,7 +257,7 @@ export default function Cabecalho({ telaAtual, torneioAtivo, aoNavegar }: PropsC
             <nav className="sidebar-navegacao-desktop" aria-label={t('global.navigation')}>
               <MenuSecao
                 titulo={t('menu.app')}
-                itens={NAVEGACAO_TABLET}
+                itens={NAVEGACAO_DESKTOP}
                 telaAtual={telaAtual}
                 aoNavegar={aoNavegar}
                 t={t}
@@ -365,7 +391,7 @@ function MenuSecao({
               aria-current={ativo ? 'page' : undefined}
               onClick={() => aoNavegar(item.tela)}
             >
-              <i className={`fas ${item.icone}`} aria-hidden="true" />
+              <IconeMenu icone={item.icone} />
               <span>{t(item.chave)}</span>
             </button>
           )
