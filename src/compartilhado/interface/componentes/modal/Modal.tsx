@@ -69,7 +69,9 @@ export default function Modal({
       document.activeElement instanceof HTMLElement ? document.activeElement : null
     const overflowAnterior = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    botaoFecharRef.current?.focus()
+    // Foco inicial no próprio diálogo (não no X): leitores de tela anunciam o
+    // título e o X não abre com o anel de foco aceso; o Tab leva ao X.
+    dialogoRef.current?.focus()
 
     const aoPressionarTecla = (evento: KeyboardEvent) => {
       if (evento.key === 'Escape') {
@@ -86,7 +88,10 @@ export default function Modal({
 
       const primeiro = focaveis[0]
       const ultimo = focaveis[focaveis.length - 1]
-      if (evento.shiftKey && document.activeElement === primeiro) {
+      if (document.activeElement === dialogo) {
+        evento.preventDefault()
+        ;(evento.shiftKey ? ultimo : primeiro).focus()
+      } else if (evento.shiftKey && document.activeElement === primeiro) {
         evento.preventDefault()
         ultimo.focus()
       } else if (!evento.shiftKey && document.activeElement === ultimo) {
@@ -126,6 +131,7 @@ export default function Modal({
         className={classes}
         role="dialog"
         aria-modal="true"
+        tabIndex={-1}
         aria-labelledby={idTitulo}
         aria-describedby={subtitulo ? idSubtitulo : undefined}
       >

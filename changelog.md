@@ -2,7 +2,18 @@
 
 ## Não lançado
 
+### Novo
+
+- Finalização da mão: botão de ajuda "?" ao lado do título de cada seção (Furiten, Vitória, Honba e doras, Configuração de ventos, Riichi e Condições especiais). Ele abre uma explicação curta para quem está começando; nas seções com mais de um assunto, a explicação traz um subtítulo para cada um. O antigo "i" das Doras saiu, e o texto dele está na ajuda de Honba e doras.
+- Ajudas explicam quais condições são yaku (tornam a mão válida sozinhas), o que é Ura Dora e os tipos de furiten (pelos descartes, temporário e de Riichi). A ajuda de Honba e doras fica toda em rosa, com "Qual é o Dora?" trazendo a curiosidade de onde vem o nome (dragon → doragon → Dora), Doras na mão, Indicadores e Ura Dora; a de Vitória separa Tsumo, Ron e Yaku em subtítulos.
+
 ### Alterado
+
+- Finalização da mão: a seção Furiten (botão Descartes) fica logo abaixo da mão, antes da Vitória.
+- Finalização da mão: os títulos de seção com "?" ganharam uma linha de 44px de altura, para o "?" ter área de toque confortável sem encostar nos botões da seção.
+- O botão de fechar das janelas mostra só o X, sem o círculo; a área de toque continua a mesma. Ao abrir uma janela, o X não aparece mais com o anel de foco (ele só aparece ao chegar nele pelo teclado).
+- Botão dos Indicadores de Dora na finalização: o ícone de grade virou um dragão (Dora vem de "dragon").
+- Contador de Honba na finalização: rosa como o de Doras (antes azul), já que os dois ficam na mesma seção.
 
 - Teclado da montagem no celular em pé: as Honras ficam centralizadas abaixo dos naipes, como nos tablets. Sem aka dora, os naipes de 9 pedras também ficam centralizados, sem a coluna vazia à direita. As pedras mantêm o mesmo tamanho.
 - Teclado da montagem no celular deitado sem aka dora: os naipes de 9 pedras ocupam toda a largura, sem a coluna vazia à direita.

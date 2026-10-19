@@ -1,0 +1,176 @@
+/* Ajuda das seções da finalização: botão "?" e conteúdo da modal. */
+
+/*
+ * Botão "?": o <button> é só a área clicável (transparente) e o círculo é o
+ * span interno, que nenhuma regra genérica de botão alcança. `:not(#_)` só
+ * sobe a especificidade, para as regras de botão das seções (ex.:
+ * `.descartes-finalizacao button` nos tablets) não mudarem o tamanho do "?".
+ */
+.botao-ajuda-secao:not(#_) {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 18px;
+  min-width: 0;
+  max-width: none;
+  height: 18px;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  /* Margens negativas: o círculo não entra na altura da linha do rótulo. */
+  margin: -9px 0 -9px 5px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #607080;
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.botao-ajuda-secao-circulo {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 999px;
+  background: #ffffff;
+  color: inherit;
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
+}
+
+/*
+ * Linha do rótulo que tem "?": 44px de altura, com o texto e o "?" centrados.
+ * Os rótulos ficam colados no topo de seções que cortam o que passa da borda
+ * (`overflow: hidden` da animação de revelar) e logo acima dos controles; sem
+ * essa altura não sobra espaço para a área de toque de 44px.
+ */
+.rotulo-com-ajuda:not(#_) {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+/*
+ * Área de toque de 44×44px sem aumentar o círculo: a altura inteira da linha
+ * do rótulo e, na largura, o texto do rótulo à esquerda e o vazio à direita,
+ * que não são clicáveis.
+ */
+.botao-ajuda-secao:not(#_)::before {
+  content: '';
+  position: absolute;
+  top: -13px;
+  right: -18px;
+  bottom: -13px;
+  left: -24px;
+}
+
+/* Onde a área de toque do "?" encosta num controle, o controle continua com
+   prioridade no toque. Não muda posição nem tamanho: só a ordem de
+   empilhamento. */
+.toggle-agari-mao button,
+.btn-vento-pedra,
+.linha-opcoes-mao .btn-toggle-mao,
+.descartes-finalizacao .btn-toggle-mao,
+.contador-dora-manual > div > button {
+  position: relative;
+  z-index: 1;
+}
+
+.botao-ajuda-secao:not(#_):focus-visible {
+  outline: none;
+}
+
+.botao-ajuda-secao:hover .botao-ajuda-secao-circulo,
+.botao-ajuda-secao:focus-visible .botao-ajuda-secao-circulo {
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+.botao-ajuda-secao:focus-visible .botao-ajuda-secao-circulo {
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.35);
+}
+
+/* ─── Modal ───────────────────────────────────────────────────────────────── */
+.modal-ajuda-secao p,
+.modal-ajuda-secao li {
+  margin: 0;
+  color: #102a43;
+  font-size: clamp(0.92rem, 0.88rem + 0.2vw, 1.02rem);
+  line-height: 1.5;
+}
+
+.modal-ajuda-secao p + p,
+.modal-ajuda-secao p + ul {
+  margin-top: 10px;
+}
+
+.modal-ajuda-secao h3 + p,
+.modal-ajuda-secao h4 + p {
+  margin-top: 4px;
+}
+
+/* Itens dentro de um assunto (ex.: Doras na mão e Indicadores dentro de
+   "Qual é o Dora?"): mais próximos entre si e um degrau abaixo do subtítulo. */
+.bloco-ajuda-secao + .bloco-ajuda-secao--item {
+  margin-top: 10px;
+}
+
+.modal-ajuda-secao h4 {
+  margin: 0;
+  color: #334e68;
+  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
+  font-weight: 800;
+}
+
+.modal-ajuda-secao ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+.bloco-ajuda-secao + .bloco-ajuda-secao {
+  margin-top: 14px;
+}
+
+/* Subtítulo de cada assunto quando a seção agrupa mais de um (ex.: Honba e
+   Doras na mão): mesmo estilo dos rótulos da finalização, um degrau maior. */
+.modal-ajuda-secao h3 {
+  margin: 0;
+  color: #102a43;
+  font-size: clamp(0.82rem, 0.78rem + 0.2vw, 0.95rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.icone-subtitulo-ajuda {
+  margin-left: 6px;
+  font-size: 0.9em;
+}
+
+/* Honba e doras: rosa das Doras (o mesmo do contador na finalização) nas
+   bordas, no título e em todos os subtítulos, Honba inclusive (mesmo setor). */
+.modal-ajuda-secao--doras {
+  --modal-borda: #fbcfe8;
+}
+
+.modal-ajuda-secao--doras.modal--titulo-rotulo {
+  --modal-cor-titulo: #be185d;
+}
+
+.modal-ajuda-secao--doras h3,
+.modal-ajuda-secao--doras h4 {
+  color: #be185d;
+}

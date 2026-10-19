@@ -233,3 +233,9 @@ export const ESTILO_MELD: Record<Meld['tipo'], { fundo: string; borda: string; r
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────
+
+/**
+ * Ícone (Font Awesome) dos Indicadores de Dora: o botão da finalização e a
+ * ajuda de Honba e doras usam o mesmo. Um dragão, porque Dora vem de "dragon".
+ */
+export const ICONE_INDICADOR_DORA = 'fa-dragon'

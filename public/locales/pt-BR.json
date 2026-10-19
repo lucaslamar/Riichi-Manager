@@ -86,9 +86,6 @@
     "honbaAndDora": "Honba e doras",
     "honba": "Honba",
     "manualDora": "Doras na mão",
-    "manualDoraHelp": "Doras na mão: informe quantas Doras você possui na mão.",
-    "manualDoraHelpIndicadores": "Indicadores: selecione os Indicadores de Dora. O Indicador não é a Dora; ele determina qual peça será contada como Dora.",
-    "manualDoraHelpTitle": "Doras na mão",
     "winds": "Configuração de ventos",
     "roundWind": "Vento da rodada",
     "seatWind": "Seu vento",
@@ -234,6 +231,66 @@
     "south": "Sul",
     "west": "Oeste",
     "north": "Norte"
+  },
+  "sectionHelp": {
+    "buttonLabel": "Ajuda: {{section}}",
+    "victory": {
+      "tsumo": "Você completou a mão com uma peça comprada da parede. Todos os outros jogadores pagam.",
+      "ron": "Você completou a mão com uma peça descartada por outro jogador. Quem descartou paga sozinho.",
+      "menzen": "Com a mão fechada, Tsumo vale 1 han (Menzen Tsumo) e é um yaku: sozinho já torna sua mão válida.",
+      "yakuTitle": "Yaku",
+      "yaku": "Condição de pontuação que dá direito a vencer: toda mão precisa de pelo menos um."
+    },
+    "honba": {
+      "counter": "Contador de rodadas extras. Aumenta quando o dealer vence ou quando a rodada termina empatada.",
+      "points": "Cada honba adiciona 300 pontos ao vencedor: 100 de cada jogador no Tsumo, ou 300 de quem descartou no Ron."
+    },
+    "dora": {
+      "title": "Qual é o Dora?",
+      "inHand": "Informe quantas Doras você possui na mão.",
+      "indicatorsTitle": "Indicadores",
+      "indicators": "Selecione os Indicadores de Dora. O Indicador não é a Dora; ele determina qual peça será contada como Dora.",
+      "uraDora": "A peça que fica embaixo de cada Indicador de Dora no muro morto. Funciona como um Indicador de Dora a mais, mas só é revelada para quem vence depois de declarar Riichi.",
+      "curiosityTitle": "Curiosidade",
+      "curiosity": "No Riichi Mahjong, a palavra Dora (ドラ) é uma abreviação de “dragon”, dragão em inglês, que em japonês se pronuncia doragon (ドラゴン).",
+      "dragonPrince": "Por isso dizem que quem nunca abandona suas Doras é príncipe (ou princesa) dos dragões."
+    },
+    "uraDora": {
+      "term": "Ura Dora",
+      "text": "a peça que fica embaixo de cada Indicador de Dora no muro morto. Funciona como um Indicador de Dora a mais, mas só é revelada para quem vence depois de declarar Riichi."
+    },
+    "furiten": {
+      "rule": "Em furiten você não pode vencer por Ron, só por Tsumo. Declarar Ron em furiten é chombo (penalidade).",
+      "discardsTerm": "Pelos descartes",
+      "discards": "alguma peça que completaria sua mão está entre os seus descartes. Dura enquanto a sua espera incluir essa peça.",
+      "temporaryTerm": "Temporário",
+      "temporary": "você deixou passar uma peça que completaria sua mão (não declarou Ron). Dura até o seu próximo descarte.",
+      "riichiTerm": "De Riichi",
+      "riichi": "depois de declarar Riichi, você deixou passar uma peça que completaria sua mão. Dura até o fim da rodada, porque a mão não pode mais mudar.",
+      "register": "Registre aqui os seus descartes: o app verifica o furiten pelos descartes. O temporário e o de Riichi dependem do que aconteceu na mesa e não são verificados."
+    },
+    "seatWind": {
+      "seat": "O vento do seu assento nesta rodada. Um trio do seu vento vale 1 han e é um yaku: sozinho já torna sua mão válida.",
+      "dealer": "Quem está no Leste é o dealer (oya) e recebe 1,5× os pontos ao vencer."
+    },
+    "roundWind": {
+      "round": "O vento da rodada atual: Leste na primeira metade da partida, Sul na segunda. Um trio do vento da rodada também vale 1 han e é um yaku.",
+      "double": "Se o vento da rodada for também o seu vento, o trio vale 2 han."
+    },
+    "riichi": {
+      "declaration": "Declaração feita com a mão fechada e a um passo de completar (tenpai). Custa 1.000 pontos de aposta.",
+      "value": "Vale 1 han e é um yaku: sozinho já torna sua mão válida. Também libera a Ura Dora. Depois de declarar, você não pode mais alterar a mão.",
+      "doubleRiichi": "Riichi declarado no primeiro descarte, sem chamadas antes. 2 han no lugar de 1; também é um yaku.",
+      "ippatsu": "Vitória até uma volta após o Riichi, sem chamadas no meio. +1 han; é um yaku, mas só existe junto com o Riichi."
+    },
+    "specialConditions": {
+      "allYaku": "Todas são yaku: qualquer uma delas já torna sua mão válida, mesmo sem outro yaku.",
+      "tenhouChiihou": "Vitória com a mão inicial (Tenhou pelo dealer, Chiihou pelos demais). Yakuman.",
+      "rinshan": "Vitória com a peça comprada após um Kan. +1 han.",
+      "chankan": "Ron sobre a peça que outro jogador adicionou a um Pon para formar Kan. +1 han.",
+      "haitei": "Vitória por Tsumo com a última peça da parede. +1 han.",
+      "houtei": "Vitória por Ron com o último descarte da partida. +1 han."
+    }
   },
   "rulesModal": {
     "open": "Abrir regras de cálculo",

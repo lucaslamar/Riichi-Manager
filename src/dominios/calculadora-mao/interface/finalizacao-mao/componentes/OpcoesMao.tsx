@@ -2,12 +2,17 @@ import { useMemo, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
-import { codigoBase, nomePedraAcessivel, proximaDoraIndicada } from '../../constantes'
+import {
+  codigoBase,
+  ICONE_INDICADOR_DORA,
+  nomePedraAcessivel,
+  proximaDoraIndicada,
+} from '../../constantes'
 import { BotaoToggle } from '../../compartilhado/componentes/Botoes'
 import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import { TecladoPedras } from '../../montagem-mao/componentes/TecladoPedras'
-import ModalAjudaDoras from '../../modais/ajuda-doras/ModalAjudaDoras'
+import BotaoAjuda from '../../modais/ajuda-secoes/BotaoAjuda'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
@@ -49,7 +54,6 @@ export default function OpcoesMao({
     marcarVentoRodadaDefinido,
     marcarVentoAssentoDefinido,
   } = estado
-  const [ajudaDoraAberta, setAjudaDoraAberta] = useState(false)
   const [descartesExpandidos, setDescartesExpandidos] = useState(false)
   const [painelContextualAberto, setPainelContextualAberto] = useState<'dora' | 'descartes' | null>(
     null,
@@ -143,7 +147,10 @@ export default function OpcoesMao({
       id="secao-vitoria"
       className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}
     >
-      <span>{t('calculator.victory')}</span>
+      <span className="rotulo-com-ajuda">
+        {t('calculator.victory')}
+        <BotaoAjuda topico="vitoria" />
+      </span>
       <ToggleAgari
         mao={mao}
         atualizarMao={atualizarMao}
@@ -155,122 +162,17 @@ export default function OpcoesMao({
 
   return (
     <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-      {!vitoriaNaColunaDireita && campoVitoria}
-
-      <section
-        className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}
-      >
-        <span className="rotulo-bloco-opcoes">{t('calculator.honbaAndDora')}</span>
-        <div className="contadores-dora-honba">
-          <div className="contador-dora-manual contador-honba">
-            <span>{t('calculator.honba')}</span>
-            <div>
-              <button
-                type="button"
-                aria-label={`${t('calculator.honba')} -`}
-                disabled={honba <= 0}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.max(0, atual - 1)
-                  })
-                }
-              >
-                -
-              </button>
-              <strong>{honba}</strong>
-              <button
-                type="button"
-                aria-label={`${t('calculator.honba')} +`}
-                disabled={honba >= 99}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.min(99, atual + 1)
-                  })
-                }
-              >
-                +
-              </button>
-            </div>
-          </div>
-
-          <div className="contador-dora-manual">
-            <span className="rotulo-contador-com-ajuda">
-              {t('calculator.manualDora')}
-              <button
-                type="button"
-                className="icone-ajuda-dora"
-                title="Abre explicação sobre Dora e Ura Dora"
-                aria-label={t('calculator.manualDoraHelpTitle')}
-                onClick={() => setAjudaDoraAberta(true)}
-              >
-                i
-              </button>
-              <button
-                type="button"
-                className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
-                aria-label={t('calculator.doraUraIndicators')}
-                aria-expanded={painelContextualAberto === 'dora'}
-                onClick={() => alternarPainelContextual('dora')}
-              >
-                <i className="fas fa-border-all" aria-hidden="true" />
-                {mao.dora.length > 0 && (
-                  <span className="badge-indicadores-dora">{mao.dora.length}</span>
-                )}
-              </button>
-            </span>
-            <div>
-              <button
-                type="button"
-                aria-label={`${t('calculator.manualDora')} -`}
-                disabled={mao.doraManual <= 0}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
-                  })
-                }
-              >
-                -
-              </button>
-              <strong>{dorasNaMaoTotal}</strong>
-              <button
-                type="button"
-                aria-label={`${t('calculator.manualDora')} +`}
-                disabled={dorasNaMaoTotal >= 13}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
-                  })
-                }
-              >
-                +
-              </button>
-            </div>
-          </div>
-        </div>
-        {painelContextualAberto === 'dora' && (
-          <div className="painel-contextual-finalizacao">
-            {tecladoContextual}
-            <IndicadoresDora
-              mao={mao}
-              atualizarMao={atualizarMao}
-              tipo="dora"
-              aoLimparIndicadores={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.dora = []
-                })
-              }
-            />
-          </div>
-        )}
-      </section>
-
+      {/* Furiten logo abaixo da mão: os descartes registrados aqui são os que o
+          app usa para verificar o furiten. */}
       <section
         className={`descartes-finalizacao${painelContextualAberto === 'descartes' ? ' descartes-expandido' : ''}`}
       >
+        <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+          {t('calculator.furiten')}
+          <BotaoAjuda topico="furiten" />
+        </span>
         <BotaoToggle
-          rotulo={`${t('calculator.discardsFuriten')} (${mao.descartes.length})`}
+          rotulo={`${t('calculator.discards')} (${mao.descartes.length})`}
           ativo={painelContextualAberto === 'descartes'}
           corAtiva="#111827"
           desabilitado={false}
@@ -325,6 +227,111 @@ export default function OpcoesMao({
         )}
       </section>
 
+      {!vitoriaNaColunaDireita && campoVitoria}
+
+      <section
+        className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}
+      >
+        <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+          {t('calculator.honbaAndDora')}
+          <BotaoAjuda topico="honbaDoras" />
+        </span>
+        <div className="contadores-dora-honba">
+          <div className="contador-dora-manual contador-honba">
+            <span>{t('calculator.honba')}</span>
+            <div>
+              <button
+                type="button"
+                aria-label={`${t('calculator.honba')} -`}
+                disabled={honba <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.max(0, atual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{honba}</strong>
+              <button
+                type="button"
+                aria-label={`${t('calculator.honba')} +`}
+                disabled={honba >= 99}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.min(99, atual + 1)
+                  })
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div className="contador-dora-manual">
+            <span className="rotulo-contador-com-ajuda">
+              {t('calculator.manualDora')}
+              <button
+                type="button"
+                className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
+                aria-label={t('calculator.doraUraIndicators')}
+                aria-expanded={painelContextualAberto === 'dora'}
+                onClick={() => alternarPainelContextual('dora')}
+              >
+                <i className={`fas ${ICONE_INDICADOR_DORA}`} aria-hidden="true" />
+                {mao.dora.length > 0 && (
+                  <span className="badge-indicadores-dora">{mao.dora.length}</span>
+                )}
+              </button>
+            </span>
+            <div>
+              <button
+                type="button"
+                aria-label={`${t('calculator.manualDora')} -`}
+                disabled={mao.doraManual <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{dorasNaMaoTotal}</strong>
+              <button
+                type="button"
+                aria-label={`${t('calculator.manualDora')} +`}
+                disabled={dorasNaMaoTotal >= 13}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
+                  })
+                }
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+        {painelContextualAberto === 'dora' && (
+          <div className="painel-contextual-finalizacao">
+            {tecladoContextual}
+            <IndicadoresDora
+              mao={mao}
+              atualizarMao={atualizarMao}
+              tipo="dora"
+              aoLimparIndicadores={() =>
+                atualizarMao((rascunho) => {
+                  rascunho.dora = []
+                })
+              }
+            />
+          </div>
+        )}
+      </section>
+
       {/* Em tablets, as opções se agrupam por assunto em duas colunas:
           esquerda = ventos (Seu Vento + Vento da Rodada), direita = Riichi +
           Condições Especiais. No celular/desktop o wrapper é display:contents e
@@ -334,7 +341,10 @@ export default function OpcoesMao({
           id="secao-ventos"
           className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}
         >
-          <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
+          <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+            {t('calculator.winds')}
+            <BotaoAjuda topico="ventos" />
+          </span>
           <SeletorVentos
             mao={mao}
             atualizarMao={atualizarMao}
@@ -353,7 +363,10 @@ export default function OpcoesMao({
           {vitoriaNaColunaDireita && campoVitoria}
           {mostrarRiichi && (
             <section id="secao-riichi" className={`grupo-opcoes-mao ${classeEtapa(mostrarRiichi)}`}>
-              <span className="rotulo-bloco-opcoes">{t('calculator.riichi')}</span>
+              <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+                {t('calculator.riichi')}
+                <BotaoAjuda topico="riichi" />
+              </span>
               <div className="linha-opcoes-mao">
                 <BotaoToggle
                   rotulo={t('calculator.riichi')}
@@ -405,7 +418,10 @@ export default function OpcoesMao({
           )}
 
           <section className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}>
-            <span className="rotulo-bloco-opcoes">{t('calculator.specialConditions')}</span>
+            <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+              {t('calculator.specialConditions')}
+              <BotaoAjuda topico="condicoesEspeciais" />
+            </span>
             <div className="linha-opcoes-mao linha-condicoes-especiais">
               <BotaoToggle
                 rotulo={t('calculator.tenhouChiihou')}
@@ -456,7 +472,6 @@ export default function OpcoesMao({
           </section>
         </div>
       </div>
-      {ajudaDoraAberta && <ModalAjudaDoras aoFechar={() => setAjudaDoraAberta(false)} />}
     </div>
   )
 }
