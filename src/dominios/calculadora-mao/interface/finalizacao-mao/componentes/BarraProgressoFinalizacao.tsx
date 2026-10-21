@@ -25,7 +25,7 @@ export function BarraProgressoFinalizacao({ estado }: PropsBarraProgresso) {
   const etapas: Etapa[] = (
     [
       { id: 'secao-mao',     label: 'Mão',     visivel: true,         estado: e(true) },
-      { id: 'secao-vitoria', label: 'Vitória',  visivel: true,         estado: e(fluxoOpcoes.vitoriaDefinida) },
+      { id: 'secao-vitoria', label: 'Batida',   visivel: true,         estado: e(fluxoOpcoes.vitoriaDefinida) },
       { id: 'secao-ventos',  label: 'Ventos',   visivel: true,         estado: e(ventosDefined, fluxoOpcoes.vitoriaDefinida) },
       { id: 'secao-riichi',  label: 'Riichi',   visivel: mostrarRiichi, estado: e(podeCalcularMao, ventosDefined) },
       { id: 'secao-calcular',label: 'Calcular', visivel: true,         estado: e(deveCalcularMao, podeCalcularMao) },

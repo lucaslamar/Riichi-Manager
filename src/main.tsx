@@ -28,7 +28,8 @@ createRoot(elementoRaiz).render(
 )
 
 initSwipeBurger({
-  burgerSelector: '.botao-menu-global',
+  // Só o burger do menu: a seta de voltar usa a mesma classe e não deve ser clicada.
+  burgerSelector: '.botao-menu-global[aria-controls="drawer-global"]',
   swipeThreshold: 50,
   edgeZone: 30,
 })

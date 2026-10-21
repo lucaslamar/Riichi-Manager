@@ -165,12 +165,27 @@ export const CONFIGURACOES_REGRAS: {
       'Permite contar os cincos vermelhos como dora. Quando ativado, o teclado mostra um 5 vermelho para cada naipe.',
   },
   {
+    chave: 'doraFlamejante',
+    titulo: 'Dora flamejante',
+    ligado: 'Ativar',
+    desligado: 'Desativar',
+    ajuda:
+      'Quando o indicador de dora é um 5 vermelho, cada dora vale 2 han. Exige Aka dora ativado.',
+  },
+  {
     chave: 'tanyaoAberto',
     titulo: 'Tanyao aberto',
     ligado: 'Permitido',
     desligado: 'Fechado apenas',
     ajuda:
       'Define se Tanyao vale com chamadas abertas. É comum em regras japonesas modernas, mas alguns grupos usam kuitan nashi.',
+  },
+  {
+    chave: 'basengo',
+    titulo: 'Basengo',
+    ligado: 'Ativar',
+    desligado: 'Desativar',
+    ajuda: 'Cada honba vale 1500 pontos em vez de 300. Na tsumo, cada jogador paga 500 por honba.',
   },
   {
     chave: 'fuVentosDuplo',
@@ -185,7 +200,7 @@ export const CONFIGURACOES_REGRAS: {
     titulo: 'Fu em Rinshan',
     ligado: '+2 fu',
     desligado: 'Sem +2 fu',
-    ajuda: 'Define se uma vitória por Rinshan Kaihou recebe também os 2 fu de tsumo.',
+    ajuda: 'Define se uma batida por Rinshan Kaihou recebe também os 2 fu de tsumo.',
   },
   {
     chave: 'kiriageMangan',

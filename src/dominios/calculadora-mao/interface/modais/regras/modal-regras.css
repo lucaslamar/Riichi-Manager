@@ -86,3 +86,27 @@
     min-height: 44px;
   }
 }
+
+/* Rodapé: Restaurar padrão e Aplicar com a mesma largura, ocupando o rodapé.
+   Rótulo longo quebra linha em vez de encolher a altura do botão. */
+.modal-regras .modal-rodape {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.modal-regras .modal-rodape > button {
+  min-width: 0;
+  white-space: normal;
+  text-align: center;
+}
+
+/* Regra que depende de outra desligada (Dora flamejante sem Aka dora): o
+   controle fica apagado e sem toque; a descrição continua legível. */
+.linha-regra--desabilitada .controle-regra {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.linha-regra--desabilitada .controle-regra button {
+  cursor: not-allowed;
+}

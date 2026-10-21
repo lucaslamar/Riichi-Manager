@@ -23,8 +23,17 @@ export function initSwipeBurger(options: SwipeBurgerOptions = {}) {
     return document.querySelector(burgerSelector)?.getAttribute('aria-expanded') === 'true'
   }
 
+  // O burger só existe na tela quando não há barra inferior (ex.: celular
+  // deitado). Escondido pelo CSS, o deslize não abre o menu.
+  function burgerVisivel() {
+    const burger = document.querySelector(burgerSelector)
+    return !!burger && burger.getClientRects().length > 0
+  }
+
   function openDrawer() {
-    if (!isOpen()) (document.querySelector(burgerSelector) as HTMLElement | null)?.click()
+    if (!isOpen() && burgerVisivel()) {
+      ;(document.querySelector(burgerSelector) as HTMLElement | null)?.click()
+    }
   }
 
   function closeDrawer() {

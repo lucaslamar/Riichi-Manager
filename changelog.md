@@ -1,5 +1,36 @@
 # Changelog - Mojoca
 
+## 5.1.2 - 2026-10-21
+
+### Novo
+
+- Gestos de deslizar com o dedo no celular e no tablet, seguindo a ordem da barra inferior, com a Han e Fu antes da Calculadora de Mão: Han e Fu ← Calculadora de Mão → Sorteador de Ventos → Regras. Dedo para a esquerda vai para a tela seguinte e dedo para a direita volta para a anterior. Na Han e Fu, os dois sentidos voltam para a Calculadora de Mão (inclusive no sentido da seta de voltar). Na finalização da mão, dedo para a direita volta para a edição da mão (como o botão "Editar mão") e dedo para a esquerda vai para o Sorteador de Ventos. Os gestos não agem com janela ou menu abertos, nem quando o toque começa numa área que rola de lado.
+
+### Alterado
+
+- A mão montada continua na Calculadora de Mão ao ir para outra tela e voltar (antes era apagada).
+
+### Corrigido
+
+- Celular em pé (com barra inferior): deslizar a partir da borda esquerda abria o menu lateral, que deveria existir só onde há o botão de menu (☰), como no celular deitado.
+
+## 5.1.1 - 2026-10-21
+
+### Novo
+
+- Regras de cálculo: opção **Dora flamejante** (logo abaixo de Aka dora, desativada por padrão). Quando o Indicador de Dora é um 5 vermelho, cada Dora daquele indicador vale 2 han. Vale para cada indicador separadamente, incluindo Ura Dora. Depende do Aka dora: com ele desativado, a opção fica apagada e não conta, mas a escolha volta quando o Aka dora é reativado.
+- Regras de cálculo: opção **Basengo** (logo abaixo de Tanyao aberto, desativada por padrão). Cada honba vale 1.500 pontos em vez de 300; no Tsumo, cada jogador paga 500 por honba. Assim como o honba normal, entra depois dos limites (mangan e acima) e não é multiplicado para o dealer.
+- "Restaurar padrão" desativa as duas novas regras. Com elas desativadas, a pontuação continua igual à de antes.
+
+### Alterado
+
+- No app em português, "Vitória" passou a ser "Batida" (título da seção na finalização, ajuda, avisos e Calculadora de Han e Fu).
+- Finalização da mão: a seção Honba e doras fica antes da Batida. Nos tablets, a Batida continua na coluna da direita.
+- Regras de cálculo: os botões "Restaurar padrão" e "Aplicar" têm a mesma largura e ocupam todo o rodapé. No celular, "Restaurar padrão" quebra em duas linhas.
+- Ajuda de Riichi e de Condições especiais: em vez de lista com "Termo: texto", cada assunto ganhou um subtítulo com parágrafo, no mesmo padrão da ajuda de Honba e doras. Os textos das outras ajudas não usam mais dois-pontos como separador, e no Furiten cada item da lista virou uma frase completa.
+- Ajuda de Honba e doras: o subtítulo "Indicadores" virou "Indicadores de Dora", e foram adicionados Basengo, Aka Dora e Dora flamejante, cada um explicando como ativar no ícone de engrenagem (⚙) da Calculadora de Mão.
+- Botão do dragão ao lado de "Doras na mão": desligado, fica só o ícone cinza, sem o quadrado; ligado, continua rosa. Leitores de tela agora também recebem se o botão está ligado ou não.
+
 ## 5.1.0 - 2026-10-20
 
 ### Novo

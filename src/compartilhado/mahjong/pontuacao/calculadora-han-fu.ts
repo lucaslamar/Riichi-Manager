@@ -41,12 +41,21 @@ export function calcularHanFu(
   }
 }
 
-export function aplicarHonba(pontos: PontosCalculados, honba: number): PontosCalculados {
+/**
+ * Soma o honba depois dos limites (mangan+) e fora do multiplicador do dealer.
+ * `valorHonba` é quanto cada honba vale no Ron (300, ou 1500 no Basengo); no
+ * Tsumo cada pagador paga um terço.
+ */
+export function aplicarHonba(
+  pontos: PontosCalculados,
+  honba: number,
+  valorHonba = 300,
+): PontosCalculados {
   const honbaValida = Number.isFinite(honba) ? honba : 0
   if (pontos.agari === null || honbaValida <= 0) return pontos
 
-  const bonusRon = honbaValida * 300
-  const bonusTsumo = honbaValida * 100
+  const bonusRon = honbaValida * valorHonba
+  const bonusTsumo = honbaValida * (valorHonba / 3)
 
   if (pontos.agari === 'ron') {
     return {

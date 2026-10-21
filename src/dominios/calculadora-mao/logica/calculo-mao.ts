@@ -3,7 +3,14 @@ import type { Mao } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
 import type { ConfiguracaoCalculo, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
-import { aplicarHonba, calcularHanFu, calcularPatamarHanFu, montarPontosRapidos } from '@/compartilhado/mahjong/pontuacao'
+import {
+  aplicarHonba,
+  calcularHanFu,
+  calcularPatamarHanFu,
+  doraFlamejanteAtiva,
+  montarPontosRapidos,
+  valorPorHonba,
+} from '@/compartilhado/mahjong/pontuacao'
 
 function codigoBase(pedra: string): string {
   return pedra[0] === '0' ? `5${pedra[1]}` : pedra
@@ -33,13 +40,23 @@ function contarAkaDora(mao: Mao): number {
   return pedrasDaMaoFisica(mao).filter((pedra) => pedra[0] === '0').length
 }
 
-function contarDorasPorIndicadores(mao: Mao, indicadores: string[]): number {
+/**
+ * Doras dos indicadores. Com Dora flamejante, cada dora de um indicador 5
+ * vermelho vale 2 han; cada indicador conta à parte.
+ */
+function contarDorasPorIndicadores(
+  mao: Mao,
+  indicadores: string[],
+  doraFlamejante: boolean,
+): number {
   const pedrasFisicas = pedrasDaMaoFisica(mao)
   return indicadores.reduce((total, indicador) => {
     const doraReal = proximaDora(indicador)
+    const hanPorDora = doraFlamejante && indicador[0] === '0' ? 2 : 1
     return (
       total +
-      pedrasFisicas.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length
+      pedrasFisicas.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length *
+        hanPorDora
     )
   }, 0)
 }
@@ -53,10 +70,11 @@ function contarDorasPorIndicadores(mao: Mao, indicadores: string[]): number {
  */
 export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
   const dorasAutomaticasAka = config.akadora ? contarAkaDora(mao) : 0
-  const dorasPorIndicadores = contarDorasPorIndicadores(mao, mao.dora)
+  const flamejante = doraFlamejanteAtiva(config)
+  const dorasPorIndicadores = contarDorasPorIndicadores(mao, mao.dora, flamejante)
   const dorasNaMaoTotal = Math.min(13, dorasAutomaticasAka + dorasPorIndicadores + mao.doraManual)
   const uradorasTotal = mao.riichi
-    ? contarDorasPorIndicadores(mao, mao.uradora) + mao.uradoraManual
+    ? contarDorasPorIndicadores(mao, mao.uradora, flamejante) + mao.uradoraManual
     : 0
   const dorasBonusTotal = dorasNaMaoTotal + uradorasTotal
   const usaDoraManual = dorasBonusTotal > 0
@@ -116,7 +134,7 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     !semYaku
       ? montarPontosRapidos(isOya, mao.agari, calcularHanFu(hanFinal, fu, config))
       : pontosBiblioteca
-  const pontos = aplicarHonba(pontosBase, mao.honba)
+  const pontos = aplicarHonba(pontosBase, mao.honba, valorPorHonba(config))
 
   const yaku = Object.entries(resultadoBiblioteca.yaku ?? {})
     .sort((a, b) => (ORDEM_YAKU[a[0]] ?? 99) - (ORDEM_YAKU[b[0]] ?? 99))

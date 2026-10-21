@@ -12,12 +12,6 @@ export type TopicoAjuda =
   | 'riichi'
   | 'condicoesEspeciais'
 
-export interface ItemListaAjuda {
-  /** Chave do termo em destaque (de preferência o rótulo do botão da seção). */
-  termo: string
-  texto: string
-}
-
 /** Um trecho da explicação; com `subtitulo` quando a seção agrupa assuntos. */
 export interface BlocoAjuda {
   subtitulo?: string
@@ -26,7 +20,8 @@ export interface BlocoAjuda {
   /** Ícone Font Awesome ao lado do subtítulo, o mesmo do controle na tela. */
   icone?: string
   paragrafos?: string[]
-  lista?: ItemListaAjuda[]
+  /** Itens com marcador; cada um é uma frase completa (sem "Termo: texto"). */
+  lista?: string[]
 }
 
 export interface ConteudoAjuda {
@@ -36,11 +31,6 @@ export interface ConteudoAjuda {
   tema?: 'doras'
 }
 
-const URA_DORA: ItemListaAjuda = {
-  termo: 'sectionHelp.uraDora.term',
-  texto: 'sectionHelp.uraDora.text',
-}
-
 export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
   furiten: {
     titulo: 'calculator.furiten',
@@ -48,9 +38,9 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
       {
         paragrafos: ['sectionHelp.furiten.rule'],
         lista: [
-          { termo: 'sectionHelp.furiten.discardsTerm', texto: 'sectionHelp.furiten.discards' },
-          { termo: 'sectionHelp.furiten.temporaryTerm', texto: 'sectionHelp.furiten.temporary' },
-          { termo: 'sectionHelp.furiten.riichiTerm', texto: 'sectionHelp.furiten.riichi' },
+          'sectionHelp.furiten.discards',
+          'sectionHelp.furiten.temporary',
+          'sectionHelp.furiten.riichi',
         ],
       },
       { paragrafos: ['sectionHelp.furiten.register'] },
@@ -75,6 +65,11 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         subtitulo: 'calculator.honba',
         paragrafos: ['sectionHelp.honba.counter', 'sectionHelp.honba.points'],
       },
+      {
+        subtitulo: 'sectionHelp.honba.basengoTitle',
+        item: true,
+        paragrafos: ['sectionHelp.honba.basengo'],
+      },
       // "Qual é o Dora?": piada do clube. Os textos de Doras na mão e de
       // Indicadores são os revisados do antigo botão "i" de Doras.
       { subtitulo: 'sectionHelp.dora.title' },
@@ -91,6 +86,12 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         paragrafos: ['sectionHelp.dora.indicators'],
       },
       { subtitulo: 'sectionHelp.uraDora.term', item: true, paragrafos: ['sectionHelp.dora.uraDora'] },
+      { subtitulo: 'sectionHelp.dora.akaTitle', item: true, paragrafos: ['sectionHelp.dora.aka'] },
+      {
+        subtitulo: 'sectionHelp.dora.flamingTitle',
+        item: true,
+        paragrafos: ['sectionHelp.dora.flaming'],
+      },
     ],
   },
   ventos: {
@@ -106,32 +107,30 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
       },
     ],
   },
+  // Mesmo padrão de Honba e doras: a modal já mostra o título, então o texto
+  // geral vem direto e cada assunto ganha um subtítulo com parágrafo.
   riichi: {
     titulo: 'calculator.riichi',
     blocos: [
-      {
-        paragrafos: ['sectionHelp.riichi.declaration', 'sectionHelp.riichi.value'],
-        lista: [
-          { termo: 'calculator.doubleRiichi', texto: 'sectionHelp.riichi.doubleRiichi' },
-          { termo: 'calculator.ippatsu', texto: 'sectionHelp.riichi.ippatsu' },
-          URA_DORA,
-        ],
-      },
+      { paragrafos: ['sectionHelp.riichi.declaration', 'sectionHelp.riichi.value'] },
+      { subtitulo: 'calculator.doubleRiichi', item: true, paragrafos: ['sectionHelp.riichi.doubleRiichi'] },
+      { subtitulo: 'calculator.ippatsu', item: true, paragrafos: ['sectionHelp.riichi.ippatsu'] },
+      { subtitulo: 'sectionHelp.uraDora.term', item: true, paragrafos: ['sectionHelp.riichi.uraDora'] },
     ],
   },
   condicoesEspeciais: {
     titulo: 'calculator.specialConditions',
     blocos: [
+      { paragrafos: ['sectionHelp.specialConditions.allYaku'] },
       {
-        paragrafos: ['sectionHelp.specialConditions.allYaku'],
-        lista: [
-          { termo: 'calculator.tenhouChiihou', texto: 'sectionHelp.specialConditions.tenhouChiihou' },
-          { termo: 'calculator.rinshan', texto: 'sectionHelp.specialConditions.rinshan' },
-          { termo: 'calculator.chankan', texto: 'sectionHelp.specialConditions.chankan' },
-          { termo: 'calculator.haitei', texto: 'sectionHelp.specialConditions.haitei' },
-          { termo: 'calculator.houtei', texto: 'sectionHelp.specialConditions.houtei' },
-        ],
+        subtitulo: 'sectionHelp.specialConditions.tenhouChiihouTitle',
+        item: true,
+        paragrafos: ['sectionHelp.specialConditions.tenhouChiihou'],
       },
+      { subtitulo: 'calculator.rinshan', item: true, paragrafos: ['sectionHelp.specialConditions.rinshan'] },
+      { subtitulo: 'calculator.chankan', item: true, paragrafos: ['sectionHelp.specialConditions.chankan'] },
+      { subtitulo: 'calculator.haitei', item: true, paragrafos: ['sectionHelp.specialConditions.haitei'] },
+      { subtitulo: 'calculator.houtei', item: true, paragrafos: ['sectionHelp.specialConditions.houtei'] },
     ],
   },
 }

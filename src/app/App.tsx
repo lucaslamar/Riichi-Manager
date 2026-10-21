@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
+import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
@@ -13,6 +14,9 @@ export type TelaPrincipal =
   | 'sorteadorVentos'
   | 'regras'
   | 'sobre'
+
+/** Ordem das telas ao deslizar o dedo: a barra inferior, com a Han e Fu antes da Mão. */
+const ORDEM_DESLIZE: TelaPrincipal[] = ['calculadoraRapida', 'calculadora', 'sorteadorVentos', 'regras']
 
 /**
  * Componente raiz da aplicacao. A Calculadora de Mao e a porta de entrada.
@@ -35,14 +39,33 @@ export default function App() {
   const voltar =
     telaRetorno && tela === 'calculadoraRapida' ? () => navegar(telaRetorno) : undefined
 
+  // Deslizar segue a ordem da barra inferior, com a Han e Fu à esquerda da
+  // Calculadora de Mão. Dedo para a esquerda vai para a tela seguinte e para a
+  // direita volta para a anterior. Os gestos da Calculadora de Mão ficam na
+  // própria página (a finalização tem um caso a mais).
+  const indiceTela = ORDEM_DESLIZE.indexOf(tela)
+  const telaAnterior = indiceTela > 0 ? ORDEM_DESLIZE[indiceTela - 1] : undefined
+  const proximaTela = indiceTela >= 0 ? ORDEM_DESLIZE[indiceTela + 1] : undefined
+  // A Han e Fu é ponta da fila e tem a seta de voltar: deslizar no sentido da
+  // seta (dedo para a direita) também volta para a Calculadora de Mão.
+  const voltarDaHanFu = tela === 'calculadoraRapida' ? (voltar ?? (() => navegar('calculadora'))) : undefined
+  useDeslizeHorizontal({
+    ativo: indiceTela >= 0 && tela !== 'calculadora',
+    aoDeslizarDireita: voltarDaHanFu ?? (telaAnterior && (() => navegar(telaAnterior))),
+    aoDeslizarEsquerda: proximaTela && (() => navegar(proximaTela)),
+  })
+
   return (
     <>
       <Cabecalho telaAtual={tela} aoNavegar={navegar} aoVoltar={voltar} />
 
       <main className="conteudo-principal">
-        {tela === 'calculadora' && (
-          <PaginaCalculadoraMao aoAbrirCalculadoraRapida={abrirCalculadoraRapida} />
-        )}
+        {/* Sempre montada: a mão em andamento continua lá ao voltar de outra tela. */}
+        <PaginaCalculadoraMao
+          aoAbrirCalculadoraRapida={abrirCalculadoraRapida}
+          aoIrParaProximaTela={() => navegar('sorteadorVentos')}
+          visivel={tela === 'calculadora'}
+        />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
         {tela === 'regras' && <PaginaRegrasConfiguracoes />}

@@ -293,6 +293,21 @@
   background: #fce7f3;
 }
 
+/* Fechado: só o ícone cinza, sem o quadrado, para ler como "desligado" sobre
+   o card rosa. Aberto mantém o rosa acima. Tamanho e posição não mudam. */
+.btn-expandir-indicadores-dora[aria-pressed='false'] {
+  border-color: transparent;
+  background: transparent;
+  color: #9ca3af;
+}
+
+.btn-expandir-indicadores-dora[aria-pressed='false']:hover,
+.btn-expandir-indicadores-dora[aria-pressed='false']:focus-visible {
+  border-color: transparent;
+  background: transparent;
+  color: #6b7280;
+}
+
 .badge-indicadores-dora {
   position: absolute;
   top: -6px;

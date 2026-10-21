@@ -1,5 +1,5 @@
 export type { ConfiguracaoCalculo } from './configuracao'
-export { configuracaoPadrao } from './configuracao'
+export { configuracaoPadrao, doraFlamejanteAtiva, valorPorHonba } from './configuracao'
 export type { DetalheFu, PontosCalculados, ResultadoMao } from './resultado'
 export {
   aplicarHonba,

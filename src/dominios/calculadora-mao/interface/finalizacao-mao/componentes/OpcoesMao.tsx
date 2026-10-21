@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
+import { doraFlamejanteAtiva } from '../../../logica/mao'
 import {
   codigoBase,
   ICONE_INDICADOR_DORA,
@@ -66,12 +67,15 @@ export default function OpcoesMao({
   const dorasAutomaticasAka = configuracao.akadora
     ? pedrasFisicasMao.filter((pedra) => pedra[0] === '0').length
     : 0
+  const flamejante = doraFlamejanteAtiva(configuracao)
   const contarDorasPorIndicadores = (indicadores: typeof mao.dora) =>
     indicadores.reduce((total, indicador) => {
       const doraReal = proximaDoraIndicada(indicador)
+      const hanPorDora = flamejante && indicador[0] === '0' ? 2 : 1
       return (
         total +
-        pedrasFisicasMao.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length
+        pedrasFisicasMao.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length *
+          hanPorDora
       )
     }, 0)
   const dorasPorIndicadores = contarDorasPorIndicadores(mao.dora)
@@ -273,6 +277,7 @@ export default function OpcoesMao({
               className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
               aria-label={t('calculator.doraUraIndicators')}
               aria-expanded={painelContextualAberto === 'dora'}
+              aria-pressed={painelContextualAberto === 'dora'}
               onClick={() => alternarPainelContextual('dora')}
             >
               <i className={`fas ${ICONE_INDICADOR_DORA}`} aria-hidden="true" />
@@ -335,9 +340,9 @@ export default function OpcoesMao({
           deste componente. */}
       {destinoFuriten ? createPortal(secaoFuriten, destinoFuriten) : secaoFuriten}
 
-      {!vitoriaNaColunaDireita && campoVitoria}
-
       {secaoHonbaDoras}
+
+      {!vitoriaNaColunaDireita && campoVitoria}
 
       {/* Em tablets, as opções se agrupam por assunto em duas colunas:
           esquerda = ventos (Seu Vento + Vento da Rodada), direita = Riichi +

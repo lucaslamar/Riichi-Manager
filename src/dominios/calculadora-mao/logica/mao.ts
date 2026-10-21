@@ -9,7 +9,7 @@
 export type { Acao, CodigoPedra, Mao, Meld, VentoMao } from './tipos'
 export { criarAcao } from './tipos'
 export type { ConfiguracaoCalculo, DetalheFu, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
-export { configuracaoPadrao } from '@/compartilhado/mahjong/pontuacao'
+export { configuracaoPadrao, doraFlamejanteAtiva, valorPorHonba } from '@/compartilhado/mahjong/pontuacao'
 export { calcularMao } from './calculo-mao'
 export {
   aplicarHonba,

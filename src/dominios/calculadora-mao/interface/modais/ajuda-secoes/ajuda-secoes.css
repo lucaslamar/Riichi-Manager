@@ -155,6 +155,11 @@
   text-transform: uppercase;
 }
 
+/* Ícone no meio do texto (ex.: a engrenagem das Regras de cálculo). */
+.icone-texto-ajuda {
+  font-size: 0.9em;
+}
+
 .icone-subtitulo-ajuda {
   margin-left: 6px;
   font-size: 0.9em;

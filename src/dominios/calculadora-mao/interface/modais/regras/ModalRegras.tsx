@@ -14,6 +14,12 @@ const CHAVES_REGRAS: Record<
     ligado: 'rulesModal.akadora.on',
     desligado: 'rulesModal.akadora.off',
   },
+  doraFlamejante: {
+    titulo: 'rulesModal.doraFlamejante.title',
+    ajuda: 'rulesModal.doraFlamejante.help',
+    ligado: 'rulesModal.doraFlamejante.on',
+    desligado: 'rulesModal.doraFlamejante.off',
+  },
   tanyaoAberto: {
     titulo: 'rulesModal.tanyaoAberto.title',
     ajuda: 'rulesModal.tanyaoAberto.help',
@@ -56,6 +62,17 @@ const CHAVES_REGRAS: Record<
     ligado: 'rulesModal.multiYakuman.on',
     desligado: 'rulesModal.multiYakuman.off',
   },
+  basengo: {
+    titulo: 'rulesModal.basengo.title',
+    ajuda: 'rulesModal.basengo.help',
+    ligado: 'rulesModal.basengo.on',
+    desligado: 'rulesModal.basengo.off',
+  },
+}
+
+/** Regras que só valem com outra ligada (Dora flamejante precisa do 5 vermelho). */
+const DEPENDENCIAS_REGRAS: Partial<Record<keyof ConfiguracaoCalculo, keyof ConfiguracaoCalculo>> = {
+  doraFlamejante: 'akadora',
 }
 
 /**
@@ -103,22 +120,36 @@ export default function ModalRegras({
     >
       <div className="lista-regras">
         {CONFIGURACOES_REGRAS.map((regra) => {
-          const ativo = configuracao[regra.chave]
+          const dependencia = DEPENDENCIAS_REGRAS[regra.chave]
+          // Sem a regra de que depende: fica apagada e vale desligada, mas a
+          // escolha guardada volta quando a dependência for religada.
+          const desabilitada = dependencia !== undefined && !configuracao[dependencia]
+          const ativo = configuracao[regra.chave] && !desabilitada
           const textos = CHAVES_REGRAS[regra.chave]
           const titulo = t(textos.titulo)
           const ajudaId = `ajuda-regra-${regra.chave}`
 
           return (
-            <div className="linha-regra" key={regra.chave}>
+            <div
+              className={`linha-regra${desabilitada ? ' linha-regra--desabilitada' : ''}`}
+              key={regra.chave}
+            >
               <div className="texto-regra">
                 <strong>{titulo}</strong>
                 <span id={ajudaId}>{t(textos.ajuda)}</span>
               </div>
-              <div className="controle-regra" role="group" aria-label={titulo} aria-describedby={ajudaId}>
+              <div
+                className="controle-regra"
+                role="group"
+                aria-label={titulo}
+                aria-describedby={ajudaId}
+                aria-disabled={desabilitada || undefined}
+              >
                 <button
                   type="button"
                   className={ativo ? 'ativo' : ''}
                   aria-pressed={ativo}
+                  disabled={desabilitada}
                   onClick={() => {
                     if (!ativo) alternar(regra.chave)
                   }}
@@ -129,6 +160,7 @@ export default function ModalRegras({
                   type="button"
                   className={!ativo ? 'ativo' : ''}
                   aria-pressed={!ativo}
+                  disabled={desabilitada}
                   onClick={() => {
                     if (ativo) alternar(regra.chave)
                   }}
