@@ -1897,11 +1897,14 @@
  * Cada seção mantém seus botões internos em 2 colunas (o 3º ocupa a linha —
  * Ippatsu/Haitei).
  *
- * Faixa: 768px até o desktop de 2 colunas (1280px). Celulares (<768px) e desktop
- * (≥1280px) não são afetados. min-height:600 exclui celulares em paisagem, que
- * têm regras próprias mais abaixo neste arquivo.
+ * Faixa: 768px até 1279px, e também telas deitadas a partir de 1280px com
+ * altura de tablet (iPad Pro 13 e Surface deitados, desktop) — ali a mesma
+ * disposição substitui as duas colunas mão | opções (acertos no bloco "telas
+ * deitadas a partir de 1024px", no fim do arquivo). Celulares (<768px) não são
+ * afetados. min-height:600 exclui celulares em paisagem, que têm regras
+ * próprias mais abaixo neste arquivo.
  */
-@media (min-width: 768px) and (max-width: 1279px) and (min-height: 600px) {
+@media (min-width: 768px) and (max-width: 1279px) and (min-height: 600px), (min-width: 1280px) and (orientation: landscape) and (min-height: 701px) {
   .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
     max-width: min(100%, 1000px);
     margin-inline: auto;
@@ -1948,30 +1951,16 @@
     max-height: 820px;
   }
 
-  /* Teclado dos painéis Dora/Descartes: pedras em tamanho MÉDIO fixo, alinhadas
-     à esquerda — em vez de esticadas para preencher a largura, o que a 1024px as
-     inflava para ~80px ("gigantes"). Vale para os dois painéis (mesma classe). */
-  .painel-teclado-contextual-finalizacao .linha-naipe {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 4px;
-  }
-
-  .painel-teclado-contextual-finalizacao .teclado-pedras .btn-pedra {
-    flex: 0 0 auto;
-    width: 46px;
-    min-width: 0;
-    height: auto;
-    aspect-ratio: 0.78 / 1;
-  }
+  /* Teclado dos painéis Dora/Descartes: ver TecladoContextual
+     (teclado-contextual.css), que segue o padrão do teclado da montagem. */
 
   /* Contadores Honba/Doras: passos −/+ e número maiores em TODOS os tablets (não
      só nos altos), como pedido — os alvos de toque no iPad estavam pequenos.
-     Agrupados e compactos à esquerda (largura do conteúdo), não esticados. */
+     As duas caixas dividem a largura da seção, alinhadas às bordas do botão
+     Descartes logo acima. */
   .card-mao-completa.etapa-finalizacao .contadores-dora-honba {
-    grid-template-columns: repeat(2, minmax(0, max-content));
-    justify-content: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
     gap: 14px;
   }
 
@@ -2186,12 +2175,11 @@
     max-width: min(100% - 44px, 980px);
   }
 
-  /* Honba e Doras voltam a colunas que encolhem para o conteúdo (o bloco >=640
-     as esticava a 1fr, jogando um contador em cada extremo da linha larga). Com
-     max-content elas ficam agrupadas à esquerda, lado a lado — seção coesa. */
+  /* Honba e Doras dividem a largura da seção em duas caixas iguais, com as
+     mesmas bordas do botão Descartes logo acima. */
   .card-mao-completa.etapa-finalizacao .contadores-dora-honba {
-    grid-template-columns: repeat(2, minmax(0, max-content));
-    justify-content: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
     gap: 14px;
   }
 
@@ -3228,10 +3216,10 @@
     height: 22px;
   }
 
-  /* Editor expandido de descartes: ocupa o espaço disponível, grade com scroll se necessário */
+  /* Editor expandido de descartes: ocupa o espaço disponível, grade com scroll
+     se necessário. Mantém o padding da caixa (igual ao painel de Dora). */
   .editor-descartes-finalizacao {
     gap: 5px;
-    padding: 2px 0;
   }
 
   .editor-descartes-finalizacao .grade-descartes-finalizacao {
@@ -3362,7 +3350,20 @@
     overflow: visible;
   }
 
-  .coluna-finalizacao-opcoes .acao-calcular-mao.rodape-finalizacao-mao {
+  /* O Furiten desce para a coluna da mão, entre as pedras e o Calcular
+     (PaginaFinalizacaoMao + portal em OpcoesMao), aproveitando o espaço vazio. */
+  .secoes-junto-da-mao {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding-top: 4px;
+  }
+
+  /* Na coluna da mão o Calcular fica abaixo das pedras e do Furiten (PaginaFinalizacaoMao). */
+  .coluna-finalizacao-opcoes .acao-calcular-mao.rodape-finalizacao-mao,
+  .coluna-finalizacao-mao .acao-calcular-mao.rodape-finalizacao-mao {
     position: static;
     bottom: auto;
     flex: 0 0 auto;
@@ -3798,6 +3799,13 @@
   .chip-meld-mao .meld-pedras .tile-img-lado {
     width: 34px !important;
     height: 26px !important;
+  }
+
+  /* Finalização: as colunas da grade da mão seguem a largura real das pedras
+     (26px acima), em vez dos 34px da variável; antes sobravam ~8px vazios
+     entre uma pedra e outra. */
+  .construtor-mao-finalizacao .mao-principal-finalizacao {
+    grid-template-columns: repeat(auto-fit, 26px);
   }
 
   /* ─── Botões de ação da mão (Chi, Pon, Kan, Descarte) ──────────────────── */
@@ -5123,5 +5131,197 @@
   .construtor-mao-montagem .teclado-pedras:has(.btn-pedra-aka) .grupo-teclado-honras .linha-naipe {
     grid-template-columns: repeat(7, var(--largura-coluna-pedra));
     justify-content: center;
+  }
+}
+
+/*
+ * Finalização nos iPads em pé (Mini, Air, Pro 11 e Pro 13): tudo cabe numa
+ * tela só, com o Calcular visível sem rolar. A mão fica um pouco menor — a
+ * pedra é calculada para as 14 caberem numa linha (antes o Air e o Pro 11
+ * quebravam em duas) — e o bloco da mão perde espaços vazios (gap antes de um
+ * elemento vazio, paddings e margens em volta do cabeçalho e das pedras).
+ * A altura da pedra é redeclarada aqui porque ela é calculada a partir da
+ * largura no elemento onde a variável é definida.
+ */
+@media (min-width: 744px) and (max-width: 1279px) and (min-height: 1000px) and (orientation: portrait) {
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-principal-finalizacao {
+    --finalizacao-tile-largura: clamp(36px, calc((100vw - 230px) / 14), 52px);
+    --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    padding-top: 8px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora {
+    margin-top: 0;
+    gap: 8px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao {
+    gap: 0;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-editor-fixo {
+    padding-block: 6px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .cabecalho-mao-editor {
+    margin-bottom: 2px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .pedras-selecionadas {
+    padding-block: 4px 6px;
+  }
+}
+
+/*
+ * Finalização em telas deitadas a partir de 1024px (iPads deitados, Surface e
+ * desktop): mesma disposição dos tablets (bloco "Tablets: layout unificado",
+ * que também vale para estas telas a partir de 1280px) — Furiten, Honba e
+ * doras, e a grade Ventos | Vitória + Riichi + Condições. Aqui ficam só os
+ * acertos destas telas:
+ *   - fundo branco e card sem respiro em cima, em vez do azul-claro da página
+ *     aparecendo em volta do card;
+ *   - mão compacta, numa linha só;
+ *   - desfaz o que o desktop (>=1280px) muda: mão e opções em duas colunas,
+ *     contadores com o rótulo em cima e o Calcular em linha com a mensagem.
+ */
+@media (min-width: 1024px) and (orientation: landscape) and (min-height: 701px) {
+  body:has(.card-mao-completa.etapa-finalizacao) {
+    background: #ffffff;
+  }
+
+  body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal {
+    padding-top: 0;
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-finalizacao {
+    width: 100%;
+    max-width: min(100%, 1000px);
+    margin-inline: auto;
+    padding-top: 8px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .layout-finalizacao-calculadora {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 0;
+    gap: 10px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-mao,
+  .card-mao-completa.etapa-finalizacao .coluna-finalizacao-opcoes {
+    grid-column: 1;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Mão compacta, numa linha só (pedra pela altura da tela, até 52px). */
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-principal-finalizacao {
+    --finalizacao-tile-largura: clamp(40px, calc(100vh / 21), 52px);
+    --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
+    grid-template-columns: repeat(auto-fit, var(--finalizacao-tile-largura));
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao {
+    gap: 0;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-editor-fixo {
+    padding-block: 6px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .cabecalho-mao-editor {
+    margin-bottom: 2px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .pedras-selecionadas {
+    padding-block: 4px 6px;
+  }
+
+  /* Rótulo e −/+ na mesma linha (a partir de 1280px eles empilhavam). */
+  .card-mao-completa.etapa-finalizacao .contador-dora-manual {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Calcular na largura toda, com a mensagem embaixo. `flex: 0 0 auto`: no
+     desktop o botão tinha base de 220px (largura, quando ficava em linha com a
+     mensagem); em coluna isso virava altura. */
+  .card-mao-completa.etapa-finalizacao .acao-calcular-mao.rodape-finalizacao-mao {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card-mao-completa.etapa-finalizacao .botao-calcular-finalizacao {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+/*
+ * Finalização nos tablets/iPads (em pé e deitados), Surface e desktop: os
+ * conjuntos (Chi/Pon/Kan) ficam ao lado das pedras da mão, na mesma linha, em
+ * vez de numa faixa "Conjuntos" embaixo — que somava ~85px de altura e
+ * empurrava o Calcular para fora da tela. Se não couber, quebra para a linha de
+ * baixo. O título "Conjuntos" some da tela, mas continua para leitores de tela.
+ */
+@media (min-width: 744px) and (min-height: 701px) {
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .pedras-selecionadas {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-principal-finalizacao {
+    display: flex;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .secao-melds-finalizacao {
+    display: block;
+    flex: 0 1 auto;
+    width: auto;
+    max-width: 100%;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .titulo-melds-finalizacao {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .melds-finalizacao-coluna {
+    width: auto;
+    gap: 6px;
+  }
+}
+
+/* Até 1279px a largura é justa para a mão + 4 conjuntos numa linha: as pedras
+   dos conjuntos ficam com 28px (0.82 × 34px) e a mão perde o padding lateral.
+   A altura é redeclarada porque é calculada onde a variável é definida. */
+@media (min-width: 744px) and (max-width: 1279px) and (min-height: 701px) {
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .melds-finalizacao-coluna {
+    --finalizacao-tile-largura: 34px;
+    --finalizacao-tile-altura: calc(34px * 1.35);
+  }
+}
+
+@media (min-width: 744px) and (min-height: 701px) {
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-principal-finalizacao {
+    padding-inline: 0;
   }
 }

@@ -16,7 +16,7 @@ O Mojoca e um app estatico React + TypeScript. Ele deve continuar funcionando em
   - `finalizacao-mao`: revisao da mao completa, troca nao destrutiva da pedra da batida, configuracao de vitoria, honba, doras, descartes/furiten, ventos, riichi/condicoes especiais e calculo/modal de resultado.
   - `modais`: uma pasta por modal (`resultado`, `regras`, `ajuda-secoes`), cada uma com componente e CSS proprios, todas construidas sobre a Modal base `src/compartilhado/interface/componentes/modal` (cabecalho, corpo rolavel, rodape opcional, tamanhos `pequena`/`media`/`grande`, tom `alerta`). Funcionalidades de uma modal ficam so na pasta dela.
   - `modais/ajuda-secoes`: botao "?" (`BotaoAjuda`) das secoes da finalizacao e a modal que ele abre. O conteudo de cada secao fica em `topicosAjuda.ts` (so chaves i18n, em blocos com subtitulo opcional para secoes que agrupam assuntos); os textos ficam em `public/locales` (bloco `sectionHelp`).
-  - `compartilhado`: componentes visuais e orquestradores sem regra destrutiva propria, como renderizacao de tiles e melds.
+  - `compartilhado`: componentes visuais e orquestradores sem regra destrutiva propria, como renderizacao de tiles e melds e o `TecladoContextual` (teclado de selecao de pedras para paineis, no padrao do teclado da montagem em cada aparelho; usado nos paineis de Dora e Descartes).
 - `src/dominios/calculadora-han-fu/logica`: porta de entrada do dominio Han/Fu para a pontuacao direta compartilhada.
 - `src/dominios/calculadora-han-fu/interface`: estado e componentes da Calculadora de Han e Fu, sem depender da interface ou do estado da Calculadora de Mao.
 - `src/dominios/sorteador-ventos`: sorteio dos ventos/assentos da mesa.

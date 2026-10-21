@@ -372,8 +372,10 @@
      (a altura renderizada para de crescer na altura do conteudo). Em telas
      estreitas (<=420px) as secoes Riichi e Condicoes empilham em coluna unica
      e, com area de toque de 48px, o conteudo passa de 240px. Teto folgado
-     evita cortar a ultima linha sem afetar o desktop (conteudo ~128px). */
-  max-height: 400px;
+     evita cortar a ultima linha sem afetar o desktop (conteudo ~128px).
+     Nos tablets a Vitoria tambem entra aqui e cada titulo com "?" tem linha
+     de 44px: no iPad Mini (768x1024) o conteudo chega a ~452px. */
+  max-height: 720px;
   opacity: 1;
 }
 
@@ -465,14 +467,19 @@
   background: #f8fafc;
 }
 
+/* Mesma caixa do painel de Dora (.painel-contextual-finalizacao): as pedras
+   descartadas e o teclado ficam juntos, num bloco só, logo abaixo do botão. */
 .editor-descartes-finalizacao {
   position: static;
   display: flex;
-  gap: 8px;
+  gap: 5px;
   width: 100%;
   min-width: 0;
   flex-direction: column;
-  padding: 4px 0;
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  background: #f8fafc;
   transform: none;
   z-index: auto;
 }
@@ -519,6 +526,19 @@
   font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+/* Seção que não se aplica à mão (ex.: Riichi com mão aberta): no lugar dos
+   botões, uma frase curta dizendo por quê. */
+.aviso-opcao-indisponivel {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px dashed #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .linha-opcoes-mao {

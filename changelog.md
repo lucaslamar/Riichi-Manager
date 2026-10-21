@@ -1,6 +1,6 @@
 # Changelog - Mojoca
 
-## Não lançado
+## 5.1.0 - 2026-10-20
 
 ### Novo
 
@@ -14,9 +14,21 @@
 - O botão de fechar das janelas mostra só o X, sem o círculo; a área de toque continua a mesma. Ao abrir uma janela, o X não aparece mais com o anel de foco (ele só aparece ao chegar nele pelo teclado).
 - Botão dos Indicadores de Dora na finalização: o ícone de grade virou um dragão (Dora vem de "dragon").
 - Contador de Honba na finalização: rosa como o de Doras (antes azul), já que os dois ficam na mesma seção.
-
+- Finalização: o teclado dos painéis de Dora e Descartes segue o padrão do teclado da montagem em cada aparelho — no celular em pé e nos iPads as linhas ocupam a largura do painel, as Honras ficam centralizadas e as pedras não ficam mais achatadas. Virou um componente próprio (TecladoContextual) para ser reaproveitado.
+- Finalização em telas deitadas a partir de 1024px (iPads deitados, Surface e desktop): mesma disposição dos tablets (Furiten; Honba e doras; Ventos à esquerda; Vitória, Riichi e Condições especiais à direita), com a mão compacta numa linha só e fundo branco (antes aparecia o azul-claro da página em volta do card). No iPad Pro 13, no Surface e no desktop ela substitui o layout em duas colunas (mão | opções), que espremia as opções, e tudo cabe sem rolar.
+- Finalização com mão aberta (Chi, Pon ou Kan aberto): a seção Riichi continua no lugar, com o título e a ajuda, e diz "Só com a mão fechada" em vez de sumir; o Tenhou/Chiihou some em vez de ficar apagado no meio dos outros botões.
+- Finalização nos tablets/iPads, Surface e desktop: os conjuntos (Chi/Pon/Kan) ficam ao lado das pedras da mão, na mesma linha e sem o título "Conjuntos" (continua para leitores de tela), em vez de numa faixa embaixo que empurrava o Calcular para fora da tela. Até 1279px as pedras dos conjuntos ficam um pouco menores para a mão + 4 conjuntos caberem numa linha.
+- Finalização nos iPads em pé (Mini, Air, Pro 11 e Pro 13): tudo cabe numa tela só, com o Calcular visível sem rolar. A mão ficou um pouco menor, com as 14 pedras numa linha só (o Air e o Pro 11 quebravam em duas), e o bloco da mão perdeu espaços vazios.
+- Finalização nos iPads: as caixas de Honba e Doras na mão dividem a largura da seção, alinhadas às bordas do botão Descartes (antes ficavam compactas à esquerda).
 - Teclado da montagem no celular em pé: as Honras ficam centralizadas abaixo dos naipes, como nos tablets. Sem aka dora, os naipes de 9 pedras também ficam centralizados, sem a coluna vazia à direita. As pedras mantêm o mesmo tamanho.
 - Teclado da montagem no celular deitado sem aka dora: os naipes de 9 pedras ocupam toda a largura, sem a coluna vazia à direita.
+- Finalização no celular deitado: abaixo das pedras ficam o Furiten (Descartes) e depois o Calcular, aproveitando o espaço que sobrava em branco na coluna da mão; a coluna da direita fica só com as opções (Vitória, Honba e doras, ventos, Riichi e Condições especiais).
+- Finalização: o painel de descartes ganhou a mesma caixa do painel de Dora, com as pedras descartadas junto do teclado; sem descartes, o teclado fica logo abaixo do botão, sem o espaço vazio que sobrava.
+- Finalização no celular deitado: as pedras da mão ficam juntas (2px entre elas), sem o vão de ~8px que sobrava em cada coluna.
+
+### Corrigido
+
+- Finalização da mão no iPad Mini (768×1024): o Haitei/Houtei de Condições especiais ficava cortado, porque a coluna da direita (Vitória, Riichi e Condições especiais) passou do limite de altura da animação de abrir.
 
 ## 5.0.0 - 2026-10-19
 

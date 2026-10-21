@@ -1,0 +1,68 @@
+/*
+ * Teclado contextual (TecladoContextual): mesmo padrão do teclado da montagem
+ * no celular em pé e nos tablets — cada linha ocupa a largura do painel, as
+ * Honras ficam centralizadas embaixo dos naipes e a pedra mantém a proporção
+ * (sem achatar). Com aka dora são 10 pedras por linha; sem ela, os naipes de 9
+ * também ficam centralizados.
+ *
+ * Celular deitado (altura até 700px) e desktop ficam de fora: ali o teclado
+ * contextual já segue o da montagem (regras em responsivo.css).
+ *
+ * O seletor dobrado (.teclado-contextual.teclado-contextual) só sobe a
+ * especificidade, para vencer as regras antigas do teclado dos painéis.
+ */
+@media (max-width: 1279px) and (orientation: portrait), (max-width: 1279px) and (min-height: 701px) {
+  .teclado-contextual.teclado-contextual {
+    /* Espaço entre pedras: 3px no celular, até 10px nos tablets. */
+    --teclado-contextual-vao: clamp(3px, 1.1vw, 10px);
+    /* Pedra: 1/10 da linha, com teto para não virar "gigante" no iPad Pro. */
+    --teclado-contextual-pedra: min(
+      calc((100% - 9 * var(--teclado-contextual-vao)) / 10),
+      76px
+    );
+  }
+
+  .teclado-contextual.teclado-contextual .teclado-pedras {
+    display: flex;
+    flex-direction: column;
+    gap: var(--teclado-contextual-vao);
+  }
+
+  .teclado-contextual.teclado-contextual .grupo-teclado-naipe {
+    display: block;
+    min-width: 0;
+  }
+
+  .teclado-contextual.teclado-contextual .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  .teclado-contextual.teclado-contextual .linha-naipe {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: var(--teclado-contextual-vao);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .teclado-contextual.teclado-contextual .teclado-pedras .btn-pedra {
+    flex: 0 0 auto;
+    width: var(--teclado-contextual-pedra);
+    min-width: 0;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 0.72 / 1;
+    padding: 1px;
+  }
+
+  .teclado-contextual.teclado-contextual .teclado-pedras .btn-pedra > .tile-img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+  }
+}

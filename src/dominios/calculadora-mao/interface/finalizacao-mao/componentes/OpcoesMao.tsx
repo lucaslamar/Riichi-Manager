@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
@@ -11,13 +12,15 @@ import {
 import { BotaoToggle } from '../../compartilhado/componentes/Botoes'
 import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
-import { TecladoPedras } from '../../montagem-mao/componentes/TecladoPedras'
+import { TecladoContextual } from '../../compartilhado/componentes/TecladoContextual'
 import BotaoAjuda from '../../modais/ajuda-secoes/BotaoAjuda'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
+  /** Onde renderizar o Furiten quando ele fica junto da mão (celular deitado). */
+  destinoFuriten?: HTMLElement | null
 }
 
 /**
@@ -36,6 +39,7 @@ const NOME_VENTO_MAO: Record<string, string> = {
 export default function OpcoesMao({
   estado,
   embutido = false,
+  destinoFuriten = null,
 }: PropsOpcoesMao) {
   const { t } = useI18n()
   const {
@@ -77,9 +81,6 @@ export default function OpcoesMao({
     () => new Set(mao.dora.map((indicador) => codigoBase(proximaDoraIndicada(indicador)))),
     [mao.dora],
   )
-  const mapaEsperasVazio = useMemo(() => new Map(), [])
-  const rotuloEsperaTeclado = () => ''
-  const classeEsperaTeclado = () => ''
   const alternarPainelContextual = (painel: 'dora' | 'descartes') => {
     const tipoAcao = painel === 'descartes' ? 'descarte' : 'dora'
     const fechandoPainel = painelContextualAberto === painel
@@ -94,22 +95,13 @@ export default function OpcoesMao({
     }
   }
   const tecladoContextual = (
-    <div className="painel-teclado-calculadora painel-teclado-contextual-finalizacao">
-      <TecladoPedras
-        acaoPendente={acaoPendente}
-        configuracao={configuracao}
-        dorasReais={dorasReais}
-        esperasPorPedra={mapaEsperasVazio}
-        filtrarTecladoPorEspera={false}
-        furitenBloqueiaRon={false}
-        maoCompleta={false}
-        podeSelecionarPedra={podeSelecionarPedra}
-        rotuloEsperaTeclado={rotuloEsperaTeclado}
-        classeEsperaTeclado={classeEsperaTeclado}
-        contexto="finalizacao"
-        aoAdicionarPedra={adicionarPedra}
-      />
-    </div>
+    <TecladoContextual
+      acaoPendente={acaoPendente}
+      configuracao={configuracao}
+      dorasReais={dorasReais}
+      podeSelecionarPedra={podeSelecionarPedra}
+      aoAdicionarPedra={adicionarPedra}
+    />
   )
   const descartesUnicos = mao.descartes.reduce<
     Array<{ chave: string; pedra: (typeof mao.descartes)[number]; quantidade: number }>
@@ -135,10 +127,12 @@ export default function OpcoesMao({
   // coluna direita, logo acima de Riichi/Condições, equilibrando as duas colunas
   // (esquerda = Ventos, direita = Vitória + Riichi + Condições). Assim o Descarte
   // pode ocupar o topo (onde a Vitória ficava) — ver a regra `order` em
-  // responsivo.css. No celular/desktop ela permanece no topo, largura total.
-  // (A faixa espelha o @media do layout por assunto em responsivo.css.)
+  // responsivo.css. Nas telas deitadas a partir de 1024px (iPads, Surface e
+  // desktop) vale a mesma disposição. No celular ela permanece no topo, largura
+  // total.
+  // (As faixas espelham os @media de responsivo.css.)
   const tabletPorAssunto = useMediaQuery(
-    '(min-width: 768px) and (max-width: 1279px) and (min-height: 600px)',
+    '(min-width: 768px) and (max-width: 1279px) and (min-height: 600px), (min-width: 1024px) and (orientation: landscape) and (min-height: 701px)',
   )
   const vitoriaNaColunaDireita = tabletPorAssunto && mostrarConfiguracaoBasica
 
@@ -160,27 +154,29 @@ export default function OpcoesMao({
     </div>
   )
 
-  return (
-    <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
-      {/* Furiten logo abaixo da mão: os descartes registrados aqui são os que o
-          app usa para verificar o furiten. */}
-      <section
-        className={`descartes-finalizacao${painelContextualAberto === 'descartes' ? ' descartes-expandido' : ''}`}
-      >
-        <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
-          {t('calculator.furiten')}
-          <BotaoAjuda topico="furiten" />
-        </span>
-        <BotaoToggle
-          rotulo={`${t('calculator.discards')} (${mao.descartes.length})`}
-          ativo={painelContextualAberto === 'descartes'}
-          corAtiva="#111827"
-          desabilitado={false}
-          aoClicar={() => alternarPainelContextual('descartes')}
-        />
-        {painelContextualAberto === 'descartes' && (
-          <div className="editor-descartes-finalizacao">
-            {tecladoContextual}
+  // Furiten logo abaixo da mão: os descartes registrados aqui são os que o app
+  // usa para verificar o furiten.
+  const secaoFuriten = (
+    <section
+      className={`descartes-finalizacao${painelContextualAberto === 'descartes' ? ' descartes-expandido' : ''}`}
+    >
+      <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+        {t('calculator.furiten')}
+        <BotaoAjuda topico="furiten" />
+      </span>
+      <BotaoToggle
+        rotulo={`${t('calculator.discards')} (${mao.descartes.length})`}
+        ativo={painelContextualAberto === 'descartes'}
+        corAtiva="#111827"
+        desabilitado={false}
+        aoClicar={() => alternarPainelContextual('descartes')}
+      />
+      {painelContextualAberto === 'descartes' && (
+        <div className="editor-descartes-finalizacao">
+          {tecladoContextual}
+          {/* Sem descartes a grade some, para o teclado ficar logo abaixo do
+              botão (vazia, ela ainda ocupava a altura mínima). */}
+          {mao.descartes.length > 0 && (
             <div
               className={`grade-descartes-finalizacao ${
                 descartesExpandidos ? 'grade-descartes-expandida' : 'grade-descartes-compacta'
@@ -207,130 +203,141 @@ export default function OpcoesMao({
                   </button>
                 ),
               )}
-              {mao.descartes.length > 0 && (
-                <button
-                  className="btn-limpar-grupo-pedras"
-                  type="button"
-                  aria-label={t('calculator.clearDiscards')}
-                  title={t('calculator.clearDiscards')}
-                  onClick={() =>
-                    atualizarMao((rascunho) => {
-                      rascunho.descartes = []
-                    })
-                  }
-                >
-                  <i className="fas fa-trash" aria-hidden="true" />
-                </button>
-              )}
+              <button
+                className="btn-limpar-grupo-pedras"
+                type="button"
+                aria-label={t('calculator.clearDiscards')}
+                title={t('calculator.clearDiscards')}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    rascunho.descartes = []
+                  })
+                }
+              >
+                <i className="fas fa-trash" aria-hidden="true" />
+              </button>
             </div>
+          )}
+        </div>
+      )}
+    </section>
+  )
+
+  const secaoHonbaDoras = (
+    <section
+      className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}
+    >
+      <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+        {t('calculator.honbaAndDora')}
+        <BotaoAjuda topico="honbaDoras" />
+      </span>
+      <div className="contadores-dora-honba">
+        <div className="contador-dora-manual contador-honba">
+          <span>{t('calculator.honba')}</span>
+          <div>
+            <button
+              type="button"
+              aria-label={`${t('calculator.honba')} -`}
+              disabled={honba <= 0}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                  rascunho.honba = Math.max(0, atual - 1)
+                })
+              }
+            >
+              -
+            </button>
+            <strong>{honba}</strong>
+            <button
+              type="button"
+              aria-label={`${t('calculator.honba')} +`}
+              disabled={honba >= 99}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                  rascunho.honba = Math.min(99, atual + 1)
+                })
+              }
+            >
+              +
+            </button>
           </div>
-        )}
-      </section>
+        </div>
+
+        <div className="contador-dora-manual">
+          <span className="rotulo-contador-com-ajuda">
+            {t('calculator.manualDora')}
+            <button
+              type="button"
+              className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
+              aria-label={t('calculator.doraUraIndicators')}
+              aria-expanded={painelContextualAberto === 'dora'}
+              onClick={() => alternarPainelContextual('dora')}
+            >
+              <i className={`fas ${ICONE_INDICADOR_DORA}`} aria-hidden="true" />
+              {mao.dora.length > 0 && (
+                <span className="badge-indicadores-dora">{mao.dora.length}</span>
+              )}
+            </button>
+          </span>
+          <div>
+            <button
+              type="button"
+              aria-label={`${t('calculator.manualDora')} -`}
+              disabled={mao.doraManual <= 0}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
+                })
+              }
+            >
+              -
+            </button>
+            <strong>{dorasNaMaoTotal}</strong>
+            <button
+              type="button"
+              aria-label={`${t('calculator.manualDora')} +`}
+              disabled={dorasNaMaoTotal >= 13}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
+                })
+              }
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+      {painelContextualAberto === 'dora' && (
+        <div className="painel-contextual-finalizacao">
+          {tecladoContextual}
+          <IndicadoresDora
+            mao={mao}
+            atualizarMao={atualizarMao}
+            tipo="dora"
+            aoLimparIndicadores={() =>
+              atualizarMao((rascunho) => {
+                rascunho.dora = []
+              })
+            }
+          />
+        </div>
+      )}
+    </section>
+  )
+
+  return (
+    <div className={embutido ? 'opcoes-mao-embutidas' : 'card'}>
+      {/* Celular deitado: o Furiten desce para a coluna da mão, logo abaixo
+          das pedras. O portal mantém o mesmo estado (painel de Descartes)
+          deste componente. */}
+      {destinoFuriten ? createPortal(secaoFuriten, destinoFuriten) : secaoFuriten}
 
       {!vitoriaNaColunaDireita && campoVitoria}
 
-      <section
-        className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}
-      >
-        <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
-          {t('calculator.honbaAndDora')}
-          <BotaoAjuda topico="honbaDoras" />
-        </span>
-        <div className="contadores-dora-honba">
-          <div className="contador-dora-manual contador-honba">
-            <span>{t('calculator.honba')}</span>
-            <div>
-              <button
-                type="button"
-                aria-label={`${t('calculator.honba')} -`}
-                disabled={honba <= 0}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.max(0, atual - 1)
-                  })
-                }
-              >
-                -
-              </button>
-              <strong>{honba}</strong>
-              <button
-                type="button"
-                aria-label={`${t('calculator.honba')} +`}
-                disabled={honba >= 99}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.min(99, atual + 1)
-                  })
-                }
-              >
-                +
-              </button>
-            </div>
-          </div>
-
-          <div className="contador-dora-manual">
-            <span className="rotulo-contador-com-ajuda">
-              {t('calculator.manualDora')}
-              <button
-                type="button"
-                className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
-                aria-label={t('calculator.doraUraIndicators')}
-                aria-expanded={painelContextualAberto === 'dora'}
-                onClick={() => alternarPainelContextual('dora')}
-              >
-                <i className={`fas ${ICONE_INDICADOR_DORA}`} aria-hidden="true" />
-                {mao.dora.length > 0 && (
-                  <span className="badge-indicadores-dora">{mao.dora.length}</span>
-                )}
-              </button>
-            </span>
-            <div>
-              <button
-                type="button"
-                aria-label={`${t('calculator.manualDora')} -`}
-                disabled={mao.doraManual <= 0}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
-                  })
-                }
-              >
-                -
-              </button>
-              <strong>{dorasNaMaoTotal}</strong>
-              <button
-                type="button"
-                aria-label={`${t('calculator.manualDora')} +`}
-                disabled={dorasNaMaoTotal >= 13}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
-                  })
-                }
-              >
-                +
-              </button>
-            </div>
-          </div>
-        </div>
-        {painelContextualAberto === 'dora' && (
-          <div className="painel-contextual-finalizacao">
-            {tecladoContextual}
-            <IndicadoresDora
-              mao={mao}
-              atualizarMao={atualizarMao}
-              tipo="dora"
-              aoLimparIndicadores={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.dora = []
-                })
-              }
-            />
-          </div>
-        )}
-      </section>
+      {secaoHonbaDoras}
 
       {/* Em tablets, as opções se agrupam por assunto em duas colunas:
           esquerda = ventos (Seu Vento + Vento da Rodada), direita = Riichi +
@@ -416,6 +423,17 @@ export default function OpcoesMao({
               </div>
             </section>
           )}
+          {/* Mão aberta: o Riichi não se aplica. Em vez de a seção sumir, o título
+              (com a ajuda) fica e explica o porquê. */}
+          {mostrarEtapaRiichi && maoAberta && (
+            <section id="secao-riichi" className={`grupo-opcoes-mao ${classeEtapa(true)}`}>
+              <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+                {t('calculator.riichi')}
+                <BotaoAjuda topico="riichi" />
+              </span>
+              <p className="aviso-opcao-indisponivel">{t('calculator.riichiClosedHandOnly')}</p>
+            </section>
+          )}
 
           <section className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}>
             <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
@@ -423,23 +441,27 @@ export default function OpcoesMao({
               <BotaoAjuda topico="condicoesEspeciais" />
             </span>
             <div className="linha-opcoes-mao linha-condicoes-especiais">
-              <BotaoToggle
-                rotulo={t('calculator.tenhouChiihou')}
-                ativo={mao.bencao}
-                desabilitado={mao.melds.length > 0}
-                aoClicar={() =>
-                  atualizarMao((rascunho) => {
-                    rascunho.bencao = !rascunho.bencao
-                    if (rascunho.bencao) {
-                      rascunho.riichi = null
-                      rascunho.uradora = []
-                      rascunho.uradoraManual = 0
-                      rascunho.ultimaPedra = false
-                      rascunho.kan = false
-                    }
-                  })
-                }
-              />
+              {/* Com Chi/Pon/Kan não existe Tenhou/Chiihou: o botão some, em vez
+                  de ficar apagado no meio dos outros. */}
+              {mao.melds.length === 0 && (
+                <BotaoToggle
+                  rotulo={t('calculator.tenhouChiihou')}
+                  ativo={mao.bencao}
+                  desabilitado={false}
+                  aoClicar={() =>
+                    atualizarMao((rascunho) => {
+                      rascunho.bencao = !rascunho.bencao
+                      if (rascunho.bencao) {
+                        rascunho.riichi = null
+                        rascunho.uradora = []
+                        rascunho.uradoraManual = 0
+                        rascunho.ultimaPedra = false
+                        rascunho.kan = false
+                      }
+                    })
+                  }
+                />
+              )}
               <BotaoToggle
                 rotulo={mao.agari === 'ron' ? t('calculator.chankan') : t('calculator.rinshan')}
                 ativo={mao.kan}
