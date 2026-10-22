@@ -43,9 +43,14 @@ export function expandirGrupoMesmoValor(pedra: CodigoPedra, tamanho: number): Co
   return [pedra, ...Array(tamanho - 1).fill(codigoBase(pedra))]
 }
 
+/**
+ * PNGs em 240×320: nítidos até nas maiores pedras do iPad em tela retina. Os
+ * originais (600×800, em regular-png) pesavam para decodificar no celular e o
+ * teclado reaparecia pedra por pedra ao voltar da finalização para a montagem.
+ */
 export function urlPedra(nomeArquivo: string, formato: 'png' | 'svg'): string {
-  const pasta = formato === 'png' ? 'regular-png' : 'regular'
-  return `${import.meta.env.BASE_URL}tiles/${pasta}/${nomeArquivo}.${formato}?v=2`
+  const pasta = formato === 'png' ? 'regular-png-240' : 'regular'
+  return `${import.meta.env.BASE_URL}tiles/${pasta}/${nomeArquivo}.${formato}?v=3`
 }
 
 export function nomePedraAcessivel(pedra?: CodigoPedra): string {
