@@ -1455,6 +1455,21 @@
     line-height: 12px;
   }
 
+  /* Selo de han acompanha a pedra, que cresce com a largura da tela (33px no
+     Galaxy de 360px, 41px no iPhone Pro Max). Em 8px fixos, "11 HAN" quebrava
+     em duas linhas no celular estreito e ficava miúdo no largo. Ocupa quase
+     toda a largura da pedra e não quebra; "Sem yaku" segue como antes. */
+  .construtor-mao-montagem .badge-espera-teclado:not(.sem-yaku) {
+    right: 1px;
+    left: 1px;
+    min-height: 1.45em;
+    overflow: hidden;
+    font-size: clamp(8px, 2.25vw, 11px);
+    letter-spacing: -0.01em;
+    line-height: 1.45em;
+    white-space: nowrap;
+  }
+
   .layout-montagem-calculadora.com-esperas .painel-teclado-calculadora .menu-acoes-teclado-mobile {
     order: 1;
   }
