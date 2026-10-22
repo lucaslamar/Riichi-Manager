@@ -1,13 +1,9 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { Mao, VentoMao } from '../../../logica/mao'
+import type { Mao } from '../../../logica/mao'
 import { VENTOS_ASSENTO, VENTOS_RODADA } from '../../constantes'
-import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import { GradeVentos } from '../../compartilhado/componentes/GradeVentos'
 
 export type AtualizarMao = (receita: (rascunho: Mao) => void) => void
-
-function chaveVento(valor: VentoMao) {
-  return valor === '1' ? 'winds.east' : valor === '2' ? 'winds.south' : valor === '3' ? 'winds.west' : 'winds.north'
-}
 
 export function SeletorVentos({
   mao,
@@ -29,88 +25,43 @@ export function SeletorVentos({
   aoDefinirVentoAssento?: () => void
 }) {
   const { t } = useI18n()
-
-  const renderizarSeletor = (
-    titulo: string,
-    valorAtual: VentoMao,
-    valorDefinido: boolean,
-    opcoes: { valor: VentoMao; nome: string }[],
-    aoSelecionar: (rascunho: Mao, valor: VentoMao) => void,
-    aoDefinir?: () => void,
-    id?: string,
-  ) => (
-    <div id={id} className="campo-vento-mao secao-vento-finalizacao">
-      <span>{titulo}</span>
-      <div
-        className="pedras-vento-mao grade-ventos-finalizacao"
-        role="group"
-        aria-label={titulo}
-      >
-        {opcoes.map((vento) => {
-          const nomeVento = t(chaveVento(vento.valor))
-          const selecionado = valorDefinido && valorAtual === vento.valor
-          const ventoIgual =
-            ventoRodadaDefinido &&
-            ventoAssentoDefinido &&
-            mao.ventoRodada === mao.ventoAssento &&
-            selecionado
-
-          return (
-            <button
-              key={vento.valor}
-              type="button"
-              className={`btn-vento-pedra botao-vento-finalizacao ${selecionado ? 'ativo' : ''} ${
-                ventoIgual ? 'vento-igual' : ''
-              }`}
-              aria-pressed={selecionado}
-              aria-label={
-                titulo === t('calculator.roundWind')
-                  ? t('calculator.chooseRoundWind', { wind: nomeVento })
-                  : t('calculator.chooseSeatWind', { wind: nomeVento })
-              }
-              title={nomeVento}
-              onClick={() => {
-                atualizarMao((rascunho: Mao) => {
-                  aoSelecionar(rascunho, vento.valor)
-                })
-                aoDefinir?.()
-              }}
-            >
-              <PedraSvg pedra={`${vento.valor}z`} />
-              <small className="label-vento">{nomeVento}</small>
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
+  const ventoDuplo =
+    ventoRodadaDefinido && ventoAssentoDefinido && mao.ventoRodada === mao.ventoAssento
 
   return (
     <div className="seletores-vento-mao">
-      {mostrarAssento &&
-        renderizarSeletor(
-          t('calculator.seatWind'),
-          mao.ventoAssento,
-          ventoAssentoDefinido,
-          VENTOS_ASSENTO,
-          (rascunho, valor) => {
-            rascunho.ventoAssento = valor
-          },
-          aoDefinirVentoAssento,
-        )}
+      {mostrarAssento && (
+        <GradeVentos
+          titulo={t('calculator.seatWind')}
+          opcoes={VENTOS_ASSENTO}
+          selecionado={ventoAssentoDefinido ? mao.ventoAssento : null}
+          destacarIgual={ventoDuplo}
+          rotuloAcessivel={(nomeVento) => t('calculator.chooseSeatWind', { wind: nomeVento })}
+          aoEscolher={(valor) => {
+            atualizarMao((rascunho) => {
+              rascunho.ventoAssento = valor
+            })
+            aoDefinirVentoAssento?.()
+          }}
+        />
+      )}
 
-      {mostrarVentoRodada &&
-        renderizarSeletor(
-          t('calculator.roundWind'),
-          mao.ventoRodada,
-          ventoRodadaDefinido,
-          VENTOS_RODADA,
-          (rascunho, valor) => {
-            rascunho.ventoRodada = valor
-          },
-          aoDefinirVentoRodada,
-          'secao-vento-rodada',
-        )}
+      {mostrarVentoRodada && (
+        <GradeVentos
+          id="secao-vento-rodada"
+          titulo={t('calculator.roundWind')}
+          opcoes={VENTOS_RODADA}
+          selecionado={ventoRodadaDefinido ? mao.ventoRodada : null}
+          destacarIgual={ventoDuplo}
+          rotuloAcessivel={(nomeVento) => t('calculator.chooseRoundWind', { wind: nomeVento })}
+          aoEscolher={(valor) => {
+            atualizarMao((rascunho) => {
+              rascunho.ventoRodada = valor
+            })
+            aoDefinirVentoRodada?.()
+          }}
+        />
+      )}
     </div>
   )
 }

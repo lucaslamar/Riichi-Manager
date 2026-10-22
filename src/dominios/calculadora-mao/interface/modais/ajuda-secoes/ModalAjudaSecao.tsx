@@ -40,7 +40,7 @@ export default function ModalAjudaSecao({
       estiloTitulo="rotulo"
       className={`modal-ajuda-secao${tema ? ` modal-ajuda-secao--${tema}` : ''}`}
     >
-      {blocos.map(({ subtitulo, item, icone, paragrafos = [], lista }, indice) => {
+      {blocos.map(({ subtitulo, item, icone, paragrafos = [] }, indice) => {
         const Subtitulo = item ? 'h4' : 'h3'
 
         return (
@@ -60,13 +60,6 @@ export default function ModalAjudaSecao({
                 <TextoAjuda texto={t(chave)} />
               </p>
             ))}
-            {lista && (
-              <ul>
-                {lista.map((chave) => (
-                  <li key={chave}>{t(chave)}</li>
-                ))}
-              </ul>
-            )}
           </section>
         )
       })}

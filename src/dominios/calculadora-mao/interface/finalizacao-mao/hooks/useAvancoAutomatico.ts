@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react'
 
 const ATRASO_PADRAO_MS = 250
 const ESPERA_FIM_ROLAGEM_MS = 900
+const ESPERA_ANIMACAO_MS = 600
 const FOLGA_PX = 8
 
 type Alinhamento = 'topo' | 'base'
@@ -62,11 +63,21 @@ export function useAvancoAutomatico(atraso = ATRASO_PADRAO_MS) {
       window.addEventListener('wheel', cancelar, opcoes)
       window.addEventListener('touchmove', cancelar, opcoes)
 
-      const agendamento = window.setTimeout(() => {
+      const agendamento = window.setTimeout(async () => {
         const alvo = ([] as string[])
           .concat(ids)
           .map((id) => document.getElementById(id))
           .find((elemento) => elemento !== null)
+        // A etapa recém-liberada abre com transição de altura; medida no meio
+        // dela, pareceria já caber na tela. Espera a abertura (com teto).
+        const animacoes = alvo?.getAnimations?.() ?? []
+        if (animacoes.length > 0) {
+          await Promise.race([
+            Promise.allSettled(animacoes.map((animacao) => animacao.finished)),
+            new Promise((resolver) => window.setTimeout(resolver, ESPERA_ANIMACAO_MS)),
+          ])
+          if (temporizador.current !== agendamento) return
+        }
         const caixa = alvo?.getBoundingClientRect()
         const { topo, base } = areaLivreDaJanela()
         const inteiroNaTela = !!caixa && caixa.top >= topo && caixa.bottom <= base

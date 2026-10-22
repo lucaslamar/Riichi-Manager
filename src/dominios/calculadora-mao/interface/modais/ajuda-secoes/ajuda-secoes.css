@@ -102,16 +102,14 @@
 }
 
 /* ─── Modal ───────────────────────────────────────────────────────────────── */
-.modal-ajuda-secao p,
-.modal-ajuda-secao li {
+.modal-ajuda-secao p {
   margin: 0;
   color: #102a43;
   font-size: clamp(0.92rem, 0.88rem + 0.2vw, 1.02rem);
   line-height: 1.5;
 }
 
-.modal-ajuda-secao p + p,
-.modal-ajuda-secao p + ul {
+.modal-ajuda-secao p + p {
   margin-top: 10px;
 }
 
@@ -131,13 +129,6 @@
   color: #334e68;
   font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
   font-weight: 800;
-}
-
-.modal-ajuda-secao ul {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding-left: 1.1em;
 }
 
 .bloco-ajuda-secao + .bloco-ajuda-secao {

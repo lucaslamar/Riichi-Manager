@@ -1,5 +1,18 @@
 # Changelog - Mojoca
 
+## 5.1.3 - 2026-10-22
+
+### Novo
+
+- Finalização da mão: rolagem guiada. Depois de cada escolha (Batida, ventos, Riichi…), a tela leva a próxima seção para o topo da área visível e, no fim, mostra o Calcular inteiro logo acima da navegação. Só rola para baixo, não mexe em seções que já estão inteiras na tela (comum no tablet) e para se a pessoa rolar por conta própria.
+
+### Alterado
+
+- Finalização da mão: a seção passou a se chamar "Doras e honba", com as Doras antes do Honba.
+- Ajuda do Furiten no mesmo padrão das outras ajudas: em vez de lista, cada tipo (Pelos descartes, Temporário, De Riichi) e "Como o app verifica" ganharam um subtítulo com parágrafo.
+- Regras de cálculo: o texto do Basengo diz "No tsumo" (antes "Na tsumo").
+- Pedras da mão (montagem e finalização) viraram um componente só, com o tamanho definido num token de CSS.
+
 ## 5.1.2 - 2026-10-21
 
 ### Novo

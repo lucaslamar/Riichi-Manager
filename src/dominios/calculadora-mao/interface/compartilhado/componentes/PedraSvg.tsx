@@ -6,13 +6,16 @@ export function PedraSvg({
   pedra,
   virada = false,
   deLado = false,
+  arquivo,
 }: {
   pedra?: CodigoPedra
   virada?: boolean
   deLado?: boolean
+  /** Outra arte para a mesma pedra (ex.: 'Ton-Vermelho'); o nome acessível não muda. */
+  arquivo?: string
 }) {
   const [formato, setFormato] = useState<'png' | 'svg' | 'texto'>('png')
-  const nomeArquivo = virada ? 'Back' : pedra ? arquivoPedra(pedra) : 'Blank'
+  const nomeArquivo = virada ? 'Back' : (arquivo ?? (pedra ? arquivoPedra(pedra) : 'Blank'))
   const alt = virada ? 'Pedra virada' : nomePedraAcessivel(pedra)
 
   if (formato === 'texto') {

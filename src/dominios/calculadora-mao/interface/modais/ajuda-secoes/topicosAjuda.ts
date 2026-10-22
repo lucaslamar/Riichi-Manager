@@ -20,8 +20,6 @@ export interface BlocoAjuda {
   /** Ícone Font Awesome ao lado do subtítulo, o mesmo do controle na tela. */
   icone?: string
   paragrafos?: string[]
-  /** Itens com marcador; cada um é uma frase completa (sem "Termo: texto"). */
-  lista?: string[]
 }
 
 export interface ConteudoAjuda {
@@ -35,15 +33,27 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
   furiten: {
     titulo: 'calculator.furiten',
     blocos: [
+      { paragrafos: ['sectionHelp.furiten.rule'] },
       {
-        paragrafos: ['sectionHelp.furiten.rule'],
-        lista: [
-          'sectionHelp.furiten.discards',
-          'sectionHelp.furiten.temporary',
-          'sectionHelp.furiten.riichi',
-        ],
+        subtitulo: 'sectionHelp.furiten.discardsTitle',
+        item: true,
+        paragrafos: ['sectionHelp.furiten.discards'],
       },
-      { paragrafos: ['sectionHelp.furiten.register'] },
+      {
+        subtitulo: 'sectionHelp.furiten.temporaryTitle',
+        item: true,
+        paragrafos: ['sectionHelp.furiten.temporary'],
+      },
+      {
+        subtitulo: 'sectionHelp.furiten.riichiTitle',
+        item: true,
+        paragrafos: ['sectionHelp.furiten.riichi'],
+      },
+      {
+        subtitulo: 'sectionHelp.furiten.registerTitle',
+        item: true,
+        paragrafos: ['sectionHelp.furiten.register'],
+      },
     ],
   },
   vitoria: {

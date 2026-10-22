@@ -63,8 +63,23 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   const [fluxoOpcoes, setFluxoOpcoes] = useState({
     vitoriaDefinida: fluxoPreconfiguradoRef.current,
     ventoRodadaDefinido: true,
-    ventoAssentoDefinido: true,
+    ventoAssentoDefinido: fluxoPreconfiguradoRef.current,
   })
+
+  // A tela pode crescer depois do primeiro render (girar o aparelho, trocar de
+  // aparelho no DevTools). Ao virar tela grande, marca os padrões para todas as
+  // opções aparecerem; ao voltar para o celular, mantém o que já foi escolhido.
+  const fluxoCompleto = opcoes?.fluxoCompleto ?? false
+  useEffect(() => {
+    fluxoPreconfiguradoRef.current = fluxoCompleto
+    if (!fluxoCompleto) return
+    setFluxoOpcoes((fluxoAtual) => ({
+      ...fluxoAtual,
+      vitoriaDefinida: true,
+      ventoAssentoDefinido: true,
+    }))
+  }, [fluxoCompleto])
+
   const assinaturaMaoAtual = useMemo(
     () =>
       JSON.stringify({
@@ -333,7 +348,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     setFluxoOpcoes({
       vitoriaDefinida: fluxoPreconfiguradoRef.current,
       ventoRodadaDefinido: true,
-      ventoAssentoDefinido: true,
+      ventoAssentoDefinido: fluxoPreconfiguradoRef.current,
     })
     setEtapaFinalizacaoAtiva(false)
     setSelecionandoPedraAgari(false)

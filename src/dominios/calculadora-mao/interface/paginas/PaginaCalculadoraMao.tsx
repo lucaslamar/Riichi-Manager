@@ -22,12 +22,16 @@ export default function PaginaCalculadoraMao({
   visivel = true,
 }: PropsPaginaCalculadoraMao = {}) {
   /**
-   * Em telas grandes (tablets/desktop, ≥768px) todas as opções da finalização
+   * Em telas grandes (tablets/desktop) todas as opções da finalização
    * aparecem de uma vez, com os padrões já marcados — o usuário escolhe em
    * qualquer ordem e só clica em Calcular. No celular mantém-se o fluxo por
    * etapas (mais guiado no espaço estreito).
+   *
+   * Vale a partir de 768px e também de 640px, onde o layout de tablet já começa
+   * em responsivo.css (o iPad mini tem 744px). Nessa faixa menor, a altura
+   * mínima deixa de fora o celular deitado.
    */
-  const telaGrande = useMediaQuery('(min-width: 768px)')
+  const telaGrande = useMediaQuery('(min-width: 768px), (min-width: 640px) and (min-height: 600px)')
 
   const calculadora = useCalculadoraMao({ fluxoCompleto: telaGrande })
   const finalizandoMao = calculadora.etapaFinalizacaoAtiva && calculadora.maoProntaParaFinalizar

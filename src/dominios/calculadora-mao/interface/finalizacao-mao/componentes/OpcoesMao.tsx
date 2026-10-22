@@ -376,7 +376,9 @@ export default function OpcoesMao({
             }}
             aoDefinirVentoAssento={() => {
               marcarVentoAssentoDefinido()
-              avancar('secao-vento-rodada')
+              // O Vento da Rodada já vem marcado (Leste): desce direto até o
+              // Calcular, passando por Riichi e Condições Especiais.
+              avancarParaCalcular()
             }}
           />
         </section>
