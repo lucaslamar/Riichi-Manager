@@ -32,6 +32,10 @@ export function PedraSvg({
       src={urlPedra(nomeArquivo, formato)}
       alt={alt}
       draggable={false}
+      // Em telas de alta densidade (iPhone 16, Pixel, Galaxy) o Chrome adiava a
+      // decodificação das pedras e o teclado aparecia pedra por pedra ao voltar
+      // da finalização. "sync" faz a tela só aparecer com as pedras prontas.
+      decoding="sync"
       onError={() => setFormato(formato === 'png' ? 'svg' : 'texto')}
     />
   )
