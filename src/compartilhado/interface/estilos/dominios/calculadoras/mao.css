@@ -239,6 +239,20 @@
   transition: border-color 0.15s;
 }
 
+/* Mesma especificidade de .chip-pedra: overrides de breakpoint que vem depois
+   (paisagem, tablets) continuam valendo sem precisar conhecer o token. */
+.pedra-mao {
+  width: var(--pedra-mao-largura);
+  height: calc(var(--pedra-mao-largura) * var(--pedra-mao-proporcao));
+}
+
+.grade-pedras-mao {
+  display: grid;
+  grid-template-columns: repeat(var(--pedra-mao-colunas), var(--pedra-mao-largura));
+  gap: var(--pedra-mao-gap);
+  justify-content: start;
+}
+
 span.chip-pedra {
   display: inline-flex;
   align-items: center;
@@ -323,14 +337,12 @@ span.chip-pedra {
 }
 
 /*
- * Na finalizacao o rotulo "Batida" acompanha o tamanho da pedra (variavel
- * --finalizacao-tile-largura). Como a pedra cresce em telas grandes, a fonte
- * cresce junto e o texto deixa de exigir esforco para ler — sem afetar a
- * montagem, onde a variavel nao existe e o badge mantem 0.45rem.
+ * O rotulo "Batida" acompanha o tamanho da pedra (--pedra-mao-largura): quando a
+ * pedra cresce, a fonte cresce junto e o texto continua legivel.
  */
-.card-mao-completa.etapa-finalizacao .badge-pedra-agari {
-  min-height: calc(var(--finalizacao-tile-largura, 34px) * 0.33);
-  font-size: calc(var(--finalizacao-tile-largura, 34px) * 0.21);
+.pedra-mao .badge-pedra-agari {
+  min-height: calc(var(--pedra-mao-largura) * 0.33);
+  font-size: calc(var(--pedra-mao-largura) * 0.21);
   line-height: 1.3;
 }
 /*

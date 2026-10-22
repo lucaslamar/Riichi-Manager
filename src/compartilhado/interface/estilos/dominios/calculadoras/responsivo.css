@@ -1578,13 +1578,20 @@
   /* Teto elevado de 34px -> 46px: em celulares grandes (ex.: Pro Max) sobra
      largura, entao as pedras crescem e o rotulo "Batida" fica legivel sem
      esforco. 6 por linha continua cabendo com folga (6x46 + gaps < 300px). */
-  --finalizacao-tile-largura: clamp(32px, 11vw, 46px);
-  --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
+  --finalizacao-tile-largura: var(--pedra-mao-largura-celular);
+  --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * var(--pedra-mao-proporcao));
 
   width: min(100%, 100vw);
   max-width: 100%;
   margin-inline: auto;
   overflow-x: visible;
+}
+
+/* PedraMao (e o selo "Batida") seguem o tamanho da finalizacao. O alias fica na
+   propria pedra para pegar tambem os overrides de tablet que redefinem
+   --finalizacao-tile-largura em elementos internos (ex.: a grade da mao). */
+.card-mao-completa.etapa-finalizacao .pedra-mao {
+  --pedra-mao-largura: var(--finalizacao-tile-largura);
 }
 
 .pagina-finalizacao-mao,
@@ -3478,6 +3485,7 @@
 }
 
 .pedras-selecionadas > .chip-pedra,
+.grade-pedras-mao > .chip-pedra,
 .pedras-selecionadas > .chip-meld-mao,
 .mao-principal-finalizacao > .chip-pedra,
 .grupo-indicador-dora > .chip-pedra,
@@ -3546,10 +3554,35 @@
   background: #f3e5f5 !important;
 }
 
+/* Fora do celular em retrato a montagem mantem pedras e melds no mesmo fluxo
+   (flex-wrap) da .pedras-selecionadas, com os tamanhos de cada breakpoint. */
+.construtor-mao-montagem .grade-pedras-mao {
+  display: contents;
+}
+
 @media (max-width: 640px) and (orientation: portrait) {
   .construtor-mao-montagem {
     height: 100%;
     min-height: 0;
+  }
+
+  /* Montagem no celular usa o mesmo tamanho e densidade da finalizacao (pedra
+     --pedra-mao-largura-celular, ate --pedra-mao-colunas por linha). Flex em vez
+     de grid para o bloco encolher quando ha poucas pedras soltas: com kans, o
+     primeiro meld sobe para o lado delas em vez de abrir uma linha a mais. */
+  .construtor-mao-montagem .grade-pedras-mao {
+    --pedra-mao-largura: var(--pedra-mao-largura-celular);
+
+    display: flex;
+    flex-wrap: wrap;
+    max-width: calc(
+      var(--pedra-mao-colunas) * var(--pedra-mao-largura) + (var(--pedra-mao-colunas) - 1) *
+        var(--pedra-mao-gap)
+    );
+  }
+
+  .construtor-mao-montagem .grade-pedras-mao.compacta {
+    --pedra-mao-largura: var(--pedra-mao-largura-compacta);
   }
 
   .construtor-mao-montagem .mao-editor-fixo {
@@ -4212,6 +4245,8 @@
   }
 
   .construtor-mao-montagem .mao-editor-fixo .chip-pedra:not(.mini) {
+    --pedra-mao-largura: 76px;
+
     width: 76px;
     height: 100px;
     border-radius: 8px;
@@ -4525,6 +4560,8 @@
   }
 
   .construtor-mao-montagem .chip-pedra:not(.mini) {
+    --pedra-mao-largura: 56px;
+
     width: 56px;
     height: 76px;
   }
@@ -4859,6 +4896,8 @@
   }
 
   .construtor-mao-montagem .mao-editor-fixo .chip-pedra:not(.mini) {
+    --pedra-mao-largura: 76px;
+
     width: 76px;
     height: 100px;
     border-radius: 8px;

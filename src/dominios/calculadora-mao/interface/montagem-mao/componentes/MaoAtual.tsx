@@ -4,6 +4,7 @@ import type { Acao, CodigoPedra, Mao, Meld } from '../../../logica/mao'
 import { ESTILO_MELD, nomePedraAcessivel } from '../../constantes'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
+import { GradePedrasMao, PedraMao } from '../../compartilhado/componentes/PedraMao'
 
 interface AcaoMobileAtiva {
   rotulo: string
@@ -254,22 +255,17 @@ export function MaoAtual({
   }
   const renderizarPedrasMaoFinalizacao = () =>
     mao.pedras.map((pedra, indicePedra) => {
-      const tile = nomePedraAcessivel(pedra)
       const ehAgari = indicePedra === mao.indiceAgari
-      const classe = `chip-pedra ${ehAgari ? 'agari' : ''} ${maoInvalida && ehAgari ? 'chombo' : ''}`
 
       return (
-        <button
+        <PedraMao
           key={indicePedra}
-          className={classe}
-          type="button"
-          title={t('calculator.selectWinningTile', { tile })}
-          aria-label={t('calculator.selectWinningTile', { tile })}
-          onClick={() => aoEscolherPedraAgariMao(indicePedra)}
-        >
-          <PedraSvg pedra={pedra} />
-          {ehAgari && <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>}
-        </button>
+          pedra={pedra}
+          rotulo={t('calculator.selectWinningTile', { tile: nomePedraAcessivel(pedra) })}
+          ehAgari={ehAgari}
+          chombo={maoInvalida && ehAgari}
+          aoClicar={() => aoEscolherPedraAgariMao(indicePedra)}
+        />
       )
     })
 
@@ -345,7 +341,9 @@ export function MaoAtual({
       >
         {contexto === 'finalizacao' && (
           <>
-            <div className="mao-principal-finalizacao">{renderizarPedrasMaoFinalizacao()}</div>
+            <GradePedrasMao className="mao-principal-finalizacao">
+              {renderizarPedrasMaoFinalizacao()}
+            </GradePedrasMao>
             {mao.melds.length > 0 && (
               <section
                 className="secao-melds-finalizacao"
@@ -379,42 +377,30 @@ export function MaoAtual({
         )}
         {contexto !== 'finalizacao' && (
           <>
-            {mao.pedras.map((pedra, indicePedra) => {
-              const tile = nomePedraAcessivel(pedra)
-              const ehAgari = indicePedra === mao.indiceAgari
+            <GradePedrasMao compacta={totalPedras > 14}>
+              {mao.pedras.map((pedra, indicePedra) => {
+                const tile = nomePedraAcessivel(pedra)
+                const ehAgari = indicePedra === mao.indiceAgari
 
-              const classe = `chip-pedra ${ehAgari ? 'agari' : ''} ${
-                indicesSelecionadosChii.has(indicePedra) ? 'selecionada-meld' : ''
-              } ${maoInvalida && ehAgari ? 'chombo' : ''}`
-
-              return (
-                <button
-                  key={indicePedra}
-                  className={classe}
-                  type="button"
-                  title={
-                    selecionandoPedraAgari
-                      ? t('calculator.selectWinningTile', { tile })
-                      : ehAgari
-                        ? t('calculator.removeWinningTile', { tile })
-                        : t('calculator.removeTile', { tile })
-                  }
-                  aria-label={
-                    selecionandoPedraAgari
-                      ? t('calculator.selectWinningTile', { tile })
-                      : ehAgari
-                        ? t('calculator.removeWinningTile', { tile })
-                        : t('calculator.removeTile', { tile })
-                  }
-                  onClick={() => clicarPedraDaMao(indicePedra)}
-                >
-                  <PedraSvg pedra={pedra} />
-                  {ehAgari && (
-                    <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>
-                  )}
-                </button>
-              )
-            })}
+                return (
+                  <PedraMao
+                    key={indicePedra}
+                    pedra={pedra}
+                    rotulo={
+                      selecionandoPedraAgari
+                        ? t('calculator.selectWinningTile', { tile })
+                        : ehAgari
+                          ? t('calculator.removeWinningTile', { tile })
+                          : t('calculator.removeTile', { tile })
+                    }
+                    ehAgari={ehAgari}
+                    selecionada={indicesSelecionadosChii.has(indicePedra)}
+                    chombo={maoInvalida && ehAgari}
+                    aoClicar={() => clicarPedraDaMao(indicePedra)}
+                  />
+                )
+              })}
+            </GradePedrasMao>
             {mao.melds.map((meld, indiceMeld) => (
               <ChipMeld
                 key={`meld-${indiceMeld}`}

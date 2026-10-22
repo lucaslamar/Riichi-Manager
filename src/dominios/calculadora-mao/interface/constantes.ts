@@ -185,7 +185,7 @@ export const CONFIGURACOES_REGRAS: {
     titulo: 'Basengo',
     ligado: 'Ativar',
     desligado: 'Desativar',
-    ajuda: 'Cada honba vale 1500 pontos em vez de 300. Na tsumo, cada jogador paga 500 por honba.',
+    ajuda: 'Cada honba vale 1500 pontos em vez de 300. No tsumo, cada jogador paga 500 por honba.',
   },
   {
     chave: 'fuVentosDuplo',

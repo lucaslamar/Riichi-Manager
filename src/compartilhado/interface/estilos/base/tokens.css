@@ -15,6 +15,17 @@
   --info-texto: #0d47a1;
   --sombra: 0 4px 12px rgb(0 0 0 / 8%);
   --raio: 12px;
+
+  /* Pedras de visualizacao da mao (PedraMao/GradePedrasMao). --pedra-mao-largura
+     e o valor ativo, que cada tela/breakpoint aponta para um dos tamanhos abaixo.
+     -celular e a referencia da finalizacao (46px no iPhone Pro Max, 6 por linha);
+     -compacta entra na montagem quando kans levam a mao alem de 14 pedras. */
+  --pedra-mao-largura: 34px;
+  --pedra-mao-largura-celular: clamp(32px, 11vw, 46px);
+  --pedra-mao-largura-compacta: clamp(30px, 9.5vw, 40px);
+  --pedra-mao-proporcao: 1.35;
+  --pedra-mao-gap: 3px;
+  --pedra-mao-colunas: 6;
   color: var(--escuro);
   background: var(--fundo);
   font-family:

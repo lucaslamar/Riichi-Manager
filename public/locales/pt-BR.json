@@ -83,7 +83,7 @@
     "missingRoundWind": "vento da rodada",
     "missingSeatWind": "seu vento",
     "victory": "Batida",
-    "honbaAndDora": "Honba e doras",
+    "doraAndHonba": "Doras e honba",
     "honba": "Honba",
     "manualDora": "Doras na mão",
     "winds": "Configuração de ventos",
@@ -360,7 +360,7 @@
     },
     "basengo": {
       "title": "Basengo",
-      "help": "Cada honba vale 1500 pontos em vez de 300. Na tsumo, cada jogador paga 500 por honba.",
+      "help": "Cada honba vale 1500 pontos em vez de 300. No tsumo, cada jogador paga 500 por honba.",
       "on": "Ativar",
       "off": "Desativar"
     }

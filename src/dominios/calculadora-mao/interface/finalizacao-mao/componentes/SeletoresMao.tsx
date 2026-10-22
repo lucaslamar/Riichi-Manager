@@ -37,8 +37,9 @@ export function SeletorVentos({
     opcoes: { valor: VentoMao; nome: string }[],
     aoSelecionar: (rascunho: Mao, valor: VentoMao) => void,
     aoDefinir?: () => void,
+    id?: string,
   ) => (
-    <div className="campo-vento-mao secao-vento-finalizacao">
+    <div id={id} className="campo-vento-mao secao-vento-finalizacao">
       <span>{titulo}</span>
       <div
         className="pedras-vento-mao grade-ventos-finalizacao"
@@ -108,6 +109,7 @@ export function SeletorVentos({
             rascunho.ventoRodada = valor
           },
           aoDefinirVentoRodada,
+          'secao-vento-rodada',
         )}
     </div>
   )

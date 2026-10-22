@@ -15,6 +15,7 @@ import { IndicadoresDora } from '../../compartilhado/componentes/IndicadoresDora
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import { TecladoContextual } from '../../compartilhado/componentes/TecladoContextual'
 import BotaoAjuda from '../../modais/ajuda-secoes/BotaoAjuda'
+import { useAvancoAutomatico } from '../hooks/useAvancoAutomatico'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 
 interface PropsOpcoesMao {
@@ -59,6 +60,7 @@ export default function OpcoesMao({
     marcarVentoRodadaDefinido,
     marcarVentoAssentoDefinido,
   } = estado
+  const avancar = useAvancoAutomatico()
   const [descartesExpandidos, setDescartesExpandidos] = useState(false)
   const [painelContextualAberto, setPainelContextualAberto] = useState<'dora' | 'descartes' | null>(
     null,
@@ -124,6 +126,8 @@ export default function OpcoesMao({
     mostrarVentos && fluxoOpcoes.ventoRodadaDefinido && fluxoOpcoes.ventoAssentoDefinido
   const mostrarRiichi = mostrarEtapaRiichi && !maoAberta && !mao.bencao
   const mostrarCondicoes = mostrarEtapaRiichi
+  // Calcular inteiro (botão + aviso "Mão pronta…") logo acima da navegação.
+  const avancarParaCalcular = () => avancar('secao-calcular', 'base')
   const classeEtapa = (ativa: boolean) =>
     `etapa-opcoes-mao ${ativa ? 'etapa-opcoes-ativa' : 'etapa-opcoes-discreta'}`
 
@@ -153,7 +157,10 @@ export default function OpcoesMao({
         mao={mao}
         atualizarMao={atualizarMao}
         definido={fluxoOpcoes.vitoriaDefinida}
-        aoDefinir={marcarVitoriaDefinida}
+        aoDefinir={() => {
+          marcarVitoriaDefinida()
+          avancar('secao-ventos')
+        }}
       />
     </div>
   )
@@ -232,43 +239,10 @@ export default function OpcoesMao({
       className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}
     >
       <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
-        {t('calculator.honbaAndDora')}
+        {t('calculator.doraAndHonba')}
         <BotaoAjuda topico="honbaDoras" />
       </span>
       <div className="contadores-dora-honba">
-        <div className="contador-dora-manual contador-honba">
-          <span>{t('calculator.honba')}</span>
-          <div>
-            <button
-              type="button"
-              aria-label={`${t('calculator.honba')} -`}
-              disabled={honba <= 0}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                  rascunho.honba = Math.max(0, atual - 1)
-                })
-              }
-            >
-              -
-            </button>
-            <strong>{honba}</strong>
-            <button
-              type="button"
-              aria-label={`${t('calculator.honba')} +`}
-              disabled={honba >= 99}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                  rascunho.honba = Math.min(99, atual + 1)
-                })
-              }
-            >
-              +
-            </button>
-          </div>
-        </div>
-
         <div className="contador-dora-manual">
           <span className="rotulo-contador-com-ajuda">
             {t('calculator.manualDora')}
@@ -307,6 +281,39 @@ export default function OpcoesMao({
               onClick={() =>
                 atualizarMao((rascunho) => {
                   rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
+                })
+              }
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <div className="contador-dora-manual contador-honba">
+          <span>{t('calculator.honba')}</span>
+          <div>
+            <button
+              type="button"
+              aria-label={`${t('calculator.honba')} -`}
+              disabled={honba <= 0}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                  rascunho.honba = Math.max(0, atual - 1)
+                })
+              }
+            >
+              -
+            </button>
+            <strong>{honba}</strong>
+            <button
+              type="button"
+              aria-label={`${t('calculator.honba')} +`}
+              disabled={honba >= 99}
+              onClick={() =>
+                atualizarMao((rascunho) => {
+                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                  rascunho.honba = Math.min(99, atual + 1)
                 })
               }
             >
@@ -362,8 +369,15 @@ export default function OpcoesMao({
             atualizarMao={atualizarMao}
             ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
             ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
-            aoDefinirVentoRodada={marcarVentoRodadaDefinido}
-            aoDefinirVentoAssento={marcarVentoAssentoDefinido}
+            aoDefinirVentoRodada={() => {
+              marcarVentoRodadaDefinido()
+              // Sem a seção de Riichi (Tenhou/Chiihou), segue para as Condições.
+              avancar(['secao-riichi', 'secao-condicoes'])
+            }}
+            aoDefinirVentoAssento={() => {
+              marcarVentoAssentoDefinido()
+              avancar('secao-vento-rodada')
+            }}
           />
         </section>
 
@@ -419,11 +433,12 @@ export default function OpcoesMao({
                   ativo={!!mao.riichi?.ippatsu}
                   desabilitado={!mao.riichi}
                   corAtiva="#f97316"
-                  aoClicar={() =>
+                  aoClicar={() => {
+                    if (mao.riichi && !mao.riichi.ippatsu) avancar('secao-condicoes')
                     atualizarMao((rascunho) => {
                       if (rascunho.riichi) rascunho.riichi.ippatsu = !rascunho.riichi.ippatsu
                     })
-                  }
+                  }}
                 />
               </div>
             </section>
@@ -440,7 +455,10 @@ export default function OpcoesMao({
             </section>
           )}
 
-          <section className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}>
+          <section
+            id="secao-condicoes"
+            className={`grupo-opcoes-mao ${classeEtapa(mostrarCondicoes)}`}
+          >
             <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
               {t('calculator.specialConditions')}
               <BotaoAjuda topico="condicoesEspeciais" />
@@ -453,7 +471,8 @@ export default function OpcoesMao({
                   rotulo={t('calculator.tenhouChiihou')}
                   ativo={mao.bencao}
                   desabilitado={false}
-                  aoClicar={() =>
+                  aoClicar={() => {
+                    if (!mao.bencao) avancarParaCalcular()
                     atualizarMao((rascunho) => {
                       rascunho.bencao = !rascunho.bencao
                       if (rascunho.bencao) {
@@ -464,14 +483,15 @@ export default function OpcoesMao({
                         rascunho.kan = false
                       }
                     })
-                  }
+                  }}
                 />
               )}
               <BotaoToggle
                 rotulo={mao.agari === 'ron' ? t('calculator.chankan') : t('calculator.rinshan')}
                 ativo={mao.kan}
                 desabilitado={false}
-                aoClicar={() =>
+                aoClicar={() => {
+                  if (!mao.kan) avancarParaCalcular()
                   atualizarMao((rascunho) => {
                     rascunho.kan = !rascunho.kan
                     if (rascunho.kan) {
@@ -479,13 +499,14 @@ export default function OpcoesMao({
                       rascunho.ultimaPedra = false
                     }
                   })
-                }
+                }}
               />
               <BotaoToggle
                 rotulo={mao.agari === 'ron' ? t('calculator.houtei') : t('calculator.haitei')}
                 ativo={mao.ultimaPedra}
                 desabilitado={false}
-                aoClicar={() =>
+                aoClicar={() => {
+                  if (!mao.ultimaPedra) avancarParaCalcular()
                   atualizarMao((rascunho) => {
                     rascunho.ultimaPedra = !rascunho.ultimaPedra
                     if (rascunho.ultimaPedra) {
@@ -493,7 +514,7 @@ export default function OpcoesMao({
                       rascunho.kan = false
                     }
                   })
-                }
+                }}
               />
             </div>
           </section>

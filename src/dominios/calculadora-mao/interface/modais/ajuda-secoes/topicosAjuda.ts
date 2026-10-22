@@ -58,18 +58,9 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     ],
   },
   honbaDoras: {
-    titulo: 'calculator.honbaAndDora',
+    titulo: 'calculator.doraAndHonba',
     tema: 'doras',
     blocos: [
-      {
-        subtitulo: 'calculator.honba',
-        paragrafos: ['sectionHelp.honba.counter', 'sectionHelp.honba.points'],
-      },
-      {
-        subtitulo: 'sectionHelp.honba.basengoTitle',
-        item: true,
-        paragrafos: ['sectionHelp.honba.basengo'],
-      },
       // "Qual é o Dora?": piada do clube. Os textos de Doras na mão e de
       // Indicadores são os revisados do antigo botão "i" de Doras.
       { subtitulo: 'sectionHelp.dora.title' },
@@ -91,6 +82,15 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         subtitulo: 'sectionHelp.dora.flamingTitle',
         item: true,
         paragrafos: ['sectionHelp.dora.flaming'],
+      },
+      {
+        subtitulo: 'calculator.honba',
+        paragrafos: ['sectionHelp.honba.counter', 'sectionHelp.honba.points'],
+      },
+      {
+        subtitulo: 'sectionHelp.honba.basengoTitle',
+        item: true,
+        paragrafos: ['sectionHelp.honba.basengo'],
       },
     ],
   },
