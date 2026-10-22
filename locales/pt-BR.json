@@ -83,7 +83,7 @@
     "missingRoundWind": "vento da rodada",
     "missingSeatWind": "seu vento",
     "victory": "Batida",
-    "honbaAndDora": "Honba e doras",
+    "doraAndHonba": "Doras e honba",
     "honba": "Honba",
     "manualDora": "Doras na mão",
     "winds": "Configuração de ventos",
@@ -267,9 +267,13 @@
     },
     "furiten": {
       "rule": "Em furiten você não pode vencer por Ron, só por Tsumo. Declarar Ron em furiten é chombo (penalidade).",
-      "discards": "O furiten pelos descartes acontece quando alguma peça que completaria sua mão está entre os seus descartes. Dura enquanto a sua espera incluir essa peça.",
-      "temporary": "O furiten temporário acontece quando você deixa passar uma peça que completaria sua mão (não declara Ron). Dura até o seu próximo descarte.",
-      "riichi": "O furiten de Riichi acontece quando, depois de declarar Riichi, você deixa passar uma peça que completaria sua mão. Dura até o fim da rodada, porque a mão não pode mais mudar.",
+      "discardsTitle": "Pelos descartes",
+      "discards": "Alguma peça que completaria sua mão está entre os seus descartes. Dura enquanto a sua espera incluir essa peça.",
+      "temporaryTitle": "Temporário",
+      "temporary": "Você deixou passar uma peça que completaria sua mão, sem declarar Ron. Dura até o seu próximo descarte.",
+      "riichiTitle": "De Riichi",
+      "riichi": "Depois de declarar Riichi, você deixou passar uma peça que completaria sua mão. Dura até o fim da rodada, porque a mão não pode mais mudar.",
+      "registerTitle": "Como o app verifica",
       "register": "Registre aqui os seus descartes, porque é por eles que o app verifica o furiten. O temporário e o de Riichi dependem do que aconteceu na mesa e não são verificados."
     },
     "seatWind": {
@@ -360,7 +364,7 @@
     },
     "basengo": {
       "title": "Basengo",
-      "help": "Cada honba vale 1500 pontos em vez de 300. Na tsumo, cada jogador paga 500 por honba.",
+      "help": "Cada honba vale 1500 pontos em vez de 300. No tsumo, cada jogador paga 500 por honba.",
       "on": "Ativar",
       "off": "Desativar"
     }
