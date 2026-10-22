@@ -1,5 +1,30 @@
 # Changelog - Mojoca
 
+## 5.2.0 - 2026-10-22
+
+### Novo
+
+- **Guia de bolso 🐑**: botão com chapéu de formatura (🎓) logo antes da engrenagem, no cabeçalho da mão (no tablet, antes da lixeira) e como primeiro botão na finalização. Abre uma janela com abas Iniciante, Sequências, Terminais, Trincas, Naipes, Outros, Yakuman e Glossário, baseada nas regras EMA 2016, no mesmo azul do Resultado. Cada yaku mostra nome em romaji, kanji e português, han com a mão fechada e aberta, uma explicação curta e uma mão de exemplo. Yakumans têm selo dourado e aba própria ("mão máxima"). A última aba aberta é lembrada.
+- Aba Iniciante: os essenciais de 1 han (Riichi, Tan'yao, Yakuhai, Pinfu, Menzen tsumo) e os fáceis de 2+ han (Chiitoitsu, Toitoi, Sanshoku doujun, Ittsuu, Hon'itsu, Chin'itsu). O Chiitoitsu traz a dica de quando tentar (4 pares na mão inicial, ideal 5) e de quando é melhor ir para Toitoi.
+- Aba Glossário: os três naipes com os números de 1 a 9 em cima de cada pedra; as honras com o nome japonês em cima (Ton, Nan, Shaa, Pei; Haku, Hatsu, Chun); a ordem do indicador de dora (9 → 1, Norte → Leste, Vermelho → Branco), Kan-dora, Ura-dora e os 5 vermelhos, em tópicos; e, por fim, 20 termos do jogo (Yaku, Han, Fu, Tenpai, Chi, Pon, Kan, Riichi, Tsumo, Ron, Furiten, Oya, Ko, Honba, Dora, Ura dora, Aka dora, Mangan, Yakuman e Chombo).
+- Deslizar o dedo para o lado troca de aba nas janelas com abas, dando a volta: depois da última vem a primeira, e vice-versa.
+- Resultado: tocar num yaku abre a explicação dele no próprio retângulo e pinta de dourado as pedras que formam esse yaku (por exemplo, a trinca de Branco no Yakuhai). Tocar de novo fecha. Uma exclamação no círculo ao lado do nome indica que ele é clicável.
+- Resultado: tags com o vento da rodada e o seu vento.
+- Regras de cálculo: opção **Multa de chombo**, Mangan (padrão) ou Yakuman. Mangan: 8.000, ou 12.000 sendo Leste. Yakuman: 32.000, ou 48.000 sendo Leste.
+
+### Alterado
+
+- Resultado: com honba, o valor aparece em linhas: Han e Fu com o seu valor, Honba com o acréscimo e o total grande embaixo.
+- Resultado: no tsumo, em vez de "All" e "Oya/Ko", aparece quanto cada um paga: "Todos pagam" quando você é Leste; "Leste paga" e "Demais pagam" quando não é. No ron fica só o total.
+- Resultado: as tags de vento usam o azul das tags do resultado.
+- Penalidade de chombo (sem yaku ou ron em furiten) no mesmo formato do resultado, com as tags de vento em vermelho, o valor e quanto cada jogador recebe, seguindo a regra de multa escolhida.
+- Finalização da mão: o teclado dos indicadores de dora abre logo abaixo de "Doras na mão", antes do Honba (no tablet, embaixo dos dois contadores), para não parecer que é do Honba.
+- Deslizar entre as telas dá a volta: depois de Regras vem a Calculadora de Mão. A Han e Fu continua fora do círculo (deslizando para a direita na Calculadora de Mão).
+- Ajuda de Doras e honba dividida em duas abas, Dora e Honba. Os Indicadores de Dora mostram a ordem do indicador com pedras, e o Aka Dora mostra os 5 vermelhos.
+- Ajuda de Batida: saiu o trecho sobre Yaku, que agora tem a referência própria.
+- Cabeçalho da mão na montagem: saíram os balões de Tenpai e do Kan ativo. O tenpai continua na cor da borda da mão e o Kan ativo, no próprio botão.
+- Resultado: saíram as tags "Dora manual" e "Ura dora", que já aparecem na lista de yakus.
+
 ## 5.1.3 - 2026-10-22
 
 ### Novo

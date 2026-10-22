@@ -20,11 +20,21 @@ export interface BlocoAjuda {
   /** Ícone Font Awesome ao lado do subtítulo, o mesmo do controle na tela. */
   icone?: string
   paragrafos?: string[]
+  /** Pedras de exemplo depois dos parágrafos (sequências do indicador, 5 vermelhos). */
+  visual?: 'ciclosDora' | 'akaDora'
+}
+
+/** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */
+export interface AbaAjuda {
+  rotulo: string
+  blocos: BlocoAjuda[]
 }
 
 export interface ConteudoAjuda {
   titulo: string
-  blocos: BlocoAjuda[]
+  blocos?: BlocoAjuda[]
+  /** Em vez de `blocos`: uma tela por assunto, trocadas por abas ou deslize. */
+  abas?: AbaAjuda[]
   /** Cor de destaque da modal (bordas, título e subtítulos). */
   tema?: 'doras'
 }
@@ -64,43 +74,67 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         paragrafos: ['sectionHelp.victory.tsumo', 'sectionHelp.victory.menzen'],
       },
       { subtitulo: 'calculator.ron', paragrafos: ['sectionHelp.victory.ron'] },
-      { subtitulo: 'sectionHelp.victory.yakuTitle', paragrafos: ['sectionHelp.victory.yaku'] },
     ],
   },
   honbaDoras: {
     titulo: 'calculator.doraAndHonba',
     tema: 'doras',
-    blocos: [
-      // "Qual é o Dora?": piada do clube. Os textos de Doras na mão e de
-      // Indicadores são os revisados do antigo botão "i" de Doras.
-      { subtitulo: 'sectionHelp.dora.title' },
+    abas: [
       {
-        subtitulo: 'sectionHelp.dora.curiosityTitle',
-        item: true,
-        paragrafos: ['sectionHelp.dora.curiosity', 'sectionHelp.dora.dragonPrince'],
+        // Literal: o mesmo termo em todos os idiomas.
+        rotulo: 'Dora',
+        blocos: [
+          // "Qual é o Dora?": piada do clube. Os textos de Doras na mão e de
+          // Indicadores são os revisados do antigo botão "i" de Doras.
+          { subtitulo: 'sectionHelp.dora.title' },
+          {
+            subtitulo: 'sectionHelp.dora.curiosityTitle',
+            item: true,
+            paragrafos: ['sectionHelp.dora.curiosity', 'sectionHelp.dora.dragonPrince'],
+          },
+          {
+            subtitulo: 'calculator.manualDora',
+            item: true,
+            paragrafos: ['sectionHelp.dora.inHand'],
+          },
+          {
+            subtitulo: 'sectionHelp.dora.indicatorsTitle',
+            item: true,
+            icone: ICONE_INDICADOR_DORA,
+            paragrafos: ['sectionHelp.dora.indicators'],
+            visual: 'ciclosDora',
+          },
+          {
+            subtitulo: 'sectionHelp.uraDora.term',
+            item: true,
+            paragrafos: ['sectionHelp.dora.uraDora'],
+          },
+          {
+            subtitulo: 'sectionHelp.dora.akaTitle',
+            item: true,
+            paragrafos: ['sectionHelp.dora.aka'],
+            visual: 'akaDora',
+          },
+          {
+            subtitulo: 'sectionHelp.dora.flamingTitle',
+            item: true,
+            paragrafos: ['sectionHelp.dora.flaming'],
+          },
+        ],
       },
-      { subtitulo: 'calculator.manualDora', item: true, paragrafos: ['sectionHelp.dora.inHand'] },
       {
-        subtitulo: 'sectionHelp.dora.indicatorsTitle',
-        item: true,
-        icone: ICONE_INDICADOR_DORA,
-        paragrafos: ['sectionHelp.dora.indicators'],
-      },
-      { subtitulo: 'sectionHelp.uraDora.term', item: true, paragrafos: ['sectionHelp.dora.uraDora'] },
-      { subtitulo: 'sectionHelp.dora.akaTitle', item: true, paragrafos: ['sectionHelp.dora.aka'] },
-      {
-        subtitulo: 'sectionHelp.dora.flamingTitle',
-        item: true,
-        paragrafos: ['sectionHelp.dora.flaming'],
-      },
-      {
-        subtitulo: 'calculator.honba',
-        paragrafos: ['sectionHelp.honba.counter', 'sectionHelp.honba.points'],
-      },
-      {
-        subtitulo: 'sectionHelp.honba.basengoTitle',
-        item: true,
-        paragrafos: ['sectionHelp.honba.basengo'],
+        rotulo: 'calculator.honba',
+        blocos: [
+          {
+            subtitulo: 'calculator.honba',
+            paragrafos: ['sectionHelp.honba.counter', 'sectionHelp.honba.points'],
+          },
+          {
+            subtitulo: 'sectionHelp.honba.basengoTitle',
+            item: true,
+            paragrafos: ['sectionHelp.honba.basengo'],
+          },
+        ],
       },
     ],
   },
@@ -123,9 +157,17 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     titulo: 'calculator.riichi',
     blocos: [
       { paragrafos: ['sectionHelp.riichi.declaration', 'sectionHelp.riichi.value'] },
-      { subtitulo: 'calculator.doubleRiichi', item: true, paragrafos: ['sectionHelp.riichi.doubleRiichi'] },
+      {
+        subtitulo: 'calculator.doubleRiichi',
+        item: true,
+        paragrafos: ['sectionHelp.riichi.doubleRiichi'],
+      },
       { subtitulo: 'calculator.ippatsu', item: true, paragrafos: ['sectionHelp.riichi.ippatsu'] },
-      { subtitulo: 'sectionHelp.uraDora.term', item: true, paragrafos: ['sectionHelp.riichi.uraDora'] },
+      {
+        subtitulo: 'sectionHelp.uraDora.term',
+        item: true,
+        paragrafos: ['sectionHelp.riichi.uraDora'],
+      },
     ],
   },
   condicoesEspeciais: {
@@ -137,10 +179,26 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         item: true,
         paragrafos: ['sectionHelp.specialConditions.tenhouChiihou'],
       },
-      { subtitulo: 'calculator.rinshan', item: true, paragrafos: ['sectionHelp.specialConditions.rinshan'] },
-      { subtitulo: 'calculator.chankan', item: true, paragrafos: ['sectionHelp.specialConditions.chankan'] },
-      { subtitulo: 'calculator.haitei', item: true, paragrafos: ['sectionHelp.specialConditions.haitei'] },
-      { subtitulo: 'calculator.houtei', item: true, paragrafos: ['sectionHelp.specialConditions.houtei'] },
+      {
+        subtitulo: 'calculator.rinshan',
+        item: true,
+        paragrafos: ['sectionHelp.specialConditions.rinshan'],
+      },
+      {
+        subtitulo: 'calculator.chankan',
+        item: true,
+        paragrafos: ['sectionHelp.specialConditions.chankan'],
+      },
+      {
+        subtitulo: 'calculator.haitei',
+        item: true,
+        paragrafos: ['sectionHelp.specialConditions.haitei'],
+      },
+      {
+        subtitulo: 'calculator.houtei',
+        item: true,
+        paragrafos: ['sectionHelp.specialConditions.houtei'],
+      },
     ],
   },
 }

@@ -193,6 +193,14 @@ export const CONFIGURACOES_REGRAS: {
     ajuda: 'Cada honba vale 1500 pontos em vez de 300. No tsumo, cada jogador paga 500 por honba.',
   },
   {
+    chave: 'chomboMangan',
+    titulo: 'Multa de chombo',
+    ligado: 'Mangan',
+    desligado: 'Yakuman',
+    ajuda:
+      'Quanto paga quem comete chombo (sem yaku, ron em furiten). Mangan: 8.000 (12.000 sendo Leste). Yakuman: 32.000 (48.000 sendo Leste).',
+  },
+  {
     chave: 'fuVentosDuplo',
     titulo: 'Par de vento duplo',
     ligado: '4 fu',

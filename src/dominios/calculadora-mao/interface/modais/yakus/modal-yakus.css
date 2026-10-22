@@ -1,0 +1,198 @@
+/*
+ * Modal de Yakus — só o conteúdo. Esqueleto, cabeçalho, fundo, Esc e trava de
+ * rolagem vêm da Modal base. As abas ficam presas no topo do corpo rolável
+ * (sticky), então só a lista rola.
+ */
+
+.modal.yaku-modal {
+  --modal-largura: 640px;
+
+  /* 16px de margem lateral no celular. */
+  width: min(var(--modal-largura), calc(100vw - 32px));
+  max-height: min(var(--modal-altura), 90dvh, 100%);
+}
+
+.yaku-modal .modal-corpo {
+  padding-top: 0;
+  padding-bottom: max(var(--modal-espaco), env(safe-area-inset-bottom));
+}
+
+/* ─── Grupos ─────────────────────────────────────────────────────────────── */
+.yaku-grupo {
+  margin-top: 14px;
+}
+
+/* Mesmo rótulo azul das listas do Resultado ("YAKU", "FU"). */
+.yaku-grupo__titulo {
+  margin: 0 0 8px;
+  color: var(--primario);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.yaku-grupo__subtitulo {
+  color: #607080;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.yaku-lista {
+  display: grid;
+  gap: 8px;
+}
+
+/* ─── Cartão ─────────────────────────────────────────────────────────────── */
+.yaku-card {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  /* Azul claro dos cartões de yaku do Resultado. */
+  background: #eef6ff;
+}
+
+.yaku-card--yakuman {
+  border-color: #f2d36b;
+  background: #fffbea;
+}
+
+.yaku-card__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+}
+
+.yaku-card__nome {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.yaku-card__kanji,
+.yaku-card__apelido {
+  color: #607080;
+  font-weight: 600;
+}
+
+.yaku-card__apelido {
+  font-size: 0.85rem;
+}
+
+.yaku-card__pt {
+  margin: 0;
+  color: #334e68;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.yaku-card__descricao {
+  margin: 0;
+  color: #486581;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.yaku-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: var(--branco);
+  color: #486581;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.yaku-badge strong {
+  color: var(--primario);
+  font-weight: 900;
+}
+
+.yaku-badge__divisor {
+  color: #bfdbfe;
+}
+
+.yaku-badge--yakuman {
+  border-color: #e6b800;
+  background: #ffd700;
+  color: #5c4300;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+/* ─── Aba Pedras ─────────────────────────────────────────────────────────── */
+.yaku-topicos {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  color: #486581;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.yaku-topicos li::marker {
+  color: #94a3b8;
+}
+
+.yaku-card .yaku-ciclos {
+  margin-top: 6px;
+}
+
+.yaku-pedras__nota,
+.yaku-pedras__aka {
+  margin-top: 8px;
+}
+
+/* Nota de rodapé em cinza, discreta. */
+.yaku-nota-dora {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  color: #486581;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* ─── Glossário ──────────────────────────────────────────────────────────── */
+.yaku-glossario {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  background: #eef6ff;
+}
+
+.yaku-glossario__item {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+}
+
+.yaku-glossario__item + .yaku-glossario__item {
+  border-top: 1px solid #dbeafe;
+}
+
+.yaku-glossario dd {
+  margin: 0;
+}
+
+/* Ovelhinha no título: um pouco maior que o texto, alinhada à linha. */
+.yaku-modal__ovelha {
+  display: inline-block;
+  font-size: 1.15em;
+  line-height: 1;
+  vertical-align: -0.05em;
+}

@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import AdSlot from '@/compartilhado/interface/componentes/AdSlot'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
+import BotaoYakus from '../../modais/yakus/BotaoYakus'
 import { PaginaFinalizacaoMao } from '../../finalizacao-mao/paginas/PaginaFinalizacaoMao'
 import { PaginaMontagemMao } from '../../montagem-mao/paginas/PaginaMontagemMao'
 
@@ -87,6 +88,7 @@ export default function ModoCompletoCalculadora({
             estado={estado}
             acoesCabecalho={
               <div className="acoes-finalizacao-calculadora" aria-label={t('calculator.actionsMenu')}>
+                <BotaoYakus classeBase="acao-finalizacao" />
                 {acoesContextuais.map((acao) => (
                   <button
                     key={acao.chave}

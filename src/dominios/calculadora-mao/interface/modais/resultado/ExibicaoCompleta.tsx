@@ -1,42 +1,101 @@
-import type { DetalheFu, Mao } from '../../../logica/mao'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import type { DetalheFu, Mao, VentoMao } from '../../../logica/mao'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import { explicacaoDoYaku } from './destaqueYaku'
+
+const CHAVE_VENTO: Record<VentoMao, string> = {
+  '1': 'winds.east',
+  '2': 'winds.south',
+  '3': 'winds.west',
+  '4': 'winds.north',
+}
+
+const formatar = (valor: number) => valor.toLocaleString('pt-BR')
+
+/**
+ * Quem paga no tsumo: sendo Leste, todos pagam o mesmo; senão, Leste paga a
+ * parte maior e os demais a menor. No ron o total já é o que o descarte paga.
+ */
+function pagamentos(resultado: any, nomeLeste: string): { quem: string; valor: number }[] {
+  const pts = resultado.pontos
+  if (resultado.agari !== 'tsumo') return []
+  if (resultado.isOya) return [{ quem: 'Todos pagam', valor: pts.oya?.ko }]
+  return [
+    { quem: `${nomeLeste} paga`, valor: pts.ko?.oya },
+    { quem: 'Demais pagam', valor: pts.ko?.ko },
+  ]
+}
+
+/** Tags de vento da rodada e do assento (resultado e penalidade de chombo). */
+export function TagsVentos({ mao }: { mao: Mao }) {
+  const { t } = useI18n()
+  return (
+    <div className="tags-ventos-resultado">
+      <span>
+        {t('calculator.roundWind')}: <strong>{t(CHAVE_VENTO[mao.ventoRodada])}</strong>
+      </span>
+      <span>
+        {t('calculator.seatWind')}: <strong>{t(CHAVE_VENTO[mao.ventoAssento])}</strong>
+      </span>
+    </div>
+  )
+}
 
 export default function ExibicaoCompleta({
   resultado,
   mao,
+  yakuSelecionado = null,
+  aoSelecionarYaku,
 }: {
   resultado: any
   mao?: Mao
+  /** Yaku aberto na lista (mostra a explicação e destaca as pedras). */
+  yakuSelecionado?: string | null
+  aoSelecionarYaku?: (nome: string | null) => void
 }) {
+  const { t } = useI18n()
   const pts = resultado.pontos
   const completarIndicadores = (quantidade: number) => Math.max(0, 5 - quantidade)
+  const pontosHonba: number = resultado.pontosHonba ?? 0
+  const rotuloHanFu =
+    resultado.yakuman > 0
+      ? `${resultado.yakuman}× Yakuman`
+      : resultado.han > 0
+        ? `${resultado.han} Han ${resultado.fu} Fu`
+        : null
 
   return (
     <>
       {resultado.nome && <div className="nome-mao">{resultado.nome}</div>}
-      {resultado.yakuman > 0 && (
-        <div className="resumo-yakuman">{resultado.yakuman}× Yakuman</div>
-      )}
-      {resultado.han > 0 && resultado.yakuman === 0 && (
-        <div className="resumo-han-fu">
-          {resultado.han} Han {resultado.fu} Fu
-          {mao && mao.honba > 0 && <> · Honba {mao.honba}</>}
+      {mao && <TagsVentos mao={mao} />}
+      {pontosHonba > 0 && mao ? (
+        <div className="linhas-pontos-resultado">
+          <div className="linha-pontos-resultado">
+            <span>{rotuloHanFu}</span>
+            <strong>{formatar(pts.total - pontosHonba)}</strong>
+          </div>
+          <div className="linha-pontos-resultado">
+            <span>
+              {t('calculator.honba')} {mao.honba}
+            </span>
+            <strong>+{formatar(pontosHonba)}</strong>
+          </div>
         </div>
+      ) : (
+        rotuloHanFu && (
+          <div className={resultado.yakuman > 0 ? 'resumo-yakuman' : 'resumo-han-fu'}>
+            {rotuloHanFu}
+          </div>
+        )
       )}
-      <div className="pontos-totais">{pts.total.toLocaleString('pt-BR')}</div>
-      <div className="detalhe-pontos">
-        {resultado.agari === 'tsumo'
-          ? resultado.isOya
-            ? `All ${pts.oya?.ko ?? 0}`
-            : `Oya ${pts.ko?.oya ?? 0} / Ko ${pts.ko?.ko ?? 0}`
-          : resultado.isOya
-            ? `Ron ${pts.oya?.ron ?? 0}`
-            : `Ron ${pts.ko?.ron ?? 0}`}
-      </div>
-      {mao && (mao.doraManual > 0 || (mao.riichi && mao.uradoraManual > 0)) && (
-        <div className="detalhes-contexto-resultado">
-          {mao.doraManual > 0 && <span>Dora manual: {mao.doraManual}</span>}
-          {mao.riichi && mao.uradoraManual > 0 && <span>Ura dora: {mao.uradoraManual}</span>}
+      <div className="pontos-totais">{formatar(pts.total)}</div>
+      {resultado.agari === 'tsumo' && (
+        <div className="pagamentos-resultado">
+          {pagamentos(resultado, t(CHAVE_VENTO['1'])).map(({ quem, valor }) => (
+            <span key={quem}>
+              {quem} <strong>{formatar(valor ?? 0)}</strong>
+            </span>
+          ))}
         </div>
       )}
       {mao && (mao.dora.length > 0 || mao.uradora.length > 0) && (
@@ -51,7 +110,10 @@ export default function ExibicaoCompleta({
                   </span>
                 ))}
                 {Array.from({ length: completarIndicadores(mao.dora.length) }).map((_, indice) => (
-                  <span key={`dora-fechada-${indice}`} className="chip-pedra mini indicador-fechado">
+                  <span
+                    key={`dora-fechada-${indice}`}
+                    className="chip-pedra mini indicador-fechado"
+                  >
                     <PedraSvg virada />
                   </span>
                 ))}
@@ -67,11 +129,16 @@ export default function ExibicaoCompleta({
                     <PedraSvg pedra={pedra} />
                   </span>
                 ))}
-                {Array.from({ length: completarIndicadores(mao.uradora.length) }).map((_, indice) => (
-                  <span key={`ura-fechada-${indice}`} className="chip-pedra mini indicador-fechado">
-                    <PedraSvg virada />
-                  </span>
-                ))}
+                {Array.from({ length: completarIndicadores(mao.uradora.length) }).map(
+                  (_, indice) => (
+                    <span
+                      key={`ura-fechada-${indice}`}
+                      className="chip-pedra mini indicador-fechado"
+                    >
+                      <PedraSvg virada />
+                    </span>
+                  ),
+                )}
               </span>
             </div>
           )}
@@ -83,11 +150,41 @@ export default function ExibicaoCompleta({
           <div className="rotulo-lista-resultado">Yaku</div>
           <div className="lista-yaku">
             {resultado.yaku.map(
-              ([nome, valor, ehYakuman]: [string, number, boolean], i: number) => (
-                <span key={i} className="chip-yaku">
-                  {nome} <strong>{ehYakuman ? `${valor}× YM` : `${valor}han`}</strong>
-                </span>
-              ),
+              ([nome, valor, ehYakuman]: [string, number, boolean], i: number) => {
+                const aberto = yakuSelecionado === nome
+                const explicacao = explicacaoDoYaku(nome)
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`chip-yaku${aberto ? ' aberto' : ''}`}
+                    aria-expanded={aberto}
+                    onClick={() => aoSelecionarYaku?.(aberto ? null : nome)}
+                  >
+                    <span className="chip-yaku__rotulo">
+                      {nome}
+                      {/* Avisa que o yaku abre a explicação ao tocar. */}
+                      {explicacao && (
+                        <i
+                          className="fas fa-circle-exclamation chip-yaku__icone"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </span>
+                    <strong>{ehYakuman ? `${valor}× YM` : `${valor}han`}</strong>
+                    {aberto && explicacao && (
+                      <span className="chip-yaku__explicacao">
+                        {explicacao.yaku && (
+                          <span className="chip-yaku__nome-pt">
+                            {explicacao.yaku.namePt} <span lang="ja">{explicacao.yaku.kanji}</span>
+                          </span>
+                        )}
+                        {explicacao.texto}
+                      </span>
+                    )}
+                  </button>
+                )
+              },
             )}
           </div>
         </>

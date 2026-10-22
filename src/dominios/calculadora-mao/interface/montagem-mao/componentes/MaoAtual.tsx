@@ -5,6 +5,11 @@ import { ESTILO_MELD, nomePedraAcessivel } from '../../constantes'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 import { GradePedrasMao, PedraMao } from '../../compartilhado/componentes/PedraMao'
+import BotaoYakus from '../../modais/yakus/BotaoYakus'
+import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
+
+/** Tablets em retrato: a ⚙ sai do cabeçalho e vai para a barra de ações (responsivo.css). */
+const CONSULTA_TABLET_RETRATO = '(min-width: 768px) and (orientation: portrait)'
 
 interface AcaoMobileAtiva {
   rotulo: string
@@ -229,6 +234,7 @@ export function MaoAtual({
   aoLimpar,
 }: PropsMaoAtual) {
   const { t } = useI18n()
+  const tabletRetrato = useMediaQuery(CONSULTA_TABLET_RETRATO)
   const slotsEstruturais = Math.min(slotsUsados, 14)
   const sufixoFisico =
     totalPedras !== slotsUsados
@@ -278,6 +284,9 @@ export function MaoAtual({
         </h3>
         <div className="acoes-cabecalho-mao">
           {acoesCabecalho}
+          {contexto === 'montagem' && aoAbrirRegras && !tabletRetrato && (
+            <BotaoYakus classeBase="btn-configuracao-mao-cabecalho" />
+          )}
           {contexto === 'montagem' && aoAbrirRegras && (
             <button
               className="btn-configuracao-mao-cabecalho"
@@ -289,7 +298,8 @@ export function MaoAtual({
               <i className="fas fa-gear" aria-hidden="true" />
             </button>
           )}
-          {(maoInvalida || statusTenpai) && (
+          {/* Na montagem o tenpai já aparece na borda da mão; o balão fica só na finalização. */}
+          {contexto !== 'montagem' && (maoInvalida || statusTenpai) && (
             <span
               className={`status-tenpai-mao status-tenpai-cabecalho ${
                 maoInvalida || temEsperaFuriten
@@ -302,17 +312,10 @@ export function MaoAtual({
               {maoInvalida ? t('calculator.noYaku') : statusTenpai}
             </span>
           )}
-          {contexto === 'montagem' && acaoPendente && acaoMobileAtiva && (
-            <button
-              className="chip-acao-meld-ativa"
-              type="button"
-              style={{ borderColor: acaoMobileAtiva?.cor, color: acaoMobileAtiva?.cor }}
-              onClick={() => aoAlternarAcao(acaoPendente.tipo)}
-              aria-label={t('calculator.meldActive', { action: acaoMobileAtiva?.rotulo ?? '' })}
-            >
-              {acaoMobileAtiva?.rotulo ?? ''}
-              <span aria-hidden="true">x</span>
-            </button>
+          {/* No tablet a engrenagem do cabeçalho some (fica na barra de ações),
+              então o YAKU entra antes da lixeira, com o tamanho dela. */}
+          {contexto === 'montagem' && aoAbrirRegras && tabletRetrato && (
+            <BotaoYakus classeBase="btn-limpar-mao-cabecalho" />
           )}
           {contexto === 'montagem' && totalPedras > 0 && (
             <button

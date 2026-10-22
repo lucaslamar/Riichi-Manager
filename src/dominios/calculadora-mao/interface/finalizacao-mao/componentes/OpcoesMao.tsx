@@ -242,7 +242,11 @@ export default function OpcoesMao({
         {t('calculator.doraAndHonba')}
         <BotaoAjuda topico="honbaDoras" />
       </span>
-      <div className="contadores-dora-honba">
+      <div
+        className={`contadores-dora-honba${
+          painelContextualAberto === 'dora' ? ' contadores-dora-honba--com-painel' : ''
+        }`}
+      >
         <div className="contador-dora-manual">
           <span className="rotulo-contador-com-ajuda">
             {t('calculator.manualDora')}
@@ -289,6 +293,24 @@ export default function OpcoesMao({
           </div>
         </div>
 
+        {/* Painel dos indicadores logo abaixo do botão do dragão (no tablet,
+            ocupa a linha inteira embaixo de Doras e Honba). */}
+        {painelContextualAberto === 'dora' && (
+          <div className="painel-contextual-finalizacao">
+            {tecladoContextual}
+            <IndicadoresDora
+              mao={mao}
+              atualizarMao={atualizarMao}
+              tipo="dora"
+              aoLimparIndicadores={() =>
+                atualizarMao((rascunho) => {
+                  rascunho.dora = []
+                })
+              }
+            />
+          </div>
+        )}
+
         <div className="contador-dora-manual contador-honba">
           <span>{t('calculator.honba')}</span>
           <div>
@@ -322,21 +344,6 @@ export default function OpcoesMao({
           </div>
         </div>
       </div>
-      {painelContextualAberto === 'dora' && (
-        <div className="painel-contextual-finalizacao">
-          {tecladoContextual}
-          <IndicadoresDora
-            mao={mao}
-            atualizarMao={atualizarMao}
-            tipo="dora"
-            aoLimparIndicadores={() =>
-              atualizarMao((rascunho) => {
-                rascunho.dora = []
-              })
-            }
-          />
-        </div>
-      )}
     </section>
   )
 

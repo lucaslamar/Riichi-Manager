@@ -135,6 +135,10 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
       ? montarPontosRapidos(isOya, mao.agari, calcularHanFu(hanFinal, fu, config))
       : pontosBiblioteca
   const pontos = aplicarHonba(pontosBase, mao.honba, valorPorHonba(config))
+  const pontosHonba =
+    pontos.agari !== null && pontosBase.agari !== null
+      ? pontos.pontos.total - pontosBase.pontos.total
+      : 0
 
   const yaku = Object.entries(resultadoBiblioteca.yaku ?? {})
     .sort((a, b) => (ORDEM_YAKU[a[0]] ?? 99) - (ORDEM_YAKU[b[0]] ?? 99))
@@ -162,6 +166,7 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     semYaku,
     han: hanFinal,
     fu,
+    pontosHonba,
     nome:
       patamarManual?.nome ??
       (resultadoBiblioteca.name ? traduzirPatamares(resultadoBiblioteca.name) : null),

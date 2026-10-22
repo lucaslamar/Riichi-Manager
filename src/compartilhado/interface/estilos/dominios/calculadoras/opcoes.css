@@ -1253,3 +1253,15 @@
   right: 2px;
   flex-shrink: 0;
 }
+
+/* Painel dos indicadores de Dora entre os contadores, logo abaixo de "Doras
+   na mão". Em duas colunas (tablet) ocupa a linha inteira e o `dense` mantém
+   o Honba ao lado das Doras, na primeira linha. */
+.contadores-dora-honba--com-painel {
+  grid-auto-flow: row dense;
+}
+
+.contadores-dora-honba > .painel-contextual-finalizacao {
+  grid-column: 1 / -1;
+  min-width: 0;
+}

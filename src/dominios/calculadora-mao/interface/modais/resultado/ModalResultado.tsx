@@ -1,9 +1,18 @@
+import { useState } from 'react'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { CodigoPedra, Mao } from '../../../logica/mao'
+import {
+  configuracaoPadrao,
+  pagamentoChombo,
+  type CodigoPedra,
+  type Mao,
+} from '../../../logica/mao'
 import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
-import ExibicaoCompleta from './ExibicaoCompleta'
+import ExibicaoCompleta, { TagsVentos } from './ExibicaoCompleta'
+
+const formatar = (valor: number) => valor.toLocaleString('pt-BR')
+import { consumirDestaque, destaqueDoYaku } from './destaqueYaku'
 import './modal-resultado.css'
 
 interface PropsModalResultado {
@@ -13,6 +22,8 @@ interface PropsModalResultado {
   chomboFuriten: boolean
   /** Mão sem yaku: mostra o aviso de mão inválida no lugar da pontuação. */
   maoInvalida: boolean
+  /** Regra da mesa: multa de chombo no valor de mangan (senão, de yakuman). */
+  chomboMangan: boolean
   /** Texto lido pelo leitor de tela ao abrir (resumo do resultado). */
   descricaoAcessivel: string
   aoFechar: () => void
@@ -30,12 +41,18 @@ export default function ModalResultado({
   resultado,
   chomboFuriten,
   maoInvalida,
+  chomboMangan,
   descricaoAcessivel,
   aoFechar,
 }: PropsModalResultado) {
   const { t } = useI18n()
+  const [yakuSelecionado, setYakuSelecionado] = useState<string | null>(null)
+  // Recalculado a cada render: as cotas são consumidas na ordem das pedras na tela.
+  const destaque = yakuSelecionado ? destaqueDoYaku(yakuSelecionado, mao) : null
+  const destacar = (pedra: CodigoPedra) => (destaque ? consumirDestaque(destaque, pedra) : false)
   const alerta = chomboFuriten || maoInvalida
   const chomboOya = mao.ventoAssento === '1'
+  const multa = pagamentoChombo({ ...configuracaoPadrao, chomboMangan }, chomboOya)
   const pedraAgari = mao.agariMeld ? null : mao.pedras[mao.indiceAgari]
   const pedrasFechadas = mao.agariMeld
     ? mao.pedras
@@ -66,53 +83,85 @@ export default function ModalResultado({
         {mao.pedras.length > 0 && (
           <div className="resultado-grupo-mao" aria-label={t('calculator.closedHand')}>
             {pedrasFechadas.map((pedra, indice) => (
-              <span key={`${pedra}-${indice}`} className="chip-pedra resultado-pedra">
+              <span
+                key={`${pedra}-${indice}`}
+                className={`chip-pedra resultado-pedra${destacar(pedra) ? ' destaque-yaku' : ''}`}
+              >
                 <PedraSvg pedra={pedra} />
               </span>
             ))}
             {pedraAgari && (
-              <span className="chip-pedra resultado-pedra agari">
+              <span
+                className={`chip-pedra resultado-pedra agari${
+                  destaque?.batida || destacar(pedraAgari) ? ' destaque-yaku' : ''
+                }`}
+              >
                 <PedraSvg pedra={pedraAgari} />
               </span>
             )}
           </div>
         )}
-        {mao.melds.map((meld, indice) => (
-          <span
-            key={`${meld.tipo}-${indice}`}
-            className={`resultado-meld resultado-meld-${meld.tipo}`}
-            style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
-            aria-label={ESTILO_MELD[meld.tipo].rotulo}
-          >
-            <PedrasMeld
-              meld={meld}
-              indiceAgari={mao.agariMeld?.indiceMeld === indice ? mao.agariMeld.indicePedra : undefined}
-            />
-          </span>
-        ))}
+        {mao.melds.map((meld, indice) => {
+          const temBatida = mao.agariMeld?.indiceMeld === indice
+          // Sem curto-circuito: todas as pedras do grupo consomem a cota.
+          const destacadas = meld.pedras.map(destacar).filter(Boolean).length
+          const meldDestacado = destacadas > 0 || (destaque?.batida && temBatida)
+          return (
+            <span
+              key={`${meld.tipo}-${indice}`}
+              className={`resultado-meld resultado-meld-${meld.tipo}${meldDestacado ? ' destaque-yaku' : ''}`}
+              style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
+              aria-label={ESTILO_MELD[meld.tipo].rotulo}
+            >
+              <PedrasMeld
+                meld={meld}
+                indiceAgari={temBatida ? mao.agariMeld?.indicePedra : undefined}
+              />
+            </span>
+          )
+        })}
       </div>
 
-      {maoInvalida ? (
+      {maoInvalida || chomboFuriten ? (
+        // Mesmo esquema do resultado, invertido: quem errou paga a cada jogador.
         <div className="resultado-chombo">
-          <strong>{t('calculator.noYakuTitle')}</strong>
-          <div className="pontos-chombo">{chomboOya ? '-12.000' : '-8.000'}</div>
-          <span>{t('calculator.invalidNoYakuAnnounce')}</span>
-          <span>
-            {chomboOya ? t('calculator.noYakuPenaltyDealer') : t('calculator.noYakuPenaltyNonDealer')}
+          <strong>
+            {maoInvalida ? t('calculator.noYakuTitle') : t('calculator.furitenChomboTitle')}
+          </strong>
+          <TagsVentos mao={mao} />
+          <div className="pontos-chombo">-{formatar(multa.total)}</div>
+          <div className="pagamentos-resultado">
+            {chomboOya ? (
+              <span>
+                Todos recebem <strong>{formatar(multa.demais)}</strong>
+              </span>
+            ) : (
+              <>
+                <span>
+                  {t('winds.east')} recebe <strong>{formatar(multa.leste)}</strong>
+                </span>
+                <span>
+                  Demais recebem <strong>{formatar(multa.demais)}</strong>
+                </span>
+              </>
+            )}
+          </div>
+          <span className="motivo-chombo">
+            {maoInvalida
+              ? t('calculator.invalidNoYakuAnnounce')
+              : t('calculator.invalidFuritenAnnounce')}
           </span>
-        </div>
-      ) : chomboFuriten ? (
-        <div className="resultado-chombo">
-          <strong>{t('calculator.furitenChomboTitle')}</strong>
-          <div className="pontos-chombo">{chomboOya ? '-12.000' : '-8.000'}</div>
-          <span>
-            {chomboOya
-              ? t('calculator.furitenChomboTextDealer')
-              : t('calculator.furitenChomboTextNonDealer')}
+          <span className="regra-chombo">
+            Multa de chombo: {chomboMangan ? 'Mangan' : 'Yakuman'}
           </span>
         </div>
       ) : (
-        <ExibicaoCompleta resultado={resultado} mao={mao} />
+        <ExibicaoCompleta
+          resultado={resultado}
+          mao={mao}
+          yakuSelecionado={yakuSelecionado}
+          aoSelecionarYaku={setYakuSelecionado}
+        />
       )}
     </Modal>
   )

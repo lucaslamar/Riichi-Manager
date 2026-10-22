@@ -179,6 +179,7 @@ export default function ResultadoMaoCalculada({
           resultado={resultado}
           chomboFuriten={chomboFuriten}
           maoInvalida={resultadoMaoInvalida}
+          chomboMangan={estado.configuracao.chomboMangan}
           descricaoAcessivel={descreverResultado()}
           aoFechar={fecharModalResultado}
         />

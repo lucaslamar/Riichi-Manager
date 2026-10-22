@@ -170,3 +170,28 @@
 .modal-ajuda-secao--doras h4 {
   color: #be185d;
 }
+
+/* Modal com abas (ex.: Dora | Honba): as abas encostam no cabeçalho e
+   seguem a cor do tema. */
+.modal-ajuda-secao--abas .modal-corpo {
+  padding-top: 0;
+}
+
+.modal-ajuda-secao--abas .abas-modal__painel {
+  padding-top: 14px;
+}
+
+.modal-ajuda-secao--doras .abas-modal {
+  --abas-cor: #db2777;
+  --abas-cor-texto: #be185d;
+}
+
+/* Pedras de exemplo dentro de um bloco (sequências do indicador, 5 vermelhos). */
+.bloco-ajuda-secao .yaku-ciclos {
+  margin-top: 8px;
+}
+
+.modal-ajuda-secao .yaku-ciclo__titulo {
+  font-size: 0.85rem;
+  line-height: 1.3;
+}

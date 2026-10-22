@@ -1,0 +1,104 @@
+/*
+ * Pedras pequenas de exemplo (modal de Yakus e ajuda de Doras). Tamanho pela
+ * largura da modal (container query do corpo), não pela tela.
+ */
+
+.yaku-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+/* Cada conjunto (bloco da notação mpsz) fica junto; só quebra linha entre
+   conjuntos, ou dentro de um conjunto maior que a linha inteira. */
+.yaku-tiles__grupo {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.yaku-tiles:has(.yaku-tiles__grupo) {
+  column-gap: 6px;
+  row-gap: 4px;
+}
+
+/* Face branca com borda, como as pedras da mão no app. */
+.yaku-tile {
+  display: block;
+  box-sizing: border-box;
+  width: var(--yaku-pedra, 22px);
+  height: calc(var(--yaku-pedra, 22px) * var(--pedra-mao-proporcao, 1.35));
+  padding: 1px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgba(16, 42, 67, 0.12);
+}
+
+/* O Branco já tem moldura própria; dentro da face ela sobraria. */
+.yaku-tile .tile-img-haku {
+  border: 0;
+  box-shadow: none;
+}
+
+/* Número em cima da pedra (aba Pedras). */
+.yaku-tile-numerada {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.yaku-tile-numerada__numero {
+  color: #607080;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ─── Sequências do indicador de dora ────────────────────────────────────── */
+.yaku-ciclo__linha + .yaku-ciclo__linha {
+  margin-top: 8px;
+}
+
+.yaku-ciclo__titulo {
+  margin: 0;
+  color: #334e68;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.yaku-ciclo__detalhe {
+  color: #607080;
+  font-weight: 500;
+}
+
+.yaku-ciclo {
+  gap: 4px;
+}
+
+.yaku-ciclo__seta {
+  color: #94a3b8;
+  font-size: 0.7rem;
+}
+
+/* Modal larga (tablet/desktop): pedras maiores. */
+@container (min-width: 520px) {
+  .yaku-tile {
+    --yaku-pedra: 30px;
+  }
+}
+
+/* Com rótulo em cima (número ou nome japonês), mais respiro entre as pedras
+   para os nomes (Haku, Hatsu, Shaa…) não encostarem uns nos outros. */
+.yaku-tiles__grupo:has(.yaku-tile-numerada) {
+  column-gap: 6px;
+}
+
+.yaku-tile-numerada__numero {
+  white-space: nowrap;
+}

@@ -1,5 +1,10 @@
 export type { ConfiguracaoCalculo } from './configuracao'
-export { configuracaoPadrao, doraFlamejanteAtiva, valorPorHonba } from './configuracao'
+export {
+  configuracaoPadrao,
+  doraFlamejanteAtiva,
+  pagamentoChombo,
+  valorPorHonba,
+} from './configuracao'
 export type { DetalheFu, PontosCalculados, ResultadoMao } from './resultado'
 export {
   aplicarHonba,

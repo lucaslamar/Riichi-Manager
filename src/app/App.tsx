@@ -45,7 +45,9 @@ export default function App() {
   // própria página (a finalização tem um caso a mais).
   const indiceTela = ORDEM_DESLIZE.indexOf(tela)
   const telaAnterior = indiceTela > 0 ? ORDEM_DESLIZE[indiceTela - 1] : undefined
-  const proximaTela = indiceTela >= 0 ? ORDEM_DESLIZE[indiceTela + 1] : undefined
+  // Depois de Regras a fila recomeça na Calculadora de Mão (a Han e Fu fica
+  // fora do círculo: só se chega nela deslizando para a direita na Mão).
+  const proximaTela = indiceTela >= 0 ? (ORDEM_DESLIZE[indiceTela + 1] ?? 'calculadora') : undefined
   // A Han e Fu é ponta da fila e tem a seta de voltar: deslizar no sentido da
   // seta (dedo para a direita) também volta para a Calculadora de Mão.
   const voltarDaHanFu = tela === 'calculadoraRapida' ? (voltar ?? (() => navegar('calculadora'))) : undefined

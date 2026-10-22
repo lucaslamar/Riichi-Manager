@@ -22,6 +22,8 @@ export type ResultadoMao = PontosCalculados & {
   fu: number
   /** Nome do patamar traduzido (Mangan, Haneman, etc.) */
   nome: string | null
+  /** Pontos que vieram só do honba (já somados em `pontos.total`). */
+  pontosHonba?: number
 }
 
 export type DetalheFu = {

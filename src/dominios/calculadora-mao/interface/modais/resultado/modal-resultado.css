@@ -228,14 +228,14 @@
 /* ─── Aviso de chombo / sem yaku (tom de alerta) ──────────────────────────── */
 .modal-resultado .resultado-chombo {
   display: grid;
-  justify-items: start;
+  justify-items: center;
   gap: 8px;
   padding: 12px;
   border: 1px solid #fecaca;
   border-radius: 8px;
   background: #fee2e2;
   color: #7f1d1d;
-  text-align: left;
+  text-align: center;
 }
 
 .modal-resultado .resultado-chombo strong {
@@ -307,4 +307,158 @@
     height: auto;
     aspect-ratio: 3 / 4;
   }
+}
+
+/* ─── Ventos, linhas de pontos e pagamentos ──────────────────────────────── */
+.modal-resultado .tags-ventos-resultado {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* Mesmo azul das tags de Dora manual / Ura dora. */
+.modal-resultado .tags-ventos-resultado span {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--resultado-cartao);
+  color: #1d4ed8;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.modal-resultado .tags-ventos-resultado strong {
+  font-weight: 900;
+}
+
+/* Han/Fu e Honba, cada um com o seu valor; o total grande vem logo abaixo. */
+.modal-resultado .linhas-pontos-resultado {
+  display: grid;
+  gap: 2px;
+  width: min(100%, 280px);
+  margin: 0 auto 6px;
+}
+
+.modal-resultado .linha-pontos-resultado {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--resultado-texto-suave);
+  font-size: clamp(0.9rem, 0.84rem + 0.3vw, 1.05rem);
+}
+
+.modal-resultado .linha-pontos-resultado strong {
+  color: #334e68;
+}
+
+.modal-resultado .linha-pontos-resultado + .linha-pontos-resultado {
+  padding-bottom: 4px;
+  border-bottom: 1px dashed #cbd5e1;
+}
+
+.modal-resultado .pagamentos-resultado {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+  margin-top: 6px;
+  color: var(--resultado-texto-suave);
+  font-size: clamp(0.85rem, 0.8rem + 0.3vw, 1rem);
+}
+
+.modal-resultado .pagamentos-resultado strong {
+  color: #102a43;
+}
+
+/* ─── Yaku clicável: explicação e pedras em dourado ──────────────────────── */
+.modal-resultado button.chip-yaku {
+  width: 100%;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.modal-resultado button.chip-yaku:hover,
+.modal-resultado button.chip-yaku:focus-visible {
+  border-color: #bfdbfe;
+}
+
+.modal-resultado .chip-yaku.aberto {
+  border-color: #e6b800;
+  background: #fffbea;
+}
+
+.modal-resultado .chip-yaku__explicacao {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 2px;
+  color: #486581;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.modal-resultado .chip-yaku__nome-pt {
+  color: #334e68;
+  font-weight: 800;
+}
+
+.modal-resultado .resultado-pedra.destaque-yaku,
+.modal-resultado .resultado-meld.destaque-yaku .meld-tile {
+  border-radius: 5px;
+  background: #ffd700;
+  box-shadow: 0 0 0 2px #e6b800;
+}
+
+/* Penalidade: tags e pagamentos no mesmo esquema do resultado, em vermelho. */
+.modal-resultado .resultado-chombo .tags-ventos-resultado {
+  margin-bottom: 0;
+}
+
+.modal-resultado .resultado-chombo .pagamentos-resultado {
+  margin-top: 0;
+  color: #7f1d1d;
+}
+
+.modal-resultado .resultado-chombo .pagamentos-resultado strong {
+  color: #991b1b;
+  font-size: inherit;
+}
+
+.modal-resultado .resultado-chombo .regra-chombo {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #fecaca;
+  color: #991b1b;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.modal-resultado .resultado-chombo .tags-ventos-resultado strong {
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Exclamação no círculo ao lado do nome: indica que o yaku é clicável. */
+.modal-resultado .chip-yaku__rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-resultado .chip-yaku__icone {
+  color: #93c5fd;
+  font-size: 0.85em;
+}
+
+.modal-resultado .chip-yaku:hover .chip-yaku__icone,
+.modal-resultado .chip-yaku.aberto .chip-yaku__icone {
+  color: var(--primario);
+}
+
+/* Na penalidade as tags de vento seguem o vermelho do chombo. */
+.modal-resultado .resultado-chombo .tags-ventos-resultado span {
+  background: #fecaca;
+  color: #991b1b;
 }

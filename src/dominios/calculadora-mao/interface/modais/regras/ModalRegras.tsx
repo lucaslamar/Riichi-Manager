@@ -68,6 +68,12 @@ const CHAVES_REGRAS: Record<
     ligado: 'rulesModal.basengo.on',
     desligado: 'rulesModal.basengo.off',
   },
+  chomboMangan: {
+    titulo: 'rulesModal.chomboMangan.title',
+    ajuda: 'rulesModal.chomboMangan.help',
+    ligado: 'rulesModal.chomboMangan.on',
+    desligado: 'rulesModal.chomboMangan.off',
+  },
 }
 
 /** Regras que só valem com outra ligada (Dora flamejante precisa do 5 vermelho). */

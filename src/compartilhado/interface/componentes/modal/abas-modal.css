@@ -1,0 +1,47 @@
+/*
+ * Abas dentro do corpo de uma Modal. A fileira fica presa no topo do corpo
+ * rolável (sticky) e ocupa a largura toda, por cima do respiro lateral.
+ * Cor de destaque: --abas-cor (padrão: azul primário).
+ */
+
+.abas-modal {
+  --abas-cor: var(--primario);
+  --abas-cor-texto: var(--primario-escuro);
+}
+
+.abas-modal__lista {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  gap: 4px;
+  margin-inline: calc(var(--modal-espaco) * -1);
+  padding: 8px var(--modal-espaco);
+  border-bottom: 1px solid var(--modal-borda);
+  background: var(--modal-fundo);
+}
+
+.abas-modal__aba {
+  min-width: 0;
+  min-height: 34px;
+  padding: 0 2px;
+  border: 1px solid #d7dde6;
+  border-radius: 8px;
+  background: #eef2f6;
+  color: #607080;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.abas-modal__aba--ativa {
+  border-color: var(--abas-cor);
+  background: var(--branco);
+  color: var(--abas-cor-texto);
+}
+
+.abas-modal__aba:focus-visible {
+  outline: 2px solid var(--abas-cor);
+  outline-offset: 2px;
+}
