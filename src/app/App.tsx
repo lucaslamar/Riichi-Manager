@@ -144,6 +144,12 @@ function PaginaRegrasConfiguracoes() {
           aoMudar={setToqueAmpliado}
         />
       </div>
+      <section className="opcao-configuracao-usuario" aria-labelledby="titulo-como-funciona-sorteio">
+        <div>
+          <strong id="titulo-como-funciona-sorteio">{t('windDraw.howItWorksTitle')}</strong>
+          <span>{t('windDraw.howItWorksText')}</span>
+        </div>
+      </section>
     </section>
   )
 }

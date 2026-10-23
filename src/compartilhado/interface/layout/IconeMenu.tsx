@@ -5,7 +5,7 @@
  */
 export function IconeMenu({ icone }: { icone: string }) {
   if (icone === 'um-pin') return <i className="icone-svg-menu" aria-hidden="true"><SvgUmPin /></i>
-  if (icone === 'catavento') return <i className="icone-svg-menu" aria-hidden="true"><SvgCatavento /></i>
+  if (icone === 'chapeu-helice') return <i className="icone-svg-menu" aria-hidden="true"><SvgChapeuHelice /></i>
   return <i className={`fas ${icone}`} aria-hidden="true" />
 }
 
@@ -27,20 +27,20 @@ function SvgUmPin() {
   )
 }
 
-/** Catavento: quatro pás alternando opacidade (efeito de dobra) e haste. */
-function SvgCatavento() {
+/**
+ * Boné de hélice (o do gato do Sorteador): hélice de duas pás, haste, copa em
+ * gomos alternando opacidade e aba.
+ */
+function SvgChapeuHelice() {
   return (
     <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
-      <line x1="12" y1="9.5" x2="12" y2="23" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      {[0, 90, 180, 270].map((rotacao, indice) => (
-        <path
-          key={rotacao}
-          d="M12 9.5 L12 2 L19.5 2 Z"
-          opacity={indice % 2 === 0 ? 1 : 0.62}
-          transform={`rotate(${rotacao} 12 9.5)`}
-        />
-      ))}
-      <circle cx="12" cy="9.5" r="1.3" fill="#fff" stroke="currentColor" strokeWidth="0.9" />
+      <ellipse cx="6.8" cy="4.4" rx="5" ry="2.1" />
+      <ellipse cx="17.2" cy="4.4" rx="5" ry="2.1" opacity="0.62" />
+      <rect x="11.1" y="5" width="1.8" height="6" rx="0.9" />
+      <circle cx="12" cy="4.4" r="1.7" fill="#fff" stroke="currentColor" strokeWidth="1" />
+      <path d="M3 17.5 C3 8.8 12 10.3 12 10.3 V17.5 Z" />
+      <path d="M12 10.3 C12 10.3 21 8.8 21 17.5 H12 Z" opacity="0.62" />
+      <path d="M1.5 17 H22.5 V18.8 Q22.5 21 20 21 H4 Q1.5 21 1.5 18.8 Z" />
     </svg>
   )
 }

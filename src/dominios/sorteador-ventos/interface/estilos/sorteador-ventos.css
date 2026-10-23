@@ -3,161 +3,350 @@ body:has(.sorteador-ventos-page) {
 }
 
 .sorteador-ventos-page {
+  /* Referência das trilhas de bolinhas (TrilhasBalao). */
+  position: relative;
   display: flex;
   height: calc(100dvh - 46px);
   max-height: calc(100dvh - 46px);
   width: min(100%, 600px);
   flex-direction: column;
-  justify-content: center;
   gap: clamp(8px, 1.5dvh, 12px);
   margin-inline: auto;
   border-radius: var(--raio);
-  padding: clamp(12px, 2dvh, 16px) 16px calc(12px + env(safe-area-inset-bottom));
+  padding: clamp(12px, 2dvh, 16px) 16px
+    calc(12px + var(--sorteio-barra-inferior, 0px) + env(safe-area-inset-bottom));
   background: var(--branco);
   color: var(--escuro);
   box-shadow: var(--sombra);
   overflow: hidden;
   box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* neutraliza margin-bottom e borda global do cabecalho-secao */
-.sorteador-ventos__cabecalho {
+.sorteador-ventos-page--tocavel {
+  cursor: pointer;
+}
+
+/*
+ * A barra de abas inferior é fixa e fica por cima do fim da página. Mesmas
+ * faixas de cabecalho.css: 56px em celulares em pé e tablets, 76px no iPad Pro
+ * em pé e nenhuma nos celulares deitados (que usam o menu lateral).
+ */
+@media (min-width: 768px) and (max-width: 1023px),
+  (min-width: 375px) and (max-width: 767px) and (orientation: portrait),
+  (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
+  .sorteador-ventos-page {
+    --sorteio-barra-inferior: 56px;
+  }
+}
+
+@media (min-width: 1024px) and (orientation: portrait) {
+  .sorteador-ventos-page {
+    --sorteio-barra-inferior: 76px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .sorteador-ventos-page {
+    --sorteio-barra-inferior: 0px;
+  }
+}
+
+/* ── Resultados J1–J4: balõezinhos de quadrinho ─────────── */
+
+/*
+ * Mesmo traço do balão de fala (contorno preto, sombra deslocada, fonte de
+ * gibi). Bolinhas de pensamento (TrilhasBalao) ligam cada um à boca do gato.
+ */
+.sorteio-historico {
+  --balao-traco: #1a1a1a;
+  display: grid;
+  min-height: 74px;
   flex: 0 0 auto;
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 10px;
+  margin: 0;
+  padding: 0 4px 10px 0;
+  list-style: none;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', inherit;
 }
 
-/* ── Grade de cards ──────────────────────────────────────── */
-
-.sorteador-ventos__grade {
-  display: grid;
-  flex: 0 1 auto;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
-
-/* ── Card individual ─────────────────────────────────────── */
-
-.card-vento {
+.sorteio-historico__quadrado {
   position: relative;
-  display: grid;
-  justify-items: center;
-  align-content: center;
-  gap: 3px;
-  min-height: clamp(88px, 14dvh, 104px);
-  border: 2px solid #dfe7ef;
-  border-radius: 10px;
-  padding: 12px 10px;
-  background: #f8fbff;
-  text-align: center;
-  transition:
-    border-color 0.15s,
-    background 0.15s,
-    box-shadow 0.15s,
-    transform 0.12s;
-  overflow: hidden;
+  display: flex;
+  height: 64px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 2.5px solid var(--balao-traco);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 3px 3px 0 var(--balao-traco);
+  box-sizing: border-box;
 }
 
-.card-vento__kanji {
-  font-size: 2.6rem;
+.sorteio-historico__jogador {
+  font-size: 0.7rem;
   font-weight: 900;
   line-height: 1;
-  transition: color 0.15s;
+  color: var(--escuro);
 }
 
-.card-vento__nome {
-  font-size: 0.88rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.sorteio-historico__pedra {
+  display: block;
+  width: 27px;
+  height: 36px;
 }
 
-.card-vento__status {
+.sorteio-historico__pedra .tile-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Fim do sorteio: o balão cresce um pouco para caber o nome do vento. */
+/*
+ * Fim do sorteio: os 4 se juntam num balão gigante. A lista vira o balão e
+ * cada resultado perde o próprio contorno, ficando só separado por um traço.
+ */
+.sorteio-historico--completo {
+  min-height: 92px;
+  gap: 0;
+  margin-right: 4px;
+  border: 3px solid var(--balao-traco);
+  border-radius: 26px;
+  padding: 6px 8px;
+  background: #ffffff;
+  box-shadow: 4px 4px 0 var(--balao-traco);
+  transform-origin: 80% 100%;
+  animation: sorteio-balao-juntar 420ms cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+
+.sorteio-historico--completo .sorteio-historico__quadrado {
+  height: 80px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.sorteio-historico--completo .sorteio-historico__quadrado + .sorteio-historico__quadrado {
+  border-left: 2px dashed #cfd8e3;
+}
+
+.sorteio-historico__nome {
   font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--primario);
+}
+
+/* Trilhas de bolinhas da boca do gato até os balõezinhos. */
+.sorteio-trilhas {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sorteio-trilhas__bolinha {
+  fill: #ffffff;
+  stroke: #1a1a1a;
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sorteio-bolinha 260ms cubic-bezier(0.2, 0.9, 0.3, 1.4) backwards;
+}
+
+/* ── Palco: gato de boné de hélice ───────────────────────── */
+
+.sorteio-palco {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1dvh, 10px);
+  border-radius: 12px;
+  outline: none;
+}
+
+.sorteio-palco:focus-visible {
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.35);
+}
+
+/*
+ * Desenho em 320×400. A largura também respeita a altura livre da tela
+ * (descontando topo, quadrados, nome e barra inferior) para nunca cortar.
+ */
+.gato-helice {
+  --gato-reserva: 300px;
+  position: relative;
+  width: min(
+    100%,
+    440px,
+    calc((100dvh - var(--gato-reserva) - var(--sorteio-barra-inferior, 0px)) * 0.8)
+  );
+  aspect-ratio: 320 / 400;
+  flex: 0 0 auto;
+  container-type: inline-size;
+}
+
+.gato-helice__desenho {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Centro da hélice em (160, 135) do desenho; 1 unidade = 0,3125cqw. */
+.gato-helice__rotor {
+  --giro: 0deg;
+  position: absolute;
+  top: 33.75%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.gato-helice__pa {
+  position: absolute;
+  bottom: 0;
+  left: -4cqw;
+  width: 8cqw;
+  height: 25cqw;
+  border-radius: 50% 50% 35% 35% / 70% 70% 30% 30%;
+  background: linear-gradient(90deg, #1f6fd1, #4aa3f5 55%, #1f6fd1);
+  transform: rotate(calc(var(--pa) + var(--giro)));
+  transform-origin: 50% 100%;
+}
+
+/* Pedra na ponta da pá, sempre de pé (desfaz o giro depois de ir para a ponta). */
+.gato-helice__pedra {
+  position: absolute;
+  top: -10cqw;
+  left: -7.5cqw;
+  width: 15cqw;
+  height: 20cqw;
+  border: 0.6cqw solid #dde1e7;
+  border-radius: 1.8cqw;
+  padding: 1.2cqw;
+  background: #ffffff;
+  box-shadow: 0 0.9cqw 0 #cfd8e3;
+  box-sizing: border-box;
+  transform: rotate(calc(var(--pa) + var(--giro))) translateY(-27.5cqw)
+    rotate(calc(-1 * (var(--pa) + var(--giro))));
+  transition:
+    scale 250ms ease-out,
+    opacity 200ms;
+}
+
+.gato-helice__pedra .tile-img {
+  width: 100%;
+  height: 100%;
+}
+
+.gato-helice__pedra--usada {
+  opacity: 0.3;
+}
+
+.gato-helice__pedra--escolhida {
+  z-index: 2;
+  border-color: var(--primario);
+  outline: 0.7cqw solid var(--primario);
+  outline-offset: 0.6cqw;
+  scale: 1.3;
+}
+
+/* Boca do gato (160, 370 no desenho): origem do voo dos balõezinhos. */
+.gato-helice__boca {
+  position: absolute;
+  top: 92.5%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.gato-helice__cubo {
+  position: absolute;
+  z-index: 3;
+  top: -3.5cqw;
+  left: -3.5cqw;
+  width: 7cqw;
+  height: 7cqw;
+  border-radius: 50%;
+  background: #fbc02d;
+  box-shadow: inset 0 -0.6cqw 0 #e0a800;
+}
+
+/* ── Balão de fala do gato (quadrinho) ───────────────────── */
+
+.sorteio-balao {
+  --balao-traco: #1a1a1a;
+  position: relative;
+  flex: 0 0 auto;
+  max-width: min(100%, 340px);
+  margin-top: 14px;
+  border: 3px solid var(--balao-traco);
+  border-radius: 22px;
+  padding: 10px 20px;
+  background: #ffffff;
+  box-shadow: 4px 4px 0 var(--balao-traco);
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', inherit;
+  text-align: center;
+  /* Nasce da boca do gato: cresce a partir da ponta do rabinho. */
+  transform-origin: 50% -16px;
+  animation: sorteio-balao-boca 380ms cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+
+/* Rabinho apontando para a boca do gato: contorno preto + miolo branco. */
+.sorteio-balao::before,
+.sorteio-balao::after {
+  position: absolute;
+  left: 50%;
+  border-style: solid;
+  border-color: transparent;
+  content: '';
+  translate: -50% 0;
+}
+
+.sorteio-balao::before {
+  bottom: 100%;
+  border-width: 0 12px 16px;
+  border-bottom-color: var(--balao-traco);
+}
+
+.sorteio-balao::after {
+  bottom: calc(100% - 4px);
+  border-width: 0 8px 12px;
+  border-bottom-color: #ffffff;
+}
+
+.sorteio-balao__fala {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--escuro);
+}
+
+.sorteio-balao--destaque .sorteio-balao__fala {
+  font-size: 1.35rem;
+  color: var(--primario);
+}
+
+.sorteio-balao__dica {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
   font-weight: 700;
   color: #607080;
-}
-
-.card-vento__ordem {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: #607080;
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 900;
-}
-
-/* ── Estados por cor de vento ────────────────────────────── */
-
-.card-vento--leste .card-vento__kanji { color: var(--leste); }
-.card-vento--sul .card-vento__kanji   { color: var(--sul); }
-.card-vento--oeste .card-vento__kanji { color: var(--oeste); }
-.card-vento--norte .card-vento__kanji { color: var(--norte); }
-
-/* ── Estado: disponível (default) ────────────────────────── */
-
-.card-vento--disponivel {
-  cursor: default;
-}
-
-/* ── Estado: animando ────────────────────────────────────── */
-
-.card-vento--animando {
-  border-color: var(--primario);
-  background: var(--info-fundo);
-  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.22);
-  transform: scale(1.04);
-}
-
-/* ── Estado: sorteado ────────────────────────────────────── */
-
-.card-vento--sorteado {
-  border-color: #c9d4df;
-  background: #f1f5f9;
-  opacity: 0.72;
-}
-
-.card-vento--sorteado .card-vento__kanji {
-  color: #8a9bb0;
-}
-
-.card-vento--sorteado .card-vento__nome {
-  color: #7b8794;
-}
-
-/* ── Botões de ação ──────────────────────────────────────── */
-
-.sorteador-ventos__acoes {
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.sorteador-ventos__btn-sortear,
-.sorteador-ventos__btn-reiniciar {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.sorteador-ventos__btn-sortear {
-  min-height: 52px;
-  font-size: 1rem;
-}
-
-.sorteador-ventos__btn-reiniciar {
-  min-height: 46px;
+  animation: sorteio-piscar 1.6s ease-in-out infinite;
 }
 
 /* ── Focus ───────────────────────────────────────────────── */
@@ -167,25 +356,85 @@ body:has(.sorteador-ventos-page) {
   outline-offset: 2px;
 }
 
-/* ── Responsivo: desktop ─────────────────────────────────── */
+/* ── Animações ───────────────────────────────────────────── */
+
+@keyframes sorteio-balao-juntar {
+  from {
+    transform: scale(0.85);
+  }
+}
+
+@keyframes sorteio-bolinha {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes sorteio-balao-boca {
+  from {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  40% {
+    opacity: 1;
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes sorteio-piscar {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes sorteio-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Movimento reduzido: sem crescer animado, só um fade curto. */
+@media (prefers-reduced-motion: reduce) {
+  .gato-helice__pedra {
+    transition: none;
+  }
+
+  .sorteio-balao__dica {
+    animation: none;
+  }
+
+  .sorteio-balao {
+    animation: sorteio-fade 150ms ease-out;
+  }
+
+  .sorteio-trilhas__bolinha,
+  .sorteio-historico--completo {
+    animation: none;
+  }
+
+  .gato-helice__pedra--escolhida,
+  .sorteio-historico__quadrado {
+    animation: sorteio-fade 150ms ease-out;
+  }
+}
+
+/* ── Responsivo ──────────────────────────────────────────── */
 
 @media (min-width: 560px) {
   .sorteador-ventos-page {
     gap: clamp(10px, 1.8dvh, 16px);
     padding: clamp(18px, 3dvh, 24px);
+    padding-bottom: calc(clamp(18px, 3dvh, 24px) + var(--sorteio-barra-inferior, 0px));
   }
 
-  .sorteador-ventos__grade {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-  }
-
-  .card-vento {
-    min-height: 130px;
-  }
-
-  .card-vento__kanji {
-    font-size: 3rem;
+  .sorteio-historico {
+    gap: 14px;
   }
 }
 
@@ -193,6 +442,10 @@ body:has(.sorteador-ventos-page) {
   .sorteador-ventos-page {
     height: calc(100dvh - 74px);
     max-height: calc(100dvh - 74px);
+  }
+
+  .gato-helice {
+    --gato-reserva: 340px;
   }
 }
 
@@ -204,108 +457,90 @@ body:has(.sorteador-ventos-page) {
   }
 }
 
-/* ── Responsivo: mobile pequeno ──────────────────────────── */
-
 @media (max-width: 380px) {
   .sorteador-ventos-page {
     gap: 8px;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    padding: 10px 12px calc(10px + var(--sorteio-barra-inferior, 0px) + env(safe-area-inset-bottom));
   }
 
-  .card-vento {
-    min-height: 88px;
-    padding: 10px 8px;
-  }
-
-  .card-vento__kanji {
-    font-size: 2rem;
-  }
-
-  .card-vento__nome {
-    font-size: 0.76rem;
-  }
-}
-
-@media (max-height: 640px) {
-  .sorteador-ventos-page {
-    justify-content: flex-start;
-    overflow-x: hidden;
-    overflow-y: auto;
+  .sorteio-historico {
+    gap: 6px;
   }
 }
 
 @media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
   .sorteador-ventos-page {
-    display: grid;
     width: min(100%, 720px);
     height: calc(100dvh - 38px);
     max-height: calc(100dvh - 38px);
-    grid-template-rows: auto minmax(0, 1fr) auto;
-    align-content: center;
-    justify-content: stretch;
-    gap: 8px;
-    margin-inline: auto;
-    overflow: hidden;
+    gap: 6px;
     border: 0;
     border-radius: 0;
-    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+    padding: 8px 12px calc(8px + var(--sorteio-barra-inferior, 0px) + env(safe-area-inset-bottom));
     box-shadow: none;
   }
 
-  .sorteador-ventos__cabecalho {
+  /* Deitado, os balõezinhos ficam do tamanho do conteúdo e centralizados. */
+  .sorteio-historico,
+  .sorteio-historico--completo {
+    min-height: 54px;
+    grid-template-columns: repeat(4, auto);
     justify-content: center;
-    text-align: center;
+    gap: 16px;
   }
 
-  .sorteador-ventos__cabecalho h2 {
-    font-size: 0.98rem;
-    line-height: 1.1;
+  .sorteio-historico__quadrado,
+  .sorteio-historico--completo .sorteio-historico__quadrado {
+    height: 44px;
+    flex-direction: row;
+    gap: 6px;
+    padding: 0 12px;
   }
 
-  .sorteador-ventos__cabecalho .subtitulo-secao {
-    display: none;
+  /* O balão gigante fica do tamanho do conteúdo, centralizado. */
+  .sorteio-historico--completo {
+    align-self: center;
+    gap: 0;
+    padding: 2px 6px;
   }
 
-  .sorteador-ventos__grade {
-    display: grid;
-    min-height: 0;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    align-items: stretch;
-    gap: 8px;
+  .sorteio-historico__pedra {
+    width: 22px;
+    height: 29px;
   }
 
-  .card-vento {
-    min-height: 0;
-    gap: 2px;
-    padding: 8px 7px;
-    border-width: 1.5px;
-    border-radius: 8px;
+  /* Deitado, o balão fica ao lado do gato, com o rabinho para a esquerda. */
+  .sorteio-palco {
+    flex-direction: row;
+    gap: 4px;
   }
 
-  .card-vento__kanji {
-    font-size: clamp(2rem, 8dvh, 2.7rem);
+  .gato-helice {
+    --gato-reserva: 110px;
   }
 
-  .card-vento__nome {
-    font-size: 0.72rem;
+  .sorteio-balao {
+    margin: 0 0 0 16px;
+    transform-origin: -16px 50%;
   }
 
-  .card-vento__status {
-    font-size: 0.62rem;
+  .sorteio-balao::before,
+  .sorteio-balao::after {
+    top: 50%;
+    bottom: auto;
+    left: auto;
+    translate: 0 -50%;
   }
 
-  .sorteador-ventos__acoes {
-    display: grid;
-    grid-template-columns: minmax(180px, 1fr) minmax(140px, 0.7fr);
-    gap: 8px;
+  .sorteio-balao::before {
+    right: 100%;
+    border-width: 12px 16px 12px 0;
+    border-color: transparent var(--balao-traco) transparent transparent;
   }
 
-  .sorteador-ventos__btn-sortear,
-  .sorteador-ventos__btn-reiniciar {
-    min-height: 38px;
-  }
-
-  .sorteador-ventos__btn-sortear {
-    font-size: 0.9rem;
+  .sorteio-balao::after {
+    right: calc(100% - 4px);
+    border-width: 8px 12px 8px 0;
+    border-color: transparent #ffffff transparent transparent;
   }
 }

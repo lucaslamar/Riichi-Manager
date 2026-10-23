@@ -1,19 +1,11 @@
-export type CodigoVento = 'leste' | 'sul' | 'oeste' | 'norte'
+import type { VentoMao } from '../../calculadora-mao/logica/mao'
 
-export interface VentoMesa {
-  codigo: CodigoVento
-  kanji: string
-  chaveNome: string
-}
-
-export interface VentoSorteado {
-  vento: VentoMesa
-  ordem: number
-}
+export type FaseSorteio = 'ciclando' | 'desacelerando' | 'revelado' | 'concluido'
 
 export interface EstadoSorteadorVentos {
-  ventosDisponiveis: VentoMesa[]
-  ventosSorteados: VentoSorteado[]
-  ventoAnimado: CodigoVento | null
-  sorteando: boolean
+  /** Embaralhada uma vez ao iniciar/reiniciar; o jogador N recebe `ordem[N - 1]`. */
+  ordem: VentoMao[]
+  /** Quantos ventos já foram revelados (0..4). */
+  reveladas: number
+  fase: FaseSorteio
 }

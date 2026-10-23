@@ -1,23 +1,10 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { VentoMao } from '../../../logica/mao'
-import { PedraSvg } from './PedraSvg'
-
-// Como nos jogos, o Leste (vento do dealer) aparece em vermelho.
-const ARQUIVO_VENTO: Partial<Record<VentoMao, string>> = { '1': 'Ton-Vermelho' }
-
-function chaveNomeVento(valor: VentoMao) {
-  return valor === '1'
-    ? 'winds.east'
-    : valor === '2'
-      ? 'winds.south'
-      : valor === '3'
-        ? 'winds.west'
-        : 'winds.north'
-}
+import { PedraVento, chaveNomeVento } from './PedraVento'
 
 /**
  * Grade de escolha de um vento (pedra + nome), no padrão visual da finalização
- * da mão. Pensada para ser reaproveitada em outras telas, como o Sorteador.
+ * da mão. A pedra em si vem de `PedraVento`, compartilhada com o Sorteador.
  */
 export function GradeVentos({
   id,
@@ -60,8 +47,7 @@ export function GradeVentos({
               title={nomeVento}
               onClick={() => aoEscolher(vento.valor)}
             >
-              <PedraSvg pedra={`${vento.valor}z`} arquivo={ARQUIVO_VENTO[vento.valor]} />
-              <small className="label-vento">{nomeVento}</small>
+              <PedraVento vento={vento.valor} />
             </button>
           )
         })}

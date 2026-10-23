@@ -1,104 +1,202 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { VENTOS, sortearVento } from '../../logica/sortearVento'
-import type { CodigoVento, VentoMesa, VentoSorteado } from '../../logica/tipos'
+import type { VentoMao } from '../../../calculadora-mao/logica/mao'
+import { VENTOS_MESA, embaralharVentos } from '../../logica/sortearVento'
+import type { EstadoSorteadorVentos } from '../../logica/tipos'
 
-const CICLOS_ANIMACAO = 11
-const INTERVALO_ANIMACAO_MS = 80
-const DELAY_AUTO_REVELAR_MS = 500
+/** Giro da hélice enquanto espera o toque, em graus por segundo. */
+const VELOCIDADE_GIRO = 720
+/** Retomada do giro depois de uma revelação (chega no giro cheio em 0,4 s). */
+const ACELERACAO_GIRO = 1800
+/** O freio dá ao menos 1,5 volta antes de parar no vento sorteado. */
+const GIRO_MINIMO_FREIO = 540
+const DELAY_ULTIMO_VENTO_MS = 900
+const TOTAL_VENTOS = VENTOS_MESA.length
 
+interface Freio {
+  inicio: number
+  de: number
+  delta: number
+  duracao: number
+}
+
+function novoSorteio(): EstadoSorteadorVentos {
+  return { ordem: embaralharVentos(), reveladas: 0, fase: 'ciclando' }
+}
+
+function modulo(valor: number, divisor: number) {
+  return ((valor % divisor) + divisor) % divisor
+}
+
+/** Cada vento fica numa pá: Leste em cima e os outros a cada 90° no sentido horário. */
+export function anguloPa(vento: VentoMao) {
+  return VENTOS_MESA.indexOf(vento) * 90
+}
+
+/** Giro da hélice que deixa a pá deste vento apontando para cima. */
+function giroParaCima(vento: VentoMao) {
+  return modulo(-anguloPa(vento), 360)
+}
+
+function movimentoReduzido(): boolean {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+}
+
+function vibrar() {
+  // Não existe no iOS: lá simplesmente não vibra.
+  navigator.vibrate?.(40)
+}
+
+/**
+ * Sorteio sequencial: a ordem dos 4 ventos é embaralhada uma única vez ao
+ * iniciar/reiniciar e cada toque só revela o próximo vento dela. A hélice é
+ * apenas visual: o freio é calculado para parar sempre em `ordem[reveladas]`.
+ *
+ * O ângulo vai direto para a variável CSS `--giro` do rotor a cada quadro, sem
+ * passar pelo estado do React (nada de 60 renders por segundo).
+ */
 export function useSorteadorVentos() {
-  const [ventosDisponiveis, setVentosDisponiveis] = useState<VentoMesa[]>([...VENTOS])
-  const [ventosSorteados, setVentosSorteados] = useState<VentoSorteado[]>([])
-  const [ventoAnimado, setVentoAnimado] = useState<CodigoVento | null>(null)
-  const [sorteando, setSorteando] = useState(false)
+  const [estado, setEstado] = useState(novoSorteio)
+  const [reduzirMovimento] = useState(movimentoReduzido)
 
-  const intervaloRef = useRef<number | null>(null)
-  const autoRevelarRef = useRef<number | null>(null)
-  const ventosDisponiveisRef = useRef(ventosDisponiveis)
-  const ventosSorteadosRef = useRef(ventosSorteados)
-  const sorteandoRef = useRef(sorteando)
+  // Fonte da verdade para os timers, sem esperar o próximo render.
+  const estadoRef = useRef(estado)
+  const timeoutRef = useRef<number | null>(null)
+  const rotorRef = useRef<HTMLDivElement>(null)
+  // Com movimento reduzido a hélice começa entre duas pás, sem "escolher" ninguém.
+  const giroRef = useRef({ angulo: reduzirMovimento ? 45 : 0, velocidade: 0 })
+  const freioRef = useRef<Freio | null>(null)
 
-  ventosDisponiveisRef.current = ventosDisponiveis
-  ventosSorteadosRef.current = ventosSorteados
-  sorteandoRef.current = sorteando
+  const atualizar = useCallback((parcial: Partial<EstadoSorteadorVentos>) => {
+    estadoRef.current = { ...estadoRef.current, ...parcial }
+    setEstado(estadoRef.current)
+  }, [])
 
-  const limparTimers = useCallback(() => {
-    if (intervaloRef.current !== null) {
-      window.clearInterval(intervaloRef.current)
-      intervaloRef.current = null
-    }
-    if (autoRevelarRef.current !== null) {
-      window.clearTimeout(autoRevelarRef.current)
-      autoRevelarRef.current = null
+  const aplicarGiro = useCallback(() => {
+    rotorRef.current?.style.setProperty('--giro', `${giroRef.current.angulo}deg`)
+  }, [])
+
+  const limparTimeout = useCallback(() => {
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
     }
   }, [])
 
-  useEffect(() => () => limparTimers(), [limparTimers])
+  useEffect(() => limparTimeout, [limparTimeout])
 
-  const executarSorteio = useCallback(
-    (disponiveis: VentoMesa[], sorteados: VentoSorteado[]) => {
-      const vencedor = sortearVento(disponiveis)
-      if (!vencedor) return
+  const concluirRevelacao = useCallback(() => {
+    const novasReveladas = estadoRef.current.reveladas + 1
+    atualizar({
+      reveladas: novasReveladas,
+      fase: novasReveladas === TOTAL_VENTOS ? 'concluido' : 'revelado',
+    })
+    vibrar()
 
-      setSorteando(true)
+    // Sobrou um vento: vai para o último jogador sem precisar tocar.
+    if (novasReveladas === TOTAL_VENTOS - 1) {
+      timeoutRef.current = window.setTimeout(() => {
+        timeoutRef.current = null
+        atualizar({ reveladas: TOTAL_VENTOS, fase: 'concluido' })
+        vibrar()
+      }, DELAY_ULTIMO_VENTO_MS)
+    }
+  }, [atualizar])
 
-      let ciclo = 0
+  // Um quadro por vez: gira enquanto espera, freia até o alvo depois do toque.
+  useEffect(() => {
+    aplicarGiro()
+    if (reduzirMovimento) return
 
-      intervaloRef.current = window.setInterval(() => {
-        ciclo++
+    let anterior = performance.now()
+    let quadro = 0
 
-        if (ciclo < CICLOS_ANIMACAO) {
-          const idx = Math.floor(Math.random() * disponiveis.length)
-          setVentoAnimado(disponiveis[idx].codigo)
-        } else {
-          window.clearInterval(intervaloRef.current!)
-          intervaloRef.current = null
+    const animar = (agora: number) => {
+      const dt = Math.min((agora - anterior) / 1000, 0.05)
+      anterior = agora
+      const giro = giroRef.current
+      const freio = freioRef.current
 
-          const novosSorteados: VentoSorteado[] = [
-            ...sorteados,
-            { vento: vencedor, ordem: sorteados.length + 1 },
-          ]
-          const novosDisponiveis = disponiveis.filter((vento) => vento.codigo !== vencedor.codigo)
-
-          setVentoAnimado(null)
-          setVentosSorteados(novosSorteados)
-          setVentosDisponiveis(novosDisponiveis)
-          setSorteando(false)
-
-          if (novosDisponiveis.length === 1) {
-            autoRevelarRef.current = window.setTimeout(() => {
-              executarSorteio(novosDisponiveis, novosSorteados)
-            }, DELAY_AUTO_REVELAR_MS)
-          }
+      if (freio) {
+        // Ease-out cúbico: começa na velocidade do giro e para suave no alvo.
+        const progresso = Math.min((agora - freio.inicio) / freio.duracao, 1)
+        giro.angulo = freio.de + freio.delta * (1 - (1 - progresso) ** 3)
+        if (progresso >= 1) {
+          freioRef.current = null
+          giro.velocidade = 0
+          concluirRevelacao()
         }
-      }, INTERVALO_ANIMACAO_MS)
-    },
-    [],
-  )
+      } else if (estadoRef.current.fase === 'ciclando' || estadoRef.current.fase === 'concluido') {
+        // No fim a hélice volta a girar, de comemoração.
+        giro.velocidade = Math.min(VELOCIDADE_GIRO, giro.velocidade + ACELERACAO_GIRO * dt)
+        giro.angulo = modulo(giro.angulo + giro.velocidade * dt, 360)
+      }
 
-  const sortearProximoVento = useCallback(() => {
-    if (sorteandoRef.current || ventosDisponiveisRef.current.length === 0) return
-    executarSorteio(ventosDisponiveisRef.current, ventosSorteadosRef.current)
-  }, [executarSorteio])
+      aplicarGiro()
+      quadro = requestAnimationFrame(animar)
+    }
 
-  const reiniciarSorteio = useCallback(() => {
-    limparTimers()
-    setVentosDisponiveis([...VENTOS])
-    setVentosSorteados([])
-    setVentoAnimado(null)
-    setSorteando(false)
-  }, [limparTimers])
+    quadro = requestAnimationFrame(animar)
+    return () => cancelAnimationFrame(quadro)
+  }, [reduzirMovimento, aplicarGiro, concluirRevelacao])
 
-  const sorteioCompleto = ventosSorteados.length === VENTOS.length
+  const revelar = useCallback(() => {
+    const atual = estadoRef.current
+    if (atual.fase !== 'ciclando' || atual.reveladas >= TOTAL_VENTOS) return
+
+    // Decidido no embaralhamento, nunca no toque.
+    const alvo = atual.ordem[atual.reveladas]
+    const giro = giroRef.current
+
+    if (reduzirMovimento) {
+      giro.angulo = giroParaCima(alvo)
+      aplicarGiro()
+      concluirRevelacao()
+      return
+    }
+
+    const minimo = giro.angulo + GIRO_MINIMO_FREIO
+    const delta = GIRO_MINIMO_FREIO + modulo(giroParaCima(alvo) - minimo, 360)
+    freioRef.current = {
+      inicio: performance.now(),
+      de: giro.angulo,
+      delta,
+      // Velocidade inicial do ease-out cúbico (3·delta/duração) = giro cheio.
+      duracao: ((3 * delta) / VELOCIDADE_GIRO) * 1000,
+    }
+    atualizar({ fase: 'desacelerando' })
+  }, [reduzirMovimento, aplicarGiro, atualizar, concluirRevelacao])
+
+  const proximo = useCallback(() => {
+    const atual = estadoRef.current
+    if (atual.fase !== 'revelado' || atual.reveladas >= TOTAL_VENTOS - 1) return
+    if (reduzirMovimento) {
+      giroRef.current.angulo += 45
+      aplicarGiro()
+    }
+    atualizar({ fase: 'ciclando' })
+  }, [reduzirMovimento, aplicarGiro, atualizar])
+
+  const reiniciar = useCallback(() => {
+    limparTimeout()
+    freioRef.current = null
+    if (reduzirMovimento) {
+      giroRef.current.angulo = 45
+      aplicarGiro()
+    }
+    atualizar(novoSorteio())
+  }, [reduzirMovimento, limparTimeout, aplicarGiro, atualizar])
+
+  const { ordem, reveladas, fase } = estado
 
   return {
-    ventos: VENTOS,
-    ventosDisponiveis,
-    ventosSorteados,
-    ventoAnimado,
-    sorteando,
-    sorteioCompleto,
-    sortearProximoVento,
-    reiniciarSorteio,
+    fase,
+    reveladas,
+    /** Só os ventos já revelados; o restante da ordem não sai do hook. */
+    ventosRevelados: ordem.slice(0, reveladas),
+    rotorRef,
+    reduzirMovimento,
+    revelar,
+    proximo,
+    reiniciar,
   }
 }

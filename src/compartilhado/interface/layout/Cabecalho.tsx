@@ -24,7 +24,7 @@ interface ItemMenuGlobal {
 const MODULOS_MENU: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'catavento' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
 ]
 
 const APP_MENU: ItemMenuGlobal[] = [
@@ -35,7 +35,7 @@ const APP_MENU: ItemMenuGlobal[] = [
 const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'catavento' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
 ]
 
@@ -45,7 +45,7 @@ const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
  */
 const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'catavento' },
+  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h', chaveCurta: 'menu.rulesShort' },
 ]
 
