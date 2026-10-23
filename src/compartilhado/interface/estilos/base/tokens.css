@@ -16,6 +16,12 @@
   --sombra: 0 4px 12px rgb(0 0 0 / 8%);
   --raio: 12px;
 
+  /* Caixa de fórmula dos tutoriais (CaixaFormula): borda na cor de destaque e
+     fundo num tom bem suave dela. Um tema escuro só redefine estes três. */
+  --formula-borda: var(--primario-escuro);
+  --formula-fundo: #f2f8fe;
+  --formula-texto: #102a43;
+
   /* Pedras de visualizacao da mao (PedraMao/GradePedrasMao). --pedra-mao-largura
      e o valor ativo, que cada tela/breakpoint aponta para um dos tamanhos abaixo.
      -celular e a referencia da finalizacao (46px no iPhone Pro Max, 6 por linha);

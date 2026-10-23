@@ -1,0 +1,98 @@
+/*
+ * Caixa de fórmula (livro didático de matemática) e contas passo a passo.
+ * Cores pelos tokens --formula-* (tokens.css): um tema escuro só redefine os
+ * tokens, sem mexer aqui.
+ */
+
+.caixa-formula-linha {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.caixa-formula {
+  display: inline-block;
+  max-width: 100%;
+  border: 1.25px solid var(--formula-borda);
+  border-radius: 2px;
+  padding: 8px 14px;
+  background: var(--formula-fundo);
+  color: var(--formula-texto);
+  text-align: left;
+}
+
+.caixa-formula,
+.conta-passos {
+  font-family: 'Cambria Math', 'STIX Two Math', 'Times New Roman', serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.caixa-formula i,
+.conta-passos i {
+  font-style: italic;
+}
+
+.caixa-formula sup,
+.conta-passos sup {
+  font-size: 0.68em;
+  line-height: 0;
+}
+
+/* Etapas: lado esquerdo alinhado à direita, para os "=" ficarem em coluna. */
+.conta-passos {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  column-gap: 0.35em;
+  max-width: 100%;
+  color: var(--formula-texto);
+}
+
+.caixa-formula > .conta-passos {
+  display: grid;
+}
+
+.conta-passos__linha {
+  display: contents;
+}
+
+.conta-passos__linha > span:first-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.conta-passos--conta .conta-passos__linha > span:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.conta-passos--equacao .conta-passos__linha > span:last-child {
+  text-align: left;
+}
+
+/* Parcelas de uma soma: rótulo à esquerda, número à direita. */
+.conta-passos--soma {
+  column-gap: 1.5em;
+}
+
+.conta-passos--soma .conta-passos__linha > span:first-child {
+  text-align: left;
+  white-space: normal;
+}
+
+.conta-passos--soma .conta-passos__linha > span:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.conta-passos__linha--total > span {
+  margin-top: 2px;
+  padding-top: 2px;
+  border-top: 1px solid currentColor;
+  font-weight: 700;
+}
+
+.conta-passos__linha-inteira {
+  grid-column: 1 / -1;
+}

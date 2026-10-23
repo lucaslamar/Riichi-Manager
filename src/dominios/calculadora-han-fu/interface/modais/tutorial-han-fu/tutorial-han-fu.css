@@ -1,0 +1,276 @@
+/*
+ * Tutorial "Como contar Han e Fu". Esqueleto, páginas e rodapé vêm da Modal
+ * base; o texto usa o bloco do Glossário e os ajustes das ajudas "?"
+ * (ajuda-secoes.css). Aqui ficam só as peças próprias do tutorial.
+ */
+
+/* Chapéu de formatura no cabeçalho da Tabela rápida. */
+/* O retângulo inteiro (cabeçalho da Tabela rápida) é o botão; o visual do
+   retângulo vem de `.cabecalho-referencia-han-fu` (han-fu.css). */
+.botao-tutorial-han-fu {
+  min-height: 44px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.botao-tutorial-han-fu:hover {
+  background: #f5f9ff;
+}
+
+.botao-tutorial-han-fu:focus-visible {
+  outline: 3px solid rgba(33, 150, 243, 0.35);
+  outline-offset: 2px;
+}
+
+.botao-tutorial-han-fu__icone {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--primario-escuro);
+  font-size: 1rem;
+}
+
+.botao-tutorial-han-fu:hover .botao-tutorial-han-fu__icone {
+  background: var(--info-fundo);
+  color: var(--primario);
+}
+
+/* Subtítulo solto (sem o cartão do item): a divisória fica nele. */
+.modal-tutorial-han-fu .tutorial-subtitulo {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modal-tutorial-han-fu .tutorial-subtitulo + .glossario-item__texto {
+  margin-top: 4px;
+}
+
+.modal-tutorial-han-fu .glossario-item__texto + .glossario-item__texto {
+  margin-top: 6px;
+}
+
+.modal-tutorial-han-fu .tutorial-grupo {
+  margin-top: 14px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 14px;
+}
+
+.modal-tutorial-han-fu .tutorial-topicos {
+  margin: 2px 0 6px;
+}
+
+.modal-tutorial-han-fu .glossario-bloco__intro + .tutorial-topicos {
+  margin-top: 0;
+}
+
+/* Conta passo a passo solta: centralizada, como a caixa de fórmula. */
+.tutorial-conta {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.tutorial-conta .conta-passos {
+  text-align: left;
+}
+
+/* Tabelas (Fu das combinações, Mãos de limite). */
+.tutorial-tabela {
+  margin: 4px 0 10px;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.tutorial-tabela table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.tutorial-tabela th,
+.tutorial-tabela td {
+  padding: 7px 6px;
+  border-top: 1px solid #edf0f4;
+  color: #334e68;
+  text-align: left;
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+}
+
+.tutorial-tabela .numero {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tutorial-tabela thead th {
+  border-top: 0;
+  background: #f8fafc;
+  color: #607080;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.tutorial-tabela tbody th {
+  color: #102a43;
+  font-weight: 800;
+}
+
+/* Curiosidade: a dica cinza com uma lâmpada. */
+.tutorial-curiosidade {
+  margin: 12px 0 4px;
+}
+
+.tutorial-curiosidade .fa-lightbulb {
+  color: #d97706;
+}
+
+/* Link no meio do texto que leva a outra página do tutorial. */
+.tutorial-link-pagina {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primario-escuro);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tutorial-link-pagina:hover {
+  color: var(--primario);
+}
+
+.tutorial-link-pagina:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid var(--primario);
+}
+
+/* Ver na Tabela rápida / Ver na calculadora. */
+.tutorial-botao {
+  justify-self: center;
+  min-height: 44px;
+  margin: 10px 0 4px;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+}
+
+.modal-tutorial-han-fu .yaku-mao-rotulada {
+  margin: 8px 0 10px;
+}
+
+.tutorial-credito {
+  margin: 16px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+  color: #607080;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.tutorial-credito a {
+  color: var(--primario-escuro);
+}
+
+/* ─── Multiplicação com retas ─────────────────────────────────────────────── */
+.multiplicacao-linhas {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  margin: 8px 0 0;
+}
+
+.multiplicacao-linhas svg {
+  width: min(100%, 300px);
+  height: auto;
+}
+
+.multiplicacao-linhas__legenda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.multiplicacao-linhas__onze {
+  color: var(--primario-escuro);
+}
+
+.multiplicacao-linhas__sessenta {
+  color: #c2410c;
+}
+
+.multiplicacao-linhas__reta {
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  animation: multiplicacao-desenhar 420ms ease-out both;
+}
+
+.multiplicacao-linhas__reta--onze {
+  stroke: var(--primario-escuro);
+}
+
+.multiplicacao-linhas__reta--sessenta {
+  stroke: #c2410c;
+}
+
+.multiplicacao-linhas__grupo {
+  fill: none;
+  stroke: #94a3b8;
+  stroke-dasharray: 4 3;
+  stroke-width: 1.2;
+}
+
+/* Os cruzamentos aparecem depois da última reta. */
+.multiplicacao-linhas__cruzamento {
+  fill: #102a43;
+  animation: multiplicacao-aparecer 300ms ease-out 1.5s both;
+}
+
+/* Parado no começo (retas e cruzamentos escondidos) até o desenho aparecer na tela. */
+.multiplicacao-linhas__reta,
+.multiplicacao-linhas__cruzamento {
+  animation-play-state: paused;
+}
+
+.multiplicacao-linhas--desenhar .multiplicacao-linhas__reta,
+.multiplicacao-linhas--desenhar .multiplicacao-linhas__cruzamento {
+  animation-play-state: running;
+}
+
+.multiplicacao-linhas__contagens text {
+  fill: #102a43;
+  font-family: 'Cambria Math', 'STIX Two Math', 'Times New Roman', serif;
+  font-size: 17px;
+  text-anchor: middle;
+}
+
+@keyframes multiplicacao-desenhar {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes multiplicacao-aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .multiplicacao-linhas__reta,
+  .multiplicacao-linhas__cruzamento {
+    animation: none;
+  }
+}

@@ -41,6 +41,8 @@ export interface ItemGlossario {
   pedras?: PedrasGlossario
   /** Nota no fim do item, depois das pedras (ex.: "Dora não é yaku"). */
   nota?: string
+  /** Caixa cinza no fim do item que abre o tutorial "Como contar Han e Fu". */
+  tutorialHanFu?: boolean
   /** Formas que viram link nas descrições (sem diferenciar maiúsculas). */
   aliases: string[]
   /** Termos que não viram link nos textos deste item (ex.: Riichi como nome do jogo). */
@@ -381,6 +383,7 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         kanji: '符',
         texto:
           'Pontos pela forma da mão (trincas, espera, jeito de vencer). Ajustam o valor até 4 han.',
+        tutorialHanFu: true,
         aliases: ['fu'],
       },
     ],

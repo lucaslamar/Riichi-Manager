@@ -43,9 +43,26 @@ export interface PropsModal {
    * Resultado). Esc, toque fora e arrastar continuam fechando.
    */
   semBotaoFechar?: boolean
+  /**
+   * Conteúdo em páginas (ex.: tutorial): o corpo mostra a página `atual` e o
+   * rodapé ganha Anterior/Próximo com os pontos das páginas. Deslizar o dedo
+   * para o lado também troca de página.
+   */
+  paginacao?: PaginacaoModal
   /** Classe da modal específica, para os estilos e funcionalidades próprios dela. */
   className?: string
   children: ReactNode
+}
+
+export interface PaginacaoModal {
+  total: number
+  /** Índice da página aberta, a partir de 0. */
+  atual: number
+  aoMudar: (indice: number) => void
+  rotuloAnterior: string
+  rotuloProximo: string
+  /** Nome acessível do ponto de cada página (ex.: "Página 2 de 9"). */
+  rotuloPagina: (indice: number) => string
 }
 
 /**
@@ -85,6 +102,9 @@ interface TelaAberta extends TelaModal {
  * na mesma modal, que entra deslizando da direita, com botão de voltar (Esc
  * ou deslizar para a direita também voltam). As telas de baixo continuam
  * montadas, então cada uma volta com a rolagem onde estava.
+ *
+ * Páginas (`paginacao`): o conteúdo é uma página de várias (ex.: tutorial),
+ * trocada por Anterior/Próximo, pelos pontos do rodapé ou deslizando o dedo.
  */
 export default function Modal({
   titulo,
@@ -97,6 +117,7 @@ export default function Modal({
   rodape,
   acoes,
   semBotaoFechar = false,
+  paginacao,
   className,
   children,
 }: PropsModal) {
@@ -114,10 +135,28 @@ export default function Modal({
   const telasRef = useRef(telas)
   telasRef.current = telas
   const inicioToque = useRef<{ x: number; y: number } | null>(null)
+  const corpoRef = useRef<HTMLDivElement | null>(null)
+  const paginaAtual = paginacao?.atual
+  // Sentido da última troca de página, para a página nova entrar do lado certo.
+  const pagina = useRef({ indice: paginaAtual, avancou: true })
+  if (paginaAtual !== pagina.current.indice) {
+    pagina.current = { indice: paginaAtual, avancou: (paginaAtual ?? 0) > (pagina.current.indice ?? 0) }
+  }
 
   useEffect(() => {
     aoFecharRef.current = aoFechar
   }, [aoFechar])
+
+  // Página nova começa do topo.
+  useEffect(() => {
+    corpoRef.current?.scrollTo({ top: 0 })
+  }, [paginaAtual])
+
+  const mudarPagina = (passo: number) => {
+    if (!paginacao) return
+    const destino = paginacao.atual + passo
+    if (destino >= 0 && destino < paginacao.total) paginacao.aoMudar(destino)
+  }
 
   useDeslizeParaFechar(dialogoRef, fundoRef, aoFechar)
 
@@ -221,6 +260,19 @@ export default function Modal({
     }
   }
 
+  // Páginas: dedo para a esquerda = próxima, como virar página (sem dar a volta).
+  const aoSoltarPagina = (evento: EventoToque) => {
+    const inicio = inicioToque.current
+    inicioToque.current = null
+    const toque = evento.changedTouches[0]
+    if (!inicio || !toque) return
+    const deltaX = toque.clientX - inicio.x
+    const deltaY = toque.clientY - inicio.y
+    if (Math.abs(deltaX) < DISTANCIA_VOLTAR) return
+    if (Math.abs(deltaX) < Math.abs(deltaY) * PROPORCAO_HORIZONTAL) return
+    mudarPagina(deltaX < 0 ? 1 : -1)
+  }
+
   const navegando = telas.length > 0
   const classes = [
     'modal',
@@ -310,10 +362,22 @@ export default function Modal({
         <ContextoNavegacaoModal.Provider value={abrirTela}>
           <div className={`modal-palco${navegando || saindo ? ' modal-palco--navegando' : ''}`}>
             <div
+              ref={corpoRef}
               className={`modal-corpo${navegando ? ' modal-corpo--coberta' : ''}`}
               aria-hidden={navegando || undefined}
+              onTouchStart={paginacao ? aoTocarTela : undefined}
+              onTouchEnd={paginacao ? aoSoltarPagina : undefined}
             >
-              {children}
+              {paginacao ? (
+                <div
+                  key={paginacao.atual}
+                  className={`modal-pagina modal-pagina--${pagina.current.avancou ? 'avancar' : 'voltar'}`}
+                >
+                  {children}
+                </div>
+              ) : (
+                children
+              )}
             </div>
             {telas.map((tela, indice) =>
               renderizarTela(tela, indice === telas.length - 1 ? 'ativa' : 'coberta'),
@@ -324,6 +388,43 @@ export default function Modal({
 
         {/* O rodapé é da tela principal (ex.: Aplicar das Regras): some nas telas internas. */}
         {rodape && !navegando && <footer className="modal-rodape">{rodape}</footer>}
+        {paginacao && !navegando && (
+          <footer className="modal-rodape modal-paginacao">
+            <button
+              type="button"
+              className="btn-contorno"
+              disabled={paginacao.atual === 0}
+              onClick={() => mudarPagina(-1)}
+            >
+              <i className="fas fa-chevron-left" aria-hidden="true" />
+              {paginacao.rotuloAnterior}
+            </button>
+            <div className="modal-paginacao__pontos">
+              {Array.from({ length: paginacao.total }, (_, indice) => (
+                <button
+                  // biome-ignore lint/suspicious/noArrayIndexKey: um ponto por página, fixos
+                  key={indice}
+                  type="button"
+                  className={`modal-paginacao__ponto${
+                    indice === paginacao.atual ? ' modal-paginacao__ponto--ativo' : ''
+                  }`}
+                  aria-label={paginacao.rotuloPagina(indice)}
+                  aria-current={indice === paginacao.atual ? 'step' : undefined}
+                  onClick={() => paginacao.aoMudar(indice)}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              className="btn-primario"
+              disabled={paginacao.atual === paginacao.total - 1}
+              onClick={() => mudarPagina(1)}
+            >
+              {paginacao.rotuloProximo}
+              <i className="fas fa-chevron-right" aria-hidden="true" />
+            </button>
+          </footer>
+        )}
       </div>
     </div>,
     document.body,

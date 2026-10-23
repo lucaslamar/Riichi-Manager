@@ -6,6 +6,8 @@ import {
 } from '../../../logica/glossario'
 import { parseMpsz, parseMpszGrupos } from '../../../logica/yakus'
 import { CiclosDora, MaoRotulada, PedrasExemplo } from '../yakus/PedrasExemplo'
+// Tutorial da Calculadora de Han e Fu: só o botão que abre a modal dele.
+import BotaoTutorialHanFu from '@/dominios/calculadora-han-fu/interface/modais/tutorial-han-fu/BotaoTutorialHanFu'
 import BlocoDica from './BlocoDica'
 import TextoGlossario from './TextoGlossario'
 import './bloco-glossario.css'
@@ -68,6 +70,13 @@ function Item({
       {item.pedras && <PedrasItem pedras={item.pedras} rotulo={`Exemplo: ${item.nome}`} />}
       {item.nota && (
         <BlocoDica texto={item.nota} ignorar={ignorar} className="glossario-item__nota" />
+      )}
+      {item.tutorialHanFu && (
+        <BotaoTutorialHanFu className="bloco-dica glossario-item__nota glossario-item__tutorial">
+          <span>
+            <strong>Como contar</strong> han e fu, passo a passo
+          </span>
+        </BotaoTutorialHanFu>
       )}
     </div>
   )

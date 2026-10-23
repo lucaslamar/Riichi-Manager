@@ -147,6 +147,16 @@
   background: #f1f5f9;
 }
 
+/* Caixa cinza que abre o tutorial "Como contar Han e Fu" (verbete Fu). */
+.glossario-item__tutorial {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+}
+
 /* No item destacado (amarelo), a nota fica num branco translúcido. */
 .glossario-item--destaque .glossario-item__nota {
   background: rgb(255 255 255 / 60%);

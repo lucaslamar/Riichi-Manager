@@ -46,6 +46,14 @@
   text-transform: uppercase;
 }
 
+/* Kanji ao lado do rótulo (ex.: 親 de oya), como nos verbetes do glossário. */
+.kanji-seletor-han-fu {
+  color: #607080;
+  font-size: 1.1em;
+  font-weight: 700;
+  text-transform: none;
+}
+
 .seletor-segmentado-han-fu {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -261,63 +269,54 @@
 
 .referencia-han-fu {
   display: grid;
-  gap: 10px;
+  gap: 6px;
   min-width: 0;
+}
+
+/* Rolagem até a tabela (tutorial) sem parar embaixo do cabeçalho fixo. */
+.referencia-han-fu {
+  scroll-margin-top: 84px;
 }
 
 .cabecalho-referencia-han-fu {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   border: 1px solid #dfe7ef;
   border-radius: 8px;
-  padding: 12px;
+  padding: 5px 6px 5px 12px;
   background: #ffffff;
   color: #102a43;
   text-align: left;
 }
 
-button.cabecalho-referencia-toggle {
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s;
+/* Subtítulo na mesma linha do título; quebra para baixo só quando não cabe. */
+.titulos-referencia-han-fu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  min-width: 0;
 }
 
-button.cabecalho-referencia-toggle:hover {
-  background: #f5f9ff;
-}
-
-.cabecalho-referencia-han-fu > span {
-  display: grid;
-  gap: 2px;
-}
-
-.cabecalho-referencia-han-fu strong {
+.titulos-referencia-han-fu strong {
   margin: 0;
   color: #102a43;
-  font-size: 1.02rem;
-}
-
-.cabecalho-referencia-han-fu small {
-  color: #607080;
-  font-size: 0.78rem;
+  font-size: 0.92rem;
   font-weight: 800;
 }
 
-.legenda-referencia-han-fu {
-  justify-self: end;
-  white-space: nowrap;
+.titulos-referencia-han-fu small {
+  color: #607080;
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
 .conteudo-referencia-han-fu {
   display: grid;
   gap: 10px;
-}
-
-.conteudo-referencia-han-fu[hidden] {
-  display: none;
 }
 
 .tabela-referencia-han-fu {
@@ -366,6 +365,14 @@ button.cabecalho-referencia-toggle:hover {
   font-weight: 900;
 }
 
+/* Na grade larga o Han fica preso à esquerda quando a tabela rola para o lado. */
+.linha-referencia-han-fu > strong,
+.linha-referencia-han-fu.cabecalho > span:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
 .celula-referencia-han-fu,
 .celula-referencia-vazia {
   border-left: 1px solid #edf0f4;
@@ -374,11 +381,23 @@ button.cabecalho-referencia-toggle:hover {
   gap: 5px;
 }
 
-.fu-celula-referencia {
+/* Han e Fu da linha, empilhados: só no celular (na grade larga os eixos já dizem). */
+.eixo-celula-referencia {
   display: none;
+}
+
+.eixo-celula-referencia small {
+  color: #607080;
+  font-size: 0.64rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.eixo-celula-referencia span {
   color: #607080;
   font-size: 0.68rem;
   font-weight: 900;
+  line-height: 1.2;
 }
 
 .celula-referencia-han-fu.limite {
@@ -631,22 +650,15 @@ button.cabecalho-referencia-toggle:hover {
   }
 
   .cabecalho-referencia-han-fu {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 4px;
-    padding: 10px;
+    padding: 4px 4px 4px 10px;
   }
 
-  .cabecalho-referencia-han-fu strong {
-    font-size: 0.94rem;
+  .titulos-referencia-han-fu strong {
+    font-size: 0.86rem;
   }
 
-  .cabecalho-referencia-han-fu small {
-    font-size: 0.72rem;
-  }
-
-  .legenda-referencia-han-fu {
-    justify-self: start;
+  .titulos-referencia-han-fu small {
+    font-size: 0.68rem;
   }
 
   .tabela-referencia-han-fu {
@@ -703,9 +715,13 @@ button.cabecalho-referencia-toggle:hover {
     padding: 0 !important;
   }
 
-  .fu-celula-referencia {
-    display: inline;
-    padding-top: 2px;
+  .eixo-celula-referencia {
+    display: grid;
+    padding-top: 1px;
+  }
+
+  .celula-referencia-han-fu.ativo .eixo-celula-referencia span {
+    color: var(--info-texto);
   }
 
   .pagamentos-referencia-han-fu {
@@ -820,11 +836,11 @@ button.cabecalho-referencia-toggle:hover {
   }
 
   .referencia-han-fu {
-    gap: 6px;
+    gap: 4px;
   }
 
   .cabecalho-referencia-han-fu {
-    padding: 8px 10px;
+    padding: 3px 4px 3px 10px;
   }
 }
 
@@ -848,5 +864,22 @@ button.cabecalho-referencia-toggle:hover {
   .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho > span,
   .tabela-referencia-han-fu.transposta .linha-referencia-han-fu > strong {
     min-height: 36px;
+  }
+
+  /* A linha de Han desce junto ao rolar (a tela rola dentro de
+     .calculadora-han-fu). Aqui a tabela cabe na largura, então ela não
+     precisa rolar de lado e o sticky passa a valer para a rolagem da tela. */
+  .tabela-referencia-han-fu.transposta {
+    overflow: visible;
+  }
+
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho {
+    position: sticky;
+    /* Encosta na borda: a tela tem 8px de respiro em cima (.calculadora-han-fu). */
+    top: -8px;
+    z-index: 2;
+    border-radius: 8px 8px 0 0;
+    background: #f8fafc;
+    box-shadow: 0 1px 0 #dfe7ef;
   }
 }

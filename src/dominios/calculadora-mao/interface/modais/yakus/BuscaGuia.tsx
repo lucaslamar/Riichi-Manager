@@ -5,25 +5,35 @@ import BlocoGlossario from '../glossario/BlocoGlossario'
 import CartaoYaku from './CartaoYaku'
 import './busca-guia.css'
 
-/** Campo de busca do Guia de bolso, no topo de todas as abas. */
+/**
+ * Campo de busca do Guia de bolso, no topo de todas as abas. Os textos podem
+ * ser trocados para usar o mesmo campo em outra consulta (ex.: tutorial de
+ * Han e Fu).
+ */
 export function CampoBuscaGuia({
   valor,
   aoMudar,
+  rotulo = 'Buscar no Guia de bolso',
+  placeholder = 'Buscar termo, yaku ou aba',
+  rotuloLimpar = 'Limpar busca',
 }: {
   valor: string
   aoMudar: (valor: string) => void
+  rotulo?: string
+  placeholder?: string
+  rotuloLimpar?: string
 }) {
   const id = useId()
   return (
     <div className="busca-guia">
       <i className="fas fa-magnifying-glass" aria-hidden="true" />
       <label htmlFor={id} className="sr-only">
-        Buscar no Guia de bolso
+        {rotulo}
       </label>
       <input
         id={id}
         type="search"
-        placeholder="Buscar termo, yaku ou aba"
+        placeholder={placeholder}
         autoComplete="off"
         enterKeyHint="search"
         value={valor}
@@ -33,7 +43,7 @@ export function CampoBuscaGuia({
         <button
           type="button"
           className="busca-guia__limpar"
-          aria-label="Limpar busca"
+          aria-label={rotuloLimpar}
           onClick={() => aoMudar('')}
         >
           <i className="fas fa-xmark" aria-hidden="true" />

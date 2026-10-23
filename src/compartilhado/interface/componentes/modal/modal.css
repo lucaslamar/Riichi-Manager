@@ -372,6 +372,129 @@
   background: var(--modal-fundo);
 }
 
+/* ─── Páginas (ex.: tutorial) ─────────────────────────────────────────────── */
+/* Altura fixa: Anterior/Próximo não pulam de lugar entre páginas curtas e longas. */
+.modal:has(.modal-paginacao) {
+  height: min(var(--modal-altura), 100%);
+}
+
+.modal-pagina--avancar {
+  animation: modal-pagina-avancar 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modal-pagina--voltar {
+  animation: modal-pagina-voltar 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes modal-pagina-avancar {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes modal-pagina-voltar {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+.modal-paginacao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-paginacao > .btn-contorno,
+.modal-paginacao > .btn-primario {
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.modal-paginacao > .btn-contorno {
+  justify-self: start;
+}
+
+.modal-paginacao > .btn-primario {
+  justify-self: end;
+}
+
+.modal-paginacao__pontos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ponto pequeno, área de toque maior (o botão inteiro). */
+.modal-paginacao__ponto {
+  display: inline-flex;
+  width: 16px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal-paginacao__ponto::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  transition:
+    width 0.2s,
+    background 0.2s;
+}
+
+.modal-paginacao__ponto--ativo::before {
+  width: 16px;
+  background: var(--primario);
+}
+
+.modal-paginacao__ponto--ativo {
+  width: 24px;
+}
+
+.modal-paginacao__ponto:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -4px;
+  border-radius: 999px;
+}
+
+/* Celular: os pontos sobem para uma linha própria e os botões dividem a de baixo. */
+@media (max-width: 440px) {
+  .modal-paginacao {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2px;
+    padding-top: 4px;
+  }
+
+  .modal-paginacao__pontos {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .modal-paginacao > .btn-contorno,
+  .modal-paginacao > .btn-primario {
+    justify-self: stretch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-pagina--avancar,
+  .modal-pagina--voltar {
+    animation: modal-tela-aparecer 150ms ease;
+  }
+}
+
 /*
  * Telas baixas (celular deitado, janelas curtas): cabeçalho e rodapé
  * encolhem e o subtítulo some, para sobrar altura para o conteúdo.

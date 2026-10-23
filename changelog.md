@@ -1,5 +1,24 @@
 # Changelog - Mojoca
 
+## 5.6.0 - 2026-10-23
+
+### Novo
+
+- **Tutorial "Como contar Han e Fu"**: abre ao tocar no cabeçalho da Tabela rápida (com o chapéu de formatura 🎓) e no verbete Fu do Glossário. É a mesma janela das ajudas "?", agora em páginas: Anterior/Próximo, pontos para pular de página e deslizar o dedo para o lado.
+  - **Visão geral**: a ordem da conta (han, mão de limite, fu, tabela), com o link "calcule você mesmo" que leva direto à página da fórmula.
+  - **Contando han**: yaku, dora (que não é yaku), mão aberta e a leitura com mais han.
+  - **Guia de consulta**: Fu base, Fu das combinações (tabela), Par, espera e arredondamento (só o par do seu vento e do vento da rodada soma fu), Mãos de limite (tabela, com nota sobre o Kiriage Mangan), Honba e dois exemplos com as pedras do app (a mesma mão por tsumo e por ron, com o fu somado parcela por parcela). No topo, campo de busca (o mesmo do Guia de bolso) e sumário que rola até cada assunto.
+  - **Do Han/Fu aos pontos**: a fórmula numa caixa de livro didático (Pontos básicos = Fu × 2^(2 + Han), com expoente de verdade), quanto o oya e o ko recebem no ron e no tsumo, o exemplo de 4 han e 110 fu passo a passo e "Matemática para idiotas": dobrar, quebrar o número, truque do 11, multiplicação com retas (desenhada reta a reta, parada com "Reduzir movimento") e o pagamento. Termina com a curiosidade do kuku (九九) e o botão "Ver na Tabela rápida". Crédito à página Japanese mahjong scoring rules, da Wikipedia (CC BY-SA 4.0).
+
+### Alterado
+
+- **Tabela rápida sempre aberta**: saiu a seta de abrir/fechar. O cabeçalho ficou com metade da altura, com "Valores base sem honba." na mesma linha do título.
+- Tabela rápida no celular: cada linha mostra o Han em cima do Fu ("3 Han / 30 Fu"), para não perder a referência ao rolar.
+- Tabela rápida no tablet: a coluna Han/Fu fica presa à esquerda quando a tabela rola para o lado.
+- Tabela rápida com o celular deitado: a linha "1 Han · 2 Han · 3 Han · 4 Han" desce junto ao rolar.
+- Calculadora de Han e Fu: "É leste?" virou "É oya? 親".
+- Janela base (Modal): ganhou o modo em páginas, usado pelo tutorial. As demais janelas não mudam.
+
 ## 5.5.0 - 2026-10-23
 
 ### Novo

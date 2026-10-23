@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import {
@@ -13,6 +13,7 @@ import {
   type ReferenciaRapidaHanFu,
   type ResultadoPontuacaoHanFu,
 } from '../../logica'
+import BotaoTutorialHanFu from '../modais/tutorial-han-fu/BotaoTutorialHanFu'
 
 interface PropsControleNumerico {
   rotulo: string
@@ -207,7 +208,12 @@ export function SeletorDealer({
   const { t } = useI18n()
   return (
     <section className="grupo-seletor-han-fu" aria-label={t('hanFu.isDealer')}>
-      <span>{t('hanFu.isDealer')}</span>
+      <span>
+        {t('hanFu.isDealer')}{' '}
+        <span className="kanji-seletor-han-fu" lang="ja" aria-hidden="true">
+          親
+        </span>
+      </span>
       <div className="seletor-segmentado-han-fu">
         {[
           { valor: true, rotulo: t('hanFu.yes') },
@@ -259,15 +265,9 @@ export function SeletorTipoVitoria({
 const CONSULTA_TABELA_TRANSPOSTA =
   '(orientation: landscape) and (min-width: 561px) and (max-width: 1000px) and (max-height: 500px)'
 
-export function TabelaReferenciaRapida({
-  referencia,
-  recolhidaPorPadrao = false,
-}: {
-  referencia: ReferenciaRapidaHanFu
-  recolhidaPorPadrao?: boolean
-}) {
+export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaRapidaHanFu }) {
   const { t } = useI18n()
-  const [recolhida, setRecolhida] = useState(recolhidaPorPadrao)
+  const secaoRef = useRef<HTMLElement>(null)
   // Celular deitado: eixos trocados (Fu nas linhas, Han nas colunas). A faixa
   // espelha o @media de `.tabela-referencia-han-fu.transposta` em han-fu.css.
   const transposta = useMediaQuery(CONSULTA_TABELA_TRANSPOSTA)
@@ -276,25 +276,18 @@ export function TabelaReferenciaRapida({
   ) ?? []
 
   return (
-    <section className="referencia-han-fu" aria-labelledby="referencia-han-fu-titulo">
-      <button
-        type="button"
-        className="cabecalho-referencia-han-fu cabecalho-referencia-toggle"
-        onClick={() => setRecolhida((prev) => !prev)}
-        aria-expanded={!recolhida}
-        aria-controls="conteudo-referencia-han-fu"
+    <section ref={secaoRef} className="referencia-han-fu" aria-labelledby="referencia-han-fu-titulo">
+      {/* O retângulo inteiro abre o tutorial "Como contar Han e Fu". */}
+      <BotaoTutorialHanFu
+        className="cabecalho-referencia-han-fu"
+        aoVerTabela={() => secaoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
       >
-        <span>
+        <span className="titulos-referencia-han-fu">
           <strong id="referencia-han-fu-titulo">{t('hanFu.quickReference')}</strong>
           <small>{t('hanFu.quickReferenceHint')}</small>
         </span>
-        <i className={`fas fa-chevron-${recolhida ? 'down' : 'up'}`} aria-hidden="true" />
-      </button>
-      <div
-        id="conteudo-referencia-han-fu"
-        className="conteudo-referencia-han-fu"
-        hidden={recolhida}
-      >
+      </BotaoTutorialHanFu>
+      <div className="conteudo-referencia-han-fu">
         <div
           className={`tabela-referencia-han-fu ${transposta ? 'transposta' : ''}`}
           role="table"
@@ -386,7 +379,11 @@ function CelulaReferencia({ celula }: { celula: CelulaReferenciaHanFu }) {
       role="cell"
       aria-label={`${celula.han} han ${celula.fu} fu`}
     >
-      <span className="fu-celula-referencia">{celula.fu} Fu</span>
+      {/* No celular cada linha repete o Han: o título do grupo some ao rolar. */}
+      <span className="eixo-celula-referencia">
+        <small>{celula.han} Han</small>
+        <span>{celula.fu} Fu</span>
+      </span>
       <PagamentosReferencia pagamentos={celula.pagamentos} />
     </div>
   )
