@@ -4,7 +4,7 @@
 
 ### Novo
 
-- **Sorteador de Ventos com o gato de boné de hélice** (o meme do clube): a hélice gira com uma pedra de vento em cada pá, e o toque faz ela frear; a pedra que para no alto é o vento do jogador, maior e com contorno azul. As pás seguem a ordem da mesa, como nos jogos: Leste embaixo, Sul à direita, Oeste em cima e Norte à esquerda.
+- **Sorteador de Ventos com o gato de boné de hélice** (o meme do clube): a hélice gira com uma pedra de vento em cada pá, e o toque faz ela frear; a pedra que para no alto é o vento do jogador, maior e com contorno azul. As pás seguem a ordem da mesa, como nos jogos: Leste embaixo, Sul à direita, Oeste em cima e Norte à esquerda. A hélice gira no sentido anti-horário, o mesmo dos turnos.
 - **Sorteio justo por construção**: a ordem dos 4 ventos é embaralhada uma única vez, antes do primeiro toque, com o gerador aleatório criptográfico do aparelho. O toque só revela o próximo vento: o momento do toque e a posição de quem sorteia não mudam nada, e cada jogador tem 25% de chance de cada vento. A explicação está em "Como funciona o sorteio", na tela Regras.
 - O gato fala num balão de quadrinho que nasce da boca dele: de quem é a vez, "Sorteando…", o vento sorteado e, no fim, "Ron ron!" com a língua de fora.
 - Cada vento sorteado sai voando da boca do gato num balãozinho, ligado a ela por uma trilha de bolinhas, como balão de pensamento. No fim, os 4 se juntam num balão gigante.

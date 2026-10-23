@@ -132,7 +132,8 @@ export function useSorteadorVentos() {
       } else if (estadoRef.current.fase === 'ciclando' || estadoRef.current.fase === 'concluido') {
         // No fim a hélice volta a girar, de comemoração.
         giro.velocidade = Math.min(VELOCIDADE_GIRO, giro.velocidade + ACELERACAO_GIRO * dt)
-        giro.angulo = modulo(giro.angulo + giro.velocidade * dt, 360)
+        // Anti-horário (ângulo diminuindo), no sentido dos turnos na mesa.
+        giro.angulo = modulo(giro.angulo - giro.velocidade * dt, 360)
       }
 
       aplicarGiro()
@@ -158,14 +159,16 @@ export function useSorteadorVentos() {
       return
     }
 
-    const minimo = giro.angulo + GIRO_MINIMO_FREIO
-    const delta = GIRO_MINIMO_FREIO + modulo(giroParaCima(alvo) - minimo, 360)
+    // Freia girando para trás (anti-horário): ao menos o giro mínimo e mais o
+    // que faltar para a pá do alvo chegar ao alto.
+    const minimo = giro.angulo - GIRO_MINIMO_FREIO
+    const recuo = GIRO_MINIMO_FREIO + modulo(minimo - giroParaCima(alvo), 360)
     freioRef.current = {
       inicio: performance.now(),
       de: giro.angulo,
-      delta,
-      // Velocidade inicial do ease-out cúbico (3·delta/duração) = giro cheio.
-      duracao: ((3 * delta) / VELOCIDADE_GIRO) * 1000,
+      delta: -recuo,
+      // Velocidade inicial do ease-out cúbico (3·recuo/duração) = giro cheio.
+      duracao: ((3 * recuo) / VELOCIDADE_GIRO) * 1000,
     }
     atualizar({ fase: 'desacelerando' })
   }, [reduzirMovimento, aplicarGiro, atualizar, concluirRevelacao])
