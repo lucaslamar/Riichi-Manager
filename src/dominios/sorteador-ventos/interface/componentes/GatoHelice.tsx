@@ -12,7 +12,15 @@ interface PropsGatoHelice {
   escolhido: VentoMao | null
   /** Sorteio terminado: o gato mostra a língua. */
   linguaDeFora: boolean
+  /** Palavra escrita em granulado no pirulito ("REINICIAR"). */
+  textoPirulito: string
+  rotuloPirulito: string
+  /** O pirulito reinicia o sorteio a qualquer momento. */
+  aoTocarPirulito: () => void
 }
+
+/** Cores do granulado, alternadas letra a letra. */
+const CORES_GRANULADO = ['#ffffff', '#ff80ab', '#b3e5fc', '#fff59d']
 
 /** Olho do Gato de Botas: pupila enorme e brilhos. */
 function Olho({ cx, cy }: { cx: number; cy: number }) {
@@ -44,6 +52,9 @@ export default function GatoHelice({
   ventosApagados,
   escolhido,
   linguaDeFora,
+  textoPirulito,
+  rotuloPirulito,
+  aoTocarPirulito,
 }: PropsGatoHelice) {
   return (
     <div className="gato-helice">
@@ -106,13 +117,26 @@ export default function GatoHelice({
           <circle cx="42" cy="292" r="18" fill="#43a047" />
           <circle cx="42" cy="292" r="12" fill="#1e88e5" />
           <circle cx="42" cy="292" r="6" fill="#8e24aa" />
-          <path
-            d="M42 292 m0 -4 a4 4 0 1 1 -4 4 a10 10 0 1 1 10 10 a16 16 0 1 1 -16 -16 a24 24 0 1 1 24 24"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="2.5"
-            opacity="0.7"
-          />
+          {/* "REINICIAR" em granulado: cada letra de uma cor, seguindo a borda de cima. */}
+          <path id="gato-helice-arco-pirulito" d="M14 292 A28 28 0 1 1 70 292" fill="none" />
+          <text className="gato-helice__granulado" fontSize="10.5">
+            <textPath href="#gato-helice-arco-pirulito" startOffset="50%" textAnchor="middle">
+              {[...textoPirulito].map((letra, indice) => (
+                <tspan key={indice} fill={CORES_GRANULADO[indice % CORES_GRANULADO.length]}>
+                  {letra}
+                </tspan>
+              ))}
+            </textPath>
+          </text>
+          {/* Granulado solto na metade de baixo. */}
+          <g strokeWidth="2.6" strokeLinecap="round">
+            <path d="M28 302 l4 3" stroke="#ffffff" />
+            <path d="M52 304 l-3 4" stroke="#ff80ab" />
+            <path d="M36 314 l5 -1" stroke="#b3e5fc" />
+            <path d="M58 296 l2 4" stroke="#fff59d" />
+            <path d="M24 290 l1 5" stroke="#ff80ab" />
+            <path d="M45 318 l4 2" stroke="#ffffff" />
+          </g>
           {/* Patinha branca de gato frajola segurando o palito */}
           <ellipse cx="58" cy="372" rx="25" ry="19" fill="#f4f4f4" />
           <g stroke="#c9c9c9" strokeWidth="1.6" strokeLinecap="round">
@@ -122,6 +146,19 @@ export default function GatoHelice({
           </g>
         </g>
       </svg>
+
+      {/* Área de toque do pirulito (o desenho fica no SVG acima). */}
+      <button
+        type="button"
+        className="gato-helice__botao-pirulito"
+        aria-label={rotuloPirulito}
+        title={rotuloPirulito}
+        onClick={(evento) => {
+          // Não deixa o toque chegar na página (que sortearia ou passaria a vez).
+          evento.stopPropagation()
+          aoTocarPirulito()
+        }}
+      />
 
       {/* Ponto da boca: de onde saem voando os balõezinhos dos resultados. */}
       <span className="gato-helice__boca" />

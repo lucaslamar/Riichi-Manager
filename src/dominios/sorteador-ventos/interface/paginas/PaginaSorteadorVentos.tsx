@@ -56,6 +56,8 @@ export default function PaginaSorteadorVentos() {
   }
 
   const teclarPalco = (evento: KeyboardEvent<HTMLDivElement>) => {
+    // O pirulito é um botão dentro do palco: as teclas dele são dele.
+    if (evento.target !== evento.currentTarget) return
     if (evento.key !== 'Enter' && evento.key !== ' ') return
     evento.preventDefault()
     tocar()
@@ -86,6 +88,9 @@ export default function PaginaSorteadorVentos() {
           ventosApagados={concluido ? [] : ventosRevelados}
           escolhido={fase === 'revelado' ? ultimoRevelado : null}
           linguaDeFora={concluido}
+          textoPirulito={t('windDraw.lollipopText')}
+          rotuloPirulito={t('windDraw.restartButtonLabel')}
+          aoTocarPirulito={reiniciar}
         />
         {/* A chave refaz o "pop" do balão a cada fala nova. */}
         <div

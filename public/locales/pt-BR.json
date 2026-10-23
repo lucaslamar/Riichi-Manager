@@ -396,6 +396,7 @@
   "windDraw": {
     "title": "Sorteador de Ventos",
     "restartButtonLabel": "Reiniciar sorteio",
+    "lollipopText": "REINICIAR",
     "nextPlayer": "Próximo jogador",
     "playerShort": "J{{player}}",
     "tapToContinue": "toque para o próximo",
