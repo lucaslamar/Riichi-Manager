@@ -27,9 +27,13 @@ function modulo(valor: number, divisor: number) {
   return ((valor % divisor) + divisor) % divisor
 }
 
-/** Cada vento fica numa pá: Leste em cima e os outros a cada 90° no sentido horário. */
+/**
+ * Cada vento fica numa pá na ordem da mesa, como nos jogos: com o Leste embaixo,
+ * Sul à direita, Oeste em cima e Norte à esquerda (anti-horário, a ordem dos
+ * turnos). Pedido de jogador: antes Leste e Oeste estavam trocados.
+ */
 export function anguloPa(vento: VentoMao) {
-  return VENTOS_MESA.indexOf(vento) * 90
+  return modulo(180 - VENTOS_MESA.indexOf(vento) * 90, 360)
 }
 
 /** Giro da hélice que deixa a pá deste vento apontando para cima. */

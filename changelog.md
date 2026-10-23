@@ -1,5 +1,24 @@
 # Changelog - Mojoca
 
+## 5.4.0 - 2026-10-23
+
+### Novo
+
+- **Sorteador de Ventos com o gato de boné de hélice** (o meme do clube): a hélice gira com uma pedra de vento em cada pá, e o toque faz ela frear; a pedra que para no alto é o vento do jogador, maior e com contorno azul. As pás seguem a ordem da mesa, como nos jogos: Leste embaixo, Sul à direita, Oeste em cima e Norte à esquerda.
+- **Sorteio justo por construção**: a ordem dos 4 ventos é embaralhada uma única vez, antes do primeiro toque, com o gerador aleatório criptográfico do aparelho. O toque só revela o próximo vento: o momento do toque e a posição de quem sorteia não mudam nada, e cada jogador tem 25% de chance de cada vento. A explicação está em "Como funciona o sorteio", na tela Regras.
+- O gato fala num balão de quadrinho que nasce da boca dele: de quem é a vez, "Sorteando…", o vento sorteado e, no fim, "Ron ron!" com a língua de fora.
+- Cada vento sorteado sai voando da boca do gato num balãozinho, ligado a ela por uma trilha de bolinhas, como balão de pensamento. No fim, os 4 se juntam num balão gigante.
+- O último vento vai sozinho para o Jogador 4, sem precisar tocar.
+- Ícone do Sorteador no menu virou um boné de hélice.
+
+### Alterado
+
+- Sorteador todo no toque: tocar na tela sorteia, passa para o próximo jogador e, no fim, começa outro sorteio (com um respiro de pouco mais de 1 segundo para ninguém apagar o resultado sem querer). Saíram os botões "Sortear vento" e "Reiniciar sorteio", o título e os cartões com "Disponível".
+- Ventos com a mesma pedra da Configuração de ventos da Calculadora de Mão (Leste em vermelho), no lugar dos kanjis coloridos.
+- Com "Reduzir movimento" ligado no aparelho, a hélice fica parada e a pedra sorteada vai direto para o alto, com um fade curto.
+- A pedra de vento da Calculadora de Mão virou um componente compartilhado com o Sorteador, sem mudança visual na Calculadora.
+- Novo script `scripts/check-wind-fairness.ts`: roda 1 milhão de sorteios e falha se algum vento sair fora de 24,5%–25,5% em alguma posição.
+
 ## 5.3.0 - 2026-10-22
 
 ### Novo
