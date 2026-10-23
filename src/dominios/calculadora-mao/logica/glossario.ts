@@ -590,6 +590,66 @@ export function termosDoItem(secao: SecaoGlossario, item?: ItemGlossario): strin
   return [secao.id, ...(item ? [item.id, ...(item.semLink ?? [])] : [])]
 }
 
+// ── Pesquisa do Guia de bolso
+
+/** Minúsculas e sem acento, para "dragao" achar "dragão". */
+const paraBusca = (texto: string) =>
+  normalizar(texto).normalize('NFD').replace(/\p{M}/gu, '').replace(/[’']/g, '')
+
+/**
+ * Formas da busca: como foi digitada e sem o "s" do plural (assim "yakus"
+ * acha Yaku e "pares" acha Par).
+ */
+const formasDaBusca = (texto: string) => {
+  const busca = paraBusca(texto.trim())
+  return [...new Set([busca, busca.replace(/(\p{L}{3,})s(?= |$)/gu, '$1')])]
+}
+
+/** Bate no começo de alguma palavra: "atama" acha Atamahane, não "Patamares". */
+const bate = (buscas: string[], textos: (string | undefined)[]) =>
+  textos.some(
+    (texto) => texto && buscas.some((busca) => ` ${paraBusca(texto)}`.includes(` ${busca}`)),
+  )
+
+/** Se a busca bate em algum dos textos (ex.: o nome das abas do Guia de bolso). */
+export function correspondeBusca(texto: string, textos: string[]): boolean {
+  return bate(formasDaBusca(texto), textos)
+}
+
+export interface ResultadoBuscaGlossario {
+  /** Seções com só os itens que batem (todos, se o título da seção bateu). */
+  secoes: SecaoGlossario[]
+  yakus: Yaku[]
+}
+
+/**
+ * Pesquisa pelo nome, kanji, apelido e aliases de cada termo (assim "dealer"
+ * acha Oya), e pelo romaji, apelidos e nome em português dos yakus. Não busca
+ * dentro das explicações, para não listar meio glossário a cada letra.
+ */
+export function buscarNoGlossario(texto: string): ResultadoBuscaGlossario {
+  const busca = formasDaBusca(texto)
+  const secoes: SecaoGlossario[] = []
+  for (const secao of SECOES_GLOSSARIO) {
+    if (bate(busca, [secao.titulo, ...(secao.aliases ?? [])])) {
+      secoes.push(secao)
+      continue
+    }
+    const itens: ItemGlossario[] = []
+    secao.itens.forEach((item, indice) => {
+      if (!bate(busca, [item.nome, item.kanji, item.leitura, item.apelido, ...item.aliases])) return
+      // Sub-verbete sem o item de cima na lista: vem como item comum.
+      const paiNaLista = itens[itens.length - 1] === secao.itens[indice - 1]
+      itens.push(item.sub && !paiNaLista ? { ...item, sub: false } : item)
+    })
+    if (itens.length > 0) secoes.push({ ...secao, intro: undefined, exemplo: undefined, itens })
+  }
+  const yakus = YAKU.filter((yaku) =>
+    bate(busca, [yaku.romaji, yaku.kanji, yaku.namePt, ...(yaku.apelidos ?? [])]),
+  )
+  return { secoes, yakus }
+}
+
 export interface TrechoGlossario {
   texto: string
   negrito: boolean

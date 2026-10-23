@@ -90,7 +90,10 @@ export default function BlocoGlossario({
 }) {
   const ignorar = termosDoItem(secao)
   return (
-    <section className={`glossario-bloco${comTitulo ? ' glossario-bloco--cartao' : ''}`}>
+    <section
+      className={`glossario-bloco${comTitulo ? ' glossario-bloco--cartao' : ''}`}
+      data-secao={secao.id}
+    >
       {comTitulo && <TituloSecaoGlossario secao={secao} como="h3" />}
       {secao.intro && (
         <p className="glossario-bloco__intro">

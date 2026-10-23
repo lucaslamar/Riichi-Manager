@@ -13,6 +13,7 @@ import {
 } from '../../../logica/yakus'
 import BlocoDica from '../glossario/BlocoDica'
 import AbaGlossario from './AbaGlossario'
+import { CampoBuscaGuia, ResultadoBuscaGuia } from './BuscaGuia'
 import CartaoYaku from './CartaoYaku'
 import './modal-yakus.css'
 
@@ -106,15 +107,19 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
 /**
  * Referência de yakus para consulta durante a partida. Construída sobre a
  * Modal base (fundo, Esc, foco e trava de rolagem); aqui ficam só as abas
- * (Glossário, Yaku para iniciantes, uma por categoria e Yakuman) e os cartões.
+ * (Glossário, Yaku para iniciantes, uma por categoria e Yakuman), os cartões e
+ * a busca, que vale para o Guia inteiro: com texto, o resultado entra no lugar
+ * do conteúdo da aba; trocar de aba limpa a busca.
  */
 export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()
   const [aba, setAba] = useState<AbaYakus>(lerAbaSalva)
+  const [busca, setBusca] = useState('')
 
   const escolherAba = (novaAba: AbaYakus) => {
     setAba(novaAba)
     salvarAba(novaAba)
+    setBusca('')
   }
 
   return (
@@ -140,7 +145,12 @@ export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
         rotulo="Seções do guia"
         colunas={4}
       >
-        <ConteudoAba aba={aba} />
+        <CampoBuscaGuia valor={busca} aoMudar={setBusca} />
+        {busca.trim() ? (
+          <ResultadoBuscaGuia busca={busca} abas={ABAS} aoAbrirAba={escolherAba} />
+        ) : (
+          <ConteudoAba aba={aba} />
+        )}
       </AbasModal>
     </Modal>
   )

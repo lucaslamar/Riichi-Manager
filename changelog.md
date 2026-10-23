@@ -4,6 +4,8 @@
 
 ### Novo
 
+- **Busca no Guia de bolso**: campo "Buscar termo, yaku ou aba" no topo de todas as abas. Com texto, o resultado entra no lugar do conteúdo: as abas do Guia pelo nome (por exemplo, "yakus para" leva a Yaku para iniciantes), os verbetes do Glossário e os cartões dos yakus. A busca procura no começo das palavras, sem diferenciar acento nem plural, pelo nome, kanji e outras formas de cada termo ("dealer" acha Oya, "naki" acha Chamada, "pares" acha Par e Chiitoitsu). Trocar de aba limpa a busca.
+- **Sumário no Glossário**: índice "Sumário:" com os assuntos no topo da aba, que rola até o bloco.
 - **Yakus clicáveis**: o nome de um yaku nos textos (por exemplo, "Toitoi" na dica do Chiitoitsu, "Tan'yao" no Kuitan) abre o cartão dele, com han, explicação e mão de exemplo. Também vale para outras grafias, como Chiitoi, Tanyao e Kokushi.
 - Glossário, novos verbetes:
   - **Chamada** 鳴き (naki), no começo de Chamadas.

@@ -1,0 +1,104 @@
+/*
+ * Busca do Guia de bolso: campo no topo de todas as abas e, com texto, o
+ * resultado no lugar do conteúdo da aba. Rola junto com o conteúdo.
+ */
+
+.busca-guia {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.busca-guia > .fa-magnifying-glass {
+  position: absolute;
+  left: 12px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.busca-guia input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 40px 0 34px;
+  border: 1px solid #d7dde6;
+  border-radius: 8px;
+  background: var(--branco);
+  color: #102a43;
+  /* 16px: menos que isso o iPhone dá zoom ao focar. */
+  font-size: 1rem;
+  appearance: none;
+}
+
+/* O X nativo do campo some: o botão próprio é maior e igual em todo navegador. */
+.busca-guia input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.busca-guia input::placeholder {
+  color: #94a3b8;
+}
+
+.busca-guia input:focus-visible {
+  border-color: var(--primario);
+  outline: 2px solid var(--primario);
+  outline-offset: -1px;
+}
+
+.busca-guia__limpar {
+  position: absolute;
+  right: 2px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #607080;
+  cursor: pointer;
+}
+
+.busca-guia__limpar:focus-visible {
+  outline: 2px solid var(--primario);
+}
+
+.busca-guia__vazio {
+  margin: 16px 0 0;
+  color: #607080;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.busca-guia__yakus {
+  margin-top: 14px;
+}
+
+/* Abas do Guia achadas pela busca: uma linha por aba, com seta. */
+.busca-guia__abas button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid #dbeafe;
+  background: none;
+  color: #102a43;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-align: left;
+}
+
+.busca-guia__abas button > .fa-chevron-right {
+  color: var(--primario);
+  font-size: 0.8rem;
+}
+
+.busca-guia__abas button:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--primario);
+}
