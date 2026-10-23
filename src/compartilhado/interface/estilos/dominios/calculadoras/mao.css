@@ -148,11 +148,44 @@
 }
 
 .mao-principal-finalizacao {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(6, max-content);
   gap: 4px;
   width: 100%;
   justify-content: start;
+}
+
+/* Limpar da finalização: no canto direito da mão, na altura da última fileira,
+   fora das colunas das pedras (não desloca nenhuma). Tamanho de uma pedra. */
+.btn-limpar-mao-finalizacao {
+  position: absolute;
+  right: 12px;
+  bottom: 0;
+  display: inline-flex;
+  width: max(var(--finalizacao-tile-largura, var(--pedra-mao-largura)), 44px);
+  height: var(--finalizacao-tile-altura, 44px);
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  /* Só o ícone aparece; a área de toque continua com o tamanho de uma pedra. */
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 0.9rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-limpar-mao-finalizacao:hover,
+.btn-limpar-mao-finalizacao:focus-visible {
+  background: #fff5f5;
+}
+
+.btn-limpar-mao-finalizacao:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
 }
 
 .secao-melds-finalizacao {

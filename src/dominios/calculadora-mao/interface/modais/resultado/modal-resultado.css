@@ -176,19 +176,41 @@
 
 .modal-resultado .chip-yaku {
   display: grid;
-  grid-template-columns: 1fr auto;
   gap: 8px;
-  align-items: center;
   padding: 9px 12px;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: var(--resultado-cartao);
   color: #102a43;
+  cursor: pointer;
   font-size: clamp(0.85rem, 0.8rem + 0.25vw, 0.98rem);
   font-weight: 700;
   text-align: left;
 }
 
-.modal-resultado .chip-yaku strong {
+/* Linha do nome e do han: o botão do cartão (acesso por teclado). */
+.modal-resultado .chip-yaku__botao {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.modal-resultado .chip-yaku__botao:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--primario);
+  outline-offset: 3px;
+}
+
+.modal-resultado .chip-yaku__botao > strong {
   color: var(--resultado-destaque);
   font-weight: 900;
 }
@@ -372,15 +394,7 @@
 }
 
 /* ─── Yaku clicável: explicação e pedras em dourado ──────────────────────── */
-.modal-resultado button.chip-yaku {
-  width: 100%;
-  border: 1px solid transparent;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.modal-resultado button.chip-yaku:hover,
-.modal-resultado button.chip-yaku:focus-visible {
+.modal-resultado .chip-yaku:hover {
   border-color: #bfdbfe;
 }
 

@@ -1,6 +1,8 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { DetalheFu, Mao, VentoMao } from '../../../logica/mao'
+import { termoGlossarioDoNome } from '../../../logica/glossario'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import TextoGlossario from '../glossario/TextoGlossario'
 import { explicacaoDoYaku } from './destaqueYaku'
 
 const CHAVE_VENTO: Record<VentoMao, string> = {
@@ -11,6 +13,16 @@ const CHAVE_VENTO: Record<VentoMao, string> = {
 }
 
 const formatar = (valor: number) => valor.toLocaleString('pt-BR')
+
+/**
+ * Grafia exibida dos nomes que a lógica usa como identificador (filtros de
+ * dora, ligação com a referência de yakus): mesma grafia do Glossário.
+ */
+const NOME_EXIBIDO: Record<string, string> = {
+  Tanyao: "Tan'yao",
+  Uradora: 'Ura-dora',
+  Akadora: 'Aka dora',
+}
 
 /**
  * Quem paga no tsumo: sendo Leste, todos pagam o mesmo; senão, Leste paga a
@@ -102,7 +114,7 @@ export default function ExibicaoCompleta({
         <div className="indicadores-resultado">
           {mao.dora.length > 0 && (
             <div className="linha-indicadores-resultado">
-              <strong>Indicadores de Dora</strong>
+              <strong>Indicadores de dora</strong>
               <span className="tiles-indicadores-resultado">
                 {mao.dora.map((pedra, indice) => (
                   <span key={`dora-${pedra}-${indice}`} className="chip-pedra mini">
@@ -122,7 +134,7 @@ export default function ExibicaoCompleta({
           )}
           {mao.uradora.length > 0 && (
             <div className="linha-indicadores-resultado">
-              <strong>Indicadores de Ura Dora</strong>
+              <strong>Indicadores de ura-dora</strong>
               <span className="tiles-indicadores-resultado">
                 {mao.uradora.map((pedra, indice) => (
                   <span key={`ura-${pedra}-${indice}`} className="chip-pedra mini">
@@ -153,36 +165,50 @@ export default function ExibicaoCompleta({
               ([nome, valor, ehYakuman]: [string, number, boolean], i: number) => {
                 const aberto = yakuSelecionado === nome
                 const explicacao = explicacaoDoYaku(nome)
+                const idExplicacao = `explicacao-yaku-${i}`
+                // O cartão todo abre/fecha ao tocar (o botão é o acesso por
+                // teclado); a explicação fica fora do botão por ter links.
                 return (
-                  <button
+                  // biome-ignore lint/a11y/useKeyWithClickEvents: o botão interno faz o mesmo
+                  <div
                     key={i}
-                    type="button"
                     className={`chip-yaku${aberto ? ' aberto' : ''}`}
-                    aria-expanded={aberto}
                     onClick={() => aoSelecionarYaku?.(aberto ? null : nome)}
                   >
-                    <span className="chip-yaku__rotulo">
-                      {nome}
-                      {/* Avisa que o yaku abre a explicação ao tocar. */}
-                      {explicacao && (
-                        <i
-                          className="fas fa-circle-exclamation chip-yaku__icone"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </span>
-                    <strong>{ehYakuman ? `${valor}× YM` : `${valor}han`}</strong>
+                    <button
+                      type="button"
+                      className="chip-yaku__botao"
+                      aria-expanded={aberto}
+                      aria-controls={aberto && explicacao ? idExplicacao : undefined}
+                    >
+                      <span className="chip-yaku__rotulo">
+                        {NOME_EXIBIDO[nome] ?? nome}
+                        {/* Avisa que o yaku abre a explicação ao tocar. */}
+                        {explicacao && (
+                          <i
+                            className="fas fa-circle-exclamation chip-yaku__icone"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </span>
+                      <strong>{ehYakuman ? `${valor}× YM` : `${valor}han`}</strong>
+                    </button>
                     {aberto && explicacao && (
-                      <span className="chip-yaku__explicacao">
+                      <span id={idExplicacao} className="chip-yaku__explicacao">
                         {explicacao.yaku && (
                           <span className="chip-yaku__nome-pt">
                             {explicacao.yaku.namePt} <span lang="ja">{explicacao.yaku.kanji}</span>
                           </span>
                         )}
-                        {explicacao.texto}
+                        <span>
+                          <TextoGlossario
+                            texto={explicacao.texto}
+                            ignorar={[termoGlossarioDoNome(explicacao.yaku?.romaji ?? nome)]}
+                          />
+                        </span>
                       </span>
                     )}
-                  </button>
+                  </div>
                 )
               },
             )}

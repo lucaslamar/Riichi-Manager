@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { parseMpszGrupos } from '../../../logica/yakus'
+import TextoGlossario from '../glossario/TextoGlossario'
 import { CiclosDora, PedrasExemplo } from '../yakus/PedrasExemplo'
 import { TOPICOS_AJUDA, type BlocoAjuda, type TopicoAjuda } from './topicosAjuda'
+import '../glossario/bloco-glossario.css'
 import './ajuda-secoes.css'
 
 /** Marcador nos textos de `sectionHelp` trocado pelo ícone de engrenagem. */
 const MARCADOR_ENGRENAGEM = '[[engrenagem]]'
 
-/** Texto da ajuda com o marcador da engrenagem virando o ícone de verdade. */
-function TextoAjuda({ texto }: { texto: string }) {
+/**
+ * Texto da ajuda com o marcador da engrenagem virando o ícone de verdade e os
+ * termos do glossário virando link (menos os que a própria ajuda explica).
+ */
+function TextoAjuda({ texto, ignorar }: { texto: string; ignorar?: string[] }) {
   const partes = texto.split(MARCADOR_ENGRENAGEM)
   return partes.map((parte, indice) => (
     // biome-ignore lint/suspicious/noArrayIndexKey: partes fixas de um texto
     <span key={indice}>
-      {parte}
+      <TextoGlossario texto={parte} ignorar={ignorar} />
       {indice < partes.length - 1 && (
         <i className="fas fa-gear icone-texto-ajuda" role="img" aria-label="engrenagem" />
       )}
@@ -24,39 +29,52 @@ function TextoAjuda({ texto }: { texto: string }) {
   ))
 }
 
-/** Pedras de exemplo de um bloco (mesmas da aba Pedras da modal de Yakus). */
+/** Pedras de exemplo de um bloco (mesmas do Glossário). */
 function VisualAjuda({ visual }: { visual: NonNullable<BlocoAjuda['visual']> }) {
   if (visual === 'ciclosDora') return <CiclosDora />
   return <PedrasExemplo grupos={parseMpszGrupos('0m0p0s')} rotulo="5 vermelho de Man, Pin e Sou" />
 }
 
-function BlocosAjuda({ blocos }: { blocos: BlocoAjuda[] }) {
+/**
+ * Conteúdo da ajuda no mesmo bloco do Glossário (BlocoGlossario): parágrafos
+ * sem subtítulo são a abertura, subtítulos são itens com divisória, e um
+ * subtítulo de assunto sem texto (ex.: "Qual é o Dora?") vira rótulo de grupo.
+ */
+function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: string[] }) {
   const { t } = useI18n()
 
-  return blocos.map(({ subtitulo, item, icone, paragrafos = [], visual }, indice) => {
-    const Subtitulo = item ? 'h4' : 'h3'
-
-    return (
-      <section
-        // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
-        key={indice}
-        className={`bloco-ajuda-secao${item ? ' bloco-ajuda-secao--item' : ''}`}
-      >
-        {subtitulo && (
-          <Subtitulo>
-            {t(subtitulo)}
-            {icone && <i className={`fas ${icone} icone-subtitulo-ajuda`} aria-hidden="true" />}
-          </Subtitulo>
-        )}
-        {paragrafos.map((chave) => (
-          <p key={chave}>
-            <TextoAjuda texto={t(chave)} />
+  return (
+    <section className="glossario-bloco">
+      {blocos.map(({ subtitulo, item, icone, paragrafos = [], visual }, indice) => {
+        const textos = paragrafos.map((chave) => (
+          <p key={chave} className={subtitulo ? 'glossario-item__texto' : 'glossario-bloco__intro'}>
+            <TextoAjuda texto={t(chave)} ignorar={ignorar} />
           </p>
-        ))}
-        {visual && <VisualAjuda visual={visual} />}
-      </section>
-    )
-  })
+        ))
+        // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
+        if (!subtitulo) return <Fragment key={indice}>{textos}</Fragment>
+        if (!item && paragrafos.length === 0) {
+          return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
+            <h3 key={indice} className="glossario-bloco__titulo">
+              {t(subtitulo)}
+            </h3>
+          )
+        }
+        return (
+          // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
+          <div key={indice} className="glossario-item">
+            <h4 className="glossario-item__nome">
+              {t(subtitulo)}
+              {icone && <i className={`fas ${icone} icone-subtitulo-ajuda`} aria-hidden="true" />}
+            </h4>
+            {textos}
+            {visual && <VisualAjuda visual={visual} />}
+          </div>
+        )
+      })}
+    </section>
+  )
 }
 
 /** Explica uma seção da finalização (aberta pelo botão "?" ao lado do título). */
@@ -68,7 +86,7 @@ export default function ModalAjudaSecao({
   aoFechar: () => void
 }) {
   const { t } = useI18n()
-  const { titulo, blocos = [], abas, tema } = TOPICOS_AJUDA[topico]
+  const { titulo, blocos = [], abas, tema, termosProprios } = TOPICOS_AJUDA[topico]
   const [indiceAba, setIndiceAba] = useState(0)
 
   return (
@@ -89,10 +107,10 @@ export default function ModalAjudaSecao({
           aoEscolher={(chave) => setIndiceAba(Number(chave))}
           rotulo={t(titulo)}
         >
-          <BlocosAjuda blocos={abas[indiceAba].blocos} />
+          <BlocosAjuda blocos={abas[indiceAba].blocos} ignorar={termosProprios} />
         </AbasModal>
       ) : (
-        <BlocosAjuda blocos={blocos} />
+        <BlocosAjuda blocos={blocos} ignorar={termosProprios} />
       )}
     </Modal>
   )

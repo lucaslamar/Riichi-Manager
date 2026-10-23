@@ -1,5 +1,14 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react'
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+  type TouchEvent as EventoToque,
+} from 'react'
 import { createPortal } from 'react-dom'
+import { useDeslizeParaFechar } from '../../hooks/useDeslizeParaFechar'
+import { ContextoNavegacaoModal, type TelaModal } from './navegacaoModal'
 import './modal.css'
 
 export type TamanhoModal = 'pequena' | 'media' | 'grande'
@@ -24,13 +33,42 @@ export interface PropsModal {
   estiloTitulo?: 'titulo' | 'rotulo'
   /** Área fixa abaixo do corpo rolável (botões de ação, referências etc.). */
   rodape?: ReactNode
+  /**
+   * Botões de ícone no cabeçalho, antes do X (classe `modal-acao`). Como o
+   * rodapé, são da tela principal: somem nas telas internas.
+   */
+  acoes?: ReactNode
+  /**
+   * Esconde o X quando uma das `acoes` já fecha a modal (ex.: o lápis do
+   * Resultado). Esc, toque fora e arrastar continuam fechando.
+   */
+  semBotaoFechar?: boolean
   /** Classe da modal específica, para os estilos e funcionalidades próprios dela. */
   className?: string
   children: ReactNode
 }
 
+/**
+ * Modais abertas, da de baixo para a de cima. Só a de cima responde ao Esc e
+ * ao Tab: uma modal aberta por cima de outra fecha sozinha e a de baixo
+ * continua como estava.
+ */
+const pilhaModais: object[] = []
+
 const SELETOR_FOCAVEIS =
   'a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+/** Deslize para a direita (px), bem mais horizontal que vertical, volta uma tela. */
+const DISTANCIA_VOLTAR = 60
+const PROPORCAO_HORIZONTAL = 1.5
+/** Um pouco mais que a animação de saída da tela (modal.css). */
+const DURACAO_SAIDA = 300
+
+interface TelaAberta extends TelaModal {
+  id: number
+  /** Onde estava o foco ao abrir a tela; volta para lá ao sair dela. */
+  foco: HTMLElement | null
+}
 
 /**
  * Modal base do app. Toda modal nasce daqui e só define o próprio conteúdo:
@@ -38,8 +76,15 @@ const SELETOR_FOCAVEIS =
  * qualquer tela (celular, tablet, desktop), sem regras por aparelho.
  *
  * Comportamentos comuns já incluídos: portal no body, fundo que fecha ao
- * clicar fora, Escape, foco preso dentro da modal e devolvido ao fechar,
- * trava de rolagem da página e ligação aria do título/subtítulo.
+ * clicar fora, Escape, arrastar para fechar no limite da rolagem
+ * (useDeslizeParaFechar), foco preso dentro da modal e devolvido ao fechar,
+ * trava de rolagem da página, modais empilhadas e ligação aria do
+ * título/subtítulo.
+ *
+ * Telas internas (ContextoNavegacaoModal): o conteúdo pode abrir outra tela
+ * na mesma modal, que entra deslizando da direita, com botão de voltar (Esc
+ * ou deslizar para a direita também voltam). As telas de baixo continuam
+ * montadas, então cada uma volta com a rolagem onde estava.
  */
 export default function Modal({
   titulo,
@@ -50,19 +95,58 @@ export default function Modal({
   tom = 'padrao',
   estiloTitulo = 'titulo',
   rodape,
+  acoes,
+  semBotaoFechar = false,
   className,
   children,
 }: PropsModal) {
   const id = useId()
   const idTitulo = `${id}-titulo`
   const idSubtitulo = `${id}-subtitulo`
+  const fundoRef = useRef<HTMLDivElement | null>(null)
   const dialogoRef = useRef<HTMLDivElement | null>(null)
   const botaoFecharRef = useRef<HTMLButtonElement | null>(null)
   const aoFecharRef = useRef(aoFechar)
+  const [telas, setTelas] = useState<TelaAberta[]>([])
+  // Tela que está saindo (animação de volta); some ao fim da animação.
+  const [saindo, setSaindo] = useState<TelaAberta | null>(null)
+  const proximoId = useRef(0)
+  const telasRef = useRef(telas)
+  telasRef.current = telas
+  const inicioToque = useRef<{ x: number; y: number } | null>(null)
 
   useEffect(() => {
     aoFecharRef.current = aoFechar
   }, [aoFechar])
+
+  useDeslizeParaFechar(dialogoRef, fundoRef, aoFechar)
+
+  const abrirTela = (tela: TelaModal) => {
+    const foco = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    proximoId.current += 1
+    setSaindo(null)
+    setTelas((atuais) => [...atuais, { ...tela, id: proximoId.current, foco }])
+  }
+
+  const voltarRef = useRef(() => {})
+  voltarRef.current = () => {
+    const atual = telasRef.current[telasRef.current.length - 1]
+    if (!atual) return
+    setTelas((atuais) => atuais.slice(0, -1))
+    setSaindo(atual)
+    // Garantia se o `animationend` não vier (aba em segundo plano pausa a animação).
+    window.setTimeout(() => setSaindo((tela) => (tela === atual ? null : tela)), DURACAO_SAIDA)
+    atual.foco?.focus({ preventScroll: true })
+  }
+
+  // Foco na tela nova, para o leitor de tela anunciar e o Tab seguir dela.
+  const ultimaTela = telas[telas.length - 1]
+  useEffect(() => {
+    if (!ultimaTela) return
+    dialogoRef.current
+      ?.querySelector<HTMLElement>(`[data-tela="${ultimaTela.id}"]`)
+      ?.focus({ preventScroll: true })
+  }, [ultimaTela])
 
   useEffect(() => {
     const focoAnterior =
@@ -72,23 +156,32 @@ export default function Modal({
     // Foco inicial no próprio diálogo (não no X): leitores de tela anunciam o
     // título e o X não abre com o anel de foco aceso; o Tab leva ao X.
     dialogoRef.current?.focus()
+    const marca = {}
+    pilhaModais.push(marca)
 
     const aoPressionarTecla = (evento: KeyboardEvent) => {
+      if (pilhaModais[pilhaModais.length - 1] !== marca) return
       if (evento.key === 'Escape') {
         evento.stopPropagation()
-        aoFecharRef.current()
+        // Numa tela interna, o Esc volta uma tela; senão fecha.
+        if (telasRef.current.length > 0) voltarRef.current()
+        else aoFecharRef.current()
         return
       }
 
       const dialogo = dialogoRef.current
       if (evento.key !== 'Tab' || !dialogo) return
 
-      const focaveis = Array.from(dialogo.querySelectorAll<HTMLElement>(SELETOR_FOCAVEIS))
+      // Só o que está visível: telas cobertas ficam com `visibility: hidden`.
+      const focaveis = Array.from(
+        dialogo.querySelectorAll<HTMLElement>(SELETOR_FOCAVEIS),
+      ).filter((elemento) => getComputedStyle(elemento).visibility !== 'hidden')
       if (focaveis.length === 0) return
 
       const primeiro = focaveis[0]
       const ultimo = focaveis[focaveis.length - 1]
-      if (document.activeElement === dialogo) {
+      const fora = !focaveis.includes(document.activeElement as HTMLElement)
+      if (fora) {
         evento.preventDefault()
         ;(evento.shiftKey ? ultimo : primeiro).focus()
       } else if (evento.shiftKey && document.activeElement === primeiro) {
@@ -103,28 +196,69 @@ export default function Modal({
     document.addEventListener('keydown', aoPressionarTecla)
     return () => {
       document.removeEventListener('keydown', aoPressionarTecla)
+      pilhaModais.splice(pilhaModais.indexOf(marca), 1)
       document.body.style.overflow = overflowAnterior
-      focoAnterior?.focus()
+      // Sem rolar: a modal de baixo (se houver) fica exatamente onde estava.
+      focoAnterior?.focus({ preventScroll: true })
     }
   }, [])
 
+  const aoTocarTela = (evento: EventoToque) => {
+    const toque = evento.touches[0]
+    inicioToque.current =
+      evento.touches.length === 1 && toque ? { x: toque.clientX, y: toque.clientY } : null
+  }
+
+  const aoSoltarTela = (evento: EventoToque) => {
+    const inicio = inicioToque.current
+    inicioToque.current = null
+    const toque = evento.changedTouches[0]
+    if (!inicio || !toque) return
+    const deltaX = toque.clientX - inicio.x
+    const deltaY = toque.clientY - inicio.y
+    if (deltaX >= DISTANCIA_VOLTAR && deltaX >= Math.abs(deltaY) * PROPORCAO_HORIZONTAL) {
+      voltarRef.current()
+    }
+  }
+
+  const navegando = telas.length > 0
   const classes = [
     'modal',
     `modal--${tamanho}`,
     `modal--${tom}`,
     `modal--titulo-${estiloTitulo}`,
+    navegando ? 'modal--navegando' : undefined,
     className,
   ]
     .filter(Boolean)
     .join(' ')
 
+  const renderizarTela = (tela: TelaAberta, estado: 'ativa' | 'coberta' | 'saindo') => (
+    <div
+      key={tela.id}
+      data-tela={tela.id}
+      className={`modal-tela modal-tela--${estado}`}
+      tabIndex={-1}
+      aria-hidden={estado === 'ativa' ? undefined : true}
+      onTouchStart={estado === 'ativa' ? aoTocarTela : undefined}
+      onTouchEnd={estado === 'ativa' ? aoSoltarTela : undefined}
+      onAnimationEnd={estado === 'saindo' ? () => setSaindo(null) : undefined}
+    >
+      {tela.conteudo}
+    </div>
+  )
+
   return createPortal(
     <div
+      ref={fundoRef}
       className="modal-fundo"
       role="presentation"
       onMouseDown={(evento) => {
         if (evento.target === evento.currentTarget) aoFechar()
       }}
+      // Eventos do React atravessam o portal: sem isso, um clique numa modal
+      // aberta de dentro de um botão também o acionaria.
+      onClick={(evento) => evento.stopPropagation()}
     >
       <div
         ref={dialogoRef}
@@ -133,34 +267,63 @@ export default function Modal({
         aria-modal="true"
         tabIndex={-1}
         aria-labelledby={idTitulo}
-        aria-describedby={subtitulo ? idSubtitulo : undefined}
+        aria-describedby={subtitulo && !navegando ? idSubtitulo : undefined}
       >
         <header className="modal-cabecalho">
+          {navegando && (
+            <button
+              className="modal-voltar"
+              type="button"
+              aria-label="Voltar"
+              title="Voltar"
+              onClick={() => voltarRef.current()}
+            >
+              <i className="fas fa-chevron-left" aria-hidden="true" />
+            </button>
+          )}
           <div className="modal-titulos">
             <h2 id={idTitulo} className="modal-titulo">
-              {titulo}
+              {ultimaTela ? ultimaTela.titulo : titulo}
             </h2>
-            {subtitulo && (
+            {subtitulo && !navegando && (
               <p id={idSubtitulo} className="modal-subtitulo">
                 {subtitulo}
               </p>
             )}
           </div>
-          <button
-            ref={botaoFecharRef}
-            className="modal-fechar"
-            type="button"
-            aria-label={rotuloFechar}
-            title={rotuloFechar}
-            onClick={aoFechar}
-          >
-            <i className="fas fa-xmark" aria-hidden="true" />
-          </button>
+          {acoes && !navegando && <div className="modal-acoes">{acoes}</div>}
+          {/* Nas telas internas as `acoes` somem, então o X volta mesmo com `semBotaoFechar`. */}
+          {(!semBotaoFechar || navegando) && (
+            <button
+              ref={botaoFecharRef}
+              className="modal-fechar"
+              type="button"
+              aria-label={rotuloFechar}
+              title={rotuloFechar}
+              onClick={aoFechar}
+            >
+              <i className="fas fa-xmark" aria-hidden="true" />
+            </button>
+          )}
         </header>
 
-        <div className="modal-corpo">{children}</div>
+        <ContextoNavegacaoModal.Provider value={abrirTela}>
+          <div className={`modal-palco${navegando || saindo ? ' modal-palco--navegando' : ''}`}>
+            <div
+              className={`modal-corpo${navegando ? ' modal-corpo--coberta' : ''}`}
+              aria-hidden={navegando || undefined}
+            >
+              {children}
+            </div>
+            {telas.map((tela, indice) =>
+              renderizarTela(tela, indice === telas.length - 1 ? 'ativa' : 'coberta'),
+            )}
+            {saindo && renderizarTela(saindo, 'saindo')}
+          </div>
+        </ContextoNavegacaoModal.Provider>
 
-        {rodape && <footer className="modal-rodape">{rodape}</footer>}
+        {/* O rodapé é da tela principal (ex.: Aplicar das Regras): some nas telas internas. */}
+        {rodape && !navegando && <footer className="modal-rodape">{rodape}</footer>}
       </div>
     </div>,
     document.body,

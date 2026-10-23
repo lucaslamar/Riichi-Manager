@@ -31,6 +31,8 @@
     "close": "Fechar",
     "clear": "Limpar",
     "editHand": "Editar mão",
+    "backToFinish": "Voltar para a finalização",
+    "newHand": "Nova mão",
     "rules": "Regras",
     "quickMode": "Han e Fu",
     "completeMode": "Modo completo",
@@ -71,7 +73,7 @@
     "waitsNoYaku": "Essas pedras fecham a forma, mas ainda falta yaku para vencer.",
     "waitsNone": "Nenhuma pedra restante fecha uma mão válida agora.",
     "waitsAccessibleSummary": "{{status}}, {{count}} esperas marcadas no teclado.",
-    "furitenWarning": "Furiten: esperas que já estão nos seus descartes não podem vencer por Ron.",
+    "furitenWarning": "Furiten: esperas que já estão nos seus descartes não podem vencer por ron.",
     "mountToCalculate": "Monte a mão para calcular.",
     "adjustAndCalculate": "Ajuste as opções e toque em Calcular.",
     "readyToCalculate": "Mão pronta. Revise as opções e calcule.",
@@ -92,7 +94,7 @@
     "riichi": "Riichi",
     "ippatsu": "Ippatsu",
     "doubleRiichi": "Double Riichi",
-    "riichiClosedHandOnly": "Só com a mão fechada (sem Chi, Pon ou Kan aberto).",
+    "riichiClosedHandOnly": "Só com a mão fechada (sem chi, pon ou kan aberto).",
     "specialConditions": "Condições especiais",
     "tenhouChiihou": "Tenhou / Chiihou",
     "chankan": "Chankan",
@@ -104,11 +106,11 @@
     "tenpai": "Tenpai",
     "furiten": "Furiten",
     "noYaku": "Sem yaku",
-    "doraIndicators": "Indicadores de Dora",
-    "doraUraIndicators": "Indicadores de Dora / Ura Dora",
-    "doraUraIndicatorsHint": "Representa Dora e Ura Dora. Até 10 indicadores e até 13 doras na mão.",
+    "doraIndicators": "Indicadores de dora",
+    "doraUraIndicators": "Indicadores de dora / ura-dora",
+    "doraUraIndicatorsHint": "Representa dora e ura-dora. Até 10 indicadores e até 13 doras na mão.",
     "noDoraIndicatorSelected": "Nenhum indicador selecionado",
-    "uraDoraIndicators": "Indicadores de Ura Dora",
+    "uraDoraIndicators": "Indicadores de ura-dora",
     "manualDoraShort": "Dora manual",
     "discards": "Descartes",
     "discardsFuriten": "Descartes / Furiten",
@@ -120,35 +122,35 @@
     "akaDora": "5 vermelho (aka dora)",
     "addTileToHand": "Adicionar {{tile}} à mão",
     "addTileToDiscards": "Adicionar {{tile}} aos descartes para furiten",
-    "selectDoraIndicator": "Selecionar {{tile}} como indicador de dora / ura dora",
-    "selectUraDoraIndicator": "Selecionar {{tile}} como indicador de ura dora",
+    "selectDoraIndicator": "Selecionar {{tile}} como indicador de dora / ura-dora",
+    "selectUraDoraIndicator": "Selecionar {{tile}} como indicador de ura-dora",
     "chooseMeldTile": "Selecionar {{tile}} para {{meld}}",
     "chooseChiiSequence": "Escolha o Chi",
     "chooseChiiSequenceOption": "Escolher Chi: {{sequence}}",
     "disabledTile": "{{tile}} indisponível neste momento",
-    "removeDoraIndicator": "Remover indicador de dora / ura dora {{tile}}",
-    "removeUraDoraIndicator": "Remover indicador de ura dora {{tile}}",
+    "removeDoraIndicator": "Remover indicador de dora / ura-dora {{tile}}",
+    "removeUraDoraIndicator": "Remover indicador de ura-dora {{tile}}",
     "removeDiscard": "Remover descarte {{tile}}",
-    "clearDoraIndicators": "Limpar indicadores de dora e ura dora",
+    "clearDoraIndicators": "Limpar indicadores de dora e ura-dora",
     "clearDiscards": "Limpar descartes",
-    "chooseRon": "Escolher batida por Ron",
-    "chooseTsumo": "Escolher batida por Tsumo",
+    "chooseRon": "Escolher batida por ron",
+    "chooseTsumo": "Escolher batida por tsumo",
     "chooseRoundWind": "Escolher vento da rodada: {{wind}}",
     "chooseSeatWind": "Escolher vento do jogador: {{wind}}",
     "result": "Resultado",
     "alert": "Alerta",
     "invalidHand": "Mão inválida",
-    "furitenChomboTitle": "Chombo por Ron em furiten",
+    "furitenChomboTitle": "Chombo por ron em furiten",
     "furitenChomboTextDealer": "Ron em furiten não vence a mão. Penalidade: 4.000 para cada jogador.",
     "furitenChomboTextNonDealer": "Ron em furiten não vence a mão. Penalidade: 4.000 para o oya e 2.000 para cada outro jogador.",
     "noYakuTitle": "Sem yaku — mão inválida",
     "noYakuPenaltyDealer": "Penalidade de chombo: 4.000 para cada jogador.",
     "noYakuPenaltyNonDealer": "Penalidade de chombo: 4.000 para o Leste e 2.000 para cada outro jogador.",
     "invalidShape": "A combinação de pedras não forma uma mão válida.",
-    "addYakuHint": "Mão sem yaku: adicione Riichi, Tanyao ou outro yaku.",
+    "addYakuHint": "Mão sem yaku: adicione Riichi, Tan'yao ou outro yaku.",
     "resultAnnounce": "Resultado: {{agari}}. {{han}} han, {{fu}} fu. Pontuação: {{points}} pontos. Yakus: {{yaku}}.",
-    "invalidFuritenAnnounce": "Resultado inválido: Furiten. Você descartou uma das suas esperas.",
-    "invalidNoYakuAnnounce": "Resultado inválido: Sem yaku. Esta mão não possui yaku válido.",
+    "invalidFuritenAnnounce": "Resultado inválido: furiten. Você descartou uma das suas esperas.",
+    "invalidNoYakuAnnounce": "Resultado inválido: sem yaku. Esta mão não possui yaku válido.",
     "notEnoughTiles": "Tiles insuficientes para calcular."
   },
   "hanFu": {
@@ -206,9 +208,9 @@
     "discardsAction": "Descartes",
     "discardsCompact": "Desc.",
     "quickCalculatorAction": "Han e Fu",
-    "dora": "Ind. Dora / Ura",
+    "dora": "Ind. dora / ura",
     "doraCompact": "Dora/Ura",
-    "uradora": "Ura dora"
+    "uradora": "Ura-dora"
   },
   "tiles": {
     "man": "{{number}} de Man",
@@ -238,39 +240,39 @@
     "victory": {
       "tsumo": "Você completou a mão com uma peça comprada da parede. Todos os outros jogadores pagam.",
       "ron": "Você completou a mão com uma peça descartada por outro jogador. Quem descartou paga sozinho.",
-      "menzen": "Com a mão fechada, Tsumo vale 1 han (Menzen Tsumo) e é um yaku, então sozinho já torna sua mão válida.",
+      "menzen": "Com a mão fechada, o tsumo vale 1 han (Menzen Tsumo) e é um yaku, então sozinho já torna sua mão válida.",
       "yakuTitle": "Yaku",
       "yaku": "Condição de pontuação que dá direito a vencer. Toda mão precisa de pelo menos um."
     },
     "honba": {
       "counter": "Contador de rodadas extras. Aumenta quando o dealer vence ou quando a rodada termina empatada.",
-      "points": "Cada honba adiciona 300 pontos ao vencedor. No Tsumo, cada jogador paga 100. No Ron, quem descartou paga 300.",
-      "basengoTitle": "Basengo (Grande Honba)",
-      "basengo": "Em algumas mesas, cada honba vale 1.500 pontos em vez de 300. No Tsumo, cada jogador paga 500 por honba. Para usar, ative Basengo em Regras de cálculo, no ícone de engrenagem ([[engrenagem]]) da Calculadora de Mão."
+      "points": "Cada honba adiciona 300 pontos ao vencedor. No tsumo, cada jogador paga 100. No ron, quem descartou paga 300.",
+      "basengoTitle": "Basengo (grande honba)",
+      "basengo": "Em algumas mesas, cada honba vale 1.500 pontos em vez de 300. No tsumo, cada jogador paga 500 por honba. Para usar, ative Basengo em Regras de cálculo, no ícone de engrenagem ([[engrenagem]]) da Calculadora de Mão."
     },
     "dora": {
       "title": "Qual é o Dora?",
-      "inHand": "Informe quantas Doras você possui na mão.",
-      "indicatorsTitle": "Indicadores de Dora",
-      "indicators": "Selecione os Indicadores de Dora. O Indicador não é a Dora; ele determina qual peça será contada como Dora.",
-      "uraDora": "A peça que fica embaixo de cada Indicador de Dora no muro morto. Funciona como um Indicador de Dora a mais, mas só é revelada para quem vence depois de declarar Riichi.",
-      "akaTitle": "Aka Dora",
-      "aka": "Os cincos vermelhos contam como Dora, 1 han cada. Para usar, ative Aka dora em Regras de cálculo, no ícone de engrenagem ([[engrenagem]]) da Calculadora de Mão.",
+      "inHand": "Informe quantas doras você possui na mão.",
+      "indicatorsTitle": "Indicadores de dora",
+      "indicators": "Selecione os indicadores de dora. O indicador não é a dora; ele determina qual peça será contada como dora.",
+      "uraDora": "A peça que fica embaixo de cada indicador de dora no muro morto. Funciona como um indicador de dora a mais, mas só é revelada para quem vence depois de declarar Riichi.",
+      "akaTitle": "Aka dora",
+      "aka": "Os cincos vermelhos contam como dora, 1 han cada. Para usar, ative Aka dora em Regras de cálculo, no ícone de engrenagem ([[engrenagem]]) da Calculadora de Mão.",
       "flamingTitle": "Dora flamejante",
-      "flaming": "Quando o Indicador de Dora é um 5 vermelho, cada Dora daquele indicador vale 2 han. Para usar, ative Aka dora e Dora flamejante em Regras de cálculo, no ícone de engrenagem ([[engrenagem]]) da Calculadora de Mão.",
+      "flaming": "Quando o indicador de dora é um 5 vermelho, cada dora daquele indicador vale 2 han. Para usar, ative Aka dora e Dora flamejante em Regras de cálculo, no ícone de engrenagem ([[engrenagem]]) da Calculadora de Mão.",
       "curiosityTitle": "Curiosidade",
-      "curiosity": "No Riichi Mahjong, a palavra Dora (ドラ) é uma abreviação de “dragon”, dragão em inglês, que em japonês se pronuncia doragon (ドラゴン).",
-      "dragonPrince": "Por isso dizem que quem nunca abandona suas Doras é príncipe (ou princesa) dos dragões."
+      "curiosity": "No Riichi Mahjong, a palavra dora (ドラ) é uma abreviação de “dragon”, dragão em inglês, que em japonês se pronuncia doragon (ドラゴン).",
+      "dragonPrince": "Por isso dizem que quem nunca abandona suas doras é príncipe (ou princesa) dos dragões."
     },
     "uraDora": {
-      "term": "Ura Dora"
+      "term": "Ura-dora"
     },
     "furiten": {
-      "rule": "Em furiten você não pode vencer por Ron, só por Tsumo. Declarar Ron em furiten é chombo (penalidade).",
+      "rule": "Em furiten você não pode vencer por ron, só por tsumo. Declarar ron em furiten é chombo (penalidade).",
       "discardsTitle": "Pelos descartes",
       "discards": "Alguma peça que completaria sua mão está entre os seus descartes. Dura enquanto a sua espera incluir essa peça.",
       "temporaryTitle": "Temporário",
-      "temporary": "Você deixou passar uma peça que completaria sua mão, sem declarar Ron. Dura até o seu próximo descarte.",
+      "temporary": "Você deixou passar uma peça que completaria sua mão, sem declarar ron. Dura até o seu próximo descarte.",
       "riichiTitle": "De Riichi",
       "riichi": "Depois de declarar Riichi, você deixou passar uma peça que completaria sua mão. Dura até o fim da rodada, porque a mão não pode mais mudar.",
       "registerTitle": "Como o app verifica",
@@ -286,19 +288,19 @@
     },
     "riichi": {
       "declaration": "Declaração feita com a mão fechada e a um passo de completar (tenpai). Custa 1.000 pontos de aposta.",
-      "value": "Vale 1 han e é um yaku, então sozinho já torna sua mão válida. Também libera a Ura Dora. Depois de declarar, você não pode mais alterar a mão.",
+      "value": "Vale 1 han e é um yaku, então sozinho já torna sua mão válida. Também libera a ura-dora. Depois de declarar, você não pode mais alterar a mão.",
       "doubleRiichi": "Riichi declarado no primeiro descarte, sem chamadas antes. Vale 2 han no lugar de 1 e também é um yaku.",
       "ippatsu": "Batida em até uma volta após o Riichi, sem chamadas no meio. Vale +1 han. É um yaku, mas só existe junto com o Riichi.",
-      "uraDora": "A peça que fica embaixo de cada Indicador de Dora no muro morto. Funciona como um Indicador de Dora a mais, mas só é revelada para quem bate depois de declarar Riichi."
+      "uraDora": "A peça que fica embaixo de cada indicador de dora no muro morto. Funciona como um indicador de dora a mais, mas só é revelada para quem bate depois de declarar Riichi."
     },
     "specialConditions": {
       "allYaku": "Todas são yaku, então qualquer uma delas já torna sua mão válida, mesmo sem outro yaku.",
       "tenhouChiihouTitle": "Tenhou e Chiihou",
-      "tenhouChiihou": "Batida com a mão inicial. Tenhou é a do dealer e Chiihou a dos demais jogadores. Valem yakuman.",
-      "rinshan": "Batida com a peça comprada após um Kan. Vale +1 han.",
-      "chankan": "Ron sobre a peça que outro jogador adicionou a um Pon para formar Kan. Vale +1 han.",
-      "haitei": "Batida por Tsumo com a última peça da parede. Vale +1 han.",
-      "houtei": "Batida por Ron com o último descarte da partida. Vale +1 han."
+      "tenhouChiihou": "Batida com a mão inicial. Tenhou é a do dealer e Chiihou a dos demais jogadores. Valem Yakuman.",
+      "rinshan": "Batida com a peça comprada após um kan. Vale +1 han.",
+      "chankan": "Ron sobre a peça que outro jogador adicionou a um pon para formar kan. Vale +1 han.",
+      "haitei": "Batida por tsumo com a última peça da parede. Vale +1 han.",
+      "houtei": "Batida por ron com o último descarte da partida. Vale +1 han."
     }
   },
   "rulesModal": {
@@ -321,8 +323,8 @@
       "off": "Desativar"
     },
     "tanyaoAberto": {
-      "title": "Tanyao aberto",
-      "help": "Define se Tanyao vale com chamadas abertas. É comum em regras japonesas modernas, mas alguns grupos usam kuitan nashi.",
+      "title": "Tan'yao aberto",
+      "help": "Define se Tan'yao vale com chamadas abertas. É comum em regras japonesas modernas, mas alguns grupos usam kuitan nashi.",
       "on": "Permitido",
       "off": "Fechado apenas"
     },
@@ -339,26 +341,26 @@
       "off": "Sem +2 fu"
     },
     "kiriageMangan": {
-      "title": "Kiriage mangan",
-      "help": "Arredonda 4 han 30 fu e 3 han 60 fu para mangan quando a regra da mesa usa kiriage.",
+      "title": "Kiriage Mangan",
+      "help": "Arredonda 4 han 30 fu e 3 han 60 fu para Mangan quando a regra da mesa usa kiriage.",
       "on": "Ativar",
       "off": "Desativar"
     },
     "kazoeYakuman": {
-      "title": "Kazoe yakuman",
-      "help": "Define se 13 ou mais han sem yakuman natural contam como yakuman contado ou param em Sanbaiman.",
+      "title": "Kazoe Yakuman",
+      "help": "Define se 13 ou mais han sem Yakuman natural contam como Yakuman contado ou param em Sanbaiman.",
       "on": "Yakuman",
       "off": "Sanbaiman"
     },
     "yakumanDuplo": {
       "title": "Yakuman duplo",
-      "help": "Permite formas especiais como Suuankou tanki ou Kokushi 13 esperas valerem yakuman duplo.",
+      "help": "Permite formas especiais como Suuankou tanki ou Kokushi 13 esperas valerem Yakuman duplo.",
       "on": "Permitir",
       "off": "Simples"
     },
     "multiYakuman": {
       "title": "Yakuman acumulado",
-      "help": "Permite somar múltiplos yakuman na mesma mão, por exemplo Daisuushii junto com Tsuuiisou.",
+      "help": "Permite somar múltiplos Yakuman na mesma mão, por exemplo Daisuushii junto com Tsuuiisou.",
       "on": "Permitir",
       "off": "Um só"
     },

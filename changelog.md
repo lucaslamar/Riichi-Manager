@@ -1,5 +1,22 @@
 # Changelog - Mojoca
 
+## 5.3.0 - 2026-10-22
+
+### Novo
+
+- **Termos clicáveis**: nas descrições do Guia de bolso, nas explicações dos yakus no Resultado, nas Regras de cálculo e nas ajudas "?", os termos do jogo ficam sublinhados em pontilhado (por exemplo, "Ippatsu" e "Ura-dora" no Riichi, "ryanmen" no Pinfu, "kuitan" no Tan'yao). Tocar abre a definição deslizando de lado dentro da própria janela, com o assunto inteiro e o termo destacado em amarelo. A seta ‹, o Esc ou deslizar o dedo para a direita voltam, e termos dentro da definição também abrem. Só a primeira vez que o termo aparece em cada texto vira link.
+- Fechar janelas arrastando, como no iPhone: no topo da rolagem, arrastar para baixo; no fim, arrastar para cima; sem rolagem, os dois. A janela acompanha o dedo e o fundo clareia; se soltar antes, volta com efeito de mola. Com "Reduzir movimento" ligado no aparelho, vira um fade curto. O X continua em todas as janelas, menos no Resultado.
+- Resultado: lápis (volta para a finalização da mão) e lixeira (limpa tudo e começa uma mão nova) no cabeçalho, no lugar do X.
+- Glossário: novos termos Sequência, Trinca, Par, Ryanmen, Kuitan e Ippatsu, com pedras de exemplo em Sequência, Trinca, Par e Ryanmen.
+
+### Alterado
+
+- Guia de bolso: nova ordem das abas, em duas linhas (Glossário, Iniciante, Sequências, Terminais / Trincas, Naipes, Outros, Yakuman), e abre no Glossário na primeira vez.
+- Glossário organizado por assunto (Naipes, Honras, Formação da mão, Chamadas, Espera e vitória, Dora, Pontuação e Mesa), cada um num bloco com título e subtítulos. A lista solta de termos saiu, e a nota "Dora não é yaku" entrou no item Dora.
+- Ajudas "?" da finalização no mesmo formato de bloco do Glossário, mantendo os textos e o rosa de Doras e honba.
+- Finalização da mão: a lixeira saiu do cabeçalho e foi para o canto direito da mão, ao lado da última fileira de pedras, só com o ícone. No cabeçalho, a engrenagem vem antes do lápis. Nos tablets a mão continua numa linha só, com a lixeira no fim.
+- Termos do jogo padronizados nos textos: nomes de yaku, patamares e pedras com maiúscula (Riichi, Tan'yao, Mangan, Haku); ron, tsumo, dora, kan, furiten e chombo em minúscula no meio da frase; grafias únicas Ura-dora, Aka dora e Tan'yao (também nos yakus do Resultado).
+
 ## 5.2.0 - 2026-10-22
 
 ### Novo

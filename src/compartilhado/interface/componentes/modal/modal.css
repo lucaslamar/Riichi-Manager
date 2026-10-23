@@ -22,8 +22,19 @@
   justify-content: center;
   padding: clamp(10px, 3vmin, 24px);
   padding-bottom: max(clamp(10px, 3vmin, 24px), env(safe-area-inset-bottom));
-  background: rgba(16, 42, 67, 0.5);
   overscroll-behavior: contain;
+}
+
+/* Escurecido numa camada própria: o arrastar para fechar (useDeslizeParaFechar)
+   clareia o fundo mexendo só na opacidade dela. */
+.modal-fundo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(16, 42, 67, 0.5);
+  opacity: var(--modal-escurecido-opacidade, 1);
+  transition: var(--modal-escurecido-transicao, none);
 }
 
 .modal {
@@ -143,6 +154,53 @@
   outline-offset: -2px;
 }
 
+/* Botões de ícone antes do X (ex.: Editar e Nova mão no Resultado). */
+.modal-acoes {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Sem o X, os ícones encostam no canto (o último fica onde o X ficaria). */
+.modal-acoes:last-child {
+  margin-right: -8px;
+}
+
+.modal-acao {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #40566d;
+  cursor: pointer;
+  font-size: 0.95rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal-acao:hover,
+.modal-acao:focus-visible {
+  color: var(--primario);
+}
+
+.modal-acao:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+.modal-acao--destrutiva {
+  color: #ef4444;
+}
+
+.modal-acao--destrutiva:hover,
+.modal-acao--destrutiva:focus-visible {
+  color: #b91c1c;
+}
+
 /* ─── Corpo (única área rolável) ──────────────────────────────────────────── */
 .modal-corpo {
   flex: 1 1 auto;
@@ -158,6 +216,148 @@
 
 .modal--titulo-titulo .modal-corpo {
   padding-top: calc(var(--modal-espaco) * 0.5);
+}
+
+/* ─── Telas internas (entram deslizando da direita, com voltar) ───────────── */
+.modal-palco {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Com uma tela aberta, a modal não encolhe abaixo disso (o corpo de baixo
+   pode ser curto). */
+.modal-palco--navegando {
+  min-height: min(380px, 55dvh);
+}
+
+.modal-tela {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: calc(var(--modal-espaco) * 0.5) var(--modal-espaco) var(--modal-espaco);
+  background: var(--modal-fundo);
+  container-type: inline-size;
+}
+
+.modal-tela:focus {
+  outline: none;
+}
+
+.modal-tela--ativa {
+  animation: modal-tela-entrar 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modal-tela--saindo {
+  z-index: 1;
+  animation: modal-tela-sair 240ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+/* O que fica por baixo recua um pouco (como no iPhone) e some do Tab e do
+   leitor de tela quando termina de ser coberto. */
+.modal-corpo,
+.modal-tela {
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 280ms ease,
+    visibility 0s;
+}
+
+.modal-corpo--coberta,
+.modal-tela--coberta {
+  transform: translateX(-25%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 280ms ease,
+    visibility 0s linear 280ms;
+}
+
+@keyframes modal-tela-entrar {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes modal-tela-sair {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.modal-voltar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  margin-left: -10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--primario-escuro);
+  cursor: pointer;
+  font-size: 1.05rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal-voltar:hover,
+.modal-voltar:focus-visible {
+  color: var(--primario);
+}
+
+.modal-voltar:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+/* Título da tela interna sempre no estilo de título, mesmo em modais de rótulo. */
+.modal--navegando.modal--titulo-rotulo .modal-titulo {
+  color: var(--escuro);
+  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Reduzir movimento: troca de tela com um fade curto, sem deslizar. */
+@media (prefers-reduced-motion: reduce) {
+  .modal-tela--ativa {
+    animation: modal-tela-aparecer 150ms ease;
+  }
+
+  .modal-tela--saindo {
+    animation: modal-tela-sumir 150ms ease forwards;
+  }
+
+  .modal-corpo--coberta,
+  .modal-tela--coberta {
+    transform: none;
+  }
+
+  .modal-corpo,
+  .modal-tela {
+    transition-duration: 150ms;
+  }
+
+  @keyframes modal-tela-aparecer {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes modal-tela-sumir {
+    to {
+      opacity: 0;
+    }
+  }
 }
 
 /* ─── Rodapé (fixo, opcional) ─────────────────────────────────────────────── */

@@ -33,7 +33,9 @@ export default function ModoCompletoCalculadora({
       ? ` • ${t('calculator.physicalTilesShort', { total: estado.totalPedras })}`
       : ''
   const rotuloMaoFinalizacao = `${t('calculator.completeHand')} ${slotsEstruturais}/14${sufixoFisico}`
+  // Limpar não fica aqui: na finalização ele vai para o canto da mão (MaoAtual).
   const acoesContextuais = [
+    { chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-gear', aoClicar: aoAbrirRegras },
     ...(finalizandoMao
       ? [
           {
@@ -45,14 +47,6 @@ export default function ModoCompletoCalculadora({
           },
         ]
       : []),
-    { chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-gear', aoClicar: aoAbrirRegras },
-    {
-      chave: 'limpar',
-      rotulo: t('actions.clear'),
-      icone: 'fa-trash',
-      aoClicar: estado.limpar,
-      destrutiva: true,
-    },
   ]
 
   useEffect(() => {
@@ -92,9 +86,7 @@ export default function ModoCompletoCalculadora({
                 {acoesContextuais.map((acao) => (
                   <button
                     key={acao.chave}
-                    className={`acao-finalizacao ${acao.destaque ? 'destaque' : ''} ${
-                      acao.destrutiva ? 'destrutiva' : ''
-                    }`.trim()}
+                    className={`acao-finalizacao ${'destaque' in acao ? 'destaque' : ''}`.trim()}
                     type="button"
                     title={acao.rotulo}
                     aria-label={acao.rotulo}

@@ -1030,6 +1030,11 @@
     border-bottom: 1px solid #edf2f7;
   }
 
+  /* Acompanha o respiro acima da divisória: alinhado à última fileira. */
+  .construtor-mao-finalizacao .btn-limpar-mao-finalizacao {
+    bottom: 5px;
+  }
+
   .construtor-mao-finalizacao .melds-finalizacao-coluna {
     gap: 6px;
     padding-bottom: 4px;
@@ -3854,6 +3859,15 @@
      entre uma pedra e outra. */
   .construtor-mao-finalizacao .mao-principal-finalizacao {
     grid-template-columns: repeat(auto-fit, 26px);
+    /* As colunas enchem a largura: reserva o canto da lixeira (34px + respiro). */
+    padding-right: 52px;
+  }
+
+  .construtor-mao-finalizacao .btn-limpar-mao-finalizacao {
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    font-size: 0.8rem;
   }
 
   /* ─── Botões de ação da mão (Chi, Pon, Kan, Descarte) ──────────────────── */
@@ -5199,7 +5213,8 @@
  */
 @media (min-width: 744px) and (max-width: 1279px) and (min-height: 1000px) and (orientation: portrait) {
   .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-principal-finalizacao {
-    --finalizacao-tile-largura: clamp(36px, calc((100vw - 230px) / 14), 52px);
+    /* 15 lugares: as 14 pedras + a lixeira no fim da linha. */
+    --finalizacao-tile-largura: clamp(36px, calc((100vw - 238px) / 15), 52px);
     --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
   }
 
@@ -5377,5 +5392,16 @@
 @media (min-width: 744px) and (min-height: 701px) {
   .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-principal-finalizacao {
     padding-inline: 0;
+    /* Mão numa linha só: o fim da linha fica reservado para a lixeira (uma
+       pedra + o espaço entre pedras). */
+    padding-right: calc(var(--finalizacao-tile-largura) + 3px);
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .btn-limpar-mao-finalizacao {
+    right: 0;
+    bottom: 0;
+    width: var(--finalizacao-tile-largura);
+    height: var(--finalizacao-tile-altura);
+    min-height: 0;
   }
 }

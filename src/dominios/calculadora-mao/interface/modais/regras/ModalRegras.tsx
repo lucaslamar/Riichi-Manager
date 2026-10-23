@@ -2,6 +2,7 @@ import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { configuracaoPadrao, type ConfiguracaoCalculo } from '../../../logica/mao'
 import { CONFIGURACOES_REGRAS } from '../../constantes'
+import TextoGlossario from '../glossario/TextoGlossario'
 import './modal-regras.css'
 
 const CHAVES_REGRAS: Record<
@@ -142,7 +143,9 @@ export default function ModalRegras({
             >
               <div className="texto-regra">
                 <strong>{titulo}</strong>
-                <span id={ajudaId}>{t(textos.ajuda)}</span>
+                <span id={ajudaId}>
+                  <TextoGlossario texto={t(textos.ajuda)} />
+                </span>
               </div>
               <div
                 className="controle-regra"

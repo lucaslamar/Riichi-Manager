@@ -1,0 +1,144 @@
+/*
+ * Bloco de um assunto do glossário: título, abertura, itens com subtítulo e
+ * nota. Cartão azul-claro na aba Glossário; solto na tela de termo, onde o
+ * item tocado ganha o destaque amarelo.
+ */
+
+.glossario-bloco {
+  display: grid;
+}
+
+.glossario-bloco--cartao {
+  margin-top: 14px;
+  padding: 2px 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  background: #eef6ff;
+}
+
+/* Mesmo rótulo azul das listas do Resultado ("YAKU", "FU"). */
+.glossario-bloco__titulo {
+  margin: 0;
+  padding: 10px 0 6px;
+  color: var(--primario);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.glossario-kanji {
+  color: #607080;
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.glossario-bloco__intro {
+  margin: 0;
+  padding-bottom: 8px;
+  color: #334e68;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.glossario-item {
+  display: grid;
+  gap: 4px;
+  padding: 9px 0;
+  border-top: 1px solid #dbeafe;
+}
+
+.glossario-item__nome {
+  margin: 0;
+  color: #102a43;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.glossario-item__apelido {
+  color: #607080;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.glossario-item__texto {
+  margin: 0;
+  color: #486581;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.glossario-item__topicos {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  color: #486581;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.glossario-item__topicos li::marker {
+  color: #94a3b8;
+}
+
+.glossario-item .yaku-tiles,
+.glossario-item .yaku-ciclos {
+  margin-top: 2px;
+}
+
+/* Nota no fim de um item (ex.: "Dora não é yaku"). */
+.glossario-item__nota {
+  margin: 4px 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 60%);
+  color: #486581;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+/* ─── Na tela de termo (sem cartão) ─────────────────────────────────────── */
+.glossario-bloco:not(.glossario-bloco--cartao) {
+  --yaku-pedra: 26px;
+}
+
+.glossario-bloco:not(.glossario-bloco--cartao) .glossario-bloco__intro {
+  padding-bottom: 10px;
+  color: #102a43;
+  font-size: 1rem;
+}
+
+.glossario-bloco:not(.glossario-bloco--cartao) .glossario-item {
+  border-top-color: #e5e7eb;
+}
+
+.glossario-bloco:not(.glossario-bloco--cartao) .glossario-item__texto,
+.glossario-bloco:not(.glossario-bloco--cartao) .glossario-item__topicos {
+  font-size: 0.92rem;
+}
+
+.glossario-bloco:not(.glossario-bloco--cartao) .glossario-item__nota {
+  background: #f1f5f9;
+}
+
+/* No item destacado (amarelo), a nota fica num branco translúcido. */
+.glossario-item--destaque .glossario-item__nota {
+  background: rgb(255 255 255 / 60%);
+}
+
+/* Item do termo tocado: marca-texto amarelo. */
+.glossario-item--destaque {
+  margin-inline: -8px;
+  padding-inline: 8px;
+  border-top-color: transparent;
+  border-radius: 8px;
+  background: #fff1b8;
+}
+
+.glossario-item--destaque + .glossario-item {
+  border-top-color: transparent;
+}

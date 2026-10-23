@@ -45,7 +45,7 @@ export default function ResumoMaoFixo({
         <div className="resumo-mao-doras">
           {mao.dora.length > 0 && (
             <span>
-              <strong>Indicador de Dora</strong>{' '}
+              <strong>Indicador de dora</strong>{' '}
               {mao.dora.map((pedraDora, i) => (
                 <PedraSvg key={`d-${i}`} pedra={pedraDora} />
               ))}
@@ -53,7 +53,7 @@ export default function ResumoMaoFixo({
           )}
           {mao.uradora.length > 0 && (
             <span>
-              <strong>Indicador de Uradora</strong>{' '}
+              <strong>Indicador de ura-dora</strong>{' '}
               {mao.uradora.map((pedraUradora, i) => (
                 <PedraSvg key={`u-${i}`} pedra={pedraUradora} />
               ))}

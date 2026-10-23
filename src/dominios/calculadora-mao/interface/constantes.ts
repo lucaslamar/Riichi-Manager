@@ -179,11 +179,11 @@ export const CONFIGURACOES_REGRAS: {
   },
   {
     chave: 'tanyaoAberto',
-    titulo: 'Tanyao aberto',
+    titulo: "Tan'yao aberto",
     ligado: 'Permitido',
     desligado: 'Fechado apenas',
     ajuda:
-      'Define se Tanyao vale com chamadas abertas. É comum em regras japonesas modernas, mas alguns grupos usam kuitan nashi.',
+      "Define se Tan'yao vale com chamadas abertas. É comum em regras japonesas modernas, mas alguns grupos usam kuitan nashi.",
   },
   {
     chave: 'basengo',

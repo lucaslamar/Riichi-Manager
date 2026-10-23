@@ -346,6 +346,16 @@ export function MaoAtual({
           <>
             <GradePedrasMao className="mao-principal-finalizacao">
               {renderizarPedrasMaoFinalizacao()}
+              {/* Limpar fica no canto da mão, longe do Editar e das Regras do cabeçalho. */}
+              <button
+                className="btn-limpar-mao-finalizacao"
+                type="button"
+                onClick={aoLimpar}
+                aria-label={t('actions.clear')}
+                title={t('actions.clear')}
+              >
+                <i className="fas fa-trash" aria-hidden="true" />
+              </button>
             </GradePedrasMao>
             {mao.melds.length > 0 && (
               <section

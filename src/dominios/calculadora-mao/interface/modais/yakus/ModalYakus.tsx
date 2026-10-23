@@ -12,11 +12,13 @@ import {
   type Yaku,
   type YakuCategory,
 } from '../../../logica/yakus'
+import { termoGlossarioDoNome } from '../../../logica/glossario'
+import TextoGlossario from '../glossario/TextoGlossario'
 import AbaGlossario from './AbaGlossario'
 import { PedrasExemplo } from './PedrasExemplo'
 import './modal-yakus.css'
 
-type AbaYakus = 'iniciante' | YakuCategory | 'yakuman' | 'pedras'
+type AbaYakus = 'glossario' | 'iniciante' | YakuCategory | 'yakuman'
 
 const ROTULOS_CURTOS: Record<YakuCategory, string> = {
   sequencias: 'Sequências',
@@ -26,11 +28,12 @@ const ROTULOS_CURTOS: Record<YakuCategory, string> = {
   outros: 'Outros',
 }
 
+/** Ordem das abas (grade de 4 colunas): a primeira é a padrão ao abrir. */
 const ABAS: AbaModal<AbaYakus>[] = [
+  { chave: 'glossario', rotulo: 'Glossário' },
   { chave: 'iniciante', rotulo: 'Iniciante' },
   ...ORDEM_CATEGORIAS.map((categoria) => ({ chave: categoria, rotulo: ROTULOS_CURTOS[categoria] })),
   { chave: 'yakuman', rotulo: 'Yakuman' },
-  { chave: 'pedras', rotulo: 'Glossário' },
 ]
 
 const CHAVE_ABA = 'riichi-manager-aba-yakus'
@@ -40,9 +43,9 @@ const YAKU_POR_ID = new Map(YAKU.map((yaku) => [yaku.id, yaku]))
 function lerAbaSalva(): AbaYakus {
   try {
     const salva = localStorage.getItem(CHAVE_ABA)
-    return ABAS.find((aba) => aba.chave === salva)?.chave ?? 'iniciante'
+    return ABAS.find((aba) => aba.chave === salva)?.chave ?? ABAS[0].chave
   } catch {
-    return 'iniciante'
+    return ABAS[0].chave
   }
 }
 
@@ -92,7 +95,9 @@ function CartaoYaku({ yaku }: { yaku: Yaku }) {
         <SeloHan yaku={yaku} />
       </header>
       <p className="yaku-card__pt">{yaku.namePt}</p>
-      <p className="yaku-card__descricao">{yaku.description}</p>
+      <p className="yaku-card__descricao">
+        <TextoGlossario texto={yaku.description} ignorar={[termoGlossarioDoNome(yaku.romaji)]} />
+      </p>
       {yaku.example && (
         <PedrasExemplo grupos={parseMpszGrupos(yaku.example)} rotulo={`Exemplo: ${yaku.example}`} />
       )}
@@ -130,7 +135,8 @@ function AbaIniciante() {
         </section>
       ))}
       <p className="yaku-nota-dora">
-        <i className="fas fa-circle-info" aria-hidden="true" /> {DORA_NOTE}
+        <i className="fas fa-circle-info" aria-hidden="true" />{' '}
+        <TextoGlossario texto={DORA_NOTE} />
       </p>
     </>
   )
@@ -138,7 +144,7 @@ function AbaIniciante() {
 
 function ConteudoAba({ aba }: { aba: AbaYakus }) {
   if (aba === 'iniciante') return <AbaIniciante />
-  if (aba === 'pedras') return <AbaGlossario />
+  if (aba === 'glossario') return <AbaGlossario />
   if (aba === 'yakuman') {
     return <ListaYakus titulo="Yakuman (mão máxima)" yakus={YAKU.filter((yaku) => yaku.yakuman)} />
   }
@@ -153,7 +159,7 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
 /**
  * Referência de yakus para consulta durante a partida. Construída sobre a
  * Modal base (fundo, Esc, foco e trava de rolagem); aqui ficam só as abas
- * (Iniciante, uma por categoria, Yakuman e Pedras) e os cartões.
+ * (Glossário, Iniciante, uma por categoria e Yakuman) e os cartões.
  */
 export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()

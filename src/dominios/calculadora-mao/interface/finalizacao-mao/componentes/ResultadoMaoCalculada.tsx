@@ -182,6 +182,10 @@ export default function ResultadoMaoCalculada({
           chomboMangan={estado.configuracao.chomboMangan}
           descricaoAcessivel={descreverResultado()}
           aoFechar={fecharModalResultado}
+          aoNovaMao={() => {
+            fecharModalResultado()
+            estado.limpar()
+          }}
         />
       )}
     </>

@@ -27,6 +27,8 @@ interface PropsModalResultado {
   /** Texto lido pelo leitor de tela ao abrir (resumo do resultado). */
   descricaoAcessivel: string
   aoFechar: () => void
+  /** Lixeira do cabeçalho: limpa a mão e começa uma nova. */
+  aoNovaMao?: () => void
 }
 
 /**
@@ -44,6 +46,7 @@ export default function ModalResultado({
   chomboMangan,
   descricaoAcessivel,
   aoFechar,
+  aoNovaMao,
 }: PropsModalResultado) {
   const { t } = useI18n()
   const [yakuSelecionado, setYakuSelecionado] = useState<string | null>(null)
@@ -74,6 +77,32 @@ export default function ModalResultado({
       estiloTitulo="rotulo"
       className="modal-resultado"
       rodape={<RodapeReferenciaPedras />}
+      semBotaoFechar
+      acoes={
+        <>
+          {/* Lápis: fecha o resultado e volta para a finalização (como o X ou o deslize). */}
+          <button
+            type="button"
+            className="modal-acao"
+            aria-label={t('actions.backToFinish')}
+            title={t('actions.backToFinish')}
+            onClick={aoFechar}
+          >
+            <i className="fas fa-pen" aria-hidden="true" />
+          </button>
+          {aoNovaMao && (
+            <button
+              type="button"
+              className="modal-acao modal-acao--destrutiva"
+              aria-label={t('actions.newHand')}
+              title={t('actions.newHand')}
+              onClick={aoNovaMao}
+            >
+              <i className="fas fa-trash" aria-hidden="true" />
+            </button>
+          )}
+        </>
+      }
     >
       <div className="sr-only" aria-live="polite">
         {descricaoAcessivel}

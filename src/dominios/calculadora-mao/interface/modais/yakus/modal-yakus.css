@@ -75,14 +75,9 @@
   font-weight: 800;
 }
 
-.yaku-card__kanji,
-.yaku-card__apelido {
+.yaku-card__kanji {
   color: #607080;
   font-weight: 600;
-}
-
-.yaku-card__apelido {
-  font-size: 0.85rem;
 }
 
 .yaku-card__pt {
@@ -130,30 +125,6 @@
   letter-spacing: 0.04em;
 }
 
-/* ─── Aba Pedras ─────────────────────────────────────────────────────────── */
-.yaku-topicos {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding-left: 18px;
-  color: #486581;
-  font-size: 0.85rem;
-  line-height: 1.4;
-}
-
-.yaku-topicos li::marker {
-  color: #94a3b8;
-}
-
-.yaku-card .yaku-ciclos {
-  margin-top: 6px;
-}
-
-.yaku-pedras__nota,
-.yaku-pedras__aka {
-  margin-top: 8px;
-}
-
 /* Nota de rodapé em cinza, discreta. */
 .yaku-nota-dora {
   margin: 16px 0 0;
@@ -164,29 +135,6 @@
   color: #486581;
   font-size: 0.85rem;
   line-height: 1.4;
-}
-
-/* ─── Glossário ──────────────────────────────────────────────────────────── */
-.yaku-glossario {
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid #dbeafe;
-  border-radius: 8px;
-  background: #eef6ff;
-}
-
-.yaku-glossario__item {
-  display: grid;
-  gap: 2px;
-  padding: 8px 10px;
-}
-
-.yaku-glossario__item + .yaku-glossario__item {
-  border-top: 1px solid #dbeafe;
-}
-
-.yaku-glossario dd {
-  margin: 0;
 }
 
 /* Ovelhinha no título: um pouco maior que o texto, alinhada à linha. */

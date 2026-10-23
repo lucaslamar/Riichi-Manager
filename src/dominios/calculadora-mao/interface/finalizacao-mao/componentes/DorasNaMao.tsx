@@ -64,7 +64,7 @@ export default function DorasNaMao({ valor, aoAlterarValor }: PropsDorasNaMao) {
             <button
               type="button"
               className="doras-na-mao-btn-info"
-              aria-label="Informação sobre Dora e Ura Dora"
+              aria-label="Informação sobre dora e ura-dora"
               aria-expanded={tooltipAberto}
               onClick={() => setTooltipAberto((v) => !v)}
             >
@@ -85,7 +85,7 @@ export default function DorasNaMao({ valor, aoAlterarValor }: PropsDorasNaMao) {
                   virado no início da partida. Cada dora na mão vale +1 han.
                 </p>
                 <p>
-                  <strong>Ura Dora</strong> funciona igual ao dora, mas o indicador só é revelado ao
+                  <strong>Ura-dora</strong> funciona igual à dora, mas o indicador só é revelado ao
                   declarar Riichi e vencer.
                 </p>
               </div>

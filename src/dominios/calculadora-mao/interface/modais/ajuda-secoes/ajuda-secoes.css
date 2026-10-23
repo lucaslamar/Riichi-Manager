@@ -102,48 +102,19 @@
 }
 
 /* ─── Modal ───────────────────────────────────────────────────────────────── */
-.modal-ajuda-secao p {
-  margin: 0;
-  color: #102a43;
-  font-size: clamp(0.92rem, 0.88rem + 0.2vw, 1.02rem);
-  line-height: 1.5;
+/* O conteúdo usa o bloco do Glossário (bloco-glossario.css); aqui ficam só os
+   ajustes da ajuda. Várias linhas de abertura seguidas ganham um respiro. */
+.modal-ajuda-secao .glossario-bloco__intro + .glossario-bloco__intro {
+  padding-top: 2px;
 }
 
-.modal-ajuda-secao p + p {
-  margin-top: 10px;
-}
-
-.modal-ajuda-secao h3 + p,
-.modal-ajuda-secao h4 + p {
+.modal-ajuda-secao .glossario-item__texto + .glossario-item__texto {
   margin-top: 4px;
 }
 
-/* Itens dentro de um assunto (ex.: Doras na mão e Indicadores dentro de
-   "Qual é o Dora?"): mais próximos entre si e um degrau abaixo do subtítulo. */
-.bloco-ajuda-secao + .bloco-ajuda-secao--item {
-  margin-top: 10px;
-}
-
-.modal-ajuda-secao h4 {
-  margin: 0;
-  color: #334e68;
-  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
-  font-weight: 800;
-}
-
-.bloco-ajuda-secao + .bloco-ajuda-secao {
-  margin-top: 14px;
-}
-
-/* Subtítulo de cada assunto quando a seção agrupa mais de um (ex.: Honba e
-   Doras na mão): mesmo estilo dos rótulos da finalização, um degrau maior. */
-.modal-ajuda-secao h3 {
-  margin: 0;
-  color: #102a43;
-  font-size: clamp(0.82rem, 0.78rem + 0.2vw, 0.95rem);
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+/* Rótulo de grupo (ex.: "Qual é o Dora?") colado no topo da aba. */
+.modal-ajuda-secao .glossario-bloco > .glossario-bloco__titulo:first-child {
+  padding-top: 0;
 }
 
 /* Ícone no meio do texto (ex.: a engrenagem das Regras de cálculo). */
@@ -166,9 +137,13 @@
   --modal-cor-titulo: #be185d;
 }
 
-.modal-ajuda-secao--doras h3,
-.modal-ajuda-secao--doras h4 {
+.modal-ajuda-secao--doras .glossario-bloco__titulo,
+.modal-ajuda-secao--doras .glossario-item__nome {
   color: #be185d;
+}
+
+.modal-ajuda-secao--doras .glossario-item {
+  border-top-color: #fce7f3;
 }
 
 /* Modal com abas (ex.: Dora | Honba): as abas encostam no cabeçalho e
@@ -184,11 +159,6 @@
 .modal-ajuda-secao--doras .abas-modal {
   --abas-cor: #db2777;
   --abas-cor-texto: #be185d;
-}
-
-/* Pedras de exemplo dentro de um bloco (sequências do indicador, 5 vermelhos). */
-.bloco-ajuda-secao .yaku-ciclos {
-  margin-top: 8px;
 }
 
 .modal-ajuda-secao .yaku-ciclo__titulo {

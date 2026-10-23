@@ -37,10 +37,16 @@ export interface ConteudoAjuda {
   abas?: AbaAjuda[]
   /** Cor de destaque da modal (bordas, título e subtítulos). */
   tema?: 'doras'
+  /**
+   * Termos do glossário que esta ajuda já explica: não viram link nos textos
+   * dela (os demais termos abrem a definição deslizando de lado).
+   */
+  termosProprios?: string[]
 }
 
 export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
   furiten: {
+    termosProprios: ['furiten'],
     titulo: 'calculator.furiten',
     blocos: [
       { paragrafos: ['sectionHelp.furiten.rule'] },
@@ -67,6 +73,7 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     ],
   },
   vitoria: {
+    termosProprios: ['tsumo', 'ron'],
     titulo: 'calculator.victory',
     blocos: [
       {
@@ -77,6 +84,8 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     ],
   },
   honbaDoras: {
+    // "dragão" aqui é a origem da palavra Dora (curiosidade), não a pedra.
+    termosProprios: ['dora', 'ura-dora', 'aka-dora', 'honba', 'dragoes'],
     titulo: 'calculator.doraAndHonba',
     tema: 'doras',
     abas: [
@@ -139,6 +148,7 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     ],
   },
   ventos: {
+    termosProprios: ['ventos'],
     titulo: 'calculator.winds',
     blocos: [
       {
@@ -154,6 +164,7 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
   // Mesmo padrão de Honba e doras: a modal já mostra o título, então o texto
   // geral vem direto e cada assunto ganha um subtítulo com parágrafo.
   riichi: {
+    termosProprios: ['riichi', 'ippatsu', 'ura-dora'],
     titulo: 'calculator.riichi',
     blocos: [
       { paragrafos: ['sectionHelp.riichi.declaration', 'sectionHelp.riichi.value'] },
