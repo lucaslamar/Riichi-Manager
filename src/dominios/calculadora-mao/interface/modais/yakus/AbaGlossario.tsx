@@ -22,7 +22,7 @@ export default function AbaGlossario() {
     const corpo = raiz?.closest('.modal-corpo')
     const bloco = raiz?.querySelector(`[data-secao="${secao}"]`)
     if (!corpo || !bloco) return
-    const abas = corpo.querySelector('.abas-modal__lista')?.getBoundingClientRect().height ?? 0
+    const abas = corpo.querySelector('.abas-modal__topo')?.getBoundingClientRect().height ?? 0
     const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     corpo.scrollTo({
       top:

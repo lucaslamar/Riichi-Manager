@@ -35,26 +35,7 @@ const ABAS: AbaModal<AbaYakus>[] = [
   { chave: 'yakuman', rotulo: 'Yakuman' },
 ]
 
-const CHAVE_ABA = 'riichi-manager-aba-yakus'
-
 const YAKU_POR_ID = new Map(YAKU.map((yaku) => [yaku.id, yaku]))
-
-function lerAbaSalva(): AbaYakus {
-  try {
-    const salva = localStorage.getItem(CHAVE_ABA)
-    return ABAS.find((aba) => aba.chave === salva)?.chave ?? ABAS[0].chave
-  } catch {
-    return ABAS[0].chave
-  }
-}
-
-function salvarAba(aba: AbaYakus) {
-  try {
-    localStorage.setItem(CHAVE_ABA, aba)
-  } catch {
-    // Sem armazenamento (aba anônima, bloqueio): só não lembra a aba.
-  }
-}
 
 function ListaYakus({ titulo, yakus }: { titulo: string; yakus: Yaku[] }) {
   return (
@@ -113,12 +94,12 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
  */
 export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()
-  const [aba, setAba] = useState<AbaYakus>(lerAbaSalva)
+  // Abre sempre no Glossário (a primeira aba), sem lembrar a última aberta.
+  const [aba, setAba] = useState<AbaYakus>(ABAS[0].chave)
   const [busca, setBusca] = useState('')
 
   const escolherAba = (novaAba: AbaYakus) => {
     setAba(novaAba)
-    salvarAba(novaAba)
     setBusca('')
   }
 
@@ -144,8 +125,8 @@ export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
         aoEscolher={escolherAba}
         rotulo="Seções do guia"
         colunas={4}
+        fixo={<CampoBuscaGuia valor={busca} aoMudar={setBusca} />}
       >
-        <CampoBuscaGuia valor={busca} aoMudar={setBusca} />
         {busca.trim() ? (
           <ResultadoBuscaGuia busca={busca} abas={ABAS} aoAbrirAba={escolherAba} />
         ) : (

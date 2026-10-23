@@ -1,5 +1,23 @@
 # Changelog - Mojoca
 
+## 5.6.1 - 2026-10-23
+
+### Novo
+
+- **Busca sempre à mão no Guia de bolso**: o campo "Buscar termo, yaku ou aba" fica preso logo abaixo das abas e continua visível ao descer o Glossário e os yakus. O sumário do Glossário agora para o assunto logo abaixo da busca.
+- Guia de consulta do tutorial de Han e Fu: a busca também fica presa no topo ao rolar.
+
+### Alterado
+
+- **Tablets sem "cartão flutuando"** (a partir de 768px, como o iPad 11, Air e Pro; o iPad mini segue com o layout de celular): Regras, Sorteador e Calculadora de Han e Fu ocupam a tela de borda a borda até a navegação, sem sombra, sem cantos arredondados e sem faixa cinza dos lados nem embaixo. Margens internas de 32px em pé e 48px deitado (menores no Modo compacto).
+- Regras e configurações: texto com largura de leitura (até 720px), fundo até a barra de navegação.
+- Sorteador no tablet: sem a largura fixa de 600px; gato e balão centralizados no espaço livre e o gato escala pelo menor lado da tela, sem rolar em pé nem deitado.
+- Calculadora de Han e Fu no tablet: a Tabela rápida mostra o Han nas colunas e o Fu nas linhas (canto "Fu/Han"), cabe na largura sem rolar de lado, com colunas iguais e os pares do tsumo ("500-1.000") numa linha só. A linha de Han fica presa embaixo do cabeçalho ao rolar. Com a sidebar, a página não rola mais para o lado.
+- Calculadora de Han e Fu: o valor do Han e do Fu tem sempre a largura de 3 algarismos, sem os botões − e + por cima do número. No tablet, Han e Fu ficam um embaixo do outro quando não cabem lado a lado.
+- Finalização da Calculadora de Mão no tablet: a lixeira foi para as ações do cabeçalho, depois do lápis (Guia, Regras, Editar, Limpar), em vermelho e com área de toque de 44×44px, também nas outras ações. As 14 pedras usam a largura toda numa linha, até 52px. No celular a lixeira continua no canto da mão.
+- Cabeçalho: o lugar do botão de voltar fica reservado em todas as telas, então o MOJOCA não muda de posição quando a seta aparece (celular em pé e tablet).
+- O campo de busca virou um componente compartilhado (`CampoBusca`), usado no Guia de bolso e no tutorial.
+
 ## 5.6.0 - 2026-10-23
 
 ### Novo

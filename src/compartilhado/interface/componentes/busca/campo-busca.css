@@ -1,0 +1,61 @@
+/* Campo de busca (CampoBusca): lupa à esquerda e X de limpar à direita. */
+
+.campo-busca {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.campo-busca > .fa-magnifying-glass {
+  position: absolute;
+  left: 12px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.campo-busca input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 40px 0 34px;
+  border: 1px solid #d7dde6;
+  border-radius: 8px;
+  background: var(--branco);
+  color: #102a43;
+  /* 16px: menos que isso o iPhone dá zoom ao focar. */
+  font-size: 1rem;
+  appearance: none;
+}
+
+/* O X nativo do campo some: o botão próprio é maior e igual em todo navegador. */
+.campo-busca input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.campo-busca input::placeholder {
+  color: #94a3b8;
+}
+
+.campo-busca input:focus-visible {
+  border-color: var(--primario);
+  outline: 2px solid var(--primario);
+  outline-offset: -1px;
+}
+
+.campo-busca__limpar {
+  position: absolute;
+  right: 2px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #607080;
+  cursor: pointer;
+}
+
+.campo-busca__limpar:focus-visible {
+  outline: 2px solid var(--primario);
+}

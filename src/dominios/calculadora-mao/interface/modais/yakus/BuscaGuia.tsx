@@ -1,55 +1,27 @@
-import { useId, useMemo } from 'react'
+import { useMemo } from 'react'
+import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import type { AbaModal } from '@/compartilhado/interface/componentes/modal/AbasModal'
 import { buscarNoGlossario, correspondeBusca } from '../../../logica/glossario'
 import BlocoGlossario from '../glossario/BlocoGlossario'
 import CartaoYaku from './CartaoYaku'
 import './busca-guia.css'
 
-/**
- * Campo de busca do Guia de bolso, no topo de todas as abas. Os textos podem
- * ser trocados para usar o mesmo campo em outra consulta (ex.: tutorial de
- * Han e Fu).
- */
+/** Campo de busca do Guia de bolso, preso logo abaixo das abas. */
 export function CampoBuscaGuia({
   valor,
   aoMudar,
-  rotulo = 'Buscar no Guia de bolso',
-  placeholder = 'Buscar termo, yaku ou aba',
-  rotuloLimpar = 'Limpar busca',
 }: {
   valor: string
   aoMudar: (valor: string) => void
-  rotulo?: string
-  placeholder?: string
-  rotuloLimpar?: string
 }) {
-  const id = useId()
   return (
-    <div className="busca-guia">
-      <i className="fas fa-magnifying-glass" aria-hidden="true" />
-      <label htmlFor={id} className="sr-only">
-        {rotulo}
-      </label>
-      <input
-        id={id}
-        type="search"
-        placeholder={placeholder}
-        autoComplete="off"
-        enterKeyHint="search"
-        value={valor}
-        onChange={(evento) => aoMudar(evento.target.value)}
-      />
-      {valor && (
-        <button
-          type="button"
-          className="busca-guia__limpar"
-          aria-label={rotuloLimpar}
-          onClick={() => aoMudar('')}
-        >
-          <i className="fas fa-xmark" aria-hidden="true" />
-        </button>
-      )}
-    </div>
+    <CampoBusca
+      valor={valor}
+      aoMudar={aoMudar}
+      rotulo="Buscar no Guia de bolso"
+      placeholder="Buscar termo, yaku ou aba"
+      rotuloLimpar="Limpar busca"
+    />
   )
 }
 

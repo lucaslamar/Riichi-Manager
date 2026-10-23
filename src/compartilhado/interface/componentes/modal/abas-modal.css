@@ -9,16 +9,22 @@
   --abas-cor-texto: var(--primario-escuro);
 }
 
-.abas-modal__lista {
+/* Topo preso: a fileira de abas e, se houver, o `fixo` logo abaixo (ex.: busca). */
+.abas-modal__topo {
   position: sticky;
   top: 0;
   z-index: 2;
   display: grid;
-  gap: 4px;
+  gap: 8px;
   margin-inline: calc(var(--modal-espaco) * -1);
   padding: 8px var(--modal-espaco);
   border-bottom: 1px solid var(--modal-borda);
   background: var(--modal-fundo);
+}
+
+.abas-modal__lista {
+  display: grid;
+  gap: 4px;
 }
 
 .abas-modal__aba {

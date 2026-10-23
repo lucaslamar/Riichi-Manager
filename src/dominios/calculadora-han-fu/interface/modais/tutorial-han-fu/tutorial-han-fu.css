@@ -132,6 +132,25 @@
   color: #d97706;
 }
 
+/* Busca do Guia de consulta: presa no topo do corpo da modal ao rolar, com o
+   fundo da modal por trás (como a fileira de abas do Guia de bolso). */
+.tutorial-consulta__busca {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin-inline: calc(var(--modal-espaco) * -1);
+  padding: 8px var(--modal-espaco);
+  border-bottom: 1px solid var(--modal-borda);
+  background: var(--modal-fundo);
+}
+
+.tutorial-consulta__vazio {
+  margin: 16px 0 0;
+  color: #607080;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 /* Link no meio do texto que leva a outra página do tutorial. */
 .tutorial-link-pagina {
   padding: 0;

@@ -4,10 +4,10 @@ import CaixaFormula, {
 } from '@/compartilhado/interface/componentes/formula/CaixaFormula'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import { correspondeBusca } from '@/dominios/calculadora-mao/logica/glossario'
 import { parseMpszGrupos } from '@/dominios/calculadora-mao/logica/yakus'
 import TextoGlossario from '@/dominios/calculadora-mao/interface/modais/glossario/TextoGlossario'
-import { CampoBuscaGuia } from '@/dominios/calculadora-mao/interface/modais/yakus/BuscaGuia'
 import { MaoRotulada } from '@/dominios/calculadora-mao/interface/modais/yakus/PedrasExemplo'
 import MultiplicacaoLinhas from './MultiplicacaoLinhas'
 import {
@@ -239,13 +239,17 @@ function PaginaConsulta({
     const raiz = raizRef.current
     const corpo = raiz?.closest('.modal-corpo')
     const secao = raiz?.querySelector(`[data-secao="${id}"]`)
-    if (!corpo || !secao) return
+    if (!raiz || !corpo || !secao) return
+    // A busca fica presa no topo: o assunto para logo abaixo dela.
+    const busca =
+      raiz.querySelector('.tutorial-consulta__busca')?.getBoundingClientRect().height ?? 0
     const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     corpo.scrollTo({
       top:
         corpo.scrollTop +
         secao.getBoundingClientRect().top -
         corpo.getBoundingClientRect().top -
+        busca -
         RESPIRO_ROLAGEM,
       behavior: reduzir ? 'auto' : 'smooth',
     })
@@ -253,13 +257,16 @@ function PaginaConsulta({
 
   return (
     <div ref={raizRef} className="tutorial-consulta">
-      <CampoBuscaGuia
-        valor={busca}
-        aoMudar={setBusca}
-        rotulo={t('hanFuTutorial.reference.searchLabel')}
-        placeholder={t('hanFuTutorial.reference.searchPlaceholder')}
-        rotuloLimpar={t('hanFuTutorial.reference.clearSearch')}
-      />
+      {/* Presa no topo ao rolar, como a busca do Guia de bolso. */}
+      <div className="tutorial-consulta__busca">
+        <CampoBusca
+          valor={busca}
+          aoMudar={setBusca}
+          rotulo={t('hanFuTutorial.reference.searchLabel')}
+          placeholder={t('hanFuTutorial.reference.searchPlaceholder')}
+          rotuloLimpar={t('hanFuTutorial.reference.clearSearch')}
+        />
+      </div>
       {!buscando && (
         <nav
           className="aba-glossario__sumario"
@@ -277,7 +284,7 @@ function PaginaConsulta({
       )}
       <div aria-live={buscando ? 'polite' : undefined}>
         {encontradas.length === 0 && (
-          <p className="busca-guia__vazio">
+          <p className="tutorial-consulta__vazio">
             {t('hanFuTutorial.reference.noResults', { search: busca.trim() })}
           </p>
         )}

@@ -23,6 +23,7 @@ export default function AbasModal<Chave extends string>({
   aoEscolher,
   rotulo,
   colunas = abas.length,
+  fixo,
   className,
   children,
 }: {
@@ -33,6 +34,8 @@ export default function AbasModal<Chave extends string>({
   rotulo: string
   /** Abas por linha; as que sobram quebram para a linha de baixo. */
   colunas?: number
+  /** Fica preso junto com as abas, logo abaixo delas (ex.: o campo de busca). */
+  fixo?: ReactNode
   className?: string
   children: ReactNode
 }) {
@@ -82,26 +85,30 @@ export default function AbasModal<Chave extends string>({
 
   return (
     <div ref={raizRef} className={['abas-modal', className].filter(Boolean).join(' ')}>
-      <div
-        className="abas-modal__lista"
-        role="tablist"
-        aria-label={rotulo}
-        style={{ gridTemplateColumns: `repeat(${colunas}, minmax(0, 1fr))` }}
-      >
-        {abas.map(({ chave, rotulo: rotuloAba }) => (
-          <button
-            key={chave}
-            id={`${id}-aba-${chave}`}
-            type="button"
-            role="tab"
-            aria-selected={ativa === chave}
-            aria-controls={`${id}-painel`}
-            className={`abas-modal__aba${ativa === chave ? ' abas-modal__aba--ativa' : ''}`}
-            onClick={() => aoEscolher(chave)}
-          >
-            {rotuloAba}
-          </button>
-        ))}
+      {/* Topo preso: as abas e o que vier em `fixo` (ex.: a busca) logo abaixo. */}
+      <div className="abas-modal__topo">
+        <div
+          className="abas-modal__lista"
+          role="tablist"
+          aria-label={rotulo}
+          style={{ gridTemplateColumns: `repeat(${colunas}, minmax(0, 1fr))` }}
+        >
+          {abas.map(({ chave, rotulo: rotuloAba }) => (
+            <button
+              key={chave}
+              id={`${id}-aba-${chave}`}
+              type="button"
+              role="tab"
+              aria-selected={ativa === chave}
+              aria-controls={`${id}-painel`}
+              className={`abas-modal__aba${ativa === chave ? ' abas-modal__aba--ativa' : ''}`}
+              onClick={() => aoEscolher(chave)}
+            >
+              {rotuloAba}
+            </button>
+          ))}
+        </div>
+        {fixo && <div className="abas-modal__fixo">{fixo}</div>}
       </div>
       <div
         id={`${id}-painel`}
