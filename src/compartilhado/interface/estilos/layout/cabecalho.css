@@ -440,9 +440,15 @@
     padding: 6px 12px 6px 8px;
   }
 
-  .botao-menu-global,
   .zona-gesto-drawer {
     display: none;
+  }
+
+  /* Sem hambúrguer nesta faixa, mas o lugar dele fica reservado (invisível e
+     fora do Tab): o MOJOCA não muda de posição quando a seta de voltar aparece. */
+  .botao-menu-global:not(.botao-voltar-global) {
+    visibility: hidden;
+    pointer-events: none;
   }
 }
 
@@ -613,9 +619,15 @@
  */
 @media (min-width: 375px) and (max-width: 767px) and (orientation: portrait),
   (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
-  .botao-menu-global,
   .zona-gesto-drawer {
     display: none;
+  }
+
+  /* Lugar do hambúrguer reservado, como no tablet: o título não pula quando
+     a seta de voltar aparece. */
+  .botao-menu-global:not(.botao-voltar-global) {
+    visibility: hidden;
+    pointer-events: none;
   }
 }
 

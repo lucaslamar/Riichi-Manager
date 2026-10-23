@@ -724,3 +724,78 @@
     font-size: 0.86rem;
   }
 }
+
+/*
+ * Tablet (a partir de 768px e fora do celular deitado, que tem no máximo 560px
+ * de altura): as telas viram uma superfície de borda a borda, sem o cartão
+ * com sombra flutuando sobre o fundo cinza.
+ *
+ * O body vira uma coluna flex que ocupa a tela toda (100dvh, com 100vh de
+ * reserva) e o <main> preenche o que sobra entre o cabeçalho e a navegação,
+ * então a superfície vai até a barra inferior mesmo com pouco conteúdo. A
+ * barra inferior continua `position: fixed`: o body já reserva a altura dela
+ * no padding-bottom (cabecalho.css), sem sobreposição. A rolagem continua sendo
+ * a da página, para não mudar o cabeçalho preso, as modais nem o teclado da
+ * Calculadora de Mão (que fica de fora: ela já ocupa a largura toda e tem a
+ * altura própria em dominios/calculadoras/responsivo.css).
+ *
+ * Han e Fu e Sorteador ajustam a própria superfície nos arquivos deles; aqui
+ * ficam o shell e as páginas de cartão (Regras e Sobre).
+ */
+@media (min-width: 768px) and (min-height: 561px) {
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica) {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100dvh;
+    flex-direction: column;
+    background: var(--branco);
+  }
+
+  /* #app (raiz do React) segura o cabeçalho e o <main>: a coluna continua nele. */
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica) > #app {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+  }
+
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica) .conteudo-principal {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    max-width: none;
+    padding: 0;
+    /* `clip` em vez de `hidden`: corta o que passa da largura sem virar área
+       de rolagem, então elementos `sticky` seguem a rolagem da página. */
+    overflow-x: clip;
+  }
+
+  /* Regras e Sobre: fundo de borda a borda, texto com largura de leitura. */
+  .card.pagina-estatica {
+    flex: 1 0 auto;
+    align-content: start;
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
+    padding: 32px;
+    box-shadow: none;
+  }
+
+  .card.pagina-estatica > * {
+    width: 100%;
+    max-width: 720px;
+  }
+
+  body.modo-compacto .card.pagina-estatica {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 768px) and (min-height: 561px) and (orientation: landscape) {
+  .card.pagina-estatica {
+    padding: 48px;
+  }
+
+  body.modo-compacto .card.pagina-estatica {
+    padding: 28px;
+  }
+}

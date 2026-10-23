@@ -125,16 +125,20 @@
   text-transform: uppercase;
 }
 
+/* A coluna do número nunca fica menor que ele: os botões não cobrem o valor. */
 .controle-han-fu-corpo {
   display: grid;
-  grid-template-columns: 46px minmax(0, 1fr) 46px;
+  grid-template-columns: 46px minmax(min-content, 1fr) 46px;
   align-items: center;
   gap: 8px;
 }
 
+/* 3 algarismos de largura fixa: o Fu chega a 110 sem empurrar os botões. */
 .controle-han-fu-corpo strong {
+  min-width: 3ch;
   color: var(--primario-escuro);
   font-size: 2.6rem;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
   text-align: center;
 }
@@ -881,5 +885,91 @@
     border-radius: 8px 8px 0 0;
     background: #f8fafc;
     box-shadow: 0 1px 0 #dfe7ef;
+  }
+}
+
+/*
+ * Tablet (a partir de 768px, fora do celular deitado): a calculadora vira uma
+ * superfície de borda a borda que preenche até a navegação (o shell flex fica
+ * em compartilhado/interface/estilos/responsivo.css).
+ */
+@media (min-width: 768px) and (min-height: 561px) {
+  .calculadora-han-fu {
+    flex: 1 0 auto;
+    width: 100%;
+    align-content: start;
+    margin: 0;
+    overflow: visible;
+    border-radius: 0;
+    padding: 32px;
+    box-shadow: none;
+  }
+
+  body.modo-compacto .calculadora-han-fu {
+    padding: 20px;
+  }
+
+  /* Colunas pela largura da própria tela, não da janela: com a sidebar, as
+     larguras mínimas de 1120px+ passavam da área útil e a página rolava de lado. */
+  .painel-principal-han-fu {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* Han e Fu lado a lado só se os dois couberem inteiros; senão, um embaixo
+     do outro (no iPad em pé a coluna dos controles é estreita). */
+  .controles-principais-han-fu {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .controles-principais-han-fu > .controle-han-fu {
+    flex: 1 1 220px;
+  }
+
+  /*
+   * Tabela rápida com o Han nas colunas e o Fu nas linhas (a mesma versão
+   * transposta do celular deitado). Cabe na largura sem rolar de lado, então
+   * a tabela não vira área de rolagem própria e a linha de Han pode ficar
+   * presa no topo ao rolar a página, embaixo do cabeçalho do app.
+   */
+  .tabela-referencia-han-fu.transposta {
+    overflow: visible;
+  }
+
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu {
+    grid-template-columns: 76px repeat(4, minmax(0, 1fr));
+    min-width: 0;
+  }
+
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho {
+    position: sticky;
+    /* Altura do cabeçalho do app (preso no topo da página nesta faixa). */
+    top: 66px;
+    z-index: 3;
+    border-radius: 8px 8px 0 0;
+    background: #f8fafc;
+    box-shadow: 0 1px 0 #dfe7ef;
+  }
+
+  /* Pares do tsumo ("500-1.000") sempre numa linha. */
+  .tabela-referencia-han-fu.transposta .pagamentos-referencia-han-fu dd span {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 768px) and (min-height: 561px) and (orientation: landscape) {
+  .calculadora-han-fu {
+    padding: 48px;
+  }
+
+  body.modo-compacto .calculadora-han-fu {
+    padding: 28px;
+  }
+}
+
+/* Com a sidebar o cabeçalho do app sai do topo: a linha de Han encosta nele. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho {
+    top: 0;
   }
 }

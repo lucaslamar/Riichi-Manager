@@ -10,6 +10,8 @@ import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 
 /** Tablets em retrato: a ⚙ sai do cabeçalho e vai para a barra de ações (responsivo.css). */
 const CONSULTA_TABLET_RETRATO = '(min-width: 768px) and (orientation: portrait)'
+/** Tablet em qualquer orientação (a partir de 768px, fora do celular deitado). */
+const CONSULTA_TABLET = '(min-width: 768px) and (min-height: 561px)'
 
 interface AcaoMobileAtiva {
   rotulo: string
@@ -235,6 +237,9 @@ export function MaoAtual({
 }: PropsMaoAtual) {
   const { t } = useI18n()
   const tabletRetrato = useMediaQuery(CONSULTA_TABLET_RETRATO)
+  // Finalização: no tablet o Limpar vai para as ações do cabeçalho (depois do
+  // lápis); no celular continua no canto da mão. Um botão só, em um lugar.
+  const limparNoCabecalho = useMediaQuery(CONSULTA_TABLET)
   const slotsEstruturais = Math.min(slotsUsados, 14)
   const sufixoFisico =
     totalPedras !== slotsUsados
@@ -275,6 +280,20 @@ export function MaoAtual({
       )
     })
 
+  const botaoLimparFinalizacao = (
+    <button
+      className={`btn-limpar-mao-finalizacao${
+        limparNoCabecalho ? ' btn-limpar-mao-finalizacao--cabecalho' : ''
+      }`}
+      type="button"
+      onClick={aoLimpar}
+      aria-label={t('actions.clear')}
+      title={t('actions.clear')}
+    >
+      <i className="fas fa-trash" aria-hidden="true" />
+    </button>
+  )
+
   return (
     <div className={`mao-editor-fixo ${maoEditorGrudado ? 'grudado' : ''}`}>
       <div className="cabecalho-mao-editor">
@@ -284,6 +303,8 @@ export function MaoAtual({
         </h3>
         <div className="acoes-cabecalho-mao">
           {acoesCabecalho}
+          {/* No tablet o Limpar da finalização entra depois do lápis. */}
+          {contexto === 'finalizacao' && limparNoCabecalho && botaoLimparFinalizacao}
           {contexto === 'montagem' && aoAbrirRegras && !tabletRetrato && (
             <BotaoYakus classeBase="btn-configuracao-mao-cabecalho" />
           )}
@@ -346,16 +367,8 @@ export function MaoAtual({
           <>
             <GradePedrasMao className="mao-principal-finalizacao">
               {renderizarPedrasMaoFinalizacao()}
-              {/* Limpar fica no canto da mão, longe do Editar e das Regras do cabeçalho. */}
-              <button
-                className="btn-limpar-mao-finalizacao"
-                type="button"
-                onClick={aoLimpar}
-                aria-label={t('actions.clear')}
-                title={t('actions.clear')}
-              >
-                <i className="fas fa-trash" aria-hidden="true" />
-              </button>
+              {/* No celular o Limpar fica no canto da mão, longe do Editar e das Regras do cabeçalho. */}
+              {!limparNoCabecalho && botaoLimparFinalizacao}
             </GradePedrasMao>
             {mao.melds.length > 0 && (
               <section

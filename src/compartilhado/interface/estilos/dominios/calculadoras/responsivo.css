@@ -5405,3 +5405,51 @@
     min-height: 0;
   }
 }
+
+/*
+ * Finalização no tablet (a partir de 768px, fora do celular deitado):
+ *   - o Limpar sai do canto da mão e entra nas ações do cabeçalho, depois do
+ *     lápis (MaoAtual decide onde renderizar o mesmo botão), com o tamanho das
+ *     outras ações, um respiro maior antes e área de toque de 44×44px;
+ *   - as 14 pedras usam a largura toda do bloco da mão numa linha só, sem
+ *     passar dos 52px que já eram o máximo. A largura sai do próprio bloco
+ *     (container), não da janela, então vale com e sem a sidebar.
+ */
+@media (min-width: 768px) and (min-height: 561px) {
+  .card-mao-completa.etapa-finalizacao
+    .construtor-mao-finalizacao
+    .btn-limpar-mao-finalizacao.btn-limpar-mao-finalizacao--cabecalho {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    margin-left: 6px;
+    border-radius: 6px;
+    /* Mesmo tamanho de ícone das outras ações (16px). */
+    font-size: 1rem;
+  }
+
+  .card-mao-completa.etapa-finalizacao .acao-finalizacao {
+    position: relative;
+  }
+
+  /* Área de toque de 44×44px sem mudar o desenho dos botões de 32px. */
+  .card-mao-completa.etapa-finalizacao .acao-finalizacao::after,
+  .card-mao-completa.etapa-finalizacao .btn-limpar-mao-finalizacao--cabecalho::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-editor-fixo {
+    container-type: inline-size;
+  }
+
+  .card-mao-completa.etapa-finalizacao .construtor-mao-finalizacao .mao-principal-finalizacao {
+    --finalizacao-tile-largura: clamp(36px, calc((100cqw - 13 * 3px) / 14), 52px);
+    --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
+    padding-right: 0;
+  }
+}

@@ -262,14 +262,16 @@ export function SeletorTipoVitoria({
   )
 }
 
+/** Celular deitado e tablet (a partir de 768px, fora do celular deitado). */
 const CONSULTA_TABELA_TRANSPOSTA =
-  '(orientation: landscape) and (min-width: 561px) and (max-width: 1000px) and (max-height: 500px)'
+  '(orientation: landscape) and (min-width: 561px) and (max-width: 1000px) and (max-height: 500px), (min-width: 768px) and (min-height: 561px)'
 
 export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaRapidaHanFu }) {
   const { t } = useI18n()
   const secaoRef = useRef<HTMLElement>(null)
-  // Celular deitado: eixos trocados (Fu nas linhas, Han nas colunas). A faixa
-  // espelha o @media de `.tabela-referencia-han-fu.transposta` em han-fu.css.
+  // Celular deitado e tablet: eixos trocados (Fu nas linhas, Han nas colunas).
+  // As faixas espelham os @media de `.tabela-referencia-han-fu.transposta` em
+  // han-fu.css. Os dados são os mesmos; só a renderização muda.
   const transposta = useMediaQuery(CONSULTA_TABELA_TRANSPOSTA)
   const fus = (referencia.linhas.find((linha) => linha.han === 2) ?? referencia.linhas[0])?.celulas.map(
     (celula) => celula.fu,
@@ -296,7 +298,7 @@ export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaR
           {transposta ? (
             <>
               <div className="linha-referencia-han-fu cabecalho" role="row">
-                <span role="columnheader">{t('hanFu.referenceCorner')}</span>
+                <span role="columnheader">{t('hanFu.referenceCornerTransposed')}</span>
                 {referencia.linhas.map((linha) => (
                   <span key={linha.han} role="columnheader">
                     {rotularHan(linha.han, t)}

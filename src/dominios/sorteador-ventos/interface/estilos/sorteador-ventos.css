@@ -575,3 +575,48 @@ body:has(.sorteador-ventos-page) {
     border-color: transparent #ffffff transparent transparent;
   }
 }
+
+/*
+ * Tablet (a partir de 768px, fora do celular deitado): superfície de borda a
+ * borda que preenche até a navegação, sem a largura fixa nem o cartão. O body
+ * já reserva a barra inferior (cabecalho.css) e o shell flex
+ * (compartilhado/interface/estilos/responsivo.css) dá a altura, então aqui a
+ * página só preenche (flex) e o palco centraliza gato e balão no que sobra.
+ * O gato escala pelo menor lado da tela, para caber em pé e deitado sem rolar.
+ */
+@media (min-width: 768px) and (min-height: 561px) {
+  .sorteador-ventos-page {
+    --sorteio-barra-inferior: 0px;
+    flex: 1 0 0;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    margin: 0;
+    border-radius: 0;
+    padding: 32px;
+    box-shadow: none;
+  }
+
+  body.modo-compacto .sorteador-ventos-page {
+    padding: 20px;
+  }
+
+  .gato-helice {
+    width: clamp(240px, min(48vw, 46dvh), 480px);
+  }
+}
+
+@media (min-width: 768px) and (min-height: 561px) and (orientation: landscape) {
+  .sorteador-ventos-page {
+    padding: 32px 48px;
+  }
+
+  body.modo-compacto .sorteador-ventos-page {
+    padding: 20px 28px;
+  }
+
+  .gato-helice {
+    width: clamp(220px, min(40vw, 44dvh), 440px);
+  }
+}
