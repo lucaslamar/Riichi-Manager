@@ -68,6 +68,11 @@
   font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
 }
 
+/* Patamar com link para o glossário: mantém a cor do título. */
+.modal-resultado .nome-mao .termo-glossario {
+  color: inherit;
+}
+
 .modal-resultado .resumo-yakuman {
   margin-bottom: 4px;
   color: #b45309;

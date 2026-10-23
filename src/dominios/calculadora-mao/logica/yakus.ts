@@ -17,6 +17,10 @@ export interface Yaku {
   bonus?: boolean // shows "+1"
   category: YakuCategory
   description: string // PT-BR
+  /** Dica em bloco destacado, entre a descrição e o exemplo. */
+  dica?: string
+  /** Outras grafias que viram link para o cartão (além do romaji). */
+  apelidos?: string[]
   example?: string // mpsz; z: 1=E 2=S 3=W 4=N 5=Branco 6=Verde 7=Vermelho
 }
 
@@ -61,7 +65,7 @@ export const YAKU: Yaku[] = [
     hanOpen: null,
     category: 'sequencias',
     description:
-      '4 sequências + par que não seja de valor (dragão, vento da rodada ou do assento), vencendo com espera de duas pontas (ryanmen). Só mão fechada.',
+      '4 sequências + par que não seja de dragão, do vento da rodada nem do vento do seu assento, vencendo com espera ryanmen. Par dos outros ventos pode. Só mão fechada.',
     example: '123m456p789s234s55p',
   },
   {
@@ -83,6 +87,7 @@ export const YAKU: Yaku[] = [
     hanClosed: 2,
     hanOpen: 1,
     category: 'sequencias',
+    apelidos: ['ittsu'],
     description: '123, 456 e 789 do mesmo naipe.',
     example: '123456789m456p77s',
   },
@@ -96,8 +101,9 @@ export const YAKU: Yaku[] = [
     hanClosed: 1,
     hanOpen: 1,
     category: 'terminais-honras',
+    apelidos: ['tanyao'],
     description:
-      'Apenas peças de 2 a 8. Sem terminais (1 e 9) e sem honras (ventos e dragões). Aberta permitida pela EMA (kuitan).',
+      'Apenas pedras de 2 a 8. Sem terminais e sem honras. Vale aberta pela EMA (kuitan).',
     example: '234m567p345s678s22p',
   },
   {
@@ -109,7 +115,7 @@ export const YAKU: Yaku[] = [
     hanOpen: 1,
     category: 'terminais-honras',
     description:
-      'Trinca ou quad de dragão, do vento da rodada (bakaze) ou do vento do seu assento (jikaze). 1 han por trinca; vento duplo vale 2.',
+      'Trinca ou quad de dragão, do vento da rodada (bakaze) ou do vento do seu assento (jikaze). 1 han por trinca. Vento duplo vale 2.',
     example: '555z123m456p789s11p',
   },
   {
@@ -226,7 +232,8 @@ export const YAKU: Yaku[] = [
     hanOpen: null,
     yakuman: true,
     category: 'terminais-honras',
-    description: 'Um de cada terminal e honra (13 peças) + uma repetida. Só fechada.',
+    apelidos: ['kokushi'],
+    description: 'Um de cada terminal e honra (13 pedras) + uma repetida. Só fechada.',
     example: '119m19p19s1234567z',
   },
 
@@ -239,8 +246,10 @@ export const YAKU: Yaku[] = [
     hanClosed: 2,
     hanOpen: null,
     category: 'trincas-pares',
+    apelidos: ['chiitoi'],
     description:
-      'Exatamente 7 pares diferentes. Só fechada. Quatro peças iguais não contam como dois pares. Dica: vale tentar quando a mão inicial já tem 4 pares; o ideal é começar com 5. Dependendo da mão, pode ser melhor ir para Toitoi.',
+      'Exatamente 7 pares, só vale se a mão estiver fechada. Vale lembrar que dois pares iguais não contam.',
+    dica: 'Vale tentar quando a mão inicial já tem 4 pares. O ideal é começar com 5. Dependendo da mão, pode ser melhor ir para Toitoi.',
     example: '11m33m55p77p22s66s11z',
   },
   {
@@ -262,7 +271,8 @@ export const YAKU: Yaku[] = [
     hanClosed: 2,
     hanOpen: 2,
     category: 'trincas-pares',
-    description: 'Três trincas formadas sem chamar peças (o resto da mão pode ser aberto).',
+    apelidos: ['sanankou', 'san ankou'],
+    description: 'Três trincas formadas sem chamar pedras (o resto da mão pode ser aberto).',
     example: '222m555p888s345s99m',
   },
   {
@@ -274,7 +284,7 @@ export const YAKU: Yaku[] = [
     hanOpen: null,
     yakuman: true,
     category: 'trincas-pares',
-    description: 'Quatro trincas formadas sem chamar peças. Só fechada.',
+    description: 'Quatro trincas formadas sem chamar pedras. Só fechada.',
     example: '222m444m777p333s55z',
   },
   {
@@ -296,7 +306,7 @@ export const YAKU: Yaku[] = [
     hanClosed: 2,
     hanOpen: 2,
     category: 'trincas-pares',
-    description: 'Três quads (kans), abertos ou fechados.',
+    description: 'Três quads, abertos ou fechados.',
     example: '2222m5555p7777s123m99s',
   },
   {
@@ -308,7 +318,7 @@ export const YAKU: Yaku[] = [
     hanOpen: null,
     yakuman: true,
     category: 'trincas-pares',
-    description: 'Quatro quads (kans).',
+    description: 'Quatro quads.',
     example: '2222m5555p7777s1111z99s',
   },
 
@@ -321,6 +331,7 @@ export const YAKU: Yaku[] = [
     hanClosed: 3,
     hanOpen: 2,
     category: 'naipes',
+    apelidos: ['honitsu'],
     description: 'Um único naipe misturado com honras.',
     example: '123p456p789p111z55z',
   },
@@ -332,6 +343,7 @@ export const YAKU: Yaku[] = [
     hanClosed: 6,
     hanOpen: 5,
     category: 'naipes',
+    apelidos: ['chinitsu'],
     description: 'Um único naipe, sem honras.',
     example: '123m345m567m789m22m',
   },
@@ -356,7 +368,8 @@ export const YAKU: Yaku[] = [
     hanOpen: null,
     yakuman: true,
     category: 'naipes',
-    description: '1112345678999 de um naipe + qualquer peça do mesmo naipe. Só fechada.',
+    apelidos: ['chuuren'],
+    description: '1112345678999 de um naipe + qualquer pedra do mesmo naipe. Só fechada.',
     example: '11123455678999m',
   },
 
@@ -365,12 +378,12 @@ export const YAKU: Yaku[] = [
     id: 'riichi',
     romaji: 'Riichi',
     kanji: '立直',
-    namePt: 'Riichi',
+    namePt: 'Declarar pronto',
     hanClosed: 1,
     hanOpen: null,
     category: 'outros',
     description:
-      'Declare em tenpai com a mão fechada, apostando 1000 pontos. Habilita Ippatsu e Ura-dora.',
+      'Declare em tenpai com a mão fechada, apostando 1.000 pontos. Habilita Ippatsu e Ura-dora.',
   },
   {
     id: 'double-riichi',
@@ -381,6 +394,7 @@ export const YAKU: Yaku[] = [
     hanOpen: null,
     bonus: true,
     category: 'outros',
+    apelidos: ['double riichi', 'riichi duplo'],
     description: 'Riichi declarado no primeiro descarte, sem chamadas antes.',
   },
   {
@@ -412,7 +426,8 @@ export const YAKU: Yaku[] = [
     hanClosed: 1,
     hanOpen: 1,
     category: 'outros',
-    description: 'Vencer por tsumo com a última peça do muro.',
+    apelidos: ['haitei'],
+    description: 'Vencer por tsumo com a última pedra do muro.',
   },
   {
     id: 'houtei',
@@ -422,6 +437,7 @@ export const YAKU: Yaku[] = [
     hanClosed: 1,
     hanOpen: 1,
     category: 'outros',
+    apelidos: ['houtei'],
     description: 'Vencer com o último descarte da mão.',
   },
   {
@@ -432,7 +448,8 @@ export const YAKU: Yaku[] = [
     hanClosed: 1,
     hanOpen: 1,
     category: 'outros',
-    description: 'Vencer com a peça de reposição após declarar um kan.',
+    apelidos: ['rinshan'],
+    description: 'Vencer com a pedra de reposição após declarar um kan.',
   },
   {
     id: 'chankan',
@@ -443,7 +460,7 @@ export const YAKU: Yaku[] = [
     hanOpen: 1,
     category: 'outros',
     description:
-      'Vencer com a peça que outro jogador adiciona a um pon para formar kan. Kan fechado só pode ser roubado para Kokushi.',
+      'Vencer com a pedra que outro jogador adiciona a um pon para formar kan. Kan fechado só pode ser roubado para Kokushi.',
   },
   {
     id: 'tenhou',
@@ -454,7 +471,7 @@ export const YAKU: Yaku[] = [
     hanOpen: null,
     yakuman: true,
     category: 'outros',
-    description: 'O dealer (Leste) vence com a mão inicial.',
+    description: 'O dealer vence com a mão inicial.',
   },
   {
     id: 'chiihou',
@@ -481,9 +498,9 @@ export const YAKU: Yaku[] = [
 ]
 
 export const DORA_NOTE =
-  'Dora não é yaku: só soma han se a mão já tiver pelo menos um yaku. O indicador aponta a próxima peça (9→1, N→E, Vermelho→Branco).'
+  'Dora não é yaku: só soma han se a mão já tiver pelo menos um yaku. O indicador aponta a próxima pedra (9→1, N→E, Vermelho→Branco).'
 
-// ── Aba Iniciante
+// ── Aba Yaku para iniciantes
 export interface BeginnerGroup {
   title: string
   subtitle: string

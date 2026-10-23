@@ -51,6 +51,23 @@
   border-top: 1px solid #dbeafe;
 }
 
+/* Sub-verbete (ex.: Renchan dentro de Oya): recuado e sem linha própria. */
+.glossario-item--sub {
+  padding-top: 0;
+  padding-left: 14px;
+  border-top: 0;
+}
+
+.glossario-item--sub .glossario-item__nome::before {
+  content: '↳ ';
+  color: #94a3b8;
+}
+
+.glossario-item--sub.glossario-item--destaque {
+  padding-top: 9px;
+  padding-left: 22px;
+}
+
 .glossario-item__nome {
   margin: 0;
   color: #102a43;
@@ -85,13 +102,18 @@
   color: #94a3b8;
 }
 
+/* Mão de exemplo da abertura (Formação da mão). */
+.glossario-bloco > .yaku-mao-rotulada {
+  margin: 0 0 10px;
+}
+
 .glossario-item .yaku-tiles,
 .glossario-item .yaku-ciclos {
   margin-top: 2px;
 }
 
 /* Nota no fim de um item (ex.: "Dora não é yaku"). */
-.glossario-item__nota {
+.bloco-dica.glossario-item__nota {
   margin: 4px 0 0;
   padding: 8px 10px;
   border-radius: 6px;

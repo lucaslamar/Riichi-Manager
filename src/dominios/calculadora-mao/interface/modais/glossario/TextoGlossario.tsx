@@ -10,25 +10,22 @@ import './texto-glossario.css'
  * dentro de uma Modal, como uma tela dela que entra deslizando de lado (com
  * voltar); fora de modal, numa modal própria.
  *
- * Não viram link: os termos da `secao` que o texto já define (blocos do
- * glossário) e os termos em `ignorar` (ex.: o yaku do cartão, os assuntos
- * de uma ajuda "?").
+ * Não viram link os termos em `ignorar` (ex.: o próprio verbete, o yaku do
+ * cartão, os assuntos de uma ajuda "?").
  */
 export default function TextoGlossario({
   texto,
-  secao,
   ignorar,
 }: {
   texto: string
-  secao?: string
   ignorar?: (string | undefined)[]
 }) {
   const abrirTela = useContext(ContextoNavegacaoModal)
   const [termoAberto, setTermoAberto] = useState<string | null>(null)
   const chaveIgnorar = ignorar?.join('|')
   const trechos = useMemo(
-    () => dividirTextoGlossario(texto, { secao, termos: chaveIgnorar?.split('|') }),
-    [texto, secao, chaveIgnorar],
+    () => dividirTextoGlossario(texto, chaveIgnorar?.split('|')),
+    [texto, chaveIgnorar],
   )
 
   const abrir = (evento: MouseEvent, termo: string) => {

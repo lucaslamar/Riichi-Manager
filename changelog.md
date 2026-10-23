@@ -1,5 +1,35 @@
 # Changelog - Mojoca
 
+## 5.5.0 - 2026-10-23
+
+### Novo
+
+- **Yakus clicáveis**: o nome de um yaku nos textos (por exemplo, "Toitoi" na dica do Chiitoitsu, "Tan'yao" no Kuitan) abre o cartão dele, com han, explicação e mão de exemplo. Também vale para outras grafias, como Chiitoi, Tanyao e Kokushi.
+- Glossário, novos verbetes:
+  - **Chamada** 鳴き (naki), no começo de Chamadas.
+  - **Ron duplo** ダブロン (daburon), abaixo de Ron, com o atamahane (só um vence: quem joga primeiro depois de quem descartou) e os três ron no mesmo descarte.
+  - **Patamares de pontuação**: Mangan, Haneman, Baiman, Sanbaiman e Yakuman, cada um com os han e quanto vale, também sendo oya. Os valores vêm das mesmas bases da calculadora.
+  - **Renchan** 連荘, abaixo de Oya.
+  - **Empate / Ryuukyoku** 流局, com o **Empate abortivo** 途中流局 logo abaixo (Kyuushu kyuuhai, Suufon renda, Suucha riichi, Suukaikan e Sanchahou).
+  - **EMA**, numa seção nova, Regras e entidades.
+- Formação da mão: exemplo de mão completa com 14 pedras, com Sequência, Sequência, Trinca, Trinca e Par embaixo de cada grupo. No celular, a linha só quebra entre grupos.
+- Resultado: cada yakuhai tem a sua explicação: Vento da rodada 場風, Vento do assento 自風, Dragão branco 白, verde 發 ou vermelho 中, com o nome do vento no texto. Se o vento da rodada e o seu são o mesmo, os dois cartões avisam que a trinca conta duas vezes (vento duplo) e vale 2 han.
+- Resultado: tocar no patamar (Mangan, Haneman…) abre o verbete dele no Glossário.
+- Bloco de dica em cinza com ícone de info, usado na dica do Chiitoitsu, na nota "Dora não é yaku" e no aviso de vento duplo.
+
+### Alterado
+
+- Guia de bolso: abas renomeadas para Yaku para iniciantes, Yaku de sequência, Yaku de terminais, Yaku de trincas, Yaku de naipe e Outros yaku. Os nomes longos quebram em duas linhas, centralizados, com todas as abas da fileira na mesma altura.
+- Termos que viram link: agora também dentro do mesmo assunto do Glossário (por exemplo, "tenpai" no Riichi), e mais formas de cada termo: Leste, Sul, Oeste e Norte (Ventos), dealer (Oya), chamada, chamadas e chamar (Chamada), empate, renchan e EMA.
+- Textos sem ponto e vírgula e com "pedra" no lugar de "peça", no Guia de bolso, no Resultado e nas ajudas "?".
+- Saíram parênteses que só repetiam o que o termo com link já explica: "terminais (1 e 9)", "honras (ventos e dragões)", "quads (kans)", "dealer (Leste)", "chombo (penalidade)".
+- Riichi: subtítulo "Declarar pronto" (antes repetia "Riichi").
+- Tan'yao: "Apenas pedras de 2 a 8. Sem terminais e sem honras. Vale aberta pela EMA (kuitan)."
+- Chiitoitsu: "Exatamente 7 pares, só vale se a mão estiver fechada. Vale lembrar que dois pares iguais não contam.", com a dica de quando tentar em bloco destacado, antes das pedras.
+- Pinfu: o par não pode ser de dragão, do vento da rodada nem do seu vento, e o texto avisa que par dos outros ventos pode.
+- Dora: o exemplo do indicador usa o mesmo naipe das pedras (7 de Pin → 8 de Pin).
+- Kuitan, Oya e Honba com textos novos. O Honba sobe a cada renchan ou empate, zera quando um ko vence e soma 300 pontos (100 de cada jogador no tsumo).
+
 ## 5.4.0 - 2026-10-23
 
 ### Novo

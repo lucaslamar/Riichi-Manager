@@ -96,14 +96,57 @@ const YAKU_POR_ID = new Map(YAKU.map((yaku) => [yaku.id, yaku]))
 export interface ExplicacaoYaku {
   /** Cartão da referência de yakus; ausente para dora (que não é yaku). */
   yaku?: Yaku
+  /** Título no lugar do nome em português do cartão (ex.: Vento da rodada). */
+  titulo?: { nome: string; kanji: string }
   texto: string
+  /** Dica em bloco destacado depois do texto. */
+  dica?: string
 }
 
-export function explicacaoDoYaku(nome: string): ExplicacaoYaku | null {
+const NOME_VENTO: Record<string, string> = { Ton: 'Leste', Nan: 'Sul', Sha: 'Oeste', Pei: 'Norte' }
+
+const DRAGAO_YAKUHAI: Record<string, { nome: string; kanji: string }> = {
+  Haku: { nome: 'Dragão branco', kanji: '白' },
+  Hatsu: { nome: 'Dragão verde', kanji: '發' },
+  Chun: { nome: 'Dragão vermelho', kanji: '中' },
+}
+
+/**
+ * Cada yakuhai com a sua explicação: vento da rodada, do assento (com o aviso
+ * de vento duplo quando são o mesmo) ou o dragão.
+ */
+function explicacaoYakuhai(nome: string, yaku: Yaku, mao?: Mao): ExplicacaoYaku {
+  const [tipo, honra = ''] = nome.split(' ')
+  const dragao = DRAGAO_YAKUHAI[honra]
+  if (tipo === 'Yakuhai' && dragao) {
+    return {
+      yaku,
+      titulo: dragao,
+      texto: `Trinca ou quad de ${dragao.nome.toLocaleLowerCase('pt-BR')}. Vale 1 han.`,
+    }
+  }
+  const vento = NOME_VENTO[honra] ?? honra
+  const daRodada = tipo === 'Bakaze'
+  const ventoDuplo = mao ? mao.ventoRodada === mao.ventoAssento : false
+  return {
+    yaku,
+    titulo: daRodada
+      ? { nome: 'Vento da rodada', kanji: '場風' }
+      : { nome: 'Vento do assento', kanji: '自風' },
+    texto: `Trinca ou quad de ${vento}, o vento ${daRodada ? 'da rodada atual' : 'do seu assento'}. Vale 1 han.`,
+    dica: ventoDuplo
+      ? `Como esse vento também é o ${daRodada ? 'do seu assento' : 'da rodada'}, a mesma trinca conta duas vezes (vento duplo) e vale 2 han no total.`
+      : undefined,
+  }
+}
+
+export function explicacaoDoYaku(nome: string, mao?: Mao): ExplicacaoYaku | null {
   if (/dora/i.test(nome)) return { texto: DORA_NOTE }
   const id = idDoYaku(nome)
   const yaku = id ? YAKU_POR_ID.get(id) : undefined
-  return yaku ? { yaku, texto: yaku.description } : null
+  if (!yaku) return null
+  if (id === 'yakuhai') return explicacaoYakuhai(nome, yaku, mao)
+  return { yaku, texto: yaku.description, dica: yaku.dica }
 }
 
 function idDoYaku(nome: string): string | null {

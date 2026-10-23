@@ -7,9 +7,13 @@
  * item tocado destacado. Cada item tem os aliases que o ligam aos textos;
  * alguns aliases apontam para a seção inteira (ex.: "naipe", "honras").
  *
+ * Os yakus da referência também viram link (pelo romaji e pelos `apelidos`)
+ * e abrem o cartão do yaku. Se um nome existe nos dois, vale o do glossário.
+ *
  * Negrito nos textos: `**assim**`.
  */
-import { DORA_NOTE, YAKU } from './yakus'
+import { BASE_PATAMAR } from '@/compartilhado/mahjong/pontuacao'
+import { DORA_NOTE, YAKU, type Yaku } from './yakus'
 
 export type PedrasGlossario =
   | {
@@ -26,8 +30,12 @@ export interface ItemGlossario {
   id: string
   nome: string
   kanji?: string
+  /** Leitura do kanji, entre parênteses depois dele (ex.: 鳴き (naki)). */
+  leitura?: string
   /** Apelido ao lado do nome (ex.: Man • Caracteres). */
   apelido?: string
+  /** Sub-verbete do item anterior: vem recuado, como continuação dele. */
+  sub?: boolean
   texto?: string
   topicos?: string[]
   pedras?: PedrasGlossario
@@ -35,6 +43,14 @@ export interface ItemGlossario {
   nota?: string
   /** Formas que viram link nas descrições (sem diferenciar maiúsculas). */
   aliases: string[]
+  /** Termos que não viram link nos textos deste item (ex.: Riichi como nome do jogo). */
+  semLink?: string[]
+}
+
+/** Mão de exemplo com um rótulo (link para o verbete) embaixo de cada grupo. */
+export interface MaoExemploGlossario {
+  mpsz: string
+  rotulos: string[]
 }
 
 export interface SecaoGlossario {
@@ -43,6 +59,8 @@ export interface SecaoGlossario {
   kanji?: string
   /** Linha de abertura do bloco. */
   intro?: string
+  /** Exemplo visual logo depois da abertura, antes dos itens. */
+  exemplo?: MaoExemploGlossario
   itens: ItemGlossario[]
   /** Aliases que abrem a seção sem destacar nenhum item. */
   aliases?: string[]
@@ -52,6 +70,10 @@ const IPPATSU = YAKU.find((yaku) => yaku.id === 'ippatsu')
 
 const numeradas = (mpsz: string): PedrasGlossario => ({ tipo: 'mpsz', mpsz, numerar: true })
 const exemplo = (mpsz: string): PedrasGlossario => ({ tipo: 'mpsz', mpsz })
+
+/** Valor do patamar no ron, das mesmas bases da calculadora: ko 4×, oya 6×. */
+const valePatamar = (base: number) =>
+  `Vale ${(base * 4).toLocaleString('pt-BR')} (${(base * 6).toLocaleString('pt-BR')} sendo oya).`
 
 /** Assuntos, na ordem em que costumam aparecer numa partida. */
 export const SECOES_GLOSSARIO: SecaoGlossario[] = [
@@ -107,7 +129,7 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         kanji: '風牌',
         texto: 'Ton (Leste), Nan (Sul), Shaa (Oeste), Pei (Norte)',
         pedras: numeradas('1234z'),
-        aliases: ['vento', 'ventos', 'kazehai'],
+        aliases: ['vento', 'ventos', 'kazehai', 'leste', 'sul', 'oeste', 'norte'],
       },
       {
         id: 'dragoes',
@@ -123,6 +145,10 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
     id: 'mao',
     titulo: 'Formação da mão',
     intro: 'A mão comum tem 4 grupos (sequências ou trincas) + 1 par.',
+    exemplo: {
+      mpsz: '234m345p777s111z77z',
+      rotulos: ['Sequência', 'Sequência', 'Trinca', 'Trinca', 'Par'],
+    },
     itens: [
       {
         id: 'sequencia',
@@ -138,7 +164,7 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         kanji: '刻子',
         texto: 'Três pedras iguais. Pode vir de um pon.',
         pedras: exemplo('555s'),
-        aliases: ['trinca', 'trincas', 'koutsu'],
+        aliases: ['trinca', 'trincas', 'trio', 'trios', 'koutsu'],
       },
       {
         id: 'par',
@@ -153,9 +179,25 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
   {
     id: 'chamadas',
     titulo: 'Chamadas',
-    kanji: '鳴き',
-    intro: 'Pegar o descarte de outro jogador. Toda chamada (menos o kan fechado) abre a mão.',
     itens: [
+      {
+        id: 'chamada',
+        nome: 'Chamada',
+        kanji: '鳴き',
+        leitura: 'naki',
+        texto:
+          'Pegar o descarte de outro jogador para formar uma combinação com chi, pon ou kan. Toda chamada abre a mão, exceto o kan fechado.',
+        aliases: [
+          'chamada',
+          'chamadas',
+          'chamar',
+          'chamou',
+          'chamando',
+          'chamado',
+          'chamados',
+          'naki',
+        ],
+      },
       {
         id: 'chi',
         nome: 'Chi',
@@ -183,7 +225,7 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         nome: 'Kuitan',
         kanji: '喰いタン',
         texto:
-          "Tan'yao com a mão aberta. Vale pela EMA; algumas mesas jogam sem ele (kuitan nashi).",
+          "Tan'yao com a mão aberta. Permitido pelas regras da EMA, mas algumas mesas jogam sem ele (kuitan nashi).",
         aliases: ['kuitan'],
       },
     ],
@@ -237,6 +279,20 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         aliases: ['ron'],
       },
       {
+        id: 'ron-duplo',
+        nome: 'Ron duplo',
+        kanji: 'ダブロン',
+        leitura: 'daburon',
+        sub: true,
+        texto:
+          'Dois jogadores dão ron no mesmo descarte e os dois vencem. Quem descartou paga cada um deles.',
+        topicos: [
+          '**Atamahane**: algumas mesas não aceitam ron duplo e só um vence. Ganha quem joga primeiro depois de quem descartou.',
+          'Com três ron no mesmo descarte, muitas mesas anulam a rodada (sanchahou).',
+        ],
+        aliases: ['ron duplo', 'double ron', 'daburon', 'atamahane'],
+      },
+      {
         id: 'furiten',
         nome: 'Furiten',
         kanji: '振聴',
@@ -257,7 +313,7 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         texto: 'Pedra bônus apontada pelo indicador. Cada uma vale 1 han, mas não é yaku.',
         topicos: [
           'O **indicador** é a pedra virada no muro morto.',
-          'A dora é a pedra seguinte na ordem abaixo (indicador 3 de Man → dora 4 de Man).',
+          'A dora é a pedra seguinte na ordem abaixo (indicador 7 de Pin → dora 8 de Pin).',
         ],
         pedras: { tipo: 'ciclosDora' },
         nota: DORA_NOTE,
@@ -322,20 +378,47 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
           'Pontos pela forma da mão (trincas, espera, jeito de vencer). Ajustam o valor até 4 han.',
         aliases: ['fu'],
       },
+    ],
+  },
+  {
+    id: 'patamares',
+    titulo: 'Patamares de pontuação',
+    aliases: ['patamar', 'patamares'],
+    itens: [
       {
         id: 'mangan',
         nome: 'Mangan',
         kanji: '満貫',
-        texto:
-          'Patamares de pontuação: Mangan (5 han), Haneman (6–7), Baiman (8–10), Sanbaiman (11–12).',
-        aliases: ['mangan', 'haneman', 'baiman', 'sanbaiman'],
+        texto: `5 han, ou 4 han com 40 fu ou mais, ou 3 han com 70 fu ou mais. ${valePatamar(BASE_PATAMAR.mangan)}`,
+        aliases: ['mangan', 'mangans'],
+      },
+      {
+        id: 'haneman',
+        nome: 'Haneman',
+        kanji: '跳満',
+        texto: `6 ou 7 han. ${valePatamar(BASE_PATAMAR.haneman)}`,
+        aliases: ['haneman', 'hanemans'],
+      },
+      {
+        id: 'baiman',
+        nome: 'Baiman',
+        kanji: '倍満',
+        texto: `8 a 10 han. ${valePatamar(BASE_PATAMAR.baiman)}`,
+        aliases: ['baiman', 'baimans'],
+      },
+      {
+        id: 'sanbaiman',
+        nome: 'Sanbaiman',
+        kanji: '三倍満',
+        texto: `11 ou 12 han. ${valePatamar(BASE_PATAMAR.sanbaiman)}`,
+        aliases: ['sanbaiman', 'sanbaimans'],
       },
       {
         id: 'yakuman',
         nome: 'Yakuman',
         kanji: '役満',
-        texto: 'Mão máxima: 32.000 pontos (48.000 sendo Leste).',
-        aliases: ['yakuman', 'yakumans'],
+        texto: `Mão máxima. ${valePatamar(BASE_PATAMAR.yakuman)}`,
+        aliases: ['yakuman', 'yakumans', 'kazoe yakuman'],
       },
     ],
   },
@@ -348,8 +431,17 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         nome: 'Oya',
         kanji: '親',
         texto:
-          'O dealer, sempre o Leste. Ganha 1,5× ao vencer e continua dealer se vencer ou ficar em tenpai no empate.',
-        aliases: ['oya', 'dealer'],
+          'O dealer, sempre o Leste. Ganha 1,5× ao vencer. Se vencer ou ficar em tenpai no empate, faz renchan.',
+        aliases: ['oya', 'dealer', 'dealers'],
+      },
+      {
+        id: 'renchan',
+        nome: 'Renchan',
+        kanji: '連荘',
+        sub: true,
+        texto:
+          'Quando o oya continua como dealer na mão seguinte. Acontece se ele vencer ou se ficar em tenpai num empate. O vento dos jogadores não gira e o contador de honba sobe.',
+        aliases: ['renchan'],
       },
       {
         id: 'ko',
@@ -363,8 +455,41 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         nome: 'Honba',
         kanji: '本場',
         texto:
-          'Contador de rodadas extras (dealer continua ou empate). Cada honba soma 300 pontos à próxima vitória.',
+          'Contador de mãos extras. Sobe a cada renchan ou empate e zera quando um ko vence. Cada honba soma 300 pontos ao próximo vencedor (no tsumo, 100 de cada jogador).',
         aliases: ['honba', 'honbas'],
+      },
+      {
+        id: 'empate',
+        nome: 'Empate / Ryuukyoku',
+        kanji: '流局',
+        texto: 'Rodada termina sem vencedor quando o muro acaba.',
+        aliases: ['empate', 'empates', 'empatada', 'empatado', 'ryuukyoku'],
+      },
+      {
+        id: 'empate-abortivo',
+        nome: 'Empate abortivo',
+        kanji: '途中流局',
+        leitura: 'tochuu ryuukyoku',
+        sub: true,
+        texto:
+          'A rodada é anulada antes de o muro acabar. O oya continua e o honba sobe. As regras da EMA não usam empate abortivo, mas muitas mesas usam. Os casos comuns:',
+        topicos: [
+          '**Kyuushu kyuuhai**: 9 terminais ou honras diferentes na mão inicial. O jogador pode anular a rodada.',
+          '**Suufon renda**: os quatro jogadores descartam o mesmo vento na primeira volta.',
+          '**Suucha riichi**: os quatro jogadores declaram Riichi.',
+          '**Suukaikan**: quatro kans de jogadores diferentes.',
+          '**Sanchahou**: três jogadores dão ron no mesmo descarte.',
+        ],
+        aliases: [
+          'empate abortivo',
+          'empates abortivos',
+          'tochuu ryuukyoku',
+          'kyuushu kyuuhai',
+          'suufon renda',
+          'suucha riichi',
+          'suukaikan',
+          'sanchahou',
+        ],
       },
       {
         id: 'chombo',
@@ -375,9 +500,27 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
       },
     ],
   },
+  {
+    id: 'regras',
+    titulo: 'Regras e entidades',
+    itens: [
+      {
+        id: 'ema',
+        nome: 'EMA',
+        texto:
+          'European Mahjong Association, entidade que organiza o mahjong competitivo na Europa. Publica o RCR (Riichi Competition Rules), regulamento de Riichi usado como referência por muitos clubes fora do Japão.',
+        aliases: ['ema', 'rcr'],
+        // Aqui Riichi é o nome do jogo, não a declaração.
+        semLink: ['riichi'],
+      },
+    ],
+  },
 ]
 
 // ── Busca dos termos nos textos
+
+/** Prefixo dos ids de termo que apontam para um yaku da referência. */
+const PREFIXO_YAKU = 'yaku:'
 
 /** Termo = um item, ou a seção inteira (id da seção) para os aliases dela. */
 interface TermoEncontrado {
@@ -402,6 +545,17 @@ const normalizar = (texto: string) => texto.toLocaleLowerCase('pt-BR').replace(/
 
 const TERMO_POR_ALIAS = new Map(ALIASES.map(([alias, termo]) => [normalizar(alias), termo]))
 
+// Yakus depois do glossário: um nome que já é verbete (Riichi, Ippatsu) fica com ele.
+const YAKU_POR_TERMO = new Map<string, Yaku>()
+for (const yaku of YAKU) {
+  const termo = `${PREFIXO_YAKU}${yaku.id}`
+  YAKU_POR_TERMO.set(termo, yaku)
+  for (const alias of [yaku.romaji, ...(yaku.apelidos ?? [])]) {
+    const chave = normalizar(alias)
+    if (!TERMO_POR_ALIAS.has(chave)) TERMO_POR_ALIAS.set(chave, termo)
+  }
+}
+
 const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 /**
@@ -421,9 +575,19 @@ export function buscarTermoGlossario(id: string): TermoEncontrado | null {
   return TERMOS.get(id) ?? null
 }
 
-/** Termo do glossário com exatamente esse nome (ex.: o yaku "Riichi"). */
+/** Yaku da referência ligado ao termo (links de yaku), ou null para verbetes. */
+export function buscarYakuDoTermo(id: string): Yaku | null {
+  return YAKU_POR_TERMO.get(id) ?? null
+}
+
+/** Termo do glossário (ou yaku) com exatamente esse nome (ex.: o yaku "Riichi"). */
 export function termoGlossarioDoNome(nome: string): string | undefined {
   return TERMO_POR_ALIAS.get(normalizar(nome))
+}
+
+/** Termos que não viram link nos textos de um item: ele mesmo, a seção e os `semLink`. */
+export function termosDoItem(secao: SecaoGlossario, item?: ItemGlossario): string[] {
+  return [secao.id, ...(item ? [item.id, ...(item.semLink ?? [])] : [])]
 }
 
 export interface TrechoGlossario {
@@ -434,25 +598,16 @@ export interface TrechoGlossario {
 }
 
 /**
- * O que não vira link num texto: `secao` = os termos da seção que o texto já
- * define (blocos do glossário); `termos` = termos avulsos (ex.: o yaku do cartão,
- * os assuntos de uma ajuda "?").
- */
-export interface IgnorarGlossario {
-  secao?: string
-  termos?: (string | undefined)[]
-}
-
-/**
  * Divide um texto em trechos (negrito `**…**` e termos do glossário). Só a
- * primeira ocorrência de cada termo vira link.
+ * primeira ocorrência de cada termo vira link. `ignorar` = termos que não
+ * viram link (ex.: o próprio verbete, o yaku do cartão, os assuntos de uma
+ * ajuda "?").
  */
 export function dividirTextoGlossario(
   texto: string,
-  { secao, termos = [] }: IgnorarGlossario = {},
+  ignorar: (string | undefined)[] = [],
 ): TrechoGlossario[] {
-  const ignorados = new Set(termos)
-  for (const [id, encontrado] of TERMOS) if (encontrado.secao.id === secao) ignorados.add(id)
+  const ignorados = new Set(ignorar)
 
   const trechos: TrechoGlossario[] = []
   texto.split('**').forEach((parte, indice) => {

@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import type { CodigoPedra } from '../../../logica/mao'
 import { parseMpsz } from '../../../logica/yakus'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import TextoGlossario from '../glossario/TextoGlossario'
 import './pedras-exemplo.css'
 
 /** Uma pedra pequena com a face branca, como nas mãos do app. */
@@ -70,9 +71,44 @@ export function PedrasExemplo({
   )
 }
 
+/**
+ * Mão de exemplo com um rótulo embaixo de cada grupo (ex.: Sequência, Par),
+ * que vira link para o verbete. Cada grupo fica inteiro numa linha.
+ */
+export function MaoRotulada({
+  grupos,
+  rotulos,
+  ignorar,
+}: {
+  grupos: CodigoPedra[][]
+  rotulos: string[]
+  ignorar?: (string | undefined)[]
+}) {
+  return (
+    <div className="yaku-mao-rotulada">
+      {grupos.map((grupo, indiceGrupo) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: exemplo fixo
+        <span key={indiceGrupo} className="yaku-mao-rotulada__grupo">
+          <span className="yaku-tiles__grupo" role="img" aria-label={grupo.join(' ')}>
+            {grupo.map((pedra, indicePedra) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: exemplo fixo
+              <PedraYaku key={indicePedra} pedra={pedra} />
+            ))}
+          </span>
+          {rotulos[indiceGrupo] && (
+            <span className="yaku-mao-rotulada__rotulo">
+              <TextoGlossario texto={rotulos[indiceGrupo]} ignorar={ignorar} />
+            </span>
+          )}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 /** Ordem em que o indicador aponta a dora: cada pedra indica a seguinte. */
 const CICLOS_DORA = [
-  { titulo: 'Números', detalhe: 'Sobe um; o 9 volta para o 1.', mpsz: '789p1p' },
+  { titulo: 'Números', detalhe: 'Sobe um e o 9 volta para o 1.', mpsz: '789p1p' },
   { titulo: 'Ventos', detalhe: 'Leste → Sul → Oeste → Norte → Leste.', mpsz: '12341z' },
   { titulo: 'Dragões', detalhe: 'Branco → Verde → Vermelho → Branco.', mpsz: '5675z' },
 ]

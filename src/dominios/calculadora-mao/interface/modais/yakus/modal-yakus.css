@@ -126,15 +126,9 @@
 }
 
 /* Nota de rodapé em cinza, discreta. */
-.yaku-nota-dora {
-  margin: 16px 0 0;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  background: #f1f5f9;
-  color: #486581;
+.bloco-dica.yaku-nota-dora {
+  margin-top: 16px;
   font-size: 0.85rem;
-  line-height: 1.4;
 }
 
 /* Ovelhinha no título: um pouco maior que o texto, alinhada à linha. */

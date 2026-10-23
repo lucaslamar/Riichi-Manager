@@ -1,11 +1,13 @@
 import { useLayoutEffect, useRef } from 'react'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { buscarTermoGlossario } from '../../../logica/glossario'
+import { buscarTermoGlossario, buscarYakuDoTermo } from '../../../logica/glossario'
+import CartaoYaku from '../yakus/CartaoYaku'
 import BlocoGlossario, { TituloSecaoGlossario } from './BlocoGlossario'
 
-/** Título da tela de termo: o assunto do glossário em que o termo está. */
+/** Título da tela de termo: o assunto do glossário em que o termo está (ou "Yaku"). */
 export function TituloTermo({ termo }: { termo: string }) {
+  if (buscarYakuDoTermo(termo)) return <span>Yaku</span>
   const encontrado = buscarTermoGlossario(termo)
   return encontrado ? <TituloSecaoGlossario secao={encontrado.secao} /> : null
 }
@@ -14,7 +16,7 @@ export function TituloTermo({ termo }: { termo: string }) {
  * Definição de um termo do glossário, aberta ao tocar num termo destacado
  * (TextoGlossario) como uma tela da própria modal: o bloco do assunto inteiro
  * (ex.: Espera e vitória), com o item do termo destacado em amarelo e já à
- * vista.
+ * vista. Link de yaku abre o cartão dele, como nas abas do Guia de bolso.
  */
 export function ConteudoTermo({ termo }: { termo: string }) {
   const encontrado = buscarTermoGlossario(termo)
@@ -31,6 +33,8 @@ export function ConteudoTermo({ termo }: { termo: string }) {
       rolavel.clientHeight / 4
   }, [])
 
+  const yaku = buscarYakuDoTermo(termo)
+  if (yaku) return <CartaoYaku yaku={yaku} />
   if (!encontrado) return null
   return (
     <div ref={conteudoRef}>

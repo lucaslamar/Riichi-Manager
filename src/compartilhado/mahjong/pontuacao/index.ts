@@ -9,6 +9,7 @@ export type { DetalheFu, PontosCalculados, ResultadoMao } from './resultado'
 export {
   aplicarHonba,
   arredondar100,
+  BASE_PATAMAR,
   calcularHanFu,
   calcularPatamarHanFu,
   fuValidos,

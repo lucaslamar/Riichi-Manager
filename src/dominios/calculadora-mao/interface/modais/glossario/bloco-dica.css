@@ -1,0 +1,11 @@
+/* Dica ou aviso dentro de um cartão: fundo cinza com ícone de info. */
+.bloco-dica {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #486581;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}

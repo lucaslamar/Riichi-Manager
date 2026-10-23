@@ -2,6 +2,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { DetalheFu, Mao, VentoMao } from '../../../logica/mao'
 import { termoGlossarioDoNome } from '../../../logica/glossario'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import BlocoDica from '../glossario/BlocoDica'
 import TextoGlossario from '../glossario/TextoGlossario'
 import { explicacaoDoYaku } from './destaqueYaku'
 
@@ -78,7 +79,12 @@ export default function ExibicaoCompleta({
 
   return (
     <>
-      {resultado.nome && <div className="nome-mao">{resultado.nome}</div>}
+      {/* O patamar (Mangan, Haneman...) abre o verbete dele no glossário. */}
+      {resultado.nome && (
+        <div className="nome-mao">
+          <TextoGlossario texto={resultado.nome} />
+        </div>
+      )}
       {mao && <TagsVentos mao={mao} />}
       {pontosHonba > 0 && mao ? (
         <div className="linhas-pontos-resultado">
@@ -164,7 +170,8 @@ export default function ExibicaoCompleta({
             {resultado.yaku.map(
               ([nome, valor, ehYakuman]: [string, number, boolean], i: number) => {
                 const aberto = yakuSelecionado === nome
-                const explicacao = explicacaoDoYaku(nome)
+                const explicacao = explicacaoDoYaku(nome, mao)
+                const ignorar = [termoGlossarioDoNome(explicacao?.yaku?.romaji ?? nome)]
                 const idExplicacao = `explicacao-yaku-${i}`
                 // O cartão todo abre/fecha ao tocar (o botão é o acesso por
                 // teclado); a explicação fica fora do botão por ter links.
@@ -194,19 +201,20 @@ export default function ExibicaoCompleta({
                       <strong>{ehYakuman ? `${valor}× YM` : `${valor}han`}</strong>
                     </button>
                     {aberto && explicacao && (
-                      <span id={idExplicacao} className="chip-yaku__explicacao">
-                        {explicacao.yaku && (
+                      <div id={idExplicacao} className="chip-yaku__explicacao">
+                        {(explicacao.titulo ?? explicacao.yaku) && (
                           <span className="chip-yaku__nome-pt">
-                            {explicacao.yaku.namePt} <span lang="ja">{explicacao.yaku.kanji}</span>
+                            {explicacao.titulo?.nome ?? explicacao.yaku?.namePt}{' '}
+                            <span lang="ja">
+                              {explicacao.titulo?.kanji ?? explicacao.yaku?.kanji}
+                            </span>
                           </span>
                         )}
                         <span>
-                          <TextoGlossario
-                            texto={explicacao.texto}
-                            ignorar={[termoGlossarioDoNome(explicacao.yaku?.romaji ?? nome)]}
-                          />
+                          <TextoGlossario texto={explicacao.texto} ignorar={ignorar} />
                         </span>
-                      </span>
+                        {explicacao.dica && <BlocoDica texto={explicacao.dica} ignorar={ignorar} />}
+                      </div>
                     )}
                   </div>
                 )

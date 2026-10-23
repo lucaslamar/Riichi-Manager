@@ -3,6 +3,15 @@ import type { PontosCalculados } from './resultado'
 
 // ─── Calculadora rápida ───────────────────────────────────────────────────────
 
+/** Pontos base de cada patamar: o ron do ko vale 4× a base e o do oya, 6×. */
+export const BASE_PATAMAR = {
+  mangan: 2000,
+  haneman: 3000,
+  baiman: 4000,
+  sanbaiman: 6000,
+  yakuman: 8000,
+} as const
+
 export function arredondar100(valor: number): number {
   return Math.ceil(valor / 100) * 100
 }
@@ -17,11 +26,12 @@ export function calcularPatamarHanFu(
     return { base, nome: null, yakuman: 0 }
   }
 
-  if (config.kazoeYakuman && han >= 13) return { base: 8000, nome: 'Kazoe Yakuman', yakuman: 1 }
-  if (han >= 11) return { base: 6000, nome: 'Sanbaiman', yakuman: 0 }
-  if (han >= 8) return { base: 4000, nome: 'Baiman', yakuman: 0 }
-  if (han >= 6) return { base: 3000, nome: 'Haneman', yakuman: 0 }
-  return { base: 2000, nome: 'Mangan', yakuman: 0 }
+  if (config.kazoeYakuman && han >= 13)
+    return { base: BASE_PATAMAR.yakuman, nome: 'Kazoe Yakuman', yakuman: 1 }
+  if (han >= 11) return { base: BASE_PATAMAR.sanbaiman, nome: 'Sanbaiman', yakuman: 0 }
+  if (han >= 8) return { base: BASE_PATAMAR.baiman, nome: 'Baiman', yakuman: 0 }
+  if (han >= 6) return { base: BASE_PATAMAR.haneman, nome: 'Haneman', yakuman: 0 }
+  return { base: BASE_PATAMAR.mangan, nome: 'Mangan', yakuman: 0 }
 }
 
 /**

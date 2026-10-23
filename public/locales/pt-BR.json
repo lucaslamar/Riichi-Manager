@@ -238,8 +238,8 @@
   "sectionHelp": {
     "buttonLabel": "Ajuda: {{section}}",
     "victory": {
-      "tsumo": "Você completou a mão com uma peça comprada da parede. Todos os outros jogadores pagam.",
-      "ron": "Você completou a mão com uma peça descartada por outro jogador. Quem descartou paga sozinho.",
+      "tsumo": "Você completou a mão com uma pedra comprada da parede. Todos os outros jogadores pagam.",
+      "ron": "Você completou a mão com uma pedra descartada por outro jogador. Quem descartou paga sozinho.",
       "menzen": "Com a mão fechada, o tsumo vale 1 han (Menzen Tsumo) e é um yaku, então sozinho já torna sua mão válida.",
       "yakuTitle": "Yaku",
       "yaku": "Condição de pontuação que dá direito a vencer. Toda mão precisa de pelo menos um."
@@ -254,8 +254,8 @@
       "title": "Qual é o Dora?",
       "inHand": "Informe quantas doras você possui na mão.",
       "indicatorsTitle": "Indicadores de dora",
-      "indicators": "Selecione os indicadores de dora. O indicador não é a dora; ele determina qual peça será contada como dora.",
-      "uraDora": "A peça que fica embaixo de cada indicador de dora no muro morto. Funciona como um indicador de dora a mais, mas só é revelada para quem vence depois de declarar Riichi.",
+      "indicators": "Selecione os indicadores de dora. O indicador não é a dora. Ele determina qual pedra será contada como dora.",
+      "uraDora": "A pedra que fica embaixo de cada indicador de dora no muro morto. Funciona como um indicador de dora a mais, mas só é revelada para quem vence depois de declarar Riichi.",
       "akaTitle": "Aka dora",
       "aka": "Os cincos vermelhos contam como dora, 1 han cada. Para usar, ative Aka dora em Regras de cálculo, no ícone de engrenagem ([[engrenagem]]) da Calculadora de Mão.",
       "flamingTitle": "Dora flamejante",
@@ -268,13 +268,13 @@
       "term": "Ura-dora"
     },
     "furiten": {
-      "rule": "Em furiten você não pode vencer por ron, só por tsumo. Declarar ron em furiten é chombo (penalidade).",
+      "rule": "Em furiten você não pode vencer por ron, só por tsumo. Declarar ron em furiten é chombo.",
       "discardsTitle": "Pelos descartes",
-      "discards": "Alguma peça que completaria sua mão está entre os seus descartes. Dura enquanto a sua espera incluir essa peça.",
+      "discards": "Alguma pedra que completaria sua mão está entre os seus descartes. Dura enquanto a sua espera incluir essa pedra.",
       "temporaryTitle": "Temporário",
-      "temporary": "Você deixou passar uma peça que completaria sua mão, sem declarar ron. Dura até o seu próximo descarte.",
+      "temporary": "Você deixou passar uma pedra que completaria sua mão, sem declarar ron. Dura até o seu próximo descarte.",
       "riichiTitle": "De Riichi",
-      "riichi": "Depois de declarar Riichi, você deixou passar uma peça que completaria sua mão. Dura até o fim da rodada, porque a mão não pode mais mudar.",
+      "riichi": "Depois de declarar Riichi, você deixou passar uma pedra que completaria sua mão. Dura até o fim da rodada, porque a mão não pode mais mudar.",
       "registerTitle": "Como o app verifica",
       "register": "Registre aqui os seus descartes, porque é por eles que o app verifica o furiten. O temporário e o de Riichi dependem do que aconteceu na mesa e não são verificados."
     },
@@ -291,15 +291,15 @@
       "value": "Vale 1 han e é um yaku, então sozinho já torna sua mão válida. Também libera a ura-dora. Depois de declarar, você não pode mais alterar a mão.",
       "doubleRiichi": "Riichi declarado no primeiro descarte, sem chamadas antes. Vale 2 han no lugar de 1 e também é um yaku.",
       "ippatsu": "Batida em até uma volta após o Riichi, sem chamadas no meio. Vale +1 han. É um yaku, mas só existe junto com o Riichi.",
-      "uraDora": "A peça que fica embaixo de cada indicador de dora no muro morto. Funciona como um indicador de dora a mais, mas só é revelada para quem bate depois de declarar Riichi."
+      "uraDora": "A pedra que fica embaixo de cada indicador de dora no muro morto. Funciona como um indicador de dora a mais, mas só é revelada para quem bate depois de declarar Riichi."
     },
     "specialConditions": {
       "allYaku": "Todas são yaku, então qualquer uma delas já torna sua mão válida, mesmo sem outro yaku.",
       "tenhouChiihouTitle": "Tenhou e Chiihou",
       "tenhouChiihou": "Batida com a mão inicial. Tenhou é a do dealer e Chiihou a dos demais jogadores. Valem Yakuman.",
-      "rinshan": "Batida com a peça comprada após um kan. Vale +1 han.",
-      "chankan": "Ron sobre a peça que outro jogador adicionou a um pon para formar kan. Vale +1 han.",
-      "haitei": "Batida por tsumo com a última peça da parede. Vale +1 han.",
+      "rinshan": "Batida com a pedra comprada após um kan. Vale +1 han.",
+      "chankan": "Ron sobre a pedra que outro jogador adicionou a um pon para formar kan. Vale +1 han.",
+      "haitei": "Batida por tsumo com a última pedra da parede. Vale +1 han.",
       "houtei": "Batida por ron com o último descarte da partida. Vale +1 han."
     }
   },

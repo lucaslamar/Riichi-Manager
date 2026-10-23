@@ -60,6 +60,32 @@
   line-height: 1;
 }
 
+/* ─── Mão com rótulo embaixo de cada grupo ───────────────────────────────── */
+/* Mais espaço entre grupos que entre pedras; a linha só quebra entre grupos. */
+.yaku-mao-rotulada {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.yaku-mao-rotulada__grupo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.yaku-mao-rotulada__grupo .yaku-tiles__grupo {
+  flex-wrap: nowrap;
+}
+
+.yaku-mao-rotulada__rotulo {
+  color: #607080;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 /* ─── Sequências do indicador de dora ────────────────────────────────────── */
 .yaku-ciclo__linha + .yaku-ciclo__linha {
   margin-top: 8px;

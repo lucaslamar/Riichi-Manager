@@ -8,30 +8,28 @@ import {
   DORA_NOTE,
   ORDEM_CATEGORIAS,
   YAKU,
-  parseMpszGrupos,
   type Yaku,
   type YakuCategory,
 } from '../../../logica/yakus'
-import { termoGlossarioDoNome } from '../../../logica/glossario'
-import TextoGlossario from '../glossario/TextoGlossario'
+import BlocoDica from '../glossario/BlocoDica'
 import AbaGlossario from './AbaGlossario'
-import { PedrasExemplo } from './PedrasExemplo'
+import CartaoYaku from './CartaoYaku'
 import './modal-yakus.css'
 
 type AbaYakus = 'glossario' | 'iniciante' | YakuCategory | 'yakuman'
 
 const ROTULOS_CURTOS: Record<YakuCategory, string> = {
-  sequencias: 'Sequências',
-  'terminais-honras': 'Terminais',
-  'trincas-pares': 'Trincas',
-  naipes: 'Naipes',
-  outros: 'Outros',
+  sequencias: 'Yaku de sequência',
+  'terminais-honras': 'Yaku de terminais',
+  'trincas-pares': 'Yaku de trincas',
+  naipes: 'Yaku de naipe',
+  outros: 'Outros yaku',
 }
 
 /** Ordem das abas (grade de 4 colunas): a primeira é a padrão ao abrir. */
 const ABAS: AbaModal<AbaYakus>[] = [
   { chave: 'glossario', rotulo: 'Glossário' },
-  { chave: 'iniciante', rotulo: 'Iniciante' },
+  { chave: 'iniciante', rotulo: 'Yaku para iniciantes' },
   ...ORDEM_CATEGORIAS.map((categoria) => ({ chave: categoria, rotulo: ROTULOS_CURTOS[categoria] })),
   { chave: 'yakuman', rotulo: 'Yakuman' },
 ]
@@ -55,54 +53,6 @@ function salvarAba(aba: AbaYakus) {
   } catch {
     // Sem armazenamento (aba anônima, bloqueio): só não lembra a aba.
   }
-}
-
-function formatarHan(han: number | null, bonus?: boolean) {
-  if (han === null) return '—'
-  return bonus ? `+${han}` : String(han)
-}
-
-function SeloHan({ yaku }: { yaku: Yaku }) {
-  if (yaku.yakuman) {
-    return <span className="yaku-badge yaku-badge--yakuman">YAKUMAN</span>
-  }
-
-  return (
-    <span className="yaku-badge">
-      <span>
-        Fechada <strong>{formatarHan(yaku.hanClosed, yaku.bonus)}</strong>
-      </span>
-      <span className="yaku-badge__divisor" aria-hidden="true">
-        |
-      </span>
-      <span>
-        Aberta <strong>{formatarHan(yaku.hanOpen, yaku.bonus)}</strong>
-      </span>
-    </span>
-  )
-}
-
-function CartaoYaku({ yaku }: { yaku: Yaku }) {
-  return (
-    <article className={`yaku-card${yaku.yakuman ? ' yaku-card--yakuman' : ''}`}>
-      <header className="yaku-card__topo">
-        <h4 className="yaku-card__nome">
-          {yaku.romaji}{' '}
-          <span className="yaku-card__kanji" lang="ja">
-            {yaku.kanji}
-          </span>
-        </h4>
-        <SeloHan yaku={yaku} />
-      </header>
-      <p className="yaku-card__pt">{yaku.namePt}</p>
-      <p className="yaku-card__descricao">
-        <TextoGlossario texto={yaku.description} ignorar={[termoGlossarioDoNome(yaku.romaji)]} />
-      </p>
-      {yaku.example && (
-        <PedrasExemplo grupos={parseMpszGrupos(yaku.example)} rotulo={`Exemplo: ${yaku.example}`} />
-      )}
-    </article>
-  )
 }
 
 function ListaYakus({ titulo, yakus }: { titulo: string; yakus: Yaku[] }) {
@@ -134,10 +84,7 @@ function AbaIniciante() {
           </div>
         </section>
       ))}
-      <p className="yaku-nota-dora">
-        <i className="fas fa-circle-info" aria-hidden="true" />{' '}
-        <TextoGlossario texto={DORA_NOTE} />
-      </p>
+      <BlocoDica texto={DORA_NOTE} className="yaku-nota-dora" />
     </>
   )
 }
@@ -159,7 +106,7 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
 /**
  * Referência de yakus para consulta durante a partida. Construída sobre a
  * Modal base (fundo, Esc, foco e trava de rolagem); aqui ficam só as abas
- * (Glossário, Iniciante, uma por categoria e Yakuman) e os cartões.
+ * (Glossário, Yaku para iniciantes, uma por categoria e Yakuman) e os cartões.
  */
 export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()

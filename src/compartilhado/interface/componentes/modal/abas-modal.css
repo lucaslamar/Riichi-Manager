@@ -24,7 +24,11 @@
 .abas-modal__aba {
   min-width: 0;
   min-height: 34px;
-  padding: 0 2px;
+  /* Rótulo longo quebra em duas linhas, centralizado; a fileira (grid) estica
+     as outras abas para a mesma altura. */
+  padding: 3px 2px;
+  line-height: 1.15;
+  text-align: center;
   border: 1px solid #d7dde6;
   border-radius: 8px;
   background: #eef2f6;
