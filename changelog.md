@@ -30,6 +30,7 @@
 - Chiitoitsu: "Exatamente 7 pares, só vale se a mão estiver fechada. Vale lembrar que dois pares iguais não contam.", com a dica de quando tentar em bloco destacado, antes das pedras.
 - Pinfu: o par não pode ser de dragão, do vento da rodada nem do seu vento, e o texto avisa que par dos outros ventos pode.
 - Dora: o exemplo do indicador usa o mesmo naipe das pedras (7 de Pin → 8 de Pin).
+- Furiten: o verbete do Glossário ganhou os três tipos (Pelos descartes, Temporário e De Riichi). Na ajuda "?" do Furiten, os tipos ficam agrupados em "Tipos de furiten", e "Como o app verifica" virou um bloco de dica em cinza.
 - Kuitan, Oya e Honba com textos novos. O Honba sobe a cada renchan ou empate, zera quando um ko vence e soma 300 pontos (100 de cada jogador no tsumo).
 
 ## 5.4.0 - 2026-10-23

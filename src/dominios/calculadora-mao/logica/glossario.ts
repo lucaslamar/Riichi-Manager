@@ -297,6 +297,11 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         nome: 'Furiten',
         kanji: '振聴',
         texto: 'Se você já descartou uma das suas esperas, não pode vencer por ron, só por tsumo.',
+        topicos: [
+          '**Pelos descartes**: uma pedra que completaria sua mão está entre os seus descartes.',
+          '**Temporário**: você deixou passar uma pedra que completaria sua mão. Dura até o seu próximo descarte.',
+          '**De Riichi**: depois do Riichi, você deixou passar uma pedra que completaria sua mão. Dura até o fim da rodada.',
+        ],
         aliases: ['furiten'],
       },
     ],

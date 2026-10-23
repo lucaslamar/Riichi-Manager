@@ -20,6 +20,8 @@ export interface BlocoAjuda {
   /** Ícone Font Awesome ao lado do subtítulo, o mesmo do controle na tela. */
   icone?: string
   paragrafos?: string[]
+  /** Bloco de dica em cinza (como o aviso da Dora), com o subtítulo em negrito no começo. */
+  dica?: boolean
   /** Pedras de exemplo depois dos parágrafos (sequências do indicador, 5 vermelhos). */
   visual?: 'ciclosDora' | 'akaDora'
 }
@@ -50,6 +52,7 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     titulo: 'calculator.furiten',
     blocos: [
       { paragrafos: ['sectionHelp.furiten.rule'] },
+      { subtitulo: 'sectionHelp.furiten.typesTitle' },
       {
         subtitulo: 'sectionHelp.furiten.discardsTitle',
         item: true,
@@ -67,7 +70,7 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
       },
       {
         subtitulo: 'sectionHelp.furiten.registerTitle',
-        item: true,
+        dica: true,
         paragrafos: ['sectionHelp.furiten.register'],
       },
     ],

@@ -269,6 +269,7 @@
     },
     "furiten": {
       "rule": "Em furiten você não pode vencer por ron, só por tsumo. Declarar ron em furiten é chombo.",
+      "typesTitle": "Tipos de furiten",
       "discardsTitle": "Pelos descartes",
       "discards": "Alguma pedra que completaria sua mão está entre os seus descartes. Dura enquanto a sua espera incluir essa pedra.",
       "temporaryTitle": "Temporário",

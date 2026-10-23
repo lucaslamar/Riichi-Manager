@@ -117,6 +117,16 @@
   padding-top: 0;
 }
 
+/* Dica em cinza no fim da ajuda (ex.: "Como o app verifica" do Furiten). */
+.modal-ajuda-secao .ajuda-dica {
+  margin-top: 6px;
+}
+
+/* Rótulo de grupo no meio da ajuda (ex.: "Tipos de furiten"): mais respiro em cima. */
+.modal-ajuda-secao .glossario-bloco__intro + .glossario-bloco__titulo {
+  padding-top: 6px;
+}
+
 /* Ícone no meio do texto (ex.: a engrenagem das Regras de cálculo). */
 .icone-texto-ajuda {
   font-size: 0.9em;

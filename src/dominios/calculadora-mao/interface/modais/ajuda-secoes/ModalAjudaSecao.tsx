@@ -6,6 +6,7 @@ import { parseMpszGrupos } from '../../../logica/yakus'
 import TextoGlossario from '../glossario/TextoGlossario'
 import { CiclosDora, PedrasExemplo } from '../yakus/PedrasExemplo'
 import { TOPICOS_AJUDA, type BlocoAjuda, type TopicoAjuda } from './topicosAjuda'
+import '../glossario/bloco-dica.css'
 import '../glossario/bloco-glossario.css'
 import './ajuda-secoes.css'
 
@@ -37,15 +38,25 @@ function VisualAjuda({ visual }: { visual: NonNullable<BlocoAjuda['visual']> }) 
 
 /**
  * Conteúdo da ajuda no mesmo bloco do Glossário (BlocoGlossario): parágrafos
- * sem subtítulo são a abertura, subtítulos são itens com divisória, e um
- * subtítulo de assunto sem texto (ex.: "Qual é o Dora?") vira rótulo de grupo.
+ * sem subtítulo são a abertura, subtítulos são itens com divisória, um
+ * subtítulo de assunto sem texto (ex.: "Qual é o Dora?") vira rótulo de grupo
+ * e `dica` vira o bloco cinza (BlocoDica), com o subtítulo em negrito.
  */
 function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: string[] }) {
   const { t } = useI18n()
 
   return (
     <section className="glossario-bloco">
-      {blocos.map(({ subtitulo, item, icone, paragrafos = [], visual }, indice) => {
+      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual }, indice) => {
+        if (dica) {
+          return paragrafos.map((chave) => (
+            <p key={chave} className="bloco-dica ajuda-dica">
+              <i className="fas fa-circle-info" aria-hidden="true" />{' '}
+              {subtitulo && <strong>{t(subtitulo)}: </strong>}
+              <TextoAjuda texto={t(chave)} ignorar={ignorar} />
+            </p>
+          ))
+        }
         const textos = paragrafos.map((chave) => (
           <p key={chave} className={subtitulo ? 'glossario-item__texto' : 'glossario-bloco__intro'}>
             <TextoAjuda texto={t(chave)} ignorar={ignorar} />
