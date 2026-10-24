@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
@@ -6,6 +6,8 @@ import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslize
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
+import { ContextoAprender } from '@/dominios/aprender-a-jogar/interface/ContextoAprender'
+import GuiaAprender from '@/dominios/aprender-a-jogar/interface/GuiaAprender'
 import packageJson from '../../package.json'
 
 export type TelaPrincipal =
@@ -15,8 +17,18 @@ export type TelaPrincipal =
   | 'regras'
   | 'sobre'
 
-/** Ordem das telas ao deslizar o dedo: a barra inferior, com a Han e Fu antes da Mão. */
-const ORDEM_DESLIZE: TelaPrincipal[] = ['calculadoraRapida', 'calculadora', 'sorteadorVentos', 'regras']
+/**
+ * Ordem das telas ao deslizar o dedo: a barra inferior, com a Han e Fu antes
+ * da Mão. 'aprender' é o guia Aprender a jogar, que abre por cima em vez de
+ * trocar de tela.
+ */
+const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
+  'calculadoraRapida',
+  'calculadora',
+  'sorteadorVentos',
+  'aprender',
+  'regras',
+]
 
 /**
  * Componente raiz da aplicacao. A Calculadora de Mao e a porta de entrada.
@@ -51,15 +63,34 @@ export default function App() {
   // A Han e Fu é ponta da fila e tem a seta de voltar: deslizar no sentido da
   // seta (dedo para a direita) também volta para a Calculadora de Mão.
   const voltarDaHanFu = tela === 'calculadoraRapida' ? (voltar ?? (() => navegar('calculadora'))) : undefined
+
+  // Guia Aprender a jogar: tela cheia por cima de tudo (até de uma modal, quando
+  // aberto pelo "Ver em Aprender a jogar" de uma ajuda). `chave` remonta o guia
+  // a cada abertura, já na página do destino.
+  const [guia, setGuia] = useState<{ destino?: string; chave: number } | null>(null)
+  const abrirGuia = useCallback((destino?: string) => {
+    setGuia((atual) => ({ destino, chave: (atual?.chave ?? 0) + 1 }))
+  }, [])
+  const aprender = useMemo(() => ({ abrir: abrirGuia, aberto: !!guia }), [abrirGuia, guia])
+
+  // Deslizar até o Aprender abre o guia por cima; ao fechar, a pessoa volta
+  // para a tela de onde deslizou.
+  const irPara = (destino: TelaPrincipal | 'aprender') =>
+    destino === 'aprender' ? abrirGuia() : navegar(destino)
   useDeslizeHorizontal({
     ativo: indiceTela >= 0 && tela !== 'calculadora',
-    aoDeslizarDireita: voltarDaHanFu ?? (telaAnterior && (() => navegar(telaAnterior))),
-    aoDeslizarEsquerda: proximaTela && (() => navegar(proximaTela)),
+    aoDeslizarDireita: voltarDaHanFu ?? (telaAnterior && (() => irPara(telaAnterior))),
+    aoDeslizarEsquerda: proximaTela && (() => irPara(proximaTela)),
   })
 
   return (
-    <>
-      <Cabecalho telaAtual={tela} aoNavegar={navegar} aoVoltar={voltar} />
+    <ContextoAprender.Provider value={aprender}>
+      <Cabecalho
+        telaAtual={tela}
+        aoNavegar={navegar}
+        aoVoltar={voltar}
+        aoAbrirAprender={() => abrirGuia()}
+      />
 
       <main className="conteudo-principal">
         {/* Sempre montada: a mão em andamento continua lá ao voltar de outra tela. */}
@@ -73,7 +104,19 @@ export default function App() {
         {tela === 'regras' && <PaginaRegrasConfiguracoes />}
         {tela === 'sobre' && <PaginaSobre />}
       </main>
-    </>
+
+      {guia && (
+        <GuiaAprender
+          key={guia.chave}
+          destino={guia.destino}
+          aoFechar={() => setGuia(null)}
+          aoAbrirCalculadora={() => {
+            setGuia(null)
+            navegar('calculadora')
+          }}
+        />
+      )}
+    </ContextoAprender.Provider>
   )
 }
 

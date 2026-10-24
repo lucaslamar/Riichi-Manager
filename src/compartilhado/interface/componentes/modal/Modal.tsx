@@ -7,8 +7,10 @@ import {
   type TouchEvent as EventoToque,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { useDeslizePaginas } from '../../hooks/useDeslizePaginas'
 import { useDeslizeParaFechar } from '../../hooks/useDeslizeParaFechar'
 import { ContextoNavegacaoModal, type TelaModal } from './navegacaoModal'
+import { empilharCamada } from './pilhaCamadas'
 import './modal.css'
 
 export type TamanhoModal = 'pequena' | 'media' | 'grande'
@@ -64,13 +66,6 @@ export interface PaginacaoModal {
   /** Nome acessível do ponto de cada página (ex.: "Página 2 de 9"). */
   rotuloPagina: (indice: number) => string
 }
-
-/**
- * Modais abertas, da de baixo para a de cima. Só a de cima responde ao Esc e
- * ao Tab: uma modal aberta por cima de outra fecha sozinha e a de baixo
- * continua como estava.
- */
-const pilhaModais: object[] = []
 
 const SELETOR_FOCAVEIS =
   'a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
@@ -137,11 +132,11 @@ export default function Modal({
   const inicioToque = useRef<{ x: number; y: number } | null>(null)
   const corpoRef = useRef<HTMLDivElement | null>(null)
   const paginaAtual = paginacao?.atual
-  // Sentido da última troca de página, para a página nova entrar do lado certo.
-  const pagina = useRef({ indice: paginaAtual, avancou: true })
-  if (paginaAtual !== pagina.current.indice) {
-    pagina.current = { indice: paginaAtual, avancou: (paginaAtual ?? 0) > (pagina.current.indice ?? 0) }
-  }
+  const { mudarPagina, sentido, propsToque } = useDeslizePaginas({
+    atual: paginaAtual,
+    total: paginacao?.total ?? 0,
+    aoMudar: (indice) => paginacao?.aoMudar(indice),
+  })
 
   useEffect(() => {
     aoFecharRef.current = aoFechar
@@ -151,12 +146,6 @@ export default function Modal({
   useEffect(() => {
     corpoRef.current?.scrollTo({ top: 0 })
   }, [paginaAtual])
-
-  const mudarPagina = (passo: number) => {
-    if (!paginacao) return
-    const destino = paginacao.atual + passo
-    if (destino >= 0 && destino < paginacao.total) paginacao.aoMudar(destino)
-  }
 
   useDeslizeParaFechar(dialogoRef, fundoRef, aoFechar)
 
@@ -195,11 +184,10 @@ export default function Modal({
     // Foco inicial no próprio diálogo (não no X): leitores de tela anunciam o
     // título e o X não abre com o anel de foco aceso; o Tab leva ao X.
     dialogoRef.current?.focus()
-    const marca = {}
-    pilhaModais.push(marca)
+    const camada = empilharCamada()
 
     const aoPressionarTecla = (evento: KeyboardEvent) => {
-      if (pilhaModais[pilhaModais.length - 1] !== marca) return
+      if (!camada.noTopo()) return
       if (evento.key === 'Escape') {
         evento.stopPropagation()
         // Numa tela interna, o Esc volta uma tela; senão fecha.
@@ -235,7 +223,7 @@ export default function Modal({
     document.addEventListener('keydown', aoPressionarTecla)
     return () => {
       document.removeEventListener('keydown', aoPressionarTecla)
-      pilhaModais.splice(pilhaModais.indexOf(marca), 1)
+      camada.remover()
       document.body.style.overflow = overflowAnterior
       // Sem rolar: a modal de baixo (se houver) fica exatamente onde estava.
       focoAnterior?.focus({ preventScroll: true })
@@ -258,19 +246,6 @@ export default function Modal({
     if (deltaX >= DISTANCIA_VOLTAR && deltaX >= Math.abs(deltaY) * PROPORCAO_HORIZONTAL) {
       voltarRef.current()
     }
-  }
-
-  // Páginas: dedo para a esquerda = próxima, como virar página (sem dar a volta).
-  const aoSoltarPagina = (evento: EventoToque) => {
-    const inicio = inicioToque.current
-    inicioToque.current = null
-    const toque = evento.changedTouches[0]
-    if (!inicio || !toque) return
-    const deltaX = toque.clientX - inicio.x
-    const deltaY = toque.clientY - inicio.y
-    if (Math.abs(deltaX) < DISTANCIA_VOLTAR) return
-    if (Math.abs(deltaX) < Math.abs(deltaY) * PROPORCAO_HORIZONTAL) return
-    mudarPagina(deltaX < 0 ? 1 : -1)
   }
 
   const navegando = telas.length > 0
@@ -365,13 +340,13 @@ export default function Modal({
               ref={corpoRef}
               className={`modal-corpo${navegando ? ' modal-corpo--coberta' : ''}`}
               aria-hidden={navegando || undefined}
-              onTouchStart={paginacao ? aoTocarTela : undefined}
-              onTouchEnd={paginacao ? aoSoltarPagina : undefined}
+              onTouchStart={paginacao ? propsToque.onTouchStart : undefined}
+              onTouchEnd={paginacao ? propsToque.onTouchEnd : undefined}
             >
               {paginacao ? (
                 <div
                   key={paginacao.atual}
-                  className={`modal-pagina modal-pagina--${pagina.current.avancou ? 'avancar' : 'voltar'}`}
+                  className={`modal-pagina modal-pagina--${sentido}`}
                 >
                   {children}
                 </div>

@@ -1,3 +1,4 @@
+import LinkVerNoGuia from '@/dominios/aprender-a-jogar/interface/componentes/LinkVerNoGuia'
 import { termoGlossarioDoNome } from '../../../logica/glossario'
 import { parseMpszGrupos, type Yaku } from '../../../logica/yakus'
 import BlocoDica from '../glossario/BlocoDica'
@@ -55,6 +56,7 @@ export default function CartaoYaku({ yaku }: { yaku: Yaku }) {
       {yaku.example && (
         <PedrasExemplo grupos={parseMpszGrupos(yaku.example)} rotulo={`Exemplo: ${yaku.example}`} />
       )}
+      <LinkVerNoGuia chave={`yaku:${yaku.id}`} />
     </article>
   )
 }

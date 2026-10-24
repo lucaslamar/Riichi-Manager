@@ -1,0 +1,1082 @@
+/*
+ * Guia Aprender a jogar: um livro em tela cheia. Fundo liso de papel, sem
+ * cards, bordas ou sombras; margens largas; a coluna de texto fica no meio
+ * (até 620px) e o resto da tela continua papel. Cores só pelos tokens --guia-*
+ * (tokens.css).
+ */
+
+.guia-aprender {
+  /* Altura da barra de cima (sem a área segura). */
+  --guia-barra: 52px;
+  --guia-margem: 28px;
+
+  position: fixed;
+  inset: 0;
+  /* Mesmo nível das modais: quem abre depois fica por cima (DOM). */
+  z-index: 100;
+  background: var(--guia-papel);
+  color: var(--guia-tinta);
+  outline: none;
+}
+
+.guia-livro,
+.guia-consulta {
+  position: absolute;
+  inset: 0;
+}
+
+/* ─── Página ──────────────────────────────────────────────────────────────── */
+/* Rola na vertical por dentro; o deslize para o lado continua virando página. */
+.guia-palco {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guia-pagina {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  padding-top: calc(var(--guia-barra) + 20px + env(safe-area-inset-top));
+}
+
+.guia-coluna {
+  box-sizing: border-box;
+  width: min(100%, 620px);
+  flex: 1 0 auto;
+  margin-inline: auto;
+  padding-inline: calc(var(--guia-margem) + env(safe-area-inset-left))
+    calc(var(--guia-margem) + env(safe-area-inset-right));
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+/* Número da página centralizado no rodapé, como em livro impresso. */
+.guia-rodape {
+  min-height: 1.2em;
+  padding: 36px 0 calc(24px + env(safe-area-inset-bottom));
+  color: var(--guia-tinta-suave);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.guia-titulo {
+  margin: 0 0 20px;
+  color: var(--guia-tinta);
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.9rem);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.guia-subtitulo {
+  margin: 36px 0 12px;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.guia-sobretitulo {
+  margin: 0 0 4px;
+  color: var(--guia-tinta-suave);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.guia-paragrafo {
+  margin: 0 0 16px;
+}
+
+.guia-lista {
+  margin: 0 0 16px;
+  padding-left: 1.2em;
+}
+
+.guia-lista li + li {
+  margin-top: 8px;
+}
+
+/* Palavra-chave (==assim== no conteúdo): vermelho, como a tinta de cor num mangá. */
+.guia-chave {
+  background: none;
+  color: var(--guia-vermelho);
+  font-weight: 800;
+}
+
+.guia-chave strong {
+  color: inherit;
+}
+
+.guia-coluna a:not(.termo-glossario) {
+  color: var(--guia-destaque);
+  font-weight: 700;
+}
+
+/* ─── Capa do guia e capas dos módulos (abertura de capítulo) ─────────────── */
+.guia-capa,
+.guia-capitulo {
+  display: flex;
+  min-height: calc(100dvh - var(--guia-barra) - 140px - env(safe-area-inset-top));
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.guia-capa__icone {
+  margin-bottom: 18px;
+  color: var(--guia-destaque);
+  font-size: 2.6rem;
+}
+
+.guia-capa__titulo,
+.guia-capitulo__titulo {
+  margin: 0;
+  font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.guia-capa__frase,
+.guia-capitulo__frase {
+  max-width: 26ch;
+  margin: 14px 0 0;
+  color: var(--guia-tinta-suave);
+  font-size: 1.15rem;
+}
+
+.guia-capitulo__numero {
+  color: var(--guia-destaque);
+  font-size: clamp(4.5rem, 3rem + 10vw, 7rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.guia-capa__acoes {
+  display: flex;
+  width: min(100%, 320px);
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+.guia-capa__acoes > button {
+  text-transform: none;
+}
+
+.guia-capa__dica {
+  max-width: 30ch;
+  margin: 28px 0 0;
+  color: var(--guia-tinta-suave);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.guia-capa__colaboracao {
+  margin: 20px 0 0;
+  color: var(--guia-tinta-suave);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+/* ─── Pedras ──────────────────────────────────────────────────────────────── */
+/* Grandes e centralizadas; quebram linha entre grupos, nunca cortadas. */
+.guia-mao {
+  margin: 20px 0 24px;
+}
+
+.guia-mao .yaku-tile {
+  --yaku-pedra: clamp(26px, 7.6vw, 40px);
+}
+
+/* Número (ou nome japonês) em cima da pedra, como no Guia de bolso, no tamanho do livro. */
+.guia-mao .yaku-tile-numerada__numero {
+  color: var(--guia-tinta-suave);
+  font-size: 0.78rem;
+}
+
+/* Mão rotulada: o grupo da espera (data-espera = posições dos grupos) em vermelho. */
+.guia-mao .yaku-mao-rotulada {
+  justify-content: center;
+}
+
+.guia-mao .yaku-mao-rotulada__rotulo {
+  font-size: 0.78rem;
+}
+
+.guia-mao[data-espera~='1'] .yaku-mao-rotulada__grupo:nth-child(1),
+.guia-mao[data-espera~='2'] .yaku-mao-rotulada__grupo:nth-child(2),
+.guia-mao[data-espera~='3'] .yaku-mao-rotulada__grupo:nth-child(3),
+.guia-mao[data-espera~='4'] .yaku-mao-rotulada__grupo:nth-child(4),
+.guia-mao[data-espera~='5'] .yaku-mao-rotulada__grupo:nth-child(5),
+.guia-mao[data-espera~='6'] .yaku-mao-rotulada__grupo:nth-child(6) {
+  --guia-cor-espera: var(--guia-vermelho);
+  --guia-borda-espera: 2px;
+}
+
+.guia-mao .yaku-mao-rotulada__grupo {
+  --guia-cor-espera: initial;
+  --guia-borda-espera: initial;
+}
+
+.guia-mao[data-espera] .yaku-mao-rotulada__grupo .yaku-mao-rotulada__rotulo {
+  color: var(--guia-cor-espera, #607080);
+}
+
+.guia-mao[data-espera] .yaku-mao-rotulada__grupo .yaku-tile {
+  border-color: var(--guia-cor-espera, #cbd5e1);
+  border-width: var(--guia-borda-espera, 1px);
+}
+
+.guia-mao__linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 14px;
+}
+
+.guia-mao .yaku-tiles {
+  justify-content: center;
+  margin-top: 0;
+}
+
+.guia-mao__resultado {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.guia-mao__seta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--guia-tinta-suave);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.guia-mao__seta i {
+  font-size: 0.9rem;
+}
+
+.guia-mao__legenda {
+  margin-top: 8px;
+  color: var(--guia-tinta-suave);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ─── Passos numerados (montagem da mesa) ─────────────────────────────────── */
+.guia-passos {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.guia-passos__item {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.guia-passos__item + .guia-passos__item {
+  margin-top: 22px;
+}
+
+.guia-passos__numero {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--guia-destaque-suave);
+  color: var(--guia-destaque);
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ─── Tabela (rola de lado sozinha) ───────────────────────────────────────── */
+.guia-tabela {
+  margin: 8px 0 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.guia-tabela table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.guia-tabela th,
+.guia-tabela td {
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--guia-linha);
+  text-align: left;
+  vertical-align: top;
+}
+
+.guia-tabela th {
+  color: var(--guia-tinta-suave);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.guia-tabela td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ─── Dica, link para ferramenta, quiz ────────────────────────────────────── */
+.guia-dica.bloco-dica {
+  margin: 18px 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.btn-contorno.guia-link-app {
+  margin: 8px 0 16px;
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  text-transform: none;
+}
+
+.guia-quiz__pergunta {
+  margin: 0 0 8px;
+  font-size: 1.18rem;
+  font-weight: 700;
+}
+
+.btn-contorno.guia-quiz__botao {
+  display: flex;
+  margin: 24px auto 0;
+  text-transform: none;
+}
+
+.guia-quiz__resposta {
+  margin: 24px 0 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--guia-destaque);
+  animation: guia-resposta 220ms ease-out;
+}
+
+.guia-quiz__resposta p {
+  margin: 0;
+}
+
+@keyframes guia-resposta {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Opções de resposta: escolher antes de ver a resposta. */
+.guia-quiz__opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.guia-quiz__opcao {
+  position: relative;
+  display: inline-flex;
+  min-width: 96px;
+  min-height: 52px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 2px solid var(--guia-linha);
+  border-radius: 12px;
+  background: var(--guia-papel);
+  color: var(--guia-tinta);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guia-quiz__opcao:hover:not(:disabled) {
+  border-color: var(--guia-destaque);
+}
+
+.guia-quiz__opcao:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+.guia-quiz__opcao:disabled {
+  cursor: default;
+}
+
+.guia-quiz__opcao .yaku-tiles {
+  margin-top: 0;
+}
+
+.guia-quiz__opcao--certa {
+  border-color: var(--secundario);
+  background: rgb(76 175 80 / 10%);
+}
+
+.guia-quiz__opcao--errada {
+  border-color: var(--leste);
+  opacity: 0.6;
+}
+
+.guia-quiz__marca {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  border-radius: 999px;
+  background: var(--guia-papel);
+  font-size: 1.1rem;
+}
+
+.guia-quiz__opcao--certa .guia-quiz__marca {
+  color: var(--secundario);
+}
+
+.guia-quiz__opcao--errada .guia-quiz__marca {
+  color: var(--leste);
+}
+
+.guia-quiz__veredito {
+  margin: 16px 0 0;
+  color: var(--leste);
+  font-weight: 800;
+  text-align: center;
+}
+
+.guia-quiz__resposta .guia-quiz__veredito--certo {
+  margin: 0 0 4px;
+  color: var(--secundario);
+  text-align: left;
+}
+
+.guia-quiz__desistir {
+  display: block;
+  margin: 18px auto 0;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--guia-tinta-suave);
+  font: inherit;
+  font-size: 0.88rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ─── Chamadas na mesa (pon, chi, kan): a pedra pegada fica de lado ─────── */
+.guia-chamadas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px 28px;
+  margin: 20px 0 24px;
+}
+
+.guia-chamada {
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  align-items: center;
+}
+
+.guia-chamada__pedras {
+  --guia-pedra: clamp(26px, 7.6vw, 36px);
+
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.guia-chamada__coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.guia-chamada__pedra {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: var(--guia-pedra);
+  height: calc(var(--guia-pedra) * var(--pedra-mao-proporcao, 1.35));
+  padding: 1px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgb(16 42 67 / 12%);
+}
+
+/* De lado: a caixa deita e a arte gira dentro dela. */
+.guia-chamada__pedra--lado {
+  width: calc(var(--guia-pedra) * var(--pedra-mao-proporcao, 1.35));
+  height: var(--guia-pedra);
+}
+
+.guia-chamada__pedra--lado .tile-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--guia-pedra) - 4px);
+  height: calc(var(--guia-pedra) * var(--pedra-mao-proporcao, 1.35) - 4px);
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.guia-chamada .tile-img-haku {
+  border: 0;
+  box-shadow: none;
+}
+
+/* ─── Ilustrações e ciclos do dora ────────────────────────────────────────── */
+.guia-ilustracao {
+  margin: 14px 0 8px;
+}
+
+.guia-passos__item > .guia-ilustracao {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.guia-ilustracao__svg {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  margin-inline: auto;
+  color: var(--guia-tinta);
+}
+
+.guia-ciclos {
+  margin: 12px 0 20px;
+}
+
+.guia-ciclos .yaku-tile {
+  --yaku-pedra: clamp(24px, 7vw, 34px);
+}
+
+.guia-ciclos .yaku-ciclo__titulo {
+  color: var(--guia-tinta);
+  font-size: 0.95rem;
+}
+
+.guia-ciclos .yaku-ciclo__linha + .yaku-ciclo__linha {
+  margin-top: 14px;
+}
+
+/* Subtópico dentro da página (1. Jogue os dados…). */
+.guia-subtitulo.guia-subtopico {
+  margin: 28px 0 8px;
+  font-size: 1.12rem;
+}
+
+.guia-coluna > .guia-subtopico:first-of-type {
+  margin-top: 4px;
+}
+
+/* ─── Cartões que abrem ao tocar (yakus para iniciantes) ──────────────────── */
+.guia-cartoes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0 20px;
+}
+
+.guia-cartao {
+  border: 2px solid var(--guia-linha);
+  border-radius: 12px;
+  background: var(--guia-papel);
+}
+
+.guia-cartao[open] {
+  border-color: var(--guia-destaque);
+}
+
+.guia-cartao__topo {
+  display: flex;
+  min-height: 52px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 10px 44px 10px 16px;
+  position: relative;
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guia-cartao__topo::-webkit-details-marker {
+  display: none;
+}
+
+.guia-cartao__topo::after {
+  content: '\f078';
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  color: var(--guia-tinta-suave);
+  font-family: 'Font Awesome 6 Free';
+  font-size: 0.75rem;
+  font-weight: 900;
+  transform: translateY(-50%);
+  transition: transform 160ms ease;
+}
+
+.guia-cartao[open] > .guia-cartao__topo::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.guia-cartao__topo:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.guia-cartao__titulo {
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+
+.guia-cartao__selo {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--guia-destaque-suave);
+  color: var(--guia-destaque);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.guia-cartao__corpo {
+  padding: 0 16px 6px;
+  animation: guia-resposta 200ms ease-out;
+}
+
+.guia-secao-intro {
+  margin: -6px 0 4px;
+  color: var(--guia-tinta-suave);
+  font-size: 0.95rem;
+}
+
+.guia-creditos__logo {
+  display: block;
+  max-width: 160px;
+  max-height: 120px;
+  margin: 0 auto 24px;
+  object-fit: contain;
+}
+
+/* ─── Barra de cima (aparece no toque e some sozinha) ─────────────────────── */
+.guia-barra,
+.guia-consulta__barra {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 8px;
+  height: var(--guia-barra);
+  padding: env(safe-area-inset-top) calc(8px + env(safe-area-inset-right)) 0
+    calc(8px + env(safe-area-inset-left));
+  border-bottom: 1px solid var(--guia-linha);
+  background: var(--guia-papel);
+}
+
+.guia-barra {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.guia-aprender--barra .guia-barra {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.guia-barra__titulo {
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guia-botao-icone {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--guia-tinta);
+  font-size: 1.15rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guia-botao-icone:hover {
+  background: var(--guia-destaque-suave);
+}
+
+.guia-botao-icone:focus-visible,
+.guia-indice button:focus-visible,
+.guia-indice summary:focus-visible,
+.guia-lista-topicos button:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+.guia-progresso {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+}
+
+.guia-progresso span {
+  display: block;
+  height: 100%;
+  background: var(--guia-destaque);
+  transform-origin: left;
+  transition: transform 240ms ease;
+}
+
+/* ─── Regras à parte e Glossário (consulta, fora do livro) ────────────────── */
+.guia-lista-topicos {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guia-lista-topicos button {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--guia-linha);
+  background: transparent;
+  color: var(--guia-tinta);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.guia-lista-topicos i {
+  color: var(--guia-tinta-suave);
+  font-size: 0.8rem;
+}
+
+.guia-glossario {
+  margin: 0;
+}
+
+.guia-glossario__item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--guia-linha);
+}
+
+.guia-glossario dt {
+  font-weight: 800;
+}
+
+.guia-glossario dd {
+  margin: 2px 0 0;
+  color: var(--guia-tinta-suave);
+  line-height: 1.55;
+}
+
+/* ─── Índice: painel de baixo no celular, preso ao botão no tablet ────────── */
+.guia-indice-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  background: var(--guia-veu);
+  animation: guia-aparecer 160ms ease;
+}
+
+.guia-indice {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  max-height: 82dvh;
+  flex-direction: column;
+  border-radius: 16px 16px 0 0;
+  background: var(--guia-papel);
+  color: var(--guia-tinta);
+  outline: none;
+  animation: guia-subir 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.guia-indice__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 4px 24px;
+}
+
+.guia-indice__cabecalho h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.guia-indice__corpo {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 24px calc(20px + env(safe-area-inset-bottom));
+}
+
+.guia-indice__secao {
+  margin: 18px 0 6px;
+  color: var(--guia-tinta-suave);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.guia-indice__modulo {
+  border-bottom: 1px solid var(--guia-linha);
+}
+
+.guia-indice__modulo summary {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.guia-indice__modulo summary::-webkit-details-marker {
+  display: none;
+}
+
+.guia-indice__modulo summary::after {
+  content: '\f078';
+  margin-left: auto;
+  color: var(--guia-tinta-suave);
+  font-family: 'Font Awesome 6 Free';
+  font-size: 0.7rem;
+  font-weight: 900;
+  transition: transform 160ms ease;
+}
+
+.guia-indice__modulo[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.guia-indice__titulo {
+  min-width: 0;
+}
+
+.guia-indice__concluido {
+  color: var(--secundario);
+}
+
+.guia-indice__numero {
+  display: inline-flex;
+  min-width: 2.2em;
+  color: var(--guia-tinta-suave);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.guia-indice ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guia-indice__modulo ul {
+  padding-bottom: 8px;
+}
+
+.guia-indice li button {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--guia-tinta);
+  font: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.guia-indice li button[aria-current='page'] {
+  background: var(--guia-destaque-suave);
+  color: var(--guia-destaque);
+  font-weight: 700;
+}
+
+.guia-indice__lista li button {
+  border-bottom: 1px solid var(--guia-linha);
+  border-radius: 0;
+  padding-inline: 0;
+}
+
+.guia-indice__lista--destaque {
+  margin-top: 18px !important;
+}
+
+.guia-indice__lista--destaque i {
+  width: 1.2em;
+  color: var(--guia-destaque);
+}
+
+@keyframes guia-aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes guia-subir {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+/* ─── Ferramenta por cima do guia (Sorteador, Han e Fu) ───────────────────── */
+.guia-ferramenta {
+  --guia-barra: 46px;
+
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  background: var(--fundo);
+  animation: guia-aparecer 160ms ease;
+}
+
+/* Coluna flexível: no tablet as páginas das ferramentas crescem até o fim (flex: 1). */
+.guia-ferramenta__corpo {
+  position: absolute;
+  inset: calc(var(--guia-barra) + env(safe-area-inset-top)) 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.guia-barra__espaco {
+  width: 44px;
+}
+
+/* Fora da área principal do app, a Han e Fu ganha aqui a margem que ela teria lá.
+   Três classes: vence `body:has(.etapa-montagem) main`, que zera o padding de
+   todo <main> enquanto a Calculadora de Mão (sempre montada) está na montagem. */
+.guia-aprender .guia-ferramenta .calculadora-han-fu {
+  padding: 12px calc(12px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom))
+    calc(12px + env(safe-area-inset-left));
+}
+
+/* Aqui não há barra de navegação embaixo para reservar espaço. */
+.guia-ferramenta .sorteador-ventos-page {
+  --sorteio-barra-inferior: 0px;
+}
+
+/* ─── Tablet e telas largas ───────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .guia-aprender {
+    --guia-margem: 40px;
+  }
+
+  .guia-coluna {
+    font-size: 1.15rem;
+  }
+
+  .guia-mao .yaku-tile {
+    --yaku-pedra: 42px;
+  }
+
+  /* Índice como painel preso ao botão, no canto de cima. */
+  .guia-indice-fundo {
+    background: transparent;
+  }
+
+  .guia-indice {
+    top: calc(var(--guia-barra) + 8px + env(safe-area-inset-top));
+    right: calc(12px + env(safe-area-inset-right));
+    bottom: auto;
+    left: auto;
+    width: 380px;
+    max-height: calc(100dvh - var(--guia-barra) - 32px - env(safe-area-inset-top));
+    border: 1px solid var(--guia-linha);
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgb(15 23 42 / 16%);
+    animation: guia-aparecer 160ms ease;
+  }
+}
+
+/* Celular deitado: menos espaço em cima e embaixo. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .guia-pagina {
+    padding-top: calc(var(--guia-barra) + 8px + env(safe-area-inset-top));
+  }
+
+  .guia-capa,
+  .guia-capitulo {
+    min-height: calc(100dvh - var(--guia-barra) - 80px);
+  }
+
+  .guia-capitulo__numero {
+    font-size: 4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guia-barra,
+  .guia-progresso span {
+    transition-duration: 1ms;
+  }
+
+  .guia-indice,
+  .guia-quiz__resposta {
+    animation: guia-aparecer 150ms ease;
+  }
+}

@@ -11,10 +11,15 @@ interface PropsCabecalho {
   aoNavegar: (tela: TelaPrincipal) => void
   /** Quando definido, a seta de voltar ocupa o lugar do hambúrguer (inclusive no retrato). */
   aoVoltar?: () => void
+  /** Abre o guia Aprender a jogar, em tela cheia por cima de qualquer tela. */
+  aoAbrirAprender: () => void
 }
 
+/** Uma tela do app ou o guia Aprender a jogar (que abre por cima, sem trocar de tela). */
+type DestinoMenu = TelaPrincipal | 'aprender'
+
 interface ItemMenuGlobal {
-  tela: TelaPrincipal
+  tela: DestinoMenu
   chave: string
   icone: string
   /** Rótulo curto para a barra inferior, onde o nome completo seria cortado. */
@@ -25,6 +30,7 @@ const MODULOS_MENU: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
 ]
 
 const APP_MENU: ItemMenuGlobal[] = [
@@ -36,6 +42,7 @@ const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
 ]
 
@@ -46,6 +53,7 @@ const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
 const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h', chaveCurta: 'menu.rulesShort' },
 ]
 
@@ -80,6 +88,7 @@ export default function Cabecalho({
   telaAtual,
   aoNavegar,
   aoVoltar,
+  aoAbrirAprender,
 }: PropsCabecalho) {
   const { t, idioma, idiomas, alterarIdioma } = useI18n()
   const [menuAberto, setMenuAberto] = useState(false)
@@ -88,8 +97,12 @@ export default function Cabecalho({
   const botaoMenuRef = useRef<HTMLButtonElement | null>(null)
   const gestoDrawerRef = useRef<EstadoGestoDrawer | null>(null)
   const deslocamentoDrawerRef = useRef(0)
-  const navegar = (tela: TelaPrincipal) => {
-    aoNavegar(tela)
+  const escolher = (destino: DestinoMenu) => {
+    if (destino === 'aprender') aoAbrirAprender()
+    else aoNavegar(destino)
+  }
+  const navegar = (destino: DestinoMenu) => {
+    escolher(destino)
     setMenuAberto(false)
   }
 
@@ -210,7 +223,7 @@ export default function Cabecalho({
             aria-current={ativo ? 'page' : undefined}
             aria-label={t(item.chave)}
             title={t(item.chave)}
-            onClick={() => aoNavegar(item.tela)}
+            onClick={() => escolher(item.tela)}
           >
             <IconeMenu icone={item.icone} />
             <span>{t(item.chaveCurta ?? item.chave)}</span>
@@ -259,7 +272,7 @@ export default function Cabecalho({
                 titulo={t('menu.app')}
                 itens={NAVEGACAO_DESKTOP}
                 telaAtual={telaAtual}
-                aoNavegar={aoNavegar}
+                aoNavegar={escolher}
                 t={t}
               />
             </nav>
@@ -374,7 +387,7 @@ function MenuSecao({
   titulo: string
   itens: ItemMenuGlobal[]
   telaAtual: TelaPrincipal
-  aoNavegar: (tela: TelaPrincipal) => void
+  aoNavegar: (destino: DestinoMenu) => void
   t: (chave: string) => string
 }) {
   return (

@@ -1,3 +1,5 @@
+import { SELETOR_CAMADAS } from './compartilhado/interface/componentes/modal/pilhaCamadas'
+
 // Detecta swipe horizontal no mobile e abre/fecha o drawer via clique no burger.
 // O drawer é gerenciado pelo React (renderização condicional), então não manipulamos
 // o DOM do drawer diretamente — usamos o botão burger como proxy para o estado React.
@@ -47,7 +49,8 @@ export function initSwipeBurger(options: SwipeBurgerOptions = {}) {
     tracking = false
     trackingMode = null
 
-    if (!isOpen() && touchStartX <= edgeZone) {
+    // Com modal ou guia por cima, a borda é deles (o guia passa página ali).
+    if (!isOpen() && touchStartX <= edgeZone && !document.querySelector(SELETOR_CAMADAS)) {
       tracking = true
       trackingMode = 'open'
     } else if (isOpen()) {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { SELETOR_CAMADAS } from '../componentes/modal/pilhaCamadas'
 
 /** Distância mínima do dedo, em px, para contar como deslize. */
 const DISTANCIA_MINIMA = 70
@@ -14,7 +15,7 @@ function burgerVisivel(): boolean {
 }
 
 /** Onde o toque não deve virar navegação: campos e áreas que rolam de lado. */
-function toqueIgnorado(alvo: EventTarget | null): boolean {
+export function toqueIgnorado(alvo: EventTarget | null): boolean {
   if (!(alvo instanceof Element)) return true
   if (alvo.closest('input, select, textarea, [role="slider"], [contenteditable="true"]')) {
     return true
@@ -60,7 +61,7 @@ export function useDeslizeHorizontal({
       if (evento.touches.length !== 1) return
       const toque = evento.touches[0]
       if (toque.clientX <= BORDA_MENU && burgerVisivel()) return
-      if (document.querySelector('.modal-fundo')) return
+      if (document.querySelector(SELETOR_CAMADAS)) return
       if (document.body.classList.contains('drawer-global-aberto')) return
       if (toqueIgnorado(evento.target)) return
       inicio = { x: toque.clientX, y: toque.clientY }

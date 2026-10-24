@@ -1,5 +1,38 @@
 # Changelog - Mojoca
 
+## Próxima versão
+
+### Novo
+
+- **Aprender a jogar**: guia em tela cheia para quem nunca jogou, lido como um livro, passando as páginas para o lado. Abre pelo novo item "Aprender" na barra inferior (e na sidebar e no menu). Feito em colaboração com o Cerrado Mahjong Club, inspirado no Mahjong Guia de Bolso, de Isabella Oliveira.
+  - **6 módulos em sequência**: As pedras, A mesa, A mão válida, O turno (comprar, pon, chi, kan, tsumo e ron), Yakus para iniciantes e Dora. Cada módulo abre com uma capa de capítulo e termina num quiz de escolher a resposta: ao responder, a certa fica verde (e a escolhida errada, vermelha) e a explicação aparece. As mãos de exemplo usam as pedras do app.
+  - **A mesa, passo a passo**: jogar os dados (a contagem anti-horária a partir do oya: 5 e 9 no oya, 2, 6 e 10 à direita…), abrir o muro contando da ponta direita, o muro morto (as 7 colunas à direita da abertura, o indicador na 3ª coluna a partir da abertura, as reposições do kan nas colunas 1 e 2), o caso dos dados menores que 7 (o muro morto dobra a esquina para o muro vizinho) e a compra, que começa à esquerda da abertura.
+  - O exemplo da mesa é com os dados dando 5: a contagem volta ao próprio oya e o muro morto já precisa ser completado no muro vizinho (5 colunas no Leste + 2 no Sul). O quiz do módulo pergunta onde ficam a abertura e o muro morto com os dados 4.
+  - Na mesa vista de cima, cada muro fica na frente do seu jogador, com um vão em cada canto: os muros não precisam se encostar nem formar um quadrado perfeito (o texto do passo diz isso também).
+  - **Tenpai com mãos inteiras**: cinco mãos de 13 pedras (dois lados, no meio, na ponta, dois pares e só o par), com cada grupo rotulado como na Formação da mão do Guia de bolso e o grupo da espera em vermelho, seguido da seta com as pedras que completam.
+  - Na capa do guia a barra de cima fica sempre à vista, e a dica da capa explica que o X volta para o app e o botão de lista abre o índice.
+  - **Vermelho onde importa**: nas ilustrações, o corte da abertura, a contagem das colunas, o contorno do muro morto, o indicador e a seta da compra; no texto, as palavras-chave (ponta direita, abertura, 3 colunas a partir da abertura…).
+  - **Ilustrações em preto e branco**, no traço de mangá: a fileira de 17 × 2 com o close de uma coluna; a mesa vista de cima com a contagem dos dados, a abertura, o muro morto dobrando a esquina, a seta da compra e os descartes em fileiras de 6 com o centro da mesa; e o close do muro morto com o indicador virado e a reposição do kan sozinha ao lado.
+  - **Yakus para iniciantes numa página só**: Riichi, Menzen Tsumo, Tan'yao, Yakuhai e Pinfu em cartões que abrem ao tocar. O "Ver em Aprender a jogar" de um desses yakus abre o guia já com o cartão dele aberto.
+  - **Chamadas como ficam na mesa**: pon da esquerda, da frente e da direita (a pedra pegada de lado, apontando para quem descartou), chi, kan aberto, kan fechado (pontas viradas) e kan adicionado (a 4ª pedra deitada em cima).
+  - **Dora numa página só**: o indicador no muro morto, a ordem dos números, ventos e dragões com as pedras e exemplos.
+  - **Leitura limpa**: a tela mostra só a página, com o número no rodapé. Tocar no terço da direita da tela avança e no da esquerda volta (com dedo ou mouse), além do deslize e das setas do teclado. Um toque no meio mostra a barra de cima (fechar, módulo, índice e progresso), que some sozinha.
+  - **Índice**: módulos com as páginas (✓ nos concluídos), Regras à parte, Glossário e Créditos. No celular abre por baixo; no tablet, preso ao botão.
+  - **Regras à parte**, em três partes:
+    - **Pontuação**: Han e fu, Os patamares, Quem paga (com quiz), Honba e empate, A próxima mão, Fim da partida e Hanchan.
+    - **Mais regras**: Ventos de valor, Furiten, Mais detalhes do Riichi, Yakus de situação, Mais yakus, Yakuman e Chombo.
+    - **Estratégia**: Eficiência da mão (o que descartar primeiro, esperas de dois lados, com quiz) e Defesa básica (genbutsu, suji e nakasuji, e contra o que o suji não protege).
+  - **Continuar de onde parou**: a capa oferece "Continuar" ou "Começar do início".
+  - Na página 2.1 o Sorteador de Ventos e em Pontuação › Han e fu a Calculadora de Han e Fu abrem por cima do guia. Ao voltar, o guia continua na mesma página.
+  - Os termos do glossário viram link nas páginas, como nas ajudas "?". Os valores dos patamares e o han dos yakus vêm do próprio app.
+- O Aprender entrou no deslize entre telas, na ordem da barra (Calculadora, Sorteador, Aprender, Regras): deslizar para a esquerda no Sorteador, ou para a direita nas Regras, abre o guia. Ao fechar, a pessoa volta para a tela de onde veio.
+- **"Ver em Aprender a jogar"**: as ajudas "?" da finalização, a definição de um termo e os cartões de yaku ganharam um link discreto que abre o guia na página do assunto, por cima da ajuda.
+
+### Alterado
+
+- Janela base (Modal): o deslize de página foi para um hook compartilhado (`useDeslizePaginas`), o mesmo do guia. Deslizar numa área que rola de lado (tabela larga) não vira mais a página.
+- Com uma janela ou o guia abertos, deslizar pela borda esquerda não abre mais o menu por trás deles.
+
 ## 5.6.1 - 2026-10-23
 
 ### Novo

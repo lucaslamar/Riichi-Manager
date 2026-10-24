@@ -1,0 +1,31 @@
+/* Link discreto no fim das ajudas curtas, que abre o guia na página do assunto. */
+.link-ver-no-guia {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  margin-top: 4px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--primario-escuro);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.link-ver-no-guia:hover {
+  text-decoration: underline;
+}
+
+.link-ver-no-guia:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.link-ver-no-guia__seta {
+  font-size: 0.7em;
+}

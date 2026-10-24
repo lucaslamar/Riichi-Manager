@@ -22,6 +22,19 @@
   --formula-fundo: #f2f8fe;
   --formula-texto: #102a43;
 
+  /* Guia Aprender a jogar (livro): papel, tinta e destaque. Um tema escuro só
+     redefine estes. */
+  --guia-papel: #ffffff;
+  --guia-tinta: #1f2d3d;
+  --guia-tinta-suave: #5b6b7c;
+  --guia-linha: #e3e8ef;
+  --guia-destaque: var(--primario-escuro);
+  --guia-destaque-suave: #e8f1fb;
+  --guia-veu: rgb(15 23 42 / 35%);
+  /* Vermelho de destaque, como a tinta de cor num mangá preto e branco: nas
+     ilustrações (corte, contagem, muro morto) e nas palavras-chave (==assim==). */
+  --guia-vermelho: #e5322d;
+
   /* Pedras de visualizacao da mao (PedraMao/GradePedrasMao). --pedra-mao-largura
      e o valor ativo, que cada tela/breakpoint aponta para um dos tamanhos abaixo.
      -celular e a referencia da finalizacao (46px no iPhone Pro Max, 6 por linha);
