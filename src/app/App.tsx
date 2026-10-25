@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
@@ -6,7 +6,6 @@ import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslize
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
-import { ContextoAprender } from '@/dominios/aprender-a-jogar/interface/ContextoAprender'
 import GuiaAprender from '@/dominios/aprender-a-jogar/interface/GuiaAprender'
 import packageJson from '../../package.json'
 
@@ -25,8 +24,8 @@ export type TelaPrincipal =
 const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
   'calculadoraRapida',
   'calculadora',
-  'sorteadorVentos',
   'aprender',
+  'sorteadorVentos',
   'regras',
 ]
 
@@ -64,14 +63,12 @@ export default function App() {
   // seta (dedo para a direita) também volta para a Calculadora de Mão.
   const voltarDaHanFu = tela === 'calculadoraRapida' ? (voltar ?? (() => navegar('calculadora'))) : undefined
 
-  // Guia Aprender a jogar: tela cheia por cima de tudo (até de uma modal, quando
-  // aberto pelo "Ver em Aprender a jogar" de uma ajuda). `chave` remonta o guia
-  // a cada abertura, já na página do destino.
-  const [guia, setGuia] = useState<{ destino?: string; chave: number } | null>(null)
-  const abrirGuia = useCallback((destino?: string) => {
-    setGuia((atual) => ({ destino, chave: (atual?.chave ?? 0) + 1 }))
+  // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
+  // a cada abertura, sempre na capa.
+  const [guia, setGuia] = useState<{ chave: number } | null>(null)
+  const abrirGuia = useCallback(() => {
+    setGuia((atual) => ({ chave: (atual?.chave ?? 0) + 1 }))
   }, [])
-  const aprender = useMemo(() => ({ abrir: abrirGuia, aberto: !!guia }), [abrirGuia, guia])
 
   // Deslizar até o Aprender abre o guia por cima; ao fechar, a pessoa volta
   // para a tela de onde deslizou.
@@ -84,7 +81,7 @@ export default function App() {
   })
 
   return (
-    <ContextoAprender.Provider value={aprender}>
+    <>
       <Cabecalho
         telaAtual={tela}
         aoNavegar={navegar}
@@ -96,7 +93,7 @@ export default function App() {
         {/* Sempre montada: a mão em andamento continua lá ao voltar de outra tela. */}
         <PaginaCalculadoraMao
           aoAbrirCalculadoraRapida={abrirCalculadoraRapida}
-          aoIrParaProximaTela={() => navegar('sorteadorVentos')}
+          aoIrParaProximaTela={() => abrirGuia()}
           visivel={tela === 'calculadora'}
         />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
@@ -108,7 +105,6 @@ export default function App() {
       {guia && (
         <GuiaAprender
           key={guia.chave}
-          destino={guia.destino}
           aoFechar={() => setGuia(null)}
           aoAbrirCalculadora={() => {
             setGuia(null)
@@ -116,7 +112,7 @@ export default function App() {
           }}
         />
       )}
-    </ContextoAprender.Provider>
+    </>
   )
 }
 

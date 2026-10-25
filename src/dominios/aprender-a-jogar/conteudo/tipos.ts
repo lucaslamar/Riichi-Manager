@@ -18,6 +18,7 @@ export type IlustracaoGuia =
   | 'mesaDados'
   | 'mesaAbertura'
   | 'muroMorto'
+  | 'muroMortoKan'
   | 'muroMortoCurto'
   | 'mesaCompra'
   | 'mesaDescartes'
@@ -84,10 +85,26 @@ export type TutorialBlock =
   | { type: 'doraCycles' }
   /** Passos numerados grandes (montagem da mesa). */
   | { type: 'steps'; items: PassoGuia[] }
-  | { type: 'table'; headers: string[]; rows: string[][] }
+  /**
+   * `compact`: as duas primeiras colunas viram uma (nome em cima, frase
+   * embaixo) e as de número ficam estreitas, para caber em 360px. `links`:
+   * termo do glossário de cada linha (ex.: 'yaku:pinfu'); tocar na linha abre
+   * o cartão dele, com o exemplo.
+   */
+  | {
+      type: 'table'
+      headers: string[]
+      rows: string[][]
+      compact?: boolean
+      links?: string[]
+    }
   /** Com `options`, a pessoa escolhe antes de ver a resposta. */
   | { type: 'quiz'; question: string; answer: string; hand?: string; options?: OpcaoQuiz[] }
   | { type: 'appLink'; tool: FerramentaGuia; label: string }
+  /** Abre o tutorial "Como contar Han e Fu" por cima do guia. */
+  | { type: 'hanFuTutorial' }
+  /** Os palitos de pontos desenhados, com o valor e quantos cada jogador recebe. */
+  | { type: 'sticks' }
   /** Dica em cinza, como as das ajudas "?" (ex.: onde achar o assunto no app). */
   | { type: 'tip'; md: string }
 
@@ -108,23 +125,23 @@ export interface TutorialModule {
   /** Frase da capa do módulo. */
   cover: string
   pages: TutorialPage[]
-  quiz?: Extract<TutorialBlock, { type: 'quiz' }>
+  /** Perguntas do quiz do módulo, uma embaixo da outra. */
+  quiz?: Extract<TutorialBlock, { type: 'quiz' }>[]
 }
 
-/** Grupo de tópicos de consulta (ex.: Pontuação, Estratégia). */
-export interface ReferenceSection {
+/**
+ * Uma parte do livro (ex.: Primeiras partidas, Para ir além), com a sua capa
+ * antes do primeiro módulo. `milestone` é um marco do que a pessoa já
+ * consegue fazer (ex.: "Você já pode jogar!"), numa tela só dele antes da capa.
+ */
+export interface TutorialPart {
   id: string
+  number: number
   title: string
-  intro?: string
-}
-
-export interface ReferenceTopic {
-  id: string
-  /** Id do ReferenceSection em que o tópico aparece. */
-  section: string
-  title: string
-  blocks: TutorialBlock[]
-  termos?: string[]
+  /** Frase da capa da parte. */
+  cover: string
+  milestone?: { title: string; md: string }
+  modules: TutorialModule[]
 }
 
 export interface TermoGlossarioGuia {
@@ -133,9 +150,8 @@ export interface TermoGlossarioGuia {
 }
 
 export interface ConteudoTutorial {
-  tutorialModules: TutorialModule[]
-  referenceSections: ReferenceSection[]
-  referenceTopics: ReferenceTopic[]
+  /** O livro, em partes; cada parte com os seus módulos, numerados em sequência. */
+  tutorialParts: TutorialPart[]
   glossary: TermoGlossarioGuia[]
   credits: TutorialBlock[]
   /** "Para ir além": clubes, associações e materiais. */

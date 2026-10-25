@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type PointerEvent as EventoPonteiro } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as EventoPonteiro,
+  type TouchEvent as EventoToque,
+} from 'react'
 import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
@@ -6,8 +12,8 @@ import { useDeslizePaginas } from '@/compartilhado/interface/hooks/useDeslizePag
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import { conteudoPtBR } from '../conteudo/pt-BR'
-import type { FerramentaGuia, ReferenceTopic } from '../conteudo/tipos'
-import { montarLivro, moduloDaPagina, resolverDestino, type PaginaLivro } from '../logica/livro'
+import type { FerramentaGuia } from '../conteudo/tipos'
+import { fimDoModulo, montarLivro, moduloDaPagina, type PaginaLivro } from '../logica/livro'
 import { lerProgressoGuia, salvarProgressoGuia } from '../persistencia/progressoGuia'
 import BlocosGuia from './componentes/BlocosGuia'
 import IndiceGuia from './componentes/IndiceGuia'
@@ -41,11 +47,7 @@ const SELETOR_FOCAVEIS =
 /** Elementos em que o toque é deles (não passa página nem mostra a barra). */
 const SELETOR_INTERATIVOS = 'a, button, input, select, textarea, summary, label, [role="button"]'
 
-type Vista =
-  | { tipo: 'livro' }
-  | { tipo: 'regras' }
-  | { tipo: 'regra'; topico: ReferenceTopic }
-  | { tipo: 'glossario' }
+type Vista = { tipo: 'livro' } | { tipo: 'glossario' }
 
 const VISTA_LIVRO: Vista = { tipo: 'livro' }
 
@@ -65,31 +67,23 @@ function useInerte<T extends HTMLElement>(ativo: boolean) {
  * Na leitura a tela mostra só a página. Um toque no meio mostra a barra de
  * cima (fechar, módulo, índice e progresso), que some sozinha; toques nas
  * bordas, setas do teclado e botões só para leitor de tela também viram a
- * página. Regras à parte e Glossário ficam fora do livro, como páginas de
- * consulta com voltar. Sorteador e Han e Fu abrem por cima e, ao fechar, o
- * guia continua na mesma página.
+ * página. O livro tem três partes, e Aprofundando é a última: só o
+ * Glossário fica fora, como página de consulta com voltar. Sorteador e Han e
+ * Fu abrem por cima e, ao fechar, o guia continua na mesma página.
  */
 export default function GuiaAprender({
-  destino,
   aoFechar,
   aoAbrirCalculadora,
 }: {
-  /** Id de página ou de tópico de Regras à parte (ver DESTINO_GUIA); sem ele, abre na capa. */
-  destino?: string
   aoFechar: () => void
   /** Fecha o guia e vai para a Calculadora de Mão (ela não abre por cima). */
   aoAbrirCalculadora: () => void
 }) {
   const { t } = useI18n()
   const [progressoInicial] = useState(lerProgressoGuia)
-  const inicio = useMemo(
-    () => (destino ? resolverDestino(LIVRO, CONTEUDO, destino) : null),
-    [destino],
-  )
-  const [indice, setIndice] = useState(() => (inicio && 'livro' in inicio ? inicio.livro : 0))
-  const [vista, setVista] = useState<Vista>(() =>
-    inicio && 'regra' in inicio ? { tipo: 'regra', topico: inicio.regra } : VISTA_LIVRO,
-  )
+  // Sempre abre na capa (a tela Aprender a jogar).
+  const [indice, setIndice] = useState(0)
+  const [vista, setVista] = useState<Vista>(VISTA_LIVRO)
   const [concluidos, setConcluidos] = useState(progressoInicial.concluidos)
   const [barraVisivel, setBarraVisivel] = useState(true)
   const [indiceAberto, setIndiceAberto] = useState(false)
@@ -108,23 +102,26 @@ export default function GuiaAprender({
     aoMudar: setIndice,
   })
 
-  // Página nova começa do topo; o lugar e o módulo concluído (ao chegar no quiz) ficam salvos.
+  // Página nova começa do topo; o lugar e o módulo concluído (ao chegar no
+  // quiz ou, sem quiz, na última página) ficam salvos.
   useEffect(() => {
     palcoRef.current?.scrollTo({ top: 0 })
-    if (pagina.tipo === 'quiz') {
+    if ((pagina.tipo === 'quiz' || pagina.tipo === 'pagina') && fimDoModulo(pagina)) {
       setConcluidos((atuais) =>
         atuais.includes(pagina.modulo.id) ? atuais : [...atuais, pagina.modulo.id],
       )
     }
   }, [pagina])
 
-  // Na capa (onde o guia sempre abre) o lugar salvo não muda: o "Continuar" segue valendo.
+  // Na capa o lugar salvo não muda: o "Continuar" segue valendo, também
+  // quando o X traz a pessoa de volta para ela.
+  const [paginaSalvaId, setPaginaSalvaId] = useState(progressoInicial.pagina)
   useEffect(() => {
-    salvarProgressoGuia({
-      pagina: pagina.tipo === 'capaGuia' ? progressoInicial.pagina : pagina.id,
-      concluidos,
-    })
-  }, [pagina, concluidos, progressoInicial])
+    if (pagina.tipo !== 'capaGuia') setPaginaSalvaId(pagina.id)
+  }, [pagina])
+  useEffect(() => {
+    salvarProgressoGuia({ pagina: paginaSalvaId, concluidos })
+  }, [paginaSalvaId, concluidos])
 
   useEffect(() => {
     consultaRef.current?.scrollTo({ top: 0 })
@@ -143,9 +140,18 @@ export default function GuiaAprender({
     return () => window.clearTimeout(tempo)
   }, [barraVisivel, indiceAberto, indice, naCapa])
 
+  /**
+   * O X sempre volta para a capa (a tela Aprender a jogar), de qualquer página
+   * do livro ou da consulta. Só na própria capa ele fecha o guia e volta para o app.
+   */
+  const fechar = () => {
+    if (naCapa) aoFechar()
+    else irPara(0)
+  }
+
   // Refs: o listener de teclado fica fixo e sempre vê o estado atual.
-  const estado = useRef({ ferramenta, indiceAberto, vista, mudarPagina, aoFechar })
-  estado.current = { ferramenta, indiceAberto, vista, mudarPagina, aoFechar }
+  const estado = useRef({ ferramenta, indiceAberto, vista, mudarPagina, fechar })
+  estado.current = { ferramenta, indiceAberto, vista, mudarPagina, fechar }
 
   useEffect(() => {
     const focoAnterior =
@@ -163,9 +169,8 @@ export default function GuiaAprender({
         evento.stopPropagation()
         if (atual.ferramenta) setFerramenta(null)
         else if (atual.indiceAberto) setIndiceAberto(false)
-        else if (atual.vista.tipo === 'regra') setVista({ tipo: 'regras' })
         else if (atual.vista.tipo !== 'livro') setVista(VISTA_LIVRO)
-        else atual.aoFechar()
+        else atual.fechar()
         return
       }
 
@@ -221,10 +226,26 @@ export default function GuiaAprender({
   // igual no celular, no tablet e no mouse, e arrastar (deslize ou seleção de
   // texto) não conta como toque.
   const toque = useRef<{ x: number; y: number } | null>(null)
+  // Modais abertas por uma página (termo, cartão de yaku, tutorial de Han e
+  // Fu) ficam num portal, mas os eventos delas sobem pela árvore do React até
+  // aqui: só conta o que aconteceu dentro do palco, senão o toque na modal
+  // viraria a página do livro por baixo dela.
+  const doPalco = (evento: { currentTarget: Element; target: EventTarget }) =>
+    evento.currentTarget.contains(evento.target as Node)
+  const deslizarPalco = {
+    onTouchStart: (evento: EventoToque<HTMLDivElement>) => {
+      if (doPalco(evento)) propsToque.onTouchStart(evento)
+    },
+    onTouchEnd: (evento: EventoToque<HTMLDivElement>) => {
+      if (doPalco(evento)) propsToque.onTouchEnd(evento)
+    },
+  }
   const tocarPalco = {
     onPointerDown: (evento: EventoPonteiro<HTMLDivElement>) => {
       toque.current =
-        evento.isPrimary && evento.button === 0 ? { x: evento.clientX, y: evento.clientY } : null
+        evento.isPrimary && evento.button === 0 && doPalco(evento)
+          ? { x: evento.clientX, y: evento.clientY }
+          : null
     },
     onPointerCancel: () => {
       toque.current = null
@@ -244,14 +265,22 @@ export default function GuiaAprender({
     },
   }
 
+  /** "Quiz", ou "Quiz 2/3" quando o módulo tem mais de uma pergunta (uma por tela). */
+  const nomeQuiz = (alvo: Extract<PaginaLivro, { tipo: 'quiz' }>) => {
+    const total = alvo.modulo.quiz?.length ?? 0
+    return total > 1 ? `${t('learn.quiz')} ${alvo.pergunta + 1}/${total}` : t('learn.quiz')
+  }
+
   const rotuloPagina = (alvo: PaginaLivro) => {
     switch (alvo.tipo) {
       case 'pagina':
         return alvo.pagina.number
       case 'quiz':
-        return `${alvo.modulo.number} · ${t('learn.quiz')}`
+        return `${alvo.modulo.number} · ${nomeQuiz(alvo)}`
       case 'capaModulo':
         return t('learn.module', { number: alvo.modulo.number })
+      case 'capaParte':
+        return t('learn.part', { number: alvo.parte.number })
       default:
         return ''
     }
@@ -261,12 +290,16 @@ export default function GuiaAprender({
     switch (alvo.tipo) {
       case 'capaGuia':
         return t('learn.title')
+      case 'capaParte':
+        return alvo.parte.title
+      case 'marco':
+        return alvo.parte.milestone?.title ?? alvo.parte.title
       case 'capaModulo':
         return alvo.modulo.title
       case 'pagina':
         return alvo.pagina.title
       case 'quiz':
-        return `${t('learn.quiz')}: ${alvo.modulo.title}`
+        return `${nomeQuiz(alvo)}: ${alvo.modulo.title}`
       case 'conclusao':
         return t('learn.conclusionTitle')
       case 'creditos':
@@ -274,7 +307,7 @@ export default function GuiaAprender({
     }
   }
 
-  const paginaSalva = LIVRO.findIndex((item) => item.id === progressoInicial.pagina)
+  const paginaSalva = LIVRO.findIndex((item) => item.id === paginaSalvaId)
 
   const conteudoPagina = () => {
     switch (pagina.tipo) {
@@ -283,7 +316,9 @@ export default function GuiaAprender({
           <div className="guia-capa">
             <i className="fas fa-book-open guia-capa__icone" aria-hidden="true" />
             <h1 className="guia-capa__titulo">{t('learn.title')}</h1>
-            <p className="guia-capa__frase">{t('learn.tagline')}</p>
+            <p className="guia-capa__frase">
+              {t('learn.tagline', { count: CONTEUDO.tutorialParts[0].modules.length })}
+            </p>
             <div className="guia-capa__acoes">
               {paginaSalva > 1 ? (
                 <>
@@ -311,6 +346,28 @@ export default function GuiaAprender({
             <p className="guia-capa__colaboracao">{t('learn.collaboration')}</p>
           </div>
         )
+      case 'marco':
+        // Tela própria, fechando a parte anterior: o que a pessoa já consegue fazer.
+        return (
+          <div className="guia-capitulo guia-parte__marco">
+            <i className="fas fa-trophy guia-capa__icone" aria-hidden="true" />
+            <h1 className="guia-capitulo__titulo">{pagina.parte.milestone?.title}</h1>
+            <BlocosGuia
+              blocos={[{ type: 'text', md: pagina.parte.milestone?.md ?? '' }]}
+              aoAbrirFerramenta={abrirFerramenta}
+            />
+          </div>
+        )
+      case 'capaParte':
+        return (
+          <div className="guia-capitulo guia-parte">
+            <span className="guia-parte__rotulo">
+              {t('learn.part', { number: pagina.parte.number })}
+            </span>
+            <h1 className="guia-capitulo__titulo">{pagina.parte.title}</h1>
+            <p className="guia-capitulo__frase">{pagina.parte.cover}</p>
+          </div>
+        )
       case 'capaModulo':
         return (
           <div className="guia-capitulo">
@@ -326,10 +383,6 @@ export default function GuiaAprender({
             <BlocosGuia
               blocos={pagina.pagina.blocks}
               termos={pagina.pagina.termos}
-              // Só na página em que o guia abriu pelo "Ver em Aprender a jogar".
-              cartaoAberto={
-                inicio && 'livro' in inicio && inicio.livro === indice ? inicio.cartao : undefined
-              }
               aoAbrirFerramenta={abrirFerramenta}
             />
           </>
@@ -338,9 +391,12 @@ export default function GuiaAprender({
         return (
           <>
             <p className="guia-sobretitulo">{pagina.modulo.title}</p>
-            <h1 className="guia-titulo">{t('learn.quiz')}</h1>
-            {pagina.modulo.quiz && (
-              <BlocosGuia blocos={[pagina.modulo.quiz]} aoAbrirFerramenta={abrirFerramenta} />
+            <h1 className="guia-titulo">{nomeQuiz(pagina)}</h1>
+            {pagina.modulo.quiz?.[pagina.pergunta] && (
+              <BlocosGuia
+                blocos={[pagina.modulo.quiz[pagina.pergunta]]}
+                aoAbrirFerramenta={abrirFerramenta}
+              />
             )}
           </>
         )
@@ -350,17 +406,15 @@ export default function GuiaAprender({
             <i className="fas fa-trophy guia-capa__icone" aria-hidden="true" />
             <h1 className="guia-capitulo__titulo">{t('learn.conclusionTitle')}</h1>
             <p className="guia-capitulo__frase">{t('learn.conclusionText')}</p>
+            {/* O Guia de bolso (chapéu de formatura) é para as dúvidas rápidas durante o jogo. */}
+            <p className="guia-conclusao__bolso">
+              <i className="fas fa-graduation-cap" aria-hidden="true" />
+              <span>{t('learn.conclusionPocketGuide')}</span>
+            </p>
             <div className="guia-capa__acoes">
               <button
                 type="button"
                 className="btn-primario"
-                onClick={() => setVista({ tipo: 'regras' })}
-              >
-                {t('learn.reference')}
-              </button>
-              <button
-                type="button"
-                className="btn-contorno"
                 onClick={() => abrirFerramenta('calculadora')}
               >
                 {t('learn.openHandCalculator')}
@@ -389,46 +443,6 @@ export default function GuiaAprender({
   }
 
   const conteudoConsulta = () => {
-    if (vista.tipo === 'regra') {
-      return (
-        <>
-          <h1 className="guia-titulo">{vista.topico.title}</h1>
-          <BlocosGuia
-            blocos={vista.topico.blocks}
-            termos={vista.topico.termos}
-            aoAbrirFerramenta={abrirFerramenta}
-          />
-        </>
-      )
-    }
-    if (vista.tipo === 'regras') {
-      return (
-        <>
-          <h1 className="guia-titulo">{t('learn.reference')}</h1>
-          <p className="guia-paragrafo">{t('learn.referenceIntro')}</p>
-          {CONTEUDO.referenceSections.map((secao) => (
-            <section key={secao.id} aria-labelledby={`guia-secao-${secao.id}`}>
-              <h2 id={`guia-secao-${secao.id}`} className="guia-subtitulo">
-                {secao.title}
-              </h2>
-              {secao.intro && <p className="guia-secao-intro">{secao.intro}</p>}
-              <ul className="guia-lista-topicos">
-                {CONTEUDO.referenceTopics
-                  .filter((topico) => topico.section === secao.id)
-                  .map((topico) => (
-                    <li key={topico.id}>
-                      <button type="button" onClick={() => setVista({ tipo: 'regra', topico })}>
-                        {topico.title}
-                        <i className="fas fa-chevron-right" aria-hidden="true" />
-                      </button>
-                    </li>
-                  ))}
-              </ul>
-            </section>
-          ))}
-        </>
-      )
-    }
     return (
       <>
         <h1 className="guia-titulo">{t('learn.glossary')}</h1>
@@ -444,7 +458,7 @@ export default function GuiaAprender({
     )
   }
 
-  const voltarConsulta = () => setVista(vista.tipo === 'regra' ? { tipo: 'regras' } : VISTA_LIVRO)
+  const voltarConsulta = () => setVista(VISTA_LIVRO)
   const progresso = indice / (LIVRO.length - 1)
   const tituloBarra = modulo ? `${modulo.number}. ${modulo.title}` : tituloPagina(pagina)
 
@@ -477,7 +491,7 @@ export default function GuiaAprender({
               className="guia-botao-icone"
               aria-label={t('learn.close')}
               title={t('learn.close')}
-              onClick={aoFechar}
+              onClick={fechar}
             >
               <i className="fas fa-xmark" aria-hidden="true" />
             </button>
@@ -504,7 +518,7 @@ export default function GuiaAprender({
             </div>
           </header>
 
-          <div ref={palcoRef} className="guia-palco" {...tocarPalco} {...propsToque}>
+          <div ref={palcoRef} className="guia-palco" {...tocarPalco} {...deslizarPalco}>
             <article
               key={indice}
               className={`guia-pagina guia-pagina--${pagina.tipo} modal-pagina modal-pagina--${sentido}`}
@@ -546,15 +560,13 @@ export default function GuiaAprender({
             >
               <i className="fas fa-chevron-left" aria-hidden="true" />
             </button>
-            <span className="guia-barra__titulo">
-              {vista.tipo === 'glossario' ? t('learn.glossary') : t('learn.reference')}
-            </span>
+            <span className="guia-barra__titulo">{t('learn.glossary')}</span>
             <button
               type="button"
               className="guia-botao-icone"
               aria-label={t('learn.close')}
               title={t('learn.close')}
-              onClick={aoFechar}
+              onClick={fechar}
             >
               <i className="fas fa-xmark" aria-hidden="true" />
             </button>
@@ -574,10 +586,6 @@ export default function GuiaAprender({
           indiceAtual={indice}
           concluidos={concluidos}
           aoIrPara={irPara}
-          aoAbrirRegra={(topico) => {
-            setIndiceAberto(false)
-            setVista({ tipo: 'regra', topico })
-          }}
           aoAbrirGlossario={() => {
             setIndiceAberto(false)
             setVista({ tipo: 'glossario' })

@@ -10,12 +10,18 @@ export default function BotaoTutorialHanFu({
   className,
   children,
   aoVerTabela,
+  rotuloVerTabela,
+  toqueNasBordas,
 }: {
   className?: string
   /** Conteúdo do retângulo (título e subtítulo da Tabela rápida). */
   children: ReactNode
   /** Leva até a Tabela rápida; fora da calculadora fica sem (ex.: Guia de bolso). */
   aoVerTabela?: () => void
+  /** Texto do botão que leva à tabela (ex.: "Calculadora e tabela", aberto pelo Aprender a jogar). */
+  rotuloVerTabela?: string
+  /** Toque nas bordas vira a página do tutorial (aberto pelo Aprender a jogar). */
+  toqueNasBordas?: boolean
 }) {
   const { t } = useI18n()
   const [aberto, setAberto] = useState(false)
@@ -47,6 +53,8 @@ export default function BotaoTutorialHanFu({
       {aberto && (
         <ModalTutorialHanFu
           aoFechar={fechar}
+          toqueNasBordas={toqueNasBordas}
+          rotuloVerTabela={rotuloVerTabela}
           // Rola depois de a modal sair, com a rolagem da página já destravada.
           aoVerTabela={
             aoVerTabela &&

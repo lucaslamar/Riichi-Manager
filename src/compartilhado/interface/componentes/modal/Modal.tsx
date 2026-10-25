@@ -3,6 +3,7 @@ import {
   useId,
   useRef,
   useState,
+  type PointerEvent as EventoPonteiro,
   type ReactNode,
   type TouchEvent as EventoToque,
 } from 'react'
@@ -65,7 +66,19 @@ export interface PaginacaoModal {
   rotuloProximo: string
   /** Nome acessível do ponto de cada página (ex.: "Página 2 de 9"). */
   rotuloPagina: (indice: number) => string
+  /**
+   * Toque no terço da direita do corpo avança e no da esquerda volta, como no
+   * livro do Aprender a jogar (ligado quando a modal abre de dentro dele).
+   */
+  toqueNasBordas?: boolean
 }
+
+/** Terço da largura de cada lado em que um toque vira a página. */
+const FAIXA_TOQUE = 1 / 3
+/** Até quantos px o dedo pode andar e ainda contar como toque. */
+const MOVIMENTO_TOQUE = 10
+/** Elementos em que o toque é deles (não vira a página). */
+const SELETOR_INTERATIVOS = 'a, button, input, select, textarea, summary, label, [role="button"]'
 
 const SELETOR_FOCAVEIS =
   'a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
@@ -137,6 +150,36 @@ export default function Modal({
     total: paginacao?.total ?? 0,
     aoMudar: (indice) => paginacao?.aoMudar(indice),
   })
+
+  // Toque nas bordas (com `paginacao.toqueNasBordas`): pelo pointer, para valer
+  // igual no dedo e no mouse; arrastar ou selecionar texto não conta.
+  const toquePagina = useRef<{ x: number; y: number } | null>(null)
+  const propsToqueBordas = paginacao?.toqueNasBordas
+    ? {
+        onPointerDown: (evento: EventoPonteiro<HTMLDivElement>) => {
+          toquePagina.current =
+            evento.isPrimary && evento.button === 0
+              ? { x: evento.clientX, y: evento.clientY }
+              : null
+        },
+        onPointerCancel: () => {
+          toquePagina.current = null
+        },
+        onPointerUp: (evento: EventoPonteiro<HTMLDivElement>) => {
+          const comeco = toquePagina.current
+          toquePagina.current = null
+          if (!comeco) return
+          if (Math.hypot(evento.clientX - comeco.x, evento.clientY - comeco.y) > MOVIMENTO_TOQUE)
+            return
+          if ((evento.target as Element).closest(SELETOR_INTERATIVOS)) return
+          if (window.getSelection()?.toString()) return
+          const caixa = evento.currentTarget.getBoundingClientRect()
+          const x = evento.clientX - caixa.left
+          if (x < caixa.width * FAIXA_TOQUE) mudarPagina(-1)
+          else if (x > caixa.width * (1 - FAIXA_TOQUE)) mudarPagina(1)
+        },
+      }
+    : undefined
 
   useEffect(() => {
     aoFecharRef.current = aoFechar
@@ -342,6 +385,7 @@ export default function Modal({
               aria-hidden={navegando || undefined}
               onTouchStart={paginacao ? propsToque.onTouchStart : undefined}
               onTouchEnd={paginacao ? propsToque.onTouchEnd : undefined}
+              {...propsToqueBordas}
             >
               {paginacao ? (
                 <div

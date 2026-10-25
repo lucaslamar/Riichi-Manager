@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { ConteudoTutorial, ReferenceTopic } from '../../conteudo/tipos'
-import { ID_CREDITOS, type PaginaLivro } from '../../logica/livro'
+import type { ConteudoTutorial, TutorialModule } from '../../conteudo/tipos'
+import { ID_CREDITOS, idCapaParte, idQuizModulo, type PaginaLivro } from '../../logica/livro'
 
 /**
- * Índice do guia: Módulos (com as páginas de cada um), Regras à parte,
- * Glossário e Créditos. No celular abre como painel de baixo; no tablet, como
+ * Índice do guia: as partes do livro (cada uma com os seus módulos e as
+ * páginas de cada um), Glossário e Créditos. No celular abre como painel de baixo; no tablet, como
  * um painel preso ao botão do índice (só CSS).
  */
 export default function IndiceGuia({
@@ -14,7 +14,6 @@ export default function IndiceGuia({
   indiceAtual,
   concluidos,
   aoIrPara,
-  aoAbrirRegra,
   aoAbrirGlossario,
   aoFechar,
 }: {
@@ -23,7 +22,6 @@ export default function IndiceGuia({
   indiceAtual: number
   concluidos: string[]
   aoIrPara: (indice: number) => void
-  aoAbrirRegra: (topico: ReferenceTopic) => void
   aoAbrirGlossario: () => void
   aoFechar: () => void
 }) {
@@ -37,6 +35,59 @@ export default function IndiceGuia({
   }, [])
 
   const indiceDe = (id: string) => livro.findIndex((pagina) => pagina.id === id)
+
+  const moduloNoIndice = (modulo: TutorialModule) => {
+    const concluido = concluidos.includes(modulo.id)
+    return (
+      <details key={modulo.id} className="guia-indice__modulo" open={modulo.id === moduloAtual}>
+        <summary>
+          <span className="guia-indice__numero">{modulo.number}</span>
+          <span className="guia-indice__titulo">{modulo.title}</span>
+          {concluido && (
+            <i
+              className="fas fa-check guia-indice__concluido"
+              role="img"
+              aria-label={t('learn.done')}
+            />
+          )}
+        </summary>
+        <ul>
+          {modulo.pages.map((pagina) => {
+            const indice = indiceDe(pagina.id)
+            return (
+              <li key={pagina.id}>
+                <button
+                  type="button"
+                  aria-current={indice === indiceAtual ? 'page' : undefined}
+                  onClick={() => aoIrPara(indice)}
+                >
+                  <span className="guia-indice__numero">{pagina.number}</span>
+                  {pagina.title}
+                </button>
+              </li>
+            )
+          })}
+          {modulo.quiz && (
+            <li>
+              <button
+                type="button"
+                // Qualquer pergunta do quiz marca a linha; tocar leva à primeira.
+                aria-current={
+                  atual?.tipo === 'quiz' && atual.modulo.id === modulo.id ? 'page' : undefined
+                }
+                onClick={() => aoIrPara(indiceDe(idQuizModulo(modulo)))}
+              >
+                <span className="guia-indice__numero">
+                  <i className="fas fa-question" aria-hidden="true" />
+                </span>
+                {t('learn.quiz')}
+              </button>
+            </li>
+          )}
+        </ul>
+      </details>
+    )
+  }
 
   return (
     <div className="guia-indice-fundo" role="presentation" onClick={aoFechar}>
@@ -62,90 +113,20 @@ export default function IndiceGuia({
         </header>
 
         <div className="guia-indice__corpo">
-          <section aria-labelledby="guia-indice-modulos">
-            <h3 id="guia-indice-modulos" className="guia-indice__secao">
-              {t('learn.modules')}
-            </h3>
-            {conteudo.tutorialModules.map((modulo) => {
-              const concluido = concluidos.includes(modulo.id)
-              return (
-                <details
-                  key={modulo.id}
-                  className="guia-indice__modulo"
-                  open={modulo.id === moduloAtual}
+          {conteudo.tutorialParts.map((parte) => (
+            <section key={parte.id} aria-labelledby={`guia-indice-${parte.id}`}>
+              <h3 id={`guia-indice-${parte.id}`} className="guia-indice__secao">
+                <button
+                  type="button"
+                  className="guia-indice__parte"
+                  onClick={() => aoIrPara(indiceDe(idCapaParte(parte)))}
                 >
-                  <summary>
-                    <span className="guia-indice__numero">{modulo.number}</span>
-                    <span className="guia-indice__titulo">{modulo.title}</span>
-                    {concluido && (
-                      <i
-                        className="fas fa-check guia-indice__concluido"
-                        role="img"
-                        aria-label={t('learn.done')}
-                      />
-                    )}
-                  </summary>
-                  <ul>
-                    {modulo.pages.map((pagina) => {
-                      const indice = indiceDe(pagina.id)
-                      return (
-                        <li key={pagina.id}>
-                          <button
-                            type="button"
-                            aria-current={indice === indiceAtual ? 'page' : undefined}
-                            onClick={() => aoIrPara(indice)}
-                          >
-                            <span className="guia-indice__numero">{pagina.number}</span>
-                            {pagina.title}
-                          </button>
-                        </li>
-                      )
-                    })}
-                    {modulo.quiz && (
-                      <li>
-                        <button
-                          type="button"
-                          aria-current={
-                            livro[indiceAtual]?.id === `${modulo.id}-quiz` ? 'page' : undefined
-                          }
-                          onClick={() => aoIrPara(indiceDe(`${modulo.id}-quiz`))}
-                        >
-                          <span className="guia-indice__numero">
-                            <i className="fas fa-question" aria-hidden="true" />
-                          </span>
-                          {t('learn.quiz')}
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                </details>
-              )
-            })}
-          </section>
-
-          <section aria-labelledby="guia-indice-regras">
-            <h3 id="guia-indice-regras" className="guia-indice__secao">
-              {t('learn.reference')}
-            </h3>
-            {conteudo.referenceSections.map((secao) => (
-              <details key={secao.id} className="guia-indice__modulo">
-                <summary>
-                  <span className="guia-indice__titulo">{secao.title}</span>
-                </summary>
-                <ul>
-                  {conteudo.referenceTopics
-                    .filter((topico) => topico.section === secao.id)
-                    .map((topico) => (
-                      <li key={topico.id}>
-                        <button type="button" onClick={() => aoAbrirRegra(topico)}>
-                          {topico.title}
-                        </button>
-                      </li>
-                    ))}
-                </ul>
-              </details>
-            ))}
-          </section>
+                  {t('learn.part', { number: parte.number })} · {parte.title}
+                </button>
+              </h3>
+              {parte.modules.map(moduloNoIndice)}
+            </section>
+          ))}
 
           <section aria-labelledby="guia-indice-outros">
             <h3 id="guia-indice-outros" className="sr-only">

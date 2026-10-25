@@ -61,7 +61,15 @@ function Texto({ chave }: { chave: string }) {
   })
 }
 
-function BlocoPagina({ bloco, aoVerTabela }: { bloco: BlocoTutorial; aoVerTabela?: () => void }) {
+function BlocoPagina({
+  bloco,
+  aoVerTabela,
+  rotuloVerTabela,
+}: {
+  bloco: BlocoTutorial
+  aoVerTabela?: () => void
+  rotuloVerTabela?: string
+}) {
   const { t } = useI18n()
 
   switch (bloco.tipo) {
@@ -169,7 +177,7 @@ function BlocoPagina({ bloco, aoVerTabela }: { bloco: BlocoTutorial; aoVerTabela
       return (
         <button type="button" className="btn-primario tutorial-botao" onClick={aoVerTabela}>
           <i className="fas fa-table" aria-hidden="true" />
-          {t('hanFuTutorial.seeTable')}
+          {rotuloVerTabela ?? t('hanFuTutorial.seeTable')}
         </button>
       )
   }
@@ -307,10 +315,16 @@ function PaginaConsulta({
 export default function ModalTutorialHanFu({
   aoFechar,
   aoVerTabela,
+  rotuloVerTabela,
+  toqueNasBordas = false,
 }: {
   aoFechar: () => void
   /** Fecha o tutorial e leva até a Tabela rápida (sem ele, o botão some). */
   aoVerTabela?: () => void
+  /** Texto do botão de ver a tabela (padrão: "Ver na Tabela rápida"). */
+  rotuloVerTabela?: string
+  /** Toque nas bordas vira a página, como no livro do Aprender a jogar (aberto de lá). */
+  toqueNasBordas?: boolean
 }) {
   const { t } = useI18n()
   const [indice, setIndice] = useState(0)
@@ -323,6 +337,7 @@ export default function ModalTutorialHanFu({
       key={posicao}
       bloco={bloco}
       aoVerTabela={aoVerTabela}
+      rotuloVerTabela={rotuloVerTabela}
     />
   )
 
@@ -341,6 +356,7 @@ export default function ModalTutorialHanFu({
         rotuloAnterior: t('hanFuTutorial.previous'),
         rotuloProximo: t('hanFuTutorial.next'),
         rotuloPagina: (numero) => t('hanFuTutorial.page', { page: numero + 1, total }),
+        toqueNasBordas,
       }}
     >
       <section className="glossario-bloco">

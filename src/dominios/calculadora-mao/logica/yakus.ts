@@ -500,6 +500,10 @@ export const YAKU: Yaku[] = [
 export const DORA_NOTE =
   'Dora não é yaku: só soma han se a mão já tiver pelo menos um yaku. O indicador aponta a próxima pedra (9→1, N→E, Vermelho→Branco).'
 
+/** Nota da aba Yakuman: o kazoe não é um yaku, é a soma que chega lá. */
+export const KAZOE_NOTE =
+  '**Kazoe yakuman** não é um yaku: é a mão que soma 13 han ou mais (yakus e doras) e passa a valer um Yakuman. Nem toda mesa usa: sem ele, a mão para em Sanbaiman.'
+
 // ── Aba Yaku para iniciantes
 export interface BeginnerGroup {
   title: string

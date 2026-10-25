@@ -2,7 +2,6 @@ import { Fragment, useState } from 'react'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import LinkVerNoGuia from '@/dominios/aprender-a-jogar/interface/componentes/LinkVerNoGuia'
 import { parseMpszGrupos } from '../../../logica/yakus'
 import TextoGlossario from '../glossario/TextoGlossario'
 import { CiclosDora, PedrasExemplo } from '../yakus/PedrasExemplo'
@@ -120,14 +119,9 @@ export default function ModalAjudaSecao({
           rotulo={t(titulo)}
         >
           <BlocosAjuda blocos={abas[indiceAba].blocos} ignorar={termosProprios} />
-          {/* Cada aba pode ter a sua página (ex.: Honba ≠ Dora). */}
-          <LinkVerNoGuia chave={`ajuda:${topico}${indiceAba > 0 ? `:${indiceAba}` : ''}`} />
         </AbasModal>
       ) : (
-        <>
-          <BlocosAjuda blocos={blocos} ignorar={termosProprios} />
-          <LinkVerNoGuia chave={`ajuda:${topico}`} />
-        </>
+        <BlocosAjuda blocos={blocos} ignorar={termosProprios} />
       )}
     </Modal>
   )

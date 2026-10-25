@@ -157,6 +157,44 @@
   line-height: 1;
 }
 
+/* Conclusão: o lembrete do Guia de bolso, com o chapéu igual ao do app. */
+.guia-conclusao__bolso {
+  display: flex;
+  max-width: 32ch;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 22px 0 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--guia-destaque-suave);
+  color: var(--guia-tinta);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.guia-conclusao__bolso i {
+  margin-top: 3px;
+  color: var(--guia-destaque);
+  font-size: 1.2rem;
+}
+
+/* ─── Capa de parte e o marco "Você já pode jogar!" (tela antes da Parte 2) ── */
+.guia-parte__rotulo {
+  margin-bottom: 10px;
+  color: var(--guia-destaque);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.guia-parte__marco .guia-paragrafo {
+  max-width: 34ch;
+  margin: 14px 0 0;
+  color: var(--guia-tinta-suave);
+}
+
 .guia-capa__acoes {
   display: flex;
   width: min(100%, 320px);
@@ -341,6 +379,81 @@
   white-space: nowrap;
 }
 
+/*
+ * Compacta (Lista de yakus): nome em cima e frase embaixo na mesma célula, e o
+ * han em duas colunas estreitas. Cabe em 360px sem rolar de lado.
+ */
+.guia-tabela--compacta th,
+.guia-tabela--compacta td {
+  padding: 9px 6px 9px 0;
+}
+
+.guia-tabela--compacta td:first-child {
+  white-space: normal;
+}
+
+.guia-tabela__nome {
+  display: block;
+  font-weight: 800;
+}
+
+/* Linha com termo: o nome vira link (abre o cartão com o exemplo). */
+.guia-tabela__link {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.guia-tabela__link .guia-tabela__nome {
+  color: var(--guia-destaque);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.guia-tabela__link:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+/* Retângulo do tutorial de Han e Fu: o mesmo do verbete Fu no Guia de bolso. */
+.guia-tutorial-han-fu {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: inherit;
+  text-align: left;
+}
+
+.guia-tabela__frase {
+  display: block;
+  margin-top: 2px;
+  color: var(--guia-tinta-suave);
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.guia-tabela--compacta th:nth-child(n + 2),
+.guia-tabela--compacta td:nth-child(n + 2) {
+  width: 4.6em;
+  padding-right: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.guia-tabela--compacta td:nth-child(n + 2) {
+  font-weight: 800;
+}
+
 /* ─── Dica, link para ferramenta, quiz ────────────────────────────────────── */
 .guia-dica.bloco-dica {
   margin: 18px 0;
@@ -354,6 +467,44 @@
   padding: 10px 16px;
   font-size: 0.95rem;
   text-transform: none;
+}
+
+/* ─── Palitos de pontos ───────────────────────────────────────────────────── */
+.guia-palitos {
+  display: grid;
+  gap: 14px;
+  margin: 12px 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.guia-palitos__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 14px;
+}
+
+.guia-palitos__svg {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  color: var(--guia-tinta);
+}
+
+/* Largura fixa: os quatro palitos ficam do mesmo tamanho, um embaixo do outro. */
+.guia-palitos__valor {
+  min-width: 6.4em;
+  text-align: right;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.guia-palitos__quantos {
+  color: var(--guia-tinta-suave);
+  font-weight: 600;
 }
 
 .guia-quiz__pergunta {
@@ -386,24 +537,24 @@
   }
 }
 
-/* Opções de resposta: escolher antes de ver a resposta. */
+/* Opções de resposta: uma embaixo da outra, todas da mesma largura. */
 .guia-quiz__opcoes {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: min(100%, 360px);
+  flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
+  margin: 20px auto 0;
 }
 
 .guia-quiz__opcao {
   position: relative;
-  display: inline-flex;
-  min-width: 96px;
+  display: flex;
+  width: 100%;
   min-height: 52px;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 12px;
+  text-align: center;
   padding: 10px 18px;
   border: 2px solid var(--guia-linha);
   border-radius: 12px;
@@ -671,12 +822,6 @@
   animation: guia-resposta 200ms ease-out;
 }
 
-.guia-secao-intro {
-  margin: -6px 0 4px;
-  color: var(--guia-tinta-suave);
-  font-size: 0.95rem;
-}
-
 .guia-creditos__logo {
   display: block;
   max-width: 160px;
@@ -749,8 +894,7 @@
 
 .guia-botao-icone:focus-visible,
 .guia-indice button:focus-visible,
-.guia-indice summary:focus-visible,
-.guia-lista-topicos button:focus-visible {
+.guia-indice summary:focus-visible {
   outline: 2px solid var(--primario);
   outline-offset: 2px;
 }
@@ -771,36 +915,7 @@
   transition: transform 240ms ease;
 }
 
-/* ─── Regras à parte e Glossário (consulta, fora do livro) ────────────────── */
-.guia-lista-topicos {
-  margin: 8px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.guia-lista-topicos button {
-  display: flex;
-  width: 100%;
-  min-height: 52px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-  border: 0;
-  border-bottom: 1px solid var(--guia-linha);
-  background: transparent;
-  color: var(--guia-tinta);
-  font: inherit;
-  font-weight: 700;
-  text-align: left;
-  cursor: pointer;
-}
-
-.guia-lista-topicos i {
-  color: var(--guia-tinta-suave);
-  font-size: 0.8rem;
-}
-
+/* ─── Glossário (consulta, fora do livro) ─────────────────────────────────── */
 .guia-glossario {
   margin: 0;
 }
@@ -870,6 +985,24 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+/* Título da parte no índice: leva à capa da parte, com cara de rótulo. */
+.guia-indice__parte {
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.guia-indice__parte:hover {
+  color: var(--guia-destaque);
 }
 
 .guia-indice__modulo {
@@ -1020,6 +1153,58 @@
   --sorteio-barra-inferior: 0px;
 }
 
+/*
+ * ─── Celulares grandes (iPhone Pro Max, Galaxy Ultra…) ───────────────────────
+ * A tela é maior e fica mais longe do olho: com a letra de um celular pequeno
+ * o texto parece miúdo. Sobe a letra da página e de tudo o que é texto nela.
+ */
+@media (min-width: 410px) and (max-width: 767px) {
+  .guia-coluna {
+    font-size: 1.3rem;
+  }
+
+  .guia-titulo {
+    font-size: 1.85rem;
+  }
+
+  .guia-subtitulo {
+    font-size: 1.35rem;
+  }
+
+  .guia-dica.bloco-dica,
+  .btn-contorno.guia-link-app,
+  .guia-tabela table {
+    font-size: 1.12rem;
+  }
+
+  .guia-mao__legenda,
+  .guia-tabela__frase {
+    font-size: 1.02rem;
+  }
+
+  .guia-quiz__pergunta {
+    font-size: 1.4rem;
+  }
+
+  .guia-quiz__opcao {
+    font-size: 1.15rem;
+  }
+
+  .guia-capa__frase,
+  .guia-capitulo__frase {
+    font-size: 1.32rem;
+  }
+
+  /* Pedras maiores também, para acompanhar o texto. */
+  .guia-mao .yaku-tile {
+    --yaku-pedra: clamp(36px, 9.6vw, 46px);
+  }
+
+  .guia-ciclos .yaku-tile {
+    --yaku-pedra: clamp(30px, 8vw, 38px);
+  }
+}
+
 /* ─── Tablet e telas largas ───────────────────────────────────────────────── */
 @media (min-width: 768px) {
   .guia-aprender {
@@ -1027,7 +1212,7 @@
   }
 
   .guia-coluna {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
 
   .guia-mao .yaku-tile {

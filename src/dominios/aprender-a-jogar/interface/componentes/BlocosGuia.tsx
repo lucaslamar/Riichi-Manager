@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
 import { nomePedraAcessivel } from '@/dominios/calculadora-mao/interface/constantes'
@@ -9,6 +9,8 @@ import {
   MaoRotulada,
   PedrasExemplo,
 } from '@/dominios/calculadora-mao/interface/modais/yakus/PedrasExemplo'
+import ModalTermo from '@/dominios/calculadora-mao/interface/modais/glossario/ModalTermo'
+import BotaoTutorialHanFu from '@/dominios/calculadora-han-fu/interface/modais/tutorial-han-fu/BotaoTutorialHanFu'
 import { dividirTextoGlossario } from '@/dominios/calculadora-mao/logica/glossario'
 import { parseMpsz, parseMpszGrupos } from '@/dominios/calculadora-mao/logica/yakus'
 import type {
@@ -20,6 +22,7 @@ import type {
   TutorialBlock,
 } from '../../conteudo/tipos'
 import IlustracaoGuia from './IlustracaoGuia'
+import PalitosGuia from './PalitosGuia'
 
 /**
  * Termos do glossário que viram link numa página: só a primeira vez que
@@ -327,38 +330,91 @@ function QuizGuia({
   )
 }
 
+type BlocoTabela = Extract<TutorialBlock, { type: 'table' }>
+
 /**
- * Cartões que abrem ao tocar (`<details>`): título e selo à vista, a
- * explicação dentro. Com `aberto`, aquele cartão já vem aberto e à vista.
+ * Tabela que rola de lado por conta própria (o deslize de página ignora o
+ * toque aqui). Compacta, as duas primeiras colunas viram uma: nome em cima e
+ * frase embaixo. Com `links`, tocar no nome abre o cartão do termo (o yaku
+ * com o exemplo, como no Guia de bolso) por cima do guia.
  */
+function TabelaGuia({ bloco }: { bloco: BlocoTabela }) {
+  const [termoAberto, setTermoAberto] = useState<string | null>(null)
+  const cabecalhos = bloco.compact
+    ? bloco.headers.filter((_, indice) => indice !== 1)
+    : bloco.headers
+
+  return (
+    <div className={`guia-tabela${bloco.compact ? ' guia-tabela--compacta' : ''}`}>
+      <table>
+        <thead>
+          <tr>
+            {cabecalhos.map((cabecalho) => (
+              <th key={cabecalho} scope="col">
+                {cabecalho}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {bloco.rows.map((linha, indiceLinha) => {
+            const termo = bloco.links?.[indiceLinha]
+            const nome = bloco.compact ? (
+              <>
+                <span className="guia-tabela__nome">{linha[0]}</span>
+                <span className="guia-tabela__frase">
+                  <TextoSimples md={linha[1]} />
+                </span>
+              </>
+            ) : (
+              <TextoSimples md={linha[0]} />
+            )
+            return (
+              <tr key={linha[0]}>
+                <td>
+                  {termo ? (
+                    <button
+                      type="button"
+                      className="guia-tabela__link"
+                      aria-haspopup="dialog"
+                      onClick={() => setTermoAberto(termo)}
+                    >
+                      {nome}
+                    </button>
+                  ) : (
+                    nome
+                  )}
+                </td>
+                {linha.slice(bloco.compact ? 2 : 1).map((celula, indiceCelula) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: colunas fixas
+                  <td key={indiceCelula}>
+                    <TextoSimples md={celula} />
+                  </td>
+                ))}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      {termoAberto && <ModalTermo termo={termoAberto} aoFechar={() => setTermoAberto(null)} />}
+    </div>
+  )
+}
+
+/** Cartões que abrem ao tocar (`<details>`): título e selo à vista, a explicação dentro. */
 function CartoesGuia({
   itens,
   termos,
-  aberto,
   aoAbrirFerramenta,
 }: {
   itens: CartaoGuia[]
   termos?: string[]
-  aberto?: string
   aoAbrirFerramenta: (ferramenta: FerramentaGuia) => void
 }) {
-  const listaRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!aberto) return
-    listaRef.current
-      ?.querySelector(`[data-cartao="${aberto}"]`)
-      ?.scrollIntoView({ block: 'center' })
-  }, [aberto])
-
   return (
-    <div ref={listaRef} className="guia-cartoes">
+    <div className="guia-cartoes">
       {itens.map((item) => (
-        <details
-          key={item.id}
-          data-cartao={item.id}
-          className="guia-cartao"
-          open={item.id === aberto || undefined}
-        >
+        <details key={item.id} data-cartao={item.id} className="guia-cartao">
           <summary className="guia-cartao__topo">
             <span className="guia-cartao__titulo">{item.title}</span>
             {item.badge && <span className="guia-cartao__selo">{item.badge}</span>}
@@ -380,16 +436,14 @@ function CartoesGuia({
 export default function BlocosGuia({
   blocos,
   termos,
-  cartaoAberto,
   aoAbrirFerramenta,
 }: {
   blocos: TutorialBlock[]
   /** Termos que a página explica (não viram link nela). */
   termos?: string[]
-  /** Cartão que já abre aberto (vindo de um "Ver em Aprender a jogar"). */
-  cartaoAberto?: string
   aoAbrirFerramenta: (ferramenta: FerramentaGuia) => void
 }) {
+  const { t } = useI18n()
   const ligar = criarLigadorTermos(termos)
 
   return (
@@ -412,7 +466,6 @@ export default function BlocosGuia({
                 key={indice}
                 itens={bloco.items}
                 termos={termos}
-                aberto={cartaoAberto}
                 aoAbrirFerramenta={aoAbrirFerramenta}
               />
             )
@@ -462,35 +515,8 @@ export default function BlocosGuia({
               </div>
             )
           case 'table':
-            return (
-              // Rola de lado por conta própria; o deslize de página ignora o toque aqui.
-              // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
-              <div key={indice} className="guia-tabela">
-                <table>
-                  <thead>
-                    <tr>
-                      {bloco.headers.map((cabecalho) => (
-                        <th key={cabecalho} scope="col">
-                          {cabecalho}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {bloco.rows.map((linha) => (
-                      <tr key={linha[0]}>
-                        {linha.map((celula, indiceCelula) => (
-                          // biome-ignore lint/suspicious/noArrayIndexKey: colunas fixas
-                          <td key={indiceCelula}>
-                            <TextoSimples md={celula} />
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )
+            // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
+            return <TabelaGuia key={indice} bloco={bloco} />
           case 'quiz':
             return (
               <QuizGuia
@@ -501,6 +527,26 @@ export default function BlocosGuia({
                 hand={bloco.hand}
                 opcoes={bloco.options}
               />
+            )
+          case 'sticks':
+            // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
+            return <PalitosGuia key={indice} />
+          case 'hanFuTutorial':
+            return (
+              // O mesmo retângulo do verbete Fu no Guia de bolso: abre o tutorial por cima.
+              <BotaoTutorialHanFu
+                // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
+                key={indice}
+                className="bloco-dica guia-dica guia-tutorial-han-fu"
+                toqueNasBordas
+                // Embaixo do passo 4 (consulte a tabela): abre a Calculadora de Han e Fu por cima do guia.
+                rotuloVerTabela={t('learn.calculatorAndTable')}
+                aoVerTabela={() => aoAbrirFerramenta('hanFu')}
+              >
+                <span>
+                  <strong>Como contar</strong> han e fu, passo a passo
+                </span>
+              </BotaoTutorialHanFu>
             )
           case 'appLink':
             return (

@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import LinkVerNoGuia from '@/dominios/aprender-a-jogar/interface/componentes/LinkVerNoGuia'
 import { buscarTermoGlossario, buscarYakuDoTermo } from '../../../logica/glossario'
 import CartaoYaku from '../yakus/CartaoYaku'
 import BlocoGlossario, { TituloSecaoGlossario } from './BlocoGlossario'
@@ -40,7 +39,6 @@ export function ConteudoTermo({ termo }: { termo: string }) {
   return (
     <div ref={conteudoRef}>
       <BlocoGlossario secao={encontrado.secao} destaque={encontrado.item?.id} comTitulo={false} />
-      <LinkVerNoGuia chave={encontrado.item?.id ?? encontrado.secao.id} />
     </div>
   )
 }

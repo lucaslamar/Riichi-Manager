@@ -68,6 +68,8 @@ export const PAGINAS_TUTORIAL_HAN_FU: PaginaTutorial[] = [
           `${CHAVE}.overview.step4`,
         ],
       },
+      // Logo abaixo do passo 4 (consulte a tabela).
+      { tipo: 'verTabela' },
     ],
   },
   {

@@ -258,25 +258,74 @@ function MuroFileira({ padroes, id, alt }: PropsDesenho) {
 }
 
 /**
- * Close do muro aberto, de frente para quem montou: à esquerda o muro de onde
- * se compra, a abertura e as 7 colunas do muro morto, numeradas a partir da
- * abertura. A coluna 3 tem o indicador virado; a pedra de cima da coluna 1
- * (a primeira reposição do kan) fica sozinha na mesa, ao lado.
+ * Linha guia de um rótulo até o ponto do desenho: sai logo abaixo do texto e
+ * termina numa bolinha em cima do alvo. Os rótulos ficam todos fora do muro,
+ * em faixas próprias, para nenhum texto passar por cima de outro nem do desenho.
  */
-function MuroMorto({ padroes, id, alt }: PropsDesenho) {
-  const chao = 96
+function LinhaGuia({
+  x1,
+  y1,
+  x2,
+  y2,
+  destaque = false,
+  tracejada = false,
+}: {
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+  destaque?: boolean
+  tracejada?: boolean
+}) {
+  const cor = destaque ? VERMELHO : 'currentColor'
+  return (
+    <g>
+      <path
+        d={`M${x1} ${y1} L${x2} ${y2}`}
+        stroke={cor}
+        strokeWidth={1.3}
+        strokeDasharray={tracejada ? '3 2' : undefined}
+      />
+      <circle cx={x2} cy={y2} r={1.9} fill={cor} stroke="none" />
+    </g>
+  )
+}
+
+/** Tamanho dos rótulos do muro morto: um pouco maior, para ler bem a 360px. */
+const ROTULO = 12
+
+/**
+ * Close do muro aberto, de frente para quem montou: à esquerda o muro de onde
+ * se compra, a abertura e as 7 colunas do muro morto. A coluna 3 (contando da
+ * abertura) tem o indicador de dora virado.
+ *
+ * Com `kan`, o desenho de depois de um kan: as colunas numeradas, a pedra de
+ * cima da coluna 1 (a reposição) sozinha na mesa, ao lado, e a coluna 4 com o
+ * indicador do kan dora virado.
+ *
+ * Os rótulos ficam em três faixas fora do muro: duas em cima (y 24 e 46) e uma
+ * embaixo. Cada um tem a sua faixa de x, e as linhas guia descem na vertical
+ * sem cruzar outro texto. Legível a partir de 360px de largura (o quadro
+ * encolhe para ~300px e o texto fica com ~11px).
+ */
+function MuroMorto({ padroes, id, alt, kan = false }: PropsDesenho & { kan?: boolean }) {
+  const chao = 100
   const inicioVivo = 14
   const colunasVivas = 5
-  const abertura = 28
-  const inicioMorto = inicioVivo + colunasVivas * LARGURA + abertura
+  const fimVivo = inicioVivo + colunasVivas * LARGURA
+  // Com kan o vão é maior: a reposição fica nele, longe do corte da abertura.
+  const vao = kan ? 44 : 28
+  const inicioMorto = fimVivo + vao
+  const xCorte = inicioMorto - (kan ? 7 : vao / 2)
   const colunaX = (numero: number) => inicioMorto + (numero - 1) * LARGURA
   const fimMorto = colunaX(8)
-  const xSolta = inicioMorto - LARGURA - 6
-  const xIndicador = colunaX(3) + (LARGURA + FUNDO_X) / 2
-  const topo = chao - ESPESSURA * 2 - FUNDO_Y
+  const centroColuna = (numero: number) => colunaX(numero) + (LARGURA + FUNDO_X) / 2
+  const topoColuna = (altura: 1 | 2) => chao - ESPESSURA * altura - FUNDO_Y
+  const xSolta = fimVivo + 6
+  const largura = kan ? 340 : 322
 
   return (
-    <Quadro largura={322} altura={150} id={id} alt={alt}>
+    <Quadro largura={largura} altura={160} id={id} alt={alt}>
       {Array.from({ length: colunasVivas }, (_, indice) => (
         <Coluna
           key={`vivo-${indice}`}
@@ -294,69 +343,76 @@ function MuroMorto({ padroes, id, alt }: PropsDesenho) {
               y={chao}
               padroes={padroes}
               morta
-              // A pedra de cima da coluna 1 desceu para a mesa: a coluna fica com uma só.
-              altura={numero === 1 ? 1 : 2}
-              virada={numero === 3}
+              // Depois do kan a pedra de cima da coluna 1 desceu para a mesa.
+              altura={kan && numero === 1 ? 1 : 2}
+              virada={numero === 3 || (kan && numero === 4)}
             />
-            <Texto x={colunaX(numero) + LARGURA / 2} y={chao + 11} tamanho={8} peso={600}>
-              {numero}
-            </Texto>
+            {kan && (
+              <Texto x={colunaX(numero) + LARGURA / 2} y={chao + 11} tamanho={8} peso={600}>
+                {numero}
+              </Texto>
+            )}
           </g>
         )
       })}
-      <Coluna x={xSolta} y={chao} padroes={padroes} altura={1} morta />
+      {kan && <Coluna x={xSolta} y={chao} padroes={padroes} altura={1} morta />}
 
-      {/* Traços de ênfase em volta do indicador. */}
-      {[-160, -130, -50, -20].map((angulo) => {
-        const radianos = (angulo * Math.PI) / 180
-        return (
-          <line
-            key={angulo}
-            x1={xIndicador + Math.cos(radianos) * 13}
-            y1={topo + 3 + Math.sin(radianos) * 9}
-            x2={xIndicador + Math.cos(radianos) * 19}
-            y2={topo + 3 + Math.sin(radianos) * 14}
-            stroke={VERMELHO}
-            strokeWidth={1.6}
-          />
-        )
-      })}
-
-      <Texto x={xIndicador + 4} y={28} destaque>
-        indicador de dora (coluna 3)
-      </Texto>
+      {/* Corte da abertura: tracejado vermelho no vão, do rótulo até o chão. */}
       <path
-        d={`M${xIndicador} 33 L${xIndicador} ${topo - 3}`}
-        stroke={VERMELHO}
-        strokeWidth={1.4}
-      />
-      <Texto x={inicioMorto - abertura / 2} y={46} destaque>
-        abertura
-      </Texto>
-      <path
-        d={`M${inicioMorto - abertura / 2} 51 V${chao - ESPESSURA - FUNDO_Y - 3}`}
+        d={`M${xCorte} 28 V${chao + 4}`}
         stroke={VERMELHO}
         strokeDasharray="3 2"
         strokeWidth={1.8}
       />
-      <Texto x={colunaX(6)} y={46} ancora="start" peso={500} tamanho={10}>
-        kan-dora →
-      </Texto>
 
-      <Medida x1={inicioMorto} x2={fimMorto} y={118} />
-      <Texto x={(inicioMorto + fimMorto) / 2} y={134} destaque>
-        muro morto: 7 colunas, 14 pedras
+      {/* Faixa de cima (y 24): abertura à esquerda do corte, indicador à direita. */}
+      <Texto tamanho={ROTULO} x={xCorte - 4} y={24} ancora="end" destaque>
+        abertura
       </Texto>
-      <Texto x={inicioVivo + (colunasVivas * LARGURA) / 2} y={118}>
+      <Texto tamanho={ROTULO} x={centroColuna(3) - 4} y={24} ancora="start" destaque>
+        indicador de dora
+      </Texto>
+      <LinhaGuia
+        x1={centroColuna(3)}
+        y1={29}
+        x2={centroColuna(3)}
+        y2={topoColuna(2) + FUNDO_Y / 2}
+        destaque
+      />
+
+      {kan && (
+        <>
+          {/* Faixa do meio (y 46): reposição à esquerda, kan dora à direita. */}
+          <Texto tamanho={ROTULO} x={10} y={46} ancora="start">
+            reposição do kan
+          </Texto>
+          <LinhaGuia
+            x1={xSolta + (LARGURA + FUNDO_X) / 2}
+            y1={51}
+            x2={xSolta + (LARGURA + FUNDO_X) / 2}
+            y2={topoColuna(1) + FUNDO_Y / 2}
+          />
+          <Texto tamanho={ROTULO} x={centroColuna(4) + 6} y={46} ancora="start" destaque>
+            kan dora
+          </Texto>
+          <LinhaGuia
+            x1={centroColuna(4)}
+            y1={42}
+            x2={centroColuna(4)}
+            y2={topoColuna(2) + FUNDO_Y / 2}
+            destaque
+          />
+        </>
+      )}
+
+      {/* Faixa de baixo: compras sob o muro vivo, a chave e o nome sob o muro morto. */}
+      <Texto tamanho={ROTULO} x={inicioVivo + (colunasVivas * LARGURA) / 2} y={124}>
         ← compras
       </Texto>
-      <Texto x={10} y={28} ancora="start">
-        reposição do kan
+      <Medida x1={inicioMorto} x2={fimMorto} y={128} />
+      <Texto tamanho={ROTULO} x={(inicioMorto + fimMorto) / 2} y={145} destaque>
+        muro morto (14 pedras)
       </Texto>
-      <path
-        d={`M52 33 L${xSolta + LARGURA / 2} ${chao - ESPESSURA - FUNDO_Y - 3}`}
-        strokeWidth={1.1}
-      />
     </Quadro>
   )
 }
@@ -373,6 +429,13 @@ const SENTIDO_COMPRA: Vento[] = ['leste', 'norte', 'oeste', 'sul']
 
 /** Os jogadores a partir do oya, em sentido anti-horário: é assim que se contam os dados. */
 const CONTAGEM_DADOS: Vento[] = ['leste', 'sul', 'oeste', 'norte']
+
+/** Somas dos dados que abrem o muro de um vento (Leste: 1 · 5 · 9; Norte: 4 · 8 · 12). */
+const numerosDoVento = (vento: Vento) =>
+  [0, 4, 8]
+    .map((volta) => CONTAGEM_DADOS.indexOf(vento) + 1 + volta)
+    .filter((numero) => numero <= 12)
+    .join(' · ')
 
 const NOME_VENTO: Record<Vento, string> = {
   leste: 'Leste',
@@ -566,6 +629,8 @@ interface OpcoesMesa {
   compra?: boolean
   /** Fileiras de descartes na frente de cada jogador e o centro da mesa. */
   descartes?: boolean
+  /** Centerpiece no meio, com os números dos dados de cada muro virados para cada jogador. */
+  centerpiece?: boolean
   /** Textos extras dentro da mesa. */
   rotulos?: {
     x: number
@@ -817,9 +882,66 @@ function Mesa({ padroes, id, alt, opcoes }: PropsDesenho & { opcoes: OpcoesMesa 
     )
   }
 
+  /**
+   * Centerpiece no meio da mesa: o vento da rodada no centro e, em cada lado,
+   * virados para o jogador, os números dos dados que abrem o muro dele.
+   */
+  const centerpiece = () => {
+    const meio = 56
+    const giros: Record<Vento, number> = { leste: 0, sul: -90, oeste: 180, norte: 90 }
+    return (
+      <g>
+        <rect
+          x={CENTRO.x - meio}
+          y={CENTRO.y - meio}
+          width={meio * 2}
+          height={meio * 2}
+          rx={8}
+          fill="var(--guia-papel)"
+          strokeWidth={2.2}
+        />
+        <rect
+          x={CENTRO.x - meio + 5}
+          y={CENTRO.y - meio + 5}
+          width={(meio - 5) * 2}
+          height={(meio - 5) * 2}
+          rx={5}
+          fill={padroes.reticula}
+          strokeWidth={0.8}
+        />
+        <circle cx={CENTRO.x} cy={CENTRO.y} r={17} fill="var(--guia-papel)" strokeWidth={1.4} />
+        <text
+          x={CENTRO.x}
+          y={CENTRO.y + 6.2}
+          textAnchor="middle"
+          style={{ ...estiloTexto, fontSize: 18, fontWeight: 800 }}
+          lang="ja"
+        >
+          東
+        </text>
+        {(Object.keys(giros) as Vento[]).map((vento) => (
+          <g key={vento} transform={`rotate(${giros[vento]} ${CENTRO.x} ${CENTRO.y})`}>
+            {/* Faixa de papel embaixo do número, para ele ler bem sobre a retícula. */}
+            <rect
+              x={CENTRO.x - 31}
+              y={CENTRO.y + meio - 22}
+              width={62}
+              height={16}
+              rx={3}
+              fill="var(--guia-papel)"
+              stroke="none"
+            />
+            <Texto x={CENTRO.x} y={CENTRO.y + meio - 10} tamanho={12.5} peso={800} destaque>
+              {numerosDoVento(vento)}
+            </Texto>
+          </g>
+        ))}
+      </g>
+    )
+  }
+
   const rotuloVento = (vento: Vento) => {
-    const numeros = [1, 2, 3].map((volta) => CONTAGEM_DADOS.indexOf(vento) + 1 + (volta - 1) * 4)
-    const textoNumeros = numeros.filter((numero) => numero <= 12).join(' · ')
+    const textoNumeros = numerosDoVento(vento)
     const destaque = abertura?.vento === vento && opcoes.contagem
     const posicoes: Record<Vento, { x: number; y: number; ancora: 'start' | 'middle' | 'end' }> = {
       leste: { x: CENTRO.x, y: FORA.base + 22, ancora: 'middle' },
@@ -873,7 +995,8 @@ function Mesa({ padroes, id, alt, opcoes }: PropsDesenho & { opcoes: OpcoesMesa 
       {opcoes.contarColunas && numerosColunas()}
       {opcoes.compra && setaCompra()}
       {opcoes.descartes && descartes()}
-      {opcoes.dados && !opcoes.descartes && (
+      {opcoes.centerpiece && centerpiece()}
+      {opcoes.dados && !opcoes.descartes && !opcoes.centerpiece && (
         <>
           <Dado cx={CENTRO.x - 14} cy={CENTRO.y + 2} giro={-12} valor={opcoes.dados[0]} />
           <Dado cx={CENTRO.x + 14} cy={CENTRO.y - 6} giro={16} valor={opcoes.dados[1]} />
@@ -928,7 +1051,7 @@ const DADOS_EXEMPLO: [number, number] = [2, 3]
 
 const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
   muroFileira: MuroFileira,
-  muroQuadrado: (props) => <Mesa {...props} opcoes={{ dados: [3, 4] }} />,
+  muroQuadrado: (props) => <Mesa {...props} opcoes={{ centerpiece: true }} />,
   mesaDados: (props) => (
     <Mesa
       {...props}
@@ -973,6 +1096,7 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
     />
   ),
   muroMorto: MuroMorto,
+  muroMortoKan: (props) => <MuroMorto {...props} kan />,
   muroMortoCurto: (props) => (
     <Mesa
       {...props}

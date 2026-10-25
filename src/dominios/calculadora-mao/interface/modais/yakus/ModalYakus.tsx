@@ -6,6 +6,7 @@ import {
   BEGINNER_GROUPS,
   CATEGORY_LABELS,
   DORA_NOTE,
+  KAZOE_NOTE,
   ORDEM_CATEGORIAS,
   YAKU,
   type Yaku,
@@ -75,7 +76,12 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
   if (aba === 'iniciante') return <AbaIniciante />
   if (aba === 'glossario') return <AbaGlossario />
   if (aba === 'yakuman') {
-    return <ListaYakus titulo="Yakuman (mão máxima)" yakus={YAKU.filter((yaku) => yaku.yakuman)} />
+    return (
+      <>
+        <ListaYakus titulo="Yakuman (mão máxima)" yakus={YAKU.filter((yaku) => yaku.yakuman)} />
+        <BlocoDica texto={KAZOE_NOTE} className="yaku-nota-dora" />
+      </>
+    )
   }
   return (
     <ListaYakus
