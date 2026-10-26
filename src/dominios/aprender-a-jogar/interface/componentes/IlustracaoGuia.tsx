@@ -629,6 +629,11 @@ interface OpcoesMesa {
   compra?: boolean
   /** Fileiras de descartes na frente de cada jogador e o centro da mesa. */
   descartes?: boolean
+  /**
+   * Um pon do Leste aberto à direita dele, do lado de fora do muro: a pedra
+   * pegada do Norte (à esquerda dele) fica de lado, na ponta esquerda.
+   */
+  chamada?: boolean
   /** Centerpiece no meio, com os números dos dados de cada muro virados para cada jogador. */
   centerpiece?: boolean
   /** Textos extras dentro da mesa. */
@@ -995,6 +1000,20 @@ function Mesa({ padroes, id, alt, opcoes }: PropsDesenho & { opcoes: OpcoesMesa 
       {opcoes.contarColunas && numerosColunas()}
       {opcoes.compra && setaCompra()}
       {opcoes.descartes && descartes()}
+      {opcoes.chamada && (
+        <g>
+          {/* Um pouco maior que os descartes, para a chamada aparecer: a de lado
+              (15 de largura) e mais duas em pé (11), com 1 de folga. */}
+          <g transform={`translate(${CENTRO.x + 60} ${FORA.base + 3}) scale(1.3)`}>
+            <Descarte x={0} y={4} deLado />
+            <Descarte x={16} y={0} />
+            <Descarte x={28} y={0} />
+          </g>
+          <Texto x={CENTRO.x + 85} y={FORA.base + 36} tamanho={10} destaque>
+            pon (chamada)
+          </Texto>
+        </g>
+      )}
       {opcoes.centerpiece && centerpiece()}
       {opcoes.dados && !opcoes.descartes && !opcoes.centerpiece && (
         <>
@@ -1042,6 +1061,107 @@ const FORA = {
   direita: MESA.cx + MESA.raio + MESA.grossura / 2,
 }
 
+/**
+ * Os quatro lugares em volta da mesa, vistos de cima, com o vento de cada um
+ * (Leste embaixo, Sul à direita, Oeste em cima, Norte à esquerda) e setas
+ * vermelhas no sentido em que a vez passa: para a direita de quem jogou, que
+ * visto de cima é o sentido anti-horário.
+ */
+function MesaVentos({ padroes, id, alt }: PropsDesenho) {
+  const largura = 320
+  const altura = 330
+  const cx = largura / 2
+  const cy = altura / 2
+  const meioMesa = 70
+  const raioLugar = 112
+  const raioSeta = 50
+  const lugares: { vento: Vento; kanji: string; angulo: number }[] = [
+    { vento: 'leste', kanji: '東', angulo: 90 },
+    { vento: 'sul', kanji: '南', angulo: 0 },
+    { vento: 'oeste', kanji: '西', angulo: -90 },
+    { vento: 'norte', kanji: '北', angulo: 180 },
+  ]
+  const ponto = (graus: number, raio: number) => {
+    const radianos = (graus * Math.PI) / 180
+    return { x: cx + Math.cos(radianos) * raio, y: cy + Math.sin(radianos) * raio }
+  }
+  // Cada seta vai de um lugar ao seguinte (ângulo diminuindo = anti-horário na tela).
+  const setas = lugares.map(({ angulo }) => {
+    const inicio = ponto(angulo - 22, raioSeta)
+    const fim = ponto(angulo - 68, raioSeta)
+    return `M${inicio.x} ${inicio.y} A${raioSeta} ${raioSeta} 0 0 0 ${fim.x} ${fim.y}`
+  })
+  const rotulos: Record<Vento, { x: number; y: number }> = {
+    leste: { x: cx, y: cy + raioLugar + 36 },
+    oeste: { x: cx, y: cy - raioLugar - 28 },
+    sul: { x: cx + raioLugar, y: cy + 40 },
+    norte: { x: cx - raioLugar, y: cy + 40 },
+  }
+
+  return (
+    <Quadro largura={largura} altura={altura} id={id} alt={alt}>
+      <rect
+        x={cx - meioMesa}
+        y={cy - meioMesa}
+        width={meioMesa * 2}
+        height={meioMesa * 2}
+        rx={10}
+        fill={padroes.reticula}
+        strokeWidth={2}
+      />
+      <circle cx={cx} cy={cy} r={raioSeta + 12} fill="var(--guia-papel)" stroke="none" />
+      {setas.map((trajeto) => (
+        <path
+          key={trajeto}
+          d={trajeto}
+          stroke={VERMELHO}
+          strokeWidth={2.4}
+          markerEnd={padroes.seta}
+        />
+      ))}
+      <Texto x={cx} y={cy - 2} tamanho={11}>
+        ordem
+      </Texto>
+      <Texto x={cx} y={cy + 12} tamanho={11}>
+        da vez
+      </Texto>
+      {lugares.map(({ vento, kanji, angulo }) => {
+        const lugar = ponto(angulo, raioLugar)
+        return (
+          <g key={vento}>
+            <circle
+              cx={lugar.x}
+              cy={lugar.y}
+              r={20}
+              fill="var(--guia-papel)"
+              strokeWidth={vento === 'leste' ? 2.6 : 1.8}
+            />
+            <text
+              x={lugar.x}
+              y={lugar.y + 6.5}
+              textAnchor="middle"
+              style={{ ...estiloTexto, fontSize: 18, fontWeight: 800 }}
+              lang="ja"
+            >
+              {kanji}
+            </text>
+            <Texto
+              x={rotulos[vento].x}
+              y={rotulos[vento].y}
+              tamanho={12}
+              peso={800}
+              destaque={vento === 'leste'}
+            >
+              {NOME_VENTO[vento]}
+              {vento === 'leste' ? ' (oya)' : ''}
+            </Texto>
+          </g>
+        )
+      })}
+    </Quadro>
+  )
+}
+
 /*
  * Exemplo de todas as vistas de cima: dados 2 + 3 = 5. A contagem dá a volta e
  * para no próprio oya (Leste), e o muro morto não cabe no muro dele: 5 colunas
@@ -1051,6 +1171,7 @@ const DADOS_EXEMPLO: [number, number] = [2, 3]
 
 const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
   muroFileira: MuroFileira,
+  mesaVentos: MesaVentos,
   muroQuadrado: (props) => <Mesa {...props} opcoes={{ centerpiece: true }} />,
   mesaDados: (props) => (
     <Mesa
@@ -1150,6 +1271,7 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
       {...props}
       opcoes={{
         descartes: true,
+        chamada: true,
         rotulos: [{ x: CENTRO.x, y: DENTRO.base - 4, texto: 'seus descartes: fileiras de 6' }],
       }}
     />

@@ -8,7 +8,7 @@ import type {
 /**
  * Uma tela do livro, na ordem em que se lê: capa do guia → capa da Parte 1 →
  * capa do Módulo 1 → 1.1 → … → quiz → capa do Módulo 2 → … → marco ("Você já
- * pode jogar!") → capa da Parte 2 → … → conclusão → créditos.
+ * pode jogar!") → capa da Parte 2 → … → conclusão.
  */
 export type PaginaLivro =
   | { tipo: 'capaGuia'; id: string }
@@ -20,10 +20,8 @@ export type PaginaLivro =
   /** Uma pergunta do quiz do módulo por tela; `pergunta` a partir de 0. */
   | { tipo: 'quiz'; id: string; modulo: TutorialModule; pergunta: number }
   | { tipo: 'conclusao'; id: string }
-  | { tipo: 'creditos'; id: string }
 
 export const ID_CAPA_GUIA = 'capa-guia'
-export const ID_CREDITOS = 'creditos'
 
 export const idCapaParte = (parte: TutorialPart) => `parte-${parte.id}`
 export const idCapaModulo = (modulo: TutorialModule) => `capa-${modulo.id}`
@@ -50,7 +48,7 @@ export function montarLivro(conteudo: ConteudoTutorial): PaginaLivro[] {
       })
     }
   }
-  paginas.push({ tipo: 'conclusao', id: 'conclusao' }, { tipo: 'creditos', id: ID_CREDITOS })
+  paginas.push({ tipo: 'conclusao', id: 'conclusao' })
   return paginas
 }
 

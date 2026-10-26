@@ -13,6 +13,7 @@ export type FerramentaGuia = 'sorteador' | 'calculadora' | 'hanFu'
 
 /** Ilustrações em preto e branco do guia (desenhadas no app, sem imagens de fora). */
 export type IlustracaoGuia =
+  | 'mesaVentos'
   | 'muroFileira'
   | 'muroQuadrado'
   | 'mesaDados'
@@ -153,7 +154,4 @@ export interface ConteudoTutorial {
   /** O livro, em partes; cada parte com os seus módulos, numerados em sequência. */
   tutorialParts: TutorialPart[]
   glossary: TermoGlossarioGuia[]
-  credits: TutorialBlock[]
-  /** "Para ir além": clubes, associações e materiais. */
-  furtherReading: TutorialBlock[]
 }

@@ -13,8 +13,6 @@ const VERSAO = 2
  * livro: a pessoa volta para a capa do módulo onde o assunto está agora.
  */
 const MOVIDAS_V1: Record<string, string> = {
-  'muro-morto': 'capa-mesa',
-  compra: 'capa-mesa',
   prioridade: 'capa-turno',
   kan: 'capa-kan',
   juntando: 'capa-pontos',

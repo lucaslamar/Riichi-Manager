@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { ConteudoTutorial, TutorialModule } from '../../conteudo/tipos'
-import { ID_CREDITOS, idCapaParte, idQuizModulo, type PaginaLivro } from '../../logica/livro'
+import { idCapaParte, idQuizModulo, type PaginaLivro } from '../../logica/livro'
 
 /**
  * Índice do guia: as partes do livro (cada uma com os seus módulos e as
- * páginas de cada um), Glossário e Créditos. No celular abre como painel de baixo; no tablet, como
+ * páginas de cada um), e Glossário. No celular abre como painel de baixo; no tablet, como
  * um painel preso ao botão do índice (só CSS).
  */
 export default function IndiceGuia({
@@ -13,6 +13,7 @@ export default function IndiceGuia({
   livro,
   indiceAtual,
   concluidos,
+  rotuloRank,
   aoIrPara,
   aoAbrirGlossario,
   aoFechar,
@@ -21,6 +22,8 @@ export default function IndiceGuia({
   livro: PaginaLivro[]
   indiceAtual: number
   concluidos: string[]
+  /** "Seu rank: 6º kyu", embaixo do título. */
+  rotuloRank: string
   aoIrPara: (indice: number) => void
   aoAbrirGlossario: () => void
   aoFechar: () => void
@@ -100,7 +103,13 @@ export default function IndiceGuia({
         onClick={(evento) => evento.stopPropagation()}
       >
         <header className="guia-indice__cabecalho">
-          <h2>{t('learn.index')}</h2>
+          <div>
+            <h2>{t('learn.index')}</h2>
+            <p className="guia-indice__rank">
+              <i className="fas fa-medal" aria-hidden="true" />
+              {rotuloRank}
+            </p>
+          </div>
           <button
             type="button"
             className="guia-botao-icone"
@@ -137,12 +146,6 @@ export default function IndiceGuia({
                 <button type="button" onClick={aoAbrirGlossario}>
                   <i className="fas fa-book" aria-hidden="true" />
                   {t('learn.glossary')}
-                </button>
-              </li>
-              <li>
-                <button type="button" onClick={() => aoIrPara(indiceDe(ID_CREDITOS))}>
-                  <i className="fas fa-heart" aria-hidden="true" />
-                  {t('learn.credits')}
                 </button>
               </li>
             </ul>

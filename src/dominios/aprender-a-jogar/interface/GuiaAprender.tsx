@@ -14,6 +14,7 @@ import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas
 import { conteudoPtBR } from '../conteudo/pt-BR'
 import type { FerramentaGuia } from '../conteudo/tipos'
 import { fimDoModulo, montarLivro, moduloDaPagina, type PaginaLivro } from '../logica/livro'
+import { ehDan, nomeRank, rankDaParte, rankPorConcluidos, type RankGuia } from '../logica/rank'
 import { lerProgressoGuia, salvarProgressoGuia } from '../persistencia/progressoGuia'
 import BlocosGuia from './componentes/BlocosGuia'
 import IndiceGuia from './componentes/IndiceGuia'
@@ -24,15 +25,8 @@ import './guia-aprender.css'
 // Hoje só há o conteúdo em pt-BR; os outros idiomas usam ele até ganharem o seu.
 const CONTEUDO = conteudoPtBR
 const LIVRO = montarLivro(CONTEUDO)
-
-/** Logo do CMC nos Créditos, só se o arquivo existir no projeto. */
-const LOGO_CMC = Object.values(
-  import.meta.glob<string>('/src/assets/credits/cmc-logo.png', {
-    eager: true,
-    query: '?url',
-    import: 'default',
-  }),
-)[0]
+/** Quanto tempo o aviso de estrela ou de "Subiu de rank!" fica na tela. */
+const TEMPO_RANK = 3500
 
 /** A barra de cima some sozinha depois deste tempo sem uso. */
 const TEMPO_BARRA = 4000
@@ -93,6 +87,36 @@ export default function GuiaAprender({
   const consultaRef = useRef<HTMLDivElement>(null)
   const livroRef = useInerte<HTMLDivElement>(!!ferramenta || indiceAberto)
   const consultaInerteRef = useInerte<HTMLDivElement>(!!ferramenta)
+
+  // Rank por parte (Novato, Adepto, Especialista, 1º dan), com uma estrela por
+  // módulo concluído. Ao concluir um módulo, aparece o aviso de estrela ou,
+  // se a parte acabou, o de "Subiu de rank!".
+  const rank = rankPorConcluidos(concluidos, CONTEUDO.tutorialParts)
+  const [aviso, setAviso] = useState<{ rank: RankGuia; subiu: boolean } | null>(null)
+  const { degrau, nivel } = rank
+  const anterior = useRef({ degrau, nivel })
+  useEffect(() => {
+    if (degrau > anterior.current.degrau) {
+      setAviso({
+        rank: rankPorConcluidos(concluidos, CONTEUDO.tutorialParts),
+        subiu: nivel > anterior.current.nivel,
+      })
+    }
+    anterior.current = { degrau, nivel }
+  }, [degrau, nivel, concluidos])
+  useEffect(() => {
+    if (!aviso) return
+    const tempo = window.setTimeout(() => setAviso(null), TEMPO_RANK)
+    return () => window.clearTimeout(tempo)
+  }, [aviso])
+
+  /** Selo com o rank atual (capa do guia e capas de módulo). */
+  const seloRank = () => (
+    <p className={`guia-rank${ehDan(rank) ? ' guia-rank--dan' : ''}`}>
+      <i className={`fas ${ehDan(rank) ? 'fa-crown' : 'fa-medal'}`} aria-hidden="true" />
+      {t('learn.yourRank', { rank: nomeRank(rank) })}
+    </p>
+  )
 
   const pagina = LIVRO[indice]
   const modulo = moduloDaPagina(pagina)
@@ -302,8 +326,6 @@ export default function GuiaAprender({
         return `${nomeQuiz(alvo)}: ${alvo.modulo.title}`
       case 'conclusao':
         return t('learn.conclusionTitle')
-      case 'creditos':
-        return t('learn.credits')
     }
   }
 
@@ -319,6 +341,8 @@ export default function GuiaAprender({
             <p className="guia-capa__frase">
               {t('learn.tagline', { count: CONTEUDO.tutorialParts[0].modules.length })}
             </p>
+            {seloRank()}
+            {rank.degrau === 0 && <p className="guia-rank__dica">{t('learn.rankHint')}</p>}
             <div className="guia-capa__acoes">
               {paginaSalva > 1 ? (
                 <>
@@ -343,7 +367,6 @@ export default function GuiaAprender({
               )}
             </div>
             <p className="guia-capa__dica">{t('learn.howToRead')}</p>
-            <p className="guia-capa__colaboracao">{t('learn.collaboration')}</p>
           </div>
         )
       case 'marco':
@@ -361,10 +384,12 @@ export default function GuiaAprender({
       case 'capaParte':
         return (
           <div className="guia-capitulo guia-parte">
-            <span className="guia-parte__rotulo">
-              {t('learn.part', { number: pagina.parte.number })}
-            </span>
-            <h1 className="guia-capitulo__titulo">{pagina.parte.title}</h1>
+            <i className="fas fa-medal guia-capa__icone guia-parte__medalha" aria-hidden="true" />
+            <span className="guia-parte__rotulo">{t('learn.rankTier')}</span>
+            <h1 className="guia-capitulo__titulo">{rankDaParte(pagina.parte.number - 1)}</h1>
+            <p className="guia-parte__nome">
+              {t('learn.part', { number: pagina.parte.number })} · {pagina.parte.title}
+            </p>
             <p className="guia-capitulo__frase">{pagina.parte.cover}</p>
           </div>
         )
@@ -374,6 +399,7 @@ export default function GuiaAprender({
             <span className="guia-capitulo__numero">{pagina.modulo.number}</span>
             <h1 className="guia-capitulo__titulo">{pagina.modulo.title}</h1>
             <p className="guia-capitulo__frase">{pagina.modulo.cover}</p>
+            {seloRank()}
           </div>
         )
       case 'pagina':
@@ -411,6 +437,13 @@ export default function GuiaAprender({
               <i className="fas fa-graduation-cap" aria-hidden="true" />
               <span>{t('learn.conclusionPocketGuide')}</span>
             </p>
+            {/* Recado secreto: só aparece para quem concluiu tudo (1º dan). */}
+            {ehDan(rank) && (
+              <p className="guia-conclusao__secreto">
+                <i className="fas fa-crown" aria-hidden="true" />
+                <span>{t('learn.conclusionSecret')}</span>
+              </p>
+            )}
             <div className="guia-capa__acoes">
               <button
                 type="button"
@@ -421,23 +454,6 @@ export default function GuiaAprender({
               </button>
             </div>
           </div>
-        )
-      case 'creditos':
-        return (
-          <>
-            <h1 className="guia-titulo">{t('learn.credits')}</h1>
-            {LOGO_CMC && (
-              <img className="guia-creditos__logo" src={LOGO_CMC} alt={t('learn.cmcLogo')} />
-            )}
-            <BlocosGuia blocos={CONTEUDO.credits} aoAbrirFerramenta={abrirFerramenta} />
-            <h2 className="guia-subtitulo">{t('learn.furtherReading')}</h2>
-            <BlocosGuia
-              blocos={CONTEUDO.furtherReading}
-              // Riichi aqui é o nome do jogo, não a declaração.
-              termos={['riichi']}
-              aoAbrirFerramenta={abrirFerramenta}
-            />
-          </>
         )
     }
   }
@@ -585,6 +601,7 @@ export default function GuiaAprender({
           livro={LIVRO}
           indiceAtual={indice}
           concluidos={concluidos}
+          rotuloRank={t('learn.yourRank', { rank: nomeRank(rank) })}
           aoIrPara={irPara}
           aoAbrirGlossario={() => {
             setIndiceAberto(false)
@@ -619,6 +636,30 @@ export default function GuiaAprender({
           </div>
         </section>
       )}
+
+      {/* Aviso de subida de rank, por cima de tudo, como nos jogos online. */}
+      <div className="guia-rank-aviso__regiao" role="status" aria-live="polite">
+        {aviso && (
+          <div
+            className={`guia-rank-aviso${ehDan(aviso.rank) ? ' guia-rank-aviso--dan' : ''}${
+              aviso.subiu ? '' : ' guia-rank-aviso--estrela'
+            }`}
+          >
+            <i
+              className={`fas ${
+                ehDan(aviso.rank) ? 'fa-crown' : aviso.subiu ? 'fa-medal' : 'fa-star'
+              } guia-rank-aviso__icone`}
+              aria-hidden="true"
+            />
+            <span>
+              <span className="guia-rank-aviso__titulo">
+                {aviso.subiu ? t('learn.rankUp') : t('learn.starUp')}
+              </span>
+              <strong className="guia-rank-aviso__rank">{nomeRank(aviso.rank)}</strong>
+            </span>
+          </div>
+        )}
+      </div>
     </div>,
     document.body,
   )

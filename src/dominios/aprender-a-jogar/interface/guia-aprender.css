@@ -179,6 +179,150 @@
   font-size: 1.2rem;
 }
 
+/* Recado secreto da conclusão: só para o 1º dan, no dourado do dan. */
+.guia-conclusao__secreto {
+  display: flex;
+  max-width: 32ch;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fff3cf;
+  color: #5c3d00;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.guia-conclusao__secreto i {
+  margin-top: 3px;
+  color: #9a6400;
+  font-size: 1.2rem;
+}
+
+/* ─── Rank (kyu/dan): selo nas capas e aviso ao subir ─────────────────────── */
+.guia-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--guia-destaque-suave);
+  color: var(--guia-destaque);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+/* Dan em dourado, como a faixa de cima nos jogos online. */
+.guia-rank--dan {
+  background: #fff3cf;
+  color: #9a6400;
+}
+
+/* Capa da parte: a medalha e o nome da parte embaixo do rank. */
+.guia-parte__medalha {
+  color: var(--guia-destaque);
+}
+
+.guia-parte__nome {
+  margin: 10px 0 0;
+  color: var(--guia-tinta);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* Estrela (módulo concluído sem subir de rank): aviso mais discreto. */
+.guia-rank-aviso--estrela {
+  background: var(--guia-papel);
+  color: var(--guia-tinta);
+  border: 2px solid var(--guia-destaque);
+}
+
+.guia-rank-aviso--estrela .guia-rank-aviso__icone {
+  color: #f2b01e;
+}
+
+.guia-rank__dica {
+  max-width: 30ch;
+  margin: 8px 0 0;
+  color: var(--guia-tinta-suave);
+  font-size: 0.85rem;
+}
+
+.guia-indice__rank {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 0;
+  color: var(--guia-destaque);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.guia-rank-aviso__regiao {
+  position: fixed;
+  right: 0;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.guia-rank-aviso {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 22px 12px 16px;
+  border-radius: 16px;
+  background: var(--guia-destaque);
+  color: #fff;
+  box-shadow: 0 12px 30px rgb(15 23 42 / 28%);
+  animation: guia-rank-entra 520ms cubic-bezier(0.2, 1.5, 0.4, 1);
+}
+
+.guia-rank-aviso--dan {
+  background: linear-gradient(135deg, #c98a00, #f2c14e);
+  color: #3a2600;
+}
+
+.guia-rank-aviso__icone {
+  font-size: 1.8rem;
+  animation: guia-rank-brilho 900ms ease-in-out 2;
+}
+
+.guia-rank-aviso__titulo {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.guia-rank-aviso__rank {
+  display: block;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+@keyframes guia-rank-entra {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.85);
+  }
+}
+
+@keyframes guia-rank-brilho {
+  50% {
+    transform: scale(1.25) rotate(-8deg);
+  }
+}
+
 /* ─── Capa de parte e o marco "Você já pode jogar!" (tela antes da Parte 2) ── */
 .guia-parte__rotulo {
   margin-bottom: 10px;
@@ -213,13 +357,6 @@
   color: var(--guia-tinta-suave);
   font-size: 0.88rem;
   line-height: 1.5;
-}
-
-.guia-capa__colaboracao {
-  margin: 20px 0 0;
-  color: var(--guia-tinta-suave);
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
 }
 
 /* ─── Pedras ──────────────────────────────────────────────────────────────── */
@@ -822,14 +959,6 @@
   animation: guia-resposta 200ms ease-out;
 }
 
-.guia-creditos__logo {
-  display: block;
-  max-width: 160px;
-  max-height: 120px;
-  margin: 0 auto 24px;
-  object-fit: contain;
-}
-
 /* ─── Barra de cima (aparece no toque e some sozinha) ─────────────────────── */
 .guia-barra,
 .guia-consulta__barra {
@@ -1258,6 +1387,11 @@
   .guia-barra,
   .guia-progresso span {
     transition-duration: 1ms;
+  }
+
+  .guia-rank-aviso,
+  .guia-rank-aviso__icone {
+    animation: none;
   }
 
   .guia-indice,

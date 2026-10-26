@@ -13,9 +13,6 @@
  * vira "Parte N, Módulo M (Título)" (ver `trocarReferencias`), então a
  * referência acompanha a ordem do livro. Os textos não citam telas do app,
  * menos o Sorteador, que o próprio guia abre no sorteio dos ventos.
- *
- * Escrito a partir do Mahjong Guia de Bolso, de Isabella Oliveira / Cerrado
- * Mahjong Club (ver `credits`).
  */
 import { BASE_PATAMAR } from '@/compartilhado/mahjong/pontuacao'
 import { SECOES_GLOSSARIO } from '@/dominios/calculadora-mao/logica/glossario'
@@ -77,7 +74,7 @@ const doGlossario = (id: string) => {
   return ''
 }
 
-/** Artigo de suji indicado na Defesa básica e em "Para ir além". */
+/** Artigo de suji indicado no fim da defesa (matagi suji). */
 const ARTIGO_SUJI = 'https://npmahjong.com/blog/suji'
 
 const SIM_NAO = (sim: boolean) => [
@@ -185,6 +182,13 @@ const modulos: TutorialModule[] = [
             md: '- Quem tira **Leste** é o **oya** (dealer). É ele quem joga os dados e faz o primeiro descarte.\n- Os outros sentam em sentido anti-horário a partir dele: Leste → Sul → Oeste → Norte.',
           },
           {
+            type: 'image',
+            image: 'mesaVentos',
+            alt: 'Mesa vista de cima com os quatro lugares: Leste (o oya) embaixo, Sul à direita, Oeste em cima e Norte à esquerda. Setas vermelhas no meio mostram a ordem da vez: do Leste para o Sul, do Sul para o Oeste, do Oeste para o Norte e do Norte de volta ao Leste.',
+            caption:
+              'A vez passa para a direita de quem jogou: Leste → Sul → Oeste → Norte. Quando o oya muda, o Leste também passa para a direita: quem era Sul vira o novo Leste.',
+          },
+          {
             type: 'text',
             md: '**Como sortear**\n- **Com as pedras**: vire para baixo uma pedra de cada vento, embaralhe e cada jogador pega uma.\n- **Com o app**: o Sorteador de Ventos sorteia os quatro ventos na hora, sem separar pedras.',
           },
@@ -222,27 +226,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'O oya ==sempre joga os dados==. A soma diz onde o muro abre: em qual muro e depois de quantas colunas. É ali que se separa o muro morto.',
-          },
-          {
-            type: 'text',
-            md: 'Com um centerpiece (ou numa mesa automática), não precisa decorar a conta: ele mostra, para cada número, qual muro abre.',
-          },
-          {
-            type: 'tip',
-            md: 'Sem centerpiece, a conta está na próxima página.',
-          },
-        ],
-      },
-      {
-        id: 'abrindo-muro',
-        number: '2.4',
-        title: 'Contando com os dados',
-        termos: ['oya'],
-        blocks: [
-          {
-            type: 'text',
-            md: 'Sem centerpiece, quem joga conta onde o muro abre a partir da soma dos dois dados.',
+            md: 'O oya ==sempre joga os dois dados== e soma. O número diz **qual muro abre** e **em que coluna** ele é cortado. É no corte que se separa o muro morto.',
           },
           { type: 'heading', text: '1. Qual muro abre' },
           {
@@ -252,6 +236,10 @@ const modulos: TutorialModule[] = [
           {
             type: 'text',
             md: '- **5 ou 9**: o muro do oya.\n- **2, 6 ou 10**: o muro de quem está à direita dele.\n- **3, 7 ou 11**: o muro da frente.\n- **4, 8 ou 12**: o muro de quem está à esquerda.',
+          },
+          {
+            type: 'tip',
+            md: '**Com centerpiece** não precisa contar: cada lado dele mostra os números que abrem o muro do jogador sentado ali. É só achar a soma dos dados.',
           },
           {
             type: 'image',
@@ -274,7 +262,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'muro-morto',
-        number: '2.5',
+        number: '2.4',
         title: 'O muro morto',
         termos: ['dora'],
         blocks: [
@@ -321,14 +309,14 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'compra',
-        number: '2.6',
+        number: '2.5',
         title: 'Comprar as pedras',
         blocks: [
           {
             type: 'steps',
             items: [
               {
-                md: 'A compra começa ==à esquerda da abertura== (para quem montou aquele muro) e segue no sentido da seta, muro após muro. O muro morto fica de fora.',
+                md: 'A compra começa ==à esquerda da abertura== (para quem montou aquele muro) e segue no sentido da seta, muro após muro. O muro morto fica de fora. Visto de cima, as pedras saem do muro no sentido **horário**: o contrário da ordem da vez, que é anti-horária.',
                 image: 'mesaCompra',
                 alt: 'Mesa vista de cima. O muro do Leste está aberto; do lado do canto fica o muro morto, com contorno vermelho, dobrando para o muro do Sul. Do outro lado da abertura sai uma seta vermelha que segue pelo muro do Leste e depois pelo do Norte, no sentido horário.',
               },
@@ -512,8 +500,9 @@ const modulos: TutorialModule[] = [
           {
             type: 'image',
             image: 'mesaDescartes',
-            alt: 'Mesa vista de cima: na frente de cada muro, uma fileira de 6 descartes e o começo da segunda. No meio, o centro da mesa com o vento da rodada (東). Um dos descartes do Sul está de lado, como no Riichi.',
-            caption: 'Cada um descarta à sua frente, em fileiras de 6. No meio, o centro da mesa.',
+            alt: 'Mesa vista de cima: na frente de cada muro, uma fileira de 6 descartes e o começo da segunda. No meio, o centro da mesa com o vento da rodada (東). Um dos descartes do Sul está de lado, como no Riichi. À direita do Leste, do lado de fora do muro, um pon aberto: três pedras, com a da ponta esquerda deitada.',
+            caption:
+              'Cada um descarta à sua frente, em fileiras de 6. À direita do Leste, um pon: a pedra pegada fica de lado.',
           },
           {
             type: 'text',
@@ -637,7 +626,7 @@ const modulos: TutorialModule[] = [
       {
         id: 'yakus-iniciantes',
         number: '5.2',
-        title: 'Os 5 yakus para começar',
+        title: 'Yakus para começar',
         termos: [
           'riichi',
           'yaku:menzen-tsumo',
@@ -645,11 +634,17 @@ const modulos: TutorialModule[] = [
           'yaku:yakuhai',
           'yaku:pinfu',
           'ryanmen',
+          'yaku:iipeikou',
+          'yaku:chanta',
+          'yaku:toitoi',
+          'yaku:chinitsu',
+          'yaku:honitsu',
+          'yaku:chiitoitsu',
         ],
         blocks: [
           {
             type: 'text',
-            md: 'Com estes cinco você já vence a maioria das mãos. Toque em cada um para ver como funciona.',
+            md: 'Comece por estes cinco: com eles você já vence a maioria das mãos. Toque em cada um para ver como funciona.',
           },
           {
             type: 'cards',
@@ -703,9 +698,22 @@ const modulos: TutorialModule[] = [
                 blocks: [
                   { type: 'text', md: 'Uma trinca de **dragão** ou de **Leste**.' },
                   { type: 'hand', mpsz: '123m 456p 789s 555z 22s' },
+                  { type: 'heading', text: 'Quais ventos valem' },
+                  {
+                    type: 'text',
+                    md: 'Cada jogador tem o **vento do seu assento** (o que tirou no sorteio). A mesa toda tem o **vento da rodada**: no tonpuusen, o Leste.',
+                  },
+                  {
+                    type: 'text',
+                    md: '- Vento da rodada: vale yaku para todos.\n- Vento do seu assento: vale yaku só para você.\n- Se o vento da rodada também é o seu, vale ==em dobro==.\n- Vento que não é de ninguém não vale yaku.',
+                  },
+                  {
+                    type: 'text',
+                    md: 'Exemplo: na rodada do Leste, o Leste vale para todos. Para o **oya**, ele também é o vento do assento: vale em dobro.',
+                  },
                   {
                     type: 'tip',
-                    md: 'Outros ventos também podem valer, conforme o seu lugar na mesa. Você vai ver isso em Ventos de valor, na {{onde:regras}}.',
+                    md: 'Vale também com a mão **aberta**: um pon de dragão ou de vento de valor já dá yaku à mão.',
                   },
                 ],
               },
@@ -716,7 +724,7 @@ const modulos: TutorialModule[] = [
                 blocks: [
                   {
                     type: 'text',
-                    md: 'Só sequências, um par que não seja de dragão nem de Leste, e espera de dois lados (ryanmen).',
+                    md: 'Só sequências, um par que não seja de dragão nem de vento de valor (o seu ou o da rodada), e espera de dois lados (ryanmen).',
                   },
                   {
                     type: 'hand',
@@ -724,6 +732,92 @@ const modulos: TutorialModule[] = [
                     caption: 'Mão em tenpai',
                     after: '1s4s',
                     afterLabel: 'espera',
+                  },
+                ],
+              },
+            ],
+          },
+          { type: 'heading', text: 'Para o próximo passo' },
+          {
+            type: 'text',
+            md: 'Quando esses cinco já saírem naturais, estes aparecem bastante na mesa:',
+          },
+          {
+            type: 'cards',
+            items: [
+              {
+                id: 'iipeikou',
+                title: 'Iipeikou',
+                badge: 'só fechada',
+                blocks: [
+                  {
+                    type: 'text',
+                    md: 'Duas sequências ==iguais==, do mesmo naipe.',
+                  },
+                  { type: 'hand', mpsz: '234m 234m 567p 789s 55p' },
+                ],
+              },
+              {
+                id: 'chanta',
+                title: 'Chanta',
+                badge: 'aberta ou fechada',
+                blocks: [
+                  {
+                    type: 'text',
+                    md: 'Todos os grupos **e o par** têm um terminal (1 ou 9) ou uma honra. Precisa ter pelo menos uma sequência.',
+                  },
+                  { type: 'hand', mpsz: '123m 789p 999s 111z 77z' },
+                ],
+              },
+              {
+                id: 'toitoi',
+                title: 'Toitoi',
+                badge: 'aberta ou fechada',
+                blocks: [
+                  {
+                    type: 'text',
+                    md: 'Só trincas (ou kans) e um par. ==Nenhuma sequência==.',
+                  },
+                  { type: 'hand', mpsz: '222m 555p 888s 666z 99m' },
+                ],
+              },
+              {
+                id: 'honitsu',
+                title: "Hon'itsu",
+                badge: 'aberta ou fechada',
+                blocks: [
+                  {
+                    type: 'text',
+                    md: 'A mão inteira de **um naipe só**, mais honras.',
+                  },
+                  { type: 'hand', mpsz: '123s 456s 789s 555z 11z' },
+                ],
+              },
+              {
+                id: 'chinitsu',
+                title: "Chin'itsu",
+                badge: 'aberta ou fechada',
+                blocks: [
+                  {
+                    type: 'text',
+                    md: 'A mão inteira de **um naipe só**, ==sem honras==.',
+                  },
+                  { type: 'hand', mpsz: '123p 456p 345p 789p 99p' },
+                ],
+              },
+              {
+                id: 'chiitoitsu',
+                title: 'Chiitoitsu',
+                badge: 'só fechada',
+                blocks: [
+                  {
+                    type: 'text',
+                    md: '**Sete pares** diferentes. É a única mão que não segue a fórmula de 4 grupos + 1 par.',
+                  },
+                  { type: 'hand', mpsz: '22m 55m 88p 33s 66s 11z 77z' },
+                  {
+                    type: 'tip',
+                    md: 'Os pares precisam ser diferentes: quatro pedras iguais não contam como dois pares.',
                   },
                 ],
               },
@@ -1138,30 +1232,6 @@ interface TopicoRegras {
 
 const topicosRegras: TopicoRegras[] = [
   {
-    id: 'ventos-de-valor',
-    section: 'regras',
-    title: 'Ventos de valor',
-    termos: ['ventos', 'yaku:yakuhai'],
-    blocks: [
-      {
-        type: 'text',
-        md: 'Cada jogador tem o **vento do seu assento** (Leste, Sul, Oeste ou Norte). A mesa toda tem o **vento da rodada**: Leste no tonpuusen e na primeira metade do hanchan, Sul na segunda.',
-      },
-      {
-        type: 'text',
-        md: '- Trinca do vento da rodada vale 1 han para todos.\n- Trinca do vento do seu assento vale 1 han só para você.\n- Se o vento da rodada for também o seu vento, a trinca vale 2 han.\n- Trinca de um vento que não é de ninguém não vale yaku.',
-      },
-      {
-        type: 'tip',
-        md: 'Vale também com a mão **aberta**: um pon de vento de valor ou de dragão já dá yaku à mão.',
-      },
-      {
-        type: 'tip',
-        md: 'No Pinfu, o par não pode ser de dragão, do vento da rodada nem do vento do seu assento.',
-      },
-    ],
-  },
-  {
     id: 'furiten',
     section: 'regras',
     title: 'Furiten',
@@ -1289,10 +1359,54 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
+    id: 'cinco-blocos',
+    section: 'estrategia',
+    title: 'Os 5 blocos',
+    termos: ['par', 'trinca', 'sequencia'],
+    blocks: [
+      {
+        type: 'text',
+        md: 'Uma mão completa tem **5 blocos**: 4 grupos e 1 par. Então a mão anda mais rápido quando você a mantém em ==5 blocos==, cada um pronto ou a caminho.',
+      },
+      {
+        type: 'text',
+        md: 'Bloco é um par, uma trinca, uma sequência ou um grupo quase pronto (duas pedras esperando a terceira).',
+      },
+      {
+        type: 'hand',
+        mpsz: '55p 777s 345m 68p',
+        labels: ['Par', 'Trinca', 'Sequência', 'Quase pronto'],
+        caption: 'Os quatro tipos de bloco',
+      },
+      { type: 'tip', md: 'Não vale para Chiitoitsu (sete pares) nem para Kokushi musou.' },
+      { type: 'heading', text: 'Exemplo' },
+      {
+        type: 'hand',
+        mpsz: '345m 24m 55p 46p 778s 12s',
+        labels: ['Sequência', 'No meio', 'Par', 'No meio', 'Quase pronto', 'Na ponta'],
+      },
+      {
+        type: 'text',
+        md: 'São **6 blocos** para 5 lugares: um precisa sair. Qual?',
+      },
+      {
+        type: 'text',
+        md: '- **345m e 55p** já estão prontos: ficam.\n- **778s** aceita o 6, o 7 e o 9 de Sou: ótimo, fica.\n- **24m e 46p** esperam no meio (3m e 5p), mas viram dois lados se chegar um 5m, ou um 3p ou 7p.\n- **12s** espera na ponta e só o 3s completa: é o ==pior bloco==.',
+      },
+      {
+        type: 'hand',
+        mpsz: '12s',
+        caption: 'Desmanche o pior bloco, começando pelo 1 de Sou',
+        after: '3s',
+        afterLabel: 'só espera',
+      },
+    ],
+  },
+  {
     id: 'eficiencia',
     section: 'estrategia',
-    title: 'Eficiência da mão',
-    termos: ['tenpai', 'ryanmen'],
+    title: 'Os primeiros descartes',
+    termos: ['tenpai'],
     blocks: [
       {
         type: 'text',
@@ -1300,25 +1414,99 @@ const topicosRegras: TopicoRegras[] = [
       },
       {
         type: 'text',
-        md: '**Descarte primeiro o que não conversa com nada**\n- Honras soltas que não valem yaku para você (um vento que não é o seu nem o da rodada).\n- Depois, terminais soltos (1 e 9): só formam grupo de um lado.\n- Depois, honras de valor soltas (dragões, o vento da rodada e o seu).\n- Depois, as outras pedras soltas.',
+        md: 'Com pedras ==soltas== (sem par e sem vizinha do mesmo naipe), descarte nesta ordem, da primeira à última:',
       },
-      { type: 'heading', text: 'Leste sozinho ou terminal sozinho?' },
-      {
-        type: 'hand',
-        mpsz: '1z 9m',
-        caption: 'Os dois estão soltos na mão: qual sai primeiro?',
-      },
+      { type: 'hand', mpsz: '234z', caption: '1. Ventos que não são o seu nem o da rodada' },
+      { type: 'hand', mpsz: '19m 19p 19s', caption: '2. Terminais (1 e 9)' },
+      { type: 'hand', mpsz: '567z', caption: '3. Dragões' },
+      { type: 'hand', mpsz: '1z', caption: '4. Por último, o seu vento e o da rodada' },
       {
         type: 'text',
-        md: 'Descarte o ==9 de Man== e guarde o Leste por mais algumas voltas. O Leste é vento da rodada no tonpuusen e vale yaku para todos: se ele virar par, um pon já dá yaku, mesmo com a mão aberta. O 9 só forma sequência de um lado (7-8-9) e não traz yaku nenhum.',
+        md: 'Quais ventos valem yaku para você está no Yakuhai, na {{onde:yakus}}. Na rodada do Leste, o **oya** guarda o Leste até o fim: para ele, vale em dobro. Para os outros, o Leste vale como um dragão.',
       },
       {
         type: 'tip',
-        md: 'Não segure o Leste para sempre: se ele não formou par em poucas voltas, descarte cedo. Mais tarde, uma honra de valor pode ser justo a pedra que outro jogador espera.',
+        md: 'Não segure uma honra de valor para sempre: se ela não formou par em poucas voltas, descarte cedo. Mais tarde, ela pode ser justo a pedra que outro jogador espera.',
+      },
+    ],
+  },
+  {
+    id: 'ordem-muda',
+    section: 'estrategia',
+    title: 'Quando a ordem muda',
+    termos: ['par'],
+    blocks: [
+      { type: 'heading', text: 'Par não é pedra solta' },
+      {
+        type: 'hand',
+        mpsz: '33z 99m',
+        caption: 'Um par de vento sem valor e um par de terminais: ficam',
       },
       {
         type: 'text',
-        md: '**Prefira esperas de dois lados.** Conte quantas pedras servem: cada tipo tem 4 cópias.',
+        md: 'Um par de vento sem valor pode ser o par da mão (até no Pinfu), e um par de terminais também fica.',
+      },
+      { type: 'heading', text: 'Terminal com vizinha não é solto' },
+      {
+        type: 'hand',
+        mpsz: '12p 13s',
+        caption: '1 com 2, ou 1 com 3: já é meio grupo',
+      },
+      { type: 'heading', text: '1 junto do 4' },
+      { type: 'hand', mpsz: '14p', caption: '1 junto do 4 (ou 9 junto do 6): o 1 sai' },
+      {
+        type: 'text',
+        md: 'O 1 quase não ajuda quando tem um 4 do mesmo naipe: o 2 e o 3 que serviriam para ele encaixam ==melhor no 4==.',
+      },
+      { type: 'heading', text: 'Outros casos' },
+      {
+        type: 'text',
+        md: "- **Honra que já saiu** nos descartes vale menos: sobram menos cópias para virar par.\n- **Yakus como Hon'itsu e Chanta** mudam tudo: aí honras e terminais podem valer mais.",
+      },
+    ],
+  },
+  {
+    id: 'contagem-pedras',
+    section: 'estrategia',
+    title: 'Quantas pedras ajudam',
+    termos: ['ryanmen'],
+    blocks: [
+      {
+        type: 'text',
+        md: 'Por que essa ordem? Conte quantas pedras transformam uma pedra solta em par ou em meio grupo. Quanto mais pedras ajudam, mais vale guardar.',
+      },
+      {
+        type: 'table',
+        headers: ['Pedra solta', 'Pedras que ajudam'],
+        rows: [
+          ['Honra', '3 (só vira par)'],
+          ['1 e 9', '11'],
+          ['2 e 8', '15'],
+          ['3 a 7', '19'],
+        ],
+      },
+      {
+        type: 'hand',
+        mpsz: '1p',
+        caption: '1 de Pin solto: o par, o 2 e o 3 ajudam',
+        after: '1p2p3p',
+        afterLabel: 'ajudam',
+      },
+      {
+        type: 'hand',
+        mpsz: '5p',
+        caption: '5 de Pin solto: o par e do 3 ao 7 ajudam',
+        after: '3p4p5p6p7p',
+        afterLabel: 'ajudam',
+      },
+      {
+        type: 'tip',
+        md: 'Só pela conta: 3 a 7 > 2 e 8 > 1 e 9 > honras. O que tira uma honra do fim da fila é o yaku que ela pode dar.',
+      },
+      { type: 'heading', text: 'Prefira esperas de dois lados' },
+      {
+        type: 'text',
+        md: 'Conte quantas pedras servem: cada tipo tem 4 cópias.',
       },
       {
         type: 'hand',
@@ -1341,56 +1529,439 @@ const topicosRegras: TopicoRegras[] = [
         after: '3m',
         afterLabel: 'espera',
       },
+    ],
+  },
+  {
+    id: 'quando-defender',
+    section: 'estrategia',
+    title: 'Atacar ou defender?',
+    termos: ['tenpai', 'riichi'],
+    blocks: [
       {
-        type: 'quiz',
-        question: 'Você comprou e precisa descartar. Qual pedra sai primeiro?',
-        hand: '234m 9m 55p 678p 45s 79s 4z',
-        options: [
-          { label: 'Norte', mpsz: '4z', correct: true },
-          { label: '9 de Man', mpsz: '9m' },
-          { label: '7 de Sou', mpsz: '7s' },
-        ],
-        answer:
-          'O Norte (se ele não for o seu vento nem o da rodada). Sozinho ele só vira par ou trinca e não vale yaku. O 9 de Man ainda pode virar 7-8-9 e o 7-9 de Sou espera o 8.',
+        type: 'text',
+        md: 'Quando alguém declara Riichi, olhe para a sua mão. **Shanten** é quanto falta para o tenpai: em 1-shanten falta uma pedra, em 2-shanten faltam duas.',
+      },
+      {
+        type: 'hand',
+        mpsz: '234m 567p 11s 345s 78p',
+        caption: 'Tenpai: espera o 6 ou o 9 de Pin',
+      },
+      {
+        type: 'hand',
+        mpsz: '234m 567p 11s 34s 78p 9m',
+        caption: '1-shanten: falta uma pedra para o tenpai',
+      },
+      {
+        type: 'text',
+        md: '- **Em tenpai**: atacar costuma valer a pena, ainda mais se você é o oya. Depende de quanto a sua mão vale.\n- **1-shanten**: pense se muitas pedras ainda ajudam e se a mão vale o risco.\n- **2-shanten ou mais**: ==defenda==.',
+      },
+      { type: 'heading', text: 'O que pesar' },
+      {
+        type: 'text',
+        md: '- Quantas doras estão à vista?\n- Quem está em tenpai é o oya? Ele ganha 1,5×.\n- Quanto vale a sua mão?\n- Como está o placar?\n- Quantas mãos faltam para a partida acabar?',
       },
     ],
   },
   {
     id: 'defesa',
     section: 'estrategia',
-    title: 'Defesa básica: genbutsu e suji',
+    title: 'Defesa: genbutsu',
     termos: ['riichi', 'furiten'],
     blocks: [
       {
         type: 'text',
-        md: 'Quando alguém declara Riichi, a mão dele está pronta. Se a sua mão está longe, descartar com segurança vale mais do que insistir.',
+        md: 'Defender é descartar a pedra com ==menos chance== de ser a espera de quem declarou Riichi.',
       },
       {
         type: 'text',
-        md: '**Genbutsu: as pedras dele.** Tudo o que o jogador em Riichi já descartou é 100% seguro contra ele: se essa pedra fosse uma espera dele, ele estaria em furiten e não poderia fazer ron.',
-      },
-      {
-        type: 'text',
-        md: '**Suji: os números de 3 em 3.** No mesmo naipe, 1-4-7, 2-5-8 e 3-6-9 são suji. Se ele descartou o 4, uma espera de dois lados 2-3 (que espera 1 ou 4) ou 5-6 (que espera 4 ou 7) o deixaria em furiten. Então o 1 e o 7 daquele naipe ficam mais seguros.',
+        md: 'A base de tudo é o **furiten**: se ==qualquer== pedra da espera dele está nos descartes dele, ele não pode fazer ron com nenhuma das esperas, nem com as outras.',
       },
       {
         type: 'hand',
-        mpsz: '4p',
-        caption: 'Ele descartou o 4 de Pin',
-        after: '1p7p',
-        afterLabel: 'suji',
+        mpsz: '45s',
+        caption: 'Se ele espera com 4-5 de Sou e já descartou o 3…',
+        after: '3s6s',
+        afterLabel: 'furiten nas duas',
       },
+      { type: 'heading', text: 'Genbutsu: as pedras dele' },
       {
         type: 'text',
-        md: '- Para o 4, o 5 e o 6, precisa dos dois lados: o 5 fica mais seguro se o 2 **e** o 8 já saíram (nakasuji).\n- Suji só protege contra espera de dois lados. Não protege contra espera no meio (4-6 esperando 5), na ponta (1-2 esperando 3), no par ou em trinca.',
+        md: 'Tudo o que o jogador em Riichi ==já descartou== é 100% seguro contra ele: se essa pedra fosse uma espera dele, ele estaria em furiten e não poderia fazer ron.',
+      },
+      {
+        type: 'hand',
+        mpsz: '9m 2z 7p 3s',
+        caption: 'Descartes dele: todas são seguras contra ele',
+      },
+      {
+        type: 'tip',
+        md: 'Só genbutsu é 100%. Suji, kabe e o resto não garantem nada, mas são muito mais seguros que uma pedra qualquer.',
       },
       {
         type: 'text',
         md: '**Na dúvida**: genbutsu primeiro, depois honras que já saíram duas ou três vezes, depois suji. Desistir de uma mão fraca é jogar bem.',
       },
+    ],
+  },
+  {
+    id: 'suji',
+    section: 'estrategia',
+    title: 'Defesa: suji',
+    termos: ['furiten', 'ryanmen'],
+    blocks: [
       {
         type: 'text',
-        md: `Para ir mais fundo (kabe, meio suji e as armadilhas do suji): [Suji in mahjong, do NPMahjong](${ARTIGO_SUJI}), em inglês.`,
+        md: 'Os descartes de quem declarou Riichi mostram pedras mais seguras para você. Se ele descartou um 4, o ==1 e o 7== do mesmo naipe ficam mais seguros.',
+      },
+      {
+        type: 'text',
+        md: 'Esses números de 3 em 3 (1-4-7, 2-5-8 e 3-6-9) se chamam **suji**. Eles protegem contra a espera de dois lados, a mais comum.',
+      },
+      { type: 'heading', text: 'Por que funciona' },
+      {
+        type: 'text',
+        md: 'Ele descartou o **5 de Pin**. Se esperasse com 3-4 ou com 6-7 de Pin, o 5 seria uma das esperas e ele estaria em furiten. Então ele ==não espera== por essas duas formas:',
+      },
+      {
+        type: 'hand',
+        mpsz: '34p',
+        caption: '3-4 esperaria o 2 ou o 5: impossível',
+        after: '2p5p',
+        afterLabel: 'espera',
+      },
+      {
+        type: 'hand',
+        mpsz: '67p',
+        caption: '6-7 esperaria o 5 ou o 8: impossível',
+        after: '5p8p',
+        afterLabel: 'espera',
+      },
+      {
+        type: 'text',
+        md: 'Por isso o **2 e o 8 de Pin** ficam mais seguros: são os suji do 5.',
+      },
+      { type: 'heading', text: 'As três referências' },
+      {
+        type: 'text',
+        md: 'O 4, o 5 e o 6 são as referências porque cada um corta ==duas== esperas de dois lados. Se ele descartou um deles, ==descartar os suji== dele é mais seguro para você:',
+      },
+      {
+        type: 'hand',
+        mpsz: '4p',
+        caption: 'Ele descartou o 4: você pode soltar o 1 e o 7 com menos risco',
+        after: '1p7p',
+        afterLabel: 'mais seguras',
+      },
+      {
+        type: 'hand',
+        mpsz: '5p',
+        caption: 'Ele descartou o 5: o 2 e o 8 ficam mais seguros',
+        after: '2p8p',
+        afterLabel: 'mais seguras',
+      },
+      {
+        type: 'hand',
+        mpsz: '6p',
+        caption: 'Ele descartou o 6: o 3 e o 9 ficam mais seguros',
+        after: '3p9p',
+        afterLabel: 'mais seguras',
+      },
+      { type: 'heading', text: 'O que o suji não cobre' },
+      {
+        type: 'hand',
+        mpsz: '46p',
+        caption: 'No meio: 4-6 espera o 5 mesmo com o 2 e o 8 descartados',
+        after: '5p',
+        afterLabel: 'espera',
+      },
+      {
+        type: 'text',
+        md: 'Suji não protege contra espera no meio, na ponta (1-2 esperando 3), no par ou em trinca.',
+      },
+      {
+        type: 'tip',
+        md: 'É justamente aí que mora a **armadilha de suji**: quem conhece a regra pode esperar num suji de propósito. Você vai ver como, logo depois do meio suji.',
+      },
+    ],
+  },
+  {
+    id: 'meio-suji',
+    section: 'estrategia',
+    title: 'Defesa: meio suji e nakasuji',
+    termos: ['ryanmen'],
+    blocks: [
+      { type: 'heading', text: 'Meio suji' },
+      {
+        type: 'hand',
+        mpsz: '8m',
+        caption: 'Ele descartou só o 8: o 5 fica só um pouco mais seguro',
+        after: '5m',
+        afterLabel: 'meio seguro',
+      },
+      {
+        type: 'text',
+        md: 'O 8 corta o 6-7 (que esperaria 5 ou 8), mas não o 3-4. Ele ainda pode esperar o 5 com 3-4:',
+      },
+      {
+        type: 'hand',
+        mpsz: '34m',
+        caption: 'Ainda possível: espera o 2 ou o 5',
+        after: '2m5m',
+        afterLabel: 'espera',
+      },
+      {
+        type: 'text',
+        md: 'Por isso o 5 é só **meio suji**: mais seguro que nada, menos que um suji de verdade.',
+      },
+      { type: 'heading', text: 'Nakasuji' },
+      {
+        type: 'hand',
+        mpsz: '2s8s',
+        caption: 'Ele descartou o 2 e o 8: o 5 fica tão seguro quanto um suji',
+        after: '5s',
+        afterLabel: 'mais segura',
+      },
+      {
+        type: 'text',
+        md: 'Com o 2 **e** o 8 descartados, o 3-4 e o 6-7 ficam impossíveis. O 5 fica protegido dos dois lados e vale como ==um suji de verdade==. O mesmo vale para o 4 (1 e 7) e o 6 (3 e 9).',
+      },
+    ],
+  },
+  {
+    id: 'armadilha-suji',
+    section: 'estrategia',
+    title: 'Ataque: armadilha de suji',
+    termos: ['riichi', 'furiten'],
+    blocks: [
+      {
+        type: 'text',
+        md: 'Agora do outro lado da mesa: quem defende com suji acha que, se você descartou um 4, o 1 e o 7 são seguros. A **armadilha de suji** é ==esperar justamente nesse suji==, com uma forma que o suji não cobre.',
+      },
+      { type: 'heading', text: 'Como montar' },
+      {
+        type: 'hand',
+        mpsz: '4m 68m',
+        caption: 'Você tem o 4 e o 6-8 de Man',
+      },
+      {
+        type: 'steps',
+        items: [
+          '**Descarte a isca**: o 4 de Man. Para os outros, o 1 e o 7 de Man passam a parecer seguros.',
+          'Fique com a espera **no meio**: o 6-8 espera o 7, o suji do 4 que você soltou.',
+          'Quem defende com suji descarta o 7 achando que está seguro, e você faz ron.',
+        ],
+      },
+      {
+        type: 'hand',
+        mpsz: '68m',
+        caption: 'Espera o 7, que parece seguro por causa do 4 descartado',
+        after: '7m',
+        afterLabel: 'espera',
+      },
+      { type: 'heading', text: 'Outras formas que funcionam' },
+      {
+        type: 'hand',
+        mpsz: '89m',
+        caption: 'Na ponta: 8-9 espera o 7',
+        after: '7m',
+        afterLabel: 'espera',
+      },
+      {
+        type: 'hand',
+        mpsz: '11m 55p',
+        caption: 'Dois pares: espera o 1 (suji do 4) ou o 5 de Pin',
+        after: '1m5p',
+        afterLabel: 'espera',
+      },
+      {
+        type: 'text',
+        md: 'O que ==não funciona== é a espera de dois lados: com o 4 descartado, um 5-6 esperando 4 ou 7 deixa você em **furiten**, porque o 4 está nos seus descartes.',
+      },
+      {
+        type: 'hand',
+        mpsz: '56m',
+        caption: 'Furiten: o 4 é uma das esperas e já está nos seus descartes',
+        after: '4m7m',
+        afterLabel: 'não serve',
+      },
+      { type: 'heading', text: 'A isca mais forte' },
+      {
+        type: 'text',
+        md: 'Declarar Riichi ==com a própria isca==. Todo mundo olha a pedra do Riichi e confia nos suji dela. Uma isca descartada cedo também ajuda, porque soma o sotogawa: o lado de fora parece ainda mais seguro.',
+      },
+      { type: 'heading', text: 'Cuidados' },
+      {
+        type: 'text',
+        md: '- Espera no meio ou na ponta aceita **menos pedras** (até 4) que a de dois lados (até 8). Só vale trocar quando a armadilha compensa.\n- Funciona contra quem **defende com suji**. Iniciantes descartam sem ler os seus descartes, e jogadores experientes desconfiam de suji perto do Riichi.\n- Não exagere: se você sempre faz armadilha, os outros param de confiar nos seus suji.',
+      },
+    ],
+  },
+  {
+    id: 'kabe',
+    section: 'estrategia',
+    title: 'Defesa: kabe',
+    termos: ['ryanmen'],
+    blocks: [
+      {
+        type: 'text',
+        md: '**Kabe** quer dizer parede. É olhar onde estão as 4 cópias de uma pedra: nos descartes, nas chamadas, no indicador de dora e na sua mão. Quando ==as 4 estão à vista==, ninguém mais pode ter um grupo que precise dela.',
+      },
+      {
+        type: 'hand',
+        mpsz: '3333p',
+        caption: 'As 4 cópias do 3 de Pin estão à vista',
+      },
+      {
+        type: 'hand',
+        mpsz: '23p 34p 13p',
+        caption: 'Nenhum destes é possível: todos precisam de um 3',
+      },
+      {
+        type: 'hand',
+        mpsz: '3p',
+        caption: 'Atrás da parede',
+        after: '1p2p',
+        afterLabel: 'mais seguras',
+      },
+      {
+        type: 'tip',
+        md: 'Kabe não deixa a pedra 100% segura: ela ainda pode ser esperada no par ou numa trinca. Mas ela fica bem mais segura que uma pedra qualquer.',
+      },
+      { type: 'heading', text: 'Quais pedras ficam mais seguras' },
+      {
+        type: 'table',
+        headers: ['As 4 à vista', 'Ficam mais seguras'],
+        rows: [
+          ['2', '1'],
+          ['3', '1 e 2'],
+          ['4', '2 e 3'],
+          ['5', '3 e 7'],
+          ['6', '7 e 8'],
+          ['7', '8 e 9'],
+          ['8', '9'],
+        ],
+      },
+      {
+        type: 'text',
+        md: 'Com 2, 3 ou 4, as duas pedras de ==antes== ficam mais seguras. Com 6, 7 ou 8, as duas de ==depois==. Com o 5, o 3 e o 7.',
+      },
+      {
+        type: 'hand',
+        mpsz: '1111s',
+        caption: 'Terminal: as 4 cópias à vista não protegem nada',
+      },
+      { type: 'heading', text: 'No chance e one chance' },
+      {
+        type: 'hand',
+        mpsz: '6666m',
+        caption: 'No chance: as 4 à vista',
+      },
+      {
+        type: 'hand',
+        mpsz: '666m',
+        caption: 'One chance: 3 das 4 à vista',
+      },
+      {
+        type: 'text',
+        md: '- **No chance**: não há chance de espera de dois lados com ela, e vale também contra espera no meio. É tão seguro quanto suji, ou mais.\n- **One chance**: é menos provável que alguém tenha a última, mas pode ter. Vale mais no começo e no meio da mão; perto do fim, a última cópia já pode estar na mão de alguém.',
+      },
+    ],
+  },
+  {
+    id: 'sotogawa',
+    section: 'estrategia',
+    title: 'Defesa: sotogawa',
+    termos: ['riichi'],
+    blocks: [
+      {
+        type: 'text',
+        md: '**Sotogawa** é o lado de fora. Quem descarta uma pedra do meio ==logo no começo== (na primeira fileira) provavelmente não guardava as pedras entre ela e a ponta do naipe: se guardasse, ela seria útil.',
+      },
+      {
+        type: 'hand',
+        mpsz: '233m 334m',
+        caption: 'Com um destes, ele não soltaria o 3 de Man cedo',
+      },
+      {
+        type: 'text',
+        md: 'Se soltou, provavelmente já completou o grupo. As pedras até 2 números de distância, ==indo para a ponta==, ficam um pouco mais seguras:',
+      },
+      {
+        type: 'hand',
+        mpsz: '3m',
+        caption: 'Ele descartou o 3 cedo: o 1 e o 2 (lado de fora) ficam um pouco mais seguros',
+        after: '1m2m',
+        afterLabel: 'mais seguras',
+      },
+      {
+        type: 'table',
+        headers: ['Descartou cedo', 'Lado de fora'],
+        rows: [
+          ['2', '1'],
+          ['3', '1 e 2'],
+          ['4', '2 e 3'],
+          ['5', '3 e 7'],
+          ['6', '7 e 8'],
+          ['7', '8 e 9'],
+          ['8', '9'],
+        ],
+      },
+      {
+        type: 'text',
+        md: '- Funciona melhor contra quem joga bem: a ideia supõe que o jogador descarta com eficiência.\n- Uma pedra que é sotogawa **e** suji ao mesmo tempo é mais segura.\n- Não vale para a pedra com que ele declarou Riichi, mesmo que cedo.',
+      },
+      {
+        type: 'hand',
+        mpsz: '3p5p',
+        caption: 'Ele descartou o 3 e o 5: o 2 é sotogawa do 3 e suji do 5',
+        after: '2p',
+        afterLabel: 'bem mais segura',
+      },
+    ],
+  },
+  {
+    id: 'matagi-suji',
+    section: 'estrategia',
+    title: 'Defesa: matagi suji',
+    termos: ['riichi'],
+    blocks: [
+      {
+        type: 'text',
+        md: '**Matagi suji** é o contrário do sotogawa: mostra as pedras ==mais perigosas==. Olha para os descartes do fim, em especial a pedra com que ele declarou Riichi.',
+      },
+      {
+        type: 'hand',
+        mpsz: '3m',
+        caption: 'Declarou Riichi soltando o 3 de Man',
+      },
+      {
+        type: 'hand',
+        mpsz: '233m 334m',
+        caption: 'Pode ter saído de um destes',
+      },
+      {
+        type: 'hand',
+        mpsz: '23m 34m',
+        caption: 'Sobrou na mão um 2-3 ou um 3-4',
+      },
+      {
+        type: 'hand',
+        mpsz: '3m',
+        caption: 'Então as esperas mais prováveis são 1-4 e 2-5',
+        after: '1m4m2m5m',
+        afterLabel: 'mais perigosas',
+      },
+      {
+        type: 'text',
+        md: 'Vale para qualquer pedra: as perigosas são as esperas de dois lados que ==passam por cima== dela.',
+      },
+      {
+        type: 'tip',
+        md: 'Não precisa decorar o matagi suji. Na defesa a ordem é genbutsu, depois suji e kabe, depois sotogawa. O matagi suji ajuda a decidir entre atacar ou recuar.',
+      },
+      {
+        type: 'text',
+        md: `Para ir mais fundo: [Suji in mahjong, do NPMahjong](${ARTIGO_SUJI}), em inglês.`,
       },
     ],
   },
@@ -1402,11 +1973,13 @@ const moduloRegras = (
   number: number,
   title: string,
   cover: string,
+  quiz?: TutorialModule['quiz'],
 ): TutorialModule => ({
   id,
   number,
   title,
   cover,
+  quiz,
   pages: topicosRegras
     .filter((topico) => topico.section === id)
     .map(({ id: idTopico, title: titulo, termos, blocks }, indice) => ({
@@ -1456,6 +2029,97 @@ export const tutorialParts: TutorialPart[] = [
         11,
         'Estratégia',
         'Para jogar melhor depois das primeiras partidas.',
+        [
+          {
+            type: 'quiz',
+            question: 'Sua mão tem 6 blocos. Qual deles você desmancha primeiro?',
+            hand: '345m 24m 55p 46p 778s 12s',
+            options: [
+              { label: '1-2 de Sou', mpsz: '12s', correct: true },
+              { label: '2-4 de Man', mpsz: '24m' },
+              { label: '7-7-8 de Sou', mpsz: '778s' },
+            ],
+            answer:
+              'O 1-2 de Sou. Ele espera na ponta e só o 3 de Sou completa. O 2-4 de Man ainda pode virar dois lados, e o 7-7-8 aceita três pedras diferentes.',
+          },
+          {
+            type: 'quiz',
+            question: 'Você comprou e precisa descartar. Qual pedra sai primeiro?',
+            hand: '234m 9m 55p 678p 45s 79s 4z',
+            options: [
+              { label: 'Norte', mpsz: '4z', correct: true },
+              { label: '9 de Man', mpsz: '9m' },
+              { label: '7 de Sou', mpsz: '7s' },
+            ],
+            answer:
+              'O Norte (se ele não for o seu vento nem o da rodada). Sozinho ele só vira par e não vale yaku. O 9 de Man ainda pode virar 7-8-9 e o 7-9 de Sou espera o 8.',
+          },
+          {
+            type: 'quiz',
+            question: 'O 1 e o 4 de Pin estão sozinhos no naipe. Qual sai?',
+            hand: '14p',
+            options: [
+              { label: '1 de Pin', mpsz: '1p', correct: true },
+              { label: '4 de Pin', mpsz: '4p' },
+            ],
+            answer:
+              'O 1 de Pin. O 2 e o 3 que ajudariam o 1 encaixam melhor no 4, que ainda aceita o 5 e o 6.',
+          },
+          {
+            type: 'quiz',
+            question:
+              'Alguém declarou Riichi. Sua mão está em 2-shanten e não vale muito. O que fazer?',
+            options: [{ label: 'Defender', correct: true }, { label: 'Atacar' }],
+            answer:
+              'Defender. Faltam duas pedras para o tenpai: a chance de chegar lá antes de pagar a mão dele é pequena.',
+          },
+          {
+            type: 'quiz',
+            question: 'Ele descartou só o 8 de Man. O 5 de Man é suji?',
+            hand: '8m',
+            options: [{ label: 'Sim, é suji' }, { label: 'Não, é só meio suji', correct: true }],
+            answer:
+              'Só meio suji. Ele ainda pode ter 3-4 de Man esperando o 2 ou o 5. Para o 5 valer como suji de verdade, o 2 também precisa ter saído.',
+          },
+          {
+            type: 'quiz',
+            question:
+              'Você quer montar uma armadilha esperando o 7 de Man com 6-8. Qual pedra é a melhor isca para descartar?',
+            hand: '68m',
+            options: [
+              { label: '4 de Man', mpsz: '4m', correct: true },
+              { label: '5 de Man', mpsz: '5m' },
+              { label: '9 de Man', mpsz: '9m' },
+            ],
+            answer:
+              'O 4 de Man. O 7 é suji do 4: quem defende com suji acha o 7 seguro e descarta ele para você.',
+          },
+          {
+            type: 'quiz',
+            question:
+              'Alguém declarou Riichi e as 4 cópias do 3 de Pin estão à vista. Qual destas é a mais segura?',
+            hand: '3333p',
+            options: [
+              { label: '1 de Pin', mpsz: '1p', correct: true },
+              { label: '4 de Pin', mpsz: '4p' },
+              { label: '6 de Pin', mpsz: '6p' },
+            ],
+            answer:
+              'O 1 de Pin. Ele só seria esperado por um 2-3, e com os quatro 3 à vista ninguém tem 2-3. O 4 e o 6 ainda podem ser esperados de vários jeitos.',
+          },
+          {
+            type: 'quiz',
+            question:
+              'Você é o oya, na rodada do Leste. Tem um Leste e um Dragão verde soltos. Qual guarda por mais tempo?',
+            hand: '1z 6z',
+            options: [
+              { label: 'Leste', mpsz: '1z', correct: true },
+              { label: 'Verde', mpsz: '6z' },
+            ],
+            answer:
+              'O Leste. Para o oya na rodada do Leste, ele é o vento do assento e o da rodada: uma trinca dele vale 2 han.',
+          },
+        ],
       ),
     ],
   },
@@ -1519,37 +2183,7 @@ export const glossary: TermoGlossarioGuia[] = [
   { term: 'Yaku', definition: doGlossario('yaku') },
 ]
 
-const INSTAGRAM_CMC = 'https://www.instagram.com/cerradomahjongclub'
-const INSTAGRAM_SAMBA = 'https://www.instagram.com/sambaestudios'
-
-export const credits: TutorialBlock[] = [
-  {
-    type: 'text',
-    md: '**Tutorial Mojoca em colaboração com o Cerrado Mahjong Club (CMC)**',
-  },
-  {
-    type: 'text',
-    md: 'Este tutorial foi inspirado no **Mahjong Guia de Bolso**, de Isabella Oliveira, que usamos para ensinar novos jogadores no Cerrado Mahjong Club. A ideia não é substituir o guia, é só ter uma versão que cabe no celular e economiza papel.',
-  },
-  { type: 'text', md: 'As árvores do Cerrado agradecem. 🌳' },
-  { type: 'text', md: 'Se você tiver a chance, pegue o guia impresso. Ele é lindo.' },
-  {
-    type: 'tip',
-    md: 'Mahjong Guia de Bolso © Isabella Oliveira / Cerrado Mahjong Club, licenciado em Creative Commons CC BY-NC-ND 4.0.',
-  },
-  { type: 'text', md: `Instagram: [@cerradomahjongclub](${INSTAGRAM_CMC})` },
-]
-
-export const furtherReading: TutorialBlock[] = [
-  {
-    type: 'text',
-    md: `- **Cerrado Mahjong Club**: [@cerradomahjongclub](${INSTAGRAM_CMC})\n- **ABM**: Associação Brasileira de Mahjong.\n- **Feljong**, de Fel Barros (Samba Estudios): jogo de cartas inspirado no Riichi Mahjong, ótimo para quem está começando. Ensina as regras aos poucos, cabe na mochila e tem variantes para 2 e 3 jogadores. Boa porta de entrada antes de investir em um jogo de pedras. [@sambaestudios](${INSTAGRAM_SAMBA})\n- Canal **Jogos de Cartas & Afins**.\n- **NPMahjong**, de Nicolas Pro: artigos de estratégia, como [Suji in mahjong](${ARTIGO_SUJI}) (em inglês).`,
-  },
-]
-
 export const conteudoPtBR: ConteudoTutorial = {
   tutorialParts,
   glossary,
-  credits,
-  furtherReading,
 }

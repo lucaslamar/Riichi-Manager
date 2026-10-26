@@ -521,6 +521,15 @@ export const SECOES_GLOSSARIO: SecaoGlossario[] = [
         // Aqui Riichi é o nome do jogo, não a declaração.
         semLink: ['riichi'],
       },
+      {
+        id: 'm-league',
+        nome: 'M.League',
+        texto:
+          'Liga profissional de Riichi do Japão, criada em 2018. Times patrocinados reúnem jogadores profissionais de várias associações, e as partidas são transmitidas ao vivo, com narração e câmeras mostrando a mão de cada um. É a melhor vitrine para ver jogo de alto nível.',
+        aliases: ['m.league', 'm league', 'mleague'],
+        // Aqui Riichi é o nome do jogo, não a declaração.
+        semLink: ['riichi'],
+      },
     ],
   },
 ]
