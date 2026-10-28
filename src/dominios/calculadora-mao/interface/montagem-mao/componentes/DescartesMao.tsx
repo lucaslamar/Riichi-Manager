@@ -32,11 +32,10 @@ export function DescartesMao({
     <div className="descartes-selecionados descartes-furiten-row">
       <div className="descartes-furiten-header">
         <span className="descartes-furiten-label">
-          DESCARTES <span className="descartes-contador">{descartes.length}/18</span>
+          {t('calculator.discards')}{' '}
+          <span className="descartes-contador">{descartes.length}/18</span>
         </span>
-        {temEsperaFuriten && (
-          <span className="chip-furiten-ativo">FURITEN</span>
-        )}
+        {temEsperaFuriten && <span className="chip-furiten-ativo">{t('calculator.furiten')}</span>}
       </div>
       <div className="descartes-furiten-scroll">
         <div className="descartes-furiten-list">
@@ -47,7 +46,10 @@ export function DescartesMao({
               type="button"
               title={t('calculator.removeDiscard', { tile: nomePedraAcessivel(pedra) })}
               aria-label={t('calculator.removeDiscard', {
-                tile: `${nomePedraAcessivel(pedra)}, quantidade ${quantidade}`,
+                tile: t('calculator.tileWithCount', {
+                  tile: nomePedraAcessivel(pedra),
+                  count: quantidade,
+                }),
               })}
               onClick={() => aoRemoverDescarte(primeiroIndice)}
             >

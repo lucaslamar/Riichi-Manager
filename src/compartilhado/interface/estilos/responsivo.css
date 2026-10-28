@@ -20,7 +20,7 @@
 @media (max-width: 768px) {
   body {
     padding: 0 0 24px;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
     line-height: 1.4;
   }
 
@@ -33,7 +33,7 @@
   }
 
   .opcao-configuracao-usuario {
-    border-color: #e2e8f0;
+    border-color: var(--cor-borda, #e2e8f0);
     box-shadow: none;
   }
 }
@@ -56,7 +56,7 @@
   (min-width: 1024px) and (orientation: portrait) {
   body {
     padding: 0 0 24px;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 }
 
@@ -109,7 +109,7 @@
 @media (orientation: landscape) and (max-height: 700px) and (max-width: 1000px) {
   .cabecalho-principal {
     padding: 2px 0;
-    background: rgba(255, 255, 255, 0.98);
+    background: color-mix(in srgb, var(--cor-superficie, #ffffff) 98%, transparent);
   }
 
   .barra-marca-aplicacao {
@@ -410,7 +410,7 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.18) !important;
+    background: color-mix(in srgb, var(--cor-texto, #000000) 18%, transparent) !important;
     border-radius: 3px !important;
   }
 
@@ -743,7 +743,7 @@
  * ficam o shell e as páginas de cartão (Regras e Sobre).
  */
 @media (min-width: 768px) and (min-height: 561px) {
-  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica) {
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica, .pagina-regras) {
     display: flex;
     min-height: 100vh;
     min-height: 100dvh;
@@ -752,13 +752,13 @@
   }
 
   /* #app (raiz do React) segura o cabeçalho e o <main>: a coluna continua nele. */
-  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica) > #app {
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica, .pagina-regras) > #app {
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;
   }
 
-  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica) .conteudo-principal {
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica, .pagina-regras) .conteudo-principal {
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;

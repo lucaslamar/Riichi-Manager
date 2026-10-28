@@ -1,3 +1,4 @@
+import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import type { CodigoPedra, ConfiguracaoCalculo, Mao, Meld, VentoMao } from '../logica/mao'
 
 export const NAIPES = [
@@ -53,29 +54,34 @@ export function urlPedra(nomeArquivo: string, formato: 'png' | 'svg'): string {
   return `${import.meta.env.BASE_URL}tiles/${pasta}/${nomeArquivo}.${formato}?v=3`
 }
 
-export function nomePedraAcessivel(pedra?: CodigoPedra): string {
-  if (!pedra) return 'Pedra vazia'
-  if (pedra === '0m') return '5 vermelho de Man'
-  if (pedra === '0p') return '5 vermelho de Pin'
-  if (pedra === '0s') return '5 vermelho de Sou'
+const CHAVES_HONRAS: Record<string, string> = {
+  '1z': 'tiles.east',
+  '2z': 'tiles.south',
+  '3z': 'tiles.west',
+  '4z': 'tiles.north',
+  '5z': 'tiles.white',
+  '6z': 'tiles.green',
+  '7z': 'tiles.red',
+}
 
+const CHAVES_NAIPES: Record<string, string> = { m: 'tiles.man', p: 'tiles.pin', s: 'tiles.sou' }
+
+const CHAVES_CINCO_VERMELHO: Record<string, string> = {
+  m: 'tiles.redMan',
+  p: 'tiles.redPin',
+  s: 'tiles.redSou',
+}
+
+/** Nome da pedra para leitores de tela, no idioma ativo. */
+export function nomePedraAcessivel(pedra?: CodigoPedra): string {
+  if (!pedra) return traduzirGlobal('tiles.blank')
   const valor = pedra[0]
   const naipe = pedra[1]
-  if (naipe === 'm') return `${valor} de Man`
-  if (naipe === 'p') return `${valor} de Pin`
-  if (naipe === 's') return `${valor} de Sou`
-
-  const nomesHonras: Record<string, string> = {
-    '1z': 'Vento Leste',
-    '2z': 'Vento Sul',
-    '3z': 'Vento Oeste',
-    '4z': 'Vento Norte',
-    '5z': 'Dragão branco',
-    '6z': 'Dragão verde',
-    '7z': 'Dragão vermelho',
+  if (valor === '0' && CHAVES_CINCO_VERMELHO[naipe]) {
+    return traduzirGlobal(CHAVES_CINCO_VERMELHO[naipe])
   }
-
-  return nomesHonras[pedra] ?? pedra
+  if (CHAVES_NAIPES[naipe]) return traduzirGlobal(CHAVES_NAIPES[naipe], { number: valor })
+  return CHAVES_HONRAS[pedra] ? traduzirGlobal(CHAVES_HONRAS[pedra]) : pedra
 }
 
 export function ehPedraNumerada(pedra: CodigoPedra): boolean {
@@ -253,11 +259,28 @@ export const CONFIGURACOES_REGRAS: {
 /**
  * Cada tipo de meld tem cor e rótulo diferente para identificação rápida.
  */
+/** Cores de cada chamada; `rotulo` é a chave i18n do nome. */
 export const ESTILO_MELD: Record<Meld['tipo'], { fundo: string; borda: string; rotulo: string }> = {
-  chii: { fundo: '#e8f5e9', borda: '#4caf50', rotulo: 'Chi' },
-  pon: { fundo: '#e3f2fd', borda: '#2196f3', rotulo: 'Pon' },
-  kanAberto: { fundo: '#f8edfb', borda: '#ba68c8', rotulo: 'Kan aberto' },
-  kanFechado: { fundo: '#f3e5f5', borda: '#9c27b0', rotulo: 'Kan fechado' },
+  chii: {
+    fundo: 'var(--cor-sucesso-suave, #e8f5e9)',
+    borda: 'var(--cor-sucesso, #4caf50)',
+    rotulo: 'melds.chii',
+  },
+  pon: {
+    fundo: 'var(--cor-primario-suave, #e3f2fd)',
+    borda: 'var(--cor-primario, #2196f3)',
+    rotulo: 'melds.pon',
+  },
+  kanAberto: {
+    fundo: 'var(--cor-destaque-suave, #f8edfb)',
+    borda: 'var(--cor-destaque, #ba68c8)',
+    rotulo: 'melds.kanAberto',
+  },
+  kanFechado: {
+    fundo: 'var(--cor-primario-suave, #f3e5f5)',
+    borda: 'var(--cor-secundario-texto, #9c27b0)',
+    rotulo: 'melds.kanFechado',
+  },
 }
 
 // ─── Componente principal ─────────────────────────────────────────────────────

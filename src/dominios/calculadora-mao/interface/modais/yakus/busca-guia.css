@@ -5,7 +5,7 @@
 
 .busca-guia__vazio {
   margin: 16px 0 0;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.9rem;
   text-align: center;
 }
@@ -23,9 +23,9 @@
   min-height: 44px;
   padding: 0;
   border: 0;
-  border-top: 1px solid #dbeafe;
+  border-top: 1px solid var(--cor-borda, #dbeafe);
   background: none;
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 800;

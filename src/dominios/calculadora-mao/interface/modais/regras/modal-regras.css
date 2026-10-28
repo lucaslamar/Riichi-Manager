@@ -16,7 +16,7 @@
   gap: clamp(14px, 2vw, 26px);
   align-items: center;
   padding: clamp(10px, 1.6vw + 4px, 22px) 0;
-  border-bottom: 1px solid #edf0f4;
+  border-bottom: 1px solid var(--cor-borda, #edf0f4);
 }
 
 .linha-regra:last-child {
@@ -34,7 +34,7 @@
 }
 
 .texto-regra span {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: clamp(0.85rem, 0.8rem + 0.3vw, 1.1rem);
   line-height: 1.4;
 }
@@ -43,16 +43,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
-  border: 1px solid #d7dde6;
+  border: 1px solid var(--cor-borda, #d7dde6);
   border-radius: 8px;
-  background: #eef2f6;
+  background: var(--cor-superficie-alt, #eef2f6);
 }
 
 .controle-regra button {
   min-height: clamp(44px, 2.4vw + 30px, 58px);
   border: 0;
   background: transparent;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   cursor: pointer;
   font-size: clamp(0.9rem, 0.85rem + 0.3vw, 1.15rem);
   font-weight: 900;

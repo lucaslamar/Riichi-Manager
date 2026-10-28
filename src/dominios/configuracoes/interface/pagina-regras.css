@@ -1,0 +1,233 @@
+/*
+ * Aba Regras: mesma superfície da Han e Fu e do Sorteador (cartão branco com
+ * sombra no desktop, de borda a borda no celular e no tablet), com uma pilha de
+ * cartões de preferência.
+ */
+
+/* A página reserva a barra inferior no próprio padding (abaixo). */
+body:has(.pagina-regras) {
+  padding-bottom: 0 !important;
+}
+
+.pagina-regras {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  width: min(100%, 720px);
+  margin-inline: auto;
+  border-radius: var(--raio);
+  padding: 20px 20px
+    calc(var(--altura-barra-inferior, 0px) + env(safe-area-inset-bottom, 0px) + 16px);
+  background: var(--branco);
+  color: var(--escuro);
+  box-shadow: var(--sombra);
+}
+
+.cartao-regras {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  margin: 0;
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  border-radius: var(--raio);
+  padding: 14px 16px;
+  background: var(--cor-superficie, #ffffff);
+  color: var(--cor-texto, #102a43);
+  font: inherit;
+  text-align: left;
+}
+
+.cartao-regras--empilhado {
+  grid-template-columns: 28px minmax(0, 1fr);
+}
+
+.cartao-regras--empilhado .segmentos-tema {
+  grid-column: 1 / -1;
+}
+
+.cartao-regras--info {
+  align-items: start;
+  grid-template-columns: 28px minmax(0, 1fr);
+}
+
+.cartao-regras__icone {
+  color: var(--cor-secundario-texto, #155b98);
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.cartao-regras__texto {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cartao-regras__texto strong {
+  color: var(--cor-texto, #102a43);
+  font-size: 0.95rem;
+  font-weight: 850;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.cartao-regras__texto span {
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.cartao-regras__select {
+  max-width: 52vw;
+  min-height: 44px;
+  border: 1px solid var(--cor-borda-controle, #c8d4e0);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--cor-superficie-alt, #f8fafc);
+  color: var(--cor-texto, #102a43);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+/* ── Switch ────────────────────────────────────────────── */
+
+.cartao-regras--switch {
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.cartao-regras--switch:hover {
+  border-color: var(--cor-primario-borda, #bfdbfe);
+}
+
+.interruptor {
+  position: relative;
+  display: block;
+  width: 46px;
+  height: 28px;
+  flex-shrink: 0;
+  border: 2px solid var(--cor-borda-controle, #94a3b8);
+  border-radius: 999px;
+  background: var(--cor-superficie-alt, #e2e8f0);
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.interruptor::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--cor-borda-controle, #64748b);
+  transition:
+    transform 0.15s,
+    background 0.15s;
+}
+
+.cartao-regras--switch[aria-checked='true'] .interruptor {
+  border-color: var(--cor-primario, #2196f3);
+  background: var(--cor-primario, #2196f3);
+}
+
+.cartao-regras--switch[aria-checked='true'] .interruptor::after {
+  background: var(--cor-sobre-primario, #ffffff);
+  transform: translateX(18px);
+}
+
+/* ── Tema: controle segmentado (rádios nativos, setas do teclado de graça) ── */
+
+.segmentos-tema {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  border-radius: 10px;
+  padding: 4px;
+  background: var(--cor-superficie-alt, #f8fafc);
+}
+
+.segmento-tema {
+  position: relative;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  padding: 6px 8px;
+  color: var(--cor-texto-suave, #40566d);
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 850;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.segmento-tema input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segmento-tema:has(input:checked) {
+  background: var(--cor-primario, #2196f3);
+  color: var(--cor-sobre-primario, #ffffff);
+}
+
+.segmento-tema:has(input:focus-visible) {
+  outline: 3px solid var(--cor-foco, rgba(249, 115, 22, 0.65));
+  outline-offset: 2px;
+}
+
+/* ── Celular: superfície de borda a borda, como as outras abas ── */
+
+@media (max-width: 767px) {
+  .pagina-regras {
+    border-radius: 0;
+    padding-inline: 12px;
+    padding-top: 12px;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .cartao-regras__select {
+    max-width: 46vw;
+  }
+}
+
+@media (min-width: 768px) and (min-height: 561px) {
+  .pagina-regras {
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
+    padding-inline: max(32px, calc((100% - 720px) / 2));
+    padding-top: 32px;
+    box-shadow: none;
+  }
+}
+
+body.modo-compacto .pagina-regras {
+  gap: 6px;
+  padding-top: 10px;
+}
+
+body.modo-compacto .cartao-regras {
+  min-height: 52px;
+  padding: 10px 12px;
+}
+
+body.toque-ampliado .cartao-regras {
+  min-height: 72px;
+}

@@ -1,14 +1,12 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import AbasModal, { type AbaModal } from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { conteudoGuiaBolso } from '../../../conteudo/guia-bolso'
 import {
-  BEGINNER_GROUPS,
-  CATEGORY_LABELS,
-  DORA_NOTE,
-  KAZOE_NOTE,
+  GRUPOS_INICIANTE,
   ORDEM_CATEGORIAS,
-  YAKU,
+  yakusDoIdioma,
   type Yaku,
   type YakuCategory,
 } from '../../../logica/yakus'
@@ -20,23 +18,13 @@ import './modal-yakus.css'
 
 type AbaYakus = 'glossario' | 'iniciante' | YakuCategory | 'yakuman'
 
-const ROTULOS_CURTOS: Record<YakuCategory, string> = {
-  sequencias: 'Yaku de sequência',
-  'terminais-honras': 'Yaku de terminais',
-  'trincas-pares': 'Yaku de trincas',
-  naipes: 'Yaku de naipe',
-  outros: 'Outros yaku',
+const CHAVE_ROTULO_CURTO: Record<YakuCategory, string> = {
+  sequencias: 'pocketGuide.tabs.sequences',
+  'terminais-honras': 'pocketGuide.tabs.terminals',
+  'trincas-pares': 'pocketGuide.tabs.triplets',
+  naipes: 'pocketGuide.tabs.suits',
+  outros: 'pocketGuide.tabs.others',
 }
-
-/** Ordem das abas (grade de 4 colunas): a primeira é a padrão ao abrir. */
-const ABAS: AbaModal<AbaYakus>[] = [
-  { chave: 'glossario', rotulo: 'Glossário' },
-  { chave: 'iniciante', rotulo: 'Yaku para iniciantes' },
-  ...ORDEM_CATEGORIAS.map((categoria) => ({ chave: categoria, rotulo: ROTULOS_CURTOS[categoria] })),
-  { chave: 'yakuman', rotulo: 'Yakuman' },
-]
-
-const YAKU_POR_ID = new Map(YAKU.map((yaku) => [yaku.id, yaku]))
 
 function ListaYakus({ titulo, yakus }: { titulo: string; yakus: Yaku[] }) {
   return (
@@ -52,41 +40,51 @@ function ListaYakus({ titulo, yakus }: { titulo: string; yakus: Yaku[] }) {
 }
 
 function AbaIniciante() {
+  const { idioma } = useI18n()
+  const { iniciante, notaDora } = conteudoGuiaBolso(idioma)
+  const yakus = yakusDoIdioma(idioma)
   return (
     <>
-      {BEGINNER_GROUPS.map((grupo) => (
-        <section key={grupo.title} className="yaku-grupo">
+      {GRUPOS_INICIANTE.map((ids, indice) => (
+        <section key={ids[0]} className="yaku-grupo">
           <h3 className="yaku-grupo__titulo">
-            {grupo.title} <span className="yaku-grupo__subtitulo">({grupo.subtitle})</span>
+            {iniciante[indice].titulo}{' '}
+            <span className="yaku-grupo__subtitulo">({iniciante[indice].subtitulo})</span>
           </h3>
           <div className="yaku-lista">
-            {grupo.ids.map((id) => {
-              const yaku = YAKU_POR_ID.get(id)
+            {ids.map((id) => {
+              const yaku = yakus.find((candidato) => candidato.id === id)
               return yaku ? <CartaoYaku key={id} yaku={yaku} /> : null
             })}
           </div>
         </section>
       ))}
-      <BlocoDica texto={DORA_NOTE} className="yaku-nota-dora" />
+      <BlocoDica texto={notaDora} className="yaku-nota-dora" />
     </>
   )
 }
 
 function ConteudoAba({ aba }: { aba: AbaYakus }) {
+  const { t, idioma } = useI18n()
+  const conteudo = conteudoGuiaBolso(idioma)
+  const yakus = yakusDoIdioma(idioma)
   if (aba === 'iniciante') return <AbaIniciante />
   if (aba === 'glossario') return <AbaGlossario />
   if (aba === 'yakuman') {
     return (
       <>
-        <ListaYakus titulo="Yakuman (mão máxima)" yakus={YAKU.filter((yaku) => yaku.yakuman)} />
-        <BlocoDica texto={KAZOE_NOTE} className="yaku-nota-dora" />
+        <ListaYakus
+          titulo={t('pocketGuide.yakumanHeading')}
+          yakus={yakus.filter((yaku) => yaku.yakuman)}
+        />
+        <BlocoDica texto={conteudo.notaKazoe} className="yaku-nota-dora" />
       </>
     )
   }
   return (
     <ListaYakus
-      titulo={CATEGORY_LABELS[aba]}
-      yakus={YAKU.filter((yaku) => yaku.category === aba && !yaku.yakuman)}
+      titulo={conteudo.categorias[aba]}
+      yakus={yakus.filter((yaku) => yaku.category === aba && !yaku.yakuman)}
     />
   )
 }
@@ -101,8 +99,22 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
 export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()
   // Abre sempre no Glossário (a primeira aba), sem lembrar a última aberta.
-  const [aba, setAba] = useState<AbaYakus>(ABAS[0].chave)
+  const [aba, setAba] = useState<AbaYakus>('glossario')
   const [busca, setBusca] = useState('')
+
+  /** Ordem das abas (grade de 4 colunas): a primeira é a padrão ao abrir. */
+  const abas = useMemo<AbaModal<AbaYakus>[]>(
+    () => [
+      { chave: 'glossario', rotulo: t('pocketGuide.tabs.glossary') },
+      { chave: 'iniciante', rotulo: t('pocketGuide.tabs.beginner') },
+      ...ORDEM_CATEGORIAS.map((categoria) => ({
+        chave: categoria,
+        rotulo: t(CHAVE_ROTULO_CURTO[categoria]),
+      })),
+      { chave: 'yakuman', rotulo: t('pocketGuide.tabs.yakuman') },
+    ],
+    [t],
+  )
 
   const escolherAba = (novaAba: AbaYakus) => {
     setAba(novaAba)
@@ -113,9 +125,9 @@ export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
     <Modal
       titulo={
         <>
-          Guia de bolso{' '}
+          {t('pocketGuide.title')}{' '}
           {/* Font Awesome grátis não tem ovelha: emoji, com nome para leitor de tela. */}
-          <span className="yaku-modal__ovelha" role="img" aria-label="Ovelhinha">
+          <span className="yaku-modal__ovelha" role="img" aria-label={t('pocketGuide.sheep')}>
             🐑
           </span>
         </>
@@ -126,15 +138,15 @@ export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
       className="yaku-modal"
     >
       <AbasModal
-        abas={ABAS}
+        abas={abas}
         ativa={aba}
         aoEscolher={escolherAba}
-        rotulo="Seções do guia"
+        rotulo={t('pocketGuide.tabsLabel')}
         colunas={4}
         fixo={<CampoBuscaGuia valor={busca} aoMudar={setBusca} />}
       >
         {busca.trim() ? (
-          <ResultadoBuscaGuia busca={busca} abas={ABAS} aoAbrirAba={escolherAba} />
+          <ResultadoBuscaGuia busca={busca} abas={abas} aoAbrirAba={escolherAba} />
         ) : (
           <ConteudoAba aba={aba} />
         )}

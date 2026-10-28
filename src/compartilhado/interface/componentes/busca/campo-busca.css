@@ -9,7 +9,7 @@
 .campo-busca > .fa-magnifying-glass {
   position: absolute;
   left: 12px;
-  color: #94a3b8;
+  color: var(--cor-texto-suave, #94a3b8);
   font-size: 0.85rem;
   pointer-events: none;
 }
@@ -18,10 +18,10 @@
   width: 100%;
   min-height: 40px;
   padding: 0 40px 0 34px;
-  border: 1px solid #d7dde6;
+  border: 1px solid var(--cor-borda, #d7dde6);
   border-radius: 8px;
   background: var(--branco);
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   /* 16px: menos que isso o iPhone dá zoom ao focar. */
   font-size: 1rem;
   appearance: none;
@@ -33,7 +33,7 @@
 }
 
 .campo-busca input::placeholder {
-  color: #94a3b8;
+  color: var(--cor-texto-suave, #94a3b8);
 }
 
 .campo-busca input:focus-visible {
@@ -52,7 +52,7 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   cursor: pointer;
 }
 

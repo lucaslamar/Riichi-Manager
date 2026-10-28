@@ -1,5 +1,5 @@
 .resultado-calculadora {
-  background: #102a43;
+  background: var(--cor-primario, #102a43);
   color: var(--branco);
   border-radius: var(--raio);
   padding: 24px;
@@ -13,11 +13,11 @@
 .resultado-esperas-compacto {
   display: grid;
   gap: 8px;
-  border: 1px solid #dbeafe;
+  border: 1px solid var(--cor-borda, #dbeafe);
   border-radius: 8px;
   padding: 12px;
-  background: #eff6ff;
-  color: #102a43;
+  background: var(--cor-primario-suave, #eff6ff);
+  color: var(--cor-texto, #102a43);
 }
 
 .resultado-esperas-compacto .resultado-esperas {
@@ -26,14 +26,14 @@
 }
 
 .resultado-esperas-compacto .resultado-esperas strong {
-  color: #155b98;
+  color: var(--cor-primario, #155b98);
   font-size: 0.84rem;
   text-transform: uppercase;
 }
 
 .resultado-esperas-compacto .resultado-esperas p {
   max-width: none;
-  color: #40566d;
+  color: var(--cor-texto-suave, #40566d);
   font-size: 0.8rem;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .resultado-esperas-compacto .espera-resultado small {
-  color: #40566d;
+  color: var(--cor-texto-suave, #40566d);
 }
 
 .resultado-montagem-conteudo {
@@ -50,13 +50,13 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: color-mix(in srgb, var(--cor-sobre-primario, #ffffff) 70%, transparent);
   font-size: 0.9rem;
   font-weight: 800;
 }
 
 .resultado-montagem-conteudo strong {
-  color: #ffffff;
+  color: var(--cor-sobre-primario, #ffffff);
 }
 
 /*
@@ -79,15 +79,23 @@
  */
 
 .resultado-calculadora.resultado-furiten-chombo {
-  background: linear-gradient(180deg, #7f1d1d 0%, #5f1515 100%);
-  border: 1px solid rgba(248, 113, 113, 0.65);
-  box-shadow: 0 18px 36px rgba(127, 29, 29, 0.18);
+  background: linear-gradient(
+    180deg,
+    var(--cor-perigo, #7f1d1d) 0%,
+    var(--cor-perigo, #5f1515) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--cor-perigo-borda, #f87171) 65%, transparent);
+  box-shadow: 0 18px 36px color-mix(in srgb, var(--cor-perigo, #7f1d1d) 18%, transparent);
 }
 
 .resultado-calculadora.resultado-mao-invalida {
-  background: linear-gradient(180deg, #7f1d1d 0%, #5f1515 100%);
-  border: 1px solid rgba(248, 113, 113, 0.68);
-  box-shadow: 0 18px 36px rgba(127, 29, 29, 0.18);
+  background: linear-gradient(
+    180deg,
+    var(--cor-perigo, #7f1d1d) 0%,
+    var(--cor-perigo, #5f1515) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--cor-perigo-borda, #f87171) 68%, transparent);
+  box-shadow: 0 18px 36px color-mix(in srgb, var(--cor-perigo, #7f1d1d) 18%, transparent);
 }
 
 .resultado-invalido-conteudo {
@@ -101,10 +109,10 @@
   align-items: center;
   min-height: 24px;
   padding: 4px 10px;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--cor-perigo-borda, #fecaca);
   border-radius: 999px;
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--cor-perigo-suave, #fee2e2);
+  color: var(--cor-perigo, #991b1b);
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0;
@@ -112,7 +120,7 @@
 
 .rotulo-bloco {
   margin-bottom: 8px;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.74rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -127,7 +135,7 @@
 .resultado-pronto p {
   max-width: 360px;
   margin: 0 0 4px;
-  color: rgba(255, 255, 255, 0.72);
+  color: color-mix(in srgb, var(--cor-sobre-primario, #ffffff) 72%, transparent);
   font-size: 0.9rem;
 }
 
@@ -144,7 +152,7 @@
 .resultado-esperas p {
   max-width: 440px;
   margin: 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: color-mix(in srgb, var(--cor-sobre-primario, #ffffff) 72%, transparent);
   font-size: 0.88rem;
 }
 
@@ -168,7 +176,7 @@
 }
 
 .espera-resultado small {
-  color: rgba(255, 255, 255, 0.68);
+  color: color-mix(in srgb, var(--cor-sobre-primario, #ffffff) 68%, transparent);
   font-size: 0.7rem;
   font-weight: 900;
 }
@@ -177,16 +185,16 @@
   display: none;
   margin-bottom: 14px;
   padding: 10px;
-  border: 1px solid #d7dde6;
+  border: 1px solid var(--cor-borda, #d7dde6);
   border-radius: 8px;
-  background: #f8fbff;
+  background: var(--cor-superficie, #f8fbff);
 }
 
 .resumo-mao-linha {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.78rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -206,7 +214,7 @@
   align-items: center;
   gap: 2px;
   padding: 2px 4px;
-  border: 1px solid #d7dde6;
+  border: 1px solid var(--cor-borda, #d7dde6);
   border-radius: 6px;
   background: var(--branco);
 }
@@ -217,7 +225,7 @@
   gap: 3px;
   font-size: 0.74rem;
   font-weight: 900;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
 }
 
 .resumo-mao-doras .tile-img {

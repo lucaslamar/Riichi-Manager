@@ -188,8 +188,8 @@
   margin: 14px 0 0;
   padding: 14px 16px;
   border-radius: 12px;
-  background: #fff3cf;
-  color: #5c3d00;
+  background: var(--cor-aviso-suave, #fff3cf);
+  color: var(--cor-aviso, #5c3d00);
   font-size: 1rem;
   font-style: italic;
   line-height: 1.5;
@@ -198,7 +198,7 @@
 
 .guia-conclusao__secreto i {
   margin-top: 3px;
-  color: #9a6400;
+  color: var(--cor-aviso, #9a6400);
   font-size: 1.2rem;
 }
 
@@ -218,8 +218,8 @@
 
 /* Dan em dourado, como a faixa de cima nos jogos online. */
 .guia-rank--dan {
-  background: #fff3cf;
-  color: #9a6400;
+  background: var(--cor-aviso-suave, #fff3cf);
+  color: var(--cor-aviso, #9a6400);
 }
 
 /* Capa da parte: a medalha e o nome da parte embaixo do rank. */
@@ -242,7 +242,7 @@
 }
 
 .guia-rank-aviso--estrela .guia-rank-aviso__icone {
-  color: #f2b01e;
+  color: var(--cor-aviso, #f2b01e);
 }
 
 .guia-rank__dica {
@@ -280,14 +280,14 @@
   padding: 12px 22px 12px 16px;
   border-radius: 16px;
   background: var(--guia-destaque);
-  color: #fff;
+  color: var(--cor-sobre-primario, #fff);
   box-shadow: 0 12px 30px rgb(15 23 42 / 28%);
   animation: guia-rank-entra 520ms cubic-bezier(0.2, 1.5, 0.4, 1);
 }
 
 .guia-rank-aviso--dan {
-  background: linear-gradient(135deg, #c98a00, #f2c14e);
-  color: #3a2600;
+  background: linear-gradient(135deg, var(--cor-aviso, #c98a00), var(--cor-aviso, #f2c14e));
+  color: var(--cor-aviso, #3a2600);
 }
 
 .guia-rank-aviso__icone {
@@ -400,11 +400,11 @@
 }
 
 .guia-mao[data-espera] .yaku-mao-rotulada__grupo .yaku-mao-rotulada__rotulo {
-  color: var(--guia-cor-espera, #607080);
+  color: var(--guia-cor-espera, var(--cor-texto-suave, #607080));
 }
 
 .guia-mao[data-espera] .yaku-mao-rotulada__grupo .yaku-tile {
-  border-color: var(--guia-cor-espera, #cbd5e1);
+  border-color: var(--guia-cor-espera, var(--pedra-borda, #cbd5e1));
   border-width: var(--guia-borda-espera, 1px);
 }
 
@@ -627,7 +627,8 @@
   width: 100%;
   max-width: 260px;
   height: auto;
-  color: var(--guia-tinta);
+  /* No escuro, contorno e pontos do 100 no lilás do tema; no claro, a tinta do guia. */
+  color: var(--cor-primario, var(--guia-tinta));
 }
 
 /* Largura fixa: os quatro palitos ficam do mesmo tamanho, um embaixo do outro. */
@@ -810,9 +811,9 @@
   width: var(--guia-pedra);
   height: calc(var(--guia-pedra) * var(--pedra-mao-proporcao, 1.35));
   padding: 1px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--pedra-borda, #cbd5e1);
   border-radius: 4px;
-  background: #ffffff;
+  background: var(--pedra-face, #ffffff);
   box-shadow: 0 1px 0 rgb(16 42 67 / 12%);
 }
 

@@ -23,7 +23,7 @@
   border: 0;
   background: transparent;
   box-shadow: none;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   cursor: pointer;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
@@ -37,9 +37,9 @@
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #cbd5e1;
+  border: 1.5px solid var(--cor-borda, #cbd5e1);
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--cor-superficie, #ffffff);
   color: inherit;
   font-family: Arial, sans-serif;
   font-size: 0.72rem;
@@ -98,7 +98,7 @@
 }
 
 .botao-ajuda-secao:focus-visible .botao-ajuda-secao-circulo {
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.35);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cor-primario, #2196f3) 35%, transparent);
 }
 
 /* ─── Modal ───────────────────────────────────────────────────────────────── */
@@ -140,20 +140,20 @@
 /* Honba e doras: rosa das Doras (o mesmo do contador na finalização) nas
    bordas, no título e em todos os subtítulos, Honba inclusive (mesmo setor). */
 .modal-ajuda-secao--doras {
-  --modal-borda: #fbcfe8;
+  --modal-borda: var(--cor-destaque-borda, #fbcfe8);
 }
 
 .modal-ajuda-secao--doras.modal--titulo-rotulo {
-  --modal-cor-titulo: #be185d;
+  --modal-cor-titulo: var(--cor-destaque, #be185d);
 }
 
 .modal-ajuda-secao--doras .glossario-bloco__titulo,
 .modal-ajuda-secao--doras .glossario-item__nome {
-  color: #be185d;
+  color: var(--cor-destaque, #be185d);
 }
 
 .modal-ajuda-secao--doras .glossario-item {
-  border-top-color: #fce7f3;
+  border-top-color: var(--cor-borda, #fce7f3);
 }
 
 /* Modal com abas (ex.: Dora | Honba): as abas encostam no cabeçalho e
@@ -167,8 +167,8 @@
 }
 
 .modal-ajuda-secao--doras .abas-modal {
-  --abas-cor: #db2777;
-  --abas-cor-texto: #be185d;
+  --abas-cor: var(--cor-destaque, #db2777);
+  --abas-cor-texto: var(--cor-destaque, #be185d);
 }
 
 .modal-ajuda-secao .yaku-ciclo__titulo {

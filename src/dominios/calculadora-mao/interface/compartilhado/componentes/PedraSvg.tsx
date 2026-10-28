@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import type { CodigoPedra, Meld } from '../../../logica/mao'
 import { arquivoPedra, nomePedraAcessivel, urlPedra } from '../../constantes'
 
@@ -16,7 +17,7 @@ export function PedraSvg({
 }) {
   const [formato, setFormato] = useState<'png' | 'svg' | 'texto'>('png')
   const nomeArquivo = virada ? 'Back' : (arquivo ?? (pedra ? arquivoPedra(pedra) : 'Blank'))
-  const alt = virada ? 'Pedra virada' : nomePedraAcessivel(pedra)
+  const alt = virada ? traduzirGlobal('tiles.back') : nomePedraAcessivel(pedra)
 
   if (formato === 'texto') {
     return (

@@ -6,9 +6,9 @@
 
 .modal-resultado {
   --resultado-destaque: var(--primario);
-  --resultado-texto-suave: #607080;
-  --resultado-cartao: #eef6ff;
-  --resultado-cartao-neutro: #f8fafc;
+  --resultado-texto-suave: var(--cor-texto-suave, #607080);
+  --resultado-cartao: var(--cor-primario-suave, #eef6ff);
+  --resultado-cartao-neutro: var(--cor-superficie-alt, #f8fafc);
 }
 
 .modal-resultado .modal-corpo {
@@ -75,7 +75,7 @@
 
 .modal-resultado .resumo-yakuman {
   margin-bottom: 4px;
-  color: #b45309;
+  color: var(--cor-aviso, #b45309);
   font-size: 1.1rem;
   font-weight: 800;
 }
@@ -91,7 +91,7 @@
 }
 
 .modal-resultado .pontos-totais {
-  color: #4fc3f7;
+  color: var(--cor-primario, #4fc3f7);
   font-size: clamp(2.5rem, 2rem + 2vw, 3.25rem);
   font-weight: 900;
   line-height: 1;
@@ -113,7 +113,7 @@
   padding: 3px 8px;
   border-radius: 999px;
   background: var(--resultado-cartao);
-  color: #1d4ed8;
+  color: var(--cor-primario, #1d4ed8);
   font-size: 0.76rem;
   font-weight: 800;
 }
@@ -186,7 +186,7 @@
   border: 1px solid transparent;
   border-radius: 8px;
   background: var(--resultado-cartao);
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   cursor: pointer;
   font-size: clamp(0.85rem, 0.8rem + 0.25vw, 0.98rem);
   font-weight: 700;
@@ -234,11 +234,11 @@
   border: 1px solid var(--modal-borda);
   border-radius: 8px;
   background: var(--resultado-cartao-neutro);
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
 }
 
 .modal-resultado .chip-fu strong {
-  color: #0284c7;
+  color: var(--cor-primario, #0284c7);
   font-size: 0.9rem;
 }
 
@@ -258,15 +258,15 @@
   justify-items: center;
   gap: 8px;
   padding: 12px;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--cor-perigo-borda, #fecaca);
   border-radius: 8px;
-  background: #fee2e2;
-  color: #7f1d1d;
+  background: var(--cor-perigo-suave, #fee2e2);
+  color: var(--cor-perigo, #7f1d1d);
   text-align: center;
 }
 
 .modal-resultado .resultado-chombo strong {
-  color: #991b1b;
+  color: var(--cor-perigo, #991b1b);
   font-size: 1rem;
 }
 
@@ -276,7 +276,7 @@
 }
 
 .modal-resultado .pontos-chombo {
-  color: #dc2626;
+  color: var(--cor-perigo, #dc2626);
   font-size: clamp(2.5rem, 2rem + 2vw, 3rem);
   font-weight: 900;
   line-height: 1;
@@ -350,7 +350,7 @@
   padding: 3px 10px;
   border-radius: 999px;
   background: var(--resultado-cartao);
-  color: #1d4ed8;
+  color: var(--cor-primario, #1d4ed8);
   font-size: 0.76rem;
   font-weight: 700;
 }
@@ -376,12 +376,12 @@
 }
 
 .modal-resultado .linha-pontos-resultado strong {
-  color: #334e68;
+  color: var(--cor-texto, #334e68);
 }
 
 .modal-resultado .linha-pontos-resultado + .linha-pontos-resultado {
   padding-bottom: 4px;
-  border-bottom: 1px dashed #cbd5e1;
+  border-bottom: 1px dashed var(--cor-borda, #cbd5e1);
 }
 
 .modal-resultado .pagamentos-resultado {
@@ -395,39 +395,39 @@
 }
 
 .modal-resultado .pagamentos-resultado strong {
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
 }
 
 /* ─── Yaku clicável: explicação e pedras em dourado ──────────────────────── */
 .modal-resultado .chip-yaku:hover {
-  border-color: #bfdbfe;
+  border-color: var(--cor-primario-borda, #bfdbfe);
 }
 
 .modal-resultado .chip-yaku.aberto {
-  border-color: #e6b800;
-  background: #fffbea;
+  border-color: var(--cor-aviso, #e6b800);
+  background: var(--cor-aviso-suave, #fffbea);
 }
 
 .modal-resultado .chip-yaku__explicacao {
   grid-column: 1 / -1;
   display: grid;
   gap: 2px;
-  color: #486581;
+  color: var(--cor-texto-suave, #486581);
   font-size: 0.85rem;
   font-weight: 500;
   line-height: 1.4;
 }
 
 .modal-resultado .chip-yaku__nome-pt {
-  color: #334e68;
+  color: var(--cor-texto, #334e68);
   font-weight: 800;
 }
 
 .modal-resultado .resultado-pedra.destaque-yaku,
 .modal-resultado .resultado-meld.destaque-yaku .meld-tile {
   border-radius: 5px;
-  background: #ffd700;
-  box-shadow: 0 0 0 2px #e6b800;
+  background: var(--cor-aviso, #ffd700);
+  box-shadow: 0 0 0 2px var(--cor-aviso, #e6b800);
 }
 
 /* Penalidade: tags e pagamentos no mesmo esquema do resultado, em vermelho. */
@@ -437,19 +437,19 @@
 
 .modal-resultado .resultado-chombo .pagamentos-resultado {
   margin-top: 0;
-  color: #7f1d1d;
+  color: var(--cor-perigo, #7f1d1d);
 }
 
 .modal-resultado .resultado-chombo .pagamentos-resultado strong {
-  color: #991b1b;
+  color: var(--cor-perigo, #991b1b);
   font-size: inherit;
 }
 
 .modal-resultado .resultado-chombo .regra-chombo {
   padding: 2px 10px;
   border-radius: 999px;
-  background: #fecaca;
-  color: #991b1b;
+  background: var(--cor-perigo-suave, #fecaca);
+  color: var(--cor-perigo, #991b1b);
   font-size: 0.76rem;
   font-weight: 800;
 }
@@ -467,7 +467,7 @@
 }
 
 .modal-resultado .chip-yaku__icone {
-  color: #93c5fd;
+  color: var(--cor-primario, #93c5fd);
   font-size: 0.85em;
 }
 
@@ -478,6 +478,6 @@
 
 /* Na penalidade as tags de vento seguem o vermelho do chombo. */
 .modal-resultado .resultado-chombo .tags-ventos-resultado span {
-  background: #fecaca;
-  color: #991b1b;
+  background: var(--cor-perigo-suave, #fecaca);
+  color: var(--cor-perigo, #991b1b);
 }

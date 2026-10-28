@@ -37,7 +37,7 @@ function SvgChapeuHelice() {
       <ellipse cx="6.8" cy="4.4" rx="5" ry="2.1" />
       <ellipse cx="17.2" cy="4.4" rx="5" ry="2.1" opacity="0.62" />
       <rect x="11.1" y="5" width="1.8" height="6" rx="0.9" />
-      <circle cx="12" cy="4.4" r="1.7" fill="#fff" stroke="currentColor" strokeWidth="1" />
+      <circle cx="12" cy="4.4" r="1.7" fill="var(--cor-superficie, #fff)" stroke="currentColor" strokeWidth="1" />
       <path d="M3 17.5 C3 8.8 12 10.3 12 10.3 V17.5 Z" />
       <path d="M12 10.3 C12 10.3 21 8.8 21 17.5 H12 Z" opacity="0.62" />
       <path d="M1.5 17 H22.5 V18.8 Q22.5 21 20 21 H4 Q1.5 21 1.5 18.8 Z" />

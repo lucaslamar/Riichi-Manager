@@ -46,9 +46,9 @@
     position: absolute;
     inset: -8px;
     z-index: -1;
-    border: 1px solid rgba(223, 231, 239, 0.9);
+    border: 1px solid color-mix(in srgb, var(--cor-borda, #dfe7ef) 90%, transparent);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.96);
+    background: color-mix(in srgb, var(--cor-superficie, #ffffff) 96%, transparent);
     box-shadow: 0 8px 18px rgba(16, 42, 67, 0.08);
     content: '';
     opacity: 0;
@@ -203,7 +203,7 @@
     margin: 0;
     border-radius: 4px;
     padding: 1px 3px;
-    background: rgba(248, 250, 252, 0.88);
+    background: color-mix(in srgb, var(--cor-superficie-alt, #f8fafc) 88%, transparent);
     font-size: 0.52rem;
     line-height: 1;
   }
@@ -368,9 +368,9 @@
   .btn-acao-flutuante {
     width: 46px;
     min-height: 46px;
-    border: 2px solid #dfe7ef;
-    background: #ffffff;
-    color: #102a43;
+    border: 2px solid var(--cor-borda, #dfe7ef);
+    background: var(--cor-superficie, #ffffff);
+    color: var(--cor-texto, #102a43);
     opacity: 0;
     pointer-events: none;
     transform: translate(0, 0) scale(0.82);
@@ -444,9 +444,9 @@
   .btn-acao-flutuante {
     width: 46px;
     min-height: 46px;
-    border: 2px solid #dfe7ef;
-    background: #ffffff;
-    color: #102a43;
+    border: 2px solid var(--cor-borda, #dfe7ef);
+    background: var(--cor-superficie, #ffffff);
+    color: var(--cor-texto, #102a43);
     opacity: 0;
     pointer-events: none;
     transform: translate(0, 0) scale(0.82);
@@ -674,7 +674,7 @@
     margin: 0;
     border-radius: 4px;
     padding: 1px 3px;
-    background: rgba(248, 250, 252, 0.88);
+    background: color-mix(in srgb, var(--cor-superficie-alt, #f8fafc) 88%, transparent);
     font-size: 0.52rem;
     line-height: 1;
   }
@@ -917,7 +917,7 @@
 @media (max-width: 640px) {
   body:has(.card-mao-completa.etapa-finalizacao) {
     padding: 0;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal,
@@ -926,7 +926,7 @@
     max-width: none;
     margin: 0;
     padding: 0;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   .cabecalho-finalizacao {
@@ -940,7 +940,7 @@
     border: 0;
     border-radius: 0;
     padding: 8px 10px 14px;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
     box-shadow: none;
   }
 
@@ -1027,7 +1027,7 @@
   .construtor-mao-finalizacao .mao-principal-finalizacao {
     gap: 3px;
     padding-bottom: 5px;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid var(--cor-borda, #edf2f7);
   }
 
   /* Acompanha o respiro acima da divisória: alinhado à última fileira. */
@@ -1048,8 +1048,7 @@
   }
 
   .construtor-mao-finalizacao .chip-pedra.agari {
-    box-shadow:
-      0 0 0 2px rgba(249, 115, 22, 0.22),
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--cor-aviso, #f97316) 22%, transparent),
       inset 0 0 0 1px rgba(253, 186, 116, 0.38);
   }
 
@@ -1101,7 +1100,7 @@
   .linha-opcoes-mao {
     border-radius: 9px;
     padding: 3px;
-    background: #eef2f6;
+    background: var(--cor-superficie-alt, #eef2f6);
   }
 
   .toggle-agari-mao button,
@@ -1131,10 +1130,10 @@
     align-content: start;
     gap: 2px;
     padding: 5px 5px calc(6px + env(safe-area-inset-bottom));
-    border-color: #d7e1ea;
+    border-color: var(--cor-borda, #d7e1ea);
     border-radius: 0 0 10px 10px;
-    background: #f2f4f7;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    background: var(--cor-superficie-alt, #f2f4f7);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--cor-borda, #ffffff) 90%, transparent);
     touch-action: manipulation;
     user-select: none;
   }
@@ -1166,14 +1165,14 @@
     border-color: transparent;
     border-radius: 999px;
     background: transparent;
-    color: #155b98;
+    color: var(--cor-primario, #155b98);
     box-shadow: none;
   }
 
   .teclado-pedras .botao-configuracao-teclado:hover,
   .teclado-pedras .botao-configuracao-teclado:focus-visible {
     border-color: transparent;
-    background: rgba(21, 91, 152, 0.08);
+    background: color-mix(in srgb, var(--cor-primario, #155b98) 8%, transparent);
   }
 
   .grupo-teclado-naipe {
@@ -1244,9 +1243,9 @@
     margin-bottom: 0;
     margin-inline: -10px;
     width: calc(100% + 20px);
-    border-top: 1px solid #d7e1ea;
+    border-top: 1px solid var(--cor-borda, #d7e1ea);
     border-radius: 10px 10px 0 0;
-    background: #f2f4f7;
+    background: var(--cor-superficie-alt, #f2f4f7);
   }
 
   .construtor-mao-montagem .teclado-pedras {
@@ -1283,7 +1282,7 @@
     height: 100dvh;
     min-height: 100dvh;
     overflow: hidden;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   body:has(.card-mao-completa.etapa-montagem) {
@@ -1299,7 +1298,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   body:has(.card-mao-completa.etapa-montagem) .conteudo-principal > div,
@@ -1313,7 +1312,7 @@
     height: 100%;
     max-height: 100%;
     min-height: 0;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
     border: 0;
     padding: 0;
     overflow: hidden;
@@ -1326,7 +1325,7 @@
 
   .construtor-mao-montagem .mao-editor-fixo {
     padding: 8px 12px 6px;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   .construtor-mao-montagem .pedras-selecionadas.modo-meld-ativo {
@@ -1343,10 +1342,10 @@
     flex-direction: column;
     margin: auto 0 0;
     border: 0;
-    border-top: 1px solid #d8e1ea;
+    border-top: 1px solid var(--cor-borda, #d8e1ea);
     border-radius: 12px 12px 0 0;
     padding: 6px 2px calc(5px + env(safe-area-inset-bottom));
-    background: #eef2f6;
+    background: var(--cor-superficie-alt, #eef2f6);
     box-shadow: none;
     touch-action: manipulation;
   }
@@ -1370,10 +1369,10 @@
     justify-content: stretch;
     gap: 3px;
     overflow: visible;
-    border: 1px solid #d8e1ea;
+    border: 1px solid var(--cor-borda, #d8e1ea);
     border-radius: 11px;
     padding: 3px;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   .construtor-mao-montagem .menu-acoes-teclado-mobile .btn-acao-mao {
@@ -1438,9 +1437,9 @@
     overflow: hidden;
     padding: 1px;
     border-width: 1px;
-    border-color: #d9e0e8;
+    border-color: var(--pedra-borda, #d9e0e8);
     border-radius: 6px;
-    background: #ffffff;
+    background: var(--pedra-face, #ffffff);
   }
 
   .construtor-mao-montagem .teclado-pedras .tile-img,
@@ -1504,7 +1503,7 @@
     min-height: 20px;
     border-width: 1px;
     padding: 2px 6px;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
     font-size: 0.56rem;
   }
 }
@@ -1752,7 +1751,7 @@
 
 .status-finalizacao-mao {
   min-width: 0;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.2;
@@ -1761,7 +1760,7 @@
 }
 
 .texto-calcular-pronto.status-finalizacao-mao {
-  color: #147a3b;
+  color: var(--cor-sucesso, #147a3b);
 }
 
 @media (min-width: 640px) {
@@ -1965,9 +1964,9 @@
   .editor-descartes-finalizacao {
     gap: 6px;
     padding: 8px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--cor-borda, #e5e7eb);
     border-radius: 8px;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   /* A seção de Ventos tem um teto de altura (max-height: 560px) usado na animação
@@ -2419,7 +2418,7 @@
   body:has(.card-mao-completa.etapa-montagem),
   body:has(.card-mao-completa.etapa-finalizacao) {
     padding: 0;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
     overflow: hidden;
   }
 
@@ -2432,7 +2431,7 @@
     min-height: calc(100dvh - 40px);
     margin: 0;
     padding: 0;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
     overflow: hidden;
   }
 
@@ -2446,7 +2445,7 @@
     border: 0;
     border-radius: 0;
     padding: 5px 8px calc(5px + env(safe-area-inset-bottom));
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
     box-shadow: none;
   }
 
@@ -2805,7 +2804,7 @@
     gap: 4px;
     min-height: 32px;
     padding-top: 0;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   .botao-mudar-batida-teclado,
@@ -2820,9 +2819,9 @@
   }
 
   .botao-mudar-batida-teclado.ativo {
-    border-color: #9a3412;
-    background: #c2410c;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+    border-color: var(--cor-aviso, #9a3412);
+    background: var(--cor-aviso, #c2410c);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cor-borda, #ffffff) 34%, transparent);
   }
 
   .texto-batida-completo {
@@ -2839,7 +2838,7 @@
     min-height: 16px;
     padding: 2px 6px;
     border-radius: 5px;
-    background: #fff7ed;
+    background: var(--cor-aviso-suave, #fff7ed);
     font-size: 0.58rem;
     line-height: 1.15;
     text-align: center;
@@ -2979,7 +2978,7 @@
     display: grid;
     gap: 4px;
     padding: 4px;
-    border-color: #edf2f7;
+    border-color: var(--cor-borda, #edf2f7);
   }
 
   .construtor-mao-finalizacao .mao-principal-finalizacao {
@@ -3183,7 +3182,7 @@
     margin-top: 8px;
     padding: 5px 0 calc(10px + env(safe-area-inset-bottom));
     overflow: visible;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   .botao-calcular-finalizacao {
@@ -3233,7 +3232,7 @@
     max-height: none;
     min-height: 0;
     overflow: visible;
-    border-right: 1px solid #e2e8f0;
+    border-right: 1px solid var(--cor-borda, #e2e8f0);
     border-radius: 7px;
   }
 
@@ -3401,7 +3400,7 @@
     margin: 8px 0 0;
     padding: 8px 0 calc(10px + env(safe-area-inset-bottom));
     overflow: visible;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 }
 
@@ -3539,7 +3538,7 @@
 
 .secao-melds-finalizacao {
   padding-top: 4px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--cor-borda, #e2e8f0);
 }
 
 .melds-finalizacao-coluna {
@@ -3559,19 +3558,19 @@
 }
 
 .construtor-mao-finalizacao .chip-meld-mao-chii {
-  background: #e8f5e9 !important;
+  background: var(--cor-sucesso-suave, #e8f5e9) !important;
 }
 
 .construtor-mao-finalizacao .chip-meld-mao-pon {
-  background: #e3f2fd !important;
+  background: var(--cor-primario-suave, #e3f2fd) !important;
 }
 
 .construtor-mao-finalizacao .chip-meld-mao-kanAberto {
-  background: #f8edfb !important;
+  background: var(--cor-primario-suave, #f8edfb) !important;
 }
 
 .construtor-mao-finalizacao .chip-meld-mao-kanFechado {
-  background: #f3e5f5 !important;
+  background: var(--cor-destaque-suave, #f3e5f5) !important;
 }
 
 /* Fora do celular em retrato a montagem mantem pedras e melds no mesmo fluxo
@@ -3783,10 +3782,10 @@
     gap: 0;
     margin-bottom: -4px;
     overflow: hidden;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--cor-borda, #e2e8f0);
     border-bottom: 0;
     border-radius: 8px 8px 0 0;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   .acoes-construtor-mao .btn-acao-mao {
@@ -4040,9 +4039,9 @@
     gap: 6px;
     margin-bottom: 0;
     padding: 8px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--cor-borda, #e2e8f0);
     border-radius: 10px;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   .acoes-construtor-mao .btn-acao-mao {
@@ -4064,8 +4063,8 @@
     right: 0;
     z-index: 30;
     padding: 0;
-    background: #f8fafc;
-    border-top: 1px solid #e2e8f0;
+    background: var(--cor-superficie-alt, #f8fafc);
+    border-top: 1px solid var(--cor-borda, #e2e8f0);
     box-shadow: 0 -4px 16px rgba(16, 42, 67, 0.08);
   }
 
@@ -4118,7 +4117,7 @@
     gap: 5px;
     padding: 6px 8px 8px;
     border-radius: 0;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   /* Remove label column — tiles fill 100% width */
@@ -4318,9 +4317,9 @@
     flex-direction: column;
     width: 100%;
     margin: 0;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--cor-borda, #e2e8f0);
     border-radius: 0;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
     box-shadow: 0 -4px 16px rgba(16, 42, 67, 0.08);
   }
 
@@ -4456,9 +4455,9 @@
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 8px;
     padding: 10px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--cor-borda, #e2e8f0);
     border-radius: 10px;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   .acoes-construtor-mao .btn-acao-mao {
@@ -4819,9 +4818,9 @@
     width: 100%;
     margin: 0;
     border: 0;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--cor-borda, #e2e8f0);
     border-radius: 0;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
     box-shadow: 0 -4px 16px rgba(16, 42, 67, 0.08);
   }
 
@@ -5258,7 +5257,7 @@
  */
 @media (min-width: 1024px) and (orientation: landscape) and (min-height: 701px) {
   body:has(.card-mao-completa.etapa-finalizacao) {
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   body:has(.card-mao-completa.etapa-finalizacao) .conteudo-principal {

@@ -151,7 +151,7 @@ function ChipMeld({
     return (
       <span className={`chip-meld-mao chip-meld-mao-${meld.tipo} chip-meld-seletor-agari`}>
         <span className="rotulo-meld-seletor" style={{ color: estilo.borda }}>
-          {estilo.rotulo}
+          {t(estilo.rotulo)}
         </span>
         <span className="meld-pedras">{pedrasSelecionaveis}</span>
       </span>
@@ -162,8 +162,8 @@ function ChipMeld({
     <button
       className={`chip-meld-mao chip-meld-mao-${meld.tipo}`}
       type="button"
-      title={t('calculator.removeMeld', { meld: estilo.rotulo })}
-      aria-label={t('calculator.removeMeld', { meld: estilo.rotulo })}
+      title={t('calculator.removeMeld', { meld: t(estilo.rotulo) })}
+      aria-label={t('calculator.removeMeld', { meld: t(estilo.rotulo) })}
       onClick={() => aoRemoverMeld(indiceMeld)}
       style={{
         display: 'inline-flex',
@@ -189,7 +189,7 @@ function ChipMeld({
           letterSpacing: 0,
         }}
       >
-        {estilo.rotulo}
+        {t(estilo.rotulo)}
       </span>
       <PedrasMeld meld={meld} indiceAgari={indiceAgari} />
     </button>
@@ -243,7 +243,7 @@ export function MaoAtual({
   const slotsEstruturais = Math.min(slotsUsados, 14)
   const sufixoFisico =
     totalPedras !== slotsUsados
-      ? ` • ${t('calculator.physicalTilesShort', { total: totalPedras })}`
+      ? ` • ${t('calculator.physicalTilesShort', { count: totalPedras })}`
       : ''
   const tituloMao =
     contexto === 'finalizacao'
@@ -460,7 +460,7 @@ export function MaoAtual({
                 ? {
                     borderColor: acaoMobileAtiva.cor,
                     background: acaoMobileAtiva.cor,
-                    color: '#ffffff',
+                    color: 'var(--cor-sobre-primario, #ffffff)',
                   }
                 : undefined
             }

@@ -1,5 +1,9 @@
+import type { IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
+import { idiomaGlobal } from '@/compartilhado/i18n/tradutorGlobal'
+import { interpolar } from '@/compartilhado/i18n/traduzir'
+import { conteudoGuiaBolso } from '../../../conteudo/guia-bolso'
 import type { CodigoPedra, Mao } from '../../../logica/mao'
-import { DORA_NOTE, YAKU, type Yaku } from '../../../logica/yakus'
+import { yakusDoIdioma, type Yaku } from '../../../logica/yakus'
 import { codigoBase, proximaDoraIndicada } from '../../constantes'
 
 /**
@@ -91,62 +95,72 @@ const MAO_INTEIRA = new Set([
 /** Yakus da forma de vencer: o que conta é a pedra da batida. */
 const SO_BATIDA = new Set(['menzen-tsumo', 'haitei', 'houtei', 'rinshan', 'chankan', 'ippatsu'])
 
-const YAKU_POR_ID = new Map(YAKU.map((yaku) => [yaku.id, yaku]))
-
 export interface ExplicacaoYaku {
   /** Cartão da referência de yakus; ausente para dora (que não é yaku). */
   yaku?: Yaku
-  /** Título no lugar do nome em português do cartão (ex.: Vento da rodada). */
+  /** Título no lugar do nome do yaku (ex.: Vento da rodada). */
   titulo?: { nome: string; kanji: string }
   texto: string
   /** Dica em bloco destacado depois do texto. */
   dica?: string
 }
 
-const NOME_VENTO: Record<string, string> = { Ton: 'Leste', Nan: 'Sul', Sha: 'Oeste', Pei: 'Norte' }
+const KANJI_DRAGAO = { Haku: '白', Hatsu: '發', Chun: '中' } as const
 
-const DRAGAO_YAKUHAI: Record<string, { nome: string; kanji: string }> = {
-  Haku: { nome: 'Dragão branco', kanji: '白' },
-  Hatsu: { nome: 'Dragão verde', kanji: '發' },
-  Chun: { nome: 'Dragão vermelho', kanji: '中' },
-}
+type Dragao = keyof typeof KANJI_DRAGAO
+type Vento = keyof ReturnType<typeof conteudoGuiaBolso>['yakuhai']['ventos']
 
 /**
  * Cada yakuhai com a sua explicação: vento da rodada, do assento (com o aviso
  * de vento duplo quando são o mesmo) ou o dragão.
  */
-function explicacaoYakuhai(nome: string, yaku: Yaku, mao?: Mao): ExplicacaoYaku {
+function explicacaoYakuhai(
+  nome: string,
+  yaku: Yaku,
+  idioma: IdiomaSuportado,
+  mao?: Mao,
+): ExplicacaoYaku {
+  const textos = conteudoGuiaBolso(idioma).yakuhai
   const [tipo, honra = ''] = nome.split(' ')
-  const dragao = DRAGAO_YAKUHAI[honra]
-  if (tipo === 'Yakuhai' && dragao) {
+  if (tipo === 'Yakuhai' && honra in KANJI_DRAGAO) {
+    const dragao = textos.dragoes[honra as Dragao]
     return {
       yaku,
-      titulo: dragao,
-      texto: `Trinca ou quad de ${dragao.nome.toLocaleLowerCase('pt-BR')}. Vale 1 han.`,
+      titulo: { nome: dragao, kanji: KANJI_DRAGAO[honra as Dragao] },
+      texto: interpolar(textos.textoDragao, idioma, { dragao: dragao.toLocaleLowerCase(idioma) }),
     }
   }
-  const vento = NOME_VENTO[honra] ?? honra
+  const vento = textos.ventos[honra as Vento] ?? honra
   const daRodada = tipo === 'Bakaze'
   const ventoDuplo = mao ? mao.ventoRodada === mao.ventoAssento : false
   return {
     yaku,
     titulo: daRodada
-      ? { nome: 'Vento da rodada', kanji: '場風' }
-      : { nome: 'Vento do assento', kanji: '自風' },
-    texto: `Trinca ou quad de ${vento}, o vento ${daRodada ? 'da rodada atual' : 'do seu assento'}. Vale 1 han.`,
+      ? { nome: textos.tituloRodada, kanji: '場風' }
+      : { nome: textos.tituloAssento, kanji: '自風' },
+    texto: interpolar(daRodada ? textos.textoVentoRodada : textos.textoVentoAssento, idioma, {
+      vento,
+    }),
     dica: ventoDuplo
-      ? `Como esse vento também é o ${daRodada ? 'do seu assento' : 'da rodada'}, a mesma trinca conta duas vezes (vento duplo) e vale 2 han no total.`
+      ? daRodada
+        ? textos.dicaVentoDuploRodada
+        : textos.dicaVentoDuploAssento
       : undefined,
   }
 }
 
-export function explicacaoDoYaku(nome: string, mao?: Mao): ExplicacaoYaku | null {
-  if (/dora/i.test(nome)) return { texto: DORA_NOTE }
+/** Explicação do yaku no idioma (o ativo, se nenhum for dado). */
+export function explicacaoDoYaku(
+  nome: string,
+  mao?: Mao,
+  idioma: IdiomaSuportado = idiomaGlobal(),
+): ExplicacaoYaku | null {
+  if (/dora/i.test(nome)) return { texto: conteudoGuiaBolso(idioma).notaDora }
   const id = idDoYaku(nome)
-  const yaku = id ? YAKU_POR_ID.get(id) : undefined
+  const yaku = id ? yakusDoIdioma(idioma).find((candidato) => candidato.id === id) : undefined
   if (!yaku) return null
-  if (id === 'yakuhai') return explicacaoYakuhai(nome, yaku, mao)
-  return { yaku, texto: yaku.description, dica: yaku.dica }
+  if (id === 'yakuhai') return explicacaoYakuhai(nome, yaku, idioma, mao)
+  return { yaku, texto: yaku.descricao, dica: yaku.dica }
 }
 
 function idDoYaku(nome: string): string | null {

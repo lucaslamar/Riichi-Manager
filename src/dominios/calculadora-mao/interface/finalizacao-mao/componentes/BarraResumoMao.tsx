@@ -1,3 +1,4 @@
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { Mao } from '../../../logica/mao'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
@@ -6,6 +7,7 @@ interface PropsBarraResumoMao {
 }
 
 export function BarraResumoMao({ mao }: PropsBarraResumoMao) {
+  const { t } = useI18n()
   const todosTiles = [
     ...mao.pedras.map((pedra, i) => ({ pedra, agari: i === mao.indiceAgari, key: `m${i}` })),
     ...mao.melds.flatMap((meld, im) =>
@@ -20,10 +22,13 @@ export function BarraResumoMao({ mao }: PropsBarraResumoMao) {
   return (
     <div className="barra-resumo-mao">
       <div className="barra-resumo-linha">
-        <span className="barra-resumo-rotulo">MÃO</span>
+        <span className="barra-resumo-rotulo">{t('calculator.handLabel')}</span>
         <div className="barra-resumo-tiles">
           {todosTiles.map(({ pedra, agari, key }) => (
-            <span key={key} className={`barra-resumo-tile ${agari ? 'barra-resumo-tile-agari' : ''}`}>
+            <span
+              key={key}
+              className={`barra-resumo-tile ${agari ? 'barra-resumo-tile-agari' : ''}`}
+            >
               <PedraSvg pedra={pedra} />
             </span>
           ))}

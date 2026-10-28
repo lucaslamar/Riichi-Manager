@@ -1,0 +1,23 @@
+/*
+ * Fonte por idioma. Japonês, chinês e coreano compartilham caracteres com
+ * desenhos diferentes (ex.: 直, 骨, 角): cada um usa a sua Noto, carregada pelo
+ * I18nProvider só quando o idioma é escolhido, com as fontes do sistema como
+ * reserva. Os outros idiomas seguem a pilha de tokens.css.
+ */
+:root:lang(ja) {
+  font-family:
+    'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', Meiryo, sans-serif;
+}
+
+:root:lang(zh-Hans) {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif;
+}
+
+:root:lang(ko) {
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+
+/* Coreano quebra linha entre palavras (há espaços); japonês e chinês quebram entre caracteres. */
+:lang(ko) {
+  word-break: keep-all;
+}

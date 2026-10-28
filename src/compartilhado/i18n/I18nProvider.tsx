@@ -8,94 +8,112 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import {
+  CADEIA_RESERVA,
+  IDIOMAS_SUPORTADOS,
+  idiomaDoNavegador,
+  normalizarIdiomaSalvo,
+  type IdiomaSuportado,
+} from './idiomas'
+import { definirTradutorGlobal } from './tradutorGlobal'
+import {
+  formatarNumero,
+  interpolar,
+  textoDaChave,
+  type Dicionario,
+  type Parametros,
+} from './traduzir'
 
-type Dicionario = Record<string, unknown>
+export type { IdiomaSuportado } from './idiomas'
+export { IDIOMA_PADRAO } from './idiomas'
 
-export const IDIOMA_PADRAO = 'pt-BR'
+const CHAVE_ARMAZENAMENTO = 'riichi-manager-idioma'
 
-const IDIOMAS_SUPORTADOS = ['pt-BR', 'en-US', 'ja-JP', 'zh-CN', 'ko-KR'] as const
-
-export type IdiomaSuportado = (typeof IDIOMAS_SUPORTADOS)[number]
+/** Fonte Noto de cada idioma CJK: o mesmo caractere tem desenho diferente em cada um. */
+const FONTES_CJK: Partial<Record<IdiomaSuportado, string>> = {
+  ja: 'Noto+Sans+JP',
+  'zh-Hans': 'Noto+Sans+SC',
+  ko: 'Noto+Sans+KR',
+}
 
 interface ContextoI18n {
   idioma: IdiomaSuportado
   idiomas: readonly IdiomaSuportado[]
   alterarIdioma: (idioma: IdiomaSuportado) => void
-  t: (chave: string, parametros?: Record<string, string | number>) => string
+  t: (chave: string, parametros?: Parametros) => string
+  /** Número no formato do idioma ativo. */
+  numero: (valor: number) => string
 }
 
 const I18nContext = createContext<ContextoI18n | null>(null)
 
-function ehIdiomaSuportado(idioma: string | null): idioma is IdiomaSuportado {
-  return !!idioma && IDIOMAS_SUPORTADOS.includes(idioma as IdiomaSuportado)
+const dicionariosCarregados = new Map<IdiomaSuportado, Promise<Dicionario>>()
+
+function carregarDicionario(idioma: IdiomaSuportado): Promise<Dicionario> {
+  let pedido = dicionariosCarregados.get(idioma)
+  if (!pedido) {
+    pedido = fetch(`${import.meta.env.BASE_URL}locales/${idioma}.json`)
+      .then((resposta) => {
+        if (!resposta.ok) throw new Error(`Locale não encontrado: ${idioma}`)
+        return resposta.json() as Promise<Dicionario>
+      })
+      .catch(() => {
+        dicionariosCarregados.delete(idioma)
+        return {}
+      })
+    dicionariosCarregados.set(idioma, pedido)
+  }
+  return pedido
 }
 
-function buscarValor(dicionario: Dicionario, chave: string): string | undefined {
-  const valor = chave.split('.').reduce<unknown>((atual, parte) => {
-    if (!atual || typeof atual !== 'object') return undefined
-    return (atual as Dicionario)[parte]
-  }, dicionario)
-
-  return typeof valor === 'string' ? valor : undefined
-}
-
-function interpolar(texto: string, parametros?: Record<string, string | number>) {
-  if (!parametros) return texto
-  return Object.entries(parametros).reduce(
-    (textoAtual, [chave, valor]) => textoAtual.split(`{{${chave}}}`).join(String(valor)),
-    texto,
+function idiomaInicial(): IdiomaSuportado {
+  let salvo: string | null = null
+  try {
+    salvo = window.localStorage.getItem(CHAVE_ARMAZENAMENTO)
+  } catch {
+    // Armazenamento bloqueado: segue para o idioma do navegador.
+  }
+  return (
+    normalizarIdiomaSalvo(salvo) ?? idiomaDoNavegador(navigator.languages ?? [navigator.language])
   )
 }
 
-async function carregarDicionario(idioma: IdiomaSuportado): Promise<Dicionario> {
-  const resposta = await fetch(`${import.meta.env.BASE_URL}locales/${idioma}.json`)
-  if (!resposta.ok) throw new Error(`Locale nao encontrado: ${idioma}`)
-  return resposta.json() as Promise<Dicionario>
+/** Carrega a fonte Noto do idioma CJK uma vez, só quando ele é escolhido. */
+function carregarFonte(idioma: IdiomaSuportado) {
+  const familia = FONTES_CJK[idioma]
+  if (!familia || document.querySelector(`link[data-fonte-idioma="${idioma}"]`)) return
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.href = `https://fonts.googleapis.com/css2?family=${familia}:wght@400;700;900&display=swap`
+  link.dataset.fonteIdioma = idioma
+  document.head.appendChild(link)
 }
 
 /**
- * Carrega textos visiveis a partir de `public/locales`, preservando fallback em pt-BR.
+ * Textos visíveis a partir de `public/locales`. A troca de idioma vale na hora,
+ * sem recarregar; chave ausente cai no inglês e depois no pt-BR.
  *
- * Chamado uma vez no ponto de entrada da aplicacao. Componentes novos devem usar `useI18n`
- * para evitar textos hardcoded e manter compatibilidade com GitHub Pages via `BASE_URL`.
+ * Componentes novos devem usar `useI18n` para evitar textos fixos.
  */
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [idioma, setIdioma] = useState<IdiomaSuportado>(() => {
-    const salvo = window.localStorage.getItem('riichi-manager-idioma')
-    return ehIdiomaSuportado(salvo) ? salvo : IDIOMA_PADRAO
-  })
-  const [dicionarioPadrao, setDicionarioPadrao] = useState<Dicionario>({})
-  const [dicionarioAtual, setDicionarioAtual] = useState<Dicionario>({})
+  const [idioma, setIdioma] = useState<IdiomaSuportado>(idiomaInicial)
+  const [dicionarios, setDicionarios] = useState<Partial<Record<IdiomaSuportado, Dicionario>>>({})
 
   useEffect(() => {
     let cancelado = false
-
-    carregarDicionario(IDIOMA_PADRAO)
-      .then((dicionario) => {
-        if (!cancelado) setDicionarioPadrao(dicionario)
+    for (const codigo of [idioma, ...CADEIA_RESERVA]) {
+      carregarDicionario(codigo).then((dicionario) => {
+        if (!cancelado) setDicionarios((atuais) => ({ ...atuais, [codigo]: dicionario }))
       })
-      .catch(() => {
-        if (!cancelado) setDicionarioPadrao({})
-      })
-
-    return () => {
-      cancelado = true
     }
-  }, [])
-
-  useEffect(() => {
-    let cancelado = false
-
-    carregarDicionario(idioma)
-      .then((dicionario) => {
-        if (!cancelado) setDicionarioAtual(dicionario)
-      })
-      .catch(() => {
-        if (!cancelado) setDicionarioAtual({})
-      })
 
     document.documentElement.lang = idioma
-    window.localStorage.setItem('riichi-manager-idioma', idioma)
+    carregarFonte(idioma)
+    try {
+      window.localStorage.setItem(CHAVE_ARMAZENAMENTO, idioma)
+    } catch {
+      // Sem armazenamento a escolha vale só nesta sessão.
+    }
 
     return () => {
       cancelado = true
@@ -103,12 +121,19 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [idioma])
 
   const traduzir = useCallback(
-    (chave: string, parametros?: Record<string, string | number>) => {
-      const texto = buscarValor(dicionarioAtual, chave) ?? buscarValor(dicionarioPadrao, chave)
-      return interpolar(texto ?? chave, parametros)
+    (chave: string, parametros?: Parametros) => {
+      for (const codigo of [idioma, ...CADEIA_RESERVA]) {
+        const dicionario = dicionarios[codigo]
+        const texto = dicionario && textoDaChave(dicionario, chave, codigo, parametros)
+        if (texto !== undefined) return interpolar(texto, idioma, parametros)
+      }
+      return chave
     },
-    [dicionarioAtual, dicionarioPadrao],
+    [dicionarios, idioma],
   )
+
+  // Antes dos filhos renderizarem: funções fora de componentes já usam o idioma novo.
+  definirTradutorGlobal(traduzir, idioma)
 
   const valor = useMemo<ContextoI18n>(
     () => ({
@@ -116,6 +141,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       idiomas: IDIOMAS_SUPORTADOS,
       alterarIdioma: setIdioma,
       t: traduzir,
+      numero: (numero: number) => formatarNumero(numero, idioma),
     }),
     [idioma, traduzir],
   )

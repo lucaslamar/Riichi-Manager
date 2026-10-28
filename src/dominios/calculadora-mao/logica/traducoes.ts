@@ -165,82 +165,108 @@ export function traduzirPatamares(nome: string): string {
   return mapa[nome] ?? nome
 }
 
-function rotuloPedraFu(valor: string | string[] | undefined): string {
-  const lista = Array.isArray(valor) ? valor : valor ? [valor] : []
-  const nomes: Record<string, string> = {
-    '1z': 'Leste',
-    '2z': 'Sul',
-    '3z': 'Oeste',
-    '4z': 'Norte',
-    '5z': 'Haku',
-    '6z': 'Hatsu',
-    '7z': 'Chun',
-  }
-  const naipes: Record<string, string> = { m: 'man', p: 'pin', s: 'sou' }
-  return lista
-    .map((pedra) => nomes[pedra] ?? `${pedra[0]} ${naipes[pedra[1]] ?? pedra[1] ?? ''}`.trim())
+/** Nome curto de cada honra nos detalhes de fu. */
+const CHAVES_HONRA_FU: Record<string, string> = {
+  '1z': 'winds.east',
+  '2z': 'winds.south',
+  '3z': 'winds.west',
+  '4z': 'winds.north',
+  '5z': 'fuDetails.haku',
+  '6z': 'fuDetails.hatsu',
+  '7z': 'fuDetails.chun',
+}
+
+const CHAVES_NAIPE_FU: Record<string, string> = {
+  m: 'calculator.suitMan',
+  p: 'calculator.suitPin',
+  s: 'calculator.suitSou',
+}
+
+type Traduzir = (chave: string, parametros?: Record<string, string | number>) => string
+
+function nomesPedrasFu(pedras: string[], traduzir: Traduzir): string {
+  return pedras
+    .map((pedra) => {
+      if (CHAVES_HONRA_FU[pedra]) return traduzir(CHAVES_HONRA_FU[pedra])
+      const naipe = CHAVES_NAIPE_FU[pedra[1]]
+      return naipe
+        ? traduzir('fuDetails.numberTile', { number: pedra[0], suit: traduzir(naipe) })
+        : pedra
+    })
     .join(', ')
 }
 
+/** Descrição de um detalhe de fu no idioma ativo (com o nome das pedras). */
+export function textoDetalheFu(detalhe: DetalheFu, traduzir: Traduzir): string {
+  const pedras = detalhe.pedras?.length ? nomesPedrasFu(detalhe.pedras, traduzir) : ''
+  const tiles = pedras || (detalhe.semPedra ? traduzir(detalhe.semPedra) : '')
+  return traduzir(detalhe.descricao, { tiles })
+}
+
+const ESPERAS_FU = new Set(['ryanmen', 'shanpon', 'kanchan', 'penchan', 'tanki'])
+
+/**
+ * Detalhes de fu da biblioteca como chaves i18n (bloco `fuDetails`): a tela
+ * traduz com `textoDetalheFu`.
+ */
 export function traduzirDetalhesFu(padroes: Array<Record<string, any>>): DetalheFu[] {
   return padroes
     .filter((padrao) => Number(padrao.fu) > 0)
-    .map((padrao) => {
+    .map((padrao): DetalheFu => {
       const fu = Number(padrao.fu)
-      const pedra = rotuloPedraFu(padrao.v)
+      const pedras = Array.isArray(padrao.v) ? padrao.v : padrao.v ? [padrao.v] : []
+      const tipoGrupo = padrao.yaochuu ? 'fuDetails.terminalHonorDesc' : 'fuDetails.simpleDesc'
       switch (padrao.t) {
         case 'base':
-          return { tipo: 'Base', descricao: 'Fu base de toda mão vencedora', fu }
+          return { tipo: 'fuDetails.base', descricao: 'fuDetails.baseDesc', fu }
         case 'chiitoi':
-          return { tipo: 'Chiitoitsu', descricao: 'Sete pares usa valor fixo de 25 fu', fu }
+          return { tipo: 'fuDetails.chiitoi', descricao: 'fuDetails.chiitoiDesc', fu }
         case 'pinfuTsumo':
-          return { tipo: 'Pinfu tsumo', descricao: 'Mão fechada de Pinfu vencida por tsumo', fu }
+          return { tipo: 'fuDetails.pinfuTsumo', descricao: 'fuDetails.pinfuTsumoDesc', fu }
         case 'closedRon':
-          return { tipo: 'Ron fechado', descricao: 'Mão fechada vencida por descarte', fu }
+          return { tipo: 'fuDetails.closedRon', descricao: 'fuDetails.closedRonDesc', fu }
         case 'rinshanTsumo':
-          return { tipo: 'Rinshan', descricao: 'Tsumo após kan, conforme a regra selecionada', fu }
+          return { tipo: 'fuDetails.rinshan', descricao: 'fuDetails.rinshanDesc', fu }
         case 'tsumo':
-          return { tipo: 'Tsumo', descricao: 'Vitória por compra própria', fu }
+          return { tipo: 'fuDetails.tsumo', descricao: 'fuDetails.tsumoDesc', fu }
         case 'openPinfu':
-          return {
-            tipo: 'Mão aberta sem fu',
-            descricao: 'Arredondamento mínimo para mão aberta sem outro fu',
-            fu,
-          }
+          return { tipo: 'fuDetails.openPinfu', descricao: 'fuDetails.openPinfuDesc', fu }
         case 'yakuhaiPair':
           return {
-            tipo: 'Par de yakuhai',
-            descricao: `${pedra || 'Par de valor'}${padrao.double ? ' como vento da rodada e do assento' : ''}`,
+            tipo: 'fuDetails.yakuhaiPair',
+            descricao: padrao.double
+              ? 'fuDetails.yakuhaiPairDoubleDesc'
+              : 'fuDetails.yakuhaiPairDesc',
+            pedras,
+            semPedra: 'fuDetails.valuePair',
             fu,
           }
         case 'triplet':
           return {
-            tipo: padrao.open ? 'Trinca aberta' : 'Trinca fechada',
-            descricao: `${pedra || 'Trinca'}${padrao.yaochuu ? ' de terminal/honra' : ' de simples'}`,
+            tipo: padrao.open ? 'fuDetails.openTriplet' : 'fuDetails.closedTriplet',
+            descricao: tipoGrupo,
+            pedras,
+            semPedra: 'fuDetails.triplet',
             fu,
           }
         case 'quad':
           return {
-            tipo: padrao.open ? 'Kan aberto' : 'Kan fechado',
-            descricao: `${pedra || 'Kan'}${padrao.yaochuu ? ' de terminal/honra' : ' de simples'}`,
+            tipo: padrao.open ? 'fuDetails.openKan' : 'fuDetails.closedKan',
+            descricao: tipoGrupo,
+            pedras,
+            semPedra: 'fuDetails.kan',
             fu,
           }
-        case 'wait': {
-          const esperas: Record<string, string> = {
-            ryanmen: 'espera aberta dos dois lados',
-            shanpon: 'espera em par para formar trinca',
-            kanchan: 'espera fechada no meio',
-            penchan: 'espera de ponta',
-            tanki: 'espera no par',
-          }
-          return { tipo: 'Espera', descricao: esperas[padrao.w] ?? 'Tipo de espera', fu }
-        }
-        default:
+        case 'wait':
           return {
-            tipo: String(padrao.t ?? 'Fu'),
-            descricao: 'Detalhe retornado pela biblioteca',
+            tipo: 'fuDetails.wait',
+            descricao: ESPERAS_FU.has(padrao.w)
+              ? `fuDetails.waits.${padrao.w}`
+              : 'fuDetails.waitGeneric',
             fu,
           }
+        default:
+          return { tipo: 'fuDetails.generic', descricao: 'fuDetails.libraryDetail', fu }
       }
     })
 }

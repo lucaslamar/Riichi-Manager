@@ -8,6 +8,7 @@ import { parseMpsz, parseMpszGrupos } from '../../../logica/yakus'
 import { CiclosDora, MaoRotulada, PedrasExemplo } from '../yakus/PedrasExemplo'
 // Tutorial da Calculadora de Han e Fu: só o botão que abre a modal dele.
 import BotaoTutorialHanFu from '@/dominios/calculadora-han-fu/interface/modais/tutorial-han-fu/BotaoTutorialHanFu'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import BlocoDica from './BlocoDica'
 import TextoGlossario from './TextoGlossario'
 import './bloco-glossario.css'
@@ -32,6 +33,7 @@ function Item({
   secao: SecaoGlossario
   destacado: boolean
 }) {
+  const { t } = useI18n()
   const ignorar = termosDoItem(secao, item)
   const classes = [
     'glossario-item',
@@ -42,7 +44,7 @@ function Item({
     <div className={classes.filter(Boolean).join(' ')}>
       <h4 className="glossario-item__nome">
         {item.nome}
-        {item.kanji && (
+        {item.kanji && item.kanji !== item.nome && (
           <>
             {' '}
             <span className="glossario-kanji" lang="ja">
@@ -67,14 +69,19 @@ function Item({
           ))}
         </ul>
       )}
-      {item.pedras && <PedrasItem pedras={item.pedras} rotulo={`Exemplo: ${item.nome}`} />}
+      {item.pedras && (
+        <PedrasItem
+          pedras={item.pedras}
+          rotulo={t('pocketGuide.example', { exemplo: item.nome })}
+        />
+      )}
       {item.nota && (
         <BlocoDica texto={item.nota} ignorar={ignorar} className="glossario-item__nota" />
       )}
       {item.tutorialHanFu && (
         <BotaoTutorialHanFu className="bloco-dica glossario-item__nota glossario-item__tutorial">
           <span>
-            <strong>Como contar</strong> han e fu, passo a passo
+            <strong>{t('pocketGuide.howToCountStrong')}</strong> {t('pocketGuide.howToCountRest')}
           </span>
         </BotaoTutorialHanFu>
       )}
@@ -134,7 +141,7 @@ export function TituloSecaoGlossario({
   return (
     <Tag className={Tag === 'h3' ? 'glossario-bloco__titulo' : undefined}>
       {secao.titulo}
-      {secao.kanji && (
+      {secao.kanji && secao.kanji !== secao.titulo && (
         <>
           {' '}
           <span className="glossario-kanji" lang="ja">

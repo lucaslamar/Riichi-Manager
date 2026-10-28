@@ -3,7 +3,7 @@
  * bastão reto com as marcas no meio. 100 tem 8 pontos pretos; 1.000, um ponto
  * vermelho; 5.000, um ponto vermelho com 4 em volta; 10.000, um ponto vermelho
  * com 6 em volta e um verde de cada lado. Preto em `currentColor` e o vermelho
- * do guia, então seguem o tema.
+ * do guia, então seguem o tema (no escuro, o palito fica lilás).
  */
 
 const LARGURA = 160
@@ -85,7 +85,7 @@ function DesenhoPalito({ palito }: { palito: Palito }) {
         width={LARGURA - 3}
         height={ALTURA - 3}
         rx={3}
-        fill="var(--guia-papel)"
+        fill="var(--cor-primario-suave, var(--guia-papel))"
         stroke="currentColor"
         strokeWidth={1.4}
       />

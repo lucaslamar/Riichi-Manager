@@ -1,5 +1,6 @@
 import { useRef } from 'react'
-import { SECOES_GLOSSARIO } from '../../../logica/glossario'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { secoesGlossario } from '../../../logica/glossario'
 import BlocoGlossario from '../glossario/BlocoGlossario'
 import './aba-glossario.css'
 
@@ -15,6 +16,8 @@ const RESPIRO_ROLAGEM = 8
  * Guia de bolso inteiro (ModalYakus).
  */
 export default function AbaGlossario() {
+  const { t, idioma } = useI18n()
+  const secoes = secoesGlossario(idioma)
   const raizRef = useRef<HTMLDivElement>(null)
 
   const irPara = (secao: string) => {
@@ -37,17 +40,17 @@ export default function AbaGlossario() {
 
   return (
     <div ref={raizRef} className="aba-glossario">
-      <nav className="aba-glossario__sumario" aria-label="Assuntos do glossário">
+      <nav className="aba-glossario__sumario" aria-label={t('pocketGuide.glossaryTopics')}>
         <span className="aba-glossario__sumario-rotulo" aria-hidden="true">
-          Sumário:
+          {t('pocketGuide.summary')}
         </span>
-        {SECOES_GLOSSARIO.map((secao) => (
+        {secoes.map((secao) => (
           <button key={secao.id} type="button" onClick={() => irPara(secao.id)}>
             {secao.titulo}
           </button>
         ))}
       </nav>
-      {SECOES_GLOSSARIO.map((secao) => (
+      {secoes.map((secao) => (
         <BlocoGlossario key={secao.id} secao={secao} />
       ))}
     </div>

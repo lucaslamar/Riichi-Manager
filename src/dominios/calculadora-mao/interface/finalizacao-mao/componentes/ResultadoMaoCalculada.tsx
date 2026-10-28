@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import { codigoBase } from '../../constantes'
+import { nomeYakuExibido } from '../../../logica/nomesYaku'
 import ModalResultado from '../../modais/resultado/ModalResultado'
 
 interface PropsResultadoMao {
@@ -15,7 +16,7 @@ export default function ResultadoMaoCalculada({
   estado,
   modoFluxo = 'montagem',
 }: PropsResultadoMao) {
-  const { t } = useI18n()
+  const { t, idioma } = useI18n()
   const {
     mao,
     maoCompleta,
@@ -99,13 +100,15 @@ export default function ResultadoMaoCalculada({
     if (chomboFuriten) return t('calculator.invalidFuritenAnnounce')
     if (resultadoMaoInvalida || !resultado) return t('calculator.invalidNoYakuAnnounce')
     const yaku =
-      resultado.yaku?.map(([nome]: [string, number, boolean]) => nome).join(', ') ||
+      resultado.yaku
+        ?.map(([nome]: [string, number, boolean]) => nomeYakuExibido(nome, idioma))
+        .join(', ') ||
       t('calculator.noYaku')
     return t('calculator.resultAnnounce', {
       agari: mao.agari === 'ron' ? t('calculator.ron') : t('calculator.tsumo'),
       han: resultado.han,
       fu: resultado.fu,
-      points: totalResultado.toLocaleString('pt-BR'),
+      points: totalResultado,
       yaku,
     })
   }

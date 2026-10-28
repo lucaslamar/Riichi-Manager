@@ -163,6 +163,11 @@ export default function GatoHelice({
       {/* Ponto da boca: de onde saem voando os balõezinhos dos resultados. */}
       <span className="gato-helice__boca" />
 
+      {/* Pontos logo fora da cabeça, um de cada lado: onde terminam as bolinhas
+          de pensamento (sem atravessar o boné nem o rosto). */}
+      <span className="gato-helice__pensamento gato-helice__pensamento--esquerda" />
+      <span className="gato-helice__pensamento gato-helice__pensamento--direita" />
+
       {/* Hélice: gira por cima do boné */}
       <div ref={rotorRef} className="gato-helice__rotor">
         {VENTOS_MESA.map((vento) => (

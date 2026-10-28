@@ -7,8 +7,9 @@ import BlocoGlossario, { TituloSecaoGlossario } from './BlocoGlossario'
 
 /** Título da tela de termo: o assunto do glossário em que o termo está (ou "Yaku"). */
 export function TituloTermo({ termo }: { termo: string }) {
-  if (buscarYakuDoTermo(termo)) return <span>Yaku</span>
-  const encontrado = buscarTermoGlossario(termo)
+  const { t, idioma } = useI18n()
+  if (buscarYakuDoTermo(termo, idioma)) return <span>{t('pocketGuide.yaku')}</span>
+  const encontrado = buscarTermoGlossario(termo, idioma)
   return encontrado ? <TituloSecaoGlossario secao={encontrado.secao} /> : null
 }
 
@@ -19,7 +20,8 @@ export function TituloTermo({ termo }: { termo: string }) {
  * vista. Link de yaku abre o cartão dele, como nas abas do Guia de bolso.
  */
 export function ConteudoTermo({ termo }: { termo: string }) {
-  const encontrado = buscarTermoGlossario(termo)
+  const { idioma } = useI18n()
+  const encontrado = buscarTermoGlossario(termo, idioma)
   const conteudoRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
@@ -33,7 +35,7 @@ export function ConteudoTermo({ termo }: { termo: string }) {
       rolavel.clientHeight / 4
   }, [])
 
-  const yaku = buscarYakuDoTermo(termo)
+  const yaku = buscarYakuDoTermo(termo, idioma)
   if (yaku) return <CartaoYaku yaku={yaku} />
   if (!encontrado) return null
   return (

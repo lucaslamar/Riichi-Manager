@@ -26,8 +26,13 @@ export type ResultadoMao = PontosCalculados & {
   pontosHonba?: number
 }
 
+/** Um item da conta de fu. `tipo` e `descricao` são chaves i18n (bloco `fuDetails`). */
 export type DetalheFu = {
   tipo: string
   descricao: string
   fu: number
+  /** Pedras citadas na descrição (`{{tiles}}`), em código mpsz. */
+  pedras?: string[]
+  /** Chave usada no lugar das pedras quando a biblioteca não informa quais são. */
+  semPedra?: string
 }

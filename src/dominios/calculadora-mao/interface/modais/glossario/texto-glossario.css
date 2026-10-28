@@ -2,7 +2,8 @@
 .termo-glossario {
   position: relative;
   border-radius: 3px;
-  color: var(--primario-escuro);
+  /* Lilás do tema no escuro (mais saturado que o texto); no claro, azul que passa no AA. */
+  color: var(--cor-primario, #1565c0);
   cursor: pointer;
   text-decoration: underline dotted;
   text-decoration-thickness: 1.5px;
@@ -21,8 +22,13 @@
   transform: translate(-50%, -50%);
 }
 
+/* Alto contraste: o tom mais forte de cada tema. */
+body.alto-contraste .termo-glossario {
+  color: var(--primario-escuro);
+}
+
 .termo-glossario:hover {
-  color: var(--primario);
+  color: var(--primario-escuro);
 }
 
 .termo-glossario:focus-visible {

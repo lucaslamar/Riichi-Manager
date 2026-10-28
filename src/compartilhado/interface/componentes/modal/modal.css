@@ -32,7 +32,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(16, 42, 67, 0.5);
+  background: var(--cor-veu, rgba(16, 42, 67, 0.5));
   opacity: var(--modal-escurecido-opacidade, 1);
   transition: var(--modal-escurecido-transicao, none);
 }
@@ -41,7 +41,7 @@
   --modal-largura: 560px;
   --modal-altura: 760px;
   --modal-fundo: var(--branco);
-  --modal-borda: #e5e7eb;
+  --modal-borda: var(--cor-borda, #e5e7eb);
   --modal-cor-titulo: var(--escuro);
   --modal-espaco: clamp(14px, 2.4vmin + 6px, 24px);
 
@@ -53,7 +53,7 @@
   border: 1px solid var(--modal-borda);
   border-radius: 12px;
   background: var(--modal-fundo);
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   box-shadow: 0 24px 60px rgba(16, 42, 67, 0.28);
 }
 
@@ -75,10 +75,10 @@
 }
 
 .modal--alerta {
-  --modal-fundo: #fff7f7;
-  --modal-borda: #fecaca;
-  --modal-cor-titulo: #b91c1c;
-  box-shadow: 0 24px 60px rgba(127, 29, 29, 0.24);
+  --modal-fundo: var(--cor-superficie-alt, #fff7f7);
+  --modal-borda: var(--cor-perigo-borda, #fecaca);
+  --modal-cor-titulo: var(--cor-perigo, #b91c1c);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--cor-perigo, #7f1d1d) 24%, transparent);
 }
 
 /* ─── Cabeçalho (fixo) ────────────────────────────────────────────────────── */
@@ -117,12 +117,12 @@
 }
 
 .modal--padrao.modal--titulo-rotulo {
-  --modal-cor-titulo: #607080;
+  --modal-cor-titulo: var(--cor-texto-suave, #607080);
 }
 
 .modal-subtitulo {
   margin: 4px 0 0;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: clamp(0.88rem, 0.82rem + 0.35vw, 1.15rem);
   line-height: 1.4;
 }
@@ -138,7 +138,7 @@
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   cursor: pointer;
   font-size: 1.05rem;
   -webkit-tap-highlight-color: transparent;
@@ -176,7 +176,7 @@
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #40566d;
+  color: var(--cor-texto-suave, #40566d);
   cursor: pointer;
   font-size: 0.95rem;
   -webkit-tap-highlight-color: transparent;
@@ -193,12 +193,12 @@
 }
 
 .modal-acao--destrutiva {
-  color: #ef4444;
+  color: var(--cor-perigo, #ef4444);
 }
 
 .modal-acao--destrutiva:hover,
 .modal-acao--destrutiva:focus-visible {
-  color: #b91c1c;
+  color: var(--cor-perigo, #b91c1c);
 }
 
 /* ─── Corpo (única área rolável) ──────────────────────────────────────────── */
@@ -448,7 +448,7 @@
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: #cbd5e1;
+  background: var(--cor-superficie-alt, #cbd5e1);
   transition:
     width 0.2s,
     background 0.2s;

@@ -9,20 +9,20 @@
 
 .tile-img-haku {
   box-sizing: border-box;
-  border: 1px solid #d7dde6;
+  border: 1px solid var(--pedra-borda, #d7dde6);
   border-radius: 5px;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 2px rgba(248, 250, 252, 0.95);
+  background: var(--pedra-face, #ffffff);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--pedra-borda, #f8fafc) 95%, transparent);
 }
 
 .tile-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #d7dde6;
+  border: 1px solid var(--pedra-borda, #d7dde6);
   border-radius: 5px;
-  background: linear-gradient(#ffffff, #eef3f8);
-  color: #111;
+  background: linear-gradient(var(--pedra-face, #ffffff), var(--pedra-face-primario, #eef3f8));
+  color: var(--cor-texto, #111);
   font-family: monospace;
   font-size: 0.78rem;
   font-weight: 900;
@@ -58,9 +58,9 @@
   align-items: center;
   justify-content: center;
   padding: 1px;
-  border: 1px solid #d7dde6;
+  border: 1px solid var(--pedra-borda, #d7dde6);
   border-radius: 5px;
-  background: #ffffff;
+  background: var(--pedra-face, #ffffff);
 }
 
 .meld-tile.de-lado {
@@ -69,10 +69,10 @@
 }
 
 .meld-tile.agari {
-  border-color: #f97316;
-  background: #fff7ed;
+  border-color: var(--cor-aviso, #f97316);
+  background: var(--pedra-face-aviso, #fff7ed);
   box-shadow:
-    0 0 0 2px rgba(249, 115, 22, 0.2),
+    0 0 0 2px color-mix(in srgb, var(--cor-aviso, #f97316) 20%, transparent),
     inset 0 0 0 2px rgba(253, 186, 116, 0.35);
 }
 
@@ -91,8 +91,8 @@
   gap: 2px;
   padding: 4px 10px;
   border-radius: 6px;
-  border: 1.5px solid #ffa726;
-  background: #fff8e1;
+  border: 1.5px solid var(--cor-aviso, #ffa726);
+  background: var(--cor-aviso-suave, #fff8e1);
   font-weight: 900;
   font-family: monospace;
   font-size: 0.85rem;
@@ -100,5 +100,5 @@
 }
 
 .chip-meld:hover {
-  border-color: #ef5350;
+  border-color: var(--cor-perigo-borda, #ef5350);
 }

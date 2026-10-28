@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import type { AbaModal } from '@/compartilhado/interface/componentes/modal/AbasModal'
 import { buscarNoGlossario, correspondeBusca } from '../../../logica/glossario'
@@ -14,13 +15,14 @@ export function CampoBuscaGuia({
   valor: string
   aoMudar: (valor: string) => void
 }) {
+  const { t } = useI18n()
   return (
     <CampoBusca
       valor={valor}
       aoMudar={aoMudar}
-      rotulo="Buscar no Guia de bolso"
-      placeholder="Buscar termo, yaku ou aba"
-      rotuloLimpar="Limpar busca"
+      rotulo={t('pocketGuide.search.label')}
+      placeholder={t('pocketGuide.search.placeholder')}
+      rotuloLimpar={t('pocketGuide.search.clear')}
     />
   )
 }
@@ -38,18 +40,21 @@ export function ResultadoBuscaGuia<Chave extends string>({
   abas: AbaModal<Chave>[]
   aoAbrirAba: (chave: Chave) => void
 }) {
-  const { secoes, yakus } = useMemo(() => buscarNoGlossario(busca), [busca])
-  const abasEncontradas = abas.filter((aba) => correspondeBusca(busca, [aba.rotulo]))
+  const { t, idioma } = useI18n()
+  const { secoes, yakus } = useMemo(() => buscarNoGlossario(busca, idioma), [busca, idioma])
+  const abasEncontradas = abas.filter((aba) => correspondeBusca(busca, [aba.rotulo], idioma))
   const nadaEncontrado = abasEncontradas.length === 0 && secoes.length === 0 && yakus.length === 0
 
   return (
     <div aria-live="polite">
       {nadaEncontrado && (
-        <p className="busca-guia__vazio">Nada encontrado para “{busca.trim()}”.</p>
+        <p className="busca-guia__vazio">
+          {t('pocketGuide.search.nothingFound', { busca: busca.trim() })}
+        </p>
       )}
       {abasEncontradas.length > 0 && (
         <section className="glossario-bloco glossario-bloco--cartao busca-guia__abas">
-          <h3 className="glossario-bloco__titulo">Abas do Guia</h3>
+          <h3 className="glossario-bloco__titulo">{t('pocketGuide.search.tabsHeading')}</h3>
           {abasEncontradas.map((aba) => (
             <button key={aba.chave} type="button" onClick={() => aoAbrirAba(aba.chave)}>
               {aba.rotulo}
@@ -63,7 +68,7 @@ export function ResultadoBuscaGuia<Chave extends string>({
       ))}
       {yakus.length > 0 && (
         <section className="busca-guia__yakus">
-          <h3 className="yaku-grupo__titulo">Yaku</h3>
+          <h3 className="yaku-grupo__titulo">{t('pocketGuide.yaku')}</h3>
           <div className="yaku-lista">
             {yakus.map((yaku) => (
               <CartaoYaku key={yaku.id} yaku={yaku} />

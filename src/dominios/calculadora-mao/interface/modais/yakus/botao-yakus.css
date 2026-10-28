@@ -5,10 +5,10 @@
 
 /* No tablet herda o tamanho da lixeira, mas com a cor da engrenagem. */
 .btn-limpar-mao-cabecalho.yaku-btn {
-  color: #155b98;
+  color: var(--cor-primario, #155b98);
 }
 
 .btn-limpar-mao-cabecalho.yaku-btn:hover {
-  border-color: #bfdbfe;
-  background: #eff6ff;
+  border-color: var(--cor-primario-borda, #bfdbfe);
+  background: var(--cor-primario-suave, #eff6ff);
 }

@@ -7,19 +7,28 @@
  * item tocado destacado. Cada item tem os aliases que o ligam aos textos;
  * alguns aliases apontam para a seção inteira (ex.: "naipe", "honras").
  *
- * Os yakus da referência também viram link (pelo romaji e pelos `apelidos`)
- * e abrem o cartão do yaku. Se um nome existe nos dois, vale o do glossário.
+ * Os yakus da referência também viram link (pelo romaji, pelos `apelidos` e
+ * pelo nome no idioma) e abrem o cartão do yaku. Se um nome existe nos dois,
+ * vale o do glossário.
+ *
+ * Aqui fica a estrutura (ids, kanji, pedras); os textos e aliases de cada
+ * idioma vêm de `conteudo/guia-bolso`. Cada idioma tem o próprio índice de
+ * links e de busca, montado na primeira vez que é pedido.
  *
  * Negrito nos textos: `**assim**`.
  */
+import type { IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
+import { idiomaGlobal } from '@/compartilhado/i18n/tradutorGlobal'
+import { interpolar } from '@/compartilhado/i18n/traduzir'
 import { BASE_PATAMAR } from '@/compartilhado/mahjong/pontuacao'
-import { DORA_NOTE, YAKU, type Yaku } from './yakus'
+import { conteudoGuiaBolso, type IdSecaoGlossario } from '../conteudo/guia-bolso'
+import { yakusDoIdioma, type Yaku } from './yakus'
 
 export type PedrasGlossario =
   | {
       tipo: 'mpsz'
       mpsz: string
-      /** Mostra em cima de cada pedra o número (naipes) ou o nome japonês (honras). */
+      /** Mostra em cima de cada pedra o número (naipes) ou o nome da honra. */
       numerar?: boolean
     }
   /** As três sequências do indicador de dora, com setas. */
@@ -68,471 +77,162 @@ export interface SecaoGlossario {
   aliases?: string[]
 }
 
-const IPPATSU = YAKU.find((yaku) => yaku.id === 'ippatsu')
+/** Parte de um item que não muda com o idioma. */
+type ItemBase = Pick<
+  ItemGlossario,
+  'id' | 'kanji' | 'sub' | 'pedras' | 'tutorialHanFu' | 'semLink'
+> & {
+  /** Nota de dora no fim do item. */
+  notaDora?: boolean
+  /** Base do patamar: o texto ganha {{ko}} e {{oya}} com o valor no ron. */
+  patamar?: keyof typeof BASE_PATAMAR
+}
+
+interface SecaoBase {
+  id: IdSecaoGlossario
+  kanji?: string
+  exemplo?: string
+  itens: ItemBase[]
+}
 
 const numeradas = (mpsz: string): PedrasGlossario => ({ tipo: 'mpsz', mpsz, numerar: true })
 const exemplo = (mpsz: string): PedrasGlossario => ({ tipo: 'mpsz', mpsz })
 
-/** Valor do patamar no ron, das mesmas bases da calculadora: ko 4×, oya 6×. */
-const valePatamar = (base: number) =>
-  `Vale ${(base * 4).toLocaleString('pt-BR')} (${(base * 6).toLocaleString('pt-BR')} sendo oya).`
-
 /** Assuntos, na ordem em que costumam aparecer numa partida. */
-export const SECOES_GLOSSARIO: SecaoGlossario[] = [
+const SECOES_BASE: SecaoBase[] = [
   {
     id: 'naipes',
-    titulo: 'Naipes',
     kanji: '数牌',
-    intro: 'Pedras numeradas de 1 a 9, em três naipes.',
-    aliases: ['naipe', 'naipes'],
     itens: [
-      {
-        id: 'man',
-        nome: 'Man',
-        kanji: '萬',
-        apelido: 'Caracteres',
-        pedras: numeradas('123456789m'),
-        aliases: ['man', 'manzu'],
-      },
-      {
-        id: 'pin',
-        nome: 'Pin',
-        kanji: '筒',
-        apelido: 'Círculos',
-        pedras: numeradas('123456789p'),
-        aliases: ['pin', 'pinzu'],
-      },
-      {
-        id: 'sou',
-        nome: 'Sou',
-        kanji: '索',
-        apelido: 'Bambus',
-        pedras: numeradas('123456789s'),
-        aliases: ['sou', 'souzu'],
-      },
-      {
-        id: 'terminais',
-        nome: 'Terminais e simples',
-        topicos: ['1 e 9 são **terminais**.', '2 a 8 são **simples**.'],
-        aliases: ['terminal', 'terminais', 'routouhai', 'simples', 'chunchanpai'],
-      },
+      { id: 'man', kanji: '萬', pedras: numeradas('123456789m') },
+      { id: 'pin', kanji: '筒', pedras: numeradas('123456789p') },
+      { id: 'sou', kanji: '索', pedras: numeradas('123456789s') },
+      { id: 'terminais' },
     ],
   },
   {
     id: 'honras',
-    titulo: 'Honras',
     kanji: '字牌',
-    intro: 'Pedras sem número: ventos e dragões.',
-    aliases: ['honra', 'honras', 'jihai'],
     itens: [
-      {
-        id: 'ventos',
-        nome: 'Ventos',
-        kanji: '風牌',
-        texto: 'Ton (Leste), Nan (Sul), Shaa (Oeste), Pei (Norte)',
-        pedras: numeradas('1234z'),
-        aliases: ['vento', 'ventos', 'kazehai', 'leste', 'sul', 'oeste', 'norte'],
-      },
-      {
-        id: 'dragoes',
-        nome: 'Dragões',
-        kanji: '三元牌',
-        texto: 'Haku (Branco), Hatsu (Verde), Chun (Vermelho)',
-        pedras: numeradas('567z'),
-        aliases: ['dragão', 'dragões', 'dragao', 'dragoes', 'sangenpai'],
-      },
+      { id: 'ventos', kanji: '風牌', pedras: numeradas('1234z') },
+      { id: 'dragoes', kanji: '三元牌', pedras: numeradas('567z') },
     ],
   },
   {
     id: 'mao',
-    titulo: 'Formação da mão',
-    intro: 'A mão comum tem 4 grupos (sequências ou trincas) + 1 par.',
-    exemplo: {
-      mpsz: '234m345p777s111z77z',
-      rotulos: ['Sequência', 'Sequência', 'Trinca', 'Trinca', 'Par'],
-    },
+    exemplo: '234m345p777s111z77z',
     itens: [
-      {
-        id: 'sequencia',
-        nome: 'Sequência',
-        kanji: '順子',
-        texto: 'Três números seguidos do mesmo naipe (ex.: 3-4-5 de Pin). Pode vir de um chi.',
-        pedras: exemplo('345p'),
-        aliases: ['sequência', 'sequências', 'sequencia', 'sequencias', 'shuntsu'],
-      },
-      {
-        id: 'trinca',
-        nome: 'Trinca',
-        kanji: '刻子',
-        texto: 'Três pedras iguais. Pode vir de um pon.',
-        pedras: exemplo('555s'),
-        aliases: ['trinca', 'trincas', 'trio', 'trios', 'koutsu'],
-      },
-      {
-        id: 'par',
-        nome: 'Par',
-        kanji: '雀頭',
-        texto: 'Duas pedras iguais.',
-        pedras: exemplo('77z'),
-        aliases: ['par', 'pares', 'jantou'],
-      },
+      { id: 'sequencia', kanji: '順子', pedras: exemplo('345p') },
+      { id: 'trinca', kanji: '刻子', pedras: exemplo('555s') },
+      { id: 'par', kanji: '雀頭', pedras: exemplo('77z') },
     ],
   },
   {
     id: 'chamadas',
-    titulo: 'Chamadas',
     itens: [
-      {
-        id: 'chamada',
-        nome: 'Chamada',
-        kanji: '鳴き',
-        leitura: 'naki',
-        texto:
-          'Pegar o descarte de outro jogador para formar uma combinação com chi, pon ou kan. Toda chamada abre a mão, exceto o kan fechado.',
-        aliases: [
-          'chamada',
-          'chamadas',
-          'chamar',
-          'chamou',
-          'chamando',
-          'chamado',
-          'chamados',
-          'naki',
-        ],
-      },
-      {
-        id: 'chi',
-        nome: 'Chi',
-        kanji: 'チー',
-        texto: 'Pegar o descarte do jogador à sua esquerda para formar uma sequência.',
-        aliases: ['chi', 'chii'],
-      },
-      {
-        id: 'pon',
-        nome: 'Pon',
-        kanji: 'ポン',
-        texto: 'Pegar o descarte de qualquer jogador para formar uma trinca.',
-        aliases: ['pon'],
-      },
-      {
-        id: 'kan',
-        nome: 'Kan',
-        kanji: 'カン',
-        texto:
-          'Quatro pedras iguais. Você compra uma pedra de reposição e revela mais um indicador de dora. O kan fechado (as quatro são suas) não abre a mão.',
-        aliases: ['kan', 'kans', 'kantsu', 'quad', 'quads'],
-      },
-      {
-        id: 'kuitan',
-        nome: 'Kuitan',
-        kanji: '喰いタン',
-        texto:
-          "Tan'yao com a mão aberta. Permitido pelas regras da EMA, mas algumas mesas jogam sem ele (kuitan nashi).",
-        aliases: ['kuitan'],
-      },
+      { id: 'chamada', kanji: '鳴き' },
+      { id: 'chi', kanji: 'チー' },
+      { id: 'pon', kanji: 'ポン' },
+      { id: 'kan', kanji: 'カン' },
+      { id: 'kuitan', kanji: '喰いタン' },
     ],
   },
   {
     id: 'vitoria',
-    titulo: 'Espera e vitória',
     itens: [
-      {
-        id: 'tenpai',
-        nome: 'Tenpai',
-        kanji: '聴牌',
-        texto: 'Falta só uma pedra para completar a mão.',
-        aliases: ['tenpai', 'tempai'],
-      },
-      {
-        id: 'ryanmen',
-        nome: 'Ryanmen',
-        kanji: '両面',
-        texto:
-          'Espera de duas pontas: dois números seguidos que completam com a pedra de qualquer lado (3-4 espera 2 ou 5).',
-        pedras: exemplo('34m'),
-        aliases: ['ryanmen'],
-      },
-      {
-        id: 'riichi',
-        nome: 'Riichi',
-        kanji: '立直',
-        texto: 'Declarar tenpai com a mão fechada, apostando 1.000 pontos. Vale 1 han.',
-        aliases: ['riichi'],
-      },
-      {
-        id: 'ippatsu',
-        nome: 'Ippatsu',
-        kanji: '一発',
-        texto: IPPATSU?.description ?? '',
-        aliases: ['ippatsu', 'ipatsu'],
-      },
-      {
-        id: 'tsumo',
-        nome: 'Tsumo',
-        kanji: 'ツモ',
-        texto: 'Vencer com uma pedra comprada por você.',
-        aliases: ['tsumo'],
-      },
-      {
-        id: 'ron',
-        nome: 'Ron',
-        kanji: 'ロン',
-        texto: 'Vencer com o descarte de outro jogador.',
-        aliases: ['ron'],
-      },
-      {
-        id: 'ron-duplo',
-        nome: 'Ron duplo',
-        kanji: 'ダブロン',
-        leitura: 'daburon',
-        sub: true,
-        texto:
-          'Dois jogadores dão ron no mesmo descarte e os dois vencem. Quem descartou paga cada um deles.',
-        topicos: [
-          '**Atamahane**: algumas mesas não aceitam ron duplo e só um vence. Ganha quem joga primeiro depois de quem descartou.',
-          'Com três ron no mesmo descarte, muitas mesas anulam a rodada (sanchahou).',
-        ],
-        aliases: ['ron duplo', 'double ron', 'daburon', 'atamahane'],
-      },
-      {
-        id: 'furiten',
-        nome: 'Furiten',
-        kanji: '振聴',
-        texto: 'Se você já descartou uma das suas esperas, não pode vencer por ron, só por tsumo.',
-        topicos: [
-          '**Pelos descartes**: uma pedra que completaria sua mão está entre os seus descartes.',
-          '**Temporário**: você deixou passar uma pedra que completaria sua mão. Dura até o seu próximo descarte.',
-          '**De Riichi**: depois do Riichi, você deixou passar uma pedra que completaria sua mão. Dura até o fim da rodada.',
-        ],
-        aliases: ['furiten'],
-      },
+      { id: 'tenpai', kanji: '聴牌' },
+      { id: 'ryanmen', kanji: '両面', pedras: exemplo('34m') },
+      { id: 'riichi', kanji: '立直' },
+      { id: 'ippatsu', kanji: '一発' },
+      { id: 'tsumo', kanji: 'ツモ' },
+      { id: 'ron', kanji: 'ロン' },
+      { id: 'ron-duplo', kanji: 'ダブロン', sub: true },
+      { id: 'furiten', kanji: '振聴' },
     ],
   },
   {
     id: 'dora',
-    titulo: 'Dora',
     kanji: 'ドラ',
     itens: [
-      {
-        id: 'dora',
-        nome: 'Dora',
-        kanji: 'ドラ',
-        texto: 'Pedra bônus apontada pelo indicador. Cada uma vale 1 han, mas não é yaku.',
-        topicos: [
-          'O **indicador** é a pedra virada no muro morto.',
-          'A dora é a pedra seguinte na ordem abaixo (indicador 7 de Pin → dora 8 de Pin).',
-        ],
-        pedras: { tipo: 'ciclosDora' },
-        nota: DORA_NOTE,
-        aliases: ['dora', 'doras', 'indicador', 'indicadores', 'indicador de dora'],
-      },
-      {
-        id: 'kan-dora',
-        nome: 'Kan-dora',
-        texto: 'Cada kan revela mais um indicador.',
-        aliases: ['kan-dora', 'kandora', 'kan dora'],
-      },
-      {
-        id: 'ura-dora',
-        nome: 'Ura-dora',
-        kanji: '裏ドラ',
-        texto:
-          'Pedra embaixo de cada indicador. Só é revelada para quem vence depois de declarar Riichi.',
-        aliases: ['ura-dora', 'uradora', 'ura dora'],
-      },
-      {
-        id: 'aka-dora',
-        nome: 'Aka dora',
-        kanji: '赤ドラ',
-        apelido: '5 vermelho',
-        texto: 'Cada 5 vermelho vale 1 dora. Só conta com a regra Aka dora ligada.',
-        pedras: exemplo('0m0p0s'),
-        aliases: [
-          'aka dora',
-          'aka-dora',
-          'akadora',
-          '5 vermelho',
-          '5 vermelhos',
-          'cinco vermelho',
-          'cincos vermelhos',
-        ],
-      },
+      { id: 'dora', kanji: 'ドラ', pedras: { tipo: 'ciclosDora' }, notaDora: true },
+      { id: 'kan-dora' },
+      { id: 'ura-dora', kanji: '裏ドラ' },
+      { id: 'aka-dora', kanji: '赤ドラ', pedras: exemplo('0m0p0s') },
     ],
   },
   {
     id: 'pontuacao',
-    titulo: 'Pontuação',
     itens: [
-      {
-        id: 'yaku',
-        nome: 'Yaku',
-        kanji: '役',
-        texto: 'Condição de pontuação. Toda mão precisa de pelo menos um yaku para vencer.',
-        aliases: ['yaku', 'yakus'],
-      },
-      {
-        id: 'han',
-        nome: 'Han',
-        kanji: '翻',
-        texto: 'Valor de cada yaku e dora. Quanto mais han, mais pontos.',
-        aliases: ['han'],
-      },
-      {
-        id: 'fu',
-        nome: 'Fu',
-        kanji: '符',
-        texto:
-          'Pontos pela forma da mão (trincas, espera, jeito de vencer). Ajustam o valor até 4 han.',
-        tutorialHanFu: true,
-        aliases: ['fu'],
-      },
+      { id: 'yaku', kanji: '役' },
+      { id: 'han', kanji: '翻' },
+      { id: 'fu', kanji: '符', tutorialHanFu: true },
     ],
   },
   {
     id: 'patamares',
-    titulo: 'Patamares de pontuação',
-    aliases: ['patamar', 'patamares'],
     itens: [
-      {
-        id: 'mangan',
-        nome: 'Mangan',
-        kanji: '満貫',
-        texto: `5 han, ou 4 han com 40 fu ou mais, ou 3 han com 70 fu ou mais. ${valePatamar(BASE_PATAMAR.mangan)}`,
-        aliases: ['mangan', 'mangans'],
-      },
-      {
-        id: 'haneman',
-        nome: 'Haneman',
-        kanji: '跳満',
-        texto: `6 ou 7 han. ${valePatamar(BASE_PATAMAR.haneman)}`,
-        aliases: ['haneman', 'hanemans'],
-      },
-      {
-        id: 'baiman',
-        nome: 'Baiman',
-        kanji: '倍満',
-        texto: `8 a 10 han. ${valePatamar(BASE_PATAMAR.baiman)}`,
-        aliases: ['baiman', 'baimans'],
-      },
-      {
-        id: 'sanbaiman',
-        nome: 'Sanbaiman',
-        kanji: '三倍満',
-        texto: `11 ou 12 han. ${valePatamar(BASE_PATAMAR.sanbaiman)}`,
-        aliases: ['sanbaiman', 'sanbaimans'],
-      },
-      {
-        id: 'yakuman',
-        nome: 'Yakuman',
-        kanji: '役満',
-        texto: `Mão máxima. ${valePatamar(BASE_PATAMAR.yakuman)}`,
-        aliases: ['yakuman', 'yakumans', 'kazoe yakuman'],
-      },
+      { id: 'mangan', kanji: '満貫', patamar: 'mangan' },
+      { id: 'haneman', kanji: '跳満', patamar: 'haneman' },
+      { id: 'baiman', kanji: '倍満', patamar: 'baiman' },
+      { id: 'sanbaiman', kanji: '三倍満', patamar: 'sanbaiman' },
+      { id: 'yakuman', kanji: '役満', patamar: 'yakuman' },
     ],
   },
   {
     id: 'mesa',
-    titulo: 'Mesa',
     itens: [
-      {
-        id: 'oya',
-        nome: 'Oya',
-        kanji: '親',
-        texto:
-          'O dealer, sempre o Leste. Ganha 1,5× ao vencer. Se vencer ou ficar em tenpai no empate, faz renchan.',
-        aliases: ['oya', 'dealer', 'dealers'],
-      },
-      {
-        id: 'renchan',
-        nome: 'Renchan',
-        kanji: '連荘',
-        sub: true,
-        texto:
-          'Quando o oya continua como dealer na mão seguinte. Acontece se ele vencer ou se ficar em tenpai num empate. O vento dos jogadores não gira e o contador de honba sobe.',
-        aliases: ['renchan'],
-      },
-      {
-        id: 'ko',
-        nome: 'Ko',
-        kanji: '子',
-        texto: 'Os outros três jogadores, que não são o dealer.',
-        aliases: ['ko'],
-      },
-      {
-        id: 'honba',
-        nome: 'Honba',
-        kanji: '本場',
-        texto:
-          'Contador de mãos extras. Sobe a cada renchan ou empate e zera quando um ko vence. Cada honba soma 300 pontos ao próximo vencedor (no tsumo, 100 de cada jogador).',
-        aliases: ['honba', 'honbas'],
-      },
-      {
-        id: 'empate',
-        nome: 'Empate / Ryuukyoku',
-        kanji: '流局',
-        texto: 'Rodada termina sem vencedor quando o muro acaba.',
-        aliases: ['empate', 'empates', 'empatada', 'empatado', 'ryuukyoku'],
-      },
-      {
-        id: 'empate-abortivo',
-        nome: 'Empate abortivo',
-        kanji: '途中流局',
-        leitura: 'tochuu ryuukyoku',
-        sub: true,
-        texto:
-          'A rodada é anulada antes de o muro acabar. O oya continua e o honba sobe. As regras da EMA não usam empate abortivo, mas muitas mesas usam. Os casos comuns:',
-        topicos: [
-          '**Kyuushu kyuuhai**: 9 terminais ou honras diferentes na mão inicial. O jogador pode anular a rodada.',
-          '**Suufon renda**: os quatro jogadores descartam o mesmo vento na primeira volta.',
-          '**Suucha riichi**: os quatro jogadores declaram Riichi.',
-          '**Suukaikan**: quatro kans de jogadores diferentes.',
-          '**Sanchahou**: três jogadores dão ron no mesmo descarte.',
-        ],
-        aliases: [
-          'empate abortivo',
-          'empates abortivos',
-          'tochuu ryuukyoku',
-          'kyuushu kyuuhai',
-          'suufon renda',
-          'suucha riichi',
-          'suukaikan',
-          'sanchahou',
-        ],
-      },
-      {
-        id: 'chombo',
-        nome: 'Chombo',
-        kanji: '錯和',
-        texto: 'Penalidade por erro grave, como vencer sem yaku ou dar ron em furiten.',
-        aliases: ['chombo'],
-      },
+      { id: 'oya', kanji: '親' },
+      { id: 'renchan', kanji: '連荘', sub: true },
+      { id: 'ko', kanji: '子' },
+      { id: 'honba', kanji: '本場' },
+      { id: 'empate', kanji: '流局' },
+      { id: 'empate-abortivo', kanji: '途中流局', sub: true },
+      { id: 'chombo', kanji: '錯和' },
     ],
   },
   {
     id: 'regras',
-    titulo: 'Regras e entidades',
     itens: [
-      {
-        id: 'ema',
-        nome: 'EMA',
-        texto:
-          'European Mahjong Association, entidade que organiza o mahjong competitivo na Europa. Publica o RCR (Riichi Competition Rules), regulamento de Riichi usado como referência por muitos clubes fora do Japão.',
-        aliases: ['ema', 'rcr'],
-        // Aqui Riichi é o nome do jogo, não a declaração.
-        semLink: ['riichi'],
-      },
-      {
-        id: 'm-league',
-        nome: 'M.League',
-        texto:
-          'Liga profissional de Riichi do Japão, criada em 2018. Times patrocinados reúnem jogadores profissionais de várias associações, e as partidas são transmitidas ao vivo, com narração e câmeras mostrando a mão de cada um. É a melhor vitrine para ver jogo de alto nível.',
-        aliases: ['m.league', 'm league', 'mleague'],
-        // Aqui Riichi é o nome do jogo, não a declaração.
-        semLink: ['riichi'],
-      },
+      // Aqui Riichi é o nome do jogo, não a declaração (nem o yaku).
+      { id: 'ema', semLink: ['riichi', 'yaku:riichi'] },
+      { id: 'm-league', semLink: ['riichi', 'yaku:riichi'] },
     ],
   },
 ]
+
+/** Assuntos com os textos do idioma. */
+function montarSecoes(idioma: IdiomaSuportado): SecaoGlossario[] {
+  const conteudo = conteudoGuiaBolso(idioma)
+  const ippatsu = conteudo.yakus.ippatsu.descricao
+  return SECOES_BASE.map(({ id, kanji, exemplo: mpsz, itens }) => {
+    const textos = conteudo.secoes[id]
+    return {
+      id,
+      kanji,
+      titulo: textos.titulo,
+      intro: textos.intro,
+      aliases: textos.aliases,
+      exemplo: mpsz ? { mpsz, rotulos: textos.rotulosExemplo ?? [] } : undefined,
+      itens: itens.map(({ notaDora, patamar, ...base }) => {
+        const item = textos.itens[base.id]
+        const texto = item.texto ?? (base.id === 'ippatsu' ? ippatsu : undefined)
+        return {
+          ...base,
+          ...item,
+          // Valor do patamar no ron, das mesmas bases da calculadora: ko 4×, oya 6×.
+          texto:
+            texto && patamar
+              ? interpolar(texto, idioma, {
+                  ko: BASE_PATAMAR[patamar] * 4,
+                  oya: BASE_PATAMAR[patamar] * 6,
+                })
+              : texto,
+          nota: notaDora ? conteudo.notaDora : undefined,
+        }
+      }),
+    }
+  })
+}
 
 // ── Busca dos termos nos textos
 
@@ -545,61 +245,116 @@ interface TermoEncontrado {
   item?: ItemGlossario
 }
 
-const TERMOS = new Map<string, TermoEncontrado>()
-const ALIASES: [string, string][] = []
-for (const secao of SECOES_GLOSSARIO) {
-  if (secao.aliases) {
-    TERMOS.set(secao.id, { secao })
-    for (const alias of secao.aliases) ALIASES.push([alias, secao.id])
-  }
-  for (const item of secao.itens) {
-    TERMOS.set(item.id, { secao, item })
-    for (const alias of item.aliases) ALIASES.push([alias, item.id])
-  }
+/**
+ * Como achar um termo no meio do texto. Em pt-BR, en e lt o termo é palavra
+ * inteira. Japonês e chinês não separam palavras com espaço: o termo vale em
+ * qualquer ponto. Coreano separa, mas cola a partícula no fim ("리치를"): o termo
+ * precisa começar uma palavra, mas pode terminar no meio dela.
+ */
+type Escrita = 'palavras' | 'coreano' | 'sem-espacos'
+
+const ESCRITA: Record<IdiomaSuportado, Escrita> = {
+  'pt-BR': 'palavras',
+  en: 'palavras',
+  lt: 'palavras',
+  ko: 'coreano',
+  ja: 'sem-espacos',
+  'zh-Hans': 'sem-espacos',
 }
 
 const normalizar = (texto: string) => texto.toLocaleLowerCase('pt-BR').replace(/[\s-]+/g, ' ')
 
-const TERMO_POR_ALIAS = new Map(ALIASES.map(([alias, termo]) => [normalizar(alias), termo]))
-
-// Yakus depois do glossário: um nome que já é verbete (Riichi, Ippatsu) fica com ele.
-const YAKU_POR_TERMO = new Map<string, Yaku>()
-for (const yaku of YAKU) {
-  const termo = `${PREFIXO_YAKU}${yaku.id}`
-  YAKU_POR_TERMO.set(termo, yaku)
-  for (const alias of [yaku.romaji, ...(yaku.apelidos ?? [])]) {
-    const chave = normalizar(alias)
-    if (!TERMO_POR_ALIAS.has(chave)) TERMO_POR_ALIAS.set(chave, termo)
-  }
-}
-
 const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-/**
- * Todos os aliases numa expressão só, do mais longo para o mais curto (assim
- * "Ura-dora" ganha de "dora"). Limite de palavra com letras acentuadas: o
- * caractere antes é capturado (lookbehind quebraria iPhones antigos).
- */
-const EXPRESSAO_TERMOS = new RegExp(
-  `(^|[^\\p{L}\\p{N}])(${[...TERMO_POR_ALIAS.keys()]
-    .sort((a, b) => b.length - a.length)
-    .map((alias) => escapar(alias).replace(/ /g, '[\\s-]+'))
-    .join('|')})(?=[^\\p{L}\\p{N}]|$)`,
-  'giu',
-)
+interface IndiceGlossario {
+  secoes: SecaoGlossario[]
+  yakus: Yaku[]
+  termos: Map<string, TermoEncontrado>
+  termoPorAlias: Map<string, string>
+  yakuPorTermo: Map<string, Yaku>
+  expressao: RegExp
+  escrita: Escrita
+}
 
-export function buscarTermoGlossario(id: string): TermoEncontrado | null {
-  return TERMOS.get(id) ?? null
+function montarIndice(idioma: IdiomaSuportado): IndiceGlossario {
+  const secoes = montarSecoes(idioma)
+  const yakus = yakusDoIdioma(idioma)
+  const escrita = ESCRITA[idioma]
+
+  const termos = new Map<string, TermoEncontrado>()
+  const aliases: [string, string][] = []
+  for (const secao of secoes) {
+    if (secao.aliases) {
+      termos.set(secao.id, { secao })
+      for (const alias of secao.aliases) aliases.push([alias, secao.id])
+    }
+    for (const item of secao.itens) {
+      termos.set(item.id, { secao, item })
+      for (const alias of item.aliases) aliases.push([alias, item.id])
+    }
+  }
+  const termoPorAlias = new Map(aliases.map(([alias, termo]) => [normalizar(alias), termo]))
+
+  // Yakus depois do glossário: um nome que já é verbete (Riichi, Ippatsu) fica com ele.
+  const yakuPorTermo = new Map<string, Yaku>()
+  for (const yaku of yakus) {
+    const termo = `${PREFIXO_YAKU}${yaku.id}`
+    yakuPorTermo.set(termo, yaku)
+    for (const alias of yaku.apelidos) {
+      const chave = normalizar(alias)
+      if (!termoPorAlias.has(chave)) termoPorAlias.set(chave, termo)
+    }
+  }
+
+  /*
+   * Todos os aliases numa expressão só, do mais longo para o mais curto (assim
+   * "Ura-dora" ganha de "dora"). Limite de palavra com letras acentuadas: o
+   * caractere antes é capturado (lookbehind quebraria iPhones antigos).
+   */
+  const antes = escrita === 'sem-espacos' ? '()' : '(^|[^\\p{L}\\p{N}])'
+  const depois = escrita === 'palavras' ? '(?=[^\\p{L}\\p{N}]|$)' : ''
+  const expressao = new RegExp(
+    `${antes}(${[...termoPorAlias.keys()]
+      .sort((a, b) => b.length - a.length)
+      .map((alias) => escapar(alias).replace(/ /g, '[\\s-]+'))
+      .join('|')})${depois}`,
+    'giu',
+  )
+
+  return { secoes, yakus, termos, termoPorAlias, yakuPorTermo, expressao, escrita }
+}
+
+const indices = new Map<IdiomaSuportado, IndiceGlossario>()
+
+function indice(idioma: IdiomaSuportado = idiomaGlobal()): IndiceGlossario {
+  let atual = indices.get(idioma)
+  if (!atual) {
+    atual = montarIndice(idioma)
+    indices.set(idioma, atual)
+  }
+  return atual
+}
+
+/** Assuntos do glossário no idioma (o ativo, se nenhum for dado). */
+export function secoesGlossario(idioma?: IdiomaSuportado): SecaoGlossario[] {
+  return indice(idioma).secoes
+}
+
+/** Assuntos em pt-BR, para os textos fixos em português (ex.: guia Aprender a jogar). */
+export const SECOES_GLOSSARIO = secoesGlossario('pt-BR')
+
+export function buscarTermoGlossario(id: string, idioma?: IdiomaSuportado): TermoEncontrado | null {
+  return indice(idioma).termos.get(id) ?? null
 }
 
 /** Yaku da referência ligado ao termo (links de yaku), ou null para verbetes. */
-export function buscarYakuDoTermo(id: string): Yaku | null {
-  return YAKU_POR_TERMO.get(id) ?? null
+export function buscarYakuDoTermo(id: string, idioma?: IdiomaSuportado): Yaku | null {
+  return indice(idioma).yakuPorTermo.get(id) ?? null
 }
 
 /** Termo do glossário (ou yaku) com exatamente esse nome (ex.: o yaku "Riichi"). */
-export function termoGlossarioDoNome(nome: string): string | undefined {
-  return TERMO_POR_ALIAS.get(normalizar(nome))
+export function termoGlossarioDoNome(nome: string, idioma?: IdiomaSuportado): string | undefined {
+  return indice(idioma).termoPorAlias.get(normalizar(nome))
 }
 
 /** Termos que não viram link nos textos de um item: ele mesmo, a seção e os `semLink`. */
@@ -622,15 +377,22 @@ const formasDaBusca = (texto: string) => {
   return [...new Set([busca, busca.replace(/(\p{L}{3,})s(?= |$)/gu, '$1')])]
 }
 
-/** Bate no começo de alguma palavra: "atama" acha Atamahane, não "Patamares". */
-const bate = (buscas: string[], textos: (string | undefined)[]) =>
-  textos.some(
-    (texto) => texto && buscas.some((busca) => ` ${paraBusca(texto)}`.includes(` ${busca}`)),
-  )
+/**
+ * Bate no começo de alguma palavra: "atama" acha Atamahane, não "Patamares".
+ * Em japonês, chinês e coreano vale qualquer trecho ("暗刻" acha 三暗刻).
+ */
+const bate = (buscas: string[], textos: (string | undefined)[], escrita: Escrita) =>
+  textos.some((texto) => {
+    if (!texto) return false
+    const alvo = ` ${paraBusca(texto)}`
+    return buscas.some((busca) =>
+      escrita === 'palavras' ? alvo.includes(` ${busca}`) : alvo.includes(busca),
+    )
+  })
 
 /** Se a busca bate em algum dos textos (ex.: o nome das abas do Guia de bolso). */
-export function correspondeBusca(texto: string, textos: string[]): boolean {
-  return bate(formasDaBusca(texto), textos)
+export function correspondeBusca(texto: string, textos: string[], idioma?: IdiomaSuportado) {
+  return bate(formasDaBusca(texto), textos, indice(idioma).escrita)
 }
 
 export interface ResultadoBuscaGlossario {
@@ -641,28 +403,34 @@ export interface ResultadoBuscaGlossario {
 
 /**
  * Pesquisa pelo nome, kanji, apelido e aliases de cada termo (assim "dealer"
- * acha Oya), e pelo romaji, apelidos e nome em português dos yakus. Não busca
+ * acha Oya), e pelo romaji, apelidos e nome no idioma dos yakus. Não busca
  * dentro das explicações, para não listar meio glossário a cada letra.
  */
-export function buscarNoGlossario(texto: string): ResultadoBuscaGlossario {
+export function buscarNoGlossario(
+  texto: string,
+  idioma?: IdiomaSuportado,
+): ResultadoBuscaGlossario {
+  const { secoes: todas, yakus: todosYakus, escrita } = indice(idioma)
   const busca = formasDaBusca(texto)
   const secoes: SecaoGlossario[] = []
-  for (const secao of SECOES_GLOSSARIO) {
-    if (bate(busca, [secao.titulo, ...(secao.aliases ?? [])])) {
+  for (const secao of todas) {
+    if (bate(busca, [secao.titulo, ...(secao.aliases ?? [])], escrita)) {
       secoes.push(secao)
       continue
     }
     const itens: ItemGlossario[] = []
-    secao.itens.forEach((item, indice) => {
-      if (!bate(busca, [item.nome, item.kanji, item.leitura, item.apelido, ...item.aliases])) return
+    secao.itens.forEach((item, indiceItem) => {
+      // O id entra para o romaji achar o verbete em qualquer idioma ("dora" acha ドラ).
+      const textos = [item.id, item.nome, item.kanji, item.leitura, item.apelido, ...item.aliases]
+      if (!bate(busca, textos, escrita)) return
       // Sub-verbete sem o item de cima na lista: vem como item comum.
-      const paiNaLista = itens[itens.length - 1] === secao.itens[indice - 1]
+      const paiNaLista = itens[itens.length - 1] === secao.itens[indiceItem - 1]
       itens.push(item.sub && !paiNaLista ? { ...item, sub: false } : item)
     })
     if (itens.length > 0) secoes.push({ ...secao, intro: undefined, exemplo: undefined, itens })
   }
-  const yakus = YAKU.filter((yaku) =>
-    bate(busca, [yaku.romaji, yaku.kanji, yaku.namePt, ...(yaku.apelidos ?? [])]),
+  const yakus = todosYakus.filter((yaku) =>
+    bate(busca, [yaku.kanji, yaku.nome, ...yaku.apelidos], escrita),
   )
   return { secoes, yakus }
 }
@@ -678,21 +446,24 @@ export interface TrechoGlossario {
  * Divide um texto em trechos (negrito `**…**` e termos do glossário). Só a
  * primeira ocorrência de cada termo vira link. `ignorar` = termos que não
  * viram link (ex.: o próprio verbete, o yaku do cartão, os assuntos de uma
- * ajuda "?").
+ * ajuda "?"). Os termos são os do idioma: um texto em português num idioma
+ * sem esses aliases só perde os links.
  */
 export function dividirTextoGlossario(
   texto: string,
   ignorar: (string | undefined)[] = [],
+  idioma?: IdiomaSuportado,
 ): TrechoGlossario[] {
+  const { expressao, termoPorAlias } = indice(idioma)
   const ignorados = new Set(ignorar)
 
   const trechos: TrechoGlossario[] = []
-  texto.split('**').forEach((parte, indice) => {
-    const negrito = indice % 2 === 1
+  texto.split('**').forEach((parte, indiceParte) => {
+    const negrito = indiceParte % 2 === 1
     let inicio = 0
-    for (const encontro of parte.matchAll(EXPRESSAO_TERMOS)) {
+    for (const encontro of parte.matchAll(expressao)) {
       const [, antes, palavra] = encontro
-      const achado = TERMO_POR_ALIAS.get(normalizar(palavra))
+      const achado = termoPorAlias.get(normalizar(palavra))
       if (!achado || ignorados.has(achado)) continue
       ignorados.add(achado)
       const posicao = (encontro.index ?? 0) + antes.length

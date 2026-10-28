@@ -1,0 +1,172 @@
+/*
+ * Velvet Darkness: tema escuro. Valores em `temas.ts` (VELVET_DARKNESS), a
+ * fonte que um app nativo também usa; `npm test` confere que os dois batem.
+ *
+ * As variáveis `--cor-*` só existem aqui: no tema claro cada uso cai no valor
+ * de reserva (`var(--cor-texto, #102a43)`), que é a cor original do app.
+ */
+:root[data-tema='escuro'] {
+  color-scheme: dark;
+
+  --cor-fundo: #0b090f;
+  --cor-superficie: #141019;
+  --cor-superficie-alt: #1c1724;
+  --cor-borda: #2c2438;
+  --cor-borda-controle: #7a6c94;
+  --cor-texto: #ece6f0;
+  --cor-texto-suave: #a398b8;
+  --cor-primario: #b9a3e3;
+  --cor-sobre-primario: #1a1424;
+  --cor-primario-suave: #251d35;
+  --cor-primario-borda: #57487a;
+  --cor-secundario: #8a4fd1;
+  --cor-secundario-texto: #c29bf2;
+  --cor-destaque: #e06ab0;
+  --cor-destaque-suave: #2a1524;
+  --cor-destaque-borda: #6a2e55;
+  --cor-foco: #f4b7c6;
+  --cor-perigo: #ff6b7a;
+  --cor-perigo-suave: #2b1219;
+  --cor-perigo-borda: #702a36;
+  --cor-sucesso: #6fd6a8;
+  --cor-sucesso-suave: #10241c;
+  --cor-sucesso-borda: #255c45;
+  --cor-aviso: #f27cc4;
+  --cor-aviso-suave: #2e1428;
+  --cor-aviso-borda: #7a2e60;
+  --cor-nav: #070609;
+  --cor-veu: rgb(0 0 0 / 70%);
+
+  /* Pedras: a face continua clara (legibilidade); borda e sombra para o preto. */
+  --pedra-face: #f6f3f9;
+  --pedra-borda: #8a7aa8;
+  --pedra-face-primario: #e6dcf7;
+  --pedra-face-aviso: #f9d2e9;
+  --pedra-face-perigo: #fad3d8;
+  --pedra-face-sucesso: #d2f1e3;
+
+  /* Tokens antigos do app, apontados para a paleta. */
+  --primario: var(--cor-primario);
+  --primario-escuro: #cdbbf0;
+  --secundario: var(--cor-sucesso);
+  --escuro: var(--cor-texto);
+  --fundo: var(--cor-fundo);
+  --branco: var(--cor-superficie);
+  --leste: #ff6b7a;
+  --sul: #6fd6a8;
+  --oeste: #f27cc4;
+  --norte: #8fb8f5;
+  --bloqueado: var(--cor-borda-controle);
+  --info-fundo: var(--cor-primario-suave);
+  --info-texto: var(--cor-primario);
+  --sombra: 0 4px 16px rgb(0 0 0 / 55%);
+
+  --formula-borda: var(--cor-primario);
+  --formula-fundo: var(--cor-primario-suave);
+  --formula-texto: var(--cor-texto);
+
+  --guia-papel: var(--cor-superficie);
+  --guia-tinta: var(--cor-texto);
+  --guia-tinta-suave: var(--cor-texto-suave);
+  --guia-linha: var(--cor-borda);
+  --guia-destaque: var(--cor-primario);
+  --guia-destaque-suave: var(--cor-primario-suave);
+  --guia-veu: rgb(0 0 0 / 60%);
+  --guia-vermelho: var(--cor-perigo);
+
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+}
+
+/* Velvet Darkness + Alto contraste. Fica no body para vencer `body.alto-contraste`. */
+:root[data-tema='escuro'] body.alto-contraste {
+  --cor-texto: #ffffff;
+  --cor-texto-suave: #e2daf0;
+  --cor-borda: #8a7aa8;
+  --primario: var(--cor-primario);
+  --primario-escuro: #cdbbf0;
+  --escuro: var(--cor-texto);
+  --fundo: var(--cor-fundo);
+}
+
+:root[data-tema='escuro'] body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+/* Cabeçalho e barra inferior: o tom mais escuro. */
+:root[data-tema='escuro'] .cabecalho-principal,
+:root[data-tema='escuro'] .barra-navegacao-inferior,
+:root[data-tema='escuro'] .drawer-global {
+  background: var(--cor-nav);
+}
+
+:root[data-tema='escuro'] .cabecalho-principal {
+  border-bottom-color: var(--cor-borda);
+}
+
+:root[data-tema='escuro'] .barra-navegacao-inferior {
+  border-top-color: var(--cor-borda);
+  box-shadow: none;
+}
+
+:root[data-tema='escuro'] .item-tab-inferior.ativo {
+  color: var(--cor-primario);
+}
+
+:root[data-tema='escuro'] .titulo-principal {
+  color: var(--cor-primario);
+}
+
+/* Imagens das pedras: sombra para destacar a face clara sobre o preto. */
+:root[data-tema='escuro'] .tile-img {
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 60%));
+}
+
+/* Aba Regras: cartões (surface) sobre o fundo da tela, também no tablet. */
+:root[data-tema='escuro'] .pagina-regras {
+  background: var(--cor-fundo);
+}
+
+/* Teclado da Calculadora de Mão: Mudar batida em rosa e Finalizar mão em lilás. */
+:root[data-tema='escuro'] .botao-mudar-batida-teclado {
+  border-color: var(--cor-destaque);
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-primario);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--cor-destaque) 25%, transparent);
+}
+
+:root[data-tema='escuro'] .botao-mudar-batida-teclado:hover,
+:root[data-tema='escuro'] .botao-mudar-batida-teclado.ativo {
+  border-color: #ec8cc4;
+  background: #ec8cc4;
+}
+
+:root[data-tema='escuro'] .botao-finalizar-mao-teclado:not(:disabled) {
+  border-color: var(--cor-primario);
+  background: var(--cor-primario);
+  color: var(--cor-sobre-primario);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--cor-primario) 25%, transparent);
+}
+
+:root[data-tema='escuro'] .botao-finalizar-mao-teclado:not(:disabled):hover {
+  border-color: var(--primario-escuro);
+  background: var(--primario-escuro);
+}
+
+/* Marca-texto (termo tocado no glossário, yaku aberto no resultado): rosa choque
+   em vez do amarelo do tema claro. */
+:root[data-tema='escuro'] {
+  --cor-realce: color-mix(in srgb, var(--cor-destaque) 24%, var(--cor-superficie));
+  --cor-realce-borda: var(--cor-destaque);
+}
+
+:root[data-tema='escuro'] .glossario-item--destaque {
+  background: var(--cor-realce);
+  box-shadow: inset 0 0 0 1px var(--cor-realce-borda);
+}
+
+:root[data-tema='escuro'] .modal-resultado .chip-yaku.aberto {
+  border-color: var(--cor-realce-borda);
+  background: var(--cor-realce);
+}

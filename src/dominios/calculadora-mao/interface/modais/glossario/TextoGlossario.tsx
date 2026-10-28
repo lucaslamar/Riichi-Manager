@@ -1,4 +1,5 @@
 import { Fragment, useContext, useMemo, useState, type MouseEvent } from 'react'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ContextoNavegacaoModal } from '@/compartilhado/interface/componentes/modal/navegacaoModal'
 import { dividirTextoGlossario } from '../../../logica/glossario'
 import ModalTermo, { ConteudoTermo, TituloTermo } from './ModalTermo'
@@ -20,12 +21,13 @@ export default function TextoGlossario({
   texto: string
   ignorar?: (string | undefined)[]
 }) {
+  const { t, idioma } = useI18n()
   const abrirTela = useContext(ContextoNavegacaoModal)
   const [termoAberto, setTermoAberto] = useState<string | null>(null)
   const chaveIgnorar = ignorar?.join('|')
   const trechos = useMemo(
-    () => dividirTextoGlossario(texto, chaveIgnorar?.split('|')),
-    [texto, chaveIgnorar],
+    () => dividirTextoGlossario(texto, chaveIgnorar?.split('|'), idioma),
+    [texto, chaveIgnorar, idioma],
   )
 
   const abrir = (evento: MouseEvent, termo: string) => {
@@ -47,7 +49,7 @@ export default function TextoGlossario({
           <a
             href={`#glossario-${termo}`}
             className="termo-glossario"
-            aria-label={`${trecho}, ver definição`}
+            aria-label={t('pocketGuide.seeDefinition', { termo: trecho })}
             onClick={(evento) => abrir(evento, termo)}
           >
             {trecho}

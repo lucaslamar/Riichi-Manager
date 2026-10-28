@@ -30,7 +30,7 @@ export default function ModoCompletoCalculadora({
   const slotsEstruturais = Math.min(estado.slotsUsados, 14)
   const sufixoFisico =
     estado.totalPedras !== estado.slotsUsados
-      ? ` • ${t('calculator.physicalTilesShort', { total: estado.totalPedras })}`
+      ? ` • ${t('calculator.physicalTilesShort', { count: estado.totalPedras })}`
       : ''
   const rotuloMaoFinalizacao = `${t('calculator.completeHand')} ${slotsEstruturais}/14${sufixoFisico}`
   // Limpar não fica aqui: na finalização ele vai para o canto da mão (MaoAtual).

@@ -3,10 +3,10 @@ textarea {
   width: 100%;
   min-height: 150px;
   margin-bottom: 15px;
-  border: 2px solid #dde1e7;
+  border: 2px solid var(--cor-borda, #dde1e7);
   border-radius: 8px;
   padding: 15px;
-  color: #253445;
+  color: var(--cor-texto, #253445);
   background: var(--branco);
   font-size: 1rem;
   resize: vertical;
@@ -22,11 +22,11 @@ textarea:focus {
   width: 72px;
   height: 30px;
   flex-shrink: 0;
-  border: 2px solid #c8d4e0;
+  border: 2px solid var(--cor-borda, #c8d4e0);
   border-radius: 5px;
   padding: 0 5px;
-  color: #111;
-  background: #f0f4f8;
+  color: var(--cor-texto, #111);
+  background: var(--cor-superficie-alt, #f0f4f8);
   font-size: 0.85rem;
   font-weight: 800;
   text-align: right;
@@ -39,8 +39,8 @@ textarea:focus {
 }
 
 .input-bloqueado {
-  border-color: #ddd !important;
-  background: #f5f5f5 !important;
-  color: #999 !important;
+  border-color: var(--cor-borda, #ddd) !important;
+  background: var(--cor-superficie-alt, #f5f5f5) !important;
+  color: var(--cor-texto-suave, #999) !important;
   pointer-events: none;
 }

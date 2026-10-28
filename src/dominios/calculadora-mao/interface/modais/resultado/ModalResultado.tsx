@@ -11,7 +11,6 @@ import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 import ExibicaoCompleta, { TagsVentos } from './ExibicaoCompleta'
 
-const formatar = (valor: number) => valor.toLocaleString('pt-BR')
 import { consumirDestaque, destaqueDoYaku } from './destaqueYaku'
 import './modal-resultado.css'
 
@@ -48,7 +47,7 @@ export default function ModalResultado({
   aoFechar,
   aoNovaMao,
 }: PropsModalResultado) {
-  const { t } = useI18n()
+  const { t, numero } = useI18n()
   const [yakuSelecionado, setYakuSelecionado] = useState<string | null>(null)
   // Recalculado a cada render: as cotas são consumidas na ordem das pedras na tela.
   const destaque = yakuSelecionado ? destaqueDoYaku(yakuSelecionado, mao) : null
@@ -140,7 +139,7 @@ export default function ModalResultado({
               key={`${meld.tipo}-${indice}`}
               className={`resultado-meld resultado-meld-${meld.tipo}${meldDestacado ? ' destaque-yaku' : ''}`}
               style={{ borderColor: ESTILO_MELD[meld.tipo].borda }}
-              aria-label={ESTILO_MELD[meld.tipo].rotulo}
+              aria-label={t(ESTILO_MELD[meld.tipo].rotulo)}
             >
               <PedrasMeld
                 meld={meld}
@@ -158,19 +157,19 @@ export default function ModalResultado({
             {maoInvalida ? t('calculator.noYakuTitle') : t('calculator.furitenChomboTitle')}
           </strong>
           <TagsVentos mao={mao} />
-          <div className="pontos-chombo">-{formatar(multa.total)}</div>
+          <div className="pontos-chombo">-{numero(multa.total)}</div>
           <div className="pagamentos-resultado">
             {chomboOya ? (
               <span>
-                Todos recebem <strong>{formatar(multa.demais)}</strong>
+                {t('calculator.everyoneReceives')} <strong>{numero(multa.demais)}</strong>
               </span>
             ) : (
               <>
                 <span>
-                  {t('winds.east')} recebe <strong>{formatar(multa.leste)}</strong>
+                  {t('calculator.eastReceives')} <strong>{numero(multa.leste)}</strong>
                 </span>
                 <span>
-                  Demais recebem <strong>{formatar(multa.demais)}</strong>
+                  {t('calculator.othersReceive')} <strong>{numero(multa.demais)}</strong>
                 </span>
               </>
             )}
@@ -181,7 +180,9 @@ export default function ModalResultado({
               : t('calculator.invalidFuritenAnnounce')}
           </span>
           <span className="regra-chombo">
-            Multa de chombo: {chomboMangan ? 'Mangan' : 'Yakuman'}
+            {t('calculator.chomboPenaltyRule', {
+              limit: t(chomboMangan ? 'hanFu.limitMangan' : 'hanFu.limitYakuman'),
+            })}
           </span>
         </div>
       ) : (
@@ -198,6 +199,7 @@ export default function ModalResultado({
 
 /** Referência visual MAN/PIN/SOU/HONRAS para conferir as pedras na mesa. */
 function RodapeReferenciaPedras() {
+  const { t } = useI18n()
   return (
     <div className="rodape-pedras" aria-hidden="true">
       {NAIPES.map(({ naipe, rotulo }) => (
@@ -213,7 +215,7 @@ function RodapeReferenciaPedras() {
         </div>
       ))}
       <div className="rodape-pedras-linha">
-        <span className="rodape-pedras-rotulo">Honras</span>
+        <span className="rodape-pedras-rotulo">{t('calculator.honors')}</span>
         <div className="rodape-pedras-tiles">
           {HONRAS.map((pedra) => (
             <span key={pedra} className="rodape-pedra-ref">

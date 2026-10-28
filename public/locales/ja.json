@@ -176,7 +176,8 @@
     "fuCount": {
       "other": "{{count}}符"
     },
-    "yakumanShort": "{{count}}倍役満"
+    "yakumanShort": "{{count}}倍役満",
+    "pocketGuide": "ひつじのポケットガイド"
   },
   "hanFu": {
     "isDealer": "親ですか？",
@@ -557,7 +558,7 @@
     "theme": "テーマ",
     "themeHelp": "「自動」はシステムのライト／ダークテーマに従います。",
     "themeLight": "ライト",
-    "themeVelvet": "Velvet Darkness",
+    "themeVelvet": "ダーク",
     "themeAuto": "自動",
     "highContrast": "ハイコントラスト",
     "highContrastHelp": "文字、枠線、フォーカス表示のコントラストを上げます。",
@@ -675,5 +676,38 @@
     "haku": "白",
     "hatsu": "發",
     "chun": "中"
+  },
+  "pocketGuide": {
+    "title": "ポケットガイド",
+    "sheep": "ひつじ",
+    "tabsLabel": "ガイドのセクション",
+    "tabs": {
+      "glossary": "用語集",
+      "beginner": "初心者向けの役",
+      "sequences": "順子の役",
+      "terminals": "么九牌の役",
+      "triplets": "刻子の役",
+      "suits": "色の役",
+      "others": "その他の役",
+      "yakuman": "役満"
+    },
+    "yakumanHeading": "役満",
+    "yakumanBadge": "役満",
+    "closed": "門前",
+    "open": "副露",
+    "example": "例：{{exemplo}}",
+    "yaku": "役",
+    "glossaryTopics": "用語集の項目",
+    "summary": "目次：",
+    "howToCountStrong": "翻と符の数え方",
+    "howToCountRest": "（ステップごとに）",
+    "seeDefinition": "{{termo}}、意味を見る",
+    "search": {
+      "label": "ポケットガイドを検索",
+      "placeholder": "用語・役・タブを検索",
+      "clear": "検索をクリア",
+      "nothingFound": "「{{busca}}」は見つかりませんでした。",
+      "tabsHeading": "ガイドのタブ"
+    }
   }
 }

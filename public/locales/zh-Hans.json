@@ -176,7 +176,8 @@
     "fuCount": {
       "other": "{{count}} 符"
     },
-    "yakumanShort": "{{count}}倍役满"
+    "yakumanShort": "{{count}}倍役满",
+    "pocketGuide": "小羊口袋指南"
   },
   "hanFu": {
     "isDealer": "是庄家吗？",
@@ -557,7 +558,7 @@
     "theme": "主题",
     "themeHelp": "“自动”跟随系统的浅色或深色主题。",
     "themeLight": "浅色",
-    "themeVelvet": "Velvet Darkness",
+    "themeVelvet": "深色",
     "themeAuto": "自动",
     "highContrast": "高对比度",
     "highContrastHelp": "提高文字、边框和焦点状态的对比度。",
@@ -675,5 +676,38 @@
     "haku": "白",
     "hatsu": "发",
     "chun": "中"
+  },
+  "pocketGuide": {
+    "title": "口袋指南",
+    "sheep": "小羊",
+    "tabsLabel": "指南分区",
+    "tabs": {
+      "glossary": "术语表",
+      "beginner": "新手役种",
+      "sequences": "顺子类役",
+      "terminals": "幺九类役",
+      "triplets": "刻子类役",
+      "suits": "花色类役",
+      "others": "其他役",
+      "yakuman": "役满"
+    },
+    "yakumanHeading": "役满（最高牌型）",
+    "yakumanBadge": "役满",
+    "closed": "门清",
+    "open": "副露",
+    "example": "示例：{{exemplo}}",
+    "yaku": "役",
+    "glossaryTopics": "术语表主题",
+    "summary": "目录：",
+    "howToCountStrong": "番和符怎么算",
+    "howToCountRest": "，一步一步来",
+    "seeDefinition": "{{termo}}，查看释义",
+    "search": {
+      "label": "搜索口袋指南",
+      "placeholder": "搜索术语、役或分区",
+      "clear": "清除搜索",
+      "nothingFound": "没有找到“{{busca}}”。",
+      "tabsHeading": "指南分区"
+    }
   }
 }

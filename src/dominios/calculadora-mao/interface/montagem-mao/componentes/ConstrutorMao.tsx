@@ -124,13 +124,13 @@ export default function ConstrutorMao({
   }
 
   const rotulosAcaoMobile = {
-    chii: { rotulo: t('melds.chii'), cor: '#4caf50' },
-    pon: { rotulo: t('melds.pon'), cor: '#2196f3' },
-    kanAberto: { rotulo: t('melds.kanAberto'), cor: '#ba68c8' },
-    kanFechado: { rotulo: t('melds.kanFechado'), cor: '#9c27b0' },
-    dora: { rotulo: t('melds.dora'), cor: '#d97706' },
-    uradora: { rotulo: t('melds.uradora'), cor: '#d97706' },
-    descarte: { rotulo: t('melds.discards'), cor: '#111827' },
+    chii: { rotulo: t('melds.chii'), cor: 'var(--cor-sucesso, #4caf50)' },
+    pon: { rotulo: t('melds.pon'), cor: 'var(--cor-primario, #2196f3)' },
+    kanAberto: { rotulo: t('melds.kanAberto'), cor: 'var(--cor-destaque, #ba68c8)' },
+    kanFechado: { rotulo: t('melds.kanFechado'), cor: 'var(--cor-secundario-texto, #9c27b0)' },
+    dora: { rotulo: t('melds.dora'), cor: 'var(--cor-aviso, #d97706)' },
+    uradora: { rotulo: t('melds.uradora'), cor: 'var(--cor-aviso, #d97706)' },
+    descarte: { rotulo: t('melds.discards'), cor: 'var(--cor-texto, #111827)' },
   }
   const acaoMobileAtiva = acaoPendente ? rotulosAcaoMobile[acaoPendente.tipo] : null
   const acaoMeldAtiva =

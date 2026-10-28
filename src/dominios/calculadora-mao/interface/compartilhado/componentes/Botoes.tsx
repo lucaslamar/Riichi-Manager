@@ -60,7 +60,7 @@ export function BotaoToggle({
       style={{
         borderColor: ativo && corAtiva ? corAtiva : undefined,
         background: ativo && corAtiva ? corAtiva : undefined,
-        color: ativo && corAtiva ? 'white' : undefined,
+        color: ativo && corAtiva ? 'var(--cor-sobre-primario, white)' : undefined,
         opacity: desabilitado ? 0.35 : 1,
       }}
       onClick={aoClicar}

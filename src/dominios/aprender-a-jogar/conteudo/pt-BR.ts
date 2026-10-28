@@ -1356,6 +1356,10 @@ const topicosRegras: TopicoRegras[] = [
         type: 'text',
         md: 'Na rodada do Sul, o vento da rodada passa a ser o Sul. Dura o dobro do tonpuusen e dá mais tempo para recuperar pontos.',
       },
+      {
+        type: 'tip',
+        md: '**Ninguém chegou a 30.000?** Em muitas mesas, como no Mahjong Soul e no Tenhou, a partida continua na rodada do **Oeste** até alguém passar de 30.000. Pelas regras da EMA, ela acaba no fim do Sul de qualquer jeito.',
+      },
     ],
   },
   {

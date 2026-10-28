@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import { parseMpszGrupos } from '../../../logica/yakus'
 import TextoGlossario from '../glossario/TextoGlossario'
 import { CiclosDora, PedrasExemplo } from '../yakus/PedrasExemplo'
@@ -24,7 +25,11 @@ function TextoAjuda({ texto, ignorar }: { texto: string; ignorar?: string[] }) {
     <span key={indice}>
       <TextoGlossario texto={parte} ignorar={ignorar} />
       {indice < partes.length - 1 && (
-        <i className="fas fa-gear icone-texto-ajuda" role="img" aria-label="engrenagem" />
+        <i
+          className="fas fa-gear icone-texto-ajuda"
+          role="img"
+          aria-label={traduzirGlobal('calculator.gearIcon')}
+        />
       )}
     </span>
   ))

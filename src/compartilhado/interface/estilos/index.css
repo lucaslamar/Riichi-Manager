@@ -1,5 +1,6 @@
 @import './base/tokens.css';
 @import './base/reset.css';
+@import './base/fontes-idioma.css';
 @import './layout/cabecalho.css';
 @import './componentes/card.css';
 @import './componentes/botoes.css';
@@ -7,3 +8,4 @@
 @import './componentes/placeholder.css';
 @import './dominios/calculadoras/index.css';
 @import './responsivo.css';
+@import '../../tema/tema-escuro.css';

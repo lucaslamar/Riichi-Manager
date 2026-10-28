@@ -34,31 +34,31 @@
   transform: translateY(-1px);
 }
 .btn-primario:disabled {
-  background: #999;
+  background: var(--cor-borda-controle, #999);
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-contorno {
-  border: 2px solid #dde1e7;
+  border: 2px solid var(--cor-borda, #dde1e7);
   background: var(--branco);
   color: var(--escuro);
 }
 
 .btn-contorno:hover {
-  border-color: #ccd0d5;
-  background: #f8f9fa;
+  border-color: var(--cor-borda, #ccd0d5);
+  background: var(--cor-superficie-alt, #f8f9fa);
 }
 .btn-contorno:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 .btn-perigo {
-  color: #ef5350;
-  border-color: #ef5350;
+  color: var(--cor-perigo, #ef5350);
+  border-color: var(--cor-perigo-borda, #ef5350);
 }
 .btn-bloqueado {
-  background: #999 !important;
+  background: var(--cor-borda-controle, #999) !important;
   cursor: not-allowed;
   transform: none !important;
 }

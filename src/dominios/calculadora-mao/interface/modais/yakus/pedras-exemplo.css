@@ -33,9 +33,9 @@
   width: var(--yaku-pedra, 22px);
   height: calc(var(--yaku-pedra, 22px) * var(--pedra-mao-proporcao, 1.35));
   padding: 1px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--pedra-borda, #cbd5e1);
   border-radius: 4px;
-  background: #ffffff;
+  background: var(--pedra-face, #ffffff);
   box-shadow: 0 1px 0 rgba(16, 42, 67, 0.12);
 }
 
@@ -54,7 +54,7 @@
 }
 
 .yaku-tile-numerada__numero {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.7rem;
   font-weight: 800;
   line-height: 1;
@@ -80,7 +80,7 @@
 }
 
 .yaku-mao-rotulada__rotulo {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.72rem;
   font-weight: 700;
   line-height: 1.2;
@@ -93,13 +93,13 @@
 
 .yaku-ciclo__titulo {
   margin: 0;
-  color: #334e68;
+  color: var(--cor-texto, #334e68);
   font-size: 0.85rem;
   font-weight: 700;
 }
 
 .yaku-ciclo__detalhe {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-weight: 500;
 }
 
@@ -108,7 +108,7 @@
 }
 
 .yaku-ciclo__seta {
-  color: #94a3b8;
+  color: var(--cor-texto-suave, #94a3b8);
   font-size: 0.7rem;
 }
 

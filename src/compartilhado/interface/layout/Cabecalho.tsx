@@ -51,9 +51,19 @@ const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
  * Calculadora de Mão, então não ocupa espaço aqui.
  */
 const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
-  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
+  {
+    tela: 'calculadora',
+    chave: 'menu.handCalculator',
+    icone: 'um-pin',
+    chaveCurta: 'menu.handCalculatorShort',
+  },
   { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  {
+    tela: 'sorteadorVentos',
+    chave: 'menu.windDraw',
+    icone: 'chapeu-helice',
+    chaveCurta: 'menu.windDrawShort',
+  },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h', chaveCurta: 'menu.rulesShort' },
 ]
 
@@ -347,7 +357,7 @@ export default function Cabecalho({
                       onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
                     >
                       {idiomas.map((opcaoIdioma) => (
-                        <option key={opcaoIdioma} value={opcaoIdioma}>
+                        <option key={opcaoIdioma} value={opcaoIdioma} lang={opcaoIdioma}>
                           {ROTULOS_IDIOMA[opcaoIdioma]}
                         </option>
                       ))}

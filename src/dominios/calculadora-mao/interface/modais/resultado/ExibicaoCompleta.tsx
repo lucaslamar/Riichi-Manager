@@ -1,6 +1,8 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { DetalheFu, Mao, VentoMao } from '../../../logica/mao'
 import { termoGlossarioDoNome } from '../../../logica/glossario'
+import { chavePatamar, nomeYakuExibido } from '../../../logica/nomesYaku'
+import { textoDetalheFu } from '../../../logica/traducoes'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import BlocoDica from '../glossario/BlocoDica'
 import TextoGlossario from '../glossario/TextoGlossario'
@@ -13,29 +15,17 @@ const CHAVE_VENTO: Record<VentoMao, string> = {
   '4': 'winds.north',
 }
 
-const formatar = (valor: number) => valor.toLocaleString('pt-BR')
-
-/**
- * Grafia exibida dos nomes que a lógica usa como identificador (filtros de
- * dora, ligação com a referência de yakus): mesma grafia do Glossário.
- */
-const NOME_EXIBIDO: Record<string, string> = {
-  Tanyao: "Tan'yao",
-  Uradora: 'Ura-dora',
-  Akadora: 'Aka dora',
-}
-
 /**
  * Quem paga no tsumo: sendo Leste, todos pagam o mesmo; senão, Leste paga a
  * parte maior e os demais a menor. No ron o total já é o que o descarte paga.
  */
-function pagamentos(resultado: any, nomeLeste: string): { quem: string; valor: number }[] {
+function pagamentos(resultado: any): { chave: string; valor: number }[] {
   const pts = resultado.pontos
   if (resultado.agari !== 'tsumo') return []
-  if (resultado.isOya) return [{ quem: 'Todos pagam', valor: pts.oya?.ko }]
+  if (resultado.isOya) return [{ chave: 'calculator.everyonePays', valor: pts.oya?.ko }]
   return [
-    { quem: `${nomeLeste} paga`, valor: pts.ko?.oya },
-    { quem: 'Demais pagam', valor: pts.ko?.ko },
+    { chave: 'calculator.eastPays', valor: pts.ko?.oya },
+    { chave: 'calculator.othersPay', valor: pts.ko?.ko },
   ]
 }
 
@@ -66,23 +56,25 @@ export default function ExibicaoCompleta({
   yakuSelecionado?: string | null
   aoSelecionarYaku?: (nome: string | null) => void
 }) {
-  const { t } = useI18n()
+  const { t, idioma, numero } = useI18n()
   const pts = resultado.pontos
   const completarIndicadores = (quantidade: number) => Math.max(0, 5 - quantidade)
   const pontosHonba: number = resultado.pontosHonba ?? 0
   const rotuloHanFu =
     resultado.yakuman > 0
-      ? `${resultado.yakuman}× Yakuman`
+      ? t('hanFu.limitYakumanTimes', { count: resultado.yakuman })
       : resultado.han > 0
-        ? `${resultado.han} Han ${resultado.fu} Fu`
+        ? t('calculator.hanFuSummary', { han: resultado.han, fu: resultado.fu })
         : null
+  const patamar = resultado.nome ? chavePatamar(resultado.nome) : null
+  const nomePatamar = patamar ? t(patamar.chave, patamar.parametros) : resultado.nome
 
   return (
     <>
       {/* O patamar (Mangan, Haneman...) abre o verbete dele no glossário. */}
       {resultado.nome && (
         <div className="nome-mao">
-          <TextoGlossario texto={resultado.nome} />
+          <TextoGlossario texto={nomePatamar} />
         </div>
       )}
       {mao && <TagsVentos mao={mao} />}
@@ -90,13 +82,13 @@ export default function ExibicaoCompleta({
         <div className="linhas-pontos-resultado">
           <div className="linha-pontos-resultado">
             <span>{rotuloHanFu}</span>
-            <strong>{formatar(pts.total - pontosHonba)}</strong>
+            <strong>{numero(pts.total - pontosHonba)}</strong>
           </div>
           <div className="linha-pontos-resultado">
             <span>
               {t('calculator.honba')} {mao.honba}
             </span>
-            <strong>+{formatar(pontosHonba)}</strong>
+            <strong>+{numero(pontosHonba)}</strong>
           </div>
         </div>
       ) : (
@@ -106,12 +98,12 @@ export default function ExibicaoCompleta({
           </div>
         )
       )}
-      <div className="pontos-totais">{formatar(pts.total)}</div>
+      <div className="pontos-totais">{numero(pts.total)}</div>
       {resultado.agari === 'tsumo' && (
         <div className="pagamentos-resultado">
-          {pagamentos(resultado, t(CHAVE_VENTO['1'])).map(({ quem, valor }) => (
-            <span key={quem}>
-              {quem} <strong>{formatar(valor ?? 0)}</strong>
+          {pagamentos(resultado).map(({ chave, valor }) => (
+            <span key={chave}>
+              {t(chave)} <strong>{numero(valor ?? 0)}</strong>
             </span>
           ))}
         </div>
@@ -120,7 +112,7 @@ export default function ExibicaoCompleta({
         <div className="indicadores-resultado">
           {mao.dora.length > 0 && (
             <div className="linha-indicadores-resultado">
-              <strong>Indicadores de dora</strong>
+              <strong>{t('calculator.doraIndicators')}</strong>
               <span className="tiles-indicadores-resultado">
                 {mao.dora.map((pedra, indice) => (
                   <span key={`dora-${pedra}-${indice}`} className="chip-pedra mini">
@@ -140,7 +132,7 @@ export default function ExibicaoCompleta({
           )}
           {mao.uradora.length > 0 && (
             <div className="linha-indicadores-resultado">
-              <strong>Indicadores de ura-dora</strong>
+              <strong>{t('calculator.uraDoraIndicators')}</strong>
               <span className="tiles-indicadores-resultado">
                 {mao.uradora.map((pedra, indice) => (
                   <span key={`ura-${pedra}-${indice}`} className="chip-pedra mini">
@@ -165,13 +157,16 @@ export default function ExibicaoCompleta({
       {resultado.yaku?.length > 0 && (
         <>
           <div className="divisor-resultado" />
-          <div className="rotulo-lista-resultado">Yaku</div>
+          <div className="rotulo-lista-resultado">{t('calculator.yakuHeading')}</div>
           <div className="lista-yaku">
             {resultado.yaku.map(
               ([nome, valor, ehYakuman]: [string, number, boolean], i: number) => {
                 const aberto = yakuSelecionado === nome
-                const explicacao = explicacaoDoYaku(nome, mao)
-                const ignorar = [termoGlossarioDoNome(explicacao?.yaku?.romaji ?? nome)]
+                const explicacao = explicacaoDoYaku(nome, mao, idioma)
+                const ignorar = [
+                  termoGlossarioDoNome(explicacao?.yaku?.romaji ?? nome, idioma),
+                  termoGlossarioDoNome(nomeYakuExibido(nome, idioma), idioma),
+                ]
                 const idExplicacao = `explicacao-yaku-${i}`
                 // O cartão todo abre/fecha ao tocar (o botão é o acesso por
                 // teclado); a explicação fica fora do botão por ter links.
@@ -189,7 +184,7 @@ export default function ExibicaoCompleta({
                       aria-controls={aberto && explicacao ? idExplicacao : undefined}
                     >
                       <span className="chip-yaku__rotulo">
-                        {NOME_EXIBIDO[nome] ?? nome}
+                        {nomeYakuExibido(nome, idioma)}
                         {/* Avisa que o yaku abre a explicação ao tocar. */}
                         {explicacao && (
                           <i
@@ -198,13 +193,19 @@ export default function ExibicaoCompleta({
                           />
                         )}
                       </span>
-                      <strong>{ehYakuman ? `${valor}× YM` : `${valor}han`}</strong>
+                      <strong>
+                        {ehYakuman
+                          ? t('calculator.yakumanShort', { count: valor })
+                          : t('calculator.hanCount', { count: valor })}
+                      </strong>
                     </button>
                     {aberto && explicacao && (
                       <div id={idExplicacao} className="chip-yaku__explicacao">
                         {(explicacao.titulo ?? explicacao.yaku) && (
                           <span className="chip-yaku__nome-pt">
-                            {explicacao.titulo?.nome ?? explicacao.yaku?.namePt}{' '}
+                            {explicacao.titulo?.nome ??
+                              explicacao.yaku?.nome ??
+                              explicacao.yaku?.titulo}{' '}
                             <span lang="ja">
                               {explicacao.titulo?.kanji ?? explicacao.yaku?.kanji}
                             </span>
@@ -226,13 +227,13 @@ export default function ExibicaoCompleta({
       {resultado.fuDetalhes?.length > 0 && resultado.yakuman === 0 && (
         <>
           <div className="divisor-resultado" />
-          <div className="rotulo-lista-resultado">Fu</div>
+          <div className="rotulo-lista-resultado">{t('hanFu.fu')}</div>
           <div className="lista-fu">
             {resultado.fuDetalhes.map((detalhe: DetalheFu, i: number) => (
               <span key={i} className="chip-fu">
-                <strong>{detalhe.fu} fu</strong>
-                <span>{detalhe.tipo}</span>
-                <small>{detalhe.descricao}</small>
+                <strong>{t('calculator.fuCount', { count: detalhe.fu })}</strong>
+                <span>{t(detalhe.tipo)}</span>
+                <small>{textoDetalheFu(detalhe, t)}</small>
               </span>
             ))}
           </div>

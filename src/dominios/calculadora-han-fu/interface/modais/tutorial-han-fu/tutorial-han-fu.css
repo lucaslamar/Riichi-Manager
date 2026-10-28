@@ -16,11 +16,11 @@
 }
 
 .botao-tutorial-han-fu:hover {
-  background: #f5f9ff;
+  background: var(--cor-primario-suave, #f5f9ff);
 }
 
 .botao-tutorial-han-fu:focus-visible {
-  outline: 3px solid rgba(33, 150, 243, 0.35);
+  outline: 3px solid color-mix(in srgb, var(--cor-primario, #2196f3) 35%, transparent);
   outline-offset: 2px;
 }
 
@@ -45,7 +45,7 @@
 .modal-tutorial-han-fu .tutorial-subtitulo {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--cor-borda, #e5e7eb);
 }
 
 .modal-tutorial-han-fu .tutorial-subtitulo + .glossario-item__texto {
@@ -58,7 +58,7 @@
 
 .modal-tutorial-han-fu .tutorial-grupo {
   margin-top: 14px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--cor-borda, #e5e7eb);
   padding-top: 14px;
 }
 
@@ -84,7 +84,7 @@
 .tutorial-tabela {
   margin: 4px 0 10px;
   overflow-x: auto;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--cor-borda, #e5e7eb);
   border-radius: 8px;
 }
 
@@ -97,8 +97,8 @@
 .tutorial-tabela th,
 .tutorial-tabela td {
   padding: 7px 6px;
-  border-top: 1px solid #edf0f4;
-  color: #334e68;
+  border-top: 1px solid var(--cor-borda, #edf0f4);
+  color: var(--cor-texto, #334e68);
   text-align: left;
   vertical-align: top;
   font-variant-numeric: tabular-nums;
@@ -111,15 +111,15 @@
 
 .tutorial-tabela thead th {
   border-top: 0;
-  background: #f8fafc;
-  color: #607080;
+  background: var(--cor-superficie-alt, #f8fafc);
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.68rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .tutorial-tabela tbody th {
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   font-weight: 800;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .tutorial-curiosidade .fa-lightbulb {
-  color: #d97706;
+  color: var(--cor-aviso, #d97706);
 }
 
 /* Busca do Guia de consulta: presa no topo do corpo da modal ao rolar, com o
@@ -146,7 +146,7 @@
 
 .tutorial-consulta__vazio {
   margin: 16px 0 0;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.9rem;
   text-align: center;
 }
@@ -189,8 +189,8 @@
 .tutorial-credito {
   margin: 16px 0 0;
   padding-top: 10px;
-  border-top: 1px solid #e5e7eb;
-  color: #607080;
+  border-top: 1px solid var(--cor-borda, #e5e7eb);
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.75rem;
   line-height: 1.4;
 }
@@ -226,7 +226,7 @@
 }
 
 .multiplicacao-linhas__sessenta {
-  color: #c2410c;
+  color: var(--cor-aviso, #c2410c);
 }
 
 .multiplicacao-linhas__reta {
@@ -241,19 +241,19 @@
 }
 
 .multiplicacao-linhas__reta--sessenta {
-  stroke: #c2410c;
+  stroke: var(--cor-aviso, #c2410c);
 }
 
 .multiplicacao-linhas__grupo {
   fill: none;
-  stroke: #94a3b8;
+  stroke: var(--cor-borda-controle, #94a3b8);
   stroke-dasharray: 4 3;
   stroke-width: 1.2;
 }
 
 /* Os cruzamentos aparecem depois da última reta. */
 .multiplicacao-linhas__cruzamento {
-  fill: #102a43;
+  fill: var(--cor-texto, #102a43);
   animation: multiplicacao-aparecer 300ms ease-out 1.5s both;
 }
 
@@ -269,7 +269,7 @@
 }
 
 .multiplicacao-linhas__contagens text {
-  fill: #102a43;
+  fill: var(--cor-texto, #102a43);
   font-family: 'Cambria Math', 'STIX Two Math', 'Times New Roman', serif;
   font-size: 17px;
   text-anchor: middle;

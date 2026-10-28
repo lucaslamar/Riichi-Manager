@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import ModalYakus from './ModalYakus'
 import './botao-yakus.css'
 
@@ -9,6 +10,7 @@ import './botao-yakus.css'
  * em cada tela.
  */
 export default function BotaoYakus({ classeBase }: { classeBase: string }) {
+  const { t } = useI18n()
   const [aberto, setAberto] = useState(false)
   const botaoRef = useRef<HTMLButtonElement>(null)
 
@@ -24,8 +26,8 @@ export default function BotaoYakus({ classeBase }: { classeBase: string }) {
         ref={botaoRef}
         type="button"
         className={`${classeBase} yaku-btn`}
-        aria-label="Guia de bolso da Ovelhinha"
-        title="Guia de bolso da Ovelhinha"
+        aria-label={t('calculator.pocketGuide')}
+        title={t('calculator.pocketGuide')}
         aria-haspopup="dialog"
         onClick={() => setAberto(true)}
       >

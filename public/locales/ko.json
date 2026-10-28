@@ -176,7 +176,8 @@
     "fuCount": {
       "other": "{{count}}부"
     },
-    "yakumanShort": "{{count}}배 역만"
+    "yakumanShort": "{{count}}배 역만",
+    "pocketGuide": "아기 양의 포켓 가이드"
   },
   "hanFu": {
     "isDealer": "친인가요?",
@@ -557,7 +558,7 @@
     "theme": "테마",
     "themeHelp": "자동은 시스템의 라이트 또는 다크 테마를 따릅니다.",
     "themeLight": "라이트",
-    "themeVelvet": "Velvet Darkness",
+    "themeVelvet": "다크",
     "themeAuto": "자동",
     "highContrast": "고대비",
     "highContrastHelp": "글자, 테두리, 포커스 표시의 대비를 높입니다.",
@@ -675,5 +676,38 @@
     "haku": "백",
     "hatsu": "발",
     "chun": "중"
+  },
+  "pocketGuide": {
+    "title": "포켓 가이드",
+    "sheep": "아기 양",
+    "tabsLabel": "가이드 구역",
+    "tabs": {
+      "glossary": "용어집",
+      "beginner": "입문자용 역",
+      "sequences": "슌쯔 역",
+      "terminals": "요구패 역",
+      "triplets": "커쯔 역",
+      "suits": "패 종류 역",
+      "others": "기타 역",
+      "yakuman": "역만"
+    },
+    "yakumanHeading": "역만 (최고 점수 손패)",
+    "yakumanBadge": "역만",
+    "closed": "멘젠",
+    "open": "후로",
+    "example": "예: {{exemplo}}",
+    "yaku": "역",
+    "glossaryTopics": "용어집 주제",
+    "summary": "목차:",
+    "howToCountStrong": "판과 부 세는 법",
+    "howToCountRest": "(단계별)",
+    "seeDefinition": "{{termo}}, 뜻 보기",
+    "search": {
+      "label": "포켓 가이드 검색",
+      "placeholder": "용어, 역, 탭 검색",
+      "clear": "검색 지우기",
+      "nothingFound": "“{{busca}}”에 대한 결과가 없습니다.",
+      "tabsHeading": "가이드 탭"
+    }
   }
 }

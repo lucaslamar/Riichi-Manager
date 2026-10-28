@@ -13,7 +13,7 @@
 .calculadora-han-fu .cabecalho-calculadora {
   display: flex;
   margin: 0;
-  border-bottom: 2px solid #f0f4f8;
+  border-bottom: 2px solid var(--cor-borda, #f0f4f8);
   padding: 0 0 14px;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .grupo-seletor-han-fu > span {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.74rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -48,7 +48,7 @@
 
 /* Kanji ao lado do rótulo (ex.: 親 de oya), como nos verbetes do glossário. */
 .kanji-seletor-han-fu {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 1.1em;
   font-weight: 700;
   text-transform: none;
@@ -59,10 +59,10 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4px;
   min-height: 48px;
-  border: 1px solid #d7e3f0;
+  border: 1px solid var(--cor-borda, #d7e3f0);
   border-radius: 8px;
   padding: 4px;
-  background: #f8fafc;
+  background: var(--cor-superficie-alt, #f8fafc);
 }
 
 .seletor-segmentado-han-fu button,
@@ -77,13 +77,13 @@
   min-height: 40px;
   border-radius: 7px;
   background: transparent;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
 }
 
 .seletor-segmentado-han-fu button.ativo {
   background: var(--primario);
-  color: #ffffff;
-  box-shadow: 0 8px 18px rgba(33, 150, 243, 0.18);
+  color: var(--cor-sobre-primario, #ffffff);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--cor-primario, #2196f3) 18%, transparent);
 }
 
 .controles-principais-han-fu {
@@ -101,24 +101,24 @@
   gap: 10px;
   min-width: 0;
   min-height: 132px;
-  border: 1px solid #dfe7ef;
+  border: 1px solid var(--cor-borda, #dfe7ef);
   border-radius: 8px;
   padding: 16px;
-  background: #f8fbff;
+  background: var(--cor-superficie, #f8fbff);
 }
 
 .controle-honba-linha-han-fu .controle-han-fu {
   min-height: 108px;
-  background: #ffffff;
+  background: var(--cor-superficie, #ffffff);
 }
 
 .controle-han-fu.desabilitado {
-  background: #f3f6f9;
-  color: #7b8794;
+  background: var(--cor-superficie-alt, #f3f6f9);
+  color: var(--cor-texto-suave, #7b8794);
 }
 
 .controle-han-fu-rotulo {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.82rem;
   font-weight: 900;
   text-align: center;
@@ -144,7 +144,7 @@
 }
 
 .controle-han-fu.desabilitado .controle-han-fu-corpo strong {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
 }
 
 .botao-stepper-han-fu {
@@ -167,9 +167,9 @@
   height: 34px;
   align-items: center;
   justify-content: center;
-  border: 1px solid #cfe2f5;
+  border: 1px solid var(--cor-borda, #cfe2f5);
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--cor-superficie, #ffffff);
   color: var(--primario-escuro);
   box-shadow: 0 5px 12px rgba(16, 42, 67, 0.08);
   font-size: 1.05rem;
@@ -185,7 +185,7 @@
 .botao-stepper-han-fu:hover:not(:disabled) span,
 .botao-stepper-han-fu:focus-visible span {
   background: var(--info-fundo);
-  border-color: #93c5fd;
+  border-color: var(--cor-primario-borda, #93c5fd);
 }
 
 .botao-stepper-han-fu:active:not(:disabled) span {
@@ -199,14 +199,14 @@
 }
 
 .botao-stepper-han-fu:disabled span {
-  border-color: #d7dee8;
-  background: #f3f6f9;
-  color: #9aa6b2;
+  border-color: var(--cor-borda, #d7dee8);
+  background: var(--cor-superficie-alt, #f3f6f9);
+  color: var(--cor-texto-suave, #9aa6b2);
   box-shadow: none;
 }
 
 .aviso-fu-han-fu {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.8rem;
   font-weight: 800;
   text-align: center;
@@ -217,12 +217,12 @@
   justify-items: center;
   gap: 5px;
   min-height: 162px;
-  border: 1px solid #bfdbfe;
+  border: 1px solid var(--cor-primario-borda, #bfdbfe);
   border-radius: 8px;
   padding: 24px 18px;
   background: var(--info-fundo);
   color: var(--info-texto);
-  box-shadow: 0 14px 26px rgba(33, 150, 243, 0.12);
+  box-shadow: 0 14px 26px color-mix(in srgb, var(--cor-primario, #2196f3) 12%, transparent);
 }
 
 .resultado-han-fu-topo {
@@ -230,7 +230,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  color: #40566d;
+  color: var(--cor-texto-suave, #40566d);
   font-size: 0.84rem;
   font-weight: 900;
 }
@@ -244,18 +244,18 @@
 
 .resultado-han-fu-pontos {
   margin-top: -2px;
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-weight: 900;
 }
 
 .resultado-yakuman-han-fu {
-  color: #c2410c;
+  color: var(--cor-aviso, #c2410c);
   font-size: 0.98rem;
   font-weight: 900;
 }
 
 .detalhe-han-fu {
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   font-size: 0.96rem;
   font-weight: 900;
   text-align: center;
@@ -265,8 +265,8 @@
   margin-top: 6px;
   border-radius: 999px;
   padding: 5px 11px;
-  background: #fff7ed;
-  color: #c2410c;
+  background: var(--cor-aviso-suave, #fff7ed);
+  color: var(--cor-aviso, #c2410c);
   font-size: 0.78rem;
   font-weight: 900;
 }
@@ -288,11 +288,11 @@
   justify-content: space-between;
   gap: 10px;
   width: 100%;
-  border: 1px solid #dfe7ef;
+  border: 1px solid var(--cor-borda, #dfe7ef);
   border-radius: 8px;
   padding: 5px 6px 5px 12px;
-  background: #ffffff;
-  color: #102a43;
+  background: var(--cor-superficie, #ffffff);
+  color: var(--cor-texto, #102a43);
   text-align: left;
 }
 
@@ -307,13 +307,13 @@
 
 .titulos-referencia-han-fu strong {
   margin: 0;
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   font-size: 0.92rem;
   font-weight: 800;
 }
 
 .titulos-referencia-han-fu small {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.72rem;
   font-weight: 700;
 }
@@ -327,16 +327,16 @@
   display: grid;
   min-width: 0;
   overflow-x: auto;
-  border: 1px solid #dfe7ef;
+  border: 1px solid var(--cor-borda, #dfe7ef);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--cor-superficie, #ffffff);
 }
 
 .linha-referencia-han-fu {
   display: grid;
   grid-template-columns: 82px repeat(11, minmax(94px, 1fr));
   min-width: 1130px;
-  border-bottom: 1px solid #edf0f4;
+  border-bottom: 1px solid var(--cor-borda, #edf0f4);
 }
 
 .linha-referencia-han-fu:last-child {
@@ -352,7 +352,7 @@
   align-items: center;
   justify-content: center;
   padding: 6px;
-  color: #40566d;
+  color: var(--cor-texto-suave, #40566d);
   font-size: 0.78rem;
   text-align: center;
 }
@@ -364,8 +364,8 @@
 
 .linha-referencia-han-fu > strong,
 .linha-referencia-han-fu.cabecalho > span {
-  background: #f8fafc;
-  color: #607080;
+  background: var(--cor-superficie-alt, #f8fafc);
+  color: var(--cor-texto-suave, #607080);
   font-weight: 900;
 }
 
@@ -379,7 +379,7 @@
 
 .celula-referencia-han-fu,
 .celula-referencia-vazia {
-  border-left: 1px solid #edf0f4;
+  border-left: 1px solid var(--cor-borda, #edf0f4);
   background: transparent;
   flex-direction: column;
   gap: 5px;
@@ -391,21 +391,21 @@
 }
 
 .eixo-celula-referencia small {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.64rem;
   font-weight: 800;
   line-height: 1.1;
 }
 
 .eixo-celula-referencia span {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.68rem;
   font-weight: 900;
   line-height: 1.2;
 }
 
 .celula-referencia-han-fu.limite {
-  color: #c2410c;
+  color: var(--cor-aviso, #c2410c);
 }
 
 .celula-referencia-han-fu.ativo {
@@ -415,7 +415,7 @@
 }
 
 .celula-referencia-vazia {
-  color: #b7c1cc;
+  color: var(--cor-texto-suave, #b7c1cc);
 }
 
 .pagamentos-referencia-han-fu {
@@ -431,7 +431,7 @@
 }
 
 .pagamentos-referencia-han-fu dt {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-size: 0.66rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -441,14 +441,14 @@
   display: grid;
   gap: 1px;
   margin: 0;
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   font-size: 0.78rem;
   font-weight: 900;
   line-height: 1.2;
 }
 
 .pagamentos-referencia-han-fu abbr {
-  color: #0f172a;
+  color: var(--cor-texto, #0f172a);
   text-decoration: none;
 }
 
@@ -473,17 +473,17 @@
 
 .bloco-limites-han-fu h4 {
   margin: 4px 0 0;
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   font-size: 0.92rem;
 }
 
 .limites-referencia-han-fu > div {
   display: grid;
   gap: 6px;
-  border: 1px solid #fed7aa;
+  border: 1px solid var(--cor-aviso-borda, #fed7aa);
   border-radius: 8px;
   padding: 10px;
-  background: #fff7ed;
+  background: var(--cor-aviso-suave, #fff7ed);
 }
 
 .limites-referencia-han-fu > div.ativo {
@@ -493,18 +493,18 @@
 }
 
 .limites-referencia-han-fu strong {
-  color: #c2410c;
+  color: var(--cor-aviso, #c2410c);
   font-size: 0.78rem;
 }
 
 .limites-referencia-han-fu span {
-  color: #40566d;
+  color: var(--cor-texto-suave, #40566d);
   font-size: 0.82rem;
   font-weight: 900;
 }
 
 .calculadora-han-fu button:focus-visible {
-  outline: 3px solid rgba(33, 150, 243, 0.35);
+  outline: 3px solid color-mix(in srgb, var(--cor-primario, #2196f3) 35%, transparent);
   outline-offset: 2px;
 }
 
@@ -681,17 +681,17 @@
     display: grid;
     grid-template-columns: 1fr;
     min-width: 0;
-    border: 1px solid #dfe7ef;
+    border: 1px solid var(--cor-borda, #dfe7ef);
     border-radius: 8px;
     overflow: hidden;
-    background: #ffffff;
+    background: var(--cor-superficie, #ffffff);
   }
 
   .linha-referencia-han-fu > strong {
     justify-content: flex-start;
     min-height: 38px;
     padding-inline: 10px;
-    background: #f8fafc;
+    background: var(--cor-superficie-alt, #f8fafc);
   }
 
   .celula-referencia-han-fu {
@@ -699,7 +699,7 @@
     grid-template-columns: minmax(54px, 0.22fr) minmax(0, 1fr);
     align-items: start;
     min-height: 64px;
-    border-top: 1px solid #edf0f4;
+    border-top: 1px solid var(--cor-borda, #edf0f4);
     border-left: 0;
     padding: 7px 9px;
     text-align: left;
@@ -883,8 +883,8 @@
     top: -8px;
     z-index: 2;
     border-radius: 8px 8px 0 0;
-    background: #f8fafc;
-    box-shadow: 0 1px 0 #dfe7ef;
+    background: var(--cor-superficie-alt, #f8fafc);
+    box-shadow: 0 1px 0 var(--cor-borda, #dfe7ef);
   }
 }
 
@@ -947,8 +947,8 @@
     top: 66px;
     z-index: 3;
     border-radius: 8px 8px 0 0;
-    background: #f8fafc;
-    box-shadow: 0 1px 0 #dfe7ef;
+    background: var(--cor-superficie-alt, #f8fafc);
+    box-shadow: 0 1px 0 var(--cor-borda, #dfe7ef);
   }
 
   /* Pares do tsumo ("500-1.000") sempre numa linha. */

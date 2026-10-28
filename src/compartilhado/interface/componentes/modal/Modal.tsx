@@ -8,6 +8,7 @@ import {
   type TouchEvent as EventoToque,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import { useDeslizePaginas } from '../../hooks/useDeslizePaginas'
 import { useDeslizeParaFechar } from '../../hooks/useDeslizeParaFechar'
 import { ContextoNavegacaoModal, type TelaModal } from './navegacaoModal'
@@ -243,9 +244,9 @@ export default function Modal({
       if (evento.key !== 'Tab' || !dialogo) return
 
       // Só o que está visível: telas cobertas ficam com `visibility: hidden`.
-      const focaveis = Array.from(
-        dialogo.querySelectorAll<HTMLElement>(SELETOR_FOCAVEIS),
-      ).filter((elemento) => getComputedStyle(elemento).visibility !== 'hidden')
+      const focaveis = Array.from(dialogo.querySelectorAll<HTMLElement>(SELETOR_FOCAVEIS)).filter(
+        (elemento) => getComputedStyle(elemento).visibility !== 'hidden',
+      )
       if (focaveis.length === 0) return
 
       const primeiro = focaveis[0]
@@ -344,8 +345,8 @@ export default function Modal({
             <button
               className="modal-voltar"
               type="button"
-              aria-label="Voltar"
-              title="Voltar"
+              aria-label={traduzirGlobal('actions.back')}
+              title={traduzirGlobal('actions.back')}
               onClick={() => voltarRef.current()}
             >
               <i className="fas fa-chevron-left" aria-hidden="true" />
@@ -388,10 +389,7 @@ export default function Modal({
               {...propsToqueBordas}
             >
               {paginacao ? (
-                <div
-                  key={paginacao.atual}
-                  className={`modal-pagina modal-pagina--${sentido}`}
-                >
+                <div key={paginacao.atual} className={`modal-pagina modal-pagina--${sentido}`}>
                   {children}
                 </div>
               ) : (

@@ -180,7 +180,8 @@
       "one": "{{count}} fu",
       "other": "{{count}} fu"
     },
-    "yakumanShort": "{{count}}× YM"
+    "yakumanShort": "{{count}}× YM",
+    "pocketGuide": "Little Sheep pocket guide"
   },
   "hanFu": {
     "isDealer": "Dealer?",
@@ -563,7 +564,7 @@
     "theme": "Theme",
     "themeHelp": "Automatic follows the system's light or dark theme.",
     "themeLight": "Light",
-    "themeVelvet": "Velvet Darkness",
+    "themeVelvet": "Dark",
     "themeAuto": "Automatic",
     "highContrast": "High contrast",
     "highContrastHelp": "Increases the contrast of text, borders and focus states.",
@@ -682,5 +683,38 @@
     "haku": "Haku",
     "hatsu": "Hatsu",
     "chun": "Chun"
+  },
+  "pocketGuide": {
+    "title": "Pocket guide",
+    "sheep": "Little sheep",
+    "tabsLabel": "Guide sections",
+    "tabs": {
+      "glossary": "Glossary",
+      "beginner": "Yaku for beginners",
+      "sequences": "Sequence yaku",
+      "terminals": "Terminal yaku",
+      "triplets": "Triplet yaku",
+      "suits": "Suit yaku",
+      "others": "Other yaku",
+      "yakuman": "Yakuman"
+    },
+    "yakumanHeading": "Yakuman (limit hands)",
+    "yakumanBadge": "YAKUMAN",
+    "closed": "Closed",
+    "open": "Open",
+    "example": "Example: {{exemplo}}",
+    "yaku": "Yaku",
+    "glossaryTopics": "Glossary topics",
+    "summary": "Contents:",
+    "howToCountStrong": "How to count",
+    "howToCountRest": "han and fu, step by step",
+    "seeDefinition": "{{termo}}, see definition",
+    "search": {
+      "label": "Search the Pocket guide",
+      "placeholder": "Search a term, yaku or tab",
+      "clear": "Clear search",
+      "nothingFound": "Nothing found for “{{busca}}”.",
+      "tabsHeading": "Guide tabs"
+    }
   }
 }

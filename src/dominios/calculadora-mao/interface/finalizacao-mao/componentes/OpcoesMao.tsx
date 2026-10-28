@@ -178,7 +178,7 @@ export default function OpcoesMao({
       <BotaoToggle
         rotulo={`${t('calculator.discards')} (${mao.descartes.length})`}
         ativo={painelContextualAberto === 'descartes'}
-        corAtiva="#111827"
+        corAtiva="var(--cor-texto, #111827)"
         desabilitado={false}
         aoClicar={() => alternarPainelContextual('descartes')}
       />
@@ -407,7 +407,7 @@ export default function OpcoesMao({
                   rotulo={t('calculator.riichi')}
                   ativo={!!mao.riichi}
                   desabilitado={maoAberta}
-                  corAtiva="#f97316"
+                  corAtiva="var(--cor-aviso, #f97316)"
                   aoClicar={() =>
                     atualizarMao((rascunho) => {
                       if (rascunho.riichi) {
@@ -425,7 +425,7 @@ export default function OpcoesMao({
                   rotulo={t('calculator.doubleRiichi')}
                   ativo={!!mao.riichi?.duplo}
                   desabilitado={maoAberta}
-                  corAtiva="#f97316"
+                  corAtiva="var(--cor-aviso, #f97316)"
                   aoClicar={() =>
                     atualizarMao((rascunho) => {
                       if (!rascunho.riichi) return
@@ -441,7 +441,7 @@ export default function OpcoesMao({
                   rotulo={t('calculator.ippatsu')}
                   ativo={!!mao.riichi?.ippatsu}
                   desabilitado={!mao.riichi}
-                  corAtiva="#f97316"
+                  corAtiva="var(--cor-aviso, #f97316)"
                   aoClicar={() => {
                     if (mao.riichi && !mao.riichi.ippatsu) avancar('secao-condicoes')
                     atualizarMao((rascunho) => {

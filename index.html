@@ -3,12 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#101827" />
+    <meta name="theme-color" content="#0B090F" />
     <meta
       name="description"
       content="Gerenciador de torneios de Riichi Mahjong com calculadora de pontos"
     />
     <title>Mojoca</title>
+
+    <!--
+      Tema antes da primeira pintura: sem piscar o claro quando o Velvet Darkness
+      está salvo. Mesmas chaves e cores de PreferenciasProvider e temas.ts.
+    -->
+    <script>
+      ;(function () {
+        var tema = null
+        try {
+          tema = localStorage.getItem('riichi-manager-tema')
+        } catch (erro) {}
+        // Sem escolha salva, abre no escuro.
+        var escuro =
+          tema !== 'claro' &&
+          (tema !== 'automatico' ||
+            (!!window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches))
+        var raiz = document.documentElement
+        raiz.setAttribute('data-tema', escuro ? 'escuro' : 'claro')
+        raiz.style.colorScheme = escuro ? 'dark' : 'light'
+        if (escuro) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B090F')
+        }
+      })()
+    </script>
 
     <!-- Ícone com o kanji 中 (chun) -->
     <link
@@ -23,6 +47,16 @@
     />
   </head>
   <body>
+    <!-- Preferências de uso antes da primeira pintura (ver PreferenciasProvider). -->
+    <script>
+      ;['alto-contraste', 'modo-compacto', 'toque-ampliado'].forEach(function (classe) {
+        try {
+          if (localStorage.getItem('riichi-manager-' + classe) === 'true') {
+            document.body.classList.add(classe)
+          }
+        } catch (erro) {}
+      })
+    </script>
     <!-- React monta aqui. Sem JavaScript o app não funciona. -->
     <div id="app"></div>
     <script type="module" src="/src/main.tsx"></script>

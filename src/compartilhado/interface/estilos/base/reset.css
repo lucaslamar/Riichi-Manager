@@ -29,7 +29,7 @@ button:focus-visible,
 a:focus-visible,
 select:focus-visible,
 input:focus-visible {
-  outline: 3px solid rgba(249, 115, 22, 0.65);
+  outline: 3px solid var(--cor-foco, rgba(249, 115, 22, 0.65));
   outline-offset: 3px;
 }
 h1,
@@ -84,10 +84,10 @@ main {
 }
 
 body.alto-contraste {
-  --primario: #005ea8;
-  --primario-escuro: #003f73;
-  --escuro: #0f172a;
-  --fundo: #e8eef7;
+  --primario: var(--cor-primario, #005ea8);
+  --primario-escuro: var(--cor-primario, #003f73);
+  --escuro: var(--cor-texto, #0f172a);
+  --fundo: var(--cor-primario-suave, #e8eef7);
 }
 
 body.modo-compacto .card {

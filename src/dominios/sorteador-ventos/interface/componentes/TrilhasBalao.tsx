@@ -3,8 +3,8 @@ import { useLayoutEffect, useState, type RefObject } from 'react'
 const BOLINHAS_POR_TRILHA = 11
 const RAIO_PERTO_DO_BALAO = 7.5
 const RAIO_PERTO_DA_BOCA = 3
-/** Quanto a curva abre para o lado (afasta as trilhas da hélice, no meio). */
-const ABERTURA_CURVA = 2.2
+/** Quanto (px) a curva abre para fora (afasta as trilhas da hélice, no meio). */
+const ABERTURA_CURVA = 10
 const MARGEM_LATERAL = 12
 
 interface Bolinha {
@@ -40,9 +40,9 @@ function limitar(valor: number, minimo: number, maximo: number) {
 }
 
 /**
- * Bolinhas de balão de pensamento (como nos gibis) ligando a boca do gato ao
- * balãozinho do vento que acabou de sair: menores perto da boca, maiores perto
- * do balão. Só a trilha do último aparece (as 4 juntas poluíam a tela); a
+ * Bolinhas de balão de pensamento (como nos gibis) ligando a cabeça do gato ao
+ * balãozinho do vento que acabou de sair: menores perto da cabeça, maiores
+ * perto do balão. Terminam logo fora da cabeça, do lado do balão. Só a trilha do último aparece (as 4 juntas poluíam a tela); a
  * próxima nasce da boca de novo. A raiz precisa ser posicionada.
  */
 export default function TrilhasBalao({
@@ -75,7 +75,7 @@ export default function TrilhasBalao({
       }
 
       const largura = raiz.clientWidth
-      const fim = posicaoEm(boca, raiz)
+      const centro = posicaoEm(boca, raiz)
       const topo = posicaoEm(balao, raiz)
       // No balão gigante, sai mais à direita para a curva contornar a hélice.
       const saida = completo ? 0.8 : 0.5
@@ -83,21 +83,27 @@ export default function TrilhasBalao({
         x: topo.x + balao.offsetWidth * saida,
         y: topo.y + balao.offsetHeight + 4,
       }
-      // Em pé a curva abre para o lado (longe da hélice). Deitado o balão fica
+      // Termina fora da cabeça, do lado do balão (como nos gibis), em vez de
+      // atravessar o boné e o rosto até a boca.
+      const lado = inicio.x < centro.x ? 'esquerda' : 'direita'
+      const pensamento = raiz.querySelector<HTMLElement>(`.gato-helice__pensamento--${lado}`)
+      const fim = pensamento ? posicaoEm(pensamento, raiz) : centro
+      // Em pé a curva abre para fora (longe da hélice). Deitado o balão fica
       // mais longe na horizontal: a curva passa por cima, longe do balão de fala.
       const deitado = Math.abs(inicio.x - fim.x) > Math.abs(inicio.y - fim.y)
+      const externo = lado === 'esquerda' ? Math.min(inicio.x, fim.x) : Math.max(inicio.x, fim.x)
       const controle = deitado
         ? { x: (inicio.x + fim.x) / 2, y: inicio.y }
         : {
             x: limitar(
-              fim.x + (inicio.x - fim.x) * ABERTURA_CURVA,
+              externo + (lado === 'esquerda' ? -1 : 1) * ABERTURA_CURVA,
               MARGEM_LATERAL,
               largura - MARGEM_LATERAL,
             ),
-            y: (inicio.y + fim.y) / 2,
+            y: inicio.y + (fim.y - inicio.y) * 0.3,
           }
 
-      // Curva de Bézier quadrática do balão até perto da boca.
+      // Curva de Bézier quadrática do balão até perto da cabeça.
       const bolinhas = Array.from({ length: BOLINHAS_POR_TRILHA }, (_, indice) => {
         const fracao = indice / (BOLINHAS_POR_TRILHA - 1)
         const passo = 0.05 + fracao * 0.9
@@ -137,7 +143,7 @@ export default function TrilhasBalao({
             cx={bolinha.x}
             cy={bolinha.y}
             r={bolinha.r}
-            // Saem da boca para fora: a mais perto da boca aparece primeiro.
+            // Saem da cabeça para fora: a mais perto da cabeça aparece primeiro.
             style={{ animationDelay: `${(BOLINHAS_POR_TRILHA - 1 - indice) * 35}ms` }}
           />
         ))}

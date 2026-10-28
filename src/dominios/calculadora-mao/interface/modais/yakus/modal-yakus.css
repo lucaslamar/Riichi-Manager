@@ -33,7 +33,7 @@
 }
 
 .yaku-grupo__subtitulo {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
@@ -49,15 +49,15 @@
   display: grid;
   gap: 4px;
   padding: 10px;
-  border: 1px solid #dbeafe;
+  border: 1px solid var(--cor-borda, #dbeafe);
   border-radius: 8px;
   /* Azul claro dos cartões de yaku do Resultado. */
-  background: #eef6ff;
+  background: var(--cor-primario-suave, #eef6ff);
 }
 
 .yaku-card--yakuman {
-  border-color: #f2d36b;
-  background: #fffbea;
+  border-color: var(--cor-aviso-borda, #f2d36b);
+  background: var(--cor-aviso-suave, #fffbea);
 }
 
 .yaku-card__topo {
@@ -70,26 +70,26 @@
 
 .yaku-card__nome {
   margin: 0;
-  color: #102a43;
+  color: var(--cor-texto, #102a43);
   font-size: 1rem;
   font-weight: 800;
 }
 
 .yaku-card__kanji {
-  color: #607080;
+  color: var(--cor-texto-suave, #607080);
   font-weight: 600;
 }
 
 .yaku-card__pt {
   margin: 0;
-  color: #334e68;
+  color: var(--cor-texto, #334e68);
   font-size: 0.85rem;
   font-weight: 700;
 }
 
 .yaku-card__descricao {
   margin: 0;
-  color: #486581;
+  color: var(--cor-texto-suave, #486581);
   font-size: 0.85rem;
   line-height: 1.4;
 }
@@ -100,10 +100,10 @@
   align-items: center;
   gap: 6px;
   padding: 2px 8px;
-  border: 1px solid #bfdbfe;
+  border: 1px solid var(--cor-primario-borda, #bfdbfe);
   border-radius: 999px;
   background: var(--branco);
-  color: #486581;
+  color: var(--cor-texto-suave, #486581);
   font-size: 0.72rem;
   white-space: nowrap;
 }
@@ -114,13 +114,13 @@
 }
 
 .yaku-badge__divisor {
-  color: #bfdbfe;
+  color: var(--cor-sobre-primario, #bfdbfe);
 }
 
 .yaku-badge--yakuman {
-  border-color: #e6b800;
-  background: #ffd700;
-  color: #5c4300;
+  border-color: var(--cor-aviso, #e6b800);
+  background: var(--cor-aviso, #ffd700);
+  color: var(--cor-aviso, #5c4300);
   font-weight: 900;
   letter-spacing: 0.04em;
 }
