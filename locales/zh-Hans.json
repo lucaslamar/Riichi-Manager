@@ -472,6 +472,19 @@
       "chankan": "荣和其他玩家加到碰上组成杠的那张牌。+1 番。",
       "haitei": "用牌山最后一张牌自摸和牌。+1 番。",
       "houtei": "用本局最后一张舍牌荣和。+1 番。"
+    },
+    "notation": {
+      "intro": "先写牌的数字，再写花色：m（万子）、p（筒子）、s（索子）、z（字牌）。同一花色前的多个数字都属于它：2388m447p 是万子 2、3、8、8 和筒子 4、4、7。",
+      "honorsTitle": "字牌",
+      "honors": "1z 到 4z 是东、南、西、北风；5z、6z、7z 是白、发、中三元牌。",
+      "akaTitle": "赤五",
+      "aka": "用 0 代替 5：0m、0p、0s 是赤五（赤宝牌）。",
+      "callsTitle": "副露",
+      "calls": "在一组后面加 c 表示副露：123mc 是吃，111pc 是碰，1111sc 是明杠。加 a 表示暗杠：1111ma。",
+      "winTitle": "和牌张",
+      "win": "门内手牌的最后一张是和牌张，也就是完成手牌的那张。123456m789p1122z 中和牌张是 2z。",
+      "tipTitle": "提示",
+      "tip": "可以用大写字母和空格（2388M 447P 123mc）。要回到牌键盘，点「牌」或向左滑动。"
     }
   },
   "rulesModal": {
@@ -711,6 +724,7 @@
     }
   },
   "notation": {
+    "toggle": "记谱",
     "fieldLabel": "记谱手牌",
     "placeholder": "例如 {{example}}",
     "tileCount": {
@@ -725,7 +739,10 @@
       "tooManyTiles": "牌太多了：门内手牌最多 {{max}} 张",
       "akaDisabled": "规则中已关闭赤宝牌：请用 5 代替 0",
       "duplicateAka": "赤五 {{tile}} 只有一张",
-      "invalid": "记谱无效"
-    }
+      "invalid": "记谱无效",
+      "invalidCall": "无效的副露：{{group}}（c 前面应为顺子、刻子或 4 张相同的牌）",
+      "invalidClosedKan": "无效的暗杠：{{group}}（a 前面应为 4 张相同的牌）"
+    },
+    "backToTiles": "牌"
   }
 }

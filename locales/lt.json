@@ -490,6 +490,19 @@
       "chankan": "Ron ant akmens, kurį kitas žaidėjas pridėjo prie pon, kad sudarytų kan. Vertas +1 han.",
       "haitei": "Laimėjimas tsumo būdu su paskutiniu sienos akmeniu. Vertas +1 han.",
       "houtei": "Laimėjimas ron būdu su paskutiniu partijos išmestu akmeniu. Vertas +1 han."
+    },
+    "notation": {
+      "intro": "Rašykite akmenų skaičius, o po jų rūšį: m (Man), p (Pin), s (Sou) ir z (garbės akmenys). Keli skaičiai prieš tą pačią rūšį visi priklauso jai: 2388m447p yra Man 2, 3, 8 ir 8 bei Pin 4, 4 ir 7.",
+      "honorsTitle": "Garbės akmenys",
+      "honors": "1z–4z yra Rytų, Pietų, Vakarų ir Šiaurės vėjai; 5z, 6z ir 7z – baltas, žalias ir raudonas drakonai.",
+      "akaTitle": "Raudonas penketas",
+      "aka": "Vietoj 5 rašykite 0: 0m, 0p ir 0s yra raudoni penketai (Aka dora).",
+      "callsTitle": "Skambinimai",
+      "calls": "Užbaikite grupę raide c atviram skambinimui: 123mc – chi, 111pc – pon, 1111sc – atviras kan. Užbaikite raide a uždaram kan: 1111ma.",
+      "winTitle": "Laiminčiasis akmuo",
+      "win": "Paskutinis uždaros rankos akmuo yra laiminčiasis – tas, kuris užbaigė ranką. 123456m789p1122z laiminčiasis akmuo yra 2z.",
+      "tipTitle": "Patarimas",
+      "tip": "Didžiosios raidės ir tarpai tinka (2388M 447P 123mc). Norėdami grįžti į akmenų klaviatūrą, palieskite „Akmenys“ arba braukite į kairę."
     }
   },
   "rulesModal": {
@@ -732,6 +745,7 @@
     }
   },
   "notation": {
+    "toggle": "Užrašas",
     "fieldLabel": "Ranka užrašu",
     "placeholder": "pvz. {{example}}",
     "tileCount": {
@@ -749,7 +763,10 @@
       "tooManyTiles": "Per daug akmenų: uždaroje rankoje telpa iki {{max}}",
       "akaDisabled": "Taisyklėse Aka dora išjungta: vietoj 0 rašykite 5",
       "duplicateAka": "Raudonas penketas {{tile}} yra tik vienas",
-      "invalid": "Netinkamas užrašas"
-    }
+      "invalid": "Netinkamas užrašas",
+      "invalidCall": "Netinkamas skambinimas: {{group}} (prieš c rašykite seką, trejetą arba 4 vienodus)",
+      "invalidClosedKan": "Netinkamas uždaras kan: {{group}} (prieš a rašykite 4 vienodus akmenis)"
+    },
+    "backToTiles": "Akmenys"
   }
 }
