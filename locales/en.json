@@ -18,6 +18,7 @@
     "language": "Language",
     "handCalculator": "Hand Calculator",
     "quickCalculator": "Han and Fu Calculator",
+    "quickCalculatorShort": "Han and Fu",
     "windDraw": "Wind Draw",
     "rules": "Rules / Settings",
     "rulesShort": "Rules",
@@ -383,7 +384,6 @@
     "discards": "Discards / Furiten",
     "discardsAction": "Discards",
     "discardsCompact": "Disc.",
-    "quickCalculatorAction": "Han and Fu",
     "dora": "Dora / ura ind.",
     "doraCompact": "Dora/Ura",
     "uradora": "Ura-dora"
@@ -718,14 +718,8 @@
     }
   },
   "notation": {
-    "modeLabel": "Hand input mode",
-    "modeTiles": "Tiles",
-    "modeNotation": "Notation",
     "fieldLabel": "Hand in notation",
     "placeholder": "e.g. {{example}}",
-    "suitBar": "Suits",
-    "insertSuit": "Insert {{suit}} ({{key}})",
-    "backspace": "Delete",
     "tileCount": {
       "one": "{{count}} tile",
       "other": "{{count}} tiles"

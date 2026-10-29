@@ -18,6 +18,7 @@
     "language": "语言",
     "handCalculator": "手牌计算器",
     "quickCalculator": "番符计算器",
+    "quickCalculatorShort": "番符",
     "windDraw": "抽风位",
     "rules": "规则 / 设置",
     "rulesShort": "规则",
@@ -377,7 +378,6 @@
     "discards": "舍牌 / 振听",
     "discardsAction": "舍牌",
     "discardsCompact": "舍牌",
-    "quickCalculatorAction": "番符",
     "dora": "宝牌 / 里 指示",
     "doraCompact": "宝/里",
     "uradora": "里宝牌"
@@ -711,14 +711,8 @@
     }
   },
   "notation": {
-    "modeLabel": "手牌输入方式",
-    "modeTiles": "牌",
-    "modeNotation": "记谱",
     "fieldLabel": "记谱手牌",
     "placeholder": "例如 {{example}}",
-    "suitBar": "花色",
-    "insertSuit": "输入{{suit}}（{{key}}）",
-    "backspace": "删除",
     "tileCount": {
       "other": "{{count}} 张"
     },

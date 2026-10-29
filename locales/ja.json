@@ -18,6 +18,7 @@
     "language": "言語",
     "handCalculator": "手牌計算",
     "quickCalculator": "翻・符計算",
+    "quickCalculatorShort": "翻・符",
     "windDraw": "風牌抽選",
     "rules": "ルール / 設定",
     "rulesShort": "ルール",
@@ -377,7 +378,6 @@
     "discards": "捨て牌 / フリテン",
     "discardsAction": "捨て牌",
     "discardsCompact": "捨て",
-    "quickCalculatorAction": "翻・符",
     "dora": "ドラ / 裏 表示",
     "doraCompact": "ドラ/裏",
     "uradora": "裏ドラ"
@@ -711,14 +711,8 @@
     }
   },
   "notation": {
-    "modeLabel": "手牌の入力方法",
-    "modeTiles": "牌",
-    "modeNotation": "表記",
     "fieldLabel": "表記で入力した手牌",
     "placeholder": "例: {{example}}",
-    "suitBar": "種類",
-    "insertSuit": "{{suit}}（{{key}}）を入力",
-    "backspace": "削除",
     "tileCount": {
       "other": "{{count}}枚"
     },

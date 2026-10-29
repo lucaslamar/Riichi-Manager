@@ -18,6 +18,7 @@
     "language": "언어",
     "handCalculator": "손패 계산기",
     "quickCalculator": "판·부 계산기",
+    "quickCalculatorShort": "판·부",
     "windDraw": "바람 뽑기",
     "rules": "규칙 / 설정",
     "rulesShort": "규칙",
@@ -377,7 +378,6 @@
     "discards": "버림패 / 후리텐",
     "discardsAction": "버림패",
     "discardsCompact": "버림",
-    "quickCalculatorAction": "판·부",
     "dora": "도라 / 뒷도라 표시",
     "doraCompact": "도라/뒷",
     "uradora": "뒷도라"
@@ -711,14 +711,8 @@
     }
   },
   "notation": {
-    "modeLabel": "손패 입력 방식",
-    "modeTiles": "패",
-    "modeNotation": "표기",
     "fieldLabel": "표기로 입력한 손패",
     "placeholder": "예: {{example}}",
-    "suitBar": "수트",
-    "insertSuit": "{{suit}}({{key}}) 입력",
-    "backspace": "지우기",
     "tileCount": {
       "other": "{{count}}장"
     },
