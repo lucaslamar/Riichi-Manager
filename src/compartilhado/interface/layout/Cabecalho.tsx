@@ -29,7 +29,7 @@ interface ItemMenuGlobal {
 
 const MODULOS_MENU: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
-  { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
+  { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
   { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
 ]
@@ -41,15 +41,15 @@ const APP_MENU: ItemMenuGlobal[] = [
 
 const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
-  { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'fa-bolt' },
+  { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
   { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
 ]
 
 /**
- * Barra inferior (celular/tablet). A Han e Fu é aberta pelo atalho na
- * Calculadora de Mão, então não ocupa espaço aqui.
+ * Barra inferior (celular/tablet). A Han e Fu fica logo depois da Calculadora
+ * de Mão, na mesma posição que tinha antes da 5.0.0.
  */
 const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
   {
@@ -57,6 +57,12 @@ const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
     chave: 'menu.handCalculator',
     icone: 'um-pin',
     chaveCurta: 'menu.handCalculatorShort',
+  },
+  {
+    tela: 'calculadoraRapida',
+    chave: 'menu.quickCalculator',
+    icone: 'palito-riichi',
+    chaveCurta: 'menu.quickCalculatorShort',
   },
   { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
   {

@@ -8,18 +8,16 @@ export function PaginaMontagemMao({
   mostrandoEsperas,
   aoAbrirRegras,
   aoCalcularDireto,
-  aoAbrirCalculadoraRapida,
 }: {
   estado: EstadoCalculadoraMao
   mostrandoEsperas: boolean
   aoAbrirRegras: () => void
   cabecalho?: ReactNode
   aoCalcularDireto?: () => void
-  aoAbrirCalculadoraRapida?: () => void
 }) {
   return (
     <div className={`layout-montagem-calculadora ${mostrandoEsperas ? 'com-esperas' : 'sem-esperas'}`}>
-      <ConstrutorMao estado={estado} embutido contexto="montagem" aoAbrirRegras={aoAbrirRegras} aoCalcularDireto={aoCalcularDireto} aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida} />
+      <ConstrutorMao estado={estado} embutido contexto="montagem" aoAbrirRegras={aoAbrirRegras} aoCalcularDireto={aoCalcularDireto} />
       <ResultadoMaoCalculada estado={estado} embutido modoFluxo="montagem" />
     </div>
   )

@@ -6,8 +6,7 @@ import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCa
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
 
 interface PropsPaginaCalculadoraMao {
-  aoAbrirCalculadoraRapida?: () => void
-  /** Tela seguinte na ordem da barra inferior (Sorteador de Ventos). */
+  /** Tela seguinte na ordem da barra inferior (Han e Fu). */
   aoIrParaProximaTela?: () => void
   /**
    * Falso quando outra tela está aberta. A página continua montada (a mão em
@@ -17,7 +16,6 @@ interface PropsPaginaCalculadoraMao {
 }
 
 export default function PaginaCalculadoraMao({
-  aoAbrirCalculadoraRapida,
   aoIrParaProximaTela,
   visivel = true,
 }: PropsPaginaCalculadoraMao = {}) {
@@ -36,12 +34,12 @@ export default function PaginaCalculadoraMao({
   const calculadora = useCalculadoraMao({ fluxoCompleto: telaGrande })
   const finalizandoMao = calculadora.etapaFinalizacaoAtiva && calculadora.maoProntaParaFinalizar
 
-  // Dedo para a esquerda vai para o Sorteador de Ventos. Dedo para a direita
-  // volta: na montagem abre a Han e Fu (à esquerda da mão); na finalização
-  // volta para a edição da mão (o mesmo do botão "Editar mão").
+  // Dedo para a esquerda vai para a Han e Fu, a próxima aba da barra. A Mão é a
+  // primeira aba, então dedo para a direita só age na finalização: volta para a
+  // edição da mão (o mesmo do botão "Editar mão").
   useDeslizeHorizontal({
     ativo: visivel,
-    aoDeslizarDireita: finalizandoMao ? calculadora.voltarParaMontagem : aoAbrirCalculadoraRapida,
+    aoDeslizarDireita: finalizandoMao ? calculadora.voltarParaMontagem : undefined,
     aoDeslizarEsquerda: aoIrParaProximaTela,
   })
 
@@ -55,7 +53,6 @@ export default function PaginaCalculadoraMao({
         estado={calculadora}
         cabecalho={<BarraCalculadora modo="completo" />}
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
-        aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida}
       />
 
       {calculadora.modalRegrasAberto && (

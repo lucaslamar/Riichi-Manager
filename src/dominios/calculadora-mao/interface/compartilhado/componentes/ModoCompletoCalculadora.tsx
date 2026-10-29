@@ -10,7 +10,6 @@ interface PropsModoCompleto {
   estado: EstadoCalculadoraMao
   cabecalho: ReactNode
   aoAbrirRegras: () => void
-  aoAbrirCalculadoraRapida?: () => void
 }
 
 /**
@@ -21,7 +20,6 @@ export default function ModoCompletoCalculadora({
   estado,
   cabecalho,
   aoAbrirRegras,
-  aoAbrirCalculadoraRapida,
 }: PropsModoCompleto) {
   const { t } = useI18n()
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -70,7 +68,6 @@ export default function ModoCompletoCalculadora({
             estado={estado}
             mostrandoEsperas={mostrandoEsperas}
             aoAbrirRegras={aoAbrirRegras}
-            aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida}
           />
         </section>
       ) : (

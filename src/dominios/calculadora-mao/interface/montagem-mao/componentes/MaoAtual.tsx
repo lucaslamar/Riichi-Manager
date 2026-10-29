@@ -41,7 +41,6 @@ interface PropsMaoAtual {
   contexto: 'montagem' | 'finalizacao'
   acoesCabecalho?: ReactNode
   aoAbrirRegras?: () => void
-  aoAbrirCalculadoraRapida?: () => void
   aoAbrirMenuAcoes: () => void
   aoAlternarAcao: (tipo: Acao['tipo']) => void
   aoAdicionarPedraDaMao: (pedra: CodigoPedra) => void
@@ -225,7 +224,6 @@ export function MaoAtual({
   contexto,
   acoesCabecalho,
   aoAbrirRegras,
-  aoAbrirCalculadoraRapida,
   aoAbrirMenuAcoes,
   aoAlternarAcao,
   aoAdicionarPedraDaMao,
@@ -477,7 +475,6 @@ export function MaoAtual({
               podeKanAberto={podeKanAberto}
               podeKanFechado={podeKanFechado}
               aoAlternarAcao={aoAlternarAcao}
-              aoAbrirCalculadoraRapida={aoAbrirCalculadoraRapida}
               compacto
             />
           </div>

@@ -273,7 +273,7 @@ Ficam em `src/dominios/calculadora-mao/logica/nomesYaku.ts` (o japonês ao lado,
 | `melds.kanCompact` | 깡 | Kan |
 | `melds.kanClosedCompact` | 암깡 | Uždaras kan |
 | `melds.discards` | 버림패 / 후리텐 | Išmesti / Furiten |
-| `melds.quickCalculatorAction` | 판·부 | Han ir Fu |
+| `menu.quickCalculatorShort` | 판·부 | Han ir Fu |
 | `melds.dora` | 도라 / 뒷도라 표시 | Dora / ura ind. |
 | `melds.doraCompact` | 도라/뒷 | Dora/Ura |
 | `melds.uradora` | 뒷도라 | Ura-dora |

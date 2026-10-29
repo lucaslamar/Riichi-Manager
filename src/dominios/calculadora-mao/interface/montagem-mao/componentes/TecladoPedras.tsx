@@ -28,8 +28,6 @@ interface PropsTecladoPedras {
   rotuloEsperaTeclado: (espera: Pick<EsperaPossivel, 'semYaku' | 'yakuman' | 'han'>) => string
   classeEsperaTeclado: (espera?: Pick<EsperaPossivel, 'semYaku' | 'furiten'>) => string
   contexto: 'montagem' | 'finalizacao'
-  /** Falso na entrada por notação: só o rodapé de finalização (e a escolha de batida) aparece. */
-  mostrarGrade?: boolean
   maoProntaParaFinalizar?: boolean
   batidaDefinida?: boolean
   mensagemFinalizacao?: string | null
@@ -63,7 +61,6 @@ export function TecladoPedras({
   rotuloEsperaTeclado,
   classeEsperaTeclado,
   contexto,
-  mostrarGrade = true,
   maoProntaParaFinalizar = false,
   batidaDefinida = maoProntaParaFinalizar,
   mensagemFinalizacao,
@@ -79,7 +76,6 @@ export function TecladoPedras({
   aoEscolherChiiPendente,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
-  const gradeVisivel = mostrarGrade || selecionandoPedraAgari
 
   const renderizarBadgeEspera = (
     espera?: Pick<EsperaPossivel, 'semYaku' | 'furiten' | 'yakuman' | 'han'>,
@@ -210,7 +206,7 @@ export function TecladoPedras({
       }`}
       aria-label={t('calculator.keyboard')}
     >
-      {contexto === 'montagem' && aoAbrirRegras && !maoProntaParaFinalizar && gradeVisivel && (
+      {contexto === 'montagem' && aoAbrirRegras && !maoProntaParaFinalizar && (
         <button
           className="botao-configuracao-teclado"
           type="button"
@@ -238,7 +234,7 @@ export function TecladoPedras({
           )}
         </div>
       )}
-      {gradeVisivel && NAIPES.map(({ naipe }) => {
+      {NAIPES.map(({ naipe }) => {
         const rotulo =
           naipe === 'm'
             ? t('calculator.suitMan')
@@ -268,18 +264,16 @@ export function TecladoPedras({
           </div>
         )
       })}
-      {gradeVisivel && (
-        <div
-          className="grupo-teclado-naipe grupo-teclado-honras"
-          role="group"
-          aria-label={t('calculator.honors')}
-        >
-          <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
-            {t('calculator.honors')}
-          </div>
-          <div className="linha-naipe">{HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}</div>
+      <div
+        className="grupo-teclado-naipe grupo-teclado-honras"
+        role="group"
+        aria-label={t('calculator.honors')}
+      >
+        <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
+          {t('calculator.honors')}
         </div>
-      )}
+        <div className="linha-naipe">{HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}</div>
+      </div>
       {contexto === 'montagem' && maoProntaParaFinalizar && (aoFinalizarMao || aoCalcularDireto) && (
         <div className="rodape-teclado-finalizacao">
           {aoAlternarSelecaoPedraAgari && (

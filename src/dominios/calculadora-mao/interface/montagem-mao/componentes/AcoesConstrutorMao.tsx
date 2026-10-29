@@ -10,14 +10,13 @@ interface PropsAcoesConstrutorMao {
   podeKanAberto: boolean
   podeKanFechado: boolean
   aoAlternarAcao: (tipo: Acao['tipo']) => void
-  aoAbrirCalculadoraRapida?: () => void
   compacto?: boolean
 }
 
 /**
  * Agrupa os comandos que mudam o destino do próximo clique no teclado de pedras.
- * É usado tanto na barra desktop quanto no menu compacto mobile. O último botão
- * é um atalho para a Calculadora de Han e Fu (descartes/furiten seguem na finalização).
+ * É usado tanto na barra desktop quanto no menu compacto mobile.
+ * Descartes/furiten seguem na finalização.
  */
 export function AcoesConstrutorMao({
   acaoPendente,
@@ -26,7 +25,6 @@ export function AcoesConstrutorMao({
   podeKanAberto,
   podeKanFechado,
   aoAlternarAcao,
-  aoAbrirCalculadoraRapida,
   compacto = false,
 }: PropsAcoesConstrutorMao) {
   const { t } = useI18n()
@@ -61,17 +59,6 @@ export function AcoesConstrutorMao({
         desabilitado={!podeKanFechado}
         aoClicar={() => aoAlternarAcao('kanFechado')}
       />
-      {aoAbrirCalculadoraRapida && (
-        <button
-          className="btn-acao-mao btn-acao-calculadora-rapida action-tab action-tab--quick-calc"
-          type="button"
-          aria-label={t('menu.quickCalculator')}
-          title={t('menu.quickCalculator')}
-          onClick={aoAbrirCalculadoraRapida}
-        >
-          <span>{t('melds.quickCalculatorAction')}</span>
-        </button>
-      )}
     </>
   )
 }

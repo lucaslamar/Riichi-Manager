@@ -7,8 +7,8 @@
 import assert from 'node:assert/strict'
 import { parseHand } from '../src/dominios/calculadora-mao/logica/parseHand'
 import {
-  gerarNotacao,
   interpretarNotacao,
+  normalizarNotacao,
   pedraDoTile,
 } from '../src/dominios/calculadora-mao/logica/notacao'
 
@@ -101,14 +101,11 @@ caso('adaptador: Aka dora desligado ou repetido', () => {
   assert.equal(interpretarNotacao('00m', semMelds).erro?.chave, 'notation.errors.duplicateAka')
 })
 
-caso('adaptador: gerarNotacao põe a batida por último e volta igual', () => {
-  const pedras = ['2m', '3m', '0m', '4p', '4p', '7z']
-  assert.equal(gerarNotacao(pedras), '230m44p7z')
-  assert.equal(gerarNotacao(pedras, 0), '30m44p7z2m')
-  assert.equal(gerarNotacao(pedras, 5), '230m44p7z')
-  assert.equal(gerarNotacao([]), '')
-  const relida = interpretarNotacao(gerarNotacao(pedras, 0), semMelds).pedras
-  assert.equal(relida[relida.length - 1], '2m')
+caso('adaptador: aceita maiúsculas e espaços', () => {
+  assert.equal(normalizarNotacao(' 2388M 447p\t2458889S '), '2388m447p2458889s')
+  const { pedras, erro } = interpretarNotacao(normalizarNotacao('123M 456P'), semMelds)
+  assert.equal(erro, null)
+  assert.deepEqual(pedras, ['1m', '2m', '3m', '4p', '5p', '6p'])
 })
 
 let falhas = 0

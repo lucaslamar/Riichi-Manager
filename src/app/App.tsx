@@ -17,13 +17,12 @@ export type TelaPrincipal =
   | 'sobre'
 
 /**
- * Ordem das telas ao deslizar o dedo: a barra inferior, com a Han e Fu antes
- * da Mão. 'aprender' é o guia Aprender a jogar, que abre por cima em vez de
- * trocar de tela.
+ * Ordem das telas ao deslizar o dedo: a da barra inferior. 'aprender' é o guia
+ * Aprender a jogar, que abre por cima em vez de trocar de tela.
  */
 const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
-  'calculadoraRapida',
   'calculadora',
+  'calculadoraRapida',
   'aprender',
   'sorteadorVentos',
   'regras',
@@ -34,8 +33,6 @@ const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
  */
 export default function App() {
   const [tela, setTela] = useState<TelaPrincipal>('calculadora')
-  /** Tela de origem quando a Han e Fu é aberta pelo atalho da Calculadora de Mão. */
-  const [telaRetorno, setTelaRetorno] = useState<TelaPrincipal | null>(null)
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
   // a cada abertura, sempre na capa.
@@ -47,30 +44,16 @@ export default function App() {
   // Ir para uma tela fecha o guia: na capa dele a barra inferior fica à vista.
   const navegar = useCallback((proxima: TelaPrincipal) => {
     setGuia(null)
-    setTelaRetorno(null)
     setTela(proxima)
   }, [])
 
-  const abrirCalculadoraRapida = useCallback(() => {
-    setTelaRetorno('calculadora')
-    setTela('calculadoraRapida')
-  }, [])
-
-  const voltar =
-    telaRetorno && tela === 'calculadoraRapida' ? () => navegar(telaRetorno) : undefined
-
-  // Deslizar segue a ordem da barra inferior, com a Han e Fu à esquerda da
-  // Calculadora de Mão. Dedo para a esquerda vai para a tela seguinte e para a
-  // direita volta para a anterior. Os gestos da Calculadora de Mão ficam na
-  // própria página (a finalização tem um caso a mais).
+  // Deslizar segue a ordem da barra inferior. Dedo para a esquerda vai para a
+  // tela seguinte e para a direita volta para a anterior. Os gestos da
+  // Calculadora de Mão ficam na própria página (a finalização tem um caso a mais).
   const indiceTela = ORDEM_DESLIZE.indexOf(tela)
   const telaAnterior = indiceTela > 0 ? ORDEM_DESLIZE[indiceTela - 1] : undefined
-  // Depois de Regras a fila recomeça na Calculadora de Mão (a Han e Fu fica
-  // fora do círculo: só se chega nela deslizando para a direita na Mão).
+  // Depois de Regras a fila recomeça na Calculadora de Mão.
   const proximaTela = indiceTela >= 0 ? (ORDEM_DESLIZE[indiceTela + 1] ?? 'calculadora') : undefined
-  // A Han e Fu é ponta da fila e tem a seta de voltar: deslizar no sentido da
-  // seta (dedo para a direita) também volta para a Calculadora de Mão.
-  const voltarDaHanFu = tela === 'calculadoraRapida' ? (voltar ?? (() => navegar('calculadora'))) : undefined
 
   // Deslizar até o Aprender abre o guia por cima; ao fechar, a pessoa volta
   // para a tela de onde deslizou.
@@ -84,7 +67,7 @@ export default function App() {
   }
   useDeslizeHorizontal({
     ativo: indiceTela >= 0 && tela !== 'calculadora',
-    aoDeslizarDireita: voltarDaHanFu ?? (telaAnterior && (() => irPara(telaAnterior))),
+    aoDeslizarDireita: telaAnterior && (() => irPara(telaAnterior)),
     aoDeslizarEsquerda: proximaTela && (() => irPara(proximaTela)),
   })
 
@@ -93,15 +76,13 @@ export default function App() {
       <Cabecalho
         telaAtual={guia ? 'aprender' : tela}
         aoNavegar={navegar}
-        aoVoltar={voltar}
         aoAbrirAprender={() => abrirGuia()}
       />
 
       <main className="conteudo-principal">
         {/* Sempre montada: a mão em andamento continua lá ao voltar de outra tela. */}
         <PaginaCalculadoraMao
-          aoAbrirCalculadoraRapida={abrirCalculadoraRapida}
-          aoIrParaProximaTela={() => abrirGuia()}
+          aoIrParaProximaTela={() => navegar('calculadoraRapida')}
           visivel={tela === 'calculadora'}
         />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}

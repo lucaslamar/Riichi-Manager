@@ -1,5 +1,13 @@
 # Changelog - Mojoca
 
+## 5.7.1 - 2026-10-29
+
+### Alterado
+
+- **Han e Fu de volta à barra inferior**, logo depois da Calculadora, com um ícone novo de palito de riichi (também na sidebar). O atalho Han e Fu saiu da linha Chi / Pon / Kan / Kan fechado, e o deslizar segue a ordem da barra: Calculadora, Han e Fu, Aprender, Sorteador, Regras.
+- **Notação da mão agora fica na Han e Fu**: um campo de texto que usa o teclado padrão do aparelho e aceita maiúsculas e espaços (`2388M 447p`). Abaixo dele aparecem a contagem de peças ou o erro e as pedras lidas.
+- A Calculadora voltou a ter só o teclado de peças: saíram o seletor Peças | Notação e a barra de naipes da 5.7.0.
+
 ## 5.7.0 - 2026-10-29
 
 ### Novo

@@ -6,7 +6,18 @@
 export function IconeMenu({ icone }: { icone: string }) {
   if (icone === 'um-pin') return <i className="icone-svg-menu" aria-hidden="true"><SvgUmPin /></i>
   if (icone === 'chapeu-helice') return <i className="icone-svg-menu" aria-hidden="true"><SvgChapeuHelice /></i>
+  if (icone === 'palito-riichi') return <i className="icone-svg-menu" aria-hidden="true"><SvgPalitoRiichi /></i>
   return <i className={`fas ${icone}`} aria-hidden="true" />
+}
+
+/** Palito de riichi (Han e Fu): barra arredondada com o ponto no centro. */
+function SvgPalitoRiichi() {
+  return (
+    <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none">
+      <rect x="1.6" y="7" width="20.8" height="10" rx="5" stroke="currentColor" strokeWidth="2.4" />
+      <circle cx="12" cy="12" r="2.6" fill="currentColor" />
+    </svg>
+  )
 }
 
 /** Pedra 1 Pin: círculo grande com anel de pontos e miolo. */

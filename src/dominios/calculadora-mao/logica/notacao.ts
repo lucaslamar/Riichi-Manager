@@ -5,7 +5,7 @@
  * O parser (`parseHand`) não conhece melds nem regras; aqui ficam as checagens
  * que dependem da mão atual: limite de 14 slots, cópias somadas aos melds e Aka dora.
  */
-import { parseHand, type Suit, type Tile } from './parseHand'
+import { parseHand, type Tile } from './parseHand'
 import { contarSlotsLogicos } from './ordenacao'
 import type { CodigoPedra, Meld } from './tipos'
 
@@ -16,41 +16,19 @@ export interface ErroNotacao {
 }
 
 export interface ResultadoNotacao {
-  /** Pedras na ordem digitada: a última é a candidata a pedra de batida. */
+  /** Pedras na ordem digitada. */
   pedras: CodigoPedra[]
   erro: ErroNotacao | null
 }
-
-const ORDEM_NAIPES: Suit[] = ['m', 'p', 's', 'z']
 
 /** `red: true` vira o 5 vermelho ("0m"); honras usam 1z–7z (E S W N, branco, verde, vermelho). */
 export function pedraDoTile(tile: Tile): CodigoPedra {
   return tile.red ? `0${tile.suit}` : `${tile.num}${tile.suit}`
 }
 
-export function tileDaPedra(pedra: CodigoPedra): Tile {
-  const red = pedra[0] === '0'
-  return { suit: pedra[1] as Suit, num: red ? 5 : Number(pedra[0]), red }
-}
-
-/**
- * Gera a notação das pedras da mão fechada. A pedra de batida, se houver, vai
- * por último, para que ao interpretar de volta ela continue sendo a batida.
- */
-export function gerarNotacao(pedras: CodigoPedra[], indiceAgari = -1): string {
-  const agari = pedras[indiceAgari]
-  const resto = pedras.filter((_pedra, indice) => indice !== indiceAgari)
-  const grupos = ORDEM_NAIPES.map((naipe) => ({
-    naipe,
-    digitos: resto.filter((pedra) => pedra[1] === naipe).map((pedra) => pedra[0]),
-  })).filter((grupo) => grupo.digitos.length > 0)
-
-  if (agari) {
-    const ultimo = grupos[grupos.length - 1]
-    if (ultimo?.naipe === agari[1]) ultimo.digitos.push(agari[0])
-    else grupos.push({ naipe: agari[1] as Suit, digitos: [agari[0]] })
-  }
-  return grupos.map((grupo) => grupo.digitos.join('') + grupo.naipe).join('')
+/** Aceita maiúsculas e espaços antes de passar ao parser: "2388M 447P" vira "2388m447p". */
+export function normalizarNotacao(texto: string): string {
+  return texto.toLowerCase().replace(/\s+/g, '')
 }
 
 /** Traduz a mensagem do parser para uma chave de i18n, sem mexer no parser. */

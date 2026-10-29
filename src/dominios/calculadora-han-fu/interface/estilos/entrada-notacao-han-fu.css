@@ -1,0 +1,68 @@
+/* Campo de notação da mão na Calculadora de Han e Fu (EntradaNotacaoHanFu). */
+
+.entrada-notacao-han-fu {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.campo-notacao-han-fu {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--cor-borda-controle, #b8c6d6);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--cor-superficie, #ffffff);
+  color: var(--cor-texto, #111827);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* 16px ou mais evita o zoom automático do iOS ao focar o campo. */
+  font-size: 17px;
+  letter-spacing: 0.04em;
+}
+
+.campo-notacao-han-fu:focus-visible {
+  outline: 2px solid var(--cor-foco, var(--cor-primario, #2196f3));
+  outline-offset: 1px;
+}
+
+.campo-notacao-han-fu.com-erro {
+  border-color: var(--cor-perigo-borda, var(--cor-perigo, #d32f2f));
+}
+
+.mensagem-notacao-han-fu {
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.78rem;
+}
+
+.mensagem-notacao-han-fu.com-erro {
+  color: var(--cor-perigo, #d32f2f);
+}
+
+.pedras-notacao-han-fu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.pedra-notacao-han-fu {
+  display: block;
+  width: clamp(22px, 6.4vw, 30px);
+  line-height: 0;
+}
+
+.pedra-notacao-han-fu .tile-img {
+  width: 100%;
+  height: auto;
+}
+
+/* iPad mini, Air e Pro: campo e pedras um pouco maiores. */
+@media (min-width: 768px) and (min-height: 561px) {
+  .campo-notacao-han-fu {
+    min-height: 52px;
+    font-size: 19px;
+  }
+
+  .pedra-notacao-han-fu {
+    width: 36px;
+  }
+}

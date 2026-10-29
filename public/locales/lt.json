@@ -18,6 +18,7 @@
     "language": "Kalba",
     "handCalculator": "Rankos skaičiuoklė",
     "quickCalculator": "Han ir Fu skaičiuoklė",
+    "quickCalculatorShort": "Han ir Fu",
     "windDraw": "Vėjų burtai",
     "rules": "Taisyklės / Nustatymai",
     "rulesShort": "Taisyklės",
@@ -395,7 +396,6 @@
     "discards": "Išmesti / Furiten",
     "discardsAction": "Išmesti",
     "discardsCompact": "Išm.",
-    "quickCalculatorAction": "Han ir Fu",
     "dora": "Dora / ura ind.",
     "doraCompact": "Dora/Ura",
     "uradora": "Ura-dora"
@@ -732,14 +732,8 @@
     }
   },
   "notation": {
-    "modeLabel": "Rankos įvedimo būdas",
-    "modeTiles": "Akmenys",
-    "modeNotation": "Užrašas",
     "fieldLabel": "Ranka užrašu",
     "placeholder": "pvz. {{example}}",
-    "suitBar": "Rūšys",
-    "insertSuit": "Įterpti {{suit}} ({{key}})",
-    "backspace": "Ištrinti",
     "tileCount": {
       "one": "{{count}} akmuo",
       "few": "{{count}} akmenys",
