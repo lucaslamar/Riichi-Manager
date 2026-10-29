@@ -411,6 +411,13 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     acoesPedras.alternarAcao(tipo)
   }
 
+  /** Entrada por notação: troca a mão e os melds e sai de qualquer escolha de batida em curso. */
+  const substituirMaoNotacao = (entrada: Parameters<typeof acoesPedras.substituirMaoNotacao>[0]) => {
+    setSelecionandoPedraAgari(false)
+    setMensagemFinalizacao(null)
+    acoesPedras.substituirMaoNotacao(entrada)
+  }
+
   return {
     ...estado,
     contarCodigo: acoesMelds.contarCodigo,
@@ -444,6 +451,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     calculandoEsperas,
     ...acoesPedras,
     alternarAcao: alternarAcaoCalculadora,
+    substituirMaoNotacao,
     podeMeld,
     podeChii,
     podePon,

@@ -1,5 +1,14 @@
 # Changelog - Mojoca
 
+## 5.7.2 - 2026-10-29
+
+### Alterado
+
+- **Notação de volta à Calculadora de Mão**, agora como botão **Notação** depois de Kan fechado. Ela troca o teclado de pedras por um campo de texto com o teclado normal do celular (aceita maiúsculas e espaços), e a mão é montada enquanto se digita. A Han e Fu voltou a ser só a calculadora.
+- **Chamadas digitadas**: `c` depois de um grupo é chamada aberta, e o app deduz o tipo pelo formato (`123mc` chi, `111pc` pon, `1111sc` kan aberto); `a` é kan fechado (`1111ma`). No modo notação os botões Chi / Pon / Kan somem.
+- **Deslizar**: nas pedras, dedo para a direita abre a notação; nela, dedo para a esquerda (ou o botão ‹ Peças) volta às pedras.
+- **Ajuda "?" da notação**, no padrão das ajudas da finalização: naipes, honras, 5 vermelho, chamadas e batida, com pedras de exemplo.
+
 ## 5.7.1 - 2026-10-29
 
 ### Alterado

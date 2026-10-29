@@ -478,6 +478,19 @@
       "chankan": "Ron on the tile another player added to a pon to make a kan. Worth +1 han.",
       "haitei": "Winning by tsumo with the last tile of the wall. Worth +1 han.",
       "houtei": "Winning by ron on the last discard of the hand. Worth +1 han."
+    },
+    "notation": {
+      "intro": "Write the tile numbers followed by the suit: m (Man), p (Pin), s (Sou) and z (honors). Several numbers before the same suit all belong to it: 2388m447p is 2, 3, 8 and 8 of Man and 4, 4 and 7 of Pin.",
+      "honorsTitle": "Honors",
+      "honors": "1z to 4z are the East, South, West and North winds; 5z, 6z and 7z are the white, green and red dragons.",
+      "akaTitle": "Red five",
+      "aka": "Use 0 instead of 5: 0m, 0p and 0s are the red fives (Aka dora).",
+      "callsTitle": "Calls",
+      "calls": "End a group with c for an open call: 123mc is chi, 111pc is pon and 1111sc is an open kan. End it with a for a closed kan: 1111ma.",
+      "winTitle": "Winning tile",
+      "win": "The last tile of the closed hand is the winning tile, the one that completed the hand. In 123456m789p1122z, the winning tile is 2z.",
+      "tipTitle": "Tip",
+      "tip": "Capital letters and spaces are fine (2388M 447P 123mc). To go back to the tile keyboard, tap Tiles or swipe left."
     }
   },
   "rulesModal": {
@@ -718,6 +731,7 @@
     }
   },
   "notation": {
+    "toggle": "Notation",
     "fieldLabel": "Hand in notation",
     "placeholder": "e.g. {{example}}",
     "tileCount": {
@@ -733,7 +747,10 @@
       "tooManyTiles": "Too many tiles: the closed hand holds up to {{max}}",
       "akaDisabled": "Aka dora is off in the rules: use 5 instead of 0",
       "duplicateAka": "There is only one red five {{tile}}",
-      "invalid": "Invalid notation"
-    }
+      "invalid": "Invalid notation",
+      "invalidCall": "Invalid call: {{group}} (put a sequence, a triplet or 4 of a kind before c)",
+      "invalidClosedKan": "Invalid closed kan: {{group}} (put 4 identical tiles before a)"
+    },
+    "backToTiles": "Tiles"
   }
 }

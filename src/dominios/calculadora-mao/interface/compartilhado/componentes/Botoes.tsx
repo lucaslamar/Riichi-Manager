@@ -18,6 +18,7 @@ export function BotaoAcao({
     kanAberto: 'kan-open',
     kanFechado: 'kan-closed',
     descarte: 'discard',
+    notacao: 'notation',
   }[tipo]
 
   return (

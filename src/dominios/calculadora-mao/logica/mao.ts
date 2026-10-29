@@ -33,5 +33,13 @@ export {
 } from './ordenacao'
 export { traduzirPatamares, traduzirYaku } from './traducoes'
 export { converterMaoParaString } from './conversor-riichi'
+export type { ErroNotacao, ResultadoNotacao, ResultadoNotacaoCompleta } from './notacao'
+export {
+  gerarNotacao,
+  gerarNotacaoCompleta,
+  interpretarNotacao,
+  interpretarNotacaoCompleta,
+  normalizarNotacao,
+} from './notacao'
 export type { EsperaPossivel } from './esperas'
 export { calcularEsperasPossiveis } from './esperas'

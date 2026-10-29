@@ -10,13 +10,15 @@ interface PropsAcoesConstrutorMao {
   podeKanAberto: boolean
   podeKanFechado: boolean
   aoAlternarAcao: (tipo: Acao['tipo']) => void
+  /** Troca o teclado de pedras pelo campo de notação. */
+  aoAbrirNotacao?: () => void
   compacto?: boolean
 }
 
 /**
  * Agrupa os comandos que mudam o destino do próximo clique no teclado de pedras.
- * É usado tanto na barra desktop quanto no menu compacto mobile.
- * Descartes/furiten seguem na finalização.
+ * É usado tanto na barra desktop quanto no menu compacto mobile. O último botão
+ * abre o campo de notação (descartes/furiten seguem na finalização).
  */
 export function AcoesConstrutorMao({
   acaoPendente,
@@ -25,6 +27,7 @@ export function AcoesConstrutorMao({
   podeKanAberto,
   podeKanFechado,
   aoAlternarAcao,
+  aoAbrirNotacao,
   compacto = false,
 }: PropsAcoesConstrutorMao) {
   const { t } = useI18n()
@@ -59,6 +62,15 @@ export function AcoesConstrutorMao({
         desabilitado={!podeKanFechado}
         aoClicar={() => aoAlternarAcao('kanFechado')}
       />
+      {aoAbrirNotacao && (
+        <BotaoAcao
+          tipo="notacao"
+          rotulo={t('notation.toggle')}
+          ativo={false}
+          desabilitado={false}
+          aoClicar={aoAbrirNotacao}
+        />
+      )}
     </>
   )
 }

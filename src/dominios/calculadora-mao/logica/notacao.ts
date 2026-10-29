@@ -5,7 +5,7 @@
  * O parser (`parseHand`) não conhece melds nem regras; aqui ficam as checagens
  * que dependem da mão atual: limite de 14 slots, cópias somadas aos melds e Aka dora.
  */
-import { parseHand, type Tile } from './parseHand'
+import { parseHand, type Suit, type Tile } from './parseHand'
 import { contarSlotsLogicos } from './ordenacao'
 import type { CodigoPedra, Meld } from './tipos'
 
@@ -16,10 +16,12 @@ export interface ErroNotacao {
 }
 
 export interface ResultadoNotacao {
-  /** Pedras na ordem digitada. */
+  /** Pedras na ordem digitada: a última é a candidata a pedra de batida. */
   pedras: CodigoPedra[]
   erro: ErroNotacao | null
 }
+
+const ORDEM_NAIPES: Suit[] = ['m', 'p', 's', 'z']
 
 /** `red: true` vira o 5 vermelho ("0m"); honras usam 1z–7z (E S W N, branco, verde, vermelho). */
 export function pedraDoTile(tile: Tile): CodigoPedra {
@@ -29,6 +31,26 @@ export function pedraDoTile(tile: Tile): CodigoPedra {
 /** Aceita maiúsculas e espaços antes de passar ao parser: "2388M 447P" vira "2388m447p". */
 export function normalizarNotacao(texto: string): string {
   return texto.toLowerCase().replace(/\s+/g, '')
+}
+
+/**
+ * Gera a notação das pedras da mão fechada. A pedra de batida, se houver, vai
+ * por último, para que ao interpretar de volta ela continue sendo a batida.
+ */
+export function gerarNotacao(pedras: CodigoPedra[], indiceAgari = -1): string {
+  const agari = pedras[indiceAgari]
+  const resto = pedras.filter((_pedra, indice) => indice !== indiceAgari)
+  const grupos = ORDEM_NAIPES.map((naipe) => ({
+    naipe,
+    digitos: resto.filter((pedra) => pedra[1] === naipe).map((pedra) => pedra[0]),
+  })).filter((grupo) => grupo.digitos.length > 0)
+
+  if (agari) {
+    const ultimo = grupos[grupos.length - 1]
+    if (ultimo?.naipe === agari[1]) ultimo.digitos.push(agari[0])
+    else grupos.push({ naipe: agari[1] as Suit, digitos: [agari[0]] })
+  }
+  return grupos.map((grupo) => grupo.digitos.join('') + grupo.naipe).join('')
 }
 
 /** Traduz a mensagem do parser para uma chave de i18n, sem mexer no parser. */
@@ -67,13 +89,14 @@ export function interpretarNotacao(
     }
   }
 
-  if (!contexto.akadora && pedras.some((pedra) => pedra[0] === '0')) {
+  const todas = [...contexto.melds.flatMap((meld) => meld.pedras), ...pedras]
+  if (!contexto.akadora && todas.some((pedra) => pedra[0] === '0')) {
     return { pedras, erro: { chave: 'notation.errors.akaDisabled' } }
   }
 
   const copias = new Map<string, number>()
   const akas = new Map<string, number>()
-  for (const pedra of [...contexto.melds.flatMap((meld) => meld.pedras), ...pedras]) {
+  for (const pedra of todas) {
     const base = pedra[0] === '0' ? `5${pedra[1]}` : pedra
     copias.set(base, (copias.get(base) ?? 0) + 1)
     if (copias.get(base)! > 4) {
@@ -94,4 +117,75 @@ export function interpretarNotacao(
   }
 
   return { pedras, erro: null }
+}
+
+export interface ResultadoNotacaoCompleta extends ResultadoNotacao {
+  /** Chamadas digitadas com `c` (chi, pon, kan aberto) ou `a` (kan fechado). */
+  melds: Meld[]
+}
+
+/** Grupo de chamada: números, naipe e a marca (`123mc`, `111pc`, `1111sa`). */
+const GRUPO_CHAMADA = /(\d+)([mpsz])([ca])/g
+
+const valorBase = (pedra: CodigoPedra) => (pedra[0] === '0' ? 5 : Number(pedra[0]))
+
+/**
+ * Deduz o tipo da chamada pelo formato do grupo: com `c`, sequência é chi,
+ * trinca é pon e 4 iguais é kan aberto; com `a`, só 4 iguais (kan fechado).
+ */
+function meldDoGrupo(pedras: CodigoPedra[], marca: string, grupo: string): Meld | ErroNotacao {
+  const iguais = pedras.every(
+    (pedra) => pedra[1] === pedras[0][1] && valorBase(pedra) === valorBase(pedras[0]),
+  )
+  if (marca === 'a') {
+    if (pedras.length === 4 && iguais) return { tipo: 'kanFechado', pedras }
+    return { chave: 'notation.errors.invalidClosedKan', parametros: { group: grupo } }
+  }
+  if (pedras.length === 4 && iguais) return { tipo: 'kanAberto', pedras }
+  if (pedras.length === 3 && iguais) return { tipo: 'pon', pedras }
+  const valores = pedras.map(valorBase).sort((a, b) => a - b)
+  const sequencia =
+    pedras.length === 3 &&
+    pedras[0][1] !== 'z' &&
+    valores[1] === valores[0] + 1 &&
+    valores[2] === valores[1] + 1
+  if (sequencia) {
+    return { tipo: 'chii', pedras: [...pedras].sort((a, b) => valorBase(a) - valorBase(b)) }
+  }
+  return { chave: 'notation.errors.invalidCall', parametros: { group: grupo } }
+}
+
+/**
+ * Interpreta a mão inteira: os grupos marcados com `c`/`a` viram melds e o
+ * resto é a mão fechada (a última pedra dela é a candidata a batida).
+ * Ex.: `2388m447p 123mc 111pc 1111sa`. O texto deve vir de `normalizarNotacao`.
+ */
+export function interpretarNotacaoCompleta(
+  texto: string,
+  contexto: { akadora: boolean },
+): ResultadoNotacaoCompleta {
+  const melds: Meld[] = []
+  for (const [grupo, digitos, naipe, marca] of texto.matchAll(GRUPO_CHAMADA)) {
+    const { tiles, error } = parseHand(digitos + naipe)
+    if (error) return { pedras: [], melds, erro: erroDoParser(error) }
+    const meld = meldDoGrupo(tiles.map(pedraDoTile), marca, grupo)
+    if ('chave' in meld) return { pedras: [], melds, erro: meld }
+    melds.push(meld)
+  }
+  const resto = texto.replace(GRUPO_CHAMADA, '')
+  return { ...interpretarNotacao(resto, { melds, akadora: contexto.akadora }), melds }
+}
+
+/**
+ * Notação da mão inteira: a mão fechada (batida por último) e depois cada
+ * meld com a sua marca, `c` ou `a` para o kan fechado.
+ */
+export function gerarNotacaoCompleta(pedras: CodigoPedra[], indiceAgari: number, melds: Meld[]) {
+  const chamadas = melds.map(
+    (meld) =>
+      meld.pedras.map((pedra) => pedra[0]).join('') +
+      meld.pedras[0][1] +
+      (meld.tipo === 'kanFechado' ? 'a' : 'c'),
+  )
+  return [gerarNotacao(pedras, indiceAgari), ...chamadas].filter(Boolean).join(' ')
 }

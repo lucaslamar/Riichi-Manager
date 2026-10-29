@@ -1,0 +1,113 @@
+/* Campo de notação da mão (CampoNotacaoMao), no lugar do teclado de pedras. */
+
+.campo-notacao-mao {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px 10px;
+}
+
+/* Voltar às pedras | Notação | ? */
+.cabecalho-campo-notacao-mao {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.botao-voltar-pedras-notacao {
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  border: 1px solid var(--cor-borda-controle, #b8c6d6);
+  border-radius: 999px;
+  padding: 6px 14px 6px 10px;
+  background: var(--cor-superficie-alt, #f8fafc);
+  color: var(--cor-texto, #111827);
+  font-size: 0.85rem;
+  font-weight: 800;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.botao-voltar-pedras-notacao:hover {
+  border-color: var(--cor-primario, #2196f3);
+}
+
+.botao-voltar-pedras-notacao:focus-visible {
+  outline: 2px solid var(--cor-foco, var(--cor-primario, #2196f3));
+  outline-offset: 2px;
+}
+
+.botao-voltar-pedras-notacao i {
+  font-size: 0.8em;
+}
+
+.titulo-campo-notacao-mao {
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cabecalho-campo-notacao-mao .botao-ajuda-secao {
+  justify-self: end;
+}
+
+.entrada-campo-notacao-mao {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--cor-borda-controle, #b8c6d6);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--cor-superficie, #ffffff);
+  color: var(--cor-texto, #111827);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* 16px ou mais evita o zoom automático do iOS ao focar o campo. */
+  font-size: 17px;
+  letter-spacing: 0.04em;
+}
+
+.entrada-campo-notacao-mao:focus-visible {
+  outline: 2px solid var(--cor-foco, var(--cor-primario, #2196f3));
+  outline-offset: 1px;
+}
+
+.entrada-campo-notacao-mao.com-erro {
+  border-color: var(--cor-perigo-borda, var(--cor-perigo, #d32f2f));
+}
+
+.mensagem-campo-notacao-mao {
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.78rem;
+}
+
+.mensagem-campo-notacao-mao.com-erro {
+  color: var(--cor-perigo, #d32f2f);
+}
+
+/* iPad Air e Pro em pé: o painel do teclado vira uma faixa de borda a borda
+   (responsivo.css), com a mesma margem lateral de 16px da barra de ações. */
+@media (min-width: 768px) and (orientation: portrait) {
+  .painel-teclado-calculadora .campo-notacao-mao {
+    margin-inline: 16px;
+    padding: 10px 0 12px;
+  }
+}
+
+/* iPad mini, Air e Pro: campo um pouco maior. */
+@media (min-width: 768px) and (min-height: 561px) {
+  .entrada-campo-notacao-mao {
+    min-height: 52px;
+    font-size: 19px;
+  }
+}
+
+/* Sem o teclado de pedras, nada dá largura ao construtor (o layout da montagem
+   alinha os filhos no início): com a notação ele ocupa a largura toda. */
+.layout-montagem-calculadora .construtor-mao.com-notacao {
+  align-self: stretch;
+}

@@ -7,7 +7,6 @@ import {
   SeletorTipoVitoria,
   TabelaReferenciaRapida,
 } from '../componentes/ControlesHanFu'
-import { EntradaNotacaoHanFu } from '../componentes/EntradaNotacaoHanFu'
 import { useCalculadoraHanFu } from '../hooks/useCalculadoraHanFu'
 import '../estilos/han-fu.css'
 
@@ -32,8 +31,6 @@ export default function PaginaCalculadoraHanFu() {
   return (
     <main className="calculadora-han-fu">
       <section className="painel-principal-han-fu">
-        <EntradaNotacaoHanFu />
-
         <div className="seletores-topo-han-fu">
           <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
           <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />

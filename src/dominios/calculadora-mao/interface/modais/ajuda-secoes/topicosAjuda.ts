@@ -1,7 +1,7 @@
 import { ICONE_INDICADOR_DORA } from '../../constantes'
 
 /**
- * Conteúdo dos botões "?" das seções da finalização. Aqui ficam só as chaves
+ * Conteúdo dos botões "?" das seções da finalização (e do campo de notação da montagem). Aqui ficam só as chaves
  * i18n; os textos vivem em `public/locales` (bloco `sectionHelp`).
  */
 export type TopicoAjuda =
@@ -11,6 +11,7 @@ export type TopicoAjuda =
   | 'ventos'
   | 'riichi'
   | 'condicoesEspeciais'
+  | 'notacao'
 
 /** Um trecho da explicação; com `subtitulo` quando a seção agrupa assuntos. */
 export interface BlocoAjuda {
@@ -23,7 +24,7 @@ export interface BlocoAjuda {
   /** Bloco de dica em cinza (como o aviso da Dora), com o subtítulo em negrito no começo. */
   dica?: boolean
   /** Pedras de exemplo depois dos parágrafos (sequências do indicador, 5 vermelhos). */
-  visual?: 'ciclosDora' | 'akaDora'
+  visual?: 'ciclosDora' | 'akaDora' | 'notacao'
 }
 
 /** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */
@@ -212,6 +213,40 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         subtitulo: 'calculator.houtei',
         item: true,
         paragrafos: ['sectionHelp.specialConditions.houtei'],
+      },
+    ],
+  },
+  // Campo de notação da montagem: como escrever a mão, do básico às chamadas.
+  notacao: {
+    termosProprios: ['aka-dora'],
+    titulo: 'notation.toggle',
+    blocos: [
+      { paragrafos: ['sectionHelp.notation.intro'], visual: 'notacao' },
+      {
+        subtitulo: 'sectionHelp.notation.honorsTitle',
+        item: true,
+        paragrafos: ['sectionHelp.notation.honors'],
+      },
+      {
+        subtitulo: 'sectionHelp.notation.akaTitle',
+        item: true,
+        paragrafos: ['sectionHelp.notation.aka'],
+        visual: 'akaDora',
+      },
+      {
+        subtitulo: 'sectionHelp.notation.callsTitle',
+        item: true,
+        paragrafos: ['sectionHelp.notation.calls'],
+      },
+      {
+        subtitulo: 'sectionHelp.notation.winTitle',
+        item: true,
+        paragrafos: ['sectionHelp.notation.win'],
+      },
+      {
+        subtitulo: 'sectionHelp.notation.tipTitle',
+        dica: true,
+        paragrafos: ['sectionHelp.notation.tip'],
       },
     ],
   },

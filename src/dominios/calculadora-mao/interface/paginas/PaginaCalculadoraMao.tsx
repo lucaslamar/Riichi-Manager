@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
@@ -33,14 +34,29 @@ export default function PaginaCalculadoraMao({
 
   const calculadora = useCalculadoraMao({ fluxoCompleto: telaGrande })
   const finalizandoMao = calculadora.etapaFinalizacaoAtiva && calculadora.maoProntaParaFinalizar
+  /** Campo de notação no lugar do teclado de pedras (fica "à esquerda" dele). */
+  const [entradaNotacao, setEntradaNotacao] = useState(false)
 
-  // Dedo para a esquerda vai para a Han e Fu, a próxima aba da barra. A Mão é a
-  // primeira aba, então dedo para a direita só age na finalização: volta para a
-  // edição da mão (o mesmo do botão "Editar mão").
+  // Ao sair da Calculadora a notação fecha: ao voltar, o campo não abre o
+  // teclado do celular sozinho.
+  useEffect(() => {
+    if (!visivel) setEntradaNotacao(false)
+  }, [visivel])
+
+  // Na montagem, a notação fica à esquerda do teclado de pedras: dedo para a
+  // direita abre a notação e, nela, dedo para a esquerda volta às pedras. Das
+  // pedras, dedo para a esquerda vai para a Han e Fu, a próxima aba da barra.
+  // Na finalização, dedo para a direita volta para a edição da mão (o mesmo do
+  // botão "Editar mão").
   useDeslizeHorizontal({
     ativo: visivel,
-    aoDeslizarDireita: finalizandoMao ? calculadora.voltarParaMontagem : undefined,
-    aoDeslizarEsquerda: aoIrParaProximaTela,
+    aoDeslizarDireita: finalizandoMao
+      ? calculadora.voltarParaMontagem
+      : entradaNotacao
+        ? undefined
+        : () => setEntradaNotacao(true),
+    aoDeslizarEsquerda:
+      !finalizandoMao && entradaNotacao ? () => setEntradaNotacao(false) : aoIrParaProximaTela,
   })
 
   // Escondida: nada no DOM, para os estilos `body:has(.card-mao-completa…)`
@@ -53,6 +69,8 @@ export default function PaginaCalculadoraMao({
         estado={calculadora}
         cabecalho={<BarraCalculadora modo="completo" />}
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
+        entradaNotacao={entradaNotacao}
+        aoMudarEntradaNotacao={setEntradaNotacao}
       />
 
       {calculadora.modalRegrasAberto && (

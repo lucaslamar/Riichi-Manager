@@ -1,11 +1,23 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import {
+  gerarNotacaoCompleta,
+  interpretarNotacaoCompleta,
+  normalizarNotacao,
+  ordenarPedras,
+} from '../../../logica/mao'
 import { codigoBase, proximaDoraIndicada } from '../../constantes'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
+import { CampoNotacaoMao } from './CampoNotacaoMao'
 import { DescartesMao } from './DescartesMao'
 import { MaoAtual } from './MaoAtual'
 import { TecladoPedras } from './TecladoPedras'
+
+/** Mão fechada que a notação descreve; uma batida em meld devolve as pedras consumidas. */
+function pedrasParaNotacao(mao: EstadoCalculadoraMao['mao']) {
+  return mao.agariMeld ? [...mao.pedras, ...mao.agariMeld.pedrasConsumidasMao] : mao.pedras
+}
 
 interface PropsConstrutorMao {
   estado: EstadoCalculadoraMao
@@ -14,6 +26,9 @@ interface PropsConstrutorMao {
   aoAbrirRegras?: () => void
   acoesCabecalho?: ReactNode
   aoCalcularDireto?: () => void
+  /** Campo de notação no lugar do teclado de pedras; o estado fica na página (gestos). */
+  entradaNotacao?: boolean
+  aoMudarEntradaNotacao?: (ativa: boolean) => void
 }
 
 /**
@@ -31,6 +46,8 @@ export default function ConstrutorMao({
   aoAbrirRegras,
   acoesCabecalho,
   aoCalcularDireto,
+  entradaNotacao = false,
+  aoMudarEntradaNotacao,
 }: PropsConstrutorMao) {
   const { t } = useI18n()
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
@@ -70,7 +87,76 @@ export default function ConstrutorMao({
     escolherPedraAgariMeld,
     escolherPedraAgariPorCodigo,
     escolherChiiPendente,
+    substituirMaoNotacao,
   } = estado
+
+  const [textoNotacao, setTextoNotacao] = useState('')
+  const notacao = useMemo(
+    () =>
+      interpretarNotacaoCompleta(normalizarNotacao(textoNotacao), {
+        akadora: configuracao.akadora,
+      }),
+    [textoNotacao, configuracao.akadora],
+  )
+  const entradaPorNotacao = contexto === 'montagem' && entradaNotacao && !!aoMudarEntradaNotacao
+  const erroNotacao = entradaPorNotacao ? notacao.erro : null
+
+  /** Mão atual em notação; a batida vai por último na mão fechada. */
+  const notacaoDaMao = () =>
+    gerarNotacaoCompleta(
+      pedrasParaNotacao(mao),
+      mao.agariMeld ? -1 : mao.indiceAgari,
+      mao.melds.filter((_meld, indice) => indice !== mao.agariMeld?.indiceMeld),
+    )
+
+  const abrirNotacao = () => {
+    setMenuAcoesMaoAberto(false)
+    aoMudarEntradaNotacao?.(true)
+  }
+  const voltarParaPedras = () => aoMudarEntradaNotacao?.(false)
+
+  // Ao abrir a notação (botão ou deslize), nenhuma ação de chamada fica pendente.
+  useEffect(() => {
+    if (entradaPorNotacao) estado.setAcaoPendente(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entradaPorNotacao])
+
+  /** Com erro, a mão mantém a última leitura válida, mas sem batida: nada é calculado. */
+  const mudarTextoNotacao = (texto: string) => {
+    setTextoNotacao(texto)
+    const resultado = interpretarNotacaoCompleta(normalizarNotacao(texto), {
+      akadora: configuracao.akadora,
+    })
+    substituirMaoNotacao(resultado.erro ? null : resultado)
+  }
+
+  /*
+   * O texto acompanha a mão: ao abrir a notação e quando ela muda fora do campo
+   * (remover pedra ou meld tocando nele, Limpar). Digitar não dispara isto: texto
+   * válido deixa a mão igual ao que foi lido, e texto com erro não mexe na mão.
+   * Só compara pedras e melds: a ordem digitada e a batida ficam como estão.
+   */
+  const assinatura = (pedras: string[], melds: typeof mao.melds) =>
+    [ordenarPedras([...pedras]).join(), ...melds.map((meld) => meld.tipo + meld.pedras.join())]
+      .sort()
+      .join('|')
+  const assinaturaMao = assinatura(mao.pedras, mao.melds)
+  useEffect(() => {
+    if (!entradaPorNotacao) return
+    if (assinatura(notacao.pedras, notacao.melds) === assinaturaMao) return
+    setTextoNotacao(notacaoDaMao())
+    // O texto só acompanha a mão; reagir a `notacao` aqui desfaria o que está sendo digitado.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assinaturaMao, entradaPorNotacao])
+
+  // Uma chamada escolhida por outro caminho (menu da mão) usa o teclado de pedras.
+  const acaoAnteriorRef = useRef(acaoPendente)
+  useEffect(() => {
+    const anterior = acaoAnteriorRef.current
+    acaoAnteriorRef.current = acaoPendente
+    if (acaoPendente && acaoPendente !== anterior && entradaPorNotacao) voltarParaPedras()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [acaoPendente])
 
   /**
    * Converte indicadores escolhidos em doras reais para destacar o teclado.
@@ -140,7 +226,12 @@ export default function ConstrutorMao({
       : null
   const mostrarTeclado = contexto === 'montagem'
   const mostrarFinalizacaoNoTeclado =
-    contexto === 'montagem' && maoProntaParaEscolherBatida && !acaoMeldAtiva
+    contexto === 'montagem' && maoProntaParaEscolherBatida && !acaoMeldAtiva && !erroNotacao
+  const aoConfirmarNotacao = () => {
+    if (!mostrarFinalizacaoNoTeclado || !maoProntaParaFinalizar || selecionandoPedraAgari) return
+    if (aoCalcularDireto) aoCalcularDireto()
+    else finalizarMao()
+  }
 
   /**
    * Marca na mão fechada as pedras já escolhidas durante uma ação de chii.
@@ -194,7 +285,7 @@ export default function ConstrutorMao({
     <div
       className={`${embutido ? '' : 'card'} construtor-mao construtor-mao-${contexto} ${
         selecionandoPedraAgari ? 'selecionando-batida' : ''
-      }`.trim()}
+      } ${entradaPorNotacao ? 'com-notacao' : ''}`.trim()}
     >
       <div ref={sentinelaStickyRef} aria-hidden="true" />
       <MaoAtual
@@ -239,17 +330,21 @@ export default function ConstrutorMao({
             aoLimparDescartes={limparDescartes}
           />
 
-          <div className="acoes-construtor-mao">
-            <AcoesConstrutorMao
-              mao={mao}
-              acaoPendente={acaoPendente}
-              podeChii={podeChii}
-              podePon={podePon}
-              podeKanAberto={podeKanAberto}
-              podeKanFechado={podeKanFechado}
-              aoAlternarAcao={alternarAcaoMao}
-            />
-          </div>
+          {/* Na notação as chamadas são digitadas: a linha de botões dá lugar ao campo. */}
+          {!entradaPorNotacao && (
+            <div className="acoes-construtor-mao">
+              <AcoesConstrutorMao
+                mao={mao}
+                acaoPendente={acaoPendente}
+                podeChii={podeChii}
+                podePon={podePon}
+                podeKanAberto={podeKanAberto}
+                podeKanFechado={podeKanFechado}
+                aoAlternarAcao={alternarAcaoMao}
+                aoAbrirNotacao={aoMudarEntradaNotacao && abrirNotacao}
+              />
+            </div>
+          )}
         </>
       )}
 
@@ -259,7 +354,7 @@ export default function ConstrutorMao({
             {mensagemFinalizacao ??
               (mostrarFinalizacaoNoTeclado ? t('calculator.readyToFinalizeAnnouncement') : '')}
           </span>
-          {contexto === 'montagem' && (
+          {contexto === 'montagem' && !entradaPorNotacao && (
             <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
               <div className="opcoes-acoes-mao-mobile">
                 <AcoesConstrutorMao
@@ -270,6 +365,7 @@ export default function ConstrutorMao({
                   podeKanAberto={podeKanAberto}
                   podeKanFechado={podeKanFechado}
                   aoAlternarAcao={alternarAcaoMao}
+                  aoAbrirNotacao={aoMudarEntradaNotacao && abrirNotacao}
                   compacto
                 />
                 {aoAbrirRegras && !mostrarFinalizacaoNoTeclado && (
@@ -286,32 +382,53 @@ export default function ConstrutorMao({
               </div>
             </div>
           )}
-          <TecladoPedras
-            acaoPendente={acaoPendente}
-            configuracao={configuracao}
-            dorasReais={dorasReais}
-            esperasPorPedra={esperasPorPedra}
-            filtrarTecladoPorEspera={filtrarTecladoPorEspera}
-            furitenBloqueiaRon={furitenBloqueiaRonNoTeclado}
-            maoCompleta={maoCompleta}
-            podeSelecionarPedra={podeSelecionarPedra}
-            rotuloEsperaTeclado={rotuloEsperaTeclado}
-            classeEsperaTeclado={classeEsperaTeclado}
-            contexto={contexto}
-            maoProntaParaFinalizar={mostrarFinalizacaoNoTeclado}
-            batidaDefinida={maoProntaParaFinalizar}
-            mensagemFinalizacao={mensagemFinalizacao}
-            selecionandoPedraAgari={selecionandoPedraAgari}
-            candidatasPedraAgari={candidatasPedraAgari}
-            escolhaChiiPendente={escolhaChiiPendente}
-            aoAbrirRegras={contexto === 'montagem' ? aoAbrirRegras : undefined}
-            aoAdicionarPedra={adicionarPedra}
-            aoFinalizarMao={aoCalcularDireto ? undefined : finalizarMao}
-            aoCalcularDireto={aoCalcularDireto}
-            aoAlternarSelecaoPedraAgari={alternarSelecaoPedraAgari}
-            aoEscolherPedraAgariPorCodigo={escolherPedraAgariPorCodigo}
-            aoEscolherChiiPendente={escolherChiiPendente}
-          />
+          {entradaPorNotacao && (
+            <CampoNotacaoMao
+              valor={textoNotacao}
+              aoMudar={mudarTextoNotacao}
+              aoConfirmar={aoConfirmarNotacao}
+              aoVoltar={voltarParaPedras}
+              erro={!!erroNotacao}
+              mensagem={
+                erroNotacao
+                  ? t(erroNotacao.chave, erroNotacao.parametros)
+                  : t('notation.tileCount', {
+                      count:
+                        notacao.pedras.length +
+                        notacao.melds.reduce((soma, meld) => soma + meld.pedras.length, 0),
+                    })
+              }
+            />
+          )}
+          {(!entradaPorNotacao || mostrarFinalizacaoNoTeclado || selecionandoPedraAgari) && (
+            <TecladoPedras
+              mostrarGrade={!entradaPorNotacao}
+              acaoPendente={acaoPendente}
+              configuracao={configuracao}
+              dorasReais={dorasReais}
+              esperasPorPedra={esperasPorPedra}
+              filtrarTecladoPorEspera={filtrarTecladoPorEspera}
+              furitenBloqueiaRon={furitenBloqueiaRonNoTeclado}
+              maoCompleta={maoCompleta}
+              podeSelecionarPedra={podeSelecionarPedra}
+              rotuloEsperaTeclado={rotuloEsperaTeclado}
+              classeEsperaTeclado={classeEsperaTeclado}
+              contexto={contexto}
+              maoProntaParaFinalizar={mostrarFinalizacaoNoTeclado}
+              batidaDefinida={maoProntaParaFinalizar}
+              mensagemFinalizacao={mensagemFinalizacao}
+              selecionandoPedraAgari={selecionandoPedraAgari}
+              candidatasPedraAgari={candidatasPedraAgari}
+              escolhaChiiPendente={escolhaChiiPendente}
+              aoAbrirRegras={contexto === 'montagem' ? aoAbrirRegras : undefined}
+              aoAdicionarPedra={adicionarPedra}
+              aoFinalizarMao={aoCalcularDireto ? undefined : finalizarMao}
+              aoCalcularDireto={aoCalcularDireto}
+              aoAlternarSelecaoPedraAgari={alternarSelecaoPedraAgari}
+              aoEscolherPedraAgariPorCodigo={escolherPedraAgariPorCodigo}
+              aoEscolherChiiPendente={escolherChiiPendente}
+            />
+          )}
         </div>
       )}
     </div>

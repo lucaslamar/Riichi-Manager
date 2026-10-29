@@ -38,6 +38,8 @@ function TextoAjuda({ texto, ignorar }: { texto: string; ignorar?: string[] }) {
 /** Pedras de exemplo de um bloco (mesmas do Glossário). */
 function VisualAjuda({ visual }: { visual: NonNullable<BlocoAjuda['visual']> }) {
   if (visual === 'ciclosDora') return <CiclosDora />
+  if (visual === 'notacao')
+    return <PedrasExemplo grupos={parseMpszGrupos('2388m447p')} rotulo="2388m447p" />
   return <PedrasExemplo grupos={parseMpszGrupos('0m0p0s')} rotulo="5 vermelho de Man, Pin e Sou" />
 }
 
@@ -67,8 +69,15 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
             <TextoAjuda texto={t(chave)} ignorar={ignorar} />
           </p>
         ))
-        // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
-        if (!subtitulo) return <Fragment key={indice}>{textos}</Fragment>
+        if (!subtitulo) {
+          return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
+            <Fragment key={indice}>
+              {textos}
+              {visual && <VisualAjuda visual={visual} />}
+            </Fragment>
+          )
+        }
         if (!item && paragrafos.length === 0) {
           return (
             // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados

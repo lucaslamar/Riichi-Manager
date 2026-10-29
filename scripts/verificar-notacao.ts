@@ -7,7 +7,10 @@
 import assert from 'node:assert/strict'
 import { parseHand } from '../src/dominios/calculadora-mao/logica/parseHand'
 import {
+  gerarNotacao,
+  gerarNotacaoCompleta,
   interpretarNotacao,
+  interpretarNotacaoCompleta,
   normalizarNotacao,
   pedraDoTile,
 } from '../src/dominios/calculadora-mao/logica/notacao'
@@ -106,6 +109,63 @@ caso('adaptador: aceita maiúsculas e espaços', () => {
   const { pedras, erro } = interpretarNotacao(normalizarNotacao('123M 456P'), semMelds)
   assert.equal(erro, null)
   assert.deepEqual(pedras, ['1m', '2m', '3m', '4p', '5p', '6p'])
+})
+
+caso('adaptador: gerarNotacao põe a batida por último e volta igual', () => {
+  const pedras = ['2m', '3m', '0m', '4p', '4p', '7z']
+  assert.equal(gerarNotacao(pedras), '230m44p7z')
+  assert.equal(gerarNotacao(pedras, 0), '30m44p7z2m')
+  assert.equal(gerarNotacao(pedras, 5), '230m44p7z')
+  assert.equal(gerarNotacao([]), '')
+  const relida = interpretarNotacao(gerarNotacao(pedras, 0), semMelds).pedras
+  assert.equal(relida[relida.length - 1], '2m')
+})
+
+caso('chamadas: c deduz chi, pon e kan aberto; a é kan fechado', () => {
+  const { pedras, melds, erro } = interpretarNotacaoCompleta('238m44p123mc111pc1111sa', {
+    akadora: true,
+  })
+  assert.equal(erro, null)
+  assert.deepEqual(pedras, ['2m', '3m', '8m', '4p', '4p'])
+  assert.deepEqual(melds, [
+    { tipo: 'chii', pedras: ['1m', '2m', '3m'] },
+    { tipo: 'pon', pedras: ['1p', '1p', '1p'] },
+    { tipo: 'kanFechado', pedras: ['1s', '1s', '1s', '1s'] },
+  ])
+  assert.deepEqual(interpretarNotacaoCompleta('7777zc', { akadora: true }).melds, [
+    { tipo: 'kanAberto', pedras: ['7z', '7z', '7z', '7z'] },
+  ])
+  // Chi com o 5 vermelho, digitado fora de ordem.
+  assert.deepEqual(interpretarNotacaoCompleta('604pc', { akadora: true }).melds, [
+    { tipo: 'chii', pedras: ['4p', '0p', '6p'] },
+  ])
+})
+
+caso('chamadas: formatos inválidos e limites somando melds', () => {
+  const erro = (texto: string) => interpretarNotacaoCompleta(texto, { akadora: true }).erro
+  assert.deepEqual(erro('124mc'), {
+    chave: 'notation.errors.invalidCall',
+    parametros: { group: '124mc' },
+  })
+  assert.equal(erro('123zc')?.chave, 'notation.errors.invalidCall')
+  assert.equal(erro('111ma')?.chave, 'notation.errors.invalidClosedKan')
+  assert.equal(erro('8zc')?.chave, 'notation.errors.invalidHonor')
+  assert.equal(erro('11m111mc')?.chave, 'notation.errors.tooManyCopies')
+  assert.equal(erro('112233445566m123pc')?.chave, 'notation.errors.tooManyTiles')
+  assert.equal(erro('111pcx')?.chave, 'notation.errors.invalidChar')
+})
+
+caso('chamadas: gerarNotacaoCompleta volta igual', () => {
+  const melds = [
+    { tipo: 'chii' as const, pedras: ['4p', '0p', '6p'] },
+    { tipo: 'kanFechado' as const, pedras: ['1s', '1s', '1s', '1s'] },
+  ]
+  const texto = gerarNotacaoCompleta(['2m', '3m', '4m', '7z', '7z'], 0, melds)
+  assert.equal(texto, '34m77z2m 406pc 1111sa')
+  const relida = interpretarNotacaoCompleta(normalizarNotacao(texto), { akadora: true })
+  assert.equal(relida.erro, null)
+  assert.equal(relida.pedras[relida.pedras.length - 1], '2m')
+  assert.deepEqual(relida.melds, melds)
 })
 
 let falhas = 0

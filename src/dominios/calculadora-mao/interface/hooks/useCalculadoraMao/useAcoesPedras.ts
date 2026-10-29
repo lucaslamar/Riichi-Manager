@@ -1,4 +1,5 @@
 import {
+  contarSlotsLogicos,
   criarAcao,
   ordenarMelds,
   ordenarPedras,
@@ -6,6 +7,7 @@ import {
   type CodigoPedra,
   type EsperaPossivel,
   type Mao,
+  type Meld,
 } from '../../../logica/mao'
 import { MAO_VAZIA, codigoBase, expandirGrupoMesmoValor } from '../../constantes'
 import type { EscolhaChiiPendente, EstadoMaoCalculadora, TipoMeldCalculadora } from './tipos'
@@ -369,6 +371,37 @@ export function useAcoesPedras({
     setAcaoPendente(null)
   }
 
+  /**
+   * Troca de uma vez a mão fechada e os melds (entrada por notação). Doras e
+   * descartes ficam como estão. A última pedra digitada da mão fechada vira a
+   * batida quando a mão fecha 14 slots, como no teclado. Com `null`, a mão fica
+   * e só a batida é desfeita: é o caso da notação com erro, que não pode ser calculada.
+   */
+  const substituirMaoNotacao = (entrada: { pedras: CodigoPedra[]; melds: Meld[] } | null) => {
+    const ultimaDigitada = entrada?.pedras[entrada.pedras.length - 1]
+    atualizarMao((rascunho) => {
+      // Batida num meld (chii/pon de ron) é desfeita: a notação não tem como marcá-la.
+      if (rascunho.agariMeld) {
+        rascunho.melds.splice(rascunho.agariMeld.indiceMeld, 1)
+        if (!entrada) rascunho.pedras.push(...rascunho.agariMeld.pedrasConsumidasMao)
+      }
+      rascunho.agariMeld = null
+      if (entrada) {
+        rascunho.pedras = [...entrada.pedras]
+        rascunho.melds = ordenarMelds(entrada.melds.map((meld) => ({ ...meld, pedras: [...meld.pedras] })))
+        // Como no teclado: chamada aberta tira o riichi.
+        if (entrada.melds.some((meld) => meld.tipo !== 'kanFechado')) rascunho.riichi = null
+      }
+      ordenarPedras(rascunho.pedras)
+      rascunho.indiceAgari =
+        ultimaDigitada && contarSlotsLogicos(rascunho) >= 14
+          ? rascunho.pedras.lastIndexOf(ultimaDigitada)
+          : -1
+    })
+    setEscolhaChiiPendente(null)
+    setAcaoPendente(null)
+  }
+
   /** Liga/desliga o significado especial do próximo clique no teclado. */
   const alternarAcao = (tipo: Acao['tipo']) => {
     const desligandoAcaoAtual = acaoPendente?.tipo === tipo
@@ -394,5 +427,6 @@ export function useAcoesPedras({
     removerDescarte,
     limpar,
     alternarAcao,
+    substituirMaoNotacao,
   }
 }

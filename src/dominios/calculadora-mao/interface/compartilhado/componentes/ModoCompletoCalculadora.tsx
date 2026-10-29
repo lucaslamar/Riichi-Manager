@@ -10,6 +10,8 @@ interface PropsModoCompleto {
   estado: EstadoCalculadoraMao
   cabecalho: ReactNode
   aoAbrirRegras: () => void
+  entradaNotacao?: boolean
+  aoMudarEntradaNotacao?: (ativa: boolean) => void
 }
 
 /**
@@ -20,6 +22,8 @@ export default function ModoCompletoCalculadora({
   estado,
   cabecalho,
   aoAbrirRegras,
+  entradaNotacao,
+  aoMudarEntradaNotacao,
 }: PropsModoCompleto) {
   const { t } = useI18n()
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -68,6 +72,8 @@ export default function ModoCompletoCalculadora({
             estado={estado}
             mostrandoEsperas={mostrandoEsperas}
             aoAbrirRegras={aoAbrirRegras}
+            entradaNotacao={entradaNotacao}
+            aoMudarEntradaNotacao={aoMudarEntradaNotacao}
           />
         </section>
       ) : (

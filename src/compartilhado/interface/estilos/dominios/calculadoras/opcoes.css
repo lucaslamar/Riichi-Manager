@@ -217,7 +217,7 @@
 }
 
 .action-tab--discard,
-.action-tab--quick-calc {
+.action-tab--notation {
   --action-color: var(--cor-texto, #263238);
 }
 
