@@ -21,7 +21,9 @@
     "windDraw": "Sorteador de Ventos",
     "rules": "Regras / Configurações",
     "rulesShort": "Regras",
-    "about": "Sobre / versão"
+    "about": "Sobre / versão",
+    "handCalculatorShort": "Calculadora",
+    "windDrawShort": "Sorteador"
   },
   "actions": {
     "back": "Voltar",
@@ -53,7 +55,10 @@
     "goToHandFinalization": "Ir para finalização de mão",
     "readyToFinalizeAnnouncement": "Mão pronta para finalizar.",
     "finalHelp": "Revise a mão completa, escolha as opções de batida e calcule.",
-    "physicalTilesShort": "{{total}} físicas",
+    "physicalTilesShort": {
+      "one": "{{count}} física",
+      "other": "{{count}} físicas"
+    },
     "completeHand": "Mão completa",
     "closedHand": "Pedras da mão",
     "emptyHand": "Monte a mão pelo teclado.",
@@ -72,7 +77,10 @@
     "waitsValid": "Essas pedras fecham uma mão válida com yaku nas opções atuais.",
     "waitsNoYaku": "Essas pedras fecham a forma, mas ainda falta yaku para vencer.",
     "waitsNone": "Nenhuma pedra restante fecha uma mão válida agora.",
-    "waitsAccessibleSummary": "{{status}}, {{count}} esperas marcadas no teclado.",
+    "waitsAccessibleSummary": {
+      "one": "{{status}}, {{count}} espera marcada no teclado.",
+      "other": "{{status}}, {{count}} esperas marcadas no teclado."
+    },
     "furitenWarning": "Furiten: esperas que já estão nos seus descartes não podem vencer por ron.",
     "mountToCalculate": "Monte a mão para calcular.",
     "adjustAndCalculate": "Ajuste as opções e toque em Calcular.",
@@ -151,7 +159,29 @@
     "resultAnnounce": "Resultado: {{agari}}. {{han}} han, {{fu}} fu. Pontuação: {{points}} pontos. Yakus: {{yaku}}.",
     "invalidFuritenAnnounce": "Resultado inválido: furiten. Você descartou uma das suas esperas.",
     "invalidNoYakuAnnounce": "Resultado inválido: sem yaku. Esta mão não possui yaku válido.",
-    "notEnoughTiles": "Tiles insuficientes para calcular."
+    "notEnoughTiles": "Tiles insuficientes para calcular.",
+    "handLabel": "Mão",
+    "tileWithCount": "{{tile}}, quantidade {{count}}",
+    "everyonePays": "Todos pagam",
+    "eastPays": "Leste paga",
+    "othersPay": "Demais pagam",
+    "everyoneReceives": "Todos recebem",
+    "eastReceives": "Leste recebe",
+    "othersReceive": "Demais recebem",
+    "chomboPenaltyRule": "Multa de chombo: {{limit}}",
+    "gearIcon": "engrenagem",
+    "yakuHeading": "Yaku",
+    "hanFuSummary": "{{han}} Han {{fu}} Fu",
+    "hanCount": {
+      "one": "{{count}} han",
+      "other": "{{count}} han"
+    },
+    "fuCount": {
+      "one": "{{count}} fu",
+      "other": "{{count}} fu"
+    },
+    "yakumanShort": "{{count}}× YM",
+    "pocketGuide": "Guia de bolso da Ovelhinha"
   },
   "hanFu": {
     "isDealer": "É oya?",
@@ -167,7 +197,10 @@
     "validFu": "Fu válidos",
     "result": "Resultado",
     "pointsSuffix": "pts",
-    "honbaCount": "{{count}} honba",
+    "honbaCount": {
+      "one": "{{count}} honba",
+      "other": "{{count}} honba"
+    },
     "decreaseHan": "Diminuir han",
     "increaseHan": "Aumentar han",
     "decreaseFu": "Diminuir fu",
@@ -196,7 +229,12 @@
     "limitTripleYakuman": "Yakuman triplo",
     "limitQuadrupleYakuman": "Yakuman quádruplo",
     "limitQuintupleYakuman": "Yakuman quíntuplo",
-    "limitSextupleYakuman": "Yakuman sêxtuplo"
+    "limitSextupleYakuman": "Yakuman sêxtuplo",
+    "limitKazoe": "Kazoe Yakuman",
+    "limitYakumanTimes": {
+      "one": "Yakuman",
+      "other": "{{count}}× Yakuman"
+    }
   },
   "hanFuTutorial": {
     "title": "Como contar Han e Fu",
@@ -223,7 +261,7 @@
       "step1": "**Conte o han** da mão.",
       "step2": "Deu **5 ou mais**? É mão de limite e não precisa contar fu.",
       "step3": "Senão, **conte o fu**.",
-      "step4": "Com han e fu, **consulte a tabela**. Ou, se quiser, [[pagina:4|calcule você mesmo]]."
+      "step4": "Com han e fu, **consulte a tabela**."
     },
     "han": {
       "title": "Contando han",
@@ -517,14 +555,17 @@
     }
   },
   "pages": {
-    "rulesTitle": "Regras e configurações",
-    "rulesText": "Ajuste preferências de uso do app. As regras de mesa da calculadora continuam acessíveis no menu contextual da Calculadora de Mão.",
     "aboutTitle": "Sobre o Mojoca",
     "aboutText": "Um app feito para ajudar jogadores e clubes de Riichi Mahjong a calcular mãos, organizar partidas e testar ideias de torneio, levando Riichi Mahjong para todos.",
     "version": "Versão {{version}}",
     "author": "Feito por Lucas Lamar",
     "reportIssue": "Reportar problema",
     "supportProject": "Apoiar o projeto",
+    "theme": "Tema",
+    "themeHelp": "Automático segue o tema claro ou escuro do sistema.",
+    "themeLight": "Claro",
+    "themeVelvet": "Dark",
+    "themeAuto": "Automático",
     "highContrast": "Alto contraste",
     "highContrastHelp": "Aumenta contraste de textos, bordas e estados de foco.",
     "compactMode": "Modo compacto",
@@ -550,8 +591,155 @@
     "ronRon": "Ron ron!",
     "tapToPlayAgain": "Toque para mais um sorteio"
   },
+  "learn": {
+    "title": "Aprender a jogar",
+    "short": "Aprender",
+    "tagline": {
+      "one": "Riichi Mahjong do começo ao fim. Em {{count}} módulo você já joga a primeira partida.",
+      "other": "Riichi Mahjong do começo ao fim. Em {{count}} módulos você já joga a primeira partida."
+    },
+    "howToRead": "Toque na direita ou na esquerda da tela (ou deslize) para virar a página. Toque no meio para mostrar a barra de cima: o X volta para esta capa (e, daqui, para o app) e o botão de lista abre o índice.",
+    "continue": "Continuar",
+    "continueFrom": "Continuar de {{page}}",
+    "startOver": "Começar do início",
+    "start": "Começar",
+    "close": "Fechar o guia",
+    "index": "Índice",
+    "indexTitle": "Índice do guia",
+    "closeIndex": "Fechar índice",
+    "modules": "Módulos",
+    "module": "Módulo {{number}}",
+    "part": "Parte {{number}}",
+    "glossary": "Glossário",
+    "quiz": "Quiz",
+    "seeAnswer": "Ver resposta",
+    "done": "Concluído",
+    "previousPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "pageAnnounce": "Página {{page}}: {{title}}",
+    "progress": "Progresso do guia",
+    "back": "Voltar",
+    "closeTool": "Voltar ao guia",
+    "conclusionTitle": "Você terminou o guia!",
+    "conclusionText": "Agora é jogar! Para uma regra mais detalhada, o índice leva direto a Mais regras.",
+    "conclusionSecret": "Recado secreto, só para quem chegou ao 1º dan: a M.League ainda não ligou, mas é questão de tempo. Enquanto isso, nada de dar ron em furiten.",
+    "conclusionPocketGuide": "Durante a partida, toque no chapéu de formatura do app: ele abre o Guia de bolso, feito para tirar dúvidas rápidas. Não precisa voltar aqui toda vez.",
+    "openHandCalculator": "Abrir a Calculadora de Mão",
+    "calculatorAndTable": "Calculadora e tabela",
+    "or": "ou",
+    "quizOptions": "Opções de resposta",
+    "quizRight": "Isso!",
+    "rankTier": "Novo rank",
+    "starUp": "Ganhou uma estrela!",
+    "yourRank": "Seu rank: {{rank}}",
+    "rankUp": "Subiu de rank!",
+    "rankHint": "Cada módulo concluído vale uma estrela. Complete uma parte para subir de rank: Novato, Adepto, Especialista e 1º dan.",
+    "quizWrong": "Não é essa. A certa é: {{answer}}.",
+    "seeScoring": "Pontuação"
+  },
   "ad": {
     "label": "Publicidade",
     "placeholder": "Espaço reservado para publicidade"
+  },
+  "fuDetails": {
+    "base": "Base",
+    "baseDesc": "Fu base de toda mão vencedora",
+    "chiitoi": "Chiitoitsu",
+    "chiitoiDesc": "Sete pares usa valor fixo de 25 fu",
+    "pinfuTsumo": "Pinfu tsumo",
+    "pinfuTsumoDesc": "Mão fechada de Pinfu vencida por tsumo",
+    "closedRon": "Ron fechado",
+    "closedRonDesc": "Mão fechada vencida por descarte",
+    "rinshan": "Rinshan",
+    "rinshanDesc": "Tsumo após kan, conforme a regra selecionada",
+    "tsumo": "Tsumo",
+    "tsumoDesc": "Vitória por compra própria",
+    "openPinfu": "Mão aberta sem fu",
+    "openPinfuDesc": "Arredondamento mínimo para mão aberta sem outro fu",
+    "yakuhaiPair": "Par de yakuhai",
+    "yakuhaiPairDesc": "{{tiles}}",
+    "yakuhaiPairDoubleDesc": "{{tiles}} como vento da rodada e do assento",
+    "valuePair": "Par de valor",
+    "openTriplet": "Trinca aberta",
+    "closedTriplet": "Trinca fechada",
+    "openKan": "Kan aberto",
+    "closedKan": "Kan fechado",
+    "triplet": "Trinca",
+    "kan": "Kan",
+    "terminalHonorDesc": "{{tiles}} de terminal/honra",
+    "simpleDesc": "{{tiles}} de simples",
+    "wait": "Espera",
+    "waits": {
+      "ryanmen": "espera aberta dos dois lados",
+      "shanpon": "espera em par para formar trinca",
+      "kanchan": "espera fechada no meio",
+      "penchan": "espera de ponta",
+      "tanki": "espera no par"
+    },
+    "waitGeneric": "Tipo de espera",
+    "generic": "Fu",
+    "libraryDetail": "Detalhe retornado pela biblioteca",
+    "numberTile": "{{number}} {{suit}}",
+    "haku": "Haku",
+    "hatsu": "Hatsu",
+    "chun": "Chun"
+  },
+  "pocketGuide": {
+    "title": "Guia de bolso",
+    "sheep": "Ovelhinha",
+    "tabsLabel": "Seções do guia",
+    "tabs": {
+      "glossary": "Glossário",
+      "beginner": "Yaku para iniciantes",
+      "sequences": "Yaku de sequência",
+      "terminals": "Yaku de terminais",
+      "triplets": "Yaku de trincas",
+      "suits": "Yaku de naipe",
+      "others": "Outros yaku",
+      "yakuman": "Yakuman"
+    },
+    "yakumanHeading": "Yakuman (mão máxima)",
+    "yakumanBadge": "YAKUMAN",
+    "closed": "Fechada",
+    "open": "Aberta",
+    "example": "Exemplo: {{exemplo}}",
+    "yaku": "Yaku",
+    "glossaryTopics": "Assuntos do glossário",
+    "summary": "Sumário:",
+    "howToCountStrong": "Como contar",
+    "howToCountRest": "han e fu, passo a passo",
+    "seeDefinition": "{{termo}}, ver definição",
+    "search": {
+      "label": "Buscar no Guia de bolso",
+      "placeholder": "Buscar termo, yaku ou aba",
+      "clear": "Limpar busca",
+      "nothingFound": "Nada encontrado para “{{busca}}”.",
+      "tabsHeading": "Abas do Guia"
+    }
+  },
+  "notation": {
+    "modeLabel": "Modo de entrada da mão",
+    "modeTiles": "Peças",
+    "modeNotation": "Notação",
+    "fieldLabel": "Mão em notação",
+    "placeholder": "ex.: {{example}}",
+    "suitBar": "Naipes",
+    "insertSuit": "Inserir {{suit}} ({{key}})",
+    "backspace": "Apagar",
+    "tileCount": {
+      "one": "{{count}} peça",
+      "other": "{{count}} peças"
+    },
+    "errors": {
+      "suitWithoutNumbers": "Naipe \"{{suit}}\" sem números antes",
+      "invalidHonor": "{{tile}} não existe (honras vão de 1z a 7z)",
+      "invalidChar": "Caractere inválido: \"{{char}}\"",
+      "missingSuit": "Faltou o naipe no final (m, p, s ou z)",
+      "tooManyCopies": "Mais de 4 peças {{tile}}",
+      "tooManyTiles": "Peças demais: a mão fechada aceita até {{max}}",
+      "akaDisabled": "Aka dora está desligado nas regras: use 5 em vez de 0",
+      "duplicateAka": "Só existe um 5 vermelho {{tile}}",
+      "invalid": "Notação inválida"
+    }
   }
 }
