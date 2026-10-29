@@ -7,7 +7,8 @@ import { IconeMenu } from './IconeMenu'
 import packageJson from '../../../../package.json'
 
 interface PropsCabecalho {
-  telaAtual: TelaPrincipal
+  /** 'aprender' com o guia aberto: a aba Aprender fica marcada. */
+  telaAtual: DestinoMenu
   aoNavegar: (tela: TelaPrincipal) => void
   /** Quando definido, a seta de voltar ocupa o lugar do hambúrguer (inclusive no retrato). */
   aoVoltar?: () => void
@@ -396,7 +397,7 @@ function MenuSecao({
 }: {
   titulo: string
   itens: ItemMenuGlobal[]
-  telaAtual: TelaPrincipal
+  telaAtual: DestinoMenu
   aoNavegar: (destino: DestinoMenu) => void
   t: (chave: string) => string
 }) {

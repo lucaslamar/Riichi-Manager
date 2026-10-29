@@ -24,6 +24,60 @@ body:has(.sorteador-ventos-page) {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* "?" no canto de cima: abre "Como funciona o sorteio". */
+.sorteio-ajuda {
+  position: absolute;
+  z-index: 6;
+  top: 4px;
+  right: 4px;
+  display: grid;
+  /* Área de toque de 40px; o círculo dentro segue o "?" da calculadora. */
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--cor-texto, #102a43);
+  cursor: pointer;
+}
+
+.sorteio-ajuda__circulo {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  /* A borda do tema some no fundo da página: aqui ela segue a cor do texto. */
+  border: 1.5px solid color-mix(in srgb, currentColor 80%, transparent);
+  border-radius: 999px;
+  background: var(--cor-superficie, #ffffff);
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.sorteio-ajuda:hover .sorteio-ajuda__circulo,
+.sorteio-ajuda:focus-visible .sorteio-ajuda__circulo {
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+.sorteio-ajuda:focus-visible {
+  outline: none;
+}
+
+.sorteio-ajuda:focus-visible .sorteio-ajuda__circulo {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cor-primario, #2196f3) 35%, transparent);
+}
+
+.sorteio-ajuda__texto {
+  margin: 0;
+  line-height: 1.55;
+}
+
 .sorteador-ventos-page--tocavel {
   cursor: pointer;
 }
@@ -69,7 +123,8 @@ body:has(.sorteador-ventos-page) {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: start;
   gap: 10px;
-  margin: 0;
+  /* À direita fica o espaço do "?" (.sorteio-ajuda). */
+  margin: 0 40px 0 0;
   padding: 0 4px 10px 0;
   list-style: none;
   font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', inherit;
@@ -123,7 +178,7 @@ body:has(.sorteador-ventos-page) {
 .sorteio-historico--completo {
   min-height: 92px;
   gap: 0;
-  margin-right: 4px;
+  margin-right: 44px;
   border: 3px solid var(--balao-traco);
   border-radius: 26px;
   padding: 6px 8px;

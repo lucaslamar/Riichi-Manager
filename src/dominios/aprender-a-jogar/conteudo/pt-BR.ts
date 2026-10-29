@@ -609,6 +609,8 @@ const modulos: TutorialModule[] = [
     number: 5,
     title: 'Mão válida',
     cover: 'Completa não basta: para vencer, a mão precisa de um yaku.',
+    coverTip:
+      'Antes de seguir, jogue **uma partida sem yaku**: vale vencer com qualquer mão completa. Depois deste módulo, jogue a próxima **já valendo o yaku**.',
     pages: [
       {
         id: 'sem-yaku',
@@ -620,7 +622,7 @@ const modulos: TutorialModule[] = [
             type: 'text',
             md: 'Ter 4 grupos e 1 par não basta. A mão precisa de pelo menos um **yaku**, uma condição de pontuação.',
           },
-          { type: 'tip', md: 'Vencer sem yaku é chombo, uma falta grave.' },
+          { type: 'tip', md: 'Na regra de verdade, vencer sem yaku é chombo, uma falta grave.' },
         ],
       },
       {

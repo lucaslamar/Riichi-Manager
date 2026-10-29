@@ -1,5 +1,6 @@
-import { useEffect, useRef, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { chaveNomeVento } from '../../../calculadora-mao/interface/compartilhado/componentes/PedraVento'
 import GatoHelice from '../componentes/GatoHelice'
 import ResultadoVentos from '../componentes/ResultadoVentos'
@@ -43,6 +44,7 @@ export default function PaginaSorteadorVentos() {
   // Logo que o 4º vento aparece, um toque de quem ainda está olhando não pode
   // apagar o resultado: o reinício só vale depois de um respiro.
   const paginaRef = useRef<HTMLElement>(null)
+  const [ajudaAberta, setAjudaAberta] = useState(false)
   const concluidoEmRef = useRef(0)
   useEffect(() => {
     if (concluido) concluidoEmRef.current = Date.now()
@@ -67,10 +69,30 @@ export default function PaginaSorteadorVentos() {
     <section
       ref={paginaRef}
       className={`sorteador-ventos-page${podeTocar ? ' sorteador-ventos-page--tocavel' : ''}`}
-      // Toda a área responde ao toque.
-      onClick={tocar}
+      // Toda a área responde ao toque. A janela do "?" é portal: os toques
+      // nela sobem pela árvore do React, mas não são da página.
+      onClick={(evento) => {
+        if (evento.currentTarget.contains(evento.target as Node)) tocar()
+      }}
     >
       <h2 className="sr-only">{t('windDraw.title')}</h2>
+
+      {/* "?" no canto: explica por que o sorteio é justo. */}
+      <button
+        type="button"
+        className="sorteio-ajuda"
+        aria-label={t('sectionHelp.buttonLabel', { section: t('windDraw.howItWorksTitle') })}
+        aria-haspopup="dialog"
+        onClick={(evento) => {
+          // Não deixa o toque chegar na página (que sortearia ou passaria a vez).
+          evento.stopPropagation()
+          setAjudaAberta(true)
+        }}
+      >
+        <span className="sorteio-ajuda__circulo" aria-hidden="true">
+          ?
+        </span>
+      </button>
 
       <ResultadoVentos ventosRevelados={ventosRevelados} completo={concluido} />
 
@@ -104,6 +126,17 @@ export default function PaginaSorteadorVentos() {
       </div>
 
       <TrilhasBalao raizRef={paginaRef} quantidade={ventosRevelados.length} completo={concluido} />
+
+      {ajudaAberta && (
+        <Modal
+          titulo={t('windDraw.howItWorksTitle')}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+          aoFechar={() => setAjudaAberta(false)}
+        >
+          <p className="sorteio-ajuda__texto">{t('windDraw.howItWorksText')}</p>
+        </Modal>
+      )}
 
       <p className="sr-only" aria-live="polite">
         {revelado && ultimoRevelado

@@ -125,6 +125,8 @@ export interface TutorialModule {
   title: string
   /** Frase da capa do módulo. */
   cover: string
+  /** Dica na capa do módulo, embaixo da frase (ex.: como treinar o módulo). */
+  coverTip?: string
   pages: TutorialPage[]
   /** Perguntas do quiz do módulo, uma embaixo da outra. */
   quiz?: Extract<TutorialBlock, { type: 'quiz' }>[]

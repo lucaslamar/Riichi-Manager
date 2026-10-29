@@ -44,6 +44,9 @@
   --pedra-face-aviso: #f9d2e9;
   --pedra-face-perigo: #fad3d8;
   --pedra-face-sucesso: #d2f1e3;
+  /* Texto sobre a face clara (ex.: nome do vento): tinta escura, não a do tema. */
+  --pedra-texto: #4f4366;
+  --pedra-texto-primario: #4b2f8a;
 
   /* Tokens antigos do app, apontados para a paleta. */
   --primario: var(--cor-primario);

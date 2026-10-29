@@ -91,17 +91,6 @@ export default function PaginaRegras() {
         ligado={preferencias.toqueAmpliado}
         aoMudar={(ligado) => preferencias.alterar('toqueAmpliado', ligado)}
       />
-
-      <section
-        className="cartao-regras cartao-regras--info"
-        aria-labelledby="titulo-sorteio-regras"
-      >
-        <i className="fas fa-shuffle cartao-regras__icone" aria-hidden="true" />
-        <span className="cartao-regras__texto">
-          <strong id="titulo-sorteio-regras">{t('windDraw.howItWorksTitle')}</strong>
-          <span>{t('windDraw.howItWorksText')}</span>
-        </span>
-      </section>
     </section>
   )
 }

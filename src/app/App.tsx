@@ -37,7 +37,16 @@ export default function App() {
   /** Tela de origem quando a Han e Fu é aberta pelo atalho da Calculadora de Mão. */
   const [telaRetorno, setTelaRetorno] = useState<TelaPrincipal | null>(null)
 
+  // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
+  // a cada abertura, sempre na capa.
+  const [guia, setGuia] = useState<{ chave: number } | null>(null)
+  const abrirGuia = useCallback(() => {
+    setGuia((atual) => ({ chave: (atual?.chave ?? 0) + 1 }))
+  }, [])
+
+  // Ir para uma tela fecha o guia: na capa dele a barra inferior fica à vista.
   const navegar = useCallback((proxima: TelaPrincipal) => {
+    setGuia(null)
     setTelaRetorno(null)
     setTela(proxima)
   }, [])
@@ -63,17 +72,16 @@ export default function App() {
   // seta (dedo para a direita) também volta para a Calculadora de Mão.
   const voltarDaHanFu = tela === 'calculadoraRapida' ? (voltar ?? (() => navegar('calculadora'))) : undefined
 
-  // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
-  // a cada abertura, sempre na capa.
-  const [guia, setGuia] = useState<{ chave: number } | null>(null)
-  const abrirGuia = useCallback(() => {
-    setGuia((atual) => ({ chave: (atual?.chave ?? 0) + 1 }))
-  }, [])
-
   // Deslizar até o Aprender abre o guia por cima; ao fechar, a pessoa volta
   // para a tela de onde deslizou.
   const irPara = (destino: TelaPrincipal | 'aprender') =>
     destino === 'aprender' ? abrirGuia() : navegar(destino)
+  // Na capa do guia, deslizar vai para a tela vizinha do Aprender na barra.
+  const indiceAprender = ORDEM_DESLIZE.indexOf('aprender')
+  const sairDoGuia = (passo: 1 | -1) => {
+    const destino = ORDEM_DESLIZE[indiceAprender + passo] ?? 'calculadora'
+    if (destino !== 'aprender') navegar(destino)
+  }
   useDeslizeHorizontal({
     ativo: indiceTela >= 0 && tela !== 'calculadora',
     aoDeslizarDireita: voltarDaHanFu ?? (telaAnterior && (() => irPara(telaAnterior))),
@@ -83,7 +91,7 @@ export default function App() {
   return (
     <>
       <Cabecalho
-        telaAtual={tela}
+        telaAtual={guia ? 'aprender' : tela}
         aoNavegar={navegar}
         aoVoltar={voltar}
         aoAbrirAprender={() => abrirGuia()}
@@ -106,10 +114,8 @@ export default function App() {
         <GuiaAprender
           key={guia.chave}
           aoFechar={() => setGuia(null)}
-          aoAbrirCalculadora={() => {
-            setGuia(null)
-            navegar('calculadora')
-          }}
+          aoAbrirCalculadora={() => navegar('calculadora')}
+          aoTrocarTela={sairDoGuia}
         />
       )}
     </>

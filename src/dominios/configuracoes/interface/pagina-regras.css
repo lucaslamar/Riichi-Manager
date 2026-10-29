@@ -48,11 +48,6 @@ body:has(.pagina-regras) {
   grid-column: 1 / -1;
 }
 
-.cartao-regras--info {
-  align-items: start;
-  grid-template-columns: 28px minmax(0, 1fr);
-}
-
 .cartao-regras__icone {
   color: var(--cor-secundario-texto, #155b98);
   font-size: 1.1rem;

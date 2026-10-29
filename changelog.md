@@ -32,6 +32,8 @@
 
 - Janela base (Modal): o deslize de página foi para um hook compartilhado (`useDeslizePaginas`), o mesmo do guia. Deslizar numa área que rola de lado (tabela larga) não vira mais a página.
 - Com uma janela ou o guia abertos, deslizar pela borda esquerda não abre mais o menu por trás deles.
+- "Como funciona o sorteio" saiu da tela Regras e virou um botão "?" no canto de cima do Sorteador de Ventos.
+- Sorteador: as bolinhas de pensamento terminam fora da cabeça do gato, do lado do balão, e as pedras dos balõezinhos têm face branca.
 
 ## 5.6.1 - 2026-10-23
 

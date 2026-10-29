@@ -8,6 +8,7 @@ import {
 import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
+import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useDeslizePaginas } from '@/compartilhado/interface/hooks/useDeslizePaginas'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
@@ -34,6 +35,8 @@ const TEMPO_BARRA = 4000
 const FAIXA_TOQUE = 1 / 3
 /** Até quantos px o dedo pode andar e ainda contar como toque (mais que isso é deslize). */
 const MOVIMENTO_TOQUE = 10
+/** Na capa, quantos px o dedo anda de lado para trocar de tela (o mesmo das outras telas). */
+const DESLIZE_CAPA = 70
 
 const SELETOR_FOCAVEIS =
   'a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])'
@@ -68,10 +71,16 @@ function useInerte<T extends HTMLElement>(ativo: boolean) {
 export default function GuiaAprender({
   aoFechar,
   aoAbrirCalculadora,
+  aoTrocarTela,
 }: {
   aoFechar: () => void
   /** Fecha o guia e vai para a Calculadora de Mão (ela não abre por cima). */
   aoAbrirCalculadora: () => void
+  /**
+   * Na capa, deslizar troca de tela do app (1 = a próxima aba da barra, -1 = a
+   * anterior), como nas outras telas: o livro só começa no Começar/Continuar.
+   */
+  aoTrocarTela: (passo: 1 | -1) => void
 }) {
   const { t } = useI18n()
   const [progressoInicial] = useState(lerProgressoGuia)
@@ -164,6 +173,14 @@ export default function GuiaAprender({
     return () => window.clearTimeout(tempo)
   }, [barraVisivel, indiceAberto, indice, naCapa])
 
+  // Na capa a barra inferior do app sobe por cima do guia (guia-aprender.css),
+  // menos com o índice ou uma ferramenta abertos por cima da capa.
+  const barraDoApp = naCapa && !indiceAberto && !ferramenta
+  useEffect(() => {
+    document.body.classList.toggle('guia-capa-aberta', barraDoApp)
+    return () => document.body.classList.remove('guia-capa-aberta')
+  }, [barraDoApp])
+
   /**
    * O X sempre volta para a capa (a tela Aprender a jogar), de qualquer página
    * do livro ou da consulta. Só na própria capa ele fecha o guia e volta para o app.
@@ -174,8 +191,8 @@ export default function GuiaAprender({
   }
 
   // Refs: o listener de teclado fica fixo e sempre vê o estado atual.
-  const estado = useRef({ ferramenta, indiceAberto, vista, mudarPagina, fechar })
-  estado.current = { ferramenta, indiceAberto, vista, mudarPagina, fechar }
+  const estado = useRef({ ferramenta, indiceAberto, vista, mudarPagina, fechar, naCapa })
+  estado.current = { ferramenta, indiceAberto, vista, mudarPagina, fechar, naCapa }
 
   useEffect(() => {
     const focoAnterior =
@@ -198,7 +215,8 @@ export default function GuiaAprender({
         return
       }
 
-      const livroAtivo = atual.vista.tipo === 'livro' && !atual.ferramenta && !atual.indiceAberto
+      const livroAtivo =
+        atual.vista.tipo === 'livro' && !atual.ferramenta && !atual.indiceAberto && !atual.naCapa
       const campo = (evento.target as Element | null)?.closest?.('input, select, textarea')
       if (livroAtivo && !campo && (evento.key === 'ArrowRight' || evento.key === 'ArrowLeft')) {
         evento.preventDefault()
@@ -256,12 +274,35 @@ export default function GuiaAprender({
   // viraria a página do livro por baixo dela.
   const doPalco = (evento: { currentTarget: Element; target: EventTarget }) =>
     evento.currentTarget.contains(evento.target as Node)
+  // Na capa o deslize não abre o livro: vai para a aba vizinha da barra.
+  const deslizeCapa = useRef<{ x: number; y: number } | null>(null)
   const deslizarPalco = {
     onTouchStart: (evento: EventoToque<HTMLDivElement>) => {
-      if (doPalco(evento)) propsToque.onTouchStart(evento)
+      if (!doPalco(evento)) return
+      if (!naCapa) {
+        propsToque.onTouchStart(evento)
+        return
+      }
+      const dedo = evento.touches[0]
+      deslizeCapa.current =
+        evento.touches.length === 1 && !toqueIgnorado(evento.target)
+          ? { x: dedo.clientX, y: dedo.clientY }
+          : null
     },
     onTouchEnd: (evento: EventoToque<HTMLDivElement>) => {
-      if (doPalco(evento)) propsToque.onTouchEnd(evento)
+      if (!doPalco(evento)) return
+      if (!naCapa) {
+        propsToque.onTouchEnd(evento)
+        return
+      }
+      const comeco = deslizeCapa.current
+      deslizeCapa.current = null
+      if (!comeco) return
+      const dedo = evento.changedTouches[0]
+      const deltaX = dedo.clientX - comeco.x
+      const deltaY = dedo.clientY - comeco.y
+      if (Math.abs(deltaX) < DESLIZE_CAPA || Math.abs(deltaX) < Math.abs(deltaY) * 1.5) return
+      aoTrocarTela(deltaX < 0 ? 1 : -1)
     },
   }
   const tocarPalco = {
@@ -281,6 +322,8 @@ export default function GuiaAprender({
       if (Math.hypot(evento.clientX - comeco.x, evento.clientY - comeco.y) > MOVIMENTO_TOQUE) return
       if ((evento.target as Element).closest(SELETOR_INTERATIVOS)) return
       if (window.getSelection()?.toString()) return
+      // Na capa os toques nas bordas não abrem o livro (só os botões).
+      if (naCapa) return
       const largura = evento.currentTarget.clientWidth
       const x = evento.clientX - evento.currentTarget.getBoundingClientRect().left
       if (x < largura * FAIXA_TOQUE) mudarPagina(-1)
@@ -399,6 +442,14 @@ export default function GuiaAprender({
             <span className="guia-capitulo__numero">{pagina.modulo.number}</span>
             <h1 className="guia-capitulo__titulo">{pagina.modulo.title}</h1>
             <p className="guia-capitulo__frase">{pagina.modulo.cover}</p>
+            {pagina.modulo.coverTip && (
+              <div className="guia-capitulo__dica">
+                <BlocosGuia
+                  blocos={[{ type: 'tip', md: pagina.modulo.coverTip }]}
+                  aoAbrirFerramenta={abrirFerramenta}
+                />
+              </div>
+            )}
             {seloRank()}
           </div>
         )
@@ -481,7 +532,10 @@ export default function GuiaAprender({
   return createPortal(
     <div
       ref={raizRef}
-      className={`guia-aprender${barraVisivel ? ' guia-aprender--barra' : ''}`}
+      // Na capa a barra inferior do app fica à vista, embaixo do guia.
+      className={`guia-aprender${barraVisivel ? ' guia-aprender--barra' : ''}${
+        naCapa ? ' guia-aprender--capa' : ''
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label={t('learn.title')}

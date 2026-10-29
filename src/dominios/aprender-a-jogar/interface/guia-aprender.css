@@ -19,6 +19,19 @@
   outline: none;
 }
 
+/*
+ * Na capa a barra inferior do app (só no celular e no tablet) fica por cima do
+ * guia, que continua ocupando a tela toda: sem vão, qualquer que seja a altura
+ * da barra (modo compacto, área de toque ampliada). O palco reserva o espaço.
+ */
+body.guia-capa-aberta .barra-navegacao-inferior {
+  z-index: 101;
+}
+
+.guia-aprender--capa .guia-palco {
+  padding-bottom: calc(var(--altura-barra-inferior, 0px) + env(safe-area-inset-bottom, 0px));
+}
+
 .guia-livro,
 .guia-consulta {
   position: absolute;
@@ -148,6 +161,13 @@
   margin: 14px 0 0;
   color: var(--guia-tinta-suave);
   font-size: 1.15rem;
+}
+
+/* Dica da capa do módulo: mais estreita que a página, texto à esquerda. */
+.guia-capitulo__dica {
+  width: min(100%, 32ch);
+  margin-top: 18px;
+  text-align: left;
 }
 
 .guia-capitulo__numero {
