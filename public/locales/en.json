@@ -716,5 +716,30 @@
       "nothingFound": "Nothing found for “{{busca}}”.",
       "tabsHeading": "Guide tabs"
     }
+  },
+  "notation": {
+    "modeLabel": "Hand input mode",
+    "modeTiles": "Tiles",
+    "modeNotation": "Notation",
+    "fieldLabel": "Hand in notation",
+    "placeholder": "e.g. {{example}}",
+    "suitBar": "Suits",
+    "insertSuit": "Insert {{suit}} ({{key}})",
+    "backspace": "Delete",
+    "tileCount": {
+      "one": "{{count}} tile",
+      "other": "{{count}} tiles"
+    },
+    "errors": {
+      "suitWithoutNumbers": "Suit \"{{suit}}\" has no numbers before it",
+      "invalidHonor": "{{tile}} does not exist (honors go from 1z to 7z)",
+      "invalidChar": "Invalid character: \"{{char}}\"",
+      "missingSuit": "Missing suit at the end (m, p, s or z)",
+      "tooManyCopies": "More than 4 copies of {{tile}}",
+      "tooManyTiles": "Too many tiles: the closed hand holds up to {{max}}",
+      "akaDisabled": "Aka dora is off in the rules: use 5 instead of 0",
+      "duplicateAka": "There is only one red five {{tile}}",
+      "invalid": "Invalid notation"
+    }
   }
 }

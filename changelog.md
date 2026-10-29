@@ -1,8 +1,10 @@
 # Changelog - Mojoca
 
-## Próxima versão
+## 5.7.0 - 2026-10-29
 
 ### Novo
+
+- **Calculadora: mão por notação**: além do teclado de peças, a mão pode ser digitada em notação (`2388m447p2458889s`, `0` para o 5 vermelho, `1z`–`7z` para ventos e dragões). O campo abre o teclado numérico do celular e uma barra com m, p, s, z e apagar, que não fecha o teclado. A última pedra digitada vira a batida. O seletor Peças | Notação lembra a última escolha, e a mão passa de um modo para o outro sem se perder. Com a notação errada, o erro aparece abaixo do campo e a mão não é calculada.
 
 - **Aprender a jogar**: guia em tela cheia para quem nunca jogou, lido como um livro, passando as páginas para o lado. Abre pelo novo item "Aprender" na barra inferior (e na sidebar e no menu). Feito em colaboração com o Cerrado Mahjong Club, inspirado no Mahjong Guia de Bolso, de Isabella Oliveira.
   - **6 módulos em sequência**: As pedras, A mesa, A mão válida, O turno (comprar, pon, chi, kan, tsumo e ron), Yakus para iniciantes e Dora. Cada módulo abre com uma capa de capítulo e termina num quiz de escolher a resposta: ao responder, a certa fica verde (e a escolhida errada, vermelha) e a explicação aparece. As mãos de exemplo usam as pedras do app.

@@ -709,5 +709,29 @@
       "nothingFound": "没有找到“{{busca}}”。",
       "tabsHeading": "指南分区"
     }
+  },
+  "notation": {
+    "modeLabel": "手牌输入方式",
+    "modeTiles": "牌",
+    "modeNotation": "记谱",
+    "fieldLabel": "记谱手牌",
+    "placeholder": "例如 {{example}}",
+    "suitBar": "花色",
+    "insertSuit": "输入{{suit}}（{{key}}）",
+    "backspace": "删除",
+    "tileCount": {
+      "other": "{{count}} 张"
+    },
+    "errors": {
+      "suitWithoutNumbers": "花色“{{suit}}”前面没有数字",
+      "invalidHonor": "{{tile}} 不存在（字牌为 1z 到 7z）",
+      "invalidChar": "无效字符：“{{char}}”",
+      "missingSuit": "末尾缺少花色（m、p、s 或 z）",
+      "tooManyCopies": "{{tile}} 超过 4 张",
+      "tooManyTiles": "牌太多了：门内手牌最多 {{max}} 张",
+      "akaDisabled": "规则中已关闭赤宝牌：请用 5 代替 0",
+      "duplicateAka": "赤五 {{tile}} 只有一张",
+      "invalid": "记谱无效"
+    }
   }
 }

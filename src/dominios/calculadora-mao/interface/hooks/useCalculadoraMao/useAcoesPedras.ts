@@ -1,4 +1,5 @@
 import {
+  contarSlotsLogicos,
   criarAcao,
   ordenarMelds,
   ordenarPedras,
@@ -369,6 +370,32 @@ export function useAcoesPedras({
     setAcaoPendente(null)
   }
 
+  /**
+   * Troca de uma vez as pedras da mão fechada (entrada por notação). Melds,
+   * doras e descartes ficam como estão. A última pedra digitada vira a batida
+   * quando a mão fecha 14 slots, como no teclado. Com `null`, as pedras ficam
+   * e só a batida é desfeita: é o caso da notação com erro, que não pode ser calculada.
+   */
+  const substituirPedrasMao = (pedras: CodigoPedra[] | null) => {
+    const ultimaDigitada = pedras?.[pedras.length - 1]
+    atualizarMao((rascunho) => {
+      // Batida num meld (chii/pon de ron) é desfeita: a notação só descreve a mão fechada.
+      if (rascunho.agariMeld) {
+        rascunho.melds.splice(rascunho.agariMeld.indiceMeld, 1)
+        if (!pedras) rascunho.pedras.push(...rascunho.agariMeld.pedrasConsumidasMao)
+      }
+      rascunho.agariMeld = null
+      if (pedras) rascunho.pedras = [...pedras]
+      ordenarPedras(rascunho.pedras)
+      rascunho.indiceAgari =
+        ultimaDigitada && contarSlotsLogicos(rascunho) >= 14
+          ? rascunho.pedras.lastIndexOf(ultimaDigitada)
+          : -1
+    })
+    setEscolhaChiiPendente(null)
+    setAcaoPendente(null)
+  }
+
   /** Liga/desliga o significado especial do próximo clique no teclado. */
   const alternarAcao = (tipo: Acao['tipo']) => {
     const desligandoAcaoAtual = acaoPendente?.tipo === tipo
@@ -394,5 +421,6 @@ export function useAcoesPedras({
     removerDescarte,
     limpar,
     alternarAcao,
+    substituirPedrasMao,
   }
 }

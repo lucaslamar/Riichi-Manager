@@ -709,5 +709,29 @@
       "nothingFound": "“{{busca}}”에 대한 결과가 없습니다.",
       "tabsHeading": "가이드 탭"
     }
+  },
+  "notation": {
+    "modeLabel": "손패 입력 방식",
+    "modeTiles": "패",
+    "modeNotation": "표기",
+    "fieldLabel": "표기로 입력한 손패",
+    "placeholder": "예: {{example}}",
+    "suitBar": "수트",
+    "insertSuit": "{{suit}}({{key}}) 입력",
+    "backspace": "지우기",
+    "tileCount": {
+      "other": "{{count}}장"
+    },
+    "errors": {
+      "suitWithoutNumbers": "\"{{suit}}\" 앞에 숫자가 없습니다",
+      "invalidHonor": "{{tile}}는 없는 패입니다 (자패는 1z~7z)",
+      "invalidChar": "잘못된 문자: \"{{char}}\"",
+      "missingSuit": "끝에 수트(m, p, s, z)가 없습니다",
+      "tooManyCopies": "{{tile}}가 4장을 넘습니다",
+      "tooManyTiles": "패가 너무 많습니다: 손패는 최대 {{max}}장입니다",
+      "akaDisabled": "규칙에서 아카도라가 꺼져 있습니다: 0 대신 5를 쓰세요",
+      "duplicateAka": "적5 {{tile}}는 한 장뿐입니다",
+      "invalid": "잘못된 표기입니다"
+    }
   }
 }

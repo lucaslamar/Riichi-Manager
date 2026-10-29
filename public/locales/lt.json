@@ -730,5 +730,32 @@
       "nothingFound": "Nieko nerasta pagal „{{busca}}“.",
       "tabsHeading": "Gido skirtukai"
     }
+  },
+  "notation": {
+    "modeLabel": "Rankos įvedimo būdas",
+    "modeTiles": "Akmenys",
+    "modeNotation": "Užrašas",
+    "fieldLabel": "Ranka užrašu",
+    "placeholder": "pvz. {{example}}",
+    "suitBar": "Rūšys",
+    "insertSuit": "Įterpti {{suit}} ({{key}})",
+    "backspace": "Ištrinti",
+    "tileCount": {
+      "one": "{{count}} akmuo",
+      "few": "{{count}} akmenys",
+      "many": "{{count}} akmens",
+      "other": "{{count}} akmenų"
+    },
+    "errors": {
+      "suitWithoutNumbers": "Prieš rūšį „{{suit}}“ nėra skaičių",
+      "invalidHonor": "{{tile}} neegzistuoja (garbės akmenys yra nuo 1z iki 7z)",
+      "invalidChar": "Netinkamas simbolis: „{{char}}“",
+      "missingSuit": "Pabaigoje trūksta rūšies (m, p, s arba z)",
+      "tooManyCopies": "Daugiau nei 4 akmenys {{tile}}",
+      "tooManyTiles": "Per daug akmenų: uždaroje rankoje telpa iki {{max}}",
+      "akaDisabled": "Taisyklėse Aka dora išjungta: vietoj 0 rašykite 5",
+      "duplicateAka": "Raudonas penketas {{tile}} yra tik vienas",
+      "invalid": "Netinkamas užrašas"
+    }
   }
 }

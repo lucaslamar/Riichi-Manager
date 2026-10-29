@@ -716,5 +716,30 @@
       "nothingFound": "Nada encontrado para “{{busca}}”.",
       "tabsHeading": "Abas do Guia"
     }
+  },
+  "notation": {
+    "modeLabel": "Modo de entrada da mão",
+    "modeTiles": "Peças",
+    "modeNotation": "Notação",
+    "fieldLabel": "Mão em notação",
+    "placeholder": "ex.: {{example}}",
+    "suitBar": "Naipes",
+    "insertSuit": "Inserir {{suit}} ({{key}})",
+    "backspace": "Apagar",
+    "tileCount": {
+      "one": "{{count}} peça",
+      "other": "{{count}} peças"
+    },
+    "errors": {
+      "suitWithoutNumbers": "Naipe \"{{suit}}\" sem números antes",
+      "invalidHonor": "{{tile}} não existe (honras vão de 1z a 7z)",
+      "invalidChar": "Caractere inválido: \"{{char}}\"",
+      "missingSuit": "Faltou o naipe no final (m, p, s ou z)",
+      "tooManyCopies": "Mais de 4 peças {{tile}}",
+      "tooManyTiles": "Peças demais: a mão fechada aceita até {{max}}",
+      "akaDisabled": "Aka dora está desligado nas regras: use 5 em vez de 0",
+      "duplicateAka": "Só existe um 5 vermelho {{tile}}",
+      "invalid": "Notação inválida"
+    }
   }
 }

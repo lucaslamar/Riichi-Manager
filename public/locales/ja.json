@@ -709,5 +709,29 @@
       "nothingFound": "「{{busca}}」は見つかりませんでした。",
       "tabsHeading": "ガイドのタブ"
     }
+  },
+  "notation": {
+    "modeLabel": "手牌の入力方法",
+    "modeTiles": "牌",
+    "modeNotation": "表記",
+    "fieldLabel": "表記で入力した手牌",
+    "placeholder": "例: {{example}}",
+    "suitBar": "種類",
+    "insertSuit": "{{suit}}（{{key}}）を入力",
+    "backspace": "削除",
+    "tileCount": {
+      "other": "{{count}}枚"
+    },
+    "errors": {
+      "suitWithoutNumbers": "「{{suit}}」の前に数字がありません",
+      "invalidHonor": "{{tile}}はありません（字牌は1z〜7z）",
+      "invalidChar": "使えない文字です:「{{char}}」",
+      "missingSuit": "最後に種類（m・p・s・z）がありません",
+      "tooManyCopies": "{{tile}}が4枚を超えています",
+      "tooManyTiles": "牌が多すぎます: 門前の手牌は最大{{max}}枚です",
+      "akaDisabled": "ルールで赤ドラがオフです: 0ではなく5を使ってください",
+      "duplicateAka": "赤五{{tile}}は1枚しかありません",
+      "invalid": "表記が正しくありません"
+    }
   }
 }
