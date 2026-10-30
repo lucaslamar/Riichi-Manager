@@ -24,7 +24,9 @@ export interface BlocoAjuda {
   /** Bloco de dica em cinza (como o aviso da Dora), com o subtítulo em negrito no começo. */
   dica?: boolean
   /** Pedras de exemplo depois dos parágrafos (sequências do indicador, 5 vermelhos). */
-  visual?: 'ciclosDora' | 'akaDora' | 'notacao'
+  visual?: 'ciclosDora' | 'akaDora'
+  /** Pedras de exemplo em notação (ex.: '123m'), mostradas depois dos parágrafos. */
+  exemplo?: string
 }
 
 /** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */
@@ -221,7 +223,7 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     termosProprios: ['aka-dora'],
     titulo: 'notation.toggle',
     blocos: [
-      { paragrafos: ['sectionHelp.notation.intro'], visual: 'notacao' },
+      { paragrafos: ['sectionHelp.notation.intro'], exemplo: '2388m447p' },
       {
         subtitulo: 'sectionHelp.notation.honorsTitle',
         item: true,
@@ -233,10 +235,36 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         paragrafos: ['sectionHelp.notation.aka'],
         visual: 'akaDora',
       },
+      // Chamadas pelo teclado: o grupo e depois a tecla, com as pedras de exemplo.
+      { subtitulo: 'sectionHelp.notation.callsTitle' },
       {
-        subtitulo: 'sectionHelp.notation.callsTitle',
+        subtitulo: 'melds.chii',
         item: true,
-        paragrafos: ['sectionHelp.notation.calls'],
+        paragrafos: ['sectionHelp.notation.chi'],
+        exemplo: '123m',
+      },
+      {
+        subtitulo: 'melds.pon',
+        item: true,
+        paragrafos: ['sectionHelp.notation.pon'],
+        exemplo: '111p',
+      },
+      {
+        subtitulo: 'melds.kanAberto',
+        item: true,
+        paragrafos: ['sectionHelp.notation.kan'],
+        exemplo: '1111s',
+      },
+      {
+        subtitulo: 'melds.kanFechado',
+        item: true,
+        paragrafos: ['sectionHelp.notation.closedKan'],
+        exemplo: '7777z',
+      },
+      {
+        subtitulo: 'sectionHelp.notation.displayTitle',
+        item: true,
+        paragrafos: ['sectionHelp.notation.display'],
       },
       {
         subtitulo: 'sectionHelp.notation.winTitle',

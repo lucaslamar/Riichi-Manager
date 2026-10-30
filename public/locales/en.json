@@ -486,11 +486,16 @@
       "akaTitle": "Red five",
       "aka": "Use 0 instead of 5: 0m, 0p and 0s are the red fives (Aka dora).",
       "callsTitle": "Calls",
-      "calls": "End a group with c for an open call: 123mc is chi, 111pc is pon and 1111sc is an open kan. End it with a for a closed kan: 1111ma.",
       "winTitle": "Winning tile",
       "win": "The last tile of the closed hand is the winning tile, the one that completed the hand. In 123456m789p1122z, the winning tile is 2z.",
       "tipTitle": "Tip",
-      "tip": "Capital letters and spaces are fine (2388M 447P 123mc). To go back to the tile keyboard, tap Tiles or swipe left."
+      "tip": "Each number shows up in the hand as a blank tile until you tap the suit. The call keys only light up when the last group fits them (123m → Chi). AC clears everything. To go back to the tile keyboard, tap Tiles or swipe left.",
+      "chi": "A run of 3 in the same suit taken from the player before you. Type 123m and tap Chi. Or tap Chi first and then a number: pick the run (still without a suit) and tap the suit. With Chi selected, tapping a tile in the hand also makes the chi.",
+      "pon": "A triplet taken from any player’s discard. Type 111p and tap Pon. Or tap Pon first and then 1: three blank 1s wait for the suit; tap p.",
+      "kan": "4 of a kind, the 4th taken from another player’s discard. Type 1111s and tap Kan. Or tap Kan first and then 1: four 1s appear; tap s.",
+      "closedKan": "4 of a kind, all from your own hand. Type 7777z and tap Closed kan. Or tap Closed kan first and then 7: four 7s appear; tap z.",
+      "displayTitle": "On a computer",
+      "display": "With a physical keyboard, a call is a letter at the end of the group: c for Chi, Pon and Kan (123mc, 111pc, 1111sc) and a for Closed kan (7777za)."
     }
   },
   "rulesModal": {
@@ -732,12 +737,6 @@
   },
   "notation": {
     "toggle": "Notation",
-    "fieldLabel": "Hand in notation",
-    "placeholder": "e.g. {{example}}",
-    "tileCount": {
-      "one": "{{count}} tile",
-      "other": "{{count}} tiles"
-    },
     "errors": {
       "suitWithoutNumbers": "Suit \"{{suit}}\" has no numbers before it",
       "invalidHonor": "{{tile}} does not exist (honors go from 1z to 7z)",
@@ -751,6 +750,17 @@
       "invalidCall": "Invalid call: {{group}} (put a sequence, a triplet or 4 of a kind before c)",
       "invalidClosedKan": "Invalid closed kan: {{group}} (put 4 identical tiles before a)"
     },
-    "backToTiles": "Tiles"
+    "backToTiles": "Tiles",
+    "keyboard": "Notation keyboard",
+    "keys": {
+      "man": "Man",
+      "pin": "Pin",
+      "sou": "Sou",
+      "honors": "Honors",
+      "redFive": "Red five",
+      "backspace": "Delete",
+      "clear": "Clear all"
+    },
+    "pendingTile": "{{number}} waiting for a suit"
   }
 }

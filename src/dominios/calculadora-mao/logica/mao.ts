@@ -8,7 +8,12 @@
 
 export type { Acao, CodigoPedra, Mao, Meld, VentoMao } from './tipos'
 export { criarAcao } from './tipos'
-export type { ConfiguracaoCalculo, DetalheFu, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
+export type {
+  ConfiguracaoCalculo,
+  DetalheFu,
+  PontosCalculados,
+  ResultadoMao,
+} from '@/compartilhado/mahjong/pontuacao'
 export {
   configuracaoPadrao,
   doraFlamejanteAtiva,
@@ -35,11 +40,16 @@ export { traduzirPatamares, traduzirYaku } from './traducoes'
 export { converterMaoParaString } from './conversor-riichi'
 export type { ErroNotacao, ResultadoNotacao, ResultadoNotacaoCompleta } from './notacao'
 export {
+  chamadasPossiveis,
+  expandirChamada,
   gerarNotacao,
   gerarNotacaoCompleta,
+  grupoDaChamada,
   interpretarNotacao,
   interpretarNotacaoCompleta,
   normalizarNotacao,
+  podeDigitarNumero,
+  sequenciasChiComNumero,
 } from './notacao'
 export type { EsperaPossivel } from './esperas'
 export { calcularEsperasPossiveis } from './esperas'

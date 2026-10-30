@@ -7,12 +7,17 @@
 import assert from 'node:assert/strict'
 import { parseHand } from '../src/dominios/calculadora-mao/logica/parseHand'
 import {
+  chamadasPossiveis,
+  expandirChamada,
   gerarNotacao,
   gerarNotacaoCompleta,
+  grupoDaChamada,
   interpretarNotacao,
   interpretarNotacaoCompleta,
   normalizarNotacao,
   pedraDoTile,
+  podeDigitarNumero,
+  sequenciasChiComNumero,
 } from '../src/dominios/calculadora-mao/logica/notacao'
 
 const casos: [string, () => void][] = []
@@ -166,6 +171,66 @@ caso('chamadas: gerarNotacaoCompleta volta igual', () => {
   assert.equal(relida.erro, null)
   assert.equal(relida.pedras[relida.pedras.length - 1], '2m')
   assert.deepEqual(relida.melds, melds)
+})
+
+caso('teclado: chamadas possíveis no último grupo', () => {
+  const tipos = (texto: string) => [...chamadasPossiveis(texto)].sort()
+  assert.deepEqual(tipos('2388m447p123m'), ['chii'])
+  assert.deepEqual(tipos('2388m111p'), ['pon'])
+  assert.deepEqual(tipos('1111s'), ['kanAberto', 'kanFechado'])
+  assert.deepEqual(tipos('406p'), ['chii'])
+  assert.deepEqual(tipos('124m'), [])
+  assert.deepEqual(tipos('123mc'), [])
+  assert.deepEqual(tipos('12'), [])
+  assert.deepEqual(tipos(''), [])
+})
+
+caso('teclado: chamada escolhida antes do grupo', () => {
+  assert.equal(expandirChamada('5', 'p', 'pon'), '555pc')
+  assert.equal(expandirChamada('0', 'p', 'pon'), '055pc')
+  assert.equal(expandirChamada('1', 's', 'kanAberto'), '1111sc')
+  assert.equal(expandirChamada('7', 'z', 'kanFechado'), '7777za')
+  assert.equal(expandirChamada('1', 'm', 'chii'), '123mc')
+  assert.equal(expandirChamada('0', 'p', 'chii'), '067pc')
+  assert.equal(expandirChamada('8', 'm', 'chii'), null)
+  assert.equal(expandirChamada('1', 'z', 'chii'), null)
+  assert.equal(expandirChamada('', 'm', 'pon'), null)
+  // Grupo inteiro digitado: fica como está.
+  assert.equal(expandirChamada('345', 's', 'chii'), '345sc')
+  // E o resultado é uma chamada válida.
+  for (const [digitos, naipe, tipo] of [
+    ['5', 'p', 'pon'],
+    ['0', 'p', 'chii'],
+    ['7', 'z', 'kanFechado'],
+  ] as const) {
+    const texto = expandirChamada(digitos, naipe, tipo)!
+    assert.deepEqual(
+      interpretarNotacaoCompleta(texto, { akadora: true }).melds.map((meld) => meld.tipo),
+      [tipo],
+    )
+  }
+})
+
+caso('teclado: no máximo 4 de cada número e um 0 no grupo sem naipe', () => {
+  assert.equal(podeDigitarNumero('888', '8'), true)
+  assert.equal(podeDigitarNumero('8888', '8'), false)
+  assert.equal(podeDigitarNumero('555', '0'), true)
+  assert.equal(podeDigitarNumero('0555', '5'), false)
+  assert.equal(podeDigitarNumero('0', '0'), false)
+  assert.equal(podeDigitarNumero('', '1'), true)
+})
+
+caso('teclado: número depois da chamada marcada', () => {
+  assert.equal(grupoDaChamada('8', 'pon'), '888')
+  assert.equal(grupoDaChamada('0', 'pon'), '055')
+  assert.equal(grupoDaChamada('8', 'kanAberto'), '8888')
+  assert.equal(grupoDaChamada('7', 'kanFechado'), '7777')
+  assert.equal(grupoDaChamada('4', 'chii'), null)
+  assert.deepEqual(sequenciasChiComNumero('4'), ['234', '345', '456'])
+  assert.deepEqual(sequenciasChiComNumero('1'), ['123'])
+  assert.deepEqual(sequenciasChiComNumero('2'), ['123', '234'])
+  assert.deepEqual(sequenciasChiComNumero('9'), ['789'])
+  assert.deepEqual(sequenciasChiComNumero('0'), ['340', '406', '067'])
 })
 
 let falhas = 0

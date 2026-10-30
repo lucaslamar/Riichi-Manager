@@ -1,5 +1,16 @@
 # Changelog - Mojoca
 
+## 5.7.3 - 2026-10-29
+
+### Alterado
+
+- **Teclado próprio da notação, no layout de calculadora**: o teclado do celular não abre mais, então a tela não se mexe. Em cima ficam Chi / Pon / Kan / Kan fechado; os números ficam como numa calculadora (7-8-9 em cima) e os naipes na coluna da direita. A barra acima do teclado tem ‹ Peças, ?, AC e ⌫. No computador, dá para digitar direto pelo teclado físico.
+- **Sem visor**: cada número entra na mão como uma pedra branca e vira a pedra de verdade quando o naipe é escolhido. Cada número trava em 4 no grupo sem naipe (o 0, em 1).
+- **Chamadas nas duas ordens**: o grupo e depois a chamada (`111p` → Pon; a tecla só acende quando o grupo combina) ou a chamada antes, como no teclado de pedras. Pon → 8 já mostra o meld com três 8 esperando o naipe, e Kan → 1 mostra quatro. Chi → 4 abre "Escolha o chi" com 2-3-4, 3-4-5 e 4-5-6. Com a chamada marcada, tocar nas pedras da mão também forma o meld, e tocar no meld pendente o remove.
+- O meld pendente usa o mesmo componente dos melds da mão (`ChipMeldMao`), com borda tracejada.
+- **Ajuda "?" da notação** explica cada chamada com pedras de exemplo.
+- Os textos de tradução são buscados com a versão no endereço, para não ficar um JSON antigo em cache depois de uma atualização.
+
 ## 5.7.2 - 2026-10-29
 
 ### Alterado

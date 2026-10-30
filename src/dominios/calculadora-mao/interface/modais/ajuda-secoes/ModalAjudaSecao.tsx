@@ -38,8 +38,6 @@ function TextoAjuda({ texto, ignorar }: { texto: string; ignorar?: string[] }) {
 /** Pedras de exemplo de um bloco (mesmas do Glossário). */
 function VisualAjuda({ visual }: { visual: NonNullable<BlocoAjuda['visual']> }) {
   if (visual === 'ciclosDora') return <CiclosDora />
-  if (visual === 'notacao')
-    return <PedrasExemplo grupos={parseMpszGrupos('2388m447p')} rotulo="2388m447p" />
   return <PedrasExemplo grupos={parseMpszGrupos('0m0p0s')} rotulo="5 vermelho de Man, Pin e Sou" />
 }
 
@@ -54,7 +52,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
 
   return (
     <section className="glossario-bloco">
-      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual }, indice) => {
+      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo }, indice) => {
         if (dica) {
           return paragrafos.map((chave) => (
             <p key={chave} className="bloco-dica ajuda-dica">
@@ -75,6 +73,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
             <Fragment key={indice}>
               {textos}
               {visual && <VisualAjuda visual={visual} />}
+              {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
             </Fragment>
           )
         }
@@ -95,6 +94,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
             </h4>
             {textos}
             {visual && <VisualAjuda visual={visual} />}
+            {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
           </div>
         )
       })}

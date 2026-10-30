@@ -14,6 +14,16 @@ import { DescartesMao } from './DescartesMao'
 import { MaoAtual } from './MaoAtual'
 import { TecladoPedras } from './TecladoPedras'
 
+/**
+ * Separa os números do fim, ainda sem naipe, do resto da notação. A mão é montada
+ * só com o resto; os números aparecem nela como pedras brancas até o naipe chegar.
+ */
+function separarPendentes(texto: string) {
+  const normalizado = normalizarNotacao(texto)
+  const pendentes = normalizado.match(/\d+$/)?.[0] ?? ''
+  return { completo: normalizado.slice(0, normalizado.length - pendentes.length), pendentes }
+}
+
 /** Mão fechada que a notação descreve; uma batida em meld devolve as pedras consumidas. */
 function pedrasParaNotacao(mao: EstadoCalculadoraMao['mao']) {
   return mao.agariMeld ? [...mao.pedras, ...mao.agariMeld.pedrasConsumidasMao] : mao.pedras
@@ -91,12 +101,10 @@ export default function ConstrutorMao({
   } = estado
 
   const [textoNotacao, setTextoNotacao] = useState('')
+  const { completo: notacaoCompleta, pendentes: pendentesNotacao } = separarPendentes(textoNotacao)
   const notacao = useMemo(
-    () =>
-      interpretarNotacaoCompleta(normalizarNotacao(textoNotacao), {
-        akadora: configuracao.akadora,
-      }),
-    [textoNotacao, configuracao.akadora],
+    () => interpretarNotacaoCompleta(notacaoCompleta, { akadora: configuracao.akadora }),
+    [notacaoCompleta, configuracao.akadora],
   )
   const entradaPorNotacao = contexto === 'montagem' && entradaNotacao && !!aoMudarEntradaNotacao
   const erroNotacao = entradaPorNotacao ? notacao.erro : null
@@ -115,16 +123,10 @@ export default function ConstrutorMao({
   }
   const voltarParaPedras = () => aoMudarEntradaNotacao?.(false)
 
-  // Ao abrir a notação (botão ou deslize), nenhuma ação de chamada fica pendente.
-  useEffect(() => {
-    if (entradaPorNotacao) estado.setAcaoPendente(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entradaPorNotacao])
-
   /** Com erro, a mão mantém a última leitura válida, mas sem batida: nada é calculado. */
   const mudarTextoNotacao = (texto: string) => {
     setTextoNotacao(texto)
-    const resultado = interpretarNotacaoCompleta(normalizarNotacao(texto), {
+    const resultado = interpretarNotacaoCompleta(separarPendentes(texto).completo, {
       akadora: configuracao.akadora,
     })
     substituirMaoNotacao(resultado.erro ? null : resultado)
@@ -144,19 +146,12 @@ export default function ConstrutorMao({
   useEffect(() => {
     if (!entradaPorNotacao) return
     if (assinatura(notacao.pedras, notacao.melds) === assinaturaMao) return
+    // Texto no meio da digitação (com erro) só é reescrito quando a mão foi limpa.
+    if (notacao.erro && assinaturaMao !== assinatura([], [])) return
     setTextoNotacao(notacaoDaMao())
     // O texto só acompanha a mão; reagir a `notacao` aqui desfaria o que está sendo digitado.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assinaturaMao, entradaPorNotacao])
-
-  // Uma chamada escolhida por outro caminho (menu da mão) usa o teclado de pedras.
-  const acaoAnteriorRef = useRef(acaoPendente)
-  useEffect(() => {
-    const anterior = acaoAnteriorRef.current
-    acaoAnteriorRef.current = acaoPendente
-    if (acaoPendente && acaoPendente !== anterior && entradaPorNotacao) voltarParaPedras()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [acaoPendente])
 
   /**
    * Converte indicadores escolhidos em doras reais para destacar o teclado.
@@ -226,7 +221,11 @@ export default function ConstrutorMao({
       : null
   const mostrarTeclado = contexto === 'montagem'
   const mostrarFinalizacaoNoTeclado =
-    contexto === 'montagem' && maoProntaParaEscolherBatida && !acaoMeldAtiva && !erroNotacao
+    contexto === 'montagem' &&
+    maoProntaParaEscolherBatida &&
+    !acaoMeldAtiva &&
+    !erroNotacao &&
+    !(entradaPorNotacao && pendentesNotacao)
   const aoConfirmarNotacao = () => {
     if (!mostrarFinalizacaoNoTeclado || !maoProntaParaFinalizar || selecionandoPedraAgari) return
     if (aoCalcularDireto) aoCalcularDireto()
@@ -319,6 +318,14 @@ export default function ConstrutorMao({
         aoRemoverPedra={contexto === 'montagem' ? removerPedra : () => undefined}
         aoRemoverMeld={contexto === 'montagem' ? removerMeld : () => undefined}
         aoLimpar={limpar}
+        pedrasPendentes={entradaPorNotacao ? [...pendentesNotacao] : undefined}
+        tipoMeldPendente={
+          entradaPorNotacao && acaoMeldAtiva && pendentesNotacao ? acaoMeldAtiva.tipo : undefined
+        }
+        aoRemoverPendentes={() => {
+          estado.setAcaoPendente(null)
+          mudarTextoNotacao(notacaoCompleta)
+        }}
       />
 
       {contexto === 'montagem' && (
@@ -388,19 +395,20 @@ export default function ConstrutorMao({
               aoMudar={mudarTextoNotacao}
               aoConfirmar={aoConfirmarNotacao}
               aoVoltar={voltarParaPedras}
-              erro={!!erroNotacao}
-              mensagem={
-                erroNotacao
-                  ? t(erroNotacao.chave, erroNotacao.parametros)
-                  : t('notation.tileCount', {
-                      count:
-                        notacao.pedras.length +
-                        notacao.melds.reduce((soma, meld) => soma + meld.pedras.length, 0),
-                    })
-              }
+              erro={erroNotacao ? t(erroNotacao.chave, erroNotacao.parametros) : null}
+              // A chamada marcada é a mesma ação do teclado de pedras: com ela, tocar
+              // nas pedras da mão forma o meld, como lá.
+              chamadaArmada={acaoMeldAtiva?.tipo ?? null}
+              aoArmarChamada={(tipo) => {
+                if (tipo) alternarAcaoMao(tipo)
+                else estado.setAcaoPendente(null)
+              }}
             />
           )}
-          {(!entradaPorNotacao || mostrarFinalizacaoNoTeclado || selecionandoPedraAgari) && (
+          {(!entradaPorNotacao ||
+            mostrarFinalizacaoNoTeclado ||
+            selecionandoPedraAgari ||
+            escolhaChiiPendente) && (
             <TecladoPedras
               mostrarGrade={!entradaPorNotacao}
               acaoPendente={acaoPendente}

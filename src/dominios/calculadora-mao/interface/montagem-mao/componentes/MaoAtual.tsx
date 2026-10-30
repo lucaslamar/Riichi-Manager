@@ -5,6 +5,7 @@ import { ESTILO_MELD, nomePedraAcessivel } from '../../constantes'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 import { GradePedrasMao, PedraMao } from '../../compartilhado/componentes/PedraMao'
+import { ChipMeldMao } from '../../compartilhado/componentes/ChipMeldMao'
 import BotaoYakus from '../../modais/yakus/BotaoYakus'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 
@@ -49,6 +50,12 @@ interface PropsMaoAtual {
   aoRemoverPedra: (indicePedra: number) => void
   aoRemoverMeld: (indiceMeld: number) => void
   aoLimpar: () => void
+  /** Números da notação ainda sem naipe: aparecem como pedras brancas no fim da mão. */
+  pedrasPendentes?: string[]
+  /** Com chamada marcada, as pedras brancas formam um meld desse tipo, ainda sem naipe. */
+  tipoMeldPendente?: Meld['tipo']
+  /** Toque no meld pendente: some o grupo inteiro (e a chamada marcada). */
+  aoRemoverPendentes?: () => void
 }
 
 function ChipMeld({
@@ -158,40 +165,13 @@ function ChipMeld({
   }
 
   return (
-    <button
-      className={`chip-meld-mao chip-meld-mao-${meld.tipo}`}
-      type="button"
-      title={t('calculator.removeMeld', { meld: t(estilo.rotulo) })}
-      aria-label={t('calculator.removeMeld', { meld: t(estilo.rotulo) })}
-      onClick={() => aoRemoverMeld(indiceMeld)}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 3,
-        padding: '2px 5px',
-        borderRadius: 7,
-        border: `1.5px solid ${estilo.borda}`,
-        background: 'transparent',
-        boxShadow: 'none',
-        fontWeight: 900,
-        fontFamily: 'monospace',
-        fontSize: '0.78rem',
-        cursor: 'pointer',
-      }}
+    <ChipMeldMao
+      tipo={meld.tipo}
+      titulo={t('calculator.removeMeld', { meld: t(estilo.rotulo) })}
+      aoClicar={() => aoRemoverMeld(indiceMeld)}
     >
-      <span
-        className="rotulo-meld-chip"
-        style={{
-          fontWeight: 900,
-          color: estilo.borda,
-          marginRight: 1,
-          letterSpacing: 0,
-        }}
-      >
-        {t(estilo.rotulo)}
-      </span>
       <PedrasMeld meld={meld} indiceAgari={indiceAgari} />
-    </button>
+    </ChipMeldMao>
   )
 }
 
@@ -232,6 +212,9 @@ export function MaoAtual({
   aoRemoverPedra,
   aoRemoverMeld,
   aoLimpar,
+  pedrasPendentes = [],
+  tipoMeldPendente,
+  aoRemoverPendentes,
 }: PropsMaoAtual) {
   const { t } = useI18n()
   const tabletRetrato = useMediaQuery(CONSULTA_TABLET_RETRATO)
@@ -247,6 +230,19 @@ export function MaoAtual({
     contexto === 'finalizacao'
       ? `${t('calculator.completeHand')} ${slotsEstruturais}/14${sufixoFisico}`
       : `${t('calculator.buildTitle', { total: slotsEstruturais })}${sufixoFisico}`
+  /** Número ainda sem naipe: pedra branca tracejada (o 0 aparece como 5 vermelho). */
+  const renderizarPedraPendente = (numero: string, indice: number) => (
+    <span
+      // biome-ignore lint/suspicious/noArrayIndexKey: números digitados em ordem
+      key={`pendente-${indice}`}
+      className={`chip-pedra pedra-mao pedra-pendente-notacao ${numero === '0' ? 'vermelha' : ''}`.trim()}
+      role="img"
+      aria-label={t('notation.pendingTile', { number: numero === '0' ? '5' : numero })}
+    >
+      {numero === '0' ? '5' : numero}
+    </span>
+  )
+
   const clicarPedraDaMao = (indicePedra: number) => {
     if (contexto === 'finalizacao') {
       aoEscolherPedraAgariMao(indicePedra)
@@ -424,6 +420,7 @@ export function MaoAtual({
                   />
                 )
               })}
+              {!tipoMeldPendente && pedrasPendentes.map(renderizarPedraPendente)}
             </GradePedrasMao>
             {mao.melds.map((meld, indiceMeld) => (
               <ChipMeld
@@ -440,9 +437,21 @@ export function MaoAtual({
                 aoRemoverMeld={aoRemoverMeld}
               />
             ))}
+            {tipoMeldPendente && pedrasPendentes.length > 0 && (
+              <ChipMeldMao
+                tipo={tipoMeldPendente}
+                pendente
+                titulo={t('calculator.removeMeld', {
+                  meld: t(ESTILO_MELD[tipoMeldPendente].rotulo),
+                })}
+                aoClicar={() => aoRemoverPendentes?.()}
+              >
+                <PedrasMeld meld={{ tipo: tipoMeldPendente, pedras: pedrasPendentes }} pendente />
+              </ChipMeldMao>
+            )}
           </>
         )}
-        {contexto === 'montagem' && totalPedras === 0 && (
+        {contexto === 'montagem' && totalPedras === 0 && pedrasPendentes.length === 0 && (
           <span className="estado-vazio-mao">{t('calculator.emptyHand')}</span>
         )}
       </div>

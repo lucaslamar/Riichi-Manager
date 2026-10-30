@@ -498,11 +498,16 @@
       "akaTitle": "Raudonas penketas",
       "aka": "Vietoj 5 rašykite 0: 0m, 0p ir 0s yra raudoni penketai (Aka dora).",
       "callsTitle": "Skambinimai",
-      "calls": "Užbaikite grupę raide c atviram skambinimui: 123mc – chi, 111pc – pon, 1111sc – atviras kan. Užbaikite raide a uždaram kan: 1111ma.",
       "winTitle": "Laiminčiasis akmuo",
       "win": "Paskutinis uždaros rankos akmuo yra laiminčiasis – tas, kuris užbaigė ranką. 123456m789p1122z laiminčiasis akmuo yra 2z.",
       "tipTitle": "Patarimas",
-      "tip": "Didžiosios raidės ir tarpai tinka (2388M 447P 123mc). Norėdami grįžti į akmenų klaviatūrą, palieskite „Akmenys“ arba braukite į kairę."
+      "tip": "Kiekvienas skaičius rankoje rodomas kaip baltas akmuo, kol paliesite rūšį. Skambinimo klavišai šviečia tik tada, kai paskutinė grupė jiems tinka (123m → Chi). AC viską išvalo. Norėdami grįžti į akmenų klaviatūrą, palieskite „Akmenys“ arba braukite į kairę.",
+      "chi": "Tos pačios rūšies seka iš 3, paimta iš prieš jus žaidusio žaidėjo. Įveskite 123m ir palieskite Chi. Arba pirma Chi, paskui skaičių: pasirinkite seką (dar be rūšies) ir palieskite rūšį. Pasirinkus Chi, palietus akmenį rankoje taip pat sudaromas chi.",
+      "pon": "Trejetas, paimtas iš bet kurio žaidėjo išmesto akmens. Įveskite 111p ir palieskite Pon. Arba pirma Pon, paskui 1: atsiranda trys 1, laukiantys rūšies; palieskite p.",
+      "kan": "4 vienodi, ketvirtas paimtas iš kito žaidėjo išmesto akmens. Įveskite 1111s ir palieskite Kan. Arba pirma Kan, paskui 1: atsiranda keturi 1; palieskite s.",
+      "closedKan": "4 vienodi, visi iš jūsų rankos. Įveskite 7777z ir palieskite uždarą kan. Arba pirma uždarą kan, paskui 7: atsiranda keturi 7; palieskite z.",
+      "displayTitle": "Kompiuteryje",
+      "display": "Su fizine klaviatūra skambinimas yra raidė grupės gale: c – Chi, Pon ir Kan (123mc, 111pc, 1111sc), a – uždaras kan (7777za)."
     }
   },
   "rulesModal": {
@@ -746,14 +751,6 @@
   },
   "notation": {
     "toggle": "Užrašas",
-    "fieldLabel": "Ranka užrašu",
-    "placeholder": "pvz. {{example}}",
-    "tileCount": {
-      "one": "{{count}} akmuo",
-      "few": "{{count}} akmenys",
-      "many": "{{count}} akmens",
-      "other": "{{count}} akmenų"
-    },
     "errors": {
       "suitWithoutNumbers": "Prieš rūšį „{{suit}}“ nėra skaičių",
       "invalidHonor": "{{tile}} neegzistuoja (garbės akmenys yra nuo 1z iki 7z)",
@@ -767,6 +764,17 @@
       "invalidCall": "Netinkamas skambinimas: {{group}} (prieš c rašykite seką, trejetą arba 4 vienodus)",
       "invalidClosedKan": "Netinkamas uždaras kan: {{group}} (prieš a rašykite 4 vienodus akmenis)"
     },
-    "backToTiles": "Akmenys"
+    "backToTiles": "Akmenys",
+    "keyboard": "Užrašo klaviatūra",
+    "keys": {
+      "man": "Man",
+      "pin": "Pin",
+      "sou": "Sou",
+      "honors": "Garbės",
+      "redFive": "Raud. 5",
+      "backspace": "Ištrinti",
+      "clear": "Išvalyti viską"
+    },
+    "pendingTile": "{{number}} laukia rūšies"
   }
 }

@@ -398,8 +398,8 @@ export function useAcoesPedras({
           ? rascunho.pedras.lastIndexOf(ultimaDigitada)
           : -1
     })
+    // A ação pendente (Pon, Chi…) continua: na notação ela é a chamada marcada antes do grupo.
     setEscolhaChiiPendente(null)
-    setAcaoPendente(null)
   }
 
   /** Liga/desliga o significado especial do próximo clique no teclado. */

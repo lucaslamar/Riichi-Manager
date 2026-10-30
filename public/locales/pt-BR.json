@@ -486,11 +486,16 @@
       "akaTitle": "5 vermelho",
       "aka": "Use 0 no lugar do 5: 0m, 0p e 0s são os cincos vermelhos (Aka dora).",
       "callsTitle": "Chamadas",
-      "calls": "Termine um grupo com c para uma chamada aberta: 123mc é chi, 111pc é pon e 1111sc é kan aberto. Termine com a para kan fechado: 1111ma.",
       "winTitle": "Batida",
       "win": "A última pedra da mão fechada é a batida, a que completou a mão. Em 123456m789p1122z, a batida é 2z.",
       "tipTitle": "Dica",
-      "tip": "Maiúsculas e espaços valem (2388M 447P 123mc). Para voltar ao teclado de pedras, toque em Peças ou deslize para a esquerda."
+      "tip": "Cada número aparece na mão como uma pedra branca até você tocar no naipe. As teclas de chamada só acendem quando o último grupo combina com elas (123m → Chi). AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize para a esquerda.",
+      "chi": "Sequência de 3 do mesmo naipe pega de quem jogou antes de você. Digite 123m e toque em Chi. Ou toque em Chi antes e depois num número: escolha a sequência (ainda sem naipe) e toque no naipe. Com Chi marcado, tocar numa pedra da mão também forma o chi.",
+      "pon": "Trinca pega do descarte de qualquer jogador. Digite 111p e toque em Pon. Ou toque em Pon antes e depois no 1: aparecem três 1 esperando o naipe; toque em p.",
+      "kan": "4 iguais, a 4ª pega do descarte de outro jogador. Digite 1111s e toque em Kan. Ou toque em Kan antes e depois no 1: aparecem quatro 1; toque em s.",
+      "closedKan": "4 iguais, todas da sua própria mão. Digite 7777z e toque em Kan fechado. Ou toque em Kan fechado antes e depois no 7: aparecem quatro 7; toque em z.",
+      "displayTitle": "No computador",
+      "display": "Pelo teclado físico, a chamada é uma letra no fim do grupo: c para Chi, Pon e Kan (123mc, 111pc, 1111sc) e a para Kan fechado (7777za)."
     }
   },
   "rulesModal": {
@@ -732,12 +737,6 @@
   },
   "notation": {
     "toggle": "Notação",
-    "fieldLabel": "Mão em notação",
-    "placeholder": "ex.: {{example}}",
-    "tileCount": {
-      "one": "{{count}} peça",
-      "other": "{{count}} peças"
-    },
     "errors": {
       "suitWithoutNumbers": "Naipe \"{{suit}}\" sem números antes",
       "invalidHonor": "{{tile}} não existe (honras vão de 1z a 7z)",
@@ -751,6 +750,17 @@
       "invalidCall": "Chamada inválida: {{group}} (antes do c vai uma sequência, uma trinca ou 4 iguais)",
       "invalidClosedKan": "Kan fechado inválido: {{group}} (antes do a vão 4 pedras iguais)"
     },
-    "backToTiles": "Peças"
+    "backToTiles": "Peças",
+    "keyboard": "Teclado da notação",
+    "keys": {
+      "man": "Man",
+      "pin": "Pin",
+      "sou": "Sou",
+      "honors": "Honras",
+      "redFive": "5 vermelho",
+      "backspace": "Apagar",
+      "clear": "Limpar tudo"
+    },
+    "pendingTile": "{{number}} esperando o naipe"
   }
 }

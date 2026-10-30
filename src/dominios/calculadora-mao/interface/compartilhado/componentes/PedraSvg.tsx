@@ -42,7 +42,20 @@ export function PedraSvg({
   )
 }
 
-export function PedrasMeld({ meld, indiceAgari }: { meld: Meld; indiceAgari?: number }) {
+/**
+ * Pedras de um meld na disposição da mesa: a chamada de lado e, no kan fechado,
+ * as pontas viradas. Com `pendente`, `meld.pedras` são só números (notação ainda
+ * sem naipe) e cada pedra mostra o número numa face branca.
+ */
+export function PedrasMeld({
+  meld,
+  indiceAgari,
+  pendente = false,
+}: {
+  meld: Meld
+  indiceAgari?: number
+  pendente?: boolean
+}) {
   const renderizarPedra = ({
     chave,
     pedra,
@@ -56,8 +69,17 @@ export function PedrasMeld({ meld, indiceAgari }: { meld: Meld; indiceAgari?: nu
     deLado?: boolean
     agari?: boolean
   }) => (
-    <span key={chave} className={`meld-tile ${deLado ? 'de-lado' : ''} ${agari ? 'agari' : ''}`}>
-      <PedraSvg pedra={pedra} virada={virada} deLado={deLado} />
+    <span
+      key={chave}
+      className={`meld-tile ${deLado ? 'de-lado' : ''} ${agari ? 'agari' : ''} ${
+        pendente && !virada ? 'pendente' : ''
+      } ${pendente && pedra === '0' ? 'vermelha' : ''}`}
+    >
+      {pendente && !virada ? (
+        <span className="numero-meld-pendente">{pedra === '0' ? '5' : pedra}</span>
+      ) : (
+        <PedraSvg pedra={pedra} virada={virada} deLado={deLado} />
+      )}
     </span>
   )
 
@@ -70,8 +92,16 @@ export function PedrasMeld({ meld, indiceAgari }: { meld: Meld; indiceAgari?: nu
     return (
       <span className="meld-pedras">
         {renderizarPedra({ chave: 'back-left', virada: true, agari: indiceAgari === 0 })}
-        {renderizarPedra({ chave: 'middle-left', pedra: pedrasCentrais[0], agari: indiceAgari === 1 })}
-        {renderizarPedra({ chave: 'middle-right', pedra: pedrasCentrais[1], agari: indiceAgari === 2 })}
+        {renderizarPedra({
+          chave: 'middle-left',
+          pedra: pedrasCentrais[0],
+          agari: indiceAgari === 1,
+        })}
+        {renderizarPedra({
+          chave: 'middle-right',
+          pedra: pedrasCentrais[1],
+          agari: indiceAgari === 2,
+        })}
         {renderizarPedra({ chave: 'back-right', virada: true, agari: indiceAgari === 3 })}
       </span>
     )

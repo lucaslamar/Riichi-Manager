@@ -156,6 +156,82 @@ function meldDoGrupo(pedras: CodigoPedra[], marca: string, grupo: string): Meld 
 }
 
 /**
+ * Chamadas que cabem no último grupo digitado (`…123m` → chi, `…111p` → pon,
+ * `…1111s` → kan aberto e kan fechado). O teclado da notação só acende essas
+ * teclas, e todas escrevem a marca deduzida (`c`) ou `a`.
+ */
+export function chamadasPossiveis(texto: string): Set<Meld['tipo']> {
+  const possiveis = new Set<Meld['tipo']>()
+  const fim = normalizarNotacao(texto).match(/(\d+)([mpsz])$/)
+  if (!fim) return possiveis
+  const { tiles, error } = parseHand(fim[0])
+  if (error) return possiveis
+  const pedras = tiles.map(pedraDoTile)
+  for (const marca of ['c', 'a']) {
+    const meld = meldDoGrupo(pedras, marca, fim[0] + marca)
+    if (!('chave' in meld)) possiveis.add(meld.tipo)
+  }
+  return possiveis
+}
+
+/**
+ * Chamada escolhida antes do grupo (como no teclado de pedras): com um número só,
+ * completa o grupo pelo tipo — Pon `5`+`p` → `555pc`, Kan `1`+`s` → `1111sc`,
+ * Kan fechado → `…a`, Chi `1`+`m` → `123mc` (a partir da menor pedra). O 0 (5
+ * vermelho) entra uma vez e o resto é 5 comum (Pon `0p` → `055pc`). Com mais de um
+ * número, o grupo fica como foi digitado. Sem números, ou Chi impossível, `null`.
+ */
+export function expandirChamada(digitos: string, naipe: string, tipo: Meld['tipo']): string | null {
+  const marca = tipo === 'kanFechado' ? 'a' : 'c'
+  if (!digitos) return null
+  if (digitos.length > 1) return digitos + naipe + marca
+  const base = digitos === '0' ? '5' : digitos
+  if (tipo === 'pon') return digitos + base.repeat(2) + naipe + marca
+  if (tipo === 'kanAberto' || tipo === 'kanFechado') return digitos + base.repeat(3) + naipe + marca
+  const inicio = Number(base)
+  if (naipe === 'z' || inicio < 1 || inicio > 7) return null
+  return `${digitos}${inicio + 1}${inicio + 2}${naipe}${marca}`
+}
+
+/**
+ * Sequências de chi que contêm o número (sem naipe), da menor para a maior:
+ * `4` → `234`, `345`, `456`; `1` → só `123`. O 0 (5 vermelho) fica no lugar do 5.
+ */
+export function sequenciasChiComNumero(numero: string): string[] {
+  const valor = numero === '0' ? 5 : Number(numero)
+  const sequencias: string[] = []
+  for (let inicio = valor - 2; inicio <= valor; inicio++) {
+    if (inicio < 1 || inicio > 7) continue
+    const valores = [inicio, inicio + 1, inicio + 2]
+    sequencias.push(valores.map((atual) => (atual === valor ? numero : String(atual))).join(''))
+  }
+  return sequencias
+}
+
+/**
+ * Grupo que a chamada marcada antes completa a partir de um número, ainda sem
+ * naipe: Pon `8` → `888`, Kan `8` → `8888` (o 0 entra uma vez: Pon `0` → `055`).
+ * Chi depende da sequência escolhida (`sequenciasChiComNumero`); aqui, `null`.
+ */
+export function grupoDaChamada(numero: string, tipo: Meld['tipo']): string | null {
+  const base = numero === '0' ? '5' : numero
+  if (tipo === 'pon') return numero + base.repeat(2)
+  if (tipo === 'kanAberto' || tipo === 'kanFechado') return numero + base.repeat(3)
+  return null
+}
+
+/**
+ * Se mais um número cabe no grupo que ainda espera o naipe: cada valor no máximo
+ * 4 vezes (o 0 conta como 5) e o 0 uma vez só, porque há um 5 vermelho por naipe.
+ */
+export function podeDigitarNumero(pendentes: string, numero: string): boolean {
+  if (numero === '0' && pendentes.includes('0')) return false
+  const base = numero === '0' ? '5' : numero
+  const iguais = [...pendentes].filter((digito) => (digito === '0' ? '5' : digito) === base)
+  return iguais.length < 4
+}
+
+/**
  * Interpreta a mão inteira: os grupos marcados com `c`/`a` viram melds e o
  * resto é a mão fechada (a última pedra dela é a candidata a batida).
  * Ex.: `2388m447p 123mc 111pc 1111sa`. O texto deve vir de `normalizarNotacao`.
