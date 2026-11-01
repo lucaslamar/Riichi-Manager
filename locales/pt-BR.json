@@ -607,11 +607,12 @@
     "bubbleTapToDraw": "Jogador {{player}}, toque para sortear!",
     "bubbleResult": "Jogador {{player}}: {{wind}}!",
     "ronRon": "Ron ron!",
-    "tapToPlayAgain": "Toque para mais um sorteio"
+    "tapToPlayAgain": "Toque para mais um sorteio",
+    "continueTutorial": "Continue o tutorial"
   },
   "learn": {
-    "title": "Aprender a jogar",
-    "short": "Aprender",
+    "title": "Tutorial",
+    "short": "Tutorial",
     "tagline": {
       "one": "Riichi Mahjong do começo ao fim. Em {{count}} módulo você já joga a primeira partida.",
       "other": "Riichi Mahjong do começo ao fim. Em {{count}} módulos você já joga a primeira partida."

@@ -607,7 +607,8 @@
     "bubbleTapToDraw": "Player {{player}}, tap to draw!",
     "bubbleResult": "Player {{player}}: {{wind}}!",
     "ronRon": "Ron ron!",
-    "tapToPlayAgain": "Tap to draw again"
+    "tapToPlayAgain": "Tap to draw again",
+    "continueTutorial": "Continue the tutorial"
   },
   "learn": {
     "title": "Learn to play",
