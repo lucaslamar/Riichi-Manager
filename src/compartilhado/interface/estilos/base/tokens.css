@@ -68,4 +68,7 @@ body {
   --linha-divisoria: var(--cor-borda, #d9e0e8);
   --entrada-borda: var(--cor-borda-controle, #7b8794);
   --texto-erro: var(--cor-perigo, #b91c1c);
+  --texto-aviso: var(--cor-aviso, #8a4b00);
+  --primario-forte: var(--cor-primario, #1565c0);
+  --sobre-primario: var(--cor-sobre-primario, #ffffff);
 }

@@ -1,0 +1,165 @@
+/* Folha "Configurações de mesa". Cores só pelos tokens de tokens.css. */
+
+.cfg-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cfg-entrada {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 2px solid var(--entrada-borda);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.cfg-entrada:focus-visible,
+.cfg-segmento:focus-visible,
+.cfg-opcao input:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+.cfg-grupo {
+  margin: 20px 0 12px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding-bottom: 6px;
+  color: var(--texto-principal);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.cfg-duas-colunas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cfg-ajuda {
+  margin: -4px 0 12px;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+}
+
+.cfg-conjunto {
+  min-width: 0;
+  margin: 0 0 12px;
+  border: 0;
+  padding: 0;
+}
+
+.cfg-conjunto > legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cfg-uma {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.cfg-uma .cfg-campo {
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+.cfg-uma .cfg-entrada {
+  padding-inline: 6px;
+  text-align: center;
+}
+
+.cfg-aviso {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 8px 0 0;
+  color: var(--texto-aviso);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.cfg-segmentos {
+  display: flex;
+  gap: 6px;
+}
+
+.cfg-segmento {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 44px;
+  border: 2px solid var(--entrada-borda);
+  border-radius: 8px;
+  padding: 6px 4px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cfg-segmento--ativo {
+  border-color: var(--primario);
+  color: var(--sobre-primario);
+  background: var(--primario-forte);
+}
+
+.cfg-opcao {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.cfg-opcao > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cfg-opcao strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.cfg-opcao small {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}
+
+.cfg-opcao input {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  accent-color: var(--primario);
+}
+
+.cfg-acoes {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.cfg-acoes > button {
+  flex: 1 1 0;
+  min-height: 44px;
+}

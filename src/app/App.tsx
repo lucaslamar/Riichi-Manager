@@ -17,6 +17,7 @@ const PaginaJogadores = lazy(() => import('@/dominios/jogadores/interface/pagina
 const DemoSeletorJogador = lazy(
   () => import('@/dominios/jogadores/interface/paginas/DemoSeletorJogador'),
 )
+const DemoConfigMesa = lazy(() => import('@/dominios/centerpiece/interface/paginas/DemoConfigMesa'))
 
 export type TelaPrincipal =
   | 'calculadora'
@@ -26,13 +27,14 @@ export type TelaPrincipal =
   | 'torneio'
   | 'jogadores'
   | 'seletor'
+  | 'configmesa'
   | 'regras'
   | 'sobre'
 
 /**
  * Caminho temporário de teste enquanto os módulos não voltam ao menu: só no
- * servidor de desenvolvimento, com `?modulo=centerpiece`, `torneio`, `jogadores`
- * ou `seletor`.
+ * servidor de desenvolvimento, com `?modulo=centerpiece`, `torneio`, `jogadores`,
+ * `seletor` ou `configmesa`.
  */
 function telaInicial(): TelaPrincipal {
   if (import.meta.env.DEV) {
@@ -41,7 +43,8 @@ function telaInicial(): TelaPrincipal {
       modulo === 'centerpiece' ||
       modulo === 'torneio' ||
       modulo === 'jogadores' ||
-      modulo === 'seletor'
+      modulo === 'seletor' ||
+      modulo === 'configmesa'
     )
       return modulo
   }
@@ -124,6 +127,7 @@ export default function App() {
           {tela === 'torneio' && <PaginaTorneio aoVoltar={() => navegar('calculadora')} />}
           {tela === 'jogadores' && <PaginaJogadores />}
           {tela === 'seletor' && <DemoSeletorJogador />}
+          {tela === 'configmesa' && <DemoConfigMesa />}
         </Suspense>
         {tela === 'regras' && <PaginaRegras />}
         {tela === 'sobre' && <PaginaSobre />}

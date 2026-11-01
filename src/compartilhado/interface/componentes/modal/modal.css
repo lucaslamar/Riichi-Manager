@@ -513,3 +513,20 @@
     height: 34px;
   }
 }
+
+/* ─── Folha: no celular a modal sai de baixo, grudada na borda ───────────── */
+@media (max-width: 767px) {
+  .modal-fundo:has(> .modal-folha) {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-folha {
+    width: 100%;
+    max-width: none;
+    max-height: 85dvh;
+    border-width: 1px 0 0;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
