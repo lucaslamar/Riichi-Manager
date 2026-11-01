@@ -43,6 +43,7 @@ interface PropsMaoAtual {
   contexto: 'montagem' | 'finalizacao'
   acoesCabecalho?: ReactNode
   aoAbrirRegras?: () => void
+  aoVoltar?: () => void
   aoAbrirMenuAcoes: () => void
   aoAlternarAcao: (tipo: Acao['tipo']) => void
   aoAdicionarPedraDaMao: (pedra: CodigoPedra) => void
@@ -209,6 +210,7 @@ export function MaoAtual({
   contexto,
   acoesCabecalho,
   aoAbrirRegras,
+  aoVoltar,
   aoAbrirMenuAcoes,
   aoAlternarAcao,
   aoAdicionarPedraDaMao,
@@ -299,6 +301,16 @@ export function MaoAtual({
   return (
     <div className={`mao-editor-fixo ${maoEditorGrudado ? 'grudado' : ''}`}>
       <div className="cabecalho-mao-editor">
+        {aoVoltar && (
+          <button
+            type="button"
+            className="cp-calc-voltar-btn"
+            onClick={aoVoltar}
+            aria-label={t('actions.back')}
+          >
+            <i className="fas fa-arrow-left" aria-hidden="true" />
+          </button>
+        )}
         <h3 className="titulo-mao-editor">
           <i className="fas fa-layer-group" style={{ marginRight: 6 }} aria-hidden="true" />
           {tituloMao}

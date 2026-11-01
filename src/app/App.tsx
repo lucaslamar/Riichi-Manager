@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { lazy, Suspense, useCallback, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
@@ -9,12 +9,31 @@ import PaginaRegras from '@/dominios/configuracoes/interface/PaginaRegras'
 import GuiaAprender from '@/dominios/aprender-a-jogar/interface/GuiaAprender'
 import packageJson from '../../package.json'
 
+const PaginaCenterpiece = lazy(
+  () => import('@/dominios/centerpiece/interface/paginas/PaginaCenterpiece'),
+)
+const PaginaTorneio = lazy(() => import('@/dominios/torneio-fast/interface/paginas/PaginaTorneio'))
+
 export type TelaPrincipal =
   | 'calculadora'
   | 'calculadoraRapida'
   | 'sorteadorVentos'
+  | 'centerpiece'
+  | 'torneio'
   | 'regras'
   | 'sobre'
+
+/**
+ * Caminho temporário de teste enquanto os módulos não voltam ao menu: só no
+ * servidor de desenvolvimento, com `?modulo=centerpiece` ou `?modulo=torneio`.
+ */
+function telaInicial(): TelaPrincipal {
+  if (import.meta.env.DEV) {
+    const modulo = new URLSearchParams(window.location.search).get('modulo')
+    if (modulo === 'centerpiece' || modulo === 'torneio') return modulo
+  }
+  return 'calculadora'
+}
 
 /**
  * Ordem das telas ao deslizar o dedo: a da barra inferior. 'aprender' é o guia
@@ -32,7 +51,7 @@ const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
  * Componente raiz da aplicacao. A Calculadora de Mao e a porta de entrada.
  */
 export default function App() {
-  const [tela, setTela] = useState<TelaPrincipal>('calculadora')
+  const [tela, setTela] = useState<TelaPrincipal>(telaInicial)
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
   // a cada abertura, sempre na capa.
@@ -87,6 +106,10 @@ export default function App() {
         />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
+        <Suspense fallback={null}>
+          {tela === 'centerpiece' && <PaginaCenterpiece />}
+          {tela === 'torneio' && <PaginaTorneio aoVoltar={() => navegar('calculadora')} />}
+        </Suspense>
         {tela === 'regras' && <PaginaRegras />}
         {tela === 'sobre' && <PaginaSobre />}
       </main>

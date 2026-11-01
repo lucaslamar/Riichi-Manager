@@ -5,8 +5,17 @@ import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import ModalRegras from '../modais/regras/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
+import {
+  converterMaoParaCenterpiece,
+  type ContextoCenterpieceMao,
+  type ResultadoCalculoParaCenterpiece,
+} from '@/dominios/centerpiece/logica/tipos-integracao'
 
 interface PropsPaginaCalculadoraMao {
+  /** Aberta pelo modal de batida do Centerpiece: vitória e ventos vêm da mesa. */
+  aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
+  contextoCenterpiece?: ContextoCenterpieceMao
+  aoVoltar?: () => void
   /** Tela seguinte na ordem da barra inferior (Han e Fu). */
   aoIrParaProximaTela?: () => void
   /**
@@ -17,6 +26,9 @@ interface PropsPaginaCalculadoraMao {
 }
 
 export default function PaginaCalculadoraMao({
+  aoUsarResultado,
+  contextoCenterpiece,
+  aoVoltar,
   aoIrParaProximaTela,
   visivel = true,
 }: PropsPaginaCalculadoraMao = {}) {
@@ -32,7 +44,20 @@ export default function PaginaCalculadoraMao({
    */
   const telaGrande = useMediaQuery('(min-width: 768px), (min-width: 640px) and (min-height: 600px)')
 
-  const calculadora = useCalculadoraMao({ fluxoCompleto: telaGrande })
+  const calculadora = useCalculadoraMao(
+    contextoCenterpiece
+      ? {
+          initialMao: {
+            agari: contextoCenterpiece.tipoVitoria,
+            ventoRodada: contextoCenterpiece.ventoRodada,
+            ventoAssento: contextoCenterpiece.ventoAssento,
+            honba: contextoCenterpiece.honba,
+            riichi: contextoCenterpiece.jogadorRiichi ? { duplo: false, ippatsu: false } : null,
+          },
+          fluxoCompleto: true,
+        }
+      : { fluxoCompleto: telaGrande },
+  )
   const finalizandoMao = calculadora.etapaFinalizacaoAtiva && calculadora.maoProntaParaFinalizar
   /** Teclado de notação no lugar do de pedras. */
   const [entradaNotacao, setEntradaNotacao] = useState(false)
@@ -59,12 +84,28 @@ export default function PaginaCalculadoraMao({
   // não alcançarem a tela aberta.
   if (!visivel) return null
 
+  const aoUsarMao = aoUsarResultado
+    ? () => {
+        if (!calculadora.resultado) return
+        const convertido = converterMaoParaCenterpiece(calculadora.resultado, {
+          vencedorId: contextoCenterpiece?.vencedorId,
+          pagadorId: contextoCenterpiece?.pagadorId,
+          vencedorEhLeste: contextoCenterpiece?.vencedorEhLeste,
+          honbaUsado: contextoCenterpiece?.honba,
+        })
+        if (convertido) aoUsarResultado(convertido)
+      }
+    : undefined
+
   return (
     <div>
       <ModoCompletoCalculadora
         estado={calculadora}
-        cabecalho={<BarraCalculadora modo="completo" />}
+        cabecalho={contextoCenterpiece ? null : <BarraCalculadora modo="completo" />}
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
+        aoUsarMao={aoUsarMao}
+        contextoCenterpiece={contextoCenterpiece}
+        aoVoltar={contextoCenterpiece ? aoVoltar : undefined}
         entradaNotacao={entradaNotacao}
         aoMudarEntradaNotacao={setEntradaNotacao}
       />

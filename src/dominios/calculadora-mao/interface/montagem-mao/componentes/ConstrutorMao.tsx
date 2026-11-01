@@ -34,6 +34,8 @@ interface PropsConstrutorMao {
   /** Campo de notação no lugar do teclado de pedras; o estado fica na página (gestos). */
   entradaNotacao?: boolean
   aoMudarEntradaNotacao?: (ativa: boolean) => void
+  /** Seta de voltar no cabeçalho da mão (aberta pelo Centerpiece). */
+  aoVoltar?: () => void
 }
 
 /**
@@ -53,6 +55,7 @@ export default function ConstrutorMao({
   aoCalcularDireto,
   entradaNotacao = false,
   aoMudarEntradaNotacao,
+  aoVoltar,
 }: PropsConstrutorMao) {
   const { t } = useI18n()
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
@@ -375,6 +378,7 @@ export default function ConstrutorMao({
         contexto={contexto}
         acoesCabecalho={acoesCabecalho}
         aoAbrirRegras={aoAbrirRegras}
+        aoVoltar={aoVoltar}
         aoAbrirMenuAcoes={() => setMenuAcoesMaoAberto((aberto) => !aberto)}
         aoAlternarAcao={alternarAcaoMao}
         aoAdicionarPedraDaMao={adicionarPedraDaMao}

@@ -4,17 +4,22 @@ import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import { codigoBase } from '../../constantes'
 import { nomeYakuExibido } from '../../../logica/nomesYaku'
 import ModalResultado from '../../modais/resultado/ModalResultado'
+import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
 interface PropsResultadoMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
   modoFluxo?: 'montagem' | 'finalizacao'
+  aoUsarMao?: () => void
+  contextoCenterpiece?: ContextoCenterpieceMao
 }
 
 /** Resultado da mao montada, incluindo esperas, botao Calcular e modal final. */
 export default function ResultadoMaoCalculada({
   estado,
   modoFluxo = 'montagem',
+  aoUsarMao,
+  contextoCenterpiece,
 }: PropsResultadoMao) {
   const { t, idioma } = useI18n()
   const {
@@ -185,10 +190,16 @@ export default function ResultadoMaoCalculada({
           chomboMangan={estado.configuracao.chomboMangan}
           descricaoAcessivel={descreverResultado()}
           aoFechar={fecharModalResultado}
-          aoNovaMao={() => {
-            fecharModalResultado()
-            estado.limpar()
-          }}
+          aoUsarMao={resultadoValido ? aoUsarMao : undefined}
+          contextoCenterpiece={contextoCenterpiece}
+          aoNovaMao={
+            contextoCenterpiece
+              ? undefined
+              : () => {
+                  fecharModalResultado()
+                  estado.limpar()
+                }
+          }
         />
       )}
     </>

@@ -7,6 +7,7 @@ import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import BlocoDica from '../glossario/BlocoDica'
 import TextoGlossario from '../glossario/TextoGlossario'
 import { explicacaoDoYaku } from './destaqueYaku'
+import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
 const CHAVE_VENTO: Record<VentoMao, string> = {
   '1': 'winds.east',
@@ -49,12 +50,15 @@ export default function ExibicaoCompleta({
   mao,
   yakuSelecionado = null,
   aoSelecionarYaku,
+  contextoCenterpiece,
 }: {
   resultado: any
   mao?: Mao
   /** Yaku aberto na lista (mostra a explicação e destaca as pedras). */
   yakuSelecionado?: string | null
   aoSelecionarYaku?: (nome: string | null) => void
+  /** Faixa com quem bateu e a rodada, quando aberta pelo Centerpiece. */
+  contextoCenterpiece?: ContextoCenterpieceMao
 }) {
   const { t, idioma, numero } = useI18n()
   const pts = resultado.pontos
@@ -78,6 +82,15 @@ export default function ExibicaoCompleta({
         </div>
       )}
       {mao && <TagsVentos mao={mao} />}
+      {contextoCenterpiece && (
+        <div className="detalhes-contexto-resultado">
+          <span>{contextoCenterpiece.vencedorNome}</span>
+          <span>{t(contextoCenterpiece.tipoVitoria === 'ron' ? 'calculator.ron' : 'calculator.tsumo')}</span>
+          <span>
+            {t(CHAVE_VENTO[contextoCenterpiece.ventoRodada])} {contextoCenterpiece.rodadaNumero}
+          </span>
+        </div>
+      )}
       {pontosHonba > 0 && mao ? (
         <div className="linhas-pontos-resultado">
           <div className="linha-pontos-resultado">

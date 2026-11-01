@@ -5,6 +5,7 @@ import OpcoesMao from '../componentes/OpcoesMao'
 import ResultadoMaoCalculada from '../componentes/ResultadoMaoCalculada'
 import { BarraResumoMao } from '../componentes/BarraResumoMao'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
+import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
 // Mesma faixa do layout de duas colunas do celular deitado em responsivo.css.
 const MEDIA_CELULAR_DEITADO = '(orientation: landscape) and (max-height: 700px) and (max-width: 1200px)'
@@ -12,9 +13,13 @@ const MEDIA_CELULAR_DEITADO = '(orientation: landscape) and (max-height: 700px) 
 export function PaginaFinalizacaoMao({
   estado,
   acoesCabecalho,
+  aoUsarMao,
+  contextoCenterpiece,
 }: {
   estado: EstadoCalculadoraMao
   acoesCabecalho?: ReactNode
+  aoUsarMao?: () => void
+  contextoCenterpiece?: ContextoCenterpieceMao
 }) {
   const maoRef = useRef<HTMLDivElement>(null)
   const [maoVisivelNaTela, setMaoVisivelNaTela] = useState(true)
@@ -33,7 +38,15 @@ export function PaginaFinalizacaoMao({
   const mostrarResumo =
     !maoVisivelNaTela && estado.maoCompleta && estado.fluxoOpcoes.vitoriaDefinida
 
-  const resultado = <ResultadoMaoCalculada estado={estado} embutido modoFluxo="finalizacao" />
+  const resultado = (
+    <ResultadoMaoCalculada
+      estado={estado}
+      embutido
+      modoFluxo="finalizacao"
+      aoUsarMao={aoUsarMao}
+      contextoCenterpiece={contextoCenterpiece}
+    />
+  )
 
   return (
     <div className="pagina-finalizacao-mao">
@@ -65,6 +78,7 @@ export function PaginaFinalizacaoMao({
             estado={estado}
             embutido
             destinoFuriten={celularDeitado ? destinoFuriten : null}
+            contextoCenterpiece={contextoCenterpiece}
           />
           {!celularDeitado && resultado}
         </div>

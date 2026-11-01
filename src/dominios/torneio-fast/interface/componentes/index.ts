@@ -1,0 +1,5 @@
+export { ConfiguracaoTorneio } from './ConfiguracaoTorneio'
+export { RankingGeral } from './RankingGeral'
+export { TimerRodada } from './TimerRodada'
+export { PainelQualidade } from './PainelQualidade'
+export { GradeRodadas } from './GradeRodadas'
