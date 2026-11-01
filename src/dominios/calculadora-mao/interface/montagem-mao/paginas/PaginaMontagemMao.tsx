@@ -10,7 +10,6 @@ export function PaginaMontagemMao({
   aoCalcularDireto,
   entradaNotacao,
   aoMudarEntradaNotacao,
-  aoVoltar,
 }: {
   estado: EstadoCalculadoraMao
   mostrandoEsperas: boolean
@@ -19,11 +18,10 @@ export function PaginaMontagemMao({
   aoCalcularDireto?: () => void
   entradaNotacao?: boolean
   aoMudarEntradaNotacao?: (ativa: boolean) => void
-  aoVoltar?: () => void
 }) {
   return (
     <div className={`layout-montagem-calculadora ${mostrandoEsperas ? 'com-esperas' : 'sem-esperas'}`}>
-      <ConstrutorMao estado={estado} embutido contexto="montagem" aoAbrirRegras={aoAbrirRegras} aoCalcularDireto={aoCalcularDireto} entradaNotacao={entradaNotacao} aoMudarEntradaNotacao={aoMudarEntradaNotacao} aoVoltar={aoVoltar} />
+      <ConstrutorMao estado={estado} embutido contexto="montagem" aoAbrirRegras={aoAbrirRegras} aoCalcularDireto={aoCalcularDireto} entradaNotacao={entradaNotacao} aoMudarEntradaNotacao={aoMudarEntradaNotacao} />
       <ResultadoMaoCalculada estado={estado} embutido modoFluxo="montagem" />
     </div>
   )

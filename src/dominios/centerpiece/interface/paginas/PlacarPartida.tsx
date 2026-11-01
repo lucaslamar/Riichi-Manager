@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -29,6 +30,7 @@ import {
 import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
 import CardPartida from '../componentes/CardPartida'
 import JogarDados from '../componentes/JogarDados'
+import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
 import { iniciarBatida, type EstadoBatida } from '../hooks/estadoBatida'
 import {
@@ -197,21 +199,28 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
       {/* A mesa continua montada atrás da calculadora, com o timer pausado. */}
       <div hidden={!!batida?.calculadora}>
         <div className="centerpiece-mesa">
-          <TituloTela
-            aoVoltar={aoSair}
-            titulo={
-              <label className="ptd-seletor-mesa">
-                <span className="sr-only">{t('match.table.switch')}</span>
-                <select value={id} onChange={(evento) => aoTrocarDeMesa(evento.target.value)}>
-                  {abertas.map((aberta, indice) => (
-                    <option key={aberta.id} value={aberta.id}>
-                      {t('match.table.number', { number: indice + 1 })}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            }
-          />
+          {batida?.calculadora && vencedorAtual !== null ? (
+            <TituloTela
+              titulo={`${nomeDe(vencedorAtual)} · ${t(`calculator.${batida.tipo}`)}`}
+              aoVoltar={() => setBatida({ ...batida, calculadora: null })}
+            />
+          ) : (
+            <TituloTela
+              aoVoltar={aoSair}
+              titulo={
+                <label className="ptd-seletor-mesa">
+                  <span className="sr-only">{t('match.table.switch')}</span>
+                  <select value={id} onChange={(evento) => aoTrocarDeMesa(evento.target.value)}>
+                    {abertas.map((aberta, indice) => (
+                      <option key={aberta.id} value={aberta.id}>
+                        {t('match.table.number', { number: indice + 1 })}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              }
+            />
+          )}
 
           <div className="sr-only" aria-live="polite">
             {anuncio}
@@ -328,44 +337,34 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
         </div>
       </div>
 
-      {batida?.calculadora === 'hanFu' && vencedorAtual !== null && (
-        <div className="ptd-calculadora">
-          <button
-            type="button"
-            className="btn-contorno"
-            onClick={() => setBatida({ ...batida, calculadora: null })}
-          >
-            <i className="fas fa-arrow-left" aria-hidden="true" />
-            {t('actions.back')}
-          </button>
-          <p className="ptd-rotulo">
-            {nomeDe(vencedorAtual)} · {t(`calculator.${batida.tipo}`)}
-          </p>
-          <PaginaCalculadoraHanFu
-            aoUsarResultado={receberCalculo}
-            initialIsOya={vencedorEhDealer}
-            initialAgari={batida.tipo}
-            initialHonba={placar.honba}
-          />
-        </div>
-      )}
-
-      {batida?.calculadora === 'mao' && vencedorAtual !== null && (
-        <PaginaCalculadoraMao
-          aoUsarResultado={receberCalculo}
-          aoVoltar={() => setBatida({ ...batida, calculadora: null })}
-          contextoCenterpiece={{
-            tipoVitoria: batida.tipo,
-            ventoRodada: ventoMao(placar.rodadaVento),
-            ventoAssento: ventoMao(ventoDaCadeira(vencedorAtual, placar.cadeiraDealer)),
-            honba: placar.honba,
-            rodadaNumero: placar.rodadaNumero,
-            vencedorEhLeste: vencedorEhDealer,
-            vencedorNome: nomeDe(vencedorAtual),
-            jogadorRiichi: placar.riichi.includes(vencedorAtual),
-          }}
-        />
-      )}
+      {/* O CSS das calculadoras conta com elas como filhas diretas do `main`. */}
+      {batida?.calculadora &&
+        vencedorAtual !== null &&
+        createPortal(
+          batida.calculadora === 'hanFu' ? (
+            <PaginaCalculadoraHanFu
+              aoUsarResultado={receberCalculo}
+              initialIsOya={vencedorEhDealer}
+              initialAgari={batida.tipo}
+              initialHonba={placar.honba}
+            />
+          ) : (
+            <PaginaCalculadoraMao
+              aoUsarResultado={receberCalculo}
+              contextoCenterpiece={{
+                tipoVitoria: batida.tipo,
+                ventoRodada: ventoMao(placar.rodadaVento),
+                ventoAssento: ventoMao(ventoDaCadeira(vencedorAtual, placar.cadeiraDealer)),
+                honba: placar.honba,
+                rodadaNumero: placar.rodadaNumero,
+                vencedorEhLeste: vencedorEhDealer,
+                vencedorNome: nomeDe(vencedorAtual),
+                jogadorRiichi: placar.riichi.includes(vencedorAtual),
+              }}
+            />
+          ),
+          document.querySelector('main.conteudo-principal') ?? document.body,
+        )}
 
       {batida && !batida.calculadora && (
         <ModalBatida
@@ -451,35 +450,13 @@ function ResultadoFinalTela({
   aoFinalizar: () => void
   aoCorrigir: () => void
 }) {
-  const { t, numero } = useI18n()
-  const decimal = (valor: number) =>
-    `${valor > 0 ? '+' : ''}${numero(valor)}`
+  const { t } = useI18n()
 
   return (
     <section className="card ptd-resultado">
       <h2>{t('match.result.title')}</h2>
       <p className="ptd-apoio">{t(`match.result.reason.${partida.fim}`)}</p>
-      <ol className="ptd-resultado-lista">
-        {calcularResultado(partida).map((linha) => (
-          <li key={linha.cadeira}>
-            <span className="ptd-resultado-lugar">{t('match.result.place', { place: linha.colocacao })}</span>
-            <div className="ptd-resultado-dados">
-              <strong>{nomeDe(linha.cadeira)}</strong>
-              <span className="ptd-apoio">
-                {t('match.result.breakdown', {
-                  raw: numero(linha.pontosBrutos),
-                  uma: decimal(linha.uma),
-                  oka: decimal(linha.oka),
-                })}
-                {linha.multa > 0 ? ` · ${t('match.result.penalty', { points: numero(linha.multa) })}` : ''}
-              </span>
-            </div>
-            <strong className={linha.final < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
-              {decimal(linha.final)}
-            </strong>
-          </li>
-        ))}
-      </ol>
+      <ListaResultado linhas={calcularResultado(partida)} nomeDe={nomeDe} />
       <div className="ptd-acoes-folha">
         <button type="button" className="btn-contorno" onClick={aoCorrigir}>
           {t('match.result.correct')}

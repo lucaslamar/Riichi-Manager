@@ -5,8 +5,13 @@
  */
 
 /* ─── Comuns ──────────────────────────────────────────────────────────────── */
-.conteudo-principal:has(> .ptd-modulo) {
+.conteudo-principal:has(> .ptd-modulo):not(:has(> div > .card-mao-completa, > .calculadora-han-fu)) {
   display: block;
+}
+
+/* Calculadora aberta: ela ocupa o `main`, com a mesa montada e escondida. */
+.conteudo-principal:has(> div > .card-mao-completa, > .calculadora-han-fu) > .ptd-modulo {
+  display: none;
 }
 
 .ptd-resultado h2 {
@@ -238,15 +243,6 @@
 .ptd-card-inicio > span {
   color: var(--texto-apoio);
   font-size: 0.8125rem;
-}
-
-.ptd-card-inicio:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-}
-
-.ptd-card-inicio:disabled > i {
-  color: var(--texto-apoio);
 }
 
 .ptd-lista-mesas {
@@ -561,10 +557,6 @@
   text-align: center;
 }
 
-.ptd-calculadora {
-  padding: 12px;
-}
-
 /* ─── Dados ───────────────────────────────────────────────────────────────── */
 .ptd-dados {
   display: flex;
@@ -776,4 +768,121 @@
 
 .smp-largo {
   grid-column: span 2;
+}
+
+/* ─── Histórico ───────────────────────────────────────────────────────────── */
+.ptd-lista-historico {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ptd-item-historico {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.ptd-item-historico:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+.ptd-item-historico-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+}
+
+.ptd-placar-historico {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ptd-placar-historico > li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ptd-detalhe-historico .ptd-rotulo {
+  margin-top: 20px;
+  font-size: 1rem;
+}
+
+/* ─── Ranking ─────────────────────────────────────────────────────────────── */
+.ptd-filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ptd-filtros .ptd-segmento {
+  min-height: 44px;
+  font-size: 0.875rem;
+}
+
+.ptd-ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ptd-linha-ranking {
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+}
+
+.ptd-linha-ranking-topo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ptd-metricas {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  margin: 10px 0 0;
+}
+
+.ptd-metricas dt {
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+}
+
+.ptd-metricas dd {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }

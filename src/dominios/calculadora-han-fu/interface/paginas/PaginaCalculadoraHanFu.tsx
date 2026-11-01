@@ -101,7 +101,7 @@ export default function PaginaCalculadoraHanFu({
         )}
       </section>
 
-      {!aoUsarResultado && <TabelaReferenciaRapida referencia={referenciaRapida} />}
+      <TabelaReferenciaRapida referencia={referenciaRapida} />
     </main>
   )
 }

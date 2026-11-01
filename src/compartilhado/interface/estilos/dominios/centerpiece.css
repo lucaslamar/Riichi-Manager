@@ -1451,25 +1451,6 @@ body:has(.centerpiece-mesa) {
 }
 
 /* Seta de voltar no topo da calculadora de mão (contexto centerpiece) */
-.cp-calc-voltar-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  color: var(--escuro);
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin: 6px 0 0 8px;
-  padding: 2px 4px;
-  opacity: 0.6;
-  transition: opacity 0.15s;
-}
-
-.cp-calc-voltar-btn:hover {
-  opacity: 1;
-}
-
 /* Botão "Usar resultado no Centerpiece" */
 .cp-btn-usar-resultado {
   width: 100%;

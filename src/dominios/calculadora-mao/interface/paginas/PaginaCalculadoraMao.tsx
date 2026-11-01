@@ -15,7 +15,6 @@ interface PropsPaginaCalculadoraMao {
   /** Aberta pelo modal de batida do Centerpiece: vitória e ventos vêm da mesa. */
   aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
   contextoCenterpiece?: ContextoCenterpieceMao
-  aoVoltar?: () => void
   /** Tela seguinte na ordem da barra inferior (Han e Fu). */
   aoIrParaProximaTela?: () => void
   /**
@@ -28,7 +27,6 @@ interface PropsPaginaCalculadoraMao {
 export default function PaginaCalculadoraMao({
   aoUsarResultado,
   contextoCenterpiece,
-  aoVoltar,
   aoIrParaProximaTela,
   visivel = true,
 }: PropsPaginaCalculadoraMao = {}) {
@@ -105,7 +103,6 @@ export default function PaginaCalculadoraMao({
         aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
         aoUsarMao={aoUsarMao}
         contextoCenterpiece={contextoCenterpiece}
-        aoVoltar={contextoCenterpiece ? aoVoltar : undefined}
         entradaNotacao={entradaNotacao}
         aoMudarEntradaNotacao={setEntradaNotacao}
       />

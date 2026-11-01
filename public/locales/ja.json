@@ -872,12 +872,13 @@
       "tournamentHelp": "Fast Tournament",
       "history": "History",
       "ranking": "Ranking",
-      "comingSoon": "Coming soon",
       "playersHelp": "Player roster",
       "discard": "Discard",
       "discardNamed": "Discard table {{number}}",
       "discardTitle": "Discard this table?",
-      "discardHelp": "The game is deleted and stays out of the history and ranking."
+      "discardHelp": "The game is deleted and stays out of the history and ranking.",
+      "historyHelp": "Finished games",
+      "rankingHelp": "All games added up"
     },
     "simple": {
       "title": "Simple Centerpiece",
@@ -1006,6 +1007,33 @@
         "retorno": "Someone reached the return points in the extra round.",
         "agariYame": "The dealer ended with agari-yame."
       }
+    },
+    "history": {
+      "empty": "No finished games yet.",
+      "origin": {
+        "casual": "Casual",
+        "torneio": "Tournament"
+      }
+    },
+    "ranking": {
+      "period": "Period",
+      "origin": "Origin",
+      "periods": {
+        "mes": "This month",
+        "ano": "This year",
+        "tudo": "All time"
+      },
+      "origins": {
+        "todas": "All",
+        "casuais": "Casual",
+        "torneios": "Tournaments"
+      },
+      "empty": "No finished games for this filter.",
+      "games": "Games",
+      "averagePlace": "Average",
+      "first": "% 1st",
+      "fourth": "% 4th",
+      "tobi": "% tobi"
     }
   }
 }

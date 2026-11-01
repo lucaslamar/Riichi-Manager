@@ -879,12 +879,13 @@
       "tournamentHelp": "Torneio Fast",
       "history": "Histórico",
       "ranking": "Ranking",
-      "comingSoon": "Em breve",
       "playersHelp": "Cadastro de jogadores",
       "discard": "Descartar",
       "discardNamed": "Descartar mesa {{number}}",
       "discardTitle": "Descartar esta mesa?",
-      "discardHelp": "A partida é apagada e não entra no histórico nem no ranking."
+      "discardHelp": "A partida é apagada e não entra no histórico nem no ranking.",
+      "historyHelp": "Partidas finalizadas",
+      "rankingHelp": "Soma de todas as partidas"
     },
     "simple": {
       "title": "Centerpiece simples",
@@ -1013,6 +1014,33 @@
         "retorno": "Alguém chegou aos pontos de retorno na prorrogação.",
         "agariYame": "O dealer encerrou com agari-yame."
       }
+    },
+    "history": {
+      "empty": "Nenhuma partida finalizada ainda.",
+      "origin": {
+        "casual": "Casual",
+        "torneio": "Torneio"
+      }
+    },
+    "ranking": {
+      "period": "Período",
+      "origin": "Origem",
+      "periods": {
+        "mes": "Este mês",
+        "ano": "Este ano",
+        "tudo": "Tudo"
+      },
+      "origins": {
+        "todas": "Todas",
+        "casuais": "Casuais",
+        "torneios": "Torneios"
+      },
+      "empty": "Nenhuma partida finalizada neste filtro.",
+      "games": "Partidas",
+      "averagePlace": "Média",
+      "first": "% 1º",
+      "fourth": "% 4º",
+      "tobi": "% tobi"
     }
   }
 }

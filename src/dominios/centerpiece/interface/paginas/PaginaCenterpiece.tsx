@@ -8,6 +8,8 @@ import { CADEIRAS, KANJI_VENTO } from '../../logica/partida'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import { usePartidas } from '../hooks/usePartidas'
 import CenterpieceSimples from './CenterpieceSimples'
+import PaginaHistorico from './PaginaHistorico'
+import PaginaRanking from './PaginaRanking'
 import PlacarPartida from './PlacarPartida'
 import SetupPartida from './SetupPartida'
 import '../partida.css'
@@ -21,6 +23,8 @@ type TelaModulo =
   | { nome: 'andamento' }
   | { nome: 'jogadores' }
   | { nome: 'torneio' }
+  | { nome: 'historico' }
+  | { nome: 'ranking' }
   | { nome: 'mesa'; id: string }
 
 /** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
@@ -69,6 +73,8 @@ function TelasCenterpiece() {
     }
   }
   if (tela.nome === 'jogadores') return <PaginaJogadores aoVoltar={irInicio} />
+  if (tela.nome === 'historico') return <PaginaHistorico aoVoltar={irInicio} />
+  if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
   if (tela.nome === 'torneio') {
     return (
       <>
@@ -136,7 +142,7 @@ function TelasCenterpiece() {
     icone: string
     titulo: string
     texto: string
-    aoTocar?: () => void
+    aoTocar: () => void
   }[] = [
     {
       chave: 'nova',
@@ -171,7 +177,8 @@ function TelasCenterpiece() {
       chave: 'historico',
       icone: 'fa-clock-rotate-left',
       titulo: t('match.home.history'),
-      texto: t('match.home.comingSoon'),
+      texto: t('match.home.historyHelp'),
+      aoTocar: () => setTela({ nome: 'historico' }),
     },
     {
       chave: 'jogadores',
@@ -184,7 +191,8 @@ function TelasCenterpiece() {
       chave: 'ranking',
       icone: 'fa-ranking-star',
       titulo: t('match.home.ranking'),
-      texto: t('match.home.comingSoon'),
+      texto: t('match.home.rankingHelp'),
+      aoTocar: () => setTela({ nome: 'ranking' }),
     },
   ]
 
@@ -197,7 +205,6 @@ function TelasCenterpiece() {
             key={card.chave}
             type="button"
             className="ptd-card-inicio"
-            disabled={!card.aoTocar}
             onClick={card.aoTocar}
           >
             <i className={`fas ${card.icone}`} aria-hidden="true" />

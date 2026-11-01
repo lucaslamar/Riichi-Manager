@@ -15,7 +15,6 @@ interface PropsModoCompleto {
   aoMudarEntradaNotacao?: (ativa: boolean) => void
   aoUsarMao?: () => void
   contextoCenterpiece?: ContextoCenterpieceMao
-  aoVoltar?: () => void
 }
 
 /**
@@ -30,7 +29,6 @@ export default function ModoCompletoCalculadora({
   aoMudarEntradaNotacao,
   aoUsarMao,
   contextoCenterpiece,
-  aoVoltar,
 }: PropsModoCompleto) {
   const { t } = useI18n()
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -81,7 +79,6 @@ export default function ModoCompletoCalculadora({
             aoAbrirRegras={aoAbrirRegras}
             entradaNotacao={entradaNotacao}
             aoMudarEntradaNotacao={aoMudarEntradaNotacao}
-            aoVoltar={aoVoltar}
           />
         </section>
       ) : (
