@@ -1,5 +1,15 @@
 # Changelog - Mojoca
 
+## 5.9.0 - 2026-11-01
+
+### Adicionado
+
+- **Aprender a jogar em inglês**: o guia inteiro, com quizzes, desenhos e ranks. Japonês, chinês, coreano e lituano agora mostram o guia em inglês no lugar do português.
+
+### Corrigido
+
+- **Valores dos palitos no guia**: seguem o idioma (10,000 em inglês), em vez de sempre 10.000.
+
 ## 5.8.0 - 2026-11-01
 
 ### Adicionado

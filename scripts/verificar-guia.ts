@@ -4,6 +4,7 @@
  *
  * Uso: npm run test:guia
  */
+import { conteudoEn } from '../src/dominios/aprender-a-jogar/conteudo/en'
 import { conteudoEs } from '../src/dominios/aprender-a-jogar/conteudo/es'
 import { conteudoPtBR } from '../src/dominios/aprender-a-jogar/conteudo/pt-BR'
 
@@ -47,20 +48,23 @@ function diferencas(a: unknown, b: unknown, caminho: string, erros: string[]) {
 }
 
 const erros: string[] = []
-diferencas(
-  esqueleto(conteudoPtBR.tutorialParts),
-  esqueleto(conteudoEs.tutorialParts),
-  'es.tutorialParts',
-  erros,
-)
-if (conteudoPtBR.glossary.length !== conteudoEs.glossary.length) {
-  erros.push('es.glossary: quantidade de verbetes diferente do pt-BR')
+for (const [idioma, conteudo] of Object.entries({ en: conteudoEn, es: conteudoEs })) {
+  diferencas(
+    esqueleto(conteudoPtBR.tutorialParts),
+    esqueleto(conteudo.tutorialParts),
+    `${idioma}.tutorialParts`,
+    erros,
+  )
+  if (conteudoPtBR.glossary.length !== conteudo.glossary.length) {
+    erros.push(`${idioma}.glossary: quantidade de verbetes diferente do pt-BR`)
+  }
+  if (JSON.stringify(conteudo.tutorialParts).includes('{{onde:')) {
+    erros.push(`${idioma}: referência {{onde:…}} sem trocar`)
+  }
 }
-const textos = JSON.stringify(conteudoEs.tutorialParts)
-if (textos.includes('{{onde:')) erros.push('es: referência {{onde:…}} sem trocar')
 
 if (erros.length) {
   console.error(`Guia com problema (${erros.length}):\n${erros.join('\n')}`)
   process.exit(1)
 }
-console.log('Guia ok: es tem a mesma estrutura do pt-BR.')
+console.log('Guia ok: en e es têm a mesma estrutura do pt-BR.')

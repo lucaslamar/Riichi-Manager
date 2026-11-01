@@ -5,6 +5,7 @@
  * com 6 em volta e um verde de cada lado. Preto em `currentColor` e o vermelho
  * do guia, então seguem o tema (no escuro, o palito fica lilás).
  */
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 
 const LARGURA = 160
 const ALTURA = 22
@@ -49,7 +50,7 @@ const grade = (colunas: number, linhas: number, passo: number, raio: number) =>
 const centro = (raio: number) => ponto(MEIO_X, MEIO_Y, raio, 'var(--guia-vermelho)')
 
 interface Palito {
-  valor: string
+  valor: number
   quantos: number
   marcas: Marca[]
 }
@@ -57,7 +58,7 @@ interface Palito {
 /** Os quatro palitos de quem começa com 25.000 pontos. */
 const PALITOS: Palito[] = [
   {
-    valor: '10.000',
+    valor: 10000,
     quantos: 1,
     marcas: [
       centro(3.2),
@@ -66,9 +67,9 @@ const PALITOS: Palito[] = [
       ponto(MEIO_X + 26, MEIO_Y, 2.3, VERDE),
     ],
   },
-  { valor: '5.000', quantos: 2, marcas: [centro(3.2), ...flor(4, 6.4, 1.8, Math.PI / 4)] },
-  { valor: '1.000', quantos: 4, marcas: [centro(3.4)] },
-  { valor: '100', quantos: 10, marcas: grade(4, 2, 5.4, 1.7) },
+  { valor: 5000, quantos: 2, marcas: [centro(3.2), ...flor(4, 6.4, 1.8, Math.PI / 4)] },
+  { valor: 1000, quantos: 4, marcas: [centro(3.4)] },
+  { valor: 100, quantos: 10, marcas: grade(4, 2, 5.4, 1.7) },
 ]
 
 function DesenhoPalito({ palito }: { palito: Palito }) {
@@ -104,13 +105,14 @@ function DesenhoPalito({ palito }: { palito: Palito }) {
 
 /** Lista dos palitos: o desenho, o valor e quantos cada jogador recebe. */
 export default function PalitosGuia() {
+  const { numero } = useI18n()
   return (
     <ul className="guia-palitos">
       {PALITOS.map((palito) => (
         <li key={palito.valor} className="guia-palitos__item">
           <DesenhoPalito palito={palito} />
           <span className="guia-palitos__valor">
-            {palito.valor} <span className="guia-palitos__quantos">× {palito.quantos}</span>
+            {numero(palito.valor)} <span className="guia-palitos__quantos">× {palito.quantos}</span>
           </span>
         </li>
       ))}

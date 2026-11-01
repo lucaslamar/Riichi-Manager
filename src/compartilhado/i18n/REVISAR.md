@@ -10,7 +10,8 @@ e milhar com ponto (8.000). Corrija em `public/locales/es.json` e
 `src/dominios/calculadora-mao/conteudo/guia-bolso/es.ts`. O Aprender a jogar fica em
 `src/dominios/aprender-a-jogar/conteudo/es.ts`: comece a leitura pela Parte 1, e rode
 `npm run test:guia` depois de mudar o guia em pt-BR (ele acusa pedras, ids e respostas
-diferentes, mas não texto desatualizado). Conferir com jogadores:
+diferentes, mas não texto desatualizado; o mesmo vale para o inglês, em `conteudo/en.ts`).
+Conferir com jogadores:
 
 - **Termos de mesa:** "ficha" (pedra), "palo" (naipe), "trío" (trinca), "pareja" (par),
   "secuencia", "cuarteto" (quad), "llamada" (chamada), "robar" (comprar), "muro muerto",

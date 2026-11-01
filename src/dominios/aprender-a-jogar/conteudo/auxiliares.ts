@@ -113,13 +113,16 @@ export const criarBuscaModulo = (modulos: TutorialModule[]) => (id: string) => {
 }
 
 /** Troca `{{onde:<id>}}` em todos os textos do livro pelo lugar do módulo. */
-export function trocarReferencias(partes: TutorialPart[]) {
+export function trocarReferencias(
+  partes: TutorialPart[],
   // "Parte" e "Módulo" se escrevem igual em português e espanhol.
+  rotulos = { parte: 'Parte', modulo: 'Módulo' },
+) {
   const ondeEsta = new Map(
     partes.flatMap((parte) =>
       parte.modules.map((item) => [
         item.id,
-        `Parte ${parte.number}, Módulo ${item.number} (${item.title})`,
+        `${rotulos.parte} ${parte.number}, ${rotulos.modulo} ${item.number} (${item.title})`,
       ]),
     ),
   )
