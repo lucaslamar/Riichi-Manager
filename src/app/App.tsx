@@ -12,41 +12,23 @@ import packageJson from '../../package.json'
 const PaginaCenterpiece = lazy(
   () => import('@/dominios/centerpiece/interface/paginas/PaginaCenterpiece'),
 )
-const PaginaTorneio = lazy(() => import('@/dominios/torneio-fast/interface/paginas/PaginaTorneio'))
-const PaginaJogadores = lazy(() => import('@/dominios/jogadores/interface/paginas/PaginaJogadores'))
-const DemoSeletorJogador = lazy(
-  () => import('@/dominios/jogadores/interface/paginas/DemoSeletorJogador'),
-)
-const DemoConfigMesa = lazy(() => import('@/dominios/centerpiece/interface/paginas/DemoConfigMesa'))
 
 export type TelaPrincipal =
   | 'calculadora'
   | 'calculadoraRapida'
   | 'sorteadorVentos'
   | 'centerpiece'
-  | 'torneio'
-  | 'jogadores'
-  | 'seletor'
-  | 'configmesa'
   | 'regras'
   | 'sobre'
 
 /**
  * Caminho temporário de teste enquanto os módulos não voltam ao menu: só no
- * servidor de desenvolvimento, com `?modulo=centerpiece`, `torneio`, `jogadores`,
- * `seletor` ou `configmesa`.
+ * servidor de desenvolvimento, com `?modulo=centerpiece`.
  */
 function telaInicial(): TelaPrincipal {
   if (import.meta.env.DEV) {
     const modulo = new URLSearchParams(window.location.search).get('modulo')
-    if (
-      modulo === 'centerpiece' ||
-      modulo === 'torneio' ||
-      modulo === 'jogadores' ||
-      modulo === 'seletor' ||
-      modulo === 'configmesa'
-    )
-      return modulo
+    if (modulo === 'centerpiece') return modulo
   }
   return 'calculadora'
 }
@@ -124,10 +106,6 @@ export default function App() {
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
         <Suspense fallback={null}>
           {tela === 'centerpiece' && <PaginaCenterpiece />}
-          {tela === 'torneio' && <PaginaTorneio aoVoltar={() => navegar('calculadora')} />}
-          {tela === 'jogadores' && <PaginaJogadores />}
-          {tela === 'seletor' && <DemoSeletorJogador />}
-          {tela === 'configmesa' && <DemoConfigMesa />}
         </Suspense>
         {tela === 'regras' && <PaginaRegras />}
         {tela === 'sobre' && <PaginaSobre />}

@@ -63,15 +63,45 @@
 }
 
 /* ─── Tela Jogadores ──────────────────────────────────────────────────────── */
-.barra-jogadores {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
+.pagina-jogadores {
+  width: min(100%, 640px);
+  margin: 0 auto;
+  padding: 12px 16px 24px;
+  color: var(--texto-principal);
 }
 
-.barra-jogadores > button {
+.barra-jogadores {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.botao-adicionar-jogador {
   flex: 0 0 auto;
+  width: 48px;
   min-height: 44px;
+  padding: 0;
+}
+
+.busca-jogadores {
+  position: relative;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.busca-jogadores > i {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  color: var(--texto-apoio);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.busca-jogadores .entrada-jogador {
+  border-width: 1px;
+  border-radius: 12px;
+  padding-left: 40px;
 }
 
 .lista-jogadores,
@@ -83,24 +113,34 @@
   list-style: none;
 }
 
+.lista-jogadores {
+  gap: 8px;
+}
+
 .linha-cadastro {
   display: flex;
   align-items: center;
-  gap: 4px;
-  min-height: 56px;
-  border-bottom: 1px solid var(--linha-divisoria);
+  gap: 2px;
+  min-height: 64px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 8px 6px 8px 14px;
+  background: var(--superficie);
 }
 
 .dados-jogador {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+  gap: 2px;
   min-width: 0;
 }
 
 .nome-cadastro {
   overflow-wrap: anywhere;
+  font-size: 1rem;
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .apelido-jogador {
@@ -127,6 +167,10 @@
   color: var(--primario);
 }
 
+.linha-cadastro .acao-jogador {
+  color: var(--texto-apoio);
+}
+
 .acao-jogador:focus-visible,
 .botao-arquivados:focus-visible,
 .opcao-seletor-jogador:focus-visible {
@@ -135,13 +179,13 @@
 }
 
 .vazio-jogadores {
-  margin: 16px 0;
+  margin: 24px 0;
   color: var(--texto-apoio);
   text-align: center;
 }
 
 .arquivados-jogadores {
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .botao-arquivados {
@@ -174,17 +218,20 @@
   display: flex;
   width: 100%;
   min-height: 52px;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 8px;
+  align-items: center;
+  gap: 8px;
   border: 0;
   border-bottom: 1px solid var(--linha-divisoria);
-  padding: 12px 4px;
+  padding: 10px 4px;
   color: var(--texto-principal);
   background: transparent;
   cursor: pointer;
   font: inherit;
   text-align: left;
+}
+
+.opcao-seletor-jogador .dados-jogador {
+  flex: 1 1 0;
 }
 
 .opcao-seletor-jogador:hover:not(:disabled) {
@@ -197,7 +244,7 @@
 }
 
 .selo-jogador {
-  margin-left: auto;
+  flex: 0 0 auto;
   color: var(--texto-apoio);
   font-size: 0.8125rem;
   font-weight: 700;

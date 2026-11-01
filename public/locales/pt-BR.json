@@ -772,109 +772,8 @@
     "pendingTile": "{{number}} esperando o naipe"
   },
   "centerpiece": {
-    "setup": {
-      "title": "Configurar Mesa",
-      "subtitle": "Informe os jogadores e sorteia os ventos para iniciar.",
-      "playerNames": "Nomes dos jogadores",
-      "player": "Jogador {{n}}",
-      "namesHint": "Um nome por linha, exatamente 4 jogadores",
-      "namesPlaceholder": "Daniel\nVisoni\nSantiago\nMagalhães",
-      "namesError": {
-        "tooFew": "Informe 4 jogadores.",
-        "tooMany": "Informe apenas 4 jogadores."
-      },
-      "initialPoints": "Pontuação inicial",
-      "windAssignment": {
-        "title": "Definição dos ventos",
-        "aleatorio": {
-          "label": "Aleatório",
-          "help": "Sorteia os ventos entre os jogadores."
-        },
-        "ordemNomes": {
-          "label": "Ordem dos nomes",
-          "help": "1º Leste, 2º Sul, 3º Oeste, 4º Norte."
-        }
-      },
-      "custom": "Outro valor",
-      "customPointsError": "Informe uma pontuação inicial válida.",
-      "start": "Sortear ventos e iniciar",
-      "startRandom": "Sortear ventos e iniciar",
-      "startOrdered": "Iniciar mesa"
-    },
-    "continue": {
-      "title": "Partida em andamento",
-      "resume": "Continuar",
-      "restart": "Nova Mesa"
-    },
-    "round": {
-      "leste": "Leste",
-      "sul": "Sul"
-    },
-    "mesa": {
-      "honba": "Honba",
-      "riichiSticks": "Riichi sticks",
-      "registerWin": "Registrar Batida",
-      "riichi": "Riichi",
-      "riichiAtivo": "Riichi ativo",
-      "draw": "Empate",
-      "chombo": "Chombo",
-      "undo": "Desfazer",
-      "newGame": "Nova Mesa",
-      "confirmNewGame": "Isso vai apagar a mesa atual. Deseja continuar?"
-    },
     "win": {
-      "title": "Registrar Batida",
-      "type": "Tipo de vitória",
-      "winner": "Quem venceu?",
-      "payer": "Quem pagou? (Ron)",
-      "calcMethod": "Método de cálculo",
-      "byHanFu": "Han e Fu",
-      "byMao": "Calculadora de Mão",
-      "valueDealer": "Pago pelo Leste",
-      "valueNonDealer": "Pago por não-Leste",
-      "handValue": "Valor da mão",
-      "payerLoses": "Pagador perde",
-      "totalReceived": "Total recebido",
-      "next": "Próximo",
-      "summaryTitle": "Confirmar resultado",
-      "applyResult": "Aplicar resultado",
-      "recalculate": "Recalcular",
       "useResult": "Usar resultado no Centerpiece"
-    },
-    "menu": {
-      "acoes": "Ações do jogador",
-      "ganhouRon": "Venceu por Ron",
-      "ganhouTsumo": "Venceu por Tsumo",
-      "deuChombo": "Deu Chombo",
-      "declararRiichi": "Declarar Riichi"
-    },
-    "riichi": {
-      "title": "Declarar Riichi",
-      "player": "Jogador em Riichi",
-      "confirm": "Confirmar Riichi",
-      "notEnough": "Pontuação insuficiente para riichi"
-    },
-    "ryukyoku": {
-      "title": "Empate / Ryukyoku",
-      "tenpai": "Quem estava em Tenpai?",
-      "confirm": "Confirmar Empate",
-      "noPayment": "Nenhuma troca de pontos (0 ou 4 tenpai)."
-    },
-    "chombo": {
-      "title": "Chombo / Mão Inválida",
-      "player": "Quem cometeu chombo?",
-      "penalty": "Penalidade",
-      "preset": "Mangan padrão",
-      "custom": "Valor por jogador",
-      "valuePerPlayer": "Valor pago a cada jogador (pts)",
-      "confirm": "Aplicar Chombo"
-    },
-    "timer": {
-      "label": "Tempo da mesa",
-      "reiniciar": "Reiniciar tempo",
-      "esgotado": "Tempo esgotado",
-      "pausar": "Pausar timer",
-      "retomar": "Retomar timer"
     },
     "tournament": {
       "ranking": "Ranking",
@@ -966,5 +865,154 @@
     "recordDiscards": "Registrar descartes",
     "reset": "Reiniciar",
     "done": "Feito"
+  },
+  "match": {
+    "home": {
+      "title": "Centerpiece",
+      "newGame": "Nova partida",
+      "newGameHelp": "Com contagem de pontos",
+      "simpleHelp": "Sem pontos, só o centro da mesa",
+      "inProgress": "Em andamento",
+      "openCount": "Mesas abertas: {{count}}",
+      "noneOpen": "Nenhuma mesa aberta.",
+      "tournament": "Torneio",
+      "tournamentHelp": "Torneio Fast",
+      "history": "Histórico",
+      "ranking": "Ranking",
+      "comingSoon": "Em breve",
+      "playersHelp": "Cadastro de jogadores",
+      "discard": "Descartar",
+      "discardNamed": "Descartar mesa {{number}}",
+      "discardTitle": "Descartar esta mesa?",
+      "discardHelp": "A partida é apagada e não entra no histórico nem no ranking."
+    },
+    "simple": {
+      "title": "Centerpiece simples",
+      "nextDealer": "Próximo dealer",
+      "repeatDealer": "Repetir dealer",
+      "restart": "Recomeçar do 東1",
+      "restartHelp": "A rodada, o dealer e o honba voltam ao início.",
+      "honbaPlus": "Aumentar honba",
+      "honbaMinus": "Diminuir honba"
+    },
+    "setup": {
+      "title": "Nova partida",
+      "assign": "Atribuir",
+      "seatEmpty": "Assento {{wind}}: atribuir jogador",
+      "seatFilled": "Assento {{wind}}: {{name}}. Trocar",
+      "randomSeats": "Assentos aleatórios",
+      "start": "Iniciar mesa",
+      "rulesSummary": "{{start}} pontos · retorno {{target}} · uma {{uma}}"
+    },
+    "table": {
+      "switch": "Trocar de mesa",
+      "number": "Mesa {{number}}",
+      "round": "{{wind}} {{number}}",
+      "undo": "Desfazer",
+      "undone": "Última ação desfeita.",
+      "agariYame": "Encerrar partida (agari-yame)"
+    },
+    "card": {
+      "label": "{{name}}, {{wind}}, {{points}} pontos. Abrir menu",
+      "dealer": "Dealer"
+    },
+    "menu": {
+      "actions": "Ações do jogador",
+      "hisTurn": "É a vez dele",
+      "ron": "Venceu por ron",
+      "tsumo": "Venceu por tsumo",
+      "riichi": "Declarar Riichi",
+      "difference": "Diferença de pontos",
+      "chombo": "Deu chombo"
+    },
+    "difference": {
+      "title": "Diferença de {{name}}",
+      "behind": "faltam {{points}}",
+      "ahead": "sobram {{points}}"
+    },
+    "timer": {
+      "passTurn": "Timer, {{seconds}} segundos. Tocar para passar a vez",
+      "pause": "Pausar timer",
+      "resume": "Retomar timer",
+      "turnAnnounce": "Vez de {{name}}",
+      "expiredAnnounce": "Tempo esgotado: {{name}}"
+    },
+    "win": {
+      "title": "Registrar batida",
+      "step": "Etapa {{current}} de {{total}}",
+      "type": "Tipo de vitória",
+      "winner": "Quem venceu?",
+      "payer": "Quem pagou?",
+      "howToScore": "Como calcular a mão de {{name}}?",
+      "byHanFu": "Han e Fu",
+      "byHand": "Calculadora de Mão",
+      "next": "Próximo",
+      "apply": "Aplicar resultado",
+      "paidBy": "Pagou",
+      "sticks": "Palitos de Riichi",
+      "addWinner": "Mais um vencedor"
+    },
+    "draw": {
+      "title": "Ryukyoku",
+      "short": "Ryukyoku",
+      "whoTenpai": "Quem estava tenpai?",
+      "whoNagashi": "Nagashi Mangan de quem?",
+      "abortive": "Ou empate abortivo:",
+      "confirm": "Confirmar ryukyoku"
+    },
+    "abortive": {
+      "kyuushuKyuuhai": "Kyuushu kyuuhai",
+      "quatroVentos": "4 ventos",
+      "quatroKans": "4 kans",
+      "quatroRiichis": "4 Riichis",
+      "ronTriplo": "Ron triplo"
+    },
+    "chombo": {
+      "title": "Chombo de {{name}}?",
+      "confirm": "Aplicar chombo",
+      "reverseHelp": "Mangan reverso: paga 4.000 ao dealer e 2.000 aos outros. A mão é repetida.",
+      "dealerHelp": "Mangan reverso: paga 4.000 a cada jogador. A mão é repetida.",
+      "fixedHelp": "{{points}} pontos saem da pontuação final, depois da uma. A mão é repetida."
+    },
+    "event": {
+      "ron": "Ron",
+      "tsumo": "Tsumo",
+      "ryukyoku": "Ryukyoku",
+      "chombo": "Chombo",
+      "abortivo": "Abortivo",
+      "riichi": "Riichi",
+      "legado": "Mão anterior"
+    },
+    "hands": {
+      "title": "Mãos da partida",
+      "short": "Mãos",
+      "empty": "Nenhuma mão registrada ainda."
+    },
+    "dice": {
+      "roll": "Dados",
+      "title": "Jogar 2 dados",
+      "rollAgain": "Jogar de novo",
+      "description": "Dados: {{first}} e {{second}}, soma {{sum}}, {{wall}}",
+      "wall": {
+        "dealer": "parede do dealer",
+        "direita": "parede à direita",
+        "frente": "parede em frente",
+        "esquerda": "parede à esquerda"
+      }
+    },
+    "result": {
+      "title": "Resultado final",
+      "place": "{{place}}º",
+      "breakdown": "{{raw}} pontos · uma {{uma}} · oka {{oka}}",
+      "penalty": "multa {{points}}",
+      "correct": "Voltar e corrigir",
+      "finish": "Finalizar",
+      "reason": {
+        "ultimaMao": "A última mão terminou.",
+        "tobi": "Tobi: alguém ficou abaixo de zero.",
+        "retorno": "Alguém chegou aos pontos de retorno na prorrogação.",
+        "agariYame": "O dealer encerrou com agari-yame."
+      }
+    }
   }
 }

@@ -1,99 +1,211 @@
-import { useState } from 'react'
-import { useCenterpiece } from '../hooks/useCenterpiece'
-import SetupCenterpiece from '../componentes/SetupCenterpiece'
-import MesaCenterpiece from '../componentes/MesaCenterpiece'
-import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
-import type { ContextoCalcMao } from '../componentes/ModalRegistrarBatida'
-import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
+import { lazy, Suspense, useState } from 'react'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogadores'
+import { CADEIRAS, KANJI_VENTO } from '../../logica/partida'
+import { ModalConfirmacao } from '../componentes/ModaisPartida'
+import { usePartidas } from '../hooks/usePartidas'
+import CenterpieceSimples from './CenterpieceSimples'
+import PlacarPartida from './PlacarPartida'
+import SetupPartida from './SetupPartida'
+import '../partida.css'
 
-interface CalcMaoAberta {
-  contexto: ContextoCalcMao
-  aoReceberResultado: (r: ResultadoCalculoParaCenterpiece) => void
+const PaginaTorneio = lazy(() => import('@/dominios/torneio-fast/interface/paginas/PaginaTorneio'))
+
+type TelaModulo =
+  | { nome: 'inicio' }
+  | { nome: 'setup' }
+  | { nome: 'simples' }
+  | { nome: 'andamento' }
+  | { nome: 'jogadores' }
+  | { nome: 'torneio' }
+  | { nome: 'mesa'; id: string }
+
+/** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
+export default function PaginaCenterpiece() {
+  return (
+    <section className="ptd-modulo">
+      <TelasCenterpiece />
+    </section>
+  )
 }
 
-export default function PaginaCenterpiece() {
-  const {
-    estado,
-    modalAberto,
-    setModalAberto,
-    mensagemDesfazer,
-    iniciarMesa,
-    registrarRon,
-    registrarTsumo,
-    declararRiichi,
-    registrarRyukyoku,
-    registrarChomboPadrao,
-    registrarChomboManual,
-    desfazer,
-    reiniciarMesa,
-  } = useCenterpiece()
+/** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
+function TelasCenterpiece() {
+  const { t } = useI18n()
+  const { partidas, abertas, descartar } = usePartidas()
+  const { jogadores } = useJogadores()
+  const [tela, setTela] = useState<TelaModulo>({ nome: 'inicio' })
+  const [paraDescartar, setParaDescartar] = useState<string | null>(null)
+  const irInicio = () => setTela({ nome: 'inicio' })
 
-  const [calcMaoAberta, setCalcMaoAberta] = useState<CalcMaoAberta | null>(null)
-
-  const aoAbrirCalculadoraMao = (
-    contexto: ContextoCalcMao,
-    aoReceberResultado: (r: ResultadoCalculoParaCenterpiece) => void,
-  ) => {
-    setCalcMaoAberta({ contexto, aoReceberResultado })
+  const nomesDa = (id: string) => {
+    const partida = partidas.find((item) => item.id === id)
+    if (!partida) return ''
+    return CADEIRAS.map((cadeira) => {
+      const jogador = jogadores.find((item) => item.id === partida.assentos[cadeira].jogadorId)
+      return jogador ? nomeExibido(jogador) : '—'
+    }).join(' · ')
   }
 
-  const aoUsarResultadoCalc = (resultado: ResultadoCalculoParaCenterpiece) => {
-    const contexto = calcMaoAberta?.contexto
-    if (contexto) {
-      if (resultado.tipoVitoria === 'ron') {
-        const pontos = resultado.pontosRon
-        if (pontos != null && contexto.vencedorId && contexto.pagadorId) {
-          registrarRon({ vencedorId: contexto.vencedorId, pagadorId: contexto.pagadorId, pontos })
-          setModalAberto(null)
-        }
-      } else {
-        const { pagamentoDealer, pagamentoNaoDealer } = resultado
-        if (pagamentoDealer != null && pagamentoNaoDealer != null && contexto.vencedorId) {
-          registrarTsumo({ vencedorId: contexto.vencedorId, pagamentoDealer, pagamentoNaoDealer })
-          setModalAberto(null)
-        }
-      }
+  if (tela.nome === 'setup') {
+    return <SetupPartida aoVoltar={irInicio} aoIniciar={(id) => setTela({ nome: 'mesa', id })} />
+  }
+  if (tela.nome === 'simples') return <CenterpieceSimples aoVoltar={irInicio} />
+  if (tela.nome === 'mesa') {
+    const partida = partidas.find((item) => item.id === tela.id)
+    if (partida) {
+      return (
+        <PlacarPartida
+          key={partida.id}
+          partida={partida}
+          aoSair={irInicio}
+          aoFinalizar={irInicio}
+          aoTrocarDeMesa={(id) => setTela({ nome: 'mesa', id })}
+        />
+      )
     }
-    setCalcMaoAberta(null)
   }
-
-  if (!estado.iniciada) {
+  if (tela.nome === 'jogadores') return <PaginaJogadores aoVoltar={irInicio} />
+  if (tela.nome === 'torneio') {
     return (
-      <SetupCenterpiece
-        pontosIniciaisExistentes={undefined}
-        aoIniciar={iniciarMesa}
-      />
+      <>
+        <TituloTela titulo={t('match.home.tournament')} aoVoltar={irInicio} />
+        <Suspense fallback={null}>
+          <PaginaTorneio aoVoltar={irInicio} />
+        </Suspense>
+      </>
     )
   }
 
-  return (
-    <>
-      {/* MesaCenterpiece fica montado (estado preservado) mesmo durante a calculadora */}
-      <div style={calcMaoAberta ? { display: 'none' } : undefined}>
-        <MesaCenterpiece
-          estado={estado}
-          modalAberto={modalAberto}
-          mensagemDesfazer={mensagemDesfazer}
-          aoAbrirModal={setModalAberto}
-          aoRegistrarRon={registrarRon}
-          aoRegistrarTsumo={registrarTsumo}
-          aoDeclararRiichi={declararRiichi}
-          aoRegistrarRyukyoku={registrarRyukyoku}
-          aoRegistrarChomboPadrao={registrarChomboPadrao}
-          aoRegistrarChomboManual={registrarChomboManual}
-          aoDesfazer={desfazer}
-          aoReiniciar={reiniciarMesa}
-          aoAbrirCalculadoraMao={aoAbrirCalculadoraMao}
-        />
-      </div>
+  if (tela.nome === 'andamento') {
+    return (
+      <section className="ptd-inicio">
+        <TituloTela titulo={t('match.home.inProgress')} aoVoltar={irInicio} />
+        {abertas.length === 0 ? (
+          <p className="ptd-vazio">{t('match.home.noneOpen')}</p>
+        ) : (
+          <ul className="ptd-lista-mesas">
+            {abertas.map((partida, indice) => (
+              <li key={partida.id}>
+                <button
+                  type="button"
+                  className="ptd-mesa-aberta"
+                  onClick={() => setTela({ nome: 'mesa', id: partida.id })}
+                >
+                  <strong>
+                    {t('match.table.number', { number: indice + 1 })} ·{' '}
+                    {KANJI_VENTO[partida.placar.rodadaVento]}
+                    {partida.placar.rodadaNumero}
+                  </strong>
+                  <span className="ptd-apoio">{nomesDa(partida.id)}</span>
+                </button>
+                <button
+                  type="button"
+                  className="ptd-btn-icone"
+                  aria-label={t('match.home.discardNamed', { number: indice + 1 })}
+                  onClick={() => setParaDescartar(partida.id)}
+                >
+                  <i className="fas fa-trash" aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        {paraDescartar && (
+          <ModalConfirmacao
+            titulo={t('match.home.discardTitle')}
+            texto={t('match.home.discardHelp')}
+            rotuloConfirmar={t('match.home.discard')}
+            perigo
+            aoFechar={() => setParaDescartar(null)}
+            aoConfirmar={() => {
+              descartar(paraDescartar)
+              setParaDescartar(null)
+            }}
+          />
+        )}
+      </section>
+    )
+  }
 
-      {calcMaoAberta && (
-        <PaginaCalculadoraMao
-          aoUsarResultado={aoUsarResultadoCalc}
-          contextoCenterpiece={calcMaoAberta.contexto}
-          aoVoltar={() => setCalcMaoAberta(null)}
-        />
-      )}
-    </>
+  const cards: {
+    chave: string
+    icone: string
+    titulo: string
+    texto: string
+    aoTocar?: () => void
+  }[] = [
+    {
+      chave: 'nova',
+      icone: 'fa-plus',
+      titulo: t('match.home.newGame'),
+      texto: t('match.home.newGameHelp'),
+      aoTocar: () => setTela({ nome: 'setup' }),
+    },
+    {
+      chave: 'simples',
+      icone: 'fa-border-all',
+      titulo: t('match.simple.title'),
+      texto: t('match.home.simpleHelp'),
+      aoTocar: () => setTela({ nome: 'simples' }),
+    },
+    {
+      chave: 'andamento',
+      icone: 'fa-hourglass-half',
+      titulo: t('match.home.inProgress'),
+      texto: t('match.home.openCount', { count: abertas.length }),
+      aoTocar: () =>
+        setTela(abertas.length === 1 ? { nome: 'mesa', id: abertas[0].id } : { nome: 'andamento' }),
+    },
+    {
+      chave: 'torneio',
+      icone: 'fa-trophy',
+      titulo: t('match.home.tournament'),
+      texto: t('match.home.tournamentHelp'),
+      aoTocar: () => setTela({ nome: 'torneio' }),
+    },
+    {
+      chave: 'historico',
+      icone: 'fa-clock-rotate-left',
+      titulo: t('match.home.history'),
+      texto: t('match.home.comingSoon'),
+    },
+    {
+      chave: 'jogadores',
+      icone: 'fa-users',
+      titulo: t('players.title'),
+      texto: t('match.home.playersHelp'),
+      aoTocar: () => setTela({ nome: 'jogadores' }),
+    },
+    {
+      chave: 'ranking',
+      icone: 'fa-ranking-star',
+      titulo: t('match.home.ranking'),
+      texto: t('match.home.comingSoon'),
+    },
+  ]
+
+  return (
+    <section className="ptd-inicio">
+      <TituloTela titulo={t('match.home.title')} />
+      <div className="ptd-cards">
+        {cards.map((card) => (
+          <button
+            key={card.chave}
+            type="button"
+            className="ptd-card-inicio"
+            disabled={!card.aoTocar}
+            onClick={card.aoTocar}
+          >
+            <i className={`fas ${card.icone}`} aria-hidden="true" />
+            <strong>{card.titulo}</strong>
+            <span>{card.texto}</span>
+          </button>
+        ))}
+      </div>
+    </section>
   )
 }

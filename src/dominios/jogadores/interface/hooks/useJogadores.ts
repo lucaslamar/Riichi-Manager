@@ -5,6 +5,7 @@ import {
   adicionarJogador,
   definirArquivado,
   editarJogador,
+  garantirPorNomes,
   type DadosJogador,
   type Jogador,
   type ResultadoJogador,
@@ -47,6 +48,14 @@ const acoes = {
   editar: (id: string, dados: DadosJogador) => aplicar(editarJogador(lerCadastro(), id, dados)),
   arquivar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, true)),
   restaurar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, false)),
+}
+
+/** Ids de uma lista de nomes, cadastrando quem faltar. Usado pelas migrações. */
+export function garantirJogadoresPorNomes(nomes: string[]) {
+  const atual = lerCadastro()
+  const resultado = garantirPorNomes(atual, nomes, gerarId, new Date().toISOString())
+  if (resultado.jogadores !== atual) definirCadastro(resultado.jogadores)
+  return resultado.ids
 }
 
 export function useJogadores() {

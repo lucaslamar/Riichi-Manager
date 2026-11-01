@@ -762,3 +762,73 @@
     display: none;
   }
 }
+
+/* ─── Título da tela (TituloTela) ─────────────────────────────────────────── */
+.cabecalho-tela {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 4px;
+}
+
+.cabecalho-tela:empty {
+  display: none;
+}
+
+.titulo-tela {
+  overflow: hidden;
+  min-width: 0;
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 1rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.botao-voltar-tela {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-block: -6px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+}
+
+.botao-voltar-tela:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+/* Sem seta, o título vem ao lado da marca. */
+.cabecalho-tela > .titulo-tela:first-child::before {
+  content: '·';
+  margin-right: 8px;
+  color: var(--texto-apoio);
+}
+
+/* Com seta, ela e o título ocupam o lugar da marca (a sidebar mantém a marca). */
+@media not all and (min-width: 1024px) and (orientation: landscape) {
+  .barra-marca-aplicacao:has(.botao-voltar-tela) .marca-aplicacao,
+  .barra-marca-aplicacao:has(.botao-voltar-tela) .botao-menu-global {
+    display: none;
+  }
+}
+
+/* Sidebar: o título fica logo abaixo da marca, sem empurrar a navegação. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .cabecalho-tela {
+    flex: 0 0 auto;
+  }
+
+  .cabecalho-tela > .titulo-tela:first-child::before {
+    content: none;
+  }
+}

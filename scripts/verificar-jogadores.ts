@@ -13,6 +13,7 @@ import {
   editarJogador,
   nomeExibido,
   ordenarJogadores,
+  partesDoNome,
   type Jogador,
 } from '../src/dominios/jogadores/logica/jogadores'
 import {
@@ -111,6 +112,18 @@ teste('ordena pelo alfabeto do idioma', () => {
   assert.deepEqual(nomes, ['Ágata', 'Bia', 'Zeca'])
 })
 
+teste('nome com parênteses vira duas linhas; sem parênteses, a de baixo é o apelido', () => {
+  assert.deepEqual(partesDoNome({ nome: 'Shigeru Akagi (Akagi)', apelido: 'X' }), {
+    principal: 'Shigeru Akagi',
+    apoio: 'Akagi',
+  })
+  assert.deepEqual(partesDoNome({ nome: 'Ana', apelido: 'Aninha' }), {
+    principal: 'Ana',
+    apoio: 'Aninha',
+  })
+  assert.deepEqual(partesDoNome({ nome: 'Ana' }), { principal: 'Ana', apoio: undefined })
+})
+
 function memoria(inicial?: string): ArmazenamentoChaveValor & { valor: string | null } {
   return {
     valor: inicial ?? null,
@@ -131,8 +144,24 @@ teste('salva com versão e carrega de volta', () => {
   assert.deepEqual(carregarJogadores(armazenamento), lista)
 })
 
-teste('dados vazios ou corrompidos abrem com a lista vazia', () => {
-  assert.deepEqual(carregarJogadores(memoria()), [])
+teste('primeiro uso traz os jogadores padrão, com apelido curto para a mesa', () => {
+  const nomes = carregarJogadores(memoria()).map((jogador) => nomeExibido(jogador))
+  assert.deepEqual(nomes, ['Akagi', 'Saki', 'Tetsuya', 'Koizumi'])
+})
+
+teste('os padrão não voltam depois que o cadastro foi salvo', () => {
+  const armazenamento = memoria()
+  const arquivados = carregarJogadores(armazenamento).map((jogador) => ({
+    ...jogador,
+    arquivado: true,
+  }))
+  salvarJogadores(armazenamento, arquivados)
+  assert.ok(carregarJogadores(armazenamento).every((jogador) => jogador.arquivado))
+  salvarJogadores(armazenamento, [])
+  assert.deepEqual(carregarJogadores(armazenamento), [])
+})
+
+teste('dados corrompidos abrem com a lista vazia', () => {
   assert.deepEqual(carregarJogadores(memoria('{quebrado')), [])
   assert.deepEqual(carregarJogadores(memoria('{"jogadores":[{"id":1}]}')), [])
 })

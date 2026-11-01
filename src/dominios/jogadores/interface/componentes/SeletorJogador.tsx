@@ -4,6 +4,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import {
   buscarJogadores,
   ordenarJogadores,
+  partesDoNome,
   type DadosJogador,
   type Jogador,
 } from '../../logica/jogadores'
@@ -104,10 +105,12 @@ export default function SeletorJogador({
                       disabled={escolhido}
                       onClick={() => aoEscolher(jogador)}
                     >
-                      <span className="nome-cadastro">{jogador.nome}</span>
-                      {jogador.apelido && (
-                        <span className="apelido-jogador">{jogador.apelido}</span>
-                      )}
+                      <span className="dados-jogador">
+                        <span className="nome-cadastro">{partesDoNome(jogador).principal}</span>
+                        {partesDoNome(jogador).apoio && (
+                          <span className="apelido-jogador">{partesDoNome(jogador).apoio}</span>
+                        )}
+                      </span>
                       {escolhido && (
                         <span className="selo-jogador">{t('players.alreadyChosen')}</span>
                       )}

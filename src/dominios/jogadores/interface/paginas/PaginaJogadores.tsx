@@ -1,7 +1,13 @@
 import { useMemo, useState } from 'react'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { buscarJogadores, ordenarJogadores, type Jogador } from '../../logica/jogadores'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import {
+  buscarJogadores,
+  ordenarJogadores,
+  partesDoNome,
+  type Jogador,
+} from '../../logica/jogadores'
 import FormJogador from '../componentes/FormJogador'
 import { useJogadores } from '../hooks/useJogadores'
 import '../jogadores.css'
@@ -9,7 +15,17 @@ import '../jogadores.css'
 /** Formulário aberto: jogador novo ou o que está sendo renomeado. */
 type Edicao = { tipo: 'novo' } | { tipo: 'editar'; jogador: Jogador }
 
-export default function PaginaJogadores() {
+function DadosJogador({ jogador }: { jogador: Jogador }) {
+  const { principal, apoio } = partesDoNome(jogador)
+  return (
+    <div className="dados-jogador">
+      <span className="nome-cadastro">{principal}</span>
+      {apoio && <span className="apelido-jogador">{apoio}</span>}
+    </div>
+  )
+}
+
+export default function PaginaJogadores({ aoVoltar }: { aoVoltar: () => void }) {
   const { t, idioma } = useI18n()
   const { jogadores, adicionar, editar, arquivar, restaurar } = useJogadores()
   const [busca, setBusca] = useState('')
@@ -25,28 +41,30 @@ export default function PaginaJogadores() {
   const arquivados = encontrados.filter((jogador) => jogador.arquivado)
 
   return (
-    <section className="card pagina-jogadores">
-      <div className="cabecalho-secao">
-        <i className="fas fa-users icone-secao" aria-hidden="true" />
-        <div>
-          <h2>{t('players.title')}</h2>
-          <p className="subtitulo-secao">{t('players.subtitle')}</p>
-        </div>
-      </div>
+    <section className="pagina-jogadores">
+      <TituloTela titulo={t('players.title')} aoVoltar={aoVoltar} />
 
       <div className="barra-jogadores">
-        <input
-          className="entrada-jogador"
-          type="search"
-          value={busca}
-          placeholder={t('players.search')}
-          aria-label={t('players.search')}
-          autoComplete="off"
-          onChange={(evento) => setBusca(evento.target.value)}
-        />
-        <button type="button" className="btn-primario" onClick={() => setEdicao({ tipo: 'novo' })}>
+        <div className="busca-jogadores">
+          <i className="fas fa-magnifying-glass" aria-hidden="true" />
+          <input
+            className="entrada-jogador"
+            type="search"
+            value={busca}
+            placeholder={t('players.search')}
+            aria-label={t('players.search')}
+            autoComplete="off"
+            onChange={(evento) => setBusca(evento.target.value)}
+          />
+        </div>
+        <button
+          type="button"
+          className="btn-primario botao-adicionar-jogador"
+          aria-label={t('players.add')}
+          title={t('players.add')}
+          onClick={() => setEdicao({ tipo: 'novo' })}
+        >
           <i className="fas fa-plus" aria-hidden="true" />
-          {t('players.add')}
         </button>
       </div>
 
@@ -56,10 +74,7 @@ export default function PaginaJogadores() {
         <ul className="lista-jogadores">
           {ativos.map((jogador) => (
             <li key={jogador.id} className="linha-cadastro">
-              <div className="dados-jogador">
-                <span className="nome-cadastro">{jogador.nome}</span>
-                {jogador.apelido && <span className="apelido-jogador">{jogador.apelido}</span>}
-              </div>
+              <DadosJogador jogador={jogador} />
               <button
                 type="button"
                 className="acao-jogador"
@@ -98,10 +113,7 @@ export default function PaginaJogadores() {
             <ul className="lista-jogadores">
               {arquivados.map((jogador) => (
                 <li key={jogador.id} className="linha-cadastro linha-cadastro--arquivada">
-                  <div className="dados-jogador">
-                    <span className="nome-cadastro">{jogador.nome}</span>
-                    {jogador.apelido && <span className="apelido-jogador">{jogador.apelido}</span>}
-                  </div>
+                  <DadosJogador jogador={jogador} />
                   <button
                     type="button"
                     className="acao-jogador"

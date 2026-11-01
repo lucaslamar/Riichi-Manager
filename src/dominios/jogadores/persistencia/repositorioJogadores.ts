@@ -1,5 +1,5 @@
 import type { ArmazenamentoChaveValor } from '../../../compartilhado/persistencia/armazenamento'
-import type { Jogador } from '../logica/jogadores'
+import { JOGADORES_PADRAO, type Jogador } from '../logica/jogadores'
 
 const CHAVE = 'riichi-manager-jogadores'
 const VERSAO = 1
@@ -16,7 +16,8 @@ function ehJogador(valor: unknown): valor is Jogador {
 
 export function carregarJogadores(armazenamento: ArmazenamentoChaveValor): Jogador[] {
   const salvo = armazenamento.ler(CHAVE)
-  if (!salvo) return []
+  // Nada salvo = primeiro uso. Depois de salvo, o padrão não volta sozinho.
+  if (!salvo) return [...JOGADORES_PADRAO]
   try {
     const lido = JSON.parse(salvo) as { jogadores?: unknown }
     return Array.isArray(lido.jogadores) ? lido.jogadores.filter(ehJogador) : []

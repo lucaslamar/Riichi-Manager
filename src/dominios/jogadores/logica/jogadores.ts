@@ -13,6 +13,16 @@ export interface Jogador {
   arquivado: boolean
 }
 
+const CRIADOS_EM = '2026-11-01T00:00:00.000Z'
+
+/** Cadastro de fábrica, para a primeira partida já ter com quem jogar. */
+export const JOGADORES_PADRAO: readonly Jogador[] = [
+  { id: 'padrao-akagi', nome: 'Shigeru Akagi (Akagi)', apelido: 'Akagi', criadoEm: CRIADOS_EM, arquivado: false },
+  { id: 'padrao-saki', nome: 'Saki Miyanaga (Saki)', apelido: 'Saki', criadoEm: CRIADOS_EM, arquivado: false },
+  { id: 'padrao-asada', nome: 'Tetsuya Asada (Legendary Gambler Tetsuya)', apelido: 'Tetsuya', criadoEm: CRIADOS_EM, arquivado: false },
+  { id: 'padrao-koizumi', nome: 'Junichiro Koizumi (The Legend of Koizumi)', apelido: 'Koizumi', criadoEm: CRIADOS_EM, arquivado: false },
+]
+
 export type ErroJogador = 'nomeVazio' | 'nomeDuplicado'
 
 export type ResultadoJogador =
@@ -100,6 +110,26 @@ export function definirArquivado(jogadores: Jogador[], id: string, arquivado: bo
   return jogadores.map((jogador) => (jogador.id === id ? { ...jogador, arquivado } : jogador))
 }
 
+/** Para migrações: devolve o id de cada nome, cadastrando só quem ainda não existe. */
+export function garantirPorNomes(
+  jogadores: Jogador[],
+  nomes: string[],
+  gerarId: () => string,
+  criadoEm: string,
+): { jogadores: Jogador[]; ids: string[] } {
+  let lista = jogadores
+  const ids = nomes.map((nome) => {
+    const procurado = normalizarTexto(nome)
+    const existente = lista.find((jogador) => normalizarTexto(jogador.nome) === procurado)
+    if (existente) return existente.id
+    const resultado = adicionarJogador(lista, { nome: nome.trim() || '?' }, gerarId(), criadoEm)
+    if (!resultado.ok) return gerarId()
+    lista = resultado.jogadores
+    return resultado.jogador.id
+  })
+  return { jogadores: lista, ids }
+}
+
 /** Busca por nome ou apelido, ignorando maiúsculas e acentos. */
 export function buscarJogadores(jogadores: Jogador[], busca: string): Jogador[] {
   const procurado = normalizarTexto(busca)
@@ -113,6 +143,17 @@ export function buscarJogadores(jogadores: Jogador[], busca: string): Jogador[] 
 
 export function ordenarJogadores(jogadores: Jogador[], idioma: string): Jogador[] {
   return [...jogadores].sort((a, b) => a.nome.localeCompare(b.nome, idioma))
+}
+
+/**
+ * Duas linhas da lista: "Shigeru Akagi (Akagi)" vira o nome e, embaixo, o que está
+ * entre parênteses. Sem parênteses, a linha de baixo é o apelido.
+ */
+export function partesDoNome(jogador: Pick<Jogador, 'nome' | 'apelido'>) {
+  const partes = jogador.nome.match(/^(.+?)\s*\((.+)\)$/)
+  return partes
+    ? { principal: partes[1], apoio: partes[2] }
+    : { principal: jogador.nome, apoio: jogador.apelido }
 }
 
 /** Como o jogador aparece na mesa: o apelido, se tiver. */

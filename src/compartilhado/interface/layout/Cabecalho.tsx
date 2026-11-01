@@ -4,6 +4,7 @@ import type { TelaPrincipal } from '@/app/App'
 import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
 import { IconeMenu } from './IconeMenu'
+import { ID_TITULO_TELA } from './TituloTela'
 import packageJson from '../../../../package.json'
 
 interface PropsCabecalho {
@@ -283,6 +284,8 @@ export default function Cabecalho({
             <div className="marca-aplicacao">
               <h1 className="titulo-principal">{t('global.appName')}</h1>
             </div>
+
+            <div id={ID_TITULO_TELA} className="cabecalho-tela" />
 
             <nav className="sidebar-navegacao-desktop" aria-label={t('global.navigation')}>
               <MenuSecao

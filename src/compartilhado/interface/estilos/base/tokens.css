@@ -71,4 +71,12 @@ body {
   --texto-aviso: var(--cor-aviso, #8a4b00);
   --primario-forte: var(--cor-primario, #1565c0);
   --sobre-primario: var(--cor-sobre-primario, #ffffff);
+  --texto-positivo: var(--cor-sucesso, #1b7a3d);
+  --perigo-forte: var(--cor-perigo, #b91c1c);
+  --sobre-perigo: var(--cor-sobre-primario, #ffffff);
+  /* Jogador da vez: borda acesa e anel do timer. */
+  --cor-vez: var(--cor-destaque, #b47b00);
+  --fundo-timer: var(--cor-superficie, #ffffff);
+  --texto-timer: var(--cor-texto, #102a43);
+  --feltro: var(--cor-superficie-alt, #1f6b4a);
 }
