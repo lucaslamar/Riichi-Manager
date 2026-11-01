@@ -8,6 +8,13 @@ mahjong (yaku, han, fu, ventos, chamadas, pontuação) para conferência.
 Sem revisão nativa. Termos de estratégia a conferir: ja 筋引っかけ, 片筋, 跨ぎ筋, 表示盤
 (centerpiece), 切れ目 (abertura), 供託; zh-Hans 筋陷阱, 半筋, 跨筋, 指示盘, 开门, 错和, 押注.
 
+## Lituano (lt): Aprender a jogar
+
+Sem revisão nativa, em `src/dominios/aprender-a-jogar/conteudo/lt.ts`. Conferir principalmente
+declinações e estes termos: "anga" (abertura), "lazdelė" (palito), "statymas" (aposta do Riichi),
+"masalas" e "suji spąstai" (armadilha de suji), "pusinis suji", "centrinė plokštė" (centerpiece),
+"pakaitinis akmuo" (reposição do kan), "pavienis akmuo" (pedra solta).
+
 ## Espanhol (es)
 
 Espanhol latino-americano neutro, com "tú" (sem voseo, que Argentina, Uruguai e Paraguai usam)

@@ -1,28 +1,16 @@
 # Changelog - Mojoca
 
-## 5.10.0 - 2026-11-01
-
-### Adicionado
-
-- **Aprender a jogar em japonês e chinês**: o guia inteiro, com quizzes, desenhos e ranks, usando os termos que o app já usa em cada idioma. Coreano e lituano continuam com o guia em inglês.
-
-## 5.9.0 - 2026-11-01
-
-### Adicionado
-
-- **Aprender a jogar em inglês**: o guia inteiro, com quizzes, desenhos e ranks. Japonês, chinês, coreano e lituano agora mostram o guia em inglês no lugar do português.
-
-### Corrigido
-
-- **Valores dos palitos no guia**: seguem o idioma (10,000 em inglês), em vez de sempre 10.000.
-
 ## 5.8.0 - 2026-11-01
 
 ### Adicionado
 
 - **Espanhol**: o app agora tem Español no seletor de idioma e abre nele quando o navegador está em espanhol. Com o português e o inglês que já existiam, cobre todos os Estados Partes do Mercosul e os Estados Associados, menos o Suriname (holandês).
-- **Aprender a jogar em espanhol**: o guia inteiro, com quizzes, desenhos e ranks. Os outros idiomas continuam com o guia em português.
+- **Aprender a jogar em mais idiomas**: o guia inteiro, com quizzes, desenhos e ranks, agora também em espanhol, inglês, japonês, chinês e lituano. O coreano mostra o guia em inglês.
 - **Bandeira no seletor de idioma**: cada idioma mostra a bandeira entre parênteses, para achar o seu mesmo sem ler a escrita. No Windows, o navegador mostra as letras do país no lugar da bandeira.
+
+### Corrigido
+
+- **Valores dos palitos no guia**: seguem o idioma (10,000 em inglês), em vez de sempre 10.000.
 
 ## 5.7.5 - 2026-11-01
 
