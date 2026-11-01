@@ -769,13 +769,20 @@
 
 /* Wrapper sticky que agrupa barra de progresso + resumo contextual.
    top = altura do cabecalho-principal (sticky do app):
-   mobile ≤640px → 46px, desktop → 74px */
+   mobile ≤640px → 46px, desktop → 74px.
+   Altura 0: a barra fica por cima do conteúdo, sem ocupar espaço. Ela só existe
+   com a mão fora da tela; se empurrasse a página, a mão voltaria à tela, a barra
+   sairia e a tela ficaria tremendo durante a rolagem. */
 .cabecalho-sticky-finalizacao {
   position: sticky;
   top: 74px;
   z-index: 10;
-  background: var(--cor-superficie, #ffffff);
+  height: 0;
   margin: 0 -18px;
+}
+
+.cabecalho-sticky-finalizacao > * {
+  background: var(--cor-superficie, #ffffff);
 }
 
 @media (max-width: 640px) {

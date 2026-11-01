@@ -2889,6 +2889,7 @@
 
   .cabecalho-sticky-finalizacao {
     position: static;
+    height: auto;
     margin: 0 -8px;
   }
 

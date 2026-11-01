@@ -1,5 +1,11 @@
 # Changelog - Mojoca
 
+## 5.7.5 - 2026-11-01
+
+### Corrigido
+
+- **Tela tremendo na finalização da Calculadora de Mão**: ao escolher tsumo ou ron, a rolagem até os ventos tremia nos celulares. A barra de resumo da mão empurrava a página ao aparecer, a mão voltava à tela e a barra sumia, repetidas vezes. Agora ela não ocupa espaço na página.
+
 ## 5.7.4 - 2026-10-31
 
 ### Alterado

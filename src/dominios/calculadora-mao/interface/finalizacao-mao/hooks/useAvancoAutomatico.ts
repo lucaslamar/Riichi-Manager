@@ -12,7 +12,8 @@ function areaLivreDaJanela() {
   let topo = document.querySelector('.cabecalho-principal')?.getBoundingClientRect().bottom ?? 0
   const resumo = document.querySelector('.cabecalho-sticky-finalizacao')
   if (resumo && getComputedStyle(resumo).position === 'sticky') {
-    const caixa = resumo.getBoundingClientRect()
+    // O invólucro tem altura 0: quem ocupa a tela é a barra dentro dele.
+    const caixa = (resumo.firstElementChild ?? resumo).getBoundingClientRect()
     if (caixa.top <= topo + 1) topo = Math.max(topo, caixa.bottom)
   }
   let base = window.innerHeight
@@ -102,9 +103,9 @@ export function useAvancoAutomatico(atraso = ATRASO_PADRAO_MS) {
           return
         }
 
-        // Quando a mão sai da tela, a barra de resumo entra no topo da página e
-        // empurra o conteúdo para baixo no meio da rolagem. Ao fim dela, um
-        // ajuste curto (sempre para baixo) recoloca o alvo no lugar.
+        // Quando a mão sai da tela, a barra de resumo entra no topo, por cima
+        // do conteúdo, no meio da rolagem. Ao fim dela, um ajuste curto (sempre
+        // para baixo) tira o alvo de baixo da barra.
         const aoTerminar = () => {
           window.removeEventListener('scrollend', aoTerminar)
           if (temporizador.current !== reserva) return

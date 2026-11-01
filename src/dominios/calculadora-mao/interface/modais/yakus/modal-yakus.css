@@ -6,6 +6,8 @@
 
 .modal.yaku-modal {
   --modal-largura: 640px;
+  /* Guia de leitura: em celular alto, aproveita a tela até o limite de 90dvh. */
+  --modal-altura: 900px;
 
   /* 16px de margem lateral no celular. */
   width: min(var(--modal-largura), calc(100vw - 32px));
@@ -17,6 +19,64 @@
   padding-bottom: max(var(--modal-espaco), env(safe-area-inset-bottom));
 }
 
+/*
+ * Mesma proporção de leitura em todo celular: --guia-u vale 16px na largura do
+ * iPhone SE (conteúdo de 311px) e cresce com o corpo da modal, levando texto e
+ * pedras junto. Do tablet para cima, fica no tamanho normal.
+ */
+@media (max-width: 599px) {
+  .modal.yaku-modal {
+    --guia-u: clamp(16px, 5.14cqw, 20px);
+  }
+
+  .yaku-modal .yaku-tile {
+    --yaku-pedra: calc(var(--guia-u) * 1.375);
+  }
+}
+
+/* Texto de leitura maior e na cor principal; a parte compartilhada com outras
+   modais (abas, glossário, dicas) só muda aqui dentro. */
+.yaku-modal .abas-modal__aba {
+  font-size: calc(var(--guia-u, 1rem) * 0.8);
+}
+
+.yaku-modal .aba-glossario__sumario {
+  font-size: calc(var(--guia-u, 1rem) * 0.9);
+}
+
+.yaku-modal .glossario-bloco__titulo {
+  font-size: calc(var(--guia-u, 1rem) * 0.85);
+}
+
+.yaku-modal .glossario-bloco__intro,
+.yaku-modal .glossario-item__texto,
+.yaku-modal .glossario-item__topicos {
+  color: var(--cor-texto, #334e68);
+  font-size: calc(var(--guia-u, 1rem) * 0.95);
+  line-height: 1.5;
+}
+
+.yaku-modal .glossario-item__nome {
+  font-size: calc(var(--guia-u, 1rem) * 0.95);
+}
+
+.yaku-modal .glossario-item__apelido,
+.yaku-modal .yaku-ciclo__titulo {
+  font-size: calc(var(--guia-u, 1rem) * 0.9);
+}
+
+.yaku-modal .bloco-dica,
+.yaku-modal .bloco-dica.glossario-item__nota {
+  color: var(--cor-texto, #334e68);
+  font-size: calc(var(--guia-u, 1rem) * 0.9);
+  line-height: 1.45;
+}
+
+.yaku-modal .yaku-tile-numerada__numero,
+.yaku-modal .yaku-mao-rotulada__rotulo {
+  font-size: calc(var(--guia-u, 1rem) * 0.75);
+}
+
 /* ─── Grupos ─────────────────────────────────────────────────────────────── */
 .yaku-grupo {
   margin-top: 14px;
@@ -26,7 +86,7 @@
 .yaku-grupo__titulo {
   margin: 0 0 8px;
   color: var(--primario);
-  font-size: 0.8rem;
+  font-size: calc(var(--guia-u, 1rem) * 0.85);
   font-weight: 800;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -47,8 +107,8 @@
 /* ─── Cartão ─────────────────────────────────────────────────────────────── */
 .yaku-card {
   display: grid;
-  gap: 4px;
-  padding: 10px;
+  gap: 6px;
+  padding: 12px;
   border: 1px solid var(--cor-borda, #dbeafe);
   border-radius: 8px;
   /* Azul claro dos cartões de yaku do Resultado. */
@@ -71,7 +131,7 @@
 .yaku-card__nome {
   margin: 0;
   color: var(--cor-texto, #102a43);
-  font-size: 1rem;
+  font-size: calc(var(--guia-u, 1rem) * 1.05);
   font-weight: 800;
 }
 
@@ -83,15 +143,15 @@
 .yaku-card__pt {
   margin: 0;
   color: var(--cor-texto, #334e68);
-  font-size: 0.85rem;
+  font-size: calc(var(--guia-u, 1rem) * 0.95);
   font-weight: 700;
 }
 
 .yaku-card__descricao {
   margin: 0;
-  color: var(--cor-texto-suave, #486581);
-  font-size: 0.85rem;
-  line-height: 1.4;
+  color: var(--cor-texto, #334e68);
+  font-size: calc(var(--guia-u, 1rem) * 0.95);
+  line-height: 1.5;
 }
 
 .yaku-badge {
@@ -103,8 +163,8 @@
   border: 1px solid var(--cor-primario-borda, #bfdbfe);
   border-radius: 999px;
   background: var(--branco);
-  color: var(--cor-texto-suave, #486581);
-  font-size: 0.72rem;
+  color: var(--cor-texto, #486581);
+  font-size: calc(var(--guia-u, 1rem) * 0.78);
   white-space: nowrap;
 }
 
@@ -128,7 +188,6 @@
 /* Nota de rodapé em cinza, discreta. */
 .bloco-dica.yaku-nota-dora {
   margin-top: 16px;
-  font-size: 0.85rem;
 }
 
 /* Ovelhinha no título: um pouco maior que o texto, alinhada à linha. */
