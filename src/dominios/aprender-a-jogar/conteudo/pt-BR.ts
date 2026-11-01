@@ -1,7 +1,7 @@
 /**
  * Guia Aprender a jogar em pt-BR: um livro em três partes. Primeiras partidas
  * (das pedras ao fim da partida, para jogar sem contar pontos), Para ir além
- * (pontos, dora e kan) e Aprofundando (mais regras e estratégia), com
+ * (mão válida, pontos, dora e kan) e Aprofundando (mais regras e estratégia), com
  * glossário e créditos.
  *
  * É a versão longa das ajudas do app (botões "?", Glossário do Guia de bolso,
@@ -250,13 +250,19 @@ const modulos: TutorialModule[] = [
           { type: 'heading', text: '2. Onde ele abre' },
           {
             type: 'text',
-            md: 'Quem montou o muro sorteado conta, a partir da ==ponta direita== dele (olhando de onde está sentado), o mesmo número de colunas que deu nos dados. O muro se separa ali: essa é a ==abertura==.',
+            md: 'Quem montou o muro sorteado olha para ele de onde está sentado e conta as colunas ==da direita para a esquerda==: a coluna da ponta direita é a 1. Conta o mesmo número que deu nos dados e separa o muro logo depois dessa coluna: essa é a ==abertura==.',
+          },
+          {
+            type: 'image',
+            image: 'muroContagem',
+            alt: 'Um muro de 17 colunas, visto de frente por quem o montou. As 5 colunas da ponta direita estão numeradas: 1 na ponta direita e 5 mais para a esquerda. Uma seta vermelha aponta da direita para a esquerda até o corte da abertura, logo depois da 5ª coluna.',
+            caption: 'Dados 5: a coluna 1 é a da sua direita, e o corte vem depois da 5ª.',
           },
           {
             type: 'image',
             image: 'mesaAbertura',
-            alt: 'Mesa vista de cima. No muro do Leste, as colunas estão numeradas de 1 a 5, em vermelho, a partir da ponta direita de quem está sentado no Leste, e o muro está cortado depois da 5ª.',
-            caption: 'Com 5, o Leste conta 5 colunas a partir da sua direita e abre o muro.',
+            alt: 'Mesa vista de cima. No muro do Leste, as colunas estão numeradas de 1 a 5, em vermelho, da ponta direita de quem está sentado no Leste para a esquerda, e o muro está cortado depois da 5ª.',
+            caption: 'A mesma contagem vista de cima, no muro do Leste.',
           },
         ],
       },
@@ -273,13 +279,14 @@ const modulos: TutorialModule[] = [
           {
             type: 'image',
             image: 'muroMorto',
-            alt: 'Muro aberto visto de frente: à esquerda o muro de onde se compra, depois a abertura e, à direita, as 7 colunas do muro morto. Na 3ª coluna a partir da abertura, a pedra de cima está virada para cima: é o indicador de dora.',
-            caption: 'De frente para o muro: compras à esquerda da abertura, muro morto à direita.',
+            alt: 'Muro aberto visto de frente: à esquerda o muro de onde se compra, depois a abertura e, à direita, as 7 colunas do muro morto, numeradas de 1 a 7 a partir da abertura. Na coluna 3, a pedra de cima está virada para cima: é o indicador de dora.',
+            caption:
+              'De frente para o muro: compras à esquerda da abertura, muro morto à direita, numerado a partir da abertura.',
           },
           { type: 'heading', text: 'Se os dados derem menos de 7' },
           {
             type: 'text',
-            md: 'À direita da abertura sobram menos de 7 colunas para o muro morto. ==Complete o muro morto com o muro vizinho==, à direita. No exemplo dos dados 5, ficam 5 colunas no muro do Leste e as outras 2 vêm do muro do Sul.',
+            md: 'À direita da abertura ficam só as colunas que você contou nos dados, menos de 7. ==Complete o muro morto com o muro vizinho==, à direita. No exemplo dos dados 5, ficam 5 colunas no muro do Leste e as outras 2 vêm do muro do Sul.',
           },
           {
             type: 'image',
@@ -299,7 +306,7 @@ const modulos: TutorialModule[] = [
           { type: 'heading', text: 'O indicador de dora' },
           {
             type: 'text',
-            md: 'Conte ==3 colunas a partir da abertura== e vire para cima a pedra de cima da 3ª. Ela é o **indicador de dora**, que você vai conhecer na {{onde:dora}}.',
+            md: 'Agora a contagem é ao contrário da dos dados: conte ==3 colunas da abertura para a direita== e vire para cima a pedra de cima da 3ª. Ela é o **indicador de dora**, que você vai conhecer na {{onde:dora}}.',
           },
           {
             type: 'tip',
@@ -316,7 +323,7 @@ const modulos: TutorialModule[] = [
             type: 'steps',
             items: [
               {
-                md: 'A compra começa ==à esquerda da abertura== (para quem montou aquele muro) e segue no sentido da seta, muro após muro. O muro morto fica de fora. Visto de cima, as pedras saem do muro no sentido **horário**: o contrário da ordem da vez, que é anti-horária.',
+                md: 'A compra começa ==na coluna logo à esquerda da abertura== (para quem montou aquele muro) e segue ==para a esquerda==, muro após muro, como mostra a seta. O muro morto fica de fora. Visto de cima, as pedras saem do muro no sentido **horário**: o contrário da ordem da vez, que é anti-horária.',
                 image: 'mesaCompra',
                 alt: 'Mesa vista de cima. O muro do Leste está aberto; do lado do canto fica o muro morto, com contorno vermelho, dobrando para o muro do Sul. Do outro lado da abertura sai uma seta vermelha que segue pelo muro do Leste e depois pelo do Norte, no sentido horário.',
               },
@@ -324,6 +331,11 @@ const modulos: TutorialModule[] = [
               'Cada jogador pega mais **1 pedra** e fica com 13.',
               'O oya fica com a **14ª pedra** e abre o jogo com o primeiro descarte.',
             ],
+          },
+          { type: 'heading', text: 'Resumo: para que lado contar' },
+          {
+            type: 'text',
+            md: 'Sempre de frente para o muro, como quem o montou:\n- **Dados**: da ponta direita para a esquerda.\n- **Muro morto e indicador**: da abertura para a direita.\n- **Compras**: da abertura para a esquerda.',
           },
         ],
       },
@@ -369,7 +381,7 @@ const modulos: TutorialModule[] = [
           { label: 'No Oeste: 4 colunas nele + 3 no Sul' },
         ],
         answer:
-          'Contando a partir do oya em sentido anti-horário, o 4 cai em quem está à esquerda dele: o Norte. Ele conta 4 colunas a partir da sua ponta direita e abre. Só cabem 4 colunas do muro morto ali; as outras 3 vêm do muro vizinho à direita do Norte, que é o do Leste.',
+          'Contando a partir do oya em sentido anti-horário, o 4 cai em quem está à esquerda dele: o Norte. Ele conta 4 colunas, da sua ponta direita para a esquerda, e abre. Só cabem 4 colunas do muro morto ali; as outras 3 vêm do muro vizinho à direita do Norte, que é o do Leste.',
       },
     ],
   },
@@ -606,15 +618,15 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'yakus',
-    number: 5,
+    number: 6,
     title: 'Mão válida',
     cover: 'Completa não basta: para vencer, a mão precisa de um yaku.',
     coverTip:
-      'Antes de seguir, jogue **uma partida sem yaku**: vale vencer com qualquer mão completa. Depois deste módulo, jogue a próxima **já valendo o yaku**.',
+      'Ao terminar este módulo, jogue **uma rodada já valendo o yaku**, antes de passar para os pontos.',
     pages: [
       {
         id: 'sem-yaku',
-        number: '5.1',
+        number: '6.1',
         title: 'Sem yaku, sem vitória',
         termos: ['yaku'],
         blocks: [
@@ -627,7 +639,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'yakus-iniciantes',
-        number: '5.2',
+        number: '6.2',
         title: 'Yakus para começar',
         termos: [
           'riichi',
@@ -844,6 +856,8 @@ const modulos: TutorialModule[] = [
     number: 7,
     title: 'Pontos',
     cover: 'Quanto vale a sua mão e como pagar.',
+    coverTip:
+      'Já jogou uma rodada valendo o yaku? Se ainda não, **jogue uma agora**, ainda sem contar pontos, e volte depois.',
     pages: [
       {
         id: 'palitos',
@@ -1144,13 +1158,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'fim-partida',
-    number: 6,
+    number: 5,
     title: 'Fim da partida',
     cover: 'Empate, o próximo oya e quando a partida acaba.',
     pages: [
       {
         id: 'empate',
-        number: '6.1',
+        number: '5.1',
         title: 'Empate',
         termos: ['empate', 'tenpai'],
         blocks: [
@@ -1170,7 +1184,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'proxima-mao',
-        number: '6.2',
+        number: '5.2',
         title: 'A próxima mão',
         termos: ['oya', 'renchan'],
         blocks: [
@@ -1182,7 +1196,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'fim',
-        number: '6.3',
+        number: '5.3',
         title: 'Tonpuusen',
         blocks: [
           {
@@ -2008,20 +2022,20 @@ export const tutorialParts: TutorialPart[] = [
     id: 'primeiras-partidas',
     number: 1,
     title: 'Primeiras partidas',
-    cover: 'Tudo o que você precisa para jogar, sem contar pontos.',
-    modules: ['pedras', 'mesa', 'mao', 'turno', 'yakus', 'fim-partida'].map(modulo),
+    cover: 'Tudo o que você precisa para jogar uma rodada, sem yaku e sem contar pontos.',
+    modules: ['pedras', 'mesa', 'mao', 'turno', 'fim-partida'].map(modulo),
   },
   {
     id: 'ir-alem',
     number: 2,
     title: 'Para ir além',
     cover:
-      'Pontos, dora e kan também fazem parte do jogo: numa partida de verdade, tudo isso entra na mesa.',
+      'Mão válida, pontos, dora e kan também fazem parte do jogo: numa partida de verdade, tudo isso entra na mesa.',
     milestone: {
       title: 'Você já pode jogar!',
-      md: 'Com o que você viu até aqui já dá para jogar uma partida inteira. Nas primeiras, não precisa contar pontos: quem vence com uma mão válida ganha a mão, e o Leste passa adiante como no fim da partida.\nO que você viu até aqui é a **base**. O jogo completo vai além, e os próximos módulos mostram o resto.',
+      md: 'Antes de seguir, ==jogue uma rodada== (um tonpuusen). Por enquanto, sem yaku e sem contar pontos: quem completa a mão ganha, e o Leste passa adiante como você acabou de ver.\nO que você viu até aqui é a **base**. O jogo completo vai além, e os próximos módulos mostram o resto.',
     },
-    modules: ['pontos', 'dora', 'kan'].map(modulo),
+    modules: ['yakus', 'pontos', 'dora', 'kan'].map(modulo),
   },
   {
     id: 'aprofundando',

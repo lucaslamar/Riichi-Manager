@@ -18,6 +18,7 @@ export type IlustracaoGuia =
   | 'muroQuadrado'
   | 'mesaDados'
   | 'mesaAbertura'
+  | 'muroContagem'
   | 'muroMorto'
   | 'muroMortoKan'
   | 'muroMortoCurto'

@@ -258,6 +258,66 @@ function MuroFileira({ padroes, id, alt }: PropsDesenho) {
 }
 
 /**
+ * Um muro de frente, como quem o montou vê: com dados 5, as colunas 1 a 5
+ * contadas da ponta direita para a esquerda e o corte depois da 5ª.
+ */
+function MuroContagem({ padroes, id, alt }: PropsDesenho) {
+  const chao = 96
+  const inicio = 12
+  const vao = 12
+  const colunasAntes = 12
+  const contadas = 5
+  const inicioContadas = inicio + colunasAntes * LARGURA + vao
+  const fim = inicioContadas + contadas * LARGURA + FUNDO_X
+  const xCorte = inicioContadas - vao / 2
+  return (
+    <Quadro largura={322} altura={160} id={id} alt={alt}>
+      <Texto tamanho={ROTULO} x={fim} y={24} ancora="end" destaque>
+        conte da direita para a esquerda
+      </Texto>
+      <path
+        d={`M${fim} 40 H${xCorte + 6}`}
+        stroke={VERMELHO}
+        strokeWidth={2.4}
+        markerEnd={padroes.seta}
+      />
+      <Texto tamanho={ROTULO} x={xCorte - 5} y={44} ancora="end" destaque>
+        abertura
+      </Texto>
+      {Array.from({ length: colunasAntes }, (_, indice) => (
+        <Coluna key={`antes-${indice}`} x={inicio + indice * LARGURA} y={chao} padroes={padroes} />
+      ))}
+      {Array.from({ length: contadas }, (_, indice) => {
+        const x = inicioContadas + indice * LARGURA
+        return (
+          <g key={`contada-${indice}`}>
+            <Coluna x={x} y={chao} padroes={padroes} />
+            <Texto x={x + LARGURA / 2} y={chao + 13} tamanho={11} peso={800} destaque>
+              {contadas - indice}
+            </Texto>
+          </g>
+        )
+      })}
+      <path
+        d={`M${xCorte} 32 V${chao + 6}`}
+        stroke={VERMELHO}
+        strokeDasharray="3 2"
+        strokeWidth={1.8}
+      />
+      <Texto tamanho={ROTULO} x={inicio} y={chao + 13} ancora="start">
+        ← esquerda
+      </Texto>
+      <Texto tamanho={ROTULO} x={fim} y={chao + 30} ancora="end">
+        sua direita →
+      </Texto>
+      <Texto tamanho={ROTULO} x={161} y={148} peso={500}>
+        você, sentado de frente para o seu muro
+      </Texto>
+    </Quadro>
+  )
+}
+
+/**
  * Linha guia de um rótulo até o ponto do desenho: sai logo abaixo do texto e
  * termina numa bolinha em cima do alvo. Os rótulos ficam todos fora do muro,
  * em faixas próprias, para nenhum texto passar por cima de outro nem do desenho.
@@ -347,11 +407,15 @@ function MuroMorto({ padroes, id, alt, kan = false }: PropsDesenho & { kan?: boo
               altura={kan && numero === 1 ? 1 : 2}
               virada={numero === 3 || (kan && numero === 4)}
             />
-            {kan && (
-              <Texto x={colunaX(numero) + LARGURA / 2} y={chao + 11} tamanho={8} peso={600}>
-                {numero}
-              </Texto>
-            )}
+            <Texto
+              x={colunaX(numero) + LARGURA / 2}
+              y={chao + 11}
+              tamanho={kan ? 8 : 10}
+              peso={kan ? 600 : 800}
+              destaque={!kan && numero <= 3}
+            >
+              {numero}
+            </Texto>
           </g>
         )
       })}
@@ -1196,13 +1260,13 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
           {
             x: DENTRO.direita - 6,
             y: DENTRO.base - 46,
-            texto: '1 = a ponta direita',
+            texto: '1 = a direita do Leste',
             ancora: 'end',
           },
           {
             x: DENTRO.direita - 6,
             y: DENTRO.base - 32,
-            texto: 'de quem senta no Leste',
+            texto: '← conta para a esquerda',
             ancora: 'end',
           },
           {
@@ -1216,6 +1280,7 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
       }}
     />
   ),
+  muroContagem: MuroContagem,
   muroMorto: MuroMorto,
   muroMortoKan: (props) => <MuroMorto {...props} kan />,
   muroMortoCurto: (props) => (

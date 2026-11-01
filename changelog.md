@@ -1,5 +1,12 @@
 # Changelog - Mojoca
 
+## 5.7.4 - 2026-10-31
+
+### Alterado
+
+- **Aprender a jogar, montar o muro**: o Módulo 2 agora diz para que lado contar. Os dados contam da ponta direita para a esquerda, com um desenho novo do muro de frente; o muro morto e o indicador contam da abertura para a direita, com as colunas numeradas; e a compra segue para a esquerda. A página 2.5 termina com um resumo das direções.
+- **Nova ordem do guia**: a Parte 1 vai das pedras ao fim da partida (Módulos 1 a 5) e termina recomendando jogar uma rodada, sem yaku e sem contar pontos. A Parte 2 começa em Mão válida (agora Módulo 6), e o guia recomenda mais uma rodada, já valendo o yaku, antes de Pontos.
+
 ## 5.7.3 - 2026-10-29
 
 ### Alterado
