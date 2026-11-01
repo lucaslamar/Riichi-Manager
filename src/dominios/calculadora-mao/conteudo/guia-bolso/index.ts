@@ -1,5 +1,6 @@
 import type { IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
 import { conteudo as en } from './en'
+import { conteudo as es } from './es'
 import { conteudo as ja } from './ja'
 import { conteudo as ko } from './ko'
 import { conteudo as lt } from './lt'
@@ -18,6 +19,7 @@ export type * from './tipos'
 const CONTEUDOS: Record<IdiomaSuportado, ConteudoGuiaBolso> = {
   'pt-BR': ptBR,
   en,
+  es,
   ja,
   'zh-Hans': zhHans,
   ko,

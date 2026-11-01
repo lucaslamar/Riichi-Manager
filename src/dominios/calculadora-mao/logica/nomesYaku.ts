@@ -4,7 +4,7 @@ import type { IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
  * Nome exibido de cada yaku por idioma. A lógica continua usando o romaji como
  * identificador (`traduzirYaku`); só a tela troca o nome.
  *
- * - pt-BR, en e lt: romaji (com as grafias do Glossário: Tan'yao, Ura-dora…).
+ * - pt-BR, en, es e lt: romaji (com as grafias do Glossário: Tan'yao, Ura-dora…).
  * - ja: kanji/kana japoneses.
  * - zh-Hans: termos chineses do riichi; sem termo consolidado, os kanji japoneses.
  * - ko: hangul usado pela comunidade coreana de riichi (revisar: i18n/REVISAR.md).
@@ -82,9 +82,9 @@ const NOMES: Record<string, NomesCjk> = {
   'Dora manual': { ja: 'ドラ（手入力）', zh: '宝牌（手动）', ko: '도라 (수동)' },
 }
 
-/** Nomes com português no id que mudam também em inglês e lituano. */
-const NOMES_LATINOS: Record<string, { en: string; lt: string }> = {
-  'Dora manual': { en: 'Dora (manual)', lt: 'Dora (rankinė)' },
+/** Nomes com português no id que mudam também em inglês, espanhol e lituano. */
+const NOMES_LATINOS: Record<string, { en: string; es: string; lt: string }> = {
+  'Dora manual': { en: 'Dora (manual)', es: 'Dora (manual)', lt: 'Dora (rankinė)' },
 }
 
 /** Ids antigos (com português no nome) → id canônico em romaji. */
@@ -124,7 +124,7 @@ export function nomeYakuExibido(id: string, idioma: IdiomaSuportado): string {
   // Em pt-BR os ids antigos já são o nome exibido.
   if (idioma === 'pt-BR') return GRAFIA_ROMAJI[id] ?? id
   const latino = NOMES_LATINOS[canonico]
-  if (latino && (idioma === 'en' || idioma === 'lt')) return latino[idioma]
+  if (latino && (idioma === 'en' || idioma === 'es' || idioma === 'lt')) return latino[idioma]
   return GRAFIA_ROMAJI[canonico] ?? canonico
 }
 

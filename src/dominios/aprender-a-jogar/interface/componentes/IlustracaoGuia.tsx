@@ -1,5 +1,7 @@
 import { useId, type ReactNode } from 'react'
-import type { IlustracaoGuia as IdIlustracao } from '../../conteudo/tipos'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { conteudoGuia } from '../../conteudo'
+import type { IlustracaoGuia as IdIlustracao, TextosIlustracoes } from '../../conteudo/tipos'
 
 /*
  * Ilustrações do guia em preto e branco, no traço de mangá: contorno de nanquim,
@@ -224,7 +226,7 @@ function Medida({ x1, x2, y }: { x1: number; x2: number; y: number }) {
 }
 
 /** 17 colunas de 2 pedras: um muro, o que cada jogador monta à sua frente. */
-function MuroFileira({ padroes, id, alt }: PropsDesenho) {
+function MuroFileira({ padroes, id, alt, textos }: PropsDesenho) {
   const inicio = 14
   const chao = 118
   const fim = inicio + LARGURA * 17
@@ -236,10 +238,10 @@ function MuroFileira({ padroes, id, alt }: PropsDesenho) {
         <Coluna x={0} y={ESPESSURA * 2 + FUNDO_Y + 2} padroes={padroes} />
       </g>
       <Texto x={90} y={40} ancora="start">
-        1 coluna = 2 pedras
+        {textos.colunaDuasPedras}
       </Texto>
       <Texto x={90} y={56} ancora="start" peso={500}>
-        uma deitada em cima da outra
+        {textos.umaSobreOutra}
       </Texto>
       <path
         d={`M42 76 L${inicio + LARGURA / 2} ${chao - ESPESSURA * 2 - FUNDO_Y - 2}`}
@@ -251,7 +253,7 @@ function MuroFileira({ padroes, id, alt }: PropsDesenho) {
       ))}
       <Medida x1={inicio} x2={fim} y={132} />
       <Texto x={(inicio + fim) / 2} y={148}>
-        17 pedras de comprimento
+        {textos.comprimentoMuro}
       </Texto>
     </Quadro>
   )
@@ -261,7 +263,7 @@ function MuroFileira({ padroes, id, alt }: PropsDesenho) {
  * Um muro de frente, como quem o montou vê: com dados 5, as colunas 1 a 5
  * contadas da ponta direita para a esquerda e o corte depois da 5ª.
  */
-function MuroContagem({ padroes, id, alt }: PropsDesenho) {
+function MuroContagem({ padroes, id, alt, textos }: PropsDesenho) {
   const chao = 96
   const inicio = 12
   const vao = 12
@@ -273,7 +275,7 @@ function MuroContagem({ padroes, id, alt }: PropsDesenho) {
   return (
     <Quadro largura={322} altura={160} id={id} alt={alt}>
       <Texto tamanho={ROTULO} x={fim} y={24} ancora="end" destaque>
-        conte da direita para a esquerda
+        {textos.conteDireitaEsquerda}
       </Texto>
       <path
         d={`M${fim} 40 H${xCorte + 6}`}
@@ -282,7 +284,7 @@ function MuroContagem({ padroes, id, alt }: PropsDesenho) {
         markerEnd={padroes.seta}
       />
       <Texto tamanho={ROTULO} x={xCorte - 5} y={44} ancora="end" destaque>
-        abertura
+        {textos.abertura}
       </Texto>
       {Array.from({ length: colunasAntes }, (_, indice) => (
         <Coluna key={`antes-${indice}`} x={inicio + indice * LARGURA} y={chao} padroes={padroes} />
@@ -305,13 +307,13 @@ function MuroContagem({ padroes, id, alt }: PropsDesenho) {
         strokeWidth={1.8}
       />
       <Texto tamanho={ROTULO} x={inicio} y={chao + 13} ancora="start">
-        ← esquerda
+        {textos.esquerda}
       </Texto>
       <Texto tamanho={ROTULO} x={fim} y={chao + 30} ancora="end">
-        sua direita →
+        {textos.suaDireita}
       </Texto>
       <Texto tamanho={ROTULO} x={161} y={148} peso={500}>
-        você, sentado de frente para o seu muro
+        {textos.voceSentado}
       </Texto>
     </Quadro>
   )
@@ -368,7 +370,7 @@ const ROTULO = 12
  * sem cruzar outro texto. Legível a partir de 360px de largura (o quadro
  * encolhe para ~300px e o texto fica com ~11px).
  */
-function MuroMorto({ padroes, id, alt, kan = false }: PropsDesenho & { kan?: boolean }) {
+function MuroMorto({ padroes, id, alt, textos, kan = false }: PropsDesenho & { kan?: boolean }) {
   const chao = 100
   const inicioVivo = 14
   const colunasVivas = 5
@@ -431,10 +433,10 @@ function MuroMorto({ padroes, id, alt, kan = false }: PropsDesenho & { kan?: boo
 
       {/* Faixa de cima (y 24): abertura à esquerda do corte, indicador à direita. */}
       <Texto tamanho={ROTULO} x={xCorte - 4} y={24} ancora="end" destaque>
-        abertura
+        {textos.abertura}
       </Texto>
       <Texto tamanho={ROTULO} x={centroColuna(3) - 4} y={24} ancora="start" destaque>
-        indicador de dora
+        {textos.indicadorDora}
       </Texto>
       <LinhaGuia
         x1={centroColuna(3)}
@@ -448,7 +450,7 @@ function MuroMorto({ padroes, id, alt, kan = false }: PropsDesenho & { kan?: boo
         <>
           {/* Faixa do meio (y 46): reposição à esquerda, kan dora à direita. */}
           <Texto tamanho={ROTULO} x={10} y={46} ancora="start">
-            reposição do kan
+            {textos.reposicaoKan}
           </Texto>
           <LinhaGuia
             x1={xSolta + (LARGURA + FUNDO_X) / 2}
@@ -457,7 +459,7 @@ function MuroMorto({ padroes, id, alt, kan = false }: PropsDesenho & { kan?: boo
             y2={topoColuna(1) + FUNDO_Y / 2}
           />
           <Texto tamanho={ROTULO} x={centroColuna(4) + 6} y={46} ancora="start" destaque>
-            kan dora
+            {textos.kanDora}
           </Texto>
           <LinhaGuia
             x1={centroColuna(4)}
@@ -471,11 +473,11 @@ function MuroMorto({ padroes, id, alt, kan = false }: PropsDesenho & { kan?: boo
 
       {/* Faixa de baixo: compras sob o muro vivo, a chave e o nome sob o muro morto. */}
       <Texto tamanho={ROTULO} x={inicioVivo + (colunasVivas * LARGURA) / 2} y={124}>
-        ← compras
+        {textos.compras}
       </Texto>
       <Medida x1={inicioMorto} x2={fimMorto} y={128} />
       <Texto tamanho={ROTULO} x={(inicioMorto + fimMorto) / 2} y={145} destaque>
-        muro morto (14 pedras)
+        {textos.muroMorto}
       </Texto>
     </Quadro>
   )
@@ -500,13 +502,6 @@ const numerosDoVento = (vento: Vento) =>
     .map((volta) => CONTAGEM_DADOS.indexOf(vento) + 1 + volta)
     .filter((numero) => numero <= 12)
     .join(' · ')
-
-const NOME_VENTO: Record<Vento, string> = {
-  leste: 'Leste',
-  sul: 'Sul',
-  oeste: 'Oeste',
-  norte: 'Norte',
-}
 
 /**
  * Geometria da mesa vista de cima. Cada muro fica centrado na frente do seu
@@ -712,7 +707,7 @@ interface OpcoesMesa {
 }
 
 /** A mesa vista de cima, com os quatro muros e o que cada ilustração destaca. */
-function Mesa({ padroes, id, alt, opcoes }: PropsDesenho & { opcoes: OpcoesMesa }) {
+function Mesa({ padroes, id, alt, textos, opcoes }: PropsDesenho & { opcoes: OpcoesMesa }) {
   const { comprimento, grossura } = MESA
   const soma = opcoes.dados ? opcoes.dados[0] + opcoes.dados[1] : 0
   const abertura = soma ? abrirMesa(soma) : null
@@ -1022,7 +1017,7 @@ function Mesa({ padroes, id, alt, opcoes }: PropsDesenho & { opcoes: OpcoesMesa 
     return (
       <g key={vento}>
         <Texto x={x} y={y} ancora={ancora} tamanho={12} peso={800}>
-          {NOME_VENTO[vento]}
+          {textos.ventos[vento]}
           {vento === 'leste' ? ' (oya)' : ''}
         </Texto>
         {opcoes.contagem && (
@@ -1074,7 +1069,7 @@ function Mesa({ padroes, id, alt, opcoes }: PropsDesenho & { opcoes: OpcoesMesa 
             <Descarte x={28} y={0} />
           </g>
           <Texto x={CENTRO.x + 85} y={FORA.base + 36} tamanho={10} destaque>
-            pon (chamada)
+            {textos.ponChamada}
           </Texto>
         </g>
       )}
@@ -1104,6 +1099,7 @@ function Mesa({ padroes, id, alt, opcoes }: PropsDesenho & { opcoes: OpcoesMesa 
 }
 
 interface PropsDesenho {
+  textos: TextosIlustracoes
   padroes: Padroes
   id: string
   alt: string
@@ -1131,7 +1127,7 @@ const FORA = {
  * vermelhas no sentido em que a vez passa: para a direita de quem jogou, que
  * visto de cima é o sentido anti-horário.
  */
-function MesaVentos({ padroes, id, alt }: PropsDesenho) {
+function MesaVentos({ padroes, id, alt, textos }: PropsDesenho) {
   const largura = 320
   const altura = 330
   const cx = largura / 2
@@ -1184,10 +1180,10 @@ function MesaVentos({ padroes, id, alt }: PropsDesenho) {
         />
       ))}
       <Texto x={cx} y={cy - 2} tamanho={11}>
-        ordem
+        {textos.ordem}
       </Texto>
       <Texto x={cx} y={cy + 12} tamanho={11}>
-        da vez
+        {textos.daVez}
       </Texto>
       {lugares.map(({ vento, kanji, angulo }) => {
         const lugar = ponto(angulo, raioLugar)
@@ -1216,7 +1212,7 @@ function MesaVentos({ padroes, id, alt }: PropsDesenho) {
               peso={800}
               destaque={vento === 'leste'}
             >
-              {NOME_VENTO[vento]}
+              {textos.ventos[vento]}
               {vento === 'leste' ? ' (oya)' : ''}
             </Texto>
           </g>
@@ -1244,7 +1240,7 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
         dados: DADOS_EXEMPLO,
         contagem: true,
         rotulos: [
-          { x: CENTRO.x, y: CENTRO.y + 34, texto: '2 + 3 = 5 → Leste (o oya)', destaque: true },
+          { x: CENTRO.x, y: CENTRO.y + 34, texto: props.textos.dadosExemplo, destaque: true },
         ],
       }}
     />
@@ -1260,19 +1256,19 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
           {
             x: DENTRO.direita - 6,
             y: DENTRO.base - 46,
-            texto: '1 = a direita do Leste',
+            texto: props.textos.direitaLeste,
             ancora: 'end',
           },
           {
             x: DENTRO.direita - 6,
             y: DENTRO.base - 32,
-            texto: '← conta para a esquerda',
+            texto: props.textos.contaEsquerda,
             ancora: 'end',
           },
           {
             x: retanguloColuna('leste', 5).x - 3,
             y: DENTRO.base - 16,
-            texto: 'abre depois da 5ª ↘',
+            texto: props.textos.abreDepois,
             ancora: 'end',
             destaque: true,
           },
@@ -1294,18 +1290,18 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
           {
             x: DENTRO.direita - 6,
             y: DENTRO.base - 40,
-            texto: '5 colunas no Leste',
+            texto: props.textos.colunasLeste,
             ancora: 'end',
             destaque: true,
           },
           {
             x: DENTRO.direita - 6,
             y: DENTRO.base - 26,
-            texto: '+ 2 no Sul ↘',
+            texto: props.textos.colunasSul,
             ancora: 'end',
             destaque: true,
           },
-          { x: CENTRO.x, y: CENTRO.y + 34, texto: '2 + 3 = 5 → Leste' },
+          { x: CENTRO.x, y: CENTRO.y + 34, texto: props.textos.dadosExemploCurto },
         ],
       }}
     />
@@ -1319,11 +1315,16 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
         muroMorto: true,
         compra: true,
         rotulos: [
-          { x: DENTRO.direita - 6, y: DENTRO.base - 30, texto: 'muro morto', ancora: 'end' },
+          {
+            x: DENTRO.direita - 6,
+            y: DENTRO.base - 30,
+            texto: props.textos.muroMortoCurto,
+            ancora: 'end',
+          },
           {
             x: CENTRO.x + 10,
             y: DENTRO.base - 30,
-            texto: '← compras',
+            texto: props.textos.compras,
             ancora: 'end',
             destaque: true,
           },
@@ -1337,7 +1338,7 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
       opcoes={{
         descartes: true,
         chamada: true,
-        rotulos: [{ x: CENTRO.x, y: DENTRO.base - 4, texto: 'seus descartes: fileiras de 6' }],
+        rotulos: [{ x: CENTRO.x, y: DENTRO.base - 4, texto: props.textos.seusDescartes }],
       }}
     />
   ),
@@ -1360,10 +1361,11 @@ export default function IlustracaoGuia({
     hachura: `url(#${id}-hachura)`,
     seta: `url(#${id}-seta)`,
   }
+  const { idioma } = useI18n()
   const Desenho = ILUSTRACOES[ilustracao]
   return (
     <figure className="guia-ilustracao">
-      <Desenho padroes={padroes} id={id} alt={alt} />
+      <Desenho padroes={padroes} id={id} alt={alt} textos={conteudoGuia(idioma).ilustracoes} />
       {legenda && <figcaption className="guia-mao__legenda">{legenda}</figcaption>}
     </figure>
   )

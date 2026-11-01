@@ -1,5 +1,13 @@
 # Changelog - Mojoca
 
+## 5.8.0 - 2026-11-01
+
+### Adicionado
+
+- **Espanhol**: o app agora tem Español no seletor de idioma e abre nele quando o navegador está em espanhol. Com o português e o inglês que já existiam, cobre todos os Estados Partes do Mercosul e os Estados Associados, menos o Suriname (holandês).
+- **Aprender a jogar em espanhol**: o guia inteiro, com quizzes, desenhos e ranks. Os outros idiomas continuam com o guia em português.
+- **Bandeira no seletor de idioma**: cada idioma mostra a bandeira entre parênteses, para achar o seu mesmo sem ler a escrita. No Windows, o navegador mostra as letras do país no lugar da bandeira.
+
 ## 5.7.5 - 2026-11-01
 
 ### Corrigido

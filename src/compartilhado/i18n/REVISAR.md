@@ -1,7 +1,24 @@
-# Revisão por falante nativo: coreano (ko) e lituano (lt)
+# Revisão por falante nativo: coreano (ko), lituano (lt) e espanhol (es)
 
 Traduções feitas sem revisão nativa. Esta lista reúne as chaves com termo técnico de
 mahjong (yaku, han, fu, ventos, chamadas, pontuação) para conferência.
+
+## Espanhol (es)
+
+Espanhol latino-americano neutro, com "tú" (sem voseo, que Argentina, Uruguai e Paraguai usam)
+e milhar com ponto (8.000). Corrija em `public/locales/es.json` e
+`src/dominios/calculadora-mao/conteudo/guia-bolso/es.ts`. O Aprender a jogar fica em
+`src/dominios/aprender-a-jogar/conteudo/es.ts`: comece a leitura pela Parte 1, e rode
+`npm run test:guia` depois de mudar o guia em pt-BR (ele acusa pedras, ids e respostas
+diferentes, mas não texto desatualizado). Conferir com jogadores:
+
+- **Termos de mesa:** "ficha" (pedra), "palo" (naipe), "trío" (trinca), "pareja" (par),
+  "secuencia", "cuarteto" (quad), "llamada" (chamada), "robar" (comprar), "muro muerto",
+  "honores" (honras), "terminales", "simples".
+- **Vitória:** "Victoria" no lugar de "Batida", "ficha ganadora" para a pedra da batida.
+- **Nomes descritivos dos yakus:** "Medio color" (Honitsu), "Color completo" (Chinitsu),
+  "Escalera pura" (Ittsu), "Declarar listo" (Riichi), "Dora llameante" (Dora flamejante).
+- **Glossário:** "este" não é alias de Vento porque também é o demonstrativo "este".
 
 Como revisar:
 

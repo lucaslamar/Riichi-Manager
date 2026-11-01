@@ -1,7 +1,7 @@
 /**
  * Formato do conteúdo do guia Aprender a jogar. Só dados, sem JSX: o mesmo
  * conteúdo serve à versão web e a uma futura versão nativa. Um arquivo por
- * idioma (pt-BR.ts, en-US.ts…), com os mesmos ids.
+ * idioma (pt-BR.ts, es.ts…), com os mesmos ids.
  *
  * Nos textos (`md`): `**negrito**`, `==palavra-chave==` (em vermelho, para o
  * que não pode passar batido), `[texto](url)` e uma linha começando com
@@ -153,8 +153,41 @@ export interface TermoGlossarioGuia {
   definition: string
 }
 
+/** Textos desenhados dentro das ilustrações. */
+export interface TextosIlustracoes {
+  colunaDuasPedras: string
+  umaSobreOutra: string
+  comprimentoMuro: string
+  conteDireitaEsquerda: string
+  abertura: string
+  esquerda: string
+  suaDireita: string
+  voceSentado: string
+  indicadorDora: string
+  reposicaoKan: string
+  kanDora: string
+  compras: string
+  muroMorto: string
+  muroMortoCurto: string
+  ponChamada: string
+  ordem: string
+  daVez: string
+  ventos: Record<'leste' | 'sul' | 'oeste' | 'norte', string>
+  dadosExemplo: string
+  dadosExemploCurto: string
+  direitaLeste: string
+  contaEsquerda: string
+  abreDepois: string
+  colunasLeste: string
+  colunasSul: string
+  seusDescartes: string
+}
+
 export interface ConteudoTutorial {
   /** O livro, em partes; cada parte com os seus módulos, numerados em sequência. */
   tutorialParts: TutorialPart[]
   glossary: TermoGlossarioGuia[]
+  /** O rank de quem está em cada parte, e o último (com tudo concluído). */
+  ranks: [string, string, string, string]
+  ilustracoes: TextosIlustracoes
 }

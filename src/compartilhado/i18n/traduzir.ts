@@ -44,7 +44,8 @@ function regraPlural(idioma: string) {
 export function formatarNumero(valor: number, idioma: IdiomaSuportado) {
   let formato = formatosNumero.get(idioma)
   if (!formato) {
-    formato = new Intl.NumberFormat(idioma)
+    // Sem isso o espanhol escreve 8000 ao lado de 12.000.
+    formato = new Intl.NumberFormat(idioma, { useGrouping: true })
     formatosNumero.set(idioma, formato)
   }
   return formato.format(valor)

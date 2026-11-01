@@ -17,8 +17,8 @@ export interface RankGuia {
   degrau: number
 }
 
-/** O rank de quem está em cada parte, e o último (com tudo concluído). */
-export const NIVEIS_RANK = ['Novato', 'Adepto', 'Especialista', '1º dan'] as const
+/** Nível do último rank (1º dan), de quem concluiu o livro todo. */
+const NIVEL_DAN = 3
 
 export function rankPorConcluidos(concluidos: string[], partes: TutorialPart[]): RankGuia {
   const feitos = (parte: TutorialPart) =>
@@ -36,14 +36,14 @@ export function rankPorConcluidos(concluidos: string[], partes: TutorialPart[]):
 }
 
 /** Nome do rank com as estrelas da parte (ex.: "Adepto ★★☆"). */
-export function nomeRank(rank: RankGuia): string {
-  const nome = NIVEIS_RANK[Math.min(rank.nivel, NIVEIS_RANK.length - 1)]
+export function nomeRank(rank: RankGuia, nomes: string[]): string {
+  const nome = nomes[Math.min(rank.nivel, NIVEL_DAN)]
   if (!rank.totalEstrelas) return nome
   return `${nome} ${'★'.repeat(rank.estrelas)}${'☆'.repeat(rank.totalEstrelas - rank.estrelas)}`
 }
 
 /** Rank de quem acabou de chegar à parte `indice` (o título da capa dela). */
-export const rankDaParte = (indice: number) => NIVEIS_RANK[Math.min(indice, NIVEIS_RANK.length - 1)]
+export const rankDaParte = (indice: number, nomes: string[]) => nomes[Math.min(indice, NIVEL_DAN)]
 
 /** O último rank, de quem concluiu o livro todo. */
-export const ehDan = (rank: RankGuia) => rank.nivel >= NIVEIS_RANK.length - 1
+export const ehDan = (rank: RankGuia) => rank.nivel >= NIVEL_DAN

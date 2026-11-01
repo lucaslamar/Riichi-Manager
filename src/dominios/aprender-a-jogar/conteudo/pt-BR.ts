@@ -15,72 +15,23 @@
  * menos o Sorteador, que o próprio guia abre no sorteio dos ventos.
  */
 import { BASE_PATAMAR } from '@/compartilhado/mahjong/pontuacao'
-import { SECOES_GLOSSARIO } from '@/dominios/calculadora-mao/logica/glossario'
-import { KAZOE_NOTE, YAKU } from '@/dominios/calculadora-mao/logica/yakus'
-import type {
-  ConteudoTutorial,
-  TermoGlossarioGuia,
-  TutorialBlock,
-  TutorialModule,
-  TutorialPart,
-} from './tipos'
+import { KAZOE_NOTE } from '@/dominios/calculadora-mao/logica/yakus'
+import {
+  ARTIGO_SUJI,
+  criarAuxiliares,
+  criarBuscaModulo,
+  criarModuloRegras,
+  hanYaku,
+  trocarReferencias,
+  type TopicoRegras,
+} from './auxiliares'
+import type { ConteudoTutorial, TermoGlossarioGuia, TutorialModule, TutorialPart } from './tipos'
 
-const pontos = (valor: number) => valor.toLocaleString('pt-BR')
-
-/** Linha da tabela de patamares: ko recebe 4× a base e o oya 6×, como na calculadora. */
-const linhaPatamar = (nome: string, han: string, base: number) => [
-  nome,
-  han,
-  pontos(base * 4),
-  pontos(base * 6),
-]
-
-/** Han de um yaku na referência do app (mão fechada). */
-const hanYaku = (id: string) => String(YAKU.find((item) => item.id === id)?.hanClosed ?? '')
-
-/** Yakuman que só vale com a mão fechada: na tabela, "—" na coluna da aberta. */
-const YAKUMAN_SO_FECHADA = new Set(['kokushi', 'suuankou', 'chuuren', 'tenhou', 'chiihou'])
-
-/**
- * Linha da Lista de yakus: nome, a frase e o han da referência do app.
- * "—" = só fechada; "Y" = yakuman; "+1" = soma ao Riichi (Daburu Riichi).
- */
-const linhaYaku = (id: string, frase: string) => {
-  const yaku = YAKU.find((item) => item.id === id)
-  if (yaku?.yakuman) return [yaku.romaji, frase, 'Y', YAKUMAN_SO_FECHADA.has(id) ? '—' : 'Y']
-  const han = (valor: number | null | undefined) =>
-    valor == null ? '—' : yaku?.bonus ? `+${valor}` : String(valor)
-  return [yaku?.romaji ?? id, frase, han(yaku?.hanClosed), han(yaku?.hanOpen)]
-}
-
-/** Um grupo da Lista de yakus: subtítulo e tabela; tocar num yaku abre o cartão dele. */
-const grupoYakus = (titulo: string, linhas: [id: string, frase: string][]): TutorialBlock[] => [
-  { type: 'heading', text: titulo },
-  {
-    type: 'table',
-    headers: ['Yaku', 'O que pede', 'Fechada', 'Aberta'],
-    rows: linhas.map(([id, frase]) => linhaYaku(id, frase)),
-    compact: true,
-    links: linhas.map(([id]) => `yaku:${id}`),
-  },
-]
-
-/** Definição de um verbete do Glossário do app (fonte única). */
-const doGlossario = (id: string) => {
-  for (const secao of SECOES_GLOSSARIO) {
-    const item = secao.itens.find((verbete) => verbete.id === id)
-    if (item?.texto) return item.texto
-  }
-  return ''
-}
-
-/** Artigo de suji indicado no fim da defesa (matagi suji). */
-const ARTIGO_SUJI = 'https://npmahjong.com/blog/suji'
-
-const SIM_NAO = (sim: boolean) => [
-  { label: 'Sim', correct: sim },
-  { label: 'Não', correct: !sim },
-]
+const { pontos, linhaPatamar, grupoYakus, doGlossario, simNao } = criarAuxiliares('pt-BR', {
+  sim: 'Sim',
+  nao: 'Não',
+  cabecalhoYakus: ['Yaku', 'O que pede', 'Fechada', 'Aberta'],
+})
 
 const modulos: TutorialModule[] = [
   {
@@ -489,7 +440,7 @@ const modulos: TutorialModule[] = [
         type: 'quiz',
         question: 'Esta mão está em tenpai?',
         hand: '234m 567p 11s 345s 78p',
-        options: SIM_NAO(true),
+        options: simNao(true),
         answer: 'Sim. Ela espera o 6 ou o 9 de Pin para completar o 7-8.',
       },
     ],
@@ -611,7 +562,7 @@ const modulos: TutorialModule[] = [
         question:
           'O jogador à sua frente descartou o 6 de Pin e você tem o 5 e o 7 de Pin. Pode chamar chi?',
         hand: '57p',
-        options: SIM_NAO(false),
+        options: simNao(false),
         answer: 'Não. Chi só vale com o descarte de quem está à sua esquerda.',
       },
     ],
@@ -845,7 +796,7 @@ const modulos: TutorialModule[] = [
         type: 'quiz',
         question: 'Mão aberta com um chi, sem trinca de honra. Ela tem yaku?',
         hand: '123m 456p 789s 678p 11m',
-        options: SIM_NAO(false),
+        options: simNao(false),
         answer:
           "Não. Tem terminais (sem Tan'yao), está aberta (sem Riichi, Menzen Tsumo e Pinfu) e não tem trinca de valor (sem Yakuhai).",
       },
@@ -1150,7 +1101,7 @@ const modulos: TutorialModule[] = [
       {
         type: 'quiz',
         question: 'Fiz kan fechado. Minha mão continua fechada?',
-        options: SIM_NAO(true),
+        options: simNao(true),
         answer:
           'Sim. O kan fechado é feito só com pedras da sua mão, sem nenhum descarte de outro jogador.',
       },
@@ -1236,15 +1187,6 @@ const modulos: TutorialModule[] = [
     ],
   },
 ]
-
-/** Um assunto da Parte 3 (Aprofundando); vira uma página do módulo da sua seção. */
-interface TopicoRegras {
-  id: string
-  section: 'regras' | 'estrategia'
-  title: string
-  termos?: string[]
-  blocks: TutorialBlock[]
-}
 
 const topicosRegras: TopicoRegras[] = [
   {
@@ -1987,35 +1929,8 @@ const topicosRegras: TopicoRegras[] = [
   },
 ]
 
-/** Um módulo da Parte 3 (Aprofundando), com as páginas dos tópicos da seção. */
-const moduloRegras = (
-  id: TopicoRegras['section'],
-  number: number,
-  title: string,
-  cover: string,
-  quiz?: TutorialModule['quiz'],
-): TutorialModule => ({
-  id,
-  number,
-  title,
-  cover,
-  quiz,
-  pages: topicosRegras
-    .filter((topico) => topico.section === id)
-    .map(({ id: idTopico, title: titulo, termos, blocks }, indice) => ({
-      id: idTopico,
-      number: `${number}.${indice + 1}`,
-      title: titulo,
-      termos,
-      blocks,
-    })),
-})
-
-const modulo = (id: string) => {
-  const encontrado = modulos.find((item) => item.id === id)
-  if (!encontrado) throw new Error(`Módulo do guia não encontrado: ${id}`)
-  return encontrado
-}
+const moduloRegras = criarModuloRegras(topicosRegras)
+const modulo = criarBuscaModulo(modulos)
 
 export const tutorialParts: TutorialPart[] = [
   {
@@ -2145,31 +2060,6 @@ export const tutorialParts: TutorialPart[] = [
   },
 ]
 
-/** Onde cada módulo está no livro, para as referências `{{onde:<id>}}` dos textos. */
-const ONDE_ESTA = new Map(
-  tutorialParts.flatMap((parte) =>
-    parte.modules.map((item) => [
-      item.id,
-      `Parte ${parte.number}, Módulo ${item.number} (${item.title})`,
-    ]),
-  ),
-)
-
-/** Troca `{{onde:<id>}}` em todos os textos do livro pelo lugar do módulo. */
-function trocarReferencias(valor: unknown) {
-  if (!valor || typeof valor !== 'object') return
-  const campos = valor as Record<string, unknown>
-  for (const chave of Object.keys(campos)) {
-    const campo = campos[chave]
-    if (typeof campo === 'string' && campo.includes('{{onde:')) {
-      campos[chave] = campo.replace(/\{\{onde:([\w-]+)\}\}/g, (_, id: string) => {
-        const lugar = ONDE_ESTA.get(id)
-        if (!lugar) throw new Error(`Referência do guia para módulo inexistente: ${id}`)
-        return lugar
-      })
-    } else trocarReferencias(campo)
-  }
-}
 trocarReferencias(tutorialParts)
 
 /** Verbetes do Glossário do app, mais os termos de mesa que só o guia usa. */
@@ -2206,4 +2096,33 @@ export const glossary: TermoGlossarioGuia[] = [
 export const conteudoPtBR: ConteudoTutorial = {
   tutorialParts,
   glossary,
+  ranks: ['Novato', 'Adepto', 'Especialista', '1º dan'],
+  ilustracoes: {
+    colunaDuasPedras: '1 coluna = 2 pedras',
+    umaSobreOutra: 'uma deitada em cima da outra',
+    comprimentoMuro: '17 pedras de comprimento',
+    conteDireitaEsquerda: 'conte da direita para a esquerda',
+    abertura: 'abertura',
+    esquerda: '← esquerda',
+    suaDireita: 'sua direita →',
+    voceSentado: 'você, sentado de frente para o seu muro',
+    indicadorDora: 'indicador de dora',
+    reposicaoKan: 'reposição do kan',
+    kanDora: 'kan dora',
+    compras: '← compras',
+    muroMorto: 'muro morto (14 pedras)',
+    muroMortoCurto: 'muro morto',
+    ponChamada: 'pon (chamada)',
+    ordem: 'ordem',
+    daVez: 'da vez',
+    ventos: { leste: 'Leste', sul: 'Sul', oeste: 'Oeste', norte: 'Norte' },
+    dadosExemplo: '2 + 3 = 5 → Leste (o oya)',
+    dadosExemploCurto: '2 + 3 = 5 → Leste',
+    direitaLeste: '1 = a direita do Leste',
+    contaEsquerda: '← conta para a esquerda',
+    abreDepois: 'abre depois da 5ª ↘',
+    colunasLeste: '5 colunas no Leste',
+    colunasSul: '+ 2 no Sul ↘',
+    seusDescartes: 'seus descartes: fileiras de 6',
+  },
 }

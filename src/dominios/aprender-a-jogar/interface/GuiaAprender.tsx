@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type PointerEvent as EventoPonteiro,
@@ -12,7 +13,7 @@ import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizon
 import { useDeslizePaginas } from '@/compartilhado/interface/hooks/useDeslizePaginas'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
-import { conteudoPtBR } from '../conteudo/pt-BR'
+import { conteudoGuia } from '../conteudo'
 import type { FerramentaGuia } from '../conteudo/tipos'
 import { fimDoModulo, montarLivro, moduloDaPagina, type PaginaLivro } from '../logica/livro'
 import { ehDan, nomeRank, rankDaParte, rankPorConcluidos, type RankGuia } from '../logica/rank'
@@ -23,9 +24,6 @@ import IndiceGuia from './componentes/IndiceGuia'
 import '@/compartilhado/interface/componentes/modal/modal.css'
 import './guia-aprender.css'
 
-// Hoje só há o conteúdo em pt-BR; os outros idiomas usam ele até ganharem o seu.
-const CONTEUDO = conteudoPtBR
-const LIVRO = montarLivro(CONTEUDO)
 /** Quanto tempo o aviso de estrela ou de "Subiu de rank!" fica na tela. */
 const TEMPO_RANK = 3500
 
@@ -82,7 +80,9 @@ export default function GuiaAprender({
    */
   aoTrocarTela: (passo: 1 | -1) => void
 }) {
-  const { t } = useI18n()
+  const { t, idioma } = useI18n()
+  const conteudo = conteudoGuia(idioma)
+  const livro = useMemo(() => montarLivro(conteudo), [conteudo])
   const [progressoInicial] = useState(lerProgressoGuia)
   // Sempre abre na capa (a tela Aprender a jogar).
   const [indice, setIndice] = useState(0)
@@ -100,14 +100,14 @@ export default function GuiaAprender({
   // Rank por parte (Novato, Adepto, Especialista, 1º dan), com uma estrela por
   // módulo concluído. Ao concluir um módulo, aparece o aviso de estrela ou,
   // se a parte acabou, o de "Subiu de rank!".
-  const rank = rankPorConcluidos(concluidos, CONTEUDO.tutorialParts)
+  const rank = rankPorConcluidos(concluidos, conteudo.tutorialParts)
   const [aviso, setAviso] = useState<{ rank: RankGuia; subiu: boolean } | null>(null)
   const { degrau, nivel } = rank
   const anterior = useRef({ degrau, nivel })
   useEffect(() => {
     if (degrau > anterior.current.degrau) {
       setAviso({
-        rank: rankPorConcluidos(concluidos, CONTEUDO.tutorialParts),
+        rank: rankPorConcluidos(concluidos, conteudo.tutorialParts),
         subiu: nivel > anterior.current.nivel,
       })
     }
@@ -123,15 +123,15 @@ export default function GuiaAprender({
   const seloRank = () => (
     <p className={`guia-rank${ehDan(rank) ? ' guia-rank--dan' : ''}`}>
       <i className={`fas ${ehDan(rank) ? 'fa-crown' : 'fa-medal'}`} aria-hidden="true" />
-      {t('learn.yourRank', { rank: nomeRank(rank) })}
+      {t('learn.yourRank', { rank: nomeRank(rank, conteudo.ranks) })}
     </p>
   )
 
-  const pagina = LIVRO[indice]
+  const pagina = livro[indice]
   const modulo = moduloDaPagina(pagina)
   const { mudarPagina, sentido, propsToque } = useDeslizePaginas({
     atual: vista.tipo === 'livro' && !ferramenta ? indice : undefined,
-    total: LIVRO.length,
+    total: livro.length,
     aoMudar: setIndice,
   })
 
@@ -372,7 +372,7 @@ export default function GuiaAprender({
     }
   }
 
-  const paginaSalva = LIVRO.findIndex((item) => item.id === paginaSalvaId)
+  const paginaSalva = livro.findIndex((item) => item.id === paginaSalvaId)
 
   const conteudoPagina = () => {
     switch (pagina.tipo) {
@@ -382,7 +382,7 @@ export default function GuiaAprender({
             <i className="fas fa-book-open guia-capa__icone" aria-hidden="true" />
             <h1 className="guia-capa__titulo">{t('learn.title')}</h1>
             <p className="guia-capa__frase">
-              {t('learn.tagline', { count: CONTEUDO.tutorialParts[0].modules.length })}
+              {t('learn.tagline', { count: conteudo.tutorialParts[0].modules.length })}
             </p>
             {seloRank()}
             {rank.degrau === 0 && <p className="guia-rank__dica">{t('learn.rankHint')}</p>}
@@ -395,7 +395,7 @@ export default function GuiaAprender({
                     onClick={() => irPara(paginaSalva)}
                   >
                     {t('learn.continueFrom', {
-                      page: rotuloPagina(LIVRO[paginaSalva]) || tituloPagina(LIVRO[paginaSalva]),
+                      page: rotuloPagina(livro[paginaSalva]) || tituloPagina(livro[paginaSalva]),
                     })}
                   </button>
                   <button type="button" className="btn-contorno" onClick={() => irPara(1)}>
@@ -429,7 +429,9 @@ export default function GuiaAprender({
           <div className="guia-capitulo guia-parte">
             <i className="fas fa-medal guia-capa__icone guia-parte__medalha" aria-hidden="true" />
             <span className="guia-parte__rotulo">{t('learn.rankTier')}</span>
-            <h1 className="guia-capitulo__titulo">{rankDaParte(pagina.parte.number - 1)}</h1>
+            <h1 className="guia-capitulo__titulo">
+              {rankDaParte(pagina.parte.number - 1, conteudo.ranks)}
+            </h1>
             <p className="guia-parte__nome">
               {t('learn.part', { number: pagina.parte.number })} · {pagina.parte.title}
             </p>
@@ -514,7 +516,7 @@ export default function GuiaAprender({
       <>
         <h1 className="guia-titulo">{t('learn.glossary')}</h1>
         <dl className="guia-glossario">
-          {CONTEUDO.glossary.map(({ term, definition }) => (
+          {conteudo.glossary.map(({ term, definition }) => (
             <div key={term} className="guia-glossario__item">
               <dt>{term}</dt>
               <dd>{definition}</dd>
@@ -526,7 +528,7 @@ export default function GuiaAprender({
   }
 
   const voltarConsulta = () => setVista(VISTA_LIVRO)
-  const progresso = indice / (LIVRO.length - 1)
+  const progresso = indice / (livro.length - 1)
   const tituloBarra = modulo ? `${modulo.number}. ${modulo.title}` : tituloPagina(pagina)
 
   return createPortal(
@@ -612,7 +614,7 @@ export default function GuiaAprender({
           <button
             type="button"
             className="sr-only guia-sr-proxima"
-            disabled={indice === LIVRO.length - 1}
+            disabled={indice === livro.length - 1}
             onClick={() => mudarPagina(1)}
           >
             {t('learn.nextPage')}
@@ -651,11 +653,11 @@ export default function GuiaAprender({
 
       {indiceAberto && (
         <IndiceGuia
-          conteudo={CONTEUDO}
-          livro={LIVRO}
+          conteudo={conteudo}
+          livro={livro}
           indiceAtual={indice}
           concluidos={concluidos}
-          rotuloRank={t('learn.yourRank', { rank: nomeRank(rank) })}
+          rotuloRank={t('learn.yourRank', { rank: nomeRank(rank, conteudo.ranks) })}
           aoIrPara={irPara}
           aoAbrirGlossario={() => {
             setIndiceAberto(false)
@@ -709,7 +711,9 @@ export default function GuiaAprender({
               <span className="guia-rank-aviso__titulo">
                 {aviso.subiu ? t('learn.rankUp') : t('learn.starUp')}
               </span>
-              <strong className="guia-rank-aviso__rank">{nomeRank(aviso.rank)}</strong>
+              <strong className="guia-rank-aviso__rank">
+                {nomeRank(aviso.rank, conteudo.ranks)}
+              </strong>
             </span>
           </div>
         )}

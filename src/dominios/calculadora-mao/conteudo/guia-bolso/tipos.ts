@@ -63,7 +63,7 @@ export type IdSecaoGlossario =
   | 'regras'
 
 export interface TextosYaku {
-  /** Nome no título do cartão; sem ele, o romaji (pt-BR, en, lt). */
+  /** Nome no título do cartão; sem ele, o romaji (pt-BR, en, es, lt). */
   titulo?: string
   /** Linha embaixo do título (ex.: "Tudo simples"). */
   nome?: string

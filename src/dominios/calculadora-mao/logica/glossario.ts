@@ -246,7 +246,7 @@ interface TermoEncontrado {
 }
 
 /**
- * Como achar um termo no meio do texto. Em pt-BR, en e lt o termo é palavra
+ * Como achar um termo no meio do texto. Em pt-BR, en, es e lt o termo é palavra
  * inteira. Japonês e chinês não separam palavras com espaço: o termo vale em
  * qualquer ponto. Coreano separa, mas cola a partícula no fim ("리치를"): o termo
  * precisa começar uma palavra, mas pode terminar no meio dela.
@@ -256,6 +256,7 @@ type Escrita = 'palavras' | 'coreano' | 'sem-espacos'
 const ESCRITA: Record<IdiomaSuportado, Escrita> = {
   'pt-BR': 'palavras',
   en: 'palavras',
+  es: 'palavras',
   lt: 'palavras',
   ko: 'coreano',
   ja: 'sem-espacos',
