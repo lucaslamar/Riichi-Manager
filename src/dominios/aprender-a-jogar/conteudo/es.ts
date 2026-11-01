@@ -2105,6 +2105,7 @@ export const conteudoEs: ConteudoTutorial = {
     ordem: 'orden',
     daVez: 'de turnos',
     ventos: { leste: 'Este', sul: 'Sur', oeste: 'Oeste', norte: 'Norte' },
+    sufixoOya: ' (oya)',
     dadosExemplo: '2 + 3 = 5 → Este (el oya)',
     dadosExemploCurto: '2 + 3 = 5 → Este',
     direitaLeste: '1 = la derecha del Este',

@@ -2116,6 +2116,7 @@ export const conteudoPtBR: ConteudoTutorial = {
     ordem: 'ordem',
     daVez: 'da vez',
     ventos: { leste: 'Leste', sul: 'Sul', oeste: 'Oeste', norte: 'Norte' },
+    sufixoOya: ' (oya)',
     dadosExemplo: '2 + 3 = 5 → Leste (o oya)',
     dadosExemploCurto: '2 + 3 = 5 → Leste',
     direitaLeste: '1 = a direita do Leste',

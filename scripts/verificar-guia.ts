@@ -6,7 +6,9 @@
  */
 import { conteudoEn } from '../src/dominios/aprender-a-jogar/conteudo/en'
 import { conteudoEs } from '../src/dominios/aprender-a-jogar/conteudo/es'
+import { conteudoJa } from '../src/dominios/aprender-a-jogar/conteudo/ja'
 import { conteudoPtBR } from '../src/dominios/aprender-a-jogar/conteudo/pt-BR'
+import { conteudoZhHans } from '../src/dominios/aprender-a-jogar/conteudo/zh-Hans'
 
 /** Campos de texto corrido viram `*`; estes são dados e precisam ser iguais. */
 const DADOS = new Set([
@@ -48,7 +50,12 @@ function diferencas(a: unknown, b: unknown, caminho: string, erros: string[]) {
 }
 
 const erros: string[] = []
-for (const [idioma, conteudo] of Object.entries({ en: conteudoEn, es: conteudoEs })) {
+for (const [idioma, conteudo] of Object.entries({
+  en: conteudoEn,
+  es: conteudoEs,
+  ja: conteudoJa,
+  'zh-Hans': conteudoZhHans,
+})) {
   diferencas(
     esqueleto(conteudoPtBR.tutorialParts),
     esqueleto(conteudo.tutorialParts),
@@ -67,4 +74,4 @@ if (erros.length) {
   console.error(`Guia com problema (${erros.length}):\n${erros.join('\n')}`)
   process.exit(1)
 }
-console.log('Guia ok: en e es têm a mesma estrutura do pt-BR.')
+console.log('Guia ok: en, es, ja e zh-Hans têm a mesma estrutura do pt-BR.')

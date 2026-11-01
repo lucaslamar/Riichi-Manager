@@ -3,6 +3,11 @@
 Traduções feitas sem revisão nativa. Esta lista reúne as chaves com termo técnico de
 mahjong (yaku, han, fu, ventos, chamadas, pontuação) para conferência.
 
+## Japonês (ja) e chinês (zh-Hans): Aprender a jogar
+
+Sem revisão nativa. Termos de estratégia a conferir: ja 筋引っかけ, 片筋, 跨ぎ筋, 表示盤
+(centerpiece), 切れ目 (abertura), 供託; zh-Hans 筋陷阱, 半筋, 跨筋, 指示盘, 开门, 错和, 押注.
+
 ## Espanhol (es)
 
 Espanhol latino-americano neutro, com "tú" (sem voseo, que Argentina, Uruguai e Paraguai usam)
@@ -10,7 +15,7 @@ e milhar com ponto (8.000). Corrija em `public/locales/es.json` e
 `src/dominios/calculadora-mao/conteudo/guia-bolso/es.ts`. O Aprender a jogar fica em
 `src/dominios/aprender-a-jogar/conteudo/es.ts`: comece a leitura pela Parte 1, e rode
 `npm run test:guia` depois de mudar o guia em pt-BR (ele acusa pedras, ids e respostas
-diferentes, mas não texto desatualizado; o mesmo vale para o inglês, em `conteudo/en.ts`).
+diferentes, mas não texto desatualizado; o mesmo vale para `conteudo/en.ts`, `ja.ts` e `zh-Hans.ts`).
 Conferir com jogadores:
 
 - **Termos de mesa:** "ficha" (pedra), "palo" (naipe), "trío" (trinca), "pareja" (par),

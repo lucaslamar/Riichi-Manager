@@ -1,5 +1,11 @@
 # Changelog - Mojoca
 
+## 5.10.0 - 2026-11-01
+
+### Adicionado
+
+- **Aprender a jogar em japonês e chinês**: o guia inteiro, com quizzes, desenhos e ranks, usando os termos que o app já usa em cada idioma. Coreano e lituano continuam com o guia em inglês.
+
 ## 5.9.0 - 2026-11-01
 
 ### Adicionado

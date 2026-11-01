@@ -173,6 +173,8 @@ export interface TextosIlustracoes {
   ordem: string
   daVez: string
   ventos: Record<'leste' | 'sul' | 'oeste' | 'norte', string>
+  /** Depois do nome do vento do oya no desenho. */
+  sufixoOya: string
   dadosExemplo: string
   dadosExemploCurto: string
   direitaLeste: string

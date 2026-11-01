@@ -2046,7 +2046,10 @@ const tutorialParts: TutorialPart[] = [
   },
 ]
 
-trocarReferencias(tutorialParts, { parte: 'Part', modulo: 'Module' })
+trocarReferencias(
+  tutorialParts,
+  (parte, numeroModulo, titulo) => `Part ${parte}, Module ${numeroModulo} (${titulo})`,
+)
 
 /** Verbetes do Glossário do app, mais os termos de mesa que só o guia usa. */
 const glossary: TermoGlossarioGuia[] = [
@@ -2102,6 +2105,7 @@ export const conteudoEn: ConteudoTutorial = {
     ordem: 'turn',
     daVez: 'order',
     ventos: { leste: 'East', sul: 'South', oeste: 'West', norte: 'North' },
+    sufixoOya: ' (oya)',
     dadosExemplo: '2 + 3 = 5 → East (the oya)',
     dadosExemploCurto: '2 + 3 = 5 → East',
     direitaLeste: "1 = East's right end",

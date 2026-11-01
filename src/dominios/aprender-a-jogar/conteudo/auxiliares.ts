@@ -6,7 +6,7 @@
 import type { IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
 import { formatarNumero } from '@/compartilhado/i18n/traduzir'
 import { secoesGlossario } from '@/dominios/calculadora-mao/logica/glossario'
-import { YAKU } from '@/dominios/calculadora-mao/logica/yakus'
+import { YAKU, yakusDoIdioma } from '@/dominios/calculadora-mao/logica/yakus'
 import type { TutorialBlock, TutorialModule, TutorialPart } from './tipos'
 
 /** Artigo de suji indicado no fim da defesa (matagi suji). */
@@ -19,15 +19,15 @@ export const hanYaku = (id: string) => String(YAKU.find((item) => item.id === id
 const YAKUMAN_SO_FECHADA = new Set(['kokushi', 'suuankou', 'chuuren', 'tenhou', 'chiihou'])
 
 /**
- * Linha da Lista de yakus: nome, a frase e o han da referência do app.
+ * Linha da Lista de yakus: nome no idioma, a frase e o han da referência do app.
  * "—" = só fechada; "Y" = yakuman; "+1" = soma ao Riichi (Daburu Riichi).
  */
-const linhaYaku = (id: string, frase: string) => {
-  const yaku = YAKU.find((item) => item.id === id)
-  if (yaku?.yakuman) return [yaku.romaji, frase, 'Y', YAKUMAN_SO_FECHADA.has(id) ? '—' : 'Y']
+const linhaYaku = (idioma: IdiomaSuportado, id: string, frase: string) => {
+  const yaku = yakusDoIdioma(idioma).find((item) => item.id === id)
+  if (yaku?.yakuman) return [yaku.titulo, frase, 'Y', YAKUMAN_SO_FECHADA.has(id) ? '—' : 'Y']
   const han = (valor: number | null | undefined) =>
     valor == null ? '—' : yaku?.bonus ? `+${valor}` : String(valor)
-  return [yaku?.romaji ?? id, frase, han(yaku?.hanClosed), han(yaku?.hanOpen)]
+  return [yaku?.titulo ?? id, frase, han(yaku?.hanClosed), han(yaku?.hanOpen)]
 }
 
 /** Auxiliares que dependem do idioma do arquivo. */
@@ -51,7 +51,7 @@ export function criarAuxiliares(
       {
         type: 'table',
         headers: textos.cabecalhoYakus,
-        rows: linhas.map(([id, frase]) => linhaYaku(id, frase)),
+        rows: linhas.map(([id, frase]) => linhaYaku(idioma, id, frase)),
         compact: true,
         links: linhas.map(([id]) => `yaku:${id}`),
       },
@@ -116,14 +116,12 @@ export const criarBuscaModulo = (modulos: TutorialModule[]) => (id: string) => {
 export function trocarReferencias(
   partes: TutorialPart[],
   // "Parte" e "Módulo" se escrevem igual em português e espanhol.
-  rotulos = { parte: 'Parte', modulo: 'Módulo' },
+  lugar = (parte: number, modulo: number, titulo: string) =>
+    `Parte ${parte}, Módulo ${modulo} (${titulo})`,
 ) {
   const ondeEsta = new Map(
     partes.flatMap((parte) =>
-      parte.modules.map((item) => [
-        item.id,
-        `${rotulos.parte} ${parte.number}, ${rotulos.modulo} ${item.number} (${item.title})`,
-      ]),
+      parte.modules.map((item) => [item.id, lugar(parte.number, item.number, item.title)]),
     ),
   )
   const percorrer = (valor: unknown) => {
@@ -133,9 +131,9 @@ export function trocarReferencias(
       const campo = campos[chave]
       if (typeof campo === 'string' && campo.includes('{{onde:')) {
         campos[chave] = campo.replace(/\{\{onde:([\w-]+)\}\}/g, (_, id: string) => {
-          const lugar = ondeEsta.get(id)
-          if (!lugar) throw new Error(`Referência do guia para módulo inexistente: ${id}`)
-          return lugar
+          const achado = ondeEsta.get(id)
+          if (!achado) throw new Error(`Referência do guia para módulo inexistente: ${id}`)
+          return achado
         })
       } else percorrer(campo)
     }

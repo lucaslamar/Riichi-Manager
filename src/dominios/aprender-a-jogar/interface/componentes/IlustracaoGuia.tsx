@@ -1018,7 +1018,7 @@ function Mesa({ padroes, id, alt, textos, opcoes }: PropsDesenho & { opcoes: Opc
       <g key={vento}>
         <Texto x={x} y={y} ancora={ancora} tamanho={12} peso={800}>
           {textos.ventos[vento]}
-          {vento === 'leste' ? ' (oya)' : ''}
+          {vento === 'leste' ? textos.sufixoOya : ''}
         </Texto>
         {opcoes.contagem && (
           <Texto x={x} y={y + 14} ancora={ancora} tamanho={10} peso={destaque ? 800 : 500}>
@@ -1213,7 +1213,7 @@ function MesaVentos({ padroes, id, alt, textos }: PropsDesenho) {
               destaque={vento === 'leste'}
             >
               {textos.ventos[vento]}
-              {vento === 'leste' ? ' (oya)' : ''}
+              {vento === 'leste' ? textos.sufixoOya : ''}
             </Texto>
           </g>
         )
