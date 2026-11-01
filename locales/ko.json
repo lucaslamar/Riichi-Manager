@@ -729,7 +729,7 @@
     }
   },
   "notation": {
-    "toggle": "표기",
+    "toggle": "MPSZ",
     "errors": {
       "suitWithoutNumbers": "\"{{suit}}\" 앞에 숫자가 없습니다",
       "invalidHonor": "{{tile}}는 없는 패입니다 (자패는 1z~7z)",

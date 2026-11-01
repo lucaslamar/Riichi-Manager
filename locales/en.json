@@ -736,7 +736,7 @@
     }
   },
   "notation": {
-    "toggle": "Notation",
+    "toggle": "MPSZ",
     "errors": {
       "suitWithoutNumbers": "Suit \"{{suit}}\" has no numbers before it",
       "invalidHonor": "{{tile}} does not exist (honors go from 1z to 7z)",

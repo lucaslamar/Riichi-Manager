@@ -750,7 +750,7 @@
     }
   },
   "notation": {
-    "toggle": "Užrašas",
+    "toggle": "MPSZ",
     "errors": {
       "suitWithoutNumbers": "Prieš rūšį „{{suit}}“ nėra skaičių",
       "invalidHonor": "{{tile}} neegzistuoja (garbės akmenys yra nuo 1z iki 7z)",

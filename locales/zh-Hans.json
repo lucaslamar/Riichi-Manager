@@ -729,7 +729,7 @@
     }
   },
   "notation": {
-    "toggle": "记谱",
+    "toggle": "MPSZ",
     "errors": {
       "suitWithoutNumbers": "花色“{{suit}}”前面没有数字",
       "invalidHonor": "{{tile}} 不存在（字牌为 1z 到 7z）",
