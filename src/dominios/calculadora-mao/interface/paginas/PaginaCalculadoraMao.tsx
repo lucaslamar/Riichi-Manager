@@ -34,7 +34,7 @@ export default function PaginaCalculadoraMao({
 
   const calculadora = useCalculadoraMao({ fluxoCompleto: telaGrande })
   const finalizandoMao = calculadora.etapaFinalizacaoAtiva && calculadora.maoProntaParaFinalizar
-  /** Campo de notação no lugar do teclado de pedras (fica "à esquerda" dele). */
+  /** Teclado de notação no lugar do de pedras. */
   const [entradaNotacao, setEntradaNotacao] = useState(false)
 
   // Ao sair da Calculadora a notação fecha: ao voltar, o campo não abre o
@@ -43,20 +43,16 @@ export default function PaginaCalculadoraMao({
     if (!visivel) setEntradaNotacao(false)
   }, [visivel])
 
-  // Na montagem, a notação fica à esquerda do teclado de pedras: dedo para a
-  // direita abre a notação e, nela, dedo para a esquerda volta às pedras. Das
-  // pedras, dedo para a esquerda vai para a Han e Fu, a próxima aba da barra.
-  // Na finalização, dedo para a direita volta para a edição da mão (o mesmo do
+  // Dedo para a esquerda segue a barra inferior (próxima tela). Dedo para a direita,
+  // que nas outras telas volta à anterior, aqui é a primeira aba: na montagem alterna
+  // entre pedras e notação; na finalização volta para a edição da mão (o mesmo do
   // botão "Editar mão").
   useDeslizeHorizontal({
     ativo: visivel,
     aoDeslizarDireita: finalizandoMao
       ? calculadora.voltarParaMontagem
-      : entradaNotacao
-        ? undefined
-        : () => setEntradaNotacao(true),
-    aoDeslizarEsquerda:
-      !finalizandoMao && entradaNotacao ? () => setEntradaNotacao(false) : aoIrParaProximaTela,
+      : () => setEntradaNotacao((ativa) => !ativa),
+    aoDeslizarEsquerda: aoIrParaProximaTela,
   })
 
   // Escondida: nada no DOM, para os estilos `body:has(.card-mao-completa…)`

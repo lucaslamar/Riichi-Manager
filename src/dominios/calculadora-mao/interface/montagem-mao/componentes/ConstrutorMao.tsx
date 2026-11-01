@@ -3,7 +3,12 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import {
   gerarNotacaoCompleta,
   interpretarNotacaoCompleta,
-  normalizarNotacao,
+  lerPendentes,
+  separarPendentes,
+  slotsDosPendentes,
+  tipoDoGrupoPendente,
+  chamadasPossiveis,
+  type ErroNotacao,
   ordenarPedras,
 } from '../../../logica/mao'
 import { codigoBase, proximaDoraIndicada } from '../../constantes'
@@ -13,16 +18,6 @@ import { CampoNotacaoMao } from './CampoNotacaoMao'
 import { DescartesMao } from './DescartesMao'
 import { MaoAtual } from './MaoAtual'
 import { TecladoPedras } from './TecladoPedras'
-
-/**
- * Separa os números do fim, ainda sem naipe, do resto da notação. A mão é montada
- * só com o resto; os números aparecem nela como pedras brancas até o naipe chegar.
- */
-function separarPendentes(texto: string) {
-  const normalizado = normalizarNotacao(texto)
-  const pendentes = normalizado.match(/\d+$/)?.[0] ?? ''
-  return { completo: normalizado.slice(0, normalizado.length - pendentes.length), pendentes }
-}
 
 /** Mão fechada que a notação descreve; uma batida em meld devolve as pedras consumidas. */
 function pedrasParaNotacao(mao: EstadoCalculadoraMao['mao']) {
@@ -108,6 +103,21 @@ export default function ConstrutorMao({
   )
   const entradaPorNotacao = contexto === 'montagem' && entradaNotacao && !!aoMudarEntradaNotacao
   const erroNotacao = entradaPorNotacao ? notacao.erro : null
+  /** Entrada recusada: a mensagem fica até o próximo toque; o texto já voltou ao que valia. */
+  const [erroRecusado, setErroRecusado] = useState<ErroNotacao | null>(null)
+  /** 4 iguais que estouram a mão: é só o passo antes da tecla Kan, não um erro a mostrar. */
+  const grupoEsperandoKan =
+    erroNotacao?.chave === 'notation.errors.tooManyTiles' &&
+    chamadasPossiveis(notacaoCompleta).has('kanFechado')
+  const erroVisivel = entradaPorNotacao
+    ? (erroRecusado ?? (grupoEsperandoKan ? null : erroNotacao))
+    : null
+
+  // Na mão, o que espera o naipe: chamadas viram melds tracejados; o resto, pedras brancas.
+  const gruposPendentes = lerPendentes(pendentesNotacao).map((grupo) => ({
+    ...grupo,
+    tipo: tipoDoGrupoPendente(grupo),
+  }))
 
   /** Mão atual em notação; a batida vai por último na mão fechada. */
   const notacaoDaMao = () =>
@@ -123,13 +133,46 @@ export default function ConstrutorMao({
   }
   const voltarParaPedras = () => aoMudarEntradaNotacao?.(false)
 
-  /** Com erro, a mão mantém a última leitura válida, mas sem batida: nada é calculado. */
+  /**
+   * Entrada inválida é recusada: a mão não muda, o texto volta ao que ela descreve e
+   * o erro só aparece até o próximo toque, sem travar o que vem depois. A exceção é o
+   * grupo de 4 iguais que estoura a mão: ele fica à espera da tecla Kan (e sem batida).
+   */
   const mudarTextoNotacao = (texto: string) => {
-    setTextoNotacao(texto)
-    const resultado = interpretarNotacaoCompleta(separarPendentes(texto).completo, {
-      akadora: configuracao.akadora,
-    })
-    substituirMaoNotacao(resultado.erro ? null : resultado)
+    setErroRecusado(null)
+    const { completo } = separarPendentes(texto)
+    const resultado = interpretarNotacaoCompleta(completo, { akadora: configuracao.akadora })
+    if (!resultado.erro) {
+      setTextoNotacao(texto)
+      substituirMaoNotacao(resultado)
+      return
+    }
+    if (
+      resultado.erro.chave === 'notation.errors.tooManyTiles' &&
+      chamadasPossiveis(completo).has('kanFechado')
+    ) {
+      setTextoNotacao(texto)
+      substituirMaoNotacao(null)
+      return
+    }
+    setErroRecusado(resultado.erro)
+    setTextoNotacao(notacaoDaMao())
+  }
+
+  /** AC: zera tudo, como a lixeira da mão. */
+  const limparNotacao = () => {
+    setErroRecusado(null)
+    setTextoNotacao('')
+    limpar()
+  }
+
+  /** Tira um grupo que esperava o naipe (e desmarca a chamada). */
+  const removerGrupoPendente = (indice: number) => {
+    estado.setAcaoPendente(null)
+    const resto = gruposPendentes
+      .filter((_grupo, posicao) => posicao !== indice)
+      .map((grupo) => grupo.digitos + grupo.marca)
+    mudarTextoNotacao(notacaoCompleta + resto.join(''))
   }
 
   /*
@@ -148,7 +191,7 @@ export default function ConstrutorMao({
     if (assinatura(notacao.pedras, notacao.melds) === assinaturaMao) return
     // Texto no meio da digitação (com erro) só é reescrito quando a mão foi limpa.
     if (notacao.erro && assinaturaMao !== assinatura([], [])) return
-    setTextoNotacao(notacaoDaMao())
+    setTextoNotacao(notacaoDaMao() + pendentesNotacao)
     // O texto só acompanha a mão; reagir a `notacao` aqui desfaria o que está sendo digitado.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assinaturaMao, entradaPorNotacao])
@@ -292,8 +335,14 @@ export default function ConstrutorMao({
         acaoPendente={acaoPendente}
         acaoMeldAtiva={acaoMeldAtiva}
         acaoMobileAtiva={acaoMobileAtiva}
-        totalPedras={totalPedras}
-        slotsUsados={slotsUsados}
+        // A contagem da mão inclui o que ainda espera o naipe.
+        totalPedras={
+          totalPedras +
+          (entradaPorNotacao
+            ? gruposPendentes.reduce((soma, grupo) => soma + grupo.digitos.length, 0)
+            : 0)
+        }
+        slotsUsados={slotsUsados + (entradaPorNotacao ? slotsDosPendentes(pendentesNotacao) : 0)}
         maoEditorGrudado={maoEditorGrudado}
         menuAcoesMaoAberto={menuAcoesMaoAberto}
         indicesSelecionadosChii={indicesSelecionadosChii}
@@ -318,14 +367,20 @@ export default function ConstrutorMao({
         aoRemoverPedra={contexto === 'montagem' ? removerPedra : () => undefined}
         aoRemoverMeld={contexto === 'montagem' ? removerMeld : () => undefined}
         aoLimpar={limpar}
-        pedrasPendentes={entradaPorNotacao ? [...pendentesNotacao] : undefined}
-        tipoMeldPendente={
-          entradaPorNotacao && acaoMeldAtiva && pendentesNotacao ? acaoMeldAtiva.tipo : undefined
+        pedrasPendentes={
+          entradaPorNotacao
+            ? gruposPendentes.filter((grupo) => !grupo.tipo).flatMap((grupo) => [...grupo.digitos])
+            : undefined
         }
-        aoRemoverPendentes={() => {
-          estado.setAcaoPendente(null)
-          mudarTextoNotacao(notacaoCompleta)
-        }}
+        meldsPendentes={
+          entradaPorNotacao
+            ? gruposPendentes.flatMap((grupo, indice) =>
+                grupo.tipo ? [{ indice, tipo: grupo.tipo, pedras: [...grupo.digitos] }] : [],
+              )
+            : undefined
+        }
+        aoRemoverMeldPendente={removerGrupoPendente}
+        entradaPorNotacao={entradaPorNotacao}
       />
 
       {contexto === 'montagem' && (
@@ -395,7 +450,9 @@ export default function ConstrutorMao({
               aoMudar={mudarTextoNotacao}
               aoConfirmar={aoConfirmarNotacao}
               aoVoltar={voltarParaPedras}
-              erro={erroNotacao ? t(erroNotacao.chave, erroNotacao.parametros) : null}
+              aoLimpar={limparNotacao}
+              slotsMao={slotsUsados}
+              erro={erroVisivel ? t(erroVisivel.chave, erroVisivel.parametros) : null}
               // A chamada marcada é a mesma ação do teclado de pedras: com ela, tocar
               // nas pedras da mão forma o meld, como lá.
               chamadaArmada={acaoMeldAtiva?.tipo ?? null}

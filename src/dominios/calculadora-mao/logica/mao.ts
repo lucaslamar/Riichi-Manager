@@ -41,15 +41,20 @@ export { converterMaoParaString } from './conversor-riichi'
 export type { ErroNotacao, ResultadoNotacao, ResultadoNotacaoCompleta } from './notacao'
 export {
   chamadasPossiveis,
-  expandirChamada,
+  fecharPendentes,
   gerarNotacao,
   gerarNotacaoCompleta,
+  grupoCabeNosPendentes,
   grupoDaChamada,
   interpretarNotacao,
   interpretarNotacaoCompleta,
+  lerPendentes,
   normalizarNotacao,
   podeDigitarNumero,
+  separarPendentes,
+  slotsDosPendentes,
   sequenciasChiComNumero,
+  tipoDoGrupoPendente,
 } from './notacao'
 export type { EsperaPossivel } from './esperas'
 export { calcularEsperasPossiveis } from './esperas'

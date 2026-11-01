@@ -8,16 +8,21 @@ import assert from 'node:assert/strict'
 import { parseHand } from '../src/dominios/calculadora-mao/logica/parseHand'
 import {
   chamadasPossiveis,
-  expandirChamada,
+  fecharPendentes,
   gerarNotacao,
   gerarNotacaoCompleta,
+  grupoCabeNosPendentes,
   grupoDaChamada,
   interpretarNotacao,
   interpretarNotacaoCompleta,
+  lerPendentes,
   normalizarNotacao,
   pedraDoTile,
   podeDigitarNumero,
+  separarPendentes,
+  slotsDosPendentes,
   sequenciasChiComNumero,
+  tipoDoGrupoPendente,
 } from '../src/dominios/calculadora-mao/logica/notacao'
 
 const casos: [string, () => void][] = []
@@ -185,30 +190,46 @@ caso('teclado: chamadas possíveis no último grupo', () => {
   assert.deepEqual(tipos(''), [])
 })
 
-caso('teclado: chamada escolhida antes do grupo', () => {
-  assert.equal(expandirChamada('5', 'p', 'pon'), '555pc')
-  assert.equal(expandirChamada('0', 'p', 'pon'), '055pc')
-  assert.equal(expandirChamada('1', 's', 'kanAberto'), '1111sc')
-  assert.equal(expandirChamada('7', 'z', 'kanFechado'), '7777za')
-  assert.equal(expandirChamada('1', 'm', 'chii'), '123mc')
-  assert.equal(expandirChamada('0', 'p', 'chii'), '067pc')
-  assert.equal(expandirChamada('8', 'm', 'chii'), null)
-  assert.equal(expandirChamada('1', 'z', 'chii'), null)
-  assert.equal(expandirChamada('', 'm', 'pon'), null)
-  // Grupo inteiro digitado: fica como está.
-  assert.equal(expandirChamada('345', 's', 'chii'), '345sc')
-  // E o resultado é uma chamada válida.
-  for (const [digitos, naipe, tipo] of [
-    ['5', 'p', 'pon'],
-    ['0', 'p', 'chii'],
-    ['7', 'z', 'kanFechado'],
-  ] as const) {
-    const texto = expandirChamada(digitos, naipe, tipo)!
-    assert.deepEqual(
-      interpretarNotacaoCompleta(texto, { akadora: true }).melds.map((meld) => meld.tipo),
-      [tipo],
-    )
-  }
+caso('teclado: vários grupos esperando o mesmo naipe', () => {
+  assert.deepEqual(separarPendentes('238m999c123c78'), {
+    completo: '238m',
+    pendentes: '999c123c78',
+  })
+  assert.deepEqual(separarPendentes('123mc'), { completo: '123mc', pendentes: '' })
+  assert.deepEqual(separarPendentes('123mc45'), { completo: '123mc', pendentes: '45' })
+  assert.deepEqual(lerPendentes('999c78'), [
+    { digitos: '999', marca: 'c' },
+    { digitos: '78', marca: '' },
+  ])
+  assert.equal(fecharPendentes('123c456c789', 'm'), '123mc456mc789m')
+  assert.equal(fecharPendentes('7777a', 'z'), '7777za')
+  const { melds, pedras, erro } = interpretarNotacaoCompleta(fecharPendentes('123c456c789', 'm'), {
+    akadora: true,
+  })
+  assert.equal(erro, null)
+  assert.deepEqual(
+    melds.map((meld) => meld.tipo),
+    ['chii', 'chii'],
+  )
+  assert.deepEqual(pedras, ['7m', '8m', '9m'])
+  assert.equal(tipoDoGrupoPendente({ digitos: '999', marca: 'c' }), 'pon')
+  assert.equal(tipoDoGrupoPendente({ digitos: '406', marca: 'c' }), 'chii')
+  assert.equal(tipoDoGrupoPendente({ digitos: '1111', marca: 'a' }), 'kanFechado')
+  assert.equal(tipoDoGrupoPendente({ digitos: '12', marca: 'c' }), null)
+  assert.equal(tipoDoGrupoPendente({ digitos: '12', marca: '' }), null)
+  assert.deepEqual([...chamadasPossiveis('999c111')], ['pon'])
+  assert.deepEqual([...chamadasPossiveis('999c')], [])
+  assert.equal(grupoCabeNosPendentes('999', '999'), false)
+  assert.equal(grupoCabeNosPendentes('9', '999'), true)
+  assert.equal(grupoCabeNosPendentes('0', '055'), false)
+})
+
+caso('teclado: slots dos grupos sem naipe', () => {
+  assert.equal(slotsDosPendentes(''), 0)
+  assert.equal(slotsDosPendentes('745644'), 6)
+  assert.equal(slotsDosPendentes('888c745'), 6)
+  assert.equal(slotsDosPendentes('1111a'), 3)
+  assert.equal(slotsDosPendentes('1111c123c7'), 7)
 })
 
 caso('teclado: no máximo 4 de cada número e um 0 no grupo sem naipe', () => {

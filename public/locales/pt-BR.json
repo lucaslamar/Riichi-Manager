@@ -489,7 +489,7 @@
       "winTitle": "Batida",
       "win": "A última pedra da mão fechada é a batida, a que completou a mão. Em 123456m789p1122z, a batida é 2z.",
       "tipTitle": "Dica",
-      "tip": "Cada número aparece na mão como uma pedra branca até você tocar no naipe. As teclas de chamada só acendem quando o último grupo combina com elas (123m → Chi). AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize para a esquerda.",
+      "tip": "Dá para montar vários grupos e números e tocar no naipe só no fim, e ele vale para todos: bom para Honitsu e Itsu. Cada número mostra embaixo a honra que vira com o z. AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize o dedo para a direita.",
       "chi": "Sequência de 3 do mesmo naipe pega de quem jogou antes de você. Digite 123m e toque em Chi. Ou toque em Chi antes e depois num número: escolha a sequência (ainda sem naipe) e toque no naipe. Com Chi marcado, tocar numa pedra da mão também forma o chi.",
       "pon": "Trinca pega do descarte de qualquer jogador. Digite 111p e toque em Pon. Ou toque em Pon antes e depois no 1: aparecem três 1 esperando o naipe; toque em p.",
       "kan": "4 iguais, a 4ª pega do descarte de outro jogador. Digite 1111s e toque em Kan. Ou toque em Kan antes e depois no 1: aparecem quatro 1; toque em s.",
@@ -759,7 +759,14 @@
       "honors": "Honras",
       "redFive": "5 vermelho",
       "backspace": "Apagar",
-      "clear": "Limpar tudo"
+      "clear": "Limpar tudo",
+      "honor1": "Leste",
+      "honor2": "Sul",
+      "honor3": "Oeste",
+      "honor4": "Norte",
+      "honor5": "Branco",
+      "honor6": "Verde",
+      "honor7": "Vermelho"
     },
     "pendingTile": "{{number}} esperando o naipe"
   }

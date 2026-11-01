@@ -3,22 +3,29 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { SELETOR_CAMADAS } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
 import {
   chamadasPossiveis,
-  expandirChamada,
+  fecharPendentes,
+  grupoCabeNosPendentes,
   grupoDaChamada,
-  normalizarNotacao,
+  lerPendentes,
   podeDigitarNumero,
+  separarPendentes,
   sequenciasChiComNumero,
+  slotsDosPendentes,
+  tipoDoGrupoPendente,
   type Meld,
 } from '../../../logica/mao'
-import BotaoAjuda from '../../modais/ajuda-secoes/BotaoAjuda'
 import './campo-notacao-mao.css'
 
 interface PropsCampoNotacaoMao {
   valor: string
   aoMudar: (texto: string) => void
   aoConfirmar?: () => void
-  /** Volta para o teclado de pedras (o mesmo que deslizar para a esquerda). */
+  /** Volta para o teclado de pedras (o mesmo que deslizar o dedo para a direita). */
   aoVoltar: () => void
+  /** AC: zera tudo, como a lixeira da mão. */
+  aoLimpar: () => void
+  /** Slots já ocupados na mão, sem contar o que espera o naipe. */
+  slotsMao: number
   /** Erro da notação já traduzido; sem erro, nada aparece além do teclado. */
   erro?: string | null
   /** Chamada marcada antes do grupo (a ação pendente do teclado de pedras). */
@@ -38,19 +45,23 @@ interface Tecla {
 /**
  * Layout de calculadora, para digitar rápido sem pensar onde fica cada tecla:
  *
- *   ‹ Peças  ?        AC  ⌫   ← barra de ferramentas, como a da calculadora
+ *   ‹ Peças           AC  ⌫   ← barra de ferramentas, como a da calculadora
  *   ─────────────────────────
  *   Chi  Pon  Kan  Kan f.      ← linha de funções (como C ( ) % ÷)
- *    7    8    9    m
+ *    1    2    3    m          ← números na ordem do teclado do celular
  *    4    5    6    p          ← naipes na coluna dos operadores
- *    1    2    3    s
+ *    7    8    9    s
  *         0         z
  */
 const TECLAS: Tecla[] = [
-  ...['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) => ({
+  // De 1 a 7, a legenda lembra a honra que o número vira com o z.
+  ...['1', '2', '3', '4', '5', '6', '7'].map((numero) => ({
     valor: numero,
     area: `n${numero}`,
+    dica: `notation.keys.honor${numero}`,
   })),
+  { valor: '8', area: 'n8' },
+  { valor: '9', area: 'n9' },
   { valor: '0', area: 'n0', dica: 'notation.keys.redFive' },
   { valor: 'm', area: 'm', dica: 'notation.keys.man', classe: 'naipe' },
   { valor: 'p', area: 'p', dica: 'notation.keys.pin', classe: 'naipe' },
@@ -62,7 +73,8 @@ const TECLAS: Tecla[] = [
  * Chamadas, nas duas ordens. Depois do grupo: só acende a que cabe no último
  * grupo digitado (`123m` → Chi). Antes do grupo, como no teclado de pedras: a
  * tecla fica marcada e o número já monta o grupo sem naipe (Pon, `8` → três 8;
- * Chi, `4` → escolher 234, 345 ou 456); o naipe fecha a chamada.
+ * Chi, `4` → escolher 234, 345 ou 456). Dá para seguir montando grupos e números:
+ * o naipe, tocado no fim, vale para todos.
  * Chi, Pon e Kan escrevem `c` (o tipo sai do grupo); Kan fechado, `a`.
  */
 const CHAMADAS: {
@@ -99,6 +111,8 @@ export function CampoNotacaoMao({
   aoMudar,
   aoConfirmar,
   aoVoltar,
+  aoLimpar,
+  slotsMao,
   erro = null,
   chamadaArmada,
   aoArmarChamada,
@@ -106,8 +120,8 @@ export function CampoNotacaoMao({
   const { t } = useI18n()
   const idMensagem = useId()
   const possiveis = chamadasPossiveis(valor)
-  const pendentesDoTexto = (texto: string) => normalizarNotacao(texto).match(/\d+$/)?.[0] ?? ''
-  const pendentes = pendentesDoTexto(valor)
+  const { pendentes } = separarPendentes(valor)
+  const numerosDe = (grupos: string) => grupos.replace(/[ca]/g, '')
 
   // Toques seguidos antes do próximo render partem do último texto, não de `valor`.
   const valorRef = useRef(valor)
@@ -117,63 +131,93 @@ export function CampoNotacaoMao({
     aoMudar(texto)
   }
   const digitar = (texto: string) => mudar(valorRef.current + texto)
-  /** Com chamada marcada, o grupo sem naipe é uma unidade: ⌫ tira ele todo. */
+  /** Uma chamada sem naipe é uma unidade: ⌫ tira o grupo todo. */
   const apagar = () => {
-    const pendentesAtuais = pendentesDoTexto(valorRef.current)
-    const quantos = chamadaArmada && pendentesAtuais ? pendentesAtuais.length : 1
-    mudar(valorRef.current.slice(0, -quantos))
+    const atual = separarPendentes(valorRef.current)
+    const grupoMarcado = atual.pendentes.match(/\d+[ca]$/)?.[0]
+    const texto = atual.completo + atual.pendentes
+    mudar(texto.slice(0, -(grupoMarcado?.length ?? 1)))
   }
-  /** AC: limpa a notação, e com ela a mão fechada e as chamadas. */
   const limpar = () => {
-    aoArmarChamada(null)
-    mudar('')
+    valorRef.current = ''
+    aoLimpar()
   }
 
-  /**
-   * Números travam quando o grupo sem naipe já tem 4 iguais (ou um 0) e, com
-   * chamada marcada, depois do primeiro: o grupo já foi montado e falta o naipe.
-   */
-  const numeroBloqueado = (numero: string, pendentesAtuais: string) =>
-    !podeDigitarNumero(pendentesAtuais, numero) || (!!chamadaArmada && !!pendentesAtuais)
+  /** Sequências de chi com o número que ainda cabem nos grupos sem naipe. */
+  const sequenciasPossiveis = (numero: string, numerosPendentes: string) =>
+    sequenciasChiComNumero(numero).filter((sequencia) =>
+      grupoCabeNosPendentes(numerosPendentes, sequencia),
+    )
 
-  /** Chi marcado e um número digitado: as sequências possíveis, sem naipe. */
+  /** Chi marcado e um número digitado: escolher a sequência, ainda sem naipe. */
+  const numeroAberto = pendentes.match(/\d+$/)?.[0] ?? ''
   const opcoesChi =
-    chamadaArmada === 'chii' && pendentes.length === 1 ? sequenciasChiComNumero(pendentes) : []
+    chamadaArmada === 'chii' && numeroAberto.length === 1
+      ? sequenciasPossiveis(
+          numeroAberto,
+          numerosDe(pendentes.slice(0, pendentes.length - numeroAberto.length)),
+        )
+      : []
 
+  /** Números travam quando não cabem mais: 4 iguais (ou um 0) entre os grupos sem naipe. */
+  const numeroBloqueado = (numero: string, pendentesAtuais: string) => {
+    const numeros = numerosDe(pendentesAtuais)
+    const slotsLivres = 14 - slotsMao - slotsDosPendentes(pendentesAtuais)
+    if (chamadaArmada) {
+      // Toda chamada ocupa 3 slots, mesmo o kan.
+      if (slotsLivres < 3) return true
+      if (chamadaArmada === 'chii') {
+        return opcoesChi.length > 0 || sequenciasPossiveis(numero, numeros).length === 0
+      }
+      return !grupoCabeNosPendentes(numeros, grupoDaChamada(numero, chamadaArmada) ?? numero)
+    }
+    if (!podeDigitarNumero(numeros, numero)) return true
+    if (slotsLivres > 0) return false
+    // Mão cheia: só o 4º igual passa, porque com a tecla Kan ele não ocupa slot a mais.
+    const aberto = pendentesAtuais.match(/\d+$/)?.[0] ?? ''
+    const base = (digito: string) => (digito === '0' ? '5' : digito)
+    return !(
+      slotsLivres === 0 &&
+      aberto.length === 3 &&
+      [...aberto].every((digito) => base(digito) === base(numero))
+    )
+  }
+
+  const marcaArmada = chamadaArmada === 'kanFechado' ? 'a' : 'c'
+
+  /** Com chamada marcada o número já monta o grupo, e dá para seguir montando outros. */
   const tocarNumero = (numero: string) => {
-    if (numeroBloqueado(numero, pendentesDoTexto(valorRef.current))) return
+    const { pendentes: atuais } = separarPendentes(valorRef.current)
+    if (numeroBloqueado(numero, atuais)) return
     if (chamadaArmada === 'chii') {
       // Uma sequência só (1 → 123, 9 → 789): entra direto; senão, escolhe abaixo.
-      const sequencias = sequenciasChiComNumero(numero)
-      digitar(sequencias.length === 1 ? sequencias[0] : numero)
+      const sequencias = sequenciasPossiveis(numero, numerosDe(atuais))
+      digitar(sequencias.length === 1 ? sequencias[0] + marcaArmada : numero)
       return
     }
-    digitar((chamadaArmada && grupoDaChamada(numero, chamadaArmada)) || numero)
+    const grupo = chamadaArmada && grupoDaChamada(numero, chamadaArmada)
+    digitar(grupo ? grupo + marcaArmada : numero)
   }
 
   /** Troca o número sem naipe pela sequência de chi escolhida. */
   const escolherSequenciaChi = (sequencia: string) => {
-    const pendentesAtuais = pendentesDoTexto(valorRef.current)
-    mudar(valorRef.current.slice(0, valorRef.current.length - pendentesAtuais.length) + sequencia)
+    const texto = valorRef.current.slice(0, valorRef.current.length - numeroAberto.length)
+    mudar(texto + sequencia + marcaArmada)
   }
 
-  /** Naipe sem efeito: chamada marcada sem grupo, chi ainda sem sequência ou chi em honras. */
+  /** Naipe sem efeito: nada esperando, chi ainda sem sequência ou chi em honras. */
+  const temChiPendente = lerPendentes(pendentes).some(
+    (grupo) => tipoDoGrupoPendente(grupo) === 'chii',
+  )
   const naipeBloqueado = (naipe: string) =>
-    !!chamadaArmada &&
-    (!pendentes || opcoesChi.length > 1 || (chamadaArmada === 'chii' && naipe === 'z'))
+    !pendentes || opcoesChi.length > 0 || (naipe === 'z' && temChiPendente)
 
-  /** Com uma chamada marcada, o naipe completa o grupo; senão é só a letra. */
+  /** O naipe vale para todos os grupos que estavam esperando. */
   const tocarNaipe = (naipe: string) => {
-    if (naipeBloqueado(naipe)) return
-    const pendentesAtuais = pendentesDoTexto(valorRef.current)
-    if (chamadaArmada && pendentesAtuais) {
-      const grupo = expandirChamada(pendentesAtuais, naipe, chamadaArmada)
-      if (!grupo) return
-      aoArmarChamada(null)
-      mudar(valorRef.current.slice(0, valorRef.current.length - pendentesAtuais.length) + grupo)
-      return
-    }
-    digitar(naipe)
+    const atual = separarPendentes(valorRef.current)
+    if (!atual.pendentes || opcoesChi.length > 0) return
+    aoArmarChamada(null)
+    mudar(atual.completo + fecharPendentes(atual.pendentes, naipe))
   }
 
   const tocarChamada = (chamada: (typeof CHAMADAS)[number]) => {
@@ -220,7 +264,6 @@ export function CampoNotacaoMao({
           <i className="fas fa-chevron-left" aria-hidden="true" />
           <span>{t('notation.backToTiles')}</span>
         </button>
-        <BotaoAjuda topico="notacao" />
         <span className="espaco-barra-notacao-mao" aria-hidden="true" />
         <button
           className="acao-barra-notacao-mao limpar"
@@ -242,7 +285,7 @@ export function CampoNotacaoMao({
         </button>
       </div>
 
-      {opcoesChi.length > 1 && (
+      {opcoesChi.length > 0 && (
         <div
           className="opcoes-chi-notacao"
           role="group"
@@ -298,7 +341,7 @@ export function CampoNotacaoMao({
             type="button"
             aria-pressed={chamadaArmada === chamada.tipo}
             // Acende quando cabe no último grupo, ou para marcar antes de um grupo novo.
-            disabled={!possiveis.has(chamada.tipo) && !!pendentes}
+            disabled={!possiveis.has(chamada.tipo) && /\d$/.test(pendentes)}
             onClick={() => tocarChamada(chamada)}
           >
             <span className="rotulo-tecla-notacao-mao">{t(chamada.rotulo)}</span>

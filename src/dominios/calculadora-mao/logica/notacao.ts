@@ -162,9 +162,10 @@ function meldDoGrupo(pedras: CodigoPedra[], marca: string, grupo: string): Meld 
  */
 export function chamadasPossiveis(texto: string): Set<Meld['tipo']> {
   const possiveis = new Set<Meld['tipo']>()
-  const fim = normalizarNotacao(texto).match(/(\d+)([mpsz])$/)
+  const fim = normalizarNotacao(texto).match(/(\d+)([mpsz]?)$/)
   if (!fim) return possiveis
-  const { tiles, error } = parseHand(fim[0])
+  // Ainda sem naipe, o formato do grupo é o mesmo em qualquer naipe numérico.
+  const { tiles, error } = parseHand(fim[1] + (fim[2] || 'm'))
   if (error) return possiveis
   const pedras = tiles.map(pedraDoTile)
   for (const marca of ['c', 'a']) {
@@ -174,23 +175,56 @@ export function chamadasPossiveis(texto: string): Set<Meld['tipo']> {
   return possiveis
 }
 
+/** Um grupo ainda sem naipe: números soltos ou uma chamada marcada (`999c`, `1111a`). */
+export interface GrupoPendente {
+  digitos: string
+  marca: string
+}
+
 /**
- * Chamada escolhida antes do grupo (como no teclado de pedras): com um número só,
- * completa o grupo pelo tipo — Pon `5`+`p` → `555pc`, Kan `1`+`s` → `1111sc`,
- * Kan fechado → `…a`, Chi `1`+`m` → `123mc` (a partir da menor pedra). O 0 (5
- * vermelho) entra uma vez e o resto é 5 comum (Pon `0p` → `055pc`). Com mais de um
- * número, o grupo fica como foi digitado. Sem números, ou Chi impossível, `null`.
+ * Separa o fim da notação que ainda espera o naipe do resto, já completo. Podem
+ * ser vários grupos (`999c123c78`): o naipe escolhido no fim vale para todos.
  */
-export function expandirChamada(digitos: string, naipe: string, tipo: Meld['tipo']): string | null {
-  const marca = tipo === 'kanFechado' ? 'a' : 'c'
-  if (!digitos) return null
-  if (digitos.length > 1) return digitos + naipe + marca
-  const base = digitos === '0' ? '5' : digitos
-  if (tipo === 'pon') return digitos + base.repeat(2) + naipe + marca
-  if (tipo === 'kanAberto' || tipo === 'kanFechado') return digitos + base.repeat(3) + naipe + marca
-  const inicio = Number(base)
-  if (naipe === 'z' || inicio < 1 || inicio > 7) return null
-  return `${digitos}${inicio + 1}${inicio + 2}${naipe}${marca}`
+export function separarPendentes(texto: string) {
+  const normalizado = normalizarNotacao(texto)
+  const pendentes = normalizado.match(/(?:\d+[ca]?)+$/)?.[0] ?? ''
+  return { completo: normalizado.slice(0, normalizado.length - pendentes.length), pendentes }
+}
+
+export function lerPendentes(pendentes: string): GrupoPendente[] {
+  return [...pendentes.matchAll(/(\d+)([ca]?)/g)].map(([, digitos, marca]) => ({ digitos, marca }))
+}
+
+/** Aplica o naipe a todos os grupos pendentes: `999c12` + `p` → `999pc12p`. */
+export function fecharPendentes(pendentes: string, naipe: string): string {
+  return pendentes.replace(/(\d+)([ca]?)/g, (_grupo, digitos, marca) => digitos + naipe + marca)
+}
+
+/** Tipo do meld de um grupo pendente, ou `null` se o formato não fecha uma chamada. */
+export function tipoDoGrupoPendente({ digitos, marca }: GrupoPendente): Meld['tipo'] | null {
+  if (!marca) return null
+  const { tiles, error } = parseHand(digitos + 'm')
+  if (error) return null
+  const meld = meldDoGrupo(tiles.map(pedraDoTile), marca, digitos + marca)
+  return 'chave' in meld ? null : meld.tipo
+}
+
+/** Slots que os grupos sem naipe ocupam: número solto vale 1 e chamada vale 3 (kan também). */
+export function slotsDosPendentes(pendentes: string): number {
+  return lerPendentes(pendentes).reduce(
+    (soma, grupo) => soma + (tipoDoGrupoPendente(grupo) ? 3 : grupo.digitos.length),
+    0,
+  )
+}
+
+/** Se o grupo inteiro cabe nos números pendentes (todos terão o mesmo naipe). */
+export function grupoCabeNosPendentes(digitos: string, grupo: string): boolean {
+  let acumulado = digitos
+  for (const numero of grupo) {
+    if (!podeDigitarNumero(acumulado, numero)) return false
+    acumulado += numero
+  }
+  return true
 }
 
 /**

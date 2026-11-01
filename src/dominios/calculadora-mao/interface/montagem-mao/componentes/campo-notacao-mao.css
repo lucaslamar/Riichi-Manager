@@ -13,7 +13,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Barra de ferramentas como a da calculadora: ‹ Peças e ? à esquerda, AC e ⌫ à
+/* Barra de ferramentas como a da calculadora: ‹ Peças à esquerda, AC e ⌫ à
    direita, com uma linha separando do teclado. */
 .barra-notacao-mao {
   display: flex;
@@ -104,15 +104,15 @@
 }
 
 /* Teclado no layout de calculadora: chamadas na linha de funções, números com o
-   7-8-9 em cima, naipes na coluna dos operadores e AC / 0 / ⌫ embaixo. */
+   1-2-3 em cima (como no celular), naipes na coluna dos operadores e o 0 embaixo. */
 .teclado-notacao-mao {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-areas:
     'chi pon kan kanf'
-    'n7 n8 n9 m'
+    'n1 n2 n3 m'
     'n4 n5 n6 p'
-    'n1 n2 n3 s'
+    'n7 n8 n9 s'
     'n0 n0 n0 z';
   gap: 8px;
   margin-top: 2px;
@@ -368,4 +368,10 @@
 
 .pedra-branca-notacao.vermelha {
   color: #d32f2f;
+}
+
+/* Tablet em pé: a engrenagem mora na barra de ações, que some na notação. Aqui ela
+   fica no cabeçalho, para as regras continuarem a um toque. */
+.btn-configuracao-mao-cabecalho.em-notacao:not(#_) {
+  display: inline-flex;
 }
