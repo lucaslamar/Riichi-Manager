@@ -30,8 +30,8 @@ interface ItemMenuGlobal {
 const MODULOS_MENU: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
-  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
 ]
 
 const APP_MENU: ItemMenuGlobal[] = [
@@ -42,8 +42,8 @@ const APP_MENU: ItemMenuGlobal[] = [
 const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
-  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
 ]
 
@@ -64,13 +64,13 @@ const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
     icone: 'palito-riichi',
     chaveCurta: 'menu.quickCalculatorShort',
   },
-  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
   {
     tela: 'sorteadorVentos',
     chave: 'menu.windDraw',
     icone: 'chapeu-helice',
     chaveCurta: 'menu.windDrawShort',
   },
+  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
   { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h', chaveCurta: 'menu.rulesShort' },
 ]
 

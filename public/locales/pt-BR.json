@@ -736,7 +736,7 @@
     }
   },
   "notation": {
-    "toggle": "Notação",
+    "toggle": "MPSZ",
     "errors": {
       "suitWithoutNumbers": "Naipe \"{{suit}}\" sem números antes",
       "invalidHonor": "{{tile}} não existe (honras vão de 1z a 7z)",

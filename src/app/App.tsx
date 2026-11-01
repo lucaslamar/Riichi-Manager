@@ -23,8 +23,8 @@ export type TelaPrincipal =
 const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
   'calculadora',
   'calculadoraRapida',
-  'aprender',
   'sorteadorVentos',
+  'aprender',
   'regras',
 ]
 

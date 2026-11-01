@@ -729,7 +729,7 @@
     }
   },
   "notation": {
-    "toggle": "表記",
+    "toggle": "MPSZ",
     "errors": {
       "suitWithoutNumbers": "「{{suit}}」の前に数字がありません",
       "invalidHonor": "{{tile}}はありません（字牌は1z〜7z）",
