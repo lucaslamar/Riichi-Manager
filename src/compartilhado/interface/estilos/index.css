@@ -8,7 +8,6 @@
 @import './componentes/placeholder.css';
 @import './dominios/calculadoras/index.css';
 @import './dominios/centerpiece.css';
-@import './dominios/torneio-fast.css';
 @import './responsivo.css';
 @import './dominios/centerpiece-torneio-responsivo.css';
 @import '../../tema/tema-escuro.css';

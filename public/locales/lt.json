@@ -788,13 +788,6 @@
   "centerpiece": {
     "win": {
       "useResult": "Use result in Centerpiece"
-    },
-    "tournament": {
-      "ranking": "Ranking",
-      "position": "Pos.",
-      "player": "Player",
-      "points": "PT",
-      "pdfError": "Couldn't create the PDF. Check your connection and try again."
     }
   },
   "players": {
@@ -1055,6 +1048,101 @@
       "first": "% 1st",
       "fourth": "% 4th",
       "tobi": "% tobi"
+    }
+  },
+  "tournament": {
+    "badge": "Tournament · Round {{round}} · Table {{table}}",
+    "backToGrid": "Back to grid",
+    "create": {
+      "title": "New tournament",
+      "steps": {
+        "players": "Players",
+        "rules": "Rules",
+        "draw": "Draw",
+        "review": "Review"
+      },
+      "roundTime": "Round time",
+      "roundTimeHelp": "When the round time runs out, the game ends on the current hand.",
+      "methodHelp": "Tables are drawn so players repeat each other as little as possible.",
+      "balanceWinds": "Balance winds",
+      "balanceWindsHelp": "Each player goes through each wind as evenly as possible.",
+      "rounds": "Number of rounds",
+      "summary": "{{players}} players · {{tables}} tables · {{rounds}} rounds · {{points}} pts · {{time}} per round",
+      "firstRound": "First round",
+      "drawAgain": "Draw again",
+      "start": "Start tournament"
+    },
+    "notes": {
+      "lineLabel": "Player on line {{line}}",
+      "placeholder": "Type or paste the names",
+      "suggestions": "Registered players",
+      "counterMissing": "{{players}} players · {{missing}} short of {{target}}",
+      "counterReady": "{{players}} players · {{tables}} tables",
+      "counterRepeated": "There are repeated names on the list"
+    },
+    "timer": {
+      "label": "Round {{round}} time",
+      "round": "Round on the timer",
+      "start": "Start",
+      "pause": "Pause",
+      "addAll": "+{{minutes}} min for all",
+      "reset": "Reset"
+    },
+    "grid": {
+      "rounds": "Rounds",
+      "round": "Round {{number}}",
+      "roundProgress": "Round {{number}} · {{done}}/{{total}}",
+      "currentHand": "Current hand",
+      "status": {
+        "nao_iniciada": "Not started",
+        "em_andamento": "In progress",
+        "finalizada": "To check",
+        "guardada": "Saved"
+      },
+      "open": "Open table",
+      "resume": "Resume table",
+      "manual": "Enter from paper",
+      "save": "Save table",
+      "reopen": "Reopen table",
+      "addTime": "+{{minutes}} min",
+      "pointsOf": "{{name}}'s points",
+      "sum": "Sum: {{sum}} of {{expected}}",
+      "reopenTitle": "Reopen table {{number}}?",
+      "reopenHelp": "It leaves the ranking until saved again."
+    },
+    "ranking": {
+      "title": "Tournament ranking",
+      "position": "Pos.",
+      "player": "Player",
+      "games": "Tables",
+      "points": "PT",
+      "pdf": "Create PDF",
+      "pdfError": "Couldn't create the PDF. Check your connection and try again."
+    },
+    "diagnosis": {
+      "title": "Grid diagnosis",
+      "grade": {
+        "perfeita": "Perfect",
+        "boa": "Good",
+        "regular": "Fair",
+        "ruim": "Poor"
+      },
+      "maxMeetings": "Max meetings",
+      "maxMeetingsHelp": "How many times the same pair meets, at worst.",
+      "repeatedPairs": "Repeated pairs",
+      "repeatedPairsHelp": "Pairs that meet more than once.",
+      "sameTables": "Identical tables",
+      "sameTablesHelp": "Tables with the same 4 players in different rounds.",
+      "indirect": "Indirect meetings",
+      "indirectHelp": "Pairs who never meet but share an opponent.",
+      "indirectAll": "Everyone meets",
+      "pairsTitle": "Pairs that repeat",
+      "windsTitle": "Winds per player"
+    },
+    "finish": {
+      "action": "End tournament",
+      "title": "End this tournament?",
+      "help": "Saved tables stay in the history and the general ranking. You can create another tournament afterwards."
     }
   }
 }

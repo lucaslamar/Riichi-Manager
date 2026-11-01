@@ -132,7 +132,11 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
       }
     }
   }
-  const lesteExato = [...contadorLeste.values()].every((vezesComoLeste) => vezesComoLeste === 1)
+  const vezesLeste = [...contadorLeste.values()]
+  const lesteExato =
+    contadorLeste.size === totalJogadores || rodadas.length < VENTOS.length
+      ? vezesLeste.every((vezes) => vezes <= Math.ceil(rodadas.length / VENTOS.length))
+      : false
 
   // Verificar dispersão de adversários repetidos por jogador (torneios grandes).
   const limiteRepetidos =
@@ -185,16 +189,59 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
   }
 }
 
+export type NotaGrade = 'perfeita' | 'boa' | 'regular' | 'ruim'
+
+export function notaDaGrade(qualidade: RelatorioQualidade): NotaGrade {
+  if (qualidade.quantidadeTresVezesMais > 0 || qualidade.mesasCompletasRepetidas > 0) return 'ruim'
+  if (qualidade.quantidadeDuasVezes === 0) return 'perfeita'
+  if (qualidade.quantidadeDuasVezes <= qualidade.quantidadeIdealRepetidos) return 'boa'
+  return 'regular'
+}
+
+/** Quantas vezes cada jogador ficou em cada vento, nesta ordem: Leste, Sul, Oeste, Norte. */
+export function distribuicaoDeVentos(rodadas: Rodada[]): Map<string, [number, number, number, number]> {
+  const contagem = new Map<string, [number, number, number, number]>()
+  for (const rodada of rodadas) {
+    for (const mesa of rodada.mesas) {
+      for (const assento of mesa.assentos) {
+        const linha = contagem.get(assento.jogador) ?? [0, 0, 0, 0]
+        linha[VENTOS.indexOf(assento.vento)] += 1
+        contagem.set(assento.jogador, linha)
+      }
+    }
+  }
+  return contagem
+}
+
 /**
- * Retorna um rótulo legível para a nota da grade.
- *
- * @param qualidade - Relatório de qualidade gerado.
- * @returns String descritiva: "Excelente", "Boa", etc.
+ * Encontros indiretos: pares que não jogam juntos, mas enfrentam ao menos um
+ * adversário em comum. Devolve quantos pares nunca se enfrentam e quantos deles
+ * têm adversário em comum.
  */
-export function rotuloQualidade(qualidade: RelatorioQualidade): string {
-  if (qualidade.quantidadeTresVezesMais > 0) return '⚠️ Ruim'
-  if (qualidade.mesasCompletasRepetidas > 0) return '⚠️ Ruim'
-  if (qualidade.quantidadeDuasVezes === 0) return '✨ Perfeita'
-  if (qualidade.quantidadeDuasVezes <= qualidade.quantidadeIdealRepetidos) return '✅ Boa'
-  return '🟡 Regular'
+export function coberturaIndireta(rodadas: Rodada[]) {
+  const adversarios = new Map<string, Set<string>>()
+  for (const rodada of rodadas) {
+    for (const mesa of rodada.mesas) {
+      for (const assento of mesa.assentos) {
+        const conjunto = adversarios.get(assento.jogador) ?? new Set<string>()
+        for (const outro of mesa.assentos) {
+          if (outro.jogador !== assento.jogador) conjunto.add(outro.jogador)
+        }
+        adversarios.set(assento.jogador, conjunto)
+      }
+    }
+  }
+  const jogadores = [...adversarios.keys()]
+  let semEncontro = 0
+  let comIndireto = 0
+  for (let primeiro = 0; primeiro < jogadores.length; primeiro += 1) {
+    for (let segundo = primeiro + 1; segundo < jogadores.length; segundo += 1) {
+      const deA = adversarios.get(jogadores[primeiro])
+      const deB = adversarios.get(jogadores[segundo])
+      if (!deA || !deB || deA.has(jogadores[segundo])) continue
+      semEncontro += 1
+      if ([...deA].some((nome) => deB.has(nome))) comIndireto += 1
+    }
+  }
+  return { semEncontro, comIndireto }
 }

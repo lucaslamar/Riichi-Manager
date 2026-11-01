@@ -50,7 +50,9 @@ function finalizada(
     CTX,
   )
   return finalizarPartida(
-    dados.torneio ? { ...jogada, vinculoTorneio: { torneioId: 't', rodada: 0, mesa: 0 } } : jogada,
+    dados.torneio
+      ? { ...jogada, vinculoTorneio: { torneioId: 't', rodada: 0, mesa: 0, guardada: true } }
+      : jogada,
     quando.toISOString(),
   )
 }
@@ -66,6 +68,16 @@ teste('histórico: só finalizadas, da mais recente para a mais antiga', () => {
   const nova = finalizada(new Date(2026, 10, 1))
   const aberta = criarPartida('x', configDoPreset('padrao'), ['a', 'b', 'c', 'd'], CTX.agora)
   assert.deepEqual(partidasDoHistorico([antiga, aberta, nova]), [nova, antiga])
+})
+
+teste('mesa de torneio só entra no histórico depois de guardada', () => {
+  const partida = finalizada(AGORA, { torneio: true })
+  const naoGuardada = {
+    ...partida,
+    vinculoTorneio: { torneioId: 't', rodada: 0, mesa: 0, guardada: false },
+  }
+  assert.deepEqual(partidasDoHistorico([naoGuardada]), [])
+  assert.deepEqual(partidasDoHistorico([partida]), [partida])
 })
 
 teste('origem: casual ou torneio', () => {

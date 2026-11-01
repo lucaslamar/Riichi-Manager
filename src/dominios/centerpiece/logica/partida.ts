@@ -94,7 +94,8 @@ export interface Partida {
   /** Dealer em 1º na última mão: a pessoa escolhe encerrar ou seguir. */
   agariYameDisponivel?: boolean
   resultado?: ResultadoFinal[]
-  vinculoTorneio?: { torneioId: string; rodada: number; mesa: number }
+  /** Índices base zero na grade. `guardada`: o organizador conferiu e confirmou. */
+  vinculoTorneio?: { torneioId: string; rodada: number; mesa: number; guardada?: boolean }
 }
 
 export interface Contexto {
@@ -535,6 +536,24 @@ export function finalizarPartida(partida: Partida, agora: string): Partida {
     resultado: calcularResultado(partida),
     fim: partida.fim,
   }
+}
+
+/**
+ * Pontos finais digitados (mesa no papel ou correção): trocam o placar e recalculam
+ * o resultado. Os palitos já estão nesses pontos. Multas de chombo continuam valendo.
+ */
+export function corrigirPontosFinais(
+  partida: Partida,
+  pontos: readonly [number, number, number, number],
+  agora: string,
+): Partida {
+  return finalizarPartida(
+    {
+      ...partida,
+      placar: { ...partida.placar, pontos: porCadeira((cadeira) => pontos[cadeira]), palitos: 0 },
+    },
+    partida.finalizadaEm ?? agora,
+  )
 }
 
 /** Quanto falta (negativo) ou sobra em relação a cada outro jogador. */

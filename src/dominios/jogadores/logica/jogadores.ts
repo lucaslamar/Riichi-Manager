@@ -120,7 +120,11 @@ export function garantirPorNomes(
   let lista = jogadores
   const ids = nomes.map((nome) => {
     const procurado = normalizarTexto(nome)
-    const existente = lista.find((jogador) => normalizarTexto(jogador.nome) === procurado)
+    const existente = lista.find(
+      (jogador) =>
+        normalizarTexto(jogador.nome) === procurado ||
+        normalizarTexto(jogador.apelido ?? '') === procurado,
+    )
     if (existente) return existente.id
     const resultado = adicionarJogador(lista, { nome: nome.trim() || '?' }, gerarId(), criadoEm)
     if (!resultado.ok) return gerarId()

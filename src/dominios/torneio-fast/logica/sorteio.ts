@@ -11,7 +11,7 @@
  * 3. Guarda a melhor grade encontrada (menor score de qualidade).
  */
 
-import { MAX_TENTATIVAS_SORTEIO, TOTAL_RODADAS, PONTUACAO_INICIAL, VENTOS } from './constantes'
+import { MAX_TENTATIVAS_SORTEIO, RODADAS_PADRAO, VENTOS } from './constantes'
 import { avaliarGrade, chavePar } from './qualidade'
 import { embaralhar } from './aleatorio'
 import type { CandidatoGrade, Mesa, Rodada, Assento, Vento } from './tipos'
@@ -88,7 +88,7 @@ function construirRodada(
 
       // Remove o jogador escolhido da lista de disponíveis para este vento.
       const [escolhido] = candidatos.splice(melhorIndice, 1)
-      assentos.push({ vento, jogador: escolhido, pontuacao: PONTUACAO_INICIAL })
+      assentos.push({ vento, jogador: escolhido })
     }
 
     mesas.push({ id: indiceMesa + 1, assentos })
@@ -105,10 +105,16 @@ function construirRodada(
  * Gera a grade completa do torneio fast, tentando várias vezes e guardando
  * a melhor versão encontrada.
  *
- * @param jogadores - Array embaralhado de nomes dos jogadores.
+ * @param jogadores - Array embaralhado de jogadores.
+ * @param totalRodadas - Quantas rodadas gerar.
+ * @param equilibrarVentos - Desligado, os ventos de cada mesa são sorteados no fim.
  * @returns O melhor candidato de grade encontrado.
  */
-export function gerarGrade(jogadores: string[]): CandidatoGrade {
+export function gerarGrade(
+  jogadores: string[],
+  totalRodadas: number = RODADAS_PADRAO,
+  equilibrarVentos = true,
+): CandidatoGrade {
   let melhorCandidato: CandidatoGrade | null = null
 
   for (let tentativa = 0; tentativa < MAX_TENTATIVAS_SORTEIO; tentativa++) {
@@ -122,7 +128,7 @@ export function gerarGrade(jogadores: string[]): CandidatoGrade {
     const contagemPares = new Map<ChavePar, number>()
     const rodadas: Rodada[] = []
 
-    for (let indiceRodada = 0; indiceRodada < TOTAL_RODADAS; indiceRodada++) {
+    for (let indiceRodada = 0; indiceRodada < totalRodadas; indiceRodada++) {
       rodadas.push(construirRodada(indiceRodada, jogadores, offsetPorJogador, contagemPares))
     }
 
@@ -137,5 +143,20 @@ export function gerarGrade(jogadores: string[]): CandidatoGrade {
     if (qualidade.score === 0) break
   }
 
-  return melhorCandidato!
+  return equilibrarVentos ? melhorCandidato! : sortearVentos(melhorCandidato!, jogadores.length)
+}
+
+/** Mantém quem joga com quem e sorteia o vento de cada um dentro da mesa. */
+function sortearVentos(candidato: CandidatoGrade, totalJogadores: number): CandidatoGrade {
+  const rodadas = candidato.rodadas.map((rodada) => ({
+    ...rodada,
+    mesas: rodada.mesas.map((mesa) => {
+      const ventos = embaralhar([...VENTOS])
+      return {
+        ...mesa,
+        assentos: mesa.assentos.map((assento, indice) => ({ ...assento, vento: ventos[indice] })),
+      }
+    }),
+  }))
+  return { rodadas, qualidade: avaliarGrade(rodadas, totalJogadores) }
 }

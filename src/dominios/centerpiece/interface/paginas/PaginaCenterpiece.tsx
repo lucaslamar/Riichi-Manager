@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from 'react'
+import { carregarTorneiosSeNecessario } from '@/dominios/torneio-fast/interface/hooks/useTorneios'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
@@ -38,12 +39,15 @@ export default function PaginaCenterpiece() {
 
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
 function TelasCenterpiece() {
+  // Migrações de dados antigos antes de qualquer lista desta tela ser lida.
+  useState(carregarTorneiosSeNecessario)
   const { t } = useI18n()
   const { partidas, abertas, descartar } = usePartidas()
   const { jogadores } = useJogadores()
   const [tela, setTela] = useState<TelaModulo>({ nome: 'inicio' })
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
   const irInicio = () => setTela({ nome: 'inicio' })
+  const irTorneio = () => setTela({ nome: 'torneio' })
 
   const nomesDa = (id: string) => {
     const partida = partidas.find((item) => item.id === id)
@@ -65,8 +69,8 @@ function TelasCenterpiece() {
         <PlacarPartida
           key={partida.id}
           partida={partida}
-          aoSair={irInicio}
-          aoFinalizar={irInicio}
+          aoSair={partida.vinculoTorneio ? irTorneio : irInicio}
+          aoFinalizar={partida.vinculoTorneio ? irTorneio : irInicio}
           aoTrocarDeMesa={(id) => setTela({ nome: 'mesa', id })}
         />
       )
@@ -77,12 +81,9 @@ function TelasCenterpiece() {
   if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
   if (tela.nome === 'torneio') {
     return (
-      <>
-        <TituloTela titulo={t('match.home.tournament')} aoVoltar={irInicio} />
-        <Suspense fallback={null}>
-          <PaginaTorneio aoVoltar={irInicio} />
-        </Suspense>
-      </>
+      <Suspense fallback={null}>
+        <PaginaTorneio aoVoltar={irInicio} aoAbrirPartida={(id) => setTela({ nome: 'mesa', id })} />
+      </Suspense>
     )
   }
 

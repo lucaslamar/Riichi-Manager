@@ -10,7 +10,7 @@ import { carregarPartidas, salvarPartidas } from '../../persistencia/repositorio
 let partidas: Partida[] | null = null
 const ouvintes = new Set<() => void>()
 
-function lerPartidas() {
+export function lerPartidas() {
   partidas ??= carregarPartidas(armazenamentoLocal, {
     idDoNome: garantirJogadoresPorNomes,
     gerarId,
@@ -32,7 +32,10 @@ function assinar(ouvinte: () => void) {
   }
 }
 
-const acoes = {
+export const acoesPartidas = {
+  adicionar(partida: Partida) {
+    definirPartidas([...lerPartidas(), partida])
+  },
   criar(config: ConfigMesa, jogadorIds: readonly [string, string, string, string]) {
     const partida = criarPartida(gerarId(), config, jogadorIds, new Date().toISOString())
     definirPartidas([...lerPartidas(), partida])
@@ -53,6 +56,6 @@ export function usePartidas() {
   return {
     partidas: lista,
     abertas: lista.filter((partida) => partida.status === 'em_andamento'),
-    ...acoes,
+    ...acoesPartidas,
   }
 }
