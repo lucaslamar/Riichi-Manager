@@ -890,5 +890,31 @@
       "points": "PT",
       "pdfError": "Couldn't create the PDF. Check your connection and try again."
     }
+  },
+  "players": {
+    "title": "Players",
+    "subtitle": "Roster used in games, the tournament and the ranking.",
+    "search": "Search players",
+    "add": "Add",
+    "new": "New player",
+    "choose": "Choose player",
+    "name": "Name",
+    "nickname": "Nickname (optional)",
+    "save": "Save",
+    "rename": "Rename",
+    "renameNamed": "Rename {{name}}",
+    "archive": "Archive",
+    "archiveNamed": "Archive {{name}}",
+    "archiveTitle": "Archive {{name}}?",
+    "archiveHelp": "The player leaves the selection lists but stays in the history and ranking. You can restore them later.",
+    "restore": "Restore",
+    "restoreNamed": "Restore {{name}}",
+    "archivedCount": "Archived ({{count}})",
+    "alreadyChosen": "Already chosen",
+    "empty": "No players yet.",
+    "emptyChooser": "No players yet. Create the first one above.",
+    "noResults": "No players found.",
+    "errorEmptyName": "Enter a name.",
+    "errorDuplicateName": "A player with this name already exists. Check the archived ones too."
   }
 }

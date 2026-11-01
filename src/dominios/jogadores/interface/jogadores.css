@@ -1,0 +1,221 @@
+/* Cadastro de jogadores e SeletorJogador. Cores só pelos tokens de tokens.css. */
+
+/* ─── Folha: no celular a modal sai de baixo, grudada na borda ───────────── */
+@media (max-width: 767px) {
+  .modal-fundo:has(> .modal-folha) {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-folha {
+    width: 100%;
+    max-width: none;
+    max-height: 85dvh;
+    border-width: 1px 0 0;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ─── Campos ──────────────────────────────────────────────────────────────── */
+.entrada-jogador {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 2px solid var(--entrada-borda);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.entrada-jogador::placeholder {
+  color: var(--texto-apoio);
+}
+
+.entrada-jogador:focus-visible {
+  border-color: var(--primario);
+  outline: 2px solid var(--primario);
+  outline-offset: 1px;
+}
+
+.entrada-jogador[aria-invalid='true'] {
+  border-color: var(--texto-erro);
+}
+
+.campo-jogador {
+  display: block;
+  margin: 12px 0 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.campo-jogador:first-child {
+  margin-top: 0;
+}
+
+.erro-jogador {
+  margin: 6px 0 0;
+  color: var(--texto-erro);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.acoes-form-jogador {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.form-jogador .acoes-form-jogador {
+  margin-top: 18px;
+}
+
+.acoes-form-jogador > button {
+  flex: 1 1 0;
+  min-height: 44px;
+}
+
+/* ─── Tela Jogadores ──────────────────────────────────────────────────────── */
+.barra-jogadores {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.barra-jogadores > button {
+  flex: 0 0 auto;
+  min-height: 44px;
+}
+
+.lista-jogadores,
+.lista-seletor-jogador {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.linha-cadastro {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 56px;
+  border-bottom: 1px solid var(--linha-divisoria);
+}
+
+.dados-jogador {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nome-cadastro {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+.apelido-jogador {
+  overflow-wrap: anywhere;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+}
+
+.acao-jogador {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+}
+
+.acao-jogador:hover {
+  color: var(--primario);
+}
+
+.acao-jogador:focus-visible,
+.botao-arquivados:focus-visible,
+.opcao-seletor-jogador:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+.vazio-jogadores {
+  margin: 16px 0;
+  color: var(--texto-apoio);
+  text-align: center;
+}
+
+.arquivados-jogadores {
+  margin-top: 14px;
+}
+
+.botao-arquivados {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  color: var(--texto-apoio);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.linha-cadastro--arquivada .nome-cadastro {
+  color: var(--texto-apoio);
+}
+
+/* ─── SeletorJogador ──────────────────────────────────────────────────────── */
+.botao-novo-jogador {
+  width: 100%;
+  min-height: 44px;
+  margin: 10px 0 6px;
+}
+
+.opcao-seletor-jogador {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 12px 4px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.opcao-seletor-jogador:hover:not(:disabled) {
+  color: var(--primario);
+}
+
+.opcao-seletor-jogador:disabled {
+  color: var(--texto-apoio);
+  cursor: not-allowed;
+}
+
+.selo-jogador {
+  margin-left: auto;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}

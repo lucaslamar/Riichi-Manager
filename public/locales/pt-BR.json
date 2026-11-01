@@ -883,5 +883,31 @@
       "points": "PT",
       "pdfError": "Não foi possível gerar o PDF. Verifique a conexão e tente de novo."
     }
+  },
+  "players": {
+    "title": "Jogadores",
+    "subtitle": "Cadastro usado nas partidas, no torneio e no ranking.",
+    "search": "Buscar jogador",
+    "add": "Adicionar",
+    "new": "Novo jogador",
+    "choose": "Escolher jogador",
+    "name": "Nome",
+    "nickname": "Apelido (opcional)",
+    "save": "Salvar",
+    "rename": "Renomear",
+    "renameNamed": "Renomear {{name}}",
+    "archive": "Arquivar",
+    "archiveNamed": "Arquivar {{name}}",
+    "archiveTitle": "Arquivar {{name}}?",
+    "archiveHelp": "O jogador sai das listas de escolha, mas continua no histórico e no ranking. Dá para restaurar depois.",
+    "restore": "Restaurar",
+    "restoreNamed": "Restaurar {{name}}",
+    "archivedCount": "Arquivados ({{count}})",
+    "alreadyChosen": "Já escolhido",
+    "empty": "Nenhum jogador cadastrado ainda.",
+    "emptyChooser": "Nenhum jogador cadastrado. Crie o primeiro acima.",
+    "noResults": "Nenhum jogador encontrado.",
+    "errorEmptyName": "Informe o nome.",
+    "errorDuplicateName": "Já existe um jogador com esse nome. Confira também os arquivados."
   }
 }
