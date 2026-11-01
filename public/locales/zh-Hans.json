@@ -601,7 +601,8 @@
     "bubbleTapToDraw": "玩家 {{player}}，点击抽取！",
     "bubbleResult": "玩家 {{player}}：{{wind}}！",
     "ronRon": "荣和荣和！",
-    "tapToPlayAgain": "点击再抽一次"
+    "tapToPlayAgain": "点击再抽一次",
+    "continueTutorial": "继续教程"
   },
   "learn": {
     "title": "学习玩法",

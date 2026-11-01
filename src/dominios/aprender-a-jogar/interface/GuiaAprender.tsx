@@ -35,6 +35,8 @@ const FAIXA_TOQUE = 1 / 3
 const MOVIMENTO_TOQUE = 10
 /** Na capa, quantos px o dedo anda de lado para trocar de tela (o mesmo das outras telas). */
 const DESLIZE_CAPA = 70
+/** Segurar o dedo por este tempo (ms) mostra as barras, mesmo sobre texto ou pedras. */
+const TEMPO_SEGURAR = 450
 
 const SELETOR_FOCAVEIS =
   'a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])'
@@ -173,12 +175,12 @@ export default function GuiaAprender({
     return () => window.clearTimeout(tempo)
   }, [barraVisivel, indiceAberto, indice, naCapa])
 
-  // Na capa a barra inferior do app sobe por cima do guia (guia-aprender.css),
-  // menos com o índice ou uma ferramenta abertos por cima da capa.
-  const barraDoApp = naCapa && !indiceAberto && !ferramenta
+  // A barra inferior do app sobe por cima do guia (guia-aprender.css) na capa e
+  // junto com a barra de cima, menos com o índice ou uma ferramenta por cima.
+  const barraDoApp = vista.tipo === 'livro' && barraVisivel && !indiceAberto && !ferramenta
   useEffect(() => {
-    document.body.classList.toggle('guia-capa-aberta', barraDoApp)
-    return () => document.body.classList.remove('guia-capa-aberta')
+    document.body.classList.toggle('guia-barra-app-visivel', barraDoApp)
+    return () => document.body.classList.remove('guia-barra-app-visivel')
   }, [barraDoApp])
 
   /**
@@ -268,6 +270,9 @@ export default function GuiaAprender({
   // igual no celular, no tablet e no mouse, e arrastar (deslize ou seleção de
   // texto) não conta como toque.
   const toque = useRef<{ x: number; y: number } | null>(null)
+  const temporizadorSegurar = useRef<number | undefined>(undefined)
+  const pararSegurar = () => window.clearTimeout(temporizadorSegurar.current)
+  useEffect(() => pararSegurar, [])
   // Modais abertas por uma página (termo, cartão de yaku, tutorial de Han e
   // Fu) ficam num portal, mas os eventos delas sobem pela árvore do React até
   // aqui: só conta o que aconteceu dentro do palco, senão o toque na modal
@@ -311,17 +316,41 @@ export default function GuiaAprender({
         evento.isPrimary && evento.button === 0 && doPalco(evento)
           ? { x: evento.clientX, y: evento.clientY }
           : null
+      pararSegurar()
+      // Segurar não vale com o mouse sobre botões e links (o clique é deles).
+      if (
+        toque.current &&
+        !(evento.pointerType === 'mouse' && (evento.target as Element).closest(SELETOR_INTERATIVOS))
+      ) {
+        temporizadorSegurar.current = window.setTimeout(() => {
+          toque.current = null
+          setBarraVisivel(true)
+        }, TEMPO_SEGURAR)
+      }
+    },
+    onPointerMove: (evento: EventoPonteiro<HTMLDivElement>) => {
+      const comeco = toque.current
+      if (
+        comeco &&
+        Math.hypot(evento.clientX - comeco.x, evento.clientY - comeco.y) > MOVIMENTO_TOQUE
+      ) {
+        pararSegurar()
+      }
     },
     onPointerCancel: () => {
+      pararSegurar()
       toque.current = null
     },
     onPointerUp: (evento: EventoPonteiro<HTMLDivElement>) => {
+      pararSegurar()
       const comeco = toque.current
       toque.current = null
       if (!comeco) return
       if (Math.hypot(evento.clientX - comeco.x, evento.clientY - comeco.y) > MOVIMENTO_TOQUE) return
       if ((evento.target as Element).closest(SELETOR_INTERATIVOS)) return
-      if (window.getSelection()?.toString()) return
+      // Só o mouse arrasta para selecionar: no dedo, uma seleção que ficou de um
+      // toque longo não pode travar a barra.
+      if (evento.pointerType === 'mouse' && window.getSelection()?.toString()) return
       // Na capa os toques nas bordas não abrem o livro (só os botões).
       if (naCapa) return
       const largura = evento.currentTarget.clientWidth
@@ -329,6 +358,37 @@ export default function GuiaAprender({
       if (x < largura * FAIXA_TOQUE) mudarPagina(-1)
       else if (x > largura * (1 - FAIXA_TOQUE)) mudarPagina(1)
       else setBarraVisivel((visivel) => !visivel)
+    },
+  }
+
+  /** Sai da ferramenta e segue para a página seguinte à que a abriu. */
+  const continuarTutorial = () => {
+    setFerramenta(null)
+    setIndice((atual) => Math.min(atual + 1, livro.length - 1))
+  }
+
+  // No Sorteador aberto pelo guia: dedo para a esquerda volta à página de onde
+  // veio e para a direita segue para a próxima. A janela do "?" é portal: os
+  // toques nela sobem pela árvore do React, mas não são gesto.
+  const deslizeFerramenta = useRef<{ x: number; y: number } | null>(null)
+  const deslizarSorteador = {
+    onTouchStart: (evento: EventoToque<HTMLElement>) => {
+      const dedo = evento.touches[0]
+      deslizeFerramenta.current =
+        evento.touches.length === 1 && doPalco(evento) && !toqueIgnorado(evento.target)
+          ? { x: dedo.clientX, y: dedo.clientY }
+          : null
+    },
+    onTouchEnd: (evento: EventoToque<HTMLElement>) => {
+      const comeco = deslizeFerramenta.current
+      deslizeFerramenta.current = null
+      if (!comeco) return
+      const dedo = evento.changedTouches[0]
+      const deltaX = dedo.clientX - comeco.x
+      const deltaY = dedo.clientY - comeco.y
+      if (Math.abs(deltaX) < DESLIZE_CAPA || Math.abs(deltaX) < Math.abs(deltaY) * 1.5) return
+      if (deltaX < 0) setFerramenta(null)
+      else continuarTutorial()
     },
   }
 
@@ -671,6 +731,7 @@ export default function GuiaAprender({
         <section
           className="guia-ferramenta"
           aria-label={ferramenta === 'sorteador' ? t('windDraw.title') : t('menu.quickCalculator')}
+          {...(ferramenta === 'sorteador' ? deslizarSorteador : {})}
         >
           <header className="guia-consulta__barra">
             <button
@@ -688,7 +749,11 @@ export default function GuiaAprender({
             <span className="guia-barra__espaco" aria-hidden="true" />
           </header>
           <div className="guia-ferramenta__corpo">
-            {ferramenta === 'sorteador' ? <PaginaSorteadorVentos /> : <PaginaCalculadoraHanFu />}
+            {ferramenta === 'sorteador' ? (
+              <PaginaSorteadorVentos aoContinuarTutorial={continuarTutorial} />
+            ) : (
+              <PaginaCalculadoraHanFu />
+            )}
           </div>
         </section>
       )}

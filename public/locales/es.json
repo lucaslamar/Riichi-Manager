@@ -613,7 +613,8 @@
     "bubbleTapToDraw": "Jugador {{player}}, ¡toca para sortear!",
     "bubbleResult": "Jugador {{player}}: ¡{{wind}}!",
     "ronRon": "¡Ron ron!",
-    "tapToPlayAgain": "Toca para otro sorteo"
+    "tapToPlayAgain": "Toca para otro sorteo",
+    "continueTutorial": "Continúa el tutorial"
   },
   "learn": {
     "title": "Aprender a jugar",

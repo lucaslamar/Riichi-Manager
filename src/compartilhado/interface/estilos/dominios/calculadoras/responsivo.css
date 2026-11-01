@@ -3951,7 +3951,7 @@
  * Tablet layouts are intentionally scoped from 768px upward so the existing
  * phone experience remains controlled by the earlier mobile rules.
  */
-@media (min-width: 768px) and (max-width: 1023px) and (min-height: 600px) {
+@media (min-width: 641px) and (max-width: 1023px) and (min-height: 600px) {
   .conteudo-principal,
   main {
     max-width: none;
@@ -4182,7 +4182,7 @@
  * flex:1 + keyboard flex:0-auto) instead of page scroll — sized for the
  * tablet's taller sticky header (67px) and persistent bottom tab bar (56px).
  */
-@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+@media (min-width: 641px) and (max-width: 1023px) and (orientation: portrait) {
   html:has(.card-mao-completa.etapa-montagem),
   body:has(.card-mao-completa.etapa-montagem) {
     height: 100dvh;
@@ -5119,7 +5119,7 @@
  * largura da tela (até o tamanho do Pro 13, 80px), então nada sobra à direita
  * nem as Honras ficam encostadas à esquerda.
  */
-@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+@media (min-width: 641px) and (max-width: 1023px) and (orientation: portrait) {
   .construtor-mao-montagem .painel-teclado-calculadora .menu-acoes-teclado-mobile {
     display: block;
     overflow: visible;
@@ -5451,5 +5451,24 @@
     --finalizacao-tile-largura: clamp(36px, calc((100cqw - 13 * 3px) / 14), 52px);
     --finalizacao-tile-altura: calc(var(--finalizacao-tile-largura) * 1.35);
     padding-right: 0;
+  }
+}
+
+/* Celular em pé: respiro entre a última fileira de pedras e a barra inferior. */
+@media (max-width: 640px) and (orientation: portrait) {
+  .construtor-mao-montagem .teclado-pedras {
+    padding-bottom: 12px;
+  }
+}
+
+/* Dobráveis abertos e iPad mini em pé, mais estreitos que os blocos de 768px:
+   a engrenagem fica só na barra de ações e as pedras respiram antes da barra inferior. */
+@media (min-width: 641px) and (max-width: 767px) and (orientation: portrait) {
+  .etapa-montagem .btn-configuracao-mao-cabecalho {
+    display: none;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    padding-bottom: 18px;
   }
 }

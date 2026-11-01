@@ -24,7 +24,7 @@
  * guia, que continua ocupando a tela toda: sem vão, qualquer que seja a altura
  * da barra (modo compacto, área de toque ampliada). O palco reserva o espaço.
  */
-body.guia-capa-aberta .barra-navegacao-inferior {
+body.guia-barra-app-visivel .barra-navegacao-inferior {
   z-index: 101;
 }
 

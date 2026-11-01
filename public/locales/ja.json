@@ -601,7 +601,8 @@
     "bubbleTapToDraw": "プレイヤー{{player}}、タップして抽選！",
     "bubbleResult": "プレイヤー{{player}}：{{wind}}！",
     "ronRon": "ロンロン！",
-    "tapToPlayAgain": "タップでもう一度抽選"
+    "tapToPlayAgain": "タップでもう一度抽選",
+    "continueTutorial": "チュートリアルを続ける"
   },
   "learn": {
     "title": "遊び方を学ぶ",

@@ -10,7 +10,12 @@ import '../estilos/sorteador-ventos.css'
 
 const RESPIRO_ANTES_DE_REINICIAR_MS = 1200
 
-export default function PaginaSorteadorVentos() {
+export default function PaginaSorteadorVentos({
+  aoContinuarTutorial,
+}: {
+  /** Aberto pelo guia: no fim, o toque segue o tutorial em vez de sortear de novo. */
+  aoContinuarTutorial?: () => void
+} = {}) {
   const { t } = useI18n()
   const { fase, reveladas, ventosRevelados, rotorRef, revelar, proximo, reiniciar } =
     useSorteadorVentos()
@@ -28,7 +33,7 @@ export default function PaginaSorteadorVentos() {
   if (fase === 'desacelerando') fala = t('windDraw.drawing')
   else if (concluido) {
     fala = t('windDraw.ronRon')
-    dica = t('windDraw.tapToPlayAgain')
+    dica = t(aoContinuarTutorial ? 'windDraw.continueTutorial' : 'windDraw.tapToPlayAgain')
   } else if (fase === 'revelado' && ultimoRevelado) {
     fala = t('windDraw.bubbleResult', {
       player: reveladas,
@@ -39,7 +44,11 @@ export default function PaginaSorteadorVentos() {
 
   let rotuloAcessivel = t('windDraw.tapAreaLabel', { player: reveladas + 1 })
   if (fase === 'revelado') rotuloAcessivel = t('windDraw.nextPlayer')
-  else if (concluido) rotuloAcessivel = t('windDraw.restartButtonLabel')
+  else if (concluido) {
+    rotuloAcessivel = aoContinuarTutorial
+      ? t('windDraw.continueTutorial')
+      : t('windDraw.restartButtonLabel')
+  }
 
   // Logo que o 4º vento aparece, um toque de quem ainda está olhando não pode
   // apagar o resultado: o reinício só vale depois de um respiro.
@@ -53,7 +62,9 @@ export default function PaginaSorteadorVentos() {
   const tocar = () => {
     if (fase === 'ciclando') revelar()
     else if (concluido) {
-      if (Date.now() - concluidoEmRef.current >= RESPIRO_ANTES_DE_REINICIAR_MS) reiniciar()
+      if (Date.now() - concluidoEmRef.current < RESPIRO_ANTES_DE_REINICIAR_MS) return
+      if (aoContinuarTutorial) aoContinuarTutorial()
+      else reiniciar()
     } else proximo()
   }
 

@@ -619,7 +619,8 @@
     "bubbleTapToDraw": "Žaidėjau {{player}}, palieskite ir traukite!",
     "bubbleResult": "Žaidėjas {{player}}: {{wind}}!",
     "ronRon": "Ron ron!",
-    "tapToPlayAgain": "Palieskite ir traukite dar kartą"
+    "tapToPlayAgain": "Palieskite ir traukite dar kartą",
+    "continueTutorial": "Tęsti pamoką"
   },
   "learn": {
     "title": "Išmok žaisti",

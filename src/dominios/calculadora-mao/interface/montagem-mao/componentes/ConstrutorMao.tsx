@@ -175,6 +175,22 @@ export default function ConstrutorMao({
     mudarTextoNotacao(notacaoCompleta + resto.join(''))
   }
 
+  /** Tira um número solto que esperava o naipe (`posicao` na ordem em que aparecem na mão). */
+  const removerPedraPendente = (posicao: number) => {
+    let restante = posicao
+    const texto = gruposPendentes.map((grupo) => {
+      if (grupo.tipo || restante < 0) return grupo.digitos + grupo.marca
+      if (restante >= grupo.digitos.length) {
+        restante -= grupo.digitos.length
+        return grupo.digitos + grupo.marca
+      }
+      const digitos = grupo.digitos.slice(0, restante) + grupo.digitos.slice(restante + 1)
+      restante = -1
+      return digitos && digitos + grupo.marca
+    })
+    mudarTextoNotacao(notacaoCompleta + texto.join(''))
+  }
+
   /*
    * O texto acompanha a mão: ao abrir a notação e quando ela muda fora do campo
    * (remover pedra ou meld tocando nele, Limpar). Digitar não dispara isto: texto
@@ -379,6 +395,7 @@ export default function ConstrutorMao({
               )
             : undefined
         }
+        aoRemoverPedraPendente={removerPedraPendente}
         aoRemoverMeldPendente={removerGrupoPendente}
         entradaPorNotacao={entradaPorNotacao}
       />

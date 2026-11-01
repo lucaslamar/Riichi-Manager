@@ -889,11 +889,11 @@
 }
 
 /*
- * Tablet (a partir de 768px, fora do celular deitado): a calculadora vira uma
+ * Dobrável aberto e tablet (a partir de 641px, fora do celular deitado): a calculadora vira uma
  * superfície de borda a borda que preenche até a navegação (o shell flex fica
  * em compartilhado/interface/estilos/responsivo.css).
  */
-@media (min-width: 768px) and (min-height: 561px) {
+@media (min-width: 641px) and (min-height: 561px) {
   .calculadora-han-fu {
     flex: 1 0 auto;
     width: 100%;
@@ -926,6 +926,39 @@
     flex: 1 1 220px;
   }
 
+}
+
+/*
+ * Dobráveis abertos e iPad mini em pé: mesma disposição dos tablets (controles
+ * empilhados à esquerda e resultado à direita, sempre à vista), que os blocos
+ * acima só alcançam a partir de 760px.
+ */
+@media (min-width: 641px) and (max-width: 767px) and (orientation: portrait) {
+  .painel-principal-han-fu {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .seletores-topo-han-fu,
+  .controles-principais-han-fu,
+  .controle-honba-linha-han-fu {
+    grid-column: 1;
+  }
+
+  .resultado-han-fu {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-content: center;
+    min-height: 100%;
+  }
+
+  .controles-principais-han-fu {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Dobráveis abertos, iPad mini e tablets maiores. */
+@media (min-width: 641px) and (min-height: 561px) {
   /*
    * Tabela rápida com o Han nas colunas e o Fu nas linhas (a mesma versão
    * transposta do celular deitado). Cabe na largura sem rolar de lado, então
@@ -944,7 +977,7 @@
   .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho {
     position: sticky;
     /* Altura do cabeçalho do app (preso no topo da página nesta faixa). */
-    top: 66px;
+    top: 69px;
     z-index: 3;
     border-radius: 8px 8px 0 0;
     background: var(--cor-superficie-alt, #f8fafc);
@@ -964,6 +997,28 @@
 
   body.modo-compacto .calculadora-han-fu {
     padding: 28px;
+  }
+}
+
+/* Abaixo de 768px o cabeçalho do app é mais alto. */
+@media (min-width: 641px) and (max-width: 767px) and (min-height: 561px) {
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho {
+    top: 75px;
+  }
+}
+
+/*
+ * iPad Pro 13 e Surface em pé: a mesma disposição do iPad mini, ampliada. Sem
+ * isso, a tela grande espalha os controles e deixa o texto da tabela pequeno.
+ */
+@media (min-width: 900px) and (min-height: 1200px) and (orientation: portrait) {
+  .calculadora-han-fu {
+    zoom: 1.25;
+  }
+
+  /* O zoom também escala o `top`: 55,2px × 1,25 = altura do cabeçalho do app. */
+  .tabela-referencia-han-fu.transposta .linha-referencia-han-fu.cabecalho {
+    top: 55.2px;
   }
 }
 

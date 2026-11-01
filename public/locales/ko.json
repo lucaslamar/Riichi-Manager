@@ -601,7 +601,8 @@
     "bubbleTapToDraw": "플레이어 {{player}}, 눌러서 뽑기!",
     "bubbleResult": "플레이어 {{player}}: {{wind}}!",
     "ronRon": "론론!",
-    "tapToPlayAgain": "눌러서 한 번 더 뽑기"
+    "tapToPlayAgain": "눌러서 한 번 더 뽑기",
+    "continueTutorial": "튜토리얼 계속하기"
   },
   "learn": {
     "title": "배우기",

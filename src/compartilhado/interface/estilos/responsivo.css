@@ -703,7 +703,7 @@
  * são exclusivas dos dois botões. Telefones (<768px) e paisagem conservam o
  * layout próprio deles.
  */
-@media (min-width: 768px) and (orientation: portrait) {
+@media (min-width: 641px) and (orientation: portrait) {
   .rodape-teclado-finalizacao {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 10px;
@@ -742,7 +742,7 @@
  * Han e Fu e Sorteador ajustam a própria superfície nos arquivos deles; aqui
  * ficam o shell e as páginas de cartão (Regras e Sobre).
  */
-@media (min-width: 768px) and (min-height: 561px) {
+@media (min-width: 641px) and (min-height: 561px) {
   body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica, .pagina-regras) {
     display: flex;
     min-height: 100vh;

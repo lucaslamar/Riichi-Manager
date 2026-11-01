@@ -259,7 +259,7 @@
 
 /* iPad Air e Pro em pé: o painel do teclado vira uma faixa de borda a borda
    (responsivo.css), com a mesma margem lateral de 16px da barra de ações. */
-@media (min-width: 768px) and (orientation: portrait) {
+@media (min-width: 641px) and (orientation: portrait) {
   .painel-teclado-calculadora .campo-notacao-mao {
     margin-inline: 16px;
     padding: 10px 0 22px;

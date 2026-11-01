@@ -11,7 +11,7 @@ import BotaoYakus from '../../modais/yakus/BotaoYakus'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 
 /** Tablets em retrato: a ⚙ sai do cabeçalho e vai para a barra de ações (responsivo.css). */
-const CONSULTA_TABLET_RETRATO = '(min-width: 768px) and (orientation: portrait)'
+const CONSULTA_TABLET_RETRATO = '(min-width: 641px) and (orientation: portrait)'
 /** Tablet em qualquer orientação (a partir de 768px, fora do celular deitado). */
 const CONSULTA_TABLET = '(min-width: 768px) and (min-height: 561px)'
 
@@ -55,6 +55,8 @@ interface PropsMaoAtual {
   entradaPorNotacao?: boolean
   /** Números da notação ainda sem naipe: aparecem como pedras brancas no fim da mão. */
   pedrasPendentes?: string[]
+  /** Toque numa pedra branca: some esse número. */
+  aoRemoverPedraPendente?: (posicao: number) => void
   /** Chamadas da notação ainda sem naipe: melds tracejados com os números. */
   meldsPendentes?: { indice: number; tipo: Meld['tipo']; pedras: string[] }[]
   /** Toque num meld pendente: some o grupo inteiro (e a chamada marcada). */
@@ -217,6 +219,7 @@ export function MaoAtual({
   aoLimpar,
   entradaPorNotacao = false,
   pedrasPendentes = [],
+  aoRemoverPedraPendente,
   meldsPendentes = [],
   aoRemoverMeldPendente,
 }: PropsMaoAtual) {
@@ -236,15 +239,16 @@ export function MaoAtual({
       : `${t('calculator.buildTitle', { total: slotsEstruturais })}${sufixoFisico}`
   /** Número ainda sem naipe: pedra branca tracejada (o 0 aparece como 5 vermelho). */
   const renderizarPedraPendente = (numero: string, indice: number) => (
-    <span
+    <button
       // biome-ignore lint/suspicious/noArrayIndexKey: números digitados em ordem
       key={`pendente-${indice}`}
+      type="button"
       className={`chip-pedra pedra-mao pedra-pendente-notacao ${numero === '0' ? 'vermelha' : ''}`.trim()}
-      role="img"
       aria-label={t('notation.pendingTile', { number: numero === '0' ? '5' : numero })}
+      onClick={() => aoRemoverPedraPendente?.(indice)}
     >
       {numero === '0' ? '5' : numero}
-    </span>
+    </button>
   )
 
   const clicarPedraDaMao = (indicePedra: number) => {

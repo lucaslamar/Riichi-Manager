@@ -262,9 +262,9 @@ export function SeletorTipoVitoria({
   )
 }
 
-/** Celular deitado e tablet (a partir de 768px, fora do celular deitado). */
+/** Celular deitado, dobrável aberto e tablet (a partir de 641px, fora do celular deitado). */
 const CONSULTA_TABELA_TRANSPOSTA =
-  '(orientation: landscape) and (min-width: 561px) and (max-width: 1000px) and (max-height: 500px), (min-width: 768px) and (min-height: 561px)'
+  '(orientation: landscape) and (min-width: 561px) and (max-width: 1000px) and (max-height: 500px), (min-width: 641px) and (min-height: 561px)'
 
 export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaRapidaHanFu }) {
   const { t } = useI18n()

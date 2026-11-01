@@ -1,5 +1,27 @@
 # Changelog - Mojoca
 
+## 5.8.1 - 2026-11-01
+
+### Adicionado
+
+- **Tutorial, segurar para mostrar as barras**: segurar o dedo na página mostra o fechar e o índice, mesmo sobre texto ou pedras. O menu inferior do app aparece e some junto.
+- **Sorteador aberto pelo Tutorial**: no fim do sorteio, o balão diz "Continue o tutorial" e o toque leva à página seguinte. Deslizar o dedo para a esquerda volta à página de onde veio, e para a direita segue para a próxima. Pelo menu inferior, o Sorteador continua igual.
+
+### Alterado
+
+- **Aprender virou Tutorial** no app em português, no menu e na capa do guia.
+- **Dobráveis abertos**: em pé, a partir de 641px de largura, a Calculadora de Mão, a Han e Fu, o Sorteador e Regras agora seguem o padrão do Pixel 9 Pro Fold: telas de borda a borda, pedras grandes sem os rótulos de naipe e, na Han e Fu, controles à esquerda e resultado à direita. Vale também para o iPad mini.
+- **Tabela rápida da Han e Fu**: nos dobráveis abertos, Fu na vertical e Han na horizontal, sem rolar para o lado.
+- **Han e Fu no iPad Pro 13 e no Surface em pé**: a tela ficou 25% maior, com a disposição do iPad mini.
+- **Teclado MPSZ**: as teclas de naipe aparecem em maiúsculo (M, P, S, Z).
+- **Calculadora de Mão no celular em pé**: mais espaço entre a última fileira de pedras e o menu inferior.
+
+### Corrigido
+
+- **Pedras sem naipe**: tocar numa pedra que ainda só tem o número agora a apaga.
+- **Barra do Tutorial travada**: um texto que ficava selecionado por toque longo impedia o toque de mostrar a barra com o fechar.
+- **Linha de Han presa no topo da Tabela rápida**: ficava parte escondida sob o cabeçalho ao rolar, nos tablets e dobráveis.
+
 ## 5.8.0 - 2026-11-01
 
 ### Adicionado

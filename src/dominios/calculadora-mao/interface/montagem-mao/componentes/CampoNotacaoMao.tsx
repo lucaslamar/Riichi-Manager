@@ -352,7 +352,7 @@ export function CampoNotacaoMao({
             key={tecla.valor}
             className={`tecla-notacao-mao area-${tecla.area} ${tecla.classe ?? ''}`.trim()}
             type="button"
-            aria-label={tecla.dica ? `${tecla.valor} – ${t(tecla.dica)}` : undefined}
+            aria-label={tecla.dica ? `${tecla.valor.toUpperCase()} – ${t(tecla.dica)}` : undefined}
             disabled={
               tecla.classe === 'naipe'
                 ? naipeBloqueado(tecla.valor)
@@ -362,7 +362,7 @@ export function CampoNotacaoMao({
               tecla.classe === 'naipe' ? tocarNaipe(tecla.valor) : tocarNumero(tecla.valor)
             }
           >
-            <span className="rotulo-tecla-notacao-mao">{tecla.valor}</span>
+            <span className="rotulo-tecla-notacao-mao">{tecla.valor.toUpperCase()}</span>
             {tecla.dica && <span className="dica-tecla-notacao-mao">{t(tecla.dica)}</span>}
           </button>
         ))}
