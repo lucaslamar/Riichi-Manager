@@ -489,7 +489,7 @@
       "winTitle": "Winning tile",
       "win": "The last tile of the closed hand is the winning tile, the one that completed the hand. In 123456m789p1122z, the winning tile is 2z.",
       "tipTitle": "Tip",
-      "tip": "Each number shows up in the hand as a blank tile until you tap the suit. The call keys only light up when the last group fits them (123m → Chi). AC clears everything. To go back to the tile keyboard, tap Tiles or swipe left.",
+      "tip": "You can build several groups and numbers and tap the suit only at the end; it applies to all of them, which is handy for Honitsu and Itsu. Each number shows below it the honor it becomes with z. AC clears everything. To go back to the tile keyboard, tap Tiles or swipe your finger to the right.",
       "chi": "A run of 3 in the same suit taken from the player before you. Type 123m and tap Chi. Or tap Chi first and then a number: pick the run (still without a suit) and tap the suit. With Chi selected, tapping a tile in the hand also makes the chi.",
       "pon": "A triplet taken from any player’s discard. Type 111p and tap Pon. Or tap Pon first and then 1: three blank 1s wait for the suit; tap p.",
       "kan": "4 of a kind, the 4th taken from another player’s discard. Type 1111s and tap Kan. Or tap Kan first and then 1: four 1s appear; tap s.",
@@ -759,7 +759,14 @@
       "honors": "Honors",
       "redFive": "Red five",
       "backspace": "Delete",
-      "clear": "Clear all"
+      "clear": "Clear all",
+      "honor1": "East",
+      "honor2": "South",
+      "honor3": "West",
+      "honor4": "North",
+      "honor5": "White",
+      "honor6": "Green",
+      "honor7": "Red"
     },
     "pendingTile": "{{number}} waiting for a suit"
   }

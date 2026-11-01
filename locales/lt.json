@@ -501,7 +501,7 @@
       "winTitle": "Laiminčiasis akmuo",
       "win": "Paskutinis uždaros rankos akmuo yra laiminčiasis – tas, kuris užbaigė ranką. 123456m789p1122z laiminčiasis akmuo yra 2z.",
       "tipTitle": "Patarimas",
-      "tip": "Kiekvienas skaičius rankoje rodomas kaip baltas akmuo, kol paliesite rūšį. Skambinimo klavišai šviečia tik tada, kai paskutinė grupė jiems tinka (123m → Chi). AC viską išvalo. Norėdami grįžti į akmenų klaviatūrą, palieskite „Akmenys“ arba braukite į kairę.",
+      "tip": "Galite surinkti kelias grupes bei skaičius ir rūšį paliesti tik pabaigoje: ji galios visiems, tai patogu Honitsu ir Itsu. Po kiekvienu skaičiumi parašytas garbės akmuo, kuriuo jis tampa su z. AC viską išvalo. Norėdami grįžti į akmenų klaviatūrą, palieskite „Akmenys“ arba braukite pirštu į dešinę.",
       "chi": "Tos pačios rūšies seka iš 3, paimta iš prieš jus žaidusio žaidėjo. Įveskite 123m ir palieskite Chi. Arba pirma Chi, paskui skaičių: pasirinkite seką (dar be rūšies) ir palieskite rūšį. Pasirinkus Chi, palietus akmenį rankoje taip pat sudaromas chi.",
       "pon": "Trejetas, paimtas iš bet kurio žaidėjo išmesto akmens. Įveskite 111p ir palieskite Pon. Arba pirma Pon, paskui 1: atsiranda trys 1, laukiantys rūšies; palieskite p.",
       "kan": "4 vienodi, ketvirtas paimtas iš kito žaidėjo išmesto akmens. Įveskite 1111s ir palieskite Kan. Arba pirma Kan, paskui 1: atsiranda keturi 1; palieskite s.",
@@ -773,7 +773,14 @@
       "honors": "Garbės",
       "redFive": "Raud. 5",
       "backspace": "Ištrinti",
-      "clear": "Išvalyti viską"
+      "clear": "Išvalyti viską",
+      "honor1": "Rytai",
+      "honor2": "Pietūs",
+      "honor3": "Vakarai",
+      "honor4": "Šiaurė",
+      "honor5": "Balta",
+      "honor6": "Žalia",
+      "honor7": "Raudona"
     },
     "pendingTile": "{{number}} laukia rūšies"
   }
