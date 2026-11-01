@@ -868,8 +868,6 @@
       "inProgress": "Em andamento",
       "openCount": "Mesas abertas: {{count}}",
       "noneOpen": "Nenhuma mesa aberta.",
-      "tournament": "Torneio",
-      "tournamentHelp": "Torneio Fast",
       "history": "Histórico",
       "ranking": "Ranking",
       "playersHelp": "Cadastro de jogadores",
@@ -887,7 +885,8 @@
       "restart": "Recomeçar do 東1",
       "restartHelp": "A rodada, o dealer e o honba voltam ao início.",
       "honbaPlus": "Aumentar honba",
-      "honbaMinus": "Diminuir honba"
+      "honbaMinus": "Diminuir honba",
+      "windDraw": "Sorteador de Ventos"
     },
     "setup": {
       "title": "Nova partida",
@@ -1009,24 +1008,14 @@
       }
     },
     "history": {
-      "empty": "Nenhuma partida finalizada ainda.",
-      "origin": {
-        "casual": "Casual",
-        "torneio": "Torneio"
-      }
+      "empty": "Nenhuma partida finalizada ainda."
     },
     "ranking": {
       "period": "Período",
-      "origin": "Origem",
       "periods": {
         "mes": "Este mês",
         "ano": "Este ano",
         "tudo": "Tudo"
-      },
-      "origins": {
-        "todas": "Todas",
-        "casuais": "Casuais",
-        "torneios": "Torneios"
       },
       "empty": "Nenhuma partida finalizada neste filtro.",
       "games": "Partidas",
@@ -1034,101 +1023,6 @@
       "first": "% 1º",
       "fourth": "% 4º",
       "tobi": "% tobi"
-    }
-  },
-  "tournament": {
-    "badge": "Torneio · Rodada {{round}} · Mesa {{table}}",
-    "backToGrid": "Voltar à grade",
-    "create": {
-      "title": "Novo torneio",
-      "steps": {
-        "players": "Jogadores",
-        "rules": "Regras",
-        "draw": "Sorteio",
-        "review": "Revisão"
-      },
-      "roundTime": "Tempo da rodada",
-      "roundTimeHelp": "Quando o tempo da rodada acaba, a partida termina na mão atual.",
-      "methodHelp": "As mesas são sorteadas para os jogadores se repetirem o mínimo possível.",
-      "balanceWinds": "Equilibrar ventos",
-      "balanceWindsHelp": "Cada jogador passa por cada vento o mais igual possível.",
-      "rounds": "Número de rodadas",
-      "summary": "{{players}} jogadores · {{tables}} mesas · {{rounds}} rodadas · {{points}} pts · {{time}} por rodada",
-      "firstRound": "Primeira rodada",
-      "drawAgain": "Sortear de novo",
-      "start": "Começar torneio"
-    },
-    "notes": {
-      "lineLabel": "Jogador da linha {{line}}",
-      "placeholder": "Digite ou cole os nomes",
-      "suggestions": "Jogadores cadastrados",
-      "counterMissing": "{{players}} jogadores · faltam {{missing}} para {{target}}",
-      "counterReady": "{{players}} jogadores · {{tables}} mesas",
-      "counterRepeated": "Há nomes repetidos na lista"
-    },
-    "timer": {
-      "label": "Tempo da rodada {{round}}",
-      "round": "Rodada no timer",
-      "start": "Iniciar",
-      "pause": "Pausar",
-      "addAll": "+{{minutes}} min para todas",
-      "reset": "Reiniciar"
-    },
-    "grid": {
-      "rounds": "Rodadas",
-      "round": "Rodada {{number}}",
-      "roundProgress": "Rodada {{number}} · {{done}}/{{total}}",
-      "currentHand": "Mão atual",
-      "status": {
-        "nao_iniciada": "Não iniciada",
-        "em_andamento": "Em andamento",
-        "finalizada": "Conferir",
-        "guardada": "Guardada"
-      },
-      "open": "Abrir mesa",
-      "resume": "Continuar mesa",
-      "manual": "Lançar no papel",
-      "save": "Guardar mesa",
-      "reopen": "Reabrir mesa",
-      "addTime": "+{{minutes}} min",
-      "pointsOf": "Pontos de {{name}}",
-      "sum": "Soma: {{sum}} de {{expected}}",
-      "reopenTitle": "Reabrir a mesa {{number}}?",
-      "reopenHelp": "Ela sai do ranking até ser guardada de novo."
-    },
-    "ranking": {
-      "title": "Ranking do torneio",
-      "position": "Pos.",
-      "player": "Jogador",
-      "games": "Mesas",
-      "points": "PT",
-      "pdf": "Gerar PDF",
-      "pdfError": "Não foi possível gerar o PDF. Verifique a conexão e tente de novo."
-    },
-    "diagnosis": {
-      "title": "Diagnóstico da Grade",
-      "grade": {
-        "perfeita": "Perfeita",
-        "boa": "Boa",
-        "regular": "Regular",
-        "ruim": "Ruim"
-      },
-      "maxMeetings": "Máx. de encontros",
-      "maxMeetingsHelp": "Quantas vezes a mesma dupla se enfrenta, no pior caso.",
-      "repeatedPairs": "Duplas repetidas",
-      "repeatedPairsHelp": "Duplas que se enfrentam mais de uma vez.",
-      "sameTables": "Mesas iguais",
-      "sameTablesHelp": "Mesas com os mesmos 4 jogadores em rodadas diferentes.",
-      "indirect": "Encontros indiretos",
-      "indirectHelp": "Duplas que nunca se enfrentam, mas têm um adversário em comum.",
-      "indirectAll": "Todos se enfrentam",
-      "pairsTitle": "Duplas que se repetem",
-      "windsTitle": "Ventos por jogador"
-    },
-    "finish": {
-      "action": "Encerrar torneio",
-      "title": "Encerrar este torneio?",
-      "help": "As mesas guardadas continuam no histórico e no ranking geral. Depois você pode criar outro torneio."
     }
   }
 }

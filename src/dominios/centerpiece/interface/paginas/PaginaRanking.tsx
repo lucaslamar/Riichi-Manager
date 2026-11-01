@@ -2,17 +2,16 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { partesDoNome } from '@/dominios/jogadores/logica/jogadores'
-import type { FiltroOrigem, FiltroPeriodo } from '../../logica/ranking'
+import type { FiltroPeriodo } from '../../logica/ranking'
 import { useRankingGeral } from '../hooks/useRankingGeral'
 
 const PERIODOS: readonly FiltroPeriodo[] = ['mes', 'ano', 'tudo']
-const ORIGENS: readonly FiltroOrigem[] = ['todas', 'casuais', 'torneios']
 
-/** Ranking geral: partidas finalizadas, casuais e de torneio. */
+/** Ranking geral: soma das partidas finalizadas. */
 export default function PaginaRanking({ aoVoltar }: { aoVoltar: () => void }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
-  const { periodo, setPeriodo, origem, setOrigem, linhas, posicoes } = useRankingGeral()
+  const { periodo, setPeriodo, linhas, posicoes } = useRankingGeral()
 
   const nomeDe = (id: string) => {
     const jogador = jogadores.find((item) => item.id === id)
@@ -35,19 +34,6 @@ export default function PaginaRanking({ aoVoltar }: { aoVoltar: () => void }) {
               onClick={() => setPeriodo(opcao)}
             >
               {t(`match.ranking.periods.${opcao}`)}
-            </button>
-          ))}
-        </div>
-        <div className="ptd-segmentos" role="group" aria-label={t('match.ranking.origin')}>
-          {ORIGENS.map((opcao) => (
-            <button
-              key={opcao}
-              type="button"
-              className={`ptd-segmento${origem === opcao ? ' ptd-segmento--ativo' : ''}`}
-              aria-pressed={origem === opcao}
-              onClick={() => setOrigem(opcao)}
-            >
-              {t(`match.ranking.origins.${opcao}`)}
             </button>
           ))}
         </div>

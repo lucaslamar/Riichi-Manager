@@ -559,31 +559,78 @@
 
 /* ─── Dados ───────────────────────────────────────────────────────────────── */
 .ptd-dados {
-  display: flex;
-  min-height: 150px;
-  align-items: center;
-  justify-content: center;
   text-align: center;
 }
 
-.ptd-dados-par {
+/* Mesa vista de cima: cada lado com o vento e as somas que abrem aquela parede. */
+.ptd-mesa-dados {
+  display: grid;
+  width: min(100%, 320px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  grid-template: 1fr 1.4fr 1fr / 1fr 1.4fr 1fr;
+  gap: 6px;
+  color: var(--texto-principal);
+}
+
+.ptd-mesa-dados-lado {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  border: 2px solid var(--linha-divisoria);
+  border-radius: 10px;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.ptd-mesa-dados-lado strong {
+  font-size: 1.25rem;
+}
+
+.ptd-mesa-dados-lado--0 {
+  grid-area: 3 / 2;
+}
+
+.ptd-mesa-dados-lado--1 {
+  grid-area: 2 / 3;
+}
+
+.ptd-mesa-dados-lado--2 {
+  grid-area: 1 / 2;
+}
+
+.ptd-mesa-dados-lado--3 {
+  grid-area: 2 / 1;
+}
+
+.ptd-mesa-dados-lado--sorteado {
+  border-color: var(--cor-vez);
+  box-shadow: 0 0 12px var(--cor-vez);
+  font-weight: 800;
+}
+
+.ptd-mesa-dados-centro {
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: 2 / 2;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .ptd-dado {
   display: inline-flex;
-  width: 64px;
-  height: 64px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   border: 2px solid var(--entrada-borda);
   border-radius: 12px;
   color: var(--texto-principal);
   background: var(--superficie);
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 800;
 }
 
@@ -604,8 +651,9 @@
 }
 
 .ptd-dados-soma {
+  width: 100%;
   color: var(--texto-principal);
-  font-size: 2rem;
+  font-size: 1.25rem;
   font-weight: 800;
 }
 
@@ -618,11 +666,6 @@
   color: var(--texto-principal);
   font-size: 1.1rem;
   font-weight: 700;
-}
-
-.ptd-dados-parede i {
-  color: var(--cor-vez);
-  font-size: 1.5rem;
 }
 
 /* ─── Resultado ───────────────────────────────────────────────────────────── */
@@ -686,8 +729,24 @@
   border-radius: 12px;
   color: var(--texto-principal);
   background: var(--superficie);
-  font-size: clamp(2rem, 11vw, 3.5rem);
+}
+
+.smp-lado-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.smp-lado-conteudo strong {
+  font-size: clamp(1.75rem, 10vw, 3.25rem);
   font-weight: 800;
+}
+
+.smp-lado-conteudo small {
+  font-size: clamp(0.75rem, 3.2vw, 0.9375rem);
+  font-weight: 700;
 }
 
 .smp-lado--0 {
@@ -698,7 +757,7 @@
   grid-area: 2 / 3;
 }
 
-.smp-lado--1 span {
+.smp-lado--1 .smp-lado-conteudo {
   transform: rotate(-90deg);
 }
 
@@ -706,7 +765,7 @@
   grid-area: 1 / 2;
 }
 
-.smp-lado--2 span {
+.smp-lado--2 .smp-lado-conteudo {
   transform: rotate(180deg);
 }
 
@@ -714,13 +773,19 @@
   grid-area: 2 / 1;
 }
 
-.smp-lado--3 span {
+.smp-lado--3 .smp-lado-conteudo {
   transform: rotate(90deg);
 }
 
 .smp-lado--dealer {
+  outline: 3px solid var(--entrada-borda);
+  outline-offset: -3px;
+}
+
+.smp-lado--sorteado {
   outline: 3px solid var(--cor-vez);
   outline-offset: -3px;
+  box-shadow: 0 0 16px var(--cor-vez);
 }
 
 .smp-centro {
@@ -755,19 +820,15 @@
 }
 
 .smp-acoes {
-  display: grid;
+  display: flex;
   max-width: 460px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex-direction: column;
   gap: 8px;
   margin: 12px auto 0;
 }
 
 .smp-acoes > button {
-  min-height: 56px;
-}
-
-.smp-largo {
-  grid-column: span 2;
+  min-height: 48px;
 }
 
 /* ─── Histórico ───────────────────────────────────────────────────────────── */

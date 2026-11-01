@@ -4,7 +4,7 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import type { Cadeira, Partida } from '../../logica/partida'
-import { origemDaPartida, partidasDoHistorico } from '../../logica/ranking'
+import { partidasDoHistorico } from '../../logica/ranking'
 import ListaResultado from '../componentes/ListaResultado'
 import { ListaMaos } from '../componentes/ModaisPartida'
 import { usePartidas } from '../hooks/usePartidas'
@@ -29,13 +29,11 @@ export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) 
     iso
       ? new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(new Date(iso))
       : ''
-  const rotuloOrigem = (partida: Partida) => t(`match.history.origin.${origemDaPartida(partida)}`)
 
   if (aberta) {
     return (
       <section className="ptd-inicio ptd-detalhe-historico">
         <TituloTela titulo={data(aberta.finalizadaEm)} aoVoltar={() => setAbertaId(null)} />
-        <p className="ptd-apoio">{rotuloOrigem(aberta)}</p>
         <ListaResultado linhas={aberta.resultado ?? []} nomeDe={nomeNa(aberta)} />
         <h3 className="ptd-rotulo">{t('match.hands.title')}</h3>
         <ListaMaos partida={aberta} nomeDe={nomeNa(aberta)} />
@@ -57,10 +55,7 @@ export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) 
                 className="ptd-item-historico"
                 onClick={() => setAbertaId(partida.id)}
               >
-                <span className="ptd-item-historico-topo">
-                  <strong>{data(partida.finalizadaEm)}</strong>
-                  <span className="ptd-apoio">{rotuloOrigem(partida)}</span>
-                </span>
+                <strong>{data(partida.finalizadaEm)}</strong>
                 <ol className="ptd-placar-historico">
                   {(partida.resultado ?? []).map((linha) => (
                     <li key={linha.cadeira}>

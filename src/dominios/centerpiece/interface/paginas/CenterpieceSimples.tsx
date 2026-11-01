@@ -9,18 +9,31 @@ import {
   SIMPLES_INICIAL,
   type EstadoSimples,
 } from '../../logica/centerpieceSimples'
-import { CADEIRAS, CHAVE_VENTO, KANJI_VENTO, ventoDaCadeira } from '../../logica/partida'
+import { numerosDaParede } from '../../logica/dados'
+import { CADEIRAS, CHAVE_VENTO, KANJI_VENTO, ventoDaCadeira, type Cadeira } from '../../logica/partida'
 import { carregarSimples, salvarSimples } from '../../persistencia/repositorioPartidas'
 import JogarDados from '../componentes/JogarDados'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 
 /** Só o centro da mesa: abre direto, sem jogadores, e lembra o estado se o app fechar. */
-export default function CenterpieceSimples({ aoVoltar }: { aoVoltar: () => void }) {
+export default function CenterpieceSimples({
+  aoVoltar,
+  aoAbrirSorteador,
+}: {
+  aoVoltar: () => void
+  aoAbrirSorteador: () => void
+}) {
   const { t } = useI18n()
   const [estado, setEstado] = useState<EstadoSimples>(() => carregarSimples(armazenamentoLocal))
   const [confirmando, setConfirmando] = useState(false)
 
+  // Lado que caiu nos dados; a mão seguinte começa sem destaque.
+  const [ladoSorteado, setLadoSorteado] = useState<Cadeira | null>(null)
+
   const mudar = (proximo: EstadoSimples) => {
+    if (proximo.cadeiraDealer !== estado.cadeiraDealer || proximo.rodadaNumero !== estado.rodadaNumero) {
+      setLadoSorteado(null)
+    }
     setEstado(proximo)
     salvarSimples(armazenamentoLocal, proximo)
   }
@@ -32,14 +45,20 @@ export default function CenterpieceSimples({ aoVoltar }: { aoVoltar: () => void 
       <div className="smp-mesa">
         {CADEIRAS.map((cadeira) => {
           const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer)
+          const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + 4) % 4).join(' · ')
           return (
             <div
               key={cadeira}
-              className={`smp-lado smp-lado--${cadeira}${vento === 'leste' ? ' smp-lado--dealer' : ''}`}
+              className={`smp-lado smp-lado--${cadeira}${vento === 'leste' ? ' smp-lado--dealer' : ''}${
+                ladoSorteado === cadeira ? ' smp-lado--sorteado' : ''
+              }`}
               role="img"
-              aria-label={t(CHAVE_VENTO[vento])}
+              aria-label={`${t(CHAVE_VENTO[vento])}: ${numeros}`}
             >
-              <span aria-hidden="true">{KANJI_VENTO[vento]}</span>
+              <span className="smp-lado-conteudo" aria-hidden="true">
+                <strong>{KANJI_VENTO[vento]}</strong>
+                <small>{numeros}</small>
+              </span>
             </div>
           )
         })}
@@ -81,8 +100,16 @@ export default function CenterpieceSimples({ aoVoltar }: { aoVoltar: () => void 
         <button type="button" className="btn-primario" onClick={() => mudar(repetirDealer(estado))}>
           {t('match.simple.repeatDealer')}
         </button>
-        <JogarDados cadeiraDealer={estado.cadeiraDealer} className="btn-contorno smp-largo" />
-        <button type="button" className="btn-contorno smp-largo" onClick={() => setConfirmando(true)}>
+        <JogarDados
+          cadeiraDealer={estado.cadeiraDealer}
+          className="btn-contorno"
+          aoSortear={setLadoSorteado}
+        />
+        <button type="button" className="btn-contorno" onClick={aoAbrirSorteador}>
+          <i className="fas fa-shuffle" aria-hidden="true" />
+          {t('match.simple.windDraw')}
+        </button>
+        <button type="button" className="btn-contorno" onClick={() => setConfirmando(true)}>
           <i className="fas fa-rotate-left" aria-hidden="true" />
           {t('match.simple.restart')}
         </button>

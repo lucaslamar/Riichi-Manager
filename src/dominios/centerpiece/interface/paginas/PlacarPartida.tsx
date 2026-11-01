@@ -30,7 +30,6 @@ import {
 import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
 import CardPartida from '../componentes/CardPartida'
 import JogarDados from '../componentes/JogarDados'
-import SeloTorneioPlacar from '../componentes/SeloTorneioPlacar'
 import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
 import { iniciarBatida, type EstadoBatida } from '../hooks/estadoBatida'
@@ -227,9 +226,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             {anuncio}
           </div>
 
-          {partida.vinculoTorneio && (
-            <SeloTorneioPlacar vinculo={partida.vinculoTorneio} aoVoltarGrade={aoSair} />
-          )}
 
           <div className="cp-compass">
             {CADEIRAS.map((cadeira) => (

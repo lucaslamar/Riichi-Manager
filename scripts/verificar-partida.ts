@@ -13,7 +13,7 @@ import {
   repetirDealer,
   SIMPLES_INICIAL,
 } from '../src/dominios/centerpiece/logica/centerpieceSimples'
-import { jogarDados, paredeDaSoma } from '../src/dominios/centerpiece/logica/dados'
+import { jogarDados, numerosDaParede, paredeDaSoma } from '../src/dominios/centerpiece/logica/dados'
 import { migrarMesaAntiga, somaPontos } from '../src/dominios/centerpiece/logica/migrarMesaAntiga'
 import {
   calcularResultado,
@@ -330,6 +330,13 @@ teste('dados: parede pela soma e valores de 1 a 6', () => {
   assert.deepEqual(r, { dado1: 3, dado2: 5, soma: 8, parede: 'esquerda' })
   assert.equal(jogarDados(() => 0.9999).soma, 12)
   assert.equal(jogarDados(() => 0).soma, 2)
+})
+
+teste('números de cada parede: Leste 1, 5 e 9; Norte 4, 8 e 12', () => {
+  assert.deepEqual(numerosDaParede(0), [1, 5, 9])
+  assert.deepEqual(numerosDaParede(1), [2, 6, 10])
+  assert.deepEqual(numerosDaParede(2), [3, 7, 11])
+  assert.deepEqual(numerosDaParede(3), [4, 8, 12])
 })
 
 teste('Centerpiece simples: dealer, renchan, honba e virada de rodada', () => {

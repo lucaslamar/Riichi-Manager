@@ -105,7 +105,7 @@ export default function App() {
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
         <Suspense fallback={null}>
-          {tela === 'centerpiece' && <PaginaCenterpiece />}
+          {tela === 'centerpiece' && <PaginaCenterpiece aoAbrirSorteador={() => navegar('sorteadorVentos')} />}
         </Suspense>
         {tela === 'regras' && <PaginaRegras />}
         {tela === 'sobre' && <PaginaSobre />}

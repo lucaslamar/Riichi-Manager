@@ -5,24 +5,30 @@ import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import {
   descreverDados,
   jogarDados,
+  numerosDaParede,
   passosDaParede,
   type ResultadoDados,
 } from '../../logica/dados'
-import type { Cadeira } from '../../logica/partida'
+import { CADEIRAS, KANJI_VENTO, ventoDaCadeira, type Cadeira } from '../../logica/partida'
 
 const DURACAO_ANIMACAO_MS = 600
-/** Cadeira na tela: 0 embaixo, 1 à direita, 2 em cima, 3 à esquerda. */
-const SETA_DA_CADEIRA = ['fa-arrow-down', 'fa-arrow-right', 'fa-arrow-up', 'fa-arrow-left']
 
 interface PropsJogarDados {
   cadeiraDealer: Cadeira
   className?: string
   /** Avisa a tela (o timer de vez pausa com a folha aberta). */
   aoMudarAberto?: (aberto: boolean) => void
+  /** Cadeira da parede sorteada, para a tela também destacar o lado. */
+  aoSortear?: (cadeira: Cadeira) => void
 }
 
 /** Botão "Jogar 2 dados" e a folha com o resultado, a mesma em todas as mesas. */
-export default function JogarDados({ cadeiraDealer, className, aoMudarAberto }: PropsJogarDados) {
+export default function JogarDados({
+  cadeiraDealer,
+  className,
+  aoMudarAberto,
+  aoSortear,
+}: PropsJogarDados) {
   const { t } = useI18n()
   const [resultado, setResultado] = useState<ResultadoDados | null>(null)
   const [rolando, setRolando] = useState(false)
@@ -35,8 +41,10 @@ export default function JogarDados({ cadeiraDealer, className, aoMudarAberto }: 
     vibrar(40)
     window.clearTimeout(temporizador.current)
     temporizador.current = window.setTimeout(() => {
-      setResultado(jogarDados(Math.random))
+      const novo = jogarDados(Math.random)
+      setResultado(novo)
       setRolando(false)
+      aoSortear?.(((cadeiraDealer + passosDaParede(novo.parede)) % 4) as Cadeira)
     }, DURACAO_ANIMACAO_MS)
   }
 
@@ -52,10 +60,10 @@ export default function JogarDados({ cadeiraDealer, className, aoMudarAberto }: 
     aoMudarAberto?.(false)
   }
 
-  const descricao = resultado ? descreverDados(resultado, t) : ''
-  const cadeiraDaParede = resultado
-    ? (((cadeiraDealer + passosDaParede(resultado.parede)) % 4) as Cadeira)
-    : null
+  const cadeiraDaParede =
+    resultado && !rolando
+      ? (((cadeiraDealer + passosDaParede(resultado.parede)) % 4) as Cadeira)
+      : null
 
   return (
     <>
@@ -80,30 +88,49 @@ export default function JogarDados({ cadeiraDealer, className, aoMudarAberto }: 
           }
         >
           <div className="ptd-dados" aria-live="polite">
-            {rolando || !resultado ? (
-              <div className="ptd-dados-par" aria-hidden="true">
-                <span className="ptd-dado ptd-dado--rolando">
-                  <i className="fas fa-dice-five" />
-                </span>
-                <span className="ptd-dado ptd-dado--rolando">
-                  <i className="fas fa-dice-two" />
-                </span>
-              </div>
-            ) : (
-              <div role="img" aria-label={descricao}>
-                <div className="ptd-dados-par" aria-hidden="true">
-                  <span className="ptd-dado">{resultado.dado1}</span>
-                  <span className="ptd-dado">{resultado.dado2}</span>
-                  <span className="ptd-dados-soma">= {resultado.soma}</span>
-                </div>
-                <p className="ptd-dados-parede" aria-hidden="true">
-                  <i
-                    className={`fas ${SETA_DA_CADEIRA[cadeiraDaParede ?? 0]}`}
+            <div
+              className="ptd-mesa-dados"
+              role={resultado && !rolando ? 'img' : undefined}
+              aria-label={resultado && !rolando ? descreverDados(resultado, t) : undefined}
+            >
+              {CADEIRAS.map((cadeira) => {
+                const passos = (cadeira - cadeiraDealer + 4) % 4
+                return (
+                  <div
+                    key={cadeira}
+                    className={`ptd-mesa-dados-lado ptd-mesa-dados-lado--${cadeira}${
+                      cadeira === cadeiraDaParede ? ' ptd-mesa-dados-lado--sorteado' : ''
+                    }`}
                     aria-hidden="true"
-                  />
-                  {t(`match.dice.wall.${resultado.parede}`)}
-                </p>
+                  >
+                    <strong>{KANJI_VENTO[ventoDaCadeira(cadeira, cadeiraDealer)]}</strong>
+                    <span>{numerosDaParede(passos).join(' · ')}</span>
+                  </div>
+                )
+              })}
+              <div className="ptd-mesa-dados-centro" aria-hidden="true">
+                {rolando || !resultado ? (
+                  <>
+                    <span className="ptd-dado ptd-dado--rolando">
+                      <i className="fas fa-dice-five" />
+                    </span>
+                    <span className="ptd-dado ptd-dado--rolando">
+                      <i className="fas fa-dice-two" />
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="ptd-dado">{resultado.dado1}</span>
+                    <span className="ptd-dado">{resultado.dado2}</span>
+                    <strong className="ptd-dados-soma">= {resultado.soma}</strong>
+                  </>
+                )}
               </div>
+            </div>
+            {resultado && !rolando && (
+              <p className="ptd-dados-parede" aria-hidden="true">
+                {t(`match.dice.wall.${resultado.parede}`)}
+              </p>
             )}
           </div>
         </Modal>

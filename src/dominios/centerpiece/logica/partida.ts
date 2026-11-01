@@ -538,24 +538,6 @@ export function finalizarPartida(partida: Partida, agora: string): Partida {
   }
 }
 
-/**
- * Pontos finais digitados (mesa no papel ou correção): trocam o placar e recalculam
- * o resultado. Os palitos já estão nesses pontos. Multas de chombo continuam valendo.
- */
-export function corrigirPontosFinais(
-  partida: Partida,
-  pontos: readonly [number, number, number, number],
-  agora: string,
-): Partida {
-  return finalizarPartida(
-    {
-      ...partida,
-      placar: { ...partida.placar, pontos: porCadeira((cadeira) => pontos[cadeira]), palitos: 0 },
-    },
-    partida.finalizadaEm ?? agora,
-  )
-}
-
 /** Quanto falta (negativo) ou sobra em relação a cada outro jogador. */
 export function diferencasDePontos(placar: Placar, cadeira: Cadeira) {
   return CADEIRAS.filter((outra) => outra !== cadeira).map((outra) => ({

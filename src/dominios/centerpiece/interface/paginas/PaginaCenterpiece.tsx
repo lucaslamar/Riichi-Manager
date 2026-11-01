@@ -1,5 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
-import { carregarTorneiosSeNecessario } from '@/dominios/torneio-fast/interface/hooks/useTorneios'
+import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
@@ -15,39 +14,37 @@ import PlacarPartida from './PlacarPartida'
 import SetupPartida from './SetupPartida'
 import '../partida.css'
 
-const PaginaTorneio = lazy(() => import('@/dominios/torneio-fast/interface/paginas/PaginaTorneio'))
-
 type TelaModulo =
   | { nome: 'inicio' }
   | { nome: 'setup' }
   | { nome: 'simples' }
   | { nome: 'andamento' }
   | { nome: 'jogadores' }
-  | { nome: 'torneio' }
   | { nome: 'historico' }
   | { nome: 'ranking' }
   | { nome: 'mesa'; id: string }
 
 /** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
-export default function PaginaCenterpiece() {
+export default function PaginaCenterpiece({
+  aoAbrirSorteador,
+}: {
+  aoAbrirSorteador: () => void
+}) {
   return (
     <section className="ptd-modulo">
-      <TelasCenterpiece />
+      <TelasCenterpiece aoAbrirSorteador={aoAbrirSorteador} />
     </section>
   )
 }
 
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
-function TelasCenterpiece() {
-  // Migrações de dados antigos antes de qualquer lista desta tela ser lida.
-  useState(carregarTorneiosSeNecessario)
+function TelasCenterpiece({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }) {
   const { t } = useI18n()
   const { partidas, abertas, descartar } = usePartidas()
   const { jogadores } = useJogadores()
   const [tela, setTela] = useState<TelaModulo>({ nome: 'inicio' })
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
   const irInicio = () => setTela({ nome: 'inicio' })
-  const irTorneio = () => setTela({ nome: 'torneio' })
 
   const nomesDa = (id: string) => {
     const partida = partidas.find((item) => item.id === id)
@@ -61,7 +58,7 @@ function TelasCenterpiece() {
   if (tela.nome === 'setup') {
     return <SetupPartida aoVoltar={irInicio} aoIniciar={(id) => setTela({ nome: 'mesa', id })} />
   }
-  if (tela.nome === 'simples') return <CenterpieceSimples aoVoltar={irInicio} />
+  if (tela.nome === 'simples') return <CenterpieceSimples aoVoltar={irInicio} aoAbrirSorteador={aoAbrirSorteador} />
   if (tela.nome === 'mesa') {
     const partida = partidas.find((item) => item.id === tela.id)
     if (partida) {
@@ -69,8 +66,8 @@ function TelasCenterpiece() {
         <PlacarPartida
           key={partida.id}
           partida={partida}
-          aoSair={partida.vinculoTorneio ? irTorneio : irInicio}
-          aoFinalizar={partida.vinculoTorneio ? irTorneio : irInicio}
+          aoSair={irInicio}
+          aoFinalizar={irInicio}
           aoTrocarDeMesa={(id) => setTela({ nome: 'mesa', id })}
         />
       )
@@ -79,13 +76,6 @@ function TelasCenterpiece() {
   if (tela.nome === 'jogadores') return <PaginaJogadores aoVoltar={irInicio} />
   if (tela.nome === 'historico') return <PaginaHistorico aoVoltar={irInicio} />
   if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
-  if (tela.nome === 'torneio') {
-    return (
-      <Suspense fallback={null}>
-        <PaginaTorneio aoVoltar={irInicio} aoAbrirPartida={(id) => setTela({ nome: 'mesa', id })} />
-      </Suspense>
-    )
-  }
 
   if (tela.nome === 'andamento') {
     return (
@@ -166,13 +156,6 @@ function TelasCenterpiece() {
       texto: t('match.home.openCount', { count: abertas.length }),
       aoTocar: () =>
         setTela(abertas.length === 1 ? { nome: 'mesa', id: abertas[0].id } : { nome: 'andamento' }),
-    },
-    {
-      chave: 'torneio',
-      icone: 'fa-trophy',
-      titulo: t('match.home.tournament'),
-      texto: t('match.home.tournamentHelp'),
-      aoTocar: () => setTela({ nome: 'torneio' }),
     },
     {
       chave: 'historico',

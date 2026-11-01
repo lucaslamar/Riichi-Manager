@@ -34,6 +34,11 @@ export function passosDaParede(parede: ParedeDados) {
   return PAREDES.indexOf(parede)
 }
 
+/** Somas que abrem a parede a N passos do dealer: 0 → 1, 5 e 9 (Leste). */
+export function numerosDaParede(passos: number) {
+  return [1, 5, 9].map((numero) => numero + passos).filter((numero) => numero <= 12)
+}
+
 /** Texto por extenso, para `aria-label` na web e `accessibilityLabel` no React Native. */
 export function descreverDados(
   resultado: ResultadoDados,
