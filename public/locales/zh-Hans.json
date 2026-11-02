@@ -4,9 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "计算器",
-    "openMenu": "打开模块菜单",
-    "closeMenu": "关闭菜单",
+    "calculator": "计算器",
     "navigation": "主导航",
     "currentModule": "当前模块",
     "tagline": "立直麻将生态",

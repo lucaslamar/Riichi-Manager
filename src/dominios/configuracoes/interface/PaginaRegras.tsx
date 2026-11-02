@@ -1,6 +1,5 @@
 import { useId } from 'react'
-import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
-import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { PreferenciaTema } from '@/compartilhado/tema/temas'
 import packageJson from '../../../../package.json'
@@ -17,33 +16,13 @@ const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
  * calculadora ficam no menu contextual da Calculadora de Mão.
  */
 export default function PaginaRegras() {
-  const { t, idioma, idiomas, alterarIdioma } = useI18n()
+  const { t } = useI18n()
   const preferencias = usePreferencias()
-  const idSelectIdioma = useId()
   const idTituloTema = useId()
 
   return (
     <section className="pagina-regras" aria-label={t('menu.rulesShort')}>
       <h2 className="sr-only">{t('menu.rules')}</h2>
-
-      <div className="cartao-regras">
-        <i className="fas fa-globe cartao-regras__icone" aria-hidden="true" />
-        <label className="cartao-regras__texto" htmlFor={idSelectIdioma}>
-          <strong>{t('menu.language')}</strong>
-        </label>
-        <select
-          id={idSelectIdioma}
-          className="cartao-regras__select"
-          value={idioma}
-          onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
-        >
-          {idiomas.map((opcao) => (
-            <option key={opcao} value={opcao} lang={opcao}>
-              {ROTULOS_IDIOMA[opcao]}
-            </option>
-          ))}
-        </select>
-      </div>
 
       <div
         className="cartao-regras cartao-regras--empilhado"

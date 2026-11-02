@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { TelaPrincipal } from '@/app/App'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import GavetaMenu from './GavetaMenu'
 import { IconeMenu } from './IconeMenu'
 import {
   ITENS_NAVEGACAO,
   PAGINAS_NAVEGACAO,
   paginaDoDestino,
+  type DestinoNavegacao,
   type DestinoTela,
 } from './navegacao'
+import ModalIdioma from './ModalIdioma'
 import { ID_TITULO_TELA } from './TituloTela'
 
 interface PropsCabecalho {
@@ -21,16 +22,15 @@ interface PropsCabecalho {
 }
 
 /**
- * Cabeçalho, barra inferior (celular em pé e tablet), menu lateral (celular deitado,
- * onde a barra tomaria a altura) e sidebar fixa (telas grandes).
+ * Cabeçalho, barra inferior (celular em pé e tablet; no celular deitado o CSS a põe
+ * de pé, como trilho à esquerda) e sidebar fixa (telas grandes).
  * A barra tem duas páginas: "Mais" troca os itens no mesmo lugar, nada abre por cima.
  */
 export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: PropsCabecalho) {
   const { t } = useI18n()
   const paginaAtiva = paginaDoDestino(telaAtual)
   const [pagina, setPagina] = useState(paginaAtiva)
-  const [gavetaAberta, setGavetaAberta] = useState(false)
-  const fecharGaveta = useCallback(() => setGavetaAberta(false), [])
+  const [idiomaAberto, setIdiomaAberto] = useState(false)
   const barraRef = useRef<HTMLElement | null>(null)
   const focarPrimeiro = useRef(false)
   // Só anima ao trocar de página, não ao abrir o app.
@@ -48,8 +48,9 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
     barraRef.current?.querySelector<HTMLElement>('.item-tab-inferior:not(.item-tab-mais)')?.focus()
   }, [pagina])
 
-  const escolher = (destino: DestinoTela) => {
-    if (destino === 'aprender') aoAbrirAprender()
+  const escolher = (destino: DestinoNavegacao) => {
+    if (destino === 'idioma') setIdiomaAberto(true)
+    else if (destino === 'aprender') aoAbrirAprender()
     else aoNavegar(destino)
   }
 
@@ -75,7 +76,7 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
     </button>
   )
 
-  const listaItens = (aoEscolher: (destino: DestinoTela) => void = escolher) => (
+  const listaItens = (
     <section className="drawer-secao">
       <h2>{t('menu.app')}</h2>
       <div className="drawer-itens">
@@ -87,7 +88,7 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
               className={`item-menu-global ${ativo ? 'ativo' : ''}`}
               type="button"
               aria-current={ativo ? 'page' : undefined}
-              onClick={() => aoEscolher(item.destino)}
+              onClick={() => escolher(item.destino)}
             >
               <IconeMenu icone={item.icone} />
               <span>{t(item.chave)}</span>
@@ -101,7 +102,6 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
   const barraInferior = createPortal(
     <nav ref={barraRef} className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
       <div key={pagina} className={`barra-pagina${trocou.current ? ` barra-pagina--${naSegunda ? 'segunda' : 'primeira'}` : ''}`}>
-        {naSegunda && botaoPagina}
         {PAGINAS_NAVEGACAO[pagina].map((item) => {
           const ativo = item.destino === telaAtual
           return (
@@ -119,7 +119,7 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
             </button>
           )
         })}
-        {!naSegunda && botaoPagina}
+        {botaoPagina}
       </div>
     </nav>,
     document.body,
@@ -130,16 +130,6 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
       <header className="cabecalho-principal">
         <div className="conteudo-cabecalho">
           <div className="barra-marca-aplicacao">
-            <button
-              type="button"
-              className="botao-menu-global"
-              aria-label={t('global.openMenu')}
-              aria-expanded={gavetaAberta}
-              onClick={() => setGavetaAberta(true)}
-            >
-              <i className="fas fa-bars" aria-hidden="true" />
-            </button>
-
             <div className="marca-aplicacao">
               <h1 className="titulo-principal">{t('global.appName')}</h1>
             </div>
@@ -147,22 +137,14 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
             <div id={ID_TITULO_TELA} className="cabecalho-tela" />
 
             <nav className="sidebar-navegacao-desktop" aria-label={t('global.navigation')}>
-              {listaItens()}
+              {listaItens}
             </nav>
           </div>
         </div>
       </header>
       {barraInferior}
 
-      {gavetaAberta && (
-        <GavetaMenu aoFechar={fecharGaveta}>
-          {listaItens((destino) => {
-            fecharGaveta()
-            escolher(destino)
-          })}
-        </GavetaMenu>
-      )}
-
+      {idiomaAberto && <ModalIdioma aoFechar={() => setIdiomaAberto(false)} />}
     </>
   )
 }

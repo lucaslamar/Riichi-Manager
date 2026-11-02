@@ -4,9 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "計算機",
-    "openMenu": "モジュールメニューを開く",
-    "closeMenu": "メニューを閉じる",
+    "calculator": "計算機",
     "navigation": "メインナビゲーション",
     "currentModule": "現在のモジュール",
     "tagline": "リーチ麻雀のエコシステム",

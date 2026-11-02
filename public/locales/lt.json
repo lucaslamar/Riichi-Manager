@@ -4,9 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "Skaičiuoklė",
-    "openMenu": "Atidaryti modulių meniu",
-    "closeMenu": "Uždaryti meniu",
+    "calculator": "Skaičiuoklė",
     "navigation": "Pagrindinė navigacija",
     "currentModule": "Dabartinis modulis",
     "tagline": "Riichi Mahjong ekosistema",

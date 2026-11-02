@@ -4,9 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "계산기",
-    "openMenu": "모듈 메뉴 열기",
-    "closeMenu": "메뉴 닫기",
+    "calculator": "계산기",
     "navigation": "주 메뉴",
     "currentModule": "현재 모듈",
     "tagline": "리치 마작 생태계",

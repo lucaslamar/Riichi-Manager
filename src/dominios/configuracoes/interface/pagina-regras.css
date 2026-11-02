@@ -76,18 +76,6 @@ body:has(.pagina-regras) {
   overflow-wrap: anywhere;
 }
 
-.cartao-regras__select {
-  max-width: 52vw;
-  min-height: 44px;
-  border: 1px solid var(--cor-borda-controle, #c8d4e0);
-  border-radius: 8px;
-  padding: 8px 10px;
-  background: var(--cor-superficie-alt, #f8fafc);
-  color: var(--cor-texto, #102a43);
-  font-size: 0.9rem;
-  font-weight: 800;
-}
-
 /* ── Switch ────────────────────────────────────────────── */
 
 .cartao-regras--switch {
@@ -193,10 +181,6 @@ body:has(.pagina-regras) {
     padding-top: 12px;
     background: transparent;
     box-shadow: none;
-  }
-
-  .cartao-regras__select {
-    max-width: 46vw;
   }
 }
 

@@ -30,6 +30,7 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
 
 .guia-aprender--capa .guia-palco {
   padding-bottom: calc(var(--altura-barra-inferior, 0px) + env(safe-area-inset-bottom, 0px));
+  padding-left: var(--largura-trilho, 0px);
 }
 
 .guia-livro,

@@ -4,9 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "Calculadora",
-    "openMenu": "Abrir menú de módulos",
-    "closeMenu": "Cerrar menú",
+    "calculator": "Calculadora",
     "navigation": "Navegación principal",
     "currentModule": "Módulo actual",
     "tagline": "Ecosistema de Riichi Mahjong",

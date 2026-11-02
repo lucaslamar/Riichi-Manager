@@ -1,13 +1,15 @@
 /**
  * Ordem da navegação: uma lista só, usada pela barra inferior, pela sidebar e
- * pelos gestos de deslizar. 'aprender' é o guia, que abre por cima da tela.
+ * pelos gestos de deslizar. 'aprender' é o guia, que abre por cima da tela, e
+ * 'idioma' é uma folha: fica na barra, mas não é tela, então não entra nos gestos.
  */
 import type { TelaPrincipal } from '@/app/App'
 
 export type DestinoTela = TelaPrincipal | 'aprender'
+export type DestinoNavegacao = DestinoTela | 'idioma'
 
 export interface ItemNavegacao {
-  destino: DestinoTela
+  destino: DestinoNavegacao
   chave: string
   icone: string
   /** Rótulo curto da barra inferior, onde o nome completo seria cortado. */
@@ -24,13 +26,16 @@ export const PAGINAS_NAVEGACAO: readonly (readonly ItemNavegacao[])[] = [
   [
     { destino: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
     { destino: 'regras', chave: 'menu.rules', icone: 'fa-gear', chaveCurta: 'menu.rulesShort' },
+    { destino: 'idioma', chave: 'menu.language', icone: 'fa-globe' },
   ],
 ]
 
 export const ITENS_NAVEGACAO: readonly ItemNavegacao[] = PAGINAS_NAVEGACAO.flat()
 
 /** Ordem do carrossel de telas ao deslizar. */
-export const ORDEM_TELAS: readonly DestinoTela[] = ITENS_NAVEGACAO.map(({ destino }) => destino)
+export const ORDEM_TELAS: readonly DestinoTela[] = ITENS_NAVEGACAO.flatMap(({ destino }) =>
+  destino === 'idioma' ? [] : [destino],
+)
 
 export function paginaDoDestino(destino: DestinoTela): number {
   return PAGINAS_NAVEGACAO.findIndex((pagina) => pagina.some((item) => item.destino === destino))
