@@ -924,21 +924,6 @@ body:has(.ptd-modulo) {
   min-height: 44px;
 }
 
-.fin-sinal {
-  width: 44px;
-  min-height: 44px;
-  flex: 0 0 auto;
-  border: 1px solid var(--entrada-borda);
-  border-radius: 10px;
-  padding: 0;
-  color: var(--texto-principal);
-  background: var(--superficie);
-  box-shadow: none;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 800;
-}
-
 .fin-uma {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

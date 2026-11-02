@@ -24,26 +24,26 @@ const CHAVE_LINHA: Record<LinhaUmaFlutuante, string> = {
   tres: 'tableConfig.umaFloatThree',
 }
 
-/** O teclado numérico do iPhone não tem a tecla de menos. */
-const PRECISA_SINAL = ehIos()
+/**
+ * Teclado de campo que aceita negativo. No iPhone, `decimal` abre um teclado sem a
+ * tecla de menos; `numeric` sem `pattern` abre o de números e pontuação, que tem.
+ */
+export const TECLADO_COM_SINAL = ehIos() ? 'numeric' : 'decimal'
 
 /** Número com texto próprio: dá para apagar tudo ou começar pelo sinal de menos. */
 export function CampoInteiro({
   rotulo,
   valor,
   aoMudar,
-  comSinal = false,
   negativo = true,
   invalido = false,
 }: {
   rotulo: string
   valor: number
   aoMudar: (valor: number) => void
-  comSinal?: boolean
   negativo?: boolean
   invalido?: boolean
 }) {
-  const { t } = useI18n()
   const [texto, setTexto] = useState(String(valor))
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export function CampoInteiro({
       <input
         className="cfg-entrada"
         type="text"
-        inputMode="decimal"
+        inputMode={TECLADO_COM_SINAL}
         aria-label={rotulo}
         aria-invalid={invalido || undefined}
         autoComplete="off"
@@ -72,16 +72,6 @@ export function CampoInteiro({
         onChange={(evento) => mudar(evento.target.value)}
         onBlur={() => setTexto(String(valor))}
       />
-      {comSinal && PRECISA_SINAL && (
-        <button
-          type="button"
-          className="fin-sinal"
-          aria-label={t('match.manual.toggleSign', { field: rotulo })}
-          onClick={() => mudar(texto.startsWith('-') ? texto.slice(1) : `-${texto}`)}
-        >
-          ±
-        </button>
-      )}
     </div>
   )
 }
@@ -186,7 +176,6 @@ export default function CampoUma({
               <CampoInteiro
                 rotulo={`${t('tableConfig.umaLabel')} ${t(CHAVE_LUGAR[indice])}`}
                 valor={numeroUma}
-                comSinal
                 aoMudar={(novo) => {
                   const valores = [...valor.valores] as ValoresUma
                   valores[indice] = novo
@@ -245,7 +234,6 @@ export default function CampoUma({
                           <CampoInteiro
                             rotulo={`${t(CHAVE_LINHA[linha])}, ${t(CHAVE_LUGAR[indice])}`}
                             valor={numeroUma}
-                            comSinal
                             invalido={invalida}
                             aoMudar={(novo) => {
                               const valores = [...valor.tabela[linha]] as ValoresUma

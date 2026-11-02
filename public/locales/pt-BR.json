@@ -1176,7 +1176,6 @@
       "players": "Jogadores e pontos",
       "choosePlayer": "Escolher jogador {{number}}",
       "points": "Pontos de {{name}}",
-      "toggleSign": "Trocar o sinal: {{field}}",
       "preview": "Resultado",
       "save": "Registrar partida",
       "noHands": "Partida registrada só com o resultado, sem as mãos."

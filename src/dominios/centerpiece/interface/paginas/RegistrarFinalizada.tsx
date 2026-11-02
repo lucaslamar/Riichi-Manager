@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
-import { ehIos } from '@/compartilhado/adaptadores/instalacao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -18,14 +17,12 @@ import {
 import { criarPartidaManual } from '../../logica/partidaManual'
 import { umaValida, type UmaMesa } from '../../logica/uma'
 import { carregarUltimaConfig } from '../../persistencia/repositorioConfigMesa'
-import CampoUma, { CampoInteiro } from '../componentes/CampoUma'
+import CampoUma, { CampoInteiro, TECLADO_COM_SINAL } from '../componentes/CampoUma'
 import ListaResultado from '../componentes/ListaResultado'
 import { usePartidas } from '../hooks/usePartidas'
 import '../config-mesa.css'
 
 const LUGARES = [0, 1, 2, 3] as const
-/** O teclado numérico do iPhone não tem a tecla de menos. */
-const PRECISA_SINAL = ehIos()
 const PONTOS_VALIDOS = /^-?\d+$/
 
 /** Partida jogada fora do app: regras, jogadores, pontos, uma e oka. */
@@ -133,7 +130,7 @@ export default function RegistrarFinalizada({
                 <input
                   className="cfg-entrada"
                   type="text"
-                  inputMode="decimal"
+                  inputMode={TECLADO_COM_SINAL}
                   aria-label={rotulo}
                   autoComplete="off"
                   value={pontos[lugar]}
@@ -144,21 +141,6 @@ export default function RegistrarFinalizada({
                     mudarPontos(lugar, limpo)
                   }}
                 />
-                {PRECISA_SINAL && (
-                  <button
-                    type="button"
-                    className="fin-sinal"
-                    aria-label={t('match.manual.toggleSign', { field: rotulo })}
-                    onClick={() =>
-                      mudarPontos(
-                        lugar,
-                        pontos[lugar].startsWith('-') ? pontos[lugar].slice(1) : `-${pontos[lugar]}`,
-                      )
-                    }
-                  >
-                    ±
-                  </button>
-                )}
               </div>
             </div>
           )

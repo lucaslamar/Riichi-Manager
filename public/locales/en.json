@@ -1176,7 +1176,6 @@
       "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
-      "toggleSign": "Toggle sign: {{field}}",
       "preview": "Result",
       "save": "Record game",
       "noHands": "Game recorded with the result only, no hands."
