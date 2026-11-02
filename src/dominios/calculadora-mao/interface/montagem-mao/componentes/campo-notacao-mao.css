@@ -435,14 +435,15 @@
  */
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
   .campo-notacao-mao {
-    grid-template-columns: repeat(12, minmax(0, 1fr)) minmax(0, 6fr) minmax(0, 4fr);
+    /* A coluna das chamadas vale por duas na linha de cima: metade vai para as esperas. */
+    grid-template-columns: repeat(12, minmax(0, 1fr)) repeat(2, minmax(0, 3fr)) minmax(0, 4fr);
     grid-template-rows: repeat(5, minmax(44px, auto));
     grid-template-areas:
-      'pec pec fx fx fx fx fx fx fx fx fx fx ac del'
-      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi m'
-      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon p'
-      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kan s'
-      'n0 n0 n0 n0 n0 n0 n0 n0 n0 n0 n0 n0 kanf z';
+      'pec pec fx fx fx fx fx fx fx fx fx fx fx ac del'
+      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi m'
+      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon pon p'
+      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kan kan s'
+      'n0 n0 n0 n0 n0 n0 n0 n0 n0 n0 n0 n0 kanf kanf z';
     gap: 4px;
     padding: 2px 10px;
   }
@@ -542,15 +543,19 @@
 
   .opcao-espera-notacao {
     flex-direction: row;
-    gap: 8px;
+    gap: 4px;
     border-width: 2px;
-    padding: 0 10px 0 4px;
+    padding: 0 6px 0 2px;
     background: var(--cor-sucesso-suave, #e8f5e9);
   }
 
   .opcao-espera-notacao > small {
-    font-size: 0.9375rem;
+    font-size: 0.8125rem;
     font-weight: 900;
+  }
+
+  .opcoes-espera-notacao > div {
+    gap: 4px;
   }
 
   /* Mão completa: só as teclas que ainda fazem algo, com folga. */
