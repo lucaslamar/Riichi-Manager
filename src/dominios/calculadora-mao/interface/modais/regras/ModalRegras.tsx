@@ -131,11 +131,14 @@ export function ListaRegrasCalculo({
   configuracao,
   aoMudar,
   semChombo = false,
+  mostrar,
 }: {
   configuracao: ConfiguracaoCalculo
   aoMudar: (config: ConfiguracaoCalculo) => void
   /** A mesa tem o próprio chombo. */
   semChombo?: boolean
+  /** Filtro da busca, com o texto de cada regra. */
+  mostrar?: (texto: string) => boolean
 }) {
   const { t } = useI18n()
 
@@ -154,6 +157,7 @@ export function ListaRegrasCalculo({
           const ativo = configuracao[regra.chave] && !desabilitada
           const textos = CHAVES_REGRAS[regra.chave]
           const titulo = t(textos.titulo)
+          if (mostrar && !mostrar(`${titulo} ${t(textos.ajuda)}`)) return null
           const ajudaId = `ajuda-regra-${regra.chave}`
 
           return (

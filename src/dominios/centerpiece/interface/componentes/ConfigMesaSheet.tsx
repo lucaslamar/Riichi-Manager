@@ -1,8 +1,10 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
+import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import { normalizarTexto } from '@/dominios/jogadores/logica/jogadores'
 import {
   calcularOka,
   IDS_PRESET,
@@ -25,6 +27,28 @@ const ABORTIVOS: { campo: keyof ConfigMesa['abortivos']; chave: string }[] = [
 ]
 const ajudaDe = (chave: string) => `${chave}Help`
 
+/** Seções do índice, na ordem da folha. */
+const SECOES = [
+  { id: 'pontuacao', chave: 'tableConfig.scoring' },
+  { id: 'regras', chave: 'tableConfig.rules' },
+  { id: 'empates', chave: 'tableConfig.indexDraws' },
+  { id: 'calculo', chave: 'tableConfig.calcRules' },
+  { id: 'mesa', chave: 'tableConfig.indexTable' },
+] as const
+
+/** O que foi digitado na busca, já normalizado; vazio mostra tudo. */
+const ContextoBusca = createContext('')
+
+function bate(busca: string, ...textos: (string | undefined)[]) {
+  return !busca || normalizarTexto(textos.filter(Boolean).join(' ')).includes(busca)
+}
+
+/** Some quando não bate com a busca. As seções vazias somem pelo CSS (config-mesa.css). */
+function Buscavel({ termos, className, children }: { termos: string; className?: string; children: ReactNode }) {
+  const busca = useContext(ContextoBusca)
+  return bate(busca, termos) ? <div className={['cfg-item', className].filter(Boolean).join(' ')}>{children}</div> : null
+}
+
 interface PropsConfigMesaSheet {
   inicial: ConfigMesa
   aoConcluir: (config: ConfigMesa) => void
@@ -36,6 +60,11 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
   const { t, numero } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
   const oka = calcularOka(config)
+  const [texto, setTexto] = useState('')
+  const busca = normalizarTexto(texto)
+  const raiz = useRef<HTMLDivElement | null>(null)
+  const irPara = (id: string) =>
+    raiz.current?.querySelector(`[data-secao="${id}"]`)?.scrollIntoView({ block: 'start' })
 
   return (
     <Modal
@@ -59,6 +88,27 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         </div>
       }
     >
+      <ContextoBusca.Provider value={busca}>
+      <div ref={raiz} className="cfg-corpo">
+      <div className="cfg-topo">
+        <CampoBusca
+          valor={texto}
+          aoMudar={setTexto}
+          rotulo={t('tableConfig.searchPlaceholder')}
+          placeholder={t('tableConfig.searchPlaceholder')}
+          rotuloLimpar={t('actions.clear')}
+        />
+        {!busca && (
+          <nav className="cfg-indice" aria-label={t('tableConfig.indexLabel')}>
+            {SECOES.map(({ id, chave }) => (
+              <button key={id} type="button" onClick={() => irPara(id)}>
+                {t(chave)}
+              </button>
+            ))}
+          </nav>
+        )}
+      </div>
+
       <Campo rotulo={t('tableConfig.preset')}>
         <select
           className="cfg-entrada"
@@ -73,8 +123,9 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           <option value="personalizado">{t('tableConfig.presets.personalizado')}</option>
         </select>
       </Campo>
-      {config.preset === 'padrao' && <p className="cfg-ajuda">{t('tableConfig.presetDefaultHelp')}</p>}
+      {config.preset === 'padrao' && !busca && <p className="cfg-ajuda">{t('tableConfig.presetDefaultHelp')}</p>}
 
+      <section className="cfg-secao" data-secao="pontuacao">
       <h3 className="cfg-grupo">{t('tableConfig.scoring')}</h3>
 
       <div className="cfg-duas-colunas">
@@ -102,20 +153,25 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           />
         </Campo>
       </div>
-      <p className="cfg-ajuda cfg-ajuda--com-botao">
-        {t('tableConfig.okaValue', { points: numero(oka) })}
-        <AjudaCampo rotulo={t('tableConfig.okaLabel')}>
-          <p>{t('tableConfig.okaHelp')}</p>
-        </AjudaCampo>
-      </p>
+      <Buscavel termos={`${t('tableConfig.okaLabel')} ${t('tableConfig.okaHelp')}`}>
+        <p className="cfg-ajuda cfg-ajuda--com-botao">
+          {t('tableConfig.okaValue', { points: numero(oka) })}
+          <AjudaCampo rotulo={t('tableConfig.okaLabel')}>
+            <p>{t('tableConfig.okaHelp')}</p>
+          </AjudaCampo>
+        </p>
+      </Buscavel>
 
-      <CampoUma
-        valor={config.uma}
-        aoMudar={(uma) => alterar({ uma })}
-        pontosRetorno={config.pontosRetorno}
-      />
+      <Buscavel termos={`${t('tableConfig.uma')} ${t('tableConfig.umaHelp')} ${t('tableConfig.umaFloatHelp')}`}>
+        <CampoUma
+          valor={config.uma}
+          aoMudar={(uma) => alterar({ uma })}
+          pontosRetorno={config.pontosRetorno}
+        />
+      </Buscavel>
 
       <Grupo
+        termos={t('tableConfig.leftoverHelp')}
         rotulo={t('tableConfig.leftoverSticks')}
         ajuda={
           <AjudaCampo rotulo={t('tableConfig.leftoverSticks')}>
@@ -134,7 +190,10 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         />
       </Grupo>
 
-      <Grupo rotulo={t('tableConfig.chombo')}>
+      <Grupo
+        termos={`${t('tableConfig.chomboReverseMangan')} ${t('tableConfig.chomboReverseYakuman')} ${t('tableConfig.chomboFixed')}`}
+        rotulo={t('tableConfig.chombo')}
+      >
         <BotoesOpcao
           rotulo={t('tableConfig.chombo')}
           valor={config.chombo.tipo}
@@ -161,9 +220,15 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         </Campo>
       )}
 
+      </section>
+
+      <section className="cfg-secao" data-secao="regras">
       <h3 className="cfg-grupo">{t('tableConfig.rules')}</h3>
 
-      <Grupo rotulo={t('tableConfig.gameType')}>
+      <Grupo
+        termos={`${t('tableConfig.gameEast')} ${t('tableConfig.gameHanchan')}`}
+        rotulo={t('tableConfig.gameType')}
+      >
         <BotoesOpcao
           rotulo={t('tableConfig.gameType')}
           valor={config.tipoPartida}
@@ -175,7 +240,10 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         />
       </Grupo>
 
-      <Grupo rotulo={t('tableConfig.multipleRon')}>
+      <Grupo
+        termos={`${t('tableConfig.ronAtamaHane')} ${t('tableConfig.ronTripleAborts')} ${t('tableConfig.ronAllowed')}`}
+        rotulo={t('tableConfig.multipleRon')}
+      >
         <BotoesOpcao
           empilhado
           rotulo={t('tableConfig.multipleRon')}
@@ -214,20 +282,35 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         aoMudar={(nagashiMangan) => alterar({ nagashiMangan })}
       />
 
-      <fieldset className="cfg-conjunto">
-        <legend>{t('tableConfig.abortiveDraws')}</legend>
-        <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.abortiveDrawsHelp')}</p>
+      </section>
+
+      <section className="cfg-secao" data-secao="empates">
+      <h3 className="cfg-grupo">{t('tableConfig.abortiveDraws')}</h3>
+      <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.abortiveDrawsHelp')}</p>
         {ABORTIVOS.map(({ campo, chave }) => (
           <Opcao
             key={campo}
+            termos={`${t('tableConfig.abortiveDraws')} ${t('tableConfig.abortiveDrawsHelp')}`}
             rotulo={t(chave)}
             ajuda={t(ajudaDe(chave))}
             marcado={config.abortivos[campo]}
             aoMudar={(marcado) => alterar({ abortivos: { ...config.abortivos, [campo]: marcado } })}
           />
         ))}
-      </fieldset>
+      </section>
 
+      <section className="cfg-secao" data-secao="calculo">
+      <h3 className="cfg-grupo">{t('tableConfig.calcRules')}</h3>
+      <ListaRegrasCalculo
+        semChombo
+        configuracao={config.regrasCalculo}
+        aoMudar={(regrasCalculo) => alterar({ regrasCalculo })}
+        mostrar={(textoRegra) => bate(busca, textoRegra)}
+      />
+      </section>
+
+      <section className="cfg-secao" data-secao="mesa">
+      <h3 className="cfg-grupo">{t('tableConfig.indexTable')}</h3>
       <Grupo rotulo={t('tableConfig.turnTimer')}>
         <BotoesOpcao
           rotulo={t('tableConfig.turnTimer')}
@@ -239,13 +322,6 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           }))}
         />
       </Grupo>
-
-      <h3 className="cfg-grupo">{t('tableConfig.calcRules')}</h3>
-      <ListaRegrasCalculo
-        semChombo
-        configuracao={config.regrasCalculo}
-        aoMudar={(regrasCalculo) => alterar({ regrasCalculo })}
-      />
 
       <Opcao
         rotulo={t('tableConfig.recordDiscards')}
@@ -263,6 +339,13 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           aoMudar={(checarFuriten) => alterar({ checarFuriten })}
         />
       )}
+      </section>
+
+      <p className="cfg-sem-resultado" role="status">
+        {t('tableConfig.searchEmpty')}
+      </p>
+      </div>
+      </ContextoBusca.Provider>
     </Modal>
   )
 }
@@ -276,6 +359,8 @@ function Campo({
   ajuda?: ReactNode
   children: ReactNode
 }) {
+  const busca = useContext(ContextoBusca)
+  if (!bate(busca, rotulo)) return null
   return (
     <label className="cfg-campo">
       <span className="cfg-campo-rotulo">
@@ -290,13 +375,18 @@ function Campo({
 /** Como `Campo`, para um grupo de botões: `label` em volta deles confundiria o toque. */
 function Grupo({
   rotulo,
+  termos,
   ajuda,
   children,
 }: {
   rotulo: string
+  /** Textos a mais que a busca encontra. */
+  termos?: string
   ajuda?: ReactNode
   children: ReactNode
 }) {
+  const busca = useContext(ContextoBusca)
+  if (!bate(busca, rotulo, termos)) return null
   return (
     <div className="cfg-campo">
       <span className="cfg-campo-rotulo">
@@ -432,16 +522,21 @@ function CampoNumero({
 /** Mesmo controle das regras de cálculo: tudo na folha se liga e desliga igual. */
 function Opcao({
   rotulo,
+  termos,
   ajuda,
   marcado,
   aoMudar,
 }: {
   rotulo: string
+  /** Textos a mais que a busca encontra. */
+  termos?: string
   ajuda?: string
   marcado: boolean
   aoMudar: (marcado: boolean) => void
 }) {
   const { t } = useI18n()
+  const busca = useContext(ContextoBusca)
+  if (!bate(busca, rotulo, ajuda, termos)) return null
   return (
     <div className="linha-regra">
       <div className="texto-regra">

@@ -213,3 +213,73 @@
 .cfg-ajuda--grupo {
   margin: 4px 0 0;
 }
+
+/* Busca e índice fixos no topo do corpo rolável da folha. */
+.cfg-topo {
+  position: sticky;
+  top: calc(var(--modal-espaco) * -0.5);
+  z-index: 2;
+  display: grid;
+  gap: 6px;
+  margin: calc(var(--modal-espaco) * -0.5) calc(var(--modal-espaco) * -1) 12px;
+  border-bottom: 1px solid var(--modal-borda);
+  padding: 8px var(--modal-espaco);
+  background: var(--modal-fundo);
+}
+
+.cfg-indice {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.cfg-indice button {
+  min-height: 44px;
+  flex: 0 0 auto;
+  border: 1px solid var(--modal-borda);
+  border-radius: 8px;
+  padding: 0 10px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.cfg-indice button:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+/* O índice leva o título da seção para logo abaixo da parte fixa. */
+.cfg-secao {
+  scroll-margin-top: 112px;
+}
+
+.cfg-secao:not(:has(.linha-regra, .cfg-campo, .cfg-item)) {
+  display: none;
+}
+
+.cfg-sem-resultado {
+  display: none;
+  margin: 16px 0;
+  color: var(--texto-apoio);
+  text-align: center;
+}
+
+.cfg-corpo:not(:has(.linha-regra, .cfg-campo, .cfg-item)) .cfg-sem-resultado {
+  display: block;
+}
+
+/* Celular deitado: só a busca, para não tirar a altura da lista. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .cfg-indice {
+    display: none;
+  }
+
+  .cfg-secao {
+    scroll-margin-top: 60px;
+  }
+}
