@@ -53,6 +53,12 @@ Sem revisão nativa em es, ja, ko, lt e zh-Hans: tableConfig.uma*, tableConfig.c
 tableConfig.ruleKuitan, match.manual.sumWarning e calculator.chooseWait. Conferir
 "retorno" e "acima do retorno" em cada idioma, e 待ち/대기패/听牌 na espera.
 
+## Explicações das Configurações de mesa
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans: tableConfig.nagashiManganHelp,
+tableConfig.abortive*Help e tableConfig.recordDiscardsHelp. Termos técnicos a conferir:
+terminais e honras, muro, furiten.
+
 ## Pontos de atenção
 
 - **ko, nomes de yaku:** mistura de leitura sino-coreana (일발, 청일색, 국사무쌍) e transliteração do

@@ -209,3 +209,7 @@
 .cfg-uma-linha-invalida .cfg-entrada {
   border-color: var(--texto-erro);
 }
+
+.cfg-ajuda--grupo {
+  margin: 4px 0 0;
+}

@@ -23,6 +23,7 @@ const ABORTIVOS: { campo: keyof ConfigMesa['abortivos']; chave: string }[] = [
   { campo: 'quatroKans', chave: 'tableConfig.abortiveFourKans' },
   { campo: 'quatroRiichis', chave: 'tableConfig.abortiveFourRiichi' },
 ]
+const ajudaDe = (chave: string) => `${chave}Help`
 
 interface PropsConfigMesaSheet {
   inicial: ConfigMesa
@@ -208,16 +209,19 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       />
       <Opcao
         rotulo={t('tableConfig.nagashiMangan')}
+        ajuda={t('tableConfig.nagashiManganHelp')}
         marcado={config.nagashiMangan}
         aoMudar={(nagashiMangan) => alterar({ nagashiMangan })}
       />
 
       <fieldset className="cfg-conjunto">
         <legend>{t('tableConfig.abortiveDraws')}</legend>
+        <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.abortiveDrawsHelp')}</p>
         {ABORTIVOS.map(({ campo, chave }) => (
           <Opcao
             key={campo}
             rotulo={t(chave)}
+            ajuda={t(ajudaDe(chave))}
             marcado={config.abortivos[campo]}
             aoMudar={(marcado) => alterar({ abortivos: { ...config.abortivos, [campo]: marcado } })}
           />
@@ -245,6 +249,7 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
 
       <Opcao
         rotulo={t('tableConfig.recordDiscards')}
+        ajuda={t('tableConfig.recordDiscardsHelp')}
         marcado={config.registrarDescartes}
         aoMudar={(registrarDescartes) =>
           alterar({ registrarDescartes, checarFuriten: registrarDescartes && config.checarFuriten })
