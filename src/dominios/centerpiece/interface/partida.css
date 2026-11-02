@@ -862,7 +862,10 @@
   display: block;
   min-width: 0;
   flex: 0 1 22px;
+  box-sizing: border-box;
+  border: 1px solid var(--pedra-borda, #ddd);
   border-radius: 3px;
+  background: var(--pedra-face, var(--branco));
 }
 
 .linha-pedras-pedra .tile-img {
@@ -876,12 +879,19 @@
   outline-offset: 1px;
 }
 
+/* No detalhe a mão é grande: em vez de encolher, as pedras descem de linha. */
 .linha-pedras--grande {
+  flex-wrap: wrap;
   margin-bottom: 12px;
 }
 
+.linha-pedras--grande .linha-pedras-grupo {
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+}
+
 .linha-pedras--grande .linha-pedras-pedra {
-  flex-basis: 34px;
+  flex: 0 0 34px;
 }
 
 .mao-historico {
