@@ -13,18 +13,20 @@
     "adHidden": "Espaço de publicidade indisponível"
   },
   "menu": {
-    "modules": "Módulos",
     "app": "App",
     "language": "Idioma",
     "handCalculator": "Calculadora de Mão",
     "quickCalculator": "Calculadora de Han e Fu",
     "quickCalculatorShort": "Han e Fu",
     "windDraw": "Sorteador de Ventos",
-    "rules": "Regras / Configurações",
-    "rulesShort": "Regras",
-    "about": "Sobre / versão",
+    "rules": "Configurações",
+    "rulesShort": "Configurações",
     "handCalculatorShort": "Calculadora",
-    "windDrawShort": "Sorteador"
+    "windDrawShort": "Sorteador",
+    "centerpiece": "Centerpiece",
+    "more": "Mais",
+    "moreOptions": "Mais opções",
+    "backToMain": "Voltar para as opções principais"
   },
   "actions": {
     "back": "Voltar",
@@ -39,7 +41,8 @@
     "rules": "Regras",
     "quickMode": "Han e Fu",
     "completeMode": "Modo completo",
-    "modules": "Módulos"
+    "modules": "Módulos",
+    "helpFor": "Ajuda: {{field}}"
   },
   "calculator": {
     "title": "Calculadora de Mão",
@@ -575,10 +578,7 @@
   "pages": {
     "aboutTitle": "Sobre o Mojoca",
     "aboutText": "Um app feito para ajudar jogadores e clubes de Riichi Mahjong a calcular mãos, organizar partidas e testar ideias de torneio, levando Riichi Mahjong para todos.",
-    "version": "Versão {{version}}",
-    "author": "Feito por Lucas Lamar",
     "reportIssue": "Reportar problema",
-    "supportProject": "Apoiar o projeto",
     "theme": "Tema",
     "themeHelp": "Automático segue o tema claro ou escuro do sistema.",
     "themeLight": "Claro",
@@ -589,7 +589,8 @@
     "compactMode": "Modo compacto",
     "compactModeHelp": "Reduz espaçamentos para mostrar mais mão e teclado na tela.",
     "largeTouchTargets": "Área de toque ampliada",
-    "largeTouchTargetsHelp": "Aumenta botões e tiles para uso com mais conforto no toque."
+    "largeTouchTargetsHelp": "Aumenta botões e tiles para uso com mais conforto no toque.",
+    "versionLine": "Versão {{version}} · Feito por Lucas Lamar"
   },
   "windDraw": {
     "title": "Sorteador de Ventos",
@@ -770,5 +771,403 @@
       "honor7": "Vermelho"
     },
     "pendingTile": "{{number}} esperando o naipe"
+  },
+  "centerpiece": {
+    "win": {
+      "useResult": "Usar resultado no Centerpiece"
+    }
+  },
+  "players": {
+    "title": "Jogadores",
+    "subtitle": "Cadastro usado nas partidas, no torneio e no ranking.",
+    "search": "Buscar jogador",
+    "add": "Adicionar",
+    "new": "Novo jogador",
+    "choose": "Escolher jogador",
+    "name": "Nome",
+    "nickname": "Apelido (opcional)",
+    "save": "Salvar",
+    "rename": "Editar",
+    "renameNamed": "Editar {{name}}",
+    "archive": "Arquivar",
+    "archiveNamed": "Arquivar {{name}}",
+    "archiveTitle": "Arquivar {{name}}?",
+    "archiveHelp": "O jogador sai das listas de escolha, mas continua no histórico e no ranking. Dá para restaurar depois.",
+    "restore": "Desarquivar",
+    "restoreNamed": "Desarquivar {{name}}",
+    "archivedCount": "Arquivados ({{count}})",
+    "alreadyChosen": "Já escolhido",
+    "empty": "Nenhum jogador cadastrado ainda.",
+    "emptyChooser": "Nenhum jogador cadastrado. Crie o primeiro acima.",
+    "noResults": "Nenhum jogador encontrado.",
+    "errorEmptyName": "Informe o nome.",
+    "errorDuplicateName": "Já existe um jogador com esse nome. Confira também os arquivados.",
+    "moreActions": "Mais ações para {{name}}",
+    "delete": "Excluir",
+    "deleteAnyway": "Excluir mesmo assim",
+    "deleteTitle": "Excluir {{name}}?",
+    "deleteHelp": "O jogador sai do cadastro de vez.",
+    "deleteImpact": "{{name}} aparece em {{count}} partidas. O histórico fica com o nome e os pontos dos outros não mudam, mas o jogador sai do ranking. Arquivar mantém tudo.",
+    "inUseTitle": "{{name}} está jogando",
+    "inUseHelp": "Não dá para arquivar nem excluir quem está numa partida em andamento: {{tables}}.",
+    "deleted": "{{name}} excluído",
+    "undoDelete": "Desfazer",
+    "deletedName": "{{name}} (excluído)",
+    "club": "Clube (opcional)",
+    "clubSuggestions": "Clubes já usados",
+    "deleteImpactOne": "{{name}} aparece em 1 partida. O histórico fica com o nome e os pontos dos outros não mudam, mas o jogador sai do ranking. Arquivar mantém tudo."
+  },
+  "tableConfig": {
+    "title": "Configurações de mesa",
+    "preset": "Conjunto de regras",
+    "presets": {
+      "padrao": "Padrão do app",
+      "wrc": "WRC",
+      "ema": "EMA",
+      "mleague": "M.League",
+      "personalizado": "Personalizado"
+    },
+    "scoring": "Pontuação",
+    "rules": "Regras",
+    "startPoints": "Pontos de partida",
+    "returnPoints": "Pontos de retorno",
+    "okaValue": "Oka: {{points}} pontos para o 1º",
+    "uma": "Uma (em milhares de pontos)",
+    "uma1": "1º",
+    "uma2": "2º",
+    "uma3": "3º",
+    "uma4": "4º",
+    "umaWarning": "A uma soma {{sum}} em vez de zero.",
+    "leftoverSticks": "Palitos de Riichi que sobram no fim",
+    "leftoverFirst": "Vão para o 1º",
+    "leftoverLost": "Se perdem",
+    "chombo": "Chombo",
+    "chomboReverseMangan": "Mangan reverso",
+    "chomboFixed": "Valor fixo",
+    "chomboValue": "Valor do chombo (descontado no fim)",
+    "gameType": "Tipo de partida",
+    "gameEast": "Leste apenas",
+    "gameHanchan": "Hanchan",
+    "multipleRon": "Ron múltiplo",
+    "ronAtamaHane": "Atama hane (só um vence)",
+    "ronTripleAborts": "Ron duplo; triplo é empate abortado",
+    "ronAllowed": "Duplo e triplo permitidos",
+    "tobi": "Tobi",
+    "tobiHelp": "A partida acaba quando alguém fica abaixo de zero.",
+    "agariYame": "Agari-yame",
+    "agariYameHelp": "O dealer em 1º na última mão pode encerrar.",
+    "extraRound": "Prorrogação",
+    "extraRoundHelp": "Segue para Sul ou Oeste se ninguém chegou ao retorno.",
+    "nagashiMangan": "Nagashi Mangan",
+    "abortiveDraws": "Empates abortivos permitidos",
+    "abortiveNineTerminals": "Kyuushu kyuuhai",
+    "abortiveFourWinds": "4 ventos",
+    "abortiveFourKans": "4 kans",
+    "abortiveFourRiichi": "4 Riichis",
+    "turnTimer": "Timer de vez",
+    "timer0": "Desligado",
+    "timer30": "30 s",
+    "timer60": "1 min",
+    "timer90": "1 min 30",
+    "recordDiscards": "Registrar descartes",
+    "reset": "Reiniciar",
+    "done": "Feito",
+    "presetDefaultHelp": "Padrão de clube, pensado para iniciantes",
+    "chomboReverseYakuman": "Yakuman reverso",
+    "okaLabel": "Oka",
+    "umaLabel": "Uma",
+    "okaHelp": "Prêmio extra do 1º lugar. É a diferença entre retorno e pontos de partida, vezes 4.",
+    "umaHelp": "Bônus ou desconto por colocação, em milhares de pontos. A soma dos 4 deve dar zero.",
+    "leftoverHelp": "Palitos de riichi que ninguém ganhou até o fim da partida. Podem ir para o 1º colocado ou ser descartados.",
+    "returnHelp1": "É o valor de referência para calcular a pontuação final. No fim da partida, cada jogador tem seus pontos comparados com o retorno, e depois soma-se a uma da colocação.",
+    "returnHelp2": "Se o retorno for maior que os pontos de partida, a diferença de todos os jogadores vira o **oka**, um prêmio extra para o 1º lugar.",
+    "returnHelpOka": "Exemplo: partida {{start}} e retorno {{target}} → 4 × {{each}} = {{oka}} de oka.",
+    "returnHelpNoOka": "Se os dois forem iguais, não existe oka.",
+    "returnExample": "Exemplo",
+    "returnExampleValues": "({{start}} / {{target}}, uma {{uma}}):",
+    "exPlace": "Colocação",
+    "exPoints": "Pontos",
+    "exReturn": "− retorno",
+    "exUma": "+ uma",
+    "exOka": "+ oka",
+    "exFinal": "Final",
+    "checkFuriten": "Checagem de furiten",
+    "checkFuritenHelp": "Cada jogador pode informar a própria mão para o app avisar se está em furiten."
+  },
+  "match": {
+    "home": {
+      "title": "Centerpiece",
+      "newGame": "Nova partida",
+      "newGameHelp": "Com contagem de pontos",
+      "simpleHelp": "Sem pontos, só o centro da mesa",
+      "inProgress": "Em andamento",
+      "openCount": "Mesas abertas: {{count}}",
+      "noneOpen": "Nenhuma mesa aberta.",
+      "history": "Histórico",
+      "ranking": "Ranking",
+      "playersHelp": "Cadastro de jogadores",
+      "discard": "Descartar",
+      "discardNamed": "Descartar mesa {{number}}",
+      "discardTitle": "Descartar esta mesa?",
+      "discardHelp": "A partida é apagada e não entra no histórico nem no ranking.",
+      "historyHelp": "Partidas finalizadas",
+      "rankingHelp": "Soma de todas as partidas"
+    },
+    "simple": {
+      "title": "Centerpiece simples",
+      "nextRound": "Próxima rodada",
+      "honba": "Honba",
+      "restart": "Recomeçar do 東1",
+      "restartHelp": "A rodada, o dealer e o honba voltam ao início.",
+      "honbaPlus": "Aumentar honba",
+      "honbaMinus": "Diminuir honba",
+      "windDraw": "Sorteador de Ventos",
+      "actions": "Ações da mesa",
+      "hint": "Toque na mesa para ver as ações",
+      "openActions": "Abrir as ações da mesa. Honba atual: {{count}}",
+      "help1": "Deixe o celular no meio da mesa, com o 東 virado para o dealer. Tocar em qualquer ponto da mesa abre as ações: próxima rodada, honba, dados, sorteador e recomeçar.",
+      "help2": "A cada troca de dealer, gire o celular para o 東 continuar virado para ele. A mesa acompanha o celular mesmo se a tela girar sozinha, mas o cabeçalho e a barra mudam de lado; para evitar isso, trave a rotação nos ajustes do celular.",
+      "help3": "A tela fica acesa enquanto esta mesa estiver aberta, quando o aparelho permite."
+    },
+    "setup": {
+      "title": "Nova partida",
+      "assign": "Atribuir",
+      "seatEmpty": "Assento {{wind}}: atribuir jogador",
+      "seatFilled": "Assento {{wind}}: {{name}}. Trocar",
+      "randomSeats": "Assentos aleatórios",
+      "start": "Iniciar mesa",
+      "rulesSummary": "{{start}} pontos · retorno {{target}} · uma {{uma}}"
+    },
+    "table": {
+      "switch": "Trocar de mesa",
+      "number": "Mesa {{number}}",
+      "round": "{{wind}} {{number}}",
+      "undo": "Desfazer",
+      "undone": "Última ação desfeita.",
+      "agariYame": "Encerrar partida (agari-yame)",
+      "center": "Centro da mesa"
+    },
+    "card": {
+      "label": "{{name}}, {{wind}}, {{points}} pontos. Abrir menu",
+      "dealer": "Dealer"
+    },
+    "menu": {
+      "actions": "Ações do jogador",
+      "hisTurn": "É a vez dele",
+      "ron": "Venceu por ron",
+      "tsumo": "Venceu por tsumo",
+      "riichi": "Declarar Riichi",
+      "difference": "Diferença de pontos",
+      "chombo": "Deu chombo",
+      "discards": "Descartes",
+      "checkFuriten": "Checar furiten"
+    },
+    "difference": {
+      "title": "Diferença de {{name}}",
+      "behind": "faltam {{points}}",
+      "ahead": "sobram {{points}}"
+    },
+    "timer": {
+      "passTurn": "Timer, {{seconds}} segundos. Tocar para passar a vez",
+      "pause": "Pausar timer",
+      "resume": "Retomar timer",
+      "turnAnnounce": "Vez de {{name}}",
+      "expiredAnnounce": "Tempo esgotado: {{name}}"
+    },
+    "win": {
+      "title": "Registrar batida",
+      "step": "Etapa {{current}} de {{total}}",
+      "type": "Tipo de vitória",
+      "winner": "Quem venceu?",
+      "payer": "Quem pagou?",
+      "howToScore": "Como calcular a mão de {{name}}?",
+      "byHanFu": "Han e Fu",
+      "byHand": "Calculadora de Mão",
+      "next": "Próximo",
+      "apply": "Aplicar resultado",
+      "paidBy": "Pagou",
+      "sticks": "Palitos de Riichi",
+      "addWinner": "Mais um vencedor"
+    },
+    "draw": {
+      "title": "Ryukyoku",
+      "short": "Ryukyoku",
+      "whoTenpai": "Quem estava tenpai?",
+      "whoNagashi": "Nagashi Mangan de quem?",
+      "abortive": "Ou empate abortivo:",
+      "confirm": "Confirmar ryukyoku"
+    },
+    "abortive": {
+      "kyuushuKyuuhai": "Kyuushu kyuuhai",
+      "quatroVentos": "4 ventos",
+      "quatroKans": "4 kans",
+      "quatroRiichis": "4 Riichis",
+      "ronTriplo": "Ron triplo"
+    },
+    "chombo": {
+      "title": "Chombo de {{name}}?",
+      "confirm": "Aplicar chombo",
+      "reverseHelp": "Mangan reverso: paga 4.000 ao dealer e 2.000 aos outros. A mão é repetida.",
+      "dealerHelp": "Mangan reverso: paga 4.000 a cada jogador. A mão é repetida.",
+      "fixedHelp": "{{points}} pontos saem da pontuação final, depois da uma. A mão é repetida.",
+      "yakumanHelp": "Paga como um tsumo de yakuman ao contrário: 16.000 ao dealer e 8.000 a cada outro jogador.",
+      "yakumanDealerHelp": "Paga como um tsumo de yakuman ao contrário: 16.000 a cada jogador."
+    },
+    "event": {
+      "ron": "Ron",
+      "tsumo": "Tsumo",
+      "ryukyoku": "Ryukyoku",
+      "chombo": "Chombo",
+      "abortivo": "Abortivo",
+      "riichi": "Riichi",
+      "legado": "Mão anterior"
+    },
+    "hands": {
+      "title": "Mãos da partida",
+      "short": "Mãos",
+      "empty": "Nenhuma mão registrada ainda.",
+      "winningTile": "batida com {{tile}}",
+      "openDetail": "Ver mão de {{name}}: {{summary}}"
+    },
+    "dice": {
+      "roll": "Dados",
+      "title": "Jogar 2 dados",
+      "rollAgain": "Jogar de novo",
+      "description": "Dados: {{first}} e {{second}}, soma {{sum}}, {{wall}}",
+      "wall": {
+        "dealer": "parede do dealer",
+        "direita": "parede à direita",
+        "frente": "parede em frente",
+        "esquerda": "parede à esquerda"
+      }
+    },
+    "result": {
+      "title": "Resultado final",
+      "place": "{{place}}º",
+      "breakdown": "{{raw}} pontos · uma {{uma}} · oka {{oka}}",
+      "penalty": "multa {{points}}",
+      "correct": "Voltar e corrigir",
+      "finish": "Finalizar",
+      "reason": {
+        "ultimaMao": "A última mão terminou.",
+        "tobi": "Tobi: alguém ficou abaixo de zero.",
+        "retorno": "Alguém chegou aos pontos de retorno na prorrogação.",
+        "agariYame": "O dealer encerrou com agari-yame."
+      }
+    },
+    "history": {
+      "empty": "Nenhuma partida finalizada ainda."
+    },
+    "ranking": {
+      "period": "Período",
+      "periods": {
+        "mes": "Este mês",
+        "ano": "Este ano",
+        "tudo": "Tudo"
+      },
+      "empty": "Nenhuma partida finalizada neste filtro.",
+      "games": "Partidas",
+      "averagePlace": "Média",
+      "first": "% 1º",
+      "fourth": "% 4º",
+      "tobi": "% tobi"
+    },
+    "discards": {
+      "title": "Descartes de {{name}}",
+      "quickTitle": "Descarte de {{name}}",
+      "skip": "Pular",
+      "add": "Adicionar",
+      "input": "Descarte em notação (3m5p1z)",
+      "kakanInput": "Pedra do kakan em notação (3m)",
+      "riichi": "Descarte de Riichi",
+      "kakan": "Kakan",
+      "empty": "Nenhum descarte ainda.",
+      "call": {
+        "chi": "Chi",
+        "pon": "Pon",
+        "kan": "Kan",
+        "ron": "Ron"
+      },
+      "tileOrder": "Descarte {{order}}",
+      "history": "Ver descartes",
+      "handSave": "Salvar",
+      "handClear": "Apagar mão",
+      "handNotTenpai": "Essa mão não está em tenpai.",
+      "handWaits": "Espera: {{tiles}}",
+      "nagashiDetected": "Já marcado pelos descartes: só terminais e honras, sem pedra chamada. Confira antes de confirmar.",
+      "fourWindsNotice": "Os 4 primeiros descartes foram o mesmo vento: a mão empata.",
+      "fourWindsConfirm": "Registrar empate",
+      "expiredTitle": "Tempo esgotado · Descarte de {{name}}",
+      "ask": "O que aconteceu com o descarte?",
+      "askTile": "O que aconteceu com {{tile}}?",
+      "nothing": "Nada · vez de {{name}}",
+      "whoCalled": {
+        "pon": "Quem fez pon?",
+        "kan": "Quem fez kan?",
+        "ron": "Quem fez ron?"
+      }
+    },
+    "furiten": {
+      "waiting": "espera {{tiles}}",
+      "canTsumo": "Ainda pode ganhar por tsumo. Declarar ron é chombo.",
+      "cause": "{{tile}}, descarte {{order}} de {{name}}",
+      "glossary": "Ver no glossário",
+      "riichi": {
+        "title": "Furiten de Riichi",
+        "until": "até o fim da mão"
+      },
+      "discards": {
+        "title": "Furiten pelos descartes",
+        "until": "enquanto a espera não mudar"
+      },
+      "temporary": {
+        "title": "Furiten temporário",
+        "until": "até seu próximo descarte"
+      },
+      "checkTitle": "Checar furiten de {{name}}",
+      "checkHelp": "Informe sua mão para o app avisar se você está em furiten",
+      "counter": "{{count}}/13 pedras",
+      "input": "Mão em notação (123m456p)",
+      "callsHelp": "Escolha as pedras da chamada e toque no tipo para agrupar.",
+      "removeLast": "Tirar última",
+      "none": "Sem furiten por enquanto.",
+      "savedHelp": "As pedras saíram da tela. Toque no ícone do seu card para ver o aviso.",
+      "iconTitle": "Furiten de {{name}}",
+      "iconLabel": "Ver checagem de furiten de {{name}}"
+    },
+    "manual": {
+      "title": "Registrar partida finalizada",
+      "help": "Jogada fora do app: pontos, uma e oka",
+      "players": "Jogadores e pontos",
+      "choosePlayer": "Escolher jogador {{number}}",
+      "points": "Pontos de {{name}}",
+      "toggleSign": "Trocar o sinal: {{field}}",
+      "oka": "Oka (pontos para o 1º)",
+      "preview": "Resultado",
+      "save": "Registrar partida",
+      "noHands": "Partida registrada só com o resultado, sem as mãos."
+    }
+  },
+  "spokenTiles": {
+    "man": "{{number}} de caracteres",
+    "pin": "{{number}} de círculos",
+    "sou": "{{number}} de bambu",
+    "red": {
+      "man": "5 vermelho de caracteres",
+      "pin": "5 vermelho de círculos",
+      "sou": "5 vermelho de bambu"
+    },
+    "east": "vento Leste",
+    "south": "vento Sul",
+    "west": "vento Oeste",
+    "north": "vento Norte",
+    "white": "dragão branco",
+    "green": "dragão verde",
+    "and": "e",
+    "riichiMark": "Riichi",
+    "calledMark": "{{call}} de {{name}}",
+    "river": "{{name}} descartou: {{tiles}}.",
+    "noDiscards": "{{name}} ainda não descartou.",
+    "redDragon": "dragão vermelho"
   }
 }
