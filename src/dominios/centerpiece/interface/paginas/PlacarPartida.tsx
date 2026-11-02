@@ -9,7 +9,11 @@ import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { numerosDaParede } from '../../logica/dados'
+import { ehQuatroVentos } from '../../logica/descartes'
+import { descreverFuriten } from '../../logica/descreverPedras'
+import { furitenDe } from '../../logica/registroPartida'
 import {
+  CADEIRAS,
   calcularResultado,
   declararRiichi,
   desfazer,
@@ -35,6 +39,7 @@ import PlacaJogador from '../componentes/PlacaJogador'
 import JogarDados from '../componentes/JogarDados'
 import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
+import ModalDescartes from '../componentes/ModalDescartes'
 import { iniciarBatida, type EstadoBatida } from '../hooks/estadoBatida'
 import {
   MenuJogador,
@@ -43,6 +48,7 @@ import {
   ModalMaos,
   ModalRyukyoku,
 } from '../componentes/ModaisPartida'
+import { useDescartes } from '../hooks/useDescartes'
 import { usePartidas } from '../hooks/usePartidas'
 import { useModoMesa } from '../hooks/useModoMesa'
 import { useTimerVez } from '../hooks/useTimerVez'
@@ -84,6 +90,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const [ryukyokuAberto, setRyukyokuAberto] = useState(false)
   const [maosAbertas, setMaosAbertas] = useState(false)
   const [dadosAbertos, setDadosAbertos] = useState(false)
+  const [descartesDe, setDescartesDe] = useState<Cadeira | null>(null)
+  const [descarteRapidoDe, setDescarteRapidoDe] = useState<Cadeira | null>(null)
+  const [quatroVentosAberto, setQuatroVentosAberto] = useState(false)
   const [aviso, setAviso] = useState<string | null>(null)
   const temporizadorAviso = useRef<number | undefined>(undefined)
 
@@ -95,10 +104,31 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     ryukyokuAberto ||
     maosAbertas ||
     dadosAbertos ||
+    descartesDe !== null ||
+    descarteRapidoDe !== null ||
+    quatroVentosAberto ||
     !!partida.fim
 
   const timer = useTimerVez(partida, atualizar, modalAberta)
   const { modo, alternar } = useModoMesa()
+  const acoesDescartes = useDescartes(atualizar)
+
+  /** O nome e a frase do furiten de quem informou a mão, para o card e o aviso. */
+  const avisoFuriten = (cadeira: Cadeira) => {
+    const mao = partida.registro?.maos[cadeira]
+    const estado = furitenDe(partida, cadeira)
+    return mao && estado?.principal ? descreverFuriten(estado, mao.esperas, t) : undefined
+  }
+
+  // Com o registro ligado, passar a vez pergunta antes o que foi descartado.
+  const tocarTimer = () => {
+    if (config.registrarDescartes && vez.comecou) setDescarteRapidoDe(vez.cadeira)
+    else timer.tocar()
+  }
+  const passarDepoisDoDescarte = () => {
+    setDescarteRapidoDe(null)
+    timer.tocar()
+  }
 
   // Troca de vez e tempo esgotado no leitor de tela.
   const nomeDaVez = nomeDe(vez.cadeira)
@@ -119,12 +149,13 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
 
   const aoEscolherNoMenu = (
     cadeira: Cadeira,
-    acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca',
+    acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes',
   ) => {
     setMenuDe(null)
     if (acao === 'vez') timer.passarPara(cadeira)
     else if (acao === 'riichi') atualizar((atual) => declararRiichi(atual, cadeira, contexto()))
     else if (acao === 'chombo') setChomboDe(cadeira)
+    else if (acao === 'descartes') setDescartesDe(cadeira)
     else if (acao === 'diferenca') setDiferencaDe(cadeira)
     else setBatida(iniciarBatida({ tipo: acao, vencedor: cadeira }))
   }
@@ -265,13 +296,14 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                     vento={ventoDaCadeira(cadeira, placar.cadeiraDealer)}
                     pontos={placar.pontos[cadeira]}
                     emRiichi={placar.riichi.includes(cadeira)}
+                    furiten={avisoFuriten(cadeira)}
                     timer={
                       timer.ligado && vez.cadeira === cadeira
                         ? {
                             segundos: timer.segundos,
                             fracao: timer.fracao,
                             esgotado: timer.esgotado,
-                            aoTocar: timer.tocar,
+                            aoTocar: tocarTimer,
                           }
                         : undefined
                     }
@@ -291,6 +323,30 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           </div>
 
           <div className="mesa-acoes">
+            {config.abortivos.quatroVentos && ehQuatroVentos(partida.registro?.lances ?? []) && (
+              <button
+                type="button"
+                className="mesa-aviso-furiten"
+                onClick={() => setQuatroVentosAberto(true)}
+              >
+                {t('match.discards.fourWindsNotice')}
+              </button>
+            )}
+            {CADEIRAS.map((cadeira) => {
+              const frase = avisoFuriten(cadeira)
+              return (
+                frase && (
+                  <button
+                    key={cadeira}
+                    type="button"
+                    className="mesa-aviso-furiten"
+                    onClick={() => setDescartesDe(cadeira)}
+                  >
+                    <strong>{nomeDe(cadeira)}</strong> {frase}
+                  </button>
+                )
+              )
+            })}
             <button
               type="button"
               className="mesa-btn-principal"
@@ -433,6 +489,46 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             atualizar((atual) => registrarAbortivo(atual, abortivo, contexto()))
             setRyukyokuAberto(false)
           }}
+        />
+      )}
+
+      {quatroVentosAberto && (
+        <ModalConfirmacao
+          titulo={t('match.abortive.quatroVentos')}
+          texto={t('match.discards.fourWindsNotice')}
+          rotuloConfirmar={t('match.discards.fourWindsConfirm')}
+          aoFechar={() => setQuatroVentosAberto(false)}
+          aoConfirmar={() => {
+            atualizar((atual) => registrarAbortivo(atual, 'quatroVentos', contexto()))
+            setQuatroVentosAberto(false)
+          }}
+        />
+      )}
+
+      {descartesDe !== null && (
+        <ModalDescartes
+          partida={partida}
+          cadeira={descartesDe}
+          nomeDe={nomeDe}
+          acoes={acoesDescartes}
+          aoChamou={(outra) => {
+            setDescartesDe(null)
+            if (timer.ligado) timer.passarPara(outra)
+          }}
+          aoFechar={() => setDescartesDe(null)}
+        />
+      )}
+
+      {descarteRapidoDe !== null && (
+        <ModalDescartes
+          rapido
+          partida={partida}
+          cadeira={descarteRapidoDe}
+          nomeDe={nomeDe}
+          acoes={acoesDescartes}
+          aoPular={passarDepoisDoDescarte}
+          aoRegistrou={passarDepoisDoDescarte}
+          aoFechar={() => setDescarteRapidoDe(null)}
         />
       )}
 

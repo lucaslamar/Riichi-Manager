@@ -6,6 +6,7 @@
  * Cadeiras em ordem de turno: 0 embaixo, 1 à direita, 2 em cima, 3 à esquerda.
  */
 import { calcularOka, type ConfigMesa } from './configMesa'
+import { desmarcarRiichi, type Lance, type RegistroMao } from './descartes'
 import { vezInicial, type EstadoVez } from './vez'
 
 export type Cadeira = 0 | 1 | 2 | 3
@@ -64,6 +65,8 @@ export interface EventoPartida {
   /** Volta exatamente para cá ao desfazer. */
   placarAntes: Placar
   detalhe?: DetalheEvento
+  /** Descartes da mão que terminou, quando o registro está ligado. */
+  lances?: Lance[]
 }
 
 export type MotivoFim = 'ultimaMao' | 'tobi' | 'retorno' | 'agariYame'
@@ -86,6 +89,8 @@ export interface Partida {
   placar: Placar
   eventos: EventoPartida[]
   vez: EstadoVez
+  /** Linha do tempo da mão atual; só existe com "Registrar descartes" em uso. */
+  registro?: RegistroMao
   status: 'em_andamento' | 'finalizada'
   criadaEm: string
   finalizadaEm?: string
@@ -217,19 +222,25 @@ function fecharMao(
       : rodadaSeguinte(antes)
 
   const placar: Placar = { ...antes, ...rodada, pontos, honba: regras.honba, palitos: regras.palitos, riichi: [] }
+  const lances = partida.registro?.lances ?? []
 
   return {
     ...partida,
     placar,
-    eventos: [...partida.eventos, registrarEvento(evento, antes, contexto)],
+    eventos: [
+      ...partida.eventos,
+      registrarEvento(lances.length > 0 ? { ...evento, lances } : evento, antes, contexto),
+    ],
     vez: vezInicial(placar.cadeiraDealer, partida.config.timerVez),
+    // O rio é limpo e a mão informada some; os descartes ficam no histórico da mão.
+    registro: undefined,
     fim: analise.fim,
     agariYameDisponivel: analise.agariYameDisponivel,
   }
 }
 
 function registrarEvento(
-  evento: Pick<EventoPartida, 'tipo' | 'variacao' | 'detalhe'>,
+  evento: Pick<EventoPartida, 'tipo' | 'variacao' | 'detalhe' | 'lances'>,
   antes: Placar,
   contexto: Contexto,
 ): EventoPartida {
@@ -454,8 +465,18 @@ export function desfazer(partida: Partida): Partida {
   const ultimo = partida.eventos[partida.eventos.length - 1]
   if (!ultimo) return partida
   const manterVez = ultimo.tipo === 'riichi'
+  const { cadeira } = ultimo.detalhe ?? {}
+  // Riichi desfeito: o descarte não fica deitado. Mão desfeita: o rio volta, sem as mãos.
+  const registro = manterVez
+    ? partida.registro && cadeira !== undefined
+      ? desmarcarRiichi(partida.registro, cadeira)
+      : partida.registro
+    : ultimo.lances
+      ? { lances: ultimo.lances, maos: {} }
+      : undefined
   return {
     ...partida,
+    registro,
     placar: ultimo.placarAntes,
     eventos: partida.eventos.slice(0, -1),
     vez: manterVez

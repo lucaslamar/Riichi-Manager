@@ -11,6 +11,8 @@ interface PropsPlacaJogador {
   vento: Vento
   pontos: number
   emRiichi: boolean
+  /** Frase do aviso de furiten; o card mostra só a marca. */
+  furiten?: string
   /** Presente só na placa da vez, com o timer ligado. */
   timer?: { segundos: number; fracao: number; esgotado: boolean; aoTocar: () => void }
   aoAbrirMenu: () => void
@@ -26,6 +28,7 @@ export default function PlacaJogador({
   vento,
   pontos,
   emRiichi,
+  furiten,
   timer,
   aoAbrirMenu,
   aoSegurar,
@@ -79,6 +82,12 @@ export default function PlacaJogador({
           {vento === 'leste' && (
             <span className="mesa-placa-dealer" title={t('match.card.dealer')} aria-hidden="true">
               親
+            </span>
+          )}
+          {furiten && (
+            <span className="mesa-placa-furiten" title={furiten}>
+              <span aria-hidden="true">振</span>
+              <span className="sr-only">{furiten}</span>
             </span>
           )}
           {emRiichi && <span className="sr-only">{t('calculator.riichi')}</span>}

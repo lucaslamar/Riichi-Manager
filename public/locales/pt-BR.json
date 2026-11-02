@@ -921,7 +921,8 @@
       "tsumo": "Venceu por tsumo",
       "riichi": "Declarar Riichi",
       "difference": "Diferença de pontos",
-      "chombo": "Deu chombo"
+      "chombo": "Deu chombo",
+      "discards": "Descartes"
     },
     "difference": {
       "title": "Diferença de {{name}}",
@@ -1028,6 +1029,79 @@
       "first": "% 1º",
       "fourth": "% 4º",
       "tobi": "% tobi"
+    },
+    "discards": {
+      "title": "Descartes de {{name}}",
+      "quickTitle": "Descarte de {{name}}",
+      "skip": "Pular",
+      "add": "Adicionar",
+      "input": "Descarte em notação (3m5p1z)",
+      "kakanInput": "Pedra do kakan em notação (3m)",
+      "keyboard": "Teclado de pedras",
+      "riichi": "Descarte de Riichi",
+      "kakan": "Kakan",
+      "undo": "Desfazer último",
+      "empty": "Nenhum descarte ainda.",
+      "calledBy": "Chamada por",
+      "removeCall": "Tirar chamada",
+      "call": {
+        "chi": "Chi",
+        "pon": "Pon",
+        "kan": "Kan"
+      },
+      "tileOrder": "Descarte {{order}}",
+      "history": "Ver descartes",
+      "handTitle": "Mão de quem espera",
+      "handHelp": "Informe as 13 pedras para checar o furiten. Chamadas com c: 123mc. A mão some ao fim da mão.",
+      "handSave": "Salvar",
+      "handClear": "Apagar mão",
+      "handNot13": "A mão precisa ter 13 pedras.",
+      "handNotTenpai": "Essa mão não está em tenpai.",
+      "handChanged": "Houve descarte depois de informar. Se a mão mudou, salve de novo.",
+      "handWaits": "Espera: {{tiles}}",
+      "nagashiDetected": "Já marcado pelos descartes: só terminais e honras, sem pedra chamada. Confira antes de confirmar.",
+      "fourWindsNotice": "Os 4 primeiros descartes foram o mesmo vento: a mão empata.",
+      "fourWindsConfirm": "Registrar empate"
+    },
+    "furiten": {
+      "waiting": "espera {{tiles}}",
+      "canTsumo": "Ainda pode ganhar por tsumo. Declarar ron é chombo.",
+      "cause": "{{tile}}, descarte {{order}} de {{name}}",
+      "glossary": "Ver no glossário",
+      "riichi": {
+        "title": "Furiten de Riichi",
+        "until": "até o fim da mão"
+      },
+      "discards": {
+        "title": "Furiten pelos descartes",
+        "until": "enquanto a espera não mudar"
+      },
+      "temporary": {
+        "title": "Furiten temporário",
+        "until": "até seu próximo descarte"
+      }
     }
+  },
+  "spokenTiles": {
+    "man": "{{number}} de caracteres",
+    "pin": "{{number}} de círculos",
+    "sou": "{{number}} de bambu",
+    "red": {
+      "man": "5 vermelho de caracteres",
+      "pin": "5 vermelho de círculos",
+      "sou": "5 vermelho de bambu"
+    },
+    "east": "vento Leste",
+    "south": "vento Sul",
+    "west": "vento Oeste",
+    "north": "vento Norte",
+    "white": "dragão branco",
+    "green": "dragão verde",
+    "and": "e",
+    "riichiMark": "Riichi",
+    "calledMark": "{{call}} de {{name}}",
+    "river": "{{name}} descartou: {{tiles}}.",
+    "noDiscards": "{{name}} ainda não descartou.",
+    "redDragon": "dragão vermelho"
   }
 }

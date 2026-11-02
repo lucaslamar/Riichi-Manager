@@ -921,7 +921,8 @@
       "tsumo": "Won by tsumo",
       "riichi": "Declare Riichi",
       "difference": "Point difference",
-      "chombo": "Chombo"
+      "chombo": "Chombo",
+      "discards": "Discards"
     },
     "difference": {
       "title": "{{name}}'s difference",
@@ -1028,6 +1029,79 @@
       "first": "% 1st",
       "fourth": "% 4th",
       "tobi": "% tobi"
+    },
+    "discards": {
+      "title": "{{name}}'s discards",
+      "quickTitle": "{{name}}'s discard",
+      "skip": "Skip",
+      "add": "Add",
+      "input": "Discard in notation (3m5p1z)",
+      "kakanInput": "Kakan tile in notation (3m)",
+      "keyboard": "Tile keyboard",
+      "riichi": "Riichi discard",
+      "kakan": "Kakan",
+      "undo": "Undo last",
+      "empty": "No discards yet.",
+      "calledBy": "Called by",
+      "removeCall": "Remove call",
+      "call": {
+        "chi": "Chi",
+        "pon": "Pon",
+        "kan": "Kan"
+      },
+      "tileOrder": "Discard {{order}}",
+      "history": "View discards",
+      "handTitle": "Waiting hand",
+      "handHelp": "Enter the 13 tiles to check furiten. Calls with c: 123mc. It is cleared when the hand ends.",
+      "handSave": "Save",
+      "handClear": "Clear hand",
+      "handNot13": "The hand must have 13 tiles.",
+      "handNotTenpai": "This hand is not in tenpai.",
+      "handChanged": "There was a discard after entering it. If the hand changed, save it again.",
+      "handWaits": "Waiting on: {{tiles}}",
+      "nagashiDetected": "Already marked from the discards: only terminals and honors, no called tiles. Check before confirming.",
+      "fourWindsNotice": "The first 4 discards were the same wind: the hand is a draw.",
+      "fourWindsConfirm": "Record draw"
+    },
+    "furiten": {
+      "waiting": "waiting on {{tiles}}",
+      "canTsumo": "You can still win by tsumo. Declaring ron is chombo.",
+      "cause": "{{tile}}, discard {{order}} by {{name}}",
+      "glossary": "See in glossary",
+      "riichi": {
+        "title": "Riichi furiten",
+        "until": "until the hand ends"
+      },
+      "discards": {
+        "title": "Discard furiten",
+        "until": "while the wait stays the same"
+      },
+      "temporary": {
+        "title": "Temporary furiten",
+        "until": "until your next discard"
+      }
     }
+  },
+  "spokenTiles": {
+    "man": "{{number}} of characters",
+    "pin": "{{number}} of circles",
+    "sou": "{{number}} of bamboo",
+    "red": {
+      "man": "red 5 of characters",
+      "pin": "red 5 of circles",
+      "sou": "red 5 of bamboo"
+    },
+    "east": "East wind",
+    "south": "South wind",
+    "west": "West wind",
+    "north": "North wind",
+    "white": "white dragon",
+    "green": "green dragon",
+    "and": "and",
+    "riichiMark": "Riichi",
+    "calledMark": "{{call}} by {{name}}",
+    "river": "{{name}} discarded: {{tiles}}.",
+    "noDiscards": "{{name}} has not discarded yet.",
+    "redDragon": "red dragon"
   }
 }

@@ -342,6 +342,16 @@ button.mesa-domo {
   font-weight: 800;
 }
 
+.mesa-placa-furiten {
+  flex: 0 0 auto;
+  border-radius: 3px;
+  padding: 0 3px;
+  color: var(--led-fundo);
+  background: var(--led-timer);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
 .mesa-placa-pontos {
   color: var(--led-texto);
   font-size: max(1.5rem, 8cqw);

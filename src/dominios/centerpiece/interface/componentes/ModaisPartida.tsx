@@ -15,6 +15,8 @@ import {
   type Partida,
   type TipoAbortivo,
 } from '../../logica/partida'
+import { candidatosNagashi } from '../../logica/descartes'
+import RioPedras from './RioPedras'
 
 /** Nome de cada cadeira, resolvido pela tela a partir do cadastro. */
 export type NomeDaCadeira = (cadeira: Cadeira) => string
@@ -83,7 +85,7 @@ export function MenuJogador({
   cadeira: Cadeira
   nome: string
   podeReceberVez: boolean
-  aoEscolher: (acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca') => void
+  aoEscolher: (acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes') => void
   aoFechar: () => void
 }) {
   const { t } = useI18n()
@@ -122,6 +124,9 @@ export function MenuJogador({
       <div className="ptd-lista-opcoes" role="group" aria-label={t('match.menu.actions')}>
         {podeReceberVez && (
           <Acao acao="vez" icone="fa-hand-point-right" rotulo={t('match.menu.hisTurn')} />
+        )}
+        {partida.config.registrarDescartes && (
+          <Acao acao="descartes" icone="fa-layer-group" rotulo={t('match.menu.discards')} />
         )}
         <Acao acao="ron" icone="fa-trophy" rotulo={t('match.menu.ron')} />
         <Acao acao="tsumo" icone="fa-trophy" rotulo={t('match.menu.tsumo')} />
@@ -196,7 +201,11 @@ export function ModalRyukyoku({
   const { placar, config } = partida
   // Quem declarou Riichi precisa estar tenpai: já vem marcado.
   const [tenpai, setTenpai] = useState<Cadeira[]>(placar.riichi)
-  const [nagashi, setNagashi] = useState<Cadeira[]>([])
+  // Com os descartes anotados, quem cumpre o Nagashi Mangan já vem marcado.
+  const [detectados] = useState<Cadeira[]>(() =>
+    config.nagashiMangan ? candidatosNagashi(partida.registro?.lances ?? []) : [],
+  )
+  const [nagashi, setNagashi] = useState<Cadeira[]>(detectados)
 
   const alternar = (lista: Cadeira[], cadeira: Cadeira) =>
     lista.includes(cadeira) ? lista.filter((item) => item !== cadeira) : [...lista, cadeira]
@@ -253,6 +262,7 @@ export function ModalRyukyoku({
       {config.nagashiMangan && (
         <>
           <p className="ptd-rotulo">{t('match.draw.whoNagashi')}</p>
+          {detectados.length > 0 && <p className="ptd-apoio">{t('match.discards.nagashiDetected')}</p>}
           <div className="ptd-lista-opcoes ptd-lista-opcoes--linha">
             {CADEIRAS.map((cadeira) => (
               <button
@@ -335,6 +345,17 @@ export function ListaMaos({ partida, nomeDe }: { partida: Partida; nomeDe: NomeD
               </li>
             ))}
           </ul>
+          {evento.lances && (
+            <details className="dsc-historico">
+              <summary>{t('match.discards.history')}</summary>
+              {CADEIRAS.map((cadeira) => (
+                <div key={cadeira}>
+                  <p className="ptd-rotulo">{nomeDe(cadeira)}</p>
+                  <RioPedras lances={evento.lances ?? []} cadeira={cadeira} nomeDe={nomeDe} />
+                </div>
+              ))}
+            </details>
+          )}
         </li>
       ))}
     </ol>

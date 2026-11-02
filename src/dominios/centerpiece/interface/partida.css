@@ -666,3 +666,168 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+
+/* ─── Registro de descartes ───────────────────────────────────────────────── */
+.dsc-rio {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dsc-pedra {
+  display: inline-flex;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 2px;
+  background: transparent;
+  font: inherit;
+}
+
+button.dsc-pedra {
+  cursor: pointer;
+}
+
+.dsc-pedra .tile-img {
+  width: 32px;
+  height: auto;
+}
+
+.dsc-pedra--riichi {
+  border-color: var(--cor-vez);
+}
+
+.dsc-pedra--chamada {
+  border-style: dashed;
+  border-color: var(--entrada-borda);
+  opacity: 0.65;
+}
+
+.dsc-pedra--selecionada {
+  border-color: var(--primario-forte);
+  border-style: solid;
+  opacity: 1;
+}
+
+.dsc-entrada,
+.dsc-chamada,
+.dsc-furiten {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.dsc-entrada-linha {
+  display: flex;
+  gap: 8px;
+}
+
+.dsc-entrada-linha input {
+  min-width: 0;
+  min-height: 44px;
+  flex: 1 1 auto;
+}
+
+.dsc-marcas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dsc-marcas > .ptd-opcao {
+  width: auto;
+  flex: 1 1 30%;
+}
+
+.dsc-erro {
+  margin: 0;
+  color: var(--texto-erro);
+  font-size: 0.875rem;
+}
+
+.dsc-desfazer {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.dsc-chamada-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(3, 56px);
+  align-items: center;
+  gap: 6px;
+}
+
+.dsc-chamada-linha > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dsc-chamada-linha > button {
+  padding: 0;
+}
+
+.dsc-chamada-linha > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.dsc-furiten {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.dsc-furiten p {
+  margin: 0;
+}
+
+.dsc-furiten-aviso,
+.mesa-aviso-furiten {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--cor-aviso-borda);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: var(--texto-aviso);
+  background: var(--cor-aviso-suave);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.dsc-furiten-aviso > i {
+  margin-right: 6px;
+}
+
+.dsc-historico {
+  margin-top: 8px;
+}
+
+.dsc-historico > summary {
+  min-height: 44px;
+  align-content: center;
+  color: var(--texto-apoio);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.dsc-teclado .teclado-pedras {
+  position: static;
+  width: 100%;
+  margin: 0;
+}
+
+/* 10 colunas não dão 44px de largura num celular; a altura completa o toque. */
+.dsc-teclado .btn-pedra {
+  min-height: 44px;
+}
