@@ -8,13 +8,14 @@ import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/P
 import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import { numerosDaParede } from '../../logica/dados'
 import {
-  CADEIRAS,
   calcularResultado,
   declararRiichi,
   desfazer,
   encerrarPorAgariYame,
   finalizarPartida,
+  CHAVE_VENTO,
   KANJI_VENTO,
   ORDEM_VENTOS,
   registrarAbortivo,
@@ -28,7 +29,9 @@ import {
   type Partida,
 } from '../../logica/partida'
 import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
-import CardPartida from '../componentes/CardPartida'
+import AdSlot from '@/compartilhado/interface/componentes/AdSlot'
+import MesaQuadrada from '../componentes/MesaQuadrada'
+import PlacaJogador from '../componentes/PlacaJogador'
 import JogarDados from '../componentes/JogarDados'
 import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
@@ -41,10 +44,9 @@ import {
   ModalRyukyoku,
 } from '../componentes/ModaisPartida'
 import { usePartidas } from '../hooks/usePartidas'
+import { useModoMesa } from '../hooks/useModoMesa'
 import { useTimerVez } from '../hooks/useTimerVez'
 
-/** Cadeira → lugar na tela. Fixo: não depende do vento. */
-const AREA_DA_CADEIRA = ['cp-area-baixo', 'cp-area-direita', 'cp-area-topo', 'cp-area-esquerda']
 const DURACAO_AVISO_MS = 2500
 
 const ventoMao = (vento: (typeof ORDEM_VENTOS)[number]) =>
@@ -96,6 +98,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     !!partida.fim
 
   const timer = useTimerVez(partida, atualizar, modalAberta)
+  const { modo, alternar } = useModoMesa()
 
   // Troca de vez e tempo esgotado no leitor de tela.
   const nomeDaVez = nomeDe(vez.cadeira)
@@ -198,7 +201,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     <>
       {/* A mesa continua montada atrás da calculadora, com o timer pausado. */}
       <div hidden={!!batida?.calculadora}>
-        <div className="centerpiece-mesa">
+        <div className="mesa-tela">
           {batida?.calculadora && vencedorAtual !== null ? (
             <TituloTela
               titulo={`${nomeDe(vencedorAtual)} · ${t(`calculator.${batida.tipo}`)}`}
@@ -227,107 +230,108 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           </div>
 
 
-          <div className="cp-compass">
-            {CADEIRAS.map((cadeira) => (
-              <div key={cadeira} className={AREA_DA_CADEIRA[cadeira]}>
-                <CardPartida
-                  nome={nomeDe(cadeira)}
-                  vento={ventoDaCadeira(cadeira, placar.cadeiraDealer)}
-                  pontos={placar.pontos[cadeira]}
-                  emRiichi={placar.riichi.includes(cadeira)}
-                  timer={
-                    timer.ligado && vez.cadeira === cadeira
-                      ? {
-                          segundos: timer.segundos,
-                          fracao: timer.fracao,
-                          esgotado: timer.esgotado,
-                          aoTocar: timer.tocar,
-                        }
-                      : undefined
-                  }
-                  aoAbrirMenu={() => setMenuDe(cadeira)}
-                  aoSegurar={() => setDiferencaDe(cadeira)}
-                />
-              </div>
-            ))}
+          <AdSlot />
 
-            <div className="cp-area-centro">
-              <div className="centerpiece-painel-central">
-                <div className="ptd-rodada">
-                  <strong aria-hidden="true">
+          <div className="mesa-centro-tela">
+            <MesaQuadrada
+              modo={modo}
+              cadeiraDealer={placar.cadeiraDealer}
+              aoTocarDomo={timer.ligado && vez.comecou ? timer.alternarPausa : undefined}
+              rotuloDomo={t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}
+              domo={
+                <>
+                  <span className="mesa-domo-rodada" aria-hidden="true">
                     {KANJI_VENTO[placar.rodadaVento]}
                     {placar.rodadaNumero}
-                  </strong>
+                  </span>
                   <span className="sr-only">
                     {t('match.table.round', {
-                      wind: t(`winds.${{ leste: 'east', sul: 'south', oeste: 'west', norte: 'north' }[placar.rodadaVento]}`),
+                      wind: t(CHAVE_VENTO[placar.rodadaVento]),
                       number: placar.rodadaNumero,
                     })}
                   </span>
-                  <span>
-                    本{placar.honba} · 棒{placar.palitos}
+                  <span className="mesa-domo-info">
+                    {timer.ligado && vez.comecou && !timer.contando && (
+                      <i className="fas fa-pause" aria-hidden="true" />
+                    )}{' '}
+                    本{placar.honba}·棒{placar.palitos}
                   </span>
-                  {timer.ligado && vez.comecou && (
-                    <button
-                      type="button"
-                      className="ptd-btn-icone"
-                      aria-label={t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}
-                      onClick={timer.alternarPausa}
-                    >
-                      <i className={`fas ${timer.contando ? 'fa-pause' : 'fa-play'}`} aria-hidden="true" />
-                    </button>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  className="btn-primario ptd-btn-largo"
-                  onClick={() => setBatida(iniciarBatida())}
-                >
-                  {t('match.win.title')}
-                </button>
-                {partida.agariYameDisponivel && (
-                  <button
-                    type="button"
-                    className="btn-contorno ptd-btn-largo"
-                    onClick={() => atualizar(encerrarPorAgariYame)}
-                  >
-                    {t('match.table.agariYame')}
-                  </button>
-                )}
-                <div className="ptd-acoes-mesa">
-                  <JogarDados
-                    cadeiraDealer={placar.cadeiraDealer}
-                    className="btn-contorno"
-                    aoMudarAberto={setDadosAbertos}
+                </>
+              }
+              lado={(cadeira) => ({
+                placa: (
+                  <PlacaJogador
+                    nome={nomeDe(cadeira)}
+                    vento={ventoDaCadeira(cadeira, placar.cadeiraDealer)}
+                    pontos={placar.pontos[cadeira]}
+                    emRiichi={placar.riichi.includes(cadeira)}
+                    timer={
+                      timer.ligado && vez.cadeira === cadeira
+                        ? {
+                            segundos: timer.segundos,
+                            fracao: timer.fracao,
+                            esgotado: timer.esgotado,
+                            aoTocar: timer.tocar,
+                          }
+                        : undefined
+                    }
+                    aoAbrirMenu={() => setMenuDe(cadeira)}
+                    aoSegurar={() => setDiferencaDe(cadeira)}
                   />
-                  <button
-                    type="button"
-                    className="btn-contorno"
-                    onClick={() => setRyukyokuAberto(true)}
-                  >
-                    <i className="fas fa-equals" aria-hidden="true" />
-                    {t('match.draw.short')}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-contorno"
-                    disabled={partida.eventos.length === 0}
-                    onClick={() => {
-                      atualizar(desfazer)
-                      mostrarAviso(t('match.table.undone'))
-                    }}
-                  >
-                    <i className="fas fa-rotate-left" aria-hidden="true" />
-                    {t('match.table.undo')}
-                  </button>
-                  <button type="button" className="btn-contorno" onClick={() => setMaosAbertas(true)}>
-                    <i className="fas fa-list" aria-hidden="true" />
-                    {t('match.hands.short')}
-                  </button>
-                </div>
-              </div>
+                ),
+                ranhura: placar.riichi.includes(cadeira) ? (
+                  <span className="mesa-palito" aria-hidden="true" />
+                ) : (
+                  <span aria-hidden="true">
+                    {numerosDaParede((cadeira - placar.cadeiraDealer + 4) % 4).join(' · ')}
+                  </span>
+                ),
+              })}
+            />
+          </div>
+
+          <div className="mesa-acoes">
+            <button
+              type="button"
+              className="mesa-btn-principal"
+              onClick={() => setBatida(iniciarBatida())}
+            >
+              {t('match.win.title')}
+            </button>
+            {partida.agariYameDisponivel && (
+              <button
+                type="button"
+                className="mesa-btn-secundario"
+                onClick={() => atualizar(encerrarPorAgariYame)}
+              >
+                {t('match.table.agariYame')}
+              </button>
+            )}
+            <div className="mesa-linha-acoes">
+              <JogarDados cadeiraDealer={placar.cadeiraDealer} aoMudarAberto={setDadosAbertos} />
+              <button type="button" onClick={() => setRyukyokuAberto(true)}>
+                <i className="fas fa-equals" aria-hidden="true" />
+                {t('match.draw.short')}
+              </button>
+              <button
+                type="button"
+                disabled={partida.eventos.length === 0}
+                onClick={() => {
+                  atualizar(desfazer)
+                  mostrarAviso(t('match.table.undone'))
+                }}
+              >
+                <i className="fas fa-rotate-left" aria-hidden="true" />
+                {t('match.table.undo')}
+              </button>
+              <button type="button" onClick={() => setMaosAbertas(true)}>
+                <i className="fas fa-list" aria-hidden="true" />
+                {t('match.hands.short')}
+              </button>
             </div>
+            <button type="button" className="mesa-alternar-modo" onClick={alternar}>
+              {t(modo === 'mesa' ? 'match.table.modeList' : 'match.table.modeTable')}
+            </button>
           </div>
 
           {aviso && (

@@ -1,0 +1,86 @@
+/*
+ * Tema claro: bege da mesa com verde do feltro. Valores em `temas.ts` (TEMA_CLARO);
+ * `npm test` confere que os dois batem.
+ */
+:root[data-tema='claro'] {
+  color-scheme: light;
+
+  --cor-fundo: #efe8da;
+  --cor-superficie: #fbf8f1;
+  --cor-superficie-alt: #f4efe3;
+  --cor-borda: #d8cfbb;
+  --cor-borda-controle: #857c66;
+  --cor-texto: #25302a;
+  --cor-texto-suave: #5c5a4b;
+  --cor-primario: #1c6454;
+  --cor-sobre-primario: #ffffff;
+  --cor-primario-suave: #dcebe1;
+  --cor-primario-borda: #8fb8a3;
+  --cor-secundario: #14503c;
+  --cor-secundario-texto: #17684a;
+  --cor-destaque: #8a5a00;
+  --cor-destaque-suave: #f6e7c8;
+  --cor-destaque-borda: #cda95c;
+  --cor-foco: #1c6454;
+  --cor-perigo: #a8281f;
+  --cor-perigo-suave: #f8e0db;
+  --cor-perigo-borda: #dca79e;
+  --cor-sucesso: #17683f;
+  --cor-sucesso-suave: #dcefdf;
+  --cor-sucesso-borda: #9cc8a8;
+  --cor-aviso: #8a4b00;
+  --cor-aviso-suave: #f7e6cc;
+  --cor-aviso-borda: #d9b27c;
+  --cor-nav: #f7f2e7;
+  --cor-veu: rgb(37 48 42 / 50%);
+
+  --pedra-face-primario: #dcebe1;
+
+  /* Tokens antigos do app, apontados para a paleta. */
+  --primario: var(--cor-primario);
+  --primario-escuro: #14503c;
+  --secundario: var(--cor-sucesso);
+  --escuro: var(--cor-texto);
+  --fundo: var(--cor-fundo);
+  --branco: var(--cor-superficie);
+  --bloqueado: var(--cor-borda-controle);
+  --info-fundo: var(--cor-primario-suave);
+  --info-texto: var(--cor-primario);
+
+  --formula-borda: var(--cor-primario);
+  --formula-fundo: var(--cor-primario-suave);
+  --formula-texto: var(--cor-texto);
+
+  --guia-papel: var(--cor-superficie);
+  --guia-tinta: var(--cor-texto);
+  --guia-tinta-suave: var(--cor-texto-suave);
+  --guia-linha: var(--cor-borda);
+  --guia-destaque: var(--cor-primario);
+  --guia-destaque-suave: var(--cor-primario-suave);
+
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+}
+
+:root[data-tema='claro'] body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+:root[data-tema='claro'] .cabecalho-principal,
+:root[data-tema='claro'] .barra-navegacao-inferior,
+:root[data-tema='claro'] .drawer-global {
+  background: var(--cor-nav);
+}
+
+:root[data-tema='claro'] .cabecalho-principal {
+  border-bottom-color: var(--cor-borda);
+}
+
+:root[data-tema='claro'] .barra-navegacao-inferior {
+  border-top-color: var(--cor-borda);
+}
+
+:root[data-tema='claro'] .titulo-principal {
+  color: var(--cor-primario);
+}

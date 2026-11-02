@@ -7,7 +7,19 @@ export function IconeMenu({ icone }: { icone: string }) {
   if (icone === 'um-pin') return <i className="icone-svg-menu" aria-hidden="true"><SvgUmPin /></i>
   if (icone === 'chapeu-helice') return <i className="icone-svg-menu" aria-hidden="true"><SvgChapeuHelice /></i>
   if (icone === 'palito-riichi') return <i className="icone-svg-menu" aria-hidden="true"><SvgPalitoRiichi /></i>
+  if (icone === 'centerpiece') return <i className="icone-svg-menu" aria-hidden="true"><SvgCenterpiece /></i>
   return <i className={`fas ${icone}`} aria-hidden="true" />
+}
+
+/** PROVISÓRIO até chegar o IconeCenterpiece.tsx: painel quadrado com o disco central. */
+function SvgCenterpiece() {
+  return (
+    <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none">
+      <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" strokeWidth="2" />
+      <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" />
+      <circle cx="12" cy="12" r="1.8" fill="currentColor" />
+    </svg>
+  )
 }
 
 /** Palito de riichi (Han e Fu): barra arredondada com o ponto no centro. */

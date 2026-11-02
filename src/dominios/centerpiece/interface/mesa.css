@@ -1,0 +1,666 @@
+/*
+ * Mesa no padrão do mockup: feltro, painel quadrado, placas de LED e disco central.
+ * Medidas em cqw (largura do painel), para os 4 lados escalarem juntos. Cores só
+ * pelos tokens de tokens.css.
+ */
+
+/* ─── Tela ────────────────────────────────────────────────────────────────── */
+.mesa-tela {
+  --mesa-altura-cabecalho: 53px;
+  display: flex;
+  box-sizing: border-box;
+  width: min(100%, 560px);
+  min-height: calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px));
+  margin: 0 auto;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px 12px;
+}
+
+.mesa-centro-tela {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* O cabeçalho do tablet em pé é mais alto. */
+@media (min-width: 768px) and (orientation: portrait) {
+  .mesa-tela {
+    --mesa-altura-cabecalho: 67px;
+  }
+}
+
+/* iPhone SE: sem barra inferior, mas o conteúdo principal guarda 18px embaixo. */
+@media (max-width: 374px) and (orientation: portrait) and (min-aspect-ratio: 1 / 2) {
+  .mesa-tela {
+    --mesa-altura-cabecalho: 71px;
+    padding-block: 6px;
+  }
+}
+
+/* O simples tem mais botões: a mesa encolhe, sem passar do mínimo legível. */
+.mesa-tela--simples {
+  --mesa-altura-acoes: 296px;
+}
+
+.mesa-tela--simples .mesa-feltro {
+  min-width: 200px;
+}
+
+/* ─── Feltro e painel ─────────────────────────────────────────────────────── */
+.mesa-feltro {
+  box-sizing: border-box;
+  /* Quadrado que cabe na altura livre entre o cabeçalho e as ações. */
+  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 172px)));
+  min-width: 260px;
+  aspect-ratio: 1;
+  border-radius: 7%;
+  padding: 4%;
+  background: var(--mesa-feltro);
+  box-shadow: 0 10px 24px var(--mesa-sombra);
+}
+
+.mesa-painel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--mesa-painel-borda);
+  border-radius: 8%;
+  background: var(--mesa-painel);
+  box-shadow: 0 2px 8px var(--mesa-sombra);
+  container-type: size;
+}
+
+.mesa-disco {
+  position: absolute;
+  inset: 31%;
+  border: 1px solid var(--mesa-painel-borda);
+  border-radius: 50%;
+  background: var(--mesa-disco);
+}
+
+/* Cada lado é o mesmo quadrado girado; só os filhos recebem toque. */
+.mesa-lado {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mesa-lado > * {
+  pointer-events: auto;
+}
+
+.mesa-lado--1 {
+  transform: rotate(-90deg);
+}
+
+.mesa-lado--2 {
+  transform: rotate(180deg);
+}
+
+.mesa-lado--3 {
+  transform: rotate(90deg);
+}
+
+.mesa-lugar-placa {
+  position: absolute;
+  right: 24%;
+  bottom: 3%;
+  left: 24%;
+  height: 21%;
+}
+
+.mesa-ranhura {
+  position: absolute;
+  right: 31%;
+  bottom: 25%;
+  left: 31%;
+  display: flex;
+  height: 5%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--mesa-ranhura-texto);
+  background: var(--mesa-ranhura);
+  font-size: max(0.75rem, 3.4cqw);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.mesa-palito {
+  position: relative;
+  width: 94%;
+  height: 70%;
+  border-radius: 999px;
+  background: var(--mesa-palito);
+  box-shadow: 0 1px 2px var(--mesa-sombra);
+}
+
+.mesa-palito::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--mesa-palito-ponto);
+  transform: translate(-50%, -50%);
+}
+
+.mesa-anel-vento {
+  position: absolute;
+  bottom: 31.5%;
+  left: 50%;
+  font-size: 4.8cqw;
+  font-weight: 800;
+  line-height: 1;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.mesa-vento--leste {
+  color: var(--vento-leste);
+}
+
+.mesa-vento--sul {
+  color: var(--vento-sul);
+}
+
+.mesa-vento--oeste {
+  color: var(--vento-oeste);
+}
+
+.mesa-vento--norte {
+  color: var(--vento-norte);
+}
+
+/* ─── Domo ────────────────────────────────────────────────────────────────── */
+.mesa-painel > .mesa-domo {
+  position: absolute;
+  inset: 38%;
+  width: auto;
+  height: auto;
+}
+
+.mesa-domo {
+  display: flex;
+  width: 84px;
+  height: 84px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--mesa-domo-texto);
+  background: var(--mesa-domo);
+  box-shadow: inset 0 2px 6px var(--mesa-sombra);
+  font: inherit;
+}
+
+button.mesa-domo {
+  cursor: pointer;
+}
+
+.mesa-domo-rodada {
+  font-size: max(1.125rem, 6cqw);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.mesa-domo-info {
+  font-size: 0.75rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ─── Placa de LED ────────────────────────────────────────────────────────── */
+.mesa-placa {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  border: 3px solid transparent;
+  border-radius: 16%/28%;
+  background: var(--led-fundo);
+  color: var(--led-texto-nome);
+}
+
+.mesa-placa--vez {
+  border-color: var(--cor-vez);
+  animation: mesa-brilho-vez 1.8s ease-in-out infinite;
+}
+
+.mesa-placa--esgotado {
+  border-color: var(--texto-erro);
+  animation: mesa-pisca-alerta 0.7s steps(2, jump-none) infinite;
+}
+
+@keyframes mesa-brilho-vez {
+  0%,
+  100% {
+    box-shadow: 0 0 6px var(--cor-vez);
+  }
+  50% {
+    box-shadow: 0 0 16px 3px var(--cor-vez);
+  }
+}
+
+@keyframes mesa-pisca-alerta {
+  0% {
+    box-shadow: 0 0 20px 6px var(--texto-erro);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesa-placa--vez,
+  .mesa-placa--esgotado {
+    animation: none;
+    box-shadow: 0 0 10px 2px var(--cor-vez);
+  }
+}
+
+.mesa-placa-menu {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1px;
+  border: 0;
+  border-radius: inherit;
+  padding: 0 4px 0 8%;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.mesa-placa-topo {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+  font-size: max(0.75rem, 3.6cqw);
+  line-height: 1.2;
+}
+
+.mesa-placa-kanji {
+  flex: 0 0 auto;
+  font-weight: 800;
+}
+
+.mesa-led-vento--leste {
+  color: var(--led-vento-leste);
+}
+
+.mesa-led-vento--sul {
+  color: var(--led-vento-sul);
+}
+
+.mesa-led-vento--oeste {
+  color: var(--led-vento-oeste);
+}
+
+.mesa-led-vento--norte {
+  color: var(--led-vento-norte);
+}
+
+.mesa-placa-nome {
+  overflow: hidden;
+  min-width: 0;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mesa-placa-dealer {
+  flex: 0 0 auto;
+  border-radius: 3px;
+  padding: 0 3px;
+  color: var(--led-fundo);
+  background: var(--led-texto);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.mesa-placa-pontos {
+  color: var(--led-texto);
+  font-size: max(1.5rem, 8cqw);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+  text-shadow: 0 0 8px var(--led-brilho);
+}
+
+.mesa-timer {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--led-timer);
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mesa-timer svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.mesa-timer circle {
+  fill: none;
+  stroke-width: 4;
+}
+
+.mesa-timer-fundo {
+  stroke: var(--mesa-timer-fundo);
+}
+
+.mesa-timer-progresso {
+  stroke: var(--led-timer);
+}
+
+.mesa-placa--esgotado .mesa-timer {
+  color: var(--texto-erro);
+}
+
+.mesa-placa--esgotado .mesa-timer-progresso {
+  stroke: var(--texto-erro);
+}
+
+.mesa-placa-menu:focus-visible,
+.mesa-timer:focus-visible,
+.mesa-domo:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+/* Centerpiece simples: placa só com o vento e as somas. */
+.mesa-placa--simples {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.mesa-placa--simples strong {
+  font-size: max(1.75rem, 9cqw);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.mesa-placa--simples small {
+  color: var(--led-texto-nome);
+  font-size: max(0.75rem, 3.6cqw);
+  font-weight: 700;
+}
+
+.mesa-placa--dealer {
+  border-color: var(--led-texto);
+}
+
+.mesa-placa--sorteada {
+  border-color: var(--cor-vez);
+  box-shadow: 0 0 14px 2px var(--cor-vez);
+}
+
+/* ─── Modo lista ──────────────────────────────────────────────────────────── */
+.mesa-lista {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  container-type: inline-size;
+}
+
+.mesa-lista-placas {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mesa-lista-item {
+  position: relative;
+  height: 92px;
+}
+
+/* A ranhura sobe para a linha do nome, sem cobrir os pontos. */
+.mesa-lista-item .mesa-ranhura {
+  top: 8px;
+  right: 8px;
+  bottom: auto;
+  left: auto;
+  width: 68px;
+  height: 16px;
+  font-size: 0.75rem;
+}
+
+.mesa-lista-item .mesa-placa-topo {
+  width: calc(100% - 68px);
+}
+
+/* Com o timer, a placa já abriu mão de quase toda a largura da ranhura. */
+.mesa-lista-item .mesa-placa:has(.mesa-timer) .mesa-placa-topo {
+  width: calc(100% - 26px);
+}
+
+/* ─── Ações ───────────────────────────────────────────────────────────────── */
+.mesa-acoes {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mesa-btn-principal {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 14px;
+  color: var(--mesa-sobre-acao);
+  background: var(--mesa-acao);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+
+.mesa-btn-secundario {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 12px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.mesa-linha-acoes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mesa-linha-acoes > button {
+  display: flex;
+  min-width: 0;
+  min-height: 60px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 4px 2px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.mesa-linha-acoes > button > i {
+  font-size: 1.125rem;
+}
+
+.mesa-linha-acoes > button:disabled {
+  color: var(--texto-apoio);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.mesa-alternar-modo {
+  align-self: center;
+  min-height: 44px;
+  border: 0;
+  padding: 0 12px;
+  color: var(--texto-apoio);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.mesa-honba {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--texto-principal);
+  font-weight: 800;
+}
+
+/* Simples: a pilha vira grade para caber sem rolar. */
+.mesa-tela--simples .mesa-acoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mesa-tela--simples .mesa-honba,
+.mesa-tela--simples .mesa-btn-principal,
+.mesa-tela--simples .mesa-alternar-modo {
+  grid-column: 1 / -1;
+}
+
+.mesa-tela--simples .mesa-alternar-modo {
+  justify-self: center;
+}
+
+/* Tablet deitado e desktop: mesa à esquerda e botões à direita. */
+@media (min-width: 1024px) and (orientation: landscape) and (min-height: 501px) {
+  .mesa-tela--simples {
+    --mesa-altura-acoes: 40px;
+    display: grid;
+    width: min(100%, 980px);
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+    align-items: center;
+    gap: 20px;
+  }
+}
+
+/* Celular deitado: placas à esquerda e ações à direita, tudo sem rolar. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mesa-tela {
+    --mesa-altura-acoes: 40px;
+    display: grid;
+    width: 100%;
+    max-width: 900px;
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding-block: 6px;
+  }
+
+  .mesa-tela > :not(.mesa-centro-tela, .mesa-acoes) {
+    grid-column: 1 / -1;
+  }
+
+  .mesa-feltro {
+    min-width: 0;
+  }
+
+  .mesa-lista {
+    gap: 6px;
+  }
+
+  .mesa-lista .mesa-domo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .mesa-lista-item {
+    height: 88px;
+  }
+
+  .mesa-acoes {
+    gap: 6px;
+  }
+
+  .mesa-btn-principal {
+    min-height: 44px;
+  }
+
+  .mesa-linha-acoes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .mesa-linha-acoes > button {
+    min-height: 44px;
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .mesa-alternar-modo {
+    min-height: 44px;
+  }
+}
+
+/* Calculadora dentro do resultado. */
+.cp-btn-usar-resultado {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}

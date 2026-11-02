@@ -24,7 +24,9 @@
     "rulesShort": "规则",
     "about": "关于 / 版本",
     "handCalculatorShort": "计算器",
-    "windDrawShort": "抽风位"
+    "windDrawShort": "抽风位",
+    "centerpiece": "Centerpiece",
+    "more": "More"
   },
   "actions": {
     "back": "返回",
@@ -873,8 +875,8 @@
     },
     "simple": {
       "title": "Simple Centerpiece",
-      "nextDealer": "Next dealer",
-      "repeatDealer": "Repeat dealer",
+      "nextRound": "Next round",
+      "honba": "Honba",
       "restart": "Restart from 東1",
       "restartHelp": "Round, dealer and honba go back to the start.",
       "honbaPlus": "Increase honba",
@@ -896,7 +898,10 @@
       "round": "{{wind}} {{number}}",
       "undo": "Undo",
       "undone": "Last action undone.",
-      "agariYame": "End game (agari-yame)"
+      "agariYame": "End game (agari-yame)",
+      "modeList": "List view",
+      "modeTable": "Table view",
+      "center": "Table center"
     },
     "card": {
       "label": "{{name}}, {{wind}}, {{points}} points. Open menu",

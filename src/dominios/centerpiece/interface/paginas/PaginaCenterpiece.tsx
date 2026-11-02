@@ -12,6 +12,7 @@ import PaginaHistorico from './PaginaHistorico'
 import PaginaRanking from './PaginaRanking'
 import PlacarPartida from './PlacarPartida'
 import SetupPartida from './SetupPartida'
+import '../mesa.css'
 import '../partida.css'
 
 type TelaModulo =

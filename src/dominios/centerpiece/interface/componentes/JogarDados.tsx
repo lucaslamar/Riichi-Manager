@@ -68,8 +68,7 @@ export default function JogarDados({
   return (
     <>
       <button type="button" className={className} onClick={abrir}>
-        <i className="fas fa-dice" aria-hidden="true" />
-        {t('match.dice.roll')}
+        <i className="fas fa-dice" aria-hidden="true" /> {t('match.dice.roll')}
       </button>
 
       {aberto && (

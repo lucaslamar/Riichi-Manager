@@ -1,9 +1,6 @@
 /*
  * Velvet Darkness: tema escuro. Valores em `temas.ts` (VELVET_DARKNESS), a
  * fonte que um app nativo também usa; `npm test` confere que os dois batem.
- *
- * As variáveis `--cor-*` só existem aqui: no tema claro cada uso cai no valor
- * de reserva (`var(--cor-texto, #102a43)`), que é a cor original do app.
  */
 :root[data-tema='escuro'] {
   color-scheme: dark;

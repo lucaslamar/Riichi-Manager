@@ -24,7 +24,9 @@
     "rulesShort": "Taisyklės",
     "about": "Apie / versija",
     "handCalculatorShort": "Skaičiuoklė",
-    "windDrawShort": "Burtai"
+    "windDrawShort": "Burtai",
+    "centerpiece": "Centerpiece",
+    "more": "More"
   },
   "actions": {
     "back": "Atgal",
@@ -894,8 +896,8 @@
     },
     "simple": {
       "title": "Simple Centerpiece",
-      "nextDealer": "Next dealer",
-      "repeatDealer": "Repeat dealer",
+      "nextRound": "Next round",
+      "honba": "Honba",
       "restart": "Restart from 東1",
       "restartHelp": "Round, dealer and honba go back to the start.",
       "honbaPlus": "Increase honba",
@@ -917,7 +919,10 @@
       "round": "{{wind}} {{number}}",
       "undo": "Undo",
       "undone": "Last action undone.",
-      "agariYame": "End game (agari-yame)"
+      "agariYame": "End game (agari-yame)",
+      "modeList": "List view",
+      "modeTable": "Table view",
+      "center": "Table center"
     },
     "card": {
       "label": "{{name}}, {{wind}}, {{points}} points. Open menu",

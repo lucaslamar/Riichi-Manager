@@ -22,18 +22,6 @@ export type TelaPrincipal =
   | 'sobre'
 
 /**
- * Caminho temporário de teste enquanto os módulos não voltam ao menu: só no
- * servidor de desenvolvimento, com `?modulo=centerpiece`.
- */
-function telaInicial(): TelaPrincipal {
-  if (import.meta.env.DEV) {
-    const modulo = new URLSearchParams(window.location.search).get('modulo')
-    if (modulo === 'centerpiece') return modulo
-  }
-  return 'calculadora'
-}
-
-/**
  * Ordem das telas ao deslizar o dedo: a da barra inferior. 'aprender' é o guia
  * Aprender a jogar, que abre por cima em vez de trocar de tela.
  */
@@ -41,6 +29,7 @@ const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
   'calculadora',
   'calculadoraRapida',
   'sorteadorVentos',
+  'centerpiece',
   'aprender',
   'regras',
 ]
@@ -49,7 +38,7 @@ const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
  * Componente raiz da aplicacao. A Calculadora de Mao e a porta de entrada.
  */
 export default function App() {
-  const [tela, setTela] = useState<TelaPrincipal>(telaInicial)
+  const [tela, setTela] = useState<TelaPrincipal>('calculadora')
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
   // a cada abertura, sempre na capa.
@@ -83,7 +72,7 @@ export default function App() {
     if (destino !== 'aprender') navegar(destino)
   }
   useDeslizeHorizontal({
-    ativo: indiceTela >= 0 && tela !== 'calculadora',
+    ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece',
     aoDeslizarDireita: telaAnterior && (() => irPara(telaAnterior)),
     aoDeslizarEsquerda: proximaTela && (() => irPara(proximaTela)),
   })

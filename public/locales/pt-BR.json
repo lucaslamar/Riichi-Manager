@@ -24,7 +24,9 @@
     "rulesShort": "Regras",
     "about": "Sobre / versão",
     "handCalculatorShort": "Calculadora",
-    "windDrawShort": "Sorteador"
+    "windDrawShort": "Sorteador",
+    "centerpiece": "Centerpiece",
+    "more": "Mais"
   },
   "actions": {
     "back": "Voltar",
@@ -880,8 +882,8 @@
     },
     "simple": {
       "title": "Centerpiece simples",
-      "nextDealer": "Próximo dealer",
-      "repeatDealer": "Repetir dealer",
+      "nextRound": "Próxima rodada",
+      "honba": "Honba",
       "restart": "Recomeçar do 東1",
       "restartHelp": "A rodada, o dealer e o honba voltam ao início.",
       "honbaPlus": "Aumentar honba",
@@ -903,7 +905,10 @@
       "round": "{{wind}} {{number}}",
       "undo": "Desfazer",
       "undone": "Última ação desfeita.",
-      "agariYame": "Encerrar partida (agari-yame)"
+      "agariYame": "Encerrar partida (agari-yame)",
+      "modeList": "Ver em lista",
+      "modeTable": "Ver como mesa",
+      "center": "Centro da mesa"
     },
     "card": {
       "label": "{{name}}, {{wind}}, {{points}} pontos. Abrir menu",

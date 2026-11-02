@@ -97,7 +97,8 @@
 .drawer-global-overlay {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  /* Acima do guia (100) e da barra inferior dele (101): o "Mais" abre por cima. */
+  z-index: 110;
   background: var(--cor-veu, rgba(15, 23, 42, 0.38));
 }
 

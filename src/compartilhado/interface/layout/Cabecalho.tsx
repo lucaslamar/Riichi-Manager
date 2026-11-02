@@ -32,11 +32,12 @@ const MODULOS_MENU: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  { tela: 'centerpiece', chave: 'menu.centerpiece', icone: 'centerpiece' },
   { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
 ]
 
 const APP_MENU: ItemMenuGlobal[] = [
-  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
+  { tela: 'regras', chave: 'menu.rules', icone: 'fa-gear' },
   { tela: 'sobre', chave: 'menu.about', icone: 'fa-info-circle' },
 ]
 
@@ -44,13 +45,14 @@ const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
   { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
   { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
   { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
+  { tela: 'centerpiece', chave: 'menu.centerpiece', icone: 'centerpiece' },
   { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
-  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
+  { tela: 'regras', chave: 'menu.rules', icone: 'fa-gear' },
 ]
 
 /**
  * Barra inferior (celular/tablet). A Han e Fu fica logo depois da Calculadora
- * de Mão, na mesma posição que tinha antes da 5.0.0.
+ * de Mão, na mesma posição que tinha antes da 5.0.0. O resto abre pelo "Mais".
  */
 const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
   {
@@ -71,9 +73,11 @@ const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
     icone: 'chapeu-helice',
     chaveCurta: 'menu.windDrawShort',
   },
-  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
-  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h', chaveCurta: 'menu.rulesShort' },
+  { tela: 'centerpiece', chave: 'menu.centerpiece', icone: 'centerpiece' },
 ]
+
+/** O que fica atrás do "Mais" da barra inferior, no menu lateral. */
+const TELAS_DO_MAIS: DestinoMenu[] = ['aprender', 'regras', 'sobre']
 
 const TODOS_ITENS = [...MODULOS_MENU, ...APP_MENU]
 const LIMIAR_GESTO_DRAWER = 64
@@ -248,6 +252,18 @@ export default function Cabecalho({
           </button>
         )
       })}
+      <button
+        className={`item-tab-inferior ${TELAS_DO_MAIS.includes(telaAtual) ? 'ativo' : ''}`}
+        type="button"
+        aria-label={t('menu.more')}
+        aria-expanded={menuAberto}
+        aria-controls="drawer-global"
+        title={t('menu.more')}
+        onClick={() => setMenuAberto(true)}
+      >
+        <IconeMenu icone="fa-ellipsis" />
+        <span>{t('menu.more')}</span>
+      </button>
     </nav>,
     document.body,
   )
