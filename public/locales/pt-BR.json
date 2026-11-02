@@ -1018,7 +1018,7 @@
       "ahead": "sobram {{points}}"
     },
     "timer": {
-      "passTurn": "Timer, {{seconds}} segundos. Tocar para passar a vez",
+      "remaining": "{{seconds}} segundos restantes na vez",
       "pause": "Pausar timer",
       "resume": "Retomar timer",
       "turnAnnounce": "Vez de {{name}}",
@@ -1123,7 +1123,6 @@
       "tobi": "% tobi"
     },
     "discards": {
-      "title": "Descartes de {{name}}",
       "quickTitle": "Descarte de {{name}}",
       "add": "Adicionar",
       "input": "Descarte em notação (3m5p1z)",
@@ -1140,6 +1139,8 @@
       "riichiSince": "Em riichi desde o {{order}}º descarte",
       "closedKan": "Kan fechado",
       "noRiichiWall": "Riichi precisa de pelo menos {{count}} pedras no muro.",
+      "title": "Descartes de {{name}}",
+      "rivers": "Rio de cada jogador",
       "tileOrder": "Descarte {{order}}",
       "history": "Ver descartes",
       "handSave": "Salvar",

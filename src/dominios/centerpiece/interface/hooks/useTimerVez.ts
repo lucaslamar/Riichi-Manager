@@ -16,12 +16,15 @@ const INTERVALO_ALARME_MS = 2000
 
 /**
  * Timer de vez da partida aberta: atualiza a tela, toca o alarme enquanto o tempo
- * estiver esgotado e pausa sozinho com modal aberta ou ao sair da mesa.
+ * estiver esgotado e pausa sozinho com modal aberta ou ao sair da mesa. O modal de
+ * descarte não entra em `modalAberta`: é parte da vez, e o tempo segue correndo.
+ * Com `alarmeUmaVez`, quem está descartando ouve um toque só, não a repetição.
  */
 export function useTimerVez(
   partida: Partida,
   atualizar: (transformar: (partida: Partida) => Partida) => void,
   modalAberta: boolean,
+  alarmeUmaVez: boolean,
 ) {
   const { vez, config } = partida
   const segundosTotais = config.timerVez
@@ -36,6 +39,8 @@ export function useTimerVez(
     return () => window.clearInterval(intervalo)
   }, [contando])
 
+  const silenciar = useRef(alarmeUmaVez)
+  silenciar.current = alarmeUmaVez
   useEffect(() => {
     if (!esgotado) return
     const sinalizar = () => {
@@ -43,7 +48,9 @@ export function useTimerVez(
       vibrar([200, 100, 200])
     }
     sinalizar()
-    const intervalo = window.setInterval(sinalizar, INTERVALO_ALARME_MS)
+    const intervalo = window.setInterval(() => {
+      if (!silenciar.current) sinalizar()
+    }, INTERVALO_ALARME_MS)
     return () => window.clearInterval(intervalo)
   }, [esgotado])
 

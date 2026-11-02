@@ -1011,7 +1011,7 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
-      "passTurn": "Timer, {{seconds}} seconds. Tap to pass the turn",
+      "remaining": "本巡剩余 {{seconds}} 秒",
       "pause": "Pause timer",
       "resume": "Resume timer",
       "turnAnnounce": "{{name}}'s turn",
@@ -1116,7 +1116,6 @@
       "tobi": "% tobi"
     },
     "discards": {
-      "title": "{{name}}'s discards",
       "quickTitle": "{{name}}'s discard",
       "add": "Add",
       "input": "Discard in notation (3m5p1z)",
@@ -1133,6 +1132,8 @@
       "riichiSince": "从第 {{order}} 张弃牌起立直",
       "closedKan": "暗杠",
       "noRiichiWall": "立直需要牌山至少剩余 {{count}} 张。",
+      "title": "{{name}} 的弃牌",
+      "rivers": "各玩家的牌河",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

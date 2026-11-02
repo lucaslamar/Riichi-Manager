@@ -16,6 +16,8 @@ import { descreverPedra } from '../../logica/descreverPedras'
 import { CADEIRAS, KANJI_VENTO, ventoDaCadeira, type Cadeira, type Partida } from '../../logica/partida'
 import { MAXIMO_VENCEDORES } from '../hooks/estadoBatida'
 import type { AcoesDescartes } from '../hooks/useDescartes'
+import AnelTimer from './AnelTimer'
+import BotoesOpcao from './BotoesOpcao'
 import RioPedras from './RioPedras'
 import TecladoSoPedras from './TecladoSoPedras'
 
@@ -27,15 +29,17 @@ export type DecisaoDescarte =
 
 type Etapa = 'entrada' | 'pergunta' | 'pon' | 'kan' | 'ron'
 
-/** Rio do jogador e registro do descarte, seguido da pergunta "alguém chamou?". */
+/**
+ * Registro do descarte de quem está na vez, seguido da pergunta "alguém chamou?". O
+ * tempo continua correndo, e dá para olhar o rio dos outros antes de escolher.
+ */
 export default function ModalDescartes({
   partida,
   cadeira,
   nomeDe,
   acoes,
-  rapido = false,
-  consulta = false,
   expirou = false,
+  timer,
   aoDecidir,
   aoFechar,
 }: {
@@ -43,12 +47,10 @@ export default function ModalDescartes({
   cadeira: Cadeira
   nomeDe: (cadeira: Cadeira) => string
   acoes: AcoesDescartes
-  /** "Descarte de Fulano", na hora de passar a vez. */
-  rapido?: boolean
-  /** Rio de quem não está na vez: só para ver, não registra nada. */
-  consulta?: boolean
   /** O timer zerou: o título avisa, na cor de alerta. */
   expirou?: boolean
+  /** Com o timer ligado, o tempo que resta da vez. */
+  timer?: { segundos: number; fracao: number }
   aoDecidir: (decisao: DecisaoDescarte) => void
   aoFechar: () => void
 }) {
@@ -57,6 +59,7 @@ export default function ModalDescartes({
   const { placar, config } = partida
 
   const [etapa, setEtapa] = useState<Etapa>('entrada')
+  const [rioVisto, setRioVisto] = useState<Cadeira>(cadeira)
   const [texto, setTexto] = useState('')
   const [erro, setErro] = useState<string | null>(null)
   const [riichi, setRiichi] = useState(false)
@@ -96,7 +99,7 @@ export default function ModalDescartes({
 
   const titulo = expirou
     ? t('match.discards.expiredTitle', { name: nomeDe(cadeira) })
-    : t(rapido ? 'match.discards.quickTitle' : 'match.discards.title', { name: nomeDe(cadeira) })
+    : t('match.discards.quickTitle', { name: nomeDe(cadeira) })
 
   const OutroJogador = ({ outra, aoTocar, ativo }: { outra: Cadeira; aoTocar: () => void; ativo?: boolean }) => (
     <button
@@ -118,21 +121,31 @@ export default function ModalDescartes({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       className="dsc-modal"
-      rodape={
-        consulta ? (
-          <div className="ptd-acoes-folha">
-            <button type="button" className="btn-primario" onClick={aoFechar}>
-              {t('actions.close')}
-            </button>
-          </div>
-        ) : undefined
+      acoes={
+        timer && <AnelTimer segundos={timer.segundos} fracao={timer.fracao} esgotado={timer.segundos === 0} />
       }
     >
-      <RioPedras lances={lances} cadeira={cadeira} nomeDe={nomeDe} destacarAposRiichi={consulta} />
-      {lances.some((lance) => lance.tipo === 'kakan' && lance.cadeira === cadeira) && (
+      <BotoesOpcao
+        rotulo={t('match.discards.rivers')}
+        valor={rioVisto}
+        aoEscolher={setRioVisto}
+        opcoes={CADEIRAS.map((outra) => ({
+          valor: outra,
+          rotulo: `${KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]} ${nomeDe(outra)}`,
+        }))}
+      />
+      <div className="dsc-rio-visto">
+        <RioPedras
+          lances={lances}
+          cadeira={rioVisto}
+          nomeDe={nomeDe}
+          destacarAposRiichi={rioVisto !== cadeira}
+        />
+      </div>
+      {lances.some((lance) => lance.tipo === 'kakan' && lance.cadeira === rioVisto) && (
         <p className="ptd-apoio">
           {lances
-            .filter((lance) => lance.tipo === 'kakan' && lance.cadeira === cadeira)
+            .filter((lance) => lance.tipo === 'kakan' && lance.cadeira === rioVisto)
             .map(
               (lance) =>
                 `${t(lance.tipo === 'kakan' && lance.fechado ? 'match.discards.closedKan' : 'match.discards.kakan')}: ${descreverPedra(lance.pedra, t)}`,
@@ -141,7 +154,7 @@ export default function ModalDescartes({
         </p>
       )}
 
-      {etapa === 'entrada' && !consulta && (
+      {etapa === 'entrada' && (
         <form className="dsc-entrada" onSubmit={aoEnviar}>
           <label className="ptd-rotulo" htmlFor="dsc-notacao">
             {t(kan ? 'match.discards.kakanInput' : 'match.discards.input')}

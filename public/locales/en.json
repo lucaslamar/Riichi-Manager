@@ -1018,7 +1018,7 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
-      "passTurn": "Timer, {{seconds}} seconds. Tap to pass the turn",
+      "remaining": "{{seconds}} seconds left in the turn",
       "pause": "Pause timer",
       "resume": "Resume timer",
       "turnAnnounce": "{{name}}'s turn",
@@ -1123,7 +1123,6 @@
       "tobi": "% tobi"
     },
     "discards": {
-      "title": "{{name}}'s discards",
       "quickTitle": "{{name}}'s discard",
       "add": "Add",
       "input": "Discard in notation (3m5p1z)",
@@ -1140,6 +1139,8 @@
       "riichiSince": "In riichi since discard {{order}}",
       "closedKan": "Closed kan",
       "noRiichiWall": "Riichi needs at least {{count}} tiles left in the wall.",
+      "title": "{{name}}'s discards",
+      "rivers": "Each player's river",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

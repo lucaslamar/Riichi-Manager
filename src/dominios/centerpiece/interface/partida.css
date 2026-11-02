@@ -1173,3 +1173,8 @@ body:has(.ptd-modulo) {
     padding-block: 4px;
   }
 }
+
+/* Rio escolhido no modal de descarte: abaixo dos botões de cada jogador. */
+.dsc-rio-visto {
+  margin-top: 8px;
+}

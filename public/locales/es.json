@@ -1025,7 +1025,7 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
-      "passTurn": "Timer, {{seconds}} seconds. Tap to pass the turn",
+      "remaining": "{{seconds}} segundos restantes en el turno",
       "pause": "Pause timer",
       "resume": "Resume timer",
       "turnAnnounce": "{{name}}'s turn",
@@ -1130,7 +1130,6 @@
       "tobi": "% tobi"
     },
     "discards": {
-      "title": "{{name}}'s discards",
       "quickTitle": "{{name}}'s discard",
       "add": "Add",
       "input": "Discard in notation (3m5p1z)",
@@ -1147,6 +1146,8 @@
       "riichiSince": "En riichi desde el descarte {{order}}",
       "closedKan": "Kan cerrado",
       "noRiichiWall": "Riichi necesita al menos {{count}} fichas en el muro.",
+      "title": "Descartes de {{name}}",
+      "rivers": "Río de cada jugador",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

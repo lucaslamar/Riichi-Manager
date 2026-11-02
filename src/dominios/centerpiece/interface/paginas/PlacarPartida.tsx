@@ -38,7 +38,7 @@ import PlacaJogador from '../componentes/PlacaJogador'
 import JogarDados from '../componentes/JogarDados'
 import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
-import ResumoRegrasCalculo from '../componentes/ResumoRegrasCalculo'
+import ModalRio from '../componentes/ModalRio'
 import RecursosDaMesa from '../componentes/RecursosDaMesa'
 import { ModalAvisoFuriten, ModalChecarFuriten } from '../componentes/ModaisFuriten'
 import ModalDescartes, { type DecisaoDescarte } from '../componentes/ModalDescartes'
@@ -86,13 +86,13 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   }
 
   const [menuDe, setMenuDe] = useState<Cadeira | null>(null)
+  const [rioDe, setRioDe] = useState<Cadeira | null>(null)
   const [diferencaDe, setDiferencaDe] = useState<Cadeira | null>(null)
   const [chomboDe, setChomboDe] = useState<Cadeira | null>(null)
   const [batida, setBatida] = useState<EstadoBatida | null>(null)
   const [ryukyokuAberto, setRyukyokuAberto] = useState(false)
   const [maosAbertas, setMaosAbertas] = useState(false)
   const [dadosAbertos, setDadosAbertos] = useState(false)
-  const [descartesDe, setDescartesDe] = useState<Cadeira | null>(null)
   const [descarteRapido, setDescarteRapido] = useState<{ cadeira: Cadeira; expirou: boolean } | null>(null)
   const [checarFuritenDe, setChecarFuritenDe] = useState<Cadeira | null>(null)
   const [avisoFuritenDe, setAvisoFuritenDe] = useState<Cadeira | null>(null)
@@ -103,21 +103,20 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
 
   const modalAberta =
     menuDe !== null ||
+    rioDe !== null ||
     diferencaDe !== null ||
     chomboDe !== null ||
     batida !== null ||
     ryukyokuAberto ||
     maosAbertas ||
     dadosAbertos ||
-    descartesDe !== null ||
-    descarteRapido !== null ||
     checarFuritenDe !== null ||
     avisoFuritenDe !== null ||
     quatroVentosAberto ||
     abortando ||
     !!partida.fim
 
-  const timer = useTimerVez(partida, atualizar, modalAberta)
+  const timer = useTimerVez(partida, atualizar, modalAberta, descarteRapido !== null)
   const acoesDescartes = useDescartes(atualizar)
   const fecharAvisoFuriten = useCallback(() => setAvisoFuritenDe(null), [])
 
@@ -128,8 +127,8 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   }
   const muro = pedrasNoMuro(partida.registro?.lances ?? [])
 
-  // Timer zerou: abre o descarte de quem estourou, uma vez por vez. A modal pausa o
-  // timer, então o alarme para aqui; fechar pelo X volta ao alarme e ao card piscando.
+  // Timer zerou: abre o descarte de quem estourou, uma vez por vez, ou avisa no que já
+  // está aberto. O alarme para aqui; fechar pelo X volta ao alarme e ao card piscando.
   const estouroAberto = useRef(false)
   if (vez.restanteMs > 0) estouroAberto.current = false
   useEffect(() => {
@@ -140,7 +139,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
 
   /** Depois do descarte: de quem é a vez agora, e se a mão acabou em ron. */
   const decidirDescarte = (origem: Cadeira, decisao: DecisaoDescarte) => {
-    setDescartesDe(null)
     setDescarteRapido(null)
     if (decisao.tipo === 'ron') {
       setBatida(iniciarRonDoDescarte(origem, decisao.cadeiras, decisao.ordem))
@@ -181,7 +179,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     if (acao === 'vez') timer.passarPara(cadeira)
     else if (acao === 'riichi') atualizar((atual) => declararRiichi(atual, cadeira, contexto()))
     else if (acao === 'chombo') setChomboDe(cadeira)
-    else if (acao === 'descartes') setDescartesDe(cadeira)
+    else if (acao === 'descartes') setRioDe(cadeira)
     else if (acao === 'furiten') setChecarFuritenDe(cadeira)
     else if (acao === 'diferenca') setDiferencaDe(cadeira)
     else setBatida(iniciarBatida({ tipo: acao, vencedor: cadeira }))
@@ -355,7 +353,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                             segundos: timer.segundos,
                             fracao: timer.fracao,
                             esgotado: timer.esgotado || !!descarteRapido?.expirou,
-                            aoTocar: abrirDescarte,
                           }
                         : undefined
                     }
@@ -376,7 +373,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           </div>
 
           <div className="mesa-acoes">
-            <ResumoRegrasCalculo regras={config.regrasCalculo} className="ptd-apoio mesa-regras-ativas" />
             {config.abortivos.quatroVentos && ehQuatroVentos(partida.registro?.lances ?? []) && (
               <button
                 type="button"
@@ -564,24 +560,15 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
         />
       )}
 
-      {descartesDe !== null && (
-        <ModalDescartes
-          // Quem não está na vez só consulta o rio.
-          consulta={descartesDe !== vez.cadeira}
-          partida={partida}
-          cadeira={descartesDe}
-          nomeDe={nomeDe}
-          acoes={acoesDescartes}
-          aoDecidir={(decisao) => decidirDescarte(descartesDe, decisao)}
-          aoFechar={() => setDescartesDe(null)}
-        />
+      {rioDe !== null && (
+        <ModalRio partida={partida} cadeira={rioDe} nomeDe={nomeDe} aoFechar={() => setRioDe(null)} />
       )}
 
       {descarteRapido !== null && (
         <ModalDescartes
           key={descarteRapido.cadeira}
-          rapido
           expirou={descarteRapido.expirou}
+          timer={timer.ligado ? { segundos: timer.segundos, fracao: timer.fracao } : undefined}
           partida={partida}
           cadeira={descarteRapido.cadeira}
           nomeDe={nomeDe}

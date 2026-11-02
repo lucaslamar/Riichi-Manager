@@ -153,9 +153,6 @@ export function MenuJogador({
       tamanho="pequena"
     >
       <div className="ptd-lista-opcoes" role="group" aria-label={t('match.menu.actions')}>
-        {podeReceberVez && (
-          <Acao acao="vez" icone="fa-hand-point-right" rotulo={t('match.menu.hisTurn')} />
-        )}
         <Acao acao="descartes" icone="fa-layer-group" rotulo={t('match.menu.discards')} />
         {partida.config.checarFuriten && (
           <Acao acao="furiten" icone="fa-eye-slash" rotulo={t('match.menu.checkFuriten')} />
@@ -173,6 +170,10 @@ export function MenuJogador({
           rotulo={t('match.menu.chombo')}
           perigo
         />
+        {/* Por último: passar a vez sem querer bagunça o timer e o muro. */}
+        {podeReceberVez && (
+          <Acao acao="vez" icone="fa-hand-point-right" rotulo={t('match.menu.hisTurn')} />
+        )}
       </div>
     </Modal>
   )

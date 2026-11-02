@@ -444,16 +444,17 @@ button.mesa-domo {
   stroke: var(--led-timer);
 }
 
-.mesa-placa--esgotado .mesa-timer {
+.mesa-placa--esgotado .mesa-timer,
+.mesa-timer--esgotado {
   color: var(--texto-erro);
 }
 
-.mesa-placa--esgotado .mesa-timer-progresso {
+.mesa-placa--esgotado .mesa-timer-progresso,
+.mesa-timer--esgotado .mesa-timer-progresso {
   stroke: var(--texto-erro);
 }
 
 .mesa-placa-menu:focus-visible,
-.mesa-timer:focus-visible,
 .mesa-domo:focus-visible {
   outline: 2px solid var(--primario);
   outline-offset: 2px;

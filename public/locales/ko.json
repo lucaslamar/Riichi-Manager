@@ -1011,7 +1011,7 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
-      "passTurn": "Timer, {{seconds}} seconds. Tap to pass the turn",
+      "remaining": "차례 {{seconds}}초 남음",
       "pause": "Pause timer",
       "resume": "Resume timer",
       "turnAnnounce": "{{name}}'s turn",
@@ -1116,7 +1116,6 @@
       "tobi": "% tobi"
     },
     "discards": {
-      "title": "{{name}}'s discards",
       "quickTitle": "{{name}}'s discard",
       "add": "Add",
       "input": "Discard in notation (3m5p1z)",
@@ -1133,6 +1132,8 @@
       "riichiSince": "{{order}}번째 버림패부터 리치",
       "closedKan": "암깡",
       "noRiichiWall": "리치는 패산에 {{count}}장 이상 있어야 합니다.",
+      "title": "{{name}}의 버림패",
+      "rivers": "각 플레이어의 강",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

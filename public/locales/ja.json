@@ -1011,7 +1011,7 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
-      "passTurn": "Timer, {{seconds}} seconds. Tap to pass the turn",
+      "remaining": "手番の残り{{seconds}}秒",
       "pause": "Pause timer",
       "resume": "Resume timer",
       "turnAnnounce": "{{name}}'s turn",
@@ -1116,7 +1116,6 @@
       "tobi": "% tobi"
     },
     "discards": {
-      "title": "{{name}}'s discards",
       "quickTitle": "{{name}}'s discard",
       "add": "Add",
       "input": "Discard in notation (3m5p1z)",
@@ -1133,6 +1132,8 @@
       "riichiSince": "{{order}}打目からリーチ",
       "closedKan": "暗槓",
       "noRiichiWall": "リーチには山に{{count}}枚以上必要です。",
+      "title": "{{name}}の捨て牌",
+      "rivers": "各プレイヤーの河",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

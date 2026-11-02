@@ -1,12 +1,11 @@
 import { useRef, type PointerEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { CHAVE_VENTO, KANJI_VENTO, type Vento } from '../../logica/partida'
+import AnelTimer from './AnelTimer'
 
 const TEMPO_SEGURAR_MS = 500
 /** Andar mais que isso é deslize, não tocar e segurar. */
 const MOVIMENTO_SEGURAR = 10
-/** Circunferência do anel do timer (raio 22 no viewBox de 48). */
-const CIRCUNFERENCIA = 2 * Math.PI * 22
 
 interface PropsPlacaJogador {
   nome: string
@@ -16,7 +15,7 @@ interface PropsPlacaJogador {
   /** Checagem de furiten ativa: só um ícone, para não entregar a espera à mesa. */
   checagem?: { rotulo: string; aoTocar: () => void }
   /** Presente só na placa da vez, com o timer ligado. */
-  timer?: { segundos: number; fracao: number; esgotado: boolean; aoTocar: () => void }
+  timer?: { segundos: number; fracao: number; esgotado: boolean }
   /** A vez é dele; com o timer desligado, é o único sinal na placa. */
   daVez?: boolean
   aoAbrirMenu: () => void
@@ -24,8 +23,8 @@ interface PropsPlacaJogador {
 }
 
 /**
- * Placa de LED do jogador. O toque no timer (passa a vez) é separado do toque no
- * resto (abre o menu); tocar e segurar mostra a diferença de pontos.
+ * Placa de LED do jogador: tocar em qualquer ponto abre as ações dele, e tocar e
+ * segurar mostra a diferença de pontos. Descartar fica no botão da mesa.
  */
 export default function PlacaJogador({
   nome,
@@ -112,27 +111,7 @@ export default function PlacaJogador({
         </button>
       )}
 
-      {timer && (
-        <button
-          type="button"
-          className="mesa-timer"
-          aria-label={t('match.timer.passTurn', { seconds: timer.segundos })}
-          onClick={timer.aoTocar}
-        >
-          <svg viewBox="0 0 48 48" aria-hidden="true">
-            <circle className="mesa-timer-fundo" cx="24" cy="24" r="22" />
-            <circle
-              className="mesa-timer-progresso"
-              cx="24"
-              cy="24"
-              r="22"
-              strokeDasharray={CIRCUNFERENCIA}
-              strokeDashoffset={CIRCUNFERENCIA * (1 - timer.fracao)}
-            />
-          </svg>
-          <span aria-hidden="true">{timer.segundos}</span>
-        </button>
-      )}
+      {timer && <AnelTimer segundos={timer.segundos} fracao={timer.fracao} aoTocar={aoAbrirMenu} />}
     </article>
   )
 }

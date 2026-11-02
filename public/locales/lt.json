@@ -1032,7 +1032,7 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
-      "passTurn": "Timer, {{seconds}} seconds. Tap to pass the turn",
+      "remaining": "Ėjimui liko sekundžių: {{seconds}}",
       "pause": "Pause timer",
       "resume": "Resume timer",
       "turnAnnounce": "{{name}}'s turn",
@@ -1137,7 +1137,6 @@
       "tobi": "% tobi"
     },
     "discards": {
-      "title": "{{name}}'s discards",
       "quickTitle": "{{name}}'s discard",
       "add": "Add",
       "input": "Discard in notation (3m5p1z)",
@@ -1154,6 +1153,8 @@
       "riichiSince": "Riichi nuo {{order}}-o išmetimo",
       "closedKan": "Uždaras kan",
       "noRiichiWall": "Riichi reikia bent tiek akmenų sienoje: {{count}}.",
+      "title": "{{name}} išmesti akmenys",
+      "rivers": "Kiekvieno žaidėjo upė",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",
