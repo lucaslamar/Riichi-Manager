@@ -560,6 +560,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
 
       {descartesDe !== null && (
         <ModalDescartes
+          // Com o timer se sabe de quem é a vez: os outros só consultam. Sem ele, a vez
+          // não é acompanhada e o menu de cada jogador continua registrando.
+          consulta={timer.ligado && descartesDe !== vez.cadeira}
           partida={partida}
           cadeira={descartesDe}
           nomeDe={nomeDe}

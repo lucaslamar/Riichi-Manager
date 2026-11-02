@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import type { CodigoPedra } from '@/dominios/calculadora-mao/logica/tipos'
 import { descartesDe, lerPedrasDescartadas, REGISTRO_VAZIO } from '../../logica/descartes'
@@ -25,6 +26,7 @@ export default function ModalDescartes({
   nomeDe,
   acoes,
   rapido = false,
+  consulta = false,
   expirou = false,
   aoPular,
   aoDecidir,
@@ -36,6 +38,8 @@ export default function ModalDescartes({
   acoes: AcoesDescartes
   /** "Descarte de Fulano", na hora de passar a vez: tem Pular. */
   rapido?: boolean
+  /** Rio de quem não está na vez: só para ver, não registra nada. */
+  consulta?: boolean
   /** O timer zerou: o título avisa, na cor de alerta. */
   expirou?: boolean
   aoPular?: () => void
@@ -108,7 +112,13 @@ export default function ModalDescartes({
       rotuloFechar={t('actions.close')}
       className="dsc-modal"
       rodape={
-        rapido && etapa === 'entrada' ? (
+        consulta ? (
+          <div className="ptd-acoes-folha">
+            <button type="button" className="btn-primario" onClick={aoFechar}>
+              {t('actions.close')}
+            </button>
+          </div>
+        ) : rapido && etapa === 'entrada' ? (
           <div className="ptd-acoes-folha">
             <button type="button" className="btn-contorno" onClick={aoPular}>
               {t('match.discards.skip')}
@@ -117,7 +127,7 @@ export default function ModalDescartes({
         ) : undefined
       }
     >
-      <RioPedras lances={lances} cadeira={cadeira} nomeDe={nomeDe} />
+      <RioPedras lances={lances} cadeira={cadeira} nomeDe={nomeDe} destacarAposRiichi={consulta} />
       {lances.some((lance) => lance.tipo === 'kakan' && lance.cadeira === cadeira) && (
         <p className="ptd-apoio">
           {t('match.discards.kakan')}:{' '}
@@ -128,7 +138,7 @@ export default function ModalDescartes({
         </p>
       )}
 
-      {etapa === 'entrada' && (
+      {etapa === 'entrada' && !consulta && (
         <form className="dsc-entrada" onSubmit={aoEnviar}>
           <label className="ptd-rotulo" htmlFor="dsc-notacao">
             {t(kakan ? 'match.discards.kakanInput' : 'match.discards.input')}
@@ -186,6 +196,9 @@ export default function ModalDescartes({
 
       {etapa === 'pergunta' && ultimo && (
         <div className="dsc-pergunta" role="group" aria-label={t('match.discards.ask')}>
+          <span className="chip-pedra dsc-pedra dsc-pedra-destaque" aria-hidden="true">
+            <PedraSvg pedra={ultimo.pedra} />
+          </span>
           <p className="ptd-rotulo">
             {t('match.discards.askTile', { tile: descreverPedra(ultimo.pedra, t) })}
           </p>

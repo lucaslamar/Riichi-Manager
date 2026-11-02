@@ -668,42 +668,74 @@
 }
 
 /* ─── Registro de descartes ───────────────────────────────────────────────── */
+/* Linhas de 6, como na mesa. A célula é larga o bastante para a pedra deitada. */
 .dsc-rio {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  display: grid;
+  width: min(100%, 320px);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px 2px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.dsc-rio-lugar {
+  position: relative;
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mesmo corpo de pedra da Calculadora de Mão (.chip-pedra). */
 .dsc-pedra {
   display: inline-flex;
   box-sizing: border-box;
-  min-width: 44px;
-  min-height: 56px;
   align-items: center;
   justify-content: center;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  padding: 2px;
-  background: transparent;
-  font: inherit;
+  cursor: default;
 }
 
 .dsc-pedra .tile-img {
-  width: 32px;
+  width: 100%;
   height: auto;
 }
 
 .dsc-pedra--riichi {
   border-color: var(--cor-vez);
+  transform: rotate(90deg);
 }
 
 .dsc-pedra--chamada {
-  border-style: dashed;
-  border-color: var(--entrada-borda);
-  opacity: 0.65;
+  opacity: 0.5;
+}
+
+.dsc-pedra--apos-riichi {
+  border: 2px solid var(--cor-vez);
+  box-shadow: 0 0 0 2px var(--cor-vez);
+}
+
+.dsc-pedra-seta {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  color: var(--texto-principal);
+  font-size: 0.75rem;
+}
+
+.dsc-riichi-desde {
+  margin: 0 0 8px;
+  color: var(--texto-principal);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* Pedra que acabou de sair, em destaque acima da pergunta. */
+.dsc-pedra-destaque {
+  display: inline-flex;
+  width: 52px;
+  height: 70px;
+  align-self: center;
 }
 
 .dsc-entrada,
