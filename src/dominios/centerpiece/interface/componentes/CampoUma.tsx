@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ehIos } from '@/compartilhado/adaptadores/instalacao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
+import BotoesOpcao from './BotoesOpcao'
 import {
   ehSimetrica,
   linhaDaContagem,
@@ -140,22 +141,19 @@ export default function CampoUma({
         </AjudaCampo>
       </legend>
 
-      <div className="cfg-segmentos">
-        {(['fixa', 'flutuante'] as const).map((tipo) => (
-          <button
-            key={tipo}
-            type="button"
-            className={`cfg-segmento${valor.tipo === tipo ? ' cfg-segmento--ativo' : ''}`}
-            aria-pressed={valor.tipo === tipo}
-            onClick={() => {
-              if (valor.tipo === tipo) return
-              aoMudar(tipo === 'fixa' ? { tipo, valores: ultimaFixa } : { tipo, tabela: ultimaTabela })
-            }}
-          >
-            {t(tipo === 'fixa' ? 'tableConfig.umaFixed' : 'tableConfig.umaFloating')}
-          </button>
-        ))}
-      </div>
+      <BotoesOpcao
+        rotulo={t('tableConfig.umaLabel')}
+        valor={valor.tipo}
+        aoEscolher={(tipo) =>
+          aoMudar(
+            tipo === 'fixa' ? { tipo: 'fixa', valores: ultimaFixa } : { tipo: 'flutuante', tabela: ultimaTabela },
+          )
+        }
+        opcoes={[
+          { valor: 'fixa', rotulo: t('tableConfig.umaFixed') },
+          { valor: 'flutuante', rotulo: t('tableConfig.umaFloating') },
+        ]}
+      />
 
       {valor.tipo === 'fixa' && !quatroCampos && (
         <div className="cfg-duas-colunas">

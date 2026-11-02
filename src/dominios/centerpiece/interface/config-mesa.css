@@ -24,8 +24,7 @@
   font-weight: 400;
 }
 
-.cfg-entrada:focus-visible,
-.cfg-segmento:focus-visible {
+.cfg-entrada:focus-visible {
   outline: 2px solid var(--primario);
   outline-offset: 2px;
 }
@@ -91,30 +90,20 @@
   font-weight: 700;
 }
 
-.cfg-segmentos {
-  display: flex;
-  gap: 6px;
-}
-
-.cfg-segmento {
-  flex: 1 1 0;
+.cfg-opcoes button {
   min-width: 0;
-  min-height: 44px;
-  border: 2px solid var(--entrada-borda);
-  border-radius: 8px;
-  padding: 6px 4px;
-  color: var(--texto-principal);
-  background: transparent;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 700;
+  padding: 6px;
+  font-size: 0.875rem;
+  line-height: 1.15;
 }
 
-.cfg-segmento--ativo {
-  border-color: var(--primario);
-  color: var(--sobre-primario);
-  background: var(--primario-forte);
+.cfg-opcoes button:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+.cfg-opcoes--empilhado button + button {
+  border-top: 1px solid var(--linha-divisoria);
 }
 
 .cfg-acoes {
@@ -160,7 +149,7 @@
 }
 
 /* Uma: resumo calculado, Personalizar e a tabela flutuante. */
-.cfg-conjunto .cfg-segmentos {
+.cfg-conjunto > .cfg-opcoes {
   margin-bottom: 10px;
 }
 

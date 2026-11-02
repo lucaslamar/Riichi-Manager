@@ -13,6 +13,7 @@ import {
 import { exemploPontuacao } from '../../logica/exemploPontuacao'
 import { umaValida, valoresDaUma } from '../../logica/uma'
 import { useConfigMesa } from '../hooks/useConfigMesa'
+import BotoesOpcao from './BotoesOpcao'
 import CampoUma from './CampoUma'
 import '../config-mesa.css'
 
@@ -113,7 +114,7 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         pontosRetorno={config.pontosRetorno}
       />
 
-      <Campo
+      <Grupo
         rotulo={t('tableConfig.leftoverSticks')}
         ajuda={
           <AjudaCampo rotulo={t('tableConfig.leftoverSticks')}>
@@ -121,36 +122,33 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           </AjudaCampo>
         }
       >
-        <select
-          className="cfg-entrada"
-          value={config.palitosRestantes}
-          onChange={(evento) =>
-            alterar({ palitosRestantes: evento.target.value as ConfigMesa['palitosRestantes'] })
-          }
-        >
-          <option value="primeiro">{t('tableConfig.leftoverFirst')}</option>
-          <option value="perdidos">{t('tableConfig.leftoverLost')}</option>
-        </select>
-      </Campo>
+        <BotoesOpcao
+          rotulo={t('tableConfig.leftoverSticks')}
+          valor={config.palitosRestantes}
+          aoEscolher={(palitosRestantes) => alterar({ palitosRestantes })}
+          opcoes={[
+            { valor: 'primeiro', rotulo: t('tableConfig.leftoverFirst') },
+            { valor: 'perdidos', rotulo: t('tableConfig.leftoverLost') },
+          ]}
+        />
+      </Grupo>
 
-      <Campo rotulo={t('tableConfig.chombo')}>
-        <select
-          className="cfg-entrada"
-          value={config.chombo.tipo}
-          onChange={(evento) =>
+      <Grupo rotulo={t('tableConfig.chombo')}>
+        <BotoesOpcao
+          rotulo={t('tableConfig.chombo')}
+          valor={config.chombo.tipo}
+          aoEscolher={(tipo) =>
             alterar({
-              chombo:
-                evento.target.value === 'fixo'
-                  ? { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO }
-                  : { tipo: evento.target.value as 'manganReverso' | 'yakumanReverso' },
+              chombo: tipo === 'fixo' ? { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO } : { tipo },
             })
           }
-        >
-          <option value="manganReverso">{t('tableConfig.chomboReverseMangan')}</option>
-          <option value="yakumanReverso">{t('tableConfig.chomboReverseYakuman')}</option>
-          <option value="fixo">{t('tableConfig.chomboFixed')}</option>
-        </select>
-      </Campo>
+          opcoes={[
+            { valor: 'manganReverso', rotulo: t('tableConfig.chomboReverseMangan') },
+            { valor: 'yakumanReverso', rotulo: t('tableConfig.chomboReverseYakuman') },
+            { valor: 'fixo', rotulo: t('tableConfig.chomboFixed') },
+          ]}
+        />
+      </Grupo>
       {config.chombo.tipo === 'fixo' && (
         <Campo rotulo={t('tableConfig.chomboValue')}>
           <CampoNumero
@@ -164,35 +162,31 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
 
       <h3 className="cfg-grupo">{t('tableConfig.rules')}</h3>
 
-      <fieldset className="cfg-conjunto">
-        <legend>{t('tableConfig.gameType')}</legend>
-        <div className="cfg-segmentos">
-          <Segmento
-            ativo={config.tipoPartida === 'leste'}
-            rotulo={t('tableConfig.gameEast')}
-            aoEscolher={() => alterar({ tipoPartida: 'leste' })}
-          />
-          <Segmento
-            ativo={config.tipoPartida === 'hanchan'}
-            rotulo={t('tableConfig.gameHanchan')}
-            aoEscolher={() => alterar({ tipoPartida: 'hanchan' })}
-          />
-        </div>
-      </fieldset>
+      <Grupo rotulo={t('tableConfig.gameType')}>
+        <BotoesOpcao
+          rotulo={t('tableConfig.gameType')}
+          valor={config.tipoPartida}
+          aoEscolher={(tipoPartida) => alterar({ tipoPartida })}
+          opcoes={[
+            { valor: 'leste', rotulo: t('tableConfig.gameEast') },
+            { valor: 'hanchan', rotulo: t('tableConfig.gameHanchan') },
+          ]}
+        />
+      </Grupo>
 
-      <Campo rotulo={t('tableConfig.multipleRon')}>
-        <select
-          className="cfg-entrada"
-          value={config.ronMultiplo}
-          onChange={(evento) =>
-            alterar({ ronMultiplo: evento.target.value as ConfigMesa['ronMultiplo'] })
-          }
-        >
-          <option value="atamaHane">{t('tableConfig.ronAtamaHane')}</option>
-          <option value="duploTriploAborta">{t('tableConfig.ronTripleAborts')}</option>
-          <option value="duploTriploPermitidos">{t('tableConfig.ronAllowed')}</option>
-        </select>
-      </Campo>
+      <Grupo rotulo={t('tableConfig.multipleRon')}>
+        <BotoesOpcao
+          empilhado
+          rotulo={t('tableConfig.multipleRon')}
+          valor={config.ronMultiplo}
+          aoEscolher={(ronMultiplo) => alterar({ ronMultiplo })}
+          opcoes={[
+            { valor: 'atamaHane', rotulo: t('tableConfig.ronAtamaHane') },
+            { valor: 'duploTriploAborta', rotulo: t('tableConfig.ronTripleAborts') },
+            { valor: 'duploTriploPermitidos', rotulo: t('tableConfig.ronAllowed') },
+          ]}
+        />
+      </Grupo>
 
       <Opcao
         rotulo={t('tableConfig.tobi')}
@@ -230,19 +224,17 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         ))}
       </fieldset>
 
-      <fieldset className="cfg-conjunto">
-        <legend>{t('tableConfig.turnTimer')}</legend>
-        <div className="cfg-segmentos">
-          {OPCOES_TIMER_VEZ.map((segundos) => (
-            <Segmento
-              key={segundos}
-              ativo={config.timerVez === segundos}
-              rotulo={t(`tableConfig.timer${segundos}`)}
-              aoEscolher={() => alterar({ timerVez: segundos })}
-            />
-          ))}
-        </div>
-      </fieldset>
+      <Grupo rotulo={t('tableConfig.turnTimer')}>
+        <BotoesOpcao
+          rotulo={t('tableConfig.turnTimer')}
+          valor={config.timerVez}
+          aoEscolher={(timerVez) => alterar({ timerVez })}
+          opcoes={OPCOES_TIMER_VEZ.map((segundos) => ({
+            valor: segundos,
+            rotulo: t(`tableConfig.timer${segundos}`),
+          }))}
+        />
+      </Grupo>
 
       <h3 className="cfg-grupo">{t('tableConfig.calcRules')}</h3>
       <ListaRegrasCalculo
@@ -287,6 +279,27 @@ function Campo({
       </span>
       {children}
     </label>
+  )
+}
+
+/** Como `Campo`, para um grupo de botões: `label` em volta deles confundiria o toque. */
+function Grupo({
+  rotulo,
+  ajuda,
+  children,
+}: {
+  rotulo: string
+  ajuda?: ReactNode
+  children: ReactNode
+}) {
+  return (
+    <div className="cfg-campo">
+      <span className="cfg-campo-rotulo">
+        {rotulo}
+        {ajuda}
+      </span>
+      {children}
+    </div>
   )
 }
 
@@ -408,27 +421,6 @@ function CampoNumero({
       // Saiu do campo com algo inválido: volta para o último valor que valeu.
       onBlur={() => setTexto(String(valor))}
     />
-  )
-}
-
-function Segmento({
-  ativo,
-  rotulo,
-  aoEscolher,
-}: {
-  ativo: boolean
-  rotulo: string
-  aoEscolher: () => void
-}) {
-  return (
-    <button
-      type="button"
-      className={`cfg-segmento${ativo ? ' cfg-segmento--ativo' : ''}`}
-      aria-pressed={ativo}
-      onClick={aoEscolher}
-    >
-      {rotulo}
-    </button>
   )
 }
 
