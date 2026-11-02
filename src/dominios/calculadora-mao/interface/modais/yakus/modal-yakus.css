@@ -8,10 +8,6 @@
   --modal-largura: 640px;
   /* Guia de leitura: em celular alto, aproveita a tela até o limite de 90dvh. */
   --modal-altura: 900px;
-
-  /* 16px de margem lateral no celular. */
-  width: min(var(--modal-largura), calc(100vw - 32px));
-  max-height: min(var(--modal-altura), 90dvh, 100%);
 }
 
 .yaku-modal .modal-corpo {

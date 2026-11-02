@@ -124,7 +124,6 @@ export default function CenterpieceSimples({
           aoFechar={() => setAcoesAbertas(false)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
         >
           <div className="mesa-simples-acoes">
             <button

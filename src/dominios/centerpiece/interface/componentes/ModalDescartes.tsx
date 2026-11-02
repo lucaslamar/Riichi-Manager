@@ -106,7 +106,7 @@ export default function ModalDescartes({
       tom={expirou ? 'alerta' : 'padrao'}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
-      className="modal-folha dsc-modal"
+      className="dsc-modal"
       rodape={
         rapido && etapa === 'entrada' ? (
           <div className="ptd-acoes-folha">

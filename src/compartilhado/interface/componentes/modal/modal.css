@@ -1,8 +1,8 @@
 /*
- * Modal base. Layout único e fluido para todas as telas: tamanhos com min()/
- * clamp() em vez de regras por aparelho. Cada modal específica só ajusta o
- * próprio conteúdo pela classe que passa em `className` (ou pelas variáveis
- * abaixo) — nunca o esqueleto.
+ * Modal base. Um visual só, em três lugares (fim do arquivo): folha embaixo no
+ * celular em pé, painel à direita no celular deitado e modal central no resto.
+ * Cada modal específica só ajusta o próprio conteúdo pela classe que passa em
+ * `className` (ou pelas variáveis abaixo) — nunca o esqueleto.
  *
  * Variáveis que uma modal específica pode sobrescrever:
  *   --modal-largura     largura máxima (definida pelo tamanho)
@@ -48,13 +48,14 @@
   display: flex;
   flex-direction: column;
   width: min(var(--modal-largura), 100%);
-  max-height: min(var(--modal-altura), 100%);
+  max-height: min(var(--modal-altura), 90dvh, 100%);
   overflow: hidden;
   border: 1px solid var(--modal-borda);
   border-radius: 12px;
   background: var(--modal-fundo);
   color: var(--cor-texto, #102a43);
   box-shadow: 0 24px 60px rgba(16, 42, 67, 0.28);
+  animation: modal-entrar-central 180ms ease-out;
 }
 
 /* O diálogo recebe o foco inicial só para leitores de tela; sem contorno. */
@@ -87,11 +88,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: var(--modal-espaco) var(--modal-espaco) calc(var(--modal-espaco) * 0.6);
-}
-
-.modal--titulo-titulo .modal-cabecalho {
-  padding-bottom: var(--modal-espaco);
+  padding: var(--modal-espaco);
   border-bottom: 1px solid var(--modal-borda);
 }
 
@@ -107,17 +104,6 @@
   font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
   font-weight: 800;
   line-height: 1.2;
-}
-
-.modal--titulo-rotulo .modal-titulo {
-  font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.modal--padrao.modal--titulo-rotulo {
-  --modal-cor-titulo: var(--cor-texto-suave, #607080);
 }
 
 .modal-subtitulo {
@@ -208,14 +194,10 @@
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 0 var(--modal-espaco) var(--modal-espaco);
+  padding: calc(var(--modal-espaco) * 0.5) var(--modal-espaco) var(--modal-espaco);
   /* Permite ao conteúdo de cada modal se adaptar à largura da própria modal
      (@container / unidades cqw), em vez da largura da tela. */
   container-type: inline-size;
-}
-
-.modal--titulo-titulo .modal-corpo {
-  padding-top: calc(var(--modal-espaco) * 0.5);
 }
 
 /* ─── Telas internas (entram deslizando da direita, com voltar) ───────────── */
@@ -316,15 +298,6 @@
 .modal-voltar:focus-visible {
   outline: 2px solid var(--primario);
   outline-offset: -2px;
-}
-
-/* Título da tela interna sempre no estilo de título, mesmo em modais de rótulo. */
-.modal--navegando.modal--titulo-rotulo .modal-titulo {
-  color: var(--escuro);
-  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem);
-  font-weight: 800;
-  letter-spacing: 0;
-  text-transform: none;
 }
 
 /* Reduzir movimento: troca de tela com um fade curto, sem deslizar. */
@@ -514,19 +487,116 @@
   }
 }
 
-/* ─── Folha: no celular a modal sai de baixo, grudada na borda ───────────── */
+/* ─── Entrada e saída ─────────────────────────────────────────────────────── */
+.modal-fundo::before {
+  animation: modal-fundo-entrar 180ms ease-out;
+}
+
+.modal-fundo--fechando::before {
+  animation: modal-fundo-sair 160ms ease-in forwards;
+}
+
+.modal-fundo--fechando .modal {
+  animation: modal-sair-central 160ms ease-in forwards;
+}
+
+@keyframes modal-fundo-entrar {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-fundo-sair {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-entrar-central {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@keyframes modal-sair-central {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@keyframes modal-entrar-baixo {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes modal-sair-baixo {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes modal-entrar-direita {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes modal-sair-direita {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* ─── Celular em pé: folha grudada embaixo, ao alcance do polegar ─────────── */
 @media (max-width: 767px) {
-  .modal-fundo:has(> .modal-folha) {
+  .modal-fundo {
     align-items: flex-end;
     padding: 0;
   }
 
-  .modal-folha {
+  .modal {
     width: 100%;
     max-width: none;
-    max-height: 85dvh;
     border-width: 1px 0 0;
     border-radius: 16px 16px 0 0;
     padding-bottom: env(safe-area-inset-bottom);
+    animation-name: modal-entrar-baixo;
+  }
+
+  .modal-fundo--fechando .modal {
+    animation-name: modal-sair-baixo;
+  }
+}
+
+/* ─── Celular deitado: painel à direita, com a altura toda ────────────────── */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .modal-fundo {
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    width: min(var(--modal-largura), 70vw);
+    max-height: 100dvh;
+    border-width: 0 0 0 1px;
+    border-radius: 16px 0 0 16px;
+    padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) 0;
+    animation-name: modal-entrar-direita;
+  }
+
+  .modal-fundo--fechando .modal {
+    animation-name: modal-sair-direita;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal,
+  .modal-fundo::before,
+  .modal-fundo--fechando .modal {
+    animation: none;
   }
 }

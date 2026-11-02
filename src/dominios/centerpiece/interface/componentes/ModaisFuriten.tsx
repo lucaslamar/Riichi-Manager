@@ -58,7 +58,6 @@ export function ModalChecarFuriten({
         aoFechar={aoFechar}
         rotuloFechar={t('actions.close')}
         tamanho="pequena"
-        className="modal-folha"
       >
         <p>{t('match.discards.handWaits', { tiles: descreverEsperas(salva, t) })}</p>
         <p className={estado.principal ? 'dsc-erro' : 'ptd-apoio'} role="status">
@@ -96,7 +95,7 @@ export function ModalChecarFuriten({
       subtitulo={t('match.furiten.checkHelp')}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
-      className="modal-folha dsc-modal"
+      className="dsc-modal"
       rodape={
         <div className="ptd-acoes-folha">
           <button
@@ -214,7 +213,6 @@ export function ModalAvisoFuriten({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
       rodape={
         <div className="ptd-acoes-folha">
           <button

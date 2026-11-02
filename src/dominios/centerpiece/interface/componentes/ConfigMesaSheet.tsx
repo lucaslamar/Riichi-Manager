@@ -41,7 +41,7 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       titulo={t('tableConfig.title')}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
-      className="modal-folha config-mesa"
+      className="config-mesa"
       rodape={
         <div className="cfg-acoes">
           <button type="button" className="btn-contorno" onClick={reiniciar}>

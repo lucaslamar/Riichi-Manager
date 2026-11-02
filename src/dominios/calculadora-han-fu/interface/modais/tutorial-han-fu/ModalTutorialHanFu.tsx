@@ -347,7 +347,6 @@ export default function ModalTutorialHanFu({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="media"
-      estiloTitulo="rotulo"
       className="modal-ajuda-secao modal-tutorial-han-fu"
       paginacao={{
         total,

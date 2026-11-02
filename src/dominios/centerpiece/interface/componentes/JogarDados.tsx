@@ -77,7 +77,6 @@ export default function JogarDados({
           aoFechar={fechar}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
           rodape={
             <div className="ptd-acoes-folha">
               <button type="button" className="btn-primario" onClick={jogar} disabled={rolando}>

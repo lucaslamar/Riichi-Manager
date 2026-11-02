@@ -79,7 +79,6 @@ export default function ModalResultado({
       rotuloFechar={t('actions.close')}
       tamanho="media"
       tom={alerta ? 'alerta' : 'padrao'}
-      estiloTitulo="rotulo"
       className="modal-resultado"
       rodape={<RodapeReferenciaPedras />}
       semBotaoFechar

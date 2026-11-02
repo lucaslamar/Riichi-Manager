@@ -56,7 +56,6 @@ export function ModalConfirmacao({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
       rodape={
         <div className="ptd-acoes-folha">
           <button type="button" className="btn-contorno" onClick={aoFechar}>
@@ -152,7 +151,6 @@ export function MenuJogador({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
     >
       <div className="ptd-lista-opcoes" role="group" aria-label={t('match.menu.actions')}>
         {podeReceberVez && (
@@ -200,7 +198,6 @@ export function ModalDiferenca({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
     >
       <ul className="ptd-linhas">
         {diferencasDePontos(partida.placar, cadeira).map(({ cadeira: outra, diferenca }) => (
@@ -262,7 +259,6 @@ export function ModalRyukyoku({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
       rodape={
         <div className="ptd-acoes-folha">
           <button type="button" className="btn-contorno" onClick={aoFechar}>
@@ -423,7 +419,6 @@ export function ModalMaos({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
     >
       <ListaMaos partida={partida} nomeDe={nomeDe} />
     </Modal>

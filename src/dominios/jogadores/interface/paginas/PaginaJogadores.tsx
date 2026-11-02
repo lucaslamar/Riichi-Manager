@@ -180,7 +180,6 @@ export default function PaginaJogadores({
           aoFechar={() => setEdicao(null)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
         >
           <FormJogador
             inicial={edicao.tipo === 'editar' ? edicao.jogador : undefined}
@@ -201,7 +200,6 @@ export default function PaginaJogadores({
           aoFechar={() => setMenuDe(null)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
         >
           <div className="menu-jogador">
             {menuDe.arquivado ? (
@@ -239,7 +237,6 @@ export default function PaginaJogadores({
           aoFechar={() => setBloqueado(null)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
         >
           <p>{t('players.inUseHelp', { tables: bloqueado.mesas.join(', ') })}</p>
         </Modal>
@@ -251,7 +248,6 @@ export default function PaginaJogadores({
           aoFechar={() => setParaExcluir(null)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
           rodape={
             <div className="acoes-form-jogador">
               {finalizadas > 0 && !paraExcluir.arquivado ? (
@@ -310,7 +306,6 @@ export default function PaginaJogadores({
           aoFechar={() => setParaArquivar(null)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
           rodape={
             <div className="acoes-form-jogador">
               <button type="button" className="btn-contorno" onClick={() => setParaArquivar(null)}>

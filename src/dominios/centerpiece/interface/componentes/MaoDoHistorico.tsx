@@ -63,7 +63,7 @@ export default function MaoDoHistorico({
           aoFechar={() => setAberta(false)}
           rotuloFechar={t('actions.close')}
           tamanho="media"
-          className="modal-folha modal-resultado"
+          className="modal-resultado"
         >
           <LinhaPedras {...partesDaMao(montada)} grande />
           <ExibicaoCompleta
