@@ -10,10 +10,15 @@
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import './compartilhado/interface/estilos/index.css'
 import App from './app/App'
+import { iniciarInstalacao } from './compartilhado/adaptadores/instalacao'
 import { I18nProvider } from './compartilhado/i18n/I18nProvider'
 import { PreferenciasProvider } from './compartilhado/preferencias/PreferenciasProvider'
+
+// O service worker só existe no build; no dev ele ia guardar arquivos velhos.
+iniciarInstalacao(import.meta.env.PROD ? `${import.meta.env.BASE_URL}sw.js` : '')
 
 // Seleciona o elemento raiz. O `!` diz ao TypeScript que temos certeza que ele existe.
 const elementoRaiz = document.getElementById('app')!

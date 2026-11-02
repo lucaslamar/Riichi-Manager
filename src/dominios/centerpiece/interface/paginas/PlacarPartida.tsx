@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
@@ -37,6 +38,7 @@ import PlacaJogador from '../componentes/PlacaJogador'
 import JogarDados from '../componentes/JogarDados'
 import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
+import RecursosDaMesa from '../componentes/RecursosDaMesa'
 import { ModalAvisoFuriten, ModalChecarFuriten } from '../componentes/ModaisFuriten'
 import ModalDescartes, { type DecisaoDescarte } from '../componentes/ModalDescartes'
 import { iniciarBatida, iniciarRonDoDescarte, type EstadoBatida } from '../hooks/estadoBatida'
@@ -274,6 +276,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           ) : (
             <TituloTela
               aoVoltar={aoSair}
+              acoes={<BotaoTelaCheia />}
               titulo={
                 <>
                 <label className="ptd-seletor-mesa">
@@ -293,6 +296,8 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               }
             />
           )}
+
+          <RecursosDaMesa />
 
           <div className="sr-only" aria-live="polite">
             {anuncio}

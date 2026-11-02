@@ -657,3 +657,7 @@
   outline: 2px solid var(--primario);
   outline-offset: -2px;
 }
+
+.botao-tela-cheia {
+  margin-left: auto;
+}

@@ -1,5 +1,7 @@
 import { useRef, useState, type RefObject } from 'react'
+import { entrarTelaCheia } from '@/compartilhado/adaptadores/telaCheia'
 import { useGestoHorizontal } from '@/compartilhado/interface/hooks/useGestoHorizontal'
+import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
@@ -62,6 +64,13 @@ function TelasCenterpiece({
   const [tela, setTela] = useState<TelaModulo>({ nome: 'inicio' })
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
   const irInicio = () => setTela({ nome: 'inicio' })
+  const { telaCheiaMesa } = usePreferencias()
+
+  /** O navegador só deixa entrar em tela cheia dentro do toque, por isso fica aqui. */
+  const abrirMesa = (mesa: TelaModulo) => {
+    if (telaCheiaMesa) entrarTelaCheia()
+    setTela(mesa)
+  }
 
   // No menu segue o carrossel da barra inferior; dentro, a borda esquerda volta ao menu.
   useGestoHorizontal({
@@ -81,7 +90,7 @@ function TelasCenterpiece({
   }
 
   if (tela.nome === 'setup') {
-    return <SetupPartida aoVoltar={irInicio} aoIniciar={(id) => setTela({ nome: 'mesa', id })} />
+    return <SetupPartida aoVoltar={irInicio} aoIniciar={(id) => abrirMesa({ nome: 'mesa', id })} />
   }
   if (tela.nome === 'registrarFinalizada') {
     return (
@@ -134,7 +143,7 @@ function TelasCenterpiece({
                 <button
                   type="button"
                   className="ptd-mesa-aberta"
-                  onClick={() => setTela({ nome: 'mesa', id: partida.id })}
+                  onClick={() => abrirMesa({ nome: 'mesa', id: partida.id })}
                 >
                   <strong>
                     {t('match.table.number', { number: indice + 1 })} ·{' '}
@@ -184,7 +193,7 @@ function TelasCenterpiece({
       icone: 'fa-border-all',
       titulo: t('match.simple.title'),
       texto: t('match.home.simpleHelp'),
-      aoTocar: () => setTela({ nome: 'simples' }),
+      aoTocar: () => abrirMesa({ nome: 'simples' }),
     },
     {
       chave: 'nova',
@@ -206,7 +215,7 @@ function TelasCenterpiece({
       titulo: t('match.home.inProgress'),
       texto: t('match.home.openCount', { count: abertas.length }),
       aoTocar: () =>
-        setTela(abertas.length === 1 ? { nome: 'mesa', id: abertas[0].id } : { nome: 'andamento' }),
+        abertas.length === 1 ? abrirMesa({ nome: 'mesa', id: abertas[0].id }) : setTela({ nome: 'andamento' }),
     },
     {
       chave: 'historico',

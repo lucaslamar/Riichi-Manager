@@ -24,6 +24,8 @@ export const CHAVES_PREFERENCIAS = {
   altoContraste: 'riichi-manager-alto-contraste',
   modoCompacto: 'riichi-manager-modo-compacto',
   toqueAmpliado: 'riichi-manager-toque-ampliado',
+  telaCheiaMesa: 'riichi-manager-tela-cheia-mesa',
+  telaAcesaMesa: 'riichi-manager-tela-acesa-mesa',
 } as const
 
 export interface Preferencias {
@@ -31,6 +33,9 @@ export interface Preferencias {
   altoContraste: boolean
   modoCompacto: boolean
   toqueAmpliado: boolean
+  /** Entra em tela cheia no toque que abre uma mesa. */
+  telaCheiaMesa: boolean
+  telaAcesaMesa: boolean
 }
 
 interface ContextoPreferencias extends Preferencias {
@@ -66,6 +71,8 @@ function lerPreferencias(): Preferencias {
     altoContraste: lerArmazenado(CHAVES_PREFERENCIAS.altoContraste) === 'true',
     modoCompacto: lerArmazenado(CHAVES_PREFERENCIAS.modoCompacto) === 'true',
     toqueAmpliado: lerArmazenado(CHAVES_PREFERENCIAS.toqueAmpliado) === 'true',
+    telaCheiaMesa: lerArmazenado(CHAVES_PREFERENCIAS.telaCheiaMesa) === 'true',
+    telaAcesaMesa: lerArmazenado(CHAVES_PREFERENCIAS.telaAcesaMesa) !== 'false',
   }
 }
 
@@ -101,7 +108,7 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
   }, [temaEfetivo])
 
   useEffect(() => {
-    const { tema, altoContraste, modoCompacto, toqueAmpliado } = preferencias
+    const { tema, altoContraste, modoCompacto, toqueAmpliado, telaCheiaMesa, telaAcesaMesa } = preferencias
     document.body.classList.toggle('alto-contraste', altoContraste)
     document.body.classList.toggle('modo-compacto', modoCompacto)
     document.body.classList.toggle('toque-ampliado', toqueAmpliado)
@@ -109,6 +116,8 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
     salvar(CHAVES_PREFERENCIAS.altoContraste, String(altoContraste))
     salvar(CHAVES_PREFERENCIAS.modoCompacto, String(modoCompacto))
     salvar(CHAVES_PREFERENCIAS.toqueAmpliado, String(toqueAmpliado))
+    salvar(CHAVES_PREFERENCIAS.telaCheiaMesa, String(telaCheiaMesa))
+    salvar(CHAVES_PREFERENCIAS.telaAcesaMesa, String(telaAcesaMesa))
   }, [preferencias])
 
   const alterar = useCallback<ContextoPreferencias['alterar']>((chave, valor) => {

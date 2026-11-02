@@ -12,9 +12,12 @@ export const ID_TITULO_TELA = 'cabecalho-tela'
 export default function TituloTela({
   titulo,
   aoVoltar,
+  acoes,
 }: {
   titulo: ReactNode
   aoVoltar?: () => void
+  /** Botões à direita do título. */
+  acoes?: ReactNode
 }) {
   const [destino, setDestino] = useState<HTMLElement | null>(null)
 
@@ -38,6 +41,7 @@ export default function TituloTela({
         </button>
       )}
       <h2 className="titulo-tela">{titulo}</h2>
+      {acoes}
     </>,
     destino,
   )

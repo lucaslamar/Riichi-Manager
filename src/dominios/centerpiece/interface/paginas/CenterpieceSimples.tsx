@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-import { manterTelaAcesa } from '@/compartilhado/adaptadores/telaAcesa'
+import { useState } from 'react'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
+import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
@@ -24,6 +24,7 @@ import JogarDados from '../componentes/JogarDados'
 import { useGiroDaMesa } from '../hooks/useGiroDaMesa'
 import MesaQuadrada from '../componentes/MesaQuadrada'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
+import RecursosDaMesa from '../componentes/RecursosDaMesa'
 
 /**
  * Só o centro da mesa, para deixar no meio da mesa e ir girando o celular: tocar
@@ -46,8 +47,6 @@ export default function CenterpieceSimples({
 
   const giro = useGiroDaMesa()
 
-  useEffect(() => manterTelaAcesa(), [])
-
   const mudar = (proximo: EstadoSimples) => {
     if (proximo.cadeiraDealer !== estado.cadeiraDealer || proximo.rodadaNumero !== estado.rodadaNumero) {
       setLadoSorteado(null)
@@ -66,7 +65,8 @@ export default function CenterpieceSimples({
 
   return (
     <section className="mesa-tela mesa-tela--simples">
-      <TituloTela titulo={t('match.simple.title')} aoVoltar={aoVoltar} />
+      <TituloTela titulo={t('match.simple.title')} aoVoltar={aoVoltar} acoes={<BotaoTelaCheia />} />
+      <RecursosDaMesa />
 
       <div className="mesa-simples-ajuda">
         <AjudaCampo rotulo={t('match.simple.title')}>
