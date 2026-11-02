@@ -1096,3 +1096,39 @@ body:has(.ptd-modulo) {
     gap: 8px;
   }
 }
+
+/* Modal de descarte deitado: entrada à esquerda e teclado à direita, sem rolar. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .modal.dsc-modal {
+    --modal-largura: 92vw;
+    width: 92vw;
+  }
+
+  .dsc-modal .modal-cabecalho {
+    padding-block: 2px;
+  }
+
+  .dsc-entrada {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    align-content: start;
+    margin-top: 4px;
+  }
+
+  .dsc-entrada > * {
+    grid-column: 1;
+  }
+
+  .dsc-entrada > .dsc-teclado {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+  }
+
+  .dsc-modal .modal-corpo {
+    padding-bottom: 2px;
+  }
+
+  .dsc-modal .modal-rodape {
+    padding-block: 4px;
+  }
+}
