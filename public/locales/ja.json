@@ -840,6 +840,8 @@
     "uma": "Uma (in thousands of points)",
     "calcRules": "計算ルール",
     "ruleKuitan": "喰いタン",
+    "yes": "あり",
+    "no": "なし",
     "umaFixed": "固定",
     "umaFloating": "変動",
     "uma23": "2位 / 3位",

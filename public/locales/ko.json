@@ -840,6 +840,8 @@
     "uma": "Uma (in thousands of points)",
     "calcRules": "계산 규칙",
     "ruleKuitan": "쿠이탄",
+    "yes": "예",
+    "no": "아니요",
     "umaFixed": "고정",
     "umaFloating": "변동",
     "uma23": "2위 / 3위",

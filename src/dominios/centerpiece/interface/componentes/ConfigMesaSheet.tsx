@@ -432,6 +432,7 @@ function Segmento({
   )
 }
 
+/** Mesmo controle das regras de cálculo: tudo na folha se liga e desliga igual. */
 function Opcao({
   rotulo,
   ajuda,
@@ -443,17 +444,31 @@ function Opcao({
   marcado: boolean
   aoMudar: (marcado: boolean) => void
 }) {
+  const { t } = useI18n()
   return (
-    <label className="cfg-opcao">
-      <span>
+    <div className="linha-regra">
+      <div className="texto-regra">
         <strong>{rotulo}</strong>
-        {ajuda && <small>{ajuda}</small>}
-      </span>
-      <input
-        type="checkbox"
-        checked={marcado}
-        onChange={(evento) => aoMudar(evento.target.checked)}
-      />
-    </label>
+        {ajuda && <span>{ajuda}</span>}
+      </div>
+      <div className="controle-regra" role="group" aria-label={rotulo}>
+        <button
+          type="button"
+          className={marcado ? 'ativo' : ''}
+          aria-pressed={marcado}
+          onClick={() => aoMudar(true)}
+        >
+          {t('tableConfig.yes')}
+        </button>
+        <button
+          type="button"
+          className={!marcado ? 'ativo' : ''}
+          aria-pressed={!marcado}
+          onClick={() => aoMudar(false)}
+        >
+          {t('tableConfig.no')}
+        </button>
+      </div>
+    </div>
   )
 }

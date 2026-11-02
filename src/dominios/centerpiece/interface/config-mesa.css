@@ -25,8 +25,7 @@
 }
 
 .cfg-entrada:focus-visible,
-.cfg-segmento:focus-visible,
-.cfg-opcao input:focus-visible {
+.cfg-segmento:focus-visible {
   outline: 2px solid var(--primario);
   outline-offset: 2px;
 }
@@ -116,41 +115,6 @@
   border-color: var(--primario);
   color: var(--sobre-primario);
   background: var(--primario-forte);
-}
-
-.cfg-opcao {
-  display: flex;
-  min-height: 48px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-bottom: 1px solid var(--linha-divisoria);
-  padding: 6px 0;
-  cursor: pointer;
-}
-
-.cfg-opcao > span {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.cfg-opcao strong {
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.cfg-opcao small {
-  color: var(--texto-apoio);
-  font-size: 0.8125rem;
-}
-
-.cfg-opcao input {
-  flex: 0 0 auto;
-  width: 24px;
-  height: 24px;
-  accent-color: var(--primario);
 }
 
 .cfg-acoes {
