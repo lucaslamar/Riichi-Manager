@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import {
@@ -16,6 +16,8 @@ import {
   type TipoAbortivo,
 } from '../../logica/partida'
 import { candidatosNagashi } from '../../logica/descartes'
+import { pagamentosChombo } from '../../logica/aplicarChombo'
+import MaoDoHistorico from './MaoDoHistorico'
 import RioPedras from './RioPedras'
 
 /** Nome de cada cadeira, resolvido pela tela a partir do cadastro. */
@@ -37,6 +39,7 @@ export function ModalConfirmacao({
   perigo = false,
   aoConfirmar,
   aoFechar,
+  children,
 }: {
   titulo: string
   texto: string
@@ -44,6 +47,7 @@ export function ModalConfirmacao({
   perigo?: boolean
   aoConfirmar: () => void
   aoFechar: () => void
+  children?: ReactNode
 }) {
   const { t } = useI18n()
   return (
@@ -69,7 +73,36 @@ export function ModalConfirmacao({
       }
     >
       <p>{texto}</p>
+      {children}
     </Modal>
+  )
+}
+
+/** Quanto cada um recebe do chombo, antes de confirmar. */
+export function ResumoChombo({
+  partida,
+  cadeira,
+  nomeDe,
+}: {
+  partida: Partida
+  cadeira: Cadeira
+  nomeDe: NomeDaCadeira
+}) {
+  const { comSinal } = useFormato()
+  const { chombo } = partida.config
+  if (chombo.tipo === 'fixo') return null
+  const variacao = pagamentosChombo(chombo.tipo, cadeira, partida.placar.cadeiraDealer)
+  return (
+    <ul className="ptd-linhas">
+      {CADEIRAS.map((outra) => (
+        <li key={outra}>
+          <span>{nomeDe(outra)}</span>
+          <strong className={variacao[outra] < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
+            {comSinal(variacao[outra])}
+          </strong>
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -85,7 +118,7 @@ export function MenuJogador({
   cadeira: Cadeira
   nome: string
   podeReceberVez: boolean
-  aoEscolher: (acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes') => void
+  aoEscolher: (acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes' | 'furiten') => void
   aoFechar: () => void
 }) {
   const { t } = useI18n()
@@ -127,6 +160,9 @@ export function MenuJogador({
         )}
         {partida.config.registrarDescartes && (
           <Acao acao="descartes" icone="fa-layer-group" rotulo={t('match.menu.discards')} />
+        )}
+        {partida.config.registrarDescartes && partida.config.checarFuriten && (
+          <Acao acao="furiten" icone="fa-eye-slash" rotulo={t('match.menu.checkFuriten')} />
         )}
         <Acao acao="ron" icone="fa-trophy" rotulo={t('match.menu.ron')} />
         <Acao acao="tsumo" icone="fa-trophy" rotulo={t('match.menu.tsumo')} />
@@ -345,6 +381,15 @@ export function ListaMaos({ partida, nomeDe }: { partida: Partida; nomeDe: NomeD
               </li>
             ))}
           </ul>
+          {evento.detalhe?.maosMontadas?.map(({ cadeira, montada }) => (
+            <MaoDoHistorico
+              key={cadeira}
+              montada={montada}
+              evento={evento}
+              cadeira={cadeira}
+              nomeDe={nomeDe}
+            />
+          ))}
           {evento.lances && (
             <details className="dsc-historico">
               <summary>{t('match.discards.history')}</summary>

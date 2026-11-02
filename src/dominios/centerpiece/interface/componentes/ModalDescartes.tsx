@@ -1,106 +1,81 @@
 import { useState, type FormEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { configuracaoPadrao } from '@/compartilhado/mahjong/pontuacao/configuracao'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
-import ModalTermo from '@/dominios/calculadora-mao/interface/modais/glossario/ModalTermo'
-import { TecladoPedras } from '@/dominios/calculadora-mao/interface/montagem-mao/componentes/TecladoPedras'
 import type { CodigoPedra } from '@/dominios/calculadora-mao/logica/tipos'
-import {
-  lerPedrasDescartadas,
-  REGISTRO_VAZIO,
-  type LanceDescarte,
-  type TipoChamada,
-} from '../../logica/descartes'
-import { CHAVE_DESCRICAO_FURITEN, descreverEsperas, descreverFuriten, descreverPedra } from '../../logica/descreverPedras'
-import { CADEIRAS, type Cadeira, type Partida } from '../../logica/partida'
-import {
-  furitenDe,
-  lerMaoInformada,
-  maoPodeTerMudado,
-} from '../../logica/registroPartida'
+import { descartesDe, lerPedrasDescartadas, REGISTRO_VAZIO } from '../../logica/descartes'
+import { descreverPedra } from '../../logica/descreverPedras'
+import { CADEIRAS, KANJI_VENTO, ventoDaCadeira, type Cadeira, type Partida } from '../../logica/partida'
+import { MAXIMO_VENCEDORES } from '../hooks/estadoBatida'
 import type { AcoesDescartes } from '../hooks/useDescartes'
 import RioPedras from './RioPedras'
+import TecladoSoPedras from './TecladoSoPedras'
 
-const TIPOS_CHAMADA: TipoChamada[] = ['chi', 'pon', 'kan']
-const CHAVE_AJUDA = { riichi: 'riichi', descartes: 'discards', temporario: 'temporary' } as const
+/** O que aconteceu com o descarte: é o que decide de quem é a vez. */
+export type DecisaoDescarte =
+  | { tipo: 'nada' }
+  | { tipo: 'chamada'; chamada: 'chi' | 'pon' | 'kan'; cadeira: Cadeira; ordem: number }
+  | { tipo: 'ron'; cadeiras: Cadeira[]; ordem: number }
 
-const SEM_ESPERA = new Map()
+type Etapa = 'entrada' | 'pergunta' | 'pon' | 'kan' | 'ron'
 
-/** Só as pedras da Calculadora de Mão: sem esperas, batida ou finalização. */
-function Teclado({ aoEscolher }: { aoEscolher: (pedra: CodigoPedra) => void }) {
-  return (
-    <div className="dsc-teclado">
-      <TecladoPedras
-        acaoPendente={{ tipo: 'descarte' }}
-        configuracao={configuracaoPadrao}
-        dorasReais={new Set()}
-        esperasPorPedra={SEM_ESPERA}
-        filtrarTecladoPorEspera={false}
-        furitenBloqueiaRon={false}
-        maoCompleta={false}
-        podeSelecionarPedra={() => true}
-        rotuloEsperaTeclado={() => ''}
-        classeEsperaTeclado={() => ''}
-        contexto="finalizacao"
-        aoAdicionarPedra={aoEscolher}
-      />
-    </div>
-  )
-}
-
-/** Rio do jogador: registrar, marcar Riichi e chamadas, informar a mão e ver o furiten. */
+/** Rio do jogador e registro do descarte, seguido da pergunta "alguém chamou?". */
 export default function ModalDescartes({
   partida,
   cadeira,
   nomeDe,
   acoes,
   rapido = false,
+  expirou = false,
   aoPular,
-  aoRegistrou,
-  aoChamou,
+  aoDecidir,
   aoFechar,
 }: {
   partida: Partida
   cadeira: Cadeira
   nomeDe: (cadeira: Cadeira) => string
   acoes: AcoesDescartes
-  /** "Descarte de Fulano", ao passar a vez pelo timer: registrar já passa. */
+  /** "Descarte de Fulano", na hora de passar a vez: tem Pular. */
   rapido?: boolean
+  /** O timer zerou: o título avisa, na cor de alerta. */
+  expirou?: boolean
   aoPular?: () => void
-  aoRegistrou?: () => void
-  aoChamou?: (cadeira: Cadeira) => void
+  aoDecidir: (decisao: DecisaoDescarte) => void
   aoFechar: () => void
 }) {
   const { t } = useI18n()
-  const registro = partida.registro ?? REGISTRO_VAZIO
-  const { lances } = registro
-  const mao = registro.maos[cadeira]
-  const furiten = furitenDe(partida, cadeira)
+  const { lances } = partida.registro ?? REGISTRO_VAZIO
+  const { placar, config } = partida
 
+  const [etapa, setEtapa] = useState<Etapa>('entrada')
   const [texto, setTexto] = useState('')
   const [erro, setErro] = useState<string | null>(null)
   const [riichi, setRiichi] = useState(false)
   const [kakan, setKakan] = useState(false)
-  const [tecladoEm, setTecladoEm] = useState<'descarte' | 'mao' | null>(rapido ? 'descarte' : null)
-  const [selecionado, setSelecionado] = useState<LanceDescarte | null>(null)
-  const [textoMao, setTextoMao] = useState(mao?.notacao ?? '')
-  const [erroMao, setErroMao] = useState<string | null>(null)
-  const [detalheAberto, setDetalheAberto] = useState(false)
-  const [glossarioAberto, setGlossarioAberto] = useState(false)
+  const [vencedores, setVencedores] = useState<Cadeira[]>([])
+
+  const emRiichi = placar.riichi.includes(cadeira)
+  const seguinte = ((cadeira + 1) % 4) as Cadeira
+  const ultimo = descartesDe(lances, cadeira).pop()
+  const maximoRon = MAXIMO_VENCEDORES[config.ronMultiplo]
+
+  const registrarPedras = (pedras: CodigoPedra[]) => {
+    setErro(null)
+    setTexto('')
+    if (kakan) {
+      // A pedra acrescentada não passa a vez: quem fez o kan ainda vai descartar.
+      pedras.forEach((pedra) => acoes.kakan(cadeira, pedra))
+    } else {
+      acoes.descartar(cadeira, pedras, riichi)
+      setEtapa('pergunta')
+    }
+    setRiichi(false)
+    setKakan(false)
+  }
 
   const registrar = (entrada: string) => {
     const leitura = lerPedrasDescartadas(entrada, lances)
-    if (leitura.erro) {
-      setErro(t(leitura.erro.chave, leitura.erro.parametros))
-      return
-    }
-    setErro(null)
-    setTexto('')
-    if (kakan) leitura.pedras.forEach((pedra) => acoes.kakan(cadeira, pedra))
-    else acoes.descartar(cadeira, leitura.pedras, riichi)
-    setRiichi(false)
-    setKakan(false)
-    if (rapido) aoRegistrou?.()
+    if (leitura.erro) setErro(t(leitura.erro.chave, leitura.erro.parametros))
+    else registrarPedras(leitura.pedras)
   }
 
   const aoEnviar = (evento: FormEvent) => {
@@ -108,35 +83,32 @@ export default function ModalDescartes({
     registrar(texto)
   }
 
-  const salvarMao = (evento: FormEvent) => {
-    evento.preventDefault()
-    const leitura = lerMaoInformada(textoMao)
-    if (leitura.erro) {
-      const { chave, ...resto } = leitura.erro
-      setErroMao(t(chave, 'parametros' in resto ? resto.parametros : undefined))
-      return
-    }
-    setErroMao(null)
-    acoes.informarMao(cadeira, leitura.mao)
-  }
+  const titulo = expirou
+    ? t('match.discards.expiredTitle', { name: nomeDe(cadeira) })
+    : t(rapido ? 'match.discards.quickTitle' : 'match.discards.title', { name: nomeDe(cadeira) })
 
-  const chamar = (ordem: number, outra: Cadeira, tipo: TipoChamada) => {
-    acoes.chamar(ordem, { cadeira: outra, tipo })
-    setSelecionado(null)
-    aoChamou?.(outra)
-  }
-
-  const seguinte = ((cadeira + 1) % 4) as Cadeira
-  const emRiichi = partida.placar.riichi.includes(cadeira)
+  const OutroJogador = ({ outra, aoTocar, ativo }: { outra: Cadeira; aoTocar: () => void; ativo?: boolean }) => (
+    <button
+      type="button"
+      className={`ptd-opcao${ativo ? ' ptd-opcao--ativa' : ''}`}
+      aria-pressed={ativo}
+      onClick={aoTocar}
+    >
+      <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]}</span>
+      <span className="ptd-opcao-nome">{nomeDe(outra)}</span>
+    </button>
+  )
+  const outras = CADEIRAS.filter((outra) => outra !== cadeira)
 
   return (
     <Modal
-      titulo={t(rapido ? 'match.discards.quickTitle' : 'match.discards.title', { name: nomeDe(cadeira) })}
+      titulo={titulo}
+      tom={expirou ? 'alerta' : 'padrao'}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       className="modal-folha dsc-modal"
       rodape={
-        rapido ? (
+        rapido && etapa === 'entrada' ? (
           <div className="ptd-acoes-folha">
             <button type="button" className="btn-contorno" onClick={aoPular}>
               {t('match.discards.skip')}
@@ -145,51 +117,7 @@ export default function ModalDescartes({
         ) : undefined
       }
     >
-      {furiten?.principal && mao && (
-        <div className="dsc-furiten">
-          <button
-            type="button"
-            className="dsc-furiten-aviso"
-            aria-expanded={detalheAberto}
-            onClick={() => setDetalheAberto((aberto) => !aberto)}
-          >
-            <i className="fas fa-triangle-exclamation" aria-hidden="true" />
-            {descreverFuriten(furiten, mao.esperas, t)}
-          </button>
-          <p className="ptd-apoio">{t('match.furiten.canTsumo')}</p>
-          {detalheAberto && (
-            <>
-              <p>{t(`sectionHelp.furiten.${CHAVE_AJUDA[furiten.principal]}`)}</p>
-              <ul className="ptd-linhas">
-                {furiten.causas.map((causa) => (
-                  <li key={`${causa.tipo}-${causa.ordem}`}>
-                    <span>{t(`${CHAVE_DESCRICAO_FURITEN[causa.tipo]}.title`)}</span>
-                    <strong>
-                      {t('match.furiten.cause', {
-                        tile: descreverPedra(causa.pedra, t),
-                        order: causa.ordem,
-                        name: nomeDe(causa.cadeira),
-                      })}
-                    </strong>
-                  </li>
-                ))}
-              </ul>
-              <button type="button" className="btn-contorno" onClick={() => setGlossarioAberto(true)}>
-                {t('match.furiten.glossary')}
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
-      <RioPedras
-        lances={lances}
-        cadeira={cadeira}
-        nomeDe={nomeDe}
-        selecionada={selecionado?.ordem ?? null}
-        aoTocar={rapido ? undefined : (descarte) => setSelecionado((atual) => (atual?.ordem === descarte.ordem ? null : descarte))}
-      />
-
+      <RioPedras lances={lances} cadeira={cadeira} nomeDe={nomeDe} />
       {lances.some((lance) => lance.tipo === 'kakan' && lance.cadeira === cadeira) && (
         <p className="ptd-apoio">
           {t('match.discards.kakan')}:{' '}
@@ -200,183 +128,159 @@ export default function ModalDescartes({
         </p>
       )}
 
-      {selecionado && (
-        <div className="dsc-chamada">
-          <p className="ptd-rotulo">{t('match.discards.calledBy')}</p>
-          {CADEIRAS.filter((outra) => outra !== cadeira).map((outra) => (
-            <div key={outra} className="dsc-chamada-linha">
-              <span>{nomeDe(outra)}</span>
-              {TIPOS_CHAMADA.map((tipo) => (
-                <button
-                  key={tipo}
-                  type="button"
-                  className="mesa-btn-secundario"
-                  // Chi só vem do jogador à esquerda de quem descartou.
-                  disabled={tipo === 'chi' && outra !== seguinte}
-                  aria-label={t('spokenTiles.calledMark', { name: nomeDe(outra), call: t(`match.discards.call.${tipo}`) })}
-                  onClick={() => chamar(selecionado.ordem, outra, tipo)}
-                >
-                  {t(`match.discards.call.${tipo}`)}
-                </button>
-              ))}
-            </div>
-          ))}
-          {selecionado.chamadaPor && (
-            <button
-              type="button"
-              className="btn-contorno"
-              onClick={() => {
-                acoes.chamar(selecionado.ordem)
-                setSelecionado(null)
+      {etapa === 'entrada' && (
+        <form className="dsc-entrada" onSubmit={aoEnviar}>
+          <label className="ptd-rotulo" htmlFor="dsc-notacao">
+            {t(kakan ? 'match.discards.kakanInput' : 'match.discards.input')}
+          </label>
+          <div className="dsc-entrada-linha">
+            <input
+              id="dsc-notacao"
+              className="cfg-entrada"
+              value={texto}
+              placeholder="3m5p1z"
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              aria-invalid={!!erro}
+              onChange={(evento) => {
+                setTexto(evento.target.value)
+                setErro(null)
               }}
-            >
-              {t('match.discards.removeCall')}
+            />
+            <button type="submit" className="btn-primario" disabled={!texto.trim()}>
+              {t('match.discards.add')}
             </button>
+          </div>
+          {erro && (
+            <p className="dsc-erro" role="alert">
+              {erro}
+            </p>
           )}
-        </div>
-      )}
-
-      <form className="dsc-entrada" onSubmit={aoEnviar}>
-        <label className="ptd-rotulo" htmlFor="dsc-notacao">
-          {t(kakan ? 'match.discards.kakanInput' : 'match.discards.input')}
-        </label>
-        <div className="dsc-entrada-linha">
-          <input
-            id="dsc-notacao"
-            className="cfg-entrada"
-            value={texto}
-            placeholder="3m5p1z"
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck={false}
-            aria-invalid={!!erro}
-            onChange={(evento) => {
-              setTexto(evento.target.value)
-              setErro(null)
-            }}
-          />
-          <button type="submit" className="btn-primario" disabled={!texto.trim()}>
-            {t('match.discards.add')}
-          </button>
-        </div>
-        {erro && (
-          <p className="dsc-erro" role="alert">
-            {erro}
-          </p>
-        )}
-        <div className="dsc-marcas">
-          {!emRiichi && (
-            <button
-              type="button"
-              className={`ptd-opcao${riichi ? ' ptd-opcao--ativa' : ''}`}
-              aria-pressed={riichi}
-              disabled={kakan}
-              onClick={() => setRiichi((atual) => !atual)}
-            >
-              {t('match.discards.riichi')}
-            </button>
-          )}
-          <button
-            type="button"
-            className={`ptd-opcao${kakan ? ' ptd-opcao--ativa' : ''}`}
-            aria-pressed={kakan}
-            disabled={riichi}
-            onClick={() => setKakan((atual) => !atual)}
-          >
-            {t('match.discards.kakan')}
-          </button>
-          <button
-            type="button"
-            className={`ptd-opcao${tecladoEm === 'descarte' ? ' ptd-opcao--ativa' : ''}`}
-            aria-pressed={tecladoEm === 'descarte'}
-            onClick={() => setTecladoEm((atual) => (atual === 'descarte' ? null : 'descarte'))}
-          >
-            {t('match.discards.keyboard')}
-          </button>
-        </div>
-        {tecladoEm === 'descarte' && <Teclado aoEscolher={registrar} />}
-      </form>
-
-      {!rapido && (
-        <>
-          <button
-            type="button"
-            className="btn-contorno dsc-desfazer"
-            disabled={lances.every((lance) => lance.cadeira !== cadeira)}
-            onClick={() => acoes.desfazer(cadeira)}
-          >
-            <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.discards.undo')}
-          </button>
-
-          <form className="dsc-entrada" onSubmit={salvarMao}>
-            <label className="ptd-rotulo" htmlFor="dsc-mao">
-              {t('match.discards.handTitle')}
-            </label>
-            <p className="ptd-apoio">{t('match.discards.handHelp')}</p>
-            <div className="dsc-entrada-linha">
-              <input
-                id="dsc-mao"
-                className="cfg-entrada"
-                value={textoMao}
-                placeholder="123456789m123p4s"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                spellCheck={false}
-                aria-invalid={!!erroMao}
-                onChange={(evento) => {
-                  setTextoMao(evento.target.value)
-                  setErroMao(null)
-                }}
-              />
-              <button type="submit" className="btn-primario" disabled={!textoMao.trim()}>
-                {t('match.discards.handSave')}
-              </button>
-            </div>
-            {erroMao && (
-              <p className="dsc-erro" role="alert">
-                {erroMao}
-              </p>
-            )}
-            {mao && (
-              <>
-                <p>{t('match.discards.handWaits', { tiles: descreverEsperas(mao.esperas, t) })}</p>
-                {maoPodeTerMudado(partida, cadeira) && (
-                  <p className="ptd-apoio">{t('match.discards.handChanged')}</p>
-                )}
-              </>
-            )}
-            <div className="dsc-marcas">
+          <div className="dsc-marcas">
+            {!emRiichi && (
               <button
                 type="button"
-                className={`ptd-opcao${tecladoEm === 'mao' ? ' ptd-opcao--ativa' : ''}`}
-                aria-pressed={tecladoEm === 'mao'}
-                onClick={() => setTecladoEm((atual) => (atual === 'mao' ? null : 'mao'))}
+                className={`ptd-opcao${riichi ? ' ptd-opcao--ativa' : ''}`}
+                aria-pressed={riichi}
+                disabled={kakan}
+                onClick={() => setRiichi((atual) => !atual)}
               >
-                {t('match.discards.keyboard')}
+                {t('match.discards.riichi')}
               </button>
-              {mao && (
-                <button
-                  type="button"
-                  className="ptd-opcao"
-                  onClick={() => {
-                    acoes.apagarMao(cadeira)
-                    setTextoMao('')
-                  }}
-                >
-                  {t('match.discards.handClear')}
-                </button>
-              )}
-            </div>
-            {tecladoEm === 'mao' && (
-              <Teclado aoEscolher={(pedra) => setTextoMao((atual) => atual + pedra)} />
             )}
-          </form>
-        </>
+            <button
+              type="button"
+              className={`ptd-opcao${kakan ? ' ptd-opcao--ativa' : ''}`}
+              aria-pressed={kakan}
+              disabled={riichi}
+              onClick={() => setKakan((atual) => !atual)}
+            >
+              {t('match.discards.kakan')}
+            </button>
+          </div>
+          <TecladoSoPedras aoEscolher={(pedra) => registrar(pedra)} />
+        </form>
       )}
 
-      {glossarioAberto && <ModalTermo termo="furiten" aoFechar={() => setGlossarioAberto(false)} />}
+      {etapa === 'pergunta' && ultimo && (
+        <div className="dsc-pergunta" role="group" aria-label={t('match.discards.ask')}>
+          <p className="ptd-rotulo">
+            {t('match.discards.askTile', { tile: descreverPedra(ultimo.pedra, t) })}
+          </p>
+          <button
+            type="button"
+            className="mesa-btn-principal"
+            onClick={() => aoDecidir({ tipo: 'nada' })}
+          >
+            {t('match.discards.nothing', { name: nomeDe(seguinte) })}
+          </button>
+          <div className="dsc-pergunta-chamadas">
+            <button
+              type="button"
+              className="mesa-btn-secundario"
+              onClick={() =>
+                aoDecidir({ tipo: 'chamada', chamada: 'chi', cadeira: seguinte, ordem: ultimo.ordem })
+              }
+            >
+              {t('match.discards.call.chi')}
+            </button>
+            <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('pon')}>
+              {t('match.discards.call.pon')}
+            </button>
+            <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('kan')}>
+              {t('match.discards.call.kan')}
+            </button>
+            <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('ron')}>
+              {t('match.discards.call.ron')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {(etapa === 'pon' || etapa === 'kan') && ultimo && (
+        <div className="dsc-pergunta">
+          <p className="ptd-rotulo">{t(`match.discards.whoCalled.${etapa}`)}</p>
+          <div className="ptd-lista-opcoes">
+            {outras.map((outra) => (
+              <OutroJogador
+                key={outra}
+                outra={outra}
+                aoTocar={() =>
+                  aoDecidir({ tipo: 'chamada', chamada: etapa, cadeira: outra, ordem: ultimo.ordem })
+                }
+              />
+            ))}
+          </div>
+          <button type="button" className="btn-contorno" onClick={() => setEtapa('pergunta')}>
+            {t('actions.back')}
+          </button>
+        </div>
+      )}
+
+      {etapa === 'ron' && ultimo && (
+        <div className="dsc-pergunta">
+          <p className="ptd-rotulo">{t('match.discards.whoCalled.ron')}</p>
+          <div className="ptd-lista-opcoes">
+            {outras.map((outra) => (
+              <OutroJogador
+                key={outra}
+                outra={outra}
+                ativo={vencedores.includes(outra)}
+                aoTocar={() => {
+                  if (maximoRon === 1) {
+                    aoDecidir({ tipo: 'ron', cadeiras: [outra], ordem: ultimo.ordem })
+                    return
+                  }
+                  setVencedores((lista) =>
+                    lista.includes(outra)
+                      ? lista.filter((item) => item !== outra)
+                      : lista.length < maximoRon
+                        ? [...lista, outra]
+                        : lista,
+                  )
+                }}
+              />
+            ))}
+          </div>
+          <div className="ptd-acoes-folha">
+            <button type="button" className="btn-contorno" onClick={() => setEtapa('pergunta')}>
+              {t('actions.back')}
+            </button>
+            {maximoRon > 1 && (
+              <button
+                type="button"
+                className="btn-primario"
+                disabled={vencedores.length === 0}
+                onClick={() => aoDecidir({ tipo: 'ron', cadeiras: vencedores, ordem: ultimo.ordem })}
+              >
+                {t('match.win.next')}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </Modal>
   )
 }

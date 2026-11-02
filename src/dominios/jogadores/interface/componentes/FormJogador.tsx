@@ -1,6 +1,12 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { DadosJogador, ErroJogador, ResultadoJogador } from '../../logica/jogadores'
+import {
+  sugerirClubes,
+  type DadosJogador,
+  type ErroJogador,
+  type ResultadoJogador,
+} from '../../logica/jogadores'
+import { useJogadores } from '../hooks/useJogadores'
 
 const CHAVE_ERRO: Record<ErroJogador, string> = {
   nomeVazio: 'players.errorEmptyName',
@@ -13,13 +19,15 @@ interface PropsFormJogador {
   aoCancelar: () => void
 }
 
-/** Nome e apelido, usado ao criar e ao renomear. Quem chama decide o que fazer ao salvar. */
+/** Nome, apelido e clube, usado ao criar e ao renomear. Quem chama decide o que fazer ao salvar. */
 export default function FormJogador({ inicial, aoSalvar, aoCancelar }: PropsFormJogador) {
   const { t } = useI18n()
+  const { jogadores } = useJogadores()
   const id = useId()
   const nomeRef = useRef<HTMLInputElement | null>(null)
   const [nome, setNome] = useState(inicial?.nome ?? '')
   const [apelido, setApelido] = useState(inicial?.apelido ?? '')
+  const [clube, setClube] = useState(inicial?.clube ?? '')
   const [erro, setErro] = useState<ErroJogador | null>(null)
 
   // A modal foca o próprio diálogo ao abrir; o foco vem para o nome logo depois.
@@ -28,9 +36,11 @@ export default function FormJogador({ inicial, aoSalvar, aoCancelar }: PropsForm
     return () => window.clearTimeout(temporizador)
   }, [])
 
+  const sugestoes = sugerirClubes(jogadores, clube)
+
   const enviar = (evento: FormEvent) => {
     evento.preventDefault()
-    const resultado = aoSalvar({ nome, apelido })
+    const resultado = aoSalvar({ nome, apelido, clube })
     if (!resultado.ok) setErro(resultado.erro)
   }
 
@@ -70,6 +80,30 @@ export default function FormJogador({ inicial, aoSalvar, aoCancelar }: PropsForm
         autoComplete="off"
         onChange={(evento) => setApelido(evento.target.value)}
       />
+
+      <label className="campo-jogador" htmlFor={`${id}-clube`}>
+        {t('players.club')}
+      </label>
+      <input
+        id={`${id}-clube`}
+        className="entrada-jogador"
+        type="text"
+        value={clube}
+        autoComplete="off"
+        autoCapitalize="words"
+        onChange={(evento) => setClube(evento.target.value)}
+      />
+      {sugestoes.length > 0 && (
+        <ul className="sugestoes-clube" aria-label={t('players.clubSuggestions')}>
+          {sugestoes.map((sugestao) => (
+            <li key={sugestao}>
+              <button type="button" onClick={() => setClube(sugestao)}>
+                {sugestao}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <div className="acoes-form-jogador">
         <button type="button" className="btn-contorno" onClick={aoCancelar}>

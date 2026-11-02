@@ -10,10 +10,17 @@ import {
 } from '@/dominios/calculadora-mao/logica/notacao'
 import type { CodigoPedra, Meld } from '@/dominios/calculadora-mao/logica/tipos'
 import type { Cadeira } from './partida'
+import type { EstadoVez } from './vez'
 
-export type TipoChamada = 'chi' | 'pon' | 'kan'
+export type TipoChamada = 'chi' | 'pon' | 'kan' | 'ron'
 
-export interface LanceDescarte {
+/** Como a mesa estava antes do lance: é para onde o Desfazer volta. */
+export interface AntesDoLance {
+  vezAntes?: EstadoVez
+  eventosAntes?: number
+}
+
+export interface LanceDescarte extends AntesDoLance {
   tipo: 'descarte'
   /** Ordem global na mão: 1, 2, 3… somando os 4 jogadores. */
   ordem: number
@@ -22,11 +29,11 @@ export interface LanceDescarte {
   riichi: boolean
   /** O Riichi foi declarado por este descarte: desfazer um desfaz o outro. */
   declarouRiichi?: boolean
-  chamadaPor?: { cadeira: Cadeira; tipo: TipoChamada }
+  chamadaPor?: { cadeira: Cadeira; jogadorId?: string; tipo: TipoChamada }
 }
 
 /** Pedra acrescentada a um pon: quem esperava por ela perdeu o chankan. */
-export interface LanceKakan {
+export interface LanceKakan extends AntesDoLance {
   tipo: 'kakan'
   ordem: number
   cadeira: Cadeira
@@ -60,7 +67,7 @@ export function adicionarDescartes(
   registro: RegistroMao,
   cadeira: Cadeira,
   pedras: readonly CodigoPedra[],
-  marca: { indiceRiichi?: number; declarouRiichi?: boolean } = {},
+  marca: { indiceRiichi?: number; declarouRiichi?: boolean; antes?: AntesDoLance } = {},
 ): RegistroMao {
   const novos: Lance[] = pedras.map((pedra, indice) => ({
     tipo: 'descarte',
@@ -68,13 +75,19 @@ export function adicionarDescartes(
     cadeira,
     pedra,
     riichi: indice === marca.indiceRiichi,
+    ...marca.antes,
     ...(indice === marca.indiceRiichi && marca.declarouRiichi ? { declarouRiichi: true } : {}),
   }))
   return { ...registro, lances: [...registro.lances, ...novos] }
 }
 
-export function adicionarKakan(registro: RegistroMao, cadeira: Cadeira, pedra: CodigoPedra): RegistroMao {
-  const lance: Lance = { tipo: 'kakan', ordem: registro.lances.length + 1, cadeira, pedra }
+export function adicionarKakan(
+  registro: RegistroMao,
+  cadeira: Cadeira,
+  pedra: CodigoPedra,
+  antes?: AntesDoLance,
+): RegistroMao {
+  const lance: Lance = { tipo: 'kakan', ordem: registro.lances.length + 1, cadeira, pedra, ...antes }
   return { ...registro, lances: [...registro.lances, lance] }
 }
 
@@ -98,7 +111,7 @@ export function desfazerUltimoLance(registro: RegistroMao, cadeira: Cadeira): Re
 export function marcarChamada(
   registro: RegistroMao,
   ordem: number,
-  chamada?: { cadeira: Cadeira; tipo: TipoChamada },
+  chamada?: LanceDescarte['chamadaPor'],
 ): RegistroMao {
   return {
     ...registro,

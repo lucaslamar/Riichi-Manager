@@ -11,8 +11,8 @@ interface PropsPlacaJogador {
   vento: Vento
   pontos: number
   emRiichi: boolean
-  /** Frase do aviso de furiten; o card mostra só a marca. */
-  furiten?: string
+  /** Checagem de furiten ativa: só um ícone, para não entregar a espera à mesa. */
+  checagem?: { rotulo: string; aoTocar: () => void }
   /** Presente só na placa da vez, com o timer ligado. */
   timer?: { segundos: number; fracao: number; esgotado: boolean; aoTocar: () => void }
   aoAbrirMenu: () => void
@@ -28,7 +28,7 @@ export default function PlacaJogador({
   vento,
   pontos,
   emRiichi,
-  furiten,
+  checagem,
   timer,
   aoAbrirMenu,
   aoSegurar,
@@ -84,16 +84,21 @@ export default function PlacaJogador({
               親
             </span>
           )}
-          {furiten && (
-            <span className="mesa-placa-furiten" title={furiten}>
-              <span aria-hidden="true">振</span>
-              <span className="sr-only">{furiten}</span>
-            </span>
-          )}
           {emRiichi && <span className="sr-only">{t('calculator.riichi')}</span>}
         </span>
         <span className="mesa-placa-pontos">{numero(pontos)}</span>
       </button>
+
+      {checagem && (
+        <button
+          type="button"
+          className={`mesa-placa-checagem${timer ? ' mesa-placa-checagem--com-timer' : ''}`}
+          aria-label={checagem.rotulo}
+          onClick={checagem.aoTocar}
+        >
+          <i className="fas fa-eye-slash" aria-hidden="true" />
+        </button>
+      )}
 
       {timer && (
         <button

@@ -5,6 +5,7 @@
  */
 import assert from 'node:assert/strict'
 import { alterarConfig, configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
+import { criarPartidaManual } from '../src/dominios/centerpiece/logica/partidaManual'
 import {
   criarPartida,
   finalizarPartida,
@@ -16,6 +17,7 @@ import {
   origemDaPartida,
   partidasDoHistorico,
   posicoesDoRanking,
+  semExcluidos,
 } from '../src/dominios/centerpiece/logica/ranking'
 
 let testes = 0
@@ -149,6 +151,50 @@ teste('sem partidas no filtro, ranking vazio', () => {
     calcularRanking([finalizada(AGORA)], { periodo: 'tudo', origem: 'torneios' }, AGORA),
     [],
   )
+})
+
+teste('excluído sai do ranking e os outros ficam iguais', () => {
+  const linhas = [
+    { jogadorId: 'a', partidas: 1, pontuacaoTotal: 10, mediaColocacao: 1, percentualPrimeiro: 100, percentualQuarto: 0, percentualTobi: 0 },
+    { jogadorId: 'b', partidas: 1, pontuacaoTotal: 5, mediaColocacao: 2, percentualPrimeiro: 0, percentualQuarto: 0, percentualTobi: 0 },
+  ]
+  const sobra = semExcluidos(linhas, (id) => id === 'b')
+  assert.deepEqual(sobra.map((linha) => linha.pontuacaoTotal), [5])
+  assert.deepEqual(posicoesDoRanking(sobra), [1])
+})
+
+teste('partida registrada à mão entra no histórico e no ranking', () => {
+  const partida = criarPartidaManual(
+    'm',
+    configDoPreset('padrao'),
+    {
+      jogadorIds: ['a', 'b', 'c', 'd'],
+      nomes: ['A', 'B', 'C', 'D'],
+      pontos: [12000, 42000, 18000, 28000],
+      uma: [15, 5, -5, -15],
+      oka: 20000,
+    },
+    '2026-11-01T12:00:00.000Z',
+  )
+  assert.equal(partida.status, 'finalizada')
+  assert.deepEqual(partida.resultado?.map((linha) => [linha.jogadorId, linha.final]), [
+    ['b', 47],
+    ['d', 3],
+    ['c', -17],
+    ['a', -33],
+  ])
+  assert.equal(partidasDoHistorico([partida]).length, 1)
+  const ranking = calcularRanking([partida], { periodo: 'tudo', origem: 'todas' }, new Date('2026-11-02'))
+  assert.equal(ranking[0].jogadorId, 'b')
+  const semOka = criarPartidaManual('n', configDoPreset('wrc'), {
+    jogadorIds: ['a', 'b', 'c', 'd'],
+    nomes: [],
+    pontos: [47000, 33000, 23000, -3000],
+    uma: [15, 5, -5, -15],
+    oka: 0,
+  }, 'x')
+  assert.equal(semOka.config.pontosPartida, 25000)
+  assert.equal(semOka.resultado?.reduce((soma, linha) => soma + linha.final, 0), 0)
 })
 
 console.log(`Ranking ok: ${testes} testes.`)

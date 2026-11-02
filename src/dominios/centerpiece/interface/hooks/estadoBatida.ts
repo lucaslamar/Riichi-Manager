@@ -1,6 +1,8 @@
 import type { Cadeira } from '../../logica/partida'
 import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
 
+export const MAXIMO_VENCEDORES = { atamaHane: 1, duploTriploAborta: 2, duploTriploPermitidos: 3 }
+
 export type PassoBatida = 'tipo' | 'vencedor' | 'pagador' | 'calculo' | 'confirmacao'
 
 export interface EstadoBatida {
@@ -11,6 +13,9 @@ export interface EstadoBatida {
   /** Abre a calculadora no lugar da mesa. */
   calculadora: 'hanFu' | 'mao' | null
   vencedores: { cadeira: Cadeira; resultado: ResultadoCalculoParaCenterpiece }[]
+  /** Ron vindo do descarte: quem falta calcular e a pedra que fica marcada. */
+  pendentes?: Cadeira[]
+  ordemDescarte?: number
 }
 
 export function iniciarBatida(inicial?: { tipo: 'ron' | 'tsumo'; vencedor: Cadeira }): EstadoBatida {
@@ -21,5 +26,19 @@ export function iniciarBatida(inicial?: { tipo: 'ron' | 'tsumo'; vencedor: Cadei
     pagador: null,
     calculadora: null,
     vencedores: [],
+  }
+}
+
+/** Ron perguntado depois do descarte: vencedor e pagador já vêm preenchidos. */
+export function iniciarRonDoDescarte(pagador: Cadeira, vencedores: Cadeira[], ordemDescarte: number): EstadoBatida {
+  return {
+    tipo: 'ron',
+    passo: 'calculo',
+    vencedorAtual: vencedores[0],
+    pagador,
+    calculadora: null,
+    vencedores: [],
+    pendentes: vencedores.slice(1),
+    ordemDescarte,
   }
 }

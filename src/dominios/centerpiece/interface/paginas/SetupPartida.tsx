@@ -37,7 +37,13 @@ export default function SetupPartida({
   const iniciar = () => {
     if (!completos) return
     salvarUltimaConfig(armazenamentoLocal, config)
-    aoIniciar(criar(config, preenchidos as unknown as readonly [string, string, string, string]))
+    aoIniciar(
+      criar(
+        config,
+        preenchidos as unknown as readonly [string, string, string, string],
+        preenchidos.map((id) => nomeDe(id) ?? ''),
+      ),
+    )
   }
 
   return (

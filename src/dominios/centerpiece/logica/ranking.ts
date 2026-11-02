@@ -103,6 +103,38 @@ export function calcularRanking(
     )
 }
 
+/** Onde o jogador aparece: mesas abertas pelo nome da tela e total de finalizadas. */
+export function usoDoJogadorNasPartidas(partidas: readonly Partida[], jogadorId: string) {
+  const joga = (partida: Partida) =>
+    Object.values(partida.assentos).some((assento) => assento.jogadorId === jogadorId)
+  const abertas = partidas.filter((partida) => partida.status === 'em_andamento')
+  return {
+    /** Índices base 1, os mesmos do seletor "Mesa N". */
+    mesasAbertas: abertas.flatMap((partida, indice) => (joga(partida) ? [indice + 1] : [])),
+    partidasFinalizadas: partidasDoHistorico(partidas).filter(joga).length,
+  }
+}
+
+/** Guarda o nome em todas as partidas dele, antes de sair do cadastro. */
+export function guardarNomeNasPartidas(partidas: readonly Partida[], jogadorId: string, nome: string): Partida[] {
+  return partidas.map((partida) => {
+    const assentos = { ...partida.assentos }
+    let mudou = false
+    for (const cadeira of [0, 1, 2, 3] as const) {
+      if (assentos[cadeira].jogadorId === jogadorId) {
+        assentos[cadeira] = { ...assentos[cadeira], nome }
+        mudou = true
+      }
+    }
+    return mudou ? { ...partida, assentos } : partida
+  })
+}
+
+/** Quem saiu do cadastro sai do ranking; os demais seguem com os mesmos pontos. */
+export function semExcluidos(linhas: readonly LinhaRanking[], existe: (id: string) => boolean) {
+  return linhas.filter((linha) => existe(linha.jogadorId))
+}
+
 /** Posição de cada linha: pontuação igual fica na mesma posição. */
 export function posicoesDoRanking(linhas: readonly LinhaRanking[]): number[] {
   return linhas.map(

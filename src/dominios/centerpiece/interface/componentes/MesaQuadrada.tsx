@@ -3,8 +3,6 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { CADEIRAS, KANJI_VENTO, ventoDaCadeira, type Cadeira } from '../../logica/partida'
 import '../mesa.css'
 
-export type ModoMesa = 'mesa' | 'lista'
-
 interface LadoMesa {
   placa: ReactNode
   /** Conteúdo da ranhura do palito de Riichi. */
@@ -12,10 +10,13 @@ interface LadoMesa {
 }
 
 interface PropsMesaQuadrada {
-  modo: ModoMesa
   cadeiraDealer: Cadeira
   lado: (cadeira: Cadeira) => LadoMesa
   domo: ReactNode
+  /** Graus para girar a mesa inteira, sem mudar o layout em volta. */
+  giro?: number
+  /** Toque em qualquer ponto da mesa. O domo continua sendo o acesso por teclado. */
+  aoTocarMesa?: () => void
   /** Com ação, o domo vira botão (ex.: pausar o timer). */
   aoTocarDomo?: () => void
   rotuloDomo?: string
@@ -24,47 +25,30 @@ interface PropsMesaQuadrada {
 /**
  * Centerpiece de mesa automática: feltro, painel quadrado, 4 lados e disco central.
  * Cada lado é a mesma camada quadrada, escrita para o lado de baixo e girada, então
- * os 4 ficam idênticos. No modo lista, as placas ficam sem rotação, lado a lado.
+ * os 4 ficam idênticos. A ordem no DOM segue os ventos (東 南 西 北), para o leitor de
+ * tela e o foco não dependerem da rotação.
  */
 export default function MesaQuadrada({
-  modo,
   cadeiraDealer,
   lado,
   domo,
+  aoTocarMesa,
+  giro = 0,
   aoTocarDomo,
   rotuloDomo,
 }: PropsMesaQuadrada) {
   const { t } = useI18n()
 
-  if (modo === 'lista') {
-    return (
-      <div className="mesa-lista">
-        <div className="mesa-lista-domo">
-          {aoTocarDomo ? (
-            <button type="button" className="mesa-domo" aria-label={rotuloDomo} onClick={aoTocarDomo}>
-              {domo}
-            </button>
-          ) : (
-            <div className="mesa-domo">{domo}</div>
-          )}
-        </div>
-        <div className="mesa-lista-placas">
-          {CADEIRAS.map((cadeira) => (
-            <div key={cadeira} className="mesa-lista-item">
-              {lado(cadeira).placa}
-              {lado(cadeira).ranhura && <div className="mesa-ranhura">{lado(cadeira).ranhura}</div>}
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="mesa-feltro">
+    <div
+      className={`mesa-feltro${aoTocarMesa ? ' mesa-feltro--tocavel' : ''}`}
+      style={giro ? { transform: `rotate(${giro}deg)` } : undefined}
+      onClick={aoTocarMesa}
+    >
       <div className="mesa-painel">
         <div className="mesa-disco" aria-hidden="true" />
-        {CADEIRAS.map((cadeira) => {
+        {CADEIRAS.map((passo) => {
+          const cadeira = ((cadeiraDealer + passo) % 4) as Cadeira
           const vento = ventoDaCadeira(cadeira, cadeiraDealer)
           const { placa, ranhura } = lado(cadeira)
           return (

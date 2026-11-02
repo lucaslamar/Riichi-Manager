@@ -163,3 +163,34 @@
   flex: 1 1 0;
   min-height: 44px;
 }
+
+/* ─── Ajuda dos campos ────────────────────────────────────────────────────── */
+.cfg-campo-rotulo,
+.cfg-legenda-com-botao,
+.cfg-ajuda--com-botao {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.cfg-ajuda-texto p {
+  margin: 0 0 10px;
+}
+
+.cfg-tabela-exemplo {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.cfg-tabela-exemplo th,
+.cfg-tabela-exemplo td {
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 6px 2px;
+  text-align: right;
+}
+
+.cfg-tabela-exemplo th:first-child {
+  text-align: left;
+}

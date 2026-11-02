@@ -7,6 +7,7 @@ import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCa
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
 import {
   converterMaoParaCenterpiece,
+  montarMaoParaHistorico,
   type ContextoCenterpieceMao,
   type ResultadoCalculoParaCenterpiece,
 } from '@/dominios/centerpiece/logica/tipos-integracao'
@@ -91,7 +92,12 @@ export default function PaginaCalculadoraMao({
           vencedorEhLeste: contextoCenterpiece?.vencedorEhLeste,
           honbaUsado: contextoCenterpiece?.honba,
         })
-        if (convertido) aoUsarResultado(convertido)
+        if (convertido) {
+          aoUsarResultado({
+            ...convertido,
+            maoMontada: montarMaoParaHistorico(calculadora.mao, calculadora.resultado),
+          })
+        }
       }
     : undefined
 

@@ -22,20 +22,25 @@ import {
   descreverPedra,
   descreverRio,
 } from '../src/dominios/centerpiece/logica/descreverPedras'
+import { pagamentosChombo } from '../src/dominios/centerpiece/logica/aplicarChombo'
 import { calcularFuriten } from '../src/dominios/centerpiece/logica/furiten'
+import { passarVezPara } from '../src/dominios/centerpiece/logica/vez'
 import {
   criarPartida,
   declararRiichi,
   desfazer,
+  registrarChombo,
   registrarRyukyoku,
   registrarTsumo,
   type Cadeira,
 } from '../src/dominios/centerpiece/logica/partida'
 import {
+  agruparChamada,
+  chamarPedra,
   desfazerLance,
+  desfazerUltimoDaMesa,
   esperasDaMao,
   furitenDe,
-  lerMaoInformada,
   maoPodeTerMudado,
   registrarDescartes,
   salvarMaoInformada,
@@ -162,15 +167,59 @@ teste('notação de descartes: vários de uma vez, erro e 5 cópias', () => {
 })
 
 teste('esperas vêm da lógica da calculadora', () => {
-  assert.deepEqual(esperasDaMao(['1m', '2m', '3m', '4m', '5m', '6m', '7m', '8m', '9m', '1p', '2p', '3p', '4s'], []).sort(), ['4s'])
-  const lida = lerMaoInformada('123456789m123p4s')
-  assert.deepEqual(lida.mao?.esperas, ['4s'])
-  assert.equal(lerMaoInformada('123m').erro?.chave, 'match.discards.handNot13')
-  assert.equal(lerMaoInformada('1469m1469p1469s1z').erro?.chave, 'match.discards.handNotTenpai')
+  const pedras = ['1m', '2m', '3m', '4m', '5m', '6m', '7m', '8m', '9m', '1p', '2p', '3p', '4s']
+  assert.deepEqual(esperasDaMao(pedras, []), ['4s'])
 })
 
-teste('mão com chamada conta os slots', () => {
-  assert.deepEqual(lerMaoInformada('456m789p11s23s 123mc').mao?.esperas.sort(), ['1s', '4s'])
+teste('chamadas agrupam as últimas pedras escolhidas', () => {
+  assert.deepEqual(agruparChamada(['9s', '3m', '1m', '2m'], 'chii'), {
+    soltas: ['9s'],
+    meld: { tipo: 'chii', pedras: ['1m', '2m', '3m'] },
+  })
+  assert.equal(agruparChamada(['1m', '2m', '4m'], 'chii'), null)
+  assert.equal(agruparChamada(['1z', '2z', '3z'], 'chii'), null)
+  assert.deepEqual(agruparChamada(['5p', '0p', '5p'], 'pon')?.meld.tipo, 'pon')
+  assert.deepEqual(agruparChamada(['7z', '7z', '7z', '7z'], 'kanFechado')?.soltas, [])
+  assert.equal(agruparChamada(['7z', '7z', '7z'], 'kanAberto'), null)
+  const { meld, soltas } = agruparChamada(['4m', '5m', '6m', '7p', '8p', '9p', '1s', '1s', '2s', '3s', '1m', '2m', '3m'], 'chii')!
+  assert.deepEqual(esperasDaMao(soltas, [meld]).sort(), ['1s', '4s'])
+})
+
+teste('desfazer da mesa volta o descarte, a chamada e a vez juntos', () => {
+  const config = { ...configDoPreset('padrao'), timerVez: 30 as const }
+  let partida = criarPartida('p', config, ['a', 'b', 'c', 'd'], '2026-11-01T00:00:00.000Z')
+  partida = { ...partida, vez: passarVezPara(0, 30, 1000) }
+  partida = registrarDescartes(partida, 0, ['1m'], { riichi: false }, contexto('a'))
+  partida = chamarPedra(partida, 1, { cadeira: 2, tipo: 'pon' })
+  partida = { ...partida, vez: passarVezPara(2, 30, 2000) }
+  const lance = partida.registro?.lances[0]
+  assert.ok(lance?.tipo === 'descarte' && lance.chamadaPor?.jogadorId === 'c')
+  const voltou = desfazerUltimoDaMesa(partida, 3000)
+  assert.equal(voltou.registro?.lances.length, 0)
+  assert.equal(voltou.vez.cadeira, 0)
+})
+
+teste('Riichi pelo menu depois do descarte: o Desfazer tira o Riichi primeiro', () => {
+  let partida = registrarDescartes(novaPartida(), 0, ['1m'], { riichi: false }, contexto('a'))
+  partida = declararRiichi(partida, 1, contexto('r'))
+  const voltou = desfazerUltimoDaMesa(partida, 1000)
+  assert.equal(voltou.eventos.length, 0)
+  assert.equal(voltou.registro?.lances.length, 1)
+})
+
+teste('Yakuman reverso: valores e soma zero', () => {
+  const ko = pagamentosChombo('yakumanReverso', 1, 0)
+  assert.deepEqual(ko, { 0: 16000, 1: -32000, 2: 8000, 3: 8000 })
+  const oya = pagamentosChombo('yakumanReverso', 0, 0)
+  assert.deepEqual(oya, { 0: -48000, 1: 16000, 2: 16000, 3: 16000 })
+  const mangan = pagamentosChombo('manganReverso', 1, 0)
+  assert.deepEqual(mangan, { 0: 4000, 1: -8000, 2: 2000, 3: 2000 })
+  const config = { ...configDoPreset('padrao'), chombo: { tipo: 'yakumanReverso' as const } }
+  const partida = registrarChombo(criarPartida('p', config, ['a', 'b', 'c', 'd'], 'x'), 1, contexto('c'))
+  assert.equal(Object.values(partida.placar.pontos).reduce((a, b) => a + b, 0), 100000)
+  assert.equal(partida.placar.cadeiraDealer, 0)
+  assert.equal(partida.placar.honba, 0)
+  assert.equal(desfazer(partida).placar.pontos[1], 25000)
 })
 
 teste('Riichi marcado no descarte paga o palito e desfazer devolve', () => {

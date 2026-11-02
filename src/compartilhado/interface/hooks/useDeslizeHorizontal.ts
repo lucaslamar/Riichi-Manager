@@ -5,15 +5,6 @@ import { SELETOR_CAMADAS } from '../componentes/modal/pilhaCamadas'
 const DISTANCIA_MINIMA = 70
 /** O movimento tem que ser bem mais horizontal que vertical (não briga com a rolagem). */
 const PROPORCAO_HORIZONTAL = 1.5
-/** Faixa da borda esquerda reservada para abrir o menu (ver swipe-burger-menu.ts). */
-const BORDA_MENU = 30
-
-/** O menu só abre pela borda quando o burger está na tela (sem barra inferior). */
-function burgerVisivel(): boolean {
-  const burger = document.querySelector('.botao-menu-global[aria-controls="drawer-global"]')
-  return !!burger && burger.getClientRects().length > 0
-}
-
 /** Onde o toque não deve virar navegação: campos e áreas que rolam de lado. */
 export function toqueIgnorado(alvo: EventTarget | null): boolean {
   if (!(alvo instanceof Element)) return true
@@ -35,8 +26,7 @@ export function toqueIgnorado(alvo: EventTarget | null): boolean {
 /**
  * Deslize horizontal com o dedo pela tela para navegar entre telas.
  * `aoDeslizarDireita` = dedo indo para a direita; `aoDeslizarEsquerda` = para a
- * esquerda. Não age com janela (modal) ou menu abertos, nem quando o toque
- * começa na borda do menu (só onde há burger).
+ * esquerda. Não age com janela (modal) aberta.
  */
 export function useDeslizeHorizontal({
   ativo = true,
@@ -60,9 +50,7 @@ export function useDeslizeHorizontal({
       inicio = null
       if (evento.touches.length !== 1) return
       const toque = evento.touches[0]
-      if (toque.clientX <= BORDA_MENU && burgerVisivel()) return
       if (document.querySelector(SELETOR_CAMADAS)) return
-      if (document.body.classList.contains('drawer-global-aberto')) return
       if (toqueIgnorado(evento.target)) return
       inicio = { x: toque.clientX, y: toque.clientY }
     }

@@ -4,11 +4,7 @@
  */
 import { configuracaoPadrao } from '@/compartilhado/mahjong/pontuacao/configuracao'
 import { calcularEsperasPossiveis } from '@/dominios/calculadora-mao/logica/esperas'
-import {
-  interpretarNotacaoCompleta,
-  normalizarNotacao,
-  type ErroNotacao,
-} from '@/dominios/calculadora-mao/logica/notacao'
+import { gerarNotacaoCompleta } from '@/dominios/calculadora-mao/logica/notacao'
 import { contarSlotsLogicos } from '@/dominios/calculadora-mao/logica/ordenacao'
 import type { CodigoPedra, Mao, Meld } from '@/dominios/calculadora-mao/logica/tipos'
 import {
@@ -33,6 +29,7 @@ import {
   type Contexto,
   type Partida,
 } from './partida'
+import { passarVezPara } from './vez'
 
 const registroDe = (partida: Partida): RegistroMao => partida.registro ?? REGISTRO_VAZIO
 
@@ -44,6 +41,7 @@ export function registrarDescartes(
   contexto: Contexto,
 ): Partida {
   const registro = registroDe(partida)
+  const antes = { vezAntes: partida.vez, eventosAntes: partida.eventos.length }
   const jaDeitou = descartesDe(registro.lances, cadeira).some((descarte) => descarte.riichi)
   const emRiichi = partida.placar.riichi.includes(cadeira)
 
@@ -54,17 +52,24 @@ export function registrarDescartes(
       registro: adicionarDescartes(registro, cadeira, pedras, {
         indiceRiichi: pedras.length - 1,
         declarouRiichi: true,
+        antes,
       }),
     }
   }
 
   // Riichi declarado pelo menu: o próximo descarte é o que fica deitado.
   const indiceRiichi = emRiichi && !jaDeitou ? 0 : undefined
-  return { ...partida, registro: adicionarDescartes(registro, cadeira, pedras, { indiceRiichi }) }
+  return { ...partida, registro: adicionarDescartes(registro, cadeira, pedras, { indiceRiichi, antes }) }
 }
 
 export function registrarKakan(partida: Partida, cadeira: Cadeira, pedra: CodigoPedra): Partida {
-  return { ...partida, registro: adicionarKakan(registroDe(partida), cadeira, pedra) }
+  return {
+    ...partida,
+    registro: adicionarKakan(registroDe(partida), cadeira, pedra, {
+      vezAntes: partida.vez,
+      eventosAntes: partida.eventos.length,
+    }),
+  }
 }
 
 export function desfazerLance(partida: Partida, cadeira: Cadeira): Partida {
@@ -82,17 +87,46 @@ export function desfazerLance(partida: Partida, cadeira: Cadeira): Partida {
   return desfazRiichi ? desfazer(semLance) : semLance
 }
 
+/**
+ * O Desfazer da mesa: o que aconteceu por último, seja o descarte (com a chamada e
+ * a vez de antes dele) ou um evento da mesa, como um Riichi declarado pelo menu.
+ */
+export function desfazerUltimoDaMesa(partida: Partida, agora: number): Partida {
+  const { lances } = registroDe(partida)
+  const ultimo = lances[lances.length - 1]
+  if (!ultimo) return desfazer(partida)
+
+  const eventosDoLance =
+    (ultimo.eventosAntes ?? partida.eventos.length) +
+    (ultimo.tipo === 'descarte' && ultimo.declarouRiichi ? 1 : 0)
+  if (partida.eventos.length > eventosDoLance) return desfazer(partida)
+
+  const semLance = desfazerLance(partida, ultimo.cadeira)
+  const vez = ultimo.vezAntes
+  if (!vez) return semLance
+  return {
+    ...semLance,
+    vez:
+      vez.comecou && partida.config.timerVez > 0
+        ? passarVezPara(vez.cadeira, partida.config.timerVez, agora)
+        : vez,
+  }
+}
+
 export function chamarPedra(
   partida: Partida,
   ordem: number,
   chamada?: { cadeira: Cadeira; tipo: TipoChamada },
 ): Partida {
-  return { ...partida, registro: marcarChamada(registroDe(partida), ordem, chamada) }
+  return {
+    ...partida,
+    registro: marcarChamada(
+      registroDe(partida),
+      ordem,
+      chamada && { ...chamada, jogadorId: partida.assentos[chamada.cadeira].jogadorId },
+    ),
+  }
 }
-
-export type LeituraMao =
-  | { mao: Omit<MaoInformada, 'aposOrdem'>; erro: null }
-  | { mao: null; erro: ErroNotacao | { chave: 'match.discards.handNot13' | 'match.discards.handNotTenpai' } }
 
 /** Usa a mesma lógica de esperas da Calculadora de Mão, sem nada novo de regra. */
 export function esperasDaMao(pedras: CodigoPedra[], melds: Meld[]): CodigoPedra[] {
@@ -119,16 +153,33 @@ export function esperasDaMao(pedras: CodigoPedra[], melds: Meld[]): CodigoPedra[
   return [...new Set(esperas.map((espera) => pedraBase(espera.pedra)))]
 }
 
-export function lerMaoInformada(texto: string): LeituraMao {
-  const notacao = normalizarNotacao(texto)
-  const { pedras, melds, erro } = interpretarNotacaoCompleta(notacao, { akadora: true })
-  if (erro) return { mao: null, erro }
-  if (contarSlotsLogicos({ pedras, melds }) !== 13) {
-    return { mao: null, erro: { chave: 'match.discards.handNot13' } }
+/** Agrupa as últimas pedras escolhidas numa chamada, se elas formarem uma. */
+export function agruparChamada(
+  soltas: readonly CodigoPedra[],
+  tipo: Meld['tipo'],
+): { soltas: CodigoPedra[]; meld: Meld } | null {
+  const tamanho = tipo === 'kanAberto' || tipo === 'kanFechado' ? 4 : 3
+  if (soltas.length < tamanho) return null
+  const pedras = soltas.slice(-tamanho)
+  const resto = soltas.slice(0, -tamanho)
+  const bases = pedras.map(pedraBase)
+  if (tipo === 'chii') {
+    if (bases.some((base) => base[1] === 'z' || base[1] !== bases[0][1])) return null
+    const ordenadas = [...pedras].sort((a, b) => pedraBase(a).localeCompare(pedraBase(b)))
+    const numeros = ordenadas.map((pedra) => Number(pedraBase(pedra)[0]))
+    if (numeros[1] !== numeros[0] + 1 || numeros[2] !== numeros[1] + 1) return null
+    return { soltas: resto, meld: { tipo, pedras: ordenadas } }
   }
-  const esperas = esperasDaMao(pedras, melds)
-  if (esperas.length === 0) return { mao: null, erro: { chave: 'match.discards.handNotTenpai' } }
-  return { mao: { notacao, pedras, melds, esperas }, erro: null }
+  if (bases.some((base) => base !== bases[0])) return null
+  return { soltas: resto, meld: { tipo, pedras } }
+}
+
+export function montarMaoInformada(
+  pedras: CodigoPedra[],
+  melds: Meld[],
+  esperas: CodigoPedra[],
+): Omit<MaoInformada, 'aposOrdem'> {
+  return { notacao: gerarNotacaoCompleta(pedras, -1, melds), pedras, melds, esperas }
 }
 
 export function salvarMaoInformada(

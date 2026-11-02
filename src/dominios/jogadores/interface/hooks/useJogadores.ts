@@ -6,6 +6,7 @@ import {
   definirArquivado,
   editarJogador,
   garantirPorNomes,
+  removerJogador,
   type DadosJogador,
   type Jogador,
   type ResultadoJogador,
@@ -48,6 +49,9 @@ const acoes = {
   editar: (id: string, dados: DadosJogador) => aplicar(editarJogador(lerCadastro(), id, dados)),
   arquivar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, true)),
   restaurar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, false)),
+  excluir: (id: string) => definirCadastro(removerJogador(lerCadastro(), id)),
+  /** Desfazer da exclusão: o jogador volta como estava. */
+  devolver: (jogador: Jogador) => definirCadastro([...lerCadastro(), jogador]),
 }
 
 /** Ids de uma lista de nomes, cadastrando quem faltar. Usado pelas migrações. */

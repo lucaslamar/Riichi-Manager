@@ -8,6 +8,7 @@ import assert from 'node:assert/strict'
 import { configDoPreset, alterarConfig, type ConfigMesa } from '../src/dominios/centerpiece/logica/configMesa'
 import {
   ajustarHonba,
+  giroDaMesa,
   normalizarSimples,
   proximoDealer,
   repetirDealer,
@@ -54,7 +55,8 @@ function teste(nome: string, corpo: () => void) {
 
 const IDS = ['a', 'b', 'c', 'd'] as const
 const CTX = { id: 'e', agora: '2026-11-01T12:00:00.000Z' }
-const nova = (config: ConfigMesa = configDoPreset('padrao')) => criarPartida('p', config, IDS, CTX.agora)
+const HANCHAN = alterarConfig(configDoPreset('padrao'), { tipoPartida: 'hanchan', timerVez: 30 })
+const nova = (config: ConfigMesa = HANCHAN) => criarPartida('p', config, IDS, CTX.agora)
 const pontos = (p: Partida) => [p.placar.pontos[0], p.placar.pontos[1], p.placar.pontos[2], p.placar.pontos[3]]
 const soma = (p: Partida) => pontos(p).reduce((a, b) => a + b, 0) + p.placar.palitos * 1000
 
@@ -197,7 +199,7 @@ teste('Hanchan acaba no Sul 4', () => {
 teste('tobi encerra; sem a regra, segue com negativo', () => {
   const ron = { pagador: 2 as const, vencedores: [{ cadeira: 1 as const, pontos: 32000 }] }
   assert.equal(registrarRon(nova(), ron, CTX).fim, 'tobi')
-  const semTobi = nova(alterarConfig(configDoPreset('padrao'), { tobi: false }))
+  const semTobi = nova(alterarConfig(HANCHAN, { tobi: false }))
   assert.equal(registrarRon(semTobi, ron, CTX).fim, undefined)
 })
 
@@ -418,7 +420,16 @@ teste('migração: mesa não iniciada, inválida ou ilegível não vira partida'
 
 teste('migração: pontos iniciais diferentes viram Personalizado', () => {
   assert.equal(migrar({ ...mesaAntiga, pontosIniciais: 30000 })?.config.preset, 'personalizado')
-  assert.equal(migrar(mesaAntiga)?.config.preset, 'padrao')
+  assert.equal(migrar(mesaAntiga)?.config.tipoPartida, 'hanchan')
+})
+
+teste('a mesa gira ao contrário da tela e começa reta', () => {
+  assert.equal(giroDaMesa(0, 0), 0)
+  assert.equal(giroDaMesa(0, 90), 270)
+  assert.equal(giroDaMesa(0, 270), 90)
+  assert.equal(giroDaMesa(90, 90), 0)
+  assert.equal(giroDaMesa(90, 0), 90)
+  assert.equal(giroDaMesa(90, 270), 180)
 })
 
 console.log(`Partida ok: ${testes} testes.`)

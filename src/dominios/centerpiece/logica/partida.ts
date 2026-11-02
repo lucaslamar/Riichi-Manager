@@ -5,8 +5,10 @@
  * o card não troca de lugar ao passar o dealer, só o kanji, a cor e o destaque.
  * Cadeiras em ordem de turno: 0 embaixo, 1 à direita, 2 em cima, 3 à esquerda.
  */
+import { pagamentosChombo } from './aplicarChombo'
 import { calcularOka, type ConfigMesa } from './configMesa'
 import { desmarcarRiichi, type Lance, type RegistroMao } from './descartes'
+import type { MaoMontada } from './tipos-integracao'
 import { vezInicial, type EstadoVez } from './vez'
 
 export type Cadeira = 0 | 1 | 2 | 3
@@ -52,6 +54,8 @@ export interface DetalheEvento {
   nagashi?: Cadeira[]
   abortivo?: TipoAbortivo
   cadeira?: Cadeira
+  /** Mãos vindas de "Montar mão", como foram salvas na hora da batida. */
+  maosMontadas?: { cadeira: Cadeira; montada: MaoMontada }[]
   /** Chombo de valor fixo: sai da pontuação final, depois da uma. */
   multa?: { cadeira: Cadeira; valor: number }
 }
@@ -85,7 +89,8 @@ export interface ResultadoFinal {
 export interface Partida {
   id: string
   config: ConfigMesa
-  assentos: PorCadeira<{ jogadorId: string; ventoInicial: Vento }>
+  /** `nome`: como o jogador se chamava, para o histórico sobreviver à exclusão. */
+  assentos: PorCadeira<{ jogadorId: string; ventoInicial: Vento; nome?: string }>
   placar: Placar
   eventos: EventoPartida[]
   vez: EstadoVez
@@ -99,6 +104,8 @@ export interface Partida {
   /** Dealer em 1º na última mão: a pessoa escolhe encerrar ou seguir. */
   agariYameDisponivel?: boolean
   resultado?: ResultadoFinal[]
+  /** Jogada fora do app: só tem o resultado, sem mãos. */
+  registradaManual?: boolean
   /** Índices base zero na grade. `guardada`: o organizador conferiu e confirmou. */
   vinculoTorneio?: { torneioId: string; rodada: number; mesa: number; guardada?: boolean }
 }
@@ -121,6 +128,7 @@ export function criarPartida(
   config: ConfigMesa,
   jogadorIds: readonly [string, string, string, string],
   agora: string,
+  nomes?: readonly string[],
 ): Partida {
   return {
     id,
@@ -128,6 +136,7 @@ export function criarPartida(
     assentos: porCadeira((cadeira) => ({
       jogadorId: jogadorIds[cadeira],
       ventoInicial: ORDEM_VENTOS[cadeira],
+      ...(nomes?.[cadeira] ? { nome: nomes[cadeira] } : {}),
     })),
     placar: {
       pontos: porCadeira(() => config.pontosPartida),
@@ -283,6 +292,7 @@ export interface VencedorRon {
   han?: number
   fu?: number
   yakuman?: number
+  montada?: MaoMontada
 }
 
 /**
@@ -323,11 +333,19 @@ export function registrarRon(
         vencedores: cadeiras,
         pagador,
         ...(unico ? { han: unico.han, fu: unico.fu, yakuman: unico.yakuman } : {}),
+        ...maosDosVencedores(vencedores),
       },
     },
     contexto,
     { dealerManteve: dealerVenceu, honba: dealerVenceu ? antes.honba + 1 : 0, palitos: 0 },
   )
+}
+
+function maosDosVencedores(vencedores: readonly { cadeira: Cadeira; montada?: MaoMontada }[]) {
+  const maosMontadas = vencedores.flatMap(({ cadeira, montada }) =>
+    montada ? [{ cadeira, montada }] : [],
+  )
+  return maosMontadas.length > 0 ? { maosMontadas } : {}
 }
 
 export function registrarTsumo(
@@ -340,6 +358,7 @@ export function registrarTsumo(
     han?: number
     fu?: number
     yakuman?: number
+    montada?: MaoMontada
   },
   contexto: Contexto,
 ): Partida {
@@ -358,7 +377,13 @@ export function registrarTsumo(
     {
       tipo: 'tsumo',
       variacao,
-      detalhe: { vencedores: [vencedor], han: dados.han, fu: dados.fu, yakuman: dados.yakuman },
+      detalhe: {
+        vencedores: [vencedor],
+        han: dados.han,
+        fu: dados.fu,
+        yakuman: dados.yakuman,
+        ...maosDosVencedores([{ cadeira: vencedor, montada: dados.montada }]),
+      },
     },
     contexto,
     { dealerManteve: dealerVenceu, honba: dealerVenceu ? antes.honba + 1 : 0, palitos: 0 },
@@ -423,15 +448,16 @@ export function registrarAbortivo(partida: Partida, abortivo: TipoAbortivo, cont
 
 /**
  * Chombo: a mão é repetida, sem honba nem troca de dealer, e os palitos desta mão
- * voltam para quem declarou Riichi. Mangan reverso paga na hora; o valor fixo só
+ * voltam para quem declarou Riichi. Mangan e Yakuman reverso pagam na hora; o valor fixo só
  * sai da pontuação final.
  */
 export function registrarChombo(partida: Partida, cadeira: Cadeira, contexto: Contexto): Partida {
   const antes = partida.placar
   const { chombo } = partida.config
-  const variacao = chombo.tipo === 'manganReverso'
-    ? porCadeira((outra) => -pagamentosNagashi([cadeira], antes.cadeiraDealer)[outra])
-    : porCadeira(() => 0)
+  const variacao =
+    chombo.tipo === 'fixo'
+      ? porCadeira(() => 0)
+      : pagamentosChombo(chombo.tipo, cadeira, antes.cadeiraDealer)
   for (const quem of antes.riichi) variacao[quem] += 1000
 
   return fecharMao(

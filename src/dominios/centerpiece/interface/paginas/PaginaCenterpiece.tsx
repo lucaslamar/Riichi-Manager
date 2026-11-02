@@ -1,16 +1,19 @@
-import { useState } from 'react'
+import { useRef, useState, type RefObject } from 'react'
+import { useGestoHorizontal } from '@/compartilhado/interface/hooks/useGestoHorizontal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogadores'
 import { CADEIRAS, KANJI_VENTO } from '../../logica/partida'
+import { usoDoJogadorNasPartidas } from '../../logica/ranking'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import { usePartidas } from '../hooks/usePartidas'
 import CenterpieceSimples from './CenterpieceSimples'
 import PaginaHistorico from './PaginaHistorico'
 import PaginaRanking from './PaginaRanking'
 import PlacarPartida from './PlacarPartida'
+import RegistrarFinalizada from './RegistrarFinalizada'
 import SetupPartida from './SetupPartida'
 import '../mesa.css'
 import '../partida.css'
@@ -18,6 +21,7 @@ import '../partida.css'
 type TelaModulo =
   | { nome: 'inicio' }
   | { nome: 'setup' }
+  | { nome: 'registrarFinalizada' }
   | { nome: 'simples' }
   | { nome: 'andamento' }
   | { nome: 'jogadores' }
@@ -26,26 +30,46 @@ type TelaModulo =
   | { nome: 'mesa'; id: string }
 
 /** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
-export default function PaginaCenterpiece({
-  aoAbrirSorteador,
-}: {
-  aoAbrirSorteador: () => void
-}) {
+export default function PaginaCenterpiece(props: PropsCenterpiece) {
+  const raiz = useRef<HTMLElement | null>(null)
   return (
-    <section className="ptd-modulo">
-      <TelasCenterpiece aoAbrirSorteador={aoAbrirSorteador} />
+    <section ref={raiz} className="ptd-modulo">
+      <TelasCenterpiece {...props} raiz={raiz} />
     </section>
   )
 }
 
+interface PropsCenterpiece {
+  aoAbrirSorteador: () => void
+  /** Vizinhos na barra inferior, para o deslize no menu do módulo. */
+  aoTelaAnterior?: () => void
+  aoProximaTela?: () => void
+}
+
+/** Borda esquerda de onde o deslize volta ao menu, sem brigar com o resto da tela. */
+const BORDA_VOLTAR = 24
+
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
-function TelasCenterpiece({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }) {
+function TelasCenterpiece({
+  aoAbrirSorteador,
+  aoTelaAnterior,
+  aoProximaTela,
+  raiz,
+}: PropsCenterpiece & { raiz: RefObject<HTMLElement | null> }) {
   const { t } = useI18n()
-  const { partidas, abertas, descartar } = usePartidas()
+  const { partidas, abertas, descartar, guardarNome } = usePartidas()
   const { jogadores } = useJogadores()
   const [tela, setTela] = useState<TelaModulo>({ nome: 'inicio' })
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
   const irInicio = () => setTela({ nome: 'inicio' })
+
+  // No menu segue o carrossel da barra inferior; dentro, a borda esquerda volta ao menu.
+  useGestoHorizontal({
+    alvo: raiz,
+    bordaEsquerda: tela.nome === 'inicio' ? undefined : BORDA_VOLTAR,
+    aoDireita: tela.nome === 'inicio' ? aoTelaAnterior : irInicio,
+    aoEsquerda: tela.nome === 'inicio' ? aoProximaTela : undefined,
+  })
 
   const nomesDa = (id: string) => {
     const partida = partidas.find((item) => item.id === id)
@@ -58,6 +82,11 @@ function TelasCenterpiece({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }
 
   if (tela.nome === 'setup') {
     return <SetupPartida aoVoltar={irInicio} aoIniciar={(id) => setTela({ nome: 'mesa', id })} />
+  }
+  if (tela.nome === 'registrarFinalizada') {
+    return (
+      <RegistrarFinalizada aoVoltar={irInicio} aoRegistrar={() => setTela({ nome: 'historico' })} />
+    )
   }
   if (tela.nome === 'simples') return <CenterpieceSimples aoVoltar={irInicio} aoAbrirSorteador={aoAbrirSorteador} />
   if (tela.nome === 'mesa') {
@@ -74,7 +103,21 @@ function TelasCenterpiece({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }
       )
     }
   }
-  if (tela.nome === 'jogadores') return <PaginaJogadores aoVoltar={irInicio} />
+  if (tela.nome === 'jogadores') {
+    return (
+      <PaginaJogadores
+        aoVoltar={irInicio}
+        usoDoJogador={(id) => {
+          const uso = usoDoJogadorNasPartidas(partidas, id)
+          return {
+            partidasFinalizadas: uso.partidasFinalizadas,
+            mesasAbertas: uso.mesasAbertas.map((numero) => t('match.table.number', { number: numero })),
+          }
+        }}
+        aoExcluir={(jogador) => guardarNome(jogador.id, nomeExibido(jogador))}
+      />
+    )
+  }
   if (tela.nome === 'historico') return <PaginaHistorico aoVoltar={irInicio} />
   if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
 
@@ -137,6 +180,13 @@ function TelasCenterpiece({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }
     aoTocar: () => void
   }[] = [
     {
+      chave: 'simples',
+      icone: 'fa-border-all',
+      titulo: t('match.simple.title'),
+      texto: t('match.home.simpleHelp'),
+      aoTocar: () => setTela({ nome: 'simples' }),
+    },
+    {
       chave: 'nova',
       icone: 'fa-plus',
       titulo: t('match.home.newGame'),
@@ -144,11 +194,11 @@ function TelasCenterpiece({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }
       aoTocar: () => setTela({ nome: 'setup' }),
     },
     {
-      chave: 'simples',
-      icone: 'fa-border-all',
-      titulo: t('match.simple.title'),
-      texto: t('match.home.simpleHelp'),
-      aoTocar: () => setTela({ nome: 'simples' }),
+      chave: 'registrarFinalizada',
+      icone: 'fa-clipboard-check',
+      titulo: t('match.manual.title'),
+      texto: t('match.manual.help'),
+      aoTocar: () => setTela({ nome: 'registrarFinalizada' }),
     },
     {
       chave: 'andamento',

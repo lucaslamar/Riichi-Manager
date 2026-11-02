@@ -5,7 +5,6 @@ import { removerMao, type MaoInformada, type TipoChamada } from '../../logica/de
 import type { Cadeira, Partida } from '../../logica/partida'
 import {
   chamarPedra,
-  desfazerLance,
   registrarDescartes,
   registrarKakan,
   salvarMaoInformada,
@@ -24,7 +23,6 @@ export function useDescartes(atualizar: (transformar: (partida: Partida) => Part
         ),
       kakan: (cadeira: Cadeira, pedra: CodigoPedra) =>
         atualizar((atual) => registrarKakan(atual, cadeira, pedra)),
-      desfazer: (cadeira: Cadeira) => atualizar((atual) => desfazerLance(atual, cadeira)),
       chamar: (ordem: number, chamada?: { cadeira: Cadeira; tipo: TipoChamada }) =>
         atualizar((atual) => chamarPedra(atual, ordem, chamada)),
       informarMao: (cadeira: Cadeira, mao: Omit<MaoInformada, 'aposOrdem'>) =>

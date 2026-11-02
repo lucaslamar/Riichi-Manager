@@ -96,8 +96,7 @@
 
 /* Cabeçalho e barra inferior: o tom mais escuro. */
 :root[data-tema='escuro'] .cabecalho-principal,
-:root[data-tema='escuro'] .barra-navegacao-inferior,
-:root[data-tema='escuro'] .drawer-global {
+:root[data-tema='escuro'] .barra-navegacao-inferior {
   background: var(--cor-nav);
 }
 

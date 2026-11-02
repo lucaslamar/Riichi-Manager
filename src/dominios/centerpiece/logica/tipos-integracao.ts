@@ -1,6 +1,7 @@
 import type { ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import type { ResultadoPontuacaoHanFu } from '@/dominios/calculadora-han-fu/logica/tipos'
-import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
+import type { Mao, VentoMao } from '@/dominios/calculadora-mao/logica/mao'
+import { gerarNotacaoCompleta } from '@/dominios/calculadora-mao/logica/notacao'
 
 export interface ResultadoCalculoParaCenterpiece {
   origem?: 'calculadora-mao' | 'calculadora-han-fu'
@@ -17,6 +18,23 @@ export interface ResultadoCalculoParaCenterpiece {
   categoria?: string
   honbaUsado?: number
   incluiHonba: boolean
+  /** Só em "Montar mão": a mão como foi calculada, para o histórico. */
+  maoMontada?: MaoMontada
+}
+
+/** Só dados: o histórico mostra isto sem recalcular nada. */
+export interface MaoMontada {
+  notacao: string
+  mao: Mao
+  resultado: ResultadoMao
+}
+
+export function montarMaoParaHistorico(mao: Mao, resultado: ResultadoMao): MaoMontada {
+  return {
+    notacao: gerarNotacaoCompleta(mao.pedras, mao.indiceAgari, mao.melds),
+    mao,
+    resultado,
+  }
 }
 
 /** O que a Calculadora de Mão recebe quando é aberta pelo modal de batida. */

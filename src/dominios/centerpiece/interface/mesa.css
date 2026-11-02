@@ -33,29 +33,53 @@
   }
 }
 
-/* iPhone SE: sem barra inferior, mas o conteúdo principal guarda 18px embaixo. */
-@media (max-width: 374px) and (orientation: portrait) and (min-aspect-ratio: 1 / 2) {
-  .mesa-tela {
-    --mesa-altura-cabecalho: 71px;
-    padding-block: 6px;
-  }
-}
-
 /* O simples tem mais botões: a mesa encolhe, sem passar do mínimo legível. */
 .mesa-tela--simples {
-  --mesa-altura-acoes: 296px;
+  --mesa-altura-acoes: 56px;
+  position: relative;
 }
 
-.mesa-tela--simples .mesa-feltro {
-  min-width: 200px;
+.mesa-feltro--tocavel {
+  cursor: pointer;
+}
+
+.mesa-simples-ajuda {
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  z-index: 1;
+}
+
+.mesa-simples-ajuda .ajuda-campo {
+  margin: 0;
+}
+
+.mesa-simples-dica {
+  margin: 12px 0 0;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mesa-simples-acoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mesa-simples-acoes .mesa-btn-principal,
+.mesa-simples-acoes .mesa-honba {
+  grid-column: 1 / -1;
 }
 
 /* ─── Feltro e painel ─────────────────────────────────────────────────────── */
 .mesa-feltro {
   box-sizing: border-box;
   /* Quadrado que cabe na altura livre entre o cabeçalho e as ações. */
-  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 172px)));
-  min-width: 260px;
+  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 152px)));
+  max-width: 620px;
+  min-width: 200px;
   aspect-ratio: 1;
   border-radius: 7%;
   padding: 4%;
@@ -342,14 +366,34 @@ button.mesa-domo {
   font-weight: 800;
 }
 
-.mesa-placa-furiten {
-  flex: 0 0 auto;
-  border-radius: 3px;
-  padding: 0 3px;
-  color: var(--led-fundo);
-  background: var(--led-timer);
+/* Ícone pequeno; a área de toque de 44px vem do ::after. */
+.mesa-placa-checagem {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  z-index: 1;
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  color: var(--led-timer);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
   font-size: 0.75rem;
-  font-weight: 800;
+}
+
+.mesa-placa-checagem::after {
+  content: '';
+  position: absolute;
+  inset: -13px;
+}
+
+.mesa-placa-checagem--com-timer {
+  right: 52px;
 }
 
 .mesa-placa-pontos {
@@ -443,48 +487,6 @@ button.mesa-domo {
   box-shadow: 0 0 14px 2px var(--cor-vez);
 }
 
-/* ─── Modo lista ──────────────────────────────────────────────────────────── */
-.mesa-lista {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  container-type: inline-size;
-}
-
-.mesa-lista-placas {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.mesa-lista-item {
-  position: relative;
-  height: 92px;
-}
-
-/* A ranhura sobe para a linha do nome, sem cobrir os pontos. */
-.mesa-lista-item .mesa-ranhura {
-  top: 8px;
-  right: 8px;
-  bottom: auto;
-  left: auto;
-  width: 68px;
-  height: 16px;
-  font-size: 0.75rem;
-}
-
-.mesa-lista-item .mesa-placa-topo {
-  width: calc(100% - 68px);
-}
-
-/* Com o timer, a placa já abriu mão de quase toda a largura da ranhura. */
-.mesa-lista-item .mesa-placa:has(.mesa-timer) .mesa-placa-topo {
-  width: calc(100% - 26px);
-}
-
 /* ─── Ações ───────────────────────────────────────────────────────────────── */
 .mesa-acoes {
   display: flex;
@@ -557,19 +559,6 @@ button.mesa-domo {
   opacity: 0.6;
 }
 
-.mesa-alternar-modo {
-  align-self: center;
-  min-height: 44px;
-  border: 0;
-  padding: 0 12px;
-  color: var(--texto-apoio);
-  background: transparent;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-
 .mesa-honba {
   display: flex;
   align-items: center;
@@ -579,66 +568,76 @@ button.mesa-domo {
   font-weight: 800;
 }
 
-/* Simples: a pilha vira grade para caber sem rolar. */
-.mesa-tela--simples .mesa-acoes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.mesa-tela--simples .mesa-honba,
-.mesa-tela--simples .mesa-btn-principal,
-.mesa-tela--simples .mesa-alternar-modo {
-  grid-column: 1 / -1;
-}
-
-.mesa-tela--simples .mesa-alternar-modo {
-  justify-self: center;
-}
-
-/* Tablet deitado e desktop: mesa à esquerda e botões à direita. */
-@media (min-width: 1024px) and (orientation: landscape) and (min-height: 501px) {
+/* Deitado: mesa de um lado, ações do outro, dimensionada pelo menor lado livre. */
+@media (orientation: landscape) {
+  .mesa-tela,
   .mesa-tela--simples {
-    --mesa-altura-acoes: 40px;
-    display: grid;
-    width: min(100%, 980px);
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
-    align-items: center;
-    gap: 20px;
-  }
-}
-
-/* Celular deitado: placas à esquerda e ações à direita, tudo sem rolar. */
-@media (orientation: landscape) and (max-height: 500px) {
-  .mesa-tela {
-    --mesa-altura-acoes: 40px;
+    --mesa-lado: min(620px, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - 20px));
     display: grid;
     width: 100%;
-    max-width: 900px;
-    grid-template-columns: minmax(0, 1.4fr) minmax(220px, 1fr);
+    max-width: none;
+    grid-template-columns: var(--mesa-lado) minmax(200px, 340px);
     align-items: center;
-    gap: 12px;
-    padding-block: 6px;
+    justify-content: center;
+    gap: 16px;
+    padding-block: 10px;
   }
 
   .mesa-tela > :not(.mesa-centro-tela, .mesa-acoes) {
     grid-column: 1 / -1;
   }
 
-  .mesa-feltro {
+  .mesa-feltro,
+  .mesa-tela--simples .mesa-feltro {
+    width: 100%;
     min-width: 0;
   }
 
-  .mesa-lista {
-    gap: 6px;
+  /* O simples só tem a mesa, no meio da tela. */
+  .mesa-tela--simples {
+    grid-template-columns: var(--mesa-lado);
   }
 
-  .mesa-lista .mesa-domo {
-    width: 64px;
-    height: 64px;
+  .mesa-simples-dica {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    max-width: calc((100% - var(--mesa-lado)) / 2 - 16px);
+    margin: 0;
+    text-align: right;
   }
 
-  .mesa-lista-item {
-    height: 88px;
+  /* Botões um embaixo do outro. */
+  .mesa-linha-acoes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mesa-linha-acoes > button {
+    min-height: 44px;
+    flex-direction: row;
+    gap: 8px;
+  }
+}
+
+/* Sidebar: o conteúdo principal tem margem própria em cima e embaixo. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .mesa-tela {
+    min-height: calc(100dvh - 72px);
+  }
+}
+
+/* Celular deitado: menos altura para os botões. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mesa-tela {
+    --mesa-altura-cabecalho: 46px;
+    gap: 12px;
+    padding-block: 6px;
+  }
+
+  .mesa-tela,
+  .mesa-tela--simples {
+    --mesa-lado: calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - 12px);
   }
 
   .mesa-acoes {
@@ -650,18 +649,18 @@ button.mesa-domo {
   }
 
   .mesa-linha-acoes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
   }
 
-  .mesa-linha-acoes > button {
-    min-height: 44px;
-    flex-direction: row;
-    gap: 6px;
+  .mesa-placa-pontos {
+    font-size: max(1.125rem, 8cqw);
   }
 
-  .mesa-alternar-modo {
-    min-height: 44px;
+  .mesa-timer {
+    width: 34px;
+    height: 34px;
+    margin-right: 2px;
+    font-size: 0.8125rem;
   }
 }
 
@@ -673,4 +672,11 @@ button.mesa-domo {
   justify-content: center;
   gap: 8px;
   margin-top: 12px;
+}
+
+/* Absoluto dentro da grade, ele se mediria pela coluna da mesa. */
+@media (orientation: landscape) {
+  .mesa-tela > .mesa-simples-ajuda {
+    grid-column: auto;
+  }
 }

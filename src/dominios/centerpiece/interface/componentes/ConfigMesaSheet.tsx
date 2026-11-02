@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import {
   calcularOka,
@@ -9,6 +10,7 @@ import {
   VALOR_CHOMBO_FIXO_PADRAO,
   type ConfigMesa,
 } from '../../logica/configMesa'
+import { exemploPontuacao } from '../../logica/exemploPontuacao'
 import { useConfigMesa } from '../hooks/useConfigMesa'
 import '../config-mesa.css'
 
@@ -65,6 +67,7 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           <option value="personalizado">{t('tableConfig.presets.personalizado')}</option>
         </select>
       </Campo>
+      {config.preset === 'padrao' && <p className="cfg-ajuda">{t('tableConfig.presetDefaultHelp')}</p>}
 
       <h3 className="cfg-grupo">{t('tableConfig.scoring')}</h3>
 
@@ -77,7 +80,14 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
             aoMudar={(pontosPartida) => alterar({ pontosPartida })}
           />
         </Campo>
-        <Campo rotulo={t('tableConfig.returnPoints')}>
+        <Campo
+          rotulo={t('tableConfig.returnPoints')}
+          ajuda={
+            <AjudaCampo rotulo={t('tableConfig.returnPoints')}>
+              <AjudaRetorno config={config} />
+            </AjudaCampo>
+          }
+        >
           <CampoNumero
             valor={config.pontosRetorno}
             passo={1000}
@@ -86,10 +96,20 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           />
         </Campo>
       </div>
-      <p className="cfg-ajuda">{t('tableConfig.okaValue', { points: numero(oka) })}</p>
+      <p className="cfg-ajuda cfg-ajuda--com-botao">
+        {t('tableConfig.okaValue', { points: numero(oka) })}
+        <AjudaCampo rotulo={t('tableConfig.okaLabel')}>
+          <p>{t('tableConfig.okaHelp')}</p>
+        </AjudaCampo>
+      </p>
 
       <fieldset className="cfg-conjunto">
-        <legend>{t('tableConfig.uma')}</legend>
+        <legend className="cfg-legenda-com-botao">
+          {t('tableConfig.uma')}
+          <AjudaCampo rotulo={t('tableConfig.umaLabel')}>
+            <p>{t('tableConfig.umaHelp')}</p>
+          </AjudaCampo>
+        </legend>
         <div className="cfg-uma">
           {config.uma.map((valor, indice) => (
             <Campo key={CHAVE_LUGAR[indice]} rotulo={t(CHAVE_LUGAR[indice])}>
@@ -113,7 +133,14 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         )}
       </fieldset>
 
-      <Campo rotulo={t('tableConfig.leftoverSticks')}>
+      <Campo
+        rotulo={t('tableConfig.leftoverSticks')}
+        ajuda={
+          <AjudaCampo rotulo={t('tableConfig.leftoverSticks')}>
+            <p>{t('tableConfig.leftoverHelp')}</p>
+          </AjudaCampo>
+        }
+      >
         <select
           className="cfg-entrada"
           value={config.palitosRestantes}
@@ -135,11 +162,12 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
               chombo:
                 evento.target.value === 'fixo'
                   ? { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO }
-                  : { tipo: 'manganReverso' },
+                  : { tipo: evento.target.value as 'manganReverso' | 'yakumanReverso' },
             })
           }
         >
           <option value="manganReverso">{t('tableConfig.chomboReverseMangan')}</option>
+          <option value="yakumanReverso">{t('tableConfig.chomboReverseYakuman')}</option>
           <option value="fixo">{t('tableConfig.chomboFixed')}</option>
         </select>
       </Campo>
@@ -239,18 +267,111 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       <Opcao
         rotulo={t('tableConfig.recordDiscards')}
         marcado={config.registrarDescartes}
-        aoMudar={(registrarDescartes) => alterar({ registrarDescartes })}
+        aoMudar={(registrarDescartes) =>
+          alterar({ registrarDescartes, checarFuriten: registrarDescartes && config.checarFuriten })
+        }
       />
+      {config.registrarDescartes && (
+        <Opcao
+          rotulo={t('tableConfig.checkFuriten')}
+          ajuda={t('tableConfig.checkFuritenHelp')}
+          marcado={config.checarFuriten}
+          aoMudar={(checarFuriten) => alterar({ checarFuriten })}
+        />
+      )}
     </Modal>
   )
 }
 
-function Campo({ rotulo, children }: { rotulo: string; children: ReactNode }) {
+function Campo({
+  rotulo,
+  ajuda,
+  children,
+}: {
+  rotulo: string
+  ajuda?: ReactNode
+  children: ReactNode
+}) {
   return (
     <label className="cfg-campo">
-      <span>{rotulo}</span>
+      <span className="cfg-campo-rotulo">
+        {rotulo}
+        {ajuda}
+      </span>
       {children}
     </label>
+  )
+}
+
+/** Texto com **destaque** vindo dos locales. */
+function TextoComDestaque({ texto }: { texto: string }) {
+  return (
+    <p>
+      {texto.split('**').map((parte, indice) =>
+        indice % 2 === 1 ? <strong key={indice}>{parte}</strong> : parte,
+      )}
+    </p>
+  )
+}
+
+/** Ajuda de Pontos de retorno; o exemplo usa os valores que estão na tela. */
+function AjudaRetorno({ config }: { config: ConfigMesa }) {
+  const { t, numero } = useI18n()
+  const oka = calcularOka(config)
+  const comSinal = (valor: number) => (valor > 0 ? `+${numero(valor)}` : numero(valor))
+  return (
+    <div className="cfg-ajuda-texto">
+      <p>{t('tableConfig.returnHelp1')}</p>
+      <TextoComDestaque texto={t('tableConfig.returnHelp2')} />
+      {oka > 0 ? (
+        <p>
+          {t('tableConfig.returnHelpOka', {
+            start: numero(config.pontosPartida),
+            target: numero(config.pontosRetorno),
+            each: numero(oka / 4),
+            oka: numero(oka),
+          })}
+        </p>
+      ) : (
+        <p>{t('tableConfig.returnHelpNoOka')}</p>
+      )}
+      <p>
+        <strong>{t('tableConfig.returnExample')}</strong>{' '}
+        {t('tableConfig.returnExampleValues', {
+          start: numero(config.pontosPartida),
+          target: numero(config.pontosRetorno),
+          uma: config.uma.join(' / '),
+        })}
+      </p>
+      <table className="cfg-tabela-exemplo">
+        <thead>
+          <tr>
+            <th scope="col">
+              <span className="sr-only">{t('tableConfig.exPlace')}</span>
+            </th>
+            <th scope="col">{t('tableConfig.exPoints')}</th>
+            <th scope="col">{t('tableConfig.exReturn')}</th>
+            <th scope="col">{t('tableConfig.exUma')}</th>
+            {oka > 0 && <th scope="col">{t('tableConfig.exOka')}</th>}
+            <th scope="col">{t('tableConfig.exFinal')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {exemploPontuacao(config).map((linha) => (
+            <tr key={linha.colocacao}>
+              <th scope="row">{t('match.result.place', { place: linha.colocacao })}</th>
+              <td>{numero(linha.pontos)}</td>
+              <td>{comSinal(linha.menosRetorno)}</td>
+              <td>{comSinal(linha.uma)}</td>
+              {oka > 0 && <td>{linha.oka > 0 ? comSinal(linha.oka) : ''}</td>}
+              <td>
+                <strong>{comSinal(linha.final)}</strong>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

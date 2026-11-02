@@ -14,7 +14,6 @@ import './compartilhado/interface/estilos/index.css'
 import App from './app/App'
 import { I18nProvider } from './compartilhado/i18n/I18nProvider'
 import { PreferenciasProvider } from './compartilhado/preferencias/PreferenciasProvider'
-import { initSwipeBurger } from './swipe-burger-menu.ts'
 
 // Seleciona o elemento raiz. O `!` diz ao TypeScript que temos certeza que ele existe.
 const elementoRaiz = document.getElementById('app')!
@@ -30,9 +29,3 @@ createRoot(elementoRaiz).render(
   </StrictMode>,
 )
 
-initSwipeBurger({
-  // Só o burger do menu: a seta de voltar usa a mesma classe e não deve ser clicada.
-  burgerSelector: '.botao-menu-global[aria-controls="drawer-global"]',
-  swipeThreshold: 50,
-  edgeZone: 30,
-})

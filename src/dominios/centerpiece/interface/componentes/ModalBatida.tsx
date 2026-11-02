@@ -7,10 +7,8 @@ import {
   type Cadeira,
   type Partida,
 } from '../../logica/partida'
-import type { EstadoBatida, PassoBatida } from '../hooks/estadoBatida'
+import { MAXIMO_VENCEDORES, type EstadoBatida, type PassoBatida } from '../hooks/estadoBatida'
 import type { NomeDaCadeira } from './ModaisPartida'
-
-const MAXIMO_VENCEDORES = { atamaHane: 1, duploTriploAborta: 2, duploTriploPermitidos: 3 }
 
 /** Registro de batida em etapas, com indicador 1/4. */
 export default function ModalBatida({

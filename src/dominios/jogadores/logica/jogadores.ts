@@ -9,6 +9,7 @@ export interface Jogador {
   id: string
   nome: string
   apelido?: string
+  clube?: string
   criadoEm: string
   arquivado: boolean
 }
@@ -32,6 +33,7 @@ export type ResultadoJogador =
 export interface DadosJogador {
   nome: string
   apelido?: string
+  clube?: string
 }
 
 /** Tira espaços sobrando; o texto continua como a pessoa escreveu. */
@@ -60,6 +62,32 @@ function validar(jogadores: Jogador[], nome: string, ignorarId?: string): ErroJo
   return nomeEmUso(jogadores, nome, ignorarId) ? 'nomeDuplicado' : null
 }
 
+/** Clubes já usados, sem repetir grafia e em ordem alfabética. */
+export function clubesUsados(jogadores: readonly Jogador[]): string[] {
+  const porForma = new Map<string, string>()
+  for (const { clube } of jogadores) {
+    if (clube && !porForma.has(normalizarTexto(clube))) porForma.set(normalizarTexto(clube), clube)
+  }
+  return [...porForma.values()].sort((a, b) => a.localeCompare(b))
+}
+
+/** "cerrado" vira "Cerrado" se esse clube já existe; não nascem dois iguais. */
+function clubeComGrafiaExistente(jogadores: readonly Jogador[], texto: string): string {
+  const limpo = limpar(texto)
+  const forma = normalizarTexto(limpo)
+  return clubesUsados(jogadores).find((clube) => normalizarTexto(clube) === forma) ?? limpo
+}
+
+/** Sugestões enquanto digita; some quando o texto já é o clube inteiro. */
+export function sugerirClubes(jogadores: readonly Jogador[], texto: string): string[] {
+  const forma = normalizarTexto(texto)
+  if (!forma) return []
+  return clubesUsados(jogadores).filter((clube) => {
+    const candidato = normalizarTexto(clube)
+    return candidato.includes(forma) && candidato !== forma
+  })
+}
+
 export function adicionarJogador(
   jogadores: Jogador[],
   dados: DadosJogador,
@@ -70,10 +98,12 @@ export function adicionarJogador(
   if (erro) return { ok: false, erro }
 
   const apelido = limpar(dados.apelido ?? '')
+  const clube = clubeComGrafiaExistente(jogadores, dados.clube ?? '')
   const jogador: Jogador = {
     id,
     nome: limpar(dados.nome),
     ...(apelido ? { apelido } : {}),
+    ...(clube ? { clube } : {}),
     criadoEm,
     arquivado: false,
   }
@@ -92,10 +122,12 @@ export function editarJogador(
   if (!atual) return { ok: false, erro: 'nomeVazio' }
 
   const apelido = limpar(dados.apelido ?? '')
+  const clube = clubeComGrafiaExistente(jogadores, dados.clube ?? '')
   const jogador: Jogador = {
     id: atual.id,
     nome: limpar(dados.nome),
     ...(apelido ? { apelido } : {}),
+    ...(clube ? { clube } : {}),
     criadoEm: atual.criadoEm,
     arquivado: atual.arquivado,
   }
@@ -104,6 +136,10 @@ export function editarJogador(
     jogadores: jogadores.map((item) => (item.id === id ? jogador : item)),
     jogador,
   }
+}
+
+export function removerJogador(jogadores: Jogador[], id: string): Jogador[] {
+  return jogadores.filter((jogador) => jogador.id !== id)
 }
 
 export function definirArquivado(jogadores: Jogador[], id: string, arquivado: boolean): Jogador[] {
@@ -134,14 +170,15 @@ export function garantirPorNomes(
   return { jogadores: lista, ids }
 }
 
-/** Busca por nome ou apelido, ignorando maiúsculas e acentos. */
+/** Busca por nome, apelido ou clube, ignorando maiúsculas e acentos. */
 export function buscarJogadores(jogadores: Jogador[], busca: string): Jogador[] {
   const procurado = normalizarTexto(busca)
   if (!procurado) return jogadores
   return jogadores.filter(
     (jogador) =>
       normalizarTexto(jogador.nome).includes(procurado) ||
-      normalizarTexto(jogador.apelido ?? '').includes(procurado),
+      normalizarTexto(jogador.apelido ?? '').includes(procurado) ||
+      normalizarTexto(jogador.clube ?? '').includes(procurado),
   )
 }
 
@@ -158,6 +195,11 @@ export function partesDoNome(jogador: Pick<Jogador, 'nome' | 'apelido'>) {
   return partes
     ? { principal: partes[1], apoio: partes[2] }
     : { principal: jogador.nome, apoio: jogador.apelido }
+}
+
+/** Segunda linha da lista: "Apelido · Clube", ou só o que existir. */
+export function linhaDeApoio(jogador: Pick<Jogador, 'nome' | 'apelido' | 'clube'>) {
+  return [partesDoNome(jogador).apoio, jogador.clube].filter(Boolean).join(' · ')
 }
 
 /** Como o jogador aparece na mesa: o apelido, se tiver. */

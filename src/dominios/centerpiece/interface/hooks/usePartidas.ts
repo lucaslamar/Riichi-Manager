@@ -4,18 +4,26 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { garantirJogadoresPorNomes } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { criarPartida, type Partida } from '../../logica/partida'
 import type { ConfigMesa } from '../../logica/configMesa'
-import { carregarPartidas, salvarPartidas } from '../../persistencia/repositorioPartidas'
+import { guardarNomeNasPartidas } from '../../logica/ranking'
+import {
+  carregarPartidas,
+  limparPreferenciasAntigas,
+  salvarPartidas,
+} from '../../persistencia/repositorioPartidas'
 
 /** Lista única do app, salva a cada ação. */
 let partidas: Partida[] | null = null
 const ouvintes = new Set<() => void>()
 
 export function lerPartidas() {
-  partidas ??= carregarPartidas(armazenamentoLocal, {
-    idDoNome: garantirJogadoresPorNomes,
-    gerarId,
-    agora: Date.now(),
-  })
+  if (!partidas) {
+    limparPreferenciasAntigas(armazenamentoLocal)
+    partidas = carregarPartidas(armazenamentoLocal, {
+      idDoNome: garantirJogadoresPorNomes,
+      gerarId,
+      agora: Date.now(),
+    })
+  }
   return partidas
 }
 
@@ -36,8 +44,12 @@ export const acoesPartidas = {
   adicionar(partida: Partida) {
     definirPartidas([...lerPartidas(), partida])
   },
-  criar(config: ConfigMesa, jogadorIds: readonly [string, string, string, string]) {
-    const partida = criarPartida(gerarId(), config, jogadorIds, new Date().toISOString())
+  criar(
+    config: ConfigMesa,
+    jogadorIds: readonly [string, string, string, string],
+    nomes?: readonly string[],
+  ) {
+    const partida = criarPartida(gerarId(), config, jogadorIds, new Date().toISOString(), nomes)
     definirPartidas([...lerPartidas(), partida])
     return partida.id
   },
@@ -45,6 +57,9 @@ export const acoesPartidas = {
     const atuais = lerPartidas()
     const proximas = atuais.map((partida) => (partida.id === id ? transformar(partida) : partida))
     if (proximas.some((partida, indice) => partida !== atuais[indice])) definirPartidas(proximas)
+  },
+  guardarNome(jogadorId: string, nome: string) {
+    definirPartidas(guardarNomeNasPartidas(lerPartidas(), jogadorId, nome))
   },
   descartar(id: string) {
     definirPartidas(lerPartidas().filter((partida) => partida.id !== id))

@@ -10,13 +10,11 @@ import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { numerosDaParede } from '../../logica/dados'
 import { ehQuatroVentos } from '../../logica/descartes'
-import { descreverFuriten } from '../../logica/descreverPedras'
-import { furitenDe } from '../../logica/registroPartida'
+import { chamarPedra, desfazerUltimoDaMesa } from '../../logica/registroPartida'
 import {
   CADEIRAS,
   calcularResultado,
   declararRiichi,
-  desfazer,
   encerrarPorAgariYame,
   finalizarPartida,
   CHAVE_VENTO,
@@ -39,18 +37,19 @@ import PlacaJogador from '../componentes/PlacaJogador'
 import JogarDados from '../componentes/JogarDados'
 import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
-import ModalDescartes from '../componentes/ModalDescartes'
-import { iniciarBatida, type EstadoBatida } from '../hooks/estadoBatida'
+import { ModalAvisoFuriten, ModalChecarFuriten } from '../componentes/ModaisFuriten'
+import ModalDescartes, { type DecisaoDescarte } from '../componentes/ModalDescartes'
+import { iniciarBatida, iniciarRonDoDescarte, type EstadoBatida } from '../hooks/estadoBatida'
 import {
   MenuJogador,
   ModalConfirmacao,
   ModalDiferenca,
   ModalMaos,
   ModalRyukyoku,
+  ResumoChombo,
 } from '../componentes/ModaisPartida'
 import { useDescartes } from '../hooks/useDescartes'
 import { usePartidas } from '../hooks/usePartidas'
-import { useModoMesa } from '../hooks/useModoMesa'
 import { useTimerVez } from '../hooks/useTimerVez'
 
 const DURACAO_AVISO_MS = 2500
@@ -91,7 +90,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const [maosAbertas, setMaosAbertas] = useState(false)
   const [dadosAbertos, setDadosAbertos] = useState(false)
   const [descartesDe, setDescartesDe] = useState<Cadeira | null>(null)
-  const [descarteRapidoDe, setDescarteRapidoDe] = useState<Cadeira | null>(null)
+  const [descarteRapido, setDescarteRapido] = useState<{ cadeira: Cadeira; expirou: boolean } | null>(null)
+  const [checarFuritenDe, setChecarFuritenDe] = useState<Cadeira | null>(null)
+  const [avisoFuritenDe, setAvisoFuritenDe] = useState<Cadeira | null>(null)
   const [quatroVentosAberto, setQuatroVentosAberto] = useState(false)
   const [aviso, setAviso] = useState<string | null>(null)
   const temporizadorAviso = useRef<number | undefined>(undefined)
@@ -105,29 +106,51 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     maosAbertas ||
     dadosAbertos ||
     descartesDe !== null ||
-    descarteRapidoDe !== null ||
+    descarteRapido !== null ||
+    checarFuritenDe !== null ||
+    avisoFuritenDe !== null ||
     quatroVentosAberto ||
     !!partida.fim
 
   const timer = useTimerVez(partida, atualizar, modalAberta)
-  const { modo, alternar } = useModoMesa()
   const acoesDescartes = useDescartes(atualizar)
-
-  /** O nome e a frase do furiten de quem informou a mão, para o card e o aviso. */
-  const avisoFuriten = (cadeira: Cadeira) => {
-    const mao = partida.registro?.maos[cadeira]
-    const estado = furitenDe(partida, cadeira)
-    return mao && estado?.principal ? descreverFuriten(estado, mao.esperas, t) : undefined
-  }
+  const fecharAvisoFuriten = useCallback(() => setAvisoFuritenDe(null), [])
 
   // Com o registro ligado, passar a vez pergunta antes o que foi descartado.
   const tocarTimer = () => {
-    if (config.registrarDescartes && vez.comecou) setDescarteRapidoDe(vez.cadeira)
+    if (config.registrarDescartes && vez.comecou) setDescarteRapido({ cadeira: vez.cadeira, expirou: false })
     else timer.tocar()
   }
-  const passarDepoisDoDescarte = () => {
-    setDescarteRapidoDe(null)
-    timer.tocar()
+
+  // Timer zerou: abre o descarte de quem estourou, uma vez por vez. A modal pausa o
+  // timer, então o alarme para aqui; fechar pelo X volta ao alarme e ao card piscando.
+  const estouroAberto = useRef(false)
+  if (vez.restanteMs > 0) estouroAberto.current = false
+  useEffect(() => {
+    if (!timer.esgotado || !config.registrarDescartes || modalAberta || estouroAberto.current) return
+    estouroAberto.current = true
+    setDescarteRapido({ cadeira: vez.cadeira, expirou: true })
+  }, [timer.esgotado, config.registrarDescartes, modalAberta, vez.cadeira])
+
+  const pularDescarte = () => {
+    setDescarteRapido(null)
+    if (timer.ligado) timer.tocar()
+  }
+
+  /** Depois do descarte: de quem é a vez agora, e se a mão acabou em ron. */
+  const decidirDescarte = (origem: Cadeira, decisao: DecisaoDescarte) => {
+    setDescartesDe(null)
+    setDescarteRapido(null)
+    if (decisao.tipo === 'ron') {
+      setBatida(iniciarRonDoDescarte(origem, decisao.cadeiras, decisao.ordem))
+    } else if (decisao.tipo === 'chamada') {
+      const { cadeira, chamada, ordem } = decisao
+      atualizar((atual) => chamarPedra(atual, ordem, { cadeira, tipo: chamada }))
+      if (timer.ligado) timer.passarPara(cadeira)
+      setDescarteRapido({ cadeira, expirou: false })
+    } else if (timer.ligado) {
+      timer.passarPara(((origem + 1) % 4) as Cadeira)
+    }
   }
 
   // Troca de vez e tempo esgotado no leitor de tela.
@@ -149,35 +172,41 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
 
   const aoEscolherNoMenu = (
     cadeira: Cadeira,
-    acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes',
+    acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes' | 'furiten',
   ) => {
     setMenuDe(null)
     if (acao === 'vez') timer.passarPara(cadeira)
     else if (acao === 'riichi') atualizar((atual) => declararRiichi(atual, cadeira, contexto()))
     else if (acao === 'chombo') setChomboDe(cadeira)
     else if (acao === 'descartes') setDescartesDe(cadeira)
+    else if (acao === 'furiten') setChecarFuritenDe(cadeira)
     else if (acao === 'diferenca') setDiferencaDe(cadeira)
     else setBatida(iniciarBatida({ tipo: acao, vencedor: cadeira }))
   }
 
   const receberCalculo = (resultado: ResultadoCalculoParaCenterpiece) => {
     if (!batida || batida.vencedorAtual === null) return
+    const [proximo, ...pendentes] = batida.pendentes ?? []
     setBatida({
       ...batida,
       calculadora: null,
-      passo: 'confirmacao',
-      vencedorAtual: null,
+      // Ron de mais de um jogador: segue para o próximo antes de confirmar.
+      passo: proximo === undefined ? 'confirmacao' : 'calculo',
+      vencedorAtual: proximo ?? null,
+      pendentes,
       vencedores: [...batida.vencedores, { cadeira: batida.vencedorAtual, resultado }],
     })
   }
 
   const aplicarBatida = () => {
     if (!batida) return
-    const { vencedores, pagador, tipo } = batida
+    const { vencedores, pagador, tipo, ordemDescarte } = batida
     if (tipo === 'ron' && pagador !== null) {
       atualizar((atual) =>
         registrarRon(
-          atual,
+          ordemDescarte === undefined || !vencedores[0]
+            ? atual
+            : chamarPedra(atual, ordemDescarte, { cadeira: vencedores[0].cadeira, tipo: 'ron' }),
           {
             pagador,
             vencedores: vencedores.map(({ cadeira, resultado }) => ({
@@ -186,6 +215,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               han: resultado.han,
               fu: resultado.fu,
               yakuman: resultado.yakuman,
+              montada: resultado.maoMontada,
             })),
           },
           contexto(),
@@ -203,6 +233,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             han: resultado.han,
             fu: resultado.fu,
             yakuman: resultado.yakuman,
+            montada: resultado.maoMontada,
           },
           contexto(),
         ),
@@ -265,7 +296,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
 
           <div className="mesa-centro-tela">
             <MesaQuadrada
-              modo={modo}
               cadeiraDealer={placar.cadeiraDealer}
               aoTocarDomo={timer.ligado && vez.comecou ? timer.alternarPausa : undefined}
               rotuloDomo={t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}
@@ -296,13 +326,20 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                     vento={ventoDaCadeira(cadeira, placar.cadeiraDealer)}
                     pontos={placar.pontos[cadeira]}
                     emRiichi={placar.riichi.includes(cadeira)}
-                    furiten={avisoFuriten(cadeira)}
+                    checagem={
+                      partida.registro?.maos[cadeira]
+                        ? {
+                            rotulo: t('match.furiten.iconLabel', { name: nomeDe(cadeira) }),
+                            aoTocar: () => setAvisoFuritenDe(cadeira),
+                          }
+                        : undefined
+                    }
                     timer={
                       timer.ligado && vez.cadeira === cadeira
                         ? {
                             segundos: timer.segundos,
                             fracao: timer.fracao,
-                            esgotado: timer.esgotado,
+                            esgotado: timer.esgotado || !!descarteRapido?.expirou,
                             aoTocar: tocarTimer,
                           }
                         : undefined
@@ -326,27 +363,12 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             {config.abortivos.quatroVentos && ehQuatroVentos(partida.registro?.lances ?? []) && (
               <button
                 type="button"
-                className="mesa-aviso-furiten"
+                className="mesa-aviso"
                 onClick={() => setQuatroVentosAberto(true)}
               >
                 {t('match.discards.fourWindsNotice')}
               </button>
             )}
-            {CADEIRAS.map((cadeira) => {
-              const frase = avisoFuriten(cadeira)
-              return (
-                frase && (
-                  <button
-                    key={cadeira}
-                    type="button"
-                    className="mesa-aviso-furiten"
-                    onClick={() => setDescartesDe(cadeira)}
-                  >
-                    <strong>{nomeDe(cadeira)}</strong> {frase}
-                  </button>
-                )
-              )
-            })}
             <button
               type="button"
               className="mesa-btn-principal"
@@ -371,9 +393,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               </button>
               <button
                 type="button"
-                disabled={partida.eventos.length === 0}
+                disabled={partida.eventos.length === 0 && !partida.registro?.lances.length}
                 onClick={() => {
-                  atualizar(desfazer)
+                  atualizar((atual) => desfazerUltimoDaMesa(atual, Date.now()))
                   mostrarAviso(t('match.table.undone'))
                 }}
               >
@@ -385,9 +407,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 {t('match.hands.short')}
               </button>
             </div>
-            <button type="button" className="mesa-alternar-modo" onClick={alternar}>
-              {t(modo === 'mesa' ? 'match.table.modeList' : 'match.table.modeTable')}
-            </button>
           </div>
 
           {aviso && (
@@ -464,7 +483,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           texto={
             config.chombo.tipo === 'fixo'
               ? t('match.chombo.fixedHelp', { points: numero(config.chombo.valor) })
-              : t(chomboDe === placar.cadeiraDealer ? 'match.chombo.dealerHelp' : 'match.chombo.reverseHelp')
+              : config.chombo.tipo === 'yakumanReverso'
+                ? t(chomboDe === placar.cadeiraDealer ? 'match.chombo.yakumanDealerHelp' : 'match.chombo.yakumanHelp')
+                : t(chomboDe === placar.cadeiraDealer ? 'match.chombo.dealerHelp' : 'match.chombo.reverseHelp')
           }
           rotuloConfirmar={t('match.chombo.confirm')}
           perigo
@@ -473,7 +494,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             atualizar((atual) => registrarChombo(atual, chomboDe, contexto()))
             setChomboDe(null)
           }}
-        />
+        >
+          <ResumoChombo partida={partida} cadeira={chomboDe} nomeDe={nomeDe} />
+        </ModalConfirmacao>
       )}
 
       {ryukyokuAberto && (
@@ -511,24 +534,43 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           cadeira={descartesDe}
           nomeDe={nomeDe}
           acoes={acoesDescartes}
-          aoChamou={(outra) => {
-            setDescartesDe(null)
-            if (timer.ligado) timer.passarPara(outra)
-          }}
+          aoDecidir={(decisao) => decidirDescarte(descartesDe, decisao)}
           aoFechar={() => setDescartesDe(null)}
         />
       )}
 
-      {descarteRapidoDe !== null && (
+      {descarteRapido !== null && (
         <ModalDescartes
+          key={descarteRapido.cadeira}
           rapido
+          expirou={descarteRapido.expirou}
           partida={partida}
-          cadeira={descarteRapidoDe}
+          cadeira={descarteRapido.cadeira}
           nomeDe={nomeDe}
           acoes={acoesDescartes}
-          aoPular={passarDepoisDoDescarte}
-          aoRegistrou={passarDepoisDoDescarte}
-          aoFechar={() => setDescarteRapidoDe(null)}
+          aoPular={pularDescarte}
+          aoDecidir={(decisao) => decidirDescarte(descarteRapido.cadeira, decisao)}
+          aoFechar={() => setDescarteRapido(null)}
+        />
+      )}
+
+      {checarFuritenDe !== null && (
+        <ModalChecarFuriten
+          partida={partida}
+          cadeira={checarFuritenDe}
+          nome={nomeDe(checarFuritenDe)}
+          acoes={acoesDescartes}
+          aoFechar={() => setChecarFuritenDe(null)}
+        />
+      )}
+
+      {avisoFuritenDe !== null && (
+        <ModalAvisoFuriten
+          partida={partida}
+          cadeira={avisoFuritenDe}
+          nomeDe={nomeDe}
+          acoes={acoesDescartes}
+          aoFechar={fecharAvisoFuriten}
         />
       )}
 

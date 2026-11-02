@@ -2,7 +2,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { partesDoNome } from '@/dominios/jogadores/logica/jogadores'
-import type { FiltroPeriodo } from '../../logica/ranking'
+import { posicoesDoRanking, semExcluidos, type FiltroPeriodo } from '../../logica/ranking'
 import { useRankingGeral } from '../hooks/useRankingGeral'
 
 const PERIODOS: readonly FiltroPeriodo[] = ['mes', 'ano', 'tudo']
@@ -11,7 +11,9 @@ const PERIODOS: readonly FiltroPeriodo[] = ['mes', 'ano', 'tudo']
 export default function PaginaRanking({ aoVoltar }: { aoVoltar: () => void }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
-  const { periodo, setPeriodo, linhas, posicoes } = useRankingGeral()
+  const { periodo, setPeriodo, linhas: todas } = useRankingGeral()
+  const linhas = semExcluidos(todas, (id) => jogadores.some((jogador) => jogador.id === id))
+  const posicoes = posicoesDoRanking(linhas)
 
   const nomeDe = (id: string) => {
     const jogador = jogadores.find((item) => item.id === id)

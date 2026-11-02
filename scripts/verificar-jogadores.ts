@@ -9,11 +9,15 @@ import type { ArmazenamentoChaveValor } from '../src/compartilhado/persistencia/
 import {
   adicionarJogador,
   buscarJogadores,
+  clubesUsados,
   definirArquivado,
   editarJogador,
+  linhaDeApoio,
   nomeExibido,
   ordenarJogadores,
   partesDoNome,
+  removerJogador,
+  sugerirClubes,
   type Jogador,
 } from '../src/dominios/jogadores/logica/jogadores'
 import {
@@ -164,6 +168,28 @@ teste('os padrão não voltam depois que o cadastro foi salvo', () => {
 teste('dados corrompidos abrem com a lista vazia', () => {
   assert.deepEqual(carregarJogadores(memoria('{quebrado')), [])
   assert.deepEqual(carregarJogadores(memoria('{"jogadores":[{"id":1}]}')), [])
+})
+
+teste('clube: grafia existente, sugestões, busca e limpar', () => {
+  const um = adicionarJogador([], { nome: 'Ana', clube: 'Cerrado' }, 'a', 'x')
+  assert.ok(um.ok)
+  const dois = adicionarJogador(um.ok ? um.jogadores : [], { nome: 'Bia', clube: 'cérrado' }, 'b', 'x')
+  assert.ok(dois.ok)
+  if (!dois.ok) return
+  assert.equal(dois.jogador.clube, 'Cerrado')
+  assert.deepEqual(clubesUsados(dois.jogadores), ['Cerrado'])
+  assert.deepEqual(sugerirClubes(dois.jogadores, 'cerr'), ['Cerrado'])
+  assert.deepEqual(sugerirClubes(dois.jogadores, 'Cerrado'), [])
+  assert.equal(buscarJogadores(dois.jogadores, 'cerrado').length, 2)
+  assert.equal(linhaDeApoio({ nome: 'Ana', apelido: 'A', clube: 'Cerrado' }), 'A · Cerrado')
+  const limpo = editarJogador(dois.jogadores, 'a', { nome: 'Ana', clube: '' })
+  assert.ok(limpo.ok && limpo.jogador.clube === undefined)
+})
+
+teste('excluir tira só o jogador', () => {
+  const lista = adicionarJogador([], { nome: 'Ana' }, 'a', 'x')
+  assert.ok(lista.ok)
+  if (lista.ok) assert.deepEqual(removerJogador(lista.jogadores, 'a'), [])
 })
 
 console.log(`Jogadores ok: ${testes} testes.`)

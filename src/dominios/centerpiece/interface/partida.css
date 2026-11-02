@@ -691,10 +691,6 @@
   font: inherit;
 }
 
-button.dsc-pedra {
-  cursor: pointer;
-}
-
 .dsc-pedra .tile-img {
   width: 32px;
   height: auto;
@@ -710,14 +706,8 @@ button.dsc-pedra {
   opacity: 0.65;
 }
 
-.dsc-pedra--selecionada {
-  border-color: var(--primario-forte);
-  border-style: solid;
-  opacity: 1;
-}
-
 .dsc-entrada,
-.dsc-chamada,
+.dsc-pergunta,
 .dsc-furiten {
   display: flex;
   flex-direction: column;
@@ -753,33 +743,6 @@ button.dsc-pedra {
   font-size: 0.875rem;
 }
 
-.dsc-desfazer {
-  width: 100%;
-  margin-top: 12px;
-}
-
-.dsc-chamada-linha {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) repeat(3, 56px);
-  align-items: center;
-  gap: 6px;
-}
-
-.dsc-chamada-linha > span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dsc-chamada-linha > button {
-  padding: 0;
-}
-
-.dsc-chamada-linha > button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
 .dsc-furiten {
   margin-top: 0;
   margin-bottom: 16px;
@@ -790,7 +753,7 @@ button.dsc-pedra {
 }
 
 .dsc-furiten-aviso,
-.mesa-aviso-furiten {
+.mesa-aviso {
   width: 100%;
   min-height: 44px;
   border: 1px solid var(--cor-aviso-borda);
@@ -798,15 +761,14 @@ button.dsc-pedra {
   padding: 8px 12px;
   color: var(--texto-aviso);
   background: var(--cor-aviso-suave);
-  cursor: pointer;
   font: inherit;
   font-size: 0.875rem;
   font-weight: 700;
   text-align: left;
 }
 
-.dsc-furiten-aviso > i {
-  margin-right: 6px;
+.mesa-aviso {
+  cursor: pointer;
 }
 
 .dsc-historico {
@@ -830,4 +792,160 @@ button.dsc-pedra {
 /* 10 colunas não dão 44px de largura num celular; a altura completa o toque. */
 .dsc-teclado .btn-pedra {
   min-height: 44px;
+}
+
+.dsc-pergunta-chamadas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 8px;
+}
+
+.dsc-pergunta-chamadas > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ─── Mão no histórico ────────────────────────────────────────────────────── */
+.linha-pedras {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.linha-pedras-grupo {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  gap: 1px;
+}
+
+.linha-pedras-grupo--chamada {
+  flex: 0 1 auto;
+}
+
+/* As pedras diminuem para caber numa linha. */
+.linha-pedras-pedra {
+  display: block;
+  min-width: 0;
+  flex: 0 1 22px;
+  border-radius: 3px;
+}
+
+.linha-pedras-pedra .tile-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.linha-pedras-pedra--batida {
+  outline: 2px solid var(--cor-vez);
+  outline-offset: 1px;
+}
+
+.linha-pedras--grande {
+  margin-bottom: 12px;
+}
+
+.linha-pedras--grande .linha-pedras-pedra {
+  flex-basis: 34px;
+}
+
+.mao-historico {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 10px;
+  padding: 8px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+}
+
+.mao-historico-yakus {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}
+
+/* Módulo: o deslize horizontal é do gesto; o vertical continua rolando. */
+body:has(.ptd-modulo) {
+  touch-action: pan-y;
+  /* O cabeçalho vai de ponta a ponta; o respiro fica nas telas do módulo. */
+  padding-inline: 0;
+}
+
+/* ─── Registrar partida finalizada ────────────────────────────────────────── */
+.fin-tela {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 16px;
+}
+
+.fin-linhas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fin-linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.fin-jogador {
+  min-height: 44px;
+  overflow: hidden;
+  padding: 0 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fin-campo {
+  display: flex;
+  min-width: 0;
+  gap: 4px;
+}
+
+.fin-campo input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+}
+
+.fin-sinal {
+  width: 44px;
+  min-height: 44px;
+  flex: 0 0 auto;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 10px;
+  padding: 0;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.fin-uma {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mesa-btn-principal:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

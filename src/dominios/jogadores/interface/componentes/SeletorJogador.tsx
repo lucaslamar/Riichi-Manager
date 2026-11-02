@@ -106,7 +106,10 @@ export default function SeletorJogador({
                       onClick={() => aoEscolher(jogador)}
                     >
                       <span className="dados-jogador">
-                        <span className="nome-cadastro">{partesDoNome(jogador).principal}</span>
+                        <span className="nome-cadastro">
+                          {partesDoNome(jogador).principal}
+                          {jogador.clube && <small className="clube-jogador"> {jogador.clube}</small>}
+                        </span>
                         {partesDoNome(jogador).apoio && (
                           <span className="apelido-jogador">{partesDoNome(jogador).apoio}</span>
                         )}

@@ -1,5 +1,6 @@
 import type { ArmazenamentoChaveValor } from '../../../compartilhado/persistencia/armazenamento'
 import { normalizarSimples, SIMPLES_INICIAL, type EstadoSimples } from '../logica/centerpieceSimples'
+import { normalizarConfig } from '../logica/configMesa'
 import { migrarMesaAntiga } from '../logica/migrarMesaAntiga'
 import type { Partida } from '../logica/partida'
 import { pausarVez } from '../logica/vez'
@@ -7,7 +8,10 @@ import { pausarVez } from '../logica/vez'
 const CHAVE_PARTIDAS = 'riichi-manager-partidas'
 const CHAVE_MESA_ANTIGA = 'riichi-manager-centerpiece'
 const CHAVE_SIMPLES = 'riichi-manager-centerpiece-simples'
+const CHAVE_DICA_SIMPLES = 'riichi-manager-dica-simples'
 const VERSAO = 1
+/** Preferência da visualização em lista, que saiu do app. */
+const CHAVE_MODO_ANTIGA = 'riichi-manager-modo-mesa'
 
 interface ContextoMigracao {
   idDoNome: (nomes: string[]) => string[]
@@ -30,6 +34,8 @@ export function carregarPartidas(
       if (Array.isArray(lido.partidas)) {
         return lido.partidas.map((partida) => ({
           ...partida,
+          // Dados antigos: preset que saiu e campos novos não podem quebrar nada.
+          config: normalizarConfig(partida.config),
           vez: pausarVez(partida.vez, migracao.agora),
         }))
       }
@@ -45,6 +51,18 @@ export function carregarPartidas(
   const partidas = migrada ? [migrada] : []
   salvarPartidas(armazenamento, partidas)
   return partidas
+}
+
+export function dicaSimplesFoiVista(armazenamento: ArmazenamentoChaveValor) {
+  return armazenamento.ler(CHAVE_DICA_SIMPLES) !== null
+}
+
+export function marcarDicaSimples(armazenamento: ArmazenamentoChaveValor) {
+  armazenamento.gravar(CHAVE_DICA_SIMPLES, '1')
+}
+
+export function limparPreferenciasAntigas(armazenamento: ArmazenamentoChaveValor) {
+  armazenamento.remover?.(CHAVE_MODO_ANTIGA)
 }
 
 export function salvarPartidas(armazenamento: ArmazenamentoChaveValor, partidas: Partida[]) {

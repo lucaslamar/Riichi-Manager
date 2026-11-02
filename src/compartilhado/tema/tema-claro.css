@@ -68,8 +68,7 @@
 }
 
 :root[data-tema='claro'] .cabecalho-principal,
-:root[data-tema='claro'] .barra-navegacao-inferior,
-:root[data-tema='claro'] .drawer-global {
+:root[data-tema='claro'] .barra-navegacao-inferior {
   background: var(--cor-nav);
 }
 

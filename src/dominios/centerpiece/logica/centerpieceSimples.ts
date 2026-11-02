@@ -49,3 +49,11 @@ export function normalizarSimples(salvo: unknown): EstadoSimples {
     (lido.honba as number) >= 0
   return valido ? (lido as EstadoSimples) : SIMPLES_INICIAL
 }
+
+/**
+ * Giro da mesa, em graus, para ela seguir o aparelho quando o sistema gira a tela.
+ * Conta a partir de como a tela estava ao abrir, para a mesa começar sempre reta.
+ */
+export function giroDaMesa(anguloInicial: number, anguloAtual: number): number {
+  return ((anguloInicial - anguloAtual) % 360 + 360) % 360
+}

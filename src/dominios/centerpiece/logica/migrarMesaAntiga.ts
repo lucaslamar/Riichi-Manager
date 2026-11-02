@@ -70,11 +70,14 @@ function placarDaFoto(foto: FotoAntiga, cadeiraDoNome: Map<string, Cadeira>): Pl
   }
 }
 
+/** A mesa antiga jogava sem fim marcado: segue em Hanchan, para não acabar no Leste 4. */
 function configDaMesa(pontosIniciais: number | undefined): ConfigMesa {
   const padrao = configDoPreset('padrao')
-  return pontosIniciais && pontosIniciais !== padrao.pontosPartida
-    ? alterarConfig(padrao, { pontosPartida: pontosIniciais })
-    : padrao
+  return alterarConfig(padrao, {
+    tipoPartida: 'hanchan',
+    timerVez: 30,
+    pontosPartida: pontosIniciais || padrao.pontosPartida,
+  })
 }
 
 export function migrarMesaAntiga(

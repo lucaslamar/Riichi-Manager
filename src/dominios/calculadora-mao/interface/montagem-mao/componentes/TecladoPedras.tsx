@@ -30,6 +30,8 @@ interface PropsTecladoPedras {
   contexto: 'montagem' | 'finalizacao'
   /** Falso na entrada por notação: só o rodapé de finalização (e a escolha de batida) aparece. */
   mostrarGrade?: boolean
+  /** Nome da pedra no leitor de tela, quando quem usa o teclado tem o próprio. */
+  rotuloPedra?: (pedra: CodigoPedra) => string
   maoProntaParaFinalizar?: boolean
   batidaDefinida?: boolean
   mensagemFinalizacao?: string | null
@@ -64,6 +66,7 @@ export function TecladoPedras({
   classeEsperaTeclado,
   contexto,
   mostrarGrade = true,
+  rotuloPedra,
   maoProntaParaFinalizar = false,
   batidaDefinida = maoProntaParaFinalizar,
   mensagemFinalizacao,
@@ -97,6 +100,7 @@ export function TecladoPedras({
     ) : null
 
   const labelBotaoPedra = (codigo: CodigoPedra, indisponivel: boolean) => {
+    if (rotuloPedra) return rotuloPedra(codigo)
     const tile = nomePedraAcessivel(codigo)
     if (indisponivel) return t('calculator.disabledTile', { tile })
     if (acaoPendente?.tipo === 'descarte') return t('calculator.addTileToDiscards', { tile })

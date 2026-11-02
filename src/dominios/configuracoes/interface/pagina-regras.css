@@ -226,3 +226,35 @@ body.modo-compacto .cartao-regras {
 body.toque-ampliado .cartao-regras {
   min-height: 72px;
 }
+
+/* Sobre o Mojoca: compacto, no fim da tela. */
+.sobre-mojoca {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 8px 4px;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+}
+
+.sobre-mojoca h3 {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 1rem;
+}
+
+.sobre-mojoca p {
+  margin: 0;
+}
+
+.sobre-mojoca a {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--linha-divisoria);
+  color: var(--primario-forte);
+  font-weight: 700;
+  text-decoration: none;
+}

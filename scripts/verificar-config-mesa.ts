@@ -16,6 +16,7 @@ import {
   reiniciarConfig,
   somaUma,
 } from '../src/dominios/centerpiece/logica/configMesa'
+import { exemploPontuacao } from '../src/dominios/centerpiece/logica/exemploPontuacao'
 import {
   carregarUltimaConfig,
   salvarUltimaConfig,
@@ -32,12 +33,15 @@ function teste(nome: string, corpo: () => void) {
   }
 }
 
-teste('padrão do app: 25.000, retorno 30.000, oka 20.000, timer 30 s, descartes desligado', () => {
+teste('padrão do app: Leste apenas, sem abortivos nem prorrogação, timer de 1 min', () => {
   const config = configDoPreset('padrao')
   assert.equal(config.pontosPartida, 25000)
   assert.equal(config.pontosRetorno, 30000)
   assert.equal(calcularOka(config), 20000)
-  assert.equal(config.timerVez, 30)
+  assert.equal(config.timerVez, 60)
+  assert.equal(config.tipoPartida, 'leste')
+  assert.equal(config.prorrogacao, false)
+  assert.ok(Object.values(config.abortivos).every((ligado) => !ligado))
   assert.equal(config.registrarDescartes, false)
 })
 
@@ -91,10 +95,34 @@ teste('escolher Personalizado mantém os valores; escolher preset aplica os dele
 
 teste('mexer na config devolvida não altera o preset', () => {
   configDoPreset('padrao').uma[0] = 99
-  configDoPreset('padrao').abortivos.quatroKans = false
+  configDoPreset('padrao').abortivos.quatroKans = true
   assert.equal(configDoPreset('padrao').uma[0], 15)
-  assert.equal(configDoPreset('padrao').abortivos.quatroKans, true)
-  assert.equal(configDoPreset('cerrado').uma[0], 15)
+  assert.equal(configDoPreset('padrao').abortivos.quatroKans, false)
+})
+
+teste('Cerrado/ABM salvo vira Personalizado, com os mesmos valores', () => {
+  const salva = { ...configDoPreset('padrao'), preset: 'cerrado', presetBase: 'cerrado', pontosPartida: 27000 }
+  const lida = normalizarConfig(salva)
+  assert.equal(lida.preset, 'personalizado')
+  assert.equal(lida.presetBase, 'padrao')
+  assert.equal(lida.pontosPartida, 27000)
+})
+
+teste('só restam 4 presets, e WRC, EMA e M.League usam o valor fixo oficial', () => {
+  assert.deepEqual([...IDS_PRESET], ['padrao', 'wrc', 'ema', 'mleague'])
+  assert.deepEqual(configDoPreset('wrc').chombo, { tipo: 'fixo', valor: 30000 })
+  assert.deepEqual(configDoPreset('ema').chombo, { tipo: 'fixo', valor: 20000 })
+  assert.deepEqual(configDoPreset('mleague').chombo, { tipo: 'fixo', valor: 20000 })
+})
+
+teste('exemplo de pontuação usa os valores da tela', () => {
+  const com = exemploPontuacao(configDoPreset('mleague'))
+  assert.equal(com[0].oka, 20)
+  assert.equal(com.reduce((soma, linha) => soma + linha.final, 0), 0)
+  const padrao = exemploPontuacao({ pontosPartida: 25000, pontosRetorno: 30000, uma: [15, 5, -5, -15] })
+  assert.deepEqual(padrao.map((linha) => linha.final), [47, 3, -17, -33])
+  const sem = exemploPontuacao({ pontosPartida: 30000, pontosRetorno: 30000, uma: [15, 5, -5, -15] })
+  assert.equal(sem[0].oka, 0)
 })
 
 teste('soma da uma acusa quando não fecha', () => {

@@ -4999,8 +4999,7 @@
  * otherwise let the docked keyboard slide behind it. iPhone SE (~0.56 ratio)
  * never matches the aspect guard, so it keeps its edge-flush keyboard.
  */
-@media (min-width: 375px) and (max-width: 640px) and (orientation: portrait),
-  (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
+@media (max-width: 640px) and (orientation: portrait) {
   body:has(.card-mao-completa.etapa-montagem) .conteudo-principal,
   body:has(.card-mao-completa.etapa-montagem) main {
     min-height: calc(100dvh - 46px - 56px - env(safe-area-inset-bottom, 0px));

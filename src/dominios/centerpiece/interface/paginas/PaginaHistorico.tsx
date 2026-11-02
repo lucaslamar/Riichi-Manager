@@ -19,12 +19,12 @@ export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) 
   const historico = useMemo(() => partidasDoHistorico(partidas), [partidas])
   const aberta = historico.find((partida) => partida.id === abertaId)
 
-  const nomeDoId = (id: string) => {
-    const jogador = jogadores.find((item) => item.id === id)
-    return jogador ? nomeExibido(jogador) : '—'
+  // Quem saiu do cadastro aparece com o nome guardado na partida.
+  const nomeNa = (partida: Partida) => (cadeira: Cadeira) => {
+    const assento = partida.assentos[cadeira]
+    const jogador = jogadores.find((item) => item.id === assento.jogadorId)
+    return jogador ? nomeExibido(jogador) : t('players.deletedName', { name: assento.nome ?? '—' })
   }
-  const nomeNa = (partida: Partida) => (cadeira: Cadeira) =>
-    nomeDoId(partida.assentos[cadeira].jogadorId)
   const data = (iso: string | undefined) =>
     iso
       ? new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(new Date(iso))
@@ -36,7 +36,11 @@ export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) 
         <TituloTela titulo={data(aberta.finalizadaEm)} aoVoltar={() => setAbertaId(null)} />
         <ListaResultado linhas={aberta.resultado ?? []} nomeDe={nomeNa(aberta)} />
         <h3 className="ptd-rotulo">{t('match.hands.title')}</h3>
-        <ListaMaos partida={aberta} nomeDe={nomeNa(aberta)} />
+        {aberta.registradaManual ? (
+          <p className="ptd-vazio">{t('match.manual.noHands')}</p>
+        ) : (
+          <ListaMaos partida={aberta} nomeDe={nomeNa(aberta)} />
+        )}
       </section>
     )
   }
@@ -61,7 +65,7 @@ export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) 
                     <li key={linha.cadeira}>
                       <span>
                         {t('match.result.place', { place: linha.colocacao })}{' '}
-                        {nomeDoId(linha.jogadorId)}
+                        {nomeNa(partida)(linha.cadeira)}
                       </span>
                       <span className={linha.final < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
                         {linha.final > 0 ? '+' : ''}

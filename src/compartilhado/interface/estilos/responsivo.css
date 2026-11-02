@@ -127,15 +127,6 @@
     max-width: none;
   }
 
-  .botao-menu-global {
-    width: 30px;
-    min-height: 30px;
-    border-color: transparent;
-    border-radius: 7px;
-    background: transparent;
-    box-shadow: none;
-  }
-
   .titulo-principal {
     font-size: 0.96rem;
     line-height: 1;
@@ -144,19 +135,6 @@
   .modulo-atual,
   .pedra-mahjong {
     display: none;
-  }
-
-  .zona-gesto-drawer {
-    inset-block-start: 38px;
-  }
-
-  .drawer-global {
-    gap: 10px;
-    padding: 12px 12px 10px;
-  }
-
-  .drawer-cabecalho {
-    padding-bottom: 8px;
   }
 
   .item-menu-global {
@@ -740,10 +718,10 @@
  * altura própria em dominios/calculadoras/responsivo.css).
  *
  * Han e Fu e Sorteador ajustam a própria superfície nos arquivos deles; aqui
- * ficam o shell e as páginas de cartão (Regras e Sobre).
+ * ficam o shell e a página de cartões (Regras).
  */
 @media (min-width: 641px) and (min-height: 561px) {
-  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica, .pagina-regras) {
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-regras) {
     display: flex;
     min-height: 100vh;
     min-height: 100dvh;
@@ -752,13 +730,13 @@
   }
 
   /* #app (raiz do React) segura o cabeçalho e o <main>: a coluna continua nele. */
-  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica, .pagina-regras) > #app {
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-regras) > #app {
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;
   }
 
-  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-estatica, .pagina-regras) .conteudo-principal {
+  body:has(.calculadora-han-fu, .sorteador-ventos-page, .pagina-regras) .conteudo-principal {
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;
@@ -769,33 +747,5 @@
     overflow-x: clip;
   }
 
-  /* Regras e Sobre: fundo de borda a borda, texto com largura de leitura. */
-  .card.pagina-estatica {
-    flex: 1 0 auto;
-    align-content: start;
-    max-width: none;
-    margin: 0;
-    border-radius: 0;
-    padding: 32px;
-    box-shadow: none;
   }
 
-  .card.pagina-estatica > * {
-    width: 100%;
-    max-width: 720px;
-  }
-
-  body.modo-compacto .card.pagina-estatica {
-    padding: 20px;
-  }
-}
-
-@media (min-width: 768px) and (min-height: 561px) and (orientation: landscape) {
-  .card.pagina-estatica {
-    padding: 48px;
-  }
-
-  body.modo-compacto .card.pagina-estatica {
-    padding: 28px;
-  }
-}

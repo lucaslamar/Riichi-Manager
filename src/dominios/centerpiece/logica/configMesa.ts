@@ -2,7 +2,7 @@
  * Regras de uma mesa, usadas pelo Centerpiece e pelo Torneio, em TypeScript puro.
  * A partida guarda uma cópia: mudar um preset depois não altera partida já jogada.
  */
-export type IdPreset = 'padrao' | 'wrc' | 'ema' | 'mleague' | 'cerrado'
+export type IdPreset = 'padrao' | 'wrc' | 'ema' | 'mleague'
 
 export interface ConfigMesa {
   preset: IdPreset | 'personalizado'
@@ -26,13 +26,15 @@ export interface ConfigMesa {
   }
   nagashiMangan: boolean
   /** `fixo`: pontos descontados da pontuação final, depois da uma. */
-  chombo: { tipo: 'manganReverso' } | { tipo: 'fixo'; valor: number }
+  chombo: { tipo: 'manganReverso' } | { tipo: 'yakumanReverso' } | { tipo: 'fixo'; valor: number }
   /** Segundos por vez; 0 = desligado. */
   timerVez: 0 | 30 | 60 | 90
   registrarDescartes: boolean
+  /** Só vale com o registro de descartes ligado. */
+  checarFuriten: boolean
 }
 
-export const IDS_PRESET: readonly IdPreset[] = ['padrao', 'wrc', 'ema', 'mleague', 'cerrado']
+export const IDS_PRESET: readonly IdPreset[] = ['padrao', 'wrc', 'ema', 'mleague']
 export const OPCOES_TIMER_VEZ: readonly ConfigMesa['timerVez'][] = [0, 30, 60, 90]
 
 /** Multa de chombo fixo sugerida ao trocar de tipo; é a da EMA e da M.League. */
@@ -46,11 +48,14 @@ const SEM_ABORTIVOS: ConfigMesa['abortivos'] = {
 }
 
 /** Regras próprias de cada preset; timer e descartes são preferências da mesa. */
-type RegrasPreset = Omit<ConfigMesa, 'preset' | 'presetBase' | 'timerVez' | 'registrarDescartes'>
+type RegrasPreset = Omit<
+  ConfigMesa,
+  'preset' | 'presetBase' | 'timerVez' | 'registrarDescartes' | 'checarFuriten'
+>
 
-/** Regras de clube comuns no Japão, escolha do app. */
+/** Padrão de clube, para iniciantes: regras simples e partida que acaba no horário. */
 const REGRAS_PADRAO: RegrasPreset = {
-  tipoPartida: 'hanchan',
+  tipoPartida: 'leste',
   pontosPartida: 25000,
   pontosRetorno: 30000,
   uma: [15, 5, -5, -15],
@@ -59,12 +64,7 @@ const REGRAS_PADRAO: RegrasPreset = {
   agariYame: true,
   prorrogacao: false,
   palitosRestantes: 'primeiro',
-  abortivos: {
-    kyuushuKyuuhai: true,
-    quatroVentos: true,
-    quatroKans: true,
-    quatroRiichis: true,
-  },
+  abortivos: SEM_ABORTIVOS,
   nagashiMangan: true,
   chombo: { tipo: 'manganReverso' },
 }
@@ -74,7 +74,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
 
   /**
    * WRC Rules 2025, conferido em 01/11/2026 no livro oficial (resumo inicial e cap. 10):
-   * https://www.worldriichi.org/s/WRC-Rules-2025-42fx.pdf
+   * https://static1.squarespace.com/static/634a7884c297a25f06589b79/t/6834d67360e19c1da6c0d12c/1748293243651/WRC+Rules+2025.pdf
    * Página de regras: https://www.worldriichi.org/wrc-rules
    * Chombo: 30P, no documento de penalidades:
    * https://www.worldriichi.org/s/WRC-Penalties-2025.pdf
@@ -95,12 +95,9 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
   },
 
   /**
-   * EMA Riichi Rulebook 2025 v1.1, conferido em 01/11/2026 (seções 3.4, 3.7 e 4.1.4):
-   * https://mahjong.dk/hubfs/Mahjong%20documents/Riichi/Riichi_Rulebook_2025_v1.1.pdf
-   * O site da EMA (mahjong-europe.org) estava com certificado inválido nesse dia;
-   * esta cópia é da federação da Dinamarca. O livro traz só o empate por exaustão,
-   * sem empates abortivos e sem Nagashi Mangan. Chombo: 20.000 é o valor de torneio;
-   * fora de torneio é Mangan reverso.
+   * EMA, conferido no livro de 2016 e no de 2025 (seções 3.4, 3.7 e 4.1.4):
+   * https://mahjong-mil.org/wp-content/uploads/2024/08/riichirules2016.pdf
+   * Chombo: -20.000 no resultado final, o valor de competição.
    */
   ema: {
     tipoPartida: 'hanchan',
@@ -118,10 +115,9 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
   },
 
   /**
-   * M.League: NÃO conferido na fonte oficial. https://m-league.jp/about/ estava em
-   * manutenção em 01/11/2026. Conferir lá e apagar este aviso. Valores tirados de:
-   * https://ml-stadium.jp/rule/ (casa que usa a regra oficial)
-   * https://janten.net/guide/m-league-rules (guia que cita os artigos da regra oficial)
+   * M.League: https://m-league.jp/ (resumo em https://dic.nicovideo.jp/a/m%E3%83%AA%E3%83%BC%E3%82%B0).
+   * Palitos que sobram: não encontrado na fonte oficial, conferir.
+   * Chombo: -20 pt no resultado final.
    */
   mleague: {
     tipoPartida: 'hanchan',
@@ -137,9 +133,6 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     nagashiMangan: false,
     chombo: { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO },
   },
-
-  /** Cerrado/ABM: por enquanto igual ao padrão do app. Ajustar os valores aqui. */
-  cerrado: REGRAS_PADRAO,
 }
 
 export function configDoPreset(preset: IdPreset): ConfigMesa {
@@ -151,8 +144,9 @@ export function configDoPreset(preset: IdPreset): ConfigMesa {
     chombo: { ...regras.chombo },
     preset,
     presetBase: preset,
-    timerVez: 30,
+    timerVez: preset === 'padrao' ? 60 : 30,
     registrarDescartes: false,
+    checarFuriten: false,
   }
 }
 
@@ -192,6 +186,8 @@ const numeroValido = (valor: unknown): valor is number =>
  */
 export function normalizarConfig(salva: unknown): ConfigMesa {
   const lida = (salva ?? {}) as Partial<ConfigMesa>
+  // O preset Cerrado/ABM saiu: quem o usava fica em Personalizado, com os mesmos valores.
+  const presetSalvo = lida.preset as string | undefined
   const presetBase =
     lida.presetBase && IDS_PRESET.includes(lida.presetBase) ? lida.presetBase : 'padrao'
   const base = configDoPreset(presetBase)
@@ -199,15 +195,19 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     Array.isArray(lida.uma) && lida.uma.length === 4 && lida.uma.every(numeroValido)
   const chombo = lida.chombo
   const chomboValido =
-    chombo?.tipo === 'manganReverso' || (chombo?.tipo === 'fixo' && numeroValido(chombo.valor))
+    chombo?.tipo === 'manganReverso' ||
+    chombo?.tipo === 'yakumanReverso' ||
+    (chombo?.tipo === 'fixo' && numeroValido(chombo.valor))
   const booleano = (valor: unknown, reserva: boolean) =>
     typeof valor === 'boolean' ? valor : reserva
 
   return {
     preset:
-      lida.preset === 'personalizado' || (lida.preset && IDS_PRESET.includes(lida.preset))
-        ? lida.preset
-        : base.preset,
+      presetSalvo === 'cerrado'
+        ? 'personalizado'
+        : lida.preset === 'personalizado' || (lida.preset && IDS_PRESET.includes(lida.preset))
+          ? lida.preset
+          : base.preset,
     presetBase,
     tipoPartida: lida.tipoPartida === 'leste' || lida.tipoPartida === 'hanchan' ? lida.tipoPartida : base.tipoPartida,
     pontosPartida: numeroValido(lida.pontosPartida) ? lida.pontosPartida : base.pontosPartida,
@@ -239,5 +239,6 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
         ? lida.timerVez
         : base.timerVez,
     registrarDescartes: booleano(lida.registrarDescartes, base.registrarDescartes),
+    checarFuriten: booleano(lida.checarFuriten, base.checarFuriten),
   }
 }
