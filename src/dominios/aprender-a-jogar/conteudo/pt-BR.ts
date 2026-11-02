@@ -526,6 +526,10 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'Depois do chi, sua mão fica **aberta**.' },
+          {
+            type: 'text',
+            md: '**Troca proibida (kuikae):** na mesma vez em que chamou, você não pode descartar a pedra que pegou nem a da outra ponta da sequência. Com 3-4 na mão, quem pega o 2 não pode descartar outro 2 nem o 5. No Pon vale o mesmo para a pedra igual.',
+          },
         ],
       },
       {
@@ -1093,6 +1097,10 @@ const modulos: TutorialModule[] = [
           {
             type: 'text',
             md: 'Cada kan vira mais um indicador, o **kan dora**: a pedra de cima da coluna seguinte (a 4, depois a 5…). Ele funciona igual ao primeiro indicador.',
+          },
+          {
+            type: 'text',
+            md: 'Não dá para fazer kan quando o muro acabou: sem pedras, não há reposição.',
           },
         ],
       },

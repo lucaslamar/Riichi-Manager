@@ -241,7 +241,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         chi: {
           nome: 'Chi',
-          texto: 'Take the discard of the player on your left to make a sequence.',
+          texto: 'Take the discard of the player on your left to make a sequence. After calling, you may not discard, on that same turn, the tile you took or the one at the other end of the sequence: with 3-4 in hand, taking a 2 means you may not discard another 2 or the 5 (kuikae). The same goes for the matching tile after a Pon.',
           aliases: ['chi', 'chii'],
         },
         pon: {
@@ -252,7 +252,7 @@ export const conteudo: ConteudoGuiaBolso = {
         kan: {
           nome: 'Kan',
           texto:
-            'Four identical tiles. You draw a replacement tile and reveal one more dora indicator. A closed kan (all four are yours) does not open the hand.',
+            'Four identical tiles. You draw a replacement tile and reveal one more dora indicator. A closed kan (all four are yours) does not open the hand. You may not declare a kan once the wall is empty: there is no replacement tile left to draw.',
           aliases: ['kan', 'kans', 'kantsu', 'quad', 'quads'],
         },
         kuitan: {
@@ -279,7 +279,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         riichi: {
           nome: 'Riichi',
-          texto: 'Declare tenpai with a closed hand, betting 1,000 points. Worth 1 han.',
+          texto: 'Declare tenpai with a closed hand, betting 1,000 points. Worth 1 han. You may only declare with 4 or more tiles left in the wall.',
           aliases: ['riichi'],
         },
         ippatsu: { nome: 'Ippatsu', aliases: ['ippatsu', 'ipatsu'] },

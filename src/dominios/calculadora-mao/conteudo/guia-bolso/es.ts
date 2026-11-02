@@ -249,7 +249,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         chi: {
           nome: 'Chi',
-          texto: 'Tomar el descarte del jugador a tu izquierda para formar una secuencia.',
+          texto: 'Tomar el descarte del jugador a tu izquierda para formar una secuencia. Después de cantar, no puedes descartar en ese mismo turno la ficha que tomaste ni la del otro extremo de la secuencia: con 3-4 en la mano, si tomas el 2 no puedes descartar otro 2 ni el 5 (kuikae). En el Pon vale lo mismo para la ficha igual.',
           aliases: ['chi', 'chii'],
         },
         pon: {
@@ -260,7 +260,7 @@ export const conteudo: ConteudoGuiaBolso = {
         kan: {
           nome: 'Kan',
           texto:
-            'Cuatro fichas iguales. Robas una ficha de reposición y revelas un indicador de dora más. El kan cerrado (las cuatro son tuyas) no abre la mano.',
+            'Cuatro fichas iguales. Robas una ficha de reposición y revelas un indicador de dora más. El kan cerrado (las cuatro son tuyas) no abre la mano. No se puede hacer kan cuando el muro se acabó: no hay ficha de reposición.',
           aliases: ['kan', 'kans', 'kantsu', 'cuarteto', 'cuartetos'],
         },
         kuitan: {
@@ -287,7 +287,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         riichi: {
           nome: 'Riichi',
-          texto: 'Declarar tenpai con la mano cerrada, apostando 1.000 puntos. Vale 1 han.',
+          texto: 'Declarar tenpai con la mano cerrada, apostando 1.000 puntos. Vale 1 han. Solo se puede declarar con 4 fichas o más en el muro.',
           aliases: ['riichi'],
         },
         ippatsu: { nome: 'Ippatsu', aliases: ['ippatsu', 'ipatsu'] },

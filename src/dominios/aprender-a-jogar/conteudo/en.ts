@@ -514,6 +514,10 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'After a chi, your hand is **open**.' },
+          {
+            type: 'text',
+            md: '**Swap calling (kuikae):** on the turn you call, you may not discard the tile you took or the one at the other end of the sequence. With 3-4 in hand, taking a 2 means you may not discard another 2 or the 5. The same goes for the matching tile after a Pon.',
+          },
         ],
       },
       {
@@ -1085,6 +1089,10 @@ const modulos: TutorialModule[] = [
           {
             type: 'text',
             md: 'Each kan flips one more indicator, the **kan dora**: the top tile of the next column (4, then 5…). It works just like the first indicator.',
+          },
+          {
+            type: 'text',
+            md: 'You may not declare a kan once the wall is empty: there is no replacement tile left to draw.',
           },
         ],
       },

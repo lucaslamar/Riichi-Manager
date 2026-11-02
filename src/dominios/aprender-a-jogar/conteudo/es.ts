@@ -514,6 +514,10 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'Después del chi, tu mano queda **abierta**.' },
+          {
+            type: 'text',
+            md: '**Cambio prohibido (kuikae):** en el mismo turno en que cantas, no puedes descartar la ficha que tomaste ni la del otro extremo de la secuencia. Con 3-4 en la mano, si tomas el 2 no puedes descartar otro 2 ni el 5. En el Pon vale lo mismo para la ficha igual.',
+          },
         ],
       },
       {
@@ -1082,6 +1086,10 @@ const modulos: TutorialModule[] = [
           {
             type: 'text',
             md: 'Cada kan voltea un indicador más, el **kan dora**: la ficha de arriba de la columna siguiente (la 4, después la 5…). Funciona igual que el primer indicador.',
+          },
+          {
+            type: 'text',
+            md: 'No se puede hacer kan cuando el muro se acabó: no hay ficha de reposición.',
           },
         ],
       },
