@@ -103,13 +103,19 @@
   color: var(--cor-perigo, #d32f2f);
 }
 
-/* Teclado no layout de calculadora: chamadas na linha de funções, números com o
-   1-2-3 em cima (como no celular), naipes na coluna dos operadores e o 0 embaixo. */
+/* Chamadas na linha de funções, em cima do teclado. */
+.chamadas-notacao-mao {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* Teclado no layout de calculadora: números com o 1-2-3 em cima (como no celular),
+   naipes na coluna dos operadores e o 0 embaixo. */
 .teclado-notacao-mao {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-areas:
-    'chi pon kan kanf'
     'n1 n2 n3 m'
     'n4 n5 n6 p'
     'n7 n8 n9 s'
@@ -118,18 +124,6 @@
   margin-top: 2px;
 }
 
-.area-chi {
-  grid-area: chi;
-}
-.area-pon {
-  grid-area: pon;
-}
-.area-kan {
-  grid-area: kan;
-}
-.area-kanf {
-  grid-area: kanf;
-}
 .area-n7 {
   grid-area: n7;
 }
@@ -268,6 +262,7 @@
 
 /* iPad mini, Air e Pro: visor e teclas maiores. */
 @media (min-width: 768px) and (min-height: 561px) {
+  .chamadas-notacao-mao,
   .teclado-notacao-mao {
     gap: 10px;
   }
@@ -425,8 +420,8 @@
   display: inline-flex;
 }
 
-/* Celular deitado: barra e esperas à esquerda, teclado à direita. Em cima um do
-   outro, o teclado passava da altura e as últimas teclas ficavam cortadas. */
+/* Celular deitado: barra, chamadas e esperas à esquerda, números à direita. Em cima
+   um do outro, o teclado passava da altura e as últimas teclas ficavam cortadas. */
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
   .campo-notacao-mao {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
@@ -437,6 +432,31 @@
 
   .campo-notacao-mao > * {
     grid-column: 1;
+    order: 2;
+  }
+
+  .campo-notacao-mao > .barra-notacao-mao {
+    order: 0;
+  }
+
+  .campo-notacao-mao > .chamadas-notacao-mao {
+    order: 1;
+    gap: 4px;
+  }
+
+  .chamadas-notacao-mao .tecla-notacao-mao {
+    min-height: 44px;
+    padding-block: 0;
+  }
+
+  .teclado-notacao-mao .tecla-notacao-mao {
+    min-height: 46px;
+    padding-block: 0;
+  }
+
+  .teclado-notacao-mao .rotulo-tecla-notacao-mao {
+    font-size: 1.2rem;
+    line-height: 1.1;
   }
 
   .campo-notacao-mao > .teclado-notacao-mao {
@@ -445,19 +465,10 @@
     gap: 4px;
     margin-top: 0;
   }
-
-  .teclado-notacao-mao .tecla-notacao-mao {
-    min-height: 40px;
-    padding-block: 0;
-  }
-
-  .teclado-notacao-mao .dica-tecla-notacao-mao {
-    display: none;
-  }
 }
 
-/* Mão completa, deitado: Mudar batida e Finalizar ficam na coluna da esquerda, no
-   lugar das esperas. As duas coisas nunca aparecem juntas, e assim não tiram altura
+/* Mão completa, deitado: Mudar batida e Finalizar ficam na coluna da esquerda, sob
+   as chamadas, no lugar das esperas. As duas coisas nunca aparecem juntas, e assim não tiram altura
    do teclado. Escolhendo a batida, o rodapé volta ao lugar, embaixo das pedras. */
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
   .construtor-mao.com-notacao:not(.selecionando-batida) .painel-teclado-calculadora {
@@ -466,7 +477,7 @@
 
   .construtor-mao.com-notacao:not(.selecionando-batida) .teclado-pedras {
     position: absolute;
-    top: 62px;
+    top: 107px;
     left: 10px;
     width: calc((100% - 32px) / 2.6);
     margin: 0;
@@ -490,7 +501,8 @@
 
   .construtor-mao.com-notacao:not(.selecionando-batida) .rodape-teclado-finalizacao > button {
     width: 100%;
-    min-height: 44px;
+    height: 44px !important;
+    min-height: 44px !important;
     flex: 0 0 auto;
   }
 

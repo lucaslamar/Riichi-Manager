@@ -55,7 +55,7 @@ interface Tecla {
  *
  *   ‹ Peças           AC  ⌫   ← barra de ferramentas, como a da calculadora
  *   ─────────────────────────
- *   Chi  Pon  Kan  Kan f.      ← linha de funções (como C ( ) % ÷)
+ *   Chi  Pon  Kan  Kan f.      ← linha de funções (como C ( ) % ÷); deitado, vai para a esquerda
  *    1    2    3    m          ← números na ordem do teclado do celular
  *    4    5    6    p          ← naipes na coluna dos operadores
  *    7    8    9    s
@@ -90,17 +90,15 @@ const CHAMADAS: {
   marca: string
   rotulo: string
   variante: string
-  area: string
 }[] = [
-  { tipo: 'chii', marca: 'c', rotulo: 'melds.chii', variante: 'chi', area: 'chi' },
-  { tipo: 'pon', marca: 'c', rotulo: 'melds.pon', variante: 'pon', area: 'pon' },
-  { tipo: 'kanAberto', marca: 'c', rotulo: 'melds.kanCompact', variante: 'kan-open', area: 'kan' },
+  { tipo: 'chii', marca: 'c', rotulo: 'melds.chii', variante: 'chi' },
+  { tipo: 'pon', marca: 'c', rotulo: 'melds.pon', variante: 'pon' },
+  { tipo: 'kanAberto', marca: 'c', rotulo: 'melds.kanCompact', variante: 'kan-open' },
   {
     tipo: 'kanFechado',
     marca: 'a',
     rotulo: 'melds.kanClosedCompact',
     variante: 'kan-closed',
-    area: 'kanf',
   },
 ]
 
@@ -359,16 +357,11 @@ export function CampoNotacaoMao({
         </small>
       )}
 
-      <div
-        className="teclado-notacao-mao"
-        role="group"
-        aria-label={t('notation.keyboard')}
-        aria-describedby={erro ? idMensagem : undefined}
-      >
+      <div className="chamadas-notacao-mao" role="group" aria-label={t('calculator.actionsMenu')}>
         {CHAMADAS.map((chamada) => (
           <button
             key={chamada.tipo}
-            className={`tecla-notacao-mao chamada area-${chamada.area} action-tab action-tab--${chamada.variante} ${
+            className={`tecla-notacao-mao chamada action-tab action-tab--${chamada.variante} ${
               chamadaArmada === chamada.tipo ? 'active' : ''
             }`.trim()}
             type="button"
@@ -380,6 +373,14 @@ export function CampoNotacaoMao({
             <span className="rotulo-tecla-notacao-mao">{t(chamada.rotulo)}</span>
           </button>
         ))}
+      </div>
+
+      <div
+        className="teclado-notacao-mao"
+        role="group"
+        aria-label={t('notation.keyboard')}
+        aria-describedby={erro ? idMensagem : undefined}
+      >
         {TECLAS.map((tecla) => (
           <button
             key={tecla.valor}
