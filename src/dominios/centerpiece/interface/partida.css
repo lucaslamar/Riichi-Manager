@@ -391,7 +391,7 @@
   position: fixed;
   right: 16px;
   bottom: calc(var(--altura-barra-inferior, 0px) + 12px);
-  left: 16px;
+  left: calc(var(--largura-trilho, 0px) + 16px);
   z-index: 60;
   margin: 0;
   border-radius: 10px;
