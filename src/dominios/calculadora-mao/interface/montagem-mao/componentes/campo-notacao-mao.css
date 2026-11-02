@@ -420,59 +420,126 @@
   display: inline-flex;
 }
 
-/* Celular deitado: chamadas empilhadas à esquerda, números à direita e, entre eles,
-   a barra e as esperas. Sem esperas, a coluna do meio encolhe e os números crescem.
-   Mudar batida e Finalizar continuam na faixa de baixo. */
+/*
+ * Celular deitado: um teclado só, sem nada solto ao lado. A barra, as chamadas e os
+ * números entregam as teclas para a mesma grade (display: contents):
+ *
+ *   [ esperas, chi ou erro, numa faixa que só existe quando há o que mostrar ]
+ *    1     2     3    Chi          M
+ *    4     5     6    Pon          P
+ *    7     8     9    Kan          S
+ *   Peças AC  0  ⌫    Kan fechado  Z
+ *
+ * Mudar batida e Finalizar continuam na faixa de baixo.
+ */
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
   .campo-notacao-mao {
-    grid-template-columns: minmax(92px, 0.5fr) 56px minmax(0, 2fr);
-    grid-auto-rows: min-content;
-    gap: 4px 10px;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) minmax(0, 6fr) minmax(0, 4fr);
+    grid-template-rows: auto repeat(4, minmax(44px, auto));
+    grid-template-areas:
+      'fx fx fx fx fx fx fx fx fx fx fx fx fx fx'
+      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi m'
+      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon p'
+      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kan s'
+      'pec pec pec ac ac ac n0 n0 n0 del del del kanf z';
+    gap: 4px;
     padding: 2px 10px;
   }
 
-  .campo-notacao-mao:has(.opcoes-espera-notacao) {
-    grid-template-columns: minmax(92px, 0.5fr) minmax(0, 1fr) minmax(0, 1.6fr);
+  .barra-notacao-mao,
+  .chamadas-notacao-mao,
+  .teclado-notacao-mao {
+    display: contents;
   }
 
-  .campo-notacao-mao > * {
-    grid-column: 2;
+  .espaco-barra-notacao-mao {
+    display: none;
   }
 
-  .campo-notacao-mao > .chamadas-notacao-mao {
-    grid-column: 1;
-    grid-row: 1 / span 6;
-    grid-template-columns: minmax(0, 1fr);
-    grid-auto-rows: 1fr;
-    gap: 4px;
+  .opcoes-chi-notacao,
+  .opcoes-espera-notacao,
+  .mensagem-campo-notacao-mao {
+    grid-area: fx;
   }
 
-  .chamadas-notacao-mao .tecla-notacao-mao {
+  .botao-voltar-pedras-notacao,
+  .acao-barra-notacao-mao {
+    min-width: 0;
+    border: 1px solid var(--cor-borda, #d7e3f0);
+    padding: 0 2px;
+    background: var(--cor-superficie, #ffffff);
+  }
+
+  .botao-voltar-pedras-notacao {
+    grid-area: pec;
+    gap: 2px;
+    font-size: 0.75rem;
+  }
+
+  .acao-barra-notacao-mao.limpar {
+    grid-area: ac;
+  }
+
+  .acao-barra-notacao-mao.apagar {
+    grid-area: del;
+  }
+
+  .chamadas-notacao-mao > :nth-child(1) {
+    grid-area: chi;
+  }
+
+  .chamadas-notacao-mao > :nth-child(2) {
+    grid-area: pon;
+  }
+
+  .chamadas-notacao-mao > :nth-child(3) {
+    grid-area: kan;
+  }
+
+  .chamadas-notacao-mao > :nth-child(4) {
+    grid-area: kanf;
+  }
+
+  .campo-notacao-mao .tecla-notacao-mao {
     min-height: 44px;
-    border-radius: 14px;
     padding-block: 0;
   }
 
-  .campo-notacao-mao > .teclado-notacao-mao {
-    grid-column: 3;
-    grid-row: 1 / span 6;
-    gap: 4px;
-    margin-top: 0;
-  }
-
-  .teclado-notacao-mao .tecla-notacao-mao {
-    min-height: 44px;
-    padding-block: 0;
-  }
-
-  .teclado-notacao-mao .tecla-notacao-mao .rotulo-tecla-notacao-mao {
+  .campo-notacao-mao .tecla-notacao-mao .rotulo-tecla-notacao-mao {
     font-size: 1.2rem;
     line-height: 1.1;
   }
 
+  .campo-notacao-mao .tecla-notacao-mao.chamada .rotulo-tecla-notacao-mao {
+    font-size: 0.85rem;
+  }
+
   /* A linha do naipe é mais folgada em pé; aqui ela empurrava a altura das teclas. */
-  .teclado-notacao-mao .tecla-notacao-mao.naipe {
+  .campo-notacao-mao .tecla-notacao-mao.naipe {
     gap: 1px;
+  }
+
+  /* Esperas numa linha só, acima do teclado: pedra e valor lado a lado. */
+  .opcoes-espera-notacao {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .opcoes-espera-notacao > span {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .opcoes-espera-notacao > div {
+    min-width: 0;
+    padding-bottom: 0;
+  }
+
+  .opcao-espera-notacao {
+    flex-direction: row;
+    gap: 6px;
+    padding: 0 8px;
   }
 
   /* Sem a grade de pedras, sobra só o rodapé: nada de folga em volta dele. */
@@ -495,21 +562,5 @@
   .construtor-mao.com-notacao .rodape-teclado-finalizacao > button {
     height: 44px !important;
     min-height: 44px !important;
-  }
-
-  /* Coluna do meio estreita: Peças, AC e apagar um embaixo do outro. */
-  .campo-notacao-mao:not(:has(.opcoes-espera-notacao)) .barra-notacao-mao {
-    flex-direction: column;
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
-
-  .campo-notacao-mao:not(:has(.opcoes-espera-notacao)) .espaco-barra-notacao-mao {
-    display: none;
-  }
-
-  .campo-notacao-mao:not(:has(.opcoes-espera-notacao)) .botao-voltar-pedras-notacao {
-    padding-inline: 0;
-    font-size: 0.75rem;
   }
 }
