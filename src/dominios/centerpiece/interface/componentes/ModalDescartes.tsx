@@ -3,7 +3,15 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import type { CodigoPedra } from '@/dominios/calculadora-mao/logica/tipos'
-import { descartesDe, lerPedrasDescartadas, REGISTRO_VAZIO } from '../../logica/descartes'
+import {
+  descartesDe,
+  lerPedrasDescartadas,
+  MINIMO_MURO_RIICHI,
+  muroPermiteKan,
+  muroPermiteRiichi,
+  REGISTRO_VAZIO,
+  ultimoDescarteDaMao,
+} from '../../logica/descartes'
 import { descreverPedra } from '../../logica/descreverPedras'
 import { CADEIRAS, KANJI_VENTO, ventoDaCadeira, type Cadeira, type Partida } from '../../logica/partida'
 import { MAXIMO_VENCEDORES } from '../hooks/estadoBatida'
@@ -28,7 +36,6 @@ export default function ModalDescartes({
   rapido = false,
   consulta = false,
   expirou = false,
-  aoPular,
   aoDecidir,
   aoFechar,
 }: {
@@ -36,13 +43,12 @@ export default function ModalDescartes({
   cadeira: Cadeira
   nomeDe: (cadeira: Cadeira) => string
   acoes: AcoesDescartes
-  /** "Descarte de Fulano", na hora de passar a vez: tem Pular. */
+  /** "Descarte de Fulano", na hora de passar a vez. */
   rapido?: boolean
   /** Rio de quem não está na vez: só para ver, não registra nada. */
   consulta?: boolean
   /** O timer zerou: o título avisa, na cor de alerta. */
   expirou?: boolean
-  aoPular?: () => void
   aoDecidir: (decisao: DecisaoDescarte) => void
   aoFechar: () => void
 }) {
@@ -54,26 +60,27 @@ export default function ModalDescartes({
   const [texto, setTexto] = useState('')
   const [erro, setErro] = useState<string | null>(null)
   const [riichi, setRiichi] = useState(false)
-  const [kakan, setKakan] = useState(false)
+  const [kan, setKan] = useState<'kakan' | 'fechado' | null>(null)
   const [vencedores, setVencedores] = useState<Cadeira[]>([])
 
   const emRiichi = placar.riichi.includes(cadeira)
   const seguinte = ((cadeira + 1) % 4) as Cadeira
   const ultimo = descartesDe(lances, cadeira).pop()
   const maximoRon = MAXIMO_VENCEDORES[config.ronMultiplo]
+  const ultimoDaMao = ultimoDescarteDaMao(lances)
 
   const registrarPedras = (pedras: CodigoPedra[]) => {
     setErro(null)
     setTexto('')
-    if (kakan) {
-      // A pedra acrescentada não passa a vez: quem fez o kan ainda vai descartar.
-      pedras.forEach((pedra) => acoes.kakan(cadeira, pedra))
+    if (kan) {
+      // O kan não passa a vez: quem fez ainda compra a reposição e descarta.
+      pedras.forEach((pedra) => acoes.kakan(cadeira, pedra, kan === 'fechado'))
     } else {
       acoes.descartar(cadeira, pedras, riichi)
       setEtapa('pergunta')
     }
     setRiichi(false)
-    setKakan(false)
+    setKan(null)
   }
 
   const registrar = (entrada: string) => {
@@ -118,30 +125,26 @@ export default function ModalDescartes({
               {t('actions.close')}
             </button>
           </div>
-        ) : rapido && etapa === 'entrada' ? (
-          <div className="ptd-acoes-folha">
-            <button type="button" className="btn-contorno" onClick={aoPular}>
-              {t('match.discards.skip')}
-            </button>
-          </div>
         ) : undefined
       }
     >
       <RioPedras lances={lances} cadeira={cadeira} nomeDe={nomeDe} destacarAposRiichi={consulta} />
       {lances.some((lance) => lance.tipo === 'kakan' && lance.cadeira === cadeira) && (
         <p className="ptd-apoio">
-          {t('match.discards.kakan')}:{' '}
           {lances
             .filter((lance) => lance.tipo === 'kakan' && lance.cadeira === cadeira)
-            .map((lance) => descreverPedra(lance.pedra, t))
-            .join(', ')}
+            .map(
+              (lance) =>
+                `${t(lance.tipo === 'kakan' && lance.fechado ? 'match.discards.closedKan' : 'match.discards.kakan')}: ${descreverPedra(lance.pedra, t)}`,
+            )
+            .join(' · ')}
         </p>
       )}
 
       {etapa === 'entrada' && !consulta && (
         <form className="dsc-entrada" onSubmit={aoEnviar}>
           <label className="ptd-rotulo" htmlFor="dsc-notacao">
-            {t(kakan ? 'match.discards.kakanInput' : 'match.discards.input')}
+            {t(kan ? 'match.discards.kakanInput' : 'match.discards.input')}
           </label>
           <div className="dsc-entrada-linha">
             <input
@@ -174,22 +177,28 @@ export default function ModalDescartes({
                 type="button"
                 className={`ptd-opcao${riichi ? ' ptd-opcao--ativa' : ''}`}
                 aria-pressed={riichi}
-                disabled={kakan}
+                disabled={kan !== null || !muroPermiteRiichi(lances)}
                 onClick={() => setRiichi((atual) => !atual)}
               >
                 {t('match.discards.riichi')}
               </button>
             )}
-            <button
-              type="button"
-              className={`ptd-opcao${kakan ? ' ptd-opcao--ativa' : ''}`}
-              aria-pressed={kakan}
-              disabled={riichi}
-              onClick={() => setKakan((atual) => !atual)}
-            >
-              {t('match.discards.kakan')}
-            </button>
+            {(['kakan', 'fechado'] as const).map((tipo) => (
+              <button
+                key={tipo}
+                type="button"
+                className={`ptd-opcao${kan === tipo ? ' ptd-opcao--ativa' : ''}`}
+                aria-pressed={kan === tipo}
+                disabled={riichi || !muroPermiteKan(lances)}
+                onClick={() => setKan((atual) => (atual === tipo ? null : tipo))}
+              >
+                {t(tipo === 'kakan' ? 'match.discards.kakan' : 'match.discards.closedKan')}
+              </button>
+            ))}
           </div>
+          {!emRiichi && !muroPermiteRiichi(lances) && (
+            <p className="ptd-apoio">{t('match.discards.noRiichiWall', { count: MINIMO_MURO_RIICHI })}</p>
+          )}
           <TecladoSoPedras regras={config.regrasCalculo} aoEscolher={(pedra) => registrar(pedra)} />
         </form>
       )}
@@ -213,16 +222,27 @@ export default function ModalDescartes({
             <button
               type="button"
               className="mesa-btn-secundario"
+              disabled={ultimoDaMao}
               onClick={() =>
                 aoDecidir({ tipo: 'chamada', chamada: 'chi', cadeira: seguinte, ordem: ultimo.ordem })
               }
             >
               {t('match.discards.call.chi')}
             </button>
-            <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('pon')}>
+            <button
+              type="button"
+              className="mesa-btn-secundario"
+              disabled={ultimoDaMao}
+              onClick={() => setEtapa('pon')}
+            >
               {t('match.discards.call.pon')}
             </button>
-            <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('kan')}>
+            <button
+              type="button"
+              className="mesa-btn-secundario"
+              disabled={ultimoDaMao}
+              onClick={() => setEtapa('kan')}
+            >
               {t('match.discards.call.kan')}
             </button>
             <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('ron')}>

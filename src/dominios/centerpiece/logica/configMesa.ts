@@ -39,8 +39,6 @@ export interface ConfigMesa {
   regrasCalculo: ConfiguracaoCalculo
   /** Segundos por vez; 0 = desligado. */
   timerVez: 0 | 30 | 60 | 90
-  registrarDescartes: boolean
-  /** Só vale com o registro de descartes ligado. */
   checarFuriten: boolean
 }
 
@@ -75,7 +73,7 @@ const regrasOficiais = (akadora: boolean): ConfiguracaoCalculo => ({
 /** Regras próprias de cada preset; timer e descartes são preferências da mesa. */
 type RegrasPreset = Omit<
   ConfigMesa,
-  'preset' | 'presetBase' | 'timerVez' | 'registrarDescartes' | 'checarFuriten'
+  'preset' | 'presetBase' | 'timerVez' | 'checarFuriten'
 >
 
 /** Padrão de clube, para iniciantes: regras simples e partida que acaba no horário. */
@@ -175,7 +173,6 @@ export function configDoPreset(preset: IdPreset): ConfigMesa {
     preset,
     presetBase: preset,
     timerVez: preset === 'padrao' ? 60 : 30,
-    registrarDescartes: false,
     checarFuriten: false,
   }
 }
@@ -279,7 +276,6 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
       lida.timerVez !== undefined && OPCOES_TIMER_VEZ.includes(lida.timerVez)
         ? lida.timerVez
         : base.timerVez,
-    registrarDescartes: booleano(lida.registrarDescartes, base.registrarDescartes),
     checarFuriten: booleano(lida.checarFuriten, base.checarFuriten),
   }
 }

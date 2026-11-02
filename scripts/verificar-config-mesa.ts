@@ -54,7 +54,6 @@ teste('padrão do app: Leste apenas, sem abortivos nem prorrogação, timer de 1
   assert.equal(config.tipoPartida, 'leste')
   assert.equal(config.prorrogacao, false)
   assert.ok(Object.values(config.abortivos).every((ligado) => !ligado))
-  assert.equal(config.registrarDescartes, false)
 })
 
 teste('toda uma de preset fecha em zero', () => {

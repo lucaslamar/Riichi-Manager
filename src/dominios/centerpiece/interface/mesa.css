@@ -737,3 +737,19 @@ button.mesa-domo {
   font-size: 0.75rem;
   text-align: center;
 }
+
+/* Pedras que ainda dá para comprar, no domo. */
+.mesa-domo-muro {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Celular deitado: Dados, Ryukyoku, Desfazer e Mãos em duas colunas, para caber. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mesa-linha-acoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -10,7 +10,7 @@ import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { numerosDaParede } from '../../logica/dados'
-import { ehQuatroVentos } from '../../logica/descartes'
+import { ehQuatroVentos, pedrasNoMuro, ultimoDescarteDaMao } from '../../logica/descartes'
 import { chamarPedra, desfazerUltimoDaMesa } from '../../logica/registroPartida'
 import {
   CADEIRAS,
@@ -121,26 +121,22 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const acoesDescartes = useDescartes(atualizar)
   const fecharAvisoFuriten = useCallback(() => setAvisoFuritenDe(null), [])
 
-  // Com o registro ligado, passar a vez pergunta antes o que foi descartado.
-  const tocarTimer = () => {
-    if (config.registrarDescartes && vez.comecou) setDescarteRapido({ cadeira: vez.cadeira, expirou: false })
-    else timer.tocar()
+  // Todo descarte é registrado: é dele que saem a vez, o rio e as pedras do muro.
+  const abrirDescarte = () => {
+    if (!vez.comecou) timer.tocar()
+    setDescarteRapido({ cadeira: vez.cadeira, expirou: false })
   }
+  const muro = pedrasNoMuro(partida.registro?.lances ?? [])
 
   // Timer zerou: abre o descarte de quem estourou, uma vez por vez. A modal pausa o
   // timer, então o alarme para aqui; fechar pelo X volta ao alarme e ao card piscando.
   const estouroAberto = useRef(false)
   if (vez.restanteMs > 0) estouroAberto.current = false
   useEffect(() => {
-    if (!timer.esgotado || !config.registrarDescartes || modalAberta || estouroAberto.current) return
+    if (!timer.esgotado || modalAberta || estouroAberto.current) return
     estouroAberto.current = true
     setDescarteRapido({ cadeira: vez.cadeira, expirou: true })
-  }, [timer.esgotado, config.registrarDescartes, modalAberta, vez.cadeira])
-
-  const pularDescarte = () => {
-    setDescarteRapido(null)
-    if (timer.ligado) timer.tocar()
-  }
+  }, [timer.esgotado, modalAberta, vez.cadeira])
 
   /** Depois do descarte: de quem é a vez agora, e se a mão acabou em ron. */
   const decidirDescarte = (origem: Cadeira, decisao: DecisaoDescarte) => {
@@ -151,10 +147,12 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     } else if (decisao.tipo === 'chamada') {
       const { cadeira, chamada, ordem } = decisao
       atualizar((atual) => chamarPedra(atual, ordem, { cadeira, tipo: chamada }))
-      if (timer.ligado) timer.passarPara(cadeira)
+      timer.passarPara(cadeira)
       setDescarteRapido({ cadeira, expirou: false })
-    } else if (timer.ligado) {
+    } else {
       timer.passarPara(((origem + 1) % 4) as Cadeira)
+      // Ninguém chamou o último descarte: a mão acaba em ryukyoku.
+      if (ultimoDescarteDaMao(partida.registro?.lances ?? [])) setRyukyokuAberto(true)
     }
   }
 
@@ -311,7 +309,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             <MesaQuadrada
               cadeiraDealer={placar.cadeiraDealer}
               aoTocarDomo={timer.ligado && vez.comecou ? timer.alternarPausa : undefined}
-              rotuloDomo={t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}
+              rotuloDomo={`${t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}. ${t('match.table.wall', { count: muro })}`}
               domo={
                 <>
                   <span className="mesa-domo-rodada" aria-hidden="true">
@@ -330,6 +328,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                     )}{' '}
                     本{placar.honba}·棒{placar.palitos}
                   </span>
+                  <span className="mesa-domo-muro" aria-hidden="true">
+                    ×{muro}
+                  </span>
+                  <span className="sr-only">{t('match.table.wall', { count: muro })}</span>
                 </>
               }
               lado={(cadeira) => ({
@@ -353,10 +355,11 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                             segundos: timer.segundos,
                             fracao: timer.fracao,
                             esgotado: timer.esgotado || !!descarteRapido?.expirou,
-                            aoTocar: tocarTimer,
+                            aoTocar: abrirDescarte,
                           }
                         : undefined
                     }
+                    daVez={vez.cadeira === cadeira}
                     aoAbrirMenu={() => setMenuDe(cadeira)}
                     aoSegurar={() => setDiferencaDe(cadeira)}
                   />
@@ -383,9 +386,12 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 {t('match.discards.fourWindsNotice')}
               </button>
             )}
+            <button type="button" className="mesa-btn-principal" onClick={abrirDescarte}>
+              {t('match.table.discard', { name: nomeDaVez })}
+            </button>
             <button
               type="button"
-              className="mesa-btn-principal"
+              className="mesa-btn-secundario"
               onClick={() => setBatida(iniciarBatida())}
             >
               {t('match.win.title')}
@@ -478,7 +484,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           partida={partida}
           cadeira={menuDe}
           nome={nomeDe(menuDe)}
-          podeReceberVez={timer.ligado && vez.cadeira !== menuDe}
+          podeReceberVez={vez.cadeira !== menuDe}
           aoEscolher={(acao) => aoEscolherNoMenu(menuDe, acao)}
           aoFechar={() => setMenuDe(null)}
         />
@@ -560,9 +566,8 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
 
       {descartesDe !== null && (
         <ModalDescartes
-          // Com o timer se sabe de quem é a vez: os outros só consultam. Sem ele, a vez
-          // não é acompanhada e o menu de cada jogador continua registrando.
-          consulta={timer.ligado && descartesDe !== vez.cadeira}
+          // Quem não está na vez só consulta o rio.
+          consulta={descartesDe !== vez.cadeira}
           partida={partida}
           cadeira={descartesDe}
           nomeDe={nomeDe}
@@ -581,7 +586,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           cadeira={descarteRapido.cadeira}
           nomeDe={nomeDe}
           acoes={acoesDescartes}
-          aoPular={pularDescarte}
           aoDecidir={(decisao) => decidirDescarte(descarteRapido.cadeira, decisao)}
           aoFechar={() => setDescarteRapido(null)}
         />

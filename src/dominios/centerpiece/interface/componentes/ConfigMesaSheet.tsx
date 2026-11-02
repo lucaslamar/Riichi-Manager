@@ -329,21 +329,11 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       </Grupo>
 
       <Opcao
-        rotulo={t('tableConfig.recordDiscards')}
-        ajuda={t('tableConfig.recordDiscardsHelp')}
-        marcado={config.registrarDescartes}
-        aoMudar={(registrarDescartes) =>
-          alterar({ registrarDescartes, checarFuriten: registrarDescartes && config.checarFuriten })
-        }
+        rotulo={t('tableConfig.checkFuriten')}
+        ajuda={t('tableConfig.checkFuritenHelp')}
+        marcado={config.checarFuriten}
+        aoMudar={(checarFuriten) => alterar({ checarFuriten })}
       />
-      {config.registrarDescartes && (
-        <Opcao
-          rotulo={t('tableConfig.checkFuriten')}
-          ajuda={t('tableConfig.checkFuritenHelp')}
-          marcado={config.checarFuriten}
-          aoMudar={(checarFuriten) => alterar({ checarFuriten })}
-        />
-      )}
       </section>
 
       <p className="cfg-sem-resultado" role="status">

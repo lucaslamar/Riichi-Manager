@@ -855,7 +855,6 @@
     "abortiveFourWindsHelp": "No primeiro giro, sem chamadas, os 4 jogadores descartam o mesmo vento.",
     "abortiveFourKansHelp": "Jogadores diferentes declaram 4 kans na mesma mão. Se um só fez os 4, a mão segue.",
     "abortiveFourRiichiHelp": "Os 4 jogadores declaram Riichi na mesma mão.",
-    "recordDiscardsHelp": "Anota cada descarte para mostrar o rio dos jogadores e avisar de furiten.",
     "searchPlaceholder": "Buscar regra",
     "searchEmpty": "Nada encontrado.",
     "indexLabel": "Ir para a seção",
@@ -914,7 +913,6 @@
     "timer30": "30 s",
     "timer60": "1 min",
     "timer90": "1 min 30",
-    "recordDiscards": "Registrar descartes",
     "reset": "Reiniciar",
     "done": "Feito",
     "presetDefaultHelp": "Padrão de clube, pensado para iniciantes",
@@ -985,6 +983,8 @@
       "rulesSummary": "{{start}} pontos · retorno {{target}} · uma {{uma}}"
     },
     "table": {
+      "discard": "Descarte de {{name}}",
+      "wall": "{{count}} pedras no muro",
       "switch": "Trocar de mesa",
       "number": "Mesa {{number}}",
       "round": "{{wind}} {{number}}",
@@ -1125,7 +1125,6 @@
     "discards": {
       "title": "Descartes de {{name}}",
       "quickTitle": "Descarte de {{name}}",
-      "skip": "Pular",
       "add": "Adicionar",
       "input": "Descarte em notação (3m5p1z)",
       "kakanInput": "Pedra do kakan em notação (3m)",
@@ -1139,6 +1138,8 @@
         "ron": "Ron"
       },
       "riichiSince": "Em riichi desde o {{order}}º descarte",
+      "closedKan": "Kan fechado",
+      "noRiichiWall": "Riichi precisa de pelo menos {{count}} pedras no muro.",
       "tileOrder": "Descarte {{order}}",
       "history": "Ver descartes",
       "handSave": "Salvar",

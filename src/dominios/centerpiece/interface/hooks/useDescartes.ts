@@ -21,8 +21,8 @@ export function useDescartes(atualizar: (transformar: (partida: Partida) => Part
             agora: new Date().toISOString(),
           }),
         ),
-      kakan: (cadeira: Cadeira, pedra: CodigoPedra) =>
-        atualizar((atual) => registrarKakan(atual, cadeira, pedra)),
+      kakan: (cadeira: Cadeira, pedra: CodigoPedra, fechado = false) =>
+        atualizar((atual) => registrarKakan(atual, cadeira, pedra, fechado)),
       chamar: (ordem: number, chamada?: { cadeira: Cadeira; tipo: TipoChamada }) =>
         atualizar((atual) => chamarPedra(atual, ordem, chamada)),
       informarMao: (cadeira: Cadeira, mao: Omit<MaoInformada, 'aposOrdem'>) =>

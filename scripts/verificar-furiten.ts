@@ -6,6 +6,10 @@
 import assert from 'node:assert/strict'
 import { configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
 import {
+  muroPermiteKan,
+  muroPermiteRiichi,
+  pedrasNoMuro,
+  ultimoDescarteDaMao,
   adicionarDescartes,
   adicionarKakan,
   candidatosNagashi,
@@ -313,6 +317,55 @@ teste('frases por extenso', () => {
   assert.ok(descreverRio('Ana', [], () => '', t).includes('noDiscards'))
   const estado = calcularFuriten(linha([1, '3s']), 0, ESPERAS)
   assert.ok(descreverFuriten(estado, ESPERAS, t).startsWith('match.furiten.temporary.title'))
+})
+
+teste('muro: abre com 69 e cada descarte leva à próxima compra', () => {
+  assert.equal(pedrasNoMuro([]), 69)
+  assert.equal(pedrasNoMuro(linha([0, '1m'])), 68)
+  assert.equal(pedrasNoMuro(linha([0, '1m'], [1, '2m'], [2, '3m'])), 66)
+})
+
+teste('muro: chi, pon e ron não compram; kan compra a reposição', () => {
+  const comChamada = (tipo: 'chi' | 'pon' | 'kan' | 'ron') =>
+    linha([0, '1m']).map((lance) =>
+      lance.tipo === 'descarte' ? { ...lance, chamadaPor: { cadeira: 1 as Cadeira, tipo } } : lance,
+    )
+  assert.equal(pedrasNoMuro(comChamada('chi')), 69)
+  assert.equal(pedrasNoMuro(comChamada('pon')), 69)
+  assert.equal(pedrasNoMuro(comChamada('ron')), 69)
+  assert.equal(pedrasNoMuro(comChamada('kan')), 68)
+  const fechado: Lance = { tipo: 'kakan', ordem: 1, cadeira: 0, pedra: '1m', fechado: true }
+  const kakan: Lance = { tipo: 'kakan', ordem: 2, cadeira: 0, pedra: '2m' }
+  assert.equal(pedrasNoMuro([fechado, kakan]), 67)
+})
+
+const descartes = (quantos: number) =>
+  Array.from({ length: quantos }, (_, indice) => linha([0, '1m']).map((lance) => ({ ...lance, ordem: indice + 1 }))[0])
+
+teste('muro: Riichi só com 4 ou mais; kan só com alguma pedra; nunca fica negativo', () => {
+  assert.equal(pedrasNoMuro(descartes(65)), 4)
+  assert.equal(muroPermiteRiichi(descartes(65)), true)
+  assert.equal(muroPermiteRiichi(descartes(66)), false)
+  assert.equal(muroPermiteKan(descartes(68)), true)
+  assert.equal(muroPermiteKan(descartes(69)), false)
+  assert.equal(pedrasNoMuro(descartes(75)), 0)
+})
+
+teste('muro: o descarte feito com o muro vazio é o último da mão', () => {
+  assert.equal(ultimoDescarteDaMao(descartes(69)), false)
+  assert.equal(ultimoDescarteDaMao(descartes(70)), true)
+})
+
+teste('Riichi com menos de 4 no muro não é declarado', () => {
+  const base = novaPartida()
+  const lances = descartes(66)
+  const partida = registrarDescartes({ ...base, registro: { lances, maos: {} } }, 0, ['1m'], { riichi: true }, contexto('r'))
+  assert.deepEqual(partida.placar.riichi, [])
+})
+
+teste('passar por um kan fechado não dá furiten', () => {
+  const fechado: Lance = { tipo: 'kakan', ordem: 1, cadeira: 1, pedra: '3s', fechado: true }
+  assert.equal(calcularFuriten([fechado], 0, ESPERAS).principal, null)
 })
 
 console.log(`Furiten ok: ${testes} testes.`)

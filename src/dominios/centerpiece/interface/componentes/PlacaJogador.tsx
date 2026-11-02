@@ -17,6 +17,8 @@ interface PropsPlacaJogador {
   checagem?: { rotulo: string; aoTocar: () => void }
   /** Presente só na placa da vez, com o timer ligado. */
   timer?: { segundos: number; fracao: number; esgotado: boolean; aoTocar: () => void }
+  /** A vez é dele; com o timer desligado, é o único sinal na placa. */
+  daVez?: boolean
   aoAbrirMenu: () => void
   aoSegurar: () => void
 }
@@ -32,6 +34,7 @@ export default function PlacaJogador({
   emRiichi,
   checagem,
   timer,
+  daVez = false,
   aoAbrirMenu,
   aoSegurar,
 }: PropsPlacaJogador) {
@@ -56,7 +59,7 @@ export default function PlacaJogador({
 
   const classes = [
     'mesa-placa',
-    timer ? 'mesa-placa--vez' : '',
+    timer || daVez ? 'mesa-placa--vez' : '',
     timer?.esgotado ? 'mesa-placa--esgotado' : '',
   ]
     .filter(Boolean)

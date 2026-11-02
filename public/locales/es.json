@@ -862,7 +862,6 @@
     "abortiveFourWindsHelp": "En la primera vuelta, sin cantos, los 4 jugadores descartan el mismo viento.",
     "abortiveFourKansHelp": "Jugadores distintos declaran 4 kans en la misma mano. Si uno solo hizo los 4, la mano sigue.",
     "abortiveFourRiichiHelp": "Los 4 jugadores declaran Riichi en la misma mano.",
-    "recordDiscardsHelp": "Anota cada descarte para mostrar el río de los jugadores y avisar de furiten.",
     "searchPlaceholder": "Buscar regla",
     "searchEmpty": "No se encontró nada.",
     "indexLabel": "Ir a la sección",
@@ -921,7 +920,6 @@
     "timer30": "30 s",
     "timer60": "1 min",
     "timer90": "1 min 30",
-    "recordDiscards": "Record discards",
     "reset": "Reset",
     "done": "Done",
     "presetDefaultHelp": "Club standard, made for beginners",
@@ -992,6 +990,8 @@
       "rulesSummary": "{{start}} points · return {{target}} · uma {{uma}}"
     },
     "table": {
+      "discard": "Descarte de {{name}}",
+      "wall": "{{count}} fichas en el muro",
       "switch": "Switch table",
       "number": "Table {{number}}",
       "round": "{{wind}} {{number}}",
@@ -1132,7 +1132,6 @@
     "discards": {
       "title": "{{name}}'s discards",
       "quickTitle": "{{name}}'s discard",
-      "skip": "Skip",
       "add": "Add",
       "input": "Discard in notation (3m5p1z)",
       "kakanInput": "Kakan tile in notation (3m)",
@@ -1146,6 +1145,8 @@
         "ron": "Ron"
       },
       "riichiSince": "En riichi desde el descarte {{order}}",
+      "closedKan": "Kan cerrado",
+      "noRiichiWall": "Riichi necesita al menos {{count}} fichas en el muro.",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

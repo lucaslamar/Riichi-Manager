@@ -38,6 +38,8 @@ export interface LanceKakan extends AntesDoLance {
   ordem: number
   cadeira: Cadeira
   pedra: CodigoPedra
+  /** Kan fechado: compra a reposição como o kakan, mas ninguém pode fazer ron nele. */
+  fechado?: boolean
 }
 
 export type Lance = LanceDescarte | LanceKakan
@@ -86,8 +88,16 @@ export function adicionarKakan(
   cadeira: Cadeira,
   pedra: CodigoPedra,
   antes?: AntesDoLance,
+  fechado = false,
 ): RegistroMao {
-  const lance: Lance = { tipo: 'kakan', ordem: registro.lances.length + 1, cadeira, pedra, ...antes }
+  const lance: Lance = {
+    tipo: 'kakan',
+    ordem: registro.lances.length + 1,
+    cadeira,
+    pedra,
+    ...(fechado ? { fechado: true } : {}),
+    ...antes,
+  }
   return { ...registro, lances: [...registro.lances, lance] }
 }
 
@@ -133,6 +143,39 @@ export function desmarcarRiichi(registro: RegistroMao, cadeira: Cadeira): Regist
         : lance,
     ),
   }
+}
+
+/** 136 pedras, menos 14 do muro morto e 13 de cada mão, menos a compra do dealer. */
+const PEDRAS_NO_MURO_AO_ABRIR = 69
+/** Riichi só com pelo menos esta quantidade no muro: ainda haverá a próxima compra. */
+export const MINIMO_MURO_RIICHI = 4
+
+/**
+ * Pedras que ainda dá para comprar, já com a compra de quem está na vez. Cada descarte
+ * leva à compra do próximo; Chi, Pon e Ron não compram, e todo kan compra a reposição,
+ * que também tira uma pedra do muro.
+ */
+export function pedrasNoMuro(lances: readonly Lance[]): number {
+  const compras = lances.filter((lance) => {
+    if (lance.tipo === 'kakan') return true
+    const chamada = lance.chamadaPor?.tipo
+    return chamada !== 'chi' && chamada !== 'pon' && chamada !== 'ron'
+  }).length
+  return Math.max(0, PEDRAS_NO_MURO_AO_ABRIR - compras)
+}
+
+export function muroPermiteRiichi(lances: readonly Lance[]) {
+  return pedrasNoMuro(lances) >= MINIMO_MURO_RIICHI
+}
+
+/** Sem pedra para a reposição não há kan. */
+export function muroPermiteKan(lances: readonly Lance[]) {
+  return pedrasNoMuro(lances) > 0
+}
+
+/** Foi o último descarte da mão: o muro já estava vazio quando ele saiu. Só cabe ron. */
+export function ultimoDescarteDaMao(lances: readonly Lance[]) {
+  return lances.length > 0 && pedrasNoMuro(lances.slice(0, -1)) === 0
 }
 
 export function descartesDe(lances: readonly Lance[], cadeira: Cadeira) {
