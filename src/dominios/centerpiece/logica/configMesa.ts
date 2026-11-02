@@ -194,6 +194,11 @@ export function escolherPreset(config: ConfigMesa, preset: ConfigMesa['preset'])
     : configDoPreset(preset)
 }
 
+/** Sem oka, o retorno é igual à partida e a soma final fecha em zero. */
+export function retornoComOka(pontosPartida: number, comOka: boolean) {
+  return comOka ? pontosPartida + 5000 : pontosPartida
+}
+
 export function reiniciarConfig(config: ConfigMesa): ConfigMesa {
   return configDoPreset(config.presetBase)
 }

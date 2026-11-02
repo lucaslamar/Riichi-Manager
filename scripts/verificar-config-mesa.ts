@@ -14,6 +14,7 @@ import {
   IDS_PRESET,
   normalizarConfig,
   reiniciarConfig,
+  retornoComOka,
   somaUma,
 } from '../src/dominios/centerpiece/logica/configMesa'
 import { calcularPontuacaoHanFu } from '../src/dominios/calculadora-han-fu/logica/calcularPontuacaoHanFu'
@@ -165,6 +166,14 @@ teste('basengo: honba vale 1500 no ron e 500 por jogador no tsumo', () => {
   const tsumo = calcularPontuacaoHanFu({ ...base, tipoVitoria: 'tsumo' }).tsumo
   assert.deepEqual([tsumo?.dealer, tsumo?.nonDealer], [500 + 500, 300 + 500])
   assert.equal(calcularPontuacaoHanFu({ ...base, basengo: false, tipoVitoria: 'ron' }).ron, 1300)
+})
+
+teste('sem oka, o retorno é a partida; com oka, 5.000 acima', () => {
+  assert.equal(retornoComOka(25000, false), 25000)
+  assert.equal(retornoComOka(25000, true), 30000)
+  assert.equal(calcularOka({ pontosPartida: 25000, pontosRetorno: retornoComOka(25000, false) }), 0)
+  const sem = exemploPontuacao({ pontosPartida: 25000, pontosRetorno: 25000, uma: umaFixa([15, 5, -5, -15]) })
+  assert.equal(sem.reduce((soma, linha) => soma + linha.final, 0), 0)
 })
 
 teste('uma 5-15 e 10-30 viram os 4 valores', () => {

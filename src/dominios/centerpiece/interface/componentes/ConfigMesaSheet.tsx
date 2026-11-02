@@ -17,6 +17,7 @@ import { umaValida, valoresDaUma } from '../../logica/uma'
 import { useConfigMesa } from '../hooks/useConfigMesa'
 import BotoesOpcao from './BotoesOpcao'
 import CampoUma from './CampoUma'
+import EscolhaOka from './EscolhaOka'
 import '../config-mesa.css'
 
 const ABORTIVOS: { campo: keyof ConfigMesa['abortivos']; chave: string }[] = [
@@ -57,9 +58,9 @@ interface PropsConfigMesaSheet {
 
 /** Folha "Configurações de mesa": preset no topo, Pontuação, Regras, Reiniciar e Feito. */
 export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: PropsConfigMesaSheet) {
-  const { t, numero } = useI18n()
+  const { t } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
-  const oka = calcularOka(config)
+  const semOka = calcularOka(config) <= 0
   const [texto, setTexto] = useState('')
   const busca = normalizarTexto(texto)
   const raiz = useRef<HTMLDivElement | null>(null)
@@ -134,32 +135,36 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
             valor={config.pontosPartida}
             passo={1000}
             minimo={0}
-            aoMudar={(pontosPartida) => alterar({ pontosPartida })}
+            // Sem oka, o retorno acompanha a partida.
+            aoMudar={(pontosPartida) =>
+              alterar(semOka ? { pontosPartida, pontosRetorno: pontosPartida } : { pontosPartida })
+            }
           />
         </Campo>
-        <Campo
-          rotulo={t('tableConfig.returnPoints')}
-          ajuda={
-            <AjudaCampo rotulo={t('tableConfig.returnPoints')}>
-              <AjudaRetorno config={config} />
-            </AjudaCampo>
-          }
-        >
-          <CampoNumero
-            valor={config.pontosRetorno}
-            passo={1000}
-            minimo={0}
-            aoMudar={(pontosRetorno) => alterar({ pontosRetorno })}
-          />
-        </Campo>
+        {!semOka && (
+          <Campo
+            rotulo={t('tableConfig.returnPoints')}
+            ajuda={
+              <AjudaCampo rotulo={t('tableConfig.returnPoints')}>
+                <AjudaRetorno config={config} />
+              </AjudaCampo>
+            }
+          >
+            <CampoNumero
+              valor={config.pontosRetorno}
+              passo={1000}
+              minimo={0}
+              aoMudar={(pontosRetorno) => alterar({ pontosRetorno })}
+            />
+          </Campo>
+        )}
       </div>
-      <Buscavel termos={`${t('tableConfig.okaLabel')} ${t('tableConfig.okaHelp')}`}>
-        <p className="cfg-ajuda cfg-ajuda--com-botao">
-          {t('tableConfig.okaValue', { points: numero(oka) })}
-          <AjudaCampo rotulo={t('tableConfig.okaLabel')}>
-            <p>{t('tableConfig.okaHelp')}</p>
-          </AjudaCampo>
-        </p>
+      <Buscavel termos={`${t('tableConfig.okaLabel')} ${t('tableConfig.okaHelp')} ${t('tableConfig.okaOffHelp')}`}>
+        <EscolhaOka
+          pontosPartida={config.pontosPartida}
+          pontosRetorno={config.pontosRetorno}
+          aoMudarRetorno={(pontosRetorno) => alterar({ pontosRetorno })}
+        />
       </Buscavel>
 
       <Buscavel termos={`${t('tableConfig.uma')} ${t('tableConfig.umaHelp')} ${t('tableConfig.umaFloatHelp')}`}>

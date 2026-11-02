@@ -1,14 +1,12 @@
 import { useMemo, useState } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import SeletorJogador from '@/dominios/jogadores/interface/componentes/SeletorJogador'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import {
-  calcularOka,
   configDoPreset,
   IDS_PRESET,
   type ConfigMesa,
@@ -18,6 +16,7 @@ import { criarPartidaManual } from '../../logica/partidaManual'
 import { umaValida, type UmaMesa } from '../../logica/uma'
 import { carregarUltimaConfig } from '../../persistencia/repositorioConfigMesa'
 import CampoUma, { CampoInteiro, TECLADO_COM_SINAL } from '../componentes/CampoUma'
+import EscolhaOka from '../componentes/EscolhaOka'
 import ListaResultado from '../componentes/ListaResultado'
 import { usePartidas } from '../hooks/usePartidas'
 import '../config-mesa.css'
@@ -176,25 +175,30 @@ export default function RegistrarFinalizada({
             rotulo={t('tableConfig.startPoints')}
             valor={pontosPartida}
             negativo={false}
-            aoMudar={setPontosPartida}
+            // Sem oka, o retorno acompanha a partida.
+            aoMudar={(novo) => {
+              if (pontosRetorno <= pontosPartida) setPontosRetorno(novo)
+              setPontosPartida(novo)
+            }}
           />
         </label>
-        <label className="cfg-campo">
-          <span>{t('tableConfig.returnPoints')}</span>
-          <CampoInteiro
-            rotulo={t('tableConfig.returnPoints')}
-            valor={pontosRetorno}
-            negativo={false}
-            aoMudar={setPontosRetorno}
-          />
-        </label>
+        {pontosRetorno > pontosPartida && (
+          <label className="cfg-campo">
+            <span>{t('tableConfig.returnPoints')}</span>
+            <CampoInteiro
+              rotulo={t('tableConfig.returnPoints')}
+              valor={pontosRetorno}
+              negativo={false}
+              aoMudar={setPontosRetorno}
+            />
+          </label>
+        )}
       </div>
-      <p className="cfg-ajuda cfg-ajuda--com-botao">
-        {t('tableConfig.okaValue', { points: numero(calcularOka({ pontosPartida, pontosRetorno })) })}
-        <AjudaCampo rotulo={t('tableConfig.okaLabel')}>
-          <p>{t('tableConfig.okaHelp')}</p>
-        </AjudaCampo>
-      </p>
+      <EscolhaOka
+        pontosPartida={pontosPartida}
+        pontosRetorno={pontosRetorno}
+        aoMudarRetorno={setPontosRetorno}
+      />
 
       <CampoUma
         valor={uma}
