@@ -708,3 +708,14 @@ body:has(.sorteador-ventos-page) {
     width: clamp(220px, min(40vw, 44dvh), 440px);
   }
 }
+
+/* Celular deitado: de borda a borda, com o gato inteiro na altura que sobra. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .sorteador-ventos-page {
+    width: 100%;
+  }
+
+  .gato-helice {
+    --gato-reserva: 124px;
+  }
+}

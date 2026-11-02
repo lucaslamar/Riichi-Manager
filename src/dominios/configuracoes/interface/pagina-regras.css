@@ -242,3 +242,17 @@ body.toque-ampliado .cartao-regras {
   font-weight: 700;
   text-decoration: none;
 }
+
+/* Celular deitado: duas colunas de cartões, com o Sobre ocupando a linha toda. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .pagina-regras {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .cartao-regras--empilhado,
+  .sobre-mojoca {
+    grid-column: 1 / -1;
+  }
+}
