@@ -845,6 +845,8 @@
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
     "uma": "Uma (in thousands of points)",
+    "calcRules": "Calculation rules",
+    "ruleKuitan": "Kuitan",
     "umaFixed": "Fixed",
     "umaFloating": "Floating",
     "uma23": "2nd / 3rd",

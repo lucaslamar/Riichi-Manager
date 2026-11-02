@@ -1,4 +1,4 @@
-import type { ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
+import type { ConfiguracaoCalculo, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import type { ResultadoPontuacaoHanFu } from '@/dominios/calculadora-han-fu/logica/tipos'
 import type { Mao, VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { gerarNotacaoCompleta } from '@/dominios/calculadora-mao/logica/notacao'
@@ -27,13 +27,20 @@ export interface MaoMontada {
   notacao: string
   mao: Mao
   resultado: ResultadoMao
+  /** Regras ativas na hora; mãos antigas não têm. */
+  regras?: ConfiguracaoCalculo
 }
 
-export function montarMaoParaHistorico(mao: Mao, resultado: ResultadoMao): MaoMontada {
+export function montarMaoParaHistorico(
+  mao: Mao,
+  resultado: ResultadoMao,
+  regras?: ConfiguracaoCalculo,
+): MaoMontada {
   return {
     notacao: gerarNotacaoCompleta(mao.pedras, mao.indiceAgari, mao.melds),
     mao,
     resultado,
+    ...(regras ? { regras } : {}),
   }
 }
 
@@ -49,6 +56,8 @@ export interface ContextoCenterpieceMao {
   vencedorEhLeste?: boolean
   vencedorNome?: string
   jogadorRiichi?: boolean
+  /** Regras da mesa: a calculadora não oferece a engrenagem. */
+  regras?: ConfiguracaoCalculo
 }
 
 interface MetadadosCenterpiece {

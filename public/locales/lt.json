@@ -859,6 +859,8 @@
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
     "uma": "Uma (in thousands of points)",
+    "calcRules": "Skaičiavimo taisyklės",
+    "ruleKuitan": "Kuitan",
     "umaFixed": "Fiksuota",
     "umaFloating": "Kintama",
     "uma23": "2-a / 3-ia",

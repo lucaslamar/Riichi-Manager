@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import {
@@ -242,6 +243,13 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           ))}
         </div>
       </fieldset>
+
+      <h3 className="cfg-grupo">{t('tableConfig.calcRules')}</h3>
+      <ListaRegrasCalculo
+        semChombo
+        configuracao={config.regrasCalculo}
+        aoMudar={(regrasCalculo) => alterar({ regrasCalculo })}
+      />
 
       <Opcao
         rotulo={t('tableConfig.recordDiscards')}

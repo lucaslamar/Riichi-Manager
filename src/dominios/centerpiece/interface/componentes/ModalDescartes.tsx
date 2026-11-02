@@ -73,7 +73,7 @@ export default function ModalDescartes({
   }
 
   const registrar = (entrada: string) => {
-    const leitura = lerPedrasDescartadas(entrada, lances)
+    const leitura = lerPedrasDescartadas(entrada, lances, config.regrasCalculo.akadora)
     if (leitura.erro) setErro(t(leitura.erro.chave, leitura.erro.parametros))
     else registrarPedras(leitura.pedras)
   }
@@ -180,7 +180,7 @@ export default function ModalDescartes({
               {t('match.discards.kakan')}
             </button>
           </div>
-          <TecladoSoPedras aoEscolher={(pedra) => registrar(pedra)} />
+          <TecladoSoPedras regras={config.regrasCalculo} aoEscolher={(pedra) => registrar(pedra)} />
         </form>
       )}
 

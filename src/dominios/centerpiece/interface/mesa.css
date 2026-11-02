@@ -731,3 +731,9 @@ button.mesa-domo {
 .mesa-sugestao-instalar > span {
   flex: 1 1 auto;
 }
+
+.mesa-regras-ativas {
+  display: block;
+  font-size: 0.75rem;
+  text-align: center;
+}

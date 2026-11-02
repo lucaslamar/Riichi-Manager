@@ -16,6 +16,7 @@ import {
   reiniciarConfig,
   somaUma,
 } from '../src/dominios/centerpiece/logica/configMesa'
+import { calcularPontuacaoHanFu } from '../src/dominios/calculadora-han-fu/logica/calcularPontuacaoHanFu'
 import { exemploPontuacao } from '../src/dominios/centerpiece/logica/exemploPontuacao'
 import {
   calcularUma,
@@ -138,6 +139,32 @@ teste('exemplo de pontuação usa os valores da tela', () => {
 
 teste('soma da uma acusa quando não fecha', () => {
   assert.equal(somaUma([20, 5, -5, -15]), 5)
+})
+
+teste('regras de cálculo dos presets e de partidas antigas', () => {
+  assert.equal(configDoPreset('wrc').regrasCalculo.akadora, false)
+  assert.equal(configDoPreset('ema').regrasCalculo.akadora, false)
+  assert.equal(configDoPreset('mleague').regrasCalculo.akadora, true)
+  for (const preset of IDS_PRESET) {
+    const { regrasCalculo } = configDoPreset(preset)
+    assert.equal(regrasCalculo.tanyaoAberto, true, preset)
+    assert.equal(regrasCalculo.doraFlamejante, false, preset)
+    assert.equal(regrasCalculo.basengo, false, preset)
+  }
+  const mudada = alterarConfig(configDoPreset('wrc'), {
+    regrasCalculo: { ...configDoPreset('wrc').regrasCalculo, akadora: true },
+  })
+  assert.equal(mudada.preset, 'personalizado')
+  assert.equal(normalizarConfig({ preset: 'padrao' }).regrasCalculo.akadora, true)
+  assert.equal(normalizarConfig({ regrasCalculo: { basengo: true } }).regrasCalculo.basengo, true)
+})
+
+teste('basengo: honba vale 1500 no ron e 500 por jogador no tsumo', () => {
+  const base = { han: 1, fu: 30, ehDealer: false, honba: 1, basengo: true }
+  assert.equal(calcularPontuacaoHanFu({ ...base, tipoVitoria: 'ron' }).ron, 1000 + 1500)
+  const tsumo = calcularPontuacaoHanFu({ ...base, tipoVitoria: 'tsumo' }).tsumo
+  assert.deepEqual([tsumo?.dealer, tsumo?.nonDealer], [500 + 500, 300 + 500])
+  assert.equal(calcularPontuacaoHanFu({ ...base, basengo: false, tipoVitoria: 'ron' }).ron, 1300)
 })
 
 teste('uma 5-15 e 10-30 viram os 4 valores', () => {

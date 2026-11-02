@@ -838,6 +838,8 @@
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
     "uma": "Uma (in thousands of points)",
+    "calcRules": "計算ルール",
+    "ruleKuitan": "喰いタン",
     "umaFixed": "固定",
     "umaFloating": "変動",
     "uma23": "2位 / 3位",

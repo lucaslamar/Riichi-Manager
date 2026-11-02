@@ -75,7 +75,7 @@ export function ModalChecarFuriten({
 
   const aoEnviar = (evento: FormEvent) => {
     evento.preventDefault()
-    const leitura = interpretarNotacao(normalizarNotacao(texto), { melds, akadora: true })
+    const leitura = interpretarNotacao(normalizarNotacao(texto), { melds, akadora: partida.config.regrasCalculo.akadora })
     if (leitura.erro) {
       setErro(t(leitura.erro.chave, leitura.erro.parametros))
       return
@@ -175,7 +175,7 @@ export function ModalChecarFuriten({
         })}
       </div>
 
-      <TecladoSoPedras aoEscolher={(pedra) => adicionar([pedra])} />
+      <TecladoSoPedras regras={partida.config.regrasCalculo} aoEscolher={(pedra) => adicionar([pedra])} />
     </Modal>
   )
 }

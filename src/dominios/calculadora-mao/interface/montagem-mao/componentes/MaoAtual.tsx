@@ -307,7 +307,7 @@ export function MaoAtual({
           {acoesCabecalho}
           {/* No tablet o Limpar da finalização entra depois do lápis. */}
           {contexto === 'finalizacao' && limparNoCabecalho && botaoLimparFinalizacao}
-          {contexto === 'montagem' && aoAbrirRegras && !tabletRetrato && (
+          {contexto === 'montagem' && !tabletRetrato && (
             <BotaoYakus classeBase="btn-configuracao-mao-cabecalho" />
           )}
           {entradaPorNotacao && <BotaoAjuda topico="notacao" />}
@@ -338,7 +338,7 @@ export function MaoAtual({
           )}
           {/* No tablet a engrenagem do cabeçalho some (fica na barra de ações),
               então o YAKU entra antes da lixeira, com o tamanho dela. */}
-          {contexto === 'montagem' && aoAbrirRegras && tabletRetrato && (
+          {contexto === 'montagem' && tabletRetrato && (
             <BotaoYakus classeBase="btn-limpar-mao-cabecalho" />
           )}
           {contexto === 'montagem' && totalPedras > 0 && !entradaPorNotacao && (

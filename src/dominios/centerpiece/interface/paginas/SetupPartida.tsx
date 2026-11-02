@@ -9,6 +9,7 @@ import { alterarConfig, type ConfigMesa } from '../../logica/configMesa'
 import { CADEIRAS, KANJI_VENTO, ORDEM_VENTOS, sortearAssentos, type Cadeira } from '../../logica/partida'
 import { carregarUltimaConfig, salvarUltimaConfig } from '../../persistencia/repositorioConfigMesa'
 import ConfigMesaSheet from '../componentes/ConfigMesaSheet'
+import ResumoRegrasCalculo from '../componentes/ResumoRegrasCalculo'
 import { usePartidas } from '../hooks/usePartidas'
 
 /** Setup: tipo de partida, assentos 2×2, resumo das regras e "Iniciar mesa". */
@@ -113,6 +114,7 @@ export default function SetupPartida({
                   : t('tableConfig.umaFloating'),
             })}
           </span>
+          <ResumoRegrasCalculo regras={config.regrasCalculo} className="ptd-apoio" />
         </span>
         <i className="fas fa-wrench" aria-hidden="true" />
         <span className="sr-only">{t('tableConfig.title')}</span>

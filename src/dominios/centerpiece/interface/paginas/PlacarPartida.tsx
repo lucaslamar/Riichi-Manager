@@ -38,6 +38,7 @@ import PlacaJogador from '../componentes/PlacaJogador'
 import JogarDados from '../componentes/JogarDados'
 import ListaResultado from '../componentes/ListaResultado'
 import ModalBatida from '../componentes/ModalBatida'
+import ResumoRegrasCalculo from '../componentes/ResumoRegrasCalculo'
 import RecursosDaMesa from '../componentes/RecursosDaMesa'
 import { ModalAvisoFuriten, ModalChecarFuriten } from '../componentes/ModaisFuriten'
 import ModalDescartes, { type DecisaoDescarte } from '../componentes/ModalDescartes'
@@ -372,6 +373,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           </div>
 
           <div className="mesa-acoes">
+            <ResumoRegrasCalculo regras={config.regrasCalculo} className="ptd-apoio mesa-regras-ativas" />
             {config.abortivos.quatroVentos && ehQuatroVentos(partida.registro?.lances ?? []) && (
               <button
                 type="button"
@@ -439,6 +441,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               initialIsOya={vencedorEhDealer}
               initialAgari={batida.tipo}
               initialHonba={placar.honba}
+              basengo={config.regrasCalculo.basengo}
             />
           ) : (
             <PaginaCalculadoraMao
@@ -452,6 +455,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 vencedorEhLeste: vencedorEhDealer,
                 vencedorNome: nomeDe(vencedorAtual),
                 jogadorRiichi: placar.riichi.includes(vencedorAtual),
+                regras: config.regrasCalculo,
               }}
             />
           ),

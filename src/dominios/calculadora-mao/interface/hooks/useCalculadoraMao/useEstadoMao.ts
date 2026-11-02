@@ -22,10 +22,13 @@ type InitialMaoOverrides = Partial<
   Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi'>
 >
 
-export function useEstadoMao(initialMao?: InitialMaoOverrides): EstadoMaoCalculadora {
+export function useEstadoMao(
+  initialMao?: InitialMaoOverrides,
+  configuracaoInicial?: ConfiguracaoCalculo,
+): EstadoMaoCalculadora {
   const [mao, atualizarMao] = useImmer<Mao>(initialMao ? { ...MAO_VAZIA, ...initialMao } : MAO_VAZIA)
   const [acaoPendente, setAcaoPendente] = useState<Acao | null>(null)
-  const [configuracao, setConfiguracao] = useState<ConfiguracaoCalculo>(configuracaoPadrao)
+  const [configuracao, setConfiguracao] = useState<ConfiguracaoCalculo>(configuracaoInicial ?? configuracaoPadrao)
   const [modalRegrasAberto, setModalRegrasAberto] = useState(false)
 
   const totalPedras = contarPedrasTotais(mao)

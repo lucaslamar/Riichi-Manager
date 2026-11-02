@@ -54,6 +54,7 @@ export default function PaginaCalculadoraMao({
             riichi: contextoCenterpiece.jogadorRiichi ? { duplo: false, ippatsu: false } : null,
           },
           fluxoCompleto: true,
+          configuracaoInicial: contextoCenterpiece.regras,
         }
       : { fluxoCompleto: telaGrande },
   )
@@ -95,7 +96,7 @@ export default function PaginaCalculadoraMao({
         if (convertido) {
           aoUsarResultado({
             ...convertido,
-            maoMontada: montarMaoParaHistorico(calculadora.mao, calculadora.resultado),
+            maoMontada: montarMaoParaHistorico(calculadora.mao, calculadora.resultado, contextoCenterpiece?.regras),
           })
         }
       }
@@ -106,7 +107,8 @@ export default function PaginaCalculadoraMao({
       <ModoCompletoCalculadora
         estado={calculadora}
         cabecalho={contextoCenterpiece ? null : <BarraCalculadora modo="completo" />}
-        aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
+        // Na partida as regras são as da mesa, decididas ao criá-la.
+        aoAbrirRegras={contextoCenterpiece?.regras ? undefined : () => calculadora.setModalRegrasAberto(true)}
         aoUsarMao={aoUsarMao}
         contextoCenterpiece={contextoCenterpiece}
         entradaNotacao={entradaNotacao}

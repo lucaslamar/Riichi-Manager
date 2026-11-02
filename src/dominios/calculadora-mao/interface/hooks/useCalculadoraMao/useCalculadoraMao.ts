@@ -5,7 +5,7 @@ import { useAcoesPedras } from './useAcoesPedras'
 import { useEsperasMao } from './useEsperasMao'
 import { useEstadoMao } from './useEstadoMao'
 import { useResultadoMao } from './useResultadoMao'
-import { ordenarPedras, type CodigoPedra, type Mao } from '../../../logica/mao'
+import { ordenarPedras, type CodigoPedra, type ConfiguracaoCalculo, type Mao } from '../../../logica/mao'
 import type { EscolhaChiiPendente } from './tipos'
 
 const YAKU_APENAS_BONUS = new Set(['Dora', 'Uradora', 'Akadora', 'Dora manual'])
@@ -20,6 +20,8 @@ function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['r
 interface OpcionsCalculadoraMao {
   initialMao?: Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi'>>
   fluxoCompleto?: boolean
+  /** Regras vindas de fora (a mesa do Centerpiece). */
+  configuracaoInicial?: ConfiguracaoCalculo
 }
 
 /**
@@ -36,7 +38,7 @@ interface OpcionsCalculadoraMao {
  * Evite mudar nomes sem revisar todos os componentes consumidores.
  */
 export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
-  const estado = useEstadoMao(opcoes?.initialMao)
+  const estado = useEstadoMao(opcoes?.initialMao, opcoes?.configuracaoInicial)
   const {
     mao,
     atualizarMao,

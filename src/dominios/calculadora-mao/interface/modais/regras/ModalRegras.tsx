@@ -98,10 +98,6 @@ export default function ModalRegras({
 }) {
   const { t } = useI18n()
 
-  const alternar = (chave: keyof ConfiguracaoCalculo) => {
-    aoMudar({ ...configuracao, [chave]: !configuracao[chave] })
-  }
-
   return (
     <Modal
       titulo={t('rulesModal.title')}
@@ -125,8 +121,32 @@ export default function ModalRegras({
         </>
       }
     >
+      <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
+    </Modal>
+  )
+}
+
+/** A lista de regras, igual na calculadora e nas Configurações de mesa. */
+export function ListaRegrasCalculo({
+  configuracao,
+  aoMudar,
+  semChombo = false,
+}: {
+  configuracao: ConfiguracaoCalculo
+  aoMudar: (config: ConfiguracaoCalculo) => void
+  /** A mesa tem o próprio chombo. */
+  semChombo?: boolean
+}) {
+  const { t } = useI18n()
+
+  const alternar = (chave: keyof ConfiguracaoCalculo) => {
+    aoMudar({ ...configuracao, [chave]: !configuracao[chave] })
+  }
+  const regras = CONFIGURACOES_REGRAS.filter((regra) => !semChombo || regra.chave !== 'chomboMangan')
+
+  return (
       <div className="lista-regras">
-        {CONFIGURACOES_REGRAS.map((regra) => {
+        {regras.map((regra) => {
           const dependencia = DEPENDENCIAS_REGRAS[regra.chave]
           // Sem a regra de que depende: fica apagada e vale desligada, mas a
           // escolha guardada volta quando a dependência for religada.
@@ -181,6 +201,5 @@ export default function ModalRegras({
           )
         })}
       </div>
-    </Modal>
   )
 }

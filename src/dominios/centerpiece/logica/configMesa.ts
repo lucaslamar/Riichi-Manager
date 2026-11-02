@@ -2,6 +2,10 @@
  * Regras de uma mesa, usadas pelo Centerpiece e pelo Torneio, em TypeScript puro.
  * A partida guarda uma cópia: mudar um preset depois não altera partida já jogada.
  */
+import {
+  configuracaoPadrao,
+  type ConfiguracaoCalculo,
+} from '@/compartilhado/mahjong/pontuacao/configuracao'
 import { normalizarUma, somaUma, umaFixa, type UmaMesa } from './uma'
 
 export { somaUma }
@@ -31,6 +35,8 @@ export interface ConfigMesa {
   nagashiMangan: boolean
   /** `fixo`: pontos descontados da pontuação final, depois da uma. */
   chombo: { tipo: 'manganReverso' } | { tipo: 'yakumanReverso' } | { tipo: 'fixo'; valor: number }
+  /** Decididas ao criar a mesa; valem para todas as mãos da partida. */
+  regrasCalculo: ConfiguracaoCalculo
   /** Segundos por vez; 0 = desligado. */
   timerVez: 0 | 30 | 60 | 90
   registrarDescartes: boolean
@@ -50,6 +56,21 @@ const SEM_ABORTIVOS: ConfigMesa['abortivos'] = {
   quatroKans: false,
   quatroRiichis: false,
 }
+
+/**
+ * Regras de cálculo dos presets oficiais: as variações saem, e o que a tabela do
+ * projeto não fixa (yakuman acumulado e duplo, kazoe, fu em Rinshan) segue o padrão
+ * do app. Conferir essas quatro nas fontes de cada preset.
+ */
+const regrasOficiais = (akadora: boolean): ConfiguracaoCalculo => ({
+  ...configuracaoPadrao,
+  akadora,
+  tanyaoAberto: true,
+  doraFlamejante: false,
+  basengo: false,
+  kiriageMangan: false,
+  fuVentosDuplo: false,
+})
 
 /** Regras próprias de cada preset; timer e descartes são preferências da mesa. */
 type RegrasPreset = Omit<
@@ -71,6 +92,7 @@ const REGRAS_PADRAO: RegrasPreset = {
   abortivos: SEM_ABORTIVOS,
   nagashiMangan: true,
   chombo: { tipo: 'manganReverso' },
+  regrasCalculo: configuracaoPadrao,
 }
 
 const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
@@ -96,6 +118,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
     chombo: { tipo: 'fixo', valor: 30000 },
+    regrasCalculo: regrasOficiais(false),
   },
 
   /**
@@ -116,6 +139,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
     chombo: { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO },
+    regrasCalculo: regrasOficiais(false),
   },
 
   /**
@@ -136,6 +160,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
     chombo: { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO },
+    regrasCalculo: regrasOficiais(true),
   },
 }
 
@@ -146,6 +171,7 @@ export function configDoPreset(preset: IdPreset): ConfigMesa {
     uma: structuredClone(regras.uma),
     abortivos: { ...regras.abortivos },
     chombo: { ...regras.chombo },
+    regrasCalculo: { ...regras.regrasCalculo },
     preset,
     presetBase: preset,
     timerVez: preset === 'padrao' ? 60 : 30,
@@ -175,6 +201,16 @@ export function reiniciarConfig(config: ConfigMesa): ConfigMesa {
 /** Oka total, que vai para o 1º: (retorno − partida) × 4. */
 export function calcularOka(config: Pick<ConfigMesa, 'pontosPartida' | 'pontosRetorno'>) {
   return (config.pontosRetorno - config.pontosPartida) * 4
+}
+
+function normalizarRegras(salvas: unknown): ConfiguracaoCalculo {
+  const lidas = (salvas ?? {}) as Partial<ConfiguracaoCalculo>
+  const regras = { ...configuracaoPadrao }
+  for (const chave of Object.keys(regras) as (keyof ConfiguracaoCalculo)[]) {
+    const valor = lidas[chave]
+    if (typeof valor === 'boolean') regras[chave] = valor
+  }
+  return regras
 }
 
 const numeroValido = (valor: unknown): valor is number =>
@@ -232,6 +268,8 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     },
     nagashiMangan: booleano(lida.nagashiMangan, base.nagashiMangan),
     chombo: chomboValido ? (chombo as ConfigMesa['chombo']) : base.chombo,
+    // Partida criada antes desta opção usa o padrão atual da calculadora.
+    regrasCalculo: normalizarRegras(lida.regrasCalculo),
     timerVez:
       lida.timerVez !== undefined && OPCOES_TIMER_VEZ.includes(lida.timerVez)
         ? lida.timerVez

@@ -838,6 +838,8 @@
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
     "uma": "Uma (in thousands of points)",
+    "calcRules": "계산 규칙",
+    "ruleKuitan": "쿠이탄",
     "umaFixed": "고정",
     "umaFloating": "변동",
     "uma23": "2위 / 3위",

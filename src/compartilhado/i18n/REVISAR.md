@@ -47,6 +47,12 @@ Textos novos em es, ja, ko, lt e zh-Hans, sem revisão nativa. Em ko e zh-Hans, 
 "탁자" e "牌桌" para mesa; os nomes de Compartilhar e Adicionar à Tela de Início devem
 ser os que o iOS usa em cada idioma.
 
+## Uma flutuante e regras de cálculo da mesa
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans: tableConfig.uma*, tableConfig.calcRules,
+tableConfig.ruleKuitan, match.manual.sumWarning e calculator.chooseWait. Conferir
+"retorno" e "acima do retorno" em cada idioma, e 待ち/대기패/听牌 na espera.
+
 ## Pontos de atenção
 
 - **ko, nomes de yaku:** mistura de leitura sino-coreana (일발, 청일색, 국사무쌍) e transliteração do

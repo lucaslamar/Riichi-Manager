@@ -187,8 +187,12 @@ export interface LeituraPedras {
  * Lê `3m5p1z`, a mesma notação da calculadora, e recusa o que não existe na mesa:
  * mais de 4 cópias de uma pedra somando o que já foi descartado.
  */
-export function lerPedrasDescartadas(texto: string, lances: readonly Lance[]): LeituraPedras {
-  const { pedras, erro } = interpretarNotacao(normalizarNotacao(texto), { melds: [], akadora: true })
+export function lerPedrasDescartadas(
+  texto: string,
+  lances: readonly Lance[],
+  akadora = true,
+): LeituraPedras {
+  const { pedras, erro } = interpretarNotacao(normalizarNotacao(texto), { melds: [], akadora })
   if (erro) return { pedras: [], erro }
   if (pedras.length === 0) return { pedras: [], erro: { chave: 'notation.errors.invalid' } }
 

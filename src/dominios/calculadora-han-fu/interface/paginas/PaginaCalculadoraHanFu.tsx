@@ -21,6 +21,8 @@ interface PropsPaginaCalculadoraHanFu {
   initialIsOya?: boolean
   initialAgari?: AgariHanFu
   initialHonba?: number
+  /** Regra da mesa, quando aberta pela partida. */
+  basengo?: boolean
   vencedorId?: string
   pagadorId?: string
 }
@@ -31,6 +33,7 @@ export default function PaginaCalculadoraHanFu({
   initialIsOya,
   initialAgari,
   initialHonba,
+  basengo,
   vencedorId,
   pagadorId,
 }: PropsPaginaCalculadoraHanFu = {}) {
@@ -49,7 +52,7 @@ export default function PaginaCalculadoraHanFu({
     setIsOya,
     referenciaRapida,
     resultado,
-  } = useCalculadoraHanFu({ initialIsOya, initialAgari, initialHonba })
+  } = useCalculadoraHanFu({ initialIsOya, initialAgari, initialHonba, basengo })
 
   const podeUsar =
     !!aoUsarResultado &&

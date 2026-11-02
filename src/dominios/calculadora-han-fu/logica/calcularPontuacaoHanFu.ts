@@ -15,6 +15,8 @@ export function calcularPontuacaoHanFu(entrada: EntradaPontuacaoHanFu): Resultad
   const han = normalizarHan(entrada.han)
   const fu = normalizarFu(han, entrada.fu)
   const honba = normalizarHonba(entrada.honba)
+  const honbaRon = entrada.basengo ? 1500 : 300
+  const honbaTsumo = honbaRon / 3
   const { categoria, base } = resolverCategoria(han, fu)
   const yakumanMultiplo = obterYakumanMultiplo(han)
   const modoYakuman = yakumanMultiplo > 0
@@ -25,7 +27,7 @@ export function calcularPontuacaoHanFu(entrada: EntradaPontuacaoHanFu): Resultad
 
   if (entrada.tipoVitoria === 'ron') {
     const ronBase = arredondarCentena(base * (entrada.ehDealer ? 6 : 4))
-    const ron = ronBase + honba * 300
+    const ron = ronBase + honba * honbaRon
     return formatarResultadoHanFu({
       han,
       fu,
@@ -49,7 +51,7 @@ export function calcularPontuacaoHanFu(entrada: EntradaPontuacaoHanFu): Resultad
 
   if (entrada.ehDealer) {
     const pagamentoBase = arredondarCentena(base * 2)
-    const all = pagamentoBase + honba * 100
+    const all = pagamentoBase + honba * honbaTsumo
     return formatarResultadoHanFu({
       han,
       fu,
@@ -73,8 +75,8 @@ export function calcularPontuacaoHanFu(entrada: EntradaPontuacaoHanFu): Resultad
 
   const dealerBase = arredondarCentena(base * 2)
   const nonDealerBase = arredondarCentena(base)
-  const dealer = dealerBase + honba * 100
-  const nonDealer = nonDealerBase + honba * 100
+  const dealer = dealerBase + honba * honbaTsumo
+  const nonDealer = nonDealerBase + honba * honbaTsumo
 
   return formatarResultadoHanFu({
     han,

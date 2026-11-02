@@ -10,7 +10,7 @@ import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos
 interface PropsModoCompleto {
   estado: EstadoCalculadoraMao
   cabecalho: ReactNode
-  aoAbrirRegras: () => void
+  aoAbrirRegras?: () => void
   entradaNotacao?: boolean
   aoMudarEntradaNotacao?: (ativa: boolean) => void
   aoUsarMao?: () => void
@@ -42,7 +42,9 @@ export default function ModoCompletoCalculadora({
   const rotuloMaoFinalizacao = `${t('calculator.completeHand')} ${slotsEstruturais}/14${sufixoFisico}`
   // Limpar não fica aqui: na finalização ele vai para o canto da mão (MaoAtual).
   const acoesContextuais = [
-    { chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-gear', aoClicar: aoAbrirRegras },
+    ...(aoAbrirRegras
+      ? [{ chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-gear', aoClicar: aoAbrirRegras }]
+      : []),
     ...(finalizandoMao
       ? [
           {

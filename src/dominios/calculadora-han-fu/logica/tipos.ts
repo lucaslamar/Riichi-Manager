@@ -15,6 +15,8 @@ export interface EntradaPontuacaoHanFu {
   ehDealer: boolean
   tipoVitoria: TipoVitoriaHanFu
   honba: number
+  /** Regra local (場千五): cada honba vale 1500 em vez de 300. */
+  basengo?: boolean
 }
 
 export interface PagamentoTsumoHanFu {
