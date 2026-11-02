@@ -1,6 +1,6 @@
 /**
- * Confere o tema Velvet Darkness:
- * - `tema-escuro.css` usa exatamente os valores de `temas.ts`;
+ * Confere os temas Velvet Darkness e claro:
+ * - `tema-escuro.css` e `tema-claro.css` usam exatamente os valores de `temas.ts`;
  * - os pares principais passam no WCAG AA (4,5:1 para texto, 3:1 para bordas
  *   de controles e acentos não textuais), com e sem Alto contraste.
  *
@@ -9,15 +9,15 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
+  TEMA_CLARO,
   VELVET_DARKNESS,
   VELVET_DARKNESS_ALTO_CONTRASTE,
   type PaletaTema,
 } from '../src/compartilhado/tema/temas'
 
-const css = readFileSync(
-  resolve(import.meta.dirname, '../src/compartilhado/tema/tema-escuro.css'),
-  'utf8',
-)
+const css = ['tema-escuro.css', 'tema-claro.css']
+  .map((arquivo) => readFileSync(resolve(import.meta.dirname, '../src/compartilhado/tema', arquivo), 'utf8'))
+  .join('\n')
 const erros: string[] = []
 
 /** Token da paleta → variável CSS. */
@@ -70,6 +70,7 @@ function conferir(seletor: string, paleta: Partial<PaletaTema>) {
 
 conferir(":root[data-tema='escuro']", VELVET_DARKNESS)
 conferir(":root[data-tema='escuro'] body.alto-contraste", VELVET_DARKNESS_ALTO_CONTRASTE)
+conferir(":root[data-tema='claro']", TEMA_CLARO)
 
 function luminancia(hex: string) {
   const canais = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
@@ -125,6 +126,7 @@ function pares(paleta: PaletaTema, nome: string) {
 }
 
 pares(VELVET_DARKNESS, 'Velvet Darkness')
+pares(TEMA_CLARO, 'Tema claro')
 const comAltoContraste = { ...VELVET_DARKNESS, ...VELVET_DARKNESS_ALTO_CONTRASTE }
 pares(comAltoContraste, 'Velvet Darkness + Alto contraste')
 if (contraste(comAltoContraste.border, comAltoContraste.surface) < NAO_TEXTO) {
@@ -135,4 +137,4 @@ if (erros.length) {
   console.error(`Tema com problema (${erros.length}):\n${erros.join('\n')}`)
   process.exit(1)
 }
-console.log('Tema ok: Velvet Darkness bate com temas.ts e passa no WCAG AA.')
+console.log('Tema ok: Velvet Darkness e claro batem com temas.ts e passam no WCAG AA.')

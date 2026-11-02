@@ -1,252 +1,126 @@
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { TelaPrincipal } from '@/app/App'
-import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
-import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import GavetaMenu from './GavetaMenu'
 import { IconeMenu } from './IconeMenu'
-import packageJson from '../../../../package.json'
+import {
+  ITENS_NAVEGACAO,
+  PAGINAS_NAVEGACAO,
+  paginaDoDestino,
+  type DestinoTela,
+} from './navegacao'
+import { ID_TITULO_TELA } from './TituloTela'
 
 interface PropsCabecalho {
-  /** 'aprender' com o guia aberto: a aba Aprender fica marcada. */
-  telaAtual: DestinoMenu
+  /** 'aprender' com o guia aberto: o item Tutorial fica marcado. */
+  telaAtual: DestinoTela
   aoNavegar: (tela: TelaPrincipal) => void
-  /** Quando definido, a seta de voltar ocupa o lugar do hambúrguer (inclusive no retrato). */
-  aoVoltar?: () => void
   /** Abre o guia Aprender a jogar, em tela cheia por cima de qualquer tela. */
   aoAbrirAprender: () => void
 }
 
-/** Uma tela do app ou o guia Aprender a jogar (que abre por cima, sem trocar de tela). */
-type DestinoMenu = TelaPrincipal | 'aprender'
-
-interface ItemMenuGlobal {
-  tela: DestinoMenu
-  chave: string
-  icone: string
-  /** Rótulo curto para a barra inferior, onde o nome completo seria cortado. */
-  chaveCurta?: string
-}
-
-const MODULOS_MENU: ItemMenuGlobal[] = [
-  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
-  { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
-  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
-]
-
-const APP_MENU: ItemMenuGlobal[] = [
-  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
-  { tela: 'sobre', chave: 'menu.about', icone: 'fa-info-circle' },
-]
-
-const NAVEGACAO_DESKTOP: ItemMenuGlobal[] = [
-  { tela: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin' },
-  { tela: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi' },
-  { tela: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice' },
-  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open' },
-  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h' },
-]
-
 /**
- * Barra inferior (celular/tablet). A Han e Fu fica logo depois da Calculadora
- * de Mão, na mesma posição que tinha antes da 5.0.0.
+ * Cabeçalho, barra inferior (celular em pé e tablet), menu lateral (celular deitado,
+ * onde a barra tomaria a altura) e sidebar fixa (telas grandes).
+ * A barra tem duas páginas: "Mais" troca os itens no mesmo lugar, nada abre por cima.
  */
-const NAVEGACAO_INFERIOR: ItemMenuGlobal[] = [
-  {
-    tela: 'calculadora',
-    chave: 'menu.handCalculator',
-    icone: 'um-pin',
-    chaveCurta: 'menu.handCalculatorShort',
-  },
-  {
-    tela: 'calculadoraRapida',
-    chave: 'menu.quickCalculator',
-    icone: 'palito-riichi',
-    chaveCurta: 'menu.quickCalculatorShort',
-  },
-  {
-    tela: 'sorteadorVentos',
-    chave: 'menu.windDraw',
-    icone: 'chapeu-helice',
-    chaveCurta: 'menu.windDrawShort',
-  },
-  { tela: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
-  { tela: 'regras', chave: 'menu.rules', icone: 'fa-sliders-h', chaveCurta: 'menu.rulesShort' },
-]
+export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: PropsCabecalho) {
+  const { t } = useI18n()
+  const paginaAtiva = paginaDoDestino(telaAtual)
+  const [pagina, setPagina] = useState(paginaAtiva)
+  const [gavetaAberta, setGavetaAberta] = useState(false)
+  const fecharGaveta = useCallback(() => setGavetaAberta(false), [])
+  const barraRef = useRef<HTMLElement | null>(null)
+  const focarPrimeiro = useRef(false)
+  // Só anima ao trocar de página, não ao abrir o app.
+  const paginaInicial = useRef(paginaAtiva)
+  const trocou = useRef(false)
+  if (pagina !== paginaInicial.current) trocou.current = true
 
-const TODOS_ITENS = [...MODULOS_MENU, ...APP_MENU]
-const LIMIAR_GESTO_DRAWER = 64
-const BORDA_GESTO_DRAWER = 28
+  // A barra acompanha a tela aberta, inclusive ao trocar de tela deslizando.
+  useEffect(() => setPagina(paginaAtiva), [paginaAtiva])
 
-type ModoGestoDrawer = 'abrir' | 'fechar'
+  // Trocou de página pelo botão: o foco vai para o primeiro item da nova.
+  useEffect(() => {
+    if (!focarPrimeiro.current) return
+    focarPrimeiro.current = false
+    barraRef.current?.querySelector<HTMLElement>('.item-tab-inferior:not(.item-tab-mais)')?.focus()
+  }, [pagina])
 
-interface EstadoGestoDrawer {
-  modo: ModoGestoDrawer
-  inicioX: number
-  inicioY: number
-  ativo: boolean
-}
-
-function elementosFocaveis(container: HTMLElement) {
-  return Array.from(
-    container.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    ),
-  ).filter((elemento) => !elemento.hasAttribute('aria-hidden'))
-}
-
-/**
- * Header compacto e drawer global do app.
- *
- * O drawer concentra navegacao entre modulos, idioma e versao. Quando aberto,
- * prende foco, fecha com Escape e fecha ao selecionar item ou clicar no overlay.
- */
-export default function Cabecalho({
-  telaAtual,
-  aoNavegar,
-  aoVoltar,
-  aoAbrirAprender,
-}: PropsCabecalho) {
-  const { t, idioma, idiomas, alterarIdioma } = useI18n()
-  const [menuAberto, setMenuAberto] = useState(false)
-  const [deslocamentoDrawer, setDeslocamentoDrawer] = useState(0)
-  const drawerRef = useRef<HTMLDivElement | null>(null)
-  const botaoMenuRef = useRef<HTMLButtonElement | null>(null)
-  const gestoDrawerRef = useRef<EstadoGestoDrawer | null>(null)
-  const deslocamentoDrawerRef = useRef(0)
-  const escolher = (destino: DestinoMenu) => {
+  const escolher = (destino: DestinoTela) => {
     if (destino === 'aprender') aoAbrirAprender()
     else aoNavegar(destino)
   }
-  const navegar = (destino: DestinoMenu) => {
-    escolher(destino)
-    setMenuAberto(false)
+
+  const trocarPagina = () => {
+    focarPrimeiro.current = true
+    setPagina((atual) => (atual === 0 ? 1 : 0))
   }
 
-  const iniciarGestoDrawer = (modo: ModoGestoDrawer, evento: ReactPointerEvent<HTMLElement>) => {
-    if (evento.pointerType === 'mouse') return
+  const naSegunda = pagina === 1
 
-    if (modo === 'abrir' && evento.clientX > BORDA_GESTO_DRAWER) return
+  const botaoPagina = (
+    <button
+      className="item-tab-inferior item-tab-mais"
+      type="button"
+      aria-label={t(naSegunda ? 'menu.backToMain' : 'menu.moreOptions')}
+      aria-expanded={naSegunda}
+      title={t(naSegunda ? 'menu.backToMain' : 'menu.moreOptions')}
+      onClick={trocarPagina}
+    >
+      <i className={`fas ${naSegunda ? 'fa-chevron-left' : 'fa-ellipsis'}`} aria-hidden="true" />
+      <span>{t(naSegunda ? 'actions.back' : 'menu.more')}</span>
+      {paginaAtiva !== pagina && <span className="item-tab-ponto" aria-hidden="true" />}
+    </button>
+  )
 
-    gestoDrawerRef.current = {
-      modo,
-      inicioX: evento.clientX,
-      inicioY: evento.clientY,
-      ativo: false,
-    }
-    evento.currentTarget.setPointerCapture(evento.pointerId)
-  }
-
-  const moverGestoDrawer = (evento: ReactPointerEvent<HTMLElement>) => {
-    const gesto = gestoDrawerRef.current
-    if (!gesto) return
-
-    const deltaX = evento.clientX - gesto.inicioX
-    const deltaY = evento.clientY - gesto.inicioY
-
-    if (!gesto.ativo) {
-      if (Math.abs(deltaY) > 18 && Math.abs(deltaY) > Math.abs(deltaX)) {
-        gestoDrawerRef.current = null
-        return
-      }
-
-      gesto.ativo = Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY)
-    }
-
-    if (!gesto.ativo) return
-
-    if (gesto.modo === 'abrir' && deltaX > LIMIAR_GESTO_DRAWER) {
-      setMenuAberto(true)
-      gestoDrawerRef.current = null
-      return
-    }
-
-    if (gesto.modo === 'fechar') {
-      const deslocamento = Math.min(0, deltaX)
-      deslocamentoDrawerRef.current = deslocamento
-      setDeslocamentoDrawer(deslocamento)
-    }
-  }
-
-  const finalizarGestoDrawer = () => {
-    const gesto = gestoDrawerRef.current
-    if (!gesto) return
-
-    const deveFechar =
-      gesto.modo === 'fechar' && deslocamentoDrawerRef.current <= -LIMIAR_GESTO_DRAWER
-
-    gestoDrawerRef.current = null
-    deslocamentoDrawerRef.current = 0
-    setDeslocamentoDrawer(0)
-
-    if (deveFechar) setMenuAberto(false)
-  }
-
-  useEffect(() => {
-    if (!menuAberto) return
-
-    const focoAnterior =
-      document.activeElement instanceof HTMLElement ? document.activeElement : null
-    const drawer = drawerRef.current
-    document.body.classList.add('drawer-global-aberto')
-
-    window.setTimeout(() => {
-      const primeiro = drawer ? elementosFocaveis(drawer)[0] : null
-      primeiro?.focus()
-    }, 0)
-
-    const aoPressionarTecla = (evento: KeyboardEvent) => {
-      if (evento.key === 'Escape') {
-        setMenuAberto(false)
-        return
-      }
-
-      if (evento.key !== 'Tab' || !drawer) return
-
-      const focaveis = elementosFocaveis(drawer)
-      if (focaveis.length === 0) return
-
-      const primeiro = focaveis[0]
-      const ultimo = focaveis[focaveis.length - 1]
-      const ativo = document.activeElement
-
-      if (evento.shiftKey && ativo === primeiro) {
-        evento.preventDefault()
-        ultimo.focus()
-      } else if (!evento.shiftKey && ativo === ultimo) {
-        evento.preventDefault()
-        primeiro.focus()
-      }
-    }
-
-    document.addEventListener('keydown', aoPressionarTecla)
-
-    return () => {
-      document.body.classList.remove('drawer-global-aberto')
-      document.removeEventListener('keydown', aoPressionarTecla)
-      focoAnterior?.focus()
-    }
-  }, [menuAberto])
+  const listaItens = (aoEscolher: (destino: DestinoTela) => void = escolher) => (
+    <section className="drawer-secao">
+      <h2>{t('menu.app')}</h2>
+      <div className="drawer-itens">
+        {ITENS_NAVEGACAO.map((item) => {
+          const ativo = item.destino === telaAtual
+          return (
+            <button
+              key={item.destino}
+              className={`item-menu-global ${ativo ? 'ativo' : ''}`}
+              type="button"
+              aria-current={ativo ? 'page' : undefined}
+              onClick={() => aoEscolher(item.destino)}
+            >
+              <IconeMenu icone={item.icone} />
+              <span>{t(item.chave)}</span>
+            </button>
+          )
+        })}
+      </div>
+    </section>
+  )
 
   const barraInferior = createPortal(
-    <nav className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
-      {NAVEGACAO_INFERIOR.map((item) => {
-        const ativo = item.tela === telaAtual
-        return (
-          <button
-            key={item.tela}
-            className={`item-tab-inferior ${ativo ? 'ativo' : ''}`}
-            type="button"
-            aria-current={ativo ? 'page' : undefined}
-            aria-label={t(item.chave)}
-            title={t(item.chave)}
-            onClick={() => escolher(item.tela)}
-          >
-            <IconeMenu icone={item.icone} />
-            <span>{t(item.chaveCurta ?? item.chave)}</span>
-          </button>
-        )
-      })}
+    <nav ref={barraRef} className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
+      <div key={pagina} className={`barra-pagina${trocou.current ? ` barra-pagina--${naSegunda ? 'segunda' : 'primeira'}` : ''}`}>
+        {naSegunda && botaoPagina}
+        {PAGINAS_NAVEGACAO[pagina].map((item) => {
+          const ativo = item.destino === telaAtual
+          return (
+            <button
+              key={item.destino}
+              className={`item-tab-inferior ${ativo ? 'ativo' : ''}`}
+              type="button"
+              aria-current={ativo ? 'page' : undefined}
+              aria-label={t(item.chave)}
+              title={t(item.chave)}
+              onClick={() => escolher(item.destino)}
+            >
+              <IconeMenu icone={item.icone} />
+              <span>{t(item.chaveCurta ?? item.chave)}</span>
+            </button>
+          )
+        })}
+        {!naSegunda && botaoPagina}
+      </div>
     </nav>,
     document.body,
   )
@@ -256,177 +130,39 @@ export default function Cabecalho({
       <header className="cabecalho-principal">
         <div className="conteudo-cabecalho">
           <div className="barra-marca-aplicacao">
-            {aoVoltar ? (
-              <button
-                className="botao-menu-global botao-voltar-global"
-                type="button"
-                aria-label={t('actions.back')}
-                title={t('actions.back')}
-                onClick={aoVoltar}
-              >
-                <i className="fas fa-arrow-left" aria-hidden="true" />
-              </button>
-            ) : (
-              <button
-                ref={botaoMenuRef}
-                className="botao-menu-global"
-                type="button"
-                aria-label={menuAberto ? t('global.closeMenu') : t('global.openMenu')}
-                aria-expanded={menuAberto}
-                aria-controls="drawer-global"
-                onClick={() => setMenuAberto((aberto) => !aberto)}
-              >
-                <i className={`fas ${menuAberto ? 'fa-xmark' : 'fa-bars'}`} aria-hidden="true" />
-              </button>
-            )}
+            <button
+              type="button"
+              className="botao-menu-global"
+              aria-label={t('global.openMenu')}
+              aria-expanded={gavetaAberta}
+              onClick={() => setGavetaAberta(true)}
+            >
+              <i className="fas fa-bars" aria-hidden="true" />
+            </button>
 
             <div className="marca-aplicacao">
               <h1 className="titulo-principal">{t('global.appName')}</h1>
             </div>
 
+            <div id={ID_TITULO_TELA} className="cabecalho-tela" />
+
             <nav className="sidebar-navegacao-desktop" aria-label={t('global.navigation')}>
-              <MenuSecao
-                titulo={t('menu.app')}
-                itens={NAVEGACAO_DESKTOP}
-                telaAtual={telaAtual}
-                aoNavegar={escolher}
-                t={t}
-              />
+              {listaItens()}
             </nav>
           </div>
-
-          {menuAberto &&
-            createPortal(
-              <div
-                className="drawer-global-overlay"
-                role="presentation"
-                onPointerDown={(evento) => iniciarGestoDrawer('fechar', evento)}
-                onPointerMove={moverGestoDrawer}
-                onPointerCancel={finalizarGestoDrawer}
-                onPointerUp={finalizarGestoDrawer}
-                onMouseDown={(evento) => {
-                  if (evento.target === evento.currentTarget) setMenuAberto(false)
-                }}
-              >
-                <div
-                  ref={drawerRef}
-                  id="drawer-global"
-                  className="drawer-global"
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="titulo-drawer-global"
-                  style={{
-                    transform: deslocamentoDrawer
-                      ? `translateX(${deslocamentoDrawer}px)`
-                      : undefined,
-                  }}
-                >
-                  <div className="drawer-cabecalho">
-                    <div>
-                      <strong id="titulo-drawer-global">{t('global.appName')}</strong>
-                      <span>{t('global.tagline')}</span>
-                    </div>
-                    <button
-                      className="botao-fechar-drawer"
-                      type="button"
-                      aria-label={t('global.closeMenu')}
-                      onClick={() => setMenuAberto(false)}
-                    >
-                      <i className="fas fa-xmark" aria-hidden="true" />
-                    </button>
-                  </div>
-
-                  <nav className="drawer-navegacao" aria-label={t('global.navigation')}>
-                    <MenuSecao
-                      titulo={t('menu.modules')}
-                      itens={MODULOS_MENU}
-                      telaAtual={telaAtual}
-                      aoNavegar={navegar}
-                      t={t}
-                    />
-                    <MenuSecao
-                      titulo={t('menu.app')}
-                      itens={APP_MENU}
-                      telaAtual={telaAtual}
-                      aoNavegar={navegar}
-                      t={t}
-                    />
-                  </nav>
-
-                  <label className="seletor-idioma seletor-idioma-drawer">
-                    <span>
-                      <i className="fas fa-globe" aria-hidden="true" />
-                      {t('menu.language')}
-                    </span>
-                    <select
-                      value={idioma}
-                      aria-label={t('menu.language')}
-                      onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
-                    >
-                      {idiomas.map((opcaoIdioma) => (
-                        <option key={opcaoIdioma} value={opcaoIdioma} lang={opcaoIdioma}>
-                          {ROTULOS_IDIOMA[opcaoIdioma]}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <div className="drawer-rodape">v{packageJson.version}</div>
-                </div>
-              </div>,
-              document.body,
-            )}
-
-          {!menuAberto && (
-            <div
-              className="zona-gesto-drawer"
-              aria-hidden="true"
-              onPointerDown={(evento) => iniciarGestoDrawer('abrir', evento)}
-              onPointerMove={moverGestoDrawer}
-              onPointerCancel={finalizarGestoDrawer}
-              onPointerUp={finalizarGestoDrawer}
-            />
-          )}
         </div>
       </header>
       {barraInferior}
-    </>
-  )
-}
 
-function MenuSecao({
-  titulo,
-  itens,
-  telaAtual,
-  aoNavegar,
-  t,
-}: {
-  titulo: string
-  itens: ItemMenuGlobal[]
-  telaAtual: DestinoMenu
-  aoNavegar: (destino: DestinoMenu) => void
-  t: (chave: string) => string
-}) {
-  return (
-    <section className="drawer-secao">
-      <h2>{titulo}</h2>
-      <div className="drawer-itens">
-        {itens.map((item) => {
-          const ativo = item.tela === telaAtual
-          return (
-            <button
-              key={item.tela}
-              className={`item-menu-global ${ativo ? 'ativo' : ''}`}
-              type="button"
-              aria-current={ativo ? 'page' : undefined}
-              onClick={() => aoNavegar(item.tela)}
-            >
-              <IconeMenu icone={item.icone} />
-              <span>{t(item.chave)}</span>
-            </button>
-          )
-        })}
-      </div>
-    </section>
+      {gavetaAberta && (
+        <GavetaMenu aoFechar={fecharGaveta}>
+          {listaItens((destino) => {
+            fecharGaveta()
+            escolher(destino)
+          })}
+        </GavetaMenu>
+      )}
+
+    </>
   )
 }

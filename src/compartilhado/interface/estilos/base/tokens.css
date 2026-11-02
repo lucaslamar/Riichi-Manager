@@ -58,3 +58,78 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
+
+/* Cores de interface nos dois temas. As --cor-* vêm de tema-escuro.css e tema-claro.css.
+   Ficam no body para acompanhar também o Alto contraste. */
+body {
+  --superficie: var(--branco);
+  --texto-principal: var(--escuro);
+  --texto-apoio: var(--cor-texto-suave, #52606d);
+  --linha-divisoria: var(--cor-borda, #d9e0e8);
+  --entrada-borda: var(--cor-borda-controle, #7b8794);
+  --texto-erro: var(--cor-perigo, #b91c1c);
+  --texto-aviso: var(--cor-aviso, #8a4b00);
+  --primario-forte: var(--cor-primario, #1565c0);
+  --sobre-primario: var(--cor-sobre-primario, #ffffff);
+  --texto-positivo: var(--cor-sucesso, #1b7a3d);
+  --perigo-forte: var(--cor-perigo, #b91c1c);
+  --sobre-perigo: var(--cor-sobre-primario, #ffffff);
+  /* Jogador da vez: borda acesa e anel do timer. */
+  --cor-vez: var(--cor-destaque, #b47b00);
+  --fundo-timer: var(--cor-superficie, #ffffff);
+  --texto-timer: var(--cor-texto, #102a43);
+    /* Mesa: feltro verde, centerpiece marfim e LED vermelho. */
+  --mesa-feltro: #14503c;
+  --mesa-painel: #efe9dc;
+  --mesa-painel-borda: #cfc6b2;
+  --mesa-disco: #f7f3ea;
+  --mesa-ranhura: #d5ccb8;
+  --mesa-ranhura-texto: #4a4436;
+  --mesa-palito: #ffffff;
+  --mesa-palito-ponto: #d0342c;
+  --mesa-domo: #3a3a3c;
+  --mesa-domo-texto: #f7f3ea;
+  --mesa-sombra: rgb(20 20 20 / 28%);
+  --mesa-timer-fundo: #4a3434;
+  --mesa-acao: #1c6454;
+  --mesa-sobre-acao: #ffffff;
+  --led-fundo: #241618;
+  --led-texto: #ff6a56;
+  --led-texto-nome: #f3e6df;
+  --led-brilho: rgb(255 90 70 / 55%);
+  --led-timer: #ffc24d;
+  --led-vento-leste: #ff8a75;
+  --led-vento-sul: #5fd0a0;
+  --led-vento-oeste: #7fb2ee;
+  --led-vento-norte: #c4a1f0;
+  --vento-leste: #b4231a;
+  --vento-sul: #17684a;
+  --vento-oeste: #1f5f9e;
+  --vento-norte: #5b3a99;
+}
+
+/* Velvet Darkness: feltro roxo, centerpiece grafite e LED rosa. */
+:root[data-tema='escuro'] body {
+  --cor-vez: #ef8ec9;
+  --mesa-feltro: #1d1229;
+  --mesa-painel: #2a2533;
+  --mesa-painel-borda: #514a5e;
+  --mesa-disco: #322c3d;
+  --mesa-ranhura: #443b54;
+  --mesa-ranhura-texto: #e4dcef;
+  --mesa-domo: #1c1923;
+  --mesa-domo-texto: #f4eff8;
+  --mesa-sombra: rgb(0 0 0 / 45%);
+  --mesa-timer-fundo: #3f2c47;
+  --mesa-acao: #d580dc;
+  --mesa-sobre-acao: #1a1424;
+  --led-fundo: #120d18;
+  --led-texto: #ff8bd2;
+  --led-texto-nome: #efe7f4;
+  --led-brilho: rgb(255 120 200 / 55%);
+  --led-timer: #ef8ec9;
+  --vento-leste: #ff8f85;
+  --vento-sul: #6fdcb0;
+  --vento-oeste: #8fbcf5;
+  --vento-norte: #cdaef5;
+}

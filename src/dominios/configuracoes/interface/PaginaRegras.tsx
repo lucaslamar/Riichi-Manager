@@ -3,6 +3,7 @@ import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { PreferenciaTema } from '@/compartilhado/tema/temas'
+import packageJson from '../../../../package.json'
 import './pagina-regras.css'
 
 const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
@@ -91,6 +92,20 @@ export default function PaginaRegras() {
         ligado={preferencias.toqueAmpliado}
         aoMudar={(ligado) => preferencias.alterar('toqueAmpliado', ligado)}
       />
+
+      <div className="sobre-mojoca">
+        <h3>{t('pages.aboutTitle')}</h3>
+        <p>{t('pages.aboutText')}</p>
+        <p className="sobre-mojoca__versao">
+          {t('pages.versionLine', { version: packageJson.version })}
+        </p>
+        <a href="https://github.com/lucaslamar/Riichi-Manager" target="_blank" rel="noreferrer">
+          <i className="fab fa-github" aria-hidden="true" /> GitHub
+        </a>
+        <a href="https://github.com/lucaslamar/Riichi-Manager/issues/new" target="_blank" rel="noreferrer">
+          <i className="fas fa-bug" aria-hidden="true" /> {t('pages.reportIssue')}
+        </a>
+      </div>
     </section>
   )
 }

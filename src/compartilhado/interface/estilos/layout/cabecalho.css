@@ -23,17 +23,21 @@
   padding: 7px 12px 7px 7px;
 }
 
+/* Só aparece no celular deitado; lá a barra inferior sai. */
 .botao-menu-global {
-  display: inline-flex;
-  width: 40px;
-  min-height: 40px;
+  display: none;
+  width: 44px;
+  min-height: 36px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--cor-borda, #d7dee8);
+  border: 0;
   border-radius: 8px;
-  background: var(--cor-superficie-alt, #f8fafc);
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
   color: var(--cor-primario, #1a4a8a);
+  cursor: pointer;
 }
 
 .marca-aplicacao {
@@ -86,96 +90,8 @@
   line-height: 1.1;
 }
 
-.drawer-global-aberto {
-  overflow: hidden;
-}
-
 .sidebar-navegacao-desktop {
   display: none;
-}
-
-.drawer-global-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  background: var(--cor-veu, rgba(15, 23, 42, 0.38));
-}
-
-.drawer-global {
-  display: grid;
-  width: min(320px, 82vw);
-  height: 100%;
-  grid-template-rows: auto auto auto 1fr;
-  gap: 14px;
-  padding: 18px 14px 14px;
-  background: var(--cor-superficie, #ffffff);
-  color: var(--cor-texto, #102a43);
-  box-shadow: 18px 0 46px rgba(15, 23, 42, 0.24);
-  touch-action: pan-y;
-  will-change: transform;
-  animation: drawer-entrada 0.18s ease-out;
-}
-
-.zona-gesto-drawer {
-  position: fixed;
-  inset: 54px auto 0 0;
-  z-index: 70;
-  display: none;
-  width: 0;
-  pointer-events: none;
-  touch-action: pan-y;
-}
-
-@keyframes drawer-entrada {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-.drawer-cabecalho {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--cor-borda, #edf2f7);
-}
-
-.drawer-cabecalho strong {
-  display: block;
-  color: var(--cor-primario, #155b98);
-  font-size: 1rem;
-  line-height: 1.2;
-}
-
-.drawer-cabecalho span {
-  display: block;
-  margin-top: 2px;
-  color: var(--cor-texto-suave, #607080);
-  font-size: 0.8rem;
-  font-weight: 800;
-  line-height: 1.25;
-}
-
-.botao-fechar-drawer {
-  display: inline-flex;
-  width: 38px;
-  min-height: 38px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--cor-borda, #d7dee8);
-  border-radius: 8px;
-  background: var(--cor-superficie-alt, #f8fafc);
-  color: var(--cor-texto, #102a43);
-}
-
-.drawer-navegacao {
-  display: grid;
-  align-content: start;
-  gap: 16px;
 }
 
 .drawer-secao {
@@ -244,72 +160,6 @@
   display: block;
 }
 
-.seletor-idioma {
-  display: grid;
-  gap: 7px;
-}
-
-.seletor-idioma > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--cor-texto-suave, #607080);
-  font-size: 0.78rem;
-  font-weight: 900;
-}
-
-.seletor-idioma select {
-  width: 100%;
-  min-height: 42px;
-  border: 1px solid var(--cor-borda, #d7dee8);
-  border-radius: 8px;
-  padding: 8px 34px 8px 10px;
-  background: var(--cor-superficie, #ffffff);
-  color: var(--cor-texto, #102a43);
-  font-size: 0.86rem;
-  font-weight: 850;
-}
-
-.drawer-rodape {
-  align-self: end;
-  padding-top: 10px;
-  border-top: 1px solid var(--cor-borda, #edf2f7);
-  color: var(--cor-texto-suave, #94a3b8);
-  font-size: 0.76rem;
-  font-weight: 900;
-}
-
-.pagina-estatica {
-  display: grid;
-  gap: 16px;
-}
-
-.lista-recursos-estatica {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.lista-recursos-estatica span,
-.chip-sobre {
-  display: inline-flex;
-  min-height: 34px;
-  align-items: center;
-  border: 1px solid var(--cor-borda, #d7dee8);
-  border-radius: 999px;
-  padding: 6px 12px;
-  background: var(--cor-superficie-alt, #f8fafc);
-  color: var(--cor-texto-suave, #40566d);
-  font-size: 0.82rem;
-  font-weight: 800;
-}
-
-.grupo-configuracoes-usuario,
-.grupo-sobre {
-  display: grid;
-  gap: 10px;
-}
-
 .opcao-configuracao-usuario {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -340,12 +190,6 @@
   width: 22px;
   height: 22px;
   accent-color: var(--primario);
-}
-
-.acoes-sobre {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .ad-slot {
@@ -387,25 +231,6 @@
     max-width: none;
   }
 
-  .botao-menu-global {
-    width: 32px;
-    min-height: 32px;
-    border-color: transparent;
-    border-radius: 7px;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .botao-menu-global:hover,
-  .botao-menu-global:focus-visible {
-    border-color: var(--cor-borda, #d7dee8);
-    background: var(--cor-superficie-alt, #f8fafc);
-  }
-
-  .zona-gesto-drawer {
-    inset-block-start: 46px;
-  }
-
   .titulo-principal {
     font-size: 1rem;
     line-height: 1;
@@ -440,16 +265,8 @@
     padding: 6px 12px 6px 8px;
   }
 
-  .zona-gesto-drawer {
-    display: none;
-  }
-
   /* Sem hambúrguer nesta faixa, mas o lugar dele fica reservado (invisível e
      fora do Tab): o MOJOCA não muda de posição quando a seta de voltar aparece. */
-  .botao-menu-global:not(.botao-voltar-global) {
-    visibility: hidden;
-    pointer-events: none;
-  }
 }
 
 @media (min-width: 1024px) and (orientation: landscape) {
@@ -482,14 +299,6 @@
     border-radius: 0;
     padding: 20px 16px;
     box-shadow: none;
-  }
-
-  .botao-menu-global {
-    display: none;
-  }
-
-  .zona-gesto-drawer {
-    display: none;
   }
 
   .marca-aplicacao {
@@ -532,24 +341,8 @@
   display: none;
 }
 
-/*
- * The persistent bottom tab bar covers the small-tablet band and, since a
- * native-style tab bar beats a hidden drawer on a phone too, portrait phones
- * from 375px up. The iPhone SE (~320px) is excluded on purpose: its short
- * canvas can't spare a permanent bar, so it keeps the hamburger drawer. The
- * hamburger is hidden and the body reserves the bar height in the same band
- * (see the `.botao-menu-global` hide rule just below).
- *
- * The last clause adds the Galaxy Z Fold 5 cover screen: a very narrow but very
- * tall portrait canvas (<375px wide) that otherwise falls below the phone band
- * and would keep the drawer. It is keyed by a strict tall aspect ratio
- * (<=1/2, ~0.39 on the Fold cover) so no iPhone SE (~0.56) ever matches,
- * leaving every SE untouched regardless of its exact width.
- */
-@media (min-width: 768px) and (max-width: 1023px),
-  (min-width: 1024px) and (orientation: portrait),
-  (min-width: 375px) and (max-width: 767px) and (orientation: portrait),
-  (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
+/* Barra inferior em toda tela sem a sidebar fixa: celular (em pé e deitado) e tablet. */
+@media not all and (min-width: 1024px) and (orientation: landscape) {
   .barra-navegacao-inferior {
     display: flex;
     flex-direction: row;
@@ -615,27 +408,6 @@
 }
 
 /*
- * Portrait phones (>=375px) use the bottom tab bar as their primary
- * navigation, so the hamburger button and its edge-swipe zone are removed and
- * the top bar collapses to just the logo/title. The iPhone SE (~320px) is
- * below this band and keeps the drawer. Header spacing is intentionally left
- * to the existing phone rules — only the hamburger is dropped.
- */
-@media (min-width: 375px) and (max-width: 767px) and (orientation: portrait),
-  (max-width: 374px) and (orientation: portrait) and (max-aspect-ratio: 1 / 2) {
-  .zona-gesto-drawer {
-    display: none;
-  }
-
-  /* Lugar do hambúrguer reservado, como no tablet: o título não pula quando
-     a seta de voltar aparece. */
-  .botao-menu-global:not(.botao-voltar-global) {
-    visibility: hidden;
-    pointer-events: none;
-  }
-}
-
-/*
  * iPad Pro 12.9" portrait only: the persistent tab bar is the primary
  * navigation on this large canvas, so its controls are enlarged — a taller
  * bar with bigger icons and labels and a clearer active state. Scoped to
@@ -685,6 +457,27 @@
  * The max-height keeps every tablet out regardless of width.
  */
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .botao-menu-global {
+    display: inline-flex;
+  }
+
+  /* Com seta de voltar, o menu sai junto com a marca. */
+  .barra-marca-aplicacao:has(.botao-voltar-tela) .botao-menu-global {
+    display: none;
+  }
+
+  .barra-navegacao-inferior {
+    display: none;
+  }
+
+  :root {
+    --altura-barra-inferior: 0px;
+  }
+
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+
   .cabecalho-principal {
     padding: 4px 0;
   }
@@ -705,37 +498,6 @@
     padding: 3px 10px 3px 6px;
   }
 
-  /*
-   * Phones in landscape (iPhone XR/12 Pro/14, Galaxy Z Fold 5 cover screen)
-   * fall inside the 768–1023 "tablet" band by width alone, which would hide the
-   * hamburger and show the bottom tab bar. Their short canvas (<=560px tall) is
-   * really a phone, so restore the desktop-style drawer: show the hamburger,
-   * drop the bottom bar and its reserved height. Tablets in landscape are >=768
-   * tall and never match this block.
-   */
-  .botao-menu-global {
-    display: inline-flex;
-    width: 32px;
-    min-height: 32px;
-    border-radius: 7px;
-  }
-
-  .barra-navegacao-inferior {
-    display: none;
-  }
-
-  :root {
-    --altura-barra-inferior: 0px;
-  }
-
-  body {
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-  }
-
-  .zona-gesto-drawer {
-    inset-block-start: 46px;
-  }
-
   .titulo-principal {
     font-size: 1rem;
     line-height: 1;
@@ -748,17 +510,187 @@
 }
 
 
-/*
- * Seta de voltar da Han e Fu (aberta pelo atalho da Calculadora de Mão). Ocupa
- * o lugar do hambúrguer e, ao contrário dele, aparece também no retrato, onde
- * a barra inferior não tem a Han e Fu. No desktop a sidebar já resolve.
- */
-.botao-menu-global.botao-voltar-global {
-  display: inline-flex;
+/* ─── Título da tela (TituloTela) ─────────────────────────────────────────── */
+.cabecalho-tela {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 4px;
 }
 
-@media (min-width: 1024px) and (orientation: landscape) {
-  .botao-menu-global.botao-voltar-global {
+.cabecalho-tela:empty {
+  display: none;
+}
+
+.titulo-tela {
+  overflow: hidden;
+  min-width: 0;
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 1rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.botao-voltar-tela {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-block: -6px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+}
+
+.botao-voltar-tela:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+/* Sem seta, o título vem ao lado da marca. */
+.cabecalho-tela > .titulo-tela:first-child::before {
+  content: '·';
+  margin-right: 8px;
+  color: var(--texto-apoio);
+}
+
+/* Com seta, ela e o título ocupam o lugar da marca (a sidebar mantém a marca). */
+@media not all and (min-width: 1024px) and (orientation: landscape) {
+  .barra-marca-aplicacao:has(.botao-voltar-tela) .marca-aplicacao {
     display: none;
   }
+}
+
+/* Sidebar: o título fica logo abaixo da marca, sem empurrar a navegação. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .cabecalho-tela {
+    flex: 0 0 auto;
+  }
+
+  .cabecalho-tela > .titulo-tela:first-child::before {
+    content: none;
+  }
+}
+
+/* ─── Barra inferior em páginas ────────────────────────── */
+.barra-pagina {
+  display: flex;
+  width: 100%;
+}
+
+.barra-pagina--segunda {
+  animation: barra-entra-direita 0.18s ease-out;
+}
+
+.barra-pagina--primeira {
+  animation: barra-entra-esquerda 0.18s ease-out;
+}
+
+@keyframes barra-entra-direita {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes barra-entra-esquerda {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra-pagina--segunda,
+  .barra-pagina--primeira {
+    animation: none;
+  }
+}
+
+.item-tab-mais {
+  position: relative;
+}
+
+.item-tab-ponto {
+  position: absolute;
+  top: 6px;
+  right: calc(50% - 16px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-primario, #155b98);
+}
+
+/* iPhone SE: 5 itens em 320px, o rótulo precisa de toda a largura. */
+@media (max-width: 374px) {
+  .item-tab-inferior {
+    padding-inline: 1px;
+  }
+}
+
+/* ─── Menu lateral do celular deitado ─────────────────────────────────────── */
+.gaveta-menu-fundo {
+  position: fixed;
+  inset: 0;
+  /* Acima do guia (100) e da barra dele (101). */
+  z-index: 110;
+  background: var(--cor-veu, rgba(15, 23, 42, 0.38));
+}
+
+.gaveta-menu {
+  display: flex;
+  overflow-y: auto;
+  width: min(320px, 82vw);
+  height: 100%;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--cor-nav, var(--cor-superficie));
+  color: var(--cor-texto);
+  animation: gaveta-entra 0.18s ease-out;
+}
+
+@keyframes gaveta-entra {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gaveta-menu {
+    animation: none;
+  }
+}
+
+.gaveta-menu-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--cor-borda);
+  color: var(--cor-primario);
+}
+
+.gaveta-menu-fechar {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--cor-texto);
+  cursor: pointer;
+}
+
+.gaveta-menu .item-menu-global {
+  min-height: 44px;
 }

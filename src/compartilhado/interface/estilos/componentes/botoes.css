@@ -62,3 +62,37 @@
   cursor: not-allowed;
   transform: none !important;
 }
+
+/* Botão "?" da ajuda de um campo: círculo pequeno, toque de 44px. */
+.ajuda-campo {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin: -12px -10px -12px -6px;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--primario-forte);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.ajuda-campo > span {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+}

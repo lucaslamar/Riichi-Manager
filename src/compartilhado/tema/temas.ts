@@ -3,13 +3,8 @@
  * para a web (via variáveis CSS em `tema-escuro.css`) e para um futuro app em
  * React Native (via StyleSheet).
  *
- * O tema claro continua sendo o visual original do app: na web, cada cor fixa
- * dos estilos virou `var(--cor-…, #valor-claro)`, então as variáveis `--cor-*`
- * só existem no tema escuro e o claro cai no valor de reserva. Aqui fica só o
- * núcleo do claro, para quem precisar dele fora do CSS.
- *
- * `scripts/verificar-tema.ts` confere que `tema-escuro.css` usa exatamente estes
- * valores e que os pares principais passam no contraste WCAG AA.
+ * `scripts/verificar-tema.ts` confere que `tema-escuro.css` e `tema-claro.css`
+ * usam exatamente estes valores e que os pares principais passam no WCAG AA.
  */
 
 export type PreferenciaTema = 'claro' | 'escuro' | 'automatico'
@@ -91,18 +86,40 @@ export const VELVET_DARKNESS_ALTO_CONTRASTE: Partial<PaletaTema> = {
   border: '#8A7AA8',
 }
 
-/** Núcleo do tema claro original (fundo, cartão, texto e destaque). */
-export const TEMA_CLARO = {
-  background: '#EEF2F7',
-  surface: '#FFFFFF',
-  text: '#102A43',
-  textMuted: '#607080',
-  primary: '#2196F3',
+/** Tema claro: bege da mesa com verde do feltro. */
+export const TEMA_CLARO: PaletaTema = {
+  background: '#EFE8DA',
+  surface: '#FBF8F1',
+  surfaceAlt: '#F4EFE3',
+  border: '#D8CFBB',
+  borderControl: '#857C66',
+  text: '#25302A',
+  textMuted: '#5C5A4B',
+  primary: '#1C6454',
+  onPrimary: '#FFFFFF',
+  primarySoft: '#DCEBE1',
+  primaryBorder: '#8FB8A3',
+  secondary: '#14503C',
+  secondaryText: '#17684A',
+  accent: '#8A5A00',
+  accentSoft: '#F6E7C8',
+  accentBorder: '#CDA95C',
+  focus: '#1C6454',
+  danger: '#A8281F',
+  dangerSoft: '#F8E0DB',
+  dangerBorder: '#DCA79E',
+  success: '#17683F',
+  successSoft: '#DCEFDF',
+  successBorder: '#9CC8A8',
+  warning: '#8A4B00',
+  warningSoft: '#F7E6CC',
+  warningBorder: '#D9B27C',
+  navBackground: '#F7F2E7',
 }
 
 /** `meta theme-color` de cada tema. */
 export const COR_BARRA_NAVEGADOR: Record<TemaEfetivo, string> = {
-  claro: '#101827',
+  claro: TEMA_CLARO.navBackground,
   escuro: VELVET_DARKNESS.background,
 }
 

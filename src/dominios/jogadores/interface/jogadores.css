@@ -1,0 +1,375 @@
+/* Cadastro de jogadores e SeletorJogador. Cores só pelos tokens de tokens.css. */
+
+/* ─── Campos ──────────────────────────────────────────────────────────────── */
+.entrada-jogador {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 2px solid var(--entrada-borda);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.entrada-jogador::placeholder {
+  color: var(--texto-apoio);
+}
+
+.entrada-jogador:focus-visible {
+  border-color: var(--primario);
+  outline: 2px solid var(--primario);
+  outline-offset: 1px;
+}
+
+.entrada-jogador[aria-invalid='true'] {
+  border-color: var(--texto-erro);
+}
+
+.campo-jogador {
+  display: block;
+  margin: 12px 0 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.campo-jogador:first-child {
+  margin-top: 0;
+}
+
+.erro-jogador {
+  margin: 6px 0 0;
+  color: var(--texto-erro);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.acoes-form-jogador {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.form-jogador .acoes-form-jogador {
+  margin-top: 18px;
+}
+
+.acoes-form-jogador > button {
+  flex: 1 1 0;
+  min-height: 44px;
+}
+
+/* ─── Tela Jogadores ──────────────────────────────────────────────────────── */
+.pagina-jogadores {
+  width: min(100%, 640px);
+  margin: 0 auto;
+  padding: 12px 16px 24px;
+  color: var(--texto-principal);
+}
+
+.barra-jogadores {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.botao-adicionar-jogador {
+  flex: 0 0 auto;
+  width: 48px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.busca-jogadores {
+  position: relative;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.busca-jogadores > i {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  color: var(--texto-apoio);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.busca-jogadores .entrada-jogador {
+  border-width: 1px;
+  border-radius: 12px;
+  padding-left: 40px;
+}
+
+.lista-jogadores,
+.lista-seletor-jogador {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-jogadores {
+  gap: 8px;
+}
+
+.linha-cadastro {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 64px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 8px 6px 8px 14px;
+  background: var(--superficie);
+}
+
+.dados-jogador {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nome-cadastro {
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.apelido-jogador {
+  overflow-wrap: anywhere;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+}
+
+.acao-jogador {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+}
+
+.acao-jogador:hover {
+  color: var(--primario);
+}
+
+.linha-cadastro .acao-jogador {
+  color: var(--texto-apoio);
+}
+
+.acao-jogador:focus-visible,
+.botao-arquivados:focus-visible,
+.opcao-seletor-jogador:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+.vazio-jogadores {
+  margin: 24px 0;
+  color: var(--texto-apoio);
+  text-align: center;
+}
+
+.arquivados-jogadores {
+  margin-top: 16px;
+}
+
+.botao-arquivados {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  color: var(--texto-apoio);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.linha-cadastro--arquivada .nome-cadastro {
+  color: var(--texto-apoio);
+}
+
+/* ─── SeletorJogador ──────────────────────────────────────────────────────── */
+.botao-novo-jogador {
+  width: 100%;
+  min-height: 44px;
+  margin: 10px 0 6px;
+}
+
+.opcao-seletor-jogador {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 10px 4px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.opcao-seletor-jogador .dados-jogador {
+  flex: 1 1 0;
+}
+
+.opcao-seletor-jogador:hover:not(:disabled) {
+  color: var(--primario);
+}
+
+.opcao-seletor-jogador:disabled {
+  color: var(--texto-apoio);
+  cursor: not-allowed;
+}
+
+.selo-jogador {
+  flex: 0 0 auto;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+/* ─── Clube, menu de ações e aviso de exclusão ────────────────────────────── */
+.sugestoes-clube {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sugestoes-clube button {
+  min-height: 44px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 999px;
+  padding: 0 14px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.clube-jogador {
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.menu-jogador {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-jogador button {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 0 14px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.menu-jogador button.menu-jogador-perigo {
+  color: var(--texto-erro);
+}
+
+.aviso-excluido {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--altura-barra-inferior, 0px) + 12px);
+  left: 16px;
+  z-index: 60;
+  display: flex;
+  max-width: 520px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 auto;
+  border-radius: 12px;
+  padding: 4px 6px 4px 14px;
+  color: var(--cor-fundo, #ffffff);
+  background: var(--texto-principal);
+  font-weight: 600;
+}
+
+.aviso-excluido button {
+  min-height: 44px;
+  border: 0;
+  padding: 0 10px;
+  color: inherit;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: normal;
+  text-decoration: underline;
+  text-transform: none;
+}
+
+/* Lista grande: busca e adicionar acompanham a rolagem, logo abaixo do cabeçalho. */
+.barra-jogadores {
+  position: sticky;
+  top: 47px;
+  z-index: 5;
+  padding-block: 8px;
+  background: var(--fundo);
+}
+
+/* O main rola de lado por padrão, e isso prenderia o sticky nele. */
+.conteudo-principal:has(.pagina-jogadores) {
+  overflow: clip visible;
+}
+
+@media (min-width: 768px) and (max-width: 1023px), (min-width: 1024px) and (orientation: portrait) {
+  .barra-jogadores {
+    top: 67px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .barra-jogadores {
+    top: 37px;
+  }
+}
+
+@media (min-width: 1024px) and (orientation: landscape) {
+  .barra-jogadores {
+    top: 0;
+  }
+}

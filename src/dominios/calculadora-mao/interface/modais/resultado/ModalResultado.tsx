@@ -12,6 +12,7 @@ import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 import ExibicaoCompleta, { TagsVentos } from './ExibicaoCompleta'
 
 import { consumirDestaque, destaqueDoYaku } from './destaqueYaku'
+import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 import './modal-resultado.css'
 
 interface PropsModalResultado {
@@ -28,6 +29,9 @@ interface PropsModalResultado {
   aoFechar: () => void
   /** Lixeira do cabeçalho: limpa a mão e começa uma nova. */
   aoNovaMao?: () => void
+  /** Aberta pelo Centerpiece: botão que leva a pontuação para a mesa. */
+  aoUsarMao?: () => void
+  contextoCenterpiece?: ContextoCenterpieceMao
 }
 
 /**
@@ -46,6 +50,8 @@ export default function ModalResultado({
   descricaoAcessivel,
   aoFechar,
   aoNovaMao,
+  aoUsarMao,
+  contextoCenterpiece,
 }: PropsModalResultado) {
   const { t, numero } = useI18n()
   const [yakuSelecionado, setYakuSelecionado] = useState<string | null>(null)
@@ -186,12 +192,21 @@ export default function ModalResultado({
           </span>
         </div>
       ) : (
-        <ExibicaoCompleta
-          resultado={resultado}
-          mao={mao}
-          yakuSelecionado={yakuSelecionado}
-          aoSelecionarYaku={setYakuSelecionado}
-        />
+        <>
+          <ExibicaoCompleta
+            resultado={resultado}
+            mao={mao}
+            yakuSelecionado={yakuSelecionado}
+            aoSelecionarYaku={setYakuSelecionado}
+            contextoCenterpiece={contextoCenterpiece}
+          />
+          {aoUsarMao && (
+            <button type="button" className="btn-primario cp-btn-usar-resultado" onClick={aoUsarMao}>
+              <i className="fas fa-check" aria-hidden="true" />
+              {t('centerpiece.win.useResult')}
+            </button>
+          )}
+        </>
       )}
     </Modal>
   )

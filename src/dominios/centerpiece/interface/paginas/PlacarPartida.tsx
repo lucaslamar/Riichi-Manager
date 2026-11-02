@@ -1,0 +1,613 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { gerarId } from '@/compartilhado/adaptadores/identificador'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
+import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
+import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
+import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import { numerosDaParede } from '../../logica/dados'
+import { ehQuatroVentos } from '../../logica/descartes'
+import { chamarPedra, desfazerUltimoDaMesa } from '../../logica/registroPartida'
+import {
+  CADEIRAS,
+  calcularResultado,
+  declararRiichi,
+  encerrarPorAgariYame,
+  finalizarPartida,
+  CHAVE_VENTO,
+  KANJI_VENTO,
+  ORDEM_VENTOS,
+  registrarAbortivo,
+  registrarChombo,
+  registrarRon,
+  registrarRyukyoku,
+  registrarTsumo,
+  ventoDaCadeira,
+  voltarDoResultado,
+  type Cadeira,
+  type Partida,
+} from '../../logica/partida'
+import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
+import AdSlot from '@/compartilhado/interface/componentes/AdSlot'
+import MesaQuadrada from '../componentes/MesaQuadrada'
+import PlacaJogador from '../componentes/PlacaJogador'
+import JogarDados from '../componentes/JogarDados'
+import ListaResultado from '../componentes/ListaResultado'
+import ModalBatida from '../componentes/ModalBatida'
+import { ModalAvisoFuriten, ModalChecarFuriten } from '../componentes/ModaisFuriten'
+import ModalDescartes, { type DecisaoDescarte } from '../componentes/ModalDescartes'
+import { iniciarBatida, iniciarRonDoDescarte, type EstadoBatida } from '../hooks/estadoBatida'
+import {
+  MenuJogador,
+  ModalConfirmacao,
+  ModalDiferenca,
+  ModalMaos,
+  ModalRyukyoku,
+  ResumoChombo,
+} from '../componentes/ModaisPartida'
+import { useDescartes } from '../hooks/useDescartes'
+import { usePartidas } from '../hooks/usePartidas'
+import { useTimerVez } from '../hooks/useTimerVez'
+
+const DURACAO_AVISO_MS = 2500
+
+const ventoMao = (vento: (typeof ORDEM_VENTOS)[number]) =>
+  String(ORDEM_VENTOS.indexOf(vento) + 1) as VentoMao
+
+const contexto = () => ({ id: gerarId(), agora: new Date().toISOString() })
+
+interface PropsPlacar {
+  partida: Partida
+  aoSair: () => void
+  aoTrocarDeMesa: (id: string) => void
+  aoFinalizar: () => void
+}
+
+export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinalizar }: PropsPlacar) {
+  const { t, numero } = useI18n()
+  const { abertas, atualizar: atualizarLista } = usePartidas()
+  const { jogadores } = useJogadores()
+
+  const { id, placar, config, vez } = partida
+  const atualizar = useCallback(
+    (transformar: (atual: Partida) => Partida) => atualizarLista(id, transformar),
+    [atualizarLista, id],
+  )
+
+  const nomeDe = (cadeira: Cadeira) => {
+    const jogador = jogadores.find((item) => item.id === partida.assentos[cadeira].jogadorId)
+    return jogador ? nomeExibido(jogador) : '—'
+  }
+
+  const [menuDe, setMenuDe] = useState<Cadeira | null>(null)
+  const [diferencaDe, setDiferencaDe] = useState<Cadeira | null>(null)
+  const [chomboDe, setChomboDe] = useState<Cadeira | null>(null)
+  const [batida, setBatida] = useState<EstadoBatida | null>(null)
+  const [ryukyokuAberto, setRyukyokuAberto] = useState(false)
+  const [maosAbertas, setMaosAbertas] = useState(false)
+  const [dadosAbertos, setDadosAbertos] = useState(false)
+  const [descartesDe, setDescartesDe] = useState<Cadeira | null>(null)
+  const [descarteRapido, setDescarteRapido] = useState<{ cadeira: Cadeira; expirou: boolean } | null>(null)
+  const [checarFuritenDe, setChecarFuritenDe] = useState<Cadeira | null>(null)
+  const [avisoFuritenDe, setAvisoFuritenDe] = useState<Cadeira | null>(null)
+  const [quatroVentosAberto, setQuatroVentosAberto] = useState(false)
+  const [aviso, setAviso] = useState<string | null>(null)
+  const temporizadorAviso = useRef<number | undefined>(undefined)
+
+  const modalAberta =
+    menuDe !== null ||
+    diferencaDe !== null ||
+    chomboDe !== null ||
+    batida !== null ||
+    ryukyokuAberto ||
+    maosAbertas ||
+    dadosAbertos ||
+    descartesDe !== null ||
+    descarteRapido !== null ||
+    checarFuritenDe !== null ||
+    avisoFuritenDe !== null ||
+    quatroVentosAberto ||
+    !!partida.fim
+
+  const timer = useTimerVez(partida, atualizar, modalAberta)
+  const acoesDescartes = useDescartes(atualizar)
+  const fecharAvisoFuriten = useCallback(() => setAvisoFuritenDe(null), [])
+
+  // Com o registro ligado, passar a vez pergunta antes o que foi descartado.
+  const tocarTimer = () => {
+    if (config.registrarDescartes && vez.comecou) setDescarteRapido({ cadeira: vez.cadeira, expirou: false })
+    else timer.tocar()
+  }
+
+  // Timer zerou: abre o descarte de quem estourou, uma vez por vez. A modal pausa o
+  // timer, então o alarme para aqui; fechar pelo X volta ao alarme e ao card piscando.
+  const estouroAberto = useRef(false)
+  if (vez.restanteMs > 0) estouroAberto.current = false
+  useEffect(() => {
+    if (!timer.esgotado || !config.registrarDescartes || modalAberta || estouroAberto.current) return
+    estouroAberto.current = true
+    setDescarteRapido({ cadeira: vez.cadeira, expirou: true })
+  }, [timer.esgotado, config.registrarDescartes, modalAberta, vez.cadeira])
+
+  const pularDescarte = () => {
+    setDescarteRapido(null)
+    if (timer.ligado) timer.tocar()
+  }
+
+  /** Depois do descarte: de quem é a vez agora, e se a mão acabou em ron. */
+  const decidirDescarte = (origem: Cadeira, decisao: DecisaoDescarte) => {
+    setDescartesDe(null)
+    setDescarteRapido(null)
+    if (decisao.tipo === 'ron') {
+      setBatida(iniciarRonDoDescarte(origem, decisao.cadeiras, decisao.ordem))
+    } else if (decisao.tipo === 'chamada') {
+      const { cadeira, chamada, ordem } = decisao
+      atualizar((atual) => chamarPedra(atual, ordem, { cadeira, tipo: chamada }))
+      if (timer.ligado) timer.passarPara(cadeira)
+      setDescarteRapido({ cadeira, expirou: false })
+    } else if (timer.ligado) {
+      timer.passarPara(((origem + 1) % 4) as Cadeira)
+    }
+  }
+
+  // Troca de vez e tempo esgotado no leitor de tela.
+  const nomeDaVez = nomeDe(vez.cadeira)
+  const anuncio = !timer.ligado
+    ? ''
+    : timer.esgotado
+      ? t('match.timer.expiredAnnounce', { name: nomeDaVez })
+      : vez.comecou
+        ? t('match.timer.turnAnnounce', { name: nomeDaVez })
+        : ''
+
+  useEffect(() => () => window.clearTimeout(temporizadorAviso.current), [])
+  const mostrarAviso = (texto: string) => {
+    setAviso(texto)
+    window.clearTimeout(temporizadorAviso.current)
+    temporizadorAviso.current = window.setTimeout(() => setAviso(null), DURACAO_AVISO_MS)
+  }
+
+  const aoEscolherNoMenu = (
+    cadeira: Cadeira,
+    acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes' | 'furiten',
+  ) => {
+    setMenuDe(null)
+    if (acao === 'vez') timer.passarPara(cadeira)
+    else if (acao === 'riichi') atualizar((atual) => declararRiichi(atual, cadeira, contexto()))
+    else if (acao === 'chombo') setChomboDe(cadeira)
+    else if (acao === 'descartes') setDescartesDe(cadeira)
+    else if (acao === 'furiten') setChecarFuritenDe(cadeira)
+    else if (acao === 'diferenca') setDiferencaDe(cadeira)
+    else setBatida(iniciarBatida({ tipo: acao, vencedor: cadeira }))
+  }
+
+  const receberCalculo = (resultado: ResultadoCalculoParaCenterpiece) => {
+    if (!batida || batida.vencedorAtual === null) return
+    const [proximo, ...pendentes] = batida.pendentes ?? []
+    setBatida({
+      ...batida,
+      calculadora: null,
+      // Ron de mais de um jogador: segue para o próximo antes de confirmar.
+      passo: proximo === undefined ? 'confirmacao' : 'calculo',
+      vencedorAtual: proximo ?? null,
+      pendentes,
+      vencedores: [...batida.vencedores, { cadeira: batida.vencedorAtual, resultado }],
+    })
+  }
+
+  const aplicarBatida = () => {
+    if (!batida) return
+    const { vencedores, pagador, tipo, ordemDescarte } = batida
+    if (tipo === 'ron' && pagador !== null) {
+      atualizar((atual) =>
+        registrarRon(
+          ordemDescarte === undefined || !vencedores[0]
+            ? atual
+            : chamarPedra(atual, ordemDescarte, { cadeira: vencedores[0].cadeira, tipo: 'ron' }),
+          {
+            pagador,
+            vencedores: vencedores.map(({ cadeira, resultado }) => ({
+              cadeira,
+              pontos: resultado.pontosRon ?? 0,
+              han: resultado.han,
+              fu: resultado.fu,
+              yakuman: resultado.yakuman,
+              montada: resultado.maoMontada,
+            })),
+          },
+          contexto(),
+        ),
+      )
+    } else if (tipo === 'tsumo' && vencedores[0]) {
+      const { cadeira, resultado } = vencedores[0]
+      atualizar((atual) =>
+        registrarTsumo(
+          atual,
+          {
+            vencedor: cadeira,
+            pagamentoDealer: resultado.pagamentoDealer ?? 0,
+            pagamentoNaoDealer: resultado.pagamentoNaoDealer ?? 0,
+            han: resultado.han,
+            fu: resultado.fu,
+            yakuman: resultado.yakuman,
+            montada: resultado.maoMontada,
+          },
+          contexto(),
+        ),
+      )
+    }
+    setBatida(null)
+  }
+
+  if (partida.fim) {
+    return (
+      <ResultadoFinalTela
+        partida={partida}
+        nomeDe={nomeDe}
+        aoFinalizar={() => {
+          atualizar((atual) => finalizarPartida(atual, new Date().toISOString()))
+          aoFinalizar()
+        }}
+        aoCorrigir={() => atualizar(voltarDoResultado)}
+      />
+    )
+  }
+
+  const vencedorAtual = batida?.vencedorAtual ?? null
+  const vencedorEhDealer = vencedorAtual === placar.cadeiraDealer
+
+  return (
+    <>
+      {/* A mesa continua montada atrás da calculadora, com o timer pausado. */}
+      <div hidden={!!batida?.calculadora}>
+        <div className="mesa-tela">
+          {batida?.calculadora && vencedorAtual !== null ? (
+            <TituloTela
+              titulo={`${nomeDe(vencedorAtual)} · ${t(`calculator.${batida.tipo}`)}`}
+              aoVoltar={() => setBatida({ ...batida, calculadora: null })}
+            />
+          ) : (
+            <TituloTela
+              aoVoltar={aoSair}
+              titulo={
+                <label className="ptd-seletor-mesa">
+                  <span className="sr-only">{t('match.table.switch')}</span>
+                  <select value={id} onChange={(evento) => aoTrocarDeMesa(evento.target.value)}>
+                    {abertas.map((aberta, indice) => (
+                      <option key={aberta.id} value={aberta.id}>
+                        {t('match.table.number', { number: indice + 1 })}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              }
+            />
+          )}
+
+          <div className="sr-only" aria-live="polite">
+            {anuncio}
+          </div>
+
+
+          <AdSlot />
+
+          <div className="mesa-centro-tela">
+            <MesaQuadrada
+              cadeiraDealer={placar.cadeiraDealer}
+              aoTocarDomo={timer.ligado && vez.comecou ? timer.alternarPausa : undefined}
+              rotuloDomo={t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}
+              domo={
+                <>
+                  <span className="mesa-domo-rodada" aria-hidden="true">
+                    {KANJI_VENTO[placar.rodadaVento]}
+                    {placar.rodadaNumero}
+                  </span>
+                  <span className="sr-only">
+                    {t('match.table.round', {
+                      wind: t(CHAVE_VENTO[placar.rodadaVento]),
+                      number: placar.rodadaNumero,
+                    })}
+                  </span>
+                  <span className="mesa-domo-info">
+                    {timer.ligado && vez.comecou && !timer.contando && (
+                      <i className="fas fa-pause" aria-hidden="true" />
+                    )}{' '}
+                    本{placar.honba}·棒{placar.palitos}
+                  </span>
+                </>
+              }
+              lado={(cadeira) => ({
+                placa: (
+                  <PlacaJogador
+                    nome={nomeDe(cadeira)}
+                    vento={ventoDaCadeira(cadeira, placar.cadeiraDealer)}
+                    pontos={placar.pontos[cadeira]}
+                    emRiichi={placar.riichi.includes(cadeira)}
+                    checagem={
+                      partida.registro?.maos[cadeira]
+                        ? {
+                            rotulo: t('match.furiten.iconLabel', { name: nomeDe(cadeira) }),
+                            aoTocar: () => setAvisoFuritenDe(cadeira),
+                          }
+                        : undefined
+                    }
+                    timer={
+                      timer.ligado && vez.cadeira === cadeira
+                        ? {
+                            segundos: timer.segundos,
+                            fracao: timer.fracao,
+                            esgotado: timer.esgotado || !!descarteRapido?.expirou,
+                            aoTocar: tocarTimer,
+                          }
+                        : undefined
+                    }
+                    aoAbrirMenu={() => setMenuDe(cadeira)}
+                    aoSegurar={() => setDiferencaDe(cadeira)}
+                  />
+                ),
+                ranhura: placar.riichi.includes(cadeira) ? (
+                  <span className="mesa-palito" aria-hidden="true" />
+                ) : (
+                  <span aria-hidden="true">
+                    {numerosDaParede((cadeira - placar.cadeiraDealer + 4) % 4).join(' · ')}
+                  </span>
+                ),
+              })}
+            />
+          </div>
+
+          <div className="mesa-acoes">
+            {config.abortivos.quatroVentos && ehQuatroVentos(partida.registro?.lances ?? []) && (
+              <button
+                type="button"
+                className="mesa-aviso"
+                onClick={() => setQuatroVentosAberto(true)}
+              >
+                {t('match.discards.fourWindsNotice')}
+              </button>
+            )}
+            <button
+              type="button"
+              className="mesa-btn-principal"
+              onClick={() => setBatida(iniciarBatida())}
+            >
+              {t('match.win.title')}
+            </button>
+            {partida.agariYameDisponivel && (
+              <button
+                type="button"
+                className="mesa-btn-secundario"
+                onClick={() => atualizar(encerrarPorAgariYame)}
+              >
+                {t('match.table.agariYame')}
+              </button>
+            )}
+            <div className="mesa-linha-acoes">
+              <JogarDados cadeiraDealer={placar.cadeiraDealer} aoMudarAberto={setDadosAbertos} />
+              <button type="button" onClick={() => setRyukyokuAberto(true)}>
+                <i className="fas fa-equals" aria-hidden="true" />
+                {t('match.draw.short')}
+              </button>
+              <button
+                type="button"
+                disabled={partida.eventos.length === 0 && !partida.registro?.lances.length}
+                onClick={() => {
+                  atualizar((atual) => desfazerUltimoDaMesa(atual, Date.now()))
+                  mostrarAviso(t('match.table.undone'))
+                }}
+              >
+                <i className="fas fa-rotate-left" aria-hidden="true" />
+                {t('match.table.undo')}
+              </button>
+              <button type="button" onClick={() => setMaosAbertas(true)}>
+                <i className="fas fa-list" aria-hidden="true" />
+                {t('match.hands.short')}
+              </button>
+            </div>
+          </div>
+
+          {aviso && (
+            <p className="ptd-aviso" role="status">
+              {aviso}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* O CSS das calculadoras conta com elas como filhas diretas do `main`. */}
+      {batida?.calculadora &&
+        vencedorAtual !== null &&
+        createPortal(
+          batida.calculadora === 'hanFu' ? (
+            <PaginaCalculadoraHanFu
+              aoUsarResultado={receberCalculo}
+              initialIsOya={vencedorEhDealer}
+              initialAgari={batida.tipo}
+              initialHonba={placar.honba}
+            />
+          ) : (
+            <PaginaCalculadoraMao
+              aoUsarResultado={receberCalculo}
+              contextoCenterpiece={{
+                tipoVitoria: batida.tipo,
+                ventoRodada: ventoMao(placar.rodadaVento),
+                ventoAssento: ventoMao(ventoDaCadeira(vencedorAtual, placar.cadeiraDealer)),
+                honba: placar.honba,
+                rodadaNumero: placar.rodadaNumero,
+                vencedorEhLeste: vencedorEhDealer,
+                vencedorNome: nomeDe(vencedorAtual),
+                jogadorRiichi: placar.riichi.includes(vencedorAtual),
+              }}
+            />
+          ),
+          document.querySelector('main.conteudo-principal') ?? document.body,
+        )}
+
+      {batida && !batida.calculadora && (
+        <ModalBatida
+          partida={partida}
+          batida={batida}
+          nomeDe={nomeDe}
+          aoMudar={setBatida}
+          aoAplicar={aplicarBatida}
+          aoFechar={() => setBatida(null)}
+        />
+      )}
+
+      {menuDe !== null && (
+        <MenuJogador
+          partida={partida}
+          cadeira={menuDe}
+          nome={nomeDe(menuDe)}
+          podeReceberVez={timer.ligado && vez.cadeira !== menuDe}
+          aoEscolher={(acao) => aoEscolherNoMenu(menuDe, acao)}
+          aoFechar={() => setMenuDe(null)}
+        />
+      )}
+
+      {diferencaDe !== null && (
+        <ModalDiferenca
+          partida={partida}
+          cadeira={diferencaDe}
+          nomeDe={nomeDe}
+          aoFechar={() => setDiferencaDe(null)}
+        />
+      )}
+
+      {chomboDe !== null && (
+        <ModalConfirmacao
+          titulo={t('match.chombo.title', { name: nomeDe(chomboDe) })}
+          texto={
+            config.chombo.tipo === 'fixo'
+              ? t('match.chombo.fixedHelp', { points: numero(config.chombo.valor) })
+              : config.chombo.tipo === 'yakumanReverso'
+                ? t(chomboDe === placar.cadeiraDealer ? 'match.chombo.yakumanDealerHelp' : 'match.chombo.yakumanHelp')
+                : t(chomboDe === placar.cadeiraDealer ? 'match.chombo.dealerHelp' : 'match.chombo.reverseHelp')
+          }
+          rotuloConfirmar={t('match.chombo.confirm')}
+          perigo
+          aoFechar={() => setChomboDe(null)}
+          aoConfirmar={() => {
+            atualizar((atual) => registrarChombo(atual, chomboDe, contexto()))
+            setChomboDe(null)
+          }}
+        >
+          <ResumoChombo partida={partida} cadeira={chomboDe} nomeDe={nomeDe} />
+        </ModalConfirmacao>
+      )}
+
+      {ryukyokuAberto && (
+        <ModalRyukyoku
+          partida={partida}
+          nomeDe={nomeDe}
+          aoFechar={() => setRyukyokuAberto(false)}
+          aoConfirmar={(dados) => {
+            atualizar((atual) => registrarRyukyoku(atual, dados, contexto()))
+            setRyukyokuAberto(false)
+          }}
+          aoAbortivo={(abortivo) => {
+            atualizar((atual) => registrarAbortivo(atual, abortivo, contexto()))
+            setRyukyokuAberto(false)
+          }}
+        />
+      )}
+
+      {quatroVentosAberto && (
+        <ModalConfirmacao
+          titulo={t('match.abortive.quatroVentos')}
+          texto={t('match.discards.fourWindsNotice')}
+          rotuloConfirmar={t('match.discards.fourWindsConfirm')}
+          aoFechar={() => setQuatroVentosAberto(false)}
+          aoConfirmar={() => {
+            atualizar((atual) => registrarAbortivo(atual, 'quatroVentos', contexto()))
+            setQuatroVentosAberto(false)
+          }}
+        />
+      )}
+
+      {descartesDe !== null && (
+        <ModalDescartes
+          partida={partida}
+          cadeira={descartesDe}
+          nomeDe={nomeDe}
+          acoes={acoesDescartes}
+          aoDecidir={(decisao) => decidirDescarte(descartesDe, decisao)}
+          aoFechar={() => setDescartesDe(null)}
+        />
+      )}
+
+      {descarteRapido !== null && (
+        <ModalDescartes
+          key={descarteRapido.cadeira}
+          rapido
+          expirou={descarteRapido.expirou}
+          partida={partida}
+          cadeira={descarteRapido.cadeira}
+          nomeDe={nomeDe}
+          acoes={acoesDescartes}
+          aoPular={pularDescarte}
+          aoDecidir={(decisao) => decidirDescarte(descarteRapido.cadeira, decisao)}
+          aoFechar={() => setDescarteRapido(null)}
+        />
+      )}
+
+      {checarFuritenDe !== null && (
+        <ModalChecarFuriten
+          partida={partida}
+          cadeira={checarFuritenDe}
+          nome={nomeDe(checarFuritenDe)}
+          acoes={acoesDescartes}
+          aoFechar={() => setChecarFuritenDe(null)}
+        />
+      )}
+
+      {avisoFuritenDe !== null && (
+        <ModalAvisoFuriten
+          partida={partida}
+          cadeira={avisoFuritenDe}
+          nomeDe={nomeDe}
+          acoes={acoesDescartes}
+          aoFechar={fecharAvisoFuriten}
+        />
+      )}
+
+      {maosAbertas && (
+        <ModalMaos partida={partida} nomeDe={nomeDe} aoFechar={() => setMaosAbertas(false)} />
+      )}
+    </>
+  )
+}
+
+/** Colocação, pontos brutos, uma/oka aplicados e pontuação final. */
+function ResultadoFinalTela({
+  partida,
+  nomeDe,
+  aoFinalizar,
+  aoCorrigir,
+}: {
+  partida: Partida
+  nomeDe: (cadeira: Cadeira) => string
+  aoFinalizar: () => void
+  aoCorrigir: () => void
+}) {
+  const { t } = useI18n()
+
+  return (
+    <section className="card ptd-resultado">
+      <h2>{t('match.result.title')}</h2>
+      <p className="ptd-apoio">{t(`match.result.reason.${partida.fim}`)}</p>
+      <ListaResultado linhas={calcularResultado(partida)} nomeDe={nomeDe} />
+      <div className="ptd-acoes-folha">
+        <button type="button" className="btn-contorno" onClick={aoCorrigir}>
+          {t('match.result.correct')}
+        </button>
+        <button type="button" className="btn-primario" onClick={aoFinalizar}>
+          {t('match.result.finish')}
+        </button>
+      </div>
+    </section>
+  )
+}

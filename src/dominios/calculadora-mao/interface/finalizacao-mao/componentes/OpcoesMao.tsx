@@ -17,12 +17,15 @@ import { TecladoContextual } from '../../compartilhado/componentes/TecladoContex
 import BotaoAjuda from '../../modais/ajuda-secoes/BotaoAjuda'
 import { useAvancoAutomatico } from '../hooks/useAvancoAutomatico'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
+import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
 interface PropsOpcoesMao {
   estado: EstadoCalculadoraMao
   embutido?: boolean
   /** Onde renderizar o Furiten quando ele fica junto da mão (celular deitado). */
   destinoFuriten?: HTMLElement | null
+  /** Aberta pelo Centerpiece: Vitória, Honba e Ventos vêm da mesa e o Riichi fica liberado. */
+  contextoCenterpiece?: ContextoCenterpieceMao
 }
 
 /**
@@ -42,6 +45,7 @@ export default function OpcoesMao({
   estado,
   embutido = false,
   destinoFuriten = null,
+  contextoCenterpiece,
 }: PropsOpcoesMao) {
   const { t } = useI18n()
   const {
@@ -120,10 +124,12 @@ export default function OpcoesMao({
   }, [])
   const honba = Number.isFinite(mao.honba) ? mao.honba : 0
   const mostrarOpcoesTenpai = slotsUsados >= 13
-  const mostrarConfiguracaoBasica = mostrarOpcoesTenpai
-  const mostrarVentos = mostrarConfiguracaoBasica && fluxoOpcoes.vitoriaDefinida
+  const modoCenterpiece = !!contextoCenterpiece
+  const mostrarConfiguracaoBasica = modoCenterpiece || mostrarOpcoesTenpai
+  const mostrarVentos = !modoCenterpiece && mostrarConfiguracaoBasica && fluxoOpcoes.vitoriaDefinida
   const mostrarEtapaRiichi =
-    mostrarVentos && fluxoOpcoes.ventoRodadaDefinido && fluxoOpcoes.ventoAssentoDefinido
+    modoCenterpiece ||
+    (mostrarVentos && fluxoOpcoes.ventoRodadaDefinido && fluxoOpcoes.ventoAssentoDefinido)
   const mostrarRiichi = mostrarEtapaRiichi && !maoAberta && !mao.bencao
   const mostrarCondicoes = mostrarEtapaRiichi
   // Calcular inteiro (botão + aviso "Mão pronta…") logo acima da navegação.
@@ -142,9 +148,9 @@ export default function OpcoesMao({
   const tabletPorAssunto = useMediaQuery(
     '(min-width: 768px) and (max-width: 1279px) and (min-height: 600px), (min-width: 1024px) and (orientation: landscape) and (min-height: 701px)',
   )
-  const vitoriaNaColunaDireita = tabletPorAssunto && mostrarConfiguracaoBasica
+  const vitoriaNaColunaDireita = tabletPorAssunto && !modoCenterpiece && mostrarConfiguracaoBasica
 
-  const campoVitoria = (
+  const campoVitoria = modoCenterpiece ? null : (
     <div
       id="secao-vitoria"
       className={`campo-vitoria-mao ${classeEtapa(mostrarConfiguracaoBasica)}`}
@@ -311,38 +317,40 @@ export default function OpcoesMao({
           </div>
         )}
 
-        <div className="contador-dora-manual contador-honba">
-          <span>{t('calculator.honba')}</span>
-          <div>
-            <button
-              type="button"
-              aria-label={`${t('calculator.honba')} -`}
-              disabled={honba <= 0}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                  rascunho.honba = Math.max(0, atual - 1)
-                })
-              }
-            >
-              -
-            </button>
-            <strong>{honba}</strong>
-            <button
-              type="button"
-              aria-label={`${t('calculator.honba')} +`}
-              disabled={honba >= 99}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                  rascunho.honba = Math.min(99, atual + 1)
-                })
-              }
-            >
-              +
-            </button>
+        {!modoCenterpiece && (
+          <div className="contador-dora-manual contador-honba">
+            <span>{t('calculator.honba')}</span>
+            <div>
+              <button
+                type="button"
+                aria-label={`${t('calculator.honba')} -`}
+                disabled={honba <= 0}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.max(0, atual - 1)
+                  })
+                }
+              >
+                -
+              </button>
+              <strong>{honba}</strong>
+              <button
+                type="button"
+                aria-label={`${t('calculator.honba')} +`}
+                disabled={honba >= 99}
+                onClick={() =>
+                  atualizarMao((rascunho) => {
+                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+                    rascunho.honba = Math.min(99, atual + 1)
+                  })
+                }
+              >
+                +
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   )
@@ -363,32 +371,34 @@ export default function OpcoesMao({
           Condições Especiais. No celular/desktop o wrapper é display:contents e
           o layout anterior é preservado. */}
       <div className="colunas-assuntos-finalizacao">
-        <section
-          id="secao-ventos"
-          className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}
-        >
-          <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
-            {t('calculator.winds')}
-            <BotaoAjuda topico="ventos" />
-          </span>
-          <SeletorVentos
-            mao={mao}
-            atualizarMao={atualizarMao}
-            ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
-            ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
-            aoDefinirVentoRodada={() => {
-              marcarVentoRodadaDefinido()
-              // Sem a seção de Riichi (Tenhou/Chiihou), segue para as Condições.
-              avancar(['secao-riichi', 'secao-condicoes'])
-            }}
-            aoDefinirVentoAssento={() => {
-              marcarVentoAssentoDefinido()
-              // O Vento da Rodada já vem marcado (Leste): desce direto até o
-              // Calcular, passando por Riichi e Condições Especiais.
-              avancarParaCalcular()
-            }}
-          />
-        </section>
+        {!modoCenterpiece && (
+          <section
+            id="secao-ventos"
+            className={`grupo-opcoes-mao grupo-opcoes-ventos ${classeEtapa(mostrarVentos)}`}
+          >
+            <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+              {t('calculator.winds')}
+              <BotaoAjuda topico="ventos" />
+            </span>
+            <SeletorVentos
+              mao={mao}
+              atualizarMao={atualizarMao}
+              ventoRodadaDefinido={fluxoOpcoes.ventoRodadaDefinido}
+              ventoAssentoDefinido={fluxoOpcoes.ventoAssentoDefinido}
+              aoDefinirVentoRodada={() => {
+                marcarVentoRodadaDefinido()
+                // Sem a seção de Riichi (Tenhou/Chiihou), segue para as Condições.
+                avancar(['secao-riichi', 'secao-condicoes'])
+              }}
+              aoDefinirVentoAssento={() => {
+                marcarVentoAssentoDefinido()
+                // O Vento da Rodada já vem marcado (Leste): desce direto até o
+                // Calcular, passando por Riichi e Condições Especiais.
+                avancarParaCalcular()
+              }}
+            />
+          </section>
+        )}
 
         <div
           className={`grupos-opcoes-mao ${

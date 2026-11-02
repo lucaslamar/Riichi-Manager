@@ -130,8 +130,8 @@
 .modal-fechar {
   display: inline-flex;
   flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   /* Só o X aparece; a área de toque continua com o tamanho do botão. */
@@ -169,8 +169,8 @@
 
 .modal-acao {
   display: inline-flex;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   border: 0;
@@ -294,8 +294,8 @@
 .modal-voltar {
   display: inline-flex;
   flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   align-items: center;
   justify-content: center;
   margin-left: -10px;
@@ -509,7 +509,24 @@
   }
 
   .modal-fechar {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ─── Folha: no celular a modal sai de baixo, grudada na borda ───────────── */
+@media (max-width: 767px) {
+  .modal-fundo:has(> .modal-folha) {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-folha {
+    width: 100%;
+    max-width: none;
+    max-height: 85dvh;
+    border-width: 1px 0 0;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }

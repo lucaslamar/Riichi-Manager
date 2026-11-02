@@ -5,6 +5,7 @@ import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import BotaoYakus from '../../modais/yakus/BotaoYakus'
 import { PaginaFinalizacaoMao } from '../../finalizacao-mao/paginas/PaginaFinalizacaoMao'
 import { PaginaMontagemMao } from '../../montagem-mao/paginas/PaginaMontagemMao'
+import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
 interface PropsModoCompleto {
   estado: EstadoCalculadoraMao
@@ -12,6 +13,8 @@ interface PropsModoCompleto {
   aoAbrirRegras: () => void
   entradaNotacao?: boolean
   aoMudarEntradaNotacao?: (ativa: boolean) => void
+  aoUsarMao?: () => void
+  contextoCenterpiece?: ContextoCenterpieceMao
 }
 
 /**
@@ -24,6 +27,8 @@ export default function ModoCompletoCalculadora({
   aoAbrirRegras,
   entradaNotacao,
   aoMudarEntradaNotacao,
+  aoUsarMao,
+  contextoCenterpiece,
 }: PropsModoCompleto) {
   const { t } = useI18n()
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -83,6 +88,8 @@ export default function ModoCompletoCalculadora({
           </h3>
           <PaginaFinalizacaoMao
             estado={estado}
+            aoUsarMao={aoUsarMao}
+            contextoCenterpiece={contextoCenterpiece}
             acoesCabecalho={
               <div className="acoes-finalizacao-calculadora" aria-label={t('calculator.actionsMenu')}>
                 <BotaoYakus classeBase="acao-finalizacao" />

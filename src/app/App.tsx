@@ -1,32 +1,23 @@
-import { useCallback, useState } from 'react'
+import { lazy, Suspense, useCallback, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
-import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
+import { ORDEM_TELAS } from '@/compartilhado/interface/layout/navegacao'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import PaginaRegras from '@/dominios/configuracoes/interface/PaginaRegras'
 import GuiaAprender from '@/dominios/aprender-a-jogar/interface/GuiaAprender'
-import packageJson from '../../package.json'
+
+const PaginaCenterpiece = lazy(
+  () => import('@/dominios/centerpiece/interface/paginas/PaginaCenterpiece'),
+)
 
 export type TelaPrincipal =
   | 'calculadora'
   | 'calculadoraRapida'
   | 'sorteadorVentos'
+  | 'centerpiece'
   | 'regras'
-  | 'sobre'
-
-/**
- * Ordem das telas ao deslizar o dedo: a da barra inferior. 'aprender' é o guia
- * Aprender a jogar, que abre por cima em vez de trocar de tela.
- */
-const ORDEM_DESLIZE: (TelaPrincipal | 'aprender')[] = [
-  'calculadora',
-  'calculadoraRapida',
-  'sorteadorVentos',
-  'aprender',
-  'regras',
-]
 
 /**
  * Componente raiz da aplicacao. A Calculadora de Mao e a porta de entrada.
@@ -47,26 +38,27 @@ export default function App() {
     setTela(proxima)
   }, [])
 
-  // Deslizar segue a ordem da barra inferior. Dedo para a esquerda vai para a
+  // Deslizar segue a ordem da barra inferior; o Centerpiece trata o próprio gesto
+  // (Pointer Events, com a tela acompanhando). Dedo para a esquerda vai para a
   // tela seguinte e para a direita volta para a anterior. Os gestos da
   // Calculadora de Mão ficam na própria página (a finalização tem um caso a mais).
-  const indiceTela = ORDEM_DESLIZE.indexOf(tela)
-  const telaAnterior = indiceTela > 0 ? ORDEM_DESLIZE[indiceTela - 1] : undefined
+  const indiceTela = ORDEM_TELAS.indexOf(tela)
+  const telaAnterior = indiceTela > 0 ? ORDEM_TELAS[indiceTela - 1] : undefined
   // Depois de Regras a fila recomeça na Calculadora de Mão.
-  const proximaTela = indiceTela >= 0 ? (ORDEM_DESLIZE[indiceTela + 1] ?? 'calculadora') : undefined
+  const proximaTela = indiceTela >= 0 ? (ORDEM_TELAS[indiceTela + 1] ?? 'calculadora') : undefined
 
   // Deslizar até o Aprender abre o guia por cima; ao fechar, a pessoa volta
   // para a tela de onde deslizou.
   const irPara = (destino: TelaPrincipal | 'aprender') =>
     destino === 'aprender' ? abrirGuia() : navegar(destino)
   // Na capa do guia, deslizar vai para a tela vizinha do Aprender na barra.
-  const indiceAprender = ORDEM_DESLIZE.indexOf('aprender')
+  const indiceAprender = ORDEM_TELAS.indexOf('aprender')
   const sairDoGuia = (passo: 1 | -1) => {
-    const destino = ORDEM_DESLIZE[indiceAprender + passo] ?? 'calculadora'
+    const destino = ORDEM_TELAS[indiceAprender + passo] ?? 'calculadora'
     if (destino !== 'aprender') navegar(destino)
   }
   useDeslizeHorizontal({
-    ativo: indiceTela >= 0 && tela !== 'calculadora',
+    ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece',
     aoDeslizarDireita: telaAnterior && (() => irPara(telaAnterior)),
     aoDeslizarEsquerda: proximaTela && (() => irPara(proximaTela)),
   })
@@ -87,8 +79,16 @@ export default function App() {
         />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
+        <Suspense fallback={null}>
+          {tela === 'centerpiece' && (
+            <PaginaCenterpiece
+              aoAbrirSorteador={() => navegar('sorteadorVentos')}
+              aoTelaAnterior={telaAnterior && (() => irPara(telaAnterior))}
+              aoProximaTela={proximaTela && (() => irPara(proximaTela))}
+            />
+          )}
+        </Suspense>
         {tela === 'regras' && <PaginaRegras />}
-        {tela === 'sobre' && <PaginaSobre />}
       </main>
 
       {guia && (
@@ -100,49 +100,5 @@ export default function App() {
         />
       )}
     </>
-  )
-}
-
-function PaginaSobre() {
-  const { t } = useI18n()
-  const linkApoio = ''
-
-  return (
-    <section className="card pagina-estatica">
-      <div className="cabecalho-secao">
-        <i className="fas fa-info-circle icone-secao" aria-hidden="true" />
-        <div>
-          <h2>{t('pages.aboutTitle')}</h2>
-          <p className="subtitulo-secao">{t('pages.aboutText')}</p>
-        </div>
-      </div>
-      <div className="grupo-sobre">
-        <span className="chip-sobre">{t('pages.version', { version: packageJson.version })}</span>
-        <span className="chip-sobre">{t('pages.author')}</span>
-      </div>
-      <div className="acoes-sobre">
-        <a
-          className="btn-contorno"
-          href="https://github.com/lucaslamar/Riichi-Manager"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <i className="fab fa-github" aria-hidden="true" /> GitHub
-        </a>
-        <a
-          className="btn-contorno"
-          href="https://github.com/lucaslamar/Riichi-Manager/issues/new"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <i className="fas fa-bug" aria-hidden="true" /> {t('pages.reportIssue')}
-        </a>
-        {linkApoio && (
-          <a className="btn-primario" href={linkApoio} target="_blank" rel="noreferrer">
-            <i className="fas fa-mug-hot" aria-hidden="true" /> {t('pages.supportProject')}
-          </a>
-        )}
-      </div>
-    </section>
   )
 }
