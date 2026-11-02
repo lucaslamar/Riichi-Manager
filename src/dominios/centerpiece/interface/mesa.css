@@ -680,3 +680,31 @@ button.mesa-domo {
     grid-column: auto;
   }
 }
+
+/* Abortar a partida: no cabeçalho, longe dos botões de jogo. */
+.mesa-abortar {
+  display: inline-flex;
+  min-height: 44px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  border: 0;
+  padding: 0 8px;
+  color: var(--texto-erro);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* iPhone SE: com o timer na placa, os pontos precisam caber ao lado do anel. */
+@media (max-width: 374px) {
+  .mesa-placa:has(.mesa-timer) .mesa-placa-pontos {
+    font-size: 1.25rem;
+  }
+}

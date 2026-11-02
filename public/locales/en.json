@@ -945,7 +945,11 @@
       "undo": "Undo",
       "undone": "Last action undone.",
       "agariYame": "End game (agari-yame)",
-      "center": "Table center"
+      "center": "Table center",
+      "abort": "Abort",
+      "abortTitle": "Abort this game?",
+      "abortHelp": "The game is deleted and does not go into the history or the ranking. This cannot be undone.",
+      "abortConfirm": "Abort game"
     },
     "card": {
       "label": "{{name}}, {{wind}}, {{points}} points. Open menu",

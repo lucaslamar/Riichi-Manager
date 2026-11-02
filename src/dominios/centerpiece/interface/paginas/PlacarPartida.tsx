@@ -68,7 +68,7 @@ interface PropsPlacar {
 
 export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinalizar }: PropsPlacar) {
   const { t, numero } = useI18n()
-  const { abertas, atualizar: atualizarLista } = usePartidas()
+  const { abertas, atualizar: atualizarLista, descartar } = usePartidas()
   const { jogadores } = useJogadores()
 
   const { id, placar, config, vez } = partida
@@ -94,6 +94,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const [checarFuritenDe, setChecarFuritenDe] = useState<Cadeira | null>(null)
   const [avisoFuritenDe, setAvisoFuritenDe] = useState<Cadeira | null>(null)
   const [quatroVentosAberto, setQuatroVentosAberto] = useState(false)
+  const [abortando, setAbortando] = useState(false)
   const [aviso, setAviso] = useState<string | null>(null)
   const temporizadorAviso = useRef<number | undefined>(undefined)
 
@@ -110,6 +111,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     checarFuritenDe !== null ||
     avisoFuritenDe !== null ||
     quatroVentosAberto ||
+    abortando ||
     !!partida.fim
 
   const timer = useTimerVez(partida, atualizar, modalAberta)
@@ -273,6 +275,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             <TituloTela
               aoVoltar={aoSair}
               titulo={
+                <>
                 <label className="ptd-seletor-mesa">
                   <span className="sr-only">{t('match.table.switch')}</span>
                   <select value={id} onChange={(evento) => aoTrocarDeMesa(evento.target.value)}>
@@ -283,6 +286,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                     ))}
                   </select>
                 </label>
+                <button type="button" className="mesa-abortar" onClick={() => setAbortando(true)}>
+                  <i className="fas fa-ban" aria-hidden="true" /> {t('match.table.abort')}
+                </button>
+                </>
               }
             />
           )}
@@ -511,6 +518,20 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           aoAbortivo={(abortivo) => {
             atualizar((atual) => registrarAbortivo(atual, abortivo, contexto()))
             setRyukyokuAberto(false)
+          }}
+        />
+      )}
+
+      {abortando && (
+        <ModalConfirmacao
+          titulo={t('match.table.abortTitle')}
+          texto={t('match.table.abortHelp')}
+          rotuloConfirmar={t('match.table.abortConfirm')}
+          perigo
+          aoFechar={() => setAbortando(false)}
+          aoConfirmar={() => {
+            descartar(id)
+            aoSair()
           }}
         />
       )}

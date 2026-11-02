@@ -945,7 +945,11 @@
       "undo": "Desfazer",
       "undone": "Última ação desfeita.",
       "agariYame": "Encerrar partida (agari-yame)",
-      "center": "Centro da mesa"
+      "center": "Centro da mesa",
+      "abort": "Abortar",
+      "abortTitle": "Abortar esta partida?",
+      "abortHelp": "A partida é apagada e não entra no histórico nem no ranking. Não dá para desfazer.",
+      "abortConfirm": "Abortar partida"
     },
     "card": {
       "label": "{{name}}, {{wind}}, {{points}} pontos. Abrir menu",
