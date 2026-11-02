@@ -133,6 +133,7 @@
     "selectDoraIndicator": "{{tile}}をドラ / 裏ドラ表示牌にする",
     "selectUraDoraIndicator": "{{tile}}を裏ドラ表示牌にする",
     "chooseMeldTile": "{{meld}}に{{tile}}を選ぶ",
+    "chooseWait": "待ちを選択",
     "chooseChiiSequence": "チーを選択",
     "chooseChiiSequenceOption": "チーを選択：{{sequence}}",
     "disabledTile": "{{tile}}は今は選べません",

@@ -133,6 +133,7 @@
     "selectDoraIndicator": "{{tile}}을(를) 도라 / 뒷도라 표시패로 선택",
     "selectUraDoraIndicator": "{{tile}}을(를) 뒷도라 표시패로 선택",
     "chooseMeldTile": "{{meld}}에 {{tile}} 선택",
+    "chooseWait": "대기패 선택",
     "chooseChiiSequence": "치 선택",
     "chooseChiiSequenceOption": "치 선택: {{sequence}}",
     "disabledTile": "{{tile}}은(는) 지금 선택할 수 없습니다",

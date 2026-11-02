@@ -139,6 +139,7 @@
     "selectDoraIndicator": "Pasirinkti {{tile}} kaip dora / ura-dora indikatorių",
     "selectUraDoraIndicator": "Pasirinkti {{tile}} kaip ura-dora indikatorių",
     "chooseMeldTile": "Pasirinkti {{tile}} deriniui {{meld}}",
+    "chooseWait": "Pasirinkite laukimą",
     "chooseChiiSequence": "Pasirinkite Chi",
     "chooseChiiSequenceOption": "Pasirinkti Chi: {{sequence}}",
     "disabledTile": "{{tile}} šiuo metu neprieinamas",

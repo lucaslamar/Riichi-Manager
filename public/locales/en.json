@@ -135,6 +135,7 @@
     "selectDoraIndicator": "Select {{tile}} as a dora / ura-dora indicator",
     "selectUraDoraIndicator": "Select {{tile}} as an ura-dora indicator",
     "chooseMeldTile": "Select {{tile}} for {{meld}}",
+    "chooseWait": "Choose the wait",
     "chooseChiiSequence": "Choose the Chi",
     "chooseChiiSequenceOption": "Choose Chi: {{sequence}}",
     "disabledTile": "{{tile}} unavailable right now",

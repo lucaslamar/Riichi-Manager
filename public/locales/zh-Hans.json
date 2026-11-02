@@ -133,6 +133,7 @@
     "selectDoraIndicator": "选择{{tile}}为宝牌 / 里宝牌指示牌",
     "selectUraDoraIndicator": "选择{{tile}}为里宝牌指示牌",
     "chooseMeldTile": "为{{meld}}选择{{tile}}",
+    "chooseWait": "选择听牌",
     "chooseChiiSequence": "选择吃",
     "chooseChiiSequenceOption": "选择吃：{{sequence}}",
     "disabledTile": "{{tile}}暂不可用",

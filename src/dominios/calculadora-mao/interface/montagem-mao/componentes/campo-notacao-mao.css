@@ -352,6 +352,55 @@
   background: var(--cor-sucesso-suave, #e8f5e9);
 }
 
+/* Mesma faixa do "Escolha o chi"; se não couber, rola para o lado. */
+.opcoes-espera-notacao {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.opcoes-espera-notacao > span {
+  color: var(--cor-sucesso, #43a047);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.opcoes-espera-notacao > div {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-bottom: 2px;
+}
+
+.opcao-espera-notacao {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid var(--cor-sucesso, #43a047);
+  border-radius: 10px;
+  padding: 5px 8px;
+  background: transparent;
+  color: var(--cor-texto);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.opcao-espera-notacao:active {
+  background: var(--cor-sucesso-suave, #e8f5e9);
+}
+
+.opcao-espera-notacao > small {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 .pedra-branca-notacao {
   display: inline-flex;
   align-items: center;
@@ -374,4 +423,35 @@
    fica no cabeçalho, para as regras continuarem a um toque. */
 .btn-configuracao-mao-cabecalho.em-notacao:not(#_) {
   display: inline-flex;
+}
+
+/* Celular deitado: barra e esperas à esquerda, teclado à direita. Em cima um do
+   outro, o teclado passava da altura e as últimas teclas ficavam cortadas. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .campo-notacao-mao {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    grid-auto-rows: min-content;
+    gap: 4px 12px;
+    padding: 4px 10px;
+  }
+
+  .campo-notacao-mao > * {
+    grid-column: 1;
+  }
+
+  .campo-notacao-mao > .teclado-notacao-mao {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+    gap: 4px;
+    margin-top: 0;
+  }
+
+  .teclado-notacao-mao .tecla-notacao-mao {
+    min-height: 40px;
+    padding-block: 0;
+  }
+
+  .teclado-notacao-mao .dica-tecla-notacao-mao {
+    display: none;
+  }
 }

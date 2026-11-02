@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { SELETOR_CAMADAS } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
+import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import { nomePedraAcessivel } from '../../constantes'
 import {
   chamadasPossiveis,
   fecharPendentes,
@@ -12,6 +14,8 @@ import {
   sequenciasChiComNumero,
   slotsDosPendentes,
   tipoDoGrupoPendente,
+  type CodigoPedra,
+  type EsperaPossivel,
   type Meld,
 } from '../../../logica/mao'
 import './campo-notacao-mao.css'
@@ -32,6 +36,10 @@ interface PropsCampoNotacaoMao {
   chamadaArmada: Meld['tipo'] | null
   /** Marca uma chamada (tocar de novo desmarca) ou, com `null`, desmarca. */
   aoArmarChamada: (tipo: Meld['tipo'] | null) => void
+  /** Esperas da mão em tenpai, as mesmas do teclado de pedras. */
+  esperas: EsperaPossivel[]
+  rotuloEspera: (espera: EsperaPossivel) => string
+  aoEscolherEspera: (pedra: CodigoPedra) => void
 }
 
 interface Tecla {
@@ -116,6 +124,9 @@ export function CampoNotacaoMao({
   erro = null,
   chamadaArmada,
   aoArmarChamada,
+  esperas,
+  rotuloEspera,
+  aoEscolherEspera,
 }: PropsCampoNotacaoMao) {
   const { t } = useI18n()
   const idMensagem = useId()
@@ -314,6 +325,28 @@ export function CampoNotacaoMao({
                     {digito === '0' ? '5' : digito}
                   </span>
                 ))}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {esperas.length > 0 && !pendentes && !chamadaArmada && (
+        <div className="opcoes-espera-notacao" role="group" aria-label={t('calculator.chooseWait')}>
+          <span>{t('calculator.chooseWait')}</span>
+          <div>
+            {esperas.map((espera) => (
+              <button
+                key={espera.pedra}
+                className="opcao-espera-notacao"
+                type="button"
+                aria-label={`${nomePedraAcessivel(espera.pedra)}, ${rotuloEspera(espera)}`}
+                onClick={() => aoEscolherEspera(espera.pedra)}
+              >
+                <span className="chip-pedra mini">
+                  <PedraSvg pedra={espera.pedra} />
+                </span>
+                <small>{rotuloEspera(espera)}</small>
               </button>
             ))}
           </div>

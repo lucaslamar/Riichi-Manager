@@ -461,7 +461,8 @@ export default function ConstrutorMao({
               </div>
             </div>
           )}
-          {entradaPorNotacao && (
+          {/* Escolhendo a batida, o teclado de pedras toma o lugar: a mão continua à vista. */}
+          {entradaPorNotacao && !selecionandoPedraAgari && (
             <CampoNotacaoMao
               valor={textoNotacao}
               aoMudar={mudarTextoNotacao}
@@ -473,6 +474,13 @@ export default function ConstrutorMao({
               // A chamada marcada é a mesma ação do teclado de pedras: com ela, tocar
               // nas pedras da mão forma o meld, como lá.
               chamadaArmada={acaoMeldAtiva?.tipo ?? null}
+              esperas={slotsUsados === 13 && !acaoPendente ? esperasPossiveis : []}
+              rotuloEspera={(espera) =>
+                espera.furiten && furitenBloqueiaRonNoTeclado && !espera.semYaku
+                  ? t('calculator.furiten')
+                  : rotuloEsperaTeclado(espera)
+              }
+              aoEscolherEspera={adicionarPedra}
               aoArmarChamada={(tipo) => {
                 if (tipo) alternarAcaoMao(tipo)
                 else estado.setAcaoPendente(null)
