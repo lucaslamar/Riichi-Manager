@@ -969,7 +969,8 @@
       "windDraw": "Sorteador de Ventos",
       "actions": "Ações da mesa",
       "hint": "Toque na mesa para ver as ações",
-      "openActions": "Abrir as ações da mesa. Honba atual: {{count}}",
+      "adjustHonba": "Ajustar honba, atual {{count}}",
+      "help4": "Tocar no centro da mesa corrige o honba.",
       "help1": "Deixe o celular no meio da mesa, com o 東 virado para o dealer. Tocar em qualquer ponto da mesa abre as ações: próxima rodada, honba, dados, sorteador e recomeçar.",
       "help2": "A cada troca de dealer, gire o celular para o 東 continuar virado para ele. A mesa acompanha o celular mesmo se a tela girar sozinha, mas o cabeçalho e a barra mudam de lado; para evitar isso, trave a rotação nos ajustes do celular.",
       "help3": "A tela fica acesa enquanto esta mesa estiver aberta, quando o aparelho permite."
@@ -1137,6 +1138,7 @@
         "kan": "Kan",
         "ron": "Ron"
       },
+      "riichiSince": "Em riichi desde o {{order}}º descarte",
       "tileOrder": "Descarte {{order}}",
       "history": "Ver descartes",
       "handSave": "Salvar",

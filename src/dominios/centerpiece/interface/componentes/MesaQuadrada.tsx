@@ -17,7 +17,7 @@ interface PropsMesaQuadrada {
   giro?: number
   /** Toque em qualquer ponto da mesa. O domo continua sendo o acesso por teclado. */
   aoTocarMesa?: () => void
-  /** Com ação, o domo vira botão (ex.: pausar o timer). */
+  /** Com ação, o domo vira botão (ex.: pausar o timer); o toque não chega à mesa. */
   aoTocarDomo?: () => void
   rotuloDomo?: string
 }
@@ -62,7 +62,15 @@ export default function MesaQuadrada({
           )
         })}
         {aoTocarDomo ? (
-          <button type="button" className="mesa-domo" aria-label={rotuloDomo} onClick={aoTocarDomo}>
+          <button
+            type="button"
+            className="mesa-domo"
+            aria-label={rotuloDomo}
+            onClick={(evento) => {
+              evento.stopPropagation()
+              aoTocarDomo()
+            }}
+          >
             {domo}
           </button>
         ) : (
