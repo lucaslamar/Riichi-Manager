@@ -2,6 +2,10 @@
  * Regras de uma mesa, usadas pelo Centerpiece e pelo Torneio, em TypeScript puro.
  * A partida guarda uma cópia: mudar um preset depois não altera partida já jogada.
  */
+import { normalizarUma, somaUma, umaFixa, type UmaMesa } from './uma'
+
+export { somaUma }
+
 export type IdPreset = 'padrao' | 'wrc' | 'ema' | 'mleague'
 
 export interface ConfigMesa {
@@ -12,7 +16,7 @@ export interface ConfigMesa {
   pontosPartida: number
   pontosRetorno: number
   /** Do 1º ao 4º, em milhares de pontos (+15 = 15.000). */
-  uma: [number, number, number, number]
+  uma: UmaMesa
   ronMultiplo: 'atamaHane' | 'duploTriploAborta' | 'duploTriploPermitidos'
   tobi: boolean
   agariYame: boolean
@@ -58,7 +62,7 @@ const REGRAS_PADRAO: RegrasPreset = {
   tipoPartida: 'leste',
   pontosPartida: 25000,
   pontosRetorno: 30000,
-  uma: [15, 5, -5, -15],
+  uma: umaFixa([15, 5, -5, -15]),
   ronMultiplo: 'atamaHane',
   tobi: true,
   agariYame: true,
@@ -83,7 +87,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tipoPartida: 'hanchan',
     pontosPartida: 30000,
     pontosRetorno: 30000,
-    uma: [15, 5, -5, -15],
+    uma: umaFixa([15, 5, -5, -15]),
     ronMultiplo: 'atamaHane',
     tobi: false,
     agariYame: false,
@@ -103,7 +107,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tipoPartida: 'hanchan',
     pontosPartida: 30000,
     pontosRetorno: 30000,
-    uma: [15, 5, -5, -15],
+    uma: umaFixa([15, 5, -5, -15]),
     ronMultiplo: 'duploTriploPermitidos',
     tobi: false,
     agariYame: false,
@@ -123,7 +127,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tipoPartida: 'hanchan',
     pontosPartida: 25000,
     pontosRetorno: 30000,
-    uma: [30, 10, -10, -30],
+    uma: umaFixa([30, 10, -10, -30]),
     ronMultiplo: 'atamaHane',
     tobi: false,
     agariYame: false,
@@ -139,7 +143,7 @@ export function configDoPreset(preset: IdPreset): ConfigMesa {
   const regras = REGRAS_PRESET[preset]
   return {
     ...regras,
-    uma: [...regras.uma],
+    uma: structuredClone(regras.uma),
     abortivos: { ...regras.abortivos },
     chombo: { ...regras.chombo },
     preset,
@@ -173,10 +177,6 @@ export function calcularOka(config: Pick<ConfigMesa, 'pontosPartida' | 'pontosRe
   return (config.pontosRetorno - config.pontosPartida) * 4
 }
 
-export function somaUma(uma: ConfigMesa['uma']) {
-  return uma.reduce((soma, valor) => soma + valor, 0)
-}
-
 const numeroValido = (valor: unknown): valor is number =>
   typeof valor === 'number' && Number.isFinite(valor)
 
@@ -191,8 +191,6 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
   const presetBase =
     lida.presetBase && IDS_PRESET.includes(lida.presetBase) ? lida.presetBase : 'padrao'
   const base = configDoPreset(presetBase)
-  const umaValida =
-    Array.isArray(lida.uma) && lida.uma.length === 4 && lida.uma.every(numeroValido)
   const chombo = lida.chombo
   const chomboValido =
     chombo?.tipo === 'manganReverso' ||
@@ -212,7 +210,7 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     tipoPartida: lida.tipoPartida === 'leste' || lida.tipoPartida === 'hanchan' ? lida.tipoPartida : base.tipoPartida,
     pontosPartida: numeroValido(lida.pontosPartida) ? lida.pontosPartida : base.pontosPartida,
     pontosRetorno: numeroValido(lida.pontosRetorno) ? lida.pontosRetorno : base.pontosRetorno,
-    uma: umaValida ? (lida.uma as ConfigMesa['uma']) : base.uma,
+    uma: normalizarUma(lida.uma, base.uma),
     ronMultiplo:
       lida.ronMultiplo === 'atamaHane' ||
       lida.ronMultiplo === 'duploTriploAborta' ||

@@ -194,3 +194,65 @@
 .cfg-tabela-exemplo th:first-child {
   text-align: left;
 }
+
+/* Uma: resumo calculado, Personalizar e a tabela flutuante. */
+.cfg-conjunto .cfg-segmentos {
+  margin-bottom: 10px;
+}
+
+.cfg-uma-resumo {
+  margin: 0 0 4px;
+}
+
+.cfg-link {
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  color: var(--primario-forte);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.cfg-uma-tabela {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.cfg-uma-tabela table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-size: 0.8125rem;
+}
+
+.cfg-uma-tabela th {
+  color: var(--texto-apoio);
+  font-weight: 700;
+  text-align: left;
+}
+
+.cfg-uma-tabela thead th {
+  text-align: center;
+}
+
+.cfg-uma-tabela td {
+  min-width: 52px;
+}
+
+.cfg-uma-tabela .cfg-entrada {
+  padding-inline: 4px;
+  text-align: center;
+}
+
+.cfg-uma-linha-invalida th {
+  color: var(--texto-erro);
+}
+
+.cfg-uma-linha-invalida .cfg-entrada {
+  border-color: var(--texto-erro);
+}

@@ -4,6 +4,7 @@
  * Uso: npm run test:ranking
  */
 import assert from 'node:assert/strict'
+import { umaFixa } from '../src/dominios/centerpiece/logica/uma'
 import { alterarConfig, configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
 import { criarPartidaManual } from '../src/dominios/centerpiece/logica/partidaManual'
 import {
@@ -171,8 +172,9 @@ teste('partida registrada à mão entra no histórico e no ranking', () => {
       jogadorIds: ['a', 'b', 'c', 'd'],
       nomes: ['A', 'B', 'C', 'D'],
       pontos: [12000, 42000, 18000, 28000],
-      uma: [15, 5, -5, -15],
-      oka: 20000,
+      pontosPartida: 25000,
+      pontosRetorno: 30000,
+      uma: umaFixa([15, 5, -5, -15]),
     },
     '2026-11-01T12:00:00.000Z',
   )
@@ -190,8 +192,9 @@ teste('partida registrada à mão entra no histórico e no ranking', () => {
     jogadorIds: ['a', 'b', 'c', 'd'],
     nomes: [],
     pontos: [47000, 33000, 23000, -3000],
-    uma: [15, 5, -5, -15],
-    oka: 0,
+    pontosPartida: 25000,
+    pontosRetorno: 25000,
+    uma: umaFixa([15, 5, -5, -15]),
   }, 'x')
   assert.equal(semOka.config.pontosPartida, 25000)
   assert.equal(semOka.resultado?.reduce((soma, linha) => soma + linha.final, 0), 0)

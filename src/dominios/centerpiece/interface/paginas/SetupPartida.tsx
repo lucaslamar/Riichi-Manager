@@ -107,7 +107,10 @@ export default function SetupPartida({
             {t('match.setup.rulesSummary', {
               start: numero(config.pontosPartida),
               target: numero(config.pontosRetorno),
-              uma: config.uma.slice(0, 2).join('/'),
+              uma:
+                config.uma.tipo === 'fixa'
+                  ? config.uma.valores.slice(0, 2).join('/')
+                  : t('tableConfig.umaFloating'),
             })}
           </span>
         </span>

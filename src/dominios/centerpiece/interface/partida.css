@@ -1093,7 +1093,12 @@ body:has(.ptd-modulo) {
 
   .fin-tela > .fin-linhas {
     grid-column: 1;
-    grid-row: 2 / span 12;
+    grid-row: 2;
+  }
+
+  .fin-tela > .fin-aviso-soma {
+    grid-column: 1;
+    grid-row: 3;
   }
 
   .ptd-lista-historico,

@@ -6,15 +6,14 @@ import {
   calcularOka,
   IDS_PRESET,
   OPCOES_TIMER_VEZ,
-  somaUma,
   VALOR_CHOMBO_FIXO_PADRAO,
   type ConfigMesa,
 } from '../../logica/configMesa'
 import { exemploPontuacao } from '../../logica/exemploPontuacao'
+import { umaValida, valoresDaUma } from '../../logica/uma'
 import { useConfigMesa } from '../hooks/useConfigMesa'
+import CampoUma from './CampoUma'
 import '../config-mesa.css'
-
-const CHAVE_LUGAR = ['tableConfig.uma1', 'tableConfig.uma2', 'tableConfig.uma3', 'tableConfig.uma4']
 
 const ABORTIVOS: { campo: keyof ConfigMesa['abortivos']; chave: string }[] = [
   { campo: 'kyuushuKyuuhai', chave: 'tableConfig.abortiveNineTerminals' },
@@ -34,7 +33,6 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
   const { t, numero } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
   const oka = calcularOka(config)
-  const soma = somaUma(config.uma)
 
   return (
     <Modal
@@ -47,7 +45,12 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           <button type="button" className="btn-contorno" onClick={reiniciar}>
             {t('tableConfig.reset')}
           </button>
-          <button type="button" className="btn-primario" onClick={() => aoConcluir(config)}>
+          <button
+            type="button"
+            className="btn-primario"
+            disabled={!umaValida(config.uma)}
+            onClick={() => aoConcluir(config)}
+          >
             {t('tableConfig.done')}
           </button>
         </div>
@@ -103,35 +106,11 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         </AjudaCampo>
       </p>
 
-      <fieldset className="cfg-conjunto">
-        <legend className="cfg-legenda-com-botao">
-          {t('tableConfig.uma')}
-          <AjudaCampo rotulo={t('tableConfig.umaLabel')}>
-            <p>{t('tableConfig.umaHelp')}</p>
-          </AjudaCampo>
-        </legend>
-        <div className="cfg-uma">
-          {config.uma.map((valor, indice) => (
-            <Campo key={CHAVE_LUGAR[indice]} rotulo={t(CHAVE_LUGAR[indice])}>
-              <CampoNumero
-                valor={valor}
-                passo={1}
-                aoMudar={(novo) => {
-                  const uma = [...config.uma] as ConfigMesa['uma']
-                  uma[indice] = novo
-                  alterar({ uma })
-                }}
-              />
-            </Campo>
-          ))}
-        </div>
-        {soma !== 0 && (
-          <p className="cfg-aviso" role="status">
-            <i className="fas fa-triangle-exclamation" aria-hidden="true" />
-            {t('tableConfig.umaWarning', { sum: numero(soma) })}
-          </p>
-        )}
-      </fieldset>
+      <CampoUma
+        valor={config.uma}
+        aoMudar={(uma) => alterar({ uma })}
+        pontosRetorno={config.pontosRetorno}
+      />
 
       <Campo
         rotulo={t('tableConfig.leftoverSticks')}
@@ -340,7 +319,11 @@ function AjudaRetorno({ config }: { config: ConfigMesa }) {
         {t('tableConfig.returnExampleValues', {
           start: numero(config.pontosPartida),
           target: numero(config.pontosRetorno),
-          uma: config.uma.join(' / '),
+          uma: valoresDaUma(
+            config.uma,
+            exemploPontuacao(config).map((linha) => linha.pontos),
+            config.pontosRetorno,
+          ).join(' / '),
         })}
       </p>
       <table className="cfg-tabela-exemplo">
