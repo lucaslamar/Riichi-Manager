@@ -1,8 +1,10 @@
-import { useRef } from 'react'
+import { useRef, type PointerEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { CHAVE_VENTO, KANJI_VENTO, type Vento } from '../../logica/partida'
 
 const TEMPO_SEGURAR_MS = 500
+/** Andar mais que isso é deslize, não tocar e segurar. */
+const MOVIMENTO_SEGURAR = 10
 /** Circunferência do anel do timer (raio 22 no viewBox de 48). */
 const CIRCUNFERENCIA = 2 * Math.PI * 22
 
@@ -36,15 +38,21 @@ export default function PlacaJogador({
   const { t, numero } = useI18n()
   const temporizador = useRef<number | undefined>(undefined)
   const segurou = useRef(false)
+  const inicioToque = useRef({ x: 0, y: 0 })
 
-  const iniciarSegurar = () => {
+  const iniciarSegurar = (evento: PointerEvent<HTMLButtonElement>) => {
     segurou.current = false
+    inicioToque.current = { x: evento.clientX, y: evento.clientY }
     temporizador.current = window.setTimeout(() => {
       segurou.current = true
       aoSegurar()
     }, TEMPO_SEGURAR_MS)
   }
   const cancelarSegurar = () => window.clearTimeout(temporizador.current)
+  const aoMover = (evento: PointerEvent<HTMLButtonElement>) => {
+    const { x, y } = inicioToque.current
+    if (Math.hypot(evento.clientX - x, evento.clientY - y) > MOVIMENTO_SEGURAR) cancelarSegurar()
+  }
 
   const classes = [
     'mesa-placa',
@@ -65,6 +73,7 @@ export default function PlacaJogador({
           points: numero(pontos),
         })}
         onPointerDown={iniciarSegurar}
+        onPointerMove={aoMover}
         onPointerUp={cancelarSegurar}
         onPointerLeave={cancelarSegurar}
         onPointerCancel={cancelarSegurar}

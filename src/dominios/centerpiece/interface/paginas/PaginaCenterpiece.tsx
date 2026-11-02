@@ -48,9 +48,6 @@ interface PropsCenterpiece {
   aoProximaTela?: () => void
 }
 
-/** Borda esquerda de onde o deslize volta ao menu, sem brigar com o resto da tela. */
-const BORDA_VOLTAR = 24
-
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
 function TelasCenterpiece({
   aoAbrirSorteador,
@@ -72,12 +69,11 @@ function TelasCenterpiece({
     setTela(mesa)
   }
 
-  // No menu segue o carrossel da barra inferior; dentro, a borda esquerda volta ao menu.
+  // No menu segue o carrossel da barra inferior; dentro, os dois sentidos voltam ao menu.
   useGestoHorizontal({
     alvo: raiz,
-    bordaEsquerda: tela.nome === 'inicio' ? undefined : BORDA_VOLTAR,
     aoDireita: tela.nome === 'inicio' ? aoTelaAnterior : irInicio,
-    aoEsquerda: tela.nome === 'inicio' ? aoProximaTela : undefined,
+    aoEsquerda: tela.nome === 'inicio' ? aoProximaTela : irInicio,
   })
 
   const nomesDa = (id: string) => {

@@ -44,8 +44,8 @@ export default function App() {
   // Calculadora de Mão ficam na própria página (a finalização tem um caso a mais).
   const indiceTela = ORDEM_TELAS.indexOf(tela)
   const telaAnterior = indiceTela > 0 ? ORDEM_TELAS[indiceTela - 1] : undefined
-  // Depois de Regras a fila recomeça na Calculadora de Mão.
-  const proximaTela = indiceTela >= 0 ? (ORDEM_TELAS[indiceTela + 1] ?? 'calculadora') : undefined
+  // Nas pontas não há para onde ir.
+  const proximaTela = indiceTela >= 0 ? ORDEM_TELAS[indiceTela + 1] : undefined
 
   // Deslizar até o Aprender abre o guia por cima; ao fechar, a pessoa volta
   // para a tela de onde deslizou.
