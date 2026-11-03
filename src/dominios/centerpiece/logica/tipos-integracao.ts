@@ -2,6 +2,7 @@ import type { ConfiguracaoCalculo, ResultadoMao } from '@/compartilhado/mahjong/
 import type { ResultadoPontuacaoHanFu } from '@/dominios/calculadora-han-fu/logica/tipos'
 import type { Mao, VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { gerarNotacaoCompleta } from '@/dominios/calculadora-mao/logica/notacao'
+import type { DadosDaPartida } from './dadosDaPartida'
 
 export interface ResultadoCalculoParaCenterpiece {
   origem?: 'calculadora-mao' | 'calculadora-han-fu'
@@ -58,6 +59,8 @@ export interface ContextoCenterpieceMao {
   jogadorRiichi?: boolean
   /** Regras da mesa: a calculadora não oferece a engrenagem. */
   regras?: ConfiguracaoCalculo
+  /** O que a linha do tempo da mão já diz: vem preenchido, mas dá para mudar. */
+  dados?: DadosDaPartida
 }
 
 interface MetadadosCenterpiece {

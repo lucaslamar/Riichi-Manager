@@ -1115,6 +1115,14 @@
       "fourth": "% 4th",
       "tobi": "% tobi"
     },
+    "fromMatch": {
+      "title": "来自对局的数据",
+      "help": "已在下方选项中标记。如有不符，直接修改即可。",
+      "doubleRiichi": "两立直",
+      "discards": "弃牌 {{count}} 张",
+      "doraExpected": "本局 {{kans}} 次杠：宝牌指示牌最多 {{count}} 张。",
+      "doraOver": "对局记录了 {{kans}} 次杠，宝牌指示牌应最多 {{count}} 张。请核对。"
+    },
     "discards": {
       "quickTitle": "{{name}}'s discard",
       "add": "Add",

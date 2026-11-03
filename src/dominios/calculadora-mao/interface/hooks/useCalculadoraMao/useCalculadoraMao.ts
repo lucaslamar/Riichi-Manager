@@ -18,7 +18,7 @@ function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['r
 }
 
 interface OpcionsCalculadoraMao {
-  initialMao?: Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi'>>
+  initialMao?: Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi' | 'ultimaPedra' | 'kan' | 'bencao' | 'descartes'>>
   fluxoCompleto?: boolean
   /** Regras vindas de fora (a mesa do Centerpiece). */
   configuracaoInicial?: ConfiguracaoCalculo

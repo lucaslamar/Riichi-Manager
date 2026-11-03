@@ -19,7 +19,7 @@ import type { EstadoMaoCalculadora } from './tipos'
  * Regras de clique, resultado e esperas pertencem aos hooks vizinhos.
  */
 type InitialMaoOverrides = Partial<
-  Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi'>
+  Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi' | 'ultimaPedra' | 'kan' | 'bencao' | 'descartes'>
 >
 
 export function useEstadoMao(

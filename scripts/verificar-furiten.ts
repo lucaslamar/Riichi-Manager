@@ -27,6 +27,7 @@ import {
   descreverRio,
 } from '../src/dominios/centerpiece/logica/descreverPedras'
 import { pagamentosChombo } from '../src/dominios/centerpiece/logica/aplicarChombo'
+import { dadosDaPartidaParaMao } from '../src/dominios/centerpiece/logica/dadosDaPartida'
 import { calcularFuriten } from '../src/dominios/centerpiece/logica/furiten'
 import { passarVezPara } from '../src/dominios/centerpiece/logica/vez'
 import {
@@ -366,6 +367,64 @@ teste('Riichi com menos de 4 no muro não é declarado', () => {
 teste('passar por um kan fechado não dá furiten', () => {
   const fechado: Lance = { tipo: 'kakan', ordem: 1, cadeira: 1, pedra: '3s', fechado: true }
   assert.equal(calcularFuriten([fechado], 0, ESPERAS).principal, null)
+})
+
+const dados = (lances: Lance[], cadeira: Cadeira, tipo: 'ron' | 'tsumo', emRiichi = false) =>
+  dadosDaPartidaParaMao({ lances, cadeira, tipo, emRiichi })
+const comRiichi = (lances: Lance[], ordem: number) =>
+  lances.map((lance) => (lance.ordem === ordem && lance.tipo === 'descarte' ? { ...lance, riichi: true } : lance))
+const chamado = (lances: Lance[], ordem: number, tipo: 'chi' | 'pon' | 'kan', cadeira: Cadeira = 2) =>
+  lances.map((lance) =>
+    lance.ordem === ordem && lance.tipo === 'descarte' ? { ...lance, chamadaPor: { cadeira, tipo } } : lance,
+  )
+
+teste('dados da partida: Riichi duplo no primeiro descarte, sem chamadas antes', () => {
+  const lances = comRiichi(linha([0, '1m'], [1, '2m']), 1)
+  assert.deepEqual(dados(lances, 0, 'tsumo', true).riichi, { duplo: true, ippatsu: true })
+  const comPon = comRiichi(chamado(linha([3, '9m'], [0, '1m']), 1, 'pon'), 2)
+  assert.equal(dados(comPon, 0, 'tsumo', true).riichi?.duplo, false)
+})
+
+teste('dados da partida: Ippatsu cai com novo descarte ou chamada de alguém', () => {
+  const base = linha([0, '1m'], [1, '2m'], [0, '3m'], [1, '4m'])
+  assert.equal(dados(comRiichi(base, 3), 0, 'tsumo', true).riichi?.ippatsu, true)
+  assert.equal(dados(comRiichi(base, 1), 0, 'tsumo', true).riichi?.ippatsu, false)
+  assert.equal(dados(chamado(comRiichi(base, 3), 4, 'pon'), 0, 'tsumo', true).riichi?.ippatsu, false)
+})
+
+teste('dados da partida: Riichi pelo menu não inventa duplo nem Ippatsu', () => {
+  assert.deepEqual(dados(linha([1, '1m']), 0, 'tsumo', true).riichi, { duplo: false, ippatsu: false })
+  assert.equal(dados(linha([1, '1m']), 0, 'tsumo', false).riichi, null)
+})
+
+teste('dados da partida: Haitei com o muro em zero e Houtei no último descarte', () => {
+  const lances = descartes(69).map((lance) => ({ ...lance, cadeira: 1 as Cadeira }))
+  assert.equal(dados(lances, 0, 'tsumo').ultimaPedra, true)
+  assert.equal(dados(lances.slice(0, 68), 0, 'tsumo').ultimaPedra, false)
+  const ate70 = descartes(70).map((lance) => ({ ...lance, cadeira: 1 as Cadeira }))
+  assert.equal(dados(ate70, 0, 'ron').ultimaPedra, true)
+  assert.equal(dados(lances, 0, 'ron').ultimaPedra, false)
+})
+
+teste('dados da partida: Rinshan no próprio kan e Chankan no kakan de outro', () => {
+  const fechado: Lance = { tipo: 'kakan', ordem: 1, cadeira: 0, pedra: '1m', fechado: true }
+  const kakanOutro: Lance = { tipo: 'kakan', ordem: 1, cadeira: 1, pedra: '1m' }
+  assert.equal(dados([fechado], 0, 'tsumo').kan, true)
+  assert.equal(dados(chamado(linha([1, '1m']), 1, 'kan', 0), 0, 'tsumo').kan, true)
+  assert.equal(dados([kakanOutro], 0, 'ron').kan, true)
+  assert.equal(dados([{ ...fechado, cadeira: 1 }], 0, 'ron').kan, false)
+  assert.equal(dados(linha([1, '1m']), 0, 'tsumo').kan, false)
+})
+
+teste('dados da partida: primeira compra, descartes do vencedor e kans', () => {
+  assert.equal(dados([], 0, 'tsumo').primeiraCompra, false)
+  assert.equal(dados(linha([0, '1m']), 1, 'tsumo').primeiraCompra, true)
+  assert.equal(dados(chamado(linha([0, '1m']), 1, 'pon'), 1, 'tsumo').primeiraCompra, false)
+  assert.equal(dados(linha([1, '1m'], [0, '2m']), 0, 'tsumo').primeiraCompra, false)
+  assert.equal(dados(linha([0, '1m']), 1, 'ron').primeiraCompra, false)
+  assert.deepEqual(dados(linha([0, '1m'], [1, '2m'], [0, '3m']), 0, 'ron').descartes, ['1m', '3m'])
+  const doisKans = chamado([...linha([1, '1m']), { tipo: 'kakan', ordem: 2, cadeira: 2, pedra: '5p' } as Lance], 1, 'kan')
+  assert.equal(dados(doisKans, 0, 'ron').kans, 2)
 })
 
 console.log(`Furiten ok: ${testes} testes.`)

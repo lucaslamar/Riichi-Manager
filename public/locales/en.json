@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "Calculator",
+    "calculator": "Calculator",
     "navigation": "Main navigation",
     "currentModule": "Current module",
     "tagline": "Riichi Mahjong ecosystem",
@@ -637,7 +637,7 @@
     "startOver": "Start over",
     "start": "Start",
     "close": "Close the guide",
-    "index": "Index",
+    "index": "Index",
     "closeIndex": "Close index",
     "modules": "Modules",
     "module": "Module {{number}}",
@@ -1121,6 +1121,14 @@
       "first": "% 1st",
       "fourth": "% 4th",
       "tobi": "% tobi"
+    },
+    "fromMatch": {
+      "title": "Data from the match",
+      "help": "Already set in the options below. If something is off, just change it.",
+      "doubleRiichi": "Double Riichi",
+      "discards": "Discards: {{count}}",
+      "doraExpected": "{{kans}} kan this hand. Dora indicators expected: up to {{count}}.",
+      "doraOver": "The match recorded {{kans}} kan. Dora indicators expected: up to {{count}}. Please check."
     },
     "discards": {
       "quickTitle": "{{name}}'s discard",

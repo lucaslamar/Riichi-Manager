@@ -1136,6 +1136,14 @@
       "fourth": "% 4th",
       "tobi": "% tobi"
     },
+    "fromMatch": {
+      "title": "Partijos duomenys",
+      "help": "Jau pažymėta parinktyse žemiau. Jei kas nesutampa, tiesiog pakeiskite.",
+      "doubleRiichi": "Dvigubas Riichi",
+      "discards": "Išmesta akmenų: {{count}}",
+      "doraExpected": "Kan šioje rankoje: {{kans}}. Dora rodiklių iki: {{count}}.",
+      "doraOver": "Partijoje užregistruota kan: {{kans}}, tad dora rodiklių turėtų būti iki {{count}}. Patikrinkite."
+    },
     "discards": {
       "quickTitle": "{{name}}'s discard",
       "add": "Add",

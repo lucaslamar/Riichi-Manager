@@ -64,6 +64,10 @@ terminais e honras, muro, furiten.
 Sem revisão nativa em es, ja, ko, lt e zh-Hans: os textos novos em chi, kan e riichi do
 Guia de bolso e nas páginas chi e kan-dora do Tutorial. Conferir o nome local de kuikae.
 
+## Dados vindos da partida
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans: match.fromMatch.*.
+
 ## Pontos de atenção
 
 - **ko, nomes de yaku:** mistura de leitura sino-coreana (일발, 청일색, 국사무쌍) e transliteração do

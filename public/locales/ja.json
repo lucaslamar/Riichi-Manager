@@ -1115,6 +1115,14 @@
       "fourth": "% 4th",
       "tobi": "% tobi"
     },
+    "fromMatch": {
+      "title": "対局からのデータ",
+      "help": "下のオプションに反映済みです。違っていれば変更してください。",
+      "doubleRiichi": "ダブルリーチ",
+      "discards": "捨て牌{{count}}枚",
+      "doraExpected": "この局のカン{{kans}}回：ドラ表示牌は最大{{count}}枚です。",
+      "doraOver": "対局の記録はカン{{kans}}回で、ドラ表示牌は最大{{count}}枚のはずです。確認してください。"
+    },
     "discards": {
       "quickTitle": "{{name}}'s discard",
       "add": "Add",

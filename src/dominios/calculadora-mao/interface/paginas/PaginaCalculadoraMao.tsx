@@ -51,7 +51,18 @@ export default function PaginaCalculadoraMao({
             ventoRodada: contextoCenterpiece.ventoRodada,
             ventoAssento: contextoCenterpiece.ventoAssento,
             honba: contextoCenterpiece.honba,
-            riichi: contextoCenterpiece.jogadorRiichi ? { duplo: false, ippatsu: false } : null,
+            riichi: contextoCenterpiece.dados
+              ? contextoCenterpiece.dados.riichi
+              : contextoCenterpiece.jogadorRiichi
+                ? { duplo: false, ippatsu: false }
+                : null,
+            // Riichi e benção não andam juntos: a opção de Riichi some com a benção.
+            ...(contextoCenterpiece.dados && {
+              ultimaPedra: contextoCenterpiece.dados.ultimaPedra,
+              kan: contextoCenterpiece.dados.kan,
+              bencao: contextoCenterpiece.dados.primeiraCompra && !contextoCenterpiece.dados.riichi,
+              descartes: contextoCenterpiece.dados.descartes,
+            }),
           },
           fluxoCompleto: true,
           configuracaoInicial: contextoCenterpiece.regras,

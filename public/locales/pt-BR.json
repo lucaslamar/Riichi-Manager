@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "Calculadora",
+    "calculator": "Calculadora",
     "navigation": "Navegação principal",
     "currentModule": "Módulo atual",
     "tagline": "Ecossistema de Riichi Mahjong",
@@ -637,7 +637,7 @@
     "startOver": "Começar do início",
     "start": "Começar",
     "close": "Fechar o guia",
-    "index": "Índice",
+    "index": "Índice",
     "closeIndex": "Fechar índice",
     "modules": "Módulos",
     "module": "Módulo {{number}}",
@@ -1121,6 +1121,14 @@
       "first": "% 1º",
       "fourth": "% 4º",
       "tobi": "% tobi"
+    },
+    "fromMatch": {
+      "title": "Dados vindos da partida",
+      "help": "Já marcados nas opções abaixo. Se algo não bater, é só mudar.",
+      "doubleRiichi": "Riichi duplo",
+      "discards": "Descartes: {{count}}",
+      "doraExpected": "{{kans}} kan na mão. Indicadores de dora esperados: até {{count}}.",
+      "doraOver": "A partida registrou {{kans}} kan. Indicadores de dora esperados: até {{count}}. Confira."
     },
     "discards": {
       "quickTitle": "Descarte de {{name}}",

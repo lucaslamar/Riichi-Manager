@@ -9,6 +9,7 @@ import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/P
 import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import { dadosDaPartidaParaMao } from '../../logica/dadosDaPartida'
 import { numerosDaParede } from '../../logica/dados'
 import { ehQuatroVentos, pedrasNoMuro, ultimoDescarteDaMao } from '../../logica/descartes'
 import { chamarPedra, desfazerUltimoDaMesa } from '../../logica/registroPartida'
@@ -458,6 +459,12 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 vencedorNome: nomeDe(vencedorAtual),
                 jogadorRiichi: placar.riichi.includes(vencedorAtual),
                 regras: config.regrasCalculo,
+                dados: dadosDaPartidaParaMao({
+                  lances: partida.registro?.lances ?? [],
+                  cadeira: vencedorAtual,
+                  tipo: batida.tipo,
+                  emRiichi: placar.riichi.includes(vencedorAtual),
+                }),
               }}
             />
           ),

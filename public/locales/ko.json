@@ -1115,6 +1115,14 @@
       "fourth": "% 4th",
       "tobi": "% tobi"
     },
+    "fromMatch": {
+      "title": "대국에서 가져온 정보",
+      "help": "아래 옵션에 이미 표시했습니다. 다르면 바꾸면 됩니다.",
+      "doubleRiichi": "더블 리치",
+      "discards": "버림패 {{count}}장",
+      "doraExpected": "이번 판 깡 {{kans}}번: 도라 표시패는 최대 {{count}}장입니다.",
+      "doraOver": "대국 기록은 깡 {{kans}}번이므로 도라 표시패는 최대 {{count}}장입니다. 확인하세요."
+    },
     "discards": {
       "quickTitle": "{{name}}'s discard",
       "add": "Add",
