@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import '@/dominios/calculadora-mao/interface/modais/regras/modal-regras.css'
 import '../config-mesa.css'
 
@@ -8,17 +9,19 @@ export default function BotoesOpcao<Valor extends string | number>({
   valor,
   aoEscolher,
   empilhado = false,
+  className = '',
 }: {
   rotulo: string
-  opcoes: readonly { valor: Valor; rotulo: string }[]
+  opcoes: readonly { valor: Valor; rotulo: ReactNode }[]
   valor: Valor
   aoEscolher: (valor: Valor) => void
   /** Rótulos longos: uma opção por linha. */
   empilhado?: boolean
+  className?: string
 }) {
   return (
     <div
-      className={`controle-regra cfg-opcoes${empilhado ? ' cfg-opcoes--empilhado' : ''}`}
+      className={`controle-regra cfg-opcoes${empilhado ? ' cfg-opcoes--empilhado' : ''}${className ? ` ${className}` : ''}`}
       style={{ gridTemplateColumns: `repeat(${empilhado ? 1 : opcoes.length}, minmax(0, 1fr))` }}
       role="group"
       aria-label={rotulo}

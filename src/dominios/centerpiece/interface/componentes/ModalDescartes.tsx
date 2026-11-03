@@ -138,10 +138,17 @@ export default function ModalDescartes({
         rotulo={t('match.discards.rivers')}
         valor={rioVisto}
         aoEscolher={setRioVisto}
+        className="dsc-abas"
         opcoes={[
           ...CADEIRAS.map((outra) => ({
             valor: outra,
-            rotulo: `${KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]} ${nomeDe(outra)}`,
+            // Vento em cima e nome embaixo, igual em todas: cinco abas cabem no celular.
+            rotulo: (
+              <>
+                <span className="dsc-aba-vento">{KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]}</span>
+                <span className="dsc-aba-nome">{nomeDe(outra)}</span>
+              </>
+            ),
           })),
           { valor: 'todos' as const, rotulo: t('match.discards.allRivers') },
         ]}
