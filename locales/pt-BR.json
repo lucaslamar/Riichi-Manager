@@ -282,7 +282,7 @@
     },
     "sets": {
       "title": "Fu das combinações",
-      "intro": "Cada trinca e cada kan somam fu; sequências não somam nada.",
+      "intro": "Cada trinca e cada kan somam fu. Sequências não somam nada.",
       "header": "Combinação|Simples (2–8)|Terminais/Honras",
       "sequence": "Sequência|0|0",
       "openTriplet": "Trinca aberta|2|4",
@@ -354,7 +354,7 @@
       "sanbaiman": "Sanbaiman|11–12 han|24.000|36.000",
       "kazoe": "Kazoe Yakuman|13+ han|32.000|48.000",
       "yakuman": "Yakuman|mãos especiais|32.000|48.000",
-      "kiriage": "Algumas regras arredondam 4 han 30 fu e 3 han 60 fu para Mangan (Kiriage Mangan). No app, essa opção fica nas Regras de cálculo da Calculadora de Mão; a Tabela rápida mostra os valores sem ela."
+      "kiriage": "Algumas regras arredondam 4 han 30 fu e 3 han 60 fu para Mangan (Kiriage Mangan). No app, essa opção fica nas Regras de cálculo da Calculadora de Mão. A Tabela rápida mostra os valores sem ela."
     },
     "honba": {
       "title": "Honba",
@@ -493,9 +493,9 @@
       "tipTitle": "Dica",
       "tip": "Dá para montar vários grupos e números e tocar no naipe só no fim, e ele vale para todos: bom para Honitsu e Itsu. Cada número mostra embaixo a honra que vira com o z. AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize o dedo para a direita.",
       "chi": "Sequência de 3 do mesmo naipe pega de quem jogou antes de você. Digite 123m e toque em Chi. Ou toque em Chi antes e depois num número: escolha a sequência (ainda sem naipe) e toque no naipe. Com Chi marcado, tocar numa pedra da mão também forma o chi.",
-      "pon": "Trinca pega do descarte de qualquer jogador. Digite 111p e toque em Pon. Ou toque em Pon antes e depois no 1: aparecem três 1 esperando o naipe; toque em p.",
-      "kan": "4 iguais, a 4ª pega do descarte de outro jogador. Digite 1111s e toque em Kan. Ou toque em Kan antes e depois no 1: aparecem quatro 1; toque em s.",
-      "closedKan": "4 iguais, todas da sua própria mão. Digite 7777z e toque em Kan fechado. Ou toque em Kan fechado antes e depois no 7: aparecem quatro 7; toque em z.",
+      "pon": "Trinca pega do descarte de qualquer jogador. Digite 111p e toque em Pon. Ou toque em Pon antes e depois no 1: aparecem três 1 esperando o naipe. Então toque em p.",
+      "kan": "4 iguais, a 4ª pega do descarte de outro jogador. Digite 1111s e toque em Kan. Ou toque em Kan antes e depois no 1: aparecem quatro 1 esperando o naipe. Então toque em s.",
+      "closedKan": "4 iguais, todas da sua própria mão. Digite 7777z e toque em Kan fechado. Ou toque em Kan fechado antes e depois no 7: aparecem quatro 7 esperando o naipe. Então toque em z.",
       "displayTitle": "No computador",
       "display": "Pelo teclado físico, a chamada é uma letra no fim do grupo: c para Chi, Pon e Kan (123mc, 111pc, 1111sc) e a para Kan fechado (7777za)."
     }
@@ -898,7 +898,7 @@
     "gameHanchan": "Hanchan",
     "multipleRon": "Ron múltiplo",
     "ronAtamaHane": "Atama hane (só um vence)",
-    "ronTripleAborts": "Ron duplo; triplo é empate abortado",
+    "ronTripleAborts": "Ron duplo vale, ron triplo é empate abortado",
     "ronAllowed": "Duplo e triplo permitidos",
     "tobi": "Tobi",
     "tobiHelp": "A partida acaba quando alguém fica abaixo de zero.",
@@ -974,7 +974,7 @@
       "adjustHonba": "Ajustar honba, atual {{count}}",
       "help4": "Tocar no centro da mesa corrige o honba.",
       "help1": "Deixe o celular no meio da mesa, com o 東 virado para o dealer. Tocar em qualquer ponto da mesa abre as ações: próxima rodada, honba, dados, sorteador e recomeçar.",
-      "help2": "A cada troca de dealer, gire o celular para o 東 continuar virado para ele. A mesa acompanha o celular mesmo se a tela girar sozinha, mas o cabeçalho e a barra mudam de lado; para evitar isso, trave a rotação nos ajustes do celular.",
+      "help2": "A cada troca de dealer, gire o celular para o 東 continuar virado para ele. A mesa acompanha o celular mesmo se a tela girar sozinha, mas o cabeçalho e a barra mudam de lado. Para evitar isso, trave a rotação nos ajustes do celular.",
       "help3": "A tela fica acesa enquanto esta mesa estiver aberta, quando o aparelho permite."
     },
     "setup": {
