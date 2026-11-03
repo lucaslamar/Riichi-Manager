@@ -561,7 +561,7 @@ const modulos: TutorialModule[] = [
     title: 'Valid hand',
     cover: "Complete isn't enough: to win, the hand needs a yaku.",
     coverTip:
-      'When you finish this module, play **a round where the yaku counts**, before moving on to points.',
+      'This module teaches the **yaku**. At the end, play **a round where the yaku counts**, before moving on to points.',
     pages: [
       {
         id: 'sem-yaku',

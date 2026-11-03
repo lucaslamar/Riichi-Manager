@@ -559,7 +559,7 @@ const modulos: TutorialModule[] = [
     title: 'Galiojanti ranka',
     cover: 'Užbaigtos rankos nepakanka: kad laimėtumėte, reikia yaku.',
     coverTip:
-      'Baigę šį modulį, prieš pereidami prie taškų sužaiskite **vieną raundą, kuriame yaku jau privalomas**.',
+      'Šiame modulyje sužinosite, kas yra **yaku**. Pabaigoje, prieš pereidami prie taškų, sužaiskite **vieną raundą, kuriame yaku jau privalomas**.',
     pages: [
       {
         id: 'sem-yaku',

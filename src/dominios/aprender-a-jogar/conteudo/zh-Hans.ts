@@ -553,7 +553,8 @@ const modulos: TutorialModule[] = [
     number: 6,
     title: '有效的手牌',
     cover: '形状完整还不够：要和牌，手牌必须有役。',
-    coverTip: '学完这个模块后，在进入点数之前，先玩**一局要求有役的牌**。',
+    coverTip:
+      '这个模块讲**役**。学完后，在进入点数之前，先玩**一局要求有役的牌**。',
     pages: [
       {
         id: 'sem-yaku',

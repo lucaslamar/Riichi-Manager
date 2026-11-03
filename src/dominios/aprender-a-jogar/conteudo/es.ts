@@ -561,7 +561,7 @@ const modulos: TutorialModule[] = [
     title: 'Mano válida',
     cover: 'Completa no basta: para ganar, la mano necesita un yaku.',
     coverTip:
-      'Al terminar este módulo, juega **una ronda ya con el yaku en juego**, antes de pasar a los puntos.',
+      'En este módulo aprendes el **yaku**. Al final, juega **una ronda ya con el yaku en juego**, antes de pasar a los puntos.',
     pages: [
       {
         id: 'sem-yaku',
