@@ -24,6 +24,8 @@ export type TelaPrincipal =
  */
 export default function App() {
   const [tela, setTela] = useState<TelaPrincipal>('calculadora')
+  // Sorteador aberto pelo Centerpiece simples: deslizar para qualquer lado volta para lá.
+  const [simplesAberto, setSimplesAberto] = useState(false)
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
   // a cada abertura, sempre na capa.
@@ -35,8 +37,18 @@ export default function App() {
   // Ir para uma tela fecha o guia: na capa dele a barra inferior fica à vista.
   const navegar = useCallback((proxima: TelaPrincipal) => {
     setGuia(null)
+    setSimplesAberto(false)
     setTela(proxima)
   }, [])
+
+  const abrirSorteadorDoSimples = () => {
+    navegar('sorteadorVentos')
+    setSimplesAberto(true)
+  }
+  const voltarAoSimples = () => {
+    setTela('centerpiece')
+  }
+  const sorteadorDoSimples = simplesAberto && tela === 'sorteadorVentos'
 
   // Deslizar segue a ordem da barra inferior; o Centerpiece trata o próprio gesto
   // (Pointer Events, com a tela acompanhando). Dedo para a esquerda vai para a
@@ -59,8 +71,12 @@ export default function App() {
   }
   useDeslizeHorizontal({
     ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece',
-    aoDeslizarDireita: telaAnterior && (() => irPara(telaAnterior)),
-    aoDeslizarEsquerda: proximaTela && (() => irPara(proximaTela)),
+    aoDeslizarDireita: sorteadorDoSimples
+      ? voltarAoSimples
+      : telaAnterior && (() => irPara(telaAnterior)),
+    aoDeslizarEsquerda: sorteadorDoSimples
+      ? voltarAoSimples
+      : proximaTela && (() => irPara(proximaTela)),
   })
 
   return (
@@ -82,7 +98,8 @@ export default function App() {
         <Suspense fallback={null}>
           {tela === 'centerpiece' && (
             <PaginaCenterpiece
-              aoAbrirSorteador={() => navegar('sorteadorVentos')}
+              inicioNoSimples={simplesAberto}
+              aoAbrirSorteador={abrirSorteadorDoSimples}
               aoTelaAnterior={telaAnterior && (() => irPara(telaAnterior))}
               aoProximaTela={proximaTela && (() => irPara(proximaTela))}
             />

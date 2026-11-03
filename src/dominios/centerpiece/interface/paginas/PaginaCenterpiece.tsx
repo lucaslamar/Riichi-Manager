@@ -43,6 +43,8 @@ export default function PaginaCenterpiece(props: PropsCenterpiece) {
 
 interface PropsCenterpiece {
   aoAbrirSorteador: () => void
+  /** Volta do sorteador aberto pelo Centerpiece simples: abre direto nele. */
+  inicioNoSimples?: boolean
   /** Vizinhos na barra inferior, para o deslize no menu do módulo. */
   aoTelaAnterior?: () => void
   aoProximaTela?: () => void
@@ -51,6 +53,7 @@ interface PropsCenterpiece {
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
 function TelasCenterpiece({
   aoAbrirSorteador,
+  inicioNoSimples = false,
   aoTelaAnterior,
   aoProximaTela,
   raiz,
@@ -58,7 +61,7 @@ function TelasCenterpiece({
   const { t } = useI18n()
   const { partidas, abertas, descartar, guardarNome } = usePartidas()
   const { jogadores } = useJogadores()
-  const [tela, setTela] = useState<TelaModulo>({ nome: 'inicio' })
+  const [tela, setTela] = useState<TelaModulo>({ nome: inicioNoSimples ? 'simples' : 'inicio' })
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
   const irInicio = () => setTela({ nome: 'inicio' })
   const { telaCheiaMesa } = usePreferencias()
