@@ -113,7 +113,11 @@ export default function ModalBatida({
 
   return (
     <Modal
-      titulo={t('match.win.title')}
+      titulo={
+        batida.atalhoTsumo && vencedorAtual !== null
+          ? t('match.win.tsumoOf', { name: nomeDe(vencedorAtual) })
+          : t('match.win.title')
+      }
       subtitulo={t('match.win.step', { current: indice + 1, total: etapas.length })}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
