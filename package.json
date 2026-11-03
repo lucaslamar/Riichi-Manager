@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . && npm run -s i18n:check",
+    "i18n:check": "tsx scripts/checar-traducoes.ts",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:i18n && npm run test:guia && npm run test:tema && npm run test:notacao && npm run test:jogadores && npm run test:config-mesa && npm run test:partida && npm run test:ranking && npm run test:furiten && npm run test:batida",
     "test:i18n": "tsx scripts/verificar-traducoes.ts",

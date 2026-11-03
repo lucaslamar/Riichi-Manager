@@ -7,6 +7,7 @@
 import { conteudoEn } from '../src/dominios/aprender-a-jogar/conteudo/en'
 import { conteudoEs } from '../src/dominios/aprender-a-jogar/conteudo/es'
 import { conteudoJa } from '../src/dominios/aprender-a-jogar/conteudo/ja'
+import { conteudoKo } from '../src/dominios/aprender-a-jogar/conteudo/ko'
 import { conteudoLt } from '../src/dominios/aprender-a-jogar/conteudo/lt'
 import { conteudoPtBR } from '../src/dominios/aprender-a-jogar/conteudo/pt-BR'
 import { conteudoZhHans } from '../src/dominios/aprender-a-jogar/conteudo/zh-Hans'
@@ -55,6 +56,7 @@ for (const [idioma, conteudo] of Object.entries({
   en: conteudoEn,
   es: conteudoEs,
   ja: conteudoJa,
+  ko: conteudoKo,
   lt: conteudoLt,
   'zh-Hans': conteudoZhHans,
 })) {
@@ -76,4 +78,4 @@ if (erros.length) {
   console.error(`Guia com problema (${erros.length}):\n${erros.join('\n')}`)
   process.exit(1)
 }
-console.log('Guia ok: en, es, ja, lt e zh-Hans têm a mesma estrutura do pt-BR.')
+console.log('Guia ok: en, es, ja, ko, lt e zh-Hans têm a mesma estrutura do pt-BR.')

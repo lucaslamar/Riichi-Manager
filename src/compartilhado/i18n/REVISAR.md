@@ -8,6 +8,15 @@ mahjong (yaku, han, fu, ventos, chamadas, pontuação) para conferência.
 Sem revisão nativa. Termos de estratégia a conferir: ja 筋引っかけ, 片筋, 跨ぎ筋, 表示盤
 (centerpiece), 切れ目 (abertura), 供託; zh-Hans 筋陷阱, 半筋, 跨筋, 指示盘, 开门, 错和, 押注.
 
+## Coreano (ko): Aprender a jogar
+
+Gerado a partir do texto em português (não do inglês), sem revisão nativa, em
+`src/dominios/aprender-a-jogar/conteudo/ko.ts`. Precisa de **revisão de um falante nativo**,
+principalmente destes termos: 만수 / 통수 / 삭수 (naipes), 노두패, 중장패, 패산, 가른 자리
+(abertura), 왕패, 영상패 (reposição do kan), 점봉, 공탁, 친 / 자, 동풍전, 반장전, 유국, 노텐,
+간짱 / 변짱 / 샤보 / 단기, 스지 함정, 반스지, 나카스지, 벽(카베), 소토가와, 마타기 스지, 현물,
+고립패, 미끼. As referências `{{onde:…}}` viram "N부 M장(título)".
+
 ## Lituano (lt): Aprender a jogar
 
 Sem revisão nativa, em `src/dominios/aprender-a-jogar/conteudo/lt.ts`. Conferir principalmente
