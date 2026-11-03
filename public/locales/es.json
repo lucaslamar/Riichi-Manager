@@ -639,7 +639,10 @@
       "many": "Riichi Mahjong de principio a fin. En {{count}} módulos ya juegas la primera partida.",
       "other": "Riichi Mahjong de principio a fin. En {{count}} módulos ya juegas la primera partida."
     },
-    "howToRead": "Toca a la derecha o a la izquierda de la pantalla (o desliza) para pasar la página. Toca en el medio para mostrar la barra superior: la X vuelve a esta portada (y, desde aquí, a la app) y el botón de lista abre el índice.",
+    "howToUse": "Cómo usar",
+    "howToTurn": "Toca los lados de la pantalla o desliza para pasar la página.",
+    "howToBar": "Toca en el medio para mostrar la barra superior.",
+    "howToIndex": "En la barra, el botón de lista abre el índice y la X vuelve a esta portada.",
     "continue": "Continuar",
     "continueFrom": "Continuar desde {{page}}",
     "startOver": "Empezar desde el principio",

@@ -632,7 +632,10 @@
       "one": "Riichi Mahjong from start to finish. In {{count}} module you'll be playing your first game.",
       "other": "Riichi Mahjong from start to finish. In {{count}} modules you'll be playing your first game."
     },
-    "howToRead": "Tap the right or left side of the screen (or swipe) to turn the page. Tap the middle to show the top bar: the X goes back to this cover (and, from here, to the app) and the list button opens the index.",
+    "howToUse": "How to use",
+    "howToTurn": "Tap the sides of the screen or swipe to turn the page.",
+    "howToBar": "Tap the middle to show the top bar.",
+    "howToIndex": "In the bar, the list button opens the index and the X returns to this cover.",
     "continue": "Continue",
     "continueFrom": "Continue from {{page}}",
     "startOver": "Start over",

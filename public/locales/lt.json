@@ -646,7 +646,10 @@
       "many": "Riichi Mahjong nuo pradžios iki galo. Per {{count}} modulio jau žaisite pirmąją partiją.",
       "other": "Riichi Mahjong nuo pradžios iki galo. Per {{count}} modulių jau žaisite pirmąją partiją."
     },
-    "howToRead": "Palieskite dešinę ar kairę ekrano pusę (arba perbraukite), kad verstumėte puslapį. Palieskite vidurį, kad būtų parodyta viršutinė juosta: X grąžina į šį viršelį (o iš čia – į programėlę), o sąrašo mygtukas atidaro turinį.",
+    "howToUse": "Kaip naudotis",
+    "howToTurn": "Palieskite ekrano kraštus arba perbraukite, kad verstumėte puslapį.",
+    "howToBar": "Palieskite vidurį, kad būtų parodyta viršutinė juosta.",
+    "howToIndex": "Juostoje sąrašo mygtukas atidaro turinį, o X grąžina į šį viršelį.",
     "continue": "Tęsti",
     "continueFrom": "Tęsti nuo {{page}}",
     "startOver": "Pradėti iš naujo",

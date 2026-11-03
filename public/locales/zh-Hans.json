@@ -625,7 +625,10 @@
     "tagline": {
       "other": "从头到尾学立直麻将。只需 {{count}} 个模块，你就能打第一局。"
     },
-    "howToRead": "点击屏幕右侧或左侧（或滑动）翻页。点击中间显示顶部栏：X 返回封面（从这里再回到应用），列表按钮打开目录。",
+    "howToUse": "使用方法",
+    "howToTurn": "点击屏幕两侧或滑动来翻页。",
+    "howToBar": "点击中间显示顶部栏。",
+    "howToIndex": "在顶部栏中，列表按钮打开目录，X 返回此封面。",
     "continue": "继续",
     "continueFrom": "从{{page}}继续",
     "startOver": "从头开始",

@@ -8,9 +8,11 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
 import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
 import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useDeslizePaginas } from '@/compartilhado/interface/hooks/useDeslizePaginas'
+import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import { conteudoGuia } from '../conteudo'
@@ -47,6 +49,13 @@ const SELETOR_INTERATIVOS = 'a, button, input, select, textarea, summary, label,
 type Vista = { tipo: 'livro' } | { tipo: 'glossario' }
 
 const VISTA_LIVRO: Vista = { tipo: 'livro' }
+
+/** Como ler o guia, na capa: um gesto por linha. */
+const COMO_USAR = [
+  { icone: 'fa-hand-pointer', chave: 'learn.howToTurn' },
+  { icone: 'fa-bars-staggered', chave: 'learn.howToBar' },
+  { icone: 'fa-list', chave: 'learn.howToIndex' },
+] as const
 
 /** O React 18 não conhece `inert`: liga direto no elemento (tira do foco e dos toques o que está coberto). */
 function useInerte<T extends HTMLElement>(ativo: boolean) {
@@ -92,6 +101,7 @@ export default function GuiaAprender({
   const [concluidos, setConcluidos] = useState(progressoInicial.concluidos)
   const [barraVisivel, setBarraVisivel] = useState(true)
   const [indiceAberto, setIndiceAberto] = useState(false)
+  const [idiomaAberto, setIdiomaAberto] = useState(false)
   const [ferramenta, setFerramenta] = useState<FerramentaGuia | null>(null)
   const raizRef = useRef<HTMLDivElement>(null)
   const palcoRef = useRef<HTMLDivElement>(null)
@@ -176,8 +186,9 @@ export default function GuiaAprender({
   }, [barraVisivel, indiceAberto, indice, naCapa])
 
   // A barra inferior do app sobe por cima do guia (guia-aprender.css) na capa e
-  // junto com a barra de cima, menos com o índice ou uma ferramenta por cima.
-  const barraDoApp = vista.tipo === 'livro' && barraVisivel && !indiceAberto && !ferramenta
+  // junto com a barra de cima, menos com o índice, o idioma ou uma ferramenta por cima.
+  const barraDoApp =
+    vista.tipo === 'livro' && barraVisivel && !indiceAberto && !idiomaAberto && !ferramenta
   useEffect(() => {
     document.body.classList.toggle('guia-barra-app-visivel', barraDoApp)
     return () => document.body.classList.remove('guia-barra-app-visivel')
@@ -446,6 +457,16 @@ export default function GuiaAprender({
             </p>
             {seloRank()}
             {rank.degrau === 0 && <p className="guia-rank__dica">{t('learn.rankHint')}</p>}
+            <button
+              type="button"
+              className="guia-capa__idioma"
+              aria-label={`${t('menu.language')}: ${ROTULOS_IDIOMA[idioma]}`}
+              onClick={() => setIdiomaAberto(true)}
+            >
+              <i className="fas fa-globe" aria-hidden="true" />
+              {ROTULOS_IDIOMA[idioma]}
+              <i className="fas fa-chevron-down" aria-hidden="true" />
+            </button>
             <div className="guia-capa__acoes">
               {paginaSalva > 1 ? (
                 <>
@@ -469,7 +490,17 @@ export default function GuiaAprender({
                 </button>
               )}
             </div>
-            <p className="guia-capa__dica">{t('learn.howToRead')}</p>
+            <section className="guia-capa__como-usar" aria-labelledby="guia-como-usar">
+              <h2 id="guia-como-usar">{t('learn.howToUse')}</h2>
+              <ul>
+                {COMO_USAR.map(({ icone, chave }) => (
+                  <li key={chave}>
+                    <i className={`fas ${icone}`} aria-hidden="true" />
+                    {t(chave)}
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
         )
       case 'marco':
@@ -710,6 +741,8 @@ export default function GuiaAprender({
           </div>
         </div>
       )}
+
+      {idiomaAberto && <ModalIdioma aoFechar={() => setIdiomaAberto(false)} />}
 
       {indiceAberto && (
         <IndiceGuia
