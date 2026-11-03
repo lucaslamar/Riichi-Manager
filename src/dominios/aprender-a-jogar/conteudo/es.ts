@@ -569,7 +569,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Tener 4 grupos y 1 pareja no basta. La mano necesita al menos un **yaku**, una condición de puntuación.',
+            md: 'Tener 4 grupos y 1 pareja no basta. La mano necesita al menos un **yaku**, una condición de puntuación. Sin yaku, la mano igual puede estar en tenpai, y eso cuenta en el empate. Solo que no puede ganar.',
           },
           { type: 'tip', md: 'En la regla real, ganar sin yaku es chombo, una falta grave.' },
         ],
@@ -647,7 +647,7 @@ const modulos: TutorialModule[] = [
                 title: 'Yakuhai',
                 badge: 'abierta o cerrada',
                 blocks: [
-                  { type: 'text', md: 'Un trío de **dragón** o de **Este**.' },
+                  { type: 'text', md: 'Un trío de **dragón**, del **viento de la ronda** o del **viento de tu asiento**.' },
                   { type: 'hand', mpsz: '123m 456p 789s 555z 22s' },
                   { type: 'heading', text: 'Qué vientos valen' },
                   {
@@ -809,7 +809,7 @@ const modulos: TutorialModule[] = [
           { type: 'sticks' },
           {
             type: 'text',
-            md: 'El palito de 1.000 también es la apuesta del Riichi. Los de 100 marcan las manos repetidas.',
+            md: 'El palito de 1.000 también es la apuesta del Riichi. Los de 100 cuentan los honba.',
           },
         ],
       },
@@ -894,7 +894,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: '- Para declararlo, necesitas tener al menos 1.000 puntos, y todavía debe haber 4 fichas o más para robar en el muro.\n- Quien gane la mano se lleva las apuestas de la mesa.\n- Si nadie gana, las apuestas quedan en la mesa para la próxima mano.',
+            md: '- Para declararlo, necesitas tener al menos 1.000 puntos.\n- En Mahjong Soul y Tenhou, además debe haber 4 fichas o más para robar en el muro. En la mesa, depende de la regla.\n- Si la ficha del Riichi le da ron a alguien, la apuesta no se hace.\n- Quien gane la mano se lleva las apuestas de la mesa.\n- Si nadie gana, las apuestas quedan en la mesa para la próxima mano.',
           },
           {
             type: 'tip',
@@ -910,7 +910,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Cada mano repetida suma un honba. Cada honba agrega 300 puntos al próximo ganador: en tsumo, cada jugador paga 100; en ron, quien descartó paga 300.',
+            md: 'Cada honba en la mesa agrega 300 puntos a quien gane. En tsumo, cada jugador paga 100 más. En ron, quien descartó paga los 300. Este valor va aparte: no cambia con los límites ni con el 1,5× del oya.',
           },
           {
             type: 'text',
@@ -972,7 +972,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Cada ficha indica la siguiente. Al final de cada secuencia, la cuenta vuelve al principio.',
+            md: 'Cada ficha indica la siguiente. Al final de cada secuencia, la cuenta vuelve al principio. Si dos indicadores apuntan a la misma ficha, cada copia de ella en la mano vale 2 han.',
           },
           { type: 'doraCycles' },
         ],
@@ -985,7 +985,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Cada 5 rojo (Aka dora) vale 1 han más y funciona como un 5 normal en la mano.',
+            md: 'Cada 5 rojo (Aka dora) vale 1 han más y funciona como un 5 normal en la mano. Si el 5 también es la dora, el 5 rojo vale 2 han. Volteado como indicador, cuenta como un 5 normal.',
           },
           { type: 'hand', mpsz: '0m 0p 0s' },
           {
@@ -1101,6 +1101,10 @@ const modulos: TutorialModule[] = [
             type: 'text',
             md: 'No se puede hacer kan cuando el muro se acabó: no hay ficha de reposición.',
           },
+          {
+            type: 'tip',
+            md: 'El momento de voltear el kan dora depende de la regla. En Mahjong Soul y Tenhou, el del kan cerrado se voltea al instante. El del kan abierto y el del agregado se voltean después de tu descarte.',
+          },
         ],
       },
     ],
@@ -1132,7 +1136,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: 'Cada uno dice si está en tenpai. Quien lo está muestra la mano; quien no, puede dejarla boca abajo.',
+            md: 'Cada uno dice si está en tenpai. Quien lo está muestra la mano. Quien no, queda **noten** y puede dejarla boca abajo.',
           },
           {
             type: 'tip',
@@ -1204,11 +1208,15 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'En furiten no puedes ganar por ron, solo por tsumo. Declarar ron en furiten es chombo.',
+        md: 'En furiten no puedes ganar por ron, solo por tsumo. Vale para ==todas== tus esperas, no solo para la ficha que causó el furiten. Declarar ron en furiten suele ser chombo.',
       },
       {
         type: 'text',
-        md: '- **Por los descartes**: alguna ficha que completaría tu mano está entre tus descartes.\n- **Temporal**: dejaste pasar una ficha que completaría tu mano, sin declarar ron. Dura hasta tu próximo descarte.\n- **De Riichi**: después del Riichi, dejaste pasar una ficha que completaría tu mano. Dura hasta el fin de la ronda.',
+        md: '- **Por los descartes**: alguna ficha que completaría tu mano está entre tus descartes. Dura hasta que cambies tu espera.\n- **Temporal**: dejaste pasar una ficha que completaría tu mano, sin declarar ron. Dura hasta tu próximo descarte.\n- **De Riichi**: después del Riichi, dejaste pasar una ficha que completaría tu mano. Dura hasta el fin de la mano.',
+      },
+      {
+        type: 'tip',
+        md: 'Lo que cuenta es la forma de la mano, no el yaku. Si la ficha completaría tu mano, el furiten vale aunque no tuvieras yaku para ganar con ella.',
       },
     ],
   },
@@ -1261,9 +1269,14 @@ const topicosRegras: TopicoRegras[] = [
         type: 'text',
         md: 'Un chi con la ficha del medio (3 con 2-4) o en un borde cerrado (3 con 1-2) solo prohíbe la ficha igual: no hay otro extremo.',
       },
+      { type: 'heading', text: 'Por qué está prohibido' },
+      {
+        type: 'text',
+        md: 'Cantar sirve para avanzar la mano. Con kuikae no avanza, porque la ficha que descartas completaría el mismo grupo. Sin la regla, se podría cantar solo para molestar: cortar el Ippatsu de alguien o cambiar quién roba la última ficha del muro.',
+      },
       {
         type: 'tip',
-        md: 'Si después del canto solo te quedarían fichas prohibidas para descartar, no puedes cantar. En Mahjong Soul y Tenhou el propio juego lo bloquea; en la mesa la penalización varía, así que acuérdenla antes de jugar.',
+        md: 'Si después del canto solo te quedarían fichas prohibidas para descartar, no puedes cantar. En Mahjong Soul y Tenhou el propio juego lo bloquea. En la mesa, quien hace kuikae queda con la mano muerta: sigue robando y descartando, pero ya no puede ganar la mano. Algunas reglas más antiguas solo prohíben la ficha igual a la que tomaste, así que acuérdenlo antes de jugar.',
       },
       {
         type: 'quiz',
@@ -1288,7 +1301,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Todos los yakus, con el han de cada uno con la mano cerrada y abierta. **—** quiere decir que solo vale con la mano cerrada, e **Y** es yakuman. Toca un yaku para ver el ejemplo.',
+        md: 'Todos los yakus, con el han de cada uno con la mano cerrada y abierta. **—** quiere decir que solo vale con la mano cerrada, e **Y** es yakuman. Toca un yaku para ver el ejemplo. Si la mano se puede leer de más de una forma, vale la lectura que da más puntos. Los yakuman no se suman con los yakus comunes.',
       },
       ...grupoYakus('Secuencia', [
         ['pinfu', 'Solo secuencias, pareja sin valor y espera de dos lados'],
@@ -1319,7 +1332,7 @@ const topicosRegras: TopicoRegras[] = [
       ...grupoYakus('Otros', [
         ['riichi', 'Declarar tenpai con la mano cerrada'],
         ['double-riichi', 'Riichi ya en el primer descarte'],
-        ['ippatsu', 'Ganar dentro de una vuelta después del Riichi'],
+        ['ippatsu', 'Ganar antes de tu siguiente descarte tras el Riichi, sin cantos en medio'],
         ['menzen-tsumo', 'Tsumo con la mano cerrada'],
         ['haitei', 'Tsumo con la última ficha del muro'],
         ['houtei', 'Ron en el último descarte'],
@@ -1352,11 +1365,11 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Falta grave que anula la mano, como declarar victoria sin una mano válida o sin yaku, hacer ron en furiten, o derribar y revelar la mano por error.',
+        md: 'Falta grave que estropea la mano de una forma que no se puede deshacer. Los casos más comunes:\n- Declarar victoria sin la mano completa, sin yaku o en furiten.\n- Declarar Riichi sin estar en tenpai. Esto se ve cuando la mano termina en empate y tienes que mostrarla.\n- Hacer, después del Riichi, un kan cerrado que cambia la espera.\n- Derribar el muro o revelar la mano por error.',
       },
       {
         type: 'text',
-        md: 'La penalización varía según el club y el torneo. Es común que quien se equivocó pague el valor de un Mangan y que la mano se repita. Acuerden la regla antes de jugar.',
+        md: 'La mano se anula y se juega de nuevo, con el mismo número de honba, y quien declaró Riichi en ella recupera su apuesta. La penalización más común es pagar un Mangan como en un tsumo. Si quien se equivocó es ko, paga 4.000 al oya y 2.000 a cada uno de los otros. Si es el oya, paga 4.000 a cada jugador. Los torneos suelen cobrar más, y las mesas casuales pueden no cobrar nada. Acuérdenlo antes de jugar.',
       },
     ],
   },
@@ -1368,7 +1381,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'La mano suma un **honba** cuando se repite: el oya ganó o terminó en empate. El oya pone un palito de 100 en la mesa para marcar cuántos hay. Cuando gana un ko, la cuenta vuelve a cero.',
+        md: 'El contador de **honba** sube uno cuando gana el oya o cuando la mano termina sin ganador, aunque el Este pase al siguiente. El oya pone un palito de 100 en la mesa para marcar cuántos hay. Cuando gana un ko, la cuenta vuelve a cero.',
       },
       {
         type: 'tip',
@@ -1718,6 +1731,19 @@ const topicosRegras: TopicoRegras[] = [
       {
         type: 'tip',
         md: 'Justamente ahí está la **trampa de suji**: quien conoce la regla puede esperar en un suji a propósito. Verás cómo, justo después del medio suji.',
+      },
+      { type: 'heading', text: 'No todo suji es igual' },
+      {
+        type: 'text',
+        md: '- **1 y 9**: los más seguros. Solo se pueden esperar en la pareja o en un trío.\n- **2 y 8**: también se pueden esperar en el medio (el 2 con 1-3).\n- **3 y 7**: los menos seguros. También se pueden esperar en el medio y en la punta (el 3 con 1-2).',
+      },
+      {
+        type: 'text',
+        md: 'Cuidado con el suji de la ==ficha del Riichi==. Quien tiene 1-3-5 y suelta el 5 para declarar queda esperando el 2, que parece seguro por el suji del 5. Esto no vale para el 1 y el 9.',
+      },
+      {
+        type: 'tip',
+        md: 'Cuantos más suji haya ya en sus descartes, más peligrosas se vuelven las demás fichas: si espera a dos lados, la espera está en uno de los suji que faltan.',
       },
     ],
   },

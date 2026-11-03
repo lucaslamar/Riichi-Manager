@@ -567,7 +567,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: '4 grupių ir 1 poros nepakanka. Rankai reikia bent vieno **yaku**, taškų sąlygos.',
+            md: '4 grupių ir 1 poros nepakanka. Rankai reikia bent vieno **yaku**, taškų sąlygos. Be yaku ranka vis tiek gali būti tenpai, ir lygiosiose tai skaičiuojama. Tik laimėti ji negali.',
           },
           {
             type: 'tip',
@@ -648,7 +648,7 @@ const modulos: TutorialModule[] = [
                 title: 'Yakuhai',
                 badge: 'atvira arba uždara',
                 blocks: [
-                  { type: 'text', md: '**Drakono** arba **Rytų** trejetas.' },
+                  { type: 'text', md: '**Drakono**, **raundo vėjo** arba **jūsų vietos vėjo** trejetas.' },
                   { type: 'hand', mpsz: '123m 456p 789s 555z 22s' },
                   { type: 'heading', text: 'Kurie vėjai tinka' },
                   {
@@ -810,7 +810,7 @@ const modulos: TutorialModule[] = [
           { type: 'sticks' },
           {
             type: 'text',
-            md: '1 000 taškų lazdelė yra ir Riichi statymas. 100 taškų lazdelės žymi pakartotas rankas.',
+            md: '1 000 taškų lazdelė yra ir Riichi statymas. 100 taškų lazdelės skaičiuoja honba.',
           },
         ],
       },
@@ -895,7 +895,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: '- Kad paskelbtumėte, reikia turėti bent 1 000 taškų, o sienoje turi būti likę bent 4 akmenys.\n- Rankos laimėtojas pasiima statymus nuo stalo.\n- Jei niekas nelaimi, statymai lieka ant stalo kitai rankai.',
+            md: '- Kad paskelbtumėte, reikia turėti bent 1 000 taškų.\n- Mahjong Soul ir Tenhou sienoje dar turi būti likę bent 4 akmenys. Prie gyvo stalo tai priklauso nuo taisyklių.\n- Jei Riichi akmuo kam nors duoda ron, statymas nedaromas.\n- Rankos laimėtojas pasiima statymus nuo stalo.\n- Jei niekas nelaimi, statymai lieka ant stalo kitai rankai.',
           },
           {
             type: 'tip',
@@ -911,7 +911,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Kiekviena pakartota ranka prideda honba. Kiekviena honba kitam laimėtojui prideda 300 taškų: tsumo atveju kiekvienas moka po 100; ron atveju išmetęs moka 300.',
+            md: 'Kiekviena honba ant stalo laimėtojui prideda 300 taškų. Tsumo atveju kiekvienas moka po 100 daugiau. Ron atveju išmetęs moka 300. Ši suma pridedama atskirai: jos nekeičia ribinės rankos ir oya 1,5×.',
           },
           {
             type: 'text',
@@ -973,7 +973,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Kiekvienas akmuo nurodo kitą. Kiekvienos eilės pabaigoje skaičiavimas grįžta į pradžią.',
+            md: 'Kiekvienas akmuo nurodo kitą. Kiekvienos eilės pabaigoje skaičiavimas grįžta į pradžią. Jei du indikatoriai rodo tą patį akmenį, kiekviena jo kopija rankoje verta 2 han.',
           },
           { type: 'doraCycles' },
         ],
@@ -986,7 +986,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Kiekvienas raudonas 5 (Aka dora) prideda 1 han, o rankoje veikia kaip įprastas 5.',
+            md: 'Kiekvienas raudonas 5 (Aka dora) prideda 1 han, o rankoje veikia kaip įprastas 5. Jei 5 taip pat yra dora, raudonas 5 vertas 2 han. Apverstas kaip indikatorius, jis laikomas įprastu 5.',
           },
           { type: 'hand', mpsz: '0m 0p 0s' },
           {
@@ -1102,6 +1102,10 @@ const modulos: TutorialModule[] = [
             type: 'text',
             md: 'Kan negalima skelbti, kai siena baigėsi: nebėra pakaitinio akmens.',
           },
+          {
+            type: 'tip',
+            md: 'Kada apverčiamas kan dora, priklauso nuo taisyklių. Mahjong Soul ir Tenhou uždaras kan jį apverčia iš karto. Atviras ir pridėtas kan jį apverčia tik po jūsų išmetimo.',
+          },
         ],
       },
     ],
@@ -1133,7 +1137,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: 'Kiekvienas pasako, ar yra tenpai. Tie, kurie yra, parodo ranką; kiti gali palikti ją apverstą.',
+            md: 'Kiekvienas pasako, ar yra tenpai. Tie, kurie yra, parodo ranką. Kiti yra **noten** ir gali palikti ranką apverstą.',
           },
           {
             type: 'tip',
@@ -1204,11 +1208,15 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Esant furiten negalima laimėti ron būdu, tik tsumo. Paskelbti ron esant furiten yra chombo.',
+        md: 'Esant furiten negalima laimėti ron būdu, tik tsumo. Tai galioja ==visiems== jūsų laukiamiems akmenims, ne tik tam, dėl kurio atsirado furiten. Paskelbti ron esant furiten paprastai yra chombo.',
       },
       {
         type: 'text',
-        md: '- **Dėl išmestų akmenų**: akmuo, kuris užbaigtų jūsų ranką, yra tarp jūsų išmestų akmenų.\n- **Laikinas**: praleidote akmenį, kuris užbaigtų ranką, nepaskelbę ron. Trunka iki kito jūsų išmetimo.\n- **Po Riichi**: paskelbę Riichi praleidote akmenį, kuris užbaigtų ranką. Trunka iki rankos pabaigos.',
+        md: '- **Dėl išmestų akmenų**: akmuo, kuris užbaigtų jūsų ranką, yra tarp jūsų išmestų akmenų. Trunka, kol pakeisite laukimą.\n- **Laikinas**: praleidote akmenį, kuris užbaigtų ranką, nepaskelbę ron. Trunka iki kito jūsų išmetimo.\n- **Po Riichi**: paskelbę Riichi praleidote akmenį, kuris užbaigtų ranką. Trunka iki rankos pabaigos.',
+      },
+      {
+        type: 'tip',
+        md: 'Svarbu rankos forma, ne yaku. Jei akmuo užbaigtų ranką, furiten galioja net jei su juo neturėtumėte yaku laimėti.',
       },
     ],
   },
@@ -1260,9 +1268,14 @@ const topicosRegras: TopicoRegras[] = [
         type: 'text',
         md: 'Chi su viduriniu akmeniu (3 su 2-4) arba uždarame krašte (3 su 1-2) draudžia tik tokį patį akmenį: kito galo nėra.',
       },
+      { type: 'heading', text: 'Kodėl tai draudžiama' },
+      {
+        type: 'text',
+        md: 'Skelbimai skirti rankai pastūmėti į priekį. Su kuikae ranka nepasistūmi, nes išmetamas akmuo užbaigtų tą pačią grupę. Be šios taisyklės būtų galima skelbti vien tam, kad trukdytumėte: nutraukti kieno nors Ippatsu arba pakeisti, kas paims paskutinį sienos akmenį.',
+      },
       {
         type: 'tip',
-        md: 'Jei po skelbimo liktų išmesti tik draudžiami akmenys, skelbti negalima. Mahjong Soul ir Tenhou pats žaidimas to neleidžia; prie gyvo stalo bauda skiriasi, todėl susitarkite prieš žaidimą.',
+        md: 'Jei po skelbimo liktų išmesti tik draudžiami akmenys, skelbti negalima. Mahjong Soul ir Tenhou pats žaidimas to neleidžia. Prie gyvo stalo tas, kas padaro kuikae, lieka su mirusia ranka: toliau traukia ir išmeta, bet nebegali laimėti šios rankos. Kai kurios senesnės taisyklės draudžia tik tokį patį akmenį, kokį paėmėte, todėl susitarkite prieš žaidimą.',
       },
       {
         type: 'quiz',
@@ -1286,7 +1299,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Visi yaku su kiekvieno han esant uždarai ir atvirai rankai. **—** reiškia, kad galioja tik su uždara ranka, o **Y** yra yakuman. Palieskite yaku, kad pamatytumėte pavyzdį.',
+        md: 'Visi yaku su kiekvieno han esant uždarai ir atvirai rankai. **—** reiškia, kad galioja tik su uždara ranka, o **Y** yra yakuman. Palieskite yaku, kad pamatytumėte pavyzdį. Jei ranką galima perskaityti keliais būdais, skaičiuojamas tas, kuris duoda daugiausia taškų. Yakuman nesumuojami su paprastais yaku.',
       },
       ...grupoYakus('Sekos', [
         ['pinfu', 'Tik sekos, poros be vertės ir dvipusis laukimas'],
@@ -1317,7 +1330,7 @@ const topicosRegras: TopicoRegras[] = [
       ...grupoYakus('Kiti', [
         ['riichi', 'Paskelbti tenpai su uždara ranka'],
         ['double-riichi', 'Riichi jau per pirmąjį išmetimą'],
-        ['ippatsu', 'Laimėti per vieną ratą po Riichi'],
+        ['ippatsu', 'Laimėti iki kito savo išmetimo po Riichi, be skelbimų tarp jų'],
         ['menzen-tsumo', 'Tsumo su uždara ranka'],
         ['haitei', 'Tsumo su paskutiniu sienos akmeniu'],
         ['houtei', 'Ron su paskutiniu išmestu akmeniu'],
@@ -1350,11 +1363,11 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Sunkus pažeidimas, panaikinantis ranką, pavyzdžiui, paskelbtas laimėjimas be galiojančios rankos ar be yaku, ron esant furiten arba per klaidą nuversta ir atskleista ranka.',
+        md: 'Sunkus pažeidimas, sugadinantis ranką taip, kad jos nebeįmanoma atitaisyti. Dažniausi atvejai:\n- Paskelbti laimėjimą su nebaigta ranka, be yaku arba esant furiten.\n- Paskelbti Riichi nesant tenpai. Tai paaiškėja, kai ranka baigiasi lygiosiomis ir ją reikia parodyti.\n- Po Riichi padaryti uždarą kan, kuris pakeičia laukimą.\n- Nugriauti sieną arba per klaidą atskleisti ranką.',
       },
       {
         type: 'text',
-        md: 'Bauda priklauso nuo klubo ir turnyro. Dažnai suklydęs sumoka Mangan vertę, o ranka kartojama. Susitarkite dėl taisyklės prieš žaisdami.',
+        md: 'Ranka panaikinama ir žaidžiama iš naujo su tuo pačiu honba skaičiumi, o kas joje paskelbė Riichi, atsiima statymą. Dažniausia bauda yra sumokėti Mangan kaip per tsumo. Jei suklydo ko, jis moka 4 000 oya ir po 2 000 kitiems. Jei suklydo oya, jis moka po 4 000 kiekvienam. Turnyruose bauda paprastai didesnė, o laisvai žaidžiant jos gali ir nebūti. Susitarkite prieš žaisdami.',
       },
     ],
   },
@@ -1366,7 +1379,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Kai ranka kartojasi, pridedama viena **honba**: oya laimėjo arba ranka baigėsi lygiosiomis. Oya padeda ant stalo 100 taškų lazdelę, kad būtų matyti, kiek jų yra. Kai laimi ko, skaičius grįžta į nulį.',
+        md: '**Honba** skaičius padidėja vienu, kai laimi oya arba kai ranka baigiasi be laimėtojo, net jei Rytai pereina kitam. Oya padeda ant stalo 100 taškų lazdelę, kad būtų matyti, kiek jų yra. Kai laimi ko, skaičius grįžta į nulį.',
       },
       {
         type: 'tip',
@@ -1716,6 +1729,19 @@ const topicosRegras: TopicoRegras[] = [
       {
         type: 'tip',
         md: 'Būtent čia slypi **suji spąstai**: taisyklę žinantis žaidėjas gali tyčia laukti suji akmens. Kaip tai daroma, sužinosite iškart po pusinio suji.',
+      },
+      { type: 'heading', text: 'Ne visi suji vienodi' },
+      {
+        type: 'text',
+        md: '- **1 ir 9**: saugiausi. Jų galima laukti tik poroje arba trejete.\n- **2 ir 8**: jų galima laukti ir viduryje (2 su 1-3).\n- **3 ir 7**: mažiausiai saugūs. Jų galima laukti ir viduryje, ir krašte (3 su 1-2).',
+      },
+      {
+        type: 'text',
+        md: 'Būkite atsargūs su ==Riichi akmens== suji. Kas turi 1-3-5 ir išmeta 5, kad paskelbtų Riichi, lieka laukti 2, kuris atrodo saugus kaip 5 suji. 1 ir 9 tai neliečia.',
+      },
+      {
+        type: 'tip',
+        md: 'Kuo daugiau suji jau yra jo išmestuose, tuo pavojingesni lieka kiti akmenys: jei jis laukia iš dviejų pusių, laukimas yra viename iš likusių suji.',
       },
     ],
   },

@@ -108,7 +108,7 @@ const modulos: TutorialModule[] = [
         question: 'O 9 de Pin é terminal ou simples?',
         hand: '9p',
         options: [{ label: 'Terminal', correct: true }, { label: 'Simples' }],
-        answer: 'Terminal. Os 1 e 9 dos naipes são terminais; de 2 a 8 são simples.',
+        answer: 'Terminal. Os 1 e 9 dos naipes são terminais, e os de 2 a 8 são simples.',
       },
     ],
   },
@@ -237,12 +237,12 @@ const modulos: TutorialModule[] = [
           { type: 'heading', text: 'Se os dados derem menos de 7' },
           {
             type: 'text',
-            md: 'À direita da abertura ficam só as colunas que você contou nos dados, menos de 7. ==Complete o muro morto com o muro vizinho==, à direita. No exemplo dos dados 5, ficam 5 colunas no muro do Leste e as outras 2 vêm do muro do Sul.',
+            md: 'Quando a soma dos dados é menor que 7, sobram à direita da abertura só as colunas que você contou, e elas não bastam. ==O muro morto continua no muro vizinho==, virando a esquina para a direita. Com os dados em 5, por exemplo, o muro morto tem 5 colunas no muro do Leste e mais 2 no muro do Sul.',
           },
           {
             type: 'image',
             image: 'muroMortoCurto',
-            alt: 'Mesa vista de cima com os dados somando 5. O muro do Leste está cortado depois da 5ª coluna; o muro morto, com hachura e contorno vermelho, ocupa essas 5 colunas e continua nas 2 primeiras do muro do Sul, dobrando a esquina. O indicador fica na 3ª coluna, ainda no Leste.',
+            alt: 'Mesa vista de cima com os dados somando 5. O muro do Leste está cortado depois da 5ª coluna. O muro morto, com hachura e contorno vermelho, ocupa essas 5 colunas e continua nas 2 primeiras do muro do Sul, dobrando a esquina. O indicador fica na 3ª coluna, ainda no Leste.',
             caption: 'Dados 5: 5 colunas no Leste + 2 no Sul.',
           },
           {
@@ -276,7 +276,7 @@ const modulos: TutorialModule[] = [
               {
                 md: 'A compra começa ==na coluna logo à esquerda da abertura== (para quem montou aquele muro) e segue ==para a esquerda==, muro após muro, como mostra a seta. O muro morto fica de fora. Visto de cima, as pedras saem do muro no sentido **horário**: o contrário da ordem da vez, que é anti-horária.',
                 image: 'mesaCompra',
-                alt: 'Mesa vista de cima. O muro do Leste está aberto; do lado do canto fica o muro morto, com contorno vermelho, dobrando para o muro do Sul. Do outro lado da abertura sai uma seta vermelha que segue pelo muro do Leste e depois pelo do Norte, no sentido horário.',
+                alt: 'Mesa vista de cima. O muro do Leste está aberto. Do lado do canto fica o muro morto, com contorno vermelho, dobrando para o muro do Sul. Do outro lado da abertura sai uma seta vermelha que segue pelo muro do Leste e depois pelo do Norte, no sentido horário.',
               },
               'O oya pega primeiro, depois quem está à direita dele, e assim por diante. Cada um pega **4 pedras por vez** (2 colunas), até todos terem 12.',
               'Cada jogador pega mais **1 pedra** e fica com 13.',
@@ -332,7 +332,7 @@ const modulos: TutorialModule[] = [
           { label: 'No Oeste: 4 colunas nele + 3 no Sul' },
         ],
         answer:
-          'Contando a partir do oya em sentido anti-horário, o 4 cai em quem está à esquerda dele: o Norte. Ele conta 4 colunas, da sua ponta direita para a esquerda, e abre. Só cabem 4 colunas do muro morto ali; as outras 3 vêm do muro vizinho à direita do Norte, que é o do Leste.',
+          'Contando a partir do oya em sentido anti-horário, o 4 cai em quem está à esquerda dele: o Norte. Ele conta 4 colunas, da sua ponta direita para a esquerda, e abre. Só cabem 4 colunas do muro morto ali, e as outras 3 vêm do muro vizinho à direita do Norte, que é o do Leste.',
       },
     ],
   },
@@ -394,7 +394,7 @@ const modulos: TutorialModule[] = [
             labels: ['Sequência', 'Sequência', 'Sequência', 'Par', 'Espera'],
             after: '36m',
             afterLabel: 'espera',
-            caption: 'O 4-5 fecha com o 3 ou o 6: a melhor espera, até 8 pedras.',
+            caption: 'O 4-5 fecha com o 3 ou o 6. É a melhor espera: até 8 pedras completam a mão.',
           },
           { type: 'heading', text: 'No meio' },
           {
@@ -501,7 +501,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: 'Depois do pon, sua mão fica **aberta**. Mão sem nenhum descarte de outro jogador é **fechada**.',
+            md: 'Depois do pon, sua mão fica **aberta**. Enquanto você não pega nenhum descarte de outro jogador, ela é **fechada**.',
           },
         ],
       },
@@ -581,7 +581,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Ter 4 grupos e 1 par não basta. A mão precisa de pelo menos um **yaku**, uma condição de pontuação.',
+            md: 'Ter 4 grupos e 1 par não basta. A mão precisa de pelo menos um **yaku**, uma condição de pontuação. Sem yaku, a mão ainda pode estar em tenpai, e isso conta no empate. Só não pode vencer.',
           },
           { type: 'tip', md: 'Na regra de verdade, vencer sem yaku é chombo, uma falta grave.' },
         ],
@@ -619,7 +619,7 @@ const modulos: TutorialModule[] = [
                 blocks: [
                   {
                     type: 'text',
-                    md: 'O yaku mais comum. Com a mão **fechada** e em tenpai, você diz "Riichi" e descarta a pedra de lado.',
+                    md: 'O yaku mais comum. Com a mão **fechada** e em tenpai, você diz "Riichi" e descarta a pedra virada de lado.',
                   },
                   {
                     type: 'text',
@@ -659,7 +659,7 @@ const modulos: TutorialModule[] = [
                 title: 'Yakuhai',
                 badge: 'aberta ou fechada',
                 blocks: [
-                  { type: 'text', md: 'Uma trinca de **dragão** ou de **Leste**.' },
+                  { type: 'text', md: 'Uma trinca de **dragão**, do **vento da rodada** ou do **vento do seu assento**.' },
                   { type: 'hand', mpsz: '123m 456p 789s 555z 22s' },
                   { type: 'heading', text: 'Quais ventos valem' },
                   {
@@ -821,7 +821,7 @@ const modulos: TutorialModule[] = [
           { type: 'sticks' },
           {
             type: 'text',
-            md: 'O palito de 1.000 também é a aposta do Riichi. Os de 100 marcam as mãos repetidas.',
+            md: 'O palito de 1.000 também é a aposta do Riichi. Os de 100 contam os honba.',
           },
         ],
       },
@@ -906,7 +906,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: '- Para declarar, você precisa ter pelo menos 1.000 pontos, e ainda precisa haver 4 pedras ou mais para comprar no muro.\n- Quem vencer a mão leva as apostas da mesa.\n- Se ninguém vencer, as apostas ficam na mesa para a próxima mão.',
+            md: '- Para declarar, você precisa ter pelo menos 1.000 pontos.\n- No Mahjong Soul e no Tenhou, ainda precisa haver 4 pedras ou mais para comprar no muro. Na mesa, isso varia conforme a regra.\n- Se a pedra do Riichi der ron para alguém, a aposta não é feita.\n- Quem vencer a mão leva as apostas da mesa.\n- Se ninguém vencer, as apostas ficam na mesa para a próxima mão.',
           },
           {
             type: 'tip',
@@ -922,7 +922,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Cada mão repetida soma um honba. Cada honba adiciona 300 pontos ao próximo vencedor: no tsumo, cada jogador paga 100; no ron, quem descartou paga 300.',
+            md: 'Cada honba na mesa adiciona 300 pontos a quem vencer. No tsumo, cada jogador paga 100 a mais. No ron, quem descartou paga os 300. Esse valor entra por fora: não muda com o patamar nem com o 1,5× do oya.',
           },
           {
             type: 'text',
@@ -984,7 +984,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Cada pedra indica a seguinte. No fim de cada sequência, a contagem volta ao começo.',
+            md: 'Cada pedra indica a seguinte. No fim de cada sequência, a contagem volta ao começo. Se dois indicadores apontam para a mesma pedra, cada cópia dela na mão vale 2 han.',
           },
           { type: 'doraCycles' },
         ],
@@ -997,7 +997,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Cada 5 vermelho (Aka dora) vale 1 han a mais e funciona como um 5 normal na mão.',
+            md: 'Cada 5 vermelho (Aka dora) vale 1 han a mais e funciona como um 5 normal na mão. Se o 5 também for a dora, o 5 vermelho vale 2 han. Virado como indicador, ele conta como um 5 normal.',
           },
           { type: 'hand', mpsz: '0m 0p 0s' },
           {
@@ -1049,7 +1049,7 @@ const modulos: TutorialModule[] = [
           { type: 'text', md: 'Quatro pedras iguais. Há três jeitos de fazer kan:' },
           {
             type: 'text',
-            md: '- **Kan aberto**: você tem três iguais e alguém descarta a quarta. Vale com qualquer jogador, como o pon.\n- **Kan fechado**: as quatro estão na sua mão. Mostre na mesa com as duas pontas viradas para baixo.\n- **Kan adicionado**: você já tem um pon e compra a quarta. Ela fica deitada em cima da pedra de lado.',
+            md: '- **Kan aberto**: você tem três iguais e alguém descarta a quarta. Vale com qualquer jogador, como o pon.\n- **Kan fechado**: as quatro estão na sua mão. Mostre na mesa com as duas pontas viradas para baixo.\n- **Kan adicionado**: você já tem um pon e, na sua vez, junta a ele a quarta pedra. Ela fica deitada em cima da pedra de lado.',
           },
           {
             type: 'melds',
@@ -1112,6 +1112,10 @@ const modulos: TutorialModule[] = [
             type: 'text',
             md: 'Não dá para fazer kan quando o muro acabou: sem pedras, não há reposição.',
           },
+          {
+            type: 'tip',
+            md: 'A hora de virar o kan dora muda conforme a regra. No Mahjong Soul e no Tenhou, o do kan fechado vira na hora. O do kan aberto e o do adicionado só viram depois do seu descarte.',
+          },
         ],
       },
     ],
@@ -1143,7 +1147,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: 'Cada um diz se está em tenpai. Quem está mostra a mão; quem não está pode deixar a mão virada para baixo.',
+            md: 'Cada um diz se está em tenpai. Quem está mostra a mão. Quem não está fica **noten** e pode deixar a mão virada para baixo.',
           },
           {
             type: 'tip',
@@ -1200,7 +1204,7 @@ const modulos: TutorialModule[] = [
           { label: 'Quem estava em tenpai' },
         ],
         answer:
-          'Quem está à direita dele. No empate, o oya só continua se estava em tenpai; senão, o Leste passa adiante.',
+          'Quem está à direita dele. No empate, o oya só continua se estava em tenpai. Se não estava, o Leste passa adiante.',
       },
     ],
   },
@@ -1215,11 +1219,15 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Em furiten você não pode vencer por ron, só por tsumo. Declarar ron em furiten é chombo.',
+        md: 'Em furiten você não pode vencer por ron, só por tsumo. Isso vale para ==todas== as suas esperas, não só para a pedra que causou o furiten. Declarar ron em furiten costuma ser chombo.',
       },
       {
         type: 'text',
-        md: '- **Pelos descartes**: alguma pedra que completaria sua mão está entre os seus descartes.\n- **Temporário**: você deixou passar uma pedra que completaria sua mão, sem declarar ron. Dura até o seu próximo descarte.\n- **De Riichi**: depois do Riichi, você deixou passar uma pedra que completaria sua mão. Dura até o fim da rodada.',
+        md: '- **Pelos descartes**: alguma pedra que completaria sua mão está entre os seus descartes. Dura até você mudar a espera.\n- **Temporário**: você deixou passar uma pedra que completaria sua mão, sem declarar ron. Dura até o seu próximo descarte.\n- **De Riichi**: depois do Riichi, você deixou passar uma pedra que completaria sua mão. Dura até o fim da mão.',
+      },
+      {
+        type: 'tip',
+        md: 'O que conta é a forma da mão, não o yaku. Se a pedra completaria a mão, o furiten vale mesmo que você não tivesse yaku para vencer com ela.',
       },
     ],
   },
@@ -1230,12 +1238,12 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Logo depois de um chi ou de um pon, o descarte dessa mesma vez tem limites. Chamar só para trocar uma pedra por outra que faz o mesmo papel é o **kuikae**, e é proibido.',
+        md: 'Quem faz chi ou pon descarta logo em seguida, e esse descarte tem regras. Não vale chamar uma pedra só para jogar fora outra que faz o mesmo papel na sua mão. Essa troca se chama **kuikae** e é proibida.',
       },
       { type: 'heading', text: 'A mesma pedra' },
       {
         type: 'text',
-        md: 'Você não pode descartar uma pedra igual à que acabou de pegar. Vale para chi e para pon.',
+        md: 'Você não pode descartar uma pedra igual à que acabou de pegar. No pon, você junta a pedra descartada com duas iguais que já tinha na mão. Se ainda sobrar uma terceira igual na mão, ela não pode sair agora. No chi vale o mesmo: se você tem outra cópia da pedra que pegou, ela fica para depois.',
       },
       {
         type: 'melds',
@@ -1271,9 +1279,14 @@ const topicosRegras: TopicoRegras[] = [
         type: 'text',
         md: 'Chi com a pedra do meio (3 com 2-4) ou numa ponta presa (3 com 1-2) só proíbe a pedra igual: não existe outra ponta.',
       },
+      { type: 'heading', text: 'Por que é proibido' },
+      {
+        type: 'text',
+        md: 'Chamar serve para avançar a mão. No kuikae ela não avança, porque a pedra que você descarta completaria o mesmo grupo. Sem a regra, daria para chamar só para atrapalhar: cortar o Ippatsu de alguém ou mudar quem compra a última pedra do muro.',
+      },
       {
         type: 'tip',
-        md: 'Se depois da chamada só sobrariam pedras proibidas para descartar, a chamada não pode ser feita. No Mahjong Soul e no Tenhou o próprio jogo bloqueia; na mesa, a penalidade varia, então combine antes de jogar.',
+        md: 'Se depois da chamada só sobrariam pedras proibidas para descartar, a chamada não pode ser feita. No Mahjong Soul e no Tenhou, o próprio jogo bloqueia. Na mesa, quem faz kuikae fica com a mão morta: continua comprando e descartando, mas não pode mais vencer a mão. Algumas regras mais antigas proíbem só a pedra igual à que você pegou, então combine antes de jogar.',
       },
       {
         type: 'quiz',
@@ -1286,7 +1299,7 @@ const topicosRegras: TopicoRegras[] = [
           { label: '4 e 6 de Pin' },
         ],
         answer:
-          '4 e 7 de Pin. O 4 é a pedra que você pegou; com o 7, os mesmos 5-6 formariam 5-6-7, a outra ponta.',
+          '4 e 7 de Pin. O 4 é a pedra que você pegou. Com o 7, os mesmos 5-6 formariam 5-6-7, a outra ponta.',
       },
     ],
   },
@@ -1298,7 +1311,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Todos os yakus, com o han de cada um com a mão fechada e aberta. **—** quer dizer que só vale com a mão fechada, e **Y** é yakuman. Toque num yaku para ver o exemplo.',
+        md: 'Todos os yakus, com o han de cada um com a mão fechada e aberta. **—** quer dizer que só vale com a mão fechada, e **Y** é yakuman. Toque num yaku para ver o exemplo. Se a mão pode ser lida de mais de um jeito, vale a leitura que dá mais pontos. Yakuman não soma com os yakus comuns.',
       },
       ...grupoYakus('Sequência', [
         ['pinfu', 'Só sequências, par sem valor e espera de dois lados'],
@@ -1329,7 +1342,7 @@ const topicosRegras: TopicoRegras[] = [
       ...grupoYakus('Outros', [
         ['riichi', 'Declarar tenpai com a mão fechada'],
         ['double-riichi', 'Riichi já no primeiro descarte'],
-        ['ippatsu', 'Vencer até uma volta depois do Riichi'],
+        ['ippatsu', 'Vencer antes do seu próximo descarte após o Riichi, sem chamadas no meio'],
         ['menzen-tsumo', 'Tsumo com a mão fechada'],
         ['haitei', 'Tsumo com a última pedra do muro'],
         ['houtei', 'Ron no último descarte'],
@@ -1362,11 +1375,11 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'Falta grave que anula a mão, como declarar vitória sem uma mão válida ou sem yaku, dar ron em furiten, ou derrubar e revelar a mão por engano.',
+        md: 'Falta grave que estraga a mão de um jeito que não dá para desfazer. Os casos mais comuns:\n- Declarar vitória sem a mão completa, sem yaku ou em furiten.\n- Declarar Riichi sem estar em tenpai. Isso aparece quando a mão termina empatada e você precisa mostrá-la.\n- Fazer, depois do Riichi, um kan fechado que muda a espera.\n- Derrubar o muro ou revelar a mão por engano.',
       },
       {
         type: 'text',
-        md: 'A penalidade varia por clube e torneio. É comum quem errou pagar o valor de um Mangan e a mão ser repetida. Combine a regra antes de jogar.',
+        md: 'A mão é anulada e jogada de novo, com o mesmo número de honba, e quem declarou Riichi nela pega a aposta de volta. A penalidade mais comum é pagar um Mangan como num tsumo. Se quem errou é ko, paga 4.000 ao oya e 2.000 a cada um dos outros. Se é o oya, paga 4.000 a cada jogador. Torneios costumam cobrar mais, e mesas casuais podem nem cobrar. Combine antes de jogar.',
       },
     ],
   },
@@ -1378,7 +1391,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'A mão soma um **honba** quando se repete: o oya venceu ou ela terminou empatada. O oya põe um palito de 100 na mesa para marcar quantos são. Quando um ko vence, a contagem volta a zero.',
+        md: 'O contador de **honba** sobe um quando o oya vence ou quando a mão termina sem vencedor, mesmo que o Leste passe adiante. O oya põe um palito de 100 na mesa para marcar quantos são. Quando um ko vence, a contagem volta a zero.',
       },
       {
         type: 'tip',
@@ -1401,7 +1414,7 @@ const topicosRegras: TopicoRegras[] = [
       },
       {
         type: 'tip',
-        md: '**Ninguém chegou a 30.000?** Em muitas mesas, como no Mahjong Soul e no Tenhou, a partida continua na rodada do **Oeste** até alguém passar de 30.000. Pelas regras da EMA, ela acaba no fim do Sul de qualquer jeito.',
+        md: '**Ninguém chegou a 30.000?** Em muitas mesas, como no Mahjong Soul e no Tenhou, a partida continua na rodada do **Oeste** até alguém chegar a 30.000. Pelas regras da EMA, ela acaba no fim do Sul de qualquer jeito.',
       },
     ],
   },
@@ -1729,6 +1742,19 @@ const topicosRegras: TopicoRegras[] = [
         type: 'tip',
         md: 'É justamente aí que mora a **armadilha de suji**: quem conhece a regra pode esperar num suji de propósito. Você vai ver como, logo depois do meio suji.',
       },
+      { type: 'heading', text: 'Nem todo suji é igual' },
+      {
+        type: 'text',
+        md: '- **1 e 9**: os mais seguros. Só podem ser esperados no par ou numa trinca.\n- **2 e 8**: também podem ser esperados no meio (o 2 com 1-3).\n- **3 e 7**: os menos seguros. Também podem ser esperados no meio e na ponta (o 3 com 1-2).',
+      },
+      {
+        type: 'text',
+        md: 'Cuidado com o suji da ==pedra do Riichi==. Quem tem 1-3-5 e solta o 5 para declarar fica esperando o 2, que parece seguro pelo suji do 5. Isso não vale para o 1 e o 9.',
+      },
+      {
+        type: 'tip',
+        md: 'Quanto mais suji já saíram nos descartes dele, mais perigosas ficam as outras pedras: se ele espera dos dois lados, a espera está num dos suji que faltam.',
+      },
     ],
   },
   {
@@ -1910,7 +1936,7 @@ const topicosRegras: TopicoRegras[] = [
       },
       {
         type: 'text',
-        md: '- **No chance**: não há chance de espera de dois lados com ela, e vale também contra espera no meio. É tão seguro quanto suji, ou mais.\n- **One chance**: é menos provável que alguém tenha a última, mas pode ter. Vale mais no começo e no meio da mão; perto do fim, a última cópia já pode estar na mão de alguém.',
+        md: '- **No chance**: não há chance de espera de dois lados com ela, e vale também contra espera no meio. É tão seguro quanto suji, ou mais.\n- **One chance**: é menos provável que alguém tenha a última, mas pode ter. Vale mais no começo e no meio da mão. Perto do fim, a última cópia já pode estar na mão de alguém.',
       },
     ],
   },

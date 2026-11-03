@@ -569,7 +569,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: "Having 4 groups and 1 pair isn't enough. The hand needs at least one **yaku**, a scoring condition.",
+            md: "Having 4 groups and 1 pair isn't enough. The hand needs at least one **yaku**, a scoring condition. Without a yaku, the hand can still be in tenpai, and that counts in a draw. It just cannot win.",
           },
           {
             type: 'tip',
@@ -650,7 +650,7 @@ const modulos: TutorialModule[] = [
                 title: 'Yakuhai',
                 badge: 'open or closed',
                 blocks: [
-                  { type: 'text', md: 'A triplet of **dragons** or of **East**.' },
+                  { type: 'text', md: 'A triplet of a **dragon**, the **round wind** or your **seat wind**.' },
                   { type: 'hand', mpsz: '123m 456p 789s 555z 22s' },
                   { type: 'heading', text: 'Which winds count' },
                   {
@@ -812,7 +812,7 @@ const modulos: TutorialModule[] = [
           { type: 'sticks' },
           {
             type: 'text',
-            md: 'The 1,000 stick is also the Riichi bet. The 100 sticks mark repeated hands.',
+            md: 'The 1,000 stick is also the Riichi bet. The 100 sticks count the honba.',
           },
         ],
       },
@@ -897,7 +897,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: '- To declare, you need at least 1,000 points, and there must still be 4 or more tiles to draw from the wall.\n- Whoever wins the hand takes the bets on the table.\n- If nobody wins, the bets stay on the table for the next hand.',
+            md: '- To declare, you need at least 1,000 points.\n- In Mahjong Soul and Tenhou, there must also be 4 or more tiles left to draw from the wall. At a live table, this depends on the rules.\n- If the Riichi tile deals in to someone, the bet is not placed.\n- Whoever wins the hand takes the bets on the table.\n- If nobody wins, the bets stay on the table for the next hand.',
           },
           {
             type: 'tip',
@@ -913,7 +913,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Each repeated hand adds a honba. Each honba adds 300 points for the next winner: on tsumo, each player pays 100; on ron, the discarder pays 300.',
+            md: 'Each honba on the table adds 300 points for whoever wins. On tsumo, each player pays 100 more. On ron, the discarder pays the 300. This is added on top: it does not change with the limit hands or with the oya\'s 1.5×.',
           },
           {
             type: 'text',
@@ -975,7 +975,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Each tile indicates the next. At the end of each sequence, the count returns to the start.',
+            md: 'Each tile indicates the next. At the end of each sequence, the count returns to the start. If two indicators point to the same tile, each copy of it in your hand is worth 2 han.',
           },
           { type: 'doraCycles' },
         ],
@@ -988,7 +988,7 @@ const modulos: TutorialModule[] = [
         blocks: [
           {
             type: 'text',
-            md: 'Each red 5 (Aka dora) is worth 1 extra han and works as a normal 5 in the hand.',
+            md: 'Each red 5 (Aka dora) is worth 1 extra han and works as a normal 5 in the hand. If 5 is also the dora, the red 5 is worth 2 han. Flipped as an indicator, it counts as a normal 5.',
           },
           { type: 'hand', mpsz: '0m 0p 0s' },
           {
@@ -1104,6 +1104,10 @@ const modulos: TutorialModule[] = [
             type: 'text',
             md: 'You may not declare a kan once the wall is empty: there is no replacement tile left to draw.',
           },
+          {
+            type: 'tip',
+            md: 'When the kan dora is flipped depends on the rules. In Mahjong Soul and Tenhou, a closed kan flips it right away. An open or added kan only flips it after your discard.',
+          },
         ],
       },
     ],
@@ -1135,7 +1139,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: "Each player says whether they're in tenpai. Those who are show their hand; those who aren't can leave it face down.",
+            md: "Each player says whether they're in tenpai. Those who are show their hand. Those who aren't are **noten** and can leave it face down.",
           },
           {
             type: 'tip',
@@ -1207,11 +1211,15 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'In furiten you cannot win by ron, only by tsumo. Declaring ron in furiten is chombo.',
+        md: 'In furiten you cannot win by ron, only by tsumo. This applies to ==all== your waits, not just the tile that caused the furiten. Declaring ron in furiten is usually chombo.',
       },
       {
         type: 'text',
-        md: '- **By discards**: a tile that would complete your hand is among your discards.\n- **Temporary**: you let a tile that would complete your hand go by, without declaring ron. It lasts until your next discard.\n- **Riichi**: after Riichi, you let a tile that would complete your hand go by. It lasts until the end of the hand.',
+        md: '- **By discards**: a tile that would complete your hand is among your discards. It lasts until you change your wait.\n- **Temporary**: you let a tile that would complete your hand go by, without declaring ron. It lasts until your next discard.\n- **Riichi**: after Riichi, you let a tile that would complete your hand go by. It lasts until the end of the hand.',
+      },
+      {
+        type: 'tip',
+        md: 'What counts is the shape of the hand, not the yaku. If the tile would complete your hand, furiten applies even if you would have no yaku to win with it.',
       },
     ],
   },
@@ -1264,9 +1272,14 @@ const topicosRegras: TopicoRegras[] = [
         type: 'text',
         md: 'A chi with the middle tile (3 with 2-4) or on a closed edge (3 with 1-2) only forbids the identical tile: there is no other end.',
       },
+      { type: 'heading', text: 'Why it is forbidden' },
+      {
+        type: 'text',
+        md: 'Calls are meant to move your hand forward. With kuikae it does not move, because the tile you discard would complete the same group. Without the rule, you could call just to get in the way: break someone\'s Ippatsu or change who draws the last tile of the wall.',
+      },
       {
         type: 'tip',
-        md: 'If after the call you would have only forbidden tiles to discard, you cannot make the call. In Mahjong Soul and Tenhou the game blocks it; at a live table the penalty varies, so agree on it before playing.',
+        md: 'If after the call you would have only forbidden tiles to discard, you cannot make the call. In Mahjong Soul and Tenhou the game blocks it. At a live table, a player who makes a kuikae call has a dead hand: they keep drawing and discarding, but can no longer win the hand. Some older rulesets only forbid the identical tile, so agree on it before playing.',
       },
       {
         type: 'quiz',
@@ -1291,7 +1304,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'All the yaku, with the han of each with a closed and an open hand. **—** means it only counts with a closed hand, and **Y** is yakuman. Tap a yaku to see the example.',
+        md: 'All the yaku, with the han of each with a closed and an open hand. **—** means it only counts with a closed hand, and **Y** is yakuman. Tap a yaku to see the example. If the hand can be read more than one way, the reading that scores the most counts. Yakuman do not add up with regular yaku.',
       },
       ...grupoYakus('Sequence', [
         ['pinfu', 'Only sequences, a valueless pair and a two-sided wait'],
@@ -1322,7 +1335,7 @@ const topicosRegras: TopicoRegras[] = [
       ...grupoYakus('Others', [
         ['riichi', 'Declare tenpai with a closed hand'],
         ['double-riichi', 'Riichi on the very first discard'],
-        ['ippatsu', 'Win within one go-around after Riichi'],
+        ['ippatsu', 'Win before your next discard after Riichi, with no calls in between'],
         ['menzen-tsumo', 'Tsumo with a closed hand'],
         ['haitei', 'Tsumo with the last tile of the wall'],
         ['houtei', 'Ron on the last discard'],
@@ -1355,11 +1368,11 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'A serious foul that voids the hand, such as declaring a win without a valid hand or without a yaku, calling ron in furiten, or knocking over and revealing your hand by mistake.',
+        md: 'A serious foul that spoils the hand in a way that can\'t be undone. The most common cases:\n- Declaring a win without a complete hand, without a yaku or in furiten.\n- Declaring Riichi without being in tenpai. This shows when the hand ends in a draw and you have to reveal it.\n- After Riichi, making a closed kan that changes your wait.\n- Knocking over the wall or revealing your hand by mistake.',
       },
       {
         type: 'text',
-        md: 'The penalty varies by club and tournament. Commonly, whoever made the mistake pays the value of a Mangan and the hand is replayed. Agree on the rule before you play.',
+        md: 'The hand is voided and replayed with the same honba count, and anyone who declared Riichi in it takes their bet back. The most common penalty is paying a Mangan as if it were a tsumo. If the offender is a ko, they pay 4,000 to the oya and 2,000 to each of the others. If it\'s the oya, they pay 4,000 to each player. Tournaments usually charge more, and casual tables may not charge at all. Agree on it before you play.',
       },
     ],
   },
@@ -1371,7 +1384,7 @@ const topicosRegras: TopicoRegras[] = [
     blocks: [
       {
         type: 'text',
-        md: 'A hand adds a **honba** when it repeats: the oya won or it ended in a draw. The oya puts a 100 stick on the table to count them. When a ko wins, the count goes back to zero.',
+        md: 'The **honba** count goes up by one when the oya wins or when the hand ends with no winner, even if East moves on. The oya puts a 100 stick on the table to count them. When a ko wins, the count goes back to zero.',
       },
       {
         type: 'tip',
@@ -1721,6 +1734,19 @@ const topicosRegras: TopicoRegras[] = [
       {
         type: 'tip',
         md: "That is exactly where the **suji trap** lives: anyone who knows the rule can wait on a suji on purpose. You'll see how, right after half suji.",
+      },
+      { type: 'heading', text: 'Not every suji is equal' },
+      {
+        type: 'text',
+        md: '- **1 and 9**: the safest. They can only be waited on as a pair or in a triplet.\n- **2 and 8**: they can also be waited on in the middle (the 2 with 1-3).\n- **3 and 7**: the least safe. They can also be waited on in the middle and on the edge (the 3 with 1-2).',
+      },
+      {
+        type: 'text',
+        md: 'Be careful with the suji of the ==Riichi tile==. Someone with 1-3-5 who lets go of the 5 to declare is left waiting on the 2, which looks safe as suji of the 5. This doesn\'t apply to 1 and 9.',
+      },
+      {
+        type: 'tip',
+        md: 'The more suji are already in their discards, the more dangerous the other tiles get: if they have a two-sided wait, it is in one of the suji that are left.',
       },
     ],
   },
