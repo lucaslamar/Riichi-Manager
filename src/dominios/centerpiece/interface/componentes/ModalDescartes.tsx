@@ -156,6 +156,8 @@ export default function ModalDescartes({
 
       {etapa === 'entrada' && (
         <form className="dsc-entrada" onSubmit={aoEnviar}>
+          {/* Digitar só compensa com teclado físico; no celular, as pedras bastam. */}
+          <div className="dsc-notacao">
           <label className="ptd-rotulo" htmlFor="dsc-notacao">
             {t(kan ? 'match.discards.kakanInput' : 'match.discards.input')}
           </label>
@@ -179,16 +181,17 @@ export default function ModalDescartes({
               {t('match.discards.add')}
             </button>
           </div>
+          </div>
           {erro && (
             <p className="dsc-erro" role="alert">
               {erro}
             </p>
           )}
-          <div className="dsc-marcas">
+          <div className="controle-regra dsc-marcas">
             {!emRiichi && (
               <button
                 type="button"
-                className={`ptd-opcao${riichi ? ' ptd-opcao--ativa' : ''}`}
+                className={riichi ? 'ativo' : ''}
                 aria-pressed={riichi}
                 disabled={kan !== null || !muroPermiteRiichi(lances)}
                 onClick={() => setRiichi((atual) => !atual)}
@@ -200,7 +203,7 @@ export default function ModalDescartes({
               <button
                 key={tipo}
                 type="button"
-                className={`ptd-opcao${kan === tipo ? ' ptd-opcao--ativa' : ''}`}
+                className={kan === tipo ? 'ativo' : ''}
                 aria-pressed={kan === tipo}
                 disabled={riichi || !muroPermiteKan(lances)}
                 onClick={() => setKan((atual) => (atual === tipo ? null : tipo))}
