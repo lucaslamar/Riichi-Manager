@@ -455,16 +455,6 @@ export default function GuiaAprender({
             <p className="guia-capa__frase">
               {t('learn.tagline', { count: conteudo.tutorialParts[0].modules.length })}
             </p>
-            <button
-              type="button"
-              className="guia-capa__idioma"
-              aria-label={`${t('menu.language')}: ${ROTULOS_IDIOMA[idioma]}`}
-              onClick={() => setIdiomaAberto(true)}
-            >
-              <i className="fas fa-globe" aria-hidden="true" />
-              {ROTULOS_IDIOMA[idioma]}
-              <i className="fas fa-chevron-down" aria-hidden="true" />
-            </button>
             <section className="guia-capa__como-usar" aria-labelledby="guia-como-usar">
               <h2 id="guia-como-usar">{t('learn.howToUse')}</h2>
               <ul>
@@ -477,6 +467,16 @@ export default function GuiaAprender({
               </ul>
             </section>
             <div className="guia-capa__acoes">
+              <button
+                type="button"
+                className="btn-contorno guia-capa__idioma"
+                aria-label={`${t('menu.language')}: ${ROTULOS_IDIOMA[idioma]}`}
+                onClick={() => setIdiomaAberto(true)}
+              >
+                <i className="fas fa-globe" aria-hidden="true" />
+                {ROTULOS_IDIOMA[idioma]}
+                <i className="fas fa-chevron-down" aria-hidden="true" />
+              </button>
               {paginaSalva > 1 ? (
                 <>
                   <button
