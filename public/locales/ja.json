@@ -1158,6 +1158,7 @@
       "noRiichiWall": "リーチには山に{{count}}枚以上必要です。",
       "title": "{{name}}の捨て牌",
       "rivers": "各プレイヤーの河",
+      "allRivers": "全員",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

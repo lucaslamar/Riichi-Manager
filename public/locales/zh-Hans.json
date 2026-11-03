@@ -1158,6 +1158,7 @@
       "noRiichiWall": "立直需要牌山至少剩余 {{count}} 张。",
       "title": "{{name}} 的弃牌",
       "rivers": "各玩家的牌河",
+      "allRivers": "全部",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

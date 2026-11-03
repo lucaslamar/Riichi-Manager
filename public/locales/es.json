@@ -1172,6 +1172,7 @@
       "noRiichiWall": "Riichi necesita al menos {{count}} fichas en el muro.",
       "title": "Descartes de {{name}}",
       "rivers": "Río de cada jugador",
+      "allRivers": "Todos",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

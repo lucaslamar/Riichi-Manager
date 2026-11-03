@@ -59,7 +59,16 @@ export default function ModalDescartes({
   const { placar, config } = partida
 
   const [etapa, setEtapa] = useState<Etapa>('entrada')
-  const [rioVisto, setRioVisto] = useState<Cadeira>(cadeira)
+  // 'todos': os quatro rios juntos, para ver a mesa inteira de uma vez.
+  const [rioVisto, setRioVisto] = useState<Cadeira | 'todos'>(cadeira)
+  const kansDe = (dono: Cadeira) =>
+    lances
+      .filter((lance) => lance.tipo === 'kakan' && lance.cadeira === dono)
+      .map(
+        (lance) =>
+          `${t(lance.tipo === 'kakan' && lance.fechado ? 'match.discards.closedKan' : 'match.discards.kakan')}: ${descreverPedra(lance.pedra, t)}`,
+      )
+      .join(' · ')
   const [texto, setTexto] = useState('')
   const [erro, setErro] = useState<string | null>(null)
   const [riichi, setRiichi] = useState(false)
@@ -129,29 +138,39 @@ export default function ModalDescartes({
         rotulo={t('match.discards.rivers')}
         valor={rioVisto}
         aoEscolher={setRioVisto}
-        opcoes={CADEIRAS.map((outra) => ({
-          valor: outra,
-          rotulo: `${KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]} ${nomeDe(outra)}`,
-        }))}
+        opcoes={[
+          ...CADEIRAS.map((outra) => ({
+            valor: outra,
+            rotulo: `${KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]} ${nomeDe(outra)}`,
+          })),
+          { valor: 'todos' as const, rotulo: t('match.discards.allRivers') },
+        ]}
       />
-      <div className="dsc-rio-visto">
-        <RioPedras
-          lances={lances}
-          cadeira={rioVisto}
-          nomeDe={nomeDe}
-          destacarAposRiichi={rioVisto !== cadeira}
-        />
-      </div>
-      {lances.some((lance) => lance.tipo === 'kakan' && lance.cadeira === rioVisto) && (
-        <p className="ptd-apoio">
-          {lances
-            .filter((lance) => lance.tipo === 'kakan' && lance.cadeira === rioVisto)
-            .map(
-              (lance) =>
-                `${t(lance.tipo === 'kakan' && lance.fechado ? 'match.discards.closedKan' : 'match.discards.kakan')}: ${descreverPedra(lance.pedra, t)}`,
-            )
-            .join(' · ')}
-        </p>
+      {rioVisto === 'todos' ? (
+        <div className="dsc-rios-todos">
+          {CADEIRAS.map((dono) => (
+            <section key={dono} className="dsc-rio-de">
+              <h3 className="dsc-rio-de-nome">
+                <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(dono, placar.cadeiraDealer)]}</span>{' '}
+                {nomeDe(dono)}
+              </h3>
+              <RioPedras lances={lances} cadeira={dono} nomeDe={nomeDe} destacarAposRiichi={dono !== cadeira} />
+              {kansDe(dono) && <p className="ptd-apoio">{kansDe(dono)}</p>}
+            </section>
+          ))}
+        </div>
+      ) : (
+        <>
+          <div className="dsc-rio-visto">
+            <RioPedras
+              lances={lances}
+              cadeira={rioVisto}
+              nomeDe={nomeDe}
+              destacarAposRiichi={rioVisto !== cadeira}
+            />
+          </div>
+          {kansDe(rioVisto) && <p className="ptd-apoio">{kansDe(rioVisto)}</p>}
+        </>
       )}
 
       {etapa === 'entrada' && (

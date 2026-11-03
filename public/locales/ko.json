@@ -1158,6 +1158,7 @@
       "noRiichiWall": "리치는 패산에 {{count}}장 이상 있어야 합니다.",
       "title": "{{name}}의 버림패",
       "rivers": "각 플레이어의 강",
+      "allRivers": "전체",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

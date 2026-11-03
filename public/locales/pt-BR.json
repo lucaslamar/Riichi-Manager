@@ -1165,6 +1165,7 @@
       "noRiichiWall": "Riichi precisa de pelo menos {{count}} pedras no muro.",
       "title": "Descartes de {{name}}",
       "rivers": "Rio de cada jogador",
+      "allRivers": "Todos",
       "tileOrder": "Descarte {{order}}",
       "history": "Ver descartes",
       "handSave": "Salvar",

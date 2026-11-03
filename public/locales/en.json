@@ -1165,6 +1165,7 @@
       "noRiichiWall": "Riichi needs at least {{count}} tiles left in the wall.",
       "title": "{{name}}'s discards",
       "rivers": "Each player's river",
+      "allRivers": "All",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

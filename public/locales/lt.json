@@ -1179,6 +1179,7 @@
       "noRiichiWall": "Riichi reikia bent tiek akmenų sienoje: {{count}}.",
       "title": "{{name}} išmesti akmenys",
       "rivers": "Kiekvieno žaidėjo upė",
+      "allRivers": "Visi",
       "tileOrder": "Discard {{order}}",
       "history": "View discards",
       "handSave": "Save",

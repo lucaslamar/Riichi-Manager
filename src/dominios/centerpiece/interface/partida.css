@@ -1224,6 +1224,42 @@ body:has(.ptd-modulo) {
   margin-top: 8px;
 }
 
+/* Todos os rios juntos: pedras menores, dois por linha quando cabe. */
+.dsc-rios-todos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px 16px;
+  margin-top: 8px;
+}
+
+.dsc-rio-de {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dsc-rio-de-nome {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.dsc-rios-todos .dsc-rio {
+  width: min(100%, 228px);
+  gap: 4px 2px;
+}
+
+.dsc-rios-todos .dsc-rio-lugar {
+  min-height: 0;
+}
+
+.dsc-rios-todos .ptd-vazio {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
 /* Aviso da finalização da mão: o que veio preenchido pela partida. */
 .aviso-dados-partida {
   margin-bottom: 8px;
