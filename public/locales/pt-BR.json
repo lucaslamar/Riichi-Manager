@@ -1041,7 +1041,7 @@
       "byTiles": "Teclado de pedras",
       "byTilesHelp": "Toque nas pedras",
       "byNotation": "Notação MPSZ",
-      "byNotationHelp": "Digite a mão em texto",
+      "byNotationHelp": "Atalho rápido: 123m456p789s11z",
       "tsumoOf": "Tsumo de {{name}}",
       "next": "Próximo",
       "apply": "Aplicar resultado",

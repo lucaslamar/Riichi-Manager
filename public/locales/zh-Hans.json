@@ -1034,7 +1034,7 @@
       "byTiles": "牌键盘",
       "byTilesHelp": "点按牌",
       "byNotation": "MPSZ 记法",
-      "byNotationHelp": "用文字输入手牌",
+      "byNotationHelp": "快速输入：123m456p789s11z",
       "tsumoOf": "{{name}} 自摸",
       "next": "Next",
       "apply": "Apply result",

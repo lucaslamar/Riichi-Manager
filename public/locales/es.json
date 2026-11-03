@@ -1048,7 +1048,7 @@
       "byTiles": "Teclado de fichas",
       "byTilesHelp": "Toca las fichas",
       "byNotation": "Notación MPSZ",
-      "byNotationHelp": "Escribe la mano como texto",
+      "byNotationHelp": "Atajo rápido: 123m456p789s11z",
       "tsumoOf": "Tsumo de {{name}}",
       "next": "Next",
       "apply": "Apply result",

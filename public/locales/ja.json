@@ -1034,7 +1034,7 @@
       "byTiles": "牌キーボード",
       "byTilesHelp": "牌をタップ",
       "byNotation": "MPSZ表記",
-      "byNotationHelp": "手牌を文字で入力",
+      "byNotationHelp": "すばやく入力: 123m456p789s11z",
       "tsumoOf": "{{name}}のツモ",
       "next": "Next",
       "apply": "Apply result",

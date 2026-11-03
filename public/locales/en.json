@@ -1041,7 +1041,7 @@
       "byTiles": "Tile keyboard",
       "byTilesHelp": "Tap the tiles",
       "byNotation": "MPSZ notation",
-      "byNotationHelp": "Type the hand as text",
+      "byNotationHelp": "Quick shortcut: 123m456p789s11z",
       "tsumoOf": "{{name}}'s tsumo",
       "next": "Next",
       "apply": "Apply result",

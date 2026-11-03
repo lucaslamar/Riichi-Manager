@@ -1034,7 +1034,7 @@
       "byTiles": "패 키보드",
       "byTilesHelp": "패를 탭하세요",
       "byNotation": "MPSZ 표기",
-      "byNotationHelp": "손패를 텍스트로 입력",
+      "byNotationHelp": "빠른 입력: 123m456p789s11z",
       "tsumoOf": "{{name}}의 쯔모",
       "next": "Next",
       "apply": "Apply result",
