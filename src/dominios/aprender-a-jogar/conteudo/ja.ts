@@ -556,8 +556,6 @@ const modulos: TutorialModule[] = [
     number: 6,
     title: '和了できる手',
     cover: '形だけでは足りません。和了には役が必要です。',
-    coverTip:
-      'このモジュールでは**役**を学びます。最後まで終えたら、点数に進む前に**役ありで1回遊びましょう**。',
     pages: [
       {
         id: 'sem-yaku',
@@ -788,7 +786,7 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'pontos',
-    number: 7,
+    number: 8,
     title: '点数',
     cover: '手の価値と支払い方を覚えましょう。',
     coverTip:
@@ -796,7 +794,7 @@ const modulos: TutorialModule[] = [
     pages: [
       {
         id: 'palitos',
-        number: '7.1',
+        number: '8.1',
         title: '点棒',
         termos: ['riichi', 'honba'],
         blocks: [
@@ -813,7 +811,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'han-fu',
-        number: '7.2',
+        number: '8.2',
         title: '翻と符',
         termos: ['han', 'fu'],
         blocks: [
@@ -841,7 +839,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'patamares',
-        number: '7.3',
+        number: '8.3',
         title: '満貫以上',
         termos: ['patamares', 'mangan', 'oya', 'ko'],
         blocks: [
@@ -866,7 +864,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'quem-paga',
-        number: '7.4',
+        number: '8.4',
         title: '誰が払うか',
         termos: ['ron', 'tsumo'],
         blocks: [
@@ -882,7 +880,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'riichi-aposta',
-        number: '7.5',
+        number: '8.5',
         title: '立直の供託',
         termos: ['riichi'],
         blocks: [
@@ -897,6 +895,22 @@ const modulos: TutorialModule[] = [
           {
             type: 'tip',
             md: '立直して和了すると裏ドラも見られます。{{onde:dora}}で説明します。',
+          },
+        ],
+      },
+      {
+        id: 'honba-empate',
+        number: '8.6',
+        title: '本場と流局',
+        termos: ['honba', 'empate'],
+        blocks: [
+          {
+            type: 'text',
+            md: '局を繰り返すたびに1本場増えます。1本場につき、次の和了者に300点が加わります。ツモなら各自100点、ロンなら捨てた人が300点を払います。',
+          },
+          {
+            type: 'text',
+            md: '山がなくなって和了者がいなければ、ノーテンの人が聴牌の人に合計3,000点を払います。',
           },
         ],
       },
@@ -916,13 +930,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'dora',
-    number: 8,
+    number: 9,
     title: 'ドラ',
     cover: '手の点数を上げるボーナス牌です。',
     pages: [
       {
         id: 'indicador',
-        number: '8.1',
+        number: '9.1',
         title: '表示牌とドラ',
         termos: ['dora'],
         blocks: [
@@ -948,7 +962,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ordem-dora',
-        number: '8.2',
+        number: '9.2',
         title: '順番',
         termos: ['dora'],
         blocks: [
@@ -961,7 +975,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'aka-dora',
-        number: '8.3',
+        number: '9.3',
         title: '赤5',
         termos: ['aka-dora'],
         blocks: [
@@ -978,7 +992,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ura-dora',
-        number: '8.4',
+        number: '9.4',
         title: '裏ドラ',
         termos: ['ura-dora', 'riichi'],
         blocks: [
@@ -1006,13 +1020,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'kan',
-    number: 9,
+    number: 10,
     title: 'カン',
     cover: '同じ牌4枚、追加の1枚、そしてドラがもう1つ。',
     pages: [
       {
         id: 'kan',
-        number: '9.1',
+        number: '10.1',
         title: '3種類のカン',
         termos: ['kan'],
         blocks: [
@@ -1056,7 +1070,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'kan-dora',
-        number: '9.2',
+        number: '10.2',
         title: '嶺上牌とカンドラ',
         termos: ['kan-dora'],
         blocks: [
@@ -1116,7 +1130,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'tip',
-            md: '点数を数えるときは、ノーテンの人が聴牌の人に払います。{{onde:regras}}の「本場と流局」で説明します。',
+            md: '点数を数えるときは、ノーテンの人が聴牌の人に払います。{{onde:pontos}}の「本場と流局」で説明します。',
           },
         ],
       },
@@ -1315,7 +1329,7 @@ const topicosRegras: TopicoRegras[] = [
   },
   {
     id: 'chombo',
-    section: 'regras',
+    section: 'chombo-honba',
     title: 'チョンボ',
     termos: ['chombo'],
     blocks: [
@@ -1330,18 +1344,18 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
-    id: 'honba-empate',
-    section: 'regras',
-    title: '本場と流局',
-    termos: ['honba', 'empate'],
+    id: 'honba',
+    section: 'chombo-honba',
+    title: '本場',
+    termos: ['honba'],
     blocks: [
       {
         type: 'text',
-        md: '局を繰り返すたびに1本場増えます。1本場につき、次の和了者に300点が加わります。ツモなら各自100点、ロンなら捨てた人が300点を払います。',
+        md: '局が繰り返されると**本場**が1つ増えます。親が和了したときと、流局したときです。親は100点棒を卓に置いて数を示します。子が和了すると0に戻ります。',
       },
       {
-        type: 'text',
-        md: '山がなくなって和了者がいなければ、ノーテンの人が聴牌の人に合計3,000点を払います。',
+        type: 'tip',
+        md: '本場は次の和了を高くします。いくらかは{{onde:pontos}}で見ます。',
       },
     ],
   },
@@ -1988,21 +2002,45 @@ const tutorialParts: TutorialPart[] = [
     id: 'ir-alem',
     number: 2,
     title: 'さらに先へ',
-    cover: '和了できる手、点数、ドラ、カンもゲームの一部です。本当の対局ではすべて使います。',
+    cover:
+      '役、チョンボ、本場：点数はまだ数えずに、本当のゲームのルールを。',
     milestone: {
       title: 'もう遊べます！',
       md: '先に進む前に、==1回遊びましょう==（東風戦）。今は役なし・点数なしで、手を完成させた人の勝ちです。東は今見たとおりに移ります。\nここまでが**基本**です。本当のゲームはさらに続き、次のモジュールで残りを説明します。',
     },
-    modules: ['yakus', 'pontos', 'dora', 'kan'].map(modulo),
+    modules: [
+      modulo('yakus'),
+      moduloRegras('chombo-honba', 7, 'チョンボと本場', '手を無効にするミスと、繰り返される局。'),
+    ],
+  },
+  {
+    id: 'pontos-parte',
+    number: 3,
+    title: '点数',
+    cover: '手の値段を、ドラとカンも含めて。',
+    milestone: {
+      title: 'もう一度遊びましょう！',
+      md: '点数に進む前に、役ありで==1回遊びましょう==。点数はまだ数えず、誰が和了したかを毎局メモして、和了の多い人の勝ちにします。',
+    },
+    modules: ['pontos', 'dora', 'kan'].map(modulo),
   },
   {
     id: 'aprofundando',
-    number: 3,
+    number: 4,
     title: 'もっと深く',
-    cover: 'どの対局にも関わるルールと、上達のための戦略。',
+    cover:
+      'どの対局にも関わるその他のルール。',
     modules: [
-      moduloRegras('regras', 10, 'その他のルール', 'これらもゲームの一部です。'),
-      moduloRegras('estrategia', 11, '戦略', '最初の対局のあとに、もっと上手に打つために。', [
+      moduloRegras('regras', 11, 'その他のルール', 'これらもゲームの一部です。'),
+    ],
+  },
+  {
+    id: 'estrategia-parte',
+    number: 5,
+    title: '戦略',
+    cover: '上達のために：何を切るか、いつ守るか。',
+    modules: [
+      moduloRegras('estrategia', 12, '戦略', '最初の対局のあとに、もっと上手に打つために。', [
         {
           type: 'quiz',
           question: '手に6ブロックあります。最初に崩すのはどれですか？',
@@ -2126,7 +2164,7 @@ const glossary: TermoGlossarioGuia[] = [
 export const conteudoJa: ConteudoTutorial = {
   tutorialParts,
   glossary,
-  ranks: ['初心者', '中級者', '上級者', '初段'],
+  ranks: ['初心者', '中級者', '熟練者', '上級者', '初段'],
   ilustracoes: {
     colunaDuasPedras: '1列 = 2枚',
     umaSobreOutra: '2枚を重ねる',

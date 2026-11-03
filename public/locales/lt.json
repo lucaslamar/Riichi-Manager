@@ -683,7 +683,7 @@
     "starUp": "Gavote žvaigždę!",
     "yourRank": "Jūsų rangas: {{rank}}",
     "rankUp": "Rangas pakeltas!",
-    "rankHint": "Kiekvienas baigtas modulis – viena žvaigždė. Baikite dalį, kad pakiltumėte rangu: Naujokas, Įgudęs, Ekspertas ir 1-asis dan.",
+    "rankHint": "Kiekvienas baigtas modulis – viena žvaigždė. Baikite dalį, kad pakiltumėte rangu: Naujokas, Įgudęs, Veteranas, Ekspertas ir 1-asis dan.",
     "quizWrong": "Ne tas. Teisingas atsakymas: {{answer}}.",
     "seeScoring": "Taškai"
   },

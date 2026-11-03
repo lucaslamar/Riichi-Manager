@@ -676,7 +676,7 @@
     "starUp": "¡Ganaste una estrella!",
     "yourRank": "Tu rango: {{rank}}",
     "rankUp": "¡Subiste de rango!",
-    "rankHint": "Cada módulo completado vale una estrella. Completa una parte para subir de rango: Novato, Adepto, Especialista y 1.er dan.",
+    "rankHint": "Cada módulo completado vale una estrella. Completa una parte para subir de rango: Novato, Adepto, Veterano, Especialista y 1.er dan.",
     "quizWrong": "No es esa. La correcta es: {{answer}}.",
     "seeScoring": "Puntuación"
   },

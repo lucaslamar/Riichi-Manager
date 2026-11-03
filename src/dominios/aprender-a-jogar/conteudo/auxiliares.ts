@@ -1,7 +1,8 @@
 /**
  * O que os arquivos de idioma do guia têm em comum: os dados que vêm do app
  * (han dos yakus, verbetes do glossário, valores dos patamares) e a montagem da
- * Parte 3 e das referências `{{onde:<id>}}`. Assim cada idioma só traz os textos.
+ * módulos feitos de tópicos e das referências `{{onde:<id>}}`. Assim cada idioma
+ * só traz os textos.
  */
 import type { IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
 import { formatarNumero } from '@/compartilhado/i18n/traduzir'
@@ -71,16 +72,16 @@ export function criarAuxiliares(
   }
 }
 
-/** Um assunto da Parte 3 (Aprofundando); vira uma página do módulo da sua seção. */
+/** Um assunto avulso (chombo, furiten…); vira uma página do módulo da sua seção. */
 export interface TopicoRegras {
   id: string
-  section: 'regras' | 'estrategia'
+  section: 'chombo-honba' | 'regras' | 'estrategia'
   title: string
   termos?: string[]
   blocks: TutorialBlock[]
 }
 
-/** Um módulo da Parte 3 (Aprofundando), com as páginas dos tópicos da seção. */
+/** Um módulo feito dos tópicos de uma seção, um por página (Chombo e honba, Mais regras, Estratégia). */
 export const criarModuloRegras =
   (topicos: TopicoRegras[]) =>
   (

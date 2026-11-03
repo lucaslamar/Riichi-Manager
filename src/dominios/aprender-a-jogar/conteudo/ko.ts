@@ -562,8 +562,6 @@ const modulos: TutorialModule[] = [
     number: 6,
     title: '화료할 수 있는 손패',
     cover: '완성만으로는 부족합니다: 화료하려면 역이 있어야 합니다.',
-    coverTip:
-      '이 모듈에서는 **역**을 배웁니다. 다 마치면 점수로 넘어가기 전에 **역이 있어야 화료하는 규칙으로 한 판** 쳐 보세요.',
     pages: [
       {
         id: 'sem-yaku',
@@ -794,7 +792,7 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'pontos',
-    number: 7,
+    number: 8,
     title: '점수',
     cover: '내 손패가 얼마짜리이고 어떻게 내는지 알아봅시다.',
     coverTip:
@@ -802,7 +800,7 @@ const modulos: TutorialModule[] = [
     pages: [
       {
         id: 'palitos',
-        number: '7.1',
+        number: '8.1',
         title: '점봉',
         termos: ['riichi', 'honba'],
         blocks: [
@@ -819,7 +817,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'han-fu',
-        number: '7.2',
+        number: '8.2',
         title: '판과 부',
         termos: ['han', 'fu'],
         blocks: [
@@ -847,7 +845,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'patamares',
-        number: '7.3',
+        number: '8.3',
         title: '만관 이상 구간',
         termos: ['patamares', 'mangan', 'oya', 'ko'],
         blocks: [
@@ -872,7 +870,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'quem-paga',
-        number: '7.4',
+        number: '8.4',
         title: '누가 내나',
         termos: ['ron', 'tsumo'],
         blocks: [
@@ -888,7 +886,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'riichi-aposta',
-        number: '7.5',
+        number: '8.5',
         title: '리치 공탁',
         termos: ['riichi'],
         blocks: [
@@ -903,6 +901,22 @@ const modulos: TutorialModule[] = [
           {
             type: 'tip',
             md: '리치를 하면 화료할 때 뒷도라(우라도라)도 확인할 수 있습니다. {{onde:dora}}에서 봅니다.',
+          },
+        ],
+      },
+      {
+        id: 'honba-empate',
+        number: '8.6',
+        title: '본장과 유국',
+        termos: ['honba', 'empate'],
+        blocks: [
+          {
+            type: 'text',
+            md: '국이 반복될 때마다 본장이 하나 쌓입니다. 본장 하나마다 다음에 화료하는 사람에게 300점이 더해집니다: 쯔모는 각자 100점씩, 론은 버린 사람이 300점을 냅니다.',
+          },
+          {
+            type: 'text',
+            md: '화료한 사람 없이 패산이 다 떨어지면, 노텐인 사람이 텐파이인 사람에게 합계 3,000점을 냅니다.',
           },
         ],
       },
@@ -922,13 +936,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'dora',
-    number: 8,
+    number: 9,
     title: '도라',
     cover: '손패를 더 비싸게 만드는 보너스 패.',
     pages: [
       {
         id: 'indicador',
-        number: '8.1',
+        number: '9.1',
         title: '표시패와 도라',
         termos: ['dora'],
         blocks: [
@@ -954,7 +968,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ordem-dora',
-        number: '8.2',
+        number: '9.2',
         title: '순서',
         termos: ['dora'],
         blocks: [
@@ -967,7 +981,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'aka-dora',
-        number: '8.3',
+        number: '9.3',
         title: '빨간 5',
         termos: ['aka-dora'],
         blocks: [
@@ -984,7 +998,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ura-dora',
-        number: '8.4',
+        number: '9.4',
         title: '뒷도라',
         termos: ['ura-dora', 'riichi'],
         blocks: [
@@ -1012,13 +1026,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'kan',
-    number: 9,
+    number: 10,
     title: '깡',
     cover: '같은 패 네 장, 한 장 더 가져오기, 그리고 도라 하나 더.',
     pages: [
       {
         id: 'kan',
-        number: '9.1',
+        number: '10.1',
         title: '세 가지 깡',
         termos: ['kan'],
         blocks: [
@@ -1062,7 +1076,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'kan-dora',
-        number: '9.2',
+        number: '10.2',
         title: '영상패와 깡도라',
         termos: ['kan-dora'],
         blocks: [
@@ -1123,7 +1137,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'tip',
-            md: '점수를 셀 때는 노텐인 사람이 텐파이인 사람에게 냅니다. {{onde:regras}}의 본장과 유국에서 봅니다.',
+            md: '점수를 셀 때는 노텐인 사람이 텐파이인 사람에게 냅니다. {{onde:pontos}}의 본장과 유국에서 봅니다.',
           },
         ],
       },
@@ -1323,7 +1337,7 @@ const topicosRegras: TopicoRegras[] = [
   },
   {
     id: 'chombo',
-    section: 'regras',
+    section: 'chombo-honba',
     title: '촌보',
     termos: ['chombo'],
     blocks: [
@@ -1338,18 +1352,18 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
-    id: 'honba-empate',
-    section: 'regras',
-    title: '본장과 유국',
-    termos: ['honba', 'empate'],
+    id: 'honba',
+    section: 'chombo-honba',
+    title: '본장',
+    termos: ['honba'],
     blocks: [
       {
         type: 'text',
-        md: '국이 반복될 때마다 본장이 하나 쌓입니다. 본장 하나마다 다음에 화료하는 사람에게 300점이 더해집니다: 쯔모는 각자 100점씩, 론은 버린 사람이 300점을 냅니다.',
+        md: '국이 반복되면 **본장**이 하나 늘어납니다. 친이 화료했거나 유국으로 끝났을 때입니다. 친은 100점 봉을 테이블에 놓아 개수를 표시합니다. 자가 화료하면 0으로 돌아갑니다.',
       },
       {
-        type: 'text',
-        md: '화료한 사람 없이 패산이 다 떨어지면, 노텐인 사람이 텐파이인 사람에게 합계 3,000점을 냅니다.',
+        type: 'tip',
+        md: '본장은 다음 화료를 더 비싸게 만듭니다. 얼마인지는 {{onde:pontos}}에서 봅니다.',
       },
     ],
   },
@@ -1997,23 +2011,46 @@ export const tutorialParts: TutorialPart[] = [
     number: 2,
     title: '한 걸음 더',
     cover:
-      '화료 조건, 점수, 도라, 깡도 게임의 일부입니다: 실제 대국에서는 이 모든 것이 테이블에 오릅니다.',
+      '역, 촌보, 본장: 점수는 아직 세지 않고 실제 게임의 규칙을.',
     milestone: {
       title: '이제 칠 수 있습니다!',
       md: '계속하기 전에 ==한 판 쳐 보세요==(동풍전). 지금은 역도 점수 계산도 없이: 손패를 완성한 사람이 이기고, 방금 본 대로 동이 넘어갑니다.\n지금까지 본 것은 **기초**입니다. 완전한 게임은 더 넓고, 다음 모듈들이 나머지를 보여 줍니다.',
     },
-    modules: ['yakus', 'pontos', 'dora', 'kan'].map(modulo),
+    modules: [
+      modulo('yakus'),
+      moduloRegras('chombo-honba', 7, '촌보와 본장', '화료를 무효로 만드는 실수와 반복되는 국.'),
+    ],
+  },
+  {
+    id: 'pontos-parte',
+    number: 3,
+    title: '점수',
+    cover: '각 손패의 값, 도라와 깡까지.',
+    milestone: {
+      title: '다시 쳐 보세요!',
+      md: '점수로 넘어가기 전에, 역이 있어야 하는 규칙으로 ==한 판 쳐 보세요==. 점수는 아직 세지 않고 국마다 누가 이겼는지 적어 두었다가, 가장 많이 이긴 사람이 이깁니다.',
+    },
+    modules: ['pontos', 'dora', 'kan'].map(modulo),
   },
   {
     id: 'aprofundando',
-    number: 3,
+    number: 4,
     title: '더 깊이',
-    cover: '모든 대국에 적용되는 규칙들과 더 잘 치기 위한 전략.',
+    cover:
+      '모든 대국에 적용되는 더 많은 규칙.',
     modules: [
-      moduloRegras('regras', 10, '더 많은 규칙', '이것도 게임의 일부인 세부 규칙.'),
+      moduloRegras('regras', 11, '더 많은 규칙', '이것도 게임의 일부인 세부 규칙.'),
+    ],
+  },
+  {
+    id: 'estrategia-parte',
+    number: 5,
+    title: '전략',
+    cover: '더 잘 치기 위해: 무엇을 버리고 언제 수비할지.',
+    modules: [
       moduloRegras(
         'estrategia',
-        11,
+        12,
         '전략',
         '첫 대국들을 치른 뒤 더 잘 치기 위해.',
         [
@@ -2148,7 +2185,7 @@ export const glossary: TermoGlossarioGuia[] = [
 export const conteudoKo: ConteudoTutorial = {
   tutorialParts,
   glossary,
-  ranks: ['초보', '숙련', '전문가', '초단'],
+  ranks: ['초보', '숙련', '베테랑', '전문가', '초단'],
   ilustracoes: {
     colunaDuasPedras: '1열 = 패 2장',
     umaSobreOutra: '한 장 위에 한 장',

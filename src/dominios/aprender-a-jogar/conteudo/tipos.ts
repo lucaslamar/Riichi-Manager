@@ -190,6 +190,6 @@ export interface ConteudoTutorial {
   tutorialParts: TutorialPart[]
   glossary: TermoGlossarioGuia[]
   /** O rank de quem está em cada parte, e o último (com tudo concluído). */
-  ranks: [string, string, string, string]
+  ranks: [string, string, string, string, string]
   ilustracoes: TextosIlustracoes
 }

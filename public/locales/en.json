@@ -669,7 +669,7 @@
     "starUp": "You earned a star!",
     "yourRank": "Your rank: {{rank}}",
     "rankUp": "Rank up!",
-    "rankHint": "Each completed module is worth a star. Complete a part to rank up: Novice, Adept, Expert and 1st dan.",
+    "rankHint": "Each completed module is worth a star. Complete a part to rank up: Novice, Adept, Veteran, Expert and 1st dan.",
     "quizWrong": "Not that one. The right answer is: {{answer}}.",
     "seeScoring": "Scoring"
   },

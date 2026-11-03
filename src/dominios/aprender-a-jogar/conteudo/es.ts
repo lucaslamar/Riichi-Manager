@@ -560,8 +560,6 @@ const modulos: TutorialModule[] = [
     number: 6,
     title: 'Mano válida',
     cover: 'Completa no basta: para ganar, la mano necesita un yaku.',
-    coverTip:
-      'En este módulo aprendes el **yaku**. Al final, juega **una ronda ya con el yaku en juego**, antes de pasar a los puntos.',
     pages: [
       {
         id: 'sem-yaku',
@@ -792,7 +790,7 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'pontos',
-    number: 7,
+    number: 8,
     title: 'Puntos',
     cover: 'Cuánto vale tu mano y cómo pagar.',
     coverTip:
@@ -800,7 +798,7 @@ const modulos: TutorialModule[] = [
     pages: [
       {
         id: 'palitos',
-        number: '7.1',
+        number: '8.1',
         title: 'Los palitos',
         termos: ['riichi', 'honba'],
         blocks: [
@@ -817,7 +815,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'han-fu',
-        number: '7.2',
+        number: '8.2',
         title: 'Han y fu',
         termos: ['han', 'fu'],
         blocks: [
@@ -845,7 +843,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'patamares',
-        number: '7.3',
+        number: '8.3',
         title: 'Los niveles',
         termos: ['patamares', 'mangan', 'oya', 'ko'],
         blocks: [
@@ -870,7 +868,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'quem-paga',
-        number: '7.4',
+        number: '8.4',
         title: 'Quién paga',
         termos: ['ron', 'tsumo'],
         blocks: [
@@ -886,7 +884,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'riichi-aposta',
-        number: '7.5',
+        number: '8.5',
         title: 'La apuesta del Riichi',
         termos: ['riichi'],
         blocks: [
@@ -901,6 +899,22 @@ const modulos: TutorialModule[] = [
           {
             type: 'tip',
             md: 'El Riichi también revela la Ura-dora a quien gana, que verás en {{onde:dora}}.',
+          },
+        ],
+      },
+      {
+        id: 'honba-empate',
+        number: '8.6',
+        title: 'Honba y empate',
+        termos: ['honba', 'empate'],
+        blocks: [
+          {
+            type: 'text',
+            md: 'Cada mano repetida suma un honba. Cada honba agrega 300 puntos al próximo ganador: en tsumo, cada jugador paga 100; en ron, quien descartó paga 300.',
+          },
+          {
+            type: 'text',
+            md: 'Si el muro se acaba sin ganador, quien no está en tenpai paga 3.000 en total a quien sí lo está.',
           },
         ],
       },
@@ -920,13 +934,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'dora',
-    number: 8,
+    number: 9,
     title: 'Dora',
     cover: 'Fichas de bonificación que encarecen la mano.',
     pages: [
       {
         id: 'indicador',
-        number: '8.1',
+        number: '9.1',
         title: 'El indicador y la dora',
         termos: ['dora'],
         blocks: [
@@ -952,7 +966,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ordem-dora',
-        number: '8.2',
+        number: '9.2',
         title: 'El orden',
         termos: ['dora'],
         blocks: [
@@ -965,7 +979,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'aka-dora',
-        number: '8.3',
+        number: '9.3',
         title: '5 rojo',
         termos: ['aka-dora'],
         blocks: [
@@ -982,7 +996,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ura-dora',
-        number: '8.4',
+        number: '9.4',
         title: 'Ura-dora',
         termos: ['ura-dora', 'riichi'],
         blocks: [
@@ -1010,13 +1024,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'kan',
-    number: 9,
+    number: 10,
     title: 'Kan',
     cover: 'Cuatro fichas iguales, una ficha más y una dora más.',
     pages: [
       {
         id: 'kan',
-        number: '9.1',
+        number: '10.1',
         title: 'Los tres kans',
         termos: ['kan'],
         blocks: [
@@ -1060,7 +1074,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'kan-dora',
-        number: '9.2',
+        number: '10.2',
         title: 'Reposición y kan dora',
         termos: ['kan-dora'],
         blocks: [
@@ -1122,7 +1136,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'tip',
-            md: 'Contando puntos, quien no está en tenpai le paga a quien sí. Lo verás en Honba y empate, en {{onde:regras}}.',
+            md: 'Contando puntos, quien no está en tenpai le paga a quien sí. Lo verás en Honba y empate, en {{onde:pontos}}.',
           },
         ],
       },
@@ -1332,7 +1346,7 @@ const topicosRegras: TopicoRegras[] = [
   },
   {
     id: 'chombo',
-    section: 'regras',
+    section: 'chombo-honba',
     title: 'Chombo',
     termos: ['chombo'],
     blocks: [
@@ -1347,18 +1361,18 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
-    id: 'honba-empate',
-    section: 'regras',
-    title: 'Honba y empate',
-    termos: ['honba', 'empate'],
+    id: 'honba',
+    section: 'chombo-honba',
+    title: 'Honba',
+    termos: ['honba'],
     blocks: [
       {
         type: 'text',
-        md: 'Cada mano repetida suma un honba. Cada honba agrega 300 puntos al próximo ganador: en tsumo, cada jugador paga 100; en ron, quien descartó paga 300.',
+        md: 'La mano suma un **honba** cuando se repite: el oya ganó o terminó en empate. El oya pone un palito de 100 en la mesa para marcar cuántos hay. Cuando gana un ko, la cuenta vuelve a cero.',
       },
       {
-        type: 'text',
-        md: 'Si el muro se acaba sin ganador, quien no está en tenpai paga 3.000 en total a quien sí lo está.',
+        type: 'tip',
+        md: 'Cada honba hace más cara la próxima victoria. Cuánto, lo verás en {{onde:pontos}}.',
       },
     ],
   },
@@ -2006,23 +2020,46 @@ const tutorialParts: TutorialPart[] = [
     number: 2,
     title: 'Para ir más allá',
     cover:
-      'Mano válida, puntos, dora y kan también son parte del juego: en una partida de verdad, todo eso entra en la mesa.',
+      'Yaku, chombo y honba: las reglas del juego de verdad, todavía sin contar puntos.',
     milestone: {
       title: '¡Ya puedes jugar!',
       md: 'Antes de seguir, ==juega una ronda== (un tonpuusen). Por ahora, sin yaku y sin contar puntos: quien completa la mano gana, y el Este pasa como acabas de ver.\nLo que viste hasta aquí es la **base**. El juego completo va más allá, y los próximos módulos muestran el resto.',
     },
-    modules: ['yakus', 'pontos', 'dora', 'kan'].map(modulo),
+    modules: [
+      modulo('yakus'),
+      moduloRegras('chombo-honba', 7, 'Chombo y honba', 'El error que anula la mano y la mano que se repite.'),
+    ],
+  },
+  {
+    id: 'pontos-parte',
+    number: 3,
+    title: 'Puntos',
+    cover: 'Cuánto vale cada mano, con dora y kan.',
+    milestone: {
+      title: '¡Juega otra vez!',
+      md: 'Antes de los puntos, ==juega una partida== ya con el yaku en juego. Todavía sin contar puntos: anota quién gana cada mano, como en el marcador de una canasta, y al final gana quien ganó más manos.',
+    },
+    modules: ['pontos', 'dora', 'kan'].map(modulo),
   },
   {
     id: 'aprofundando',
-    number: 3,
+    number: 4,
     title: 'Profundizando',
-    cover: 'Más reglas que también valen en toda partida, y estrategia para jugar mejor.',
+    cover:
+      'Más reglas que también valen en toda partida.',
     modules: [
-      moduloRegras('regras', 10, 'Más reglas', 'Detalles que también son parte del juego.'),
+      moduloRegras('regras', 11, 'Más reglas', 'Detalles que también son parte del juego.'),
+    ],
+  },
+  {
+    id: 'estrategia-parte',
+    number: 5,
+    title: 'Estrategia',
+    cover: 'Para jugar mejor: qué descartar y cuándo defenderse.',
+    modules: [
       moduloRegras(
         'estrategia',
-        11,
+        12,
         'Estrategia',
         'Para jugar mejor después de las primeras partidas.',
         [
@@ -2157,7 +2194,7 @@ const glossary: TermoGlossarioGuia[] = [
 export const conteudoEs: ConteudoTutorial = {
   tutorialParts,
   glossary,
-  ranks: ['Novato', 'Adepto', 'Especialista', '1.er dan'],
+  ranks: ['Novato', 'Adepto', 'Veterano', 'Especialista', '1.er dan'],
   ilustracoes: {
     colunaDuasPedras: '1 columna = 2 fichas',
     umaSobreOutra: 'una acostada encima de la otra',

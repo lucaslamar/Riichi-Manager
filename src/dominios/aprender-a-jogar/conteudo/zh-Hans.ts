@@ -553,8 +553,6 @@ const modulos: TutorialModule[] = [
     number: 6,
     title: '有效的手牌',
     cover: '形状完整还不够：要和牌，手牌必须有役。',
-    coverTip:
-      '这个模块讲**役**。学完后，在进入点数之前，先玩**一局要求有役的牌**。',
     pages: [
       {
         id: 'sem-yaku',
@@ -785,14 +783,14 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'pontos',
-    number: 7,
+    number: 8,
     title: '点数',
     cover: '你的手牌值多少，以及如何支付。',
     coverTip: '玩过要求有役的牌局了吗？如果还没有，**现在玩一局**，仍然不计点数，然后再回来。',
     pages: [
       {
         id: 'palitos',
-        number: '7.1',
+        number: '8.1',
         title: '点棒',
         termos: ['riichi', 'honba'],
         blocks: [
@@ -809,7 +807,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'han-fu',
-        number: '7.2',
+        number: '8.2',
         title: '番和符',
         termos: ['han', 'fu'],
         blocks: [
@@ -837,7 +835,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'patamares',
-        number: '7.3',
+        number: '8.3',
         title: '满贯以上',
         termos: ['patamares', 'mangan', 'oya', 'ko'],
         blocks: [
@@ -862,7 +860,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'quem-paga',
-        number: '7.4',
+        number: '8.4',
         title: '谁来支付',
         termos: ['ron', 'tsumo'],
         blocks: [
@@ -878,7 +876,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'riichi-aposta',
-        number: '7.5',
+        number: '8.5',
         title: '立直的押注',
         termos: ['riichi'],
         blocks: [
@@ -893,6 +891,22 @@ const modulos: TutorialModule[] = [
           {
             type: 'tip',
             md: '立直还能让和牌的人翻开里宝牌，会在{{onde:dora}}中介绍。',
+          },
+        ],
+      },
+      {
+        id: 'honba-empate',
+        number: '8.6',
+        title: '本场和流局',
+        termos: ['honba', 'empate'],
+        blocks: [
+          {
+            type: 'text',
+            md: '每重打一局增加一个本场。每个本场让下一位和牌的人多得300点：自摸时每人付100点；荣和时打出那张牌的人付300点。',
+          },
+          {
+            type: 'text',
+            md: '如果牌山摸完没有人和牌，没听牌的人一共付3,000点给听牌的人。',
           },
         ],
       },
@@ -912,13 +926,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'dora',
-    number: 8,
+    number: 9,
     title: '宝牌',
     cover: '让手牌更值钱的奖励牌。',
     pages: [
       {
         id: 'indicador',
-        number: '8.1',
+        number: '9.1',
         title: '指示牌和宝牌',
         termos: ['dora'],
         blocks: [
@@ -944,7 +958,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ordem-dora',
-        number: '8.2',
+        number: '9.2',
         title: '顺序',
         termos: ['dora'],
         blocks: [
@@ -957,7 +971,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'aka-dora',
-        number: '8.3',
+        number: '9.3',
         title: '红5',
         termos: ['aka-dora'],
         blocks: [
@@ -974,7 +988,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ura-dora',
-        number: '8.4',
+        number: '9.4',
         title: '里宝牌',
         termos: ['ura-dora', 'riichi'],
         blocks: [
@@ -1002,13 +1016,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'kan',
-    number: 9,
+    number: 10,
     title: '杠',
     cover: '四张相同的牌，多摸一张，再多一张宝牌。',
     pages: [
       {
         id: 'kan',
-        number: '9.1',
+        number: '10.1',
         title: '三种杠',
         termos: ['kan'],
         blocks: [
@@ -1052,7 +1066,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'kan-dora',
-        number: '9.2',
+        number: '10.2',
         title: '岭上牌和杠宝牌',
         termos: ['kan-dora'],
         blocks: [
@@ -1112,7 +1126,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'tip',
-            md: '计点时，没听牌的人付给听牌的人。这会在{{onde:regras}}的“本场和流局”中介绍。',
+            md: '计点时，没听牌的人付给听牌的人。这会在{{onde:pontos}}的“本场和流局”中介绍。',
           },
         ],
       },
@@ -1302,7 +1316,7 @@ const topicosRegras: TopicoRegras[] = [
   },
   {
     id: 'chombo',
-    section: 'regras',
+    section: 'chombo-honba',
     title: '错和',
     termos: ['chombo'],
     blocks: [
@@ -1317,18 +1331,18 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
-    id: 'honba-empate',
-    section: 'regras',
-    title: '本场和流局',
-    termos: ['honba', 'empate'],
+    id: 'honba',
+    section: 'chombo-honba',
+    title: '本场',
+    termos: ['honba'],
     blocks: [
       {
         type: 'text',
-        md: '每重打一局增加一个本场。每个本场让下一位和牌的人多得300点：自摸时每人付100点；荣和时打出那张牌的人付300点。',
+        md: '一局重复时，**本场**加一：庄家和牌，或者流局。庄家在桌上放一根100点棒来标记次数。闲家和牌时，次数归零。',
       },
       {
-        type: 'text',
-        md: '如果牌山摸完没有人和牌，没听牌的人一共付3,000点给听牌的人。',
+        type: 'tip',
+        md: '每个本场都会让下一次和牌更值钱。多少，你会在{{onde:pontos}}中看到。',
       },
     ],
   },
@@ -1975,21 +1989,45 @@ const tutorialParts: TutorialPart[] = [
     id: 'ir-alem',
     number: 2,
     title: '更进一步',
-    cover: '有效的手牌、点数、宝牌和杠也是游戏的一部分：真正的牌局里都会用到。',
+    cover:
+      '役、错和与本场：真正的游戏规则，但还不计点数。',
     milestone: {
       title: '你已经可以玩了！',
       md: '继续之前，先==玩一局==（东风战）。现在不用役，也不计点数：谁先完成手牌谁赢，东按你刚看到的方式传下去。\n到这里是**基础**。完整的游戏还有更多，接下来的模块会介绍其余内容。',
     },
-    modules: ['yakus', 'pontos', 'dora', 'kan'].map(modulo),
+    modules: [
+      modulo('yakus'),
+      moduloRegras('chombo-honba', 7, '错和与本场', '让手牌作废的失误，以及重复的一局。'),
+    ],
+  },
+  {
+    id: 'pontos-parte',
+    number: 3,
+    title: '点数',
+    cover: '每手牌值多少，包括宝牌和杠。',
+    milestone: {
+      title: '再玩一局！',
+      md: '进入点数之前，先在要求有役的规则下==玩一局==。还是不计点数：记下每一局谁和了，最后和牌次数最多的人获胜。',
+    },
+    modules: ['pontos', 'dora', 'kan'].map(modulo),
   },
   {
     id: 'aprofundando',
-    number: 3,
+    number: 4,
     title: '深入学习',
-    cover: '每局都适用的更多规则，以及打得更好的策略。',
+    cover:
+      '每局都适用的更多规则。',
     modules: [
-      moduloRegras('regras', 10, '更多规则', '这些细节也是游戏的一部分。'),
-      moduloRegras('estrategia', 11, '策略', '在最初几局之后打得更好。', [
+      moduloRegras('regras', 11, '更多规则', '这些细节也是游戏的一部分。'),
+    ],
+  },
+  {
+    id: 'estrategia-parte',
+    number: 5,
+    title: '策略',
+    cover: '打得更好：打哪张牌，什么时候防守。',
+    modules: [
+      moduloRegras('estrategia', 12, '策略', '在最初几局之后打得更好。', [
         {
           type: 'quiz',
           question: '你的手牌有六个块。先拆哪一个？',
@@ -2110,7 +2148,7 @@ const glossary: TermoGlossarioGuia[] = [
 export const conteudoZhHans: ConteudoTutorial = {
   tutorialParts,
   glossary,
-  ranks: ['新手', '熟手', '专家', '初段'],
+  ranks: ['新手', '熟手', '老手', '专家', '初段'],
   ilustracoes: {
     colunaDuasPedras: '1列 = 2张',
     umaSobreOutra: '两张叠放',

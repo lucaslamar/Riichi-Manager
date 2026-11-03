@@ -558,8 +558,6 @@ const modulos: TutorialModule[] = [
     number: 6,
     title: 'Galiojanti ranka',
     cover: 'Užbaigtos rankos nepakanka: kad laimėtumėte, reikia yaku.',
-    coverTip:
-      'Šiame modulyje sužinosite, kas yra **yaku**. Pabaigoje, prieš pereidami prie taškų, sužaiskite **vieną raundą, kuriame yaku jau privalomas**.',
     pages: [
       {
         id: 'sem-yaku',
@@ -793,7 +791,7 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'pontos',
-    number: 7,
+    number: 8,
     title: 'Taškai',
     cover: 'Kiek verta jūsų ranka ir kaip mokėti.',
     coverTip:
@@ -801,7 +799,7 @@ const modulos: TutorialModule[] = [
     pages: [
       {
         id: 'palitos',
-        number: '7.1',
+        number: '8.1',
         title: 'Lazdelės',
         termos: ['riichi', 'honba'],
         blocks: [
@@ -818,7 +816,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'han-fu',
-        number: '7.2',
+        number: '8.2',
         title: 'Han ir fu',
         termos: ['han', 'fu'],
         blocks: [
@@ -846,7 +844,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'patamares',
-        number: '7.3',
+        number: '8.3',
         title: 'Taškų ribos',
         termos: ['patamares', 'mangan', 'oya', 'ko'],
         blocks: [
@@ -871,7 +869,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'quem-paga',
-        number: '7.4',
+        number: '8.4',
         title: 'Kas moka',
         termos: ['ron', 'tsumo'],
         blocks: [
@@ -887,7 +885,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'riichi-aposta',
-        number: '7.5',
+        number: '8.5',
         title: 'Riichi statymas',
         termos: ['riichi'],
         blocks: [
@@ -902,6 +900,22 @@ const modulos: TutorialModule[] = [
           {
             type: 'tip',
             md: 'Riichi laimėtojui taip pat atskleidžia Ura-dora; žr. {{onde:dora}}.',
+          },
+        ],
+      },
+      {
+        id: 'honba-empate',
+        number: '8.6',
+        title: 'Honba ir lygiosios',
+        termos: ['honba', 'empate'],
+        blocks: [
+          {
+            type: 'text',
+            md: 'Kiekviena pakartota ranka prideda honba. Kiekviena honba kitam laimėtojui prideda 300 taškų: tsumo atveju kiekvienas moka po 100; ron atveju išmetęs moka 300.',
+          },
+          {
+            type: 'text',
+            md: 'Jei siena baigiasi be laimėtojo, ne tenpai žaidėjai iš viso sumoka 3 000 tenpai žaidėjams.',
           },
         ],
       },
@@ -921,13 +935,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'dora',
-    number: 8,
+    number: 9,
     title: 'Dora',
     cover: 'Premijiniai akmenys, kurie padaro ranką vertingesnę.',
     pages: [
       {
         id: 'indicador',
-        number: '8.1',
+        number: '9.1',
         title: 'Indikatorius ir dora',
         termos: ['dora'],
         blocks: [
@@ -953,7 +967,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ordem-dora',
-        number: '8.2',
+        number: '9.2',
         title: 'Tvarka',
         termos: ['dora'],
         blocks: [
@@ -966,7 +980,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'aka-dora',
-        number: '8.3',
+        number: '9.3',
         title: 'Raudonas 5',
         termos: ['aka-dora'],
         blocks: [
@@ -983,7 +997,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'ura-dora',
-        number: '8.4',
+        number: '9.4',
         title: 'Ura-dora',
         termos: ['ura-dora', 'riichi'],
         blocks: [
@@ -1011,13 +1025,13 @@ const modulos: TutorialModule[] = [
   },
   {
     id: 'kan',
-    number: 9,
+    number: 10,
     title: 'Kan',
     cover: 'Keturi vienodi akmenys, vienas papildomas akmuo ir dar viena dora.',
     pages: [
       {
         id: 'kan',
-        number: '9.1',
+        number: '10.1',
         title: 'Trys kan rūšys',
         termos: ['kan'],
         blocks: [
@@ -1061,7 +1075,7 @@ const modulos: TutorialModule[] = [
       },
       {
         id: 'kan-dora',
-        number: '9.2',
+        number: '10.2',
         title: 'Pakaitinis akmuo ir kan dora',
         termos: ['kan-dora'],
         blocks: [
@@ -1123,7 +1137,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'tip',
-            md: 'Skaičiuojant taškus, ne tenpai žaidėjai moka tenpai žaidėjams. Žr. „Honba ir lygiosios“, {{onde:regras}}.',
+            md: 'Skaičiuojant taškus, ne tenpai žaidėjai moka tenpai žaidėjams. Žr. „Honba ir lygiosios“, {{onde:pontos}}.',
           },
         ],
       },
@@ -1330,7 +1344,7 @@ const topicosRegras: TopicoRegras[] = [
   },
   {
     id: 'chombo',
-    section: 'regras',
+    section: 'chombo-honba',
     title: 'Chombo',
     termos: ['chombo'],
     blocks: [
@@ -1345,18 +1359,18 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
-    id: 'honba-empate',
-    section: 'regras',
-    title: 'Honba ir lygiosios',
-    termos: ['honba', 'empate'],
+    id: 'honba',
+    section: 'chombo-honba',
+    title: 'Honba',
+    termos: ['honba'],
     blocks: [
       {
         type: 'text',
-        md: 'Kiekviena pakartota ranka prideda honba. Kiekviena honba kitam laimėtojui prideda 300 taškų: tsumo atveju kiekvienas moka po 100; ron atveju išmetęs moka 300.',
+        md: 'Kai ranka kartojasi, pridedama viena **honba**: oya laimėjo arba ranka baigėsi lygiosiomis. Oya padeda ant stalo 100 taškų lazdelę, kad būtų matyti, kiek jų yra. Kai laimi ko, skaičius grįžta į nulį.',
       },
       {
-        type: 'text',
-        md: 'Jei siena baigiasi be laimėtojo, ne tenpai žaidėjai iš viso sumoka 3 000 tenpai žaidėjams.',
+        type: 'tip',
+        md: 'Kiekviena honba padaro kitą pergalę brangesnę. Kiek – pamatysite {{onde:pontos}}.',
       },
     ],
   },
@@ -2004,26 +2018,49 @@ const tutorialParts: TutorialPart[] = [
     number: 2,
     title: 'Toliau',
     cover:
-      'Galiojanti ranka, taškai, dora ir kan taip pat yra žaidimo dalis: tikroje partijoje visa tai naudojama.',
+      'Yaku, chombo ir honba: tikro žaidimo taisyklės, dar neskaičiuojant taškų.',
     milestone: {
       title: 'Jau galite žaisti!',
       md: 'Prieš tęsdami ==sužaiskite raundą== (tonpuusen). Kol kas be yaku ir neskaičiuojant taškų: laimi užbaigęs ranką, o Rytai pereina taip, kaip ką tik matėte.\nTai, ką matėte iki šiol, yra **pagrindas**. Visas žaidimas yra platesnis, o kiti moduliai parodo likusią dalį.',
     },
-    modules: ['yakus', 'pontos', 'dora', 'kan'].map(modulo),
+    modules: [
+      modulo('yakus'),
+      moduloRegras('chombo-honba', 7, 'Chombo ir honba', 'Klaida, kuri panaikina ranką, ir ranka, kuri kartojasi.'),
+    ],
+  },
+  {
+    id: 'pontos-parte',
+    number: 3,
+    title: 'Taškai',
+    cover: 'Kiek verta kiekviena ranka, su dora ir kan.',
+    milestone: {
+      title: 'Žaiskite dar kartą!',
+      md: 'Prieš taškus ==sužaiskite partiją==, kurioje yaku jau privalomas. Vis dar neskaičiuodami taškų užsirašykite, kas laimi kiekvieną ranką, o pabaigoje laimi tas, kas laimėjo daugiausia rankų.',
+    },
+    modules: ['pontos', 'dora', 'kan'].map(modulo),
   },
   {
     id: 'aprofundando',
-    number: 3,
+    number: 4,
     title: 'Giliau',
-    cover: 'Daugiau taisyklių, galiojančių kiekvienoje partijoje, ir strategija geriau žaisti.',
+    cover:
+      'Daugiau taisyklių, galiojančių kiekvienoje partijoje.',
     modules: [
       moduloRegras(
         'regras',
-        10,
+        11,
         'Daugiau taisyklių',
         'Detalės, kurios taip pat yra žaidimo dalis.',
       ),
-      moduloRegras('estrategia', 11, 'Strategija', 'Kad geriau žaistumėte po pirmųjų partijų.', [
+    ],
+  },
+  {
+    id: 'estrategia-parte',
+    number: 5,
+    title: 'Strategija',
+    cover: 'Kad žaistumėte geriau: ką išmesti ir kada gintis.',
+    modules: [
+      moduloRegras('estrategia', 12, 'Strategija', 'Kad geriau žaistumėte po pirmųjų partijų.', [
         {
           type: 'quiz',
           question: 'Jūsų ranka turi 6 blokus. Kurį išardysite pirmiausia?',
@@ -2154,7 +2191,7 @@ const glossary: TermoGlossarioGuia[] = [
 export const conteudoLt: ConteudoTutorial = {
   tutorialParts,
   glossary,
-  ranks: ['Naujokas', 'Įgudęs', 'Ekspertas', '1-asis dan'],
+  ranks: ['Naujokas', 'Įgudęs', 'Veteranas', 'Ekspertas', '1-asis dan'],
   ilustracoes: {
     colunaDuasPedras: '1 stulpelis = 2 akmenys',
     umaSobreOutra: 'vienas gulintis ant kito',

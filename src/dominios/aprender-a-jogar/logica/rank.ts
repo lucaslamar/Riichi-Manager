@@ -2,12 +2,15 @@ import type { TutorialPart } from '../conteudo/tipos'
 
 /**
  * Rank do guia, no estilo dos jogos online de mahjong: cada parte do livro é
- * um rank (Novato, Adepto, Especialista) e cada módulo concluído dentro dela
- * vale uma estrela. Completar uma parte sobe de rank; com tudo concluído, 1º
- * dan.
+ * um rank (Novato, Adepto, Veterano, Especialista, 1º dan) e cada módulo
+ * concluído dentro dela vale uma estrela. Completar uma parte sobe de rank; o
+ * 1º dan chega com a Parte 5 (Estratégia) e continua com tudo concluído.
  */
 export interface RankGuia {
-  /** 0 = Novato (Parte 1), 1 = Adepto (Parte 2), 2 = Especialista (Parte 3), 3 = 1º dan. */
+  /**
+   * 0 = Novato (Parte 1), 1 = Adepto (Parte 2), 2 = Veterano (Parte 3),
+   * 3 = Especialista (Parte 4), 4 = 1º dan (Parte 5); 5 = livro concluído.
+   */
   nivel: number
   /** Módulos concluídos na parte do rank atual. */
   estrelas: number
@@ -17,8 +20,8 @@ export interface RankGuia {
   degrau: number
 }
 
-/** Nível do último rank (1º dan), de quem concluiu o livro todo. */
-const NIVEL_DAN = 3
+/** Nível do último rank (1º dan), o da Parte 5 em diante. */
+const NIVEL_DAN = 4
 
 export function rankPorConcluidos(concluidos: string[], partes: TutorialPart[]): RankGuia {
   const feitos = (parte: TutorialPart) =>
