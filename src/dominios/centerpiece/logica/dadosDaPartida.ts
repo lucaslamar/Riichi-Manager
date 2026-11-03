@@ -17,6 +17,49 @@ export interface DadosDaPartida {
   descartes: CodigoPedra[]
   /** Kans da mão: cada um vira mais um indicador de dora. */
   kans: number
+  /** Cópias que estão na mesa e não na mão do vencedor: contam no limite de 4 da Calculadora. */
+  pedrasDaMesa: CodigoPedra[]
+}
+
+const semAka = (pedra: CodigoPedra) => (pedra[0] === '0' ? `5${pedra[1]}` : pedra)
+
+/**
+ * Descartes contam uma cópia cada; Pon de outro jogador tira 3 e Kan tira 4. Fica de fora o
+ * que foi parar na mão do vencedor: o que ele chamou, a pedra do Ron e a roubada no Chankan.
+ * Os descartes do próprio vencedor também, porque já vão em `Mao.descartes`.
+ */
+function pedrasForaDaMao(lances: readonly Lance[], cadeira: Cadeira, tipo: 'ron' | 'tsumo') {
+  const ultimo = lances[lances.length - 1]
+  const vistas = new Map<CodigoPedra, number>()
+  const piso = new Map<CodigoPedra, number>()
+  const proprias = new Map<CodigoPedra, number>()
+  const akas = new Set<CodigoPedra>()
+  const subir = (base: CodigoPedra, copias: number) =>
+    piso.set(base, Math.max(piso.get(base) ?? 0, copias))
+
+  for (const lance of lances) {
+    const base = semAka(lance.pedra)
+    if (lance.tipo === 'kakan') {
+      if (lance.cadeira !== cadeira) subir(base, tipo === 'ron' && lance === ultimo && !lance.fechado ? 3 : 4)
+      continue
+    }
+    const chamada = lance.chamadaPor
+    const foiProVencedor = chamada?.cadeira === cadeira || (tipo === 'ron' && lance === ultimo)
+    if (foiProVencedor) continue
+    vistas.set(base, (vistas.get(base) ?? 0) + 1)
+    if (lance.cadeira === cadeira) proprias.set(base, (proprias.get(base) ?? 0) + 1)
+    else if (lance.pedra !== base) akas.add(lance.pedra)
+    if (chamada?.tipo === 'pon') subir(base, 3)
+    if (chamada?.tipo === 'kan') subir(base, 4)
+  }
+
+  return [...new Set([...vistas.keys(), ...piso.keys()])].flatMap((base) => {
+    const total = Math.min(4, Math.max(vistas.get(base) ?? 0, piso.get(base) ?? 0))
+    const copias = Array.from({ length: Math.max(0, total - (proprias.get(base) ?? 0)) }, () => base)
+    const aka = `0${base[1]}`
+    if (akas.has(aka) && copias.length > 0) copias[0] = aka
+    return copias
+  })
 }
 
 /** Chamada que interrompe a volta: Ron não conta, porque é a própria batida. */
@@ -78,5 +121,6 @@ export function dadosDaPartidaParaMao({
     kans: lances.filter(
       (lance) => lance.tipo === 'kakan' || (lance.tipo === 'descarte' && lance.chamadaPor?.tipo === 'kan'),
     ).length,
+    pedrasDaMesa: pedrasForaDaMao(lances, cadeira, tipo),
   }
 }

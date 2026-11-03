@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   calcularEsperasPossiveis,
+  type CodigoPedra,
   type ConfiguracaoCalculo,
   type EsperaPossivel,
   type Mao,
@@ -11,6 +12,7 @@ interface ParametrosEsperasMao {
   mao: Mao
   configuracao: ConfiguracaoCalculo
   slotsUsados: number
+  pedrasDaMesa: CodigoPedra[]
 }
 
 /**
@@ -26,6 +28,7 @@ export function useEsperasMao({
   mao,
   configuracao,
   slotsUsados,
+  pedrasDaMesa,
 }: ParametrosEsperasMao): EstadoEsperasCalculadora {
   const [esperasPossiveis, setEsperasPossiveis] = useState<EsperaPossivel[]>([])
   const [calculandoEsperas, setCalculandoEsperas] = useState(false)
@@ -37,12 +40,12 @@ export function useEsperasMao({
 
     setCalculandoEsperas(true)
     const id = window.setTimeout(() => {
-      setEsperasPossiveis(calcularEsperasPossiveis(mao, configuracao, slotsUsados))
+      setEsperasPossiveis(calcularEsperasPossiveis(mao, configuracao, slotsUsados, pedrasDaMesa))
       setCalculandoEsperas(false)
     }, 0)
 
     return () => window.clearTimeout(id)
-  }, [mao, configuracao, slotsUsados])
+  }, [mao, configuracao, slotsUsados, pedrasDaMesa])
 
   return { esperasPossiveis, calculandoEsperas }
 }

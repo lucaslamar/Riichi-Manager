@@ -427,4 +427,27 @@ teste('dados da partida: primeira compra, descartes do vencedor e kans', () => {
   assert.equal(dados(doisKans, 0, 'ron').kans, 2)
 })
 
+teste('pedras da mesa: descartes dos outros contam, os do vencedor já vão na mão', () => {
+  const lances = linha([1, '1m'], [2, '1m'], [0, '1m'], [3, '0p'])
+  assert.deepEqual(dados(lances, 0, 'tsumo').pedrasDaMesa.sort(), ['0p', '1m', '1m'])
+})
+
+teste('pedras da mesa: o que foi para a mão do vencedor não conta', () => {
+  const chamadaPeloVencedor = chamado(linha([1, '1m'], [2, '2m']), 1, 'pon', 0)
+  assert.deepEqual(dados(chamadaPeloVencedor, 0, 'tsumo').pedrasDaMesa, ['2m'])
+  assert.deepEqual(dados(linha([1, '1m'], [2, '2m']), 0, 'ron').pedrasDaMesa, ['1m'])
+  const chankan: Lance = { tipo: 'kakan', ordem: 1, cadeira: 1, pedra: '5p' }
+  assert.equal(dados([chankan], 0, 'ron').pedrasDaMesa.length, 3)
+})
+
+teste('pedras da mesa: Pon de outro tira 3 cópias e Kan tira 4', () => {
+  const pon = chamado(linha([1, '1m'], [3, '9m']), 1, 'pon', 2)
+  assert.equal(dados(pon, 0, 'tsumo').pedrasDaMesa.filter((p) => p === '1m').length, 3)
+  const kan = chamado(linha([1, '1m'], [3, '9m']), 1, 'kan', 2)
+  assert.equal(dados(kan, 0, 'tsumo').pedrasDaMesa.filter((p) => p === '1m').length, 4)
+  // Descarte do próprio vencedor chamado: uma cópia já está em Mao.descartes.
+  const proprio = chamado(linha([0, '1m'], [3, '9m']), 1, 'pon', 2)
+  assert.equal(dados(proprio, 0, 'tsumo').pedrasDaMesa.filter((p) => p === '1m').length, 2)
+})
+
 console.log(`Furiten ok: ${testes} testes.`)

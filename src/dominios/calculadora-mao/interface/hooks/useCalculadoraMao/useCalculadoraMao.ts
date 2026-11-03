@@ -22,6 +22,8 @@ interface OpcionsCalculadoraMao {
   fluxoCompleto?: boolean
   /** Regras vindas de fora (a mesa do Centerpiece). */
   configuracaoInicial?: ConfiguracaoCalculo
+  /** Cópias que a partida já mostrou fora desta mão: contam no limite de 4 de cada pedra. */
+  pedrasDaMesa?: CodigoPedra[]
 }
 
 /**
@@ -84,7 +86,14 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   )
   const deveCalcularMao = maoCompleta && assinaturaCalculo === assinaturaMaoAtual
 
-  const acoesMelds = useAcoesMelds({ mao, acaoPendente, slotsUsados })
+  // Pela chave: quem chama recria a lista a cada render, e as esperas recalculam quando ela muda.
+  const chavePedrasDaMesa = opcoes?.pedrasDaMesa?.join() ?? ''
+  const pedrasDaMesa = useMemo(
+    () => (chavePedrasDaMesa ? chavePedrasDaMesa.split(',') : []),
+    [chavePedrasDaMesa],
+  )
+
+  const acoesMelds = useAcoesMelds({ mao, acaoPendente, slotsUsados, pedrasDaMesa })
 
   /*
    * Esperas precisam estar disponíveis antes das ações de clique:
@@ -94,6 +103,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     mao,
     configuracao,
     slotsUsados,
+    pedrasDaMesa,
   })
   const resultados = useResultadoMao({
     mao,

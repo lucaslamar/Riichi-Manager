@@ -99,10 +99,11 @@ export function calcularEsperasPossiveis(
   mao: Mao,
   config: ConfiguracaoCalculo,
   slotsUsados: number,
+  pedrasDaMesa: CodigoPedra[] = [],
 ): EsperaPossivel[] {
   if (slotsUsados !== 13) return []
 
-  const visiveis = [...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora]
+  const visiveis = [...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora, ...pedrasDaMesa]
   const contagem = contar(visiveis)
   const contagemAka = contarAka(visiveis)
   const descartes = new Set(mao.descartes.map(base))

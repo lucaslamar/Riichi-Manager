@@ -64,6 +64,7 @@ export default function PaginaCalculadoraMao({
               descartes: contextoCenterpiece.dados.descartes,
             }),
           },
+          pedrasDaMesa: contextoCenterpiece.dados?.pedrasDaMesa,
           fluxoCompleto: true,
           configuracaoInicial: contextoCenterpiece.regras,
         }
