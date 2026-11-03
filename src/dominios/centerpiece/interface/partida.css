@@ -685,9 +685,11 @@
 /* Linhas de 6, como na mesa. A célula é larga o bastante para a pedra deitada. */
 .dsc-rio {
   display: grid;
-  width: min(100%, 320px);
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 6px 2px;
+  width: max-content;
+  max-width: 100%;
+  /* Colunas do tamanho da pedra: sem vão largo entre elas. */
+  grid-template-columns: repeat(6, auto);
+  gap: 6px 3px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -718,6 +720,11 @@
 .dsc-pedra--riichi {
   border-color: var(--cor-vez);
   transform: rotate(90deg);
+}
+
+/* Deitada, a pedra de Riichi é mais larga: abre espaço para não encostar nas vizinhas. */
+.dsc-rio-visto .dsc-pedra--riichi {
+  margin-inline: 6px;
 }
 
 .dsc-pedra--chamada {
@@ -772,33 +779,16 @@
   flex: 1 1 auto;
 }
 
-/* Marcas do próximo descarte: uma faixa só, no mesmo controle das regras. */
+/* Marcas do próximo descarte: os botões de chamada da Calculadora de Mão, lado a lado. */
 .dsc-marcas {
-  grid-template-columns: none;
-  grid-auto-columns: minmax(0, 1fr);
-  grid-auto-flow: column;
+  display: flex;
+  gap: 8px;
 }
 
-.dsc-marcas button {
+.dsc-marcas > .btn-acao-mao {
+  flex: 1 1 0;
   min-width: 0;
   min-height: 44px;
-  padding: 4px;
-  font-size: 0.875rem;
-  line-height: 1.15;
-}
-
-.dsc-marcas button + button {
-  border-left: 1px solid var(--linha-divisoria);
-}
-
-.dsc-marcas button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
-.dsc-marcas button:focus-visible {
-  outline: 2px solid var(--primario);
-  outline-offset: -2px;
 }
 
 .dsc-notacao {
@@ -1272,6 +1262,7 @@ body:has(.ptd-modulo) {
 
 .dsc-rios-todos .dsc-rio {
   width: min(100%, 240px);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 3px 2px;
 }
 

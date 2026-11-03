@@ -213,28 +213,31 @@ export default function ModalDescartes({
               {erro}
             </p>
           )}
-          <div className="controle-regra dsc-marcas">
+          {/* Mesmos botões do Chi, Pon e Kan da Calculadora de Mão. */}
+          <div className="acoes-construtor-mao dsc-marcas">
             {!emRiichi && (
               <button
                 type="button"
-                className={riichi ? 'ativo' : ''}
+                className={`btn-acao-mao action-tab action-tab--chi${riichi ? ' active' : ''}`}
                 aria-pressed={riichi}
                 disabled={kan !== null || !muroPermiteRiichi(lances)}
                 onClick={() => setRiichi((atual) => !atual)}
               >
-                {t('match.discards.riichi')}
+                <span>{t('match.discards.riichi')}</span>
               </button>
             )}
             {(['kakan', 'fechado'] as const).map((tipo) => (
               <button
                 key={tipo}
                 type="button"
-                className={kan === tipo ? 'ativo' : ''}
+                className={`btn-acao-mao action-tab action-tab--${tipo === 'kakan' ? 'kan-open' : 'kan-closed'}${
+                  kan === tipo ? ' active' : ''
+                }`}
                 aria-pressed={kan === tipo}
                 disabled={riichi || !muroPermiteKan(lances)}
                 onClick={() => setKan((atual) => (atual === tipo ? null : tipo))}
               >
-                {t(tipo === 'kakan' ? 'match.discards.kakan' : 'match.discards.closedKan')}
+                <span>{t(tipo === 'kakan' ? 'match.discards.kakan' : 'match.discards.closedKan')}</span>
               </button>
             ))}
           </div>

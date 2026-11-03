@@ -30,7 +30,7 @@ export default function TecladoSoPedras({
         rotuloEsperaTeclado={() => ''}
         classeEsperaTeclado={() => ''}
         rotuloPedra={(pedra) => descreverPedra(pedra, t)}
-        contexto="finalizacao"
+        contexto="montagem"
         aoAdicionarPedra={aoEscolher}
       />
     </div>
