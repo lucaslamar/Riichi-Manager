@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { tocarAlarme } from '@/compartilhado/adaptadores/alarme'
 import { vibrar } from '@/compartilhado/adaptadores/vibracao'
 import type { Cadeira, Partida } from '../../logica/partida'
@@ -9,6 +9,7 @@ import {
   retomarVez,
   tempoEsgotado,
   tocarTimer,
+  type EstadoVez,
 } from '../../logica/vez'
 
 const INTERVALO_TELA_MS = 250
@@ -26,8 +27,25 @@ export function useTimerVez(
   modalAberta: boolean,
   alarmeUmaVez: boolean,
 ) {
-  const { vez, config } = partida
-  const segundosTotais = config.timerVez
+  const atualizarVez = useCallback(
+    (transformar: (vez: EstadoVez) => EstadoVez) =>
+      atualizar((atual) => ({ ...atual, vez: transformar(atual.vez) })),
+    [atualizar],
+  )
+  return useRelogioVez(partida.vez, partida.config.timerVez, atualizarVez, modalAberta, alarmeUmaVez)
+}
+
+/**
+ * O mesmo timer para quem guarda a vez em outro lugar (o Centerpiece simples).
+ * `atualizarVez` precisa ser estável: quando muda, conta como sair da mesa e pausa.
+ */
+export function useRelogioVez(
+  vez: EstadoVez,
+  segundosTotais: number,
+  atualizarVez: (transformar: (vez: EstadoVez) => EstadoVez) => void,
+  modalAberta: boolean,
+  alarmeUmaVez = false,
+) {
   const [relogio, setRelogio] = useState(Date.now)
   const contando = vez.contandoDesde !== null
   const agora = Math.max(relogio, vez.contandoDesde ?? 0)
@@ -59,21 +77,16 @@ export function useTimerVez(
   useEffect(() => {
     if (modalAberta && contando) {
       pausadoPelaModal.current = true
-      atualizar((atual) => ({ ...atual, vez: pausarVez(atual.vez, Date.now()) }))
+      atualizarVez((atual) => pausarVez(atual, Date.now()))
     } else if (!modalAberta && pausadoPelaModal.current) {
       pausadoPelaModal.current = false
       // A mão pode ter terminado com a modal aberta: a nova só conta no primeiro toque.
-      atualizar((atual) =>
-        atual.vez.comecou ? { ...atual, vez: retomarVez(atual.vez, Date.now()) } : atual,
-      )
+      atualizarVez((atual) => (atual.comecou ? retomarVez(atual, Date.now()) : atual))
     }
-  }, [modalAberta, contando, atualizar])
+  }, [modalAberta, contando, atualizarVez])
 
   // Sair da mesa (ou trocar de mesa) deixa o timer parado.
-  useEffect(
-    () => () => atualizar((atual) => ({ ...atual, vez: pausarVez(atual.vez, Date.now()) })),
-    [atualizar],
-  )
+  useEffect(() => () => atualizarVez((atual) => pausarVez(atual, Date.now())), [atualizarVez])
 
   return {
     ligado: segundosTotais > 0,
@@ -81,23 +94,12 @@ export function useTimerVez(
     esgotado,
     segundos: Math.ceil(milissegundosRestantes(vez, agora) / 1000),
     fracao: segundosTotais > 0 ? milissegundosRestantes(vez, agora) / (segundosTotais * 1000) : 0,
-    tocar: () =>
-      atualizar((atual) => ({
-        ...atual,
-        vez: tocarTimer(atual.vez, atual.config.timerVez, Date.now()),
-      })),
+    tocar: () => atualizarVez((atual) => tocarTimer(atual, segundosTotais, Date.now())),
     passarPara: (cadeira: Cadeira) =>
-      atualizar((atual) => ({
-        ...atual,
-        vez: passarVezPara(cadeira, atual.config.timerVez, Date.now()),
-      })),
+      atualizarVez(() => passarVezPara(cadeira, segundosTotais, Date.now())),
     alternarPausa: () =>
-      atualizar((atual) => ({
-        ...atual,
-        vez:
-          atual.vez.contandoDesde !== null
-            ? pausarVez(atual.vez, Date.now())
-            : retomarVez(atual.vez, Date.now()),
-      })),
+      atualizarVez((atual) =>
+        atual.contandoDesde !== null ? pausarVez(atual, Date.now()) : retomarVez(atual, Date.now()),
+      ),
   }
 }

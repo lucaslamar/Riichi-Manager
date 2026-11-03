@@ -1,4 +1,5 @@
 /** Centerpiece simples: só a rodada, o dealer e o honba, sem pontos nem jogadores. */
+import { OPCOES_TIMER_VEZ, type ConfigMesa } from './configMesa'
 import { ORDEM_VENTOS, type Cadeira, type Vento } from './partida'
 
 export interface EstadoSimples {
@@ -6,6 +7,8 @@ export interface EstadoSimples {
   rodadaVento: Vento
   rodadaNumero: 1 | 2 | 3 | 4
   honba: number
+  /** Timer de vez opcional, em segundos; 0 = desligado. */
+  timerVez: ConfigMesa['timerVez']
 }
 
 export const SIMPLES_INICIAL: EstadoSimples = {
@@ -13,12 +16,14 @@ export const SIMPLES_INICIAL: EstadoSimples = {
   rodadaVento: 'leste',
   rodadaNumero: 1,
   honba: 0,
+  timerVez: 0,
 }
 
 export function proximoDealer(estado: EstadoSimples): EstadoSimples {
   const cadeiraDealer = ((estado.cadeiraDealer + 1) % 4) as Cadeira
   if (estado.rodadaNumero < 4) {
     return {
+      ...estado,
       cadeiraDealer,
       rodadaVento: estado.rodadaVento,
       rodadaNumero: (estado.rodadaNumero + 1) as EstadoSimples['rodadaNumero'],
@@ -26,7 +31,7 @@ export function proximoDealer(estado: EstadoSimples): EstadoSimples {
     }
   }
   const indice = ORDEM_VENTOS.indexOf(estado.rodadaVento)
-  return { cadeiraDealer, rodadaVento: ORDEM_VENTOS[(indice + 1) % 4], rodadaNumero: 1, honba: 0 }
+  return { ...estado, cadeiraDealer, rodadaVento: ORDEM_VENTOS[(indice + 1) % 4], rodadaNumero: 1, honba: 0 }
 }
 
 /** Renchan: o dealer fica e o honba sobe. */
@@ -47,7 +52,18 @@ export function normalizarSimples(salvo: unknown): EstadoSimples {
     [1, 2, 3, 4].includes(lido.rodadaNumero as number) &&
     Number.isInteger(lido.honba) &&
     (lido.honba as number) >= 0
-  return valido ? (lido as EstadoSimples) : SIMPLES_INICIAL
+  if (!valido) return SIMPLES_INICIAL
+  // Salvo antes do timer existir: fica desligado.
+  const timerVez = OPCOES_TIMER_VEZ.includes(lido.timerVez as ConfigMesa['timerVez'])
+    ? (lido.timerVez as ConfigMesa['timerVez'])
+    : 0
+  return {
+    cadeiraDealer: lido.cadeiraDealer as Cadeira,
+    rodadaVento: lido.rodadaVento as Vento,
+    rodadaNumero: lido.rodadaNumero as EstadoSimples['rodadaNumero'],
+    honba: lido.honba as number,
+    timerVez,
+  }
 }
 
 /**

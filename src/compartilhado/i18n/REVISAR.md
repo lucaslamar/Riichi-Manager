@@ -50,6 +50,10 @@ Como revisar:
 - Plural em lituano: `one` (1, 21, 31…), `few` (2–9, 22–29…), `many` (frações) e `other`
   (0, 10–20, 30…). Em coreano só existe `other`.
 
+## Timer do Centerpiece simples (match.simple.help5, timerStart, timerPass)
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans.
+
 ## Instalação e tela cheia (pages.install*, pages.fullscreen*, pages.keepAwake*)
 
 Textos novos em es, ja, ko, lt e zh-Hans, sem revisão nativa. Em ko e zh-Hans, conferir

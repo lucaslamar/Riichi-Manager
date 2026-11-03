@@ -473,9 +473,38 @@ button.mesa-domo {
 
 /* Centerpiece simples: placa só com o vento e as somas. */
 .mesa-placa--simples {
+  position: relative;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+.mesa-placa-simples-vento {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* O anel fica na ponta da placa, sem empurrar o vento do centro. */
+.mesa-simples-timer {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  display: flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.mesa-simples-timer .mesa-timer {
+  margin: 0;
 }
 
 .mesa-placa--simples strong {
