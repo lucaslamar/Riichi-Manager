@@ -1057,8 +1057,6 @@
       "byNotation": "MPSZ užrašas",
       "byNotationHelp": "Įveskite ranką tekstu",
       "tsumoOf": "{{name}} tsumo",
-      "notTsumoOf": "Ne {{name}} tsumo?",
-      "registerManually": "Įrašyti rankiniu būdu",
       "next": "Next",
       "apply": "Apply result",
       "paidBy": "Paid by",

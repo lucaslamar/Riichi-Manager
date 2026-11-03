@@ -1043,8 +1043,6 @@
       "byNotation": "Notação MPSZ",
       "byNotationHelp": "Digite a mão em texto",
       "tsumoOf": "Tsumo de {{name}}",
-      "notTsumoOf": "Não foi tsumo de {{name}}?",
-      "registerManually": "Registrar manualmente",
       "next": "Próximo",
       "apply": "Aplicar resultado",
       "paidBy": "Pagou",

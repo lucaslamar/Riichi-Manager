@@ -8,7 +8,6 @@ import {
   type Partida,
 } from '../../logica/partida'
 import {
-  iniciarBatida,
   MAXIMO_VENCEDORES,
   type EstadoBatida,
   type PassoBatida,
@@ -216,14 +215,6 @@ export default function ModalBatida({
               </button>
             ))}
           </div>
-          {batida.atalhoTsumo && vencedorAtual !== null && (
-            <p className="ptd-link-manual">
-              {t('match.win.notTsumoOf', { name: nomeDe(vencedorAtual) })}{' '}
-              <button type="button" className="ptd-link" onClick={() => aoMudar(iniciarBatida())}>
-                {t('match.win.registerManually')}
-              </button>
-            </p>
-          )}
         </>
       )}
 

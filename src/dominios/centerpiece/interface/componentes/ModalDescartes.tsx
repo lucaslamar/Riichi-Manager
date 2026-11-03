@@ -234,16 +234,10 @@ export default function ModalDescartes({
           >
             {t('match.discards.nothing', { name: nomeDe(seguinte) })}
           </button>
+          {/* Na ordem de prioridade das chamadas: ron, depois pon e kan, por último chi. */}
           <div className="dsc-pergunta-chamadas">
-            <button
-              type="button"
-              className="mesa-btn-secundario"
-              disabled={ultimoDaMao}
-              onClick={() =>
-                aoDecidir({ tipo: 'chamada', chamada: 'chi', cadeira: seguinte, ordem: ultimo.ordem })
-              }
-            >
-              {t('match.discards.call.chi')}
+            <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('ron')}>
+              {t('match.discards.call.ron')}
             </button>
             <button
               type="button"
@@ -261,8 +255,15 @@ export default function ModalDescartes({
             >
               {t('match.discards.call.kan')}
             </button>
-            <button type="button" className="mesa-btn-secundario" onClick={() => setEtapa('ron')}>
-              {t('match.discards.call.ron')}
+            <button
+              type="button"
+              className="mesa-btn-secundario"
+              disabled={ultimoDaMao}
+              onClick={() =>
+                aoDecidir({ tipo: 'chamada', chamada: 'chi', cadeira: seguinte, ordem: ultimo.ordem })
+              }
+            >
+              {t('match.discards.call.chi')}
             </button>
           </div>
         </div>

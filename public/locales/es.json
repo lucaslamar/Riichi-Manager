@@ -1050,8 +1050,6 @@
       "byNotation": "Notación MPSZ",
       "byNotationHelp": "Escribe la mano como texto",
       "tsumoOf": "Tsumo de {{name}}",
-      "notTsumoOf": "¿No fue tsumo de {{name}}?",
-      "registerManually": "Registrar manualmente",
       "next": "Next",
       "apply": "Apply result",
       "paidBy": "Paid by",

@@ -1036,8 +1036,6 @@
       "byNotation": "MPSZ 记法",
       "byNotationHelp": "用文字输入手牌",
       "tsumoOf": "{{name}} 自摸",
-      "notTsumoOf": "不是 {{name}} 自摸？",
-      "registerManually": "手动记录",
       "next": "Next",
       "apply": "Apply result",
       "paidBy": "Paid by",

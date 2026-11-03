@@ -1036,8 +1036,6 @@
       "byNotation": "MPSZ 표기",
       "byNotationHelp": "손패를 텍스트로 입력",
       "tsumoOf": "{{name}}의 쯔모",
-      "notTsumoOf": "{{name}}의 쯔모가 아닌가요?",
-      "registerManually": "직접 기록",
       "next": "Next",
       "apply": "Apply result",
       "paidBy": "Paid by",

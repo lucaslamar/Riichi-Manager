@@ -391,13 +391,13 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             <button type="button" className="mesa-btn-principal mesa-btn-descarte" onClick={abrirDescarte}>
               {t('match.table.discard', { name: nomeDaVez })}
             </button>
-            {/* Com a mão em andamento o ron vem da pergunta do descarte: aqui só sobra o tsumo da vez. */}
+            {/* O ron vem só da pergunta do descarte: aqui fica apenas o tsumo de quem está na vez. */}
             <button
               type="button"
               className="mesa-btn-principal"
-              onClick={() => setBatida(vez.comecou ? iniciarTsumoDaVez(vez.cadeira) : iniciarBatida())}
+              onClick={() => setBatida(iniciarTsumoDaVez(vez.cadeira))}
             >
-              {vez.comecou ? t('match.win.tsumoOf', { name: nomeDaVez }) : t('match.win.title')}
+              {t('match.win.tsumoOf', { name: nomeDaVez })}
             </button>
             {partida.agariYameDisponivel && (
               <button

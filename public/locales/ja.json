@@ -1036,8 +1036,6 @@
       "byNotation": "MPSZ表記",
       "byNotationHelp": "手牌を文字で入力",
       "tsumoOf": "{{name}}のツモ",
-      "notTsumoOf": "{{name}}のツモではない？",
-      "registerManually": "手動で記録",
       "next": "Next",
       "apply": "Apply result",
       "paidBy": "Paid by",
