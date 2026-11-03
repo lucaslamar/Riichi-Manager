@@ -7,30 +7,29 @@ const DISTANCIA = 60
 /** A partir daqui o gesto é horizontal e a tela acompanha o dedo. */
 const INICIO = 10
 const DURACAO_MS = 180
+const ESPERA_CLIQUE_MS = 350
 /** Onde o toque é de outro componente (arrastar pedra, teclado). */
 const AREAS_DESLIGADAS = '.teclado-pedras, .dsc-teclado'
 
 /**
  * Deslize horizontal com Pointer Events: a tela (`alvo`) acompanha o dedo e, se
- * soltar antes do limite, volta para o lugar. Com `bordaEsquerda`, só vale
- * começando perto da borda. É atalho: tudo também existe em botão.
+ * soltar antes do limite, volta para o lugar. Sem ação no sentido, resiste (o
+ * quique). É atalho: tudo também existe em botão.
  */
 export function useGestoHorizontal({
   ativo = true,
   alvo,
-  bordaEsquerda,
   aoDireita,
   aoEsquerda,
 }: {
   ativo?: boolean
   alvo: RefObject<HTMLElement | null>
-  bordaEsquerda?: number
   aoDireita?: () => void
   aoEsquerda?: () => void
 }) {
   // Ref: os listeners ficam fixos e sempre chamam a versão atual das ações.
-  const atual = useRef({ bordaEsquerda, aoDireita, aoEsquerda })
-  atual.current = { bordaEsquerda, aoDireita, aoEsquerda }
+  const atual = useRef({ aoDireita, aoEsquerda })
+  atual.current = { aoDireita, aoEsquerda }
 
   useEffect(() => {
     if (!ativo) return
@@ -50,9 +49,8 @@ export function useGestoHorizontal({
       if (!evento.isPrimary || (evento.pointerType === 'mouse' && evento.button !== 0)) return
       const elemento = alvo.current
       if (!elemento || elemento.getClientRects().length === 0) return
-      const { bordaEsquerda: borda, aoDireita: direita, aoEsquerda: esquerda } = atual.current
+      const { aoDireita: direita, aoEsquerda: esquerda } = atual.current
       if (!direita && !esquerda) return
-      if (borda !== undefined && evento.clientX > borda) return
       if (document.querySelector(SELETOR_CAMADAS)) return
       if (toqueIgnorado(evento.target)) return
       if (evento.target instanceof Element && evento.target.closest(AREAS_DESLIGADAS)) return
@@ -71,12 +69,7 @@ export function useGestoHorizontal({
         toque.arrastando = Math.abs(deltaX) > INICIO
       }
       if (!toque.arrastando) return
-      // Com borda, só existe o gesto para a direita. Sem ação no sentido, resiste: é o quique.
-      const { bordaEsquerda: borda, aoDireita: direita, aoEsquerda: esquerda } = atual.current
-      if (borda !== undefined && deltaX < 0) {
-        mover(0, false)
-        return
-      }
+      const { aoDireita: direita, aoEsquerda: esquerda } = atual.current
       const temAcao = deltaX > 0 ? direita : esquerda
       mover(temAcao ? deltaX : deltaX * 0.2, false)
     }
@@ -95,10 +88,11 @@ export function useGestoHorizontal({
         clique.preventDefault()
       }
       document.addEventListener('click', engolirClique, { capture: true, once: true })
-      window.setTimeout(() => document.removeEventListener('click', engolirClique, { capture: true }), 0)
+      // O clique pode vir um pouco depois de soltar o dedo.
+      window.setTimeout(() => document.removeEventListener('click', engolirClique, { capture: true }), ESPERA_CLIQUE_MS)
 
-      const { bordaEsquerda: borda, aoDireita: direita, aoEsquerda: esquerda } = atual.current
-      const acao = deltaX > 0 ? direita : borda === undefined ? esquerda : undefined
+      const { aoDireita: direita, aoEsquerda: esquerda } = atual.current
+      const acao = deltaX > 0 ? direita : esquerda
       if (!acao || Math.abs(deltaX) < DISTANCIA || Math.abs(deltaX) <= Math.abs(deltaY)) {
         mover(0, true)
         return

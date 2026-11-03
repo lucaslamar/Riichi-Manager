@@ -76,18 +76,6 @@ body:has(.pagina-regras) {
   overflow-wrap: anywhere;
 }
 
-.cartao-regras__select {
-  max-width: 52vw;
-  min-height: 44px;
-  border: 1px solid var(--cor-borda-controle, #c8d4e0);
-  border-radius: 8px;
-  padding: 8px 10px;
-  background: var(--cor-superficie-alt, #f8fafc);
-  color: var(--cor-texto, #102a43);
-  font-size: 0.9rem;
-  font-weight: 800;
-}
-
 /* ── Switch ────────────────────────────────────────────── */
 
 .cartao-regras--switch {
@@ -194,10 +182,6 @@ body:has(.pagina-regras) {
     background: transparent;
     box-shadow: none;
   }
-
-  .cartao-regras__select {
-    max-width: 46vw;
-  }
 }
 
 @media (min-width: 641px) and (min-height: 561px) {
@@ -257,4 +241,18 @@ body.toque-ampliado .cartao-regras {
   color: var(--primario-forte);
   font-weight: 700;
   text-decoration: none;
+}
+
+/* Celular deitado: duas colunas de cartões, com o Sobre ocupando a linha toda. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .pagina-regras {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .cartao-regras--empilhado,
+  .sobre-mojoca {
+    grid-column: 1 / -1;
+  }
 }

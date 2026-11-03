@@ -24,9 +24,7 @@
   font-weight: 400;
 }
 
-.cfg-entrada:focus-visible,
-.cfg-segmento:focus-visible,
-.cfg-opcao input:focus-visible {
+.cfg-entrada:focus-visible {
   outline: 2px solid var(--primario);
   outline-offset: 2px;
 }
@@ -92,65 +90,20 @@
   font-weight: 700;
 }
 
-.cfg-segmentos {
-  display: flex;
-  gap: 6px;
-}
-
-.cfg-segmento {
-  flex: 1 1 0;
+.cfg-opcoes button {
   min-width: 0;
-  min-height: 44px;
-  border: 2px solid var(--entrada-borda);
-  border-radius: 8px;
-  padding: 6px 4px;
-  color: var(--texto-principal);
-  background: transparent;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 700;
+  padding: 6px;
+  font-size: 0.875rem;
+  line-height: 1.15;
 }
 
-.cfg-segmento--ativo {
-  border-color: var(--primario);
-  color: var(--sobre-primario);
-  background: var(--primario-forte);
+.cfg-opcoes button:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
 }
 
-.cfg-opcao {
-  display: flex;
-  min-height: 48px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-bottom: 1px solid var(--linha-divisoria);
-  padding: 6px 0;
-  cursor: pointer;
-}
-
-.cfg-opcao > span {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.cfg-opcao strong {
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.cfg-opcao small {
-  color: var(--texto-apoio);
-  font-size: 0.8125rem;
-}
-
-.cfg-opcao input {
-  flex: 0 0 auto;
-  width: 24px;
-  height: 24px;
-  accent-color: var(--primario);
+.cfg-opcoes--empilhado button + button {
+  border-top: 1px solid var(--linha-divisoria);
 }
 
 .cfg-acoes {
@@ -193,4 +146,140 @@
 
 .cfg-tabela-exemplo th:first-child {
   text-align: left;
+}
+
+/* Uma: resumo calculado, Personalizar e a tabela flutuante. */
+.cfg-conjunto > .cfg-opcoes {
+  margin-bottom: 10px;
+}
+
+.cfg-uma-resumo {
+  margin: 0 0 4px;
+}
+
+.cfg-link {
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  color: var(--primario-forte);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.cfg-uma-tabela {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.cfg-uma-tabela table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-size: 0.8125rem;
+}
+
+.cfg-uma-tabela th {
+  color: var(--texto-apoio);
+  font-weight: 700;
+  text-align: left;
+}
+
+.cfg-uma-tabela thead th {
+  text-align: center;
+}
+
+.cfg-uma-tabela td {
+  min-width: 52px;
+}
+
+.cfg-uma-tabela .cfg-entrada {
+  padding-inline: 4px;
+  text-align: center;
+}
+
+.cfg-uma-linha-invalida th {
+  color: var(--texto-erro);
+}
+
+.cfg-uma-linha-invalida .cfg-entrada {
+  border-color: var(--texto-erro);
+}
+
+.cfg-ajuda--grupo {
+  margin: 4px 0 0;
+}
+
+/* Busca e índice fixos no topo do corpo rolável da folha. */
+.cfg-topo {
+  position: sticky;
+  top: calc(var(--modal-espaco) * -0.5);
+  z-index: 2;
+  display: grid;
+  gap: 6px;
+  margin: calc(var(--modal-espaco) * -0.5) calc(var(--modal-espaco) * -1) 12px;
+  border-bottom: 1px solid var(--modal-borda);
+  padding: 8px var(--modal-espaco);
+  background: var(--modal-fundo);
+}
+
+.cfg-indice {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.cfg-indice button {
+  min-height: 44px;
+  flex: 0 0 auto;
+  border: 1px solid var(--modal-borda);
+  border-radius: 8px;
+  padding: 0 10px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.cfg-indice button:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+/* O índice leva o título da seção para logo abaixo da parte fixa. */
+.cfg-secao {
+  scroll-margin-top: 112px;
+}
+
+.cfg-secao:not(:has(.linha-regra, .cfg-campo, .cfg-item)) {
+  display: none;
+}
+
+.cfg-sem-resultado {
+  display: none;
+  margin: 16px 0;
+  color: var(--texto-apoio);
+  text-align: center;
+}
+
+.cfg-corpo:not(:has(.linha-regra, .cfg-campo, .cfg-item)) .cfg-sem-resultado {
+  display: block;
+}
+
+/* Celular deitado: só a busca, para não tirar a altura da lista. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .cfg-indice {
+    display: none;
+  }
+
+  .cfg-secao {
+    scroll-margin-top: 60px;
+  }
 }

@@ -8,6 +8,7 @@
 import { pagamentosChombo } from './aplicarChombo'
 import { calcularOka, type ConfigMesa } from './configMesa'
 import { desmarcarRiichi, type Lance, type RegistroMao } from './descartes'
+import { calcularUma } from './uma'
 import type { MaoMontada } from './tipos-integracao'
 import { vezInicial, type EstadoVez } from './vez'
 
@@ -549,6 +550,7 @@ export function calcularResultado(partida: Partida): ResultadoFinal[] {
 
   const ordenadas = [...CADEIRAS].sort((uma, outra) => pontos[outra] - pontos[uma] || uma - outra)
   const oka = calcularOka(config) / 1000
+  const umas = calcularUma(config, CADEIRAS.map((cadeira) => pontos[cadeira]))
   const multas = porCadeira(() => 0)
   for (const evento of eventos) {
     const multa = evento.detalhe?.multa
@@ -558,8 +560,7 @@ export function calcularResultado(partida: Partida): ResultadoFinal[] {
   return ordenadas.map((cadeira) => {
     const empatadas = ordenadas.filter((outra) => pontos[outra] === pontos[cadeira])
     const inicio = ordenadas.indexOf(empatadas[0])
-    const lugares = empatadas.map((_, indice) => inicio + indice)
-    const uma = lugares.reduce((soma, lugar) => soma + config.uma[lugar], 0) / empatadas.length
+    const uma = umas[cadeira]
     const okaAqui = inicio === 0 ? oka / empatadas.length : 0
     const multa = multas[cadeira] / 1000
     return {

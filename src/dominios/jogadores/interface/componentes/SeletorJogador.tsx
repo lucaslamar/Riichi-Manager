@@ -60,7 +60,7 @@ export default function SeletorJogador({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha seletor-jogador"
+      className="seletor-jogador"
     >
       {criando ? (
         <FormJogador

@@ -2,6 +2,14 @@
  * Regras de uma mesa, usadas pelo Centerpiece e pelo Torneio, em TypeScript puro.
  * A partida guarda uma cópia: mudar um preset depois não altera partida já jogada.
  */
+import {
+  configuracaoPadrao,
+  type ConfiguracaoCalculo,
+} from '@/compartilhado/mahjong/pontuacao/configuracao'
+import { normalizarUma, somaUma, umaFixa, type UmaMesa } from './uma'
+
+export { somaUma }
+
 export type IdPreset = 'padrao' | 'wrc' | 'ema' | 'mleague'
 
 export interface ConfigMesa {
@@ -12,7 +20,7 @@ export interface ConfigMesa {
   pontosPartida: number
   pontosRetorno: number
   /** Do 1º ao 4º, em milhares de pontos (+15 = 15.000). */
-  uma: [number, number, number, number]
+  uma: UmaMesa
   ronMultiplo: 'atamaHane' | 'duploTriploAborta' | 'duploTriploPermitidos'
   tobi: boolean
   agariYame: boolean
@@ -27,10 +35,10 @@ export interface ConfigMesa {
   nagashiMangan: boolean
   /** `fixo`: pontos descontados da pontuação final, depois da uma. */
   chombo: { tipo: 'manganReverso' } | { tipo: 'yakumanReverso' } | { tipo: 'fixo'; valor: number }
+  /** Decididas ao criar a mesa; valem para todas as mãos da partida. */
+  regrasCalculo: ConfiguracaoCalculo
   /** Segundos por vez; 0 = desligado. */
   timerVez: 0 | 30 | 60 | 90
-  registrarDescartes: boolean
-  /** Só vale com o registro de descartes ligado. */
   checarFuriten: boolean
 }
 
@@ -47,10 +55,25 @@ const SEM_ABORTIVOS: ConfigMesa['abortivos'] = {
   quatroRiichis: false,
 }
 
+/**
+ * Regras de cálculo dos presets oficiais: as variações saem, e o que a tabela do
+ * projeto não fixa (yakuman acumulado e duplo, kazoe, fu em Rinshan) segue o padrão
+ * do app. Conferir essas quatro nas fontes de cada preset.
+ */
+const regrasOficiais = (akadora: boolean): ConfiguracaoCalculo => ({
+  ...configuracaoPadrao,
+  akadora,
+  tanyaoAberto: true,
+  doraFlamejante: false,
+  basengo: false,
+  kiriageMangan: false,
+  fuVentosDuplo: false,
+})
+
 /** Regras próprias de cada preset; timer e descartes são preferências da mesa. */
 type RegrasPreset = Omit<
   ConfigMesa,
-  'preset' | 'presetBase' | 'timerVez' | 'registrarDescartes' | 'checarFuriten'
+  'preset' | 'presetBase' | 'timerVez' | 'checarFuriten'
 >
 
 /** Padrão de clube, para iniciantes: regras simples e partida que acaba no horário. */
@@ -58,7 +81,7 @@ const REGRAS_PADRAO: RegrasPreset = {
   tipoPartida: 'leste',
   pontosPartida: 25000,
   pontosRetorno: 30000,
-  uma: [15, 5, -5, -15],
+  uma: umaFixa([15, 5, -5, -15]),
   ronMultiplo: 'atamaHane',
   tobi: true,
   agariYame: true,
@@ -67,6 +90,7 @@ const REGRAS_PADRAO: RegrasPreset = {
   abortivos: SEM_ABORTIVOS,
   nagashiMangan: true,
   chombo: { tipo: 'manganReverso' },
+  regrasCalculo: configuracaoPadrao,
 }
 
 const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
@@ -83,7 +107,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tipoPartida: 'hanchan',
     pontosPartida: 30000,
     pontosRetorno: 30000,
-    uma: [15, 5, -5, -15],
+    uma: umaFixa([15, 5, -5, -15]),
     ronMultiplo: 'atamaHane',
     tobi: false,
     agariYame: false,
@@ -92,6 +116,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
     chombo: { tipo: 'fixo', valor: 30000 },
+    regrasCalculo: regrasOficiais(false),
   },
 
   /**
@@ -103,7 +128,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tipoPartida: 'hanchan',
     pontosPartida: 30000,
     pontosRetorno: 30000,
-    uma: [15, 5, -5, -15],
+    uma: umaFixa([15, 5, -5, -15]),
     ronMultiplo: 'duploTriploPermitidos',
     tobi: false,
     agariYame: false,
@@ -112,6 +137,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
     chombo: { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO },
+    regrasCalculo: regrasOficiais(false),
   },
 
   /**
@@ -123,7 +149,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tipoPartida: 'hanchan',
     pontosPartida: 25000,
     pontosRetorno: 30000,
-    uma: [30, 10, -10, -30],
+    uma: umaFixa([30, 10, -10, -30]),
     ronMultiplo: 'atamaHane',
     tobi: false,
     agariYame: false,
@@ -132,6 +158,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
     chombo: { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO },
+    regrasCalculo: regrasOficiais(true),
   },
 }
 
@@ -139,13 +166,13 @@ export function configDoPreset(preset: IdPreset): ConfigMesa {
   const regras = REGRAS_PRESET[preset]
   return {
     ...regras,
-    uma: [...regras.uma],
+    uma: structuredClone(regras.uma),
     abortivos: { ...regras.abortivos },
     chombo: { ...regras.chombo },
+    regrasCalculo: { ...regras.regrasCalculo },
     preset,
     presetBase: preset,
     timerVez: preset === 'padrao' ? 60 : 30,
-    registrarDescartes: false,
     checarFuriten: false,
   }
 }
@@ -164,6 +191,11 @@ export function escolherPreset(config: ConfigMesa, preset: ConfigMesa['preset'])
     : configDoPreset(preset)
 }
 
+/** Sem oka, o retorno é igual à partida e a soma final fecha em zero. */
+export function retornoComOka(pontosPartida: number, comOka: boolean) {
+  return comOka ? pontosPartida + 5000 : pontosPartida
+}
+
 export function reiniciarConfig(config: ConfigMesa): ConfigMesa {
   return configDoPreset(config.presetBase)
 }
@@ -173,8 +205,14 @@ export function calcularOka(config: Pick<ConfigMesa, 'pontosPartida' | 'pontosRe
   return (config.pontosRetorno - config.pontosPartida) * 4
 }
 
-export function somaUma(uma: ConfigMesa['uma']) {
-  return uma.reduce((soma, valor) => soma + valor, 0)
+function normalizarRegras(salvas: unknown): ConfiguracaoCalculo {
+  const lidas = (salvas ?? {}) as Partial<ConfiguracaoCalculo>
+  const regras = { ...configuracaoPadrao }
+  for (const chave of Object.keys(regras) as (keyof ConfiguracaoCalculo)[]) {
+    const valor = lidas[chave]
+    if (typeof valor === 'boolean') regras[chave] = valor
+  }
+  return regras
 }
 
 const numeroValido = (valor: unknown): valor is number =>
@@ -191,8 +229,6 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
   const presetBase =
     lida.presetBase && IDS_PRESET.includes(lida.presetBase) ? lida.presetBase : 'padrao'
   const base = configDoPreset(presetBase)
-  const umaValida =
-    Array.isArray(lida.uma) && lida.uma.length === 4 && lida.uma.every(numeroValido)
   const chombo = lida.chombo
   const chomboValido =
     chombo?.tipo === 'manganReverso' ||
@@ -212,7 +248,7 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     tipoPartida: lida.tipoPartida === 'leste' || lida.tipoPartida === 'hanchan' ? lida.tipoPartida : base.tipoPartida,
     pontosPartida: numeroValido(lida.pontosPartida) ? lida.pontosPartida : base.pontosPartida,
     pontosRetorno: numeroValido(lida.pontosRetorno) ? lida.pontosRetorno : base.pontosRetorno,
-    uma: umaValida ? (lida.uma as ConfigMesa['uma']) : base.uma,
+    uma: normalizarUma(lida.uma, base.uma),
     ronMultiplo:
       lida.ronMultiplo === 'atamaHane' ||
       lida.ronMultiplo === 'duploTriploAborta' ||
@@ -234,11 +270,12 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     },
     nagashiMangan: booleano(lida.nagashiMangan, base.nagashiMangan),
     chombo: chomboValido ? (chombo as ConfigMesa['chombo']) : base.chombo,
+    // Partida criada antes desta opção usa o padrão atual da calculadora.
+    regrasCalculo: normalizarRegras(lida.regrasCalculo),
     timerVez:
       lida.timerVez !== undefined && OPCOES_TIMER_VEZ.includes(lida.timerVez)
         ? lida.timerVez
         : base.timerVez,
-    registrarDescartes: booleano(lida.registrarDescartes, base.registrarDescartes),
     checarFuriten: booleano(lida.checarFuriten, base.checarFuriten),
   }
 }

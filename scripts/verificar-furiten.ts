@@ -6,6 +6,10 @@
 import assert from 'node:assert/strict'
 import { configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
 import {
+  muroPermiteKan,
+  muroPermiteRiichi,
+  pedrasNoMuro,
+  ultimoDescarteDaMao,
   adicionarDescartes,
   adicionarKakan,
   candidatosNagashi,
@@ -23,6 +27,7 @@ import {
   descreverRio,
 } from '../src/dominios/centerpiece/logica/descreverPedras'
 import { pagamentosChombo } from '../src/dominios/centerpiece/logica/aplicarChombo'
+import { dadosDaPartidaParaMao } from '../src/dominios/centerpiece/logica/dadosDaPartida'
 import { calcularFuriten } from '../src/dominios/centerpiece/logica/furiten'
 import { passarVezPara } from '../src/dominios/centerpiece/logica/vez'
 import {
@@ -313,6 +318,136 @@ teste('frases por extenso', () => {
   assert.ok(descreverRio('Ana', [], () => '', t).includes('noDiscards'))
   const estado = calcularFuriten(linha([1, '3s']), 0, ESPERAS)
   assert.ok(descreverFuriten(estado, ESPERAS, t).startsWith('match.furiten.temporary.title'))
+})
+
+teste('muro: abre com 69 e cada descarte leva à próxima compra', () => {
+  assert.equal(pedrasNoMuro([]), 69)
+  assert.equal(pedrasNoMuro(linha([0, '1m'])), 68)
+  assert.equal(pedrasNoMuro(linha([0, '1m'], [1, '2m'], [2, '3m'])), 66)
+})
+
+teste('muro: chi, pon e ron não compram; kan compra a reposição', () => {
+  const comChamada = (tipo: 'chi' | 'pon' | 'kan' | 'ron') =>
+    linha([0, '1m']).map((lance) =>
+      lance.tipo === 'descarte' ? { ...lance, chamadaPor: { cadeira: 1 as Cadeira, tipo } } : lance,
+    )
+  assert.equal(pedrasNoMuro(comChamada('chi')), 69)
+  assert.equal(pedrasNoMuro(comChamada('pon')), 69)
+  assert.equal(pedrasNoMuro(comChamada('ron')), 69)
+  assert.equal(pedrasNoMuro(comChamada('kan')), 68)
+  const fechado: Lance = { tipo: 'kakan', ordem: 1, cadeira: 0, pedra: '1m', fechado: true }
+  const kakan: Lance = { tipo: 'kakan', ordem: 2, cadeira: 0, pedra: '2m' }
+  assert.equal(pedrasNoMuro([fechado, kakan]), 67)
+})
+
+const descartes = (quantos: number) =>
+  Array.from({ length: quantos }, (_, indice) => linha([0, '1m']).map((lance) => ({ ...lance, ordem: indice + 1 }))[0])
+
+teste('muro: Riichi só com 4 ou mais; kan só com alguma pedra; nunca fica negativo', () => {
+  assert.equal(pedrasNoMuro(descartes(65)), 4)
+  assert.equal(muroPermiteRiichi(descartes(65)), true)
+  assert.equal(muroPermiteRiichi(descartes(66)), false)
+  assert.equal(muroPermiteKan(descartes(68)), true)
+  assert.equal(muroPermiteKan(descartes(69)), false)
+  assert.equal(pedrasNoMuro(descartes(75)), 0)
+})
+
+teste('muro: o descarte feito com o muro vazio é o último da mão', () => {
+  assert.equal(ultimoDescarteDaMao(descartes(69)), false)
+  assert.equal(ultimoDescarteDaMao(descartes(70)), true)
+})
+
+teste('Riichi com menos de 4 no muro não é declarado', () => {
+  const base = novaPartida()
+  const lances = descartes(66)
+  const partida = registrarDescartes({ ...base, registro: { lances, maos: {} } }, 0, ['1m'], { riichi: true }, contexto('r'))
+  assert.deepEqual(partida.placar.riichi, [])
+})
+
+teste('passar por um kan fechado não dá furiten', () => {
+  const fechado: Lance = { tipo: 'kakan', ordem: 1, cadeira: 1, pedra: '3s', fechado: true }
+  assert.equal(calcularFuriten([fechado], 0, ESPERAS).principal, null)
+})
+
+const dados = (lances: Lance[], cadeira: Cadeira, tipo: 'ron' | 'tsumo', emRiichi = false) =>
+  dadosDaPartidaParaMao({ lances, cadeira, tipo, emRiichi })
+const comRiichi = (lances: Lance[], ordem: number) =>
+  lances.map((lance) => (lance.ordem === ordem && lance.tipo === 'descarte' ? { ...lance, riichi: true } : lance))
+const chamado = (lances: Lance[], ordem: number, tipo: 'chi' | 'pon' | 'kan', cadeira: Cadeira = 2) =>
+  lances.map((lance) =>
+    lance.ordem === ordem && lance.tipo === 'descarte' ? { ...lance, chamadaPor: { cadeira, tipo } } : lance,
+  )
+
+teste('dados da partida: Riichi duplo no primeiro descarte, sem chamadas antes', () => {
+  const lances = comRiichi(linha([0, '1m'], [1, '2m']), 1)
+  assert.deepEqual(dados(lances, 0, 'tsumo', true).riichi, { duplo: true, ippatsu: true })
+  const comPon = comRiichi(chamado(linha([3, '9m'], [0, '1m']), 1, 'pon'), 2)
+  assert.equal(dados(comPon, 0, 'tsumo', true).riichi?.duplo, false)
+})
+
+teste('dados da partida: Ippatsu cai com novo descarte ou chamada de alguém', () => {
+  const base = linha([0, '1m'], [1, '2m'], [0, '3m'], [1, '4m'])
+  assert.equal(dados(comRiichi(base, 3), 0, 'tsumo', true).riichi?.ippatsu, true)
+  assert.equal(dados(comRiichi(base, 1), 0, 'tsumo', true).riichi?.ippatsu, false)
+  assert.equal(dados(chamado(comRiichi(base, 3), 4, 'pon'), 0, 'tsumo', true).riichi?.ippatsu, false)
+})
+
+teste('dados da partida: Riichi pelo menu não inventa duplo nem Ippatsu', () => {
+  assert.deepEqual(dados(linha([1, '1m']), 0, 'tsumo', true).riichi, { duplo: false, ippatsu: false })
+  assert.equal(dados(linha([1, '1m']), 0, 'tsumo', false).riichi, null)
+})
+
+teste('dados da partida: Haitei com o muro em zero e Houtei no último descarte', () => {
+  const lances = descartes(69).map((lance) => ({ ...lance, cadeira: 1 as Cadeira }))
+  assert.equal(dados(lances, 0, 'tsumo').ultimaPedra, true)
+  assert.equal(dados(lances.slice(0, 68), 0, 'tsumo').ultimaPedra, false)
+  const ate70 = descartes(70).map((lance) => ({ ...lance, cadeira: 1 as Cadeira }))
+  assert.equal(dados(ate70, 0, 'ron').ultimaPedra, true)
+  assert.equal(dados(lances, 0, 'ron').ultimaPedra, false)
+})
+
+teste('dados da partida: Rinshan no próprio kan e Chankan no kakan de outro', () => {
+  const fechado: Lance = { tipo: 'kakan', ordem: 1, cadeira: 0, pedra: '1m', fechado: true }
+  const kakanOutro: Lance = { tipo: 'kakan', ordem: 1, cadeira: 1, pedra: '1m' }
+  assert.equal(dados([fechado], 0, 'tsumo').kan, true)
+  assert.equal(dados(chamado(linha([1, '1m']), 1, 'kan', 0), 0, 'tsumo').kan, true)
+  assert.equal(dados([kakanOutro], 0, 'ron').kan, true)
+  assert.equal(dados([{ ...fechado, cadeira: 1 }], 0, 'ron').kan, false)
+  assert.equal(dados(linha([1, '1m']), 0, 'tsumo').kan, false)
+})
+
+teste('dados da partida: primeira compra, descartes do vencedor e kans', () => {
+  assert.equal(dados([], 0, 'tsumo').primeiraCompra, false)
+  assert.equal(dados(linha([0, '1m']), 1, 'tsumo').primeiraCompra, true)
+  assert.equal(dados(chamado(linha([0, '1m']), 1, 'pon'), 1, 'tsumo').primeiraCompra, false)
+  assert.equal(dados(linha([1, '1m'], [0, '2m']), 0, 'tsumo').primeiraCompra, false)
+  assert.equal(dados(linha([0, '1m']), 1, 'ron').primeiraCompra, false)
+  assert.deepEqual(dados(linha([0, '1m'], [1, '2m'], [0, '3m']), 0, 'ron').descartes, ['1m', '3m'])
+  const doisKans = chamado([...linha([1, '1m']), { tipo: 'kakan', ordem: 2, cadeira: 2, pedra: '5p' } as Lance], 1, 'kan')
+  assert.equal(dados(doisKans, 0, 'ron').kans, 2)
+})
+
+teste('pedras da mesa: descartes dos outros contam, os do vencedor já vão na mão', () => {
+  const lances = linha([1, '1m'], [2, '1m'], [0, '1m'], [3, '0p'])
+  assert.deepEqual(dados(lances, 0, 'tsumo').pedrasDaMesa.sort(), ['0p', '1m', '1m'])
+})
+
+teste('pedras da mesa: o que foi para a mão do vencedor não conta', () => {
+  const chamadaPeloVencedor = chamado(linha([1, '1m'], [2, '2m']), 1, 'pon', 0)
+  assert.deepEqual(dados(chamadaPeloVencedor, 0, 'tsumo').pedrasDaMesa, ['2m'])
+  assert.deepEqual(dados(linha([1, '1m'], [2, '2m']), 0, 'ron').pedrasDaMesa, ['1m'])
+  const chankan: Lance = { tipo: 'kakan', ordem: 1, cadeira: 1, pedra: '5p' }
+  assert.equal(dados([chankan], 0, 'ron').pedrasDaMesa.length, 3)
+})
+
+teste('pedras da mesa: Pon de outro tira 3 cópias e Kan tira 4', () => {
+  const pon = chamado(linha([1, '1m'], [3, '9m']), 1, 'pon', 2)
+  assert.equal(dados(pon, 0, 'tsumo').pedrasDaMesa.filter((p) => p === '1m').length, 3)
+  const kan = chamado(linha([1, '1m'], [3, '9m']), 1, 'kan', 2)
+  assert.equal(dados(kan, 0, 'tsumo').pedrasDaMesa.filter((p) => p === '1m').length, 4)
+  // Descarte do próprio vencedor chamado: uma cópia já está em Mao.descartes.
+  const proprio = chamado(linha([0, '1m'], [3, '9m']), 1, 'pon', 2)
+  assert.equal(dados(proprio, 0, 'tsumo').pedrasDaMesa.filter((p) => p === '1m').length, 2)
 })
 
 console.log(`Furiten ok: ${testes} testes.`)

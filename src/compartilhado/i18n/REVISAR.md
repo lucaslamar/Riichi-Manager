@@ -41,6 +41,33 @@ Como revisar:
 - Plural em lituano: `one` (1, 21, 31…), `few` (2–9, 22–29…), `many` (frações) e `other`
   (0, 10–20, 30…). Em coreano só existe `other`.
 
+## Instalação e tela cheia (pages.install*, pages.fullscreen*, pages.keepAwake*)
+
+Textos novos em es, ja, ko, lt e zh-Hans, sem revisão nativa. Em ko e zh-Hans, conferir
+"탁자" e "牌桌" para mesa; os nomes de Compartilhar e Adicionar à Tela de Início devem
+ser os que o iOS usa em cada idioma.
+
+## Uma flutuante e regras de cálculo da mesa
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans: tableConfig.uma*, tableConfig.calcRules,
+tableConfig.ruleKuitan, match.manual.sumWarning e calculator.chooseWait. Conferir
+"retorno" e "acima do retorno" em cada idioma, e 待ち/대기패/听牌 na espera.
+
+## Explicações das Configurações de mesa
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans: tableConfig.nagashiManganHelp,
+tableConfig.abortive*Help e tableConfig.recordDiscardsHelp. Termos técnicos a conferir:
+terminais e honras, muro, furiten.
+
+## Kuikae e limites do muro (Tutorial e Guia de bolso)
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans: os textos novos em chi, kan e riichi do
+Guia de bolso e nas páginas chi e kan-dora do Tutorial. Conferir o nome local de kuikae.
+
+## Dados vindos da partida
+
+Sem revisão nativa em es, ja, ko, lt e zh-Hans: match.fromMatch.*.
+
 ## Pontos de atenção
 
 - **ko, nomes de yaku:** mistura de leitura sino-coreana (일발, 청일색, 국사무쌍) e transliteração do

@@ -27,7 +27,7 @@ export default function AjudaCampo({ rotulo, children }: { rotulo: string; child
           aoFechar={() => setAberta(false)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha ajuda-campo-folha"
+          className="ajuda-campo-folha"
         >
           {children}
         </Modal>

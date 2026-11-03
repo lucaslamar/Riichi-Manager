@@ -45,6 +45,8 @@ export function calcularFuriten(
   // Vale também a pedra chamada por outro e a de kakan: nenhuma virou ron.
   for (const lance of lances) {
     if (lance.cadeira === cadeira || !espera.has(pedraBase(lance.pedra))) continue
+    // Em kan fechado não há ron, então passar por ele não é furiten.
+    if (lance.tipo === 'kakan' && lance.fechado) continue
     if (ordemRiichi !== undefined && lance.ordem > ordemRiichi) causar('riichi', lance)
     else if (lance.ordem > ordemUltimo) causar('temporario', lance)
   }

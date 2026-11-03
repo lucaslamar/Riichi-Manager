@@ -224,7 +224,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         chi: {
           nome: '吃',
-          texto: '拿走上家（左边玩家）打出的牌组成顺子。',
+          texto: '拿走上家（左边玩家）打出的牌组成顺子。 鸣牌后的同一巡，不能打出刚拿到的牌，也不能打出顺子另一端的牌（食替）：手中有3-4并吃2时，不能打出另一张2或5。碰牌后同样不能打出相同的牌。',
           aliases: ['吃'],
         },
         pon: {
@@ -235,7 +235,7 @@ export const conteudo: ConteudoGuiaBolso = {
         kan: {
           nome: '杠',
           texto:
-            '四张相同的牌（杠子）。补摸一张岭上牌，并再翻开一张宝牌指示牌。暗杠（四张都是自己的）不算副露。',
+            '四张相同的牌（杠子）。补摸一张岭上牌，并再翻开一张宝牌指示牌。暗杠（四张都是自己的）不算副露。 牌山摸完后不能开杠：已没有岭上牌可摸。',
           aliases: ['杠', '杠子', '暗杠', '明杠', '加杠'],
         },
         kuitan: {
@@ -260,7 +260,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         riichi: {
           nome: '立直',
-          texto: '门清时宣言听牌，并押上1,000点。1番。',
+          texto: '门清时宣言听牌，并押上1,000点。1番。 牌山剩余4张或以上时才能宣告。',
           aliases: ['立直'],
         },
         ippatsu: { nome: '一发', aliases: ['一发'] },

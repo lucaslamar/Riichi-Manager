@@ -6,6 +6,7 @@ import { nomeYakuExibido } from '@/dominios/calculadora-mao/logica/nomesYaku'
 import { CADEIRAS, type Cadeira, type EventoPartida } from '../../logica/partida'
 import type { MaoMontada } from '../../logica/tipos-integracao'
 import LinhaPedras from './LinhaPedras'
+import ResumoRegrasCalculo from './ResumoRegrasCalculo'
 
 /** Pedras da batida, separadas das outras; a batida em chamada já está no grupo. */
 function partesDaMao({ mao }: MaoMontada) {
@@ -63,7 +64,7 @@ export default function MaoDoHistorico({
           aoFechar={() => setAberta(false)}
           rotuloFechar={t('actions.close')}
           tamanho="media"
-          className="modal-folha modal-resultado"
+          className="modal-resultado"
         >
           <LinhaPedras {...partesDaMao(montada)} grande />
           <ExibicaoCompleta
@@ -72,6 +73,9 @@ export default function MaoDoHistorico({
             yakuSelecionado={yakuAberto}
             aoSelecionarYaku={setYakuAberto}
           />
+          {montada.regras && (
+            <ResumoRegrasCalculo regras={montada.regras} className="ptd-apoio mesa-regras-ativas" />
+          )}
           <div className="divisor-resultado" />
           <ul className="ptd-linhas">
             {CADEIRAS.map((outra) => (

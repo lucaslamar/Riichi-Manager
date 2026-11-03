@@ -51,9 +51,22 @@ export default function PaginaCalculadoraMao({
             ventoRodada: contextoCenterpiece.ventoRodada,
             ventoAssento: contextoCenterpiece.ventoAssento,
             honba: contextoCenterpiece.honba,
-            riichi: contextoCenterpiece.jogadorRiichi ? { duplo: false, ippatsu: false } : null,
+            riichi: contextoCenterpiece.dados
+              ? contextoCenterpiece.dados.riichi
+              : contextoCenterpiece.jogadorRiichi
+                ? { duplo: false, ippatsu: false }
+                : null,
+            // Riichi e benção não andam juntos: a opção de Riichi some com a benção.
+            ...(contextoCenterpiece.dados && {
+              ultimaPedra: contextoCenterpiece.dados.ultimaPedra,
+              kan: contextoCenterpiece.dados.kan,
+              bencao: contextoCenterpiece.dados.primeiraCompra && !contextoCenterpiece.dados.riichi,
+              descartes: contextoCenterpiece.dados.descartes,
+            }),
           },
+          pedrasDaMesa: contextoCenterpiece.dados?.pedrasDaMesa,
           fluxoCompleto: true,
+          configuracaoInicial: contextoCenterpiece.regras,
         }
       : { fluxoCompleto: telaGrande },
   )
@@ -95,7 +108,7 @@ export default function PaginaCalculadoraMao({
         if (convertido) {
           aoUsarResultado({
             ...convertido,
-            maoMontada: montarMaoParaHistorico(calculadora.mao, calculadora.resultado),
+            maoMontada: montarMaoParaHistorico(calculadora.mao, calculadora.resultado, contextoCenterpiece?.regras),
           })
         }
       }
@@ -106,7 +119,8 @@ export default function PaginaCalculadoraMao({
       <ModoCompletoCalculadora
         estado={calculadora}
         cabecalho={contextoCenterpiece ? null : <BarraCalculadora modo="completo" />}
-        aoAbrirRegras={() => calculadora.setModalRegrasAberto(true)}
+        // Na partida as regras são as da mesa, decididas ao criá-la.
+        aoAbrirRegras={contextoCenterpiece?.regras ? undefined : () => calculadora.setModalRegrasAberto(true)}
         aoUsarMao={aoUsarMao}
         contextoCenterpiece={contextoCenterpiece}
         entradaNotacao={entradaNotacao}

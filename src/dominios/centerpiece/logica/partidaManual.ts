@@ -4,23 +4,15 @@
  */
 import { alterarConfig, type ConfigMesa } from './configMesa'
 import { calcularResultado, criarPartida, type Partida } from './partida'
+import type { UmaMesa } from './uma'
 
 export interface DadosPartidaManual {
   jogadorIds: readonly [string, string, string, string]
   nomes: readonly string[]
   pontos: readonly [number, number, number, number]
-  uma: ConfigMesa['uma']
-  /** Total que vai para o 1º, em pontos (20.000). */
-  oka: number
-}
-
-/**
- * A partida não pergunta os pontos iniciais: saem da soma da mesa. Arredonda para
- * cima porque palitos que ninguém ganhou fazem a soma ficar um pouco abaixo.
- */
-function pontosIniciais(pontos: readonly number[]) {
-  const soma = pontos.reduce((total, valor) => total + valor, 0)
-  return Math.ceil(soma / 4 / 1000) * 1000
+  pontosPartida: number
+  pontosRetorno: number
+  uma: UmaMesa
 }
 
 export function criarPartidaManual(
@@ -29,11 +21,10 @@ export function criarPartidaManual(
   dados: DadosPartidaManual,
   agora: string,
 ): Partida {
-  const pontosPartida = pontosIniciais(dados.pontos)
   const config = alterarConfig(base, {
-    pontosPartida,
-    pontosRetorno: pontosPartida + dados.oka / 4,
-    uma: [...dados.uma],
+    pontosPartida: dados.pontosPartida,
+    pontosRetorno: dados.pontosRetorno,
+    uma: dados.uma,
   })
   const partida = criarPartida(id, config, dados.jogadorIds, agora, dados.nomes)
   const comPontos: Partida = {

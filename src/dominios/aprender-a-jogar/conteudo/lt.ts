@@ -512,6 +512,10 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'Po chi jūsų ranka tampa **atvira**.' },
+          {
+            type: 'text',
+            md: '**Draudžiamas keitimas (kuikae):** tą patį ėjimą, kai paskelbei, negali išmesti paimto akmens ar akmens kitame sekos gale. Turint 3-4 ir paėmus 2, negalima išmesti nei kito 2, nei 5. Po Pon negalima išmesti tokio paties akmens.',
+          },
         ],
       },
       {
@@ -1083,6 +1087,10 @@ const modulos: TutorialModule[] = [
           {
             type: 'text',
             md: 'Kiekvienas kan apverčia dar vieną indikatorių, **kan dora**: viršutinį kito stulpelio akmenį (4-ojo, paskui 5-ojo…). Jis veikia kaip pirmasis indikatorius.',
+          },
+          {
+            type: 'text',
+            md: 'Kan negalima skelbti, kai siena baigėsi: nebėra pakaitinio akmens.',
           },
         ],
       },

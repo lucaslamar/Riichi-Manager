@@ -15,6 +15,7 @@ interface OpcionsIniciaisCalculadoraHanFu {
   initialAgari?: AgariHanFu
   initialIsOya?: boolean
   initialHonba?: number
+  basengo?: boolean
 }
 
 export function useCalculadoraHanFu(opcoes?: OpcionsIniciaisCalculadoraHanFu) {
@@ -34,8 +35,9 @@ export function useCalculadoraHanFu(opcoes?: OpcionsIniciaisCalculadoraHanFu) {
         ehDealer: isOya,
         tipoVitoria: agari,
         honba,
+        basengo: opcoes?.basengo,
       }),
-    [agari, fuNormalizado, han, honba, isOya],
+    [agari, fuNormalizado, han, honba, isOya, opcoes?.basengo],
   )
   const referenciaRapida = useMemo(
     () =>

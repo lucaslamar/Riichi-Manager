@@ -13,6 +13,7 @@ import {
   desfazerUltimoLance,
   descartesDe,
   marcarChamada,
+  muroPermiteRiichi,
   pedraBase,
   REGISTRO_VAZIO,
   ultimoLanceDe,
@@ -45,7 +46,12 @@ export function registrarDescartes(
   const jaDeitou = descartesDe(registro.lances, cadeira).some((descarte) => descarte.riichi)
   const emRiichi = partida.placar.riichi.includes(cadeira)
 
-  if (opcoes.riichi && !emRiichi && podeDeclararRiichi(partida.placar, cadeira)) {
+  if (
+    opcoes.riichi &&
+    !emRiichi &&
+    podeDeclararRiichi(partida.placar, cadeira) &&
+    muroPermiteRiichi(registro.lances)
+  ) {
     const comRiichi = declararRiichi(partida, cadeira, contexto)
     return {
       ...comRiichi,
@@ -62,13 +68,21 @@ export function registrarDescartes(
   return { ...partida, registro: adicionarDescartes(registro, cadeira, pedras, { indiceRiichi, antes }) }
 }
 
-export function registrarKakan(partida: Partida, cadeira: Cadeira, pedra: CodigoPedra): Partida {
+export function registrarKakan(
+  partida: Partida,
+  cadeira: Cadeira,
+  pedra: CodigoPedra,
+  fechado = false,
+): Partida {
   return {
     ...partida,
-    registro: adicionarKakan(registroDe(partida), cadeira, pedra, {
-      vezAntes: partida.vez,
-      eventosAntes: partida.eventos.length,
-    }),
+    registro: adicionarKakan(
+      registroDe(partida),
+      cadeira,
+      pedra,
+      { vezAntes: partida.vez, eventosAntes: partida.eventos.length },
+      fechado,
+    ),
   }
 }
 

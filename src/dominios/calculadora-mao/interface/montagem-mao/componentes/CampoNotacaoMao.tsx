@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { SELETOR_CAMADAS } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
+import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import { nomePedraAcessivel } from '../../constantes'
 import {
   chamadasPossiveis,
   fecharPendentes,
@@ -12,6 +14,8 @@ import {
   sequenciasChiComNumero,
   slotsDosPendentes,
   tipoDoGrupoPendente,
+  type CodigoPedra,
+  type EsperaPossivel,
   type Meld,
 } from '../../../logica/mao'
 import './campo-notacao-mao.css'
@@ -32,6 +36,10 @@ interface PropsCampoNotacaoMao {
   chamadaArmada: Meld['tipo'] | null
   /** Marca uma chamada (tocar de novo desmarca) ou, com `null`, desmarca. */
   aoArmarChamada: (tipo: Meld['tipo'] | null) => void
+  /** Esperas da mão em tenpai, as mesmas do teclado de pedras. */
+  esperas: EsperaPossivel[]
+  rotuloEspera: (espera: EsperaPossivel) => string
+  aoEscolherEspera: (pedra: CodigoPedra) => void
 }
 
 interface Tecla {
@@ -47,7 +55,7 @@ interface Tecla {
  *
  *   ‹ Peças           AC  ⌫   ← barra de ferramentas, como a da calculadora
  *   ─────────────────────────
- *   Chi  Pon  Kan  Kan f.      ← linha de funções (como C ( ) % ÷)
+ *   Chi  Pon  Kan  Kan f.      ← linha de funções (como C ( ) % ÷); deitado, vai para a esquerda
  *    1    2    3    m          ← números na ordem do teclado do celular
  *    4    5    6    p          ← naipes na coluna dos operadores
  *    7    8    9    s
@@ -82,17 +90,15 @@ const CHAMADAS: {
   marca: string
   rotulo: string
   variante: string
-  area: string
 }[] = [
-  { tipo: 'chii', marca: 'c', rotulo: 'melds.chii', variante: 'chi', area: 'chi' },
-  { tipo: 'pon', marca: 'c', rotulo: 'melds.pon', variante: 'pon', area: 'pon' },
-  { tipo: 'kanAberto', marca: 'c', rotulo: 'melds.kanCompact', variante: 'kan-open', area: 'kan' },
+  { tipo: 'chii', marca: 'c', rotulo: 'melds.chii', variante: 'chi' },
+  { tipo: 'pon', marca: 'c', rotulo: 'melds.pon', variante: 'pon' },
+  { tipo: 'kanAberto', marca: 'c', rotulo: 'melds.kanCompact', variante: 'kan-open' },
   {
     tipo: 'kanFechado',
     marca: 'a',
     rotulo: 'melds.kanClosedCompact',
     variante: 'kan-closed',
-    area: 'kanf',
   },
 ]
 
@@ -116,6 +122,9 @@ export function CampoNotacaoMao({
   erro = null,
   chamadaArmada,
   aoArmarChamada,
+  esperas,
+  rotuloEspera,
+  aoEscolherEspera,
 }: PropsCampoNotacaoMao) {
   const { t } = useI18n()
   const idMensagem = useId()
@@ -320,22 +329,39 @@ export function CampoNotacaoMao({
         </div>
       )}
 
+      {esperas.length > 0 && !pendentes && !chamadaArmada && (
+        <div className="opcoes-espera-notacao" role="group" aria-label={t('calculator.chooseWait')}>
+          <span>{t('calculator.chooseWait')}</span>
+          <div>
+            {esperas.map((espera) => (
+              <button
+                key={espera.pedra}
+                className="opcao-espera-notacao"
+                type="button"
+                aria-label={`${nomePedraAcessivel(espera.pedra)}, ${rotuloEspera(espera)}`}
+                onClick={() => aoEscolherEspera(espera.pedra)}
+              >
+                <span className="chip-pedra mini">
+                  <PedraSvg pedra={espera.pedra} />
+                </span>
+                <small>{rotuloEspera(espera)}</small>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {erro && (
         <small id={idMensagem} className="mensagem-campo-notacao-mao com-erro" role="alert">
           {erro}
         </small>
       )}
 
-      <div
-        className="teclado-notacao-mao"
-        role="group"
-        aria-label={t('notation.keyboard')}
-        aria-describedby={erro ? idMensagem : undefined}
-      >
+      <div className="chamadas-notacao-mao" role="group" aria-label={t('calculator.actionsMenu')}>
         {CHAMADAS.map((chamada) => (
           <button
             key={chamada.tipo}
-            className={`tecla-notacao-mao chamada area-${chamada.area} action-tab action-tab--${chamada.variante} ${
+            className={`tecla-notacao-mao chamada action-tab action-tab--${chamada.variante} ${
               chamadaArmada === chamada.tipo ? 'active' : ''
             }`.trim()}
             type="button"
@@ -347,6 +373,14 @@ export function CampoNotacaoMao({
             <span className="rotulo-tecla-notacao-mao">{t(chamada.rotulo)}</span>
           </button>
         ))}
+      </div>
+
+      <div
+        className="teclado-notacao-mao"
+        role="group"
+        aria-label={t('notation.keyboard')}
+        aria-describedby={erro ? idMensagem : undefined}
+      >
         {TECLAS.map((tecla) => (
           <button
             key={tecla.valor}

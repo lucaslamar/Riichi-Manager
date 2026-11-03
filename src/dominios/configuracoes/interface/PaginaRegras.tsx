@@ -1,6 +1,8 @@
-import { useId } from 'react'
-import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
-import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
+import { useId, useState } from 'react'
+import { entrarTelaCheia, suportaTelaCheia } from '@/compartilhado/adaptadores/telaCheia'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import { useInstalacao } from '@/compartilhado/interface/hooks/useInstalacao'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { PreferenciaTema } from '@/compartilhado/tema/temas'
 import packageJson from '../../../../package.json'
@@ -17,33 +19,16 @@ const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
  * calculadora ficam no menu contextual da Calculadora de Mão.
  */
 export default function PaginaRegras() {
-  const { t, idioma, idiomas, alterarIdioma } = useI18n()
+  const { t } = useI18n()
   const preferencias = usePreferencias()
-  const idSelectIdioma = useId()
   const idTituloTema = useId()
+  const { modo: modoInstalacao, instalar } = useInstalacao()
+  const [instrucaoAberta, setInstrucaoAberta] = useState(false)
+  const temTelaCheia = suportaTelaCheia()
 
   return (
     <section className="pagina-regras" aria-label={t('menu.rulesShort')}>
       <h2 className="sr-only">{t('menu.rules')}</h2>
-
-      <div className="cartao-regras">
-        <i className="fas fa-globe cartao-regras__icone" aria-hidden="true" />
-        <label className="cartao-regras__texto" htmlFor={idSelectIdioma}>
-          <strong>{t('menu.language')}</strong>
-        </label>
-        <select
-          id={idSelectIdioma}
-          className="cartao-regras__select"
-          value={idioma}
-          onChange={(evento) => alterarIdioma(evento.target.value as IdiomaSuportado)}
-        >
-          {idiomas.map((opcao) => (
-            <option key={opcao} value={opcao} lang={opcao}>
-              {ROTULOS_IDIOMA[opcao]}
-            </option>
-          ))}
-        </select>
-      </div>
 
       <div
         className="cartao-regras cartao-regras--empilhado"
@@ -93,6 +78,41 @@ export default function PaginaRegras() {
         aoMudar={(ligado) => preferencias.alterar('toqueAmpliado', ligado)}
       />
 
+      {modoInstalacao && (
+        <CartaoAcao
+          icone="fa-download"
+          titulo={t('pages.installTitle')}
+          descricao={t('pages.installHelp')}
+          aoTocar={modoInstalacao === 'botao' ? () => void instalar() : () => setInstrucaoAberta(true)}
+        />
+      )}
+      {temTelaCheia && (
+        <>
+          <CartaoAcao
+            icone="fa-expand"
+            titulo={t('pages.fullscreenTitle')}
+            descricao={t('pages.fullscreenHelp')}
+            aoTocar={entrarTelaCheia}
+          />
+          <CartaoSwitch
+            icone="fa-up-right-and-down-left-from-center"
+            titulo={t('pages.fullscreenOnTable')}
+            descricao={t('pages.fullscreenOnTableHelp')}
+            ligado={preferencias.telaCheiaMesa}
+            aoMudar={(ligado) => preferencias.alterar('telaCheiaMesa', ligado)}
+          />
+        </>
+      )}
+      {'wakeLock' in navigator && (
+        <CartaoSwitch
+          icone="fa-sun"
+          titulo={t('pages.keepAwake')}
+          descricao={t('pages.keepAwakeHelp')}
+          ligado={preferencias.telaAcesaMesa}
+          aoMudar={(ligado) => preferencias.alterar('telaAcesaMesa', ligado)}
+        />
+      )}
+
       <div className="sobre-mojoca">
         <h3>{t('pages.aboutTitle')}</h3>
         <p>{t('pages.aboutText')}</p>
@@ -106,7 +126,41 @@ export default function PaginaRegras() {
           <i className="fas fa-bug" aria-hidden="true" /> {t('pages.reportIssue')}
         </a>
       </div>
+
+      {instrucaoAberta && (
+        <Modal
+          titulo={t('pages.installTitle')}
+          aoFechar={() => setInstrucaoAberta(false)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+        >
+          <p>{t('pages.installIosSteps')}</p>
+        </Modal>
+      )}
     </section>
+  )
+}
+
+/** Cartão inteiro como botão, para o que acontece na hora. */
+function CartaoAcao({
+  icone,
+  titulo,
+  descricao,
+  aoTocar,
+}: {
+  icone: string
+  titulo: string
+  descricao: string
+  aoTocar: () => void
+}) {
+  return (
+    <button type="button" className="cartao-regras cartao-regras--switch" onClick={aoTocar}>
+      <i className={`fas ${icone} cartao-regras__icone`} aria-hidden="true" />
+      <span className="cartao-regras__texto">
+        <strong>{titulo}</strong>
+        <span>{descricao}</span>
+      </span>
+    </button>
   )
 }
 

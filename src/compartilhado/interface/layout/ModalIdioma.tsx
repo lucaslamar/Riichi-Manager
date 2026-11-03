@@ -1,0 +1,39 @@
+import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
+import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
+import Modal from '../componentes/modal/Modal'
+
+/** Lista de idiomas, aberta pela barra de navegação. */
+export default function ModalIdioma({ aoFechar }: { aoFechar: () => void }) {
+  const { t, idioma, idiomas, alterarIdioma } = useI18n()
+
+  const escolher = (opcao: IdiomaSuportado) => {
+    alterarIdioma(opcao)
+    aoFechar()
+  }
+
+  return (
+    <Modal
+      titulo={t('menu.language')}
+      aoFechar={aoFechar}
+      rotuloFechar={t('actions.close')}
+      tamanho="pequena"
+    >
+      <div className="lista-idiomas" role="radiogroup" aria-label={t('menu.language')}>
+        {idiomas.map((opcao) => (
+          <button
+            key={opcao}
+            type="button"
+            role="radio"
+            aria-checked={opcao === idioma}
+            className={`item-idioma${opcao === idioma ? ' ativo' : ''}`}
+            lang={opcao}
+            onClick={() => escolher(opcao)}
+          >
+            <span>{ROTULOS_IDIOMA[opcao]}</span>
+            {opcao === idioma && <i className="fas fa-check" aria-hidden="true" />}
+          </button>
+        ))}
+      </div>
+    </Modal>
+  )
+}

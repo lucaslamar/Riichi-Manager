@@ -107,7 +107,6 @@ export default function ModalBatida({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
       rodape={
         <div className="ptd-acoes-folha">
           <button type="button" className="btn-contorno" onClick={voltar}>

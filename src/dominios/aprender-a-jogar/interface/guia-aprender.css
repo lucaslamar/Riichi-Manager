@@ -30,6 +30,7 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
 
 .guia-aprender--capa .guia-palco {
   padding-bottom: calc(var(--altura-barra-inferior, 0px) + env(safe-area-inset-bottom, 0px));
+  padding-left: var(--largura-trilho, 0px);
 }
 
 .guia-livro,
@@ -1085,48 +1086,7 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
   line-height: 1.55;
 }
 
-/* ─── Índice: painel de baixo no celular, preso ao botão no tablet ────────── */
-.guia-indice-fundo {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  background: var(--guia-veu);
-  animation: guia-aparecer 160ms ease;
-}
-
-.guia-indice {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  max-height: 82dvh;
-  flex-direction: column;
-  border-radius: 16px 16px 0 0;
-  background: var(--guia-papel);
-  color: var(--guia-tinta);
-  outline: none;
-  animation: guia-subir 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.guia-indice__cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px 4px 24px;
-}
-
-.guia-indice__cabecalho h2 {
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 800;
-}
-
-.guia-indice__corpo {
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0 24px calc(20px + env(safe-area-inset-bottom));
-}
+/* ─── Índice: o esqueleto é o da Modal base ───────────────────────────────── */
 
 .guia-indice__secao {
   margin: 18px 0 6px;
@@ -1369,23 +1329,6 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
     --yaku-pedra: 42px;
   }
 
-  /* Índice como painel preso ao botão, no canto de cima. */
-  .guia-indice-fundo {
-    background: transparent;
-  }
-
-  .guia-indice {
-    top: calc(var(--guia-barra) + 8px + env(safe-area-inset-top));
-    right: calc(12px + env(safe-area-inset-right));
-    bottom: auto;
-    left: auto;
-    width: 380px;
-    max-height: calc(100dvh - var(--guia-barra) - 32px - env(safe-area-inset-top));
-    border: 1px solid var(--guia-linha);
-    border-radius: 14px;
-    box-shadow: 0 12px 32px rgb(15 23 42 / 16%);
-    animation: guia-aparecer 160ms ease;
-  }
 }
 
 /* Celular deitado: menos espaço em cima e embaixo. */

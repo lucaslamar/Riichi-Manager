@@ -391,7 +391,7 @@
   position: fixed;
   right: 16px;
   bottom: calc(var(--altura-barra-inferior, 0px) + 12px);
-  left: 16px;
+  left: calc(var(--largura-trilho, 0px) + 16px);
   z-index: 60;
   margin: 0;
   border-radius: 10px;
@@ -668,42 +668,74 @@
 }
 
 /* ─── Registro de descartes ───────────────────────────────────────────────── */
+/* Linhas de 6, como na mesa. A célula é larga o bastante para a pedra deitada. */
 .dsc-rio {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  display: grid;
+  width: min(100%, 320px);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px 2px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.dsc-rio-lugar {
+  position: relative;
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mesmo corpo de pedra da Calculadora de Mão (.chip-pedra). */
 .dsc-pedra {
   display: inline-flex;
   box-sizing: border-box;
-  min-width: 44px;
-  min-height: 56px;
   align-items: center;
   justify-content: center;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  padding: 2px;
-  background: transparent;
-  font: inherit;
+  cursor: default;
 }
 
 .dsc-pedra .tile-img {
-  width: 32px;
+  width: 100%;
   height: auto;
 }
 
 .dsc-pedra--riichi {
   border-color: var(--cor-vez);
+  transform: rotate(90deg);
 }
 
 .dsc-pedra--chamada {
-  border-style: dashed;
-  border-color: var(--entrada-borda);
-  opacity: 0.65;
+  opacity: 0.5;
+}
+
+.dsc-pedra--apos-riichi {
+  border: 2px solid var(--cor-vez);
+  box-shadow: 0 0 0 2px var(--cor-vez);
+}
+
+.dsc-pedra-seta {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  color: var(--texto-principal);
+  font-size: 0.75rem;
+}
+
+.dsc-riichi-desde {
+  margin: 0 0 8px;
+  color: var(--texto-principal);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* Pedra que acabou de sair, em destaque acima da pergunta. */
+.dsc-pedra-destaque {
+  display: inline-flex;
+  width: 52px;
+  height: 70px;
+  align-self: center;
 }
 
 .dsc-entrada,
@@ -726,15 +758,46 @@
   flex: 1 1 auto;
 }
 
+/* Marcas do próximo descarte: uma faixa só, no mesmo controle das regras. */
 .dsc-marcas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  grid-template-columns: none;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
 }
 
-.dsc-marcas > .ptd-opcao {
-  width: auto;
-  flex: 1 1 30%;
+.dsc-marcas button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 4px;
+  font-size: 0.875rem;
+  line-height: 1.15;
+}
+
+.dsc-marcas button + button {
+  border-left: 1px solid var(--linha-divisoria);
+}
+
+.dsc-marcas button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.dsc-marcas button:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+.dsc-notacao {
+  display: none;
+}
+
+/* Tela com sidebar: quem digita tem teclado físico. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .dsc-notacao {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .dsc-erro {
@@ -830,7 +893,10 @@
   display: block;
   min-width: 0;
   flex: 0 1 22px;
+  box-sizing: border-box;
+  border: 1px solid var(--pedra-borda, #ddd);
   border-radius: 3px;
+  background: var(--pedra-face, var(--branco));
 }
 
 .linha-pedras-pedra .tile-img {
@@ -844,12 +910,19 @@
   outline-offset: 1px;
 }
 
+/* No detalhe a mão é grande: em vez de encolher, as pedras descem de linha. */
 .linha-pedras--grande {
+  flex-wrap: wrap;
   margin-bottom: 12px;
 }
 
+.linha-pedras--grande .linha-pedras-grupo {
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+}
+
 .linha-pedras--grande .linha-pedras-pedra {
-  flex-basis: 34px;
+  flex: 0 0 34px;
 }
 
 .mao-historico {
@@ -924,21 +997,6 @@ body:has(.ptd-modulo) {
   min-height: 44px;
 }
 
-.fin-sinal {
-  width: 44px;
-  min-height: 44px;
-  flex: 0 0 auto;
-  border: 1px solid var(--entrada-borda);
-  border-radius: 10px;
-  padding: 0;
-  color: var(--texto-principal);
-  background: var(--superficie);
-  box-shadow: none;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 800;
-}
-
 .fin-uma {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -948,4 +1006,250 @@ body:has(.ptd-modulo) {
 .mesa-btn-principal:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+/* ─── Tablet e desktop: menu em grade de blocos ───────────────────────────── */
+@media (min-width: 768px) and (min-height: 561px) {
+  .ptd-inicio:has(> .ptd-cards) {
+    width: min(100%, 760px);
+  }
+
+  /* 3 blocos de jogar em cima e 4 de consulta embaixo, sem vão na última linha. */
+  .ptd-cards {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .ptd-card-inicio {
+    grid-column: span 3;
+  }
+
+  .ptd-card-inicio:nth-child(-n + 3) {
+    grid-column: span 4;
+  }
+
+  .ptd-card-inicio {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .ptd-card-inicio > i {
+    font-size: 2rem;
+  }
+}
+
+/* ─── Celular deitado: colunas, sem nada esticado na largura toda ─────────── */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .ptd-inicio {
+    width: 100%;
+  }
+
+  /* Duas linhas na altura livre: 3 blocos de jogar em cima e 4 de consulta embaixo. */
+  .ptd-cards {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: minmax(120px, calc((100dvh - 41px - 24px - 8px) / 2));
+    gap: 8px;
+    margin-top: 0;
+  }
+
+  .ptd-card-inicio {
+    display: flex;
+    min-height: 0;
+    grid-column: span 3;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px;
+    text-align: center;
+  }
+
+  .ptd-card-inicio:nth-child(-n + 3) {
+    grid-column: span 4;
+  }
+
+  .ptd-card-inicio > i {
+    font-size: 1.5rem;
+  }
+
+  /* Nova partida: os 4 assentos numa linha, regras e Iniciar na coluna da direita. */
+  .ptd-setup {
+    display: grid;
+    width: 100%;
+    min-height: calc(100dvh - 41px);
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+    grid-template-rows: auto minmax(0, 1fr) 48px;
+    gap: 8px 12px;
+    padding: 8px 12px;
+  }
+
+  .ptd-setup > .ptd-assentos {
+    grid-area: 1 / 1 / 3 / 2;
+    max-height: none;
+    min-height: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 8px;
+  }
+
+  .ptd-setup .ptd-assento {
+    min-height: 88px;
+  }
+
+  .ptd-setup .ptd-assento-kanji {
+    font-size: 2rem;
+  }
+
+  .ptd-setup > .ptd-btn-largo {
+    grid-area: 3 / 1;
+    min-height: 0;
+  }
+
+  .ptd-setup > .ptd-segmentos {
+    grid-area: 1 / 2;
+  }
+
+  /* Ocupa a altura entre os segmentos e o Iniciar, sem vão na coluna. */
+  .ptd-setup > .ptd-resumo-regras {
+    grid-area: 2 / 2;
+  }
+
+  /* Fim da coluna, sem ficar por cima do conteúdo. */
+  .ptd-setup > .ptd-rodape-fixo {
+    position: static;
+    grid-area: 3 / 2;
+    padding: 0;
+    background: transparent;
+  }
+
+  .ptd-setup > .ptd-rodape-fixo > .ptd-btn-largo {
+    height: 100%;
+    min-height: 0;
+  }
+
+  /* Registrar partida: jogadores e pontos à esquerda, uma e oka à direita. */
+  .fin-tela {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    gap: 8px 16px;
+  }
+
+  .fin-tela > * {
+    grid-column: 2;
+  }
+
+  .fin-tela > .ptd-rotulo:first-of-type {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .fin-tela > .fin-linhas {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .fin-tela > .fin-aviso-soma {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .ptd-lista-historico,
+  .ptd-ranking,
+  .ptd-lista-mesas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 8px;
+  }
+}
+
+/* Modal de descarte deitado: entrada à esquerda e teclado à direita, sem rolar. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .modal.dsc-modal {
+    --modal-largura: 92vw;
+    width: 92vw;
+  }
+
+  .dsc-modal .modal-cabecalho {
+    padding-block: 2px;
+  }
+
+  .dsc-entrada {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    align-content: start;
+    margin-top: 4px;
+  }
+
+  .dsc-entrada > * {
+    grid-column: 1;
+  }
+
+  .dsc-entrada > .dsc-teclado {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+  }
+
+  .dsc-modal .modal-corpo {
+    padding-bottom: 2px;
+  }
+
+  .dsc-modal .modal-rodape {
+    padding-block: 4px;
+  }
+}
+
+/* Rio escolhido no modal de descarte: abaixo dos botões de cada jogador. */
+.dsc-rio-visto {
+  margin-top: 8px;
+}
+
+/* Aviso da finalização da mão: o que veio preenchido pela partida. */
+.aviso-dados-partida {
+  margin-bottom: 8px;
+  border: 1px solid var(--primario);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font-size: 0.875rem;
+}
+
+.aviso-dados-partida p {
+  margin: 2px 0 0;
+}
+
+.aviso-dados-partida-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block: -8px;
+}
+
+.aviso-dados-partida-fechar {
+  width: 44px;
+  height: 44px;
+  margin-right: -12px;
+  border: 0;
+  padding: 0;
+  color: var(--texto-principal);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.aviso-dados-partida-ajuda {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}
+
+.aviso-dados-partida-alerta {
+  color: var(--texto-aviso);
+  font-weight: 700;
 }

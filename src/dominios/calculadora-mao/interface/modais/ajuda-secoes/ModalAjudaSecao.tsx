@@ -120,7 +120,6 @@ export default function ModalAjudaSecao({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      estiloTitulo="rotulo"
       className={`modal-ajuda-secao${tema ? ` modal-ajuda-secao--${tema}` : ''}${
         abas ? ' modal-ajuda-secao--abas' : ''
       }`}

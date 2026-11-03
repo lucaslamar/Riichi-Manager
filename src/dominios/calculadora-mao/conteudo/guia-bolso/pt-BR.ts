@@ -250,7 +250,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         chi: {
           nome: 'Chi',
-          texto: 'Pegar o descarte do jogador à sua esquerda para formar uma sequência.',
+          texto: 'Pegar o descarte do jogador à sua esquerda para formar uma sequência. Depois de chamar, você não pode descartar na mesma vez a pedra que pegou nem a da outra ponta da sequência: com 3-4 na mão, quem pega o 2 não pode descartar outro 2 nem o 5 (kuikae). No Pon vale o mesmo para a pedra igual.',
           aliases: ['chi', 'chii'],
         },
         pon: {
@@ -261,7 +261,7 @@ export const conteudo: ConteudoGuiaBolso = {
         kan: {
           nome: 'Kan',
           texto:
-            'Quatro pedras iguais. Você compra uma pedra de reposição e revela mais um indicador de dora. O kan fechado (as quatro são suas) não abre a mão.',
+            'Quatro pedras iguais. Você compra uma pedra de reposição e revela mais um indicador de dora. O kan fechado (as quatro são suas) não abre a mão. Não dá para fazer kan quando o muro acabou: sem pedras, não há reposição.',
           aliases: ['kan', 'kans', 'kantsu', 'quad', 'quads'],
         },
         kuitan: {
@@ -288,7 +288,7 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         riichi: {
           nome: 'Riichi',
-          texto: 'Declarar tenpai com a mão fechada, apostando 1.000 pontos. Vale 1 han.',
+          texto: 'Declarar tenpai com a mão fechada, apostando 1.000 pontos. Vale 1 han. Só pode declarar com 4 pedras ou mais no muro.',
           aliases: ['riichi'],
         },
         ippatsu: { nome: 'Ippatsu', aliases: ['ippatsu', 'ipatsu'] },

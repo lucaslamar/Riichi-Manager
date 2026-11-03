@@ -23,23 +23,6 @@
   padding: 7px 12px 7px 7px;
 }
 
-/* Só aparece no celular deitado; lá a barra inferior sai. */
-.botao-menu-global {
-  display: none;
-  width: 44px;
-  min-height: 36px;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 8px;
-  padding: 0;
-  background: transparent;
-  box-shadow: none;
-  color: var(--cor-primario, #1a4a8a);
-  cursor: pointer;
-}
-
 .marca-aplicacao {
   display: inline-flex;
   min-width: 0;
@@ -264,9 +247,6 @@
     min-height: 50px;
     padding: 6px 12px 6px 8px;
   }
-
-  /* Sem hambúrguer nesta faixa, mas o lugar dele fica reservado (invisível e
-     fora do Tab): o MOJOCA não muda de posição quando a seta de voltar aparece. */
 }
 
 @media (min-width: 1024px) and (orientation: landscape) {
@@ -452,29 +432,44 @@
 }
 
 /*
- * Upper bound is 1023px (not 950px) so the iPhone Pro Max / Plus in landscape
- * (956×440 / 932×430) also get the drawer instead of the tablet bottom bar.
- * The max-height keeps every tablet out regardless of width.
+ * Celular deitado: a barra inferior vira trilho à esquerda, com os mesmos itens
+ * e páginas, e libera a altura toda. Limite de 1023px para pegar o iPhone Pro Max
+ * (956×440); a altura máxima deixa os tablets de fora.
  */
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
-  .botao-menu-global {
-    display: inline-flex;
-  }
-
-  /* Com seta de voltar, o menu sai junto com a marca. */
-  .barra-marca-aplicacao:has(.botao-voltar-tela) .botao-menu-global {
-    display: none;
+  :root {
+    --altura-barra-inferior: 0px;
+    --largura-trilho: calc(64px + env(safe-area-inset-left, 0px));
   }
 
   .barra-navegacao-inferior {
-    display: none;
+    top: 0;
+    right: auto;
+    width: var(--largura-trilho);
+    border-top: 0;
+    border-right: 1px solid color-mix(in srgb, var(--cor-texto, #000000) 10%, transparent);
+    padding: 0 0 0 env(safe-area-inset-left, 0px);
+    box-shadow: none;
   }
 
-  :root {
-    --altura-barra-inferior: 0px;
+  .barra-pagina {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .item-tab-inferior {
+    width: 100%;
+    min-height: 44px;
+    padding: 2px;
+  }
+
+  .item-tab-inferior i {
+    font-size: 1.1rem;
   }
 
   body {
+    padding-left: var(--largura-trilho) !important;
+    padding-right: env(safe-area-inset-right, 0px) !important;
     padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
@@ -482,12 +477,6 @@
     padding: 4px 0;
   }
 
-  /*
-   * Phones in landscape fall inside the 768–1023 tablet band, which pads the
-   * header with clamp(18px,3vw,32px) — ~28px — pushing the hamburger far from
-   * the edge. Pull it back to the side so it reads as a phone control, not a
-   * tablet one.
-   */
   .conteudo-cabecalho {
     padding-inline: 6px;
   }
@@ -635,62 +624,40 @@
   }
 }
 
-/* ─── Menu lateral do celular deitado ─────────────────────────────────────── */
-.gaveta-menu-fundo {
-  position: fixed;
-  inset: 0;
-  /* Acima do guia (100) e da barra dele (101). */
-  z-index: 110;
-  background: var(--cor-veu, rgba(15, 23, 42, 0.38));
+/* ─── Lista de idiomas ────────────────────────────────────────────────────── */
+.lista-idiomas {
+  display: grid;
+  gap: 4px;
 }
 
-.gaveta-menu {
+.item-idioma {
   display: flex;
-  overflow-y: auto;
-  width: min(320px, 82vw);
-  height: 100%;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px 12px;
-  background: var(--cor-nav, var(--cor-superficie));
-  color: var(--cor-texto);
-  animation: gaveta-entra 0.18s ease-out;
-}
-
-@keyframes gaveta-entra {
-  from {
-    transform: translateX(-100%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .gaveta-menu {
-    animation: none;
-  }
-}
-
-.gaveta-menu-cabecalho {
-  display: flex;
+  min-height: 48px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--cor-borda);
-  color: var(--cor-primario);
-}
-
-.gaveta-menu-fechar {
-  display: inline-flex;
-  width: 44px;
-  height: 44px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  padding: 0;
+  gap: 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px 12px;
   background: transparent;
-  box-shadow: none;
   color: var(--cor-texto);
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: left;
   cursor: pointer;
 }
 
-.gaveta-menu .item-menu-global {
-  min-height: 44px;
+.item-idioma.ativo {
+  border-color: var(--cor-primario-borda);
+  background: var(--cor-primario-suave);
+  color: var(--cor-primario);
+}
+
+.item-idioma:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+.botao-tela-cheia {
+  margin-left: auto;
 }

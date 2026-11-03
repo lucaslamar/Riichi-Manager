@@ -1,12 +1,11 @@
-import { useEffect, useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import type { ConteudoTutorial, TutorialModule } from '../../conteudo/tipos'
 import { idCapaParte, idQuizModulo, type PaginaLivro } from '../../logica/livro'
 
 /**
  * Índice do guia: as partes do livro (cada uma com os seus módulos e as
- * páginas de cada um), e Glossário. No celular abre como painel de baixo; no tablet, como
- * um painel preso ao botão do índice (só CSS).
+ * páginas de cada um), e Glossário.
  */
 export default function IndiceGuia({
   conteudo,
@@ -29,13 +28,8 @@ export default function IndiceGuia({
   aoFechar: () => void
 }) {
   const { t } = useI18n()
-  const painelRef = useRef<HTMLDivElement>(null)
   const atual = livro[indiceAtual]
   const moduloAtual = atual && 'modulo' in atual ? atual.modulo.id : undefined
-
-  useEffect(() => {
-    painelRef.current?.focus()
-  }, [])
 
   const indiceDe = (id: string) => livro.findIndex((pagina) => pagina.id === id)
 
@@ -93,34 +87,19 @@ export default function IndiceGuia({
   }
 
   return (
-    <div className="guia-indice-fundo" role="presentation" onClick={aoFechar}>
-      <div
-        ref={painelRef}
-        className="guia-indice"
-        role="dialog"
-        aria-label={t('learn.indexTitle')}
-        tabIndex={-1}
-        onClick={(evento) => evento.stopPropagation()}
-      >
-        <header className="guia-indice__cabecalho">
-          <div>
-            <h2>{t('learn.index')}</h2>
-            <p className="guia-indice__rank">
-              <i className="fas fa-medal" aria-hidden="true" />
-              {rotuloRank}
-            </p>
-          </div>
-          <button
-            type="button"
-            className="guia-botao-icone"
-            aria-label={t('learn.closeIndex')}
-            title={t('learn.closeIndex')}
-            onClick={aoFechar}
-          >
-            <i className="fas fa-xmark" aria-hidden="true" />
-          </button>
-        </header>
-
+    <Modal
+      titulo={t('learn.index')}
+      subtitulo={
+        <span className="guia-indice__rank">
+          <i className="fas fa-medal" aria-hidden="true" />
+          {rotuloRank}
+        </span>
+      }
+      aoFechar={aoFechar}
+      rotuloFechar={t('learn.closeIndex')}
+      tamanho="pequena"
+      className="guia-indice"
+    >
         <div className="guia-indice__corpo">
           {conteudo.tutorialParts.map((parte) => (
             <section key={parte.id} aria-labelledby={`guia-indice-${parte.id}`}>
@@ -151,7 +130,6 @@ export default function IndiceGuia({
             </ul>
           </section>
         </div>
-      </div>
-    </div>
+    </Modal>
   )
 }

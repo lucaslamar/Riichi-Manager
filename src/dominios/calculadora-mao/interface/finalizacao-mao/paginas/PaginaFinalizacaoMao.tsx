@@ -3,6 +3,7 @@ import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import ConstrutorMao from '../../montagem-mao/componentes/ConstrutorMao'
 import OpcoesMao from '../componentes/OpcoesMao'
 import ResultadoMaoCalculada from '../componentes/ResultadoMaoCalculada'
+import { AvisoDadosPartida } from '../componentes/AvisoDadosPartida'
 import { BarraResumoMao } from '../componentes/BarraResumoMao'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
@@ -74,6 +75,7 @@ export function PaginaFinalizacaoMao({
           )}
         </div>
         <div className="coluna-finalizacao-opcoes">
+          {contextoCenterpiece && <AvisoDadosPartida contexto={contextoCenterpiece} mao={estado.mao} />}
           <OpcoesMao
             estado={estado}
             embutido

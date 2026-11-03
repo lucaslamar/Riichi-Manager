@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-import { manterTelaAcesa } from '@/compartilhado/adaptadores/telaAcesa'
+import { useState } from 'react'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
+import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
@@ -24,6 +24,7 @@ import JogarDados from '../componentes/JogarDados'
 import { useGiroDaMesa } from '../hooks/useGiroDaMesa'
 import MesaQuadrada from '../componentes/MesaQuadrada'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
+import RecursosDaMesa from '../componentes/RecursosDaMesa'
 
 /**
  * Só o centro da mesa, para deixar no meio da mesa e ir girando o celular: tocar
@@ -40,13 +41,12 @@ export default function CenterpieceSimples({
   const [estado, setEstado] = useState<EstadoSimples>(() => carregarSimples(armazenamentoLocal))
   const [confirmando, setConfirmando] = useState(false)
   const [acoesAbertas, setAcoesAbertas] = useState(false)
+  const [honbaAberto, setHonbaAberto] = useState(false)
   const [dicaVisivel, setDicaVisivel] = useState(() => !dicaSimplesFoiVista(armazenamentoLocal))
   // Lado que caiu nos dados; a mão seguinte começa sem destaque.
   const [ladoSorteado, setLadoSorteado] = useState<Cadeira | null>(null)
 
   const giro = useGiroDaMesa()
-
-  useEffect(() => manterTelaAcesa(), [])
 
   const mudar = (proximo: EstadoSimples) => {
     if (proximo.cadeiraDealer !== estado.cadeiraDealer || proximo.rodadaNumero !== estado.rodadaNumero) {
@@ -66,7 +66,8 @@ export default function CenterpieceSimples({
 
   return (
     <section className="mesa-tela mesa-tela--simples">
-      <TituloTela titulo={t('match.simple.title')} aoVoltar={aoVoltar} />
+      <TituloTela titulo={t('match.simple.title')} aoVoltar={aoVoltar} acoes={<BotaoTelaCheia />} />
+      <RecursosDaMesa />
 
       <div className="mesa-simples-ajuda">
         <AjudaCampo rotulo={t('match.simple.title')}>
@@ -74,6 +75,7 @@ export default function CenterpieceSimples({
             <p>{t('match.simple.help1')}</p>
             <p>{t('match.simple.help2')}</p>
             <p>{t('match.simple.help3')}</p>
+            <p>{t('match.simple.help4')}</p>
           </div>
         </AjudaCampo>
       </div>
@@ -83,8 +85,8 @@ export default function CenterpieceSimples({
           cadeiraDealer={estado.cadeiraDealer}
           giro={giro}
           aoTocarMesa={abrirAcoes}
-          aoTocarDomo={abrirAcoes}
-          rotuloDomo={t('match.simple.openActions', { count: estado.honba })}
+          aoTocarDomo={() => setHonbaAberto(true)}
+          rotuloDomo={t('match.simple.adjustHonba', { count: estado.honba })}
           domo={
             <>
               <span className="mesa-domo-rodada" aria-live="polite">
@@ -124,7 +126,6 @@ export default function CenterpieceSimples({
           aoFechar={() => setAcoesAbertas(false)}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
-          className="modal-folha"
         >
           <div className="mesa-simples-acoes">
             <button
@@ -158,28 +159,43 @@ export default function CenterpieceSimples({
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>
               <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.simple.restart')}
             </button>
-            <div className="mesa-honba">
-              <button
-                type="button"
-                className="ptd-btn-icone"
-                aria-label={t('match.simple.honbaMinus')}
-                disabled={estado.honba === 0}
-                onClick={() => mudar(ajustarHonba(estado, -1))}
-              >
-                <i className="fas fa-minus" aria-hidden="true" />
-              </button>
-              <span aria-live="polite">
-                <span className="sr-only">{t('calculator.honba')} </span>本{estado.honba}
-              </span>
-              <button
-                type="button"
-                className="ptd-btn-icone"
-                aria-label={t('match.simple.honbaPlus')}
-                onClick={() => mudar(ajustarHonba(estado, 1))}
-              >
-                <i className="fas fa-plus" aria-hidden="true" />
-              </button>
-            </div>
+          </div>
+        </Modal>
+      )}
+
+      {honbaAberto && (
+        <Modal
+          titulo={t('calculator.honba')}
+          aoFechar={() => setHonbaAberto(false)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+          rodape={
+            <button type="button" className="btn-primario" onClick={() => setHonbaAberto(false)}>
+              {t('actions.close')}
+            </button>
+          }
+        >
+          <div className="mesa-honba">
+            <button
+              type="button"
+              className="ptd-btn-icone"
+              aria-label={t('match.simple.honbaMinus')}
+              disabled={estado.honba === 0}
+              onClick={() => mudar(ajustarHonba(estado, -1))}
+            >
+              <i className="fas fa-minus" aria-hidden="true" />
+            </button>
+            <span aria-live="polite">
+              <span className="sr-only">{t('calculator.honba')} </span>本{estado.honba}
+            </span>
+            <button
+              type="button"
+              className="ptd-btn-icone"
+              aria-label={t('match.simple.honbaPlus')}
+              onClick={() => mudar(ajustarHonba(estado, 1))}
+            >
+              <i className="fas fa-plus" aria-hidden="true" />
+            </button>
           </div>
         </Modal>
       )}

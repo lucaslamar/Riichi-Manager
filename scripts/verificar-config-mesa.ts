@@ -14,9 +14,21 @@ import {
   IDS_PRESET,
   normalizarConfig,
   reiniciarConfig,
+  retornoComOka,
   somaUma,
 } from '../src/dominios/centerpiece/logica/configMesa'
+import { calcularPontuacaoHanFu } from '../src/dominios/calculadora-han-fu/logica/calcularPontuacaoHanFu'
 import { exemploPontuacao } from '../src/dominios/centerpiece/logica/exemploPontuacao'
+import {
+  calcularUma,
+  linhaDaContagem,
+  linhaUmaValida,
+  TABELA_FLUTUANTE_EXEMPLO,
+  umaFixa,
+  umaSimetrica,
+  umaValida,
+  type ValoresUma,
+} from '../src/dominios/centerpiece/logica/uma'
 import {
   carregarUltimaConfig,
   salvarUltimaConfig,
@@ -42,17 +54,16 @@ teste('padrão do app: Leste apenas, sem abortivos nem prorrogação, timer de 1
   assert.equal(config.tipoPartida, 'leste')
   assert.equal(config.prorrogacao, false)
   assert.ok(Object.values(config.abortivos).every((ligado) => !ligado))
-  assert.equal(config.registrarDescartes, false)
 })
 
 teste('toda uma de preset fecha em zero', () => {
-  for (const preset of IDS_PRESET) assert.equal(somaUma(configDoPreset(preset).uma), 0, preset)
+  for (const preset of IDS_PRESET) assert.ok(umaValida(configDoPreset(preset).uma), preset)
 })
 
 teste('WRC 2025: 30.000 sem oka, 15/5, um vencedor, palitos perdidos, sem abortivos', () => {
   const config = configDoPreset('wrc')
   assert.equal(calcularOka(config), 0)
-  assert.deepEqual(config.uma, [15, 5, -5, -15])
+  assert.deepEqual(config.uma, umaFixa([15, 5, -5, -15]))
   assert.equal(config.ronMultiplo, 'atamaHane')
   assert.equal(config.palitosRestantes, 'perdidos')
   assert.equal(config.tobi, false)
@@ -72,7 +83,7 @@ teste('EMA 2025: ron múltiplo permitido e palitos para o 1º', () => {
 teste('M.League: 25.000/30.000 e uma 30/10', () => {
   const config = configDoPreset('mleague')
   assert.equal(calcularOka(config), 20000)
-  assert.deepEqual(config.uma, [30, 10, -10, -30])
+  assert.deepEqual(config.uma, umaFixa([30, 10, -10, -30]))
 })
 
 teste('mudar qualquer campo vira Personalizado e guarda a origem', () => {
@@ -94,9 +105,10 @@ teste('escolher Personalizado mantém os valores; escolher preset aplica os dele
 })
 
 teste('mexer na config devolvida não altera o preset', () => {
-  configDoPreset('padrao').uma[0] = 99
+  const alterada = configDoPreset('padrao')
+  if (alterada.uma.tipo === 'fixa') alterada.uma.valores[0] = 99
   configDoPreset('padrao').abortivos.quatroKans = true
-  assert.equal(configDoPreset('padrao').uma[0], 15)
+  assert.deepEqual(configDoPreset('padrao').uma, umaFixa([15, 5, -5, -15]))
   assert.equal(configDoPreset('padrao').abortivos.quatroKans, false)
 })
 
@@ -119,14 +131,89 @@ teste('exemplo de pontuação usa os valores da tela', () => {
   const com = exemploPontuacao(configDoPreset('mleague'))
   assert.equal(com[0].oka, 20)
   assert.equal(com.reduce((soma, linha) => soma + linha.final, 0), 0)
-  const padrao = exemploPontuacao({ pontosPartida: 25000, pontosRetorno: 30000, uma: [15, 5, -5, -15] })
+  const padrao = exemploPontuacao({ pontosPartida: 25000, pontosRetorno: 30000, uma: umaFixa([15, 5, -5, -15]) })
   assert.deepEqual(padrao.map((linha) => linha.final), [47, 3, -17, -33])
-  const sem = exemploPontuacao({ pontosPartida: 30000, pontosRetorno: 30000, uma: [15, 5, -5, -15] })
+  const sem = exemploPontuacao({ pontosPartida: 30000, pontosRetorno: 30000, uma: umaFixa([15, 5, -5, -15]) })
   assert.equal(sem[0].oka, 0)
 })
 
 teste('soma da uma acusa quando não fecha', () => {
   assert.equal(somaUma([20, 5, -5, -15]), 5)
+})
+
+teste('regras de cálculo dos presets e de partidas antigas', () => {
+  assert.equal(configDoPreset('wrc').regrasCalculo.akadora, false)
+  assert.equal(configDoPreset('ema').regrasCalculo.akadora, false)
+  assert.equal(configDoPreset('mleague').regrasCalculo.akadora, true)
+  for (const preset of IDS_PRESET) {
+    const { regrasCalculo } = configDoPreset(preset)
+    assert.equal(regrasCalculo.tanyaoAberto, true, preset)
+    assert.equal(regrasCalculo.doraFlamejante, false, preset)
+    assert.equal(regrasCalculo.basengo, false, preset)
+  }
+  const mudada = alterarConfig(configDoPreset('wrc'), {
+    regrasCalculo: { ...configDoPreset('wrc').regrasCalculo, akadora: true },
+  })
+  assert.equal(mudada.preset, 'personalizado')
+  assert.equal(normalizarConfig({ preset: 'padrao' }).regrasCalculo.akadora, true)
+  assert.equal(normalizarConfig({ regrasCalculo: { basengo: true } }).regrasCalculo.basengo, true)
+})
+
+teste('basengo: honba vale 1500 no ron e 500 por jogador no tsumo', () => {
+  const base = { han: 1, fu: 30, ehDealer: false, honba: 1, basengo: true }
+  assert.equal(calcularPontuacaoHanFu({ ...base, tipoVitoria: 'ron' }).ron, 1000 + 1500)
+  const tsumo = calcularPontuacaoHanFu({ ...base, tipoVitoria: 'tsumo' }).tsumo
+  assert.deepEqual([tsumo?.dealer, tsumo?.nonDealer], [500 + 500, 300 + 500])
+  assert.equal(calcularPontuacaoHanFu({ ...base, basengo: false, tipoVitoria: 'ron' }).ron, 1300)
+})
+
+teste('sem oka, o retorno é a partida; com oka, 5.000 acima', () => {
+  assert.equal(retornoComOka(25000, false), 25000)
+  assert.equal(retornoComOka(25000, true), 30000)
+  assert.equal(calcularOka({ pontosPartida: 25000, pontosRetorno: retornoComOka(25000, false) }), 0)
+  const sem = exemploPontuacao({ pontosPartida: 25000, pontosRetorno: 25000, uma: umaFixa([15, 5, -5, -15]) })
+  assert.equal(sem.reduce((soma, linha) => soma + linha.final, 0), 0)
+})
+
+teste('uma 5-15 e 10-30 viram os 4 valores', () => {
+  assert.deepEqual(umaSimetrica(5, 15), [15, 5, -5, -15])
+  assert.deepEqual(umaSimetrica(10, 30), [30, 10, -10, -30])
+})
+
+teste('uma com 3º maior que o 2º ou soma diferente de zero é inválida', () => {
+  assert.equal(linhaUmaValida([15, -5, 5, -15]), false)
+  assert.equal(linhaUmaValida([20, 5, -5, -15]), false)
+  assert.equal(linhaUmaValida([12, -1, -3, -8]), true)
+})
+
+const flutuante = { uma: { tipo: 'flutuante', tabela: TABELA_FLUTUANTE_EXEMPLO } as const, pontosRetorno: 30000 }
+
+teste('uma flutuante: a linha sai de quantos terminaram no retorno ou acima', () => {
+  assert.equal(linhaDaContagem([25000, 25000, 25000, 25000], 30000), 'nenhum')
+  assert.equal(linhaDaContagem([45000, 25000, 20000, 10000], 30000), 'um')
+  assert.equal(linhaDaContagem([40000, 30000, 20000, 10000], 30000), 'dois')
+  assert.equal(linhaDaContagem([35000, 33000, 31000, 1000], 30000), 'tres')
+  assert.equal(linhaDaContagem([30000, 30000, 30000, 30000], 30000), 'nenhum')
+})
+
+teste('uma flutuante: cada caso da tabela, na ordem dos jogadores', () => {
+  const casos: [number[], ValoresUma][] = [
+    [[45000, 25000, 20000, 10000], [12, -1, -3, -8]],
+    [[40000, 30000, 20000, 10000], [8, 4, -4, -8]],
+    [[35000, 33000, 31000, 1000], [8, 3, 1, -12]],
+    [[28000, 26000, 24000, 22000], [8, 4, -4, -8]],
+  ]
+  for (const [pontos, esperado] of casos) assert.deepEqual(calcularUma(flutuante, pontos), esperado)
+  assert.deepEqual(calcularUma(flutuante, [10000, 45000, 25000, 20000]), [-8, 12, -1, -3])
+})
+
+teste('empate divide a uma das colocações empatadas', () => {
+  assert.deepEqual(calcularUma({ uma: umaFixa([15, 5, -5, -15]), pontosRetorno: 30000 }, [40000, 20000, 20000, 20000]), [15, -5, -5, -5])
+  assert.deepEqual(calcularUma(flutuante, [40000, 40000, 10000, 10000]), [6, 6, -6, -6])
+})
+
+teste('config antiga com a uma em lista vira fixa, com os mesmos valores', () => {
+  assert.deepEqual(normalizarConfig({ uma: [20, 10, -10, -20] }).uma, umaFixa([20, 10, -10, -20]))
 })
 
 teste('dado salvo inválido cai no preset de origem, sem perder o que vale', () => {

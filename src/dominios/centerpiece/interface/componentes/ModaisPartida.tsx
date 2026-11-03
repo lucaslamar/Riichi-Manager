@@ -15,7 +15,7 @@ import {
   type Partida,
   type TipoAbortivo,
 } from '../../logica/partida'
-import { candidatosNagashi } from '../../logica/descartes'
+import { candidatosNagashi, muroPermiteRiichi } from '../../logica/descartes'
 import { pagamentosChombo } from '../../logica/aplicarChombo'
 import MaoDoHistorico from './MaoDoHistorico'
 import RioPedras from './RioPedras'
@@ -56,7 +56,6 @@ export function ModalConfirmacao({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
       rodape={
         <div className="ptd-acoes-folha">
           <button type="button" className="btn-contorno" onClick={aoFechar}>
@@ -152,21 +151,16 @@ export function MenuJogador({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
     >
       <div className="ptd-lista-opcoes" role="group" aria-label={t('match.menu.actions')}>
-        {podeReceberVez && (
-          <Acao acao="vez" icone="fa-hand-point-right" rotulo={t('match.menu.hisTurn')} />
-        )}
-        {partida.config.registrarDescartes && (
-          <Acao acao="descartes" icone="fa-layer-group" rotulo={t('match.menu.discards')} />
-        )}
-        {partida.config.registrarDescartes && partida.config.checarFuriten && (
+        <Acao acao="descartes" icone="fa-layer-group" rotulo={t('match.menu.discards')} />
+        {partida.config.checarFuriten && (
           <Acao acao="furiten" icone="fa-eye-slash" rotulo={t('match.menu.checkFuriten')} />
         )}
         <Acao acao="ron" icone="fa-trophy" rotulo={t('match.menu.ron')} />
         <Acao acao="tsumo" icone="fa-trophy" rotulo={t('match.menu.tsumo')} />
-        {podeDeclararRiichi(partida.placar, cadeira) && (
+        {podeDeclararRiichi(partida.placar, cadeira) &&
+          muroPermiteRiichi(partida.registro?.lances ?? []) && (
           <Acao acao="riichi" icone="fa-flag" rotulo={t('match.menu.riichi')} />
         )}
         <Acao acao="diferenca" icone="fa-scale-balanced" rotulo={t('match.menu.difference')} />
@@ -176,6 +170,10 @@ export function MenuJogador({
           rotulo={t('match.menu.chombo')}
           perigo
         />
+        {/* Por último: passar a vez sem querer bagunça o timer e o muro. */}
+        {podeReceberVez && (
+          <Acao acao="vez" icone="fa-hand-point-right" rotulo={t('match.menu.hisTurn')} />
+        )}
       </div>
     </Modal>
   )
@@ -200,7 +198,6 @@ export function ModalDiferenca({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
     >
       <ul className="ptd-linhas">
         {diferencasDePontos(partida.placar, cadeira).map(({ cadeira: outra, diferenca }) => (
@@ -262,7 +259,6 @@ export function ModalRyukyoku({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
       rodape={
         <div className="ptd-acoes-folha">
           <button type="button" className="btn-contorno" onClick={aoFechar}>
@@ -423,7 +419,6 @@ export function ModalMaos({
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
-      className="modal-folha"
     >
       <ListaMaos partida={partida} nomeDe={nomeDe} />
     </Modal>

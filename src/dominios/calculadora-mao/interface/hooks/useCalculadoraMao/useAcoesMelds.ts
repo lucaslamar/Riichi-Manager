@@ -12,6 +12,8 @@ interface ParametrosAcoesMelds {
   mao: Mao
   acaoPendente: Acao | null
   slotsUsados: number
+  /** Cópias que a partida já mostrou fora desta mão. */
+  pedrasDaMesa: CodigoPedra[]
 }
 
 const CODIGOS_BASE_MELD: CodigoPedra[] = [
@@ -32,6 +34,7 @@ export function useAcoesMelds({
   mao,
   acaoPendente,
   slotsUsados,
+  pedrasDaMesa,
 }: ParametrosAcoesMelds): AcoesMeldsCalculadora {
   const todasPedras = useMemo(
     () => [
@@ -40,9 +43,10 @@ export function useAcoesMelds({
       ...mao.descartes,
       ...mao.dora,
       ...mao.uradora,
+      ...pedrasDaMesa,
       ...(acaoPendente?.tipo === 'chii' ? acaoPendente.pedras : []),
     ],
-    [acaoPendente, mao],
+    [acaoPendente, mao, pedrasDaMesa],
   )
 
   const contarCodigo = useCallback(
@@ -100,6 +104,7 @@ export function useAcoesMelds({
         ...mao.descartes,
         ...mao.dora,
         ...mao.uradora,
+        ...pedrasDaMesa,
       ]
 
       return pedrasMeld.every((pedra) => {
@@ -118,7 +123,7 @@ export function useAcoesMelds({
         return totalBase <= 4 && totalAka <= 1
       })
     },
-    [indicesPedrasNaMaoPara, mao, slotsUsados],
+    [indicesPedrasNaMaoPara, mao, pedrasDaMesa, slotsUsados],
   )
 
   const podeCriarKanFechadoDireto = useCallback(

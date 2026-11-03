@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "npm run test:i18n && npm run test:guia && npm run test:tema && npm run test:notacao && npm run test:jogadores && npm run test:config-mesa && npm run test:partida && npm run test:ranking && npm run test:furiten",
+    "test": "npm run test:i18n && npm run test:guia && npm run test:tema && npm run test:notacao && npm run test:jogadores && npm run test:config-mesa && npm run test:partida && npm run test:ranking && npm run test:furiten && npm run test:batida",
     "test:i18n": "tsx scripts/verificar-traducoes.ts",
     "test:guia": "tsx scripts/verificar-guia.ts",
     "test:tema": "tsx scripts/verificar-tema.ts",
@@ -19,6 +19,7 @@
     "test:partida": "tsx scripts/verificar-partida.ts",
     "test:ranking": "tsx scripts/verificar-ranking.ts",
     "test:furiten": "tsx scripts/verificar-furiten.ts",
+    "test:batida": "tsx scripts/verificar-batida.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "vite preview",
@@ -27,6 +28,7 @@
     "deploy": "npx gh-pages -d dist"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
     "immer": "^10.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

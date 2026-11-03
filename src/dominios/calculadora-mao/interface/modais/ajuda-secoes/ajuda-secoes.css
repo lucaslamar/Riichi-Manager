@@ -143,7 +143,7 @@
   --modal-borda: var(--cor-destaque-borda, #fbcfe8);
 }
 
-.modal-ajuda-secao--doras.modal--titulo-rotulo {
+.modal-ajuda-secao--doras {
   --modal-cor-titulo: var(--cor-destaque, #be185d);
 }
 

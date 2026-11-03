@@ -13,7 +13,7 @@ export function PaginaMontagemMao({
 }: {
   estado: EstadoCalculadoraMao
   mostrandoEsperas: boolean
-  aoAbrirRegras: () => void
+  aoAbrirRegras?: () => void
   cabecalho?: ReactNode
   aoCalcularDireto?: () => void
   entradaNotacao?: boolean

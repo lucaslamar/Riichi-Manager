@@ -30,11 +30,6 @@ export interface PropsModal {
   tamanho?: TamanhoModal
   /** `alerta` pinta a modal de vermelho (chombo, mão inválida). */
   tom?: TomModal
-  /**
-   * `titulo`: título em destaque (ex.: Regras de cálculo).
-   * `rotulo`: título pequeno em caixa alta, para modais cujo conteúdo é o destaque (ex.: Resultado).
-   */
-  estiloTitulo?: 'titulo' | 'rotulo'
   /** Área fixa abaixo do corpo rolável (botões de ação, referências etc.). */
   rodape?: ReactNode
   /**
@@ -89,6 +84,8 @@ const DISTANCIA_VOLTAR = 60
 const PROPORCAO_HORIZONTAL = 1.5
 /** Um pouco mais que a animação de saída da tela (modal.css). */
 const DURACAO_SAIDA = 300
+/** Igual à animação de saída da modal inteira (modal.css). */
+const DURACAO_FECHAR = 160
 
 interface TelaAberta extends TelaModal {
   id: number
@@ -97,9 +94,9 @@ interface TelaAberta extends TelaModal {
 }
 
 /**
- * Modal base do app. Toda modal nasce daqui e só define o próprio conteúdo:
- * cabeçalho, corpo rolável e rodapé opcional seguem o mesmo layout fluido em
- * qualquer tela (celular, tablet, desktop), sem regras por aparelho.
+ * Modal base do app. Toda modal nasce daqui e só define o próprio conteúdo. O
+ * visual é um só; muda o lugar (modal.css): folha embaixo no celular em pé, painel
+ * à direita no celular deitado e modal central no tablet e no desktop.
  *
  * Comportamentos comuns já incluídos: portal no body, fundo que fecha ao
  * clicar fora, Escape, arrastar para fechar no limite da rolagem
@@ -122,7 +119,6 @@ export default function Modal({
   rotuloFechar,
   tamanho = 'media',
   tom = 'padrao',
-  estiloTitulo = 'titulo',
   rodape,
   acoes,
   semBotaoFechar = false,
@@ -193,6 +189,21 @@ export default function Modal({
 
   useDeslizeParaFechar(dialogoRef, fundoRef, aoFechar)
 
+  // X, fundo e Esc saem com animação; quem fecha por fora (ex.: Aplicar) só desmonta.
+  const [fechando, setFechando] = useState(false)
+  const temporizadorFechar = useRef<number | undefined>(undefined)
+  const fecharRef = useRef(() => {})
+  fecharRef.current = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      aoFecharRef.current()
+      return
+    }
+    setFechando(true)
+    window.clearTimeout(temporizadorFechar.current)
+    temporizadorFechar.current = window.setTimeout(() => aoFecharRef.current(), DURACAO_FECHAR)
+  }
+  useEffect(() => () => window.clearTimeout(temporizadorFechar.current), [])
+
   const abrirTela = (tela: TelaModal) => {
     const foco = document.activeElement instanceof HTMLElement ? document.activeElement : null
     proximoId.current += 1
@@ -236,7 +247,7 @@ export default function Modal({
         evento.stopPropagation()
         // Numa tela interna, o Esc volta uma tela; senão fecha.
         if (telasRef.current.length > 0) voltarRef.current()
-        else aoFecharRef.current()
+        else fecharRef.current()
         return
       }
 
@@ -297,7 +308,6 @@ export default function Modal({
     'modal',
     `modal--${tamanho}`,
     `modal--${tom}`,
-    `modal--titulo-${estiloTitulo}`,
     navegando ? 'modal--navegando' : undefined,
     className,
   ]
@@ -322,10 +332,10 @@ export default function Modal({
   return createPortal(
     <div
       ref={fundoRef}
-      className="modal-fundo"
+      className={`modal-fundo${fechando ? ' modal-fundo--fechando' : ''}`}
       role="presentation"
       onMouseDown={(evento) => {
-        if (evento.target === evento.currentTarget) aoFechar()
+        if (evento.target === evento.currentTarget) fecharRef.current()
       }}
       // Eventos do React atravessam o portal: sem isso, um clique numa modal
       // aberta de dentro de um botão também o acionaria.
@@ -371,7 +381,7 @@ export default function Modal({
               type="button"
               aria-label={rotuloFechar}
               title={rotuloFechar}
-              onClick={aoFechar}
+              onClick={() => fecharRef.current()}
             >
               <i className="fas fa-xmark" aria-hidden="true" />
             </button>

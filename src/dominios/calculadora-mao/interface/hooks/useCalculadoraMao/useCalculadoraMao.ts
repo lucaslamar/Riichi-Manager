@@ -1,22 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { candidatasDaBatida, trocarBatida, type CandidataBatida } from '../../../logica/batida'
 import { useAcoesMelds } from './useAcoesMelds'
 import { useAcoesPedras } from './useAcoesPedras'
 import { useEsperasMao } from './useEsperasMao'
 import { useEstadoMao } from './useEstadoMao'
 import { useResultadoMao } from './useResultadoMao'
-import { calcularMao, ordenarPedras, type CodigoPedra, type Mao } from '../../../logica/mao'
-import { codigoBase } from '../../constantes'
+import { ordenarPedras, type CodigoPedra, type ConfiguracaoCalculo, type Mao } from '../../../logica/mao'
 import type { EscolhaChiiPendente } from './tipos'
 
 const YAKU_APENAS_BONUS = new Set(['Dora', 'Uradora', 'Akadora', 'Dora manual'])
-
-interface CandidataPedraAgari {
-  pedra: CodigoPedra
-  han: number
-  yakuman: number
-  semYaku: boolean
-  furiten: boolean
-}
 
 function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['resultado']) {
   if (!resultado || resultado.agari == null) return false
@@ -26,8 +18,12 @@ function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['r
 }
 
 interface OpcionsCalculadoraMao {
-  initialMao?: Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi'>>
+  initialMao?: Partial<Pick<Mao, 'agari' | 'ventoRodada' | 'ventoAssento' | 'honba' | 'riichi' | 'ultimaPedra' | 'kan' | 'bencao' | 'descartes'>>
   fluxoCompleto?: boolean
+  /** Regras vindas de fora (a mesa do Centerpiece). */
+  configuracaoInicial?: ConfiguracaoCalculo
+  /** Cópias que a partida já mostrou fora desta mão: contam no limite de 4 de cada pedra. */
+  pedrasDaMesa?: CodigoPedra[]
 }
 
 /**
@@ -44,7 +40,7 @@ interface OpcionsCalculadoraMao {
  * Evite mudar nomes sem revisar todos os componentes consumidores.
  */
 export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
-  const estado = useEstadoMao(opcoes?.initialMao)
+  const estado = useEstadoMao(opcoes?.initialMao, opcoes?.configuracaoInicial)
   const {
     mao,
     atualizarMao,
@@ -90,7 +86,14 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   )
   const deveCalcularMao = maoCompleta && assinaturaCalculo === assinaturaMaoAtual
 
-  const acoesMelds = useAcoesMelds({ mao, acaoPendente, slotsUsados })
+  // Pela chave: quem chama recria a lista a cada render, e as esperas recalculam quando ela muda.
+  const chavePedrasDaMesa = opcoes?.pedrasDaMesa?.join() ?? ''
+  const pedrasDaMesa = useMemo(
+    () => (chavePedrasDaMesa ? chavePedrasDaMesa.split(',') : []),
+    [chavePedrasDaMesa],
+  )
+
+  const acoesMelds = useAcoesMelds({ mao, acaoPendente, slotsUsados, pedrasDaMesa })
 
   /*
    * Esperas precisam estar disponíveis antes das ações de clique:
@@ -100,6 +103,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     mao,
     configuracao,
     slotsUsados,
+    pedrasDaMesa,
   })
   const resultados = useResultadoMao({
     mao,
@@ -107,69 +111,10 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     maoCompleta,
     deveCalcularMao,
   })
-  const candidatasPedraAgari = useMemo(() => {
-    if (!maoCompleta) return new Map<string, CandidataPedraAgari>()
-
-    const candidatas = new Map<string, CandidataPedraAgari>()
-    const registrarCandidata = (pedra: CodigoPedra, maoCandidata: typeof mao) => {
-      const chave = pedra
-      if (candidatas.has(chave)) return
-
-      try {
-        const resultado = calcularMao(maoCandidata, configuracao)
-        if (resultado.agari == null) return
-        candidatas.set(chave, {
-          pedra,
-          han: resultado.han,
-          yakuman: resultado.yakuman,
-          semYaku: resultado.semYaku,
-          furiten: false,
-        })
-      } catch {
-        // Nem toda tile visivel precisa ser uma batida calculavel; ela apenas nao vira candidata no teclado.
-      }
-    }
-
-    mao.pedras.forEach((pedra, indiceAgari) => {
-      registrarCandidata(pedra, {
-        ...mao,
-        indiceAgari,
-        agariMeld: null,
-      })
-    })
-
-    if (mao.agariMeld) {
-      const { indiceMeld, indicePedra } = mao.agariMeld
-      const meld = mao.melds[indiceMeld]
-      const pedra = meld?.pedras[indicePedra]
-      if (meld && pedra) {
-        registrarCandidata(pedra, {
-          ...mao,
-          indiceAgari: -1,
-          agariMeld: {
-            ...mao.agariMeld,
-            pedra,
-            tipo: meld.tipo,
-          },
-        })
-      }
-    }
-
-    const ronBloqueadoPorFuriten =
-      [...candidatas.entries()].some(
-        ([chave, candidata]) =>
-          !candidata.semYaku &&
-          mao.descartes.some((descarte) => codigoBase(descarte) === codigoBase(chave as CodigoPedra)),
-      )
-
-    if (ronBloqueadoPorFuriten) {
-      candidatas.forEach((candidata) => {
-        if (!candidata.semYaku) candidata.furiten = true
-      })
-    }
-
-    return candidatas
-  }, [configuracao, mao, maoCompleta])
+  const candidatasPedraAgari = useMemo(
+    () => (maoCompleta ? candidatasDaBatida(mao, configuracao) : new Map<string, CandidataBatida>()),
+    [configuracao, mao, maoCompleta],
+  )
   const acoesPedras = useAcoesPedras({
     estado: {
       mao,
@@ -283,6 +228,19 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
 
   const escolherPedraAgariPorCodigo = (pedra: CodigoPedra) => {
     if (!maoCompleta) return
+    const trocada = trocarBatida(mao, pedra, configuracao)
+    if (trocada) {
+      atualizarMao((rascunho) => {
+        rascunho.pedras = trocada.pedras
+        rascunho.melds = trocada.melds
+        rascunho.indiceAgari = trocada.indiceAgari
+        rascunho.agariMeld = null
+      })
+      setSelecionandoPedraAgari(false)
+      setMensagemFinalizacao('Pedra da batida selecionada.')
+      setAssinaturaCalculo(null)
+      return
+    }
     const indicePedra = mao.pedras.findIndex((pedraMao) => pedraMao === pedra)
     if (indicePedra >= 0) {
       escolherPedraAgariMao(indicePedra)

@@ -1,20 +1,24 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
+import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import { normalizarTexto } from '@/dominios/jogadores/logica/jogadores'
 import {
   calcularOka,
   IDS_PRESET,
   OPCOES_TIMER_VEZ,
-  somaUma,
   VALOR_CHOMBO_FIXO_PADRAO,
   type ConfigMesa,
 } from '../../logica/configMesa'
 import { exemploPontuacao } from '../../logica/exemploPontuacao'
+import { umaValida, valoresDaUma } from '../../logica/uma'
 import { useConfigMesa } from '../hooks/useConfigMesa'
+import BotoesOpcao from './BotoesOpcao'
+import CampoUma from './CampoUma'
+import EscolhaOka from './EscolhaOka'
 import '../config-mesa.css'
-
-const CHAVE_LUGAR = ['tableConfig.uma1', 'tableConfig.uma2', 'tableConfig.uma3', 'tableConfig.uma4']
 
 const ABORTIVOS: { campo: keyof ConfigMesa['abortivos']; chave: string }[] = [
   { campo: 'kyuushuKyuuhai', chave: 'tableConfig.abortiveNineTerminals' },
@@ -22,6 +26,29 @@ const ABORTIVOS: { campo: keyof ConfigMesa['abortivos']; chave: string }[] = [
   { campo: 'quatroKans', chave: 'tableConfig.abortiveFourKans' },
   { campo: 'quatroRiichis', chave: 'tableConfig.abortiveFourRiichi' },
 ]
+const ajudaDe = (chave: string) => `${chave}Help`
+
+/** Seções do índice, na ordem da folha. */
+const SECOES = [
+  { id: 'pontuacao', chave: 'tableConfig.scoring' },
+  { id: 'regras', chave: 'tableConfig.rules' },
+  { id: 'empates', chave: 'tableConfig.indexDraws' },
+  { id: 'calculo', chave: 'tableConfig.calcRules' },
+  { id: 'mesa', chave: 'tableConfig.indexTable' },
+] as const
+
+/** O que foi digitado na busca, já normalizado; vazio mostra tudo. */
+const ContextoBusca = createContext('')
+
+function bate(busca: string, ...textos: (string | undefined)[]) {
+  return !busca || normalizarTexto(textos.filter(Boolean).join(' ')).includes(busca)
+}
+
+/** Some quando não bate com a busca. As seções vazias somem pelo CSS (config-mesa.css). */
+function Buscavel({ termos, className, children }: { termos: string; className?: string; children: ReactNode }) {
+  const busca = useContext(ContextoBusca)
+  return bate(busca, termos) ? <div className={['cfg-item', className].filter(Boolean).join(' ')}>{children}</div> : null
+}
 
 interface PropsConfigMesaSheet {
   inicial: ConfigMesa
@@ -31,28 +58,58 @@ interface PropsConfigMesaSheet {
 
 /** Folha "Configurações de mesa": preset no topo, Pontuação, Regras, Reiniciar e Feito. */
 export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: PropsConfigMesaSheet) {
-  const { t, numero } = useI18n()
+  const { t } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
-  const oka = calcularOka(config)
-  const soma = somaUma(config.uma)
+  const semOka = calcularOka(config) <= 0
+  const [texto, setTexto] = useState('')
+  const busca = normalizarTexto(texto)
+  const raiz = useRef<HTMLDivElement | null>(null)
+  const irPara = (id: string) =>
+    raiz.current?.querySelector(`[data-secao="${id}"]`)?.scrollIntoView({ block: 'start' })
 
   return (
     <Modal
       titulo={t('tableConfig.title')}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
-      className="modal-folha config-mesa"
+      className="config-mesa"
       rodape={
         <div className="cfg-acoes">
           <button type="button" className="btn-contorno" onClick={reiniciar}>
             {t('tableConfig.reset')}
           </button>
-          <button type="button" className="btn-primario" onClick={() => aoConcluir(config)}>
+          <button
+            type="button"
+            className="btn-primario"
+            disabled={!umaValida(config.uma)}
+            onClick={() => aoConcluir(config)}
+          >
             {t('tableConfig.done')}
           </button>
         </div>
       }
     >
+      <ContextoBusca.Provider value={busca}>
+      <div ref={raiz} className="cfg-corpo">
+      <div className="cfg-topo">
+        <CampoBusca
+          valor={texto}
+          aoMudar={setTexto}
+          rotulo={t('tableConfig.searchPlaceholder')}
+          placeholder={t('tableConfig.searchPlaceholder')}
+          rotuloLimpar={t('actions.clear')}
+        />
+        {!busca && (
+          <nav className="cfg-indice" aria-label={t('tableConfig.indexLabel')}>
+            {SECOES.map(({ id, chave }) => (
+              <button key={id} type="button" onClick={() => irPara(id)}>
+                {t(chave)}
+              </button>
+            ))}
+          </nav>
+        )}
+      </div>
+
       <Campo rotulo={t('tableConfig.preset')}>
         <select
           className="cfg-entrada"
@@ -67,8 +124,9 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           <option value="personalizado">{t('tableConfig.presets.personalizado')}</option>
         </select>
       </Campo>
-      {config.preset === 'padrao' && <p className="cfg-ajuda">{t('tableConfig.presetDefaultHelp')}</p>}
+      {config.preset === 'padrao' && !busca && <p className="cfg-ajuda">{t('tableConfig.presetDefaultHelp')}</p>}
 
+      <section className="cfg-secao" data-secao="pontuacao">
       <h3 className="cfg-grupo">{t('tableConfig.scoring')}</h3>
 
       <div className="cfg-duas-colunas">
@@ -77,63 +135,48 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
             valor={config.pontosPartida}
             passo={1000}
             minimo={0}
-            aoMudar={(pontosPartida) => alterar({ pontosPartida })}
+            // Sem oka, o retorno acompanha a partida.
+            aoMudar={(pontosPartida) =>
+              alterar(semOka ? { pontosPartida, pontosRetorno: pontosPartida } : { pontosPartida })
+            }
           />
         </Campo>
-        <Campo
-          rotulo={t('tableConfig.returnPoints')}
-          ajuda={
-            <AjudaCampo rotulo={t('tableConfig.returnPoints')}>
-              <AjudaRetorno config={config} />
-            </AjudaCampo>
-          }
-        >
-          <CampoNumero
-            valor={config.pontosRetorno}
-            passo={1000}
-            minimo={0}
-            aoMudar={(pontosRetorno) => alterar({ pontosRetorno })}
-          />
-        </Campo>
-      </div>
-      <p className="cfg-ajuda cfg-ajuda--com-botao">
-        {t('tableConfig.okaValue', { points: numero(oka) })}
-        <AjudaCampo rotulo={t('tableConfig.okaLabel')}>
-          <p>{t('tableConfig.okaHelp')}</p>
-        </AjudaCampo>
-      </p>
-
-      <fieldset className="cfg-conjunto">
-        <legend className="cfg-legenda-com-botao">
-          {t('tableConfig.uma')}
-          <AjudaCampo rotulo={t('tableConfig.umaLabel')}>
-            <p>{t('tableConfig.umaHelp')}</p>
-          </AjudaCampo>
-        </legend>
-        <div className="cfg-uma">
-          {config.uma.map((valor, indice) => (
-            <Campo key={CHAVE_LUGAR[indice]} rotulo={t(CHAVE_LUGAR[indice])}>
-              <CampoNumero
-                valor={valor}
-                passo={1}
-                aoMudar={(novo) => {
-                  const uma = [...config.uma] as ConfigMesa['uma']
-                  uma[indice] = novo
-                  alterar({ uma })
-                }}
-              />
-            </Campo>
-          ))}
-        </div>
-        {soma !== 0 && (
-          <p className="cfg-aviso" role="status">
-            <i className="fas fa-triangle-exclamation" aria-hidden="true" />
-            {t('tableConfig.umaWarning', { sum: numero(soma) })}
-          </p>
+        {!semOka && (
+          <Campo
+            rotulo={t('tableConfig.returnPoints')}
+            ajuda={
+              <AjudaCampo rotulo={t('tableConfig.returnPoints')}>
+                <AjudaRetorno config={config} />
+              </AjudaCampo>
+            }
+          >
+            <CampoNumero
+              valor={config.pontosRetorno}
+              passo={1000}
+              minimo={0}
+              aoMudar={(pontosRetorno) => alterar({ pontosRetorno })}
+            />
+          </Campo>
         )}
-      </fieldset>
+      </div>
+      <Buscavel termos={`${t('tableConfig.okaLabel')} ${t('tableConfig.okaHelp')} ${t('tableConfig.okaOffHelp')}`}>
+        <EscolhaOka
+          pontosPartida={config.pontosPartida}
+          pontosRetorno={config.pontosRetorno}
+          aoMudarRetorno={(pontosRetorno) => alterar({ pontosRetorno })}
+        />
+      </Buscavel>
 
-      <Campo
+      <Buscavel termos={`${t('tableConfig.uma')} ${t('tableConfig.umaHelp')} ${t('tableConfig.umaFloatHelp')}`}>
+        <CampoUma
+          valor={config.uma}
+          aoMudar={(uma) => alterar({ uma })}
+          pontosRetorno={config.pontosRetorno}
+        />
+      </Buscavel>
+
+      <Grupo
+        termos={t('tableConfig.leftoverHelp')}
         rotulo={t('tableConfig.leftoverSticks')}
         ajuda={
           <AjudaCampo rotulo={t('tableConfig.leftoverSticks')}>
@@ -141,36 +184,36 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           </AjudaCampo>
         }
       >
-        <select
-          className="cfg-entrada"
-          value={config.palitosRestantes}
-          onChange={(evento) =>
-            alterar({ palitosRestantes: evento.target.value as ConfigMesa['palitosRestantes'] })
-          }
-        >
-          <option value="primeiro">{t('tableConfig.leftoverFirst')}</option>
-          <option value="perdidos">{t('tableConfig.leftoverLost')}</option>
-        </select>
-      </Campo>
+        <BotoesOpcao
+          rotulo={t('tableConfig.leftoverSticks')}
+          valor={config.palitosRestantes}
+          aoEscolher={(palitosRestantes) => alterar({ palitosRestantes })}
+          opcoes={[
+            { valor: 'primeiro', rotulo: t('tableConfig.leftoverFirst') },
+            { valor: 'perdidos', rotulo: t('tableConfig.leftoverLost') },
+          ]}
+        />
+      </Grupo>
 
-      <Campo rotulo={t('tableConfig.chombo')}>
-        <select
-          className="cfg-entrada"
-          value={config.chombo.tipo}
-          onChange={(evento) =>
+      <Grupo
+        termos={`${t('tableConfig.chomboReverseMangan')} ${t('tableConfig.chomboReverseYakuman')} ${t('tableConfig.chomboFixed')}`}
+        rotulo={t('tableConfig.chombo')}
+      >
+        <BotoesOpcao
+          rotulo={t('tableConfig.chombo')}
+          valor={config.chombo.tipo}
+          aoEscolher={(tipo) =>
             alterar({
-              chombo:
-                evento.target.value === 'fixo'
-                  ? { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO }
-                  : { tipo: evento.target.value as 'manganReverso' | 'yakumanReverso' },
+              chombo: tipo === 'fixo' ? { tipo: 'fixo', valor: VALOR_CHOMBO_FIXO_PADRAO } : { tipo },
             })
           }
-        >
-          <option value="manganReverso">{t('tableConfig.chomboReverseMangan')}</option>
-          <option value="yakumanReverso">{t('tableConfig.chomboReverseYakuman')}</option>
-          <option value="fixo">{t('tableConfig.chomboFixed')}</option>
-        </select>
-      </Campo>
+          opcoes={[
+            { valor: 'manganReverso', rotulo: t('tableConfig.chomboReverseMangan') },
+            { valor: 'yakumanReverso', rotulo: t('tableConfig.chomboReverseYakuman') },
+            { valor: 'fixo', rotulo: t('tableConfig.chomboFixed') },
+          ]}
+        />
+      </Grupo>
       {config.chombo.tipo === 'fixo' && (
         <Campo rotulo={t('tableConfig.chomboValue')}>
           <CampoNumero
@@ -182,37 +225,42 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         </Campo>
       )}
 
+      </section>
+
+      <section className="cfg-secao" data-secao="regras">
       <h3 className="cfg-grupo">{t('tableConfig.rules')}</h3>
 
-      <fieldset className="cfg-conjunto">
-        <legend>{t('tableConfig.gameType')}</legend>
-        <div className="cfg-segmentos">
-          <Segmento
-            ativo={config.tipoPartida === 'leste'}
-            rotulo={t('tableConfig.gameEast')}
-            aoEscolher={() => alterar({ tipoPartida: 'leste' })}
-          />
-          <Segmento
-            ativo={config.tipoPartida === 'hanchan'}
-            rotulo={t('tableConfig.gameHanchan')}
-            aoEscolher={() => alterar({ tipoPartida: 'hanchan' })}
-          />
-        </div>
-      </fieldset>
+      <Grupo
+        termos={`${t('tableConfig.gameEast')} ${t('tableConfig.gameHanchan')}`}
+        rotulo={t('tableConfig.gameType')}
+      >
+        <BotoesOpcao
+          rotulo={t('tableConfig.gameType')}
+          valor={config.tipoPartida}
+          aoEscolher={(tipoPartida) => alterar({ tipoPartida })}
+          opcoes={[
+            { valor: 'leste', rotulo: t('tableConfig.gameEast') },
+            { valor: 'hanchan', rotulo: t('tableConfig.gameHanchan') },
+          ]}
+        />
+      </Grupo>
 
-      <Campo rotulo={t('tableConfig.multipleRon')}>
-        <select
-          className="cfg-entrada"
-          value={config.ronMultiplo}
-          onChange={(evento) =>
-            alterar({ ronMultiplo: evento.target.value as ConfigMesa['ronMultiplo'] })
-          }
-        >
-          <option value="atamaHane">{t('tableConfig.ronAtamaHane')}</option>
-          <option value="duploTriploAborta">{t('tableConfig.ronTripleAborts')}</option>
-          <option value="duploTriploPermitidos">{t('tableConfig.ronAllowed')}</option>
-        </select>
-      </Campo>
+      <Grupo
+        termos={`${t('tableConfig.ronAtamaHane')} ${t('tableConfig.ronTripleAborts')} ${t('tableConfig.ronAllowed')}`}
+        rotulo={t('tableConfig.multipleRon')}
+      >
+        <BotoesOpcao
+          empilhado
+          rotulo={t('tableConfig.multipleRon')}
+          valor={config.ronMultiplo}
+          aoEscolher={(ronMultiplo) => alterar({ ronMultiplo })}
+          opcoes={[
+            { valor: 'atamaHane', rotulo: t('tableConfig.ronAtamaHane') },
+            { valor: 'duploTriploAborta', rotulo: t('tableConfig.ronTripleAborts') },
+            { valor: 'duploTriploPermitidos', rotulo: t('tableConfig.ronAllowed') },
+          ]}
+        />
+      </Grupo>
 
       <Opcao
         rotulo={t('tableConfig.tobi')}
@@ -234,51 +282,65 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       />
       <Opcao
         rotulo={t('tableConfig.nagashiMangan')}
+        ajuda={t('tableConfig.nagashiManganHelp')}
         marcado={config.nagashiMangan}
         aoMudar={(nagashiMangan) => alterar({ nagashiMangan })}
       />
 
-      <fieldset className="cfg-conjunto">
-        <legend>{t('tableConfig.abortiveDraws')}</legend>
+      </section>
+
+      <section className="cfg-secao" data-secao="empates">
+      <h3 className="cfg-grupo">{t('tableConfig.abortiveDraws')}</h3>
+      <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.abortiveDrawsHelp')}</p>
         {ABORTIVOS.map(({ campo, chave }) => (
           <Opcao
             key={campo}
+            termos={`${t('tableConfig.abortiveDraws')} ${t('tableConfig.abortiveDrawsHelp')}`}
             rotulo={t(chave)}
+            ajuda={t(ajudaDe(chave))}
             marcado={config.abortivos[campo]}
             aoMudar={(marcado) => alterar({ abortivos: { ...config.abortivos, [campo]: marcado } })}
           />
         ))}
-      </fieldset>
+      </section>
 
-      <fieldset className="cfg-conjunto">
-        <legend>{t('tableConfig.turnTimer')}</legend>
-        <div className="cfg-segmentos">
-          {OPCOES_TIMER_VEZ.map((segundos) => (
-            <Segmento
-              key={segundos}
-              ativo={config.timerVez === segundos}
-              rotulo={t(`tableConfig.timer${segundos}`)}
-              aoEscolher={() => alterar({ timerVez: segundos })}
-            />
-          ))}
-        </div>
-      </fieldset>
+      <section className="cfg-secao" data-secao="calculo">
+      <h3 className="cfg-grupo">{t('tableConfig.calcRules')}</h3>
+      <ListaRegrasCalculo
+        semChombo
+        configuracao={config.regrasCalculo}
+        aoMudar={(regrasCalculo) => alterar({ regrasCalculo })}
+        mostrar={(textoRegra) => bate(busca, textoRegra)}
+      />
+      </section>
+
+      <section className="cfg-secao" data-secao="mesa">
+      <h3 className="cfg-grupo">{t('tableConfig.indexTable')}</h3>
+      <Grupo rotulo={t('tableConfig.turnTimer')}>
+        <BotoesOpcao
+          rotulo={t('tableConfig.turnTimer')}
+          valor={config.timerVez}
+          aoEscolher={(timerVez) => alterar({ timerVez })}
+          opcoes={OPCOES_TIMER_VEZ.map((segundos) => ({
+            valor: segundos,
+            rotulo: t(`tableConfig.timer${segundos}`),
+          }))}
+        />
+      </Grupo>
 
       <Opcao
-        rotulo={t('tableConfig.recordDiscards')}
-        marcado={config.registrarDescartes}
-        aoMudar={(registrarDescartes) =>
-          alterar({ registrarDescartes, checarFuriten: registrarDescartes && config.checarFuriten })
-        }
+        rotulo={t('tableConfig.checkFuriten')}
+        ajuda={t('tableConfig.checkFuritenHelp')}
+        marcado={config.checarFuriten}
+        aoMudar={(checarFuriten) => alterar({ checarFuriten })}
       />
-      {config.registrarDescartes && (
-        <Opcao
-          rotulo={t('tableConfig.checkFuriten')}
-          ajuda={t('tableConfig.checkFuritenHelp')}
-          marcado={config.checarFuriten}
-          aoMudar={(checarFuriten) => alterar({ checarFuriten })}
-        />
-      )}
+      </section>
+
+      <p className="cfg-sem-resultado" role="status">
+        {t('tableConfig.searchEmpty')}
+      </p>
+      </div>
+      </ContextoBusca.Provider>
     </Modal>
   )
 }
@@ -292,6 +354,8 @@ function Campo({
   ajuda?: ReactNode
   children: ReactNode
 }) {
+  const busca = useContext(ContextoBusca)
+  if (!bate(busca, rotulo)) return null
   return (
     <label className="cfg-campo">
       <span className="cfg-campo-rotulo">
@@ -300,6 +364,32 @@ function Campo({
       </span>
       {children}
     </label>
+  )
+}
+
+/** Como `Campo`, para um grupo de botões: `label` em volta deles confundiria o toque. */
+function Grupo({
+  rotulo,
+  termos,
+  ajuda,
+  children,
+}: {
+  rotulo: string
+  /** Textos a mais que a busca encontra. */
+  termos?: string
+  ajuda?: ReactNode
+  children: ReactNode
+}) {
+  const busca = useContext(ContextoBusca)
+  if (!bate(busca, rotulo, termos)) return null
+  return (
+    <div className="cfg-campo">
+      <span className="cfg-campo-rotulo">
+        {rotulo}
+        {ajuda}
+      </span>
+      {children}
+    </div>
   )
 }
 
@@ -340,7 +430,11 @@ function AjudaRetorno({ config }: { config: ConfigMesa }) {
         {t('tableConfig.returnExampleValues', {
           start: numero(config.pontosPartida),
           target: numero(config.pontosRetorno),
-          uma: config.uma.join(' / '),
+          uma: valoresDaUma(
+            config.uma,
+            exemploPontuacao(config).map((linha) => linha.pontos),
+            config.pontosRetorno,
+          ).join(' / '),
         })}
       </p>
       <table className="cfg-tabela-exemplo">
@@ -420,49 +514,48 @@ function CampoNumero({
   )
 }
 
-function Segmento({
-  ativo,
-  rotulo,
-  aoEscolher,
-}: {
-  ativo: boolean
-  rotulo: string
-  aoEscolher: () => void
-}) {
-  return (
-    <button
-      type="button"
-      className={`cfg-segmento${ativo ? ' cfg-segmento--ativo' : ''}`}
-      aria-pressed={ativo}
-      onClick={aoEscolher}
-    >
-      {rotulo}
-    </button>
-  )
-}
-
+/** Mesmo controle das regras de cálculo: tudo na folha se liga e desliga igual. */
 function Opcao({
   rotulo,
+  termos,
   ajuda,
   marcado,
   aoMudar,
 }: {
   rotulo: string
+  /** Textos a mais que a busca encontra. */
+  termos?: string
   ajuda?: string
   marcado: boolean
   aoMudar: (marcado: boolean) => void
 }) {
+  const { t } = useI18n()
+  const busca = useContext(ContextoBusca)
+  if (!bate(busca, rotulo, ajuda, termos)) return null
   return (
-    <label className="cfg-opcao">
-      <span>
+    <div className="linha-regra">
+      <div className="texto-regra">
         <strong>{rotulo}</strong>
-        {ajuda && <small>{ajuda}</small>}
-      </span>
-      <input
-        type="checkbox"
-        checked={marcado}
-        onChange={(evento) => aoMudar(evento.target.checked)}
-      />
-    </label>
+        {ajuda && <span>{ajuda}</span>}
+      </div>
+      <div className="controle-regra" role="group" aria-label={rotulo}>
+        <button
+          type="button"
+          className={marcado ? 'ativo' : ''}
+          aria-pressed={marcado}
+          onClick={() => aoMudar(true)}
+        >
+          {t('tableConfig.yes')}
+        </button>
+        <button
+          type="button"
+          className={!marcado ? 'ativo' : ''}
+          aria-pressed={!marcado}
+          onClick={() => aoMudar(false)}
+        >
+          {t('tableConfig.no')}
+        </button>
+      </div>
+    </div>
   )
 }
