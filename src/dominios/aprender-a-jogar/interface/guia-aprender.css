@@ -266,9 +266,8 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
   color: var(--cor-aviso, #f2b01e);
 }
 
-.guia-rank__dica {
-  max-width: 30ch;
-  margin: 8px 0 0;
+.guia-indice__dica {
+  margin: 0 0 12px;
   color: var(--guia-tinta-suave);
   font-size: 0.85rem;
 }
@@ -365,7 +364,7 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
   width: min(100%, 320px);
   flex-direction: column;
   gap: 10px;
-  margin-top: 36px;
+  margin-top: 24px;
 }
 
 .guia-capa__acoes > button {
@@ -399,7 +398,7 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
   font-size: 0.75em;
 }
 
-/* Como usar: logo abaixo do Começar, um gesto por linha. */
+/* Como usar: antes do Começar, um gesto por linha. */
 .guia-capa__como-usar {
   width: min(100%, 320px);
   margin-top: 20px;

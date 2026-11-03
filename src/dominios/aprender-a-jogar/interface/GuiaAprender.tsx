@@ -455,8 +455,6 @@ export default function GuiaAprender({
             <p className="guia-capa__frase">
               {t('learn.tagline', { count: conteudo.tutorialParts[0].modules.length })}
             </p>
-            {seloRank()}
-            {rank.degrau === 0 && <p className="guia-rank__dica">{t('learn.rankHint')}</p>}
             <button
               type="button"
               className="guia-capa__idioma"
@@ -467,6 +465,17 @@ export default function GuiaAprender({
               {ROTULOS_IDIOMA[idioma]}
               <i className="fas fa-chevron-down" aria-hidden="true" />
             </button>
+            <section className="guia-capa__como-usar" aria-labelledby="guia-como-usar">
+              <h2 id="guia-como-usar">{t('learn.howToUse')}</h2>
+              <ul>
+                {COMO_USAR.map(({ icone, chave }) => (
+                  <li key={chave}>
+                    <i className={`fas ${icone}`} aria-hidden="true" />
+                    {t(chave)}
+                  </li>
+                ))}
+              </ul>
+            </section>
             <div className="guia-capa__acoes">
               {paginaSalva > 1 ? (
                 <>
@@ -490,17 +499,6 @@ export default function GuiaAprender({
                 </button>
               )}
             </div>
-            <section className="guia-capa__como-usar" aria-labelledby="guia-como-usar">
-              <h2 id="guia-como-usar">{t('learn.howToUse')}</h2>
-              <ul>
-                {COMO_USAR.map(({ icone, chave }) => (
-                  <li key={chave}>
-                    <i className={`fas ${icone}`} aria-hidden="true" />
-                    {t(chave)}
-                  </li>
-                ))}
-              </ul>
-            </section>
           </div>
         )
       case 'marco':
@@ -751,6 +749,7 @@ export default function GuiaAprender({
           indiceAtual={indice}
           concluidos={concluidos}
           rotuloRank={t('learn.yourRank', { rank: nomeRank(rank, conteudo.ranks) })}
+          dicaRank={t('learn.rankHint')}
           aoIrPara={irPara}
           aoAbrirGlossario={() => {
             setIndiceAberto(false)

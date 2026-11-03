@@ -13,6 +13,7 @@ export default function IndiceGuia({
   indiceAtual,
   concluidos,
   rotuloRank,
+  dicaRank,
   aoIrPara,
   aoAbrirGlossario,
   aoFechar,
@@ -23,6 +24,8 @@ export default function IndiceGuia({
   concluidos: string[]
   /** "Seu rank: 6º kyu", embaixo do título. */
   rotuloRank: string
+  /** Como as estrelas e o rank sobem, no topo da lista. */
+  dicaRank: string
   aoIrPara: (indice: number) => void
   aoAbrirGlossario: () => void
   aoFechar: () => void
@@ -101,6 +104,7 @@ export default function IndiceGuia({
       className="guia-indice"
     >
         <div className="guia-indice__corpo">
+          <p className="guia-indice__dica">{dicaRank}</p>
           {conteudo.tutorialParts.map((parte) => (
             <section key={parte.id} aria-labelledby={`guia-indice-${parte.id}`}>
               <h3 id={`guia-indice-${parte.id}`} className="guia-indice__secao">
