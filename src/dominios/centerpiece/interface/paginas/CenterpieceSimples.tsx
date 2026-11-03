@@ -136,7 +136,7 @@ export default function CenterpieceSimples({
                 setAcoesAbertas(false)
               }}
             >
-              {t('match.simple.nextRound')}
+              <i className="fas fa-forward" aria-hidden="true" /> {t('match.simple.nextRound')}
             </button>
             <button
               type="button"
@@ -146,7 +146,7 @@ export default function CenterpieceSimples({
                 setAcoesAbertas(false)
               }}
             >
-              {t('match.simple.honba')}
+              <i className="fas fa-repeat" aria-hidden="true" /> {t('match.simple.honba')}
             </button>
             <JogarDados
               cadeiraDealer={estado.cadeiraDealer}

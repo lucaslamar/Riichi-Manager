@@ -62,15 +62,26 @@
   text-align: center;
 }
 
+/* Uma ação por linha, com o Recomeçar (a mais destrutiva) por último. */
 .mesa-simples-acoes {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
 }
 
-.mesa-simples-acoes .mesa-btn-principal,
-.mesa-simples-acoes .mesa-honba {
-  grid-column: 1 / -1;
+.mesa-simples-acoes > button {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  text-align: left;
+}
+
+.mesa-simples-acoes > button > i {
+  width: 1.25em;
+  flex: none;
+  text-align: center;
 }
 
 /* ─── Feltro e painel ─────────────────────────────────────────────────────── */
