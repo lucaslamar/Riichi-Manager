@@ -332,10 +332,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                     )}{' '}
                     本{placar.honba}·棒{placar.palitos}
                   </span>
-                  <span className="mesa-domo-muro" aria-hidden="true">
-                    ×{muro}
+                  {/* 山 é o muro, como 本 é o honba e 棒 os palitos. */}
+                  <span className="mesa-domo-muro" role="img" aria-label={t('match.table.wall', { count: muro })}>
+                    山{muro}
                   </span>
-                  <span className="sr-only">{t('match.table.wall', { count: muro })}</span>
                 </>
               }
               lado={(cadeira) => ({
