@@ -16,6 +16,8 @@ export interface EstadoBatida {
   /** Ron vindo do descarte: quem falta calcular e a pedra que fica marcada. */
   pendentes?: Cadeira[]
   ordemDescarte?: number
+  /** Tsumo de quem está na vez: começa no cálculo, sem tipo, vencedor e pagador. */
+  atalhoTsumo?: boolean
 }
 
 export function iniciarBatida(inicial?: { tipo: 'ron' | 'tsumo'; vencedor: Cadeira }): EstadoBatida {
@@ -27,6 +29,11 @@ export function iniciarBatida(inicial?: { tipo: 'ron' | 'tsumo'; vencedor: Cadei
     calculadora: null,
     vencedores: [],
   }
+}
+
+/** Ron sai da pergunta depois do descarte; o botão de batida fica para o tsumo de quem está na vez. */
+export function iniciarTsumoDaVez(vencedor: Cadeira): EstadoBatida {
+  return { ...iniciarBatida({ tipo: 'tsumo', vencedor }), atalhoTsumo: true }
 }
 
 /** Ron perguntado depois do descarte: vencedor e pagador já vêm preenchidos. */

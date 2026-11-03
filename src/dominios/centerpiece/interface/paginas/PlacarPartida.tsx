@@ -43,7 +43,12 @@ import ModalRio from '../componentes/ModalRio'
 import RecursosDaMesa from '../componentes/RecursosDaMesa'
 import { ModalAvisoFuriten, ModalChecarFuriten } from '../componentes/ModaisFuriten'
 import ModalDescartes, { type DecisaoDescarte } from '../componentes/ModalDescartes'
-import { iniciarBatida, iniciarRonDoDescarte, type EstadoBatida } from '../hooks/estadoBatida'
+import {
+  iniciarBatida,
+  iniciarRonDoDescarte,
+  iniciarTsumoDaVez,
+  type EstadoBatida,
+} from '../hooks/estadoBatida'
 import {
   MenuJogador,
   ModalConfirmacao,
@@ -386,12 +391,13 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             <button type="button" className="mesa-btn-principal mesa-btn-descarte" onClick={abrirDescarte}>
               {t('match.table.discard', { name: nomeDaVez })}
             </button>
+            {/* Com a mão em andamento o ron vem da pergunta do descarte: aqui só sobra o tsumo da vez. */}
             <button
               type="button"
               className="mesa-btn-principal"
-              onClick={() => setBatida(iniciarBatida())}
+              onClick={() => setBatida(vez.comecou ? iniciarTsumoDaVez(vez.cadeira) : iniciarBatida())}
             >
-              {t('match.win.title')}
+              {vez.comecou ? t('match.win.tsumoOf', { name: nomeDaVez }) : t('match.win.title')}
             </button>
             {partida.agariYameDisponivel && (
               <button

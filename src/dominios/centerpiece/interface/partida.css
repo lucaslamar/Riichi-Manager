@@ -168,6 +168,25 @@
   font-variant-numeric: tabular-nums;
 }
 
+.ptd-link-manual {
+  margin: 12px 0 0;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.ptd-link {
+  min-height: 44px;
+  border: 0;
+  padding: 0 4px;
+  background: none;
+  color: var(--primario);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .ptd-linhas {
   display: flex;
   flex-direction: column;

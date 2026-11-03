@@ -7,7 +7,12 @@ import {
   type Cadeira,
   type Partida,
 } from '../../logica/partida'
-import { MAXIMO_VENCEDORES, type EstadoBatida, type PassoBatida } from '../hooks/estadoBatida'
+import {
+  iniciarBatida,
+  MAXIMO_VENCEDORES,
+  type EstadoBatida,
+  type PassoBatida,
+} from '../hooks/estadoBatida'
 import type { NomeDaCadeira } from './ModaisPartida'
 
 /** Registro de batida em etapas, com indicador 1/4. */
@@ -30,8 +35,9 @@ export default function ModalBatida({
   const { placar, config } = partida
   const { tipo, passo, vencedorAtual, pagador, vencedores } = batida
 
-  const etapas: PassoBatida[] =
-    tipo === 'ron'
+  const etapas: PassoBatida[] = batida.atalhoTsumo
+    ? ['calculo', 'confirmacao']
+    : tipo === 'ron'
       ? ['tipo', 'vencedor', 'pagador', 'calculo', 'confirmacao']
       : ['tipo', 'vencedor', 'calculo', 'confirmacao']
   const indice = etapas.indexOf(passo)
@@ -206,6 +212,14 @@ export default function ModalBatida({
               {t('match.win.byHand')}
             </button>
           </div>
+          {batida.atalhoTsumo && vencedorAtual !== null && (
+            <p className="ptd-link-manual">
+              {t('match.win.notTsumoOf', { name: nomeDe(vencedorAtual) })}{' '}
+              <button type="button" className="ptd-link" onClick={() => aoMudar(iniciarBatida())}>
+                {t('match.win.registerManually')}
+              </button>
+            </p>
+          )}
         </>
       )}
 
