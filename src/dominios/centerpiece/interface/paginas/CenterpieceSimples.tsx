@@ -199,16 +199,30 @@ export default function CenterpieceSimples({
             >
               <i className="fas fa-forward" aria-hidden="true" /> {t('match.simple.nextRound')}
             </button>
-            <button
-              type="button"
-              className="mesa-btn-secundario"
-              onClick={() => {
-                mudar(repetirDealer(estado), true)
-                fecharAcoes(false)
-              }}
-            >
-              <i className="fas fa-repeat" aria-hidden="true" /> {t('match.simple.honba')}
-            </button>
+            {/* Um controle só: o + é o renchan (a mão recomeça) e o − corrige um toque a mais. */}
+            <div className="mesa-honba mesa-honba--acoes" role="group" aria-label={t('calculator.honba')}>
+              <span className="mesa-honba-rotulo">
+                <i className="fas fa-repeat" aria-hidden="true" /> {t('match.simple.honba')}
+              </span>
+              <button
+                type="button"
+                className="ptd-btn-icone"
+                aria-label={t('match.simple.honbaMinus')}
+                disabled={estado.honba === 0}
+                onClick={() => mudar(ajustarHonba(estado, -1))}
+              >
+                <i className="fas fa-minus" aria-hidden="true" />
+              </button>
+              <span aria-live="polite">本{estado.honba}</span>
+              <button
+                type="button"
+                className="ptd-btn-icone"
+                aria-label={t('match.simple.honbaPlus')}
+                onClick={() => mudar(repetirDealer(estado), true)}
+              >
+                <i className="fas fa-plus" aria-hidden="true" />
+              </button>
+            </div>
             <JogarDados
               cadeiraDealer={estado.cadeiraDealer}
               className="mesa-btn-secundario"
@@ -220,29 +234,6 @@ export default function CenterpieceSimples({
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>
               <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.simple.restart')}
             </button>
-            {/* Corrigir o honba sem passar a mão: o Honba de cima é o renchan. */}
-            <div className="mesa-honba" role="group" aria-label={t('calculator.honba')}>
-              <button
-                type="button"
-                className="ptd-btn-icone"
-                aria-label={t('match.simple.honbaMinus')}
-                disabled={estado.honba === 0}
-                onClick={() => mudar(ajustarHonba(estado, -1))}
-              >
-                <i className="fas fa-minus" aria-hidden="true" />
-              </button>
-              <span aria-live="polite">
-                <span className="sr-only">{t('calculator.honba')} </span>本{estado.honba}
-              </span>
-              <button
-                type="button"
-                className="ptd-btn-icone"
-                aria-label={t('match.simple.honbaPlus')}
-                onClick={() => mudar(ajustarHonba(estado, 1))}
-              >
-                <i className="fas fa-plus" aria-hidden="true" />
-              </button>
-            </div>
             <BotoesOpcao
               rotulo={t('tableConfig.turnTimer')}
               valor={estado.timerVez}

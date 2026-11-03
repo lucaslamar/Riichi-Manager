@@ -632,6 +632,22 @@ button.mesa-domo {
   font-weight: 800;
 }
 
+/* Nas ações, o honba ocupa uma linha no mesmo contorno dos outros botões. */
+.mesa-honba--acoes {
+  grid-column: 1 / -1;
+  min-height: 44px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 12px;
+  padding: 2px 6px 2px 12px;
+  gap: 12px;
+  font-size: 0.875rem;
+}
+
+.mesa-honba-rotulo {
+  flex: 1;
+  font-weight: 700;
+}
+
 /* Deitado: mesa de um lado, ações do outro, dimensionada pelo menor lado livre. */
 @media (orientation: landscape) {
   .mesa-tela,
