@@ -1032,6 +1032,9 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
+      "start": "Pradėti",
+      "pauseShort": "Pauzė",
+      "resumeShort": "Tęsti",
       "remaining": "Ėjimui liko sekundžių: {{seconds}}",
       "pause": "Pause timer",
       "resume": "Resume timer",

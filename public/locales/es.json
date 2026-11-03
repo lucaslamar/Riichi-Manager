@@ -1025,6 +1025,9 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
+      "start": "Iniciar",
+      "pauseShort": "Pausar",
+      "resumeShort": "Seguir",
       "remaining": "{{seconds}} segundos restantes en el turno",
       "pause": "Pause timer",
       "resume": "Resume timer",

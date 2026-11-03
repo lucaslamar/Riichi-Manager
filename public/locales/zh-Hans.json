@@ -1011,6 +1011,9 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
+      "start": "开始",
+      "pauseShort": "暂停",
+      "resumeShort": "继续",
       "remaining": "本巡剩余 {{seconds}} 秒",
       "pause": "Pause timer",
       "resume": "Resume timer",

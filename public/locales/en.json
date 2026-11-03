@@ -1018,6 +1018,9 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
+      "start": "Start",
+      "pauseShort": "Pause",
+      "resumeShort": "Resume",
       "remaining": "{{seconds}} seconds left in the turn",
       "pause": "Pause timer",
       "resume": "Resume timer",

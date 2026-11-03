@@ -307,7 +307,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           <div className="mesa-centro-tela">
             <MesaQuadrada
               cadeiraDealer={placar.cadeiraDealer}
-              aoTocarDomo={timer.ligado && vez.comecou ? timer.alternarPausa : undefined}
+              aoTocarDomo={timer.ligado ? timer.alternarPausa : undefined}
               rotuloDomo={`${t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}. ${t('match.table.wall', { count: muro })}`}
               domo={
                 <>
@@ -402,7 +402,23 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 {t('match.table.agariYame')}
               </button>
             )}
-            <div className="mesa-linha-acoes">
+            <div className={`mesa-linha-acoes${timer.ligado ? ' mesa-linha-acoes--timer' : ''}`}>
+              {timer.ligado && (
+                <button
+                  type="button"
+                  className={timer.contando ? undefined : 'mesa-btn-timer--parado'}
+                  onClick={timer.alternarPausa}
+                >
+                  <i className={`fas ${timer.contando ? 'fa-pause' : 'fa-play'}`} aria-hidden="true" />
+                  {t(
+                    timer.contando
+                      ? 'match.timer.pauseShort'
+                      : vez.comecou
+                        ? 'match.timer.resumeShort'
+                        : 'match.timer.start',
+                  )}
+                </button>
+              )}
               <JogarDados cadeiraDealer={placar.cadeiraDealer} aoMudarAberto={setDadosAbertos} />
               <button type="button" onClick={() => setRyukyokuAberto(true)}>
                 <i className="fas fa-equals" aria-hidden="true" />

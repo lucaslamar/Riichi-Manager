@@ -1011,6 +1011,9 @@
       "ahead": "{{points}} ahead"
     },
     "timer": {
+      "start": "시작",
+      "pauseShort": "일시정지",
+      "resumeShort": "계속",
       "remaining": "차례 {{seconds}}초 남음",
       "pause": "Pause timer",
       "resume": "Resume timer",

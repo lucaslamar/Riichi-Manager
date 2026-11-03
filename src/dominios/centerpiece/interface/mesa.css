@@ -528,6 +528,16 @@ button.mesa-domo {
   gap: 8px;
 }
 
+/* Com timer são cinco botões: o de iniciar e pausar vem primeiro. */
+.mesa-linha-acoes--timer {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.mesa-linha-acoes > button.mesa-btn-timer--parado {
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
 .mesa-linha-acoes > button {
   display: flex;
   min-width: 0;
@@ -752,5 +762,10 @@ button.mesa-domo {
   .mesa-linha-acoes {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Cinco botões em duas colunas: o do timer ocupa a linha, sem deixar buraco. */
+  .mesa-linha-acoes--timer > button:first-child {
+    grid-column: 1 / -1;
   }
 }

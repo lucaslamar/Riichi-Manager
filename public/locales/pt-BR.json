@@ -1018,6 +1018,9 @@
       "ahead": "sobram {{points}}"
     },
     "timer": {
+      "start": "Iniciar",
+      "pauseShort": "Pausar",
+      "resumeShort": "Retomar",
       "remaining": "{{seconds}} segundos restantes na vez",
       "pause": "Pausar timer",
       "resume": "Retomar timer",
