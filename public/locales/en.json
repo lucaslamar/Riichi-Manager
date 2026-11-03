@@ -589,6 +589,7 @@
     "keepAwakeHelp": "The phone stays on while a table is open.",
     "fullscreenEnter": "Enter full screen",
     "fullscreenExit": "Exit full screen",
+    "fullscreenHeaderHint": "Tap MOJOCA for full screen",
     "aboutTitle": "About Mojoca",
     "aboutText": "An app made to help Riichi Mahjong players and clubs score hands, organize games and try out tournament ideas, bringing Riichi Mahjong to everyone.",
     "reportIssue": "Report an issue",

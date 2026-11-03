@@ -583,6 +583,7 @@
     "keepAwakeHelp": "牌桌打开期间屏幕不会熄灭。",
     "fullscreenEnter": "进入全屏",
     "fullscreenExit": "退出全屏",
+    "fullscreenHeaderHint": "点按 MOJOCA 进入全屏",
     "aboutTitle": "关于 Mojoca",
     "aboutText": "一款帮助立直麻将玩家和俱乐部计算手牌、组织对局和尝试比赛点子的应用，让每个人都能玩立直麻将。",
     "reportIssue": "报告问题",

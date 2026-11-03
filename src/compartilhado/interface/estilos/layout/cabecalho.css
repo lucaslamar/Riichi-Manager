@@ -64,6 +64,49 @@
   white-space: nowrap;
 }
 
+/* Nome do app como botão de tela cheia: mesmo visual do título, área de toque de 44px. */
+.marca-aplicacao {
+  position: relative;
+}
+
+.botao-marca-tela-cheia {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.4em;
+  margin-block: -6px;
+  border: 0;
+  padding: 0 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.botao-marca-tela-cheia i {
+  font-size: 0.75em;
+  letter-spacing: 0;
+}
+
+.dica-tela-cheia {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 5;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: var(--cor-primario, #1a4a8a);
+  color: var(--cor-superficie, #ffffff);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 25%);
+  pointer-events: none;
+}
+
 .modulo-atual {
   display: block;
   margin-top: 2px;

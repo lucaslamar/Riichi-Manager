@@ -583,6 +583,7 @@
     "keepAwakeHelp": "卓を開いている間は画面が消えません。",
     "fullscreenEnter": "全画面にする",
     "fullscreenExit": "全画面を終了",
+    "fullscreenHeaderHint": "MOJOCAをタップで全画面",
     "aboutTitle": "Mojocaについて",
     "aboutText": "リーチ麻雀のプレイヤーとクラブが手牌を計算し、対局を管理し、大会のアイデアを試せるように作ったアプリです。リーチ麻雀をすべての人に。",
     "reportIssue": "問題を報告",

@@ -595,6 +595,7 @@
     "keepAwakeHelp": "El teléfono no se apaga mientras haya una mesa abierta.",
     "fullscreenEnter": "Entrar en pantalla completa",
     "fullscreenExit": "Salir de pantalla completa",
+    "fullscreenHeaderHint": "Toca MOJOCA para pantalla completa",
     "aboutTitle": "Acerca de Mojoca",
     "aboutText": "Una app hecha para ayudar a jugadores y clubes de Riichi Mahjong a calcular manos, organizar partidas y probar ideas de torneo, llevando el Riichi Mahjong a todos.",
     "reportIssue": "Reportar un problema",

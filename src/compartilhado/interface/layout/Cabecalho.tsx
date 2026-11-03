@@ -10,6 +10,7 @@ import {
   type DestinoNavegacao,
   type DestinoTela,
 } from './navegacao'
+import MarcaAplicacao from './MarcaAplicacao'
 import ModalIdioma from './ModalIdioma'
 import { ID_TITULO_TELA } from './TituloTela'
 
@@ -131,7 +132,7 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
         <div className="conteudo-cabecalho">
           <div className="barra-marca-aplicacao">
             <div className="marca-aplicacao">
-              <h1 className="titulo-principal">{t('global.appName')}</h1>
+              <MarcaAplicacao />
             </div>
 
             <div id={ID_TITULO_TELA} className="cabecalho-tela" />
