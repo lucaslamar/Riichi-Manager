@@ -1,5 +1,12 @@
+/* A página já cabe na tela, com a barra inferior por dentro: nada rola.
+ * O !important vence a folga da barra que o cabecalho.css põe no body. */
+html:has(.sorteador-ventos-page) {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body:has(.sorteador-ventos-page) {
-  padding-bottom: 0;
+  padding-bottom: 0 !important;
 }
 
 .sorteador-ventos-page {
