@@ -46,7 +46,6 @@ export default function CenterpieceSimples({
   const [estado, setEstado] = useState<EstadoSimples>(() => carregarSimples(armazenamentoLocal))
   const [confirmando, setConfirmando] = useState(false)
   const [acoesAbertas, setAcoesAbertas] = useState(false)
-  const [honbaAberto, setHonbaAberto] = useState(false)
   const [dicaVisivel, setDicaVisivel] = useState(() => !dicaSimplesFoiVista(armazenamentoLocal))
   // Lado que caiu nos dados; a mão seguinte começa sem destaque.
   const [ladoSorteado, setLadoSorteado] = useState<Cadeira | null>(null)
@@ -56,20 +55,22 @@ export default function CenterpieceSimples({
   // A vez não é salva: ao voltar para a mesa, o timer espera o primeiro toque.
   const [vez, setVez] = useState<EstadoVez>(() => vezInicial(estado.cadeiraDealer, estado.timerVez))
   const atualizarVez = useCallback((transformar: (atual: EstadoVez) => EstadoVez) => setVez(transformar), [])
-  const timer = useRelogioVez(vez, estado.timerVez, atualizarVez, honbaAberto || confirmando)
+  const timer = useRelogioVez(vez, estado.timerVez, atualizarVez, confirmando)
   // As ações pausam por conta própria: o Pausar de dentro delas não pode ser desfeito ao fechar.
   const [retomarAoFechar, setRetomarAoFechar] = useState(false)
 
-  const mudar = (proximo: EstadoSimples) => {
+  /** `novaMao`: renchan, quando só o honba muda mas a mão recomeça. */
+  const mudar = (proximo: EstadoSimples, novaMao = false) => {
     if (proximo.cadeiraDealer !== estado.cadeiraDealer || proximo.rodadaNumero !== estado.rodadaNumero) {
       setLadoSorteado(null)
     }
-    // Mão nova ou outro tempo: a vez volta para o dealer, esperando o toque.
+    // Mão nova ou outro tempo: a vez volta para o dealer, esperando o toque. Corrigir
+    // o honba com − e + não mexe na vez.
     if (
+      novaMao ||
       proximo.cadeiraDealer !== estado.cadeiraDealer ||
       proximo.rodadaNumero !== estado.rodadaNumero ||
       proximo.rodadaVento !== estado.rodadaVento ||
-      proximo.honba > estado.honba ||
       proximo.timerVez !== estado.timerVez
     ) {
       setVez(vezInicial(proximo.cadeiraDealer, proximo.timerVez))
@@ -119,8 +120,6 @@ export default function CenterpieceSimples({
           cadeiraDealer={estado.cadeiraDealer}
           giro={giro}
           aoTocarMesa={abrirAcoes}
-          aoTocarDomo={() => setHonbaAberto(true)}
-          rotuloDomo={t('match.simple.adjustHonba', { count: estado.honba })}
           domo={
             <>
               <span className="mesa-domo-rodada" aria-live="polite">
@@ -134,37 +133,36 @@ export default function CenterpieceSimples({
             const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer)
             const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + 4) % 4).join(' · ')
             const daVez = timer.ligado && vez.cadeira === cadeira
+            const classe = `mesa-placa mesa-placa--simples${vento === 'leste' ? ' mesa-placa--dealer' : ''}${
+              ladoSorteado === cadeira ? ' mesa-placa--sorteada' : ''
+            }${daVez ? ' mesa-placa--vez' : ''}${daVez && timer.esgotado ? ' mesa-placa--esgotado' : ''}`
+            const ventoNaPlaca = (
+              <span className="mesa-placa-simples-vento" aria-hidden="true">
+                <strong className={`mesa-led-vento--${vento}`}>{KANJI_VENTO[vento]}</strong>
+                <small>{numeros}</small>
+              </span>
+            )
+            const descricao = `${t(CHAVE_VENTO[vento])}: ${numeros}`
             return {
-              placa: (
-                <div
-                  className={`mesa-placa mesa-placa--simples${vento === 'leste' ? ' mesa-placa--dealer' : ''}${
-                    ladoSorteado === cadeira ? ' mesa-placa--sorteada' : ''
-                  }${daVez ? ' mesa-placa--vez' : ''}${daVez && timer.esgotado ? ' mesa-placa--esgotado' : ''}`}
+              placa: daVez ? (
+                // A placa inteira da vez é do timer: o toque começa ou passa a vez, sem abrir as ações.
+                <button
+                  type="button"
+                  className={`${classe} mesa-placa--botao`}
+                  aria-label={`${descricao}. ${t(vez.comecou ? 'match.simple.timerPass' : 'match.simple.timerStart')}`}
+                  onClick={(evento) => {
+                    evento.stopPropagation()
+                    timer.tocar()
+                  }}
                 >
-                  <span
-                    className="mesa-placa-simples-vento"
-                    role="img"
-                    aria-label={`${t(CHAVE_VENTO[vento])}: ${numeros}`}
-                  >
-                    <strong className={`mesa-led-vento--${vento}`} aria-hidden="true">
-                      {KANJI_VENTO[vento]}
-                    </strong>
-                    <small aria-hidden="true">{numeros}</small>
+                  {ventoNaPlaca}
+                  <span className="mesa-simples-timer">
+                    <AnelTimer segundos={timer.segundos} fracao={timer.fracao} esgotado={timer.esgotado} />
                   </span>
-                  {daVez && (
-                    // O toque no anel é do timer: não abre as ações da mesa.
-                    <button
-                      type="button"
-                      className="mesa-simples-timer"
-                      aria-label={t(vez.comecou ? 'match.simple.timerPass' : 'match.simple.timerStart')}
-                      onClick={(evento) => {
-                        evento.stopPropagation()
-                        timer.tocar()
-                      }}
-                    >
-                      <AnelTimer segundos={timer.segundos} fracao={timer.fracao} esgotado={timer.esgotado} />
-                    </button>
-                  )}
+                </button>
+              ) : (
+                <div className={classe} role="img" aria-label={descricao}>
+                  {ventoNaPlaca}
                 </div>
               ),
             }
@@ -205,7 +203,7 @@ export default function CenterpieceSimples({
               type="button"
               className="mesa-btn-secundario"
               onClick={() => {
-                mudar(repetirDealer(estado))
+                mudar(repetirDealer(estado), true)
                 fecharAcoes(false)
               }}
             >
@@ -222,6 +220,29 @@ export default function CenterpieceSimples({
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>
               <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.simple.restart')}
             </button>
+            {/* Corrigir o honba sem passar a mão: o Honba de cima é o renchan. */}
+            <div className="mesa-honba" role="group" aria-label={t('calculator.honba')}>
+              <button
+                type="button"
+                className="ptd-btn-icone"
+                aria-label={t('match.simple.honbaMinus')}
+                disabled={estado.honba === 0}
+                onClick={() => mudar(ajustarHonba(estado, -1))}
+              >
+                <i className="fas fa-minus" aria-hidden="true" />
+              </button>
+              <span aria-live="polite">
+                <span className="sr-only">{t('calculator.honba')} </span>本{estado.honba}
+              </span>
+              <button
+                type="button"
+                className="ptd-btn-icone"
+                aria-label={t('match.simple.honbaPlus')}
+                onClick={() => mudar(ajustarHonba(estado, 1))}
+              >
+                <i className="fas fa-plus" aria-hidden="true" />
+              </button>
+            </div>
             <BotoesOpcao
               rotulo={t('tableConfig.turnTimer')}
               valor={estado.timerVez}
@@ -235,42 +256,6 @@ export default function CenterpieceSimples({
         </Modal>
       )}
 
-      {honbaAberto && (
-        <Modal
-          titulo={t('calculator.honba')}
-          aoFechar={() => setHonbaAberto(false)}
-          rotuloFechar={t('actions.close')}
-          tamanho="pequena"
-          rodape={
-            <button type="button" className="btn-primario" onClick={() => setHonbaAberto(false)}>
-              {t('actions.close')}
-            </button>
-          }
-        >
-          <div className="mesa-honba">
-            <button
-              type="button"
-              className="ptd-btn-icone"
-              aria-label={t('match.simple.honbaMinus')}
-              disabled={estado.honba === 0}
-              onClick={() => mudar(ajustarHonba(estado, -1))}
-            >
-              <i className="fas fa-minus" aria-hidden="true" />
-            </button>
-            <span aria-live="polite">
-              <span className="sr-only">{t('calculator.honba')} </span>本{estado.honba}
-            </span>
-            <button
-              type="button"
-              className="ptd-btn-icone"
-              aria-label={t('match.simple.honbaPlus')}
-              onClick={() => mudar(ajustarHonba(estado, 1))}
-            >
-              <i className="fas fa-plus" aria-hidden="true" />
-            </button>
-          </div>
-        </Modal>
-      )}
 
       {confirmando && (
         <ModalConfirmacao

@@ -485,22 +485,29 @@ button.mesa-domo {
   align-items: center;
 }
 
+/* A placa da vez vira botão: só o que a placa já desenha, sem o estilo do navegador. */
+.mesa-placa--botao {
+  justify-content: center;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.mesa-placa--botao:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
 /* O anel fica na ponta da placa, sem empurrar o vento do centro. */
 .mesa-simples-timer {
   position: absolute;
   top: 50%;
   right: 4px;
   display: flex;
-  min-width: 44px;
-  min-height: 44px;
   align-items: center;
   justify-content: center;
-  border: 0;
-  padding: 0;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
   transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .mesa-simples-timer .mesa-timer {
