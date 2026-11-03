@@ -383,12 +383,12 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 {t('match.discards.fourWindsNotice')}
               </button>
             )}
-            <button type="button" className="mesa-btn-principal" onClick={abrirDescarte}>
+            <button type="button" className="mesa-btn-principal mesa-btn-descarte" onClick={abrirDescarte}>
               {t('match.table.discard', { name: nomeDaVez })}
             </button>
             <button
               type="button"
-              className="mesa-btn-secundario"
+              className="mesa-btn-principal"
               onClick={() => setBatida(iniciarBatida())}
             >
               {t('match.win.title')}

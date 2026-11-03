@@ -77,7 +77,7 @@
 .mesa-feltro {
   box-sizing: border-box;
   /* Quadrado que cabe na altura livre entre o cabeçalho e as ações. */
-  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 152px)));
+  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 160px)));
   max-width: 620px;
   min-width: 200px;
   aspect-ratio: 1;
@@ -507,6 +507,12 @@ button.mesa-domo {
   font: inherit;
   font-size: 1.0625rem;
   font-weight: 800;
+}
+
+/* Mesmo tom do botão de descartes da finalização da mão. */
+.mesa-btn-descarte {
+  color: var(--cor-sobre-primario);
+  background: var(--cor-texto);
 }
 
 .mesa-btn-secundario {
