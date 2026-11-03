@@ -33,6 +33,8 @@ interface PropsConstrutorMao {
   /** Campo de notação no lugar do teclado de pedras; o estado fica na página (gestos). */
   entradaNotacao?: boolean
   aoMudarEntradaNotacao?: (ativa: boolean) => void
+  /** Entrada escolhida antes (Centerpiece): sem botão MPSZ nem volta para as pedras. */
+  entradaFixa?: boolean
 }
 
 /**
@@ -52,6 +54,7 @@ export default function ConstrutorMao({
   aoCalcularDireto,
   entradaNotacao = false,
   aoMudarEntradaNotacao,
+  entradaFixa = false,
 }: PropsConstrutorMao) {
   const { t } = useI18n()
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
@@ -405,7 +408,7 @@ export default function ConstrutorMao({
                 podeKanAberto={podeKanAberto}
                 podeKanFechado={podeKanFechado}
                 aoAlternarAcao={alternarAcaoMao}
-                aoAbrirNotacao={aoMudarEntradaNotacao && abrirNotacao}
+                aoAbrirNotacao={entradaFixa ? undefined : aoMudarEntradaNotacao && abrirNotacao}
               />
             </div>
           )}
@@ -420,7 +423,7 @@ export default function ConstrutorMao({
           </span>
           {contexto === 'montagem' && !entradaPorNotacao && (
             <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
-              <div className="opcoes-acoes-mao-mobile">
+              <div className={`opcoes-acoes-mao-mobile${entradaFixa ? ' opcoes-acoes-mao-mobile--sem-mpsz' : ''}`}>
                 <AcoesConstrutorMao
                   mao={mao}
                   acaoPendente={acaoPendente}
@@ -429,7 +432,7 @@ export default function ConstrutorMao({
                   podeKanAberto={podeKanAberto}
                   podeKanFechado={podeKanFechado}
                   aoAlternarAcao={alternarAcaoMao}
-                  aoAbrirNotacao={aoMudarEntradaNotacao && abrirNotacao}
+                  aoAbrirNotacao={entradaFixa ? undefined : aoMudarEntradaNotacao && abrirNotacao}
                   compacto
                 />
                 {aoAbrirRegras && !mostrarFinalizacaoNoTeclado && (
@@ -452,7 +455,7 @@ export default function ConstrutorMao({
               valor={textoNotacao}
               aoMudar={mudarTextoNotacao}
               aoConfirmar={aoConfirmarNotacao}
-              aoVoltar={voltarParaPedras}
+              aoVoltar={entradaFixa ? undefined : voltarParaPedras}
               aoLimpar={limparNotacao}
               slotsMao={slotsUsados}
               erro={erroVisivel ? t(erroVisivel.chave, erroVisivel.parametros) : null}

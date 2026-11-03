@@ -13,6 +13,8 @@ interface PropsModoCompleto {
   aoAbrirRegras?: () => void
   entradaNotacao?: boolean
   aoMudarEntradaNotacao?: (ativa: boolean) => void
+  /** Pedras ou notação escolhidas antes de abrir: não dá para trocar aqui. */
+  entradaFixa?: boolean
   aoUsarMao?: () => void
   contextoCenterpiece?: ContextoCenterpieceMao
 }
@@ -27,6 +29,7 @@ export default function ModoCompletoCalculadora({
   aoAbrirRegras,
   entradaNotacao,
   aoMudarEntradaNotacao,
+  entradaFixa,
   aoUsarMao,
   contextoCenterpiece,
 }: PropsModoCompleto) {
@@ -81,6 +84,7 @@ export default function ModoCompletoCalculadora({
             aoAbrirRegras={aoAbrirRegras}
             entradaNotacao={entradaNotacao}
             aoMudarEntradaNotacao={aoMudarEntradaNotacao}
+            entradaFixa={entradaFixa}
           />
         </section>
       ) : (

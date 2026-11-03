@@ -16,6 +16,8 @@ interface PropsPaginaCalculadoraMao {
   /** Aberta pelo modal de batida do Centerpiece: vitória e ventos vêm da mesa. */
   aoUsarResultado?: (resultado: ResultadoCalculoParaCenterpiece) => void
   contextoCenterpiece?: ContextoCenterpieceMao
+  /** Entrada escolhida no registro de batida: só pedras ou só notação MPSZ, sem trocar. */
+  entradaFixa?: 'pedras' | 'notacao'
   /** Tela seguinte na ordem da barra inferior (Han e Fu). */
   aoIrParaProximaTela?: () => void
   /**
@@ -28,6 +30,7 @@ interface PropsPaginaCalculadoraMao {
 export default function PaginaCalculadoraMao({
   aoUsarResultado,
   contextoCenterpiece,
+  entradaFixa,
   aoIrParaProximaTela,
   visivel = true,
 }: PropsPaginaCalculadoraMao = {}) {
@@ -72,13 +75,13 @@ export default function PaginaCalculadoraMao({
   )
   const finalizandoMao = calculadora.etapaFinalizacaoAtiva && calculadora.maoProntaParaFinalizar
   /** Teclado de notação no lugar do de pedras. */
-  const [entradaNotacao, setEntradaNotacao] = useState(false)
+  const [entradaNotacao, setEntradaNotacao] = useState(entradaFixa === 'notacao')
 
   // Ao sair da Calculadora a notação fecha: ao voltar, o campo não abre o
   // teclado do celular sozinho.
   useEffect(() => {
-    if (!visivel) setEntradaNotacao(false)
-  }, [visivel])
+    if (!visivel && !entradaFixa) setEntradaNotacao(false)
+  }, [visivel, entradaFixa])
 
   // Dedo para a esquerda segue a barra inferior (próxima tela). Dedo para a direita,
   // que nas outras telas volta à anterior, aqui é a primeira aba: na montagem alterna
@@ -88,7 +91,9 @@ export default function PaginaCalculadoraMao({
     ativo: visivel,
     aoDeslizarDireita: finalizandoMao
       ? calculadora.voltarParaMontagem
-      : () => setEntradaNotacao((ativa) => !ativa),
+      : entradaFixa
+        ? undefined
+        : () => setEntradaNotacao((ativa) => !ativa),
     aoDeslizarEsquerda: aoIrParaProximaTela,
   })
 
@@ -125,6 +130,7 @@ export default function PaginaCalculadoraMao({
         contextoCenterpiece={contextoCenterpiece}
         entradaNotacao={entradaNotacao}
         aoMudarEntradaNotacao={setEntradaNotacao}
+        entradaFixa={!!entradaFixa}
       />
 
       {calculadora.modalRegrasAberto && (

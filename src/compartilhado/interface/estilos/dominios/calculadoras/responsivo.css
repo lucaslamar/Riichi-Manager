@@ -5471,3 +5471,8 @@
     padding-bottom: 18px;
   }
 }
+
+/* Centerpiece com a entrada já escolhida: sem a coluna do MPSZ, os 4 botões dividem a linha. */
+.construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile--sem-mpsz {
+  grid-template-columns: 1fr 1fr 1fr 1.5fr;
+}

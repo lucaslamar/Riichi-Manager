@@ -10,8 +10,8 @@ export interface EstadoBatida {
   passo: PassoBatida
   vencedorAtual: Cadeira | null
   pagador: Cadeira | null
-  /** Abre a calculadora no lugar da mesa. */
-  calculadora: 'hanFu' | 'mao' | null
+  /** Abre a calculadora no lugar da mesa: Han e Fu, teclado de pedras ou notação MPSZ. */
+  calculadora: 'hanFu' | 'pedras' | 'notacao' | null
   vencedores: { cadeira: Cadeira; resultado: ResultadoCalculoParaCenterpiece }[]
   /** Ron vindo do descarte: quem falta calcular e a pedra que fica marcada. */
   pendentes?: Cadeira[]

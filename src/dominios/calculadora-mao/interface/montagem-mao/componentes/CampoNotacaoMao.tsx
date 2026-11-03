@@ -25,7 +25,7 @@ interface PropsCampoNotacaoMao {
   aoMudar: (texto: string) => void
   aoConfirmar?: () => void
   /** Volta para o teclado de pedras (o mesmo que deslizar o dedo para a direita). */
-  aoVoltar: () => void
+  aoVoltar?: () => void
   /** AC: zera tudo, como a lixeira da mão. */
   aoLimpar: () => void
   /** Slots já ocupados na mão, sem contar o que espera o naipe. */
@@ -269,10 +269,12 @@ export function CampoNotacaoMao({
   return (
     <div className="campo-notacao-mao">
       <div className="barra-notacao-mao" role="toolbar" aria-label={t('notation.toggle')}>
-        <button className="botao-voltar-pedras-notacao" type="button" onClick={aoVoltar}>
-          <i className="fas fa-chevron-left" aria-hidden="true" />
-          <span>{t('notation.backToTiles')}</span>
-        </button>
+        {aoVoltar && (
+          <button className="botao-voltar-pedras-notacao" type="button" onClick={aoVoltar}>
+            <i className="fas fa-chevron-left" aria-hidden="true" />
+            <span>{t('notation.backToTiles')}</span>
+          </button>
+        )}
         <span className="espaco-barra-notacao-mao" aria-hidden="true" />
         <button
           className="acao-barra-notacao-mao limpar"

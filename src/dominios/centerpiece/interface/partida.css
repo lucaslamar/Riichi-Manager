@@ -168,6 +168,20 @@
   font-variant-numeric: tabular-nums;
 }
 
+.ptd-opcao-icone {
+  width: 1.25em;
+  flex: none;
+  text-align: center;
+}
+
+/* Linha curta embaixo do nome da opção (como calcular a mão). */
+.ptd-opcao-dica {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 .ptd-link-manual {
   margin: 12px 0 0;
   color: var(--texto-apoio);

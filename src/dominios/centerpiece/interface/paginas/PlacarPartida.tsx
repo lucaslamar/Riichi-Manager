@@ -470,6 +470,8 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             />
           ) : (
             <PaginaCalculadoraMao
+              key={batida.calculadora}
+              entradaFixa={batida.calculadora}
               aoUsarResultado={receberCalculo}
               contextoCenterpiece={{
                 tipoVitoria: batida.tipo,

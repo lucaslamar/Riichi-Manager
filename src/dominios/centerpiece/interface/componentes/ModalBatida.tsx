@@ -15,6 +15,12 @@ import {
 } from '../hooks/estadoBatida'
 import type { NomeDaCadeira } from './ModaisPartida'
 
+const FORMAS_DE_CALCULAR = [
+  { calculadora: 'hanFu', icone: 'fa-calculator', rotulo: 'match.win.byHanFu', dica: 'match.win.byHanFuHelp' },
+  { calculadora: 'pedras', icone: 'fa-hand', rotulo: 'match.win.byTiles', dica: 'match.win.byTilesHelp' },
+  { calculadora: 'notacao', icone: 'fa-keyboard', rotulo: 'match.win.byNotation', dica: 'match.win.byNotationHelp' },
+] as const
+
 /** Registro de batida em etapas, com indicador 1/4. */
 export default function ModalBatida({
   partida,
@@ -195,22 +201,20 @@ export default function ModalBatida({
             {t('match.win.howToScore', { name: vencedorAtual !== null ? nomeDe(vencedorAtual) : '' })}
           </p>
           <div className="ptd-lista-opcoes">
-            <button
-              type="button"
-              className="ptd-opcao"
-              onClick={() => aoMudar({ ...batida, calculadora: 'hanFu' })}
-            >
-              <i className="fas fa-calculator" aria-hidden="true" />
-              {t('match.win.byHanFu')}
-            </button>
-            <button
-              type="button"
-              className="ptd-opcao"
-              onClick={() => aoMudar({ ...batida, calculadora: 'mao' })}
-            >
-              <i className="fas fa-hand" aria-hidden="true" />
-              {t('match.win.byHand')}
-            </button>
+            {FORMAS_DE_CALCULAR.map((forma) => (
+              <button
+                key={forma.calculadora}
+                type="button"
+                className="ptd-opcao"
+                onClick={() => aoMudar({ ...batida, calculadora: forma.calculadora })}
+              >
+                <i className={`fas ${forma.icone} ptd-opcao-icone`} aria-hidden="true" />
+                <span className="ptd-opcao-nome">
+                  {t(forma.rotulo)}
+                  <small className="ptd-opcao-dica">{t(forma.dica)}</small>
+                </span>
+              </button>
+            ))}
           </div>
           {batida.atalhoTsumo && vencedorAtual !== null && (
             <p className="ptd-link-manual">
