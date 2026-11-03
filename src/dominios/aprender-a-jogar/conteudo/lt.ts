@@ -512,10 +512,6 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'Po chi jūsų ranka tampa **atvira**.' },
-          {
-            type: 'text',
-            md: '**Draudžiamas keitimas (kuikae):** tą patį ėjimą, kai paskelbei, negali išmesti paimto akmens ar akmens kitame sekos gale. Turint 3-4 ir paėmus 2, negalima išmesti nei kito 2, nei 5. Po Pon negalima išmesti tokio paties akmens.',
-          },
         ],
       },
       {
@@ -1199,6 +1195,72 @@ const topicosRegras: TopicoRegras[] = [
       {
         type: 'text',
         md: '- **Dėl išmestų akmenų**: akmuo, kuris užbaigtų jūsų ranką, yra tarp jūsų išmestų akmenų.\n- **Laikinas**: praleidote akmenį, kuris užbaigtų ranką, nepaskelbę ron. Trunka iki kito jūsų išmetimo.\n- **Po Riichi**: paskelbę Riichi praleidote akmenį, kuris užbaigtų ranką. Trunka iki rankos pabaigos.',
+      },
+    ],
+  },
+  {
+    id: 'kuikae',
+    section: 'regras',
+    title: 'Draudžiamas keitimas (kuikae)',
+    blocks: [
+      {
+        type: 'text',
+        md: 'Iškart po chi ar pon to paties ėjimo išmetimas turi apribojimų. Skelbti vien tam, kad pakeistumėte akmenį kitu, atliekančiu tą patį vaidmenį, vadinama **kuikae**, ir tai draudžiama.',
+      },
+      { type: 'heading', text: 'Tas pats akmuo' },
+      {
+        type: 'text',
+        md: 'Negalite išmesti tokio paties akmens, kokį ką tik paėmėte. Tai galioja ir chi, ir pon.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '555p',
+            deLado: 1,
+            caption: 'Pon su Pin 5: jei rankoje dar turite kitą Pin 5, jo dabar išmesti negalima',
+          },
+        ],
+      },
+      { type: 'heading', text: 'Kitas sekos galas' },
+      {
+        type: 'text',
+        md: 'Jei chi darote su dviem gretimais akmenimis, draudžiamas ir akmuo kitame sekos gale: su juo seka būtų ta pati, tik pasislinkusi.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '234m',
+            deLado: 0,
+            caption: 'Chi su Man 2, turint 3-4: negalima išmesti nei Man 2, nei Man 5',
+          },
+          {
+            mpsz: '867s',
+            deLado: 0,
+            caption: 'Chi su Sou 8, turint 6-7: negalima išmesti nei Sou 8, nei Sou 5',
+          },
+        ],
+      },
+      {
+        type: 'text',
+        md: 'Chi su viduriniu akmeniu (3 su 2-4) arba uždarame krašte (3 su 1-2) draudžia tik tokį patį akmenį: kito galo nėra.',
+      },
+      {
+        type: 'tip',
+        md: 'Jei po skelbimo liktų išmesti tik draudžiami akmenys, skelbti negalima. Mahjong Soul ir Tenhou pats žaidimas to neleidžia; prie gyvo stalo bauda skiriasi, todėl susitarkite prieš žaidimą.',
+      },
+      {
+        type: 'quiz',
+        question: 'Turite Pin 5-6 ir darote chi su Pin 4. Ko negalite išmesti tą patį ėjimą?',
+        hand: '56p',
+        options: [
+          { label: 'Pin 4 ir 7', correct: true },
+          { label: 'Tik Pin 4' },
+          { label: 'Pin 4 ir 6' },
+        ],
+        answer:
+          'Pin 4 ir 7. Pin 4 – akmuo, kurį paėmėte; išmetus 7, tie patys 5-6 sudarytų 5-6-7, kitą galą.',
       },
     ],
   },

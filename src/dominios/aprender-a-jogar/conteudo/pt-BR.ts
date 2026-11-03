@@ -526,10 +526,6 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'Depois do chi, sua mão fica **aberta**.' },
-          {
-            type: 'text',
-            md: '**Troca proibida (kuikae):** na mesma vez em que chamou, você não pode descartar a pedra que pegou nem a da outra ponta da sequência. Com 3-4 na mão, quem pega o 2 não pode descartar outro 2 nem o 5. No Pon vale o mesmo para a pedra igual.',
-          },
         ],
       },
       {
@@ -1210,6 +1206,73 @@ const topicosRegras: TopicoRegras[] = [
       {
         type: 'text',
         md: '- **Pelos descartes**: alguma pedra que completaria sua mão está entre os seus descartes.\n- **Temporário**: você deixou passar uma pedra que completaria sua mão, sem declarar ron. Dura até o seu próximo descarte.\n- **De Riichi**: depois do Riichi, você deixou passar uma pedra que completaria sua mão. Dura até o fim da rodada.',
+      },
+    ],
+  },
+  {
+    id: 'kuikae',
+    section: 'regras',
+    title: 'Troca proibida (kuikae)',
+    blocks: [
+      {
+        type: 'text',
+        md: 'Logo depois de um chi ou de um pon, o descarte dessa mesma vez tem limites. Chamar só para trocar uma pedra por outra que faz o mesmo papel é o **kuikae**, e é proibido.',
+      },
+      { type: 'heading', text: 'A mesma pedra' },
+      {
+        type: 'text',
+        md: 'Você não pode descartar uma pedra igual à que acabou de pegar. Vale para chi e para pon.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '555p',
+            deLado: 1,
+            caption: 'Pon do 5 de Pin: se ainda tem outro 5 de Pin na mão, ele não pode sair agora',
+          },
+        ],
+      },
+      { type: 'heading', text: 'A outra ponta da sequência' },
+      {
+        type: 'text',
+        md: 'No chi com duas pedras vizinhas, a pedra da outra ponta também fica proibida: com ela, a sequência seria a mesma, só deslocada.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '234m',
+            deLado: 0,
+            caption: 'Chi do 2 de Man com 3-4: não pode descartar 2 nem 5 de Man',
+          },
+          {
+            mpsz: '867s',
+            deLado: 0,
+            caption: 'Chi do 8 de Sou com 6-7: não pode descartar 8 nem 5 de Sou',
+          },
+        ],
+      },
+      {
+        type: 'text',
+        md: 'Chi com a pedra do meio (3 com 2-4) ou numa ponta presa (3 com 1-2) só proíbe a pedra igual: não existe outra ponta.',
+      },
+      {
+        type: 'tip',
+        md: 'Se depois da chamada só sobrariam pedras proibidas para descartar, a chamada não pode ser feita. No Mahjong Soul e no Tenhou o próprio jogo bloqueia; na mesa, a penalidade varia, então combine antes de jogar.',
+      },
+      {
+        type: 'quiz',
+        question:
+          'Você tem 5-6 de Pin e faz chi do 4 de Pin. O que não pode descartar nessa mesma vez?',
+        hand: '56p',
+        options: [
+          { label: '4 e 7 de Pin', correct: true },
+          { label: 'Só o 4 de Pin' },
+          { label: '4 e 6 de Pin' },
+        ],
+        answer:
+          '4 e 7 de Pin. O 4 é a pedra que você pegou; com o 7, os mesmos 5-6 formariam 5-6-7, a outra ponta.',
       },
     ],
   },

@@ -514,10 +514,6 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'After a chi, your hand is **open**.' },
-          {
-            type: 'text',
-            md: '**Swap calling (kuikae):** on the turn you call, you may not discard the tile you took or the one at the other end of the sequence. With 3-4 in hand, taking a 2 means you may not discard another 2 or the 5. The same goes for the matching tile after a Pon.',
-          },
         ],
       },
       {
@@ -1202,6 +1198,74 @@ const topicosRegras: TopicoRegras[] = [
       {
         type: 'text',
         md: '- **By discards**: a tile that would complete your hand is among your discards.\n- **Temporary**: you let a tile that would complete your hand go by, without declaring ron. It lasts until your next discard.\n- **Riichi**: after Riichi, you let a tile that would complete your hand go by. It lasts until the end of the hand.',
+      },
+    ],
+  },
+  {
+    id: 'kuikae',
+    section: 'regras',
+    title: 'Swap calling (kuikae)',
+    blocks: [
+      {
+        type: 'text',
+        md: 'Right after a chi or a pon, the discard you make that same turn has limits. Calling just to swap a tile for another that does the same job is **kuikae**, and it is not allowed.',
+      },
+      { type: 'heading', text: 'The same tile' },
+      {
+        type: 'text',
+        md: 'You may not discard a tile identical to the one you just took. This applies to chi and pon.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '555p',
+            deLado: 1,
+            caption:
+              'Pon of the 5 of Pin: if you still hold another 5 of Pin, it cannot go out now',
+          },
+        ],
+      },
+      { type: 'heading', text: 'The other end of the sequence' },
+      {
+        type: 'text',
+        md: 'In a chi with two neighboring tiles, the tile at the other end is also forbidden: with it, the sequence would be the same, just shifted.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '234m',
+            deLado: 0,
+            caption: 'Chi of the 2 of Man with 3-4: you may not discard the 2 or the 5 of Man',
+          },
+          {
+            mpsz: '867s',
+            deLado: 0,
+            caption: 'Chi of the 8 of Sou with 6-7: you may not discard the 8 or the 5 of Sou',
+          },
+        ],
+      },
+      {
+        type: 'text',
+        md: 'A chi with the middle tile (3 with 2-4) or on a closed edge (3 with 1-2) only forbids the identical tile: there is no other end.',
+      },
+      {
+        type: 'tip',
+        md: 'If after the call you would have only forbidden tiles to discard, you cannot make the call. In Mahjong Soul and Tenhou the game blocks it; at a live table the penalty varies, so agree on it before playing.',
+      },
+      {
+        type: 'quiz',
+        question:
+          'You hold 5-6 of Pin and chi the 4 of Pin. What can you not discard on that same turn?',
+        hand: '56p',
+        options: [
+          { label: '4 and 7 of Pin', correct: true },
+          { label: 'Only the 4 of Pin' },
+          { label: '4 and 6 of Pin' },
+        ],
+        answer:
+          'The 4 and 7 of Pin. The 4 is the tile you took; with the 7, the same 5-6 would make 5-6-7, the other end.',
       },
     ],
   },

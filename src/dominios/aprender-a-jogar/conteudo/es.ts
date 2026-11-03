@@ -514,10 +514,6 @@ const modulos: TutorialModule[] = [
             ],
           },
           { type: 'text', md: 'Después del chi, tu mano queda **abierta**.' },
-          {
-            type: 'text',
-            md: '**Cambio prohibido (kuikae):** en el mismo turno en que cantas, no puedes descartar la ficha que tomaste ni la del otro extremo de la secuencia. Con 3-4 en la mano, si tomas el 2 no puedes descartar otro 2 ni el 5. En el Pon vale lo mismo para la ficha igual.',
-          },
         ],
       },
       {
@@ -1199,6 +1195,74 @@ const topicosRegras: TopicoRegras[] = [
       {
         type: 'text',
         md: '- **Por los descartes**: alguna ficha que completaría tu mano está entre tus descartes.\n- **Temporal**: dejaste pasar una ficha que completaría tu mano, sin declarar ron. Dura hasta tu próximo descarte.\n- **De Riichi**: después del Riichi, dejaste pasar una ficha que completaría tu mano. Dura hasta el fin de la ronda.',
+      },
+    ],
+  },
+  {
+    id: 'kuikae',
+    section: 'regras',
+    title: 'Cambio prohibido (kuikae)',
+    blocks: [
+      {
+        type: 'text',
+        md: 'Justo después de un chi o un pon, el descarte de ese mismo turno tiene límites. Cantar solo para cambiar una ficha por otra que cumple la misma función es **kuikae**, y está prohibido.',
+      },
+      { type: 'heading', text: 'La misma ficha' },
+      {
+        type: 'text',
+        md: 'No puedes descartar una ficha igual a la que acabas de tomar. Vale para chi y para pon.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '555p',
+            deLado: 1,
+            caption:
+              'Pon del 5 de Pin: si aún tienes otro 5 de Pin en la mano, no puede salir ahora',
+          },
+        ],
+      },
+      { type: 'heading', text: 'El otro extremo de la secuencia' },
+      {
+        type: 'text',
+        md: 'En un chi con dos fichas vecinas, la ficha del otro extremo también queda prohibida: con ella, la secuencia sería la misma, solo desplazada.',
+      },
+      {
+        type: 'melds',
+        items: [
+          {
+            mpsz: '234m',
+            deLado: 0,
+            caption: 'Chi del 2 de Man con 3-4: no puedes descartar el 2 ni el 5 de Man',
+          },
+          {
+            mpsz: '867s',
+            deLado: 0,
+            caption: 'Chi del 8 de Sou con 6-7: no puedes descartar el 8 ni el 5 de Sou',
+          },
+        ],
+      },
+      {
+        type: 'text',
+        md: 'Un chi con la ficha del medio (3 con 2-4) o en un borde cerrado (3 con 1-2) solo prohíbe la ficha igual: no hay otro extremo.',
+      },
+      {
+        type: 'tip',
+        md: 'Si después del canto solo te quedarían fichas prohibidas para descartar, no puedes cantar. En Mahjong Soul y Tenhou el propio juego lo bloquea; en la mesa la penalización varía, así que acuérdenla antes de jugar.',
+      },
+      {
+        type: 'quiz',
+        question:
+          'Tienes 5-6 de Pin y haces chi del 4 de Pin. ¿Qué no puedes descartar en ese mismo turno?',
+        hand: '56p',
+        options: [
+          { label: '4 y 7 de Pin', correct: true },
+          { label: 'Solo el 4 de Pin' },
+          { label: '4 y 6 de Pin' },
+        ],
+        answer:
+          'El 4 y el 7 de Pin. El 4 es la ficha que tomaste; con el 7, el mismo 5-6 formaría 5-6-7, el otro extremo.',
       },
     ],
   },
