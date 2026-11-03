@@ -218,7 +218,7 @@ export default function ModalDescartes({
             {!emRiichi && (
               <button
                 type="button"
-                className={`btn-acao-mao action-tab action-tab--chi${riichi ? ' active' : ''}`}
+                className={`btn-acao-mao action-tab dsc-marca-riichi${riichi ? ' active' : ''}`}
                 aria-pressed={riichi}
                 disabled={kan !== null || !muroPermiteRiichi(lances)}
                 onClick={() => setRiichi((atual) => !atual)}
@@ -230,7 +230,7 @@ export default function ModalDescartes({
               <button
                 key={tipo}
                 type="button"
-                className={`btn-acao-mao action-tab action-tab--${tipo === 'kakan' ? 'kan-open' : 'kan-closed'}${
+                className={`btn-acao-mao action-tab action-tab--${tipo === 'kakan' ? 'pon' : 'kan-closed'}${
                   kan === tipo ? ' active' : ''
                 }`}
                 aria-pressed={kan === tipo}

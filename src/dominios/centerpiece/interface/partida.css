@@ -791,6 +791,17 @@
   min-height: 44px;
 }
 
+/* Riichi em rosa choque; o Kakan fica na cor do Pon, que é de onde ele sai. */
+.dsc-marca-riichi {
+  --action-color: var(--rosa-choque);
+}
+
+.dsc-marca-riichi.active {
+  border-color: var(--rosa-choque);
+  background: var(--rosa-choque);
+  color: var(--cor-sobre-primario);
+}
+
 .dsc-notacao {
   display: none;
 }
@@ -856,9 +867,31 @@
   margin: 0;
 }
 
-/* 10 colunas não dão 44px de largura num celular; a altura completa o toque. */
+/* Mesma grade do teclado da montagem da mão: 10 colunas, honras centralizadas
+ * com a largura das outras, e pedras na proporção da Calculadora. */
+.dsc-teclado .teclado-pedras {
+  gap: 4px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.dsc-teclado .linha-naipe {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.dsc-teclado .grupo-teclado-honras .linha-naipe {
+  grid-template-columns: repeat(7, calc((100% - 27px) / 10));
+  justify-content: center;
+}
+
 .dsc-teclado .btn-pedra {
+  width: 100%;
+  height: auto;
   min-height: 44px;
+  aspect-ratio: 34 / 49;
 }
 
 .dsc-pergunta-chamadas {

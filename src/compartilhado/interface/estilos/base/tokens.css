@@ -76,6 +76,8 @@ body {
   --sobre-perigo: var(--cor-sobre-primario, #ffffff);
   /* Jogador da vez: borda acesa e anel do timer. */
   --cor-vez: var(--cor-destaque, #b47b00);
+  /* Botão de Riichi no descarte. */
+  --rosa-choque: #c2185b;
   --fundo-timer: var(--cor-superficie, #ffffff);
   --texto-timer: var(--cor-texto, #102a43);
     /* Mesa: feltro verde, centerpiece marfim e LED vermelho. */
@@ -111,6 +113,7 @@ body {
 /* Velvet Darkness: feltro roxo, centerpiece grafite e LED rosa. */
 :root[data-tema='escuro'] body {
   --cor-vez: #ef8ec9;
+  --rosa-choque: #ff3fa4;
   --mesa-feltro: #1d1229;
   --mesa-painel: #2a2533;
   --mesa-painel-borda: #514a5e;
