@@ -15,7 +15,6 @@ import { codigoBase, proximaDoraIndicada } from '../../constantes'
 import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import { AcoesConstrutorMao } from './AcoesConstrutorMao'
 import { CampoNotacaoMao } from './CampoNotacaoMao'
-import { DescartesMao } from './DescartesMao'
 import { MaoAtual } from './MaoAtual'
 import { TecladoPedras } from './TecladoPedras'
 
@@ -70,7 +69,6 @@ export default function ConstrutorMao({
     adicionarPedraDaMao,
     removerPedra,
     removerMeld,
-    removerDescarte,
     limpar,
     alternarAcao,
     podeChii,
@@ -316,12 +314,6 @@ export default function ConstrutorMao({
     setMenuAcoesMaoAberto(false)
   }
 
-  const limparDescartes = () => {
-    estado.atualizarMao((rascunho) => {
-      rascunho.descartes = []
-    })
-  }
-
   useEffect(() => {
     const atualizarEstadoSticky = () => {
       const sentinela = sentinelaStickyRef.current
@@ -402,13 +394,6 @@ export default function ConstrutorMao({
 
       {contexto === 'montagem' && (
         <>
-          <DescartesMao
-            descartes={mao.descartes}
-            temEsperaFuriten={temEsperaFuriten}
-            aoRemoverDescarte={removerDescarte}
-            aoLimparDescartes={limparDescartes}
-          />
-
           {/* Na notação as chamadas são digitadas: a linha de botões dá lugar ao campo. */}
           {!entradaPorNotacao && (
             <div className="acoes-construtor-mao">
