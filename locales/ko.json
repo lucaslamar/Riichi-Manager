@@ -966,6 +966,9 @@
       "hint": "Tap the table to see the actions",
       "adjustHonba": "본장 조정, 현재 {{count}}",
       "help4": "탁자 가운데를 누르면 본장을 고칠 수 있습니다.",
+      "help5": "동작에서 타이머를 켜면 링을 눌러 시작하고 차례를 넘깁니다.",
+      "timerStart": "타이머 시작",
+      "timerPass": "차례 넘기기",
       "help1": "Leave the phone in the middle of the table, with 東 facing the dealer. Tapping anywhere on the table opens the actions: next round, honba, dice, wind draw and restart.",
       "help2": "Each time the dealer changes, turn the phone so 東 keeps facing them. The table follows the phone even if the screen rotates by itself, but the header and bar change sides; to avoid that, lock the rotation in your phone settings.",
       "help3": "The screen stays on while this table is open, when the device allows it."

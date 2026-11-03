@@ -966,6 +966,9 @@
       "hint": "Tap the table to see the actions",
       "adjustHonba": "本場を調整、現在 {{count}}",
       "help4": "卓の中央をタップすると本場を修正できます。",
+      "help5": "アクションでタイマーをオンにしたら、リングをタップして開始し、手番を回します。",
+      "timerStart": "タイマーを開始",
+      "timerPass": "手番を回す",
       "help1": "Leave the phone in the middle of the table, with 東 facing the dealer. Tapping anywhere on the table opens the actions: next round, honba, dice, wind draw and restart.",
       "help2": "Each time the dealer changes, turn the phone so 東 keeps facing them. The table follows the phone even if the screen rotates by itself, but the header and bar change sides; to avoid that, lock the rotation in your phone settings.",
       "help3": "The screen stays on while this table is open, when the device allows it."
