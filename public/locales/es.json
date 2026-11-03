@@ -635,9 +635,9 @@
     "title": "Aprender a jugar",
     "short": "Aprender",
     "tagline": {
-      "one": "Riichi Mahjong de principio a fin. En {{count}} módulo ya juegas la primera partida.",
-      "many": "Riichi Mahjong de principio a fin. En {{count}} módulos ya juegas la primera partida.",
-      "other": "Riichi Mahjong de principio a fin. En {{count}} módulos ya juegas la primera partida."
+      "one": "El primer módulo enseña lo básico. Antes de seguir, juega una partida para afianzar la base.",
+      "many": "Los {{count}} primeros módulos enseñan lo básico. Antes de seguir, juega una partida para afianzar la base.",
+      "other": "Los {{count}} primeros módulos enseñan lo básico. Antes de seguir, juega una partida para afianzar la base."
     },
     "howToUse": "Cómo usar",
     "howToTurn": "Toca los lados de la pantalla o desliza para pasar la página.",

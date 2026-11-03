@@ -641,10 +641,10 @@
     "title": "Išmok žaisti",
     "short": "Mokytis",
     "tagline": {
-      "one": "Riichi Mahjong nuo pradžios iki galo. Per {{count}} modulį jau žaisite pirmąją partiją.",
-      "few": "Riichi Mahjong nuo pradžios iki galo. Per {{count}} modulius jau žaisite pirmąją partiją.",
-      "many": "Riichi Mahjong nuo pradžios iki galo. Per {{count}} modulio jau žaisite pirmąją partiją.",
-      "other": "Riichi Mahjong nuo pradžios iki galo. Per {{count}} modulių jau žaisite pirmąją partiją."
+      "one": "Pirmasis modulis moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
+      "few": "Pirmieji {{count}} moduliai moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
+      "many": "Pirmieji {{count}} modulio moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
+      "other": "Pirmieji {{count}} modulių moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus."
     },
     "howToUse": "Kaip naudotis",
     "howToTurn": "Palieskite ekrano kraštus arba perbraukite, kad verstumėte puslapį.",

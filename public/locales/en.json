@@ -629,8 +629,8 @@
     "title": "Learn to play",
     "short": "Learn",
     "tagline": {
-      "one": "Riichi Mahjong from start to finish. In {{count}} module you'll be playing your first game.",
-      "other": "Riichi Mahjong from start to finish. In {{count}} modules you'll be playing your first game."
+      "one": "The first module teaches the basics. Before moving on, play a game to lock them in.",
+      "other": "The first {{count}} modules teach the basics. Before moving on, play a game to lock them in."
     },
     "howToUse": "How to use",
     "howToTurn": "Tap the sides of the screen or swipe to turn the page.",

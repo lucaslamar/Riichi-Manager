@@ -629,8 +629,8 @@
     "title": "Tutorial",
     "short": "Tutorial",
     "tagline": {
-      "one": "Riichi Mahjong do começo ao fim. Em {{count}} módulo você já joga a primeira partida.",
-      "other": "Riichi Mahjong do começo ao fim. Em {{count}} módulos você já joga a primeira partida."
+      "one": "O primeiro módulo ensina o básico. Antes de seguir, jogue uma partida para firmar a base.",
+      "other": "Os {{count}} primeiros módulos ensinam o básico. Antes de seguir, jogue uma partida para firmar a base."
     },
     "howToUse": "Como usar",
     "howToTurn": "Toque nas laterais da tela ou deslize para virar a página.",
