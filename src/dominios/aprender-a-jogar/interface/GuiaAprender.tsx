@@ -479,6 +479,10 @@ export default function GuiaAprender({
               </button>
               {paginaSalva > 1 ? (
                 <>
+                  {/* O Continuar fica por último, como o Começar quando não há lugar salvo. */}
+                  <button type="button" className="btn-contorno" onClick={() => irPara(1)}>
+                    {t('learn.startOver')}
+                  </button>
                   <button
                     type="button"
                     className="btn-primario"
@@ -487,9 +491,6 @@ export default function GuiaAprender({
                     {t('learn.continueFrom', {
                       page: rotuloPagina(livro[paginaSalva]) || tituloPagina(livro[paginaSalva]),
                     })}
-                  </button>
-                  <button type="button" className="btn-contorno" onClick={() => irPara(1)}>
-                    {t('learn.startOver')}
                   </button>
                 </>
               ) : (
