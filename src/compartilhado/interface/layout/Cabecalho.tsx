@@ -108,6 +108,8 @@ export default function Cabecalho({
   const barraInferior = createPortal(
     <nav ref={barraRef} className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
       <div key={pagina} className={`barra-pagina${trocou.current ? ` barra-pagina--${naSegunda ? 'segunda' : 'primeira'}` : ''}`}>
+        {/* Na segunda página o Voltar fica no começo, do lado para onde a seta aponta. */}
+        {naSegunda && botaoPagina}
         {PAGINAS_NAVEGACAO[pagina].map((item) => {
           const ativo = item.destino === telaAtual
           return (
@@ -125,7 +127,7 @@ export default function Cabecalho({
             </button>
           )
         })}
-        {botaoPagina}
+        {!naSegunda && botaoPagina}
       </div>
     </nav>,
     document.body,
