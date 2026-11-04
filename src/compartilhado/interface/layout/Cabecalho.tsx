@@ -11,7 +11,6 @@ import {
   type DestinoTela,
 } from './navegacao'
 import MarcaAplicacao from './MarcaAplicacao'
-import ModalIdioma from './ModalIdioma'
 import { ID_TITULO_TELA } from './TituloTela'
 
 interface PropsCabecalho {
@@ -20,6 +19,8 @@ interface PropsCabecalho {
   aoNavegar: (tela: TelaPrincipal) => void
   /** Abre o guia Aprender a jogar, em tela cheia por cima de qualquer tela. */
   aoAbrirAprender: () => void
+  /** Abre a folha de idiomas (o App a controla, porque ela também é parada do carrossel). */
+  aoAbrirIdioma: () => void
 }
 
 /**
@@ -27,11 +28,15 @@ interface PropsCabecalho {
  * de pé, como trilho à esquerda) e sidebar fixa (telas grandes).
  * A barra tem duas páginas: "Mais" troca os itens no mesmo lugar, nada abre por cima.
  */
-export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: PropsCabecalho) {
+export default function Cabecalho({
+  telaAtual,
+  aoNavegar,
+  aoAbrirAprender,
+  aoAbrirIdioma,
+}: PropsCabecalho) {
   const { t } = useI18n()
   const paginaAtiva = paginaDoDestino(telaAtual)
   const [pagina, setPagina] = useState(paginaAtiva)
-  const [idiomaAberto, setIdiomaAberto] = useState(false)
   const barraRef = useRef<HTMLElement | null>(null)
   const focarPrimeiro = useRef(false)
   // Só anima ao trocar de página, não ao abrir o app.
@@ -50,7 +55,7 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
   }, [pagina])
 
   const escolher = (destino: DestinoNavegacao) => {
-    if (destino === 'idioma') setIdiomaAberto(true)
+    if (destino === 'idioma') aoAbrirIdioma()
     else if (destino === 'aprender') aoAbrirAprender()
     else aoNavegar(destino)
   }
@@ -144,8 +149,6 @@ export default function Cabecalho({ telaAtual, aoNavegar, aoAbrirAprender }: Pro
         </div>
       </header>
       {barraInferior}
-
-      {idiomaAberto && <ModalIdioma aoFechar={() => setIdiomaAberto(false)} />}
     </>
   )
 }

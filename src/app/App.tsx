@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { ORDEM_TELAS } from '@/compartilhado/interface/layout/navegacao'
+import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
@@ -26,6 +27,7 @@ export default function App() {
   const [tela, setTela] = useState<TelaPrincipal>('calculadora')
   // Sorteador aberto pelo Centerpiece simples: deslizar para qualquer lado volta para lá.
   const [simplesAberto, setSimplesAberto] = useState(false)
+  const [idiomaAberto, setIdiomaAberto] = useState(false)
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
   // a cada abertura, sempre na capa.
@@ -54,15 +56,20 @@ export default function App() {
   // (Pointer Events, com a tela acompanhando). Dedo para a esquerda vai para a
   // tela seguinte e para a direita volta para a anterior. Os gestos da
   // Calculadora de Mão ficam na própria página (a finalização tem um caso a mais).
+  // Carrossel infinito: depois da última tela (Configurações) vem a folha de
+  // Idioma e, dela, a Calculadora de novo.
   const indiceTela = ORDEM_TELAS.indexOf(tela)
   const telaAnterior = indiceTela > 0 ? ORDEM_TELAS[indiceTela - 1] : undefined
-  // Nas pontas não há para onde ir.
-  const proximaTela = indiceTela >= 0 ? ORDEM_TELAS[indiceTela + 1] : undefined
+  const proximaTela =
+    indiceTela >= 0 ? (ORDEM_TELAS[indiceTela + 1] ?? ('idioma' as const)) : undefined
 
-  // Deslizar até o Aprender abre o guia por cima; ao fechar, a pessoa volta
-  // para a tela de onde deslizou.
-  const irPara = (destino: TelaPrincipal | 'aprender') =>
-    destino === 'aprender' ? abrirGuia() : navegar(destino)
+  // Deslizar até o Aprender abre o guia por cima, e até o Idioma abre a folha
+  // por cima. Ao fechar, a pessoa volta para a tela de onde deslizou.
+  const irPara = (destino: TelaPrincipal | 'aprender' | 'idioma') => {
+    if (destino === 'aprender') abrirGuia()
+    else if (destino === 'idioma') setIdiomaAberto(true)
+    else navegar(destino)
+  }
   // Na capa do guia, deslizar vai para a tela vizinha do Aprender na barra.
   const indiceAprender = ORDEM_TELAS.indexOf('aprender')
   const sairDoGuia = (passo: 1 | -1) => {
@@ -85,6 +92,7 @@ export default function App() {
         telaAtual={guia ? 'aprender' : tela}
         aoNavegar={navegar}
         aoAbrirAprender={() => abrirGuia()}
+        aoAbrirIdioma={() => setIdiomaAberto(true)}
       />
 
       <main className="conteudo-principal">
@@ -114,6 +122,16 @@ export default function App() {
           aoFechar={() => setGuia(null)}
           aoAbrirCalculadora={() => navegar('calculadora')}
           aoTrocarTela={sairDoGuia}
+        />
+      )}
+
+      {idiomaAberto && (
+        <ModalIdioma
+          aoFechar={() => setIdiomaAberto(false)}
+          aoProximaTela={() => {
+            setIdiomaAberto(false)
+            navegar('calculadora')
+          }}
         />
       )}
     </>

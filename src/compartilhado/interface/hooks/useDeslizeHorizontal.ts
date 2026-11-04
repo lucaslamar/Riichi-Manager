@@ -26,14 +26,17 @@ export function toqueIgnorado(alvo: EventTarget | null): boolean {
 /**
  * Deslize horizontal com o dedo pela tela para navegar entre telas.
  * `aoDeslizarDireita` = dedo indo para a direita; `aoDeslizarEsquerda` = para a
- * esquerda. Não age com janela (modal) aberta.
+ * esquerda. Não age com janela (modal) aberta, a não ser com `dentroDaCamada`,
+ * usado pela própria modal que é parada do carrossel (Idioma).
  */
 export function useDeslizeHorizontal({
   ativo = true,
+  dentroDaCamada = false,
   aoDeslizarDireita,
   aoDeslizarEsquerda,
 }: {
   ativo?: boolean
+  dentroDaCamada?: boolean
   aoDeslizarDireita?: () => void
   aoDeslizarEsquerda?: () => void
 }) {
@@ -50,7 +53,7 @@ export function useDeslizeHorizontal({
       inicio = null
       if (evento.touches.length !== 1) return
       const toque = evento.touches[0]
-      if (document.querySelector(SELETOR_CAMADAS)) return
+      if (!dentroDaCamada && document.querySelector(SELETOR_CAMADAS)) return
       if (toqueIgnorado(evento.target)) return
       inicio = { x: toque.clientX, y: toque.clientY }
     }
@@ -81,5 +84,5 @@ export function useDeslizeHorizontal({
       document.removeEventListener('touchend', aoSoltar)
       document.removeEventListener('touchcancel', aoCancelar)
     }
-  }, [ativo])
+  }, [ativo, dentroDaCamada])
 }

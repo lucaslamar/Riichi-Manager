@@ -1,7 +1,8 @@
 /**
  * Ordem da navegação: uma lista só, usada pela barra inferior, pela sidebar e
  * pelos gestos de deslizar. 'aprender' é o guia, que abre por cima da tela, e
- * 'idioma' é uma folha: fica na barra, mas não é tela, então não entra nos gestos.
+ * 'idioma' é uma folha: fica na barra, mas não é tela. Nos gestos ela é a parada
+ * entre a última tela e a primeira (o App fecha o carrossel por ela).
  */
 import type { TelaPrincipal } from '@/app/App'
 

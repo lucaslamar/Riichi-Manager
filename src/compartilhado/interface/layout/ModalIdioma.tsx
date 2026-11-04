@@ -1,10 +1,24 @@
 import { useI18n, type IdiomaSuportado } from '@/compartilhado/i18n/I18nProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
 import Modal from '../componentes/modal/Modal'
+import { useDeslizeHorizontal } from '../hooks/useDeslizeHorizontal'
 
-/** Lista de idiomas, aberta pela barra de navegação. */
-export default function ModalIdioma({ aoFechar }: { aoFechar: () => void }) {
+interface PropsModalIdioma {
+  aoFechar: () => void
+  /** Idioma é parada do carrossel: dedo para a esquerda segue para a tela seguinte. */
+  aoProximaTela?: () => void
+}
+
+/** Lista de idiomas, aberta pela barra de navegação ou deslizando a partir das Configurações. */
+export default function ModalIdioma({ aoFechar, aoProximaTela }: PropsModalIdioma) {
   const { t, idioma, idiomas, alterarIdioma } = useI18n()
+
+  // Dedo para a direita volta para a tela de baixo; para a esquerda, a seguinte.
+  useDeslizeHorizontal({
+    dentroDaCamada: true,
+    aoDeslizarDireita: aoFechar,
+    aoDeslizarEsquerda: aoProximaTela ?? aoFechar,
+  })
 
   const escolher = (opcao: IdiomaSuportado) => {
     alterarIdioma(opcao)
