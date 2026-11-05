@@ -12,12 +12,14 @@ import {
   type ConfigMesa,
   type IdPreset,
 } from '../../logica/configMesa'
+import type { MesaDoSorteio } from '../../logica/encontroClube'
 import { criarPartidaManual } from '../../logica/partidaManual'
 import { umaValida, type UmaMesa } from '../../logica/uma'
 import { carregarUltimaConfig } from '../../persistencia/repositorioConfigMesa'
 import CampoUma, { CampoInteiro, TECLADO_COM_SINAL } from '../componentes/CampoUma'
 import EscolhaOka from '../componentes/EscolhaOka'
 import ListaResultado from '../componentes/ListaResultado'
+import { assentosDaMesa, configDoClube } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
 import '../config-mesa.css'
 
@@ -31,19 +33,34 @@ const PONTOS_VALIDOS = /^-?\d+$/
 const semSeparadores = (texto: string) => texto.replace(/[.,]/g, '')
 const pontosValidos = (texto: string) => PONTOS_VALIDOS.test(semSeparadores(texto))
 
-/** Partida jogada fora do app: regras, jogadores, pontos, uma e oka. */
+/**
+ * Partida jogada fora do app: regras, jogadores, pontos, uma e oka. Com `clube`,
+ * vem de uma mesa sorteada: os quatro já preenchidos na ordem dos ventos (convidados
+ * pelo nome), as regras de clube e a partida ligada ao encontro.
+ */
 export default function RegistrarFinalizada({
   aoVoltar,
   aoRegistrar,
+  clube,
 }: {
   aoVoltar: () => void
-  aoRegistrar: () => void
+  aoRegistrar: (id: string) => void
+  clube?: { mesa: MesaDoSorteio; encontroId: string }
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
   const { adicionar } = usePartidas()
-  const [base, setBase] = useState<ConfigMesa>(() => carregarUltimaConfig(armazenamentoLocal))
-  const [assentos, setAssentos] = useState<(string | null)[]>([null, null, null, null])
+  const [base, setBase] = useState<ConfigMesa>(() =>
+    clube ? configDoClube() : carregarUltimaConfig(armazenamentoLocal),
+  )
+  // Convidados do clube: id gerado na hora e o nome escrito na lista.
+  const [mesaClube] = useState(() => (clube ? assentosDaMesa(clube.mesa) : null))
+  const convidados = new Map(
+    mesaClube ? mesaClube.ids.map((id, indice) => [id, mesaClube.nomes[indice]] as const) : [],
+  )
+  const [assentos, setAssentos] = useState<(string | null)[]>(() =>
+    mesaClube ? [...mesaClube.ids] : [null, null, null, null],
+  )
   const [pontos, setPontos] = useState(['', '', '', ''])
   const [pontosPartida, setPontosPartida] = useState(base.pontosPartida)
   const [pontosRetorno, setPontosRetorno] = useState(base.pontosRetorno)
@@ -64,7 +81,8 @@ export default function RegistrarFinalizada({
 
   const nomeDe = (id: string | null) => {
     const jogador = jogadores.find((item) => item.id === id)
-    return jogador ? nomeExibido(jogador) : null
+    if (jogador) return nomeExibido(jogador)
+    return (id && convidados.get(id)) || null
   }
 
   const totalMesa = pontosPartida * 4
@@ -116,7 +134,10 @@ export default function RegistrarFinalizada({
 
   return (
     <section className="ptd-inicio fin-tela">
-      <TituloTela titulo={t('match.manual.title')} aoVoltar={aoVoltar} />
+      <TituloTela
+        titulo={clube ? t('match.table.number', { number: clube.mesa.numero }) : t('match.manual.title')}
+        aoVoltar={aoVoltar}
+      />
 
       <p className="ptd-rotulo">{t('match.manual.players')}</p>
       <div className="fin-linhas">
@@ -230,8 +251,13 @@ export default function RegistrarFinalizada({
         disabled={!previa}
         onClick={() => {
           if (!previa) return
-          adicionar({ ...previa, id: gerarId() })
-          aoRegistrar()
+          const id = gerarId()
+          adicionar({
+            ...previa,
+            id,
+            ...(clube ? { encontro: { id: clube.encontroId, mesa: clube.mesa.numero } } : {}),
+          })
+          aoRegistrar(id)
         }}
       >
         {t('match.manual.save')}

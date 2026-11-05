@@ -977,7 +977,93 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "club": {
+      "listTitle": "俱乐部名单",
+      "addRegistered": "使用已登记",
+      "addRegisteredLabel": "在这一行使用已登记的玩家",
+      "registeredTitle": "已登记的玩家",
+      "addSelected": {
+        "other": "添加（{{count}}）"
+      },
+      "alreadyInList": "已在名单中",
+      "lastDraw": {
+        "other": "上次抽签：{{count}} 桌"
+      },
+      "linkedShort": "已登记",
+      "guestShort": "访客",
+      "placeholder": "每行一个名字",
+      "editorLabel": "签到名单，每行一个名字",
+      "register": "登记",
+      "registerNamed": "登记 {{name}}",
+      "registered": "已登记 {{name}}",
+      "suggestions": "名字相近的已登记玩家",
+      "suggestionLabel": "使用已登记的 {{name}}",
+      "listSummary": "名单上的人",
+      "linked": "{{name}}，已登记",
+      "guest": "{{name}}，访客",
+      "empty": "名单为空",
+      "players": {
+        "other": "{{count}} 名玩家"
+      },
+      "tables": {
+        "other": "{{count}} 桌"
+      },
+      "minimum": {
+        "other": "第一桌还差 {{count}} 人"
+      },
+      "missing": {
+        "other": "凑满一桌还差 {{count}} 人"
+      },
+      "leftover": {
+        "other": "或多出 {{count}} 人"
+      },
+      "clear": "清空名单",
+      "clearTitle": "清空名单？",
+      "clearHelp": "名字和上次抽签会从这个页面移除。已记录的对局仍在历史中。",
+      "draw": "抽签分桌",
+      "duplicatesRemoved": {
+        "other": "已移除 {{count}} 个重复的名字"
+      },
+      "resultTitle": "抽签结果",
+      "noDraw": "还没有抽签。先建好名单，再点“抽签分桌”。",
+      "shareTitle": "MOJOCA · 俱乐部牌桌 · {{date}}",
+      "copied": "已复制到剪贴板",
+      "shareFailed": "无法分享。",
+      "share": "分享",
+      "meeting": "俱乐部聚会",
+      "redraw": "重新抽签",
+      "redrawTitle": "重新抽签？",
+      "redrawHelp": "牌桌会改变。已记录的对局仍在历史中。",
+      "newDraw": "新一轮抽签",
+      "newDrawLabel": "用同一份名单为下一轮重新抽签",
+      "registerResult": "记录结果",
+      "tableRegistered": "对局已记录"
+    },
+    "cards": {
+      "honba": {
+        "other": "{{count}} 本场"
+      },
+      "open": "打开",
+      "view": "查看",
+      "openNamed": "打开{{table}}",
+      "viewNamed": "查看{{table}}",
+      "shareNamed": "分享{{table}}",
+      "deleteNamed": "删除{{table}}",
+      "pointsSpoken": "{{points}} 点",
+      "dealer": "庄家",
+      "biggestHand": "最大和牌：{{hand}}",
+      "player": "玩家",
+      "points": "点数",
+      "deltaHelp": "含马点与头名奖励的变化",
+      "dealIn": "放铳",
+      "expand": "显示详情",
+      "collapse": "隐藏详情",
+      "deleteTitle": "删除这局对局？",
+      "deleteHelp": "对局会从历史和排名中移除，且无法撤销。"
+    },
     "home": {
+      "clubTitle": "安排俱乐部牌桌",
+      "clubHelp": "签到名单与抽签分桌",
       "title": "Centerpiece",
       "newGame": "New game",
       "newGameHelp": "With score tracking",

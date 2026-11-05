@@ -977,7 +977,93 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "club": {
+      "listTitle": "クラブ出席リスト",
+      "addRegistered": "登録済みから選ぶ",
+      "addRegisteredLabel": "この行に登録済みプレイヤーを入れる",
+      "registeredTitle": "登録済みプレイヤー",
+      "addSelected": {
+        "other": "追加（{{count}}）"
+      },
+      "alreadyInList": "リストにあり",
+      "lastDraw": {
+        "other": "前回の抽選：{{count}}卓"
+      },
+      "linkedShort": "登録済み",
+      "guestShort": "ゲスト",
+      "placeholder": "1行に1人",
+      "editorLabel": "出席リスト（1行に1人）",
+      "register": "登録",
+      "registerNamed": "{{name}}を登録",
+      "registered": "{{name}}を登録しました",
+      "suggestions": "似た名前の登録済みプレイヤー",
+      "suggestionLabel": "登録済みの{{name}}を使う",
+      "listSummary": "リストにいる人",
+      "linked": "{{name}}（登録済み）",
+      "guest": "{{name}}（ゲスト）",
+      "empty": "リストは空です",
+      "players": {
+        "other": "{{count}}人"
+      },
+      "tables": {
+        "other": "{{count}}卓"
+      },
+      "minimum": {
+        "other": "最初の卓まであと{{count}}人"
+      },
+      "missing": {
+        "other": "卓を組むにはあと{{count}}人"
+      },
+      "leftover": {
+        "other": "または{{count}}人余り"
+      },
+      "clear": "リストを消去",
+      "clearTitle": "リストを消去しますか？",
+      "clearHelp": "名前と前回の抽選がこの画面から消えます。記録済みの対局は履歴に残ります。",
+      "draw": "卓を抽選",
+      "duplicatesRemoved": {
+        "other": "重複した名前を{{count}}件削除しました"
+      },
+      "resultTitle": "抽選結果",
+      "noDraw": "まだ抽選していません。リストを作って「卓を抽選」をタップしてください。",
+      "shareTitle": "MOJOCA · クラブの卓 · {{date}}",
+      "copied": "クリップボードにコピーしました",
+      "shareFailed": "共有できませんでした。",
+      "share": "共有",
+      "meeting": "クラブ例会",
+      "redraw": "もう一度抽選",
+      "redrawTitle": "もう一度抽選しますか？",
+      "redrawHelp": "卓が変わります。記録済みの対局は履歴に残ります。",
+      "newDraw": "再抽選",
+      "newDrawLabel": "同じリストで次の回戦を再抽選",
+      "registerResult": "結果を記録",
+      "tableRegistered": "記録済み"
+    },
+    "cards": {
+      "honba": {
+        "other": "{{count}}本場"
+      },
+      "open": "開く",
+      "view": "見る",
+      "openNamed": "{{table}}を開く",
+      "viewNamed": "{{table}}を見る",
+      "shareNamed": "{{table}}を共有",
+      "deleteNamed": "{{table}}を削除",
+      "pointsSpoken": "{{points}}点",
+      "dealer": "親",
+      "biggestHand": "最高の和了：{{hand}}",
+      "player": "プレイヤー",
+      "points": "点数",
+      "deltaHelp": "ウマ・オカ込みの増減",
+      "dealIn": "放銃",
+      "expand": "詳細を表示",
+      "collapse": "詳細を隠す",
+      "deleteTitle": "この対局を削除しますか？",
+      "deleteHelp": "履歴とランキングから消えます。元に戻せません。"
+    },
     "home": {
+      "clubTitle": "クラブの卓組み",
+      "clubHelp": "出席リストと卓の抽選",
       "title": "Centerpiece",
       "newGame": "New game",
       "newGameHelp": "With score tracking",

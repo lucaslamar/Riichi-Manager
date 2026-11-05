@@ -132,10 +132,14 @@ export default function SetupPartida({
           idsEscolhidos={preenchidos.filter((id) => id !== assentos[escolhendo])}
           aoFechar={() => setEscolhendo(null)}
           aoEscolher={(jogador) => {
-            setAssentos((atuais) =>
-              atuais.map((id, indice) => (indice === escolhendo ? jogador.id : id)),
-            )
-            setEscolhendo(null)
+            const proximos = assentos.map((id, indice) => (indice === escolhendo ? jogador.id : id))
+            setAssentos(proximos)
+            // A folha segue aberta no próximo vento vazio (東 → 南 → 西 → 北), e só
+            // fecha quando os quatro estão preenchidos.
+            const seguinte = [1, 2, 3]
+              .map((passo) => ((escolhendo + passo) % 4) as Cadeira)
+              .find((cadeira) => proximos[cadeira] === null)
+            setEscolhendo(seguinte ?? null)
           }}
         />
       )}

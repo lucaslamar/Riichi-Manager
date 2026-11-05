@@ -50,7 +50,12 @@ export default function SeletorJogador({
 
   const criar = (dados: DadosJogador) => {
     const resultado = adicionar(dados)
-    if (resultado.ok) aoEscolher(resultado.jogador)
+    if (resultado.ok) {
+      // Se a folha seguir aberta para o próximo assento, volta para a lista.
+      setCriando(false)
+      setBusca('')
+      aoEscolher(resultado.jogador)
+    }
     return resultado
   }
 
@@ -103,7 +108,11 @@ export default function SeletorJogador({
                       type="button"
                       className="opcao-seletor-jogador"
                       disabled={escolhido}
-                      onClick={() => aoEscolher(jogador)}
+                      onClick={() => {
+                        // A folha pode seguir aberta para o próximo assento: a busca recomeça.
+                        setBusca('')
+                        aoEscolher(jogador)
+                      }}
                     >
                       <span className="dados-jogador">
                         <span className="nome-cadastro">

@@ -48,8 +48,12 @@ export const acoesPartidas = {
     config: ConfigMesa,
     jogadorIds: readonly [string, string, string, string],
     nomes?: readonly string[],
+    extras?: Pick<Partida, 'encontro'>,
   ) {
-    const partida = criarPartida(gerarId(), config, jogadorIds, new Date().toISOString(), nomes)
+    const partida = {
+      ...criarPartida(gerarId(), config, jogadorIds, new Date().toISOString(), nomes),
+      ...extras,
+    }
     definirPartidas([...lerPartidas(), partida])
     return partida.id
   },
