@@ -977,7 +977,93 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "club": {
+      "listTitle": "클럽 명단",
+      "addRegistered": "등록된 사람 사용",
+      "addRegisteredLabel": "이 줄에 등록된 플레이어 넣기",
+      "registeredTitle": "등록된 플레이어",
+      "addSelected": {
+        "other": "추가 ({{count}})"
+      },
+      "alreadyInList": "이미 명단에 있음",
+      "lastDraw": {
+        "other": "지난 추첨: {{count}}탁"
+      },
+      "linkedShort": "등록됨",
+      "guestShort": "게스트",
+      "placeholder": "한 줄에 한 명",
+      "editorLabel": "출석 명단, 한 줄에 한 명",
+      "register": "등록",
+      "registerNamed": "{{name}} 등록",
+      "registered": "{{name}}을(를) 등록했어요",
+      "suggestions": "비슷한 이름의 등록된 플레이어",
+      "suggestionLabel": "등록된 {{name}} 사용",
+      "listSummary": "명단에 있는 사람",
+      "linked": "{{name}}, 등록됨",
+      "guest": "{{name}}, 게스트",
+      "empty": "명단이 비어 있어요",
+      "players": {
+        "other": "{{count}}명"
+      },
+      "tables": {
+        "other": "{{count}}탁"
+      },
+      "minimum": {
+        "other": "첫 탁까지 {{count}}명 더 필요해요"
+      },
+      "missing": {
+        "other": "탁을 채우려면 {{count}}명 더 필요해요"
+      },
+      "leftover": {
+        "other": "또는 {{count}}명 남아요"
+      },
+      "clear": "명단 지우기",
+      "clearTitle": "명단을 지울까요?",
+      "clearHelp": "이름과 지난 추첨이 이 화면에서 사라져요. 이미 기록한 대국은 기록에 남아요.",
+      "draw": "탁 추첨",
+      "duplicatesRemoved": {
+        "other": "중복된 이름 {{count}}개를 지웠어요"
+      },
+      "resultTitle": "추첨 결과",
+      "noDraw": "아직 추첨하지 않았어요. 명단을 만들고 탁 추첨을 누르세요.",
+      "shareTitle": "MOJOCA · 클럽 탁 · {{date}}",
+      "copied": "클립보드에 복사했어요",
+      "shareFailed": "공유하지 못했어요.",
+      "share": "공유",
+      "meeting": "클럽 모임",
+      "redraw": "다시 추첨",
+      "redrawTitle": "다시 추첨할까요?",
+      "redrawHelp": "탁이 바뀌어요. 이미 기록한 대국은 기록에 남아요.",
+      "newDraw": "새 추첨",
+      "newDrawLabel": "같은 명단으로 다음 라운드 새 추첨",
+      "registerResult": "결과 기록",
+      "tableRegistered": "대국 기록됨"
+    },
+    "cards": {
+      "honba": {
+        "other": "{{count}}본장"
+      },
+      "open": "열기",
+      "view": "보기",
+      "openNamed": "{{table}} 열기",
+      "viewNamed": "{{table}} 보기",
+      "shareNamed": "{{table}} 공유",
+      "deleteNamed": "{{table}} 삭제",
+      "pointsSpoken": "{{points}}점",
+      "dealer": "친",
+      "biggestHand": "최고 화료: {{hand}}",
+      "player": "플레이어",
+      "points": "점수",
+      "deltaHelp": "우마와 오카를 반영한 증감",
+      "dealIn": "방총",
+      "expand": "자세히 보기",
+      "collapse": "접기",
+      "deleteTitle": "이 대국을 삭제할까요?",
+      "deleteHelp": "기록과 랭킹에서 사라져요. 되돌릴 수 없어요."
+    },
     "home": {
+      "clubTitle": "클럽 탁 배정",
+      "clubHelp": "출석 명단과 탁 추첨",
       "title": "Centerpiece",
       "newGame": "New game",
       "newGameHelp": "With score tracking",

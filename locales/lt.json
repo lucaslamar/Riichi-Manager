@@ -998,7 +998,120 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "club": {
+      "listTitle": "Klubo sąrašas",
+      "addRegistered": "Naudoti registruotą",
+      "addRegisteredLabel": "Naudoti registruotus žaidėjus šioje eilutėje",
+      "registeredTitle": "Registruoti žaidėjai",
+      "addSelected": {
+        "one": "Pridėti ({{count}})",
+        "few": "Pridėti ({{count}})",
+        "many": "Pridėti ({{count}})",
+        "other": "Pridėti ({{count}})"
+      },
+      "alreadyInList": "Jau sąraše",
+      "lastDraw": {
+        "one": "Paskutiniai burtai: {{count}} stalas",
+        "few": "Paskutiniai burtai: {{count}} stalai",
+        "many": "Paskutiniai burtai: {{count}} stalo",
+        "other": "Paskutiniai burtai: {{count}} stalų"
+      },
+      "linkedShort": "Registruotas",
+      "guestShort": "Svečias",
+      "placeholder": "Po vardą eilutėje",
+      "editorLabel": "Dalyvių sąrašas, po vieną vardą eilutėje",
+      "register": "Registruoti",
+      "registerNamed": "Registruoti {{name}}",
+      "registered": "Užregistruota: {{name}}",
+      "suggestions": "Panašūs registruoti žaidėjai",
+      "suggestionLabel": "Naudoti registruotą {{name}}",
+      "listSummary": "Kas yra sąraše",
+      "linked": "{{name}}, registruotas",
+      "guest": "{{name}}, svečias",
+      "empty": "Sąrašas tuščias",
+      "players": {
+        "one": "{{count}} žaidėjas",
+        "few": "{{count}} žaidėjai",
+        "many": "{{count}} žaidėjo",
+        "other": "{{count}} žaidėjų"
+      },
+      "tables": {
+        "one": "{{count}} stalas",
+        "few": "{{count}} stalai",
+        "many": "{{count}} stalo",
+        "other": "{{count}} stalų"
+      },
+      "minimum": {
+        "one": "Pirmam stalui trūksta {{count}} žaidėjo",
+        "few": "Pirmam stalui trūksta {{count}} žaidėjų",
+        "many": "Pirmam stalui trūksta {{count}} žaidėjo",
+        "other": "Pirmam stalui trūksta {{count}} žaidėjų"
+      },
+      "missing": {
+        "one": "Stalui užpildyti trūksta {{count}} žaidėjo",
+        "few": "Stalui užpildyti trūksta {{count}} žaidėjų",
+        "many": "Stalui užpildyti trūksta {{count}} žaidėjo",
+        "other": "Stalui užpildyti trūksta {{count}} žaidėjų"
+      },
+      "leftover": {
+        "one": "arba lieka {{count}}",
+        "few": "arba lieka {{count}}",
+        "many": "arba lieka {{count}}",
+        "other": "arba lieka {{count}}"
+      },
+      "clear": "Išvalyti sąrašą",
+      "clearTitle": "Išvalyti sąrašą?",
+      "clearHelp": "Vardai ir paskutiniai burtai dings iš šio ekrano. Jau užregistruotos partijos liks istorijoje.",
+      "draw": "Burti stalus",
+      "duplicatesRemoved": {
+        "one": "Pašalintas {{count}} pasikartojantis vardas",
+        "few": "Pašalinti {{count}} pasikartojantys vardai",
+        "many": "Pašalinta {{count}} pasikartojančio vardo",
+        "other": "Pašalinta {{count}} pasikartojančių vardų"
+      },
+      "resultTitle": "Išburti stalai",
+      "noDraw": "Burtų dar nebuvo. Sudarykite sąrašą ir palieskite „Burti stalus“.",
+      "shareTitle": "MOJOCA · Klubo stalai · {{date}}",
+      "copied": "Nukopijuota į iškarpinę",
+      "shareFailed": "Nepavyko pasidalyti.",
+      "share": "Dalintis",
+      "meeting": "Klubo susitikimas",
+      "redraw": "Burti iš naujo",
+      "redrawTitle": "Burti iš naujo?",
+      "redrawHelp": "Stalai pasikeis. Jau užregistruotos partijos liks istorijoje.",
+      "newDraw": "Nauji burtai",
+      "newDrawLabel": "Nauji burtai su tuo pačiu sąrašu kitam ratui",
+      "registerResult": "Įrašyti rezultatą",
+      "tableRegistered": "Partija užregistruota"
+    },
+    "cards": {
+      "honba": {
+        "one": "{{count}} honba",
+        "few": "{{count}} honba",
+        "many": "{{count}} honba",
+        "other": "{{count}} honba"
+      },
+      "open": "Atidaryti",
+      "view": "Žiūrėti",
+      "openNamed": "Atidaryti: {{table}}",
+      "viewNamed": "Žiūrėti: {{table}}",
+      "shareNamed": "Dalintis: {{table}}",
+      "deleteNamed": "Ištrinti: {{table}}",
+      "pointsSpoken": "{{points}} taškų",
+      "dealer": "dalintojas",
+      "biggestHand": "didžiausia ranka: {{hand}}",
+      "player": "Žaidėjas",
+      "points": "Taškai",
+      "deltaHelp": "Pokytis su uma ir oka",
+      "dealIn": "Deal-in",
+      "expand": "Rodyti daugiau",
+      "collapse": "Slėpti",
+      "deleteTitle": "Ištrinti šią partiją?",
+      "deleteHelp": "Partija dings iš istorijos ir reitingo. Atšaukti nebus galima."
+    },
     "home": {
+      "clubTitle": "Klubo stalų sudarymas",
+      "clubHelp": "Dalyvių sąrašas ir stalų burtai",
       "title": "Centerpiece",
       "newGame": "New game",
       "newGameHelp": "With score tracking",

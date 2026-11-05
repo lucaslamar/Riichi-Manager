@@ -988,7 +988,102 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "club": {
+      "listTitle": "Lista del club",
+      "addRegistered": "Usar registrado",
+      "addRegisteredLabel": "Usar jugadores registrados en esta línea",
+      "registeredTitle": "Jugadores registrados",
+      "addSelected": {
+        "one": "Añadir ({{count}})",
+        "other": "Añadir ({{count}})"
+      },
+      "alreadyInList": "Ya en la lista",
+      "lastDraw": {
+        "one": "Último sorteo: {{count}} mesa",
+        "other": "Último sorteo: {{count}} mesas"
+      },
+      "linkedShort": "Registrado",
+      "guestShort": "Invitado",
+      "placeholder": "Un nombre por línea",
+      "editorLabel": "Lista de asistencia, un nombre por línea",
+      "register": "Registrar",
+      "registerNamed": "Registrar a {{name}}",
+      "registered": "Registro hecho: {{name}}",
+      "suggestions": "Jugadores registrados parecidos",
+      "suggestionLabel": "Usar a {{name}}, del registro",
+      "listSummary": "Quién está en la lista",
+      "linked": "{{name}}, registrado",
+      "guest": "{{name}}, invitado",
+      "empty": "Lista vacía",
+      "players": {
+        "one": "{{count}} jugador",
+        "other": "{{count}} jugadores"
+      },
+      "tables": {
+        "one": "{{count}} mesa",
+        "other": "{{count}} mesas"
+      },
+      "minimum": {
+        "one": "Falta {{count}} jugador para la primera mesa",
+        "other": "Faltan {{count}} jugadores para la primera mesa"
+      },
+      "missing": {
+        "one": "Falta {{count}} jugador para cerrar la mesa",
+        "other": "Faltan {{count}} jugadores para cerrar la mesa"
+      },
+      "leftover": {
+        "one": "o sobra {{count}}",
+        "other": "o sobran {{count}}"
+      },
+      "clear": "Vaciar lista",
+      "clearTitle": "¿Vaciar la lista?",
+      "clearHelp": "Los nombres y el último sorteo salen de esta pantalla. Las partidas ya registradas siguen en el historial.",
+      "draw": "Sortear mesas",
+      "duplicatesRemoved": {
+        "one": "Se quitó {{count}} nombre repetido",
+        "other": "Se quitaron {{count}} nombres repetidos"
+      },
+      "resultTitle": "Mesas sorteadas",
+      "noDraw": "Todavía no hay sorteo. Arma la lista y toca Sortear mesas.",
+      "shareTitle": "MOJOCA · Mesas del club · {{date}}",
+      "copied": "Copiado al portapapeles",
+      "shareFailed": "No se pudo compartir.",
+      "share": "Compartir",
+      "meeting": "Encuentro del club",
+      "redraw": "Sortear de nuevo",
+      "redrawTitle": "¿Sortear de nuevo?",
+      "redrawHelp": "Las mesas cambian. Las partidas ya registradas siguen en el historial.",
+      "newDraw": "Nuevo sorteo",
+      "newDrawLabel": "Nuevo sorteo con la misma lista, para la próxima ronda",
+      "registerResult": "Registrar resultado",
+      "tableRegistered": "Partida registrada"
+    },
+    "cards": {
+      "honba": {
+        "one": "{{count}} honba",
+        "other": "{{count}} honba"
+      },
+      "open": "Abrir",
+      "view": "Ver",
+      "openNamed": "Abrir {{table}}",
+      "viewNamed": "Ver {{table}}",
+      "shareNamed": "Compartir {{table}}",
+      "deleteNamed": "Eliminar {{table}}",
+      "pointsSpoken": "{{points}} puntos",
+      "dealer": "dealer",
+      "biggestHand": "mano más alta: {{hand}}",
+      "player": "Jugador",
+      "points": "Puntos",
+      "deltaHelp": "Variación con uma y oka",
+      "dealIn": "Deal-in",
+      "expand": "Mostrar detalles",
+      "collapse": "Ocultar detalles",
+      "deleteTitle": "¿Eliminar esta partida?",
+      "deleteHelp": "La partida sale del historial y del ranking. No se puede deshacer."
+    },
     "home": {
+      "clubTitle": "Organizar mesas del club",
+      "clubHelp": "Lista de asistencia y sorteo de mesas",
       "title": "Centerpiece",
       "newGame": "New game",
       "newGameHelp": "With score tracking",

@@ -981,7 +981,102 @@
     "checkFuritenHelp": "Cada jogador pode informar a própria mão para o app avisar se está em furiten."
   },
   "match": {
+    "club": {
+      "listTitle": "Lista do clube",
+      "addRegistered": "Usar cadastrado",
+      "addRegisteredLabel": "Usar jogadores cadastrados nesta linha",
+      "registeredTitle": "Jogadores cadastrados",
+      "addSelected": {
+        "one": "Adicionar ({{count}})",
+        "other": "Adicionar ({{count}})"
+      },
+      "alreadyInList": "Já na lista",
+      "lastDraw": {
+        "one": "Último sorteio: {{count}} mesa",
+        "other": "Último sorteio: {{count}} mesas"
+      },
+      "linkedShort": "Cadastrado",
+      "guestShort": "Convidado",
+      "placeholder": "Um nome por linha",
+      "editorLabel": "Lista de presença, um nome por linha",
+      "register": "Cadastrar",
+      "registerNamed": "Cadastrar {{name}}",
+      "registered": "Cadastro feito: {{name}}",
+      "suggestions": "Jogadores cadastrados parecidos",
+      "suggestionLabel": "Usar {{name}}, do cadastro",
+      "listSummary": "Quem está na lista",
+      "linked": "{{name}}, cadastrado",
+      "guest": "{{name}}, convidado",
+      "empty": "Lista vazia",
+      "players": {
+        "one": "{{count}} jogador",
+        "other": "{{count}} jogadores"
+      },
+      "tables": {
+        "one": "{{count}} mesa",
+        "other": "{{count}} mesas"
+      },
+      "minimum": {
+        "one": "Falta {{count}} jogador para a primeira mesa",
+        "other": "Faltam {{count}} jogadores para a primeira mesa"
+      },
+      "missing": {
+        "one": "Falta {{count}} jogador para fechar a mesa",
+        "other": "Faltam {{count}} jogadores para fechar a mesa"
+      },
+      "leftover": {
+        "one": "ou sobra {{count}}",
+        "other": "ou sobram {{count}}"
+      },
+      "clear": "Limpar lista",
+      "clearTitle": "Limpar a lista?",
+      "clearHelp": "Os nomes e o último sorteio saem desta tela. As partidas já registradas continuam no histórico.",
+      "draw": "Sortear mesas",
+      "duplicatesRemoved": {
+        "one": "{{count}} nome repetido foi removido",
+        "other": "{{count}} nomes repetidos foram removidos"
+      },
+      "resultTitle": "Mesas sorteadas",
+      "noDraw": "Nenhum sorteio ainda. Monte a lista e toque em Sortear mesas.",
+      "shareTitle": "MOJOCA · Mesas do clube · {{date}}",
+      "copied": "Copiado para a área de transferência",
+      "shareFailed": "Não foi possível compartilhar.",
+      "share": "Compartilhar",
+      "meeting": "Encontro do clube",
+      "redraw": "Sortear novamente",
+      "redrawTitle": "Sortear de novo?",
+      "redrawHelp": "As mesas mudam. As partidas já registradas continuam no histórico.",
+      "newDraw": "Novo sorteio",
+      "newDrawLabel": "Novo sorteio com a mesma lista, para a próxima rodada",
+      "registerResult": "Registrar resultado",
+      "tableRegistered": "Partida registrada"
+    },
+    "cards": {
+      "honba": {
+        "one": "{{count}}º honba",
+        "other": "{{count}}º honba"
+      },
+      "open": "Abrir",
+      "view": "Ver",
+      "openNamed": "Abrir {{table}}",
+      "viewNamed": "Ver {{table}}",
+      "shareNamed": "Compartilhar {{table}}",
+      "deleteNamed": "Excluir {{table}}",
+      "pointsSpoken": "{{points}} pontos",
+      "dealer": "dealer",
+      "biggestHand": "maior mão: {{hand}}",
+      "player": "Jogador",
+      "points": "Pontos",
+      "deltaHelp": "Variação com uma e oka",
+      "dealIn": "Deal-in",
+      "expand": "Mostrar detalhes",
+      "collapse": "Esconder detalhes",
+      "deleteTitle": "Excluir esta partida?",
+      "deleteHelp": "A partida sai do histórico e do ranking. Não dá para desfazer."
+    },
     "home": {
+      "clubTitle": "Organizar mesas do clube",
+      "clubHelp": "Lista de presença e sorteio de mesas",
       "title": "Centerpiece",
       "newGame": "Nova partida",
       "newGameHelp": "Com contagem de pontos",
