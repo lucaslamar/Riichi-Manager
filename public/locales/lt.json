@@ -22,6 +22,10 @@
     "handCalculatorShort": "Skaičiuoklė",
     "windDrawShort": "Burtai",
     "centerpiece": "Centerpiece",
+
+    "matches": "Partijos stalas",
+
+    "matchesShort": "Partijos",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -134,6 +138,8 @@
     "suitSou": "Sou",
     "honors": "Garbės akmenys",
     "akaDora": "Raudonas 5 (aka dora)",
+
+    "holdForAka": "Palaikykite raudonam 5",
     "addTileToHand": "Pridėti {{tile}} į ranką",
     "addTileToDiscards": "Pridėti {{tile}} prie išmestų akmenų furiten patikrai",
     "selectDoraIndicator": "Pasirinkti {{tile}} kaip dora / ura-dora indikatorių",
@@ -510,6 +516,42 @@
       "closedKan": "4 vienodi, visi iš jūsų rankos. Įveskite 7777z ir palieskite uždarą kan. Arba pirma uždarą kan, paskui 7: atsiranda keturi 7; palieskite z.",
       "displayTitle": "Kompiuteryje",
       "display": "Su fizine klaviatūra skambinimas yra raidė grupės gale: c – Chi, Pon ir Kan (123mc, 111pc, 1111sc), a – uždaras kan (7777za)."
+    },
+    "tiles": {
+      "title": "Rankos sudėjimas",
+      "intro": "Liesdami klaviatūros akmenėlius sudėkite ranką bet kokia tvarka: programėlė ją surikiuos pati. Kad pašalintumėte akmenėlį, palieskite jį rankoje.",
+      "winTitle": "Laimėjimo akmenėlis",
+      "win": "Kitaip nei kitose skaičiuoklėse, laimėjimo akmenėlio nereikia palikti paskutinio. Paskutinis paliestas tampa laimėjimo akmenėliu, bet kai ranka pilna, jį galima pakeisti per Keisti laimėjimo akmenį ir pasirinkti bet kurį rankos akmenėlį.",
+      "waits": "Kai yra 13 akmenėlių, klaviatūra virš kiekvieno laukimo rodo, kiek han verta ranka laimint su juo. Pritemdyti akmenėliai rankos neužbaigia.",
+      "chi": "Palieskite Chi ir tada akmenėlį. Jei jis sudaro daugiau nei vieną seką, parinktys atsiranda skiltyje Pasirinkite Chi: palieskite tinkamą. Kai Chi pažymėtas, palietus akmenėlį rankoje taip pat sudaromas chi su ten jau esančiais akmenėliais.",
+      "pon": "Palieskite Pon ir tada akmenėlį. Visi trys įeina kaip Pon, naudojant jau rankoje esančius.",
+      "kan": "Palieskite Kan ir tada akmenėlį. Visi keturi įeina kaip atviras Kan.",
+      "closedKan": "Palieskite Uždaras Kan ir tada akmenėlį. Jei rankoje jau yra trys ar keturi tokie, jie tampa Kan.",
+      "aka": "Kai taisyklėse [[engrenagem]] įjungtas Aka dora, laikydami telefoną stačiai palaikykite 5, kad įdėtumėte raudoną 5. Raudonas taškelis 5 kampe rodo, kad raudonas dar laisvas. Laikant telefoną gulsčiai, planšetėje ir kompiuteryje raudonas 5 yra paskutinis kiekvienos rūšies akmenėlis. Kiekviena rūšis turi tik vieną: ketvirtas tos rūšies 5 visada yra raudonas, taip pat ir Kan.",
+      "akaHan": "Kai yra 13 akmenų, 5 ženklelis rodo abi vertes: pirma han laimint su paprastu 5, o raudonai – laimint su raudonu 5. 7/8 HAN reiškia, kad paprastas 5 duoda 7, o raudonas 8 dėl Aka dora.",
+      "guideTitle": "Kišeninis gidas",
+      "guide": "Kepurės mygtukas atidaro Kišeninį gidą: Yaku su pavyzdžiais, terminai ir lentelės, kurias galima žiūrėti žaidimo metu.",
+      "finishTitle": "Užbaigti ranką",
+      "finish": "Kai ranka pilna, Užbaigti ranką atveria laimėjimo parinktis: ron ar tsumo, vėjus, Riichi, doras ir honba. Kiekviena dalis ten turi savo ?.",
+      "tip": "Mieliau rašote? MPSZ pakeičia akmenų klaviatūrą žymėjimu, pvz., 123m. Norėdami grįžti, palieskite Akmenys."
+    },
+    "demo": {
+      "tap": "Palieskite {{name}}",
+      "winLast": "Paskutinis paliestas akmuo yra laimėjimo akmuo",
+      "pickWin": "Palieskite laimėjimo akmenį",
+      "choose": "Pasirinkite seką",
+      "done": "Atlikta",
+      "tapHand": "Palieskite {{name}} rankoje",
+      "hold": "Palaikykite {{name}}",
+      "fourthAka": "Kai rankoje yra trys paprasti 5, klaviatūros 5 jau yra raudonas",
+      "tapCap": "Palieskite kepurę",
+      "pickTab": "Palieskite skirtuką {{name}}",
+      "guideCard": "Kiekvienas Yaku su pavyzdžiu ir verte",
+      "cases": "Atvejai",
+      "caseNew": "Naujas akmuo",
+      "caseHand": "Iš rankos",
+      "caseHold": "Laikant 5",
+      "caseFourth": "Ketvirtas 5"
     }
   },
   "rulesModal": {
@@ -975,6 +1017,31 @@
       "rankingHelp": "All games added up"
     },
     "simple": {
+      "guide": {
+        "intro": "Padėkite telefoną stalo viduryje, kad 東 būtų atsuktas į dalintoją. Kiekviena plokštelė rodo ten sėdinčiojo vėją ir kauliukų sumas, kurios atidaro sieną priešais jį.",
+        "timerTitle": "Ėjimo laikmatis",
+        "timer": "30 s laikmatis įjungtas iš karto. Savo ėjimo metu palieskite savo vėjo plokštelę ir laikas centre prasidės iš naujo. Kadangi Pon, Chi ir Kan praleidžia žaidėjus, laikmatis nespėlioja, kieno ėjimas: liečia tas, kuris žais. Kai laikas baigiasi, centras mirksi ir skamba signalas.",
+        "actionsTitle": "Stalo veiksmai",
+        "actions": "Palietus bet kurią stalo vietą už plokštelių, taip pat ir centrą, atsiveria veiksmai: kitas raundas, honba, kauliukai, Vėjų burtai, pradėti iš naujo nuo 東1 ir laikmačio trukmė.",
+        "dealerTitle": "Dalintojo keitimas",
+        "dealer": "Kitas raundas perduoda 東 kitam žaidėjui. Pasukite telefoną, kad 東 ir toliau būtų atsuktas į dalintoją. Stalas seka telefoną net jei ekranas pasisuka pats, bet antraštė ir juosta persikelia. Kad to išvengtumėte, užrakinkite pasukimą telefono nustatymuose.",
+        "honbaTitle": "Honba",
+        "honba": "Kai laimi dalintojas arba raundas baigiasi lygiosiomis, palieskite + prie honba: skaičius padidėja ir ranka prasideda iš naujo su tuo pačiu dalintoju. − ištaiso per daug paspaudimų.",
+        "screenTitle": "Ekranas įjungtas",
+        "screen": "Ekranas lieka įjungtas, kol šis stalas atidarytas, jei įrenginys leidžia."
+      },
+      "demo": {
+        "timerTap": "Savo ėjimo metu palieskite plokštelę priešais save",
+        "timerRuns": "Laikas bėga centre",
+        "timerOut": "Laikas baigėsi: centras mirksi ir skamba signalas",
+        "timerNext": "Kitas paliečia savo plokštelę ir laikas prasideda iš naujo",
+        "tapTable": "Palieskite stalą už plokštelių",
+        "nextRound": "Palieskite Kitas raundas",
+        "dealerMoved": "東 pereina kitam dalintojui",
+        "rotate": "Pasukite telefoną, kad 東 būtų priešais jį",
+        "honbaPlus": "Palieskite + prie honba",
+        "honbaUp": "Honba padidėja ir ranka prasideda iš naujo"
+      },
       "title": "Simple Centerpiece",
       "nextRound": "Next round",
       "honba": "Honba",
@@ -986,13 +1053,8 @@
       "actions": "Table actions",
       "hint": "Tap the table to see the actions",
       "adjustHonba": "Koreguoti honba, dabar {{count}}",
-      "help4": "Honba taisomas stalo veiksmuose, mygtukais − ir +.",
-      "help5": "Įjungę laikmatį veiksmuose, palieskite žaidžiančiojo plokštelę, kad pradėtumėte ir perduotumėte ėjimą.",
       "timerStart": "Pradėti laikmatį",
-      "timerPass": "Perduoti ėjimą",
-      "help1": "Leave the phone in the middle of the table, with 東 facing the dealer. Tapping anywhere on the table opens the actions: next round, honba, dice, wind draw and restart.",
-      "help2": "Each time the dealer changes, turn the phone so 東 keeps facing them. The table follows the phone even if the screen rotates by itself, but the header and bar change sides; to avoid that, lock the rotation in your phone settings.",
-      "help3": "The screen stays on while this table is open, when the device allows it."
+      "timerPass": "Perduoti ėjimą"
     },
     "setup": {
       "title": "New game",

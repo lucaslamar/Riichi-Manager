@@ -1,7 +1,12 @@
+import { useEffect, useRef, type MouseEvent } from 'react'
+import { vibrar } from '@/compartilhado/adaptadores/vibracao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { Acao, CodigoPedra, ConfiguracaoCalculo, EsperaPossivel } from '../../../logica/mao'
 import { HONRAS, NAIPES, codigoBase, nomePedraAcessivel } from '../../constantes'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+
+/** Quanto segurar o 5 para virar o 5 vermelho. */
+const DURACAO_TOQUE_LONGO_MS = 450
 
 interface CandidataPedraAgariTeclado {
   pedra: CodigoPedra
@@ -32,6 +37,11 @@ interface PropsTecladoPedras {
   mostrarGrade?: boolean
   /** Nome da pedra no leitor de tela, quando quem usa o teclado tem o próprio. */
   rotuloPedra?: (pedra: CodigoPedra) => string
+  /**
+   * Celular em pé: com Aka dora, segurar o 5 de cada naipe põe o 5 vermelho, e os
+   * naipes ficam com 9 pedras do tamanho de quando a regra está desligada.
+   */
+  akaSegurandoCinco?: boolean
   maoProntaParaFinalizar?: boolean
   batidaDefinida?: boolean
   mensagemFinalizacao?: string | null
@@ -67,6 +77,7 @@ export function TecladoPedras({
   contexto,
   mostrarGrade = true,
   rotuloPedra,
+  akaSegurandoCinco = false,
   maoProntaParaFinalizar = false,
   batidaDefinida = maoProntaParaFinalizar,
   mensagemFinalizacao,
@@ -82,6 +93,7 @@ export function TecladoPedras({
   aoEscolherChiiPendente,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
+  const akaNoCinco = akaSegurandoCinco && configuracao.akadora
   const gradeVisivel = mostrarGrade || selecionandoPedraAgari
 
   const renderizarBadgeEspera = (
@@ -117,63 +129,154 @@ export function TecladoPedras({
     return t('calculator.addTileToHand', { tile })
   }
 
+  /**
+   * Selo do 5 com o vermelho livre: o han do 5 comum e, em vermelho, o do 5
+   * vermelho (ex.: 7/8 HAN). Sem diferença, sem yaku ou em furiten, fica o selo comum.
+   */
+  const renderizarBadgeComAka = (
+    comum: Pick<EsperaPossivel, 'semYaku' | 'furiten' | 'yakuman' | 'han'>,
+    vermelho: Pick<EsperaPossivel, 'semYaku' | 'furiten' | 'yakuman' | 'han'>,
+  ) => {
+    const bloqueada = (espera: typeof comum) => espera.semYaku || (espera.furiten && furitenBloqueiaRon)
+    const valor = (espera: typeof comum) => (espera.yakuman > 0 ? `${espera.yakuman}Y` : String(espera.han))
+    if (bloqueada(comum) || bloqueada(vermelho) || valor(comum) === valor(vermelho)) {
+      return renderizarBadgeEspera(comum)
+    }
+    const sufixo = comum.yakuman === 0 && vermelho.yakuman === 0 ? ' han' : ''
+    return (
+      <span className="badge-espera-teclado badge-espera-teclado--com-aka">
+        {valor(comum)}/<span className="badge-espera-teclado__aka">{valor(vermelho)}</span>
+        {sufixo}
+      </span>
+    )
+  }
+
+  const acionarPedra = (codigo: CodigoPedra) =>
+    selecionandoPedraAgari ? aoEscolherPedraAgariPorCodigo?.(codigo) : aoAdicionarPedra(codigo)
+
+  const pedraIndisponivel = (codigo: CodigoPedra) => {
+    if (selecionandoPedraAgari) return !candidatasPedraAgari.get(codigo)
+    const cheiaESemAcao = maoCompleta && !acaoPendente
+    const bloqueadaPorEspera =
+      filtrarTecladoPorEspera && (!esperasPorPedra.get(codigo) || esperasPorPedra.get(codigo)?.semYaku)
+    return cheiaESemAcao || !podeSelecionarPedra(codigo) || Boolean(bloqueadaPorEspera)
+  }
+
+  // Segurar o 5: o toque longo põe o 5 vermelho e o toque seguinte (o clique que o
+  // navegador manda ao soltar) é ignorado.
+  const toqueLongo = useRef<{ timer: number | null; disparou: boolean }>({ timer: null, disparou: false })
+  const cancelarToqueLongo = () => {
+    if (toqueLongo.current.timer !== null) window.clearTimeout(toqueLongo.current.timer)
+    toqueLongo.current.timer = null
+  }
+  useEffect(() => cancelarToqueLongo, [])
+
+  const modoMeldAtivo =
+    acaoPendente?.tipo === 'chii' ||
+    acaoPendente?.tipo === 'pon' ||
+    acaoPendente?.tipo === 'kanAberto' ||
+    acaoPendente?.tipo === 'kanFechado'
+
+  /** A espera que o selo da pedra mostra (ou nenhuma), já com o furiten ajustado. */
+  const esperaVisivelDe = (codigo: CodigoPedra) => {
+    const base = selecionandoPedraAgari
+      ? candidatasPedraAgari.get(codigo)
+      : !podeSelecionarPedra(codigo) || modoMeldAtivo
+        ? undefined
+        : esperasPorPedra.get(codigo)
+    return base?.furiten && !furitenBloqueiaRon ? { ...base, furiten: false } : base
+  }
+
   const renderizarBotaoPedra = (codigo: CodigoPedra, tituloPadrao?: string) => {
+    // Celular em pé com Aka dora: o 5 de cada naipe também dá o vermelho, segurando.
+    const aka: CodigoPedra | null =
+      akaNoCinco && codigo[0] === '5' && codigo[1] !== 'z' ? (`0${codigo[1]}` as CodigoPedra) : null
+    const akaDisponivel = aka !== null && !pedraIndisponivel(aka)
     const candidataAgari = candidatasPedraAgari.get(codigo)
     const cheiaESemAcao = maoCompleta && !acaoPendente && !selecionandoPedraAgari
     const invalidaParaAcao = !podeSelecionarPedra(codigo)
-    const modoMeldAtivo =
-      acaoPendente?.tipo === 'chii' ||
-      acaoPendente?.tipo === 'pon' ||
-      acaoPendente?.tipo === 'kanAberto' ||
-      acaoPendente?.tipo === 'kanFechado'
     const ehDoraReal = dorasReais.has(codigoBase(codigo))
     const espera = esperasPorPedra.get(codigo)
     const bloqueadaPorEspera = filtrarTecladoPorEspera && (!espera || espera.semYaku)
     const indisponivel = selecionandoPedraAgari
       ? !candidataAgari
       : cheiaESemAcao || invalidaParaAcao || bloqueadaPorEspera
-    const esperaVisivelBase = selecionandoPedraAgari
-      ? candidataAgari
-      : invalidaParaAcao
-        ? undefined
-        : modoMeldAtivo
-          ? undefined
-          : espera
-    const esperaVisivel =
-      esperaVisivelBase?.furiten && !furitenBloqueiaRon
-        ? { ...esperaVisivelBase, furiten: false }
-        : esperaVisivelBase
-    const rotuloEspera = esperaVisivel
-      ? `${rotuloEsperaTeclado(esperaVisivel)}${esperaVisivel.furiten ? ` - ${t('calculator.furiten')}` : ''}`
-      : undefined
+    const esperaComum = esperaVisivelDe(codigo)
+    const esperaAka = aka !== null && akaDisponivel ? esperaVisivelDe(aka) : undefined
     const label = selecionandoPedraAgari
       ? candidataAgari
         ? t('calculator.selectWinningTile', { tile: nomePedraAcessivel(codigo) })
         : t('calculator.disabledTile', { tile: nomePedraAcessivel(codigo) })
       : labelBotaoPedra(codigo, indisponivel)
 
+    // Com o 5 normal esgotado, o toque comum dá o vermelho, se ele ainda estiver livre.
+    const soAka = aka !== null && indisponivel && akaDisponivel
+    // Só o vermelho: o selo é o dele. Os dois livres: o selo mostra os dois valores.
+    const esperaVisivel = soAka ? esperaAka : (esperaComum ?? esperaAka)
+    const comDoisValores = !soAka && esperaComum !== undefined && esperaAka !== undefined
+    const badge =
+      comDoisValores && esperaComum && esperaAka
+        ? renderizarBadgeComAka(esperaComum, esperaAka)
+        : renderizarBadgeEspera(esperaVisivel)
+    const rotuloEspera = esperaVisivel
+      ? `${rotuloEsperaTeclado(esperaVisivel)}${esperaVisivel.furiten ? ` - ${t('calculator.furiten')}` : ''}${
+          comDoisValores && esperaAka ? ` · ${t('calculator.akaDora')}: ${rotuloEsperaTeclado(esperaAka)}` : ''
+        }`
+      : undefined
+    const segurando =
+      aka !== null && akaDisponivel
+        ? {
+            onPointerDown: () => {
+              cancelarToqueLongo()
+              toqueLongo.current.disparou = false
+              toqueLongo.current.timer = window.setTimeout(() => {
+                toqueLongo.current.timer = null
+                toqueLongo.current.disparou = true
+                vibrar(30)
+                acionarPedra(aka)
+              }, DURACAO_TOQUE_LONGO_MS)
+            },
+            onPointerUp: cancelarToqueLongo,
+            onPointerLeave: cancelarToqueLongo,
+            onPointerCancel: cancelarToqueLongo,
+            onContextMenu: (evento: MouseEvent) => evento.preventDefault(),
+          }
+        : {}
+
     return (
       <button
         key={codigo}
         className={`btn-pedra ${codigo[0] === '0' ? 'btn-pedra-aka' : ''} ${
           ehDoraReal ? 'dora-real' : ''
-        } ${classeEsperaTeclado(esperaVisivel)} ${indisponivel ? 'indisponivel' : ''}`}
+        } ${classeEsperaTeclado(esperaVisivel)} ${indisponivel && !soAka ? 'indisponivel' : ''}${
+          aka !== null ? ' btn-pedra-com-aka' : ''
+        }`}
         type="button"
         title={
           tituloPadrao && rotuloEspera
             ? `${tituloPadrao} - ${rotuloEspera}`
             : (rotuloEspera ?? tituloPadrao ?? nomePedraAcessivel(codigo))
         }
-        aria-label={label}
-        disabled={indisponivel}
-        onClick={() =>
-          selecionandoPedraAgari
-            ? aoEscolherPedraAgariPorCodigo?.(codigo)
-            : aoAdicionarPedra(codigo)
+        aria-label={
+          soAka
+            ? labelBotaoPedra(aka, false)
+            : akaDisponivel
+              ? `${label}${rotuloEspera ? `, ${rotuloEspera}` : ''}. ${t('calculator.holdForAka')}`
+              : label
         }
+        disabled={indisponivel && !soAka}
+        {...segurando}
+        onClick={() => {
+          if (toqueLongo.current.disparou) {
+            toqueLongo.current.disparou = false
+            return
+          }
+          acionarPedra(soAka && aka ? aka : codigo)
+        }}
       >
-        <PedraSvg pedra={codigo} />
-        {renderizarBadgeEspera(esperaVisivel)}
+        <PedraSvg pedra={soAka && aka ? aka : codigo} />
+        {badge}
+        {akaDisponivel && !soAka && <span className="ponto-aka-teclado" aria-hidden="true" />}
       </button>
     )
   }
@@ -211,7 +314,7 @@ export function TecladoPedras({
     <div
       className={`teclado-pedras teclado-pedras-${contexto} ${
         maoProntaParaFinalizar ? 'teclado-mao-pronta' : ''
-      }`}
+      }${akaNoCinco ? ' teclado-aka-no-cinco' : ''}`}
       aria-label={t('calculator.keyboard')}
     >
       {contexto === 'montagem' && aoAbrirRegras && !maoProntaParaFinalizar && gradeVisivel && (
@@ -267,7 +370,9 @@ export function TecladoPedras({
               {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) =>
                 renderizarBotaoPedra(`${numero}${naipe}`),
               )}
-              {configuracao.akadora && renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))}
+              {configuracao.akadora &&
+                !akaNoCinco &&
+                renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))}
             </div>
           </div>
         )

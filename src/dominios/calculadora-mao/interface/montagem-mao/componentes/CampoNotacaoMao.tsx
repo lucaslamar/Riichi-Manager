@@ -40,6 +40,8 @@ interface PropsCampoNotacaoMao {
   esperas: EsperaPossivel[]
   rotuloEspera: (espera: EsperaPossivel) => string
   aoEscolherEspera: (pedra: CodigoPedra) => void
+  /** Sem Aka dora nas regras, o 0 (5 vermelho) fica desabilitado. */
+  akadora: boolean
 }
 
 interface Tecla {
@@ -125,6 +127,7 @@ export function CampoNotacaoMao({
   esperas,
   rotuloEspera,
   aoEscolherEspera,
+  akadora,
 }: PropsCampoNotacaoMao) {
   const { t } = useI18n()
   const idMensagem = useId()
@@ -239,8 +242,8 @@ export function CampoNotacaoMao({
   }
 
   // Ref: o listener do teclado físico fica fixo e usa sempre o estado atual.
-  const acoes = useRef({ digitar, apagar, aoConfirmar, tocarNumero, tocarNaipe })
-  acoes.current = { digitar, apagar, aoConfirmar, tocarNumero, tocarNaipe }
+  const acoes = useRef({ digitar, apagar, aoConfirmar, tocarNumero, tocarNaipe, akadora })
+  acoes.current = { digitar, apagar, aoConfirmar, tocarNumero, tocarNaipe, akadora }
 
   useEffect(() => {
     const aoTeclar = (evento: KeyboardEvent) => {
@@ -254,6 +257,8 @@ export function CampoNotacaoMao({
       }
       if (document.querySelector(SELETOR_CAMADAS)) return
       const tecla = evento.key.toLowerCase()
+      // Sem Aka dora o 0 do teclado físico também não faz nada, como a tecla da tela.
+      if (tecla === '0' && !acoes.current.akadora) return
       if (/^\d$/.test(tecla)) acoes.current.tocarNumero(tecla)
       else if (/^[mpsz]$/.test(tecla)) acoes.current.tocarNaipe(tecla)
       else if (TECLAS_FISICAS.test(tecla)) acoes.current.digitar(tecla)
@@ -392,7 +397,7 @@ export function CampoNotacaoMao({
             disabled={
               tecla.classe === 'naipe'
                 ? naipeBloqueado(tecla.valor)
-                : numeroBloqueado(tecla.valor, pendentes)
+                : (tecla.valor === '0' && !akadora) || numeroBloqueado(tecla.valor, pendentes)
             }
             onClick={() =>
               tecla.classe === 'naipe' ? tocarNaipe(tecla.valor) : tocarNumero(tecla.valor)

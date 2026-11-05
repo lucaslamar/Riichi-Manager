@@ -1,4 +1,5 @@
 import { ICONE_INDICADOR_DORA } from '../../constantes'
+import type { NomeCena } from './cenasAjuda'
 
 /**
  * Conteúdo dos botões "?" das seções da finalização (e do campo de notação da montagem). Aqui ficam só as chaves
@@ -12,6 +13,7 @@ export type TopicoAjuda =
   | 'riichi'
   | 'condicoesEspeciais'
   | 'notacao'
+  | 'pecas'
 
 /** Um trecho da explicação; com `subtitulo` quando a seção agrupa assuntos. */
 export interface BlocoAjuda {
@@ -27,6 +29,8 @@ export interface BlocoAjuda {
   visual?: 'ciclosDora' | 'akaDora'
   /** Pedras de exemplo em notação (ex.: '123m'), mostradas depois dos parágrafos. */
   exemplo?: string
+  /** Cena animada do app (mão + teclado + dedo), no lugar do exemplo parado. */
+  cena?: NomeCena
 }
 
 /** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */
@@ -219,6 +223,65 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
     ],
   },
   // Campo de notação da montagem: como escrever a mão, do básico às chamadas.
+  // Teclado de pedras da montagem: o que muda em relação a outras calculadoras.
+  pecas: {
+    termosProprios: ['aka-dora'],
+    titulo: 'sectionHelp.tiles.title',
+    blocos: [
+      { paragrafos: ['sectionHelp.tiles.intro'] },
+      {
+        subtitulo: 'sectionHelp.tiles.winTitle',
+        item: true,
+        paragrafos: ['sectionHelp.tiles.win', 'sectionHelp.tiles.waits'],
+        cena: 'pecasBatida',
+      },
+      { subtitulo: 'sectionHelp.notation.callsTitle' },
+      {
+        subtitulo: 'melds.chii',
+        item: true,
+        paragrafos: ['sectionHelp.tiles.chi'],
+        cena: 'pecasChi',
+      },
+      {
+        subtitulo: 'melds.pon',
+        item: true,
+        paragrafos: ['sectionHelp.tiles.pon'],
+        cena: 'pecasPon',
+      },
+      {
+        subtitulo: 'melds.kanAberto',
+        item: true,
+        paragrafos: ['sectionHelp.tiles.kan'],
+        cena: 'pecasKan',
+      },
+      {
+        subtitulo: 'melds.kanFechado',
+        item: true,
+        paragrafos: ['sectionHelp.tiles.closedKan'],
+        cena: 'pecasKanFechado',
+      },
+      {
+        subtitulo: 'sectionHelp.notation.akaTitle',
+        paragrafos: ['sectionHelp.tiles.aka', 'sectionHelp.tiles.akaHan'],
+        cena: 'pecasAka',
+      },
+      {
+        subtitulo: 'sectionHelp.tiles.guideTitle',
+        icone: 'fa-graduation-cap',
+        paragrafos: ['sectionHelp.tiles.guide'],
+        cena: 'pecasGuia',
+      },
+      {
+        subtitulo: 'sectionHelp.tiles.finishTitle',
+        paragrafos: ['sectionHelp.tiles.finish'],
+      },
+      {
+        subtitulo: 'sectionHelp.notation.tipTitle',
+        dica: true,
+        paragrafos: ['sectionHelp.tiles.tip'],
+      },
+    ],
+  },
   notacao: {
     termosProprios: ['aka-dora'],
     titulo: 'notation.toggle',
@@ -233,7 +296,7 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         subtitulo: 'sectionHelp.notation.akaTitle',
         item: true,
         paragrafos: ['sectionHelp.notation.aka'],
-        visual: 'akaDora',
+        cena: 'mpszAka',
       },
       // Chamadas pelo teclado: o grupo e depois a tecla, com as pedras de exemplo.
       { subtitulo: 'sectionHelp.notation.callsTitle' },
@@ -241,25 +304,25 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         subtitulo: 'melds.chii',
         item: true,
         paragrafos: ['sectionHelp.notation.chi'],
-        exemplo: '123m',
+        cena: 'mpszChi',
       },
       {
         subtitulo: 'melds.pon',
         item: true,
         paragrafos: ['sectionHelp.notation.pon'],
-        exemplo: '111p',
+        cena: 'mpszPon',
       },
       {
         subtitulo: 'melds.kanAberto',
         item: true,
         paragrafos: ['sectionHelp.notation.kan'],
-        exemplo: '1111s',
+        cena: 'mpszKan',
       },
       {
         subtitulo: 'melds.kanFechado',
         item: true,
         paragrafos: ['sectionHelp.notation.closedKan'],
-        exemplo: '7777z',
+        cena: 'mpszKanFechado',
       },
       {
         subtitulo: 'sectionHelp.notation.displayTitle',

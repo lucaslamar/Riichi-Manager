@@ -6,6 +6,7 @@ import {
   milissegundosRestantes,
   passarVezPara,
   pausarVez,
+  reiniciarVez,
   retomarVez,
   tempoEsgotado,
   tocarTimer,
@@ -95,6 +96,7 @@ export function useRelogioVez(
     segundos: Math.ceil(milissegundosRestantes(vez, agora) / 1000),
     fracao: segundosTotais > 0 ? milissegundosRestantes(vez, agora) / (segundosTotais * 1000) : 0,
     tocar: () => atualizarVez((atual) => tocarTimer(atual, segundosTotais, Date.now())),
+    reiniciar: () => atualizarVez((atual) => reiniciarVez(atual, segundosTotais, Date.now())),
     passarPara: (cadeira: Cadeira) =>
       atualizarVez(() => passarVezPara(cadeira, segundosTotais, Date.now())),
     alternarPausa: () =>

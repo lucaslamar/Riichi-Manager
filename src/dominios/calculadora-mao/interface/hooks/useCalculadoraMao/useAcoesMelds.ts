@@ -5,7 +5,15 @@ import {
   type CodigoPedra,
   type Mao,
 } from '../../../logica/mao'
-import { codigoBase, ehPedraNumerada, expandirGrupoMesmoValor, valorPedra } from '../../constantes'
+import {
+  MAXIMO_CINCOS_COMUNS_COM_AKA,
+  codigoBase,
+  ehCincoComum,
+  ehPedraNumerada,
+  expandirGrupoMesmoValor,
+  trocarQuartoCincoPorAka,
+  valorPedra,
+} from '../../constantes'
 import type { AcoesMeldsCalculadora } from './tipos'
 
 interface ParametrosAcoesMelds {
@@ -14,6 +22,8 @@ interface ParametrosAcoesMelds {
   slotsUsados: number
   /** Cópias que a partida já mostrou fora desta mão. */
   pedrasDaMesa: CodigoPedra[]
+  /** Com Aka dora, um dos quatro 5 de cada naipe é o vermelho: só sobram 3 comuns. */
+  akadora: boolean
 }
 
 const CODIGOS_BASE_MELD: CodigoPedra[] = [
@@ -35,7 +45,20 @@ export function useAcoesMelds({
   acaoPendente,
   slotsUsados,
   pedrasDaMesa,
+  akadora,
 }: ParametrosAcoesMelds): AcoesMeldsCalculadora {
+  const expandir = useCallback(
+    (pedra: CodigoPedra, tamanho: number) =>
+      trocarQuartoCincoPorAka(expandirGrupoMesmoValor(pedra, tamanho), akadora),
+    [akadora],
+  )
+  /** O 5 comum passou do limite de 3 por naipe (com Aka dora)? */
+  const passouCincosComuns = useCallback(
+    (pedra: CodigoPedra, quantosComuns: number) =>
+      akadora && ehCincoComum(pedra) && quantosComuns > MAXIMO_CINCOS_COMUNS_COM_AKA,
+    [akadora],
+  )
+
   const todasPedras = useMemo(
     () => [
       ...mao.pedras,
@@ -120,15 +143,18 @@ export function useAcoesMelds({
             ? visiveisAposMeld.filter((visivel) => visivel === pedra).length +
               pedrasMeld.filter((visivel) => visivel === pedra).length
             : 0
-        return totalBase <= 4 && totalAka <= 1
+        const totalComum =
+          visiveisAposMeld.filter((visivel) => visivel === pedra).length +
+          pedrasMeld.filter((visivel) => visivel === pedra).length
+        return totalBase <= 4 && totalAka <= 1 && !passouCincosComuns(pedra, totalComum)
       })
     },
-    [indicesPedrasNaMaoPara, mao, pedrasDaMesa, slotsUsados],
+    [indicesPedrasNaMaoPara, mao, passouCincosComuns, pedrasDaMesa, slotsUsados],
   )
 
   const podeCriarKanFechadoDireto = useCallback(
-    (codigo: CodigoPedra) => podeCriarMeld(expandirGrupoMesmoValor(codigo, 4), [], 3),
-    [podeCriarMeld],
+    (codigo: CodigoPedra) => podeCriarMeld(expandir(codigo, 4), [], 3),
+    [expandir, podeCriarMeld],
   )
 
   const podeCriarKanFechadoDaMao = useCallback(
@@ -136,17 +162,17 @@ export function useAcoesMelds({
       const quantidade = Math.min(contarCodigoNaMao(codigo), 4)
       if (quantidade < 3) return false
       return podeCriarMeld(
-        expandirGrupoMesmoValor(codigo, 4),
-        expandirGrupoMesmoValor(codigo, quantidade),
+        expandir(codigo, 4),
+        expandir(codigo, quantidade),
         3,
       )
     },
-    [contarCodigoNaMao, podeCriarMeld],
+    [contarCodigoNaMao, expandir, podeCriarMeld],
   )
 
   const podeFormarMeldComMao = useCallback(
     (pedras: CodigoPedra[], slotsMeld = 3) => podeCriarMeld(pedras, pedras, slotsMeld),
-    [podeCriarMeld],
+    [expandir, podeCriarMeld],
   )
 
   const podeAdicionarPedras = useCallback(
@@ -160,9 +186,14 @@ export function useAcoesMelds({
           (pedra[0] !== '0' ||
             contarAka(pedra) +
               pedras.filter((pedraDoGrupo) => pedraDoGrupo === pedra).length <=
-              1),
+              1) &&
+          // contarAka conta o código exato: para o 5 comum, quantos 5 comuns já estão visíveis.
+          !passouCincosComuns(
+            pedra,
+            contarAka(pedra) + pedras.filter((pedraDoGrupo) => pedraDoGrupo === pedra).length,
+          ),
       ),
-    [contarAka, contarCodigo],
+    [contarAka, contarCodigo, passouCincosComuns],
   )
 
   const sequenciasChiiPossiveis = useCallback(
@@ -188,7 +219,7 @@ export function useAcoesMelds({
           )
         })
     },
-    [podeCriarMeld],
+    [expandir, podeCriarMeld],
   )
 
   const sequenciasChiiDaMaoPossiveis = useCallback(
@@ -214,7 +245,7 @@ export function useAcoesMelds({
           )
         })
     },
-    [podeCriarMeld],
+    [expandir, podeCriarMeld],
   )
 
   const sequenciasChiiDisponiveis = useMemo(() => {
@@ -228,28 +259,28 @@ export function useAcoesMelds({
   const podePon = useMemo(
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
-        const pedrasMeld = expandirGrupoMesmoValor(codigo, 3)
-        const pedrasMao = expandirGrupoMesmoValor(codigo, 2)
+        const pedrasMeld = expandir(codigo, 3)
+        const pedrasMao = expandir(codigo, 2)
         return (
           podeCriarMeld(pedrasMeld, pedrasMeld, 3) ||
           podeCriarMeld(pedrasMeld, pedrasMao, 3) ||
           podeCriarMeld(pedrasMeld, [], 3)
         )
       }),
-    [podeCriarMeld],
+    [expandir, podeCriarMeld],
   )
   const podeKanAberto = useMemo(
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
-        const pedrasMeld = expandirGrupoMesmoValor(codigo, 4)
-        const pedrasMao = expandirGrupoMesmoValor(codigo, 3)
+        const pedrasMeld = expandir(codigo, 4)
+        const pedrasMao = expandir(codigo, 3)
         return (
           podeCriarMeld(pedrasMeld, pedrasMeld, 3) ||
           podeCriarMeld(pedrasMeld, pedrasMao, 3) ||
           podeCriarMeld(pedrasMeld, [], 3)
         )
       }),
-    [podeCriarMeld],
+    [expandir, podeCriarMeld],
   )
   const podeKanFechado = useMemo(
     () =>
@@ -271,15 +302,15 @@ export function useAcoesMelds({
           return podeAdicionarPedras([pedra])
         case 'pon':
           return (
-            podeCriarMeld(expandirGrupoMesmoValor(pedra, 3), expandirGrupoMesmoValor(pedra, 3), 3) ||
-            podeCriarMeld(expandirGrupoMesmoValor(pedra, 3), expandirGrupoMesmoValor(pedra, 2), 3) ||
-            podeCriarMeld(expandirGrupoMesmoValor(pedra, 3), [], 3)
+            podeCriarMeld(expandir(pedra, 3), expandir(pedra, 3), 3) ||
+            podeCriarMeld(expandir(pedra, 3), expandir(pedra, 2), 3) ||
+            podeCriarMeld(expandir(pedra, 3), [], 3)
           )
         case 'kanAberto':
           return (
-            podeCriarMeld(expandirGrupoMesmoValor(pedra, 4), expandirGrupoMesmoValor(pedra, 4), 3) ||
-            podeCriarMeld(expandirGrupoMesmoValor(pedra, 4), expandirGrupoMesmoValor(pedra, 3), 3) ||
-            podeCriarMeld(expandirGrupoMesmoValor(pedra, 4), [], 3)
+            podeCriarMeld(expandir(pedra, 4), expandir(pedra, 4), 3) ||
+            podeCriarMeld(expandir(pedra, 4), expandir(pedra, 3), 3) ||
+            podeCriarMeld(expandir(pedra, 4), [], 3)
           )
         case 'kanFechado':
           return podeCriarKanFechadoDaMao(pedra) || podeCriarKanFechadoDireto(pedra)
@@ -289,6 +320,7 @@ export function useAcoesMelds({
     },
     [
       acaoPendente,
+      expandir,
       mao.dora.length,
       mao.riichi,
       mao.uradora.length,

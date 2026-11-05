@@ -25,6 +25,8 @@ export const PAGINAS_NAVEGACAO: readonly (readonly ItemNavegacao[])[] = [
     { destino: 'centerpiece', chave: 'menu.centerpiece', icone: 'centerpiece' },
   ],
   [
+    // Partidas com pontos, histórico, jogadores e ranking (o simples fica no Centerpiece).
+    { destino: 'partidas', chave: 'menu.matches', icone: 'fa-gamepad', chaveCurta: 'menu.matchesShort' },
     { destino: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
     { destino: 'regras', chave: 'menu.rules', icone: 'fa-gear', chaveCurta: 'menu.rulesShort' },
     { destino: 'idioma', chave: 'menu.language', icone: 'fa-globe' },

@@ -43,8 +43,11 @@ export default function PaginaCenterpiece(props: PropsCenterpiece) {
 
 interface PropsCenterpiece {
   aoAbrirSorteador: () => void
-  /** Volta do sorteador aberto pelo Centerpiece simples: abre direto nele. */
-  inicioNoSimples?: boolean
+  /**
+   * 'simples': o botão Centerpiece da barra, que abre direto a mesa simples.
+   * 'partidas': Mesa partida, o menu das partidas com pontos.
+   */
+  modo: 'simples' | 'partidas'
   /** Vizinhos na barra inferior, para o deslize no menu do módulo. */
   aoTelaAnterior?: () => void
   aoProximaTela?: () => void
@@ -53,7 +56,7 @@ interface PropsCenterpiece {
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
 function TelasCenterpiece({
   aoAbrirSorteador,
-  inicioNoSimples = false,
+  modo,
   aoTelaAnterior,
   aoProximaTela,
   raiz,
@@ -61,7 +64,7 @@ function TelasCenterpiece({
   const { t } = useI18n()
   const { partidas, abertas, descartar, guardarNome } = usePartidas()
   const { jogadores } = useJogadores()
-  const [tela, setTela] = useState<TelaModulo>({ nome: inicioNoSimples ? 'simples' : 'inicio' })
+  const [tela, setTela] = useState<TelaModulo>({ nome: modo === 'simples' ? 'simples' : 'inicio' })
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
   const irInicio = () => setTela({ nome: 'inicio' })
   const { telaCheiaMesa } = usePreferencias()
@@ -72,11 +75,13 @@ function TelasCenterpiece({
     setTela(mesa)
   }
 
-  // No menu segue o carrossel da barra inferior; dentro, os dois sentidos voltam ao menu.
+  // No menu e no simples (que agora é a raiz do Centerpiece) segue o carrossel da
+  // barra inferior; dentro das outras telas, os dois sentidos voltam ao menu.
+  const naRaiz = tela.nome === 'inicio' || tela.nome === 'simples'
   useGestoHorizontal({
     alvo: raiz,
-    aoDireita: tela.nome === 'inicio' ? aoTelaAnterior : irInicio,
-    aoEsquerda: tela.nome === 'inicio' ? aoProximaTela : irInicio,
+    aoDireita: naRaiz ? aoTelaAnterior : irInicio,
+    aoEsquerda: naRaiz ? aoProximaTela : irInicio,
   })
 
   const nomesDa = (id: string) => {
@@ -96,7 +101,7 @@ function TelasCenterpiece({
       <RegistrarFinalizada aoVoltar={irInicio} aoRegistrar={() => setTela({ nome: 'historico' })} />
     )
   }
-  if (tela.nome === 'simples') return <CenterpieceSimples aoVoltar={irInicio} aoAbrirSorteador={aoAbrirSorteador} />
+  if (tela.nome === 'simples') return <CenterpieceSimples aoAbrirSorteador={aoAbrirSorteador} />
   if (tela.nome === 'mesa') {
     const partida = partidas.find((item) => item.id === tela.id)
     if (partida) {
@@ -188,13 +193,6 @@ function TelasCenterpiece({
     aoTocar: () => void
   }[] = [
     {
-      chave: 'simples',
-      icone: 'fa-border-all',
-      titulo: t('match.simple.title'),
-      texto: t('match.home.simpleHelp'),
-      aoTocar: () => abrirMesa({ nome: 'simples' }),
-    },
-    {
       chave: 'nova',
       icone: 'fa-plus',
       titulo: t('match.home.newGame'),
@@ -241,7 +239,7 @@ function TelasCenterpiece({
 
   return (
     <section className="ptd-inicio">
-      <TituloTela titulo={t('match.home.title')} />
+      <TituloTela titulo={t('menu.matches')} />
       <div className="ptd-cards">
         {cards.map((card) => (
           <button

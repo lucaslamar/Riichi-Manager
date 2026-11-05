@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "Calculadora",
+    "calculator": "Calculadora",
     "navigation": "Navegação principal",
     "currentModule": "Módulo atual",
     "tagline": "Ecossistema de Riichi Mahjong",
@@ -18,10 +18,12 @@
     "quickCalculatorShort": "Han e Fu",
     "windDraw": "Sorteador de Ventos",
     "rules": "Configurações",
-    "rulesShort": "Configurações",
+    "rulesShort": "Ajustes",
     "handCalculatorShort": "Calculadora",
     "windDrawShort": "Sorteador",
     "centerpiece": "Centerpiece",
+    "matches": "Mesa partida",
+    "matchesShort": "Partida",
     "more": "Mais",
     "moreOptions": "Mais opções",
     "backToMain": "Voltar para as opções principais"
@@ -130,6 +132,7 @@
     "suitSou": "Sou",
     "honors": "Honras",
     "akaDora": "5 vermelho (aka dora)",
+    "holdForAka": "Segure para o 5 vermelho",
     "addTileToHand": "Adicionar {{tile}} à mão",
     "addTileToDiscards": "Adicionar {{tile}} aos descartes para furiten",
     "selectDoraIndicator": "Selecionar {{tile}} como indicador de dora / ura-dora",
@@ -422,6 +425,24 @@
       "yakuTitle": "Yaku",
       "yaku": "Condição de pontuação que dá direito a vencer. Toda mão precisa de pelo menos um."
     },
+    "demo": {
+      "tap": "Toque em {{name}}",
+      "winLast": "A última pedra tocada é a batida",
+      "pickWin": "Toque na pedra da batida",
+      "choose": "Escolha a sequência",
+      "done": "Pronto",
+      "tapHand": "Toque no {{name}} da mão",
+      "hold": "Segure o {{name}}",
+      "fourthAka": "Com três 5 comuns na mão, o 5 do teclado já é o vermelho",
+      "tapCap": "Toque no chapéu",
+      "pickTab": "Toque na aba {{name}}",
+      "guideCard": "Cada Yaku com exemplo e quanto vale",
+      "cases": "Casos",
+      "caseNew": "Pedra nova",
+      "caseHand": "Com as da mão",
+      "caseHold": "Segurando o 5",
+      "caseFourth": "O quarto 5"
+    },
     "honba": {
       "counter": "Contador de rodadas extras. Aumenta quando o dealer vence ou quando a rodada termina empatada.",
       "points": "Cada honba adiciona 300 pontos ao vencedor. No tsumo, cada jogador paga 100. No ron, quem descartou paga 300.",
@@ -498,6 +519,24 @@
       "closedKan": "4 iguais, todas da sua própria mão. Digite 7777z e toque em Kan fechado. Ou toque em Kan fechado antes e depois no 7: aparecem quatro 7 esperando o naipe. Então toque em z.",
       "displayTitle": "No computador",
       "display": "Pelo teclado físico, a chamada é uma letra no fim do grupo: c para Chi, Pon e Kan (123mc, 111pc, 1111sc) e a para Kan fechado (7777za)."
+    },
+    "tiles": {
+      "title": "Montar a mão",
+      "intro": "Toque nas pedras do teclado para montar a mão, em qualquer ordem: o app arruma sozinho. Para tirar uma pedra, toque nela na mão.",
+      "winTitle": "Batida",
+      "win": "Diferente de outras calculadoras, você não precisa deixar por último a pedra com que bateu. A última que você tocar vira a batida, mas com a mão completa dá para trocar em Mudar batida e escolher qualquer pedra da mão.",
+      "waits": "Com 13 pedras, o teclado mostra em cima de cada espera quantos han a mão vale batendo com ela. As pedras apagadas não completam a mão.",
+      "chi": "Toque em Chi e depois numa pedra. Se ela formar mais de uma sequência, as opções aparecem em Escolha o Chi: toque na certa. Com Chi marcado, tocar numa pedra da mão também forma o chi com as pedras que já estão nela.",
+      "pon": "Toque em Pon e depois na pedra. As três entram como Pon, usando as que já estão na mão.",
+      "kan": "Toque em Kan e depois na pedra. As quatro entram como Kan aberto.",
+      "closedKan": "Toque em Kan fechado e depois na pedra. Se a mão já tem três ou quatro dela, elas viram o Kan.",
+      "aka": "Com o Aka dora ligado nas regras [[engrenagem]], com o celular em pé você segura o 5 para pôr o 5 vermelho. O pontinho vermelho no canto do 5 mostra que o vermelho ainda está livre. Com o celular deitado, no tablet e no computador, o 5 vermelho é a última pedra de cada naipe. Cada naipe tem um só: o quarto 5 de um naipe é sempre o vermelho, também no Kan.",
+      "akaHan": "Com 13 pedras, o selo do 5 mostra os dois valores: primeiro o han batendo com o 5 comum e, em vermelho, batendo com o 5 vermelho. Em 7/8 HAN, o 5 comum dá 7 e o vermelho dá 8, por causa do Aka dora.",
+      "guideTitle": "Guia de bolso",
+      "guide": "O chapéu abre o Guia de bolso: Yaku com exemplos, termos e tabelas para consultar durante o jogo.",
+      "finishTitle": "Finalizar mão",
+      "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: ron ou tsumo, ventos, Riichi, doras e honba. Cada parte de lá tem o próprio ?.",
+      "tip": "Prefere digitar? MPSZ troca o teclado de pedras pela notação, como 123m. Para voltar, toque em Peças."
     }
   },
   "rulesModal": {
@@ -961,6 +1000,31 @@
       "rankingHelp": "Soma de todas as partidas"
     },
     "simple": {
+      "guide": {
+        "intro": "Deixe o celular no meio da mesa, com o 東 virado para o dealer. Cada placa mostra o vento de quem senta ali e as somas dos dados que fazem a parede da frente dele ser aberta.",
+        "timerTitle": "Timer de vez",
+        "timer": "O timer de 30 s já vem ligado. Na sua vez, toque na placa do seu vento e o tempo recomeça cheio no centro. Como Pon, Chi e Kan pulam jogadores, o timer não adivinha de quem é a vez: quem vai jogar é que toca. Se o tempo acabar, o centro pisca e o alarme toca.",
+        "actionsTitle": "Ações da mesa",
+        "actions": "Tocar em qualquer ponto da mesa fora das placas, inclusive no centro, abre as ações: próxima rodada, honba, dados, Sorteador de Ventos, recomeçar do 東1 e o tempo do timer.",
+        "dealerTitle": "Troca de dealer",
+        "dealer": "Próxima rodada passa o 東 para o próximo jogador. Gire o celular para o 東 continuar virado para o dealer. A mesa acompanha o celular mesmo se a tela girar sozinha, mas o cabeçalho e a barra mudam de lado. Para evitar isso, trave a rotação nos ajustes do celular.",
+        "honbaTitle": "Honba",
+        "honba": "Quando o dealer ganha ou a rodada empata, toque em + no honba: o número sobe e a mão recomeça com o mesmo dealer. O − corrige um toque a mais.",
+        "screenTitle": "Tela acesa",
+        "screen": "A tela fica acesa enquanto esta mesa estiver aberta, quando o aparelho permite."
+      },
+      "demo": {
+        "timerTap": "Na sua vez, toque na placa à sua frente",
+        "timerRuns": "O tempo corre no centro",
+        "timerOut": "Acabou o tempo: o centro pisca e o alarme toca",
+        "timerNext": "O próximo toca na placa dele e o tempo recomeça",
+        "tapTable": "Toque na mesa, fora das placas",
+        "nextRound": "Toque em Próxima rodada",
+        "dealerMoved": "O 東 passa para o próximo dealer",
+        "rotate": "Gire o celular para o 東 ficar na frente dele",
+        "honbaPlus": "Toque em + no honba",
+        "honbaUp": "O honba sobe e a mão recomeça"
+      },
       "title": "Centerpiece simples",
       "nextRound": "Próxima rodada",
       "honba": "Honba",
@@ -972,13 +1036,8 @@
       "actions": "Ações da mesa",
       "hint": "Toque na mesa para ver as ações",
       "adjustHonba": "Ajustar honba, atual {{count}}",
-      "help4": "O honba se corrige nas ações da mesa, com − e +.",
-      "help5": "Com o timer ligado nas ações, toque na placa de quem joga para começar e para passar a vez.",
       "timerStart": "Começar o timer",
-      "timerPass": "Passar a vez",
-      "help1": "Deixe o celular no meio da mesa, com o 東 virado para o dealer. Tocar em qualquer ponto da mesa abre as ações: próxima rodada, honba, dados, sorteador e recomeçar.",
-      "help2": "A cada troca de dealer, gire o celular para o 東 continuar virado para ele. A mesa acompanha o celular mesmo se a tela girar sozinha, mas o cabeçalho e a barra mudam de lado. Para evitar isso, trave a rotação nos ajustes do celular.",
-      "help3": "A tela fica acesa enquanto esta mesa estiver aberta, quando o aparelho permite."
+      "timerPass": "Passar a vez"
     },
     "setup": {
       "title": "Nova partida",

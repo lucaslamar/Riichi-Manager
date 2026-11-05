@@ -16,7 +16,7 @@ export const SIMPLES_INICIAL: EstadoSimples = {
   rodadaVento: 'leste',
   rodadaNumero: 1,
   honba: 0,
-  timerVez: 0,
+  timerVez: 30,
 }
 
 export function proximoDealer(estado: EstadoSimples): EstadoSimples {
@@ -53,10 +53,10 @@ export function normalizarSimples(salvo: unknown): EstadoSimples {
     Number.isInteger(lido.honba) &&
     (lido.honba as number) >= 0
   if (!valido) return SIMPLES_INICIAL
-  // Salvo antes do timer existir: fica desligado.
+  // Salvo antes do timer existir: fica no padrão, 30 s. Quem desligou continua desligado.
   const timerVez = OPCOES_TIMER_VEZ.includes(lido.timerVez as ConfigMesa['timerVez'])
     ? (lido.timerVez as ConfigMesa['timerVez'])
-    : 0
+    : SIMPLES_INICIAL.timerVez
   return {
     cadeiraDealer: lido.cadeiraDealer as Cadeira,
     rodadaVento: lido.rodadaVento as Vento,

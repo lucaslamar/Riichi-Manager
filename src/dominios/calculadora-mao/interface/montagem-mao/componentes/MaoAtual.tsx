@@ -304,13 +304,16 @@ export function MaoAtual({
           {tituloMao}
         </h3>
         <div className="acoes-cabecalho-mao">
+          {/* A ajuda vem primeiro: do MPSZ ou, no teclado de pedras, de como montar a mão. */}
+          {(entradaPorNotacao || contexto === 'montagem') && (
+            <BotaoAjuda topico={entradaPorNotacao ? 'notacao' : 'pecas'} />
+          )}
           {acoesCabecalho}
           {/* No tablet o Limpar da finalização entra depois do lápis. */}
           {contexto === 'finalizacao' && limparNoCabecalho && botaoLimparFinalizacao}
           {contexto === 'montagem' && !tabletRetrato && (
             <BotaoYakus classeBase="btn-configuracao-mao-cabecalho" />
           )}
-          {entradaPorNotacao && <BotaoAjuda topico="notacao" />}
           {contexto === 'montagem' && aoAbrirRegras && (
             <button
               className={`btn-configuracao-mao-cabecalho ${entradaPorNotacao ? 'em-notacao' : ''}`.trim()}

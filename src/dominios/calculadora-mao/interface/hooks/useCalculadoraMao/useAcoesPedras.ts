@@ -9,7 +9,12 @@ import {
   type Mao,
   type Meld,
 } from '../../../logica/mao'
-import { MAO_VAZIA, codigoBase, expandirGrupoMesmoValor } from '../../constantes'
+import {
+  MAO_VAZIA,
+  codigoBase,
+  expandirGrupoMesmoValor,
+  trocarQuartoCincoPorAka,
+} from '../../constantes'
 import type { EscolhaChiiPendente, EstadoMaoCalculadora, TipoMeldCalculadora } from './tipos'
 
 const MAXIMO_DESCARTES = 18
@@ -30,6 +35,8 @@ interface ParametrosAcoesPedras {
   sequenciasChiiPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
   sequenciasChiiDaMaoPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
   setEscolhaChiiPendente: (escolha: EscolhaChiiPendente | null) => void
+  /** Com Aka dora, o Kan de 5 leva o vermelho como quarta pedra. */
+  akadora: boolean
 }
 
 /**
@@ -52,8 +59,11 @@ export function useAcoesPedras({
   sequenciasChiiPossiveis,
   sequenciasChiiDaMaoPossiveis,
   setEscolhaChiiPendente,
+  akadora,
 }: ParametrosAcoesPedras) {
   const { mao, atualizarMao, acaoPendente, setAcaoPendente, slotsUsados, maoCompleta } = estado
+  const expandir = (pedra: CodigoPedra, tamanho: number) =>
+    trocarQuartoCincoPorAka(expandirGrupoMesmoValor(pedra, tamanho), akadora)
 
   const invalidarBatida = (rascunho: Mao) => {
     rascunho.indiceAgari = -1
@@ -195,9 +205,9 @@ export function useAcoesPedras({
         })
         return
       case 'pon': {
-        const pedrasMeld = expandirGrupoMesmoValor(pedra, 3)
-        const consumoTrinca = expandirGrupoMesmoValor(pedra, 3)
-        const consumoPar = expandirGrupoMesmoValor(pedra, 2)
+        const pedrasMeld = expandir(pedra, 3)
+        const consumoTrinca = expandir(pedra, 3)
+        const consumoPar = expandir(pedra, 2)
         const pedrasConsumir = podeCriarMeld(pedrasMeld, consumoTrinca, 3)
           ? consumoTrinca
           : podeCriarMeld(pedrasMeld, consumoPar, 3)
@@ -209,9 +219,9 @@ export function useAcoesPedras({
         return
       }
       case 'kanAberto': {
-        const pedrasMeld = expandirGrupoMesmoValor(pedra, 4)
-        const consumoQuadra = expandirGrupoMesmoValor(pedra, 4)
-        const consumoTrinca = expandirGrupoMesmoValor(pedra, 3)
+        const pedrasMeld = expandir(pedra, 4)
+        const consumoQuadra = expandir(pedra, 4)
+        const consumoTrinca = expandir(pedra, 3)
         const pedrasConsumir = podeCriarMeld(pedrasMeld, consumoQuadra, 3)
           ? consumoQuadra
           : podeCriarMeld(pedrasMeld, consumoTrinca, 3)
@@ -232,11 +242,14 @@ export function useAcoesPedras({
         if (pedrasConsumir.some((pedraMao) => codigoBase(pedraMao) !== codigoBase(pedra))) return
         const pedrasMeld =
           pedrasConsumir.length >= 3
-            ? ([
-                ...pedrasConsumir,
-                ...Array(4 - pedrasConsumir.length).fill(codigoBase(pedra)),
-              ] as CodigoPedra[])
-            : expandirGrupoMesmoValor(pedra, 4)
+            ? trocarQuartoCincoPorAka(
+                [
+                  ...pedrasConsumir,
+                  ...Array(4 - pedrasConsumir.length).fill(codigoBase(pedra)),
+                ] as CodigoPedra[],
+                akadora,
+              )
+            : expandir(pedra, 4)
         if (pedrasMeld.length !== 4) return
         if (!podeCriarMeld(pedrasMeld, pedrasConsumir, 3)) return
         const slotsAposMeld = aplicarMeld('kanFechado', pedrasMeld, pedrasConsumir, false)

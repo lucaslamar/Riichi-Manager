@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 
 /** Circunferência do anel (raio 22 no viewBox de 48). */
@@ -9,17 +10,22 @@ export default function AnelTimer({
   fracao,
   esgotado = false,
   aoTocar,
+  className,
+  children,
 }: {
   segundos: number
   fracao: number
   esgotado?: boolean
   /** Na placa, o toque no anel é o mesmo da placa. */
   aoTocar?: () => void
+  className?: string
+  /** Troca os segundos no meio do anel (ex.: o domo mostra também a rodada). */
+  children?: ReactNode
 }) {
   const { t } = useI18n()
   return (
     <span
-      className={`mesa-timer${esgotado ? ' mesa-timer--esgotado' : ''}`}
+      className={`mesa-timer${esgotado ? ' mesa-timer--esgotado' : ''}${className ? ` ${className}` : ''}`}
       role="timer"
       aria-label={t('match.timer.remaining', { seconds: segundos })}
       onClick={aoTocar}
@@ -35,7 +41,7 @@ export default function AnelTimer({
           strokeDashoffset={CIRCUNFERENCIA * (1 - fracao)}
         />
       </svg>
-      <span aria-hidden="true">{segundos}</span>
+      {children ?? <span aria-hidden="true">{segundos}</span>}
     </span>
   )
 }

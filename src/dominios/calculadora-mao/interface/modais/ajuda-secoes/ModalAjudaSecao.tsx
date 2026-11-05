@@ -6,6 +6,7 @@ import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import { parseMpszGrupos } from '../../../logica/yakus'
 import TextoGlossario from '../glossario/TextoGlossario'
 import { CiclosDora, PedrasExemplo } from '../yakus/PedrasExemplo'
+import CenaAjuda from './CenaAjuda'
 import { TOPICOS_AJUDA, type BlocoAjuda, type TopicoAjuda } from './topicosAjuda'
 import '../glossario/bloco-dica.css'
 import '../glossario/bloco-glossario.css'
@@ -52,7 +53,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
 
   return (
     <section className="glossario-bloco">
-      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo }, indice) => {
+      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena }, indice) => {
         if (dica) {
           return paragrafos.map((chave) => (
             <p key={chave} className="bloco-dica ajuda-dica">
@@ -74,6 +75,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
               {textos}
               {visual && <VisualAjuda visual={visual} />}
               {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
+              {cena && <CenaAjuda nome={cena} />}
             </Fragment>
           )
         }
@@ -95,6 +97,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
             {textos}
             {visual && <VisualAjuda visual={visual} />}
             {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
+            {cena && <CenaAjuda nome={cena} />}
           </div>
         )
       })}

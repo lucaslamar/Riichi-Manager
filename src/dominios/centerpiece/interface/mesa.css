@@ -485,12 +485,17 @@ button.mesa-domo {
   align-items: center;
 }
 
-/* A placa da vez vira botão: só o que a placa já desenha, sem o estilo do navegador. */
+/* Com o timer ligado, a placa vira botão de recomeçar: só o que ela já desenha. */
 .mesa-placa--botao {
   justify-content: center;
   padding: 0;
   font: inherit;
   cursor: pointer;
+  touch-action: manipulation;
+}
+
+.mesa-placa--botao:active {
+  filter: brightness(1.25);
 }
 
 .mesa-placa--botao:focus-visible {
@@ -498,20 +503,39 @@ button.mesa-domo {
   outline-offset: 2px;
 }
 
-/* O anel fica na ponta da placa, sem empurrar o vento do centro. */
-.mesa-simples-timer {
-  position: absolute;
-  top: 50%;
-  right: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(-50%);
-  pointer-events: none;
+/* Centerpiece simples: o timer é o anel do domo, sem dono. O toque nele abre as ações. */
+.mesa-domo .mesa-timer--domo {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  margin: 0;
+  color: inherit;
 }
 
-.mesa-simples-timer .mesa-timer {
-  margin: 0;
+.mesa-timer--domo circle {
+  stroke-width: 3;
+}
+
+.mesa-domo-segundos {
+  color: var(--led-timer);
+  font-size: max(1.5rem, 8cqw);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.mesa-timer--domo.mesa-timer--esgotado {
+  animation: mesa-pisca-alerta 0.7s steps(2, jump-none) infinite;
+}
+
+.mesa-timer--domo.mesa-timer--esgotado .mesa-domo-segundos {
+  color: var(--texto-erro);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesa-timer--domo.mesa-timer--esgotado {
+    animation: none;
+    box-shadow: 0 0 10px 2px var(--texto-erro);
+  }
 }
 
 .mesa-placa--simples strong {

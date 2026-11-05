@@ -593,3 +593,30 @@
     min-height: 52px !important;
   }
 }
+
+/*
+ * Celular em pé com MPSZ: o teclado de notação é mais alto que o de pedras e
+ * deixava a mão com uma fileira só (as outras ficavam escondidas na rolagem).
+ * - A mão usa 7 pedras por fileira: as 14 cabem em 2.
+ * - As teclas ficam com a altura mínima de toque, 44px.
+ * - Com a mão completa, números e naipes saem (como no celular deitado) e
+ *   ficam só as chamadas, a barra e o Mudar batida / Finalizar.
+ */
+@media (max-width: 640px) and (orientation: portrait) {
+  .construtor-mao-montagem.com-notacao .grade-pedras-mao {
+    --pedra-mao-colunas: 7;
+  }
+
+  .construtor-mao.com-notacao .teclado-notacao-mao {
+    gap: 6px;
+  }
+
+  .construtor-mao.com-notacao .tecla-notacao-mao {
+    min-height: 44px;
+    padding-block: 2px;
+  }
+
+  .construtor-mao.com-notacao:has(.rodape-teclado-finalizacao):not(.selecionando-batida) .teclado-notacao-mao {
+    display: none;
+  }
+}

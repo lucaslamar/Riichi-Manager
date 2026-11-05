@@ -44,6 +44,30 @@ export function expandirGrupoMesmoValor(pedra: CodigoPedra, tamanho: number): Co
   return [pedra, ...Array(tamanho - 1).fill(codigoBase(pedra))]
 }
 
+/** Com Aka dora, cada naipe tem só 3 cincos comuns: o quarto é o vermelho. */
+export const MAXIMO_CINCOS_COMUNS_COM_AKA = 3
+
+export function ehCincoComum(pedra: CodigoPedra) {
+  return pedra[0] === '5' && pedra[1] !== 'z'
+}
+
+/**
+ * Com Aka dora, um grupo com mais de 3 cincos comuns do mesmo naipe (o Kan de 5)
+ * troca o último pelo vermelho, se o grupo ainda não tem um.
+ */
+export function trocarQuartoCincoPorAka(pedras: CodigoPedra[], akadora: boolean): CodigoPedra[] {
+  if (!akadora) return pedras
+  const resultado = [...pedras]
+  for (const naipe of ['m', 'p', 's']) {
+    const comum = `5${naipe}`
+    const quantos = resultado.filter((pedra) => pedra === comum).length
+    if (quantos > MAXIMO_CINCOS_COMUNS_COM_AKA && !resultado.includes(`0${naipe}`)) {
+      resultado[resultado.lastIndexOf(comum)] = `0${naipe}`
+    }
+  }
+  return resultado
+}
+
 /**
  * PNGs em 240×320: nítidos até nas maiores pedras do iPad em tela retina. Os
  * originais (600×800, em regular-png) pesavam para decodificar no celular e o

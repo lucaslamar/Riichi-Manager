@@ -1,0 +1,267 @@
+/*
+ * Mesa em miniatura das cenas da ajuda do Centerpiece simples. Usa os mesmos
+ * tokens da mesa de verdade (feltro, painel, LED, ventos), então segue o tema.
+ */
+.cena-mesa {
+  margin: 8px 0 14px;
+}
+
+/* Subtítulos da ajuda do Centerpiece simples. */
+.ajuda-simples h4 {
+  margin: 16px 0 4px;
+  color: var(--primario, #1565c0);
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.cena-mesa__palco {
+  position: relative;
+  display: flex;
+  width: min(220px, 100%);
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 18px;
+  background: var(--mesa-feltro);
+  overflow: hidden;
+}
+
+.cena-mesa__mesa {
+  position: relative;
+  width: 86%;
+  aspect-ratio: 1;
+  border: 1px solid var(--mesa-painel-borda);
+  border-radius: 14px;
+  background: var(--mesa-painel);
+}
+
+.cena-mesa__mesa--girando {
+  transition: transform 0.7s ease-in-out;
+}
+
+/* Placas: uma por lado, com o kanji virado para quem senta ali. */
+.cena-mesa__placa {
+  position: absolute;
+  display: flex;
+  width: 46%;
+  height: 20%;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--led-fundo);
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.cena-mesa__placa--0 {
+  bottom: 4%;
+  left: 27%;
+}
+
+.cena-mesa__placa--1 {
+  top: 40%;
+  right: -9%;
+  transform: rotate(-90deg);
+}
+
+.cena-mesa__placa--2 {
+  top: 4%;
+  left: 27%;
+  transform: rotate(180deg);
+}
+
+.cena-mesa__placa--3 {
+  top: 40%;
+  left: -9%;
+  transform: rotate(90deg);
+}
+
+.cena-mesa__placa--dealer {
+  border-color: var(--cor-vez);
+}
+
+/* Centro: rodada e honba, ou o timer com o anel. */
+.cena-mesa__domo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: 34%;
+  aspect-ratio: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--mesa-domo);
+  color: var(--mesa-domo-texto, #ffffff);
+  transform: translate(-50%, -50%);
+}
+
+.cena-mesa__domo svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.cena-mesa__domo circle {
+  fill: none;
+  stroke-width: 3;
+}
+
+.cena-mesa__anel-fundo {
+  stroke: var(--mesa-timer-fundo, rgba(255, 255, 255, 0.15));
+}
+
+.cena-mesa__anel {
+  stroke: var(--led-timer);
+  transition: stroke-dashoffset 1.2s linear;
+}
+
+.cena-mesa__domo b {
+  font-size: 1.125rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cena-mesa__domo small {
+  font-size: 0.5625rem;
+  white-space: nowrap;
+}
+
+.cena-mesa__domo--esgotado {
+  animation: cena-mesa-pisca 0.7s steps(2, jump-none) infinite;
+}
+
+.cena-mesa__domo--esgotado b {
+  color: var(--texto-erro, #e53935);
+}
+
+/* Folha de ações, subindo por cima da mesa como no app. */
+.cena-mesa__acoes {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 12px 12px 0 0;
+  padding: 8px;
+  background: var(--cor-superficie, #ffffff);
+  color: var(--cor-texto, #102a43);
+  font-size: 0.6875rem;
+  animation: cena-mesa-sobe 0.3s ease-out;
+}
+
+.cena-mesa__acao {
+  position: relative;
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--cor-borda, #cbd5e1);
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.cena-mesa__acao--principal {
+  border-color: var(--primario, #1565c0);
+  background: var(--primario, #1565c0);
+  color: var(--cor-sobre-primario, #ffffff);
+}
+
+.cena-mesa__acao--honba {
+  justify-content: space-between;
+  padding-inline: 8px;
+}
+
+.cena-mesa__honba-botoes {
+  display: flex;
+  gap: 10px;
+}
+
+.cena-mesa__mais {
+  position: relative;
+}
+
+/* O dedo: anel que pulsa sobre o que está sendo tocado. */
+.cena-mesa__tocando::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 2.5px solid var(--cor-aviso, #b45309);
+  border-radius: 999px;
+  animation: cena-mesa-toque 0.9s ease-out infinite;
+  pointer-events: none;
+}
+
+/* Tocar na mesa: o anel aparece num canto vazio do feltro, não na mesa inteira. */
+.cena-mesa__palco.cena-mesa__tocando::after {
+  inset: auto;
+  top: 30%;
+  left: 18%;
+  width: 24px;
+  height: 24px;
+}
+
+.cena-mesa__legenda {
+  margin-top: 6px;
+  min-height: 2.6em;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.cena-mesa__contador {
+  color: var(--cor-texto-suave, #607080);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.cena-mesa__passos {
+  margin: 6px 0 0;
+  padding-left: 1.25em;
+  font-size: 0.875rem;
+}
+
+@keyframes cena-mesa-toque {
+  0% {
+    opacity: 1;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes cena-mesa-pisca {
+  0% {
+    box-shadow: 0 0 14px 4px var(--texto-erro, #e53935);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+@keyframes cena-mesa-sobe {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cena-mesa__mesa--girando,
+  .cena-mesa__anel {
+    transition: none;
+  }
+
+  .cena-mesa__domo--esgotado,
+  .cena-mesa__acoes {
+    animation: none;
+  }
+}

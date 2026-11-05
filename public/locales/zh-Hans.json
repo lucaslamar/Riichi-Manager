@@ -22,6 +22,10 @@
     "handCalculatorShort": "计算器",
     "windDrawShort": "抽风位",
     "centerpiece": "Centerpiece",
+
+    "matches": "对局桌",
+
+    "matchesShort": "对局",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -128,6 +132,8 @@
     "suitSou": "索",
     "honors": "字牌",
     "akaDora": "赤五（赤宝牌）",
+
+    "holdForAka": "长按选择赤五",
     "addTileToHand": "将{{tile}}加入手牌",
     "addTileToDiscards": "将{{tile}}加入舍牌以判断振听",
     "selectDoraIndicator": "选择{{tile}}为宝牌 / 里宝牌指示牌",
@@ -492,6 +498,42 @@
       "closedKan": "4 张相同的牌，全部来自自己的手牌。输入 7777z 后点「暗杠」。或先点「暗杠」再点 7：出现四张 7，点 z。",
       "displayTitle": "在电脑上",
       "display": "用实体键盘时，副露是组末的一个字母：吃、碰、杠为 c（123mc、111pc、1111sc），暗杠为 a（7777za）。"
+    },
+    "tiles": {
+      "title": "输入手牌",
+      "intro": "点击键盘上的牌来组成手牌，顺序随意，应用会自动排序。要移除一张牌，在手牌里点它即可。",
+      "winTitle": "和牌",
+      "win": "和其他计算器不同，你不需要把和的那张牌放到最后。最后点击的牌就是和牌，但手牌完成后可以在“更换和牌张”里选择手牌中的任意一张。",
+      "waits": "有 13 张牌时，键盘会在每张听牌上方显示用它和牌时的番数。变暗的牌无法完成手牌。",
+      "chi": "先点“吃”，再点一张牌。如果能组成多个顺子，选项会出现在“选择吃”里，点正确的那个。选中“吃”时，点手牌里的牌也会用手牌中已有的牌组成吃。",
+      "pon": "先点“碰”，再点那张牌。三张会作为碰加入，并使用手牌里已有的牌。",
+      "kan": "先点“杠”，再点那张牌。四张会作为明杠加入。",
+      "closedKan": "先点“暗杠”，再点那张牌。如果手牌里已有三张或四张，它们会变成暗杠。",
+      "aka": "在规则 [[engrenagem]] 中开启赤宝牌后，手机竖放时长按 5 即可加入赤五。5 角上的小红点表示赤五还可以用。手机横放、平板和电脑上，赤五是每种花色的最后一张牌。每种花色只有一张，所以同花色的第四张 5 一定是赤五，杠也一样。",
+      "akaHan": "有 13 张牌时，5 的标记会显示两个值：前面是用普通 5 和牌的番数，红色的是用赤五和牌的番数。7/8 HAN 表示普通 5 是 7 番，赤五因为赤宝牌是 8 番。",
+      "guideTitle": "口袋指南",
+      "guide": "帽子按钮打开口袋指南：役种示例、术语和表格，对局中随时查看。",
+      "finishTitle": "和牌设置",
+      "finish": "手牌完成后，“和牌设置”会进入和牌选项：荣和或自摸、风位、立直、宝牌和本场。每个部分都有自己的 ?。",
+      "tip": "想直接输入？MPSZ 会把牌键盘换成记法，例如 123m。要返回，点“牌”。"
+    },
+    "demo": {
+      "tap": "点击 {{name}}",
+      "winLast": "最后点击的牌就是和牌",
+      "pickWin": "点击和牌",
+      "choose": "选择顺子",
+      "done": "完成",
+      "tapHand": "点击手牌里的 {{name}}",
+      "hold": "长按 {{name}}",
+      "fourthAka": "手牌里已有三张普通 5 时，键盘上的 5 就是赤五",
+      "tapCap": "点击帽子",
+      "pickTab": "点击 {{name}} 标签",
+      "guideCard": "每个役都有示例和番数",
+      "cases": "情况",
+      "caseNew": "新牌",
+      "caseHand": "用手牌",
+      "caseHold": "长按 5",
+      "caseFourth": "第四张 5"
     }
   },
   "rulesModal": {
@@ -954,6 +996,31 @@
       "rankingHelp": "All games added up"
     },
     "simple": {
+      "guide": {
+        "intro": "把手机放在桌子中间，让“東”朝向庄家。每块牌板显示坐在那里的人的风位，以及开他面前那道牌墙的骰子点数和。",
+        "timerTitle": "回合计时器",
+        "timer": "30 秒计时器默认开启。轮到你时，点击你风位的牌板，中间的时间会重新从满开始。因为碰、吃、杠会跳过玩家，计时器不会猜是谁的回合：由要出牌的人来点。时间用完时，中间会闪烁并响起提示音。",
+        "actionsTitle": "牌桌操作",
+        "actions": "点击牌板以外的任何位置（包括中间）会打开操作：下一局、本场、骰子、风位抽签、从東1重新开始，以及计时器时长。",
+        "dealerTitle": "换庄",
+        "dealer": "“下一局”会把“東”交给下一位玩家。转动手机，让“東”一直朝向庄家。即使屏幕自动旋转，牌桌也会跟着手机，但顶栏和底栏会换到另一边。想避免这种情况，请在手机设置中锁定旋转。",
+        "honbaTitle": "本场",
+        "honba": "庄家和牌或流局时，点本场的 +：数字增加，由同一位庄家重新开始。− 用来修正多点的一次。",
+        "screenTitle": "保持亮屏",
+        "screen": "设备允许时，这张牌桌打开期间屏幕会保持常亮。"
+      },
+      "demo": {
+        "timerTap": "轮到你时，点你面前的牌板",
+        "timerRuns": "时间在中间流逝",
+        "timerOut": "时间到：中间闪烁并响起提示音",
+        "timerNext": "下一位点自己的牌板，时间重新开始",
+        "tapTable": "点牌板以外的牌桌",
+        "nextRound": "点“下一局”",
+        "dealerMoved": "“東”交给下一位庄家",
+        "rotate": "转动手机，让“東”朝向他",
+        "honbaPlus": "点本场的 +",
+        "honbaUp": "本场增加，重新开始"
+      },
       "title": "Simple Centerpiece",
       "nextRound": "Next round",
       "honba": "Honba",
@@ -965,13 +1032,8 @@
       "actions": "Table actions",
       "hint": "Tap the table to see the actions",
       "adjustHonba": "调整本场，当前 {{count}}",
-      "help4": "本场在牌桌操作中用 − 和 + 修正。",
-      "help5": "在操作中开启计时器后，点击当前玩家的牌板开始计时并传递回合。",
       "timerStart": "开始计时",
-      "timerPass": "传递回合",
-      "help1": "Leave the phone in the middle of the table, with 東 facing the dealer. Tapping anywhere on the table opens the actions: next round, honba, dice, wind draw and restart.",
-      "help2": "Each time the dealer changes, turn the phone so 東 keeps facing them. The table follows the phone even if the screen rotates by itself, but the header and bar change sides; to avoid that, lock the rotation in your phone settings.",
-      "help3": "The screen stays on while this table is open, when the device allows it."
+      "timerPass": "传递回合"
     },
     "setup": {
       "title": "New game",

@@ -18,6 +18,7 @@ export type TelaPrincipal =
   | 'calculadoraRapida'
   | 'sorteadorVentos'
   | 'centerpiece'
+  | 'partidas'
   | 'regras'
 
 /**
@@ -77,7 +78,7 @@ export default function App() {
     if (destino !== 'aprender') navegar(destino)
   }
   useDeslizeHorizontal({
-    ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece',
+    ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece' && tela !== 'partidas',
     aoDeslizarDireita: sorteadorDoSimples
       ? voltarAoSimples
       : telaAnterior && (() => irPara(telaAnterior)),
@@ -104,9 +105,11 @@ export default function App() {
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
         <Suspense fallback={null}>
-          {tela === 'centerpiece' && (
+          {/* O botão Centerpiece abre direto o simples; Mesa partida é o menu das partidas com pontos. */}
+          {(tela === 'centerpiece' || tela === 'partidas') && (
             <PaginaCenterpiece
-              inicioNoSimples={simplesAberto}
+              key={tela}
+              modo={tela === 'centerpiece' ? 'simples' : 'partidas'}
               aoAbrirSorteador={abrirSorteadorDoSimples}
               aoTelaAnterior={telaAnterior && (() => irPara(telaAnterior))}
               aoProximaTela={proximaTela && (() => irPara(proximaTela))}

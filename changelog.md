@@ -1,5 +1,33 @@
 # Changelog - Mojoca
 
+## 5.9.0 - 2026-11-05
+
+### Adicionado
+
+- **Partida na barra inferior**: o menu das partidas com pontos (Nova partida, Registrar partida finalizada, Em andamento, Histórico, Jogadores e Ranking) virou Mesa partida, com o botão Partida na segunda página da barra, antes do Tutorial.
+- **Ajuda do modo Peças**: o "?" da Calculadora de Mão agora explica também o teclado de pedras. A pedra da batida não precisa ser a última, as chamadas, o 5 vermelho, o Guia de bolso e o Finalizar mão.
+- **Cenas animadas nas ajudas**: as ajudas do teclado de pedras e do MPSZ mostram o app funcionando, com o dedo tocando onde o jogador tocaria. Batida, Chi, Pon, Kan e Kan fechado (com pedra nova e com as pedras que já estão na mão), 5 vermelho e Guia de bolso. Seguem o tema e o idioma, e ficam paradas para quem desligou as animações no celular.
+- **5 vermelho segurando o 5**: no celular em pé, com Aka dora ligado, tocar no 5 põe o 5 comum e segurar põe o vermelho. Um pontinho vermelho no 5 mostra que o vermelho ainda está livre.
+- **Han do 5 com e sem o vermelho**: com 13 pedras, o selo do 5 mostra os dois valores, como 7/8 HAN, com o do 5 vermelho em vermelho.
+- **Ajuda do Centerpiece simples**: texto reorganizado em Timer de vez, Ações da mesa, Troca de dealer, Honba e Tela acesa, com mesas animadas do timer, da troca de dealer e do honba.
+
+### Alterado
+
+- **Centerpiece abre direto a mesa simples**: o botão Centerpiece da barra leva à mesa, sem passar pelo menu.
+- **Timer do Centerpiece simples no centro**: o tempo aparece no círculo do meio e não passa sozinho de jogador em jogador, já que Pon, Chi e Kan pulam a vez. Quem vai jogar toca na placa do próprio vento e o tempo recomeça cheio. Tocar no centro ou no resto da mesa abre as ações.
+- **Timer de 30 s ligado por padrão** no Centerpiece simples.
+- **Pedras maiores no teclado do celular em pé**: com o 5 vermelho no toque longo, cada naipe fica com 9 pedras, cerca de 12% mais largas.
+- **Quarto 5 é o vermelho**: com Aka dora, cada naipe tem só três 5 comuns. O quarto, inclusive no Kan, é sempre o 5 vermelho.
+- **"?" primeiro no cabeçalho da mão**, antes do Guia de bolso e das regras.
+- **MPSZ no celular em pé**: a mão mostra 7 pedras por fileira, as teclas ficaram mais baixas e, com a mão completa, só ficam as chamadas e os botões de finalizar.
+- **Tecla 0 do MPSZ** desabilitada quando o Aka dora está desligado.
+- **Ajustes**: em português, o botão de Configurações na barra inferior se chama Ajustes, para caber com o novo botão Partida.
+
+### Corrigido
+
+- **Selo YAKUMAN no Guia de bolso**: o texto tinha a mesma cor do fundo e não aparecia.
+- **Mão escondida no MPSZ**: no celular em pé, com 14 pedras, só a primeira fileira aparecia e as outras ficavam escondidas.
+
 ## 5.8.1 - 2026-11-01
 
 ### Adicionado

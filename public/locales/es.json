@@ -22,6 +22,8 @@
     "handCalculatorShort": "Calculadora",
     "windDrawShort": "Sorteo",
     "centerpiece": "Centerpiece",
+    "matches": "Mesa de partida",
+    "matchesShort": "Partidas",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -132,6 +134,7 @@
     "suitSou": "Sou",
     "honors": "Honores",
     "akaDora": "5 rojo (aka dora)",
+    "holdForAka": "Mantén pulsado para el 5 rojo",
     "addTileToHand": "Agregar {{tile}} a la mano",
     "addTileToDiscards": "Agregar {{tile}} a los descartes para furiten",
     "selectDoraIndicator": "Seleccionar {{tile}} como indicador de dora / ura-dora",
@@ -428,6 +431,24 @@
       "yakuTitle": "Yaku",
       "yaku": "Condición de puntuación que da derecho a ganar. Toda mano necesita al menos uno."
     },
+    "demo": {
+      "tap": "Toca {{name}}",
+      "winLast": "La última ficha tocada es la ganadora",
+      "pickWin": "Toca la ficha ganadora",
+      "choose": "Elige la secuencia",
+      "done": "Listo",
+      "tapHand": "Toca el {{name}} de la mano",
+      "hold": "Mantén pulsado el {{name}}",
+      "fourthAka": "Con tres 5 normales en la mano, el 5 del teclado ya es el rojo",
+      "tapCap": "Toca el birrete",
+      "pickTab": "Toca la pestaña {{name}}",
+      "guideCard": "Cada Yaku con ejemplo y cuánto vale",
+      "cases": "Casos",
+      "caseNew": "Ficha nueva",
+      "caseHand": "Con las de la mano",
+      "caseHold": "Manteniendo el 5",
+      "caseFourth": "El cuarto 5"
+    },
     "honba": {
       "counter": "Contador de rondas extra. Aumenta cuando el oya gana o cuando la ronda termina en empate.",
       "points": "Cada honba agrega 300 puntos al ganador. En tsumo, cada jugador paga 100. En ron, quien descartó paga 300.",
@@ -504,6 +525,24 @@
       "closedKan": "4 iguales, todas de tu propia mano. Escribe 7777z y toca Kan cerrado. O toca Kan cerrado antes y después el 7: aparecen cuatro 7; toca z.",
       "displayTitle": "En la computadora",
       "display": "Con el teclado físico, la llamada es una letra al final del grupo: c para Chi, Pon y Kan (123mc, 111pc, 1111sc) y a para Kan cerrado (7777za)."
+    },
+    "tiles": {
+      "title": "Armar la mano",
+      "intro": "Toca las fichas del teclado para armar la mano, en cualquier orden: la app la ordena sola. Para quitar una ficha, tócala en la mano.",
+      "winTitle": "Ficha ganadora",
+      "win": "A diferencia de otras calculadoras, no hace falta dejar para el final la ficha con la que ganaste. La última que toques es la ganadora, pero con la mano completa puedes cambiarla en Cambiar ficha ganadora y elegir cualquier ficha de la mano.",
+      "waits": "Con 13 fichas, el teclado muestra encima de cada espera cuántos han vale la mano ganando con ella. Las fichas apagadas no completan la mano.",
+      "chi": "Toca Chi y luego una ficha. Si forma más de una secuencia, las opciones aparecen en Elige el Chi: toca la correcta. Con Chi marcado, tocar una ficha de la mano también forma el chi con las fichas que ya están en ella.",
+      "pon": "Toca Pon y luego la ficha. Las tres entran como Pon, usando las que ya están en la mano.",
+      "kan": "Toca Kan y luego la ficha. Las cuatro entran como Kan abierto.",
+      "closedKan": "Toca Kan cerrado y luego la ficha. Si la mano ya tiene tres o cuatro, se convierten en el Kan.",
+      "aka": "Con el Aka dora activado en las reglas [[engrenagem]], con el móvil en vertical mantén pulsado el 5 para poner el 5 rojo. El puntito rojo en la esquina del 5 indica que el rojo aún está libre. Con el móvil en horizontal, en la tableta y en el ordenador, el 5 rojo es la última ficha de cada palo. Cada palo tiene uno solo: el cuarto 5 de un palo siempre es el rojo, también en el Kan.",
+      "akaHan": "Con 13 fichas, el sello del 5 muestra los dos valores: primero el han ganando con el 5 normal y, en rojo, ganando con el 5 rojo. En 7/8 HAN, el 5 normal da 7 y el rojo da 8, por el Aka dora.",
+      "guideTitle": "Guía de bolsillo",
+      "guide": "El birrete abre la Guía de bolsillo: Yaku con ejemplos, términos y tablas para consultar durante la partida.",
+      "finishTitle": "Finalizar mano",
+      "finish": "Con la mano completa, Finalizar mano lleva a las opciones de la victoria: ron o tsumo, vientos, Riichi, doras y honba. Cada parte tiene su propio ?.",
+      "tip": "¿Prefieres escribir? MPSZ cambia el teclado de fichas por la notación, como 123m. Para volver, toca Fichas."
     }
   },
   "rulesModal": {
@@ -968,6 +1007,31 @@
       "rankingHelp": "All games added up"
     },
     "simple": {
+      "guide": {
+        "intro": "Deja el móvil en el centro de la mesa, con el 東 mirando al dealer. Cada placa muestra el viento de quien se sienta ahí y las sumas de los dados que abren la pared frente a él.",
+        "timerTitle": "Temporizador de turno",
+        "timer": "El temporizador de 30 s viene activado. En tu turno, toca la placa de tu viento y el tiempo vuelve a empezar completo en el centro. Como Pon, Chi y Kan saltan jugadores, el temporizador no adivina de quién es el turno: quien va a jugar es quien toca. Si se acaba el tiempo, el centro parpadea y suena la alarma.",
+        "actionsTitle": "Acciones de la mesa",
+        "actions": "Tocar cualquier punto de la mesa fuera de las placas, incluido el centro, abre las acciones: siguiente ronda, honba, dados, Sorteo de vientos, reiniciar desde 東1 y el tiempo del temporizador.",
+        "dealerTitle": "Cambio de dealer",
+        "dealer": "Siguiente ronda pasa el 東 al siguiente jugador. Gira el móvil para que el 東 siga mirando al dealer. La mesa sigue al móvil aunque la pantalla gire sola, pero la cabecera y la barra cambian de lado. Para evitarlo, bloquea la rotación en los ajustes del móvil.",
+        "honbaTitle": "Honba",
+        "honba": "Cuando el dealer gana o la ronda queda en empate, toca + en honba: el número sube y la mano empieza de nuevo con el mismo dealer. El − corrige un toque de más.",
+        "screenTitle": "Pantalla encendida",
+        "screen": "La pantalla se queda encendida mientras esta mesa esté abierta, cuando el dispositivo lo permite."
+      },
+      "demo": {
+        "timerTap": "En tu turno, toca la placa frente a ti",
+        "timerRuns": "El tiempo corre en el centro",
+        "timerOut": "Se acabó el tiempo: el centro parpadea y suena la alarma",
+        "timerNext": "El siguiente toca su placa y el tiempo se reinicia",
+        "tapTable": "Toca la mesa, fuera de las placas",
+        "nextRound": "Toca Siguiente ronda",
+        "dealerMoved": "El 東 pasa al siguiente dealer",
+        "rotate": "Gira el móvil para que el 東 quede frente a él",
+        "honbaPlus": "Toca + en honba",
+        "honbaUp": "El honba sube y la mano empieza de nuevo"
+      },
       "title": "Simple Centerpiece",
       "nextRound": "Next round",
       "honba": "Honba",
@@ -979,13 +1043,8 @@
       "actions": "Table actions",
       "hint": "Tap the table to see the actions",
       "adjustHonba": "Ajustar honba, actual {{count}}",
-      "help4": "El honba se corrige en las acciones de la mesa, con − y +.",
-      "help5": "Con el temporizador activado en las acciones, toca la placa de quien juega para empezar y para pasar el turno.",
       "timerStart": "Iniciar el temporizador",
-      "timerPass": "Pasar el turno",
-      "help1": "Leave the phone in the middle of the table, with 東 facing the dealer. Tapping anywhere on the table opens the actions: next round, honba, dice, wind draw and restart.",
-      "help2": "Each time the dealer changes, turn the phone so 東 keeps facing them. The table follows the phone even if the screen rotates by itself, but the header and bar change sides; to avoid that, lock the rotation in your phone settings.",
-      "help3": "The screen stays on while this table is open, when the device allows it."
+      "timerPass": "Pasar el turno"
     },
     "setup": {
       "title": "New game",

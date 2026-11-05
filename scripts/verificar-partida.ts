@@ -346,7 +346,7 @@ teste('Centerpiece simples: dealer, renchan, honba e virada de rodada', () => {
   assert.equal(e.honba, 1)
   assert.equal(e.cadeiraDealer, 0)
   e = proximoDealer(e)
-  assert.deepEqual(e, { cadeiraDealer: 1, rodadaVento: 'leste', rodadaNumero: 2, honba: 0, timerVez: 0 })
+  assert.deepEqual(e, { cadeiraDealer: 1, rodadaVento: 'leste', rodadaNumero: 2, honba: 0, timerVez: 30 })
   assert.equal(ajustarHonba(e, -1).honba, 0)
   for (let i = 0; i < 3; i += 1) e = proximoDealer(e)
   assert.equal(e.rodadaVento, 'sul')
@@ -355,11 +355,13 @@ teste('Centerpiece simples: dealer, renchan, honba e virada de rodada', () => {
   assert.deepEqual(normalizarSimples({ cadeiraDealer: 9 }), SIMPLES_INICIAL)
 })
 
-teste('Centerpiece simples: timer opcional, desligado no estado salvo antes dele', () => {
+teste('Centerpiece simples: timer de 30 s por padrão, também no estado salvo antes dele', () => {
   const antigo = { cadeiraDealer: 2, rodadaVento: 'sul', rodadaNumero: 3, honba: 1 }
-  assert.deepEqual(normalizarSimples(antigo), { ...antigo, timerVez: 0 })
+  assert.deepEqual(normalizarSimples(antigo), { ...antigo, timerVez: 30 })
   assert.equal(normalizarSimples({ ...antigo, timerVez: 60 }).timerVez, 60)
-  assert.equal(normalizarSimples({ ...antigo, timerVez: 45 }).timerVez, 0)
+  assert.equal(normalizarSimples({ ...antigo, timerVez: 45 }).timerVez, 30)
+  // Quem desligou o timer continua com ele desligado.
+  assert.equal(normalizarSimples({ ...antigo, timerVez: 0 }).timerVez, 0)
   assert.equal(proximoDealer({ ...SIMPLES_INICIAL, timerVez: 30 }).timerVez, 30)
   assert.equal(repetirDealer({ ...SIMPLES_INICIAL, timerVez: 90 }).timerVez, 90)
 })

@@ -5173,9 +5173,9 @@
 /*
  * Teclado de pedras no celular retrato: mesma disposição do tablet.
  * ------------------------------------------------------------------
- * Cada pedra mantém a largura de uma coluna da grade de 10 (mesmo tamanho de
- * antes), mas as linhas que têm menos de 10 pedras ficam centralizadas em vez
- * de deixar espaço vazio à direita. `--gap-pedra-celular` vem das regras de
+ * Todas as pedras têm a largura de uma coluna da linha mais cheia: 10 com Aka
+ * dora, 9 sem. As Honras usam essa mesma largura e ficam centralizadas, em vez
+ * de esticar até encostar. `--gap-pedra-celular` vem das regras de
  * `.construtor-mao-montagem .linha-naipe` acima (2px, ou 3px com min-height 700px).
  */
 @media (max-width: 640px) and (orientation: portrait) {
@@ -5183,8 +5183,9 @@
     --largura-coluna-pedra: calc((100% - 9 * var(--gap-pedra-celular, 2px)) / 10);
   }
 
-  /* Sem aka dora: naipes com 9 pedras e Honras centralizados. */
+  /* Sem Aka dora: os naipes têm 9 pedras e ocupam a linha toda, sem encolher para 10. */
   .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .linha-naipe {
+    --largura-coluna-pedra: calc((100% - 8 * var(--gap-pedra-celular, 2px)) / 9);
     grid-template-columns: repeat(9, var(--largura-coluna-pedra));
     justify-content: center;
   }
@@ -5198,6 +5199,55 @@
   .construtor-mao-montagem .teclado-pedras:has(.btn-pedra-aka) .grupo-teclado-honras .linha-naipe {
     grid-template-columns: repeat(7, var(--largura-coluna-pedra));
     justify-content: center;
+  }
+
+  /*
+   * Com Aka dora, o 5 vermelho sai segurando o 5 (TecladoPedras com
+   * `akaSegurandoCinco`): o teclado fica igual ao sem Aka dora, 9 pedras grandes
+   * por naipe e as Honras centralizadas com a mesma largura.
+   */
+  .construtor-mao-montagem .teclado-pedras.teclado-aka-no-cinco .linha-naipe {
+    --largura-coluna-pedra: calc((100% - 8 * var(--gap-pedra-celular, 2px)) / 9);
+    grid-template-columns: repeat(9, var(--largura-coluna-pedra));
+    justify-content: center;
+  }
+
+  .construtor-mao-montagem .teclado-pedras.teclado-aka-no-cinco .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, var(--largura-coluna-pedra));
+  }
+
+  /* Segurar não pode abrir o menu do sistema nem selecionar a pedra. */
+  .construtor-mao-montagem .teclado-pedras .btn-pedra-com-aka {
+    position: relative;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  /* Selo do 5 com os dois valores: o do vermelho num fundo branco com texto vermelho. */
+  .construtor-mao-montagem .teclado-pedras .badge-espera-teclado--com-aka {
+    gap: 0;
+    white-space: nowrap;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .badge-espera-teclado__aka {
+    margin-left: 1px;
+    border-radius: 2px;
+    padding: 0 1px;
+    background: #ffffff;
+    color: #d01f26;
+  }
+
+  /* Pontinho vermelho no canto do 5: tem o vermelho, segurando. */
+  .construtor-mao-montagem .teclado-pedras .ponto-aka-teclado {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #e0242b;
+    box-shadow: 0 0 0 1.5px #ffffff;
+    pointer-events: none;
   }
 }
 

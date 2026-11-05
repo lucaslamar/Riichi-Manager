@@ -93,7 +93,13 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     [chavePedrasDaMesa],
   )
 
-  const acoesMelds = useAcoesMelds({ mao, acaoPendente, slotsUsados, pedrasDaMesa })
+  const acoesMelds = useAcoesMelds({
+    mao,
+    acaoPendente,
+    slotsUsados,
+    pedrasDaMesa,
+    akadora: configuracao.akadora,
+  })
 
   /*
    * Esperas precisam estar disponíveis antes das ações de clique:
@@ -131,6 +137,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     sequenciasChiiPossiveis: acoesMelds.sequenciasChiiPossiveis,
     sequenciasChiiDaMaoPossiveis: acoesMelds.sequenciasChiiDaMaoPossiveis,
     setEscolhaChiiPendente,
+    akadora: configuracao.akadora,
   })
 
   const podeMeld = mao.riichi === null && !mao.bencao

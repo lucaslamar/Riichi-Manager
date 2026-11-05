@@ -24,6 +24,7 @@ import { OPCOES_TIMER_VEZ } from '../../logica/configMesa'
 import { vezInicial, type EstadoVez } from '../../logica/vez'
 import AnelTimer from '../componentes/AnelTimer'
 import BotoesOpcao from '../componentes/BotoesOpcao'
+import CenaMesa from '../componentes/CenaMesa'
 import JogarDados from '../componentes/JogarDados'
 import { useRelogioVez } from '../hooks/useTimerVez'
 import { useGiroDaMesa } from '../hooks/useGiroDaMesa'
@@ -34,14 +35,9 @@ import RecursosDaMesa from '../componentes/RecursosDaMesa'
 /**
  * Só o centro da mesa, para deixar no meio da mesa e ir girando o celular: tocar
  * nela abre as ações. Abre direto, sem jogadores, e lembra o estado se o app fechar.
+ * É a tela do botão Centerpiece da barra, então não tem seta de voltar.
  */
-export default function CenterpieceSimples({
-  aoVoltar,
-  aoAbrirSorteador,
-}: {
-  aoVoltar: () => void
-  aoAbrirSorteador: () => void
-}) {
+export default function CenterpieceSimples({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }) {
   const { t } = useI18n()
   const [estado, setEstado] = useState<EstadoSimples>(() => carregarSimples(armazenamentoLocal))
   const [confirmando, setConfirmando] = useState(false)
@@ -51,6 +47,17 @@ export default function CenterpieceSimples({
   const [ladoSorteado, setLadoSorteado] = useState<Cadeira | null>(null)
 
   const giro = useGiroDaMesa()
+  const rodada = `${KANJI_VENTO[estado.rodadaVento]}${estado.rodadaNumero} 本${estado.honba}`
+  // Timer desligado: o domo mostra só a rodada, em destaque.
+  const rodadaNoDomo = (
+    <>
+      <span className="mesa-domo-rodada" aria-live="polite">
+        {KANJI_VENTO[estado.rodadaVento]}
+        {estado.rodadaNumero}
+      </span>
+      <span className="mesa-domo-info">本{estado.honba}</span>
+    </>
+  )
 
   // A vez não é salva: ao voltar para a mesa, o timer espera o primeiro toque.
   const [vez, setVez] = useState<EstadoVez>(() => vezInicial(estado.cadeiraDealer, estado.timerVez))
@@ -100,17 +107,26 @@ export default function CenterpieceSimples({
 
   return (
     <section className="mesa-tela mesa-tela--simples">
-      <TituloTela titulo={t('match.simple.title')} aoVoltar={aoVoltar} acoes={<BotaoTelaCheia />} />
+      <TituloTela titulo={t('match.simple.title')} acoes={<BotaoTelaCheia />} />
       <RecursosDaMesa />
 
       <div className="mesa-simples-ajuda">
         <AjudaCampo rotulo={t('match.simple.title')}>
-          <div className="cfg-ajuda-texto">
-            <p>{t('match.simple.help1')}</p>
-            <p>{t('match.simple.help2')}</p>
-            <p>{t('match.simple.help3')}</p>
-            <p>{t('match.simple.help4')}</p>
-            <p>{t('match.simple.help5')}</p>
+          <div className="cfg-ajuda-texto ajuda-simples">
+            <p>{t('match.simple.guide.intro')}</p>
+            <h4>{t('match.simple.guide.timerTitle')}</h4>
+            <p>{t('match.simple.guide.timer')}</p>
+            <CenaMesa nome="timer" />
+            <h4>{t('match.simple.guide.actionsTitle')}</h4>
+            <p>{t('match.simple.guide.actions')}</p>
+            <h4>{t('match.simple.guide.dealerTitle')}</h4>
+            <p>{t('match.simple.guide.dealer')}</p>
+            <CenaMesa nome="acoes" />
+            <h4>{t('match.simple.guide.honbaTitle')}</h4>
+            <p>{t('match.simple.guide.honba')}</p>
+            <CenaMesa nome="honba" />
+            <h4>{t('match.simple.guide.screenTitle')}</h4>
+            <p>{t('match.simple.guide.screen')}</p>
           </div>
         </AjudaCampo>
       </div>
@@ -120,45 +136,53 @@ export default function CenterpieceSimples({
           cadeiraDealer={estado.cadeiraDealer}
           giro={giro}
           aoTocarMesa={abrirAcoes}
+          // O timer fica no centro, sem dono: Pon, Chi e Kan pulam jogadores, então ele
+          // não tenta adivinhar de quem é a vez. Quem vai jogar toca na placa à sua frente
+          // e o tempo recomeça cheio; o centro e o resto da mesa abrem as ações.
           domo={
-            <>
-              <span className="mesa-domo-rodada" aria-live="polite">
-                {KANJI_VENTO[estado.rodadaVento]}
-                {estado.rodadaNumero}
-              </span>
-              <span className="mesa-domo-info">本{estado.honba}</span>
-            </>
+            timer.ligado ? (
+              <AnelTimer
+                className="mesa-timer--domo"
+                segundos={timer.segundos}
+                fracao={timer.fracao}
+                esgotado={timer.esgotado}
+              >
+                <span className="mesa-domo-segundos" aria-hidden="true">
+                  {timer.segundos}
+                </span>
+                <span className="mesa-domo-info" aria-live="polite">
+                  {rodada}
+                </span>
+              </AnelTimer>
+            ) : (
+              rodadaNoDomo
+            )
           }
           lado={(cadeira) => {
             const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer)
             const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + 4) % 4).join(' · ')
-            const daVez = timer.ligado && vez.cadeira === cadeira
             const classe = `mesa-placa mesa-placa--simples${vento === 'leste' ? ' mesa-placa--dealer' : ''}${
               ladoSorteado === cadeira ? ' mesa-placa--sorteada' : ''
-            }${daVez ? ' mesa-placa--vez' : ''}${daVez && timer.esgotado ? ' mesa-placa--esgotado' : ''}`
+            }`
+            const descricao = `${t(CHAVE_VENTO[vento])}: ${numeros}`
             const ventoNaPlaca = (
               <span className="mesa-placa-simples-vento" aria-hidden="true">
                 <strong className={`mesa-led-vento--${vento}`}>{KANJI_VENTO[vento]}</strong>
                 <small>{numeros}</small>
               </span>
             )
-            const descricao = `${t(CHAVE_VENTO[vento])}: ${numeros}`
             return {
-              placa: daVez ? (
-                // A placa inteira da vez é do timer: o toque começa ou passa a vez, sem abrir as ações.
+              placa: timer.ligado ? (
                 <button
                   type="button"
                   className={`${classe} mesa-placa--botao`}
                   aria-label={`${descricao}. ${t(vez.comecou ? 'match.simple.timerPass' : 'match.simple.timerStart')}`}
                   onClick={(evento) => {
                     evento.stopPropagation()
-                    timer.tocar()
+                    timer.reiniciar()
                   }}
                 >
                   {ventoNaPlaca}
-                  <span className="mesa-simples-timer">
-                    <AnelTimer segundos={timer.segundos} fracao={timer.fracao} esgotado={timer.esgotado} />
-                  </span>
                 </button>
               ) : (
                 <div className={classe} role="img" aria-label={descricao}>

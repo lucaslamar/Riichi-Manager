@@ -43,6 +43,14 @@ export function tocarTimer(vez: EstadoVez, segundos: number, agora: number): Est
   return passarVezPara(((vez.cadeira + 1) % 4) as CadeiraVez, segundos, agora)
 }
 
+/**
+ * Timer sem dono (Centerpiece simples): todo toque recomeça o tempo cheio, para quem
+ * for jogar. Não avança a cadeira, porque Pon, Chi e Kan pulam jogadores.
+ */
+export function reiniciarVez(vez: EstadoVez, segundos: number, agora: number): EstadoVez {
+  return passarVezPara(vez.cadeira, segundos, agora)
+}
+
 export function pausarVez(vez: EstadoVez, agora: number): EstadoVez {
   if (vez.contandoDesde === null) return vez
   return { ...vez, restanteMs: milissegundosRestantes(vez, agora), contandoDesde: null }

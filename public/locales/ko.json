@@ -22,6 +22,10 @@
     "handCalculatorShort": "계산기",
     "windDrawShort": "바람 뽑기",
     "centerpiece": "Centerpiece",
+
+    "matches": "대국 테이블",
+
+    "matchesShort": "대국",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -128,6 +132,8 @@
     "suitSou": "삭",
     "honors": "자패",
     "akaDora": "빨간 5 (적도라)",
+
+    "holdForAka": "길게 누르면 빨간 5",
     "addTileToHand": "{{tile}}을(를) 손패에 추가",
     "addTileToDiscards": "후리텐 확인용으로 {{tile}}을(를) 버림패에 추가",
     "selectDoraIndicator": "{{tile}}을(를) 도라 / 뒷도라 표시패로 선택",
@@ -492,6 +498,42 @@
       "closedKan": "같은 패 4장이 모두 내 손패. 7777z를 입력하고 「안깡」. 또는 먼저 「안깡」을 누르고 7: 7이 네 장 나오면 z를 누르세요.",
       "displayTitle": "컴퓨터에서",
       "display": "실제 키보드에서는 울기가 그룹 끝의 글자입니다: 치·퐁·깡은 c(123mc, 111pc, 1111sc), 안깡은 a(7777za)."
+    },
+    "tiles": {
+      "title": "손패 입력",
+      "intro": "키보드의 패를 눌러 손패를 만듭니다. 순서는 상관없고 앱이 알아서 정렬합니다. 패를 빼려면 손패에서 그 패를 누르세요.",
+      "winTitle": "화료패",
+      "win": "다른 계산기와 달리 화료패를 마지막에 넣을 필요가 없습니다. 마지막에 누른 패가 화료패가 되지만, 손패가 완성되면 화료패 바꾸기에서 손패의 어떤 패든 고를 수 있습니다.",
+      "waits": "13장일 때 키보드의 각 대기패 위에 그 패로 화료하면 몇 판인지 표시됩니다. 흐리게 보이는 패로는 손패가 완성되지 않습니다.",
+      "chi": "치를 누른 뒤 패를 누르세요. 순자가 여러 개 나오면 치 선택에 후보가 나오니 맞는 것을 누르세요. 치를 선택한 상태에서 손패의 패를 눌러도 손패의 패로 치가 됩니다.",
+      "pon": "퐁을 누른 뒤 패를 누르세요. 손패에 있는 패를 써서 3장이 퐁이 됩니다.",
+      "kan": "깡을 누른 뒤 패를 누르세요. 4장이 명깡이 됩니다.",
+      "closedKan": "암깡을 누른 뒤 패를 누르세요. 손패에 3장이나 4장이 있으면 그 패가 깡이 됩니다.",
+      "aka": "규칙 [[engrenagem]] 에서 적도라를 켜면, 휴대폰을 세웠을 때 5를 길게 눌러 빨간 5를 넣습니다. 5의 모서리에 있는 빨간 점은 빨간 5를 아직 쓸 수 있다는 뜻입니다. 휴대폰을 눕혔을 때, 태블릿과 컴퓨터에서는 빨간 5가 각 수패의 마지막 패입니다. 빨간 5는 수패마다 한 장뿐이라 같은 종류의 네 번째 5는 항상 빨간 5이고, 깡에서도 같습니다.",
+      "akaHan": "13장일 때 5의 배지에는 두 값이 나옵니다. 앞은 일반 5로 화료할 때의 판수, 빨간 글자는 빨간 5로 화료할 때의 판수입니다. 7/8 HAN이면 일반 5는 7판, 빨간 5는 적도라 덕분에 8판입니다.",
+      "guideTitle": "포켓 가이드",
+      "guide": "모자 버튼으로 포켓 가이드를 엽니다. 역과 예시, 용어, 표를 대국 중에 확인할 수 있습니다.",
+      "finishTitle": "화료 설정",
+      "finish": "손패가 완성되면 화료 설정으로 화료 옵션에 들어갑니다. 론 또는 쯔모, 바람, 리치, 도라, 본장을 정합니다. 각 항목에 전용 ?가 있습니다.",
+      "tip": "직접 입력하고 싶다면 MPSZ로 패 키보드를 표기법(예: 123m)으로 바꿀 수 있습니다. 돌아가려면 패를 누르세요."
+    },
+    "demo": {
+      "tap": "{{name}} 누르기",
+      "winLast": "마지막에 누른 패가 화료패",
+      "pickWin": "화료패를 누르기",
+      "choose": "순자 고르기",
+      "done": "완료",
+      "tapHand": "손패의 {{name}} 누르기",
+      "hold": "{{name}} 길게 누르기",
+      "fourthAka": "손패에 일반 5가 세 장 있으면 키보드의 5는 이미 빨간 5",
+      "tapCap": "모자 누르기",
+      "pickTab": "{{name}} 탭 누르기",
+      "guideCard": "역마다 예시와 판수",
+      "cases": "경우",
+      "caseNew": "새 패",
+      "caseHand": "손패의 패로",
+      "caseHold": "5 길게 누르기",
+      "caseFourth": "네 번째 5"
     }
   },
   "rulesModal": {
@@ -954,6 +996,31 @@
       "rankingHelp": "All games added up"
     },
     "simple": {
+      "guide": {
+        "intro": "휴대폰을 테이블 가운데에 두고 東이 친을 향하게 하세요. 각 판에는 그 자리 사람의 바람과, 그 사람 앞 산을 여는 주사위 합이 표시됩니다.",
+        "timerTitle": "차례 타이머",
+        "timer": "30초 타이머는 기본으로 켜져 있습니다. 내 차례가 되면 내 바람 판을 누르면 가운데 시간이 처음부터 다시 시작됩니다. 퐁, 치, 깡으로 차례가 건너뛰기 때문에 타이머는 차례를 추측하지 않고, 다음에 칠 사람이 직접 누릅니다. 시간이 끝나면 가운데가 깜빡이고 알람이 울립니다.",
+        "actionsTitle": "테이블 동작",
+        "actions": "판을 뺀 테이블 아무 곳(가운데 포함)이나 누르면 동작이 열립니다. 다음 국, 본장, 주사위, 자리 정하기, 東1부터 다시, 타이머 시간입니다.",
+        "dealerTitle": "친 교대",
+        "dealer": "다음 국을 누르면 東이 다음 사람에게 넘어갑니다. 東이 계속 친을 향하도록 휴대폰을 돌리세요. 화면이 저절로 돌아가도 테이블은 휴대폰을 따라가지만 헤더와 바의 위치가 바뀝니다. 이를 피하려면 휴대폰 설정에서 회전을 잠그세요.",
+        "honbaTitle": "본장",
+        "honba": "친이 이기거나 국이 유국되면 본장의 +를 누르세요. 숫자가 오르고 같은 친으로 손이 다시 시작됩니다. −는 잘못 누른 것을 고칩니다.",
+        "screenTitle": "화면 켜짐",
+        "screen": "기기가 허용하면 이 테이블이 열려 있는 동안 화면이 켜져 있습니다."
+      },
+      "demo": {
+        "timerTap": "내 차례에 앞에 있는 판 누르기",
+        "timerRuns": "가운데에서 시간이 흐름",
+        "timerOut": "시간 끝: 가운데가 깜빡이고 알람이 울림",
+        "timerNext": "다음 사람이 자기 판을 누르면 시간이 다시 시작",
+        "tapTable": "판 밖의 테이블 누르기",
+        "nextRound": "다음 국 누르기",
+        "dealerMoved": "東이 다음 친에게 넘어감",
+        "rotate": "東이 친 앞에 오도록 휴대폰 돌리기",
+        "honbaPlus": "본장의 + 누르기",
+        "honbaUp": "본장이 오르고 손이 다시 시작"
+      },
       "title": "Simple Centerpiece",
       "nextRound": "Next round",
       "honba": "Honba",
@@ -965,13 +1032,8 @@
       "actions": "Table actions",
       "hint": "Tap the table to see the actions",
       "adjustHonba": "본장 조정, 현재 {{count}}",
-      "help4": "본장은 탁자 동작에서 − 와 + 로 고칩니다.",
-      "help5": "동작에서 타이머를 켜면 차례인 사람의 판을 눌러 시작하고 차례를 넘깁니다.",
       "timerStart": "타이머 시작",
-      "timerPass": "차례 넘기기",
-      "help1": "Leave the phone in the middle of the table, with 東 facing the dealer. Tapping anywhere on the table opens the actions: next round, honba, dice, wind draw and restart.",
-      "help2": "Each time the dealer changes, turn the phone so 東 keeps facing them. The table follows the phone even if the screen rotates by itself, but the header and bar change sides; to avoid that, lock the rotation in your phone settings.",
-      "help3": "The screen stays on while this table is open, when the device allows it."
+      "timerPass": "차례 넘기기"
     },
     "setup": {
       "title": "New game",
