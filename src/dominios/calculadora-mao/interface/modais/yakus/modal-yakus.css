@@ -176,7 +176,7 @@
 .yaku-badge--yakuman {
   border-color: var(--cor-aviso, #e6b800);
   background: var(--cor-aviso, #ffd700);
-  color: var(--cor-aviso, #5c4300);
+  color: var(--cor-sobre-primario, #5c4300);
   font-weight: 900;
   letter-spacing: 0.04em;
 }
