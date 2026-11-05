@@ -1,7 +1,10 @@
-import type { ReactNode } from 'react'
+import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { CADEIRAS, KANJI_VENTO, ventoDaCadeira, type Cadeira } from '../../logica/partida'
 import '../mesa.css'
+
+/** Quanto dura o giro da mesa quando o dealer troca. */
+const DURACAO_GIRO_MS = 700
 
 interface LadoMesa {
   placa: ReactNode
@@ -38,6 +41,23 @@ export default function MesaQuadrada({
   rotuloDomo,
 }: PropsMesaQuadrada) {
   const { t } = useI18n()
+  const painelRef = useRef<HTMLDivElement>(null)
+  const dealerAnterior = useRef(cadeiraDealer)
+
+  // Troca de dealer: a mesa já nasce com o novo dealer, mas começa girada onde o 東
+  // estava e volta a zero, então o 東 anda até o novo dealer (90° por cadeira),
+  // como na ajuda. Renchan não gira. Com movimento reduzido, só troca.
+  useLayoutEffect(() => {
+    const passos = (cadeiraDealer - dealerAnterior.current + 4) % 4
+    dealerAnterior.current = cadeiraDealer
+    const painel = painelRef.current
+    if (!passos || !painel || typeof painel.animate !== 'function') return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    painel.animate([{ transform: `rotate(${passos * 90}deg)` }, { transform: 'rotate(0deg)' }], {
+      duration: DURACAO_GIRO_MS,
+      easing: 'ease-in-out',
+    })
+  }, [cadeiraDealer])
 
   return (
     <div
@@ -45,7 +65,7 @@ export default function MesaQuadrada({
       style={giro ? { transform: `rotate(${giro}deg)` } : undefined}
       onClick={aoTocarMesa}
     >
-      <div className="mesa-painel">
+      <div ref={painelRef} className="mesa-painel">
         <div className="mesa-disco" aria-hidden="true" />
         {CADEIRAS.map((passo) => {
           const cadeira = ((cadeiraDealer + passo) % 4) as Cadeira
