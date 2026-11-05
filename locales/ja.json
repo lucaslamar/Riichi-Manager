@@ -22,6 +22,10 @@
     "handCalculatorShort": "計算",
     "windDrawShort": "抽選",
     "centerpiece": "Centerpiece",
+
+    "matches": "対局テーブル",
+
+    "matchesShort": "対局",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -128,6 +132,8 @@
     "suitSou": "索子",
     "honors": "字牌",
     "akaDora": "赤5（赤ドラ）",
+
+    "holdForAka": "長押しで赤5",
     "addTileToHand": "{{tile}}を手牌に加える",
     "addTileToDiscards": "フリテン確認用に{{tile}}を捨て牌に加える",
     "selectDoraIndicator": "{{tile}}をドラ / 裏ドラ表示牌にする",
@@ -492,6 +498,42 @@
       "closedKan": "同じ牌4枚がすべて自分の手牌。7777z と入力して「暗槓」。または先に「暗槓」を押して 7：7 が4枚出るので z をタップ。",
       "displayTitle": "パソコンでは",
       "display": "物理キーボードでは、鳴きはグループの最後の文字です: チー・ポン・カンは c（123mc、111pc、1111sc）、暗槓は a（7777za）。"
+    },
+    "tiles": {
+      "title": "手牌の入力",
+      "intro": "キーボードの牌をタップして手牌を作ります。順番は自由で、アプリが自動で並べます。牌を外すには手牌の牌をタップします。",
+      "winTitle": "和了牌",
+      "win": "ほかの計算アプリと違い、和了牌を最後に入れる必要はありません。最後にタップした牌が和了牌になりますが、手牌がそろったら「和了牌を変更」で手牌のどの牌でも選べます。",
+      "waits": "13枚のとき、キーボードの各待ち牌の上に、その牌で和了したときの翻数が出ます。暗くなった牌では手牌が完成しません。",
+      "chi": "チーをタップしてから牌をタップします。複数の順子になる場合は「チーを選択」に候補が出るので、正しいものをタップします。チーを選んだ状態で手牌の牌をタップしても、手牌の牌でチーが作れます。",
+      "pon": "ポンをタップしてから牌をタップします。手牌にある牌を使って3枚がポンになります。",
+      "kan": "カンをタップしてから牌をタップします。4枚が明槓になります。",
+      "closedKan": "暗槓をタップしてから牌をタップします。手牌に3枚か4枚あれば、それが暗槓になります。",
+      "aka": "ルール [[engrenagem]] で赤ドラをオンにすると、スマホを縦にしているときは5を長押しして赤5を入れます。5の角の赤い点は、赤5がまだ使えることを示します。スマホを横にしたとき、タブレット、パソコンでは、赤5は各色の最後の牌です。赤5は各色に1枚だけなので、同じ色の4枚目の5は必ず赤5になります。カンでも同じです。",
+      "akaHan": "13枚のとき、5のバッジには2つの値が出ます。先が普通の5で和了したときの翻数、赤字が赤5で和了したときの翻数です。7/8 HANなら、普通の5は7翻、赤5は赤ドラの分で8翻です。",
+      "guideTitle": "ポケットガイド",
+      "guide": "帽子のボタンでポケットガイドを開きます。役の例、用語、表を対局中に確認できます。",
+      "finishTitle": "和了設定",
+      "finish": "手牌がそろったら「和了設定」で和了の設定に進みます。ロンかツモ、風、リーチ、ドラ、本場を設定します。各項目に専用の ? があります。",
+      "tip": "文字で入力したいときは、MPSZで牌のキーボードを表記入力(123mなど)に切り替えます。戻るには「牌」をタップします。"
+    },
+    "demo": {
+      "tap": "{{name}} をタップ",
+      "winLast": "最後にタップした牌が和了牌",
+      "pickWin": "和了牌をタップ",
+      "choose": "順子を選ぶ",
+      "done": "完了",
+      "tapHand": "手牌の {{name}} をタップ",
+      "hold": "{{name}} を長押し",
+      "fourthAka": "手牌に普通の5が3枚あると、キーボードの5はもう赤5",
+      "tapCap": "帽子をタップ",
+      "pickTab": "{{name}} タブをタップ",
+      "guideCard": "役ごとに例と翻数",
+      "cases": "ケース",
+      "caseNew": "新しい牌",
+      "caseHand": "手牌の牌で",
+      "caseHold": "5を長押し",
+      "caseFourth": "4枚目の5"
     }
   },
   "rulesModal": {
@@ -954,6 +996,31 @@
       "rankingHelp": "All games added up"
     },
     "simple": {
+      "guide": {
+        "intro": "スマホを卓の中央に置き、東を親に向けます。各プレートには、そこに座る人の風と、その人の前の山を開くサイコロの合計が出ます。",
+        "timerTitle": "手番タイマー",
+        "timer": "30秒のタイマーは最初からオンです。自分の手番になったら自分の風のプレートをタップすると、中央の時間が最初からになります。ポン・チー・カンで手番が飛ぶので、タイマーは手番を推測しません。次に打つ人がタップします。時間切れになると中央が点滅し、アラームが鳴ります。",
+        "actionsTitle": "卓のアクション",
+        "actions": "プレート以外の卓のどこか(中央も含む)をタップするとアクションが開きます。次の局、本場、サイコロ、場決め、東1からやり直し、タイマーの時間です。",
+        "dealerTitle": "親の交代",
+        "dealer": "「次の局」で東が次の人に移ります。東が親の方を向き続けるようにスマホを回してください。画面が自動で回転しても卓はスマホに合わせて動きますが、ヘッダーとバーの位置が変わります。避けたいときはスマホの設定で回転をロックしてください。",
+        "honbaTitle": "本場",
+        "honba": "親の和了か流局のときは本場の+をタップします。数が増え、同じ親で次の手が始まります。−は押しすぎの修正用です。",
+        "screenTitle": "画面を点灯",
+        "screen": "端末が対応していれば、この卓を開いている間は画面が消えません。"
+      },
+      "demo": {
+        "timerTap": "自分の手番で目の前のプレートをタップ",
+        "timerRuns": "中央で時間が進む",
+        "timerOut": "時間切れ: 中央が点滅しアラームが鳴る",
+        "timerNext": "次の人が自分のプレートをタップすると時間がリセット",
+        "tapTable": "プレート以外の卓をタップ",
+        "nextRound": "「次の局」をタップ",
+        "dealerMoved": "東が次の親に移る",
+        "rotate": "東が親の前に来るようスマホを回す",
+        "honbaPlus": "本場の+をタップ",
+        "honbaUp": "本場が増えて手がやり直しに"
+      },
       "title": "Simple Centerpiece",
       "nextRound": "Next round",
       "honba": "Honba",
@@ -965,13 +1032,8 @@
       "actions": "Table actions",
       "hint": "Tap the table to see the actions",
       "adjustHonba": "本場を調整、現在 {{count}}",
-      "help4": "本場は卓のアクションで − と + を使って修正します。",
-      "help5": "アクションでタイマーをオンにしたら、手番の人のプレートをタップして開始し、手番を回します。",
       "timerStart": "タイマーを開始",
-      "timerPass": "手番を回す",
-      "help1": "Leave the phone in the middle of the table, with 東 facing the dealer. Tapping anywhere on the table opens the actions: next round, honba, dice, wind draw and restart.",
-      "help2": "Each time the dealer changes, turn the phone so 東 keeps facing them. The table follows the phone even if the screen rotates by itself, but the header and bar change sides; to avoid that, lock the rotation in your phone settings.",
-      "help3": "The screen stays on while this table is open, when the device allows it."
+      "timerPass": "手番を回す"
     },
     "setup": {
       "title": "New game",
