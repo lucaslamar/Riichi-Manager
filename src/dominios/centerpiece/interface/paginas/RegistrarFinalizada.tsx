@@ -24,6 +24,13 @@ import '../config-mesa.css'
 const LUGARES = [0, 1, 2, 3] as const
 const PONTOS_VALIDOS = /^-?\d+$/
 
+/**
+ * Ponto e vírgula são separadores de milhar (22.300 ou 22,300): saem antes da conta.
+ * Pontos de mesa são sempre inteiros, então não há casa decimal para confundir.
+ */
+const semSeparadores = (texto: string) => texto.replace(/[.,]/g, '')
+const pontosValidos = (texto: string) => PONTOS_VALIDOS.test(semSeparadores(texto))
+
 /** Partida jogada fora do app: regras, jogadores, pontos, uma e oka. */
 export default function RegistrarFinalizada({
   aoVoltar,
@@ -61,18 +68,20 @@ export default function RegistrarFinalizada({
   }
 
   const totalMesa = pontosPartida * 4
-  const preenchidos = pontos.filter((texto) => PONTOS_VALIDOS.test(texto))
+  const preenchidos = pontos.filter(pontosValidos)
   const indiceVazio = pontos.findIndex((texto) => texto === '')
   // O último campo vazio fecha a soma sozinho, até a pessoa digitar nele.
   const quanto =
     preenchidos.length === 3 && indiceVazio >= 0
-      ? totalMesa - preenchidos.reduce((soma, texto) => soma + Number(texto), 0)
+      ? totalMesa - preenchidos.reduce((soma, texto) => soma + Number(semSeparadores(texto)), 0)
       : null
   const efetivos = pontos.map((texto, indice) =>
     indice === indiceVazio && quanto !== null ? String(quanto) : texto,
   )
-  const pontosCompletos = efetivos.every((texto) => PONTOS_VALIDOS.test(texto))
-  const pontosNumeros = pontosCompletos ? efetivos.map(Number) : undefined
+  const pontosCompletos = efetivos.every(pontosValidos)
+  const pontosNumeros = pontosCompletos
+    ? efetivos.map((texto) => Number(semSeparadores(texto)))
+    : undefined
   const diferenca = pontosNumeros
     ? pontosNumeros.reduce((soma, valor) => soma + valor, 0) - totalMesa
     : 0
@@ -133,10 +142,11 @@ export default function RegistrarFinalizada({
                   aria-label={rotulo}
                   autoComplete="off"
                   value={pontos[lugar]}
-                  placeholder={preenchidoSozinho ? String(quanto) : undefined}
+                  placeholder={preenchidoSozinho ? numero(quanto ?? 0) : undefined}
                   onChange={(evento) => {
                     const texto = evento.target.value
-                    const limpo = `${texto.trim().startsWith('-') ? '-' : ''}${texto.replace(/\D/g, '')}`
+                    // Números, ponto e vírgula (milhar) e o menos só no começo.
+                    const limpo = `${texto.trim().startsWith('-') ? '-' : ''}${texto.replace(/[^\d.,]/g, '')}`
                     mudarPontos(lugar, limpo)
                   }}
                 />
