@@ -981,7 +981,102 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "club": {
+      "listTitle": "Club list",
+      "addRegistered": "Use registered",
+      "addRegisteredLabel": "Use registered players on this line",
+      "registeredTitle": "Registered players",
+      "addSelected": {
+        "one": "Add ({{count}})",
+        "other": "Add ({{count}})"
+      },
+      "alreadyInList": "Already listed",
+      "lastDraw": {
+        "one": "Last draw: {{count}} table",
+        "other": "Last draw: {{count}} tables"
+      },
+      "linkedShort": "Registered",
+      "guestShort": "Guest",
+      "placeholder": "One name per line",
+      "editorLabel": "Attendance list, one name per line",
+      "register": "Register",
+      "registerNamed": "Register {{name}}",
+      "registered": "{{name}} registered",
+      "suggestions": "Matching registered players",
+      "suggestionLabel": "Use {{name}} from the registry",
+      "listSummary": "Who is on the list",
+      "linked": "{{name}}, registered",
+      "guest": "{{name}}, guest",
+      "empty": "Empty list",
+      "players": {
+        "one": "{{count}} player",
+        "other": "{{count}} players"
+      },
+      "tables": {
+        "one": "{{count}} table",
+        "other": "{{count}} tables"
+      },
+      "minimum": {
+        "one": "{{count}} more player needed for the first table",
+        "other": "{{count}} more players needed for the first table"
+      },
+      "missing": {
+        "one": "{{count}} more player needed to close the table",
+        "other": "{{count}} more players needed to close the table"
+      },
+      "leftover": {
+        "one": "or {{count}} left over",
+        "other": "or {{count}} left over"
+      },
+      "clear": "Clear list",
+      "clearTitle": "Clear the list?",
+      "clearHelp": "The names and the last draw leave this screen. Games already recorded stay in the history.",
+      "draw": "Draw tables",
+      "duplicatesRemoved": {
+        "one": "{{count}} repeated name removed",
+        "other": "{{count}} repeated names removed"
+      },
+      "resultTitle": "Drawn tables",
+      "noDraw": "No draw yet. Build the list and tap Draw tables.",
+      "shareTitle": "MOJOCA · Club tables · {{date}}",
+      "copied": "Copied to clipboard",
+      "shareFailed": "Could not share.",
+      "share": "Share",
+      "meeting": "Club meeting",
+      "redraw": "Draw again",
+      "redrawTitle": "Draw again?",
+      "redrawHelp": "The tables change. Games already recorded stay in the history.",
+      "newDraw": "New draw",
+      "newDrawLabel": "New draw with the same list, for the next round",
+      "registerResult": "Record result",
+      "tableRegistered": "Game recorded"
+    },
+    "cards": {
+      "honba": {
+        "one": "{{count}} honba",
+        "other": "{{count}} honba"
+      },
+      "open": "Open",
+      "view": "View",
+      "openNamed": "Open {{table}}",
+      "viewNamed": "View {{table}}",
+      "shareNamed": "Share {{table}}",
+      "deleteNamed": "Delete {{table}}",
+      "pointsSpoken": "{{points}} points",
+      "dealer": "dealer",
+      "biggestHand": "biggest hand: {{hand}}",
+      "player": "Player",
+      "points": "Points",
+      "deltaHelp": "Change with uma and oka",
+      "dealIn": "Deal-in",
+      "expand": "Show details",
+      "collapse": "Hide details",
+      "deleteTitle": "Delete this game?",
+      "deleteHelp": "The game leaves the history and the ranking. This cannot be undone."
+    },
     "home": {
+      "clubTitle": "Organize club tables",
+      "clubHelp": "Attendance list and table draw",
       "title": "Centerpiece",
       "newGame": "New game",
       "newGameHelp": "With score tracking",

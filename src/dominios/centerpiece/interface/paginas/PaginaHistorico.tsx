@@ -1,34 +1,49 @@
 import { useMemo, useState } from 'react'
+import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import type { Cadeira, Partida } from '../../logica/partida'
 import { partidasDoHistorico } from '../../logica/ranking'
+import CardMesa from '../componentes/CardMesa'
 import ListaResultado from '../componentes/ListaResultado'
-import { ListaMaos } from '../componentes/ModaisPartida'
+import { ListaMaos, ModalConfirmacao } from '../componentes/ModaisPartida'
+import { useAviso } from '../hooks/useAviso'
 import { usePartidas } from '../hooks/usePartidas'
+import { nomeDoAssento } from '../nomeDoAssento'
+import { textoDaPartida } from '../textoPartida'
 
 /** Partidas finalizadas; abrir uma mostra o resultado e o histórico de mãos. */
 export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) {
-  const { t, idioma } = useI18n()
-  const { partidas } = usePartidas()
+  const { t, idioma, numero } = useI18n()
+  const { partidas, descartar } = usePartidas()
   const { jogadores } = useJogadores()
+  const { aviso, mostrar } = useAviso()
   const [abertaId, setAbertaId] = useState<string | null>(null)
+  const [paraExcluir, setParaExcluir] = useState<string | null>(null)
 
   const historico = useMemo(() => partidasDoHistorico(partidas), [partidas])
   const aberta = historico.find((partida) => partida.id === abertaId)
 
   // Quem saiu do cadastro aparece com o nome guardado na partida.
-  const nomeNa = (partida: Partida) => (cadeira: Cadeira) => {
-    const assento = partida.assentos[cadeira]
-    const jogador = jogadores.find((item) => item.id === assento.jogadorId)
-    return jogador ? nomeExibido(jogador) : t('players.deletedName', { name: assento.nome ?? '—' })
-  }
+  const nomeNa = (partida: Partida) => (cadeira: Cadeira) =>
+    nomeDoAssento(jogadores, partida.assentos[cadeira], (nome) => t('players.deletedName', { name: nome }))
   const data = (iso: string | undefined) =>
     iso
       ? new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(new Date(iso))
       : ''
+  /** Mesa do encontro do clube, ou o tipo de partida para as avulsas. */
+  const tituloDa = (partida: Partida) =>
+    partida.encontro
+      ? t('match.table.number', { number: partida.encontro.mesa })
+      : t(partida.config.tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')
+
+  const compartilhar = async (partida: Partida) => {
+    const cabecalho = `${tituloDa(partida)} · ${data(partida.finalizadaEm)}`
+    const resultado = await compartilharTexto(textoDaPartida(partida, cabecalho, nomeNa(partida), t, numero))
+    if (resultado === 'copiado') mostrar(t('match.club.copied'))
+    if (resultado === 'falhou') mostrar(t('match.club.shareFailed'))
+  }
 
   if (aberta) {
     return (
@@ -46,38 +61,46 @@ export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) 
   }
 
   return (
-    <section className="ptd-inicio">
+    <section className="ptd-inicio cm-pagina">
       <TituloTela titulo={t('match.home.history')} aoVoltar={aoVoltar} />
       {historico.length === 0 ? (
         <p className="ptd-vazio">{t('match.history.empty')}</p>
       ) : (
-        <ul className="ptd-lista-historico">
+        <ul className="cm-lista ptd-lista-historico">
           {historico.map((partida) => (
             <li key={partida.id}>
-              <button
-                type="button"
-                className="ptd-item-historico"
-                onClick={() => setAbertaId(partida.id)}
-              >
-                <strong>{data(partida.finalizadaEm)}</strong>
-                <ol className="ptd-placar-historico">
-                  {(partida.resultado ?? []).map((linha) => (
-                    <li key={linha.cadeira}>
-                      <span>
-                        {t('match.result.place', { place: linha.colocacao })}{' '}
-                        {nomeNa(partida)(linha.cadeira)}
-                      </span>
-                      <span className={linha.final < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
-                        {linha.final > 0 ? '+' : ''}
-                        {new Intl.NumberFormat(idioma).format(linha.final)}
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-              </button>
+              <CardMesa
+                partida={partida}
+                modo="historico"
+                titulo={tituloDa(partida)}
+                nomeDe={nomeNa(partida)}
+                aoAbrir={() => setAbertaId(partida.id)}
+                aoCompartilhar={() => void compartilhar(partida)}
+                aoExcluir={() => setParaExcluir(partida.id)}
+              />
             </li>
           ))}
         </ul>
+      )}
+
+      {aviso && (
+        <p className="ptd-aviso" role="status">
+          {aviso}
+        </p>
+      )}
+
+      {paraExcluir && (
+        <ModalConfirmacao
+          titulo={t('match.cards.deleteTitle')}
+          texto={t('match.cards.deleteHelp')}
+          rotuloConfirmar={t('players.delete')}
+          perigo
+          aoFechar={() => setParaExcluir(null)}
+          aoConfirmar={() => {
+            descartar(paraExcluir)
+            setParaExcluir(null)
+          }}
+        />
       )}
     </section>
   )

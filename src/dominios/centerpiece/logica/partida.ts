@@ -109,6 +109,8 @@ export interface Partida {
   registradaManual?: boolean
   /** Índices base zero na grade. `guardada`: o organizador conferiu e confirmou. */
   vinculoTorneio?: { torneioId: string; rodada: number; mesa: number; guardada?: boolean }
+  /** Mesa que saiu do sorteio de um encontro do clube. `mesa` começa em 1. */
+  encontro?: { id: string; mesa: number }
 }
 
 export interface Contexto {

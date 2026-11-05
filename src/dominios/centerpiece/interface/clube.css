@@ -1,0 +1,819 @@
+/*
+ * Organizar mesas do clube (lista, sorteio, encontro) e os cards de placar de
+ * "Em andamento" e "Histórico". Cores só pelos tokens do tema.
+ */
+
+/* ─── Lista do clube: folha de bloco de notas ─────────────────────────────── */
+.clb-lista {
+  box-sizing: border-box;
+  width: min(100%, 720px);
+  margin: 0 auto;
+  /* Espaço para o rodapé fixo não cobrir as últimas linhas. */
+  padding: 8px 16px calc(150px + var(--altura-barra-inferior, 0px));
+}
+
+.clb-ultimo-sorteio {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--cor-primario-borda, var(--linha-divisoria));
+  border-radius: 12px;
+  padding: 8px 14px;
+  color: var(--texto-principal);
+  background: var(--cor-primario-suave, var(--superficie));
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.clb-ultimo-sorteio > span {
+  flex: 1 1 auto;
+  font-weight: 700;
+}
+
+.clb-ultimo-sorteio > i:first-child {
+  color: var(--primario);
+}
+
+.clb-folha {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  border-radius: 16px;
+  padding: 12px 12px 12px 4px;
+  background: var(--superficie);
+  /* Pauta bem leve, como uma página; some no texto. */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--clb-linha) - 1px),
+    color-mix(in srgb, var(--linha-divisoria) 55%, transparent) calc(var(--clb-linha) - 1px),
+    color-mix(in srgb, var(--linha-divisoria) 55%, transparent) var(--clb-linha)
+  );
+  background-position: 0 12px;
+  background-clip: content-box;
+  box-shadow: 0 1px 0 var(--linha-divisoria);
+}
+
+.clb-marcadores {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clb-marcadores > li {
+  display: flex;
+  height: var(--clb-linha);
+  align-items: center;
+  justify-content: center;
+}
+
+.clb-marcador {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--sobre-primario);
+  background: var(--primario);
+  font-size: 0.6875rem;
+}
+
+.clb-marcador--convidado {
+  border: 1px dashed var(--texto-apoio);
+  color: var(--texto-apoio);
+  background: transparent;
+}
+
+.clb-campo {
+  display: block;
+  box-sizing: border-box;
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  height: calc(var(--clb-linha) * var(--clb-linhas));
+  margin: 0;
+  border: 0;
+  /* Espaço à direita para o "Cadastrar" sem cobrir o nome. */
+  padding: 0 96px 0 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  color: var(--texto-principal);
+  background: transparent;
+  font: inherit;
+  font-size: 1.25rem;
+  line-height: var(--clb-linha);
+  white-space: pre;
+  resize: none;
+  scrollbar-width: none;
+  caret-color: var(--primario);
+}
+
+.clb-campo::placeholder {
+  color: var(--texto-apoio);
+  opacity: 0.7;
+}
+
+.clb-campo:focus {
+  outline: none;
+}
+
+.clb-folha:focus-within {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primario) 45%, transparent);
+}
+
+.clb-acoes-linhas {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 0;
+}
+
+.clb-cadastrar {
+  position: absolute;
+  right: 0;
+  display: inline-flex;
+  height: calc(var(--clb-linha) - 8px);
+  align-items: center;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 10px;
+  color: var(--texto-apoio);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.clb-cadastrar:hover,
+.clb-cadastrar:focus-visible {
+  color: var(--primario);
+  background: var(--cor-primario-suave, transparent);
+}
+
+.clb-sugestoes {
+  position: absolute;
+  z-index: 5;
+  left: 40px;
+  right: 12px;
+  display: flex;
+  max-width: 420px;
+  flex-direction: column;
+  margin: 12px 0 0;
+  border: 1px solid var(--cor-primario-borda, var(--linha-divisoria));
+  border-radius: 12px;
+  padding: 4px;
+  background: var(--cor-superficie-alt, var(--superficie));
+  box-shadow: var(--sombra);
+  list-style: none;
+}
+
+.clb-sugestoes button {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--texto-principal);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.clb-sugestoes button:hover,
+.clb-sugestoes button:focus-visible {
+  background: var(--cor-primario-suave, var(--superficie));
+}
+
+.clb-sugestoes i {
+  color: var(--primario);
+}
+
+.clb-sugestoes small {
+  margin-left: auto;
+  color: var(--texto-apoio);
+}
+
+/* Rodapé fixo: contador, falta/sobra e os dois botões, na largura da coluna. */
+.clb-rodape {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--linha-divisoria);
+  padding-inline: max(16px, calc((100% - 720px) / 2));
+}
+
+/* Aviso acima do rodapé fixo, sem cobrir os botões. */
+.clb-aviso {
+  bottom: calc(var(--altura-barra-inferior, 0px) + 150px);
+}
+
+@media (min-width: 1024px) {
+  .clb-rodape {
+    padding-inline: 0;
+  }
+
+  .clb-aviso {
+    bottom: 160px;
+  }
+}
+
+.clb-contagem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.clb-falta {
+  color: var(--texto-aviso);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.clb-lista-cadastrados .clb-opcao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.clb-opcao > input {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  accent-color: var(--primario);
+}
+
+.clb-opcao--na-lista {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* ─── Mesas sorteadas ─────────────────────────────────────────────────────── */
+.clb-resultado {
+  padding-bottom: 24px;
+}
+
+.clb-btn-titulo,
+.clb-acoes-titulo {
+  margin-left: auto;
+}
+
+.clb-acoes-titulo {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.cm-btn-icone:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.clb-mesa-feita {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--texto-positivo);
+  font-weight: 700;
+}
+
+.clb-encontro-data {
+  margin: 4px 0 12px;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+}
+
+.clb-encontro-data time {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
+.clb-mesas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clb-mesa {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 16px;
+  padding: 14px;
+  background: var(--superficie);
+}
+
+.clb-mesa-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.clb-mesa-assentos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clb-assento {
+  display: grid;
+  min-height: 64px;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 10px;
+  border-radius: 12px;
+  padding: 8px 10px;
+  background: var(--cor-superficie-alt, var(--fundo));
+}
+
+.clb-assento-kanji {
+  grid-row: span 2;
+  color: var(--primario);
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.clb-assento-vento {
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.clb-assento-nome {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  color: var(--texto-principal);
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clb-convidado {
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+}
+
+.clb-mesa-botao {
+  width: 100%;
+  min-height: 48px;
+}
+
+/* ─── Cards de placar (Em andamento e Histórico) ──────────────────────────── */
+.cm-pagina {
+  width: min(100%, 720px);
+}
+
+.cm-grupos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cm-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* O li da lista de mesas antiga era flex com a lixeira ao lado; aqui é só o card. */
+.cm-lista > li {
+  display: block;
+  min-width: 0;
+}
+
+.cm-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--cor-primario-borda, var(--linha-divisoria));
+  border-radius: 16px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--cor-primario-suave, var(--superficie)) 60%, transparent);
+}
+
+.cm-grupo-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cm-grupo-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.cm-grupo-titulo > i {
+  color: var(--primario);
+}
+
+.cm-grupo-apoio {
+  display: block;
+  margin-top: 2px;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.cm-grupo-apoio time {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+}
+
+.cm-grupo-botao {
+  min-height: 40px;
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+}
+
+.cm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 14px;
+  padding: 10px 10px 34px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+}
+
+.cm-topo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cm-titulo {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cm-titulo > strong {
+  overflow: hidden;
+  font-size: 0.9375rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-hora {
+  color: var(--texto-apoio);
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+}
+
+.cm-acoes {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+}
+
+.cm-btn-icone {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 10px;
+  color: var(--texto-apoio);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+
+.cm-btn-icone:hover,
+.cm-btn-icone:focus-visible {
+  color: var(--primario);
+  background: var(--cor-primario-suave, var(--superficie));
+}
+
+.cm-btn-icone--perigo:hover,
+.cm-btn-icone--perigo:focus-visible {
+  color: var(--texto-erro);
+  background: var(--cor-perigo-suave, var(--superficie));
+}
+
+.cm-abrir {
+  min-height: 40px;
+  padding: 6px 16px;
+  font-size: 0.8125rem;
+}
+
+.cm-grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cm-celula {
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: 2em minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  border-radius: 10px;
+  padding: 6px 10px 6px 8px;
+  background: var(--cor-superficie-alt, var(--fundo));
+}
+
+/* Faixa lateral do dealer (em andamento) ou do 1º lugar (histórico). */
+.cm-celula--destaque {
+  box-shadow: inset 4px 0 0 var(--primario);
+  background: var(--cor-primario-suave, var(--cor-superficie-alt));
+}
+
+.cm-posicao {
+  color: var(--primario);
+  font-size: 1.125rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.cm-posicao--lugar {
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.cm-nome {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cm-nome-texto {
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Selo da maior mão da partida, em cor quente. */
+.cm-selo {
+  align-self: flex-start;
+  border: 1px solid var(--cor-aviso-borda, currentColor);
+  border-radius: 999px;
+  padding: 0 6px;
+  color: var(--texto-aviso);
+  background: var(--cor-aviso-suave, transparent);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.cm-pontos {
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: right;
+}
+
+.cm-negativo {
+  color: color-mix(in srgb, var(--texto-erro) 80%, var(--texto-principal));
+}
+
+/* Abrir e fechar com a altura animada (grid de 0fr para 1fr). */
+.cm-detalhes {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 200ms ease,
+    visibility 200ms;
+  visibility: hidden;
+}
+
+.cm-card--aberto .cm-detalhes {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.cm-detalhes-rolagem {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.cm-card--aberto .cm-detalhes-rolagem {
+  /* Rolagem horizontal só na tabela, se não couber. */
+  overflow-x: auto;
+}
+
+.cm-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cm-tabela th,
+.cm-tabela td {
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 6px 8px;
+  text-align: right;
+}
+
+.cm-tabela thead th {
+  color: var(--texto-apoio);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.cm-tabela th:first-child {
+  position: sticky;
+  left: 0;
+  background: var(--superficie);
+  text-align: left;
+}
+
+.cm-tabela tbody th {
+  font-weight: 700;
+}
+
+.cm-tabela-posicao {
+  display: inline-block;
+  min-width: 1.6em;
+  color: var(--primario);
+}
+
+.cm-tabela abbr {
+  text-decoration: none;
+}
+
+.cm-expandir {
+  position: absolute;
+  right: 6px;
+  bottom: 2px;
+  display: inline-flex;
+  width: 36px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  color: var(--texto-apoio);
+  background: transparent;
+  cursor: pointer;
+}
+
+.cm-expandir > i {
+  transition: transform 200ms ease;
+}
+
+.cm-card--aberto .cm-expandir > i {
+  transform: rotate(180deg);
+}
+
+.cm-expandir:hover,
+.cm-expandir:focus-visible {
+  color: var(--primario);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-detalhes,
+  .cm-expandir > i {
+    transition: none;
+  }
+}
+
+/* ─── Celular pequeno: grade 2×2 compacta ─────────────────────────────────── */
+@media (max-width: 400px) {
+  .cm-celula {
+    grid-template-columns: 1.6em minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 0 6px;
+    padding: 6px 8px;
+  }
+
+  .cm-posicao {
+    grid-row: span 2;
+  }
+
+  .cm-pontos {
+    text-align: left;
+  }
+
+  .cm-abrir {
+    padding-inline: 12px;
+  }
+
+  .clb-assento-kanji {
+    font-size: 1.5rem;
+  }
+}
+
+/* ─── Mesas sorteadas: duas colunas quando cabe, para ficarem "quadradinhas" ── */
+@media (min-width: 560px) {
+  .clb-mesas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .clb-mesa-assentos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .clb-resultado {
+    width: min(100%, 1100px);
+  }
+
+  .clb-mesas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ─── iPad: cards mais largos; em telas grandes, duas colunas ─────────────── */
+@media (min-width: 768px) {
+  .cm-pagina {
+    width: min(100%, 860px);
+  }
+
+  .cm-celula {
+    min-height: 56px;
+    padding-inline: 12px;
+  }
+
+  .cm-nome-texto {
+    font-size: 1rem;
+  }
+
+  .cm-pontos {
+    font-size: 1.0625rem;
+  }
+}
+
+@media (min-width: 1000px) {
+  .cm-pagina {
+    width: min(100%, 1240px);
+  }
+
+  .cm-grupos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .cm-grupo {
+    grid-column: 1 / -1;
+  }
+
+  .cm-grupo > .cm-lista,
+  .cm-pagina > .cm-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}

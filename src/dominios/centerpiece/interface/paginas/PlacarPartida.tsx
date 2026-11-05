@@ -8,7 +8,7 @@ import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/pagi
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import { nomeDoAssento } from '../nomeDoAssento'
 import { dadosDaPartidaParaMao } from '../../logica/dadosDaPartida'
 import { numerosDaParede } from '../../logica/dados'
 import { ehQuatroVentos, pedrasNoMuro, ultimoDescarteDaMao } from '../../logica/descartes'
@@ -86,10 +86,8 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     [atualizarLista, id],
   )
 
-  const nomeDe = (cadeira: Cadeira) => {
-    const jogador = jogadores.find((item) => item.id === partida.assentos[cadeira].jogadorId)
-    return jogador ? nomeExibido(jogador) : '—'
-  }
+  // Convidado do clube aparece pelo nome guardado; quem saiu do cadastro, com "—".
+  const nomeDe = (cadeira: Cadeira) => nomeDoAssento(jogadores, partida.assentos[cadeira], () => '—')
 
   const [menuDe, setMenuDe] = useState<Cadeira | null>(null)
   const [rioDe, setRioDe] = useState<Cadeira | null>(null)
