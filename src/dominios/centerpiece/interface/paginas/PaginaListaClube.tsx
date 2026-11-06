@@ -41,7 +41,7 @@ export default function PaginaListaClube({
   aoSortear: () => void
   aoVerSorteio: () => void
 }) {
-  const { t } = useI18n()
+  const { t, numero } = useI18n()
   const { jogadores, adicionar } = useJogadores()
   const { lista, sorteio, definirLista, sortear, limpar } = useClube()
   const { aviso, mostrar } = useAviso()
@@ -270,11 +270,19 @@ export default function PaginaListaClube({
 
       <div className="ptd-rodape-fixo clb-rodape">
         <p id="clb-contagem" className="clb-contagem" aria-live="polite">
-          <strong>
-            {entradas.length === 0
-              ? t('match.club.empty')
-              : `${t('match.club.players', { count: entradas.length })} · ${t('match.club.tables', { count: contagem.mesas })}`}
-          </strong>
+          {/* Ícones no lugar das palavras; o leitor de tela ouve "12 jogadores, 3 mesas". */}
+          <span className="clb-contadores">
+            <span>
+              <i className="fas fa-user" aria-hidden="true" />
+              <strong aria-hidden="true">{numero(entradas.length)}</strong>
+              <span className="sr-only">{t('match.club.players', { count: entradas.length })}</span>
+            </span>
+            <span>
+              <i className="fas fa-table-cells-large" aria-hidden="true" />
+              <strong aria-hidden="true">{numero(contagem.mesas)}</strong>
+              <span className="sr-only">{t('match.club.tables', { count: contagem.mesas })}</span>
+            </span>
+          </span>
           {!contagem.podeSortear && (
             <span className="clb-falta">
               {entradas.length < 4

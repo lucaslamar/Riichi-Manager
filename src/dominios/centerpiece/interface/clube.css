@@ -38,24 +38,12 @@
   color: var(--primario);
 }
 
+/* Folha lisa, como o Samsung Notes: sem borda, sem caixa e sem pauta. */
 .clb-folha {
   position: relative;
   display: grid;
   grid-template-columns: 32px minmax(0, 1fr);
-  border-radius: 16px;
-  padding: 12px 12px 12px 4px;
-  background: var(--superficie);
-  /* Pauta bem leve, como uma página; some no texto. */
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(var(--clb-linha) - 1px),
-    color-mix(in srgb, var(--linha-divisoria) 55%, transparent) calc(var(--clb-linha) - 1px),
-    color-mix(in srgb, var(--linha-divisoria) 55%, transparent) var(--clb-linha)
-  );
-  background-position: 0 12px;
-  background-clip: content-box;
-  box-shadow: 0 1px 0 var(--linha-divisoria);
+  padding: 4px 0;
 }
 
 .clb-marcadores {
@@ -124,14 +112,10 @@
   outline: none;
 }
 
-.clb-folha:focus-within {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primario) 45%, transparent);
-}
-
 .clb-acoes-linhas {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 4px;
+  right: 0;
   width: 0;
 }
 
@@ -168,7 +152,7 @@
   display: flex;
   max-width: 420px;
   flex-direction: column;
-  margin: 12px 0 0;
+  margin: 4px 0 0;
   border: 1px solid var(--cor-primario-borda, var(--linha-divisoria));
   border-radius: 12px;
   padding: 4px;
@@ -234,11 +218,28 @@
 .clb-contagem {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 2px 12px;
   margin: 0;
   font-variant-numeric: tabular-nums;
+}
+
+.clb-contadores {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 1.0625rem;
+}
+
+.clb-contadores > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clb-contadores i {
+  color: var(--primario);
 }
 
 .clb-falta {
