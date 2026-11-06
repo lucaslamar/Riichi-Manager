@@ -38,6 +38,8 @@ export interface EstadoMaoCalculadora {
  * Elas não devem alterar estado; quem muta a mão é `useAcoesPedras`.
  */
 export interface AcoesMeldsCalculadora {
+  /** Pedras da mão que entram no meld (todas as que servem, até o tamanho dele). */
+  consumoDaMao: (pedrasMeld: CodigoPedra[]) => CodigoPedra[]
   contarCodigo: (codigo: CodigoPedra) => number
   contarAka: (codigo: CodigoPedra) => number
   indicesPedrasNaMaoPara: (pedras: CodigoPedra[]) => number[]

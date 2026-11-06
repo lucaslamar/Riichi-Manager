@@ -32,6 +32,8 @@ interface ParametrosAcoesPedras {
     slotsLogicosMeld?: number,
   ) => boolean
   indicesPedrasNaMaoPara: (pedras: CodigoPedra[]) => number[]
+  /** Pedras da mão que entram no meld: todas as que servem, até o tamanho dele. */
+  consumoDaMao: (pedrasMeld: CodigoPedra[]) => CodigoPedra[]
   sequenciasChiiPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
   sequenciasChiiDaMaoPossiveis: (pedras: CodigoPedra[]) => CodigoPedra[][]
   setEscolhaChiiPendente: (escolha: EscolhaChiiPendente | null) => void
@@ -56,6 +58,7 @@ export function useAcoesPedras({
   podeAdicionarPedras,
   podeCriarMeld,
   indicesPedrasNaMaoPara,
+  consumoDaMao,
   sequenciasChiiPossiveis,
   sequenciasChiiDaMaoPossiveis,
   setEscolhaChiiPendente,
@@ -137,14 +140,8 @@ export function useAcoesPedras({
     const sequenciaComChamadaReal = sequencia.map((pedraSequencia) =>
       codigoBase(pedraSequencia) === codigoBase(chamada) ? chamada : pedraSequencia,
     )
-    const pedrasConsumir = sequenciaComChamadaReal.filter(
-      (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(chamada),
-    )
-    const consumoChii = podeCriarMeld(sequenciaComChamadaReal, sequenciaComChamadaReal, 3)
-      ? sequenciaComChamadaReal
-      : podeCriarMeld(sequenciaComChamadaReal, pedrasConsumir, 3)
-        ? pedrasConsumir
-        : []
+    // Entra no Chi o que a mão já tem da sequência; só o resto vem novo.
+    const consumoChii = consumoDaMao(sequenciaComChamadaReal)
     const slotsAposMeld = aplicarMeld('chii', sequenciaComChamadaReal, consumoChii, true)
     if (slotsAposMeld === null) return
     atualizarAcaoAposMeld('chii', slotsAposMeld)
@@ -205,14 +202,9 @@ export function useAcoesPedras({
         })
         return
       case 'pon': {
+        // As pedras iguais que já estão na mão entram no Pon (uma, duas ou três).
         const pedrasMeld = expandir(pedra, 3)
-        const consumoTrinca = expandir(pedra, 3)
-        const consumoPar = expandir(pedra, 2)
-        const pedrasConsumir = podeCriarMeld(pedrasMeld, consumoTrinca, 3)
-          ? consumoTrinca
-          : podeCriarMeld(pedrasMeld, consumoPar, 3)
-            ? consumoPar
-            : []
+        const pedrasConsumir = consumoDaMao(pedrasMeld)
         const slotsAposMeld = aplicarMeld('pon', pedrasMeld, pedrasConsumir, true)
         if (slotsAposMeld === null) return
         atualizarAcaoAposMeld('pon', slotsAposMeld)
@@ -220,13 +212,7 @@ export function useAcoesPedras({
       }
       case 'kanAberto': {
         const pedrasMeld = expandir(pedra, 4)
-        const consumoQuadra = expandir(pedra, 4)
-        const consumoTrinca = expandir(pedra, 3)
-        const pedrasConsumir = podeCriarMeld(pedrasMeld, consumoQuadra, 3)
-          ? consumoQuadra
-          : podeCriarMeld(pedrasMeld, consumoTrinca, 3)
-            ? consumoTrinca
-            : []
+        const pedrasConsumir = consumoDaMao(pedrasMeld)
         const slotsAposMeld = aplicarMeld('kanAberto', pedrasMeld, pedrasConsumir, true)
         if (slotsAposMeld === null) return
         atualizarAcaoAposMeld('kanAberto', slotsAposMeld)
@@ -236,12 +222,10 @@ export function useAcoesPedras({
         const pedrasConsumir = mao.pedras
           .filter((pedraMao) => codigoBase(pedraMao) === codigoBase(pedra))
           .slice(0, 4)
-        if (pedrasConsumir.length > 0 && pedrasConsumir.length < 3) {
-          return
-        }
+        // Qualquer quantidade na mão entra no Kan; antes, uma ou duas travavam o clique.
         if (pedrasConsumir.some((pedraMao) => codigoBase(pedraMao) !== codigoBase(pedra))) return
         const pedrasMeld =
-          pedrasConsumir.length >= 3
+          pedrasConsumir.length > 0
             ? trocarQuartoCincoPorAka(
                 [
                   ...pedrasConsumir,
