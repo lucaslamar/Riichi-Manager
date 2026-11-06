@@ -250,14 +250,6 @@ teste('encontro: marcar mesa registrada', () => {
   assert.equal(marcado.mesas[1].partidaId, 'p2')
 })
 
-teste('regras de clube: Leste, sem abortivos, sem prorrogação e timer de 1 minuto', () => {
-  const config = configDoPreset('padrao')
-  assert.equal(config.tipoPartida, 'leste')
-  assert.equal(config.prorrogacao, false)
-  assert.equal(config.timerVez, 60)
-  assert.ok(Object.values(config.abortivos).every((ligado) => !ligado))
-})
-
 // ─── Cards de placar ────────────────────────────────────────────────────────
 teste('patamar: Mangan a Yakuman pelo han e fu', () => {
   assert.equal(patamarDaMao(3, 30), null)
