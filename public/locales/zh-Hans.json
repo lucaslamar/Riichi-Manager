@@ -989,6 +989,10 @@
         "other": "添加（{{count}}）"
       },
       "alreadyInList": "已在名单中",
+      "lastDrawNames": "上次抽签的名字",
+      "useNames": {
+        "other": "使用 {{count}} 人"
+      },
       "lastDraw": {
         "other": "上次抽签：{{count}} 桌"
       },

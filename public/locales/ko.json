@@ -989,6 +989,10 @@
         "other": "추가 ({{count}})"
       },
       "alreadyInList": "이미 명단에 있음",
+      "lastDrawNames": "지난 추첨 명단",
+      "useNames": {
+        "other": "{{count}}명 사용"
+      },
       "lastDraw": {
         "other": "지난 추첨: {{count}}탁"
       },

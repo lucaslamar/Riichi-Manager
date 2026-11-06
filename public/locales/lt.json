@@ -1013,6 +1013,13 @@
         "other": "Pridėti ({{count}})"
       },
       "alreadyInList": "Jau sąraše",
+      "lastDrawNames": "Paskutinių burtų vardai",
+      "useNames": {
+        "one": "Naudoti {{count}}",
+        "few": "Naudoti {{count}}",
+        "many": "Naudoti {{count}}",
+        "other": "Naudoti {{count}}"
+      },
       "lastDraw": {
         "one": "Paskutiniai burtai: {{count}} stalas",
         "few": "Paskutiniai burtai: {{count}} stalai",

@@ -989,6 +989,10 @@
         "other": "追加（{{count}}）"
       },
       "alreadyInList": "リストにあり",
+      "lastDrawNames": "前回の抽選の名前",
+      "useNames": {
+        "other": "{{count}}人を使う"
+      },
       "lastDraw": {
         "other": "前回の抽選：{{count}}卓"
       },

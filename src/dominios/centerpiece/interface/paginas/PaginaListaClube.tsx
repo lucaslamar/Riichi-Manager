@@ -1,6 +1,7 @@
-import { useMemo, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import { IconeMenu } from '@/compartilhado/interface/layout/IconeMenu'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import {
@@ -35,17 +36,24 @@ const LINHAS_DE_FOLGA = 3
 export default function PaginaListaClube({
   aoVoltar,
   aoSortear,
-  aoVerSorteio,
 }: {
   aoVoltar: () => void
   aoSortear: () => void
-  aoVerSorteio: () => void
 }) {
   const { t, numero } = useI18n()
   const { jogadores, adicionar } = useJogadores()
-  const { lista, sorteio, definirLista, sortear, limpar } = useClube()
+  const { lista, sorteio, encontros, definirLista, sortear, limpar } = useClube()
+  // O encontro mais recente segue guardado mesmo depois de limpar a lista.
+  const ultimoEncontro = encontros[encontros.length - 1] as (typeof encontros)[number] | undefined
   const { aviso, mostrar } = useAviso()
   const campo = useRef<HTMLTextAreaElement | null>(null)
+
+  // Como no Samsung Notes: folha vazia abre com o cursor pronto. Com nomes, abre
+  // sem selecionar, para conferir a lista sem o teclado na frente.
+  useEffect(() => {
+    const elemento = campo.current
+    if (elemento && !elemento.value.trim()) elemento.focus({ preventScroll: true })
+  }, [])
   const [linhaAtual, setLinhaAtual] = useState<number | null>(null)
   /**
    * Folha de cadastrados aberta: guarda quantos nomes ficam antes do ponto onde os
@@ -116,16 +124,15 @@ export default function PaginaListaClube({
     if (sortear(entradasDaLista(limpa.texto, jogadores))) aoSortear()
   }
 
-  /**
-   * Linha que ganha o "Usar cadastrado": a do cursor, se estiver vazia; fora do
-   * campo, a primeira linha livre depois do último nome.
-   */
-  const ultimoNome = linhas.reduce((ultimo, linha, indice) => (linha ? indice : ultimo), -1)
-  const linhaUsarCadastrado =
-    linhaAtual === null ? ultimoNome + 1 : linhas[linhaAtual] === '' ? linhaAtual : null
+  /** Nomes escolhidos (cadastrados ou do último encontro) entram no fim da lista. */
+  const acrescentar = (nomes: string[]) => {
+    const resultado = acrescentarNomes(lista, nomes, jogadores, inserirApos ?? undefined)
+    definirLista(resultado.texto)
+    avisarRepetidos(resultado.repetidos)
+    setInserirApos(null)
+  }
 
-  const abrirCadastrados = (linha: number) =>
-    setInserirApos(linhas.slice(0, linha).filter(Boolean).length)
+  const abrirCadastrados = () => setInserirApos(Number.MAX_SAFE_INTEGER)
 
   const totalDeLinhas = Math.max(linhas.length + LINHAS_DE_FOLGA, 8)
   const estiloFolha = {
@@ -139,26 +146,30 @@ export default function PaginaListaClube({
         titulo={t('match.club.listTitle')}
         aoVoltar={aoVoltar}
         acoes={
-          <button
-            type="button"
-            className="cm-btn-icone cm-btn-icone--perigo clb-btn-titulo"
-            aria-label={t('match.club.clear')}
-            title={t('match.club.clear')}
-            disabled={!lista.trim() && !sorteio}
-            onClick={() => setLimpando(true)}
-          >
-            <i className="fas fa-trash" aria-hidden="true" />
-          </button>
+          <span className="clb-acoes-titulo">
+            {/* Cartão de memória: puxar quem já está salvo no cadastro. */}
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('match.club.registeredTitle')}
+              title={t('match.club.registeredTitle')}
+              onClick={abrirCadastrados}
+            >
+              <i className="fas fa-sd-card" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="cm-btn-icone cm-btn-icone--perigo"
+              aria-label={t('match.club.clear')}
+              title={t('match.club.clear')}
+              disabled={!lista.trim() && !sorteio}
+              onClick={() => setLimpando(true)}
+            >
+              <i className="fas fa-trash" aria-hidden="true" />
+            </button>
+          </span>
         }
       />
-
-      {sorteio && (
-        <button type="button" className="clb-ultimo-sorteio" onClick={aoVerSorteio}>
-          <i className="fas fa-table-cells-large" aria-hidden="true" />
-          <span>{t('match.club.lastDraw', { count: sorteio.mesas.length })}</span>
-          <i className="fas fa-chevron-right" aria-hidden="true" />
-        </button>
-      )}
 
       <div className="clb-folha" style={estiloFolha}>
         <ol className="clb-marcadores" aria-hidden="true">
@@ -199,23 +210,8 @@ export default function PaginaListaClube({
           onBlur={arrumar}
         />
 
-        {/*
-          Ações discretas na linha: "Usar cadastrado" na linha vazia e "Cadastrar"
-          para quem digitou um nome fora do cadastro. Não tiram o foco do texto.
-        */}
+        {/* Ação discreta na linha: "Cadastrar" quem não está no cadastro, sem tirar o foco do texto. */}
         <div className="clb-acoes-linhas">
-          {linhaUsarCadastrado !== null && (
-            <button
-              type="button"
-              className="clb-cadastrar"
-              style={{ top: linhaUsarCadastrado * ALTURA_LINHA }}
-              aria-label={t('match.club.addRegisteredLabel')}
-              onPointerDown={(evento) => evento.preventDefault()}
-              onClick={() => abrirCadastrados(linhaUsarCadastrado)}
-            >
-              {t('match.club.addRegistered')}
-            </button>
-          )}
           {linhas.map((linha, indice) =>
             linha && !vinculos[indice] ? (
               <button
@@ -277,8 +273,9 @@ export default function PaginaListaClube({
               <strong aria-hidden="true">{numero(entradas.length)}</strong>
               <span className="sr-only">{t('match.club.players', { count: entradas.length })}</span>
             </span>
+            <span className="clb-barra" aria-hidden="true" />
             <span>
-              <i className="fas fa-table-cells-large" aria-hidden="true" />
+              <IconeMenu icone="centerpiece" />
               <strong aria-hidden="true">{numero(contagem.mesas)}</strong>
               <span className="sr-only">{t('match.club.tables', { count: contagem.mesas })}</span>
             </span>
@@ -310,13 +307,14 @@ export default function PaginaListaClube({
       {inserirApos !== null && (
         <FolhaCadastrados
           idsNaLista={idsNaLista}
+          ultimoEncontro={
+            ultimoEncontro
+              ? { criadoEm: ultimoEncontro.criadoEm, nomes: ultimoEncontro.jogadores.map((entrada) => entrada.nome) }
+              : undefined
+          }
           aoFechar={() => setInserirApos(null)}
-          aoConfirmar={(escolhidos) => {
-            const resultado = acrescentarNomes(lista, escolhidos.map(nomeExibido), jogadores, inserirApos)
-            definirLista(resultado.texto)
-            avisarRepetidos(resultado.repetidos)
-            setInserirApos(null)
-          }}
+          aoConfirmar={(escolhidos) => acrescentar(escolhidos.map(nomeExibido))}
+          aoUsarNomes={acrescentar}
         />
       )}
 
@@ -340,12 +338,17 @@ export default function PaginaListaClube({
 /** Folha inferior com o cadastro: busca e seleção de vários de uma vez. */
 function FolhaCadastrados({
   idsNaLista,
+  ultimoEncontro,
   aoFechar,
   aoConfirmar,
+  aoUsarNomes,
 }: {
   idsNaLista: ReadonlySet<string>
+  /** Nomes do encontro mais recente, para repetir a lista de uma vez. */
+  ultimoEncontro?: { criadoEm: string; nomes: string[] }
   aoFechar: () => void
   aoConfirmar: (jogadores: Jogador[]) => void
+  aoUsarNomes: (nomes: string[]) => void
 }) {
   const { t, idioma } = useI18n()
   const { jogadores } = useJogadores()
@@ -395,6 +398,27 @@ function FolhaCadastrados({
         </div>
       }
     >
+      {/* Atalho: a lista inteira do último encontro, convidados inclusive. */}
+      {ultimoEncontro && ultimoEncontro.nomes.length > 0 && (
+        <button type="button" className="clb-ultimo-encontro" onClick={() => aoUsarNomes(ultimoEncontro.nomes)}>
+          <i className="fas fa-clock-rotate-left" aria-hidden="true" />
+          <span className="clb-ultimo-encontro-texto">
+            <strong>{t('match.club.lastDrawNames')}</strong>
+            <span className="ptd-apoio">
+              <time dateTime={ultimoEncontro.criadoEm}>
+                {new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
+                  new Date(ultimoEncontro.criadoEm),
+                )}
+              </time>
+              {' · '}
+              {ultimoEncontro.nomes.join(', ')}
+            </span>
+          </span>
+          <span className="clb-ultimo-encontro-acao">
+            {t('match.club.useNames', { count: ultimoEncontro.nomes.length })}
+          </span>
+        </button>
+      )}
       <input
         className="entrada-jogador"
         type="search"

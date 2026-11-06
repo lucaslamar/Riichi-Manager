@@ -994,6 +994,11 @@
         "other": "Add ({{count}})"
       },
       "alreadyInList": "Already listed",
+      "lastDrawNames": "Names from the last draw",
+      "useNames": {
+        "one": "Use {{count}}",
+        "other": "Use all {{count}}"
+      },
       "lastDraw": {
         "one": "Last draw: {{count}} table",
         "other": "Last draw: {{count}} tables"

@@ -191,6 +191,48 @@
   color: var(--texto-apoio);
 }
 
+/* Folha de cadastrados: atalho para repetir a lista do último encontro. */
+.clb-ultimo-encontro {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  border: 1px solid var(--cor-primario-borda, var(--linha-divisoria));
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: var(--texto-principal);
+  background: var(--cor-primario-suave, var(--superficie));
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.clb-ultimo-encontro > i {
+  color: var(--primario);
+}
+
+.clb-ultimo-encontro-texto {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.clb-ultimo-encontro-texto > .ptd-apoio {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clb-ultimo-encontro-acao {
+  color: var(--primario);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 /* Rodapé fixo: contador, falta/sobra e os dois botões, na largura da coluna. */
 .clb-rodape {
   display: flex;
@@ -240,6 +282,16 @@
 
 .clb-contadores i {
   color: var(--primario);
+}
+
+/* Barra inclinada entre jogadores e mesas, como em "4 / 1". */
+.clb-barra {
+  width: 2px;
+  height: 1.25em;
+  border-radius: 1px;
+  background: var(--texto-apoio);
+  opacity: 0.6;
+  transform: rotate(20deg);
 }
 
 .clb-falta {

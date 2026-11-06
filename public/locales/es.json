@@ -1001,6 +1001,11 @@
         "other": "Añadir ({{count}})"
       },
       "alreadyInList": "Ya en la lista",
+      "lastDrawNames": "Nombres del último sorteo",
+      "useNames": {
+        "one": "Usar {{count}}",
+        "other": "Usar los {{count}}"
+      },
       "lastDraw": {
         "one": "Último sorteo: {{count}} mesa",
         "other": "Último sorteo: {{count}} mesas"
