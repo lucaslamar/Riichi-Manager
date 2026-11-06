@@ -634,6 +634,10 @@
     "themeLight": "ライト",
     "themeVelvet": "ダーク",
     "themeAuto": "自動",
+    "tiles": "牌の色",
+    "tilesHelp": "自動：ライトテーマでは黒、ダークテーマでは白で見やすくします。",
+    "tilesWhite": "白",
+    "tilesBlack": "黒",
     "highContrast": "ハイコントラスト",
     "highContrastHelp": "文字、枠線、フォーカス表示のコントラストを上げます。",
     "compactMode": "コンパクトモード",
@@ -872,7 +876,7 @@
     "title": "Table settings",
     "preset": "Ruleset",
     "presets": {
-      "padrao": "App default",
+      "padrao": "クラブ",
       "wrc": "WRC",
       "ema": "EMA",
       "mleague": "M.League",
@@ -940,7 +944,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "A dealer in 1st place on the last hand may end the game.",
     "extraRound": "Extra round",
-    "extraRoundHelp": "Continues to South or West if nobody reached the return.",
+    "extraRoundHelp": "延長の目標点に誰も届かなければ南場・西場へ続きます。",
+    "extensionTarget": "延長の目標点",
+    "extensionTargetHelp": "最終局の終了時に誰もこの点数に届いていなければ、誰かが届くまで続きます。返し点とは別なので、オカなしでも使えます。",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Allowed abortive draws",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -955,6 +961,7 @@
     "reset": "Reset",
     "done": "Done",
     "presetDefaultHelp": "Club standard, made for beginners",
+    "customNote": "値を変更したのでカスタムになりました。セットをタップすると元に戻せます。",
     "chomboReverseYakuman": "Reverse yakuman",
     "okaLabel": "Oka",
     "umaLabel": "Uma",
@@ -986,6 +993,10 @@
         "other": "追加（{{count}}）"
       },
       "alreadyInList": "リストにあり",
+      "lastDrawNames": "前回の抽選の名前",
+      "useNames": {
+        "other": "{{count}}人を使う"
+      },
       "lastDraw": {
         "other": "前回の抽選：{{count}}卓"
       },
@@ -1258,7 +1269,7 @@
       "reason": {
         "ultimaMao": "The last hand is over.",
         "tobi": "Tobi: someone went below zero.",
-        "retorno": "Someone reached the return points in the extra round.",
+        "retorno": "誰かが延長の目標点に届きました。",
         "agariYame": "The dealer ended with agari-yame."
       }
     },
@@ -1355,6 +1366,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "クラブ",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "カスタム"
+      },
+      "rulesetsHelp": {
+        "padrao": "MOJOCAの標準。例会や初心者向け。",
+        "ema": "ヨーロッパ麻雀協会のルール。ヨーロッパの大会で使われます。",
+        "wrc": "世界リーチ麻雀選手権のルール。",
+        "personalizado": "点数・オカ・ウマを自分で決めます。"
+      },
+      "rulesTitle": "点数のルール",
+      "editRules": "点数のルールを編集",
+      "umaFixedLine": "固定ウマ",
+      "umaFloatingLine": "変動ウマ",
+      "customNote": "クラブ・EMA・WRC 以外の値はカスタムになります。",
       "sumWarning": "卓の合計は{{total}}と{{difference}}違います。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

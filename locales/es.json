@@ -643,6 +643,10 @@
     "themeLight": "Claro",
     "themeVelvet": "Oscuro",
     "themeAuto": "Automático",
+    "tiles": "Fichas",
+    "tilesHelp": "Automático: negras en el tema claro y blancas en el oscuro, para dar contraste.",
+    "tilesWhite": "Blancas",
+    "tilesBlack": "Negras",
     "highContrast": "Alto contraste",
     "highContrastHelp": "Aumenta el contraste de textos, bordes y estados de foco.",
     "compactMode": "Modo compacto",
@@ -883,7 +887,7 @@
     "title": "Table settings",
     "preset": "Ruleset",
     "presets": {
-      "padrao": "App default",
+      "padrao": "Club",
       "wrc": "WRC",
       "ema": "EMA",
       "mleague": "M.League",
@@ -951,7 +955,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "A dealer in 1st place on the last hand may end the game.",
     "extraRound": "Extra round",
-    "extraRoundHelp": "Continues to South or West if nobody reached the return.",
+    "extraRoundHelp": "Sigue a Sur u Oeste si nadie llegó a la meta de la prórroga.",
+    "extensionTarget": "Meta de la prórroga",
+    "extensionTargetHelp": "Al final de la última ronda, si nadie tiene estos puntos, la partida sigue hasta que alguien llegue. Es independiente del retorno, así que funciona también sin oka.",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Allowed abortive draws",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -966,6 +972,7 @@
     "reset": "Reset",
     "done": "Done",
     "presetDefaultHelp": "Club standard, made for beginners",
+    "customNote": "Valores cambiados: el conjunto quedó Personalizado. Toca un conjunto para volver a él.",
     "chomboReverseYakuman": "Reverse yakuman",
     "okaLabel": "Oka",
     "umaLabel": "Uma",
@@ -998,6 +1005,11 @@
         "other": "Añadir ({{count}})"
       },
       "alreadyInList": "Ya en la lista",
+      "lastDrawNames": "Nombres del último sorteo",
+      "useNames": {
+        "one": "Usar {{count}}",
+        "other": "Usar los {{count}}"
+      },
       "lastDraw": {
         "one": "Último sorteo: {{count}} mesa",
         "other": "Último sorteo: {{count}} mesas"
@@ -1278,7 +1290,7 @@
       "reason": {
         "ultimaMao": "The last hand is over.",
         "tobi": "Tobi: someone went below zero.",
-        "retorno": "Someone reached the return points in the extra round.",
+        "retorno": "Alguien llegó a la meta de la prórroga.",
         "agariYame": "The dealer ended with agari-yame."
       }
     },
@@ -1375,6 +1387,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "Club",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "Personalizado"
+      },
+      "rulesetsHelp": {
+        "padrao": "estándar de MOJOCA para encuentros y principiantes.",
+        "ema": "reglas de la European Mahjong Association, usadas en torneos en Europa.",
+        "wrc": "reglas del World Riichi Championship.",
+        "personalizado": "tú defines puntos, oka y uma."
+      },
+      "rulesTitle": "Reglas de puntuación",
+      "editRules": "Editar reglas de puntuación",
+      "umaFixedLine": "Uma fija",
+      "umaFloatingLine": "Uma flotante",
+      "customNote": "Los valores fuera de Club, EMA y WRC quedan como Personalizado.",
       "sumWarning": "La suma de la mesa difiere en {{difference}} del total de {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

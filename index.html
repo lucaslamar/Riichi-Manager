@@ -27,6 +27,15 @@
             (!!window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches))
         var raiz = document.documentElement
         raiz.setAttribute('data-tema', escuro ? 'escuro' : 'claro')
+        // Pedras: automático = pretas no claro, brancas no escuro.
+        var pedras = null
+        try {
+          pedras = localStorage.getItem('riichi-manager-pedras')
+        } catch (erro) {}
+        raiz.setAttribute(
+          'data-pedras',
+          pedras === 'brancas' || pedras === 'pretas' ? pedras : escuro ? 'brancas' : 'pretas',
+        )
         raiz.style.colorScheme = escuro ? 'dark' : 'light'
         if (escuro) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B090F')
@@ -46,8 +55,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Mojoca" />
-    <script type="module" crossorigin src="/Riichi-Manager/assets/index-C8aD0Z86.js"></script>
-    <link rel="stylesheet" crossorigin href="/Riichi-Manager/assets/index-_8cyUvAk.css">
+    <script type="module" crossorigin src="/Riichi-Manager/assets/index-DWdAb8nc.js"></script>
+    <link rel="stylesheet" crossorigin href="/Riichi-Manager/assets/index-CUqiuRmk.css">
   </head>
   <body>
     <!-- Preferências de uso antes da primeira pintura (ver PreferenciasProvider). -->
