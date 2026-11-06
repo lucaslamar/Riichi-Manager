@@ -27,6 +27,15 @@
             (!!window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches))
         var raiz = document.documentElement
         raiz.setAttribute('data-tema', escuro ? 'escuro' : 'claro')
+        // Pedras: automático = pretas no claro, brancas no escuro.
+        var pedras = null
+        try {
+          pedras = localStorage.getItem('riichi-manager-pedras')
+        } catch (erro) {}
+        raiz.setAttribute(
+          'data-pedras',
+          pedras === 'brancas' || pedras === 'pretas' ? pedras : escuro ? 'brancas' : 'pretas',
+        )
         raiz.style.colorScheme = escuro ? 'dark' : 'light'
         if (escuro) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0B090F')

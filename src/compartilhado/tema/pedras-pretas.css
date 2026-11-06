@@ -1,0 +1,18 @@
+/*
+ * Pedras pretas (arte Black do FluffyStuff/riichi-mahjong-tiles, CC0): a face fica
+ * escura e os estados (escolhida, aviso, perigo, sucesso) tingem essa face com a
+ * cor do tema. Vale com `data-pedras="pretas"` no <html>: automático no tema
+ * claro, ou por escolha em Ajustes. O fundo do tema não muda, como no escuro.
+ * O seletor duplo ganha das variáveis de pedra definidas nos temas.
+ */
+:root[data-pedras='pretas'][data-pedras] {
+  --pedra-face: #24221f;
+  --pedra-borda: #0d0c0b;
+  --pedra-face-primario: color-mix(in srgb, var(--cor-primario) 32%, #24221f);
+  --pedra-face-aviso: color-mix(in srgb, var(--cor-aviso) 32%, #24221f);
+  --pedra-face-perigo: color-mix(in srgb, var(--cor-perigo) 32%, #24221f);
+  --pedra-face-sucesso: color-mix(in srgb, var(--cor-sucesso) 32%, #24221f);
+  /* Texto sobre a face escura (ex.: nome do vento, número pendente). */
+  --pedra-texto: #f3eee6;
+  --pedra-texto-primario: color-mix(in srgb, var(--cor-primario) 35%, #ffffff);
+}
