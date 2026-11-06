@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState, type TouchEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import {
@@ -15,6 +16,9 @@ import { umaValida } from '../../logica/uma'
 import BotoesOpcao from './BotoesOpcao'
 import CampoUma, { CampoInteiro } from './CampoUma'
 import EscolhaOka from './EscolhaOka'
+
+/** Deslize (px) bem mais horizontal que vertical para trocar de conjunto. */
+const DISTANCIA_DESLIZE = 60
 
 /** "25.000 pontos · retorno 30.000 · uma 15/5", igual ao resumo da criação de mesa. */
 function useResumo() {
@@ -44,11 +48,22 @@ export default function RegrasPontuacaoRegistro({
   aoSalvar: (conjunto: ConjuntoRegistro, regras: RegrasPontuacao) => void
   pontosAtuais?: readonly number[]
 }) {
-  const { t } = useI18n()
+  const { t, numero } = useI18n()
   const resumo = useResumo()
   const [editando, setEditando] = useState(false)
   const comOka = regras.pontosRetorno > regras.pontosPartida
   const nome = t(`match.manual.rulesets.${conjunto}`)
+  const uma = umaResumida(regras.uma)
+  const linhas = [
+    { rotulo: t('tableConfig.preset'), valor: nome },
+    { rotulo: t('tableConfig.startPoints'), valor: numero(regras.pontosPartida) },
+    ...(comOka ? [{ rotulo: t('tableConfig.returnPoints'), valor: numero(regras.pontosRetorno) }] : []),
+    { rotulo: t('tableConfig.okaLabel'), valor: t(comOka ? 'tableConfig.okaWith' : 'tableConfig.okaWithout') },
+    {
+      rotulo: t('tableConfig.umaLabel'),
+      valor: uma ? `${t('tableConfig.umaFixed')} · ${uma}` : t('tableConfig.umaFloating'),
+    },
+  ]
 
   return (
     <div className="cfg-campo reg-regras">
@@ -58,14 +73,15 @@ export default function RegrasPontuacaoRegistro({
         aria-label={`${t('match.manual.editRules')}: ${nome}, ${resumo(regras)}`}
         onClick={() => setEditando(true)}
       >
-        <span>
-          <strong>{nome}</strong>
-          <span className="ptd-apoio">{resumo(regras)}</span>
-          <span className="ptd-apoio">
-            {t(comOka ? 'tableConfig.okaWith' : 'tableConfig.okaWithout')} ·{' '}
-            {t(regras.uma.tipo === 'fixa' ? 'match.manual.umaFixedLine' : 'match.manual.umaFloatingLine')}
-          </span>
-        </span>
+        {/* Uma regra por linha, com título e o valor escolhido: a tela tem espaço. */}
+        <dl className="reg-tabela">
+          {linhas.map(({ rotulo, valor }) => (
+            <div key={rotulo}>
+              <dt>{rotulo}</dt>
+              <dd>{valor}</dd>
+            </div>
+          ))}
+        </dl>
         <i className="fas fa-wrench" aria-hidden="true" />
       </button>
 
@@ -130,6 +146,34 @@ function FolhaRegras({
   const conjunto = conjuntoDasRegras(rascunho, tocado)
   const { pontosPartida, pontosRetorno, uma } = rascunho
   const mudar = (mudanca: Partial<RegrasPontuacao>) => setRascunho((atual) => ({ ...atual, ...mudanca }))
+  const escolher = (id: ConjuntoRegistro) => {
+    setTocado(id)
+    if (id !== 'personalizado') setRascunho(regrasDoPreset(id))
+  }
+
+  // Deslizar para o lado troca o conjunto (Clube → EMA → WRC → Clube), como virar página.
+  const inicioToque = useRef<{ x: number; y: number } | null>(null)
+  const propsToque = {
+    onTouchStart: (evento: TouchEvent) => {
+      const toque = evento.touches[0]
+      inicioToque.current =
+        evento.touches.length === 1 && toque && !toqueIgnorado(evento.target)
+          ? { x: toque.clientX, y: toque.clientY }
+          : null
+    },
+    onTouchEnd: (evento: TouchEvent) => {
+      const comeco = inicioToque.current
+      inicioToque.current = null
+      const toque = evento.changedTouches[0]
+      if (!comeco || !toque) return
+      const deltaX = toque.clientX - comeco.x
+      const deltaY = toque.clientY - comeco.y
+      if (Math.abs(deltaX) < DISTANCIA_DESLIZE || Math.abs(deltaX) < Math.abs(deltaY) * 1.5) return
+      const atual = Math.max(0, PRESETS_REGISTRO.indexOf(tocado as (typeof PRESETS_REGISTRO)[number]))
+      const passo = deltaX < 0 ? 1 : -1
+      escolher(PRESETS_REGISTRO[(atual + passo + PRESETS_REGISTRO.length) % PRESETS_REGISTRO.length])
+    },
+  }
 
   return (
     <Modal
@@ -154,6 +198,7 @@ function FolhaRegras({
         </div>
       }
     >
+      <div className="reg-folha-corpo" {...propsToque}>
       <div className="cfg-campo reg-regras">
         <span className="cfg-campo-rotulo">
           {t('tableConfig.preset')}
@@ -165,10 +210,7 @@ function FolhaRegras({
         <BotoesOpcao<ConjuntoRegistro>
           rotulo={t('tableConfig.preset')}
           valor={conjunto}
-          aoEscolher={(id) => {
-            setTocado(id)
-            if (id !== 'personalizado') setRascunho(regrasDoPreset(id))
-          }}
+          aoEscolher={escolher}
           className="reg-conjuntos"
           opcoes={PRESETS_REGISTRO.map((id) => ({ valor: id, rotulo: t(`match.manual.rulesets.${id}`) }))}
         />
@@ -215,6 +257,7 @@ function FolhaRegras({
         pontosRetorno={pontosRetorno}
         pontosAtuais={pontosAtuais}
       />
+      </div>
     </Modal>
   )
 }
