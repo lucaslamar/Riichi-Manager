@@ -944,7 +944,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "O dealer em 1º na última mão pode encerrar.",
     "extraRound": "Prorrogação",
-    "extraRoundHelp": "Segue para Sul ou Oeste se ninguém chegou ao retorno.",
+    "extraRoundHelp": "Segue para Sul ou Oeste se ninguém chegou à meta da prorrogação.",
+    "extensionTarget": "Meta da prorrogação",
+    "extensionTargetHelp": "No fim da última rodada, se ninguém tiver esses pontos, a partida continua até alguém chegar. É separada do retorno, então funciona também sem oka.",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Empates abortivos permitidos",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -1271,7 +1273,7 @@
       "reason": {
         "ultimaMao": "A última mão terminou.",
         "tobi": "Tobi: alguém ficou abaixo de zero.",
-        "retorno": "Alguém chegou aos pontos de retorno na prorrogação.",
+        "retorno": "Alguém chegou à meta da prorrogação.",
         "agariYame": "O dealer encerrou com agari-yame."
       }
     },

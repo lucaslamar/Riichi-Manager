@@ -25,6 +25,11 @@ export interface ConfigMesa {
   tobi: boolean
   agariYame: boolean
   prorrogacao: boolean
+  /**
+   * Pontos que alguém precisa ter para a partida acabar no fim da última rodada; sem
+   * ninguém lá, prorroga. Fica à parte do retorno para funcionar também sem oka.
+   */
+  metaProrrogacao: number
   palitosRestantes: 'primeiro' | 'perdidos'
   abortivos: {
     kyuushuKyuuhai: boolean
@@ -89,6 +94,7 @@ const REGRAS_PADRAO: RegrasPreset = {
   tobi: true,
   agariYame: true,
   prorrogacao: true,
+  metaProrrogacao: 30000,
   palitosRestantes: 'primeiro',
   abortivos: SEM_ABORTIVOS,
   nagashiMangan: true,
@@ -115,6 +121,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tobi: false,
     agariYame: false,
     prorrogacao: false,
+    metaProrrogacao: 30000,
     palitosRestantes: 'perdidos',
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
@@ -136,6 +143,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tobi: false,
     agariYame: false,
     prorrogacao: false,
+    metaProrrogacao: 30000,
     palitosRestantes: 'primeiro',
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
@@ -157,6 +165,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tobi: false,
     agariYame: false,
     prorrogacao: false,
+    metaProrrogacao: 30000,
     palitosRestantes: 'primeiro',
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
@@ -261,6 +270,12 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     tobi: booleano(lida.tobi, base.tobi),
     agariYame: booleano(lida.agariYame, base.agariYame),
     prorrogacao: booleano(lida.prorrogacao, base.prorrogacao),
+    // Config salva antes deste campo: a meta era o próprio retorno.
+    metaProrrogacao: numeroValido(lida.metaProrrogacao)
+      ? lida.metaProrrogacao
+      : numeroValido(lida.pontosRetorno)
+        ? lida.pontosRetorno
+        : base.metaProrrogacao,
     palitosRestantes:
       lida.palitosRestantes === 'primeiro' || lida.palitosRestantes === 'perdidos'
         ? lida.palitosRestantes

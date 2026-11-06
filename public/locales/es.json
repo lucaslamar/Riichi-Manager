@@ -951,7 +951,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "A dealer in 1st place on the last hand may end the game.",
     "extraRound": "Extra round",
-    "extraRoundHelp": "Continues to South or West if nobody reached the return.",
+    "extraRoundHelp": "Sigue a Sur u Oeste si nadie llegó a la meta de la prórroga.",
+    "extensionTarget": "Meta de la prórroga",
+    "extensionTargetHelp": "Al final de la última ronda, si nadie tiene estos puntos, la partida sigue hasta que alguien llegue. Es independiente del retorno, así que funciona también sin oka.",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Allowed abortive draws",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -1278,7 +1280,7 @@
       "reason": {
         "ultimaMao": "The last hand is over.",
         "tobi": "Tobi: someone went below zero.",
-        "retorno": "Someone reached the return points in the extra round.",
+        "retorno": "Alguien llegó a la meta de la prórroga.",
         "agariYame": "The dealer ended with agari-yame."
       }
     },

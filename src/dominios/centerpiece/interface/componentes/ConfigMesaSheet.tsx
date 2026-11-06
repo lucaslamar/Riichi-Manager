@@ -280,6 +280,23 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         marcado={config.prorrogacao}
         aoMudar={(prorrogacao) => alterar({ prorrogacao })}
       />
+      {config.prorrogacao && (
+        <Campo
+          rotulo={t('tableConfig.extensionTarget')}
+          ajuda={
+            <AjudaCampo rotulo={t('tableConfig.extensionTarget')}>
+              <p>{t('tableConfig.extensionTargetHelp')}</p>
+            </AjudaCampo>
+          }
+        >
+          <CampoNumero
+            valor={config.metaProrrogacao}
+            passo={1000}
+            minimo={0}
+            aoMudar={(metaProrrogacao) => alterar({ metaProrrogacao })}
+          />
+        </Campo>
+      )}
       <Opcao
         rotulo={t('tableConfig.nagashiMangan')}
         ajuda={t('tableConfig.nagashiManganHelp')}

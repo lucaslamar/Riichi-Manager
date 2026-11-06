@@ -940,7 +940,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "A dealer in 1st place on the last hand may end the game.",
     "extraRound": "Extra round",
-    "extraRoundHelp": "Continues to South or West if nobody reached the return.",
+    "extraRoundHelp": "연장 목표 점수에 아무도 못 미치면 남장이나 서장으로 이어져요.",
+    "extensionTarget": "연장 목표 점수",
+    "extensionTargetHelp": "마지막 국이 끝났을 때 아무도 이 점수가 없으면 누군가 도달할 때까지 계속해요. 반환점과 따로라서 오카가 없어도 쓸 수 있어요.",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Allowed abortive draws",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -1258,7 +1260,7 @@
       "reason": {
         "ultimaMao": "The last hand is over.",
         "tobi": "Tobi: someone went below zero.",
-        "retorno": "Someone reached the return points in the extra round.",
+        "retorno": "누군가 연장 목표 점수에 도달했어요.",
         "agariYame": "The dealer ended with agari-yame."
       }
     },

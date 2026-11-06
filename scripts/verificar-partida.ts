@@ -245,6 +245,19 @@ teste('prorrogação: sem ninguém no retorno, entra na rodada seguinte e acaba 
   assert.equal(p.fim, 'retorno')
 })
 
+teste('prorrogação sem oka: a meta é separada do retorno', () => {
+  // Clube: retorno 25.000 (sem oka), meta 30.000. Todos com 25.000 não fecham a meta.
+  const config = alterarConfig(configDoPreset('padrao'), { agariYame: false })
+  assert.equal(config.pontosRetorno, 25000)
+  assert.equal(config.metaProrrogacao, 30000)
+  let p = nova(config)
+  for (let i = 0; i < 4; i += 1) p = passarDealer(p)
+  assert.equal(p.fim, undefined)
+  assert.equal(p.placar.rodadaVento, 'sul')
+  p = registrarRon(p, { pagador: 2, vencedores: [{ cadeira: 3, pontos: 8000 }] }, CTX)
+  assert.equal(p.fim, 'retorno')
+})
+
 teste('prorrogação: alguém já no retorno encerra na última mão', () => {
   const config = alterarConfig(BASE, { tipoPartida: 'leste', prorrogacao: true, agariYame: false })
   let p = registrarRon(nova(config), { pagador: 2, vencedores: [{ cadeira: 1, pontos: 12000 }] }, CTX)

@@ -58,6 +58,14 @@ teste('Clube (padrão do app): Leste, sem oka, uma flutuante, kiriage, prorroga�
   assert.ok(Object.values(config.abortivos).every((ligado) => !ligado))
 })
 
+teste('meta da prorrogação: 30.000 nos presets e, em config antiga, o retorno salvo', () => {
+  for (const preset of IDS_PRESET) assert.equal(configDoPreset(preset).metaProrrogacao, 30000, preset)
+  assert.equal(normalizarConfig({ pontosRetorno: 35000 }).metaProrrogacao, 35000)
+  assert.equal(normalizarConfig({ pontosRetorno: 35000, metaProrrogacao: 32000 }).metaProrrogacao, 32000)
+  assert.equal(normalizarConfig(undefined).metaProrrogacao, 30000)
+  assert.equal(alterarConfig(configDoPreset('padrao'), { metaProrrogacao: 28000 }).preset, 'personalizado')
+})
+
 teste('toda uma de preset fecha em zero', () => {
   for (const preset of IDS_PRESET) assert.ok(umaValida(configDoPreset(preset).uma), preset)
 })
