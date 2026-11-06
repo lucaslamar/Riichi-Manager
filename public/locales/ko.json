@@ -957,6 +957,7 @@
     "reset": "Reset",
     "done": "Done",
     "presetDefaultHelp": "Club standard, made for beginners",
+    "customNote": "값을 바꿔서 사용자 지정이 됐어요. 세트를 누르면 그 세트로 돌아가요.",
     "chomboReverseYakuman": "Reverse yakuman",
     "okaLabel": "Oka",
     "umaLabel": "Uma",

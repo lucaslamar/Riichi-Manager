@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
+import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { normalizarTexto } from '@/dominios/jogadores/logica/jogadores'
 import {
@@ -28,7 +29,7 @@ const ABORTIVOS: { campo: keyof ConfigMesa['abortivos']; chave: string }[] = [
 ]
 const ajudaDe = (chave: string) => `${chave}Help`
 
-/** Seções do índice, na ordem da folha. */
+/** Blocos da folha, um por aba, na ordem em que aparecem. */
 const SECOES = [
   { id: 'pontuacao', chave: 'tableConfig.scoring' },
   { id: 'regras', chave: 'tableConfig.rules' },
@@ -36,6 +37,7 @@ const SECOES = [
   { id: 'calculo', chave: 'tableConfig.calcRules' },
   { id: 'mesa', chave: 'tableConfig.indexTable' },
 ] as const
+type IdSecao = (typeof SECOES)[number]['id']
 
 /** O que foi digitado na busca, já normalizado; vazio mostra tudo. */
 const ContextoBusca = createContext('')
@@ -56,16 +58,20 @@ interface PropsConfigMesaSheet {
   aoFechar: () => void
 }
 
-/** Folha "Configurações de mesa": preset no topo, Pontuação, Regras, Reiniciar e Feito. */
+/**
+ * Folha "Configurações de mesa": um bloco por aba (Pontuação, Regras, Empates,
+ * Regras de cálculo, Mesa), trocado pela aba ou deslizando para o lado, como no
+ * Guia de bolso. O conjunto fica em botões no topo; mudou algo, vira Personalizado.
+ * Com busca, aparecem todos os blocos que batem.
+ */
 export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: PropsConfigMesaSheet) {
   const { t } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
   const semOka = calcularOka(config) <= 0
   const [texto, setTexto] = useState('')
   const busca = normalizarTexto(texto)
-  const raiz = useRef<HTMLDivElement | null>(null)
-  const irPara = (id: string) =>
-    raiz.current?.querySelector(`[data-secao="${id}"]`)?.scrollIntoView({ block: 'start' })
+  const [aba, setAba] = useState<IdSecao>('pontuacao')
+  const mostrar = (id: IdSecao) => !!busca || aba === id
 
   return (
     <Modal
@@ -90,42 +96,41 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       }
     >
       <ContextoBusca.Provider value={busca}>
-      <div ref={raiz} className="cfg-corpo">
-      <div className="cfg-topo">
-        <CampoBusca
-          valor={texto}
-          aoMudar={setTexto}
-          rotulo={t('tableConfig.searchPlaceholder')}
-          placeholder={t('tableConfig.searchPlaceholder')}
-          rotuloLimpar={t('actions.clear')}
-        />
-        {!busca && (
-          <nav className="cfg-indice" aria-label={t('tableConfig.indexLabel')}>
-            {SECOES.map(({ id, chave }) => (
-              <button key={id} type="button" onClick={() => irPara(id)}>
-                {t(chave)}
-              </button>
-            ))}
-          </nav>
-        )}
-      </div>
+      <AbasModal
+        abas={SECOES.map(({ id, chave }) => ({ chave: id, rotulo: t(chave) }))}
+        ativa={aba}
+        aoEscolher={setAba}
+        rotulo={t('tableConfig.indexLabel')}
+        className="cfg-abas"
+        fixo={
+          <CampoBusca
+            valor={texto}
+            aoMudar={setTexto}
+            rotulo={t('tableConfig.searchPlaceholder')}
+            placeholder={t('tableConfig.searchPlaceholder')}
+            rotuloLimpar={t('actions.clear')}
+          />
+        }
+      >
+      <div className={`cfg-corpo${busca ? " cfg-corpo--busca" : ""}`}>
+      {!busca && (
+        <div className="cfg-conjunto-regras">
+          <span className="cfg-campo-rotulo">{t('tableConfig.preset')}</span>
+          {/* Personalizado não é botão: nenhum fica marcado quando os valores são outros. */}
+          <BotoesOpcao<ConfigMesa['preset']>
+            rotulo={t('tableConfig.preset')}
+            valor={config.preset}
+            aoEscolher={escolherPreset}
+            className="cfg-presets"
+            opcoes={IDS_PRESET.map((preset) => ({ valor: preset, rotulo: t(`tableConfig.presets.${preset}`) }))}
+          />
+          <p className="cfg-ajuda">
+            {t(config.preset === 'personalizado' ? 'tableConfig.customNote' : 'tableConfig.presetDefaultHelp')}
+          </p>
+        </div>
+      )}
 
-      <Campo rotulo={t('tableConfig.preset')}>
-        <select
-          className="cfg-entrada"
-          value={config.preset}
-          onChange={(evento) => escolherPreset(evento.target.value as ConfigMesa['preset'])}
-        >
-          {IDS_PRESET.map((preset) => (
-            <option key={preset} value={preset}>
-              {t(`tableConfig.presets.${preset}`)}
-            </option>
-          ))}
-          <option value="personalizado">{t('tableConfig.presets.personalizado')}</option>
-        </select>
-      </Campo>
-      {config.preset === 'padrao' && !busca && <p className="cfg-ajuda">{t('tableConfig.presetDefaultHelp')}</p>}
-
+      {mostrar('pontuacao') && (
       <section className="cfg-secao" data-secao="pontuacao">
       <h3 className="cfg-grupo">{t('tableConfig.scoring')}</h3>
 
@@ -226,7 +231,9 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       )}
 
       </section>
+      )}
 
+      {mostrar('regras') && (
       <section className="cfg-secao" data-secao="regras">
       <h3 className="cfg-grupo">{t('tableConfig.rules')}</h3>
 
@@ -305,7 +312,9 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
       />
 
       </section>
+      )}
 
+      {mostrar('empates') && (
       <section className="cfg-secao" data-secao="empates">
       <h3 className="cfg-grupo">{t('tableConfig.abortiveDraws')}</h3>
       <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.abortiveDrawsHelp')}</p>
@@ -320,7 +329,9 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
           />
         ))}
       </section>
+      )}
 
+      {mostrar('calculo') && (
       <section className="cfg-secao" data-secao="calculo">
       <h3 className="cfg-grupo">{t('tableConfig.calcRules')}</h3>
       <ListaRegrasCalculo
@@ -330,7 +341,9 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         mostrar={(textoRegra) => bate(busca, textoRegra)}
       />
       </section>
+      )}
 
+      {mostrar('mesa') && (
       <section className="cfg-secao" data-secao="mesa">
       <h3 className="cfg-grupo">{t('tableConfig.indexTable')}</h3>
       <Grupo rotulo={t('tableConfig.turnTimer')}>
@@ -352,11 +365,13 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         aoMudar={(checarFuriten) => alterar({ checarFuriten })}
       />
       </section>
+      )}
 
       <p className="cfg-sem-resultado" role="status">
         {t('tableConfig.searchEmpty')}
       </p>
       </div>
+      </AbasModal>
       </ContextoBusca.Provider>
     </Modal>
   )
