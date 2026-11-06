@@ -1370,6 +1370,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "Club",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "Custom"
+      },
+      "rulesetsHelp": {
+        "padrao": "MOJOCA default for club meetings and beginners.",
+        "ema": "European Mahjong Association rules, used in tournaments in Europe.",
+        "wrc": "World Riichi Championship rules.",
+        "personalizado": "you set the points, oka and uma."
+      },
+      "rulesTitle": "Scoring rules",
+      "editRules": "Edit scoring rules",
+      "umaFixedLine": "Fixed uma",
+      "umaFloatingLine": "Floating uma",
+      "customNote": "Values outside Club, EMA and WRC count as Custom.",
       "sumWarning": "The table total differs by {{difference}} from {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

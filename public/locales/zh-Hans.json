@@ -1357,6 +1357,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "俱乐部",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "自定义"
+      },
+      "rulesetsHelp": {
+        "padrao": "MOJOCA 的默认规则，适合聚会和新手。",
+        "ema": "欧洲麻将协会规则，用于欧洲的比赛。",
+        "wrc": "世界立直麻将锦标赛规则。",
+        "personalizado": "由你设定点数、头名奖励和马点。"
+      },
+      "rulesTitle": "计分规则",
+      "editRules": "编辑计分规则",
+      "umaFixedLine": "固定马点",
+      "umaFloatingLine": "浮动马点",
+      "customNote": "不属于俱乐部、EMA、WRC 的数值记为自定义。",
       "sumWarning": "牌桌总点数与 {{total}} 相差 {{difference}}。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

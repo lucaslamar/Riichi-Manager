@@ -1357,6 +1357,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "クラブ",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "カスタム"
+      },
+      "rulesetsHelp": {
+        "padrao": "MOJOCAの標準。例会や初心者向け。",
+        "ema": "ヨーロッパ麻雀協会のルール。ヨーロッパの大会で使われます。",
+        "wrc": "世界リーチ麻雀選手権のルール。",
+        "personalizado": "点数・オカ・ウマを自分で決めます。"
+      },
+      "rulesTitle": "点数のルール",
+      "editRules": "点数のルールを編集",
+      "umaFixedLine": "固定ウマ",
+      "umaFloatingLine": "変動ウマ",
+      "customNote": "クラブ・EMA・WRC 以外の値はカスタムになります。",
       "sumWarning": "卓の合計は{{total}}と{{difference}}違います。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

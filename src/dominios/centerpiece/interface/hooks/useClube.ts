@@ -1,7 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
-import { configDoPreset } from '../../logica/configMesa'
 import { marcarMesaRegistrada, type MesaDoSorteio, type SorteioClube } from '../../logica/encontroClube'
 import { PREFIXO_CONVIDADO, type EntradaLista } from '../../logica/listaClube'
 import { sortearMesas } from '../../logica/sorteioClube'
@@ -37,8 +36,6 @@ export function assentosDaMesa(mesa: MesaDoSorteio) {
   return { ids, nomes: mesa.assentos.map(({ jogador }) => jogador.nome) }
 }
 
-/** Regras padrão de clube: Leste, sem abortivos, sem prorrogação, timer de 1 minuto. */
-export const configDoClube = () => configDoPreset('padrao')
 
 export const acoesClube = {
   definirLista(lista: string) {

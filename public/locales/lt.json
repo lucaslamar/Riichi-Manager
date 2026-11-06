@@ -1405,6 +1405,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "Klubas",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "Savos"
+      },
+      "rulesetsHelp": {
+        "padrao": "MOJOCA numatytosios taisyklės susitikimams ir pradedantiesiems.",
+        "ema": "Europos mahjongo asociacijos taisyklės, naudojamos Europos turnyruose.",
+        "wrc": "Pasaulio riichi čempionato taisyklės.",
+        "personalizado": "taškus, oka ir uma nustatote patys."
+      },
+      "rulesTitle": "Taškų taisyklės",
+      "editRules": "Keisti taškų taisykles",
+      "umaFixedLine": "Fiksuota uma",
+      "umaFloatingLine": "Kintama uma",
+      "customNote": "Vertės, nesutampančios su Klubu, EMA ar WRC, laikomos savomis.",
       "sumWarning": "Stalo suma skiriasi {{difference}} nuo {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

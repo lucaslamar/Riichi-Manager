@@ -283,3 +283,40 @@
     scroll-margin-top: 60px;
   }
 }
+
+/* ─── Registrar partida finalizada: conjunto de regras e resumo ───────────── */
+.reg-regras {
+  gap: 8px;
+}
+
+/* Quatro opções lado a lado: "Personalizado" precisa caber no celular. */
+.reg-conjuntos button {
+  min-height: 48px;
+  padding-inline: 2px;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 400px) {
+  .reg-conjuntos button {
+    font-size: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+.reg-resumo {
+  width: 100%;
+}
+
+.reg-resumo > i {
+  color: var(--primario);
+}
+
+.reg-ajuda-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}

@@ -6,20 +6,20 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import SeletorJogador from '@/dominios/jogadores/interface/componentes/SeletorJogador'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
-import {
-  configDoPreset,
-  IDS_PRESET,
-  type ConfigMesa,
-  type IdPreset,
-} from '../../logica/configMesa'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
 import { criarPartidaManual } from '../../logica/partidaManual'
-import { umaValida, type UmaMesa } from '../../logica/uma'
-import { carregarUltimaConfig } from '../../persistencia/repositorioConfigMesa'
-import CampoUma, { CampoInteiro, TECLADO_COM_SINAL } from '../componentes/CampoUma'
-import EscolhaOka from '../componentes/EscolhaOka'
+import {
+  configBaseDoConjunto,
+  regrasDoPreset,
+  type ConjuntoRegistro,
+  type RegrasPontuacao,
+} from '../../logica/regrasPontuacao'
+import { umaValida } from '../../logica/uma'
+import { carregarRegrasRegistro, salvarRegrasRegistro } from '../../persistencia/repositorioRegrasRegistro'
+import { TECLADO_COM_SINAL } from '../componentes/CampoUma'
 import ListaResultado from '../componentes/ListaResultado'
-import { assentosDaMesa, configDoClube } from '../hooks/useClube'
+import RegrasPontuacaoRegistro from '../componentes/RegrasPontuacaoRegistro'
+import { assentosDaMesa } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
 import '../config-mesa.css'
 
@@ -50,9 +50,21 @@ export default function RegistrarFinalizada({
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
   const { adicionar } = usePartidas()
-  const [base, setBase] = useState<ConfigMesa>(() =>
-    clube ? configDoClube() : carregarUltimaConfig(armazenamentoLocal),
-  )
+  // Conjunto de regras: o último usado aqui (mesa do clube sempre começa no Clube).
+  const [salvas] = useState(() => carregarRegrasRegistro(armazenamentoLocal))
+  const [conjunto, setConjunto] = useState<ConjuntoRegistro>(clube ? 'padrao' : salvas.conjunto)
+  const [personalizado, setPersonalizado] = useState(salvas.personalizado)
+  const regras =
+    conjunto === 'personalizado' && personalizado
+      ? personalizado
+      : regrasDoPreset(conjunto === 'personalizado' ? 'padrao' : conjunto)
+  const { pontosPartida, pontosRetorno, uma } = regras
+  const base = configBaseDoConjunto(conjunto)
+  const guardar = (novo: ConjuntoRegistro, valores: RegrasPontuacao | null) => {
+    setConjunto(novo)
+    setPersonalizado(valores)
+    salvarRegrasRegistro(armazenamentoLocal, { conjunto: novo, personalizado: valores })
+  }
   // Convidados do clube: id gerado na hora e o nome escrito na lista.
   const [mesaClube] = useState(() => (clube ? assentosDaMesa(clube.mesa) : null))
   const convidados = new Map(
@@ -62,22 +74,7 @@ export default function RegistrarFinalizada({
     mesaClube ? [...mesaClube.ids] : [null, null, null, null],
   )
   const [pontos, setPontos] = useState(['', '', '', ''])
-  const [pontosPartida, setPontosPartida] = useState(base.pontosPartida)
-  const [pontosRetorno, setPontosRetorno] = useState(base.pontosRetorno)
-  const [uma, setUma] = useState<UmaMesa>(base.uma)
   const [escolhendo, setEscolhendo] = useState<number | null>(null)
-
-  const escolherPreset = (preset: string) => {
-    if (preset === 'personalizado') {
-      setBase({ ...base, preset: 'personalizado' })
-      return
-    }
-    const nova = configDoPreset(preset as IdPreset)
-    setBase(nova)
-    setPontosPartida(nova.pontosPartida)
-    setPontosRetorno(nova.pontosRetorno)
-    setUma(nova.uma)
-  }
 
   const nomeDe = (id: string | null) => {
     const jogador = jogadores.find((item) => item.id === id)
@@ -183,59 +180,11 @@ export default function RegistrarFinalizada({
         </p>
       )}
 
-      <label className="cfg-campo">
-        <span>{t('tableConfig.preset')}</span>
-        <select
-          className="cfg-entrada"
-          value={base.preset}
-          onChange={(evento) => escolherPreset(evento.target.value)}
-        >
-          {IDS_PRESET.map((preset) => (
-            <option key={preset} value={preset}>
-              {t(`tableConfig.presets.${preset}`)}
-            </option>
-          ))}
-          <option value="personalizado">{t('tableConfig.presets.personalizado')}</option>
-        </select>
-      </label>
-
-      <div className="cfg-duas-colunas">
-        <label className="cfg-campo">
-          <span>{t('tableConfig.startPoints')}</span>
-          <CampoInteiro
-            rotulo={t('tableConfig.startPoints')}
-            valor={pontosPartida}
-            negativo={false}
-            // Sem oka, o retorno acompanha a partida.
-            aoMudar={(novo) => {
-              if (pontosRetorno <= pontosPartida) setPontosRetorno(novo)
-              setPontosPartida(novo)
-            }}
-          />
-        </label>
-        {pontosRetorno > pontosPartida && (
-          <label className="cfg-campo">
-            <span>{t('tableConfig.returnPoints')}</span>
-            <CampoInteiro
-              rotulo={t('tableConfig.returnPoints')}
-              valor={pontosRetorno}
-              negativo={false}
-              aoMudar={setPontosRetorno}
-            />
-          </label>
-        )}
-      </div>
-      <EscolhaOka
-        pontosPartida={pontosPartida}
-        pontosRetorno={pontosRetorno}
-        aoMudarRetorno={setPontosRetorno}
-      />
-
-      <CampoUma
-        valor={uma}
-        aoMudar={setUma}
-        pontosRetorno={pontosRetorno}
+      <RegrasPontuacaoRegistro
+        conjunto={conjunto}
+        regras={regras}
         pontosAtuais={pontosNumeros}
+        aoSalvar={(novo, editadas) => guardar(novo, novo === 'personalizado' ? editadas : personalizado)}
       />
 
       {previa?.resultado && (

@@ -1357,6 +1357,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "클럽",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "사용자 지정"
+      },
+      "rulesetsHelp": {
+        "padrao": "모임과 초보자를 위한 MOJOCA 기본 규칙이에요.",
+        "ema": "유럽 마작 협회 규칙으로, 유럽 대회에서 써요.",
+        "wrc": "세계 리치 마작 선수권 규칙이에요.",
+        "personalizado": "점수, 오카, 우마를 직접 정해요."
+      },
+      "rulesTitle": "점수 규칙",
+      "editRules": "점수 규칙 편집",
+      "umaFixedLine": "고정 우마",
+      "umaFloatingLine": "변동 우마",
+      "customNote": "클럽, EMA, WRC 외의 값은 사용자 지정이 돼요.",
       "sumWarning": "탁 합계가 {{total}}과 {{difference}} 차이 납니다.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
