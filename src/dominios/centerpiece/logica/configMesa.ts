@@ -6,7 +6,7 @@ import {
   configuracaoPadrao,
   type ConfiguracaoCalculo,
 } from '@/compartilhado/mahjong/pontuacao/configuracao'
-import { normalizarUma, somaUma, umaFixa, type UmaMesa } from './uma'
+import { normalizarUma, somaUma, TABELA_FLUTUANTE_EXEMPLO, umaFixa, type UmaMesa } from './uma'
 
 export { somaUma }
 
@@ -25,6 +25,11 @@ export interface ConfigMesa {
   tobi: boolean
   agariYame: boolean
   prorrogacao: boolean
+  /**
+   * Pontos que alguém precisa ter para a partida acabar no fim da última rodada; sem
+   * ninguém lá, prorroga. Fica à parte do retorno para funcionar também sem oka.
+   */
+  metaProrrogacao: number
   palitosRestantes: 'primeiro' | 'perdidos'
   abortivos: {
     kyuushuKyuuhai: boolean
@@ -76,21 +81,25 @@ type RegrasPreset = Omit<
   'preset' | 'presetBase' | 'timerVez' | 'checarFuriten'
 >
 
-/** Padrão de clube, para iniciantes: regras simples e partida que acaba no horário. */
+/**
+ * Clube (o padrão do app), para encontros e iniciantes: Leste apenas, sem oka, uma
+ * flutuante, kiriage mangan e prorrogação. Definido pelo usuário em 05/11/2026.
+ */
 const REGRAS_PADRAO: RegrasPreset = {
   tipoPartida: 'leste',
   pontosPartida: 25000,
-  pontosRetorno: 30000,
-  uma: umaFixa([15, 5, -5, -15]),
+  pontosRetorno: 25000,
+  uma: { tipo: 'flutuante', tabela: TABELA_FLUTUANTE_EXEMPLO },
   ronMultiplo: 'atamaHane',
   tobi: true,
   agariYame: true,
-  prorrogacao: false,
+  prorrogacao: true,
+  metaProrrogacao: 30000,
   palitosRestantes: 'primeiro',
   abortivos: SEM_ABORTIVOS,
   nagashiMangan: true,
   chombo: { tipo: 'manganReverso' },
-  regrasCalculo: configuracaoPadrao,
+  regrasCalculo: { ...configuracaoPadrao, kiriageMangan: true },
 }
 
 const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
@@ -112,6 +121,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tobi: false,
     agariYame: false,
     prorrogacao: false,
+    metaProrrogacao: 30000,
     palitosRestantes: 'perdidos',
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
@@ -133,6 +143,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tobi: false,
     agariYame: false,
     prorrogacao: false,
+    metaProrrogacao: 30000,
     palitosRestantes: 'primeiro',
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
@@ -154,6 +165,7 @@ const REGRAS_PRESET: Record<IdPreset, RegrasPreset> = {
     tobi: false,
     agariYame: false,
     prorrogacao: false,
+    metaProrrogacao: 30000,
     palitosRestantes: 'primeiro',
     abortivos: SEM_ABORTIVOS,
     nagashiMangan: false,
@@ -172,7 +184,7 @@ export function configDoPreset(preset: IdPreset): ConfigMesa {
     regrasCalculo: { ...regras.regrasCalculo },
     preset,
     presetBase: preset,
-    timerVez: preset === 'padrao' ? 60 : 30,
+    timerVez: 30,
     checarFuriten: false,
   }
 }
@@ -205,9 +217,9 @@ export function calcularOka(config: Pick<ConfigMesa, 'pontosPartida' | 'pontosRe
   return (config.pontosRetorno - config.pontosPartida) * 4
 }
 
-function normalizarRegras(salvas: unknown): ConfiguracaoCalculo {
+function normalizarRegras(salvas: unknown, reserva: ConfiguracaoCalculo): ConfiguracaoCalculo {
   const lidas = (salvas ?? {}) as Partial<ConfiguracaoCalculo>
-  const regras = { ...configuracaoPadrao }
+  const regras = { ...reserva }
   for (const chave of Object.keys(regras) as (keyof ConfiguracaoCalculo)[]) {
     const valor = lidas[chave]
     if (typeof valor === 'boolean') regras[chave] = valor
@@ -258,6 +270,12 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     tobi: booleano(lida.tobi, base.tobi),
     agariYame: booleano(lida.agariYame, base.agariYame),
     prorrogacao: booleano(lida.prorrogacao, base.prorrogacao),
+    // Config salva antes deste campo: a meta era o próprio retorno.
+    metaProrrogacao: numeroValido(lida.metaProrrogacao)
+      ? lida.metaProrrogacao
+      : numeroValido(lida.pontosRetorno)
+        ? lida.pontosRetorno
+        : base.metaProrrogacao,
     palitosRestantes:
       lida.palitosRestantes === 'primeiro' || lida.palitosRestantes === 'perdidos'
         ? lida.palitosRestantes
@@ -270,8 +288,8 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     },
     nagashiMangan: booleano(lida.nagashiMangan, base.nagashiMangan),
     chombo: chomboValido ? (chombo as ConfigMesa['chombo']) : base.chombo,
-    // Partida criada antes desta opção usa o padrão atual da calculadora.
-    regrasCalculo: normalizarRegras(lida.regrasCalculo),
+    // Partida criada antes desta opção usa as regras de cálculo do preset de origem.
+    regrasCalculo: normalizarRegras(lida.regrasCalculo, base.regrasCalculo),
     timerVez:
       lida.timerVez !== undefined && OPCOES_TIMER_VEZ.includes(lida.timerVez)
         ? lida.timerVez

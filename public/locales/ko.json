@@ -634,6 +634,10 @@
     "themeLight": "라이트",
     "themeVelvet": "다크",
     "themeAuto": "자동",
+    "tiles": "패 색",
+    "tilesHelp": "자동: 밝은 테마에서는 검정, 어두운 테마에서는 흰색으로 대비를 줘요.",
+    "tilesWhite": "흰색",
+    "tilesBlack": "검정",
     "highContrast": "고대비",
     "highContrastHelp": "글자, 테두리, 포커스 표시의 대비를 높입니다.",
     "compactMode": "컴팩트 모드",
@@ -872,7 +876,7 @@
     "title": "Table settings",
     "preset": "Ruleset",
     "presets": {
-      "padrao": "App default",
+      "padrao": "클럽",
       "wrc": "WRC",
       "ema": "EMA",
       "mleague": "M.League",
@@ -940,7 +944,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "A dealer in 1st place on the last hand may end the game.",
     "extraRound": "Extra round",
-    "extraRoundHelp": "Continues to South or West if nobody reached the return.",
+    "extraRoundHelp": "연장 목표 점수에 아무도 못 미치면 남장이나 서장으로 이어져요.",
+    "extensionTarget": "연장 목표 점수",
+    "extensionTargetHelp": "마지막 국이 끝났을 때 아무도 이 점수가 없으면 누군가 도달할 때까지 계속해요. 반환점과 따로라서 오카가 없어도 쓸 수 있어요.",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Allowed abortive draws",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -955,6 +961,7 @@
     "reset": "Reset",
     "done": "Done",
     "presetDefaultHelp": "Club standard, made for beginners",
+    "customNote": "값을 바꿔서 사용자 지정이 됐어요. 세트를 누르면 그 세트로 돌아가요.",
     "chomboReverseYakuman": "Reverse yakuman",
     "okaLabel": "Oka",
     "umaLabel": "Uma",
@@ -986,6 +993,10 @@
         "other": "추가 ({{count}})"
       },
       "alreadyInList": "이미 명단에 있음",
+      "lastDrawNames": "지난 추첨 명단",
+      "useNames": {
+        "other": "{{count}}명 사용"
+      },
       "lastDraw": {
         "other": "지난 추첨: {{count}}탁"
       },
@@ -1258,7 +1269,7 @@
       "reason": {
         "ultimaMao": "The last hand is over.",
         "tobi": "Tobi: someone went below zero.",
-        "retorno": "Someone reached the return points in the extra round.",
+        "retorno": "누군가 연장 목표 점수에 도달했어요.",
         "agariYame": "The dealer ended with agari-yame."
       }
     },
@@ -1355,6 +1366,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "클럽",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "사용자 지정"
+      },
+      "rulesetsHelp": {
+        "padrao": "모임과 초보자를 위한 MOJOCA 기본 규칙이에요.",
+        "ema": "유럽 마작 협회 규칙으로, 유럽 대회에서 써요.",
+        "wrc": "세계 리치 마작 선수권 규칙이에요.",
+        "personalizado": "점수, 오카, 우마를 직접 정해요."
+      },
+      "rulesTitle": "점수 규칙",
+      "editRules": "점수 규칙 편집",
+      "umaFixedLine": "고정 우마",
+      "umaFloatingLine": "변동 우마",
+      "customNote": "클럽, EMA, WRC 외의 값은 사용자 지정이 돼요.",
       "sumWarning": "탁 합계가 {{total}}과 {{difference}} 차이 납니다.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

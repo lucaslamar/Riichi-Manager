@@ -110,6 +110,19 @@ export function useAcoesMelds({
     [mao.pedras],
   )
 
+  /**
+   * Pedras da mão que entram no meld: todas as que servem, até o tamanho dele.
+   * Assim um 三萬 já na mão vira parte do Pon de 三萬, em vez de sobrar ao lado
+   * de três novos. Devolve as pedras reais (o 5 vermelho continua vermelho).
+   */
+  const consumoDaMao = useCallback(
+    (pedrasMeld: CodigoPedra[]) =>
+      indicesPedrasNaMaoPara(pedrasMeld)
+        .sort((a, b) => a - b)
+        .map((indice) => mao.pedras[indice]),
+    [indicesPedrasNaMaoPara, mao.pedras],
+  )
+
   const podeCriarMeld = useCallback(
     (pedrasMeld: CodigoPedra[], pedrasConsumir: CodigoPedra[] = [], slotsLogicosMeld = 3) => {
       const indicesRemovidos = indicesPedrasNaMaoPara(pedrasConsumir)
@@ -160,7 +173,7 @@ export function useAcoesMelds({
   const podeCriarKanFechadoDaMao = useCallback(
     (codigo: CodigoPedra) => {
       const quantidade = Math.min(contarCodigoNaMao(codigo), 4)
-      if (quantidade < 3) return false
+      if (quantidade < 1) return false
       return podeCriarMeld(
         expandir(codigo, 4),
         expandir(codigo, quantidade),
@@ -208,18 +221,11 @@ export function useAcoesMelds({
         .filter((inicio) => inicio >= 1 && inicio <= 7)
         .map((inicio) => criarSequenciaChii(inicio, naipe))
         .filter((sequencia) => {
-          const pedrasDaMao = sequencia.filter(
-            (pedraSequencia) => codigoBase(pedraSequencia) !== codigoBase(chamada),
-          )
-          const consumo = ordenarPedras(pedrasDaMao)
-          return (
-            podeCriarMeld(sequencia, sequencia, 3) ||
-            (consumo.length === 2 && podeCriarMeld(sequencia, consumo, 3)) ||
-            podeCriarMeld(sequencia, [], 3)
-          )
+          // Usa as pedras da sequência que a mão já tem; o resto entra novo.
+          return podeCriarMeld(sequencia, consumoDaMao(sequencia), 3)
         })
     },
-    [expandir, podeCriarMeld],
+    [consumoDaMao, podeCriarMeld],
   )
 
   const sequenciasChiiDaMaoPossiveis = useCallback(
@@ -260,27 +266,17 @@ export function useAcoesMelds({
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
         const pedrasMeld = expandir(codigo, 3)
-        const pedrasMao = expandir(codigo, 2)
-        return (
-          podeCriarMeld(pedrasMeld, pedrasMeld, 3) ||
-          podeCriarMeld(pedrasMeld, pedrasMao, 3) ||
-          podeCriarMeld(pedrasMeld, [], 3)
-        )
+        return podeCriarMeld(pedrasMeld, consumoDaMao(pedrasMeld), 3)
       }),
-    [expandir, podeCriarMeld],
+    [consumoDaMao, expandir, podeCriarMeld],
   )
   const podeKanAberto = useMemo(
     () =>
       CODIGOS_BASE_MELD.some((codigo) => {
         const pedrasMeld = expandir(codigo, 4)
-        const pedrasMao = expandir(codigo, 3)
-        return (
-          podeCriarMeld(pedrasMeld, pedrasMeld, 3) ||
-          podeCriarMeld(pedrasMeld, pedrasMao, 3) ||
-          podeCriarMeld(pedrasMeld, [], 3)
-        )
+        return podeCriarMeld(pedrasMeld, consumoDaMao(pedrasMeld), 3)
       }),
-    [expandir, podeCriarMeld],
+    [consumoDaMao, expandir, podeCriarMeld],
   )
   const podeKanFechado = useMemo(
     () =>
@@ -301,17 +297,9 @@ export function useAcoesMelds({
         case 'descarte':
           return podeAdicionarPedras([pedra])
         case 'pon':
-          return (
-            podeCriarMeld(expandir(pedra, 3), expandir(pedra, 3), 3) ||
-            podeCriarMeld(expandir(pedra, 3), expandir(pedra, 2), 3) ||
-            podeCriarMeld(expandir(pedra, 3), [], 3)
-          )
+          return podeCriarMeld(expandir(pedra, 3), consumoDaMao(expandir(pedra, 3)), 3)
         case 'kanAberto':
-          return (
-            podeCriarMeld(expandir(pedra, 4), expandir(pedra, 4), 3) ||
-            podeCriarMeld(expandir(pedra, 4), expandir(pedra, 3), 3) ||
-            podeCriarMeld(expandir(pedra, 4), [], 3)
-          )
+          return podeCriarMeld(expandir(pedra, 4), consumoDaMao(expandir(pedra, 4)), 3)
         case 'kanFechado':
           return podeCriarKanFechadoDaMao(pedra) || podeCriarKanFechadoDireto(pedra)
         case 'chii':
@@ -320,6 +308,7 @@ export function useAcoesMelds({
     },
     [
       acaoPendente,
+      consumoDaMao,
       expandir,
       mao.dora.length,
       mao.riichi,
@@ -333,6 +322,7 @@ export function useAcoesMelds({
   )
 
   return {
+    consumoDaMao,
     contarCodigo,
     contarAka,
     indicesPedrasNaMaoPara,

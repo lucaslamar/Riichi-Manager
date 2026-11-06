@@ -6,6 +6,7 @@
  */
 import assert from 'node:assert/strict'
 import { configDoPreset, alterarConfig, type ConfigMesa } from '../src/dominios/centerpiece/logica/configMesa'
+import { umaFixa } from '../src/dominios/centerpiece/logica/uma'
 import {
   ajustarHonba,
   giroDaMesa,
@@ -55,7 +56,16 @@ function teste(nome: string, corpo: () => void) {
 
 const IDS = ['a', 'b', 'c', 'd'] as const
 const CTX = { id: 'e', agora: '2026-11-01T12:00:00.000Z' }
-const HANCHAN = alterarConfig(configDoPreset('padrao'), { tipoPartida: 'hanchan', timerVez: 30 })
+/**
+ * Base dos testes do motor: 25.000/30.000 (com oka), uma 15/5 e sem prorrogação.
+ * Fica fixa aqui para os testes não mudarem quando o preset Clube mudar.
+ */
+const BASE = alterarConfig(configDoPreset('padrao'), {
+  pontosRetorno: 30000,
+  uma: umaFixa([15, 5, -5, -15]),
+  prorrogacao: false,
+})
+const HANCHAN = alterarConfig(BASE, { tipoPartida: 'hanchan', timerVez: 30 })
 const nova = (config: ConfigMesa = HANCHAN) => criarPartida('p', config, IDS, CTX.agora)
 const pontos = (p: Partida) => [p.placar.pontos[0], p.placar.pontos[1], p.placar.pontos[2], p.placar.pontos[3]]
 const soma = (p: Partida) => pontos(p).reduce((a, b) => a + b, 0) + p.placar.palitos * 1000
@@ -176,7 +186,7 @@ teste('chombo fixo não mexe nos pontos e sai da pontuação final', () => {
 })
 
 teste('Leste apenas acaba no Leste 4, sem voltar ao Leste 1', () => {
-  const config = alterarConfig(configDoPreset('padrao'), { tipoPartida: 'leste', agariYame: false })
+  const config = alterarConfig(BASE, { tipoPartida: 'leste', agariYame: false })
   let p = nova(config)
   for (let i = 0; i < 3; i += 1) p = passarDealer(p)
   assert.equal(p.placar.rodadaNumero, 4)
@@ -204,7 +214,7 @@ teste('tobi encerra; sem a regra, segue com negativo', () => {
 })
 
 teste('agari-yame: dealer em 1º na última mão pode encerrar, ou seguir', () => {
-  const config = alterarConfig(configDoPreset('padrao'), { tipoPartida: 'leste' })
+  const config = alterarConfig(BASE, { tipoPartida: 'leste' })
   let p = nova(config)
   for (let i = 0; i < 3; i += 1) p = passarDealer(p)
   p = registrarRon(p, { pagador: 0, vencedores: [{ cadeira: 3, pontos: 12000 }] }, CTX)
@@ -217,7 +227,7 @@ teste('agari-yame: dealer em 1º na última mão pode encerrar, ou seguir', () =
 })
 
 teste('agari-yame desligado: dealer repete sem oferecer o fim', () => {
-  const config = alterarConfig(configDoPreset('padrao'), { tipoPartida: 'leste', agariYame: false })
+  const config = alterarConfig(BASE, { tipoPartida: 'leste', agariYame: false })
   let p = nova(config)
   for (let i = 0; i < 3; i += 1) p = passarDealer(p)
   p = registrarRon(p, { pagador: 0, vencedores: [{ cadeira: 3, pontos: 12000 }] }, CTX)
@@ -225,7 +235,7 @@ teste('agari-yame desligado: dealer repete sem oferecer o fim', () => {
 })
 
 teste('prorrogação: sem ninguém no retorno, entra na rodada seguinte e acaba ao chegar', () => {
-  const config = alterarConfig(configDoPreset('padrao'), { tipoPartida: 'leste', prorrogacao: true, agariYame: false })
+  const config = alterarConfig(BASE, { tipoPartida: 'leste', prorrogacao: true, agariYame: false })
   let p = nova(config)
   for (let i = 0; i < 4; i += 1) p = passarDealer(p)
   assert.equal(p.fim, undefined)
@@ -235,8 +245,21 @@ teste('prorrogação: sem ninguém no retorno, entra na rodada seguinte e acaba 
   assert.equal(p.fim, 'retorno')
 })
 
+teste('prorrogação sem oka: a meta é separada do retorno', () => {
+  // Clube: retorno 25.000 (sem oka), meta 30.000. Todos com 25.000 não fecham a meta.
+  const config = alterarConfig(configDoPreset('padrao'), { agariYame: false })
+  assert.equal(config.pontosRetorno, 25000)
+  assert.equal(config.metaProrrogacao, 30000)
+  let p = nova(config)
+  for (let i = 0; i < 4; i += 1) p = passarDealer(p)
+  assert.equal(p.fim, undefined)
+  assert.equal(p.placar.rodadaVento, 'sul')
+  p = registrarRon(p, { pagador: 2, vencedores: [{ cadeira: 3, pontos: 8000 }] }, CTX)
+  assert.equal(p.fim, 'retorno')
+})
+
 teste('prorrogação: alguém já no retorno encerra na última mão', () => {
-  const config = alterarConfig(configDoPreset('padrao'), { tipoPartida: 'leste', prorrogacao: true, agariYame: false })
+  const config = alterarConfig(BASE, { tipoPartida: 'leste', prorrogacao: true, agariYame: false })
   let p = registrarRon(nova(config), { pagador: 2, vencedores: [{ cadeira: 1, pontos: 12000 }] }, CTX)
   for (let i = 0; i < 2; i += 1) p = passarDealer(p)
   assert.equal(passarDealer(p).fim, 'ultimaMao')

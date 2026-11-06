@@ -195,9 +195,9 @@ export function analisarFim(
   const rodada = ORDEM_VENTOS.indexOf(antes.rodadaVento)
   const ultimaDaRodada = antes.rodadaNumero === 4
 
-  // Na prorrogação, acaba assim que alguém chega ao retorno ou no fim da rodada extra.
+  // Na prorrogação, acaba assim que alguém chega à meta ou no fim da rodada extra.
   if (rodada > ultimaOficial) {
-    if (maior >= config.pontosRetorno) return { fim: 'retorno' }
+    if (maior >= config.metaProrrogacao) return { fim: 'retorno' }
     return ultimaDaRodada && !dealerManteve ? { fim: 'ultimaMao' } : {}
   }
 
@@ -208,7 +208,7 @@ export function analisarFim(
     const sozinhoEm1 = valores.filter((valor) => valor === maior).length === 1 && dealer === maior
     return config.agariYame && sozinhoEm1 ? { agariYameDisponivel: true } : {}
   }
-  if (config.prorrogacao && maior < config.pontosRetorno) return {}
+  if (config.prorrogacao && maior < config.metaProrrogacao) return {}
   return { fim: 'ultimaMao' }
 }
 

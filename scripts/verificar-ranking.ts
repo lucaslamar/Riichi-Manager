@@ -21,6 +21,12 @@ import {
   semExcluidos,
 } from '../src/dominios/centerpiece/logica/ranking'
 
+/**
+ * Base dos testes: 25.000/30.000 (com oka) e uma 15/5, fixa aqui para os testes
+ * não mudarem quando o preset Clube mudar.
+ */
+const BASE = alterarConfig(configDoPreset('padrao'), { pontosRetorno: 30000, uma: umaFixa([15, 5, -5, -15]) })
+
 let testes = 0
 function teste(nome: string, corpo: () => void) {
   try {
@@ -43,7 +49,7 @@ function finalizada(
 ): Partida {
   const inicio = criarPartida(
     quando.toISOString(),
-    dados.config ?? configDoPreset('padrao'),
+    dados.config ?? BASE,
     ['a', 'b', 'c', 'd'],
     quando.toISOString(),
   )
@@ -69,7 +75,7 @@ const linhaDe = (linhas: ReturnType<typeof calcularRanking>, id: string) => {
 teste('histórico: só finalizadas, da mais recente para a mais antiga', () => {
   const antiga = finalizada(new Date(2026, 0, 1))
   const nova = finalizada(new Date(2026, 10, 1))
-  const aberta = criarPartida('x', configDoPreset('padrao'), ['a', 'b', 'c', 'd'], CTX.agora)
+  const aberta = criarPartida('x', BASE, ['a', 'b', 'c', 'd'], CTX.agora)
   assert.deepEqual(partidasDoHistorico([antiga, aberta, nova]), [nova, antiga])
 })
 
@@ -117,7 +123,7 @@ teste('empate: a uma dividida soma para os dois e eles ficam na mesma colocaçã
 })
 
 teste('% de tobi conta quem terminou abaixo de zero', () => {
-  const config = alterarConfig(configDoPreset('padrao'), { tobi: true })
+  const config = alterarConfig(BASE, { tobi: true })
   const comTobi = finalizada(AGORA, { config, pontos: 32000 })
   const linhas = calcularRanking([comTobi, finalizada(AGORA)], TUDO, AGORA)
   assert.equal(linhaDe(linhas, 'c').percentualTobi, 50)
@@ -167,7 +173,7 @@ teste('excluído sai do ranking e os outros ficam iguais', () => {
 teste('partida registrada à mão entra no histórico e no ranking', () => {
   const partida = criarPartidaManual(
     'm',
-    configDoPreset('padrao'),
+    BASE,
     {
       jogadorIds: ['a', 'b', 'c', 'd'],
       nomes: ['A', 'B', 'C', 'D'],

@@ -97,7 +97,6 @@ function TelasCenterpiece({
       <PaginaListaClube
         aoVoltar={irInicio}
         aoSortear={() => setTela({ nome: 'mesasSorteadas' })}
-        aoVerSorteio={() => setTela({ nome: 'mesasSorteadas' })}
       />
     )
   }

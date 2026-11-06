@@ -73,8 +73,17 @@ export function trocarQuartoCincoPorAka(pedras: CodigoPedra[], akadora: boolean)
  * originais (600×800, em regular-png) pesavam para decodificar no celular e o
  * teclado reaparecia pedra por pedra ao voltar da finalização para a montagem.
  */
-export function urlPedra(nomeArquivo: string, formato: 'png' | 'svg'): string {
-  const pasta = formato === 'png' ? 'regular-png-240' : 'regular'
+/**
+ * Arte das pedras: FluffyStuff/riichi-mahjong-tiles (CC0). `brancas` usa a versão
+ * Regular e `pretas` a Black; a face é pintada pelo CSS (--pedra-face).
+ */
+export function urlPedra(
+  nomeArquivo: string,
+  formato: 'png' | 'svg',
+  cor: 'brancas' | 'pretas' = 'brancas',
+): string {
+  const base = cor === 'pretas' ? 'black' : 'regular'
+  const pasta = formato === 'png' ? `${base}-png-240` : base
   return `${import.meta.env.BASE_URL}tiles/${pasta}/${nomeArquivo}.${formato}?v=3`
 }
 

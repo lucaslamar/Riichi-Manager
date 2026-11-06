@@ -634,6 +634,10 @@
     "themeLight": "浅色",
     "themeVelvet": "深色",
     "themeAuto": "自动",
+    "tiles": "牌的颜色",
+    "tilesHelp": "自动：浅色主题用黑牌，深色主题用白牌，对比更清楚。",
+    "tilesWhite": "白色",
+    "tilesBlack": "黑色",
     "highContrast": "高对比度",
     "highContrastHelp": "提高文字、边框和焦点状态的对比度。",
     "compactMode": "紧凑模式",
@@ -872,7 +876,7 @@
     "title": "Table settings",
     "preset": "Ruleset",
     "presets": {
-      "padrao": "App default",
+      "padrao": "俱乐部",
       "wrc": "WRC",
       "ema": "EMA",
       "mleague": "M.League",
@@ -940,7 +944,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "A dealer in 1st place on the last hand may end the game.",
     "extraRound": "Extra round",
-    "extraRoundHelp": "Continues to South or West if nobody reached the return.",
+    "extraRoundHelp": "没有人达到延长目标点时，继续进入南场或西场。",
+    "extensionTarget": "延长目标点",
+    "extensionTargetHelp": "最后一局结束时，如果没有人达到这个点数，对局会继续，直到有人达到。它与返点分开，所以没有头名奖励时也能用。",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Allowed abortive draws",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -955,6 +961,7 @@
     "reset": "Reset",
     "done": "Done",
     "presetDefaultHelp": "Club standard, made for beginners",
+    "customNote": "数值已修改，规则组变为自定义。点一个规则组即可恢复。",
     "chomboReverseYakuman": "Reverse yakuman",
     "okaLabel": "Oka",
     "umaLabel": "Uma",
@@ -986,6 +993,10 @@
         "other": "添加（{{count}}）"
       },
       "alreadyInList": "已在名单中",
+      "lastDrawNames": "上次抽签的名字",
+      "useNames": {
+        "other": "使用 {{count}} 人"
+      },
       "lastDraw": {
         "other": "上次抽签：{{count}} 桌"
       },
@@ -1258,7 +1269,7 @@
       "reason": {
         "ultimaMao": "The last hand is over.",
         "tobi": "Tobi: someone went below zero.",
-        "retorno": "Someone reached the return points in the extra round.",
+        "retorno": "有人达到了延长目标点。",
         "agariYame": "The dealer ended with agari-yame."
       }
     },
@@ -1355,6 +1366,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "俱乐部",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "自定义"
+      },
+      "rulesetsHelp": {
+        "padrao": "MOJOCA 的默认规则，适合聚会和新手。",
+        "ema": "欧洲麻将协会规则，用于欧洲的比赛。",
+        "wrc": "世界立直麻将锦标赛规则。",
+        "personalizado": "由你设定点数、头名奖励和马点。"
+      },
+      "rulesTitle": "计分规则",
+      "editRules": "编辑计分规则",
+      "umaFixedLine": "固定马点",
+      "umaFloatingLine": "浮动马点",
+      "customNote": "不属于俱乐部、EMA、WRC 的数值记为自定义。",
       "sumWarning": "牌桌总点数与 {{total}} 相差 {{difference}}。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

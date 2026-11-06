@@ -652,6 +652,10 @@
     "themeLight": "Šviesi",
     "themeVelvet": "Tamsi",
     "themeAuto": "Automatinė",
+    "tiles": "Akmenys",
+    "tilesHelp": "Automatiškai: šviesioje temoje juodi, tamsioje balti, kad būtų kontrastas.",
+    "tilesWhite": "Balti",
+    "tilesBlack": "Juodi",
     "highContrast": "Didelis kontrastas",
     "highContrastHelp": "Padidina teksto, rėmelių ir fokuso būsenų kontrastą.",
     "compactMode": "Kompaktiškas režimas",
@@ -893,7 +897,7 @@
     "title": "Table settings",
     "preset": "Ruleset",
     "presets": {
-      "padrao": "App default",
+      "padrao": "Klubas",
       "wrc": "WRC",
       "ema": "EMA",
       "mleague": "M.League",
@@ -961,7 +965,9 @@
     "agariYame": "Agari-yame",
     "agariYameHelp": "A dealer in 1st place on the last hand may end the game.",
     "extraRound": "Extra round",
-    "extraRoundHelp": "Continues to South or West if nobody reached the return.",
+    "extraRoundHelp": "Tęsiama Pietų ar Vakarų ratu, jei niekas nepasiekė pratęsimo tikslo.",
+    "extensionTarget": "Pratęsimo tikslas",
+    "extensionTargetHelp": "Paskutinio rato pabaigoje, jei niekas neturi tiek taškų, partija tęsiama, kol kas nors pasieks. Tikslas atskirtas nuo grąžos, todėl veikia ir be oka.",
     "nagashiMangan": "Nagashi Mangan",
     "abortiveDraws": "Allowed abortive draws",
     "abortiveNineTerminals": "Kyuushu kyuuhai",
@@ -976,6 +982,7 @@
     "reset": "Reset",
     "done": "Done",
     "presetDefaultHelp": "Club standard, made for beginners",
+    "customNote": "Vertės pakeistos: rinkinys tapo savas. Palieskite rinkinį, kad grįžtumėte prie jo.",
     "chomboReverseYakuman": "Reverse yakuman",
     "okaLabel": "Oka",
     "umaLabel": "Uma",
@@ -1010,6 +1017,13 @@
         "other": "Pridėti ({{count}})"
       },
       "alreadyInList": "Jau sąraše",
+      "lastDrawNames": "Paskutinių burtų vardai",
+      "useNames": {
+        "one": "Naudoti {{count}}",
+        "few": "Naudoti {{count}}",
+        "many": "Naudoti {{count}}",
+        "other": "Naudoti {{count}}"
+      },
       "lastDraw": {
         "one": "Paskutiniai burtai: {{count}} stalas",
         "few": "Paskutiniai burtai: {{count}} stalai",
@@ -1306,7 +1320,7 @@
       "reason": {
         "ultimaMao": "The last hand is over.",
         "tobi": "Tobi: someone went below zero.",
-        "retorno": "Someone reached the return points in the extra round.",
+        "retorno": "Kažkas pasiekė pratęsimo tikslą.",
         "agariYame": "The dealer ended with agari-yame."
       }
     },
@@ -1403,6 +1417,23 @@
       "iconLabel": "View {{name}}'s furiten check"
     },
     "manual": {
+      "rulesets": {
+        "padrao": "Klubas",
+        "ema": "EMA",
+        "wrc": "WRC",
+        "personalizado": "Savos"
+      },
+      "rulesetsHelp": {
+        "padrao": "MOJOCA numatytosios taisyklės susitikimams ir pradedantiesiems.",
+        "ema": "Europos mahjongo asociacijos taisyklės, naudojamos Europos turnyruose.",
+        "wrc": "Pasaulio riichi čempionato taisyklės.",
+        "personalizado": "taškus, oka ir uma nustatote patys."
+      },
+      "rulesTitle": "Taškų taisyklės",
+      "editRules": "Keisti taškų taisykles",
+      "umaFixedLine": "Fiksuota uma",
+      "umaFloatingLine": "Kintama uma",
+      "customNote": "Vertės, nesutampančios su Klubu, EMA ar WRC, laikomos savomis.",
       "sumWarning": "Stalo suma skiriasi {{difference}} nuo {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",

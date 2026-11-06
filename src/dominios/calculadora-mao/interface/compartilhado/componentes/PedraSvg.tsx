@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
+import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { CodigoPedra, Meld } from '../../../logica/mao'
 import { arquivoPedra, nomePedraAcessivel, urlPedra } from '../../constantes'
 
@@ -16,6 +17,8 @@ export function PedraSvg({
   arquivo?: string
 }) {
   const [formato, setFormato] = useState<'png' | 'svg' | 'texto'>('png')
+  // Pretas no tema claro e brancas no escuro, ou o que a pessoa escolheu em Ajustes.
+  const { pedrasEfetivas } = usePreferencias()
   const nomeArquivo = virada ? 'Back' : (arquivo ?? (pedra ? arquivoPedra(pedra) : 'Blank'))
   const alt = virada ? traduzirGlobal('tiles.back') : nomePedraAcessivel(pedra)
 
@@ -30,7 +33,7 @@ export function PedraSvg({
   return (
     <img
       className={`tile-img ${pedra === '5z' ? 'tile-img-haku' : ''} ${deLado ? 'tile-img-lado' : ''}`}
-      src={urlPedra(nomeArquivo, formato)}
+      src={urlPedra(nomeArquivo, formato, pedrasEfetivas)}
       alt={alt}
       draggable={false}
       // Em telas de alta densidade (iPhone 16, Pixel, Galaxy) o Chrome adiava a

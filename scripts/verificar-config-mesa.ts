@@ -45,15 +45,25 @@ function teste(nome: string, corpo: () => void) {
   }
 }
 
-teste('padrão do app: Leste apenas, sem abortivos nem prorrogação, timer de 1 min', () => {
+teste('Clube (padrão do app): Leste, sem oka, uma flutuante, kiriage, prorrogação, timer de 30 s', () => {
   const config = configDoPreset('padrao')
   assert.equal(config.pontosPartida, 25000)
-  assert.equal(config.pontosRetorno, 30000)
-  assert.equal(calcularOka(config), 20000)
-  assert.equal(config.timerVez, 60)
+  assert.equal(config.pontosRetorno, 25000)
+  assert.equal(calcularOka(config), 0)
+  assert.deepEqual(config.uma, { tipo: 'flutuante', tabela: TABELA_FLUTUANTE_EXEMPLO })
+  assert.equal(config.regrasCalculo.kiriageMangan, true)
+  assert.equal(config.timerVez, 30)
   assert.equal(config.tipoPartida, 'leste')
-  assert.equal(config.prorrogacao, false)
+  assert.equal(config.prorrogacao, true)
   assert.ok(Object.values(config.abortivos).every((ligado) => !ligado))
+})
+
+teste('meta da prorrogação: 30.000 nos presets e, em config antiga, o retorno salvo', () => {
+  for (const preset of IDS_PRESET) assert.equal(configDoPreset(preset).metaProrrogacao, 30000, preset)
+  assert.equal(normalizarConfig({ pontosRetorno: 35000 }).metaProrrogacao, 35000)
+  assert.equal(normalizarConfig({ pontosRetorno: 35000, metaProrrogacao: 32000 }).metaProrrogacao, 32000)
+  assert.equal(normalizarConfig(undefined).metaProrrogacao, 30000)
+  assert.equal(alterarConfig(configDoPreset('padrao'), { metaProrrogacao: 28000 }).preset, 'personalizado')
 })
 
 teste('toda uma de preset fecha em zero', () => {
@@ -106,9 +116,10 @@ teste('escolher Personalizado mantém os valores; escolher preset aplica os dele
 
 teste('mexer na config devolvida não altera o preset', () => {
   const alterada = configDoPreset('padrao')
-  if (alterada.uma.tipo === 'fixa') alterada.uma.valores[0] = 99
+  if (alterada.uma.tipo === 'flutuante') alterada.uma.tabela.nenhum[0] = 99
   configDoPreset('padrao').abortivos.quatroKans = true
-  assert.deepEqual(configDoPreset('padrao').uma, umaFixa([15, 5, -5, -15]))
+  assert.deepEqual(configDoPreset('padrao').uma, { tipo: 'flutuante', tabela: TABELA_FLUTUANTE_EXEMPLO })
+  assert.equal(TABELA_FLUTUANTE_EXEMPLO.nenhum[0], 8)
   assert.equal(configDoPreset('padrao').abortivos.quatroKans, false)
 })
 

@@ -134,6 +134,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     podeAdicionarPedras: acoesMelds.podeAdicionarPedras,
     podeCriarMeld: acoesMelds.podeCriarMeld,
     indicesPedrasNaMaoPara: acoesMelds.indicesPedrasNaMaoPara,
+    consumoDaMao: acoesMelds.consumoDaMao,
     sequenciasChiiPossiveis: acoesMelds.sequenciasChiiPossiveis,
     sequenciasChiiDaMaoPossiveis: acoesMelds.sequenciasChiiDaMaoPossiveis,
     setEscolhaChiiPendente,

@@ -12,7 +12,8 @@ body:has(.pagina-regras) {
 .pagina-regras {
   display: grid;
   align-content: start;
-  gap: 10px;
+  /* Respiro entre os cartões: colados, pareciam um bloco só. */
+  gap: 20px;
   width: min(100%, 720px);
   margin-inline: auto;
   border-radius: var(--raio);
@@ -198,7 +199,7 @@ body:has(.pagina-regras) {
 }
 
 body.modo-compacto .pagina-regras {
-  gap: 6px;
+  gap: 14px;
   padding-top: 10px;
 }
 

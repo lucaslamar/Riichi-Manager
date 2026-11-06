@@ -3,7 +3,7 @@ import { entrarTelaCheia, suportaTelaCheia } from '@/compartilhado/adaptadores/t
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useInstalacao } from '@/compartilhado/interface/hooks/useInstalacao'
-import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
+import { usePreferencias, type PreferenciaPedras } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { PreferenciaTema } from '@/compartilhado/tema/temas'
 import packageJson from '../../../../package.json'
 import './pagina-regras.css'
@@ -11,6 +11,12 @@ import './pagina-regras.css'
 const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
   { valor: 'claro', chave: 'pages.themeLight' },
   { valor: 'escuro', chave: 'pages.themeVelvet' },
+  { valor: 'automatico', chave: 'pages.themeAuto' },
+]
+
+const OPCOES_PEDRAS: { valor: PreferenciaPedras; chave: string }[] = [
+  { valor: 'brancas', chave: 'pages.tilesWhite' },
+  { valor: 'pretas', chave: 'pages.tilesBlack' },
   { valor: 'automatico', chave: 'pages.themeAuto' },
 ]
 
@@ -22,6 +28,7 @@ export default function PaginaRegras() {
   const { t } = useI18n()
   const preferencias = usePreferencias()
   const idTituloTema = useId()
+  const idTituloPedras = useId()
   const { modo: modoInstalacao, instalar } = useInstalacao()
   const [instrucaoAberta, setInstrucaoAberta] = useState(false)
   const temTelaCheia = suportaTelaCheia()
@@ -49,6 +56,33 @@ export default function PaginaRegras() {
                 value={opcao.valor}
                 checked={preferencias.tema === opcao.valor}
                 onChange={() => preferencias.alterar('tema', opcao.valor)}
+              />
+              <span>{t(opcao.chave)}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Cor das pedras: automático = pretas no claro (contraste) e brancas no escuro. */}
+      <div
+        className="cartao-regras cartao-regras--empilhado"
+        role="radiogroup"
+        aria-labelledby={idTituloPedras}
+      >
+        <i className="fas fa-chess-board cartao-regras__icone" aria-hidden="true" />
+        <span className="cartao-regras__texto">
+          <strong id={idTituloPedras}>{t('pages.tiles')}</strong>
+          <span>{t('pages.tilesHelp')}</span>
+        </span>
+        <div className="segmentos-tema">
+          {OPCOES_PEDRAS.map((opcao) => (
+            <label key={opcao.valor} className="segmento-tema">
+              <input
+                type="radio"
+                name="pedras"
+                value={opcao.valor}
+                checked={preferencias.pedras === opcao.valor}
+                onChange={() => preferencias.alterar('pedras', opcao.valor)}
               />
               <span>{t(opcao.chave)}</span>
             </label>
