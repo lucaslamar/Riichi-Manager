@@ -51,12 +51,17 @@
   --formula-fundo: var(--cor-primario-suave);
   --formula-texto: var(--cor-texto);
 
-  --guia-papel: var(--cor-superficie);
-  --guia-tinta: var(--cor-texto);
-  --guia-tinta-suave: var(--cor-texto-suave);
-  --guia-linha: var(--cor-borda);
+  /*
+   * Tutorial como página de leitura (Kindle sépia, modo leitura do Edge): papel creme
+   * quente e tinta marrom-escura, sem branco frio nem preto puro.
+   */
+  --papel-leitura: #f5edda;
+  --guia-papel: var(--papel-leitura);
+  --guia-tinta: #33291f;
+  --guia-tinta-suave: #6a5a45;
+  --guia-linha: #e0d2b4;
   --guia-destaque: var(--cor-primario);
-  --guia-destaque-suave: var(--cor-primario-suave);
+  --guia-destaque-suave: color-mix(in srgb, var(--cor-primario) 12%, #f5edda);
 
   color: var(--cor-texto);
   background: var(--cor-fundo);
@@ -65,6 +70,15 @@
 :root[data-tema='claro'] body {
   background: var(--cor-fundo);
   color: var(--cor-texto);
+}
+
+/*
+ * Palcos onde se monta e se joga (mão da Calculadora, Sorteador): o mesmo papel do
+ * tutorial, mais escuro que o branco e mais claro que a página.
+ */
+:root[data-tema='claro'] :is(.card-mao-completa, .mao-editor-fixo, .sorteador-ventos-page, .calculadora-han-fu),
+:root[data-tema='claro'] .conteudo-principal:has(> div > .card-mao-completa, > .calculadora-han-fu) {
+  background: var(--papel-leitura);
 }
 
 :root[data-tema='claro'] .cabecalho-principal,
