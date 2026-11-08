@@ -4,6 +4,7 @@
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { progressoDaRodada } from '../torneio'
 import type { RodadaTorneio, Torneio } from '../tipos'
+import { proximaRodadaEliminatoria } from './eliminatorio'
 import { proximaRodadaSuica } from './suico'
 import { rodadaAleatoria } from './rodadaAleatoria'
 import { gerarRodizio } from './rodizio/rodizio'
@@ -40,5 +41,6 @@ export function proximaRodada(torneio: Torneio, partidas: readonly Partida[], ag
   if (formato.tipo === 'suico' && torneio.rodadas.length < formato.rodadas) {
     return proximaRodadaSuica(torneio, partidas, agora)
   }
+  if (formato.tipo === 'eliminatorio') return proximaRodadaEliminatoria(torneio, formato, partidas, agora)
   return null
 }

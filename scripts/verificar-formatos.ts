@@ -11,6 +11,12 @@ import { criarPartidaManual } from '../src/dominios/centerpiece/logica/partidaMa
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
 import { contarPares, contarVentos, custoDaMesa } from '../src/dominios/torneio/logica/formatos/comum'
 import { proximaRodada, rodadaFechada, rodadasIniciais } from '../src/dominios/torneio/logica/formatos'
+import {
+  classificacaoDaFase,
+  ehMesaFinal,
+  faseDaRodada,
+  rankingEliminatorio,
+} from '../src/dominios/torneio/logica/formatos/eliminatorio'
 import { criarRascunho, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
 import type { ConfigFormato, RodadaTorneio, Torneio } from '../src/dominios/torneio/logica/tipos'
 
@@ -145,5 +151,54 @@ for (const total of [8, 12, 16]) {
   const metade = jogarRodada(torneio, torneio.rodadas[0]).slice(0, 1)
   assert.equal(proximaRodada(torneio, metade, agora), null, 'Suíço: espera todas as mesas')
 }
+
+// ─── Eliminatório ───────────────────────────────────────────────────────────
+for (const [total, classificatoria, cortes] of [
+  [16, 'suico', [8, 4]],
+  [12, 'rodizio', [8, 4]],
+  [8, 'suico', [4]],
+] as const) {
+  for (const pontosCarregados of [true, false]) {
+    const formato = {
+      tipo: 'eliminatorio' as const,
+      classificatoria,
+      rodadasClassificatoria: classificatoria === 'rodizio' ? 4 : 3,
+      cortes: [...cortes],
+      rodadasPorFase: 1,
+      pontosCarregados,
+    }
+    const nome = `Eliminatório ${total} ${classificatoria} ${pontosCarregados ? 'carregados' : 'zerados'}`
+    const { torneio, partidas, ids } = simular(formato, total)
+    const fases = torneio.rodadas.map(faseDaRodada)
+    assert.deepEqual(
+      fases,
+      [...Array(formato.rodadasClassificatoria).fill(0), ...cortes.map((_, indice) => indice + 1)],
+      `${nome}: fases`,
+    )
+    conferirRodadas(torneio.rodadas.filter((rodada) => faseDaRodada(rodada) === 0), ids)
+    // Cada corte: entram exatamente os N primeiros da fase anterior.
+    cortes.forEach((corte, indice) => {
+      const anterior = classificacaoDaFase(torneio, partidas, indice, formato).slice(0, corte).map((linha) => linha.jogadorId)
+      const rodada = torneio.rodadas.find((item) => faseDaRodada(item) === indice + 1)!
+      assert.deepEqual(rodada.mesas.flatMap((mesa) => mesa.assentos).sort(), [...anterior].sort(), `${nome}: corte ${corte}`)
+    })
+    assert.ok(ehMesaFinal(torneio, torneio.rodadas[torneio.rodadas.length - 1]), `${nome}: mesa final`)
+    const ranking = rankingEliminatorio(torneio, partidas)
+    assert.equal(ranking.length, total)
+    assert.deepEqual(ranking.slice(0, 4).map((linha) => linha.fase), [cortes.length, cortes.length, cortes.length, cortes.length], `${nome}: finalistas no topo`)
+    assert.equal(ranking[ranking.length - 1].fase, 0)
+  }
+}
+
+// Zerados x carregados: com pontos zerados, a fase só conta as rodadas dela.
+{
+  const formato = { tipo: 'eliminatorio' as const, classificatoria: 'suico' as const, rodadasClassificatoria: 2, cortes: [4], rodadasPorFase: 1, pontosCarregados: false }
+  const { torneio, partidas } = simular(formato, 8)
+  const final = classificacaoDaFase(torneio, partidas, 1, formato)
+  assert.ok(final.every((linha) => linha.partidas === 1), 'zerados: só a partida da final')
+  const carregados = classificacaoDaFase(torneio, partidas, 1, { ...formato, pontosCarregados: true })
+  assert.ok(carregados.every((linha) => linha.partidas === 3), 'carregados: classificatória + final')
+}
+console.log('Eliminatório ok.')
 
 console.log('Formatos ok.')
