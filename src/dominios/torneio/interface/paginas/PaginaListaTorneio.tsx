@@ -16,9 +16,11 @@ import {
 import { garantirJogadoresPorNomes, useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido, partesDoNome, type Jogador } from '@/dominios/jogadores/logica/jogadores'
 import { rodadaAleatoria } from '../../logica/formatos/rodadaAleatoria'
+import { formatoValido } from '../../logica/configuracao'
 import { analisarLista, idsDaLista, limparColagem, type StatusLista } from '../../logica/listaTorneio'
 import { iniciarTorneio } from '../../logica/torneio'
 import type { ListaSalva, Torneio } from '../../logica/tipos'
+import ConfigTorneioSheet from '../componentes/ConfigTorneioSheet'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
 import '../torneio.css'
@@ -34,12 +36,10 @@ const LINHAS_DE_FOLGA = 3
 export default function PaginaListaTorneio({
   torneio,
   aoVoltar,
-  aoConfigurar,
   aoSortear,
 }: {
   torneio: Torneio
   aoVoltar: () => void
-  aoConfigurar: () => void
   aoSortear: () => void
 }) {
   const { t, numero } = useI18n()
@@ -54,9 +54,13 @@ export default function PaginaListaTorneio({
   const [memoria, setMemoria] = useState(false)
   const [cadastrados, setCadastrados] = useState(false)
   const [limpando, setLimpando] = useState(false)
+  const [configurando, setConfigurando] = useState(false)
 
   const linhas = useMemo(() => linhasDoTexto(lista), [lista])
   const analise = useMemo(() => analisarLista(lista, jogadores), [lista, jogadores])
+  /** Um corte do Eliminatório maior que a lista também segura o sorteio. */
+  const formatoOk = formatoValido(torneio.formato, analise.jogadores)
+  const podeSortear = analise.podeSortear && formatoOk
   const vinculos = useMemo(() => linhas.map((linha) => jogadorDaLinha(jogadores, linha)), [linhas, jogadores])
   const idsNaLista = useMemo(
     () => new Set(vinculos.flatMap((jogador) => (jogador ? [jogador.id] : []))),
@@ -99,7 +103,7 @@ export default function PaginaListaTorneio({
   }
 
   const sortear = () => {
-    if (!analise.podeSortear) return
+    if (!podeSortear) return
     const agora = new Date().toISOString()
     const ids = idsDaLista(analise.nomes, jogadores, garantirJogadoresPorNomes)
     salvar(iniciarTorneio(torneio, ids, rodadaAleatoria(ids, 1, agora), agora))
@@ -130,7 +134,7 @@ export default function PaginaListaTorneio({
               className="cm-btn-icone"
               aria-label={t('tournament.list.settings')}
               title={t('tournament.list.settings')}
-              onClick={aoConfigurar}
+              onClick={() => setConfigurando(true)}
             >
               <i className="fas fa-gear" aria-hidden="true" />
             </button>
@@ -240,12 +244,16 @@ export default function PaginaListaTorneio({
               <span className="sr-only">{t('match.club.tables', { count: analise.mesas })}</span>
             </span>
           </span>
-          <TextoStatus status={analise.status} jogadores={analise.jogadores} mesas={analise.mesas} />
+          {analise.podeSortear && !formatoOk ? (
+            <span className="clb-falta">{t('tournament.list.cutsTooBig')}</span>
+          ) : (
+            <TextoStatus status={analise.status} jogadores={analise.jogadores} mesas={analise.mesas} />
+          )}
         </p>
         <button
           type="button"
           className="btn-primario ptd-btn-largo"
-          disabled={!analise.podeSortear}
+          disabled={!podeSortear}
           onClick={sortear}
         >
           <i className="fas fa-shuffle" aria-hidden="true" /> {t('tournament.list.draw')}
@@ -292,6 +300,19 @@ export default function PaginaListaTorneio({
           aoUsarNomes={(nomes) => {
             definirLista(acrescentarNomes(lista, nomes, jogadores).texto)
             setCadastrados(false)
+          }}
+        />
+      )}
+
+      {configurando && (
+        <ConfigTorneioSheet
+          torneio={torneio}
+          jogadores={analise.jogadores}
+          aoFechar={() => setConfigurando(false)}
+          aoSalvar={(atualizado) => {
+            salvar(atualizado)
+            setConfigurando(false)
+            mostrar(t('tournament.settings.saved'))
           }}
         />
       )}

@@ -17,7 +17,6 @@ export default function PaginaTorneio({ torneioId, aoVoltar }: { torneioId: stri
       <PaginaListaTorneio
         torneio={torneio}
         aoVoltar={aoVoltar}
-        aoConfigurar={() => undefined}
         aoSortear={() => undefined}
       />
     )

@@ -37,7 +37,14 @@ const SECOES = [
   { id: 'calculo', chave: 'tableConfig.calcRules' },
   { id: 'mesa', chave: 'tableConfig.indexTable' },
 ] as const
-type IdSecao = (typeof SECOES)[number]['id']
+type IdSecao = (typeof SECOES)[number]['id'] | string
+
+/** Aba a mais, antes das de mesa (o Torneio usa para nome, formato e tempo). */
+export interface AbaExtra {
+  id: string
+  rotulo: string
+  conteudo: ReactNode
+}
 
 /** O que foi digitado na busca, já normalizado; vazio mostra tudo. */
 const ContextoBusca = createContext('')
@@ -56,6 +63,12 @@ interface PropsConfigMesaSheet {
   inicial: ConfigMesa
   aoConcluir: (config: ConfigMesa) => void
   aoFechar: () => void
+  titulo?: string
+  abasExtras?: readonly AbaExtra[]
+  /** Rodapé Cancelar e Salvar, no lugar de Reiniciar e Concluir. */
+  rodapeSalvar?: boolean
+  /** Validação das abas a mais. */
+  podeConcluir?: boolean
 }
 
 /**
@@ -64,40 +77,51 @@ interface PropsConfigMesaSheet {
  * Guia de bolso. O conjunto fica em botões no topo; mudou algo, vira Personalizado.
  * Com busca, aparecem todos os blocos que batem.
  */
-export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: PropsConfigMesaSheet) {
+export default function ConfigMesaSheet({
+  inicial,
+  aoConcluir,
+  aoFechar,
+  titulo,
+  abasExtras = [],
+  rodapeSalvar = false,
+  podeConcluir = true,
+}: PropsConfigMesaSheet) {
   const { t } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
   const semOka = calcularOka(config) <= 0
   const [texto, setTexto] = useState('')
   const busca = normalizarTexto(texto)
-  const [aba, setAba] = useState<IdSecao>('pontuacao')
+  const [aba, setAba] = useState<IdSecao>(abasExtras[0]?.id ?? 'pontuacao')
   const mostrar = (id: IdSecao) => !!busca || aba === id
 
   return (
     <Modal
-      titulo={t('tableConfig.title')}
+      titulo={titulo ?? t('tableConfig.title')}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       className="config-mesa"
       rodape={
         <div className="cfg-acoes">
-          <button type="button" className="btn-contorno" onClick={reiniciar}>
-            {t('tableConfig.reset')}
+          <button type="button" className="btn-contorno" onClick={rodapeSalvar ? aoFechar : reiniciar}>
+            {t(rodapeSalvar ? 'actions.cancel' : 'tableConfig.reset')}
           </button>
           <button
             type="button"
             className="btn-primario"
-            disabled={!umaValida(config.uma)}
+            disabled={!umaValida(config.uma) || !podeConcluir}
             onClick={() => aoConcluir(config)}
           >
-            {t('tableConfig.done')}
+            {t(rodapeSalvar ? 'tournament.settings.save' : 'tableConfig.done')}
           </button>
         </div>
       }
     >
       <ContextoBusca.Provider value={busca}>
       <AbasModal
-        abas={SECOES.map(({ id, chave }) => ({ chave: id, rotulo: t(chave) }))}
+        abas={[
+          ...abasExtras.map(({ id, rotulo }) => ({ chave: id, rotulo })),
+          ...SECOES.map(({ id, chave }) => ({ chave: id as IdSecao, rotulo: t(chave) })),
+        ]}
         ativa={aba}
         aoEscolher={setAba}
         rotulo={t('tableConfig.indexLabel')}
@@ -113,7 +137,15 @@ export default function ConfigMesaSheet({ inicial, aoConcluir, aoFechar }: Props
         }
       >
       <div className={`cfg-corpo${busca ? " cfg-corpo--busca" : ""}`}>
-      {!busca && (
+      {abasExtras.map((extra) =>
+        !busca && aba === extra.id ? (
+          <section key={extra.id} className="cfg-secao" data-secao={extra.id}>
+            {extra.conteudo}
+          </section>
+        ) : null,
+      )}
+
+      {!busca && !abasExtras.some((extra) => extra.id === aba) && (
         <div className="cfg-conjunto-regras">
           <span className="cfg-campo-rotulo">{t('tableConfig.preset')}</span>
           {/* Personalizado não é botão: nenhum fica marcado quando os valores são outros. */}

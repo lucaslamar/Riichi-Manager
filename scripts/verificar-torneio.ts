@@ -5,6 +5,7 @@
  */
 import assert from 'node:assert/strict'
 import type { ArmazenamentoChaveValor } from '../src/compartilhado/persistencia/armazenamento'
+import { formatoValido, lerCortes } from '../src/dominios/torneio/logica/configuracao'
 import { analisarLista, idsDaLista, limparColagem } from '../src/dominios/torneio/logica/listaTorneio'
 import { rodadaAleatoria } from '../src/dominios/torneio/logica/formatos/rodadaAleatoria'
 import type { Jogador } from '../src/dominios/jogadores/logica/jogadores'
@@ -184,4 +185,15 @@ const sorteada = rodadaAleatoria(doze, 1, agora.toISOString())
 assert.equal(sorteada.mesas.length, 3)
 assert.deepEqual(sorteada.mesas.flatMap((mesa) => mesa.assentos).sort(), [...doze].sort())
 
-console.log('Torneio: modelo, histórico, migração e lista ok.')
+// Configurações: cortes do Eliminatório.
+assert.deepEqual(lerCortes('16, 8, 4'), [16, 8, 4])
+assert.deepEqual(lerCortes('8 → 4'), [8, 4])
+assert.equal(lerCortes('8, 6'), null, 'múltiplo de 4')
+assert.equal(lerCortes('4, 8'), null, 'do maior para o menor')
+assert.equal(lerCortes(''), null)
+assert.equal(lerCortes('16, 4', 16), null, 'menor que a lista')
+assert.deepEqual(lerCortes('8, 4', 16), [8, 4])
+assert.equal(formatoValido({ tipo: 'eliminatorio', classificatoria: 'suico', rodadasClassificatoria: 3, cortes: [8, 4], rodadasPorFase: 1, pontosCarregados: true }, 12), true)
+assert.equal(formatoValido({ tipo: 'eliminatorio', classificatoria: 'suico', rodadasClassificatoria: 3, cortes: [], rodadasPorFase: 1, pontosCarregados: true }), false)
+
+console.log('Torneio: modelo, histórico, migração, lista e configurações ok.')

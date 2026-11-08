@@ -139,3 +139,44 @@
 .trn-importar {
   margin-top: 16px;
 }
+
+/* ─── Configurações do torneio ────────────────────────────────────────────── */
+.trn-formatos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trn-formato {
+  display: flex;
+  min-height: 56px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trn-formato > span {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}
+
+.trn-formato.ativo {
+  border-color: var(--primario);
+  box-shadow: inset 0 0 0 1px var(--primario);
+}
+
+.trn-campo--erro {
+  border-color: var(--texto-erro);
+}
+
+.trn-erro {
+  color: var(--texto-erro);
+}

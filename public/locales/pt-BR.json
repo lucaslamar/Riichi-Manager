@@ -1492,7 +1492,50 @@
       "savedLists": "Carregar uma lista",
       "noSaved": "Nenhuma lista salva.",
       "deleteSaved": "Excluir a lista {{name}}",
-      "import": "Importar do cadastro"
+      "import": "Importar do cadastro",
+      "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista"
+    },
+    "settings": {
+      "title": "Configurações do torneio",
+      "save": "Salvar",
+      "saved": "Configurações salvas",
+      "tabTournament": "Torneio",
+      "tabTime": "Tempo",
+      "name": "Nome do torneio",
+      "format": "Formato",
+      "multipleOfFour": "As mesas fecham sempre com 4: o torneio precisa de 8, 12, 16… jogadores, sem folga e sem mesa de 3.",
+      "rotationRounds": {
+        "one": "{{count}} rodada. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes.",
+        "other": "{{count}} rodadas. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes."
+      },
+      "rounds": "Número de rodadas",
+      "qualifier": "Fase classificatória",
+      "qualifierRounds": "Rodadas da classificatória",
+      "cuts": "Cortes (quantos avançam em cada fase)",
+      "cutsHelp": "Múltiplos de 4, do maior para o menor. Exemplo: 8, 4 (o último é a mesa final).",
+      "roundsPerPhase": "Rodadas por fase eliminatória",
+      "carryPoints": "Pontos a cada corte",
+      "carry": "Carregados",
+      "reset": "Zerados",
+      "roundTimer": "Timer geral da rodada",
+      "timer60": "1h",
+      "timer90": "1h30",
+      "timer120": "2h",
+      "custom": "Personalizado",
+      "minutes": "Minutos por rodada",
+      "tableTimer": "Timer por mesa",
+      "on": "Ligado",
+      "off": "Desligado",
+      "tableTimerHelp": "Cada mesa tem o próprio relógio, que começa quando ela inicia e pode receber +5 min.",
+      "timeUpHelp": "Quando o tempo acaba, a partida termina na mão atual.",
+      "turnTimerHelp": "O timer de vez de cada jogador segue a aba Mesa."
+    },
+    "formatHelp": {
+      "rodizio": "Grade inteira sorteada no início. Cada um é Leste uma vez.",
+      "suico": "Rodada 1 sorteada. Depois, as mesas seguem a classificação.",
+      "eliminatorio": "Classificatória e cortes até a mesa final.",
+      "corridos": "Liga em um encontro: cada rodada é sorteada na hora.",
+      "temporada": "Liga com vários encontros e ranking acumulado."
     }
   }
 }

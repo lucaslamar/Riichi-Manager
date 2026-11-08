@@ -1492,7 +1492,50 @@
       "savedLists": "Load a list",
       "noSaved": "No saved lists.",
       "deleteSaved": "Delete the list {{name}}",
-      "import": "Import from registry"
+      "import": "Import from registry",
+      "cutsTooBig": "Knockout cuts must be smaller than the list"
+    },
+    "settings": {
+      "title": "Tournament settings",
+      "save": "Save",
+      "saved": "Settings saved",
+      "tabTournament": "Tournament",
+      "tabTime": "Time",
+      "name": "Tournament name",
+      "format": "Format",
+      "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
+      "rotationRounds": {
+        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
+        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
+      },
+      "rounds": "Number of rounds",
+      "qualifier": "Qualifying stage",
+      "qualifierRounds": "Qualifying rounds",
+      "cuts": "Cuts (how many advance each stage)",
+      "cutsHelp": "Multiples of 4, largest first. Example: 8, 4 (the last one is the final table).",
+      "roundsPerPhase": "Rounds per knockout stage",
+      "carryPoints": "Points at each cut",
+      "carry": "Carried over",
+      "reset": "Reset",
+      "roundTimer": "Round timer",
+      "timer60": "1h",
+      "timer90": "1h30",
+      "timer120": "2h",
+      "custom": "Custom",
+      "minutes": "Minutes per round",
+      "tableTimer": "Per-table timer",
+      "on": "On",
+      "off": "Off",
+      "tableTimerHelp": "Each table has its own clock, which starts when the table starts and can get +5 min.",
+      "timeUpHelp": "When time is up, the game ends with the current hand.",
+      "turnTimerHelp": "The per-turn timer follows the Table tab."
+    },
+    "formatHelp": {
+      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
+      "suico": "Round 1 drawn. Then tables follow the standings.",
+      "eliminatorio": "Qualifying stage and cuts down to the final table.",
+      "corridos": "One-day league: each round is drawn on the spot.",
+      "temporada": "League over several meetups with a cumulative ranking."
     }
   }
 }
