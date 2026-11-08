@@ -98,14 +98,17 @@ export function textoDaRodada(
     mesa: (numero: number) => string
     vento: (vento: Vento) => string
     nome: (jogadorId: string) => string
+    /** false: só os nomes, os ventos saem na mesa. */
+    ventos?: boolean
   },
 ): string {
   const blocos = rodada.mesas.map((mesa) =>
     [
       `*${rotulos.mesa(mesa.numero)}*`,
-      ...mesa.assentos.map(
-        (jogadorId, indice) =>
-          `${KANJI_VENTO[ORDEM_VENTOS[indice]]} ${rotulos.vento(ORDEM_VENTOS[indice])}: ${rotulos.nome(jogadorId)}`,
+      ...mesa.assentos.map((jogadorId, indice) =>
+        rotulos.ventos === false
+          ? `• ${rotulos.nome(jogadorId)}`
+          : `${KANJI_VENTO[ORDEM_VENTOS[indice]]} ${rotulos.vento(ORDEM_VENTOS[indice])}: ${rotulos.nome(jogadorId)}`,
       ),
     ].join('\n'),
   )

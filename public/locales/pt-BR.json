@@ -1533,7 +1533,12 @@
       "off": "Desligado",
       "tableTimerHelp": "Cada mesa tem o próprio relógio, que começa quando ela inicia e pode receber +5 min.",
       "timeUpHelp": "Quando o tempo acaba, a partida termina na mão atual.",
-      "turnTimerHelp": "O timer de vez de cada jogador segue a aba Mesa."
+      "turnTimerHelp": "O timer de vez de cada jogador segue a aba Mesa.",
+      "winds": "Ventos",
+      "windsApp": "Sorteados no app",
+      "windsTable": "Na mesa",
+      "windsAppHelp": "Cada mesa já sai com o vento de cada jogador.",
+      "windsTableHelp": "O app só diz quem senta em cada mesa. Os ventos são sorteados na hora, com as pedras."
     },
     "formatHelp": {
       "rodizio": "Grade inteira sorteada no início. Cada um é Leste uma vez.",

@@ -5,7 +5,7 @@ import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/Config
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
-import { dataDoDia, formatoPadrao } from '../../logica/torneio'
+import { dataDoDia, formatoPadrao, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
 import { useTorneios } from '../hooks/useTorneios'
 import type { ConfigFormato, FormatoTorneio, Torneio } from '../../logica/tipos'
 import '../torneio.css'
@@ -32,6 +32,7 @@ export default function ConfigTorneioSheet({
   const { t } = useI18n()
   const [formato, setFormato] = useState<ConfigFormato>(torneio.formato)
   const [timers, setTimers] = useState(torneio.timers)
+  const [ventos, setVentos] = useState(() => sorteiaVentos(torneio))
   const { temporadas, salvarTemporada } = useTorneios()
   const [novaTemporada, setNovaTemporada] = useState(() => {
     const hoje = new Date()
@@ -58,19 +59,33 @@ export default function ConfigTorneioSheet({
         <BotoesOpcao<FormatoTorneio>
           rotulo={t('tournament.settings.format')}
           valor={formato.tipo}
-          aoEscolher={(tipo) =>
+          aoEscolher={(tipo) => {
             // Temporada: já vem com a mais recente, que é a que costuma continuar.
             setFormato(
               tipo === 'temporada' && temporadas.length > 0
                 ? { tipo, temporadaId: temporadas[temporadas.length - 1].id }
                 : formatoPadrao(tipo),
             )
-          }
+            setVentos(ventosPadrao(tipo))
+          }}
           className="cfg-presets trn-formatos-botoes"
           opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formatsShort.${tipo}`) }))}
         />
         <p className="cfg-ajuda">{t(`tournament.formatHelp.${formato.tipo}`)}</p>
       </div>
+
+      <Grupo rotulo={t('tournament.settings.winds')}>
+        <BotoesOpcao<'app' | 'mesa'>
+          rotulo={t('tournament.settings.winds')}
+          valor={ventos ? 'app' : 'mesa'}
+          aoEscolher={(valor) => setVentos(valor === 'app')}
+          opcoes={[
+            { valor: 'app', rotulo: t('tournament.settings.windsApp') },
+            { valor: 'mesa', rotulo: t('tournament.settings.windsTable') },
+          ]}
+        />
+      </Grupo>
+      <p className="cfg-ajuda">{t(ventos ? 'tournament.settings.windsAppHelp' : 'tournament.settings.windsTableHelp')}</p>
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
       {formato.tipo === 'temporada' && (
@@ -214,7 +229,7 @@ export default function ConfigTorneioSheet({
           salvarTemporada(temporada)
           formatoFinal = { tipo: 'temporada', temporadaId: temporada.id }
         }
-        aoSalvar({ ...torneio, formato: formatoFinal, timers, config })
+        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos })
       }}
     />
   )

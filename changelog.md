@@ -15,6 +15,7 @@
 - **Exportar e importar torneio**: arquivo .mojoca.json, sequência de QRs na tela ou código para colar. Transferir deixa o aparelho antigo só para consulta, com Desfazer. A importação mostra um resumo, pergunta quem é a mesma pessoa quando o nome bate e oferece substituir ou manter os dois. Ao fechar cada rodada, um lembrete discreto sugere exportar um backup.
 - **Paisagem e tablet**: no celular deitado, a lista fica à esquerda e o Sortear à direita, o timer fica compacto e as mesas ocupam a largura toda.
 - **Torneios antigos**: os torneios das versões anteriores são migrados para o novo formato na primeira abertura.
+- **Ventos sorteados no app ou na mesa**: nas configurações do torneio, logo abaixo do formato. No Rodízio o app já sorteia os ventos (é o que garante que cada um seja Leste uma vez). Nos outros formatos o padrão é sortear na mesa, e o card mostra só os quatro nomes.
 
 ### Alterado
 

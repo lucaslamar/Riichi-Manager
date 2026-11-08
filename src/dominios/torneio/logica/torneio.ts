@@ -167,6 +167,18 @@ export function finalizarTorneio(torneio: Torneio, agora: string): Torneio {
 }
 
 /** Lista sorteada: o rascunho vira torneio em andamento com a primeira rodada. */
+/**
+ * Ventos já sorteados pelo app? No Rodízio sim (é o que garante que cada um seja
+ * Leste uma vez). Nos outros, os ventos saem na mesa, como nos torneios de clube.
+ */
+export function ventosPadrao(formato: FormatoTorneio): boolean {
+  return formato === 'rodizio'
+}
+
+export function sorteiaVentos(torneio: Pick<Torneio, 'sortearVentos' | 'formato'>): boolean {
+  return torneio.sortearVentos ?? ventosPadrao(torneio.formato.tipo)
+}
+
 /** Nome de quem está no torneio: o do cadastro ou o escrito na lista (convidado). */
 export function nomeNoTorneio(torneio: Pick<Torneio, 'convidados'>, jogadores: readonly Jogador[], id: string): string {
   const jogador = jogadores.find((item) => item.id === id)

@@ -34,7 +34,7 @@ import {
   pausar,
   segundosRestantes,
 } from '../../logica/relogio'
-import { abortarTorneio, partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
+import { abortarTorneio, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
 import FolhaExportar from '../componentes/FolhaExportar'
 import { useTorneios } from '../hooks/useTorneios'
@@ -117,6 +117,8 @@ export default function PaginaMesasTorneio({
     salvar(trocarMesa(torneio, rodada.numero, mesa.numero, (atual) => ({ ...atual, relogio })))
 
   const relogioGeral = relogioDaRodada(torneio, rodada)
+  /** Ventos na mesa: o card mostra só os quatro nomes. */
+  const comVentos = sorteiaVentos(torneio)
 
   const compartilhar = async () => {
     const texto = textoDaRodada(rodada, {
@@ -124,6 +126,7 @@ export default function PaginaMesasTorneio({
       mesa: (numeroMesa) => t('match.table.number', { number: numeroMesa }),
       vento: (vento) => t(CHAVE_VENTO[vento]),
       nome: nomeDe,
+      ventos: comVentos,
     })
     const resultado = await compartilharTexto(texto, torneio.nome)
     if (resultado === 'copiado') mostrar(t('match.club.copied'))
@@ -277,11 +280,19 @@ export default function PaginaMesasTorneio({
                   const linha = resultadoDe(indice)
                   return (
                     <li key={vento} className="clb-assento">
-                      <span className={`clb-assento-kanji trn-kanji trn-kanji--${vento}`} aria-hidden="true">
-                        {KANJI_VENTO[vento]}
-                      </span>
-                      <span className="clb-assento-vento">{t(CHAVE_VENTO[vento])}</span>
-                      <span className="sr-only">: </span>
+                      {comVentos ? (
+                        <>
+                          <span className={`clb-assento-kanji trn-kanji trn-kanji--${vento}`} aria-hidden="true">
+                            {KANJI_VENTO[vento]}
+                          </span>
+                          <span className="clb-assento-vento">{t(CHAVE_VENTO[vento])}</span>
+                          <span className="sr-only">: </span>
+                        </>
+                      ) : (
+                        <span className="clb-assento-kanji trn-sem-vento" aria-hidden="true">
+                          <i className="fas fa-user" />
+                        </span>
+                      )}
                       <strong className="clb-assento-nome">{nomeDe(jogadorId)}</strong>
                       {status === 'em_andamento' && partida && (
                         <span className="trn-assento-pontos">{numero(partida.placar.pontos[indice as 0 | 1 | 2 | 3])}</span>

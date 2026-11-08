@@ -813,3 +813,9 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Ventos na mesa: no lugar do kanji, um marcador neutro. */
+.trn-sem-vento {
+  color: var(--texto-apoio);
+  font-size: 1.125rem;
+}
