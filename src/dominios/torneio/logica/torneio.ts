@@ -96,9 +96,17 @@ export function progressoDaRodada(partidas: readonly Partida[], torneio: Torneio
   return { finalizadas, total: rodada.mesas.length }
 }
 
-/** A rodada em jogo: a última gerada. */
-export function rodadaAtual(torneio: Torneio): RodadaTorneio | undefined {
-  return torneio.rodadas[torneio.rodadas.length - 1]
+/**
+ * A rodada em jogo: a primeira com mesa sem resultado. O Rodízio gera a grade
+ * inteira de uma vez, então "a última gerada" não serve. Sem partidas, a primeira.
+ */
+export function rodadaAtual(torneio: Torneio, partidas: readonly Partida[] = []): RodadaTorneio | undefined {
+  return (
+    torneio.rodadas.find((rodada) => {
+      const { finalizadas, total } = progressoDaRodada(partidas, torneio, rodada)
+      return finalizadas < total
+    }) ?? torneio.rodadas[torneio.rodadas.length - 1]
+  )
 }
 
 /** Rodadas previstas; `null` quando o organizador decide quando parar. */
@@ -158,6 +166,11 @@ export function finalizarTorneio(torneio: Torneio, agora: string): Torneio {
 }
 
 /** Lista sorteada: o rascunho vira torneio em andamento com a primeira rodada. */
-export function iniciarTorneio(torneio: Torneio, jogadorIds: string[], primeira: RodadaTorneio, agora: string): Torneio {
-  return { ...torneio, jogadorIds, rodadas: [primeira], status: 'em_andamento', atualizadoEm: agora }
+export function iniciarTorneio(
+  torneio: Torneio,
+  jogadorIds: string[],
+  rodadas: RodadaTorneio[],
+  agora: string,
+): Torneio {
+  return { ...torneio, jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
 }

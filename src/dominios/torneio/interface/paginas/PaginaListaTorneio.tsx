@@ -15,7 +15,7 @@ import {
 } from '@/dominios/centerpiece/logica/listaClube'
 import { garantirJogadoresPorNomes, useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido, partesDoNome, type Jogador } from '@/dominios/jogadores/logica/jogadores'
-import { rodadaAleatoria } from '../../logica/formatos/rodadaAleatoria'
+import { rodadasIniciais } from '../../logica/formatos'
 import { formatoValido } from '../../logica/configuracao'
 import { analisarLista, idsDaLista, limparColagem, type StatusLista } from '../../logica/listaTorneio'
 import { iniciarTorneio } from '../../logica/torneio'
@@ -108,7 +108,7 @@ export default function PaginaListaTorneio({
     if (!podeSortear) return
     const agora = new Date().toISOString()
     const ids = idsDaLista(analise.nomes, jogadores, garantirJogadoresPorNomes)
-    salvar(iniciarTorneio(torneio, ids, rodadaAleatoria(ids, 1, agora), agora))
+    salvar(iniciarTorneio(torneio, ids, rodadasIniciais(torneio, ids, agora), agora))
     aoSortear()
   }
 

@@ -1545,6 +1545,29 @@
       "eliminatorio": "Eliminatório",
       "corridos": "Pontos corridos",
       "temporada": "Temporada"
+    },
+    "diagnosis": {
+      "title": "Diagnóstico da Grade",
+      "grade": {
+        "perfeita": "Perfeita",
+        "boa": "Boa",
+        "regular": "Regular",
+        "ruim": "Ruim"
+      },
+      "maxMeetings": "Máx. de encontros",
+      "maxMeetingsHelp": "Quantas vezes a mesma dupla se enfrenta, no pior caso.",
+      "repeatedPairs": "Duplas repetidas",
+      "repeatedPairsHelp": "Duplas que se enfrentam mais de uma vez.",
+      "sameTables": "Mesas iguais",
+      "sameTablesHelp": "Mesas com os mesmos 4 jogadores em rodadas diferentes.",
+      "indirect": "Encontros indiretos",
+      "indirectHelp": "Duplas que nunca se enfrentam, mas têm um adversário em comum.",
+      "indirectAll": "Todos se enfrentam",
+      "pairsTitle": "Duplas que se repetem",
+      "windsTitle": "Ventos por jogador"
+    },
+    "ranking": {
+      "player": "Jogador"
     }
   }
 }
