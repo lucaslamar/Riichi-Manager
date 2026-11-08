@@ -1,5 +1,25 @@
 # Changelog - Mojoca
 
+## Não lançado (feature/torneio)
+
+### Adicionado
+
+- **Torneio de volta, dentro da Mesa partida**: o card Torneio fica logo abaixo de Nova partida. Um celular controla o torneio inteiro, sem internet.
+- **Lista do torneio em bloco de notas**: um nome por linha, colando direto do WhatsApp (a numeração e os marcadores saem sozinhos). Nomes repetidos ficam sublinhados em vermelho, o rodapé conta jogadores e mesas e avisa quantos faltam para fechar a mesa. Dá para puxar jogadores do cadastro, guardar e carregar listas e renomear o torneio tocando no título.
+- **Cinco formatos**: Rodízio (grade inteira sorteada no início, cada um é Leste uma vez), Suíço, Eliminatório (classificatória por Rodízio ou Suíço, cortes e mesa final), Brasileirão (cada rodada sorteada na hora) e Brasileirão em temporada, com ranking acumulado de vários encontros (soma, média ou melhores resultados).
+- **Configurações do torneio**: formato, regras de pontuação da mesa, timer geral da rodada (1h, 1h30, 2h ou outro tempo) e timer por mesa.
+- **Mesas sorteadas**: abas por rodada, timer geral com +5 min, ventos coloridos, Diagnóstico da Grade antes das mesas e compartilhar a rodada no WhatsApp. Registrar resultado abre direto o lançamento dos pontos finais, e Corrigir substitui o resultado anterior.
+- **Menu ⋮ das Mesas**: Sortear de novo a rodada, Reiniciar sorteio (do zero, com os mesmos jogadores), Exportar ou transferir e Abortar torneio (volta para a lista).
+- **Ranking do torneio**: posição dividida nos empates, top 3 em destaque, média de colocação, fase do Eliminatório, PDF, compartilhar e Encerrar torneio.
+- **Histórico de torneios**: aba Torneios no Histórico, com busca, formato e período.
+- **Exportar e importar torneio**: arquivo .mojoca.json, sequência de QRs na tela ou código para colar. Transferir deixa o aparelho antigo só para consulta, com Desfazer. A importação mostra um resumo, pergunta quem é a mesma pessoa quando o nome bate e oferece substituir ou manter os dois. Ao fechar cada rodada, um lembrete discreto sugere exportar um backup.
+- **Paisagem e tablet**: no celular deitado, a lista fica à esquerda e o Sortear à direita, o timer fica compacto e as mesas ocupam a largura toda.
+- **Torneios antigos**: os torneios das versões anteriores são migrados para o novo formato na primeira abertura.
+
+### Alterado
+
+- **Abas das configurações da mesa** do tamanho do nome, para "Pontuação" não passar da borda.
+
 ## 5.9.0 - 2026-11-05
 
 ### Adicionado
