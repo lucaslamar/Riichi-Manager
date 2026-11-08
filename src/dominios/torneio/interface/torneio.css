@@ -382,3 +382,43 @@
   max-height: 60dvh;
   overflow-y: auto;
 }
+
+/* ─── Temporada ───────────────────────────────────────────────────────────── */
+.trn-tabela-temporada {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.trn-tabela-temporada th,
+.trn-tabela-temporada td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  text-align: right;
+}
+
+.trn-tabela-temporada th:nth-child(2),
+.trn-tabela-temporada td:nth-child(2) {
+  width: 100%;
+  text-align: left;
+}
+
+.trn-tabela-temporada th {
+  position: sticky;
+  top: 0;
+  color: var(--texto-apoio);
+  background: var(--fundo);
+  font-size: 0.8125rem;
+}
+
+.trn-positivo {
+  color: var(--texto-positivo);
+}
+
+.trn-negativo {
+  color: var(--texto-erro);
+}
+
+.trn-abaixo-minimo td {
+  color: var(--texto-apoio);
+}

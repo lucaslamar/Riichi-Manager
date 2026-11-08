@@ -1495,7 +1495,8 @@
       "import": "Adicionar jogadores do cadastro",
       "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista",
       "rename": "Renomear o torneio {{name}}",
-      "more": "Mais opções da lista"
+      "more": "Mais opções da lista",
+      "pickSeason": "Escolha ou crie a temporada na engrenagem"
     },
     "settings": {
       "title": "Configurações do torneio",
@@ -1545,6 +1546,45 @@
       "eliminatorio": "Eliminatório",
       "corridos": "Pontos corridos",
       "temporada": "Temporada"
+    },
+    "season": {
+      "title": "Temporada",
+      "new": "Nova temporada",
+      "name": "Nome da temporada",
+      "defaultName": "Temporada {{year}}",
+      "start": "Início",
+      "end": "Fim",
+      "criterionLater": "O critério do ranking (soma, média ou melhores resultados) se escolhe na tela da temporada.",
+      "meetupName": "{{season}} · Encontro {{number}}",
+      "meetups": {
+        "one": "{{count}} encontro",
+        "other": "{{count}} encontros"
+      },
+      "newMeetup": "Novo encontro",
+      "continueMeetup": "Continuar o encontro",
+      "criterion": "Critério do ranking",
+      "criterionSum": "Soma",
+      "criterionAverage": "Média",
+      "criterionBest": "Melhores",
+      "minimum": "Mínimo de partidas",
+      "best": "Quantos resultados contam",
+      "criterionSumHelp": "Soma dos pontos de todas as partidas da temporada.",
+      "criterionAverageHelp": {
+        "one": "Média de pontos por partida. Quem jogou menos de {{count}} partida fica no fim, sem posição.",
+        "other": "Média de pontos por partida. Quem jogou menos de {{count}} partidas fica no fim, sem posição."
+      },
+      "criterionBestHelp": {
+        "one": "Soma do melhor resultado de partida de cada jogador.",
+        "other": "Soma dos {{count}} melhores resultados de partida de cada jogador."
+      },
+      "ranking": "Ranking da temporada",
+      "noResults": "Nenhum resultado ainda.",
+      "points": "Pontos",
+      "games": "Partidas",
+      "meetupsTitle": "Encontros",
+      "noMeetups": "Nenhum encontro ainda.",
+      "listTitle": "Temporadas",
+      "open": "Ver a temporada"
     },
     "diagnosis": {
       "title": "Diagnóstico da Grade",

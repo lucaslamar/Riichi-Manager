@@ -3,7 +3,10 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/ConfigMesaSheet'
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
-import { formatoPadrao } from '../../logica/torneio'
+import { gerarId } from '@/compartilhado/adaptadores/identificador'
+import { criarTemporada } from '../../logica/temporada'
+import { dataDoDia, formatoPadrao } from '../../logica/torneio'
+import { useTorneios } from '../hooks/useTorneios'
 import type { ConfigFormato, FormatoTorneio, Torneio } from '../../logica/tipos'
 import '../torneio.css'
 
@@ -29,6 +32,22 @@ export default function ConfigTorneioSheet({
   const { t } = useI18n()
   const [formato, setFormato] = useState<ConfigFormato>(torneio.formato)
   const [timers, setTimers] = useState(torneio.timers)
+  const { temporadas, salvarTemporada } = useTorneios()
+  const [novaTemporada, setNovaTemporada] = useState(() => {
+    const hoje = new Date()
+    const fim = new Date(hoje)
+    fim.setMonth(fim.getMonth() + 3)
+    return {
+      nome: t('tournament.season.defaultName', { year: String(hoje.getFullYear()) }),
+      inicio: dataDoDia(hoje),
+      fim: dataDoDia(fim),
+    }
+  })
+  const temporadaNova = formato.tipo === 'temporada' && !temporadas.some((item) => item.id === formato.temporadaId)
+  const temporadaValida =
+    formato.tipo !== 'temporada' ||
+    !temporadaNova ||
+    (novaTemporada.nome.trim().length > 0 && !!novaTemporada.inicio && novaTemporada.inicio <= novaTemporada.fim)
   const minutos = Math.round(timers.rodadaSegundos / 60)
   const personalizado = !OPCOES_TIMER_RODADA.some((segundos) => segundos === timers.rodadaSegundos)
 
@@ -39,7 +58,14 @@ export default function ConfigTorneioSheet({
         <BotoesOpcao<FormatoTorneio>
           rotulo={t('tournament.settings.format')}
           valor={formato.tipo}
-          aoEscolher={(tipo) => setFormato(formatoPadrao(tipo))}
+          aoEscolher={(tipo) =>
+            // Temporada: já vem com a mais recente, que é a que costuma continuar.
+            setFormato(
+              tipo === 'temporada' && temporadas.length > 0
+                ? { tipo, temporadaId: temporadas[temporadas.length - 1].id }
+                : formatoPadrao(tipo),
+            )
+          }
           className="cfg-presets trn-formatos-botoes"
           opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formatsShort.${tipo}`) }))}
         />
@@ -47,6 +73,55 @@ export default function ConfigTorneioSheet({
       </div>
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
+      {formato.tipo === 'temporada' && (
+        <>
+          <Campo rotulo={t('tournament.season.title')}>
+            <select
+              className="trn-campo"
+              value={temporadaNova ? '' : formato.temporadaId}
+              onChange={(evento) => setFormato({ tipo: 'temporada', temporadaId: evento.target.value })}
+            >
+              {temporadas.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.nome}
+                </option>
+              ))}
+              <option value="">{t('tournament.season.new')}</option>
+            </select>
+          </Campo>
+          {temporadaNova && (
+            <>
+              <Campo rotulo={t('tournament.season.name')}>
+                <input
+                  className="trn-campo"
+                  value={novaTemporada.nome}
+                  maxLength={60}
+                  onChange={(evento) => setNovaTemporada({ ...novaTemporada, nome: evento.target.value })}
+                />
+              </Campo>
+              <div className="trn-filtros">
+                <Campo rotulo={t('tournament.season.start')}>
+                  <input
+                    type="date"
+                    className="trn-campo"
+                    value={novaTemporada.inicio}
+                    onChange={(evento) => setNovaTemporada({ ...novaTemporada, inicio: evento.target.value })}
+                  />
+                </Campo>
+                <Campo rotulo={t('tournament.season.end')}>
+                  <input
+                    type="date"
+                    className={`trn-campo${novaTemporada.inicio <= novaTemporada.fim ? '' : ' trn-campo--erro'}`}
+                    value={novaTemporada.fim}
+                    onChange={(evento) => setNovaTemporada({ ...novaTemporada, fim: evento.target.value })}
+                  />
+                </Campo>
+              </div>
+              <p className="cfg-ajuda">{t('tournament.season.criterionLater')}</p>
+            </>
+          )}
+        </>
+      )}
 
       <p className="cfg-ajuda">{t('tournament.settings.multipleOfFour')}</p>
     </>
@@ -106,14 +181,15 @@ export default function ConfigTorneioSheet({
     </>
   )
 
-  const cortesValidos = formatoValido(formato, jogadores >= 8 ? jogadores : undefined)
+  // Temporada nova ainda sem id: quem confere é `temporadaValida`.
+  const cortesValidos = formato.tipo === 'temporada' || formatoValido(formato, jogadores >= 8 ? jogadores : undefined)
 
   return (
     <ConfigMesaSheet
       titulo={t('tournament.settings.title')}
       inicial={torneio.config}
       rodapeSalvar
-      podeConcluir={cortesValidos}
+      podeConcluir={cortesValidos && temporadaValida}
       abasExtras={[
         {
           id: 'torneio',
@@ -128,8 +204,17 @@ export default function ConfigTorneioSheet({
       ]}
       aoFechar={aoFechar}
       aoConcluir={(config) => {
-        if (!cortesValidos) return
-        aoSalvar({ ...torneio, formato, timers, config })
+        if (!cortesValidos || !temporadaValida) return
+        let formatoFinal = formato
+        if (formato.tipo === 'temporada' && temporadaNova) {
+          const temporada = {
+            ...criarTemporada({ id: gerarId(), ...novaTemporada, nome: novaTemporada.nome.trim(), agora: new Date().toISOString() }),
+            config,
+          }
+          salvarTemporada(temporada)
+          formatoFinal = { tipo: 'temporada', temporadaId: temporada.id }
+        }
+        aoSalvar({ ...torneio, formato: formatoFinal, timers, config })
       }}
     />
   )

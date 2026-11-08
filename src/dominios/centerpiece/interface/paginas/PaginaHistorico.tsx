@@ -20,9 +20,11 @@ import { textoDaPartida } from '../textoPartida'
 export default function PaginaHistorico({
   aoVoltar,
   aoAbrirTorneio,
+  aoAbrirTemporada,
 }: {
   aoVoltar: () => void
   aoAbrirTorneio: (torneio: Torneio) => void
+  aoAbrirTemporada: (temporadaId: string) => void
 }) {
   const { t, idioma, numero } = useI18n()
   const { partidas, descartar } = usePartidas()
@@ -83,7 +85,7 @@ export default function PaginaHistorico({
         aoEscolher={setAba}
       />
       {aba === 'torneios' ? (
-        <HistoricoTorneios aoAbrir={aoAbrirTorneio} />
+        <HistoricoTorneios aoAbrir={aoAbrirTorneio} aoAbrirTemporada={aoAbrirTemporada} />
       ) : historico.length === 0 ? (
         <p className="ptd-vazio">{t('match.history.empty')}</p>
       ) : (

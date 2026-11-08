@@ -1481,7 +1481,8 @@
       "import": "Add players from registry",
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
-      "more": "More list options"
+      "more": "More list options",
+      "pickSeason": "Pick or create the season in the settings"
     },
     "settings": {
       "title": "Tournament settings",
@@ -1531,6 +1532,45 @@
       "eliminatorio": "Knockout",
       "corridos": "League",
       "temporada": "Season"
+    },
+    "season": {
+      "title": "Season",
+      "new": "New season",
+      "name": "Season name",
+      "defaultName": "Season {{year}}",
+      "start": "Start",
+      "end": "End",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "meetupName": "{{season}} · Meetup {{number}}",
+      "meetups": {
+        "one": "{{count}} meetup",
+        "other": "{{count}} meetups"
+      },
+      "newMeetup": "New meetup",
+      "continueMeetup": "Continue the meetup",
+      "criterion": "Ranking criterion",
+      "criterionSum": "Sum",
+      "criterionAverage": "Average",
+      "criterionBest": "Best",
+      "minimum": "Minimum games",
+      "best": "How many results count",
+      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionAverageHelp": {
+        "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
+        "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
+      },
+      "criterionBestHelp": {
+        "one": "Sum of each player's best game result.",
+        "other": "Sum of each player's {{count}} best game results."
+      },
+      "ranking": "Season ranking",
+      "noResults": "No results yet.",
+      "points": "Points",
+      "games": "Games",
+      "meetupsTitle": "Meetups",
+      "noMeetups": "No meetups yet.",
+      "listTitle": "Seasons",
+      "open": "Open the season"
     },
     "diagnosis": {
       "title": "Grid diagnosis",

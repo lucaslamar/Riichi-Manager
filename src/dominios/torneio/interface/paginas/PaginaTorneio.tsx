@@ -10,9 +10,17 @@ import PaginaListaTorneio from './PaginaListaTorneio'
 import '../torneio.css'
 
 /** Torneio aberto: a Lista enquanto é rascunho, depois as mesas (item 9). */
-export default function PaginaTorneio({ torneioId, aoVoltar }: { torneioId: string; aoVoltar: () => void }) {
+export default function PaginaTorneio({
+  torneioId,
+  aoVoltar,
+  aoAbrirTemporada,
+}: {
+  torneioId: string
+  aoVoltar: () => void
+  aoAbrirTemporada: (temporadaId: string) => void
+}) {
   const { t } = useI18n()
-  const { torneios } = useTorneios()
+  const { torneios, temporadas } = useTorneios()
   const subtitulo = useSubtituloTorneio()
   const torneio = torneios.find((item) => item.id === torneioId)
   const { jogadores } = useJogadores()
@@ -35,6 +43,20 @@ export default function PaginaTorneio({ torneioId, aoVoltar }: { torneioId: stri
     <section className="ptd-inicio trn-pagina">
       <TituloTela titulo={torneio?.nome ?? t('tournament.title')} aoVoltar={aoVoltar} />
       {torneio && <p className="ptd-vazio">{subtitulo(torneio)}</p>}
+      {torneio?.formato.tipo === 'temporada' && (
+        <button
+          type="button"
+          className="trn-card"
+          onClick={() => torneio.formato.tipo === 'temporada' && aoAbrirTemporada(torneio.formato.temporadaId)}
+        >
+          <i className="fas fa-calendar-days" aria-hidden="true" />
+          <strong>
+            {temporadas.find((item) => torneio.formato.tipo === 'temporada' && item.id === torneio.formato.temporadaId)?.nome ??
+              t('tournament.season.title')}
+          </strong>
+          <span>{t('tournament.season.open')}</span>
+        </button>
+      )}
       {torneio && torneio.rodadas.length > 0 && (
         <DiagnosticoGrade
           qualidade={qualidadeDasRodadas(torneio.rodadas, torneio.jogadorIds.length)}

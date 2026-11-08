@@ -7,6 +7,7 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogadores'
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
+import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
 import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
 import { criarRascunho, torneioAtivo } from '@/dominios/torneio/logica/torneio'
@@ -41,6 +42,7 @@ type TelaModulo =
   | { nome: 'historico' }
   | { nome: 'ranking' }
   | { nome: 'torneio'; id: string }
+  | { nome: 'temporada'; id: string }
   | { nome: 'mesa'; id: string }
 
 /** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
@@ -177,10 +179,30 @@ function TelasCenterpiece({
     )
   }
   if (tela.nome === 'historico') {
-    return <PaginaHistorico aoVoltar={irInicio} aoAbrirTorneio={(torneio) => setTela({ nome: 'torneio', id: torneio.id })} />
+    return <PaginaHistorico aoVoltar={irInicio} aoAbrirTorneio={(torneio) => setTela({ nome: 'torneio', id: torneio.id })}
+        aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
+      />
   }
   if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
-  if (tela.nome === 'torneio') return <PaginaTorneio torneioId={tela.id} aoVoltar={irInicio} />
+  if (tela.nome === 'torneio') {
+    return (
+      <PaginaTorneio
+        key={tela.id}
+        torneioId={tela.id}
+        aoVoltar={irInicio}
+        aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
+      />
+    )
+  }
+  if (tela.nome === 'temporada') {
+    return (
+      <PaginaTemporada
+        temporadaId={tela.id}
+        aoVoltar={irInicio}
+        aoAbrirEncontro={(encontro) => setTela({ nome: 'torneio', id: encontro.id })}
+      />
+    )
+  }
 
   if (tela.nome === 'andamento') {
     return (

@@ -259,7 +259,9 @@ export default function PaginaListaTorneio({
             </span>
           </span>
           {analise.podeSortear && !formatoOk ? (
-            <span className="clb-falta">{t('tournament.list.cutsTooBig')}</span>
+            <span className="clb-falta">
+              {t(torneio.formato.tipo === 'temporada' ? 'tournament.list.pickSeason' : 'tournament.list.cutsTooBig')}
+            </span>
           ) : (
             <TextoStatus status={analise.status} jogadores={analise.jogadores} mesas={analise.mesas} />
           )}

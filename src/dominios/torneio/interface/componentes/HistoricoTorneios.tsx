@@ -10,9 +10,15 @@ import '../torneio.css'
 const FORMATOS: readonly FormatoTorneio[] = ['rodizio', 'suico', 'eliminatorio', 'corridos', 'temporada']
 
 /** Torneios finalizados, com busca por jogador, formato e datas. Fica na aba do Histórico. */
-export default function HistoricoTorneios({ aoAbrir }: { aoAbrir: (torneio: Torneio) => void }) {
+export default function HistoricoTorneios({
+  aoAbrir,
+  aoAbrirTemporada,
+}: {
+  aoAbrir: (torneio: Torneio) => void
+  aoAbrirTemporada: (temporadaId: string) => void
+}) {
   const { t, idioma } = useI18n()
-  const { torneios } = useTorneios()
+  const { torneios, temporadas } = useTorneios()
   const { jogadores } = useJogadores()
   const [filtro, setFiltro] = useState<FiltroHistorico>({ busca: '', formato: 'todos', de: '', ate: '' })
 
@@ -29,6 +35,25 @@ export default function HistoricoTorneios({ aoAbrir }: { aoAbrir: (torneio: Torn
 
   return (
     <div className="trn-pagina trn-historico">
+      {temporadas.length > 0 && (
+        <>
+          <h3 className="ptd-rotulo">{t('tournament.season.listTitle')}</h3>
+          <ul className="cm-lista">
+            {[...temporadas].reverse().map((temporada) => (
+              <li key={temporada.id}>
+                <button type="button" className="trn-card" onClick={() => aoAbrirTemporada(temporada.id)}>
+                  <i className="fas fa-calendar-days" aria-hidden="true" />
+                  <strong>{temporada.nome}</strong>
+                  <span>
+                    {data(temporada.inicio)} – {data(temporada.fim)}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <h3 className="ptd-rotulo">{t('tournament.history.title')}</h3>
+        </>
+      )}
         {finalizados.length === 0 ? (
           <p className="ptd-vazio">{t('tournament.history.empty')}</p>
         ) : (

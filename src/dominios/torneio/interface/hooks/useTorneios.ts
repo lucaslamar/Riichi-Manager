@@ -4,7 +4,7 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { acoesPartidas, lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { garantirJogadoresPorNomes } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { finalizarTorneio } from '../../logica/torneio'
-import type { ListaSalva, Torneio } from '../../logica/tipos'
+import type { ListaSalva, Temporada, Torneio } from '../../logica/tipos'
 import {
   carregarLista,
   carregarTorneios,
@@ -93,6 +93,16 @@ export const acoesTorneios = {
   },
   finalizar(id: string) {
     acoesTorneios.atualizar(id, (torneio) => finalizarTorneio(torneio, new Date().toISOString()))
+  },
+  salvarTemporada(temporada: Temporada) {
+    const atual = lerTorneios()
+    const existe = atual.temporadas.some((item) => item.id === temporada.id)
+    definir({
+      ...atual,
+      temporadas: existe
+        ? atual.temporadas.map((item) => (item.id === temporada.id ? temporada : item))
+        : [...atual.temporadas, temporada],
+    })
   },
   excluir(id: string) {
     const atual = lerTorneios()

@@ -17,6 +17,7 @@ import {
   faseDaRodada,
   rankingEliminatorio,
 } from '../src/dominios/torneio/logica/formatos/eliminatorio'
+import { rankingTemporada } from '../src/dominios/torneio/logica/temporada'
 import { criarRascunho, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
 import type { ConfigFormato, RodadaTorneio, Torneio } from '../src/dominios/torneio/logica/tipos'
 
@@ -215,6 +216,37 @@ for (const total of [8, 12, 16]) {
     assert.equal(custo, 0, `Corridos ${total}: rodada 2 sem repetir adversário`)
   }
   console.log(`Corridos ${total}: pares repetidos em 4 rodadas ${repetidos(torneio.rodadas)}`)
+}
+
+// ─── Temporada: dois encontros e ranking acumulado ──────────────────────────
+{
+  const formato = { tipo: 'temporada' as const, temporadaId: 'temp' }
+  // simular joga `limite` rodadas e deixa a seguinte sorteada, sem resultado.
+  const um = simular(formato, 8, 2) // j1..j8: 2 partidas
+  const dois = simular(formato, 12, 1) // j1..j12: 1 partida
+  const encontros = [um.torneio, dois.torneio]
+  const partidas = [...um.partidas, ...dois.partidas]
+  const finais = new Map<string, number[]>()
+  for (const partida of partidas) {
+    for (const linha of partida.resultado ?? []) finais.set(linha.jogadorId, [...(finais.get(linha.jogadorId) ?? []), linha.final])
+  }
+  const soma = rankingTemporada(encontros, partidas, { tipo: 'soma' })
+  assert.equal(soma.length, 12, 'todos os presentes de qualquer encontro')
+  const j1 = soma.find((linha) => linha.jogadorId === 'j1')!
+  assert.equal(j1.partidas, 3, 'j1: 2 partidas no 1º encontro e 1 no 2º')
+  assert.equal(j1.encontros, 2)
+  assert.equal(j1.valor, Math.round(finais.get('j1')!.reduce((a, b) => a + b, 0) * 10) / 10)
+  assert.ok(soma.every((linha, indice) => indice === 0 || soma[indice - 1].valor >= linha.valor), 'soma: ordenado')
+
+  const media = rankingTemporada(encontros, partidas, { tipo: 'media', minimoPartidas: 2 })
+  const abaixo = media.filter((linha) => linha.abaixoDoMinimo).map((linha) => linha.jogadorId).sort()
+  assert.deepEqual(abaixo, ['j10', 'j11', 'j12', 'j9'], 'média: quem jogou 1 partida fica abaixo do mínimo')
+  assert.ok(media.slice(-4).every((linha) => linha.abaixoDoMinimo), 'média: abaixo do mínimo no fim')
+
+  const melhores = rankingTemporada(encontros, partidas, { tipo: 'melhores', quantidade: 2 })
+  const esperadoJ1 = [...finais.get('j1')!].sort((a, b) => b - a).slice(0, 2).reduce((a, b) => a + b, 0)
+  assert.equal(melhores.find((linha) => linha.jogadorId === 'j1')!.valor, Math.round(esperadoJ1 * 10) / 10, 'melhores 2')
+  console.log('Temporada ok.')
 }
 
 console.log('Formatos ok.')

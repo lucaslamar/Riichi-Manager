@@ -32,6 +32,8 @@ export function formatoValido(formato: ConfigFormato, jogadores?: number): boole
         formato.rodadasPorFase >= 1 &&
         lerCortes(formato.cortes.join(','), jogadores) !== null
       )
+    case 'temporada':
+      return formato.temporadaId !== ''
     default:
       return true
   }
