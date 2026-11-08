@@ -24,6 +24,11 @@ interface OpcionsCalculadoraMao {
   configuracaoInicial?: ConfiguracaoCalculo
   /** Cópias que a partida já mostrou fora desta mão: contam no limite de 4 de cada pedra. */
   pedrasDaMesa?: CodigoPedra[]
+  /**
+   * Ron registrado na partida: a pedra descartada já é a batida. Ela aparece na mão
+   * desde o começo, entra sozinha quando as outras 13 fecham e não dá para trocá-la.
+   */
+  pedraBatidaFixa?: CodigoPedra
 }
 
 /**
@@ -87,7 +92,13 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   const deveCalcularMao = maoCompleta && assinaturaCalculo === assinaturaMaoAtual
 
   // Pela chave: quem chama recria a lista a cada render, e as esperas recalculam quando ela muda.
-  const chavePedrasDaMesa = opcoes?.pedrasDaMesa?.join() ?? ''
+  const pedraBatidaFixa = opcoes?.pedraBatidaFixa ?? null
+  const batidaNaMao =
+    !!pedraBatidaFixa && mao.indiceAgari >= 0 && mao.pedras[mao.indiceAgari] === pedraBatidaFixa
+  /** A batida fixa que ainda não entrou na mão: aparece no fim dela e conta no limite. */
+  const batidaReservada = pedraBatidaFixa && !batidaNaMao ? pedraBatidaFixa : null
+
+  const chavePedrasDaMesa = [...(opcoes?.pedrasDaMesa ?? []), ...(batidaReservada ? [batidaReservada] : [])].join()
   const pedrasDaMesa = useMemo(
     () => (chavePedrasDaMesa ? chavePedrasDaMesa.split(',') : []),
     [chavePedrasDaMesa],
@@ -185,6 +196,8 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   }
 
   const alternarSelecaoPedraAgari = () => {
+    // Ron da partida: a batida é a pedra descartada, não se escolhe outra.
+    if (pedraBatidaFixa) return
     if (!maoCompleta) return
     setSelecionandoPedraAgari((selecionando) => {
       const proximo = !selecionando
@@ -195,7 +208,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   }
 
   const escolherPedraAgariMao = (indicePedra: number) => {
-    if (!maoCompleta || indicePedra < 0 || indicePedra >= mao.pedras.length) return
+    if (pedraBatidaFixa || !maoCompleta || indicePedra < 0 || indicePedra >= mao.pedras.length) return
 
     atualizarMao((rascunho) => {
       rascunho.indiceAgari = indicePedra
@@ -207,7 +220,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   }
 
   const escolherPedraAgariMeld = (indiceMeld: number, indicePedra: number) => {
-    if (!maoCompleta) return
+    if (pedraBatidaFixa || !maoCompleta) return
     const meld = mao.melds[indiceMeld]
     const pedra = meld?.pedras[indicePedra]
     if (!meld || !pedra) return
@@ -235,7 +248,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
   }
 
   const escolherPedraAgariPorCodigo = (pedra: CodigoPedra) => {
-    if (!maoCompleta) return
+    if (pedraBatidaFixa || !maoCompleta) return
     const trocada = trocarBatida(mao, pedra, configuracao)
     if (trocada) {
       atualizarMao((rascunho) => {
@@ -384,6 +397,64 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     acoesPedras.substituirMaoNotacao(entrada)
   }
 
+  // Batida fixa: ao chegar a 13 slots vindo de menos (um Pon que fecha a mão, por
+  // exemplo), a chamada em curso sai, para a batida poder entrar.
+  const slotsAnterioresRef = useRef(slotsUsados)
+  useEffect(() => {
+    const anteriores = slotsAnterioresRef.current
+    slotsAnterioresRef.current = slotsUsados
+    if (pedraBatidaFixa && anteriores < 13 && slotsUsados === 13) setAcaoPendente(null)
+  }, [pedraBatidaFixa, setAcaoPendente, slotsUsados])
+
+  // Com as outras 13 prontas, a batida fixa entra na mão já marcada. Na notação, se
+  // ela foi digitada, passa a ser a batida no lugar da última pedra digitada.
+  useEffect(() => {
+    if (!pedraBatidaFixa || batidaNaMao || mao.agariMeld) return
+    if (slotsUsados === 13 && !acaoPendente) {
+      atualizarMao((rascunho) => {
+        rascunho.pedras.push(pedraBatidaFixa)
+        ordenarPedras(rascunho.pedras)
+        rascunho.indiceAgari = rascunho.pedras.lastIndexOf(pedraBatidaFixa)
+        rascunho.agariMeld = null
+      })
+    } else if (maoCompleta && mao.pedras.includes(pedraBatidaFixa)) {
+      atualizarMao((rascunho) => {
+        rascunho.indiceAgari = rascunho.pedras.lastIndexOf(pedraBatidaFixa)
+      })
+    }
+  }, [acaoPendente, atualizarMao, batidaNaMao, mao.agariMeld, mao.pedras, maoCompleta, pedraBatidaFixa, slotsUsados])
+
+  /**
+   * Batida fixa: tirar uma pedra da mão completa tira também a batida, que volta a
+   * esperar no fim da mão. Tocar na própria batida não faz nada.
+   */
+  const removerPedra = (indicePedra: number) => {
+    if (!batidaNaMao) {
+      acoesPedras.removerPedra(indicePedra)
+      return
+    }
+    if (indicePedra === mao.indiceAgari) return
+    atualizarMao((rascunho) => {
+      for (const indice of [indicePedra, rascunho.indiceAgari].sort((a, b) => b - a)) {
+        rascunho.pedras.splice(indice, 1)
+      }
+      rascunho.indiceAgari = -1
+      rascunho.agariMeld = null
+    })
+    setEscolhaChiiPendente(null)
+    setAcaoPendente(null)
+  }
+
+  const removerMeld = (indiceMeld: number) => {
+    if (batidaNaMao) {
+      atualizarMao((rascunho) => {
+        rascunho.pedras.splice(rascunho.indiceAgari, 1)
+        rascunho.indiceAgari = -1
+      })
+    }
+    acoesPedras.removerMeld(indiceMeld)
+  }
+
   return {
     ...estado,
     contarCodigo: acoesMelds.contarCodigo,
@@ -418,6 +489,10 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     ...acoesPedras,
     alternarAcao: alternarAcaoCalculadora,
     substituirMaoNotacao,
+    removerPedra,
+    removerMeld,
+    batidaFixa: !!pedraBatidaFixa,
+    batidaReservada,
     podeMeld,
     podeChii,
     podePon,

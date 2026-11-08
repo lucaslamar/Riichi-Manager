@@ -61,6 +61,10 @@ interface PropsMaoAtual {
   meldsPendentes?: { indice: number; tipo: Meld['tipo']; pedras: string[] }[]
   /** Toque num meld pendente: some o grupo inteiro (e a chamada marcada). */
   aoRemoverMeldPendente?: (indice: number) => void
+  /** Ron da partida: a pedra descartada espera no fim da mão, já como batida. */
+  batidaReservada?: CodigoPedra | null
+  /** A batida é a do ron da partida: tocar nela não a tira da mão. */
+  batidaFixa?: boolean
 }
 
 function ChipMeld({
@@ -222,13 +226,16 @@ export function MaoAtual({
   aoRemoverPedraPendente,
   meldsPendentes = [],
   aoRemoverMeldPendente,
+  batidaReservada = null,
+  batidaFixa = false,
 }: PropsMaoAtual) {
   const { t } = useI18n()
   const tabletRetrato = useMediaQuery(CONSULTA_TABLET_RETRATO)
   // Finalização: no tablet o Limpar vai para as ações do cabeçalho (depois do
   // lápis); no celular continua no canto da mão. Um botão só, em um lugar.
   const limparNoCabecalho = useMediaQuery(CONSULTA_TABLET)
-  const slotsEstruturais = Math.min(slotsUsados, 14)
+  // A batida reservada já conta: o ron dá a 14ª pedra.
+  const slotsEstruturais = Math.min(slotsUsados + (batidaReservada ? 1 : 0), 14)
   const sufixoFisico =
     totalPedras !== slotsUsados
       ? ` • ${t('calculator.physicalTilesShort', { count: totalPedras })}`
@@ -421,7 +428,9 @@ export function MaoAtual({
                     rotulo={
                       selecionandoPedraAgari
                         ? t('calculator.selectWinningTile', { tile })
-                        : ehAgari
+                        : ehAgari && batidaFixa
+                          ? t('calculator.reservedWinningTile', { tile })
+                          : ehAgari
                           ? t('calculator.removeWinningTile', { tile })
                           : t('calculator.removeTile', { tile })
                     }
@@ -433,6 +442,14 @@ export function MaoAtual({
                 )
               })}
               {pedrasPendentes.map(renderizarPedraPendente)}
+              {batidaReservada && (
+                <PedraMao
+                  pedra={batidaReservada}
+                  rotulo={t('calculator.reservedWinningTile', { tile: nomePedraAcessivel(batidaReservada) })}
+                  ehAgari
+                  aoClicar={() => undefined}
+                />
+              )}
             </GradePedrasMao>
             {mao.melds.map((meld, indiceMeld) => (
               <ChipMeld
@@ -464,6 +481,7 @@ export function MaoAtual({
         )}
         {contexto === 'montagem' &&
           totalPedras === 0 &&
+          !batidaReservada &&
           pedrasPendentes.length === 0 &&
           meldsPendentes.length === 0 && (
             <span className="estado-vazio-mao">{t('calculator.emptyHand')}</span>

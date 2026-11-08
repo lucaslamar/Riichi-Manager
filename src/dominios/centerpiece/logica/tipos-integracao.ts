@@ -1,6 +1,6 @@
 import type { ConfiguracaoCalculo, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import type { ResultadoPontuacaoHanFu } from '@/dominios/calculadora-han-fu/logica/tipos'
-import type { Mao, VentoMao } from '@/dominios/calculadora-mao/logica/mao'
+import type { CodigoPedra, Mao, VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { gerarNotacaoCompleta } from '@/dominios/calculadora-mao/logica/notacao'
 import type { DadosDaPartida } from './dadosDaPartida'
 
@@ -59,6 +59,8 @@ export interface ContextoCenterpieceMao {
   jogadorRiichi?: boolean
   /** Regras da mesa: a calculadora não oferece a engrenagem. */
   regras?: ConfiguracaoCalculo
+  /** Ron pelo descarte: a pedra que vira a batida, já marcada e sem troca. */
+  pedraBatida?: CodigoPedra
   /** O que a linha do tempo da mão já diz: vem preenchido, mas dá para mudar. */
   dados?: DadosDaPartida
 }

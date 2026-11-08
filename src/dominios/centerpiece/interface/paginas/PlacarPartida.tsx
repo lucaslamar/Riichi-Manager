@@ -481,6 +481,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 vencedorNome: nomeDe(vencedorAtual),
                 jogadorRiichi: placar.riichi.includes(vencedorAtual),
                 regras: config.regrasCalculo,
+                pedraBatida:
+                  batida.tipo === 'ron' && batida.ordemDescarte !== undefined
+                    ? partida.registro?.lances.find((lance) => lance.ordem === batida.ordemDescarte)?.pedra
+                    : undefined,
                 dados: dadosDaPartidaParaMao({
                   lances: partida.registro?.lances ?? [],
                   cadeira: vencedorAtual,

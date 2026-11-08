@@ -89,6 +89,8 @@ export default function ConstrutorMao({
     fluxoOpcoes,
     finalizarMao,
     alternarSelecaoPedraAgari,
+    batidaFixa,
+    batidaReservada,
     escolherPedraAgariMao,
     escolherPedraAgariMeld,
     escolherPedraAgariPorCodigo,
@@ -354,6 +356,8 @@ export default function ConstrutorMao({
             : 0)
         }
         slotsUsados={slotsUsados + (entradaPorNotacao ? slotsDosPendentes(pendentesNotacao) : 0)}
+        batidaReservada={batidaReservada}
+        batidaFixa={batidaFixa}
         maoEditorGrudado={maoEditorGrudado}
         menuAcoesMaoAberto={menuAcoesMaoAberto}
         indicesSelecionadosChii={indicesSelecionadosChii}
@@ -503,7 +507,7 @@ export default function ConstrutorMao({
               aoAdicionarPedra={adicionarPedra}
               aoFinalizarMao={aoCalcularDireto ? undefined : finalizarMao}
               aoCalcularDireto={aoCalcularDireto}
-              aoAlternarSelecaoPedraAgari={alternarSelecaoPedraAgari}
+              aoAlternarSelecaoPedraAgari={batidaFixa ? undefined : alternarSelecaoPedraAgari}
               aoEscolherPedraAgariPorCodigo={escolherPedraAgariPorCodigo}
               aoEscolherChiiPendente={escolherChiiPendente}
             />

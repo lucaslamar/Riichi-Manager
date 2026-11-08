@@ -68,6 +68,7 @@ export default function PaginaCalculadoraMao({
             }),
           },
           pedrasDaMesa: contextoCenterpiece.dados?.pedrasDaMesa,
+          pedraBatidaFixa: contextoCenterpiece.pedraBatida,
           fluxoCompleto: true,
           configuracaoInicial: contextoCenterpiece.regras,
         }

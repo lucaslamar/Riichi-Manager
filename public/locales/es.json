@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "Calculadora",
+    "calculator": "Calculadora",
     "navigation": "Navegación principal",
     "currentModule": "Módulo actual",
     "tagline": "Ecosistema de Riichi Mahjong",
@@ -74,6 +74,7 @@
     "hiddenTile": "ficha oculta",
     "removeTile": "Quitar {{tile}} de la mano",
     "removeWinningTile": "Quitar {{tile}} ganadora de la mano",
+    "reservedWinningTile": "Ficha del ron, ya marcada como ganadora: {{tile}}",
     "removeMeld": "Quitar {{meld}}",
     "meldActive": "{{action}} activo",
     "actionsMenu": "Acciones de la mano",
