@@ -201,4 +201,20 @@ for (const [total, classificatoria, cortes] of [
 }
 console.log('Eliminatório ok.')
 
+// ─── Pontos corridos ─────────────────────────────────────────────────────────
+for (const total of [8, 12, 16]) {
+  const { torneio, ids } = simular({ tipo: 'corridos' }, total, 3)
+  assert.equal(torneio.rodadas.length, 4, `Corridos ${total}: segue enquanto o organizador quiser`)
+  conferirRodadas(torneio.rodadas, ids)
+  lesteEquilibrado(torneio.rodadas, `Corridos ${total}`)
+  // Rodada 2 sem repetir ninguém da rodada 1 quando dá (com 3 mesas ou menos, 4 lugares
+  // para 3 mesas de origem obrigam alguma repetição).
+  if (total >= 16) {
+    const pares = contarPares(torneio.rodadas.slice(0, 1))
+    const custo = torneio.rodadas[1].mesas.reduce((soma, mesa) => soma + custoDaMesa(mesa.assentos, pares), 0)
+    assert.equal(custo, 0, `Corridos ${total}: rodada 2 sem repetir adversário`)
+  }
+  console.log(`Corridos ${total}: pares repetidos em 4 rodadas ${repetidos(torneio.rodadas)}`)
+}
+
 console.log('Formatos ok.')
