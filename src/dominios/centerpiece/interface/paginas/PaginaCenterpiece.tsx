@@ -200,6 +200,7 @@ function TelasCenterpiece({
         torneioId={tela.id}
         aoVoltar={irInicio}
         aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
+        aoAbrirTorneio={(id) => setTela({ nome: 'torneio', id })}
         aoLancarResultado={(rodada, mesa, substituir) =>
           setTela({
             nome: 'registrarTorneio',

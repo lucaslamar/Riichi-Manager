@@ -17,10 +17,12 @@ export default function PaginaTorneio({
   torneioId,
   aoVoltar,
   aoAbrirTemporada,
+  aoAbrirTorneio,
   ...acoes
 }: {
   torneioId: string
   aoVoltar: () => void
+  aoAbrirTorneio: (torneioId: string) => void
   aoAbrirTemporada: (temporadaId: string) => void
 } & AcoesMesa) {
   const { t } = useI18n()
@@ -42,7 +44,7 @@ export default function PaginaTorneio({
   }
 
   if (torneio.status === 'rascunho') {
-    return <PaginaListaTorneio torneio={torneio} aoVoltar={aoVoltar} aoSortear={() => undefined} />
+    return <PaginaListaTorneio torneio={torneio} aoVoltar={aoVoltar} aoSortear={() => undefined} aoImportado={aoAbrirTorneio} />
   }
 
   if (vendoRanking) {

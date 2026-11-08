@@ -665,3 +665,97 @@
 .trn-abortar {
   margin-top: 16px;
 }
+
+/* ─── Exportar e importar ─────────────────────────────────────────────────── */
+.trn-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.trn-qr img,
+.trn-qr-vazio {
+  display: block;
+  width: min(320px, 100%);
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: var(--branco);
+}
+
+.trn-qr-contador {
+  margin: 0;
+  color: var(--texto-apoio);
+  font-variant-numeric: tabular-nums;
+}
+
+.trn-qr-controles {
+  display: flex;
+  gap: 16px;
+}
+
+.trn-camera {
+  display: block;
+  width: 100%;
+  max-height: 50dvh;
+  border-radius: 12px;
+  background: var(--fundo);
+  object-fit: cover;
+}
+
+.trn-codigo {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  font-family: monospace;
+  font-size: 0.8125rem;
+}
+
+.trn-resumo {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  margin: 0 0 12px;
+}
+
+.trn-resumo dt {
+  color: var(--texto-apoio);
+}
+
+.trn-resumo dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.trn-importar-jogador {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+}
+
+.trn-importar-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.trn-link {
+  min-height: 44px;
+  border: 0;
+  padding: 0 4px;
+  color: var(--primario);
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.trn-lembrete {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}

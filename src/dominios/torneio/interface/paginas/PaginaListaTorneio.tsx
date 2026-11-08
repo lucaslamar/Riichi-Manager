@@ -18,6 +18,7 @@ import { nomeExibido, partesDoNome, type Jogador } from '@/dominios/jogadores/lo
 import { rodadasIniciais } from '../../logica/formatos'
 import { formatoValido } from '../../logica/configuracao'
 import { analisarLista, idsDaLista, limparColagem, type StatusLista } from '../../logica/listaTorneio'
+import FolhaImportar from '../componentes/FolhaImportar'
 import { iniciarTorneio } from '../../logica/torneio'
 import type { ListaSalva, Torneio } from '../../logica/tipos'
 import ConfigTorneioSheet from '../componentes/ConfigTorneioSheet'
@@ -37,14 +38,17 @@ export default function PaginaListaTorneio({
   torneio,
   aoVoltar,
   aoSortear,
+  aoImportado,
 }: {
   torneio: Torneio
   aoVoltar: () => void
   aoSortear: () => void
+  /** Torneio que chegou de outro aparelho: abre no lugar deste rascunho. */
+  aoImportado: (torneioId: string) => void
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
-  const { lista, listas, definirLista, guardarLista, excluirLista, salvar } = useTorneios()
+  const { lista, listas, definirLista, guardarLista, excluirLista, salvar, excluir } = useTorneios()
   const { aviso, mostrar } = useAviso()
   const raiz = useRef<HTMLElement | null>(null)
   const campo = useRef<HTMLTextAreaElement | null>(null)
@@ -55,6 +59,7 @@ export default function PaginaListaTorneio({
   const [menu, setMenu] = useState(false)
   const [cadastrados, setCadastrados] = useState(false)
   const [limpando, setLimpando] = useState(false)
+  const [importando, setImportando] = useState(false)
   const [configurando, setConfigurando] = useState(false)
   const [renomeando, setRenomeando] = useState(false)
 
@@ -315,6 +320,18 @@ export default function PaginaListaTorneio({
             <li>
               <button
                 type="button"
+                onClick={() => {
+                  setMenu(false)
+                  setImportando(true)
+                }}
+              >
+                <i className="fas fa-file-import" aria-hidden="true" />
+                <span>{t('tournament.import.menu')}</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
                 className="trn-menu--perigo"
                 disabled={!lista.trim()}
                 onClick={() => {
@@ -384,6 +401,18 @@ export default function PaginaListaTorneio({
           aoSalvar={(nome) => {
             salvar({ ...torneio, nome })
             setRenomeando(false)
+          }}
+        />
+      )}
+
+      {importando && (
+        <FolhaImportar
+          aoFechar={() => setImportando(false)}
+          aoImportado={(torneioId) => {
+            setImportando(false)
+            // Rascunho vazio não serve para nada depois da importação.
+            if (!lista.trim() && torneioId !== torneio.id) excluir(torneio.id)
+            aoImportado(torneioId)
           }}
         />
       )}

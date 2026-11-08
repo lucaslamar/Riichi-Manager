@@ -68,6 +68,14 @@ export const acoesPartidas = {
   descartar(id: string) {
     definirPartidas(lerPartidas().filter((partida) => partida.id !== id))
   },
+  /** Importação: troca as partidas de um torneio pelas que chegaram (mesmo id substitui). */
+  trocarDoTorneio(removerTorneioId: string | undefined, novas: readonly Partida[]) {
+    const ids = new Set(novas.map((partida) => partida.id))
+    const ficam = lerPartidas().filter(
+      (partida) => !ids.has(partida.id) && (!removerTorneioId || partida.vinculoTorneio?.torneioId !== removerTorneioId),
+    )
+    definirPartidas([...ficam, ...novas])
+  },
   /** Apaga de uma vez as partidas de um torneio abortado. */
   descartarDoTorneio(torneioId: string) {
     definirPartidas(lerPartidas().filter((partida) => partida.vinculoTorneio?.torneioId !== torneioId))

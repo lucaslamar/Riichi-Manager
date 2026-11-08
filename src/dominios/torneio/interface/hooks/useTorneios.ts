@@ -2,7 +2,8 @@ import { useSyncExternalStore } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { acoesPartidas, lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
-import { garantirJogadoresPorNomes } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { acoesJogadores, garantirJogadoresPorNomes } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import type { ResultadoImportacao } from '../../logica/exportacao'
 import { finalizarTorneio } from '../../logica/torneio'
 import type { ListaSalva, Temporada, Torneio } from '../../logica/tipos'
 import {
@@ -102,6 +103,30 @@ export const acoesTorneios = {
       temporadas: existe
         ? atual.temporadas.map((item) => (item.id === temporada.id ? temporada : item))
         : [...atual.temporadas, temporada],
+    })
+  },
+  /** Transferência: este aparelho fica só para consulta. `null` desfaz. */
+  marcarTransferido(id: string, quando: string | null) {
+    acoesTorneios.atualizar(id, (torneio) => {
+      if (quando) return { ...torneio, transferidoEm: quando }
+      const semMarca = { ...torneio }
+      delete semMarca.transferidoEm
+      return semMarca
+    })
+  },
+  /** Grava o que veio de outro aparelho: jogadores, partidas, temporada e o torneio. */
+  importar(resultado: ResultadoImportacao) {
+    acoesJogadores.incluir(resultado.jogadoresNovos)
+    acoesPartidas.trocarDoTorneio(resultado.substituirId, resultado.partidas)
+    const atual = lerTorneios()
+    const temporadas =
+      resultado.temporada && !atual.temporadas.some((item) => item.id === resultado.temporada?.id)
+        ? [...atual.temporadas, resultado.temporada]
+        : atual.temporadas
+    definir({
+      ...atual,
+      temporadas,
+      torneios: [...atual.torneios.filter((item) => item.id !== resultado.torneio.id), resultado.torneio],
     })
   },
   excluir(id: string) {

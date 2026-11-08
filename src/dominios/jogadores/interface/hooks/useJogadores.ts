@@ -43,7 +43,7 @@ function aplicar(resultado: ResultadoJogador) {
   return resultado
 }
 
-const acoes = {
+export const acoesJogadores = {
   adicionar: (dados: DadosJogador) =>
     aplicar(adicionarJogador(lerCadastro(), dados, gerarId(), new Date().toISOString())),
   editar: (id: string, dados: DadosJogador) => aplicar(editarJogador(lerCadastro(), id, dados)),
@@ -52,6 +52,12 @@ const acoes = {
   excluir: (id: string) => definirCadastro(removerJogador(lerCadastro(), id)),
   /** Desfazer da exclusão: o jogador volta como estava. */
   devolver: (jogador: Jogador) => definirCadastro([...lerCadastro(), jogador]),
+  /** Importação: entra quem ainda não existe aqui (pelo id). */
+  incluir: (novos: readonly Jogador[]) => {
+    const atual = lerCadastro()
+    const faltam = novos.filter((novo) => !atual.some((jogador) => jogador.id === novo.id))
+    if (faltam.length) definirCadastro([...atual, ...faltam])
+  },
 }
 
 /** Ids de uma lista de nomes, cadastrando quem faltar. Usado pelas migrações. */
@@ -64,5 +70,5 @@ export function garantirJogadoresPorNomes(nomes: string[]) {
 
 export function useJogadores() {
   const jogadores = useSyncExternalStore(assinar, lerCadastro)
-  return { jogadores, ...acoes }
+  return { jogadores, ...acoesJogadores }
 }

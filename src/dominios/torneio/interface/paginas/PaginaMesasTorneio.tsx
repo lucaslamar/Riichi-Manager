@@ -9,6 +9,7 @@ import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { CHAVE_VENTO, KANJI_VENTO, ORDEM_VENTOS, type Partida } from '@/dominios/centerpiece/logica/partida'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import { deveLembrarBackup } from '../../logica/exportacao'
 import { ACRESCIMO_SEGUNDOS } from '../../logica/configuracao'
 import { proximaRodada, rodadaFechada } from '../../logica/formatos'
 import { ehMesaFinal } from '../../logica/formatos/eliminatorio'
@@ -34,6 +35,7 @@ import {
 } from '../../logica/relogio'
 import { abortarTorneio, partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
+import FolhaExportar from '../componentes/FolhaExportar'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
 import '../torneio.css'
@@ -66,7 +68,7 @@ export default function PaginaMesasTorneio({
   aoAbrirRanking,
 }: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode; aoAbrirRanking: () => void } & AcoesMesa) {
   const { t, idioma, numero } = useI18n()
-  const { salvar, definirLista } = useTorneios()
+  const { salvar, definirLista, marcarTransferido } = useTorneios()
   const { partidas, descartarDoTorneio } = usePartidas()
   const { jogadores } = useJogadores()
   const { aviso, mostrar } = useAviso()
@@ -75,6 +77,9 @@ export default function PaginaMesasTorneio({
   const rodada = torneio.rodadas.find((item) => item.numero === abaRodada) ?? emJogo
   const [refazendo, setRefazendo] = useState(false)
   const [abortando, setAbortando] = useState(false)
+  const [exportando, setExportando] = useState(false)
+  /** Rodada cujo lembrete de backup já foi dispensado. */
+  const [lembreteDispensado, setLembreteDispensado] = useState<number>()
 
   const algumRodando =
     !!rodada &&
@@ -178,7 +183,10 @@ export default function PaginaMesasTorneio({
             date: new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
               new Date(torneio.transferidoEm),
             ),
-          })}
+          })}{' '}
+          <button type="button" className="trn-link" onClick={() => marcarTransferido(torneio.id, null)}>
+            {t('tournament.tables.undoTransfer')}
+          </button>
         </p>
       )}
 
@@ -353,7 +361,35 @@ export default function PaginaMesasTorneio({
         </button>
       )}
 
+      {deveLembrarBackup(torneio, fechada, lembreteDispensado) && (
+        <p className="cfg-ajuda trn-lembrete" role="status">
+          <i className="fas fa-floppy-disk" aria-hidden="true" /> {t('tournament.tables.backupReminder')}{' '}
+          <button
+            type="button"
+            className="trn-link"
+            onClick={() => {
+              setLembreteDispensado(torneio.rodadas.length)
+              setExportando(true)
+            }}
+          >
+            {t('tournament.tables.backupAction')}
+          </button>
+          <button
+            type="button"
+            className="cm-btn-icone"
+            aria-label={t('actions.close')}
+            onClick={() => setLembreteDispensado(torneio.rodadas.length)}
+          >
+            <i className="fas fa-xmark" aria-hidden="true" />
+          </button>
+        </p>
+      )}
+
       {rodape}
+
+      <button type="button" className="btn-contorno ptd-btn-largo trn-abortar" onClick={() => setExportando(true)}>
+        <i className="fas fa-file-export" aria-hidden="true" /> {t('tournament.export.button')}
+      </button>
 
       {torneio.status === 'em_andamento' && !somenteLeitura && (
         <button type="button" className="btn-contorno ptd-btn-largo trn-abortar" onClick={() => setAbortando(true)}>
@@ -366,6 +402,8 @@ export default function PaginaMesasTorneio({
           {aviso}
         </p>
       )}
+
+      {exportando && <FolhaExportar torneio={torneio} aoFechar={() => setExportando(false)} />}
 
       {abortando && (
         <ModalConfirmacao

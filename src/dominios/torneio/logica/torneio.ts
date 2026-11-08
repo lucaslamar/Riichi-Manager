@@ -129,7 +129,7 @@ export function mesasDoTorneio(torneio: Torneio) {
 /** O torneio que o card do menu abre: o rascunho ou o que está em jogo. */
 export function torneioAtivo(torneios: readonly Torneio[]): Torneio | undefined {
   return [...torneios]
-    .filter((torneio) => torneio.status !== 'finalizado')
+    .filter((torneio) => torneio.status !== 'finalizado' && !torneio.transferidoEm)
     .sort((um, outro) => outro.atualizadoEm.localeCompare(um.atualizadoEm))[0]
 }
 
@@ -148,7 +148,8 @@ export function historicoDeTorneios(
 ): Torneio[] {
   const busca = normalizarTexto(filtro.busca)
   return torneios
-    .filter((torneio) => torneio.status === 'finalizado')
+    // Transferido para outro aparelho também vira consulta aqui.
+    .filter((torneio) => torneio.status === 'finalizado' || !!torneio.transferidoEm)
     .filter((torneio) => filtro.formato === 'todos' || torneio.formato.tipo === filtro.formato)
     .filter((torneio) => !filtro.de || torneio.data >= filtro.de)
     .filter((torneio) => !filtro.ate || torneio.data <= filtro.ate)
