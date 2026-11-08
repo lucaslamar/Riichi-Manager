@@ -52,7 +52,7 @@ export function useGestoHorizontal({
       const { aoDireita: direita, aoEsquerda: esquerda } = atual.current
       if (!direita && !esquerda) return
       if (document.querySelector(SELETOR_CAMADAS)) return
-      if (toqueIgnorado(evento.target)) return
+      if (toqueIgnorado(evento.target, { ignorarCampos: evento.pointerType === 'mouse' })) return
       if (evento.target instanceof Element && evento.target.closest(AREAS_DESLIGADAS)) return
       toque = { id: evento.pointerId, x: evento.clientX, y: evento.clientY, arrastando: false }
     }

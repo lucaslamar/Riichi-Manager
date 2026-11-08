@@ -6,11 +6,13 @@ const DISTANCIA_MINIMA = 70
 /** O movimento tem que ser bem mais horizontal que vertical (não briga com a rolagem). */
 const PROPORCAO_HORIZONTAL = 1.5
 /** Onde o toque não deve virar navegação: campos e áreas que rolam de lado. */
-export function toqueIgnorado(alvo: EventTarget | null): boolean {
+export function toqueIgnorado(alvo: EventTarget | null, { ignorarCampos = true } = {}): boolean {
   if (!(alvo instanceof Element)) return true
-  if (alvo.closest('input, select, textarea, [role="slider"], [contenteditable="true"]')) {
-    return true
-  }
+  if (alvo.closest('select, input[type="range"], [role="slider"]')) return true
+  // Campo de texto segura o gesto (arrastar seleciona). O deslize dos submenus da
+  // Partida libera no dedo, que não seleciona arrastando de lado: a Lista do clube é
+  // quase toda um campo, que continua com foco depois que o teclado fecha.
+  if (ignorarCampos && alvo.closest('input, textarea, [contenteditable="true"]')) return true
   for (let elemento: Element | null = alvo; elemento; elemento = elemento.parentElement) {
     const { overflowX } = getComputedStyle(elemento)
     if (
