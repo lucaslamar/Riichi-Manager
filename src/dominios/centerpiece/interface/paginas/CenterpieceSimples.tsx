@@ -261,21 +261,6 @@ export default function CenterpieceSimples({
             <button type="button" className="mesa-btn-secundario" onClick={aoAbrirSorteador}>
               <i className="fas fa-shuffle" aria-hidden="true" /> {t('match.simple.windDraw')}
             </button>
-            {/* Atalhos para calcular a mão sem sair procurando na barra. */}
-            <div className="mesa-simples-calcular" role="group" aria-label={t('match.simple.calculate')}>
-              <span className="mesa-simples-calcular-rotulo">
-                <i className="fas fa-calculator" aria-hidden="true" /> {t('match.simple.calculate')}
-              </span>
-              <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mao')}>
-                {t('match.simple.calcHand')}
-              </button>
-              <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('hanFu')}>
-                {t('menu.quickCalculatorShort')}
-              </button>
-              <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mpsz')}>
-                {t('notation.toggle')}
-              </button>
-            </div>
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>
               <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.simple.restart')}
             </button>
@@ -289,6 +274,22 @@ export default function CenterpieceSimples({
               }))}
             />
           </div>
+
+          {/* Segundo bloco da mesma janela: atalhos para calcular a mão. */}
+          <section className="mesa-simples-acoes mesa-simples-bloco" aria-labelledby="mesa-simples-calcular">
+            <h3 id="mesa-simples-calcular" className="mesa-simples-bloco-titulo">
+              {t('match.simple.calculate')}
+            </h3>
+            <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mao')}>
+              <i className="fas fa-calculator" aria-hidden="true" /> {t('menu.handCalculator')}
+            </button>
+            <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('hanFu')}>
+              <i className="fas fa-table-cells" aria-hidden="true" /> {t('menu.quickCalculator')}
+            </button>
+            <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mpsz')}>
+              <i className="fas fa-keyboard" aria-hidden="true" /> {t('match.simple.calcMpsz')}
+            </button>
+          </section>
         </Modal>
       )}
 

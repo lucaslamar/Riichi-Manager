@@ -1152,8 +1152,8 @@
       "hint": "Tap the table to see the actions",
       "adjustHonba": "Ajustar honba, actual {{count}}",
       "timerStart": "Iniciar el temporizador",
-      "calculate": "Calcular",
-      "calcHand": "Mano",
+      "calculate": "Calcular mano",
+      "calcMpsz": "Calculadora por notación MPSZ",
       "timerPass": "Pasar el turno"
     },
     "setup": {

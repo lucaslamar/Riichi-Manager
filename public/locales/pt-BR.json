@@ -1145,8 +1145,8 @@
       "hint": "Toque na mesa para ver as ações",
       "adjustHonba": "Ajustar honba, atual {{count}}",
       "timerStart": "Começar o timer",
-      "calculate": "Calcular",
-      "calcHand": "Mão",
+      "calculate": "Calcular mão",
+      "calcMpsz": "Calculadora por notação MPSZ",
       "timerPass": "Passar a vez"
     },
     "setup": {
