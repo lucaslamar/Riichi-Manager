@@ -248,6 +248,9 @@ export default function PaginaMesasTorneio({
         </div>
       )}
 
+      {/* Diagnóstico da Grade (e a temporada) antes das mesas. */}
+      {rodape}
+
       <ul className="clb-mesas">
         {rodada.mesas.map((mesa) => {
           const partida = partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero)
@@ -385,7 +388,6 @@ export default function PaginaMesasTorneio({
         </p>
       )}
 
-      {rodape}
 
       <button type="button" className="btn-contorno ptd-btn-largo trn-abortar" onClick={() => setExportando(true)}>
         <i className="fas fa-file-export" aria-hidden="true" /> {t('tournament.export.button')}
