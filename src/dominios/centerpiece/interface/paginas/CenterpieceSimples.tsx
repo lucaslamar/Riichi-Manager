@@ -37,7 +37,13 @@ import RecursosDaMesa from '../componentes/RecursosDaMesa'
  * nela abre as ações. Abre direto, sem jogadores, e lembra o estado se o app fechar.
  * É a tela do botão Centerpiece da barra, então não tem seta de voltar.
  */
-export default function CenterpieceSimples({ aoAbrirSorteador }: { aoAbrirSorteador: () => void }) {
+export default function CenterpieceSimples({
+  aoAbrirSorteador,
+  aoAbrirCalculo,
+}: {
+  aoAbrirSorteador: () => void
+  aoAbrirCalculo: (calculo: 'mao' | 'hanFu' | 'mpsz') => void
+}) {
   const { t } = useI18n()
   const [estado, setEstado] = useState<EstadoSimples>(() => carregarSimples(armazenamentoLocal))
   const [confirmando, setConfirmando] = useState(false)
@@ -255,6 +261,21 @@ export default function CenterpieceSimples({ aoAbrirSorteador }: { aoAbrirSortea
             <button type="button" className="mesa-btn-secundario" onClick={aoAbrirSorteador}>
               <i className="fas fa-shuffle" aria-hidden="true" /> {t('match.simple.windDraw')}
             </button>
+            {/* Atalhos para calcular a mão sem sair procurando na barra. */}
+            <div className="mesa-simples-calcular" role="group" aria-label={t('match.simple.calculate')}>
+              <span className="mesa-simples-calcular-rotulo">
+                <i className="fas fa-calculator" aria-hidden="true" /> {t('match.simple.calculate')}
+              </span>
+              <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mao')}>
+                {t('match.simple.calcHand')}
+              </button>
+              <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('hanFu')}>
+                {t('menu.quickCalculatorShort')}
+              </button>
+              <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mpsz')}>
+                {t('notation.toggle')}
+              </button>
+            </div>
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>
               <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.simple.restart')}
             </button>

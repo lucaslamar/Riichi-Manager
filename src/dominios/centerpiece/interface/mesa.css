@@ -667,6 +667,27 @@ button.mesa-domo {
   font-size: 0.875rem;
 }
 
+/* Calcular: rótulo e os três atalhos numa linha só, no contorno dos outros botões. */
+.mesa-simples-calcular {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 6px;
+}
+
+.mesa-simples-calcular-rotulo {
+  padding-left: 4px;
+  color: var(--texto-principal);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.mesa-simples-calcular > .mesa-btn-secundario {
+  min-width: 0;
+  padding-inline: 4px;
+}
+
 .mesa-honba-rotulo {
   flex: 1;
   font-weight: 700;

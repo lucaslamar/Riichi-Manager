@@ -1131,6 +1131,8 @@
       "hint": "Tap the table to see the actions",
       "adjustHonba": "本場を調整、現在 {{count}}",
       "timerStart": "タイマーを開始",
+      "calculate": "計算",
+      "calcHand": "手牌",
       "timerPass": "手番を回す"
     },
     "setup": {

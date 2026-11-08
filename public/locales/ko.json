@@ -1131,6 +1131,8 @@
       "hint": "Tap the table to see the actions",
       "adjustHonba": "본장 조정, 현재 {{count}}",
       "timerStart": "타이머 시작",
+      "calculate": "계산",
+      "calcHand": "손패",
       "timerPass": "차례 넘기기"
     },
     "setup": {

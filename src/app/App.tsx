@@ -48,10 +48,19 @@ export default function App() {
     navegar('sorteadorVentos')
     setSimplesAberto(true)
   }
+  // Atalhos de cálculo do Centerpiece simples. A volta é pelo botão Centerpiece,
+  // que abre o simples, ou deslizando no Han e Fu, como no sorteador.
+  const [pedidoNotacao, setPedidoNotacao] = useState(0)
+  const abrirCalculoDoSimples = (calculo: 'mao' | 'hanFu' | 'mpsz') => {
+    navegar(calculo === 'hanFu' ? 'calculadoraRapida' : 'calculadora')
+    setSimplesAberto(true)
+    if (calculo === 'mpsz') setPedidoNotacao((atual) => atual + 1)
+  }
   const voltarAoSimples = () => {
     setTela('centerpiece')
   }
-  const sorteadorDoSimples = simplesAberto && tela === 'sorteadorVentos'
+  const sorteadorDoSimples =
+    simplesAberto && (tela === 'sorteadorVentos' || tela === 'calculadoraRapida')
 
   // Deslizar segue a ordem da barra inferior; o Centerpiece trata o próprio gesto
   // (Pointer Events, com a tela acompanhando). Dedo para a esquerda vai para a
@@ -101,6 +110,7 @@ export default function App() {
         <PaginaCalculadoraMao
           aoIrParaProximaTela={() => navegar('calculadoraRapida')}
           visivel={tela === 'calculadora'}
+          pedidoNotacao={pedidoNotacao}
         />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
@@ -111,6 +121,7 @@ export default function App() {
               key={tela}
               modo={tela === 'centerpiece' ? 'simples' : 'partidas'}
               aoAbrirSorteador={abrirSorteadorDoSimples}
+              aoAbrirCalculo={abrirCalculoDoSimples}
               aoTelaAnterior={telaAnterior && (() => irPara(telaAnterior))}
               aoProximaTela={proximaTela && (() => irPara(proximaTela))}
             />

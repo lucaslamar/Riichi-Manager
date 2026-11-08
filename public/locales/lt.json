@@ -1182,6 +1182,8 @@
       "hint": "Tap the table to see the actions",
       "adjustHonba": "Koreguoti honba, dabar {{count}}",
       "timerStart": "Pradėti laikmatį",
+      "calculate": "Skaičiuoti",
+      "calcHand": "Ranka",
       "timerPass": "Perduoti ėjimą"
     },
     "setup": {

@@ -66,6 +66,8 @@ export default function PaginaCenterpiece(props: PropsCenterpiece) {
 
 interface PropsCenterpiece {
   aoAbrirSorteador: () => void
+  /** Atalhos de cálculo do simples: Calculadora de Mão, Han e Fu ou a Mão já na notação. */
+  aoAbrirCalculo: (calculo: 'mao' | 'hanFu' | 'mpsz') => void
   /**
    * 'simples': o botão Centerpiece da barra, que abre direto a mesa simples.
    * 'partidas': Mesa partida, o menu das partidas com pontos.
@@ -79,6 +81,7 @@ interface PropsCenterpiece {
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
 function TelasCenterpiece({
   aoAbrirSorteador,
+  aoAbrirCalculo,
   modo,
   aoTelaAnterior,
   aoProximaTela,
@@ -157,7 +160,9 @@ function TelasCenterpiece({
       <RegistrarFinalizada aoVoltar={irInicio} aoRegistrar={() => setTela({ nome: 'historico' })} />
     )
   }
-  if (tela.nome === 'simples') return <CenterpieceSimples aoAbrirSorteador={aoAbrirSorteador} />
+  if (tela.nome === 'simples') {
+    return <CenterpieceSimples aoAbrirSorteador={aoAbrirSorteador} aoAbrirCalculo={aoAbrirCalculo} />
+  }
   if (tela.nome === 'mesa') {
     const partida = partidas.find((item) => item.id === tela.id)
     if (partida) {

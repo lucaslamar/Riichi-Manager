@@ -25,6 +25,8 @@ interface PropsPaginaCalculadoraMao {
    * andamento fica guardada), mas não desenha nada nem escuta gestos.
    */
   visivel?: boolean
+  /** Muda a cada pedido de abrir já na notação MPSZ (o atalho do Centerpiece simples). */
+  pedidoNotacao?: number
 }
 
 export default function PaginaCalculadoraMao({
@@ -33,6 +35,7 @@ export default function PaginaCalculadoraMao({
   entradaFixa,
   aoIrParaProximaTela,
   visivel = true,
+  pedidoNotacao = 0,
 }: PropsPaginaCalculadoraMao = {}) {
   /**
    * Em telas grandes (tablets/desktop) todas as opções da finalização
@@ -83,6 +86,10 @@ export default function PaginaCalculadoraMao({
   useEffect(() => {
     if (!visivel && !entradaFixa) setEntradaNotacao(false)
   }, [visivel, entradaFixa])
+
+  useEffect(() => {
+    if (pedidoNotacao > 0) setEntradaNotacao(true)
+  }, [pedidoNotacao])
 
   // Dedo para a esquerda segue a barra inferior (próxima tela). Dedo para a direita,
   // que nas outras telas volta à anterior, aqui é a primeira aba: na montagem alterna
