@@ -75,6 +75,8 @@ export default function ModalDescartes({
   const [riichi, setRiichi] = useState(false)
   const [kan, setKan] = useState<'kakan' | 'fechado' | null>(null)
   const [vencedores, setVencedores] = useState<Cadeira[]>([])
+  // Descartes que ainda esperam a resposta de "o que aconteceu?".
+  const [semResposta, setSemResposta] = useState(0)
 
   const emRiichi = placar.riichi.includes(cadeira)
   const seguinte = ((cadeira + 1) % 4) as Cadeira
@@ -90,6 +92,7 @@ export default function ModalDescartes({
       pedras.forEach((pedra) => acoes.kakan(cadeira, pedra, kan === 'fechado'))
     } else {
       acoes.descartar(cadeira, pedras, riichi)
+      setSemResposta(pedras.length)
       setEtapa('pergunta')
     }
     setRiichi(false)
@@ -105,6 +108,15 @@ export default function ModalDescartes({
   const aoEnviar = (evento: FormEvent) => {
     evento.preventDefault()
     registrar(texto)
+  }
+
+  /**
+   * Fechar sem responder "o que aconteceu?" desfaz o descarte: a vez continua com
+   * quem descartou e, ao abrir de novo, a pedra não se repete no rio.
+   */
+  const fechar = () => {
+    if (etapa !== 'entrada' && semResposta > 0) acoes.desfazerUltimos(semResposta)
+    aoFechar()
   }
 
   const titulo = expirou
@@ -128,7 +140,7 @@ export default function ModalDescartes({
     <Modal
       titulo={titulo}
       tom={expirou ? 'alerta' : 'padrao'}
-      aoFechar={aoFechar}
+      aoFechar={fechar}
       rotuloFechar={t('actions.close')}
       className="dsc-modal"
       acoes={

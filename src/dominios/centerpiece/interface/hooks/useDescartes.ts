@@ -5,6 +5,7 @@ import { removerMao, type MaoInformada, type TipoChamada } from '../../logica/de
 import type { Cadeira, Partida } from '../../logica/partida'
 import {
   chamarPedra,
+  desfazerUltimoDaMesa,
   registrarDescartes,
   registrarKakan,
   salvarMaoInformada,
@@ -21,6 +22,13 @@ export function useDescartes(atualizar: (transformar: (partida: Partida) => Part
             agora: new Date().toISOString(),
           }),
         ),
+      /** Tira os últimos `quantos` lances da mesa, com a vez e o Riichi de antes deles. */
+      desfazerUltimos: (quantos: number) =>
+        atualizar((atual) => {
+          let partida = atual
+          for (let vez = 0; vez < quantos; vez++) partida = desfazerUltimoDaMesa(partida, Date.now())
+          return partida
+        }),
       kakan: (cadeira: Cadeira, pedra: CodigoPedra, fechado = false) =>
         atualizar((atual) => registrarKakan(atual, cadeira, pedra, fechado)),
       chamar: (ordem: number, chamada?: { cadeira: Cadeira; tipo: TipoChamada }) =>

@@ -504,7 +504,16 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           nomeDe={nomeDe}
           aoMudar={setBatida}
           aoAplicar={aplicarBatida}
-          aoFechar={() => setBatida(null)}
+          aoFechar={() => {
+            // Ron do descarte fechado sem registrar: o descarte sai, como no X da pergunta,
+            // e a vez continua com quem descartou.
+            const { ordemDescarte } = batida
+            if (ordemDescarte !== undefined) {
+              const lances = partida.registro?.lances.length ?? 0
+              acoesDescartes.desfazerUltimos(Math.max(0, lances - ordemDescarte + 1))
+            }
+            setBatida(null)
+          }}
         />
       )}
 
