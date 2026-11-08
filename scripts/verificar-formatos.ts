@@ -22,6 +22,7 @@ import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from
 import { relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
 import { rankingTemporada } from '../src/dominios/torneio/logica/temporada'
+import { exportarTorneio, importarTorneio, pacoteParaCodigo, codigoParaPacote, planejarImportacao } from '../src/dominios/torneio/logica/exportacao'
 import { criarRascunho, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
 import type { ConfigFormato, RodadaTorneio, Torneio } from '../src/dominios/torneio/logica/tipos'
 
@@ -296,6 +297,42 @@ for (const total of [8, 12, 16]) {
   assert.deepEqual(comFase.map((linha) => linha.fase), [1, 1, 1, 1, 0, 0, 0, 0], 'Eliminatório: fase atingida')
   assert.ok(textoDoRanking(comFase, { titulo: 'T', nome: (id) => id, pontos: String, fase: (fase) => `F${fase}` }).includes(' · F1'))
   console.log('Ranking ok.')
+}
+
+
+// Validação final (item 13): todos os formatos com 8, 12 e 16 jogadores, de ponta a ponta.
+// Torneio inteiro jogado, ranking com todos, e ida e volta pelo código chega igual.
+{
+  const formatos: ConfigFormato[] = [
+    { tipo: 'rodizio', rodadas: 4 },
+    { tipo: 'suico', rodadas: 4 },
+    { tipo: 'eliminatorio', classificatoria: 'suico', rodadasClassificatoria: 3, cortes: [4], rodadasPorFase: 1, pontosCarregados: true },
+    { tipo: 'corridos' },
+    { tipo: 'temporada', temporadaId: 'tmp' },
+  ]
+  for (const formato of formatos) {
+    for (const total of [8, 12, 16]) {
+      const nome = `${formato.tipo} ${total}`
+      const { torneio, partidas, ids } = simular(formato, total, 4)
+      assert.ok(torneio.rodadas.length > 0, `${nome}: rodadas`)
+      for (const rodada of torneio.rodadas) {
+        const sentados = rodada.mesas.flatMap((mesa) => mesa.assentos)
+        assert.equal(new Set(sentados).size, sentados.length, `${nome}: ninguém em duas mesas`)
+      }
+      const ranking = rankingDoTorneio(torneio, partidas)
+      assert.equal(ranking.length, total, `${nome}: ranking com todos`)
+      assert.deepEqual([...ranking.map((linha) => linha.jogadorId)].sort(), [...ids].sort())
+      const cadastro = ids.map((id) => ({ id, nome: id.toUpperCase(), criadoEm: agora, arquivado: false }))
+      const pacote = exportarTorneio(torneio, { partidas, jogadores: cadastro, temporadas: [] }, { modo: 'copia', agora })
+      const lido = codigoParaPacote(pacoteParaCodigo(pacote))
+      assert.ok(lido.ok, `${nome}: código`)
+      const plano = planejarImportacao(lido.pacote, { torneios: [], jogadores: [] })
+      const volta = importarTorneio(lido.pacote, plano, { sufixoImportado: '(i)' }, { gerarId: () => 'x', agora })
+      assert.deepEqual(volta.torneio.rodadas, torneio.rodadas, `${nome}: rodadas na volta`)
+      assert.deepEqual(rankingDoTorneio(volta.torneio, volta.partidas), ranking, `${nome}: ranking na volta`)
+    }
+  }
+  console.log('Validação de ponta a ponta ok.')
 }
 
 console.log('Formatos ok.')
