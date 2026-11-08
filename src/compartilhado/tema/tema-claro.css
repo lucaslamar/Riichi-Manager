@@ -6,7 +6,7 @@
   color-scheme: light;
 
   --cor-fundo: #efe8da;
-  --cor-superficie: #fbf8f1;
+  --cor-superficie: #f2efe6;
   --cor-superficie-alt: #f4efe3;
   --cor-borda: #d8cfbb;
   --cor-borda-controle: #857c66;
@@ -34,6 +34,8 @@
   --cor-nav: #f7f2e7;
   --cor-veu: rgb(37 48 42 / 50%);
 
+  /* Pedras brancas (escolhidas em Ajustes): o mesmo creme do tema escuro. */
+  --pedra-face: #f2efe6;
   --pedra-face-primario: #dcebe1;
 
   /* Tokens antigos do app, apontados para a paleta. */

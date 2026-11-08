@@ -89,7 +89,7 @@ export const VELVET_DARKNESS_ALTO_CONTRASTE: Partial<PaletaTema> = {
 /** Tema claro: bege da mesa com verde do feltro. */
 export const TEMA_CLARO: PaletaTema = {
   background: '#EFE8DA',
-  surface: '#FBF8F1',
+  surface: '#F2EFE6',
   surfaceAlt: '#F4EFE3',
   border: '#D8CFBB',
   borderControl: '#857C66',
