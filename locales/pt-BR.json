@@ -990,7 +990,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "Lista do clube",
+      "listTitle": "Encontro do clube",
       "addRegistered": "Usar cadastrado",
       "addRegisteredLabel": "Usar jogadores cadastrados nesta linha",
       "registeredTitle": "Jogadores cadastrados",
@@ -1438,7 +1438,7 @@
   "tournament": {
     "title": "Torneio",
     "create": "Criar torneio",
-    "defaultName": "Encontro do clube {{date}}",
+    "defaultName": "Torneio {{date}}",
     "roundOf": "Rodada {{round}} de {{total}} · {{tables}} mesas",
     "roundOpen": "Rodada {{round}} · {{tables}} mesas",
     "draft": "Lista em preparo · {{count}} jogadores",
@@ -1533,7 +1533,12 @@
       "off": "Desligado",
       "tableTimerHelp": "Cada mesa tem o próprio relógio, que começa quando ela inicia e pode receber +5 min.",
       "timeUpHelp": "Quando o tempo acaba, a partida termina na mão atual.",
-      "turnTimerHelp": "O timer de vez de cada jogador segue a aba Mesa."
+      "turnTimerHelp": "O timer de vez de cada jogador segue a aba Mesa.",
+      "winds": "Ventos",
+      "windsApp": "Sorteados no app",
+      "windsTable": "Na mesa",
+      "windsAppHelp": "Cada mesa já sai com o vento de cada jogador.",
+      "windsTableHelp": "O app só diz quem senta em cada mesa. Os ventos são sorteados na hora, com as pedras."
     },
     "formatHelp": {
       "rodizio": "Grade inteira sorteada no início. Cada um é Leste uma vez.",

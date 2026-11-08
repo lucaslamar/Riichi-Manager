@@ -997,7 +997,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "Lista del club",
+      "listTitle": "Encuentro del club",
       "addRegistered": "Usar registrado",
       "addRegisteredLabel": "Usar jugadores registrados en esta línea",
       "registeredTitle": "Jugadores registrados",
@@ -1445,7 +1445,7 @@
   "tournament": {
     "title": "Tournament",
     "create": "Create tournament",
-    "defaultName": "Club meetup {{date}}",
+    "defaultName": "Tournament {{date}}",
     "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
     "roundOpen": "Round {{round}} · {{tables}} tables",
     "draft": "List in progress · {{count}} players",
@@ -1540,7 +1540,12 @@
       "off": "Off",
       "tableTimerHelp": "Each table has its own clock, which starts when the table starts and can get +5 min.",
       "timeUpHelp": "When time is up, the game ends with the current hand.",
-      "turnTimerHelp": "The per-turn timer follows the Table tab."
+      "turnTimerHelp": "The per-turn timer follows the Table tab.",
+      "winds": "Winds",
+      "windsApp": "Drawn by the app",
+      "windsTable": "At the table",
+      "windsAppHelp": "Each table comes with every player’s wind.",
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
     },
     "formatHelp": {
       "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
