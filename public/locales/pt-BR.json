@@ -1289,7 +1289,9 @@
       }
     },
     "history": {
-      "empty": "Nenhuma partida finalizada ainda."
+      "empty": "Nenhuma partida finalizada ainda.",
+      "tabMatches": "Partidas",
+      "tabTournaments": "Torneios"
     },
     "ranking": {
       "period": "Período",

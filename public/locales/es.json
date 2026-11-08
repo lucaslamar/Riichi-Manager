@@ -1296,7 +1296,9 @@
       }
     },
     "history": {
-      "empty": "No finished games yet."
+      "empty": "No finished games yet.",
+      "tabMatches": "Matches",
+      "tabTournaments": "Tournaments"
     },
     "ranking": {
       "period": "Period",

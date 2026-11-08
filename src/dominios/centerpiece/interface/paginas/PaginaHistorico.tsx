@@ -2,9 +2,12 @@ import { useMemo, useState } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import HistoricoTorneios from '@/dominios/torneio/interface/componentes/HistoricoTorneios'
+import type { Torneio } from '@/dominios/torneio/logica/tipos'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import type { Cadeira, Partida } from '../../logica/partida'
 import { partidasDoHistorico } from '../../logica/ranking'
+import BotoesOpcao from '../componentes/BotoesOpcao'
 import CardMesa from '../componentes/CardMesa'
 import ListaResultado from '../componentes/ListaResultado'
 import { ListaMaos, ModalConfirmacao } from '../componentes/ModaisPartida'
@@ -13,14 +16,21 @@ import { usePartidas } from '../hooks/usePartidas'
 import { nomeDoAssento } from '../nomeDoAssento'
 import { textoDaPartida } from '../textoPartida'
 
-/** Partidas finalizadas; abrir uma mostra o resultado e o histórico de mãos. */
-export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) {
+/** Partidas finalizadas e, na outra aba, os torneios finalizados. */
+export default function PaginaHistorico({
+  aoVoltar,
+  aoAbrirTorneio,
+}: {
+  aoVoltar: () => void
+  aoAbrirTorneio: (torneio: Torneio) => void
+}) {
   const { t, idioma, numero } = useI18n()
   const { partidas, descartar } = usePartidas()
   const { jogadores } = useJogadores()
   const { aviso, mostrar } = useAviso()
   const [abertaId, setAbertaId] = useState<string | null>(null)
   const [paraExcluir, setParaExcluir] = useState<string | null>(null)
+  const [aba, setAba] = useState<'partidas' | 'torneios'>('partidas')
 
   const historico = useMemo(() => partidasDoHistorico(partidas), [partidas])
   const aberta = historico.find((partida) => partida.id === abertaId)
@@ -63,7 +73,18 @@ export default function PaginaHistorico({ aoVoltar }: { aoVoltar: () => void }) 
   return (
     <section className="ptd-inicio cm-pagina">
       <TituloTela titulo={t('match.home.history')} aoVoltar={aoVoltar} />
-      {historico.length === 0 ? (
+      <BotoesOpcao
+        rotulo={t('match.home.history')}
+        opcoes={[
+          { valor: 'partidas', rotulo: t('match.history.tabMatches') },
+          { valor: 'torneios', rotulo: t('match.history.tabTournaments') },
+        ]}
+        valor={aba}
+        aoEscolher={setAba}
+      />
+      {aba === 'torneios' ? (
+        <HistoricoTorneios aoAbrir={aoAbrirTorneio} />
+      ) : historico.length === 0 ? (
         <p className="ptd-vazio">{t('match.history.empty')}</p>
       ) : (
         <ul className="cm-lista ptd-lista-historico">

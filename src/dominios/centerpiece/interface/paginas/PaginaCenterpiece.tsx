@@ -9,7 +9,8 @@ import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogado
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
 import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
-import { torneioAtivo } from '@/dominios/torneio/logica/torneio'
+import { criarRascunho, torneioAtivo } from '@/dominios/torneio/logica/torneio'
+import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
 import { useClube } from '../hooks/useClube'
@@ -39,7 +40,7 @@ type TelaModulo =
   | { nome: 'jogadores' }
   | { nome: 'historico' }
   | { nome: 'ranking' }
-  | { nome: 'torneio' }
+  | { nome: 'torneio'; id: string }
   | { nome: 'mesa'; id: string }
 
 /** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
@@ -72,15 +73,23 @@ function TelasCenterpiece({
   aoProximaTela,
   raiz,
 }: PropsCenterpiece & { raiz: RefObject<HTMLElement | null> }) {
-  const { t } = useI18n()
+  const { t, idioma } = useI18n()
   const { partidas, abertas, guardarNome } = usePartidas()
   const { sorteio, marcarRegistrada } = useClube()
   const [tela, setTela] = useState<TelaModulo>({ nome: modo === 'simples' ? 'simples' : 'inicio' })
   const irInicio = () => setTela({ nome: 'inicio' })
   const { telaCheiaMesa } = usePreferencias()
-  const { torneios } = useTorneios()
+  const { torneios, salvar: salvarTorneio } = useTorneios()
   const subtituloTorneio = useSubtituloTorneio()
   const ativo = torneioAtivo(torneios)
+  /** Sem torneio em jogo, o card já cria o rascunho e abre a Lista do torneio. */
+  const criarTorneio = () => {
+    const agora = new Date()
+    const data = new Intl.DateTimeFormat(idioma, { day: '2-digit', month: '2-digit' }).format(agora)
+    const novo = criarRascunho({ id: gerarId(), agora, nome: t('tournament.defaultName', { date: data }) })
+    salvarTorneio(novo)
+    return novo.id
+  }
 
   /** O navegador só deixa entrar em tela cheia dentro do toque, por isso fica aqui. */
   const abrirMesa = (mesa: TelaModulo) => {
@@ -167,9 +176,11 @@ function TelasCenterpiece({
       />
     )
   }
-  if (tela.nome === 'historico') return <PaginaHistorico aoVoltar={irInicio} />
+  if (tela.nome === 'historico') {
+    return <PaginaHistorico aoVoltar={irInicio} aoAbrirTorneio={(torneio) => setTela({ nome: 'torneio', id: torneio.id })} />
+  }
   if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
-  if (tela.nome === 'torneio') return <PaginaTorneio aoVoltar={irInicio} aoAbrir={() => undefined} />
+  if (tela.nome === 'torneio') return <PaginaTorneio torneioId={tela.id} aoVoltar={irInicio} />
 
   if (tela.nome === 'andamento') {
     return (
@@ -196,6 +207,13 @@ function TelasCenterpiece({
       aoTocar: () => setTela({ nome: 'setup' }),
     },
     {
+      chave: 'torneio',
+      icone: 'fa-trophy',
+      titulo: t('tournament.title'),
+      texto: ativo ? subtituloTorneio(ativo) : t('tournament.create'),
+      aoTocar: () => setTela({ nome: 'torneio', id: ativo?.id ?? criarTorneio() }),
+    },
+    {
       chave: 'clube',
       icone: 'fa-table-cells-large',
       titulo: t('match.home.clubTitle'),
@@ -216,13 +234,6 @@ function TelasCenterpiece({
       texto: t('match.home.openCount', { count: abertas.length }),
       aoTocar: () =>
         abertas.length === 1 ? abrirMesa({ nome: 'mesa', id: abertas[0].id }) : setTela({ nome: 'andamento' }),
-    },
-    {
-      chave: 'torneio',
-      icone: 'fa-trophy',
-      titulo: t('tournament.title'),
-      texto: ativo && ativo.status !== 'rascunho' ? subtituloTorneio(ativo) : t('tournament.create'),
-      aoTocar: () => setTela({ nome: 'torneio' }),
     },
     {
       chave: 'historico',
