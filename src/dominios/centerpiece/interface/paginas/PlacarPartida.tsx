@@ -4,6 +4,7 @@ import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import SeloTorneio from '@/dominios/torneio/interface/componentes/SeloTorneio'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
@@ -280,6 +281,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               acoes={<BotaoTelaCheia />}
               titulo={
                 <>
+                {partida.vinculoTorneio ? (
+                  <SeloTorneio vinculo={partida.vinculoTorneio} />
+                ) : (
                 <label className="ptd-seletor-mesa">
                   <span className="sr-only">{t('match.table.switch')}</span>
                   <select value={id} onChange={(evento) => aoTrocarDeMesa(evento.target.value)}>
@@ -290,6 +294,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                     ))}
                   </select>
                 </label>
+                )}
                 <button type="button" className="mesa-abortar" onClick={() => setAbortando(true)}>
                   <i className="fas fa-ban" aria-hidden="true" /> {t('match.table.abort')}
                 </button>

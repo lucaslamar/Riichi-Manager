@@ -422,3 +422,207 @@
 .trn-abaixo-minimo td {
   color: var(--texto-apoio);
 }
+
+/* ─── Mesas sorteadas do torneio ──────────────────────────────────────────── */
+.trn-abas-rodadas {
+  display: flex;
+  gap: 8px;
+  margin: 4px 0 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.trn-abas-rodadas > button {
+  flex: none;
+  min-height: 44px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 999px;
+  padding: 0 14px;
+  color: var(--texto-apoio);
+  background: var(--superficie);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.trn-abas-rodadas > button.ativo {
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+/* Timer geral preso no topo enquanto as mesas rolam. */
+.trn-timer-geral {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 10px 0;
+  background: var(--fundo);
+}
+
+.trn-timer-geral .trn-anel {
+  width: 112px;
+  height: 112px;
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  cursor: default;
+}
+
+.trn-timer-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trn-timer-acoes > button {
+  min-height: 44px;
+}
+
+.trn-tempo-acabou {
+  width: 100%;
+  margin: 0;
+  color: var(--texto-erro);
+  font-weight: 700;
+  text-align: center;
+}
+
+.trn-mesa-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 8px;
+}
+
+.trn-mesa-topo .clb-mesa-titulo {
+  margin: 0;
+}
+
+.trn-status {
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: var(--texto-apoio);
+  background: var(--fundo);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.trn-status--em_andamento {
+  color: var(--primario);
+}
+
+.trn-status--finalizada {
+  color: var(--texto-positivo);
+}
+
+.trn-mesa--final {
+  border-color: var(--primario);
+  box-shadow: inset 0 0 0 1px var(--primario);
+}
+
+.trn-mesa--final .clb-mesa-titulo > i {
+  color: var(--primario);
+}
+
+.clb-assento-kanji.trn-kanji--leste {
+  color: var(--leste);
+}
+
+.clb-assento-kanji.trn-kanji--sul {
+  color: var(--sul);
+}
+
+.clb-assento-kanji.trn-kanji--oeste {
+  color: var(--oeste);
+}
+
+.clb-assento-kanji.trn-kanji--norte {
+  color: var(--norte);
+}
+
+.trn-assento-pontos {
+  grid-column: 2;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.trn-assento-pontos.trn-positivo {
+  color: var(--texto-positivo);
+}
+
+.trn-assento-pontos.trn-negativo {
+  color: var(--texto-erro);
+}
+
+.trn-timer-mesa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.trn-timer-mesa > i {
+  color: var(--texto-apoio);
+}
+
+.trn-timer-mesa > [role='timer'] {
+  flex: 1;
+}
+
+.trn-mais-5,
+.trn-timer-acoes > button {
+  white-space: nowrap;
+}
+
+.trn-mais-5 {
+  min-height: 44px;
+  padding-inline: 12px;
+}
+
+.trn-proxima {
+  margin-top: 16px;
+}
+
+.trn-menu button > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trn-menu button small {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}
+
+/* Selo no cabeçalho da partida do Centerpiece. */
+.trn-selo {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.trn-selo-texto {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trn-selo-tempo {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}

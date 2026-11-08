@@ -17,6 +17,9 @@ import {
   faseDaRodada,
   rankingEliminatorio,
 } from '../src/dominios/torneio/logica/formatos/eliminatorio'
+import { podeSortearDeNovo, sortearDeNovo, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
+import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
+import { relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingTemporada } from '../src/dominios/torneio/logica/temporada'
 import { criarRascunho, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
 import type { ConfigFormato, RodadaTorneio, Torneio } from '../src/dominios/torneio/logica/tipos'
@@ -247,6 +250,35 @@ for (const total of [8, 12, 16]) {
   const esperadoJ1 = [...finais.get('j1')!].sort((a, b) => b - a).slice(0, 2).reduce((a, b) => a + b, 0)
   assert.equal(melhores.find((linha) => linha.jogadorId === 'j1')!.valor, Math.round(esperadoJ1 * 10) / 10, 'melhores 2')
   console.log('Temporada ok.')
+}
+
+// ─── Mesas: relógio, sortear de novo e texto ────────────────────────────────
+{
+  let relogio = iniciar(relogioParado(60), 1_000)
+  assert.equal(segundosRestantes(relogio, 31_000), 30)
+  relogio = pausar(relogio, 31_000)
+  assert.equal(segundosRestantes(relogio, 999_000), 30, 'pausado não desconta')
+  relogio = acrescentar(relogio, 300)
+  assert.equal(segundosRestantes(relogio, 0), 330)
+  assert.equal(segundosRestantes(iniciar(relogio, 0), 1_000_000), 0)
+  assert.equal(formatarRelogio(5400), '1:30:00')
+  assert.equal(formatarRelogio(90), '1:30')
+
+  const { torneio, partidas } = simular({ tipo: 'suico', rodadas: 3 }, 8, 1)
+  assert.ok(podeSortearDeNovo(torneio, partidas), 'rodada 2 sem mesa aberta')
+  const refeito = sortearDeNovo(torneio, partidas, agora)
+  assert.equal(refeito.rodadas.length, 2)
+  assert.deepEqual(refeito.rodadas[0], torneio.rodadas[0], 'rodada com resultado não muda')
+  assert.ok(!podeSortearDeNovo({ ...torneio, rodadas: torneio.rodadas.slice(0, 1) }, partidas), 'rodada 1 já tem resultado')
+
+  const texto = textoDaRodada(torneio.rodadas[0], {
+    titulo: 'Rodada 1',
+    mesa: (numero) => `Mesa ${numero}`,
+    vento: (vento) => vento,
+    nome: (id) => id.toUpperCase(),
+  })
+  assert.ok(texto.startsWith('Rodada 1\n\n*Mesa 1*\n東 leste: '), 'texto para WhatsApp')
+  console.log('Mesas ok.')
 }
 
 console.log('Formatos ok.')

@@ -43,7 +43,16 @@ type TelaModulo =
   | { nome: 'ranking' }
   | { nome: 'torneio'; id: string }
   | { nome: 'temporada'; id: string }
-  | { nome: 'mesa'; id: string }
+  /** `voltar`: de onde a mesa foi aberta (as Mesas sorteadas do torneio). */
+  | { nome: 'mesa'; id: string; voltar?: TelaModulo }
+  | {
+      nome: 'registrarTorneio'
+      torneioId: string
+      rodada: number
+      mesa: number
+      /** Corrigir ou substituir: a partida que sai quando o novo resultado entra. */
+      substituirId?: string
+    }
 
 /** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
 export default function PaginaCenterpiece(props: PropsCenterpiece) {
@@ -76,7 +85,7 @@ function TelasCenterpiece({
   raiz,
 }: PropsCenterpiece & { raiz: RefObject<HTMLElement | null> }) {
   const { t, idioma } = useI18n()
-  const { partidas, abertas, guardarNome } = usePartidas()
+  const { partidas, abertas, guardarNome, descartar } = usePartidas()
   const { sorteio, marcarRegistrada } = useClube()
   const [tela, setTela] = useState<TelaModulo>({ nome: modo === 'simples' ? 'simples' : 'inicio' })
   const irInicio = () => setTela({ nome: 'inicio' })
@@ -156,8 +165,8 @@ function TelasCenterpiece({
         <PlacarPartida
           key={partida.id}
           partida={partida}
-          aoSair={irInicio}
-          aoFinalizar={irInicio}
+          aoSair={() => (tela.voltar ? setTela(tela.voltar) : irInicio())}
+          aoFinalizar={() => (tela.voltar ? setTela(tela.voltar) : irInicio())}
           aoTrocarDeMesa={(id) => setTela({ nome: 'mesa', id })}
         />
       )
@@ -191,8 +200,50 @@ function TelasCenterpiece({
         torneioId={tela.id}
         aoVoltar={irInicio}
         aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
+        aoAbrirPartida={(id) => abrirMesa({ nome: 'mesa', id, voltar: tela })}
+        aoLancarResultado={(rodada, mesa, substituir) =>
+          setTela({
+            nome: 'registrarTorneio',
+            torneioId: tela.id,
+            rodada: rodada.numero,
+            mesa: mesa.numero,
+            substituirId: substituir?.id,
+          })
+        }
       />
     )
+  }
+  if (tela.nome === 'registrarTorneio') {
+    const torneio = torneios.find((item) => item.id === tela.torneioId)
+    const mesa = torneio?.rodadas.find((item) => item.numero === tela.rodada)?.mesas.find((item) => item.numero === tela.mesa)
+    const substituir = partidas.find((item) => item.id === tela.substituirId)
+    const voltar = () => setTela({ nome: 'torneio', id: tela.torneioId })
+    if (torneio && mesa) {
+      return (
+        <RegistrarFinalizada
+          key={`${tela.torneioId}-${tela.rodada}-${tela.mesa}`}
+          torneio={{
+            titulo: t('tournament.tables.badge', { round: tela.rodada, table: tela.mesa }),
+            config: torneio.config,
+            jogadorIds: mesa.assentos,
+            vinculo: { torneioId: torneio.id, rodada: tela.rodada - 1, mesa: tela.mesa - 1, guardada: true },
+            pontosIniciais: substituir
+              ? [0, 1, 2, 3].map(
+                  (cadeira) =>
+                    substituir.resultado?.find((linha) => linha.cadeira === cadeira)?.pontosBrutos ??
+                    substituir.placar.pontos[cadeira as 0 | 1 | 2 | 3],
+                )
+              : undefined,
+          }}
+          aoVoltar={voltar}
+          aoRegistrar={() => {
+            // O novo resultado substitui o anterior (ou a partida aberta no Centerpiece).
+            if (substituir) descartar(substituir.id)
+            voltar()
+          }}
+        />
+      )
+    }
   }
   if (tela.nome === 'temporada') {
     return (

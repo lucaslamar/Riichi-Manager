@@ -6,7 +6,9 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import SeletorJogador from '@/dominios/jogadores/interface/componentes/SeletorJogador'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import type { ConfigMesa } from '../../logica/configMesa'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
+import type { Partida } from '../../logica/partida'
 import { criarPartidaManual } from '../../logica/partidaManual'
 import {
   configBaseDoConjunto,
@@ -36,16 +38,26 @@ const pontosValidos = (texto: string) => PONTOS_VALIDOS.test(semSeparadores(text
 /**
  * Partida jogada fora do app: regras, jogadores, pontos, uma e oka. Com `clube`,
  * vem de uma mesa sorteada: os quatro já preenchidos na ordem dos ventos (convidados
- * pelo nome), as regras de clube e a partida ligada ao encontro.
+ * pelo nome), as regras de clube e a partida ligada ao encontro. Com `torneio`, os
+ * quatro e as regras vêm travados da mesa do torneio (e os pontos, ao corrigir).
  */
 export default function RegistrarFinalizada({
   aoVoltar,
   aoRegistrar,
   clube,
+  torneio,
 }: {
   aoVoltar: () => void
   aoRegistrar: (id: string) => void
   clube?: { mesa: MesaDoSorteio; encontroId: string }
+  torneio?: {
+    titulo: string
+    config: ConfigMesa
+    jogadorIds: readonly [string, string, string, string]
+    vinculo: NonNullable<Partida['vinculoTorneio']>
+    /** Corrigir: os pontos do resultado que já existe. */
+    pontosIniciais?: readonly number[]
+  }
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
@@ -54,12 +66,17 @@ export default function RegistrarFinalizada({
   const [salvas] = useState(() => carregarRegrasRegistro(armazenamentoLocal))
   const [conjunto, setConjunto] = useState<ConjuntoRegistro>(clube ? 'padrao' : salvas.conjunto)
   const [personalizado, setPersonalizado] = useState(salvas.personalizado)
-  const regras =
-    conjunto === 'personalizado' && personalizado
+  const regras = torneio
+    ? {
+        pontosPartida: torneio.config.pontosPartida,
+        pontosRetorno: torneio.config.pontosRetorno,
+        uma: torneio.config.uma,
+      }
+    : conjunto === 'personalizado' && personalizado
       ? personalizado
       : regrasDoPreset(conjunto === 'personalizado' ? 'padrao' : conjunto)
   const { pontosPartida, pontosRetorno, uma } = regras
-  const base = configBaseDoConjunto(conjunto)
+  const base = torneio?.config ?? configBaseDoConjunto(conjunto)
   const guardar = (novo: ConjuntoRegistro, valores: RegrasPontuacao | null) => {
     setConjunto(novo)
     setPersonalizado(valores)
@@ -71,9 +88,11 @@ export default function RegistrarFinalizada({
     mesaClube ? mesaClube.ids.map((id, indice) => [id, mesaClube.nomes[indice]] as const) : [],
   )
   const [assentos, setAssentos] = useState<(string | null)[]>(() =>
-    mesaClube ? [...mesaClube.ids] : [null, null, null, null],
+    torneio ? [...torneio.jogadorIds] : mesaClube ? [...mesaClube.ids] : [null, null, null, null],
   )
-  const [pontos, setPontos] = useState(['', '', '', ''])
+  const [pontos, setPontos] = useState(() =>
+    torneio?.pontosIniciais ? torneio.pontosIniciais.map(String) : ['', '', '', ''],
+  )
   const [escolhendo, setEscolhendo] = useState<number | null>(null)
 
   const nomeDe = (id: string | null) => {
@@ -132,7 +151,13 @@ export default function RegistrarFinalizada({
   return (
     <section className="ptd-inicio fin-tela">
       <TituloTela
-        titulo={clube ? t('match.table.number', { number: clube.mesa.numero }) : t('match.manual.title')}
+        titulo={
+          torneio
+            ? torneio.titulo
+            : clube
+              ? t('match.table.number', { number: clube.mesa.numero })
+              : t('match.manual.title')
+        }
         aoVoltar={aoVoltar}
       />
 
@@ -148,6 +173,8 @@ export default function RegistrarFinalizada({
                 type="button"
                 className={`ptd-assento fin-jogador${nome ? ' ptd-assento--ocupado' : ''}`}
                 aria-label={nome ?? t('match.manual.choosePlayer', { number: lugar + 1 })}
+                // Mesa do torneio: os quatro vêm do sorteio e não mudam aqui.
+                disabled={!!torneio}
                 onClick={() => setEscolhendo(lugar)}
               >
                 {nome ?? t('match.setup.assign')}
@@ -180,12 +207,16 @@ export default function RegistrarFinalizada({
         </p>
       )}
 
+      {torneio ? (
+        <p className="cfg-ajuda">{t('tournament.tables.rulesLocked')}</p>
+      ) : (
       <RegrasPontuacaoRegistro
         conjunto={conjunto}
         regras={regras}
         pontosAtuais={pontosNumeros}
         aoSalvar={(novo, editadas) => guardar(novo, novo === 'personalizado' ? editadas : personalizado)}
       />
+      )}
 
       {previa?.resultado && (
         <>
@@ -205,6 +236,7 @@ export default function RegistrarFinalizada({
             ...previa,
             id,
             ...(clube ? { encontro: { id: clube.encontroId, mesa: clube.mesa.numero } } : {}),
+            ...(torneio ? { vinculoTorneio: torneio.vinculo } : {}),
           })
           aoRegistrar(id)
         }}

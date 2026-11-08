@@ -1,0 +1,443 @@
+import { useEffect, useState, type ReactNode } from 'react'
+import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
+import { gerarId } from '@/compartilhado/adaptadores/identificador'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import AnelTimer from '@/dominios/centerpiece/interface/componentes/AnelTimer'
+import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
+import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
+import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
+import { CHAVE_VENTO, KANJI_VENTO, ORDEM_VENTOS, type Partida } from '@/dominios/centerpiece/logica/partida'
+import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import { ACRESCIMO_SEGUNDOS } from '../../logica/configuracao'
+import { proximaRodada, rodadaFechada } from '../../logica/formatos'
+import { ehMesaFinal } from '../../logica/formatos/eliminatorio'
+import {
+  maoAtual,
+  partidaDaMesaNova,
+  podeSortearDeNovo,
+  relogioDaMesa,
+  relogioDaRodada,
+  sortearDeNovo,
+  textoDaRodada,
+  trocarMesa,
+  trocarRodada,
+} from '../../logica/mesas'
+import {
+  acabou,
+  acrescentar,
+  estaRodando,
+  formatarRelogio,
+  fracaoRestante,
+  iniciar,
+  pausar,
+  segundosRestantes,
+} from '../../logica/relogio'
+import { partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
+import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
+import { useTorneios } from '../hooks/useTorneios'
+import '@/dominios/centerpiece/interface/clube.css'
+import '../torneio.css'
+
+/** Agora, atualizado a cada segundo enquanto algum relógio corre. */
+function useAgora(ativo: boolean) {
+  const [agora, setAgora] = useState(() => Date.now())
+  useEffect(() => {
+    if (!ativo) return
+    const intervalo = window.setInterval(() => setAgora(Date.now()), 1000)
+    return () => window.clearInterval(intervalo)
+  }, [ativo])
+  return ativo ? agora : Date.now()
+}
+
+export interface AcoesMesa {
+  /** Abre (ou retoma) a partida da mesa no Centerpiece. */
+  aoAbrirPartida: (partidaId: string) => void
+  /** Registrar partida finalizada com a mesa travada; `corrigir` traz a partida a substituir. */
+  aoLancarResultado: (rodada: RodadaTorneio, mesa: MesaTorneio, corrigir?: Partida) => void
+}
+
+/**
+ * Mesas sorteadas do torneio: abas por rodada, timer geral, um card por mesa com
+ * os quatro ventos, o status ao vivo e o registro do resultado.
+ */
+export default function PaginaMesasTorneio({
+  torneio,
+  aoVoltar,
+  aoAbrirPartida,
+  aoLancarResultado,
+  rodape,
+}: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode } & AcoesMesa) {
+  const { t, idioma, numero } = useI18n()
+  const { salvar } = useTorneios()
+  const { partidas, adicionar } = usePartidas()
+  const { jogadores } = useJogadores()
+  const { aviso, mostrar } = useAviso()
+  const emJogo = rodadaAtual(torneio, partidas)
+  const [abaRodada, setAbaRodada] = useState(emJogo?.numero ?? 1)
+  const rodada = torneio.rodadas.find((item) => item.numero === abaRodada) ?? emJogo
+  const [refazendo, setRefazendo] = useState(false)
+  const [registrando, setRegistrando] = useState<MesaTorneio | null>(null)
+
+  const algumRodando =
+    !!rodada &&
+    (estaRodando(relogioDaRodada(torneio, rodada)) ||
+      rodada.mesas.some((mesa) => {
+        const relogio = relogioDaMesa(torneio, mesa)
+        return !!relogio && estaRodando(relogio)
+      }))
+  const agora = useAgora(algumRodando)
+
+  // Rodada nova gerada: a aba acompanha.
+  useEffect(() => {
+    if (emJogo) setAbaRodada(emJogo.numero)
+  }, [emJogo?.numero]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!rodada) return null
+
+  const nomeDe = (id: string) => {
+    const jogador = jogadores.find((item) => item.id === id)
+    return jogador ? nomeExibido(jogador) : '?'
+  }
+  const total = totalDeRodadas(torneio.formato)
+  const titulo = total
+    ? t('tournament.tables.roundOf', { round: rodada.numero, total })
+    : t('tournament.tables.round', { round: rodada.numero })
+  const dataHora = new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
+    new Date(rodada.geradaEm),
+  )
+  const somenteLeitura = !!torneio.transferidoEm || torneio.status === 'finalizado'
+
+  const salvarRelogioRodada = (relogio: Relogio) =>
+    salvar(trocarRodada(torneio, rodada.numero, (atual) => ({ ...atual, relogio })))
+  const salvarRelogioMesa = (mesa: MesaTorneio, relogio: Relogio) =>
+    salvar(trocarMesa(torneio, rodada.numero, mesa.numero, (atual) => ({ ...atual, relogio })))
+
+  const relogioGeral = relogioDaRodada(torneio, rodada)
+
+  const abrirNoCenterpiece = (mesa: MesaTorneio) => {
+    const existente = partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero)
+    if (existente) return aoAbrirPartida(existente.id)
+    const partida = partidaDaMesaNova(torneio, rodada, mesa, {
+      id: gerarId(),
+      agora: new Date().toISOString(),
+      nomes: mesa.assentos.map(nomeDe),
+    })
+    adicionar(partida)
+    // O relógio da mesa começa quando a mesa começa.
+    const relogio = relogioDaMesa(torneio, mesa)
+    if (relogio && !estaRodando(relogio) && segundosRestantes(relogio, Date.now()) > 0) {
+      salvarRelogioMesa(mesa, iniciar(relogio, Date.now()))
+    }
+    aoAbrirPartida(partida.id)
+  }
+
+  const compartilhar = async () => {
+    const texto = textoDaRodada(rodada, {
+      titulo: `*${torneio.nome}* · ${titulo}`,
+      mesa: (numeroMesa) => t('match.table.number', { number: numeroMesa }),
+      vento: (vento) => t(CHAVE_VENTO[vento]),
+      nome: nomeDe,
+    })
+    const resultado = await compartilharTexto(texto, torneio.nome)
+    if (resultado === 'copiado') mostrar(t('match.club.copied'))
+    if (resultado === 'falhou') mostrar(t('match.club.shareFailed'))
+  }
+
+  const fechada = rodadaFechada(torneio, partidas) && rodada.numero === torneio.rodadas.length
+  const proxima = fechada && !somenteLeitura ? proximaRodada(torneio, partidas, new Date().toISOString()) : null
+
+  return (
+    <section className="ptd-inicio clb-resultado trn-mesas">
+      <TituloTela
+        titulo={titulo}
+        aoVoltar={aoVoltar}
+        acoes={
+          <span className="clb-acoes-titulo">
+            {podeSortearDeNovo(torneio, partidas) && rodada.numero === torneio.rodadas.length && !somenteLeitura && (
+              <button
+                type="button"
+                className="cm-btn-icone"
+                aria-label={t('tournament.tables.redraw')}
+                title={t('tournament.tables.redraw')}
+                onClick={() => setRefazendo(true)}
+              >
+                <i className="fas fa-rotate" aria-hidden="true" />
+              </button>
+            )}
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('match.club.share')}
+              title={t('match.club.share')}
+              onClick={compartilhar}
+            >
+              <i className="fas fa-share-nodes" aria-hidden="true" />
+            </button>
+          </span>
+        }
+      />
+
+      <p className="clb-encontro-data">
+        {torneio.nome} · <time dateTime={rodada.geradaEm}>{dataHora}</time>
+      </p>
+
+      {torneio.transferidoEm && (
+        <p className="cfg-aviso" role="status">
+          <i className="fas fa-lock" aria-hidden="true" />{' '}
+          {t('tournament.tables.transferred', {
+            date: new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
+              new Date(torneio.transferidoEm),
+            ),
+          })}
+        </p>
+      )}
+
+      {torneio.rodadas.length > 1 && (
+        <div className="trn-abas-rodadas" role="tablist" aria-label={t('tournament.tables.rounds')}>
+          {torneio.rodadas.map((item) => {
+            const { finalizadas, total: mesas } = progressoDaRodada(partidas, torneio, item)
+            return (
+              <button
+                key={item.numero}
+                type="button"
+                role="tab"
+                aria-selected={item.numero === rodada.numero}
+                className={item.numero === rodada.numero ? 'ativo' : ''}
+                onClick={() => setAbaRodada(item.numero)}
+              >
+                {t('tournament.tables.roundTab', { round: item.numero, done: finalizadas, total: mesas })}
+              </button>
+            )
+          })}
+        </div>
+      )}
+
+      <div className="trn-timer-geral">
+        <AnelTimer
+          segundos={segundosRestantes(relogioGeral, agora)}
+          fracao={fracaoRestante(relogioGeral, agora)}
+          esgotado={acabou(relogioGeral, agora)}
+          className="trn-anel"
+        >
+          <span aria-hidden="true">{formatarRelogio(segundosRestantes(relogioGeral, agora))}</span>
+        </AnelTimer>
+        <div className="trn-timer-acoes">
+          <button
+            type="button"
+            className="btn-contorno"
+            disabled={somenteLeitura || acabou(relogioGeral, agora)}
+            onClick={() =>
+              salvarRelogioRodada(
+                estaRodando(relogioGeral) ? pausar(relogioGeral, Date.now()) : iniciar(relogioGeral, Date.now()),
+              )
+            }
+          >
+            <i className={`fas ${estaRodando(relogioGeral) ? 'fa-pause' : 'fa-play'}`} aria-hidden="true" />{' '}
+            {t(estaRodando(relogioGeral) ? 'tournament.tables.pause' : 'tournament.tables.start')}
+          </button>
+          <button
+            type="button"
+            className="btn-contorno"
+            disabled={somenteLeitura}
+            aria-label={t('tournament.tables.addTimeAll')}
+            onClick={() => salvarRelogioRodada(acrescentar(relogioGeral, ACRESCIMO_SEGUNDOS))}
+          >
+            +5 min
+          </button>
+        </div>
+        {acabou(relogioGeral, agora) && <p className="trn-tempo-acabou">{t('tournament.tables.timeUp')}</p>}
+      </div>
+
+      <ul className="clb-mesas">
+        {rodada.mesas.map((mesa) => {
+          const partida = partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero)
+          const status = statusDaMesa(partida)
+          const rotulo = t('match.table.number', { number: mesa.numero })
+          const relogio = relogioDaMesa(torneio, mesa)
+          const final = ehMesaFinal(torneio, rodada)
+          const resultadoDe = (cadeira: number) => partida?.resultado?.find((linha) => linha.cadeira === cadeira)
+          return (
+            <li key={mesa.numero} className={`clb-mesa trn-mesa trn-mesa--${status}${final ? ' trn-mesa--final' : ''}`}>
+              <div className="trn-mesa-topo">
+                <h3 className="clb-mesa-titulo">
+                  {final && <i className="fas fa-crown" aria-hidden="true" />} {final ? t('tournament.tables.finalTable') : rotulo}
+                </h3>
+                <span className={`trn-status trn-status--${status}`}>
+                  {status === 'em_andamento' && partida
+                    ? `${t('tournament.tables.status.em_andamento')} · ${maoAtual(partida)}`
+                    : t(`tournament.tables.status.${status}`)}
+                </span>
+              </div>
+
+              <ul className="clb-mesa-assentos" aria-label={rotulo}>
+                {mesa.assentos.map((jogadorId, indice) => {
+                  const vento = ORDEM_VENTOS[indice]
+                  const linha = resultadoDe(indice)
+                  return (
+                    <li key={vento} className="clb-assento">
+                      <span className={`clb-assento-kanji trn-kanji trn-kanji--${vento}`} aria-hidden="true">
+                        {KANJI_VENTO[vento]}
+                      </span>
+                      <span className="clb-assento-vento">{t(CHAVE_VENTO[vento])}</span>
+                      <span className="sr-only">: </span>
+                      <strong className="clb-assento-nome">{nomeDe(jogadorId)}</strong>
+                      {status === 'em_andamento' && partida && (
+                        <span className="trn-assento-pontos">{numero(partida.placar.pontos[indice as 0 | 1 | 2 | 3])}</span>
+                      )}
+                      {linha && (
+                        <span className={`trn-assento-pontos ${linha.final >= 0 ? 'trn-positivo' : 'trn-negativo'}`}>
+                          {t('tournament.tables.place', { place: linha.colocacao })} ·{' '}
+                          {linha.final > 0 ? '+' : ''}
+                          {new Intl.NumberFormat(idioma, { maximumFractionDigits: 1 }).format(linha.final)}
+                        </span>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+
+              {relogio && status !== 'finalizada' && (
+                <div className="trn-timer-mesa">
+                  <i className="fas fa-clock" aria-hidden="true" />
+                  <span role="timer" className={acabou(relogio, agora) ? 'trn-erro' : undefined}>
+                    {formatarRelogio(segundosRestantes(relogio, agora))}
+                  </span>
+                  <button
+                    type="button"
+                    className="cm-btn-icone"
+                    disabled={somenteLeitura}
+                    aria-label={t(estaRodando(relogio) ? 'tournament.tables.pauseTable' : 'tournament.tables.startTable', { table: mesa.numero })}
+                    onClick={() =>
+                      salvarRelogioMesa(mesa, estaRodando(relogio) ? pausar(relogio, Date.now()) : iniciar(relogio, Date.now()))
+                    }
+                  >
+                    <i className={`fas ${estaRodando(relogio) ? 'fa-pause' : 'fa-play'}`} aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-contorno trn-mais-5"
+                    disabled={somenteLeitura}
+                    aria-label={t('tournament.tables.addTimeTable', { table: mesa.numero })}
+                    onClick={() => salvarRelogioMesa(mesa, acrescentar(relogio, ACRESCIMO_SEGUNDOS))}
+                  >
+                    +5 min
+                  </button>
+                </div>
+              )}
+
+              {!somenteLeitura && (
+                <button
+                  type="button"
+                  className="btn-contorno clb-mesa-botao"
+                  aria-label={`${t(status === 'finalizada' ? 'tournament.tables.fix' : 'match.club.registerResult')}, ${rotulo}`}
+                  onClick={() => setRegistrando(mesa)}
+                >
+                  <i className={`fas ${status === 'finalizada' ? 'fa-pen' : 'fa-clipboard-check'}`} aria-hidden="true" />{' '}
+                  {t(status === 'finalizada' ? 'tournament.tables.fix' : 'match.club.registerResult')}
+                </button>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+
+      {proxima && (
+        <button
+          type="button"
+          className="btn-primario ptd-btn-largo trn-proxima"
+          onClick={() => salvar({ ...torneio, rodadas: [...torneio.rodadas, proxima] })}
+        >
+          <i className="fas fa-forward" aria-hidden="true" />{' '}
+          {proxima.fase && proxima.fase !== rodada.fase
+            ? t('tournament.tables.nextPhase', { round: proxima.numero })
+            : t('tournament.tables.nextRound', { round: proxima.numero })}
+        </button>
+      )}
+
+      {rodape}
+
+      {aviso && (
+        <p className="ptd-aviso" role="status">
+          {aviso}
+        </p>
+      )}
+
+      {registrando && (
+        <FolhaRegistrar
+          rotulo={t('tournament.tables.badge', { round: rodada.numero, table: registrando.numero })}
+          partida={partidaDaMesa(partidas, torneio.id, rodada.numero, registrando.numero)}
+          aoFechar={() => setRegistrando(null)}
+          aoCenterpiece={() => {
+            setRegistrando(null)
+            abrirNoCenterpiece(registrando)
+          }}
+          aoLancar={(corrigir) => {
+            setRegistrando(null)
+            aoLancarResultado(rodada, registrando, corrigir)
+          }}
+        />
+      )}
+
+      {refazendo && (
+        <ModalConfirmacao
+          titulo={t('tournament.tables.redrawTitle')}
+          texto={t('tournament.tables.redrawHelp')}
+          rotuloConfirmar={t('tournament.tables.redraw')}
+          aoFechar={() => setRefazendo(false)}
+          aoConfirmar={() => {
+            salvar(sortearDeNovo(torneio, partidas, new Date().toISOString()))
+            setRefazendo(false)
+          }}
+        />
+      )}
+    </section>
+  )
+}
+
+/** Duas formas de registrar: jogar no Centerpiece ou lançar só o resultado final. */
+function FolhaRegistrar({
+  rotulo,
+  partida,
+  aoFechar,
+  aoCenterpiece,
+  aoLancar,
+}: {
+  rotulo: string
+  partida: Partida | undefined
+  aoFechar: () => void
+  aoCenterpiece: () => void
+  aoLancar: (corrigir?: Partida) => void
+}) {
+  const { t } = useI18n()
+  const finalizada = partida?.status === 'finalizada'
+  return (
+    <Modal titulo={rotulo} aoFechar={aoFechar} rotuloFechar={t('actions.close')} tamanho="pequena">
+      <ul className="trn-menu">
+        {!finalizada && (
+          <li>
+            <button type="button" onClick={aoCenterpiece}>
+              <i className="fas fa-table-cells" aria-hidden="true" />
+              <span>
+                <strong>{t(partida ? 'tournament.tables.resumeCenterpiece' : 'tournament.tables.openCenterpiece')}</strong>
+                <small>{t('tournament.tables.openCenterpieceHelp')}</small>
+              </span>
+            </button>
+          </li>
+        )}
+        <li>
+          {/* Com partida aberta no Centerpiece, o lançamento a substitui. */}
+          <button type="button" onClick={() => aoLancar(partida)}>
+            <i className="fas fa-clipboard-check" aria-hidden="true" />
+            <span>
+              <strong>{t(finalizada ? 'tournament.tables.fixResult' : 'tournament.tables.finalResult')}</strong>
+              <small>{t(finalizada ? 'tournament.tables.fixResultHelp' : 'tournament.tables.finalResultHelp')}</small>
+            </span>
+          </button>
+        </li>
+      </ul>
+    </Modal>
+  )
+}
