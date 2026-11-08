@@ -6,6 +6,10 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogadores'
+import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
+import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
+import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
+import { torneioAtivo } from '@/dominios/torneio/logica/torneio'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
 import { useClube } from '../hooks/useClube'
@@ -35,6 +39,7 @@ type TelaModulo =
   | { nome: 'jogadores' }
   | { nome: 'historico' }
   | { nome: 'ranking' }
+  | { nome: 'torneio' }
   | { nome: 'mesa'; id: string }
 
 /** Raiz do módulo: no celular o `main` é uma grade, que esticaria as telas sem isto. */
@@ -73,6 +78,9 @@ function TelasCenterpiece({
   const [tela, setTela] = useState<TelaModulo>({ nome: modo === 'simples' ? 'simples' : 'inicio' })
   const irInicio = () => setTela({ nome: 'inicio' })
   const { telaCheiaMesa } = usePreferencias()
+  const { torneios } = useTorneios()
+  const subtituloTorneio = useSubtituloTorneio()
+  const ativo = torneioAtivo(torneios)
 
   /** O navegador só deixa entrar em tela cheia dentro do toque, por isso fica aqui. */
   const abrirMesa = (mesa: TelaModulo) => {
@@ -161,6 +169,7 @@ function TelasCenterpiece({
   }
   if (tela.nome === 'historico') return <PaginaHistorico aoVoltar={irInicio} />
   if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
+  if (tela.nome === 'torneio') return <PaginaTorneio aoVoltar={irInicio} aoAbrir={() => undefined} />
 
   if (tela.nome === 'andamento') {
     return (
@@ -207,6 +216,13 @@ function TelasCenterpiece({
       texto: t('match.home.openCount', { count: abertas.length }),
       aoTocar: () =>
         abertas.length === 1 ? abrirMesa({ nome: 'mesa', id: abertas[0].id }) : setTela({ nome: 'andamento' }),
+    },
+    {
+      chave: 'torneio',
+      icone: 'fa-trophy',
+      titulo: t('tournament.title'),
+      texto: ativo && ativo.status !== 'rascunho' ? subtituloTorneio(ativo) : t('tournament.create'),
+      aoTocar: () => setTela({ nome: 'torneio' }),
     },
     {
       chave: 'historico',

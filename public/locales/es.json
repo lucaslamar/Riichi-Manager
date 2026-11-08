@@ -1437,5 +1437,34 @@
     "river": "{{name}} discarded: {{tiles}}.",
     "noDiscards": "{{name}} has not discarded yet.",
     "redDragon": "red dragon"
+  },
+  "tournament": {
+    "title": "Tournament",
+    "create": "Create tournament",
+    "defaultName": "Club meetup {{date}}",
+    "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
+    "roundOpen": "Round {{round}} · {{tables}} tables",
+    "draft": "List in progress · {{count}} players",
+    "active": "Tournament in progress",
+    "continue": "Continue",
+    "formats": {
+      "rodizio": "Rotation",
+      "suico": "Swiss",
+      "eliminatorio": "Knockout",
+      "corridos": "League",
+      "temporada": "League (season)"
+    },
+    "history": {
+      "title": "Finished tournaments",
+      "empty": "No finished tournaments.",
+      "noMatch": "No tournaments match these filters.",
+      "search": "Search by player or name",
+      "format": "Format",
+      "allFormats": "All formats",
+      "from": "From",
+      "to": "To",
+      "players": "{{count}} players"
+    },
+    "createHelp": "List, table draw and ranking"
   }
 }

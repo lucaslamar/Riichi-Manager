@@ -1,0 +1,66 @@
+/* Torneio: entrada, histórico e filtros. Cores só dos tokens. */
+.trn-pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trn-filtros {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.trn-busca,
+.trn-filtros > select {
+  grid-column: 1 / -1;
+}
+
+.trn-campo {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+}
+
+.trn-data {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}
+
+/* Card de linha, igual em qualquer largura (os do menu viram blocos no desktop). */
+.trn-card {
+  display: grid;
+  width: 100%;
+  min-height: 68px;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 2px 12px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.trn-card > i {
+  grid-row: span 2;
+  color: var(--primario);
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.trn-card > span {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}

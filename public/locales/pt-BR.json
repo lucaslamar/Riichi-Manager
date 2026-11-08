@@ -1430,5 +1430,34 @@
     "river": "{{name}} descartou: {{tiles}}.",
     "noDiscards": "{{name}} ainda não descartou.",
     "redDragon": "dragão vermelho"
+  },
+  "tournament": {
+    "title": "Torneio",
+    "create": "Criar torneio",
+    "defaultName": "Encontro do clube {{date}}",
+    "roundOf": "Rodada {{round}} de {{total}} · {{tables}} mesas",
+    "roundOpen": "Rodada {{round}} · {{tables}} mesas",
+    "draft": "Lista em preparo · {{count}} jogadores",
+    "active": "Torneio em andamento",
+    "continue": "Continuar",
+    "formats": {
+      "rodizio": "Rodízio",
+      "suico": "Suíço",
+      "eliminatorio": "Eliminatório",
+      "corridos": "Pontos corridos",
+      "temporada": "Pontos corridos (temporada)"
+    },
+    "history": {
+      "title": "Torneios finalizados",
+      "empty": "Nenhum torneio finalizado.",
+      "noMatch": "Nenhum torneio com esses filtros.",
+      "search": "Buscar por jogador ou nome",
+      "format": "Formato",
+      "allFormats": "Todos os formatos",
+      "from": "De",
+      "to": "Até",
+      "players": "{{count}} jogadores"
+    },
+    "createHelp": "Lista, sorteio de mesas e ranking"
   }
 }
