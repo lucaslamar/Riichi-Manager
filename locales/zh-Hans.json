@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "计算器",
+    "calculator": "计算器",
     "navigation": "主导航",
     "currentModule": "当前模块",
     "tagline": "立直麻将生态",
@@ -74,6 +74,7 @@
     "hiddenTile": "暗牌",
     "removeTile": "从手牌移除{{tile}}",
     "removeWinningTile": "从手牌移除和牌张{{tile}}",
+    "reservedWinningTile": "荣和的牌，已定为和牌张：{{tile}}",
     "removeMeld": "移除{{meld}}",
     "meldActive": "{{action}} 已选中",
     "actionsMenu": "手牌操作",
@@ -680,7 +681,7 @@
     "startOver": "从头开始",
     "start": "开始",
     "close": "关闭指南",
-    "index": "目录",
+    "index": "目录",
     "closeIndex": "关闭目录",
     "modules": "模块",
     "module": "模块 {{number}}",

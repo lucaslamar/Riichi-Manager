@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "計算機",
+    "calculator": "計算機",
     "navigation": "メインナビゲーション",
     "currentModule": "現在のモジュール",
     "tagline": "リーチ麻雀のエコシステム",
@@ -74,6 +74,7 @@
     "hiddenTile": "伏せ牌",
     "removeTile": "手牌から{{tile}}を外す",
     "removeWinningTile": "和了牌の{{tile}}を手牌から外す",
+    "reservedWinningTile": "ロンした牌、和了牌として固定: {{tile}}",
     "removeMeld": "{{meld}}を外す",
     "meldActive": "{{action}} 選択中",
     "actionsMenu": "手牌の操作",
@@ -680,7 +681,7 @@
     "startOver": "最初から",
     "start": "始める",
     "close": "ガイドを閉じる",
-    "index": "目次",
+    "index": "目次",
     "closeIndex": "目次を閉じる",
     "modules": "モジュール",
     "module": "モジュール{{number}}",

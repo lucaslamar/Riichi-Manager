@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "계산기",
+    "calculator": "계산기",
     "navigation": "주 메뉴",
     "currentModule": "현재 모듈",
     "tagline": "리치 마작 생태계",
@@ -74,6 +74,7 @@
     "hiddenTile": "뒤집힌 패",
     "removeTile": "손패에서 {{tile}} 빼기",
     "removeWinningTile": "화료패 {{tile}}을(를) 손패에서 빼기",
+    "reservedWinningTile": "론한 패, 화료패로 고정: {{tile}}",
     "removeMeld": "{{meld}} 빼기",
     "meldActive": "{{action}} 선택됨",
     "actionsMenu": "손패 동작",
@@ -680,7 +681,7 @@
     "startOver": "처음부터",
     "start": "시작",
     "close": "가이드 닫기",
-    "index": "목차",
+    "index": "목차",
     "closeIndex": "목차 닫기",
     "modules": "모듈",
     "module": "모듈 {{number}}",

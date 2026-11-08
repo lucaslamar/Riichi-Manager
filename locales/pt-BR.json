@@ -73,6 +73,7 @@
     "hiddenTile": "pedra oculta",
     "removeTile": "Remover {{tile}} da mão",
     "removeWinningTile": "Remover {{tile}} vencedora da mão",
+    "reservedWinningTile": "Pedra do ron, já marcada como batida: {{tile}}",
     "removeMeld": "Remover {{meld}}",
     "meldActive": "{{action}} ativo",
     "actionsMenu": "Ações da mão",

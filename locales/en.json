@@ -4,7 +4,7 @@
   },
   "global": {
     "appName": "Mojoca",
-    "calculator": "Calculator",
+    "calculator": "Calculator",
     "navigation": "Main navigation",
     "currentModule": "Current module",
     "tagline": "Riichi Mahjong ecosystem",
@@ -73,6 +73,7 @@
     "hiddenTile": "hidden tile",
     "removeTile": "Remove {{tile}} from the hand",
     "removeWinningTile": "Remove winning {{tile}} from the hand",
+    "reservedWinningTile": "Ron tile, already set as the winning tile: {{tile}}",
     "removeMeld": "Remove {{meld}}",
     "meldActive": "{{action}} active",
     "actionsMenu": "Hand actions",
