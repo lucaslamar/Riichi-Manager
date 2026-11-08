@@ -1492,8 +1492,9 @@
       "savedLists": "Carregar uma lista",
       "noSaved": "Nenhuma lista salva.",
       "deleteSaved": "Excluir a lista {{name}}",
-      "import": "Importar do cadastro",
-      "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista"
+      "import": "Adicionar jogadores do cadastro",
+      "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista",
+      "rename": "Renomear o torneio {{name}}"
     },
     "settings": {
       "title": "Configurações do torneio",
@@ -1536,6 +1537,13 @@
       "eliminatorio": "Classificatória e cortes até a mesa final.",
       "corridos": "Liga em um encontro: cada rodada é sorteada na hora.",
       "temporada": "Liga com vários encontros e ranking acumulado."
+    },
+    "formatsShort": {
+      "rodizio": "Rodízio",
+      "suico": "Suíço",
+      "eliminatorio": "Eliminatório",
+      "corridos": "Pontos corridos",
+      "temporada": "Temporada"
     }
   }
 }

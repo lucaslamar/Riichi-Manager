@@ -1499,8 +1499,9 @@
       "savedLists": "Load a list",
       "noSaved": "No saved lists.",
       "deleteSaved": "Delete the list {{name}}",
-      "import": "Import from registry",
-      "cutsTooBig": "Knockout cuts must be smaller than the list"
+      "import": "Add players from registry",
+      "cutsTooBig": "Knockout cuts must be smaller than the list",
+      "rename": "Rename tournament {{name}}"
     },
     "settings": {
       "title": "Tournament settings",
@@ -1543,6 +1544,13 @@
       "eliminatorio": "Qualifying stage and cuts down to the final table.",
       "corridos": "One-day league: each round is drawn on the spot.",
       "temporada": "League over several meetups with a cumulative ranking."
+    },
+    "formatsShort": {
+      "rodizio": "Rotation",
+      "suico": "Swiss",
+      "eliminatorio": "Knockout",
+      "corridos": "League",
+      "temporada": "Season"
     }
   }
 }

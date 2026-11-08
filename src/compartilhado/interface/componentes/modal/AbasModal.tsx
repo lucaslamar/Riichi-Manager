@@ -24,6 +24,7 @@ export default function AbasModal<Chave extends string>({
   rotulo,
   colunas = abas.length,
   fixo,
+  fixoAcima = false,
   className,
   children,
 }: {
@@ -36,6 +37,8 @@ export default function AbasModal<Chave extends string>({
   colunas?: number
   /** Fica preso junto com as abas, logo abaixo delas (ex.: o campo de busca). */
   fixo?: ReactNode
+  /** `fixo` acima das abas, no lugar de abaixo. */
+  fixoAcima?: boolean
   className?: string
   children: ReactNode
 }) {
@@ -87,6 +90,7 @@ export default function AbasModal<Chave extends string>({
     <div ref={raizRef} className={['abas-modal', className].filter(Boolean).join(' ')}>
       {/* Topo preso: as abas e o que vier em `fixo` (ex.: a busca) logo abaixo. */}
       <div className="abas-modal__topo">
+        {fixo && fixoAcima && <div className="abas-modal__fixo abas-modal__fixo--acima">{fixo}</div>}
         <div
           className="abas-modal__lista"
           role="tablist"
@@ -108,7 +112,7 @@ export default function AbasModal<Chave extends string>({
             </button>
           ))}
         </div>
-        {fixo && <div className="abas-modal__fixo">{fixo}</div>}
+        {fixo && !fixoAcima && <div className="abas-modal__fixo">{fixo}</div>}
       </div>
       <div
         id={`${id}-painel`}

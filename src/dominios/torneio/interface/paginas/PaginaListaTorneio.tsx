@@ -55,6 +55,7 @@ export default function PaginaListaTorneio({
   const [cadastrados, setCadastrados] = useState(false)
   const [limpando, setLimpando] = useState(false)
   const [configurando, setConfigurando] = useState(false)
+  const [renomeando, setRenomeando] = useState(false)
 
   const linhas = useMemo(() => linhasDoTexto(lista), [lista])
   const analise = useMemo(() => analisarLista(lista, jogadores), [lista, jogadores])
@@ -116,10 +117,29 @@ export default function PaginaListaTorneio({
   return (
     <section ref={raiz} className="clb-lista trn-lista">
       <TituloTela
-        titulo={t('tournament.list.title')}
+        titulo={
+          <button
+            type="button"
+            className="trn-titulo-editavel"
+            aria-label={t('tournament.list.rename', { name: torneio.nome })}
+            onClick={() => setRenomeando(true)}
+          >
+            <span>{torneio.nome}</span>
+            <i className="fas fa-pen" aria-hidden="true" />
+          </button>
+        }
         aoVoltar={aoVoltar}
         acoes={
           <span className="clb-acoes-titulo">
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('tournament.list.import')}
+              title={t('tournament.list.import')}
+              onClick={() => setCadastrados(true)}
+            >
+              <i className="fas fa-user-plus" aria-hidden="true" />
+            </button>
             <button
               type="button"
               className="cm-btn-icone"
@@ -317,6 +337,17 @@ export default function PaginaListaTorneio({
         />
       )}
 
+      {renomeando && (
+        <FolhaNome
+          nome={torneio.nome}
+          aoFechar={() => setRenomeando(false)}
+          aoSalvar={(nome) => {
+            salvar({ ...torneio, nome })
+            setRenomeando(false)
+          }}
+        />
+      )}
+
       {limpando && (
         <ModalConfirmacao
           titulo={t('tournament.list.clearTitle')}
@@ -435,6 +466,60 @@ function FolhaMemoria({
       <button type="button" className="btn-contorno ptd-btn-largo trn-importar" onClick={aoImportar}>
         <i className="fas fa-users" aria-hidden="true" /> {t('tournament.list.import')}
       </button>
+    </Modal>
+  )
+}
+
+/** Nome do torneio: aparece no título da Lista e das Mesas sorteadas. */
+function FolhaNome({
+  nome,
+  aoFechar,
+  aoSalvar,
+}: {
+  nome: string
+  aoFechar: () => void
+  aoSalvar: (nome: string) => void
+}) {
+  const { t } = useI18n()
+  const [texto, setTexto] = useState(nome)
+  const valido = texto.trim().length > 0
+  return (
+    <Modal
+      titulo={t('tournament.settings.name')}
+      aoFechar={aoFechar}
+      rotuloFechar={t('actions.close')}
+      tamanho="pequena"
+      rodape={
+        <div className="ptd-acoes-folha">
+          <button type="button" className="btn-contorno" onClick={aoFechar}>
+            {t('actions.cancel')}
+          </button>
+          <button
+            type="submit"
+            form="trn-form-nome"
+            className="btn-primario"
+            disabled={!valido}
+          >
+            {t('tournament.settings.save')}
+          </button>
+        </div>
+      }
+    >
+      <form
+        id="trn-form-nome"
+        onSubmit={(evento) => {
+          evento.preventDefault()
+          if (valido) aoSalvar(texto.trim())
+        }}
+      >
+        <input
+          className="trn-campo"
+          value={texto}
+          maxLength={60}
+          aria-label={t('tournament.settings.name')}
+          onChange={(evento) => setTexto(evento.target.value)}
+        />
+      </form>
     </Modal>
   )
 }

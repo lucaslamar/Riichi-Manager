@@ -12,7 +12,7 @@ const RODADAS: readonly number[] = [2, 3, 4, 5, 6, 8]
 
 /**
  * Engrenagem da Lista do torneio: a folha das Configurações de mesa com a aba
- * Torneio na frente (nome, formato e tempo). Nada muda no torneio até Salvar.
+ * Torneio na frente (formato e tempo). O nome se edita no título da Lista. Nada muda no torneio até Salvar.
  */
 export default function ConfigTorneioSheet({
   torneio,
@@ -27,7 +27,6 @@ export default function ConfigTorneioSheet({
   aoFechar: () => void
 }) {
   const { t } = useI18n()
-  const [nome, setNome] = useState(torneio.nome)
   const [formato, setFormato] = useState<ConfigFormato>(torneio.formato)
   const [timers, setTimers] = useState(torneio.timers)
   const minutos = Math.round(timers.rodadaSegundos / 60)
@@ -35,32 +34,17 @@ export default function ConfigTorneioSheet({
 
   const abaTorneio = (
     <>
-      <Campo rotulo={t('tournament.settings.name')}>
-        <input
-          className="trn-campo"
-          value={nome}
-          maxLength={60}
-          onChange={(evento) => setNome(evento.target.value)}
+      <div className="cfg-conjunto-regras">
+        <span className="cfg-campo-rotulo">{t('tournament.settings.format')}</span>
+        <BotoesOpcao<FormatoTorneio>
+          rotulo={t('tournament.settings.format')}
+          valor={formato.tipo}
+          aoEscolher={(tipo) => setFormato(formatoPadrao(tipo))}
+          className="cfg-presets trn-formatos-botoes"
+          opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formatsShort.${tipo}`) }))}
         />
-      </Campo>
-
-      <Grupo rotulo={t('tournament.settings.format')}>
-        <div className="trn-formatos" role="radiogroup" aria-label={t('tournament.settings.format')}>
-          {FORMATOS.map((tipo) => (
-            <button
-              key={tipo}
-              type="button"
-              role="radio"
-              aria-checked={formato.tipo === tipo}
-              className={`trn-formato${formato.tipo === tipo ? ' ativo' : ''}`}
-              onClick={() => formato.tipo !== tipo && setFormato(formatoPadrao(tipo))}
-            >
-              <strong>{t(`tournament.formats.${tipo}`)}</strong>
-              <span>{t(`tournament.formatHelp.${tipo}`)}</span>
-            </button>
-          ))}
-        </div>
-      </Grupo>
+        <p className="cfg-ajuda">{t(`tournament.formatHelp.${formato.tipo}`)}</p>
+      </div>
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
 
@@ -145,7 +129,7 @@ export default function ConfigTorneioSheet({
       aoFechar={aoFechar}
       aoConcluir={(config) => {
         if (!cortesValidos) return
-        aoSalvar({ ...torneio, nome: nome.trim() || torneio.nome, formato, timers, config })
+        aoSalvar({ ...torneio, formato, timers, config })
       }}
     />
   )

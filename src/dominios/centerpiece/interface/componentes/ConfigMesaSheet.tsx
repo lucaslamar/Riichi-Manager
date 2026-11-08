@@ -126,6 +126,7 @@ export default function ConfigMesaSheet({
         aoEscolher={setAba}
         rotulo={t('tableConfig.indexLabel')}
         className="cfg-abas"
+        fixoAcima
         fixo={
           <CampoBusca
             valor={texto}
