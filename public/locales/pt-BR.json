@@ -1446,8 +1446,8 @@
       "rodizio": "Rodízio",
       "suico": "Suíço",
       "eliminatorio": "Eliminatório",
-      "corridos": "Pontos corridos",
-      "temporada": "Pontos corridos (temporada)"
+      "corridos": "Brasileirão",
+      "temporada": "Brasileirão (temporada)"
     },
     "history": {
       "title": "Torneios finalizados",
@@ -1524,7 +1524,7 @@
       "timer60": "1h",
       "timer90": "1h30",
       "timer120": "2h",
-      "custom": "Personalizado",
+      "custom": "Outro tempo",
       "minutes": "Minutos por rodada",
       "tableTimer": "Timer por mesa",
       "on": "Ligado",
@@ -1544,7 +1544,7 @@
       "rodizio": "Rodízio",
       "suico": "Suíço",
       "eliminatorio": "Eliminatório",
-      "corridos": "Pontos corridos",
+      "corridos": "Brasileirão",
       "temporada": "Temporada"
     },
     "season": {

@@ -225,8 +225,18 @@
 }
 
 /* Cinco abas numa linha: palavra inteira ("Pontuação" não quebra no meio). */
+/* Cada aba do tamanho do rótulo: com seis (Torneio), nada passa da borda. */
+.cfg-abas .abas-modal__lista {
+  grid-template-columns: none !important;
+  grid-auto-columns: minmax(min-content, 1fr);
+  grid-auto-flow: column;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
 .cfg-abas .abas-modal__aba {
   min-height: 40px;
+  padding-inline: 4px;
   font-size: 0.6875rem;
   overflow-wrap: normal;
   word-break: normal;
