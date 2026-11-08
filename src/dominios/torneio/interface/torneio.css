@@ -661,6 +661,7 @@
   white-space: nowrap;
 }
 
-.trn-encerrar {
+.trn-encerrar,
+.trn-abortar {
   margin-top: 16px;
 }

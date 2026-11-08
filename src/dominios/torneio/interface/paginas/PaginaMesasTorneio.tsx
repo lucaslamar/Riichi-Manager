@@ -1,8 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
-import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import AnelTimer from '@/dominios/centerpiece/interface/componentes/AnelTimer'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
@@ -16,7 +14,6 @@ import { proximaRodada, rodadaFechada } from '../../logica/formatos'
 import { ehMesaFinal } from '../../logica/formatos/eliminatorio'
 import {
   maoAtual,
-  partidaDaMesaNova,
   podeSortearDeNovo,
   relogioDaMesa,
   relogioDaRodada,
@@ -35,7 +32,7 @@ import {
   pausar,
   segundosRestantes,
 } from '../../logica/relogio'
-import { partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
+import { abortarTorneio, partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
@@ -53,8 +50,6 @@ function useAgora(ativo: boolean) {
 }
 
 export interface AcoesMesa {
-  /** Abre (ou retoma) a partida da mesa no Centerpiece. */
-  aoAbrirPartida: (partidaId: string) => void
   /** Registrar partida finalizada com a mesa travada; `corrigir` traz a partida a substituir. */
   aoLancarResultado: (rodada: RodadaTorneio, mesa: MesaTorneio, corrigir?: Partida) => void
 }
@@ -66,21 +61,20 @@ export interface AcoesMesa {
 export default function PaginaMesasTorneio({
   torneio,
   aoVoltar,
-  aoAbrirPartida,
   aoLancarResultado,
   rodape,
   aoAbrirRanking,
 }: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode; aoAbrirRanking: () => void } & AcoesMesa) {
   const { t, idioma, numero } = useI18n()
-  const { salvar } = useTorneios()
-  const { partidas, adicionar } = usePartidas()
+  const { salvar, definirLista } = useTorneios()
+  const { partidas, descartarDoTorneio } = usePartidas()
   const { jogadores } = useJogadores()
   const { aviso, mostrar } = useAviso()
   const emJogo = rodadaAtual(torneio, partidas)
   const [abaRodada, setAbaRodada] = useState(emJogo?.numero ?? 1)
   const rodada = torneio.rodadas.find((item) => item.numero === abaRodada) ?? emJogo
   const [refazendo, setRefazendo] = useState(false)
-  const [registrando, setRegistrando] = useState<MesaTorneio | null>(null)
+  const [abortando, setAbortando] = useState(false)
 
   const algumRodando =
     !!rodada &&
@@ -117,23 +111,6 @@ export default function PaginaMesasTorneio({
     salvar(trocarMesa(torneio, rodada.numero, mesa.numero, (atual) => ({ ...atual, relogio })))
 
   const relogioGeral = relogioDaRodada(torneio, rodada)
-
-  const abrirNoCenterpiece = (mesa: MesaTorneio) => {
-    const existente = partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero)
-    if (existente) return aoAbrirPartida(existente.id)
-    const partida = partidaDaMesaNova(torneio, rodada, mesa, {
-      id: gerarId(),
-      agora: new Date().toISOString(),
-      nomes: mesa.assentos.map(nomeDe),
-    })
-    adicionar(partida)
-    // O relógio da mesa começa quando a mesa começa.
-    const relogio = relogioDaMesa(torneio, mesa)
-    if (relogio && !estaRodando(relogio) && segundosRestantes(relogio, Date.now()) > 0) {
-      salvarRelogioMesa(mesa, iniciar(relogio, Date.now()))
-    }
-    aoAbrirPartida(partida.id)
-  }
 
   const compartilhar = async () => {
     const texto = textoDaRodada(rodada, {
@@ -345,7 +322,8 @@ export default function PaginaMesasTorneio({
                   type="button"
                   className="btn-contorno clb-mesa-botao"
                   aria-label={`${t(status === 'finalizada' ? 'tournament.tables.fix' : 'match.club.registerResult')}, ${rotulo}`}
-                  onClick={() => setRegistrando(mesa)}
+                  // O adm lança o resultado final. Mesa já registrada: a correção substitui a partida.
+                  onClick={() => aoLancarResultado(rodada, mesa, partida)}
                 >
                   <i className={`fas ${status === 'finalizada' ? 'fa-pen' : 'fa-clipboard-check'}`} aria-hidden="true" />{' '}
                   {t(status === 'finalizada' ? 'tournament.tables.fix' : 'match.club.registerResult')}
@@ -377,24 +355,30 @@ export default function PaginaMesasTorneio({
 
       {rodape}
 
+      {torneio.status === 'em_andamento' && !somenteLeitura && (
+        <button type="button" className="btn-contorno ptd-btn-largo trn-abortar" onClick={() => setAbortando(true)}>
+          <i className="fas fa-ban" aria-hidden="true" /> {t('tournament.tables.abort')}
+        </button>
+      )}
+
       {aviso && (
         <p className="ptd-aviso" role="status">
           {aviso}
         </p>
       )}
 
-      {registrando && (
-        <FolhaRegistrar
-          rotulo={t('tournament.tables.badge', { round: rodada.numero, table: registrando.numero })}
-          partida={partidaDaMesa(partidas, torneio.id, rodada.numero, registrando.numero)}
-          aoFechar={() => setRegistrando(null)}
-          aoCenterpiece={() => {
-            setRegistrando(null)
-            abrirNoCenterpiece(registrando)
-          }}
-          aoLancar={(corrigir) => {
-            setRegistrando(null)
-            aoLancarResultado(rodada, registrando, corrigir)
+      {abortando && (
+        <ModalConfirmacao
+          titulo={t('tournament.tables.abortTitle')}
+          texto={t('tournament.tables.abortHelp')}
+          rotuloConfirmar={t('tournament.tables.abort')}
+          aoFechar={() => setAbortando(false)}
+          aoConfirmar={() => {
+            // A lista volta com os mesmos jogadores, prontos para editar e sortear de novo.
+            definirLista(torneio.jogadorIds.map(nomeDe).join('\n'))
+            descartarDoTorneio(torneio.id)
+            salvar(abortarTorneio(torneio, new Date().toISOString()))
+            setAbortando(false)
           }}
         />
       )}
@@ -412,50 +396,5 @@ export default function PaginaMesasTorneio({
         />
       )}
     </section>
-  )
-}
-
-/** Duas formas de registrar: jogar no Centerpiece ou lançar só o resultado final. */
-function FolhaRegistrar({
-  rotulo,
-  partida,
-  aoFechar,
-  aoCenterpiece,
-  aoLancar,
-}: {
-  rotulo: string
-  partida: Partida | undefined
-  aoFechar: () => void
-  aoCenterpiece: () => void
-  aoLancar: (corrigir?: Partida) => void
-}) {
-  const { t } = useI18n()
-  const finalizada = partida?.status === 'finalizada'
-  return (
-    <Modal titulo={rotulo} aoFechar={aoFechar} rotuloFechar={t('actions.close')} tamanho="pequena">
-      <ul className="trn-menu">
-        {!finalizada && (
-          <li>
-            <button type="button" onClick={aoCenterpiece}>
-              <i className="fas fa-table-cells" aria-hidden="true" />
-              <span>
-                <strong>{t(partida ? 'tournament.tables.resumeCenterpiece' : 'tournament.tables.openCenterpiece')}</strong>
-                <small>{t('tournament.tables.openCenterpieceHelp')}</small>
-              </span>
-            </button>
-          </li>
-        )}
-        <li>
-          {/* Com partida aberta no Centerpiece, o lançamento a substitui. */}
-          <button type="button" onClick={() => aoLancar(partida)}>
-            <i className="fas fa-clipboard-check" aria-hidden="true" />
-            <span>
-              <strong>{t(finalizada ? 'tournament.tables.fixResult' : 'tournament.tables.finalResult')}</strong>
-              <small>{t(finalizada ? 'tournament.tables.fixResultHelp' : 'tournament.tables.finalResultHelp')}</small>
-            </span>
-          </button>
-        </li>
-      </ul>
-    </Modal>
   )
 }

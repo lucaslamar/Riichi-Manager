@@ -174,3 +174,8 @@ export function iniciarTorneio(
 ): Torneio {
   return { ...torneio, jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
 }
+
+/** Aborta o sorteio: o torneio volta a ser rascunho, sem rodadas, para editar a lista e sortear de novo. */
+export function abortarTorneio(torneio: Torneio, agora: string): Torneio {
+  return { ...torneio, rodadas: [], status: 'rascunho', atualizadoEm: agora }
+}

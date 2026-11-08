@@ -68,6 +68,10 @@ export const acoesPartidas = {
   descartar(id: string) {
     definirPartidas(lerPartidas().filter((partida) => partida.id !== id))
   },
+  /** Apaga de uma vez as partidas de um torneio abortado. */
+  descartarDoTorneio(torneioId: string) {
+    definirPartidas(lerPartidas().filter((partida) => partida.vinculoTorneio?.torneioId !== torneioId))
+  },
 }
 
 export function usePartidas() {
