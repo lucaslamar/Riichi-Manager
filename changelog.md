@@ -23,6 +23,7 @@
 - **Lista do clube virou Encontro do clube**, e o torneio novo se chama Torneio com a data (antes, Encontro do clube com a data).
 - **Torneio não cadastra ninguém sozinho**: como no Encontro do clube, quem não está no cadastro joga como convidado (contorno tracejado) e o Cadastrar fica na linha, para quem quiser. O convidado aparece pelo nome nas mesas, no lançamento e no ranking do torneio.
 - **Torneios com o nome antigo** "Encontro do clube" e a data passam a se chamar "Torneio" e a data, como os novos.
+- **Timer geral da rodada começa em 1h** nos torneios novos (antes, 1h30).
 
 ### Corrigido
 

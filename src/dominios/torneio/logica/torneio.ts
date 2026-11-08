@@ -7,7 +7,7 @@ import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { nomeExibido, normalizarTexto, type Jogador } from '@/dominios/jogadores/logica/jogadores'
 import type { ConfigFormato, FormatoTorneio, Relogio, RodadaTorneio, Torneio } from './tipos'
 
-export const SEGUNDOS_RODADA_PADRAO = 90 * 60
+export const SEGUNDOS_RODADA_PADRAO = 60 * 60
 export const RODADAS_PADRAO = 4
 
 /** Padrão do torneio: 30.000 de partida e de retorno, sem oka. */
