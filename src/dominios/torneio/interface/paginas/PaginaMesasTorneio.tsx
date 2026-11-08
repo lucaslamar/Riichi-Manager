@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import AnelTimer from '@/dominios/centerpiece/interface/componentes/AnelTimer'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
@@ -18,6 +19,7 @@ import {
   podeSortearDeNovo,
   relogioDaMesa,
   relogioDaRodada,
+  reiniciarSorteio,
   sortearDeNovo,
   textoDaRodada,
   trocarMesa,
@@ -78,6 +80,8 @@ export default function PaginaMesasTorneio({
   const [refazendo, setRefazendo] = useState(false)
   const [abortando, setAbortando] = useState(false)
   const [exportando, setExportando] = useState(false)
+  const [menu, setMenu] = useState(false)
+  const [reiniciando, setReiniciando] = useState(false)
   /** Rodada cujo lembrete de backup já foi dispensado. */
   const [lembreteDispensado, setLembreteDispensado] = useState<number>()
 
@@ -139,17 +143,6 @@ export default function PaginaMesasTorneio({
         aoVoltar={aoVoltar}
         acoes={
           <span className="clb-acoes-titulo">
-            {podeSortearDeNovo(torneio, partidas) && rodada.numero === torneio.rodadas.length && !somenteLeitura && (
-              <button
-                type="button"
-                className="cm-btn-icone"
-                aria-label={t('tournament.tables.redraw')}
-                title={t('tournament.tables.redraw')}
-                onClick={() => setRefazendo(true)}
-              >
-                <i className="fas fa-rotate" aria-hidden="true" />
-              </button>
-            )}
             <button
               type="button"
               className="cm-btn-icone"
@@ -167,6 +160,15 @@ export default function PaginaMesasTorneio({
               onClick={compartilhar}
             >
               <i className="fas fa-share-nodes" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('tournament.tables.more')}
+              title={t('tournament.tables.more')}
+              onClick={() => setMenu(true)}
+            >
+              <i className="fas fa-ellipsis-vertical" aria-hidden="true" />
             </button>
           </span>
         }
@@ -389,20 +391,88 @@ export default function PaginaMesasTorneio({
       )}
 
 
-      <button type="button" className="btn-contorno ptd-btn-largo trn-abortar" onClick={() => setExportando(true)}>
-        <i className="fas fa-file-export" aria-hidden="true" /> {t('tournament.export.button')}
-      </button>
-
-      {torneio.status === 'em_andamento' && !somenteLeitura && (
-        <button type="button" className="btn-contorno ptd-btn-largo trn-abortar" onClick={() => setAbortando(true)}>
-          <i className="fas fa-ban" aria-hidden="true" /> {t('tournament.tables.abort')}
-        </button>
-      )}
 
       {aviso && (
         <p className="ptd-aviso" role="status">
           {aviso}
         </p>
+      )}
+
+      {menu && (
+        <Modal titulo={torneio.nome} aoFechar={() => setMenu(false)} rotuloFechar={t('actions.close')} tamanho="pequena">
+          <ul className="trn-menu">
+          {podeSortearDeNovo(torneio, partidas) && rodada.numero === torneio.rodadas.length && !somenteLeitura && (
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu(false)
+                  setRefazendo(true)
+                }}
+              >
+                <i className="fas fa-rotate" aria-hidden="true" />
+                <span>{t('tournament.tables.redraw')}</span>
+              </button>
+            </li>
+          )}
+          {torneio.status === 'em_andamento' && !somenteLeitura && (
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu(false)
+                  setReiniciando(true)
+                }}
+              >
+                <i className="fas fa-shuffle" aria-hidden="true" />
+                <span>{t('tournament.tables.restart')}</span>
+              </button>
+            </li>
+          )}
+          <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu(false)
+                  setExportando(true)
+                }}
+              >
+                <i className="fas fa-file-export" aria-hidden="true" />
+                <span>{t('tournament.export.button')}</span>
+              </button>
+            </li>
+          {torneio.status === 'em_andamento' && !somenteLeitura && (
+            <li>
+              <button
+                type="button"
+                className="trn-menu--perigo"
+                onClick={() => {
+                  setMenu(false)
+                  setAbortando(true)
+                }}
+              >
+                <i className="fas fa-ban" aria-hidden="true" />
+                <span>{t('tournament.tables.abort')}</span>
+              </button>
+            </li>
+          )}
+          </ul>
+        </Modal>
+      )}
+
+      {reiniciando && (
+        <ModalConfirmacao
+          titulo={t('tournament.tables.restartTitle')}
+          texto={t('tournament.tables.restartHelp')}
+          rotuloConfirmar={t('tournament.tables.restart')}
+          aoFechar={() => setReiniciando(false)}
+          aoConfirmar={() => {
+            descartarDoTorneio(torneio.id)
+            salvar(reiniciarSorteio(torneio, new Date().toISOString()))
+            setAbaRodada(1)
+            setReiniciando(false)
+          }}
+        />
       )}
 
       {exportando && <FolhaExportar torneio={torneio} aoFechar={() => setExportando(false)} />}

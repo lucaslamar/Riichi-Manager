@@ -77,6 +77,14 @@ export function sortearDeNovo(torneio: Torneio, partidas: readonly Partida[], ag
   return nova ? { ...semUltima, rodadas: [...semUltima.rodadas, nova] } : torneio
 }
 
+/**
+ * Reinicia o sorteio do zero com os mesmos jogadores: as rodadas iniciais saem de
+ * novo (no Rodízio, a grade inteira). Os resultados do torneio saem junto, por fora.
+ */
+export function reiniciarSorteio(torneio: Torneio, agora: string): Torneio {
+  return { ...torneio, rodadas: rodadasIniciais(torneio, torneio.jogadorIds, agora), atualizadoEm: agora }
+}
+
 /** "南2": rodada do vento e número da mão em jogo. */
 export function maoAtual(partida: Partida): string {
   return `${KANJI_VENTO[partida.placar.rodadaVento]}${partida.placar.rodadaNumero}`

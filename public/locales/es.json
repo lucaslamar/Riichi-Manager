@@ -1637,7 +1637,11 @@
       "toFinish": "See final ranking and finish",
       "undoTransfer": "Undo transfer",
       "backupReminder": "Round closed. How about exporting a backup?",
-      "backupAction": "Export"
+      "backupAction": "Export",
+      "more": "More tournament options",
+      "restart": "Restart draw",
+      "restartTitle": "Restart the draw?",
+      "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted."
     },
     "ranking": {
       "title": "Tournament ranking",
