@@ -1623,7 +1623,28 @@
       "fixResult": "Fix result",
       "fixResultHelp": "The new points replace the old ones and the ranking is recalculated.",
       "rulesLocked": "Tournament scoring rules.",
-      "transferred": "Transferred to another device on {{date}}. Read-only here."
+      "transferred": "Transferred to another device on {{date}}. Read-only here.",
+      "toFinish": "See final ranking and finish"
+    },
+    "ranking": {
+      "title": "Tournament ranking",
+      "points": "Points",
+      "averagePlace": "Average placement",
+      "averagePlaceShort": "Avg.",
+      "games": "Games played",
+      "gamesShort": "GP",
+      "phase": "Stage",
+      "phaseQualifier": "Qualifying",
+      "phaseCut": "Cut {{number}}",
+      "place": "Place {{place}}",
+      "pdf": "Export PDF",
+      "pdfError": "Could not create the PDF. Check the internet connection.",
+      "finish": "Finish tournament",
+      "finishTitle": "Finish the tournament?",
+      "finishHelp": "The tournament goes to history and takes no more results.",
+      "seasonRanking": "Season ranking",
+      "seasonRankingHelp": "All meetups combined",
+      "player": "Player"
     },
     "diagnosis": {
       "title": "Grid diagnosis",
@@ -1644,9 +1665,6 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
-    },
-    "ranking": {
-      "player": "Player"
     }
   }
 }

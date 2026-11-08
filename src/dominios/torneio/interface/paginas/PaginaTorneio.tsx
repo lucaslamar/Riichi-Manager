@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
@@ -8,6 +9,7 @@ import DiagnosticoGrade from '../componentes/DiagnosticoGrade'
 import { useTorneios } from '../hooks/useTorneios'
 import PaginaListaTorneio from './PaginaListaTorneio'
 import PaginaMesasTorneio, { type AcoesMesa } from './PaginaMesasTorneio'
+import PaginaRankingTorneio from './PaginaRankingTorneio'
 import '../torneio.css'
 
 /** Torneio aberto: a Lista enquanto é rascunho, depois as Mesas sorteadas. */
@@ -25,6 +27,7 @@ export default function PaginaTorneio({
   const { torneios, temporadas } = useTorneios()
   const torneio = torneios.find((item) => item.id === torneioId)
   const { jogadores } = useJogadores()
+  const [vendoRanking, setVendoRanking] = useState(false)
   const nomeDe = (id: string) => {
     const jogador = jogadores.find((item) => item.id === id)
     return jogador ? nomeExibido(jogador) : '?'
@@ -42,6 +45,16 @@ export default function PaginaTorneio({
     return <PaginaListaTorneio torneio={torneio} aoVoltar={aoVoltar} aoSortear={() => undefined} />
   }
 
+  if (vendoRanking) {
+    return (
+      <PaginaRankingTorneio
+        torneio={torneio}
+        aoVoltar={() => setVendoRanking(false)}
+        aoAbrirTemporada={aoAbrirTemporada}
+      />
+    )
+  }
+
   // A grade do Rodízio sai inteira no sorteio: o Diagnóstico só faz sentido nela.
   const { formato } = torneio
   const gradeRodizio =
@@ -55,6 +68,7 @@ export default function PaginaTorneio({
     <PaginaMesasTorneio
       torneio={torneio}
       aoVoltar={aoVoltar}
+      aoAbrirRanking={() => setVendoRanking(true)}
       {...acoes}
       rodape={
         <>

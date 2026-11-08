@@ -69,7 +69,8 @@ export default function PaginaMesasTorneio({
   aoAbrirPartida,
   aoLancarResultado,
   rodape,
-}: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode } & AcoesMesa) {
+  aoAbrirRanking,
+}: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode; aoAbrirRanking: () => void } & AcoesMesa) {
   const { t, idioma, numero } = useI18n()
   const { salvar } = useTorneios()
   const { partidas, adicionar } = usePartidas()
@@ -170,6 +171,15 @@ export default function PaginaMesasTorneio({
             <button
               type="button"
               className="cm-btn-icone"
+              aria-label={t('tournament.ranking.title')}
+              title={t('tournament.ranking.title')}
+              onClick={aoAbrirRanking}
+            >
+              <i className="fas fa-ranking-star" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="cm-btn-icone"
               aria-label={t('match.club.share')}
               title={t('match.club.share')}
               onClick={compartilhar}
@@ -215,41 +225,43 @@ export default function PaginaMesasTorneio({
         </div>
       )}
 
-      <div className="trn-timer-geral">
-        <AnelTimer
-          segundos={segundosRestantes(relogioGeral, agora)}
-          fracao={fracaoRestante(relogioGeral, agora)}
-          esgotado={acabou(relogioGeral, agora)}
-          className="trn-anel"
-        >
-          <span aria-hidden="true">{formatarRelogio(segundosRestantes(relogioGeral, agora))}</span>
-        </AnelTimer>
-        <div className="trn-timer-acoes">
-          <button
-            type="button"
-            className="btn-contorno"
-            disabled={somenteLeitura || acabou(relogioGeral, agora)}
-            onClick={() =>
-              salvarRelogioRodada(
-                estaRodando(relogioGeral) ? pausar(relogioGeral, Date.now()) : iniciar(relogioGeral, Date.now()),
-              )
-            }
+      {torneio.status !== 'finalizado' && (
+        <div className="trn-timer-geral">
+          <AnelTimer
+            segundos={segundosRestantes(relogioGeral, agora)}
+            fracao={fracaoRestante(relogioGeral, agora)}
+            esgotado={acabou(relogioGeral, agora)}
+            className="trn-anel"
           >
-            <i className={`fas ${estaRodando(relogioGeral) ? 'fa-pause' : 'fa-play'}`} aria-hidden="true" />{' '}
-            {t(estaRodando(relogioGeral) ? 'tournament.tables.pause' : 'tournament.tables.start')}
-          </button>
-          <button
-            type="button"
-            className="btn-contorno"
-            disabled={somenteLeitura}
-            aria-label={t('tournament.tables.addTimeAll')}
-            onClick={() => salvarRelogioRodada(acrescentar(relogioGeral, ACRESCIMO_SEGUNDOS))}
-          >
-            +5 min
-          </button>
+            <span aria-hidden="true">{formatarRelogio(segundosRestantes(relogioGeral, agora))}</span>
+          </AnelTimer>
+          <div className="trn-timer-acoes">
+            <button
+              type="button"
+              className="btn-contorno"
+              disabled={somenteLeitura || acabou(relogioGeral, agora)}
+              onClick={() =>
+                salvarRelogioRodada(
+                  estaRodando(relogioGeral) ? pausar(relogioGeral, Date.now()) : iniciar(relogioGeral, Date.now()),
+                )
+              }
+            >
+              <i className={`fas ${estaRodando(relogioGeral) ? 'fa-pause' : 'fa-play'}`} aria-hidden="true" />{' '}
+              {t(estaRodando(relogioGeral) ? 'tournament.tables.pause' : 'tournament.tables.start')}
+            </button>
+            <button
+              type="button"
+              className="btn-contorno"
+              disabled={somenteLeitura}
+              aria-label={t('tournament.tables.addTimeAll')}
+              onClick={() => salvarRelogioRodada(acrescentar(relogioGeral, ACRESCIMO_SEGUNDOS))}
+            >
+              +5 min
+            </button>
+          </div>
+          {acabou(relogioGeral, agora) && <p className="trn-tempo-acabou">{t('tournament.tables.timeUp')}</p>}
         </div>
-        {acabou(relogioGeral, agora) && <p className="trn-tempo-acabou">{t('tournament.tables.timeUp')}</p>}
-      </div>
+      )}
 
       <ul className="clb-mesas">
         {rodada.mesas.map((mesa) => {
@@ -354,6 +366,12 @@ export default function PaginaMesasTorneio({
           {proxima.fase && proxima.fase !== rodada.fase
             ? t('tournament.tables.nextPhase', { round: proxima.numero })
             : t('tournament.tables.nextRound', { round: proxima.numero })}
+        </button>
+      )}
+
+      {fechada && !proxima && torneio.status === 'em_andamento' && !somenteLeitura && (
+        <button type="button" className="btn-primario ptd-btn-largo trn-proxima" onClick={aoAbrirRanking}>
+          <i className="fas fa-flag-checkered" aria-hidden="true" /> {t('tournament.tables.toFinish')}
         </button>
       )}
 

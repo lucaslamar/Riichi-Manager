@@ -20,6 +20,7 @@ import {
 import { podeSortearDeNovo, sortearDeNovo, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
 import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
 import { relogioParado } from '../src/dominios/torneio/logica/torneio'
+import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
 import { rankingTemporada } from '../src/dominios/torneio/logica/temporada'
 import { criarRascunho, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
 import type { ConfigFormato, RodadaTorneio, Torneio } from '../src/dominios/torneio/logica/tipos'
@@ -279,6 +280,22 @@ for (const total of [8, 12, 16]) {
   })
   assert.ok(texto.startsWith('Rodada 1\n\n*Mesa 1*\n東 leste: '), 'texto para WhatsApp')
   console.log('Mesas ok.')
+}
+
+// ─── Ranking do torneio: empatados dividem a posição ───────────────────────────
+{
+  const { torneio, partidas } = simular({ tipo: 'corridos' }, 8, 1)
+  const ranking = rankingDoTorneio(torneio, partidas)
+  ranking.forEach((linha, indice) => {
+    if (indice === 0) return assert.equal(linha.posicao, 1)
+    const anterior = ranking[indice - 1]
+    assert.equal(linha.posicao, anterior.pontos === linha.pontos ? anterior.posicao : indice + 1, 'posição com empate')
+  })
+  const elim = simular({ tipo: 'eliminatorio', classificatoria: 'suico', rodadasClassificatoria: 2, cortes: [4], rodadasPorFase: 1, pontosCarregados: true }, 8)
+  const comFase = rankingDoTorneio(elim.torneio, elim.partidas)
+  assert.deepEqual(comFase.map((linha) => linha.fase), [1, 1, 1, 1, 0, 0, 0, 0], 'Eliminatório: fase atingida')
+  assert.ok(textoDoRanking(comFase, { titulo: 'T', nome: (id) => id, pontos: String, fase: (fase) => `F${fase}` }).includes(' · F1'))
+  console.log('Ranking ok.')
 }
 
 console.log('Formatos ok.')

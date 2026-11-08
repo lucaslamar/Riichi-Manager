@@ -1623,7 +1623,28 @@
       "fixResult": "Corrigir resultado",
       "fixResultHelp": "Os pontos novos substituem os anteriores e o ranking é refeito.",
       "rulesLocked": "Regras de pontuação do torneio.",
-      "transferred": "Transferido para outro aparelho em {{date}}. Aqui fica só para consulta."
+      "transferred": "Transferido para outro aparelho em {{date}}. Aqui fica só para consulta.",
+      "toFinish": "Ver ranking final e encerrar"
+    },
+    "ranking": {
+      "title": "Ranking do torneio",
+      "points": "Pontos",
+      "averagePlace": "Média de colocação",
+      "averagePlaceShort": "Méd.",
+      "games": "Partidas jogadas",
+      "gamesShort": "PJ",
+      "phase": "Fase",
+      "phaseQualifier": "Classificatória",
+      "phaseCut": "Corte {{number}}",
+      "place": "{{place}}º lugar",
+      "pdf": "Exportar PDF",
+      "pdfError": "Não foi possível gerar o PDF. Confira a internet.",
+      "finish": "Encerrar torneio",
+      "finishTitle": "Encerrar o torneio?",
+      "finishHelp": "O torneio vai para o histórico e não recebe mais resultados.",
+      "seasonRanking": "Ranking da temporada",
+      "seasonRankingHelp": "Acumulado de todos os encontros",
+      "player": "Jogador"
     },
     "diagnosis": {
       "title": "Diagnóstico da Grade",
@@ -1644,9 +1665,6 @@
       "indirectAll": "Todos se enfrentam",
       "pairsTitle": "Duplas que se repetem",
       "windsTitle": "Ventos por jogador"
-    },
-    "ranking": {
-      "player": "Jogador"
     }
   }
 }

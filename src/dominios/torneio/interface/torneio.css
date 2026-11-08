@@ -626,3 +626,41 @@
   flex: none;
   font-variant-numeric: tabular-nums;
 }
+
+/* ─── Ranking do torneio ──────────────────────────────────────────────────── */
+.trn-tabela-ranking abbr {
+  text-decoration: none;
+}
+
+.trn-podio td:nth-child(2) {
+  font-weight: 800;
+}
+
+.trn-medalha {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--sobre-primario);
+  background: var(--primario);
+  font-weight: 800;
+}
+
+.trn-podio--2 .trn-medalha,
+.trn-podio--3 .trn-medalha {
+  border: 2px solid var(--primario);
+  color: var(--primario);
+  background: transparent;
+}
+
+.trn-fase {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.trn-encerrar {
+  margin-top: 16px;
+}
