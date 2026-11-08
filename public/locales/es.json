@@ -1467,6 +1467,39 @@
       "to": "To",
       "players": "{{count}} players"
     },
-    "createHelp": "List, table draw and ranking"
+    "createHelp": "List, table draw and ranking",
+    "list": {
+      "title": "Tournament list",
+      "memory": "Saved lists",
+      "settings": "Tournament settings",
+      "clear": "Clear list",
+      "clearTitle": "Clear the list?",
+      "clearHelp": "All names leave the list. The player registry does not change.",
+      "placeholder": "One name per line",
+      "editorLabel": "Tournament list, one name per line",
+      "draw": "Draw tables",
+      "ready": "{{players}} players · {{tables}} tables",
+      "firstTable": {
+        "one": "{{count}} more player for the first table",
+        "other": "{{count}} more players for the first table"
+      },
+      "nextTable": {
+        "one": "{{count}} more to complete the next table",
+        "other": "{{count}} more to complete the next table"
+      },
+      "duplicates": {
+        "one": "{{count}} repeated name",
+        "other": "{{count}} repeated names"
+      },
+      "saveAs": "Save the current list as",
+      "saveExample": "Thursday meetup",
+      "save": "Save",
+      "saved": "List \"{{name}}\" saved",
+      "loaded": "List \"{{name}}\" loaded",
+      "savedLists": "Load a list",
+      "noSaved": "No saved lists.",
+      "deleteSaved": "Delete the list {{name}}",
+      "import": "Import from registry"
+    }
   }
 }

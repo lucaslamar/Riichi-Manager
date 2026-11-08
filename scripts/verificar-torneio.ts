@@ -5,6 +5,9 @@
  */
 import assert from 'node:assert/strict'
 import type { ArmazenamentoChaveValor } from '../src/compartilhado/persistencia/armazenamento'
+import { analisarLista, idsDaLista, limparColagem } from '../src/dominios/torneio/logica/listaTorneio'
+import { rodadaAleatoria } from '../src/dominios/torneio/logica/formatos/rodadaAleatoria'
+import type { Jogador } from '../src/dominios/jogadores/logica/jogadores'
 import { migrarTorneiosV1, migrarTorneioV5 } from '../src/dominios/torneio/logica/migrarTorneioAntigo'
 import {
   configPadraoTorneio,
@@ -144,4 +147,41 @@ assert.equal(segunda.partidasNovas.length, 0, 'não migra duas vezes')
 salvarTorneios(armazenamento, { ...segunda, torneios: [...segunda.torneios, rascunho] })
 assert.equal(carregarTorneios(armazenamento, { idDoNome, gerarId, agora }).torneios.length, 2)
 
-console.log('Torneio: modelo, histórico e migração ok.')
+// Lista: colar do WhatsApp.
+assert.equal(
+  limparColagem('Lista quinta\n1. Ana\n2) Bia\n- Caio\n• Duda\n10 - Edu, Fê\n3\n*  Gabi  Lima '),
+  'Lista quinta\nAna\nBia\nCaio\nDuda\nEdu\nFê\nGabi Lima',
+)
+
+const cadastro = [
+  { id: 'ana', nome: 'Ana Paula', apelido: 'Ana', criadoEm: '' },
+  { id: 'bia', nome: 'Beatriz', criadoEm: '' },
+] as Jogador[]
+const status = (texto: string) => analisarLista(texto, cadastro).status
+assert.deepEqual(status(''), { tipo: 'primeiraMesa', faltam: 4 })
+assert.deepEqual(status('a\nb\nc'), { tipo: 'primeiraMesa', faltam: 1 })
+assert.deepEqual(status('a\nb\nc\nd'), { tipo: 'proximaMesa', faltam: 4 }, 'mínimo de duas mesas')
+assert.deepEqual(status('a\nb\nc\nd\ne\nf'), { tipo: 'proximaMesa', faltam: 2 })
+const oito = analisarLista('a\nb\nc\nd\ne\nf\ng\nh', cadastro)
+assert.equal(oito.podeSortear, true)
+assert.equal(oito.mesas, 2)
+const repetida = analisarLista('Ana\nb\nana paula\nc\n\nB', cadastro)
+assert.deepEqual([...repetida.repetidas], [2, 5], 'mesmo cadastro e mesmo nome sem maiúscula')
+assert.equal(repetida.podeSortear, false)
+assert.deepEqual(repetida.status, { tipo: 'repetidos', quantidade: 2 })
+
+const criados: string[][] = []
+const ids = idsDaLista(['Novo 1', 'Ana', 'Novo 2', 'Beatriz'], cadastro, (nomes) => {
+  criados.push(nomes)
+  return nomes.map((nome) => `novo-${nome}`)
+})
+assert.deepEqual(ids, ['novo-Novo 1', 'ana', 'novo-Novo 2', 'bia'])
+assert.deepEqual(criados, [['Novo 1', 'Novo 2']], 'só os nomes novos vão para o cadastro')
+
+// Primeira rodada sorteada: todo mundo uma vez, mesas de 4.
+const doze = Array.from({ length: 12 }, (_, indice) => `j${indice}`)
+const sorteada = rodadaAleatoria(doze, 1, agora.toISOString())
+assert.equal(sorteada.mesas.length, 3)
+assert.deepEqual(sorteada.mesas.flatMap((mesa) => mesa.assentos).sort(), [...doze].sort())
+
+console.log('Torneio: modelo, histórico, migração e lista ok.')

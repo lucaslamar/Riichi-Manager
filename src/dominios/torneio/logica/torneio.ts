@@ -156,3 +156,8 @@ export function historicoDeTorneios(
 export function finalizarTorneio(torneio: Torneio, agora: string): Torneio {
   return { ...torneio, status: 'finalizado', finalizadoEm: agora, atualizadoEm: agora }
 }
+
+/** Lista sorteada: o rascunho vira torneio em andamento com a primeira rodada. */
+export function iniciarTorneio(torneio: Torneio, jogadorIds: string[], primeira: RodadaTorneio, agora: string): Torneio {
+  return { ...torneio, jogadorIds, rodadas: [primeira], status: 'em_andamento', atualizadoEm: agora }
+}

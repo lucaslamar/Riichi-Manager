@@ -1460,6 +1460,39 @@
       "to": "Até",
       "players": "{{count}} jogadores"
     },
-    "createHelp": "Lista, sorteio de mesas e ranking"
+    "createHelp": "Lista, sorteio de mesas e ranking",
+    "list": {
+      "title": "Lista do torneio",
+      "memory": "Listas salvas",
+      "settings": "Configurações do torneio",
+      "clear": "Limpar lista",
+      "clearTitle": "Limpar a lista?",
+      "clearHelp": "Todos os nomes saem da lista. O cadastro de jogadores não muda.",
+      "placeholder": "Um nome por linha",
+      "editorLabel": "Lista do torneio, um nome por linha",
+      "draw": "Sortear mesas",
+      "ready": "{{players}} jogadores · {{tables}} mesas",
+      "firstTable": {
+        "one": "Falta {{count}} jogador para a primeira mesa",
+        "other": "Faltam {{count}} jogadores para a primeira mesa"
+      },
+      "nextTable": {
+        "one": "Falta {{count}} para fechar a próxima mesa",
+        "other": "Faltam {{count}} para fechar a próxima mesa"
+      },
+      "duplicates": {
+        "one": "{{count}} nome repetido",
+        "other": "{{count}} nomes repetidos"
+      },
+      "saveAs": "Salvar a lista atual como",
+      "saveExample": "Encontro de quinta",
+      "save": "Salvar",
+      "saved": "Lista \"{{name}}\" salva",
+      "loaded": "Lista \"{{name}}\" carregada",
+      "savedLists": "Carregar uma lista",
+      "noSaved": "Nenhuma lista salva.",
+      "deleteSaved": "Excluir a lista {{name}}",
+      "import": "Importar do cadastro"
+    }
   }
 }

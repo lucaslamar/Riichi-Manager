@@ -68,3 +68,74 @@
 .trn-historico {
   margin-top: 12px;
 }
+
+/* ─── Lista do torneio (bloco de notas) ──────────────────────────────────── */
+/* Sem "Cadastrar" na linha: o texto usa a largura toda. */
+.trn-lista .trn-campo-lista {
+  position: relative;
+  z-index: 1;
+  padding-right: 6px;
+}
+
+.trn-sublinhados {
+  grid-column: 2;
+  grid-row: 1;
+  overflow: hidden;
+  padding: 0 6px;
+  color: transparent;
+  font-size: 1.25rem;
+  line-height: var(--clb-linha);
+  white-space: pre;
+  pointer-events: none;
+}
+
+.trn-sublinhados span {
+  text-decoration: underline wavy var(--texto-erro);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.trn-marcador--repetido {
+  color: var(--sobre-perigo);
+  background: var(--cor-perigo);
+}
+
+.trn-marcador--novo {
+  border-style: dashed;
+}
+
+/* O rodapé sobe com o teclado do sistema. */
+.trn-rodape {
+  bottom: max(var(--altura-barra-inferior, 0px), var(--altura-teclado, 0px));
+}
+
+.trn-status--ok {
+  color: var(--texto-positivo);
+  font-weight: 700;
+}
+
+/* ─── Cartão de memória ───────────────────────────────────────────────────── */
+.trn-guardar {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.trn-guardar > label {
+  flex: 1;
+}
+
+.trn-guardar > .btn-primario {
+  min-height: 44px;
+}
+
+.trn-salva {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.trn-importar {
+  margin-top: 16px;
+}

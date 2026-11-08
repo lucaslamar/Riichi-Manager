@@ -4,11 +4,19 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { acoesPartidas, lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { garantirJogadoresPorNomes } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { finalizarTorneio } from '../../logica/torneio'
-import type { Torneio } from '../../logica/tipos'
-import { carregarTorneios, salvarTorneios, type DadosTorneios } from '../../persistencia/repositorioTorneios'
+import type { ListaSalva, Torneio } from '../../logica/tipos'
+import {
+  carregarLista,
+  carregarTorneios,
+  salvarLista,
+  salvarTorneios,
+  type DadosTorneios,
+} from '../../persistencia/repositorioTorneios'
 
 /** Estado único do torneio, salvo a cada ação: um celular controla o torneio inteiro. */
 let dados: DadosTorneios | null = null
+/** Rascunho da Lista do torneio. */
+let lista: string | null = null
 const ouvintes = new Set<() => void>()
 
 export function lerTorneios(): DadosTorneios {
@@ -46,7 +54,28 @@ function assinar(ouvinte: () => void) {
   }
 }
 
+function lerLista() {
+  lista ??= carregarLista(armazenamentoLocal)
+  return lista
+}
+
 export const acoesTorneios = {
+  definirLista(texto: string) {
+    lista = texto
+    salvarLista(armazenamentoLocal, texto)
+    ouvintes.forEach((avisar) => avisar())
+  },
+  /** Cartão de memória: guarda a lista atual com um nome (mesmo nome substitui). */
+  guardarLista(nome: string, texto: string) {
+    const atual = lerTorneios()
+    const salva: ListaSalva = { id: gerarId(), nome: nome.trim(), texto, salvaEm: new Date().toISOString() }
+    const outras = atual.listas.filter((item) => item.nome.trim().toLowerCase() !== salva.nome.toLowerCase())
+    definir({ ...atual, listas: [salva, ...outras] })
+  },
+  excluirLista(id: string) {
+    const atual = lerTorneios()
+    definir({ ...atual, listas: atual.listas.filter((item) => item.id !== id) })
+  },
   salvar(torneio: Torneio) {
     const atual = lerTorneios()
     const existe = atual.torneios.some((item) => item.id === torneio.id)
@@ -73,5 +102,6 @@ export const acoesTorneios = {
 
 export function useTorneios() {
   const estado = useSyncExternalStore(assinar, lerTorneios)
-  return { ...estado, ...acoesTorneios }
+  const texto = useSyncExternalStore(assinar, lerLista)
+  return { ...estado, lista: texto, ...acoesTorneios }
 }
