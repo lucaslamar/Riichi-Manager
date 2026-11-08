@@ -9,7 +9,6 @@ import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { CHAVE_VENTO, KANJI_VENTO, ORDEM_VENTOS, type Partida } from '@/dominios/centerpiece/logica/partida'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { deveLembrarBackup } from '../../logica/exportacao'
 import { ACRESCIMO_SEGUNDOS } from '../../logica/configuracao'
 import { proximaRodada, rodadaFechada } from '../../logica/formatos'
@@ -41,6 +40,7 @@ import FolhaExportar from '../componentes/FolhaExportar'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
 import '../torneio.css'
+import { nomeNoTorneio } from '../../logica/torneio'
 
 /** Agora, atualizado a cada segundo enquanto algum relógio corre. */
 function useAgora(ativo: boolean) {
@@ -101,10 +101,7 @@ export default function PaginaMesasTorneio({
 
   if (!rodada) return null
 
-  const nomeDe = (id: string) => {
-    const jogador = jogadores.find((item) => item.id === id)
-    return jogador ? nomeExibido(jogador) : '?'
-  }
+  const nomeDe = (id: string) => nomeNoTorneio(torneio, jogadores, id)
   const total = totalDeRodadas(torneio.formato)
   const titulo = total
     ? t('tournament.tables.roundOf', { round: rodada.numero, total })

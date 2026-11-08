@@ -986,7 +986,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "俱乐部名单",
+      "listTitle": "俱乐部聚会",
       "addRegistered": "使用已登记",
       "addRegisteredLabel": "在这一行使用已登记的玩家",
       "registeredTitle": "已登记的玩家",
@@ -1424,7 +1424,7 @@
   "tournament": {
     "title": "Tournament",
     "create": "Create tournament",
-    "defaultName": "Club meetup {{date}}",
+    "defaultName": "Tournament {{date}}",
     "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
     "roundOpen": "Round {{round}} · {{tables}} tables",
     "draft": "List in progress · {{count}} players",

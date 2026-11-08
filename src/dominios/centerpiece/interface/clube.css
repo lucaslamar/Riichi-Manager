@@ -870,3 +870,11 @@
     align-items: start;
   }
 }
+
+/* Jogadores cadastrados: a busca fica presa no topo enquanto a lista rola. */
+.clb-folha-cadastrados .entrada-jogador {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 -16px 0 var(--modal-fundo), 0 8px 0 var(--modal-fundo);
+}

@@ -4,7 +4,7 @@
  */
 import { alterarConfig, configDoPreset, type ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
-import { normalizarTexto } from '@/dominios/jogadores/logica/jogadores'
+import { nomeExibido, normalizarTexto, type Jogador } from '@/dominios/jogadores/logica/jogadores'
 import type { ConfigFormato, FormatoTorneio, Relogio, RodadaTorneio, Torneio } from './tipos'
 
 export const SEGUNDOS_RODADA_PADRAO = 90 * 60
@@ -167,6 +167,13 @@ export function finalizarTorneio(torneio: Torneio, agora: string): Torneio {
 }
 
 /** Lista sorteada: o rascunho vira torneio em andamento com a primeira rodada. */
+/** Nome de quem está no torneio: o do cadastro ou o escrito na lista (convidado). */
+export function nomeNoTorneio(torneio: Pick<Torneio, 'convidados'>, jogadores: readonly Jogador[], id: string): string {
+  const jogador = jogadores.find((item) => item.id === id)
+  if (jogador) return nomeExibido(jogador)
+  return torneio.convidados?.[id] ?? '?'
+}
+
 export function iniciarTorneio(
   torneio: Torneio,
   jogadorIds: string[],

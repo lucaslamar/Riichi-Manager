@@ -986,7 +986,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "클럽 명단",
+      "listTitle": "클럽 모임",
       "addRegistered": "등록된 사람 사용",
       "addRegisteredLabel": "이 줄에 등록된 플레이어 넣기",
       "registeredTitle": "등록된 플레이어",
@@ -1424,7 +1424,7 @@
   "tournament": {
     "title": "Tournament",
     "create": "Create tournament",
-    "defaultName": "Club meetup {{date}}",
+    "defaultName": "Tournament {{date}}",
     "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
     "roundOpen": "Round {{round}} · {{tables}} tables",
     "draft": "List in progress · {{count}} players",

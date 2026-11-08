@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { faseDaRodada } from '../../logica/formatos/eliminatorio'
 import { gradeDasRodadas, qualidadeDasRodadas } from '../../logica/formatos/rodizio/rodizio'
 import DiagnosticoGrade from '../componentes/DiagnosticoGrade'
@@ -11,6 +10,7 @@ import PaginaListaTorneio from './PaginaListaTorneio'
 import PaginaMesasTorneio, { type AcoesMesa } from './PaginaMesasTorneio'
 import PaginaRankingTorneio from './PaginaRankingTorneio'
 import '../torneio.css'
+import { nomeNoTorneio } from '../../logica/torneio'
 
 /** Torneio aberto: a Lista enquanto é rascunho, depois as Mesas sorteadas. */
 export default function PaginaTorneio({
@@ -30,10 +30,7 @@ export default function PaginaTorneio({
   const torneio = torneios.find((item) => item.id === torneioId)
   const { jogadores } = useJogadores()
   const [vendoRanking, setVendoRanking] = useState(false)
-  const nomeDe = (id: string) => {
-    const jogador = jogadores.find((item) => item.id === id)
-    return jogador ? nomeExibido(jogador) : '?'
-  }
+  const nomeDe = (id: string) => nomeNoTorneio(torneio ?? {}, jogadores, id)
 
   if (!torneio) {
     return (

@@ -1,8 +1,9 @@
 /**
- * Lista do torneio: um nome por linha, como a Lista do clube, mas sem convidados.
- * Todo mundo vira jogador do cadastro ao sortear, e as mesas fecham sempre com 4.
+ * Lista do torneio: um nome por linha, como no Encontro do clube. Quem não está no
+ * cadastro joga como convidado (só cadastra se a pessoa tocar em Cadastrar), e as
+ * mesas fecham sempre com 4.
  */
-import { jogadorDaLinha, linhasDoTexto } from '@/dominios/centerpiece/logica/listaClube'
+import { jogadorDaLinha, linhasDoTexto, PREFIXO_CONVIDADO } from '@/dominios/centerpiece/logica/listaClube'
 import { normalizarTexto, type Jogador } from '@/dominios/jogadores/logica/jogadores'
 
 /** Menor torneio: duas mesas. */
@@ -79,6 +80,26 @@ export function analisarLista(texto: string, jogadores: readonly Jogador[]): Ana
           ? { tipo: 'proximaMesa', faltam: 4 - (total % 4) }
           : { tipo: 'pronta' }
   return { nomes, repetidas, jogadores: total, mesas, status, podeSortear: status.tipo === 'pronta' }
+}
+
+/**
+ * Ids de quem está na lista, na ordem dela, sem mexer no cadastro: quem está lá usa
+ * o id de lá, os outros ganham um id de convidado e o nome fica em `convidados`.
+ */
+export function entradasDoTorneio(
+  nomes: readonly string[],
+  jogadores: readonly Jogador[],
+  gerarId: () => string,
+): { ids: string[]; convidados: Record<string, string> } {
+  const convidados: Record<string, string> = {}
+  const ids = nomes.map((nome) => {
+    const jogador = jogadorDaLinha(jogadores, nome)
+    if (jogador) return jogador.id
+    const id = `${PREFIXO_CONVIDADO}${gerarId()}`
+    convidados[id] = nome
+    return id
+  })
+  return { ids, convidados }
 }
 
 /**

@@ -100,9 +100,6 @@
   background: var(--cor-perigo);
 }
 
-.trn-marcador--novo {
-  border-style: dashed;
-}
 
 /* O rodapé sobe com o teclado do sistema. */
 .trn-rodape {

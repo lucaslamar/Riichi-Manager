@@ -997,7 +997,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "Lista del club",
+      "listTitle": "Encuentro del club",
       "addRegistered": "Usar registrado",
       "addRegisteredLabel": "Usar jugadores registrados en esta línea",
       "registeredTitle": "Jugadores registrados",
@@ -1445,7 +1445,7 @@
   "tournament": {
     "title": "Tournament",
     "create": "Create tournament",
-    "defaultName": "Club meetup {{date}}",
+    "defaultName": "Tournament {{date}}",
     "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
     "roundOpen": "Round {{round}} · {{tables}} tables",
     "draft": "List in progress · {{count}} players",

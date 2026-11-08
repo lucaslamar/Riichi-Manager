@@ -6,11 +6,12 @@
 import assert from 'node:assert/strict'
 import type { ArmazenamentoChaveValor } from '../src/compartilhado/persistencia/armazenamento'
 import { formatoValido, lerCortes } from '../src/dominios/torneio/logica/configuracao'
-import { analisarLista, idsDaLista, limparColagem } from '../src/dominios/torneio/logica/listaTorneio'
+import { analisarLista, entradasDoTorneio, idsDaLista, limparColagem } from '../src/dominios/torneio/logica/listaTorneio'
 import { rodadaAleatoria } from '../src/dominios/torneio/logica/formatos/rodadaAleatoria'
 import type { Jogador } from '../src/dominios/jogadores/logica/jogadores'
 import { migrarTorneiosV1, migrarTorneioV5 } from '../src/dominios/torneio/logica/migrarTorneioAntigo'
 import {
+  nomeNoTorneio,
   configPadraoTorneio,
   criarRascunho,
   finalizarTorneio,
@@ -195,5 +196,16 @@ assert.equal(lerCortes('16, 4', 16), null, 'menor que a lista')
 assert.deepEqual(lerCortes('8, 4', 16), [8, 4])
 assert.equal(formatoValido({ tipo: 'eliminatorio', classificatoria: 'suico', rodadasClassificatoria: 3, cortes: [8, 4], rodadasPorFase: 1, pontosCarregados: true }, 12), true)
 assert.equal(formatoValido({ tipo: 'eliminatorio', classificatoria: 'suico', rodadasClassificatoria: 3, cortes: [], rodadasPorFase: 1, pontosCarregados: true }), false)
+
+// Sem cadastro automático: quem não está no cadastro entra como convidado, com o nome guardado.
+{
+  let n = 0
+  const { ids: idsLista, convidados } = entradasDoTorneio(['Novo 1', 'Ana'], cadastro, () => `c${++n}`)
+  assert.equal(idsLista[1], 'ana')
+  assert.ok(idsLista[0].startsWith('convidado-'))
+  assert.deepEqual(convidados, { [idsLista[0]]: 'Novo 1' })
+  assert.equal(nomeNoTorneio({ convidados }, cadastro, idsLista[0]), 'Novo 1')
+  assert.equal(nomeNoTorneio({}, cadastro, 'sumiu'), '?')
+}
 
 console.log('Torneio: modelo, histórico, migração, lista e configurações ok.')

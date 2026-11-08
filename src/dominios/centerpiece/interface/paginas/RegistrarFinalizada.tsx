@@ -54,6 +54,8 @@ export default function RegistrarFinalizada({
     titulo: string
     config: ConfigMesa
     jogadorIds: readonly [string, string, string, string]
+    /** Nomes dos assentos: convidados do torneio não estão no cadastro. */
+    nomes?: readonly string[]
     vinculo: NonNullable<Partida['vinculoTorneio']>
     /** Corrigir: os pontos do resultado que já existe. */
     pontosIniciais?: readonly number[]
@@ -85,7 +87,11 @@ export default function RegistrarFinalizada({
   // Convidados do clube: id gerado na hora e o nome escrito na lista.
   const [mesaClube] = useState(() => (clube ? assentosDaMesa(clube.mesa) : null))
   const convidados = new Map(
-    mesaClube ? mesaClube.ids.map((id, indice) => [id, mesaClube.nomes[indice]] as const) : [],
+    mesaClube
+      ? mesaClube.ids.map((id, indice) => [id, mesaClube.nomes[indice]] as const)
+      : torneio?.nomes
+        ? torneio.jogadorIds.map((id, indice) => [id, torneio.nomes?.[indice] ?? ''] as const)
+        : [],
   )
   const [assentos, setAssentos] = useState<(string | null)[]>(() =>
     torneio ? [...torneio.jogadorIds] : mesaClube ? [...mesaClube.ids] : [null, null, null, null],

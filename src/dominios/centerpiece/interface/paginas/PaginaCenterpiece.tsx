@@ -10,7 +10,7 @@ import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
 import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
-import { criarRascunho, torneioAtivo } from '@/dominios/torneio/logica/torneio'
+import { criarRascunho, nomeNoTorneio, torneioAtivo } from '@/dominios/torneio/logica/torneio'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
@@ -26,6 +26,7 @@ import PlacarPartida from './PlacarPartida'
 import RegistrarFinalizada from './RegistrarFinalizada'
 import SetupPartida from './SetupPartida'
 import '../mesa.css'
+import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import '../partida.css'
 import '../clube.css'
 
@@ -94,6 +95,7 @@ function TelasCenterpiece({
   const irInicio = () => setTela({ nome: 'inicio' })
   const { telaCheiaMesa } = usePreferencias()
   const { torneios, salvar: salvarTorneio } = useTorneios()
+  const { jogadores } = useJogadores()
   const subtituloTorneio = useSubtituloTorneio()
   const ativo = torneioAtivo(torneios)
   /** Sem torneio em jogo, o card já cria o rascunho e abre a Lista do torneio. */
@@ -231,6 +233,7 @@ function TelasCenterpiece({
             titulo: t('tournament.tables.badge', { round: tela.rodada, table: tela.mesa }),
             config: torneio.config,
             jogadorIds: mesa.assentos,
+            nomes: mesa.assentos.map((id) => nomeNoTorneio(torneio, jogadores, id)),
             vinculo: { torneioId: torneio.id, rodada: tela.rodada - 1, mesa: tela.mesa - 1, guardada: true },
             pontosIniciais: substituir
               ? [0, 1, 2, 3].map(

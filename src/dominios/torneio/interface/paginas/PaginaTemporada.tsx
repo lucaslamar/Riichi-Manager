@@ -5,12 +5,12 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { encontrosDaTemporada, novoEncontro, rankingTemporada } from '../../logica/temporada'
 import type { CriterioTemporada, Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import { useSubtituloTorneio } from '../textoTorneio'
 import '../torneio.css'
+import { nomeNoTorneio } from '../../logica/torneio'
 
 const OPCOES_MINIMO = [2, 4, 6, 8, 10] as const
 const OPCOES_MELHORES = [3, 5, 8, 10, 15] as const
@@ -47,10 +47,9 @@ export default function PaginaTemporada({
 
   const data = (dia: string) =>
     new Intl.DateTimeFormat(idioma, { dateStyle: 'medium' }).format(new Date(`${dia}T12:00:00`))
-  const nomeDe = (id: string) => {
-    const jogador = jogadores.find((item) => item.id === id)
-    return jogador ? nomeExibido(jogador) : '?'
-  }
+  // Convidados: o nome vem do encontro em que jogaram.
+  const nomeDe = (id: string) =>
+    nomeNoTorneio({ convidados: Object.assign({}, ...torneios.map((item) => item.convidados ?? {})) }, jogadores, id)
   const emAberto = encontros.find((encontro) => encontro.status !== 'finalizado')
   const mudarCriterio = (criterio: CriterioTemporada) => salvarTemporada({ ...temporada, criterio })
 

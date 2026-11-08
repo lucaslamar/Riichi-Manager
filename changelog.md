@@ -19,6 +19,12 @@
 ### Alterado
 
 - **Abas das configurações da mesa** do tamanho do nome, para "Pontuação" não passar da borda.
+- **Lista do clube virou Encontro do clube**, e o torneio novo se chama Torneio com a data (antes, Encontro do clube com a data).
+- **Torneio não cadastra ninguém sozinho**: como no Encontro do clube, quem não está no cadastro joga como convidado (contorno tracejado) e o Cadastrar fica na linha, para quem quiser. O convidado aparece pelo nome nas mesas, no lançamento e no ranking do torneio.
+
+### Corrigido
+
+- **Busca dos Jogadores cadastrados presa no topo**: no Torneio e no Encontro do clube, o campo de busca não some quando a lista rola.
 
 ## 5.9.0 - 2026-11-05
 

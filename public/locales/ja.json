@@ -986,7 +986,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "クラブ出席リスト",
+      "listTitle": "クラブの集まり",
       "addRegistered": "登録済みから選ぶ",
       "addRegisteredLabel": "この行に登録済みプレイヤーを入れる",
       "registeredTitle": "登録済みプレイヤー",
@@ -1424,7 +1424,7 @@
   "tournament": {
     "title": "Tournament",
     "create": "Create tournament",
-    "defaultName": "Club meetup {{date}}",
+    "defaultName": "Tournament {{date}}",
     "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
     "roundOpen": "Round {{round}} · {{tables}} tables",
     "draft": "List in progress · {{count}} players",

@@ -7,11 +7,11 @@ import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/M
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { rankingDoTorneio, textoDoRanking } from '../../logica/ranking'
 import type { Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import '../torneio.css'
+import { nomeNoTorneio } from '../../logica/torneio'
 
 /**
  * Ranking do torneio: posição, jogador, pontos, média de colocação e partidas.
@@ -35,10 +35,7 @@ export default function PaginaRankingTorneio({
   const linhas = useMemo(() => rankingDoTorneio(torneio, partidas), [torneio, partidas])
   const eliminatorio = torneio.formato.tipo === 'eliminatorio'
 
-  const nomeDe = (id: string) => {
-    const jogador = jogadores.find((item) => item.id === id)
-    return jogador ? nomeExibido(jogador) : '?'
-  }
+  const nomeDe = (id: string) => nomeNoTorneio(torneio, jogadores, id)
   const pontos = (valor: number) =>
     `${valor > 0 ? '+' : ''}${new Intl.NumberFormat(idioma, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(valor)}`
   const media = (valor: number) =>

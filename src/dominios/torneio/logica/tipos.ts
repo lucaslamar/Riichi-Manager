@@ -69,6 +69,8 @@ export interface Torneio {
   config: ConfigMesa
   timers: TimersTorneio
   jogadorIds: string[]
+  /** Quem joga sem cadastro: id de convidado e o nome escrito na lista. */
+  convidados?: Record<string, string>
   rodadas: RodadaTorneio[]
   status: StatusTorneio
   /** Este aparelho passou o torneio adiante: fica só leitura. */

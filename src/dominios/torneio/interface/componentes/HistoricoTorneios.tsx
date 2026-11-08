@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { historicoDeTorneios, type FiltroHistorico } from '../../logica/torneio'
 import type { FormatoTorneio, Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import '../torneio.css'
+import { nomeNoTorneio } from '../../logica/torneio'
 
 const FORMATOS: readonly FormatoTorneio[] = ['rodizio', 'suico', 'eliminatorio', 'corridos', 'temporada']
 
@@ -24,10 +24,8 @@ export default function HistoricoTorneios({
 
   const finalizados = torneios.filter((torneio) => torneio.status === 'finalizado')
   const historico = useMemo(() => {
-    const nomeDe = (id: string) => {
-      const jogador = jogadores.find((item) => item.id === id)
-      return jogador ? nomeExibido(jogador) : ''
-    }
+    const convidados = Object.assign({}, ...torneios.map((item) => item.convidados ?? {}))
+    const nomeDe = (id: string) => nomeNoTorneio({ convidados }, jogadores, id)
     return historicoDeTorneios(torneios, filtro, nomeDe)
   }, [torneios, filtro, jogadores])
   const data = (dia: string) =>

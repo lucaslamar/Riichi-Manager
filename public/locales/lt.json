@@ -1007,7 +1007,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "Klubo sąrašas",
+      "listTitle": "Klubo susitikimas",
       "addRegistered": "Naudoti registruotą",
       "addRegisteredLabel": "Naudoti registruotus žaidėjus šioje eilutėje",
       "registeredTitle": "Registruoti žaidėjai",
@@ -1475,7 +1475,7 @@
   "tournament": {
     "title": "Tournament",
     "create": "Create tournament",
-    "defaultName": "Club meetup {{date}}",
+    "defaultName": "Tournament {{date}}",
     "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
     "roundOpen": "Round {{round}} · {{tables}} tables",
     "draft": "List in progress · {{count}} players",

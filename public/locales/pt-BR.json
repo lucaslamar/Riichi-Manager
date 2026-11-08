@@ -990,7 +990,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "Lista do clube",
+      "listTitle": "Encontro do clube",
       "addRegistered": "Usar cadastrado",
       "addRegisteredLabel": "Usar jogadores cadastrados nesta linha",
       "registeredTitle": "Jogadores cadastrados",
@@ -1438,7 +1438,7 @@
   "tournament": {
     "title": "Torneio",
     "create": "Criar torneio",
-    "defaultName": "Encontro do clube {{date}}",
+    "defaultName": "Torneio {{date}}",
     "roundOf": "Rodada {{round}} de {{total}} · {{tables}} mesas",
     "roundOpen": "Rodada {{round}} · {{tables}} mesas",
     "draft": "Lista em preparo · {{count}} jogadores",

@@ -990,7 +990,7 @@
   },
   "match": {
     "club": {
-      "listTitle": "Club list",
+      "listTitle": "Club meeting",
       "addRegistered": "Use registered",
       "addRegisteredLabel": "Use registered players on this line",
       "registeredTitle": "Registered players",
@@ -1438,7 +1438,7 @@
   "tournament": {
     "title": "Tournament",
     "create": "Create tournament",
-    "defaultName": "Club meetup {{date}}",
+    "defaultName": "Tournament {{date}}",
     "roundOf": "Round {{round}} of {{total}} · {{tables}} tables",
     "roundOpen": "Round {{round}} · {{tables}} tables",
     "draft": "List in progress · {{count}} players",

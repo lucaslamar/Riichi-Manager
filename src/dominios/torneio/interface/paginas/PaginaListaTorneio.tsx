@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type ClipboardEvent, type CSSProperties } from 'react'
+import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
@@ -13,11 +14,11 @@ import {
   linhasDoTexto,
   sugestoesParaLinha,
 } from '@/dominios/centerpiece/logica/listaClube'
-import { garantirJogadoresPorNomes, useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido, partesDoNome, type Jogador } from '@/dominios/jogadores/logica/jogadores'
 import { rodadasIniciais } from '../../logica/formatos'
 import { formatoValido } from '../../logica/configuracao'
-import { analisarLista, idsDaLista, limparColagem, type StatusLista } from '../../logica/listaTorneio'
+import { analisarLista, entradasDoTorneio, limparColagem, type StatusLista } from '../../logica/listaTorneio'
 import FolhaImportar from '../componentes/FolhaImportar'
 import { iniciarTorneio } from '../../logica/torneio'
 import type { ListaSalva, Torneio } from '../../logica/tipos'
@@ -47,7 +48,7 @@ export default function PaginaListaTorneio({
   aoImportado: (torneioId: string) => void
 }) {
   const { t, numero } = useI18n()
-  const { jogadores } = useJogadores()
+  const { jogadores, adicionar } = useJogadores()
   const { lista, listas, definirLista, guardarLista, excluirLista, salvar, excluir } = useTorneios()
   const { aviso, mostrar } = useAviso()
   const raiz = useRef<HTMLElement | null>(null)
@@ -109,11 +110,21 @@ export default function PaginaListaTorneio({
     })
   }
 
+  const cadastrar = (nome: string) => {
+    const resultado = adicionar({ nome })
+    mostrar(
+      resultado.ok
+        ? t('match.club.registered', { name: nome })
+        : t(resultado.erro === 'nomeDuplicado' ? 'players.errorDuplicateName' : 'players.errorEmptyName'),
+    )
+  }
+
   const sortear = () => {
     if (!podeSortear) return
     const agora = new Date().toISOString()
-    const ids = idsDaLista(analise.nomes, jogadores, garantirJogadoresPorNomes)
-    salvar(iniciarTorneio(torneio, ids, rodadasIniciais(torneio, ids, agora), agora))
+    // Ninguém é cadastrado sozinho: quem não está no cadastro entra como convidado.
+    const { ids, convidados } = entradasDoTorneio(analise.nomes, jogadores, gerarId)
+    salvar(iniciarTorneio({ ...torneio, convidados }, ids, rodadasIniciais(torneio, ids, agora), agora))
     aoSortear()
   }
 
@@ -183,8 +194,8 @@ export default function PaginaListaTorneio({
                   <i className="fas fa-user" />
                 </span>
               ) : linha ? (
-                <span className="clb-marcador clb-marcador--convidado trn-marcador--novo">
-                  <i className="fas fa-user-plus" />
+                <span className="clb-marcador clb-marcador--convidado" title={t('match.club.guestShort')}>
+                  <i className="far fa-user" />
                 </span>
               ) : null}
             </li>
@@ -220,6 +231,26 @@ export default function PaginaListaTorneio({
           onFocus={acompanharCursor}
           onBlur={() => setLinhaAtual(null)}
         />
+
+        {/* Como no Encontro do clube: quem não está no cadastro joga como convidado, e
+            "Cadastrar" na linha é opcional, sem tirar o foco do texto. */}
+        <div className="clb-acoes-linhas">
+          {linhas.map((linha, indice) =>
+            linha && !vinculos[indice] && !analise.repetidas.has(indice) ? (
+              <button
+                key={`${indice}-${linha}`}
+                type="button"
+                className="clb-cadastrar"
+                style={{ top: indice * ALTURA_LINHA }}
+                aria-label={t('match.club.registerNamed', { name: linha })}
+                onPointerDown={(evento) => evento.preventDefault()}
+                onClick={() => cadastrar(linha)}
+              >
+                {t('match.club.register')}
+              </button>
+            ) : null,
+          )}
+        </div>
 
         {sugestoes.length > 0 && linhaAtual !== null && (
           <ul
