@@ -28,6 +28,14 @@ const VAZIO: DadosTorneios = { torneios: [], temporadas: [], listas: [] }
  * antigas ficam intactas como cópia de segurança. `partidasNovas` são as mesas do
  * Torneio original, que precisam entrar no Centerpiece.
  */
+/**
+ * O nome padrão era "Encontro do clube 08/11" (en: "Club meetup …"). Agora é
+ * "Torneio 08/11": quem ainda tem o nome antigo, sem mexer, passa para o novo.
+ */
+export function renomearPadraoAntigo(nome: string): string {
+  return nome.replace(/^Encontro do clube (\d{2}\/\d{2})$/, 'Torneio $1').replace(/^Club meetup (.+)$/, 'Tournament $1')
+}
+
 export function carregarTorneios(
   armazenamento: ArmazenamentoChaveValor,
   contexto: ContextoCarga,
@@ -44,7 +52,11 @@ export function carregarTorneios(
 
   if (lido?.versao === VERSAO) {
     return {
-      torneios: (lido.torneios ?? []).map((torneio) => ({ ...torneio, config: normalizarConfig(torneio.config) })),
+      torneios: (lido.torneios ?? []).map((torneio) => ({
+        ...torneio,
+        nome: renomearPadraoAntigo(torneio.nome),
+        config: normalizarConfig(torneio.config),
+      })),
       temporadas: (lido.temporadas ?? []).map((temporada) => ({
         ...temporada,
         config: normalizarConfig(temporada.config),

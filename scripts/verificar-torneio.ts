@@ -20,7 +20,7 @@ import {
   totalDeRodadas,
 } from '../src/dominios/torneio/logica/torneio'
 import type { Torneio } from '../src/dominios/torneio/logica/tipos'
-import { carregarTorneios, salvarTorneios } from '../src/dominios/torneio/persistencia/repositorioTorneios'
+import { carregarTorneios, renomearPadraoAntigo, salvarTorneios } from '../src/dominios/torneio/persistencia/repositorioTorneios'
 
 let contador = 0
 const gerarId = () => `id-${++contador}`
@@ -207,5 +207,9 @@ assert.equal(formatoValido({ tipo: 'eliminatorio', classificatoria: 'suico', rod
   assert.equal(nomeNoTorneio({ convidados }, cadastro, idsLista[0]), 'Novo 1')
   assert.equal(nomeNoTorneio({}, cadastro, 'sumiu'), '?')
 }
+
+assert.equal(renomearPadraoAntigo('Encontro do clube 08/11'), 'Torneio 08/11')
+assert.equal(renomearPadraoAntigo('Encontro do clube especial'), 'Encontro do clube especial')
+assert.equal(renomearPadraoAntigo('Club meetup 11/8'), 'Tournament 11/8')
 
 console.log('Torneio: modelo, histórico, migração, lista e configurações ok.')
