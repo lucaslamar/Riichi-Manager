@@ -894,6 +894,16 @@
   aspect-ratio: 34 / 49;
 }
 
+/* Celular em pé com Aka dora: o 5 vermelho sai segurando o 5, como na Calculadora
+ * de Mão, e cada naipe fica com 9 pedras. */
+.dsc-teclado .teclado-aka-no-cinco .linha-naipe {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.dsc-teclado .teclado-aka-no-cinco .grupo-teclado-honras .linha-naipe {
+  grid-template-columns: repeat(7, calc((100% - 24px) / 9));
+}
+
 .dsc-pergunta-chamadas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));

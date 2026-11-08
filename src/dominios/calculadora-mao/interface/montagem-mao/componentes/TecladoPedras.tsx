@@ -1,8 +1,15 @@
 import { useEffect, useRef, type MouseEvent } from 'react'
 import { vibrar } from '@/compartilhado/adaptadores/vibracao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import type { Acao, CodigoPedra, ConfiguracaoCalculo, EsperaPossivel } from '../../../logica/mao'
-import { HONRAS, NAIPES, codigoBase, nomePedraAcessivel } from '../../constantes'
+import {
+  CONSULTA_AKA_SEGURANDO_CINCO,
+  HONRAS,
+  NAIPES,
+  codigoBase,
+  nomePedraAcessivel,
+} from '../../constantes'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 
 /** Quanto segurar o 5 para virar o 5 vermelho. */
@@ -37,11 +44,6 @@ interface PropsTecladoPedras {
   mostrarGrade?: boolean
   /** Nome da pedra no leitor de tela, quando quem usa o teclado tem o próprio. */
   rotuloPedra?: (pedra: CodigoPedra) => string
-  /**
-   * Celular em pé: com Aka dora, segurar o 5 de cada naipe põe o 5 vermelho, e os
-   * naipes ficam com 9 pedras do tamanho de quando a regra está desligada.
-   */
-  akaSegurandoCinco?: boolean
   maoProntaParaFinalizar?: boolean
   batidaDefinida?: boolean
   mensagemFinalizacao?: string | null
@@ -77,7 +79,6 @@ export function TecladoPedras({
   contexto,
   mostrarGrade = true,
   rotuloPedra,
-  akaSegurandoCinco = false,
   maoProntaParaFinalizar = false,
   batidaDefinida = maoProntaParaFinalizar,
   mensagemFinalizacao,
@@ -93,7 +94,10 @@ export function TecladoPedras({
   aoEscolherChiiPendente,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
-  const akaNoCinco = akaSegurandoCinco && configuracao.akadora
+  // Celular em pé com Aka dora: segurar o 5 de cada naipe põe o 5 vermelho, e os
+  // naipes ficam com 9 pedras. Decidido aqui para valer em todos os teclados.
+  const celularEmPe = useMediaQuery(CONSULTA_AKA_SEGURANDO_CINCO)
+  const akaNoCinco = celularEmPe && configuracao.akadora
   const gradeVisivel = mostrarGrade || selecionandoPedraAgari
 
   const renderizarBadgeEspera = (

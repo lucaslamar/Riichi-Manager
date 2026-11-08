@@ -47,6 +47,31 @@ export function expandirGrupoMesmoValor(pedra: CodigoPedra, tamanho: number): Co
 /** Com Aka dora, cada naipe tem só 3 cincos comuns: o quarto é o vermelho. */
 export const MAXIMO_CINCOS_COMUNS_COM_AKA = 3
 
+/**
+ * Cabe mais uma `pedra` na mesa, somando as que já estão à vista? Cada pedra tem
+ * 4 cópias. Com Aka dora, cada naipe tem um 5 vermelho e só 3 cincos comuns, e
+ * sem a regra o 5 vermelho não existe. É a mesma conta em todos os teclados.
+ */
+export function cabeMaisUmaPedra(
+  vistas: readonly CodigoPedra[],
+  pedra: CodigoPedra,
+  akadora: boolean,
+): boolean {
+  const base = codigoBase(pedra)
+  if (vistas.filter((vista) => codigoBase(vista) === base).length >= 4) return false
+  if (pedra[0] === '0') return akadora && !vistas.includes(pedra)
+  if (akadora && ehCincoComum(pedra)) {
+    return vistas.filter((vista) => vista === pedra).length < MAXIMO_CINCOS_COMUNS_COM_AKA
+  }
+  return true
+}
+
+/**
+ * Celular em pé: com Aka dora, o 5 vermelho sai segurando o 5 de cada naipe.
+ * É a mesma media query das regras do teclado em responsivo.css.
+ */
+export const CONSULTA_AKA_SEGURANDO_CINCO = '(max-width: 640px) and (orientation: portrait)'
+
 export function ehCincoComum(pedra: CodigoPedra) {
   return pedra[0] === '5' && pedra[1] !== 'z'
 }

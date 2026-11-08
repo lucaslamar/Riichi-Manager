@@ -8,6 +8,7 @@ import {
   normalizarNotacao,
   type ErroNotacao,
 } from '@/dominios/calculadora-mao/logica/notacao'
+import { cabeMaisUmaPedra } from '@/dominios/calculadora-mao/interface/constantes'
 import type { CodigoPedra, Meld } from '@/dominios/calculadora-mao/logica/tipos'
 import type { Cadeira } from './partida'
 import type { EstadoVez } from './vez'
@@ -228,7 +229,9 @@ export interface LeituraPedras {
 
 /**
  * Lê `3m5p1z`, a mesma notação da calculadora, e recusa o que não existe na mesa:
- * mais de 4 cópias de uma pedra somando o que já foi descartado.
+ * mais de 4 cópias de uma pedra somando o que já foi descartado, e um segundo 5
+ * vermelho do mesmo naipe. Com os 3 cincos comuns já na mesa, o 5 digitado vira o
+ * vermelho, como no teclado.
  */
 export function lerPedrasDescartadas(
   texto: string,
@@ -239,14 +242,27 @@ export function lerPedrasDescartadas(
   if (erro) return { pedras: [], erro }
   if (pedras.length === 0) return { pedras: [], erro: { chave: 'notation.errors.invalid' } }
 
-  const copias = new Map<string, number>()
-  for (const pedra of [...lances.map((lance) => lance.pedra), ...pedras]) {
-    const base = pedraBase(pedra)
-    const total = (copias.get(base) ?? 0) + 1
-    if (total > 4) {
-      return { pedras: [], erro: { chave: 'notation.errors.tooManyCopies', parametros: { tile: base } } }
+  const vistas = pedrasNaMesa(lances)
+  const lidas: CodigoPedra[] = []
+  for (const digitada of pedras) {
+    const aka: CodigoPedra = `0${digitada[1]}`
+    const pedra =
+      !cabeMaisUmaPedra(vistas, digitada, akadora) &&
+      digitada[0] === '5' &&
+      cabeMaisUmaPedra(vistas, aka, akadora)
+        ? aka
+        : digitada
+    if (!cabeMaisUmaPedra(vistas, pedra, akadora)) {
+      const chave = pedra[0] === '0' ? 'notation.errors.duplicateAka' : 'notation.errors.tooManyCopies'
+      return { pedras: [], erro: { chave, parametros: { tile: pedra[0] === '0' ? pedra : pedraBase(pedra) } } }
     }
-    copias.set(base, total)
+    vistas.push(pedra)
+    lidas.push(pedra)
   }
-  return { pedras, erro: null }
+  return { pedras: lidas, erro: null }
+}
+
+/** As pedras que já estão na mesa nesta mão: o que o teclado não deixa repetir. */
+export function pedrasNaMesa(lances: readonly Lance[]): CodigoPedra[] {
+  return lances.map((lance) => lance.pedra)
 }

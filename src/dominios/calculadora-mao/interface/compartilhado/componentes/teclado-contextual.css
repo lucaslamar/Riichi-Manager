@@ -66,3 +66,13 @@
     object-fit: contain;
   }
 }
+
+/*
+ * Celular em pé com Aka dora: o 5 vermelho sai segurando o 5 (TecladoPedras), então
+ * cada naipe tem 9 pedras, um pouco maiores, como no teclado da montagem.
+ */
+@media (max-width: 640px) and (orientation: portrait) {
+  .teclado-contextual.teclado-contextual .teclado-aka-no-cinco {
+    --teclado-contextual-pedra: min(calc((100% - 8 * var(--teclado-contextual-vao)) / 9), 76px);
+  }
+}

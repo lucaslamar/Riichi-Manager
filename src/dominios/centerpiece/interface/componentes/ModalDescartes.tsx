@@ -9,6 +9,7 @@ import {
   MINIMO_MURO_RIICHI,
   muroPermiteKan,
   muroPermiteRiichi,
+  pedrasNaMesa,
   REGISTRO_VAZIO,
   ultimoDescarteDaMao,
 } from '../../logica/descartes'
@@ -244,7 +245,11 @@ export default function ModalDescartes({
           {!emRiichi && !muroPermiteRiichi(lances) && (
             <p className="ptd-apoio">{t('match.discards.noRiichiWall', { count: MINIMO_MURO_RIICHI })}</p>
           )}
-          <TecladoSoPedras regras={config.regrasCalculo} aoEscolher={(pedra) => registrar(pedra)} />
+          <TecladoSoPedras
+            regras={config.regrasCalculo}
+            vistas={pedrasNaMesa(lances)}
+            aoEscolher={(pedra) => registrar(pedra)}
+          />
         </form>
       )}
 

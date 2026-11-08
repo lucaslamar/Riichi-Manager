@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import {
   gerarNotacaoCompleta,
   interpretarNotacaoCompleta,
@@ -58,8 +57,6 @@ export default function ConstrutorMao({
   entradaFixa = false,
 }: PropsConstrutorMao) {
   const { t } = useI18n()
-  // Mesma media query do teclado no responsivo.css: só aí o 5 vermelho sai segurando o 5.
-  const celularEmPe = useMediaQuery('(max-width: 640px) and (orientation: portrait)')
   const sentinelaStickyRef = useRef<HTMLDivElement | null>(null)
   const [maoEditorGrudado, setMaoEditorGrudado] = useState(false)
   const [menuAcoesMaoAberto, setMenuAcoesMaoAberto] = useState(false)
@@ -485,7 +482,6 @@ export default function ConstrutorMao({
             escolhaChiiPendente) && (
             <TecladoPedras
               mostrarGrade={!entradaPorNotacao}
-              akaSegurandoCinco={celularEmPe}
               acaoPendente={acaoPendente}
               configuracao={configuracao}
               dorasReais={dorasReais}

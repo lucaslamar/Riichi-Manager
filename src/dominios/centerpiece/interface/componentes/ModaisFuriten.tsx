@@ -11,6 +11,7 @@ import {
   descreverFuriten,
   descreverPedra,
 } from '../../logica/descreverPedras'
+import { pedrasNaMesa } from '../../logica/descartes'
 import { calcularFuriten } from '../../logica/furiten'
 import type { Cadeira, Partida } from '../../logica/partida'
 import { agruparChamada, esperasDaMao, montarMaoInformada } from '../../logica/registroPartida'
@@ -175,7 +176,11 @@ export function ModalChecarFuriten({
         })}
       </div>
 
-      <TecladoSoPedras regras={partida.config.regrasCalculo} aoEscolher={(pedra) => adicionar([pedra])} />
+      <TecladoSoPedras
+        regras={partida.config.regrasCalculo}
+        vistas={[...pedrasNaMesa(lances), ...soltas, ...melds.flatMap((meld) => meld.pedras)]}
+        aoEscolher={(pedra) => adicionar([pedra])}
+      />
     </Modal>
   )
 }

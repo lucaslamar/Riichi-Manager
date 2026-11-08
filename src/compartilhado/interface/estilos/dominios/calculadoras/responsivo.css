@@ -5202,9 +5202,11 @@
   }
 
   /*
-   * Com Aka dora, o 5 vermelho sai segurando o 5 (TecladoPedras com
-   * `akaSegurandoCinco`): o teclado fica igual ao sem Aka dora, 9 pedras grandes
-   * por naipe e as Honras centralizadas com a mesma largura.
+   * Com Aka dora, o 5 vermelho sai segurando o 5 (`.teclado-aka-no-cinco`, que o
+   * TecladoPedras liga sozinho no celular em pé): o teclado fica igual ao sem Aka
+   * dora, 9 pedras grandes por naipe e as Honras centralizadas com a mesma largura.
+   * O pontinho e o selo valem para todos os teclados (montagem, finalização e
+   * Centerpiece). A grade de 9 dos outros fica no CSS de cada um.
    */
   .construtor-mao-montagem .teclado-pedras.teclado-aka-no-cinco .linha-naipe {
     --largura-coluna-pedra: calc((100% - 8 * var(--gap-pedra-celular, 2px)) / 9);
@@ -5217,19 +5219,19 @@
   }
 
   /* Segurar não pode abrir o menu do sistema nem selecionar a pedra. */
-  .construtor-mao-montagem .teclado-pedras .btn-pedra-com-aka {
+  .teclado-pedras .btn-pedra-com-aka {
     position: relative;
     -webkit-touch-callout: none;
     user-select: none;
   }
 
   /* Selo do 5 com os dois valores: o do vermelho num fundo branco com texto vermelho. */
-  .construtor-mao-montagem .teclado-pedras .badge-espera-teclado--com-aka {
+  .teclado-pedras .badge-espera-teclado--com-aka {
     gap: 0;
     white-space: nowrap;
   }
 
-  .construtor-mao-montagem .teclado-pedras .badge-espera-teclado__aka {
+  .teclado-pedras .badge-espera-teclado__aka {
     margin-left: 1px;
     border-radius: 2px;
     padding: 0 1px;
@@ -5238,7 +5240,7 @@
   }
 
   /* Pontinho vermelho no canto do 5: tem o vermelho, segurando. */
-  .construtor-mao-montagem .teclado-pedras .ponto-aka-teclado {
+  .teclado-pedras .ponto-aka-teclado {
     position: absolute;
     top: 3px;
     right: 3px;
