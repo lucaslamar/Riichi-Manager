@@ -1366,3 +1366,10 @@ body:has(.ptd-modulo) {
   color: var(--texto-aviso);
   font-weight: 700;
 }
+
+/* Celular deitado: o rodapé fixo começa depois do trilho de navegação. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .ptd-rodape-fixo {
+    left: var(--largura-trilho, 0px);
+  }
+}

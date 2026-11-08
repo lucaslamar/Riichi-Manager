@@ -767,3 +767,52 @@
   align-items: center;
   gap: 4px 8px;
 }
+
+/* Mesas do torneio: quantas couberem na largura da coluna (com ou sem menu lateral). */
+.trn-mesas .clb-mesas {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+/* ─── Celular deitado (item 12) ──────────────────────────────────────────── */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  /* Lista: nomes à esquerda; contagem e Sortear numa coluna fixa à direita. */
+  .trn-lista {
+    padding-right: 272px;
+  }
+
+  .trn-lista > .trn-rodape {
+    /* Abaixo do cabeçalho, para o ⚙ e o ⋮ continuarem à mão. */
+    top: 49px;
+    left: auto;
+    width: 256px;
+    justify-content: flex-end;
+    border-top: 0;
+    border-left: 1px solid var(--linha-divisoria);
+    padding: 12px 16px;
+  }
+
+  /* Mesas: timer geral numa faixa baixa, botões lado a lado. */
+  .trn-mesas .trn-timer-geral {
+    position: static;
+    padding-block: 6px;
+  }
+
+  .trn-timer-geral .trn-anel {
+    width: 84px;
+    height: 84px;
+    font-size: 0.875rem;
+  }
+
+  .trn-timer-acoes {
+    flex-direction: row;
+  }
+
+  /* Assentos em 2 × 2 e quantas mesas couberem na largura: mais mesas na altura curta. */
+  .trn-mesas .clb-mesas {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  .trn-mesas .clb-mesa-assentos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
