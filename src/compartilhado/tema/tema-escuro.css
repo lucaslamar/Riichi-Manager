@@ -35,7 +35,8 @@
   --cor-veu: rgb(0 0 0 / 70%);
 
   /* Pedras: a face continua clara (legibilidade); borda e sombra para o preto. */
-  --pedra-face: #f6f3f9;
+  /* Creme, não branco puro: cansa menos a vista no fundo escuro. */
+  --pedra-face: #f2efe6;
   --pedra-borda: #8a7aa8;
   --pedra-face-primario: #e6dcf7;
   --pedra-face-aviso: #f9d2e9;
