@@ -1131,6 +1131,8 @@
       "hint": "Tap the table to see the actions",
       "adjustHonba": "调整本场，当前 {{count}}",
       "timerStart": "开始计时",
+      "calculate": "计算手牌",
+      "calcMpsz": "用 MPSZ 记法计算",
       "timerPass": "传递回合"
     },
     "setup": {
