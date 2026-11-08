@@ -25,8 +25,8 @@ interface PropsPaginaCalculadoraMao {
    * andamento fica guardada), mas não desenha nada nem escuta gestos.
    */
   visivel?: boolean
-  /** Muda a cada pedido de abrir já na notação MPSZ (o atalho do Centerpiece simples). */
-  pedidoNotacao?: number
+  /** Aberta pelo Centerpiece simples: deslizar para qualquer lado volta para lá. */
+  aoVoltar?: () => void
 }
 
 export default function PaginaCalculadoraMao({
@@ -35,7 +35,7 @@ export default function PaginaCalculadoraMao({
   entradaFixa,
   aoIrParaProximaTela,
   visivel = true,
-  pedidoNotacao = 0,
+  aoVoltar,
 }: PropsPaginaCalculadoraMao = {}) {
   /**
    * Em telas grandes (tablets/desktop) todas as opções da finalização
@@ -87,9 +87,10 @@ export default function PaginaCalculadoraMao({
     if (!visivel && !entradaFixa) setEntradaNotacao(false)
   }, [visivel, entradaFixa])
 
+  // A entrada fixa pode mudar com a página montada (atalhos do Centerpiece simples).
   useEffect(() => {
-    if (pedidoNotacao > 0) setEntradaNotacao(true)
-  }, [pedidoNotacao])
+    setEntradaNotacao(entradaFixa === 'notacao')
+  }, [entradaFixa])
 
   // Dedo para a esquerda segue a barra inferior (próxima tela). Dedo para a direita,
   // que nas outras telas volta à anterior, aqui é a primeira aba: na montagem alterna
@@ -99,10 +100,9 @@ export default function PaginaCalculadoraMao({
     ativo: visivel,
     aoDeslizarDireita: finalizandoMao
       ? calculadora.voltarParaMontagem
-      : entradaFixa
-        ? undefined
-        : () => setEntradaNotacao((ativa) => !ativa),
-    aoDeslizarEsquerda: aoIrParaProximaTela,
+      : (aoVoltar ??
+        (entradaFixa ? undefined : () => setEntradaNotacao((ativa) => !ativa))),
+    aoDeslizarEsquerda: aoVoltar ?? aoIrParaProximaTela,
   })
 
   // Escondida: nada no DOM, para os estilos `body:has(.card-mao-completa…)`

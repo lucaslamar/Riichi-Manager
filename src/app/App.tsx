@@ -28,6 +28,7 @@ export default function App() {
   const [tela, setTela] = useState<TelaPrincipal>('calculadora')
   // Sorteador aberto pelo Centerpiece simples: deslizar para qualquer lado volta para lá.
   const [simplesAberto, setSimplesAberto] = useState(false)
+  const [entradaDoSimples, setEntradaDoSimples] = useState<'pedras' | 'notacao' | null>(null)
   const [idiomaAberto, setIdiomaAberto] = useState(false)
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
@@ -41,6 +42,7 @@ export default function App() {
   const navegar = useCallback((proxima: TelaPrincipal) => {
     setGuia(null)
     setSimplesAberto(false)
+    setEntradaDoSimples(null)
     setTela(proxima)
   }, [])
 
@@ -48,15 +50,16 @@ export default function App() {
     navegar('sorteadorVentos')
     setSimplesAberto(true)
   }
-  // Atalhos de cálculo do Centerpiece simples. A volta é pelo botão Centerpiece,
-  // que abre o simples, ou deslizando no Han e Fu, como no sorteador.
-  const [pedidoNotacao, setPedidoNotacao] = useState(0)
+  // Atalhos de cálculo do Centerpiece simples: a Calculadora de Mão abre com a
+  // entrada escolhida, sem a troca para MPSZ, e deslizar para qualquer lado volta
+  // para o simples, como no sorteador e no Han e Fu.
   const abrirCalculoDoSimples = (calculo: 'mao' | 'hanFu' | 'mpsz') => {
     navegar(calculo === 'hanFu' ? 'calculadoraRapida' : 'calculadora')
     setSimplesAberto(true)
-    if (calculo === 'mpsz') setPedidoNotacao((atual) => atual + 1)
+    if (calculo !== 'hanFu') setEntradaDoSimples(calculo === 'mpsz' ? 'notacao' : 'pedras')
   }
   const voltarAoSimples = () => {
+    setEntradaDoSimples(null)
     setTela('centerpiece')
   }
   const sorteadorDoSimples =
@@ -110,7 +113,8 @@ export default function App() {
         <PaginaCalculadoraMao
           aoIrParaProximaTela={() => navegar('calculadoraRapida')}
           visivel={tela === 'calculadora'}
-          pedidoNotacao={pedidoNotacao}
+          entradaFixa={entradaDoSimples ?? undefined}
+          aoVoltar={entradaDoSimples ? voltarAoSimples : undefined}
         />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
