@@ -180,3 +180,82 @@
   color: var(--texto-apoio);
   font-size: 0.75em;
 }
+
+/* Rodapé: contadores e status à esquerda, "Do cadastro" à direita. */
+.trn-rodape-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.trn-rodape-topo > .clb-contagem {
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.trn-adicionar-cadastro {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  color: var(--primario);
+  background: transparent;
+  font-size: 1.375rem;
+  cursor: pointer;
+}
+
+/* Menu ⋯ da Lista. */
+.trn-menu {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trn-menu button {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 0 4px;
+  color: var(--texto-principal);
+  background: none;
+  font: inherit;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trn-menu button > i {
+  width: 22px;
+  color: var(--texto-apoio);
+  text-align: center;
+}
+
+.trn-menu button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.trn-menu .trn-menu--perigo,
+.trn-menu .trn-menu--perigo > i {
+  color: var(--texto-erro);
+}
+
+/* A Lista ocupa a altura toda, para o toque no vazio cair nela. */
+@media (max-width: 1023px) {
+  .trn-lista {
+    min-height: calc(100dvh - 56px - var(--altura-barra-inferior, 0px));
+  }
+}

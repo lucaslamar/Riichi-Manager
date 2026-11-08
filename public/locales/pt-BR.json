@@ -1494,7 +1494,8 @@
       "deleteSaved": "Excluir a lista {{name}}",
       "import": "Adicionar jogadores do cadastro",
       "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista",
-      "rename": "Renomear o torneio {{name}}"
+      "rename": "Renomear o torneio {{name}}",
+      "more": "Mais opções da lista"
     },
     "settings": {
       "title": "Configurações do torneio",

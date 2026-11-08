@@ -27,7 +27,7 @@ import '../torneio.css'
 
 /** Altura de cada linha da folha, a mesma da Lista do clube. */
 const ALTURA_LINHA = 48
-const LINHAS_DE_FOLGA = 3
+const LINHAS_DE_FOLGA = 1
 
 /**
  * Lista do torneio em estilo bloco de notas: um nome por linha. Sem foco ao abrir
@@ -52,6 +52,7 @@ export default function PaginaListaTorneio({
 
   const [linhaAtual, setLinhaAtual] = useState<number | null>(null)
   const [memoria, setMemoria] = useState(false)
+  const [menu, setMenu] = useState(false)
   const [cadastrados, setCadastrados] = useState(false)
   const [limpando, setLimpando] = useState(false)
   const [configurando, setConfigurando] = useState(false)
@@ -111,11 +112,22 @@ export default function PaginaListaTorneio({
     aoSortear()
   }
 
-  const totalDeLinhas = Math.max(linhas.length + LINHAS_DE_FOLGA, 8)
+  const totalDeLinhas = Math.max(linhas.length + LINHAS_DE_FOLGA, 4)
   const estiloFolha = { '--clb-linha': `${ALTURA_LINHA}px`, '--clb-linhas': totalDeLinhas } as CSSProperties
 
   return (
-    <section ref={raiz} className="clb-lista trn-lista">
+    <section
+      ref={raiz}
+      className="clb-lista trn-lista"
+      // Folha curta: tocar no vazio abaixo dos nomes leva o cursor para o fim da lista.
+      onClick={(evento) => {
+        if (evento.target !== evento.currentTarget) return
+        const elemento = campo.current
+        if (!elemento) return
+        elemento.focus()
+        elemento.setSelectionRange(elemento.value.length, elemento.value.length)
+      }}
+    >
       <TituloTela
         titulo={
           <button
@@ -134,24 +146,6 @@ export default function PaginaListaTorneio({
             <button
               type="button"
               className="cm-btn-icone"
-              aria-label={t('tournament.list.import')}
-              title={t('tournament.list.import')}
-              onClick={() => setCadastrados(true)}
-            >
-              <i className="fas fa-user-plus" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('tournament.list.memory')}
-              title={t('tournament.list.memory')}
-              onClick={() => setMemoria(true)}
-            >
-              <i className="fas fa-sd-card" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="cm-btn-icone"
               aria-label={t('tournament.list.settings')}
               title={t('tournament.list.settings')}
               onClick={() => setConfigurando(true)}
@@ -160,13 +154,12 @@ export default function PaginaListaTorneio({
             </button>
             <button
               type="button"
-              className="cm-btn-icone cm-btn-icone--perigo"
-              aria-label={t('tournament.list.clear')}
-              title={t('tournament.list.clear')}
-              disabled={!lista.trim()}
-              onClick={() => setLimpando(true)}
+              className="cm-btn-icone"
+              aria-label={t('tournament.list.more')}
+              title={t('tournament.list.more')}
+              onClick={() => setMenu(true)}
             >
-              <i className="fas fa-trash" aria-hidden="true" />
+              <i className="fas fa-ellipsis-vertical" aria-hidden="true" />
             </button>
           </span>
         }
@@ -250,6 +243,7 @@ export default function PaginaListaTorneio({
       </div>
 
       <div className="ptd-rodape-fixo clb-rodape trn-rodape">
+        <div className="trn-rodape-topo">
         <p id="trn-status" className="clb-contagem" aria-live="polite">
           <span className="clb-contadores">
             <span>
@@ -272,6 +266,16 @@ export default function PaginaListaTorneio({
         </p>
         <button
           type="button"
+          className="trn-adicionar-cadastro"
+          aria-label={t('tournament.list.import')}
+          title={t('tournament.list.import')}
+          onClick={() => setCadastrados(true)}
+        >
+          <i className="fas fa-address-book" aria-hidden="true" />
+        </button>
+        </div>
+        <button
+          type="button"
           className="btn-primario ptd-btn-largo"
           disabled={!podeSortear}
           onClick={sortear}
@@ -284,6 +288,44 @@ export default function PaginaListaTorneio({
         <p className="ptd-aviso clb-aviso" role="status">
           {aviso}
         </p>
+      )}
+
+      {menu && (
+        <Modal
+          titulo={t('tournament.list.title')}
+          aoFechar={() => setMenu(false)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+        >
+          <ul className="trn-menu">
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu(false)
+                  setMemoria(true)
+                }}
+              >
+                <i className="fas fa-sd-card" aria-hidden="true" />
+                <span>{t('tournament.list.memory')}</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                className="trn-menu--perigo"
+                disabled={!lista.trim()}
+                onClick={() => {
+                  setMenu(false)
+                  setLimpando(true)
+                }}
+              >
+                <i className="fas fa-trash" aria-hidden="true" />
+                <span>{t('tournament.list.clear')}</span>
+              </button>
+            </li>
+          </ul>
+        </Modal>
       )}
 
       {memoria && (
@@ -302,10 +344,6 @@ export default function PaginaListaTorneio({
             setMemoria(false)
           }}
           aoExcluir={(salva) => excluirLista(salva.id)}
-          aoImportar={() => {
-            setMemoria(false)
-            setCadastrados(true)
-          }}
         />
       )}
 
@@ -392,7 +430,6 @@ function FolhaMemoria({
   aoGuardar,
   aoCarregar,
   aoExcluir,
-  aoImportar,
 }: {
   listas: readonly ListaSalva[]
   podeGuardar: boolean
@@ -400,7 +437,6 @@ function FolhaMemoria({
   aoGuardar: (nome: string) => void
   aoCarregar: (lista: ListaSalva) => void
   aoExcluir: (lista: ListaSalva) => void
-  aoImportar: () => void
 }) {
   const { t, idioma } = useI18n()
   const [nome, setNome] = useState('')
@@ -463,9 +499,6 @@ function FolhaMemoria({
         </ul>
       )}
 
-      <button type="button" className="btn-contorno ptd-btn-largo trn-importar" onClick={aoImportar}>
-        <i className="fas fa-users" aria-hidden="true" /> {t('tournament.list.import')}
-      </button>
     </Modal>
   )
 }

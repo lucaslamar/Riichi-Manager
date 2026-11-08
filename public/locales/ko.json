@@ -1480,7 +1480,8 @@
       "deleteSaved": "Delete the list {{name}}",
       "import": "Add players from registry",
       "cutsTooBig": "Knockout cuts must be smaller than the list",
-      "rename": "Rename tournament {{name}}"
+      "rename": "Rename tournament {{name}}",
+      "more": "More list options"
     },
     "settings": {
       "title": "Tournament settings",
