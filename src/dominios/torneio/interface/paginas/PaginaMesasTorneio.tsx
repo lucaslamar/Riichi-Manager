@@ -374,28 +374,19 @@ export default function PaginaMesasTorneio({
         </button>
       )}
 
+      {/* Lembrete de backup ao fechar a rodada: um botão logo abaixo de Gerar rodada. */}
       {deveLembrarBackup(torneio, fechada, lembreteDispensado) && (
-        <p className="cfg-ajuda trn-lembrete" role="status">
-          <i className="fas fa-floppy-disk" aria-hidden="true" /> {t('tournament.tables.backupReminder')}{' '}
-          <button
-            type="button"
-            className="trn-link"
-            onClick={() => {
-              setLembreteDispensado(torneio.rodadas.length)
-              setExportando(true)
-            }}
-          >
-            {t('tournament.tables.backupAction')}
-          </button>
-          <button
-            type="button"
-            className="cm-btn-icone"
-            aria-label={t('actions.close')}
-            onClick={() => setLembreteDispensado(torneio.rodadas.length)}
-          >
-            <i className="fas fa-xmark" aria-hidden="true" />
-          </button>
-        </p>
+        <button
+          type="button"
+          className="btn-contorno ptd-btn-largo trn-backup"
+          aria-description={t('tournament.tables.backupReminder')}
+          onClick={() => {
+            setLembreteDispensado(torneio.rodadas.length)
+            setExportando(true)
+          }}
+        >
+          <i className="fas fa-floppy-disk" aria-hidden="true" /> {t('tournament.tables.backupAction')}
+        </button>
       )}
 
 

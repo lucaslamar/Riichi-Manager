@@ -758,11 +758,9 @@
   cursor: pointer;
 }
 
-.trn-lembrete {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 8px;
+/* Exportar backup, logo abaixo do Gerar rodada. */
+.trn-backup {
+  margin-top: 8px;
 }
 
 /* Mesas do torneio: quantas couberem na largura da coluna (com ou sem menu lateral). */
