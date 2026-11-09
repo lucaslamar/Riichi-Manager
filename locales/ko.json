@@ -1429,6 +1429,15 @@
     "redDragon": "red dragon"
   },
   "tournament": {
+    "share": {
+      "title": "내보내기",
+      "roundHelp": "이번 라운드의 테이블과 결과를 그룹에 보낼 수 있습니다.",
+      "rankingHelp": "대회 순위를 그룹에 보낼 수 있습니다.",
+      "text": "텍스트",
+      "image": "이미지",
+      "imageSaved": "이미지를 저장했습니다.",
+      "imageError": "이미지를 만들 수 없습니다."
+    },
     "title": "Tournament",
     "create": "Create tournament",
     "defaultName": "Tournament {{date}}",
@@ -1679,7 +1688,7 @@
       "qrNext": "Next QR",
       "qrPause": "Pause the sequence",
       "qrPlay": "Resume the sequence",
-      "qrScanHelp": "On the other device: Tournament, ⋮ menu and Import tournament. The QRs cycle until the camera reads them all.",
+      "qrScanHelp": "On the other device: Tournament and the Import tournament icon at the top of the list. The QRs cycle on their own. Keep the camera pointed at them until the counter is complete: it keeps the ones already read, in any order, and any it misses come back on the next loop. If one QR takes too long, pause and use the arrows to stay on it.",
       "qrDone": "Done"
     },
     "import": {
@@ -1693,6 +1702,8 @@
       "pasteHelp": "The code copied on the other device",
       "pastePlaceholder": "Paste the code here",
       "read": "Read code",
+      "cameraAim": "Fit the QR inside the square: only what is inside it is read. The corners flash green for each QR read. If the image is blurry, tap it to focus.",
+      "cameraSequence": "The other device shows several QRs, one after another, in a loop. Keep the camera pointed at them: each QR read adds to the counter, in any order, and any it misses come back on the next loop. When all of them are read, the import continues on its own.",
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
