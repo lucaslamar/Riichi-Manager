@@ -16,11 +16,11 @@
 - **Paisagem e tablet**: no celular deitado, a lista fica à esquerda e o Sortear à direita, o timer fica compacto e as mesas ocupam a largura toda.
 - **Torneios antigos**: os torneios das versões anteriores são migrados para o novo formato na primeira abertura.
 - **Ventos sorteados no app ou na mesa**: nas configurações do torneio, logo abaixo do formato. No Rodízio o app já sorteia os ventos (é o que garante que cada um seja Leste uma vez). Nos outros formatos o padrão é sortear na mesa, e o card mostra só os quatro nomes.
-- **Engrenagem das Configurações nas telas principais**: Calculadora, Han e Fu, Centerpiece e Partida têm uma engrenagem no canto do cabeçalho. Ela abre as Configurações com a aba "Ajustes do app" (Idioma, Tema, Pedras, Alto contraste, Modo compacto, Área de toque ampliada e tela). Na Calculadora, a primeira aba é a de Regras de cálculo. A tela Ajustes continua igual.
-- **Abas das Configurações com deslize**: dá para trocar de aba tocando nela ou deslizando o dedo para o lado, com o indicador acompanhando o dedo. Cada aba rola sozinha na vertical.
+- **Engrenagem do app em todas as telas principais**: Calculadora, Han e Fu, Centerpiece, Partida, Sorteador e a Lista do torneio têm a engrenagem no cabeçalho, ao lado da marca MOJOCA. Ela abre os Ajustes do app (Idioma, Tema, Pedras, Alto contraste, Modo compacto, Área de toque ampliada e tela).
+- **Controles deslizantes para as regras do módulo**: a engrenagem é sempre dos ajustes do app, e as regras de cada módulo ficam no ícone de controles deslizantes. Na Calculadora de Mão, ele fica onde estava a engrenagem e abre as Regras de cálculo. No Torneio, abre as Configurações do torneio.
 - **Idioma nos Ajustes**: o Idioma virou o primeiro cartão dos ajustes, antes do Tema.
-- **Seta de enviar nas listas**: com o teclado aberto, a lista do Torneio e a do Encontro do clube ganham uma seta, como a de enviar do WhatsApp, que sorteia as mesas sem precisar fechar o teclado.
-- **Engrenagem no Sorteador**: abre as Configurações com os Ajustes do app, como nas outras telas.
+- **Seta de enviar nas listas**: com o teclado aberto, a lista do Torneio e a do Encontro do clube ganham uma seta deitada, como a de enviar do WhatsApp, que sorteia as mesas sem precisar fechar o teclado.
+- **Engrenagem no Sorteador**: abre os Ajustes do app, como nas outras telas.
 
 ### Alterado
 
@@ -44,9 +44,11 @@
 - **Menu do Mais fecha com o deslize**: com o menu aberto, arrastar o dedo para o lado fecha. Para a esquerda, o menu acompanha o dedo.
 - **Barra acompanha a tela ao deslizar**: chegando deslizando no Sorteador, no Tutorial ou nas Configurações, a barra troca para essas abas, com a atual marcada. O Mais fica no fim das duas e continua abrindo o menu com todas as telas.
 - **Lista do torneio sem o menu ⋮**: Importar torneio fica ao lado da engrenagem, no topo, e Listas salvas, Jogadores cadastrados e Limpar lista ficam lado a lado no rodapé.
-- **Configurações do torneio só com Torneio e Pontuação**, mais a aba Ajustes do app. Regras, Empates, Regras de cálculo e Mesa saíram do torneio por enquanto, e as partidas do torneio usam o padrão do conjunto nessas regras. A busca procura só no que ficou.
-- **"?" da Calculadora ao lado de "MÃO 0/14"**: à direita do cabeçalho da mão ficam só o chapéu do tutorial e a engrenagem.
+- **Configurações do torneio só com Torneio e Pontuação**. Regras, Empates, Regras de cálculo e Mesa saíram do torneio por enquanto, e as partidas do torneio usam o padrão do conjunto nessas regras. A busca procura só no que ficou.
+- **"?" da Calculadora ao lado de "MÃO 0/14"**: à direita do cabeçalho da mão ficam só o chapéu do tutorial e os controles deslizantes.
 - **Ícones da Lista do torneio**: Listas salvas subiu para o topo, ao lado de Importar torneio. Na barra de baixo ficam a lixeira, os Jogadores cadastrados e, com o teclado aberto, a seta de enviar.
+- **Ajustes e Idioma fora da barra**: como a engrenagem está em toda tela, a segunda página da barra ficou com Sorteador, Tutorial e Mais. A tela Ajustes, com o Sobre o Mojoca e o Instalar, continua no menu lateral do Mais. Deslizando depois do Tutorial, volta para a Calculadora.
+- **Marca MOJOCA no Centerpiece**: volta a aparecer no cabeçalho, ao lado do título.
 
 ### Corrigido
 
