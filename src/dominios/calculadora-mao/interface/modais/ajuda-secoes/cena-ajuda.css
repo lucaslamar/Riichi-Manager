@@ -1,6 +1,7 @@
 /*
- * Cena animada da ajuda: uma miniatura da montagem (mão em cima, teclado
- * embaixo), com um anel pulsando onde o dedo toca. As cores vêm do tema, como
+ * Cena animada da ajuda: a Calculadora de Mão inteira em miniatura (cabeçalho
+ * da mão, mão, barra de chamadas e teclado completo), com um anel pulsando
+ * onde o dedo toca. As cores vêm do tema, como
  * nos botões de chamada de verdade.
  */
 .cena-ajuda {
@@ -10,6 +11,7 @@
 }
 
 .cena-ajuda__tela {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -126,10 +128,15 @@
   --action-color: var(--cor-secundario-texto, #8e24aa);
 }
 
+/* Chi | Pon | Kan | Kan fechado | MPSZ, como a barra do app. */
 .cena-ajuda__chamadas {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4px;
+}
+
+.cena-ajuda__chamada--mpsz {
+  --action-color: var(--cor-texto, #102a43);
 }
 
 .cena-ajuda__chamada {
@@ -191,9 +198,27 @@
 /* Guia de bolso: cabeçalho com os ícones e o guia aberto. */
 .cena-ajuda__cabecalho {
   display: flex;
-  justify-content: flex-end;
-  gap: 14px;
-  padding: 6px 4px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 2px;
+}
+
+.cena-ajuda__titulo-mao {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: auto;
+  color: var(--cor-texto, #102a43);
+  font-size: 0.6875rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.cena-ajuda__icone--ajuda {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--cor-borda, #cbd5e1);
+  font-size: 0.6875rem;
 }
 
 .cena-ajuda__icone {
@@ -210,9 +235,17 @@
 }
 
 .cena-ajuda__guia {
+  position: absolute;
+  inset: 36px 8px 8px;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  border: 1px solid var(--cor-borda, #cbd5e1);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--cor-superficie, #ffffff);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 25%);
   animation: cena-ajuda-entra 0.35s ease-out;
 }
 
@@ -304,9 +337,57 @@
 }
 
 .cena-ajuda__teclado-pedras {
+  --yaku-pedra: 24px;
+
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cena-ajuda__fileira-pedras {
+  display: flex;
+  justify-content: center;
   gap: 2px;
+}
+
+/* Mão completa: Mudar batida e Finalizar mão no lugar do teclado. */
+.cena-ajuda__rodape-batida {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.cena-ajuda__botao-finalizar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  border-radius: 999px;
+  background: var(--primario, #1565c0);
+  color: var(--cor-sobre-primario, #ffffff);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+/* Barra do MPSZ: ‹ Peças à esquerda, AC e apagar à direita. */
+.cena-ajuda__barra-mpsz {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 2px 4px;
+  border-bottom: 1px solid var(--cor-borda, #cbd5e1);
+  color: var(--cor-texto, #102a43);
+  font-size: 0.6875rem;
+  font-weight: 800;
+}
+
+.cena-ajuda__barra-mpsz > span:first-child {
+  margin-right: auto;
+}
+
+.cena-ajuda__ac {
+  color: #e0242b;
+  font-weight: 900;
 }
 
 .cena-ajuda__tecla-pedra {

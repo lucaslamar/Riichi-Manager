@@ -29,11 +29,17 @@ const CLASSE_CHAMADA: Record<ChamadaCena, string> = {
 const TECLAS_NUMEROS = ['1', '2', '3', 'm', '4', '5', '6', 'p', '7', '8', '9', 's', '0', 'z']
 const ABAS_GUIA = ['beginner', 'yakuman'] as const
 const PEDRAS_CARTAO_GUIA = parseMpsz('555z666z777z')
+/** Teclado de pedras inteiro, uma fileira por naipe, como no app. */
+const FILEIRAS_TECLADO = ['123456789m', '123456789p', '123456789s', '1234567z'].map(parseMpsz)
+/** Pedras que uma chamada ocupa na contagem da mão (o kan também conta 3). */
+const SLOTS_CHAMADA = 3
 
 /**
- * Mostra uma cena da ajuda (mão + pedaço do teclado + dedo) passo a passo, em
- * loop, passando de um caso para o outro. Com movimento reduzido no aparelho,
- * fica parada no resultado do caso escolhido e lista os passos.
+ * Mostra uma cena da ajuda passo a passo, em loop, passando de um caso para o
+ * outro. A cena é a Calculadora de Mão inteira em miniatura (cabeçalho da mão,
+ * mão, barra de chamadas e teclado completo), com o dedo tocando onde o
+ * jogador tocaria. Com movimento reduzido no aparelho, fica parada no
+ * resultado do caso escolhido e lista os passos.
  */
 export default function CenaAjuda({ nome }: { nome: NomeCena }) {
   const { t } = useI18n()
@@ -106,7 +112,8 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
   }
 
   const renderizarTeclaPedra = (pedra: CodigoPedra) => {
-    const ehCinco = pedra[0] === '5'
+    // O 5 vermelho (ponto ou face vermelha) só vale no naipe da cena.
+    const ehCinco = pedra[0] === '5' && !!caso.pedrasTeclado?.includes(pedra)
     const mostrada = ehCinco && quadro.cincoVermelho ? (`0${pedra[1]}` as CodigoPedra) : pedra
     return (
       <span key={pedra} className={`cena-ajuda__tecla-pedra${tocando(`pedra:${pedra}`)}`}>
@@ -116,21 +123,11 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
     )
   }
 
+  const totalMao = (quadro.mao?.length ?? 0) + (quadro.meld ? SLOTS_CHAMADA : 0)
+
+  /** Guia de bolso aberto por cima da calculadora, como no app. */
   const renderizarGuia = () => {
-    if (!quadro.guia) {
-      // Cabeçalho da mão: ?, chapéu e engrenagem, como no app.
-      return (
-        <div className="cena-ajuda__cabecalho">
-          <span className="cena-ajuda__icone">?</span>
-          <span className={`cena-ajuda__icone${tocando('chapeu')}`}>
-            <i className="fas fa-graduation-cap" />
-          </span>
-          <span className="cena-ajuda__icone">
-            <i className="fas fa-gear" />
-          </span>
-        </div>
-      )
-    }
+    if (!quadro.guia) return null
     const { aba } = quadro.guia
     return (
       <div className="cena-ajuda__guia">
@@ -185,48 +182,85 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
       )}
 
       <div className="cena-ajuda__tela" aria-hidden="true">
-        {caso.painel === 'guia' ? (
-          renderizarGuia()
-        ) : (
-          <>
-            <div className="cena-ajuda__mao">
-              {quadro.mao?.map(renderizarItemMao)}
-              {quadro.meld && (
-                <span className={`cena-ajuda__meld cena-ajuda__meld--${CLASSE_CHAMADA[quadro.meld.tipo]}`}>
-                  <small>{t(rotuloChamadaCena(quadro.meld.tipo))}</small>
-                  {quadro.meld.pedras.map((pedra, posicao) => (
-                    // biome-ignore lint/suspicious/noArrayIndexKey: cena fixa
-                    <PedraYaku key={posicao} pedra={pedra} />
-                  ))}
-                </span>
-              )}
-            </div>
+        {/* Cabeçalho da mão: título e, na ordem do app, ?, chapéu e engrenagem. */}
+        <div className="cena-ajuda__cabecalho">
+          <span className="cena-ajuda__titulo-mao">
+            <i className="fas fa-layer-group" />
+            {t('calculator.buildTitle', { total: Math.min(totalMao, 14) })}
+          </span>
+          <span className="cena-ajuda__icone cena-ajuda__icone--ajuda">?</span>
+          <span className={`cena-ajuda__icone${tocando('chapeu')}`}>
+            <i className="fas fa-graduation-cap" />
+          </span>
+          <span className="cena-ajuda__icone">
+            <i className="fas fa-gear" />
+          </span>
+        </div>
 
-            <div className="cena-ajuda__painel">
-              {caso.painel === 'batida' ? (
-                <span
-                  className={`cena-ajuda__botao-batida${tocando('mudarBatida')}${
-                    quadro.escolhendoBatida ? ' cena-ajuda__botao-batida--ativo' : ''
-                  }`}
-                >
-                  {t('calculator.changeWinningTileShort')}
-                </span>
-              ) : (
-                <div className="cena-ajuda__chamadas">
-                  {CHAMADAS.map((chamada) => (
-                    <span
-                      key={chamada}
-                      className={`cena-ajuda__chamada cena-ajuda__chamada--${CLASSE_CHAMADA[chamada]}${
-                        quadro.ativa === chamada ? ' cena-ajuda__chamada--ativa' : ''
-                      }${tocando(`chamada:${chamada}`)}`}
-                    >
-                      {t(rotuloChamadaCena(chamada))}
-                    </span>
-                  ))}
-                </div>
-              )}
+        <div className="cena-ajuda__mao">
+          {quadro.mao?.map(renderizarItemMao)}
+          {quadro.meld && (
+            <span className={`cena-ajuda__meld cena-ajuda__meld--${CLASSE_CHAMADA[quadro.meld.tipo]}`}>
+              <small>{t(rotuloChamadaCena(quadro.meld.tipo))}</small>
+              {quadro.meld.pedras.map((pedra, posicao) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: cena fixa
+                <PedraYaku key={posicao} pedra={pedra} />
+              ))}
+            </span>
+          )}
+        </div>
 
-              {quadro.opcoes && (
+        <div className="cena-ajuda__painel">
+          {caso.painel === 'numeros' ? (
+            <>
+              {/* Barra do MPSZ: voltar para as pedras, AC e apagar. */}
+              <div className="cena-ajuda__barra-mpsz">
+                <span>
+                  <i className="fas fa-chevron-left" /> {t('notation.backToTiles')}
+                </span>
+                <span className="cena-ajuda__ac">AC</span>
+                <i className="fas fa-delete-left" />
+              </div>
+              <div className="cena-ajuda__teclado-numeros">
+                {CHAMADAS.map((chamada) => (
+                  <span
+                    key={chamada}
+                    className={`cena-ajuda__chamada cena-ajuda__chamada--${CLASSE_CHAMADA[chamada]}${
+                      quadro.ativa === chamada ? ' cena-ajuda__chamada--ativa' : ''
+                    }${tocando(`chamada:${chamada}`)}`}
+                  >
+                    {t(rotuloChamadaCena(chamada))}
+                  </span>
+                ))}
+                {TECLAS_NUMEROS.map((tecla) => (
+                  <span
+                    key={tecla}
+                    className={`cena-ajuda__tecla${/[mpsz]/.test(tecla) ? ' cena-ajuda__tecla--naipe' : ''}${
+                      tecla === '0' ? ' cena-ajuda__tecla--zero' : ''
+                    }${tocando(`tecla:${tecla}`)}`}
+                  >
+                    {tecla.toUpperCase()}
+                  </span>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="cena-ajuda__chamadas">
+                {CHAMADAS.map((chamada) => (
+                  <span
+                    key={chamada}
+                    className={`cena-ajuda__chamada cena-ajuda__chamada--${CLASSE_CHAMADA[chamada]}${
+                      quadro.ativa === chamada ? ' cena-ajuda__chamada--ativa' : ''
+                    }${tocando(`chamada:${chamada}`)}`}
+                  >
+                    {t(rotuloChamadaCena(chamada))}
+                  </span>
+                ))}
+                <span className="cena-ajuda__chamada cena-ajuda__chamada--mpsz">MPSZ</span>
+              </div>
+
+              {quadro.opcoes ? (
                 <div className="cena-ajuda__opcoes">
                   <small>{t('calculator.chooseChiiSequence')}</small>
                   <div>
@@ -240,29 +274,32 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                     ))}
                   </div>
                 </div>
-              )}
-
-              {caso.painel === 'pedras' && !quadro.opcoes && (
-                <div className="cena-ajuda__teclado-pedras">{caso.pedrasTeclado?.map(renderizarTeclaPedra)}</div>
-              )}
-
-              {caso.painel === 'numeros' && (
-                <div className="cena-ajuda__teclado-numeros">
-                  {TECLAS_NUMEROS.map((tecla) => (
-                    <span
-                      key={tecla}
-                      className={`cena-ajuda__tecla${/[mpsz]/.test(tecla) ? ' cena-ajuda__tecla--naipe' : ''}${
-                        tecla === '0' ? ' cena-ajuda__tecla--zero' : ''
-                      }${tocando(`tecla:${tecla}`)}`}
-                    >
-                      {tecla.toUpperCase()}
-                    </span>
+              ) : caso.painel === 'batida' ? (
+                // Mão completa: no lugar do teclado, Mudar batida e Finalizar mão.
+                <div className="cena-ajuda__rodape-batida">
+                  <span
+                    className={`cena-ajuda__botao-batida${tocando('mudarBatida')}${
+                      quadro.escolhendoBatida ? ' cena-ajuda__botao-batida--ativo' : ''
+                    }`}
+                  >
+                    {t('calculator.changeWinningTileShort')}
+                  </span>
+                  <span className="cena-ajuda__botao-finalizar">{t('calculator.finalTitle')}</span>
+                </div>
+              ) : (
+                <div className="cena-ajuda__teclado-pedras">
+                  {FILEIRAS_TECLADO.map((fileira) => (
+                    <div key={fileira[0]} className="cena-ajuda__fileira-pedras">
+                      {fileira.map(renderizarTeclaPedra)}
+                    </div>
                   ))}
                 </div>
               )}
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
+
+        {renderizarGuia()}
       </div>
 
       {semMovimento ? (
