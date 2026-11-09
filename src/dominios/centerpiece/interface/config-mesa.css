@@ -234,6 +234,11 @@
   scrollbar-width: none;
 }
 
+/* Poucas abas (Torneio, Pontuação e Ajustes do app): dividem a largura toda. */
+.cfg-abas--largas .abas-modal__lista {
+  grid-auto-columns: minmax(0, 1fr);
+}
+
 .cfg-abas .abas-modal__aba {
   min-height: 40px;
   padding-inline: 4px;

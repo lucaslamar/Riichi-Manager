@@ -10,6 +10,7 @@ import {
   alterarConfig,
   calcularOka,
   configDoPreset,
+  configSoPontuacao,
   escolherPreset,
   IDS_PRESET,
   normalizarConfig,
@@ -267,6 +268,25 @@ teste('a última config salva volta como padrão da próxima partida', () => {
   assert.equal(JSON.parse(armazenamento.valor ?? '').versao, 1)
   assert.deepEqual(carregarUltimaConfig(armazenamento), config)
   assert.deepEqual(carregarUltimaConfig(memoria('{quebrado')), configDoPreset('padrao'))
+})
+
+teste('torneio: só a Pontuação vale, o resto vem do padrão do conjunto', () => {
+  const mexida = alterarConfig(configDoPreset('padrao'), {
+    pontosPartida: 30000,
+    pontosRetorno: 30000,
+    tobi: false,
+    timerVez: 90,
+    abortivos: { kyuushuKyuuhai: false, quatroVentos: false, quatroKans: false, quatroRiichis: false },
+  })
+  const usada = configSoPontuacao(mexida)
+  const padrao = configDoPreset('padrao')
+  assert.equal(usada.pontosPartida, 30000)
+  assert.equal(usada.pontosRetorno, 30000)
+  assert.deepEqual(usada.uma, mexida.uma)
+  assert.equal(usada.tobi, padrao.tobi)
+  assert.equal(usada.timerVez, padrao.timerVez)
+  assert.deepEqual(usada.abortivos, padrao.abortivos)
+  assert.deepEqual(usada.regrasCalculo, padrao.regrasCalculo)
 })
 
 console.log(`Config de mesa ok: ${testes} testes.`)

@@ -2,6 +2,7 @@
  * Mesas e rodadas em jogo: relógios, partida de cada mesa, sortear de novo e o
  * texto para compartilhar. Sem tela.
  */
+import { configSoPontuacao } from '@/dominios/centerpiece/logica/configMesa'
 import { criarPartida, KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
 import { proximaRodada, rodadasIniciais } from './formatos'
 import { relogioParado } from './torneio'
@@ -51,7 +52,7 @@ export function partidaDaMesaNova(
   contexto: { id: string; agora: string; nomes?: readonly string[] },
 ): Partida {
   return {
-    ...criarPartida(contexto.id, torneio.config, mesa.assentos, contexto.agora, contexto.nomes),
+    ...criarPartida(contexto.id, configSoPontuacao(torneio.config), mesa.assentos, contexto.agora, contexto.nomes),
     vinculoTorneio: { torneioId: torneio.id, rodada: rodada.numero - 1, mesa: mesa.numero - 1, guardada: true },
   }
 }

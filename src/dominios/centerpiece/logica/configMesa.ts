@@ -208,6 +208,24 @@ export function retornoComOka(pontosPartida: number, comOka: boolean) {
   return comOka ? pontosPartida + 5000 : pontosPartida
 }
 
+/**
+ * Só a Pontuação vale como foi escolhida: o resto (Regras, Empates, Regras de
+ * cálculo e Mesa) vem do padrão do conjunto. O Torneio usa ao abrir uma partida,
+ * enquanto essas abas ficam fora das Configurações do torneio.
+ */
+export function configSoPontuacao(config: ConfigMesa): ConfigMesa {
+  const { pontosPartida, pontosRetorno, uma, palitosRestantes, chombo } = config
+  return {
+    ...configDoPreset(config.presetBase),
+    preset: config.preset,
+    pontosPartida,
+    pontosRetorno,
+    uma: structuredClone(uma),
+    palitosRestantes,
+    chombo: { ...chombo },
+  }
+}
+
 export function reiniciarConfig(config: ConfigMesa): ConfigMesa {
   return configDoPreset(config.presetBase)
 }

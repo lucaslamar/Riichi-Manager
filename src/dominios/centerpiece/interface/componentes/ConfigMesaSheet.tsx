@@ -37,7 +37,8 @@ const SECOES = [
   { id: 'calculo', chave: 'tableConfig.calcRules' },
   { id: 'mesa', chave: 'tableConfig.indexTable' },
 ] as const
-type IdSecao = (typeof SECOES)[number]['id'] | string
+export type IdSecaoMesa = (typeof SECOES)[number]['id']
+type IdSecao = IdSecaoMesa | string
 
 /** Aba a mais, antes das de mesa (o Torneio usa para nome, formato e tempo). */
 export interface AbaExtra {
@@ -69,6 +70,16 @@ interface PropsConfigMesaSheet {
   rodapeSalvar?: boolean
   /** Validação das abas a mais. */
   podeConcluir?: boolean
+  /**
+   * Blocos de mesa mostrados (abas e busca). O Torneio usa só a Pontuação; os
+   * outros continuam aqui para voltar quando houver login e Centerpiece.
+   */
+  secoes?: readonly IdSecaoMesa[]
+  /**
+   * Abas depois das de mesa, que valem na hora e por isso escondem o rodapé
+   * (o Torneio põe a "Ajustes do app").
+   */
+  abasFim?: readonly AbaExtra[]
 }
 
 /**
@@ -85,6 +96,8 @@ export default function ConfigMesaSheet({
   abasExtras = [],
   rodapeSalvar = false,
   podeConcluir = true,
+  secoes = SECOES.map(({ id }) => id),
+  abasFim = [],
 }: PropsConfigMesaSheet) {
   const { t } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
@@ -92,7 +105,13 @@ export default function ConfigMesaSheet({
   const [texto, setTexto] = useState('')
   const busca = normalizarTexto(texto)
   const [aba, setAba] = useState<IdSecao>(abasExtras[0]?.id ?? 'pontuacao')
-  const mostrar = (id: IdSecao) => !!busca || aba === id
+  const mostrar = (id: IdSecaoMesa) => secoes.includes(id) && (!!busca || aba === id)
+  const abas = [
+    ...abasExtras.map(({ id, rotulo }) => ({ chave: id, rotulo })),
+    ...SECOES.filter(({ id }) => secoes.includes(id)).map(({ id, chave }) => ({ chave: id as IdSecao, rotulo: t(chave) })),
+    ...abasFim.map(({ id, rotulo }) => ({ chave: id, rotulo })),
+  ]
+  const naAbaFim = !busca && abasFim.some((extra) => extra.id === aba)
 
   return (
     <Modal
@@ -101,6 +120,7 @@ export default function ConfigMesaSheet({
       rotuloFechar={t('actions.close')}
       className="config-mesa"
       rodape={
+        naAbaFim ? undefined : (
         <div className="cfg-acoes">
           <button type="button" className="btn-contorno" onClick={rodapeSalvar ? aoFechar : reiniciar}>
             {t(rodapeSalvar ? 'actions.cancel' : 'tableConfig.reset')}
@@ -114,18 +134,16 @@ export default function ConfigMesaSheet({
             {t(rodapeSalvar ? 'tournament.settings.save' : 'tableConfig.done')}
           </button>
         </div>
+        )
       }
     >
       <ContextoBusca.Provider value={busca}>
       <AbasModal
-        abas={[
-          ...abasExtras.map(({ id, rotulo }) => ({ chave: id, rotulo })),
-          ...SECOES.map(({ id, chave }) => ({ chave: id as IdSecao, rotulo: t(chave) })),
-        ]}
+        abas={abas}
         ativa={aba}
         aoEscolher={setAba}
         rotulo={t('tableConfig.indexLabel')}
-        className="cfg-abas"
+        className={`cfg-abas${abas.length <= 3 ? ' cfg-abas--largas' : ''}`}
         fixoAcima
         fixo={
           <CampoBusca
@@ -146,7 +164,15 @@ export default function ConfigMesaSheet({
         ) : null,
       )}
 
-      {!busca && !abasExtras.some((extra) => extra.id === aba) && (
+      {abasFim.map((extra) =>
+        !busca && aba === extra.id ? (
+          <section key={extra.id} className="cfg-secao" data-secao={extra.id}>
+            {extra.conteudo}
+          </section>
+        ) : null,
+      )}
+
+      {!busca && !abasExtras.some((extra) => extra.id === aba) && !naAbaFim && (
         <div className="cfg-conjunto-regras">
           <span className="cfg-campo-rotulo">{t('tableConfig.preset')}</span>
           {/* Personalizado não é botão: nenhum fica marcado quando os valores são outros. */}
