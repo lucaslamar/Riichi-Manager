@@ -18,7 +18,8 @@ import {
 } from '../../logica/regrasPontuacao'
 import { umaValida } from '../../logica/uma'
 import { carregarRegrasRegistro, salvarRegrasRegistro } from '../../persistencia/repositorioRegrasRegistro'
-import { fecharPontos, formatarPontos, inverterSinal, lerPontos, limparPontos } from '../../logica/entradaPontos'
+import { fecharPontos, formatarPontos, lerPontos, limparPontos } from '../../logica/entradaPontos'
+import { PROPS_TECLADO_COM_SINAL } from '../componentes/CampoUma'
 import ListaResultado from '../componentes/ListaResultado'
 import RegrasPontuacaoRegistro from '../componentes/RegrasPontuacaoRegistro'
 import { assentosDaMesa } from '../hooks/useClube'
@@ -182,23 +183,11 @@ export default function RegistrarFinalizada({
               >
                 {nome ?? t('match.setup.assign')}
               </button>
-              <div className="fin-campo fin-campo--sinal">
-                {/* ± sem tirar o foco: o teclado continua aberto. */}
-                <button
-                  type="button"
-                  className="fin-sinal"
-                  aria-label={t('match.manual.toggleSign', { name: nome ?? lugar + 1 })}
-                  tabIndex={-1}
-                  onPointerDown={(evento) => evento.preventDefault()}
-                  onClick={() => mudarPontos(lugar, inverterSinal(pontos[lugar]))}
-                >
-                  ±
-                </button>
+              <div className="fin-campo">
                 <input
                   className={`cfg-entrada${pontos[lugar].startsWith('-') ? ' fin-negativo' : ''}`}
-                  // Teclado do telefone: no Android traz a tecla "-".
-                  type="text"
-                  inputMode="tel"
+                  // Teclado com a tecla "-" (no Android, o de telefone).
+                  {...PROPS_TECLADO_COM_SINAL}
                   aria-label={rotulo}
                   autoComplete="off"
                   value={focado === lugar ? pontos[lugar] : formatarPontos(pontos[lugar], idioma)}

@@ -887,6 +887,7 @@
     "startPoints": "Starting points",
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
+    "okaOffValue": "オカなしでは返し点は配給原点（{{points}}）と同じなので、返し点の欄はありません。1位にボーナスを付けるには「オカあり」を選び、返し点を入力してください。",
     "uma": "Uma (in thousands of points)",
     "calcRules": "計算ルール",
     "ruleKuitan": "喰いタン",

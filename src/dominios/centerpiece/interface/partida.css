@@ -1374,40 +1374,7 @@ body:has(.ptd-modulo) {
   }
 }
 
-/* Pontos do Registrar partida finalizada: ± dentro do campo, à esquerda. */
-.fin-campo--sinal {
-  position: relative;
-}
-
-.fin-campo--sinal input {
-  padding-left: 40px;
-}
-
-.fin-sinal {
-  position: absolute;
-  top: 50%;
-  left: 4px;
-  display: inline-flex;
-  width: 32px;
-  height: 32px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 6px;
-  color: var(--texto-apoio);
-  background: transparent;
-  font: inherit;
-  font-size: 1.125rem;
-  font-weight: 800;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-
-.fin-sinal:hover,
-.fin-sinal:focus-visible {
-  color: var(--primario);
-}
-
+/* Pontos do Registrar partida finalizada: negativos em vermelho. */
 .fin-campo input.fin-negativo {
   color: var(--texto-erro);
 }

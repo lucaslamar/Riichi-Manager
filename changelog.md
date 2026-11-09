@@ -41,7 +41,8 @@
 
 ### Corrigido
 
-- **Pontos negativos no Registrar partida finalizada**: o campo abre o teclado de telefone (com a tecla "-" no Android) e ganhou um ± à esquerda que inverte o sinal sem fechar o teclado, até com o campo vazio. Fora de foco, o número aparece com separador de milhar, e os negativos ficam em vermelho.
+- **Pontos negativos pelo teclado**: em todo campo de pontuação (Registrar partida finalizada, uma fixa e tabela de uma flutuante), o Android abre o teclado de telefone, que tem a tecla "-". No Registrar partida, fora de foco o número aparece com separador de milhar e os negativos ficam em vermelho.
+- **Sem oka explicado na tela**: com Sem oka, aparece por que não tem campo de retorno (o retorno é igual aos pontos de partida) e como ligar o oka.
 - **Leitor de QR no Android**: abre direto na câmera traseira principal, sem passar pelas outras lentes (grande-angular, tele, macro), lê 10 vezes por segundo no quadrado do meio, pede foco contínuo e vibra a cada QR lido. Com a câmera bloqueada, mostra como liberar e o botão Tentar de novo.
 - **Par de vento duplo no tutorial de Han e Fu**: dizia +4 fu, mas na regra padrão do app o par que é o seu vento e o da rodada vale +2. Agora o vento de valor é um tópico só (+2) e o caso duplo vem embaixo dele: +2 na regra padrão e +4 com a regra Par de vento duplo ligada.
 - **Calculadora de Mão lenta com mão inválida**: ao completar 14 pedras que não fecham uma mão, Mudar batida e Finalizar mão demoravam segundos para aparecer. Agora aparecem na hora, e Mudar batida numa mão inválida também responde na hora.

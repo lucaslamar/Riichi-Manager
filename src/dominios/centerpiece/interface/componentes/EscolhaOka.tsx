@@ -33,7 +33,11 @@ export default function EscolhaOka({
           { valor: 'sem', rotulo: t('tableConfig.okaWithout') },
         ]}
       />
-      {oka > 0 && <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.okaValue', { points: numero(oka) })}</p>}
+      {oka > 0 ? (
+        <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.okaValue', { points: numero(oka) })}</p>
+      ) : (
+        <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.okaOffValue', { points: numero(pontosPartida) })}</p>
+      )}
     </div>
   )
 }

@@ -908,6 +908,7 @@
     "startPoints": "Starting points",
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
+    "okaOffValue": "Be oka grąžinimas lygus pradiniams taškams ({{points}}), todėl grąžinimo laukelio nėra. Norėdami premijos 1-ai vietai, pasirinkite Su oka ir nurodykite grąžinimą.",
     "uma": "Uma (in thousands of points)",
     "calcRules": "Skaičiavimo taisyklės",
     "ruleKuitan": "Kuitan",

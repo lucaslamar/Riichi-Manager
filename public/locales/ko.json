@@ -887,6 +887,7 @@
     "startPoints": "Starting points",
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
+    "okaOffValue": "오카가 없으면 반환점은 시작 점수({{points}})와 같아서 반환점 칸이 없습니다. 1위 보너스를 주려면 오카 있음을 고르고 반환점을 입력하세요.",
     "uma": "Uma (in thousands of points)",
     "calcRules": "계산 규칙",
     "ruleKuitan": "쿠이탄",

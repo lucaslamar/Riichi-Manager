@@ -25,15 +25,17 @@ const CHAVE_LINHA: Record<LinhaUmaFlutuante, string> = {
 }
 
 /**
- * Teclado nativo de campo que aceita negativo. No Android, só `type="number"`
- * pede ao teclado (Gboard, Samsung…) a tecla de menos: `inputMode` numeric ou
- * decimal abre o teclado sem ela. No iPhone, `numeric` sem `pattern` abre o de
- * números e pontuação, que tem o menos. No computador, texto com teclado decimal.
+ * Teclado nativo de campo que aceita negativo, em todo campo de pontuação. No
+ * Android, `inputMode="tel"` abre o teclado numérico do sistema com a tecla "-"
+ * (numeric, decimal e `type="number"` do Samsung não têm). No iPhone, `numeric`
+ * sem `pattern` abre o de números e pontuação, que tem o menos. No computador,
+ * texto com teclado decimal. No React Native: "numbers-and-punctuation" no iOS e
+ * "numeric" no Android.
  */
 export const PROPS_TECLADO_COM_SINAL = ehIos()
   ? ({ type: 'text', inputMode: 'numeric' } as const)
   : /Android/i.test(navigator.userAgent)
-    ? ({ type: 'number', step: 'any' } as const)
+    ? ({ type: 'text', inputMode: 'tel' } as const)
     : ({ type: 'text', inputMode: 'decimal' } as const)
 
 /** Número com texto próprio: dá para apagar tudo ou começar pelo sinal de menos. */
