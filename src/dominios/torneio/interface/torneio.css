@@ -825,3 +825,16 @@
   opacity: 0.4;
   cursor: default;
 }
+
+/* Seta de enviar da Lista: só com o teclado aberto, no lugar do Sortear. */
+.trn-rodape-icones .clb-enviar {
+  display: none;
+  border-radius: 50%;
+  background: var(--primario);
+  color: var(--cor-sobre-primario, #fff);
+  font-size: 1.05rem;
+}
+
+body.teclado-aberto .trn-rodape-icones .clb-enviar {
+  display: inline-flex;
+}

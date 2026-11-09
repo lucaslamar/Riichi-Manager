@@ -163,6 +163,15 @@ export default function PaginaListaTorneio({
             <button
               type="button"
               className="cm-btn-icone"
+              aria-label={t('tournament.list.memory')}
+              title={t('tournament.list.memory')}
+              onClick={() => setMemoria(true)}
+            >
+              <i className="fas fa-sd-card" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="cm-btn-icone"
               aria-label={t('tournament.import.menu')}
               title={t('tournament.import.menu')}
               onClick={() => setImportando(true)}
@@ -307,11 +316,12 @@ export default function PaginaListaTorneio({
           <button
             type="button"
             className="trn-adicionar-cadastro"
-            aria-label={t('tournament.list.memory')}
-            title={t('tournament.list.memory')}
-            onClick={() => setMemoria(true)}
+            aria-label={t('tournament.list.clear')}
+            title={t('tournament.list.clear')}
+            disabled={!lista.trim()}
+            onClick={() => setLimpando(true)}
           >
-            <i className="fas fa-sd-card" aria-hidden="true" />
+            <i className="fas fa-trash" aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -322,15 +332,16 @@ export default function PaginaListaTorneio({
           >
             <i className="fas fa-address-book" aria-hidden="true" />
           </button>
+          {/* Com o teclado aberto o Sortear some: a seta, como a de enviar do WhatsApp, sorteia. */}
           <button
             type="button"
-            className="trn-adicionar-cadastro"
-            aria-label={t('tournament.list.clear')}
-            title={t('tournament.list.clear')}
-            disabled={!lista.trim()}
-            onClick={() => setLimpando(true)}
+            className="trn-adicionar-cadastro clb-enviar"
+            aria-label={t('tournament.list.draw')}
+            title={t('tournament.list.draw')}
+            disabled={!podeSortear}
+            onClick={sortear}
           >
-            <i className="fas fa-trash" aria-hidden="true" />
+            <i className="fas fa-paper-plane" aria-hidden="true" />
           </button>
         </span>
         </div>

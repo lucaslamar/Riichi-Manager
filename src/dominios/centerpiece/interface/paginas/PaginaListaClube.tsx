@@ -263,6 +263,7 @@ export default function PaginaListaClube({
       </ul>
 
       <div className="ptd-rodape-fixo clb-rodape">
+        <div className="clb-rodape-linha">
         <p id="clb-contagem" className="clb-contagem" aria-live="polite">
           {/* Ícones no lugar das palavras; o leitor de tela ouve "12 jogadores, 3 mesas". */}
           <span className="clb-contadores">
@@ -286,6 +287,18 @@ export default function PaginaListaClube({
             </span>
           )}
         </p>
+        {/* Com o teclado aberto o Sortear some: a seta, como a de enviar do WhatsApp, sorteia. */}
+        <button
+          type="button"
+          className="clb-enviar"
+          aria-label={t('match.club.draw')}
+          title={t('match.club.draw')}
+          disabled={!contagem.podeSortear}
+          onClick={iniciarSorteio}
+        >
+          <i className="fas fa-paper-plane" aria-hidden="true" />
+        </button>
+        </div>
         <button
           type="button"
           className="btn-primario ptd-btn-largo clb-sortear"

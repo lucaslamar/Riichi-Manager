@@ -252,6 +252,43 @@ body.teclado-aberto .clb-sortear {
   display: none;
 }
 
+/* Seta de enviar (como a do WhatsApp): só com o teclado aberto, no lugar do Sortear. */
+.clb-rodape-linha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clb-rodape-linha > .clb-contagem {
+  flex: 1;
+  min-width: 0;
+}
+
+.clb-enviar {
+  display: none;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: var(--primario);
+  color: var(--cor-sobre-primario, #fff);
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.clb-enviar:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+body.teclado-aberto .clb-enviar {
+  display: inline-flex;
+}
+
 /* Aviso acima do rodapé fixo, sem cobrir os botões. */
 .clb-aviso {
   bottom: calc(var(--altura-barra-inferior, 0px) + 150px);
