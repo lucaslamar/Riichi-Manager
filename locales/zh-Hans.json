@@ -887,6 +887,7 @@
     "startPoints": "Starting points",
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
+    "okaOffValue": "没有 Oka 时，返点等于起始点数（{{points}}），所以没有返点栏。要给第 1 名奖励，请选择“有 Oka”并填写返点。",
     "uma": "Uma (in thousands of points)",
     "calcRules": "计算规则",
     "ruleKuitan": "食断",

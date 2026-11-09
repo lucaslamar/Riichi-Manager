@@ -891,6 +891,7 @@
     "startPoints": "Starting points",
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
+    "okaOffValue": "Without oka, the return equals the starting points ({{points}}), so there is no return field. To give the 1st place bonus, choose With oka and set the return.",
     "uma": "Uma (in thousands of points)",
     "calcRules": "Calculation rules",
     "ruleKuitan": "Kuitan",

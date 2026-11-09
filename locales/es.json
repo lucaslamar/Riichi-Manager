@@ -898,6 +898,7 @@
     "startPoints": "Starting points",
     "returnPoints": "Return points",
     "okaValue": "Oka: {{points}} points to 1st place",
+    "okaOffValue": "Sin oka, el retorno es igual a los puntos iniciales ({{points}}), por eso no hay campo de retorno. Para dar el premio al 1.º, elige Con oka e indica el retorno.",
     "uma": "Uma (in thousands of points)",
     "calcRules": "Reglas de cálculo",
     "ruleKuitan": "Kuitan",
