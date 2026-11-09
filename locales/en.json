@@ -176,7 +176,7 @@
     "eastReceives": "East receives",
     "othersReceive": "Others receive",
     "chomboPenaltyRule": "Chombo penalty: {{limit}}",
-    "gearIcon": "gear",
+    "gearIcon": "sliders",
     "yakuHeading": "Yaku",
     "hanFuSummary": "{{han}} Han {{fu}} Fu",
     "hanCount": {
@@ -447,7 +447,7 @@
       "counter": "Counter of extra rounds. It goes up when the dealer wins or when the round ends in a draw.",
       "points": "Each honba adds 300 points to the winner. On tsumo, each player pays 100. On ron, the discarder pays 300.",
       "basengoTitle": "Basengo (big honba)",
-      "basengo": "At some tables, each honba is worth 1,500 points instead of 300. On tsumo, each player pays 500 per honba. To use it, turn on Basengo in Scoring rules, under the gear icon ([[engrenagem]]) of the Hand Calculator."
+      "basengo": "At some tables, each honba is worth 1,500 points instead of 300. On tsumo, each player pays 500 per honba. To use it, turn on Basengo in Scoring rules, under the sliders icon ([[engrenagem]]) of the Hand Calculator."
     },
     "dora": {
       "title": "Which tile is the Dora?",
@@ -456,9 +456,9 @@
       "indicators": "Select the dora indicators. The indicator is not the dora. It determines which tile counts as dora.",
       "uraDora": "The tile under each dora indicator in the dead wall. It works as one more dora indicator, but is only revealed to whoever wins after declaring Riichi.",
       "akaTitle": "Aka dora",
-      "aka": "The red fives count as dora, 1 han each. To use them, turn on Aka dora in Scoring rules, under the gear icon ([[engrenagem]]) of the Hand Calculator.",
+      "aka": "The red fives count as dora, 1 han each. To use them, turn on Aka dora in Scoring rules, under the sliders icon ([[engrenagem]]) of the Hand Calculator.",
       "flamingTitle": "Flaming dora",
-      "flaming": "When the dora indicator is a red 5, each dora from that indicator is worth 2 han. To use it, turn on Aka dora and Flaming dora in Scoring rules, under the gear icon ([[engrenagem]]) of the Hand Calculator.",
+      "flaming": "When the dora indicator is a red 5, each dora from that indicator is worth 2 han. To use it, turn on Aka dora and Flaming dora in Scoring rules, under the sliders icon ([[engrenagem]]) of the Hand Calculator.",
       "curiosityTitle": "Fun fact",
       "curiosity": "In Riichi Mahjong, the word dora (ドラ) is short for “dragon”, which in Japanese is pronounced doragon (ドラゴン).",
       "dragonPrince": "That's why they say whoever never gives up their dora is a prince (or princess) of dragons."

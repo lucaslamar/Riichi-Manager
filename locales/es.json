@@ -178,7 +178,7 @@
     "eastReceives": "Este recibe",
     "othersReceive": "Los demás reciben",
     "chomboPenaltyRule": "Multa de chombo: {{limit}}",
-    "gearIcon": "engranaje",
+    "gearIcon": "controles",
     "yakuHeading": "Yaku",
     "hanFuSummary": "{{han}} Han {{fu}} Fu",
     "hanCount": {
@@ -453,7 +453,7 @@
       "counter": "Contador de rondas extra. Aumenta cuando el oya gana o cuando la ronda termina en empate.",
       "points": "Cada honba agrega 300 puntos al ganador. En tsumo, cada jugador paga 100. En ron, quien descartó paga 300.",
       "basengoTitle": "Basengo (gran honba)",
-      "basengo": "En algunas mesas, cada honba vale 1.500 puntos en lugar de 300. En tsumo, cada jugador paga 500 por honba. Para usarlo, activa Basengo en Reglas de cálculo, en el ícono de engranaje ([[engrenagem]]) de la Calculadora de Mano."
+      "basengo": "En algunas mesas, cada honba vale 1.500 puntos en lugar de 300. En tsumo, cada jugador paga 500 por honba. Para usarlo, activa Basengo en Reglas de cálculo, en el ícono de controles ([[engrenagem]]) de la Calculadora de Mano."
     },
     "dora": {
       "title": "¿Cuál es la Dora?",
@@ -462,9 +462,9 @@
       "indicators": "Selecciona los indicadores de dora. El indicador no es la dora. Determina qué ficha se contará como dora.",
       "uraDora": "La ficha que está debajo de cada indicador de dora en el muro muerto. Funciona como un indicador de dora más, pero solo se revela a quien gana después de declarar Riichi.",
       "akaTitle": "Aka dora",
-      "aka": "Los cincos rojos cuentan como dora, 1 han cada uno. Para usarlos, activa Aka dora en Reglas de cálculo, en el ícono de engranaje ([[engrenagem]]) de la Calculadora de Mano.",
+      "aka": "Los cincos rojos cuentan como dora, 1 han cada uno. Para usarlos, activa Aka dora en Reglas de cálculo, en el ícono de controles ([[engrenagem]]) de la Calculadora de Mano.",
       "flamingTitle": "Dora llameante",
-      "flaming": "Cuando el indicador de dora es un 5 rojo, cada dora de ese indicador vale 2 han. Para usarla, activa Aka dora y Dora llameante en Reglas de cálculo, en el ícono de engranaje ([[engrenagem]]) de la Calculadora de Mano.",
+      "flaming": "Cuando el indicador de dora es un 5 rojo, cada dora de ese indicador vale 2 han. Para usarla, activa Aka dora y Dora llameante en Reglas de cálculo, en el ícono de controles ([[engrenagem]]) de la Calculadora de Mano.",
       "curiosityTitle": "Curiosidad",
       "curiosity": "En el Riichi Mahjong, la palabra dora (ドラ) es una abreviatura de “dragon”, dragón en inglés, que en japonés se pronuncia doragon (ドラゴン).",
       "dragonPrince": "Por eso dicen que quien nunca abandona sus doras es príncipe (o princesa) de los dragones."
