@@ -67,9 +67,15 @@ async function abrirCamera(): Promise<MediaStream> {
     }
   }
   const fluxo = await pedir({ facingMode: 'environment' })
-  // Primeira vez: confere se o sistema deu a lente principal. Se não, troca uma vez só.
+  // Primeira vez: a traseira que o sistema deu fica. Só se ela for uma lente
+  // secundária (grande-angular, tele, macro...) olha a lista e troca uma vez só.
   try {
-    const atual = fluxo.getVideoTracks()[0]?.getSettings().deviceId
+    const faixa = fluxo.getVideoTracks()[0]
+    const atual = faixa?.getSettings().deviceId
+    if (!LENTE_SECUNDARIA.test(faixa?.label ?? '')) {
+      if (atual) salvarCamera(atual)
+      return fluxo
+    }
     const dispositivos = await navigator.mediaDevices.enumerateDevices()
     const principal = cameraPrincipal(dispositivos.filter((item) => item.kind === 'videoinput'))
     if (principal && principal !== atual) {
