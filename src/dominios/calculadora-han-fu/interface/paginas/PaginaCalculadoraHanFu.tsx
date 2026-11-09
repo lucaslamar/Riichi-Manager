@@ -75,7 +75,7 @@ export default function PaginaCalculadoraHanFu({
   return (
     <main className="calculadora-han-fu">
       {/* Engrenagem no cabeçalho do app (aberta pelo Centerpiece, a tela é da mesa). */}
-      {!aoUsarResultado && <TituloTela acoes={<BotaoConfiguracoes />} />}
+      {!aoUsarResultado && <TituloTela titulo={t('menu.quickCalculatorShort')} acoes={<BotaoConfiguracoes />} />}
       <section className="painel-principal-han-fu">
         {!aoUsarResultado && (
           <div className="seletores-topo-han-fu">

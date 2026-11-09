@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import ModalRegras from '../modais/regras/ModalRegras'
@@ -49,6 +50,7 @@ export default function PaginaCalculadoraMao({
    * em responsivo.css (o iPad mini tem 744px). Nessa faixa menor, a altura
    * mínima deixa de fora o celular deitado.
    */
+  const { t } = useI18n()
   const telaGrande = useMediaQuery('(min-width: 768px), (min-width: 640px) and (min-height: 600px)')
 
   const calculadora = useCalculadoraMao(
@@ -132,7 +134,7 @@ export default function PaginaCalculadoraMao({
   return (
     <div>
       {/* Engrenagem do app no cabeçalho, ao lado da marca (aberta pelo Centerpiece, a tela é da mesa). */}
-      {visivel && !contextoCenterpiece && <TituloTela acoes={<BotaoConfiguracoes />} />}
+      {visivel && !contextoCenterpiece && <TituloTela titulo={t('menu.handCalculator')} acoes={<BotaoConfiguracoes />} />}
       <ModoCompletoCalculadora
         estado={calculadora}
         cabecalho={contextoCenterpiece ? null : <BarraCalculadora modo="completo" />}

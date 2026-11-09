@@ -88,9 +88,8 @@ export default function PaginaSorteadorVentos({
         if (evento.currentTarget.contains(evento.target as Node)) tocar()
       }}
     >
-      <h2 className="sr-only">{t('windDraw.title')}</h2>
       {/* Engrenagem no cabeçalho do app (portal: o toque nela não sorteia). */}
-      <TituloTela acoes={<BotaoConfiguracoes />} />
+      <TituloTela titulo={t('menu.windDraw')} acoes={<BotaoConfiguracoes />} />
 
       {/* "?" no canto: explica por que o sorteio é justo. */}
       <button

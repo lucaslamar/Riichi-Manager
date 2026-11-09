@@ -342,7 +342,7 @@ function TelasCenterpiece({
 
   return (
     <section className="ptd-inicio">
-      <TituloTela titulo={t('menu.matches')} acoes={<BotaoConfiguracoes />} />
+      <TituloTela titulo={t('menu.matchesShort')} acoes={<BotaoConfiguracoes />} />
       <div className="ptd-cards">
         {cards.map((card) => (
           <button
