@@ -695,6 +695,8 @@
 /* Engrenagem das Configurações: no canto direito, depois da tela cheia se houver. */
 .botao-configuracoes-tela {
   margin-left: auto;
+  /* Na cor de destaque do app, como o chapéu e os controles da Calculadora. */
+  color: var(--primario);
 }
 
 .botao-tela-cheia + .botao-configuracoes-tela {
