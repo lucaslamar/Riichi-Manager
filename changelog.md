@@ -38,6 +38,7 @@
 - **"?" no Fu do Resultado**: abre o tutorial "Como contar Han e Fu" por cima do resultado.
 - **Menu do Mais fecha com o deslize**: com o menu aberto, arrastar o dedo para o lado fecha. Para a esquerda, o menu acompanha o dedo.
 - **Barra acompanha a tela ao deslizar**: chegando deslizando no Sorteador, no Tutorial ou nas Configurações, a barra troca para essas abas, com a atual marcada. O Mais fica no fim das duas e continua abrindo o menu com todas as telas.
+- **Lista do torneio sem o menu ⋮**: Importar torneio fica ao lado da engrenagem, no topo, e Listas salvas, Jogadores cadastrados e Limpar lista ficam lado a lado no rodapé.
 
 ### Corrigido
 

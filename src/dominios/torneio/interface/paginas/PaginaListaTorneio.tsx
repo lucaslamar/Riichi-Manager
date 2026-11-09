@@ -57,7 +57,6 @@ export default function PaginaListaTorneio({
 
   const [linhaAtual, setLinhaAtual] = useState<number | null>(null)
   const [memoria, setMemoria] = useState(false)
-  const [menu, setMenu] = useState(false)
   const [cadastrados, setCadastrados] = useState(false)
   const [limpando, setLimpando] = useState(false)
   const [importando, setImportando] = useState(false)
@@ -162,20 +161,20 @@ export default function PaginaListaTorneio({
             <button
               type="button"
               className="cm-btn-icone"
+              aria-label={t('tournament.import.menu')}
+              title={t('tournament.import.menu')}
+              onClick={() => setImportando(true)}
+            >
+              <i className="fas fa-file-import" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="cm-btn-icone"
               aria-label={t('tournament.list.settings')}
               title={t('tournament.list.settings')}
               onClick={() => setConfigurando(true)}
             >
               <i className="fas fa-gear" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('tournament.list.more')}
-              title={t('tournament.list.more')}
-              onClick={() => setMenu(true)}
-            >
-              <i className="fas fa-ellipsis-vertical" aria-hidden="true" />
             </button>
           </span>
         }
@@ -302,15 +301,36 @@ export default function PaginaListaTorneio({
             <TextoStatus status={analise.status} jogadores={analise.jogadores} mesas={analise.mesas} />
           )}
         </p>
-        <button
-          type="button"
-          className="trn-adicionar-cadastro"
-          aria-label={t('tournament.list.import')}
-          title={t('tournament.list.import')}
-          onClick={() => setCadastrados(true)}
-        >
-          <i className="fas fa-address-book" aria-hidden="true" />
-        </button>
+        <span className="trn-rodape-icones">
+          <button
+            type="button"
+            className="trn-adicionar-cadastro"
+            aria-label={t('tournament.list.memory')}
+            title={t('tournament.list.memory')}
+            onClick={() => setMemoria(true)}
+          >
+            <i className="fas fa-sd-card" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="trn-adicionar-cadastro"
+            aria-label={t('tournament.list.import')}
+            title={t('tournament.list.import')}
+            onClick={() => setCadastrados(true)}
+          >
+            <i className="fas fa-address-book" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="trn-adicionar-cadastro"
+            aria-label={t('tournament.list.clear')}
+            title={t('tournament.list.clear')}
+            disabled={!lista.trim()}
+            onClick={() => setLimpando(true)}
+          >
+            <i className="fas fa-trash" aria-hidden="true" />
+          </button>
+        </span>
         </div>
         <button
           type="button"
@@ -326,56 +346,6 @@ export default function PaginaListaTorneio({
         <p className="ptd-aviso clb-aviso" role="status">
           {aviso}
         </p>
-      )}
-
-      {menu && (
-        <Modal
-          titulo={t('tournament.list.title')}
-          aoFechar={() => setMenu(false)}
-          rotuloFechar={t('actions.close')}
-          tamanho="pequena"
-        >
-          <ul className="trn-menu">
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  setMenu(false)
-                  setMemoria(true)
-                }}
-              >
-                <i className="fas fa-sd-card" aria-hidden="true" />
-                <span>{t('tournament.list.memory')}</span>
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={() => {
-                  setMenu(false)
-                  setImportando(true)
-                }}
-              >
-                <i className="fas fa-file-import" aria-hidden="true" />
-                <span>{t('tournament.import.menu')}</span>
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                className="trn-menu--perigo"
-                disabled={!lista.trim()}
-                onClick={() => {
-                  setMenu(false)
-                  setLimpando(true)
-                }}
-              >
-                <i className="fas fa-trash" aria-hidden="true" />
-                <span>{t('tournament.list.clear')}</span>
-              </button>
-            </li>
-          </ul>
-        </Modal>
       )}
 
       {memoria && (

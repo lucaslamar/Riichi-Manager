@@ -817,3 +817,15 @@
   color: var(--texto-apoio);
   font-size: 1.125rem;
 }
+
+/* Rodapé da Lista: Listas salvas, Jogadores cadastrados e Limpar lista. */
+.trn-rodape-icones {
+  display: inline-flex;
+  flex: none;
+  gap: 4px;
+}
+
+.trn-adicionar-cadastro:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
