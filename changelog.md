@@ -32,9 +32,14 @@
 - **Números do MPSZ ainda sem naipe** em rosa no tema escuro e em amarelo no claro (antes, azul).
 - **Tutorial de Han e Fu na calculadora sem o botão Ver na Tabela rápida**: a tabela está logo atrás, basta fechar o tutorial. Aberto pelo Tutorial do app, o botão continua.
 - **Partida na barra e Mais com menu lateral**: a barra passou a ser Calculadora, Han e Fu, Centerpiece, Partida e Mais. O Mais agora abre um menu lateral com todas as telas, com o nome completo e a tela atual marcada, em vez de trocar a barra por uma segunda página. Quando a tela aberta está só no menu (Sorteador, Tutorial, Ajustes), o Mais ganha um ponto. O deslizar entre telas segue a mesma ordem.
+- **Guia de bolso, tipos de kan**: o verbete Kan explica o kan aberto, o adicionado (que pode ser roubado no Chankan) e o fechado, que não abre a mão e depois do Riichi só vale se não mudar a espera.
+- **Guia de bolso, Kuikae**: verbete próprio em Chamadas, com o que não pode ser descartado depois de um Chi ou de um Pon.
+- **Resultado com os ventos de quem paga**: "Leste paga", "Demais pagam" e "Todos pagam" ganharam as pedras dos ventos de cada um. No chombo, o mesmo para quem recebe.
+- **"?" no Fu do Resultado**: abre o tutorial "Como contar Han e Fu" por cima do resultado.
 
 ### Corrigido
 
+- **Par de vento duplo no tutorial de Han e Fu**: dizia +4 fu, mas na regra padrão do app o par que é o seu vento e o da rodada vale +2. Agora o vento de valor é um tópico só (+2) e o caso duplo vem embaixo dele: +2 na regra padrão e +4 com a regra Par de vento duplo ligada.
 - **Calculadora de Mão lenta com mão inválida**: ao completar 14 pedras que não fecham uma mão, Mudar batida e Finalizar mão demoravam segundos para aparecer. Agora aparecem na hora, e Mudar batida numa mão inválida também responde na hora.
 - **Busca dos Jogadores cadastrados presa no topo**: no Torneio e no Encontro do clube, o campo de busca não some quando a lista rola.
 
