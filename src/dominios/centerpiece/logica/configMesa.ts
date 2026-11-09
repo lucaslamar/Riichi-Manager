@@ -209,20 +209,19 @@ export function retornoComOka(pontosPartida: number, comOka: boolean) {
 }
 
 /**
- * Só a Pontuação vale como foi escolhida: o resto (Regras, Empates, Regras de
- * cálculo e Mesa) vem do padrão do conjunto. O Torneio usa ao abrir uma partida,
- * enquanto essas abas ficam fora das Configurações do torneio.
+ * Só o placar vale como foi escolhido (pontos de partida, retorno e uma): o resto
+ * (palitos que sobram, chombo, Regras, Empates, Regras de cálculo e Mesa) vem do
+ * padrão do conjunto. O Torneio usa ao abrir uma partida, enquanto isso fica fora
+ * das Configurações do torneio.
  */
 export function configSoPontuacao(config: ConfigMesa): ConfigMesa {
-  const { pontosPartida, pontosRetorno, uma, palitosRestantes, chombo } = config
+  const { pontosPartida, pontosRetorno, uma } = config
   return {
     ...configDoPreset(config.presetBase),
     preset: config.preset,
     pontosPartida,
     pontosRetorno,
     uma: structuredClone(uma),
-    palitosRestantes,
-    chombo: { ...chombo },
   }
 }
 

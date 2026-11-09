@@ -276,6 +276,8 @@ teste('torneio: só a Pontuação vale, o resto vem do padrão do conjunto', () 
     pontosRetorno: 30000,
     tobi: false,
     timerVez: 90,
+    palitosRestantes: 'perdidos',
+    chombo: { tipo: 'yakumanReverso' },
     abortivos: { kyuushuKyuuhai: false, quatroVentos: false, quatroKans: false, quatroRiichis: false },
   })
   const usada = configSoPontuacao(mexida)
@@ -284,6 +286,8 @@ teste('torneio: só a Pontuação vale, o resto vem do padrão do conjunto', () 
   assert.equal(usada.pontosRetorno, 30000)
   assert.deepEqual(usada.uma, mexida.uma)
   assert.equal(usada.tobi, padrao.tobi)
+  assert.equal(usada.palitosRestantes, padrao.palitosRestantes)
+  assert.deepEqual(usada.chombo, padrao.chombo)
   assert.equal(usada.timerVez, padrao.timerVez)
   assert.deepEqual(usada.abortivos, padrao.abortivos)
   assert.deepEqual(usada.regrasCalculo, padrao.regrasCalculo)

@@ -76,6 +76,11 @@ interface PropsConfigMesaSheet {
    */
   secoes?: readonly IdSecaoMesa[]
   /**
+   * Só o placar final (Torneio, sem Centerpiece nas mesas): sem Palitos de Riichi
+   * que sobram e sem Chombo, que só valem com a partida jogada no app.
+   */
+  soPlacar?: boolean
+  /**
    * Abas depois das de mesa, que valem na hora e por isso escondem o rodapé
    * (o Torneio põe a "Ajustes do app").
    */
@@ -97,6 +102,7 @@ export default function ConfigMesaSheet({
   rodapeSalvar = false,
   podeConcluir = true,
   secoes = SECOES.map(({ id }) => id),
+  soPlacar = false,
   abasFim = [],
 }: PropsConfigMesaSheet) {
   const { t } = useI18n()
@@ -239,6 +245,8 @@ export default function ConfigMesaSheet({
         />
       </Buscavel>
 
+      {!soPlacar && (
+      <>
       <Grupo
         termos={t('tableConfig.leftoverHelp')}
         rotulo={t('tableConfig.leftoverSticks')}
@@ -287,6 +295,8 @@ export default function ConfigMesaSheet({
             aoMudar={(valor) => alterar({ chombo: { tipo: 'fixo', valor } })}
           />
         </Campo>
+      )}
+      </>
       )}
 
       </section>

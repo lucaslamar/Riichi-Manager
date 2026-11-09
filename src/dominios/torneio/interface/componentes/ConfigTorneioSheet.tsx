@@ -206,6 +206,7 @@ export default function ConfigTorneioSheet({
       rodapeSalvar
       // Só Torneio e Pontuação: o resto usa o padrão até haver login e Centerpiece.
       secoes={['pontuacao']}
+      soPlacar
       podeConcluir={cortesValidos && temporadaValida}
       abasExtras={[
         {
