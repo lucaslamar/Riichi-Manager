@@ -14,7 +14,15 @@ export async function gerarQr(texto: string): Promise<string> {
 
 export interface LeitorQr {
   parar: () => void
+  /**
+   * Foca no ponto tocado (x e y de 0 a 1 na imagem), quando a câmera aceita.
+   * Depois de um instante volta ao foco contínuo. Sem suporte, não faz nada.
+   */
+  focar: (x: number, y: number) => void
 }
+
+/** Lado da mira em relação ao menor lado da imagem: é o recorte que o leitor lê. */
+export const PROPORCAO_MIRA = 0.7
 
 /** Câmera sem permissão: a tela mostra o aviso com "Tentar de novo". */
 export class PermissaoCameraNegada extends Error {}
@@ -23,8 +31,10 @@ type DetectorNativo = { detect: (fonte: CanvasImageSource) => Promise<{ rawValue
 
 /** 10 quadros por segundo. */
 const INTERVALO_MS = 100
-/** Recorte quadrado no meio da imagem, com 70% do menor lado. */
-const PROPORCAO_RECORTE = 0.7
+/** Recorte quadrado no meio da imagem, com 70% do menor lado (o mesmo da mira na tela). */
+const PROPORCAO_RECORTE = PROPORCAO_MIRA
+/** Tempo no foco do toque antes de voltar ao contínuo. */
+const TEMPO_FOCO_TOQUE_MS = 2500
 const CHAVE_CAMERA = 'riichi-manager-camera-qr'
 /** Lentes que não servem para ler QR de perto (sem foco ou com zoom). */
 const LENTE_SECUNDARIA = /wide|ultra|tele|macro|depth|0[.,]5/i
@@ -159,11 +169,31 @@ export async function lerQrDaCamera(video: HTMLVideoElement, aoLer: (texto: stri
   }
   void quadro()
 
+  let voltarContinuo = 0
   return {
     parar: () => {
       ativo = false
+      window.clearTimeout(voltarContinuo)
       fluxo.getTracks().forEach((item) => item.stop())
       video.srcObject = null
+    },
+    focar: (x, y) => {
+      if (!faixa) return
+      const capacidades = (faixa.getCapabilities?.() ?? {}) as { focusMode?: string[] }
+      const modos = capacidades.focusMode ?? []
+      const pedido = {
+        pointsOfInterest: [{ x, y }],
+        ...(modos.includes('single-shot') ? { focusMode: 'single-shot' } : {}),
+      } as MediaTrackConstraintSet
+      faixa.applyConstraints({ advanced: [pedido] }).catch(() => undefined)
+      window.clearTimeout(voltarContinuo)
+      if (modos.includes('continuous')) {
+        voltarContinuo = window.setTimeout(() => {
+          faixa
+            .applyConstraints({ advanced: [{ focusMode: 'continuous' } as MediaTrackConstraintSet] })
+            .catch(() => undefined)
+        }, TEMPO_FOCO_TOQUE_MS)
+      }
     },
   }
 }

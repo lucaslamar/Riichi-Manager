@@ -697,13 +697,109 @@
   gap: 16px;
 }
 
+/* Câmera quadrada: o quadro visível é o quadrado do meio da imagem, então a mira
+   (70% dele) mostra exatamente o recorte que o leitor lê. */
+.trn-camera-moldura {
+  position: relative;
+  width: min(100%, 50dvh);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--fundo);
+  touch-action: manipulation;
+}
+
 .trn-camera {
   display: block;
   width: 100%;
-  max-height: 50dvh;
-  border-radius: 12px;
-  background: var(--fundo);
+  height: 100%;
   object-fit: cover;
+}
+
+/* Mira: escurece fora dela e marca os quatro cantos. */
+.trn-camera-mira {
+  position: absolute;
+  border-radius: 12px;
+  box-shadow: 0 0 0 100vmax rgb(0 0 0 / 45%);
+  pointer-events: none;
+  transition: box-shadow 0.2s;
+}
+
+.trn-camera-canto {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 4px solid #fff;
+  transition: border-color 0.2s;
+}
+
+.trn-camera-canto--1 {
+  top: -2px;
+  left: -2px;
+  border-right: 0;
+  border-bottom: 0;
+  border-top-left-radius: 12px;
+}
+
+.trn-camera-canto--2 {
+  top: -2px;
+  right: -2px;
+  border-bottom: 0;
+  border-left: 0;
+  border-top-right-radius: 12px;
+}
+
+.trn-camera-canto--3 {
+  bottom: -2px;
+  left: -2px;
+  border-top: 0;
+  border-right: 0;
+  border-bottom-left-radius: 12px;
+}
+
+.trn-camera-canto--4 {
+  right: -2px;
+  bottom: -2px;
+  border-top: 0;
+  border-left: 0;
+  border-bottom-right-radius: 12px;
+}
+
+/* QR lido: os cantos piscam em verde. */
+.trn-camera-mira--lida .trn-camera-canto {
+  border-color: var(--texto-positivo, #4ade80);
+}
+
+/* Anel onde o dedo tocou para focar. */
+.trn-camera-foco {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: trn-camera-foco 0.8s ease-out forwards;
+}
+
+@keyframes trn-camera-foco {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trn-camera-foco {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 .trn-codigo {

@@ -1702,6 +1702,7 @@
       "pasteHelp": "The code copied on the other device",
       "pastePlaceholder": "Paste the code here",
       "read": "Read code",
+      "cameraAim": "Fit the QR inside the square: only what is inside it is read. The corners flash green for each QR read. If the image is blurry, tap it to focus.",
       "cameraSequence": "The other device shows several QRs, one after another, in a loop. Keep the camera pointed at them: each QR read adds to the counter, in any order, and any it misses come back on the next loop. When all of them are read, the import continues on its own.",
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",

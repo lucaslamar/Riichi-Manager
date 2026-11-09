@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { lerArquivoTexto } from '@/compartilhado/adaptadores/arquivo'
-import { lerQrDaCamera, PermissaoCameraNegada, type LeitorQr } from '@/compartilhado/adaptadores/qr'
+import { lerQrDaCamera, PermissaoCameraNegada, PROPORCAO_MIRA, type LeitorQr } from '@/compartilhado/adaptadores/qr'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
@@ -160,6 +160,11 @@ function LeitorCamera({ aoLer }: { aoLer: (validacao: Validacao) => void }) {
   const [tentativa, setTentativa] = useState(0)
   const leituraRef = useRef<LeituraQr | null>(null)
   const ligada = useRef(false)
+  const leitorRef = useRef<LeitorQr | null>(null)
+  /** Muda a cada QR novo lido: a mira pisca em verde. */
+  const [lidoAgora, setLidoAgora] = useState(0)
+  /** Onde o dedo tocou para focar (em %), para o anel aparecer ali. */
+  const [toque, setToque] = useState<{ x: number; y: number; chave: number } | null>(null)
   const aoLerRef = useRef(aoLer)
   useEffect(() => {
     aoLerRef.current = aoLer
@@ -181,6 +186,7 @@ function LeitorCamera({ aoLer }: { aoLer: (validacao: Validacao) => void }) {
       if (antes && antes.total === proxima.total && quantos(antes) === quantos(proxima)) return
       leituraRef.current = proxima
       setLeitura(proxima)
+      setLidoAgora((atual) => atual + 1)
       try {
         navigator.vibrate?.(50)
       } catch {
@@ -196,7 +202,10 @@ function LeitorCamera({ aoLer }: { aoLer: (validacao: Validacao) => void }) {
     })
       .then((aberto) => {
         if (terminado) aberto.parar()
-        else leitor = aberto
+        else {
+          leitor = aberto
+          leitorRef.current = aberto
+        }
       })
       .catch((falha) => {
         ligada.current = false
@@ -205,14 +214,59 @@ function LeitorCamera({ aoLer }: { aoLer: (validacao: Validacao) => void }) {
     return () => {
       terminado = true
       ligada.current = false
+      leitorRef.current = null
       leitor?.parar()
     }
   }, [tentativa])
 
+  // A mira volta ao normal pouco depois de piscar em verde.
+  useEffect(() => {
+    if (!lidoAgora) return
+    const tempo = window.setTimeout(() => setLidoAgora(0), 700)
+    return () => window.clearTimeout(tempo)
+  }, [lidoAgora])
+
+  /** Toque na imagem: foca ali (com object-fit cover, o quadro visível é o quadrado do meio). */
+  const focar = (evento: React.PointerEvent<HTMLDivElement>) => {
+    const caixa = evento.currentTarget.getBoundingClientRect()
+    const x = (evento.clientX - caixa.left) / caixa.width
+    const y = (evento.clientY - caixa.top) / caixa.height
+    const elemento = video.current
+    if (elemento && elemento.videoWidth > 0) {
+      // Do quadrado visível para a imagem inteira da câmera.
+      const lado = Math.min(elemento.videoWidth, elemento.videoHeight)
+      const xImagem = ((elemento.videoWidth - lado) / 2 + x * lado) / elemento.videoWidth
+      const yImagem = ((elemento.videoHeight - lado) / 2 + y * lado) / elemento.videoHeight
+      leitorRef.current?.focar(xImagem, yImagem)
+    }
+    setToque({ x: x * 100, y: y * 100, chave: Date.now() })
+  }
+
   const lidos = leitura ? Object.keys(leitura.pedacos).length : 0
   return (
     <div className="trn-qr">
-      <video ref={video} className="trn-camera" muted playsInline aria-label={t('tournament.import.camera')} />
+      {/* Quadrado da câmera com a mira: só o que está dentro dela é lido. Tocar foca ali. */}
+      <div className="trn-camera-moldura" onPointerDown={focar}>
+        <video ref={video} className="trn-camera" muted playsInline aria-label={t('tournament.import.camera')} />
+        <span
+          className={`trn-camera-mira${lidoAgora ? ' trn-camera-mira--lida' : ''}`}
+          style={{ inset: `${((1 - PROPORCAO_MIRA) / 2) * 100}%` }}
+          aria-hidden="true"
+        >
+          <span className="trn-camera-canto trn-camera-canto--1" />
+          <span className="trn-camera-canto trn-camera-canto--2" />
+          <span className="trn-camera-canto trn-camera-canto--3" />
+          <span className="trn-camera-canto trn-camera-canto--4" />
+        </span>
+        {toque && (
+          <span
+            key={toque.chave}
+            className="trn-camera-foco"
+            style={{ left: `${toque.x}%`, top: `${toque.y}%` }}
+            aria-hidden="true"
+          />
+        )}
+      </div>
       {erro ? (
         <>
           <p className="cfg-ajuda trn-negativo" role="alert">
@@ -237,6 +291,7 @@ function LeitorCamera({ aoLer }: { aoLer: (validacao: Validacao) => void }) {
               : t('tournament.import.cameraWaiting')}
           </p>
           {/* Como a sequência funciona: em loop, em qualquer ordem, até o contador fechar. */}
+          <p className="cfg-ajuda">{t('tournament.import.cameraAim')}</p>
           <p className="cfg-ajuda">{t('tournament.import.cameraSequence')}</p>
         </>
       )}
