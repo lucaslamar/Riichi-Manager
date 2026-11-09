@@ -293,18 +293,22 @@ for (const total of [8, 12, 16]) {
     vento: (vento) => vento,
     nome: (id) => id.toUpperCase(),
     ventos: false,
-    resultado: (colocacao, final) => `${colocacao}º ${final}`,
+    colocacao: (colocacao) => `${colocacao}º`,
+    pontos: (final) => String(final),
   })
   const primeira = relatorio.blocos[0]
-  assert.equal(primeira.detalhe, 'finalizada')
+  assert.equal(primeira.detalhe, '✅ finalizada')
+  assert.ok(primeira.tabela, 'mesa com resultado vira tabela')
   assert.deepEqual(
-    primeira.linhas.map((linha) => linha.direita?.slice(0, 2)),
+    primeira.linhas.map((linha) => linha.esquerda.slice(0, 2)),
     ['1º', '2º', '3º', '4º'],
     'ordem de colocação',
   )
   const textoExportado = textoDoRelatorio(relatorio)
-  assert.ok(textoExportado.startsWith('*Torneio*\n_Rodada 1_\n\n*Mesa 1* · finalizada\n'), textoExportado.slice(0, 80))
-  assert.ok(textoExportado.includes(' — 1º '), 'resultado depois do nome')
+  assert.ok(textoExportado.startsWith('*Torneio*\n_Rodada 1_\n\n*Mesa 1* · ✅ finalizada\n```\n1º '), textoExportado.slice(0, 80))
+  // Colunas alinhadas: os pontos terminam na mesma coluna em todas as linhas.
+  const linhasTabela = textoExportado.split('```')[1].trim().split('\n')
+  assert.equal(new Set(linhasTabela.map((linha) => linha.length)).size, 1, 'tabela alinhada')
   assert.equal(nomeDeArquivo('Torneio 09/11', 'Rodada 1'), 'torneio-09-11-rodada-1')
 
   // Sem Centerpiece: a mesa sem resultado fica "Em andamento" quando o timer da rodada começa.
@@ -330,9 +334,16 @@ for (const total of [8, 12, 16]) {
   assert.deepEqual(comFase.map((linha) => linha.fase), [1, 1, 1, 1, 0, 0, 0, 0], 'Eliminatório: fase atingida')
   assert.ok(textoDoRanking(comFase, { titulo: 'T', nome: (id) => id, pontos: String, fase: (fase) => `F${fase}` }).includes(' · F1'))
   const classificacao = textoDoRelatorio(
-    relatorioDoRanking(ranking, { titulo: 'T', nome: (id) => id, valores: (linha) => String(linha.pontos) }),
+    relatorioDoRanking(ranking, {
+      titulo: 'T',
+      nome: (id) => id,
+      colunas: ['#  Jogador', 'Pts', 'PJ'],
+      valores: (linha) => [String(linha.pontos), String(linha.partidas)],
+      pontos: String,
+    }),
   )
   assert.ok(classificacao.split('\n')[2].startsWith('*🥇 '), 'pódio com medalha e negrito')
+  assert.ok(classificacao.includes('```\n#  Jogador'), 'tabela com cabeçalho')
   console.log('Ranking ok.')
 }
 

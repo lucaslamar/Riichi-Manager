@@ -21,7 +21,7 @@
 - **Idioma nos Ajustes**: o Idioma virou o primeiro cartão dos ajustes, antes do Tema.
 - **Seta de enviar nas listas**: com o teclado aberto, a lista do Torneio e a do Encontro do clube ganham uma seta deitada no roxo do app (sem círculo), como a de enviar do WhatsApp, que sorteia as mesas sem precisar fechar o teclado.
 - **Engrenagem no Sorteador**: abre os Ajustes do app, como nas outras telas.
-- **Exportar a rodada e a classificação do torneio**: no fim das Mesas e do Ranking, a área Exportar manda o resultado para o grupo. "Texto" sai pronto para o WhatsApp, com negrito, as mesas da rodada e, nas que já acabaram, os jogadores na ordem de colocação com os pontos. "Imagem" gera um PNG nas cores do tema. No Ranking, o PDF também fica ali. Os botões de compartilhar e de PDF saíram do topo dessas telas.
+- **Compartilhar a rodada e a classificação do torneio**: nas Mesas e no Ranking, o ícone Compartilhar no topo abre as opções. "Texto" sai pronto para o WhatsApp: título em negrito, cada mesa com o status e, nas que já acabaram, uma tabela alinhada com a colocação e os pontos. No Ranking, o pódio com medalhas e a tabela inteira com pontos, média e partidas. "Imagem" gera um PNG nas cores do tema. Nas Mesas, Exportar ou transferir o torneio também fica ali (saiu do menu ⋮). No Ranking, o PDF fica ali e Encerrar torneio virou um ícone no topo.
 
 ### Alterado
 
@@ -53,6 +53,7 @@
 - **Título da tela no cabeçalho, no roxo do app**: Calculadora de Mão (também no MPSZ), Han e Fu, Partida e Sorteador de Ventos mostram o nome ao lado da marca. Os títulos de todas as telas passaram do branco para o roxo do app.
 - **Engrenagem alinhada na Lista do torneio**: fica na mesma linha que Listas salvas, Importar e os controles deslizantes.
 - **Mesas do torneio "Em andamento" com o timer**: sem o Centerpiece nas mesas, elas ficavam em "Não iniciada" até o resultado ser registrado. Agora, ao iniciar o timer da rodada (ou o da mesa), as mesas sem resultado passam a "Em andamento", também no Exportar.
+- **Timer da rodada mais compacto**: o próprio anel inicia e pausa (o ícone no meio mostra o que o toque faz), e o +5 min virou um botão redondo ao lado. A faixa do timer ficou bem mais baixa.
 
 ### Corrigido
 

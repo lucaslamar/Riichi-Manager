@@ -1444,13 +1444,15 @@
   },
   "tournament": {
     "share": {
-      "title": "Exportar",
-      "roundHelp": "As mesas desta rodada e os resultados, para mandar no grupo.",
-      "rankingHelp": "A classificação do torneio, para mandar no grupo.",
+      "title": "Compartilhar",
       "text": "Texto",
       "image": "Imagem",
       "imageSaved": "Imagem salva.",
-      "imageError": "Não deu para gerar a imagem."
+      "imageError": "Não deu para gerar a imagem.",
+      "textHelp": "Pronto para colar no grupo, com negrito e tabela",
+      "imageHelp": "Um PNG com as cores do app",
+      "pdfHelp": "A tabela completa para imprimir ou guardar",
+      "transferHelp": "O torneio inteiro para outro aparelho (arquivo, QR ou código)"
     },
     "title": "Torneio",
     "create": "Criar torneio",
@@ -1663,6 +1665,7 @@
       "title": "Ranking do torneio",
       "points": "Pontos",
       "averagePlace": "Média de colocação",
+      "pointsShort": "Pts",
       "averagePlaceShort": "Méd.",
       "games": "Partidas jogadas",
       "gamesShort": "PJ",

@@ -1,4 +1,4 @@
-import type { Relatorio } from './relatorio'
+import { colunasDaDireita, type Relatorio } from './relatorio'
 
 const LARGURA = 1080
 const MARGEM = 56
@@ -60,7 +60,9 @@ export async function imagemDoRelatorio(relatorio: Relatorio, rodape: string): P
   const alturaTopo = 72 + (relatorio.subtitulo ? 44 : 0) + 24
   const alturaBloco = (bloco: Relatorio['blocos'][number]) =>
     RESPIRO_CARTAO * 2 + (bloco.titulo ? ALTURA_TITULO_BLOCO : 0) + bloco.linhas.length * ALTURA_LINHA
-  const alturaBlocos = relatorio.blocos.reduce((soma, bloco) => soma + alturaBloco(bloco) + ESPACO_BLOCOS, 0)
+  // Blocos só do texto (ex.: o pódio) não entram na imagem.
+  const blocosDaImagem = relatorio.blocos.filter((bloco) => bloco.so !== 'texto')
+  const alturaBlocos = blocosDaImagem.reduce((soma, bloco) => soma + alturaBloco(bloco) + ESPACO_BLOCOS, 0)
   const altura = MARGEM + alturaTopo + alturaBlocos + 56 + MARGEM
 
   const tela = document.createElement('canvas')
@@ -87,7 +89,7 @@ export async function imagemDoRelatorio(relatorio: Relatorio, rodape: string): P
   }
   y += 24
 
-  for (const bloco of relatorio.blocos) {
+  for (const bloco of blocosDaImagem) {
     const alturaCartao = alturaBloco(bloco)
     retanguloArredondado(contexto, MARGEM, y, larguraUtil, alturaCartao, 24)
     contexto.fillStyle = cores.cartao
@@ -122,8 +124,9 @@ export async function imagemDoRelatorio(relatorio: Relatorio, rodape: string): P
       contexto.font = `800 32px ${fonte}`
       contexto.fillStyle =
         linha.tom === 'positivo' ? cores.positivo : linha.tom === 'negativo' ? cores.negativo : cores.texto
-      const larguraDireita = linha.direita ? contexto.measureText(linha.direita).width + 24 : 0
-      if (linha.direita) contexto.fillText(linha.direita, xDireita, meio)
+      const direita = colunasDaDireita(linha).join('   ')
+      const larguraDireita = direita ? contexto.measureText(direita).width + 24 : 0
+      if (direita) contexto.fillText(direita, xDireita, meio)
       contexto.textAlign = 'left'
       contexto.fillStyle = cores.texto
       contexto.font = `${linha.destaque ? 800 : 600} 32px ${fonte}`

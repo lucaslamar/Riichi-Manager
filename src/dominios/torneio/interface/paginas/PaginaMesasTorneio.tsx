@@ -36,7 +36,7 @@ import {
 import { abortarTorneio, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
 import FolhaExportar from '../componentes/FolhaExportar'
-import AreaExportar from '../componentes/AreaExportar'
+import FolhaCompartilhar from '../componentes/FolhaCompartilhar'
 import { nomeDeArquivo } from '@/compartilhado/relatorio/relatorio'
 import { relatorioDaRodada } from '../../logica/relatorios'
 import { useTorneios } from '../hooks/useTorneios'
@@ -83,6 +83,7 @@ export default function PaginaMesasTorneio({
   const [abortando, setAbortando] = useState(false)
   const [exportando, setExportando] = useState(false)
   const [menu, setMenu] = useState(false)
+  const [compartilhando, setCompartilhando] = useState(false)
   const [reiniciando, setReiniciando] = useState(false)
   /** Rodada cujo lembrete de backup já foi dispensado. */
   const [lembreteDispensado, setLembreteDispensado] = useState<number>()
@@ -122,7 +123,7 @@ export default function PaginaMesasTorneio({
   /** Ventos na mesa: o card mostra só os quatro nomes. */
   const comVentos = sorteiaVentos(torneio)
 
-  /** Mesas e resultados desta rodada, para a área Exportar. */
+  /** Mesas e resultados desta rodada, para o Compartilhar. */
   const relatorio = () =>
     relatorioDaRodada(torneio, rodada, partidas, {
       titulo: torneio.nome,
@@ -133,8 +134,9 @@ export default function PaginaMesasTorneio({
       vento: (vento) => t(CHAVE_VENTO[vento]),
       nome: nomeDe,
       ventos: comVentos,
-      resultado: (colocacao, final) =>
-        `${t('tournament.tables.place', { place: colocacao })} · ${final > 0 ? '+' : ''}${new Intl.NumberFormat(idioma, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(final)}`,
+      colocacao: (colocacao) => t('tournament.tables.place', { place: colocacao }),
+      pontos: (final) =>
+        `${final > 0 ? '+' : ''}${new Intl.NumberFormat(idioma, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(final)}`,
     })
 
   const fechada = rodadaFechada(torneio, partidas) && rodada.numero === torneio.rodadas.length
@@ -155,6 +157,16 @@ export default function PaginaMesasTorneio({
               onClick={aoAbrirRanking}
             >
               <i className="fas fa-ranking-star" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('tournament.share.title')}
+              title={t('tournament.share.title')}
+              aria-haspopup="dialog"
+              onClick={() => setCompartilhando(true)}
+            >
+              <i className="fas fa-share-nodes" aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -209,38 +221,41 @@ export default function PaginaMesasTorneio({
 
       {torneio.status !== 'finalizado' && (
         <div className="trn-timer-geral">
-          <AnelTimer
-            segundos={segundosRestantes(relogioGeral, agora)}
-            fracao={fracaoRestante(relogioGeral, agora)}
-            esgotado={acabou(relogioGeral, agora)}
-            className="trn-anel"
+          {/* O anel inteiro inicia e pausa (o ícone no meio mostra o que o toque faz). */}
+          <button
+            type="button"
+            className="trn-anel-botao"
+            disabled={somenteLeitura || acabou(relogioGeral, agora)}
+            aria-label={t(estaRodando(relogioGeral) ? 'tournament.tables.pause' : 'tournament.tables.start')}
+            onClick={() =>
+              salvarRelogioRodada(
+                estaRodando(relogioGeral) ? pausar(relogioGeral, Date.now()) : iniciar(relogioGeral, Date.now()),
+              )
+            }
           >
-            <span aria-hidden="true">{formatarRelogio(segundosRestantes(relogioGeral, agora))}</span>
-          </AnelTimer>
-          <div className="trn-timer-acoes">
-            <button
-              type="button"
-              className="btn-contorno"
-              disabled={somenteLeitura || acabou(relogioGeral, agora)}
-              onClick={() =>
-                salvarRelogioRodada(
-                  estaRodando(relogioGeral) ? pausar(relogioGeral, Date.now()) : iniciar(relogioGeral, Date.now()),
-                )
-              }
+            <AnelTimer
+              segundos={segundosRestantes(relogioGeral, agora)}
+              fracao={fracaoRestante(relogioGeral, agora)}
+              esgotado={acabou(relogioGeral, agora)}
+              className="trn-anel"
             >
-              <i className={`fas ${estaRodando(relogioGeral) ? 'fa-pause' : 'fa-play'}`} aria-hidden="true" />{' '}
-              {t(estaRodando(relogioGeral) ? 'tournament.tables.pause' : 'tournament.tables.start')}
-            </button>
-            <button
-              type="button"
-              className="btn-contorno"
-              disabled={somenteLeitura}
-              aria-label={t('tournament.tables.addTimeAll')}
-              onClick={() => salvarRelogioRodada(acrescentar(relogioGeral, ACRESCIMO_SEGUNDOS))}
-            >
-              +5 min
-            </button>
-          </div>
+              <span className="trn-anel-conteudo" aria-hidden="true">
+                <span>{formatarRelogio(segundosRestantes(relogioGeral, agora))}</span>
+                <i className={`fas ${estaRodando(relogioGeral) ? 'fa-pause' : 'fa-play'}`} />
+              </span>
+            </AnelTimer>
+          </button>
+          <button
+            type="button"
+            className="trn-mais-tempo"
+            disabled={somenteLeitura}
+            aria-label={t('tournament.tables.addTimeAll')}
+            title={t('tournament.tables.addTimeAll')}
+            onClick={() => salvarRelogioRodada(acrescentar(relogioGeral, ACRESCIMO_SEGUNDOS))}
+          >
+            +5
+            <small>min</small>
+          </button>
           {acabou(relogioGeral, agora) && <p className="trn-tempo-acabou">{t('tournament.tables.timeUp')}</p>}
         </div>
       )}
@@ -384,15 +399,6 @@ export default function PaginaMesasTorneio({
         </button>
       )}
 
-      <AreaExportar
-        ajuda={t('tournament.share.roundHelp')}
-        relatorio={relatorio}
-        nomeArquivo={nomeDeArquivo(torneio.nome, t('tournament.tables.round', { round: rodada.numero }))}
-        aoAvisar={mostrar}
-      />
-
-
-
       {aviso && (
         <p className="ptd-aviso" role="status">
           {aviso}
@@ -430,18 +436,6 @@ export default function PaginaMesasTorneio({
               </button>
             </li>
           )}
-          <li>
-              <button
-                type="button"
-                onClick={() => {
-                  setMenu(false)
-                  setExportando(true)
-                }}
-              >
-                <i className="fas fa-file-export" aria-hidden="true" />
-                <span>{t('tournament.export.button')}</span>
-              </button>
-            </li>
           {torneio.status === 'em_andamento' && !somenteLeitura && (
             <li>
               <button
@@ -473,6 +467,27 @@ export default function PaginaMesasTorneio({
             setAbaRodada(1)
             setReiniciando(false)
           }}
+        />
+      )}
+
+      {/* Compartilhar: a rodada em texto ou imagem, e Exportar ou transferir o torneio. */}
+      {compartilhando && (
+        <FolhaCompartilhar
+          relatorio={relatorio}
+          nomeArquivo={nomeDeArquivo(torneio.nome, t('tournament.tables.round', { round: rodada.numero }))}
+          aoAvisar={mostrar}
+          aoFechar={() => setCompartilhando(false)}
+          extras={[
+            {
+              icone: 'fa-file-export',
+              rotulo: t('tournament.export.button'),
+              ajuda: t('tournament.share.transferHelp'),
+              aoTocar: () => {
+                setCompartilhando(false)
+                setExportando(true)
+              },
+            },
+          ]}
         />
       )}
 

@@ -479,14 +479,79 @@
   cursor: default;
 }
 
-.trn-timer-acoes {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* O anel é o botão: tocar inicia ou pausa. O ícone no meio diz o que o toque faz. */
+.trn-anel-botao {
+  display: inline-flex;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }
 
-.trn-timer-acoes > button {
-  min-height: 44px;
+.trn-anel-botao .trn-anel {
+  cursor: pointer;
+}
+
+.trn-anel-botao:disabled,
+.trn-anel-botao:disabled .trn-anel {
+  cursor: default;
+}
+
+.trn-anel-botao:focus-visible {
+  outline: 3px solid var(--primario);
+  outline-offset: 3px;
+}
+
+.trn-anel-conteudo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  line-height: 1;
+}
+
+.trn-anel-conteudo > i {
+  color: var(--primario);
+  font-size: 0.875rem;
+}
+
+.trn-anel-botao:disabled .trn-anel-conteudo > i {
+  opacity: 0.4;
+}
+
+/* +5 min: redondo e menor, ao lado do anel. */
+.trn-mais-tempo {
+  display: inline-flex;
+  width: 56px;
+  height: 56px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--linha-divisoria);
+  border-radius: 50%;
+  padding: 0;
+  background: var(--branco);
+  color: var(--primario);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.trn-mais-tempo small {
+  color: var(--texto-apoio);
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.trn-mais-tempo:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .trn-tempo-acabou {
@@ -892,10 +957,6 @@
     font-size: 0.875rem;
   }
 
-  .trn-timer-acoes {
-    flex-direction: row;
-  }
-
   /* Assentos em 2 × 2 e quantas mesas couberem na largura: mais mesas na altura curta. */
   .trn-mesas .clb-mesas {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -939,43 +1000,18 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   display: inline-flex;
 }
 
-/* ─── Área Exportar (Mesas e Ranking) ─────────────────────────────────────── */
-.trn-exportar {
+/* Folha Compartilhar: cada opção com uma linha de ajuda embaixo. */
+.trn-compartilhar button > span {
   display: grid;
-  gap: 8px;
-  margin-top: 16px;
-  border: 1px solid var(--linha-divisoria);
-  border-radius: var(--raio, 12px);
-  padding: 14px 16px 16px;
-  background: var(--branco);
+  gap: 2px;
+  padding-block: 10px;
 }
 
-.trn-exportar__titulo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  color: var(--primario);
-  font-size: 1rem;
-  font-weight: 800;
+.trn-compartilhar button small {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
 }
 
-.trn-exportar .cfg-ajuda {
-  margin: 0;
-}
-
-.trn-exportar__botoes {
-  display: grid;
-  grid-auto-columns: minmax(0, 1fr);
-  grid-auto-flow: column;
-  gap: 8px;
-}
-
-.trn-exportar__botoes > button {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-width: 0;
+.trn-compartilhar .fa-whatsapp {
+  color: #25d366;
 }
