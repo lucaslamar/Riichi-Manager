@@ -1444,6 +1444,7 @@
       "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
+      "toggleSign": "Pakeisti {{name}} taškų ženklą",
       "preview": "Result",
       "save": "Record game",
       "noHands": "Game recorded with the result only, no hands."
@@ -1772,7 +1773,9 @@
       "keepBoth": "Keep both",
       "suffix": "(imported)",
       "confirm": "Import",
-      "done": "Tournament imported."
+      "done": "Tournament imported.",
+      "cameraDenied": "The camera is blocked for this site. Allow the camera in the browser permissions and tap Try again.",
+      "cameraRetry": "Try again"
     },
     "diagnosis": {
       "title": "Grid diagnosis",

@@ -1407,6 +1407,7 @@
       "players": "Jogadores e pontos",
       "choosePlayer": "Escolher jogador {{number}}",
       "points": "Pontos de {{name}}",
+      "toggleSign": "Inverter o sinal dos pontos de {{name}}",
       "preview": "Resultado",
       "save": "Registrar partida",
       "noHands": "Partida registrada só com o resultado, sem as mãos."
@@ -1721,7 +1722,9 @@
       "keepBoth": "Manter os dois",
       "suffix": "(importado)",
       "confirm": "Importar",
-      "done": "Torneio importado."
+      "done": "Torneio importado.",
+      "cameraDenied": "A câmera está bloqueada para este site. Libere a câmera nas permissões do navegador e toque em Tentar de novo.",
+      "cameraRetry": "Tentar de novo"
     },
     "diagnosis": {
       "title": "Diagnóstico da Grade",
