@@ -42,12 +42,43 @@ export default function Cabecalho({
   const [maisAberto, setMaisAberto] = useState(false)
   const botaoMaisRef = useRef<HTMLButtonElement | null>(null)
   const menuRef = useRef<HTMLElement | null>(null)
+  // Deslize de fechar: onde o dedo começou e quanto o menu já acompanhou.
+  const toqueRef = useRef<{ x: number; y: number; horizontal: boolean | null } | null>(null)
+  const [arrasto, setArrasto] = useState(0)
 
   const escolher = (destino: DestinoNavegacao) => {
     setMaisAberto(false)
     if (destino === 'idioma') aoAbrirIdioma()
     else if (destino === 'aprender') aoAbrirAprender()
     else aoNavegar(destino)
+  }
+
+  /**
+   * Arrastar o dedo para o lado (direita ou esquerda) fecha o menu. Para a esquerda
+   * o menu acompanha o dedo, como uma gaveta, e um gesto vertical só rola a lista.
+   */
+  const aoTocar = (evento: React.TouchEvent) => {
+    const toque = evento.touches[0]
+    toqueRef.current = { x: toque.clientX, y: toque.clientY, horizontal: null }
+  }
+  const aoMoverToque = (evento: React.TouchEvent) => {
+    const inicio = toqueRef.current
+    if (!inicio) return
+    const toque = evento.touches[0]
+    const dx = toque.clientX - inicio.x
+    const dy = toque.clientY - inicio.y
+    if (inicio.horizontal === null && Math.hypot(dx, dy) > 10) {
+      inicio.horizontal = Math.abs(dx) > Math.abs(dy)
+    }
+    if (inicio.horizontal) setArrasto(Math.min(0, dx))
+  }
+  const aoSoltarToque = (evento: React.TouchEvent) => {
+    const inicio = toqueRef.current
+    toqueRef.current = null
+    setArrasto(0)
+    if (!inicio?.horizontal) return
+    const dx = evento.changedTouches[0].clientX - inicio.x
+    if (Math.abs(dx) > 50) setMaisAberto(false)
   }
 
   // Menu aberto: Esc fecha, o foco vai para a tela marcada e volta ao Mais ao fechar.
@@ -144,11 +175,25 @@ export default function Cabecalho({
       <div
         className="menu-mais-fundo"
         role="presentation"
+        onTouchStart={aoTocar}
+        onTouchMove={aoMoverToque}
+        onTouchEnd={aoSoltarToque}
+        onTouchCancel={() => {
+          toqueRef.current = null
+          setArrasto(0)
+        }}
         onClick={(evento) => {
           if (evento.target === evento.currentTarget) setMaisAberto(false)
         }}
       >
-        <nav ref={menuRef} className="menu-mais" role="dialog" aria-modal="true" aria-label={t('global.navigation')}>
+        <nav
+          ref={menuRef}
+          className={`menu-mais${arrasto ? ' arrastando' : ''}`}
+          style={arrasto ? { transform: `translateX(${arrasto}px)` } : undefined}
+          role="dialog"
+          aria-modal="true"
+          aria-label={t('global.navigation')}
+        >
           <div className="menu-mais__topo">
             <MarcaAplicacao />
             <button

@@ -701,6 +701,11 @@
   animation: menu-mais-entra 0.2s ease-out;
 }
 
+/* Acompanhando o dedo no deslize de fechar: sem animação de entrada. */
+.menu-mais.arrastando {
+  animation: none;
+}
+
 .menu-mais__topo {
   display: flex;
   align-items: center;

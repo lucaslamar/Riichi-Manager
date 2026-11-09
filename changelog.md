@@ -36,6 +36,7 @@
 - **Guia de bolso, Kuikae**: verbete próprio em Chamadas, com o que não pode ser descartado depois de um Chi ou de um Pon.
 - **Resultado com os ventos de quem paga**: "Leste paga", "Demais pagam" e "Todos pagam" ganharam as pedras dos ventos de cada um. No chombo, o mesmo para quem recebe.
 - **"?" no Fu do Resultado**: abre o tutorial "Como contar Han e Fu" por cima do resultado.
+- **Menu do Mais fecha com o deslize**: com o menu aberto, arrastar o dedo para o lado fecha. Para a esquerda, o menu acompanha o dedo.
 
 ### Corrigido
 
