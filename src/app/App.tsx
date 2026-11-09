@@ -75,7 +75,7 @@ export default function App() {
   const indiceTela = ORDEM_TELAS.indexOf(tela)
   const telaAnterior = indiceTela > 0 ? ORDEM_TELAS[indiceTela - 1] : undefined
   const proximaTela =
-    indiceTela >= 0 ? (ORDEM_TELAS[indiceTela + 1] ?? ('idioma' as const)) : undefined
+    indiceTela >= 0 ? (ORDEM_TELAS[indiceTela + 1] ?? ORDEM_TELAS[0]) : undefined
 
   // Deslizar até o Aprender abre o guia por cima, e até o Idioma abre a folha
   // por cima. Ao fechar, a pessoa volta para a tela de onde deslizou.

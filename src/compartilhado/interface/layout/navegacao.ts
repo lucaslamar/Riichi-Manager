@@ -1,8 +1,8 @@
 /**
- * Ordem da navegação: uma lista só, usada pela barra inferior, pela sidebar e
- * pelos gestos de deslizar. 'aprender' é o guia, que abre por cima da tela, e
- * 'idioma' é uma folha: fica na barra, mas não é tela. Nos gestos ela é a parada
- * entre a última tela e a primeira (o App fecha o carrossel por ela).
+ * Ordem da navegação: as páginas da barra inferior, que também são a ordem dos
+ * gestos de deslizar (da última volta para a primeira). 'aprender' é o guia, que
+ * abre por cima da tela. Idioma e os ajustes do app ficam na engrenagem de cada
+ * tela; a tela Ajustes (com o Sobre e o Instalar) fica só no menu lateral.
  */
 import type { TelaPrincipal } from '@/app/App'
 
@@ -28,15 +28,17 @@ export const PAGINAS_NAVEGACAO: readonly (readonly ItemNavegacao[])[] = [
   [
     { destino: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice', chaveCurta: 'menu.windDrawShort' },
     { destino: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
-    { destino: 'regras', chave: 'menu.rules', icone: 'fa-gear', chaveCurta: 'menu.rulesShort' },
-    { destino: 'idioma', chave: 'menu.language', icone: 'fa-globe' },
   ],
 ]
 
-export const ITENS_NAVEGACAO: readonly ItemNavegacao[] = PAGINAS_NAVEGACAO.flat()
+/** Menu lateral (Mais e sidebar): as telas da barra e, no fim, a tela Ajustes. */
+export const ITENS_NAVEGACAO: readonly ItemNavegacao[] = [
+  ...PAGINAS_NAVEGACAO.flat(),
+  { destino: 'regras', chave: 'menu.rules', icone: 'fa-gear', chaveCurta: 'menu.rulesShort' },
+]
 
-/** Ordem do carrossel de telas ao deslizar. */
-export const ORDEM_TELAS: readonly DestinoTela[] = ITENS_NAVEGACAO.flatMap(({ destino }) =>
+/** Ordem do carrossel de telas ao deslizar: só as telas da barra. */
+export const ORDEM_TELAS: readonly DestinoTela[] = PAGINAS_NAVEGACAO.flat().flatMap(({ destino }) =>
   destino === 'idioma' ? [] : [destino],
 )
 
