@@ -135,3 +135,25 @@ teste('Personalizado lembra os últimos valores', () => {
 })
 
 console.log(`Regras de registro: ${testes} testes passaram.`)
+
+// Campo de pontos: negativos pelo teclado e pelo ±, "-" pendente e soma com negativos.
+{
+  const { limparPontos, inverterSinal, lerPontos, fecharPontos, formatarPontos } = await import(
+    '../src/dominios/centerpiece/logica/entradaPontos'
+  )
+  assert.equal(limparPontos('-900'), '-900')
+  assert.equal(limparPontos('-15.000'), '-15000')
+  assert.equal(limparPontos(' 12,300 '), '12300')
+  assert.equal(limparPontos('1-2a3'), '123')
+  assert.equal(inverterSinal(''), '-')
+  assert.equal(limparPontos(`${inverterSinal('')}900`), '-900')
+  assert.equal(inverterSinal('15000'), '-15000')
+  assert.equal(inverterSinal('-15000'), '15000')
+  assert.equal(lerPontos('-'), null)
+  assert.equal(lerPontos('-900'), -900)
+  assert.equal(fecharPontos('-'), '')
+  assert.equal(formatarPontos('-12300', 'pt-BR'), '-12.300')
+  const soma = ['-900', '-15000', '58000', '57900'].map((texto) => lerPontos(texto) ?? 0).reduce((a, b) => a + b, 0)
+  assert.equal(soma, 4 * 25000)
+  console.log('Campo de pontos ok.')
+}

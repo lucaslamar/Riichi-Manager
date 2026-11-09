@@ -18,7 +18,7 @@ import {
 } from '../../logica/regrasPontuacao'
 import { umaValida } from '../../logica/uma'
 import { carregarRegrasRegistro, salvarRegrasRegistro } from '../../persistencia/repositorioRegrasRegistro'
-import { PROPS_TECLADO_COM_SINAL } from '../componentes/CampoUma'
+import { fecharPontos, formatarPontos, inverterSinal, lerPontos, limparPontos } from '../../logica/entradaPontos'
 import ListaResultado from '../componentes/ListaResultado'
 import RegrasPontuacaoRegistro from '../componentes/RegrasPontuacaoRegistro'
 import { assentosDaMesa } from '../hooks/useClube'
@@ -26,14 +26,9 @@ import { usePartidas } from '../hooks/usePartidas'
 import '../config-mesa.css'
 
 const LUGARES = [0, 1, 2, 3] as const
-const PONTOS_VALIDOS = /^-?\d+$/
-
-/**
- * Ponto e vírgula são separadores de milhar (22.300 ou 22,300): saem antes da conta.
- * Pontos de mesa são sempre inteiros, então não há casa decimal para confundir.
- */
-const semSeparadores = (texto: string) => texto.replace(/[.,]/g, '')
-const pontosValidos = (texto: string) => PONTOS_VALIDOS.test(semSeparadores(texto))
+/** Campo completo: "-" sozinho (ainda digitando) não conta. Negativos entram na soma. */
+const pontosValidos = (texto: string) => lerPontos(texto) !== null
+const semSeparadores = limparPontos
 
 /**
  * Partida jogada fora do app: regras, jogadores, pontos, uma e oka. Com `clube`,
@@ -61,7 +56,9 @@ export default function RegistrarFinalizada({
     pontosIniciais?: readonly number[]
   }
 }) {
-  const { t, numero } = useI18n()
+  const { t, numero, idioma } = useI18n()
+  /** Campo em edição: mostra o número cru. Fora de foco, com separador de milhar. */
+  const [focado, setFocado] = useState<number | null>(null)
   const { jogadores } = useJogadores()
   const { adicionar } = usePartidas()
   // Conjunto de regras: o último usado aqui (mesa do clube sempre começa no Clube).
@@ -185,20 +182,33 @@ export default function RegistrarFinalizada({
               >
                 {nome ?? t('match.setup.assign')}
               </button>
-              <div className="fin-campo">
+              <div className="fin-campo fin-campo--sinal">
+                {/* ± sem tirar o foco: o teclado continua aberto. */}
+                <button
+                  type="button"
+                  className="fin-sinal"
+                  aria-label={t('match.manual.toggleSign', { name: nome ?? lugar + 1 })}
+                  tabIndex={-1}
+                  onPointerDown={(evento) => evento.preventDefault()}
+                  onClick={() => mudarPontos(lugar, inverterSinal(pontos[lugar]))}
+                >
+                  ±
+                </button>
                 <input
-                  className="cfg-entrada"
-                  {...PROPS_TECLADO_COM_SINAL}
+                  className={`cfg-entrada${pontos[lugar].startsWith('-') ? ' fin-negativo' : ''}`}
+                  // Teclado do telefone: no Android traz a tecla "-".
+                  type="text"
+                  inputMode="tel"
                   aria-label={rotulo}
                   autoComplete="off"
-                  value={pontos[lugar]}
+                  value={focado === lugar ? pontos[lugar] : formatarPontos(pontos[lugar], idioma)}
                   placeholder={preenchidoSozinho ? numero(quanto ?? 0) : undefined}
-                  onChange={(evento) => {
-                    const texto = evento.target.value
-                    // Números, ponto e vírgula (milhar) e o menos só no começo.
-                    const limpo = `${texto.trim().startsWith('-') ? '-' : ''}${texto.replace(/[^\d.,]/g, '')}`
-                    mudarPontos(lugar, limpo)
+                  onFocus={() => setFocado(lugar)}
+                  onBlur={() => {
+                    setFocado(null)
+                    mudarPontos(lugar, fecharPontos(pontos[lugar]))
                   }}
+                  onChange={(evento) => mudarPontos(lugar, limparPontos(evento.target.value))}
                 />
               </div>
             </div>

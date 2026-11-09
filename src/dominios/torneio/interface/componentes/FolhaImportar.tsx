@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { lerArquivoTexto } from '@/compartilhado/adaptadores/arquivo'
-import { lerQrDaCamera } from '@/compartilhado/adaptadores/qr'
+import { lerQrDaCamera, PermissaoCameraNegada, type LeitorQr } from '@/compartilhado/adaptadores/qr'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
@@ -107,7 +107,7 @@ export default function FolhaImportar({
         onChange={escolherArquivo}
       />
 
-      {passo === 'camera' && <LeitorCamera aoLer={receber} aoErro={setErro} />}
+      {passo === 'camera' && <LeitorCamera aoLer={receber} />}
       {passo === 'colar' && <ColarCodigo aoLer={receber} />}
       {passo === 'resumo' && pacote && (
         <Resumo
@@ -145,64 +145,97 @@ export default function FolhaImportar({
   )
 }
 
-function LeitorCamera({
-  aoLer,
-  aoErro,
-}: {
-  aoLer: (validacao: Validacao) => void
-  aoErro: (texto: string) => void
-}) {
+type ErroCamera = 'permissao' | 'outro' | null
+
+/**
+ * Câmera traseira principal lendo a sequência de QRs. Liga uma vez só (a ref
+ * segura o StrictMode, que monta duas vezes em dev) e desliga ao sair.
+ */
+function LeitorCamera({ aoLer }: { aoLer: (validacao: Validacao) => void }) {
   const { t } = useI18n()
   const video = useRef<HTMLVideoElement | null>(null)
   const [leitura, setLeitura] = useState<LeituraQr | null>(null)
+  const [erro, setErro] = useState<ErroCamera>(null)
+  /** Muda para ligar a câmera de novo (Tentar de novo). */
+  const [tentativa, setTentativa] = useState(0)
   const leituraRef = useRef<LeituraQr | null>(null)
+  const ligada = useRef(false)
   const aoLerRef = useRef(aoLer)
-  aoLerRef.current = aoLer
+  useEffect(() => {
+    aoLerRef.current = aoLer
+  }, [aoLer])
 
   useEffect(() => {
     const elemento = video.current
-    if (!elemento) return
-    let parar: (() => void) | null = null
+    if (!elemento || ligada.current) return
+    ligada.current = true
+    let leitor: LeitorQr | null = null
     let terminado = false
     lerQrDaCamera(elemento, (texto) => {
       if (terminado) return
-      const proxima = juntarPedaco(leituraRef.current, texto)
+      const antes = leituraRef.current
+      const proxima = juntarPedaco(antes, texto)
       if (!proxima) return
+      // Pedaço que já tinha sido lido: ignora (sem vibrar de novo).
+      const quantos = (item: LeituraQr | null) => Object.keys(item?.pedacos ?? {}).length
+      if (antes && antes.total === proxima.total && quantos(antes) === quantos(proxima)) return
       leituraRef.current = proxima
       setLeitura(proxima)
+      try {
+        navigator.vibrate?.(50)
+      } catch {
+        // Sem vibração: segue.
+      }
       const codigo = leituraCompleta(proxima)
       if (codigo) {
+        // Todos lidos: para a câmera e processa uma vez só.
         terminado = true
-        parar?.()
+        leitor?.parar()
         aoLerRef.current(codigoParaPacote(codigo))
       }
     })
-      .then((leitor) => {
-        if (terminado) leitor.parar()
-        else parar = leitor.parar
+      .then((aberto) => {
+        if (terminado) aberto.parar()
+        else leitor = aberto
       })
-      .catch(() => aoErro(t('tournament.import.cameraError')))
+      .catch((falha) => {
+        ligada.current = false
+        if (!terminado) setErro(falha instanceof PermissaoCameraNegada ? 'permissao' : 'outro')
+      })
     return () => {
       terminado = true
-      parar?.()
+      ligada.current = false
+      leitor?.parar()
     }
-  }, [aoErro, t])
+  }, [tentativa])
 
   const lidos = leitura ? Object.keys(leitura.pedacos).length : 0
   return (
     <div className="trn-qr">
-      <video
-        ref={video}
-        className="trn-camera"
-        muted
-        playsInline
-        aria-label={t('tournament.import.camera')}
-      />
-      <p className="trn-qr-contador" aria-live="polite">
-        {leitura
-          ? t('tournament.import.cameraProgress', { read: lidos, total: leitura.total })
-          : t('tournament.import.cameraWaiting')}
-      </p>
+      <video ref={video} className="trn-camera" muted playsInline aria-label={t('tournament.import.camera')} />
+      {erro ? (
+        <>
+          <p className="cfg-ajuda trn-negativo" role="alert">
+            {t(erro === 'permissao' ? 'tournament.import.cameraDenied' : 'tournament.import.cameraError')}
+          </p>
+          <button
+            type="button"
+            className="btn-primario ptd-btn-largo"
+            onClick={() => {
+              setErro(null)
+              setTentativa((atual) => atual + 1)
+            }}
+          >
+            <i className="fas fa-rotate-right" aria-hidden="true" /> {t('tournament.import.cameraRetry')}
+          </button>
+        </>
+      ) : (
+        <p className="trn-qr-contador" aria-live="polite">
+          {leitura
+            ? t('tournament.import.cameraProgress', { read: lidos, total: leitura.total })
+            : t('tournament.import.cameraWaiting')}
+        </p>
+      )}
     </div>
   )
 }

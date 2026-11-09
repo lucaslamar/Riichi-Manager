@@ -165,3 +165,21 @@ assert.ok(
 assert.deepEqual(limpo.torneio.rodadas[0].relogio, pacote.torneio.rodadas[0].relogio)
 
 console.log('Exportação ok.')
+
+// Leitor de QR: escolhe a traseira principal entre as lentes de um Samsung, sem percorrer.
+{
+  const { cameraPrincipal } = await import('../src/compartilhado/adaptadores/qr')
+  const samsung = [
+    { deviceId: 'f1', label: 'camera2 1, facing front' },
+    { deviceId: 'f2', label: 'camera2 3, facing front' },
+    { deviceId: 'uw', label: 'camera2 2, facing back (ultra wide)' },
+    { deviceId: 'tele', label: 'Telephoto camera, facing back' },
+    { deviceId: 'principal', label: 'camera2 0, facing back' },
+    { deviceId: 'macro', label: 'camera2 4, facing back macro' },
+    { deviceId: 'meio', label: 'Back camera 0.5x' },
+  ]
+  assert.equal(cameraPrincipal(samsung), 'principal')
+  assert.equal(cameraPrincipal([{ deviceId: 'a', label: 'Câmera traseira' }]), 'a')
+  assert.equal(cameraPrincipal([{ deviceId: 'b', label: '' }]), null)
+  console.log('Câmera do leitor ok.')
+}
