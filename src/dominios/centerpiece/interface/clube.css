@@ -285,6 +285,13 @@ body.teclado-aberto .clb-sortear {
   cursor: default;
 }
 
+.clb-enviar-seta {
+  width: 20px;
+  height: 20px;
+  /* Um pouco à direita: o triângulo pesa à esquerda e parece fora do centro. */
+  margin-left: 2px;
+}
+
 body.teclado-aberto .clb-enviar {
   display: inline-flex;
 }

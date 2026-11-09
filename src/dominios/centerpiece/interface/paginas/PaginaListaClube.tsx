@@ -296,7 +296,10 @@ export default function PaginaListaClube({
           disabled={!contagem.podeSortear}
           onClick={iniciarSorteio}
         >
-          <i className="fas fa-paper-plane" aria-hidden="true" />
+          {/* Seta deitada, como a de enviar do WhatsApp (o avião do Font Awesome é inclinado). */}
+          <svg className="clb-enviar-seta" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 20.5 21.5 12 3 3.5v6.6L15.5 12 3 13.9z" fill="currentColor" />
+          </svg>
         </button>
         </div>
         <button
