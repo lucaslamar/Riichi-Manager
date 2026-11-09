@@ -193,7 +193,7 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
             <i className="fas fa-graduation-cap" />
           </span>
           <span className="cena-ajuda__icone">
-            <i className="fas fa-gear" />
+            <i className="fas fa-sliders" />
           </span>
         </div>
 

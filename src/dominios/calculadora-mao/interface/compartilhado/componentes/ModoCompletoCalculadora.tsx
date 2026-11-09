@@ -46,7 +46,7 @@ export default function ModoCompletoCalculadora({
   // Limpar não fica aqui: na finalização ele vai para o canto da mão (MaoAtual).
   const acoesContextuais = [
     ...(aoAbrirRegras
-      ? [{ chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-gear', aoClicar: aoAbrirRegras }]
+      ? [{ chave: 'regras', rotulo: t('actions.rules'), icone: 'fa-sliders', aoClicar: aoAbrirRegras }]
       : []),
     ...(finalizandoMao
       ? [

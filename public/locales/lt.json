@@ -183,7 +183,7 @@
     "eastReceives": "Rytai gauna",
     "othersReceive": "Kiti gauna",
     "chomboPenaltyRule": "Chombo bauda: {{limit}}",
-    "gearIcon": "krumpliaratis",
+    "gearIcon": "slankikliai",
     "yakuHeading": "Yaku",
     "hanFuSummary": "{{han}} Han {{fu}} Fu",
     "hanCount": {
@@ -444,7 +444,7 @@
       "counter": "Papildomų raundų skaitiklis. Didėja, kai laimi dalintojas arba kai raundas baigiasi lygiosiomis.",
       "points": "Kiekviena honba laimėtojui prideda 300 taškų. Tsumo atveju kiekvienas moka po 100. Ron atveju išmetęs moka 300.",
       "basengoTitle": "Basengo (didžioji honba)",
-      "basengo": "Prie kai kurių stalų kiekviena honba verta 1 500 taškų vietoj 300. Tsumo atveju kiekvienas žaidėjas moka po 500 už honba. Norėdami naudoti, įjunkite Basengo skaičiavimo taisyklėse, Rankos skaičiuoklės krumpliaračio piktogramoje ([[engrenagem]])."
+      "basengo": "Prie kai kurių stalų kiekviena honba verta 1 500 taškų vietoj 300. Tsumo atveju kiekvienas žaidėjas moka po 500 už honba. Norėdami naudoti, įjunkite Basengo skaičiavimo taisyklėse, Rankos skaičiuoklės slankiklių piktogramoje ([[engrenagem]])."
     },
     "dora": {
       "title": "Kuris akmuo yra Dora?",
@@ -453,9 +453,9 @@
       "indicators": "Pasirinkite dora indikatorius. Indikatorius nėra dora. Jis nurodo, kuris akmuo bus skaičiuojamas kaip dora.",
       "uraDora": "Akmuo po kiekvienu dora indikatoriumi mirusioje sienoje. Veikia kaip dar vienas dora indikatorius, bet atskleidžiamas tik tam, kuris laimi paskelbęs Riichi.",
       "akaTitle": "Aka dora",
-      "aka": "Raudoni penketai skaičiuojami kaip dora, po 1 han. Norėdami naudoti, įjunkite Aka dora skaičiavimo taisyklėse, Rankos skaičiuoklės krumpliaračio piktogramoje ([[engrenagem]]).",
+      "aka": "Raudoni penketai skaičiuojami kaip dora, po 1 han. Norėdami naudoti, įjunkite Aka dora skaičiavimo taisyklėse, Rankos skaičiuoklės slankiklių piktogramoje ([[engrenagem]]).",
       "flamingTitle": "Liepsnojanti dora",
-      "flaming": "Kai dora indikatorius yra raudonas 5, kiekviena to indikatoriaus dora verta 2 han. Norėdami naudoti, įjunkite Aka dora ir Liepsnojančią dora skaičiavimo taisyklėse, Rankos skaičiuoklės krumpliaračio piktogramoje ([[engrenagem]]).",
+      "flaming": "Kai dora indikatorius yra raudonas 5, kiekviena to indikatoriaus dora verta 2 han. Norėdami naudoti, įjunkite Aka dora ir Liepsnojančią dora skaičiavimo taisyklėse, Rankos skaičiuoklės slankiklių piktogramoje ([[engrenagem]]).",
       "curiosityTitle": "Įdomybė",
       "curiosity": "Riichi Mahjong žaidime žodis dora (ドラ) yra angliško „dragon“ (drakonas) santrumpa, japoniškai tariama doragon (ドラゴン).",
       "dragonPrince": "Todėl sakoma, kad tas, kuris niekada neatsisako savo dora, yra drakonų princas (arba princesė)."

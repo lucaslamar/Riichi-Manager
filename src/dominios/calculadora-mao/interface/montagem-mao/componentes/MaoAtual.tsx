@@ -329,10 +329,10 @@ export function MaoAtual({
               className={`btn-configuracao-mao-cabecalho ${entradaPorNotacao ? 'em-notacao' : ''}`.trim()}
               type="button"
               onClick={aoAbrirRegras}
-              aria-label={t('menu.rules')}
-              title={t('menu.rules')}
+              aria-label={t('rulesModal.open')}
+              title={t('rulesModal.open')}
             >
-              <i className="fas fa-gear" aria-hidden="true" />
+              <i className="fas fa-sliders" aria-hidden="true" />
             </button>
           )}
           {/* Na montagem o tenpai já aparece na borda da mão; o balão fica só na finalização. */}

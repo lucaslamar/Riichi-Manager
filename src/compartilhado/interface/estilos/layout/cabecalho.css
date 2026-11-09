@@ -595,7 +595,7 @@
 
 /* Com seta, ela e o título ocupam o lugar da marca (a sidebar mantém a marca). */
 @media not all and (min-width: 1024px) and (orientation: landscape) {
-  .barra-marca-aplicacao:has(.botao-voltar-tela:not(.botao-configuracoes-tela)) .marca-aplicacao {
+  .barra-marca-aplicacao:has(.botao-voltar-tela:not(.botao-configuracoes-tela, .botao-tela-cheia)) .marca-aplicacao {
     display: none;
   }
 }

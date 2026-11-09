@@ -5,6 +5,7 @@ import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { manterLinhaVisivel } from '@/compartilhado/interface/hooks/linhaVisivel'
 import { IconeMenu } from '@/compartilhado/interface/layout/IconeMenu'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import FolhaCadastrados from '@/dominios/centerpiece/interface/componentes/FolhaCadastrados'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
@@ -185,8 +186,9 @@ export default function PaginaListaTorneio({
               title={t('tournament.list.settings')}
               onClick={() => setConfigurando(true)}
             >
-              <i className="fas fa-gear" aria-hidden="true" />
+              <i className="fas fa-sliders" aria-hidden="true" />
             </button>
+            <BotaoConfiguracoes />
           </span>
         }
       />
@@ -341,7 +343,10 @@ export default function PaginaListaTorneio({
             disabled={!podeSortear}
             onClick={sortear}
           >
-            <i className="fas fa-paper-plane" aria-hidden="true" />
+            {/* Seta deitada, como a de enviar do WhatsApp (o avião do Font Awesome é inclinado). */}
+            <svg className="clb-enviar-seta" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 20.5 21.5 12 3 3.5v6.6L15.5 12 3 13.9z" fill="currentColor" />
+            </svg>
           </button>
         </span>
         </div>

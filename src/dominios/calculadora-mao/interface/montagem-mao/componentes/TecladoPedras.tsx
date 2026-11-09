@@ -325,11 +325,11 @@ export function TecladoPedras({
         <button
           className="botao-configuracao-teclado"
           type="button"
-          aria-label={t('menu.rules')}
-          title={t('menu.rules')}
+          aria-label={t('rulesModal.open')}
+          title={t('rulesModal.open')}
           onClick={aoAbrirRegras}
         >
-          <i className="fas fa-gear" aria-hidden="true" />
+          <i className="fas fa-sliders" aria-hidden="true" />
         </button>
       )}
       {contexto === 'montagem' && escolhaChiiPendente && (
@@ -340,11 +340,11 @@ export function TecladoPedras({
             <button
               className="botao-configuracao-chii"
               type="button"
-              aria-label={t('menu.rules')}
-              title={t('menu.rules')}
+              aria-label={t('rulesModal.open')}
+              title={t('rulesModal.open')}
               onClick={aoAbrirRegras}
             >
-              <i className="fas fa-gear" aria-hidden="true" />
+              <i className="fas fa-sliders" aria-hidden="true" />
             </button>
           )}
         </div>
@@ -437,11 +437,11 @@ export function TecladoPedras({
             <button
               className="botao-configuracao-teclado botao-configuracao-teclado-rodape"
               type="button"
-              aria-label={t('menu.rules')}
-              title={t('menu.rules')}
+              aria-label={t('rulesModal.open')}
+              title={t('rulesModal.open')}
               onClick={aoAbrirRegras}
             >
-              <i className="fas fa-gear" aria-hidden="true" />
+              <i className="fas fa-sliders" aria-hidden="true" />
             </button>
           )}
         </div>

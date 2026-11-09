@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import BarraCalculadora from '@/compartilhado/interface/componentes/BarraCalculadora'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
-import FolhaConfiguracoes from '@/dominios/configuracoes/interface/FolhaConfiguracoes'
-import { RodapeRegras, ListaRegrasCalculo } from '../modais/regras/ModalRegras'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
+import ModalRegras from '../modais/regras/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
 import {
@@ -49,7 +49,6 @@ export default function PaginaCalculadoraMao({
    * em responsivo.css (o iPad mini tem 744px). Nessa faixa menor, a altura
    * mínima deixa de fora o celular deitado.
    */
-  const { t } = useI18n()
   const telaGrande = useMediaQuery('(min-width: 768px), (min-width: 640px) and (min-height: 600px)')
 
   const calculadora = useCalculadoraMao(
@@ -132,6 +131,8 @@ export default function PaginaCalculadoraMao({
 
   return (
     <div>
+      {/* Engrenagem do app no cabeçalho, ao lado da marca (aberta pelo Centerpiece, a tela é da mesa). */}
+      {visivel && !contextoCenterpiece && <TituloTela acoes={<BotaoConfiguracoes />} />}
       <ModoCompletoCalculadora
         estado={calculadora}
         cabecalho={contextoCenterpiece ? null : <BarraCalculadora modo="completo" />}
@@ -144,27 +145,12 @@ export default function PaginaCalculadoraMao({
         entradaFixa={!!entradaFixa}
       />
 
-      {/* Engrenagem: Configurações com Regras de cálculo e Ajustes do app. */}
+      {/* Controles deslizantes da mão: só as Regras de cálculo (as do app ficam na engrenagem). */}
       {calculadora.modalRegrasAberto && (
-        <FolhaConfiguracoes
-          className="modal-regras"
+        <ModalRegras
+          configuracao={calculadora.configuracao}
+          aoMudar={calculadora.setConfiguracao}
           aoFechar={() => calculadora.setModalRegrasAberto(false)}
-          abas={[
-            {
-              id: 'regras',
-              rotulo: t('rulesModal.title'),
-              subtitulo: t('rulesModal.help'),
-              conteudo: (
-                <ListaRegrasCalculo configuracao={calculadora.configuracao} aoMudar={calculadora.setConfiguracao} />
-              ),
-              rodape: (
-                <RodapeRegras
-                  aoMudar={calculadora.setConfiguracao}
-                  aoFechar={() => calculadora.setModalRegrasAberto(false)}
-                />
-              ),
-            },
-          ]}
         />
       )}
     </div>

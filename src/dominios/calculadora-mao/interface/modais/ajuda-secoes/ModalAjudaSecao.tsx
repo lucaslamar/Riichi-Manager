@@ -27,7 +27,7 @@ function TextoAjuda({ texto, ignorar }: { texto: string; ignorar?: string[] }) {
       <TextoGlossario texto={parte} ignorar={ignorar} />
       {indice < partes.length - 1 && (
         <i
-          className="fas fa-gear icone-texto-ajuda"
+          className="fas fa-sliders icone-texto-ajuda"
           role="img"
           aria-label={traduzirGlobal('calculator.gearIcon')}
         />
