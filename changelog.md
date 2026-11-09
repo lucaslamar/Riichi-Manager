@@ -22,11 +22,19 @@
 - **Abas das configurações da mesa** do tamanho do nome, para "Pontuação" não passar da borda.
 - **Lista do clube virou Encontro do clube**, e o torneio novo se chama Torneio com a data (antes, Encontro do clube com a data).
 - **Torneio não cadastra ninguém sozinho**: como no Encontro do clube, quem não está no cadastro joga como convidado (contorno tracejado) e o Cadastrar fica na linha, para quem quiser. O convidado aparece pelo nome nas mesas, no lançamento e no ranking do torneio.
+- **Cenas das ajudas da Calculadora de Mão com a calculadora inteira**: em vez de um pedaço do teclado, cada cena mostra o cabeçalho da mão (com ?, chapéu e engrenagem, nessa ordem), a mão, a barra Chi, Pon, Kan, Kan fechado e MPSZ e o teclado completo, de pedras ou do MPSZ. Na Batida aparecem Mudar batida e Finalizar mão, e o Guia de bolso abre por cima da calculadora, como no app.
+- **Pontos negativos pelo teclado do celular**: nos campos de pontos de Registrar partida finalizada (também no lançamento das mesas do Torneio) e de uma nas regras de pontuação, o teclado numérico do Android agora tem a tecla de menos. Antes ele abria sem ela, e não dava para digitar pontos negativos.
 - **Torneios com o nome antigo** "Encontro do clube" e a data passam a se chamar "Torneio" e a data, como os novos.
 - **Timer geral da rodada começa em 1h** nos torneios novos (antes, 1h30).
+- **Torneio novo começa em Brasileirão**, com cada rodada sorteada na hora (antes, Rodízio).
+- **Exportar backup do torneio virou botão**: ao fechar a rodada, Exportar backup aparece logo abaixo de Gerar rodada, em vez da frase com link e o X.
+- **Pedras pretas rosa no tema escuro**: o amarelo, o 5 vermelho, os ventos e o dragão verde das pedras pretas ficam no rosa do botão Kan. O Leste vermelho continua vermelho. No tema claro, as pedras pretas seguem amarelas.
+- **Números do MPSZ ainda sem naipe** em rosa no tema escuro e em amarelo no claro (antes, azul).
+- **Tutorial de Han e Fu na calculadora sem o botão Ver na Tabela rápida**: a tabela está logo atrás, basta fechar o tutorial. Aberto pelo Tutorial do app, o botão continua.
 
 ### Corrigido
 
+- **Calculadora de Mão lenta com mão inválida**: ao completar 14 pedras que não fecham uma mão, Mudar batida e Finalizar mão demoravam segundos para aparecer. Agora aparecem na hora, e Mudar batida numa mão inválida também responde na hora.
 - **Busca dos Jogadores cadastrados presa no topo**: no Torneio e no Encontro do clube, o campo de busca não some quando a lista rola.
 
 ## 5.9.0 - 2026-11-05
