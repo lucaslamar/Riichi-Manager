@@ -266,7 +266,8 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         chi: {
           nome: 'Chi',
-          texto: 'Paimti kairėje sėdinčio žaidėjo išmestą akmenį ir sudaryti seką. Paskelbęs tą patį ėjimą negali išmesti paimto akmens ar akmens kitame sekos gale: turint 3-4 ir paėmus 2, negalima išmesti nei kito 2, nei 5 (kuikae). Po Pon negalima išmesti tokio paties akmens.',
+          texto:
+            'Paimti kairėje sėdinčio žaidėjo išmestą akmenį ir sudaryti seką. Paskelbus galioja kuikae.',
           aliases: ['chi', 'chii'],
         },
         pon: {
@@ -277,8 +278,33 @@ export const conteudo: ConteudoGuiaBolso = {
         kan: {
           nome: 'Kan',
           texto:
-            'Keturi vienodi akmenys. Paimate pakaitinį akmenį ir atverčiate dar vieną dora indikatorių. Uždaras kan (visi keturi jūsų) ranką palieka uždarą. Kan negalima skelbti, kai siena baigėsi: nebėra pakaitinio akmens.',
-          aliases: ['kan', 'kantsu', 'ketvertas', 'ketverto', 'ketvertą', 'ketvertai', 'ketvertų'],
+            'Keturi vienodi akmenys. Paimate pakaitinį akmenį ir atverčiate dar vieną dora indikatorių. Kan negalima skelbti, kai siena baigėsi: nebėra pakaitinio akmens.',
+          topicos: [
+            '**Atviras kan** (daiminkan): turite tris vienodus ir paimate ketvirtą iš kito žaidėjo išmesto akmens. Ranka tampa atvira.',
+            '**Pridėtas kan** (shouminkan): prie jau turimo Pon pridedate ketvirtą akmenį. Ranka jau buvo atvira, o kitas žaidėjas gali laimėti su tuo akmeniu (Chankan).',
+            '**Uždaras kan** (ankan): visi keturi akmenys jūsų. Ranka lieka uždara. Po Riichi galima tik jei nesikeičia laukimas.',
+          ],
+          aliases: [
+            'kan',
+            'kantsu',
+            'ketvertas',
+            'ketverto',
+            'ketvertą',
+            'ketvertai',
+            'ketvertų',
+            'atviras kan',
+            'pridėtas kan',
+            'uždaras kan',
+            'daiminkan',
+            'shouminkan',
+            'ankan',
+          ],
+        },
+        kuikae: {
+          nome: 'Kuikae',
+          texto:
+            'Paskelbęs tą patį ėjimą negali išmesti paimto akmens. Po Chi negali išmesti ir akmens kitame sekos gale: turint 3-4 ir paėmus 2, negalima išmesti nei kito 2, nei 5. Po Pon negalima išmesti tokio paties akmens.',
+          aliases: ['kuikae'],
         },
         kuitan: {
           nome: 'Kuitan',
@@ -304,7 +330,8 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         riichi: {
           nome: 'Riichi',
-          texto: 'Paskelbti tenpai su uždara ranka, statant 1 000 taškų. Vertas 1 han. Skelbti galima tik kai sienoje liko 4 ar daugiau akmenų.',
+          texto:
+            'Paskelbti tenpai su uždara ranka, statant 1 000 taškų. Vertas 1 han. Skelbti galima tik kai sienoje liko 4 ar daugiau akmenų.',
           aliases: ['riichi'],
         },
         ippatsu: { nome: 'Ippatsu', aliases: ['ippatsu', 'ipatsu'] },

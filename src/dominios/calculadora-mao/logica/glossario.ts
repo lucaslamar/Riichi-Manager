@@ -134,6 +134,7 @@ const SECOES_BASE: SecaoBase[] = [
       { id: 'chi', kanji: 'チー' },
       { id: 'pon', kanji: 'ポン' },
       { id: 'kan', kanji: 'カン' },
+      { id: 'kuikae', kanji: '喰い替え' },
       { id: 'kuitan', kanji: '喰いタン' },
     ],
   },

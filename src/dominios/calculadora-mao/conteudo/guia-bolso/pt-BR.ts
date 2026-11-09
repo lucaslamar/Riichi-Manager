@@ -250,7 +250,8 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         chi: {
           nome: 'Chi',
-          texto: 'Pegar o descarte do jogador à sua esquerda para formar uma sequência. Depois de chamar, você não pode descartar na mesma vez a pedra que pegou nem a da outra ponta da sequência: com 3-4 na mão, quem pega o 2 não pode descartar outro 2 nem o 5 (kuikae). No Pon vale o mesmo para a pedra igual.',
+          texto:
+            'Pegar o descarte do jogador à sua esquerda para formar uma sequência. Depois de chamar, vale o kuikae.',
           aliases: ['chi', 'chii'],
         },
         pon: {
@@ -261,8 +262,31 @@ export const conteudo: ConteudoGuiaBolso = {
         kan: {
           nome: 'Kan',
           texto:
-            'Quatro pedras iguais. Você compra uma pedra de reposição e revela mais um indicador de dora. O kan fechado (as quatro são suas) não abre a mão. Não dá para fazer kan quando o muro acabou: sem pedras, não há reposição.',
-          aliases: ['kan', 'kans', 'kantsu', 'quad', 'quads'],
+            'Quatro pedras iguais. Você compra uma pedra de reposição e revela mais um indicador de dora. Não dá para fazer kan quando o muro acabou: sem pedras, não há reposição.',
+          topicos: [
+            '**Kan aberto** (daiminkan): você tem três iguais e pega a quarta do descarte de outro jogador. Abre a mão.',
+            '**Kan adicionado** (shouminkan): você junta a quarta pedra a um Pon que já tem. A mão já estava aberta, e outro jogador pode vencer com essa pedra (Chankan).',
+            '**Kan fechado** (ankan): as quatro pedras são suas. Não abre a mão. Depois do Riichi, só pode se não mudar a sua espera.',
+          ],
+          aliases: [
+            'kan',
+            'kans',
+            'kantsu',
+            'quad',
+            'quads',
+            'kan aberto',
+            'kan adicionado',
+            'kan fechado',
+            'daiminkan',
+            'shouminkan',
+            'ankan',
+          ],
+        },
+        kuikae: {
+          nome: 'Kuikae',
+          texto:
+            'Depois de chamar, você não pode descartar na mesma vez a pedra que pegou. No Chi também não pode descartar a da outra ponta da sequência: com 3-4 na mão, quem pega o 2 não pode descartar outro 2 nem o 5. No Pon, vale para a pedra igual.',
+          aliases: ['kuikae'],
         },
         kuitan: {
           nome: 'Kuitan',
@@ -288,7 +312,8 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         riichi: {
           nome: 'Riichi',
-          texto: 'Declarar tenpai com a mão fechada, apostando 1.000 pontos. Vale 1 han. Só pode declarar com 4 pedras ou mais no muro.',
+          texto:
+            'Declarar tenpai com a mão fechada, apostando 1.000 pontos. Vale 1 han. Só pode declarar com 4 pedras ou mais no muro.',
           aliases: ['riichi'],
         },
         ippatsu: { nome: 'Ippatsu', aliases: ['ippatsu', 'ipatsu'] },

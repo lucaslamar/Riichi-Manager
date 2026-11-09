@@ -249,7 +249,8 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         chi: {
           nome: 'Chi',
-          texto: 'Tomar el descarte del jugador a tu izquierda para formar una secuencia. Después de cantar, no puedes descartar en ese mismo turno la ficha que tomaste ni la del otro extremo de la secuencia: con 3-4 en la mano, si tomas el 2 no puedes descartar otro 2 ni el 5 (kuikae). En el Pon vale lo mismo para la ficha igual.',
+          texto:
+            'Tomar el descarte del jugador a tu izquierda para formar una secuencia. Después de cantar, vale el kuikae.',
           aliases: ['chi', 'chii'],
         },
         pon: {
@@ -260,8 +261,31 @@ export const conteudo: ConteudoGuiaBolso = {
         kan: {
           nome: 'Kan',
           texto:
-            'Cuatro fichas iguales. Robas una ficha de reposición y revelas un indicador de dora más. El kan cerrado (las cuatro son tuyas) no abre la mano. No se puede hacer kan cuando el muro se acabó: no hay ficha de reposición.',
-          aliases: ['kan', 'kans', 'kantsu', 'cuarteto', 'cuartetos'],
+            'Cuatro fichas iguales. Robas una ficha de reposición y revelas un indicador de dora más. No se puede hacer kan cuando el muro se acabó: no hay ficha de reposición.',
+          topicos: [
+            '**Kan abierto** (daiminkan): tienes tres iguales y tomas la cuarta del descarte de otro jugador. Abre la mano.',
+            '**Kan añadido** (shouminkan): sumas la cuarta ficha a un Pon que ya tienes. La mano ya estaba abierta, y otro jugador puede ganar con esa ficha (Chankan).',
+            '**Kan cerrado** (ankan): las cuatro fichas son tuyas. No abre la mano. Después del Riichi, solo vale si no cambia tu espera.',
+          ],
+          aliases: [
+            'kan',
+            'kans',
+            'kantsu',
+            'cuarteto',
+            'cuartetos',
+            'kan abierto',
+            'kan añadido',
+            'kan cerrado',
+            'daiminkan',
+            'shouminkan',
+            'ankan',
+          ],
+        },
+        kuikae: {
+          nome: 'Kuikae',
+          texto:
+            'Después de cantar, no puedes descartar en ese mismo turno la ficha que tomaste. En el Chi tampoco puedes descartar la del otro extremo de la secuencia: con 3-4 en la mano, si tomas el 2 no puedes descartar otro 2 ni el 5. En el Pon, vale para la ficha igual.',
+          aliases: ['kuikae'],
         },
         kuitan: {
           nome: 'Kuitan',
@@ -287,7 +311,8 @@ export const conteudo: ConteudoGuiaBolso = {
         },
         riichi: {
           nome: 'Riichi',
-          texto: 'Declarar tenpai con la mano cerrada, apostando 1.000 puntos. Vale 1 han. Solo se puede declarar con 4 fichas o más en el muro.',
+          texto:
+            'Declarar tenpai con la mano cerrada, apostando 1.000 puntos. Vale 1 han. Solo se puede declarar con 4 fichas o más en el muro.',
           aliases: ['riichi'],
         },
         ippatsu: { nome: 'Ippatsu', aliases: ['ippatsu', 'ipatsu'] },
