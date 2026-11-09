@@ -242,6 +242,16 @@
   padding-inline: max(16px, calc((100% - 720px) / 2));
 }
 
+/* Logo acima do teclado do sistema (--altura-teclado vem do useAlturaTeclado). */
+.ptd-rodape-fixo.clb-rodape {
+  bottom: max(var(--altura-barra-inferior, 0px), var(--altura-teclado, 0px));
+}
+
+/* Teclado aberto: só a barra do contador fica; o Sortear volta ao fechar. */
+body.teclado-aberto .clb-sortear {
+  display: none;
+}
+
 /* Aviso acima do rodapé fixo, sem cobrir os botões. */
 .clb-aviso {
   bottom: calc(var(--altura-barra-inferior, 0px) + 150px);

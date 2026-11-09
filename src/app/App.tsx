@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
+import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
 import { ORDEM_TELAS } from '@/compartilhado/interface/layout/navegacao'
 import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
@@ -89,6 +90,8 @@ export default function App() {
     const destino = ORDEM_TELAS[indiceAprender + passo] ?? 'calculadora'
     if (destino !== 'aprender') navegar(destino)
   }
+  // Teclado do sistema: barras e folhas sobem com ele, a barra inferior some.
+  useAlturaTeclado()
   useDeslizeHorizontal({
     ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece' && tela !== 'partidas',
     aoDeslizarDireita: sorteadorDoSimples

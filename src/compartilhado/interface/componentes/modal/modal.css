@@ -600,3 +600,16 @@
     animation: none;
   }
 }
+
+/* ─── Teclado do sistema aberto ───────────────────────────────────────────── */
+/* A folha sobe junto e fica inteira na área visível (acima do teclado). Se não
+   couber, só o corpo rola: cabeçalho e rodapé (Cancelar e Salvar) ficam. */
+body.teclado-aberto .modal-fundo {
+  top: var(--vv-topo, 0px);
+  bottom: auto;
+  height: var(--vv-altura, 100%);
+}
+
+body.teclado-aberto .modal {
+  max-height: calc(100% - 8px);
+}

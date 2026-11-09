@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { manterLinhaVisivel } from '@/compartilhado/interface/hooks/linhaVisivel'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { IconeMenu } from '@/compartilhado/interface/layout/IconeMenu'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -77,7 +78,10 @@ export default function PaginaListaClube({
   const acompanharCursor = () => {
     const elemento = campo.current
     if (!elemento) return
-    setLinhaAtual(elemento.value.slice(0, elemento.selectionStart).split('\n').length - 1)
+    const linha = elemento.value.slice(0, elemento.selectionStart).split('\n').length - 1
+    setLinhaAtual(linha)
+    // A linha em edição fica acima da barra (que sobe com o teclado).
+    manterLinhaVisivel(elemento, linha, ALTURA_LINHA)
   }
 
   /** Ao sair do campo: tira linhas vazias e repetidos, avisando o que saiu. */
@@ -284,7 +288,7 @@ export default function PaginaListaClube({
         </p>
         <button
           type="button"
-          className="btn-primario ptd-btn-largo"
+          className="btn-primario ptd-btn-largo clb-sortear"
           disabled={!contagem.podeSortear}
           onClick={iniciarSorteio}
         >

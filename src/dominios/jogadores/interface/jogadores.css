@@ -53,8 +53,16 @@
   justify-content: flex-end;
 }
 
+/* Cancelar e Salvar presos no fim da folha: com o teclado aberto, os campos
+   rolam e os botões continuam à vista. */
 .form-jogador .acoes-form-jogador {
+  position: sticky;
+  bottom: calc(-1 * var(--modal-espaco, 16px));
+  z-index: 1;
   margin-top: 18px;
+  margin-bottom: calc(-1 * var(--modal-espaco, 16px));
+  padding-block: 10px var(--modal-espaco, 16px);
+  background: var(--modal-fundo, var(--branco));
 }
 
 .acoes-form-jogador > button {

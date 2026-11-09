@@ -101,10 +101,6 @@
 }
 
 
-/* O rodapé sobe com o teclado do sistema. */
-.trn-rodape {
-  bottom: max(var(--altura-barra-inferior, 0px), var(--altura-teclado, 0px));
-}
 
 .trn-status--ok {
   color: var(--texto-positivo);

@@ -2,7 +2,7 @@ import { useMemo, useRef, useState, type ClipboardEvent, type CSSProperties } fr
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
-import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
+import { manterLinhaVisivel } from '@/compartilhado/interface/hooks/linhaVisivel'
 import { IconeMenu } from '@/compartilhado/interface/layout/IconeMenu'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import FolhaCadastrados from '@/dominios/centerpiece/interface/componentes/FolhaCadastrados'
@@ -53,7 +53,6 @@ export default function PaginaListaTorneio({
   const { aviso, mostrar } = useAviso()
   const raiz = useRef<HTMLElement | null>(null)
   const campo = useRef<HTMLTextAreaElement | null>(null)
-  useAlturaTeclado(raiz)
 
   const [linhaAtual, setLinhaAtual] = useState<number | null>(null)
   const [memoria, setMemoria] = useState(false)
@@ -79,7 +78,10 @@ export default function PaginaListaTorneio({
   const acompanharCursor = () => {
     const elemento = campo.current
     if (!elemento) return
-    setLinhaAtual(elemento.value.slice(0, elemento.selectionStart).split('\n').length - 1)
+    const linha = elemento.value.slice(0, elemento.selectionStart).split('\n').length - 1
+    setLinhaAtual(linha)
+    // A linha em edição fica acima da barra (que sobe com o teclado).
+    manterLinhaVisivel(elemento, linha, ALTURA_LINHA)
   }
 
   /** Colar do WhatsApp: números e marcadores saem, cada nome numa linha. */
@@ -334,7 +336,7 @@ export default function PaginaListaTorneio({
         </div>
         <button
           type="button"
-          className="btn-primario ptd-btn-largo"
+          className="btn-primario ptd-btn-largo clb-sortear"
           disabled={!podeSortear}
           onClick={sortear}
         >
@@ -582,6 +584,7 @@ function FolhaNome({
           value={texto}
           maxLength={60}
           aria-label={t('tournament.settings.name')}
+          enterKeyHint="done"
           onChange={(evento) => setTexto(evento.target.value)}
         />
       </form>

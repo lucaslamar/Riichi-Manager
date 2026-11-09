@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import {
   sugerirClubes,
@@ -38,6 +38,13 @@ export default function FormJogador({ inicial, aoSalvar, aoCancelar }: PropsForm
 
   const sugestoes = sugerirClubes(jogadores, clube)
 
+  /** Enter do teclado: vai para o próximo campo (o último salva, pelo form). */
+  const irPara = (proximo: string) => (evento: KeyboardEvent<HTMLInputElement>) => {
+    if (evento.key !== 'Enter' || evento.nativeEvent.isComposing) return
+    evento.preventDefault()
+    document.getElementById(proximo)?.focus()
+  }
+
   const enviar = (evento: FormEvent) => {
     evento.preventDefault()
     const resultado = aoSalvar({ nome, apelido, clube })
@@ -56,6 +63,8 @@ export default function FormJogador({ inicial, aoSalvar, aoCancelar }: PropsForm
         type="text"
         value={nome}
         autoComplete="off"
+        enterKeyHint="next"
+        onKeyDown={irPara(`${id}-apelido`)}
         aria-invalid={!!erro}
         aria-describedby={erro ? `${id}-erro` : undefined}
         onChange={(evento) => {
@@ -78,6 +87,8 @@ export default function FormJogador({ inicial, aoSalvar, aoCancelar }: PropsForm
         type="text"
         value={apelido}
         autoComplete="off"
+        enterKeyHint="next"
+        onKeyDown={irPara(`${id}-clube`)}
         onChange={(evento) => setApelido(evento.target.value)}
       />
 
@@ -90,6 +101,7 @@ export default function FormJogador({ inicial, aoSalvar, aoCancelar }: PropsForm
         type="text"
         value={clube}
         autoComplete="off"
+        enterKeyHint="done"
         autoCapitalize="words"
         onChange={(evento) => setClube(evento.target.value)}
       />
