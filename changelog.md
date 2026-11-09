@@ -19,6 +19,8 @@
 - **Engrenagem das Configurações nas telas principais**: Calculadora, Han e Fu, Centerpiece e Partida têm uma engrenagem no canto do cabeçalho. Ela abre as Configurações com a aba "Ajustes do app" (Idioma, Tema, Pedras, Alto contraste, Modo compacto, Área de toque ampliada e tela). Na Calculadora, a primeira aba é a de Regras de cálculo. A tela Ajustes continua igual.
 - **Abas das Configurações com deslize**: dá para trocar de aba tocando nela ou deslizando o dedo para o lado, com o indicador acompanhando o dedo. Cada aba rola sozinha na vertical.
 - **Idioma nos Ajustes**: o Idioma virou o primeiro cartão dos ajustes, antes do Tema.
+- **Seta de enviar nas listas**: com o teclado aberto, a lista do Torneio e a do Encontro do clube ganham uma seta, como a de enviar do WhatsApp, que sorteia as mesas sem precisar fechar o teclado.
+- **Engrenagem no Sorteador**: abre as Configurações com os Ajustes do app, como nas outras telas.
 
 ### Alterado
 
@@ -44,6 +46,7 @@
 - **Lista do torneio sem o menu ⋮**: Importar torneio fica ao lado da engrenagem, no topo, e Listas salvas, Jogadores cadastrados e Limpar lista ficam lado a lado no rodapé.
 - **Configurações do torneio só com Torneio e Pontuação**, mais a aba Ajustes do app. Regras, Empates, Regras de cálculo e Mesa saíram do torneio por enquanto, e as partidas do torneio usam o padrão do conjunto nessas regras. A busca procura só no que ficou.
 - **"?" da Calculadora ao lado de "MÃO 0/14"**: à direita do cabeçalho da mão ficam só o chapéu do tutorial e a engrenagem.
+- **Ícones da Lista do torneio**: Listas salvas subiu para o topo, ao lado de Importar torneio. Na barra de baixo ficam a lixeira, os Jogadores cadastrados e, com o teclado aberto, a seta de enviar.
 
 ### Corrigido
 
