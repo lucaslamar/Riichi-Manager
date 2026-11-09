@@ -128,10 +128,21 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     maoCompleta,
     deveCalcularMao,
   })
-  const candidatasPedraAgari = useMemo(
-    () => (maoCompleta ? candidatasDaBatida(mao, configuracao) : new Map<string, CandidataBatida>()),
-    [configuracao, mao, maoCompleta],
+  /*
+   * Pedras que podem ser a batida (Mudar batida). Numa mão inválida não há esperas
+   * para aproveitar e o cálculo roda a mão inteira para cada pedra, segundos no
+   * celular. Por isso só roda quando a pessoa toca em Mudar batida (e depois de
+   * desenhar a tela): completar a mão mostra Mudar batida e Finalizar mão na hora.
+   */
+  const [candidatasPedraAgari, setCandidatasPedraAgari] = useState(
+    () => new Map<string, CandidataBatida>(),
   )
+  useEffect(() => {
+    setCandidatasPedraAgari(new Map())
+    if (!maoCompleta || !selecionandoPedraAgari) return
+    const id = window.setTimeout(() => setCandidatasPedraAgari(candidatasDaBatida(mao, configuracao)), 0)
+    return () => window.clearTimeout(id)
+  }, [configuracao, mao, maoCompleta, selecionandoPedraAgari])
   const acoesPedras = useAcoesPedras({
     estado: {
       mao,

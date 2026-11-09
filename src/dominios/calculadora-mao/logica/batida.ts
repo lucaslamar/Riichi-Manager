@@ -64,6 +64,23 @@ export function candidatasDaBatida(
     )
   }
 
+  /*
+   * Mão completa: tirar qualquer pedra da mão fechada deixa uma espera por ela
+   * mesma. Se a base (13 pedras) não espera a batida, ou se tirar a primeira
+   * pedra não deixa espera por ela, a mão não fecha e nenhuma pedra é batida. A
+   * conferência barata evita calcular a mão inteira para cada uma das 14 pedras,
+   * segundos no celular numa mão inválida.
+   */
+  if (base) return new Map()
+  const [primeira] = mao.pedras
+  if (primeira) {
+    const semPrimeira = { ...mao, pedras: mao.pedras.slice(1), indiceAgari: -1, agariMeld: null }
+    const fecha = calcularEsperasPossiveis(semPrimeira, config, 13).some(
+      (espera) => codigoBase(espera.pedra) === codigoBase(primeira),
+    )
+    if (!fecha) return new Map()
+  }
+
   // Sem batida marcada não há 13 pedras de base: a escolha é entre as pedras da mão.
   const candidatas = new Map<string, CandidataBatida>()
   const registrarCandidata = (pedra: CodigoPedra, maoCandidata: Mao) => {
