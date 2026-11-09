@@ -31,6 +31,7 @@
 - **Pedras pretas rosa no tema escuro**: o amarelo, o 5 vermelho, os ventos e o dragão verde das pedras pretas ficam no rosa do botão Kan. O Leste vermelho continua vermelho. No tema claro, as pedras pretas seguem amarelas.
 - **Números do MPSZ ainda sem naipe** em rosa no tema escuro e em amarelo no claro (antes, azul).
 - **Tutorial de Han e Fu na calculadora sem o botão Ver na Tabela rápida**: a tabela está logo atrás, basta fechar o tutorial. Aberto pelo Tutorial do app, o botão continua.
+- **Partida na barra e Mais com menu lateral**: a barra passou a ser Calculadora, Han e Fu, Centerpiece, Partida e Mais. O Mais agora abre um menu lateral com todas as telas, com o nome completo e a tela atual marcada, em vez de trocar a barra por uma segunda página. Quando a tela aberta está só no menu (Sorteador, Tutorial, Ajustes), o Mais ganha um ponto. O deslizar entre telas segue a mesma ordem.
 
 ### Corrigido
 

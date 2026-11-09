@@ -617,35 +617,6 @@
   width: 100%;
 }
 
-.barra-pagina--segunda {
-  animation: barra-entra-direita 0.18s ease-out;
-}
-
-.barra-pagina--primeira {
-  animation: barra-entra-esquerda 0.18s ease-out;
-}
-
-@keyframes barra-entra-direita {
-  from {
-    opacity: 0;
-    transform: translateX(24px);
-  }
-}
-
-@keyframes barra-entra-esquerda {
-  from {
-    opacity: 0;
-    transform: translateX(-24px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .barra-pagina--segunda,
-  .barra-pagina--primeira {
-    animation: none;
-  }
-}
-
 .item-tab-mais {
   position: relative;
 }
@@ -703,4 +674,76 @@
 
 .botao-tela-cheia {
   margin-left: auto;
+}
+
+/* ─── Menu do Mais: todas as telas, deslizando da esquerda ──────────────────── */
+.menu-mais-fundo {
+  position: fixed;
+  inset: 0;
+  /* Acima da barra inferior e do cabeçalho; abaixo das modais (100). */
+  z-index: 90;
+  background: rgb(0 0 0 / 45%);
+  animation: menu-mais-fundo-entra 0.18s ease-out;
+}
+
+.menu-mais {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(300px, 82vw);
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: calc(12px + env(safe-area-inset-top)) 12px calc(16px + env(safe-area-inset-bottom))
+    calc(12px + env(safe-area-inset-left));
+  background: var(--cor-superficie, #ffffff);
+  box-shadow: 4px 0 24px rgb(0 0 0 / 30%);
+  animation: menu-mais-entra 0.2s ease-out;
+}
+
+.menu-mais__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 2px 8px 6px;
+  border-bottom: 1px solid var(--cor-borda, #e2e8f0);
+}
+
+.menu-mais__fechar {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cor-texto, #102a43);
+  cursor: pointer;
+  font-size: 1.05rem;
+}
+
+.menu-mais .item-menu-global {
+  min-height: 48px;
+  font-size: 0.95rem;
+}
+
+@keyframes menu-mais-entra {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes menu-mais-fundo-entra {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-mais,
+  .menu-mais-fundo {
+    animation: none;
+  }
 }

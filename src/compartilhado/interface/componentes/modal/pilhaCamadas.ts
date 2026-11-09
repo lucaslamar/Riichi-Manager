@@ -23,4 +23,4 @@ export function empilharCamada(): CamadaEmpilhada {
 }
 
 /** Seletor das camadas que cobrem a tela: os gestos de navegação do app não agem com elas abertas. */
-export const SELETOR_CAMADAS = '.modal-fundo, .guia-aprender'
+export const SELETOR_CAMADAS = '.modal-fundo, .guia-aprender, .menu-mais-fundo'

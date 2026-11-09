@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { TelaPrincipal } from '@/app/App'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
 import { IconeMenu } from './IconeMenu'
 import {
   ITENS_NAVEGACAO,
@@ -26,7 +27,8 @@ interface PropsCabecalho {
 /**
  * Cabeçalho, barra inferior (celular em pé e tablet; no celular deitado o CSS a põe
  * de pé, como trilho à esquerda) e sidebar fixa (telas grandes).
- * A barra tem duas páginas: "Mais" troca os itens no mesmo lugar, nada abre por cima.
+ * A barra mostra as telas principais, e "Mais" abre o menu lateral com todas as
+ * telas (nome completo e a atual marcada). O deslizar entre telas segue igual.
  */
 export default function Cabecalho({
   telaAtual,
@@ -35,50 +37,54 @@ export default function Cabecalho({
   aoAbrirIdioma,
 }: PropsCabecalho) {
   const { t } = useI18n()
-  const paginaAtiva = paginaDoDestino(telaAtual)
-  const [pagina, setPagina] = useState(paginaAtiva)
-  const barraRef = useRef<HTMLElement | null>(null)
-  const focarPrimeiro = useRef(false)
-  // Só anima ao trocar de página, não ao abrir o app.
-  const paginaInicial = useRef(paginaAtiva)
-  const trocou = useRef(false)
-  if (pagina !== paginaInicial.current) trocou.current = true
-
-  // A barra acompanha a tela aberta, inclusive ao trocar de tela deslizando.
-  useEffect(() => setPagina(paginaAtiva), [paginaAtiva])
-
-  // Trocou de página pelo botão: o foco vai para o primeiro item da nova.
-  useEffect(() => {
-    if (!focarPrimeiro.current) return
-    focarPrimeiro.current = false
-    barraRef.current?.querySelector<HTMLElement>('.item-tab-inferior:not(.item-tab-mais)')?.focus()
-  }, [pagina])
+  // A tela aberta está fora da barra (no menu do Mais): o Mais ganha o ponto.
+  const foraDaBarra = paginaDoDestino(telaAtual) !== 0
+  const [maisAberto, setMaisAberto] = useState(false)
+  const botaoMaisRef = useRef<HTMLButtonElement | null>(null)
+  const menuRef = useRef<HTMLElement | null>(null)
 
   const escolher = (destino: DestinoNavegacao) => {
+    setMaisAberto(false)
     if (destino === 'idioma') aoAbrirIdioma()
     else if (destino === 'aprender') aoAbrirAprender()
     else aoNavegar(destino)
   }
 
-  const trocarPagina = () => {
-    focarPrimeiro.current = true
-    setPagina((atual) => (atual === 0 ? 1 : 0))
-  }
+  // Menu aberto: Esc fecha, o foco vai para a tela marcada e volta ao Mais ao fechar.
+  useEffect(() => {
+    if (!maisAberto) return
+    const camada = empilharCamada()
+    const botaoMais = botaoMaisRef.current
+    menuRef.current
+      ?.querySelector<HTMLElement>('.item-menu-global.ativo, .item-menu-global')
+      ?.focus()
+    const aoTeclar = (evento: KeyboardEvent) => {
+      if (evento.key !== 'Escape' || !camada.noTopo()) return
+      evento.stopPropagation()
+      setMaisAberto(false)
+    }
+    document.addEventListener('keydown', aoTeclar)
+    return () => {
+      document.removeEventListener('keydown', aoTeclar)
+      camada.remover()
+      botaoMais?.focus({ preventScroll: true })
+    }
+  }, [maisAberto])
 
-  const naSegunda = pagina === 1
-
-  const botaoPagina = (
+  const botaoMais = (
     <button
-      className="item-tab-inferior item-tab-mais"
+      ref={botaoMaisRef}
+      className={`item-tab-inferior item-tab-mais${foraDaBarra ? ' ativo' : ''}`}
       type="button"
-      aria-label={t(naSegunda ? 'menu.backToMain' : 'menu.moreOptions')}
-      aria-expanded={naSegunda}
-      title={t(naSegunda ? 'menu.backToMain' : 'menu.moreOptions')}
-      onClick={trocarPagina}
+      aria-label={t('menu.moreOptions')}
+      aria-haspopup="dialog"
+      aria-expanded={maisAberto}
+      title={t('menu.moreOptions')}
+      onClick={() => setMaisAberto(true)}
     >
-      <i className={`fas ${naSegunda ? 'fa-chevron-left' : 'fa-ellipsis'}`} aria-hidden="true" />
-      <span>{t(naSegunda ? 'actions.back' : 'menu.more')}</span>
-      {paginaAtiva !== pagina && <span className="item-tab-ponto" aria-hidden="true" />}
+      <i className="fas fa-ellipsis" aria-hidden="true" />
+      <span>{t('menu.more')}</span>
+      {foraDaBarra && <span className="item-tab-ponto" aria-hidden="true" />}
     </button>
   )
 
@@ -106,11 +112,9 @@ export default function Cabecalho({
   )
 
   const barraInferior = createPortal(
-    <nav ref={barraRef} className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
-      <div key={pagina} className={`barra-pagina${trocou.current ? ` barra-pagina--${naSegunda ? 'segunda' : 'primeira'}` : ''}`}>
-        {/* Na segunda página o Voltar fica no começo, do lado para onde a seta aponta. */}
-        {naSegunda && botaoPagina}
-        {PAGINAS_NAVEGACAO[pagina].map((item) => {
+    <nav className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
+      <div className="barra-pagina">
+        {PAGINAS_NAVEGACAO[0].map((item) => {
           const ativo = item.destino === telaAtual
           return (
             <button
@@ -127,11 +131,41 @@ export default function Cabecalho({
             </button>
           )
         })}
-        {!naSegunda && botaoPagina}
+        {botaoMais}
       </div>
     </nav>,
     document.body,
   )
+
+  /** Menu do Mais: todas as telas, deslizando da esquerda por cima do app. */
+  const menuMais =
+    maisAberto &&
+    createPortal(
+      <div
+        className="menu-mais-fundo"
+        role="presentation"
+        onClick={(evento) => {
+          if (evento.target === evento.currentTarget) setMaisAberto(false)
+        }}
+      >
+        <nav ref={menuRef} className="menu-mais" role="dialog" aria-modal="true" aria-label={t('global.navigation')}>
+          <div className="menu-mais__topo">
+            <MarcaAplicacao />
+            <button
+              type="button"
+              className="menu-mais__fechar"
+              aria-label={t('actions.close')}
+              title={t('actions.close')}
+              onClick={() => setMaisAberto(false)}
+            >
+              <i className="fas fa-xmark" aria-hidden="true" />
+            </button>
+          </div>
+          {listaItens}
+        </nav>
+      </div>,
+      document.body,
+    )
 
   return (
     <>
@@ -151,6 +185,7 @@ export default function Cabecalho({
         </div>
       </header>
       {barraInferior}
+      {menuMais}
     </>
   )
 }
