@@ -50,6 +50,7 @@
 - **Ajustes e Idioma fora da barra**: como a engrenagem está em toda tela, a segunda página da barra ficou com Sorteador, Tutorial e Mais. A tela Ajustes, com o Sobre o Mojoca e o Instalar, continua no menu lateral do Mais. Deslizando depois do Tutorial, volta para a Calculadora.
 - **Marca MOJOCA no Centerpiece**: volta a aparecer no cabeçalho, ao lado do título.
 - **Título da tela no cabeçalho, no roxo do app**: Calculadora de Mão (também no MPSZ), Han e Fu, Partida e Sorteador de Ventos mostram o nome ao lado da marca. Os títulos de todas as telas passaram do branco para o roxo do app.
+- **Engrenagem alinhada na Lista do torneio**: fica na mesma linha que Listas salvas, Importar e os controles deslizantes.
 
 ### Corrigido
 

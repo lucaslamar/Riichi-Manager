@@ -385,7 +385,13 @@ body.teclado-aberto .clb-enviar {
 
 .clb-acoes-titulo {
   display: inline-flex;
+  align-items: center;
   gap: 4px;
+}
+
+/* Engrenagem do app junto dos ícones da tela: na mesma linha que eles. */
+.clb-acoes-titulo .botao-configuracoes-tela {
+  margin-block: 0;
 }
 
 .cm-btn-icone:disabled {
