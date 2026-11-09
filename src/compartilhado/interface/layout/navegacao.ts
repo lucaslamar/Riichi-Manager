@@ -21,12 +21,12 @@ export const PAGINAS_NAVEGACAO: readonly (readonly ItemNavegacao[])[] = [
   [
     { destino: 'calculadora', chave: 'menu.handCalculator', icone: 'um-pin', chaveCurta: 'menu.handCalculatorShort' },
     { destino: 'calculadoraRapida', chave: 'menu.quickCalculator', icone: 'palito-riichi', chaveCurta: 'menu.quickCalculatorShort' },
-    { destino: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice', chaveCurta: 'menu.windDrawShort' },
     { destino: 'centerpiece', chave: 'menu.centerpiece', icone: 'centerpiece' },
-  ],
-  [
     // Partidas com pontos, histórico, jogadores e ranking (o simples fica no Centerpiece).
     { destino: 'partidas', chave: 'menu.matches', icone: 'fa-gamepad', chaveCurta: 'menu.matchesShort' },
+  ],
+  [
+    { destino: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice', chaveCurta: 'menu.windDrawShort' },
     { destino: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
     { destino: 'regras', chave: 'menu.rules', icone: 'fa-gear', chaveCurta: 'menu.rulesShort' },
     { destino: 'idioma', chave: 'menu.language', icone: 'fa-globe' },
