@@ -19,7 +19,8 @@ export type BlocoTutorial =
   /** Subtítulo de item, com divisória em cima. */
   | { tipo: 'subtitulo'; texto: string }
   | { tipo: 'paragrafo'; texto: string }
-  | { tipo: 'topicos'; textos: string[]; numerados?: boolean }
+  /** Um tópico pode ter subtópicos (`{ texto, sub }`), um nível abaixo dele. */
+  | { tipo: 'topicos'; textos: (string | TopicoComSub)[]; numerados?: boolean }
   /** Cada chave é uma linha com as células separadas por `|`; a primeira é o cabeçalho. */
   | { tipo: 'tabela'; linhas: string[] }
   /** Caixa de fórmula (CaixaFormula). */
@@ -33,6 +34,11 @@ export type BlocoTutorial =
   /** Mão de exemplo com as pedras do app (notação mpsz, um grupo por bloco). */
   | { tipo: 'mao'; mpsz: string; rotulos: string[] }
   | { tipo: 'verTabela' }
+
+export interface TopicoComSub {
+  texto: string
+  sub: string[]
+}
 
 /** Assunto de uma página de consulta: título no sumário e na página, e o conteúdo. */
 export interface SecaoTutorial {
@@ -130,9 +136,8 @@ export const PAGINAS_TUTORIAL_HAN_FU: PaginaTutorial[] = [
             tipo: 'topicos',
             textos: [
               `${CHAVE}.pairWait.pairDragon`,
-              `${CHAVE}.pairWait.pairSeat`,
-              `${CHAVE}.pairWait.pairRound`,
-              `${CHAVE}.pairWait.pairDouble`,
+              // O vento duplo é um caso do vento de valor, não um terceiro +2 somado.
+              { texto: `${CHAVE}.pairWait.pairWind`, sub: [`${CHAVE}.pairWait.pairDouble`] },
               `${CHAVE}.pairWait.pairOther`,
             ],
           },

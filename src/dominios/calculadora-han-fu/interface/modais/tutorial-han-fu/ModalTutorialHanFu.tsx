@@ -93,11 +93,24 @@ function BlocoPagina({
       const Lista = bloco.numerados ? 'ol' : 'ul'
       return (
         <Lista className="glossario-item__topicos tutorial-topicos">
-          {bloco.textos.map((chave) => (
-            <li key={chave}>
-              <Texto chave={chave} />
-            </li>
-          ))}
+          {bloco.textos.map((topico) =>
+            typeof topico === 'string' ? (
+              <li key={topico}>
+                <Texto chave={topico} />
+              </li>
+            ) : (
+              <li key={topico.texto}>
+                <Texto chave={topico.texto} />
+                <ul className="tutorial-subtopicos">
+                  {topico.sub.map((chave) => (
+                    <li key={chave}>
+                      <Texto chave={chave} />
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ),
+          )}
         </Lista>
       )
     }
@@ -189,7 +202,9 @@ function textosDoBloco(bloco: BlocoTutorial, traduzir: (chave: string) => string
     'texto' in bloco
       ? [bloco.texto, ...('titulo' in bloco ? [bloco.titulo] : [])]
       : 'textos' in bloco
-        ? bloco.textos
+        ? bloco.textos.flatMap((topico) =>
+            typeof topico === 'string' ? [topico] : [topico.texto, ...topico.sub],
+          )
         : 'linhas' in bloco
           ? bloco.linhas
           : 'rotulos' in bloco

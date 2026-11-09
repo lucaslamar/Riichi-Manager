@@ -70,6 +70,13 @@
   margin-top: 0;
 }
 
+/* Subtópico: um caso do tópico de cima (ex.: o vento duplo dentro do vento de valor). */
+.modal-tutorial-han-fu .tutorial-subtopicos {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  list-style: circle;
+}
+
 /* Conta passo a passo solta: centralizada, como a caixa de fórmula. */
 .tutorial-conta {
   margin: 10px 0;
