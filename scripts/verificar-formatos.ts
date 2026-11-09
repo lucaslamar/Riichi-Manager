@@ -21,6 +21,8 @@ import { podeSortearDeNovo, sortearDeNovo, textoDaRodada } from '../src/dominios
 import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
 import { relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
+import { relatorioDaRodada, relatorioDoRanking } from '../src/dominios/torneio/logica/relatorios'
+import { nomeDeArquivo, textoDoRelatorio } from '../src/compartilhado/relatorio/relatorio'
 import { rankingTemporada } from '../src/dominios/torneio/logica/temporada'
 import { exportarTorneio, importarTorneio, pacoteParaCodigo, codigoParaPacote, planejarImportacao } from '../src/dominios/torneio/logica/exportacao'
 import { criarRascunho, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
@@ -280,6 +282,30 @@ for (const total of [8, 12, 16]) {
     nome: (id) => id.toUpperCase(),
   })
   assert.ok(texto.startsWith('Rodada 1\n\n*Mesa 1*\n東 leste: '), 'texto para WhatsApp')
+
+  // Exportar a rodada: mesa com resultado vem na ordem de colocação, com os pontos.
+  const relatorio = relatorioDaRodada(torneio, torneio.rodadas[0], partidas, {
+    titulo: 'Torneio',
+    subtitulo: 'Rodada 1',
+    mesa: (numero) => `Mesa ${numero}`,
+    mesaFinal: 'Final',
+    status: (status) => status,
+    vento: (vento) => vento,
+    nome: (id) => id.toUpperCase(),
+    ventos: false,
+    resultado: (colocacao, final) => `${colocacao}º ${final}`,
+  })
+  const primeira = relatorio.blocos[0]
+  assert.equal(primeira.detalhe, 'finalizada')
+  assert.deepEqual(
+    primeira.linhas.map((linha) => linha.direita?.slice(0, 2)),
+    ['1º', '2º', '3º', '4º'],
+    'ordem de colocação',
+  )
+  const textoExportado = textoDoRelatorio(relatorio)
+  assert.ok(textoExportado.startsWith('*Torneio*\n_Rodada 1_\n\n*Mesa 1* · finalizada\n'), textoExportado.slice(0, 80))
+  assert.ok(textoExportado.includes(' — 1º '), 'resultado depois do nome')
+  assert.equal(nomeDeArquivo('Torneio 09/11', 'Rodada 1'), 'torneio-09-11-rodada-1')
   console.log('Mesas ok.')
 }
 
@@ -296,6 +322,10 @@ for (const total of [8, 12, 16]) {
   const comFase = rankingDoTorneio(elim.torneio, elim.partidas)
   assert.deepEqual(comFase.map((linha) => linha.fase), [1, 1, 1, 1, 0, 0, 0, 0], 'Eliminatório: fase atingida')
   assert.ok(textoDoRanking(comFase, { titulo: 'T', nome: (id) => id, pontos: String, fase: (fase) => `F${fase}` }).includes(' · F1'))
+  const classificacao = textoDoRelatorio(
+    relatorioDoRanking(ranking, { titulo: 'T', nome: (id) => id, valores: (linha) => String(linha.pontos) }),
+  )
+  assert.ok(classificacao.split('\n')[2].startsWith('*🥇 '), 'pódio com medalha e negrito')
   console.log('Ranking ok.')
 }
 

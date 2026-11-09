@@ -1450,6 +1450,15 @@
     "redDragon": "red dragon"
   },
   "tournament": {
+    "share": {
+      "title": "Exportar",
+      "roundHelp": "Las mesas de esta ronda y los resultados, para enviar al grupo.",
+      "rankingHelp": "La clasificación del torneo, para enviar al grupo.",
+      "text": "Texto",
+      "image": "Imagen",
+      "imageSaved": "Imagen guardada.",
+      "imageError": "No se pudo crear la imagen."
+    },
     "title": "Tournament",
     "create": "Create tournament",
     "defaultName": "Tournament {{date}}",

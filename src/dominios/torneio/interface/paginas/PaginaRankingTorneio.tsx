@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { exportarPdf } from '@/compartilhado/adaptadores/pdf'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -7,7 +6,10 @@ import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/M
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { rankingDoTorneio, textoDoRanking } from '../../logica/ranking'
+import { rankingDoTorneio } from '../../logica/ranking'
+import { relatorioDoRanking } from '../../logica/relatorios'
+import AreaExportar from '../componentes/AreaExportar'
+import { nomeDeArquivo } from '@/compartilhado/relatorio/relatorio'
 import type { Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import '../torneio.css'
@@ -45,17 +47,20 @@ export default function PaginaRankingTorneio({
 
   const titulo = `${torneio.nome} · ${t('tournament.ranking.title')}`
 
-  const compartilhar = async () => {
-    const texto = textoDoRanking(linhas, {
-      titulo: `*${titulo}*`,
+  /** A classificação, para a área Exportar. */
+  const relatorio = () =>
+    relatorioDoRanking(linhas, {
+      titulo: torneio.nome,
+      subtitulo: t('tournament.ranking.title'),
       nome: nomeDe,
-      pontos,
-      ...(eliminatorio ? { fase } : {}),
+      valores: (linha) =>
+        [
+          pontos(linha.pontos),
+          `${t('tournament.ranking.averagePlaceShort')} ${media(linha.mediaColocacao)}`,
+          `${t('tournament.ranking.gamesShort')} ${numero(linha.partidas)}`,
+          ...(eliminatorio ? [fase(linha.fase ?? 0)] : []),
+        ].join(' · '),
     })
-    const resultado = await compartilharTexto(texto, titulo)
-    if (resultado === 'copiado') mostrar(t('match.club.copied'))
-    if (resultado === 'falhou') mostrar(t('match.club.shareFailed'))
-  }
 
   const pdf = async () => {
     const ok = await exportarPdf({
@@ -86,28 +91,6 @@ export default function PaginaRankingTorneio({
       <TituloTela
         titulo={t('tournament.ranking.title')}
         aoVoltar={aoVoltar}
-        acoes={
-          <span className="clb-acoes-titulo">
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('tournament.ranking.pdf')}
-              title={t('tournament.ranking.pdf')}
-              onClick={pdf}
-            >
-              <i className="fas fa-file-pdf" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('match.club.share')}
-              title={t('match.club.share')}
-              onClick={compartilhar}
-            >
-              <i className="fas fa-share-nodes" aria-hidden="true" />
-            </button>
-          </span>
-        }
       />
       <p className="clb-encontro-data">{torneio.nome}</p>
 
@@ -163,6 +146,18 @@ export default function PaginaRankingTorneio({
           </tbody>
         </table>
       </div>
+
+      <AreaExportar
+        ajuda={t('tournament.share.rankingHelp')}
+        relatorio={relatorio}
+        nomeArquivo={nomeDeArquivo(torneio.nome, t('tournament.ranking.title'))}
+        aoAvisar={mostrar}
+        extras={
+          <button type="button" className="btn-contorno" onClick={pdf}>
+            <i className="fas fa-file-pdf" aria-hidden="true" /> PDF
+          </button>
+        }
+      />
 
       {torneio.status === 'em_andamento' && !torneio.transferidoEm && (
         <button type="button" className="btn-contorno ptd-btn-largo trn-encerrar" onClick={() => setEncerrando(true)}>

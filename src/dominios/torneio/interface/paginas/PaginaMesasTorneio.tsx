@@ -1,5 +1,4 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -20,7 +19,6 @@ import {
   relogioDaRodada,
   reiniciarSorteio,
   sortearDeNovo,
-  textoDaRodada,
   trocarMesa,
   trocarRodada,
 } from '../../logica/mesas'
@@ -37,6 +35,9 @@ import {
 import { abortarTorneio, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
 import FolhaExportar from '../componentes/FolhaExportar'
+import AreaExportar from '../componentes/AreaExportar'
+import { nomeDeArquivo } from '@/compartilhado/relatorio/relatorio'
+import { relatorioDaRodada } from '../../logica/relatorios'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
 import '../torneio.css'
@@ -120,18 +121,20 @@ export default function PaginaMesasTorneio({
   /** Ventos na mesa: o card mostra só os quatro nomes. */
   const comVentos = sorteiaVentos(torneio)
 
-  const compartilhar = async () => {
-    const texto = textoDaRodada(rodada, {
-      titulo: `*${torneio.nome}* · ${titulo}`,
+  /** Mesas e resultados desta rodada, para a área Exportar. */
+  const relatorio = () =>
+    relatorioDaRodada(torneio, rodada, partidas, {
+      titulo: torneio.nome,
+      subtitulo: titulo,
       mesa: (numeroMesa) => t('match.table.number', { number: numeroMesa }),
+      mesaFinal: t('tournament.tables.finalTable'),
+      status: (status) => t(`tournament.tables.status.${status}`),
       vento: (vento) => t(CHAVE_VENTO[vento]),
       nome: nomeDe,
       ventos: comVentos,
+      resultado: (colocacao, final) =>
+        `${t('tournament.tables.place', { place: colocacao })} · ${final > 0 ? '+' : ''}${new Intl.NumberFormat(idioma, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(final)}`,
     })
-    const resultado = await compartilharTexto(texto, torneio.nome)
-    if (resultado === 'copiado') mostrar(t('match.club.copied'))
-    if (resultado === 'falhou') mostrar(t('match.club.shareFailed'))
-  }
 
   const fechada = rodadaFechada(torneio, partidas) && rodada.numero === torneio.rodadas.length
   const proxima = fechada && !somenteLeitura ? proximaRodada(torneio, partidas, new Date().toISOString()) : null
@@ -151,15 +154,6 @@ export default function PaginaMesasTorneio({
               onClick={aoAbrirRanking}
             >
               <i className="fas fa-ranking-star" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('match.club.share')}
-              title={t('match.club.share')}
-              onClick={compartilhar}
-            >
-              <i className="fas fa-share-nodes" aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -388,6 +382,13 @@ export default function PaginaMesasTorneio({
           <i className="fas fa-floppy-disk" aria-hidden="true" /> {t('tournament.tables.backupAction')}
         </button>
       )}
+
+      <AreaExportar
+        ajuda={t('tournament.share.roundHelp')}
+        relatorio={relatorio}
+        nomeArquivo={nomeDeArquivo(torneio.nome, t('tournament.tables.round', { round: rodada.numero }))}
+        aoAvisar={mostrar}
+      />
 
 
 

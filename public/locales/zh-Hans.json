@@ -1429,6 +1429,15 @@
     "redDragon": "red dragon"
   },
   "tournament": {
+    "share": {
+      "title": "导出",
+      "roundHelp": "本轮的牌桌和结果，可发到群里。",
+      "rankingHelp": "比赛排名，可发到群里。",
+      "text": "文字",
+      "image": "图片",
+      "imageSaved": "图片已保存。",
+      "imageError": "无法生成图片。"
+    },
     "title": "Tournament",
     "create": "Create tournament",
     "defaultName": "Tournament {{date}}",

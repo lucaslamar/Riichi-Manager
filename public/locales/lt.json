@@ -1480,6 +1480,15 @@
     "redDragon": "red dragon"
   },
   "tournament": {
+    "share": {
+      "title": "Eksportuoti",
+      "roundHelp": "Šio raundo stalai ir rezultatai, kad nusiųstumėte grupei.",
+      "rankingHelp": "Turnyro lentelė, kad nusiųstumėte grupei.",
+      "text": "Tekstas",
+      "image": "Paveikslėlis",
+      "imageSaved": "Paveikslėlis išsaugotas.",
+      "imageError": "Nepavyko sukurti paveikslėlio."
+    },
     "title": "Tournament",
     "create": "Create tournament",
     "defaultName": "Tournament {{date}}",

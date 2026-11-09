@@ -840,3 +840,44 @@
 body.teclado-aberto .trn-rodape-icones .clb-enviar {
   display: inline-flex;
 }
+
+/* ─── Área Exportar (Mesas e Ranking) ─────────────────────────────────────── */
+.trn-exportar {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: var(--raio, 12px);
+  padding: 14px 16px 16px;
+  background: var(--branco);
+}
+
+.trn-exportar__titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--primario);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.trn-exportar .cfg-ajuda {
+  margin: 0;
+}
+
+.trn-exportar__botoes {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 8px;
+}
+
+.trn-exportar__botoes > button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+}

@@ -7,7 +7,7 @@ export type ResultadoArquivo = 'compartilhado' | 'baixado' | 'cancelado' | 'falh
 
 export async function salvarArquivo(
   nome: string,
-  conteudo: string,
+  conteudo: string | Blob,
   tipo = 'application/json',
 ): Promise<ResultadoArquivo> {
   const arquivo = new File([conteudo], nome, { type: tipo })

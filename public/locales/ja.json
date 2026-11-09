@@ -1429,6 +1429,15 @@
     "redDragon": "red dragon"
   },
   "tournament": {
+    "share": {
+      "title": "書き出し",
+      "roundHelp": "このラウンドの卓と結果をグループに送れます。",
+      "rankingHelp": "大会の順位をグループに送れます。",
+      "text": "テキスト",
+      "image": "画像",
+      "imageSaved": "画像を保存しました。",
+      "imageError": "画像を作れませんでした。"
+    },
     "title": "Tournament",
     "create": "Create tournament",
     "defaultName": "Tournament {{date}}",
