@@ -7,7 +7,8 @@ import { KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/
 import { ehMesaFinal } from './formatos/eliminatorio'
 import type { LinhaRankingTorneio } from './ranking'
 import type { RodadaTorneio, Torneio } from './tipos'
-import { partidaDaMesa, statusDaMesa, type StatusMesa } from './torneio'
+import { statusNaTela } from './mesas'
+import { partidaDaMesa, type StatusMesa } from './torneio'
 
 const MEDALHAS = ['🥇', '🥈', '🥉']
 
@@ -52,7 +53,7 @@ export function relatorioDaRodada(
     })
     return {
       titulo: final ? rotulos.mesaFinal : rotulos.mesa(mesa.numero),
-      detalhe: rotulos.status(statusDaMesa(partida)),
+      detalhe: rotulos.status(statusNaTela(torneio, rodada, mesa, partida)),
       linhas: [...linhas].sort((a, b) => a.colocacao - b.colocacao).map(({ linha }) => linha),
     }
   })

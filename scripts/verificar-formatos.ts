@@ -17,7 +17,7 @@ import {
   faseDaRodada,
   rankingEliminatorio,
 } from '../src/dominios/torneio/logica/formatos/eliminatorio'
-import { podeSortearDeNovo, sortearDeNovo, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
+import { podeSortearDeNovo, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
 import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
 import { relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
@@ -306,6 +306,13 @@ for (const total of [8, 12, 16]) {
   assert.ok(textoExportado.startsWith('*Torneio*\n_Rodada 1_\n\n*Mesa 1* · finalizada\n'), textoExportado.slice(0, 80))
   assert.ok(textoExportado.includes(' — 1º '), 'resultado depois do nome')
   assert.equal(nomeDeArquivo('Torneio 09/11', 'Rodada 1'), 'torneio-09-11-rodada-1')
+
+  // Sem Centerpiece: a mesa sem resultado fica "Em andamento" quando o timer da rodada começa.
+  const rodadaParada = { ...torneio.rodadas[0], relogio: undefined }
+  const mesaUm = rodadaParada.mesas[0]
+  assert.equal(statusNaTela(torneio, rodadaParada, mesaUm, undefined), 'nao_iniciada')
+  const rodadaCorrendo = { ...rodadaParada, relogio: iniciar(relogioDaRodada(torneio, rodadaParada), 0) }
+  assert.equal(statusNaTela(torneio, rodadaCorrendo, mesaUm, undefined), 'em_andamento')
   console.log('Mesas ok.')
 }
 

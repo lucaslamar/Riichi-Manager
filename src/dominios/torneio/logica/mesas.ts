@@ -5,11 +5,33 @@
 import { configSoPontuacao } from '@/dominios/centerpiece/logica/configMesa'
 import { criarPartida, KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
 import { proximaRodada, rodadasIniciais } from './formatos'
-import { relogioParado } from './torneio'
+import { relogioParado, statusDaMesa, type StatusMesa } from './torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from './tipos'
 
 export function relogioDaRodada(torneio: Torneio, rodada: RodadaTorneio): Relogio {
   return rodada.relogio ?? relogioParado(torneio.timers.rodadaSegundos)
+}
+
+/** O relógio já foi ligado alguma vez (correndo ou pausado depois de começar). */
+export function relogioComecou(relogio: Relogio | null): boolean {
+  return !!relogio && (relogio.iniciadoEm !== null || relogio.corridoSegundos > 0)
+}
+
+/**
+ * Status que a mesa mostra. Sem o Centerpiece nas mesas, a partida só existe ao
+ * registrar o resultado: até lá, a mesa fica "Em andamento" assim que o timer da
+ * rodada (ou o da própria mesa) começa.
+ */
+export function statusNaTela(
+  torneio: Torneio,
+  rodada: RodadaTorneio,
+  mesa: MesaTorneio,
+  partida: Partida | undefined,
+): StatusMesa {
+  const status = statusDaMesa(partida)
+  if (status !== 'nao_iniciada') return status
+  const comecou = relogioComecou(relogioDaRodada(torneio, rodada)) || relogioComecou(relogioDaMesa(torneio, mesa))
+  return comecou ? 'em_andamento' : status
 }
 
 /** Timer por mesa: mesmo tempo da rodada, contado a partir do início da mesa. */

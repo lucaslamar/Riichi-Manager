@@ -52,6 +52,7 @@
 - **Marca MOJOCA no Centerpiece**: volta a aparecer no cabeçalho, ao lado do título.
 - **Título da tela no cabeçalho, no roxo do app**: Calculadora de Mão (também no MPSZ), Han e Fu, Partida e Sorteador de Ventos mostram o nome ao lado da marca. Os títulos de todas as telas passaram do branco para o roxo do app.
 - **Engrenagem alinhada na Lista do torneio**: fica na mesma linha que Listas salvas, Importar e os controles deslizantes.
+- **Mesas do torneio "Em andamento" com o timer**: sem o Centerpiece nas mesas, elas ficavam em "Não iniciada" até o resultado ser registrado. Agora, ao iniciar o timer da rodada (ou o da mesa), as mesas sem resultado passam a "Em andamento", também no Exportar.
 
 ### Corrigido
 

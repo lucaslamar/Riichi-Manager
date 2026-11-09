@@ -19,6 +19,7 @@ import {
   relogioDaRodada,
   reiniciarSorteio,
   sortearDeNovo,
+  statusNaTela,
   trocarMesa,
   trocarRodada,
 } from '../../logica/mesas'
@@ -32,7 +33,7 @@ import {
   pausar,
   segundosRestantes,
 } from '../../logica/relogio'
-import { abortarTorneio, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, statusDaMesa, totalDeRodadas } from '../../logica/torneio'
+import { abortarTorneio, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
 import FolhaExportar from '../componentes/FolhaExportar'
 import AreaExportar from '../componentes/AreaExportar'
@@ -250,7 +251,7 @@ export default function PaginaMesasTorneio({
       <ul className="clb-mesas">
         {rodada.mesas.map((mesa) => {
           const partida = partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero)
-          const status = statusDaMesa(partida)
+          const status = statusNaTela(torneio, rodada, mesa, partida)
           const rotulo = t('match.table.number', { number: mesa.numero })
           const relogio = relogioDaMesa(torneio, mesa)
           const final = ehMesaFinal(torneio, rodada)
