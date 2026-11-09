@@ -9,7 +9,7 @@ import {
 } from '../../../logica/mao'
 import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
-import ExibicaoCompleta, { TagsVentos } from './ExibicaoCompleta'
+import ExibicaoCompleta, { TagsVentos, VentosPagamento, ventosDosDemais } from './ExibicaoCompleta'
 
 import { consumirDestaque, destaqueDoYaku } from './destaqueYaku'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
@@ -166,14 +166,17 @@ export default function ModalResultado({
           <div className="pagamentos-resultado">
             {chomboOya ? (
               <span>
+                <VentosPagamento ventos={ventosDosDemais(mao.ventoAssento)} />
                 {t('calculator.everyoneReceives')} <strong>{numero(multa.demais)}</strong>
               </span>
             ) : (
               <>
                 <span>
+                  <VentosPagamento ventos={['1']} />
                   {t('calculator.eastReceives')} <strong>{numero(multa.leste)}</strong>
                 </span>
                 <span>
+                  <VentosPagamento ventos={ventosDosDemais(mao.ventoAssento)} />
                   {t('calculator.othersReceive')} <strong>{numero(multa.demais)}</strong>
                 </span>
               </>

@@ -398,6 +398,29 @@
   color: var(--cor-texto, #102a43);
 }
 
+/* Pedras dos ventos de quem paga ou recebe, antes da frase. */
+.modal-resultado .pagamentos-resultado > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.modal-resultado .ventos-pagamento {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.modal-resultado .ventos-pagamento .chip-pedra.mini {
+  width: 18px;
+  height: 24px;
+  padding: 0;
+}
+
+/* "?" do tutorial de Han e Fu ao lado do rótulo FU. */
+.modal-resultado .rotulo-lista-resultado .botao-ajuda-secao {
+  text-transform: none;
+}
+
 /* ─── Yaku clicável: explicação e pedras em dourado ──────────────────────── */
 .modal-resultado .chip-yaku:hover {
   border-color: var(--cor-primario-borda, #bfdbfe);

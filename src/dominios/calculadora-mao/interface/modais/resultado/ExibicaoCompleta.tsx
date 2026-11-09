@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import ModalTutorialHanFu from '@/dominios/calculadora-han-fu/interface/modais/tutorial-han-fu/ModalTutorialHanFu'
 import type { DetalheFu, Mao, VentoMao } from '../../../logica/mao'
 import { termoGlossarioDoNome } from '../../../logica/glossario'
 import { chavePatamar, nomeYakuExibido } from '../../../logica/nomesYaku'
@@ -16,18 +18,49 @@ const CHAVE_VENTO: Record<VentoMao, string> = {
   '4': 'winds.north',
 }
 
+const OUTROS_VENTOS: VentoMao[] = ['2', '3', '4']
+
+/**
+ * Ventos de quem paga ou recebe, além do Leste: os três que não são o Leste,
+ * menos o de quem bateu ou errou (sem a mão, não dá para saber qual sai).
+ */
+export function ventosDosDemais(ventoDeQuem?: VentoMao): VentoMao[] {
+  if (ventoDeQuem === '1') return OUTROS_VENTOS
+  return ventoDeQuem ? OUTROS_VENTOS.filter((vento) => vento !== ventoDeQuem) : []
+}
+
 /**
  * Quem paga no tsumo: sendo Leste, todos pagam o mesmo; senão, Leste paga a
  * parte maior e os demais a menor. No ron o total já é o que o descarte paga.
+ * Cada linha leva os ventos de quem paga, para não confundir quem é quem.
  */
-function pagamentos(resultado: any): { chave: string; valor: number }[] {
+function pagamentos(
+  resultado: any,
+  ventoVencedor?: VentoMao,
+): { chave: string; valor: number; ventos: VentoMao[] }[] {
   const pts = resultado.pontos
   if (resultado.agari !== 'tsumo') return []
-  if (resultado.isOya) return [{ chave: 'calculator.everyonePays', valor: pts.oya?.ko }]
+  if (resultado.isOya) {
+    return [{ chave: 'calculator.everyonePays', valor: pts.oya?.ko, ventos: OUTROS_VENTOS }]
+  }
   return [
-    { chave: 'calculator.eastPays', valor: pts.ko?.oya },
-    { chave: 'calculator.othersPay', valor: pts.ko?.ko },
+    { chave: 'calculator.eastPays', valor: pts.ko?.oya, ventos: ['1'] },
+    { chave: 'calculator.othersPay', valor: pts.ko?.ko, ventos: ventosDosDemais(ventoVencedor) },
   ]
+}
+
+/** Pedras dos ventos de quem paga ou recebe, ao lado da frase (resultado e chombo). */
+export function VentosPagamento({ ventos }: { ventos: VentoMao[] }) {
+  if (ventos.length === 0) return null
+  return (
+    <span className="ventos-pagamento" aria-hidden="true">
+      {ventos.map((vento) => (
+        <span key={vento} className="chip-pedra mini">
+          <PedraSvg pedra={`${vento}z`} />
+        </span>
+      ))}
+    </span>
+  )
 }
 
 /** Tags de vento da rodada e do assento (resultado e penalidade de chombo). */
@@ -61,6 +94,7 @@ export default function ExibicaoCompleta({
   contextoCenterpiece?: ContextoCenterpieceMao
 }) {
   const { t, idioma, numero } = useI18n()
+  const [tutorialAberto, setTutorialAberto] = useState(false)
   const pts = resultado.pontos
   const completarIndicadores = (quantidade: number) => Math.max(0, 5 - quantidade)
   const pontosHonba: number = resultado.pontosHonba ?? 0
@@ -114,8 +148,9 @@ export default function ExibicaoCompleta({
       <div className="pontos-totais">{numero(pts.total)}</div>
       {resultado.agari === 'tsumo' && (
         <div className="pagamentos-resultado">
-          {pagamentos(resultado).map(({ chave, valor }) => (
+          {pagamentos(resultado, mao?.ventoAssento).map(({ chave, valor, ventos }) => (
             <span key={chave}>
+              <VentosPagamento ventos={ventos} />
               {t(chave)} <strong>{numero(valor ?? 0)}</strong>
             </span>
           ))}
@@ -240,7 +275,21 @@ export default function ExibicaoCompleta({
       {resultado.fuDetalhes?.length > 0 && resultado.yakuman === 0 && (
         <>
           <div className="divisor-resultado" />
-          <div className="rotulo-lista-resultado">{t('hanFu.fu')}</div>
+          <div className="rotulo-lista-resultado">
+            {t('hanFu.fu')}
+            {/* "?" do Fu: abre o tutorial "Como contar Han e Fu" por cima do resultado. */}
+            <button
+              type="button"
+              className="botao-ajuda-secao"
+              aria-label={t('sectionHelp.buttonLabel', { section: t('hanFuTutorial.title') })}
+              aria-haspopup="dialog"
+              onClick={() => setTutorialAberto(true)}
+            >
+              <span className="botao-ajuda-secao-circulo" aria-hidden="true">
+                ?
+              </span>
+            </button>
+          </div>
           <div className="lista-fu">
             {resultado.fuDetalhes.map((detalhe: DetalheFu, i: number) => (
               <span key={i} className="chip-fu">
@@ -252,6 +301,7 @@ export default function ExibicaoCompleta({
           </div>
         </>
       )}
+      {tutorialAberto && <ModalTutorialHanFu aoFechar={() => setTutorialAberto(false)} />}
     </>
   )
 }
