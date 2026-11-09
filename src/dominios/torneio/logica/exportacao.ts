@@ -9,8 +9,12 @@ import type { Temporada, Torneio } from './tipos'
 
 export const VERSAO_PACOTE = 1
 export const EXTENSAO_PACOTE = '.mojoca.json'
-/** Tamanho de cada pedaço do código: cabe com folga num QR legível pela câmera. */
-export const TAMANHO_PEDACO_QR = 800
+/**
+ * Tamanho de cada pedaço do código. Com 800 o QR ficava denso demais (versão 20,
+ * 97 módulos) e a câmera de outro celular não lia na tela. Com 300 fica
+ * na versão 11 (61 módulos): mais QRs na sequência, mas cada um lê de primeira.
+ */
+export const TAMANHO_PEDACO_QR = 300
 
 export type ModoExportacao = 'copia' | 'transferencia'
 
