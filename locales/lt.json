@@ -628,7 +628,13 @@
       "off": "Yakuman"
     }
   },
+  "settingsSheet": {
+    "appTab": "Programėlės nustatymai",
+    "appHelp": "Galioja iš karto visoje programėlėje.",
+    "tabs": "Nustatymų skirtukai"
+  },
   "pages": {
+    "languageHelp": "Programėlės tekstų kalba.",
     "installTitle": "Įdiegti Mojoca",
     "installHelp": "Atsidaro iš piktogramos, be naršyklės juostos, ir veikia neprisijungus.",
     "installAction": "Įdiegti",

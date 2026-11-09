@@ -610,7 +610,13 @@
       "off": "役満"
     }
   },
+  "settingsSheet": {
+    "appTab": "アプリの設定",
+    "appHelp": "すぐにアプリ全体に反映されます。",
+    "tabs": "設定のタブ"
+  },
   "pages": {
+    "languageHelp": "アプリの表示言語。",
     "installTitle": "Mojocaをインストール",
     "installHelp": "アイコンから開き、ブラウザのバーなしでオフラインでも使えます。",
     "installAction": "インストール",

@@ -610,7 +610,13 @@
       "off": "역만"
     }
   },
+  "settingsSheet": {
+    "appTab": "앱 설정",
+    "appHelp": "바로 앱 전체에 적용됩니다.",
+    "tabs": "설정 탭"
+  },
   "pages": {
+    "languageHelp": "앱에 표시되는 언어.",
     "installTitle": "Mojoca 설치",
     "installHelp": "아이콘으로 열리고 브라우저 막대 없이 오프라인에서도 작동합니다.",
     "installAction": "설치",

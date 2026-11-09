@@ -613,7 +613,13 @@
       "off": "Yakuman"
     }
   },
+  "settingsSheet": {
+    "appTab": "App settings",
+    "appHelp": "They apply right away, across the app.",
+    "tabs": "Settings tabs"
+  },
   "pages": {
+    "languageHelp": "Language of the app's text.",
     "installTitle": "Install Mojoca",
     "installHelp": "Opens from its icon, without the browser bar, and works offline.",
     "installAction": "Install",
