@@ -25,10 +25,16 @@ const CHAVE_LINHA: Record<LinhaUmaFlutuante, string> = {
 }
 
 /**
- * Teclado de campo que aceita negativo. No iPhone, `decimal` abre um teclado sem a
- * tecla de menos; `numeric` sem `pattern` abre o de números e pontuação, que tem.
+ * Teclado nativo de campo que aceita negativo. No Android, só `type="number"`
+ * pede ao teclado (Gboard, Samsung…) a tecla de menos: `inputMode` numeric ou
+ * decimal abre o teclado sem ela. No iPhone, `numeric` sem `pattern` abre o de
+ * números e pontuação, que tem o menos. No computador, texto com teclado decimal.
  */
-export const TECLADO_COM_SINAL = ehIos() ? 'numeric' : 'decimal'
+export const PROPS_TECLADO_COM_SINAL = ehIos()
+  ? ({ type: 'text', inputMode: 'numeric' } as const)
+  : /Android/i.test(navigator.userAgent)
+    ? ({ type: 'number', step: 'any' } as const)
+    : ({ type: 'text', inputMode: 'decimal' } as const)
 
 /** Número com texto próprio: dá para apagar tudo ou começar pelo sinal de menos. */
 export function CampoInteiro({
@@ -63,8 +69,7 @@ export function CampoInteiro({
     <div className="fin-campo">
       <input
         className="cfg-entrada"
-        type="text"
-        inputMode={TECLADO_COM_SINAL}
+        {...PROPS_TECLADO_COM_SINAL}
         aria-label={rotulo}
         aria-invalid={invalido || undefined}
         autoComplete="off"

@@ -18,7 +18,7 @@ import {
 } from '../../logica/regrasPontuacao'
 import { umaValida } from '../../logica/uma'
 import { carregarRegrasRegistro, salvarRegrasRegistro } from '../../persistencia/repositorioRegrasRegistro'
-import { TECLADO_COM_SINAL } from '../componentes/CampoUma'
+import { PROPS_TECLADO_COM_SINAL } from '../componentes/CampoUma'
 import ListaResultado from '../componentes/ListaResultado'
 import RegrasPontuacaoRegistro from '../componentes/RegrasPontuacaoRegistro'
 import { assentosDaMesa } from '../hooks/useClube'
@@ -188,8 +188,7 @@ export default function RegistrarFinalizada({
               <div className="fin-campo">
                 <input
                   className="cfg-entrada"
-                  type="text"
-                  inputMode={TECLADO_COM_SINAL}
+                  {...PROPS_TECLADO_COM_SINAL}
                   aria-label={rotulo}
                   autoComplete="off"
                   value={pontos[lugar]}
