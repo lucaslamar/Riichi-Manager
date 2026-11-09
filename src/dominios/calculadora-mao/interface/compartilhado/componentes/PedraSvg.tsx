@@ -18,7 +18,7 @@ export function PedraSvg({
 }) {
   const [formato, setFormato] = useState<'png' | 'svg' | 'texto'>('png')
   // Pretas no tema claro e brancas no escuro, ou o que a pessoa escolheu em Ajustes.
-  const { pedrasEfetivas } = usePreferencias()
+  const { pedrasEfetivas, temaEfetivo } = usePreferencias()
   const nomeArquivo = virada ? 'Back' : (arquivo ?? (pedra ? arquivoPedra(pedra) : 'Blank'))
   const alt = virada ? traduzirGlobal('tiles.back') : nomePedraAcessivel(pedra)
 
@@ -33,7 +33,7 @@ export function PedraSvg({
   return (
     <img
       className={`tile-img ${pedra === '5z' ? 'tile-img-haku' : ''} ${deLado ? 'tile-img-lado' : ''}`}
-      src={urlPedra(nomeArquivo, formato, pedrasEfetivas)}
+      src={urlPedra(nomeArquivo, formato, pedrasEfetivas, temaEfetivo === 'escuro')}
       alt={alt}
       draggable={false}
       // Em telas de alta densidade (iPhone 16, Pixel, Galaxy) o Chrome adiava a

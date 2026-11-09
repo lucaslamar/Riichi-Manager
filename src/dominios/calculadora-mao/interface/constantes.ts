@@ -106,8 +106,10 @@ export function urlPedra(
   nomeArquivo: string,
   formato: 'png' | 'svg',
   cor: 'brancas' | 'pretas' = 'brancas',
+  /** Pretas no tema escuro: o amarelo, o 5 vermelho e os ventos em rosa (scripts/gerar-pedras-rosa.ts). */
+  temaEscuro = false,
 ): string {
-  const base = cor === 'pretas' ? 'black' : 'regular'
+  const base = cor === 'pretas' ? (temaEscuro ? 'black-rosa' : 'black') : 'regular'
   const pasta = formato === 'png' ? `${base}-png-240` : base
   return `${import.meta.env.BASE_URL}tiles/${pasta}/${nomeArquivo}.${formato}?v=3`
 }

@@ -93,6 +93,24 @@
   color: #d32f2f;
 }
 
+/* Número sem naipe (na mão e nos grupos): rosa no tema escuro, o rosa do Kan e
+   das pedras pretas desse tema, e amarelo no claro, o das pedras pretas. Em
+   pedra branca no tema claro, um amarelo mais escuro para ler na face clara. */
+:root[data-tema='escuro'] .pedra-pendente-notacao:not(.vermelha),
+:root[data-tema='escuro'] .meld-tile.pendente:not(.vermelha) {
+  color: var(--cor-destaque, #e06ab0);
+}
+
+:root[data-tema='claro'] .pedra-pendente-notacao:not(.vermelha),
+:root[data-tema='claro'] .meld-tile.pendente:not(.vermelha) {
+  color: #b7740c;
+}
+
+:root[data-tema='claro'][data-pedras='pretas'] .pedra-pendente-notacao:not(.vermelha),
+:root[data-tema='claro'][data-pedras='pretas'] .meld-tile.pendente:not(.vermelha) {
+  color: #f0a023;
+}
+
 .mensagem-campo-notacao-mao {
   color: var(--cor-texto-suave, #607080);
   font-size: 0.85rem;
