@@ -1702,7 +1702,7 @@
       "qrNext": "Próximo QR",
       "qrPause": "Pausar a sequência",
       "qrPlay": "Continuar a sequência",
-      "qrScanHelp": "No outro aparelho: Torneio, menu ⋮ e Importar torneio. Os QRs passam sozinhos até a câmera ler todos.",
+      "qrScanHelp": "No outro aparelho: Torneio e o ícone Importar torneio, no topo da lista. Os QRs passam sozinhos, em loop. Deixe a câmera apontada até o contador fechar: ela guarda os que já leu, em qualquer ordem, e o que escapar aparece de novo na próxima volta. Se um QR demorar, pause e use as setas para ficar parado nele.",
       "qrDone": "Concluído"
     },
     "import": {
@@ -1716,6 +1716,7 @@
       "pasteHelp": "O código copiado no outro aparelho",
       "pastePlaceholder": "Cole o código aqui",
       "read": "Ler código",
+      "cameraSequence": "O outro aparelho mostra vários QRs, um depois do outro, em loop. Deixe a câmera apontada: cada QR lido entra no contador, em qualquer ordem, e o que escapar aparece de novo na próxima volta. Quando todos forem lidos, a importação continua sozinha.",
       "cameraWaiting": "Procurando QR…",
       "cameraProgress": "{{read}} de {{total}} lidos",
       "cameraError": "Não deu para abrir a câmera. Confira a permissão ou use outro jeito.",

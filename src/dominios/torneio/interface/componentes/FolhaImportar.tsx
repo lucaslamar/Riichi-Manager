@@ -230,11 +230,15 @@ function LeitorCamera({ aoLer }: { aoLer: (validacao: Validacao) => void }) {
           </button>
         </>
       ) : (
-        <p className="trn-qr-contador" aria-live="polite">
-          {leitura
-            ? t('tournament.import.cameraProgress', { read: lidos, total: leitura.total })
-            : t('tournament.import.cameraWaiting')}
-        </p>
+        <>
+          <p className="trn-qr-contador" aria-live="polite">
+            {leitura
+              ? t('tournament.import.cameraProgress', { read: lidos, total: leitura.total })
+              : t('tournament.import.cameraWaiting')}
+          </p>
+          {/* Como a sequência funciona: em loop, em qualquer ordem, até o contador fechar. */}
+          <p className="cfg-ajuda">{t('tournament.import.cameraSequence')}</p>
+        </>
       )}
     </div>
   )
