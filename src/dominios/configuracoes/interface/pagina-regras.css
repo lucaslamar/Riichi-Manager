@@ -257,3 +257,29 @@ body.toque-ampliado .cartao-regras {
     grid-column: 1 / -1;
   }
 }
+
+/* Idioma: seletor nativo, na largura do cartão, como os segmentos. */
+.seletor-idioma-cartao {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  border-radius: 10px;
+  padding: 6px 12px;
+  background: var(--cor-superficie-alt, #f8fafc);
+  color: var(--cor-texto, #102a43);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.seletor-idioma-cartao:focus-visible {
+  outline: 3px solid var(--cor-foco, rgba(249, 115, 22, 0.65));
+  outline-offset: 2px;
+}
+
+/* Os cartões dentro de uma folha (Configurações e Configurações do torneio). */
+.folha-cfg__ajustes {
+  display: grid;
+  gap: 14px;
+}

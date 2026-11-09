@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
@@ -113,7 +114,13 @@ export default function CenterpieceSimples({
 
   return (
     <section className="mesa-tela mesa-tela--simples">
-      <TituloTela titulo={t('match.simple.title')} acoes={<BotaoTelaCheia />} />
+      <TituloTela titulo={t('match.simple.title')} acoes={
+          <>
+            <BotaoTelaCheia />
+            <BotaoConfiguracoes />
+          </>
+        }
+      />
       <RecursosDaMesa />
 
       <div className="mesa-simples-ajuda">

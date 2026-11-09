@@ -1,0 +1,97 @@
+/*
+ * Folha Configurações: abas no topo e um trilho horizontal com snap, uma aba por
+ * tela. O corpo da Modal não rola: quem rola na vertical é cada painel.
+ */
+
+/* Altura fixa: trocar de aba não faz a folha pular de tamanho. */
+.modal.folha-cfg {
+  height: min(var(--modal-altura), 90dvh, 100%);
+}
+
+.folha-cfg .modal-corpo {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.folha-cfg__abas {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  margin: 0 var(--modal-espaco);
+  border-bottom: 1px solid var(--modal-borda);
+}
+
+.folha-cfg__aba {
+  min-height: 44px;
+  margin: 0;
+  border: 0;
+  padding: 8px 6px;
+  background: transparent;
+  color: var(--cor-texto-suave, #607080);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.folha-cfg__aba--ativa {
+  color: var(--primario, #2196f3);
+}
+
+.folha-cfg__aba:focus-visible {
+  outline: 2px solid var(--primario, #2196f3);
+  outline-offset: -2px;
+}
+
+/* Indicador da aba ativa: anda junto com o dedo (o transform vem do scroll). */
+.folha-cfg__indicador {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--primario, #2196f3);
+  pointer-events: none;
+}
+
+.folha-cfg__trilho {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.folha-cfg__trilho::-webkit-scrollbar {
+  display: none;
+}
+
+.folha-cfg__painel {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: calc(var(--modal-espaco) * 0.75) var(--modal-espaco) var(--modal-espaco);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  container-type: inline-size;
+}
+
+body.modo-compacto .folha-cfg__ajustes {
+  gap: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folha-cfg__trilho {
+    scroll-behavior: auto;
+  }
+}

@@ -610,7 +610,13 @@
       "off": "役满"
     }
   },
+  "settingsSheet": {
+    "appTab": "应用设置",
+    "appHelp": "立即在整个应用中生效。",
+    "tabs": "设置标签页"
+  },
   "pages": {
+    "languageHelp": "应用文字的语言。",
     "installTitle": "安装 Mojoca",
     "installHelp": "从图标打开，没有浏览器栏，也可离线使用。",
     "installAction": "安装",

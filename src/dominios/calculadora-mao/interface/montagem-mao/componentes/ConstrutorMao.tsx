@@ -443,8 +443,8 @@ export default function ConstrutorMao({
                   <button
                     className="botao-configuracao-toolbar"
                     type="button"
-                    aria-label={t('rulesModal.open')}
-                    title={t('rulesModal.open')}
+                    aria-label={t('menu.rules')}
+                    title={t('menu.rules')}
                     onClick={aoAbrirRegras}
                   >
                     <i className="fas fa-gear" aria-hidden="true" />

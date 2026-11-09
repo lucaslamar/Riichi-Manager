@@ -325,8 +325,8 @@ export function TecladoPedras({
         <button
           className="botao-configuracao-teclado"
           type="button"
-          aria-label={t('rulesModal.open')}
-          title={t('rulesModal.open')}
+          aria-label={t('menu.rules')}
+          title={t('menu.rules')}
           onClick={aoAbrirRegras}
         >
           <i className="fas fa-gear" aria-hidden="true" />
@@ -340,8 +340,8 @@ export function TecladoPedras({
             <button
               className="botao-configuracao-chii"
               type="button"
-              aria-label={t('rulesModal.open')}
-              title={t('rulesModal.open')}
+              aria-label={t('menu.rules')}
+              title={t('menu.rules')}
               onClick={aoAbrirRegras}
             >
               <i className="fas fa-gear" aria-hidden="true" />
@@ -437,8 +437,8 @@ export function TecladoPedras({
             <button
               className="botao-configuracao-teclado botao-configuracao-teclado-rodape"
               type="button"
-              aria-label={t('rulesModal.open')}
-              title={t('rulesModal.open')}
+              aria-label={t('menu.rules')}
+              title={t('menu.rules')}
               onClick={aoAbrirRegras}
             >
               <i className="fas fa-gear" aria-hidden="true" />

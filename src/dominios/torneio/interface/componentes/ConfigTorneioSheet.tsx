@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/ConfigMesaSheet'
+import ListaAjustesApp from '@/dominios/configuracoes/interface/ListaAjustesApp'
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
@@ -204,6 +205,20 @@ export default function ConfigTorneioSheet({
       titulo={t('tournament.settings.title')}
       inicial={torneio.config}
       rodapeSalvar
+      // Só Torneio e Pontuação: o resto usa o padrão até haver login e Centerpiece.
+      secoes={['pontuacao']}
+      // Ajustes do app no fim: valem na hora, sem o Salvar.
+      abasFim={[
+        {
+          id: 'app',
+          rotulo: t('settingsSheet.appTab'),
+          conteudo: (
+            <div className="folha-cfg__ajustes">
+              <ListaAjustesApp />
+            </div>
+          ),
+        },
+      ]}
       podeConcluir={cortesValidos && temporadaValida}
       abasExtras={[
         {

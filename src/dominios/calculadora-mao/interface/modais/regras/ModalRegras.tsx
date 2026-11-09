@@ -106,23 +106,31 @@ export default function ModalRegras({
       rotuloFechar={t('rulesModal.close')}
       tamanho="grande"
       className="modal-regras"
-      rodape={
-        <>
-          <button
-            type="button"
-            className="btn-contorno"
-            onClick={() => aoMudar(configuracaoPadrao)}
-          >
-            {t('rulesModal.restoreDefault')}
-          </button>
-          <button type="button" className="btn-primario" onClick={aoFechar}>
-            {t('rulesModal.apply')}
-          </button>
-        </>
-      }
+      rodape={<RodapeRegras aoMudar={aoMudar} aoFechar={aoFechar} />}
     >
       <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
     </Modal>
+  )
+}
+
+/** Restaurar padrão e Aplicar (as mudanças já valem; Aplicar só fecha). */
+export function RodapeRegras({
+  aoMudar,
+  aoFechar,
+}: {
+  aoMudar: (config: ConfiguracaoCalculo) => void
+  aoFechar: () => void
+}) {
+  const { t } = useI18n()
+  return (
+    <>
+      <button type="button" className="btn-contorno" onClick={() => aoMudar(configuracaoPadrao)}>
+        {t('rulesModal.restoreDefault')}
+      </button>
+      <button type="button" className="btn-primario" onClick={aoFechar}>
+        {t('rulesModal.apply')}
+      </button>
+    </>
   )
 }
 

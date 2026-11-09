@@ -1,4 +1,6 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import {
   CardResultadoHanFu,
   ControleFu,
@@ -72,6 +74,8 @@ export default function PaginaCalculadoraHanFu({
 
   return (
     <main className="calculadora-han-fu">
+      {/* Engrenagem no cabeçalho do app (aberta pelo Centerpiece, a tela é da mesa). */}
+      {!aoUsarResultado && <TituloTela acoes={<BotaoConfiguracoes />} />}
       <section className="painel-principal-han-fu">
         {!aoUsarResultado && (
           <div className="seletores-topo-han-fu">

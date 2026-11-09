@@ -4,6 +4,7 @@ import { useGestoHorizontal } from '@/compartilhado/interface/hooks/useGestoHori
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogadores'
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
@@ -341,7 +342,7 @@ function TelasCenterpiece({
 
   return (
     <section className="ptd-inicio">
-      <TituloTela titulo={t('menu.matches')} />
+      <TituloTela titulo={t('menu.matches')} acoes={<BotaoConfiguracoes />} />
       <div className="ptd-cards">
         {cards.map((card) => (
           <button

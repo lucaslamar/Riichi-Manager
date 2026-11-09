@@ -7,14 +7,15 @@ export const ID_TITULO_TELA = 'cabecalho-tela'
 
 /**
  * Coloca o título da tela no cabeçalho do app. Com `aoVoltar`, a seta e o título
- * ficam no lugar da marca; sem ele, o título aparece ao lado da marca.
+ * ficam no lugar da marca; sem ele, o título aparece ao lado da marca. Sem título,
+ * só as ações vão para o cabeçalho (ex.: a engrenagem da Han e Fu).
  */
 export default function TituloTela({
   titulo,
   aoVoltar,
   acoes,
 }: {
-  titulo: ReactNode
+  titulo?: ReactNode
   aoVoltar?: () => void
   /** Botões à direita do título. */
   acoes?: ReactNode
@@ -40,7 +41,7 @@ export default function TituloTela({
           <i className="fas fa-arrow-left" aria-hidden="true" />
         </button>
       )}
-      <h2 className="titulo-tela">{titulo}</h2>
+      {titulo && <h2 className="titulo-tela">{titulo}</h2>}
       {acoes}
     </>,
     destino,

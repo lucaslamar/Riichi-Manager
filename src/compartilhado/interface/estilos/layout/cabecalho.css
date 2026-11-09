@@ -595,7 +595,7 @@
 
 /* Com seta, ela e o título ocupam o lugar da marca (a sidebar mantém a marca). */
 @media not all and (min-width: 1024px) and (orientation: landscape) {
-  .barra-marca-aplicacao:has(.botao-voltar-tela) .marca-aplicacao {
+  .barra-marca-aplicacao:has(.botao-voltar-tela:not(.botao-configuracoes-tela)) .marca-aplicacao {
     display: none;
   }
 }
@@ -692,6 +692,15 @@
   margin-left: auto;
 }
 
+/* Engrenagem das Configurações: no canto direito, depois da tela cheia se houver. */
+.botao-configuracoes-tela {
+  margin-left: auto;
+}
+
+.botao-tela-cheia + .botao-configuracoes-tela {
+  margin-left: 0;
+}
+
 /* ─── Menu do Mais: todas as telas, deslizando da esquerda ──────────────────── */
 .menu-mais-fundo {
   position: fixed;
@@ -767,4 +776,14 @@
   .menu-mais-fundo {
     animation: none;
   }
+}
+
+/* Teclado do sistema aberto (useAlturaTeclado): a barra inferior some e libera o
+   espaço; volta quando o teclado fecha. */
+body.teclado-aberto {
+  --altura-barra-inferior: 0px;
+}
+
+body.teclado-aberto .barra-navegacao-inferior {
+  display: none;
 }
