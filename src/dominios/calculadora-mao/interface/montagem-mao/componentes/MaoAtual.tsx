@@ -306,15 +306,18 @@ export function MaoAtual({
   return (
     <div className={`mao-editor-fixo ${maoEditorGrudado ? 'grudado' : ''}`}>
       <div className="cabecalho-mao-editor">
-        <h3 className="titulo-mao-editor">
-          <i className="fas fa-layer-group" style={{ marginRight: 6 }} aria-hidden="true" />
-          {tituloMao}
-        </h3>
-        <div className="acoes-cabecalho-mao">
-          {/* A ajuda vem primeiro: do MPSZ ou, no teclado de pedras, de como montar a mão. */}
+        {/* O "?" fica colado no título (MÃO 0/14): do MPSZ ou, no teclado de pedras,
+            de como montar a mão. À direita ficam só o chapéu e a engrenagem. */}
+        <div className="titulo-mao-linha">
+          <h3 className="titulo-mao-editor">
+            <i className="fas fa-layer-group" style={{ marginRight: 6 }} aria-hidden="true" />
+            {tituloMao}
+          </h3>
           {(entradaPorNotacao || contexto === 'montagem') && (
-            <BotaoAjuda topico={entradaPorNotacao ? 'notacao' : 'pecas'} />
+            <BotaoAjuda topico={entradaPorNotacao ? 'notacao' : 'pecas'} className="botao-ajuda-titulo-mao" />
           )}
+        </div>
+        <div className="acoes-cabecalho-mao">
           {acoesCabecalho}
           {/* No tablet o Limpar da finalização entra depois do lápis. */}
           {contexto === 'finalizacao' && limparNoCabecalho && botaoLimparFinalizacao}
@@ -326,8 +329,8 @@ export function MaoAtual({
               className={`btn-configuracao-mao-cabecalho ${entradaPorNotacao ? 'em-notacao' : ''}`.trim()}
               type="button"
               onClick={aoAbrirRegras}
-              aria-label={t('rulesModal.open')}
-              title={t('rulesModal.open')}
+              aria-label={t('menu.rules')}
+              title={t('menu.rules')}
             >
               <i className="fas fa-gear" aria-hidden="true" />
             </button>

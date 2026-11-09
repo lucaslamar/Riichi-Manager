@@ -11,6 +11,22 @@
   margin-bottom: 6px;
 }
 
+/* Título da mão com o "?" logo depois do texto, na mesma linha. */
+.titulo-mao-linha {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+
+.titulo-mao-linha .titulo-mao-editor {
+  flex: 0 1 auto;
+}
+
+.titulo-mao-linha .botao-ajuda-titulo-mao:not(#_) {
+  margin-left: 8px;
+}
+
 .titulo-mao-editor {
   flex: 1;
   min-width: 0;
