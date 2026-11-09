@@ -27,8 +27,9 @@ interface PropsCabecalho {
 /**
  * Cabeçalho, barra inferior (celular em pé e tablet; no celular deitado o CSS a põe
  * de pé, como trilho à esquerda) e sidebar fixa (telas grandes).
- * A barra mostra as telas principais, e "Mais" abre o menu lateral com todas as
- * telas (nome completo e a atual marcada). O deslizar entre telas segue igual.
+ * A barra mostra a página da tela aberta (as principais ou as do Mais), sempre com
+ * o "Mais" no fim, que abre o menu lateral com todas as telas. Ao chegar deslizando
+ * numa tela da outra página, a barra troca junto, para mostrar onde se está.
  */
 export default function Cabecalho({
   telaAtual,
@@ -37,8 +38,14 @@ export default function Cabecalho({
   aoAbrirIdioma,
 }: PropsCabecalho) {
   const { t } = useI18n()
-  // A tela aberta está fora da barra (no menu do Mais): o Mais ganha o ponto.
-  const foraDaBarra = paginaDoDestino(telaAtual) !== 0
+  const pagina = Math.max(0, paginaDoDestino(telaAtual))
+  // Só anima ao trocar de página, não ao abrir o app: guarda a página anterior.
+  const paginaAnterior = useRef(pagina)
+  const trocou = useRef(false)
+  if (pagina !== paginaAnterior.current) {
+    trocou.current = true
+    paginaAnterior.current = pagina
+  }
   const [maisAberto, setMaisAberto] = useState(false)
   const botaoMaisRef = useRef<HTMLButtonElement | null>(null)
   const menuRef = useRef<HTMLElement | null>(null)
@@ -105,7 +112,7 @@ export default function Cabecalho({
   const botaoMais = (
     <button
       ref={botaoMaisRef}
-      className={`item-tab-inferior item-tab-mais${foraDaBarra ? ' ativo' : ''}`}
+      className="item-tab-inferior item-tab-mais"
       type="button"
       aria-label={t('menu.moreOptions')}
       aria-haspopup="dialog"
@@ -115,7 +122,6 @@ export default function Cabecalho({
     >
       <i className="fas fa-ellipsis" aria-hidden="true" />
       <span>{t('menu.more')}</span>
-      {foraDaBarra && <span className="item-tab-ponto" aria-hidden="true" />}
     </button>
   )
 
@@ -144,8 +150,11 @@ export default function Cabecalho({
 
   const barraInferior = createPortal(
     <nav className="barra-navegacao-inferior" aria-label={t('global.navigation')}>
-      <div className="barra-pagina">
-        {PAGINAS_NAVEGACAO[0].map((item) => {
+      <div
+        key={pagina}
+        className={`barra-pagina${trocou.current ? ` barra-pagina--${pagina === 1 ? 'segunda' : 'primeira'}` : ''}`}
+      >
+        {PAGINAS_NAVEGACAO[pagina].map((item) => {
           const ativo = item.destino === telaAtual
           return (
             <button

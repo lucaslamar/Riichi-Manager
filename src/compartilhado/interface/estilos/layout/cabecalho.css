@@ -617,18 +617,34 @@
   width: 100%;
 }
 
-.item-tab-mais {
-  position: relative;
+/* Troca de página da barra (ao deslizar para uma tela da outra página). */
+.barra-pagina--segunda {
+  animation: barra-entra-direita 0.18s ease-out;
 }
 
-.item-tab-ponto {
-  position: absolute;
-  top: 6px;
-  right: calc(50% - 16px);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--cor-primario, #155b98);
+.barra-pagina--primeira {
+  animation: barra-entra-esquerda 0.18s ease-out;
+}
+
+@keyframes barra-entra-direita {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes barra-entra-esquerda {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra-pagina--segunda,
+  .barra-pagina--primeira {
+    animation: none;
+  }
 }
 
 /* iPhone SE: 5 itens em 320px, o rótulo precisa de toda a largura. */
