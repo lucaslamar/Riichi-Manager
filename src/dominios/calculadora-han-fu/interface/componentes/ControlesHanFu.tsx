@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import {
@@ -268,7 +267,6 @@ const CONSULTA_TABELA_TRANSPOSTA =
 
 export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaRapidaHanFu }) {
   const { t } = useI18n()
-  const secaoRef = useRef<HTMLElement>(null)
   // Celular deitado e tablet: eixos trocados (Fu nas linhas, Han nas colunas).
   // As faixas espelham os @media de `.tabela-referencia-han-fu.transposta` em
   // han-fu.css. Os dados são os mesmos; só a renderização muda.
@@ -278,12 +276,10 @@ export function TabelaReferenciaRapida({ referencia }: { referencia: ReferenciaR
   ) ?? []
 
   return (
-    <section ref={secaoRef} className="referencia-han-fu" aria-labelledby="referencia-han-fu-titulo">
-      {/* O retângulo inteiro abre o tutorial "Como contar Han e Fu". */}
-      <BotaoTutorialHanFu
-        className="cabecalho-referencia-han-fu"
-        aoVerTabela={() => secaoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-      >
+    <section className="referencia-han-fu" aria-labelledby="referencia-han-fu-titulo">
+      {/* O retângulo inteiro abre o tutorial "Como contar Han e Fu". Sem o botão
+          de ir para a tabela: ela está logo atrás, basta fechar o tutorial. */}
+      <BotaoTutorialHanFu className="cabecalho-referencia-han-fu">
         <span className="titulos-referencia-han-fu">
           <strong id="referencia-han-fu-titulo">{t('hanFu.quickReference')}</strong>
           <small>{t('hanFu.quickReferenceHint')}</small>
