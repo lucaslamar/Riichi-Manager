@@ -16,6 +16,9 @@
 - **Paisagem e tablet**: no celular deitado, a lista fica à esquerda e o Sortear à direita, o timer fica compacto e as mesas ocupam a largura toda.
 - **Torneios antigos**: os torneios das versões anteriores são migrados para o novo formato na primeira abertura.
 - **Ventos sorteados no app ou na mesa**: nas configurações do torneio, logo abaixo do formato. No Rodízio o app já sorteia os ventos (é o que garante que cada um seja Leste uma vez). Nos outros formatos o padrão é sortear na mesa, e o card mostra só os quatro nomes.
+- **Engrenagem das Configurações nas telas principais**: Calculadora, Han e Fu, Centerpiece e Partida têm uma engrenagem no canto do cabeçalho. Ela abre as Configurações com a aba "Ajustes do app" (Idioma, Tema, Pedras, Alto contraste, Modo compacto, Área de toque ampliada e tela). Na Calculadora, a primeira aba é a de Regras de cálculo. A tela Ajustes continua igual.
+- **Abas das Configurações com deslize**: dá para trocar de aba tocando nela ou deslizando o dedo para o lado, com o indicador acompanhando o dedo. Cada aba rola sozinha na vertical.
+- **Idioma nos Ajustes**: o Idioma virou o primeiro cartão dos ajustes, antes do Tema.
 
 ### Alterado
 
@@ -39,6 +42,8 @@
 - **Menu do Mais fecha com o deslize**: com o menu aberto, arrastar o dedo para o lado fecha. Para a esquerda, o menu acompanha o dedo.
 - **Barra acompanha a tela ao deslizar**: chegando deslizando no Sorteador, no Tutorial ou nas Configurações, a barra troca para essas abas, com a atual marcada. O Mais fica no fim das duas e continua abrindo o menu com todas as telas.
 - **Lista do torneio sem o menu ⋮**: Importar torneio fica ao lado da engrenagem, no topo, e Listas salvas, Jogadores cadastrados e Limpar lista ficam lado a lado no rodapé.
+- **Configurações do torneio só com Torneio e Pontuação**, mais a aba Ajustes do app. Regras, Empates, Regras de cálculo e Mesa saíram do torneio por enquanto, e as partidas do torneio usam o padrão do conjunto nessas regras. A busca procura só no que ficou.
+- **"?" da Calculadora ao lado de "MÃO 0/14"**: à direita do cabeçalho da mão ficam só o chapéu do tutorial e a engrenagem.
 
 ### Corrigido
 
@@ -48,6 +53,8 @@
 - **Par de vento duplo no tutorial de Han e Fu**: dizia +4 fu, mas na regra padrão do app o par que é o seu vento e o da rodada vale +2. Agora o vento de valor é um tópico só (+2) e o caso duplo vem embaixo dele: +2 na regra padrão e +4 com a regra Par de vento duplo ligada.
 - **Calculadora de Mão lenta com mão inválida**: ao completar 14 pedras que não fecham uma mão, Mudar batida e Finalizar mão demoravam segundos para aparecer. Agora aparecem na hora, e Mudar batida numa mão inválida também responde na hora.
 - **Busca dos Jogadores cadastrados presa no topo**: no Torneio e no Encontro do clube, o campo de busca não some quando a lista rola.
+- **Barras e folhas com o teclado aberto**: nas listas do Torneio e do Encontro do clube, a barra com o contador e os botões fica logo acima do teclado e a linha que está sendo digitada não some atrás dela. Enquanto o teclado está aberto, a barra inferior do app e o Sortear mesas saem e voltam quando ele fecha.
+- **Folhas sobem com o teclado**: Novo jogador, editar jogador e nome do torneio ficam inteiros acima do teclado, com o título e os botões Cancelar e Salvar sempre à vista. O Enter do teclado vai para o próximo campo e, no último, salva.
 
 ## 5.9.0 - 2026-11-05
 
