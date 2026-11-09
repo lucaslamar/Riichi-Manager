@@ -827,12 +827,14 @@
 }
 
 /* Seta de enviar da Lista: só com o teclado aberto, no lugar do Sortear. */
+/* Só a seta, no roxo dos outros ícones da barra (sem o círculo). */
 .trn-rodape-icones .clb-enviar {
   display: none;
-  border-radius: 50%;
-  background: var(--primario);
-  color: var(--cor-sobre-primario, #fff);
-  font-size: 1.05rem;
+}
+
+.trn-rodape-icones .clb-enviar-seta {
+  width: 24px;
+  height: 24px;
 }
 
 body.teclado-aberto .trn-rodape-icones .clb-enviar {

@@ -19,7 +19,7 @@
 - **Engrenagem do app em todas as telas principais**: Calculadora, Han e Fu, Centerpiece, Partida, Sorteador e a Lista do torneio têm a engrenagem no cabeçalho, ao lado da marca MOJOCA, na cor de destaque do app. Ela abre os Ajustes do app (Idioma, Tema, Pedras, Alto contraste, Modo compacto, Área de toque ampliada e tela).
 - **Controles deslizantes para as regras do módulo**: a engrenagem é sempre dos ajustes do app, e as regras de cada módulo ficam no ícone de controles deslizantes. Na Calculadora de Mão, ele fica onde estava a engrenagem e abre as Regras de cálculo. No Torneio, abre as Configurações do torneio.
 - **Idioma nos Ajustes**: o Idioma virou o primeiro cartão dos ajustes, antes do Tema.
-- **Seta de enviar nas listas**: com o teclado aberto, a lista do Torneio e a do Encontro do clube ganham uma seta deitada, como a de enviar do WhatsApp, que sorteia as mesas sem precisar fechar o teclado.
+- **Seta de enviar nas listas**: com o teclado aberto, a lista do Torneio e a do Encontro do clube ganham uma seta deitada no roxo do app (sem círculo), como a de enviar do WhatsApp, que sorteia as mesas sem precisar fechar o teclado.
 - **Engrenagem no Sorteador**: abre os Ajustes do app, como nas outras telas.
 
 ### Alterado
