@@ -20,7 +20,7 @@ import {
   type LeituraQr,
 } from '../src/dominios/torneio/logica/exportacao'
 import { rodadasIniciais } from '../src/dominios/torneio/logica/formatos'
-import { criarRascunho, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
+import { criarRascunho, formatoPadrao, iniciarTorneio } from '../src/dominios/torneio/logica/torneio'
 
 const agora = '2026-11-08T14:00:00.000Z'
 let contador = 0
@@ -34,7 +34,8 @@ const jogadores: Jogador[] = nomes.map((nome, indice) => ({
   arquivado: false,
 }))
 const ids = jogadores.map((jogador) => jogador.id)
-const rascunho = criarRascunho({ id: 't1', agora: new Date(agora), nome: 'Encontro' })
+// Rodízio: a grade inteira já sai sorteada, então há rodadas para exportar.
+const rascunho = { ...criarRascunho({ id: 't1', agora: new Date(agora), nome: 'Encontro' }), formato: formatoPadrao('rodizio') }
 const torneio = {
   ...iniciarTorneio(rascunho, ids, rodadasIniciais(rascunho, ids, agora), agora),
   transferidoEm: agora,

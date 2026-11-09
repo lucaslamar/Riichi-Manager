@@ -48,7 +48,7 @@ export function criarRascunho(contexto: { id: string; agora: Date; nome: string 
     id: contexto.id,
     nome: contexto.nome,
     data: dataDoDia(contexto.agora),
-    formato: formatoPadrao('rodizio'),
+    formato: formatoPadrao('corridos'),
     config: configPadraoTorneio(),
     timers: { rodadaSegundos: SEGUNDOS_RODADA_PADRAO, porMesa: false },
     jogadorIds: [],
