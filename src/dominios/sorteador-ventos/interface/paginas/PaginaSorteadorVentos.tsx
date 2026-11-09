@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { chaveNomeVento } from '../../../calculadora-mao/interface/compartilhado/componentes/PedraVento'
 import GatoHelice from '../componentes/GatoHelice'
@@ -87,6 +89,8 @@ export default function PaginaSorteadorVentos({
       }}
     >
       <h2 className="sr-only">{t('windDraw.title')}</h2>
+      {/* Engrenagem no cabeçalho do app (portal: o toque nela não sorteia). */}
+      <TituloTela acoes={<BotaoConfiguracoes />} />
 
       {/* "?" no canto: explica por que o sorteio é justo. */}
       <button
