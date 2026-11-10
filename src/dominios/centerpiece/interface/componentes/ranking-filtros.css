@@ -114,6 +114,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  /* Ícones à direita; os chips ficam antes deles, à esquerda. */
+  justify-content: flex-end;
   gap: 2px 4px;
   /* Colada na lista, como o cabeçalho dela. */
   margin-bottom: 4px;
@@ -135,6 +137,7 @@
   font-size: 0.8rem;
   opacity: 0.75;
   cursor: pointer;
+  order: 1;
 }
 
 .rkf-icone:hover,
