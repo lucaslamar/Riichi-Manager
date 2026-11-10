@@ -26,10 +26,10 @@ export const PAGINAS_NAVEGACAO: readonly (readonly ItemNavegacao[])[] = [
     { destino: 'partidas', chave: 'menu.matches', icone: 'fa-gamepad', chaveCurta: 'menu.matchesShort' },
   ],
   [
+    // Ranking logo depois de Partida: abre direto na lista, com Jogadores no cabeçalho.
+    { destino: 'ranking', chave: 'menu.ranking', icone: 'fa-ranking-star' },
     { destino: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice', chaveCurta: 'menu.windDrawShort' },
     { destino: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
-    // Ranking, histórico, registrar partida finalizada e jogadores.
-    { destino: 'ranking', chave: 'menu.ranking', icone: 'fa-ranking-star' },
   ],
 ]
 
