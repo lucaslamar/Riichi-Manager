@@ -11,6 +11,13 @@ import BlocoConfrontos from '../componentes/BlocoConfrontos'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
 import '../componentes/ranking-filtros.css'
 import FerramentasDev from '../componentes/FerramentasDev'
+import type { DuracaoRanking, PeriodoRanking } from '../../logica/filtrosRanking'
+
+/** Ordem dos atalhos em ícone (o período personalizado fica só no modal). */
+const PERIODOS_RAPIDOS: readonly PeriodoRanking[] = ['tudo', 'mes', 'ano']
+const DURACOES_RAPIDAS: readonly DuracaoRanking[] = ['todas', 'hanchan', 'leste']
+/** Próxima opção da lista, voltando ao começo (de fora da lista, a primeira). */
+const proximo = <T,>(opcoes: readonly T[], atual: T) => opcoes[(opcoes.indexOf(atual) + 1) % opcoes.length]
 
 /**
  * Ranking geral: soma das partidas finalizadas. Na aba Ranking é a raiz (sem
@@ -96,13 +103,33 @@ export default function PaginaRanking({
       <div className="rkf-barra">
         <button
           type="button"
-          className={`rkf-botao-filtro${ativos.length > 0 ? ' rkf-botao-filtro--ativo' : ''}`}
+          className={`rkf-icone${ativos.length > 0 ? ' rkf-icone--ativo' : ''}`}
+          aria-label={t('match.ranking.filters.title')}
+          title={t('match.ranking.filters.title')}
           aria-haspopup="dialog"
           onClick={() => setFiltrosAbertos(true)}
         >
-          <i className="fas fa-sliders" aria-hidden="true" />
-          {t('match.ranking.filters.title')}
+          <i className="fas fa-filter" aria-hidden="true" />
           {ativos.length > 0 && <span className="rkf-contagem">{numero(ativos.length)}</span>}
+        </button>
+        {/* Atalhos: cada toque passa para a próxima opção; o chip ao lado mostra qual ficou. */}
+        <button
+          type="button"
+          className={`rkf-icone${filtros.periodo !== 'tudo' ? ' rkf-icone--ativo' : ''}`}
+          aria-label={`${t('match.ranking.period')}: ${t(`match.ranking.periods.${filtros.periodo}`)}`}
+          title={`${t('match.ranking.period')}: ${t(`match.ranking.periods.${filtros.periodo}`)}`}
+          onClick={() => setFiltros({ ...filtros, periodo: proximo(PERIODOS_RAPIDOS, filtros.periodo) })}
+        >
+          <i className="fas fa-calendar-days" aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          className={`rkf-icone${filtros.duracao !== 'todas' ? ' rkf-icone--ativo' : ''}`}
+          aria-label={`${t('match.ranking.filters.duration')}: ${t(`match.ranking.filters.durations.${filtros.duracao}`)}`}
+          title={`${t('match.ranking.filters.duration')}: ${t(`match.ranking.filters.durations.${filtros.duracao}`)}`}
+          onClick={() => setFiltros({ ...filtros, duracao: proximo(DURACOES_RAPIDAS, filtros.duracao) })}
+        >
+          <i className="fas fa-stopwatch" aria-hidden="true" />
         </button>
         {ativos.map((ativo) => (
           <button

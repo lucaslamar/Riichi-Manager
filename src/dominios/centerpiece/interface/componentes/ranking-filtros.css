@@ -118,26 +118,29 @@
   margin-bottom: 12px;
 }
 
-.rkf-botao-filtro {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 32px;
-  padding: 0 10px;
+/* Ícones redondos: o funil abre os filtros e os outros são atalhos. */
+.rkf-icone {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
   border: 1px solid var(--entrada-borda);
-  border-radius: 999px;
+  border-radius: 50%;
   color: var(--texto-apoio);
   background: transparent;
-  font-size: 0.8rem;
   cursor: pointer;
 }
 
-.rkf-botao-filtro--ativo {
+.rkf-icone--ativo {
   border-color: var(--primario);
   color: var(--primario);
 }
 
 .rkf-contagem {
+  position: absolute;
+  top: -4px;
+  right: -4px;
   display: grid;
   place-items: center;
   min-width: 18px;
