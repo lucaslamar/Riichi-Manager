@@ -98,6 +98,31 @@ export default function PaginaRanking({
 
       {/* Filtros discretos: o botão e os chips do que está ativo, numa linha só. */}
       <div className="rkf-barra">
+        {/* À esquerda, as ações de cadastro: registrar partida e jogadores. */}
+        {aoRegistrarPartida && (
+          <button
+            type="button"
+            className="rkf-icone"
+            aria-label={t('match.manual.title')}
+            title={t('match.manual.title')}
+            onClick={aoRegistrarPartida}
+          >
+            <i className="fas fa-clipboard-check" aria-hidden="true" />
+          </button>
+        )}
+        {aoAbrirJogadores && (
+          <button
+            type="button"
+            className="rkf-icone"
+            aria-label={t('players.title')}
+            title={t('players.title')}
+            onClick={aoAbrirJogadores}
+          >
+            <i className="fas fa-user-plus" aria-hidden="true" />
+          </button>
+        )}
+        <span className="rkf-espaco" aria-hidden="true" />
+        {/* À direita, os filtros e o importar/exportar. */}
         <button
           type="button"
           className={`rkf-icone${ativos.length > 0 ? ' rkf-icone--ativo' : ''}`}
@@ -128,30 +153,7 @@ export default function PaginaRanking({
         >
           <i className="fas fa-stopwatch" aria-hidden="true" />
         </button>
-        {/* Ações da lista, depois dos filtros: cadastro de jogadores e importar/exportar. */}
         <span className="rkf-separador" aria-hidden="true" />
-        {aoRegistrarPartida && (
-          <button
-            type="button"
-            className="rkf-icone"
-            aria-label={t('match.manual.title')}
-            title={t('match.manual.title')}
-            onClick={aoRegistrarPartida}
-          >
-            <i className="fas fa-clipboard-check" aria-hidden="true" />
-          </button>
-        )}
-        {aoAbrirJogadores && (
-          <button
-            type="button"
-            className="rkf-icone"
-            aria-label={t('players.title')}
-            title={t('players.title')}
-            onClick={aoAbrirJogadores}
-          >
-            <i className="fas fa-user-plus" aria-hidden="true" />
-          </button>
-        )}
         <button
           type="button"
           className="rkf-icone"

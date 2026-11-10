@@ -371,3 +371,9 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+/* Empurra os filtros para a direita, deixando as ações de cadastro à esquerda. */
+.rkf-espaco {
+  flex: 1;
+  order: 1;
+}
