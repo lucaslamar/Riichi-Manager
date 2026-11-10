@@ -32,11 +32,11 @@ export const FILTROS_PADRAO: FiltrosRankingGeral = {
   ordenarPor: 'pontuacao',
 }
 
-/** Quais filtros fogem do padrão (o período é atalho fixo da tela, não conta). */
+/** Quais filtros fogem do padrão: cada um vira um chip removível. */
 export function filtrosAtivos(filtros: FiltrosRankingGeral) {
   const ativos: ('jogador' | 'duracao' | 'origem' | 'minimo' | 'ordem' | 'periodo')[] = []
   if (filtros.jogadorId) ativos.push('jogador')
-  if (filtros.periodo === 'personalizado') ativos.push('periodo')
+  if (filtros.periodo !== 'tudo') ativos.push('periodo')
   if (filtros.duracao !== 'todas') ativos.push('duracao')
   if (filtros.origem !== 'todas') ativos.push('origem')
   if (filtros.minimoPartidas > 0) ativos.push('minimo')

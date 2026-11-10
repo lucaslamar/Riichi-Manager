@@ -4,15 +4,13 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { posicoesDoRanking, semExcluidos } from '../../logica/ranking'
-import { FILTROS_PADRAO, filtrosAtivos, type PeriodoRanking } from '../../logica/filtrosRanking'
+import { FILTROS_PADRAO, filtrosAtivos } from '../../logica/filtrosRanking'
 import { useRankingGeral } from '../hooks/useRankingGeral'
 import ModalFiltrosRanking from '../componentes/ModalFiltrosRanking'
 import BlocoConfrontos from '../componentes/BlocoConfrontos'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
 import '../componentes/ranking-filtros.css'
-
-/** Atalhos de período no topo; o personalizado fica só no modal. */
-const PERIODOS: readonly PeriodoRanking[] = ['mes', 'ano', 'tudo']
+import FerramentasDev from '../componentes/FerramentasDev'
 
 /**
  * Ranking geral: soma das partidas finalizadas. Na aba Ranking é a raiz (sem
@@ -40,7 +38,9 @@ export default function PaginaRanking({
       case 'jogador':
         return nomesDe(filtros.jogadorId ?? '').principal
       case 'periodo':
-        return t('match.ranking.periods.personalizado')
+        return filtros.periodo === 'personalizado'
+          ? [filtros.inicio, filtros.fim].filter(Boolean).join(' – ') || t('match.ranking.periods.personalizado')
+          : t(`match.ranking.periods.${filtros.periodo}`)
       case 'duracao':
         return t(`match.ranking.filters.durations.${filtros.duracao}`)
       case 'origem':
@@ -76,17 +76,6 @@ export default function PaginaRanking({
         aoVoltar={aoVoltar}
         acoes={
           <>
-            <button
-              type="button"
-              className="botao-voltar-tela botao-acao-tela rkf-botao-filtro"
-              aria-label={t('match.ranking.filters.title')}
-              title={t('match.ranking.filters.title')}
-              aria-haspopup="dialog"
-              onClick={() => setFiltrosAbertos(true)}
-            >
-              <i className="fas fa-filter" aria-hidden="true" />
-              {ativos.length > 0 && <span className="rkf-ponto" aria-hidden="true" />}
-            </button>
             {aoAbrirJogadores && (
               <button
                 type="button"
@@ -103,38 +92,34 @@ export default function PaginaRanking({
         }
       />
 
-      <div className="ptd-filtros">
-        <div className="ptd-segmentos" role="group" aria-label={t('match.ranking.period')}>
-          {PERIODOS.map((opcao) => (
-            <button
-              key={opcao}
-              type="button"
-              className={`ptd-segmento${filtros.periodo === opcao ? ' ptd-segmento--ativo' : ''}`}
-              aria-pressed={filtros.periodo === opcao}
-              onClick={() => setFiltros({ ...filtros, periodo: opcao })}
-            >
-              {t(`match.ranking.periods.${opcao}`)}
-            </button>
-          ))}
-        </div>
-        {ativos.length > 0 && (
-          <div className="rkf-chips">
-            {ativos.map((ativo) => (
-              <button
-                key={ativo}
-                type="button"
-                className="rkf-chip"
-                aria-label={t('match.ranking.filters.remove', { filter: textoDoChip(ativo) })}
-                onClick={() => setFiltros(semFiltro(ativo))}
-              >
-                {textoDoChip(ativo)}
-                <i className="fas fa-xmark" aria-hidden="true" />
-              </button>
-            ))}
-            <button type="button" className="rkf-limpar" onClick={() => setFiltros(FILTROS_PADRAO)}>
-              {t('match.ranking.filters.clear')}
-            </button>
-          </div>
+      {/* Filtros discretos: o botão e os chips do que está ativo, numa linha só. */}
+      <div className="rkf-barra">
+        <button
+          type="button"
+          className={`rkf-botao-filtro${ativos.length > 0 ? ' rkf-botao-filtro--ativo' : ''}`}
+          aria-haspopup="dialog"
+          onClick={() => setFiltrosAbertos(true)}
+        >
+          <i className="fas fa-sliders" aria-hidden="true" />
+          {t('match.ranking.filters.title')}
+          {ativos.length > 0 && <span className="rkf-contagem">{numero(ativos.length)}</span>}
+        </button>
+        {ativos.map((ativo) => (
+          <button
+            key={ativo}
+            type="button"
+            className="rkf-chip"
+            aria-label={t('match.ranking.filters.remove', { filter: textoDoChip(ativo) })}
+            onClick={() => setFiltros(semFiltro(ativo))}
+          >
+            {textoDoChip(ativo)}
+            <i className="fas fa-xmark" aria-hidden="true" />
+          </button>
+        ))}
+        {ativos.length > 1 && (
+          <button type="button" className="rkf-limpar" onClick={() => setFiltros(FILTROS_PADRAO)}>
+            {t('match.ranking.filters.clear')}
+          </button>
         )}
       </div>
 
@@ -193,6 +178,8 @@ export default function PaginaRanking({
           })}
         </ol>
       )}
+      {import.meta.env.DEV && <FerramentasDev />}
+
       {filtrosAbertos && (
         <ModalFiltrosRanking filtros={filtros} aoAplicar={setFiltros} aoFechar={() => setFiltrosAbertos(false)} />
       )}

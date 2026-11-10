@@ -282,7 +282,7 @@ teste('computeRanking: filtros de duração, origem, período, jogador e mínimo
 
 teste('filtros: ativos e leitura do salvo', () => {
   assert.deepEqual(filtrosAtivos(FILTROS_PADRAO), [])
-  assert.deepEqual(filtrosAtivos({ ...FILTROS_PADRAO, periodo: 'mes', duracao: 'hanchan' }), ['duracao'])
+  assert.deepEqual(filtrosAtivos({ ...FILTROS_PADRAO, periodo: 'mes', duracao: 'hanchan' }), ['periodo', 'duracao'])
   assert.deepEqual(lerFiltros('lixo'), FILTROS_PADRAO)
   assert.deepEqual(lerFiltros(JSON.stringify({ origem: 'app', minimoPartidas: 7 })), { ...FILTROS_PADRAO, origem: 'app' })
 })
