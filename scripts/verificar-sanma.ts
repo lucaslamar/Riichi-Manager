@@ -24,6 +24,7 @@ import {
   ventosDaVariante,
 } from '../src/compartilhado/mahjong/variante'
 import { calcularPontuacaoHanFu, montarReferenciaRapida } from '../src/dominios/calculadora-han-fu/logica'
+import { interpretarNotacaoCompleta } from '../src/dominios/calculadora-mao/logica/notacao'
 
 const casos: [string, () => void][] = []
 const caso = (nome: string, teste: () => void) => casos.push([nome, teste])
@@ -204,6 +205,38 @@ caso('han e fu: tabela do Sanma com Divisão do Norte', () => {
   assert.equal(mangan.ronNaoLeste.replace(/\D/g, ''), '8000')
   assert.equal(mangan.tsumoNaoLeste.replace(/\D/g, ''), '30005000')
   assert.equal(mangan.tsumoLeste.replace(/\D/g, ''), '6000')
+})
+
+// ─── Notação MPSZ ────────────────────────────────────────────────────────────
+
+const sanmaMpsz = (texto: string) => interpretarNotacaoCompleta(texto, { akadora: true, variante: 'sanma' })
+
+caso('mpsz sanma: sufixo +2k vira 2 Kita', () => {
+  const res = sanmaMpsz('19m123p456s111z+2k')
+  assert.equal(res.erro, null)
+  assert.equal(res.kita, 2)
+  assert.equal(res.pedras.length, 11)
+})
+caso('mpsz sanma: 2m–8m recusados com a mensagem do Sanma', () => {
+  assert.equal(sanmaMpsz('123m456p').erro?.chave, 'sanma.erroManzu')
+  assert.equal(sanmaMpsz('0m').erro?.chave, 'sanma.erroManzu')
+  assert.equal(sanmaMpsz('19m').erro, null)
+})
+caso('mpsz sanma: sem Chi, Pon segue valendo', () => {
+  assert.equal(sanmaMpsz('19m 123pc').erro?.chave, 'notation.errors.invalidCall')
+  assert.equal(sanmaMpsz('19m 111pc').erro, null)
+})
+caso('mpsz sanma: Norte na mão + Kita no máximo 4', () => {
+  assert.equal(sanmaMpsz('444z+1k').erro, null)
+  assert.equal(sanmaMpsz('444z+2k').erro?.chave, 'sanma.erroNorteLimite')
+})
+caso('mpsz sanma: sufixo pela metade não dá erro', () => {
+  assert.equal(sanmaMpsz('19m+').erro, null)
+  assert.equal(sanmaMpsz('19m+2').kita, undefined)
+})
+caso('mpsz yonma: igual a antes (sem variante, 123m vale e +2k é inválido)', () => {
+  assert.equal(interpretarNotacaoCompleta('123m', { akadora: true }).erro, null)
+  assert.equal(interpretarNotacaoCompleta('19m+2k', { akadora: true }).erro?.chave, 'notation.errors.invalidChar')
 })
 
 let falhas = 0

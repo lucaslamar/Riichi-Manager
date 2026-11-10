@@ -8,6 +8,7 @@
 import { parseHand, type Suit, type Tile } from './parseHand'
 import { contarSlotsLogicos } from './ordenacao'
 import type { CodigoPedra, Meld } from './tipos'
+import { tileExisteNaVariante, type Variante } from '@/compartilhado/mahjong/variante'
 
 export interface ErroNotacao {
   /** Chave de i18n em `notation.errors`. */
@@ -120,6 +121,8 @@ export function interpretarNotacao(
 }
 
 export interface ResultadoNotacaoCompleta extends ResultadoNotacao {
+  /** Sanma: Kita do sufixo `+Nk` (ausente no yonma ou sem sufixo). */
+  kita?: number
   /** Chamadas digitadas com `c` (chi, pon, kan aberto) ou `a` (kan fechado). */
   melds: Meld[]
 }
@@ -272,8 +275,9 @@ export function podeDigitarNumero(pendentes: string, numero: string): boolean {
  */
 export function interpretarNotacaoCompleta(
   texto: string,
-  contexto: { akadora: boolean },
+  contexto: { akadora: boolean; variante?: Variante },
 ): ResultadoNotacaoCompleta {
+  if (contexto.variante === 'sanma') return interpretarNotacaoSanma(texto, contexto.akadora)
   const melds: Meld[] = []
   for (const [grupo, digitos, naipe, marca] of texto.matchAll(GRUPO_CHAMADA)) {
     const { tiles, error } = parseHand(digitos + naipe)
@@ -284,6 +288,41 @@ export function interpretarNotacaoCompleta(
   }
   const resto = texto.replace(GRUPO_CHAMADA, '')
   return { ...interpretarNotacao(resto, { melds, akadora: contexto.akadora }), melds }
+}
+
+/** Sufixo de Kita: `+2k` no fim. `+` ou `+2` sem o `k` ainda está sendo digitado. */
+const SUFIXO_KITA = /\+(\d?)(k?)$/
+
+/** Tira o sufixo `+Nk` da notação; `kita` só vem quando o sufixo está completo. */
+export function separarKita(texto: string): { texto: string; kita?: number } {
+  const achado = texto.match(SUFIXO_KITA)
+  if (!achado) return { texto }
+  const semSufixo = texto.slice(0, achado.index)
+  return achado[1] && achado[2] ? { texto: semSufixo, kita: Number(achado[1]) } : { texto: semSufixo }
+}
+
+/**
+ * Sanma: a mesma leitura do yonma, mais o sufixo `+Nk` de Kita e as regras de 3
+ * jogadores: só 1m e 9m existem, não há Chi e o Norte (mão + Kita) não passa de 4.
+ */
+function interpretarNotacaoSanma(texto: string, akadora: boolean): ResultadoNotacaoCompleta {
+  const { texto: semKita, kita } = separarKita(texto)
+  const resultado = interpretarNotacaoCompleta(semKita, { akadora })
+  const comKita = kita === undefined ? resultado : { ...resultado, kita }
+  if (resultado.erro) return comKita
+
+  const todas = [...resultado.melds.flatMap((meld) => meld.pedras), ...resultado.pedras]
+  if (todas.some((pedra) => !tileExisteNaVariante(pedra, 'sanma'))) {
+    return { ...comKita, erro: { chave: 'sanma.erroManzu' } }
+  }
+  const chi = resultado.melds.find((meld) => meld.tipo === 'chii')
+  if (chi) {
+    const grupo = chi.pedras.map((pedra) => pedra[0]).join('') + chi.pedras[0][1] + 'c'
+    return { ...comKita, erro: { chave: 'notation.errors.invalidCall', parametros: { group: grupo } } }
+  }
+  const nortes = todas.filter((pedra) => pedra === '4z').length
+  if (nortes + (kita ?? 0) > 4) return { ...comKita, erro: { chave: 'sanma.erroNorteLimite' } }
+  return comKita
 }
 
 /**
