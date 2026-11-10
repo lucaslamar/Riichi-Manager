@@ -114,42 +114,51 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 2px 4px;
+  /* Colada na lista, como o cabeçalho dela. */
+  margin-bottom: 4px;
+  padding-inline: 4px;
 }
 
-/* Ícones redondos: o funil abre os filtros e os outros são atalhos. */
+/* Ícones pequenos e sem contorno: o funil abre os filtros e os outros são atalhos. */
 .rkf-icone {
   position: relative;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--entrada-borda);
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
   color: var(--texto-apoio);
   background: transparent;
+  font-size: 0.8rem;
+  opacity: 0.75;
   cursor: pointer;
 }
 
+.rkf-icone:hover,
 .rkf-icone--ativo {
-  border-color: var(--primario);
+  opacity: 1;
+}
+
+.rkf-icone--ativo {
   color: var(--primario);
 }
 
 .rkf-contagem {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: 0;
+  right: -2px;
   display: grid;
   place-items: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 3px;
   border-radius: 999px;
   color: var(--sobre-primario);
   background: var(--primario);
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 700;
 }
 
@@ -157,23 +166,23 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 32px;
-  padding: 0 10px;
+  min-height: 24px;
+  padding: 0 8px;
   border: 1px solid var(--primario);
   border-radius: 999px;
   color: var(--primario);
   background: transparent;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   cursor: pointer;
 }
 
 .rkf-limpar {
-  min-height: 32px;
+  min-height: 24px;
   padding: 0 6px;
   border: 0;
   color: var(--texto-apoio);
   background: transparent;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   text-decoration: underline;
   cursor: pointer;
 }
