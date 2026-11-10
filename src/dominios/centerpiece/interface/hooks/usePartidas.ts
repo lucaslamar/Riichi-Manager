@@ -44,16 +44,9 @@ export const acoesPartidas = {
   adicionar(partida: Partida) {
     definirPartidas([...lerPartidas(), partida])
   },
-  criar(
-    config: ConfigMesa,
-    jogadorIds: readonly [string, string, string, string],
-    nomes?: readonly string[],
-    extras?: Pick<Partida, 'encontro'>,
-  ) {
-    const partida = {
-      ...criarPartida(gerarId(), config, jogadorIds, new Date().toISOString(), nomes),
-      ...extras,
-    }
+  /** Partida avulsa no placar. Clube e torneio não abrem placar: só registram o resultado. */
+  criar(config: ConfigMesa, jogadorIds: readonly [string, string, string, string], nomes?: readonly string[]) {
+    const partida = criarPartida(gerarId(), config, jogadorIds, new Date().toISOString(), nomes)
     definirPartidas([...lerPartidas(), partida])
     return partida.id
   },
