@@ -1,4 +1,8 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import SeletorVariante from '@/compartilhado/interface/SeletorVariante'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import { useVarianteModulo } from '@/compartilhado/configuracoes/useVarianteModulo'
+import type { Variante } from '@/compartilhado/mahjong/variante'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import {
@@ -27,6 +31,8 @@ interface PropsPaginaCalculadoraHanFu {
   basengo?: boolean
   vencedorId?: string
   pagadorId?: string
+  /** Variante da mesa, quando aberta pela partida. */
+  variante?: Variante
 }
 
 /** Renderiza a calculadora direta por Han/Fu, sem montar a mao pedra por pedra. */
@@ -38,8 +44,13 @@ export default function PaginaCalculadoraHanFu({
   basengo,
   vencedorId,
   pagadorId,
+  variante: varianteDaMesa,
 }: PropsPaginaCalculadoraHanFu = {}) {
   const { t } = useI18n()
+  const { regrasSanma } = useConfigSanma()
+  const [varianteEscolhida, setVariante] = useVarianteModulo('han-fu')
+  // Aberta pela partida, vale a variante da mesa; sozinha, a escolhida no seletor.
+  const variante = aoUsarResultado ? (varianteDaMesa ?? 'yonma') : varianteEscolhida
   const {
     agari,
     setAgari,
@@ -54,7 +65,14 @@ export default function PaginaCalculadoraHanFu({
     setIsOya,
     referenciaRapida,
     resultado,
-  } = useCalculadoraHanFu({ initialIsOya, initialAgari, initialHonba, basengo })
+  } = useCalculadoraHanFu({
+    initialIsOya,
+    initialAgari,
+    initialHonba,
+    basengo,
+    variante,
+    regrasSanma,
+  })
 
   const podeUsar =
     !!aoUsarResultado &&
@@ -81,6 +99,7 @@ export default function PaginaCalculadoraHanFu({
           <div className="seletores-topo-han-fu">
             <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
             <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />
+            <SeletorVariante valor={variante} aoMudar={setVariante} className="seletor-variante-han-fu" />
           </div>
         )}
 

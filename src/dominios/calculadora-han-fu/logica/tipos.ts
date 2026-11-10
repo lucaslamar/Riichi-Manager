@@ -1,3 +1,5 @@
+import type { RegrasSanma, Variante } from '@/compartilhado/mahjong/variante'
+
 export type TipoJogadorHanFu = 'dealer' | 'nonDealer'
 export type TipoVitoriaHanFu = 'ron' | 'tsumo'
 
@@ -17,6 +19,9 @@ export interface EntradaPontuacaoHanFu {
   honba: number
   /** Regra local (場千五): cada honba vale 1500 em vez de 300. */
   basengo?: boolean
+  /** Sanma: Tsumo pago por 2 jogadores, conforme as regras de Sanma. Ausente = yonma. */
+  variante?: Variante
+  regrasSanma?: RegrasSanma
 }
 
 export interface PagamentoTsumoHanFu {
@@ -45,6 +50,8 @@ export interface ResultadoPontuacaoHanFu {
   totalFormatado: string
   ehLimite: boolean
   modoYakuman: boolean
+  /** Só presente no Sanma. */
+  variante?: Variante
 }
 
 export interface PagamentosReferenciaHanFu {

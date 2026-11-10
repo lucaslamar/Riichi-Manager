@@ -23,6 +23,7 @@ import {
   tilesDaVariante,
   ventosDaVariante,
 } from '../src/compartilhado/mahjong/variante'
+import { calcularPontuacaoHanFu, montarReferenciaRapida } from '../src/dominios/calculadora-han-fu/logica'
 
 const casos: [string, () => void][] = []
 const caso = (nome: string, teste: () => void) => casos.push([nome, teste])
@@ -175,6 +176,34 @@ caso('normalizarRegrasSanma completa o que faltar', () => {
   assert.deepEqual(normalizarRegrasSanma(undefined), REGRAS_SANMA_PADRAO)
   assert.equal(normalizarRegrasSanma({ notenTotal: 3000, uma: [1] }).notenTotal, 3000)
   assert.deepEqual(normalizarRegrasSanma({ uma: [1] }).uma, [15, 0, -15])
+})
+
+// ─── Han e Fu ────────────────────────────────────────────────────────────────
+
+caso('han e fu sanma: tsumo não dealer mangan 2 honba = 6400 (4200 + 2200)', () => {
+  const res = calcularPontuacaoHanFu({ han: 5, fu: 30, ehDealer: false, tipoVitoria: 'tsumo', honba: 2, variante: 'sanma' })
+  assert.equal(res.principal, 6400)
+  assert.deepEqual(res.tsumo, { dealer: 4200, nonDealer: 2200, all: undefined })
+  assert.equal(res.totalBase, 6000)
+})
+caso('han e fu sanma: dealer yakuman tsumo = 16000 × 2', () => {
+  const res = calcularPontuacaoHanFu({ han: 13, fu: 30, ehDealer: true, tipoVitoria: 'tsumo', honba: 0, variante: 'sanma' })
+  assert.equal(res.tsumo?.all, 16000)
+  assert.equal(res.principal, 32000)
+})
+caso('han e fu yonma: sem variante, mesmo resultado de antes', () => {
+  const res = calcularPontuacaoHanFu({ han: 5, fu: 30, ehDealer: false, tipoVitoria: 'tsumo', honba: 2 })
+  assert.equal(res.principal, 8600)
+  assert.equal(res.variante, undefined)
+  const tabela = montarReferenciaRapida({ han: 1, fu: 30 })
+  assert.equal(tabela.limites[0].pagamentos.tsumoLeste.startsWith('4'), true)
+})
+caso('han e fu: tabela do Sanma com Divisão do Norte', () => {
+  const regras = { ...REGRAS_SANMA_PADRAO, pagamentoTsumo: 'divisao-norte' as const }
+  const mangan = montarReferenciaRapida({ han: 1, fu: 30 }, regras).limites[0].pagamentos
+  assert.equal(mangan.ronNaoLeste.replace(/\D/g, ''), '8000')
+  assert.equal(mangan.tsumoNaoLeste.replace(/\D/g, ''), '30005000')
+  assert.equal(mangan.tsumoLeste.replace(/\D/g, ''), '6000')
 })
 
 let falhas = 0

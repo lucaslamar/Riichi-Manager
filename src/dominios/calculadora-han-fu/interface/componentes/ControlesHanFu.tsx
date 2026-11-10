@@ -166,8 +166,12 @@ export function ControleHonba({
 
 export function CardResultadoHanFu({ resultado }: { resultado: ResultadoPontuacaoHanFu }) {
   const { t } = useI18n()
-  const detalhe =
-    resultado.tipoVitoria === 'ron'
+  const tsumoSanma = resultado.variante === 'sanma' && resultado.tipoVitoria === 'tsumo'
+  const detalhe = tsumoSanma
+    ? resultado.ehDealer
+      ? t('sanma.deCada', { pontos: formatarPontos(resultado.tsumo?.all ?? 0) })
+      : `${t('sanma.doDealer')} ${formatarPontos(resultado.tsumo?.dealer ?? 0)} / ${t('sanma.doNaoDealer')} ${formatarPontos(resultado.tsumo?.nonDealer ?? 0)}`
+    : resultado.tipoVitoria === 'ron'
       ? t('hanFu.ronDetail', { points: formatarPontos(resultado.ron ?? resultado.principal) })
       : resultado.ehDealer
         ? t('hanFu.dealerTsumoDetail', { points: formatarPontos(resultado.tsumo?.all ?? 0) })
@@ -187,6 +191,7 @@ export function CardResultadoHanFu({ resultado }: { resultado: ResultadoPontuaca
       {resultado.modoYakuman ? (
         <span className="resultado-yakuman-han-fu">{resultado.nomeCategoria}</span>
       ) : null}
+      {tsumoSanma ? <span className="resultado-han-fu-total-sanma">{t('sanma.totalRecebido')}</span> : null}
       <strong>{resultado.totalFormatado}</strong>
       <span className="resultado-han-fu-pontos">{t('hanFu.pointsSuffix')}</span>
       <div className="detalhe-han-fu">{detalhe}</div>

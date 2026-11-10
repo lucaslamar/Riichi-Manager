@@ -1,3 +1,4 @@
+import type { RegrasSanma } from '@/compartilhado/mahjong/variante'
 import { calcularPontuacaoHanFu } from './calcularPontuacaoHanFu'
 import { formatarPontos } from './formatarResultadoHanFu'
 import { FU_REFERENCIA, HAN_REFERENCIA, obterFuValidos } from './tabelaPontuacao'
@@ -16,7 +17,11 @@ const LIMITES_REFERENCIA = [
   { han: 18, faixa: '6Y' },
 ] as const
 
-export function montarReferenciaRapida(entrada: Pick<EntradaPontuacaoHanFu, 'han' | 'fu'>): ReferenciaRapidaHanFu {
+/** Com `regrasSanma`, a tabela mostra os pagamentos do Sanma (aba Sanma); sem, a de sempre. */
+export function montarReferenciaRapida(
+  entrada: Pick<EntradaPontuacaoHanFu, 'han' | 'fu'>,
+  regrasSanma?: RegrasSanma,
+): ReferenciaRapidaHanFu {
   const linhas = HAN_REFERENCIA.filter((han) => han < 5).map((han) => {
     const fuValidos = obterFuValidos(han)
     return {
@@ -33,7 +38,7 @@ export function montarReferenciaRapida(entrada: Pick<EntradaPontuacaoHanFu, 'han
           }
         }
 
-        const pagamentos = calcularPagamentosBase(han, fu)
+        const pagamentos = calcularPagamentosBase(han, fu, regrasSanma)
 
         return {
           han,
@@ -53,17 +58,18 @@ export function montarReferenciaRapida(entrada: Pick<EntradaPontuacaoHanFu, 'han
       han,
       faixa,
       categoria: calcularPontuacaoHanFu({ han, fu: 30, ehDealer: false, tipoVitoria: 'ron', honba: 0 }).categoria,
-      pagamentos: calcularPagamentosBase(han, 30),
+      pagamentos: calcularPagamentosBase(han, 30, regrasSanma),
       ativo: limiteEstaAtivo(entrada.han, han),
     })),
   }
 }
 
-function calcularPagamentosBase(han: number, fu: number): PagamentosReferenciaHanFu {
-  const ronNaoLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: false, tipoVitoria: 'ron', honba: 0 })
-  const ronLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: true, tipoVitoria: 'ron', honba: 0 })
-  const tsumoNaoLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: false, tipoVitoria: 'tsumo', honba: 0 })
-  const tsumoLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: true, tipoVitoria: 'tsumo', honba: 0 })
+function calcularPagamentosBase(han: number, fu: number, regrasSanma?: RegrasSanma): PagamentosReferenciaHanFu {
+  const sanma = regrasSanma ? { variante: 'sanma' as const, regrasSanma } : {}
+  const ronNaoLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: false, tipoVitoria: 'ron', honba: 0, ...sanma })
+  const ronLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: true, tipoVitoria: 'ron', honba: 0, ...sanma })
+  const tsumoNaoLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: false, tipoVitoria: 'tsumo', honba: 0, ...sanma })
+  const tsumoLeste = calcularPontuacaoHanFu({ han, fu, ehDealer: true, tipoVitoria: 'tsumo', honba: 0, ...sanma })
 
   return {
     ronNaoLeste: formatarPontos(ronNaoLeste.ron ?? ronNaoLeste.principal),

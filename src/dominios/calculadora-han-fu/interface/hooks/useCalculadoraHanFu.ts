@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import type { RegrasSanma, Variante } from '@/compartilhado/mahjong/variante'
 import {
   calcularPontuacaoHanFu,
   montarReferenciaRapida,
@@ -16,6 +17,9 @@ interface OpcionsIniciaisCalculadoraHanFu {
   initialIsOya?: boolean
   initialHonba?: number
   basengo?: boolean
+  /** Sanma: pagamentos de 3 jogadores e tabela rápida do Sanma. Ausente = yonma. */
+  variante?: Variante
+  regrasSanma?: RegrasSanma
 }
 
 export function useCalculadoraHanFu(opcoes?: OpcionsIniciaisCalculadoraHanFu) {
@@ -25,6 +29,7 @@ export function useCalculadoraHanFu(opcoes?: OpcionsIniciaisCalculadoraHanFu) {
   const [isOya, setIsOya] = useState(opcoes?.initialIsOya ?? false)
   const [honba, setHonba] = useState(opcoes?.initialHonba ?? 0)
 
+  const sanma = opcoes?.variante === 'sanma'
   const fuDisponiveis = useMemo(() => obterFuValidos(han), [han])
   const fuNormalizado = useMemo(() => normalizarFu(han, fu), [han, fu])
   const resultado = useMemo(
@@ -36,16 +41,20 @@ export function useCalculadoraHanFu(opcoes?: OpcionsIniciaisCalculadoraHanFu) {
         tipoVitoria: agari,
         honba,
         basengo: opcoes?.basengo,
+        ...(sanma ? { variante: 'sanma' as const, regrasSanma: opcoes?.regrasSanma } : {}),
       }),
-    [agari, fuNormalizado, han, honba, isOya, opcoes?.basengo],
+    [agari, fuNormalizado, han, honba, isOya, opcoes?.basengo, sanma, opcoes?.regrasSanma],
   )
   const referenciaRapida = useMemo(
     () =>
-      montarReferenciaRapida({
-        han,
-        fu: fuNormalizado,
-      }),
-    [fuNormalizado, han],
+      montarReferenciaRapida(
+        {
+          han,
+          fu: fuNormalizado,
+        },
+        sanma ? opcoes?.regrasSanma : undefined,
+      ),
+    [fuNormalizado, han, sanma, opcoes?.regrasSanma],
   )
 
   const mudarHan = (proximoHan: number) => {

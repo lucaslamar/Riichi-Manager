@@ -1028,3 +1028,16 @@
     top: 0;
   }
 }
+
+/* Sanma: o seletor 4 | 3 jogadores ocupa a linha inteira abaixo de oya e batida. */
+.seletor-variante-han-fu {
+  grid-column: 1 / -1;
+}
+
+.resultado-han-fu-total-sanma {
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

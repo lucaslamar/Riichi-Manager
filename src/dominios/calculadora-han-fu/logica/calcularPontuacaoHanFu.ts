@@ -9,6 +9,7 @@ import {
   rotularYakumanMultiplo,
 } from './tabelaPontuacao'
 import { formatarPontos, formatarResultadoHanFu } from './formatarResultadoHanFu'
+import { calcularPontuacaoHanFuSanma } from './calcularPontuacaoHanFuSanma'
 import type { EntradaPontuacaoHanFu, ResultadoPontuacaoHanFu } from './tipos'
 
 export function calcularPontuacaoHanFu(entrada: EntradaPontuacaoHanFu): ResultadoPontuacaoHanFu {
@@ -24,6 +25,26 @@ export function calcularPontuacaoHanFu(entrada: EntradaPontuacaoHanFu): Resultad
     categoria === 'yakuman' ? rotularYakumanMultiplo(yakumanMultiplo) : CATEGORIAS_PONTUACAO[categoria].nome
   const ehLimite = categoria !== 'normal'
   const descricao = modoYakuman ? (han >= 14 ? `${yakumanMultiplo}Y` : '13 Han') : nomeCategoria ?? `${han} Han ${fu} Fu`
+
+  if (entrada.variante === 'sanma') {
+    return calcularPontuacaoHanFuSanma(
+      {
+        han,
+        fu,
+        yakumanMultiplo,
+        ehDealer: entrada.ehDealer,
+        tipoVitoria: entrada.tipoVitoria,
+        honba,
+        categoria,
+        nomeCategoria,
+        base,
+        descricao,
+        ehLimite,
+        modoYakuman,
+      },
+      entrada.regrasSanma,
+    )
+  }
 
   if (entrada.tipoVitoria === 'ron') {
     const ronBase = arredondarCentena(base * (entrada.ehDealer ? 6 : 4))
