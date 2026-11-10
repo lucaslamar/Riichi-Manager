@@ -145,24 +145,29 @@ export default function PaginaRanking({
         >
           <i className="fas fa-file-export" aria-hidden="true" />
         </button>
-        {ativos.map((ativo) => (
-          <button
-            key={ativo}
-            type="button"
-            className="rkf-chip"
-            aria-label={t('match.ranking.filters.remove', { filter: textoDoChip(ativo) })}
-            onClick={() => setFiltros(semFiltro(ativo))}
-          >
-            {textoDoChip(ativo)}
-            <i className="fas fa-xmark" aria-hidden="true" />
-          </button>
-        ))}
-        {ativos.length > 1 && (
-          <button type="button" className="rkf-limpar" onClick={() => setFiltros(FILTROS_PADRAO)}>
-            {t('match.ranking.filters.clear')}
-          </button>
-        )}
       </div>
+      {/* Filtros ativos numa linha própria, abaixo dos ícones, para não disputar com eles. */}
+      {ativos.length > 0 && (
+        <div className="rkf-chips">
+          {ativos.map((ativo) => (
+            <button
+              key={ativo}
+              type="button"
+              className="rkf-chip"
+              aria-label={t('match.ranking.filters.remove', { filter: textoDoChip(ativo) })}
+              onClick={() => setFiltros(semFiltro(ativo))}
+            >
+              {textoDoChip(ativo)}
+              <i className="fas fa-xmark" aria-hidden="true" />
+            </button>
+          ))}
+          {ativos.length > 1 && (
+            <button type="button" className="rkf-limpar" onClick={() => setFiltros(FILTROS_PADRAO)}>
+              {t('match.ranking.filters.clear')}
+            </button>
+          )}
+        </div>
+      )}
 
       {filtros.jogadorId && confrontos && (
         <BlocoConfrontos
