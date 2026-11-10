@@ -1,7 +1,12 @@
 import { useSyncExternalStore } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
-import { marcarMesaRegistrada, type MesaDoSorteio, type SorteioClube } from '../../logica/encontroClube'
+import {
+  marcarMesaRegistrada,
+  type EncontroClube,
+  type MesaDoSorteio,
+  type SorteioClube,
+} from '../../logica/encontroClube'
 import { PREFIXO_CONVIDADO, type EntradaLista } from '../../logica/listaClube'
 import { sortearMesas } from '../../logica/sorteioClube'
 import { carregarClube, salvarClube, type EstadoClube } from '../../persistencia/repositorioClube'
@@ -64,6 +69,23 @@ export const acoesClube = {
   },
   limpar() {
     definir({ ...lerEstado(), lista: '', sorteio: null })
+  },
+  /**
+   * Dados de teste (só em dev): troca os encontros com o `prefixo` no id pelos novos.
+   * O sorteio atual vira o de teste, ou some se era de teste e não veio outro.
+   */
+  substituirTeste(
+    prefixo: string,
+    novos: { encontros: EncontroClube[]; sorteio: SorteioClube | null; lista?: string },
+  ) {
+    const atual = lerEstado()
+    const sorteioAtualEhTeste = atual.sorteio?.encontro.id.startsWith(prefixo) ?? false
+    definir({
+      ...atual,
+      lista: novos.lista ?? (sorteioAtualEhTeste ? '' : atual.lista),
+      sorteio: novos.sorteio ?? (sorteioAtualEhTeste ? null : atual.sorteio),
+      encontros: [...atual.encontros.filter((item) => !item.id.startsWith(prefixo)), ...novos.encontros],
+    })
   },
   /** A mesa já teve a partida registrada: o card mostra isso em vez do botão. */
   marcarRegistrada(numero: number, partidaId: string) {

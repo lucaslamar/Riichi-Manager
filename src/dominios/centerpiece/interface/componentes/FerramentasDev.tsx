@@ -1,10 +1,19 @@
 import { acoesJogadores, useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { acoesTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import { acoesPartidas, usePartidas } from '../hooks/usePartidas'
-import { PREFIXO_TESTE, gerarJogadoresDeTeste, gerarPartidasDeTeste } from '../../logica/dadosDeTeste'
+import { acoesClube } from '../hooks/useClube'
+import {
+  PREFIXO_TESTE,
+  gerarClubeDeTeste,
+  gerarJogadoresDeTeste,
+  gerarPartidasDeTeste,
+  gerarTorneiosDeTeste,
+} from '../../logica/dadosDeTeste'
 
 /**
- * Só em `npm run dev` (fica fora do build): gera ou apaga jogadores e partidas
- * de teste. Texto fixo em português, sem i18n, por não chegar ao usuário.
+ * Só em `npm run dev` (fica fora do build): gera ou apaga a massa de teste
+ * (jogadores, partidas avulsas, torneios, temporada e encontros do clube).
+ * Texto fixo em português, sem i18n, por não chegar ao usuário.
  */
 export default function FerramentasDev() {
   const { jogadores } = useJogadores()
@@ -14,11 +23,21 @@ export default function FerramentasDev() {
 
   const gerar = () => {
     const agora = new Date()
+    const torneios = gerarTorneiosDeTeste(agora)
+    const clube = gerarClubeDeTeste(agora)
     acoesJogadores.incluir(gerarJogadoresDeTeste(agora))
-    acoesPartidas.trocarDoTorneio(undefined, gerarPartidasDeTeste(agora))
+    acoesPartidas.substituirTeste(PREFIXO_TESTE, [
+      ...gerarPartidasDeTeste(agora),
+      ...torneios.partidas,
+      ...clube.partidas,
+    ])
+    acoesTorneios.substituirTeste(PREFIXO_TESTE, torneios)
+    acoesClube.substituirTeste(PREFIXO_TESTE, clube)
   }
   const apagar = () => {
-    partidas.filter((partida) => ehTeste(partida.id)).forEach((partida) => acoesPartidas.descartar(partida.id))
+    acoesPartidas.substituirTeste(PREFIXO_TESTE, [])
+    acoesTorneios.substituirTeste(PREFIXO_TESTE, { torneios: [], temporadas: [] })
+    acoesClube.substituirTeste(PREFIXO_TESTE, { encontros: [], sorteio: null })
     jogadores.filter((jogador) => ehTeste(jogador.id)).forEach((jogador) => acoesJogadores.excluir(jogador.id))
   }
 

@@ -76,6 +76,10 @@ export const acoesPartidas = {
     )
     definirPartidas([...ficam, ...novas])
   },
+  /** Dados de teste (só em dev): troca as partidas cujo id começa com `prefixo` pelas novas. */
+  substituirTeste(prefixo: string, novas: readonly Partida[]) {
+    definirPartidas([...lerPartidas().filter((partida) => !partida.id.startsWith(prefixo)), ...novas])
+  },
   /** Apaga de uma vez as partidas de um torneio abortado. */
   descartarDoTorneio(torneioId: string) {
     definirPartidas(lerPartidas().filter((partida) => partida.vinculoTorneio?.torneioId !== torneioId))

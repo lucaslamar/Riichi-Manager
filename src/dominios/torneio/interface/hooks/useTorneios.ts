@@ -129,6 +129,15 @@ export const acoesTorneios = {
       torneios: [...atual.torneios.filter((item) => item.id !== resultado.torneio.id), resultado.torneio],
     })
   },
+  /** Dados de teste (só em dev): troca torneios e temporadas com o `prefixo` no id pelos novos. */
+  substituirTeste(prefixo: string, novos: { torneios: Torneio[]; temporadas: Temporada[] }) {
+    const atual = lerTorneios()
+    definir({
+      ...atual,
+      torneios: [...atual.torneios.filter((item) => !item.id.startsWith(prefixo)), ...novos.torneios],
+      temporadas: [...atual.temporadas.filter((item) => !item.id.startsWith(prefixo)), ...novos.temporadas],
+    })
+  },
   excluir(id: string) {
     const atual = lerTorneios()
     definir({ ...atual, torneios: atual.torneios.filter((item) => item.id !== id) })
