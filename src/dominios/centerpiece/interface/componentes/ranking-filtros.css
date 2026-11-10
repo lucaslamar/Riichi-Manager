@@ -336,3 +336,38 @@
   margin-inline: 4px;
   background: var(--entrada-borda);
 }
+
+/* Card do ranking tocável: abre a tela do jogador. */
+.ptd-linha-ranking--toque {
+  cursor: pointer;
+}
+
+.ptd-linha-ranking--toque:hover {
+  border-color: var(--primario);
+}
+
+.ptd-linha-ranking--toque:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+.rkf-confrontos-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rkf-ver-analise {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 4px;
+  border: 0;
+  color: var(--primario);
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}

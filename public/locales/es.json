@@ -1005,6 +1005,61 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "player": {
+      "open": "Abrir el análisis de {{name}}",
+      "seeCharts": "Ver gráficos",
+      "analyze": "Analizar a {{name}}",
+      "summary": {
+        "one": "{{count}} partida · media {{average}} · {{score}}",
+        "other": "{{count}} partidas · media {{average}} · {{score}}"
+      },
+      "empty": "Todavía no hay suficientes partidas con estos filtros.",
+      "share": "Compartir",
+      "shareFailed": "No se pudo generar la imagen.",
+      "map": {
+        "title": "Mapa de enfrentamientos",
+        "density": "Densidad",
+        "low": "Baja",
+        "normal": "Normal",
+        "high": "Alta",
+        "empty": "Ningún rival en esta densidad. Elige Alta o juega más partidas.",
+        "description": "Mapa de enfrentamientos de {{name}} con {{count}} rivales",
+        "rival": "Rival",
+        "customer": "Cliente",
+        "even": "Empate"
+      },
+      "duel": {
+        "together": {
+          "one": "Jugaron {{count}} partida juntos",
+          "other": "Jugaron {{count}} partidas juntos"
+        },
+        "averagePlace": "Media de posición",
+        "score": "Puntuación total",
+        "tobi": "Mandó al tobi",
+        "tobiHelp": "Mandó al tobi: terminó 1º en una partida en la que el otro quedó bajo cero.",
+        "stat": "Estadística"
+      },
+      "charts": {
+        "evolution": "Evolución de la puntuación",
+        "evolutionHelp": "Puntuación acumulada partida a partida, de la más antigua a la más reciente. Por encima de la línea discontinua, el saldo es positivo.",
+        "places": "Distribución de posiciones",
+        "placesHelp": "Cuántas veces terminó 1º, 2º, 3º y 4º.",
+        "monthly": "Media de posición por mes",
+        "monthlyHelp": "Media de posición en cada mes. El 1º puesto queda arriba: cuanto más alto, mejor.",
+        "wind": "Por viento inicial",
+        "windHelp": "Media de posición según el viento con el que empezó la partida. Barra más corta es mejor.",
+        "formats": "Hanchan × Tonpuusen",
+        "formatsHelp": "Media de posición y % de 1º puesto en cada formato.",
+        "partners": "Más jugó con",
+        "partnersHelp": "Los 5 rivales con más partidas juntos y el marcador del enfrentamiento directo (V–D)."
+      },
+      "winds": {
+        "leste": "Este",
+        "sul": "Sur",
+        "oeste": "Oeste",
+        "norte": "Norte"
+      }
+    },
     "club": {
       "listTitle": "Encuentro del club",
       "addRegistered": "Usar registrado",

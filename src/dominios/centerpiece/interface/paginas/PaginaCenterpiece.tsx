@@ -22,6 +22,7 @@ import PaginaEmAndamento from './PaginaEmAndamento'
 import PaginaHistorico from './PaginaHistorico'
 import PaginaListaClube from './PaginaListaClube'
 import PaginaMesasSorteadas from './PaginaMesasSorteadas'
+import PaginaJogador from './PaginaJogador'
 import PaginaRanking from './PaginaRanking'
 import PlacarPartida from './PlacarPartida'
 import RegistrarFinalizada from './RegistrarFinalizada'
@@ -43,6 +44,7 @@ type TelaModulo =
   | { nome: 'jogadores' }
   | { nome: 'historico' }
   | { nome: 'ranking' }
+  | { nome: 'jogador'; id: string }
   | { nome: 'torneio'; id: string }
   | { nome: 'temporada'; id: string }
   /** `voltar`: de onde a mesa foi aberta (as Mesas sorteadas do torneio). */
@@ -203,11 +205,22 @@ function TelasCenterpiece({
         aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
       />
   }
+  if (tela.nome === 'jogador') {
+    return (
+      <PaginaJogador
+        key={tela.id}
+        jogadorId={tela.id}
+        aoVoltar={() => setTela({ nome: 'ranking' })}
+        aoTrocarJogador={(id) => setTela({ nome: 'jogador', id })}
+      />
+    )
+  }
   if (tela.nome === 'ranking') {
     return (
       <PaginaRanking
         aoVoltar={modo === 'ranking' ? undefined : irInicio}
         aoAbrirJogadores={() => setTela({ nome: 'jogadores' })}
+        aoAbrirJogador={(id) => setTela({ nome: 'jogador', id })}
       />
     )
   }

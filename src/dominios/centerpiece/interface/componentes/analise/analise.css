@@ -1,0 +1,295 @@
+/* ─── Tela do jogador analisado: mapa de confrontos e gráficos ───────────── */
+.anl-tela {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.anl-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 4px 8px;
+}
+
+.anl-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 3px solid var(--primario);
+  border-radius: 50%;
+  color: var(--texto-principal);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.anl-cabecalho-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.anl-cabecalho-texto strong {
+  font-size: 1.3rem;
+}
+
+.anl-cabecalho-texto small,
+.anl-resumo {
+  color: var(--texto-apoio);
+}
+
+.anl-resumo {
+  margin-top: 2px;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.anl-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 14px;
+}
+
+.anl-card-topo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.anl-card-topo > i {
+  color: var(--primario);
+}
+
+.anl-card-topo h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.anl-vazio {
+  margin: 8px 0;
+  color: var(--texto-apoio);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.anl-densidade .ptd-segmento {
+  min-height: 36px;
+  font-size: 0.8rem;
+}
+
+.anl-mapa {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.anl-mapa g[role='button']:focus-visible {
+  outline: 2px solid var(--primario);
+}
+
+.anl-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 0;
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  list-style: none;
+}
+
+.anl-legenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.anl-legenda span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.anl-compartilhar {
+  align-self: center;
+  min-height: 40px;
+  padding: 0 16px;
+}
+
+/* Gráficos: uma série na cor de destaque, eixos e grade recessivos. */
+.anl-grafico {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.anl-grade {
+  stroke: var(--entrada-borda);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+}
+
+.anl-zero {
+  stroke: var(--texto-apoio);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.anl-eixo,
+.anl-rotulo {
+  fill: var(--texto-apoio);
+  font-size: 9px;
+}
+
+.anl-rotulo {
+  fill: var(--texto-principal);
+  font-size: 10px;
+}
+
+.anl-valor {
+  fill: var(--texto-principal);
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.anl-linha {
+  fill: none;
+  stroke: var(--primario);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.anl-ponto {
+  fill: var(--primario);
+  stroke: var(--superficie);
+  stroke-width: 2;
+}
+
+.anl-alvo {
+  fill: transparent;
+}
+
+.anl-barra {
+  fill: var(--primario);
+}
+
+.anl-formatos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.anl-formato {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 10px;
+}
+
+.anl-formato-partidas {
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+}
+
+.anl-formato dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin: 6px 0 0;
+}
+
+.anl-formato dt {
+  color: var(--texto-apoio);
+  font-size: 0.7rem;
+}
+
+.anl-formato dd {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Folha do confronto. */
+.anl-folha {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.anl-folha-juntos,
+.anl-nota {
+  margin: 0;
+  color: var(--texto-apoio);
+  font-size: 0.85rem;
+}
+
+.anl-nota {
+  font-size: 0.75rem;
+}
+
+.anl-placar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.anl-placar span:first-child {
+  text-align: right;
+}
+
+.anl-placar strong {
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.anl-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.anl-tabela th,
+.anl-tabela td {
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--entrada-borda);
+  text-align: center;
+}
+
+.anl-tabela tbody th {
+  color: var(--texto-apoio);
+  font-weight: 400;
+  text-align: left;
+}
+
+.anl-analisar {
+  min-height: 44px;
+}
+
+/* Tablet: gráficos em duas colunas, o mapa ocupando a largura toda. */
+@media (min-width: 768px) {
+  .anl-tela {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .anl-cabecalho,
+  .anl-tela > .anl-card:first-of-type {
+    grid-column: 1 / -1;
+  }
+}

@@ -994,6 +994,59 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "player": {
+      "open": "{{name}} 분석 열기",
+      "seeCharts": "그래프 보기",
+      "analyze": "{{name}} 분석",
+      "summary": {
+        "other": "{{count}}국 · 평균 {{average}} · {{score}}"
+      },
+      "empty": "이 필터로는 아직 대국이 충분하지 않습니다.",
+      "share": "공유",
+      "shareFailed": "이미지를 만들 수 없습니다.",
+      "map": {
+        "title": "상대 전적 지도",
+        "density": "밀도",
+        "low": "낮음",
+        "normal": "보통",
+        "high": "높음",
+        "empty": "이 밀도에서는 상대가 없습니다. 높음을 선택하거나 더 대국하세요.",
+        "description": "{{name}}의 상대 전적 지도, 상대 {{count}}명",
+        "rival": "라이벌",
+        "customer": "단골 손님",
+        "even": "팽팽함"
+      },
+      "duel": {
+        "together": {
+          "other": "함께 {{count}}국을 쳤습니다"
+        },
+        "averagePlace": "평균 순위",
+        "score": "합계 점수",
+        "tobi": "토비 보낸 횟수",
+        "tobiHelp": "토비 보낸 횟수: 상대가 0점 아래로 끝난 대국에서 1위를 한 횟수.",
+        "stat": "항목"
+      },
+      "charts": {
+        "evolution": "점수 추이",
+        "evolutionHelp": "오래된 대국부터 쌓은 누적 점수. 점선 위면 플러스입니다.",
+        "places": "순위 분포",
+        "placesHelp": "1위, 2위, 3위, 4위를 한 횟수.",
+        "monthly": "월별 평균 순위",
+        "monthlyHelp": "월별 평균 순위. 1위가 맨 위이며, 높을수록 좋습니다.",
+        "wind": "시작 바람별",
+        "windHelp": "시작 바람에 따른 평균 순위. 막대가 짧을수록 좋습니다.",
+        "formats": "반장전 × 동풍전",
+        "formatsHelp": "형식별 평균 순위와 1위 비율.",
+        "partners": "가장 많이 함께 친 상대",
+        "partnersHelp": "함께 친 대국이 가장 많은 상대 5명과 상대 전적(승–패)."
+      },
+      "winds": {
+        "leste": "동",
+        "sul": "남",
+        "oeste": "서",
+        "norte": "북"
+      }
+    },
     "club": {
       "listTitle": "클럽 모임",
       "addRegistered": "등록된 사람 사용",

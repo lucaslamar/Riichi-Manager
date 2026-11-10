@@ -998,6 +998,61 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "player": {
+      "open": "Open {{name}} analysis",
+      "seeCharts": "See charts",
+      "analyze": "Analyze {{name}}",
+      "summary": {
+        "one": "{{count}} game · average {{average}} · {{score}}",
+        "other": "{{count}} games · average {{average}} · {{score}}"
+      },
+      "empty": "Not enough games with these filters yet.",
+      "share": "Share",
+      "shareFailed": "Could not create the image.",
+      "map": {
+        "title": "Head-to-head map",
+        "density": "Density",
+        "low": "Low",
+        "normal": "Normal",
+        "high": "High",
+        "empty": "No opponents at this density. Choose High or play more games.",
+        "description": "{{name}} head-to-head map with {{count}} opponents",
+        "rival": "Rival",
+        "customer": "Favorite victim",
+        "even": "Even"
+      },
+      "duel": {
+        "together": {
+          "one": "You played {{count}} game together",
+          "other": "You played {{count}} games together"
+        },
+        "averagePlace": "Average placement",
+        "score": "Total score",
+        "tobi": "Sent to tobi",
+        "tobiHelp": "Sent to tobi: finished 1st in a game where the other ended below zero.",
+        "stat": "Stat"
+      },
+      "charts": {
+        "evolution": "Score over time",
+        "evolutionHelp": "Running total score, game by game, from oldest to newest. Above the dashed line, the balance is positive.",
+        "places": "Placement distribution",
+        "placesHelp": "How many times they finished 1st, 2nd, 3rd and 4th.",
+        "monthly": "Average placement by month",
+        "monthlyHelp": "Average placement each month. 1st place is at the top: higher is better.",
+        "wind": "By starting wind",
+        "windHelp": "Average placement by the wind they started the game in. Shorter bar is better.",
+        "formats": "Hanchan × Tonpuusen",
+        "formatsHelp": "Average placement and 1st place % in each format.",
+        "partners": "Played most with",
+        "partnersHelp": "The 5 opponents with the most games together and the head-to-head score (W–L)."
+      },
+      "winds": {
+        "leste": "East",
+        "sul": "South",
+        "oeste": "West",
+        "norte": "North"
+      }
+    },
     "club": {
       "listTitle": "Club meeting",
       "addRegistered": "Use registered",

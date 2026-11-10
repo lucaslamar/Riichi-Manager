@@ -11,10 +11,13 @@ export default function BlocoConfrontos({
   jogadorId,
   confrontos,
   aoEscolher,
+  aoAnalisar,
 }: {
   jogadorId: string
   confrontos: { rivais: Confronto[]; fregueses: Confronto[] }
   aoEscolher: (jogadorId: string) => void
+  /** Abre a tela do jogador com o mapa e os gráficos. */
+  aoAnalisar?: (jogadorId: string) => void
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
@@ -52,7 +55,15 @@ export default function BlocoConfrontos({
 
   return (
     <section className="rkf-confrontos" aria-live="polite">
-      <h3>{t('match.ranking.rivals.title', { name: nomesDe(jogadorId).principal })}</h3>
+      <div className="rkf-confrontos-topo">
+        <h3>{t('match.ranking.rivals.title', { name: nomesDe(jogadorId).principal })}</h3>
+        {aoAnalisar && (
+          <button type="button" className="rkf-ver-analise" onClick={() => aoAnalisar(jogadorId)}>
+            {t('match.player.seeCharts')}
+            <i className="fas fa-chevron-right" aria-hidden="true" />
+          </button>
+        )}
+      </div>
       {vazio ? (
         <p className="ptd-vazio">{t('match.ranking.rivals.empty')}</p>
       ) : (

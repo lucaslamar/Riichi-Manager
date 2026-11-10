@@ -994,6 +994,59 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "player": {
+      "open": "打开 {{name}} 的分析",
+      "seeCharts": "查看图表",
+      "analyze": "分析 {{name}}",
+      "summary": {
+        "other": "{{count}} 局 · 平均 {{average}} · {{score}}"
+      },
+      "empty": "在当前筛选下对局还不够。",
+      "share": "分享",
+      "shareFailed": "无法生成图片。",
+      "map": {
+        "title": "对战地图",
+        "density": "密度",
+        "low": "低",
+        "normal": "普通",
+        "high": "高",
+        "empty": "此密度下没有对手。请选择“高”或多打几局。",
+        "description": "{{name}} 的对战地图，共 {{count}} 名对手",
+        "rival": "劲敌",
+        "customer": "常客",
+        "even": "势均力敌"
+      },
+      "duel": {
+        "together": {
+          "other": "你们一起打了 {{count}} 局"
+        },
+        "averagePlace": "平均顺位",
+        "score": "总得分",
+        "tobi": "击飞次数",
+        "tobiHelp": "击飞次数：对方以负分结束、自己拿到一位的对局数。",
+        "stat": "项目"
+      },
+      "charts": {
+        "evolution": "得分走势",
+        "evolutionHelp": "从最早到最近逐局累计的得分。虚线以上为正。",
+        "places": "顺位分布",
+        "placesHelp": "拿到一位、二位、三位、四位的次数。",
+        "monthly": "每月平均顺位",
+        "monthlyHelp": "每个月的平均顺位。一位在最上方，越高越好。",
+        "wind": "按起始风位",
+        "windHelp": "按开局风位统计的平均顺位。柱子越短越好。",
+        "formats": "半庄 × 东风战",
+        "formatsHelp": "各赛制的平均顺位和一位率。",
+        "partners": "最常同桌",
+        "partnersHelp": "同桌对局最多的 5 名对手及直接对战战绩（胜–负）。"
+      },
+      "winds": {
+        "leste": "东",
+        "sul": "南",
+        "oeste": "西",
+        "norte": "北"
+      }
+    },
     "club": {
       "listTitle": "俱乐部聚会",
       "addRegistered": "使用已登记",

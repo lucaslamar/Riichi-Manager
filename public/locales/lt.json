@@ -1015,6 +1015,65 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "player": {
+      "open": "Atidaryti {{name}} analizę",
+      "seeCharts": "Žiūrėti grafikus",
+      "analyze": "Analizuoti {{name}}",
+      "summary": {
+        "one": "{{count}} partija · vidurkis {{average}} · {{score}}",
+        "few": "{{count}} partijos · vidurkis {{average}} · {{score}}",
+        "many": "{{count}} partijos · vidurkis {{average}} · {{score}}",
+        "other": "{{count}} partijų · vidurkis {{average}} · {{score}}"
+      },
+      "empty": "Su šiais filtrais dar nepakanka partijų.",
+      "share": "Dalintis",
+      "shareFailed": "Nepavyko sukurti paveikslėlio.",
+      "map": {
+        "title": "Akistatų žemėlapis",
+        "density": "Tankis",
+        "low": "Mažas",
+        "normal": "Įprastas",
+        "high": "Didelis",
+        "empty": "Šiame tankyje varžovų nėra. Pasirinkite Didelis arba sužaiskite daugiau partijų.",
+        "description": "{{name}} akistatų žemėlapis su {{count}} varžovais",
+        "rival": "Varžovas",
+        "customer": "Mėgstama auka",
+        "even": "Lygiosios"
+      },
+      "duel": {
+        "together": {
+          "one": "Kartu sužaidėte {{count}} partiją",
+          "few": "Kartu sužaidėte {{count}} partijas",
+          "many": "Kartu sužaidėte {{count}} partijos",
+          "other": "Kartu sužaidėte {{count}} partijų"
+        },
+        "averagePlace": "Vidutinė vieta",
+        "score": "Bendri taškai",
+        "tobi": "Išmetė į tobi",
+        "tobiHelp": "Išmetė į tobi: baigė 1-as partijoje, kurioje kitas liko žemiau nulio.",
+        "stat": "Rodiklis"
+      },
+      "charts": {
+        "evolution": "Taškų kaita",
+        "evolutionHelp": "Sukaupti taškai partija po partijos, nuo seniausios iki naujausios. Virš punktyrinės linijos balansas teigiamas.",
+        "places": "Vietų pasiskirstymas",
+        "placesHelp": "Kiek kartų baigė 1-as, 2-as, 3-ias ir 4-as.",
+        "monthly": "Vidutinė vieta pagal mėnesį",
+        "monthlyHelp": "Vidutinė vieta kiekvieną mėnesį. 1 vieta viršuje: kuo aukščiau, tuo geriau.",
+        "wind": "Pagal pradinį vėją",
+        "windHelp": "Vidutinė vieta pagal vėją, kuriuo pradėjo partiją. Trumpesnis stulpelis geriau.",
+        "formats": "Hanchan × Tonpuusen",
+        "formatsHelp": "Vidutinė vieta ir 1 vietos % kiekviename formate.",
+        "partners": "Dažniausiai žaidė su",
+        "partnersHelp": "5 varžovai, su kuriais sužaista daugiausia partijų, ir akistatos rezultatas (P–L)."
+      },
+      "winds": {
+        "leste": "Rytai",
+        "sul": "Pietūs",
+        "oeste": "Vakarai",
+        "norte": "Šiaurė"
+      }
+    },
     "club": {
       "listTitle": "Klubo susitikimas",
       "addRegistered": "Naudoti registruotą",

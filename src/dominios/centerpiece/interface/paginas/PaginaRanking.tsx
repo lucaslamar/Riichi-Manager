@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type KeyboardEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
@@ -27,9 +27,12 @@ const proximo = <T,>(opcoes: readonly T[], atual: T) => opcoes[(opcoes.indexOf(a
 export default function PaginaRanking({
   aoVoltar,
   aoAbrirJogadores,
+  aoAbrirJogador,
 }: {
   aoVoltar?: () => void
   aoAbrirJogadores?: () => void
+  /** Toque no card: abre a tela do jogador com o mapa e os gráficos. */
+  aoAbrirJogador?: (id: string) => void
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
@@ -174,6 +177,7 @@ export default function PaginaRanking({
           jogadorId={filtros.jogadorId}
           confrontos={confrontos}
           aoEscolher={(jogadorId) => setFiltros({ ...filtros, jogadorId })}
+          aoAnalisar={aoAbrirJogador}
         />
       )}
 
@@ -184,7 +188,24 @@ export default function PaginaRanking({
           {linhas.map((linha, indice) => {
             const nomes = nomesDe(linha.jogadorId)
             return (
-            <li key={linha.jogadorId} className="ptd-linha-ranking">
+            <li
+              key={linha.jogadorId}
+              className={`ptd-linha-ranking${aoAbrirJogador ? ' ptd-linha-ranking--toque' : ''}`}
+              {...(aoAbrirJogador
+                ? {
+                    role: 'button',
+                    tabIndex: 0,
+                    'aria-label': t('match.player.open', { name: nomes.principal }),
+                    onClick: () => aoAbrirJogador(linha.jogadorId),
+                    onKeyDown: (evento: KeyboardEvent) => {
+                      if (evento.key === 'Enter' || evento.key === ' ') {
+                        evento.preventDefault()
+                        aoAbrirJogador(linha.jogadorId)
+                      }
+                    },
+                  }
+                : {})}
+            >
               <div className="ptd-linha-ranking-topo">
                 <span className="ptd-resultado-lugar">
                   {t('match.result.place', { place: posicoes[indice] })}
