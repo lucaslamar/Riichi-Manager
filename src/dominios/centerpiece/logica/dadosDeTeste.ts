@@ -10,7 +10,6 @@
  */
 import type { Jogador } from '@/dominios/jogadores/logica/jogadores'
 import { rodadasIniciais, proximaRodada } from '@/dominios/torneio/logica/formatos'
-import { partidaDaMesaNova } from '@/dominios/torneio/logica/mesas'
 import { criarTemporada, novoEncontro } from '@/dominios/torneio/logica/temporada'
 import {
   criarRascunho,
@@ -156,7 +155,7 @@ export function gerarPartidasDeTeste(agora: Date, quantidade = 80, semente = 202
  * Joga um torneio do sorteio ao fim com as funções do app: registra cada mesa,
  * pede a próxima rodada e, se `finalizar`, encerra. `limiteRodadas` corta os
  * formatos sem fim (pontos corridos e temporada). `parar` deixa a última rodada
- * pela metade: uma mesa registrada, uma aberta no placar e o resto sem começar.
+ * pela metade: uma mesa registrada e o resto esperando o resultado.
  */
 function jogarTorneio(
   sortear: Sortear,
@@ -177,15 +176,8 @@ function jogarTorneio(
         if (partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero)) continue
         const id = `${PREFIXO_TESTE}${torneio.id.slice(PREFIXO_TESTE.length)}-r${rodada.numero}m${mesa.numero}`
         const ehUltimaRodada = rodada.numero === torneio.rodadas.length
-        if (opcoes.parar && ehUltimaRodada && ultima && mesa.numero > 1) {
-          // Mesa 2 aberta no placar; as demais ainda sem começar.
-          if (mesa.numero === 2) {
-            partidas.push(
-              partidaDaMesaNova(torneio, rodada, mesa, { id, agora: new Date().toISOString(), nomes: mesa.assentos.map(nomeDe) }),
-            )
-          }
-          continue
-        }
+        // Torneio só registra resultado: na rodada pela metade, as demais mesas esperam.
+        if (opcoes.parar && ehUltimaRodada && ultima && mesa.numero > 1) continue
         minutos += 20
         const quando = new Date(inicio.getTime() + minutos * 60_000)
         partidas.push({
@@ -277,8 +269,8 @@ export function gerarTorneiosDeTeste(agora: Date, semente = 7) {
 
 /**
  * Três encontros do clube já jogados (todas as mesas registradas) e o de hoje
- * como sorteio atual: mesa 1 registrada, mesa 2 aberta no placar, mesa 3 sem
- * começar. Mais uma mesa avulsa aberta.
+ * como sorteio atual: mesa 1 registrada e as outras esperando o resultado
+ * (clube só registra o resultado, sem placar). Mais uma mesa avulsa aberta.
  */
 export function gerarClubeDeTeste(agora: Date, semente = 11) {
   const sortear = sorteador(semente)
@@ -305,11 +297,7 @@ export function gerarClubeDeTeste(agora: Date, semente = 11) {
       const ids = mesa.assentos.map((assento) => assento.jogador.jogadorId ?? '') as [string, string, string, string]
       const id = `${PREFIXO_TESTE}clube-${indice + 1}-mesa-${mesa.numero}`
       const vinculo = { encontro: { id: encontro.id, mesa: mesa.numero } }
-      if (hoje && mesa.numero === 2) {
-        partidas.push({ ...criarPartida(id, config, ids, agora.toISOString(), ids.map(nomeDe)), ...vinculo })
-        return mesa
-      }
-      if (hoje && mesa.numero > 2) return mesa
+      if (hoje && mesa.numero > 1) return mesa
       const fim = new Date(quando.getTime() + (60 + mesa.numero * 5) * 60_000)
       partidas.push({ ...partidaRegistrada(sortear, id, config, ids, fim), ...vinculo })
       return { ...mesa, partidaId: id }
