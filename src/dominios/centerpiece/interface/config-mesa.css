@@ -299,18 +299,10 @@
   width: 100%;
 }
 
-.reg-resumo > i {
-  color: var(--primario);
-}
-
 /* Card do Registrar: uma regra por linha, título à esquerda e valor à direita. */
 .reg-resumo {
   align-items: flex-start;
   padding: 12px 14px;
-}
-
-.reg-resumo > i {
-  margin-top: 4px;
 }
 
 .reg-tabela {

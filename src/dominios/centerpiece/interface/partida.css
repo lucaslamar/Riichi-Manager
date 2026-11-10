@@ -1450,3 +1450,30 @@ body:has(.ptd-modulo) {
 .fin-legenda {
   margin: 4px 0 0;
 }
+
+/* Pontos, uma e oka da confirmação: colunas pequenas, título em cima. */
+.fin-detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin: 4px 0 0;
+}
+
+.fin-detalhes > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.fin-detalhes dt {
+  color: var(--texto-apoio);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.fin-detalhes dd {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}

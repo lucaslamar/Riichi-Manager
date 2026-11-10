@@ -64,6 +64,7 @@ export default function RegistrarFinalizada({
   const { jogadores } = useJogadores()
   const { partidas, adicionar } = usePartidas()
   const [confirmando, setConfirmando] = useState(false)
+  const [regrasAbertas, setRegrasAbertas] = useState(false)
   // Conjunto de regras: o último usado aqui (mesa do clube sempre começa no Clube).
   const [salvas] = useState(() => carregarRegrasRegistro(armazenamentoLocal))
   const [conjunto, setConjunto] = useState<ConjuntoRegistro>(clube ? 'padrao' : salvas.conjunto)
@@ -175,6 +176,23 @@ export default function RegistrarFinalizada({
               : t('match.manual.title')
         }
         aoVoltar={aoVoltar}
+        acoes={
+          // Regras de pontuação: o ícone de controles, como nas regras da Calculadora.
+          torneio ? undefined : (
+            <span className="clb-acoes-titulo">
+              <button
+                type="button"
+                className="cm-btn-icone"
+                aria-label={t('match.manual.editRules')}
+                title={t('match.manual.editRules')}
+                aria-haspopup="dialog"
+                onClick={() => setRegrasAbertas(true)}
+              >
+                <i className="fas fa-sliders" aria-hidden="true" />
+              </button>
+            </span>
+          )
+        }
       />
 
       {/* Títulos das seções no estilo do Han e Fu (caixa alta, pequenos). */}
@@ -251,6 +269,8 @@ export default function RegistrarFinalizada({
         conjunto={conjunto}
         regras={regras}
         pontosAtuais={pontosNumeros}
+        editando={regrasAbertas}
+        setEditando={setRegrasAbertas}
         aoSalvar={(novo, editadas) => guardar(novo, novo === 'personalizado' ? editadas : personalizado)}
       />
       )}

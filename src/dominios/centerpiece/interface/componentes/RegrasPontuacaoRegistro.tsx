@@ -34,23 +34,28 @@ function useResumo() {
 
 /**
  * Regras de pontuação de "Registrar partida finalizada": só um card de resumo na
- * tela. Tocar abre a folha com o conjunto (Clube · EMA · WRC) e os campos. Mudou
- * qualquer valor, vira Personalizado. Só o que muda a pontuação final aparece aqui.
+ * tela. Tocar nele (ou no ícone de controles do topo, que usa `editando`) abre a
+ * folha com o conjunto (Clube · EMA · WRC) e os campos. Mudou qualquer valor, vira
+ * Personalizado. Só o que muda a pontuação final aparece aqui.
  */
 export default function RegrasPontuacaoRegistro({
   conjunto,
   regras,
   aoSalvar,
   pontosAtuais,
+  editando,
+  setEditando,
 }: {
   conjunto: ConjuntoRegistro
   regras: RegrasPontuacao
   aoSalvar: (conjunto: ConjuntoRegistro, regras: RegrasPontuacao) => void
   pontosAtuais?: readonly number[]
+  /** Folha aberta: a tela controla, porque o ícone do topo também abre. */
+  editando: boolean
+  setEditando: (aberta: boolean) => void
 }) {
   const { t, numero } = useI18n()
   const resumo = useResumo()
-  const [editando, setEditando] = useState(false)
   const comOka = regras.pontosRetorno > regras.pontosPartida
   const nome = t(`match.manual.rulesets.${conjunto}`)
   const uma = umaResumida(regras.uma)
@@ -82,7 +87,6 @@ export default function RegrasPontuacaoRegistro({
             </div>
           ))}
         </dl>
-        <i className="fas fa-wrench" aria-hidden="true" />
       </button>
 
       {editando && (

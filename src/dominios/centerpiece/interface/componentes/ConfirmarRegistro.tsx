@@ -26,6 +26,8 @@ export default function ConfirmarRegistro({
   const comSinal = (valor: number) => `${valor > 0 ? '+' : ''}${numero(valor)}`
   const lugar = (posicao: number) => t('match.result.place', { place: posicao })
   const linhas = [...resultado].sort((uma, outra) => uma.colocacao - outra.colocacao)
+  // Sem oka na partida, a coluna Oka (sempre 0) não aparece.
+  const comOka = linhas.some((linha) => linha.oka !== 0)
 
   return (
     <Modal
@@ -57,13 +59,23 @@ export default function ConfirmarRegistro({
               <span className="ptd-resultado-lugar">{lugar(linha.colocacao)}</span>
               <div className="ptd-resultado-dados">
                 <strong className="fin-mudanca-nome">{nomeDe(linha.cadeira)}</strong>
-                <span className="ptd-apoio">
-                  {t('match.result.breakdown', {
-                    raw: numero(linha.pontosBrutos),
-                    uma: comSinal(linha.uma),
-                    oka: comSinal(linha.oka),
-                  })}
-                </span>
+                {/* Pontos, uma e oka em colunas pequenas, com o título em cima. */}
+                <dl className="fin-detalhes">
+                  <div>
+                    <dt>{t('match.cards.points')}</dt>
+                    <dd>{numero(linha.pontosBrutos)}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('tableConfig.umaLabel')}</dt>
+                    <dd>{comSinal(linha.uma)}</dd>
+                  </div>
+                  {comOka && (
+                    <div>
+                      <dt>{t('tableConfig.okaLabel')}</dt>
+                      <dd>{comSinal(linha.oka)}</dd>
+                    </div>
+                  )}
+                </dl>
                 {depois && (
                   // Ranking geral: posição e total antes → depois.
                   <span className="fin-mudanca-ranking">
