@@ -620,6 +620,8 @@
     "tabs": "Settings tabs"
   },
   "pages": {
+    "matchDetails": "Game details",
+    "matchDetailsHelp": "How many finished games keep the hand-by-hand log. Older ones keep only the result, which stays in the ranking and history.",
     "languageHelp": "Language of the app's text.",
     "installTitle": "Install Mojoca",
     "installHelp": "Opens from its icon, without the browser bar, and works offline.",
@@ -996,6 +998,72 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "Type",
+      "todas": "All",
+      "avulsa": "Games",
+      "clube": "Club",
+      "torneio": "Tournaments",
+      "inProgressTag": "in progress",
+      "roundTable": "Round {{round}} · Table {{table}}",
+      "registeredOf": "{{count}} of {{total}} tables recorded",
+      "openTournament": "Open tournament {{name}}"
+    },
+    "player": {
+      "open": "Open {{name}} analysis",
+      "seeCharts": "See charts",
+      "analyze": "Analyze {{name}}",
+      "summary": {
+        "one": "{{count}} game · average {{average}} · {{score}}",
+        "other": "{{count}} games · average {{average}} · {{score}}"
+      },
+      "empty": "Not enough games with these filters yet.",
+      "share": "Share",
+      "shareFailed": "Could not create the image.",
+      "map": {
+        "title": "Head-to-head map",
+        "density": "Density",
+        "low": "Low",
+        "normal": "Normal",
+        "high": "High",
+        "empty": "No opponents at this density. Choose High or play more games.",
+        "description": "{{name}} head-to-head map with {{count}} opponents",
+        "rival": "Rival",
+        "customer": "Favorite victim",
+        "even": "Even"
+      },
+      "duel": {
+        "together": {
+          "one": "You played {{count}} game together",
+          "other": "You played {{count}} games together"
+        },
+        "averagePlace": "Average placement",
+        "score": "Total score",
+        "tobi": "Sent to tobi",
+        "tobiHelp": "Sent to tobi: finished 1st in a game where the other ended below zero.",
+        "stat": "Stat"
+      },
+      "charts": {
+        "evolution": "Score over time",
+        "evolutionHelp": "Running total score, game by game, from oldest to newest. Above the dashed line, the balance is positive.",
+        "places": "Placement distribution",
+        "placesHelp": "How many times they finished 1st, 2nd, 3rd and 4th.",
+        "monthly": "Average placement by month",
+        "monthlyHelp": "Average placement each month. 1st place is at the top: higher is better.",
+        "wind": "By starting wind",
+        "windHelp": "Average placement by the wind they started the game in. Shorter bar is better.",
+        "formats": "Hanchan × Tonpuusen",
+        "formatsHelp": "Average placement and 1st place % in each format.",
+        "partners": "Played most with",
+        "partnersHelp": "The 5 opponents with the most games together and the head-to-head score (W–L)."
+      },
+      "winds": {
+        "leste": "East",
+        "sul": "South",
+        "oeste": "West",
+        "norte": "North"
+      }
+    },
     "club": {
       "listTitle": "Club meeting",
       "addRegistered": "Use registered",
@@ -1095,6 +1163,10 @@
       "deleteHelp": "The game leaves the history and the ranking. This cannot be undone."
     },
     "home": {
+      "inProgressCount": {
+        "one": "{{count}} in progress",
+        "other": "{{count}} in progress"
+      },
       "clubTitle": "Organize club tables",
       "clubHelp": "Attendance list and table draw",
       "title": "Centerpiece",
@@ -1298,6 +1370,8 @@
       }
     },
     "history": {
+      "search": "Search by player or tournament",
+      "noMatch": "No games match these filters.",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"
@@ -1307,14 +1381,61 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "Custom"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "Filters",
+        "clear": "Clear",
+        "apply": "Apply",
+        "player": "Player",
+        "playerSearch": "Search by nickname or name",
+        "removePlayer": "Remove player from filter",
+        "from": "From",
+        "to": "To",
+        "duration": "Length",
+        "durations": {
+          "todas": "All",
+          "hanchan": "Hanchan",
+          "leste": "Tonpuusen (East only)"
+        },
+        "origin": "Source",
+        "origins": {
+          "todas": "All",
+          "app": "App only",
+          "fora": "Outside the app"
+        },
+        "minimum": "Minimum games",
+        "noMinimum": "No minimum",
+        "minimumChip": {
+          "one": "Min. {{count}} game",
+          "other": "Min. {{count}} games"
+        },
+        "sort": "Sort by",
+        "sorts": {
+          "pontuacao": "Total score",
+          "media": "Average placement",
+          "primeiro": "1st %",
+          "partidas": "Games"
+        },
+        "remove": "Remove filter {{filter}}"
+      },
+      "rivals": {
+        "title": "{{name}} head to head",
+        "rivals": "Top rivals",
+        "customers": "Favorite victims",
+        "together": {
+          "one": "{{count}} game",
+          "other": "{{count}} games"
+        },
+        "empty": "Play more games with other players to see head-to-head stats."
+      }
     },
     "fromMatch": {
       "title": "Data from the match",
@@ -1772,5 +1893,45 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "Import and export data",
+    "help": "Move players, games, tournaments, club and table settings to another phone.",
+    "export": "Export",
+    "exportHelp": "Creates a backup file to send or keep.",
+    "import": "Import",
+    "importHelp": "Opens a Mojoca backup file (.json).",
+    "result": {
+      "compartilhado": "Backup sent.",
+      "baixado": "Backup saved to your downloads.",
+      "falhou": "Could not create the file. Try again."
+    },
+    "errors": {
+      "naoEhJson": "This file is not a valid backup. Choose the .json exported by Mojoca.",
+      "naoEhBackup": "This file is not a Mojoca backup.",
+      "versaoNova": "This backup comes from a newer version of Mojoca. Update the app and try again.",
+      "corrompido": "The backup is incomplete or corrupted. Export it again on the other device."
+    },
+    "summary": {
+      "from": "Backup from {{date}}:",
+      "players": {
+        "one": "{{count}} player",
+        "other": "{{count}} players"
+      },
+      "games": {
+        "one": "{{count}} finished game",
+        "other": "{{count}} finished games"
+      },
+      "tournaments": {
+        "one": "{{count}} tournament",
+        "other": "{{count}} tournaments"
+      }
+    },
+    "merge": "Merge",
+    "mergeHelp": "Adds what is not on this device yet. Nothing here is deleted.",
+    "replace": "Replace everything",
+    "replaceHelp": "Deletes the data on this device and loads the backup.",
+    "replaceConfirm": "All players, games, tournaments and meetups on this device will be deleted and replaced by the backup. This cannot be undone.",
+    "replaceYes": "Delete and replace"
   }
 }

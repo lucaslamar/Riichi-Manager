@@ -617,6 +617,8 @@
     "tabs": "설정 탭"
   },
   "pages": {
+    "matchDetails": "대국 상세 기록",
+    "matchDetailsHelp": "국별 기록을 남길 끝난 대국 수입니다. 오래된 대국은 결과만 남고 랭킹과 기록에는 계속 표시됩니다.",
     "languageHelp": "앱에 표시되는 언어.",
     "installTitle": "Mojoca 설치",
     "installHelp": "아이콘으로 열리고 브라우저 막대 없이 오프라인에서도 작동합니다.",
@@ -992,6 +994,70 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "종류",
+      "todas": "전체",
+      "avulsa": "대국",
+      "clube": "클럽",
+      "torneio": "대회",
+      "inProgressTag": "진행 중",
+      "roundTable": "{{round}}라운드 · {{table}}번 탁",
+      "registeredOf": "{{total}}탁 중 {{count}}탁 기록됨",
+      "openTournament": "{{name}} 대회 열기"
+    },
+    "player": {
+      "open": "{{name}} 분석 열기",
+      "seeCharts": "그래프 보기",
+      "analyze": "{{name}} 분석",
+      "summary": {
+        "other": "{{count}}국 · 평균 {{average}} · {{score}}"
+      },
+      "empty": "이 필터로는 아직 대국이 충분하지 않습니다.",
+      "share": "공유",
+      "shareFailed": "이미지를 만들 수 없습니다.",
+      "map": {
+        "title": "상대 전적 지도",
+        "density": "밀도",
+        "low": "낮음",
+        "normal": "보통",
+        "high": "높음",
+        "empty": "이 밀도에서는 상대가 없습니다. 높음을 선택하거나 더 대국하세요.",
+        "description": "{{name}}의 상대 전적 지도, 상대 {{count}}명",
+        "rival": "라이벌",
+        "customer": "단골 손님",
+        "even": "팽팽함"
+      },
+      "duel": {
+        "together": {
+          "other": "함께 {{count}}국을 쳤습니다"
+        },
+        "averagePlace": "평균 순위",
+        "score": "합계 점수",
+        "tobi": "토비 보낸 횟수",
+        "tobiHelp": "토비 보낸 횟수: 상대가 0점 아래로 끝난 대국에서 1위를 한 횟수.",
+        "stat": "항목"
+      },
+      "charts": {
+        "evolution": "점수 추이",
+        "evolutionHelp": "오래된 대국부터 쌓은 누적 점수. 점선 위면 플러스입니다.",
+        "places": "순위 분포",
+        "placesHelp": "1위, 2위, 3위, 4위를 한 횟수.",
+        "monthly": "월별 평균 순위",
+        "monthlyHelp": "월별 평균 순위. 1위가 맨 위이며, 높을수록 좋습니다.",
+        "wind": "시작 바람별",
+        "windHelp": "시작 바람에 따른 평균 순위. 막대가 짧을수록 좋습니다.",
+        "formats": "반장전 × 동풍전",
+        "formatsHelp": "형식별 평균 순위와 1위 비율.",
+        "partners": "가장 많이 함께 친 상대",
+        "partnersHelp": "함께 친 대국이 가장 많은 상대 5명과 상대 전적(승–패)."
+      },
+      "winds": {
+        "leste": "동",
+        "sul": "남",
+        "oeste": "서",
+        "norte": "북"
+      }
+    },
     "club": {
       "listTitle": "클럽 모임",
       "addRegistered": "등록된 사람 사용",
@@ -1081,6 +1147,9 @@
       "deleteHelp": "기록과 랭킹에서 사라져요. 되돌릴 수 없어요."
     },
     "home": {
+      "inProgressCount": {
+        "other": "진행 중 {{count}}"
+      },
       "clubTitle": "클럽 탁 배정",
       "clubHelp": "출석 명단과 탁 추첨",
       "title": "Centerpiece",
@@ -1284,6 +1353,8 @@
       }
     },
     "history": {
+      "search": "플레이어나 대회로 검색",
+      "noMatch": "이 필터에 맞는 대국이 없습니다.",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"
@@ -1293,14 +1364,59 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "직접 지정"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "필터",
+        "clear": "초기화",
+        "apply": "적용",
+        "player": "플레이어",
+        "playerSearch": "별명이나 이름으로 검색",
+        "removePlayer": "플레이어 필터 해제",
+        "from": "시작",
+        "to": "종료",
+        "duration": "형식",
+        "durations": {
+          "todas": "전체",
+          "hanchan": "반장전",
+          "leste": "동풍전"
+        },
+        "origin": "출처",
+        "origins": {
+          "todas": "전체",
+          "app": "앱에서만",
+          "fora": "앱 밖"
+        },
+        "minimum": "최소 대국 수",
+        "noMinimum": "제한 없음",
+        "minimumChip": {
+          "other": "최소 {{count}}국"
+        },
+        "sort": "정렬",
+        "sorts": {
+          "pontuacao": "총점",
+          "media": "평균 순위",
+          "primeiro": "1위 %",
+          "partidas": "대국 수"
+        },
+        "remove": "{{filter}} 필터 해제"
+      },
+      "rivals": {
+        "title": "{{name}} 상대 전적",
+        "rivals": "최대 라이벌",
+        "customers": "단골 손님",
+        "together": {
+          "other": "{{count}}국"
+        },
+        "empty": "다른 플레이어와 더 대국하면 상대 전적이 보입니다."
+      }
     },
     "fromMatch": {
       "title": "대국에서 가져온 정보",
@@ -1758,5 +1874,42 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "데이터 가져오기 및 내보내기",
+    "help": "플레이어, 대국, 대회, 클럽, 탁 설정을 다른 휴대폰으로 옮깁니다.",
+    "export": "내보내기",
+    "exportHelp": "보내거나 보관할 백업 파일을 만듭니다.",
+    "import": "가져오기",
+    "importHelp": "Mojoca 백업 파일(.json)을 엽니다.",
+    "result": {
+      "compartilhado": "백업을 보냈습니다.",
+      "baixado": "백업을 다운로드했습니다.",
+      "falhou": "파일을 만들 수 없습니다. 다시 시도하세요."
+    },
+    "errors": {
+      "naoEhJson": "유효한 백업이 아닙니다. Mojoca에서 내보낸 .json을 선택하세요.",
+      "naoEhBackup": "Mojoca 백업 파일이 아닙니다.",
+      "versaoNova": "더 새로운 버전의 Mojoca에서 만든 백업입니다. 앱을 업데이트한 뒤 다시 시도하세요.",
+      "corrompido": "백업이 불완전하거나 손상되었습니다. 다른 기기에서 다시 내보내세요."
+    },
+    "summary": {
+      "from": "{{date}} 백업:",
+      "players": {
+        "other": "플레이어 {{count}}명"
+      },
+      "games": {
+        "other": "끝난 대국 {{count}}개"
+      },
+      "tournaments": {
+        "other": "대회 {{count}}개"
+      }
+    },
+    "merge": "병합",
+    "mergeHelp": "이 기기에 없는 것만 추가합니다. 여기 있는 데이터는 지워지지 않습니다.",
+    "replace": "모두 바꾸기",
+    "replaceHelp": "이 기기의 데이터를 지우고 백업을 불러옵니다.",
+    "replaceConfirm": "이 기기의 모든 플레이어, 대국, 대회, 모임이 삭제되고 백업 내용으로 바뀝니다. 되돌릴 수 없습니다.",
+    "replaceYes": "삭제하고 바꾸기"
   }
 }

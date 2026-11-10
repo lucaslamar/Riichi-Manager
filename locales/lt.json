@@ -635,6 +635,8 @@
     "tabs": "Nustatymų skirtukai"
   },
   "pages": {
+    "matchDetails": "Partijų detalės",
+    "matchDetailsHelp": "Kiek baigtų partijų saugo kiekvieną dalijimą. Senesnėse lieka tik rezultatas, kuris toliau rodomas reitinge ir istorijoje.",
     "languageHelp": "Programėlės tekstų kalba.",
     "installTitle": "Įdiegti Mojoca",
     "installHelp": "Atsidaro iš piktogramos, be naršyklės juostos, ir veikia neprisijungus.",
@@ -1013,6 +1015,76 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "Tipas",
+      "todas": "Visos",
+      "avulsa": "Partijos",
+      "clube": "Klubas",
+      "torneio": "Turnyrai",
+      "inProgressTag": "vyksta",
+      "roundTable": "{{round}} ratas · {{table}} stalas",
+      "registeredOf": "Užregistruota {{count}} iš {{total}} stalų",
+      "openTournament": "Atidaryti turnyrą {{name}}"
+    },
+    "player": {
+      "open": "Atidaryti {{name}} analizę",
+      "seeCharts": "Žiūrėti grafikus",
+      "analyze": "Analizuoti {{name}}",
+      "summary": {
+        "one": "{{count}} partija · vidurkis {{average}} · {{score}}",
+        "few": "{{count}} partijos · vidurkis {{average}} · {{score}}",
+        "many": "{{count}} partijos · vidurkis {{average}} · {{score}}",
+        "other": "{{count}} partijų · vidurkis {{average}} · {{score}}"
+      },
+      "empty": "Su šiais filtrais dar nepakanka partijų.",
+      "share": "Dalintis",
+      "shareFailed": "Nepavyko sukurti paveikslėlio.",
+      "map": {
+        "title": "Akistatų žemėlapis",
+        "density": "Tankis",
+        "low": "Mažas",
+        "normal": "Įprastas",
+        "high": "Didelis",
+        "empty": "Šiame tankyje varžovų nėra. Pasirinkite Didelis arba sužaiskite daugiau partijų.",
+        "description": "{{name}} akistatų žemėlapis su {{count}} varžovais",
+        "rival": "Varžovas",
+        "customer": "Mėgstama auka",
+        "even": "Lygiosios"
+      },
+      "duel": {
+        "together": {
+          "one": "Kartu sužaidėte {{count}} partiją",
+          "few": "Kartu sužaidėte {{count}} partijas",
+          "many": "Kartu sužaidėte {{count}} partijos",
+          "other": "Kartu sužaidėte {{count}} partijų"
+        },
+        "averagePlace": "Vidutinė vieta",
+        "score": "Bendri taškai",
+        "tobi": "Išmetė į tobi",
+        "tobiHelp": "Išmetė į tobi: baigė 1-as partijoje, kurioje kitas liko žemiau nulio.",
+        "stat": "Rodiklis"
+      },
+      "charts": {
+        "evolution": "Taškų kaita",
+        "evolutionHelp": "Sukaupti taškai partija po partijos, nuo seniausios iki naujausios. Virš punktyrinės linijos balansas teigiamas.",
+        "places": "Vietų pasiskirstymas",
+        "placesHelp": "Kiek kartų baigė 1-as, 2-as, 3-ias ir 4-as.",
+        "monthly": "Vidutinė vieta pagal mėnesį",
+        "monthlyHelp": "Vidutinė vieta kiekvieną mėnesį. 1 vieta viršuje: kuo aukščiau, tuo geriau.",
+        "wind": "Pagal pradinį vėją",
+        "windHelp": "Vidutinė vieta pagal vėją, kuriuo pradėjo partiją. Trumpesnis stulpelis geriau.",
+        "formats": "Hanchan × Tonpuusen",
+        "formatsHelp": "Vidutinė vieta ir 1 vietos % kiekviename formate.",
+        "partners": "Dažniausiai žaidė su",
+        "partnersHelp": "5 varžovai, su kuriais sužaista daugiausia partijų, ir akistatos rezultatas (P–L)."
+      },
+      "winds": {
+        "leste": "Rytai",
+        "sul": "Pietūs",
+        "oeste": "Vakarai",
+        "norte": "Šiaurė"
+      }
+    },
     "club": {
       "listTitle": "Klubo susitikimas",
       "addRegistered": "Naudoti registruotą",
@@ -1132,6 +1204,12 @@
       "deleteHelp": "Partija dings iš istorijos ir reitingo. Atšaukti nebus galima."
     },
     "home": {
+      "inProgressCount": {
+        "one": "Vyksta: {{count}}",
+        "few": "Vyksta: {{count}}",
+        "many": "Vyksta: {{count}}",
+        "other": "Vyksta: {{count}}"
+      },
       "clubTitle": "Klubo stalų sudarymas",
       "clubHelp": "Dalyvių sąrašas ir stalų burtai",
       "title": "Centerpiece",
@@ -1335,6 +1413,8 @@
       }
     },
     "history": {
+      "search": "Ieškoti pagal žaidėją ar turnyrą",
+      "noMatch": "Pagal šiuos filtrus partijų nėra.",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"
@@ -1344,14 +1424,65 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "Pasirinktinis"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "Filtrai",
+        "clear": "Išvalyti",
+        "apply": "Taikyti",
+        "player": "Žaidėjas",
+        "playerSearch": "Ieškoti pagal slapyvardį ar vardą",
+        "removePlayer": "Pašalinti žaidėjo filtrą",
+        "from": "Nuo",
+        "to": "Iki",
+        "duration": "Trukmė",
+        "durations": {
+          "todas": "Visos",
+          "hanchan": "Hanchan",
+          "leste": "Tonpuusen (tik Rytai)"
+        },
+        "origin": "Šaltinis",
+        "origins": {
+          "todas": "Visos",
+          "app": "Tik programėlėje",
+          "fora": "Ne programėlėje"
+        },
+        "minimum": "Mažiausiai partijų",
+        "noMinimum": "Be minimumo",
+        "minimumChip": {
+          "one": "Min. {{count}} partija",
+          "few": "Min. {{count}} partijos",
+          "many": "Min. {{count}} partijos",
+          "other": "Min. {{count}} partijų"
+        },
+        "sort": "Rikiuoti pagal",
+        "sorts": {
+          "pontuacao": "Bendri taškai",
+          "media": "Vidutinė vieta",
+          "primeiro": "1 vietos %",
+          "partidas": "Partijos"
+        },
+        "remove": "Pašalinti filtrą {{filter}}"
+      },
+      "rivals": {
+        "title": "{{name}} akistatos",
+        "rivals": "Didžiausi varžovai",
+        "customers": "Mėgstamos aukos",
+        "together": {
+          "one": "{{count}} partija",
+          "few": "{{count}} partijos",
+          "many": "{{count}} partijos",
+          "other": "{{count}} partijų"
+        },
+        "empty": "Sužaiskite daugiau partijų su kitais žaidėjais, kad pamatytumėte akistatas."
+      }
     },
     "fromMatch": {
       "title": "Partijos duomenys",
@@ -1823,5 +1954,51 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "Duomenų importas ir eksportas",
+    "help": "Perkelkite žaidėjus, partijas, turnyrus, klubą ir stalo nustatymus į kitą telefoną.",
+    "export": "Eksportuoti",
+    "exportHelp": "Sukuria atsarginės kopijos failą siuntimui ar saugojimui.",
+    "import": "Importuoti",
+    "importHelp": "Atidaro Mojoca atsarginės kopijos failą (.json).",
+    "result": {
+      "compartilhado": "Kopija išsiųsta.",
+      "baixado": "Kopija atsisiųsta.",
+      "falhou": "Nepavyko sukurti failo. Bandykite dar kartą."
+    },
+    "errors": {
+      "naoEhJson": "Šis failas nėra tinkama kopija. Pasirinkite Mojoca eksportuotą .json.",
+      "naoEhBackup": "Šis failas nėra Mojoca kopija.",
+      "versaoNova": "Ši kopija sukurta naujesne Mojoca versija. Atnaujinkite programėlę ir bandykite dar kartą.",
+      "corrompido": "Kopija neišsami arba sugadinta. Eksportuokite dar kartą kitame įrenginyje."
+    },
+    "summary": {
+      "from": "Kopija iš {{date}}:",
+      "players": {
+        "one": "{{count}} žaidėjas",
+        "few": "{{count}} žaidėjai",
+        "many": "{{count}} žaidėjo",
+        "other": "{{count}} žaidėjų"
+      },
+      "games": {
+        "one": "{{count}} baigta partija",
+        "few": "{{count}} baigtos partijos",
+        "many": "{{count}} baigtos partijos",
+        "other": "{{count}} baigtų partijų"
+      },
+      "tournaments": {
+        "one": "{{count}} turnyras",
+        "few": "{{count}} turnyrai",
+        "many": "{{count}} turnyro",
+        "other": "{{count}} turnyrų"
+      }
+    },
+    "merge": "Sujungti",
+    "mergeHelp": "Prideda tai, ko šiame įrenginyje dar nėra. Niekas čia neištrinama.",
+    "replace": "Pakeisti viską",
+    "replaceHelp": "Ištrina šio įrenginio duomenis ir įkelia kopiją.",
+    "replaceConfirm": "Visi šio įrenginio žaidėjai, partijos, turnyrai ir susitikimai bus ištrinti ir pakeisti kopijos duomenimis. To atšaukti negalima.",
+    "replaceYes": "Ištrinti ir pakeisti"
   }
 }

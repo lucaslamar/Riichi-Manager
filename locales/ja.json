@@ -617,6 +617,8 @@
     "tabs": "設定のタブ"
   },
   "pages": {
+    "matchDetails": "対局の詳細",
+    "matchDetailsHelp": "局ごとの記録を残す終了済み対局の数です。古い対局は結果だけが残り、ランキングと履歴には引き続き表示されます。",
     "languageHelp": "アプリの表示言語。",
     "installTitle": "Mojocaをインストール",
     "installHelp": "アイコンから開き、ブラウザのバーなしでオフラインでも使えます。",
@@ -992,6 +994,70 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "種類",
+      "todas": "すべて",
+      "avulsa": "対局",
+      "clube": "クラブ",
+      "torneio": "大会",
+      "inProgressTag": "進行中",
+      "roundTable": "第{{round}}回戦 · {{table}}卓",
+      "registeredOf": "{{total}}卓中 {{count}}卓 記録済み",
+      "openTournament": "大会「{{name}}」を開く"
+    },
+    "player": {
+      "open": "{{name}} の分析を開く",
+      "seeCharts": "グラフを見る",
+      "analyze": "{{name}} を分析",
+      "summary": {
+        "other": "{{count}}局 · 平均 {{average}} · {{score}}"
+      },
+      "empty": "この条件ではまだ対局が足りません。",
+      "share": "共有",
+      "shareFailed": "画像を作成できませんでした。",
+      "map": {
+        "title": "対戦マップ",
+        "density": "密度",
+        "low": "低",
+        "normal": "標準",
+        "high": "高",
+        "empty": "この密度では対戦相手がいません。「高」を選ぶか、もっと対局してください。",
+        "description": "{{name}} の対戦マップ（対戦相手 {{count}} 人）",
+        "rival": "天敵",
+        "customer": "お得意様",
+        "even": "互角"
+      },
+      "duel": {
+        "together": {
+          "other": "一緒に {{count}} 局打ちました"
+        },
+        "averagePlace": "平均順位",
+        "score": "合計スコア",
+        "tobi": "飛ばした回数",
+        "tobiHelp": "飛ばした回数: 相手がマイナスで終わった対局で自分がトップだった回数。",
+        "stat": "項目"
+      },
+      "charts": {
+        "evolution": "スコア推移",
+        "evolutionHelp": "古い対局から順に積み上げた合計スコア。破線より上ならプラスです。",
+        "places": "順位分布",
+        "placesHelp": "1位・2位・3位・4位になった回数。",
+        "monthly": "月別平均順位",
+        "monthlyHelp": "月ごとの平均順位。上ほど良い（1位が一番上）。",
+        "wind": "開始時の風別",
+        "windHelp": "開始時の風ごとの平均順位。棒が短いほど良い成績です。",
+        "formats": "半荘 × 東風戦",
+        "formatsHelp": "形式ごとの平均順位とトップ率。",
+        "partners": "よく打つ相手",
+        "partnersHelp": "一緒に打った対局数が多い上位5人と、直接対決の成績（勝–負）。"
+      },
+      "winds": {
+        "leste": "東",
+        "sul": "南",
+        "oeste": "西",
+        "norte": "北"
+      }
+    },
     "club": {
       "listTitle": "クラブの集まり",
       "addRegistered": "登録済みから選ぶ",
@@ -1081,6 +1147,9 @@
       "deleteHelp": "履歴とランキングから消えます。元に戻せません。"
     },
     "home": {
+      "inProgressCount": {
+        "other": "進行中 {{count}}"
+      },
       "clubTitle": "クラブの卓組み",
       "clubHelp": "出席リストと卓の抽選",
       "title": "Centerpiece",
@@ -1284,6 +1353,8 @@
       }
     },
     "history": {
+      "search": "プレイヤーまたは大会で検索",
+      "noMatch": "この条件に合う対局はありません。",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"
@@ -1293,14 +1364,59 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "期間指定"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "フィルター",
+        "clear": "クリア",
+        "apply": "適用",
+        "player": "プレイヤー",
+        "playerSearch": "ニックネームまたは名前で検索",
+        "removePlayer": "プレイヤーの絞り込みを解除",
+        "from": "開始",
+        "to": "終了",
+        "duration": "形式",
+        "durations": {
+          "todas": "すべて",
+          "hanchan": "半荘",
+          "leste": "東風戦"
+        },
+        "origin": "記録元",
+        "origins": {
+          "todas": "すべて",
+          "app": "アプリのみ",
+          "fora": "アプリ外"
+        },
+        "minimum": "最低対局数",
+        "noMinimum": "制限なし",
+        "minimumChip": {
+          "other": "{{count}}局以上"
+        },
+        "sort": "並べ替え",
+        "sorts": {
+          "pontuacao": "合計スコア",
+          "media": "平均順位",
+          "primeiro": "トップ率",
+          "partidas": "対局数"
+        },
+        "remove": "{{filter}} を解除"
+      },
+      "rivals": {
+        "title": "{{name}} の対戦成績",
+        "rivals": "天敵",
+        "customers": "お得意様",
+        "together": {
+          "other": "{{count}}局"
+        },
+        "empty": "他のプレイヤーともっと対局すると対戦成績が表示されます。"
+      }
     },
     "fromMatch": {
       "title": "対局からのデータ",
@@ -1758,5 +1874,42 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "データのインポートとエクスポート",
+    "help": "プレイヤー、対局、大会、クラブ、卓設定を別のスマホに移せます。",
+    "export": "エクスポート",
+    "exportHelp": "送信・保存用のバックアップファイルを作成します。",
+    "import": "インポート",
+    "importHelp": "Mojoca のバックアップファイル (.json) を開きます。",
+    "result": {
+      "compartilhado": "バックアップを送信しました。",
+      "baixado": "バックアップをダウンロードしました。",
+      "falhou": "ファイルを作成できませんでした。もう一度お試しください。"
+    },
+    "errors": {
+      "naoEhJson": "有効なバックアップではありません。Mojoca でエクスポートした .json を選んでください。",
+      "naoEhBackup": "Mojoca のバックアップではありません。",
+      "versaoNova": "新しいバージョンの Mojoca で作成されたバックアップです。アプリを更新してからお試しください。",
+      "corrompido": "バックアップが不完全か破損しています。もう一方の端末で再度エクスポートしてください。"
+    },
+    "summary": {
+      "from": "{{date}} のバックアップ:",
+      "players": {
+        "other": "プレイヤー {{count}} 人"
+      },
+      "games": {
+        "other": "終了した対局 {{count}} 件"
+      },
+      "tournaments": {
+        "other": "大会 {{count}} 件"
+      }
+    },
+    "merge": "統合",
+    "mergeHelp": "この端末にないものだけを追加します。ここのデータは削除されません。",
+    "replace": "すべて置き換え",
+    "replaceHelp": "この端末のデータを削除し、バックアップを読み込みます。",
+    "replaceConfirm": "この端末のプレイヤー、対局、大会、集まりはすべて削除され、バックアップの内容に置き換わります。元に戻せません。",
+    "replaceYes": "削除して置き換え"
   }
 }

@@ -617,6 +617,8 @@
     "tabs": "设置标签页"
   },
   "pages": {
+    "matchDetails": "对局详情",
+    "matchDetailsHelp": "保留逐局记录的已结束对局数量。更早的对局只保留结果，仍会显示在排名和历史中。",
     "languageHelp": "应用文字的语言。",
     "installTitle": "安装 Mojoca",
     "installHelp": "从图标打开，没有浏览器栏，也可离线使用。",
@@ -992,6 +994,70 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "类型",
+      "todas": "全部",
+      "avulsa": "对局",
+      "clube": "俱乐部",
+      "torneio": "比赛",
+      "inProgressTag": "进行中",
+      "roundTable": "第 {{round}} 轮 · 第 {{table}} 桌",
+      "registeredOf": "已记录 {{count}}/{{total}} 桌",
+      "openTournament": "打开比赛 {{name}}"
+    },
+    "player": {
+      "open": "打开 {{name}} 的分析",
+      "seeCharts": "查看图表",
+      "analyze": "分析 {{name}}",
+      "summary": {
+        "other": "{{count}} 局 · 平均 {{average}} · {{score}}"
+      },
+      "empty": "在当前筛选下对局还不够。",
+      "share": "分享",
+      "shareFailed": "无法生成图片。",
+      "map": {
+        "title": "对战地图",
+        "density": "密度",
+        "low": "低",
+        "normal": "普通",
+        "high": "高",
+        "empty": "此密度下没有对手。请选择“高”或多打几局。",
+        "description": "{{name}} 的对战地图，共 {{count}} 名对手",
+        "rival": "劲敌",
+        "customer": "常客",
+        "even": "势均力敌"
+      },
+      "duel": {
+        "together": {
+          "other": "你们一起打了 {{count}} 局"
+        },
+        "averagePlace": "平均顺位",
+        "score": "总得分",
+        "tobi": "击飞次数",
+        "tobiHelp": "击飞次数：对方以负分结束、自己拿到一位的对局数。",
+        "stat": "项目"
+      },
+      "charts": {
+        "evolution": "得分走势",
+        "evolutionHelp": "从最早到最近逐局累计的得分。虚线以上为正。",
+        "places": "顺位分布",
+        "placesHelp": "拿到一位、二位、三位、四位的次数。",
+        "monthly": "每月平均顺位",
+        "monthlyHelp": "每个月的平均顺位。一位在最上方，越高越好。",
+        "wind": "按起始风位",
+        "windHelp": "按开局风位统计的平均顺位。柱子越短越好。",
+        "formats": "半庄 × 东风战",
+        "formatsHelp": "各赛制的平均顺位和一位率。",
+        "partners": "最常同桌",
+        "partnersHelp": "同桌对局最多的 5 名对手及直接对战战绩（胜–负）。"
+      },
+      "winds": {
+        "leste": "东",
+        "sul": "南",
+        "oeste": "西",
+        "norte": "北"
+      }
+    },
     "club": {
       "listTitle": "俱乐部聚会",
       "addRegistered": "使用已登记",
@@ -1081,6 +1147,9 @@
       "deleteHelp": "对局会从历史和排名中移除，且无法撤销。"
     },
     "home": {
+      "inProgressCount": {
+        "other": "进行中 {{count}}"
+      },
       "clubTitle": "安排俱乐部牌桌",
       "clubHelp": "签到名单与抽签分桌",
       "title": "Centerpiece",
@@ -1284,6 +1353,8 @@
       }
     },
     "history": {
+      "search": "按玩家或比赛搜索",
+      "noMatch": "没有符合这些筛选条件的对局。",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"
@@ -1293,14 +1364,59 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "自定义"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "筛选",
+        "clear": "清除",
+        "apply": "应用",
+        "player": "玩家",
+        "playerSearch": "按昵称或姓名搜索",
+        "removePlayer": "移除玩家筛选",
+        "from": "从",
+        "to": "到",
+        "duration": "赛制",
+        "durations": {
+          "todas": "全部",
+          "hanchan": "半庄",
+          "leste": "东风战"
+        },
+        "origin": "来源",
+        "origins": {
+          "todas": "全部",
+          "app": "仅应用内",
+          "fora": "应用外"
+        },
+        "minimum": "最少对局数",
+        "noMinimum": "不限",
+        "minimumChip": {
+          "other": "至少 {{count}} 局"
+        },
+        "sort": "排序",
+        "sorts": {
+          "pontuacao": "总分",
+          "media": "平均顺位",
+          "primeiro": "一位率",
+          "partidas": "对局数"
+        },
+        "remove": "移除筛选 {{filter}}"
+      },
+      "rivals": {
+        "title": "{{name}} 的对战",
+        "rivals": "最大劲敌",
+        "customers": "常客",
+        "together": {
+          "other": "{{count}} 局"
+        },
+        "empty": "与其他玩家多打几局即可查看对战数据。"
+      }
     },
     "fromMatch": {
       "title": "来自对局的数据",
@@ -1758,5 +1874,42 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "导入和导出数据",
+    "help": "把玩家、对局、比赛、俱乐部和牌桌设置转移到另一部手机。",
+    "export": "导出",
+    "exportHelp": "生成可发送或保存的备份文件。",
+    "import": "导入",
+    "importHelp": "打开 Mojoca 备份文件（.json）。",
+    "result": {
+      "compartilhado": "备份已发送。",
+      "baixado": "备份已下载。",
+      "falhou": "无法生成文件，请重试。"
+    },
+    "errors": {
+      "naoEhJson": "这不是有效的备份文件。请选择 Mojoca 导出的 .json。",
+      "naoEhBackup": "这不是 Mojoca 的备份文件。",
+      "versaoNova": "此备份来自更新版本的 Mojoca。请先更新应用再试。",
+      "corrompido": "备份不完整或已损坏。请在另一台设备上重新导出。"
+    },
+    "summary": {
+      "from": "{{date}} 的备份：",
+      "players": {
+        "other": "{{count}} 名玩家"
+      },
+      "games": {
+        "other": "{{count}} 局已结束对局"
+      },
+      "tournaments": {
+        "other": "{{count}} 场比赛"
+      }
+    },
+    "merge": "合并",
+    "mergeHelp": "只添加本设备上还没有的内容，不会删除这里的数据。",
+    "replace": "全部替换",
+    "replaceHelp": "删除本设备的数据并载入备份。",
+    "replaceConfirm": "本设备上的所有玩家、对局、比赛和聚会都会被删除，并替换为备份内容。此操作无法撤销。",
+    "replaceYes": "删除并替换"
   }
 }

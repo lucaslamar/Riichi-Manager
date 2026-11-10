@@ -626,6 +626,8 @@
     "tabs": "Pestañas de configuración"
   },
   "pages": {
+    "matchDetails": "Detalles de las partidas",
+    "matchDetailsHelp": "Cuántas partidas finalizadas guardan el mano a mano. Las más antiguas quedan solo con el resultado, que sigue en el ranking y el historial.",
     "languageHelp": "Idioma de los textos de la app.",
     "installTitle": "Instalar Mojoca",
     "installHelp": "Se abre desde su icono, sin la barra del navegador, y funciona sin conexión.",
@@ -1003,6 +1005,72 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "Tipo",
+      "todas": "Todas",
+      "avulsa": "Partidas",
+      "clube": "Club",
+      "torneio": "Torneos",
+      "inProgressTag": "en curso",
+      "roundTable": "Ronda {{round}} · Mesa {{table}}",
+      "registeredOf": "{{count}} de {{total}} mesas registradas",
+      "openTournament": "Abrir el torneo {{name}}"
+    },
+    "player": {
+      "open": "Abrir el análisis de {{name}}",
+      "seeCharts": "Ver gráficos",
+      "analyze": "Analizar a {{name}}",
+      "summary": {
+        "one": "{{count}} partida · media {{average}} · {{score}}",
+        "other": "{{count}} partidas · media {{average}} · {{score}}"
+      },
+      "empty": "Todavía no hay suficientes partidas con estos filtros.",
+      "share": "Compartir",
+      "shareFailed": "No se pudo generar la imagen.",
+      "map": {
+        "title": "Mapa de enfrentamientos",
+        "density": "Densidad",
+        "low": "Baja",
+        "normal": "Normal",
+        "high": "Alta",
+        "empty": "Ningún rival en esta densidad. Elige Alta o juega más partidas.",
+        "description": "Mapa de enfrentamientos de {{name}} con {{count}} rivales",
+        "rival": "Rival",
+        "customer": "Cliente",
+        "even": "Empate"
+      },
+      "duel": {
+        "together": {
+          "one": "Jugaron {{count}} partida juntos",
+          "other": "Jugaron {{count}} partidas juntos"
+        },
+        "averagePlace": "Media de posición",
+        "score": "Puntuación total",
+        "tobi": "Mandó al tobi",
+        "tobiHelp": "Mandó al tobi: terminó 1º en una partida en la que el otro quedó bajo cero.",
+        "stat": "Estadística"
+      },
+      "charts": {
+        "evolution": "Evolución de la puntuación",
+        "evolutionHelp": "Puntuación acumulada partida a partida, de la más antigua a la más reciente. Por encima de la línea discontinua, el saldo es positivo.",
+        "places": "Distribución de posiciones",
+        "placesHelp": "Cuántas veces terminó 1º, 2º, 3º y 4º.",
+        "monthly": "Media de posición por mes",
+        "monthlyHelp": "Media de posición en cada mes. El 1º puesto queda arriba: cuanto más alto, mejor.",
+        "wind": "Por viento inicial",
+        "windHelp": "Media de posición según el viento con el que empezó la partida. Barra más corta es mejor.",
+        "formats": "Hanchan × Tonpuusen",
+        "formatsHelp": "Media de posición y % de 1º puesto en cada formato.",
+        "partners": "Más jugó con",
+        "partnersHelp": "Los 5 rivales con más partidas juntos y el marcador del enfrentamiento directo (V–D)."
+      },
+      "winds": {
+        "leste": "Este",
+        "sul": "Sur",
+        "oeste": "Oeste",
+        "norte": "Norte"
+      }
+    },
     "club": {
       "listTitle": "Encuentro del club",
       "addRegistered": "Usar registrado",
@@ -1102,6 +1170,10 @@
       "deleteHelp": "La partida sale del historial y del ranking. No se puede deshacer."
     },
     "home": {
+      "inProgressCount": {
+        "one": "{{count}} en curso",
+        "other": "{{count}} en curso"
+      },
       "clubTitle": "Organizar mesas del club",
       "clubHelp": "Lista de asistencia y sorteo de mesas",
       "title": "Centerpiece",
@@ -1305,6 +1377,8 @@
       }
     },
     "history": {
+      "search": "Buscar por jugador o torneo",
+      "noMatch": "Ninguna partida con estos filtros.",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"
@@ -1314,14 +1388,61 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "Personalizado"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "Filtros",
+        "clear": "Limpiar",
+        "apply": "Aplicar",
+        "player": "Jugador",
+        "playerSearch": "Buscar por apodo o nombre",
+        "removePlayer": "Quitar el jugador del filtro",
+        "from": "Desde",
+        "to": "Hasta",
+        "duration": "Duración",
+        "durations": {
+          "todas": "Todas",
+          "hanchan": "Hanchan",
+          "leste": "Tonpuusen (solo Este)"
+        },
+        "origin": "Origen",
+        "origins": {
+          "todas": "Todas",
+          "app": "Solo app",
+          "fora": "Fuera de la app"
+        },
+        "minimum": "Mínimo de partidas",
+        "noMinimum": "Sin mínimo",
+        "minimumChip": {
+          "one": "Mín. {{count}} partida",
+          "other": "Mín. {{count}} partidas"
+        },
+        "sort": "Ordenar por",
+        "sorts": {
+          "pontuacao": "Puntuación total",
+          "media": "Media de posición",
+          "primeiro": "% 1º",
+          "partidas": "Partidas"
+        },
+        "remove": "Quitar filtro {{filter}}"
+      },
+      "rivals": {
+        "title": "Enfrentamientos de {{name}}",
+        "rivals": "Mayores rivales",
+        "customers": "Clientes",
+        "together": {
+          "one": "{{count}} partida",
+          "other": "{{count}} partidas"
+        },
+        "empty": "Juega más partidas con otros jugadores para ver enfrentamientos."
+      }
     },
     "fromMatch": {
       "title": "Datos de la partida",
@@ -1779,5 +1900,45 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "Importar y exportar datos",
+    "help": "Lleva jugadores, partidas, torneos, club y ajustes de mesa a otro móvil.",
+    "export": "Exportar",
+    "exportHelp": "Genera un archivo de copia para enviar o guardar.",
+    "import": "Importar",
+    "importHelp": "Abre un archivo de copia de Mojoca (.json).",
+    "result": {
+      "compartilhado": "Copia enviada.",
+      "baixado": "Copia descargada.",
+      "falhou": "No se pudo generar el archivo. Inténtalo de nuevo."
+    },
+    "errors": {
+      "naoEhJson": "Este archivo no es una copia válida. Elige el .json exportado por Mojoca.",
+      "naoEhBackup": "Este archivo no es una copia de Mojoca.",
+      "versaoNova": "Esta copia viene de una versión más nueva de Mojoca. Actualiza la app e inténtalo de nuevo.",
+      "corrompido": "La copia está incompleta o dañada. Exporta de nuevo en el otro dispositivo."
+    },
+    "summary": {
+      "from": "Copia del {{date}}:",
+      "players": {
+        "one": "{{count}} jugador",
+        "other": "{{count}} jugadores"
+      },
+      "games": {
+        "one": "{{count}} partida finalizada",
+        "other": "{{count}} partidas finalizadas"
+      },
+      "tournaments": {
+        "one": "{{count}} torneo",
+        "other": "{{count}} torneos"
+      }
+    },
+    "merge": "Combinar",
+    "mergeHelp": "Añade lo que aún no existe en este dispositivo. No se borra nada de aquí.",
+    "replace": "Reemplazar todo",
+    "replaceHelp": "Borra los datos de este dispositivo y carga los de la copia.",
+    "replaceConfirm": "Todos los jugadores, partidas, torneos y encuentros de este dispositivo se borrarán y se reemplazarán por los de la copia. No se puede deshacer.",
+    "replaceYes": "Borrar y reemplazar"
   }
 }
