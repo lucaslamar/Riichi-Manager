@@ -85,29 +85,6 @@ export default function PaginaRanking({
         aoVoltar={aoVoltar}
         acoes={
           <>
-            {aoAbrirJogadores && (
-              <button
-                type="button"
-                className="botao-voltar-tela botao-acao-tela"
-                aria-label={t('players.title')}
-                title={t('players.title')}
-                onClick={aoAbrirJogadores}
-              >
-                <i className="fas fa-user-plus" aria-hidden="true" />
-              </button>
-            )}
-            {!aoVoltar && (
-              <button
-                type="button"
-                className="botao-voltar-tela botao-acao-tela"
-                aria-label={t('backup.title')}
-                title={t('backup.title')}
-                aria-haspopup="dialog"
-                onClick={() => setBackupAberto(true)}
-              >
-                <i className="fas fa-arrow-right-arrow-left" aria-hidden="true" />
-              </button>
-            )}
             {!aoVoltar && <BotaoConfiguracoes />}
           </>
         }
@@ -144,6 +121,29 @@ export default function PaginaRanking({
           onClick={() => setFiltros({ ...filtros, duracao: proximo(DURACOES_RAPIDAS, filtros.duracao) })}
         >
           <i className="fas fa-stopwatch" aria-hidden="true" />
+        </button>
+        {/* Ações da lista, depois dos filtros: cadastro de jogadores e importar/exportar. */}
+        <span className="rkf-separador" aria-hidden="true" />
+        {aoAbrirJogadores && (
+          <button
+            type="button"
+            className="rkf-icone"
+            aria-label={t('players.title')}
+            title={t('players.title')}
+            onClick={aoAbrirJogadores}
+          >
+            <i className="fas fa-user-plus" aria-hidden="true" />
+          </button>
+        )}
+        <button
+          type="button"
+          className="rkf-icone"
+          aria-label={t('backup.title')}
+          title={t('backup.title')}
+          aria-haspopup="dialog"
+          onClick={() => setBackupAberto(true)}
+        >
+          <i className="fas fa-file-export" aria-hidden="true" />
         </button>
         {ativos.map((ativo) => (
           <button

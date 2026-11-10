@@ -300,3 +300,12 @@
   background: transparent;
   cursor: pointer;
 }
+
+/* Divide os filtros das ações da lista. */
+.rkf-separador {
+  order: 1;
+  width: 1px;
+  height: 16px;
+  margin-inline: 4px;
+  background: var(--entrada-borda);
+}
