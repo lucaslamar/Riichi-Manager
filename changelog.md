@@ -4,6 +4,8 @@
 
 ### Adicionado
 
+- **Filtros no Ranking**: o funil no cabeçalho abre os filtros de jogador, período (com datas personalizadas), duração, origem (jogadas no app ou registradas fora), mínimo de partidas e ordenação. Os filtros ativos viram chips removíveis abaixo dos atalhos de período, com um Limpar ao lado, e o funil ganha um ponto. Eles ficam salvos até a pessoa limpar.
+- **Rivais e Fregueses**: ao filtrar por um jogador, o topo do Ranking mostra os confrontos dele. Maiores rivais são quem mais termina na frente dele, e fregueses são quem ele mais deixa para trás, com o placar V–D e as partidas juntos (mínimo de 2). Tocar num adversário passa o filtro para ele.
 - **Ranking abre direto na lista**: a aba Ranking não tem mais a tela de cards. No cabeçalho ficam o atalho para Jogadores e a engrenagem. Histórico e Registrar partida finalizada voltaram para a Mesa partida, abaixo das opções de iniciar partida.
 - **Apelido em destaque no ranking**: cada linha mostra o apelido grande e o nome completo menor embaixo. Sem apelido, ou quando os dois são iguais, aparece só o nome.
 - **Ranking logo depois da Mesa partida**: na barra inferior e no menu lateral, o Ranking abre a segunda página, antes do Sorteador de Ventos.
