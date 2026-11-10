@@ -105,11 +105,13 @@ export default function CardMesa({
           </button>
           <button
             type="button"
-            className="btn-primario cm-abrir"
+            className={`btn-primario cm-abrir${historico ? ' cm-abrir--icone' : ''}`}
             aria-label={t(historico ? 'match.cards.viewNamed' : 'match.cards.openNamed', { table: cabecalho })}
+            title={historico ? t('match.cards.view') : undefined}
             onClick={aoAbrir}
           >
-            {t(historico ? 'match.cards.view' : 'match.cards.open')}
+            {/* No histórico, o olho: ver a partida já finalizada. */}
+            {historico ? <i className="fas fa-eye" aria-hidden="true" /> : t('match.cards.open')}
           </button>
         </div>
       </header>

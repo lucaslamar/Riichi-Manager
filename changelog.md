@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Histórico com ícone de olho**: o botão "Ver" de cada partida virou um olho no quadrado roxo, do mesmo tamanho dos ícones de compartilhar e excluir.
 - **Menu Ranking na barra**: na segunda página da barra inferior, depois do Tutorial, com o ícone do pódio. Ele reúne Ranking, Histórico, Registrar partida finalizada e Jogadores, que saíram da Partida. A Partida ficou com Nova partida, Torneio, Organizar mesas do clube e Em andamento.
 - **Registrar partida finalizada mais rápido**: ao tocar em Atribuir, a lista de jogadores segue aberta e passa sozinha para o próximo vazio, como na Nova partida, até escolher os quatro. No topo, Leste apenas ou Hanchan define o tipo da partida, que aparece no Histórico. O app lembra o último tipo usado.
 - **Torneio de volta, dentro da Mesa partida**: o card Torneio fica logo abaixo de Nova partida. Um celular controla o torneio inteiro, sem internet.
