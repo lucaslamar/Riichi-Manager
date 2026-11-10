@@ -1803,5 +1803,42 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "データのインポートとエクスポート",
+    "help": "プレイヤー、対局、大会、クラブ、卓設定を別のスマホに移せます。",
+    "export": "エクスポート",
+    "exportHelp": "送信・保存用のバックアップファイルを作成します。",
+    "import": "インポート",
+    "importHelp": "Mojoca のバックアップファイル (.json) を開きます。",
+    "result": {
+      "compartilhado": "バックアップを送信しました。",
+      "baixado": "バックアップをダウンロードしました。",
+      "falhou": "ファイルを作成できませんでした。もう一度お試しください。"
+    },
+    "errors": {
+      "naoEhJson": "有効なバックアップではありません。Mojoca でエクスポートした .json を選んでください。",
+      "naoEhBackup": "Mojoca のバックアップではありません。",
+      "versaoNova": "新しいバージョンの Mojoca で作成されたバックアップです。アプリを更新してからお試しください。",
+      "corrompido": "バックアップが不完全か破損しています。もう一方の端末で再度エクスポートしてください。"
+    },
+    "summary": {
+      "from": "{{date}} のバックアップ:",
+      "players": {
+        "other": "プレイヤー {{count}} 人"
+      },
+      "games": {
+        "other": "終了した対局 {{count}} 件"
+      },
+      "tournaments": {
+        "other": "大会 {{count}} 件"
+      }
+    },
+    "merge": "統合",
+    "mergeHelp": "この端末にないものだけを追加します。ここのデータは削除されません。",
+    "replace": "すべて置き換え",
+    "replaceHelp": "この端末のデータを削除し、バックアップを読み込みます。",
+    "replaceConfirm": "この端末のプレイヤー、対局、大会、集まりはすべて削除され、バックアップの内容に置き換わります。元に戻せません。",
+    "replaceYes": "削除して置き換え"
   }
 }

@@ -1874,5 +1874,51 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "Duomenų importas ir eksportas",
+    "help": "Perkelkite žaidėjus, partijas, turnyrus, klubą ir stalo nustatymus į kitą telefoną.",
+    "export": "Eksportuoti",
+    "exportHelp": "Sukuria atsarginės kopijos failą siuntimui ar saugojimui.",
+    "import": "Importuoti",
+    "importHelp": "Atidaro Mojoca atsarginės kopijos failą (.json).",
+    "result": {
+      "compartilhado": "Kopija išsiųsta.",
+      "baixado": "Kopija atsisiųsta.",
+      "falhou": "Nepavyko sukurti failo. Bandykite dar kartą."
+    },
+    "errors": {
+      "naoEhJson": "Šis failas nėra tinkama kopija. Pasirinkite Mojoca eksportuotą .json.",
+      "naoEhBackup": "Šis failas nėra Mojoca kopija.",
+      "versaoNova": "Ši kopija sukurta naujesne Mojoca versija. Atnaujinkite programėlę ir bandykite dar kartą.",
+      "corrompido": "Kopija neišsami arba sugadinta. Eksportuokite dar kartą kitame įrenginyje."
+    },
+    "summary": {
+      "from": "Kopija iš {{date}}:",
+      "players": {
+        "one": "{{count}} žaidėjas",
+        "few": "{{count}} žaidėjai",
+        "many": "{{count}} žaidėjo",
+        "other": "{{count}} žaidėjų"
+      },
+      "games": {
+        "one": "{{count}} baigta partija",
+        "few": "{{count}} baigtos partijos",
+        "many": "{{count}} baigtos partijos",
+        "other": "{{count}} baigtų partijų"
+      },
+      "tournaments": {
+        "one": "{{count}} turnyras",
+        "few": "{{count}} turnyrai",
+        "many": "{{count}} turnyro",
+        "other": "{{count}} turnyrų"
+      }
+    },
+    "merge": "Sujungti",
+    "mergeHelp": "Prideda tai, ko šiame įrenginyje dar nėra. Niekas čia neištrinama.",
+    "replace": "Pakeisti viską",
+    "replaceHelp": "Ištrina šio įrenginio duomenis ir įkelia kopiją.",
+    "replaceConfirm": "Visi šio įrenginio žaidėjai, partijos, turnyrai ir susitikimai bus ištrinti ir pakeisti kopijos duomenimis. To atšaukti negalima.",
+    "replaceYes": "Ištrinti ir pakeisti"
   }
 }

@@ -1803,5 +1803,42 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "데이터 가져오기 및 내보내기",
+    "help": "플레이어, 대국, 대회, 클럽, 탁 설정을 다른 휴대폰으로 옮깁니다.",
+    "export": "내보내기",
+    "exportHelp": "보내거나 보관할 백업 파일을 만듭니다.",
+    "import": "가져오기",
+    "importHelp": "Mojoca 백업 파일(.json)을 엽니다.",
+    "result": {
+      "compartilhado": "백업을 보냈습니다.",
+      "baixado": "백업을 다운로드했습니다.",
+      "falhou": "파일을 만들 수 없습니다. 다시 시도하세요."
+    },
+    "errors": {
+      "naoEhJson": "유효한 백업이 아닙니다. Mojoca에서 내보낸 .json을 선택하세요.",
+      "naoEhBackup": "Mojoca 백업 파일이 아닙니다.",
+      "versaoNova": "더 새로운 버전의 Mojoca에서 만든 백업입니다. 앱을 업데이트한 뒤 다시 시도하세요.",
+      "corrompido": "백업이 불완전하거나 손상되었습니다. 다른 기기에서 다시 내보내세요."
+    },
+    "summary": {
+      "from": "{{date}} 백업:",
+      "players": {
+        "other": "플레이어 {{count}}명"
+      },
+      "games": {
+        "other": "끝난 대국 {{count}}개"
+      },
+      "tournaments": {
+        "other": "대회 {{count}}개"
+      }
+    },
+    "merge": "병합",
+    "mergeHelp": "이 기기에 없는 것만 추가합니다. 여기 있는 데이터는 지워지지 않습니다.",
+    "replace": "모두 바꾸기",
+    "replaceHelp": "이 기기의 데이터를 지우고 백업을 불러옵니다.",
+    "replaceConfirm": "이 기기의 모든 플레이어, 대국, 대회, 모임이 삭제되고 백업 내용으로 바뀝니다. 되돌릴 수 없습니다.",
+    "replaceYes": "삭제하고 바꾸기"
   }
 }

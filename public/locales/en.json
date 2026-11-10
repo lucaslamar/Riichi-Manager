@@ -1819,5 +1819,45 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "Import and export data",
+    "help": "Move players, games, tournaments, club and table settings to another phone.",
+    "export": "Export",
+    "exportHelp": "Creates a backup file to send or keep.",
+    "import": "Import",
+    "importHelp": "Opens a Mojoca backup file (.json).",
+    "result": {
+      "compartilhado": "Backup sent.",
+      "baixado": "Backup saved to your downloads.",
+      "falhou": "Could not create the file. Try again."
+    },
+    "errors": {
+      "naoEhJson": "This file is not a valid backup. Choose the .json exported by Mojoca.",
+      "naoEhBackup": "This file is not a Mojoca backup.",
+      "versaoNova": "This backup comes from a newer version of Mojoca. Update the app and try again.",
+      "corrompido": "The backup is incomplete or corrupted. Export it again on the other device."
+    },
+    "summary": {
+      "from": "Backup from {{date}}:",
+      "players": {
+        "one": "{{count}} player",
+        "other": "{{count}} players"
+      },
+      "games": {
+        "one": "{{count}} finished game",
+        "other": "{{count}} finished games"
+      },
+      "tournaments": {
+        "one": "{{count}} tournament",
+        "other": "{{count}} tournaments"
+      }
+    },
+    "merge": "Merge",
+    "mergeHelp": "Adds what is not on this device yet. Nothing here is deleted.",
+    "replace": "Replace everything",
+    "replaceHelp": "Deletes the data on this device and loads the backup.",
+    "replaceConfirm": "All players, games, tournaments and meetups on this device will be deleted and replaced by the backup. This cannot be undone.",
+    "replaceYes": "Delete and replace"
   }
 }

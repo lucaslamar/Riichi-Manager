@@ -1803,5 +1803,42 @@
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
     }
+  },
+  "backup": {
+    "title": "导入和导出数据",
+    "help": "把玩家、对局、比赛、俱乐部和牌桌设置转移到另一部手机。",
+    "export": "导出",
+    "exportHelp": "生成可发送或保存的备份文件。",
+    "import": "导入",
+    "importHelp": "打开 Mojoca 备份文件（.json）。",
+    "result": {
+      "compartilhado": "备份已发送。",
+      "baixado": "备份已下载。",
+      "falhou": "无法生成文件，请重试。"
+    },
+    "errors": {
+      "naoEhJson": "这不是有效的备份文件。请选择 Mojoca 导出的 .json。",
+      "naoEhBackup": "这不是 Mojoca 的备份文件。",
+      "versaoNova": "此备份来自更新版本的 Mojoca。请先更新应用再试。",
+      "corrompido": "备份不完整或已损坏。请在另一台设备上重新导出。"
+    },
+    "summary": {
+      "from": "{{date}} 的备份：",
+      "players": {
+        "other": "{{count}} 名玩家"
+      },
+      "games": {
+        "other": "{{count}} 局已结束对局"
+      },
+      "tournaments": {
+        "other": "{{count}} 场比赛"
+      }
+    },
+    "merge": "合并",
+    "mergeHelp": "只添加本设备上还没有的内容，不会删除这里的数据。",
+    "replace": "全部替换",
+    "replaceHelp": "删除本设备的数据并载入备份。",
+    "replaceConfirm": "本设备上的所有玩家、对局、比赛和聚会都会被删除，并替换为备份内容。此操作无法撤销。",
+    "replaceYes": "删除并替换"
   }
 }

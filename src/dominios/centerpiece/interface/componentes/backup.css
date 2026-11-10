@@ -1,0 +1,91 @@
+/* ─── Importar e exportar dados ──────────────────────────────────────────── */
+.bkp-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bkp-ajuda {
+  margin: 0;
+  color: var(--texto-apoio);
+  font-size: 0.9rem;
+}
+
+.bkp-ajuda--pequena {
+  margin-top: -6px;
+  font-size: 0.8rem;
+}
+
+.bkp-acao {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 14px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 14px;
+  color: var(--texto-principal);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bkp-acao > i {
+  width: 24px;
+  color: var(--primario);
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.bkp-acao span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bkp-acao small {
+  color: var(--texto-apoio);
+}
+
+.bkp-resumo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 12px;
+  list-style: none;
+  font-weight: 700;
+}
+
+.bkp-botao {
+  width: 100%;
+  min-height: 44px;
+}
+
+.bkp-perigo {
+  border-color: var(--perigo-forte);
+  color: var(--perigo-forte);
+}
+
+.bkp-perigo-forte {
+  border-color: var(--perigo-forte);
+  color: var(--sobre-perigo);
+  background: var(--perigo-forte);
+}
+
+.bkp-ok,
+.bkp-erro {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.bkp-ok {
+  color: var(--texto-apoio);
+}
+
+.bkp-erro {
+  color: var(--perigo-forte);
+}

@@ -11,6 +11,7 @@ import BlocoConfrontos from '../componentes/BlocoConfrontos'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
 import '../componentes/ranking-filtros.css'
 import FerramentasDev from '../componentes/FerramentasDev'
+import ModalBackup from '../componentes/ModalBackup'
 import type { DuracaoRanking, PeriodoRanking } from '../../logica/filtrosRanking'
 
 /** Ordem dos atalhos em ícone (o período personalizado fica só no modal). */
@@ -34,6 +35,7 @@ export default function PaginaRanking({
   const { jogadores } = useJogadores()
   const { filtros, setFiltros, linhas: todas, confrontos } = useRankingGeral()
   const [filtrosAbertos, setFiltrosAbertos] = useState(false)
+  const [backupAberto, setBackupAberto] = useState(false)
   const ativos = filtrosAtivos(filtros)
   const linhas = semExcluidos(todas, (id) => jogadores.some((jogador) => jogador.id === id))
   const posicoes = posicoesDoRanking(linhas)
@@ -92,6 +94,18 @@ export default function PaginaRanking({
                 onClick={aoAbrirJogadores}
               >
                 <i className="fas fa-user-plus" aria-hidden="true" />
+              </button>
+            )}
+            {!aoVoltar && (
+              <button
+                type="button"
+                className="botao-voltar-tela botao-acao-tela"
+                aria-label={t('backup.title')}
+                title={t('backup.title')}
+                aria-haspopup="dialog"
+                onClick={() => setBackupAberto(true)}
+              >
+                <i className="fas fa-arrow-right-arrow-left" aria-hidden="true" />
               </button>
             )}
             {!aoVoltar && <BotaoConfiguracoes />}
@@ -206,6 +220,8 @@ export default function PaginaRanking({
         </ol>
       )}
       {import.meta.env.DEV && <FerramentasDev />}
+
+      {backupAberto && <ModalBackup aoFechar={() => setBackupAberto(false)} />}
 
       {filtrosAbertos && (
         <ModalFiltrosRanking filtros={filtros} aoAplicar={setFiltros} aoFechar={() => setFiltrosAbertos(false)} />

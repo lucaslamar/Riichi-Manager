@@ -1819,5 +1819,45 @@
       "pairsTitle": "Duplas que se repetem",
       "windsTitle": "Ventos por jogador"
     }
+  },
+  "backup": {
+    "title": "Importar e exportar dados",
+    "help": "Leve jogadores, partidas, torneios, clube e configurações de mesa para outro celular.",
+    "export": "Exportar",
+    "exportHelp": "Gera um arquivo de backup para enviar ou guardar.",
+    "import": "Importar",
+    "importHelp": "Abre um arquivo de backup do Mojoca (.json).",
+    "result": {
+      "compartilhado": "Backup enviado.",
+      "baixado": "Backup baixado na pasta de downloads.",
+      "falhou": "Não foi possível gerar o arquivo. Tente de novo."
+    },
+    "errors": {
+      "naoEhJson": "Esse arquivo não é um backup válido. Escolha o .json exportado pelo Mojoca.",
+      "naoEhBackup": "Esse arquivo não é um backup do Mojoca.",
+      "versaoNova": "Esse backup veio de uma versão mais nova do Mojoca. Atualize o app e tente de novo.",
+      "corrompido": "O backup está incompleto ou corrompido. Exporte de novo no outro aparelho."
+    },
+    "summary": {
+      "from": "Backup de {{date}}:",
+      "players": {
+        "one": "{{count}} jogador",
+        "other": "{{count}} jogadores"
+      },
+      "games": {
+        "one": "{{count}} partida finalizada",
+        "other": "{{count}} partidas finalizadas"
+      },
+      "tournaments": {
+        "one": "{{count}} torneio",
+        "other": "{{count}} torneios"
+      }
+    },
+    "merge": "Mesclar",
+    "mergeHelp": "Adiciona o que ainda não existe neste aparelho. Nada daqui é apagado.",
+    "replace": "Substituir tudo",
+    "replaceHelp": "Apaga os dados deste aparelho e carrega os do backup.",
+    "replaceConfirm": "Todos os jogadores, partidas, torneios e encontros deste aparelho serão apagados e trocados pelos do backup. Isso não pode ser desfeito.",
+    "replaceYes": "Apagar e substituir"
   }
 }
