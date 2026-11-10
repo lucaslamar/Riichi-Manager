@@ -41,19 +41,19 @@ const sanma = (han: number, fu: number, dealer: boolean, tipo: 'ron' | 'tsumo', 
 // ─── 4.4 Tsumo-son ───────────────────────────────────────────────────────────
 
 caso('tsumo-son: não dealer 1 han 30 fu tsumo = 500 + 300 = 800', () => {
-  const p = sanma(1, 30, false, 'tsumo')
-  assert.deepEqual(p.tsumo, { dealer: 500, naoDealer: 300 })
-  assert.equal(p.total, 800)
+  const pag = sanma(1, 30, false, 'tsumo')
+  assert.deepEqual(pag.tsumo, { dealer: 500, naoDealer: 300 })
+  assert.equal(pag.total, 800)
 })
 caso('tsumo-son: não dealer mangan tsumo = 6000', () => {
-  const p = sanma(5, 30, false, 'tsumo')
-  assert.deepEqual(p.tsumo, { dealer: 4000, naoDealer: 2000 })
-  assert.equal(p.total, 6000)
+  const pag = sanma(5, 30, false, 'tsumo')
+  assert.deepEqual(pag.tsumo, { dealer: 4000, naoDealer: 2000 })
+  assert.equal(pag.total, 6000)
 })
 caso('tsumo-son: dealer mangan tsumo = 4000 × 2 = 8000', () => {
-  const p = sanma(5, 30, true, 'tsumo')
-  assert.equal(p.tsumo?.todos, 4000)
-  assert.equal(p.total, 8000)
+  const pag = sanma(5, 30, true, 'tsumo')
+  assert.equal(pag.tsumo?.todos, 4000)
+  assert.equal(pag.total, 8000)
 })
 caso('ron não dealer mangan = 8000', () => assert.equal(sanma(5, 30, false, 'ron').total, 8000))
 caso('ron dealer mangan = 12000', () => assert.equal(sanma(5, 30, true, 'ron').total, 12000))
@@ -61,22 +61,22 @@ caso('ron dealer mangan = 12000', () => assert.equal(sanma(5, 30, true, 'ron').t
 // ─── 4.4 Divisão do Norte ────────────────────────────────────────────────────
 
 caso('divisão do Norte: não dealer mangan tsumo = 5000 + 3000', () => {
-  const p = sanma(5, 30, false, 'tsumo', 0, true)
-  assert.deepEqual(p.tsumo, { dealer: 5000, naoDealer: 3000 })
-  assert.equal(p.total, 8000)
+  const pag = sanma(5, 30, false, 'tsumo', 0, true)
+  assert.deepEqual(pag.tsumo, { dealer: 5000, naoDealer: 3000 })
+  assert.equal(pag.total, 8000)
 })
 caso('divisão do Norte: dealer mangan tsumo = 6000 × 2', () => {
-  const p = sanma(5, 30, true, 'tsumo', 0, true)
-  assert.equal(p.tsumo?.todos, 6000)
-  assert.equal(p.total, 12000)
+  const pag = sanma(5, 30, true, 'tsumo', 0, true)
+  assert.equal(pag.tsumo?.todos, 6000)
+  assert.equal(pag.total, 12000)
 })
 
 // ─── 4.4 Honba ───────────────────────────────────────────────────────────────
 
 caso('honba: não dealer mangan tsumo com 2 honba = 6400', () => {
-  const p = sanma(5, 30, false, 'tsumo', 2)
-  assert.equal(p.total, 6400)
-  assert.equal(p.honbaTotal, 400)
+  const pag = sanma(5, 30, false, 'tsumo', 2)
+  assert.equal(pag.total, 6400)
+  assert.equal(pag.honbaTotal, 400)
 })
 caso('honba: ron com 2 honba = 8600', () => assert.equal(sanma(5, 30, false, 'ron', 2).total, 8600))
 
@@ -103,20 +103,20 @@ caso('yonma: mesmos números da pontuação existente (han 1–13, ron/tsumo, ho
   }
 })
 caso('yonma: não dealer mangan tsumo = 2000/4000', () => {
-  const p = calcularPagamentos({ han: 5, fu: 30, dealer: false, tipo: 'tsumo', honba: 0, variante: 'yonma' })
-  assert.deepEqual(p.tsumo, { dealer: 4000, naoDealer: 2000 })
-  assert.equal(p.total, 8000)
+  const pag = calcularPagamentos({ han: 5, fu: 30, dealer: false, tipo: 'tsumo', honba: 0, variante: 'yonma' })
+  assert.deepEqual(pag.tsumo, { dealer: 4000, naoDealer: 2000 })
+  assert.equal(pag.total, 8000)
 })
 
 // ─── Noten ───────────────────────────────────────────────────────────────────
 
 caso('noten sanma: 1 tenpai recebe 2000', () => {
-  const r = calcularNoten(['a'], ['a', 'b', 'c'], 'sanma')
-  assert.deepEqual([...r.values()], [2000, -1000, -1000])
+  const res = calcularNoten(['a'], ['a', 'b', 'c'], 'sanma')
+  assert.deepEqual([...res.values()], [2000, -1000, -1000])
 })
 caso('noten sanma: 2 tenpai recebem 1000 cada', () => {
-  const r = calcularNoten(['a', 'b'], ['a', 'b', 'c'], 'sanma')
-  assert.deepEqual([...r.values()], [1000, 1000, -2000])
+  const res = calcularNoten(['a', 'b'], ['a', 'b', 'c'], 'sanma')
+  assert.deepEqual([...res.values()], [1000, 1000, -2000])
 })
 caso('noten sanma: todos ou nenhum tenpai = 0', () => {
   assert.deepEqual([...calcularNoten([], [1, 2, 3], 'sanma').values()], [0, 0, 0])
@@ -149,7 +149,7 @@ caso('resultado final 35000/40000, uma 15/0/−15 soma zero', () => {
 caso('sanma tem 27 tipos de pedra (108 pedras), sem 2m–8m', () => {
   const tiles = tilesDaVariante('sanma')
   assert.equal(tiles.length * 4, 108)
-  for (let n = 2; n <= 8; n++) assert.ok(!tiles.includes(`${n}m`))
+  for (let num = 2; num <= 8; num++) assert.ok(!tiles.includes(`${num}m`))
   assert.ok(!tileExisteNaVariante('0m', 'sanma'))
   assert.ok(tileExisteNaVariante('0m', 'yonma'))
   assert.equal(tilesDaVariante('yonma').length, 34)

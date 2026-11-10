@@ -285,3 +285,105 @@ body.toque-ampliado .cartao-regras {
   display: grid;
   gap: 14px;
 }
+
+/* ── Regras de Sanma: recolhível, só com o Suporte a Sanma ligado ── */
+.cartao-regras.regras-sanma {
+  display: block;
+}
+
+.regras-sanma__titulo {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.regras-sanma__titulo::-webkit-details-marker {
+  display: none;
+}
+
+.regras-sanma__titulo::after {
+  content: '\f078';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  color: var(--cor-texto-suave, #40566d);
+  transition: transform 0.2s ease;
+}
+
+.regras-sanma[open] .regras-sanma__titulo::after {
+  transform: rotate(180deg);
+}
+
+.regras-sanma__titulo:focus-visible {
+  outline: 3px solid var(--cor-foco, rgba(249, 115, 22, 0.65));
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.regras-sanma__corpo {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.regras-sanma__grupo,
+.regras-sanma__uma {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.regras-sanma__uma legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-weight: 800;
+}
+
+.regras-sanma__check {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.regras-sanma__check input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  accent-color: var(--cor-primario, #2196f3);
+}
+
+.regras-sanma__numero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  align-items: center;
+  gap: 10px;
+}
+
+.regras-sanma__numero input {
+  min-height: 44px;
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: var(--cor-superficie-alt, #f8fafc);
+  color: var(--cor-texto, #102a43);
+  font: inherit;
+  text-align: right;
+}
+
+.regras-sanma__restaurar {
+  justify-self: start;
+  min-height: 44px;
+}
+
+.regras-sanma__acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

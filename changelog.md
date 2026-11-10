@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Suporte a Sanma (3 jogadores)**: nos Ajustes do app (e na engrenagem), um interruptor novo, desligado por padrão, adiciona partidas com 3 jogadores. Ligado, aparece a seção recolhível Regras de Sanma: Norte como nukidora (Kita), Norte na mão como yakuhai, pagamento no Tsumo (Tsumo-son ou Divisão do Norte), pontos iniciais e de retorno, Uma, honba no Ron e no Tsumo e o total do noten, com Restaurar padrão. Desligado, o app fica exatamente como antes.
 - **Atalhos da Mesa partida no menu**: no menu lateral (Mais e barra lateral do tablet), embaixo de Mesa partida, ficam Nova partida, Torneio, Organizar mesas do clube, Em andamento, Histórico e Registrar partida finalizada. Cada um abre a tela direto, e voltar leva ao menu da Partida. O Ranking também ganhou os seus: Jogadores e Registrar partida finalizada.
 - **Registrar partida pelo Ranking**: na linha de ícones do Ranking, Registrar partida finalizada e Jogadores ficam à esquerda, e os filtros e o exportar à direita. Ao terminar (ou voltar) o registro, o app volta ao Ranking.
 - **Em andamento com filtros**: além das partidas abertas no placar, mostra o encontro do clube com mesas sem resultado (com quantas já foram registradas) e cada torneio em jogo, que abrem as mesas deles. No topo, Todas · Partidas · Clube · Torneios separa os três. Encontro do clube não tem mais mesa aberta no placar: mesas assim, de versões antigas, aparecem em Partidas para terminar ou descartar.
