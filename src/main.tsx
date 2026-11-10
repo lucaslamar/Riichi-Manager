@@ -16,6 +16,7 @@ import App from './app/App'
 import { iniciarInstalacao } from './compartilhado/adaptadores/instalacao'
 import { I18nProvider } from './compartilhado/i18n/I18nProvider'
 import { PreferenciasProvider } from './compartilhado/preferencias/PreferenciasProvider'
+import { iniciarArmazenamento } from './services/storage/iniciarArmazenamento'
 
 // O service worker só existe no build; no dev ele ia guardar arquivos velhos.
 iniciarInstalacao(import.meta.env.PROD ? `${import.meta.env.BASE_URL}sw.js` : '')
@@ -23,14 +24,16 @@ iniciarInstalacao(import.meta.env.PROD ? `${import.meta.env.BASE_URL}sw.js` : ''
 // Seleciona o elemento raiz. O `!` diz ao TypeScript que temos certeza que ele existe.
 const elementoRaiz = document.getElementById('app')!
 
-// createRoot é a API moderna do React 18 para iniciar a renderização.
-createRoot(elementoRaiz).render(
-  <StrictMode>
-    <PreferenciasProvider>
-      <I18nProvider>
-        <App />
-      </I18nProvider>
-    </PreferenciasProvider>
-  </StrictMode>,
+// Os dados vêm do banco local (IndexedDB): abre antes da primeira tela, para
+// todas as telas já lerem tudo pronto. Se falhar, segue no localStorage.
+void iniciarArmazenamento().finally(() =>
+  createRoot(elementoRaiz).render(
+    <StrictMode>
+      <PreferenciasProvider>
+        <I18nProvider>
+          <App />
+        </I18nProvider>
+      </PreferenciasProvider>
+    </StrictMode>,
+  ),
 )
-

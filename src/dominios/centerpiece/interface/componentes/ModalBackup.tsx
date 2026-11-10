@@ -13,6 +13,7 @@ import {
   type ErroBackup,
 } from '@/services/backup/backup'
 import { gravarDados, lerDadosLocais } from '@/services/backup/lojaBackup'
+import { aguardarGravacoes } from '@/services/storage/iniciarArmazenamento'
 import './backup.css'
 
 type Etapa =
@@ -42,10 +43,11 @@ export default function ModalBackup({ aoFechar }: { aoFechar: () => void }) {
     setEtapa(lido.ok ? { nome: 'resumo', backup: lido.backup } : { nome: 'inicio', erro: lido.erro })
   }
 
-  const importar = (backup: ArquivoBackup, modo: 'mesclar' | 'substituir') => {
+  const importar = async (backup: ArquivoBackup, modo: 'mesclar' | 'substituir') => {
     const dados = modo === 'mesclar' ? mesclarBackup(lerDadosLocais(armazenamentoLocal), backup.dados) : backup.dados
     gravarDados(armazenamentoLocal, dados)
-    // As telas guardam cópias em memória: recarregar faz todas lerem o que chegou.
+    // Espera chegar ao banco local e recarrega: assim todas as telas leem o que chegou.
+    await aguardarGravacoes()
     window.location.reload()
   }
 
