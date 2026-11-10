@@ -208,7 +208,7 @@ export function destaqueDoYaku(nome: string, mao: Mao): DestaqueYaku {
         ? mao.dora
         : []
     if (aka) for (const pedra of todasPedras) if (pedra[0] === '0') cota(pedra, 4)
-    for (const indicador of indicadores) cota(proximaDoraIndicada(indicador), 4)
+    for (const indicador of indicadores) cota(proximaDoraIndicada(indicador, !!mao.sanma), 4)
     return destaque
   }
 

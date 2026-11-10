@@ -1,5 +1,6 @@
 import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import type { CodigoPedra, ConfiguracaoCalculo, Mao, Meld, VentoMao } from '../logica/mao'
+import { proximaDora } from '@/compartilhado/mahjong/variante'
 
 export const NAIPES = [
   { naipe: 'm' as const, rotulo: 'Man (万)' },
@@ -167,7 +168,9 @@ export function podeAdicionarAoChii(selecionadas: CodigoPedra[], pedra: CodigoPe
   )
 }
 
-export function proximaDoraIndicada(pedra: CodigoPedra): CodigoPedra {
+/** `sanma`: 1m aponta 9m e 9m aponta 1m (regra compartilhada); sem ele, a conta de sempre. */
+export function proximaDoraIndicada(pedra: CodigoPedra, sanma = false): CodigoPedra {
+  if (sanma) return proximaDora(pedra, 'sanma')
   const base = codigoBase(pedra)
   const valor = Number(base[0])
   const naipe = base[1]

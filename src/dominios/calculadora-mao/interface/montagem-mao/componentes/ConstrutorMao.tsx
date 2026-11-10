@@ -100,9 +100,11 @@ export default function ConstrutorMao({
 
   const [textoNotacao, setTextoNotacao] = useState('')
   const { completo: notacaoCompleta, pendentes: pendentesNotacao } = separarPendentes(textoNotacao)
+  // Sanma: só 1m e 9m, sem Chi, e o sufixo +Nk dá o Kita.
+  const varianteNotacao = mao.sanma ? ('sanma' as const) : undefined
   const notacao = useMemo(
-    () => interpretarNotacaoCompleta(notacaoCompleta, { akadora: configuracao.akadora }),
-    [notacaoCompleta, configuracao.akadora],
+    () => interpretarNotacaoCompleta(notacaoCompleta, { akadora: configuracao.akadora, variante: varianteNotacao }),
+    [notacaoCompleta, configuracao.akadora, varianteNotacao],
   )
   const entradaPorNotacao = contexto === 'montagem' && entradaNotacao && !!aoMudarEntradaNotacao
   const erroNotacao = entradaPorNotacao ? notacao.erro : null
@@ -144,10 +146,16 @@ export default function ConstrutorMao({
   const mudarTextoNotacao = (texto: string) => {
     setErroRecusado(null)
     const { completo } = separarPendentes(texto)
-    const resultado = interpretarNotacaoCompleta(completo, { akadora: configuracao.akadora })
+    const resultado = interpretarNotacaoCompleta(completo, { akadora: configuracao.akadora, variante: varianteNotacao })
     if (!resultado.erro) {
       setTextoNotacao(texto)
       substituirMaoNotacao(resultado)
+      const { kita } = resultado
+      if (kita !== undefined && mao.sanma?.regras.kitaNukidora) {
+        estado.atualizarMao((rascunho) => {
+          if (rascunho.sanma) rascunho.sanma.kita = kita
+        })
+      }
       return
     }
     if (
@@ -223,10 +231,10 @@ export default function ConstrutorMao({
     () =>
       new Set(
         [...mao.dora, ...mao.uradora].map((indicador) =>
-          codigoBase(proximaDoraIndicada(indicador)),
+          codigoBase(proximaDoraIndicada(indicador, !!mao.sanma)),
         ),
       ),
-    [mao.dora, mao.uradora],
+    [mao.dora, mao.uradora, mao.sanma],
   )
 
   const temEsperaValida = esperasPossiveis.some((espera) => !espera.semYaku)

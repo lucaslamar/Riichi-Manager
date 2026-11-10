@@ -1,6 +1,7 @@
 import type { Acao, Mao } from '../../../logica/mao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { BotaoAcao } from '../../compartilhado/componentes/Botoes'
+import { useSanmaMao } from '../../compartilhado/contextoSanma'
 
 interface PropsAcoesConstrutorMao {
   mao: Mao
@@ -31,16 +32,20 @@ export function AcoesConstrutorMao({
   compacto = false,
 }: PropsAcoesConstrutorMao) {
   const { t } = useI18n()
+  // Sanma: não existe Chi.
+  const sanma = useSanmaMao()
 
   return (
     <>
-      <BotaoAcao
-        tipo="chii"
-        rotulo={t('melds.chii')}
-        ativo={acaoPendente?.tipo === 'chii'}
-        desabilitado={!podeChii}
-        aoClicar={() => aoAlternarAcao('chii')}
-      />
+      {!sanma && (
+        <BotaoAcao
+          tipo="chii"
+          rotulo={t('melds.chii')}
+          ativo={acaoPendente?.tipo === 'chii'}
+          desabilitado={!podeChii}
+          aoClicar={() => aoAlternarAcao('chii')}
+        />
+      )}
       <BotaoAcao
         tipo="pon"
         rotulo={t('melds.pon')}

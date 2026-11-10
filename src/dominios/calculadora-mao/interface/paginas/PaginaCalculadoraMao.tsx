@@ -5,6 +5,14 @@ import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import SeletorVariante from '@/compartilhado/interface/SeletorVariante'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import { useVarianteModulo } from '@/compartilhado/configuracoes/useVarianteModulo'
+import { tileExisteNaVariante, type Variante } from '@/compartilhado/mahjong/variante'
+import type { Mao } from '../../logica/mao'
+import { ContextoSanmaMao } from '../compartilhado/contextoSanma'
+import '../compartilhado/sanma-calculadora.css'
 import ModalRegras from '../modais/regras/ModalRegras'
 import ModoCompletoCalculadora from '../compartilhado/componentes/ModoCompletoCalculadora'
 import { useCalculadoraMao } from '../hooks/useCalculadoraMao'
@@ -14,6 +22,20 @@ import {
   type ContextoCenterpieceMao,
   type ResultadoCalculoParaCenterpiece,
 } from '@/dominios/centerpiece/logica/tipos-integracao'
+
+/** Pedras (ou Chi) que não existem com 3 jogadores: trocar para o Sanma pede para limpar a mão. */
+function maoForaDoSanma(mao: Mao): boolean {
+  const pedras = [
+    ...mao.pedras,
+    ...mao.melds.flatMap((meld) => meld.pedras),
+    ...mao.dora,
+    ...mao.uradora,
+    ...mao.descartes,
+  ]
+  return (
+    pedras.some((pedra) => !tileExisteNaVariante(pedra, 'sanma')) || mao.melds.some((meld) => meld.tipo === 'chii')
+  )
+}
 
 interface PropsPaginaCalculadoraMao {
   /** Aberta pelo modal de batida do Centerpiece: vitória e ventos vêm da mesa. */
@@ -52,6 +74,12 @@ export default function PaginaCalculadoraMao({
    */
   const { t } = useI18n()
   const telaGrande = useMediaQuery('(min-width: 768px), (min-width: 640px) and (min-height: 600px)')
+  const { regrasSanma } = useConfigSanma()
+  const [varianteEscolhida, setVarianteEscolhida] = useVarianteModulo('calculadora-mao')
+  // Aberta pela partida, vale a variante da mesa; sozinha, a do seletor.
+  const variante: Variante = contextoCenterpiece ? (contextoCenterpiece.variante ?? 'yonma') : varianteEscolhida
+  const regrasDaMao = variante === 'sanma' ? regrasSanma : null
+  const [confirmandoLimpeza, setConfirmandoLimpeza] = useState(false)
 
   const calculadora = useCalculadoraMao(
     contextoCenterpiece
@@ -78,8 +106,9 @@ export default function PaginaCalculadoraMao({
           pedraBatidaFixa: contextoCenterpiece.pedraBatida,
           fluxoCompleto: true,
           configuracaoInicial: contextoCenterpiece.regras,
+          regrasSanma: regrasDaMao,
         }
-      : { fluxoCompleto: telaGrande },
+      : { fluxoCompleto: telaGrande, regrasSanma: regrasDaMao },
   )
   const finalizandoMao = calculadora.etapaFinalizacaoAtiva && calculadora.maoProntaParaFinalizar
   /** Teclado de notação no lugar do de pedras. */
@@ -109,6 +138,12 @@ export default function PaginaCalculadoraMao({
     aoDeslizarEsquerda: aoVoltar ?? aoIrParaProximaTela,
   })
 
+  // Para o Sanma com pedras que não existem nele, pergunta antes: nunca some pedra calada.
+  const trocarVariante = (nova: Variante) => {
+    if (nova === 'sanma' && maoForaDoSanma(calculadora.mao)) setConfirmandoLimpeza(true)
+    else setVarianteEscolhida(nova)
+  }
+
   // Escondida: nada no DOM, para os estilos `body:has(.card-mao-completa…)`
   // não alcançarem a tela aberta.
   if (!visivel) return null
@@ -135,17 +170,51 @@ export default function PaginaCalculadoraMao({
     <div>
       {/* Engrenagem do app no cabeçalho, ao lado da marca (aberta pelo Centerpiece, a tela é da mesa). */}
       {visivel && !contextoCenterpiece && <TituloTela titulo={t('menu.handCalculator')} acoes={<BotaoConfiguracoes />} />}
-      <ModoCompletoCalculadora
-        estado={calculadora}
-        cabecalho={contextoCenterpiece ? null : <BarraCalculadora modo="completo" />}
-        // Na partida as regras são as da mesa, decididas ao criá-la.
-        aoAbrirRegras={contextoCenterpiece?.regras ? undefined : () => calculadora.setModalRegrasAberto(true)}
-        aoUsarMao={aoUsarMao}
-        contextoCenterpiece={contextoCenterpiece}
-        entradaNotacao={entradaNotacao}
-        aoMudarEntradaNotacao={setEntradaNotacao}
-        entradaFixa={!!entradaFixa}
-      />
+      {!contextoCenterpiece && !finalizandoMao && (
+        <SeletorVariante valor={variante} aoMudar={trocarVariante} className="seletor-variante-calculadora" />
+      )}
+      <ContextoSanmaMao.Provider value={calculadora.mao.sanma ?? null}>
+        <ModoCompletoCalculadora
+          estado={calculadora}
+          cabecalho={contextoCenterpiece ? null : <BarraCalculadora modo="completo" />}
+          // Na partida as regras são as da mesa, decididas ao criá-la.
+          aoAbrirRegras={contextoCenterpiece?.regras ? undefined : () => calculadora.setModalRegrasAberto(true)}
+          aoUsarMao={aoUsarMao}
+          contextoCenterpiece={contextoCenterpiece}
+          entradaNotacao={entradaNotacao}
+          aoMudarEntradaNotacao={setEntradaNotacao}
+          entradaFixa={!!entradaFixa}
+        />
+      </ContextoSanmaMao.Provider>
+
+      {confirmandoLimpeza && (
+        <Modal
+          titulo={t('sanma.variante3')}
+          aoFechar={() => setConfirmandoLimpeza(false)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+          rodape={
+            <div className="acoes-confirmacao-sanma">
+              <button type="button" className="btn-contorno" onClick={() => setConfirmandoLimpeza(false)}>
+                {t('actions.cancel')}
+              </button>
+              <button
+                type="button"
+                className="btn-primario"
+                onClick={() => {
+                  calculadora.limpar()
+                  setVarianteEscolhida('sanma')
+                  setConfirmandoLimpeza(false)
+                }}
+              >
+                {t('sanma.limparMao')}
+              </button>
+            </div>
+          }
+        >
+          <p>{t('sanma.limparMaoConfirmacao')}</p>
+        </Modal>
+      )}
 
       {/* Controles deslizantes da mão: só as Regras de cálculo (as do app ficam na engrenagem). */}
       {calculadora.modalRegrasAberto && (

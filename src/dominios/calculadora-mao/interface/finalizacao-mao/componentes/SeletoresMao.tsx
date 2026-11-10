@@ -25,6 +25,8 @@ export function SeletorVentos({
   aoDefinirVentoAssento?: () => void
 }) {
   const { t } = useI18n()
+  // Sanma: só Leste, Sul e Oeste (não há assento nem rodada do Norte).
+  const semNorte = (opcoes: typeof VENTOS_ASSENTO) => (mao.sanma ? opcoes.filter((opcao) => opcao.valor !== '4') : opcoes)
   const ventoDuplo =
     ventoRodadaDefinido && ventoAssentoDefinido && mao.ventoRodada === mao.ventoAssento
 
@@ -33,7 +35,7 @@ export function SeletorVentos({
       {mostrarAssento && (
         <GradeVentos
           titulo={t('calculator.seatWind')}
-          opcoes={VENTOS_ASSENTO}
+          opcoes={semNorte(VENTOS_ASSENTO)}
           selecionado={ventoAssentoDefinido ? mao.ventoAssento : null}
           destacarIgual={ventoDuplo}
           rotuloAcessivel={(nomeVento) => t('calculator.chooseSeatWind', { wind: nomeVento })}
@@ -50,7 +52,7 @@ export function SeletorVentos({
         <GradeVentos
           id="secao-vento-rodada"
           titulo={t('calculator.roundWind')}
-          opcoes={VENTOS_RODADA}
+          opcoes={semNorte(VENTOS_RODADA)}
           selecionado={ventoRodadaDefinido ? mao.ventoRodada : null}
           destacarIgual={ventoDuplo}
           rotuloAcessivel={(nomeVento) => t('calculator.chooseRoundWind', { wind: nomeVento })}

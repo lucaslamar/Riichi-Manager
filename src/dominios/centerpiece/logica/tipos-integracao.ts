@@ -1,4 +1,5 @@
 import type { ConfiguracaoCalculo, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
+import type { Variante } from '@/compartilhado/mahjong/variante'
 import type { ResultadoPontuacaoHanFu } from '@/dominios/calculadora-han-fu/logica/tipos'
 import type { CodigoPedra, Mao, VentoMao } from '@/dominios/calculadora-mao/logica/mao'
 import { gerarNotacaoCompleta } from '@/dominios/calculadora-mao/logica/notacao'
@@ -63,6 +64,8 @@ export interface ContextoCenterpieceMao {
   pedraBatida?: CodigoPedra
   /** O que a linha do tempo da mão já diz: vem preenchido, mas dá para mudar. */
   dados?: DadosDaPartida
+  /** Variante da mesa (Sanma = 3 jogadores). Ausente = yonma. */
+  variante?: Variante
 }
 
 interface MetadadosCenterpiece {

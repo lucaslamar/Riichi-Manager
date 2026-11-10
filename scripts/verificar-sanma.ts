@@ -25,6 +25,9 @@ import {
 } from '../src/compartilhado/mahjong/variante'
 import { calcularPontuacaoHanFu, montarReferenciaRapida } from '../src/dominios/calculadora-han-fu/logica'
 import { interpretarNotacaoCompleta } from '../src/dominios/calculadora-mao/logica/notacao'
+import { calcularMao } from '../src/dominios/calculadora-mao/logica/calculo-mao'
+import { calcularEsperasPossiveis } from '../src/dominios/calculadora-mao/logica/esperas'
+import type { Mao } from '../src/dominios/calculadora-mao/logica/tipos'
 
 const casos: [string, () => void][] = []
 const caso = (nome: string, teste: () => void) => casos.push([nome, teste])
@@ -237,6 +240,83 @@ caso('mpsz sanma: sufixo pela metade não dá erro', () => {
 caso('mpsz yonma: igual a antes (sem variante, 123m vale e +2k é inválido)', () => {
   assert.equal(interpretarNotacaoCompleta('123m', { akadora: true }).erro, null)
   assert.equal(interpretarNotacaoCompleta('19m+2k', { akadora: true }).erro?.chave, 'notation.errors.invalidChar')
+})
+
+// ─── Calculadora de mão ──────────────────────────────────────────────────────
+
+const pedrasDe = (texto: string) => interpretarNotacaoCompleta(texto, { akadora: true }).pedras
+const maoSanma = (texto: string, extra: Partial<Mao> = {}, kita = 0): Mao => {
+  const pedras = pedrasDe(texto)
+  return {
+    pedras,
+    melds: [],
+    indiceAgari: pedras.length - 1,
+    agariMeld: null,
+    agari: 'ron',
+    dora: [],
+    uradora: [],
+    descartes: [],
+    doraManual: 0,
+    uradoraManual: 0,
+    honba: 0,
+    riichi: null,
+    bencao: false,
+    ultimaPedra: false,
+    kan: false,
+    ventoRodada: '1',
+    ventoAssento: '2',
+    sanma: { regras: REGRAS_SANMA_PADRAO, kita },
+    ...extra,
+  }
+}
+// Tan'yao fechado: 234p 567p 345s 678s 22s, ron em 2s.
+const TANYAO = '234567p345678s22s'
+
+caso('mão sanma: Kita conta como Nukidora e não quebra Tan\'yao', () => {
+  const res = calcularMao(maoSanma(TANYAO, {}, 2), configuracaoPadrao)
+  const nomes = res.yaku.map(([nome]) => nome)
+  assert.ok(nomes.includes('Tanyao'), nomes.join())
+  assert.ok(nomes.includes('Nukidora'), nomes.join())
+  assert.equal(res.han, 1 + 2)
+})
+caso('mão sanma: indicador Oeste + 2 Kita = 4 dora do Kita', () => {
+  const res = calcularMao(maoSanma(TANYAO, { dora: ['3z'] }, 2), configuracaoPadrao)
+  assert.equal(res.han, 1 + 4)
+})
+caso('mão sanma: dora com indicador 9m é o 1m', () => {
+  const semDora = calcularMao(maoSanma('111m234p567p345s22s'), configuracaoPadrao)
+  const comDora = calcularMao(maoSanma('111m234p567p345s22s', { dora: ['9m'], riichi: { duplo: false, ippatsu: false } }), configuracaoPadrao)
+  assert.equal(semDora.semYaku, true)
+  assert.equal(comDora.han, 1 + 3)
+})
+caso('mão sanma: tsumo não dealer paga 2 jogadores (tsumo-son)', () => {
+  // Tan'yao + Menzen tsumo + 3 Kita = 5 han: Mangan, 2000/4000 = 6000.
+  const res = calcularMao(maoSanma(TANYAO, { agari: 'tsumo' }, 3), configuracaoPadrao)
+  assert.equal(res.nome, 'Mangan')
+  assert.ok(res.agari === 'tsumo')
+  assert.equal(res.pontos.total, 6000)
+  assert.deepEqual(res.pontos.ko, { oya: 4000, ko: 2000 })
+})
+caso('mão sanma: Tenhou some com Kita', () => {
+  const tenhou = maoSanma(TANYAO, { agari: 'tsumo', bencao: true, ventoAssento: '1' })
+  assert.ok(calcularMao(tenhou, configuracaoPadrao).yakuman > 0)
+  assert.equal(calcularMao({ ...tenhou, sanma: { regras: REGRAS_SANMA_PADRAO, kita: 1 } }, configuracaoPadrao).yakuman, 0)
+})
+caso('esperas sanma: nunca sugere 2m–8m', () => {
+  // 13 pedras esperando: 1m1m + ... com espera em 9m e 1m apenas.
+  const mao = maoSanma('11m99m234567p345s')
+  const esperas = calcularEsperasPossiveis({ ...mao, indiceAgari: -1 }, configuracaoPadrao, 13)
+  assert.ok(esperas.length > 0)
+  assert.ok(esperas.every((espera) => tileExisteNaVariante(espera.pedra, 'sanma')), esperas.map((espera) => espera.pedra).join())
+})
+caso('mão yonma: sem `sanma`, mesmo resultado de antes', () => {
+  const yonma: Mao = { ...maoSanma(TANYAO, { agari: 'tsumo' }), sanma: undefined }
+  const res = calcularMao(yonma, configuracaoPadrao)
+  assert.ok(res.agari === 'tsumo')
+  assert.equal(res.pontos.total, 2000)
+  const sanma = calcularMao(maoSanma(TANYAO, { agari: 'tsumo' }), configuracaoPadrao)
+  assert.ok(sanma.agari === 'tsumo')
+  assert.equal(sanma.pontos.total, 1500)
 })
 
 let falhas = 0

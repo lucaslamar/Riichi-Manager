@@ -2,6 +2,8 @@
  * @fileoverview Tipos centrais da calculadora de mão.
  */
 
+import type { RegrasSanma } from '@/compartilhado/mahjong/variante'
+
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
 export type CodigoPedra = string // ex: "1m", "5p", "3z"
@@ -39,6 +41,14 @@ export interface Mao {
   kan: boolean // rinshan (tsumo após kan) ou chankan (ron em kan)
   ventoRodada: VentoMao
   ventoAssento: VentoMao
+  /** Só no Sanma (3 jogadores): regras de Sanma e Norte retirado (Kita). Ausente = yonma. */
+  sanma?: MaoSanma
+}
+
+export interface MaoSanma {
+  regras: RegrasSanma
+  /** Norte retirado (Kita), de 0 a 4. Fora da mão: não abre nem quebra Tan'yao. */
+  kita: number
 }
 
 export type Acao =

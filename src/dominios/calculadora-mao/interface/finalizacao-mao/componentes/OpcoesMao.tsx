@@ -70,13 +70,17 @@ export default function OpcoesMao({
     null,
   )
   const pedrasFisicasMao = [...mao.pedras, ...mao.melds.flatMap((meld) => meld.pedras)]
+  // Sanma: Kita (Norte retirado). Mão + Kita no máximo 4 Norte.
+  const kitaVisivel = !!mao.sanma?.regras.kitaNukidora
+  const comKita = kitaVisivel && (mao.sanma?.kita ?? 0) > 0
+  const maximoKita = Math.max(0, 4 - pedrasFisicasMao.filter((pedra) => pedra === '4z').length)
   const dorasAutomaticasAka = configuracao.akadora
     ? pedrasFisicasMao.filter((pedra) => pedra[0] === '0').length
     : 0
   const flamejante = doraFlamejanteAtiva(configuracao)
   const contarDorasPorIndicadores = (indicadores: typeof mao.dora) =>
     indicadores.reduce((total, indicador) => {
-      const doraReal = proximaDoraIndicada(indicador)
+      const doraReal = proximaDoraIndicada(indicador, !!mao.sanma)
       const hanPorDora = flamejante && indicador[0] === '0' ? 2 : 1
       return (
         total +
@@ -88,8 +92,8 @@ export default function OpcoesMao({
   const dorasAutomaticas = dorasAutomaticasAka + dorasPorIndicadores
   const dorasNaMaoTotal = Math.min(13, dorasAutomaticas + mao.doraManual)
   const dorasReais = useMemo(
-    () => new Set(mao.dora.map((indicador) => codigoBase(proximaDoraIndicada(indicador)))),
-    [mao.dora],
+    () => new Set(mao.dora.map((indicador) => codigoBase(proximaDoraIndicada(indicador, !!mao.sanma)))),
+    [mao.dora, mao.sanma],
   )
   const alternarPainelContextual = (painel: 'dora' | 'descartes') => {
     const tipoAcao = painel === 'descartes' ? 'descarte' : 'dora'
@@ -299,6 +303,21 @@ export default function OpcoesMao({
           </div>
         </div>
 
+        {kitaVisivel && mao.sanma && (
+          <ContadorKita
+            kita={mao.sanma.kita}
+            maximo={maximoKita}
+            aoMudar={(kita) =>
+              atualizarMao((rascunho) => {
+                if (!rascunho.sanma) return
+                rascunho.sanma.kita = kita
+                // Kita antes da vitória: não existe mais Tenhou/Chiihou.
+                if (kita > 0) rascunho.bencao = false
+              })
+            }
+          />
+        )}
+
         {/* Painel dos indicadores logo abaixo do botão do dragão (no tablet,
             ocupa a linha inteira embaixo de Doras e Honba). */}
         {painelContextualAberto === 'dora' && (
@@ -460,6 +479,7 @@ export default function OpcoesMao({
                   }}
                 />
               </div>
+              {comKita && mao.riichi && <p className="aviso-opcao-indisponivel">{t('sanma.ippatsuKitaAviso')}</p>}
             </section>
           )}
           {/* Mão aberta: o Riichi não se aplica. Em vez de a seção sumir, o título
@@ -489,7 +509,7 @@ export default function OpcoesMao({
                 <BotaoToggle
                   rotulo={t('calculator.tenhouChiihou')}
                   ativo={mao.bencao}
-                  desabilitado={false}
+                  desabilitado={comKita}
                   aoClicar={() => {
                     if (!mao.bencao) avancarParaCalcular()
                     atualizarMao((rascunho) => {
@@ -536,8 +556,38 @@ export default function OpcoesMao({
                 }}
               />
             </div>
+            {comKita && mao.melds.length === 0 && (
+              <p className="aviso-opcao-indisponivel">{t('sanma.tenhouKitaAviso')}</p>
+            )}
           </section>
         </div>
+      </div>
+    </div>
+  )
+}
+
+/** Sanma: quantos Norte foram retirados (Kita), de 0 até o que sobra dos 4 Norte. */
+function ContadorKita({
+  kita,
+  maximo,
+  aoMudar,
+}: {
+  kita: number
+  maximo: number
+  aoMudar: (kita: number) => void
+}) {
+  const { t } = useI18n()
+  return (
+    <div className="contador-dora-manual contador-kita" role="group" aria-label={t('sanma.kitaAria')}>
+      <span className="rotulo-contador-com-ajuda">{t('sanma.kita')}</span>
+      <div>
+        <button type="button" aria-label={t('sanma.kitaMenos')} disabled={kita <= 0} onClick={() => aoMudar(kita - 1)}>
+          -
+        </button>
+        <strong aria-live="polite">{kita}</strong>
+        <button type="button" aria-label={t('sanma.kitaMais')} disabled={kita >= maximo} onClick={() => aoMudar(kita + 1)}>
+          +
+        </button>
       </div>
     </div>
   )

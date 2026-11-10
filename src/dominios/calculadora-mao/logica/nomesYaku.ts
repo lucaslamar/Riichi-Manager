@@ -58,6 +58,7 @@ const NOMES: Record<string, NomesCjk> = {
   Dora: { ja: 'ドラ', zh: '宝牌', ko: '도라' },
   Uradora: { ja: '裏ドラ', zh: '里宝牌', ko: '뒷도라' },
   Akadora: { ja: '赤ドラ', zh: '赤宝牌', ko: '적도라' },
+  Nukidora: { ja: '抜きドラ', zh: '拔北宝牌', ko: '북도라' },
   'Kokushi Musou': { ja: '国士無双', zh: '国士无双', ko: '국사무쌍' },
   'Kokushi Musou 13-men machi': {
     ja: '国士無双十三面待ち',

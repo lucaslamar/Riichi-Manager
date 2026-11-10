@@ -1,5 +1,5 @@
 import Riichi from 'riichi'
-import type { Mao } from './tipos'
+import type { Mao, MaoSanma } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
 import type { ConfiguracaoCalculo, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
@@ -11,6 +11,11 @@ import {
   montarPontosRapidos,
   valorPorHonba,
 } from '@/compartilhado/mahjong/pontuacao'
+import {
+  calcularPagamentos,
+  dorasDoKita,
+  proximaDora as proximaDoraDaVariante,
+} from '@/compartilhado/mahjong/variante'
 
 function codigoBase(pedra: string): string {
   return pedra[0] === '0' ? `5${pedra[1]}` : pedra
@@ -51,7 +56,8 @@ function contarDorasPorIndicadores(
 ): number {
   const pedrasFisicas = pedrasDaMaoFisica(mao)
   return indicadores.reduce((total, indicador) => {
-    const doraReal = proximaDora(indicador)
+    // Sanma: 1m aponta 9m e 9m aponta 1m; o yonma segue com a conta de sempre.
+    const doraReal = mao.sanma ? proximaDoraDaVariante(indicador, 'sanma') : proximaDora(indicador)
     const hanPorDora = doraFlamejante && indicador[0] === '0' ? 2 : 1
     return (
       total +
@@ -59,6 +65,66 @@ function contarDorasPorIndicadores(
         hanPorDora
     )
   }, 0)
+}
+
+/** Kita que vale como Nukidora (0 no yonma ou com a regra desligada). */
+function kitaDaMao(mao: Mao): number {
+  if (!mao.sanma?.regras.kitaNukidora) return 0
+  return Math.max(0, Math.min(4, mao.sanma.kita))
+}
+
+/**
+ * Indicador Oeste aponta o Norte: cada Kita vale mais 1 dora por indicador desses.
+ * O 1 do próprio Nukidora vem da biblioteca (`+nN`).
+ */
+function doraDoKitaPorIndicador(mao: Mao, indicadores: string[]): number {
+  const kita = kitaDaMao(mao)
+  return kita > 0 ? dorasDoKita(kita, indicadores) - kita : 0
+}
+
+/**
+ * Pontos do Sanma: a mesma base (han, fu ou yakuman) paga por 2 jogadores no
+ * Tsumo, com o honba das Regras de Sanma.
+ */
+function pontosSanma(
+  mao: Mao,
+  sanma: MaoSanma,
+  pontosBase: PontosCalculados,
+  han: number,
+  fu: number,
+  yakuman: number,
+  config: ConfiguracaoCalculo,
+): { pontos: PontosCalculados; honba: number } {
+  if (pontosBase.agari === null) return { pontos: pontosBase, honba: 0 }
+  const isOya = mao.ventoAssento === '1'
+  const base = yakuman > 0 ? 8000 * yakuman : calcularPatamarHanFu(han, fu, config).base
+  const pagamentos = calcularPagamentos({
+    han,
+    fu,
+    base,
+    dealer: isOya,
+    tipo: mao.agari,
+    honba: mao.honba,
+    variante: 'sanma',
+    regras: sanma.regras,
+    config,
+  })
+  if (mao.agari === 'ron') {
+    const ron = pagamentos.total
+    return { pontos: { agari: 'ron', pontos: { total: ron, oya: { ron }, ko: { ron } } }, honba: pagamentos.honbaTotal }
+  }
+  const tsumo = pagamentos.tsumo ?? { dealer: 0, naoDealer: 0 }
+  return {
+    pontos: {
+      agari: 'tsumo',
+      pontos: {
+        total: pagamentos.total,
+        oya: { ko: tsumo.todos ?? tsumo.dealer },
+        ko: { oya: tsumo.dealer, ko: tsumo.naoDealer },
+      },
+    },
+    honba: pagamentos.honbaTotal,
+  }
 }
 
 /**
@@ -71,14 +137,19 @@ function contarDorasPorIndicadores(
 export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
   const dorasAutomaticasAka = config.akadora ? contarAkaDora(mao) : 0
   const flamejante = doraFlamejanteAtiva(config)
-  const dorasPorIndicadores = contarDorasPorIndicadores(mao, mao.dora, flamejante)
+  const dorasPorIndicadores =
+    contarDorasPorIndicadores(mao, mao.dora, flamejante) + doraDoKitaPorIndicador(mao, mao.dora)
   const dorasNaMaoTotal = Math.min(13, dorasAutomaticasAka + dorasPorIndicadores + mao.doraManual)
   const uradorasTotal = mao.riichi
-    ? contarDorasPorIndicadores(mao, mao.uradora, flamejante) + mao.uradoraManual
+    ? contarDorasPorIndicadores(mao, mao.uradora, flamejante) +
+      doraDoKitaPorIndicador(mao, mao.uradora) +
+      mao.uradoraManual
     : 0
   const dorasBonusTotal = dorasNaMaoTotal + uradorasTotal
   const usaDoraManual = dorasBonusTotal > 0
-  const stringMao = converterMaoParaString(mao)
+  const kita = kitaDaMao(mao)
+  // Sanma: `+nN` é o Norte retirado; a biblioteca conta o Nukidora e tira Tenhou/Chiihou.
+  const stringMao = converterMaoParaString(mao) + (kita > 0 ? `+n${kita}` : '')
 
   const riichi = new Riichi(stringMao, {
     multiYakuman: config.multiYakuman,
@@ -89,6 +160,13 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     doubleWindFu: config.fuVentosDuplo,
     rinshanFu: config.fuRinshan,
     aka: usaDoraManual ? false : config.akadora,
+    ...(mao.sanma
+      ? {
+          sanma: true,
+          sanmaBisection: mao.sanma.regras.pagamentoTsumo === 'divisao-norte',
+          otakazePei: mao.sanma.regras.norteYakuhai,
+        }
+      : {}),
   })
 
   const resultadoBiblioteca = riichi.calc()
@@ -134,9 +212,11 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao
     !semYaku
       ? montarPontosRapidos(isOya, mao.agari, calcularHanFu(hanFinal, fu, config))
       : pontosBiblioteca
-  const pontos = aplicarHonba(pontosBase, mao.honba, valorPorHonba(config))
-  const pontosHonba =
-    pontos.agari !== null && pontosBase.agari !== null
+  const sanma = mao.sanma ? pontosSanma(mao, mao.sanma, pontosBase, hanFinal, fu, yakumanFinal, config) : null
+  const pontos = sanma ? sanma.pontos : aplicarHonba(pontosBase, mao.honba, valorPorHonba(config))
+  const pontosHonba = sanma
+    ? sanma.honba
+    : pontos.agari !== null && pontosBase.agari !== null
       ? pontos.pontos.total - pontosBase.pontos.total
       : 0
 

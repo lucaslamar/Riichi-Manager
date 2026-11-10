@@ -7,6 +7,7 @@ import { useEstadoMao } from './useEstadoMao'
 import { useResultadoMao } from './useResultadoMao'
 import { ordenarPedras, type CodigoPedra, type ConfiguracaoCalculo, type Mao } from '../../../logica/mao'
 import type { EscolhaChiiPendente } from './tipos'
+import type { RegrasSanma } from '@/compartilhado/mahjong/variante'
 
 const YAKU_APENAS_BONUS = new Set(['Dora', 'Uradora', 'Akadora', 'Dora manual'])
 
@@ -29,6 +30,8 @@ interface OpcionsCalculadoraMao {
    * desde o começo, entra sozinha quando as outras 13 fecham e não dá para trocá-la.
    */
   pedraBatidaFixa?: CodigoPedra
+  /** Sanma: regras de 3 jogadores. Ausente (ou `null`) = yonma, a mão fica como sempre. */
+  regrasSanma?: RegrasSanma | null
 }
 
 /**
@@ -55,6 +58,27 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     slotsUsados,
     maoCompleta,
   } = estado
+  // Sanma: a mão leva as regras (e o Kita) em `mao.sanma`; no yonma o campo não existe.
+  // Limpar a mão também tira o campo, por isso ele volta aqui sempre que faltar.
+  const regrasSanma = opcoes?.regrasSanma ?? null
+  const sanmaAtual = mao.sanma
+  const comNorte = mao.ventoAssento === '4' || mao.ventoRodada === '4'
+  useEffect(() => {
+    // Compara fora do rascunho (no immer o rascunho é outro objeto): sem mudança, nada é gravado.
+    const desatualizada = regrasSanma ? sanmaAtual?.regras !== regrasSanma || comNorte : sanmaAtual !== undefined
+    if (!desatualizada) return
+    atualizarMao((rascunho) => {
+      if (!regrasSanma) {
+        delete rascunho.sanma
+        return
+      }
+      rascunho.sanma = { regras: regrasSanma, kita: rascunho.sanma?.kita ?? 0 }
+      // Não há assento nem rodada do Norte com 3 jogadores.
+      if (rascunho.ventoAssento === '4') rascunho.ventoAssento = '1'
+      if (rascunho.ventoRodada === '4') rascunho.ventoRodada = '1'
+    })
+  }, [atualizarMao, regrasSanma, sanmaAtual, comNorte])
+
   const [assinaturaCalculo, setAssinaturaCalculo] = useState<string | null>(null)
   const [etapaFinalizacaoAtiva, setEtapaFinalizacaoAtiva] = useState(false)
   const [selecionandoPedraAgari, setSelecionandoPedraAgari] = useState(false)

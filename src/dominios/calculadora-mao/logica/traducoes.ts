@@ -64,6 +64,8 @@ const TRADUCAO_YAKU: Record<string, string> = {
   '\u8d64\u30c9\u30e9': 'Akadora',
   '\u30c9\u30e9': 'Dora',
   '\u88cf\u30c9\u30e9': 'Uradora',
+  // Sanma: Norte retirado (Kita).
+  '\u629c\u304d\u30c9\u30e9': 'Nukidora',
   // Yaku normais
   Riichi: 'Riichi',
   'Double Riichi': 'Double Riichi',

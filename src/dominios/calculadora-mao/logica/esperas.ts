@@ -1,7 +1,8 @@
 import Riichi from 'riichi'
 import type { ConfiguracaoCalculo } from '@/compartilhado/mahjong/pontuacao'
 import { converterMaoParaString } from './conversor-riichi'
-import type { CodigoPedra, Mao } from './tipos'
+import { tileExisteNaVariante } from '@/compartilhado/mahjong/variante'
+import type { CodigoPedra, Mao, MaoSanma } from './tipos'
 import { traduzirYaku } from './traducoes'
 
 export interface EsperaPossivel {
@@ -80,8 +81,10 @@ function contarAka(pedras: CodigoPedra[]): Map<CodigoPedra, number> {
   return mapa
 }
 
-function configuracaoRiichi(config: ConfiguracaoCalculo) {
+function configuracaoRiichi(config: ConfiguracaoCalculo, sanma?: MaoSanma) {
   return {
+    // Sanma: Norte como yakuhai só se a regra pedir (senão é vento convidado).
+    ...(sanma ? { otakazePei: sanma.regras.norteYakuhai } : {}),
     multiYakuman: config.multiYakuman,
     wyakuman: config.yakumanDuplo,
     kuitan: config.tanyaoAberto,
@@ -103,11 +106,15 @@ export function calcularEsperasPossiveis(
 ): EsperaPossivel[] {
   if (slotsUsados !== 13) return []
 
-  const visiveis = [...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora, ...pedrasDaMesa]
+  // Sanma: cada Kita é um Norte a menos no muro.
+  const kita: CodigoPedra[] = mao.sanma ? Array<CodigoPedra>(mao.sanma.kita).fill('4z') : []
+  const visiveis = [...pedrasVisiveis(mao), ...mao.dora, ...mao.uradora, ...pedrasDaMesa, ...kita]
   const contagem = contar(visiveis)
   const contagemAka = contarAka(visiveis)
   const descartes = new Set(mao.descartes.map(base))
-  const candidatas = config.akadora ? [...TODAS_PEDRAS, ...AKAS] : TODAS_PEDRAS
+  const todas = config.akadora ? [...TODAS_PEDRAS, ...AKAS] : TODAS_PEDRAS
+  // Sanma: só as 108 pedras (sem 2m–8m), então nunca sugere espera que não existe.
+  const candidatas = mao.sanma ? todas.filter((pedra) => tileExisteNaVariante(pedra, 'sanma')) : todas
 
   const esperas = candidatas.flatMap((pedra) => {
     if ((contagem.get(base(pedra)) ?? 0) >= 4) return []
@@ -120,7 +127,7 @@ export function calcularEsperasPossiveis(
     }
 
     try {
-      const riichi = new Riichi(converterMaoParaString(candidata), configuracaoRiichi(config))
+      const riichi = new Riichi(converterMaoParaString(candidata), configuracaoRiichi(config, mao.sanma))
       riichi.setHairi(false)
       const resultado = riichi.calc()
       if (!resultado.isAgari) return []

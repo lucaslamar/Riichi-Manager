@@ -11,6 +11,7 @@ import {
   nomePedraAcessivel,
 } from '../../constantes'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
+import { useSanmaMao } from '../../compartilhado/contextoSanma'
 
 /** Quanto segurar o 5 para virar o 5 vermelho. */
 const DURACAO_TOQUE_LONGO_MS = 450
@@ -94,6 +95,7 @@ export function TecladoPedras({
   aoEscolherChiiPendente,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
+  const sanma = useSanmaMao()
   // Celular em pé com Aka dora: segurar o 5 de cada naipe põe o 5 vermelho, e os
   // naipes ficam com 9 pedras. Decidido aqui para valer em todos os teclados.
   const celularEmPe = useMediaQuery(CONSULTA_AKA_SEGURANDO_CINCO)
@@ -372,11 +374,21 @@ export function TecladoPedras({
             </div>
             <div className="linha-naipe">
               {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) =>
-                renderizarBotaoPedra(`${numero}${naipe}`),
+                // Sanma: 2m–8m não existem. Fica um espaço vazio do mesmo tamanho, para a
+                // linha não mudar de lugar e o teclado fixo embaixo não pular.
+                sanma && naipe === 'm' && numero !== '1' && numero !== '9' ? (
+                  <span key={`${numero}${naipe}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
+                ) : (
+                  renderizarBotaoPedra(`${numero}${naipe}`)
+                ),
               )}
               {configuracao.akadora &&
                 !akaNoCinco &&
-                renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))}
+                (sanma && naipe === 'm' ? (
+                  <span key={`0${naipe}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
+                ) : (
+                  renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))
+                ))}
             </div>
           </div>
         )
