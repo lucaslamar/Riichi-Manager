@@ -93,8 +93,10 @@ function TelasCenterpiece({
   const { t, idioma } = useI18n()
   const { partidas, abertas, guardarNome, descartar } = usePartidas()
   const { sorteio, marcarRegistrada } = useClube()
-  const [tela, setTela] = useState<TelaModulo>({ nome: modo === 'simples' ? 'simples' : 'inicio' })
-  const irInicio = () => setTela({ nome: 'inicio' })
+  // A aba Ranking abre direto na lista: ela é a raiz desse modo.
+  const telaRaiz: TelaModulo = { nome: modo === 'simples' ? 'simples' : modo === 'ranking' ? 'ranking' : 'inicio' }
+  const [tela, setTela] = useState<TelaModulo>(telaRaiz)
+  const irInicio = () => setTela(telaRaiz)
   const { telaCheiaMesa } = usePreferencias()
   const { torneios, salvar: salvarTorneio } = useTorneios()
   const { jogadores } = useJogadores()
@@ -117,7 +119,7 @@ function TelasCenterpiece({
 
   // No menu e no simples (que agora é a raiz do Centerpiece) segue o carrossel da
   // barra inferior; dentro das outras telas, os dois sentidos voltam ao menu.
-  const naRaiz = tela.nome === 'inicio' || tela.nome === 'simples'
+  const naRaiz = tela.nome === telaRaiz.nome
   useGestoHorizontal({
     alvo: raiz,
     aoDireita: naRaiz ? aoTelaAnterior : irInicio,
@@ -201,7 +203,14 @@ function TelasCenterpiece({
         aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
       />
   }
-  if (tela.nome === 'ranking') return <PaginaRanking aoVoltar={irInicio} />
+  if (tela.nome === 'ranking') {
+    return (
+      <PaginaRanking
+        aoVoltar={modo === 'ranking' ? undefined : irInicio}
+        aoAbrirJogadores={() => setTela({ nome: 'jogadores' })}
+      />
+    )
+  }
   if (tela.nome === 'torneio') {
     return (
       <PaginaTorneio
@@ -319,18 +328,7 @@ function TelasCenterpiece({
       aoTocar: () =>
         abertas.length === 1 ? abrirMesa({ nome: 'mesa', id: abertas[0].id }) : setTela({ nome: 'andamento' }),
     },
-    // Histórico também aqui: logo depois de jogar, é onde se procura a partida.
-    cardHistorico,
-  ]
-  // Menu Ranking: os resultados das partidas e o cadastro de quem joga.
-  const cardsRanking: Card[] = [
-    {
-      chave: 'ranking',
-      icone: 'fa-ranking-star',
-      titulo: t('match.home.ranking'),
-      texto: t('match.home.rankingHelp'),
-      aoTocar: () => setTela({ nome: 'ranking' }),
-    },
+    // Histórico e Registrar ficam aqui, abaixo das opções de iniciar partida.
     cardHistorico,
     {
       chave: 'registrarFinalizada',
@@ -339,20 +337,13 @@ function TelasCenterpiece({
       texto: t('match.manual.help'),
       aoTocar: () => setTela({ nome: 'registrarFinalizada' }),
     },
-    {
-      chave: 'jogadores',
-      icone: 'fa-users',
-      titulo: t('players.title'),
-      texto: t('match.home.playersHelp'),
-      aoTocar: () => setTela({ nome: 'jogadores' }),
-    },
   ]
-  const cards = modo === 'ranking' ? cardsRanking : cardsPartida
+  const cards = cardsPartida
 
   return (
     <section className="ptd-inicio">
       <TituloTela
-        titulo={t(modo === 'ranking' ? 'menu.ranking' : 'menu.matchesShort')}
+        titulo={t('menu.matchesShort')}
         acoes={<BotaoConfiguracoes />}
       />
       <div className="ptd-cards">
