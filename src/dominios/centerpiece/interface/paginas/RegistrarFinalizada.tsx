@@ -175,6 +175,8 @@ export default function RegistrarFinalizada({
         aoVoltar={aoVoltar}
       />
 
+      {/* Títulos das seções no estilo do Han e Fu (caixa alta, pequenos). */}
+      {!torneio && <p className="fin-titulo fin-titulo-tipo">{t('tableConfig.gameType')}</p>}
       {!torneio && (
         <div className="ptd-segmentos fin-tipo" role="group" aria-label={t('tableConfig.gameType')}>
           {(['leste', 'hanchan'] as const).map((tipo) => (
@@ -193,7 +195,7 @@ export default function RegistrarFinalizada({
         </div>
       )}
 
-      <p className="ptd-rotulo">{t('match.manual.players')}</p>
+      <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>
       <div className="fin-linhas">
         {LUGARES.map((lugar) => {
           const nome = nomeDe(assentos[lugar])
@@ -239,6 +241,7 @@ export default function RegistrarFinalizada({
         </p>
       )}
 
+      <p className="fin-titulo">{t('match.manual.rulesTitle')}</p>
       {torneio ? (
         <p className="cfg-ajuda">{t('tournament.tables.rulesLocked')}</p>
       ) : (
@@ -252,7 +255,7 @@ export default function RegistrarFinalizada({
 
       {previa?.resultado && (
         <>
-          <p className="ptd-rotulo">{t('match.manual.preview')}</p>
+          <p className="fin-titulo">{t('match.manual.preview')}</p>
           <ListaResultado linhas={previa.resultado} nomeDe={nomeDaPrevia} />
         </>
       )}

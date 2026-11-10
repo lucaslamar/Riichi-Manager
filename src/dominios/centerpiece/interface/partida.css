@@ -1012,6 +1012,19 @@ body:has(.ptd-modulo) {
   padding-bottom: 16px;
 }
 
+/* Títulos das seções, como "É oya?" e "Batida" no Han e Fu. */
+.fin-titulo {
+  margin: 6px 0 -4px;
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.fin-titulo:first-of-type {
+  margin-top: 0;
+}
+
 .fin-linhas {
   display: flex;
   flex-direction: column;
@@ -1191,7 +1204,7 @@ body:has(.ptd-modulo) {
     grid-column: 2;
   }
 
-  .fin-tela > .ptd-rotulo:first-of-type {
+  .fin-tela > .fin-titulo-jogadores {
     grid-column: 1;
     grid-row: 1;
   }
