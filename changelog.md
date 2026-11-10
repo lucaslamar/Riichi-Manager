@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Registrar partida pelo Ranking**: o ícone de prancheta na linha de ícones do Ranking abre o Registrar partida finalizada, e ao terminar (ou voltar) o app volta ao Ranking.
 - **Em andamento com filtros**: além das partidas abertas no placar, mostra o encontro do clube com mesas sem resultado (com quantas já foram registradas) e cada torneio em jogo, que abrem as mesas deles. No topo, Todas · Partidas · Clube · Torneios separa os três. Encontro do clube não tem mais mesa aberta no placar: mesas assim, de versões antigas, aparecem em Partidas para terminar ou descartar.
 - **Histórico com busca e filtros**: na aba Partidas, busque por jogador ou pelo nome do torneio e filtre por Todas · Partidas · Clube · Torneios. As partidas de torneio mostram o nome dele, com a rodada e a mesa embaixo, e as do clube aparecem como Encontro do clube · Mesa N.
 - **Card Torneio sempre começa um novo**: tocar no card abre a criação de um torneio (um rascunho ainda sem sorteio é reaproveitado). Se houver um torneio em jogo, a tela de criar mostra um selo com o nome dele, que abre direto as mesas.

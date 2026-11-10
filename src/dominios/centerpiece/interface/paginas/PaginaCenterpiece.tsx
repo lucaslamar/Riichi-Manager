@@ -226,6 +226,7 @@ function TelasCenterpiece({
         aoVoltar={modo === 'ranking' ? undefined : irInicio}
         aoAbrirJogadores={() => setTela({ nome: 'jogadores' })}
         aoAbrirJogador={(id) => setTela({ nome: 'jogador', id })}
+        aoRegistrarPartida={() => setTela({ nome: 'registrarFinalizada' })}
       />
     )
   }

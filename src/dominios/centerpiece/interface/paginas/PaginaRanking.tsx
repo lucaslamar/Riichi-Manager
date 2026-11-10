@@ -28,11 +28,14 @@ export default function PaginaRanking({
   aoVoltar,
   aoAbrirJogadores,
   aoAbrirJogador,
+  aoRegistrarPartida,
 }: {
   aoVoltar?: () => void
   aoAbrirJogadores?: () => void
   /** Toque no card: abre a tela do jogador com o mapa e os gráficos. */
   aoAbrirJogador?: (id: string) => void
+  /** Atalho para Registrar partida finalizada (a mesma tela da Partida). */
+  aoRegistrarPartida?: () => void
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
@@ -127,6 +130,17 @@ export default function PaginaRanking({
         </button>
         {/* Ações da lista, depois dos filtros: cadastro de jogadores e importar/exportar. */}
         <span className="rkf-separador" aria-hidden="true" />
+        {aoRegistrarPartida && (
+          <button
+            type="button"
+            className="rkf-icone"
+            aria-label={t('match.manual.title')}
+            title={t('match.manual.title')}
+            onClick={aoRegistrarPartida}
+          >
+            <i className="fas fa-clipboard-check" aria-hidden="true" />
+          </button>
+        )}
         {aoAbrirJogadores && (
           <button
             type="button"
