@@ -13,6 +13,17 @@ function listarArquivos(pasta: string): string[] {
   })
 }
 
+/**
+ * Impressão digital dos textos (public/locales): muda sempre que um JSON muda,
+ * mesmo sem trocar a versão do package.json. Vai no endereço dos textos.
+ */
+function versaoDosTextos(): string {
+  const pasta = path.resolve(__dirname, 'public/locales')
+  const hash = createHash('sha256')
+  for (const arquivo of listarArquivos(pasta).sort()) hash.update(readFileSync(arquivo))
+  return hash.digest('hex').slice(0, 12)
+}
+
 /** Grava dist/sw.js com a lista dos arquivos do build, para o app abrir offline. */
 function serviceWorker(): Plugin {
   return {
@@ -22,7 +33,10 @@ function serviceWorker(): Plugin {
       const arquivos = listarArquivos(DIST)
         .filter((caminho) => !caminho.endsWith('.map'))
         .map((caminho) => `./${path.relative(DIST, caminho).split(path.sep).join('/')}`)
-      const versao = createHash('sha256').update(arquivos.join()).digest('hex').slice(0, 12)
+      // Nome e conteúdo: um JSON de textos alterado também gera um cache novo.
+      const hash = createHash('sha256')
+      for (const arquivo of arquivos) hash.update(arquivo).update(readFileSync(path.join(DIST, arquivo)))
+      const versao = hash.digest('hex').slice(0, 12)
       const modelo = readFileSync(path.resolve(__dirname, 'scripts/sw-modelo.js'), 'utf8')
       writeFileSync(
         path.join(DIST, 'sw.js'),
@@ -34,6 +48,10 @@ function serviceWorker(): Plugin {
 
 export default defineConfig({
   plugins: [react(), serviceWorker()],
+
+  define: {
+    __VERSAO_TEXTOS__: JSON.stringify(versaoDosTextos()),
+  },
 
   resolve: {
     alias: {

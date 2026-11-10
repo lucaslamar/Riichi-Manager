@@ -62,6 +62,7 @@
 
 ### Corrigido
 
+- **Textos aparecendo como código depois de atualizar**: no celular, o app novo às vezes usava os textos antigos guardados e mostrava nomes como "menu.ranking" ou "tournament.share.textHelp". Agora os textos são buscados de novo sempre que mudam.
 - **Pontos negativos pelo teclado**: em todo campo de pontuação (Registrar partida finalizada, uma fixa e tabela de uma flutuante), o Android abre o teclado de telefone, que tem a tecla "-". No Registrar partida, fora de foco o número aparece com separador de milhar e os negativos ficam em vermelho.
 - **Sem oka explicado na tela**: com Sem oka, aparece por que não tem campo de retorno (o retorno é igual aos pontos de partida) e como ligar o oka.
 - **Leitor de QR no Android**: abre direto na câmera traseira principal, sem passar pelas outras lentes (grande-angular, tele, macro), lê 10 vezes por segundo no quadrado do meio, pede foco contínuo e vibra a cada QR lido. Com a câmera bloqueada, mostra como liberar e o botão Tentar de novo.

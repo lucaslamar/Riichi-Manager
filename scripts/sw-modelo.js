@@ -10,7 +10,9 @@ self.addEventListener('install', (evento) => {
   evento.waitUntil(
     caches
       .open(CACHE)
-      .then((cache) => cache.addAll(ARQUIVOS))
+      // 'reload' busca na rede, sem o cache HTTP: senão um JSON de textos antigo,
+      // ainda guardado pelo navegador, entraria no cache da versão nova.
+      .then((cache) => cache.addAll(ARQUIVOS.map((arquivo) => new Request(arquivo, { cache: 'reload' }))))
       .then(() => self.skipWaiting()),
   )
 })

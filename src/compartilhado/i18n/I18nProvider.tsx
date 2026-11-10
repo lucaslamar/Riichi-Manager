@@ -8,7 +8,6 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import packageJson from '../../../package.json'
 import {
   CADEIA_RESERVA,
   IDIOMAS_SUPORTADOS,
@@ -53,9 +52,9 @@ const dicionariosCarregados = new Map<IdiomaSuportado, Promise<Dicionario>>()
 function carregarDicionario(idioma: IdiomaSuportado): Promise<Dicionario> {
   let pedido = dicionariosCarregados.get(idioma)
   if (!pedido) {
-    // A versão no endereço faz cada versão nova do app buscar os textos novos,
-    // em vez de um JSON antigo guardado no cache do navegador.
-    pedido = fetch(`${import.meta.env.BASE_URL}locales/${idioma}.json?v=${packageJson.version}`)
+    // A impressão digital dos textos no endereço faz cada build com textos novos
+    // buscar o JSON novo, em vez de um antigo guardado no cache do navegador.
+    pedido = fetch(`${import.meta.env.BASE_URL}locales/${idioma}.json?v=${__VERSAO_TEXTOS__}`)
       .then((resposta) => {
         if (!resposta.ok) throw new Error(`Locale não encontrado: ${idioma}`)
         return resposta.json() as Promise<Dicionario>
