@@ -33,8 +33,18 @@ export const PAGINAS_NAVEGACAO: readonly (readonly ItemNavegacao[])[] = [
   ],
 ]
 
-/** Telas de dentro da Mesa partida que o menu lateral abre direto. */
-export type SubtelaPartida = 'setup' | 'torneio' | 'listaClube' | 'andamento' | 'historico' | 'registrarFinalizada'
+/** Telas de dentro da Mesa partida e do Ranking que o menu lateral abre direto. */
+export type SubtelaPartida =
+  | 'setup'
+  | 'torneio'
+  | 'listaClube'
+  | 'andamento'
+  | 'historico'
+  | 'registrarFinalizada'
+  | 'jogadores'
+
+/** Itens do menu que têm subitens: as abas do módulo de partidas. */
+export type DestinoComSubitens = 'partidas' | 'ranking'
 
 export interface SubitemNavegacao {
   tela: SubtelaPartida
@@ -42,15 +52,21 @@ export interface SubitemNavegacao {
   icone: string
 }
 
-/** Subitens da Mesa partida no menu lateral, na ordem dos cards da tela. */
-export const SUBITENS_PARTIDA: readonly SubitemNavegacao[] = [
+/** Subitens no menu lateral: os da Mesa partida na ordem dos cards da tela. */
+export const SUBITENS_NAVEGACAO: Record<DestinoComSubitens, readonly SubitemNavegacao[]> = {
+  partidas: [
   { tela: 'setup', chave: 'match.home.newGame', icone: 'fa-plus' },
   { tela: 'torneio', chave: 'tournament.title', icone: 'fa-trophy' },
   { tela: 'listaClube', chave: 'match.home.clubTitle', icone: 'fa-table-cells-large' },
   { tela: 'andamento', chave: 'match.home.inProgress', icone: 'fa-hourglass-half' },
   { tela: 'historico', chave: 'match.home.history', icone: 'fa-clock-rotate-left' },
   { tela: 'registrarFinalizada', chave: 'match.manual.title', icone: 'fa-clipboard-check' },
-]
+  ],
+  ranking: [
+    { tela: 'jogadores', chave: 'players.title', icone: 'fa-user-plus' },
+    { tela: 'registrarFinalizada', chave: 'match.manual.title', icone: 'fa-clipboard-check' },
+  ],
+}
 
 /** Menu lateral (Mais e sidebar): as telas da barra e, no fim, a tela Ajustes. */
 export const ITENS_NAVEGACAO: readonly ItemNavegacao[] = [

@@ -2,7 +2,7 @@ import { lazy, Suspense, useCallback, useRef, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
-import { ORDEM_TELAS, type SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
+import { ORDEM_TELAS, type DestinoComSubitens, type SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
 import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
@@ -53,8 +53,8 @@ export default function App() {
     setTela(proxima)
   }, [])
   const navegarSubtela = useCallback(
-    (destino: SubtelaPartida) => {
-      navegar('partidas')
+    (aba: DestinoComSubitens, destino: SubtelaPartida) => {
+      navegar(aba)
       toquesSubtela.current += 1
       setSubtela({ tela: destino, chave: toquesSubtela.current })
     },
@@ -140,9 +140,9 @@ export default function App() {
           {/* O botão Centerpiece abre direto o simples; Mesa partida é o menu das partidas com pontos e Ranking, o dos resultados. */}
           {(tela === 'centerpiece' || tela === 'partidas' || tela === 'ranking') && (
             <PaginaCenterpiece
-              key={tela === 'partidas' && subtela ? `partidas-${subtela.chave}` : tela}
+              key={subtela ? `${tela}-${subtela.chave}` : tela}
               modo={tela === 'centerpiece' ? 'simples' : tela}
-              telaInicial={tela === 'partidas' ? subtela?.tela : undefined}
+              telaInicial={tela === 'partidas' || tela === 'ranking' ? subtela?.tela : undefined}
               aoAbrirSorteador={abrirSorteadorDoSimples}
               aoAbrirCalculo={abrirCalculoDoSimples}
               aoTelaAnterior={telaAnterior && (() => irPara(telaAnterior))}

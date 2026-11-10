@@ -81,7 +81,7 @@ interface PropsCenterpiece {
   /** Vizinhos na barra inferior, para o deslize no menu do módulo. */
   aoTelaAnterior?: () => void
   aoProximaTela?: () => void
-  /** Subitem do menu lateral: abre direto nesta tela (voltar leva ao menu da Partida). */
+  /** Subitem do menu lateral: abre direto nesta tela (voltar leva à raiz do módulo). */
   telaInicial?: SubtelaPartida
 }
 
