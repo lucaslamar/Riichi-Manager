@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Confirmação ao registrar partida finalizada**: o resultado saiu do fim da tela. Ao tocar em Registrar partida, abre uma confirmação com cada jogador: colocação, pontos, uma e oka, e como fica no ranking geral (posição e total, antes → depois, com a seta de subiu ou caiu). Depois de confirmar, o app abre o Ranking em vez do Histórico. No torneio, a confirmação mostra só o resultado da mesa.
 - **Títulos no Registrar partida finalizada**: Tipo de partida, Jogadores e pontos, Regras de pontuação e Resultado aparecem como títulos pequenos em caixa alta, no mesmo estilo do "É oya?" e do "Batida" do Han e Fu.
 - **Histórico com ícone de olho**: o botão "Ver" de cada partida virou um olho sem fundo, igual aos ícones de compartilhar e excluir ao lado.
 - **Menu Ranking na barra**: na segunda página da barra inferior, depois do Tutorial, com o ícone do pódio. Ele reúne Ranking, Histórico, Registrar partida finalizada e Jogadores, que saíram da Partida. A Partida ficou com Nova partida, Torneio, Organizar mesas do clube e Em andamento.

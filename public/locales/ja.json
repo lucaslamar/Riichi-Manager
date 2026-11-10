@@ -1404,7 +1404,11 @@
       "toggleSign": "{{name}} の点数の符号を反転",
       "preview": "Result",
       "save": "Record game",
-      "noHands": "Game recorded with the result only, no hands."
+      "noHands": "Game recorded with the result only, no hands.",
+      "confirmTitle": "結果の確認",
+      "rankingTitle": "総合ランキング：前 → 後",
+      "firstGame": "初対局",
+      "confirm": "登録"
     }
   },
   "spokenTiles": {

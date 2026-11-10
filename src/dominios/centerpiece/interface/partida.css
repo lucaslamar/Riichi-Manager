@@ -1391,3 +1391,62 @@ body:has(.ptd-modulo) {
 .fin-campo input.fin-negativo {
   color: var(--texto-erro);
 }
+
+/* Confirmação do Registrar partida finalizada: uma linha por jogador, com o
+   resultado da mesa e o ranking geral antes → depois. */
+.fin-mudancas {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.fin-mudancas > li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 10px 0;
+}
+
+.fin-mudancas > li:last-child {
+  border-bottom: 0;
+}
+
+.fin-mudanca-nome {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fin-mudanca-ranking {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
+
+.fin-mudanca-ranking > .fa-ranking-star {
+  color: var(--primario);
+}
+
+.fin-mudanca-total {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  color: var(--texto-apoio);
+}
+
+.fin-seta {
+  font-size: 0.7em;
+  opacity: 0.6;
+}
+
+.fin-legenda {
+  margin: 4px 0 0;
+}

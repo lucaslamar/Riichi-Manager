@@ -1455,7 +1455,11 @@
       "toggleSign": "Pakeisti {{name}} taškų ženklą",
       "preview": "Result",
       "save": "Record game",
-      "noHands": "Game recorded with the result only, no hands."
+      "noHands": "Game recorded with the result only, no hands.",
+      "confirmTitle": "Patvirtinti rezultatą",
+      "rankingTitle": "Bendras reitingas: prieš → po",
+      "firstGame": "1-a partija",
+      "confirm": "Išsaugoti"
     }
   },
   "spokenTiles": {

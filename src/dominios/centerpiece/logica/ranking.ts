@@ -141,3 +141,38 @@ export function posicoesDoRanking(linhas: readonly LinhaRanking[]): number[] {
     (linha) => linhas.findIndex((outra) => outra.pontuacaoTotal === linha.pontuacaoTotal) + 1,
   )
 }
+
+export interface MudancaRanking {
+  jogadorId: string
+  /** Sem partidas antes: estreia no ranking. */
+  antes: { total: number; posicao: number } | null
+  depois: { total: number; posicao: number }
+}
+
+/**
+ * Como o ranking geral (todo o período) fica com a partida `nova`: total e
+ * posição de cada jogador dela, antes e depois. Quem não está no cadastro
+ * (convidado) fica de fora, como na tela do Ranking.
+ */
+export function mudancaNoRanking(
+  partidas: readonly Partida[],
+  nova: Partida,
+  agora: Date,
+  existe: (id: string) => boolean,
+): MudancaRanking[] {
+  const situacao = (lista: readonly Partida[]) => {
+    const linhas = semExcluidos(calcularRanking(lista, { periodo: 'tudo', origem: 'todas' }, agora), existe)
+    const posicoes = posicoesDoRanking(linhas)
+    return new Map(
+      linhas.map((linha, indice) => [linha.jogadorId, { total: linha.pontuacaoTotal, posicao: posicoes[indice] }]),
+    )
+  }
+  const antes = situacao(partidas)
+  const depois = situacao([...partidas, nova])
+  return [...(nova.resultado ?? [])]
+    .sort((uma, outra) => uma.colocacao - outra.colocacao)
+    .flatMap((linha) => {
+      const final = depois.get(linha.jogadorId)
+      return final ? [{ jogadorId: linha.jogadorId, antes: antes.get(linha.jogadorId) ?? null, depois: final }] : []
+    })
+}

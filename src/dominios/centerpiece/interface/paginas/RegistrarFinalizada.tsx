@@ -16,11 +16,12 @@ import {
   type ConjuntoRegistro,
   type RegrasPontuacao,
 } from '../../logica/regrasPontuacao'
+import { mudancaNoRanking } from '../../logica/ranking'
 import { umaValida } from '../../logica/uma'
 import { carregarRegrasRegistro, salvarRegrasRegistro } from '../../persistencia/repositorioRegrasRegistro'
 import { fecharPontos, formatarPontos, lerPontos, limparPontos } from '../../logica/entradaPontos'
 import { PROPS_TECLADO_COM_SINAL } from '../componentes/CampoUma'
-import ListaResultado from '../componentes/ListaResultado'
+import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
 import RegrasPontuacaoRegistro from '../componentes/RegrasPontuacaoRegistro'
 import { assentosDaMesa } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
@@ -61,7 +62,8 @@ export default function RegistrarFinalizada({
   /** Campo em edição: mostra o número cru. Fora de foco, com separador de milhar. */
   const [focado, setFocado] = useState<number | null>(null)
   const { jogadores } = useJogadores()
-  const { adicionar } = usePartidas()
+  const { partidas, adicionar } = usePartidas()
+  const [confirmando, setConfirmando] = useState(false)
   // Conjunto de regras: o último usado aqui (mesa do clube sempre começa no Clube).
   const [salvas] = useState(() => carregarRegrasRegistro(armazenamentoLocal))
   const [conjunto, setConjunto] = useState<ConjuntoRegistro>(clube ? 'padrao' : salvas.conjunto)
@@ -253,31 +255,41 @@ export default function RegistrarFinalizada({
       />
       )}
 
-      {previa?.resultado && (
-        <>
-          <p className="fin-titulo">{t('match.manual.preview')}</p>
-          <ListaResultado linhas={previa.resultado} nomeDe={nomeDaPrevia} />
-        </>
-      )}
-
+      {/* O resultado aparece na confirmação, antes de gravar. */}
       <button
         type="button"
         className="mesa-btn-principal"
         disabled={!previa}
-        onClick={() => {
-          if (!previa) return
-          const id = gerarId()
-          adicionar({
-            ...previa,
-            id,
-            ...(clube ? { encontro: { id: clube.encontroId, mesa: clube.mesa.numero } } : {}),
-            ...(torneio ? { vinculoTorneio: torneio.vinculo } : {}),
-          })
-          aoRegistrar(id)
-        }}
+        onClick={() => setConfirmando(true)}
       >
         {t('match.manual.save')}
       </button>
+
+      {confirmando && previa?.resultado && (
+        <ConfirmarRegistro
+          resultado={previa.resultado}
+          nomeDe={nomeDaPrevia}
+          // Torneio: a mesa vale para o ranking do torneio, não para o geral.
+          mudancas={
+            torneio
+              ? []
+              : mudancaNoRanking(partidas, previa, new Date(), (id) =>
+                  jogadores.some((jogador) => jogador.id === id),
+                )
+          }
+          aoFechar={() => setConfirmando(false)}
+          aoConfirmar={() => {
+            const id = gerarId()
+            adicionar({
+              ...previa,
+              id,
+              ...(clube ? { encontro: { id: clube.encontroId, mesa: clube.mesa.numero } } : {}),
+              ...(torneio ? { vinculoTorneio: torneio.vinculo } : {}),
+            })
+            aoRegistrar(id)
+          }}
+        />
+      )}
 
       {escolhendo !== null && (
         <SeletorJogador

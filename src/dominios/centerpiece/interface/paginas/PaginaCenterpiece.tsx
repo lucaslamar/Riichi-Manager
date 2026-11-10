@@ -161,7 +161,7 @@ function TelasCenterpiece({
   }
   if (tela.nome === 'registrarFinalizada') {
     return (
-      <RegistrarFinalizada aoVoltar={irInicio} aoRegistrar={() => setTela({ nome: 'historico' })} />
+      <RegistrarFinalizada aoVoltar={irInicio} aoRegistrar={() => setTela({ nome: 'ranking' })} />
     )
   }
   if (tela.nome === 'simples') {

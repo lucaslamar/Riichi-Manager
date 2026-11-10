@@ -15,6 +15,7 @@ import {
 } from '../src/dominios/centerpiece/logica/partida'
 import {
   calcularRanking,
+  mudancaNoRanking,
   origemDaPartida,
   partidasDoHistorico,
   posicoesDoRanking,
@@ -204,6 +205,27 @@ teste('partida registrada à mão entra no histórico e no ranking', () => {
   }, 'x')
   assert.equal(semOka.config.pontosPartida, 25000)
   assert.equal(semOka.resultado?.reduce((soma, linha) => soma + linha.final, 0), 0)
+})
+
+teste('mudança no ranking: antes e depois da partida nova', () => {
+  const primeira = finalizada(new Date(2026, 10, 1))
+  const nova = criarPartidaManual('n', BASE, {
+    jogadorIds: ['a', 'b', 'c', 'e'],
+    nomes: [],
+    pontos: [40000, 30000, 20000, 10000],
+    pontosPartida: 25000,
+    pontosRetorno: 30000,
+    uma: umaFixa([15, 5, -5, -15]),
+  }, '2026-11-02T12:00:00.000Z')
+  // 'c' é convidado (fora do cadastro): não aparece.
+  const mudancas = mudancaNoRanking([primeira], nova, AGORA, (id) => id !== 'c')
+  assert.deepEqual(mudancas.map((item) => item.jogadorId), ['a', 'b', 'e'], 'ordem de colocação, sem convidado')
+  const a = mudancas[0]
+  assert.ok(a.antes, 'a já jogou')
+  assert.ok(a.depois.total > a.antes.total, 'primeiro lugar soma pontos')
+  assert.equal(mudancas[2].antes, null, 'estreia no ranking')
+  assert.deepEqual([a.antes, a.depois], [{ total: -5, posicao: 2 }, { total: 40, posicao: 2 }])
+  assert.deepEqual(mudancas[2].depois, { total: -35, posicao: 4 })
 })
 
 console.log(`Ranking ok: ${testes} testes.`)
