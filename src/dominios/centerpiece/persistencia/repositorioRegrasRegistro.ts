@@ -1,4 +1,5 @@
 import type { ArmazenamentoChaveValor } from '../../../compartilhado/persistencia/armazenamento'
+import type { ConfigMesa } from '../logica/configMesa'
 import { normalizarUma } from '../logica/uma'
 import {
   CONJUNTOS_REGISTRO,
@@ -10,10 +11,14 @@ import {
 const CHAVE = 'riichi-manager-regras-registro'
 const VERSAO = 1
 
-/** Último conjunto escolhido em "Registrar partida finalizada" e os valores do Personalizado. */
+/**
+ * Último conjunto escolhido em "Registrar partida finalizada", os valores do
+ * Personalizado e o último tipo de partida (Leste apenas ou Hanchan).
+ */
 export interface RegrasRegistroSalvas {
   conjunto: ConjuntoRegistro
   personalizado: RegrasPontuacao | null
+  tipoPartida?: ConfigMesa['tipoPartida']
 }
 
 const numeroValido = (valor: unknown): valor is number => typeof valor === 'number' && Number.isFinite(valor)
@@ -36,8 +41,13 @@ export function carregarRegrasRegistro(armazenamento: ArmazenamentoChaveValor): 
           uma: normalizarUma(bruto.uma, clube.uma),
         }
       : null
+    const tipoPartida = lido.tipoPartida === 'leste' || lido.tipoPartida === 'hanchan' ? lido.tipoPartida : null
     // Personalizado sem valores guardados volta para o Clube.
-    return { conjunto: conjunto === 'personalizado' && !personalizado ? 'padrao' : conjunto, personalizado }
+    return {
+      conjunto: conjunto === 'personalizado' && !personalizado ? 'padrao' : conjunto,
+      personalizado,
+      ...(tipoPartida ? { tipoPartida } : {}),
+    }
   } catch {
     return vazio
   }

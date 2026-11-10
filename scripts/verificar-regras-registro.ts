@@ -132,6 +132,9 @@ teste('Personalizado lembra os últimos valores', () => {
   // Dado estragado não derruba a tela.
   memoria.set('riichi-manager-regras-registro', '{nada')
   assert.deepEqual(carregarRegrasRegistro(armazenamento), { conjunto: 'padrao', personalizado: null })
+  // Tipo de partida (Leste apenas ou Hanchan) também fica guardado.
+  salvarRegrasRegistro(armazenamento, { conjunto: 'padrao', personalizado: null, tipoPartida: 'hanchan' })
+  assert.equal(carregarRegrasRegistro(armazenamento).tipoPartida, 'hanchan')
 })
 
 console.log(`Regras de registro: ${testes} testes passaram.`)

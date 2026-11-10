@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Registrar partida finalizada mais rápido**: ao tocar em Atribuir, a lista de jogadores segue aberta e passa sozinha para o próximo vazio, como na Nova partida, até escolher os quatro. No topo, Leste apenas ou Hanchan define o tipo da partida, que aparece no Histórico. O app lembra o último tipo usado.
 - **Torneio de volta, dentro da Mesa partida**: o card Torneio fica logo abaixo de Nova partida. Um celular controla o torneio inteiro, sem internet.
 - **Lista do torneio em bloco de notas**: um nome por linha, colando direto do WhatsApp (a numeração e os marcadores saem sozinhos). Nomes repetidos ficam sublinhados em vermelho, o rodapé conta jogadores e mesas e avisa quantos faltam para fechar a mesa. Dá para puxar jogadores do cadastro, guardar e carregar listas e renomear o torneio tocando no título.
 - **Cinco formatos**: Rodízio (grade inteira sorteada no início, cada um é Leste uma vez), Suíço, Eliminatório (classificatória por Rodízio ou Suíço, cortes e mesa final), Brasileirão (cada rodada sorteada na hora) e Brasileirão em temporada, com ranking acumulado de vários encontros (soma, média ou melhores resultados).

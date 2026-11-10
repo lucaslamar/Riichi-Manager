@@ -6,7 +6,7 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import SeletorJogador from '@/dominios/jogadores/interface/componentes/SeletorJogador'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
-import type { ConfigMesa } from '../../logica/configMesa'
+import { alterarConfig, type ConfigMesa } from '../../logica/configMesa'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
 import type { Partida } from '../../logica/partida'
 import { criarPartidaManual } from '../../logica/partidaManual'
@@ -76,11 +76,21 @@ export default function RegistrarFinalizada({
       ? personalizado
       : regrasDoPreset(conjunto === 'personalizado' ? 'padrao' : conjunto)
   const { pontosPartida, pontosRetorno, uma } = regras
-  const base = torneio?.config ?? configBaseDoConjunto(conjunto)
-  const guardar = (novo: ConjuntoRegistro, valores: RegrasPontuacao | null) => {
+  const baseConjunto = configBaseDoConjunto(conjunto)
+  // Tipo de partida: o último usado aqui, senão o do conjunto. No torneio vem da mesa.
+  const [tipoPartida, setTipoPartida] = useState<ConfigMesa['tipoPartida']>(
+    salvas.tipoPartida ?? baseConjunto.tipoPartida,
+  )
+  const base = torneio?.config ?? alterarConfig(baseConjunto, { tipoPartida })
+  const guardar = (
+    novo: ConjuntoRegistro,
+    valores: RegrasPontuacao | null,
+    tipo: ConfigMesa['tipoPartida'] = tipoPartida,
+  ) => {
     setConjunto(novo)
     setPersonalizado(valores)
-    salvarRegrasRegistro(armazenamentoLocal, { conjunto: novo, personalizado: valores })
+    setTipoPartida(tipo)
+    salvarRegrasRegistro(armazenamentoLocal, { conjunto: novo, personalizado: valores, tipoPartida: tipo })
   }
   // Convidados do clube: id gerado na hora e o nome escrito na lista.
   const [mesaClube] = useState(() => (clube ? assentosDaMesa(clube.mesa) : null))
@@ -164,6 +174,24 @@ export default function RegistrarFinalizada({
         }
         aoVoltar={aoVoltar}
       />
+
+      {!torneio && (
+        <div className="ptd-segmentos fin-tipo" role="group" aria-label={t('tableConfig.gameType')}>
+          {(['leste', 'hanchan'] as const).map((tipo) => (
+            <button
+              key={tipo}
+              type="button"
+              className={`ptd-segmento${tipoPartida === tipo ? ' ptd-segmento--ativo' : ''}`}
+              aria-pressed={tipoPartida === tipo}
+              onClick={() => {
+                if (tipoPartida !== tipo) guardar(conjunto, personalizado, tipo)
+              }}
+            >
+              {t(tipo === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')}
+            </button>
+          ))}
+        </div>
+      )}
 
       <p className="ptd-rotulo">{t('match.manual.players')}</p>
       <div className="fin-linhas">
@@ -250,10 +278,17 @@ export default function RegistrarFinalizada({
 
       {escolhendo !== null && (
         <SeletorJogador
-          idsEscolhidos={assentos.filter((id): id is string => !!id)}
+          titulo={t('match.manual.choosePlayer', { number: escolhendo + 1 })}
+          idsEscolhidos={assentos.filter((id): id is string => !!id && id !== assentos[escolhendo])}
           aoEscolher={(jogador) => {
-            setAssentos(assentos.map((atual, i) => (i === escolhendo ? jogador.id : atual)))
-            setEscolhendo(null)
+            const proximos = assentos.map((atual, i) => (i === escolhendo ? jogador.id : atual))
+            setAssentos(proximos)
+            // Como na Nova partida: a folha segue aberta no próximo jogador vazio
+            // e só fecha quando os quatro estão escolhidos.
+            const seguinte = [1, 2, 3]
+              .map((passo) => (escolhendo + passo) % 4)
+              .find((lugar) => proximos[lugar] === null)
+            setEscolhendo(seguinte ?? null)
           }}
           aoFechar={() => setEscolhendo(null)}
         />
