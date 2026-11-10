@@ -3,7 +3,11 @@ import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { agruparAbertas } from '../../logica/encontroClube'
+import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
+import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
+import { agruparAbertas, mesasRegistradas } from '../../logica/encontroClube'
+import { tipoDaMesa, type FiltroTipoMesa } from '../../logica/tipoDaMesa'
+import FiltroTipo from '../componentes/FiltroTipo'
 import { ehConvidado, type EntradaLista } from '../../logica/listaClube'
 import { CADEIRAS, type Cadeira, type Partida } from '../../logica/partida'
 import CardMesa from '../componentes/CardMesa'
@@ -15,22 +19,36 @@ import { nomeDoAssento } from '../nomeDoAssento'
 import { textoDaPartida } from '../textoPartida'
 
 /**
- * Mesas abertas: as de um encontro do clube agrupadas sob ele, as avulsas soltas
- * como antes. Cada mesa é um card de placar.
+ * O que está em andamento: partidas avulsas abertas no placar, o encontro do
+ * clube com mesas sem resultado e os torneios em jogo. Um filtro separa os três.
+ * Clube e torneio só registram o resultado: o card abre as mesas deles.
  */
 export default function PaginaEmAndamento({
   aoVoltar,
   aoAbrirMesa,
   aoNovoSorteio,
+  aoAbrirSorteio,
+  aoAbrirTorneio,
 }: {
   aoVoltar: () => void
   aoAbrirMesa: (id: string) => void
   aoNovoSorteio: () => void
+  aoAbrirSorteio: () => void
+  aoAbrirTorneio: (id: string) => void
 }) {
   const { t, numero, idioma } = useI18n()
-  const { abertas, descartar } = usePartidas()
+  const { partidas, abertas, descartar } = usePartidas()
   const { jogadores } = useJogadores()
-  const { encontros, sortear, sortearDeNovo } = useClube()
+  const { encontros, sorteio, sortear, sortearDeNovo } = useClube()
+  const { torneios } = useTorneios()
+  const subtituloTorneio = useSubtituloTorneio()
+  const [filtro, setFiltro] = useState<FiltroTipoMesa>('todas')
+  const torneiosEmJogo = torneios.filter((torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm)
+  const registradas = sorteio ? mesasRegistradas(sorteio, partidas) : 0
+  const sorteioPendente = sorteio && registradas < sorteio.mesas.length ? sorteio : null
+  const mostra = (tipo: FiltroTipoMesa) => filtro === 'todas' || filtro === tipo
+  const dataHora = (iso: string) =>
+    new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(new Date(iso))
   const { aviso, mostrar } = useAviso()
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
 
@@ -77,15 +95,51 @@ export default function PaginaEmAndamento({
     </li>
   )
 
-  const grupos = agruparAbertas(abertas)
+  // Mesas abertas no placar; as de clube e torneio entram no filtro de cada um.
+  const grupos = agruparAbertas(abertas).filter((grupo) =>
+    mostra(grupo.tipo === 'encontro' ? 'clube' : tipoDaMesa(grupo.partida)),
+  )
+  const nada = abertas.length === 0 && !sorteioPendente && torneiosEmJogo.length === 0
+  const vazioNoFiltro =
+    !nada && grupos.length === 0 && !(sorteioPendente && mostra('clube')) && !(torneiosEmJogo.length && mostra('torneio'))
 
   return (
     <section className="ptd-inicio cm-pagina">
       <TituloTela titulo={t('match.home.inProgress')} aoVoltar={aoVoltar} />
-      {abertas.length === 0 ? (
+      {!nada && <FiltroTipo valor={filtro} aoMudar={setFiltro} />}
+      {nada || vazioNoFiltro ? (
         <p className="ptd-vazio">{t('match.home.noneOpen')}</p>
       ) : (
         <div className="cm-grupos">
+          {mostra('torneio') &&
+            torneiosEmJogo.map((torneio) => (
+              <button
+                key={torneio.id}
+                type="button"
+                className="cm-andamento-item"
+                onClick={() => aoAbrirTorneio(torneio.id)}
+              >
+                <i className="fas fa-trophy" aria-hidden="true" />
+                <span>
+                  <strong>{torneio.nome}</strong>
+                  <small>{subtituloTorneio(torneio)}</small>
+                </span>
+                <i className="fas fa-chevron-right" aria-hidden="true" />
+              </button>
+            ))}
+          {mostra('clube') && sorteioPendente && (
+            <button type="button" className="cm-andamento-item" onClick={aoAbrirSorteio}>
+              <i className="fas fa-people-group" aria-hidden="true" />
+              <span>
+                <strong>{t('match.club.meeting')}</strong>
+                <small>
+                  {dataHora(sorteioPendente.encontro.criadoEm)} ·{' '}
+                  {t('match.types.registeredOf', { count: registradas, total: sorteioPendente.mesas.length })}
+                </small>
+              </span>
+              <i className="fas fa-chevron-right" aria-hidden="true" />
+            </button>
+          )}
           {grupos.map((grupo) => {
             if (grupo.tipo === 'avulsa') {
               return (
@@ -96,9 +150,7 @@ export default function PaginaEmAndamento({
             }
             const encontro = encontros.find((item) => item.id === grupo.encontroId)
             const inicio = encontro?.criadoEm ?? grupo.partidas[0].criadaEm
-            const data = new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
-              new Date(inicio),
-            )
+            const data = dataHora(inicio)
             const idTitulo = `encontro-${grupo.encontroId}`
             return (
               <section key={grupo.encontroId} className="cm-grupo" aria-labelledby={idTitulo}>
