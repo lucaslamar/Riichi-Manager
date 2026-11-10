@@ -4,6 +4,9 @@
 
 ### Adicionado
 
+- **Ranking abre direto na lista**: a aba Ranking não tem mais a tela de cards. No cabeçalho ficam o atalho para Jogadores e a engrenagem. Histórico e Registrar partida finalizada voltaram para a Mesa partida, abaixo das opções de iniciar partida.
+- **Apelido em destaque no ranking**: cada linha mostra o apelido grande e o nome completo menor embaixo. Sem apelido, ou quando os dois são iguais, aparece só o nome.
+- **Ranking logo depois da Mesa partida**: na barra inferior e no menu lateral, o Ranking abre a segunda página, antes do Sorteador de Ventos.
 - **Registrar partida mais limpo**: as regras de pontuação abrem pelo ícone de controles no topo da tela, e o quadro com o resumo das regras saiu da tela. Na confirmação, pontos, uma e oka viraram colunas pequenas com o título em cima, e a coluna Oka só aparece quando a partida tem oka.
 - **Confirmação ao registrar partida finalizada**: o resultado saiu do fim da tela. Ao tocar em Registrar partida, abre uma confirmação com cada jogador: colocação, pontos, uma e oka, e como fica no ranking geral (posição e total, antes → depois, com a seta de subiu ou caiu). Depois de confirmar, o app abre o Ranking em vez do Histórico. No torneio, a confirmação mostra só o resultado da mesa.
 - **Títulos no Registrar partida finalizada**: Tipo de partida, Jogadores e pontos, Regras de pontuação e Resultado aparecem como títulos pequenos em caixa alta, no mesmo estilo do "É oya?" e do "Batida" do Han e Fu.
