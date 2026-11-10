@@ -26,6 +26,7 @@
     "matches": "대국 테이블",
 
     "matchesShort": "대국",
+    "ranking": "랭킹",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -1403,7 +1404,11 @@
       "toggleSign": "{{name}} 점수 부호 바꾸기",
       "preview": "Result",
       "save": "Record game",
-      "noHands": "Game recorded with the result only, no hands."
+      "noHands": "Game recorded with the result only, no hands.",
+      "confirmTitle": "결과 확인",
+      "rankingTitle": "전체 랭킹: 전 → 후",
+      "firstGame": "첫 대국",
+      "confirm": "등록"
     }
   },
   "spokenTiles": {

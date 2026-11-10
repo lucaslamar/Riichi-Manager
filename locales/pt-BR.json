@@ -24,6 +24,7 @@
     "centerpiece": "Centerpiece",
     "matches": "Mesa partida",
     "matchesShort": "Partida",
+    "ranking": "Ranking",
     "more": "Mais",
     "moreOptions": "Mais opções",
     "backToMain": "Voltar para as opções principais"
@@ -1417,7 +1418,11 @@
       "toggleSign": "Inverter o sinal dos pontos de {{name}}",
       "preview": "Resultado",
       "save": "Registrar partida",
-      "noHands": "Partida registrada só com o resultado, sem as mãos."
+      "noHands": "Partida registrada só com o resultado, sem as mãos.",
+      "confirmTitle": "Confirmar resultado",
+      "rankingTitle": "Ranking geral: antes → depois",
+      "firstGame": "1ª partida",
+      "confirm": "Registrar"
     }
   },
   "spokenTiles": {

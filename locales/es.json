@@ -24,6 +24,7 @@
     "centerpiece": "Centerpiece",
     "matches": "Mesa de partida",
     "matchesShort": "Partidas",
+    "ranking": "Ranking",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -1424,7 +1425,11 @@
       "toggleSign": "Cambiar el signo de los puntos de {{name}}",
       "preview": "Result",
       "save": "Record game",
-      "noHands": "Game recorded with the result only, no hands."
+      "noHands": "Game recorded with the result only, no hands.",
+      "confirmTitle": "Confirmar resultado",
+      "rankingTitle": "Ranking general: antes → después",
+      "firstGame": "1.ª partida",
+      "confirm": "Registrar"
     }
   },
   "spokenTiles": {

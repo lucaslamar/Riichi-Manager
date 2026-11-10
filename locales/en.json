@@ -24,6 +24,7 @@
     "centerpiece": "Centerpiece",
     "matches": "Match table",
     "matchesShort": "Matches",
+    "ranking": "Ranking",
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options"
@@ -1417,7 +1418,11 @@
       "toggleSign": "Flip the sign of {{name}}’s points",
       "preview": "Result",
       "save": "Record game",
-      "noHands": "Game recorded with the result only, no hands."
+      "noHands": "Game recorded with the result only, no hands.",
+      "confirmTitle": "Confirm result",
+      "rankingTitle": "Overall ranking: before → after",
+      "firstGame": "1st game",
+      "confirm": "Save"
     }
   },
   "spokenTiles": {
