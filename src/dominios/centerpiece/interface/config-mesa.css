@@ -295,53 +295,6 @@
   }
 }
 
-.reg-resumo {
-  width: 100%;
-}
-
-/* Card do Registrar: uma regra por linha, título à esquerda e valor à direita. */
-.reg-resumo {
-  align-items: flex-start;
-  padding: 12px 14px;
-}
-
-.reg-tabela {
-  display: grid;
-  flex: 1 1 auto;
-  gap: 6px;
-  margin: 0;
-}
-
-.reg-tabela > div {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  border-bottom: 1px solid var(--linha-divisoria);
-  padding-bottom: 6px;
-}
-
-.reg-tabela > div:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
-
-.reg-tabela dt {
-  color: var(--texto-apoio);
-  font-size: 0.875rem;
-}
-
-.reg-tabela dd {
-  margin: 0;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-}
-
-.reg-tabela > div:first-child dd {
-  color: var(--primario);
-}
-
 .reg-ajuda-lista {
   display: flex;
   flex-direction: column;

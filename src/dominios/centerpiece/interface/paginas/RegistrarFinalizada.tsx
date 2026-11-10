@@ -261,7 +261,6 @@ export default function RegistrarFinalizada({
         </p>
       )}
 
-      <p className="fin-titulo">{t('match.manual.rulesTitle')}</p>
       {torneio ? (
         <p className="cfg-ajuda">{t('tournament.tables.rulesLocked')}</p>
       ) : (

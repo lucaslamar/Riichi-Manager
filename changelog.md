@@ -4,7 +4,7 @@
 
 ### Adicionado
 
-- **Registrar partida mais limpo**: as regras de pontuação abrem pelo ícone de controles no topo da tela (a chave saiu do quadro, que continua abrindo ao tocar). Na confirmação, pontos, uma e oka viraram colunas pequenas com o título em cima, e a coluna Oka só aparece quando a partida tem oka.
+- **Registrar partida mais limpo**: as regras de pontuação abrem pelo ícone de controles no topo da tela, e o quadro com o resumo das regras saiu da tela. Na confirmação, pontos, uma e oka viraram colunas pequenas com o título em cima, e a coluna Oka só aparece quando a partida tem oka.
 - **Confirmação ao registrar partida finalizada**: o resultado saiu do fim da tela. Ao tocar em Registrar partida, abre uma confirmação com cada jogador: colocação, pontos, uma e oka, e como fica no ranking geral (posição e total, antes → depois, com a seta de subiu ou caiu). Depois de confirmar, o app abre o Ranking em vez do Histórico. No torneio, a confirmação mostra só o resultado da mesa.
 - **Títulos no Registrar partida finalizada**: Tipo de partida, Jogadores e pontos, Regras de pontuação e Resultado aparecem como títulos pequenos em caixa alta, no mesmo estilo do "É oya?" e do "Batida" do Han e Fu.
 - **Histórico com ícone de olho**: o botão "Ver" de cada partida virou um olho sem fundo, igual aos ícones de compartilhar e excluir ao lado.

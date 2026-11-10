@@ -33,10 +33,9 @@ function useResumo() {
 }
 
 /**
- * Regras de pontuação de "Registrar partida finalizada": só um card de resumo na
- * tela. Tocar nele (ou no ícone de controles do topo, que usa `editando`) abre a
- * folha com o conjunto (Clube · EMA · WRC) e os campos. Mudou qualquer valor, vira
- * Personalizado. Só o que muda a pontuação final aparece aqui.
+ * Regras de pontuação de "Registrar partida finalizada": a folha com o conjunto
+ * (Clube · EMA · WRC) e os campos, aberta pelo ícone de controles do topo. Mudou
+ * qualquer valor, vira Personalizado. Só o que muda a pontuação final aparece aqui.
  */
 export default function RegrasPontuacaoRegistro({
   conjunto,
@@ -50,58 +49,22 @@ export default function RegrasPontuacaoRegistro({
   regras: RegrasPontuacao
   aoSalvar: (conjunto: ConjuntoRegistro, regras: RegrasPontuacao) => void
   pontosAtuais?: readonly number[]
-  /** Folha aberta: a tela controla, porque o ícone do topo também abre. */
+  /** Folha aberta: quem abre é o ícone do topo da tela. */
   editando: boolean
   setEditando: (aberta: boolean) => void
 }) {
-  const { t, numero } = useI18n()
-  const resumo = useResumo()
-  const comOka = regras.pontosRetorno > regras.pontosPartida
-  const nome = t(`match.manual.rulesets.${conjunto}`)
-  const uma = umaResumida(regras.uma)
-  const linhas = [
-    { rotulo: t('tableConfig.preset'), valor: nome },
-    { rotulo: t('tableConfig.startPoints'), valor: numero(regras.pontosPartida) },
-    ...(comOka ? [{ rotulo: t('tableConfig.returnPoints'), valor: numero(regras.pontosRetorno) }] : []),
-    { rotulo: t('tableConfig.okaLabel'), valor: t(comOka ? 'tableConfig.okaWith' : 'tableConfig.okaWithout') },
-    {
-      rotulo: t('tableConfig.umaLabel'),
-      valor: uma ? `${t('tableConfig.umaFixed')} · ${uma}` : t('tableConfig.umaFloating'),
-    },
-  ]
-
+  if (!editando) return null
   return (
-    <div className="cfg-campo reg-regras">
-      <button
-        type="button"
-        className="ptd-resumo-regras reg-resumo"
-        aria-label={`${t('match.manual.editRules')}: ${nome}, ${resumo(regras)}`}
-        onClick={() => setEditando(true)}
-      >
-        {/* Uma regra por linha, com título e o valor escolhido: a tela tem espaço. */}
-        <dl className="reg-tabela">
-          {linhas.map(({ rotulo, valor }) => (
-            <div key={rotulo}>
-              <dt>{rotulo}</dt>
-              <dd>{valor}</dd>
-            </div>
-          ))}
-        </dl>
-      </button>
-
-      {editando && (
-        <FolhaRegras
-          conjuntoInicial={conjunto}
-          inicial={regras}
-          pontosAtuais={pontosAtuais}
-          aoFechar={() => setEditando(false)}
-          aoSalvar={(novoConjunto, novas) => {
-            aoSalvar(novoConjunto, novas)
-            setEditando(false)
-          }}
-        />
-      )}
-    </div>
+    <FolhaRegras
+      conjuntoInicial={conjunto}
+      inicial={regras}
+      pontosAtuais={pontosAtuais}
+      aoFechar={() => setEditando(false)}
+      aoSalvar={(novoConjunto, novas) => {
+        aoSalvar(novoConjunto, novas)
+        setEditando(false)
+      }}
+    />
   )
 }
 
