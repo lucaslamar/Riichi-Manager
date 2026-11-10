@@ -282,6 +282,13 @@ function TelasCenterpiece({
     texto: string
     aoTocar: () => void
   }
+  const cardHistorico: Card = {
+    chave: 'historico',
+    icone: 'fa-clock-rotate-left',
+    titulo: t('match.home.history'),
+    texto: t('match.home.historyHelp'),
+    aoTocar: () => setTela({ nome: 'historico' }),
+  }
   const cardsPartida: Card[] = [
     {
       chave: 'nova',
@@ -312,6 +319,8 @@ function TelasCenterpiece({
       aoTocar: () =>
         abertas.length === 1 ? abrirMesa({ nome: 'mesa', id: abertas[0].id }) : setTela({ nome: 'andamento' }),
     },
+    // Histórico também aqui: logo depois de jogar, é onde se procura a partida.
+    cardHistorico,
   ]
   // Menu Ranking: os resultados das partidas e o cadastro de quem joga.
   const cardsRanking: Card[] = [
@@ -322,13 +331,7 @@ function TelasCenterpiece({
       texto: t('match.home.rankingHelp'),
       aoTocar: () => setTela({ nome: 'ranking' }),
     },
-    {
-      chave: 'historico',
-      icone: 'fa-clock-rotate-left',
-      titulo: t('match.home.history'),
-      texto: t('match.home.historyHelp'),
-      aoTocar: () => setTela({ nome: 'historico' }),
-    },
+    cardHistorico,
     {
       chave: 'registrarFinalizada',
       icone: 'fa-clipboard-check',
