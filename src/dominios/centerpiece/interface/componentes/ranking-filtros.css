@@ -165,29 +165,45 @@
   font-weight: 700;
 }
 
+/* Chip do filtro ativo: etiqueta suave, sem contorno, com o X discreto. */
 .rkf-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 24px;
-  padding: 0 8px;
-  border: 1px solid var(--primario);
-  border-radius: 999px;
+  gap: 5px;
+  min-height: 22px;
+  padding: 0 6px 0 8px;
+  border: 0;
+  border-radius: 6px;
   color: var(--primario);
-  background: transparent;
-  font-size: 0.72rem;
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
   cursor: pointer;
 }
 
+.rkf-chip > i {
+  font-size: 0.6rem;
+  opacity: 0.6;
+}
+
+.rkf-chip:hover > i {
+  opacity: 1;
+}
+
 .rkf-limpar {
-  min-height: 24px;
-  padding: 0 6px;
+  min-height: 22px;
+  padding: 0 4px;
   border: 0;
   color: var(--texto-apoio);
   background: transparent;
-  font-size: 0.72rem;
-  text-decoration: underline;
+  font-size: 0.7rem;
+  opacity: 0.75;
   cursor: pointer;
+}
+
+.rkf-limpar:hover {
+  opacity: 1;
 }
 
 /* Bloco "Confrontos de X" no topo do ranking. */
