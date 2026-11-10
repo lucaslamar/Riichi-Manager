@@ -1481,13 +1481,15 @@
   },
   "tournament": {
     "share": {
-      "title": "Eksportuoti",
-      "roundHelp": "Šio raundo stalai ir rezultatai, kad nusiųstumėte grupei.",
-      "rankingHelp": "Turnyro lentelė, kad nusiųstumėte grupei.",
+      "title": "Share",
       "text": "Tekstas",
       "image": "Paveikslėlis",
       "imageSaved": "Paveikslėlis išsaugotas.",
-      "imageError": "Nepavyko sukurti paveikslėlio."
+      "imageError": "Nepavyko sukurti paveikslėlio.",
+      "textHelp": "Ready to paste in the group, with bold and a table",
+      "imageHelp": "A PNG in the app colors",
+      "pdfHelp": "The full table to print or keep",
+      "transferHelp": "The whole tournament to another device (file, QR or code)"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1714,6 +1716,7 @@
       "title": "Tournament ranking",
       "points": "Points",
       "averagePlace": "Average placement",
+      "pointsShort": "Pts",
       "averagePlaceShort": "Avg.",
       "games": "Games played",
       "gamesShort": "GP",
