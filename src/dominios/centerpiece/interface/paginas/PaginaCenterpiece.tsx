@@ -10,10 +10,9 @@ import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogado
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
-import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
 import { criarRascunho, nomeNoTorneio, torneioAtivo } from '@/dominios/torneio/logica/torneio'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
-import type { MesaDoSorteio } from '../../logica/encontroClube'
+import { mesasRegistradas, type MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
 import { useClube } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
@@ -102,8 +101,15 @@ function TelasCenterpiece({
   const { telaCheiaMesa } = usePreferencias()
   const { torneios, salvar: salvarTorneio } = useTorneios()
   const { jogadores } = useJogadores()
-  const subtituloTorneio = useSubtituloTorneio()
-  const ativo = torneioAtivo(torneios)
+  /** Rascunho ainda sem sorteio: o card Torneio continua nele em vez de criar outro. */
+  const rascunho = [...torneios]
+    .filter((torneio) => torneio.status === 'rascunho' && !torneio.transferidoEm)
+    .sort((um, outro) => outro.atualizadoEm.localeCompare(um.atualizadoEm))[0]
+  const emJogo = torneioAtivo(torneios.filter((torneio) => torneio.status === 'em_andamento'))
+  const torneiosEmJogo = torneios.filter((torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm)
+  const clubePendente = sorteio && mesasRegistradas(sorteio, partidas) < sorteio.mesas.length ? 1 : 0
+  /** O que o Em andamento lista: mesas abertas, o encontro pendente e os torneios em jogo. */
+  const totalEmAndamento = abertas.length + clubePendente + torneiosEmJogo.length
   /** Sem torneio em jogo, o card já cria o rascunho e abre a Lista do torneio. */
   const criarTorneio = () => {
     const agora = new Date()
@@ -293,6 +299,8 @@ function TelasCenterpiece({
         aoVoltar={irInicio}
         aoAbrirMesa={(id) => abrirMesa({ nome: 'mesa', id })}
         aoNovoSorteio={() => setTela({ nome: 'mesasSorteadas' })}
+        aoAbrirSorteio={() => setTela({ nome: 'mesasSorteadas' })}
+        aoAbrirTorneio={(id) => setTela({ nome: 'torneio', id })}
       />
     )
   }
@@ -303,6 +311,8 @@ function TelasCenterpiece({
     titulo: string
     texto: string
     aoTocar: () => void
+    /** Atalho dentro do card (ex.: o torneio em andamento). */
+    selo?: { texto: string; rotulo: string; aoTocar: () => void }
   }
   const cardHistorico: Card = {
     chave: 'historico',
@@ -323,8 +333,18 @@ function TelasCenterpiece({
       chave: 'torneio',
       icone: 'fa-trophy',
       titulo: t('tournament.title'),
-      texto: ativo ? subtituloTorneio(ativo) : t('tournament.create'),
-      aoTocar: () => setTela({ nome: 'torneio', id: ativo?.id ?? criarTorneio() }),
+      texto: t('tournament.create'),
+      // Sempre começa um torneio novo; um rascunho ainda sem sorteio é reaproveitado.
+      aoTocar: () => setTela({ nome: 'torneio', id: rascunho?.id ?? criarTorneio() }),
+      ...(emJogo
+        ? {
+            selo: {
+              texto: emJogo.nome,
+              rotulo: t('match.types.openTournament', { name: emJogo.nome }),
+              aoTocar: () => setTela({ nome: 'torneio', id: emJogo.id }),
+            },
+          }
+        : {}),
     },
     {
       chave: 'clube',
@@ -337,9 +357,12 @@ function TelasCenterpiece({
       chave: 'andamento',
       icone: 'fa-hourglass-half',
       titulo: t('match.home.inProgress'),
-      texto: t('match.home.openCount', { count: abertas.length }),
+      texto: t('match.home.inProgressCount', { count: totalEmAndamento }),
+      // Só uma partida aberta e nada mais: vai direto para ela.
       aoTocar: () =>
-        abertas.length === 1 ? abrirMesa({ nome: 'mesa', id: abertas[0].id }) : setTela({ nome: 'andamento' }),
+        abertas.length === 1 && totalEmAndamento === 1
+          ? abrirMesa({ nome: 'mesa', id: abertas[0].id })
+          : setTela({ nome: 'andamento' }),
     },
     // Histórico e Registrar ficam aqui, abaixo das opções de iniciar partida.
     cardHistorico,
@@ -361,16 +384,19 @@ function TelasCenterpiece({
       />
       <div className="ptd-cards">
         {cards.map((card) => (
-          <button
-            key={card.chave}
-            type="button"
-            className="ptd-card-inicio"
-            onClick={card.aoTocar}
-          >
-            <i className={`fas ${card.icone}`} aria-hidden="true" />
-            <strong>{card.titulo}</strong>
-            <span>{card.texto}</span>
-          </button>
+          <div key={card.chave} className="ptd-card-inicio-casca">
+            <button type="button" className="ptd-card-inicio" onClick={card.aoTocar}>
+              <i className={`fas ${card.icone}`} aria-hidden="true" />
+              <strong>{card.titulo}</strong>
+              <span>{card.texto}</span>
+            </button>
+            {card.selo && (
+              <button type="button" className="ptd-card-selo" aria-label={card.selo.rotulo} onClick={card.selo.aoTocar}>
+                <i className="fas fa-circle-play" aria-hidden="true" />
+                {card.selo.texto}
+              </button>
+            )}
+          </div>
         ))}
       </div>
     </section>

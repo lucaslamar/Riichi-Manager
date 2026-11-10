@@ -1090,19 +1090,11 @@ body:has(.ptd-modulo) {
     width: min(100%, 760px);
   }
 
-  /* 3 blocos de jogar em cima e 4 de consulta embaixo, sem vão na última linha. */
+  /* 3 blocos de jogar em cima e 3 de consulta embaixo. */
   .ptd-cards {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
-  }
-
-  .ptd-card-inicio {
-    grid-column: span 3;
-  }
-
-  .ptd-card-inicio:nth-child(-n + 3) {
-    grid-column: span 4;
   }
 
   .ptd-card-inicio {
@@ -1128,7 +1120,7 @@ body:has(.ptd-modulo) {
   /* Duas linhas na altura livre: 3 blocos de jogar em cima e 4 de consulta embaixo. */
   .ptd-cards {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-rows: minmax(120px, calc((100dvh - 41px - 24px - 8px) / 2));
     gap: 8px;
     margin-top: 0;
@@ -1137,16 +1129,11 @@ body:has(.ptd-modulo) {
   .ptd-card-inicio {
     display: flex;
     min-height: 0;
-    grid-column: span 3;
     flex-direction: column;
     justify-content: center;
     gap: 6px;
     padding: 6px;
     text-align: center;
-  }
-
-  .ptd-card-inicio:nth-child(-n + 3) {
-    grid-column: span 4;
   }
 
   .ptd-card-inicio > i {
@@ -1492,4 +1479,107 @@ body:has(.ptd-modulo) {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+/* Card do menu com um atalho dentro (ex.: o torneio em andamento no card Torneio). */
+.ptd-card-inicio-casca {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.ptd-card-inicio-casca > .ptd-card-inicio {
+  flex: 1;
+}
+
+.ptd-card-selo {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: calc(100% - 20px);
+  min-height: 24px;
+  padding: 0 8px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 6px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Em andamento: encontro do clube e torneios, que abrem as mesas deles. */
+.cm-andamento-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 14px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cm-andamento-item > i:first-child {
+  color: var(--primario);
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.cm-andamento-item > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cm-andamento-item small {
+  color: var(--texto-apoio);
+}
+
+.cm-andamento-item > i:last-child {
+  color: var(--texto-apoio);
+}
+
+/* Filtro de tipo (Todas · Partidas · Clube · Torneios): etiquetas pequenas. */
+.ptd-filtro-tipo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 10px;
+}
+
+.ptd-filtro-tipo-opcao {
+  min-height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--texto-apoio);
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ptd-filtro-tipo-opcao--ativa {
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+}
+
+.ptd-filtro-historico {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
 }
