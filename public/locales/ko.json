@@ -994,6 +994,16 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "종류",
+      "todas": "전체",
+      "avulsa": "대국",
+      "clube": "클럽",
+      "torneio": "대회",
+      "roundTable": "{{round}}라운드 · {{table}}번 탁",
+      "registeredOf": "{{total}}탁 중 {{count}}탁 기록됨",
+      "openTournament": "{{name}} 대회 열기"
+    },
     "player": {
       "open": "{{name}} 분석 열기",
       "seeCharts": "그래프 보기",
@@ -1136,6 +1146,9 @@
       "deleteHelp": "기록과 랭킹에서 사라져요. 되돌릴 수 없어요."
     },
     "home": {
+      "inProgressCount": {
+        "other": "진행 중 {{count}}"
+      },
       "clubTitle": "클럽 탁 배정",
       "clubHelp": "출석 명단과 탁 추첨",
       "title": "Centerpiece",
@@ -1339,6 +1352,8 @@
       }
     },
     "history": {
+      "search": "플레이어나 대회로 검색",
+      "noMatch": "이 필터에 맞는 대국이 없습니다.",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"

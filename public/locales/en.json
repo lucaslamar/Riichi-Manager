@@ -998,6 +998,16 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "Type",
+      "todas": "All",
+      "avulsa": "Games",
+      "clube": "Club",
+      "torneio": "Tournaments",
+      "roundTable": "Round {{round}} · Table {{table}}",
+      "registeredOf": "{{count}} of {{total}} tables recorded",
+      "openTournament": "Open tournament {{name}}"
+    },
     "player": {
       "open": "Open {{name}} analysis",
       "seeCharts": "See charts",
@@ -1152,6 +1162,10 @@
       "deleteHelp": "The game leaves the history and the ranking. This cannot be undone."
     },
     "home": {
+      "inProgressCount": {
+        "one": "{{count}} in progress",
+        "other": "{{count}} in progress"
+      },
       "clubTitle": "Organize club tables",
       "clubHelp": "Attendance list and table draw",
       "title": "Centerpiece",
@@ -1355,6 +1369,8 @@
       }
     },
     "history": {
+      "search": "Search by player or tournament",
+      "noMatch": "No games match these filters.",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"

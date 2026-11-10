@@ -994,6 +994,16 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "種類",
+      "todas": "すべて",
+      "avulsa": "対局",
+      "clube": "クラブ",
+      "torneio": "大会",
+      "roundTable": "第{{round}}回戦 · {{table}}卓",
+      "registeredOf": "{{total}}卓中 {{count}}卓 記録済み",
+      "openTournament": "大会「{{name}}」を開く"
+    },
     "player": {
       "open": "{{name}} の分析を開く",
       "seeCharts": "グラフを見る",
@@ -1136,6 +1146,9 @@
       "deleteHelp": "履歴とランキングから消えます。元に戻せません。"
     },
     "home": {
+      "inProgressCount": {
+        "other": "進行中 {{count}}"
+      },
       "clubTitle": "クラブの卓組み",
       "clubHelp": "出席リストと卓の抽選",
       "title": "Centerpiece",
@@ -1339,6 +1352,8 @@
       }
     },
     "history": {
+      "search": "プレイヤーまたは大会で検索",
+      "noMatch": "この条件に合う対局はありません。",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"

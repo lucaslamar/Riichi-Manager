@@ -994,6 +994,16 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "类型",
+      "todas": "全部",
+      "avulsa": "对局",
+      "clube": "俱乐部",
+      "torneio": "比赛",
+      "roundTable": "第 {{round}} 轮 · 第 {{table}} 桌",
+      "registeredOf": "已记录 {{count}}/{{total}} 桌",
+      "openTournament": "打开比赛 {{name}}"
+    },
     "player": {
       "open": "打开 {{name}} 的分析",
       "seeCharts": "查看图表",
@@ -1136,6 +1146,9 @@
       "deleteHelp": "对局会从历史和排名中移除，且无法撤销。"
     },
     "home": {
+      "inProgressCount": {
+        "other": "进行中 {{count}}"
+      },
       "clubTitle": "安排俱乐部牌桌",
       "clubHelp": "签到名单与抽签分桌",
       "title": "Centerpiece",
@@ -1339,6 +1352,8 @@
       }
     },
     "history": {
+      "search": "按玩家或比赛搜索",
+      "noMatch": "没有符合这些筛选条件的对局。",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"

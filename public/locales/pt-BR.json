@@ -998,6 +998,16 @@
     "checkFuritenHelp": "Cada jogador pode informar a própria mão para o app avisar se está em furiten."
   },
   "match": {
+    "types": {
+      "label": "Tipo",
+      "todas": "Todas",
+      "avulsa": "Partidas",
+      "clube": "Clube",
+      "torneio": "Torneios",
+      "roundTable": "Rodada {{round}} · Mesa {{table}}",
+      "registeredOf": "{{count}} de {{total}} mesas registradas",
+      "openTournament": "Abrir o torneio {{name}}"
+    },
     "player": {
       "open": "Abrir a análise de {{name}}",
       "seeCharts": "Ver gráficos",
@@ -1152,6 +1162,10 @@
       "deleteHelp": "A partida sai do histórico e do ranking. Não dá para desfazer."
     },
     "home": {
+      "inProgressCount": {
+        "one": "{{count}} em andamento",
+        "other": "{{count}} em andamento"
+      },
       "clubTitle": "Organizar mesas do clube",
       "clubHelp": "Lista de presença e sorteio de mesas",
       "title": "Centerpiece",
@@ -1355,6 +1369,8 @@
       }
     },
     "history": {
+      "search": "Buscar por jogador ou torneio",
+      "noMatch": "Nenhuma partida com esses filtros.",
       "empty": "Nenhuma partida finalizada ainda.",
       "tabMatches": "Partidas",
       "tabTournaments": "Torneios"

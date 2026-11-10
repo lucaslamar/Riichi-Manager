@@ -1015,6 +1015,16 @@
     "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
   },
   "match": {
+    "types": {
+      "label": "Tipas",
+      "todas": "Visos",
+      "avulsa": "Partijos",
+      "clube": "Klubas",
+      "torneio": "Turnyrai",
+      "roundTable": "{{round}} ratas · {{table}} stalas",
+      "registeredOf": "Užregistruota {{count}} iš {{total}} stalų",
+      "openTournament": "Atidaryti turnyrą {{name}}"
+    },
     "player": {
       "open": "Atidaryti {{name}} analizę",
       "seeCharts": "Žiūrėti grafikus",
@@ -1193,6 +1203,12 @@
       "deleteHelp": "Partija dings iš istorijos ir reitingo. Atšaukti nebus galima."
     },
     "home": {
+      "inProgressCount": {
+        "one": "Vyksta: {{count}}",
+        "few": "Vyksta: {{count}}",
+        "many": "Vyksta: {{count}}",
+        "other": "Vyksta: {{count}}"
+      },
       "clubTitle": "Klubo stalų sudarymas",
       "clubHelp": "Dalyvių sąrašas ir stalų burtai",
       "title": "Centerpiece",
@@ -1396,6 +1412,8 @@
       }
     },
     "history": {
+      "search": "Ieškoti pagal žaidėją ar turnyrą",
+      "noMatch": "Pagal šiuos filtrus partijų nėra.",
       "empty": "No finished games yet.",
       "tabMatches": "Matches",
       "tabTournaments": "Tournaments"
