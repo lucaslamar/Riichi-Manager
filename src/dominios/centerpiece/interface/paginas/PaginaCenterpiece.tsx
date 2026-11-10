@@ -1,4 +1,5 @@
-import { useRef, useState, type RefObject } from 'react'
+import { useEffect, useRef, useState, type RefObject } from 'react'
+import type { SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
 import { entrarTelaCheia } from '@/compartilhado/adaptadores/telaCheia'
 import { useGestoHorizontal } from '@/compartilhado/interface/hooks/useGestoHorizontal'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
@@ -80,6 +81,8 @@ interface PropsCenterpiece {
   /** Vizinhos na barra inferior, para o deslize no menu do módulo. */
   aoTelaAnterior?: () => void
   aoProximaTela?: () => void
+  /** Subitem do menu lateral: abre direto nesta tela (voltar leva ao menu da Partida). */
+  telaInicial?: SubtelaPartida
 }
 
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
@@ -89,6 +92,7 @@ function TelasCenterpiece({
   modo,
   aoTelaAnterior,
   aoProximaTela,
+  telaInicial,
   raiz,
 }: PropsCenterpiece & { raiz: RefObject<HTMLElement | null> }) {
   const { t, idioma } = useI18n()
@@ -102,7 +106,11 @@ function TelasCenterpiece({
    * Caminho percorrido no módulo: abrir empilha, voltar (seta ou deslizar o dedo)
    * desempilha. Assim cada tela volta para onde se veio, e não para um lugar fixo.
    */
-  const [pilha, setPilha] = useState<TelaModulo[]>([telaRaiz])
+  // Do menu lateral: a subtela já em cima do menu. O torneio precisa do id do
+  // rascunho, então entra pelo efeito logo abaixo.
+  const [pilha, setPilha] = useState<TelaModulo[]>(() =>
+    telaInicial && telaInicial !== 'torneio' ? [telaRaiz, { nome: telaInicial }] : [telaRaiz],
+  )
   const tela = pilha[pilha.length - 1]
   const abrir = (proxima: TelaModulo) => setPilha((atual) => [...atual, proxima])
   /** Troca a tela de cima (ex.: Nova partida vira o placar; voltar não reabre o setup). */
@@ -134,6 +142,17 @@ function TelasCenterpiece({
     salvarTorneio(novo)
     return novo.id
   }
+
+  // Subitem Torneio: como o card, continua no rascunho ou cria um. A referência
+  // evita criar dois no modo estrito do React (que roda o efeito duas vezes).
+  const torneioInicialAberto = useRef(false)
+  useEffect(() => {
+    if (telaInicial !== 'torneio' || torneioInicialAberto.current) return
+    torneioInicialAberto.current = true
+    abrir({ nome: 'torneio', id: rascunho?.id ?? criarTorneio() })
+    // Só na montagem: o subitem remonta o módulo a cada toque.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /** O navegador só deixa entrar em tela cheia dentro do toque, por isso fica aqui. */
   const abrirMesa = (mesa: TelaModulo) => {

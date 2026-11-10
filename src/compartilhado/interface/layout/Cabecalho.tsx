@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { TelaPrincipal } from '@/app/App'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
@@ -6,6 +6,8 @@ import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilh
 import { IconeMenu } from './IconeMenu'
 import {
   ITENS_NAVEGACAO,
+  SUBITENS_PARTIDA,
+  type SubtelaPartida,
   PAGINAS_NAVEGACAO,
   paginaDoDestino,
   type DestinoNavegacao,
@@ -18,6 +20,8 @@ interface PropsCabecalho {
   /** 'aprender' com o guia aberto: o item Tutorial fica marcado. */
   telaAtual: DestinoTela
   aoNavegar: (tela: TelaPrincipal) => void
+  /** Abre uma tela de dentro da Mesa partida (subitens do menu lateral). */
+  aoNavegarSubtela: (subtela: SubtelaPartida) => void
   /** Abre o guia Aprender a jogar, em tela cheia por cima de qualquer tela. */
   aoAbrirAprender: () => void
   /** Abre a folha de idiomas (o App a controla, porque ela também é parada do carrossel). */
@@ -34,6 +38,7 @@ interface PropsCabecalho {
 export default function Cabecalho({
   telaAtual,
   aoNavegar,
+  aoNavegarSubtela,
   aoAbrirAprender,
   aoAbrirIdioma,
 }: PropsCabecalho) {
@@ -132,16 +137,33 @@ export default function Cabecalho({
         {ITENS_NAVEGACAO.map((item) => {
           const ativo = item.destino === telaAtual
           return (
-            <button
-              key={item.destino}
-              className={`item-menu-global ${ativo ? 'ativo' : ''}`}
-              type="button"
-              aria-current={ativo ? 'page' : undefined}
-              onClick={() => escolher(item.destino)}
-            >
-              <IconeMenu icone={item.icone} />
-              <span>{t(item.chave)}</span>
-            </button>
+            <Fragment key={item.destino}>
+              <button
+                className={`item-menu-global ${ativo ? 'ativo' : ''}`}
+                type="button"
+                aria-current={ativo ? 'page' : undefined}
+                onClick={() => escolher(item.destino)}
+              >
+                <IconeMenu icone={item.icone} />
+                <span>{t(item.chave)}</span>
+              </button>
+              {/* Atalhos para as telas de dentro da Mesa partida. */}
+              {item.destino === 'partidas' &&
+                SUBITENS_PARTIDA.map((sub) => (
+                  <button
+                    key={sub.tela}
+                    className="item-menu-global item-menu-sub"
+                    type="button"
+                    onClick={() => {
+                      setMaisAberto(false)
+                      aoNavegarSubtela(sub.tela)
+                    }}
+                  >
+                    <i className={`fas ${sub.icone}`} aria-hidden="true" />
+                    <span>{t(sub.chave)}</span>
+                  </button>
+                ))}
+            </Fragment>
           )
         })}
       </div>

@@ -1,8 +1,8 @@
-import { lazy, Suspense, useCallback, useState } from 'react'
+import { lazy, Suspense, useCallback, useRef, useState } from 'react'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
-import { ORDEM_TELAS } from '@/compartilhado/interface/layout/navegacao'
+import { ORDEM_TELAS, type SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
 import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
@@ -32,6 +32,10 @@ export default function App() {
   const [simplesAberto, setSimplesAberto] = useState(false)
   const [entradaDoSimples, setEntradaDoSimples] = useState<'pedras' | 'notacao' | null>(null)
   const [idiomaAberto, setIdiomaAberto] = useState(false)
+  /** Subitem do menu lateral: a Mesa partida abre direto nesta tela. `chave` remonta a cada toque. */
+  const [subtela, setSubtela] = useState<{ tela: SubtelaPartida; chave: number } | null>(null)
+  // Contador próprio: `navegar` zera a subtela no mesmo ciclo, então a chave não pode vir dela.
+  const toquesSubtela = useRef(0)
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
   // a cada abertura, sempre na capa.
@@ -45,8 +49,17 @@ export default function App() {
     setGuia(null)
     setSimplesAberto(false)
     setEntradaDoSimples(null)
+    setSubtela(null)
     setTela(proxima)
   }, [])
+  const navegarSubtela = useCallback(
+    (destino: SubtelaPartida) => {
+      navegar('partidas')
+      toquesSubtela.current += 1
+      setSubtela({ tela: destino, chave: toquesSubtela.current })
+    },
+    [navegar],
+  )
 
   const abrirSorteadorDoSimples = () => {
     navegar('sorteadorVentos')
@@ -108,6 +121,7 @@ export default function App() {
       <Cabecalho
         telaAtual={guia ? 'aprender' : tela}
         aoNavegar={navegar}
+        aoNavegarSubtela={navegarSubtela}
         aoAbrirAprender={() => abrirGuia()}
         aoAbrirIdioma={() => setIdiomaAberto(true)}
       />
@@ -126,8 +140,9 @@ export default function App() {
           {/* O botão Centerpiece abre direto o simples; Mesa partida é o menu das partidas com pontos e Ranking, o dos resultados. */}
           {(tela === 'centerpiece' || tela === 'partidas' || tela === 'ranking') && (
             <PaginaCenterpiece
-              key={tela}
+              key={tela === 'partidas' && subtela ? `partidas-${subtela.chave}` : tela}
               modo={tela === 'centerpiece' ? 'simples' : tela}
+              telaInicial={tela === 'partidas' ? subtela?.tela : undefined}
               aoAbrirSorteador={abrirSorteadorDoSimples}
               aoAbrirCalculo={abrirCalculoDoSimples}
               aoTelaAnterior={telaAnterior && (() => irPara(telaAnterior))}

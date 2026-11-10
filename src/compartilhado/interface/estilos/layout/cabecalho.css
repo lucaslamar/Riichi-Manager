@@ -157,6 +157,22 @@
   text-align: left;
 }
 
+/* Subitens da Mesa partida: recuados, menores e mais leves que os itens principais. */
+.item-menu-global.item-menu-sub {
+  min-height: 34px;
+  margin-left: 22px;
+  padding: 4px 8px;
+  grid-template-columns: 18px 1fr;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.item-menu-sub > i {
+  font-size: 0.75rem;
+  text-align: center;
+  opacity: 0.8;
+}
+
 .item-menu-global:hover {
   border-color: var(--cor-borda, #d7dee8);
   border-left-color: var(--cor-borda, #d7dee8);
