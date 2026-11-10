@@ -47,7 +47,7 @@ type TelaModulo =
   | { nome: 'torneio'; id: string }
   | { nome: 'temporada'; id: string }
   /** `voltar`: de onde a mesa foi aberta (as Mesas sorteadas do torneio). */
-  | { nome: 'mesa'; id: string; voltar?: TelaModulo }
+  | { nome: 'mesa'; id: string }
   | {
       nome: 'registrarTorneio'
       torneioId: string
@@ -95,9 +95,19 @@ function TelasCenterpiece({
   const { partidas, abertas, guardarNome, descartar } = usePartidas()
   const { sorteio, marcarRegistrada } = useClube()
   // A aba Ranking abre direto na lista: ela é a raiz desse modo.
-  const telaRaiz: TelaModulo = { nome: modo === 'simples' ? 'simples' : modo === 'ranking' ? 'ranking' : 'inicio' }
-  const [tela, setTela] = useState<TelaModulo>(telaRaiz)
-  const irInicio = () => setTela(telaRaiz)
+  const telaRaiz: TelaModulo = {
+    nome: modo === 'simples' ? 'simples' : modo === 'ranking' ? 'ranking' : 'inicio',
+  }
+  /**
+   * Caminho percorrido no módulo: abrir empilha, voltar (seta ou deslizar o dedo)
+   * desempilha. Assim cada tela volta para onde se veio, e não para um lugar fixo.
+   */
+  const [pilha, setPilha] = useState<TelaModulo[]>([telaRaiz])
+  const tela = pilha[pilha.length - 1]
+  const abrir = (proxima: TelaModulo) => setPilha((atual) => [...atual, proxima])
+  /** Troca a tela de cima (ex.: Nova partida vira o placar; voltar não reabre o setup). */
+  const trocar = (proxima: TelaModulo) => setPilha((atual) => [...atual.slice(0, -1), proxima])
+  const voltar = () => setPilha((atual) => (atual.length > 1 ? atual.slice(0, -1) : [telaRaiz]))
   const { telaCheiaMesa } = usePreferencias()
   const { torneios, salvar: salvarTorneio } = useTorneios()
   const { jogadores } = useJogadores()
@@ -105,15 +115,22 @@ function TelasCenterpiece({
   const rascunho = [...torneios]
     .filter((torneio) => torneio.status === 'rascunho' && !torneio.transferidoEm)
     .sort((um, outro) => outro.atualizadoEm.localeCompare(um.atualizadoEm))[0]
-  const torneiosEmJogo = torneios.filter((torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm)
-  const clubePendente = sorteio && mesasRegistradas(sorteio, partidas) < sorteio.mesas.length ? 1 : 0
+  const torneiosEmJogo = torneios.filter(
+    (torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm,
+  )
+  const clubePendente =
+    sorteio && mesasRegistradas(sorteio, partidas) < sorteio.mesas.length ? 1 : 0
   /** O que o Em andamento lista: mesas abertas, o encontro pendente e os torneios em jogo. */
   const totalEmAndamento = abertas.length + clubePendente + torneiosEmJogo.length
   /** Sem torneio em jogo, o card já cria o rascunho e abre a Lista do torneio. */
   const criarTorneio = () => {
     const agora = new Date()
     const data = new Intl.DateTimeFormat(idioma, { day: '2-digit', month: '2-digit' }).format(agora)
-    const novo = criarRascunho({ id: gerarId(), agora, nome: t('tournament.defaultName', { date: data }) })
+    const novo = criarRascunho({
+      id: gerarId(),
+      agora,
+      nome: t('tournament.defaultName', { date: data }),
+    })
     salvarTorneio(novo)
     return novo.id
   }
@@ -121,35 +138,40 @@ function TelasCenterpiece({
   /** O navegador só deixa entrar em tela cheia dentro do toque, por isso fica aqui. */
   const abrirMesa = (mesa: TelaModulo) => {
     if (telaCheiaMesa) entrarTelaCheia()
-    setTela(mesa)
+    abrir(mesa)
   }
 
-  // No menu e no simples (que agora é a raiz do Centerpiece) segue o carrossel da
-  // barra inferior; dentro das outras telas, os dois sentidos voltam ao menu.
-  const naRaiz = tela.nome === telaRaiz.nome
+  // Na raiz, o dedo segue o carrossel da barra inferior. Dentro das outras telas,
+  // deslizar para a direita é o mesmo que a seta de voltar: um passo atrás.
+  const naRaiz = pilha.length === 1
   useGestoHorizontal({
     alvo: raiz,
-    aoDireita: naRaiz ? aoTelaAnterior : irInicio,
-    aoEsquerda: naRaiz ? aoProximaTela : irInicio,
+    aoDireita: naRaiz ? aoTelaAnterior : voltar,
+    aoEsquerda: naRaiz ? aoProximaTela : undefined,
   })
 
   if (tela.nome === 'setup') {
-    return <SetupPartida aoVoltar={irInicio} aoIniciar={(id) => abrirMesa({ nome: 'mesa', id })} />
+    return (
+      <SetupPartida
+        aoVoltar={voltar}
+        aoIniciar={(id) => {
+          if (telaCheiaMesa) entrarTelaCheia()
+          trocar({ nome: 'mesa', id })
+        }}
+      />
+    )
   }
   if (tela.nome === 'listaClube') {
     return (
-      <PaginaListaClube
-        aoVoltar={irInicio}
-        aoSortear={() => setTela({ nome: 'mesasSorteadas' })}
-      />
+      <PaginaListaClube aoVoltar={voltar} aoSortear={() => abrir({ nome: 'mesasSorteadas' })} />
     )
   }
   if (tela.nome === 'mesasSorteadas') {
     return (
       <PaginaMesasSorteadas
-        aoVoltar={() => setTela({ nome: 'listaClube' })}
+        aoVoltar={voltar}
         aoRegistrarMesa={(mesa) => {
-          if (sorteio) setTela({ nome: 'registrarClube', mesa, encontroId: sorteio.encontro.id })
+          if (sorteio) abrir({ nome: 'registrarClube', mesa, encontroId: sorteio.encontro.id })
         }}
       />
     )
@@ -159,22 +181,28 @@ function TelasCenterpiece({
       <RegistrarFinalizada
         key={`${tela.encontroId}-${tela.mesa.numero}`}
         clube={{ mesa: tela.mesa, encontroId: tela.encontroId }}
-        aoVoltar={() => setTela({ nome: 'mesasSorteadas' })}
+        aoVoltar={voltar}
         aoRegistrar={(id) => {
           // Volta às mesas: o organizador costuma registrar uma atrás da outra.
           marcarRegistrada(tela.mesa.numero, id)
-          setTela({ nome: 'mesasSorteadas' })
+          voltar()
         }}
       />
     )
   }
   if (tela.nome === 'registrarFinalizada') {
     return (
-      <RegistrarFinalizada aoVoltar={irInicio} aoRegistrar={() => setTela({ nome: 'ranking' })} />
+      <RegistrarFinalizada
+        aoVoltar={voltar}
+        // Depois de registrar, o Ranking: na aba Ranking é só voltar a ele.
+        aoRegistrar={() => (modo === 'ranking' ? voltar() : trocar({ nome: 'ranking' }))}
+      />
     )
   }
   if (tela.nome === 'simples') {
-    return <CenterpieceSimples aoAbrirSorteador={aoAbrirSorteador} aoAbrirCalculo={aoAbrirCalculo} />
+    return (
+      <CenterpieceSimples aoAbrirSorteador={aoAbrirSorteador} aoAbrirCalculo={aoAbrirCalculo} />
+    )
   }
   if (tela.nome === 'mesa') {
     const partida = partidas.find((item) => item.id === tela.id)
@@ -183,9 +211,9 @@ function TelasCenterpiece({
         <PlacarPartida
           key={partida.id}
           partida={partida}
-          aoSair={() => (tela.voltar ? setTela(tela.voltar) : irInicio())}
-          aoFinalizar={() => (tela.voltar ? setTela(tela.voltar) : irInicio())}
-          aoTrocarDeMesa={(id) => setTela({ nome: 'mesa', id })}
+          aoSair={voltar}
+          aoFinalizar={voltar}
+          aoTrocarDeMesa={(id) => trocar({ nome: 'mesa', id })}
         />
       )
     }
@@ -193,12 +221,14 @@ function TelasCenterpiece({
   if (tela.nome === 'jogadores') {
     return (
       <PaginaJogadores
-        aoVoltar={irInicio}
+        aoVoltar={voltar}
         usoDoJogador={(id) => {
           const uso = usoDoJogadorNasPartidas(partidas, id)
           return {
             partidasFinalizadas: uso.partidasFinalizadas,
-            mesasAbertas: uso.mesasAbertas.map((numero) => t('match.table.number', { number: numero })),
+            mesasAbertas: uso.mesasAbertas.map((numero) =>
+              t('match.table.number', { number: numero }),
+            ),
           }
         }}
         aoExcluir={(jogador) => guardarNome(jogador.id, nomeExibido(jogador))}
@@ -206,27 +236,31 @@ function TelasCenterpiece({
     )
   }
   if (tela.nome === 'historico') {
-    return <PaginaHistorico aoVoltar={irInicio} aoAbrirTorneio={(torneio) => setTela({ nome: 'torneio', id: torneio.id })}
-        aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
+    return (
+      <PaginaHistorico
+        aoVoltar={voltar}
+        aoAbrirTorneio={(torneio) => abrir({ nome: 'torneio', id: torneio.id })}
+        aoAbrirTemporada={(id) => abrir({ nome: 'temporada', id })}
       />
+    )
   }
   if (tela.nome === 'jogador') {
     return (
       <PaginaJogador
         key={tela.id}
         jogadorId={tela.id}
-        aoVoltar={() => setTela({ nome: 'ranking' })}
-        aoTrocarJogador={(id) => setTela({ nome: 'jogador', id })}
+        aoVoltar={voltar}
+        aoTrocarJogador={(id) => trocar({ nome: 'jogador', id })}
       />
     )
   }
   if (tela.nome === 'ranking') {
     return (
       <PaginaRanking
-        aoVoltar={modo === 'ranking' ? undefined : irInicio}
-        aoAbrirJogadores={() => setTela({ nome: 'jogadores' })}
-        aoAbrirJogador={(id) => setTela({ nome: 'jogador', id })}
-        aoRegistrarPartida={() => setTela({ nome: 'registrarFinalizada' })}
+        aoVoltar={modo === 'ranking' ? undefined : voltar}
+        aoAbrirJogadores={() => abrir({ nome: 'jogadores' })}
+        aoAbrirJogador={(id) => abrir({ nome: 'jogador', id })}
+        aoRegistrarPartida={() => abrir({ nome: 'registrarFinalizada' })}
       />
     )
   }
@@ -235,11 +269,11 @@ function TelasCenterpiece({
       <PaginaTorneio
         key={tela.id}
         torneioId={tela.id}
-        aoVoltar={irInicio}
-        aoAbrirTemporada={(id) => setTela({ nome: 'temporada', id })}
-        aoAbrirTorneio={(id) => setTela({ nome: 'torneio', id })}
+        aoVoltar={voltar}
+        aoAbrirTemporada={(id) => abrir({ nome: 'temporada', id })}
+        aoAbrirTorneio={(id) => abrir({ nome: 'torneio', id })}
         aoLancarResultado={(rodada, mesa, substituir) =>
-          setTela({
+          abrir({
             nome: 'registrarTorneio',
             torneioId: tela.id,
             rodada: rodada.numero,
@@ -252,9 +286,10 @@ function TelasCenterpiece({
   }
   if (tela.nome === 'registrarTorneio') {
     const torneio = torneios.find((item) => item.id === tela.torneioId)
-    const mesa = torneio?.rodadas.find((item) => item.numero === tela.rodada)?.mesas.find((item) => item.numero === tela.mesa)
+    const mesa = torneio?.rodadas
+      .find((item) => item.numero === tela.rodada)
+      ?.mesas.find((item) => item.numero === tela.mesa)
     const substituir = partidas.find((item) => item.id === tela.substituirId)
-    const voltar = () => setTela({ nome: 'torneio', id: tela.torneioId })
     if (torneio && mesa) {
       return (
         <RegistrarFinalizada
@@ -264,12 +299,17 @@ function TelasCenterpiece({
             config: torneio.config,
             jogadorIds: mesa.assentos,
             nomes: mesa.assentos.map((id) => nomeNoTorneio(torneio, jogadores, id)),
-            vinculo: { torneioId: torneio.id, rodada: tela.rodada - 1, mesa: tela.mesa - 1, guardada: true },
+            vinculo: {
+              torneioId: torneio.id,
+              rodada: tela.rodada - 1,
+              mesa: tela.mesa - 1,
+              guardada: true,
+            },
             pontosIniciais: substituir
               ? [0, 1, 2, 3].map(
                   (cadeira) =>
-                    substituir.resultado?.find((linha) => linha.cadeira === cadeira)?.pontosBrutos ??
-                    substituir.placar.pontos[cadeira as 0 | 1 | 2 | 3],
+                    substituir.resultado?.find((linha) => linha.cadeira === cadeira)
+                      ?.pontosBrutos ?? substituir.placar.pontos[cadeira as 0 | 1 | 2 | 3],
                 )
               : undefined,
           }}
@@ -287,8 +327,8 @@ function TelasCenterpiece({
     return (
       <PaginaTemporada
         temporadaId={tela.id}
-        aoVoltar={irInicio}
-        aoAbrirEncontro={(encontro) => setTela({ nome: 'torneio', id: encontro.id })}
+        aoVoltar={voltar}
+        aoAbrirEncontro={(encontro) => abrir({ nome: 'torneio', id: encontro.id })}
       />
     )
   }
@@ -296,10 +336,10 @@ function TelasCenterpiece({
   if (tela.nome === 'andamento') {
     return (
       <PaginaEmAndamento
-        aoVoltar={irInicio}
+        aoVoltar={voltar}
         aoAbrirMesa={(id) => abrirMesa({ nome: 'mesa', id })}
-        aoAbrirSorteio={() => setTela({ nome: 'mesasSorteadas' })}
-        aoAbrirTorneio={(id) => setTela({ nome: 'torneio', id })}
+        aoAbrirSorteio={() => abrir({ nome: 'mesasSorteadas' })}
+        aoAbrirTorneio={(id) => abrir({ nome: 'torneio', id })}
       />
     )
   }
@@ -316,7 +356,7 @@ function TelasCenterpiece({
     icone: 'fa-clock-rotate-left',
     titulo: t('match.home.history'),
     texto: t('match.home.historyHelp'),
-    aoTocar: () => setTela({ nome: 'historico' }),
+    aoTocar: () => abrir({ nome: 'historico' }),
   }
   const cardsPartida: Card[] = [
     {
@@ -324,7 +364,7 @@ function TelasCenterpiece({
       icone: 'fa-plus',
       titulo: t('match.home.newGame'),
       texto: t('match.home.newGameHelp'),
-      aoTocar: () => setTela({ nome: 'setup' }),
+      aoTocar: () => abrir({ nome: 'setup' }),
     },
     {
       chave: 'torneio',
@@ -332,14 +372,14 @@ function TelasCenterpiece({
       titulo: t('tournament.title'),
       texto: t('tournament.create'),
       // Sempre começa um torneio novo; um rascunho ainda sem sorteio é reaproveitado.
-      aoTocar: () => setTela({ nome: 'torneio', id: rascunho?.id ?? criarTorneio() }),
+      aoTocar: () => abrir({ nome: 'torneio', id: rascunho?.id ?? criarTorneio() }),
     },
     {
       chave: 'clube',
       icone: 'fa-table-cells-large',
       titulo: t('match.home.clubTitle'),
       texto: t('match.home.clubHelp'),
-      aoTocar: () => setTela({ nome: 'listaClube' }),
+      aoTocar: () => abrir({ nome: 'listaClube' }),
     },
     {
       chave: 'andamento',
@@ -350,7 +390,7 @@ function TelasCenterpiece({
       aoTocar: () =>
         abertas.length === 1 && totalEmAndamento === 1
           ? abrirMesa({ nome: 'mesa', id: abertas[0].id })
-          : setTela({ nome: 'andamento' }),
+          : abrir({ nome: 'andamento' }),
     },
     // Histórico e Registrar ficam aqui, abaixo das opções de iniciar partida.
     cardHistorico,
@@ -359,17 +399,14 @@ function TelasCenterpiece({
       icone: 'fa-clipboard-check',
       titulo: t('match.manual.title'),
       texto: t('match.manual.help'),
-      aoTocar: () => setTela({ nome: 'registrarFinalizada' }),
+      aoTocar: () => abrir({ nome: 'registrarFinalizada' }),
     },
   ]
   const cards = cardsPartida
 
   return (
     <section className="ptd-inicio">
-      <TituloTela
-        titulo={t('menu.matchesShort')}
-        acoes={<BotaoConfiguracoes />}
-      />
+      <TituloTela titulo={t('menu.matchesShort')} acoes={<BotaoConfiguracoes />} />
       <div className="ptd-cards">
         {cards.map((card) => (
           <button key={card.chave} type="button" className="ptd-card-inicio" onClick={card.aoTocar}>

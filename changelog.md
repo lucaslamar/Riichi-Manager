@@ -76,6 +76,7 @@
 
 ### Corrigido
 
+- **Voltar volta para onde você estava**: na Partida e no Ranking, a seta de voltar e o deslizar do dedo para a direita voltam um passo, para a tela de onde se veio (ex.: Em andamento → Mesas sorteadas → Em andamento), em vez de pular para um lugar fixo ou direto para o menu.
 - **Textos aparecendo como código depois de atualizar**: no celular, o app novo às vezes usava os textos antigos guardados e mostrava nomes como "menu.ranking" ou "tournament.share.textHelp". Agora os textos são buscados de novo sempre que mudam.
 - **Pontos negativos pelo teclado**: em todo campo de pontuação (Registrar partida finalizada, uma fixa e tabela de uma flutuante), o Android abre o teclado de telefone, que tem a tecla "-". No Registrar partida, fora de foco o número aparece com separador de milhar e os negativos ficam em vermelho.
 - **Sem oka explicado na tela**: com Sem oka, aparece por que não tem campo de retorno (o retorno é igual aos pontos de partida) e como ligar o oka.
