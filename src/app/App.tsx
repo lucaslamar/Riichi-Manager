@@ -20,6 +20,7 @@ export type TelaPrincipal =
   | 'sorteadorVentos'
   | 'centerpiece'
   | 'partidas'
+  | 'ranking'
   | 'regras'
 
 /**
@@ -93,7 +94,7 @@ export default function App() {
   // Teclado do sistema: barras e folhas sobem com ele, a barra inferior some.
   useAlturaTeclado()
   useDeslizeHorizontal({
-    ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece' && tela !== 'partidas',
+    ativo: indiceTela >= 0 && tela !== 'calculadora' && tela !== 'centerpiece' && tela !== 'partidas' && tela !== 'ranking',
     aoDeslizarDireita: sorteadorDoSimples
       ? voltarAoSimples
       : telaAnterior && (() => irPara(telaAnterior)),
@@ -122,11 +123,11 @@ export default function App() {
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
         {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
         <Suspense fallback={null}>
-          {/* O botão Centerpiece abre direto o simples; Mesa partida é o menu das partidas com pontos. */}
-          {(tela === 'centerpiece' || tela === 'partidas') && (
+          {/* O botão Centerpiece abre direto o simples; Mesa partida é o menu das partidas com pontos e Ranking, o dos resultados. */}
+          {(tela === 'centerpiece' || tela === 'partidas' || tela === 'ranking') && (
             <PaginaCenterpiece
               key={tela}
-              modo={tela === 'centerpiece' ? 'simples' : 'partidas'}
+              modo={tela === 'centerpiece' ? 'simples' : tela}
               aoAbrirSorteador={abrirSorteadorDoSimples}
               aoAbrirCalculo={abrirCalculoDoSimples}
               aoTelaAnterior={telaAnterior && (() => irPara(telaAnterior))}

@@ -73,8 +73,9 @@ interface PropsCenterpiece {
   /**
    * 'simples': o botão Centerpiece da barra, que abre direto a mesa simples.
    * 'partidas': Mesa partida, o menu das partidas com pontos.
+   * 'ranking': o menu dos resultados (ranking, histórico, registrar e jogadores).
    */
-  modo: 'simples' | 'partidas'
+  modo: 'simples' | 'partidas' | 'ranking'
   /** Vizinhos na barra inferior, para o deslize no menu do módulo. */
   aoTelaAnterior?: () => void
   aoProximaTela?: () => void
@@ -274,13 +275,14 @@ function TelasCenterpiece({
     )
   }
 
-  const cards: {
+  type Card = {
     chave: string
     icone: string
     titulo: string
     texto: string
     aoTocar: () => void
-  }[] = [
+  }
+  const cardsPartida: Card[] = [
     {
       chave: 'nova',
       icone: 'fa-plus',
@@ -303,19 +305,22 @@ function TelasCenterpiece({
       aoTocar: () => setTela({ nome: 'listaClube' }),
     },
     {
-      chave: 'registrarFinalizada',
-      icone: 'fa-clipboard-check',
-      titulo: t('match.manual.title'),
-      texto: t('match.manual.help'),
-      aoTocar: () => setTela({ nome: 'registrarFinalizada' }),
-    },
-    {
       chave: 'andamento',
       icone: 'fa-hourglass-half',
       titulo: t('match.home.inProgress'),
       texto: t('match.home.openCount', { count: abertas.length }),
       aoTocar: () =>
         abertas.length === 1 ? abrirMesa({ nome: 'mesa', id: abertas[0].id }) : setTela({ nome: 'andamento' }),
+    },
+  ]
+  // Menu Ranking: os resultados das partidas e o cadastro de quem joga.
+  const cardsRanking: Card[] = [
+    {
+      chave: 'ranking',
+      icone: 'fa-ranking-star',
+      titulo: t('match.home.ranking'),
+      texto: t('match.home.rankingHelp'),
+      aoTocar: () => setTela({ nome: 'ranking' }),
     },
     {
       chave: 'historico',
@@ -325,24 +330,28 @@ function TelasCenterpiece({
       aoTocar: () => setTela({ nome: 'historico' }),
     },
     {
+      chave: 'registrarFinalizada',
+      icone: 'fa-clipboard-check',
+      titulo: t('match.manual.title'),
+      texto: t('match.manual.help'),
+      aoTocar: () => setTela({ nome: 'registrarFinalizada' }),
+    },
+    {
       chave: 'jogadores',
       icone: 'fa-users',
       titulo: t('players.title'),
       texto: t('match.home.playersHelp'),
       aoTocar: () => setTela({ nome: 'jogadores' }),
     },
-    {
-      chave: 'ranking',
-      icone: 'fa-ranking-star',
-      titulo: t('match.home.ranking'),
-      texto: t('match.home.rankingHelp'),
-      aoTocar: () => setTela({ nome: 'ranking' }),
-    },
   ]
+  const cards = modo === 'ranking' ? cardsRanking : cardsPartida
 
   return (
     <section className="ptd-inicio">
-      <TituloTela titulo={t('menu.matchesShort')} acoes={<BotaoConfiguracoes />} />
+      <TituloTela
+        titulo={t(modo === 'ranking' ? 'menu.ranking' : 'menu.matchesShort')}
+        acoes={<BotaoConfiguracoes />}
+      />
       <div className="ptd-cards">
         {cards.map((card) => (
           <button

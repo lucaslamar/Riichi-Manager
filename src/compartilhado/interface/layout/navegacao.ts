@@ -28,6 +28,8 @@ export const PAGINAS_NAVEGACAO: readonly (readonly ItemNavegacao[])[] = [
   [
     { destino: 'sorteadorVentos', chave: 'menu.windDraw', icone: 'chapeu-helice', chaveCurta: 'menu.windDrawShort' },
     { destino: 'aprender', chave: 'learn.title', icone: 'fa-book-open', chaveCurta: 'learn.short' },
+    // Ranking, histórico, registrar partida finalizada e jogadores.
+    { destino: 'ranking', chave: 'menu.ranking', icone: 'fa-ranking-star' },
   ],
 ]
 
