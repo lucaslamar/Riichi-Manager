@@ -2,12 +2,17 @@ import { useMemo, useState } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
+import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import HistoricoTorneios from '@/dominios/torneio/interface/componentes/HistoricoTorneios'
 import type { Torneio } from '@/dominios/torneio/logica/tipos'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import type { Cadeira, Partida } from '../../logica/partida'
 import { partidasDoHistorico } from '../../logica/ranking'
+import { CADEIRAS } from '../../logica/partida'
+import { filtrarHistorico, type FiltroTipoMesa } from '../../logica/tipoDaMesa'
 import BotoesOpcao from '../componentes/BotoesOpcao'
+import FiltroTipo from '../componentes/FiltroTipo'
 import CardMesa from '../componentes/CardMesa'
 import ListaResultado from '../componentes/ListaResultado'
 import { ListaMaos, ModalConfirmacao } from '../componentes/ModaisPartida'
@@ -33,26 +38,59 @@ export default function PaginaHistorico({
   const [abertaId, setAbertaId] = useState<string | null>(null)
   const [paraExcluir, setParaExcluir] = useState<string | null>(null)
   const [aba, setAba] = useState<'partidas' | 'torneios'>('partidas')
-
-  const historico = useMemo(() => partidasDoHistorico(partidas), [partidas])
-  const aberta = historico.find((partida) => partida.id === abertaId)
+  const [tipo, setTipo] = useState<FiltroTipoMesa>('todas')
+  const [busca, setBusca] = useState('')
+  const { torneios } = useTorneios()
 
   // Quem saiu do cadastro aparece com o nome guardado na partida.
   const nomeNa = (partida: Partida) => (cadeira: Cadeira) =>
-    nomeDoAssento(jogadores, partida.assentos[cadeira], (nome) => t('players.deletedName', { name: nome }))
+    nomeDoAssento(jogadores, partida.assentos[cadeira], (nome) =>
+      t('players.deletedName', { name: nome }),
+    )
+  /** Onde a busca procura: os jogadores e, nas de torneio, o nome do torneio. */
+  const nomesParaBusca = (partida: Partida) => [
+    ...CADEIRAS.map(nomeNa(partida)),
+    ...CADEIRAS.flatMap((cadeira) => {
+      const jogador = jogadores.find((item) => item.id === partida.assentos[cadeira].jogadorId)
+      return jogador ? [jogador.nome, jogador.apelido ?? ''] : []
+    }),
+    torneios.find((torneio) => torneio.id === partida.vinculoTorneio?.torneioId)?.nome ?? '',
+  ]
+
+  const historico = useMemo(() => partidasDoHistorico(partidas), [partidas])
+  const filtrado = filtrarHistorico(historico, { tipo, busca }, nomesParaBusca)
+  const aberta = historico.find((partida) => partida.id === abertaId)
   const data = (iso: string | undefined) =>
     iso
-      ? new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(new Date(iso))
+      ? new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
+          new Date(iso),
+        )
       : ''
-  /** Mesa do encontro do clube, ou o tipo de partida para as avulsas. */
-  const tituloDa = (partida: Partida) =>
-    partida.encontro
-      ? t('match.table.number', { number: partida.encontro.mesa })
-      : t(partida.config.tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')
+  /** Torneio com rodada e mesa, mesa do encontro do clube, ou o tipo da avulsa. */
+  const tituloDa = (partida: Partida) => {
+    const vinculo = partida.vinculoTorneio
+    if (vinculo) {
+      const nome = torneios.find((torneio) => torneio.id === vinculo.torneioId)?.nome
+      return nome ?? t('match.types.torneio')
+    }
+    if (partida.encontro)
+      return `${t('match.club.meeting')} · ${t('match.table.number', { number: partida.encontro.mesa })}`
+    return t(
+      partida.config.tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan',
+    )
+  }
+
+  /** Rodada e mesa do torneio, na linha da data. */
+  const apoioDa = (partida: Partida) => {
+    const vinculo = partida.vinculoTorneio
+    return vinculo ? t('match.types.roundTable', { round: vinculo.rodada + 1, table: vinculo.mesa + 1 }) : undefined
+  }
 
   const compartilhar = async (partida: Partida) => {
-    const cabecalho = `${tituloDa(partida)} · ${data(partida.finalizadaEm)}`
-    const resultado = await compartilharTexto(textoDaPartida(partida, cabecalho, nomeNa(partida), t, numero))
+    const cabecalho = [tituloDa(partida), apoioDa(partida), data(partida.finalizadaEm)].filter(Boolean).join(' · ')
+    const resultado = await compartilharTexto(
+      textoDaPartida(partida, cabecalho, nomeNa(partida), t, numero),
+    )
     if (resultado === 'copiado') mostrar(t('match.club.copied'))
     if (resultado === 'falhou') mostrar(t('match.club.shareFailed'))
   }
@@ -89,21 +127,35 @@ export default function PaginaHistorico({
       ) : historico.length === 0 ? (
         <p className="ptd-vazio">{t('match.history.empty')}</p>
       ) : (
-        <ul className="cm-lista ptd-lista-historico">
-          {historico.map((partida) => (
-            <li key={partida.id}>
-              <CardMesa
-                partida={partida}
-                modo="historico"
-                titulo={tituloDa(partida)}
-                nomeDe={nomeNa(partida)}
-                aoAbrir={() => setAbertaId(partida.id)}
-                aoCompartilhar={() => void compartilhar(partida)}
-                aoExcluir={() => setParaExcluir(partida.id)}
-              />
-            </li>
-          ))}
-        </ul>
+        <>
+          <div className="ptd-filtro-historico">
+            <CampoBusca
+              valor={busca}
+              aoMudar={setBusca}
+              rotulo={t('match.history.search')}
+              placeholder={t('match.history.search')}
+              rotuloLimpar={t('actions.clear')}
+            />
+            <FiltroTipo valor={tipo} aoMudar={setTipo} />
+          </div>
+          {filtrado.length === 0 && <p className="ptd-vazio">{t('match.history.noMatch')}</p>}
+          <ul className="cm-lista ptd-lista-historico">
+            {filtrado.map((partida) => (
+              <li key={partida.id}>
+                <CardMesa
+                  partida={partida}
+                  modo="historico"
+                  titulo={tituloDa(partida)}
+                apoio={apoioDa(partida)}
+                  nomeDe={nomeNa(partida)}
+                  aoAbrir={() => setAbertaId(partida.id)}
+                  aoCompartilhar={() => void compartilhar(partida)}
+                  aoExcluir={() => setParaExcluir(partida.id)}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
 
       {aviso && (
@@ -128,3 +180,4 @@ export default function PaginaHistorico({
     </section>
   )
 }
+

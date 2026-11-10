@@ -22,6 +22,8 @@ interface PropsCardMesa {
   modo: 'andamento' | 'historico'
   /** "Mesa 1", ou o tipo de partida no histórico. */
   titulo: string
+  /** Linha de apoio antes da hora (ex.: "Rodada 2 · Mesa 1" no torneio). */
+  apoio?: string
   nomeDe: (cadeira: Cadeira) => string
   aoAbrir: () => void
   aoCompartilhar: () => void
@@ -36,6 +38,7 @@ export default function CardMesa({
   partida,
   modo,
   titulo,
+  apoio,
   nomeDe,
   aoAbrir,
   aoCompartilhar,
@@ -78,10 +81,11 @@ export default function CardMesa({
       <header className="cm-topo">
         <div className="cm-titulo">
           <strong>{cabecalho}</strong>
-          {hora && (
-            <time className="cm-hora" dateTime={momento}>
-              {hora}
-            </time>
+          {(apoio || hora) && (
+            <span className="cm-hora">
+              {apoio && `${apoio} · `}
+              {hora && <time dateTime={momento}>{hora}</time>}
+            </span>
           )}
         </div>
         <div className="cm-acoes">
