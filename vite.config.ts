@@ -51,6 +51,8 @@ export default defineConfig({
 
   define: {
     __VERSAO_TEXTOS__: JSON.stringify(versaoDosTextos()),
+    // Vai no arquivo de backup, para saber de que versão do app ele saiu.
+    __VERSAO_APP__: JSON.stringify(JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf8')).version),
   },
 
   resolve: {
