@@ -21,6 +21,13 @@ import {
   posicoesDoRanking,
   semExcluidos,
 } from '../src/dominios/centerpiece/logica/ranking'
+import {
+  FILTROS_PADRAO,
+  computeRanking,
+  filtrosAtivos,
+  lerFiltros,
+  rivaisEFregueses,
+} from '../src/dominios/centerpiece/logica/filtrosRanking'
 
 /**
  * Base dos testes: 25.000/30.000 (com oka) e uma 15/5, fixa aqui para os testes
@@ -226,6 +233,58 @@ teste('mudança no ranking: antes e depois da partida nova', () => {
   assert.equal(mudancas[2].antes, null, 'estreia no ranking')
   assert.deepEqual([a.antes, a.depois], [{ total: -5, posicao: 2 }, { total: 40, posicao: 2 }])
   assert.deepEqual(mudancas[2].depois, { total: -35, posicao: 4 })
+})
+
+/** Partida registrada fora do app, com os pontos de a, b, c e d nessa ordem. */
+function manual(id: string, pontos: [number, number, number, number], data: string, tipo: 'leste' | 'hanchan' = 'hanchan') {
+  return criarPartidaManual(id, alterarConfig(BASE, { tipoPartida: tipo }), {
+    jogadorIds: ['a', 'b', 'c', 'd'],
+    nomes: [],
+    pontos,
+    pontosPartida: 25000,
+    pontosRetorno: 30000,
+    uma: umaFixa([15, 5, -5, -15]),
+  }, data)
+}
+
+// 4 jogadores e 3 partidas: a vence c e d sempre, b vence a duas vezes.
+const TRES = [
+  manual('p1', [40000, 30000, 20000, 10000], '2026-11-01T12:00:00.000Z'),
+  manual('p2', [30000, 40000, 20000, 10000], '2026-11-02T12:00:00.000Z', 'leste'),
+  manual('p3', [30000, 40000, 10000, 20000], '2026-10-15T12:00:00.000Z'),
+]
+
+teste('rivais e fregueses: 4 jogadores e 3 partidas', () => {
+  const { rivais, fregueses } = rivaisEFregueses(TRES, 'a')
+  assert.deepEqual(rivais, [{ adversarioId: 'b', vitorias: 1, derrotas: 2, partidas: 3 }])
+  assert.deepEqual(fregueses.map((item) => [item.adversarioId, item.vitorias, item.derrotas]), [['c', 3, 0], ['d', 3, 0]])
+  const deB = rivaisEFregueses(TRES, 'b')
+  assert.deepEqual(deB.rivais, [], 'ninguém vence b no saldo')
+  assert.deepEqual(deB.fregueses.map((item) => item.adversarioId), ['c', 'd', 'a'])
+  assert.deepEqual(rivaisEFregueses(TRES.slice(0, 1), 'a'), { rivais: [], fregueses: [] }, 'mínimo de 2 partidas juntos')
+})
+
+teste('computeRanking: filtros de duração, origem, período, jogador e mínimo', () => {
+  const tudo = computeRanking(TRES, FILTROS_PADRAO, AGORA)
+  assert.deepEqual(tudo.map((linha) => linha.jogadorId), ['b', 'a', 'c', 'd'])
+  assert.equal(computeRanking(TRES, { ...FILTROS_PADRAO, duracao: 'leste' }, AGORA)[0].partidas, 1)
+  assert.equal(computeRanking(TRES, { ...FILTROS_PADRAO, duracao: 'hanchan' }, AGORA)[0].partidas, 2)
+  assert.deepEqual(computeRanking(TRES, { ...FILTROS_PADRAO, origem: 'app' }, AGORA), [], 'todas são manuais')
+  assert.equal(computeRanking(TRES, { ...FILTROS_PADRAO, origem: 'fora' }, AGORA).length, 4)
+  assert.equal(computeRanking(TRES, { ...FILTROS_PADRAO, periodo: 'mes' }, AGORA)[0].partidas, 2)
+  const outubro = { ...FILTROS_PADRAO, periodo: 'personalizado' as const, inicio: '2026-10-01', fim: '2026-10-31' }
+  assert.equal(computeRanking(TRES, outubro, AGORA)[0].partidas, 1)
+  assert.deepEqual(computeRanking(TRES, { ...FILTROS_PADRAO, minimoPartidas: 5 }, AGORA), [])
+  assert.deepEqual(computeRanking(TRES, { ...FILTROS_PADRAO, ordenarPor: 'media' }, AGORA)[0].jogadorId, 'b')
+  assert.equal(computeRanking([...TRES, finalizada(new Date(2026, 10, 3))], { ...FILTROS_PADRAO, jogadorId: 'd' }, AGORA)[0].partidas, 4)
+  assert.deepEqual(computeRanking(TRES, { ...FILTROS_PADRAO, jogadorId: 'x' }, AGORA), [], 'só partidas do jogador')
+})
+
+teste('filtros: ativos e leitura do salvo', () => {
+  assert.deepEqual(filtrosAtivos(FILTROS_PADRAO), [])
+  assert.deepEqual(filtrosAtivos({ ...FILTROS_PADRAO, periodo: 'mes', duracao: 'hanchan' }), ['duracao'])
+  assert.deepEqual(lerFiltros('lixo'), FILTROS_PADRAO)
+  assert.deepEqual(lerFiltros(JSON.stringify({ origem: 'app', minimoPartidas: 7 })), { ...FILTROS_PADRAO, origem: 'app' })
 })
 
 console.log(`Ranking ok: ${testes} testes.`)
