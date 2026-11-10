@@ -1000,6 +1000,7 @@
       "avulsa": "対局",
       "clube": "クラブ",
       "torneio": "大会",
+      "inProgressTag": "進行中",
       "roundTable": "第{{round}}回戦 · {{table}}卓",
       "registeredOf": "{{total}}卓中 {{count}}卓 記録済み",
       "openTournament": "大会「{{name}}」を開く"

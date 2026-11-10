@@ -41,16 +41,23 @@ export default function PaginaListaTorneio({
   aoVoltar,
   aoSortear,
   aoImportado,
+  aoAbrirTorneio,
 }: {
   torneio: Torneio
   aoVoltar: () => void
   aoSortear: () => void
   /** Torneio que chegou de outro aparelho: abre no lugar deste rascunho. */
   aoImportado: (torneioId: string) => void
+  /** Abre outro torneio (o selo do que está em jogo). */
+  aoAbrirTorneio?: (torneioId: string) => void
 }) {
   const { t, numero } = useI18n()
   const { jogadores, adicionar } = useJogadores()
-  const { lista, listas, definirLista, guardarLista, excluirLista, salvar, excluir } = useTorneios()
+  const { lista, listas, definirLista, guardarLista, excluirLista, salvar, excluir, torneios } = useTorneios()
+  /** Torneio em jogo, para continuar dele sem sair da criação deste. */
+  const emJogo = [...torneios]
+    .filter((item) => item.status === 'em_andamento' && !item.transferidoEm && item.id !== torneio.id)
+    .sort((um, outro) => outro.atualizadoEm.localeCompare(um.atualizadoEm))[0]
   const { aviso, mostrar } = useAviso()
   const raiz = useRef<HTMLElement | null>(null)
   const campo = useRef<HTMLTextAreaElement | null>(null)
@@ -192,6 +199,19 @@ export default function PaginaListaTorneio({
           </span>
         }
       />
+
+      {emJogo && aoAbrirTorneio && (
+        <button
+          type="button"
+          className="trn-selo-em-jogo"
+          aria-label={t('match.types.openTournament', { name: emJogo.nome })}
+          onClick={() => aoAbrirTorneio(emJogo.id)}
+        >
+          <i className="fas fa-circle-play" aria-hidden="true" />
+          <span>{emJogo.nome}</span>
+          <small>{t('match.types.inProgressTag')}</small>
+        </button>
+      )}
 
       <div className="clb-folha" style={estiloFolha}>
         <ol className="clb-marcadores" aria-hidden="true">

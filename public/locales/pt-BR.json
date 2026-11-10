@@ -1004,6 +1004,7 @@
       "avulsa": "Partidas",
       "clube": "Clube",
       "torneio": "Torneios",
+      "inProgressTag": "em andamento",
       "roundTable": "Rodada {{round}} · Mesa {{table}}",
       "registeredOf": "{{count}} de {{total}} mesas registradas",
       "openTournament": "Abrir o torneio {{name}}"

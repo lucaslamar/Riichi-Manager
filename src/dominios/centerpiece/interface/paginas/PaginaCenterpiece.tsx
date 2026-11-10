@@ -10,7 +10,7 @@ import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogado
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
-import { criarRascunho, nomeNoTorneio, torneioAtivo } from '@/dominios/torneio/logica/torneio'
+import { criarRascunho, nomeNoTorneio } from '@/dominios/torneio/logica/torneio'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { mesasRegistradas, type MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
@@ -105,7 +105,6 @@ function TelasCenterpiece({
   const rascunho = [...torneios]
     .filter((torneio) => torneio.status === 'rascunho' && !torneio.transferidoEm)
     .sort((um, outro) => outro.atualizadoEm.localeCompare(um.atualizadoEm))[0]
-  const emJogo = torneioAtivo(torneios.filter((torneio) => torneio.status === 'em_andamento'))
   const torneiosEmJogo = torneios.filter((torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm)
   const clubePendente = sorteio && mesasRegistradas(sorteio, partidas) < sorteio.mesas.length ? 1 : 0
   /** O que o Em andamento lista: mesas abertas, o encontro pendente e os torneios em jogo. */
@@ -298,7 +297,6 @@ function TelasCenterpiece({
       <PaginaEmAndamento
         aoVoltar={irInicio}
         aoAbrirMesa={(id) => abrirMesa({ nome: 'mesa', id })}
-        aoNovoSorteio={() => setTela({ nome: 'mesasSorteadas' })}
         aoAbrirSorteio={() => setTela({ nome: 'mesasSorteadas' })}
         aoAbrirTorneio={(id) => setTela({ nome: 'torneio', id })}
       />
@@ -311,8 +309,6 @@ function TelasCenterpiece({
     titulo: string
     texto: string
     aoTocar: () => void
-    /** Atalho dentro do card (ex.: o torneio em andamento). */
-    selo?: { texto: string; rotulo: string; aoTocar: () => void }
   }
   const cardHistorico: Card = {
     chave: 'historico',
@@ -336,15 +332,6 @@ function TelasCenterpiece({
       texto: t('tournament.create'),
       // Sempre começa um torneio novo; um rascunho ainda sem sorteio é reaproveitado.
       aoTocar: () => setTela({ nome: 'torneio', id: rascunho?.id ?? criarTorneio() }),
-      ...(emJogo
-        ? {
-            selo: {
-              texto: emJogo.nome,
-              rotulo: t('match.types.openTournament', { name: emJogo.nome }),
-              aoTocar: () => setTela({ nome: 'torneio', id: emJogo.id }),
-            },
-          }
-        : {}),
     },
     {
       chave: 'clube',
@@ -384,19 +371,11 @@ function TelasCenterpiece({
       />
       <div className="ptd-cards">
         {cards.map((card) => (
-          <div key={card.chave} className="ptd-card-inicio-casca">
-            <button type="button" className="ptd-card-inicio" onClick={card.aoTocar}>
-              <i className={`fas ${card.icone}`} aria-hidden="true" />
-              <strong>{card.titulo}</strong>
-              <span>{card.texto}</span>
-            </button>
-            {card.selo && (
-              <button type="button" className="ptd-card-selo" aria-label={card.selo.rotulo} onClick={card.selo.aoTocar}>
-                <i className="fas fa-circle-play" aria-hidden="true" />
-                {card.selo.texto}
-              </button>
-            )}
-          </div>
+          <button key={card.chave} type="button" className="ptd-card-inicio" onClick={card.aoTocar}>
+            <i className={`fas ${card.icone}`} aria-hidden="true" />
+            <strong>{card.titulo}</strong>
+            <span>{card.texto}</span>
+          </button>
         ))}
       </div>
     </section>

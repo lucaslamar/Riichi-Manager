@@ -1015,3 +1015,33 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .trn-compartilhar .fa-whatsapp {
   color: #25d366;
 }
+
+/* Lista do torneio: selo do torneio em jogo, para continuar dele. */
+.trn-selo-em-jogo {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-height: 28px;
+  margin: 8px 0 4px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.trn-selo-em-jogo span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trn-selo-em-jogo small {
+  font-weight: 400;
+  opacity: 0.8;
+}

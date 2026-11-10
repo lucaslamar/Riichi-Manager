@@ -1004,6 +1004,7 @@
       "avulsa": "Games",
       "clube": "Club",
       "torneio": "Tournaments",
+      "inProgressTag": "in progress",
       "roundTable": "Round {{round}} · Table {{table}}",
       "registeredOf": "{{count}} of {{total}} tables recorded",
       "openTournament": "Open tournament {{name}}"

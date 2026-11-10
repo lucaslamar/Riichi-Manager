@@ -1000,6 +1000,7 @@
       "avulsa": "대국",
       "clube": "클럽",
       "torneio": "대회",
+      "inProgressTag": "진행 중",
       "roundTable": "{{round}}라운드 · {{table}}번 탁",
       "registeredOf": "{{total}}탁 중 {{count}}탁 기록됨",
       "openTournament": "{{name}} 대회 열기"

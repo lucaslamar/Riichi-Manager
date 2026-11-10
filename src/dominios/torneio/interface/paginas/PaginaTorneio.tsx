@@ -41,7 +41,7 @@ export default function PaginaTorneio({
   }
 
   if (torneio.status === 'rascunho') {
-    return <PaginaListaTorneio torneio={torneio} aoVoltar={aoVoltar} aoSortear={() => undefined} aoImportado={aoAbrirTorneio} />
+    return <PaginaListaTorneio torneio={torneio} aoVoltar={aoVoltar} aoSortear={() => undefined} aoImportado={aoAbrirTorneio} aoAbrirTorneio={aoAbrirTorneio} />
   }
 
   if (vendoRanking) {

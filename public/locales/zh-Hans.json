@@ -1000,6 +1000,7 @@
       "avulsa": "对局",
       "clube": "俱乐部",
       "torneio": "比赛",
+      "inProgressTag": "进行中",
       "roundTable": "第 {{round}} 轮 · 第 {{table}} 桌",
       "registeredOf": "已记录 {{count}}/{{total}} 桌",
       "openTournament": "打开比赛 {{name}}"

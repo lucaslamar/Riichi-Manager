@@ -1021,6 +1021,7 @@
       "avulsa": "Partijos",
       "clube": "Klubas",
       "torneio": "Turnyrai",
+      "inProgressTag": "vyksta",
       "roundTable": "{{round}} ratas · {{table}} stalas",
       "registeredOf": "Užregistruota {{count}} iš {{total}} stalų",
       "openTournament": "Atidaryti turnyrą {{name}}"

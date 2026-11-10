@@ -1481,39 +1481,6 @@ body:has(.ptd-modulo) {
   font-weight: 600;
 }
 
-/* Card do menu com um atalho dentro (ex.: o torneio em andamento no card Torneio). */
-.ptd-card-inicio-casca {
-  position: relative;
-  display: flex;
-  min-width: 0;
-}
-
-.ptd-card-inicio-casca > .ptd-card-inicio {
-  flex: 1;
-}
-
-.ptd-card-selo {
-  position: absolute;
-  right: 10px;
-  bottom: 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  max-width: calc(100% - 20px);
-  min-height: 24px;
-  padding: 0 8px;
-  overflow: hidden;
-  border: 0;
-  border-radius: 6px;
-  color: var(--primario);
-  background: color-mix(in srgb, var(--primario) 14%, transparent);
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
 /* Em andamento: encontro do clube e torneios, que abrem as mesas deles. */
 .cm-andamento-item {
   display: grid;
