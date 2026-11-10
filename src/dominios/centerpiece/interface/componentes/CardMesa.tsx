@@ -105,7 +105,7 @@ export default function CardMesa({
           </button>
           <button
             type="button"
-            className={`btn-primario cm-abrir${historico ? ' cm-abrir--icone' : ''}`}
+            className={historico ? 'cm-btn-icone' : 'btn-primario cm-abrir'}
             aria-label={t(historico ? 'match.cards.viewNamed' : 'match.cards.openNamed', { table: cabecalho })}
             title={historico ? t('match.cards.view') : undefined}
             onClick={aoAbrir}
