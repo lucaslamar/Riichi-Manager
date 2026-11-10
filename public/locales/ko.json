@@ -617,6 +617,8 @@
     "tabs": "설정 탭"
   },
   "pages": {
+    "matchDetails": "대국 상세 기록",
+    "matchDetailsHelp": "국별 기록을 남길 끝난 대국 수입니다. 오래된 대국은 결과만 남고 랭킹과 기록에는 계속 표시됩니다.",
     "languageHelp": "앱에 표시되는 언어.",
     "installTitle": "Mojoca 설치",
     "installHelp": "아이콘으로 열리고 브라우저 막대 없이 오프라인에서도 작동합니다.",

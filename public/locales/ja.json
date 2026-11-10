@@ -617,6 +617,8 @@
     "tabs": "設定のタブ"
   },
   "pages": {
+    "matchDetails": "対局の詳細",
+    "matchDetailsHelp": "局ごとの記録を残す終了済み対局の数です。古い対局は結果だけが残り、ランキングと履歴には引き続き表示されます。",
     "languageHelp": "アプリの表示言語。",
     "installTitle": "Mojocaをインストール",
     "installHelp": "アイコンから開き、ブラウザのバーなしでオフラインでも使えます。",

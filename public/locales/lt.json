@@ -635,6 +635,8 @@
     "tabs": "Nustatymų skirtukai"
   },
   "pages": {
+    "matchDetails": "Partijų detalės",
+    "matchDetailsHelp": "Kiek baigtų partijų saugo kiekvieną dalijimą. Senesnėse lieka tik rezultatas, kuris toliau rodomas reitinge ir istorijoje.",
     "languageHelp": "Programėlės tekstų kalba.",
     "installTitle": "Įdiegti Mojoca",
     "installHelp": "Atsidaro iš piktogramos, be naršyklės juostos, ir veikia neprisijungus.",

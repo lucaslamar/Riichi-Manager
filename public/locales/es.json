@@ -626,6 +626,8 @@
     "tabs": "Pestañas de configuración"
   },
   "pages": {
+    "matchDetails": "Detalles de las partidas",
+    "matchDetailsHelp": "Cuántas partidas finalizadas guardan el mano a mano. Las más antiguas quedan solo con el resultado, que sigue en el ranking y el historial.",
     "languageHelp": "Idioma de los textos de la app.",
     "installTitle": "Instalar Mojoca",
     "installHelp": "Se abre desde su icono, sin la barra del navegador, y funciona sin conexión.",

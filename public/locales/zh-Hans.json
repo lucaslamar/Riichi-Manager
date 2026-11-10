@@ -617,6 +617,8 @@
     "tabs": "设置标签页"
   },
   "pages": {
+    "matchDetails": "对局详情",
+    "matchDetailsHelp": "保留逐局记录的已结束对局数量。更早的对局只保留结果，仍会显示在排名和历史中。",
     "languageHelp": "应用文字的语言。",
     "installTitle": "安装 Mojoca",
     "installHelp": "从图标打开，没有浏览器栏，也可离线使用。",

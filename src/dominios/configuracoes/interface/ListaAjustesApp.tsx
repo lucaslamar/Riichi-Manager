@@ -1,9 +1,12 @@
-import { useId, type ReactNode } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { entrarTelaCheia, suportaTelaCheia } from '@/compartilhado/adaptadores/telaCheia'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { IDIOMAS_SUPORTADOS, ROTULOS_IDIOMA, type IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
 import { usePreferencias, type PreferenciaPedras } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { PreferenciaTema } from '@/compartilhado/tema/temas'
+import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
+import { CHAVE_LIMITE_DETALHES } from '@/services/storage/armazenamentoDados'
+import { lerLimiteDetalhes } from '@/services/storage/partidaArmazenada'
 import './pagina-regras.css'
 
 const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
@@ -11,6 +14,9 @@ const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
   { valor: 'escuro', chave: 'pages.themeVelvet' },
   { valor: 'automatico', chave: 'pages.themeAuto' },
 ]
+
+/** Quantas partidas finalizadas guardam o mão a mão; as mais antigas ficam só com o resultado. */
+const OPCOES_LIMITE_DETALHES = [50, 100, 250, 500] as const
 
 const OPCOES_PEDRAS: { valor: PreferenciaPedras; chave: string }[] = [
   { valor: 'brancas', chave: 'pages.tilesWhite' },
@@ -152,7 +158,40 @@ export default function ListaAjustesApp({ antesDaTela }: {
           aoMudar={(ligado) => preferencias.alterar('telaAcesaMesa', ligado)}
         />
       )}
+      <CartaoLimiteDetalhes />
     </>
+  )
+}
+
+/**
+ * "Guardar detalhes das últimas N partidas": o mão a mão das mais antigas sai
+ * para poupar espaço; o resultado delas fica para sempre no ranking e no histórico.
+ */
+function CartaoLimiteDetalhes() {
+  const { t, numero } = useI18n()
+  const idTitulo = useId()
+  const nome = useId()
+  const [limite, setLimite] = useState(() => lerLimiteDetalhes(armazenamentoLocal.ler(CHAVE_LIMITE_DETALHES)))
+  const escolher = (valor: number) => {
+    setLimite(valor)
+    armazenamentoLocal.gravar(CHAVE_LIMITE_DETALHES, String(valor))
+  }
+  return (
+    <div className="cartao-regras cartao-regras--empilhado" role="radiogroup" aria-labelledby={idTitulo}>
+      <i className="fas fa-box-archive cartao-regras__icone" aria-hidden="true" />
+      <span className="cartao-regras__texto">
+        <strong id={idTitulo}>{t('pages.matchDetails')}</strong>
+        <span>{t('pages.matchDetailsHelp')}</span>
+      </span>
+      <div className="segmentos-tema">
+        {OPCOES_LIMITE_DETALHES.map((valor) => (
+          <label key={valor} className="segmento-tema">
+            <input type="radio" name={nome} value={valor} checked={limite === valor} onChange={() => escolher(valor)} />
+            <span>{numero(valor)}</span>
+          </label>
+        ))}
+      </div>
+    </div>
   )
 }
 

@@ -620,6 +620,8 @@
     "tabs": "Settings tabs"
   },
   "pages": {
+    "matchDetails": "Game details",
+    "matchDetailsHelp": "How many finished games keep the hand-by-hand log. Older ones keep only the result, which stays in the ranking and history.",
     "languageHelp": "Language of the app's text.",
     "installTitle": "Install Mojoca",
     "installHelp": "Opens from its icon, without the browser bar, and works offline.",
