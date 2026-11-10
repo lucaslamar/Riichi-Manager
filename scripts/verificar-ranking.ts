@@ -39,6 +39,7 @@ import {
   redeDeConfrontos,
   resumoDoJogador,
 } from '../src/dominios/centerpiece/logica/analiseJogador'
+import { filtrarHistorico, tipoDaMesa } from '../src/dominios/centerpiece/logica/tipoDaMesa'
 
 /**
  * Base dos testes: 25.000/30.000 (com oka) e uma 15/5, fixa aqui para os testes
@@ -333,6 +334,19 @@ teste('mapa de confrontos e detalhe do confronto', () => {
   assert.equal(detalhe.a.mediaColocacao, 1.67)
   assert.equal(detalhe.b.mediaColocacao, 1.33)
   assert.equal(detalhe.a.mandouProTobi, 0, 'ninguém ficou abaixo de zero')
+})
+
+teste('tipo da mesa e filtro do histórico', () => {
+  const [avulsa, outra, terceira] = TRES
+  const torneio = { ...outra, vinculoTorneio: { torneioId: 't', rodada: 0, mesa: 0, guardada: true } }
+  const clube = { ...terceira, encontro: { id: 'e', mesa: 1 } }
+  assert.deepEqual([tipoDaMesa(avulsa), tipoDaMesa(torneio), tipoDaMesa(clube)], ['avulsa', 'torneio', 'clube'])
+  const nomes = { a: 'José Silva', b: 'Ana', c: 'Bruno', d: 'Duda' } as Record<string, string>
+  const nomesDa = (partida: Partida) => partida.resultado!.map((linha) => nomes[linha.jogadorId])
+  const todas = [avulsa, torneio, clube]
+  assert.deepEqual(filtrarHistorico(todas, { tipo: 'torneio', busca: '' }, nomesDa), [torneio])
+  assert.deepEqual(filtrarHistorico(todas, { tipo: 'todas', busca: 'jose' }, nomesDa).length, 3, 'sem acento e maiúscula')
+  assert.deepEqual(filtrarHistorico(todas, { tipo: 'clube', busca: 'xyz' }, nomesDa), [])
 })
 
 console.log(`Ranking ok: ${testes} testes.`)

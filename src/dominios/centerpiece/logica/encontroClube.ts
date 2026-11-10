@@ -63,3 +63,9 @@ export function marcarMesaRegistrada(sorteio: SorteioClube, numero: number, part
     mesas: sorteio.mesas.map((mesa) => (mesa.numero === numero ? { ...mesa, partidaId } : mesa)),
   }
 }
+
+/** Quantas mesas do sorteio já têm resultado (a partida existe no histórico). */
+export function mesasRegistradas(sorteio: SorteioClube, partidas: readonly Pick<Partida, 'id'>[]): number {
+  const ids = new Set(partidas.map((partida) => partida.id))
+  return sorteio.mesas.filter((mesa) => mesa.partidaId && ids.has(mesa.partidaId)).length
+}
