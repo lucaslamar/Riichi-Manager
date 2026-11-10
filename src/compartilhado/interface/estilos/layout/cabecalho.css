@@ -596,7 +596,7 @@
 
 /* Com seta, ela e o título ocupam o lugar da marca (a sidebar mantém a marca). */
 @media not all and (min-width: 1024px) and (orientation: landscape) {
-  .barra-marca-aplicacao:has(.botao-voltar-tela:not(.botao-configuracoes-tela, .botao-tela-cheia)) .marca-aplicacao {
+  .barra-marca-aplicacao:has(.botao-voltar-tela:not(.botao-configuracoes-tela, .botao-tela-cheia, .botao-acao-tela)) .marca-aplicacao {
     display: none;
   }
 }
@@ -701,6 +701,17 @@
 }
 
 .botao-tela-cheia + .botao-configuracoes-tela {
+  margin-left: 0;
+}
+
+/* Ações extras da tela (ex.: Jogadores no Ranking): à direita, junto da engrenagem. */
+.botao-acao-tela {
+  margin-left: auto;
+  color: var(--primario);
+}
+
+.botao-acao-tela + .botao-acao-tela,
+.botao-acao-tela + .botao-configuracoes-tela {
   margin-left: 0;
 }
 

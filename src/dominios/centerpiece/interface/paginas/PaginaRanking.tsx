@@ -46,7 +46,7 @@ export default function PaginaRanking({
             {aoAbrirJogadores && (
               <button
                 type="button"
-                className="botao-voltar-tela"
+                className="botao-voltar-tela botao-acao-tela"
                 aria-label={t('players.title')}
                 title={t('players.title')}
                 onClick={aoAbrirJogadores}
