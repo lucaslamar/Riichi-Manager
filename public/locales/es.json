@@ -1314,14 +1314,61 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "Personalizado"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "Filtros",
+        "clear": "Limpiar",
+        "apply": "Aplicar",
+        "player": "Jugador",
+        "playerSearch": "Buscar por apodo o nombre",
+        "removePlayer": "Quitar el jugador del filtro",
+        "from": "Desde",
+        "to": "Hasta",
+        "duration": "Duración",
+        "durations": {
+          "todas": "Todas",
+          "hanchan": "Hanchan",
+          "leste": "Tonpuusen (solo Este)"
+        },
+        "origin": "Origen",
+        "origins": {
+          "todas": "Todas",
+          "app": "Solo app",
+          "fora": "Fuera de la app"
+        },
+        "minimum": "Mínimo de partidas",
+        "noMinimum": "Sin mínimo",
+        "minimumChip": {
+          "one": "Mín. {{count}} partida",
+          "other": "Mín. {{count}} partidas"
+        },
+        "sort": "Ordenar por",
+        "sorts": {
+          "pontuacao": "Puntuación total",
+          "media": "Media de posición",
+          "primeiro": "% 1º",
+          "partidas": "Partidas"
+        },
+        "remove": "Quitar filtro {{filter}}"
+      },
+      "rivals": {
+        "title": "Enfrentamientos de {{name}}",
+        "rivals": "Mayores rivales",
+        "customers": "Clientes",
+        "together": {
+          "one": "{{count}} partida",
+          "other": "{{count}} partidas"
+        },
+        "empty": "Juega más partidas con otros jugadores para ver enfrentamientos."
+      }
     },
     "fromMatch": {
       "title": "Datos de la partida",

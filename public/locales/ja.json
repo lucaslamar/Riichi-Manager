@@ -1293,14 +1293,59 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "期間指定"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "フィルター",
+        "clear": "クリア",
+        "apply": "適用",
+        "player": "プレイヤー",
+        "playerSearch": "ニックネームまたは名前で検索",
+        "removePlayer": "プレイヤーの絞り込みを解除",
+        "from": "開始",
+        "to": "終了",
+        "duration": "形式",
+        "durations": {
+          "todas": "すべて",
+          "hanchan": "半荘",
+          "leste": "東風戦"
+        },
+        "origin": "記録元",
+        "origins": {
+          "todas": "すべて",
+          "app": "アプリのみ",
+          "fora": "アプリ外"
+        },
+        "minimum": "最低対局数",
+        "noMinimum": "制限なし",
+        "minimumChip": {
+          "other": "{{count}}局以上"
+        },
+        "sort": "並べ替え",
+        "sorts": {
+          "pontuacao": "合計スコア",
+          "media": "平均順位",
+          "primeiro": "トップ率",
+          "partidas": "対局数"
+        },
+        "remove": "{{filter}} を解除"
+      },
+      "rivals": {
+        "title": "{{name}} の対戦成績",
+        "rivals": "天敵",
+        "customers": "お得意様",
+        "together": {
+          "other": "{{count}}局"
+        },
+        "empty": "他のプレイヤーともっと対局すると対戦成績が表示されます。"
+      }
     },
     "fromMatch": {
       "title": "対局からのデータ",

@@ -1307,14 +1307,61 @@
       "periods": {
         "mes": "Este mês",
         "ano": "Este ano",
-        "tudo": "Tudo"
+        "tudo": "Tudo",
+        "personalizado": "Personalizado"
       },
       "empty": "Nenhuma partida finalizada neste filtro.",
       "games": "Partidas",
       "averagePlace": "Média",
       "first": "% 1º",
       "fourth": "% 4º",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "Filtros",
+        "clear": "Limpar",
+        "apply": "Aplicar",
+        "player": "Jogador",
+        "playerSearch": "Buscar por apelido ou nome",
+        "removePlayer": "Tirar o jogador do filtro",
+        "from": "De",
+        "to": "Até",
+        "duration": "Duração",
+        "durations": {
+          "todas": "Todas",
+          "hanchan": "Hanchan",
+          "leste": "Tonpuusen (Leste apenas)"
+        },
+        "origin": "Origem",
+        "origins": {
+          "todas": "Todas",
+          "app": "Só app",
+          "fora": "Fora do app"
+        },
+        "minimum": "Mínimo de partidas",
+        "noMinimum": "Sem mínimo",
+        "minimumChip": {
+          "one": "Mín. {{count}} partida",
+          "other": "Mín. {{count}} partidas"
+        },
+        "sort": "Ordenar por",
+        "sorts": {
+          "pontuacao": "Pontuação total",
+          "media": "Média de colocação",
+          "primeiro": "% 1º",
+          "partidas": "Partidas"
+        },
+        "remove": "Remover filtro {{filter}}"
+      },
+      "rivals": {
+        "title": "Confrontos de {{name}}",
+        "rivals": "Maiores rivais",
+        "customers": "Fregueses",
+        "together": {
+          "one": "{{count}} partida",
+          "other": "{{count}} partidas"
+        },
+        "empty": "Jogue mais partidas com outros jogadores para ver confrontos."
+      }
     },
     "fromMatch": {
       "title": "Dados vindos da partida",

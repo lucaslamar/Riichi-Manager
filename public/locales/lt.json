@@ -1344,14 +1344,65 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "Pasirinktinis"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "Filtrai",
+        "clear": "Išvalyti",
+        "apply": "Taikyti",
+        "player": "Žaidėjas",
+        "playerSearch": "Ieškoti pagal slapyvardį ar vardą",
+        "removePlayer": "Pašalinti žaidėjo filtrą",
+        "from": "Nuo",
+        "to": "Iki",
+        "duration": "Trukmė",
+        "durations": {
+          "todas": "Visos",
+          "hanchan": "Hanchan",
+          "leste": "Tonpuusen (tik Rytai)"
+        },
+        "origin": "Šaltinis",
+        "origins": {
+          "todas": "Visos",
+          "app": "Tik programėlėje",
+          "fora": "Ne programėlėje"
+        },
+        "minimum": "Mažiausiai partijų",
+        "noMinimum": "Be minimumo",
+        "minimumChip": {
+          "one": "Min. {{count}} partija",
+          "few": "Min. {{count}} partijos",
+          "many": "Min. {{count}} partijos",
+          "other": "Min. {{count}} partijų"
+        },
+        "sort": "Rikiuoti pagal",
+        "sorts": {
+          "pontuacao": "Bendri taškai",
+          "media": "Vidutinė vieta",
+          "primeiro": "1 vietos %",
+          "partidas": "Partijos"
+        },
+        "remove": "Pašalinti filtrą {{filter}}"
+      },
+      "rivals": {
+        "title": "{{name}} akistatos",
+        "rivals": "Didžiausi varžovai",
+        "customers": "Mėgstamos aukos",
+        "together": {
+          "one": "{{count}} partija",
+          "few": "{{count}} partijos",
+          "many": "{{count}} partijos",
+          "other": "{{count}} partijų"
+        },
+        "empty": "Sužaiskite daugiau partijų su kitais žaidėjais, kad pamatytumėte akistatas."
+      }
     },
     "fromMatch": {
       "title": "Partijos duomenys",

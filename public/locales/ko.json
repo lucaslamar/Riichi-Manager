@@ -1293,14 +1293,59 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "직접 지정"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "필터",
+        "clear": "초기화",
+        "apply": "적용",
+        "player": "플레이어",
+        "playerSearch": "별명이나 이름으로 검색",
+        "removePlayer": "플레이어 필터 해제",
+        "from": "시작",
+        "to": "종료",
+        "duration": "형식",
+        "durations": {
+          "todas": "전체",
+          "hanchan": "반장전",
+          "leste": "동풍전"
+        },
+        "origin": "출처",
+        "origins": {
+          "todas": "전체",
+          "app": "앱에서만",
+          "fora": "앱 밖"
+        },
+        "minimum": "최소 대국 수",
+        "noMinimum": "제한 없음",
+        "minimumChip": {
+          "other": "최소 {{count}}국"
+        },
+        "sort": "정렬",
+        "sorts": {
+          "pontuacao": "총점",
+          "media": "평균 순위",
+          "primeiro": "1위 %",
+          "partidas": "대국 수"
+        },
+        "remove": "{{filter}} 필터 해제"
+      },
+      "rivals": {
+        "title": "{{name}} 상대 전적",
+        "rivals": "최대 라이벌",
+        "customers": "단골 손님",
+        "together": {
+          "other": "{{count}}국"
+        },
+        "empty": "다른 플레이어와 더 대국하면 상대 전적이 보입니다."
+      }
     },
     "fromMatch": {
       "title": "대국에서 가져온 정보",

@@ -1,25 +1,45 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
+import { posicoesDoRanking } from '../../logica/ranking'
 import {
-  calcularRanking,
-  posicoesDoRanking,
-  type FiltroPeriodo,
-} from '../../logica/ranking'
+  computeRanking,
+  lerFiltros,
+  partidasFiltradas,
+  rivaisEFregueses,
+  type FiltrosRankingGeral,
+} from '../../logica/filtrosRanking'
 import { usePartidas } from './usePartidas'
+
+/** Os filtros ficam salvos até a pessoa limpar. */
+const CHAVE_FILTROS = 'riichi-manager-ranking-filtros'
 
 /** Filtros da tela e o ranking calculado a partir das partidas salvas. */
 export function useRankingGeral() {
   const { partidas } = usePartidas()
-  const [periodo, setPeriodo] = useState<FiltroPeriodo>('tudo')
+  const [filtros, setFiltros] = useState<FiltrosRankingGeral>(() =>
+    lerFiltros(armazenamentoLocal.ler(CHAVE_FILTROS)),
+  )
 
-  const linhas = useMemo(
-    () => calcularRanking(partidas, { periodo, origem: 'todas' }, new Date()),
-    [partidas, periodo],
+  useEffect(() => {
+    armazenamentoLocal.gravar(CHAVE_FILTROS, JSON.stringify(filtros))
+  }, [filtros])
+
+  const linhas = useMemo(() => computeRanking(partidas, filtros, new Date()), [partidas, filtros])
+
+  /** Confronto direto do jogador filtrado, nas partidas que passam nos demais filtros. */
+  const confrontos = useMemo(
+    () =>
+      filtros.jogadorId
+        ? rivaisEFregueses(partidasFiltradas(partidas, filtros, new Date()), filtros.jogadorId)
+        : null,
+    [partidas, filtros],
   )
 
   return {
-    periodo,
-    setPeriodo,
+    filtros,
+    setFiltros,
     linhas,
+    confrontos,
     posicoes: useMemo(() => posicoesDoRanking(linhas), [linhas]),
   }
 }

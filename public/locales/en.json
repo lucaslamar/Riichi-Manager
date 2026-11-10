@@ -1307,14 +1307,61 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "Custom"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "Filters",
+        "clear": "Clear",
+        "apply": "Apply",
+        "player": "Player",
+        "playerSearch": "Search by nickname or name",
+        "removePlayer": "Remove player from filter",
+        "from": "From",
+        "to": "To",
+        "duration": "Length",
+        "durations": {
+          "todas": "All",
+          "hanchan": "Hanchan",
+          "leste": "Tonpuusen (East only)"
+        },
+        "origin": "Source",
+        "origins": {
+          "todas": "All",
+          "app": "App only",
+          "fora": "Outside the app"
+        },
+        "minimum": "Minimum games",
+        "noMinimum": "No minimum",
+        "minimumChip": {
+          "one": "Min. {{count}} game",
+          "other": "Min. {{count}} games"
+        },
+        "sort": "Sort by",
+        "sorts": {
+          "pontuacao": "Total score",
+          "media": "Average placement",
+          "primeiro": "1st %",
+          "partidas": "Games"
+        },
+        "remove": "Remove filter {{filter}}"
+      },
+      "rivals": {
+        "title": "{{name}} head to head",
+        "rivals": "Top rivals",
+        "customers": "Favorite victims",
+        "together": {
+          "one": "{{count}} game",
+          "other": "{{count}} games"
+        },
+        "empty": "Play more games with other players to see head-to-head stats."
+      }
     },
     "fromMatch": {
       "title": "Data from the match",

@@ -1293,14 +1293,59 @@
       "periods": {
         "mes": "This month",
         "ano": "This year",
-        "tudo": "All time"
+        "tudo": "All time",
+        "personalizado": "自定义"
       },
       "empty": "No finished games for this filter.",
       "games": "Games",
       "averagePlace": "Average",
       "first": "% 1st",
       "fourth": "% 4th",
-      "tobi": "% tobi"
+      "tobi": "% tobi",
+      "filters": {
+        "title": "筛选",
+        "clear": "清除",
+        "apply": "应用",
+        "player": "玩家",
+        "playerSearch": "按昵称或姓名搜索",
+        "removePlayer": "移除玩家筛选",
+        "from": "从",
+        "to": "到",
+        "duration": "赛制",
+        "durations": {
+          "todas": "全部",
+          "hanchan": "半庄",
+          "leste": "东风战"
+        },
+        "origin": "来源",
+        "origins": {
+          "todas": "全部",
+          "app": "仅应用内",
+          "fora": "应用外"
+        },
+        "minimum": "最少对局数",
+        "noMinimum": "不限",
+        "minimumChip": {
+          "other": "至少 {{count}} 局"
+        },
+        "sort": "排序",
+        "sorts": {
+          "pontuacao": "总分",
+          "media": "平均顺位",
+          "primeiro": "一位率",
+          "partidas": "对局数"
+        },
+        "remove": "移除筛选 {{filter}}"
+      },
+      "rivals": {
+        "title": "{{name}} 的对战",
+        "rivals": "最大劲敌",
+        "customers": "常客",
+        "together": {
+          "other": "{{count}} 局"
+        },
+        "empty": "与其他玩家多打几局即可查看对战数据。"
+      }
     },
     "fromMatch": {
       "title": "来自对局的数据",
