@@ -28,6 +28,17 @@ import {
   lerFiltros,
   rivaisEFregueses,
 } from '../src/dominios/centerpiece/logica/filtrosRanking'
+import {
+  comparacaoDeFormatos,
+  detalheDoConfronto,
+  distribuicaoDeColocacoes,
+  evolucaoDaPontuacao,
+  maisJogouCom,
+  mediaPorMes,
+  mediaPorVento,
+  redeDeConfrontos,
+  resumoDoJogador,
+} from '../src/dominios/centerpiece/logica/analiseJogador'
 
 /**
  * Base dos testes: 25.000/30.000 (com oka) e uma 15/5, fixa aqui para os testes
@@ -285,6 +296,43 @@ teste('filtros: ativos e leitura do salvo', () => {
   assert.deepEqual(filtrosAtivos({ ...FILTROS_PADRAO, periodo: 'mes', duracao: 'hanchan' }), ['periodo', 'duracao'])
   assert.deepEqual(lerFiltros('lixo'), FILTROS_PADRAO)
   assert.deepEqual(lerFiltros(JSON.stringify({ origem: 'app', minimoPartidas: 7 })), { ...FILTROS_PADRAO, origem: 'app' })
+})
+
+teste('análise do jogador: 4 jogadores e 3 partidas', () => {
+  // a: 2º (15/10), 1º (01/11, hanchan), 2º (02/11, leste); sempre Leste.
+  assert.deepEqual(resumoDoJogador(TRES, 'a'), { partidas: 3, mediaColocacao: 1.67, pontuacaoTotal: computeRanking(TRES, FILTROS_PADRAO, AGORA).find((linha) => linha.jogadorId === 'a')!.pontuacaoTotal })
+  const evolucao = evolucaoDaPontuacao(TRES, 'a')
+  assert.deepEqual(evolucao.map((ponto) => ponto.indice), [1, 2, 3])
+  assert.equal(evolucao[2].acumulado, resumoDoJogador(TRES, 'a').pontuacaoTotal)
+  assert.ok(evolucao[0].data < evolucao[1].data, 'da mais antiga para a mais recente')
+  assert.deepEqual(distribuicaoDeColocacoes(TRES, 'a'), [1, 2, 0, 0])
+  assert.deepEqual(mediaPorMes(TRES, 'a'), [
+    { mes: '2026-10', media: 2, partidas: 1 },
+    { mes: '2026-11', media: 1.5, partidas: 2 },
+  ])
+  assert.deepEqual(
+    mediaPorVento(TRES, 'a').map((item) => [item.vento, item.media]),
+    [['leste', 1.67], ['sul', null], ['oeste', null], ['norte', null]],
+  )
+  assert.deepEqual(comparacaoDeFormatos(TRES, 'a'), [
+    { formato: 'hanchan', partidas: 2, media: 1.5, percentualPrimeiro: 50 },
+    { formato: 'leste', partidas: 1, media: 2, percentualPrimeiro: 0 },
+  ])
+  assert.deepEqual(maisJogouCom(TRES, 'a').map((item) => item.partidas), [3, 3, 3])
+})
+
+teste('mapa de confrontos e detalhe do confronto', () => {
+  const rede = redeDeConfrontos(TRES, 'a')
+  assert.deepEqual(rede.nos.map((no) => [no.adversarioId, no.saldo]).sort(), [['b', -1], ['c', 3], ['d', 3]])
+  assert.deepEqual(rede.arestas.map((aresta) => `${aresta.de}-${aresta.para}:${aresta.partidas}`).sort(), ['b-c:3', 'b-d:3', 'c-d:3'])
+  assert.deepEqual(redeDeConfrontos(TRES, 'a', 5).nos, [], 'densidade baixa esconde quem tem poucas partidas')
+  const detalhe = detalheDoConfronto(TRES, 'a', 'b')
+  assert.equal(detalhe.partidas, 3)
+  assert.equal(detalhe.a.vitorias, 1)
+  assert.equal(detalhe.b.vitorias, 2)
+  assert.equal(detalhe.a.mediaColocacao, 1.67)
+  assert.equal(detalhe.b.mediaColocacao, 1.33)
+  assert.equal(detalhe.a.mandouProTobi, 0, 'ninguém ficou abaixo de zero')
 })
 
 console.log(`Ranking ok: ${testes} testes.`)
