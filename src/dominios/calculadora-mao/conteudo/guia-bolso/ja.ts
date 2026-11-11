@@ -544,6 +544,26 @@ export const conteudo: ConteudoGuiaBolso = {
             '2018年に始まった日本のプロ麻雀リーグ。企業がスポンサーのチームに各団体のプロ雀士が所属し、実況と各選手の手牌を映すカメラ付きで生配信される。トップレベルの対局を見るのに最適。',
           aliases: ['Mリーグ', 'M.League'],
         },
+        sanma: {
+          nome: 'Sanma',
+          leitura: 'sanma',
+          texto:
+            'Riichi with 3 players (East, South and West), widely played in Japan and on Mahjong Soul. The 2 to 8 of Man are removed, leaving 108 tiles.',
+          topicos: [
+            'There is no Chi. Pon and Kan stay.',
+            'A 1m indicator makes 9m the dora, and 9m makes 1m the dora.',
+            'On tsumo only 2 pay. With tsumo-son, the North share is lost.',
+            'Sanshoku doujun and a Man Ittsu are impossible.',
+          ],
+          aliases: ['sanma', 'three players', '3 players'],
+        },
+        kita: {
+          nome: 'Kita',
+          leitura: 'kita',
+          texto:
+            'In Sanma, setting a North aside next to the hand and drawing a replacement. Each Kita is worth 1 dora (nukidora) and is not a call: the hand stays closed.',
+          aliases: ['kita', 'nukidora'],
+        },
       },
     },
   },

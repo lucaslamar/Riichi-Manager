@@ -172,6 +172,25 @@ export const PAGINAS_TUTORIAL_HAN_FU: PaginaTutorial[] = [
         blocos: [{ tipo: 'paragrafo', texto: `${CHAVE}.honba.text` }],
       },
       {
+        // Sanma: o que muda na conta com 3 jogadores (o resto é igual).
+        id: 'sanma',
+        titulo: `${CHAVE}.sanma.title`,
+        blocos: [
+          { tipo: 'intro', texto: `${CHAVE}.sanma.intro` },
+          {
+            tipo: 'topicos',
+            textos: [
+              `${CHAVE}.sanma.ron`,
+              `${CHAVE}.sanma.tsumoSon`,
+              `${CHAVE}.sanma.split`,
+              `${CHAVE}.sanma.honba`,
+              `${CHAVE}.sanma.kita`,
+            ],
+          },
+          { tipo: 'dica', texto: `${CHAVE}.sanma.tip` },
+        ],
+      },
+      {
         id: 'exemplos',
         titulo: `${CHAVE}.examples.title`,
         blocos: [

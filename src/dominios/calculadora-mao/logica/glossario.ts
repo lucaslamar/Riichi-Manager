@@ -197,6 +197,8 @@ const SECOES_BASE: SecaoBase[] = [
       // Aqui Riichi é o nome do jogo, não a declaração (nem o yaku).
       { id: 'ema', semLink: ['riichi', 'yaku:riichi'] },
       { id: 'm-league', semLink: ['riichi', 'yaku:riichi'] },
+      { id: 'sanma', kanji: '三麻' },
+      { id: 'kita', kanji: '北抜き', sub: true },
     ],
   },
 ]

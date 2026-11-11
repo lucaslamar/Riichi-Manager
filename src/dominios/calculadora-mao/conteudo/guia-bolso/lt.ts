@@ -533,6 +533,26 @@ export const conteudo: ConteudoGuiaBolso = {
             'Japonijos profesionalų Riichi lyga, įkurta 2018 m. Remiamos komandos suburia profesionalus iš įvairių asociacijų, o rungtynės transliuojamos tiesiogiai su komentarais ir kameromis, rodančiomis kiekvieno žaidėjo ranką. Tai geriausia vieta pamatyti aukšto lygio žaidimą.',
           aliases: ['m.league', 'm league', 'mleague'],
         },
+        sanma: {
+          nome: 'Sanma',
+          leitura: 'sanma',
+          texto:
+            'Riichi with 3 players (East, South and West), widely played in Japan and on Mahjong Soul. The 2 to 8 of Man are removed, leaving 108 tiles.',
+          topicos: [
+            'There is no Chi. Pon and Kan stay.',
+            'A 1m indicator makes 9m the dora, and 9m makes 1m the dora.',
+            'On tsumo only 2 pay. With tsumo-son, the North share is lost.',
+            'Sanshoku doujun and a Man Ittsu are impossible.',
+          ],
+          aliases: ['sanma', 'three players', '3 players'],
+        },
+        kita: {
+          nome: 'Kita',
+          leitura: 'kita',
+          texto:
+            'In Sanma, setting a North aside next to the hand and drawing a replacement. Each Kita is worth 1 dora (nukidora) and is not a call: the hand stays closed.',
+          aliases: ['kita', 'nukidora'],
+        },
       },
     },
   },

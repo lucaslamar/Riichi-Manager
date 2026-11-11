@@ -514,6 +514,26 @@ export const conteudo: ConteudoGuiaBolso = {
             'Liga profesional de Riichi de Japón, creada en 2018. Equipos patrocinados reúnen a jugadores profesionales de varias asociaciones, y las partidas se transmiten en vivo, con narración y cámaras que muestran la mano de cada uno. Es la mejor vitrina para ver juego de alto nivel.',
           aliases: ['m.league', 'm league', 'mleague'],
         },
+        sanma: {
+          nome: 'Sanma',
+          leitura: 'sanma',
+          texto:
+            'Riichi con 3 jugadores (Este, Sur y Oeste), muy jugado en Japón y en Mahjong Soul. Se quitan las fichas del 2 al 8 de Man y quedan 108.',
+          topicos: [
+            'No existe Chi. Pon y Kan siguen.',
+            'El indicador 1m hace del 9m la dora, y el 9m hace del 1m la dora.',
+            'En tsumo solo pagan 2. Con tsumo-son, la parte del Norte se pierde.',
+            'Sanshoku doujun e Ittsu de Man son imposibles.',
+          ],
+          aliases: ['sanma', 'tres jugadores', '3 jugadores'],
+        },
+        kita: {
+          nome: 'Kita',
+          leitura: 'kita',
+          texto:
+            'En Sanma, apartar un Norte al lado de la mano y robar una reposición. Cada Kita vale 1 dora (nukidora) y no es una llamada: la mano sigue cerrada.',
+          aliases: ['kita', 'nukidora'],
+        },
       },
     },
   },

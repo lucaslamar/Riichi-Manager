@@ -245,6 +245,16 @@
     }
   },
   "hanFuTutorial": {
+    "sanma": {
+      "title": "Sanma (3 jogadores)",
+      "intro": "Com 3 jogadores, han, fu e os pontos básicos são os mesmos. Muda só quem paga no **Tsumo**.",
+      "ron": "**Ron:** igual ao jogo de 4. Quem descartou paga tudo.",
+      "tsumoSon": "**Tsumo-son** (o mais comum): cada um dos 2 paga o mesmo de sempre e a parte do Norte se perde. Um Mangan de ko no tsumo vale 4.000 + 2.000 = 6.000, em vez de 8.000.",
+      "split": "**Divisão do Norte:** a parte do Norte é dividida entre os 2, arredondada para a centena de cima. O mesmo Mangan fica 5.000 + 3.000 = 8.000.",
+      "honba": "**Honba:** no Ron, 300 por honba. No Tsumo, cada pagante soma 100 por honba, então o vencedor recebe 200 (com Basengo, 1.500 e 500).",
+      "kita": "**Kita:** cada Norte separado é 1 dora (nukidora). Ele entra no han como uma dora qualquer.",
+      "tip": "Na calculadora, escolha 3 jogadores para ver o total recebido no Tsumo."
+    },
     "title": "Como contar Han e Fu",
     "previous": "Anterior",
     "next": "Próximo",

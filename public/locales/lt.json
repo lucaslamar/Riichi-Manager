@@ -260,6 +260,16 @@
     }
   },
   "hanFuTutorial": {
+    "sanma": {
+      "title": "Sanma (3 players)",
+      "intro": "With 3 players, han, fu and the basic points are the same. Only who pays on **Tsumo** changes.",
+      "ron": "**Ron:** same as with 4 players. The discarder pays it all.",
+      "tsumoSon": "**Tsumo-son** (the most common): each of the 2 pays the usual amount and the North share is lost. A non-dealer Mangan tsumo is 4,000 + 2,000 = 6,000 instead of 8,000.",
+      "split": "**North split:** the North share is split between the 2, rounded up to the next hundred. The same Mangan becomes 5,000 + 3,000 = 8,000.",
+      "honba": "**Honba:** on Ron, 300 per honba. On Tsumo, each payer adds 100 per honba, so the winner gets 200 (with Basengo, 1,500 and 500).",
+      "kita": "**Kita:** each North set aside is 1 dora (nukidora). It counts in han like any dora.",
+      "tip": "In the calculator, pick 3 players to see the total received on Tsumo."
+    },
     "title": "Kaip skaičiuoti Han ir Fu",
     "previous": "Ankstesnis",
     "next": "Kitas",

@@ -446,6 +446,26 @@ export const conteudo: ConteudoGuiaBolso = {
             '日本的职业立直麻将联赛，创立于2018年。由企业赞助的队伍汇集了多个协会的职业选手，比赛全程直播，配有解说和显示每位选手手牌的镜头。是观看高水平对局的最佳窗口。',
           aliases: ['M联赛', 'M.League'],
         },
+        sanma: {
+          nome: 'Sanma',
+          leitura: 'sanma',
+          texto:
+            'Riichi with 3 players (East, South and West), widely played in Japan and on Mahjong Soul. The 2 to 8 of Man are removed, leaving 108 tiles.',
+          topicos: [
+            'There is no Chi. Pon and Kan stay.',
+            'A 1m indicator makes 9m the dora, and 9m makes 1m the dora.',
+            'On tsumo only 2 pay. With tsumo-son, the North share is lost.',
+            'Sanshoku doujun and a Man Ittsu are impossible.',
+          ],
+          aliases: ['sanma', 'three players', '3 players'],
+        },
+        kita: {
+          nome: 'Kita',
+          leitura: 'kita',
+          texto:
+            'In Sanma, setting a North aside next to the hand and drawing a replacement. Each Kita is worth 1 dora (nukidora) and is not a call: the hand stays closed.',
+          aliases: ['kita', 'nukidora'],
+        },
       },
     },
   },
