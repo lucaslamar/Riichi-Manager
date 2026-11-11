@@ -1428,7 +1428,7 @@ const topicosRegras: TopicoRegras[] = [
       { type: 'text', md: "Saem as pedras de **2 a 8 de Man** e ficam 108 pedras. Do Man sobram só o 1 e o 9. O 5 vermelho existe só em Pin e Sou." },
       { type: 'hand', mpsz: '19m', caption: "Do Man, só sobram estas" },
       { type: 'heading', text: "Mesa e chamadas" },
-      { type: 'text', md: "- Só há os assentos Leste, Sul e Oeste.\n- ==Não existe Chi==. Pon e Kan continuam.\n- O indicador 1m aponta o 9m como dora, e o 9m aponta o 1m.\n- Não há empate por quatro ventos, quatro Riichi nem ron triplo. O Kyuushu kyuuhai continua." },
+      { type: 'text', md: "- Só há os assentos Leste, Sul e Oeste.\n- Pon e Kan continuam, ==só o Chi não existe==.\n- O indicador 1m aponta o 9m como dora, e o 9m aponta o 1m.\n- Não há empate por quatro ventos, quatro Riichi nem ron triplo. O Kyuushu kyuuhai continua." },
       { type: 'heading', text: "Kita (Norte)" },
       { type: 'text', md: "Com um Norte na mão você pode fazer **Kita**: separa a pedra ao lado da mão e compra uma reposição. Cada Kita vale **1 dora** (nukidora). Não conta como chamada, então a mão continua fechada e o Tan'yao não quebra. Com o indicador Oeste, cada Kita vale 2." },
       { type: 'hand', mpsz: '4z', caption: "Cada Norte separado vale 1 dora" },

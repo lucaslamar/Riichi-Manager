@@ -1418,7 +1418,7 @@ const topicosRegras: TopicoRegras[] = [
       { type: 'text', md: "Se quitan las fichas del **2 al 8 de Man** y quedan 108 fichas. Del Man solo quedan el 1 y el 9. El 5 rojo existe solo en Pin y Sou." },
       { type: 'hand', mpsz: '19m', caption: "Del Man solo quedan estas" },
       { type: 'heading', text: "Mesa y llamadas" },
-      { type: 'text', md: "- Solo están los asientos Este, Sur y Oeste.\n- ==No existe Chi==. Pon y Kan siguen.\n- El indicador 1m hace del 9m la dora, y el 9m hace del 1m la dora.\n- No hay empate por cuatro vientos, cuatro Riichi ni ron triple. El Kyuushu kyuuhai sigue." },
+      { type: 'text', md: "- Solo están los asientos Este, Sur y Oeste.\n- Pon y Kan siguen, ==solo el Chi no existe==.\n- El indicador 1m hace del 9m la dora, y el 9m hace del 1m la dora.\n- No hay empate por cuatro vientos, cuatro Riichi ni ron triple. El Kyuushu kyuuhai sigue." },
       { type: 'heading', text: "Kita (Norte)" },
       { type: 'text', md: "Con un Norte en la mano puedes hacer **Kita**: lo apartas al lado de la mano y robas una reposición. Cada Kita vale **1 dora** (nukidora). No es una llamada, así que la mano sigue cerrada y el Tan'yao no se rompe. Con el indicador Oeste, cada Kita vale 2." },
       { type: 'hand', mpsz: '4z', caption: "Cada Norte apartado vale 1 dora" },

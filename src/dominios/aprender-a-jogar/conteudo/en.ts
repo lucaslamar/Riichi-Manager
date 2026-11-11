@@ -1421,7 +1421,7 @@ const topicosRegras: TopicoRegras[] = [
       { type: 'text', md: "The **2 to 8 of Man** are removed, leaving 108 tiles. Only the 1 and 9 of Man remain. Red fives exist only in Pin and Sou." },
       { type: 'hand', mpsz: '19m', caption: "All that is left of Man" },
       { type: 'heading', text: "Table and calls" },
-      { type: 'text', md: "- There are only the East, South and West seats.\n- ==There is no Chi==. Pon and Kan stay.\n- A 1m indicator makes 9m the dora, and 9m makes 1m the dora.\n- No abortive draw for four winds, four Riichi or triple ron. Kyuushu kyuuhai stays." },
+      { type: 'text', md: "- There are only the East, South and West seats.\n- Pon and Kan stay, ==only Chi is gone==.\n- A 1m indicator makes 9m the dora, and 9m makes 1m the dora.\n- No abortive draw for four winds, four Riichi or triple ron. Kyuushu kyuuhai stays." },
       { type: 'heading', text: "Kita (North)" },
       { type: 'text', md: "With a North in hand you can call **Kita**: set it aside next to your hand and draw a replacement. Each Kita is worth **1 dora** (nukidora). It is not a call, so the hand stays closed and Tan'yao still counts. With a West indicator, each Kita is worth 2." },
       { type: 'hand', mpsz: '4z', caption: "Each North set aside is 1 dora" },

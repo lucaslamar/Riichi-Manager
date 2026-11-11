@@ -1416,7 +1416,7 @@ const topicosRegras: TopicoRegras[] = [
       { type: 'text', md: "Išimamos **Man nuo 2 iki 8** plytelės ir lieka 108. Iš Man lieka tik 1 ir 9. Raudonas 5 yra tik Pin ir Sou." },
       { type: 'hand', mpsz: '19m', caption: "Iš Man lieka tik šios" },
       { type: 'heading', text: "Stalas ir šaukimai" },
-      { type: 'text', md: "- Yra tik Rytų, Pietų ir Vakarų vietos.\n- ==Chi nėra==. Pon ir Kan lieka.\n- Kai indikatorius 1m, dora yra 9m, o kai 9m, dora yra 1m.\n- Nėra lygiųjų dėl keturių vėjų, keturių Riichi ar trigubo ron. Kyuushu kyuuhai lieka." },
+      { type: 'text', md: "- Yra tik Rytų, Pietų ir Vakarų vietos.\n- Pon ir Kan lieka, ==nėra tik Chi==.\n- Kai indikatorius 1m, dora yra 9m, o kai 9m, dora yra 1m.\n- Nėra lygiųjų dėl keturių vėjų, keturių Riichi ar trigubo ron. Kyuushu kyuuhai lieka." },
       { type: 'heading', text: "Kita (Šiaurė)" },
       { type: 'text', md: "Turėdami Šiaurę rankoje galite daryti **Kita**: padedate ją šalia rankos ir imate pakaitinę plytelę. Kiekvienas Kita vertas **1 dora** (nukidora). Tai ne šaukimas, todėl ranka lieka uždara ir Tan'yao negenda. Kai indikatorius Vakarai, kiekvienas Kita vertas 2." },
       { type: 'hand', mpsz: '4z', caption: "Kiekviena atidėta Šiaurė yra 1 dora" },
