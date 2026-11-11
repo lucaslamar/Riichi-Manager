@@ -134,7 +134,7 @@ export function CampoNotacaoMao({
   const { t } = useI18n()
   const idMensagem = useId()
   const possiveis = chamadasPossiveis(valor)
-  const { pendentes } = separarPendentes(valor)
+  const { pendentes, completo } = separarPendentes(valor)
   const numerosDe = (grupos: string) => grupos.replace(/[ca]/g, '')
 
   // Toques seguidos antes do próximo render partem do último texto, não de `valor`.
@@ -223,8 +223,19 @@ export function CampoNotacaoMao({
   const temChiPendente = lerPendentes(pendentes).some(
     (grupo) => tipoDoGrupoPendente(grupo) === 'chii',
   )
+  /** O 5 vermelho do naipe já está na mão: com um 0 esperando, esse naipe trava. */
+  const akaUsado = (naipe: string) =>
+    [...completo.matchAll(/(\d+)([mps])/g)].some(([, digitos, grupo]) => grupo === naipe && digitos.includes('0'))
+  /** Sanma: o Man só tem 1 e 9, então o M trava com 2–8 (ou o 0) esperando o naipe. */
+  const manForaDoSanma = sanma && /[02-8]/.test(pendentes.replace(/[ca]/g, ''))
   const naipeBloqueado = (naipe: string) =>
-    !pendentes || opcoesChi.length > 0 || (naipe === 'z' && temChiPendente)
+    !pendentes ||
+    opcoesChi.length > 0 ||
+    (naipe === 'z' && temChiPendente) ||
+    (naipe === 'm' && manForaDoSanma) ||
+    // Honras vão de 1z a 7z: 0, 8 e 9 esperando travam o Z.
+    (naipe === 'z' && /[089]/.test(pendentes.replace(/[ca]/g, ''))) ||
+    (pendentes.includes('0') && akaUsado(naipe))
 
   /** O naipe vale para todos os grupos que estavam esperando. */
   const tocarNaipe = (naipe: string) => {
