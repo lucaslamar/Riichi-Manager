@@ -102,12 +102,11 @@ export function TecladoPedras({
   const celularEmPe = useMediaQuery(CONSULTA_AKA_SEGURANDO_CINCO)
   const akaNoCinco = celularEmPe && configuracao.akadora
   const gradeVisivel = mostrarGrade || selecionandoPedraAgari
-  // Sanma: 1m e 9m no meio, sempre nas colunas das pedras de baixo. Com 10 lugares
-  // (com o 5 vermelho) ficam lado a lado no centro. Com 9, a coluna do meio fica
-  // vazia entre os dois, para a linha ficar simétrica sem sair da grade.
+  // Sanma: 1m e 9m juntos, no centro da linha do Man. Com 10 lugares (com o 5
+  // vermelho) já ficam no centro. Com 9, a linha anda meia coluna (CSS).
   const lugaresMan = configuracao.akadora && !akaNoCinco ? 10 : 9
   const vaziosLado = Math.floor((lugaresMan - 2) / 2)
-  const vaziosMeio = lugaresMan % 2
+  const vaziosMeio = 0
   const espacosMan = {
     esquerda: Array.from({ length: vaziosLado }, (_vazio, indice) => indice),
     meio: Array.from({ length: vaziosMeio }, (_vazio, indice) => indice),
@@ -384,7 +383,9 @@ export function TecladoPedras({
             >
               {rotulo}
             </div>
-            <div className="linha-naipe">
+            <div
+              className={`linha-naipe${sanma && naipe === 'm' && lugaresMan % 2 === 1 ? ' linha-naipe--meia-coluna' : ''}`}
+            >
               {sanma && naipe === 'm' ? (
                 // Sanma: só 1m e 9m, no meio da linha. Os lugares vazios têm o tamanho de
                 // uma pedra, para a linha não mudar de lugar e o teclado fixo não pular.

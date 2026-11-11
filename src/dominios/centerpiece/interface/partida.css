@@ -801,6 +801,16 @@
   gap: 8px;
 }
 
+/* A faixa usa a classe dos botões de chamada da Calculadora, que no celular encosta
+ * no teclado (margem negativa e borda). Aqui ela fica solta, com o mesmo espaço do resto. */
+.dsc-entrada .acoes-construtor-mao.dsc-marcas {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
 .dsc-marcas > .btn-acao-mao {
   flex: 1 1 0;
   min-width: 0;
@@ -890,6 +900,9 @@
   border: 0;
   padding: 0;
   background: transparent;
+  /* Sem a linha de cima do teclado fixo da Calculadora: aqui ele não é fixo, e no
+   * Sanma a linha aparecia nos lugares vazios do Man, cortando o 1m e o 9m. */
+  box-shadow: none;
 }
 
 .dsc-teclado .linha-naipe {
