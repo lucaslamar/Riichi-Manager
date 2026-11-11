@@ -11,8 +11,3 @@
   justify-content: flex-end;
   gap: 8px;
 }
-
-/* Linha do Man com 9 lugares (ímpar): o par 1m–9m anda meia coluna para ficar no centro. */
-.linha-naipe--meia-coluna {
-  transform: translateX(calc(100% / 18));
-}

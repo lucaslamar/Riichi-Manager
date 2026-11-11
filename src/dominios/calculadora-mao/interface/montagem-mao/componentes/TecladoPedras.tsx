@@ -102,12 +102,16 @@ export function TecladoPedras({
   const celularEmPe = useMediaQuery(CONSULTA_AKA_SEGURANDO_CINCO)
   const akaNoCinco = celularEmPe && configuracao.akadora
   const gradeVisivel = mostrarGrade || selecionandoPedraAgari
-  // Sanma: lugares vazios antes e depois do 1m e do 9m (a linha tem 9 pedras, ou 10 com o 5 vermelho).
+  // Sanma: 1m e 9m no meio, sempre nas colunas das pedras de baixo. Com 10 lugares
+  // (com o 5 vermelho) ficam lado a lado no centro. Com 9, a coluna do meio fica
+  // vazia entre os dois, para a linha ficar simétrica sem sair da grade.
   const lugaresMan = configuracao.akadora && !akaNoCinco ? 10 : 9
-  const vaziosEsquerda = Math.floor((lugaresMan - 2) / 2)
+  const vaziosLado = Math.floor((lugaresMan - 2) / 2)
+  const vaziosMeio = lugaresMan % 2
   const espacosMan = {
-    esquerda: Array.from({ length: vaziosEsquerda }, (_vazio, indice) => indice),
-    direita: Array.from({ length: lugaresMan - 2 - vaziosEsquerda }, (_vazio, indice) => indice),
+    esquerda: Array.from({ length: vaziosLado }, (_vazio, indice) => indice),
+    meio: Array.from({ length: vaziosMeio }, (_vazio, indice) => indice),
+    direita: Array.from({ length: lugaresMan - 2 - vaziosLado - vaziosMeio }, (_vazio, indice) => indice),
   }
 
   const renderizarBadgeEspera = (
@@ -380,9 +384,7 @@ export function TecladoPedras({
             >
               {rotulo}
             </div>
-            <div
-              className={`linha-naipe${sanma && naipe === 'm' && lugaresMan % 2 === 1 ? ' linha-naipe--meia-coluna' : ''}`}
-            >
+            <div className="linha-naipe">
               {sanma && naipe === 'm' ? (
                 // Sanma: só 1m e 9m, no meio da linha. Os lugares vazios têm o tamanho de
                 // uma pedra, para a linha não mudar de lugar e o teclado fixo não pular.
@@ -391,6 +393,9 @@ export function TecladoPedras({
                     <span key={`e${indice}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
                   ))}
                   {renderizarBotaoPedra('1m')}
+                  {espacosMan.meio.map((indice) => (
+                    <span key={`m${indice}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
+                  ))}
                   {renderizarBotaoPedra('9m')}
                   {espacosMan.direita.map((indice) => (
                     <span key={`d${indice}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
