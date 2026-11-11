@@ -9,6 +9,8 @@ import type { ConfigFormato, FormatoTorneio, Relogio, RodadaTorneio, Torneio } f
 
 export const SEGUNDOS_RODADA_PADRAO = 60 * 60
 export const RODADAS_PADRAO = 4
+/** Rodízio de Sanma: cada um é Leste uma vez. */
+export const RODADAS_PADRAO_SANMA = 3
 
 /** Padrão do torneio: 30.000 de partida e de retorno, sem oka. */
 export function configPadraoTorneio(): ConfigMesa {
@@ -122,8 +124,13 @@ export function totalDeRodadas(formato: ConfigFormato): number | null {
   }
 }
 
+/** Jogadores por mesa: 3 no Sanma, 4 no yonma. */
+export function jogadoresPorMesa(torneio: Pick<Torneio, 'variante'>): 3 | 4 {
+  return torneio.variante === 'sanma' ? 3 : 4
+}
+
 export function mesasDoTorneio(torneio: Torneio) {
-  return rodadaAtual(torneio)?.mesas.length ?? Math.floor(torneio.jogadorIds.length / 4)
+  return rodadaAtual(torneio)?.mesas.length ?? Math.floor(torneio.jogadorIds.length / jogadoresPorMesa(torneio))
 }
 
 /** O torneio que o card do menu abre: o rascunho ou o que está em jogo. */

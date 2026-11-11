@@ -3,18 +3,20 @@
  * Os formatos que precisam de mais (Rodízio, cortes) têm o próprio gerador.
  */
 import { embaralhar, inteiroAleatorioSeguro, type InteiroAleatorio } from '@/dominios/centerpiece/logica/sorteioClube'
-import type { AssentosMesa, RodadaTorneio } from '../tipos'
+import type { RodadaTorneio } from '../tipos'
+import { assentosDoGrupo, type JogadoresPorMesa } from './comum'
 
 export function rodadaAleatoria(
   jogadorIds: readonly string[],
   numero: number,
   agora: string,
   aleatorio: InteiroAleatorio = inteiroAleatorioSeguro,
+  porMesa: JogadoresPorMesa = 4,
 ): RodadaTorneio {
   const ordem = embaralhar(jogadorIds, aleatorio)
-  const mesas = Array.from({ length: Math.floor(ordem.length / 4) }, (_, indice) => ({
+  const mesas = Array.from({ length: Math.floor(ordem.length / porMesa) }, (_, indice) => ({
     numero: indice + 1,
-    assentos: ordem.slice(indice * 4, indice * 4 + 4) as AssentosMesa,
+    assentos: assentosDoGrupo(ordem.slice(indice * porMesa, indice * porMesa + porMesa)),
   }))
   return { numero, mesas, geradaEm: agora }
 }

@@ -53,7 +53,8 @@ export interface AnaliseLista {
  * O que a lista diz: quantos jogadores e mesas, o que falta e se dá para sortear.
  * Repetido é o mesmo nome (sem acento e sem maiúsculas) ou o mesmo cadastro.
  */
-export function analisarLista(texto: string, jogadores: readonly Jogador[]): AnaliseLista {
+/** `porMesa`: 3 no Sanma (mínimo de 2 mesas, como no yonma). */
+export function analisarLista(texto: string, jogadores: readonly Jogador[], porMesa: 3 | 4 = 4): AnaliseLista {
   const vistos = new Set<string>()
   const nomes: string[] = []
   const repetidas = new Set<number>()
@@ -70,14 +71,15 @@ export function analisarLista(texto: string, jogadores: readonly Jogador[]): Ana
   })
 
   const total = nomes.length
-  const mesas = Math.floor(total / 4)
+  const mesas = Math.floor(total / porMesa)
+  const minimo = porMesa === 4 ? MINIMO_JOGADORES : porMesa * 2
   const status: StatusLista =
     repetidas.size > 0
       ? { tipo: 'repetidos', quantidade: repetidas.size }
-      : total < 4
-        ? { tipo: 'primeiraMesa', faltam: 4 - total }
-        : total < MINIMO_JOGADORES || total % 4 !== 0
-          ? { tipo: 'proximaMesa', faltam: 4 - (total % 4) }
+      : total < porMesa
+        ? { tipo: 'primeiraMesa', faltam: porMesa - total }
+        : total < minimo || total % porMesa !== 0
+          ? { tipo: 'proximaMesa', faltam: porMesa - (total % porMesa) }
           : { tipo: 'pronta' }
   return { nomes, repetidas, jogadores: total, mesas, status, podeSortear: status.tipo === 'pronta' }
 }

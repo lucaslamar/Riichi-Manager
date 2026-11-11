@@ -3,6 +3,7 @@
  * do Centerpiece com `vinculoTorneio`, que é a fonte única para os dois rankings.
  */
 import type { ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
+import type { RegrasSanma, Variante } from '@/compartilhado/mahjong/variante'
 
 export type FormatoTorneio = 'rodizio' | 'suico' | 'eliminatorio' | 'corridos' | 'temporada'
 
@@ -32,7 +33,7 @@ export interface Relogio {
   iniciadoEm: number | null
 }
 
-/** Assentos na ordem 東 南 西 北, com o id do cadastro. */
+/** Assentos na ordem 東 南 西 北, com o id do cadastro. No Sanma, o 北 fica `''`. */
 export type AssentosMesa = [string, string, string, string]
 
 export interface MesaTorneio {
@@ -80,6 +81,10 @@ export interface Torneio {
   criadoEm: string
   atualizadoEm: string
   finalizadoEm?: string
+  /** Sanma (mesas de 3). Escolhido na criação e travado depois. Ausente = yonma. */
+  variante?: Variante
+  /** Regras de Sanma copiadas ao criar, para as mesas abertas no Centerpiece. */
+  regrasSanma?: RegrasSanma
 }
 
 export type CriterioTemporada =

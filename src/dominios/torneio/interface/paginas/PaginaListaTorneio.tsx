@@ -21,7 +21,17 @@ import { rodadasIniciais } from '../../logica/formatos'
 import { formatoValido } from '../../logica/configuracao'
 import { analisarLista, entradasDoTorneio, limparColagem, type StatusLista } from '../../logica/listaTorneio'
 import FolhaImportar from '../componentes/FolhaImportar'
-import { iniciarTorneio } from '../../logica/torneio'
+import {
+  configPadraoTorneio,
+  iniciarTorneio,
+  jogadoresPorMesa,
+  RODADAS_PADRAO,
+  RODADAS_PADRAO_SANMA,
+} from '../../logica/torneio'
+import { alterarConfig } from '@/dominios/centerpiece/logica/configMesa'
+import SeletorVariante from '@/compartilhado/interface/SeletorVariante'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import type { Variante } from '@/compartilhado/mahjong/variante'
 import type { ListaSalva, Torneio } from '../../logica/tipos'
 import ConfigTorneioSheet from '../componentes/ConfigTorneioSheet'
 import { useTorneios } from '../hooks/useTorneios'
@@ -71,9 +81,31 @@ export default function PaginaListaTorneio({
   const [renomeando, setRenomeando] = useState(false)
 
   const linhas = useMemo(() => linhasDoTexto(lista), [lista])
-  const analise = useMemo(() => analisarLista(lista, jogadores), [lista, jogadores])
+  const porMesa = jogadoresPorMesa(torneio)
+  const analise = useMemo(() => analisarLista(lista, jogadores, porMesa), [lista, jogadores, porMesa])
   /** Um corte do Eliminatório maior que a lista também segura o sorteio. */
-  const formatoOk = formatoValido(torneio.formato, analise.jogadores)
+  const formatoOk = formatoValido(torneio.formato, analise.jogadores, porMesa)
+  const { regrasSanma } = useConfigSanma()
+  /**
+   * Só no rascunho (antes do sorteio): depois a variante fica travada. No Sanma os
+   * pontos de partida e de retorno vêm das Regras de Sanma e o Rodízio tem 3 rodadas.
+   */
+  const trocarVariante = (variante: Variante) => {
+    if (variante === (torneio.variante ?? 'yonma')) return
+    const sanma = variante === 'sanma'
+    const padrao = configPadraoTorneio()
+    const rodadas = sanma ? RODADAS_PADRAO_SANMA : RODADAS_PADRAO
+    salvar({
+      ...torneio,
+      variante: sanma ? 'sanma' : undefined,
+      regrasSanma: sanma ? regrasSanma : undefined,
+      config: alterarConfig(torneio.config, {
+        pontosPartida: sanma ? regrasSanma.pontosIniciais : padrao.pontosPartida,
+        pontosRetorno: sanma ? regrasSanma.pontosRetorno : padrao.pontosRetorno,
+      }),
+      formato: torneio.formato.tipo === 'rodizio' ? { ...torneio.formato, rodadas } : torneio.formato,
+    })
+  }
   const podeSortear = analise.podeSortear && formatoOk
   const vinculos = useMemo(() => linhas.map((linha) => jogadorDaLinha(jogadores, linha)), [linhas, jogadores])
   const idsNaLista = useMemo(
@@ -199,6 +231,10 @@ export default function PaginaListaTorneio({
           </span>
         }
       />
+
+      {torneio.status === 'rascunho' && (
+        <SeletorVariante valor={torneio.variante ?? 'yonma'} aoMudar={trocarVariante} className="trn-seletor-variante" />
+      )}
 
       {emJogo && aoAbrirTorneio && (
         <button
@@ -331,7 +367,12 @@ export default function PaginaListaTorneio({
               {t(torneio.formato.tipo === 'temporada' ? 'tournament.list.pickSeason' : 'tournament.list.cutsTooBig')}
             </span>
           ) : (
-            <TextoStatus status={analise.status} jogadores={analise.jogadores} mesas={analise.mesas} />
+            <TextoStatus
+              status={analise.status}
+              jogadores={analise.jogadores}
+              mesas={analise.mesas}
+              sanma={porMesa === 3}
+            />
           )}
         </p>
         <span className="trn-rodape-icones">
@@ -473,7 +514,18 @@ export default function PaginaListaTorneio({
   )
 }
 
-function TextoStatus({ status, jogadores, mesas }: { status: StatusLista; jogadores: number; mesas: number }) {
+function TextoStatus({
+  status,
+  jogadores,
+  mesas,
+  sanma = false,
+}: {
+  status: StatusLista
+  jogadores: number
+  mesas: number
+  /** Sanma: o aviso de mesa incompleta lembra que são mesas de 3. */
+  sanma?: boolean
+}) {
   const { t } = useI18n()
   if (status.tipo === 'pronta') {
     return (
@@ -488,7 +540,9 @@ function TextoStatus({ status, jogadores, mesas }: { status: StatusLista; jogado
       ? t('tournament.list.duplicates', { count: status.quantidade })
       : status.tipo === 'primeiraMesa'
         ? t('tournament.list.firstTable', { count: status.faltam })
-        : t('tournament.list.nextTable', { count: status.faltam })
+        : sanma
+          ? `${t('sanma.jogadoresMultiplo3')} · ${t('tournament.list.nextTable', { count: status.faltam })}`
+          : t('tournament.list.nextTable', { count: status.faltam })
   return <span className="clb-falta">{texto}</span>
 }
 

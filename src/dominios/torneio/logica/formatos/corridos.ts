@@ -5,7 +5,7 @@
  */
 import { embaralhar, inteiroAleatorioSeguro, type InteiroAleatorio } from '@/dominios/centerpiece/logica/sorteioClube'
 import type { RodadaTorneio } from '../tipos'
-import { contarPares, custoDaMesa, mesasPelaOrdem } from './comum'
+import { contarPares, custoDaMesa, mesasPelaOrdem, ocupantes, type JogadoresPorMesa } from './comum'
 
 const TENTATIVAS = 300
 
@@ -15,13 +15,14 @@ export function rodadaCorridos(
   numero: number,
   agora: string,
   aleatorio: InteiroAleatorio = inteiroAleatorioSeguro,
+  porMesa: JogadoresPorMesa = 4,
 ): RodadaTorneio {
   const pares = contarPares(anteriores)
-  let melhor = mesasPelaOrdem(embaralhar(jogadorIds, aleatorio), anteriores)
+  let melhor = mesasPelaOrdem(embaralhar(jogadorIds, aleatorio), anteriores, porMesa)
   let melhorCusto = Infinity
   for (let tentativa = 0; tentativa < TENTATIVAS && melhorCusto > 0; tentativa++) {
-    const mesas = tentativa === 0 ? melhor : mesasPelaOrdem(embaralhar(jogadorIds, aleatorio), anteriores)
-    const custo = mesas.reduce((soma, mesa) => soma + custoDaMesa(mesa.assentos, pares), 0)
+    const mesas = tentativa === 0 ? melhor : mesasPelaOrdem(embaralhar(jogadorIds, aleatorio), anteriores, porMesa)
+    const custo = mesas.reduce((soma, mesa) => soma + custoDaMesa(ocupantes(mesa.assentos), pares), 0)
     if (custo < melhorCusto) {
       melhorCusto = custo
       melhor = mesas

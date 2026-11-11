@@ -80,7 +80,8 @@ export default function PaginaTorneio({
               <span>{t('tournament.season.open')}</span>
             </button>
           )}
-          {gradeRodizio && gradeRodizio.length > 0 && (
+          {/* O diagnóstico é da grade de 4 do Torneio antigo: o Rodízio de Sanma não tem. */}
+          {gradeRodizio && gradeRodizio.length > 0 && torneio.variante !== 'sanma' && (
             <DiagnosticoGrade
               qualidade={qualidadeDasRodadas(gradeRodizio, torneio.jogadorIds.length)}
               grade={gradeDasRodadas(gradeRodizio)}

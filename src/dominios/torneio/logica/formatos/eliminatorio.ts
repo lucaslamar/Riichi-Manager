@@ -7,6 +7,7 @@ import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { classificar, type LinhaClassificacao } from '../classificacao'
 import type { ConfigFormato, RodadaTorneio, Torneio } from '../tipos'
 import { mesasPelaOrdem } from './comum'
+import { jogadoresPorMesa } from '../torneio'
 
 type FormatoEliminatorio = Extract<ConfigFormato, { tipo: 'eliminatorio' }>
 
@@ -57,14 +58,14 @@ export function proximaRodadaEliminatoria(
     // O Rodízio da classificatória já saiu inteiro no sorteio.
     if (fase === 0 && formato.classificatoria === 'rodizio') return null
     const ordem = classificacaoDaFase(torneio, partidas, fase, formato).map((linha) => linha.jogadorId)
-    return { numero, fase, geradaEm: agora, mesas: mesasPelaOrdem(ordem, torneio.rodadas) }
+    return { numero, fase, geradaEm: agora, mesas: mesasPelaOrdem(ordem, torneio.rodadas, jogadoresPorMesa(torneio)) }
   }
 
   if (fase >= formato.cortes.length) return null
   const avancam = classificacaoDaFase(torneio, partidas, fase, formato)
     .slice(0, formato.cortes[fase])
     .map((linha) => linha.jogadorId)
-  return { numero, fase: fase + 1, geradaEm: agora, mesas: mesasPelaOrdem(avancam, torneio.rodadas) }
+  return { numero, fase: fase + 1, geradaEm: agora, mesas: mesasPelaOrdem(avancam, torneio.rodadas, jogadoresPorMesa(torneio)) }
 }
 
 /** A última fase eliminatória com uma mesa só. */

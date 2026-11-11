@@ -286,6 +286,8 @@ export default function PaginaMesasTorneio({
 
               <ul className="clb-mesa-assentos" aria-label={rotulo}>
                 {mesa.assentos.map((jogadorId, indice) => {
+                  // Sanma: a cadeira vazia (北) não aparece.
+                  if (jogadorId === '') return null
                   const vento = ORDEM_VENTOS[indice]
                   const linha = resultadoDe(indice)
                   return (

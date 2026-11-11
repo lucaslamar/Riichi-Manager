@@ -63,7 +63,8 @@ export function relatorioDaRodada(
     }
     return {
       ...cabecalho,
-      linhas: mesa.assentos.map((jogadorId, cadeira) => {
+      linhas: mesa.assentos.flatMap((jogadorId, cadeira) => {
+        if (jogadorId === '') return []
         const vento = ORDEM_VENTOS[cadeira]
         const nome = rotulos.nome(jogadorId)
         return { esquerda: rotulos.ventos ? `${KANJI_VENTO[vento]} ${rotulos.vento(vento)}: ${nome}` : nome }

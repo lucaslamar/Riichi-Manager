@@ -1047,3 +1047,8 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   font-weight: 400;
   opacity: 0.8;
 }
+
+/* Sanma: 4 jogadores | 3 jogadores no rascunho do torneio (some depois do sorteio). */
+.trn-seletor-variante {
+  margin: 0 0 12px;
+}

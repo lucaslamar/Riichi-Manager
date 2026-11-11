@@ -5,7 +5,7 @@ import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/Config
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
-import { dataDoDia, formatoPadrao, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
+import { dataDoDia, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
 import { useTorneios } from '../hooks/useTorneios'
 import type { ConfigFormato, FormatoTorneio, Torneio } from '../../logica/tipos'
 import '../torneio.css'
@@ -197,7 +197,9 @@ export default function ConfigTorneioSheet({
   )
 
   // Temporada nova ainda sem id: quem confere é `temporadaValida`.
-  const cortesValidos = formato.tipo === 'temporada' || formatoValido(formato, jogadores >= 8 ? jogadores : undefined)
+  const porMesa = jogadoresPorMesa(torneio)
+  const cortesValidos =
+    formato.tipo === 'temporada' || formatoValido(formato, jogadores >= porMesa * 2 ? jogadores : undefined, porMesa)
 
   return (
     <ConfigMesaSheet

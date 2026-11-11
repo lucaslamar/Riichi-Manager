@@ -3,6 +3,7 @@
  * texto para compartilhar. Sem tela.
  */
 import { configSoPontuacao } from '@/dominios/centerpiece/logica/configMesa'
+import { REGRAS_SANMA_PADRAO } from '@/compartilhado/mahjong/variante'
 import { criarPartida, KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
 import { proximaRodada, rodadasIniciais } from './formatos'
 import { relogioParado, statusDaMesa, type StatusMesa } from './torneio'
@@ -74,7 +75,15 @@ export function partidaDaMesaNova(
   contexto: { id: string; agora: string; nomes?: readonly string[] },
 ): Partida {
   return {
-    ...criarPartida(contexto.id, configSoPontuacao(torneio.config), mesa.assentos, contexto.agora, contexto.nomes),
+    ...criarPartida(
+      contexto.id,
+      configSoPontuacao(torneio.config),
+      mesa.assentos,
+      contexto.agora,
+      contexto.nomes,
+      // Sanma: a mesa abre no Centerpiece com 3 jogadores e as regras copiadas na criação.
+      torneio.variante === 'sanma' ? { regras: torneio.regrasSanma ?? REGRAS_SANMA_PADRAO } : undefined,
+    ),
     vinculoTorneio: { torneioId: torneio.id, rodada: rodada.numero - 1, mesa: mesa.numero - 1, guardada: true },
   }
 }
@@ -128,10 +137,13 @@ export function textoDaRodada(
   const blocos = rodada.mesas.map((mesa) =>
     [
       `*${rotulos.mesa(mesa.numero)}*`,
-      ...mesa.assentos.map((jogadorId, indice) =>
-        rotulos.ventos === false
-          ? `• ${rotulos.nome(jogadorId)}`
-          : `${KANJI_VENTO[ORDEM_VENTOS[indice]]} ${rotulos.vento(ORDEM_VENTOS[indice])}: ${rotulos.nome(jogadorId)}`,
+      // Sanma: a cadeira vazia (北) não entra.
+      ...mesa.assentos.flatMap((jogadorId, indice) =>
+        jogadorId === ''
+          ? []
+          : rotulos.ventos === false
+            ? `• ${rotulos.nome(jogadorId)}`
+            : `${KANJI_VENTO[ORDEM_VENTOS[indice]]} ${rotulos.vento(ORDEM_VENTOS[indice])}: ${rotulos.nome(jogadorId)}`,
       ),
     ].join('\n'),
   )

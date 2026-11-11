@@ -4,6 +4,12 @@
  */
 import type { AssentosMesa, MesaTorneio, RodadaTorneio } from '../tipos'
 
+/** Jogadores por mesa: 4 no yonma, 3 no Sanma (a 4ª cadeira da mesa fica vazia, `''`). */
+export type JogadoresPorMesa = 3 | 4
+
+/** Ids de quem senta na mesa, sem a cadeira vazia do Sanma. */
+export const ocupantes = (assentos: readonly string[]) => assentos.filter((jogador) => jogador !== '')
+
 export const chaveDoPar = (um: string, outro: string) => (um < outro ? `${um}|${outro}` : `${outro}|${um}`)
 
 /** Quantas vezes cada dupla já se enfrentou. */
@@ -11,9 +17,10 @@ export function contarPares(rodadas: readonly RodadaTorneio[]): Map<string, numb
   const contagem = new Map<string, number>()
   for (const rodada of rodadas) {
     for (const mesa of rodada.mesas) {
-      for (let um = 0; um < 4; um++) {
-        for (let outro = um + 1; outro < 4; outro++) {
-          const chave = chaveDoPar(mesa.assentos[um], mesa.assentos[outro])
+      const jogadores = ocupantes(mesa.assentos)
+      for (let um = 0; um < jogadores.length; um++) {
+        for (let outro = um + 1; outro < jogadores.length; outro++) {
+          const chave = chaveDoPar(jogadores[um], jogadores[outro])
           contagem.set(chave, (contagem.get(chave) ?? 0) + 1)
         }
       }
@@ -40,6 +47,7 @@ export function contarVentos(rodadas: readonly RodadaTorneio[]): Map<string, [nu
   for (const rodada of rodadas) {
     for (const mesa of rodada.mesas) {
       mesa.assentos.forEach((jogador, vento) => {
+        if (jogador === '') return
         const linha = contagem.get(jogador) ?? [0, 0, 0, 0]
         linha[vento] += 1
         contagem.set(jogador, linha)
@@ -49,16 +57,23 @@ export function contarVentos(rodadas: readonly RodadaTorneio[]): Map<string, [nu
   return contagem
 }
 
-/** Todas as 24 ordens de 4 posições. */
-const PERMUTACOES: number[][] = (() => {
+/** Todas as ordens de N posições: 24 para 4, 6 para 3. */
+function permutacoes(tamanho: number): number[][] {
   const saida: number[][] = []
   const montar = (atual: number[]) => {
-    if (atual.length === 4) return void saida.push(atual)
-    for (let indice = 0; indice < 4; indice++) if (!atual.includes(indice)) montar([...atual, indice])
+    if (atual.length === tamanho) return void saida.push(atual)
+    for (let indice = 0; indice < tamanho; indice++) if (!atual.includes(indice)) montar([...atual, indice])
   }
   montar([])
   return saida
-})()
+}
+
+const PERMUTACOES: Record<JogadoresPorMesa, number[][]> = { 3: permutacoes(3), 4: permutacoes(4) }
+
+/** Assentos da mesa; no Sanma a 4ª cadeira (Norte) fica vazia. */
+export function assentosDoGrupo(grupo: readonly string[]): AssentosMesa {
+  return [grupo[0], grupo[1], grupo[2], grupo[3] ?? ''] as AssentosMesa
+}
 
 /**
  * Senta os 4 da mesa: quem foi Leste menos vezes tem prioridade para Leste, depois
@@ -69,9 +84,10 @@ export function assentarComVentos(
   ventos: ReadonlyMap<string, readonly number[]>,
 ): AssentosMesa {
   const PESOS = [100, 10, 10, 10]
-  let melhor = PERMUTACOES[0]
+  const ordens = PERMUTACOES[grupo.length === 3 ? 3 : 4]
+  let melhor = ordens[0]
   let melhorCusto = Infinity
-  for (const ordem of PERMUTACOES) {
+  for (const ordem of ordens) {
     // ordem[vento] = índice no grupo de quem senta nesse vento
     const custo = ordem.reduce(
       (soma, indiceGrupo, vento) => soma + (ventos.get(grupo[indiceGrupo])?.[vento] ?? 0) * PESOS[vento],
@@ -82,7 +98,7 @@ export function assentarComVentos(
       melhor = ordem
     }
   }
-  return melhor.map((indiceGrupo) => grupo[indiceGrupo]) as AssentosMesa
+  return assentosDoGrupo(melhor.map((indiceGrupo) => grupo[indiceGrupo]))
 }
 
 /**
@@ -93,12 +109,13 @@ export function assentarComVentos(
 export function mesasPelaOrdem(
   ordem: readonly string[],
   anteriores: readonly RodadaTorneio[],
+  porMesa: JogadoresPorMesa = 4,
 ): MesaTorneio[] {
   const pares = contarPares(anteriores)
   const ventos = contarVentos(anteriores)
   const fila = [...ordem]
-  const totalMesas = Math.floor(fila.length / 4)
-  const grupo = (mesa: number) => fila.slice(mesa * 4, mesa * 4 + 4)
+  const totalMesas = Math.floor(fila.length / porMesa)
+  const grupo = (mesa: number) => fila.slice(mesa * porMesa, mesa * porMesa + porMesa)
   const leste = (jogador: string) => ventos.get(jogador)?.[0] ?? 0
   const menorLeste = Math.min(...fila.map(leste))
   /**
@@ -119,13 +136,13 @@ export function mesasPelaOrdem(
       const trocas: [number, number][] = []
       for (let vizinha = 0; vizinha < totalMesas; vizinha++) {
         if (vizinha === mesa) continue
-        for (let de = mesa * 4; de < mesa * 4 + 4; de++) {
-          for (let para = vizinha * 4; para < vizinha * 4 + 4; para++) trocas.push([de, para])
+        for (let de = mesa * porMesa; de < mesa * porMesa + porMesa; de++) {
+          for (let para = vizinha * porMesa; para < vizinha * porMesa + porMesa; para++) trocas.push([de, para])
         }
       }
       trocas.sort(([de1, para1], [de2, para2]) => Math.abs(de1 - para1) - Math.abs(de2 - para2))
       for (const [de, para] of trocas) {
-        const vizinha = Math.floor(para / 4)
+        const vizinha = Math.floor(para / porMesa)
         const antes = custo(mesa) + custo(vizinha)
         ;[fila[de], fila[para]] = [fila[para], fila[de]]
         const depois = custo(mesa) + custo(vizinha)

@@ -29,6 +29,9 @@ import { calcularMao } from '../src/dominios/calculadora-mao/logica/calculo-mao'
 import { calcularEsperasPossiveis } from '../src/dominios/calculadora-mao/logica/esperas'
 import type { Mao } from '../src/dominios/calculadora-mao/logica/tipos'
 import { configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
+import { analisarLista } from '../src/dominios/torneio/logica/listaTorneio'
+import { gerarRodizioSanma } from '../src/dominios/torneio/logica/formatos'
+import { rodadaAleatoria } from '../src/dominios/torneio/logica/formatos/rodadaAleatoria'
 import {
   cadeirasDaPartida,
   calcularResultado,
@@ -376,6 +379,38 @@ caso('partida sanma: resultado final soma zero, só 3 linhas', () => {
   assert.equal(resultado.length, 3)
   assert.equal(resultado[0].cadeira, 1)
   assert.ok(Math.abs(resultado.reduce((soma, linha) => soma + linha.final, 0)) < 1e-9)
+})
+
+// ─── Torneio ─────────────────────────────────────────────────────────────────
+
+const doze = Array.from({ length: 12 }, (_vazio, indice) => `j${indice}`)
+
+caso('torneio sanma: lista pede múltiplo de 3', () => {
+  const texto = (total: number) => doze.slice(0, total).join('\n')
+  assert.equal(analisarLista(texto(9), [], 3).status.tipo, 'pronta')
+  assert.equal(analisarLista(texto(9), [], 3).mesas, 3)
+  assert.deepEqual(analisarLista(texto(10), [], 3).status, { tipo: 'proximaMesa', faltam: 2 })
+  assert.equal(analisarLista(texto(8), []).status.tipo, 'pronta')
+})
+caso('torneio sanma: Rodízio de 3 rodadas, mesas de 3 e cada um Leste uma vez', () => {
+  const rodadas = gerarRodizioSanma(doze, 3, 'agora')
+  assert.equal(rodadas.length, 3)
+  const leste = new Map<string, number>()
+  for (const rodada of rodadas) {
+    assert.equal(rodada.mesas.length, 4)
+    for (const mesa of rodada.mesas) {
+      assert.equal(mesa.assentos[3], '')
+      assert.equal(new Set(mesa.assentos.slice(0, 3)).size, 3)
+      leste.set(mesa.assentos[0], (leste.get(mesa.assentos[0]) ?? 0) + 1)
+    }
+  }
+  assert.deepEqual([...new Set(leste.values())], [1])
+  assert.equal(leste.size, 12)
+})
+caso('torneio sanma: rodada sorteada em mesas de 3', () => {
+  const rodada = rodadaAleatoria(doze.slice(0, 9), 1, 'agora', undefined, 3)
+  assert.equal(rodada.mesas.length, 3)
+  assert.ok(rodada.mesas.every((mesa) => mesa.assentos[3] === ''))
 })
 
 let falhas = 0
