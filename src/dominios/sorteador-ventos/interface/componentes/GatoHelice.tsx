@@ -5,6 +5,8 @@ import { VENTOS_MESA } from '../../logica/sortearVento'
 import { anguloPa } from '../hooks/useSorteadorVentos'
 
 interface PropsGatoHelice {
+  /** Sanma: o Norte fica na hélice, mas transparente, porque não é sorteado. */
+  foraDoSorteio?: readonly VentoMao[]
   rotorRef: RefObject<HTMLDivElement>
   /** Ventos que já saíram: as pás deles ficam apagadas. */
   ventosApagados: VentoMao[]
@@ -55,6 +57,7 @@ export default function GatoHelice({
   textoPirulito,
   rotuloPirulito,
   aoTocarPirulito,
+  foraDoSorteio = [],
 }: PropsGatoHelice) {
   return (
     <div className="gato-helice">
@@ -183,6 +186,8 @@ export default function GatoHelice({
             <span
               key={`pedra-${vento}`}
               className={`gato-helice__pedra${apagado ? ' gato-helice__pedra--usada' : ''}${
+                foraDoSorteio.includes(vento) ? ' gato-helice__pedra--fora' : ''
+              }${
                 vento === escolhido ? ' gato-helice__pedra--escolhida' : ''
               }`}
               style={{ '--pa': `${anguloPa(vento)}deg` } as CSSProperties}

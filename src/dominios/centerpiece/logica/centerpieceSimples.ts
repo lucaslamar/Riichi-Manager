@@ -70,11 +70,10 @@ export function normalizarSimples(salvo: unknown): EstadoSimples {
   const timerVez = OPCOES_TIMER_VEZ.includes(lido.timerVez as ConfigMesa['timerVez'])
     ? (lido.timerVez as ConfigMesa['timerVez'])
     : SIMPLES_INICIAL.timerVez
-  const sanma = lido.jogadores === 3
-  // Sanma salvo com a cadeira ou a mão 4 (não existe com 3): volta ao começo.
-  if (sanma && (lido.cadeiraDealer === 3 || lido.rodadaNumero === 4)) return { ...SIMPLES_INICIAL, timerVez, jogadores: 3 }
+  // Sempre abre com 4 jogadores: o Sanma é escolhido a cada vez. Uma mesa de Sanma
+  // salva antes volta ao começo (a cadeira e a mão 4 não existem com 3).
+  if (lido.jogadores === 3) return { ...SIMPLES_INICIAL, timerVez }
   return {
-    ...(sanma ? { jogadores: 3 as const } : {}),
     cadeiraDealer: lido.cadeiraDealer as Cadeira,
     rodadaVento: lido.rodadaVento as Vento,
     rodadaNumero: lido.rodadaNumero as EstadoSimples['rodadaNumero'],

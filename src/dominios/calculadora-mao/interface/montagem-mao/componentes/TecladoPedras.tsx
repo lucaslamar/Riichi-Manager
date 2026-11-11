@@ -12,6 +12,7 @@ import {
 } from '../../constantes'
 import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import { useSanmaMao } from '../../compartilhado/contextoSanma'
+import '../../compartilhado/sanma-calculadora.css'
 
 /** Quanto segurar o 5 para virar o 5 vermelho. */
 const DURACAO_TOQUE_LONGO_MS = 450
@@ -379,7 +380,9 @@ export function TecladoPedras({
             >
               {rotulo}
             </div>
-            <div className="linha-naipe">
+            <div
+              className={`linha-naipe${sanma && naipe === 'm' && lugaresMan % 2 === 1 ? ' linha-naipe--meia-coluna' : ''}`}
+            >
               {sanma && naipe === 'm' ? (
                 // Sanma: só 1m e 9m, no meio da linha. Os lugares vazios têm o tamanho de
                 // uma pedra, para a linha não mudar de lugar e o teclado fixo não pular.

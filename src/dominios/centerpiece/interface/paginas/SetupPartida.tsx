@@ -125,7 +125,8 @@ export default function SetupPartida({
       <button type="button" className="ptd-resumo-regras" onClick={() => setRegrasAbertas(true)}>
         <span>
           <strong>
-            {sanma && `${t('sanma.variante3')} · `}
+            {/* Sempre diz quantos jogadores: 4 é o padrão. */}
+            {`${t(sanma ? 'sanma.variante3' : 'sanma.variante4')} · `}
             {t(`tableConfig.presets.${config.preset}`)}
           </strong>
           <span className="ptd-apoio">

@@ -332,6 +332,11 @@ body:has(.sorteador-ventos-page) {
   opacity: 0.3;
 }
 
+/* Sanma: o Norte não entra no sorteio. */
+.gato-helice__pedra--fora {
+  opacity: 0.15;
+}
+
 .gato-helice__pedra--escolhida {
   z-index: 2;
   border-color: var(--primario);
@@ -731,5 +736,6 @@ body:has(.sorteador-ventos-page) {
 .sorteio-variante {
   position: relative;
   z-index: 2;
-  margin: 0 16px 8px;
+  /* Espaço do "?" no canto, dos dois lados para o seletor ficar centralizado. */
+  margin: 0 48px 8px;
 }

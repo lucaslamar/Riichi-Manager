@@ -133,6 +133,7 @@ export default function PaginaSorteadorVentos({
           ventosApagados={concluido ? [] : ventosRevelados}
           escolhido={fase === 'revelado' ? ultimoRevelado : null}
           linguaDeFora={concluido}
+          foraDoSorteio={variante === 'sanma' ? ['4'] : []}
           textoPirulito={t('windDraw.lollipopText')}
           rotuloPirulito={t('windDraw.restartButtonLabel')}
           aoTocarPirulito={reiniciar}
