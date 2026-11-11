@@ -98,6 +98,12 @@ caso('honba: não dealer mangan tsumo com 2 honba = 6400', () => {
   assert.equal(pag.honbaTotal, 400)
 })
 caso('honba: ron com 2 honba = 8600', () => assert.equal(sanma(5, 30, false, 'ron', 2).total, 8600))
+caso('honba no Sanma com Basengo: 1500 no Ron e 500 por pagante no Tsumo', () => {
+  const config = { ...configuracaoPadrao, basengo: true }
+  const base = { han: 5, fu: 30, dealer: false, honba: 1, variante: 'sanma' as const, config }
+  assert.equal(calcularPagamentos({ ...base, tipo: 'ron' }).total, 9500)
+  assert.deepEqual(calcularPagamentos({ ...base, tipo: 'tsumo' }).tsumo, { dealer: 4500, naoDealer: 2500 })
+})
 
 // ─── Paridade do yonma ───────────────────────────────────────────────────────
 

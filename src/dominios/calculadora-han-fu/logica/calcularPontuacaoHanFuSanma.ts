@@ -1,3 +1,4 @@
+import { configuracaoPadrao } from '@/compartilhado/mahjong/pontuacao'
 import { calcularPagamentos, REGRAS_SANMA_PADRAO } from '@/compartilhado/mahjong/variante'
 import { formatarPontos, formatarResultadoHanFu } from './formatarResultadoHanFu'
 import type { ResultadoPontuacaoHanFu } from './tipos'
@@ -14,6 +15,8 @@ type Comum = Omit<
 export function calcularPontuacaoHanFuSanma(
   comum: Comum,
   regras = REGRAS_SANMA_PADRAO,
+  /** Basengo: cada honba vale 1.500 no Ron (500 por pagante no Tsumo). */
+  basengo = false,
 ): ResultadoPontuacaoHanFu {
   const entrada = {
     han: comum.han,
@@ -22,6 +25,7 @@ export function calcularPontuacaoHanFuSanma(
     tipo: comum.tipoVitoria,
     variante: 'sanma' as const,
     regras,
+    config: { ...configuracaoPadrao, basengo },
     base: comum.base,
   }
   const comHonba = calcularPagamentos({ ...entrada, honba: comum.honba })

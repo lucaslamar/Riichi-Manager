@@ -198,51 +198,9 @@ export function LinhaRegraOpcoes<T extends string | boolean>({
   )
 }
 
-/** Honba no Sanma: um número por linha, no mesmo desenho das regras. */
-function LinhaRegraNumero({
-  titulo,
-  ajuda,
-  valor,
-  passo,
-  aoMudar,
-  desabilitada = false,
-}: {
-  titulo: string
-  ajuda: string
-  valor: number
-  passo: number
-  aoMudar: (valor: number) => void
-  desabilitada?: boolean
-}) {
-  const ajudaId = useId()
-  return (
-    <div className={`linha-regra${desabilitada ? ' linha-regra--desabilitada' : ''}`}>
-      <div className="texto-regra">
-        <strong>{titulo}</strong>
-        <span id={ajudaId}>{ajuda}</span>
-      </div>
-      <input
-        className="campo-regra-numero"
-        type="number"
-        inputMode="numeric"
-        min={0}
-        step={passo}
-        value={valor}
-        disabled={desabilitada}
-        aria-label={titulo}
-        aria-describedby={ajudaId}
-        onChange={(evento) => {
-          const novo = Number(evento.target.value)
-          if (evento.target.value.trim() !== '' && Number.isFinite(novo) && novo >= 0) aoMudar(novo)
-        }}
-      />
-    </div>
-  )
-}
-
 /**
  * Aba Sanma: Jogadores (4 ou 3) e, em 3, só as regras que mudam o cálculo da mão
- * (Kita, Norte como yakuhai, pagamento do Tsumo e honba). Valem em todo o app.
+ * (Kita, Norte como yakuhai e pagamento do Tsumo). O honba segue o Basengo.
  */
 export function ListaRegrasSanma({
   variante,
@@ -298,22 +256,6 @@ export function ListaRegrasSanma({
           { valor: 'tsumo-son', rotulo: t('sanma.tsumoSonCurto') },
           { valor: 'divisao-norte', rotulo: t('sanma.divisaoNorteCurto') },
         ]}
-      />
-      <LinhaRegraNumero
-        titulo={t('sanma.honbaRon')}
-        ajuda={t('sanma.honbaAjuda')}
-        valor={regrasSanma.honbaRon}
-        passo={100}
-        aoMudar={(honbaRon) => mudar({ honbaRon })}
-        desabilitada={!sanma}
-      />
-      <LinhaRegraNumero
-        titulo={t('sanma.honbaTsumo')}
-        ajuda={t('sanma.honbaAjuda')}
-        valor={regrasSanma.honbaTsumoPorJogador}
-        passo={100}
-        aoMudar={(honbaTsumoPorJogador) => mudar({ honbaTsumoPorJogador })}
-        desabilitada={!sanma}
       />
     </div>
   )

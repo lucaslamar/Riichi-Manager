@@ -11,8 +11,6 @@ export interface RegrasSanma {
   pontosIniciais: number
   pontosRetorno: number
   uma: [number, number, number]
-  honbaRon: number
-  honbaTsumoPorJogador: number
   notenTotal: number
 }
 

@@ -7,8 +7,6 @@ export const REGRAS_SANMA_PADRAO: RegrasSanma = {
   pontosIniciais: 35000,
   pontosRetorno: 40000,
   uma: [15, 0, -15],
-  honbaRon: 300,
-  honbaTsumoPorJogador: 100,
   notenTotal: 2000,
 }
 
@@ -31,8 +29,6 @@ export function normalizarRegrasSanma(salvas: unknown): RegrasSanma {
     pontosIniciais: numero(lidas.pontosIniciais, padrao.pontosIniciais),
     pontosRetorno: numero(lidas.pontosRetorno, padrao.pontosRetorno),
     uma: ehUma(lidas.uma) ? [...lidas.uma] : [...padrao.uma],
-    honbaRon: numero(lidas.honbaRon, padrao.honbaRon),
-    honbaTsumoPorJogador: numero(lidas.honbaTsumoPorJogador, padrao.honbaTsumoPorJogador),
     notenTotal: numero(lidas.notenTotal, padrao.notenTotal),
   }
 }

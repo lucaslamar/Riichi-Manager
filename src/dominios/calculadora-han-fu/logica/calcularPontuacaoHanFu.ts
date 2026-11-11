@@ -43,6 +43,7 @@ export function calcularPontuacaoHanFu(entrada: EntradaPontuacaoHanFu): Resultad
         modoYakuman,
       },
       entrada.regrasSanma,
+      entrada.basengo,
     )
   }
 

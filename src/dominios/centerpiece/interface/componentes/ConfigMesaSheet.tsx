@@ -274,19 +274,6 @@ export default function ConfigMesaSheet({
         />
         <p className="cfg-ajuda">{t('sanma.pagamentoTsumoAjuda')}</p>
       </Grupo>
-      <div className="cfg-duas-colunas">
-        <Campo rotulo={t('sanma.honbaRon')}>
-          <CampoNumero valor={regrasSanma.honbaRon} passo={100} minimo={0} aoMudar={(honbaRon) => mudarSanma({ honbaRon })} />
-        </Campo>
-        <Campo rotulo={t('sanma.honbaTsumo')}>
-          <CampoNumero
-            valor={regrasSanma.honbaTsumoPorJogador}
-            passo={100}
-            minimo={0}
-            aoMudar={(honbaTsumoPorJogador) => mudarSanma({ honbaTsumoPorJogador })}
-          />
-        </Campo>
-      </div>
       <Campo rotulo={t('sanma.notenTotal')}>
         <CampoNumero valor={regrasSanma.notenTotal} passo={1000} minimo={0} aoMudar={(notenTotal) => mudarSanma({ notenTotal })} />
       </Campo>

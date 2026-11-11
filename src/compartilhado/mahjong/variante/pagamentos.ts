@@ -59,7 +59,9 @@ function pagamentosYonma(entrada: EntradaPagamentos, config: ConfiguracaoCalculo
 }
 
 /**
- * Pagamentos de uma vitória. No Sanma, o tsumo é pago por 2 jogadores: com
+ * Pagamentos de uma vitória. O honba segue o Basengo nas duas variantes (300, ou
+ * 1.500, no Ron, e um terço disso por pagante no Tsumo).
+ * No Sanma, o tsumo é pago por 2 jogadores: com
  * Tsumo-son a parte do Norte se perde; com Divisão do Norte ela é dividida entre
  * os dois pagantes (arredondada para cima, de 100 em 100).
  */
@@ -72,12 +74,12 @@ export function calcularPagamentos(entrada: EntradaPagamentos): Pagamentos {
   const base = entrada.base ?? calcularPatamarHanFu(entrada.han, entrada.fu, config).base
 
   if (entrada.tipo === 'ron') {
-    const honbaTotal = honba * regras.honbaRon
+    const honbaTotal = honba * valorPorHonba(config)
     const ron = arredondar100(base * (entrada.dealer ? 6 : 4)) + honbaTotal
     return { ron, total: ron, honbaTotal }
   }
 
-  const honbaCada = honba * regras.honbaTsumoPorJogador
+  const honbaCada = honba * (valorPorHonba(config) / 3)
   const divisao = regras.pagamentoTsumo === 'divisao-norte'
 
   if (entrada.dealer) {
