@@ -435,7 +435,11 @@ export default function ConstrutorMao({
           </span>
           {contexto === 'montagem' && !entradaPorNotacao && (
             <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
-              <div className={`opcoes-acoes-mao-mobile${entradaFixa ? ' opcoes-acoes-mao-mobile--sem-mpsz' : ''}`}>
+              <div
+                className={`opcoes-acoes-mao-mobile${entradaFixa ? ' opcoes-acoes-mao-mobile--sem-mpsz' : ''}${
+                  mao.sanma ? ' opcoes-acoes-mao-mobile--sanma' : ''
+                }`}
+              >
                 <AcoesConstrutorMao
                   mao={mao}
                   acaoPendente={acaoPendente}

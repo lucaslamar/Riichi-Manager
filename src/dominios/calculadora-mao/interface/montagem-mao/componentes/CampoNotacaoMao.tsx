@@ -1,3 +1,4 @@
+import { useSanmaMao } from '../../compartilhado/contextoSanma'
 import { useEffect, useId, useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { SELETOR_CAMADAS } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
@@ -129,6 +130,7 @@ export function CampoNotacaoMao({
   aoEscolherEspera,
   akadora,
 }: PropsCampoNotacaoMao) {
+  const sanma = !!useSanmaMao()
   const { t } = useI18n()
   const idMensagem = useId()
   const possiveis = chamadasPossiveis(valor)
@@ -364,8 +366,13 @@ export function CampoNotacaoMao({
         </small>
       )}
 
-      <div className="chamadas-notacao-mao" role="group" aria-label={t('calculator.actionsMenu')}>
-        {CHAMADAS.map((chamada) => (
+      <div
+        className={`chamadas-notacao-mao${sanma ? ' chamadas-notacao-mao--sanma' : ''}`}
+        role="group"
+        aria-label={t('calculator.actionsMenu')}
+      >
+        {/* Sanma: sem Chi. */}
+        {CHAMADAS.filter((chamada) => !sanma || chamada.tipo !== 'chii').map((chamada) => (
           <button
             key={chamada.tipo}
             className={`tecla-notacao-mao chamada action-tab action-tab--${chamada.variante} ${

@@ -128,6 +128,11 @@
   gap: 8px;
 }
 
+/* Sanma: sem Chi, 3 chamadas na linha. */
+.chamadas-notacao-mao--sanma {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 /* Teclado no layout de calculadora: números com o 1-2-3 em cima (como no celular),
    naipes na coluna dos operadores e o 0 embaixo. */
 .teclado-notacao-mao {

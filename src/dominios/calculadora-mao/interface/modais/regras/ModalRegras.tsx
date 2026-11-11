@@ -153,29 +153,39 @@ export function LinhaRegraOpcoes<T extends string | boolean>({
   valor,
   opcoes,
   aoMudar,
+  desabilitada = false,
 }: {
   titulo: string
   ajuda: string
   valor: T
   opcoes: { valor: T; rotulo: string }[]
   aoMudar: (valor: T) => void
+  /** Apagada e sem toque, como a Dora flamejante sem Aka dora. */
+  desabilitada?: boolean
 }) {
   const ajudaId = useId()
   return (
-    <div className="linha-regra">
+    <div className={`linha-regra${desabilitada ? ' linha-regra--desabilitada' : ''}`}>
       <div className="texto-regra">
         <strong>{titulo}</strong>
         <span id={ajudaId}>
           <TextoGlossario texto={ajuda} />
         </span>
       </div>
-      <div className="controle-regra" role="group" aria-label={titulo} aria-describedby={ajudaId}>
+      <div
+        className="controle-regra"
+        role="group"
+        aria-label={titulo}
+        aria-describedby={ajudaId}
+        aria-disabled={desabilitada || undefined}
+      >
         {opcoes.map((opcao) => (
           <button
             key={String(opcao.valor)}
             type="button"
             className={valor === opcao.valor ? 'ativo' : ''}
             aria-pressed={valor === opcao.valor}
+            disabled={desabilitada}
             onClick={() => {
               if (valor !== opcao.valor) aoMudar(opcao.valor)
             }}
@@ -195,16 +205,18 @@ function LinhaRegraNumero({
   valor,
   passo,
   aoMudar,
+  desabilitada = false,
 }: {
   titulo: string
   ajuda: string
   valor: number
   passo: number
   aoMudar: (valor: number) => void
+  desabilitada?: boolean
 }) {
   const ajudaId = useId()
   return (
-    <div className="linha-regra">
+    <div className={`linha-regra${desabilitada ? ' linha-regra--desabilitada' : ''}`}>
       <div className="texto-regra">
         <strong>{titulo}</strong>
         <span id={ajudaId}>{ajuda}</span>
@@ -216,6 +228,7 @@ function LinhaRegraNumero({
         min={0}
         step={passo}
         value={valor}
+        disabled={desabilitada}
         aria-label={titulo}
         aria-describedby={ajudaId}
         onChange={(evento) => {
@@ -241,6 +254,7 @@ export function ListaRegrasSanma({
   const { t } = useI18n()
   const { regrasSanma, setRegrasSanma } = useConfigSanma()
   const mudar = (parcial: Partial<RegrasSanma>) => setRegrasSanma({ ...regrasSanma, ...parcial })
+  const sanma = variante === 'sanma'
   const ligado = [
     { valor: true, rotulo: t('rulesModal.akadora.on') },
     { valor: false, rotulo: t('rulesModal.akadora.off') },
@@ -248,57 +262,59 @@ export function ListaRegrasSanma({
   return (
     <div className="lista-regras lista-regras--variante">
       <LinhaRegraOpcoes<Variante>
-        titulo={t('sanma.jogadoresTitulo')}
+        titulo={t('sanma.sanma')}
         ajuda={t('sanma.jogadoresAjuda')}
         valor={variante}
         aoMudar={aoMudarVariante}
         opcoes={[
-          { valor: 'yonma', rotulo: t('sanma.variante4') },
-          { valor: 'sanma', rotulo: t('sanma.variante3') },
+          { valor: 'sanma', rotulo: t('rulesModal.akadora.on') },
+          { valor: 'yonma', rotulo: t('rulesModal.akadora.off') },
         ]}
       />
-      {variante === 'sanma' && (
-        <>
-          <LinhaRegraOpcoes
-            titulo={t('sanma.kitaNukidora')}
-            ajuda={t('sanma.kitaAjuda')}
-            valor={regrasSanma.kitaNukidora}
-            aoMudar={(kitaNukidora) => mudar({ kitaNukidora })}
-            opcoes={ligado}
-          />
-          <LinhaRegraOpcoes
-            titulo={t('sanma.norteYakuhai')}
-            ajuda={t('sanma.norteYakuhaiAjuda')}
-            valor={regrasSanma.norteYakuhai}
-            aoMudar={(norteYakuhai) => mudar({ norteYakuhai })}
-            opcoes={ligado}
-          />
-          <LinhaRegraOpcoes<RegrasSanma['pagamentoTsumo']>
-            titulo={t('sanma.pagamentoTsumo')}
-            ajuda={t('sanma.pagamentoTsumoAjuda')}
-            valor={regrasSanma.pagamentoTsumo}
-            aoMudar={(pagamentoTsumo) => mudar({ pagamentoTsumo })}
-            opcoes={[
-              { valor: 'tsumo-son', rotulo: t('sanma.tsumoSonCurto') },
-              { valor: 'divisao-norte', rotulo: t('sanma.divisaoNorteCurto') },
-            ]}
-          />
-          <LinhaRegraNumero
-            titulo={t('sanma.honbaRon')}
-            ajuda={t('sanma.honbaAjuda')}
-            valor={regrasSanma.honbaRon}
-            passo={100}
-            aoMudar={(honbaRon) => mudar({ honbaRon })}
-          />
-          <LinhaRegraNumero
-            titulo={t('sanma.honbaTsumo')}
-            ajuda={t('sanma.honbaAjuda')}
-            valor={regrasSanma.honbaTsumoPorJogador}
-            passo={100}
-            aoMudar={(honbaTsumoPorJogador) => mudar({ honbaTsumoPorJogador })}
-          />
-        </>
-      )}
+      {/* Sem Sanma, as regras dele ficam apagadas (como a Dora flamejante sem Aka dora). */}
+      <LinhaRegraOpcoes
+        titulo={t('sanma.kitaNukidora')}
+        ajuda={t('sanma.kitaAjuda')}
+        valor={regrasSanma.kitaNukidora}
+        aoMudar={(kitaNukidora) => mudar({ kitaNukidora })}
+        opcoes={ligado}
+        desabilitada={!sanma}
+      />
+      <LinhaRegraOpcoes
+        titulo={t('sanma.norteYakuhai')}
+        ajuda={t('sanma.norteYakuhaiAjuda')}
+        valor={regrasSanma.norteYakuhai}
+        aoMudar={(norteYakuhai) => mudar({ norteYakuhai })}
+        opcoes={ligado}
+        desabilitada={!sanma}
+      />
+      <LinhaRegraOpcoes<RegrasSanma['pagamentoTsumo']>
+        titulo={t('sanma.pagamentoTsumo')}
+        ajuda={t('sanma.pagamentoTsumoAjuda')}
+        valor={regrasSanma.pagamentoTsumo}
+        aoMudar={(pagamentoTsumo) => mudar({ pagamentoTsumo })}
+        desabilitada={!sanma}
+        opcoes={[
+          { valor: 'tsumo-son', rotulo: t('sanma.tsumoSonCurto') },
+          { valor: 'divisao-norte', rotulo: t('sanma.divisaoNorteCurto') },
+        ]}
+      />
+      <LinhaRegraNumero
+        titulo={t('sanma.honbaRon')}
+        ajuda={t('sanma.honbaAjuda')}
+        valor={regrasSanma.honbaRon}
+        passo={100}
+        aoMudar={(honbaRon) => mudar({ honbaRon })}
+        desabilitada={!sanma}
+      />
+      <LinhaRegraNumero
+        titulo={t('sanma.honbaTsumo')}
+        ajuda={t('sanma.honbaAjuda')}
+        valor={regrasSanma.honbaTsumoPorJogador}
+        passo={100}
+        aoMudar={(honbaTsumoPorJogador) => mudar({ honbaTsumoPorJogador })}
+        desabilitada={!sanma}
+      />
     </div>
   )
 }

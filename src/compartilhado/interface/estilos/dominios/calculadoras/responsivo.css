@@ -5528,3 +5528,12 @@
 .construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile--sem-mpsz {
   grid-template-columns: 1fr 1fr 1fr 1.5fr;
 }
+
+/* Sanma: sem Chi, as 4 chamadas (ou 3, sem MPSZ) dividem a linha com o mesmo peso de antes. */
+.construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile--sanma {
+  grid-template-columns: 0.8fr 0.8fr 1.32fr 0.88fr;
+}
+
+.construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile--sanma.opcoes-acoes-mao-mobile--sem-mpsz {
+  grid-template-columns: 1fr 1fr 1.5fr;
+}
