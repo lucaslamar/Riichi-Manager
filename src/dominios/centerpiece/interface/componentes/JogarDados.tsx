@@ -44,10 +44,10 @@ export default function JogarDados({
     vibrar(40)
     window.clearTimeout(temporizador.current)
     temporizador.current = window.setTimeout(() => {
-      const novo = jogarDados(Math.random)
+      const novo = jogarDados(Math.random, jogadores)
       setResultado(novo)
       setRolando(false)
-      aoSortear?.(((cadeiraDealer + passosDaParede(novo.parede)) % 4) as Cadeira)
+      aoSortear?.(((cadeiraDealer + passosDaParede(novo.parede, jogadores)) % jogadores) as Cadeira)
     }, DURACAO_ANIMACAO_MS)
   }
 
@@ -65,7 +65,7 @@ export default function JogarDados({
 
   const cadeiraDaParede =
     resultado && !rolando
-      ? (((cadeiraDealer + passosDaParede(resultado.parede)) % 4) as Cadeira)
+      ? (((cadeiraDealer + passosDaParede(resultado.parede, jogadores)) % jogadores) as Cadeira)
       : null
 
   return (
@@ -95,7 +95,8 @@ export default function JogarDados({
               aria-label={resultado && !rolando ? descreverDados(resultado, t) : undefined}
             >
               {CADEIRAS.map((cadeira) => {
-                const passos = (cadeira - cadeiraDealer + 4) % 4
+                const vazia = jogadores === 3 && cadeira === 3
+                const passos = (cadeira - cadeiraDealer + jogadores) % jogadores
                 return (
                   <div
                     key={cadeira}
@@ -105,9 +106,9 @@ export default function JogarDados({
                     aria-hidden="true"
                   >
                     <strong>
-                      {jogadores === 3 && cadeira === 3 ? '–' : KANJI_VENTO[ventoDaCadeira(cadeira, cadeiraDealer, jogadores)]}
+                      {vazia ? '–' : KANJI_VENTO[ventoDaCadeira(cadeira, cadeiraDealer, jogadores)]}
                     </strong>
-                    <span>{numerosDaParede(passos).join(' · ')}</span>
+                    <span>{vazia ? '' : numerosDaParede(passos, jogadores).join(' · ')}</span>
                   </div>
                 )
               })}

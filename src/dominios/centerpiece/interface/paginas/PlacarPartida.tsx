@@ -390,7 +390,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                   <span className="mesa-palito" aria-hidden="true" />
                 ) : (
                   <span aria-hidden="true">
-                    {numerosDaParede((cadeira - placar.cadeiraDealer + 4) % 4).join(' · ')}
+                    {numerosDaParede(
+                      (cadeira - placar.cadeiraDealer + jogadoresNaMesa(partida)) % jogadoresNaMesa(partida),
+                      jogadoresNaMesa(partida),
+                    ).join(' · ')}
                   </span>
                 ),
               })}
@@ -444,7 +447,11 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                   )}
                 </button>
               )}
-              <JogarDados cadeiraDealer={placar.cadeiraDealer} aoMudarAberto={setDadosAbertos} />
+              <JogarDados
+                cadeiraDealer={placar.cadeiraDealer}
+                aoMudarAberto={setDadosAbertos}
+                jogadores={jogadoresNaMesa(partida)}
+              />
               <button type="button" onClick={() => setRyukyokuAberto(true)}>
                 <i className="fas fa-equals" aria-hidden="true" />
                 {t('match.draw.short')}

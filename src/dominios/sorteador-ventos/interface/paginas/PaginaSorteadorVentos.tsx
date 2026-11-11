@@ -9,6 +9,8 @@ import ResultadoVentos from '../componentes/ResultadoVentos'
 import TrilhasBalao from '../componentes/TrilhasBalao'
 import { useSorteadorVentos } from '../hooks/useSorteadorVentos'
 import '../estilos/sorteador-ventos.css'
+import SeletorVariante from '@/compartilhado/interface/SeletorVariante'
+import type { Variante } from '@/compartilhado/mahjong/variante'
 
 const RESPIRO_ANTES_DE_REINICIAR_MS = 1200
 
@@ -19,15 +21,17 @@ export default function PaginaSorteadorVentos({
   aoContinuarTutorial?: () => void
 } = {}) {
   const { t } = useI18n()
-  const { fase, reveladas, ventosRevelados, rotorRef, revelar, proximo, reiniciar } =
-    useSorteadorVentos()
+  // 4 jogadores por padrão. Sanma: só Leste, Sul e Oeste.
+  const [variante, setVariante] = useState<Variante>('yonma')
+  const { fase, reveladas, ventosRevelados, rotorRef, revelar, proximo, reiniciar, total } =
+    useSorteadorVentos(variante === 'sanma' ? 3 : 4)
 
   const revelado = fase === 'revelado' || fase === 'concluido'
   const concluido = fase === 'concluido'
   const ultimoRevelado = ventosRevelados[ventosRevelados.length - 1] ?? null
   // O toque sorteia no giro, com o vento à mostra passa para o próximo e, no
   // fim, reinicia. Depois do 3º vento o 4º vem sozinho, sem toque.
-  const podeTocar = fase === 'ciclando' || concluido || (fase === 'revelado' && reveladas < 3)
+  const podeTocar = fase === 'ciclando' || concluido || (fase === 'revelado' && reveladas < total - 1)
 
   // Tudo o que o gato "fala" vai no balão: a frase principal e uma dica menor.
   let fala = t('windDraw.bubbleTapToDraw', { player: reveladas + 1 })
@@ -90,6 +94,11 @@ export default function PaginaSorteadorVentos({
     >
       {/* Engrenagem no cabeçalho do app (portal: o toque nela não sorteia). */}
       <TituloTela titulo={t('menu.windDraw')} acoes={<BotaoConfiguracoes />} />
+
+      {/* O toque aqui escolhe 4 ou 3 jogadores, sem sortear. */}
+      <div className="sorteio-variante" onClick={(evento) => evento.stopPropagation()}>
+        <SeletorVariante valor={variante} aoMudar={setVariante} />
+      </div>
 
       {/* "?" no canto: explica por que o sorteio é justo. */}
       <button

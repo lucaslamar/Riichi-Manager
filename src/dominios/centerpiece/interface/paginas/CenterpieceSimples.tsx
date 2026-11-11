@@ -189,7 +189,7 @@ export default function CenterpieceSimples({
           }
           lado={(cadeira) => {
             const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer, jogadores)
-            const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + 4) % 4).join(' · ')
+            const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + jogadores) % jogadores, jogadores).join(' · ')
             const classe = `mesa-placa mesa-placa--simples${vento === 'leste' ? ' mesa-placa--dealer' : ''}${
               ladoSorteado === cadeira ? ' mesa-placa--sorteada' : ''
             }`

@@ -101,6 +101,13 @@ export function TecladoPedras({
   const celularEmPe = useMediaQuery(CONSULTA_AKA_SEGURANDO_CINCO)
   const akaNoCinco = celularEmPe && configuracao.akadora
   const gradeVisivel = mostrarGrade || selecionandoPedraAgari
+  // Sanma: lugares vazios antes e depois do 1m e do 9m (a linha tem 9 pedras, ou 10 com o 5 vermelho).
+  const lugaresMan = configuracao.akadora && !akaNoCinco ? 10 : 9
+  const vaziosEsquerda = Math.floor((lugaresMan - 2) / 2)
+  const espacosMan = {
+    esquerda: Array.from({ length: vaziosEsquerda }, (_vazio, indice) => indice),
+    direita: Array.from({ length: lugaresMan - 2 - vaziosEsquerda }, (_vazio, indice) => indice),
+  }
 
   const renderizarBadgeEspera = (
     espera?: Pick<EsperaPossivel, 'semYaku' | 'furiten' | 'yakuman' | 'han'>,
@@ -373,22 +380,25 @@ export function TecladoPedras({
               {rotulo}
             </div>
             <div className="linha-naipe">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) =>
-                // Sanma: 2m–8m não existem. Fica um espaço vazio do mesmo tamanho, para a
-                // linha não mudar de lugar e o teclado fixo embaixo não pular.
-                sanma && naipe === 'm' && numero !== '1' && numero !== '9' ? (
-                  <span key={`${numero}${naipe}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
-                ) : (
-                  renderizarBotaoPedra(`${numero}${naipe}`)
-                ),
+              {sanma && naipe === 'm' ? (
+                // Sanma: só 1m e 9m, no meio da linha. Os lugares vazios têm o tamanho de
+                // uma pedra, para a linha não mudar de lugar e o teclado fixo não pular.
+                <>
+                  {espacosMan.esquerda.map((indice) => (
+                    <span key={`e${indice}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
+                  ))}
+                  {renderizarBotaoPedra('1m')}
+                  {renderizarBotaoPedra('9m')}
+                  {espacosMan.direita.map((indice) => (
+                    <span key={`d${indice}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
+                  ))}
+                </>
+              ) : (
+                <>
+                  {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((numero) => renderizarBotaoPedra(`${numero}${naipe}`))}
+                  {configuracao.akadora && !akaNoCinco && renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))}
+                </>
               )}
-              {configuracao.akadora &&
-                !akaNoCinco &&
-                (sanma && naipe === 'm' ? (
-                  <span key={`0${naipe}`} className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
-                ) : (
-                  renderizarBotaoPedra(`0${naipe}`, t('calculator.akaDora'))
-                ))}
             </div>
           </div>
         )

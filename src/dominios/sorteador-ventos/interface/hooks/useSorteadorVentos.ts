@@ -10,7 +10,6 @@ const ACELERACAO_GIRO = 1800
 /** O freio dá ao menos 1,5 volta antes de parar no vento sorteado. */
 const GIRO_MINIMO_FREIO = 540
 const DELAY_ULTIMO_VENTO_MS = 900
-const TOTAL_VENTOS = VENTOS_MESA.length
 
 interface Freio {
   inicio: number
@@ -19,8 +18,9 @@ interface Freio {
   duracao: number
 }
 
-function novoSorteio(): EstadoSorteadorVentos {
-  return { ordem: embaralharVentos(), reveladas: 0, fase: 'ciclando' }
+/** Sanma: só Leste, Sul e Oeste entram no sorteio. */
+function novoSorteio(jogadores: 3 | 4 = 4): EstadoSorteadorVentos {
+  return { ordem: embaralharVentos(VENTOS_MESA.slice(0, jogadores)), reveladas: 0, fase: 'ciclando' }
 }
 
 function modulo(valor: number, divisor: number) {
@@ -58,8 +58,11 @@ function vibrar() {
  * O ângulo vai direto para a variável CSS `--giro` do rotor a cada quadro, sem
  * passar pelo estado do React (nada de 60 renders por segundo).
  */
-export function useSorteadorVentos() {
-  const [estado, setEstado] = useState(novoSorteio)
+export function useSorteadorVentos(jogadores: 3 | 4 = 4) {
+  const [estado, setEstado] = useState(() => novoSorteio(jogadores))
+  // Lido pelos timers sem esperar o próximo render.
+  const totalRef = useRef(jogadores)
+  totalRef.current = jogadores
   const [reduzirMovimento] = useState(movimentoReduzido)
 
   // Fonte da verdade para os timers, sem esperar o próximo render.
@@ -92,15 +95,15 @@ export function useSorteadorVentos() {
     const novasReveladas = estadoRef.current.reveladas + 1
     atualizar({
       reveladas: novasReveladas,
-      fase: novasReveladas === TOTAL_VENTOS ? 'concluido' : 'revelado',
+      fase: novasReveladas === totalRef.current ? 'concluido' : 'revelado',
     })
     vibrar()
 
     // Sobrou um vento: vai para o último jogador sem precisar tocar.
-    if (novasReveladas === TOTAL_VENTOS - 1) {
+    if (novasReveladas === totalRef.current - 1) {
       timeoutRef.current = window.setTimeout(() => {
         timeoutRef.current = null
-        atualizar({ reveladas: TOTAL_VENTOS, fase: 'concluido' })
+        atualizar({ reveladas: totalRef.current, fase: 'concluido' })
         vibrar()
       }, DELAY_ULTIMO_VENTO_MS)
     }
@@ -146,7 +149,7 @@ export function useSorteadorVentos() {
 
   const revelar = useCallback(() => {
     const atual = estadoRef.current
-    if (atual.fase !== 'ciclando' || atual.reveladas >= TOTAL_VENTOS) return
+    if (atual.fase !== 'ciclando' || atual.reveladas >= totalRef.current) return
 
     // Decidido no embaralhamento, nunca no toque.
     const alvo = atual.ordem[atual.reveladas]
@@ -175,7 +178,7 @@ export function useSorteadorVentos() {
 
   const proximo = useCallback(() => {
     const atual = estadoRef.current
-    if (atual.fase !== 'revelado' || atual.reveladas >= TOTAL_VENTOS - 1) return
+    if (atual.fase !== 'revelado' || atual.reveladas >= totalRef.current - 1) return
     if (reduzirMovimento) {
       giroRef.current.angulo += 45
       aplicarGiro()
@@ -190,12 +193,23 @@ export function useSorteadorVentos() {
       giroRef.current.angulo = 45
       aplicarGiro()
     }
-    atualizar(novoSorteio())
+    atualizar(novoSorteio(totalRef.current))
   }, [reduzirMovimento, limparTimeout, aplicarGiro, atualizar])
+
+  // Trocar entre 4 e 3 jogadores recomeça o sorteio.
+  const primeiraVez = useRef(true)
+  useEffect(() => {
+    if (primeiraVez.current) {
+      primeiraVez.current = false
+      return
+    }
+    reiniciar()
+  }, [jogadores, reiniciar])
 
   const { ordem, reveladas, fase } = estado
 
   return {
+    total: jogadores,
     fase,
     reveladas,
     /** Só os ventos já revelados; o restante da ordem não sai do hook. */

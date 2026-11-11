@@ -261,6 +261,7 @@ export default function ModalDescartes({
             regras={config.regrasCalculo}
             vistas={pedrasNaMesa(lances)}
             aoEscolher={(pedra) => registrar(pedra)}
+            sanma={partida.variante === 'sanma'}
           />
         </form>
       )}

@@ -726,3 +726,10 @@ body:has(.sorteador-ventos-page) {
     --gato-reserva: 124px;
   }
 }
+
+/* 4 jogadores | 3 jogadores acima do palco (Sanma: só Leste, Sul e Oeste). */
+.sorteio-variante {
+  position: relative;
+  z-index: 2;
+  margin: 0 16px 8px;
+}

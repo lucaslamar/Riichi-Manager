@@ -29,6 +29,7 @@ import { calcularMao } from '../src/dominios/calculadora-mao/logica/calculo-mao'
 import { calcularEsperasPossiveis } from '../src/dominios/calculadora-mao/logica/esperas'
 import type { Mao } from '../src/dominios/calculadora-mao/logica/tipos'
 import { configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
+import { numerosDaParede, paredeDaSoma } from '../src/dominios/centerpiece/logica/dados'
 import { analisarLista } from '../src/dominios/torneio/logica/listaTorneio'
 import { computeRanking, FILTROS_PADRAO } from '../src/dominios/centerpiece/logica/filtrosRanking'
 import { mudancaNoRanking } from '../src/dominios/centerpiece/logica/ranking'
@@ -446,6 +447,16 @@ caso('ranking: partida antiga (sem variante) conta como 4 jogadores', () => {
   const antiga = { ...yonmaFinal }
   delete antiga.variante
   assert.equal(computeRanking([antiga], FILTROS_PADRAO, new Date('2026-11-10')).length, 4)
+})
+
+caso('dados no Sanma: Leste 4/7/10, Sul 2/5/8/11, Oeste 3/6/9/12', () => {
+  assert.deepEqual(numerosDaParede(0, 3), [4, 7, 10])
+  assert.deepEqual(numerosDaParede(1, 3), [2, 5, 8, 11])
+  assert.deepEqual(numerosDaParede(2, 3), [3, 6, 9, 12])
+  assert.equal(paredeDaSoma(7, 3), 'dealer')
+  assert.equal(paredeDaSoma(8, 3), 'direita')
+  assert.equal(paredeDaSoma(9, 3), 'esquerda')
+  assert.deepEqual(numerosDaParede(0), [1, 5, 9])
 })
 
 let falhas = 0

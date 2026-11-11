@@ -180,6 +180,7 @@ export function ModalChecarFuriten({
         regras={partida.config.regrasCalculo}
         vistas={[...pedrasNaMesa(lances), ...soltas, ...melds.flatMap((meld) => meld.pedras)]}
         aoEscolher={(pedra) => adicionar([pedra])}
+        sanma={partida.variante === 'sanma'}
       />
     </Modal>
   )
