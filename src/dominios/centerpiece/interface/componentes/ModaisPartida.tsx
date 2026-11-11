@@ -2,12 +2,12 @@ import { useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import {
-  CADEIRAS,
+  cadeirasDaPartida,
+  jogadoresNaMesa,
   CHAVE_VENTO,
   diferencasDePontos,
   KANJI_VENTO,
-  pagamentosNagashi,
-  pagamentosNoten,
+  variacaoDoRyukyoku,
   podeDeclararRiichi,
   ventoDaCadeira,
   type Cadeira,
@@ -93,7 +93,7 @@ export function ResumoChombo({
   const variacao = pagamentosChombo(chombo.tipo, cadeira, partida.placar.cadeiraDealer)
   return (
     <ul className="ptd-linhas">
-      {CADEIRAS.map((outra) => (
+      {cadeirasDaPartida(partida).map((outra) => (
         <li key={outra}>
           <span>{nomeDe(outra)}</span>
           <strong className={variacao[outra] < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
@@ -122,7 +122,7 @@ export function MenuJogador({
 }) {
   const { t } = useI18n()
   const { numero } = useFormato()
-  const vento = ventoDaCadeira(cadeira, partida.placar.cadeiraDealer)
+  const vento = ventoDaCadeira(cadeira, partida.placar.cadeiraDealer, jogadoresNaMesa(partida))
   const Acao = ({
     acao,
     icone,
@@ -160,7 +160,7 @@ export function MenuJogador({
         <Acao acao="ron" icone="fa-trophy" rotulo={t('match.menu.ron')} />
         <Acao acao="tsumo" icone="fa-trophy" rotulo={t('match.menu.tsumo')} />
         {podeDeclararRiichi(partida.placar, cadeira) &&
-          muroPermiteRiichi(partida.registro?.lances ?? []) && (
+          muroPermiteRiichi(partida.registro?.lances ?? [], jogadoresNaMesa(partida)) && (
           <Acao acao="riichi" icone="fa-flag" rotulo={t('match.menu.riichi')} />
         )}
         <Acao acao="diferenca" icone="fa-scale-balanced" rotulo={t('match.menu.difference')} />
@@ -200,7 +200,7 @@ export function ModalDiferenca({
       tamanho="pequena"
     >
       <ul className="ptd-linhas">
-        {diferencasDePontos(partida.placar, cadeira).map(({ cadeira: outra, diferenca }) => (
+        {diferencasDePontos(partida.placar, cadeira, cadeirasDaPartida(partida)).map(({ cadeira: outra, diferenca }) => (
           <li key={outra}>
             <span>{nomeDe(outra)}</span>
             <strong className={diferenca < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
@@ -242,15 +242,16 @@ export function ModalRyukyoku({
 
   const alternar = (lista: Cadeira[], cadeira: Cadeira) =>
     lista.includes(cadeira) ? lista.filter((item) => item !== cadeira) : [...lista, cadeira]
-  const variacao =
-    nagashi.length > 0 ? pagamentosNagashi(nagashi, placar.cadeiraDealer) : pagamentosNoten(tenpai)
+  const variacao = variacaoDoRyukyoku(partida, tenpai, nagashi)
 
+  // Sanma: não há quatro ventos, quatro Riichi nem ron triplo (Kyuushu kyuuhai fica).
+  const sanma = partida.variante === 'sanma'
   const abortivos: TipoAbortivo[] = [
     ...(config.abortivos.kyuushuKyuuhai ? (['kyuushuKyuuhai'] as const) : []),
-    ...(config.abortivos.quatroVentos ? (['quatroVentos'] as const) : []),
+    ...(config.abortivos.quatroVentos && !sanma ? (['quatroVentos'] as const) : []),
     ...(config.abortivos.quatroKans ? (['quatroKans'] as const) : []),
-    ...(config.abortivos.quatroRiichis ? (['quatroRiichis'] as const) : []),
-    ...(config.ronMultiplo === 'duploTriploAborta' ? (['ronTriplo'] as const) : []),
+    ...(config.abortivos.quatroRiichis && !sanma ? (['quatroRiichis'] as const) : []),
+    ...(config.ronMultiplo === 'duploTriploAborta' && !sanma ? (['ronTriplo'] as const) : []),
   ]
 
   return (
@@ -276,7 +277,7 @@ export function ModalRyukyoku({
     >
       <p className="ptd-rotulo">{t('match.draw.whoTenpai')}</p>
       <div className="ptd-lista-opcoes">
-        {CADEIRAS.map((cadeira) => (
+        {cadeirasDaPartida(partida).map((cadeira) => (
           <button
             key={cadeira}
             type="button"
@@ -284,7 +285,7 @@ export function ModalRyukyoku({
             aria-pressed={tenpai.includes(cadeira)}
             onClick={() => setTenpai((lista) => alternar(lista, cadeira))}
           >
-            <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(cadeira, placar.cadeiraDealer)]}</span>
+            <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(cadeira, placar.cadeiraDealer, jogadoresNaMesa(partida))]}</span>
             <span className="ptd-opcao-nome">{nomeDe(cadeira)}</span>
             <span className="ptd-opcao-valor">{comSinal(variacao[cadeira])}</span>
           </button>
@@ -296,7 +297,7 @@ export function ModalRyukyoku({
           <p className="ptd-rotulo">{t('match.draw.whoNagashi')}</p>
           {detectados.length > 0 && <p className="ptd-apoio">{t('match.discards.nagashiDetected')}</p>}
           <div className="ptd-lista-opcoes ptd-lista-opcoes--linha">
-            {CADEIRAS.map((cadeira) => (
+            {cadeirasDaPartida(partida).map((cadeira) => (
               <button
                 key={cadeira}
                 type="button"
@@ -360,7 +361,7 @@ export function ListaMaos({ partida, nomeDe }: { partida: Partida; nomeDe: NomeD
             <span>{rotuloEvento(evento, t)}</span>
           </div>
           <ul className="ptd-linhas">
-            {CADEIRAS.map((cadeira) => (
+            {cadeirasDaPartida(partida).map((cadeira) => (
               <li key={cadeira}>
                 <span>{nomeDe(cadeira)}</span>
                 <strong
@@ -384,12 +385,13 @@ export function ListaMaos({ partida, nomeDe }: { partida: Partida; nomeDe: NomeD
               evento={evento}
               cadeira={cadeira}
               nomeDe={nomeDe}
+              cadeiras={cadeirasDaPartida(partida)}
             />
           ))}
           {evento.lances && (
             <details className="dsc-historico">
               <summary>{t('match.discards.history')}</summary>
-              {CADEIRAS.map((cadeira) => (
+              {cadeirasDaPartida(partida).map((cadeira) => (
                 <div key={cadeira}>
                   <p className="ptd-rotulo">{nomeDe(cadeira)}</p>
                   <RioPedras lances={evento.lances ?? []} cadeira={cadeira} nomeDe={nomeDe} />

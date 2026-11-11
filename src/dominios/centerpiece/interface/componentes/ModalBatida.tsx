@@ -1,7 +1,8 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import {
-  CADEIRAS,
+  cadeirasDaPartida,
+  jogadoresNaMesa,
   KANJI_VENTO,
   ventoDaCadeira,
   type Cadeira,
@@ -78,7 +79,7 @@ export default function ModalBatida({
       disabled={bloqueado}
       onClick={aoTocar}
     >
-      <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(cadeira, placar.cadeiraDealer)]}</span>
+      <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(cadeira, placar.cadeiraDealer, jogadoresNaMesa(partida))]}</span>
       <span className="ptd-opcao-nome">{nomeDe(cadeira)}</span>
       <span className="ptd-opcao-valor">{numero(placar.pontos[cadeira])}</span>
     </button>
@@ -169,7 +170,7 @@ export default function ModalBatida({
         <>
           <p className="ptd-rotulo">{t('match.win.winner')}</p>
           <div className="ptd-lista-opcoes">
-            {CADEIRAS.map((cadeira) => (
+            {cadeirasDaPartida(partida).map((cadeira) => (
               <Jogador
                 key={cadeira}
                 cadeira={cadeira}
@@ -186,7 +187,7 @@ export default function ModalBatida({
         <>
           <p className="ptd-rotulo">{t('match.win.payer')}</p>
           <div className="ptd-lista-opcoes">
-            {CADEIRAS.filter((cadeira) => cadeira !== vencedorAtual).map((cadeira) => (
+            {cadeirasDaPartida(partida).filter((cadeira) => cadeira !== vencedorAtual).map((cadeira) => (
               <Jogador
                 key={cadeira}
                 cadeira={cadeira}

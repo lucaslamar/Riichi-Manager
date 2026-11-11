@@ -14,7 +14,7 @@ import {
   ultimoDescarteDaMao,
 } from '../../logica/descartes'
 import { descreverPedra } from '../../logica/descreverPedras'
-import { CADEIRAS, KANJI_VENTO, ventoDaCadeira, type Cadeira, type Partida } from '../../logica/partida'
+import { cadeirasDaPartida, jogadoresNaMesa, KANJI_VENTO, ventoDaCadeira, type Cadeira, type Partida } from '../../logica/partida'
 import { MAXIMO_VENCEDORES } from '../hooks/estadoBatida'
 import type { AcoesDescartes } from '../hooks/useDescartes'
 import AnelTimer from './AnelTimer'
@@ -79,10 +79,10 @@ export default function ModalDescartes({
   const [semResposta, setSemResposta] = useState(0)
 
   const emRiichi = placar.riichi.includes(cadeira)
-  const seguinte = ((cadeira + 1) % 4) as Cadeira
+  const seguinte = ((cadeira + 1) % jogadoresNaMesa(partida)) as Cadeira
   const ultimo = descartesDe(lances, cadeira).pop()
   const maximoRon = MAXIMO_VENCEDORES[config.ronMultiplo]
-  const ultimoDaMao = ultimoDescarteDaMao(lances)
+  const ultimoDaMao = ultimoDescarteDaMao(lances, jogadoresNaMesa(partida))
 
   const registrarPedras = (pedras: CodigoPedra[]) => {
     setErro(null)
@@ -130,11 +130,11 @@ export default function ModalDescartes({
       aria-pressed={ativo}
       onClick={aoTocar}
     >
-      <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]}</span>
+      <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer, jogadoresNaMesa(partida))]}</span>
       <span className="ptd-opcao-nome">{nomeDe(outra)}</span>
     </button>
   )
-  const outras = CADEIRAS.filter((outra) => outra !== cadeira)
+  const outras = cadeirasDaPartida(partida).filter((outra) => outra !== cadeira)
 
   return (
     <Modal
@@ -153,12 +153,12 @@ export default function ModalDescartes({
         aoEscolher={setRioVisto}
         className="dsc-abas"
         opcoes={[
-          ...CADEIRAS.map((outra) => ({
+          ...cadeirasDaPartida(partida).map((outra) => ({
             valor: outra,
             // Vento em cima e nome embaixo, igual em todas: cinco abas cabem no celular.
             rotulo: (
               <>
-                <span className="dsc-aba-vento">{KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer)]}</span>
+                <span className="dsc-aba-vento">{KANJI_VENTO[ventoDaCadeira(outra, placar.cadeiraDealer, jogadoresNaMesa(partida))]}</span>
                 <span className="dsc-aba-nome">{nomeDe(outra)}</span>
               </>
             ),
@@ -168,10 +168,10 @@ export default function ModalDescartes({
       />
       {rioVisto === 'todos' ? (
         <div className="dsc-rios-todos">
-          {CADEIRAS.map((dono) => (
+          {cadeirasDaPartida(partida).map((dono) => (
             <section key={dono} className="dsc-rio-de">
               <h3 className="dsc-rio-de-nome">
-                <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(dono, placar.cadeiraDealer)]}</span>{' '}
+                <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(dono, placar.cadeiraDealer, jogadoresNaMesa(partida))]}</span>{' '}
                 {nomeDe(dono)}
               </h3>
               <RioPedras lances={lances} cadeira={dono} nomeDe={nomeDe} destacarAposRiichi={dono !== cadeira} />
@@ -233,7 +233,7 @@ export default function ModalDescartes({
                 type="button"
                 className={`btn-acao-mao action-tab dsc-marca-riichi${riichi ? ' active' : ''}`}
                 aria-pressed={riichi}
-                disabled={kan !== null || !muroPermiteRiichi(lances)}
+                disabled={kan !== null || !muroPermiteRiichi(lances, jogadoresNaMesa(partida))}
                 onClick={() => setRiichi((atual) => !atual)}
               >
                 <span>{t('match.discards.riichi')}</span>
@@ -247,14 +247,14 @@ export default function ModalDescartes({
                   kan === tipo ? ' active' : ''
                 }`}
                 aria-pressed={kan === tipo}
-                disabled={riichi || !muroPermiteKan(lances)}
+                disabled={riichi || !muroPermiteKan(lances, jogadoresNaMesa(partida))}
                 onClick={() => setKan((atual) => (atual === tipo ? null : tipo))}
               >
                 <span>{t(tipo === 'kakan' ? 'match.discards.kakan' : 'match.discards.closedKan')}</span>
               </button>
             ))}
           </div>
-          {!emRiichi && !muroPermiteRiichi(lances) && (
+          {!emRiichi && !muroPermiteRiichi(lances, jogadoresNaMesa(partida)) && (
             <p className="ptd-apoio">{t('match.discards.noRiichiWall', { count: MINIMO_MURO_RIICHI })}</p>
           )}
           <TecladoSoPedras

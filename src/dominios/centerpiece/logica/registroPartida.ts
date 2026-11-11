@@ -25,6 +25,7 @@ import { calcularFuriten, type EstadoFuriten } from './furiten'
 import {
   declararRiichi,
   desfazer,
+  jogadoresNaMesa,
   podeDeclararRiichi,
   type Cadeira,
   type Contexto,
@@ -50,7 +51,7 @@ export function registrarDescartes(
     opcoes.riichi &&
     !emRiichi &&
     podeDeclararRiichi(partida.placar, cadeira) &&
-    muroPermiteRiichi(registro.lances)
+    muroPermiteRiichi(registro.lances, jogadoresNaMesa(partida))
   ) {
     const comRiichi = declararRiichi(partida, cadeira, contexto)
     return {

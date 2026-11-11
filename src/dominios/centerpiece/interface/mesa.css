@@ -876,3 +876,26 @@ button.mesa-domo {
     grid-column: 1 / -1;
   }
 }
+
+/* ── Sanma: o lado sem jogador vira um painel neutro com a rodada, o honba e os palitos ── */
+.mesa-painel-sanma {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px dashed var(--cor-borda, rgba(255, 255, 255, 0.25));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--cor-superficie, #1e1b2e) 55%, transparent);
+  color: var(--cor-texto-suave, #b8b2cc);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.mesa-painel-sanma strong {
+  color: var(--cor-texto, #f1edf9);
+  font-size: 1rem;
+}

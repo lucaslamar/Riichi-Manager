@@ -2,7 +2,16 @@
  * Dados dos cards de placar ("Em andamento" e "Histórico"), tirados da partida e
  * do registro de mãos. Em TypeScript puro.
  */
-import { CADEIRAS, ORDEM_VENTOS, ventoDaCadeira, type Cadeira, type Partida, type Vento } from './partida'
+import {
+  CADEIRAS,
+  cadeirasDaPartida,
+  jogadoresNaMesa,
+  ORDEM_VENTOS,
+  ventoDaCadeira,
+  type Cadeira,
+  type Partida,
+  type Vento,
+} from './partida'
 
 export type Patamar = 'mangan' | 'haneman' | 'baiman' | 'sanbaiman' | 'yakuman'
 
@@ -85,15 +94,16 @@ export interface LinhaCardMesa {
 /** Em andamento: na ordem dos ventos (東 南 西 北), com o dealer em destaque. */
 export function linhasEmAndamento(partida: Partida): LinhaCardMesa[] {
   const { placar } = partida
-  return [...CADEIRAS]
+  const jogadores = jogadoresNaMesa(partida)
+  return [...cadeirasDaPartida(partida)]
     .sort(
       (uma, outra) =>
-        ORDEM_VENTOS.indexOf(ventoDaCadeira(uma, placar.cadeiraDealer)) -
-        ORDEM_VENTOS.indexOf(ventoDaCadeira(outra, placar.cadeiraDealer)),
+        ORDEM_VENTOS.indexOf(ventoDaCadeira(uma, placar.cadeiraDealer, jogadores)) -
+        ORDEM_VENTOS.indexOf(ventoDaCadeira(outra, placar.cadeiraDealer, jogadores)),
     )
     .map((cadeira) => ({
       cadeira,
-      vento: ventoDaCadeira(cadeira, placar.cadeiraDealer),
+      vento: ventoDaCadeira(cadeira, placar.cadeiraDealer, jogadores),
       pontos: placar.pontos[cadeira],
       destaque: cadeira === placar.cadeiraDealer,
     }))

@@ -11,11 +11,21 @@ import { desmarcarRiichi, type Lance, type RegistroMao } from './descartes'
 import { calcularUma } from './uma'
 import type { MaoMontada } from './tipos-integracao'
 import { vezInicial, type EstadoVez } from './vez'
+import {
+  calcularNoten,
+  calcularPagamentos,
+  calcularResultadoFinal,
+  REGRAS_SANMA_PADRAO,
+  type RegrasSanma,
+  type Variante,
+} from '@/compartilhado/mahjong/variante'
 
 export type Cadeira = 0 | 1 | 2 | 3
 export type Vento = 'leste' | 'sul' | 'oeste' | 'norte'
 
 export const CADEIRAS: readonly Cadeira[] = [0, 1, 2, 3]
+/** Sanma: 3 cadeiras (embaixo, direita, em cima). A da esquerda fica vazia. */
+export const CADEIRAS_SANMA: readonly Cadeira[] = [0, 1, 2]
 export const ORDEM_VENTOS: readonly Vento[] = ['leste', 'sul', 'oeste', 'norte']
 export const KANJI_VENTO: Record<Vento, string> = { leste: '東', sul: '南', oeste: '西', norte: '北' }
 export const CHAVE_VENTO: Record<Vento, string> = {
@@ -111,6 +121,23 @@ export interface Partida {
   vinculoTorneio?: { torneioId: string; rodada: number; mesa: number; guardada?: boolean }
   /** Mesa que saiu do sorteio de um encontro do clube. `mesa` começa em 1. */
   encontro?: { id: string; mesa: number }
+  /** Sanma (3 jogadores). Ausente = yonma, como toda partida antiga. */
+  variante?: Variante
+  /** Regras de Sanma copiadas na criação: mudar os Ajustes depois não altera a partida. */
+  regrasSanma?: RegrasSanma
+}
+
+/** Cadeiras com jogador: as 4 no yonma, as 3 de baixo, da direita e de cima no Sanma. */
+export function cadeirasDaPartida(partida: Pick<Partida, 'variante'>): readonly Cadeira[] {
+  return partida.variante === 'sanma' ? CADEIRAS_SANMA : CADEIRAS
+}
+
+export function jogadoresNaMesa(partida: Pick<Partida, 'variante'>): 3 | 4 {
+  return partida.variante === 'sanma' ? 3 : 4
+}
+
+function regrasSanmaDa(partida: Pick<Partida, 'regrasSanma'>): RegrasSanma {
+  return partida.regrasSanma ?? REGRAS_SANMA_PADRAO
 }
 
 export interface Contexto {
@@ -122,8 +149,9 @@ export function porCadeira<T>(valor: (cadeira: Cadeira) => T): PorCadeira<T> {
   return { 0: valor(0), 1: valor(1), 2: valor(2), 3: valor(3) }
 }
 
-export function ventoDaCadeira(cadeira: Cadeira, dealer: Cadeira): Vento {
-  return ORDEM_VENTOS[(cadeira - dealer + 4) % 4]
+/** `jogadores`: 3 no Sanma (só Leste, Sul e Oeste giram). */
+export function ventoDaCadeira(cadeira: Cadeira, dealer: Cadeira, jogadores: 3 | 4 = 4): Vento {
+  return ORDEM_VENTOS[(cadeira - dealer + jogadores) % jogadores]
 }
 
 export function criarPartida(
@@ -132,17 +160,21 @@ export function criarPartida(
   jogadorIds: readonly [string, string, string, string],
   agora: string,
   nomes?: readonly string[],
+  /** Sanma: a 4ª cadeira fica vazia (sem jogador e com 0 pontos). */
+  sanma?: { regras: RegrasSanma },
 ): Partida {
+  const vazia = (cadeira: Cadeira) => !!sanma && cadeira === 3
   return {
     id,
     config,
+    ...(sanma ? { variante: 'sanma' as const, regrasSanma: sanma.regras } : {}),
     assentos: porCadeira((cadeira) => ({
-      jogadorId: jogadorIds[cadeira],
+      jogadorId: vazia(cadeira) ? '' : jogadorIds[cadeira],
       ventoInicial: ORDEM_VENTOS[cadeira],
-      ...(nomes?.[cadeira] ? { nome: nomes[cadeira] } : {}),
+      ...(nomes?.[cadeira] && !vazia(cadeira) ? { nome: nomes[cadeira] } : {}),
     })),
     placar: {
-      pontos: porCadeira(() => config.pontosPartida),
+      pontos: porCadeira((cadeira) => (vazia(cadeira) ? 0 : config.pontosPartida)),
       cadeiraDealer: 0,
       rodadaVento: 'leste',
       rodadaNumero: 1,
@@ -161,10 +193,13 @@ function somar(pontos: PorCadeira<number>, variacao: PorCadeira<number>) {
   return porCadeira((cadeira) => pontos[cadeira] + variacao[cadeira])
 }
 
-/** Próxima mão depois de passar o dealer. */
-function rodadaSeguinte(placar: Placar): Pick<Placar, 'cadeiraDealer' | 'rodadaVento' | 'rodadaNumero'> {
-  const cadeiraDealer = ((placar.cadeiraDealer + 1) % 4) as Cadeira
-  if (placar.rodadaNumero < 4) {
+/** Próxima mão depois de passar o dealer. No Sanma, 3 dealers por vento (E→S→W→E). */
+function rodadaSeguinte(
+  placar: Placar,
+  jogadores: 3 | 4 = 4,
+): Pick<Placar, 'cadeiraDealer' | 'rodadaVento' | 'rodadaNumero'> {
+  const cadeiraDealer = ((placar.cadeiraDealer + 1) % jogadores) as Cadeira
+  if (placar.rodadaNumero < jogadores) {
     return {
       cadeiraDealer,
       rodadaVento: placar.rodadaVento,
@@ -186,14 +221,15 @@ export function analisarFim(
   pontos: PorCadeira<number>,
   config: ConfigMesa,
   dealerManteve: boolean,
+  cadeiras: readonly Cadeira[] = CADEIRAS,
 ): AnaliseFim {
-  const valores = CADEIRAS.map((cadeira) => pontos[cadeira])
+  const valores = cadeiras.map((cadeira) => pontos[cadeira])
   const maior = Math.max(...valores)
   if (config.tobi && valores.some((valor) => valor < 0)) return { fim: 'tobi' }
 
   const ultimaOficial = ORDEM_VENTOS.indexOf(config.tipoPartida === 'leste' ? 'leste' : 'sul')
   const rodada = ORDEM_VENTOS.indexOf(antes.rodadaVento)
-  const ultimaDaRodada = antes.rodadaNumero === 4
+  const ultimaDaRodada = antes.rodadaNumero === cadeiras.length
 
   // Na prorrogação, acaba assim que alguém chega à meta ou no fim da rodada extra.
   if (rodada > ultimaOficial) {
@@ -221,7 +257,9 @@ function fecharMao(
   const antes = partida.placar
   const pontos = somar(antes.pontos, evento.variacao)
   const analise: AnaliseFim =
-    regras.analisar === false ? {} : analisarFim(antes, pontos, partida.config, regras.dealerManteve)
+    regras.analisar === false
+      ? {}
+      : analisarFim(antes, pontos, partida.config, regras.dealerManteve, cadeirasDaPartida(partida))
 
   // Fim de partida não vira a rodada: o placar fica na mão que terminou.
   const rodada =
@@ -231,7 +269,7 @@ function fecharMao(
           rodadaVento: antes.rodadaVento,
           rodadaNumero: antes.rodadaNumero,
         }
-      : rodadaSeguinte(antes)
+      : rodadaSeguinte(antes, jogadoresNaMesa(partida))
 
   const placar: Placar = { ...antes, ...rodada, pontos, honba: regras.honba, palitos: regras.palitos, riichi: [] }
   const lances = partida.registro?.lances ?? []
@@ -320,8 +358,9 @@ export function registrarRon(
   const cadeiras = vencedores.map((vencedor) => vencedor.cadeira)
   const proprios = cadeiras.filter((cadeira) => antes.riichi.includes(cadeira))
   for (const cadeira of proprios) variacao[cadeira] += 1000
-  const maisProximo = [1, 2, 3]
-    .map((passo) => ((pagador + passo) % 4) as Cadeira)
+  const jogadores = jogadoresNaMesa(partida)
+  const maisProximo = Array.from({ length: jogadores - 1 }, (_vazio, indice) => indice + 1)
+    .map((passo) => ((pagador + passo) % jogadores) as Cadeira)
     .find((cadeira) => cadeiras.includes(cadeira))
   if (maisProximo !== undefined) variacao[maisProximo] += (antes.palitos - proprios.length) * 1000
 
@@ -367,8 +406,10 @@ export function registrarTsumo(
 ): Partida {
   const antes = partida.placar
   const { vencedor } = dados
+  const cadeiras = cadeirasDaPartida(partida)
+  // Sanma: só as 3 cadeiras pagam; o valor de cada uma já vem das calculadoras de Sanma.
   const variacao = porCadeira((cadeira) => {
-    if (cadeira === vencedor) return 0
+    if (cadeira === vencedor || !cadeiras.includes(cadeira)) return 0
     return -(cadeira === antes.cadeiraDealer ? dados.pagamentoDealer : dados.pagamentoNaoDealer)
   })
   variacao[vencedor] =
@@ -393,6 +434,42 @@ export function registrarTsumo(
   )
 }
 
+/**
+ * Noten do Sanma: o total das Regras de Sanma (regra compartilhada), só entre as 3
+ * cadeiras. O yonma segue com `pagamentosNoten`.
+ */
+export function pagamentosNotenSanma(tenpai: readonly Cadeira[], regras: RegrasSanma): PorCadeira<number> {
+  const porJogador = calcularNoten(tenpai, CADEIRAS_SANMA, 'sanma', regras)
+  return porCadeira((cadeira) => porJogador.get(cadeira) ?? 0)
+}
+
+/** Nagashi Mangan no Sanma: um tsumo de Mangan pago pelos outros 2, sem honba. */
+export function pagamentosNagashiSanma(
+  nagashi: readonly Cadeira[],
+  dealer: Cadeira,
+  regras: RegrasSanma,
+): PorCadeira<number> {
+  const variacao = porCadeira(() => 0)
+  for (const ganhador of nagashi) {
+    const { tsumo } = calcularPagamentos({
+      han: 5,
+      fu: 30,
+      dealer: ganhador === dealer,
+      tipo: 'tsumo',
+      honba: 0,
+      variante: 'sanma',
+      regras,
+    })
+    for (const cadeira of CADEIRAS_SANMA) {
+      if (cadeira === ganhador || !tsumo) continue
+      const valor = cadeira === dealer ? tsumo.dealer : tsumo.naoDealer
+      variacao[ganhador] += valor
+      variacao[cadeira] -= valor
+    }
+  }
+  return variacao
+}
+
 /** Pagamento de noten: 3.000 divididos entre quem estava tenpai. */
 export function pagamentosNoten(tenpai: readonly Cadeira[]): PorCadeira<number> {
   if (tenpai.length === 0 || tenpai.length === 4) return porCadeira(() => 0)
@@ -415,6 +492,20 @@ export function pagamentosNagashi(nagashi: readonly Cadeira[], dealer: Cadeira):
   return variacao
 }
 
+/** Pagamentos do ryukyoku (Nagashi Mangan ou noten), conforme a variante da partida. */
+export function variacaoDoRyukyoku(
+  partida: Pick<Partida, 'placar' | 'variante' | 'regrasSanma'>,
+  tenpai: readonly Cadeira[],
+  nagashi: readonly Cadeira[] = [],
+): PorCadeira<number> {
+  const dealer = partida.placar.cadeiraDealer
+  if (partida.variante === 'sanma') {
+    const regras = regrasSanmaDa(partida)
+    return nagashi.length > 0 ? pagamentosNagashiSanma(nagashi, dealer, regras) : pagamentosNotenSanma(tenpai, regras)
+  }
+  return nagashi.length > 0 ? pagamentosNagashi(nagashi, dealer) : pagamentosNoten(tenpai)
+}
+
 export function registrarRyukyoku(
   partida: Partida,
   dados: { tenpai: Cadeira[]; nagashi?: Cadeira[] },
@@ -422,10 +513,7 @@ export function registrarRyukyoku(
 ): Partida {
   const antes = partida.placar
   const nagashi = dados.nagashi ?? []
-  const variacao =
-    nagashi.length > 0
-      ? pagamentosNagashi(nagashi, antes.cadeiraDealer)
-      : pagamentosNoten(dados.tenpai)
+  const variacao = variacaoDoRyukyoku(partida, dados.tenpai, nagashi)
   return fecharMao(
     partida,
     { tipo: 'ryukyoku', variacao, detalhe: { tenpai: dados.tenpai, nagashi } },
@@ -460,7 +548,7 @@ export function registrarChombo(partida: Partida, cadeira: Cadeira, contexto: Co
   const variacao =
     chombo.tipo === 'fixo'
       ? porCadeira(() => 0)
-      : pagamentosChombo(chombo.tipo, cadeira, antes.cadeiraDealer)
+      : pagamentosChombo(chombo.tipo, cadeira, antes.cadeiraDealer, cadeirasDaPartida(partida))
   for (const quem of antes.riichi) variacao[quem] += 1000
 
   return fecharMao(
@@ -540,6 +628,7 @@ const arredondar = (valor: number) => Math.round(valor * 100) / 100
  * eles ficam com a mesma colocação; palitos que sobram vão para o 1º conforme a regra.
  */
 export function calcularResultado(partida: Partida): ResultadoFinal[] {
+  if (partida.variante === 'sanma') return calcularResultadoSanma(partida)
   const { placar, config, assentos, eventos } = partida
   const pontos = { ...placar.pontos }
 
@@ -578,6 +667,48 @@ export function calcularResultado(partida: Partida): ResultadoFinal[] {
   })
 }
 
+/**
+ * Resultado do Sanma: oka e uma das Regras de Sanma (`calcularResultadoFinal`), só
+ * entre as 3 cadeiras. Palitos e chombo de valor fixo seguem a regra da mesa.
+ */
+function calcularResultadoSanma(partida: Partida): ResultadoFinal[] {
+  const { placar, config, assentos, eventos } = partida
+  const regras = regrasSanmaDa(partida)
+  const pontos = { ...placar.pontos }
+
+  const maiorAntes = Math.max(...CADEIRAS_SANMA.map((cadeira) => pontos[cadeira]))
+  if (config.palitosRestantes === 'primeiro' && placar.palitos > 0) {
+    const primeiros = CADEIRAS_SANMA.filter((cadeira) => pontos[cadeira] === maiorAntes)
+    const parte = Math.floor((placar.palitos * 1000) / primeiros.length / 100) * 100
+    for (const cadeira of primeiros) pontos[cadeira] += parte
+  }
+
+  const multas = porCadeira(() => 0)
+  for (const evento of eventos) {
+    const multa = evento.detalhe?.multa
+    if (multa) multas[multa.cadeira] += multa.valor
+  }
+
+  const finais = calcularResultadoFinal(
+    CADEIRAS_SANMA.map((cadeira) => pontos[cadeira]),
+    regras,
+  )
+  return CADEIRAS_SANMA.map((cadeira, indice) => {
+    const linha = finais[indice]
+    const multa = multas[cadeira] / 1000
+    return {
+      cadeira,
+      jogadorId: assentos[cadeira].jogadorId,
+      colocacao: linha.colocacao,
+      pontosBrutos: pontos[cadeira],
+      uma: linha.uma,
+      oka: linha.oka,
+      multa: arredondar(multa),
+      final: arredondar(linha.final - multa),
+    }
+  }).sort((uma, outra) => uma.colocacao - outra.colocacao || outra.pontosBrutos - uma.pontosBrutos || uma.cadeira - outra.cadeira)
+}
+
 export function finalizarPartida(partida: Partida, agora: string): Partida {
   return {
     ...partida,
@@ -589,8 +720,8 @@ export function finalizarPartida(partida: Partida, agora: string): Partida {
 }
 
 /** Quanto falta (negativo) ou sobra em relação a cada outro jogador. */
-export function diferencasDePontos(placar: Placar, cadeira: Cadeira) {
-  return CADEIRAS.filter((outra) => outra !== cadeira).map((outra) => ({
+export function diferencasDePontos(placar: Placar, cadeira: Cadeira, cadeiras: readonly Cadeira[] = CADEIRAS) {
+  return cadeiras.filter((outra) => outra !== cadeira).map((outra) => ({
     cadeira: outra,
     diferenca: placar.pontos[cadeira] - placar.pontos[outra],
   }))

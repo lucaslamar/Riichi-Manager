@@ -38,7 +38,14 @@ export function montarPartida(resumo: ResumoPartida, detalhes?: DetalhesPartida)
     string,
     string,
   ]
-  const base = criarPartida(resumo.id, resumo.config, ids, resumo.criadaEm)
+  const base = criarPartida(
+    resumo.id,
+    resumo.config,
+    ids,
+    resumo.criadaEm,
+    undefined,
+    resumo.variante === 'sanma' && resumo.regrasSanma ? { regras: resumo.regrasSanma } : undefined,
+  )
   const pontos = { ...base.placar.pontos }
   for (const linha of resumo.resultado ?? []) pontos[linha.cadeira] = linha.pontosBrutos
   return { ...resumo, placar: { ...base.placar, pontos }, eventos: [], vez: base.vez }

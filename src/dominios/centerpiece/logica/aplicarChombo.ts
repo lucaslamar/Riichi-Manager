@@ -14,10 +14,12 @@ export function pagamentosChombo(
   tipo: Exclude<ConfigMesa['chombo']['tipo'], 'fixo'>,
   culpado: Cadeira,
   dealer: Cadeira,
+  /** Sanma: só as 3 cadeiras recebem. */
+  cadeiras: readonly Cadeira[] = CADEIRAS,
 ): PorCadeira<number> {
   const base = BASE_POR_TIPO[tipo]
   const variacao: PorCadeira<number> = { 0: 0, 1: 0, 2: 0, 3: 0 }
-  for (const cadeira of CADEIRAS) {
+  for (const cadeira of cadeiras) {
     if (cadeira === culpado) continue
     const valor = culpado === dealer || cadeira === dealer ? base * 2 : base
     variacao[cadeira] += valor

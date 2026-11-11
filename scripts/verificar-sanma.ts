@@ -28,6 +28,15 @@ import { interpretarNotacaoCompleta } from '../src/dominios/calculadora-mao/logi
 import { calcularMao } from '../src/dominios/calculadora-mao/logica/calculo-mao'
 import { calcularEsperasPossiveis } from '../src/dominios/calculadora-mao/logica/esperas'
 import type { Mao } from '../src/dominios/calculadora-mao/logica/tipos'
+import { configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
+import {
+  cadeirasDaPartida,
+  calcularResultado,
+  criarPartida,
+  registrarRyukyoku,
+  registrarTsumo,
+  ventoDaCadeira,
+} from '../src/dominios/centerpiece/logica/partida'
 
 const casos: [string, () => void][] = []
 const caso = (nome: string, teste: () => void) => casos.push([nome, teste])
@@ -317,6 +326,56 @@ caso('mão yonma: sem `sanma`, mesmo resultado de antes', () => {
   const sanma = calcularMao(maoSanma(TANYAO, { agari: 'tsumo' }), configuracaoPadrao)
   assert.ok(sanma.agari === 'tsumo')
   assert.equal(sanma.pontos.total, 1500)
+})
+
+// ─── Partida (Centerpiece) ───────────────────────────────────────────────────
+
+const configSanma = { ...configDoPreset('padrao'), pontosPartida: 35000, pontosRetorno: 40000 }
+const novaSanma = (tipoPartida: 'leste' | 'hanchan' = 'hanchan') =>
+  criarPartida('p', { ...configSanma, tipoPartida }, ['a', 'b', 'c', ''], 'agora', undefined, {
+    regras: REGRAS_SANMA_PADRAO,
+  })
+let idEvento = 0
+const ctx = () => ({ id: `e${idEvento++}`, agora: 'agora' })
+
+caso('partida sanma: 3 cadeiras, 4ª vazia com 0 pontos', () => {
+  const partida = novaSanma()
+  assert.equal(partida.variante, 'sanma')
+  assert.deepEqual(cadeirasDaPartida(partida), [0, 1, 2])
+  assert.equal(partida.assentos[3].jogadorId, '')
+  assert.deepEqual(partida.placar.pontos, { 0: 35000, 1: 35000, 2: 35000, 3: 0 })
+})
+caso('partida sanma: tsumo pago por 2, dealer passa E→S→W→E', () => {
+  let partida = novaSanma()
+  // Não dealer (cadeira 1) mangan tsumo: dealer 4000 + não dealer 2000.
+  partida = registrarTsumo(partida, { vencedor: 1, pagamentoDealer: 4000, pagamentoNaoDealer: 2000 }, ctx())
+  assert.deepEqual(partida.placar.pontos, { 0: 31000, 1: 41000, 2: 33000, 3: 0 })
+  assert.equal(partida.placar.cadeiraDealer, 1)
+  assert.equal(partida.placar.rodadaNumero, 2)
+  assert.equal(ventoDaCadeira(0, 1, 3), 'oeste')
+  partida = registrarRyukyoku(partida, { tenpai: [] }, ctx())
+  partida = registrarRyukyoku(partida, { tenpai: [] }, ctx())
+  // Depois do 3º dealer, volta para a cadeira 0 no Sul (sem passar pela cadeira 3).
+  assert.equal(partida.placar.cadeiraDealer, 0)
+  assert.equal(partida.placar.rodadaVento, 'sul')
+  assert.equal(partida.placar.rodadaNumero, 1)
+})
+caso('partida sanma: Leste apenas acaba depois do 3º dealer', () => {
+  let partida = novaSanma('leste')
+  for (let mao = 0; mao < 3; mao++) partida = registrarRyukyoku(partida, { tenpai: [] }, ctx())
+  assert.equal(partida.fim, 'ultimaMao')
+})
+caso('partida sanma: noten 1 tenpai recebe 2000', () => {
+  const partida = registrarRyukyoku(novaSanma(), { tenpai: [2] }, ctx())
+  assert.deepEqual(partida.placar.pontos, { 0: 34000, 1: 34000, 2: 37000, 3: 0 })
+})
+caso('partida sanma: resultado final soma zero, só 3 linhas', () => {
+  let partida = registrarTsumo(novaSanma(), { vencedor: 1, pagamentoDealer: 4000, pagamentoNaoDealer: 2000 }, ctx())
+  partida = { ...partida, placar: { ...partida.placar } }
+  const resultado = calcularResultado(partida)
+  assert.equal(resultado.length, 3)
+  assert.equal(resultado[0].cadeira, 1)
+  assert.ok(Math.abs(resultado.reduce((soma, linha) => soma + linha.final, 0)) < 1e-9)
 })
 
 let falhas = 0

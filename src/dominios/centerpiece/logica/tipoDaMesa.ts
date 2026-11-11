@@ -4,7 +4,7 @@
  * do Histórico.
  */
 import { normalizarTexto } from '@/dominios/jogadores/logica/jogadores'
-import { CADEIRAS, type Partida } from './partida'
+import { cadeirasDaPartida, type Partida } from './partida'
 
 export type TipoMesa = 'avulsa' | 'clube' | 'torneio'
 export type FiltroTipoMesa = 'todas' | TipoMesa
@@ -33,6 +33,6 @@ export function filtrarHistorico(
 }
 
 /** Ids dos jogadores da partida, na ordem das cadeiras. */
-export function jogadoresDaPartida(partida: Pick<Partida, 'assentos'>) {
-  return CADEIRAS.map((cadeira) => partida.assentos[cadeira].jogadorId)
+export function jogadoresDaPartida(partida: Pick<Partida, 'assentos' | 'variante'>) {
+  return cadeirasDaPartida(partida).map((cadeira) => partida.assentos[cadeira].jogadorId)
 }

@@ -15,7 +15,8 @@ import { numerosDaParede } from '../../logica/dados'
 import { ehQuatroVentos, pedrasNoMuro, ultimoDescarteDaMao } from '../../logica/descartes'
 import { chamarPedra, desfazerUltimoDaMesa } from '../../logica/registroPartida'
 import {
-  CADEIRAS,
+  cadeirasDaPartida,
+  jogadoresNaMesa,
   calcularResultado,
   declararRiichi,
   encerrarPorAgariYame,
@@ -130,7 +131,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     if (!vez.comecou) timer.tocar()
     setDescarteRapido({ cadeira: vez.cadeira, expirou: false })
   }
-  const muro = pedrasNoMuro(partida.registro?.lances ?? [])
+  const muro = pedrasNoMuro(partida.registro?.lances ?? [], jogadoresNaMesa(partida))
 
   // Timer zerou: abre o descarte de quem estourou, uma vez por vez, ou avisa no que já
   // está aberto. O alarme para aqui; fechar pelo X volta ao alarme e ao card piscando.
@@ -153,9 +154,9 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
       timer.passarPara(cadeira)
       setDescarteRapido({ cadeira, expirou: false })
     } else {
-      timer.passarPara(((origem + 1) % 4) as Cadeira)
+      timer.passarPara(((origem + 1) % jogadoresNaMesa(partida)) as Cadeira)
       // Ninguém chamou o último descarte: a mão acaba em ryukyoku.
-      if (ultimoDescarteDaMao(partida.registro?.lances ?? [])) setRyukyokuAberto(true)
+      if (ultimoDescarteDaMao(partida.registro?.lances ?? [], jogadoresNaMesa(partida))) setRyukyokuAberto(true)
     }
   }
 
@@ -315,6 +316,21 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           <div className="mesa-centro-tela">
             <MesaQuadrada
               cadeiraDealer={placar.cadeiraDealer}
+              cadeiras={cadeirasDaPartida(partida)}
+              ladoVazio={
+                partida.variante === 'sanma' ? (
+                  <div className="mesa-painel-sanma" aria-hidden="true">
+                    <strong>
+                      {KANJI_VENTO[placar.rodadaVento]}
+                      {placar.rodadaNumero}
+                    </strong>
+                    <span>
+                      本{placar.honba} · 棒{placar.palitos}
+                    </span>
+                    <span>{t('sanma.sanma')}</span>
+                  </div>
+                ) : undefined
+              }
               aoTocarDomo={timer.ligado ? timer.alternarPausa : undefined}
               rotuloDomo={`${t(timer.contando ? 'match.timer.pause' : 'match.timer.resume')}. ${t('match.table.wall', { count: muro })}`}
               domo={
@@ -345,7 +361,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 placa: (
                   <PlacaJogador
                     nome={nomeDe(cadeira)}
-                    vento={ventoDaCadeira(cadeira, placar.cadeiraDealer)}
+                    vento={ventoDaCadeira(cadeira, placar.cadeiraDealer, jogadoresNaMesa(partida))}
                     pontos={placar.pontos[cadeira]}
                     emRiichi={placar.riichi.includes(cadeira)}
                     checagem={
@@ -382,7 +398,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           </div>
 
           <div className="mesa-acoes">
-            {config.abortivos.quatroVentos && ehQuatroVentos(partida.registro?.lances ?? []) && (
+            {config.abortivos.quatroVentos && partida.variante !== 'sanma' && ehQuatroVentos(partida.registro?.lances ?? []) && (
               <button
                 type="button"
                 className="mesa-aviso"
@@ -470,6 +486,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               initialAgari={batida.tipo}
               initialHonba={placar.honba}
               basengo={config.regrasCalculo.basengo}
+              variante={partida.variante}
             />
           ) : (
             <PaginaCalculadoraMao
@@ -479,7 +496,8 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               contextoCenterpiece={{
                 tipoVitoria: batida.tipo,
                 ventoRodada: ventoMao(placar.rodadaVento),
-                ventoAssento: ventoMao(ventoDaCadeira(vencedorAtual, placar.cadeiraDealer)),
+                ventoAssento: ventoMao(ventoDaCadeira(vencedorAtual, placar.cadeiraDealer, jogadoresNaMesa(partida))),
+                variante: partida.variante,
                 honba: placar.honba,
                 rodadaNumero: placar.rodadaNumero,
                 vencedorEhLeste: vencedorEhDealer,
@@ -495,6 +513,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                   cadeira: vencedorAtual,
                   tipo: batida.tipo,
                   emRiichi: placar.riichi.includes(vencedorAtual),
+                  jogadores: jogadoresNaMesa(partida),
                 }),
               }}
             />

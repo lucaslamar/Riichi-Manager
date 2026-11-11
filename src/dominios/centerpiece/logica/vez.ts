@@ -38,9 +38,9 @@ export function passarVezPara(cadeira: CadeiraVez, segundos: number, agora: numb
 }
 
 /** Toque no timer: o primeiro da mão começa a contar; os outros passam a vez. */
-export function tocarTimer(vez: EstadoVez, segundos: number, agora: number): EstadoVez {
+export function tocarTimer(vez: EstadoVez, segundos: number, agora: number, jogadores: 3 | 4 = 4): EstadoVez {
   if (!vez.comecou) return passarVezPara(vez.cadeira, segundos, agora)
-  return passarVezPara(((vez.cadeira + 1) % 4) as CadeiraVez, segundos, agora)
+  return passarVezPara(((vez.cadeira + 1) % jogadores) as CadeiraVez, segundos, agora)
 }
 
 /**

@@ -1,3 +1,4 @@
+import type { RegrasSanma } from '@/compartilhado/mahjong/variante'
 import { useSyncExternalStore } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
@@ -45,8 +46,14 @@ export const acoesPartidas = {
     definirPartidas([...lerPartidas(), partida])
   },
   /** Partida avulsa no placar. Clube e torneio não abrem placar: só registram o resultado. */
-  criar(config: ConfigMesa, jogadorIds: readonly [string, string, string, string], nomes?: readonly string[]) {
-    const partida = criarPartida(gerarId(), config, jogadorIds, new Date().toISOString(), nomes)
+  criar(
+    config: ConfigMesa,
+    jogadorIds: readonly [string, string, string, string],
+    nomes?: readonly string[],
+    /** Sanma: 3 jogadores (o 4º id fica vazio). */
+    sanma?: { regras: RegrasSanma },
+  ) {
+    const partida = criarPartida(gerarId(), config, jogadorIds, new Date().toISOString(), nomes, sanma)
     definirPartidas([...lerPartidas(), partida])
     return partida.id
   },

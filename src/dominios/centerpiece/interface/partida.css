@@ -1550,3 +1550,8 @@ body:has(.ptd-modulo) {
   gap: 4px;
   margin-top: 10px;
 }
+
+/* Sanma: 3 assentos no setup, o 3º na linha inteira. */
+.ptd-assentos--sanma > :last-child {
+  grid-column: 1 / -1;
+}

@@ -148,6 +148,8 @@ export function desmarcarRiichi(registro: RegistroMao, cadeira: Cadeira): Regist
 
 /** 136 pedras, menos 14 do muro morto e 13 de cada mão, menos a compra do dealer. */
 const PEDRAS_NO_MURO_AO_ABRIR = 69
+/** Sanma: 108 pedras, menos 14 do muro morto e 13 de cada uma das 3 mãos, menos a compra do dealer. */
+const PEDRAS_NO_MURO_AO_ABRIR_SANMA = 54
 /** Riichi só com pelo menos esta quantidade no muro: ainda haverá a próxima compra. */
 export const MINIMO_MURO_RIICHI = 4
 
@@ -156,27 +158,28 @@ export const MINIMO_MURO_RIICHI = 4
  * leva à compra do próximo; Chi, Pon e Ron não compram, e todo kan compra a reposição,
  * que também tira uma pedra do muro.
  */
-export function pedrasNoMuro(lances: readonly Lance[]): number {
+export function pedrasNoMuro(lances: readonly Lance[], jogadores: 3 | 4 = 4): number {
   const compras = lances.filter((lance) => {
     if (lance.tipo === 'kakan') return true
     const chamada = lance.chamadaPor?.tipo
     return chamada !== 'chi' && chamada !== 'pon' && chamada !== 'ron'
   }).length
-  return Math.max(0, PEDRAS_NO_MURO_AO_ABRIR - compras)
+  const aoAbrir = jogadores === 3 ? PEDRAS_NO_MURO_AO_ABRIR_SANMA : PEDRAS_NO_MURO_AO_ABRIR
+  return Math.max(0, aoAbrir - compras)
 }
 
-export function muroPermiteRiichi(lances: readonly Lance[]) {
-  return pedrasNoMuro(lances) >= MINIMO_MURO_RIICHI
+export function muroPermiteRiichi(lances: readonly Lance[], jogadores: 3 | 4 = 4) {
+  return pedrasNoMuro(lances, jogadores) >= MINIMO_MURO_RIICHI
 }
 
 /** Sem pedra para a reposição não há kan. */
-export function muroPermiteKan(lances: readonly Lance[]) {
-  return pedrasNoMuro(lances) > 0
+export function muroPermiteKan(lances: readonly Lance[], jogadores: 3 | 4 = 4) {
+  return pedrasNoMuro(lances, jogadores) > 0
 }
 
 /** Foi o último descarte da mão: o muro já estava vazio quando ele saiu. Só cabe ron. */
-export function ultimoDescarteDaMao(lances: readonly Lance[]) {
-  return lances.length > 0 && pedrasNoMuro(lances.slice(0, -1)) === 0
+export function ultimoDescarteDaMao(lances: readonly Lance[], jogadores: 3 | 4 = 4) {
+  return lances.length > 0 && pedrasNoMuro(lances.slice(0, -1), jogadores) === 0
 }
 
 export function descartesDe(lances: readonly Lance[], cadeira: Cadeira) {

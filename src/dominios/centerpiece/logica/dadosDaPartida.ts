@@ -90,11 +90,14 @@ export function dadosDaPartidaParaMao({
   cadeira,
   tipo,
   emRiichi,
+  jogadores = 4,
 }: {
   lances: readonly Lance[]
   cadeira: Cadeira
   tipo: 'ron' | 'tsumo'
   emRiichi: boolean
+  /** Sanma: muro de 108 pedras. */
+  jogadores?: 3 | 4
 }): DadosDaPartida {
   const ultimo = lances[lances.length - 1]
   const proprios = descartesDe(lances, cadeira)
@@ -112,7 +115,7 @@ export function dadosDaPartidaParaMao({
   return {
     riichi: dadosDoRiichi(lances, cadeira, emRiichi),
     ultimaPedra:
-      !rinshan && (tipo === 'tsumo' ? pedrasNoMuro(lances) === 0 : ultimoDescarteDaMao(lances)),
+      !rinshan && (tipo === 'tsumo' ? pedrasNoMuro(lances, jogadores) === 0 : ultimoDescarteDaMao(lances, jogadores)),
     kan: rinshan || chankan,
     // Sem nenhum lance a mão pode só não ter sido registrada: Yakuman não vem marcado no escuro.
     primeiraCompra:

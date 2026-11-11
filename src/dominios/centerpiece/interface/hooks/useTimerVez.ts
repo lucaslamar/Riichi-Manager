@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { tocarAlarme } from '@/compartilhado/adaptadores/alarme'
 import { vibrar } from '@/compartilhado/adaptadores/vibracao'
-import type { Cadeira, Partida } from '../../logica/partida'
+import { jogadoresNaMesa, type Cadeira, type Partida } from '../../logica/partida'
 import {
   milissegundosRestantes,
   passarVezPara,
@@ -33,7 +33,14 @@ export function useTimerVez(
       atualizar((atual) => ({ ...atual, vez: transformar(atual.vez) })),
     [atualizar],
   )
-  return useRelogioVez(partida.vez, partida.config.timerVez, atualizarVez, modalAberta, alarmeUmaVez)
+  return useRelogioVez(
+    partida.vez,
+    partida.config.timerVez,
+    atualizarVez,
+    modalAberta,
+    alarmeUmaVez,
+    jogadoresNaMesa(partida),
+  )
 }
 
 /**
@@ -46,6 +53,8 @@ export function useRelogioVez(
   atualizarVez: (transformar: (vez: EstadoVez) => EstadoVez) => void,
   modalAberta: boolean,
   alarmeUmaVez = false,
+  /** Sanma: a vez gira entre 3 cadeiras. */
+  jogadores: 3 | 4 = 4,
 ) {
   const [relogio, setRelogio] = useState(Date.now)
   const contando = vez.contandoDesde !== null
@@ -95,7 +104,7 @@ export function useRelogioVez(
     esgotado,
     segundos: Math.ceil(milissegundosRestantes(vez, agora) / 1000),
     fracao: segundosTotais > 0 ? milissegundosRestantes(vez, agora) / (segundosTotais * 1000) : 0,
-    tocar: () => atualizarVez((atual) => tocarTimer(atual, segundosTotais, Date.now())),
+    tocar: () => atualizarVez((atual) => tocarTimer(atual, segundosTotais, Date.now(), jogadores)),
     reiniciar: () => atualizarVez((atual) => reiniciarVez(atual, segundosTotais, Date.now())),
     passarPara: (cadeira: Cadeira) =>
       atualizarVez(() => passarVezPara(cadeira, segundosTotais, Date.now())),

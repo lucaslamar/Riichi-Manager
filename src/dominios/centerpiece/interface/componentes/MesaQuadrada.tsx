@@ -23,6 +23,10 @@ interface PropsMesaQuadrada {
   /** Com ação, o domo vira botão (ex.: pausar o timer); o toque não chega à mesa. */
   aoTocarDomo?: () => void
   rotuloDomo?: string
+  /** Sanma: as 3 cadeiras com jogador. A que sobra mostra `ladoVazio`. */
+  cadeiras?: readonly Cadeira[]
+  /** Painel neutro no lado sem jogador (rodada, honba, palitos), no lugar de um buraco. */
+  ladoVazio?: ReactNode
 }
 
 /**
@@ -39,7 +43,10 @@ export default function MesaQuadrada({
   giro = 0,
   aoTocarDomo,
   rotuloDomo,
+  cadeiras = CADEIRAS,
+  ladoVazio,
 }: PropsMesaQuadrada) {
+  const jogadores = cadeiras.length === 3 ? 3 : 4
   const { t } = useI18n()
   const painelRef = useRef<HTMLDivElement>(null)
   const dealerAnterior = useRef(cadeiraDealer)
@@ -69,7 +76,14 @@ export default function MesaQuadrada({
         <div className="mesa-disco" aria-hidden="true" />
         {CADEIRAS.map((passo) => {
           const cadeira = ((cadeiraDealer + passo) % 4) as Cadeira
-          const vento = ventoDaCadeira(cadeira, cadeiraDealer)
+          if (!cadeiras.includes(cadeira)) {
+            return (
+              <div key={cadeira} className={`mesa-lado mesa-lado--${cadeira} mesa-lado--vazio`}>
+                <div className="mesa-lugar-placa">{ladoVazio}</div>
+              </div>
+            )
+          }
+          const vento = ventoDaCadeira(cadeira, cadeiraDealer, jogadores)
           const { placa, ranhura } = lado(cadeira)
           return (
             <div key={cadeira} className={`mesa-lado mesa-lado--${cadeira}`}>

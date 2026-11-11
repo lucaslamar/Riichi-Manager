@@ -23,11 +23,14 @@ export default function MaoDoHistorico({
   evento,
   cadeira,
   nomeDe,
+  cadeiras = CADEIRAS,
 }: {
   montada: MaoMontada
   evento: EventoPartida
   cadeira: Cadeira
   nomeDe: (cadeira: Cadeira) => string
+  /** Sanma: só as 3 cadeiras com jogador. */
+  cadeiras?: readonly Cadeira[]
 }) {
   const { t, idioma, numero } = useI18n()
   const [aberta, setAberta] = useState(false)
@@ -78,7 +81,7 @@ export default function MaoDoHistorico({
           )}
           <div className="divisor-resultado" />
           <ul className="ptd-linhas">
-            {CADEIRAS.map((outra) => (
+            {cadeiras.map((outra) => (
               <li key={outra}>
                 <span>{nomeDe(outra)}</span>
                 <strong className={evento.variacao[outra] < 0 ? 'ptd-negativo' : evento.variacao[outra] > 0 ? 'ptd-positivo' : undefined}>

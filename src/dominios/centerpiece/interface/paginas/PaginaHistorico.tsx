@@ -9,7 +9,7 @@ import type { Torneio } from '@/dominios/torneio/logica/tipos'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import type { Cadeira, Partida } from '../../logica/partida'
 import { partidasDoHistorico } from '../../logica/ranking'
-import { CADEIRAS } from '../../logica/partida'
+import { cadeirasDaPartida } from '../../logica/partida'
 import { filtrarHistorico, type FiltroTipoMesa } from '../../logica/tipoDaMesa'
 import BotoesOpcao from '../componentes/BotoesOpcao'
 import FiltroTipo from '../componentes/FiltroTipo'
@@ -49,8 +49,8 @@ export default function PaginaHistorico({
     )
   /** Onde a busca procura: os jogadores e, nas de torneio, o nome do torneio. */
   const nomesParaBusca = (partida: Partida) => [
-    ...CADEIRAS.map(nomeNa(partida)),
-    ...CADEIRAS.flatMap((cadeira) => {
+    ...cadeirasDaPartida(partida).map(nomeNa(partida)),
+    ...cadeirasDaPartida(partida).flatMap((cadeira) => {
       const jogador = jogadores.find((item) => item.id === partida.assentos[cadeira].jogadorId)
       return jogador ? [jogador.nome, jogador.apelido ?? ''] : []
     }),
