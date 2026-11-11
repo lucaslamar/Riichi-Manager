@@ -739,3 +739,8 @@ body:has(.sorteador-ventos-page) {
   /* Espaço do "?" no canto, dos dois lados para o seletor ficar centralizado. */
   margin: 0 48px 8px;
 }
+
+/* Sanma: 3 jogadores ocupam o balão inteiro, sem o lugar vazio do 4º. */
+.sorteio-historico--tres {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}

@@ -7,6 +7,8 @@ import {
 } from '../../../calculadora-mao/interface/compartilhado/componentes/PedraVento'
 
 interface PropsResultadoVentos {
+  /** Sanma: 3 jogadores, o balão divide o espaço em 3. */
+  total?: 3 | 4
   /** Ventos já revelados; o índice é o jogador (0 = J1). */
   ventosRevelados: VentoMao[]
   /** Sorteio terminado: os balõezinhos crescem para mostrar o nome do vento. */
@@ -76,12 +78,14 @@ function BalaoResultado({
  * Balõezinhos J1–J4 com a pedra de cada jogador. Só aparecem depois de
  * revelados (nada de espaço vazio) e, no fim, mostram também o nome do vento.
  */
-export default function ResultadoVentos({ ventosRevelados, completo }: PropsResultadoVentos) {
+export default function ResultadoVentos({ ventosRevelados, completo, total = 4 }: PropsResultadoVentos) {
   const { t } = useI18n()
 
   return (
     <ol
-      className={`sorteio-historico${completo ? ' sorteio-historico--completo' : ''}`}
+      className={`sorteio-historico${completo ? ' sorteio-historico--completo' : ''}${
+        total === 3 ? ' sorteio-historico--tres' : ''
+      }`}
       aria-label={t('windDraw.historyLabel')}
     >
       {ventosRevelados.map((vento, indice) => (

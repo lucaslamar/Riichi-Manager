@@ -117,7 +117,7 @@ export default function PaginaSorteadorVentos({
         </span>
       </button>
 
-      <ResultadoVentos ventosRevelados={ventosRevelados} completo={concluido} />
+      <ResultadoVentos ventosRevelados={ventosRevelados} completo={concluido} total={total} />
 
       <div
         className="sorteio-palco"
