@@ -9,7 +9,6 @@ import {
 export const CHAVE_SANMA = 'mojoca:sanma'
 
 interface ConfigSanma {
-  habilitado: boolean
   regras: RegrasSanma
 }
 
@@ -19,9 +18,9 @@ let atual: ConfigSanma | null = null
 function ler(): ConfigSanma {
   try {
     const salvo = JSON.parse(localStorageDireto.ler(CHAVE_SANMA) ?? 'null') as Partial<ConfigSanma> | null
-    return { habilitado: salvo?.habilitado === true, regras: normalizarRegrasSanma(salvo?.regras) }
+    return { regras: normalizarRegrasSanma(salvo?.regras) }
   } catch {
-    return { habilitado: false, regras: { ...REGRAS_SANMA_PADRAO } }
+    return { regras: { ...REGRAS_SANMA_PADRAO } }
   }
 }
 
@@ -52,21 +51,16 @@ function inscrever(ouvinte: () => void) {
 }
 
 /**
- * Suporte a Sanma (desligado por padrão) e as regras de Sanma, guardados em
+ * Regras de Sanma (as mesmas em todos os módulos), guardadas em
  * `mojoca:sanma`. Vale na hora em todas as telas abertas.
  */
 export function useConfigSanma() {
   const config = useSyncExternalStore(inscrever, lerConfigSanma, lerConfigSanma)
-  const setSanmaHabilitado = useCallback((habilitado: boolean) => {
-    gravar({ ...lerConfigSanma(), habilitado })
-  }, [])
   const setRegrasSanma = useCallback((regras: RegrasSanma) => {
     gravar({ ...lerConfigSanma(), regras: normalizarRegrasSanma(regras) })
   }, [])
   return {
-    sanmaHabilitado: config.habilitado,
     regrasSanma: config.regras,
-    setSanmaHabilitado,
     setRegrasSanma,
   }
 }

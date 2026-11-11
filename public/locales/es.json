@@ -1942,10 +1942,7 @@
     "replaceYes": "Borrar y reemplazar"
   },
   "sanma": {
-    "configuracao": "Soporte para Sanma (3 jugadores)",
-    "configuracaoAjuda": "Agrega partidas de 3 jugadores en toda la app",
     "regrasTitulo": "Reglas de Sanma",
-    "regrasAjuda": "Se usan en las partidas y cálculos con 3 jugadores.",
     "restaurarPadrao": "Restaurar valores",
     "restaurarConfirmacao": "Las reglas de Sanma vuelven a los valores predeterminados.",
     "jogadoresTitulo": "Jugadores",

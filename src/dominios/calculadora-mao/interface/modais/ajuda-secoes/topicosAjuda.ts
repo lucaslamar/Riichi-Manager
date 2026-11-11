@@ -31,8 +31,6 @@ export interface BlocoAjuda {
   exemplo?: string
   /** Cena animada do app (mão + teclado + dedo), no lugar do exemplo parado. */
   cena?: NomeCena
-  /** Só com o Suporte a Sanma ligado (ex.: o sufixo de Kita da notação). */
-  soSanma?: boolean
 }
 
 /** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */
@@ -340,7 +338,6 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         subtitulo: 'sanma.kita',
         item: true,
         paragrafos: ['sanma.notacaoKita'],
-        soSanma: true,
       },
       {
         subtitulo: 'sectionHelp.notation.tipTitle',

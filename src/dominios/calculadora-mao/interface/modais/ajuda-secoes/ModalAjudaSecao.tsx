@@ -1,4 +1,3 @@
-import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
 import { Fragment, useState } from 'react'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
@@ -115,9 +114,7 @@ export default function ModalAjudaSecao({
   aoFechar: () => void
 }) {
   const { t } = useI18n()
-  const { sanmaHabilitado } = useConfigSanma()
-  const { titulo, blocos: todosBlocos = [], abas, tema, termosProprios } = TOPICOS_AJUDA[topico]
-  const blocos = sanmaHabilitado ? todosBlocos : todosBlocos.filter((bloco) => !bloco.soSanma)
+  const { titulo, blocos = [], abas, tema, termosProprios } = TOPICOS_AJUDA[topico]
   const [indiceAba, setIndiceAba] = useState(0)
 
   return (

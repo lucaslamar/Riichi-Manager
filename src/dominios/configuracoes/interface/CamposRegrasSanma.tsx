@@ -3,7 +3,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
 import { REGRAS_SANMA_PADRAO, type ModoPagamentoTsumo, type RegrasSanma } from '@/compartilhado/mahjong/variante'
-import { CartaoSwitch } from './ListaAjustesApp'
+import './pagina-regras.css'
 
 type CampoNumero = 'pontosIniciais' | 'pontosRetorno' | 'honbaRon' | 'honbaTsumoPorJogador' | 'notenTotal'
 
@@ -21,13 +21,12 @@ const MODOS_TSUMO: { valor: ModoPagamentoTsumo; chave: string }[] = [
 ]
 
 /**
- * Suporte a Sanma (desligado por padrão) e, ligado, a seção recolhível "Regras de
- * Sanma". Fica na lista de ajustes do app, então aparece na tela Ajustes e na folha
- * da engrenagem sem duplicar.
+ * Regras de Sanma (Kita, pagamento do tsumo, pontos, Uma, honba e noten), com
+ * Restaurar padrão. Aparecem embaixo de Jogadores quando a regra está em 3 jogadores.
  */
-export default function RegrasSanmaSecao() {
+export default function CamposRegrasSanma() {
   const { t } = useI18n()
-  const { sanmaHabilitado, regrasSanma, setSanmaHabilitado, setRegrasSanma } = useConfigSanma()
+  const { regrasSanma, setRegrasSanma } = useConfigSanma()
   const [confirmando, setConfirmando] = useState(false)
   const idTituloTsumo = useId()
   const nomeTsumo = useId()
@@ -42,24 +41,8 @@ export default function RegrasSanmaSecao() {
 
   return (
     <>
-      <CartaoSwitch
-        icone="fa-users"
-        titulo={t('sanma.configuracao')}
-        descricao={t('sanma.configuracaoAjuda')}
-        ligado={sanmaHabilitado}
-        aoMudar={setSanmaHabilitado}
-      />
-
-      {sanmaHabilitado && (
-        <details className="cartao-regras cartao-regras--empilhado regras-sanma">
-          <summary className="regras-sanma__titulo">
-            <i className="fas fa-sliders cartao-regras__icone" aria-hidden="true" />
-            <span className="cartao-regras__texto">
-              <strong>{t('sanma.regrasTitulo')}</strong>
-              <span>{t('sanma.regrasAjuda')}</span>
-            </span>
-          </summary>
-
+      <div className="regras-sanma">
+          <strong className="regras-sanma__titulo">{t('sanma.regrasTitulo')}</strong>
           <div className="regras-sanma__corpo">
             <label className="regras-sanma__check">
               <input
@@ -129,8 +112,7 @@ export default function RegrasSanmaSecao() {
               {t('sanma.restaurarPadrao')}
             </button>
           </div>
-        </details>
-      )}
+      </div>
 
       {confirmando && (
         <Modal

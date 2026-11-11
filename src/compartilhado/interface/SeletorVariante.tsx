@@ -1,6 +1,5 @@
 import { useId } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
 import type { Variante } from '@/compartilhado/mahjong/variante'
 import './seletor-variante.css'
 
@@ -10,7 +9,7 @@ const OPCOES: { valor: Variante; chave: string }[] = [
 ]
 
 /**
- * `4 jogadores | 3 jogadores`. Não aparece com o Sanma desligado. Rádios nativos:
+ * `4 jogadores | 3 jogadores`. Rádios nativos:
  * as setas do teclado trocam a opção sem código extra.
  */
 export default function SeletorVariante({
@@ -25,9 +24,7 @@ export default function SeletorVariante({
   className?: string
 }) {
   const { t } = useI18n()
-  const { sanmaHabilitado } = useConfigSanma()
   const nome = useId()
-  if (!sanmaHabilitado) return null
   return (
     <div
       className={`seletor-variante${className ? ` ${className}` : ''}`}

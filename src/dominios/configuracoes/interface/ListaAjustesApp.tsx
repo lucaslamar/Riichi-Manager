@@ -7,7 +7,6 @@ import type { PreferenciaTema } from '@/compartilhado/tema/temas'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { CHAVE_LIMITE_DETALHES } from '@/services/storage/armazenamentoDados'
 import { lerLimiteDetalhes } from '@/services/storage/partidaArmazenada'
-import RegrasSanmaSecao from './RegrasSanmaSecao'
 import './pagina-regras.css'
 
 const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
@@ -160,7 +159,6 @@ export default function ListaAjustesApp({ antesDaTela }: {
         />
       )}
       <CartaoLimiteDetalhes />
-      <RegrasSanmaSecao />
     </>
   )
 }
@@ -224,7 +222,7 @@ export function CartaoAcao({
  * Cartão inteiro como interruptor: `button` com `role="switch"`, então Espaço e
  * Enter alternam pelo teclado sem código extra.
  */
-export function CartaoSwitch({
+function CartaoSwitch({
   icone,
   titulo,
   descricao,

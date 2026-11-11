@@ -2,7 +2,7 @@ import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { configuracaoPadrao, type ConfiguracaoCalculo } from '../../../logica/mao'
 import { CONFIGURACOES_REGRAS } from '../../constantes'
-import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import CamposRegrasSanma from '@/dominios/configuracoes/interface/CamposRegrasSanma'
 import type { Variante } from '@/compartilhado/mahjong/variante'
 import TextoGlossario from '../glossario/TextoGlossario'
 import './modal-regras.css'
@@ -123,7 +123,7 @@ export default function ModalRegras({
 
 /**
  * 4 jogadores | 3 jogadores como mais uma regra, no mesmo desenho das outras.
- * Não aparece com o Sanma desligado. Serve em qualquer folha de regras.
+ * Em 3 jogadores, as Regras de Sanma aparecem logo embaixo. Serve em qualquer folha de regras.
  */
 export function LinhaVarianteRegra({
   variante,
@@ -133,8 +133,6 @@ export function LinhaVarianteRegra({
   aoMudar: (variante: Variante) => void
 }) {
   const { t } = useI18n()
-  const { sanmaHabilitado } = useConfigSanma()
-  if (!sanmaHabilitado) return null
   const titulo = t('sanma.jogadoresTitulo')
   const opcoes: { valor: Variante; chave: string }[] = [
     { valor: 'yonma', chave: 'sanma.variante4' },
@@ -161,6 +159,7 @@ export function LinhaVarianteRegra({
           ))}
         </div>
       </div>
+      {variante === 'sanma' && <CamposRegrasSanma />}
     </div>
   )
 }

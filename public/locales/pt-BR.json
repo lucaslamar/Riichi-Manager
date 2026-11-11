@@ -1935,10 +1935,7 @@
     "replaceYes": "Apagar e substituir"
   },
   "sanma": {
-    "configuracao": "Suporte a Sanma (3 jogadores)",
-    "configuracaoAjuda": "Adiciona a opção de partidas com 3 jogadores em todo o app",
     "regrasTitulo": "Regras de Sanma",
-    "regrasAjuda": "Valem para as partidas e os cálculos com 3 jogadores.",
     "restaurarPadrao": "Restaurar padrão",
     "restaurarConfirmacao": "As regras de Sanma voltam aos valores padrão.",
     "jogadoresTitulo": "Jogadores",

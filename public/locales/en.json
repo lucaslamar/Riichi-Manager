@@ -1935,10 +1935,7 @@
     "replaceYes": "Delete and replace"
   },
   "sanma": {
-    "configuracao": "Sanma support (3 players)",
-    "configuracaoAjuda": "Adds 3-player games across the whole app",
     "regrasTitulo": "Sanma rules",
-    "regrasAjuda": "Used for 3-player games and calculations.",
     "restaurarPadrao": "Restore defaults",
     "restaurarConfirmacao": "Sanma rules will go back to their default values.",
     "jogadoresTitulo": "Players",
