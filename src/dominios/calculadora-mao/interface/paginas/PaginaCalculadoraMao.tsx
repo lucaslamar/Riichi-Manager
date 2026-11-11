@@ -6,7 +6,6 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
-import SeletorVariante from '@/compartilhado/interface/SeletorVariante'
 import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
 import { useVarianteModulo } from '@/compartilhado/configuracoes/useVarianteModulo'
 import { tileExisteNaVariante, type Variante } from '@/compartilhado/mahjong/variante'
@@ -170,9 +169,6 @@ export default function PaginaCalculadoraMao({
     <div>
       {/* Engrenagem do app no cabeçalho, ao lado da marca (aberta pelo Centerpiece, a tela é da mesa). */}
       {visivel && !contextoCenterpiece && <TituloTela titulo={t('menu.handCalculator')} acoes={<BotaoConfiguracoes />} />}
-      {!contextoCenterpiece && !finalizandoMao && (
-        <SeletorVariante valor={variante} aoMudar={trocarVariante} className="seletor-variante-calculadora" />
-      )}
       <ContextoSanmaMao.Provider value={calculadora.mao.sanma ?? null}>
         <ModoCompletoCalculadora
           estado={calculadora}
@@ -222,6 +218,8 @@ export default function PaginaCalculadoraMao({
           configuracao={calculadora.configuracao}
           aoMudar={calculadora.setConfiguracao}
           aoFechar={() => calculadora.setModalRegrasAberto(false)}
+          variante={variante}
+          aoMudarVariante={trocarVariante}
         />
       )}
     </div>

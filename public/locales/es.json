@@ -1948,6 +1948,8 @@
     "regrasAjuda": "Se usan en las partidas y cálculos con 3 jugadores.",
     "restaurarPadrao": "Restaurar valores",
     "restaurarConfirmacao": "Las reglas de Sanma vuelven a los valores predeterminados.",
+    "jogadoresTitulo": "Jugadores",
+    "jogadoresAjuda": "Yonma (4 jugadores) o Sanma (3 jugadores, sin 2m a 8m y sin Chi).",
     "variante4": "4 jugadores",
     "variante3": "3 jugadores",
     "seletorAria": "Elegir número de jugadores",

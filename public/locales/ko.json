@@ -1919,6 +1919,8 @@
     "regrasAjuda": "Used for 3-player games and calculations.",
     "restaurarPadrao": "Restore defaults",
     "restaurarConfirmacao": "Sanma rules will go back to their default values.",
+    "jogadoresTitulo": "Players",
+    "jogadoresAjuda": "Yonma (4 players) or Sanma (3 players, no 2m to 8m and no Chi).",
     "variante4": "4 players",
     "variante3": "3 players",
     "seletorAria": "Choose number of players",

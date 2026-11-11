@@ -2,6 +2,8 @@ import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { configuracaoPadrao, type ConfiguracaoCalculo } from '../../../logica/mao'
 import { CONFIGURACOES_REGRAS } from '../../constantes'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import type { Variante } from '@/compartilhado/mahjong/variante'
 import TextoGlossario from '../glossario/TextoGlossario'
 import './modal-regras.css'
 
@@ -91,10 +93,15 @@ export default function ModalRegras({
   configuracao,
   aoMudar,
   aoFechar,
+  variante,
+  aoMudarVariante,
 }: {
   configuracao: ConfiguracaoCalculo
   aoMudar: (config: ConfiguracaoCalculo) => void
   aoFechar: () => void
+  /** Com o Sanma ligado, a primeira regra é 4 ou 3 jogadores. */
+  variante?: Variante
+  aoMudarVariante?: (variante: Variante) => void
 }) {
   const { t } = useI18n()
 
@@ -108,8 +115,53 @@ export default function ModalRegras({
       className="modal-regras"
       rodape={<RodapeRegras aoMudar={aoMudar} aoFechar={aoFechar} />}
     >
+      {variante && aoMudarVariante && <LinhaVarianteRegra variante={variante} aoMudar={aoMudarVariante} />}
       <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
     </Modal>
+  )
+}
+
+/**
+ * 4 jogadores | 3 jogadores como mais uma regra, no mesmo desenho das outras.
+ * Não aparece com o Sanma desligado. Serve em qualquer folha de regras.
+ */
+export function LinhaVarianteRegra({
+  variante,
+  aoMudar,
+}: {
+  variante: Variante
+  aoMudar: (variante: Variante) => void
+}) {
+  const { t } = useI18n()
+  const { sanmaHabilitado } = useConfigSanma()
+  if (!sanmaHabilitado) return null
+  const titulo = t('sanma.jogadoresTitulo')
+  const opcoes: { valor: Variante; chave: string }[] = [
+    { valor: 'yonma', chave: 'sanma.variante4' },
+    { valor: 'sanma', chave: 'sanma.variante3' },
+  ]
+  return (
+    <div className="lista-regras lista-regras--variante">
+      <div className="linha-regra">
+        <div className="texto-regra">
+          <strong>{titulo}</strong>
+          <span id="ajuda-regra-variante">{t('sanma.jogadoresAjuda')}</span>
+        </div>
+        <div className="controle-regra" role="group" aria-label={titulo} aria-describedby="ajuda-regra-variante">
+          {opcoes.map((opcao) => (
+            <button
+              key={opcao.valor}
+              type="button"
+              className={variante === opcao.valor ? 'ativo' : ''}
+              aria-pressed={variante === opcao.valor}
+              onClick={() => aoMudar(opcao.valor)}
+            >
+              {t(opcao.chave)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
