@@ -245,6 +245,16 @@
     }
   },
   "hanFuTutorial": {
+    "sanma": {
+      "title": "Sanma (3 players)",
+      "intro": "With 3 players, han, fu and the basic points are the same. Only who pays on **Tsumo** changes.",
+      "ron": "**Ron:** same as with 4 players. The discarder pays it all.",
+      "tsumoSon": "**Tsumo-son** (the most common): each of the 2 pays the usual amount and the North share is lost. A non-dealer Mangan tsumo is 4,000 + 2,000 = 6,000 instead of 8,000.",
+      "split": "**North split:** the North share is split between the 2, rounded up to the next hundred. The same Mangan becomes 5,000 + 3,000 = 8,000.",
+      "honba": "**Honba:** on Ron, 300 per honba. On Tsumo, each payer adds 100 per honba, so the winner gets 200 (with Basengo, 1,500 and 500).",
+      "kita": "**Kita:** each North set aside is 1 dora (nukidora). It counts in han like any dora.",
+      "tip": "In the calculator, pick 3 players to see the total received on Tsumo."
+    },
     "title": "How to count Han and Fu",
     "previous": "Previous",
     "next": "Next",
@@ -1944,7 +1954,6 @@
     "kitaAjuda": "Each North set aside next to the hand is 1 dora, without opening the hand.",
     "norteYakuhaiAjuda": "A North triplet is worth 1 han, like a dragon one.",
     "pagamentoTsumoAjuda": "On tsumo only 2 pay. The North share is lost or split between the two.",
-    "honbaAjuda": "What each honba adds on Ron and, on Tsumo, to each payer.",
     "tsumoSonCurto": "Tsumo-son",
     "divisaoNorteCurto": "North split",
     "variante4": "4 players",
@@ -1964,8 +1973,6 @@
     "pontosRetorno": "Return points",
     "uma": "Uma",
     "umaPosicao": "Uma for {{posicao}}",
-    "honbaRon": "Honba on Ron",
-    "honbaTsumo": "Honba on Tsumo (per player)",
     "notenTotal": "Total noten payment",
     "erroManzu": "Sanma only has 1m and 9m",
     "erroNorteLimite": "At most 4 North between hand and Kita",

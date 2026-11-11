@@ -251,6 +251,16 @@
     }
   },
   "hanFuTutorial": {
+    "sanma": {
+      "title": "Sanma (3 jugadores)",
+      "intro": "Con 3 jugadores, han, fu y los puntos básicos son los mismos. Solo cambia quién paga en **Tsumo**.",
+      "ron": "**Ron:** igual que con 4. Quien descartó paga todo.",
+      "tsumoSon": "**Tsumo-son** (lo más común): cada uno de los 2 paga lo de siempre y la parte del Norte se pierde. Un Mangan de ko en tsumo vale 4.000 + 2.000 = 6.000, en vez de 8.000.",
+      "split": "**División del Norte:** la parte del Norte se reparte entre los 2, redondeada a la centena de arriba. El mismo Mangan queda 5.000 + 3.000 = 8.000.",
+      "honba": "**Honba:** en Ron, 300 por honba. En Tsumo, cada uno que paga suma 100 por honba, así que el ganador recibe 200 (con Basengo, 1.500 y 500).",
+      "kita": "**Kita:** cada Norte apartado es 1 dora (nukidora). Cuenta en el han como cualquier dora.",
+      "tip": "En la calculadora, elige 3 jugadores para ver el total recibido en Tsumo."
+    },
     "title": "Cómo contar Han y Fu",
     "previous": "Anterior",
     "next": "Siguiente",
@@ -1951,7 +1961,6 @@
     "kitaAjuda": "Cada Norte apartado al lado de la mano vale 1 dora, sin abrir la mano.",
     "norteYakuhaiAjuda": "Un trío de Norte vale 1 han, como uno de dragón.",
     "pagamentoTsumoAjuda": "En tsumo solo pagan 2. La parte del Norte se pierde o se reparte entre los dos.",
-    "honbaAjuda": "Cuánto suma cada honba en Ron y, en Tsumo, a cada uno que paga.",
     "tsumoSonCurto": "Tsumo-son",
     "divisaoNorteCurto": "División del Norte",
     "variante4": "4 jugadores",
@@ -1971,8 +1980,6 @@
     "pontosRetorno": "Puntos de retorno",
     "uma": "Uma",
     "umaPosicao": "Uma del {{posicao}}º",
-    "honbaRon": "Honba en Ron",
-    "honbaTsumo": "Honba en Tsumo (por jugador)",
     "notenTotal": "Pago noten total",
     "erroManzu": "En Sanma solo existen 1m y 9m",
     "erroNorteLimite": "Máximo de 4 Norte entre mano y Kita",
