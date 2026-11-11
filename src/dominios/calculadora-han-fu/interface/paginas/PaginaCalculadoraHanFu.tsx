@@ -97,9 +97,9 @@ export default function PaginaCalculadoraHanFu({
       <section className="painel-principal-han-fu">
         {!aoUsarResultado && (
           <div className="seletores-topo-han-fu">
+            <SeletorVariante valor={variante} aoMudar={setVariante} className="seletor-variante-han-fu" />
             <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
             <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />
-            <SeletorVariante valor={variante} aoMudar={setVariante} className="seletor-variante-han-fu" />
           </div>
         )}
 

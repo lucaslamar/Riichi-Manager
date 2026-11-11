@@ -1029,7 +1029,7 @@
   }
 }
 
-/* Sanma: o seletor 4 | 3 jogadores ocupa a linha inteira abaixo de oya e batida. */
+/* O seletor 4 | 3 jogadores vem primeiro, na linha inteira acima de oya e batida. */
 .seletor-variante-han-fu {
   grid-column: 1 / -1;
 }
