@@ -44,6 +44,13 @@
   gap: 10px;
 }
 
+/* Sanma: Uma do 1º, 2º e 3º lado a lado. */
+.cfg-tres-colunas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
 .cfg-ajuda {
   margin: -4px 0 12px;
   color: var(--texto-apoio);

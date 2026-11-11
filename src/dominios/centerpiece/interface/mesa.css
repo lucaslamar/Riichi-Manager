@@ -899,3 +899,10 @@ button.mesa-domo {
   color: var(--cor-texto, #f1edf9);
   font-size: 1rem;
 }
+
+/* Jogadores abre a janela: sem a linha nem o espaço de cima dos outros blocos. */
+.mesa-simples-bloco--primeiro {
+  margin-top: 0;
+  border-top: 0;
+  padding-top: 0;
+}

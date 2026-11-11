@@ -2,8 +2,10 @@ import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { configuracaoPadrao, type ConfiguracaoCalculo } from '../../../logica/mao'
 import { CONFIGURACOES_REGRAS } from '../../constantes'
-import CamposRegrasSanma from '@/dominios/configuracoes/interface/CamposRegrasSanma'
-import type { Variante } from '@/compartilhado/mahjong/variante'
+import { useId, useState } from 'react'
+import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import { REGRAS_SANMA_PADRAO, type RegrasSanma, type Variante } from '@/compartilhado/mahjong/variante'
 import TextoGlossario from '../glossario/TextoGlossario'
 import './modal-regras.css'
 
@@ -104,6 +106,12 @@ export default function ModalRegras({
   aoMudarVariante?: (variante: Variante) => void
 }) {
   const { t } = useI18n()
+  const { setRegrasSanma } = useConfigSanma()
+  const [aba, setAba] = useState<'regras' | 'sanma'>('regras')
+  const comSanma = !!variante && !!aoMudarVariante
+  // Restaurar padrão vale para a aba aberta.
+  const restaurar = (config: ConfiguracaoCalculo) =>
+    aba === 'sanma' ? setRegrasSanma({ ...REGRAS_SANMA_PADRAO, uma: [...REGRAS_SANMA_PADRAO.uma] }) : aoMudar(config)
 
   return (
     <Modal
@@ -113,53 +121,184 @@ export default function ModalRegras({
       rotuloFechar={t('rulesModal.close')}
       tamanho="grande"
       className="modal-regras"
-      rodape={<RodapeRegras aoMudar={aoMudar} aoFechar={aoFechar} />}
+      rodape={<RodapeRegras aoMudar={restaurar} aoFechar={aoFechar} />}
     >
-      {variante && aoMudarVariante && <LinhaVarianteRegra variante={variante} aoMudar={aoMudarVariante} />}
-      <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
+      {comSanma && variante && aoMudarVariante ? (
+        <AbasModal
+          abas={[
+            { chave: 'regras', rotulo: t('rulesModal.title') },
+            { chave: 'sanma', rotulo: t('sanma.sanma') },
+          ]}
+          ativa={aba}
+          aoEscolher={setAba}
+          rotulo={t('rulesModal.title')}
+        >
+          {aba === 'regras' ? (
+            <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
+          ) : (
+            <ListaRegrasSanma variante={variante} aoMudarVariante={aoMudarVariante} />
+          )}
+        </AbasModal>
+      ) : (
+        <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
+      )}
     </Modal>
   )
 }
 
-/**
- * 4 jogadores | 3 jogadores como mais uma regra, no mesmo desenho das outras.
- * Em 3 jogadores, as Regras de Sanma aparecem logo embaixo. Serve em qualquer folha de regras.
- */
-export function LinhaVarianteRegra({
-  variante,
+/** Uma regra de duas (ou mais) opções, no mesmo desenho das Regras de cálculo. */
+export function LinhaRegraOpcoes<T extends string | boolean>({
+  titulo,
+  ajuda,
+  valor,
+  opcoes,
   aoMudar,
 }: {
+  titulo: string
+  ajuda: string
+  valor: T
+  opcoes: { valor: T; rotulo: string }[]
+  aoMudar: (valor: T) => void
+}) {
+  const ajudaId = useId()
+  return (
+    <div className="linha-regra">
+      <div className="texto-regra">
+        <strong>{titulo}</strong>
+        <span id={ajudaId}>
+          <TextoGlossario texto={ajuda} />
+        </span>
+      </div>
+      <div className="controle-regra" role="group" aria-label={titulo} aria-describedby={ajudaId}>
+        {opcoes.map((opcao) => (
+          <button
+            key={String(opcao.valor)}
+            type="button"
+            className={valor === opcao.valor ? 'ativo' : ''}
+            aria-pressed={valor === opcao.valor}
+            onClick={() => {
+              if (valor !== opcao.valor) aoMudar(opcao.valor)
+            }}
+          >
+            {opcao.rotulo}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Honba no Sanma: um número por linha, no mesmo desenho das regras. */
+function LinhaRegraNumero({
+  titulo,
+  ajuda,
+  valor,
+  passo,
+  aoMudar,
+}: {
+  titulo: string
+  ajuda: string
+  valor: number
+  passo: number
+  aoMudar: (valor: number) => void
+}) {
+  const ajudaId = useId()
+  return (
+    <div className="linha-regra">
+      <div className="texto-regra">
+        <strong>{titulo}</strong>
+        <span id={ajudaId}>{ajuda}</span>
+      </div>
+      <input
+        className="campo-regra-numero"
+        type="number"
+        inputMode="numeric"
+        min={0}
+        step={passo}
+        value={valor}
+        aria-label={titulo}
+        aria-describedby={ajudaId}
+        onChange={(evento) => {
+          const novo = Number(evento.target.value)
+          if (evento.target.value.trim() !== '' && Number.isFinite(novo) && novo >= 0) aoMudar(novo)
+        }}
+      />
+    </div>
+  )
+}
+
+/**
+ * Aba Sanma: Jogadores (4 ou 3) e, em 3, só as regras que mudam o cálculo da mão
+ * (Kita, Norte como yakuhai, pagamento do Tsumo e honba). Valem em todo o app.
+ */
+export function ListaRegrasSanma({
+  variante,
+  aoMudarVariante,
+}: {
   variante: Variante
-  aoMudar: (variante: Variante) => void
+  aoMudarVariante: (variante: Variante) => void
 }) {
   const { t } = useI18n()
-  const titulo = t('sanma.jogadoresTitulo')
-  const opcoes: { valor: Variante; chave: string }[] = [
-    { valor: 'yonma', chave: 'sanma.variante4' },
-    { valor: 'sanma', chave: 'sanma.variante3' },
+  const { regrasSanma, setRegrasSanma } = useConfigSanma()
+  const mudar = (parcial: Partial<RegrasSanma>) => setRegrasSanma({ ...regrasSanma, ...parcial })
+  const ligado = [
+    { valor: true, rotulo: t('rulesModal.akadora.on') },
+    { valor: false, rotulo: t('rulesModal.akadora.off') },
   ]
   return (
     <div className="lista-regras lista-regras--variante">
-      <div className="linha-regra">
-        <div className="texto-regra">
-          <strong>{titulo}</strong>
-          <span id="ajuda-regra-variante">{t('sanma.jogadoresAjuda')}</span>
-        </div>
-        <div className="controle-regra" role="group" aria-label={titulo} aria-describedby="ajuda-regra-variante">
-          {opcoes.map((opcao) => (
-            <button
-              key={opcao.valor}
-              type="button"
-              className={variante === opcao.valor ? 'ativo' : ''}
-              aria-pressed={variante === opcao.valor}
-              onClick={() => aoMudar(opcao.valor)}
-            >
-              {t(opcao.chave)}
-            </button>
-          ))}
-        </div>
-      </div>
-      {variante === 'sanma' && <CamposRegrasSanma />}
+      <LinhaRegraOpcoes<Variante>
+        titulo={t('sanma.jogadoresTitulo')}
+        ajuda={t('sanma.jogadoresAjuda')}
+        valor={variante}
+        aoMudar={aoMudarVariante}
+        opcoes={[
+          { valor: 'yonma', rotulo: t('sanma.variante4') },
+          { valor: 'sanma', rotulo: t('sanma.variante3') },
+        ]}
+      />
+      {variante === 'sanma' && (
+        <>
+          <LinhaRegraOpcoes
+            titulo={t('sanma.kitaNukidora')}
+            ajuda={t('sanma.kitaAjuda')}
+            valor={regrasSanma.kitaNukidora}
+            aoMudar={(kitaNukidora) => mudar({ kitaNukidora })}
+            opcoes={ligado}
+          />
+          <LinhaRegraOpcoes
+            titulo={t('sanma.norteYakuhai')}
+            ajuda={t('sanma.norteYakuhaiAjuda')}
+            valor={regrasSanma.norteYakuhai}
+            aoMudar={(norteYakuhai) => mudar({ norteYakuhai })}
+            opcoes={ligado}
+          />
+          <LinhaRegraOpcoes<RegrasSanma['pagamentoTsumo']>
+            titulo={t('sanma.pagamentoTsumo')}
+            ajuda={t('sanma.pagamentoTsumoAjuda')}
+            valor={regrasSanma.pagamentoTsumo}
+            aoMudar={(pagamentoTsumo) => mudar({ pagamentoTsumo })}
+            opcoes={[
+              { valor: 'tsumo-son', rotulo: t('sanma.tsumoSonCurto') },
+              { valor: 'divisao-norte', rotulo: t('sanma.divisaoNorteCurto') },
+            ]}
+          />
+          <LinhaRegraNumero
+            titulo={t('sanma.honbaRon')}
+            ajuda={t('sanma.honbaAjuda')}
+            valor={regrasSanma.honbaRon}
+            passo={100}
+            aoMudar={(honbaRon) => mudar({ honbaRon })}
+          />
+          <LinhaRegraNumero
+            titulo={t('sanma.honbaTsumo')}
+            ajuda={t('sanma.honbaAjuda')}
+            valor={regrasSanma.honbaTsumoPorJogador}
+            passo={100}
+            aoMudar={(honbaTsumoPorJogador) => mudar({ honbaTsumoPorJogador })}
+          />
+        </>
+      )}
     </div>
   )
 }

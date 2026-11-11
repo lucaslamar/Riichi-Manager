@@ -110,3 +110,17 @@
 .linha-regra--desabilitada .controle-regra button {
   cursor: not-allowed;
 }
+
+/* Sanma: honba em número, no lugar dos dois botões. */
+.campo-regra-numero {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  border-radius: 10px;
+  padding: 6px 12px;
+  background: var(--cor-superficie-alt, #f8fafc);
+  color: var(--cor-texto, #102a43);
+  font: inherit;
+  font-weight: 800;
+  text-align: right;
+}

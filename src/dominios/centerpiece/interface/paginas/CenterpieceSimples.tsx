@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
-import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
@@ -124,13 +123,7 @@ export default function CenterpieceSimples({
 
   return (
     <section className="mesa-tela mesa-tela--simples">
-      <TituloTela titulo={t('match.simple.title')} acoes={
-          <>
-            <BotaoTelaCheia />
-            <BotaoConfiguracoes />
-          </>
-        }
-      />
+      <TituloTela titulo={t('match.simple.title')} acoes={<BotaoConfiguracoes />} />
       <RecursosDaMesa />
 
       <div className="mesa-simples-ajuda">
@@ -233,12 +226,31 @@ export default function CenterpieceSimples({
 
       {acoesAbertas && (
         <Modal
-          titulo={t('match.simple.actions')}
+          titulo={t('tableConfig.indexTable')}
           aoFechar={() => fecharAcoes()}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
         >
-          <div className="mesa-simples-acoes">
+          {/* Jogadores primeiro, à parte das ações: trocar recomeça a mesa do 東1. */}
+          <section className="mesa-simples-acoes mesa-simples-bloco mesa-simples-bloco--primeiro" aria-labelledby="mesa-simples-jogadores">
+            <h3 id="mesa-simples-jogadores" className="mesa-simples-bloco-titulo">
+              {t('sanma.jogadoresTitulo')}
+            </h3>
+            <BotoesOpcao<3 | 4>
+              rotulo={t('sanma.jogadoresTitulo')}
+              valor={jogadores}
+              aoEscolher={(quantos) => mudar(mudarJogadores(estado, quantos))}
+              opcoes={[
+                { valor: 4, rotulo: t('sanma.variante4') },
+                { valor: 3, rotulo: t('sanma.variante3') },
+              ]}
+            />
+          </section>
+
+          <section className="mesa-simples-acoes mesa-simples-bloco" aria-labelledby="mesa-simples-mesa">
+            <h3 id="mesa-simples-mesa" className="mesa-simples-bloco-titulo">
+              {t('match.simple.actions')}
+            </h3>
             {timer.ligado && vez.comecou && (
               <button
                 type="button"
@@ -295,17 +307,7 @@ export default function CenterpieceSimples({
                 rotulo: t(`tableConfig.timer${segundos}`),
               }))}
             />
-            {/* 4 ou 3 jogadores: trocar recomeça a mesa do 東1. */}
-            <BotoesOpcao<3 | 4>
-              rotulo={t('sanma.seletorAria')}
-              valor={jogadores}
-              aoEscolher={(quantos) => mudar(mudarJogadores(estado, quantos))}
-              opcoes={[
-                { valor: 4, rotulo: t('sanma.variante4') },
-                { valor: 3, rotulo: t('sanma.variante3') },
-              ]}
-            />
-          </div>
+          </section>
 
           {/* Sortear: os dados (de onde abre o muro) e o Sorteador de Ventos (os assentos). */}
           <section className="mesa-simples-acoes mesa-simples-bloco" aria-labelledby="mesa-simples-sortear">

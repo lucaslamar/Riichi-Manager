@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { LinhaVarianteRegra, ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
+import { ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import type { RegrasSanma } from '@/compartilhado/mahjong/variante'
 import type { Variante } from '@/compartilhado/mahjong/variante'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
@@ -113,6 +115,10 @@ export default function ConfigMesaSheet({
 }: PropsConfigMesaSheet) {
   const { t } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
+  // Sanma: as regras próprias entram nas seções de sempre, com os mesmos campos.
+  const sanma = variante === 'sanma'
+  const { regrasSanma, setRegrasSanma } = useConfigSanma()
+  const mudarSanma = (parcial: Partial<RegrasSanma>) => setRegrasSanma({ ...regrasSanma, ...parcial })
   const semOka = calcularOka(config) <= 0
   const [texto, setTexto] = useState('')
   const busca = normalizarTexto(texto)
@@ -203,9 +209,90 @@ export default function ConfigMesaSheet({
 
       {mostrar('pontuacao') && (
       <section className="cfg-secao" data-secao="pontuacao">
-      {variante && aoMudarVariante && <LinhaVarianteRegra variante={variante} aoMudar={aoMudarVariante} />}
       <h3 className="cfg-grupo">{t('tableConfig.scoring')}</h3>
 
+      {variante && aoMudarVariante && (
+        <Grupo rotulo={t('sanma.jogadoresTitulo')} termos={t('sanma.jogadoresAjuda')}>
+          <BotoesOpcao<NonNullable<typeof variante>>
+            rotulo={t('sanma.jogadoresTitulo')}
+            valor={variante}
+            aoEscolher={aoMudarVariante}
+            opcoes={[
+              { valor: 'yonma', rotulo: t('sanma.variante4') },
+              { valor: 'sanma', rotulo: t('sanma.variante3') },
+            ]}
+          />
+        </Grupo>
+      )}
+
+      {sanma ? (
+      <>
+      <div className="cfg-duas-colunas">
+        <Campo rotulo={t('tableConfig.startPoints')}>
+          <CampoNumero
+            valor={regrasSanma.pontosIniciais}
+            passo={1000}
+            minimo={0}
+            aoMudar={(pontosIniciais) => mudarSanma({ pontosIniciais })}
+          />
+        </Campo>
+        <Campo rotulo={t('tableConfig.returnPoints')}>
+          <CampoNumero
+            valor={regrasSanma.pontosRetorno}
+            passo={1000}
+            minimo={0}
+            aoMudar={(pontosRetorno) => mudarSanma({ pontosRetorno })}
+          />
+        </Campo>
+      </div>
+      <Grupo rotulo={t('tableConfig.uma')}>
+        <div className="cfg-tres-colunas">
+          {regrasSanma.uma.map((valor, indice) => (
+            <Campo key={indice} rotulo={t('sanma.umaPosicao', { posicao: indice + 1 })}>
+              <CampoNumero
+                valor={valor}
+                passo={5}
+                aoMudar={(novo) => {
+                  const uma = [...regrasSanma.uma] as RegrasSanma['uma']
+                  uma[indice] = novo
+                  mudarSanma({ uma })
+                }}
+              />
+            </Campo>
+          ))}
+        </div>
+      </Grupo>
+      <Grupo rotulo={t('sanma.pagamentoTsumo')} termos={t('sanma.pagamentoTsumoAjuda')}>
+        <BotoesOpcao
+          rotulo={t('sanma.pagamentoTsumo')}
+          valor={regrasSanma.pagamentoTsumo}
+          aoEscolher={(pagamentoTsumo) => mudarSanma({ pagamentoTsumo })}
+          opcoes={[
+            { valor: 'tsumo-son', rotulo: t('sanma.tsumoSonCurto') },
+            { valor: 'divisao-norte', rotulo: t('sanma.divisaoNorteCurto') },
+          ]}
+        />
+        <p className="cfg-ajuda">{t('sanma.pagamentoTsumoAjuda')}</p>
+      </Grupo>
+      <div className="cfg-duas-colunas">
+        <Campo rotulo={t('sanma.honbaRon')}>
+          <CampoNumero valor={regrasSanma.honbaRon} passo={100} minimo={0} aoMudar={(honbaRon) => mudarSanma({ honbaRon })} />
+        </Campo>
+        <Campo rotulo={t('sanma.honbaTsumo')}>
+          <CampoNumero
+            valor={regrasSanma.honbaTsumoPorJogador}
+            passo={100}
+            minimo={0}
+            aoMudar={(honbaTsumoPorJogador) => mudarSanma({ honbaTsumoPorJogador })}
+          />
+        </Campo>
+      </div>
+      <Campo rotulo={t('sanma.notenTotal')}>
+        <CampoNumero valor={regrasSanma.notenTotal} passo={1000} minimo={0} aoMudar={(notenTotal) => mudarSanma({ notenTotal })} />
+      </Campo>
+      </>
+      ) : (
+      <>
       <div className="cfg-duas-colunas">
         <Campo rotulo={t('tableConfig.startPoints')}>
           <CampoNumero
@@ -251,6 +338,8 @@ export default function ConfigMesaSheet({
           pontosRetorno={config.pontosRetorno}
         />
       </Buscavel>
+      </>
+      )}
 
       {!soPlacar && (
       <>
@@ -386,6 +475,22 @@ export default function ConfigMesaSheet({
         marcado={config.nagashiMangan}
         aoMudar={(nagashiMangan) => alterar({ nagashiMangan })}
       />
+      {sanma && (
+        <>
+          <Opcao
+            rotulo={t('sanma.kitaNukidora')}
+            ajuda={t('sanma.kitaAjuda')}
+            marcado={regrasSanma.kitaNukidora}
+            aoMudar={(kitaNukidora) => mudarSanma({ kitaNukidora })}
+          />
+          <Opcao
+            rotulo={t('sanma.norteYakuhai')}
+            ajuda={t('sanma.norteYakuhaiAjuda')}
+            marcado={regrasSanma.norteYakuhai}
+            aoMudar={(norteYakuhai) => mudarSanma({ norteYakuhai })}
+          />
+        </>
+      )}
 
       </section>
       )}
@@ -394,7 +499,7 @@ export default function ConfigMesaSheet({
       <section className="cfg-secao" data-secao="empates">
       <h3 className="cfg-grupo">{t('tableConfig.abortiveDraws')}</h3>
       <p className="cfg-ajuda cfg-ajuda--grupo">{t('tableConfig.abortiveDrawsHelp')}</p>
-        {ABORTIVOS.map(({ campo, chave }) => (
+        {ABORTIVOS.filter(({ campo }) => !sanma || (campo !== 'quatroVentos' && campo !== 'quatroRiichis')).map(({ campo, chave }) => (
           <Opcao
             key={campo}
             termos={`${t('tableConfig.abortiveDraws')} ${t('tableConfig.abortiveDrawsHelp')}`}
