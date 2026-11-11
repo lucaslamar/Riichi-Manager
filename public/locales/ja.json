@@ -1208,6 +1208,7 @@
       "adjustHonba": "本場を調整、現在 {{count}}",
       "timerStart": "タイマーを開始",
       "calculate": "手牌を計算",
+      "drawSection": "抽選",
       "calcMpsz": "MPSZ表記で計算",
       "timerPass": "手番を回す"
     },

@@ -8,13 +8,21 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import {
   ajustarHonba,
+  mudarJogadores,
   proximoDealer,
   repetirDealer,
   SIMPLES_INICIAL,
   type EstadoSimples,
 } from '../../logica/centerpieceSimples'
 import { numerosDaParede } from '../../logica/dados'
-import { CHAVE_VENTO, KANJI_VENTO, ventoDaCadeira, type Cadeira } from '../../logica/partida'
+import {
+  CADEIRAS,
+  CADEIRAS_SANMA,
+  CHAVE_VENTO,
+  KANJI_VENTO,
+  ventoDaCadeira,
+  type Cadeira,
+} from '../../logica/partida'
 import {
   carregarSimples,
   dicaSimplesFoiVista,
@@ -54,6 +62,8 @@ export default function CenterpieceSimples({
   const [ladoSorteado, setLadoSorteado] = useState<Cadeira | null>(null)
 
   const giro = useGiroDaMesa()
+  const jogadores = estado.jogadores ?? 4
+  const sanma = jogadores === 3
   const rodada = `${KANJI_VENTO[estado.rodadaVento]}${estado.rodadaNumero} 本${estado.honba}`
   // Timer desligado: o domo mostra só a rodada, em destaque.
   const rodadaNoDomo = (
@@ -147,6 +157,19 @@ export default function CenterpieceSimples({
       <div className="mesa-centro-tela">
         <MesaQuadrada
           cadeiraDealer={estado.cadeiraDealer}
+          cadeiras={sanma ? CADEIRAS_SANMA : CADEIRAS}
+          ladoVazio={
+            sanma ? (
+              <div className="mesa-painel-sanma" aria-hidden="true">
+                <strong>
+                  {KANJI_VENTO[estado.rodadaVento]}
+                  {estado.rodadaNumero}
+                </strong>
+                <span>本{estado.honba}</span>
+                <span>{t('sanma.sanma')}</span>
+              </div>
+            ) : undefined
+          }
           giro={giro}
           aoTocarMesa={abrirAcoes}
           // O timer fica no centro, sem dono: Pon, Chi e Kan pulam jogadores, então ele
@@ -172,7 +195,7 @@ export default function CenterpieceSimples({
             )
           }
           lado={(cadeira) => {
-            const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer)
+            const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer, jogadores)
             const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + 4) % 4).join(' · ')
             const classe = `mesa-placa mesa-placa--simples${vento === 'leste' ? ' mesa-placa--dealer' : ''}${
               ladoSorteado === cadeira ? ' mesa-placa--sorteada' : ''
@@ -260,14 +283,6 @@ export default function CenterpieceSimples({
                 <i className="fas fa-plus" aria-hidden="true" />
               </button>
             </div>
-            <JogarDados
-              cadeiraDealer={estado.cadeiraDealer}
-              className="mesa-btn-secundario"
-              aoSortear={setLadoSorteado}
-            />
-            <button type="button" className="mesa-btn-secundario" onClick={aoAbrirSorteador}>
-              <i className="fas fa-shuffle" aria-hidden="true" /> {t('match.simple.windDraw')}
-            </button>
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>
               <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.simple.restart')}
             </button>
@@ -280,7 +295,33 @@ export default function CenterpieceSimples({
                 rotulo: t(`tableConfig.timer${segundos}`),
               }))}
             />
+            {/* 4 ou 3 jogadores: trocar recomeça a mesa do 東1. */}
+            <BotoesOpcao<3 | 4>
+              rotulo={t('sanma.seletorAria')}
+              valor={jogadores}
+              aoEscolher={(quantos) => mudar(mudarJogadores(estado, quantos))}
+              opcoes={[
+                { valor: 4, rotulo: t('sanma.variante4') },
+                { valor: 3, rotulo: t('sanma.variante3') },
+              ]}
+            />
           </div>
+
+          {/* Sortear: os dados (de onde abre o muro) e o Sorteador de Ventos (os assentos). */}
+          <section className="mesa-simples-acoes mesa-simples-bloco" aria-labelledby="mesa-simples-sortear">
+            <h3 id="mesa-simples-sortear" className="mesa-simples-bloco-titulo">
+              {t('match.simple.drawSection')}
+            </h3>
+            <JogarDados
+              cadeiraDealer={estado.cadeiraDealer}
+              className="mesa-btn-secundario"
+              aoSortear={setLadoSorteado}
+              jogadores={jogadores}
+            />
+            <button type="button" className="mesa-btn-secundario" onClick={aoAbrirSorteador}>
+              <i className="fas fa-shuffle" aria-hidden="true" /> {t('match.simple.windDraw')}
+            </button>
+          </section>
 
           {/* Segundo bloco da mesma janela: atalhos para calcular a mão. */}
           <section className="mesa-simples-acoes mesa-simples-bloco" aria-labelledby="mesa-simples-calcular">

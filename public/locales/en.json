@@ -1225,6 +1225,7 @@
       "adjustHonba": "Adjust honba, currently {{count}}",
       "timerStart": "Start the timer",
       "calculate": "Calculate hand",
+      "drawSection": "Draw",
       "calcMpsz": "Calculator by MPSZ notation",
       "timerPass": "Pass the turn"
     },

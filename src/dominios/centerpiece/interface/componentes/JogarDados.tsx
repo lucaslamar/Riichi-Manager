@@ -20,6 +20,8 @@ interface PropsJogarDados {
   aoMudarAberto?: (aberto: boolean) => void
   /** Cadeira da parede sorteada, para a tela também destacar o lado. */
   aoSortear?: (cadeira: Cadeira) => void
+  /** Sanma: os ventos giram entre 3. A parede do lado vazio continua lá. */
+  jogadores?: 3 | 4
 }
 
 /** Botão "Jogar 2 dados" e a folha com o resultado, a mesma em todas as mesas. */
@@ -28,6 +30,7 @@ export default function JogarDados({
   className,
   aoMudarAberto,
   aoSortear,
+  jogadores = 4,
 }: PropsJogarDados) {
   const { t } = useI18n()
   const [resultado, setResultado] = useState<ResultadoDados | null>(null)
@@ -101,7 +104,9 @@ export default function JogarDados({
                     }`}
                     aria-hidden="true"
                   >
-                    <strong>{KANJI_VENTO[ventoDaCadeira(cadeira, cadeiraDealer)]}</strong>
+                    <strong>
+                      {jogadores === 3 && cadeira === 3 ? '–' : KANJI_VENTO[ventoDaCadeira(cadeira, cadeiraDealer, jogadores)]}
+                    </strong>
                     <span>{numerosDaParede(passos).join(' · ')}</span>
                   </div>
                 )

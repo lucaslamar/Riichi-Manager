@@ -9,6 +9,8 @@ export interface EstadoSimples {
   honba: number
   /** Timer de vez opcional, em segundos; 0 = desligado. */
   timerVez: ConfigMesa['timerVez']
+  /** Sanma: 3 jogadores (Leste, Sul e Oeste). Ausente = 4. */
+  jogadores?: 3
 }
 
 export const SIMPLES_INICIAL: EstadoSimples = {
@@ -20,8 +22,9 @@ export const SIMPLES_INICIAL: EstadoSimples = {
 }
 
 export function proximoDealer(estado: EstadoSimples): EstadoSimples {
-  const cadeiraDealer = ((estado.cadeiraDealer + 1) % 4) as Cadeira
-  if (estado.rodadaNumero < 4) {
+  const jogadores = estado.jogadores ?? 4
+  const cadeiraDealer = ((estado.cadeiraDealer + 1) % jogadores) as Cadeira
+  if (estado.rodadaNumero < jogadores) {
     return {
       ...estado,
       cadeiraDealer,
@@ -32,6 +35,16 @@ export function proximoDealer(estado: EstadoSimples): EstadoSimples {
   }
   const indice = ORDEM_VENTOS.indexOf(estado.rodadaVento)
   return { ...estado, cadeiraDealer, rodadaVento: ORDEM_VENTOS[(indice + 1) % 4], rodadaNumero: 1, honba: 0 }
+}
+
+/** Troca 4 ↔ 3 jogadores: a mesa recomeça do 東1, com o timer como estava. */
+export function mudarJogadores(estado: EstadoSimples, jogadores: 3 | 4): EstadoSimples {
+  if ((estado.jogadores ?? 4) === jogadores) return estado
+  return {
+    ...SIMPLES_INICIAL,
+    timerVez: estado.timerVez,
+    ...(jogadores === 3 ? { jogadores: 3 as const } : {}),
+  }
 }
 
 /** Renchan: o dealer fica e o honba sobe. */
@@ -57,7 +70,11 @@ export function normalizarSimples(salvo: unknown): EstadoSimples {
   const timerVez = OPCOES_TIMER_VEZ.includes(lido.timerVez as ConfigMesa['timerVez'])
     ? (lido.timerVez as ConfigMesa['timerVez'])
     : SIMPLES_INICIAL.timerVez
+  const sanma = lido.jogadores === 3
+  // Sanma salvo com a cadeira ou a mão 4 (não existe com 3): volta ao começo.
+  if (sanma && (lido.cadeiraDealer === 3 || lido.rodadaNumero === 4)) return { ...SIMPLES_INICIAL, timerVez, jogadores: 3 }
   return {
+    ...(sanma ? { jogadores: 3 as const } : {}),
     cadeiraDealer: lido.cadeiraDealer as Cadeira,
     rodadaVento: lido.rodadaVento as Vento,
     rodadaNumero: lido.rodadaNumero as EstadoSimples['rodadaNumero'],

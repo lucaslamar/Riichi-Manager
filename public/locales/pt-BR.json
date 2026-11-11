@@ -1225,6 +1225,7 @@
       "adjustHonba": "Ajustar honba, atual {{count}}",
       "timerStart": "Começar o timer",
       "calculate": "Calcular mão",
+      "drawSection": "Sortear",
       "calcMpsz": "Calculadora por notação MPSZ",
       "timerPass": "Passar a vez"
     },

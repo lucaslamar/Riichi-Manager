@@ -1232,6 +1232,7 @@
       "adjustHonba": "Ajustar honba, actual {{count}}",
       "timerStart": "Iniciar el temporizador",
       "calculate": "Calcular mano",
+      "drawSection": "Sortear",
       "calcMpsz": "Calculadora por notación MPSZ",
       "timerPass": "Pasar el turno"
     },
