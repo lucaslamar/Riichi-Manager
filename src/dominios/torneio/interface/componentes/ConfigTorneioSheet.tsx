@@ -5,7 +5,16 @@ import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/Config
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
-import { dataDoDia, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
+import {
+  aplicarVarianteTorneio,
+  dataDoDia,
+  formatoPadrao,
+  jogadoresPorMesa,
+  sorteiaVentos,
+  ventosPadrao,
+} from '../../logica/torneio'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import type { Variante } from '@/compartilhado/mahjong/variante'
 import { useTorneios } from '../hooks/useTorneios'
 import type { ConfigFormato, FormatoTorneio, Torneio } from '../../logica/tipos'
 import '../torneio.css'
@@ -32,6 +41,10 @@ export default function ConfigTorneioSheet({
   const { t } = useI18n()
   const [formato, setFormato] = useState<ConfigFormato>(torneio.formato)
   const [timers, setTimers] = useState(torneio.timers)
+  // Jogadores (4 ou 3): só no rascunho, antes do sorteio; vale ao Salvar.
+  const [variante, setVariante] = useState<Variante>(torneio.variante ?? 'yonma')
+  const { regrasSanma } = useConfigSanma()
+  const varianteEditavel = torneio.status === 'rascunho'
   const [ventos, setVentos] = useState(() => sorteiaVentos(torneio))
   const { temporadas, salvarTemporada } = useTorneios()
   const [novaTemporada, setNovaTemporada] = useState(() => {
@@ -197,7 +210,7 @@ export default function ConfigTorneioSheet({
   )
 
   // Temporada nova ainda sem id: quem confere é `temporadaValida`.
-  const porMesa = jogadoresPorMesa(torneio)
+  const porMesa = jogadoresPorMesa({ variante })
   const cortesValidos =
     formato.tipo === 'temporada' || formatoValido(formato, jogadores >= porMesa * 2 ? jogadores : undefined, porMesa)
 
@@ -210,6 +223,7 @@ export default function ConfigTorneioSheet({
       secoes={['pontuacao']}
       soPlacar
       podeConcluir={cortesValidos && temporadaValida}
+      {...(varianteEditavel ? { variante, aoMudarVariante: setVariante } : {})}
       abasExtras={[
         {
           id: 'torneio',
@@ -234,7 +248,13 @@ export default function ConfigTorneioSheet({
           salvarTemporada(temporada)
           formatoFinal = { tipo: 'temporada', temporadaId: temporada.id }
         }
-        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos })
+        aoSalvar(
+          aplicarVarianteTorneio(
+            { ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos },
+            variante,
+            regrasSanma,
+          ),
+        )
       }}
     />
   )

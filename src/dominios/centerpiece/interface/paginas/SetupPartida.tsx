@@ -11,7 +11,6 @@ import { carregarUltimaConfig, salvarUltimaConfig } from '../../persistencia/rep
 import ConfigMesaSheet from '../componentes/ConfigMesaSheet'
 import ResumoRegrasCalculo from '../componentes/ResumoRegrasCalculo'
 import { usePartidas } from '../hooks/usePartidas'
-import SeletorVariante from '@/compartilhado/interface/SeletorVariante'
 import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
 import { useVarianteModulo } from '@/compartilhado/configuracoes/useVarianteModulo'
 import { jogadoresDaVariante, type Variante } from '@/compartilhado/mahjong/variante'
@@ -71,8 +70,6 @@ export default function SetupPartida({
     <section className="ptd-setup">
       <TituloTela titulo={t('match.setup.title')} aoVoltar={aoVoltar} />
 
-      <SeletorVariante valor={variante} aoMudar={trocarVariante} />
-
       <div className="ptd-segmentos" role="group" aria-label={t('tableConfig.gameType')}>
         {(['leste', 'hanchan'] as const).map((tipo) => (
           <button
@@ -127,7 +124,10 @@ export default function SetupPartida({
 
       <button type="button" className="ptd-resumo-regras" onClick={() => setRegrasAbertas(true)}>
         <span>
-          <strong>{t(`tableConfig.presets.${config.preset}`)}</strong>
+          <strong>
+            {sanma && `${t('sanma.variante3')} · `}
+            {t(`tableConfig.presets.${config.preset}`)}
+          </strong>
           <span className="ptd-apoio">
             {t('match.setup.rulesSummary', {
               start: numero(configDaMesa.pontosPartida),
@@ -172,6 +172,8 @@ export default function SetupPartida({
       {regrasAbertas && (
         <ConfigMesaSheet
           inicial={config}
+          variante={variante}
+          aoMudarVariante={trocarVariante}
           aoFechar={() => setRegrasAbertas(false)}
           aoConcluir={(nova) => {
             setConfig(nova)

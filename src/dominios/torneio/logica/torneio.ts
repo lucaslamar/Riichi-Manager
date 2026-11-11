@@ -6,6 +6,7 @@ import { alterarConfig, configDoPreset, type ConfigMesa } from '@/dominios/cente
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { nomeExibido, normalizarTexto, type Jogador } from '@/dominios/jogadores/logica/jogadores'
 import type { ConfigFormato, FormatoTorneio, Relogio, RodadaTorneio, Torneio } from './tipos'
+import type { RegrasSanma, Variante } from '@/compartilhado/mahjong/variante'
 
 export const SEGUNDOS_RODADA_PADRAO = 60 * 60
 export const RODADAS_PADRAO = 4
@@ -121,6 +122,28 @@ export function totalDeRodadas(formato: ConfigFormato): number | null {
       return formato.rodadasClassificatoria + formato.cortes.length * formato.rodadasPorFase
     default:
       return null
+  }
+}
+
+/**
+ * Troca a variante de um torneio em rascunho (depois do sorteio ela fica travada).
+ * No Sanma os pontos de partida e de retorno vêm das Regras de Sanma e o Rodízio
+ * tem 3 rodadas. Mesma variante: o torneio volta igual.
+ */
+export function aplicarVarianteTorneio(torneio: Torneio, variante: Variante, regras: RegrasSanma): Torneio {
+  if (variante === (torneio.variante ?? 'yonma')) return torneio
+  const sanma = variante === 'sanma'
+  const padrao = configPadraoTorneio()
+  const rodadas = sanma ? RODADAS_PADRAO_SANMA : RODADAS_PADRAO
+  return {
+    ...torneio,
+    variante: sanma ? 'sanma' : undefined,
+    regrasSanma: sanma ? regras : undefined,
+    config: alterarConfig(torneio.config, {
+      pontosPartida: sanma ? regras.pontosIniciais : padrao.pontosPartida,
+      pontosRetorno: sanma ? regras.pontosRetorno : padrao.pontosRetorno,
+    }),
+    formato: torneio.formato.tipo === 'rodizio' ? { ...torneio.formato, rodadas } : torneio.formato,
   }
 }
 

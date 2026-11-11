@@ -21,17 +21,7 @@ import { rodadasIniciais } from '../../logica/formatos'
 import { formatoValido } from '../../logica/configuracao'
 import { analisarLista, entradasDoTorneio, limparColagem, type StatusLista } from '../../logica/listaTorneio'
 import FolhaImportar from '../componentes/FolhaImportar'
-import {
-  configPadraoTorneio,
-  iniciarTorneio,
-  jogadoresPorMesa,
-  RODADAS_PADRAO,
-  RODADAS_PADRAO_SANMA,
-} from '../../logica/torneio'
-import { alterarConfig } from '@/dominios/centerpiece/logica/configMesa'
-import SeletorVariante from '@/compartilhado/interface/SeletorVariante'
-import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
-import type { Variante } from '@/compartilhado/mahjong/variante'
+import { iniciarTorneio, jogadoresPorMesa } from '../../logica/torneio'
 import type { ListaSalva, Torneio } from '../../logica/tipos'
 import ConfigTorneioSheet from '../componentes/ConfigTorneioSheet'
 import { useTorneios } from '../hooks/useTorneios'
@@ -85,27 +75,6 @@ export default function PaginaListaTorneio({
   const analise = useMemo(() => analisarLista(lista, jogadores, porMesa), [lista, jogadores, porMesa])
   /** Um corte do Eliminatório maior que a lista também segura o sorteio. */
   const formatoOk = formatoValido(torneio.formato, analise.jogadores, porMesa)
-  const { regrasSanma } = useConfigSanma()
-  /**
-   * Só no rascunho (antes do sorteio): depois a variante fica travada. No Sanma os
-   * pontos de partida e de retorno vêm das Regras de Sanma e o Rodízio tem 3 rodadas.
-   */
-  const trocarVariante = (variante: Variante) => {
-    if (variante === (torneio.variante ?? 'yonma')) return
-    const sanma = variante === 'sanma'
-    const padrao = configPadraoTorneio()
-    const rodadas = sanma ? RODADAS_PADRAO_SANMA : RODADAS_PADRAO
-    salvar({
-      ...torneio,
-      variante: sanma ? 'sanma' : undefined,
-      regrasSanma: sanma ? regrasSanma : undefined,
-      config: alterarConfig(torneio.config, {
-        pontosPartida: sanma ? regrasSanma.pontosIniciais : padrao.pontosPartida,
-        pontosRetorno: sanma ? regrasSanma.pontosRetorno : padrao.pontosRetorno,
-      }),
-      formato: torneio.formato.tipo === 'rodizio' ? { ...torneio.formato, rodadas } : torneio.formato,
-    })
-  }
   const podeSortear = analise.podeSortear && formatoOk
   const vinculos = useMemo(() => linhas.map((linha) => jogadorDaLinha(jogadores, linha)), [linhas, jogadores])
   const idsNaLista = useMemo(
@@ -231,10 +200,6 @@ export default function PaginaListaTorneio({
           </span>
         }
       />
-
-      {torneio.status === 'rascunho' && (
-        <SeletorVariante valor={torneio.variante ?? 'yonma'} aoMudar={trocarVariante} className="trn-seletor-variante" />
-      )}
 
       {emJogo && aoAbrirTorneio && (
         <button

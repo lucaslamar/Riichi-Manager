@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
+import { LinhaVarianteRegra, ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
+import type { Variante } from '@/compartilhado/mahjong/variante'
 import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
@@ -85,6 +86,9 @@ interface PropsConfigMesaSheet {
    * (o Torneio põe a "Ajustes do app").
    */
   abasFim?: readonly AbaExtra[]
+  /** Com o Sanma ligado, Jogadores (4 ou 3) abre a Pontuação, como mais uma regra. */
+  variante?: Variante
+  aoMudarVariante?: (variante: Variante) => void
 }
 
 /**
@@ -104,6 +108,8 @@ export default function ConfigMesaSheet({
   secoes = SECOES.map(({ id }) => id),
   soPlacar = false,
   abasFim = [],
+  variante,
+  aoMudarVariante,
 }: PropsConfigMesaSheet) {
   const { t } = useI18n()
   const { config, alterar, escolherPreset, reiniciar } = useConfigMesa(inicial)
@@ -197,6 +203,7 @@ export default function ConfigMesaSheet({
 
       {mostrar('pontuacao') && (
       <section className="cfg-secao" data-secao="pontuacao">
+      {variante && aoMudarVariante && <LinhaVarianteRegra variante={variante} aoMudar={aoMudarVariante} />}
       <h3 className="cfg-grupo">{t('tableConfig.scoring')}</h3>
 
       <div className="cfg-duas-colunas">
