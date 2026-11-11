@@ -64,8 +64,6 @@ export default function PaginaRanking({
         return t('match.ranking.filters.minimumChip', { count: filtros.minimoPartidas })
       case 'ordem':
         return t(`match.ranking.filters.sorts.${filtros.ordenarPor}`)
-      case 'variante':
-        return t('sanma.variante3')
     }
   }
   const semFiltro = (ativo: (typeof ativos)[number]) => {
@@ -82,8 +80,6 @@ export default function PaginaRanking({
         return { ...filtros, minimoPartidas: FILTROS_PADRAO.minimoPartidas }
       case 'ordem':
         return { ...filtros, ordenarPor: FILTROS_PADRAO.ordenarPor }
-      case 'variante':
-        return { ...filtros, variante: undefined }
     }
   }
   const comSinal = (valor: number) => `${valor > 0 ? '+' : ''}${numero(valor)}`
@@ -147,19 +143,6 @@ export default function PaginaRanking({
           onClick={() => setFiltros({ ...filtros, periodo: proximo(PERIODOS_RAPIDOS, filtros.periodo) })}
         >
           <i className="fas fa-calendar-days" aria-hidden="true" />
-        </button>
-        {/* 4 ou 3 jogadores, como o período e a duração (o ranking nunca mistura). */}
-        <button
-          type="button"
-          className={`rkf-icone${filtros.variante === 'sanma' ? ' rkf-icone--ativo' : ''}`}
-          aria-label={`${t('sanma.filtroVariante')}: ${t(filtros.variante === 'sanma' ? 'sanma.variante3' : 'sanma.variante4')}`}
-          title={`${t('sanma.filtroVariante')}: ${t(filtros.variante === 'sanma' ? 'sanma.variante3' : 'sanma.variante4')}`}
-          onClick={() => setFiltros({ ...filtros, variante: filtros.variante === 'sanma' ? undefined : 'sanma' })}
-        >
-          <i className="fas fa-users" aria-hidden="true" />
-          <span className="rkf-icone-numero" aria-hidden="true">
-            {filtros.variante === 'sanma' ? 3 : 4}
-          </span>
         </button>
         <button
           type="button"

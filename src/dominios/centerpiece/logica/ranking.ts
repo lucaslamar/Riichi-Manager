@@ -168,8 +168,9 @@ export function mudancaNoRanking(
       linhas.map((linha, indice) => [linha.jogadorId, { total: linha.pontuacaoTotal, posicao: posicoes[indice] }]),
     )
   }
-  // O ranking nunca mistura 4 e 3 jogadores: conta só as partidas da mesma variante.
-  const mesma = partidas.filter((partida) => lerVariante(partida.variante) === lerVariante(nova.variante))
+  // Sanma não entra no ranking: a partida não muda nada nele.
+  if (lerVariante(nova.variante) !== 'yonma') return []
+  const mesma = partidas.filter((partida) => lerVariante(partida.variante) === 'yonma')
   const antes = situacao(mesma)
   const depois = situacao([...mesma, nova])
   return [...(nova.resultado ?? [])]

@@ -30,7 +30,8 @@ import { calcularEsperasPossiveis } from '../src/dominios/calculadora-mao/logica
 import type { Mao } from '../src/dominios/calculadora-mao/logica/tipos'
 import { configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
 import { analisarLista } from '../src/dominios/torneio/logica/listaTorneio'
-import { computeRanking, FILTROS_PADRAO, lerFiltros } from '../src/dominios/centerpiece/logica/filtrosRanking'
+import { computeRanking, FILTROS_PADRAO } from '../src/dominios/centerpiece/logica/filtrosRanking'
+import { mudancaNoRanking } from '../src/dominios/centerpiece/logica/ranking'
 import { gerarRodizioSanma } from '../src/dominios/torneio/logica/formatos'
 import { rodadaAleatoria } from '../src/dominios/torneio/logica/formatos/rodadaAleatoria'
 import {
@@ -430,23 +431,15 @@ const sanmaFinal = finalizada(
   registrarTsumo(novaSanma(), { vencedor: 1, pagamentoDealer: 4000, pagamentoNaoDealer: 2000 }, ctx()),
 )
 
-caso('ranking: nunca mistura 4 e 3 jogadores', () => {
-  const partidas = [yonmaFinal, sanmaFinal]
-  const de4 = computeRanking(partidas, FILTROS_PADRAO, new Date('2026-11-10'))
-  const de3 = computeRanking(partidas, { ...FILTROS_PADRAO, variante: 'sanma' }, new Date('2026-11-10'))
-  assert.deepEqual(de4.map((linha) => linha.jogadorId).sort(), ['a', 'x', 'y', 'z'])
-  assert.deepEqual(de3.map((linha) => linha.jogadorId).sort(), ['a', 'b', 'c'])
-  assert.ok(de3.every((linha) => linha.mediaColocacao <= 3))
+caso('ranking: partida de Sanma não conta', () => {
+  const linhas = computeRanking([yonmaFinal, sanmaFinal], FILTROS_PADRAO, new Date('2026-11-10'))
+  assert.deepEqual(linhas.map((linha) => linha.jogadorId).sort(), ['a', 'x', 'y', 'z'])
+  assert.deepEqual(mudancaNoRanking([yonmaFinal], sanmaFinal, new Date('2026-11-10'), () => true), [])
 })
 caso('ranking: partida antiga (sem variante) conta como 4 jogadores', () => {
   const antiga = { ...yonmaFinal }
   delete antiga.variante
   assert.equal(computeRanking([antiga], FILTROS_PADRAO, new Date('2026-11-10')).length, 4)
-  assert.equal(computeRanking([antiga], { ...FILTROS_PADRAO, variante: 'sanma' }, new Date('2026-11-10')).length, 0)
-})
-caso('ranking: filtro salvo lê a variante e ignora lixo', () => {
-  assert.equal(lerFiltros(JSON.stringify({ variante: 'sanma' })).variante, 'sanma')
-  assert.equal(lerFiltros(JSON.stringify({ variante: 'xyz' })).variante, undefined)
 })
 
 let falhas = 0
