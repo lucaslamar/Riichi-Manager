@@ -9,6 +9,7 @@ import {
   type FiltrosRankingGeral,
 } from '../../logica/filtrosRanking'
 import { usePartidas } from './usePartidas'
+import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
 
 /** Os filtros ficam salvos até a pessoa limpar. */
 const CHAVE_FILTROS = 'riichi-manager-ranking-filtros'
@@ -16,13 +17,20 @@ const CHAVE_FILTROS = 'riichi-manager-ranking-filtros'
 /** Filtros da tela e o ranking calculado a partir das partidas salvas. */
 export function useRankingGeral() {
   const { partidas } = usePartidas()
-  const [filtros, setFiltros] = useState<FiltrosRankingGeral>(() =>
+  const { sanmaHabilitado } = useConfigSanma()
+  const [filtrosSalvos, setFiltros] = useState<FiltrosRankingGeral>(() =>
     lerFiltros(armazenamentoLocal.ler(CHAVE_FILTROS)),
   )
 
   useEffect(() => {
-    armazenamentoLocal.gravar(CHAVE_FILTROS, JSON.stringify(filtros))
-  }, [filtros])
+    armazenamentoLocal.gravar(CHAVE_FILTROS, JSON.stringify(filtrosSalvos))
+  }, [filtrosSalvos])
+
+  // Sanma desligado: o ranking é o de 4 jogadores, seja qual for o filtro guardado.
+  const filtros = useMemo<FiltrosRankingGeral>(
+    () => (sanmaHabilitado || !filtrosSalvos.variante ? filtrosSalvos : { ...filtrosSalvos, variante: undefined }),
+    [sanmaHabilitado, filtrosSalvos],
+  )
 
   const linhas = useMemo(() => computeRanking(partidas, filtros, new Date()), [partidas, filtros])
 

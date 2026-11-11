@@ -3,6 +3,7 @@
  * parte: cada partida já guarda o resultado calculado com a própria config, e
  * empate de pontos já vem com a uma dividida.
  */
+import { lerVariante } from '@/compartilhado/mahjong/variante'
 import type { Partida } from './partida'
 
 export type FiltroPeriodo = 'mes' | 'ano' | 'tudo'
@@ -167,8 +168,10 @@ export function mudancaNoRanking(
       linhas.map((linha, indice) => [linha.jogadorId, { total: linha.pontuacaoTotal, posicao: posicoes[indice] }]),
     )
   }
-  const antes = situacao(partidas)
-  const depois = situacao([...partidas, nova])
+  // O ranking nunca mistura 4 e 3 jogadores: conta só as partidas da mesma variante.
+  const mesma = partidas.filter((partida) => lerVariante(partida.variante) === lerVariante(nova.variante))
+  const antes = situacao(mesma)
+  const depois = situacao([...mesma, nova])
   return [...(nova.resultado ?? [])]
     .sort((uma, outra) => uma.colocacao - outra.colocacao)
     .flatMap((linha) => {

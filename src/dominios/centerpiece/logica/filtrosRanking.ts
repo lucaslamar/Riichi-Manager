@@ -2,6 +2,7 @@
  * Filtros do ranking geral e confronto direto (Rivais e Fregueses). Tudo puro:
  * recebe as partidas e os filtros e devolve as linhas, sem nada pré-somado.
  */
+import { lerVariante, type Variante } from '@/compartilhado/mahjong/variante'
 import type { Partida } from './partida'
 import { partidasDoHistorico, type LinhaRanking } from './ranking'
 
@@ -22,6 +23,11 @@ export interface FiltrosRankingGeral {
   origem: OrigemRanking
   minimoPartidas: 0 | 3 | 5 | 10
   ordenarPor: OrdemRanking
+  /**
+   * 4 ou 3 jogadores: o ranking nunca mistura os dois. Ausente = 4 jogadores
+   * (partidas antigas, sem o campo, são de 4).
+   */
+  variante?: Variante
 }
 
 export const FILTROS_PADRAO: FiltrosRankingGeral = {
@@ -34,7 +40,8 @@ export const FILTROS_PADRAO: FiltrosRankingGeral = {
 
 /** Quais filtros fogem do padrão: cada um vira um chip removível. */
 export function filtrosAtivos(filtros: FiltrosRankingGeral) {
-  const ativos: ('jogador' | 'duracao' | 'origem' | 'minimo' | 'ordem' | 'periodo')[] = []
+  const ativos: ('jogador' | 'duracao' | 'origem' | 'minimo' | 'ordem' | 'periodo' | 'variante')[] = []
+  if (filtros.variante === 'sanma') ativos.push('variante')
   if (filtros.jogadorId) ativos.push('jogador')
   if (filtros.periodo !== 'tudo') ativos.push('periodo')
   if (filtros.duracao !== 'todas') ativos.push('duracao')
@@ -78,7 +85,9 @@ export function partidasFiltradas(
   agora: Date,
   comJogador = true,
 ): Partida[] {
+  const variante = filtros.variante ?? 'yonma'
   return partidasDoHistorico(partidas).filter((partida) => {
+    if (lerVariante(partida.variante) !== variante) return false
     if (!dentroDoPeriodo(partida.finalizadaEm ?? '', filtros, agora)) return false
     if (filtros.duracao !== 'todas' && partida.config.tipoPartida !== filtros.duracao) return false
     if (filtros.origem === 'app' && partida.registradaManual) return false
@@ -221,6 +230,7 @@ export function lerFiltros(texto: string | null): FiltrosRankingGeral {
       origem: umDe(lido.origem, ['todas', 'app', 'fora'] as const, 'todas'),
       minimoPartidas: umDe(lido.minimoPartidas, [0, 3, 5, 10] as const, 0),
       ordenarPor: umDe(lido.ordenarPor, ['pontuacao', 'media', 'primeiro', 'partidas'] as const, 'pontuacao'),
+      ...(lido.variante === 'sanma' ? { variante: 'sanma' as const } : {}),
     }
   } catch {
     return FILTROS_PADRAO
