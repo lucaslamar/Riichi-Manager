@@ -124,6 +124,12 @@ export default function SecaoYakusLocais({ mostrar }: { mostrar?: (texto: string
                     {texto.descricao}
                     {yaku.situacao && <> {t('localYaku.conditionNote')}</>}
                   </small>
+                  {EXEMPLOS_YAKUS_LOCAIS[yaku.id] && (
+                    <PedrasExemplo
+                      grupos={parseMpszGrupos(EXEMPLOS_YAKUS_LOCAIS[yaku.id])}
+                      rotulo={t('pocketGuide.example', { exemplo: EXEMPLOS_YAKUS_LOCAIS[yaku.id] })}
+                    />
+                  )}
                 </span>
               </label>
               {yaku.id === 'paarenchan' && ativo && (
