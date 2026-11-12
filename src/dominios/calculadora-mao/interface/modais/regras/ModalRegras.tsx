@@ -7,7 +7,29 @@ import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
 import { REGRAS_SANMA_PADRAO, type RegrasSanma, type Variante } from '@/compartilhado/mahjong/variante'
 import TextoGlossario from '../glossario/TextoGlossario'
+import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
+import SecaoYakusLocais from './SecaoYakusLocais'
 import './modal-regras.css'
+
+/** Sem acento e sem maiúscula, para a busca das regras. */
+function normalizarBusca(texto: string) {
+  return texto
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim()
+}
+
+/** Rola até a regra, deixando-a logo abaixo do topo preso (abas, busca e sumário). */
+function irPara(id: string) {
+  const alvo = document.getElementById(id)
+  if (!alvo) return
+  const corpo = alvo.closest('.modal-corpo')
+  const topo = corpo?.querySelector<HTMLElement>('.abas-modal__topo, .regras-topo--fixo')
+  alvo.style.scrollMarginTop = `${(topo?.offsetHeight ?? 0) + 12}px`
+  const reduzir = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  alvo.scrollIntoView({ block: 'start', behavior: reduzir ? 'auto' : 'smooth' })
+}
 
 const CHAVES_REGRAS: Record<
   keyof ConfiguracaoCalculo,
@@ -108,7 +130,48 @@ export default function ModalRegras({
   const { t } = useI18n()
   const { setRegrasSanma } = useConfigSanma()
   const [aba, setAba] = useState<'regras' | 'sanma'>('regras')
+  const [busca, setBusca] = useState('')
   const comSanma = !!variante && !!aoMudarVariante
+  const termo = normalizarBusca(busca)
+  const mostrar = termo ? (texto: string) => normalizarBusca(texto).includes(termo) : undefined
+
+  // Busca e sumário presos no topo, logo abaixo das abas.
+  const topo = (
+    <div className="regras-topo">
+      <CampoBusca
+        valor={busca}
+        aoMudar={setBusca}
+        rotulo={t('rulesModal.search')}
+        placeholder={t('rulesModal.search')}
+        rotuloLimpar={t('pocketGuide.search.clear')}
+      />
+      {!busca && (aba === 'regras' || !comSanma) && (
+        <nav className="regras-sumario" aria-label={t('rulesModal.summary')}>
+          {[
+            ...CONFIGURACOES_REGRAS.map((regra) => ({ id: `regra-${regra.chave}`, rotulo: t(CHAVES_REGRAS[regra.chave].titulo) })),
+            { id: 'regra-yakusLocais', rotulo: t('localYaku.title') },
+          ].map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              onClick={(evento) => {
+                evento.preventDefault()
+                irPara(item.id)
+              }}
+            >
+              {item.rotulo}
+            </a>
+          ))}
+        </nav>
+      )}
+    </div>
+  )
+  const listaRegras = (
+    <>
+      <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} mostrar={mostrar} />
+      <SecaoYakusLocais mostrar={mostrar} />
+    </>
+  )
   // Restaurar padrão vale para a aba aberta.
   const restaurar = (config: ConfiguracaoCalculo) =>
     aba === 'sanma' ? setRegrasSanma({ ...REGRAS_SANMA_PADRAO, uma: [...REGRAS_SANMA_PADRAO.uma] }) : aoMudar(config)
@@ -132,15 +195,15 @@ export default function ModalRegras({
           ativa={aba}
           aoEscolher={setAba}
           rotulo={t('rulesModal.title')}
+          fixo={aba === 'regras' ? topo : undefined}
         >
-          {aba === 'regras' ? (
-            <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
-          ) : (
-            <ListaRegrasSanma variante={variante} aoMudarVariante={aoMudarVariante} />
-          )}
+          {aba === 'regras' ? listaRegras : <ListaRegrasSanma variante={variante} aoMudarVariante={aoMudarVariante} />}
         </AbasModal>
       ) : (
-        <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} />
+        <>
+          <div className="regras-topo regras-topo--fixo">{topo}</div>
+          {listaRegras}
+        </>
       )}
     </Modal>
   )
@@ -318,6 +381,7 @@ export function ListaRegrasCalculo({
 
           return (
             <div
+              id={`regra-${regra.chave}`}
               className={`linha-regra${desabilitada ? ' linha-regra--desabilitada' : ''}`}
               key={regra.chave}
             >

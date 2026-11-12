@@ -55,3 +55,10 @@
   outline: 2px solid var(--abas-cor);
   outline-offset: 2px;
 }
+
+/* Dentro do corpo da modal, o topo preso cobre também o respiro de cima do corpo:
+   sem isso, o texto rolado aparecia (cortado) por cima das abas. */
+.modal-corpo .abas-modal__topo {
+  top: calc(var(--modal-espaco) * -0.5);
+  z-index: 3;
+}

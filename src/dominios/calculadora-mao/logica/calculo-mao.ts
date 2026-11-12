@@ -3,8 +3,11 @@ import type { Mao, MaoSanma } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
 import type { ConfiguracaoCalculo, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
+import { encontrarYakusLocais, HAN_MINIMO, type OpcoesLocais } from './yakusLocais'
 import {
   aplicarHonba,
+  arredondar100,
+  BASE_PATAMAR,
   calcularHanFu,
   calcularPatamarHanFu,
   doraFlamejanteAtiva,
@@ -134,7 +137,99 @@ function pontosSanma(
  * @param config - Configuracoes de regras.
  * @returns Resultado com yaku, han, fu e pontos.
  */
-export function calcularMao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
+export function calcularMao(mao: Mao, config: ConfiguracaoCalculo, locais?: OpcoesLocais): ResultadoMao {
+  const padrao = calcularMaoPadrao(mao, config)
+  const resultado = locais ? aplicarYakusLocais(padrao, mao, config, locais) : padrao
+  // Ryanhan-shibari do Paarenchan: do 5º honba em diante, 2 han sem contar dora.
+  if (locais?.ryanhanShibari && mao.honba >= 5 && resultado.agari !== null && resultado.yakuman === 0) {
+    const semDora = resultado.yaku
+      .filter(([nome]) => !/dora/i.test(nome))
+      .reduce((soma, [, han]) => soma + han, 0)
+    if (semDora < 2) return { ...resultado, semYaku: true }
+  }
+  return resultado
+}
+
+/** Pontos de uma mão com han, fu e yakuman já decididos (yonma ou Sanma, com honba). */
+function pontuar(mao: Mao, config: ConfiguracaoCalculo, han: number, fu: number, yakuman: number) {
+  const isOya = mao.ventoAssento === '1'
+  const patamar = calcularPatamarHanFu(han, fu, config)
+  const base = yakuman > 0 ? BASE_PATAMAR.yakuman * yakuman : patamar.base
+  const tabela = {
+    tsumoOya: arredondar100(base * 2),
+    tsumoKo: arredondar100(base),
+    ronOya: arredondar100(base * 6),
+    ronKo: arredondar100(base * 4),
+  }
+  const pontosBase = montarPontosRapidos(isOya, mao.agari, tabela)
+  if (mao.sanma) {
+    const sanma = pontosSanma(mao, mao.sanma, pontosBase, han, fu, yakuman, config)
+    return { pontos: sanma.pontos, pontosHonba: sanma.honba, patamar }
+  }
+  const pontos = aplicarHonba(pontosBase, mao.honba, valorPorHonba(config))
+  const pontosHonba = pontos.agari !== null ? pontos.pontos.total - pontosBase.pontos.total : 0
+  return { pontos, pontosHonba, patamar }
+}
+
+/**
+ * Yakus locais ligados: soma o han (ou garante Mangan/Yakuman) por cima do
+ * cálculo padrão. O Paarenchan sozinho não basta: a mão precisa de outro yaku.
+ */
+function aplicarYakusLocais(
+  padrao: ResultadoMao,
+  mao: Mao,
+  config: ConfiguracaoCalculo,
+  locais: OpcoesLocais,
+): ResultadoMao {
+  const encontrados = encontrarYakusLocais(mao, locais)
+  if (encontrados.length === 0) return padrao
+  const irregular = encontrados.some(({ yaku }) => yaku.formatoIrregular)
+  if (padrao.agari === null && !irregular) return padrao
+  const temOutroYaku = !padrao.semYaku || encontrados.some(({ yaku }) => yaku.id !== 'paarenchan')
+  if (!temOutroYaku) return padrao
+
+  let yakumanLocal = 0
+  let hanLocal = 0
+  let hanMinimo = 0
+  for (const { yaku, han } of encontrados) {
+    if (yaku.id === 'renhou') {
+      if (locais.renhou === 'yakuman') yakumanLocal += 1
+      else hanMinimo = Math.max(hanMinimo, HAN_MINIMO[locais.renhou])
+    } else if (yaku.valor.tipo === 'yakuman') yakumanLocal += yaku.valor.vezes
+    else if (yaku.valor.tipo === 'mangan') hanMinimo = Math.max(hanMinimo, HAN_MINIMO.mangan)
+    else hanLocal += han ?? 0
+  }
+  const yakumanAntes = padrao.agari === null ? 0 : padrao.yakuman
+  let yakuman = yakumanLocal > 0 ? yakumanAntes + yakumanLocal : yakumanAntes
+  if (!config.multiYakuman) yakuman = Math.min(yakuman, 1)
+  const hanAntes = padrao.agari === null || padrao.semYaku ? 0 : padrao.han
+  const han = Math.max(hanAntes + hanLocal, hanMinimo)
+  const fu = padrao.fu || 30
+  const { pontos, pontosHonba, patamar } = pontuar(mao, config, han, fu, yakuman)
+
+  const linhas: [string, number, boolean][] = encontrados.map(({ yaku, han: valor }) => {
+    const ehYakuman = yaku.valor.tipo === 'yakuman' || (yaku.id === 'renhou' && locais.renhou === 'yakuman')
+    return [yaku.nome, ehYakuman ? (yaku.valor.tipo === 'yakuman' ? yaku.valor.vezes : 1) : (valor ?? 0), ehYakuman]
+  })
+  const yakuPadrao = padrao.agari === null || padrao.semYaku ? [] : padrao.yaku
+  // Com Yakuman, os yakus de han deixam de contar (como no cálculo padrão).
+  const yaku = yakuman > 0 ? [...yakuPadrao.filter((linha) => linha[2]), ...linhas.filter((linha) => linha[2])] : [...yakuPadrao, ...linhas]
+
+  return {
+    ...padrao,
+    ...pontos,
+    isOya: mao.ventoAssento === '1',
+    yakuman,
+    yaku,
+    semYaku: false,
+    han,
+    fu,
+    pontosHonba,
+    nome: yakuman > 1 ? `${yakuman}x Yakuman` : yakuman === 1 ? 'Yakuman' : patamar.nome,
+  } as ResultadoMao
+}
+
+function calcularMaoPadrao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
   const dorasAutomaticasAka = config.akadora ? contarAkaDora(mao) : 0
   const flamejante = doraFlamejanteAtiva(config)
   const dorasPorIndicadores =

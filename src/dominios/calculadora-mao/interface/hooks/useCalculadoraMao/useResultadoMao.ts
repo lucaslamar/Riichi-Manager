@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { maoSemBatida } from '../../../logica/batida'
+import { useYakusLocais } from '@/compartilhado/configuracoes/useYakusLocais'
 import {
   calcularEsperasPossiveis,
   calcularMao,
@@ -28,10 +29,20 @@ export function useResultadoMao({
   maoCompleta,
   deveCalcularMao,
 }: ParametrosResultadoMao) {
+  const { yakusLocais } = useYakusLocais()
+  const locais = useMemo(
+    () => ({
+      ativos: new Set(yakusLocais.ativos),
+      condicoes: new Set(mao.condicoesLocais ?? []),
+      renhou: yakusLocais.renhou,
+      ryanhanShibari: yakusLocais.ativos.includes('paarenchan') && yakusLocais.paarenchan.ryanhanShibari,
+    }),
+    [yakusLocais, mao.condicoesLocais],
+  )
   const resultado = maoCompleta && deveCalcularMao
     ? (() => {
         try {
-          return calcularMao(mao, configuracao)
+          return calcularMao(mao, configuracao, locais)
         } catch {
           return null
         }

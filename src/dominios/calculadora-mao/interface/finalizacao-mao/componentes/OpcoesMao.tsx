@@ -16,6 +16,8 @@ import { PedraSvg } from '../../compartilhado/componentes/PedraSvg'
 import { TecladoContextual } from '../../compartilhado/componentes/TecladoContextual'
 import BotaoAjuda from '../../modais/ajuda-secoes/BotaoAjuda'
 import { useAvancoAutomatico } from '../hooks/useAvancoAutomatico'
+import { useYakusLocais } from '@/compartilhado/configuracoes/useYakusLocais'
+import { YAKUS_LOCAIS } from '../../../logica/yakusLocais'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
@@ -48,6 +50,8 @@ export default function OpcoesMao({
   contextoCenterpiece,
 }: PropsOpcoesMao) {
   const { t } = useI18n()
+  const { yakusLocais } = useYakusLocais()
+  const condicoesLocais = YAKUS_LOCAIS.filter((yaku) => yaku.situacao && yakusLocais.ativos.includes(yaku.id))
   const {
     mao,
     atualizarMao,
@@ -558,6 +562,30 @@ export default function OpcoesMao({
             </div>
             {comKita && mao.melds.length === 0 && (
               <p className="aviso-opcao-indisponivel">{t('sanma.tenhouKitaAviso')}</p>
+            )}
+            {/* Yakus locais de situação: só os ligados em Regras de cálculo → Yakus locais. */}
+            {condicoesLocais.length > 0 && (
+              <>
+                <span className="rotulo-bloco-opcoes rotulo-condicoes-locais">{t('localYaku.conditions')}</span>
+                <div className="linha-opcoes-mao linha-condicoes-especiais">
+                  {condicoesLocais.map((yaku) => (
+                    <BotaoToggle
+                      key={yaku.id}
+                      rotulo={yaku.nome}
+                      ativo={!!mao.condicoesLocais?.includes(yaku.id)}
+                      desabilitado={false}
+                      aoClicar={() =>
+                        atualizarMao((rascunho) => {
+                          const atuais = rascunho.condicoesLocais ?? []
+                          rascunho.condicoesLocais = atuais.includes(yaku.id)
+                            ? atuais.filter((id) => id !== yaku.id)
+                            : [...atuais, yaku.id]
+                        })
+                      }
+                    />
+                  ))}
+                </div>
+              </>
             )}
           </section>
         </div>

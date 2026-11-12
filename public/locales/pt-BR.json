@@ -622,7 +622,9 @@
       "help": "Quanto paga quem comete chombo (sem yaku, ron em furiten). Mangan: 8.000 (12.000 sendo Leste). Yakuman: 32.000 (48.000 sendo Leste).",
       "on": "Mangan",
       "off": "Yakuman"
-    }
+    },
+    "search": "Buscar regra",
+    "summary": "Ir para a regra"
   },
   "settingsSheet": {
     "appTab": "Ajustes do app",
@@ -2036,5 +2038,29 @@
     "sanma": "Sanma",
     "filtroVariante": "Variante",
     "varianteTravada": "A variante não muda depois de criado o torneio."
+  },
+  "localYaku": {
+    "title": "Yakus locais",
+    "help": "Regras da casa, fora do padrão. Ligue só os que a sua mesa usa: a calculadora passa a reconhecer cada um ligado.",
+    "listHelp": "Fonte: Riichi Wiki, página Local yaku.",
+    "enableAll": "Ativar todos",
+    "disableAll": "Desativar todos",
+    "conditionNote": "Depende da partida: aparece para marcar nas Condições especiais da calculadora.",
+    "conditions": "Yakus locais",
+    "renhouValue": "Valor do Renhou",
+    "renhouValueHelp": "Quanto vale a vitória por Renhou na sua mesa.",
+    "paarenchan": {
+      "variation": "Variação do Paarenchan",
+      "variation1": "1: oito vitórias seguidas do mesmo jogador.",
+      "variation2": "2: oito vitórias seguidas como dealer, sem empate no meio.",
+      "variation3": "3: acumular 8 honba como dealer e vencer o último (empates contam).",
+      "shibari": "Ryanhan-shibari",
+      "shibariHelp": "Do 5º honba em diante, a mão precisa de pelo menos 2 han sem contar dora.",
+      "after": "Depois do Paarenchan",
+      "afterHelp": "A banca passa para o próximo sozinha, ou o dealer continua.",
+      "dealerPasses": "Banca passa",
+      "dealerStays": "Dealer continua",
+      "near": "{{count}} renchan de {{name}}: a próxima vitória é Yakuman (Paarenchan)."
+    }
   }
 }

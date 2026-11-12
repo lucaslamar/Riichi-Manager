@@ -43,6 +43,8 @@ export interface Mao {
   ventoAssento: VentoMao
   /** Só no Sanma (3 jogadores): regras de Sanma e Norte retirado (Kita). Ausente = yonma. */
   sanma?: MaoSanma
+  /** Yakus locais de situação marcados (Tsubame gaeshi, Renhou…). Só valem se ligados nas regras. */
+  condicoesLocais?: string[]
 }
 
 export interface MaoSanma {

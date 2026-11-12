@@ -4,6 +4,9 @@
 
 ### Adicionado
 
+- **Busca e sumário nas Regras de cálculo**: no topo, Buscar regra filtra pelo nome e pela descrição, e o sumário logo abaixo leva direto a cada regra (Kiriage Mangan, Kazoe Yakuman, Yakuman duplo, Yakus locais…).
+- **Yakus locais**: nova seção nas Regras de cálculo com um liga/desliga para cada regra da casa da Riichi Wiki (Tsubame gaeshi, Sanrenkou, Daisharin, Renhou e mais de 50 outros), todos desligados por padrão, e o botão Ativar todos / Desativar todos. Tocar em Yakus locais abre a lista de todos com kanji, valor e descrição. A calculadora só reconhece um yaku local quando ele está ligado. Os que dependem da partida (Tsubame gaeshi, Kanburi, Maneman, Toukanhou, Renhou, Paarenchan, Open riichi…) aparecem para marcar nas Condições especiais, como Haitei e Rinshan. O Renhou deixa escolher Mangan, Baiman ou Yakuman.
+- **Paarenchan**: entre os yakus locais, com as três variações (8 vitórias seguidas de um jogador, 8 como dealer sem empate ou 8 honba como dealer), o Ryanhan-shibari a partir do 5º honba e a escolha de a banca passar ou o dealer continuar. Vale Yakuman, mas a mão ainda precisa de um yaku.
 - **Clube do Tarot pré-cadastrado**: o primeiro uso traz os membros do Clube do Tarot de Lord of the Mysteries (Klein Moretti / The Fool, Audrey Hall / Justice e os outros). Ao cadastrar o primeiro jogador de verdade, eles saem sozinhos. Quem já jogou alguma partida ou está num torneio fica, como jogador comum, para nenhuma partida perder ninguém.
 - **Sou eu e favoritos na tela Jogadores**: cada jogador tem a estrela de favorito na própria linha, e o menu ⋯ ganhou Sou eu (um por vez), que coloca a etiqueta Você no nome.
 - **Histórico de ações da partida**: o relógio no topo da mesa abre a linha do tempo da partida, da ação mais recente para a mais antiga, com a rodada e o honba, quem fez o quê e quantos pontos andaram (ex.: Ron de Brunão em Naka · +7.700). Riichi, Tsumo, Ron, Ryuukyoku, Chombo, empates abortivos e o Desfazer entram, e o que foi desfeito continua lá, riscado. O histórico fica salvo com a partida e abre de novo no Histórico, dentro da partida finalizada.
@@ -103,6 +106,8 @@
 - **Timer da rodada mais compacto**: o próprio anel inicia e pausa (o ícone no meio mostra o que o toque faz), e o +5 min virou um botão redondo ao lado. A faixa do timer ficou bem mais baixa.
 
 ### Corrigido
+
+- **Título cortado nas Regras de cálculo**: ao rolar, o Kiriage Mangan (e qualquer texto) não aparece mais por cima das abas Regras de cálculo / Sanma.
 
 - **Voltar volta para onde você estava**: na Partida e no Ranking, a seta de voltar e o deslizar do dedo para a direita voltam um passo, para a tela de onde se veio (ex.: Em andamento → Mesas sorteadas → Em andamento), em vez de pular para um lugar fixo ou direto para o menu.
 - **Textos aparecendo como código depois de atualizar**: no celular, o app novo às vezes usava os textos antigos guardados e mostrava nomes como "menu.ranking" ou "tournament.share.textHelp". Agora os textos são buscados de novo sempre que mudam.

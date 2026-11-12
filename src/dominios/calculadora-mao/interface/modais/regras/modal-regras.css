@@ -110,3 +110,130 @@
 .linha-regra--desabilitada .controle-regra button {
   cursor: not-allowed;
 }
+
+/* ─── Busca, sumário e Yakus locais ──────────────────────────────────────── */
+.regras-topo {
+  display: grid;
+  gap: 8px;
+}
+
+/* Sem abas: o próprio topo fica preso, como as abas, por cima das regras. */
+.regras-topo--fixo {
+  position: sticky;
+  top: calc(var(--modal-espaco) * -0.5);
+  z-index: 3;
+  margin-inline: calc(var(--modal-espaco) * -1);
+  padding: 8px var(--modal-espaco);
+  border-bottom: 1px solid var(--modal-borda);
+  background: var(--modal-fundo);
+}
+
+.regras-topo--fixo .regras-topo {
+  display: grid;
+}
+
+.regras-sumario {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.regras-sumario a {
+  flex: none;
+  border: 1px solid var(--cor-borda, #d7dde6);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--cor-primario, var(--primario));
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* O título da primeira regra não some atrás do topo preso. */
+.lista-regras > .linha-regra:first-child,
+.secao-yakus-locais {
+  scroll-margin-top: 140px;
+}
+
+.modal-regras .lista-regras:first-child {
+  padding-top: 4px;
+}
+
+.controle-regra:has(> button:nth-child(3)) {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.secao-yakus-locais {
+  margin-top: 12px;
+  border-top: 1px solid var(--cor-borda, #edf0f4);
+  padding-top: 16px;
+}
+
+.secao-yakus-locais__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.secao-yakus-locais__cabecalho h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.3rem);
+}
+
+.secao-yakus-locais__cabecalho .btn-contorno {
+  min-height: 40px;
+  padding-inline: 12px;
+  font-size: 0.85rem;
+}
+
+.secao-yakus-locais__ajuda {
+  margin: 6px 0 0;
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.875rem;
+}
+
+.sub-regras {
+  margin: 0 0 8px 12px;
+  border-left: 3px solid var(--cor-borda, #d7dde6);
+  padding-left: 12px;
+}
+
+.lista-yakus-locais {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-yakus-locais li {
+  border-bottom: 1px solid var(--cor-borda, #edf0f4);
+  padding: 10px 0;
+}
+
+.lista-yakus-locais__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.lista-yakus-locais__topo span {
+  color: var(--cor-texto-suave, #607080);
+}
+
+.lista-yakus-locais small {
+  color: var(--cor-primario, var(--primario));
+  font-weight: 800;
+}
+
+.lista-yakus-locais p {
+  margin: 4px 0 0;
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
