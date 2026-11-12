@@ -796,7 +796,8 @@
       "triplets": "Yaku de trincas",
       "suits": "Yaku de naipe",
       "others": "Outros yaku",
-      "yakuman": "Yakuman"
+      "yakuman": "Yakuman",
+      "special": "Yakus especiais"
     },
     "yakumanHeading": "Yakuman (mão máxima)",
     "yakumanBadge": "YAKUMAN",
@@ -815,6 +816,18 @@
       "clear": "Limpar busca",
       "nothingFound": "Nada encontrado para “{{busca}}”.",
       "tabsHeading": "Abas do Guia"
+    },
+    "specialNotice": "Estes yakus não fazem parte das regras padrão. Para usá-los na calculadora, ative em",
+    "specialNoticeLink": "Regras de cálculo → Yakus locais",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han ou mais",
+      "han3plus": "3 han ou mais",
+      "manganTile": "Mangan por pedra específica",
+      "mangan": "Mangan ou mais",
+      "yakuman": "Yakuman",
+      "double": "Yakuman duplo"
     }
   },
   "notation": {

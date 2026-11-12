@@ -803,7 +803,8 @@
       "triplets": "Yaku de tríos",
       "suits": "Yaku de palo",
       "others": "Otros yaku",
-      "yakuman": "Yakuman"
+      "yakuman": "Yakuman",
+      "special": "Special yaku"
     },
     "yakumanHeading": "Yakuman (mano máxima)",
     "yakumanBadge": "YAKUMAN",
@@ -822,6 +823,18 @@
       "clear": "Borrar búsqueda",
       "nothingFound": "No se encontró nada para “{{busca}}”.",
       "tabsHeading": "Pestañas de la Guía"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {

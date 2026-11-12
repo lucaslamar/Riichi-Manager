@@ -789,7 +789,8 @@
       "triplets": "커쯔 역",
       "suits": "패 종류 역",
       "others": "기타 역",
-      "yakuman": "역만"
+      "yakuman": "역만",
+      "special": "Special yaku"
     },
     "yakumanHeading": "역만 (최고 점수 손패)",
     "yakumanBadge": "역만",
@@ -808,6 +809,18 @@
       "clear": "검색 지우기",
       "nothingFound": "“{{busca}}”에 대한 결과가 없습니다.",
       "tabsHeading": "가이드 탭"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {

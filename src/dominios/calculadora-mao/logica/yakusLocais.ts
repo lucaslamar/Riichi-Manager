@@ -948,3 +948,15 @@ export function encontrarYakusLocais(mao: Mao, opcoes: OpcoesLocais): YakuLocalE
 
 /** Han mínimo de cada patamar, para os yakus que garantem Mangan, Baiman… */
 export const HAN_MINIMO = { mangan: 5, baiman: 8 } as const
+
+/** Ordem dos grupos no Guia de bolso, com a chave do título de cada um. */
+export const CATEGORIAS_LOCAIS_EM_ORDEM: readonly { categoria: CategoriaYakuLocal; chave: string }[] = [
+  { categoria: 'han1', chave: 'pocketGuide.special.han1' },
+  { categoria: 'han2', chave: 'pocketGuide.special.han2' },
+  { categoria: 'han2mais', chave: 'pocketGuide.special.han2plus' },
+  { categoria: 'han3mais', chave: 'pocketGuide.special.han3plus' },
+  { categoria: 'manganPedra', chave: 'pocketGuide.special.manganTile' },
+  { categoria: 'mangan', chave: 'pocketGuide.special.mangan' },
+  { categoria: 'yakuman', chave: 'pocketGuide.special.yakuman' },
+  { categoria: 'duplo', chave: 'pocketGuide.special.double' },
+]

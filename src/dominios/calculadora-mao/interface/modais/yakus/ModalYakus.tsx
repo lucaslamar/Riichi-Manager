@@ -14,9 +14,10 @@ import BlocoDica from '../glossario/BlocoDica'
 import AbaGlossario from './AbaGlossario'
 import { CampoBuscaGuia, ResultadoBuscaGuia } from './BuscaGuia'
 import CartaoYaku from './CartaoYaku'
+import AbaYakusEspeciais from './AbaYakusEspeciais'
 import './modal-yakus.css'
 
-type AbaYakus = 'glossario' | 'iniciante' | YakuCategory | 'yakuman'
+type AbaYakus = 'glossario' | 'iniciante' | YakuCategory | 'yakuman' | 'especiais'
 
 const CHAVE_ROTULO_CURTO: Record<YakuCategory, string> = {
   sequencias: 'pocketGuide.tabs.sequences',
@@ -70,6 +71,7 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
   const yakus = yakusDoIdioma(idioma)
   if (aba === 'iniciante') return <AbaIniciante />
   if (aba === 'glossario') return <AbaGlossario />
+  if (aba === 'especiais') return <AbaYakusEspeciais />
   if (aba === 'yakuman') {
     return (
       <>
@@ -112,6 +114,7 @@ export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
         rotulo: t(CHAVE_ROTULO_CURTO[categoria]),
       })),
       { chave: 'yakuman', rotulo: t('pocketGuide.tabs.yakuman') },
+      { chave: 'especiais', rotulo: t('pocketGuide.tabs.special') },
     ],
     [t],
   )

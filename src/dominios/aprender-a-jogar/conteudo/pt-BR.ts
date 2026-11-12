@@ -1368,6 +1368,28 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
+    id: 'yakus-locais',
+    section: 'regras',
+    title: 'Yakus locais',
+    termos: ['yaku', 'yakuman'],
+    blocks: [
+      {
+        type: 'text',
+        md: 'Além dos yakus da lista, muitas mesas jogam com **regras da casa**: yakus que ficam fora das regras padrão e mudam de clube para clube. Por isso, ==combine antes de jogar== quais valem na sua mesa.',
+      },
+      { type: 'heading', text: 'Alguns exemplos' },
+      {
+        type: 'text',
+        md: '- **Renhou**: o ko faz Ron antes da sua primeira compra. Conforme a casa, vale Mangan, Baiman ou Yakuman.\n- **Daisharin**: 22334455667788 de Pin. São sete pares em escada, e a casa paga Yakuman.\n- **Paarenchan**: oito vitórias seguidas. A oitava vale Yakuman, desde que a mão tenha um yaku.',
+      },
+      { type: 'hand', mpsz: '22334455667788p', caption: 'Daisharin' },
+      {
+        type: 'tip',
+        md: 'Para usar algum deles na calculadora, ligue em **Regras de cálculo → Yakus locais**. Todos começam desligados. A lista completa, com o valor de cada um, fica na aba Yakus especiais do Guia de bolso.',
+      },
+    ],
+  },
+  {
     id: 'chombo',
     section: 'chombo-honba',
     title: 'Chombo',

@@ -1358,6 +1358,28 @@ const topicosRegras: TopicoRegras[] = [
     ],
   },
   {
+    id: 'yakus-locais',
+    section: 'regras',
+    title: 'Local yaku',
+    termos: ['yaku', 'yakuman'],
+    blocks: [
+      {
+        type: 'text',
+        md: 'Besides the yaku on the list, many tables play with **house rules**: yaku outside the standard rules that change from club to club. So ==agree before playing== which ones count at your table.',
+      },
+      { type: 'heading', text: 'A few examples' },
+      {
+        type: 'text',
+        md: '- **Renhou**: a non-dealer wins by Ron before their first draw. Depending on the house, it is worth Mangan, Baiman or Yakuman.\n- **Daisharin**: 22334455667788 in Pin. Seven pairs in a ladder, paid as Yakuman.\n- **Paarenchan**: eight wins in a row. The eighth is a Yakuman, as long as the hand has a yaku.',
+      },
+      { type: 'hand', mpsz: '22334455667788p', caption: 'Daisharin' },
+      {
+        type: 'tip',
+        md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Special yaku tab of the Pocket guide.',
+      },
+    ],
+  },
+  {
     id: 'chombo',
     section: 'chombo-honba',
     title: 'Chombo',

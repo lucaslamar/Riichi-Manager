@@ -810,7 +810,8 @@
       "triplets": "Trejetų yaku",
       "suits": "Spalvų yaku",
       "others": "Kiti yaku",
-      "yakuman": "Yakuman"
+      "yakuman": "Yakuman",
+      "special": "Special yaku"
     },
     "yakumanHeading": "Yakuman (didžiausios rankos)",
     "yakumanBadge": "YAKUMAN",
@@ -829,6 +830,18 @@
       "clear": "Išvalyti paiešką",
       "nothingFound": "Nieko nerasta pagal „{{busca}}“.",
       "tabsHeading": "Gido skirtukai"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {

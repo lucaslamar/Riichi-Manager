@@ -5,6 +5,8 @@ import type { AbaModal } from '@/compartilhado/interface/componentes/modal/AbasM
 import { buscarNoGlossario, correspondeBusca } from '../../../logica/glossario'
 import BlocoGlossario from '../glossario/BlocoGlossario'
 import CartaoYaku from './CartaoYaku'
+import { CartaoYakuLocal } from './AbaYakusEspeciais'
+import { textoYakuLocal, YAKUS_LOCAIS } from '../../../logica/yakusLocais'
 import './busca-guia.css'
 
 /** Campo de busca do Guia de bolso, preso logo abaixo das abas. */
@@ -43,7 +45,13 @@ export function ResultadoBuscaGuia<Chave extends string>({
   const { t, idioma } = useI18n()
   const { secoes, yakus } = useMemo(() => buscarNoGlossario(busca, idioma), [busca, idioma])
   const abasEncontradas = abas.filter((aba) => correspondeBusca(busca, [aba.rotulo], idioma))
-  const nadaEncontrado = abasEncontradas.length === 0 && secoes.length === 0 && yakus.length === 0
+  // Yakus especiais (locais) também entram na busca.
+  const locais = YAKUS_LOCAIS.filter((yaku) => {
+    const texto = textoYakuLocal(yaku, idioma)
+    return correspondeBusca(busca, [yaku.nome, yaku.kanji, texto.traducao, texto.descricao], idioma)
+  })
+  const nadaEncontrado =
+    abasEncontradas.length === 0 && secoes.length === 0 && yakus.length === 0 && locais.length === 0
 
   return (
     <div aria-live="polite">
@@ -72,6 +80,16 @@ export function ResultadoBuscaGuia<Chave extends string>({
           <div className="yaku-lista">
             {yakus.map((yaku) => (
               <CartaoYaku key={yaku.id} yaku={yaku} />
+            ))}
+          </div>
+        </section>
+      )}
+      {locais.length > 0 && (
+        <section className="busca-guia__yakus">
+          <h3 className="yaku-grupo__titulo">{t('pocketGuide.tabs.special')}</h3>
+          <div className="yaku-lista">
+            {locais.map((yaku) => (
+              <CartaoYakuLocal key={yaku.id} yaku={yaku} />
             ))}
           </div>
         </section>

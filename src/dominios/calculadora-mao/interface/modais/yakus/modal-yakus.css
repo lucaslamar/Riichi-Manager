@@ -193,3 +193,27 @@
   line-height: 1;
   vertical-align: -0.05em;
 }
+
+/* Yakus especiais (locais): aviso no topo e o valor como a regra da casa diz. */
+.yaku-aviso-especiais {
+  margin: 4px 0 12px;
+  border: 1px solid var(--cor-aviso-borda, var(--cor-borda));
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--texto-principal, inherit);
+  background: var(--cor-aviso-suave, transparent);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.yaku-aviso-especiais a {
+  color: var(--cor-primario, var(--primario));
+  font-weight: 800;
+}
+
+.yaku-card__valor-local {
+  margin: 6px 0 0;
+  color: var(--cor-primario, var(--primario));
+  font-size: 0.8rem;
+  font-weight: 800;
+}

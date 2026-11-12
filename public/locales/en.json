@@ -796,7 +796,8 @@
       "triplets": "Triplet yaku",
       "suits": "Suit yaku",
       "others": "Other yaku",
-      "yakuman": "Yakuman"
+      "yakuman": "Yakuman",
+      "special": "Special yaku"
     },
     "yakumanHeading": "Yakuman (limit hands)",
     "yakumanBadge": "YAKUMAN",
@@ -815,6 +816,18 @@
       "clear": "Clear search",
       "nothingFound": "Nothing found for “{{busca}}”.",
       "tabsHeading": "Guide tabs"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {
