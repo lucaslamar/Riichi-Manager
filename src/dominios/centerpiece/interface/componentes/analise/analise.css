@@ -318,30 +318,34 @@
   background: color-mix(in srgb, var(--primario) 14%, transparent);
 }
 
-/* Nome com o lápis de editar ao lado. */
+/* Nome com o lápis ao lado, num botão só (tocar no nome também edita). */
 .anl-nome {
-  display: flex;
+  display: inline-flex;
+  align-self: flex-start;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  max-width: 100%;
   min-width: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .anl-nome strong {
   overflow: hidden;
+  font-size: 1.3rem;
+  line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.anl-editar {
-  display: grid;
+.anl-nome > i {
   flex: none;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 6px;
   color: var(--primario);
-  background: transparent;
-  font-size: 0.85rem;
-  cursor: pointer;
+  font-size: 0.8rem;
+  line-height: 1;
 }

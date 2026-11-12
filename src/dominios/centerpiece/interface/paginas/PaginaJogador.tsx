@@ -105,21 +105,22 @@ export default function PaginaJogador({
           {nome.principal.slice(0, 1).toUpperCase()}
         </span>
         <span className="anl-cabecalho-texto">
-          <span className="anl-nome">
+          {/* Nome e lápis num botão só: tocar no nome também edita. */}
+          {jogador ? (
+            <button
+              type="button"
+              className="anl-nome"
+              aria-label={t('players.renameNamed', { name: nome.principal })}
+              title={t('players.rename')}
+              aria-haspopup="dialog"
+              onClick={() => setEditando(true)}
+            >
+              <strong>{nome.principal}</strong>
+              <i className="fas fa-pen" aria-hidden="true" />
+            </button>
+          ) : (
             <strong>{nome.principal}</strong>
-            {jogador && (
-              <button
-                type="button"
-                className="anl-editar"
-                aria-label={t('players.renameNamed', { name: nome.principal })}
-                title={t('players.rename')}
-                aria-haspopup="dialog"
-                onClick={() => setEditando(true)}
-              >
-                <i className="fas fa-pen" aria-hidden="true" />
-              </button>
-            )}
-          </span>
+          )}
           {nome.apoio && <small>{nome.apoio}</small>}
           <span className="anl-resumo">
             {t('match.player.summary', {
