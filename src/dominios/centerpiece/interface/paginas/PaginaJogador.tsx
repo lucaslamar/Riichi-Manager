@@ -54,7 +54,7 @@ export default function PaginaJogador({
   aoTrocarJogador: (id: string) => void
 }) {
   const { t, numero, idioma } = useI18n()
-  const { jogadores, editar } = useJogadores()
+  const { jogadores, editar, favoritar } = useJogadores()
   const { euId, definirEu } = useEu()
   const [editando, setEditando] = useState(false)
   const jogador = jogadores.find((item) => item.id === jogadorId)
@@ -69,10 +69,16 @@ export default function PaginaJogador({
   const nomes = (id: string) => nomesNoRanking(jogadores.find((jogador) => jogador.id === id))
   const nome = nomes(jogadorId)
   // Os filtros do ranking, menos o de jogador (o analisado é este).
-  const filtradas = useMemo(() => partidasFiltradas(partidas, filtros, new Date(), false), [partidas, filtros])
+  const filtradas = useMemo(
+    () => partidasFiltradas(partidas, filtros, new Date(), false),
+    [partidas, filtros],
+  )
   const resumo = resumoDoJogador(filtradas, jogadorId)
   const minimo = DENSIDADES.find((opcao) => opcao.chave === densidade)!.minimo
-  const rede = useMemo(() => redeDeConfrontos(filtradas, jogadorId, minimo), [filtradas, jogadorId, minimo])
+  const rede = useMemo(
+    () => redeDeConfrontos(filtradas, jogadorId, minimo),
+    [filtradas, jogadorId, minimo],
+  )
   const evolucao = evolucaoDaPontuacao(filtradas, jogadorId)
   const distribuicao = distribuicaoDeColocacoes(filtradas, jogadorId)
   const porMes = mediaPorMes(filtradas, jogadorId)
@@ -89,7 +95,11 @@ export default function PaginaJogador({
     if (!mapa.current) return
     try {
       const png = await svgParaPng(mapa.current)
-      const resultado = await salvarArquivo(`mojoca-confrontos-${nome.principal}.png`, png, 'image/png')
+      const resultado = await salvarArquivo(
+        `mojoca-confrontos-${nome.principal}.png`,
+        png,
+        'image/png',
+      )
       setAviso(resultado === 'falhou' ? t('match.player.shareFailed') : null)
     } catch {
       setAviso(t('match.player.shareFailed'))
@@ -129,21 +139,40 @@ export default function PaginaJogador({
               score: comSinal(resumo.pontuacaoTotal),
             })}
           </span>
-          {/* "Este sou eu": fica em evidência no Ranking e no seletor. */}
-          <button
-            type="button"
-            className={`anl-sou-eu${souEu ? ' anl-sou-eu--ativo' : ''}`}
-            aria-pressed={souEu}
-            onClick={() => definirEu(souEu ? null : jogadorId)}
-          >
-            <i className={`fas ${souEu ? 'fa-user-check' : 'fa-user'}`} aria-hidden="true" />
-            {t(souEu ? 'players.itsMe' : 'players.markAsMe')}
-          </button>
+          <span className="anl-marcas">
+            {/* "Este sou eu": fica em evidência no Ranking e no seletor. */}
+            <button
+              type="button"
+              className={`anl-sou-eu${souEu ? ' anl-sou-eu--ativo' : ''}`}
+              aria-pressed={souEu}
+              onClick={() => definirEu(souEu ? null : jogadorId)}
+            >
+              <i className={`fas ${souEu ? 'fa-user-check' : 'fa-user'}`} aria-hidden="true" />
+              {t(souEu ? 'players.itsMe' : 'players.markAsMe')}
+            </button>
+            {/* Favorito: aparece no grupo Favoritos ao escolher jogador. */}
+            {jogador && (
+              <button
+                type="button"
+                className={`anl-sou-eu${jogador.favorito ? ' anl-sou-eu--ativo' : ''}`}
+                aria-pressed={!!jogador.favorito}
+                onClick={() => favoritar(jogador.id, !jogador.favorito)}
+              >
+                <i className={`${jogador.favorito ? 'fas' : 'far'} fa-star`} aria-hidden="true" />
+                {t(jogador.favorito ? 'players.favorited' : 'players.favoriteShort')}
+              </button>
+            )}
+          </span>
         </span>
       </header>
 
       {editando && jogador && (
-        <Modal titulo={t('players.rename')} aoFechar={() => setEditando(false)} rotuloFechar={t('actions.close')} tamanho="pequena">
+        <Modal
+          titulo={t('players.rename')}
+          aoFechar={() => setEditando(false)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+        >
           <FormJogador
             inicial={jogador}
             aoSalvar={(dados) => {
@@ -161,7 +190,11 @@ export default function PaginaJogador({
           <i className="fas fa-diagram-project" aria-hidden="true" />
           <h3>{t('match.player.map.title')}</h3>
         </header>
-        <div className="ptd-segmentos anl-densidade" role="group" aria-label={t('match.player.map.density')}>
+        <div
+          className="ptd-segmentos anl-densidade"
+          role="group"
+          aria-label={t('match.player.map.density')}
+        >
           {DENSIDADES.map((opcao) => (
             <button
               key={opcao.chave}
@@ -188,7 +221,10 @@ export default function PaginaJogador({
               nomeDe={(id) => nomes(id).principal}
               selecionado={selecionado}
               aoTocar={(id) => setSelecionado(id)}
-              descricao={t('match.player.map.description', { name: nome.principal, count: rede.nos.length })}
+              descricao={t('match.player.map.description', {
+                name: nome.principal,
+                count: rede.nos.length,
+              })}
             />
             <ul className="anl-legenda">
               <li>
@@ -231,7 +267,9 @@ export default function PaginaJogador({
           }))}
           zero
           formatar={(valor) => numero(Math.round(valor))}
-          rotuloX={(indice) => (indice === 0 || indice === evolucao.length - 1 ? String(indice + 1) : null)}
+          rotuloX={(indice) =>
+            indice === 0 || indice === evolucao.length - 1 ? String(indice + 1) : null
+          }
           descricao={t('match.player.charts.evolution')}
         />
       </CardGrafico>
@@ -271,7 +309,11 @@ export default function PaginaJogador({
           marcas={[1, 2, 3, 4]}
           invertido
           formatar={(valor) => t('match.result.place', { place: Math.round(valor) })}
-          rotuloX={(indice) => (porMes.length <= 6 || indice % Math.ceil(porMes.length / 6) === 0 ? mesCurto(porMes[indice].mes) : null)}
+          rotuloX={(indice) =>
+            porMes.length <= 6 || indice % Math.ceil(porMes.length / 6) === 0
+              ? mesCurto(porMes[indice].mes)
+              : null
+          }
           descricao={t('match.player.charts.monthly')}
         />
       </CardGrafico>
@@ -305,8 +347,14 @@ export default function PaginaJogador({
         <div className="anl-formatos">
           {formatos.map((item) => (
             <div key={item.formato} className="anl-formato">
-              <strong>{t(`match.ranking.filters.durations.${item.formato === 'leste' ? 'leste' : 'hanchan'}`)}</strong>
-              <span className="anl-formato-partidas">{t('match.ranking.rivals.together', { count: item.partidas })}</span>
+              <strong>
+                {t(
+                  `match.ranking.filters.durations.${item.formato === 'leste' ? 'leste' : 'hanchan'}`,
+                )}
+              </strong>
+              <span className="anl-formato-partidas">
+                {t('match.ranking.rivals.together', { count: item.partidas })}
+              </span>
               <dl>
                 <div>
                   <dt>{t('match.ranking.averagePlace')}</dt>
@@ -314,7 +362,9 @@ export default function PaginaJogador({
                 </div>
                 <div>
                   <dt>{t('match.ranking.first')}</dt>
-                  <dd>{item.percentualPrimeiro === null ? '—' : `${numero(item.percentualPrimeiro)}%`}</dd>
+                  <dd>
+                    {item.percentualPrimeiro === null ? '—' : `${numero(item.percentualPrimeiro)}%`}
+                  </dd>
                 </div>
               </dl>
             </div>

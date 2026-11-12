@@ -873,6 +873,8 @@
     }
   },
   "players": {
+    "favoriteShort": "Pažymėti",
+    "favorited": "Mėgstamas",
     "recent": "Neseniai žaidė",
     "favorites": "Mėgstami",
     "all": "Visi",

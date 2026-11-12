@@ -852,6 +852,8 @@
     }
   },
   "players": {
+    "favoriteShort": "收藏",
+    "favorited": "已收藏",
     "recent": "最近一起打",
     "favorites": "收藏",
     "all": "全部",

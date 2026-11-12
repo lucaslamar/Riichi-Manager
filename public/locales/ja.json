@@ -852,6 +852,8 @@
     }
   },
   "players": {
+    "favoriteShort": "お気に入り",
+    "favorited": "お気に入り済み",
     "recent": "最近の対局相手",
     "favorites": "お気に入り",
     "all": "すべて",

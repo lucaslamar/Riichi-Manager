@@ -349,3 +349,15 @@
   font-size: 0.8rem;
   line-height: 1;
 }
+
+/* Marcas do jogador: Este sou eu e Favorito, lado a lado. */
+.anl-marcas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.anl-marcas .anl-sou-eu {
+  margin-top: 0;
+}

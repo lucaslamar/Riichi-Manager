@@ -852,6 +852,8 @@
     }
   },
   "players": {
+    "favoriteShort": "즐겨찾기",
+    "favorited": "즐겨찾기됨",
     "recent": "최근 함께 친 사람",
     "favorites": "즐겨찾기",
     "all": "전체",

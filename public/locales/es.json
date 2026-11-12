@@ -863,6 +863,8 @@
     }
   },
   "players": {
+    "favoriteShort": "Favorito",
+    "favorited": "En favoritos",
     "recent": "Jugados recientemente",
     "favorites": "Favoritos",
     "all": "Todos",

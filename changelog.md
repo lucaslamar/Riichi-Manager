@@ -4,7 +4,7 @@
 
 ### Adicionado
 
-- **Últimos jogados e favoritos ao escolher jogador**: ao montar uma partida ou registrar uma finalizada, a lista começa pelas 5 pessoas que jogaram por último e pelos favoritos. A estrela de cada linha favorita ou desfavorita, e os favoritos vão junto no backup.
+- **Últimos jogados e favoritos ao escolher jogador**: ao montar uma partida ou registrar uma finalizada, a lista começa pelas 5 pessoas que jogaram por último e pelos favoritos. A estrela de cada linha favorita ou desfavorita, e os favoritos vão junto no backup. Também dá para favoritar pela tela do jogador, no botão Favoritar ao lado de Este sou eu.
 - **Este sou eu**: na tela do jogador, marque Este sou eu. No Ranking, seu card ganha destaque com a etiqueta Você, e uma faixa no topo mostra sua posição e pontuação (tocar abre sua análise). A marca fica só neste aparelho.
 - **Editar pela tela do jogador**: tocar no nome (ou no lápis ao lado dele), na análise do jogador, abre a edição do nome, apelido e clube.
 - **Mesma pessoa ao importar**: no Importar → Mesclar, quem tem o mesmo nome ou apelido de alguém daqui aparece como Mesma pessoa?, já marcado. Confirmado, vira uma pessoa só, e as partidas dela passam para o cadastro daqui, sem duplicar no ranking. E a mesma mesa registrada nos dois celulares entra uma vez só: partida com os mesmos quatro jogadores, os mesmos pontos finais e registrada até 1 hora antes ou depois de uma daqui fica de fora, e o resumo mostra quantas.
