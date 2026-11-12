@@ -63,7 +63,8 @@ export default function App() {
     [navegar],
   )
 
-  const abrirSorteadorDoSimples = () => {
+  const abrirSorteadorDoSimples = (jogadores: 3 | 4) => {
+    setJogadoresSorteio(jogadores)
     navegar('sorteadorVentos')
     setSimplesAberto(true)
   }
