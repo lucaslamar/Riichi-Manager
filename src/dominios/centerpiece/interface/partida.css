@@ -1719,3 +1719,8 @@ body:has(.ptd-modulo) {
   line-height: 1;
   transform: translateY(-50%);
 }
+
+/* Registrar partida: um respiro em relação ao bloco de jogadores e pontos. */
+.fin-tela > .mesa-btn-principal {
+  margin-top: 20px;
+}
