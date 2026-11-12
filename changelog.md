@@ -110,6 +110,8 @@
 
 ### Corrigido
 
+- **Outros yaku vira Yakus especiais**: no Guia de bolso, a aba (e o título dentro dela) com Riichi, Ippatsu, Haitei e cia. passa a se chamar Yakus especiais.
+
 - **Renhou só como yaku local**: saiu da lista de yakus padrão (Outros yaku no Guia de bolso e Lista de yakus no Tutorial). Ele continua em Yakus locais, com Mangan, Baiman ou Yakuman à escolha.
 
 - **Título cortado nas Regras de cálculo**: ao rolar, o Kiriage Mangan (e qualquer texto) não aparece mais por cima das abas Regras de cálculo / Sanma.

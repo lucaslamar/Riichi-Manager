@@ -8,7 +8,7 @@ export const conteudo: ConteudoGuiaBolso = {
     'terminais-honras': 'Baseados em terminais / honras',
     'trincas-pares': 'Baseados em pares / trincas / quads',
     naipes: 'Baseados em naipes',
-    outros: 'Outros yakus',
+    outros: 'Yakus especiais',
   },
 
   yakus: {
