@@ -313,7 +313,9 @@ export default function RegistrarFinalizada({
       {escolhendo !== null && (
         <SeletorJogador
           titulo={t('match.manual.choosePlayer', { number: escolhendo + 1 })}
-          idsEscolhidos={assentos.filter((id): id is string => !!id && id !== assentos[escolhendo])}
+          idsEscolhidos={assentos.filter((id): id is string => !!id)}
+          // Tocar em quem já foi escolhido tira a pessoa do lugar, como na Nova partida.
+          aoDesmarcar={(jogadorId) => setAssentos(assentos.map((id) => (id === jogadorId ? null : id)))}
           aoEscolher={(jogador) => {
             const proximos = assentos.map((atual, i) => (i === escolhendo ? jogador.id : atual))
             setAssentos(proximos)
