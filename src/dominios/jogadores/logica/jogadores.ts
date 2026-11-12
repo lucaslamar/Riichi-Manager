@@ -14,17 +14,48 @@ export interface Jogador {
   arquivado: boolean
   /** Estrela no seletor: aparece no grupo Favoritos, para achar mais rápido. */
   favorito?: boolean
+  /** Pré-cadastrado de fábrica: sai sozinho quando a pessoa cadastra o primeiro jogador real. */
+  isSeed?: boolean
 }
 
 const CRIADOS_EM = '2026-11-01T00:00:00.000Z'
 
-/** Cadastro de fábrica, para a primeira partida já ter com quem jogar. */
+const semente = (id: string, nome: string, apelido: string): Jogador => ({
+  id: `seed-${id}`,
+  nome,
+  apelido,
+  criadoEm: CRIADOS_EM,
+  arquivado: false,
+  isSeed: true,
+})
+
+/**
+ * Cadastro de fábrica (o Clube do Tarot de Lord of the Mysteries), para a primeira
+ * partida já ter com quem jogar. Some quando entra o primeiro jogador real.
+ */
 export const JOGADORES_PADRAO: readonly Jogador[] = [
-  { id: 'padrao-akagi', nome: 'Shigeru Akagi (Akagi)', apelido: 'Akagi', criadoEm: CRIADOS_EM, arquivado: false },
-  { id: 'padrao-saki', nome: 'Saki Miyanaga (Saki)', apelido: 'Saki', criadoEm: CRIADOS_EM, arquivado: false },
-  { id: 'padrao-asada', nome: 'Tetsuya Asada (Legendary Gambler Tetsuya)', apelido: 'Tetsuya', criadoEm: CRIADOS_EM, arquivado: false },
-  { id: 'padrao-koizumi', nome: 'Junichiro Koizumi (The Legend of Koizumi)', apelido: 'Koizumi', criadoEm: CRIADOS_EM, arquivado: false },
+  semente('klein', 'Klein Moretti', 'The Fool'),
+  semente('audrey', 'Audrey Hall', 'Justice'),
+  semente('alger', 'Alger Wilson', 'The Hanged Man'),
+  semente('derrick', 'Derrick Berg', 'The Sun'),
+  semente('fors', 'Fors Wall', 'The Magician'),
+  semente('gehrman', 'Gehrman Sparrow', 'The World'),
+  semente('xio', 'Xio Derecha', 'Judgment'),
+  semente('cattleya', 'Cattleya', 'The Hermit'),
+  semente('emlyn', 'Emlyn White', 'The Moon'),
+  semente('leonard', 'Leonard Mitchell', 'The Star'),
 ]
+
+/**
+ * Primeiro jogador real cadastrado: os pré-cadastrados saem. Quem já jogou alguma
+ * partida (ou está num torneio) fica, como jogador comum, para o histórico não perder ninguém.
+ */
+export function tirarPreCadastrados(jogadores: Jogador[], idsEmUso: ReadonlySet<string>): Jogador[] {
+  if (!jogadores.some((jogador) => jogador.isSeed)) return jogadores
+  return jogadores
+    .filter((jogador) => !jogador.isSeed || idsEmUso.has(jogador.id))
+    .map((jogador) => (jogador.isSeed ? { ...jogador, isSeed: undefined } : jogador))
+}
 
 export type ErroJogador = 'nomeVazio' | 'nomeDuplicado'
 

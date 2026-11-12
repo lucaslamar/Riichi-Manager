@@ -4,6 +4,8 @@
 
 ### Adicionado
 
+- **Clube do Tarot pré-cadastrado**: o primeiro uso traz os membros do Clube do Tarot de Lord of the Mysteries (Klein Moretti / The Fool, Audrey Hall / Justice e os outros). Ao cadastrar o primeiro jogador de verdade, eles saem sozinhos. Quem já jogou alguma partida ou está num torneio fica, como jogador comum, para nenhuma partida perder ninguém.
+- **Sou eu e favoritos na tela Jogadores**: cada jogador tem a estrela de favorito na própria linha, e o menu ⋯ ganhou Sou eu (um por vez), que coloca a etiqueta Você no nome.
 - **Histórico de ações da partida**: o relógio no topo da mesa abre a linha do tempo da partida, da ação mais recente para a mais antiga, com a rodada e o honba, quem fez o quê e quantos pontos andaram (ex.: Ron de Brunão em Naka · +7.700). Riichi, Tsumo, Ron, Ryuukyoku, Chombo, empates abortivos e o Desfazer entram, e o que foi desfeito continua lá, riscado. O histórico fica salvo com a partida e abre de novo no Histórico, dentro da partida finalizada.
 - **Avisos sobre a mesa**: os avisos da partida (como Última ação desfeita.) aparecem no centro da mesa, com a mesma largura e empilhados quando vêm vários, sem cobrir os botões.
 - **Desmarcar jogador na Nova partida**: ao escolher os jogadores, tocar em quem já está na mesa tira essa pessoa do lugar.

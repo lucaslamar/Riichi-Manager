@@ -20,6 +20,7 @@ import {
   partesDoNome,
   removerJogador,
   sugerirClubes,
+  tirarPreCadastrados,
   type Jogador,
 } from '../src/dominios/jogadores/logica/jogadores'
 import {
@@ -150,9 +151,24 @@ teste('salva com versão e carrega de volta', () => {
   assert.deepEqual(carregarJogadores(armazenamento), lista)
 })
 
-teste('primeiro uso traz os jogadores padrão, com apelido curto para a mesa', () => {
-  const nomes = carregarJogadores(memoria()).map((jogador) => nomeExibido(jogador))
-  assert.deepEqual(nomes, ['Akagi', 'Saki', 'Tetsuya', 'Koizumi'])
+teste('primeiro uso traz o Clube do Tarot, marcado como pré-cadastrado', () => {
+  const padrao = carregarJogadores(memoria())
+  assert.equal(padrao.length, 10)
+  assert.equal(nomeExibido(padrao[0]), 'The Fool')
+  assert.equal(padrao[0].nome, 'Klein Moretti')
+  assert.ok(padrao.every((jogador) => jogador.isSeed))
+})
+
+teste('o primeiro jogador real tira os pré-cadastrados, menos quem já jogou', () => {
+  const padrao = carregarJogadores(memoria())
+  const resultado = adicionarJogador(padrao, { nome: 'Ana' }, 'ana', 'agora')
+  assert.ok(resultado.ok)
+  if (!resultado.ok) return
+  const depois = tirarPreCadastrados(resultado.jogadores, new Set(['seed-klein']))
+  assert.deepEqual(depois.map((jogador) => jogador.id), ['seed-klein', 'ana'])
+  assert.equal(depois[0].isSeed, undefined)
+  // Sem pré-cadastrados, nada muda.
+  assert.equal(tirarPreCadastrados(depois, new Set()), depois)
 })
 
 teste('os padrão não voltam depois que o cadastro foi salvo', () => {

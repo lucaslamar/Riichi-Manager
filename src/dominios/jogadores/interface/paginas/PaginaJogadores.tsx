@@ -11,6 +11,7 @@ import {
 } from '../../logica/jogadores'
 import FormJogador from '../componentes/FormJogador'
 import { useJogadores } from '../hooks/useJogadores'
+import { useEu } from '../hooks/useEu'
 import '../jogadores.css'
 
 const DURACAO_DESFAZER_MS = 6000
@@ -25,12 +26,16 @@ export interface UsoDoJogador {
   partidasFinalizadas: number
 }
 
-function DadosJogador({ jogador }: { jogador: Jogador }) {
+function DadosJogador({ jogador, souEu = false }: { jogador: Jogador; souEu?: boolean }) {
+  const { t } = useI18n()
   const { principal } = partesDoNome(jogador)
   const apoio = linhaDeApoio(jogador)
   return (
     <div className="dados-jogador">
-      <span className="nome-cadastro">{principal}</span>
+      <span className="nome-cadastro">
+        {principal}
+        {souEu && <span className="selo-eu">{t('players.me')}</span>}
+      </span>
       {apoio && <span className="apelido-jogador">{apoio}</span>}
     </div>
   )
@@ -47,7 +52,8 @@ export default function PaginaJogadores({
   aoExcluir: (jogador: Jogador) => void
 }) {
   const { t, idioma } = useI18n()
-  const { jogadores, adicionar, editar, arquivar, restaurar, excluir, devolver } = useJogadores()
+  const { jogadores, adicionar, editar, arquivar, restaurar, excluir, devolver, favoritar } = useJogadores()
+  const { euId, definirEu } = useEu()
   const [busca, setBusca] = useState('')
   const [verArquivados, setVerArquivados] = useState(false)
   const [edicao, setEdicao] = useState<Edicao | null>(null)
@@ -120,7 +126,16 @@ export default function PaginaJogadores({
         <ul className="lista-jogadores">
           {ativos.map((jogador) => (
             <li key={jogador.id} className="linha-cadastro">
-              <DadosJogador jogador={jogador} />
+              <DadosJogador jogador={jogador} souEu={jogador.id === euId} />
+              <button
+                type="button"
+                className={`estrela-jogador acao-jogador${jogador.favorito ? ' estrela-jogador--ativa' : ''}`}
+                aria-pressed={!!jogador.favorito}
+                aria-label={t(jogador.favorito ? 'players.unfavorite' : 'players.favorite', { name: jogador.nome })}
+                onClick={() => favoritar(jogador.id, !jogador.favorito)}
+              >
+                <i className={`${jogador.favorito ? 'fas' : 'far'} fa-star`} aria-hidden="true" />
+              </button>
               <button
                 type="button"
                 className="acao-jogador"
@@ -202,6 +217,20 @@ export default function PaginaJogadores({
           tamanho="pequena"
         >
           <div className="menu-jogador">
+            {!menuDe.arquivado && (
+              // Só um "eu" por vez: marcar outra pessoa troca a marca.
+              <button
+                type="button"
+                aria-pressed={menuDe.id === euId}
+                onClick={() => {
+                  definirEu(menuDe.id === euId ? null : menuDe.id)
+                  setMenuDe(null)
+                }}
+              >
+                <i className={`fas ${menuDe.id === euId ? 'fa-user-minus' : 'fa-user-check'}`} aria-hidden="true" />
+                {t(menuDe.id === euId ? 'players.notMe' : 'players.itsMe')}
+              </button>
+            )}
             {menuDe.arquivado ? (
               <button
                 type="button"

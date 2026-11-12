@@ -904,7 +904,8 @@
     "club": "Clube (opcional)",
     "clubSuggestions": "Clubes já usados",
     "deleteImpactOne": "{{name}} aparece em 1 partida. O histórico fica com o nome e os pontos dos outros não mudam, mas o jogador sai do ranking. Arquivar mantém tudo.",
-    "tapToRemove": "Escolhido · tocar desmarca"
+    "tapToRemove": "Escolhido · tocar desmarca",
+    "notMe": "Não sou eu"
   },
   "tableConfig": {
     "title": "Configurações de mesa",

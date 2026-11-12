@@ -8,11 +8,14 @@ import {
   editarJogador,
   garantirPorNomes,
   removerJogador,
+  tirarPreCadastrados,
   type DadosJogador,
   type Jogador,
   type ResultadoJogador,
 } from '../../logica/jogadores'
 import { carregarJogadores, salvarJogadores } from '../../persistencia/repositorioJogadores'
+import { lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
+import { lerTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 
 /**
  * Cadastro único para o app inteiro: um jogador criado no SeletorJogador já
@@ -45,8 +48,12 @@ function aplicar(resultado: ResultadoJogador) {
 }
 
 export const acoesJogadores = {
-  adicionar: (dados: DadosJogador) =>
-    aplicar(adicionarJogador(lerCadastro(), dados, gerarId(), new Date().toISOString())),
+  adicionar: (dados: DadosJogador) => {
+    const resultado = adicionarJogador(lerCadastro(), dados, gerarId(), new Date().toISOString())
+    if (!resultado.ok) return resultado
+    // O primeiro jogador real tira os pré-cadastrados que nunca jogaram.
+    return aplicar({ ...resultado, jogadores: tirarPreCadastrados(resultado.jogadores, idsEmUso()) })
+  },
   editar: (id: string, dados: DadosJogador) => aplicar(editarJogador(lerCadastro(), id, dados)),
   arquivar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, true)),
   restaurar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, false)),
@@ -60,6 +67,16 @@ export const acoesJogadores = {
     const faltam = novos.filter((novo) => !atual.some((jogador) => jogador.id === novo.id))
     if (faltam.length) definirCadastro([...atual, ...faltam])
   },
+}
+
+/** Quem aparece em alguma partida ou torneio: esses não somem com os pré-cadastrados. */
+function idsEmUso(): Set<string> {
+  const ids = new Set<string>()
+  for (const partida of lerPartidas()) {
+    for (const assento of Object.values(partida.assentos)) ids.add(assento.jogadorId)
+  }
+  for (const torneio of lerTorneios().torneios) torneio.jogadorIds.forEach((id) => ids.add(id))
+  return ids
 }
 
 /** Ids de uma lista de nomes, cadastrando quem faltar. Usado pelas migrações. */
