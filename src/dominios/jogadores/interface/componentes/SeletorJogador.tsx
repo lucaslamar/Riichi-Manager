@@ -24,6 +24,8 @@ interface PropsSeletorJogador {
   aoFechar: () => void
   /** Com isto, tocar num jogador já escolhido o tira do lugar (desmarca). */
   aoDesmarcar?: (jogadorId: string) => void
+  /** Onde o jogador escolhido está (ex.: "Leste"), no lugar de "Já escolhido". */
+  rotuloEscolhido?: (jogadorId: string) => string
 }
 
 /**
@@ -39,6 +41,7 @@ export default function SeletorJogador({
   aoEscolher,
   aoFechar,
   aoDesmarcar,
+  rotuloEscolhido,
 }: PropsSeletorJogador) {
   const { t, idioma } = useI18n()
   const { jogadores, adicionar, favoritar } = useJogadores()
@@ -111,7 +114,7 @@ export default function SeletorJogador({
             {partes.apoio && <span className="apelido-jogador">{partes.apoio}</span>}
           </span>
           {escolhido && (
-            <span className="selo-jogador">{t(aoDesmarcar ? 'players.tapToRemove' : 'players.alreadyChosen')}</span>
+            <span className="selo-jogador">{rotuloEscolhido?.(jogador.id) ?? t('players.alreadyChosen')}</span>
           )}
         </button>
         <button

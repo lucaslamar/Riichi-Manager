@@ -159,6 +159,9 @@ export default function SetupPartida({
           aoFechar={() => setEscolhendo(null)}
           // Tocar em quem já está na mesa tira essa pessoa do lugar; o lugar fica livre.
           aoDesmarcar={(jogadorId) => setAssentos(assentos.map((id) => (id === jogadorId ? null : id)))}
+          rotuloEscolhido={(jogadorId) =>
+            t(`winds.${['east', 'south', 'west', 'north'][assentos.indexOf(jogadorId)]}`)
+          }
           aoEscolher={(jogador) => {
             const proximos = assentos.map((id, indice) => (indice === escolhendo ? jogador.id : id))
             setAssentos(proximos)

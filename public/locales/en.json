@@ -920,7 +920,6 @@
     "club": "Club (optional)",
     "clubSuggestions": "Clubs already used",
     "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything.",
-    "tapToRemove": "Chosen · tap to remove",
     "notMe": "This is not me"
   },
   "tableConfig": {
