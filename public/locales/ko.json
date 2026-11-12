@@ -852,6 +852,14 @@
     }
   },
   "players": {
+    "recent": "최근 함께 친 사람",
+    "favorites": "즐겨찾기",
+    "all": "전체",
+    "me": "나",
+    "favorite": "{{name}} 즐겨찾기",
+    "unfavorite": "{{name}} 즐겨찾기 해제",
+    "itsMe": "나예요",
+    "markAsMe": "이 사람이 나",
     "title": "Players",
     "subtitle": "Roster used in games, the tournament and the ranking.",
     "search": "Search players",
@@ -1887,6 +1895,11 @@
     }
   },
   "backup": {
+    "samePerson": {
+      "title": "같은 사람인가요?",
+      "help": "백업의 이 사람들은 여기 있는 사람과 이름이 같습니다. 체크하면 병합할 때 한 사람이 되고, 대국은 여기 플레이어로 옮겨집니다.",
+      "pair": "{{theirs}} (백업) = {{ours}} (여기)"
+    },
     "title": "데이터 가져오기 및 내보내기",
     "help": "플레이어, 대국, 대회, 클럽, 탁 설정을 다른 휴대폰으로 옮깁니다.",
     "export": "내보내기",

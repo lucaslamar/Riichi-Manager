@@ -863,6 +863,14 @@
     }
   },
   "players": {
+    "recent": "Jugados recientemente",
+    "favorites": "Favoritos",
+    "all": "Todos",
+    "me": "Tú",
+    "favorite": "Marcar a {{name}} como favorito",
+    "unfavorite": "Quitar a {{name}} de favoritos",
+    "itsMe": "Soy yo",
+    "markAsMe": "Este soy yo",
     "title": "Players",
     "subtitle": "Roster used in games, the tournament and the ranking.",
     "search": "Search players",
@@ -1913,6 +1921,11 @@
     }
   },
   "backup": {
+    "samePerson": {
+      "title": "¿La misma persona?",
+      "help": "Estas personas de la copia tienen el mismo nombre que alguien de aquí. Marcadas, se vuelven una sola al combinar y sus partidas pasan al jugador de aquí.",
+      "pair": "{{theirs}} (copia) = {{ours}} (aquí)"
+    },
     "title": "Importar y exportar datos",
     "help": "Lleva jugadores, partidas, torneos, club y ajustes de mesa a otro móvil.",
     "export": "Exportar",

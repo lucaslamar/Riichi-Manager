@@ -852,6 +852,14 @@
     }
   },
   "players": {
+    "recent": "最近一起打",
+    "favorites": "收藏",
+    "all": "全部",
+    "me": "你",
+    "favorite": "收藏 {{name}}",
+    "unfavorite": "取消收藏 {{name}}",
+    "itsMe": "是我",
+    "markAsMe": "这是我",
     "title": "Players",
     "subtitle": "Roster used in games, the tournament and the ranking.",
     "search": "Search players",
@@ -1887,6 +1895,11 @@
     }
   },
   "backup": {
+    "samePerson": {
+      "title": "同一个人？",
+      "help": "备份中的这些人与这里某人同名。勾选后合并时会变成同一人，其对局归到这里的玩家。",
+      "pair": "{{theirs}}（备份）= {{ours}}（这里）"
+    },
     "title": "导入和导出数据",
     "help": "把玩家、对局、比赛、俱乐部和牌桌设置转移到另一部手机。",
     "export": "导出",
