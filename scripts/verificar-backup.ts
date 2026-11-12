@@ -16,6 +16,7 @@ import { carregarJogadores } from '../src/dominios/jogadores/persistencia/reposi
 import { carregarClube } from '../src/dominios/centerpiece/persistencia/repositorioClube'
 import {
   mesclarBackup,
+  partidasRepetidas,
   montarBackup,
   nomeDoBackup,
   resumoBackup,
@@ -158,6 +159,25 @@ teste('a mesma pessoa cadastrada nos dois aparelhos vira uma só', () => {
   const partidasDela = unificado.partidas.filter((partida) => partida.resultado?.some((linha) => linha.jogadorId === 'local-carol'))
   assert.equal(partidasDela.length, cheio.partidas.filter((partida) => partida.resultado?.some((linha) => linha.jogadorId === carol.id)).length)
   assert.deepEqual(unificarJogadores(cheio, {}), cheio, 'sem pares, nada muda')
+})
+
+teste('a mesma mesa registrada nos dois celulares entra uma vez só', () => {
+  const [minha, outra] = gerarPartidasDeTeste(AGORA, 2)
+  const depois = (minutos: number) => new Date(Date.parse(minha.finalizadaEm!) + minutos * 60_000).toISOString()
+  // O Daniel registrou a mesma mesa 40 min depois, com outro id.
+  const doDaniel = { ...minha, id: 'daniel-1', finalizadaEm: depois(40) }
+  // Mesmos pontos, mas 2 horas depois: é outra partida.
+  const outroDia = { ...minha, id: 'daniel-2', finalizadaEm: depois(120) }
+  // Um ponto diferente: não dá para saber qual está certo, entram as duas.
+  const linhas = minha.resultado!.map((linha, indice) => (indice === 0 ? { ...linha, pontosBrutos: linha.pontosBrutos + 100 } : linha))
+  const digitadaDiferente = { ...minha, id: 'daniel-3', finalizadaEm: depois(10), resultado: linhas }
+  assert.deepEqual(partidasRepetidas([minha, outra], [doDaniel, outroDia, digitadaDiferente]), ['daniel-1'])
+  const local: DadosBackup = { ...VAZIO, partidas: [minha, outra] }
+  const vindo: DadosBackup = { ...VAZIO, partidas: [doDaniel, outroDia, digitadaDiferente] }
+  assert.deepEqual(
+    mesclarBackup(local, vindo).partidas.map((partida) => partida.id),
+    [minha.id, outra.id, 'daniel-2', 'daniel-3'],
+  )
 })
 
 console.log(`Backup ok: ${testes} testes.`)

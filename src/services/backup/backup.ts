@@ -115,11 +115,51 @@ function somarPorId<T extends { id: string }>(locais: readonly T[], vindos: read
  * Mesclar: adiciona o que não existe aqui, identificando por `id`. O que já
  * existe fica como está (inclusive configurações, lista e sorteio do clube).
  */
+/** Tolerância entre os dois registros da mesma mesa (cada um registra quando dá). */
+export const CARENCIA_MESMA_PARTIDA_MS = 60 * 60 * 1000
+
+/** Assinatura do resultado: quem jogou e com quantos pontos terminou. */
+function assinatura(partida: Partida) {
+  return (partida.resultado ?? [])
+    .map((linha) => `${linha.jogadorId}:${linha.pontosBrutos}`)
+    .sort()
+    .join('|')
+}
+
+/**
+ * Partidas do backup que já estão aqui com outro id: finalizadas, os mesmos
+ * quatro jogadores com os mesmos pontos finais e registradas com até 1 hora de
+ * diferença. É o caso de duas pessoas da mesma mesa que registraram cada uma
+ * no seu celular. Devolve os ids do backup.
+ */
+export function partidasRepetidas(locais: readonly Partida[], vindas: readonly Partida[]): string[] {
+  const idsLocais = new Set(locais.map((partida) => partida.id))
+  const finalizadas = locais.filter((partida) => partida.status === 'finalizada' && partida.resultado?.length)
+  return vindas
+    .filter((vinda) => {
+      if (idsLocais.has(vinda.id) || vinda.status !== 'finalizada' || !vinda.resultado?.length) return false
+      const chave = assinatura(vinda)
+      const quando = Date.parse(vinda.finalizadaEm ?? '')
+      return finalizadas.some(
+        (local) =>
+          assinatura(local) === chave &&
+          Math.abs(Date.parse(local.finalizadaEm ?? '') - quando) <= CARENCIA_MESMA_PARTIDA_MS,
+      )
+    })
+    .map((partida) => partida.id)
+}
+
+function semRepetidas(locais: readonly Partida[], vindas: readonly Partida[]) {
+  const repetidas = new Set(partidasRepetidas(locais, vindas))
+  return vindas.filter((partida) => !repetidas.has(partida.id))
+}
+
 export function mesclarBackup(locais: DadosBackup, vindos: DadosBackup): DadosBackup {
   return {
     ...locais,
     jogadores: somarPorId(locais.jogadores, vindos.jogadores),
-    partidas: somarPorId(locais.partidas, vindos.partidas),
+    // Partida que os dois aparelhos registraram da mesma mesa entra uma vez só.
+    partidas: somarPorId(locais.partidas, semRepetidas(locais.partidas, vindos.partidas)),
     torneios: somarPorId(locais.torneios, vindos.torneios),
     temporadas: somarPorId(locais.temporadas, vindos.temporadas),
     listasTorneio: somarPorId(locais.listasTorneio, vindos.listasTorneio),
