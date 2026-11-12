@@ -237,3 +237,56 @@
   font-size: 0.875rem;
   line-height: 1.4;
 }
+
+/* Yakus locais: uma caixa de seleção por yaku, com a explicação ao lado. */
+.yaku-local-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid var(--cor-borda, #edf0f4);
+  padding: 10px 2px;
+  cursor: pointer;
+}
+
+.yaku-local-check input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 2px 0 0;
+  accent-color: var(--primario);
+  cursor: pointer;
+}
+
+.yaku-local-check__texto {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.yaku-local-check__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.yaku-local-check__topo strong {
+  color: var(--escuro);
+}
+
+.yaku-local-check__topo span {
+  color: var(--cor-texto-suave, #607080);
+}
+
+.yaku-local-check__topo em {
+  color: var(--cor-primario, var(--primario));
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.yaku-local-check small {
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}

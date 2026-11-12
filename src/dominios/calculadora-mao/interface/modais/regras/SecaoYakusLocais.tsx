@@ -107,13 +107,25 @@ export default function SecaoYakusLocais({ mostrar }: { mostrar?: (texto: string
           const ativo = ativos.has(yaku.id)
           return (
             <div key={yaku.id}>
-              <LinhaRegraOpcoes
-                titulo={`${yaku.nome} ${yaku.kanji} · ${texto.valor}`}
-                ajuda={yaku.situacao ? `${texto.descricao} ${t('localYaku.conditionNote')}` : texto.descricao}
-                valor={ativo}
-                opcoes={ligado}
-                aoMudar={(valor) => alternarYakuLocal(yaku.id, valor)}
-              />
+              {/* Caixa de seleção com a explicação ao lado: a lista é longa. */}
+              <label className={`yaku-local-check${ativo ? ' yaku-local-check--ativo' : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={ativo}
+                  onChange={(evento) => alternarYakuLocal(yaku.id, evento.target.checked)}
+                />
+                <span className="yaku-local-check__texto">
+                  <span className="yaku-local-check__topo">
+                    <strong>{yaku.nome}</strong>
+                    <span lang="ja">{yaku.kanji}</span>
+                    <em>{texto.valor}</em>
+                  </span>
+                  <small>
+                    {texto.descricao}
+                    {yaku.situacao && <> {t('localYaku.conditionNote')}</>}
+                  </small>
+                </span>
+              </label>
               {yaku.id === 'paarenchan' && ativo && (
                 <div className="sub-regras">
                   <LinhaRegraOpcoes<'1' | '2' | '3'>
