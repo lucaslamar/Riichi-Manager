@@ -217,3 +217,16 @@
   font-size: 0.8rem;
   font-weight: 800;
 }
+
+.yaku-card__porque,
+.lista-yakus-locais .yaku-card__porque {
+  margin: 6px 0 0;
+  color: var(--cor-texto-suave, inherit);
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.yaku-card__porque strong {
+  font-style: normal;
+}

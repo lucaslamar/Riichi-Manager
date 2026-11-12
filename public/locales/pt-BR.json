@@ -2079,6 +2079,7 @@
       "dealerPasses": "Banca passa",
       "dealerStays": "Dealer continua",
       "near": "{{count}} renchan de {{name}}: a próxima vitória é Yakuman (Paarenchan)."
-    }
+    },
+    "why": "Por quê:"
   }
 }

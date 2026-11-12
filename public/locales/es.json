@@ -2086,6 +2086,7 @@
       "dealerPasses": "Dealer passes",
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
-    }
+    },
+    "why": "Why:"
   }
 }

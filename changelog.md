@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Por quê de cada yaku local**: no Guia de bolso e na lista de Yakus locais, cada um ganhou uma linha explicando de onde vem o nome ou a ideia e o que deixa a mão difícil (ex.: o Benikujaku usa só as pedras de sou que o Ryuuiisou deixa de fora). O Paarenchan agora explica a regra inteira: depois de 7 renchan a próxima vitória é Yakuman, com as três variações e o Ryanhan-shibari.
 - **Ordem dos ventos ao registrar partida finalizada**: escolha Leste, Sul, Oeste, Norte (cada jogador ganha o kanji do vento ao lado) ou Não sei. Só as partidas com a ordem entram no gráfico de vento inicial do jogador. Mesas do clube e do torneio já vêm com os ventos do sorteio. Partidas registradas à mão antes disso saem desse gráfico, porque o vento delas não era conhecido.
 - **Faixa de título nas Mesas sorteadas e nas Mesas do torneio**: o nome do encontro (ou do torneio) e a data ficam numa faixa na cor principal, como o cabeçalho de uma tabela, separada do relógio, com em andamento ou concluído à direita.
 - **Tema Azul**: nos Ajustes do app, Tema ganhou Azul, ao lado de Claro, Velvet Darkness e Automático. É azul forte com creme e um toque de vermelho, com o cabeçalho todo em azul e a mesa do Centerpiece e da partida também em azul (feltro azul, painel creme e placas marinho), e passa no contraste WCAG AA.

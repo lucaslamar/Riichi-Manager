@@ -690,8 +690,18 @@ export const YAKUS_LOCAIS: readonly YakuLocal[] = [
     categoria: 'yakuman',
     valor: YAKUMAN,
     situacao: true,
-    pt: { valor: 'Yakuman', traducao: 'Oito seguidas', descricao: 'Oito vitórias seguidas (a variação é escolhida nas regras). A mão ainda precisa de pelo menos 1 yaku.' },
-    en: { valor: 'Yakuman', traducao: 'Eight in a row', descricao: 'Eight wins in a row (pick the variation in the rules). The hand still needs at least 1 yaku.' },
+    pt: {
+      valor: 'Yakuman',
+      traducao: 'Oito seguidas',
+      descricao:
+        'A oitava vitória seguida vale Yakuman, desde que a mão tenha pelo menos 1 yaku. Depois de 7 renchan (7 honba), a próxima vitória já é o Paarenchan. Há três variações, escolhidas nas regras: 1) 8 vitórias seguidas do mesmo jogador. 2) 8 vitórias seguidas como dealer, sem empate no meio. 3) chegar a 8 honba como dealer, com os empates contando, e vencer essa mão. Opcional: Ryanhan-shibari, que do 5º honba em diante exige 2 han sem dora.',
+    },
+    en: {
+      valor: 'Yakuman',
+      traducao: 'Eight in a row',
+      descricao:
+        'The eighth win in a row is a Yakuman, as long as the hand has at least 1 yaku. After 7 renchan (7 honba), the next win is the Paarenchan. Three variations, picked in the rules: 1) 8 wins in a row by the same player. 2) 8 wins in a row as dealer, no draws in between. 3) reach 8 honba as dealer, draws counting, and win that hand. Optional Ryanhan-shibari: from the 5th honba on, 2 han without dora are required.',
+    },
   },
   {
     id: 'ishiNoUe',

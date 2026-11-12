@@ -7,6 +7,7 @@ import { LinhaRegraOpcoes } from './ModalRegras'
 import { PedrasExemplo } from '../yakus/PedrasExemplo'
 import { parseMpszGrupos } from '../../../logica/yakus'
 import { EXEMPLOS_YAKUS_LOCAIS } from '../../../logica/exemplosYakusLocais'
+import { PORQUE_YAKUS_LOCAIS } from '../../../logica/porqueYakusLocais'
 
 
 /** "Yakus locais" sublinhado como termo do glossário: abre a lista de todos. */
@@ -48,6 +49,11 @@ export function ModalListaYakusLocais({ aoFechar }: { aoFechar: () => void }) {
               </div>
               <small>{texto.valor}</small>
               <p>{texto.descricao}</p>
+              {PORQUE_YAKUS_LOCAIS[yaku.id] && (
+                <p className="yaku-card__porque">
+                  <strong>{t('localYaku.why')}</strong> {PORQUE_YAKUS_LOCAIS[yaku.id][idioma === 'pt-BR' ? 'pt' : 'en']}
+                </p>
+              )}
               {EXEMPLOS_YAKUS_LOCAIS[yaku.id] && (
                 <PedrasExemplo
                   grupos={parseMpszGrupos(EXEMPLOS_YAKUS_LOCAIS[yaku.id])}
