@@ -309,19 +309,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           ) : (
             <TituloTela
               aoVoltar={aoSair}
-              acoes={
-                <>
-                  <button
-                    type="button"
-                    className="ptd-btn-historico"
-                    aria-label={t('match.history.title')}
-                    onClick={() => setHistoricoAberto(true)}
-                  >
-                    <i className="fas fa-list-ul" aria-hidden="true" />
-                  </button>
-                  <BotaoTelaCheia />
-                </>
-              }
+              acoes={<BotaoTelaCheia />}
               titulo={
                 <>
                 {partida.vinculoTorneio ? (
@@ -338,6 +326,16 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                   </select>
                 </label>
                 )}
+                {/* Anotações da partida: o histórico de ações, antes do Abortar. */}
+                <button
+                  type="button"
+                  className="ptd-btn-historico"
+                  aria-label={t('match.history.title')}
+                  title={t('match.history.title')}
+                  onClick={() => setHistoricoAberto(true)}
+                >
+                  <i className="fas fa-file-pen" aria-hidden="true" />
+                </button>
                 <button type="button" className="mesa-abortar" onClick={() => setAbortando(true)}>
                   <i className="fas fa-ban" aria-hidden="true" /> {t('match.table.abort')}
                 </button>
