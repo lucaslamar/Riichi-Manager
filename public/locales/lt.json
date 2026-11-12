@@ -1305,9 +1305,7 @@
       "calculate": "Skaičiuoti ranką",
       "drawSection": "Burtai",
       "calcMpsz": "Skaičiuotuvas MPSZ žymėjimu",
-      "timerPass": "Perduoti ėjimą",
-      "rotateLeft": "Rotate the piece left",
-      "rotateRight": "Rotate the piece right"
+      "timerPass": "Perduoti ėjimą"
     },
     "setup": {
       "title": "New game",

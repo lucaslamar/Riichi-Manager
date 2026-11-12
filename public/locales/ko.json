@@ -1245,9 +1245,7 @@
       "calculate": "손패 계산",
       "drawSection": "추첨",
       "calcMpsz": "MPSZ 표기로 계산",
-      "timerPass": "차례 넘기기",
-      "rotateLeft": "Rotate the piece left",
-      "rotateRight": "Rotate the piece right"
+      "timerPass": "차례 넘기기"
     },
     "setup": {
       "title": "New game",

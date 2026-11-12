@@ -1245,9 +1245,7 @@
       "calculate": "计算手牌",
       "drawSection": "抽签",
       "calcMpsz": "用 MPSZ 记法计算",
-      "timerPass": "传递回合",
-      "rotateLeft": "Rotate the piece left",
-      "rotateRight": "Rotate the piece right"
+      "timerPass": "传递回合"
     },
     "setup": {
       "title": "New game",

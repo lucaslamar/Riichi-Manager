@@ -919,7 +919,7 @@ button.mesa-domo {
 .mesa-tri-caixa {
   position: relative;
   box-sizing: border-box;
-  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 160px) - 52px));
+  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 160px)));
   max-width: 620px;
   min-width: 200px;
   aspect-ratio: 1;
@@ -1012,10 +1012,6 @@ button.mesa-domo {
   font-size: max(1rem, 5cqw);
 }
 
-.mesa-tri-giro {
-  display: flex;
-  gap: 12px;
-}
 
 /* Honba das ações: − e + iguais (só o − apaga no 0), número no meio, 本 pequeno ao lado. */
 .mesa-honba-botao {
@@ -1071,4 +1067,11 @@ button.mesa-domo {
   border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 800;
+}
+
+/* O triângulo gira inteiro (fundo e placas) quando a banca passa; o domo fica parado. */
+.mesa-tri-peca {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
 }

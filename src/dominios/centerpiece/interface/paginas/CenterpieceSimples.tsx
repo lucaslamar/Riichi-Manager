@@ -197,7 +197,7 @@ export default function CenterpieceSimples({
 
       <div className="mesa-centro-tela">
         {sanma ? (
-          <MesaTriangular giro={giro} aoTocarMesa={abrirAcoes} domo={domoMesa} placa={placaDaCadeira} />
+          <MesaTriangular cadeiraDealer={estado.cadeiraDealer} giro={giro} aoTocarMesa={abrirAcoes} domo={domoMesa} placa={placaDaCadeira} />
         ) : (
           <MesaQuadrada
             cadeiraDealer={estado.cadeiraDealer}
