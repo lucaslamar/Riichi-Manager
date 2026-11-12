@@ -45,3 +45,19 @@
 :root[data-tema='claro'][data-cor='azul'] .cabecalho-principal :is(.titulo-principal, button, a, i, h1, h2, span) {
   color: #fafae8;
 }
+
+/* A mesa (Centerpiece e partida) também no azul: feltro azul, painel creme, domo marinho. */
+:root[data-tema='claro'][data-cor='azul'] body {
+  --mesa-feltro: #1f4fc9;
+  --mesa-painel: #f6f5e2;
+  --mesa-painel-borda: #c9cbb0;
+  --mesa-disco: #fafae8;
+  --mesa-domo: #16224a;
+  --mesa-domo-texto: #fafae8;
+  --mesa-sombra: rgb(22 34 74 / 30%);
+  --led-fundo: #121b3d;
+  --mesa-ranhura: #dedbbe;
+  --mesa-ranhura-texto: #3c4466;
+  --mesa-timer-fundo: #2a3566;
+  --mesa-acao: #1f4fc9;
+}
