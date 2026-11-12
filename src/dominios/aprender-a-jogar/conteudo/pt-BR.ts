@@ -1385,7 +1385,7 @@ const topicosRegras: TopicoRegras[] = [
       { type: 'hand', mpsz: '22334455667788p', caption: 'Daisharin' },
       {
         type: 'tip',
-        md: 'Para usar algum deles na calculadora, ligue em **Regras de cálculo → Yakus locais**. Todos começam desligados. A lista completa, com o valor de cada um, fica na aba Yakus especiais do Guia de bolso.',
+        md: 'Para usar algum deles na calculadora, ligue em **Regras de cálculo → Yakus locais**. Todos começam desligados. A lista completa, com o valor de cada um, fica na aba Yakus locais do Guia de bolso.',
       },
     ],
   },

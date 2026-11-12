@@ -1358,7 +1358,7 @@ const topicosRegras: TopicoRegras[] = [
       { type: 'hand', mpsz: '22334455667788p', caption: 'Daisharin' },
       {
         type: 'tip',
-        md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Special yaku tab of the Pocket guide.',
+        md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',
       },
     ],
   },
