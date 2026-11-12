@@ -3,6 +3,10 @@ import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { CATEGORIAS_LOCAIS_EM_ORDEM, textoYakuLocal, YAKUS_LOCAIS, type YakuLocal } from '../../../logica/yakusLocais'
 import SecaoYakusLocais from '../regras/SecaoYakusLocais'
+import { PedrasExemplo } from './PedrasExemplo'
+import { parseMpszGrupos } from '../../../logica/yakus'
+import { EXEMPLOS_YAKUS_LOCAIS } from '../../../logica/exemplosYakusLocais'
+
 import './modal-yakus.css'
 
 /** Card de um yaku local, no mesmo formato dos outros do Guia. */
@@ -43,6 +47,12 @@ export function CartaoYakuLocal({ yaku }: { yaku: YakuLocal }) {
       <p className="yaku-card__pt">{texto.traducao}</p>
       <p className="yaku-card__descricao">{texto.descricao}</p>
       <p className="yaku-card__valor-local">{texto.valor}</p>
+      {EXEMPLOS_YAKUS_LOCAIS[yaku.id] && (
+        <PedrasExemplo
+          grupos={parseMpszGrupos(EXEMPLOS_YAKUS_LOCAIS[yaku.id])}
+          rotulo={t('pocketGuide.example', { exemplo: EXEMPLOS_YAKUS_LOCAIS[yaku.id] })}
+        />
+      )}
     </article>
   )
 }

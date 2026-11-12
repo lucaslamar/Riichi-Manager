@@ -4,6 +4,10 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useYakusLocais, type VariacaoPaarenchan } from '@/compartilhado/configuracoes/useYakusLocais'
 import { YAKUS_LOCAIS, textoYakuLocal, type YakuLocal } from '../../../logica/yakusLocais'
 import { LinhaRegraOpcoes } from './ModalRegras'
+import { PedrasExemplo } from '../yakus/PedrasExemplo'
+import { parseMpszGrupos } from '../../../logica/yakus'
+import { EXEMPLOS_YAKUS_LOCAIS } from '../../../logica/exemplosYakusLocais'
+
 
 /** "Yakus locais" sublinhado como termo do glossário: abre a lista de todos. */
 export function TermoYakusLocais({ rotulo }: { rotulo?: string }) {
@@ -44,6 +48,12 @@ export function ModalListaYakusLocais({ aoFechar }: { aoFechar: () => void }) {
               </div>
               <small>{texto.valor}</small>
               <p>{texto.descricao}</p>
+              {EXEMPLOS_YAKUS_LOCAIS[yaku.id] && (
+                <PedrasExemplo
+                  grupos={parseMpszGrupos(EXEMPLOS_YAKUS_LOCAIS[yaku.id])}
+                  rotulo={t('pocketGuide.example', { exemplo: EXEMPLOS_YAKUS_LOCAIS[yaku.id] })}
+                />
+              )}
             </li>
           )
         })}
