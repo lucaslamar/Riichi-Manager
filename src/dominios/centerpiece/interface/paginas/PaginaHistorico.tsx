@@ -111,7 +111,7 @@ export default function PaginaHistorico({
             <ListaMaos partida={aberta} nomeDe={nomeNa(aberta)} />
             {/* O histórico de ações fica salvo com a partida. */}
             <button type="button" className="btn-contorno ptd-btn-largo" onClick={() => setAcoesAbertas(true)}>
-              <i className="fas fa-clock-rotate-left" aria-hidden="true" /> {t('match.history.title')}
+              <i className="fas fa-list-ul" aria-hidden="true" /> {t('match.history.title')}
             </button>
           </>
         )}

@@ -317,7 +317,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                     aria-label={t('match.history.title')}
                     onClick={() => setHistoricoAberto(true)}
                   >
-                    <i className="fas fa-clock-rotate-left" aria-hidden="true" />
+                    <i className="fas fa-list-ul" aria-hidden="true" />
                   </button>
                   <BotaoTelaCheia />
                 </>
