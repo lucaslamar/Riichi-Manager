@@ -28,7 +28,8 @@
             (!!window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches))
         var raiz = document.documentElement
         raiz.setAttribute('data-tema', escuro ? 'escuro' : 'claro')
-        if (tema === 'azul') raiz.setAttribute('data-cor', 'azul')
+        // O claro é sempre o Azul.
+        if (!escuro) raiz.setAttribute('data-cor', 'azul')
         // Pedras: automático = pretas no claro, brancas no escuro.
         var pedras = null
         try {
