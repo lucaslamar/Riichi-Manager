@@ -22,9 +22,7 @@
     "handCalculatorShort": "계산기",
     "windDrawShort": "바람 뽑기",
     "centerpiece": "Centerpiece",
-
     "matches": "대국 테이블",
-
     "matchesShort": "대국",
     "ranking": "랭킹",
     "more": "More",
@@ -134,7 +132,6 @@
     "suitSou": "삭",
     "honors": "자패",
     "akaDora": "빨간 5 (적도라)",
-
     "holdForAka": "길게 누르면 빨간 5",
     "addTileToHand": "{{tile}}을(를) 손패에 추가",
     "addTileToDiscards": "후리텐 확인용으로 {{tile}}을(를) 버림패에 추가",
@@ -1230,7 +1227,9 @@
       "calculate": "손패 계산",
       "drawSection": "추첨",
       "calcMpsz": "MPSZ 표기로 계산",
-      "timerPass": "차례 넘기기"
+      "timerPass": "차례 넘기기",
+      "rotateLeft": "Rotate the piece left",
+      "rotateRight": "Rotate the piece right"
     },
     "setup": {
       "title": "New game",

@@ -22,9 +22,7 @@
     "handCalculatorShort": "Skaičiuoklė",
     "windDrawShort": "Burtai",
     "centerpiece": "Centerpiece",
-
     "matches": "Partijos stalas",
-
     "matchesShort": "Partijos",
     "ranking": "Reitingas",
     "more": "More",
@@ -140,7 +138,6 @@
     "suitSou": "Sou",
     "honors": "Garbės akmenys",
     "akaDora": "Raudonas 5 (aka dora)",
-
     "holdForAka": "Palaikykite raudonam 5",
     "addTileToHand": "Pridėti {{tile}} į ranką",
     "addTileToDiscards": "Pridėti {{tile}} prie išmestų akmenų furiten patikrai",
@@ -1290,7 +1287,9 @@
       "calculate": "Skaičiuoti ranką",
       "drawSection": "Burtai",
       "calcMpsz": "Skaičiuotuvas MPSZ žymėjimu",
-      "timerPass": "Perduoti ėjimą"
+      "timerPass": "Perduoti ėjimą",
+      "rotateLeft": "Rotate the piece left",
+      "rotateRight": "Rotate the piece right"
     },
     "setup": {
       "title": "New game",

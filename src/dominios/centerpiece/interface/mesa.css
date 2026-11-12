@@ -906,3 +906,159 @@ button.mesa-domo {
   border-top: 0;
   padding-top: 0;
 }
+
+/* ── Sanma: peça triangular, um vento em cada lado, girável com o dedo ── */
+.mesa-tri {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.mesa-tri-caixa {
+  position: relative;
+  box-sizing: border-box;
+  width: min(100%, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - var(--mesa-altura-acoes, 160px) - 52px));
+  max-width: 620px;
+  min-width: 200px;
+  aspect-ratio: 1;
+  container-type: size;
+  touch-action: none;
+  transition: transform 0.35s ease-in-out;
+}
+
+.mesa-tri-caixa--arrastando {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesa-tri-caixa {
+    transition: none;
+  }
+}
+
+.mesa-tri-fundo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mesa-tri-feltro {
+  fill: var(--mesa-feltro);
+  stroke: var(--mesa-feltro);
+  stroke-width: 6;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 3px 5px var(--mesa-sombra));
+}
+
+.mesa-tri-painel {
+  fill: var(--mesa-painel);
+  stroke: var(--mesa-painel-borda);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.mesa-tri-lado {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mesa-tri-placa {
+  position: absolute;
+  top: 61.5%;
+  left: 50%;
+  width: 38%;
+  height: 11%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.mesa-tri-placa > .mesa-placa {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex-direction: row;
+  align-items: center;
+}
+
+.mesa-tri-placa .mesa-placa-simples-vento {
+  flex-direction: row;
+  gap: 6%;
+}
+
+.mesa-tri-placa .mesa-placa--simples strong {
+  font-size: 7cqw;
+}
+
+.mesa-tri-placa .mesa-placa--simples small {
+  font-size: max(0.625rem, 2.8cqw);
+  white-space: nowrap;
+}
+
+.mesa-tri-caixa > .mesa-tri-domo {
+  position: absolute;
+  inset: 40%;
+  width: auto;
+  height: auto;
+}
+
+.mesa-tri-domo .mesa-domo-rodada {
+  font-size: max(1rem, 5cqw);
+}
+
+.mesa-tri-giro {
+  display: flex;
+  gap: 12px;
+}
+
+/* Honba das ações: − e + iguais (só o − apaga no 0), número no meio, 本 pequeno ao lado. */
+.mesa-honba-botao {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 10px;
+  padding: 0;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+  cursor: pointer;
+}
+
+.mesa-honba-botao:disabled {
+  color: var(--texto-apoio);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mesa-honba-valor {
+  display: inline-flex;
+  min-width: 3ch;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.mesa-honba-valor small {
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.mesa-honba--acoes .mesa-honba-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}

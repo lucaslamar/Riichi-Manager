@@ -22,9 +22,7 @@
     "handCalculatorShort": "计算器",
     "windDrawShort": "抽风位",
     "centerpiece": "Centerpiece",
-
     "matches": "对局桌",
-
     "matchesShort": "对局",
     "ranking": "排名",
     "more": "More",
@@ -134,7 +132,6 @@
     "suitSou": "索",
     "honors": "字牌",
     "akaDora": "赤五（赤宝牌）",
-
     "holdForAka": "长按选择赤五",
     "addTileToHand": "将{{tile}}加入手牌",
     "addTileToDiscards": "将{{tile}}加入舍牌以判断振听",
@@ -1230,7 +1227,9 @@
       "calculate": "计算手牌",
       "drawSection": "抽签",
       "calcMpsz": "用 MPSZ 记法计算",
-      "timerPass": "传递回合"
+      "timerPass": "传递回合",
+      "rotateLeft": "Rotate the piece left",
+      "rotateRight": "Rotate the piece right"
     },
     "setup": {
       "title": "New game",

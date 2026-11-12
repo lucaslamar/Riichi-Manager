@@ -3,7 +3,10 @@
 ## Não lançado (feature/torneio)
 
 ### Adicionado
-- **Nome volta a ser Riichi Manager**: cabeçalho, aba do navegador, app instalado, textos de compartilhar e README usam Riichi Manager de novo. Backups, torneios exportados e dados salvos continuam abrindo normalmente.
+-- **Peça triangular no Sanma**: no Centerpiece simples com 3 jogadores, a mesa vira um triângulo com um vento em cada lado, como as peças de Sanma impressas em 3D. Gire arrastando o dedo em volta dela ou pelos botões embaixo, de um lado em um lado.
+- **Sorteador de Ventos pela mesa**: aberto pelo Centerpiece simples, sorteia só os ventos de quem está na mesa (3 no Sanma, sem o Norte) e não mostra a troca 4 ou 3 jogadores.
+- **Honba das ações alinhado**: os botões − e + ficam iguais (o − só apaga no 0), com o número no meio e o 本 pequeno ao lado.
+ **Nome volta a ser Riichi Manager**: cabeçalho, aba do navegador, app instalado, textos de compartilhar e README usam Riichi Manager de novo. Backups, torneios exportados e dados salvos continuam abrindo normalmente.
 
 - **Últimos jogados e favoritos ao escolher jogador**: ao montar uma partida ou registrar uma finalizada, a lista começa por um bloco com você e as 4 últimas pessoas que jogaram. Embaixo vem o resto, com os favoritos primeiro e depois a ordem alfabética. Também dá para favoritar pela tela do jogador, no botão Favoritar ao lado de Este sou eu.
 - **Este sou eu**: na tela do jogador, marque Este sou eu. No Ranking, seu card ganha destaque com a etiqueta Você, e uma faixa no topo mostra sua posição e pontuação (tocar abre sua análise). A marca fica só neste aparelho.

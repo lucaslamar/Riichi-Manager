@@ -16,13 +16,16 @@ const RESPIRO_ANTES_DE_REINICIAR_MS = 1200
 
 export default function PaginaSorteadorVentos({
   aoContinuarTutorial,
+  jogadores,
 }: {
+  /** Aberto pela mesa: sorteia só os ventos dos jogadores dela, sem trocar aqui. */
+  jogadores?: 3 | 4
   /** Aberto pelo guia: no fim, o toque segue o tutorial em vez de sortear de novo. */
   aoContinuarTutorial?: () => void
 } = {}) {
   const { t } = useI18n()
   // 4 jogadores por padrão. Sanma: só Leste, Sul e Oeste.
-  const [variante, setVariante] = useState<Variante>('yonma')
+  const [variante, setVariante] = useState<Variante>(jogadores === 3 ? 'sanma' : 'yonma')
   const { fase, reveladas, ventosRevelados, rotorRef, revelar, proximo, reiniciar, total } =
     useSorteadorVentos(variante === 'sanma' ? 3 : 4)
 
@@ -96,9 +99,11 @@ export default function PaginaSorteadorVentos({
       <TituloTela titulo={t('menu.windDraw')} acoes={<BotaoConfiguracoes />} />
 
       {/* O toque aqui escolhe 4 ou 3 jogadores, sem sortear. */}
-      <div className="sorteio-variante" onClick={(evento) => evento.stopPropagation()}>
-        <SeletorVariante valor={variante} aoMudar={setVariante} />
-      </div>
+      {!jogadores && (
+        <div className="sorteio-variante" onClick={(evento) => evento.stopPropagation()}>
+          <SeletorVariante valor={variante} aoMudar={setVariante} />
+        </div>
+      )}
 
       {/* "?" no canto: explica por que o sorteio é justo. */}
       <button

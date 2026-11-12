@@ -69,7 +69,7 @@ export default function PaginaCenterpiece(props: PropsCenterpiece) {
 }
 
 interface PropsCenterpiece {
-  aoAbrirSorteador: () => void
+  aoAbrirSorteador: (jogadores: 3 | 4) => void
   /** Atalhos de cálculo do simples: Calculadora de Mão, Han e Fu ou a Mão já na notação. */
   aoAbrirCalculo: (calculo: 'mao' | 'hanFu' | 'mpsz') => void
   /**

@@ -1247,7 +1247,9 @@
       "calculate": "Calcular mão",
       "drawSection": "Sortear",
       "calcMpsz": "Calculadora por notação MPSZ",
-      "timerPass": "Passar a vez"
+      "timerPass": "Passar a vez",
+      "rotateLeft": "Girar a peça para a esquerda",
+      "rotateRight": "Girar a peça para a direita"
     },
     "setup": {
       "title": "Nova partida",

@@ -16,7 +16,6 @@ import {
 import { numerosDaParede } from '../../logica/dados'
 import {
   CADEIRAS,
-  CADEIRAS_SANMA,
   CHAVE_VENTO,
   KANJI_VENTO,
   ventoDaCadeira,
@@ -37,6 +36,7 @@ import JogarDados from '../componentes/JogarDados'
 import { useRelogioVez } from '../hooks/useTimerVez'
 import { useGiroDaMesa } from '../hooks/useGiroDaMesa'
 import MesaQuadrada from '../componentes/MesaQuadrada'
+import MesaTriangular from '../componentes/MesaTriangular'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import RecursosDaMesa from '../componentes/RecursosDaMesa'
 
@@ -49,7 +49,7 @@ export default function CenterpieceSimples({
   aoAbrirSorteador,
   aoAbrirCalculo,
 }: {
-  aoAbrirSorteador: () => void
+  aoAbrirSorteador: (jogadores: 3 | 4) => void
   aoAbrirCalculo: (calculo: 'mao' | 'hanFu' | 'mpsz') => void
 }) {
   const { t } = useI18n()
@@ -121,6 +121,54 @@ export default function CenterpieceSimples({
     }
   }
 
+  // O timer fica no centro, sem dono: Pon, Chi e Kan pulam jogadores, então ele
+  // não tenta adivinhar de quem é a vez. Quem vai jogar toca na placa à sua frente
+  // e o tempo recomeça cheio; o centro e o resto da mesa abrem as ações.
+  const domoMesa = timer.ligado ? (
+    <AnelTimer className="mesa-timer--domo" segundos={timer.segundos} fracao={timer.fracao} esgotado={timer.esgotado}>
+      <span className="mesa-domo-segundos" aria-hidden="true">
+        {timer.segundos}
+      </span>
+      <span className="mesa-domo-info" aria-live="polite">
+        {rodada}
+      </span>
+    </AnelTimer>
+  ) : (
+    rodadaNoDomo
+  )
+
+  const placaDaCadeira = (cadeira: Cadeira) => {
+    const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer, jogadores)
+    const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + jogadores) % jogadores, jogadores).join(' · ')
+    const classe = `mesa-placa mesa-placa--simples${vento === 'leste' ? ' mesa-placa--dealer' : ''}${
+      ladoSorteado === cadeira ? ' mesa-placa--sorteada' : ''
+    }`
+    const descricao = `${t(CHAVE_VENTO[vento])}: ${numeros}`
+    const ventoNaPlaca = (
+      <span className="mesa-placa-simples-vento" aria-hidden="true">
+        <strong className={`mesa-led-vento--${vento}`}>{KANJI_VENTO[vento]}</strong>
+        <small>{numeros}</small>
+      </span>
+    )
+    return timer.ligado ? (
+      <button
+        type="button"
+        className={`${classe} mesa-placa--botao`}
+        aria-label={`${descricao}. ${t(vez.comecou ? 'match.simple.timerPass' : 'match.simple.timerStart')}`}
+        onClick={(evento) => {
+          evento.stopPropagation()
+          timer.reiniciar()
+        }}
+      >
+        {ventoNaPlaca}
+      </button>
+    ) : (
+      <div className={classe} role="img" aria-label={descricao}>
+        {ventoNaPlaca}
+      </div>
+    )
+  }
+
   return (
     <section className="mesa-tela mesa-tela--simples">
       <TituloTela titulo={t('match.simple.title')} acoes={<BotaoConfiguracoes />} />
@@ -148,79 +196,18 @@ export default function CenterpieceSimples({
       </div>
 
       <div className="mesa-centro-tela">
-        <MesaQuadrada
-          cadeiraDealer={estado.cadeiraDealer}
-          cadeiras={sanma ? CADEIRAS_SANMA : CADEIRAS}
-          ladoVazio={
-            sanma ? (
-              <div className="mesa-painel-sanma" aria-hidden="true">
-                <strong>
-                  {KANJI_VENTO[estado.rodadaVento]}
-                  {estado.rodadaNumero}
-                </strong>
-                <span>本{estado.honba}</span>
-                <span>{t('sanma.sanma')}</span>
-              </div>
-            ) : undefined
-          }
-          giro={giro}
-          aoTocarMesa={abrirAcoes}
-          // O timer fica no centro, sem dono: Pon, Chi e Kan pulam jogadores, então ele
-          // não tenta adivinhar de quem é a vez. Quem vai jogar toca na placa à sua frente
-          // e o tempo recomeça cheio; o centro e o resto da mesa abrem as ações.
-          domo={
-            timer.ligado ? (
-              <AnelTimer
-                className="mesa-timer--domo"
-                segundos={timer.segundos}
-                fracao={timer.fracao}
-                esgotado={timer.esgotado}
-              >
-                <span className="mesa-domo-segundos" aria-hidden="true">
-                  {timer.segundos}
-                </span>
-                <span className="mesa-domo-info" aria-live="polite">
-                  {rodada}
-                </span>
-              </AnelTimer>
-            ) : (
-              rodadaNoDomo
-            )
-          }
-          lado={(cadeira) => {
-            const vento = ventoDaCadeira(cadeira, estado.cadeiraDealer, jogadores)
-            const numeros = numerosDaParede((cadeira - estado.cadeiraDealer + jogadores) % jogadores, jogadores).join(' · ')
-            const classe = `mesa-placa mesa-placa--simples${vento === 'leste' ? ' mesa-placa--dealer' : ''}${
-              ladoSorteado === cadeira ? ' mesa-placa--sorteada' : ''
-            }`
-            const descricao = `${t(CHAVE_VENTO[vento])}: ${numeros}`
-            const ventoNaPlaca = (
-              <span className="mesa-placa-simples-vento" aria-hidden="true">
-                <strong className={`mesa-led-vento--${vento}`}>{KANJI_VENTO[vento]}</strong>
-                <small>{numeros}</small>
-              </span>
-            )
-            return {
-              placa: timer.ligado ? (
-                <button
-                  type="button"
-                  className={`${classe} mesa-placa--botao`}
-                  aria-label={`${descricao}. ${t(vez.comecou ? 'match.simple.timerPass' : 'match.simple.timerStart')}`}
-                  onClick={(evento) => {
-                    evento.stopPropagation()
-                    timer.reiniciar()
-                  }}
-                >
-                  {ventoNaPlaca}
-                </button>
-              ) : (
-                <div className={classe} role="img" aria-label={descricao}>
-                  {ventoNaPlaca}
-                </div>
-              ),
-            }
-          }}
-        />
+        {sanma ? (
+          <MesaTriangular giro={giro} aoTocarMesa={abrirAcoes} domo={domoMesa} placa={placaDaCadeira} />
+        ) : (
+          <MesaQuadrada
+            cadeiraDealer={estado.cadeiraDealer}
+            cadeiras={CADEIRAS}
+            giro={giro}
+            aoTocarMesa={abrirAcoes}
+            domo={domoMesa}
+            lado={(cadeira) => ({ placa: placaDaCadeira(cadeira) })}
+          />
+        )}
         {dicaVisivel && <p className="mesa-simples-dica">{t('match.simple.hint')}</p>}
       </div>
 
@@ -278,17 +265,20 @@ export default function CenterpieceSimples({
               </span>
               <button
                 type="button"
-                className="ptd-btn-icone"
+                className="mesa-honba-botao"
                 aria-label={t('match.simple.honbaMinus')}
                 disabled={estado.honba === 0}
                 onClick={() => mudar(ajustarHonba(estado, -1))}
               >
                 <i className="fas fa-minus" aria-hidden="true" />
               </button>
-              <span aria-live="polite">本{estado.honba}</span>
+              <span className="mesa-honba-valor" aria-live="polite">
+                {estado.honba}
+                <small aria-hidden="true">本</small>
+              </span>
               <button
                 type="button"
-                className="ptd-btn-icone"
+                className="mesa-honba-botao"
                 aria-label={t('match.simple.honbaPlus')}
                 onClick={() => mudar(repetirDealer(estado), true)}
               >
@@ -320,7 +310,7 @@ export default function CenterpieceSimples({
               aoSortear={setLadoSorteado}
               jogadores={jogadores}
             />
-            <button type="button" className="mesa-btn-secundario" onClick={aoAbrirSorteador}>
+            <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirSorteador(jogadores)}>
               <i className="fas fa-shuffle" aria-hidden="true" /> {t('match.simple.windDraw')}
             </button>
           </section>

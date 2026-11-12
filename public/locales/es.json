@@ -1254,7 +1254,9 @@
       "calculate": "Calcular mano",
       "drawSection": "Sortear",
       "calcMpsz": "Calculadora por notación MPSZ",
-      "timerPass": "Pasar el turno"
+      "timerPass": "Pasar el turno",
+      "rotateLeft": "Rotate the piece left",
+      "rotateRight": "Rotate the piece right"
     },
     "setup": {
       "title": "New game",

@@ -22,9 +22,7 @@
     "handCalculatorShort": "計算",
     "windDrawShort": "抽選",
     "centerpiece": "Centerpiece",
-
     "matches": "対局テーブル",
-
     "matchesShort": "対局",
     "ranking": "ランキング",
     "more": "More",
@@ -134,7 +132,6 @@
     "suitSou": "索子",
     "honors": "字牌",
     "akaDora": "赤5（赤ドラ）",
-
     "holdForAka": "長押しで赤5",
     "addTileToHand": "{{tile}}を手牌に加える",
     "addTileToDiscards": "フリテン確認用に{{tile}}を捨て牌に加える",
@@ -1230,7 +1227,9 @@
       "calculate": "手牌を計算",
       "drawSection": "抽選",
       "calcMpsz": "MPSZ表記で計算",
-      "timerPass": "手番を回す"
+      "timerPass": "手番を回す",
+      "rotateLeft": "Rotate the piece left",
+      "rotateRight": "Rotate the piece right"
     },
     "setup": {
       "title": "New game",

@@ -30,6 +30,8 @@ export default function App() {
   const [tela, setTela] = useState<TelaPrincipal>('calculadora')
   // Sorteador aberto pelo Centerpiece simples: deslizar para qualquer lado volta para lá.
   const [simplesAberto, setSimplesAberto] = useState(false)
+  // Sorteador aberto pela mesa: só os ventos de quem joga nela (3 no Sanma).
+  const [jogadoresSorteio, setJogadoresSorteio] = useState<3 | 4>(4)
   const [entradaDoSimples, setEntradaDoSimples] = useState<'pedras' | 'notacao' | null>(null)
   const [idiomaAberto, setIdiomaAberto] = useState(false)
   /** Subitem do menu lateral: a Mesa partida abre direto nesta tela. `chave` remonta a cada toque. */
@@ -135,7 +137,9 @@ export default function App() {
           aoVoltar={entradaDoSimples ? voltarAoSimples : undefined}
         />
         {tela === 'calculadoraRapida' && <PaginaCalculadoraHanFu />}
-        {tela === 'sorteadorVentos' && <PaginaSorteadorVentos />}
+        {tela === 'sorteadorVentos' && (
+          <PaginaSorteadorVentos key={simplesAberto ? 'mesa' : 'menu'} jogadores={simplesAberto ? jogadoresSorteio : undefined} />
+        )}
         <Suspense fallback={null}>
           {/* O botão Centerpiece abre direto o simples; Mesa partida é o menu das partidas com pontos e Ranking, o dos resultados. */}
           {(tela === 'centerpiece' || tela === 'partidas' || tela === 'ranking') && (
