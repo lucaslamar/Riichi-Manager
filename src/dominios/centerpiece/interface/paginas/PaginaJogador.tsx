@@ -4,6 +4,9 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { salvarArquivo } from '@/compartilhado/adaptadores/arquivo'
 import { svgParaPng } from '@/compartilhado/adaptadores/imagem'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { useEu } from '@/dominios/jogadores/interface/hooks/useEu'
+import FormJogador from '@/dominios/jogadores/interface/componentes/FormJogador'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { partidasFiltradas } from '../../logica/filtrosRanking'
 import {
   comparacaoDeFormatos,
@@ -51,7 +54,11 @@ export default function PaginaJogador({
   aoTrocarJogador: (id: string) => void
 }) {
   const { t, numero, idioma } = useI18n()
-  const { jogadores } = useJogadores()
+  const { jogadores, editar } = useJogadores()
+  const { euId, definirEu } = useEu()
+  const [editando, setEditando] = useState(false)
+  const jogador = jogadores.find((item) => item.id === jogadorId)
+  const souEu = euId === jogadorId
   const { partidas } = usePartidas()
   const { filtros } = useRankingGeral()
   const [densidade, setDensidade] = useState<(typeof DENSIDADES)[number]['chave']>('normal')
@@ -91,7 +98,24 @@ export default function PaginaJogador({
 
   return (
     <section className="ptd-inicio anl-tela">
-      <TituloTela titulo={nome.principal} aoVoltar={aoVoltar} />
+      <TituloTela
+        titulo={nome.principal}
+        aoVoltar={aoVoltar}
+        acoes={
+          jogador && (
+            <button
+              type="button"
+              className="botao-voltar-tela botao-acao-tela"
+              aria-label={t('players.renameNamed', { name: nome.principal })}
+              title={t('players.rename')}
+              aria-haspopup="dialog"
+              onClick={() => setEditando(true)}
+            >
+              <i className="fas fa-pen" aria-hidden="true" />
+            </button>
+          )
+        }
+      />
 
       <header className="anl-cabecalho">
         <span className="anl-avatar" aria-hidden="true">
@@ -107,8 +131,32 @@ export default function PaginaJogador({
               score: comSinal(resumo.pontuacaoTotal),
             })}
           </span>
+          {/* "Este sou eu": fica em evidência no Ranking e no seletor. */}
+          <button
+            type="button"
+            className={`anl-sou-eu${souEu ? ' anl-sou-eu--ativo' : ''}`}
+            aria-pressed={souEu}
+            onClick={() => definirEu(souEu ? null : jogadorId)}
+          >
+            <i className={`fas ${souEu ? 'fa-user-check' : 'fa-user'}`} aria-hidden="true" />
+            {t(souEu ? 'players.itsMe' : 'players.markAsMe')}
+          </button>
         </span>
       </header>
+
+      {editando && jogador && (
+        <Modal titulo={t('players.rename')} aoFechar={() => setEditando(false)} rotuloFechar={t('actions.close')} tamanho="pequena">
+          <FormJogador
+            inicial={jogador}
+            aoSalvar={(dados) => {
+              const resultado = editar(jogador.id, dados)
+              if (resultado.ok) setEditando(false)
+              return resultado
+            }}
+            aoCancelar={() => setEditando(false)}
+          />
+        </Modal>
+      )}
 
       <section className="anl-card">
         <header className="anl-card-topo">

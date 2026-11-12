@@ -293,3 +293,27 @@
     grid-column: 1 / -1;
   }
 }
+
+/* "Este sou eu" no cabeçalho do jogador. */
+.anl-sou-eu {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  margin-top: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 6px;
+  color: var(--texto-apoio);
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.anl-sou-eu--ativo {
+  border-color: transparent;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+}
