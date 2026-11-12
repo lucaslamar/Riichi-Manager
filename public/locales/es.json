@@ -674,7 +674,8 @@
     "compactModeHelp": "Reduce los espacios para mostrar más mano y teclado en la pantalla.",
     "largeTouchTargets": "Área táctil ampliada",
     "largeTouchTargetsHelp": "Agranda botones y fichas para tocarlos con más comodidad.",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "Azul"
   },
   "windDraw": {
     "title": "Sorteo de Vientos",

@@ -11,6 +11,7 @@ import {
 import {
   COR_BARRA_NAVEGADOR,
   resolverTema,
+  TEMA_AZUL,
   type PreferenciaTema,
   type TemaEfetivo,
 } from '@/compartilhado/tema/temas'
@@ -83,7 +84,7 @@ function lerPreferencias(): Preferencias {
   const tema = lerArmazenado(CHAVES_PREFERENCIAS.tema)
   return {
     // Sem escolha salva, o app abre no tema escuro.
-    tema: tema === 'claro' || tema === 'automatico' ? tema : 'escuro',
+    tema: tema === 'claro' || tema === 'automatico' || tema === 'azul' ? tema : 'escuro',
     altoContraste: lerArmazenado(CHAVES_PREFERENCIAS.altoContraste) === 'true',
     modoCompacto: lerArmazenado(CHAVES_PREFERENCIAS.modoCompacto) === 'true',
     toqueAmpliado: lerArmazenado(CHAVES_PREFERENCIAS.toqueAmpliado) === 'true',
@@ -125,10 +126,13 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
     const raiz = document.documentElement
     raiz.dataset.tema = temaEfetivo
     raiz.style.colorScheme = temaEfetivo === 'escuro' ? 'dark' : 'light'
+    const azul = preferencias.tema === 'azul'
+    if (azul) raiz.dataset.cor = 'azul'
+    else delete raiz.dataset.cor
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', COR_BARRA_NAVEGADOR[temaEfetivo])
-  }, [temaEfetivo])
+      ?.setAttribute('content', azul ? TEMA_AZUL.navBackground : COR_BARRA_NAVEGADOR[temaEfetivo])
+  }, [temaEfetivo, preferencias.tema])
 
   useEffect(() => {
     const { tema, altoContraste, modoCompacto, toqueAmpliado, telaCheiaMesa, telaAcesaMesa, pedras } = preferencias

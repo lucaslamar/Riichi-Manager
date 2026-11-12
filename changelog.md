@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Tema Azul**: nos Ajustes do app, Tema ganhou Azul, ao lado de Claro, Velvet Darkness e Automático. É azul forte com creme e um toque de vermelho, com o cabeçalho todo em azul, e passa no contraste WCAG AA.
 - **Yakus locais no Guia de bolso**: aba nova logo depois de Yakuman, com os yakus locais no mesmo card dos outros (nome, kanji, Fechada e Aberta, nome em português e descrição). No topo, um aviso lembra que eles não são padrão e leva direto a Regras de cálculo → Yakus locais. Cada um traz as pedras de uma mão de exemplo, também na lista que abre ao tocar em Yakus locais. A busca do Guia também encontra esses yakus.
 - **Yakus locais no Tutorial**: em Mais regras, a página 11.4 Yakus locais explica o que são as regras da casa, com Renhou, Daisharin e Paarenchan de exemplo, e traz a tabela completa deles, separada por valor como a Lista de yakus (tocar no nome abre o card com as pedras), e onde ligá-los na calculadora. Hanchan passa a ser 11.5 e Sanma 11.6.
 - **Busca e sumário nas Regras de cálculo**: no topo, Buscar regra filtra pelo nome e pela descrição, e o sumário logo abaixo leva direto a cada regra (Kiriage Mangan, Kazoe Yakuman, Yakuman duplo, Yakus locais…).

@@ -662,7 +662,8 @@
     "compactModeHelp": "여백을 줄여 화면에 손패와 키보드를 더 많이 보여 줍니다.",
     "largeTouchTargets": "터치 영역 확대",
     "largeTouchTargetsHelp": "버튼과 패를 크게 해서 터치를 더 편하게 합니다.",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "블루"
   },
   "windDraw": {
     "title": "바람 뽑기",

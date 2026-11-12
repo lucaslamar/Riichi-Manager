@@ -662,7 +662,8 @@
     "compactModeHelp": "余白を減らして、手牌とキーボードを画面に多く表示します。",
     "largeTouchTargets": "タップ領域を拡大",
     "largeTouchTargetsHelp": "ボタンと牌を大きくして、タッチ操作を快適にします。",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "ブルー"
   },
   "windDraw": {
     "title": "風牌抽選",

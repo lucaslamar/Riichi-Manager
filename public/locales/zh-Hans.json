@@ -662,7 +662,8 @@
     "compactModeHelp": "减少间距，在屏幕上显示更多手牌和键盘。",
     "largeTouchTargets": "放大触控区域",
     "largeTouchTargetsHelp": "放大按钮和牌，触控更舒适。",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "蓝色"
   },
   "windDraw": {
     "title": "抽风位",

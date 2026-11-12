@@ -680,7 +680,8 @@
     "compactModeHelp": "Sumažina tarpus, kad ekrane matytųsi daugiau rankos ir klaviatūros.",
     "largeTouchTargets": "Didesnės lietimo sritys",
     "largeTouchTargetsHelp": "Padidina mygtukus ir akmenis, kad būtų patogiau liesti.",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "Mėlyna"
   },
   "windDraw": {
     "title": "Vėjų burtai",

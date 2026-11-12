@@ -12,6 +12,7 @@ import './pagina-regras.css'
 const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
   { valor: 'claro', chave: 'pages.themeLight' },
   { valor: 'escuro', chave: 'pages.themeVelvet' },
+  { valor: 'azul', chave: 'pages.themeBlue' },
   { valor: 'automatico', chave: 'pages.themeAuto' },
 ]
 

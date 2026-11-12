@@ -1,0 +1,47 @@
+/*
+ * Tema azul: azul forte com creme e um ponto de vermelho. Vale por cima do claro
+ * (data-tema="claro" + data-cor="azul"), então só as cores mudam. Valores em
+ * `temas.ts` (TEMA_AZUL).
+ */
+:root[data-tema='claro'][data-cor='azul'] {
+  --cor-fundo: #f3f2da;
+  --cor-superficie: #fafae8;
+  --cor-superficie-alt: #f6f5e2;
+  --cor-borda: #d9d8be;
+  --cor-borda-controle: #7c7b66;
+  --cor-texto: #16224a;
+  --cor-texto-suave: #4f5470;
+  --cor-primario: #1f4fc9;
+  --cor-sobre-primario: #ffffff;
+  --cor-primario-suave: #dfe6f8;
+  --cor-primario-borda: #9db2e6;
+  --cor-secundario: #173c9a;
+  --cor-secundario-texto: #1c47b3;
+  --cor-destaque: #b8302e;
+  --cor-destaque-suave: #f8deda;
+  --cor-destaque-borda: #e2a29c;
+  --cor-foco: #1f4fc9;
+  --cor-nav: #fafae8;
+  --cor-veu: rgb(22 34 74 / 50%);
+
+  --pedra-face: #fafae8;
+  --pedra-face-primario: #dfe6f8;
+  --primario-escuro: #173c9a;
+
+  --papel-leitura: #f8f6e2;
+  --guia-tinta: #16224a;
+  --guia-tinta-suave: #4f5470;
+  --guia-linha: #dcd9b8;
+  --guia-destaque-suave: color-mix(in srgb, var(--cor-primario) 12%, #f8f6e2);
+}
+
+/* O nome no cabeçalho no azul cheio, como um selo. */
+:root[data-tema='claro'][data-cor='azul'] .cabecalho-principal {
+  background: var(--cor-primario);
+  border-bottom-color: var(--cor-secundario);
+}
+
+:root[data-tema='claro'][data-cor='azul'] .cabecalho-principal,
+:root[data-tema='claro'][data-cor='azul'] .cabecalho-principal :is(.titulo-principal, button, a, i, h1, h2, span) {
+  color: #fafae8;
+}

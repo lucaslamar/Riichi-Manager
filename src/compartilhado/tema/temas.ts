@@ -7,7 +7,7 @@
  * usam exatamente estes valores e que os pares principais passam no WCAG AA.
  */
 
-export type PreferenciaTema = 'claro' | 'escuro' | 'automatico'
+export type PreferenciaTema = 'claro' | 'escuro' | 'automatico' | 'azul'
 export type TemaEfetivo = 'claro' | 'escuro'
 
 export interface PaletaTema {
@@ -117,6 +117,29 @@ export const TEMA_CLARO: PaletaTema = {
   navBackground: '#F7F2E7',
 }
 
+/** Tema azul: o claro com azul forte, creme e um ponto de vermelho (só as cores mudam). */
+export const TEMA_AZUL: PaletaTema = {
+  ...TEMA_CLARO,
+  background: '#F3F2DA',
+  surface: '#FAFAE8',
+  surfaceAlt: '#F6F5E2',
+  border: '#D9D8BE',
+  borderControl: '#7C7B66',
+  text: '#16224A',
+  textMuted: '#4F5470',
+  primary: '#1F4FC9',
+  onPrimary: '#FFFFFF',
+  primarySoft: '#DFE6F8',
+  primaryBorder: '#9DB2E6',
+  secondary: '#173C9A',
+  secondaryText: '#1C47B3',
+  accent: '#B8302E',
+  accentSoft: '#F8DEDA',
+  accentBorder: '#E2A29C',
+  focus: '#1F4FC9',
+  navBackground: '#1F4FC9',
+}
+
 /** `meta theme-color` de cada tema. */
 export const COR_BARRA_NAVEGADOR: Record<TemaEfetivo, string> = {
   claro: TEMA_CLARO.navBackground,
@@ -125,5 +148,7 @@ export const COR_BARRA_NAVEGADOR: Record<TemaEfetivo, string> = {
 
 export function resolverTema(preferencia: PreferenciaTema, sistemaEscuro: boolean): TemaEfetivo {
   if (preferencia === 'automatico') return sistemaEscuro ? 'escuro' : 'claro'
+  // O azul é o claro com outras cores (data-cor="azul").
+  if (preferencia === 'azul') return 'claro'
   return preferencia
 }

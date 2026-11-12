@@ -668,7 +668,8 @@
     "compactModeHelp": "Reduz espaçamentos para mostrar mais mão e teclado na tela.",
     "largeTouchTargets": "Área de toque ampliada",
     "largeTouchTargetsHelp": "Aumenta botões e tiles para uso com mais conforto no toque.",
-    "versionLine": "Versão {{version}} · Feito por Lucas Lamar"
+    "versionLine": "Versão {{version}} · Feito por Lucas Lamar",
+    "themeBlue": "Azul"
   },
   "windDraw": {
     "title": "Sorteador de Ventos",

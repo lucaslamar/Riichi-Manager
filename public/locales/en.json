@@ -668,7 +668,8 @@
     "compactModeHelp": "Reduces spacing to show more of the hand and keyboard on screen.",
     "largeTouchTargets": "Larger touch targets",
     "largeTouchTargetsHelp": "Enlarges buttons and tiles for more comfortable touch use.",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "Blue"
   },
   "windDraw": {
     "title": "Wind Draw",
