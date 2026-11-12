@@ -856,6 +856,16 @@
     }
   },
   "players": {
+    "favoriteShort": "Favorite",
+    "favorited": "Favorited",
+    "recent": "Recently played",
+    "favorites": "Favorites",
+    "all": "All",
+    "me": "You",
+    "favorite": "Add {{name}} to favorites",
+    "unfavorite": "Remove {{name}} from favorites",
+    "itsMe": "It's me",
+    "markAsMe": "This is me",
     "title": "Players",
     "subtitle": "Roster used in games, the tournament and the ranking.",
     "search": "Search players",
@@ -1906,6 +1916,11 @@
     }
   },
   "backup": {
+    "samePerson": {
+      "title": "Same person?",
+      "help": "These people in the backup share a name with someone here. When checked, they become one person on merge, and their games move to the player here.",
+      "pair": "{{theirs}} (backup) = {{ours}} (here)"
+    },
     "title": "Import and export data",
     "help": "Move players, games, tournaments, club and table settings to another phone.",
     "export": "Export",
@@ -1924,6 +1939,10 @@
       "corrompido": "The backup is incomplete or corrupted. Export it again on the other device."
     },
     "summary": {
+      "repeated": {
+        "one": "{{count}} game already recorded here is skipped (same table)",
+        "other": "{{count}} games already recorded here are skipped (same table)"
+      },
       "from": "Backup from {{date}}:",
       "players": {
         "one": "{{count}} player",

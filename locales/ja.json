@@ -852,6 +852,16 @@
     }
   },
   "players": {
+    "favoriteShort": "お気に入り",
+    "favorited": "お気に入り済み",
+    "recent": "最近の対局相手",
+    "favorites": "お気に入り",
+    "all": "すべて",
+    "me": "あなた",
+    "favorite": "{{name}} をお気に入りに追加",
+    "unfavorite": "{{name}} をお気に入りから外す",
+    "itsMe": "自分です",
+    "markAsMe": "これは自分",
     "title": "Players",
     "subtitle": "Roster used in games, the tournament and the ranking.",
     "search": "Search players",
@@ -1887,6 +1897,11 @@
     }
   },
   "backup": {
+    "samePerson": {
+      "title": "同じ人ですか？",
+      "help": "バックアップのこの人たちは、ここにいる人と同じ名前です。チェックすると統合時に同一人物になり、対局はここのプレイヤーに移ります。",
+      "pair": "{{theirs}}（バックアップ）= {{ours}}（ここ）"
+    },
     "title": "データのインポートとエクスポート",
     "help": "プレイヤー、対局、大会、クラブ、卓設定を別のスマホに移せます。",
     "export": "エクスポート",
@@ -1905,6 +1920,9 @@
       "corrompido": "バックアップが不完全か破損しています。もう一方の端末で再度エクスポートしてください。"
     },
     "summary": {
+      "repeated": {
+        "other": "ここに記録済みの {{count}} 局は取り込みません（同じ卓）"
+      },
       "from": "{{date}} のバックアップ:",
       "players": {
         "other": "プレイヤー {{count}} 人"

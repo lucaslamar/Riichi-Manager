@@ -873,6 +873,16 @@
     }
   },
   "players": {
+    "favoriteShort": "Pažymėti",
+    "favorited": "Mėgstamas",
+    "recent": "Neseniai žaidė",
+    "favorites": "Mėgstami",
+    "all": "Visi",
+    "me": "Jūs",
+    "favorite": "Pažymėti {{name}} kaip mėgstamą",
+    "unfavorite": "Pašalinti {{name}} iš mėgstamų",
+    "itsMe": "Tai aš",
+    "markAsMe": "Tai aš esu",
     "title": "Players",
     "subtitle": "Roster used in games, the tournament and the ranking.",
     "search": "Search players",
@@ -1967,6 +1977,11 @@
     }
   },
   "backup": {
+    "samePerson": {
+      "title": "Tas pats žmogus?",
+      "help": "Šie žmonės iš kopijos turi tokį patį vardą kaip kažkas čia. Pažymėti, sujungiant jie taps vienu, o jų partijos atiteks čionykščiam žaidėjui.",
+      "pair": "{{theirs}} (kopija) = {{ours}} (čia)"
+    },
     "title": "Duomenų importas ir eksportas",
     "help": "Perkelkite žaidėjus, partijas, turnyrus, klubą ir stalo nustatymus į kitą telefoną.",
     "export": "Eksportuoti",
@@ -1985,6 +2000,12 @@
       "corrompido": "Kopija neišsami arba sugadinta. Eksportuokite dar kartą kitame įrenginyje."
     },
     "summary": {
+      "repeated": {
+        "one": "{{count}} čia jau užregistruota partija praleidžiama (tas pats stalas)",
+        "few": "{{count}} čia jau užregistruotos partijos praleidžiamos (tas pats stalas)",
+        "many": "{{count}} čia jau užregistruotos partijos praleidžiama (tas pats stalas)",
+        "other": "{{count}} čia jau užregistruotų partijų praleidžiama (tas pats stalas)"
+      },
       "from": "Kopija iš {{date}}:",
       "players": {
         "one": "{{count}} žaidėjas",

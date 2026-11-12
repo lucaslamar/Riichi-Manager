@@ -856,6 +856,16 @@
     }
   },
   "players": {
+    "favoriteShort": "Favoritar",
+    "favorited": "Favorito",
+    "recent": "Últimos jogados",
+    "favorites": "Favoritos",
+    "all": "Todos",
+    "me": "Você",
+    "favorite": "Favoritar {{name}}",
+    "unfavorite": "Tirar {{name}} dos favoritos",
+    "itsMe": "Sou eu",
+    "markAsMe": "Este sou eu",
     "title": "Jogadores",
     "subtitle": "Cadastro usado nas partidas, no torneio e no ranking.",
     "search": "Buscar jogador",
@@ -1906,6 +1916,11 @@
     }
   },
   "backup": {
+    "samePerson": {
+      "title": "Mesma pessoa?",
+      "help": "Estas pessoas do backup têm o mesmo nome de alguém daqui. Marcadas, viram uma só ao mesclar, e as partidas delas passam para o cadastro daqui.",
+      "pair": "{{theirs}} (backup) = {{ours}} (aqui)"
+    },
     "title": "Importar e exportar dados",
     "help": "Leve jogadores, partidas, torneios, clube e configurações de mesa para outro celular.",
     "export": "Exportar",
@@ -1924,6 +1939,10 @@
       "corrompido": "O backup está incompleto ou corrompido. Exporte de novo no outro aparelho."
     },
     "summary": {
+      "repeated": {
+        "one": "{{count}} partida já registrada aqui fica de fora (mesma mesa)",
+        "other": "{{count}} partidas já registradas aqui ficam de fora (mesma mesa)"
+      },
       "from": "Backup de {{date}}:",
       "players": {
         "one": "{{count}} jogador",
