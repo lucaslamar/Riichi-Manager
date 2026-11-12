@@ -170,7 +170,21 @@ export default function CenterpieceSimples({
   }
 
   return (
-    <section className="mesa-tela mesa-tela--simples">
+    <section
+      className="mesa-tela mesa-tela--simples mesa-tela--fundo-tocavel"
+      // Tocar no fundo vazio (fora da mesa e dos botões) também abre as ações. Só o
+      // próprio fundo, para não abrir duas vezes. Com propaganda ativa na tela, o
+      // fundo deixa de abrir, para um toque perto do anúncio não virar clique errado.
+      onClick={(evento) => {
+        const alvo = evento.target as HTMLElement
+        const fundo =
+          alvo === evento.currentTarget ||
+          alvo.classList.contains('mesa-centro-tela') ||
+          alvo.classList.contains('mesa-tri')
+        const temAnuncio = !!evento.currentTarget.querySelector('.ad-slot:not(.ad-slot-inativo)')
+        if (fundo && !temAnuncio) abrirAcoes()
+      }}
+    >
       <TituloTela titulo={t('match.simple.title')} acoes={<BotaoConfiguracoes />} />
       <RecursosDaMesa />
 

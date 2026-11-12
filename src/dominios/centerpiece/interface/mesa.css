@@ -1075,3 +1075,7 @@ button.mesa-domo {
   inset: 0;
   transform-origin: 50% 50%;
 }
+
+.mesa-tela--fundo-tocavel {
+  cursor: pointer;
+}
