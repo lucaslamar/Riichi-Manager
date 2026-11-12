@@ -1607,7 +1607,11 @@
       "confirmTitle": "Confirm result",
       "rankingTitle": "Overall ranking: before → after",
       "firstGame": "1st game",
-      "confirm": "Save"
+      "confirm": "Save",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {

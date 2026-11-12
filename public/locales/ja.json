@@ -1585,7 +1585,11 @@
       "confirmTitle": "結果の確認",
       "rankingTitle": "総合ランキング：前 → 後",
       "firstGame": "初対局",
-      "confirm": "登録"
+      "confirm": "登録",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {

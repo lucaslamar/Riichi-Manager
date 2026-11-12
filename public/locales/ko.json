@@ -1585,7 +1585,11 @@
       "confirmTitle": "결과 확인",
       "rankingTitle": "전체 랭킹: 전 → 후",
       "firstGame": "첫 대국",
-      "confirm": "등록"
+      "confirm": "등록",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {

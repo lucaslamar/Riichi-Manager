@@ -1651,7 +1651,11 @@
       "confirmTitle": "Patvirtinti rezultatą",
       "rankingTitle": "Bendras reitingas: prieš → po",
       "firstGame": "1-a partija",
-      "confirm": "Išsaugoti"
+      "confirm": "Išsaugoti",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {

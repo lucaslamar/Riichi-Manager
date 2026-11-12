@@ -1585,7 +1585,11 @@
       "confirmTitle": "确认结果",
       "rankingTitle": "总排名：之前 → 之后",
       "firstGame": "首局",
-      "confirm": "登记"
+      "confirm": "登记",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {

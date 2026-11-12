@@ -8,7 +8,7 @@ import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { alterarConfig, type ConfigMesa } from '../../logica/configMesa'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
-import type { Partida } from '../../logica/partida'
+import { KANJI_VENTO, ORDEM_VENTOS, type Partida } from '../../logica/partida'
 import { criarPartidaManual } from '../../logica/partidaManual'
 import {
   configBaseDoConjunto,
@@ -104,6 +104,9 @@ export default function RegistrarFinalizada({
         ? torneio.jogadorIds.map((id, indice) => [id, torneio.nomes?.[indice] ?? ''] as const)
         : [],
   )
+  // Clube e torneio já vêm do sorteio com os ventos. Avulsa: a pessoa diz se a lista segue a ordem.
+  const [ordemEscolhida, setOrdemEscolhida] = useState(false)
+  const ordemDosVentos = !!torneio || !!mesaClube || ordemEscolhida
   const [assentos, setAssentos] = useState<(string | null)[]>(() =>
     torneio ? [...torneio.jogadorIds] : mesaClube ? [...mesaClube.ids] : [null, null, null, null],
   )
@@ -152,6 +155,7 @@ export default function RegistrarFinalizada({
               pontosPartida,
               pontosRetorno,
               uma,
+              ordemDosVentos,
             },
             new Date().toISOString(),
           )
@@ -215,6 +219,26 @@ export default function RegistrarFinalizada({
         </div>
       )}
 
+      {!torneio && !mesaClube && (
+        <>
+          <p className="fin-titulo">{t('match.manual.windOrder')}</p>
+          <div className="ptd-segmentos fin-tipo" role="group" aria-label={t('match.manual.windOrder')}>
+            {([true, false] as const).map((opcao) => (
+              <button
+                key={String(opcao)}
+                type="button"
+                className={`ptd-segmento${ordemEscolhida === opcao ? ' ptd-segmento--ativo' : ''}`}
+                aria-pressed={ordemEscolhida === opcao}
+                onClick={() => setOrdemEscolhida(opcao)}
+              >
+                {t(opcao ? 'match.manual.windOrderYes' : 'match.manual.windOrderNo')}
+              </button>
+            ))}
+          </div>
+          <p className="fin-ajuda-ventos">{t('match.manual.windOrderHelp')}</p>
+        </>
+      )}
+
       <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>
       <div className="fin-linhas">
         {LUGARES.map((lugar) => {
@@ -231,6 +255,11 @@ export default function RegistrarFinalizada({
                 disabled={!!torneio}
                 onClick={() => setEscolhendo(lugar)}
               >
+                {ordemDosVentos && (
+                  <span className="ptd-assento-kanji" aria-hidden="true">
+                    {KANJI_VENTO[ORDEM_VENTOS[lugar]]}
+                  </span>
+                )}
                 {nome ?? t('match.setup.assign')}
               </button>
               <div className="fin-campo">

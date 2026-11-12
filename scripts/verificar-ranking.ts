@@ -256,8 +256,21 @@ function manual(id: string, pontos: [number, number, number, number], data: stri
     pontosPartida: 25000,
     pontosRetorno: 30000,
     uma: umaFixa([15, 5, -5, -15]),
+    ordemDosVentos: true,
   }, data)
 }
+
+teste('registrada sem a ordem dos ventos não entra no gráfico por vento', () => {
+  const semOrdem = criarPartidaManual('x', BASE, {
+    jogadorIds: ['a', 'b', 'c', 'd'],
+    nomes: [],
+    pontos: [40000, 30000, 20000, 10000],
+    pontosPartida: 25000,
+    pontosRetorno: 30000,
+    uma: umaFixa([15, 5, -5, -15]),
+  }, '2026-11-01T12:00:00.000Z')
+  assert.ok(mediaPorVento([semOrdem], 'a').every((item) => item.partidas === 0))
+})
 
 // 4 jogadores e 3 partidas: a vence c e d sempre, b vence a duas vezes.
 const TRES = [

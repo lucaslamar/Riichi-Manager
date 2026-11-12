@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Ordem dos ventos ao registrar partida finalizada**: escolha Leste, Sul, Oeste, Norte (cada jogador ganha o kanji do vento ao lado) ou Não sei. Só as partidas com a ordem entram no gráfico de vento inicial do jogador. Mesas do clube e do torneio já vêm com os ventos do sorteio. Partidas registradas à mão antes disso saem desse gráfico, porque o vento delas não era conhecido.
 - **Faixa de título nas Mesas sorteadas e nas Mesas do torneio**: o nome do encontro (ou do torneio) e a data ficam numa faixa na cor principal, como o cabeçalho de uma tabela, separada do relógio, com em andamento ou concluído à direita.
 - **Tema Azul**: nos Ajustes do app, Tema ganhou Azul, ao lado de Claro, Velvet Darkness e Automático. É azul forte com creme e um toque de vermelho, com o cabeçalho todo em azul e a mesa do Centerpiece e da partida também em azul (feltro azul, painel creme e placas marinho), e passa no contraste WCAG AA.
 - **Yakus locais no Guia de bolso**: aba nova logo depois de Yakuman, com os yakus locais no mesmo card dos outros (nome, kanji, Fechada e Aberta, nome em português e descrição). No topo, um aviso lembra que eles não são padrão e leva direto a Regras de cálculo → Yakus locais. Cada um traz as pedras de uma mão de exemplo, também na lista que abre ao tocar em Yakus locais. A busca do Guia também encontra esses yakus.

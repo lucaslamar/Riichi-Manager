@@ -118,6 +118,8 @@ export interface Partida {
   resultado?: ResultadoFinal[]
   /** Jogada fora do app: só tem o resultado, sem mãos. */
   registradaManual?: boolean
+  /** Registrada à mão: os jogadores foram listados na ordem dos ventos (Leste, Sul, Oeste, Norte). */
+  ordemDosVentos?: boolean
   /** Índices base zero na grade. `guardada`: o organizador conferiu e confirmou. */
   vinculoTorneio?: { torneioId: string; rodada: number; mesa: number; guardada?: boolean }
   /** Mesa que saiu do sorteio de um encontro do clube. `mesa` começa em 1. */

@@ -1614,7 +1614,11 @@
       "confirmTitle": "Confirmar resultado",
       "rankingTitle": "Ranking general: antes → después",
       "firstGame": "1.ª partida",
-      "confirm": "Registrar"
+      "confirm": "Registrar",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {

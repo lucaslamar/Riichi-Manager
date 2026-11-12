@@ -65,6 +65,8 @@ export function mediaPorMes(partidas: readonly Partida[], jogadorId: string) {
 export function mediaPorVento(partidas: readonly Partida[], jogadorId: string) {
   const porVento = new Map<Vento, number[]>(ORDEM_VENTOS.map((vento) => [vento, []]))
   for (const partida of partidasDoJogador(partidas, jogadorId)) {
+    // Registrada à mão sem a ordem dos ventos: o vento de cada um não é conhecido.
+    if (partida.registradaManual && !partida.ordemDosVentos) continue
     const linha = linhaDe(partida, jogadorId)!
     porVento.get(partida.assentos[linha.cadeira].ventoInicial)?.push(linha.colocacao)
   }

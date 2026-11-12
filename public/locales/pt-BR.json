@@ -1607,7 +1607,11 @@
       "confirmTitle": "Confirmar resultado",
       "rankingTitle": "Ranking geral: antes → depois",
       "firstGame": "1ª partida",
-      "confirm": "Registrar"
+      "confirm": "Registrar",
+      "windOrder": "Ordem dos ventos",
+      "windOrderYes": "Leste, Sul, Oeste, Norte",
+      "windOrderNo": "Não sei",
+      "windOrderHelp": "Com a ordem, a partida entra na estatística de vento inicial de cada jogador."
     }
   },
   "spokenTiles": {

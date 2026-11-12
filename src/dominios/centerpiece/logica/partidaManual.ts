@@ -13,6 +13,8 @@ export interface DadosPartidaManual {
   pontosPartida: number
   pontosRetorno: number
   uma: UmaMesa
+  /** A lista segue Leste, Sul, Oeste e Norte: a partida conta nas estatísticas por vento. */
+  ordemDosVentos?: boolean
 }
 
 export function criarPartidaManual(
@@ -36,6 +38,7 @@ export function criarPartidaManual(
     status: 'finalizada',
     finalizadaEm: agora,
     registradaManual: true,
+    ordemDosVentos: !!dados.ordemDosVentos,
   }
   return { ...comPontos, resultado: calcularResultado(comPontos) }
 }
