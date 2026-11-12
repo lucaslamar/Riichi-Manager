@@ -145,7 +145,12 @@ export default function ModalRegras({
         placeholder={t('rulesModal.search')}
         rotuloLimpar={t('pocketGuide.search.clear')}
       />
-      {!busca && (aba === 'regras' || !comSanma) && (
+    </div>
+  )
+  const listaRegras = (
+    <>
+      {/* Sumário rola junto com as regras: só a busca fica presa no topo. */}
+      {!busca && (
         <nav className="regras-sumario" aria-label={t('rulesModal.summary')}>
           {[
             ...CONFIGURACOES_REGRAS.map((regra) => ({ id: `regra-${regra.chave}`, rotulo: t(CHAVES_REGRAS[regra.chave].titulo) })),
@@ -164,10 +169,6 @@ export default function ModalRegras({
           ))}
         </nav>
       )}
-    </div>
-  )
-  const listaRegras = (
-    <>
       <ListaRegrasCalculo configuracao={configuracao} aoMudar={aoMudar} mostrar={mostrar} />
       <SecaoYakusLocais mostrar={mostrar} />
     </>

@@ -132,16 +132,16 @@
   display: grid;
 }
 
+/* Quebra em linhas, sem rolar de lado: arrastar para o lado troca de aba (Sanma). */
 .regras-sumario {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-  scrollbar-width: none;
 }
 
 .regras-sumario a {
   flex: none;
+  padding-block: 3px;
   border: 1px solid var(--cor-borda, #d7dde6);
   border-radius: 999px;
   padding: 4px 10px;
