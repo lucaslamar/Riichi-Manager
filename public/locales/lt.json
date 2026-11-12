@@ -1210,7 +1210,8 @@
       "newDraw": "Nauji burtai",
       "newDrawLabel": "Nauji burtai su tuo pačiu sąrašu kitam ratui",
       "registerResult": "Įrašyti rezultatą",
-      "tableRegistered": "Partija užregistruota"
+      "tableRegistered": "Partija užregistruota",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {

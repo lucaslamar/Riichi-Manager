@@ -943,3 +943,8 @@ body.teclado-aberto .clb-enviar {
   color: var(--primario);
   font-size: 1.1rem;
 }
+
+/* Selo do encontro no topo das Mesas sorteadas: só informa, não é botão. */
+.clb-selo-encontro {
+  cursor: default;
+}

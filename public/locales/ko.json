@@ -1156,7 +1156,8 @@
       "newDraw": "새 추첨",
       "newDrawLabel": "같은 명단으로 다음 라운드 새 추첨",
       "registerResult": "결과 기록",
-      "tableRegistered": "대국 기록됨"
+      "tableRegistered": "대국 기록됨",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {

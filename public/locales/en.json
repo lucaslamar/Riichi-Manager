@@ -1174,7 +1174,8 @@
       "newDraw": "New draw",
       "newDrawLabel": "New draw with the same list, for the next round",
       "registerResult": "Record result",
-      "tableRegistered": "Game recorded"
+      "tableRegistered": "Game recorded",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {

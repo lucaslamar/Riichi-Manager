@@ -1174,7 +1174,8 @@
       "newDraw": "Novo sorteio",
       "newDrawLabel": "Novo sorteio com a mesma lista, para a próxima rodada",
       "registerResult": "Registrar resultado",
-      "tableRegistered": "Partida registrada"
+      "tableRegistered": "Partida registrada",
+      "meetingDone": "concluído"
     },
     "cards": {
       "honba": {

@@ -1156,7 +1156,8 @@
       "newDraw": "新一轮抽签",
       "newDrawLabel": "用同一份名单为下一轮重新抽签",
       "registerResult": "记录结果",
-      "tableRegistered": "对局已记录"
+      "tableRegistered": "对局已记录",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {

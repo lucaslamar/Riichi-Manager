@@ -1156,7 +1156,8 @@
       "newDraw": "再抽選",
       "newDrawLabel": "同じリストで次の回戦を再抽選",
       "registerResult": "結果を記録",
-      "tableRegistered": "記録済み"
+      "tableRegistered": "記録済み",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {

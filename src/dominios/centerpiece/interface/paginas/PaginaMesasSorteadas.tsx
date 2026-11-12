@@ -1,3 +1,4 @@
+import '@/dominios/torneio/interface/torneio.css'
 import { useState } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
@@ -86,8 +87,15 @@ export default function PaginaMesasSorteadas({
         }
       />
 
-      <p className="clb-encontro-data">
-        {t('match.club.meeting')} · <time dateTime={sorteio.encontro.criadoEm}>{dataHora}</time>
+      {/* Selo como o do torneio em jogo: o encontro, a data e se ainda falta registrar mesa. */}
+      <p className="trn-selo-em-jogo clb-selo-encontro">
+        <i className={`fas ${sorteio.mesas.every(registrada) ? 'fa-circle-check' : 'fa-circle-play'}`} aria-hidden="true" />
+        <span>
+          {t('match.club.meeting')} · <time dateTime={sorteio.encontro.criadoEm}>{dataHora}</time>
+        </span>
+        <small>
+          {sorteio.mesas.every(registrada) ? t('match.club.meetingDone') : t('match.types.inProgressTag')}
+        </small>
       </p>
 
       <ul className="clb-mesas">
