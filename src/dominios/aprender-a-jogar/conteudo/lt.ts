@@ -17,7 +17,7 @@ import {
 } from './auxiliares'
 import type { ConteudoTutorial, TermoGlossarioGuia, TutorialModule, TutorialPart } from './tipos'
 
-const { pontos, linhaPatamar, grupoYakus, doGlossario, simNao } = criarAuxiliares('lt', {
+const { pontos, linhaPatamar, grupoYakus, doGlossario, simNao, tabelaYakusLocais } = criarAuxiliares('lt', {
   sim: 'Taip',
   nao: 'Ne',
   cabecalhoYakus: ['Yaku', 'Ko reikia', 'Uždara', 'Atvira'],
@@ -1370,6 +1370,7 @@ const topicosRegras: TopicoRegras[] = [
         md: '- **Renhou**: a non-dealer wins by Ron before their first draw. Depending on the house, it is worth Mangan, Baiman or Yakuman.\n- **Daisharin**: 22334455667788 in Pin. Seven pairs in a ladder, paid as Yakuman.\n- **Paarenchan**: eight wins in a row. The eighth is a Yakuman, as long as the hand has a yaku.',
       },
       { type: 'hand', mpsz: '22334455667788p', caption: 'Daisharin' },
+      ...tabelaYakusLocais(),
       {
         type: 'tip',
         md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',

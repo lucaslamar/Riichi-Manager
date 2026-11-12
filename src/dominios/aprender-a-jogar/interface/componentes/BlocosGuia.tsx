@@ -10,6 +10,9 @@ import {
   PedrasExemplo,
 } from '@/dominios/calculadora-mao/interface/modais/yakus/PedrasExemplo'
 import ModalTermo from '@/dominios/calculadora-mao/interface/modais/glossario/ModalTermo'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import { CartaoYakuLocal } from '@/dominios/calculadora-mao/interface/modais/yakus/AbaYakusEspeciais'
+import { YAKU_LOCAL_POR_ID } from '@/dominios/calculadora-mao/logica/yakusLocais'
 import BotaoTutorialHanFu from '@/dominios/calculadora-han-fu/interface/modais/tutorial-han-fu/BotaoTutorialHanFu'
 import { dividirTextoGlossario } from '@/dominios/calculadora-mao/logica/glossario'
 import { parseMpsz, parseMpszGrupos } from '@/dominios/calculadora-mao/logica/yakus'
@@ -396,8 +399,24 @@ function TabelaGuia({ bloco }: { bloco: BlocoTabela }) {
           })}
         </tbody>
       </table>
-      {termoAberto && <ModalTermo termo={termoAberto} aoFechar={() => setTermoAberto(null)} />}
+      {termoAberto?.startsWith('local:') ? (
+        <ModalYakuLocal id={termoAberto.slice(6)} aoFechar={() => setTermoAberto(null)} />
+      ) : (
+        termoAberto && <ModalTermo termo={termoAberto} aoFechar={() => setTermoAberto(null)} />
+      )}
     </div>
+  )
+}
+
+/** Card de um yaku local (com as pedras), aberto pela tabela de Yakus locais. */
+function ModalYakuLocal({ id, aoFechar }: { id: string; aoFechar: () => void }) {
+  const { t } = useI18n()
+  const yaku = YAKU_LOCAL_POR_ID.get(id)
+  if (!yaku) return null
+  return (
+    <Modal titulo={yaku.nome} aoFechar={aoFechar} rotuloFechar={t('actions.close')} tamanho="pequena">
+      <CartaoYakuLocal yaku={yaku} />
+    </Modal>
   )
 }
 

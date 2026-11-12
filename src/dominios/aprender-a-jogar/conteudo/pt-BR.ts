@@ -27,7 +27,7 @@ import {
 } from './auxiliares'
 import type { ConteudoTutorial, TermoGlossarioGuia, TutorialModule, TutorialPart } from './tipos'
 
-const { pontos, linhaPatamar, grupoYakus, doGlossario, simNao } = criarAuxiliares('pt-BR', {
+const { pontos, linhaPatamar, grupoYakus, doGlossario, simNao, tabelaYakusLocais } = criarAuxiliares('pt-BR', {
   sim: 'Sim',
   nao: 'Não',
   cabecalhoYakus: ['Yaku', 'O que pede', 'Fechada', 'Aberta'],
@@ -1382,6 +1382,7 @@ const topicosRegras: TopicoRegras[] = [
         md: '- **Renhou**: o ko faz Ron antes da sua primeira compra. Conforme a casa, vale Mangan, Baiman ou Yakuman.\n- **Daisharin**: 22334455667788 de Pin. São sete pares em escada, e a casa paga Yakuman.\n- **Paarenchan**: oito vitórias seguidas. A oitava vale Yakuman, desde que a mão tenha um yaku.',
       },
       { type: 'hand', mpsz: '22334455667788p', caption: 'Daisharin' },
+      ...tabelaYakusLocais(),
       {
         type: 'tip',
         md: 'Para usar algum deles na calculadora, ligue em **Regras de cálculo → Yakus locais**. Todos começam desligados. A lista completa, com o valor de cada um, fica na aba Yakus locais do Guia de bolso.',

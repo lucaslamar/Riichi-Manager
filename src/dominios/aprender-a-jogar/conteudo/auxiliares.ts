@@ -8,7 +8,36 @@ import type { IdiomaSuportado } from '@/compartilhado/i18n/idiomas'
 import { formatarNumero } from '@/compartilhado/i18n/traduzir'
 import { secoesGlossario } from '@/dominios/calculadora-mao/logica/glossario'
 import { YAKU, yakusDoIdioma } from '@/dominios/calculadora-mao/logica/yakus'
+import {
+  CATEGORIAS_LOCAIS_EM_ORDEM,
+  textoYakuLocal,
+  YAKUS_LOCAIS,
+} from '@/dominios/calculadora-mao/logica/yakusLocais'
 import type { TutorialBlock, TutorialModule, TutorialPart } from './tipos'
+
+/** Títulos dos grupos de yakus locais na tabela do guia. */
+const TITULOS_LOCAIS: Record<'pt' | 'en', Record<string, string>> = {
+  pt: {
+    han1: '1 han',
+    han2: '2 han',
+    han2mais: '2 han ou mais',
+    han3mais: '3 han ou mais',
+    manganPedra: 'Mangan por pedra específica',
+    mangan: 'Mangan ou mais',
+    yakuman: 'Yakuman',
+    duplo: 'Yakuman duplo',
+  },
+  en: {
+    han1: '1 han',
+    han2: '2 han',
+    han2mais: '2 han or more',
+    han3mais: '3 han or more',
+    manganPedra: 'Mangan for a specific tile',
+    mangan: 'Mangan or more',
+    yakuman: 'Yakuman',
+    duplo: 'Double Yakuman',
+  },
+}
 
 /** Artigo de suji indicado no fim da defesa (matagi suji). */
 export const ARTIGO_SUJI = 'https://npmahjong.com/blog/suji'
@@ -57,6 +86,31 @@ export function criarAuxiliares(
         links: linhas.map(([id]) => `yaku:${id}`),
       },
     ],
+    /**
+     * Todos os yakus locais, um grupo por valor, no formato da Lista de yakus:
+     * M = Mangan, Y = Yakuman, YY = Yakuman duplo. Tocar abre o card com as pedras.
+     */
+    tabelaYakusLocais: (): TutorialBlock[] =>
+      CATEGORIAS_LOCAIS_EM_ORDEM.flatMap(({ categoria }) => {
+        const lista = YAKUS_LOCAIS.filter((yaku) => yaku.categoria === categoria)
+        const celula = (valor: number | null) => (valor === null ? '—' : String(valor))
+        return [
+          { type: 'heading', text: TITULOS_LOCAIS[idioma === 'pt-BR' ? 'pt' : 'en'][categoria] },
+          {
+            type: 'table',
+            headers: textos.cabecalhoYakus,
+            compact: true,
+            rows: lista.map((yaku) => {
+              const { valor } = yaku
+              const frase = textoYakuLocal(yaku, idioma).descricao
+              if (valor.tipo === 'han') return [yaku.nome, frase, celula(valor.fechada), celula(valor.aberta)]
+              const marca = valor.tipo === 'mangan' ? 'M' : categoria === 'duplo' ? 'YY' : 'Y'
+              return [yaku.nome, frase, marca, marca]
+            }),
+            links: lista.map((yaku) => `local:${yaku.id}`),
+          },
+        ] satisfies TutorialBlock[]
+      }),
     /** Definição de um verbete do Glossário do app (fonte única). */
     doGlossario: (id: string) => {
       for (const secao of secoesGlossario(idioma)) {
