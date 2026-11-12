@@ -163,13 +163,15 @@ export default function SetupPartida({
             t(`winds.${['east', 'south', 'west', 'north'][assentos.indexOf(jogadorId)]}`)
           }
           aoEscolher={(jogador) => {
-            const proximos = assentos.map((id, indice) => (indice === escolhendo ? jogador.id : id))
+            // Quem é escolhido entra no primeiro vento vazio, na ordem 東 → 南 → 西 → 北
+            // (desmarcar e marcar de novo não pula de lugar). Com a mesa cheia, troca
+            // quem está no lugar que foi tocado.
+            const vazios = cadeiras.filter((cadeira) => assentos[cadeira] === null)
+            const alvo = vazios[0] ?? escolhendo
+            const proximos = assentos.map((id, indice) => (indice === alvo ? jogador.id : id))
             setAssentos(proximos)
-            // A folha segue aberta no próximo vento vazio (東 → 南 → 西 → 北), e só
-            // fecha quando os quatro estão preenchidos.
-            const seguinte = Array.from({ length: lugares - 1 }, (_vazio, indice) => indice + 1)
-              .map((passo) => ((escolhendo + passo) % lugares) as Cadeira)
-              .find((cadeira) => proximos[cadeira] === null)
+            // A folha segue aberta enquanto houver vento vazio.
+            const seguinte = cadeiras.find((cadeira) => proximos[cadeira] === null)
             setEscolhendo(seguinte ?? null)
           }}
         />
