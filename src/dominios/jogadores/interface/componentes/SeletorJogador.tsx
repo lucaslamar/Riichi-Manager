@@ -1,14 +1,17 @@
 import { useMemo, useState } from 'react'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import {
   buscarJogadores,
+  jogadoresRecentes,
   ordenarJogadores,
   partesDoNome,
   type DadosJogador,
   type Jogador,
 } from '../../logica/jogadores'
 import { useJogadores } from '../hooks/useJogadores'
+import { useEu } from '../hooks/useEu'
 import FormJogador from './FormJogador'
 import '../jogadores.css'
 
@@ -22,8 +25,10 @@ interface PropsSeletorJogador {
 }
 
 /**
- * Folha para escolher um jogador: busca, lista e "+ Novo jogador". Um jogador
- * criado aqui já volta escolhido. Arquivados não aparecem.
+ * Folha para escolher um jogador: busca, lista e "+ Novo jogador". Sem busca, a
+ * lista começa pelos últimos 5 que jogaram e pelos favoritos (a estrela de cada
+ * linha liga e desliga). Um jogador criado aqui já volta escolhido. Arquivados
+ * não aparecem.
  */
 export default function SeletorJogador({
   titulo,
@@ -32,7 +37,9 @@ export default function SeletorJogador({
   aoFechar,
 }: PropsSeletorJogador) {
   const { t, idioma } = useI18n()
-  const { jogadores, adicionar } = useJogadores()
+  const { jogadores, adicionar, favoritar } = useJogadores()
+  const { partidas } = usePartidas()
+  const { euId } = useEu()
   const [busca, setBusca] = useState('')
   const [criando, setCriando] = useState(false)
 
@@ -48,6 +55,16 @@ export default function SeletorJogador({
     [jogadores, busca, idioma],
   )
 
+  const ativos = useMemo(() => jogadores.filter((jogador) => !jogador.arquivado), [jogadores])
+  const recentes = useMemo(() => {
+    const ids = jogadoresRecentes(partidas, (id) => ativos.some((jogador) => jogador.id === id))
+    return ids.map((id) => ativos.find((jogador) => jogador.id === id)!)
+  }, [partidas, ativos])
+  const favoritos = useMemo(
+    () => ordenarJogadores(ativos.filter((jogador) => jogador.favorito), idioma),
+    [ativos, idioma],
+  )
+
   const criar = (dados: DadosJogador) => {
     const resultado = adicionar(dados)
     if (resultado.ok) {
@@ -58,6 +75,52 @@ export default function SeletorJogador({
     }
     return resultado
   }
+
+  /** Uma linha: tocar escolhe, a estrela favorita (botões separados). */
+  const linha = (jogador: Jogador, grupoChave: string) => {
+    const escolhido = idsEscolhidos.includes(jogador.id)
+    const partes = partesDoNome(jogador)
+    return (
+      <li key={`${grupoChave}-${jogador.id}`} className="linha-seletor-jogador">
+        <button
+          type="button"
+          className="opcao-seletor-jogador"
+          disabled={escolhido}
+          onClick={() => {
+            // A folha pode seguir aberta para o próximo assento: a busca recomeça.
+            setBusca('')
+            aoEscolher(jogador)
+          }}
+        >
+          <span className="dados-jogador">
+            <span className="nome-cadastro">
+              {partes.principal}
+              {jogador.id === euId && <span className="selo-eu">{t('players.me')}</span>}
+              {jogador.clube && <small className="clube-jogador"> {jogador.clube}</small>}
+            </span>
+            {partes.apoio && <span className="apelido-jogador">{partes.apoio}</span>}
+          </span>
+          {escolhido && <span className="selo-jogador">{t('players.alreadyChosen')}</span>}
+        </button>
+        <button
+          type="button"
+          className={`estrela-jogador${jogador.favorito ? ' estrela-jogador--ativa' : ''}`}
+          aria-pressed={!!jogador.favorito}
+          aria-label={t(jogador.favorito ? 'players.unfavorite' : 'players.favorite', { name: partes.principal })}
+          onClick={() => favoritar(jogador.id, !jogador.favorito)}
+        >
+          <i className={`${jogador.favorito ? 'fas' : 'far'} fa-star`} aria-hidden="true" />
+        </button>
+      </li>
+    )
+  }
+
+  const grupo = (titulo: string | undefined, lista: readonly Jogador[], chave: string) => (
+    <section key={chave} className="grupo-seletor-jogador">
+      {titulo && <h3 className="titulo-grupo-jogador">{titulo}</h3>}
+      <ul className="lista-seletor-jogador">{lista.map((jogador) => linha(jogador, chave))}</ul>
+    </section>
+  )
 
   return (
     <Modal
@@ -99,38 +162,12 @@ export default function SeletorJogador({
               {busca ? t('players.noResults') : t('players.emptyChooser')}
             </p>
           ) : (
-            <ul className="lista-seletor-jogador">
-              {visiveis.map((jogador) => {
-                const escolhido = idsEscolhidos.includes(jogador.id)
-                return (
-                  <li key={jogador.id}>
-                    <button
-                      type="button"
-                      className="opcao-seletor-jogador"
-                      disabled={escolhido}
-                      onClick={() => {
-                        // A folha pode seguir aberta para o próximo assento: a busca recomeça.
-                        setBusca('')
-                        aoEscolher(jogador)
-                      }}
-                    >
-                      <span className="dados-jogador">
-                        <span className="nome-cadastro">
-                          {partesDoNome(jogador).principal}
-                          {jogador.clube && <small className="clube-jogador"> {jogador.clube}</small>}
-                        </span>
-                        {partesDoNome(jogador).apoio && (
-                          <span className="apelido-jogador">{partesDoNome(jogador).apoio}</span>
-                        )}
-                      </span>
-                      {escolhido && (
-                        <span className="selo-jogador">{t('players.alreadyChosen')}</span>
-                      )}
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
+            <>
+              {/* Sem busca: atalhos antes da lista toda. */}
+              {!busca && recentes.length > 0 && grupo(t('players.recent'), recentes, 'recentes')}
+              {!busca && favoritos.length > 0 && grupo(t('players.favorites'), favoritos, 'favoritos')}
+              {grupo(busca ? undefined : t('players.all'), visiveis, 'todos')}
+            </>
           )}
         </>
       )}

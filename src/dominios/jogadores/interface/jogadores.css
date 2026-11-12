@@ -394,3 +394,59 @@
     align-items: start;
   }
 }
+
+/* Seletor: grupos (últimos jogados, favoritos, todos) e a estrela de cada linha. */
+.grupo-seletor-jogador + .grupo-seletor-jogador {
+  margin-top: 12px;
+}
+
+.titulo-grupo-jogador {
+  margin: 0 0 2px;
+  color: var(--texto-apoio);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.linha-seletor-jogador {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--linha-divisoria);
+}
+
+.linha-seletor-jogador .opcao-seletor-jogador {
+  flex: 1;
+  min-width: 0;
+  border-bottom: 0;
+}
+
+.estrela-jogador {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  border: 0;
+  color: var(--texto-apoio);
+  background: transparent;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.estrela-jogador--ativa {
+  color: var(--primario);
+  opacity: 1;
+}
+
+/* "Você": o jogador marcado como "Este sou eu". */
+.selo-eu {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
