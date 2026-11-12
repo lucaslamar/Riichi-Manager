@@ -1937,6 +1937,10 @@
       "corrompido": "The backup is incomplete or corrupted. Export it again on the other device."
     },
     "summary": {
+      "repeated": {
+        "one": "{{count}} game already recorded here is skipped (same table)",
+        "other": "{{count}} games already recorded here are skipped (same table)"
+      },
       "from": "Backup from {{date}}:",
       "players": {
         "one": "{{count}} player",

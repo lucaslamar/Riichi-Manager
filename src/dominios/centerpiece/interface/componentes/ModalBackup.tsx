@@ -8,6 +8,7 @@ import {
   montarBackup,
   nomeDoBackup,
   resumoBackup,
+  partidasRepetidas,
   sugerirMesmasPessoas,
   unificarJogadores,
   validarBackup,
@@ -57,10 +58,20 @@ export default function ModalBackup({ aoFechar }: { aoFechar: () => void }) {
     setEtapa({ nome: 'resumo', backup: lido.backup })
   }
 
+  /** Id do backup → id daqui, para as pessoas marcadas como a mesma. */
+  const mapa = Object.fromEntries(
+    pares.filter((par) => juntar.has(par.vindo.id)).map((par) => [par.vindo.id, par.local.id]),
+  )
+  // Partidas que os dois celulares registraram da mesma mesa: ficam de fora ao mesclar.
+  const repetidas =
+    etapa.nome === 'resumo'
+      ? partidasRepetidas(
+          lerDadosLocais(armazenamentoLocal).partidas,
+          unificarJogadores(etapa.backup.dados, mapa).partidas,
+        ).length
+      : 0
+
   const importar = async (backup: ArquivoBackup, modo: 'mesclar' | 'substituir') => {
-    const mapa = Object.fromEntries(
-      pares.filter((par) => juntar.has(par.vindo.id)).map((par) => [par.vindo.id, par.local.id]),
-    )
     const dados =
       modo === 'mesclar'
         ? mesclarBackup(lerDadosLocais(armazenamentoLocal), unificarJogadores(backup.dados, mapa))
@@ -129,6 +140,9 @@ export default function ModalBackup({ aoFechar }: { aoFechar: () => void }) {
               <li>{t('backup.summary.players', { count: resumo.jogadores })}</li>
               <li>{t('backup.summary.games', { count: resumo.partidas })}</li>
               <li>{t('backup.summary.tournaments', { count: resumo.torneios })}</li>
+              {repetidas > 0 && (
+                <li className="bkp-repetidas">{t('backup.summary.repeated', { count: repetidas })}</li>
+              )}
             </ul>
             {pares.length > 0 && (
               <fieldset className="bkp-pares">

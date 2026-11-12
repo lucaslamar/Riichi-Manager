@@ -1937,6 +1937,10 @@
       "corrompido": "O backup está incompleto ou corrompido. Exporte de novo no outro aparelho."
     },
     "summary": {
+      "repeated": {
+        "one": "{{count}} partida já registrada aqui fica de fora (mesma mesa)",
+        "other": "{{count}} partidas já registradas aqui ficam de fora (mesma mesa)"
+      },
       "from": "Backup de {{date}}:",
       "players": {
         "one": "{{count}} jogador",

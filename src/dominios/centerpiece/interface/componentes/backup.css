@@ -120,3 +120,8 @@
   height: 18px;
   accent-color: var(--primario);
 }
+
+.bkp-repetidas {
+  color: var(--texto-apoio);
+  font-weight: 400;
+}

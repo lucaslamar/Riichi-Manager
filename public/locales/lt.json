@@ -1998,6 +1998,12 @@
       "corrompido": "Kopija neišsami arba sugadinta. Eksportuokite dar kartą kitame įrenginyje."
     },
     "summary": {
+      "repeated": {
+        "one": "{{count}} čia jau užregistruota partija praleidžiama (tas pats stalas)",
+        "few": "{{count}} čia jau užregistruotos partijos praleidžiamos (tas pats stalas)",
+        "many": "{{count}} čia jau užregistruotos partijos praleidžiama (tas pats stalas)",
+        "other": "{{count}} čia jau užregistruotų partijų praleidžiama (tas pats stalas)"
+      },
       "from": "Kopija iš {{date}}:",
       "players": {
         "one": "{{count}} žaidėjas",

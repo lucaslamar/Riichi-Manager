@@ -1918,6 +1918,9 @@
       "corrompido": "백업이 불완전하거나 손상되었습니다. 다른 기기에서 다시 내보내세요."
     },
     "summary": {
+      "repeated": {
+        "other": "여기 이미 기록된 {{count}}국은 건너뜁니다 (같은 탁)"
+      },
       "from": "{{date}} 백업:",
       "players": {
         "other": "플레이어 {{count}}명"

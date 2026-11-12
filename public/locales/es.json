@@ -1944,6 +1944,10 @@
       "corrompido": "La copia está incompleta o dañada. Exporta de nuevo en el otro dispositivo."
     },
     "summary": {
+      "repeated": {
+        "one": "{{count}} partida ya registrada aquí se omite (misma mesa)",
+        "other": "{{count}} partidas ya registradas aquí se omiten (misma mesa)"
+      },
       "from": "Copia del {{date}}:",
       "players": {
         "one": "{{count}} jugador",
