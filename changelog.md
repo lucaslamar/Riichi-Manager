@@ -109,6 +109,8 @@
 
 ### Corrigido
 
+- **Renhou só como yaku local**: saiu da lista de yakus padrão (Outros yaku no Guia de bolso e Lista de yakus no Tutorial). Ele continua em Yakus locais, com Mangan, Baiman ou Yakuman à escolha.
+
 - **Título cortado nas Regras de cálculo**: ao rolar, o Kiriage Mangan (e qualquer texto) não aparece mais por cima das abas Regras de cálculo / Sanma.
 
 - **Voltar volta para onde você estava**: na Partida e no Ranking, a seta de voltar e o deslizar do dedo para a direita voltam um passo, para a tela de onde se veio (ex.: Em andamento → Mesas sorteadas → Em andamento), em vez de pular para um lugar fixo ou direto para o menu.

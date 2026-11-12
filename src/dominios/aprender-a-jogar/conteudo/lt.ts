@@ -1336,7 +1336,6 @@ const topicosRegras: TopicoRegras[] = [
         ['houtei', 'Ron su paskutiniu išmestu akmeniu'],
         ['rinshan', 'Laimėti su kan pakaitiniu akmeniu'],
         ['chankan', 'Ron ant akmens, kurį kitas prideda prie pon'],
-        ['renhou', 'Ron prieš pirmąjį traukimą'],
       ]),
       ...grupoYakus('Yakuman', [
         ['kokushi', 'Po vieną kiekvieno kraštinio ir garbės akmens, vienas pasikartoja'],

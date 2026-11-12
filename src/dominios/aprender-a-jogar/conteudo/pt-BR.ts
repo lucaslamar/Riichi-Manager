@@ -1348,7 +1348,6 @@ const topicosRegras: TopicoRegras[] = [
         ['houtei', 'Ron no último descarte'],
         ['rinshan', 'Vencer com a reposição do kan'],
         ['chankan', 'Ron na pedra que outro adiciona ao pon'],
-        ['renhou', 'Ron antes da sua primeira compra'],
       ]),
       ...grupoYakus('Yakuman', [
         ['kokushi', 'Um de cada terminal e honra, e um repetido'],

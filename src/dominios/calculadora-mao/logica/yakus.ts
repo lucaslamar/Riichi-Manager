@@ -407,14 +407,6 @@ const YAKU_BASE: YakuBase[] = [
     yakuman: true,
     category: 'outros',
   },
-  {
-    id: 'renhou',
-    romaji: 'Renhou',
-    kanji: '人和',
-    hanClosed: 5,
-    hanOpen: null,
-    category: 'outros',
-  },
 ]
 
 const yakusPorIdioma = new Map<IdiomaSuportado, Yaku[]>()

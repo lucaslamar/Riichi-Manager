@@ -1329,7 +1329,6 @@ const topicosRegras: TopicoRegras[] = [
         ['houtei', '마지막 버림패로 론'],
         ['rinshan', '깡의 영상패로 화료'],
         ['chankan', '다른 사람이 퐁에 더하는 패로 론'],
-        ['renhou', '내 첫 쯔모 전에 론'],
       ]),
       ...grupoYakus('역만', [
         ['kokushi', '노두패와 자패 한 장씩, 그리고 그중 하나 한 장 더'],

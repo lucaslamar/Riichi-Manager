@@ -1321,7 +1321,6 @@ const topicosRegras: TopicoRegras[] = [
         ['houtei', '最後の捨て牌でロン'],
         ['rinshan', 'カンの嶺上牌で和了'],
         ['chankan', '他家が加槓した牌でロン'],
-        ['renhou', '最初のツモの前にロン'],
       ]),
       ...grupoYakus('役満', [
         ['kokushi', '老頭牌と字牌を1枚ずつ、どれか1枚が重なる'],

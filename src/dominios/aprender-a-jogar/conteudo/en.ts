@@ -1341,7 +1341,6 @@ const topicosRegras: TopicoRegras[] = [
         ['houtei', 'Ron on the last discard'],
         ['rinshan', 'Win with the kan replacement'],
         ['chankan', 'Ron on the tile another player adds to a pon'],
-        ['renhou', 'Ron before your first draw'],
       ]),
       ...grupoYakus('Yakuman', [
         ['kokushi', 'One of each terminal and honor, plus one repeated'],
