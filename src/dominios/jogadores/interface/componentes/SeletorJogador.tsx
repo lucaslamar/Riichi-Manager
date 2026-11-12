@@ -25,9 +25,10 @@ interface PropsSeletorJogador {
 }
 
 /**
- * Folha para escolher um jogador: busca, lista e "+ Novo jogador". Sem busca, a
- * lista começa pelos últimos 5 que jogaram e pelos favoritos (a estrela de cada
- * linha liga e desliga). Um jogador criado aqui já volta escolhido. Arquivados
+ * Folha para escolher um jogador: busca, lista e "+ Novo jogador". Sem busca, um
+ * bloco de cima com você e as 4 últimas pessoas que jogaram, e embaixo o resto,
+ * com os favoritos primeiro (a estrela de cada linha liga e desliga) e depois a
+ * ordem alfabética. Um jogador criado aqui já volta escolhido. Arquivados
  * não aparecem.
  */
 export default function SeletorJogador({
@@ -56,14 +57,19 @@ export default function SeletorJogador({
   )
 
   const ativos = useMemo(() => jogadores.filter((jogador) => !jogador.arquivado), [jogadores])
-  const recentes = useMemo(() => {
-    const ids = jogadoresRecentes(partidas, (id) => ativos.some((jogador) => jogador.id === id))
-    return ids.map((id) => ativos.find((jogador) => jogador.id === id)!)
-  }, [partidas, ativos])
-  const favoritos = useMemo(
-    () => ordenarJogadores(ativos.filter((jogador) => jogador.favorito), idioma),
-    [ativos, idioma],
-  )
+  /** Bloco de cima: você sempre primeiro e as 4 últimas pessoas que jogaram. */
+  const topo = useMemo(() => {
+    const eu = ativos.find((jogador) => jogador.id === euId)
+    const ids = jogadoresRecentes(partidas, (id) => id !== euId && ativos.some((jogador) => jogador.id === id), 4)
+    return [...(eu ? [eu] : []), ...ids.map((id) => ativos.find((jogador) => jogador.id === id)!)]
+  }, [partidas, ativos, euId])
+  /** Favoritos primeiro, depois a ordem alfabética (que já vem de `visiveis`). */
+  const favoritosPrimeiro = (lista: readonly Jogador[]) => [
+    ...lista.filter((jogador) => jogador.favorito),
+    ...lista.filter((jogador) => !jogador.favorito),
+  ]
+  // Sem busca, quem já está no bloco de cima não se repete embaixo.
+  const resto = favoritosPrimeiro(busca ? visiveis : visiveis.filter((jogador) => !topo.includes(jogador)))
 
   const criar = (dados: DadosJogador) => {
     const resultado = adicionar(dados)
@@ -164,9 +170,8 @@ export default function SeletorJogador({
           ) : (
             <>
               {/* Sem busca: atalhos antes da lista toda. */}
-              {!busca && recentes.length > 0 && grupo(t('players.recent'), recentes, 'recentes')}
-              {!busca && favoritos.length > 0 && grupo(t('players.favorites'), favoritos, 'favoritos')}
-              {grupo(busca ? undefined : t('players.all'), visiveis, 'todos')}
+              {!busca && topo.length > 0 && grupo(t('players.recent'), topo, 'topo')}
+              {resto.length > 0 && grupo(busca ? undefined : t('players.all'), resto, 'todos')}
             </>
           )}
         </>
