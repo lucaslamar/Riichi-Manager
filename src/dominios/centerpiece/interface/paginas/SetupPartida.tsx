@@ -158,16 +158,21 @@ export default function SetupPartida({
           idsEscolhidos={preenchidos}
           aoFechar={() => setEscolhendo(null)}
           // Tocar em quem já está na mesa tira essa pessoa do lugar; o lugar fica livre.
-          aoDesmarcar={(jogadorId) => setAssentos(assentos.map((id) => (id === jogadorId ? null : id)))}
+          aoDesmarcar={(jogadorId) => {
+            const proximos = assentos.map((id) => (id === jogadorId ? null : id))
+            setAssentos(proximos)
+            // O próximo escolhido entra no primeiro vento vazio, na ordem.
+            setEscolhendo(cadeiras.find((cadeira) => proximos[cadeira] === null) ?? escolhendo)
+          }}
           rotuloEscolhido={(jogadorId) =>
             t(`winds.${['east', 'south', 'west', 'north'][assentos.indexOf(jogadorId)]}`)
           }
           aoEscolher={(jogador) => {
-            // Quem é escolhido entra no primeiro vento vazio, na ordem 東 → 南 → 西 → 北
-            // (desmarcar e marcar de novo não pula de lugar). Com a mesa cheia, troca
-            // quem está no lugar que foi tocado.
+            // Começa pelo vento que foi tocado, se estiver vazio. Depois segue o primeiro
+            // vento vazio, na ordem 東 → 南 → 西 → 北. Com a mesa cheia, troca quem está
+            // no lugar tocado.
             const vazios = cadeiras.filter((cadeira) => assentos[cadeira] === null)
-            const alvo = vazios[0] ?? escolhendo
+            const alvo = assentos[escolhendo] === null ? escolhendo : (vazios[0] ?? escolhendo)
             const proximos = assentos.map((id, indice) => (indice === alvo ? jogador.id : id))
             setAssentos(proximos)
             // A folha segue aberta enquanto houver vento vazio.
