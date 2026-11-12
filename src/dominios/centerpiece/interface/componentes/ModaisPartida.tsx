@@ -1,6 +1,9 @@
 import { useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
+import { ListaHistoricoAcoes } from './ModalHistoricoAcoes'
+import type { EntradaHistorico } from '../../logica/historicoAcoes'
 import {
   cadeirasDaPartida,
   jogadoresNaMesa,
@@ -409,20 +412,42 @@ export function ModalMaos({
   partida,
   nomeDe,
   aoFechar,
+  historico,
 }: {
   partida: Partida
   nomeDe: NomeDaCadeira
   aoFechar: () => void
+  /** Com o histórico de ações, a janela ganha as abas Mãos e Ações. */
+  historico?: EntradaHistorico[]
 }) {
   const { t } = useI18n()
+  const [aba, setAba] = useState<'maos' | 'acoes'>('maos')
   return (
     <Modal
-      titulo={t('match.hands.title')}
+      titulo={historico ? t('match.history.open') : t('match.hands.title')}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"
     >
-      <ListaMaos partida={partida} nomeDe={nomeDe} />
+      {historico ? (
+        <AbasModal
+          abas={[
+            { chave: 'maos', rotulo: t('match.hands.title') },
+            { chave: 'acoes', rotulo: t('match.history.title') },
+          ]}
+          ativa={aba}
+          aoEscolher={setAba}
+          rotulo={t('match.history.open')}
+        >
+          {aba === 'maos' ? (
+            <ListaMaos partida={partida} nomeDe={nomeDe} />
+          ) : (
+            <ListaHistoricoAcoes historico={historico} nomeDe={nomeDe} />
+          )}
+        </AbasModal>
+      ) : (
+        <ListaMaos partida={partida} nomeDe={nomeDe} />
+      )}
     </Modal>
   )
 }

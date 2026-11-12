@@ -60,7 +60,6 @@ import {
   ResumoChombo,
 } from '../componentes/ModaisPartida'
 import { useDescartes } from '../hooks/useDescartes'
-import ModalHistoricoAcoes from '../componentes/ModalHistoricoAcoes'
 import {
   anotarHistorico,
   anotarPaarenchan,
@@ -122,7 +121,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const [avisoFuritenDe, setAvisoFuritenDe] = useState<Cadeira | null>(null)
   const [quatroVentosAberto, setQuatroVentosAberto] = useState(false)
   const [abortando, setAbortando] = useState(false)
-  const [historicoAberto, setHistoricoAberto] = useState(false)
   // Avisos empilhados no centro da mesa, cada um somindo no seu tempo.
   const [avisos, setAvisos] = useState<{ id: number; texto: string }[]>([])
   const proximoAviso = useRef(0)
@@ -141,7 +139,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     avisoFuritenDe !== null ||
     quatroVentosAberto ||
     abortando ||
-    historicoAberto ||
     !!partida.fim
 
   const timer = useTimerVez(partida, atualizar, modalAberta, descarteRapido !== null)
@@ -326,16 +323,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                   </select>
                 </label>
                 )}
-                {/* Anotações da partida: o histórico de ações, antes do Abortar. */}
-                <button
-                  type="button"
-                  className="ptd-btn-historico"
-                  aria-label={t('match.history.title')}
-                  title={t('match.history.title')}
-                  onClick={() => setHistoricoAberto(true)}
-                >
-                  <i className="fas fa-file-pen" aria-hidden="true" />
-                </button>
                 <button type="button" className="mesa-abortar" onClick={() => setAbortando(true)}>
                   <i className="fas fa-ban" aria-hidden="true" /> {t('match.table.abort')}
                 </button>
@@ -524,9 +511,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 <i className="fas fa-rotate-left" aria-hidden="true" />
                 {t('match.table.undo')}
               </button>
+              {/* Mãos e histórico de ações num botão só, em abas. */}
               <button type="button" onClick={() => setMaosAbertas(true)}>
-                <i className="fas fa-list" aria-hidden="true" />
-                {t('match.hands.short')}
+                <i className="fas fa-file-pen" aria-hidden="true" />
+                {t('match.history.open')}
               </button>
             </div>
           </div>
@@ -714,9 +702,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
         />
       )}
 
-      {historicoAberto && (
-        <ModalHistoricoAcoes historico={historicoDe(partida)} nomeDe={nomeDe} aoFechar={() => setHistoricoAberto(false)} />
-      )}
 
       {avisoFuritenDe !== null && (
         <ModalAvisoFuriten
@@ -729,7 +714,12 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
       )}
 
       {maosAbertas && (
-        <ModalMaos partida={partida} nomeDe={nomeDe} aoFechar={() => setMaosAbertas(false)} />
+        <ModalMaos
+          partida={partida}
+          nomeDe={nomeDe}
+          historico={historicoDe(partida)}
+          aoFechar={() => setMaosAbertas(false)}
+        />
       )}
     </>
   )

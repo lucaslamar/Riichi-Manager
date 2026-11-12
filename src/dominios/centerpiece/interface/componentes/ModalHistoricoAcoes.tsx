@@ -27,6 +27,16 @@ const ICONE: Record<TipoAcao, string> = {
  * riscado, e o próprio Desfazer também aparece.
  */
 export default function ModalHistoricoAcoes({ historico, nomeDe, aoFechar }: Props) {
+  const { t } = useI18n()
+  return (
+    <Modal titulo={t('match.history.title')} aoFechar={aoFechar} rotuloFechar={t('actions.close')} tamanho="media">
+      <ListaHistoricoAcoes historico={historico} nomeDe={nomeDe} />
+    </Modal>
+  )
+}
+
+/** Só a lista, para usar como aba (ex.: junto das Mãos na partida). */
+export function ListaHistoricoAcoes({ historico, nomeDe }: Omit<Props, 'aoFechar'>) {
   const { t, numero } = useI18n()
 
   const pontos = (valor: number) => `${valor > 0 ? '+' : valor < 0 ? '−' : ''}${numero(Math.abs(valor))}`
@@ -65,7 +75,7 @@ export default function ModalHistoricoAcoes({ historico, nomeDe, aoFechar }: Pro
   const linhas = [...historico].reverse()
 
   return (
-    <Modal titulo={t('match.history.title')} aoFechar={aoFechar} rotuloFechar={t('actions.close')} tamanho="media">
+    <>
       {linhas.length === 0 ? (
         <p className="ptd-historico-vazio">{t('match.history.empty')}</p>
       ) : (
@@ -102,6 +112,6 @@ export default function ModalHistoricoAcoes({ historico, nomeDe, aoFechar }: Pro
           })}
         </ol>
       )}
-    </Modal>
+    </>
   )
 }
