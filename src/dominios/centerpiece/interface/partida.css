@@ -1690,3 +1690,9 @@ body:has(.ptd-modulo) {
   margin: 0;
   text-align: center;
 }
+
+/* Cards das mesas com a mesma largura: ocupam a linha toda, não só o conteúdo. */
+.ptd-lista-mesas > li > .cm-card {
+  flex: 1 1 auto;
+  min-width: 0;
+}

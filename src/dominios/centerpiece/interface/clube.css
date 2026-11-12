@@ -937,3 +937,9 @@ body.teclado-aberto .clb-enviar {
   z-index: 2;
   box-shadow: 0 -16px 0 var(--modal-fundo), 0 8px 0 var(--modal-fundo);
 }
+
+/* Abrir a mesa: ícone na cor principal, ao lado de compartilhar e excluir. */
+.cm-btn-icone.cm-btn-icone--abrir {
+  color: var(--primario);
+  font-size: 1.1rem;
+}

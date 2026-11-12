@@ -110,6 +110,8 @@
 
 ### Corrigido
 
+- **Em andamento com cards iguais**: as mesas abertas ocupam a largura toda, sem uns cards mais estreitos que outros. O botão Abrir virou o ícone de quadrado com seta, ao lado de compartilhar e excluir.
+
 - **Outros yaku vira Yakus especiais**: no Guia de bolso, a aba (e o título dentro dela) com Riichi, Ippatsu, Haitei e cia. passa a se chamar Yakus especiais.
 
 - **Renhou só como yaku local**: saiu da lista de yakus padrão (Outros yaku no Guia de bolso e Lista de yakus no Tutorial). Ele continua em Yakus locais, com Mangan, Baiman ou Yakuman à escolha.

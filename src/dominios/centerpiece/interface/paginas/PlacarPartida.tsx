@@ -500,6 +500,11 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 <i className="fas fa-equals" aria-hidden="true" />
                 {t('match.draw.short')}
               </button>
+              {/* Mãos e histórico de ações num botão só, em abas. O Desfazer fica na ponta. */}
+              <button type="button" onClick={() => setMaosAbertas(true)}>
+                <i className="fas fa-file-pen" aria-hidden="true" />
+                {t('match.history.open')}
+              </button>
               <button
                 type="button"
                 disabled={partida.eventos.length === 0 && !partida.registro?.lances.length}
@@ -510,11 +515,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
               >
                 <i className="fas fa-rotate-left" aria-hidden="true" />
                 {t('match.table.undo')}
-              </button>
-              {/* Mãos e histórico de ações num botão só, em abas. */}
-              <button type="button" onClick={() => setMaosAbertas(true)}>
-                <i className="fas fa-file-pen" aria-hidden="true" />
-                {t('match.history.open')}
               </button>
             </div>
           </div>
