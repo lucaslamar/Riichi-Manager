@@ -88,8 +88,8 @@ export default function PaginaMesasSorteadas({
       />
 
       {/* Selo como o do torneio em jogo: o encontro, a data e se ainda falta registrar mesa. */}
-      <p className="trn-selo-em-jogo clb-selo-encontro">
-        <i className={`fas ${sorteio.mesas.every(registrada) ? 'fa-circle-check' : 'fa-circle-play'}`} aria-hidden="true" />
+      <p className="ptd-faixa-titulo">
+        <i className="fas fa-people-group" aria-hidden="true" />
         <span>
           {t('match.club.meeting')} · <time dateTime={sorteio.encontro.criadoEm}>{dataHora}</time>
         </span>

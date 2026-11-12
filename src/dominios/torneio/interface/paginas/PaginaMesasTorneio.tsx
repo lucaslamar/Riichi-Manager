@@ -181,8 +181,13 @@ export default function PaginaMesasTorneio({
         }
       />
 
-      <p className="clb-encontro-data">
-        {torneio.nome} · <time dateTime={rodada.geradaEm}>{dataHora}</time>
+      {/* Faixa de título, como o cabeçalho de uma tabela: separa o nome do relógio. */}
+      <p className="ptd-faixa-titulo">
+        <i className="fas fa-trophy" aria-hidden="true" />
+        <span>
+          {torneio.nome} · <time dateTime={rodada.geradaEm}>{dataHora}</time>
+        </span>
+        <small>{torneio.status === 'finalizado' ? t('match.club.meetingDone') : t('match.types.inProgressTag')}</small>
       </p>
 
       {torneio.transferidoEm && (

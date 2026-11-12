@@ -944,7 +944,40 @@ body.teclado-aberto .clb-enviar {
   font-size: 1.1rem;
 }
 
-/* Selo do encontro no topo das Mesas sorteadas: só informa, não é botão. */
-.clb-selo-encontro {
-  cursor: default;
+
+/* Faixa de título (Mesas sorteadas e Mesas do torneio): cor principal cheia, como o
+   cabeçalho de uma tabela, para separar o nome do encontro do bloco do relógio. */
+.ptd-faixa-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 12px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--cor-sobre-primario, #fff);
+  background: var(--primario);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.ptd-faixa-titulo span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ptd-faixa-titulo time {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.ptd-faixa-titulo small {
+  flex: none;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: color-mix(in srgb, var(--cor-sobre-primario, #fff) 20%, transparent);
+  font-size: 0.75rem;
+  font-weight: 700;
 }
