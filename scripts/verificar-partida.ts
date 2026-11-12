@@ -15,7 +15,7 @@ import {
   repetirDealer,
   SIMPLES_INICIAL,
 } from '../src/dominios/centerpiece/logica/centerpieceSimples'
-import { anotarHistorico, historicoDe } from '../src/dominios/centerpiece/logica/historicoAcoes'
+import { anotarHistorico, anotarPaarenchan, historicoDe, sequenciaPaarenchan } from '../src/dominios/centerpiece/logica/historicoAcoes'
 import { jogarDados, numerosDaParede, paredeDaSoma } from '../src/dominios/centerpiece/logica/dados'
 import { migrarMesaAntiga, somaPontos } from '../src/dominios/centerpiece/logica/migrarMesaAntiga'
 import {
@@ -480,6 +480,18 @@ teste('histórico de ações guarda o desfeito riscado e o próprio desfazer', (
   assert.equal(linhas[0].desfeita, true)
   assert.equal(linhas[1].alvo, 'ron')
   assert.equal(p.eventos.length, 0)
+})
+
+
+teste('Paarenchan: conta as vitórias seguidas do mesmo jogador e anota no histórico', () => {
+  let p = nova()
+  for (let mao = 1; mao <= 8; mao += 1) {
+    const depois = registrarTsumo(p, { vencedor: 0, pagamentoDealer: 0, pagamentoNaoDealer: 500 }, { id: `t${mao}`, agora: 'a' })
+    p = anotarPaarenchan(p, anotarHistorico(p, depois, 'a'), 1, 'a')
+    assert.equal(sequenciaPaarenchan(p, 1)?.quantas, mao)
+  }
+  assert.equal(historicoDe(p).at(-1)?.tipo, 'paarenchan')
+  assert.equal(sequenciaPaarenchan(p, 3)?.quantas, 8)
 })
 
 console.log(`Partida ok: ${testes} testes.`)

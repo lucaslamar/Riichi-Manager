@@ -58,6 +58,8 @@ export interface ContextoCenterpieceMao {
   vencedorEhLeste?: boolean
   vencedorNome?: string
   jogadorRiichi?: boolean
+  /** Vitória que fecha o Paarenchan: a condição já vem marcada. */
+  paarenchan?: boolean
   /** Regras da mesa: a calculadora não oferece a engrenagem. */
   regras?: ConfiguracaoCalculo
   /** Ron pelo descarte: a pedra que vira a batida, já marcada e sem troca. */

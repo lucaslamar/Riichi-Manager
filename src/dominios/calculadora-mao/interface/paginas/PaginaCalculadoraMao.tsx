@@ -88,6 +88,7 @@ export default function PaginaCalculadoraMao({
             ventoRodada: contextoCenterpiece.ventoRodada,
             ventoAssento: contextoCenterpiece.ventoAssento,
             honba: contextoCenterpiece.honba,
+            ...(contextoCenterpiece.paarenchan && { condicoesLocais: ['paarenchan'] }),
             riichi: contextoCenterpiece.dados
               ? contextoCenterpiece.dados.riichi
               : contextoCenterpiece.jogadorRiichi

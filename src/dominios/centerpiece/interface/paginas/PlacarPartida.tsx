@@ -61,7 +61,13 @@ import {
 } from '../componentes/ModaisPartida'
 import { useDescartes } from '../hooks/useDescartes'
 import ModalHistoricoAcoes from '../componentes/ModalHistoricoAcoes'
-import { anotarHistorico, historicoDe } from '../../logica/historicoAcoes'
+import {
+  anotarHistorico,
+  anotarPaarenchan,
+  historicoDe,
+  sequenciaPaarenchan,
+} from '../../logica/historicoAcoes'
+import { lerYakusLocais, useYakusLocais } from '@/compartilhado/configuracoes/useYakusLocais'
 import { usePartidas } from '../hooks/usePartidas'
 import { useTimerVez } from '../hooks/useTimerVez'
 
@@ -83,12 +89,20 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const { t, numero } = useI18n()
   const { abertas, atualizar: atualizarLista, descartar } = usePartidas()
   const { jogadores } = useJogadores()
+  const { yakusLocais } = useYakusLocais()
 
   const { id, placar, config, vez } = partida
   // Toda mudança passa pelo histórico de ações: o que entrou ou saiu dos eventos vira linha.
   const atualizar = useCallback(
     (transformar: (atual: Partida) => Partida) =>
-      atualizarLista(id, (atual) => anotarHistorico(atual, transformar(atual), new Date().toISOString())),
+      atualizarLista(id, (atual) => {
+        const agora = new Date().toISOString()
+        const depois = anotarHistorico(atual, transformar(atual), agora)
+        const locais = lerYakusLocais()
+        return locais.ativos.includes('paarenchan')
+          ? anotarPaarenchan(atual, depois, locais.paarenchan.variacao, agora)
+          : depois
+      }),
     [atualizarLista, id],
   )
 
@@ -273,6 +287,12 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     )
   }
 
+  // Paarenchan ligado: avisa quando falta uma vitória para o Yakuman.
+  const sequencia = yakusLocais.ativos.includes('paarenchan')
+    ? sequenciaPaarenchan(partida, yakusLocais.paarenchan.variacao)
+    : null
+  const pertoDoPaarenchan = sequencia && sequencia.quantas >= (yakusLocais.paarenchan.variacao === 3 ? 8 : 7) ? sequencia : null
+
   const vencedorAtual = batida?.vencedorAtual ?? null
   const vencedorEhDealer = vencedorAtual === placar.cadeiraDealer
 
@@ -431,6 +451,15 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           </div>
 
           <div className="mesa-acoes">
+            {pertoDoPaarenchan && (
+              <p className="mesa-aviso mesa-aviso--paarenchan" role="status">
+                <i className="fas fa-crown" aria-hidden="true" />{' '}
+                {t('localYaku.paarenchan.near', {
+                  count: pertoDoPaarenchan.quantas,
+                  name: nomeDe(pertoDoPaarenchan.cadeira),
+                })}
+              </p>
+            )}
             {config.abortivos.quatroVentos && partida.variante !== 'sanma' && ehQuatroVentos(partida.registro?.lances ?? []) && (
               <button
                 type="button"
@@ -535,6 +564,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
                 vencedorEhLeste: vencedorEhDealer,
                 vencedorNome: nomeDe(vencedorAtual),
                 jogadorRiichi: placar.riichi.includes(vencedorAtual),
+                paarenchan: pertoDoPaarenchan?.cadeira === vencedorAtual,
                 regras: config.regrasCalculo,
                 pedraBatida:
                   batida.tipo === 'ron' && batida.ordemDescarte !== undefined

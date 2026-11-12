@@ -1685,3 +1685,8 @@ body:has(.ptd-modulo) {
   color: var(--texto-apoio);
   text-align: center;
 }
+
+.mesa-aviso.mesa-aviso--paarenchan {
+  margin: 0;
+  text-align: center;
+}
