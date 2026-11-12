@@ -11,7 +11,9 @@ import {
   buscarJogadores,
   clubesUsados,
   definirArquivado,
+  definirFavorito,
   editarJogador,
+  jogadoresRecentes,
   linhaDeApoio,
   nomeExibido,
   ordenarJogadores,
@@ -190,6 +192,33 @@ teste('excluir tira só o jogador', () => {
   const lista = adicionarJogador([], { nome: 'Ana' }, 'a', 'x')
   assert.ok(lista.ok)
   if (lista.ok) assert.deepEqual(removerJogador(lista.jogadores, 'a'), [])
+})
+
+teste('favorito: liga, desliga e sobrevive a renomear', () => {
+  const lista = criar(['Ana', 'Bia'])
+  const comEstrela = definirFavorito(lista, lista[0].id, true)
+  assert.equal(comEstrela[0].favorito, true)
+  assert.equal(comEstrela[1].favorito, undefined)
+  const renomeado = editarJogador(comEstrela, lista[0].id, { nome: 'Ana Maria' })
+  assert.ok(renomeado.ok && renomeado.jogador.favorito, 'editar não tira a estrela')
+  assert.ok(!('favorito' in definirFavorito(comEstrela, lista[0].id, false)[0]), 'desligar remove o campo')
+})
+
+teste('últimos jogados: das partidas mais recentes, sem repetir', () => {
+  const mesa = (ids: string[], criadaEm: string, finalizadaEm?: string) => ({
+    assentos: { 0: { jogadorId: ids[0] }, 1: { jogadorId: ids[1] }, 2: { jogadorId: ids[2] }, 3: { jogadorId: ids[3] } },
+    criadaEm,
+    ...(finalizadaEm ? { finalizadaEm } : {}),
+  })
+  const partidas = [
+    mesa(['a', 'b', 'c', 'd'], '2026-11-01'),
+    mesa(['e', 'a', 'f', 'convidado-1'], '2026-11-02', '2026-11-03'),
+    mesa(['g', 'h', 'i', 'j'], '2026-10-01'),
+  ]
+  const existe = (id: string) => !id.startsWith('convidado-')
+  assert.deepEqual(jogadoresRecentes(partidas, existe), ['e', 'a', 'f', 'b', 'c'])
+  assert.deepEqual(jogadoresRecentes(partidas, existe, 2), ['e', 'a'])
+  assert.deepEqual(jogadoresRecentes([], existe), [])
 })
 
 console.log(`Jogadores ok: ${testes} testes.`)

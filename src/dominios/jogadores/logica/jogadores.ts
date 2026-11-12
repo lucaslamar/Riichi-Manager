@@ -12,6 +12,8 @@ export interface Jogador {
   clube?: string
   criadoEm: string
   arquivado: boolean
+  /** Estrela no seletor: aparece no grupo Favoritos, para achar mais rápido. */
+  favorito?: boolean
 }
 
 const CRIADOS_EM = '2026-11-01T00:00:00.000Z'
@@ -130,6 +132,7 @@ export function editarJogador(
     ...(clube ? { clube } : {}),
     criadoEm: atual.criadoEm,
     arquivado: atual.arquivado,
+    ...(atual.favorito ? { favorito: true } : {}),
   }
   return {
     ok: true,
@@ -205,4 +208,41 @@ export function linhaDeApoio(jogador: Pick<Jogador, 'nome' | 'apelido' | 'clube'
 /** Como o jogador aparece na mesa: o apelido, se tiver. */
 export function nomeExibido(jogador: Jogador) {
   return jogador.apelido ?? jogador.nome
+}
+
+/** Liga ou desliga a estrela de favorito. */
+export function definirFavorito(jogadores: Jogador[], id: string, favorito: boolean): Jogador[] {
+  return jogadores.map((jogador) => {
+    if (jogador.id !== id) return jogador
+    const resto = { ...jogador }
+    delete resto.favorito
+    return favorito ? { ...resto, favorito: true } : resto
+  })
+}
+
+/**
+ * Quem jogou por último: os ids das partidas mais recentes (pela data de fim
+ * ou de início), sem repetir, até `limite`. Convidados (sem cadastro) ficam de fora.
+ */
+export function jogadoresRecentes(
+  partidas: readonly {
+    assentos: Record<0 | 1 | 2 | 3, { jogadorId: string }> | Partial<Record<number, { jogadorId: string }>>
+    criadaEm: string
+    finalizadaEm?: string
+  }[],
+  existe: (id: string) => boolean,
+  limite = 5,
+): string[] {
+  const ordenadas = [...partidas].sort((uma, outra) =>
+    (outra.finalizadaEm ?? outra.criadaEm).localeCompare(uma.finalizadaEm ?? uma.criadaEm),
+  )
+  const ids: string[] = []
+  for (const partida of ordenadas) {
+    for (const assento of Object.values(partida.assentos)) {
+      const id = assento?.jogadorId
+      if (id && !ids.includes(id) && existe(id)) ids.push(id)
+      if (ids.length >= limite) return ids
+    }
+  }
+  return ids
 }

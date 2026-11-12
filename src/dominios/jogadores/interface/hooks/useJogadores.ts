@@ -4,6 +4,7 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import {
   adicionarJogador,
   definirArquivado,
+  definirFavorito,
   editarJogador,
   garantirPorNomes,
   removerJogador,
@@ -49,6 +50,7 @@ export const acoesJogadores = {
   editar: (id: string, dados: DadosJogador) => aplicar(editarJogador(lerCadastro(), id, dados)),
   arquivar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, true)),
   restaurar: (id: string) => definirCadastro(definirArquivado(lerCadastro(), id, false)),
+  favoritar: (id: string, favorito: boolean) => definirCadastro(definirFavorito(lerCadastro(), id, favorito)),
   excluir: (id: string) => definirCadastro(removerJogador(lerCadastro(), id)),
   /** Desfazer da exclusão: o jogador volta como estava. */
   devolver: (jogador: Jogador) => definirCadastro([...lerCadastro(), jogador]),
