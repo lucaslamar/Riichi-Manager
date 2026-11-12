@@ -1705,11 +1705,17 @@ body:has(.ptd-modulo) {
 
 /* Registrar finalizada com a ordem dos ventos: kanji pequeno ao lado do nome. */
 .ptd-assento.fin-jogador:has(.ptd-assento-kanji) {
+  position: relative;
   flex-direction: row;
-  gap: 8px;
+  padding-inline: 40px;
 }
 
+/* O kanji fica numa coluna fixa à esquerda, alinhado nas quatro linhas; o nome segue centralizado. */
 .fin-jogador .ptd-assento-kanji {
+  position: absolute;
+  top: 50%;
+  left: 14px;
   font-size: 1.15rem;
   line-height: 1;
+  transform: translateY(-50%);
 }

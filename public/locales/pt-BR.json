@@ -1608,7 +1608,7 @@
       "confirm": "Registrar",
       "windOrder": "Ordem dos ventos",
       "windOrderYes": "Leste, Sul, Oeste, Norte",
-      "windOrderNo": "Não sei",
+      "windOrderNo": "Foi aleatório",
       "windOrderHelp": "Com a ordem, a partida entra na estatística de vento inicial de cada jogador."
     }
   },

@@ -1608,7 +1608,7 @@
       "confirm": "Save",
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
-      "windOrderNo": "Unknown",
+      "windOrderNo": "It was random",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
