@@ -1,5 +1,5 @@
 /*
- * Service worker do Mojoca: guarda os arquivos do build para o app abrir offline.
+ * Service worker do Riichi Manager: guarda os arquivos do build para o app abrir offline.
  * O plugin em vite.config.ts troca os marcadores e grava o resultado em dist/sw.js.
  * Só funciona no build: `npm run build` e `npm run preview -- --host`.
  */

@@ -1,6 +1,6 @@
 {
-  "name": "Mojoca",
-  "short_name": "Mojoca",
+  "name": "Riichi Manager",
+  "short_name": "Riichi Manager",
   "description": "Calculadora, mesa e placar de Riichi Mahjong.",
   "lang": "pt-BR",
   "start_url": "./",

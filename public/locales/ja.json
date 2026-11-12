@@ -3,8 +3,8 @@
     "name": "日本語"
   },
   "global": {
-    "appName": "Mojoca",
-    "calculator": "計算機",
+    "appName": "Riichi Manager",
+    "calculator": "計算機",
     "navigation": "メインナビゲーション",
     "currentModule": "現在のモジュール",
     "tagline": "リーチ麻雀のエコシステム",
@@ -630,11 +630,11 @@
     "matchDetails": "対局の詳細",
     "matchDetailsHelp": "局ごとの記録を残す終了済み対局の数です。古い対局は結果だけが残り、ランキングと履歴には引き続き表示されます。",
     "languageHelp": "アプリの表示言語。",
-    "installTitle": "Mojocaをインストール",
+    "installTitle": "Riichi Managerをインストール",
     "installHelp": "アイコンから開き、ブラウザのバーなしでオフラインでも使えます。",
     "installAction": "インストール",
     "installIosSteps": "Safariで共有をタップし、ホーム画面に追加を選びます。",
-    "installSuggestion": "Mojocaをインストールすると、ブラウザのバーなしで遊べます。",
+    "installSuggestion": "Riichi Managerをインストールすると、ブラウザのバーなしで遊べます。",
     "installDismiss": "閉じる",
     "fullscreenTitle": "全画面",
     "fullscreenHelp": "ブラウザのバーを隠します。戻るジェスチャーかEscキーで終了します。",
@@ -644,8 +644,8 @@
     "keepAwakeHelp": "卓を開いている間は画面が消えません。",
     "fullscreenEnter": "全画面にする",
     "fullscreenExit": "全画面を終了",
-    "fullscreenHeaderHint": "MOJOCAをタップで全画面",
-    "aboutTitle": "Mojocaについて",
+    "fullscreenHeaderHint": "Riichi Managerをタップで全画面",
+    "aboutTitle": "Riichi Managerについて",
     "aboutText": "リーチ麻雀のプレイヤーとクラブが手牌を計算し、対局を管理し、大会のアイデアを試せるように作ったアプリです。リーチ麻雀をすべての人に。",
     "reportIssue": "問題を報告",
     "theme": "テーマ",
@@ -1131,7 +1131,7 @@
       },
       "resultTitle": "抽選結果",
       "noDraw": "まだ抽選していません。リストを作って「卓を抽選」をタップしてください。",
-      "shareTitle": "MOJOCA · クラブの卓 · {{date}}",
+      "shareTitle": "Riichi Manager · クラブの卓 · {{date}}",
       "copied": "クリップボードにコピーしました",
       "shareFailed": "共有できませんでした。",
       "share": "共有",
@@ -1522,7 +1522,7 @@
         "personalizado": "カスタム"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCAの標準。例会や初心者向け。",
+        "padrao": "Riichi Managerの標準。例会や初心者向け。",
         "ema": "ヨーロッパ麻雀協会のルール。ヨーロッパの大会で使われます。",
         "wrc": "世界リーチ麻雀選手権のルール。",
         "personalizado": "点数・オカ・ウマを自分で決めます。"
@@ -1852,7 +1852,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1907,16 +1907,16 @@
     "export": "エクスポート",
     "exportHelp": "送信・保存用のバックアップファイルを作成します。",
     "import": "インポート",
-    "importHelp": "Mojoca のバックアップファイル (.json) を開きます。",
+    "importHelp": "Riichi Manager のバックアップファイル (.json) を開きます。",
     "result": {
       "compartilhado": "バックアップを送信しました。",
       "baixado": "バックアップをダウンロードしました。",
       "falhou": "ファイルを作成できませんでした。もう一度お試しください。"
     },
     "errors": {
-      "naoEhJson": "有効なバックアップではありません。Mojoca でエクスポートした .json を選んでください。",
-      "naoEhBackup": "Mojoca のバックアップではありません。",
-      "versaoNova": "新しいバージョンの Mojoca で作成されたバックアップです。アプリを更新してからお試しください。",
+      "naoEhJson": "有効なバックアップではありません。Riichi Manager でエクスポートした .json を選んでください。",
+      "naoEhBackup": "Riichi Manager のバックアップではありません。",
+      "versaoNova": "新しいバージョンの Riichi Manager で作成されたバックアップです。アプリを更新してからお試しください。",
       "corrompido": "バックアップが不完全か破損しています。もう一方の端末で再度エクスポートしてください。"
     },
     "summary": {

@@ -3,8 +3,8 @@
     "name": "Lietuvių"
   },
   "global": {
-    "appName": "Mojoca",
-    "calculator": "Skaičiuoklė",
+    "appName": "Riichi Manager",
+    "calculator": "Skaičiuoklė",
     "navigation": "Pagrindinė navigacija",
     "currentModule": "Dabartinis modulis",
     "tagline": "Riichi Mahjong ekosistema",
@@ -648,11 +648,11 @@
     "matchDetails": "Partijų detalės",
     "matchDetailsHelp": "Kiek baigtų partijų saugo kiekvieną dalijimą. Senesnėse lieka tik rezultatas, kuris toliau rodomas reitinge ir istorijoje.",
     "languageHelp": "Programėlės tekstų kalba.",
-    "installTitle": "Įdiegti Mojoca",
+    "installTitle": "Įdiegti Riichi Manager",
     "installHelp": "Atsidaro iš piktogramos, be naršyklės juostos, ir veikia neprisijungus.",
     "installAction": "Įdiegti",
     "installIosSteps": "Safari naršyklėje palieskite Bendrinti, tada Įtraukti į pradžios ekraną.",
-    "installSuggestion": "Įdiekite Mojoca ir žaiskite be naršyklės juostos.",
+    "installSuggestion": "Įdiekite Riichi Manager ir žaiskite be naršyklės juostos.",
     "installDismiss": "Atmesti",
     "fullscreenTitle": "Visas ekranas",
     "fullscreenHelp": "Paslepia naršyklės juostą. Norėdami išeiti, naudokite grįžimo gestą arba Esc klavišą.",
@@ -662,8 +662,8 @@
     "keepAwakeHelp": "Telefonas neužgęsta, kol atidarytas stalas.",
     "fullscreenEnter": "Įjungti visą ekraną",
     "fullscreenExit": "Išeiti iš viso ekrano",
-    "fullscreenHeaderHint": "Bakstelėkite MOJOCA – visas ekranas",
-    "aboutTitle": "Apie Mojoca",
+    "fullscreenHeaderHint": "Bakstelėkite Riichi Manager – visas ekranas",
+    "aboutTitle": "Apie Riichi Manager",
     "aboutText": "Programėlė, sukurta padėti Riichi Mahjong žaidėjams ir klubams skaičiuoti rankas, organizuoti partijas ir išbandyti turnyrų idėjas – Riichi Mahjong visiems.",
     "reportIssue": "Pranešti apie problemą",
     "theme": "Tema",
@@ -1185,7 +1185,7 @@
       },
       "resultTitle": "Išburti stalai",
       "noDraw": "Burtų dar nebuvo. Sudarykite sąrašą ir palieskite „Burti stalus“.",
-      "shareTitle": "MOJOCA · Klubo stalai · {{date}}",
+      "shareTitle": "Riichi Manager · Klubo stalai · {{date}}",
       "copied": "Nukopijuota į iškarpinę",
       "shareFailed": "Nepavyko pasidalyti.",
       "share": "Dalintis",
@@ -1588,7 +1588,7 @@
         "personalizado": "Savos"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCA numatytosios taisyklės susitikimams ir pradedantiesiems.",
+        "padrao": "Riichi Manager numatytosios taisyklės susitikimams ir pradedantiesiems.",
         "ema": "Europos mahjongo asociacijos taisyklės, naudojamos Europos turnyruose.",
         "wrc": "Pasaulio riichi čempionato taisyklės.",
         "personalizado": "taškus, oka ir uma nustatote patys."
@@ -1932,7 +1932,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1987,16 +1987,16 @@
     "export": "Eksportuoti",
     "exportHelp": "Sukuria atsarginės kopijos failą siuntimui ar saugojimui.",
     "import": "Importuoti",
-    "importHelp": "Atidaro Mojoca atsarginės kopijos failą (.json).",
+    "importHelp": "Atidaro Riichi Manager atsarginės kopijos failą (.json).",
     "result": {
       "compartilhado": "Kopija išsiųsta.",
       "baixado": "Kopija atsisiųsta.",
       "falhou": "Nepavyko sukurti failo. Bandykite dar kartą."
     },
     "errors": {
-      "naoEhJson": "Šis failas nėra tinkama kopija. Pasirinkite Mojoca eksportuotą .json.",
-      "naoEhBackup": "Šis failas nėra Mojoca kopija.",
-      "versaoNova": "Ši kopija sukurta naujesne Mojoca versija. Atnaujinkite programėlę ir bandykite dar kartą.",
+      "naoEhJson": "Šis failas nėra tinkama kopija. Pasirinkite Riichi Manager eksportuotą .json.",
+      "naoEhBackup": "Šis failas nėra Riichi Manager kopija.",
+      "versaoNova": "Ši kopija sukurta naujesne Riichi Manager versija. Atnaujinkite programėlę ir bandykite dar kartą.",
       "corrompido": "Kopija neišsami arba sugadinta. Eksportuokite dar kartą kitame įrenginyje."
     },
     "summary": {

@@ -47,7 +47,7 @@ export default function FolhaCompartilhar({
   const imagem = async () => {
     setGerando(true)
     try {
-      const blob = await imagemDoRelatorio(relatorio(), 'Mojoca')
+      const blob = await imagemDoRelatorio(relatorio(), 'Riichi Manager')
       const resultado = await salvarArquivo(`${nomeArquivo}.png`, blob, 'image/png')
       if (resultado === 'baixado') aoAvisar(t('tournament.share.imageSaved'))
       if (resultado === 'falhou') aoAvisar(t('tournament.share.imageError'))

@@ -2,7 +2,7 @@
 
 ## Visao geral
 
-O Mojoca e um app estatico React + TypeScript. Ele deve continuar funcionando em GitHub Pages, sem backend e sem servicos obrigatorios.
+O Riichi Manager e um app estatico React + TypeScript. Ele deve continuar funcionando em GitHub Pages, sem backend e sem servicos obrigatorios.
 
 ## Fronteiras principais
 

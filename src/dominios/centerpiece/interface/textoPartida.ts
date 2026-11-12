@@ -18,5 +18,5 @@ export function textoDaPartida(
       historico && linha.delta !== undefined ? ` (${linha.delta > 0 ? '+' : ''}${numero(linha.delta)})` : ''
     return `${posicao} ${nomeDe(linha.cadeira)} ${numero(linha.pontos)}${delta}`
   })
-  return [`MOJOCA · ${cabecalho}`, '', ...linhas].join('\n')
+  return [`Riichi Manager · ${cabecalho}`, '', ...linhas].join('\n')
 }

@@ -3,8 +3,8 @@
     "name": "简体中文"
   },
   "global": {
-    "appName": "Mojoca",
-    "calculator": "计算器",
+    "appName": "Riichi Manager",
+    "calculator": "计算器",
     "navigation": "主导航",
     "currentModule": "当前模块",
     "tagline": "立直麻将生态",
@@ -630,11 +630,11 @@
     "matchDetails": "对局详情",
     "matchDetailsHelp": "保留逐局记录的已结束对局数量。更早的对局只保留结果，仍会显示在排名和历史中。",
     "languageHelp": "应用文字的语言。",
-    "installTitle": "安装 Mojoca",
+    "installTitle": "安装 Riichi Manager",
     "installHelp": "从图标打开，没有浏览器栏，也可离线使用。",
     "installAction": "安装",
     "installIosSteps": "在 Safari 中点按“分享”，然后选择“添加到主屏幕”。",
-    "installSuggestion": "安装 Mojoca，即可在没有浏览器栏的情况下游戏。",
+    "installSuggestion": "安装 Riichi Manager，即可在没有浏览器栏的情况下游戏。",
     "installDismiss": "关闭",
     "fullscreenTitle": "全屏",
     "fullscreenHelp": "隐藏浏览器栏。退出时使用返回手势或 Esc 键。",
@@ -644,8 +644,8 @@
     "keepAwakeHelp": "牌桌打开期间屏幕不会熄灭。",
     "fullscreenEnter": "进入全屏",
     "fullscreenExit": "退出全屏",
-    "fullscreenHeaderHint": "点按 MOJOCA 进入全屏",
-    "aboutTitle": "关于 Mojoca",
+    "fullscreenHeaderHint": "点按 Riichi Manager 进入全屏",
+    "aboutTitle": "关于 Riichi Manager",
     "aboutText": "一款帮助立直麻将玩家和俱乐部计算手牌、组织对局和尝试比赛点子的应用，让每个人都能玩立直麻将。",
     "reportIssue": "报告问题",
     "theme": "主题",
@@ -1131,7 +1131,7 @@
       },
       "resultTitle": "抽签结果",
       "noDraw": "还没有抽签。先建好名单，再点“抽签分桌”。",
-      "shareTitle": "MOJOCA · 俱乐部牌桌 · {{date}}",
+      "shareTitle": "Riichi Manager · 俱乐部牌桌 · {{date}}",
       "copied": "已复制到剪贴板",
       "shareFailed": "无法分享。",
       "share": "分享",
@@ -1522,7 +1522,7 @@
         "personalizado": "自定义"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCA 的默认规则，适合聚会和新手。",
+        "padrao": "Riichi Manager 的默认规则，适合聚会和新手。",
         "ema": "欧洲麻将协会规则，用于欧洲的比赛。",
         "wrc": "世界立直麻将锦标赛规则。",
         "personalizado": "由你设定点数、头名奖励和马点。"
@@ -1852,7 +1852,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1907,16 +1907,16 @@
     "export": "导出",
     "exportHelp": "生成可发送或保存的备份文件。",
     "import": "导入",
-    "importHelp": "打开 Mojoca 备份文件（.json）。",
+    "importHelp": "打开 Riichi Manager 备份文件（.json）。",
     "result": {
       "compartilhado": "备份已发送。",
       "baixado": "备份已下载。",
       "falhou": "无法生成文件，请重试。"
     },
     "errors": {
-      "naoEhJson": "这不是有效的备份文件。请选择 Mojoca 导出的 .json。",
-      "naoEhBackup": "这不是 Mojoca 的备份文件。",
-      "versaoNova": "此备份来自更新版本的 Mojoca。请先更新应用再试。",
+      "naoEhJson": "这不是有效的备份文件。请选择 Riichi Manager 导出的 .json。",
+      "naoEhBackup": "这不是 Riichi Manager 的备份文件。",
+      "versaoNova": "此备份来自更新版本的 Riichi Manager。请先更新应用再试。",
       "corrompido": "备份不完整或已损坏。请在另一台设备上重新导出。"
     },
     "summary": {

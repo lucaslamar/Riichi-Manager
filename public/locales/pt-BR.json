@@ -3,7 +3,7 @@
     "name": "Português"
   },
   "global": {
-    "appName": "Mojoca",
+    "appName": "Riichi Manager",
     "calculator": "Calculadora",
     "navigation": "Navegação principal",
     "currentModule": "Módulo atual",
@@ -633,11 +633,11 @@
     "matchDetails": "Detalhes das partidas",
     "matchDetailsHelp": "Quantas partidas finalizadas guardam o mão a mão. As mais antigas ficam só com o resultado, que continua no ranking e no histórico.",
     "languageHelp": "Idioma dos textos do app.",
-    "installTitle": "Instalar o Mojoca",
+    "installTitle": "Instalar o Riichi Manager",
     "installHelp": "Abre pelo ícone, sem a barra do navegador, e funciona offline.",
     "installAction": "Instalar",
     "installIosSteps": "No Safari, toque em Compartilhar e depois em Adicionar à Tela de Início.",
-    "installSuggestion": "Instale o Mojoca para jogar sem a barra do navegador.",
+    "installSuggestion": "Instale o Riichi Manager para jogar sem a barra do navegador.",
     "installDismiss": "Dispensar",
     "fullscreenTitle": "Tela cheia",
     "fullscreenHelp": "Esconde a barra do navegador. Para sair, use o gesto de voltar ou a tecla Esc.",
@@ -647,8 +647,8 @@
     "keepAwakeHelp": "O celular não apaga enquanto uma mesa estiver aberta.",
     "fullscreenEnter": "Entrar em tela cheia",
     "fullscreenExit": "Sair da tela cheia",
-    "fullscreenHeaderHint": "Toque em MOJOCA para tela cheia",
-    "aboutTitle": "Sobre o Mojoca",
+    "fullscreenHeaderHint": "Toque em Riichi Manager para tela cheia",
+    "aboutTitle": "Sobre o Riichi Manager",
     "aboutText": "Um app feito para ajudar jogadores e clubes de Riichi Mahjong a calcular mãos, organizar partidas e testar ideias de torneio, levando Riichi Mahjong para todos.",
     "reportIssue": "Reportar problema",
     "theme": "Tema",
@@ -1146,7 +1146,7 @@
       },
       "resultTitle": "Mesas sorteadas",
       "noDraw": "Nenhum sorteio ainda. Monte a lista e toque em Sortear mesas.",
-      "shareTitle": "MOJOCA · Mesas do clube · {{date}}",
+      "shareTitle": "Riichi Manager · Mesas do clube · {{date}}",
       "copied": "Copiado para a área de transferência",
       "shareFailed": "Não foi possível compartilhar.",
       "share": "Compartilhar",
@@ -1541,7 +1541,7 @@
         "personalizado": "Personalizado"
       },
       "rulesetsHelp": {
-        "padrao": "padrão do MOJOCA para encontros e iniciantes.",
+        "padrao": "padrão do Riichi Manager para encontros e iniciantes.",
         "ema": "regras da European Mahjong Association, usadas em torneios na Europa.",
         "wrc": "regras do World Riichi Championship.",
         "personalizado": "você define pontos, oka e uma."
@@ -1871,7 +1871,7 @@
       "cameraWaiting": "Procurando QR…",
       "cameraProgress": "{{read}} de {{total}} lidos",
       "cameraError": "Não deu para abrir a câmera. Confira a permissão ou use outro jeito.",
-      "errorInvalid": "Isso não é um torneio do Mojoca.",
+      "errorInvalid": "Isso não é um torneio do Riichi Manager.",
       "errorCorrupted": "O arquivo está corrompido ou incompleto.",
       "errorNewer": "Esse torneio veio de uma versão mais nova do app. Atualize o app para importar.",
       "name": "Torneio",
@@ -1926,16 +1926,16 @@
     "export": "Exportar",
     "exportHelp": "Gera um arquivo de backup para enviar ou guardar.",
     "import": "Importar",
-    "importHelp": "Abre um arquivo de backup do Mojoca (.json).",
+    "importHelp": "Abre um arquivo de backup do Riichi Manager (.json).",
     "result": {
       "compartilhado": "Backup enviado.",
       "baixado": "Backup baixado na pasta de downloads.",
       "falhou": "Não foi possível gerar o arquivo. Tente de novo."
     },
     "errors": {
-      "naoEhJson": "Esse arquivo não é um backup válido. Escolha o .json exportado pelo Mojoca.",
-      "naoEhBackup": "Esse arquivo não é um backup do Mojoca.",
-      "versaoNova": "Esse backup veio de uma versão mais nova do Mojoca. Atualize o app e tente de novo.",
+      "naoEhJson": "Esse arquivo não é um backup válido. Escolha o .json exportado pelo Riichi Manager.",
+      "naoEhBackup": "Esse arquivo não é um backup do Riichi Manager.",
+      "versaoNova": "Esse backup veio de uma versão mais nova do Riichi Manager. Atualize o app e tente de novo.",
       "corrompido": "O backup está incompleto ou corrompido. Exporte de novo no outro aparelho."
     },
     "summary": {

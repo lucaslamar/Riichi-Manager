@@ -1,8 +1,9 @@
-# Changelog - Mojoca
+# Changelog - Riichi Manager
 
 ## Não lançado (feature/torneio)
 
 ### Adicionado
+- **Nome volta a ser Riichi Manager**: cabeçalho, aba do navegador, app instalado, textos de compartilhar e README usam Riichi Manager de novo. Backups, torneios exportados e dados salvos continuam abrindo normalmente.
 
 - **Últimos jogados e favoritos ao escolher jogador**: ao montar uma partida ou registrar uma finalizada, a lista começa por um bloco com você e as 4 últimas pessoas que jogaram. Embaixo vem o resto, com os favoritos primeiro e depois a ordem alfabética. Também dá para favoritar pela tela do jogador, no botão Favoritar ao lado de Este sou eu.
 - **Este sou eu**: na tela do jogador, marque Este sou eu. No Ranking, seu card ganha destaque com a etiqueta Você, e uma faixa no topo mostra sua posição e pontuação (tocar abre sua análise). A marca fica só neste aparelho.

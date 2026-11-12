@@ -158,7 +158,7 @@ export interface LeituraQr {
   pedacos: Record<number, string>
 }
 
-/** Junta um pedaço lido. Devolve a leitura atualizada, ou null se não é um QR do Mojoca. */
+/** Junta um pedaço lido. Devolve a leitura atualizada, ou null se não é um QR do Riichi Manager. */
 export function juntarPedaco(leitura: LeituraQr | null, texto: string): LeituraQr | null {
   const casamento = /^MJC:(\d+)\/(\d+):(.*)$/s.exec(texto)
   if (!casamento) return null

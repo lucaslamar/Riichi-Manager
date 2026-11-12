@@ -8,7 +8,7 @@ import './pagina-regras.css'
 
 /**
  * Tela Ajustes: os ajustes do app em cartões (os mesmos da aba "Ajustes do app"
- * das Configurações), mais instalar o app e o Sobre o Mojoca, que ficam só aqui.
+ * das Configurações), mais instalar o app e o Sobre o Riichi Manager, que ficam só aqui.
  */
 export default function PaginaRegras() {
   const { t } = useI18n()

@@ -1,4 +1,4 @@
-# Mojoca
+# Riichi Manager
 
 App web estatico para Riichi Mahjong, feito com React + TypeScript e publicado no GitHub Pages.
 
@@ -140,7 +140,7 @@ Mudancas visuais devem preservar o fluxo existente. Evite duplicar informacoes, 
 
 ## Objetivo do projeto
 
-O Mojoca busca ser um ecossistema simples, acessivel e funcional para jogadores e clubes de Riichi Mahjong.
+O Riichi Manager busca ser um ecossistema simples, acessivel e funcional para jogadores e clubes de Riichi Mahjong.
 
 Prioridades atuais:
 

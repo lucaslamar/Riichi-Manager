@@ -3,7 +3,7 @@
     "name": "English"
   },
   "global": {
-    "appName": "Mojoca",
+    "appName": "Riichi Manager",
     "calculator": "Calculator",
     "navigation": "Main navigation",
     "currentModule": "Current module",
@@ -633,11 +633,11 @@
     "matchDetails": "Game details",
     "matchDetailsHelp": "How many finished games keep the hand-by-hand log. Older ones keep only the result, which stays in the ranking and history.",
     "languageHelp": "Language of the app's text.",
-    "installTitle": "Install Mojoca",
+    "installTitle": "Install Riichi Manager",
     "installHelp": "Opens from its icon, without the browser bar, and works offline.",
     "installAction": "Install",
     "installIosSteps": "In Safari, tap Share and then Add to Home Screen.",
-    "installSuggestion": "Install Mojoca to play without the browser bar.",
+    "installSuggestion": "Install Riichi Manager to play without the browser bar.",
     "installDismiss": "Dismiss",
     "fullscreenTitle": "Full screen",
     "fullscreenHelp": "Hides the browser bar. To leave, use the back gesture or the Esc key.",
@@ -647,8 +647,8 @@
     "keepAwakeHelp": "The phone stays on while a table is open.",
     "fullscreenEnter": "Enter full screen",
     "fullscreenExit": "Exit full screen",
-    "fullscreenHeaderHint": "Tap MOJOCA for full screen",
-    "aboutTitle": "About Mojoca",
+    "fullscreenHeaderHint": "Tap Riichi Manager for full screen",
+    "aboutTitle": "About Riichi Manager",
     "aboutText": "An app made to help Riichi Mahjong players and clubs score hands, organize games and try out tournament ideas, bringing Riichi Mahjong to everyone.",
     "reportIssue": "Report an issue",
     "theme": "Theme",
@@ -1146,7 +1146,7 @@
       },
       "resultTitle": "Drawn tables",
       "noDraw": "No draw yet. Build the list and tap Draw tables.",
-      "shareTitle": "MOJOCA · Club tables · {{date}}",
+      "shareTitle": "Riichi Manager · Club tables · {{date}}",
       "copied": "Copied to clipboard",
       "shareFailed": "Could not share.",
       "share": "Share",
@@ -1541,7 +1541,7 @@
         "personalizado": "Custom"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCA default for club meetings and beginners.",
+        "padrao": "Riichi Manager default for club meetings and beginners.",
         "ema": "European Mahjong Association rules, used in tournaments in Europe.",
         "wrc": "World Riichi Championship rules.",
         "personalizado": "you set the points, oka and uma."
@@ -1871,7 +1871,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1926,16 +1926,16 @@
     "export": "Export",
     "exportHelp": "Creates a backup file to send or keep.",
     "import": "Import",
-    "importHelp": "Opens a Mojoca backup file (.json).",
+    "importHelp": "Opens a Riichi Manager backup file (.json).",
     "result": {
       "compartilhado": "Backup sent.",
       "baixado": "Backup saved to your downloads.",
       "falhou": "Could not create the file. Try again."
     },
     "errors": {
-      "naoEhJson": "This file is not a valid backup. Choose the .json exported by Mojoca.",
-      "naoEhBackup": "This file is not a Mojoca backup.",
-      "versaoNova": "This backup comes from a newer version of Mojoca. Update the app and try again.",
+      "naoEhJson": "This file is not a valid backup. Choose the .json exported by Riichi Manager.",
+      "naoEhBackup": "This file is not a Riichi Manager backup.",
+      "versaoNova": "This backup comes from a newer version of Riichi Manager. Update the app and try again.",
       "corrompido": "The backup is incomplete or corrupted. Export it again on the other device."
     },
     "summary": {

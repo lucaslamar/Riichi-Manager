@@ -198,14 +198,14 @@ teste('compartilhar: texto simples com kanji, vento e nome', () => {
       },
     ],
     {
-      titulo: 'MOJOCA · Mesas do clube · 05/11/2026',
+      titulo: 'Riichi Manager · Mesas do clube · 05/11/2026',
       mesa: (numero) => `Mesa ${numero}`,
       vento: (vento) => ({ leste: 'Leste', sul: 'Sul', oeste: 'Oeste', norte: 'Norte' })[vento],
     },
   )
   assert.equal(
     texto,
-    'MOJOCA · Mesas do clube · 05/11/2026\n\nMesa 1\n東 Leste: Ana\n南 Sul: Bruno\n西 Oeste: Carla\n北 Norte: Diego',
+    'Riichi Manager · Mesas do clube · 05/11/2026\n\nMesa 1\n東 Leste: Ana\n南 Sul: Bruno\n西 Oeste: Carla\n北 Norte: Diego',
   )
   assert.equal(KANJI_VENTO.leste, '東')
 })
