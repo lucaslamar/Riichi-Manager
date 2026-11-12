@@ -3,8 +3,8 @@
     "name": "Lietuvių"
   },
   "global": {
-    "appName": "Mojoca",
-    "calculator": "Skaičiuoklė",
+    "appName": "Riichi Manager",
+    "calculator": "Skaičiuoklė",
     "navigation": "Pagrindinė navigacija",
     "currentModule": "Dabartinis modulis",
     "tagline": "Riichi Mahjong ekosistema",
@@ -22,9 +22,7 @@
     "handCalculatorShort": "Skaičiuoklė",
     "windDrawShort": "Burtai",
     "centerpiece": "Centerpiece",
-
     "matches": "Partijos stalas",
-
     "matchesShort": "Partijos",
     "ranking": "Reitingas",
     "more": "More",
@@ -140,7 +138,6 @@
     "suitSou": "Sou",
     "honors": "Garbės akmenys",
     "akaDora": "Raudonas 5 (aka dora)",
-
     "holdForAka": "Palaikykite raudonam 5",
     "addTileToHand": "Pridėti {{tile}} į ranką",
     "addTileToDiscards": "Pridėti {{tile}} prie išmestų akmenų furiten patikrai",
@@ -637,7 +634,9 @@
       "help": "Kiek moka padaręs chombo (be yaku, ron esant furiten). Mangan: 8 000 (12 000 būnant Rytais). Yakuman: 32 000 (48 000 būnant Rytais).",
       "on": "Mangan",
       "off": "Yakuman"
-    }
+    },
+    "search": "Search rule",
+    "summary": "Go to rule"
   },
   "settingsSheet": {
     "appTab": "Programėlės nustatymai",
@@ -648,11 +647,11 @@
     "matchDetails": "Partijų detalės",
     "matchDetailsHelp": "Kiek baigtų partijų saugo kiekvieną dalijimą. Senesnėse lieka tik rezultatas, kuris toliau rodomas reitinge ir istorijoje.",
     "languageHelp": "Programėlės tekstų kalba.",
-    "installTitle": "Įdiegti Mojoca",
+    "installTitle": "Įdiegti Riichi Manager",
     "installHelp": "Atsidaro iš piktogramos, be naršyklės juostos, ir veikia neprisijungus.",
     "installAction": "Įdiegti",
     "installIosSteps": "Safari naršyklėje palieskite Bendrinti, tada Įtraukti į pradžios ekraną.",
-    "installSuggestion": "Įdiekite Mojoca ir žaiskite be naršyklės juostos.",
+    "installSuggestion": "Įdiekite Riichi Manager ir žaiskite be naršyklės juostos.",
     "installDismiss": "Atmesti",
     "fullscreenTitle": "Visas ekranas",
     "fullscreenHelp": "Paslepia naršyklės juostą. Norėdami išeiti, naudokite grįžimo gestą arba Esc klavišą.",
@@ -662,8 +661,8 @@
     "keepAwakeHelp": "Telefonas neužgęsta, kol atidarytas stalas.",
     "fullscreenEnter": "Įjungti visą ekraną",
     "fullscreenExit": "Išeiti iš viso ekrano",
-    "fullscreenHeaderHint": "Bakstelėkite MOJOCA – visas ekranas",
-    "aboutTitle": "Apie Mojoca",
+    "fullscreenHeaderHint": "Bakstelėkite Riichi Manager – visas ekranas",
+    "aboutTitle": "Apie Riichi Manager",
     "aboutText": "Programėlė, sukurta padėti Riichi Mahjong žaidėjams ir klubams skaičiuoti rankas, organizuoti partijas ir išbandyti turnyrų idėjas – Riichi Mahjong visiems.",
     "reportIssue": "Pranešti apie problemą",
     "theme": "Tema",
@@ -681,7 +680,8 @@
     "compactModeHelp": "Sumažina tarpus, kad ekrane matytųsi daugiau rankos ir klaviatūros.",
     "largeTouchTargets": "Didesnės lietimo sritys",
     "largeTouchTargetsHelp": "Padidina mygtukus ir akmenis, kad būtų patogiau liesti.",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "Mėlyna"
   },
   "windDraw": {
     "title": "Vėjų burtai",
@@ -811,7 +811,8 @@
       "triplets": "Trejetų yaku",
       "suits": "Spalvų yaku",
       "others": "Kiti yaku",
-      "yakuman": "Yakuman"
+      "yakuman": "Yakuman",
+      "special": "Local yaku"
     },
     "yakumanHeading": "Yakuman (didžiausios rankos)",
     "yakumanBadge": "YAKUMAN",
@@ -830,6 +831,18 @@
       "clear": "Išvalyti paiešką",
       "nothingFound": "Nieko nerasta pagal „{{busca}}“.",
       "tabsHeading": "Gido skirtukai"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {
@@ -920,7 +933,8 @@
     "deletedName": "{{name}} (deleted)",
     "club": "Club (optional)",
     "clubSuggestions": "Clubs already used",
-    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything."
+    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything.",
+    "notMe": "This is not me"
   },
   "tableConfig": {
     "title": "Table settings",
@@ -1185,7 +1199,7 @@
       },
       "resultTitle": "Išburti stalai",
       "noDraw": "Burtų dar nebuvo. Sudarykite sąrašą ir palieskite „Burti stalus“.",
-      "shareTitle": "MOJOCA · Klubo stalai · {{date}}",
+      "shareTitle": "Riichi Manager · Klubo stalai · {{date}}",
       "copied": "Nukopijuota į iškarpinę",
       "shareFailed": "Nepavyko pasidalyti.",
       "share": "Dalintis",
@@ -1196,7 +1210,8 @@
       "newDraw": "Nauji burtai",
       "newDrawLabel": "Nauji burtai su tuo pačiu sąrašu kitam ratui",
       "registerResult": "Įrašyti rezultatą",
-      "tableRegistered": "Partija užregistruota"
+      "tableRegistered": "Partija užregistruota",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {
@@ -1436,9 +1451,32 @@
     "history": {
       "search": "Ieškoti pagal žaidėją ar turnyrą",
       "noMatch": "Pagal šiuos filtrus partijų nėra.",
-      "empty": "No finished games yet.",
+      "empty": "Nothing recorded in this match yet.",
       "tabMatches": "Matches",
-      "tabTournaments": "Tournaments"
+      "tabTournaments": "Tournaments",
+      "title": "Action log",
+      "open": "Log",
+      "round": "{{wind}} {{number}}, {{count}} honba",
+      "ron": "Ron by {{name}} off {{payer}}",
+      "tsumo": "Tsumo by {{name}}",
+      "riichi": "Riichi by {{name}}",
+      "chombo": "Chombo by {{name}}",
+      "ryukyoku": "Ryuukyoku",
+      "abortive": "Abortive draw",
+      "paarenchan": "Paarenchan for {{name}}: the next win is a Yakuman",
+      "undo": "Undo: {{action}}",
+      "undone": "undone",
+      "kind": {
+        "ron": "Ron",
+        "tsumo": "Tsumo",
+        "riichi": "Riichi",
+        "chombo": "Chombo",
+        "ryukyoku": "Ryuukyoku",
+        "abortivo": "Abortive draw",
+        "paarenchan": "Paarenchan",
+        "desfazer": "Undo",
+        "legado": "Older action"
+      }
     },
     "ranking": {
       "period": "Period",
@@ -1588,7 +1626,7 @@
         "personalizado": "Savos"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCA numatytosios taisyklės susitikimams ir pradedantiesiems.",
+        "padrao": "Riichi Manager numatytosios taisyklės susitikimams ir pradedantiesiems.",
         "ema": "Europos mahjongo asociacijos taisyklės, naudojamos Europos turnyruose.",
         "wrc": "Pasaulio riichi čempionato taisyklės.",
         "personalizado": "taškus, oka ir uma nustatote patys."
@@ -1611,7 +1649,11 @@
       "confirmTitle": "Patvirtinti rezultatą",
       "rankingTitle": "Bendras reitingas: prieš → po",
       "firstGame": "1-a partija",
-      "confirm": "Išsaugoti"
+      "confirm": "Išsaugoti",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {
@@ -1932,7 +1974,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1987,16 +2029,16 @@
     "export": "Eksportuoti",
     "exportHelp": "Sukuria atsarginės kopijos failą siuntimui ar saugojimui.",
     "import": "Importuoti",
-    "importHelp": "Atidaro Mojoca atsarginės kopijos failą (.json).",
+    "importHelp": "Atidaro Riichi Manager atsarginės kopijos failą (.json).",
     "result": {
       "compartilhado": "Kopija išsiųsta.",
       "baixado": "Kopija atsisiųsta.",
       "falhou": "Nepavyko sukurti failo. Bandykite dar kartą."
     },
     "errors": {
-      "naoEhJson": "Šis failas nėra tinkama kopija. Pasirinkite Mojoca eksportuotą .json.",
-      "naoEhBackup": "Šis failas nėra Mojoca kopija.",
-      "versaoNova": "Ši kopija sukurta naujesne Mojoca versija. Atnaujinkite programėlę ir bandykite dar kartą.",
+      "naoEhJson": "Šis failas nėra tinkama kopija. Pasirinkite Riichi Manager eksportuotą .json.",
+      "naoEhBackup": "Šis failas nėra Riichi Manager kopija.",
+      "versaoNova": "Ši kopija sukurta naujesne Riichi Manager versija. Atnaujinkite programėlę ir bandykite dar kartą.",
       "corrompido": "Kopija neišsami arba sugadinta. Eksportuokite dar kartą kitame įrenginyje."
     },
     "summary": {
@@ -2078,5 +2120,30 @@
     "sanma": "Sanma",
     "filtroVariante": "Variant",
     "varianteTravada": "The variant can't change after the tournament is created."
+  },
+  "localYaku": {
+    "title": "Local yaku",
+    "help": "House rules outside the standard. Turn on only the ones your table uses: the calculator recognises each one that is on.",
+    "listHelp": "Source: Riichi Wiki, Local yaku page.",
+    "enableAll": "Turn all on",
+    "disableAll": "Turn all off",
+    "conditionNote": "Depends on the game: it shows up to be marked in the calculator's special conditions.",
+    "conditions": "Local yaku",
+    "renhouValue": "Renhou value",
+    "renhouValueHelp": "How much a Renhou win is worth at your table.",
+    "paarenchan": {
+      "variation": "Paarenchan variation",
+      "variation1": "1: eight wins in a row by the same player.",
+      "variation2": "2: eight wins in a row as dealer, with no draw in between.",
+      "variation3": "3: build up 8 honba as dealer and win the last one (draws count).",
+      "shibari": "Ryanhan-shibari",
+      "shibariHelp": "From the 5th honba on, the hand needs at least 2 han not counting dora.",
+      "after": "After Paarenchan",
+      "afterHelp": "The dealer seat moves on by itself, or the dealer stays.",
+      "dealerPasses": "Dealer passes",
+      "dealerStays": "Dealer stays",
+      "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
+    },
+    "why": "Why:"
   }
 }

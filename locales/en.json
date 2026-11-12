@@ -3,7 +3,7 @@
     "name": "English"
   },
   "global": {
-    "appName": "Mojoca",
+    "appName": "Riichi Manager",
     "calculator": "Calculator",
     "navigation": "Main navigation",
     "currentModule": "Current module",
@@ -622,7 +622,9 @@
       "help": "How much a player who commits chombo pays (no yaku, ron in furiten). Mangan: 8,000 (12,000 as East). Yakuman: 32,000 (48,000 as East).",
       "on": "Mangan",
       "off": "Yakuman"
-    }
+    },
+    "search": "Search rule",
+    "summary": "Go to rule"
   },
   "settingsSheet": {
     "appTab": "App settings",
@@ -633,11 +635,11 @@
     "matchDetails": "Game details",
     "matchDetailsHelp": "How many finished games keep the hand-by-hand log. Older ones keep only the result, which stays in the ranking and history.",
     "languageHelp": "Language of the app's text.",
-    "installTitle": "Install Mojoca",
+    "installTitle": "Install Riichi Manager",
     "installHelp": "Opens from its icon, without the browser bar, and works offline.",
     "installAction": "Install",
     "installIosSteps": "In Safari, tap Share and then Add to Home Screen.",
-    "installSuggestion": "Install Mojoca to play without the browser bar.",
+    "installSuggestion": "Install Riichi Manager to play without the browser bar.",
     "installDismiss": "Dismiss",
     "fullscreenTitle": "Full screen",
     "fullscreenHelp": "Hides the browser bar. To leave, use the back gesture or the Esc key.",
@@ -647,8 +649,8 @@
     "keepAwakeHelp": "The phone stays on while a table is open.",
     "fullscreenEnter": "Enter full screen",
     "fullscreenExit": "Exit full screen",
-    "fullscreenHeaderHint": "Tap MOJOCA for full screen",
-    "aboutTitle": "About Mojoca",
+    "fullscreenHeaderHint": "Tap Riichi Manager for full screen",
+    "aboutTitle": "About Riichi Manager",
     "aboutText": "An app made to help Riichi Mahjong players and clubs score hands, organize games and try out tournament ideas, bringing Riichi Mahjong to everyone.",
     "reportIssue": "Report an issue",
     "theme": "Theme",
@@ -666,7 +668,8 @@
     "compactModeHelp": "Reduces spacing to show more of the hand and keyboard on screen.",
     "largeTouchTargets": "Larger touch targets",
     "largeTouchTargetsHelp": "Enlarges buttons and tiles for more comfortable touch use.",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "Blue"
   },
   "windDraw": {
     "title": "Wind Draw",
@@ -793,8 +796,9 @@
       "terminals": "Terminal yaku",
       "triplets": "Triplet yaku",
       "suits": "Suit yaku",
-      "others": "Other yaku",
-      "yakuman": "Yakuman"
+      "others": "Special yaku",
+      "yakuman": "Yakuman",
+      "special": "Local yaku"
     },
     "yakumanHeading": "Yakuman (limit hands)",
     "yakumanBadge": "YAKUMAN",
@@ -813,6 +817,18 @@
       "clear": "Clear search",
       "nothingFound": "Nothing found for “{{busca}}”.",
       "tabsHeading": "Guide tabs"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {
@@ -903,7 +919,8 @@
     "deletedName": "{{name}} (deleted)",
     "club": "Club (optional)",
     "clubSuggestions": "Clubs already used",
-    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything."
+    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything.",
+    "notMe": "This is not me"
   },
   "tableConfig": {
     "title": "Table settings",
@@ -1146,7 +1163,7 @@
       },
       "resultTitle": "Drawn tables",
       "noDraw": "No draw yet. Build the list and tap Draw tables.",
-      "shareTitle": "MOJOCA · Club tables · {{date}}",
+      "shareTitle": "Riichi Manager · Club tables · {{date}}",
       "copied": "Copied to clipboard",
       "shareFailed": "Could not share.",
       "share": "Share",
@@ -1157,7 +1174,8 @@
       "newDraw": "New draw",
       "newDrawLabel": "New draw with the same list, for the next round",
       "registerResult": "Record result",
-      "tableRegistered": "Game recorded"
+      "tableRegistered": "Game recorded",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {
@@ -1393,9 +1411,32 @@
     "history": {
       "search": "Search by player or tournament",
       "noMatch": "No games match these filters.",
-      "empty": "No finished games yet.",
+      "empty": "Nothing recorded in this match yet.",
       "tabMatches": "Matches",
-      "tabTournaments": "Tournaments"
+      "tabTournaments": "Tournaments",
+      "title": "Action log",
+      "open": "Log",
+      "round": "{{wind}} {{number}}, {{count}} honba",
+      "ron": "Ron by {{name}} off {{payer}}",
+      "tsumo": "Tsumo by {{name}}",
+      "riichi": "Riichi by {{name}}",
+      "chombo": "Chombo by {{name}}",
+      "ryukyoku": "Ryuukyoku",
+      "abortive": "Abortive draw",
+      "paarenchan": "Paarenchan for {{name}}: the next win is a Yakuman",
+      "undo": "Undo: {{action}}",
+      "undone": "undone",
+      "kind": {
+        "ron": "Ron",
+        "tsumo": "Tsumo",
+        "riichi": "Riichi",
+        "chombo": "Chombo",
+        "ryukyoku": "Ryuukyoku",
+        "abortivo": "Abortive draw",
+        "paarenchan": "Paarenchan",
+        "desfazer": "Undo",
+        "legado": "Older action"
+      }
     },
     "ranking": {
       "period": "Period",
@@ -1541,7 +1582,7 @@
         "personalizado": "Custom"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCA default for club meetings and beginners.",
+        "padrao": "Riichi Manager default for club meetings and beginners.",
         "ema": "European Mahjong Association rules, used in tournaments in Europe.",
         "wrc": "World Riichi Championship rules.",
         "personalizado": "you set the points, oka and uma."
@@ -1564,7 +1605,11 @@
       "confirmTitle": "Confirm result",
       "rankingTitle": "Overall ranking: before → after",
       "firstGame": "1st game",
-      "confirm": "Save"
+      "confirm": "Save",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "It was random",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {
@@ -1871,7 +1916,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1926,16 +1971,16 @@
     "export": "Export",
     "exportHelp": "Creates a backup file to send or keep.",
     "import": "Import",
-    "importHelp": "Opens a Mojoca backup file (.json).",
+    "importHelp": "Opens a Riichi Manager backup file (.json).",
     "result": {
       "compartilhado": "Backup sent.",
       "baixado": "Backup saved to your downloads.",
       "falhou": "Could not create the file. Try again."
     },
     "errors": {
-      "naoEhJson": "This file is not a valid backup. Choose the .json exported by Mojoca.",
-      "naoEhBackup": "This file is not a Mojoca backup.",
-      "versaoNova": "This backup comes from a newer version of Mojoca. Update the app and try again.",
+      "naoEhJson": "This file is not a valid backup. Choose the .json exported by Riichi Manager.",
+      "naoEhBackup": "This file is not a Riichi Manager backup.",
+      "versaoNova": "This backup comes from a newer version of Riichi Manager. Update the app and try again.",
       "corrompido": "The backup is incomplete or corrupted. Export it again on the other device."
     },
     "summary": {
@@ -2009,5 +2054,30 @@
     "sanma": "Sanma",
     "filtroVariante": "Variant",
     "varianteTravada": "The variant can't change after the tournament is created."
+  },
+  "localYaku": {
+    "title": "Local yaku",
+    "help": "House rules outside the standard. Turn on only the ones your table uses: the calculator recognises each one that is on.",
+    "listHelp": "Source: Riichi Wiki, Local yaku page.",
+    "enableAll": "Turn all on",
+    "disableAll": "Turn all off",
+    "conditionNote": "Depends on the game: it shows up to be marked in the calculator's special conditions.",
+    "conditions": "Local yaku",
+    "renhouValue": "Renhou value",
+    "renhouValueHelp": "How much a Renhou win is worth at your table.",
+    "paarenchan": {
+      "variation": "Paarenchan variation",
+      "variation1": "1: eight wins in a row by the same player.",
+      "variation2": "2: eight wins in a row as dealer, with no draw in between.",
+      "variation3": "3: build up 8 honba as dealer and win the last one (draws count).",
+      "shibari": "Ryanhan-shibari",
+      "shibariHelp": "From the 5th honba on, the hand needs at least 2 han not counting dora.",
+      "after": "After Paarenchan",
+      "afterHelp": "The dealer seat moves on by itself, or the dealer stays.",
+      "dealerPasses": "Dealer passes",
+      "dealerStays": "Dealer stays",
+      "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
+    },
+    "why": "Why:"
   }
 }

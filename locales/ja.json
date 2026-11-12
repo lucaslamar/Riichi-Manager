@@ -3,8 +3,8 @@
     "name": "日本語"
   },
   "global": {
-    "appName": "Mojoca",
-    "calculator": "計算機",
+    "appName": "Riichi Manager",
+    "calculator": "計算機",
     "navigation": "メインナビゲーション",
     "currentModule": "現在のモジュール",
     "tagline": "リーチ麻雀のエコシステム",
@@ -22,9 +22,7 @@
     "handCalculatorShort": "計算",
     "windDrawShort": "抽選",
     "centerpiece": "Centerpiece",
-
     "matches": "対局テーブル",
-
     "matchesShort": "対局",
     "ranking": "ランキング",
     "more": "More",
@@ -134,7 +132,6 @@
     "suitSou": "索子",
     "honors": "字牌",
     "akaDora": "赤5（赤ドラ）",
-
     "holdForAka": "長押しで赤5",
     "addTileToHand": "{{tile}}を手牌に加える",
     "addTileToDiscards": "フリテン確認用に{{tile}}を捨て牌に加える",
@@ -619,7 +616,9 @@
       "help": "チョンボ（役なし、フリテンでのロン）をした人の支払い。満貫：8,000（東なら12,000）。役満：32,000（東なら48,000）。",
       "on": "満貫",
       "off": "役満"
-    }
+    },
+    "search": "Search rule",
+    "summary": "Go to rule"
   },
   "settingsSheet": {
     "appTab": "アプリの設定",
@@ -630,11 +629,11 @@
     "matchDetails": "対局の詳細",
     "matchDetailsHelp": "局ごとの記録を残す終了済み対局の数です。古い対局は結果だけが残り、ランキングと履歴には引き続き表示されます。",
     "languageHelp": "アプリの表示言語。",
-    "installTitle": "Mojocaをインストール",
+    "installTitle": "Riichi Managerをインストール",
     "installHelp": "アイコンから開き、ブラウザのバーなしでオフラインでも使えます。",
     "installAction": "インストール",
     "installIosSteps": "Safariで共有をタップし、ホーム画面に追加を選びます。",
-    "installSuggestion": "Mojocaをインストールすると、ブラウザのバーなしで遊べます。",
+    "installSuggestion": "Riichi Managerをインストールすると、ブラウザのバーなしで遊べます。",
     "installDismiss": "閉じる",
     "fullscreenTitle": "全画面",
     "fullscreenHelp": "ブラウザのバーを隠します。戻るジェスチャーかEscキーで終了します。",
@@ -644,8 +643,8 @@
     "keepAwakeHelp": "卓を開いている間は画面が消えません。",
     "fullscreenEnter": "全画面にする",
     "fullscreenExit": "全画面を終了",
-    "fullscreenHeaderHint": "MOJOCAをタップで全画面",
-    "aboutTitle": "Mojocaについて",
+    "fullscreenHeaderHint": "Riichi Managerをタップで全画面",
+    "aboutTitle": "Riichi Managerについて",
     "aboutText": "リーチ麻雀のプレイヤーとクラブが手牌を計算し、対局を管理し、大会のアイデアを試せるように作ったアプリです。リーチ麻雀をすべての人に。",
     "reportIssue": "問題を報告",
     "theme": "テーマ",
@@ -663,7 +662,8 @@
     "compactModeHelp": "余白を減らして、手牌とキーボードを画面に多く表示します。",
     "largeTouchTargets": "タップ領域を拡大",
     "largeTouchTargetsHelp": "ボタンと牌を大きくして、タッチ操作を快適にします。",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "ブルー"
   },
   "windDraw": {
     "title": "風牌抽選",
@@ -790,7 +790,8 @@
       "triplets": "刻子の役",
       "suits": "色の役",
       "others": "その他の役",
-      "yakuman": "役満"
+      "yakuman": "役満",
+      "special": "Local yaku"
     },
     "yakumanHeading": "役満",
     "yakumanBadge": "役満",
@@ -809,6 +810,18 @@
       "clear": "検索をクリア",
       "nothingFound": "「{{busca}}」は見つかりませんでした。",
       "tabsHeading": "ガイドのタブ"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {
@@ -899,7 +912,8 @@
     "deletedName": "{{name}} (deleted)",
     "club": "Club (optional)",
     "clubSuggestions": "Clubs already used",
-    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything."
+    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything.",
+    "notMe": "This is not me"
   },
   "tableConfig": {
     "title": "Table settings",
@@ -1131,7 +1145,7 @@
       },
       "resultTitle": "抽選結果",
       "noDraw": "まだ抽選していません。リストを作って「卓を抽選」をタップしてください。",
-      "shareTitle": "MOJOCA · クラブの卓 · {{date}}",
+      "shareTitle": "Riichi Manager · クラブの卓 · {{date}}",
       "copied": "クリップボードにコピーしました",
       "shareFailed": "共有できませんでした。",
       "share": "共有",
@@ -1142,7 +1156,8 @@
       "newDraw": "再抽選",
       "newDrawLabel": "同じリストで次の回戦を再抽選",
       "registerResult": "結果を記録",
-      "tableRegistered": "記録済み"
+      "tableRegistered": "記録済み",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {
@@ -1376,9 +1391,32 @@
     "history": {
       "search": "プレイヤーまたは大会で検索",
       "noMatch": "この条件に合う対局はありません。",
-      "empty": "No finished games yet.",
+      "empty": "Nothing recorded in this match yet.",
       "tabMatches": "Matches",
-      "tabTournaments": "Tournaments"
+      "tabTournaments": "Tournaments",
+      "title": "Action log",
+      "open": "Log",
+      "round": "{{wind}} {{number}}, {{count}} honba",
+      "ron": "Ron by {{name}} off {{payer}}",
+      "tsumo": "Tsumo by {{name}}",
+      "riichi": "Riichi by {{name}}",
+      "chombo": "Chombo by {{name}}",
+      "ryukyoku": "Ryuukyoku",
+      "abortive": "Abortive draw",
+      "paarenchan": "Paarenchan for {{name}}: the next win is a Yakuman",
+      "undo": "Undo: {{action}}",
+      "undone": "undone",
+      "kind": {
+        "ron": "Ron",
+        "tsumo": "Tsumo",
+        "riichi": "Riichi",
+        "chombo": "Chombo",
+        "ryukyoku": "Ryuukyoku",
+        "abortivo": "Abortive draw",
+        "paarenchan": "Paarenchan",
+        "desfazer": "Undo",
+        "legado": "Older action"
+      }
     },
     "ranking": {
       "period": "Period",
@@ -1522,7 +1560,7 @@
         "personalizado": "カスタム"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCAの標準。例会や初心者向け。",
+        "padrao": "Riichi Managerの標準。例会や初心者向け。",
         "ema": "ヨーロッパ麻雀協会のルール。ヨーロッパの大会で使われます。",
         "wrc": "世界リーチ麻雀選手権のルール。",
         "personalizado": "点数・オカ・ウマを自分で決めます。"
@@ -1545,7 +1583,11 @@
       "confirmTitle": "結果の確認",
       "rankingTitle": "総合ランキング：前 → 後",
       "firstGame": "初対局",
-      "confirm": "登録"
+      "confirm": "登録",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {
@@ -1852,7 +1894,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1907,16 +1949,16 @@
     "export": "エクスポート",
     "exportHelp": "送信・保存用のバックアップファイルを作成します。",
     "import": "インポート",
-    "importHelp": "Mojoca のバックアップファイル (.json) を開きます。",
+    "importHelp": "Riichi Manager のバックアップファイル (.json) を開きます。",
     "result": {
       "compartilhado": "バックアップを送信しました。",
       "baixado": "バックアップをダウンロードしました。",
       "falhou": "ファイルを作成できませんでした。もう一度お試しください。"
     },
     "errors": {
-      "naoEhJson": "有効なバックアップではありません。Mojoca でエクスポートした .json を選んでください。",
-      "naoEhBackup": "Mojoca のバックアップではありません。",
-      "versaoNova": "新しいバージョンの Mojoca で作成されたバックアップです。アプリを更新してからお試しください。",
+      "naoEhJson": "有効なバックアップではありません。Riichi Manager でエクスポートした .json を選んでください。",
+      "naoEhBackup": "Riichi Manager のバックアップではありません。",
+      "versaoNova": "新しいバージョンの Riichi Manager で作成されたバックアップです。アプリを更新してからお試しください。",
       "corrompido": "バックアップが不完全か破損しています。もう一方の端末で再度エクスポートしてください。"
     },
     "summary": {
@@ -1986,5 +2028,30 @@
     "sanma": "Sanma",
     "filtroVariante": "Variant",
     "varianteTravada": "The variant can't change after the tournament is created."
+  },
+  "localYaku": {
+    "title": "Local yaku",
+    "help": "House rules outside the standard. Turn on only the ones your table uses: the calculator recognises each one that is on.",
+    "listHelp": "Source: Riichi Wiki, Local yaku page.",
+    "enableAll": "Turn all on",
+    "disableAll": "Turn all off",
+    "conditionNote": "Depends on the game: it shows up to be marked in the calculator's special conditions.",
+    "conditions": "Local yaku",
+    "renhouValue": "Renhou value",
+    "renhouValueHelp": "How much a Renhou win is worth at your table.",
+    "paarenchan": {
+      "variation": "Paarenchan variation",
+      "variation1": "1: eight wins in a row by the same player.",
+      "variation2": "2: eight wins in a row as dealer, with no draw in between.",
+      "variation3": "3: build up 8 honba as dealer and win the last one (draws count).",
+      "shibari": "Ryanhan-shibari",
+      "shibariHelp": "From the 5th honba on, the hand needs at least 2 han not counting dora.",
+      "after": "After Paarenchan",
+      "afterHelp": "The dealer seat moves on by itself, or the dealer stays.",
+      "dealerPasses": "Dealer passes",
+      "dealerStays": "Dealer stays",
+      "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
+    },
+    "why": "Why:"
   }
 }

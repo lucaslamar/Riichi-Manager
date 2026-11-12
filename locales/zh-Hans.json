@@ -3,8 +3,8 @@
     "name": "简体中文"
   },
   "global": {
-    "appName": "Mojoca",
-    "calculator": "计算器",
+    "appName": "Riichi Manager",
+    "calculator": "计算器",
     "navigation": "主导航",
     "currentModule": "当前模块",
     "tagline": "立直麻将生态",
@@ -22,9 +22,7 @@
     "handCalculatorShort": "计算器",
     "windDrawShort": "抽风位",
     "centerpiece": "Centerpiece",
-
     "matches": "对局桌",
-
     "matchesShort": "对局",
     "ranking": "排名",
     "more": "More",
@@ -134,7 +132,6 @@
     "suitSou": "索",
     "honors": "字牌",
     "akaDora": "赤五（赤宝牌）",
-
     "holdForAka": "长按选择赤五",
     "addTileToHand": "将{{tile}}加入手牌",
     "addTileToDiscards": "将{{tile}}加入舍牌以判断振听",
@@ -619,7 +616,9 @@
       "help": "错和（无役、振听荣和）者支付的点数。满贯：8,000（东家 12,000）。役满：32,000（东家 48,000）。",
       "on": "满贯",
       "off": "役满"
-    }
+    },
+    "search": "Search rule",
+    "summary": "Go to rule"
   },
   "settingsSheet": {
     "appTab": "应用设置",
@@ -630,11 +629,11 @@
     "matchDetails": "对局详情",
     "matchDetailsHelp": "保留逐局记录的已结束对局数量。更早的对局只保留结果，仍会显示在排名和历史中。",
     "languageHelp": "应用文字的语言。",
-    "installTitle": "安装 Mojoca",
+    "installTitle": "安装 Riichi Manager",
     "installHelp": "从图标打开，没有浏览器栏，也可离线使用。",
     "installAction": "安装",
     "installIosSteps": "在 Safari 中点按“分享”，然后选择“添加到主屏幕”。",
-    "installSuggestion": "安装 Mojoca，即可在没有浏览器栏的情况下游戏。",
+    "installSuggestion": "安装 Riichi Manager，即可在没有浏览器栏的情况下游戏。",
     "installDismiss": "关闭",
     "fullscreenTitle": "全屏",
     "fullscreenHelp": "隐藏浏览器栏。退出时使用返回手势或 Esc 键。",
@@ -644,8 +643,8 @@
     "keepAwakeHelp": "牌桌打开期间屏幕不会熄灭。",
     "fullscreenEnter": "进入全屏",
     "fullscreenExit": "退出全屏",
-    "fullscreenHeaderHint": "点按 MOJOCA 进入全屏",
-    "aboutTitle": "关于 Mojoca",
+    "fullscreenHeaderHint": "点按 Riichi Manager 进入全屏",
+    "aboutTitle": "关于 Riichi Manager",
     "aboutText": "一款帮助立直麻将玩家和俱乐部计算手牌、组织对局和尝试比赛点子的应用，让每个人都能玩立直麻将。",
     "reportIssue": "报告问题",
     "theme": "主题",
@@ -663,7 +662,8 @@
     "compactModeHelp": "减少间距，在屏幕上显示更多手牌和键盘。",
     "largeTouchTargets": "放大触控区域",
     "largeTouchTargetsHelp": "放大按钮和牌，触控更舒适。",
-    "versionLine": "Version {{version}} · Made by Lucas Lamar"
+    "versionLine": "Version {{version}} · Made by Lucas Lamar",
+    "themeBlue": "蓝色"
   },
   "windDraw": {
     "title": "抽风位",
@@ -790,7 +790,8 @@
       "triplets": "刻子类役",
       "suits": "花色类役",
       "others": "其他役",
-      "yakuman": "役满"
+      "yakuman": "役满",
+      "special": "Local yaku"
     },
     "yakumanHeading": "役满（最高牌型）",
     "yakumanBadge": "役满",
@@ -809,6 +810,18 @@
       "clear": "清除搜索",
       "nothingFound": "没有找到“{{busca}}”。",
       "tabsHeading": "指南分区"
+    },
+    "specialNotice": "These yaku are not part of the standard rules. To use them in the calculator, turn them on in",
+    "specialNoticeLink": "Calculation rules → Local yaku",
+    "special": {
+      "han1": "1 han",
+      "han2": "2 han",
+      "han2plus": "2 han or more",
+      "han3plus": "3 han or more",
+      "manganTile": "Mangan for a specific tile",
+      "mangan": "Mangan or more",
+      "yakuman": "Yakuman",
+      "double": "Double Yakuman"
     }
   },
   "notation": {
@@ -899,7 +912,8 @@
     "deletedName": "{{name}} (deleted)",
     "club": "Club (optional)",
     "clubSuggestions": "Clubs already used",
-    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything."
+    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything.",
+    "notMe": "This is not me"
   },
   "tableConfig": {
     "title": "Table settings",
@@ -1131,7 +1145,7 @@
       },
       "resultTitle": "抽签结果",
       "noDraw": "还没有抽签。先建好名单，再点“抽签分桌”。",
-      "shareTitle": "MOJOCA · 俱乐部牌桌 · {{date}}",
+      "shareTitle": "Riichi Manager · 俱乐部牌桌 · {{date}}",
       "copied": "已复制到剪贴板",
       "shareFailed": "无法分享。",
       "share": "分享",
@@ -1142,7 +1156,8 @@
       "newDraw": "新一轮抽签",
       "newDrawLabel": "用同一份名单为下一轮重新抽签",
       "registerResult": "记录结果",
-      "tableRegistered": "对局已记录"
+      "tableRegistered": "对局已记录",
+      "meetingDone": "done"
     },
     "cards": {
       "honba": {
@@ -1376,9 +1391,32 @@
     "history": {
       "search": "按玩家或比赛搜索",
       "noMatch": "没有符合这些筛选条件的对局。",
-      "empty": "No finished games yet.",
+      "empty": "Nothing recorded in this match yet.",
       "tabMatches": "Matches",
-      "tabTournaments": "Tournaments"
+      "tabTournaments": "Tournaments",
+      "title": "Action log",
+      "open": "Log",
+      "round": "{{wind}} {{number}}, {{count}} honba",
+      "ron": "Ron by {{name}} off {{payer}}",
+      "tsumo": "Tsumo by {{name}}",
+      "riichi": "Riichi by {{name}}",
+      "chombo": "Chombo by {{name}}",
+      "ryukyoku": "Ryuukyoku",
+      "abortive": "Abortive draw",
+      "paarenchan": "Paarenchan for {{name}}: the next win is a Yakuman",
+      "undo": "Undo: {{action}}",
+      "undone": "undone",
+      "kind": {
+        "ron": "Ron",
+        "tsumo": "Tsumo",
+        "riichi": "Riichi",
+        "chombo": "Chombo",
+        "ryukyoku": "Ryuukyoku",
+        "abortivo": "Abortive draw",
+        "paarenchan": "Paarenchan",
+        "desfazer": "Undo",
+        "legado": "Older action"
+      }
     },
     "ranking": {
       "period": "Period",
@@ -1522,7 +1560,7 @@
         "personalizado": "自定义"
       },
       "rulesetsHelp": {
-        "padrao": "MOJOCA 的默认规则，适合聚会和新手。",
+        "padrao": "Riichi Manager 的默认规则，适合聚会和新手。",
         "ema": "欧洲麻将协会规则，用于欧洲的比赛。",
         "wrc": "世界立直麻将锦标赛规则。",
         "personalizado": "由你设定点数、头名奖励和马点。"
@@ -1545,7 +1583,11 @@
       "confirmTitle": "确认结果",
       "rankingTitle": "总排名：之前 → 之后",
       "firstGame": "首局",
-      "confirm": "登记"
+      "confirm": "登记",
+      "windOrder": "Wind order",
+      "windOrderYes": "East, South, West, North",
+      "windOrderNo": "Unknown",
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
     }
   },
   "spokenTiles": {
@@ -1852,7 +1894,7 @@
       "cameraWaiting": "Looking for a QR…",
       "cameraProgress": "{{read}} of {{total}} read",
       "cameraError": "Could not open the camera. Check the permission or use another way.",
-      "errorInvalid": "This is not a Mojoca tournament.",
+      "errorInvalid": "This is not a Riichi Manager tournament.",
       "errorCorrupted": "The file is corrupted or incomplete.",
       "errorNewer": "This tournament comes from a newer version of the app. Update the app to import it.",
       "name": "Tournament",
@@ -1907,16 +1949,16 @@
     "export": "导出",
     "exportHelp": "生成可发送或保存的备份文件。",
     "import": "导入",
-    "importHelp": "打开 Mojoca 备份文件（.json）。",
+    "importHelp": "打开 Riichi Manager 备份文件（.json）。",
     "result": {
       "compartilhado": "备份已发送。",
       "baixado": "备份已下载。",
       "falhou": "无法生成文件，请重试。"
     },
     "errors": {
-      "naoEhJson": "这不是有效的备份文件。请选择 Mojoca 导出的 .json。",
-      "naoEhBackup": "这不是 Mojoca 的备份文件。",
-      "versaoNova": "此备份来自更新版本的 Mojoca。请先更新应用再试。",
+      "naoEhJson": "这不是有效的备份文件。请选择 Riichi Manager 导出的 .json。",
+      "naoEhBackup": "这不是 Riichi Manager 的备份文件。",
+      "versaoNova": "此备份来自更新版本的 Riichi Manager。请先更新应用再试。",
       "corrompido": "备份不完整或已损坏。请在另一台设备上重新导出。"
     },
     "summary": {
@@ -1986,5 +2028,30 @@
     "sanma": "Sanma",
     "filtroVariante": "Variant",
     "varianteTravada": "The variant can't change after the tournament is created."
+  },
+  "localYaku": {
+    "title": "Local yaku",
+    "help": "House rules outside the standard. Turn on only the ones your table uses: the calculator recognises each one that is on.",
+    "listHelp": "Source: Riichi Wiki, Local yaku page.",
+    "enableAll": "Turn all on",
+    "disableAll": "Turn all off",
+    "conditionNote": "Depends on the game: it shows up to be marked in the calculator's special conditions.",
+    "conditions": "Local yaku",
+    "renhouValue": "Renhou value",
+    "renhouValueHelp": "How much a Renhou win is worth at your table.",
+    "paarenchan": {
+      "variation": "Paarenchan variation",
+      "variation1": "1: eight wins in a row by the same player.",
+      "variation2": "2: eight wins in a row as dealer, with no draw in between.",
+      "variation3": "3: build up 8 honba as dealer and win the last one (draws count).",
+      "shibari": "Ryanhan-shibari",
+      "shibariHelp": "From the 5th honba on, the hand needs at least 2 han not counting dora.",
+      "after": "After Paarenchan",
+      "afterHelp": "The dealer seat moves on by itself, or the dealer stays.",
+      "dealerPasses": "Dealer passes",
+      "dealerStays": "Dealer stays",
+      "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
+    },
+    "why": "Why:"
   }
 }

@@ -8,7 +8,7 @@
       name="description"
       content="Gerenciador de torneios de Riichi Mahjong com calculadora de pontos"
     />
-    <title>Mojoca</title>
+    <title>Riichi Manager</title>
 
     <!--
       Tema antes da primeira pintura: sem piscar o claro quando o Velvet Darkness
@@ -23,10 +23,13 @@
         // Sem escolha salva, abre no escuro.
         var escuro =
           tema !== 'claro' &&
+          tema !== 'azul' &&
           (tema !== 'automatico' ||
             (!!window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches))
         var raiz = document.documentElement
         raiz.setAttribute('data-tema', escuro ? 'escuro' : 'claro')
+        // O claro é sempre o Azul.
+        if (!escuro) raiz.setAttribute('data-cor', 'azul')
         // Pedras: automático = pretas no claro, brancas no escuro.
         var pedras = null
         try {
@@ -54,9 +57,9 @@
     <link rel="apple-touch-icon" href="/Riichi-Manager/icones/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Mojoca" />
-    <script type="module" crossorigin src="/Riichi-Manager/assets/index-BbU6nZZJ.js"></script>
-    <link rel="stylesheet" crossorigin href="/Riichi-Manager/assets/index-CHaCycvR.css">
+    <meta name="apple-mobile-web-app-title" content="Riichi Manager" />
+    <script type="module" crossorigin src="/Riichi-Manager/assets/index-C5aeGnDU.js"></script>
+    <link rel="stylesheet" crossorigin href="/Riichi-Manager/assets/index-DdI8RbS6.css">
   </head>
   <body>
     <!-- Preferências de uso antes da primeira pintura (ver PreferenciasProvider). -->
@@ -70,6 +73,6 @@
       })
     </script>
     <!-- React monta aqui. Sem JavaScript o app não funciona. -->
-    <div id="app"></div>
+    <div id="app"></div>
   </body>
 </html>
