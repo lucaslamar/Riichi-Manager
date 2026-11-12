@@ -8,12 +8,15 @@ import {
   montarBackup,
   nomeDoBackup,
   resumoBackup,
+  sugerirMesmasPessoas,
+  unificarJogadores,
   validarBackup,
   type ArquivoBackup,
   type ErroBackup,
 } from '@/services/backup/backup'
 import { gravarDados, lerDadosLocais } from '@/services/backup/lojaBackup'
 import { aguardarGravacoes } from '@/services/storage/iniciarArmazenamento'
+import { partesDoNome } from '@/dominios/jogadores/logica/jogadores'
 import './backup.css'
 
 type Etapa =
@@ -28,6 +31,9 @@ type Etapa =
 export default function ModalBackup({ aoFechar }: { aoFechar: () => void }) {
   const { t, idioma } = useI18n()
   const [etapa, setEtapa] = useState<Etapa>({ nome: 'inicio' })
+  /** Pessoas do backup que parecem ser alguém daqui, e quais delas juntar (id do backup). */
+  const [pares, setPares] = useState<ReturnType<typeof sugerirMesmasPessoas>>([])
+  const [juntar, setJuntar] = useState<ReadonlySet<string>>(new Set())
   const seletor = useRef<HTMLInputElement>(null)
 
   const exportar = async () => {
@@ -40,11 +46,25 @@ export default function ModalBackup({ aoFechar }: { aoFechar: () => void }) {
   const escolherArquivo = async (arquivo: File | undefined) => {
     if (!arquivo) return
     const lido = validarBackup(await lerArquivoTexto(arquivo))
-    setEtapa(lido.ok ? { nome: 'resumo', backup: lido.backup } : { nome: 'inicio', erro: lido.erro })
+    if (!lido.ok) {
+      setEtapa({ nome: 'inicio', erro: lido.erro })
+      return
+    }
+    // Quem foi cadastrado nos dois aparelhos: sugerido para virar uma pessoa só.
+    const sugestoes = sugerirMesmasPessoas(lerDadosLocais(armazenamentoLocal).jogadores, lido.backup.dados.jogadores)
+    setPares(sugestoes)
+    setJuntar(new Set(sugestoes.map((par) => par.vindo.id)))
+    setEtapa({ nome: 'resumo', backup: lido.backup })
   }
 
   const importar = async (backup: ArquivoBackup, modo: 'mesclar' | 'substituir') => {
-    const dados = modo === 'mesclar' ? mesclarBackup(lerDadosLocais(armazenamentoLocal), backup.dados) : backup.dados
+    const mapa = Object.fromEntries(
+      pares.filter((par) => juntar.has(par.vindo.id)).map((par) => [par.vindo.id, par.local.id]),
+    )
+    const dados =
+      modo === 'mesclar'
+        ? mesclarBackup(lerDadosLocais(armazenamentoLocal), unificarJogadores(backup.dados, mapa))
+        : backup.dados
     gravarDados(armazenamentoLocal, dados)
     // Espera chegar ao banco local e recarrega: assim todas as telas leem o que chegou.
     await aguardarGravacoes()
@@ -110,6 +130,32 @@ export default function ModalBackup({ aoFechar }: { aoFechar: () => void }) {
               <li>{t('backup.summary.games', { count: resumo.partidas })}</li>
               <li>{t('backup.summary.tournaments', { count: resumo.torneios })}</li>
             </ul>
+            {pares.length > 0 && (
+              <fieldset className="bkp-pares">
+                <legend>{t('backup.samePerson.title')}</legend>
+                <p className="bkp-ajuda bkp-ajuda--pequena">{t('backup.samePerson.help')}</p>
+                {pares.map((par) => (
+                  <label key={par.vindo.id} className="bkp-par">
+                    <input
+                      type="checkbox"
+                      checked={juntar.has(par.vindo.id)}
+                      onChange={(evento) => {
+                        const proximo = new Set(juntar)
+                        if (evento.target.checked) proximo.add(par.vindo.id)
+                        else proximo.delete(par.vindo.id)
+                        setJuntar(proximo)
+                      }}
+                    />
+                    <span>
+                      {t('backup.samePerson.pair', {
+                        theirs: partesDoNome(par.vindo).principal,
+                        ours: partesDoNome(par.local).principal,
+                      })}
+                    </span>
+                  </label>
+                ))}
+              </fieldset>
+            )}
             <button type="button" className="btn-primario bkp-botao" onClick={() => importar(etapa.backup, 'mesclar')}>
               {t('backup.merge')}
             </button>

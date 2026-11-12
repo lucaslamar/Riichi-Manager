@@ -89,3 +89,34 @@
 .bkp-erro {
   color: var(--perigo-forte);
 }
+
+/* Mesma pessoa nos dois aparelhos: pares para juntar ao mesclar. */
+.bkp-pares {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 12px;
+}
+
+.bkp-pares legend {
+  padding: 0 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.bkp-par {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  font-size: 0.85rem;
+}
+
+.bkp-par input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primario);
+}

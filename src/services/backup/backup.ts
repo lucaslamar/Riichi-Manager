@@ -130,3 +130,46 @@ export function mesclarBackup(locais: DadosBackup, vindos: DadosBackup): DadosBa
     },
   }
 }
+
+/** Mesmo texto sem acento, maiúscula ou espaço sobrando. */
+const comparavel = (texto: string | undefined) =>
+  (texto ?? '').normalize('NFD').replace(/\p{Diacritic}/gu, '').trim().replace(/\s+/g, ' ').toLowerCase()
+
+/**
+ * Pessoas do backup que parecem ser alguém daqui: id diferente, mas o mesmo nome
+ * ou o mesmo apelido. É o caso de quem foi cadastrado nos dois aparelhos.
+ */
+export function sugerirMesmasPessoas(locais: readonly Jogador[], vindos: readonly Jogador[]) {
+  const idsLocais = new Set(locais.map((jogador) => jogador.id))
+  return vindos.flatMap((vindo) => {
+    if (idsLocais.has(vindo.id)) return []
+    const nomes = [comparavel(vindo.nome), comparavel(vindo.apelido)].filter(Boolean)
+    const local = locais.find((jogador) =>
+      [comparavel(jogador.nome), comparavel(jogador.apelido)].some((nome) => nome && nomes.includes(nome)),
+    )
+    return local ? [{ vindo, local }] : []
+  })
+}
+
+/**
+ * Troca, nos dados que chegaram, cada pessoa do backup pela daqui (`mapa`: id do
+ * backup → id local). Ela some da lista de jogadores do backup, e partidas,
+ * torneios e clube passam a apontar para o jogador local.
+ */
+export function unificarJogadores(dados: DadosBackup, mapa: Readonly<Record<string, string>>): DadosBackup {
+  const pares = Object.entries(mapa)
+  if (pares.length === 0) return dados
+  // Os ids são UUIDs: trocar o valor exato "id" no JSON não acerta mais nada.
+  const trocar = <T>(valor: T): T => {
+    let texto = JSON.stringify(valor)
+    for (const [vindo, local] of pares) texto = texto.split(JSON.stringify(vindo)).join(JSON.stringify(local))
+    return JSON.parse(texto) as T
+  }
+  return {
+    ...dados,
+    jogadores: dados.jogadores.filter((jogador) => !(jogador.id in mapa)),
+    partidas: trocar(dados.partidas),
+    torneios: trocar(dados.torneios),
+    clube: trocar(dados.clube),
+  }
+}

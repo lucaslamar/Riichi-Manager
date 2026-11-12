@@ -19,6 +19,8 @@ import {
   montarBackup,
   nomeDoBackup,
   resumoBackup,
+  sugerirMesmasPessoas,
+  unificarJogadores,
   validarBackup,
   type DadosBackup,
 } from '../src/services/backup/backup'
@@ -139,6 +141,23 @@ teste('substituir grava tudo e os repositórios leem de volta', () => {
   assert.equal(torneios.torneios.length, 7)
   assert.equal(carregarClube(armazenamento).encontros.length, 4)
   assert.equal(carregarClube(armazenamento).lista, cheio.clube.lista)
+})
+
+teste('a mesma pessoa cadastrada nos dois aparelhos vira uma só', () => {
+  const cheio = aparelhoCheio()
+  // Outro aparelho: a Carol com outro id (e sem acento/maiúscula iguais).
+  const carol = cheio.jogadores.find((jogador) => jogador.apelido === 'Carol')!
+  const local = { ...carol, id: 'local-carol', nome: 'ana carolina souza', apelido: undefined }
+  const sugestoes = sugerirMesmasPessoas([local], cheio.jogadores)
+  assert.deepEqual(sugestoes.map((item) => [item.vindo.id, item.local.id]), [[carol.id, 'local-carol']])
+  const unificado = unificarJogadores(cheio, { [carol.id]: 'local-carol' })
+  assert.ok(!unificado.jogadores.some((jogador) => jogador.id === carol.id), 'a Carol do backup não entra de novo')
+  const texto = JSON.stringify([unificado.partidas, unificado.torneios, unificado.clube])
+  assert.ok(!texto.includes(JSON.stringify(carol.id)), 'nenhuma partida, torneio ou mesa aponta para o id antigo')
+  assert.ok(texto.includes('local-carol'))
+  const partidasDela = unificado.partidas.filter((partida) => partida.resultado?.some((linha) => linha.jogadorId === 'local-carol'))
+  assert.equal(partidasDela.length, cheio.partidas.filter((partida) => partida.resultado?.some((linha) => linha.jogadorId === carol.id)).length)
+  assert.deepEqual(unificarJogadores(cheio, {}), cheio, 'sem pares, nada muda')
 })
 
 console.log(`Backup ok: ${testes} testes.`)
