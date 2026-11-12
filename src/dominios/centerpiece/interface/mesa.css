@@ -1062,3 +1062,13 @@ button.mesa-domo {
   align-items: center;
   gap: 12px;
 }
+
+/* Nas ações do Centerpiece simples, o Próxima rodada tem o mesmo tamanho, letra e
+   cantos das outras linhas (Honba, Recomeçar), só com o fundo cheio de ação principal. */
+.mesa-simples-acoes > .mesa-btn-principal {
+  min-height: 48px;
+  border: 1px solid var(--mesa-acao);
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 800;
+}

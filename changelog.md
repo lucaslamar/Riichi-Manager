@@ -113,6 +113,8 @@
 
 ### Corrigido
 
+- **Próxima rodada alinhado às outras ações**: na janela Mesa do Centerpiece simples, o botão tem a mesma altura, letra e cantos do Honba e do Recomeçar, só com o fundo cheio.
+
 - **Em andamento com cards iguais**: as mesas abertas ocupam a largura toda, sem uns cards mais estreitos que outros. O botão Abrir virou o ícone de quadrado com seta, ao lado de compartilhar e excluir.
 
 - **Outros yaku vira Yakus especiais**: no Guia de bolso, a aba (e o título dentro dela) com Riichi, Ippatsu, Haitei e cia. passa a se chamar Yakus especiais.
