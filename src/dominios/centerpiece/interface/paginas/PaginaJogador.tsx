@@ -98,31 +98,28 @@ export default function PaginaJogador({
 
   return (
     <section className="ptd-inicio anl-tela">
-      <TituloTela
-        titulo={nome.principal}
-        aoVoltar={aoVoltar}
-        acoes={
-          jogador && (
-            <button
-              type="button"
-              className="botao-voltar-tela botao-acao-tela"
-              aria-label={t('players.renameNamed', { name: nome.principal })}
-              title={t('players.rename')}
-              aria-haspopup="dialog"
-              onClick={() => setEditando(true)}
-            >
-              <i className="fas fa-pen" aria-hidden="true" />
-            </button>
-          )
-        }
-      />
+      <TituloTela titulo={nome.principal} aoVoltar={aoVoltar} />
 
       <header className="anl-cabecalho">
         <span className="anl-avatar" aria-hidden="true">
           {nome.principal.slice(0, 1).toUpperCase()}
         </span>
         <span className="anl-cabecalho-texto">
-          <strong>{nome.principal}</strong>
+          <span className="anl-nome">
+            <strong>{nome.principal}</strong>
+            {jogador && (
+              <button
+                type="button"
+                className="anl-editar"
+                aria-label={t('players.renameNamed', { name: nome.principal })}
+                title={t('players.rename')}
+                aria-haspopup="dialog"
+                onClick={() => setEditando(true)}
+              >
+                <i className="fas fa-pen" aria-hidden="true" />
+              </button>
+            )}
+          </span>
           {nome.apoio && <small>{nome.apoio}</small>}
           <span className="anl-resumo">
             {t('match.player.summary', {
