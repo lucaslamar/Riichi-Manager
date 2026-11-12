@@ -5,6 +5,7 @@
  * o card não troca de lugar ao passar o dealer, só o kanji, a cor e o destaque.
  * Cadeiras em ordem de turno: 0 embaixo, 1 à direita, 2 em cima, 3 à esquerda.
  */
+import type { EntradaHistorico } from './historicoAcoes'
 import { pagamentosChombo } from './aplicarChombo'
 import { calcularOka, type ConfigMesa } from './configMesa'
 import { desmarcarRiichi, type Lance, type RegistroMao } from './descartes'
@@ -125,6 +126,8 @@ export interface Partida {
   variante?: Variante
   /** Regras de Sanma copiadas na criação: mudar os Ajustes depois não altera a partida. */
   regrasSanma?: RegrasSanma
+  /** Linha do tempo das ações, inclusive as desfeitas. Ausente em partidas antigas. */
+  historico?: EntradaHistorico[]
 }
 
 /** Cadeiras com jogador: as 4 no yonma, as 3 de baixo, da direita e de cima no Sanma. */

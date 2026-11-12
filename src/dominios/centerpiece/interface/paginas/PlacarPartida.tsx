@@ -60,6 +60,8 @@ import {
   ResumoChombo,
 } from '../componentes/ModaisPartida'
 import { useDescartes } from '../hooks/useDescartes'
+import ModalHistoricoAcoes from '../componentes/ModalHistoricoAcoes'
+import { anotarHistorico, historicoDe } from '../../logica/historicoAcoes'
 import { usePartidas } from '../hooks/usePartidas'
 import { useTimerVez } from '../hooks/useTimerVez'
 
@@ -83,8 +85,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const { jogadores } = useJogadores()
 
   const { id, placar, config, vez } = partida
+  // Toda mudança passa pelo histórico de ações: o que entrou ou saiu dos eventos vira linha.
   const atualizar = useCallback(
-    (transformar: (atual: Partida) => Partida) => atualizarLista(id, transformar),
+    (transformar: (atual: Partida) => Partida) =>
+      atualizarLista(id, (atual) => anotarHistorico(atual, transformar(atual), new Date().toISOString())),
     [atualizarLista, id],
   )
 
@@ -104,8 +108,11 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
   const [avisoFuritenDe, setAvisoFuritenDe] = useState<Cadeira | null>(null)
   const [quatroVentosAberto, setQuatroVentosAberto] = useState(false)
   const [abortando, setAbortando] = useState(false)
-  const [aviso, setAviso] = useState<string | null>(null)
-  const temporizadorAviso = useRef<number | undefined>(undefined)
+  const [historicoAberto, setHistoricoAberto] = useState(false)
+  // Avisos empilhados no centro da mesa, cada um somindo no seu tempo.
+  const [avisos, setAvisos] = useState<{ id: number; texto: string }[]>([])
+  const proximoAviso = useRef(0)
+  const temporizadoresAviso = useRef<number[]>([])
 
   const modalAberta =
     menuDe !== null ||
@@ -120,6 +127,7 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
     avisoFuritenDe !== null ||
     quatroVentosAberto ||
     abortando ||
+    historicoAberto ||
     !!partida.fim
 
   const timer = useTimerVez(partida, atualizar, modalAberta, descarteRapido !== null)
@@ -170,11 +178,13 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
         ? t('match.timer.turnAnnounce', { name: nomeDaVez })
         : ''
 
-  useEffect(() => () => window.clearTimeout(temporizadorAviso.current), [])
+  useEffect(() => () => temporizadoresAviso.current.forEach((id) => window.clearTimeout(id)), [])
   const mostrarAviso = (texto: string) => {
-    setAviso(texto)
-    window.clearTimeout(temporizadorAviso.current)
-    temporizadorAviso.current = window.setTimeout(() => setAviso(null), DURACAO_AVISO_MS)
+    const id = (proximoAviso.current += 1)
+    setAvisos((atuais) => [...atuais.slice(-2), { id, texto }])
+    temporizadoresAviso.current.push(
+      window.setTimeout(() => setAvisos((atuais) => atuais.filter((aviso) => aviso.id !== id)), DURACAO_AVISO_MS),
+    )
   }
 
   const aoEscolherNoMenu = (
@@ -279,7 +289,19 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           ) : (
             <TituloTela
               aoVoltar={aoSair}
-              acoes={<BotaoTelaCheia />}
+              acoes={
+                <>
+                  <button
+                    type="button"
+                    className="ptd-btn-historico"
+                    aria-label={t('match.history.title')}
+                    onClick={() => setHistoricoAberto(true)}
+                  >
+                    <i className="fas fa-clock-rotate-left" aria-hidden="true" />
+                  </button>
+                  <BotaoTelaCheia />
+                </>
+              }
               titulo={
                 <>
                 {partida.vinculoTorneio ? (
@@ -314,6 +336,14 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           <AdSlot />
 
           <div className="mesa-centro-tela">
+            {/* Avisos sobre o centro da mesa, longe dos botões de ação. */}
+            <div className="ptd-avisos" role="status" aria-live="polite">
+              {avisos.map((aviso) => (
+                <p key={aviso.id} className="ptd-aviso ptd-aviso--mesa">
+                  {aviso.texto}
+                </p>
+              ))}
+            </div>
             <MesaQuadrada
               cadeiraDealer={placar.cadeiraDealer}
               cadeiras={cadeirasDaPartida(partida)}
@@ -474,11 +504,6 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
             </div>
           </div>
 
-          {aviso && (
-            <p className="ptd-aviso" role="status">
-              {aviso}
-            </p>
-          )}
         </div>
       </div>
 
@@ -659,6 +684,10 @@ export default function PlacarPartida({ partida, aoSair, aoTrocarDeMesa, aoFinal
           acoes={acoesDescartes}
           aoFechar={() => setChecarFuritenDe(null)}
         />
+      )}
+
+      {historicoAberto && (
+        <ModalHistoricoAcoes historico={historicoDe(partida)} nomeDe={nomeDe} aoFechar={() => setHistoricoAberto(false)} />
       )}
 
       {avisoFuritenDe !== null && (

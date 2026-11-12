@@ -155,8 +155,10 @@ export default function SetupPartida({
       {escolhendo !== null && (
         <SeletorJogador
           titulo={KANJI_VENTO[ORDEM_VENTOS[escolhendo]]}
-          idsEscolhidos={preenchidos.filter((id) => id !== assentos[escolhendo])}
+          idsEscolhidos={preenchidos}
           aoFechar={() => setEscolhendo(null)}
+          // Tocar em quem já está na mesa tira essa pessoa do lugar; o lugar fica livre.
+          aoDesmarcar={(jogadorId) => setAssentos(assentos.map((id) => (id === jogadorId ? null : id)))}
           aoEscolher={(jogador) => {
             const proximos = assentos.map((id, indice) => (indice === escolhendo ? jogador.id : id))
             setAssentos(proximos)

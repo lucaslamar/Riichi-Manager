@@ -4,6 +4,10 @@
 
 ### Adicionado
 
+- **Histórico de ações da partida**: o relógio no topo da mesa abre a linha do tempo da partida, da ação mais recente para a mais antiga, com a rodada e o honba, quem fez o quê e quantos pontos andaram (ex.: Ron de Brunão em Naka · +7.700). Riichi, Tsumo, Ron, Ryuukyoku, Chombo, empates abortivos e o Desfazer entram, e o que foi desfeito continua lá, riscado. O histórico fica salvo com a partida e abre de novo no Histórico, dentro da partida finalizada.
+- **Avisos sobre a mesa**: os avisos da partida (como Última ação desfeita.) aparecem no centro da mesa, com a mesma largura e empilhados quando vêm vários, sem cobrir os botões.
+- **Desmarcar jogador na Nova partida**: ao escolher os jogadores, tocar em quem já está na mesa tira essa pessoa do lugar.
+- **Favoritos com seção própria**: ao escolher jogador, a lista vem em Últimos jogados, Favoritos e Todos.
 - **Peça triangular no Sanma**: no Centerpiece simples com 3 jogadores, a mesa vira um triângulo com um vento em cada lado, como as peças de Sanma impressas em 3D. Gire arrastando o dedo em volta dela ou pelos botões embaixo, de um lado em um lado.
 - **Sorteador de Ventos pela mesa**: aberto pelo Centerpiece simples, sorteia só os ventos de quem está na mesa (3 no Sanma, sem o Norte) e não mostra a troca 4 ou 3 jogadores.
 - **Honba das ações alinhado**: os botões − e + ficam iguais (o − só apaga no 0), com o número no meio e o 本 pequeno ao lado.

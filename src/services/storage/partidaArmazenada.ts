@@ -12,14 +12,17 @@
  */
 import { criarPartida, type Partida } from '@/dominios/centerpiece/logica/partida'
 
-export type ResumoPartida = Omit<Partida, 'placar' | 'eventos' | 'vez' | 'registro'>
-export type DetalhesPartida = Pick<Partida, 'id' | 'placar' | 'eventos' | 'vez' | 'registro'>
+export type ResumoPartida = Omit<Partida, 'placar' | 'eventos' | 'vez' | 'registro' | 'historico'>
+export type DetalhesPartida = Pick<Partida, 'id' | 'placar' | 'eventos' | 'vez' | 'registro' | 'historico'>
 
 export const LIMITE_DETALHES_PADRAO = 100
 
 export function dividirPartida(partida: Partida): { resumo: ResumoPartida; detalhes: DetalhesPartida } {
-  const { placar, eventos, vez, registro, ...resumo } = partida
-  return { resumo, detalhes: { id: partida.id, placar, eventos, vez, ...(registro ? { registro } : {}) } }
+  const { placar, eventos, vez, registro, historico, ...resumo } = partida
+  return {
+    resumo,
+    detalhes: { id: partida.id, placar, eventos, vez, ...(registro ? { registro } : {}), ...(historico ? { historico } : {}) },
+  }
 }
 
 /**
@@ -29,8 +32,8 @@ export function dividirPartida(partida: Partida): { resumo: ResumoPartida; detal
  */
 export function montarPartida(resumo: ResumoPartida, detalhes?: DetalhesPartida): Partida {
   if (detalhes) {
-    const { placar, eventos, vez, registro } = detalhes
-    return { ...resumo, placar, eventos, vez, ...(registro ? { registro } : {}) }
+    const { placar, eventos, vez, registro, historico } = detalhes
+    return { ...resumo, placar, eventos, vez, ...(registro ? { registro } : {}), ...(historico ? { historico } : {}) }
   }
   const ids = [0, 1, 2, 3].map((cadeira) => resumo.assentos[cadeira as 0 | 1 | 2 | 3].jogadorId) as [
     string,

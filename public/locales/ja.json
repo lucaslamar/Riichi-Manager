@@ -896,7 +896,8 @@
     "deletedName": "{{name}} (deleted)",
     "club": "Club (optional)",
     "clubSuggestions": "Clubs already used",
-    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything."
+    "deleteImpactOne": "{{name}} appears in 1 game. The history keeps the name and the others' points do not change, but the player leaves the ranking. Archiving keeps everything.",
+    "tapToRemove": "Chosen · tap to remove"
   },
   "tableConfig": {
     "title": "Table settings",
@@ -1375,9 +1376,32 @@
     "history": {
       "search": "プレイヤーまたは大会で検索",
       "noMatch": "この条件に合う対局はありません。",
-      "empty": "No finished games yet.",
+      "empty": "Nothing recorded in this match yet.",
       "tabMatches": "Matches",
-      "tabTournaments": "Tournaments"
+      "tabTournaments": "Tournaments",
+      "title": "Action log",
+      "open": "Log",
+      "round": "{{wind}} {{number}}, {{count}} honba",
+      "ron": "Ron by {{name}} off {{payer}}",
+      "tsumo": "Tsumo by {{name}}",
+      "riichi": "Riichi by {{name}}",
+      "chombo": "Chombo by {{name}}",
+      "ryukyoku": "Ryuukyoku",
+      "abortive": "Abortive draw",
+      "paarenchan": "Paarenchan for {{name}}: the next win is a Yakuman",
+      "undo": "Undo: {{action}}",
+      "undone": "undone",
+      "kind": {
+        "ron": "Ron",
+        "tsumo": "Tsumo",
+        "riichi": "Riichi",
+        "chombo": "Chombo",
+        "ryukyoku": "Ryuukyoku",
+        "abortivo": "Abortive draw",
+        "paarenchan": "Paarenchan",
+        "desfazer": "Undo",
+        "legado": "Older action"
+      }
     },
     "ranking": {
       "period": "Period",

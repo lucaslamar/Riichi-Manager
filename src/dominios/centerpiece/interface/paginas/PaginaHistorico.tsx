@@ -17,6 +17,8 @@ import CardMesa from '../componentes/CardMesa'
 import ListaResultado from '../componentes/ListaResultado'
 import { ListaMaos, ModalConfirmacao } from '../componentes/ModaisPartida'
 import { useAviso } from '../hooks/useAviso'
+import ModalHistoricoAcoes from '../componentes/ModalHistoricoAcoes'
+import { historicoDe } from '../../logica/historicoAcoes'
 import { usePartidas } from '../hooks/usePartidas'
 import { nomeDoAssento } from '../nomeDoAssento'
 import { textoDaPartida } from '../textoPartida'
@@ -37,6 +39,7 @@ export default function PaginaHistorico({
   const { aviso, mostrar } = useAviso()
   const [abertaId, setAbertaId] = useState<string | null>(null)
   const [paraExcluir, setParaExcluir] = useState<string | null>(null)
+  const [acoesAbertas, setAcoesAbertas] = useState(false)
   const [aba, setAba] = useState<'partidas' | 'torneios'>('partidas')
   const [tipo, setTipo] = useState<FiltroTipoMesa>('todas')
   const [busca, setBusca] = useState('')
@@ -104,7 +107,20 @@ export default function PaginaHistorico({
         {aberta.registradaManual ? (
           <p className="ptd-vazio">{t('match.manual.noHands')}</p>
         ) : (
-          <ListaMaos partida={aberta} nomeDe={nomeNa(aberta)} />
+          <>
+            <ListaMaos partida={aberta} nomeDe={nomeNa(aberta)} />
+            {/* O histórico de ações fica salvo com a partida. */}
+            <button type="button" className="btn-contorno ptd-btn-largo" onClick={() => setAcoesAbertas(true)}>
+              <i className="fas fa-clock-rotate-left" aria-hidden="true" /> {t('match.history.title')}
+            </button>
+          </>
+        )}
+        {acoesAbertas && (
+          <ModalHistoricoAcoes
+            historico={historicoDe(aberta)}
+            nomeDe={nomeNa(aberta)}
+            aoFechar={() => setAcoesAbertas(false)}
+          />
         )}
       </section>
     )

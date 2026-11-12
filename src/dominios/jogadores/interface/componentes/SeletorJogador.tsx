@@ -22,6 +22,8 @@ interface PropsSeletorJogador {
   idsEscolhidos?: readonly string[]
   aoEscolher: (jogador: Jogador) => void
   aoFechar: () => void
+  /** Com isto, tocar num jogador já escolhido o tira do lugar (desmarca). */
+  aoDesmarcar?: (jogadorId: string) => void
 }
 
 /**
@@ -36,6 +38,7 @@ export default function SeletorJogador({
   idsEscolhidos = [],
   aoEscolher,
   aoFechar,
+  aoDesmarcar,
 }: PropsSeletorJogador) {
   const { t, idioma } = useI18n()
   const { jogadores, adicionar, favoritar } = useJogadores()
@@ -63,13 +66,12 @@ export default function SeletorJogador({
     const ids = jogadoresRecentes(partidas, (id) => id !== euId && ativos.some((jogador) => jogador.id === id), 4)
     return [...(eu ? [eu] : []), ...ids.map((id) => ativos.find((jogador) => jogador.id === id)!)]
   }, [partidas, ativos, euId])
-  /** Favoritos primeiro, depois a ordem alfabética (que já vem de `visiveis`). */
-  const favoritosPrimeiro = (lista: readonly Jogador[]) => [
-    ...lista.filter((jogador) => jogador.favorito),
-    ...lista.filter((jogador) => !jogador.favorito),
-  ]
-  // Sem busca, quem já está no bloco de cima não se repete embaixo.
-  const resto = favoritosPrimeiro(busca ? visiveis : visiveis.filter((jogador) => !topo.includes(jogador)))
+  // Sem busca: Últimos jogados, depois Favoritos (seção própria) e Todos, sem repetir ninguém.
+  const semTopo = busca ? visiveis : visiveis.filter((jogador) => !topo.includes(jogador))
+  const favoritos = busca ? [] : semTopo.filter((jogador) => jogador.favorito)
+  const resto = busca
+    ? [...visiveis.filter((jogador) => jogador.favorito), ...visiveis.filter((jogador) => !jogador.favorito)]
+    : semTopo.filter((jogador) => !jogador.favorito)
 
   const criar = (dados: DadosJogador) => {
     const resultado = adicionar(dados)
@@ -91,11 +93,13 @@ export default function SeletorJogador({
         <button
           type="button"
           className="opcao-seletor-jogador"
-          disabled={escolhido}
+          disabled={escolhido && !aoDesmarcar}
+          aria-pressed={aoDesmarcar ? escolhido : undefined}
           onClick={() => {
             // A folha pode seguir aberta para o próximo assento: a busca recomeça.
             setBusca('')
-            aoEscolher(jogador)
+            if (escolhido && aoDesmarcar) aoDesmarcar(jogador.id)
+            else aoEscolher(jogador)
           }}
         >
           <span className="dados-jogador">
@@ -106,7 +110,9 @@ export default function SeletorJogador({
             </span>
             {partes.apoio && <span className="apelido-jogador">{partes.apoio}</span>}
           </span>
-          {escolhido && <span className="selo-jogador">{t('players.alreadyChosen')}</span>}
+          {escolhido && (
+            <span className="selo-jogador">{t(aoDesmarcar ? 'players.tapToRemove' : 'players.alreadyChosen')}</span>
+          )}
         </button>
         <button
           type="button"
@@ -171,6 +177,7 @@ export default function SeletorJogador({
             <>
               {/* Sem busca: atalhos antes da lista toda. */}
               {!busca && topo.length > 0 && grupo(t('players.recent'), topo, 'topo')}
+              {favoritos.length > 0 && grupo(t('players.favorites'), favoritos, 'favoritos')}
               {resto.length > 0 && grupo(busca ? undefined : t('players.all'), resto, 'todos')}
             </>
           )}

@@ -15,6 +15,7 @@ import {
   repetirDealer,
   SIMPLES_INICIAL,
 } from '../src/dominios/centerpiece/logica/centerpieceSimples'
+import { anotarHistorico, historicoDe } from '../src/dominios/centerpiece/logica/historicoAcoes'
 import { jogarDados, numerosDaParede, paredeDaSoma } from '../src/dominios/centerpiece/logica/dados'
 import { migrarMesaAntiga, somaPontos } from '../src/dominios/centerpiece/logica/migrarMesaAntiga'
 import {
@@ -464,6 +465,21 @@ teste('a mesa gira ao contrário da tela e começa reta', () => {
   assert.equal(giroDaMesa(90, 90), 0)
   assert.equal(giroDaMesa(90, 0), 90)
   assert.equal(giroDaMesa(90, 270), 180)
+})
+
+
+teste('histórico de ações guarda o desfeito riscado e o próprio desfazer', () => {
+  let p = nova()
+  const ron = registrarRon(p, { pagador: 2, vencedores: [{ cadeira: 1, pontos: 7700 }] }, { id: 'e1', agora: 'a' })
+  p = anotarHistorico(p, ron, 'a')
+  assert.equal(historicoDe(p).length, 1)
+  assert.equal(historicoDe(p)[0].variacao?.[1], 7700)
+  p = anotarHistorico(p, desfazer(p), 'b')
+  const linhas = historicoDe(p)
+  assert.deepEqual(linhas.map((linha) => linha.tipo), ['ron', 'desfazer'])
+  assert.equal(linhas[0].desfeita, true)
+  assert.equal(linhas[1].alvo, 'ron')
+  assert.equal(p.eventos.length, 0)
 })
 
 console.log(`Partida ok: ${testes} testes.`)

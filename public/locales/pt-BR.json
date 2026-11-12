@@ -903,7 +903,8 @@
     "deletedName": "{{name}} (excluído)",
     "club": "Clube (opcional)",
     "clubSuggestions": "Clubes já usados",
-    "deleteImpactOne": "{{name}} aparece em 1 partida. O histórico fica com o nome e os pontos dos outros não mudam, mas o jogador sai do ranking. Arquivar mantém tudo."
+    "deleteImpactOne": "{{name}} aparece em 1 partida. O histórico fica com o nome e os pontos dos outros não mudam, mas o jogador sai do ranking. Arquivar mantém tudo.",
+    "tapToRemove": "Escolhido · tocar desmarca"
   },
   "tableConfig": {
     "title": "Configurações de mesa",
@@ -1395,9 +1396,32 @@
     "history": {
       "search": "Buscar por jogador ou torneio",
       "noMatch": "Nenhuma partida com esses filtros.",
-      "empty": "Nenhuma partida finalizada ainda.",
+      "empty": "Nada registrado nesta partida ainda.",
       "tabMatches": "Partidas",
-      "tabTournaments": "Torneios"
+      "tabTournaments": "Torneios",
+      "title": "Histórico de ações",
+      "open": "Histórico",
+      "round": "{{wind}} {{number}}, {{count}} honba",
+      "ron": "Ron de {{name}} em {{payer}}",
+      "tsumo": "Tsumo de {{name}}",
+      "riichi": "Riichi de {{name}}",
+      "chombo": "Chombo de {{name}}",
+      "ryukyoku": "Ryuukyoku",
+      "abortive": "Empate abortivo",
+      "paarenchan": "Paarenchan de {{name}}: a próxima vitória vale Yakuman",
+      "undo": "Desfazer: {{action}}",
+      "undone": "desfeita",
+      "kind": {
+        "ron": "Ron",
+        "tsumo": "Tsumo",
+        "riichi": "Riichi",
+        "chombo": "Chombo",
+        "ryukyoku": "Ryuukyoku",
+        "abortivo": "Empate abortivo",
+        "paarenchan": "Paarenchan",
+        "desfazer": "Desfazer",
+        "legado": "Ação antiga"
+      }
     },
     "ranking": {
       "period": "Período",
