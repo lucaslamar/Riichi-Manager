@@ -603,6 +603,28 @@ export const YAKUS_LOCAIS: readonly YakuLocal[] = [
   },
   // Mangan ou mais
   {
+    id: 'akaSanshokuDoujun',
+    nome: 'Aka sanshoku doujun',
+    kanji: '赤三色同順',
+    categoria: 'mangan',
+    valor: MANGAN,
+    pt: {
+      valor: 'Mangan',
+      traducao: 'Três cores vermelhas',
+      descricao: 'Sanshoku doujun em que a sequência de cada naipe tem o 5 vermelho (ex.: 406m 406p 406s).',
+    },
+    en: {
+      valor: 'Mangan',
+      traducao: 'Red three colours',
+      descricao: 'Sanshoku doujun where each suit’s sequence holds the red 5 (e.g. 406m 406p 406s).',
+    },
+    detectar: (contexto) =>
+      ['0m', '0p', '0s'].every((codigo) => contexto.vermelhas.has(codigo)) &&
+      algumaDivisao(contexto, (divisao) =>
+        [2, 3, 4].some((inicio) => [0, 1, 2].every((cor) => temSequencia(divisao, cor * 9 + inicio))),
+      ),
+  },
+  {
     id: 'shanronChonchu',
     nome: 'Shanron chonchu',
     kanji: '双竜争珠',

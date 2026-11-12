@@ -34,6 +34,7 @@ export const EXEMPLOS_YAKUS_LOCAIS: Record<string, string> = {
   ryanzouChankan: '13s456p789m345m22z',
   iipinMouyue: '23p456m789s345s11p',
   chuupinRaoyui: '78p456m123s345s99m',
+  akaSanshokuDoujun: '406m406p406s111z22z',
   shanronChonchu: '123m123s789m789s55p',
   chiishinUushii: '147m258p369s1234567z',
   renhou: '234m567p345s678s22z',

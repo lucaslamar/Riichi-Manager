@@ -87,6 +87,11 @@ teste('Akadora sanshoku pelos três cincos vermelhos', () => {
   assert.ok(ids(mao('406m406p406s11122z')).includes('akadoraSanshoku'))
 })
 
+teste('Aka sanshoku doujun pede o Sanshoku com os três 5 vermelhos', () => {
+  assert.ok(ids(mao('406m406p406s11122z')).includes('akaSanshokuDoujun'))
+  assert.ok(!ids(mao('555m406p406s11122z')).includes('akaSanshokuDoujun'))
+})
+
 teste('condição de partida só vale marcada', () => {
   const m = mao('123m456p789s11122z')
   assert.ok(!ids(m).includes('tsubameGaeshi'))
