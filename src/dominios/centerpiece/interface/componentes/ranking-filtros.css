@@ -377,3 +377,45 @@
   flex: 1;
   order: 1;
 }
+
+/* "Este sou eu" no Ranking: a faixa com a sua posição e o seu card em destaque. */
+.rkf-voce {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  margin-bottom: 8px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font: inherit;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rkf-voce > span {
+  flex: 1;
+  font-weight: 700;
+}
+
+.ptd-linha-ranking--eu {
+  border-color: var(--primario);
+  box-shadow: inset 3px 0 0 var(--primario);
+}
+
+.selo-eu {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  vertical-align: middle;
+}

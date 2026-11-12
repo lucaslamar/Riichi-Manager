@@ -6,6 +6,7 @@ import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { posicoesDoRanking, semExcluidos } from '../../logica/ranking'
 import { FILTROS_PADRAO, filtrosAtivos } from '../../logica/filtrosRanking'
 import { useRankingGeral } from '../hooks/useRankingGeral'
+import { useEu } from '@/dominios/jogadores/interface/hooks/useEu'
 import ModalFiltrosRanking from '../componentes/ModalFiltrosRanking'
 import BlocoConfrontos from '../componentes/BlocoConfrontos'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
@@ -45,6 +46,8 @@ export default function PaginaRanking({
   const ativos = filtrosAtivos(filtros)
   const linhas = semExcluidos(todas, (id) => jogadores.some((jogador) => jogador.id === id))
   const posicoes = posicoesDoRanking(linhas)
+  const { euId } = useEu()
+  const indiceEu = linhas.findIndex((linha) => linha.jogadorId === euId)
 
   const nomesDe = (id: string) => nomesNoRanking(jogadores.find((item) => item.id === id))
   /** Texto curto de cada filtro ativo, para o chip removível. */
@@ -197,6 +200,23 @@ export default function PaginaRanking({
         />
       )}
 
+      {/* "Este sou eu": sua posição sempre à vista, mesmo longe do topo. */}
+      {indiceEu >= 0 && (
+        <button
+          type="button"
+          className="rkf-voce"
+          onClick={() => aoAbrirJogador?.(linhas[indiceEu].jogadorId)}
+          disabled={!aoAbrirJogador}
+        >
+          <i className="fas fa-user-check" aria-hidden="true" />
+          <span>{t('players.me')}</span>
+          <strong>{t('match.result.place', { place: posicoes[indiceEu] })}</strong>
+          <strong className={linhas[indiceEu].pontuacaoTotal < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
+            {comSinal(linhas[indiceEu].pontuacaoTotal)}
+          </strong>
+        </button>
+      )}
+
       {linhas.length === 0 ? (
         <p className="ptd-vazio">{t('match.ranking.empty')}</p>
       ) : (
@@ -206,7 +226,9 @@ export default function PaginaRanking({
             return (
             <li
               key={linha.jogadorId}
-              className={`ptd-linha-ranking${aoAbrirJogador ? ' ptd-linha-ranking--toque' : ''}`}
+              className={`ptd-linha-ranking${aoAbrirJogador ? ' ptd-linha-ranking--toque' : ''}${
+                linha.jogadorId === euId ? ' ptd-linha-ranking--eu' : ''
+              }`}
               {...(aoAbrirJogador
                 ? {
                     role: 'button',
@@ -227,7 +249,10 @@ export default function PaginaRanking({
                   {t('match.result.place', { place: posicoes[indice] })}
                 </span>
                 <span className="ptd-ranking-nomes">
-                  <strong className="ptd-opcao-nome">{nomes.principal}</strong>
+                  <strong className="ptd-opcao-nome">
+                    {nomes.principal}
+                    {linha.jogadorId === euId && <span className="selo-eu">{t('players.me')}</span>}
+                  </strong>
                   {nomes.apoio && <small className="ptd-ranking-nome-completo">{nomes.apoio}</small>}
                 </span>
                 <strong className={linha.pontuacaoTotal < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
