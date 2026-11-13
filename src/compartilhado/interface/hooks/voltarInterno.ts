@@ -1,4 +1,4 @@
-import { useEffect, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 
 /**
  * Tela interna (ex.: Ranking do torneio, aberto dentro da tela do torneio) que quer
@@ -20,15 +20,21 @@ function assinar(ouvinte: () => void) {
   }
 }
 
-/** Quem abre a tela interna: deslizar volta por ela. */
+/**
+ * Quem abre a tela interna: deslizar volta por ela. Registra uma vez só, ao abrir,
+ * e sempre chama o voltar mais novo (pela ref). Registrar a cada render fazia a
+ * tela de cima redesenhar, a interna registrar de novo e assim sem parar.
+ */
 export function useVoltarPorDeslize(voltar: () => void) {
+  const ref = useRef(voltar)
+  ref.current = voltar
   useEffect(() => {
-    const chamar = () => voltar()
+    const chamar = () => ref.current()
     definir(chamar)
     return () => {
       if (atual === chamar) definir(null)
     }
-  }, [voltar])
+  }, [])
 }
 
 /** O voltar da tela interna aberta agora, ou null. */
