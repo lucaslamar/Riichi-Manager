@@ -759,7 +759,7 @@
     border-color: transparent;
     background: transparent;
     box-shadow: none;
-    color: var(--cor-texto-suave, #64748b);
+    color: var(--cor-primario, #2196f3);
     font-size: 1.15rem;
   }
 
