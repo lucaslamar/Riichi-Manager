@@ -61,3 +61,22 @@
   --mesa-timer-fundo: #2a3566;
   --mesa-acao: #1f4fc9;
 }
+
+/* Menu lateral (iPad deitado e computador) sobre o azul: o item da tela aberta
+   num creme translúcido com a barrinha creme à esquerda, em vez do fundo claro
+   com letra creme, que sumia. */
+:root[data-tema='claro'][data-cor='azul'] .sidebar-navegacao-desktop .item-menu-global {
+  border-color: transparent;
+}
+
+:root[data-tema='claro'][data-cor='azul'] .sidebar-navegacao-desktop .item-menu-global:hover {
+  border-color: transparent;
+  background: rgb(250 250 232 / 10%);
+}
+
+:root[data-tema='claro'][data-cor='azul'] .sidebar-navegacao-desktop .item-menu-global.ativo {
+  border-color: transparent;
+  border-left-color: #fafae8;
+  background: rgb(250 250 232 / 20%);
+  font-weight: 800;
+}

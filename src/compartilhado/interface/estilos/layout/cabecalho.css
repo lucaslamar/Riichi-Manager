@@ -340,10 +340,23 @@
     box-shadow: none;
   }
 
+  /* Nome do app e título da tela juntos, como um bloco só, com a linha
+     separando os dois do menu. */
   .marca-aplicacao {
     gap: 10px;
-    padding: 0 4px 16px;
+    padding: 0 4px;
+    border-bottom: 0;
+  }
+
+  .barra-marca-aplicacao > .cabecalho-tela {
+    margin-top: -14px;
+    padding: 0 4px 14px;
     border-bottom: 1px solid var(--cor-borda, #edf2f7);
+  }
+
+  /* As Configurações já ficam no fim do menu lateral. */
+  .barra-marca-aplicacao .botao-configuracoes-tela {
+    display: none;
   }
 
   .pedra-mahjong {
