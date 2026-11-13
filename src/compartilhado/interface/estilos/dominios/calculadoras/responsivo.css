@@ -5215,39 +5215,42 @@
     grid-template-columns: repeat(7, var(--largura-coluna-pedra));
   }
 
-  /* Segurar não pode abrir o menu do sistema nem selecionar a pedra. */
-  .teclado-pedras .btn-pedra-com-aka {
-    position: relative;
-    -webkit-touch-callout: none;
-    user-select: none;
-  }
+}
 
-  /* Selo do 5 com os dois valores: o do vermelho num fundo branco com texto vermelho. */
-  .teclado-pedras .badge-espera-teclado--com-aka {
-    gap: 0;
-    white-space: nowrap;
-  }
+/* Aka dora segurando o 5 (`.btn-pedra-com-aka`, ligado pelo TecladoPedras em pé e
+   deitado até 800px de altura): vale para todos os teclados. */
+/* Segurar não pode abrir o menu do sistema nem selecionar a pedra. */
+.teclado-pedras .btn-pedra-com-aka {
+  position: relative;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
 
-  .teclado-pedras .badge-espera-teclado__aka {
-    margin-left: 1px;
-    border-radius: 2px;
-    padding: 0 1px;
-    background: #ffffff;
-    color: #d01f26;
-  }
+/* Selo do 5 com os dois valores: o do vermelho num fundo branco com texto vermelho. */
+.teclado-pedras .badge-espera-teclado--com-aka {
+  gap: 0;
+  white-space: nowrap;
+}
 
-  /* Pontinho vermelho no canto do 5: tem o vermelho, segurando. */
-  .teclado-pedras .ponto-aka-teclado {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #e0242b;
-    box-shadow: 0 0 0 1.5px #ffffff;
-    pointer-events: none;
-  }
+.teclado-pedras .badge-espera-teclado__aka {
+  margin-left: 1px;
+  border-radius: 2px;
+  padding: 0 1px;
+  background: #ffffff;
+  color: #d01f26;
+}
+
+/* Pontinho vermelho no canto do 5: tem o vermelho, segurando. */
+.teclado-pedras .ponto-aka-teclado {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e0242b;
+  box-shadow: 0 0 0 1.5px #ffffff;
+  pointer-events: none;
 }
 
 /*

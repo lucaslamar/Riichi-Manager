@@ -107,6 +107,9 @@
     width: 100%;
     max-width: 100%;
     height: calc(100dvh - 67px - 57px - 25px - env(safe-area-inset-bottom, 0px));
+    --respiro-card-x: 12px;
+    --respiro-card-y: 12px;
+
     padding: 12px;
     overflow: hidden;
   }
@@ -271,6 +274,38 @@
 
   .construtor-mao-montagem.selecionando-batida .rodape-teclado-finalizacao {
     grid-template-rows: 32px auto;
+  }
+
+  /* Abas e teclado encostam nas laterais e no fundo do card (sem parecer uma
+     caixa dentro da caixa). --respiro-card-x/y é o padding do card em cada
+     faixa de tamanho. O construtor deixa passar para os lados (com overflow
+     auto ele abria uma barra de rolagem horizontal de 10px no fundo). */
+  .card-mao-completa .construtor-mao-montagem {
+    overflow: visible;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: calc(100% + 2 * var(--respiro-card-x, 8px));
+    max-width: none;
+    margin-inline: calc(-1 * var(--respiro-card-x, 8px));
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    margin-bottom: calc(-1 * var(--respiro-card-y, 5px));
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .construtor-mao-montagem .teclado-pedras {
+    border-right-width: 0;
+    border-left-width: 0;
+    border-radius: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    border-bottom-width: 0;
+    padding-inline: var(--respiro-card-x, 8px);
+    padding-bottom: max(var(--respiro-card-y, 5px), env(safe-area-inset-bottom, 0px));
   }
 
   /* Sem a tecla do 5 vermelho (sem Aka dora, ou com ele segurando o 5) cada
