@@ -575,4 +575,71 @@
     height: clamp(56px, 11.5dvh, 120px);
     max-height: none;
   }
+
+  /* A tela toda: a mão em cima, com a área crescendo, e as abas + teclado
+     colados no fundo. As abas ficam dentro da largura (sem cortar as bordas). */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    height: calc(100dvh - 68px);
+  }
+
+  .card-mao-completa.etapa-montagem .calculadora-etapa-montagem,
+  .card-mao-completa.etapa-montagem .layout-montagem-calculadora,
+  .card-mao-completa.etapa-montagem .construtor-mao-montagem {
+    flex: 1 1 auto;
+  }
+
+  .construtor-mao-montagem {
+    --pp-alt: calc(12dvh / 1.33);
+    --pp-max: 84px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    flex: 1 1 auto;
+    padding: 4px 0;
+  }
+
+  .construtor-mao-montagem .cabecalho-mao-editor {
+    font-size: 1.15rem;
+  }
+
+  .construtor-mao-montagem .cabecalho-mao-editor button {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1.25rem;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas {
+    padding: 6px 0 0;
+    gap: 4px;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao {
+    margin-bottom: 0;
+    gap: 8px;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao .btn-acao-mao {
+    min-height: 52px;
+    border-width: 1px;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    margin-bottom: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    padding: 0;
+    background: transparent;
+  }
 }
