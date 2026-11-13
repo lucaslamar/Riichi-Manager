@@ -118,6 +118,8 @@
 
 ### Corrigido
 
+- **Sem o Monte a mão pelo teclado no tablet**: a Calculadora de Mão vazia não mostra mais esse texto no iPad, igual ao celular.
+
 - **Desfazer transferência mais claro**: no torneio transferido, o aviso vira uma notificação compacta, com fundo de aviso, e um botão Desfazer pequeno à direita.
 - **Relógio colado na faixa do torneio**: nas Mesas do torneio, o bloco do relógio fica grudado embaixo da faixa de título, separado só por uma linha discreta.
 

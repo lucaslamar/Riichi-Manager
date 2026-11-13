@@ -482,13 +482,6 @@ export function MaoAtual({
             ))}
           </>
         )}
-        {contexto === 'montagem' &&
-          totalPedras === 0 &&
-          !batidaReservada &&
-          pedrasPendentes.length === 0 &&
-          meldsPendentes.length === 0 && (
-            <span className="estado-vazio-mao">{t('calculator.emptyHand')}</span>
-          )}
       </div>
 
       {contexto === 'montagem' && (
