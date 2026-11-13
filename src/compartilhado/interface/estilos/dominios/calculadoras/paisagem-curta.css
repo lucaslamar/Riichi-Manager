@@ -712,4 +712,38 @@
     min-height: 52px;
     border-radius: 10px;
   }
+
+  /* O card vai até o fim da tela: a página vira uma coluna da altura da tela
+     sem folga embaixo, e o card cresce até o chão (antes sobravam ~70px). */
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100dvh;
+    min-height: 0;
+    padding-bottom: 0;
+    padding-inline: 0;
+  }
+
+  body:has(.card-mao-completa.etapa-montagem) .conteudo-principal > :has(> .card-mao-completa) {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    width: auto;
+    max-width: none;
+    align-self: stretch;
+    margin-inline: 0;
+    margin-bottom: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    padding: 0 8px 8px;
+  }
 }
