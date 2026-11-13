@@ -1098,3 +1098,8 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   border-radius: 0 0 10px 10px;
   background: var(--cor-primario-suave, var(--fundo));
 }
+
+/* Exportar torneio: a explicação de Copiar ou Transferir com respiro abaixo do seletor. */
+.trn-exportar-ajuda {
+  margin-top: 10px;
+}

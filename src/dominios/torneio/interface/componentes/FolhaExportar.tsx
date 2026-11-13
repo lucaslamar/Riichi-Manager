@@ -94,7 +94,7 @@ export default function FolhaExportar({
         valor={modo}
         aoEscolher={setModo}
       />
-      <p className="cfg-ajuda">
+      <p className="cfg-ajuda trn-exportar-ajuda">
         {t(modo === 'copia' ? 'tournament.export.copyHelp' : 'tournament.export.transferHelp')}
       </p>
       <ul className="trn-menu">
