@@ -1829,7 +1829,8 @@
       "more": "More tournament options",
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
-      "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted."
+      "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
+      "undoShort": "Undo"
     },
     "ranking": {
       "title": "Tournament ranking",

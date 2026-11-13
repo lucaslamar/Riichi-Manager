@@ -1808,7 +1808,7 @@
       "round": "Rodada {{round}}",
       "rounds": "Rodadas",
       "roundTab": "Rodada {{round}} · {{done}}/{{total}}",
-      "redraw": "Sortear de novo",
+      "redraw": "Sortear esta rodada de novo",
       "redrawTitle": "Sortear esta rodada de novo?",
       "redrawHelp": "As mesas da rodada mudam. Só dá para fazer isso antes de abrir ou registrar a primeira mesa dela.",
       "abort": "Abortar torneio",
@@ -1849,9 +1849,10 @@
       "backupReminder": "Rodada fechada. Que tal exportar um backup?",
       "backupAction": "Exportar backup",
       "more": "Mais opções do torneio",
-      "restart": "Reiniciar sorteio",
-      "restartTitle": "Reiniciar o sorteio?",
-      "restartHelp": "As mesas são sorteadas de novo desde a primeira rodada, com os mesmos jogadores. Os resultados já lançados neste torneio são apagados."
+      "restart": "Recomeçar o torneio do zero",
+      "restartTitle": "Recomeçar o torneio do zero?",
+      "restartHelp": "As mesas são sorteadas de novo desde a primeira rodada, com os mesmos jogadores. Os resultados já lançados neste torneio são apagados.",
+      "undoShort": "Desfazer"
     },
     "ranking": {
       "title": "Ranking do torneio",
