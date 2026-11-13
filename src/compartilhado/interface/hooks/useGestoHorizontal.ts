@@ -9,7 +9,8 @@ const INICIO = 10
 const DURACAO_MS = 180
 const ESPERA_CLIQUE_MS = 350
 /** Onde o toque é de outro componente (arrastar pedra, teclado). */
-const AREAS_DESLIGADAS = '.teclado-pedras, .dsc-teclado'
+/** Áreas onde arrastar de lado é do conteúdo (teclados, tabelas que rolam de lado), não troca de tela. */
+const AREAS_DESLIGADAS = '.teclado-pedras, .dsc-teclado, .trn-tabela-rolagem'
 
 /**
  * Deslize horizontal com Pointer Events: a tela (`alvo`) acompanha o dedo e, se

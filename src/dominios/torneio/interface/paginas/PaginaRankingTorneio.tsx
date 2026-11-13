@@ -127,7 +127,12 @@ export default function PaginaRankingTorneio({
           </span>
         }
       />
-      <p className="clb-encontro-data">{torneio.nome}</p>
+      {/* Mesma faixa de título das Mesas do torneio. */}
+      <p className="ptd-faixa-titulo">
+        <i className="fas fa-trophy" aria-hidden="true" />
+        <span>{torneio.nome}</span>
+        <small>{torneio.status === 'finalizado' ? t('match.club.meetingDone') : t('match.types.inProgressTag')}</small>
+      </p>
 
       {torneio.formato.tipo === 'temporada' && (
         <button
@@ -159,9 +164,15 @@ export default function PaginaRankingTorneio({
           </thead>
           <tbody>
             {linhas.map((linha) => (
-              <tr key={linha.jogadorId} className={linha.posicao <= 3 ? `trn-podio trn-podio--${linha.posicao}` : undefined}>
+              // Quem ainda não jogou não tem posição: sem isso, todos empatavam em 1º.
+              <tr
+                key={linha.jogadorId}
+                className={linha.partidas > 0 && linha.posicao <= 3 ? `trn-podio trn-podio--${linha.posicao}` : undefined}
+              >
                 <td>
-                  {linha.posicao <= 3 ? (
+                  {linha.partidas === 0 ? (
+                    '–'
+                  ) : linha.posicao <= 3 ? (
                     <span className="trn-medalha" aria-label={t('tournament.ranking.place', { place: linha.posicao })}>
                       {linha.posicao}
                     </span>
