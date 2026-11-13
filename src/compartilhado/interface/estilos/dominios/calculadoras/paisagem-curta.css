@@ -1,0 +1,433 @@
+/*
+ * Calculadora de Mão, etapa de montagem, em paisagem.
+ *
+ * Carregado por último (calculadoras/index.css) para mandar nos blocos de
+ * paisagem antigos do responsivo.css. A regra geral é a mesma em todos os
+ * tamanhos: a mão ocupa só a altura das pedras (nunca encolhe nem rola), as
+ * pedras crescem pela largura (14 numa linha) e o teclado fica com o resto da
+ * altura, em largura total do card.
+ */
+
+/* ─── Tamanho das pedras da mão e botões do rodapé, em qualquer paisagem ─── */
+@media (orientation: landscape) {
+  /* A pedra cabe 14 vezes na largura. Cada meld soma o rótulo e a pedra
+     deitada (~2 pedras) e cada kan soma a quarta pedra. Cada bloco de tamanho
+     abaixo define o mínimo (--pp-min), o máximo (--pp-max) e o limite pela
+     altura da tela (--pp-alt). cqw é resolvido na pedra, contra o container
+     .construtor-mao-montagem. */
+  .construtor-mao-montagem {
+    --pp-melds: 0;
+    --pp-kans: 0;
+    --pedra-paisagem: clamp(
+      var(--pp-min, 24px),
+      min(
+        (100cqw - 90px) / (14.2 + var(--pp-melds) * 2 + var(--pp-kans)),
+        var(--pp-alt, 48px)
+      ),
+      var(--pp-max, 52px)
+    );
+  }
+
+  .construtor-mao-montagem:has(.chip-meld-mao) {
+    --pp-melds: 1;
+  }
+
+  .construtor-mao-montagem:has(.chip-meld-mao ~ .chip-meld-mao) {
+    --pp-melds: 2;
+  }
+
+  .construtor-mao-montagem:has(.chip-meld-mao ~ .chip-meld-mao ~ .chip-meld-mao) {
+    --pp-melds: 3;
+  }
+
+  .construtor-mao-montagem:has(.chip-meld-mao ~ .chip-meld-mao ~ .chip-meld-mao ~ .chip-meld-mao) {
+    --pp-melds: 4;
+  }
+
+  .construtor-mao-montagem:has([class*='chip-meld-mao-kan']) {
+    --pp-kans: 1;
+  }
+
+  .construtor-mao-montagem:has([class*='chip-meld-mao-kan'] ~ [class*='chip-meld-mao-kan']) {
+    --pp-kans: 2;
+  }
+
+  .construtor-mao-montagem:has(
+      [class*='chip-meld-mao-kan'] ~ [class*='chip-meld-mao-kan'] ~ [class*='chip-meld-mao-kan']
+    ) {
+    --pp-kans: 3;
+  }
+
+  .construtor-mao-montagem:has(
+      [class*='chip-meld-mao-kan'] ~ [class*='chip-meld-mao-kan'] ~ [class*='chip-meld-mao-kan'] ~
+        [class*='chip-meld-mao-kan']
+    ) {
+    --pp-kans: 4;
+  }
+
+  .construtor-mao-montagem .rodape-teclado-finalizacao {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    justify-content: stretch;
+  }
+
+  .construtor-mao-montagem .botao-mudar-batida-teclado,
+  .construtor-mao-montagem .botao-finalizar-mao-teclado {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .construtor-mao-montagem .mensagem-finalizacao-teclado {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ─── Celulares deitados (altura até 600px) ─────────────────────────────── */
+@media (orientation: landscape) and (max-height: 600px) and (max-width: 1200px) {
+  .construtor-mao-montagem {
+    container-type: inline-size;
+    /* 14 pedras numa linha descontando o respiro das laterais e da lixeira,
+       limitadas pela altura para sobrar espaço ao teclado. */
+    --pp-min: 24px;
+    --pp-alt: calc(13dvh / 1.33);
+    --pp-max: 52px;
+  }
+}
+
+/* ─── Dobráveis abertos deitados (altura 601 a 800, largura até 1023) ────── */
+/* Desfaz a gaveta fixa do bloco de tablet (responsivo.css, min-width 641px e
+   min-height 600px): a mão, as abas e o teclado ficam em fluxo, e o card
+   preenche a altura entre o cabeçalho e a barra de navegação inferior. */
+@media (orientation: landscape) and (min-height: 601px) and (max-height: 800px) and (min-width: 700px) and (max-width: 1023px) {
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    height: calc(100dvh - 67px - 57px - 25px - env(safe-area-inset-bottom, 0px));
+    padding: 12px;
+    overflow: hidden;
+  }
+
+  .card-mao-completa.etapa-montagem .calculadora-etapa-montagem,
+  .card-mao-completa.etapa-montagem .layout-montagem-calculadora {
+    width: 100%;
+    align-items: stretch;
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .card-mao-completa.etapa-montagem .construtor-mao-montagem {
+    container-type: inline-size;
+    --pp-min: 30px;
+    --pp-alt: calc(11dvh / 1.33);
+    --pp-max: 64px;
+
+    width: 100%;
+    align-items: stretch;
+
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-height: 0;
+    gap: 6px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    padding: 8px 12px;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas {
+    flex-wrap: wrap;
+    gap: 2px;
+    margin: 0;
+    padding: 0 52px 0 0;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao {
+    display: grid;
+    padding: 6px;
+  }
+
+  .construtor-mao-montagem .menu-acoes-teclado-mobile {
+    display: none;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    display: grid;
+    width: 100%;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 10px;
+  }
+
+  .construtor-mao-montagem .linha-naipe {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+
+  .construtor-mao-montagem .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  /* Mais alta que o limite de 64px das regras comuns abaixo. */
+  .card-mao-completa .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    aspect-ratio: auto;
+    max-height: 84px;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .tile-img,
+  .construtor-mao-montagem .teclado-pedras .tile-fallback {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  .construtor-mao-montagem .rodape-teclado-finalizacao {
+    grid-template-rows: 40px;
+  }
+
+  .construtor-mao-montagem .botao-mudar-batida-teclado,
+  .construtor-mao-montagem .botao-finalizar-mao-teclado {
+    height: 40px;
+  }
+}
+
+/* ─── Regras comuns: a mão só ocupa as pedras, o teclado fica com o resto ── */
+@media (orientation: landscape) and (max-height: 600px) and (max-width: 1200px),
+  (orientation: landscape) and (min-height: 601px) and (max-height: 800px) and (min-width: 700px) and (max-width: 1023px) {
+  .construtor-mao-montagem .mao-editor-fixo {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas {
+    flex-wrap: wrap;
+    row-gap: 4px;
+    overflow: visible;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas .chip-pedra {
+    width: var(--pedra-paisagem);
+    height: calc(var(--pedra-paisagem) * 1.33);
+  }
+
+  .construtor-mao-montagem .chip-meld-mao .meld-tile,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img {
+    width: var(--pedra-paisagem);
+    height: calc(var(--pedra-paisagem) * 1.33);
+  }
+
+  .construtor-mao-montagem .chip-meld-mao .meld-tile.de-lado,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: calc(var(--pedra-paisagem) * 1.33);
+    height: var(--pedra-paisagem);
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras,
+  .construtor-mao-montagem.selecionando-batida .teclado-pedras {
+    flex: 1 1 0;
+    min-height: 0;
+    grid-template-rows: repeat(4, minmax(0, 1fr)) auto;
+    align-content: stretch;
+  }
+
+  .construtor-mao-montagem .teclado-pedras:has(.seletor-chii-pendente) {
+    grid-template-rows: auto repeat(4, minmax(0, 1fr)) auto;
+  }
+
+  .construtor-mao-montagem .grupo-teclado-naipe,
+  .construtor-mao-montagem .linha-naipe {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    height: 100%;
+    min-height: 0;
+    max-height: 64px;
+    align-self: center;
+  }
+
+  .construtor-mao-montagem.selecionando-batida .rodape-teclado-finalizacao {
+    grid-template-rows: 32px auto;
+  }
+
+  /* Seletor de Chi só com a altura do conteúdo: sobra mais para as teclas. */
+  .construtor-mao-montagem .seletor-chii-pendente {
+    min-height: 0;
+    height: auto;
+  }
+
+  /* Pedrinhas das opções de Chi: pequenas para o seletor ocupar uma linha só. */
+  .construtor-mao-montagem .seletor-chii-pendente .chip-pedra {
+    width: 22px;
+    height: 29px;
+  }
+}
+
+/* ─── Tablets grandes e desktop (largura 1024+, altura 701+) ─────────────── */
+/* Barra lateral à esquerda: o card preenche a altura da tela, o teclado usa
+   toda a largura ao lado dos rótulos MAN/PIN/SOU/HONRAS e fica com a altura
+   que sobra da mão. */
+@media (orientation: landscape) and (min-width: 1024px) and (min-height: 701px) {
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: calc(100dvh - 68px);
+    margin-bottom: 0;
+    min-height: 0;
+    max-height: 1000px;
+    overflow: hidden;
+  }
+
+  .card-mao-completa.etapa-montagem .calculadora-etapa-montagem,
+  .card-mao-completa.etapa-montagem .layout-montagem-calculadora {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .card-mao-completa.etapa-montagem .construtor-mao-montagem {
+    container-type: inline-size;
+    --pp-min: 34px;
+    --pp-alt: calc(9dvh / 1.33);
+    --pp-max: 72px;
+
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 0;
+    gap: 10px;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    flex: 0 0 auto;
+    min-height: 0;
+    overflow: visible;
+    padding: 12px 16px;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas {
+    flex-wrap: wrap;
+    gap: 2px;
+    overflow: visible;
+    margin: 0;
+    padding-block: 0;
+  }
+
+  .construtor-mao-montagem .pedras-selecionadas .chip-pedra,
+  .construtor-mao-montagem .chip-meld-mao .meld-tile,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img {
+    width: var(--pedra-paisagem);
+    height: calc(var(--pedra-paisagem) * 1.33);
+  }
+
+  .construtor-mao-montagem .chip-meld-mao .meld-tile.de-lado,
+  .construtor-mao-montagem .chip-meld-mao .meld-pedras .tile-img-lado {
+    width: calc(var(--pedra-paisagem) * 1.33);
+    height: var(--pedra-paisagem);
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-height: 0;
+    justify-content: space-between;
+  }
+
+  .construtor-mao-montagem .grupo-teclado-naipe {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: 128px;
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .construtor-mao-montagem .seletor-chii-pendente,
+  .construtor-mao-montagem .rodape-teclado-finalizacao {
+    flex: 0 0 auto;
+  }
+
+  /* Rótulos com a mesma largura para as quatro linhas ficarem alinhadas. */
+  .construtor-mao-montagem .grupo-teclado-naipe .rotulo-naipe-teclado {
+    flex: 0 0 62px;
+    align-self: center;
+  }
+
+  .construtor-mao-montagem .linha-naipe {
+    display: grid;
+    flex: 1 1 0;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+    gap: 4px;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .linha-naipe {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+
+  .construtor-mao-montagem .grupo-teclado-honras .linha-naipe,
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .card-mao-completa .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-height: 120px;
+    aspect-ratio: auto;
+  }
+
+  .construtor-mao-montagem .rodape-teclado-finalizacao {
+    grid-template-rows: 44px;
+  }
+
+  .construtor-mao-montagem.selecionando-batida .rodape-teclado-finalizacao {
+    grid-template-rows: 44px auto;
+  }
+
+  .construtor-mao-montagem .botao-mudar-batida-teclado,
+  .construtor-mao-montagem .botao-finalizar-mao-teclado {
+    height: 44px;
+  }
+}

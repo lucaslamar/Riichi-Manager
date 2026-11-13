@@ -3765,11 +3765,9 @@
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
+  /* Altura das teclas da montagem: paisagem-curta.css (crescem com a tela). */
   .construtor-mao-montagem .teclado-pedras .btn-pedra {
     width: 100%;
-    height: clamp(34px, 8dvh, 40px);
-    min-height: 34px;
-    max-height: 40px;
     justify-self: stretch;
   }
 
@@ -3830,26 +3828,25 @@
   }
 
   .teclado-pedras .btn-pedra {
-    width: 100% !important;
-    height: 34px !important;
-    flex-shrink: 0 !important;
-    padding: 1px !important;
+    width: 100%;
+    flex-shrink: 0;
+    padding: 1px;
   }
 
-  /* ─── Chips da mão montada ──────────────────────────────────────────────── */
-  .chip-pedra {
+  /* ─── Chips da mão (a montagem escala as pedras em paisagem-curta.css) ──── */
+  .chip-pedra:not(.construtor-mao-montagem .chip-pedra) {
     width: 26px !important;
     height: 34px !important;
   }
 
-  .chip-meld-mao .meld-tile,
-  .chip-meld-mao .meld-pedras .tile-img {
+  .chip-meld-mao:not(.construtor-mao-montagem .chip-meld-mao) .meld-tile,
+  .chip-meld-mao:not(.construtor-mao-montagem .chip-meld-mao) .meld-pedras .tile-img {
     width: 26px !important;
     height: 34px !important;
   }
 
-  .chip-meld-mao .meld-tile.de-lado,
-  .chip-meld-mao .meld-pedras .tile-img-lado {
+  .chip-meld-mao:not(.construtor-mao-montagem .chip-meld-mao) .meld-tile.de-lado,
+  .chip-meld-mao:not(.construtor-mao-montagem .chip-meld-mao) .meld-pedras .tile-img-lado {
     width: 34px !important;
     height: 26px !important;
   }

@@ -354,10 +354,18 @@
     display: block;
   }
 
+  /* Em telas baixas (iPad Mini, Nest Hub) a lista passa da altura: rola dentro
+     da barra lateral em vez de cortar os últimos itens. */
   .sidebar-navegacao-desktop {
     display: grid;
+    flex: 1 1 auto;
     align-content: start;
     gap: 18px;
+    min-height: 0;
+    max-height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
   }
 
   .sidebar-navegacao-desktop .drawer-secao {
