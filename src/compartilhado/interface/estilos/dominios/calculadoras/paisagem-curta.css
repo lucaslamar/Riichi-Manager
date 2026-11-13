@@ -273,6 +273,16 @@
     grid-template-rows: 32px auto;
   }
 
+  /* Sem a tecla do 5 vermelho (sem Aka dora, ou com ele segurando o 5) cada
+     naipe tem 9 teclas, que dividem toda a largura. */
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .linha-naipe {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+
+  .construtor-mao-montagem .teclado-pedras:not(:has(.btn-pedra-aka)) .grupo-teclado-honras .linha-naipe {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
   /* Seletor de Chi só com a altura do conteúdo: sobra mais para as teclas. */
   .construtor-mao-montagem .seletor-chii-pendente {
     min-height: 0;

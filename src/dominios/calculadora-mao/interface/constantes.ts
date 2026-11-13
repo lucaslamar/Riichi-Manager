@@ -68,10 +68,13 @@ export function cabeMaisUmaPedra(
 }
 
 /**
- * Celular em pé: com Aka dora, o 5 vermelho sai segurando o 5 de cada naipe.
- * É a mesma media query das regras do teclado em responsivo.css.
+ * Celular em pé, celular deitado e dobrável aberto deitado (altura até 800px):
+ * com Aka dora, o 5 vermelho sai segurando o 5 de cada naipe, e cada naipe fica
+ * com 9 teclas mais largas.
+ * Retrato segue responsivo.css, paisagem segue paisagem-curta.css.
  */
-export const CONSULTA_AKA_SEGURANDO_CINCO = '(max-width: 640px) and (orientation: portrait)'
+export const CONSULTA_AKA_SEGURANDO_CINCO =
+  '(max-width: 640px) and (orientation: portrait), (orientation: landscape) and (max-height: 800px)'
 
 export function ehCincoComum(pedra: CodigoPedra) {
   return pedra[0] === '5' && pedra[1] !== 'z'
