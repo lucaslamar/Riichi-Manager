@@ -753,4 +753,19 @@
     border-radius: 14px;
     overflow: hidden;
   }
+
+  /* A engrenagem nas abas é só o ícone, sem caixa, borda nem sombra. */
+  .construtor-mao-montagem .teclado-pedras .botao-configuracao-teclado {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    color: var(--cor-texto-suave, #64748b);
+    font-size: 1.15rem;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .botao-configuracao-teclado:hover,
+  .construtor-mao-montagem .teclado-pedras .botao-configuracao-teclado:focus-visible {
+    background: var(--cor-superficie, #ffffff);
+    color: var(--cor-primario, #2196f3);
+  }
 }
