@@ -527,4 +527,52 @@
     border-radius: 0;
     padding: 10px var(--respiro-card-x) var(--respiro-card-y);
   }
+
+  /* Sem cara de caixa: o card some no fundo da página (como no celular em pé),
+     a altura acompanha o conteúdo e o teclado não tem os rótulos Man, Pin, Sou
+     e Honras (as pedras já dizem o naipe). As teclas têm altura fixa pela tela,
+     então não sobra vão entre as linhas. */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    height: auto;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .card-mao-completa.etapa-montagem .calculadora-etapa-montagem,
+  .card-mao-completa.etapa-montagem .layout-montagem-calculadora,
+  .card-mao-completa.etapa-montagem .construtor-mao-montagem,
+  .construtor-mao-montagem .painel-teclado-calculadora,
+  .construtor-mao-montagem .teclado-pedras {
+    flex: 0 0 auto;
+  }
+
+  .construtor-mao-montagem .mao-editor-fixo {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .construtor-mao-montagem .grupo-teclado-naipe {
+    flex: 0 0 auto;
+    max-height: none;
+    gap: 0;
+  }
+
+  .construtor-mao-montagem .grupo-teclado-naipe .rotulo-naipe-teclado {
+    display: none;
+  }
+
+  .card-mao-completa .construtor-mao-montagem .teclado-pedras .btn-pedra {
+    height: clamp(56px, 11.5dvh, 120px);
+    max-height: none;
+  }
 }
