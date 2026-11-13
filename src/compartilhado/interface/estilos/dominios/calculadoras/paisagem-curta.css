@@ -642,4 +642,74 @@
     padding: 0;
     background: transparent;
   }
+
+  /* Abas e teclado viram um painel só no pé da tela, como no iPad em pé:
+     fundo próprio com uma linha em cima, encostado nas laterais e no chão do
+     card. A engrenagem do teclado sobe para o fim da linha das abas. */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    padding-bottom: 0;
+  }
+
+  .card-mao-completa.etapa-montagem .construtor-mao-montagem {
+    gap: 0;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: calc(100% + 2 * var(--respiro-card-x));
+    margin-inline: calc(-1 * var(--respiro-card-x));
+    background: var(--cor-superficie-alt, #f8fafc);
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) 52px;
+    padding: 12px var(--respiro-card-x) 10px;
+    border-top: 1px solid var(--cor-borda, #e2e8f0);
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    position: relative;
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    position: static;
+    padding: 0 12px 12px;
+  }
+
+  .construtor-mao-montagem .teclado-pedras > .botao-configuracao-teclado:not(.botao-configuracao-teclado-rodape) {
+    position: absolute;
+    top: -62px;
+    right: var(--respiro-card-x);
+    bottom: auto;
+    width: 52px;
+    min-height: 52px;
+    margin: 0;
+    border-radius: 10px;
+  }
+
+  .construtor-mao-montagem .teclado-pedras > .botao-configuracao-teclado:not(.botao-configuracao-teclado-rodape) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* A mesma engrenagem no cabeçalho da mão fica sobrando: some aqui. */
+  .construtor-mao-montagem .btn-configuracao-mao-cabecalho:not(.yaku-btn) {
+    display: none;
+  }
+
+  /* Com a mão cheia a engrenagem vem no rodapé (ao lado de Finalizar mão):
+     ela também sobe para o fim da linha das abas. */
+  .construtor-mao-montagem .rodape-teclado-finalizacao {
+    position: static;
+  }
+
+  .construtor-mao-montagem .teclado-pedras .botao-configuracao-teclado-rodape {
+    position: absolute;
+    top: -62px;
+    right: var(--respiro-card-x);
+    width: 52px;
+    min-height: 52px;
+    border-radius: 10px;
+  }
 }
