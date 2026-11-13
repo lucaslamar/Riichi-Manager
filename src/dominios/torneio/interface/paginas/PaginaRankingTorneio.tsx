@@ -1,6 +1,5 @@
 import { useVoltarPorDeslize } from '@/compartilhado/interface/hooks/voltarInterno'
 import { useMemo, useState } from 'react'
-import { exportarPdf } from '@/compartilhado/adaptadores/pdf'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
@@ -50,8 +49,6 @@ export default function PaginaRankingTorneio({
   const fase = (valor: number) =>
     valor === 0 ? t('tournament.ranking.phaseQualifier') : t('tournament.ranking.phaseCut', { number: valor })
 
-  const titulo = `${torneio.nome} · ${t('tournament.ranking.title')}`
-
   /** A classificação, para a área Exportar. */
   const relatorio = () =>
     relatorioDoRanking(linhas, {
@@ -74,29 +71,6 @@ export default function PaginaRankingTorneio({
       pontos,
     })
 
-  const pdf = async () => {
-    const ok = await exportarPdf({
-      titulo,
-      cabecalho: [
-        '#',
-        t('tournament.ranking.player'),
-        t('tournament.ranking.points'),
-        t('tournament.ranking.averagePlace'),
-        t('tournament.ranking.games'),
-        ...(eliminatorio ? [t('tournament.ranking.phase')] : []),
-      ],
-      linhas: linhas.map((linha) => [
-        String(linha.posicao),
-        nomeDe(linha.jogadorId),
-        pontos(linha.pontos),
-        media(linha.mediaColocacao),
-        String(linha.partidas),
-        ...(eliminatorio ? [fase(linha.fase ?? 0)] : []),
-      ]),
-      nomeArquivo: `${torneio.nome.replace(/[^\p{L}\p{N}]+/gu, '-').toLowerCase()}-ranking.pdf`,
-    })
-    if (!ok) mostrar(t('tournament.ranking.pdfError'))
-  }
 
   return (
     <section className="ptd-inicio trn-pagina trn-ranking">
@@ -203,17 +177,6 @@ export default function PaginaRankingTorneio({
           nomeArquivo={nomeDeArquivo(torneio.nome, t('tournament.ranking.title'))}
           aoAvisar={mostrar}
           aoFechar={() => setCompartilhando(false)}
-          extras={[
-            {
-              icone: 'fa-file-pdf',
-              rotulo: 'PDF',
-              ajuda: t('tournament.share.pdfHelp'),
-              aoTocar: () => {
-                setCompartilhando(false)
-                void pdf()
-              },
-            },
-          ]}
         />
       )}
 
