@@ -722,7 +722,7 @@
     height: 100dvh;
     min-height: 0;
     padding-bottom: 0;
-    padding-inline: 0;
+    padding: 0 12px 12px 12px;
   }
 
   body:has(.card-mao-completa.etapa-montagem) .conteudo-principal > :has(> .card-mao-completa) {
@@ -745,5 +745,12 @@
 
   .construtor-mao-montagem .teclado-pedras {
     padding: 0 8px 8px;
+  }
+
+  /* Um respiro pequeno da borda da tela, com cantos arredondados no painel,
+     como no celular deitado. */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    border-radius: 14px;
+    overflow: hidden;
   }
 }
