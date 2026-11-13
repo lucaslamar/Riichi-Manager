@@ -21,7 +21,7 @@
     --pedra-paisagem: clamp(
       var(--pp-min, 24px),
       min(
-        (100cqw - 90px) / (14.2 + var(--pp-melds) * 2 + var(--pp-kans)),
+        (100cqw - var(--pp-folga, 90px)) / (14.2 + var(--pp-melds) * 2 + var(--pp-kans)),
         var(--pp-alt, 48px)
       ),
       var(--pp-max, 52px)
@@ -362,6 +362,8 @@
     --pp-min: 34px;
     --pp-alt: calc(9dvh / 1.33);
     --pp-max: 72px;
+    /* Padding do bloco da mão (16px de cada lado) + lixeira. */
+    --pp-folga: 124px;
 
     display: flex;
     flex: 1 1 0;
@@ -474,5 +476,55 @@
   .construtor-mao-montagem .botao-mudar-batida-teclado,
   .construtor-mao-montagem .botao-finalizar-mao-teclado {
     height: 44px;
+  }
+
+  /* Abas coladas no teclado formando uma faixa só, e os dois encostando nas
+     laterais e no fundo do card, como no celular deitado. */
+  .card-mao-completa.fluxo-calculadora.etapa-montagem {
+    --respiro-card-x: 24px;
+    --respiro-card-y: 20px;
+
+    padding-bottom: var(--respiro-card-y);
+  }
+
+  .card-mao-completa .construtor-mao-montagem {
+    overflow: visible;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao,
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    width: calc(100% + 2 * var(--respiro-card-x));
+    max-width: none;
+    margin-inline: calc(-1 * var(--respiro-card-x));
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    /* Encosta no teclado, descontando o gap do construtor. */
+    margin-bottom: -10px;
+    padding: 0;
+    overflow: hidden;
+    border-width: 1px 0 0;
+    border-radius: 0;
+  }
+
+  .construtor-mao-montagem .acoes-construtor-mao .btn-acao-mao {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    border-radius: 0;
+    border-width: 1px;
+    border-top-width: 0;
+  }
+
+  .construtor-mao-montagem .painel-teclado-calculadora {
+    margin-bottom: calc(-1 * var(--respiro-card-y));
+  }
+
+  .construtor-mao-montagem .teclado-pedras {
+    border-width: 0;
+    border-radius: 0;
+    padding: 10px var(--respiro-card-x) var(--respiro-card-y);
   }
 }
