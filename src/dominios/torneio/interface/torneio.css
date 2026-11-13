@@ -1100,6 +1100,6 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 }
 
 /* Exportar torneio: a explicação de Copiar ou Transferir com respiro abaixo do seletor. */
-.trn-exportar-ajuda {
+.cfg-ajuda.trn-exportar-ajuda {
   margin-top: 10px;
 }
