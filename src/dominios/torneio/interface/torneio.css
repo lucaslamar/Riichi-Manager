@@ -1047,3 +1047,22 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   font-weight: 400;
   opacity: 0.8;
 }
+
+/* Torneio transferido: aviso com o botão de desfazer embaixo, na largura toda. */
+.trn-aviso-transferido {
+  display: grid;
+  gap: 10px;
+}
+
+.trn-aviso-transferido p {
+  margin: 0;
+}
+
+.trn-aviso-transferido .btn-contorno {
+  display: inline-flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}

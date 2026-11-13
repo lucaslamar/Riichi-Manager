@@ -118,6 +118,8 @@
 
 ### Corrigido
 
+- **Desfazer transferência mais claro**: no torneio transferido, o aviso fica num bloco com o botão Desfazer transferência embaixo, na largura toda, no lugar do link solto ao lado do texto.
+
 - **Compartilhar o Ranking do torneio sem PDF**: a folha fica com Texto (para o WhatsApp) e Imagem.
 
 - **Ranking do torneio**: o nome do torneio fica na mesma faixa de título das Mesas, quem ainda não jogou aparece sem posição (–) em vez de todos empatados em 1º, também na imagem e no texto de compartilhar (sem medalha nem pódio), e deslizar a tela para qualquer lado volta para o torneio. Arrastar em cima da tabela também volta, a não ser que ela seja larga e ainda tenha para onde rolar daquele lado.

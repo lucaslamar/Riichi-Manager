@@ -190,18 +190,21 @@ export default function PaginaMesasTorneio({
         <small>{torneio.status === 'finalizado' ? t('match.club.meetingDone') : t('match.types.inProgressTag')}</small>
       </p>
 
+      {/* Transferido: o aviso em cima e, embaixo, um botão de verdade para desfazer. */}
       {torneio.transferidoEm && (
-        <p className="cfg-aviso" role="status">
-          <i className="fas fa-lock" aria-hidden="true" />{' '}
-          {t('tournament.tables.transferred', {
-            date: new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
-              new Date(torneio.transferidoEm),
-            ),
-          })}{' '}
-          <button type="button" className="trn-link" onClick={() => marcarTransferido(torneio.id, null)}>
-            {t('tournament.tables.undoTransfer')}
+        <div className="cfg-aviso trn-aviso-transferido" role="status">
+          <p>
+            <i className="fas fa-lock" aria-hidden="true" />{' '}
+            {t('tournament.tables.transferred', {
+              date: new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
+                new Date(torneio.transferidoEm),
+              ),
+            })}
+          </p>
+          <button type="button" className="btn-contorno" onClick={() => marcarTransferido(torneio.id, null)}>
+            <i className="fas fa-rotate-left" aria-hidden="true" /> {t('tournament.tables.undoTransfer')}
           </button>
-        </p>
+        </div>
       )}
 
       {torneio.rodadas.length > 1 && (
