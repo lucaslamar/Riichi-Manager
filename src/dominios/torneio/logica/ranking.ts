@@ -37,7 +37,7 @@ export function textoDoRanking(
 ): string {
   const corpo = linhas.map(
     (linha) =>
-      `${linha.posicao}. ${rotulos.nome(linha.jogadorId)} ${rotulos.pontos(linha.pontos)}${
+      `${linha.partidas > 0 ? `${linha.posicao}.` : '–'} ${rotulos.nome(linha.jogadorId)} ${rotulos.pontos(linha.pontos)}${
         linha.fase !== undefined && rotulos.fase ? ` · ${rotulos.fase(linha.fase)}` : ''
       }`,
   )

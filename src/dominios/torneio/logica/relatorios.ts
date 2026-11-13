@@ -95,8 +95,9 @@ export function relatorioDoRanking(
   const jaJogaram = linhas.some((linha) => linha.partidas > 0)
   const podio: BlocoRelatorio = {
     so: 'texto',
+    // Quem ainda não jogou não sobe ao pódio nem ganha medalha (todos com 0 empatavam em 1º).
     linhas: linhas
-      .filter((linha) => linha.posicao <= 3)
+      .filter((linha) => linha.partidas > 0 && linha.posicao <= 3)
       .map((linha) => ({
         esquerda: `${MEDALHAS[linha.posicao - 1]} ${rotulos.nome(linha.jogadorId)}`,
         direita: rotulos.pontos(linha.pontos),
@@ -108,16 +109,16 @@ export function relatorioDoRanking(
     tabela: true,
     colunas: rotulos.colunas,
     linhas: linhas.map((linha) => ({
-      esquerda: `${String(linha.posicao).padStart(2)} ${rotulos.nome(linha.jogadorId)}`,
+      esquerda: `${(linha.partidas > 0 ? String(linha.posicao) : '–').padStart(2)} ${rotulos.nome(linha.jogadorId)}`,
       direita: rotulos.valores(linha),
     })),
   }
   const lista: BlocoRelatorio = {
     so: 'imagem',
     linhas: linhas.map((linha) => ({
-      esquerda: `${MEDALHAS[linha.posicao - 1] ?? `${linha.posicao}.`} ${rotulos.nome(linha.jogadorId)}`,
+      esquerda: `${linha.partidas === 0 ? '–' : (MEDALHAS[linha.posicao - 1] ?? `${linha.posicao}.`)} ${rotulos.nome(linha.jogadorId)}`,
       direita: rotulos.valores(linha),
-      destaque: linha.posicao <= 3,
+      destaque: linha.partidas > 0 && linha.posicao <= 3,
       ...tomDe(linha.pontos),
     })),
   }

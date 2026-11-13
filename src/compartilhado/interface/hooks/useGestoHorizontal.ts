@@ -12,10 +12,17 @@ const ESPERA_CLIQUE_MS = 350
 /** Áreas onde arrastar de lado é do conteúdo (teclados, tabelas que rolam de lado), não troca de tela. */
 const AREAS_DESLIGADAS = '.teclado-pedras, .dsc-teclado'
 
-/** Tabela que rola de lado: arrastar nela só rola, se ela de fato passar da largura. */
-function tabelaQueRola(alvo: EventTarget | null) {
+/**
+ * Tabela que rola de lado: o dedo rola a tabela enquanto ela tem para onde ir.
+ * Encostada na ponta daquele lado (ou sem rolagem), o deslize troca de tela.
+ */
+function tabelaAindaRola(alvo: EventTarget | null, deltaX: number) {
   const tabela = alvo instanceof Element ? alvo.closest('.trn-tabela-rolagem') : null
-  return !!tabela && tabela.scrollWidth > tabela.clientWidth + 1
+  if (!tabela) return false
+  // Dedo para a esquerda rola para a direita, e vice-versa.
+  return deltaX < 0
+    ? tabela.scrollLeft + tabela.clientWidth < tabela.scrollWidth - 1
+    : tabela.scrollLeft > 1
 }
 
 /**
@@ -42,7 +49,7 @@ export function useGestoHorizontal({
     if (!ativo) return
 
     const semAnimacao = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    let toque: { id: number; x: number; y: number; arrastando: boolean } | null = null
+    let toque: { id: number; x: number; y: number; arrastando: boolean; alvo: EventTarget | null } | null = null
 
     const mover = (distancia: number, transicao: boolean) => {
       const elemento = alvo.current
@@ -61,8 +68,7 @@ export function useGestoHorizontal({
       if (document.querySelector(SELETOR_CAMADAS)) return
       if (toqueIgnorado(evento.target, { ignorarCampos: evento.pointerType === 'mouse' })) return
       if (evento.target instanceof Element && evento.target.closest(AREAS_DESLIGADAS)) return
-      if (tabelaQueRola(evento.target)) return
-      toque = { id: evento.pointerId, x: evento.clientX, y: evento.clientY, arrastando: false }
+      toque = { id: evento.pointerId, x: evento.clientX, y: evento.clientY, arrastando: false, alvo: evento.target }
     }
 
     const aoMover = (evento: PointerEvent) => {
@@ -75,6 +81,10 @@ export function useGestoHorizontal({
           return
         }
         toque.arrastando = Math.abs(deltaX) > INICIO
+        if (toque.arrastando && tabelaAindaRola(toque.alvo, deltaX)) {
+          toque = null
+          return
+        }
       }
       if (!toque.arrastando) return
       const { aoDireita: direita, aoEsquerda: esquerda } = atual.current
