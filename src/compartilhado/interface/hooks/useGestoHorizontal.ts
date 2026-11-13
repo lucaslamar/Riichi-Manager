@@ -10,7 +10,13 @@ const DURACAO_MS = 180
 const ESPERA_CLIQUE_MS = 350
 /** Onde o toque é de outro componente (arrastar pedra, teclado). */
 /** Áreas onde arrastar de lado é do conteúdo (teclados, tabelas que rolam de lado), não troca de tela. */
-const AREAS_DESLIGADAS = '.teclado-pedras, .dsc-teclado, .trn-tabela-rolagem'
+const AREAS_DESLIGADAS = '.teclado-pedras, .dsc-teclado'
+
+/** Tabela que rola de lado: arrastar nela só rola, se ela de fato passar da largura. */
+function tabelaQueRola(alvo: EventTarget | null) {
+  const tabela = alvo instanceof Element ? alvo.closest('.trn-tabela-rolagem') : null
+  return !!tabela && tabela.scrollWidth > tabela.clientWidth + 1
+}
 
 /**
  * Deslize horizontal com Pointer Events: a tela (`alvo`) acompanha o dedo e, se
@@ -55,6 +61,7 @@ export function useGestoHorizontal({
       if (document.querySelector(SELETOR_CAMADAS)) return
       if (toqueIgnorado(evento.target, { ignorarCampos: evento.pointerType === 'mouse' })) return
       if (evento.target instanceof Element && evento.target.closest(AREAS_DESLIGADAS)) return
+      if (tabelaQueRola(evento.target)) return
       toque = { id: evento.pointerId, x: evento.clientX, y: evento.clientY, arrastando: false }
     }
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type RefObject } from 'react'
 import type { SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
 import { entrarTelaCheia } from '@/compartilhado/adaptadores/telaCheia'
 import { useGestoHorizontal } from '@/compartilhado/interface/hooks/useGestoHorizontal'
+import { useVoltarInterno } from '@/compartilhado/interface/hooks/voltarInterno'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -163,10 +164,12 @@ function TelasCenterpiece({
   // Na raiz, o dedo segue o carrossel da barra inferior. Dentro das outras telas,
   // deslizar para a direita é o mesmo que a seta de voltar: um passo atrás.
   const naRaiz = pilha.length === 1
+  // Tela interna aberta (ex.: Ranking do torneio): deslizar para qualquer lado volta por ela.
+  const voltarInterno = useVoltarInterno()
   useGestoHorizontal({
     alvo: raiz,
-    aoDireita: naRaiz ? aoTelaAnterior : voltar,
-    aoEsquerda: naRaiz ? aoProximaTela : undefined,
+    aoDireita: voltarInterno ?? (naRaiz ? aoTelaAnterior : voltar),
+    aoEsquerda: voltarInterno ?? (naRaiz ? aoProximaTela : undefined),
   })
 
   if (tela.nome === 'setup') {

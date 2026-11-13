@@ -118,7 +118,7 @@
 
 ### Corrigido
 
-- **Ranking do torneio**: o nome do torneio fica na mesma faixa de título das Mesas, quem ainda não jogou aparece sem posição (–) em vez de todos empatados em 1º, e arrastar a tabela de lado não sai mais da tela.
+- **Ranking do torneio**: o nome do torneio fica na mesma faixa de título das Mesas, quem ainda não jogou aparece sem posição (–) em vez de todos empatados em 1º, e deslizar a tela para qualquer lado volta para o torneio. Se a tabela for larga e rolar de lado, arrastar nela só rola.
 - **Opções do torneio mais claras**: Sortear de novo virou Sortear esta rodada de novo (só a rodada atual, antes de abrir ou registrar mesa) e Reiniciar sorteio virou Recomeçar o torneio do zero (sorteia tudo desde a 1ª rodada e apaga os resultados).
 
 - **Próxima rodada alinhado às outras ações**: na janela Mesa do Centerpiece simples, o botão tem a mesma altura, letra e cantos do Honba e do Recomeçar, só com o fundo cheio.

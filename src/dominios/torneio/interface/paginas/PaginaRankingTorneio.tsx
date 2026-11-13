@@ -1,3 +1,4 @@
+import { useVoltarPorDeslize } from '@/compartilhado/interface/hooks/voltarInterno'
 import { useMemo, useState } from 'react'
 import { exportarPdf } from '@/compartilhado/adaptadores/pdf'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
@@ -29,6 +30,8 @@ export default function PaginaRankingTorneio({
   aoAbrirTemporada: (temporadaId: string) => void
 }) {
   const { t, idioma, numero } = useI18n()
+  // Deslizar para qualquer lado volta para a tela do torneio.
+  useVoltarPorDeslize(aoVoltar)
   const { partidas } = usePartidas()
   const { jogadores } = useJogadores()
   const { finalizar } = useTorneios()
