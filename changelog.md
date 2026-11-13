@@ -118,7 +118,8 @@
 
 ### Corrigido
 
-- **Desfazer transferência mais claro**: no torneio transferido, o aviso fica num bloco com o botão Desfazer transferência embaixo, na largura toda, no lugar do link solto ao lado do texto.
+- **Desfazer transferência mais claro**: no torneio transferido, o aviso vira uma notificação compacta, com fundo de aviso, e um botão Desfazer pequeno à direita.
+- **Relógio colado na faixa do torneio**: nas Mesas do torneio, o bloco do relógio fica grudado embaixo da faixa de título, separado só por uma linha discreta.
 
 - **Compartilhar o Ranking do torneio sem PDF**: a folha fica com Texto (para o WhatsApp) e Imagem.
 

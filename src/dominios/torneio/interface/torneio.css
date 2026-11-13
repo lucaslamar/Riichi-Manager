@@ -1048,21 +1048,53 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   opacity: 0.8;
 }
 
-/* Torneio transferido: aviso com o botão de desfazer embaixo, na largura toda. */
-.trn-aviso-transferido {
-  display: grid;
+/* Torneio transferido: notificação compacta, com o Desfazer pequeno à direita. */
+.cfg-aviso.trn-aviso-transferido {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  margin: 0 0 12px;
+  border: 1px solid var(--cor-aviso-borda, var(--linha-divisoria));
+  border-radius: 12px;
+  padding: 8px 8px 8px 12px;
+  color: var(--texto-principal);
+  background: var(--cor-aviso-suave, var(--superficie));
+  font-size: 0.82rem;
+  line-height: 1.35;
 }
 
 .trn-aviso-transferido p {
+  flex: 1;
+  min-width: 0;
   margin: 0;
 }
 
+.trn-aviso-transferido p i {
+  color: var(--cor-aviso, currentColor);
+}
+
 .trn-aviso-transferido .btn-contorno {
+  flex: none;
   display: inline-flex;
-  width: 100%;
-  min-height: 44px;
+  min-height: 36px;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 0 12px;
+  font-size: 0.78rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Relógio colado na faixa de título: um bloco só, com uma linha discreta no meio. */
+.ptd-faixa-titulo:has(+ .trn-timer-geral) {
+  margin-bottom: 0;
+  border-radius: 10px 10px 0 0;
+}
+
+.ptd-faixa-titulo + .trn-timer-geral {
+  border: 1px solid color-mix(in srgb, var(--primario) 25%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--cor-sobre-primario, #fff) 35%, var(--primario));
+  border-radius: 0 0 10px 10px;
+  background: var(--cor-primario-suave, var(--fundo));
 }

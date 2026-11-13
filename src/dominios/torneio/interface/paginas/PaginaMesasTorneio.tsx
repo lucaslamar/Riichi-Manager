@@ -201,8 +201,13 @@ export default function PaginaMesasTorneio({
               ),
             })}
           </p>
-          <button type="button" className="btn-contorno" onClick={() => marcarTransferido(torneio.id, null)}>
-            <i className="fas fa-rotate-left" aria-hidden="true" /> {t('tournament.tables.undoTransfer')}
+          <button
+            type="button"
+            className="btn-contorno"
+            aria-label={t('tournament.tables.undoTransfer')}
+            onClick={() => marcarTransferido(torneio.id, null)}
+          >
+            <i className="fas fa-rotate-left" aria-hidden="true" /> {t('tournament.tables.undoShort')}
           </button>
         </div>
       )}
