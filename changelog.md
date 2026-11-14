@@ -1,6 +1,6 @@
 # Changelog - Riichi Manager
 
-## Não lançado (feature/torneio)
+## 6.0.0 - 2026-11-14
 
 ### Adicionado
 
