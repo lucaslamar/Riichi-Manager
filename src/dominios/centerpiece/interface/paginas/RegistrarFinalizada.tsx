@@ -206,6 +206,11 @@ export default function RegistrarFinalizada({
 
       {!torneio && <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>}
       <>
+        {/* Dica no topo, numa faixa como o selo de torneio em andamento. */}
+        <p className="fin-dica">
+          <i className="fas fa-hand-pointer" aria-hidden="true" />
+          <span>{t('tournament.points.swapHint')}</span>
+        </p>
         <div className="ptd-assentos trn-mesa-assentos">
           {LUGARES.map((lugar) => {
             const id = assentos[lugar]
@@ -271,7 +276,6 @@ export default function RegistrarFinalizada({
             </span>
           )}
         </p>
-        <p className="cfg-ajuda">{t('tournament.points.swapHint')}</p>
       </>
 
       {/* Regras num card, como o resumo da Nova partida. No torneio, só leitura. */}

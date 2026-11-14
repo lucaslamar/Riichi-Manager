@@ -187,3 +187,18 @@
 .fin-regras-travadas > i {
   color: var(--texto-apoio);
 }
+
+/* Dica acima da grade, na pegada do selo de torneio em andamento. */
+.fin-dica {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
