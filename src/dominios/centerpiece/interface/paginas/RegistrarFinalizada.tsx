@@ -63,7 +63,7 @@ export default function RegistrarFinalizada({
     pontosIniciais?: readonly number[]
   }
 }) {
-  const { t, numero, idioma } = useI18n()
+  const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
   const { partidas, adicionar } = usePartidas()
   const [confirmando, setConfirmando] = useState(false)
@@ -86,7 +86,8 @@ export default function RegistrarFinalizada({
   const baseConjunto = configBaseDoConjunto(conjunto)
   // Tipo de partida: o último usado aqui, senão o do conjunto. No torneio vem da mesa.
   const [tipoPartida, setTipoPartida] = useState<ConfigMesa['tipoPartida']>(
-    salvas.tipoPartida ?? baseConjunto.tipoPartida,
+    // Padrão: hanchan.
+    salvas.tipoPartida ?? 'hanchan',
   )
   const base = torneio?.config ?? alterarConfig(baseConjunto, { tipoPartida })
   const guardar = (
@@ -113,7 +114,8 @@ export default function RegistrarFinalizada({
         : [],
   )
   // Clube e torneio já vêm do sorteio com os ventos. Avulsa: a pessoa diz se a lista segue a ordem.
-  const [ordemEscolhida, setOrdemEscolhida] = useState(false)
+  // Padrão: a lista segue Leste, Sul, Oeste, Norte.
+  const [ordemEscolhida, setOrdemEscolhida] = useState(true)
   const ordemDosVentos = !!torneio || !!mesaClube || ordemEscolhida
   const [assentos, setAssentos] = useState<(string | null)[]>(() =>
     torneio ? [...torneio.jogadorIds] : mesaClube ? [...mesaClube.ids] : [null, null, null, null],
@@ -199,50 +201,6 @@ export default function RegistrarFinalizada({
         }
         aoVoltar={aoVoltar}
       />
-
-      {/* Títulos das seções no estilo do Han e Fu (caixa alta, pequenos). */}
-      {!torneio && <p className="fin-titulo fin-titulo-tipo">{t('tableConfig.gameType')}</p>}
-      {!torneio && (
-        <div className="ptd-segmentos fin-tipo" role="group" aria-label={t('tableConfig.gameType')}>
-          {(['leste', 'hanchan'] as const).map((tipo) => (
-            <button
-              key={tipo}
-              type="button"
-              className={`ptd-segmento${tipoPartida === tipo ? ' ptd-segmento--ativo' : ''}`}
-              aria-pressed={tipoPartida === tipo}
-              onClick={() => {
-                if (tipoPartida !== tipo) guardar(conjunto, personalizado, tipo)
-              }}
-            >
-              {t(tipo === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {!torneio && !mesaClube && (
-        <>
-          <p className="fin-titulo">{t('match.manual.windOrder')}</p>
-          <div
-            className="ptd-segmentos fin-tipo"
-            role="group"
-            aria-label={t('match.manual.windOrder')}
-          >
-            {([true, false] as const).map((opcao) => (
-              <button
-                key={String(opcao)}
-                type="button"
-                className={`ptd-segmento${ordemEscolhida === opcao ? ' ptd-segmento--ativo' : ''}`}
-                aria-pressed={ordemEscolhida === opcao}
-                onClick={() => setOrdemEscolhida(opcao)}
-              >
-                {t(opcao ? 'match.manual.windOrderYes' : 'match.manual.windOrderNo')}
-              </button>
-            ))}
-          </div>
-          <p className="fin-ajuda-ventos">{t('match.manual.windOrderHelp')}</p>
-        </>
-      )}
 
       {!torneio && <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>}
       <>
@@ -338,6 +296,11 @@ export default function RegistrarFinalizada({
               {`${t(tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t(`match.manual.rulesets.${conjunto}`)}`}
             </strong>
             <span className="ptd-apoio">{resumoRegras(regras)}</span>
+            {!mesaClube && (
+              <span className="ptd-apoio">
+                {`${t('match.manual.windOrder')}: ${t(ordemEscolhida ? 'match.manual.windOrderYes' : 'match.manual.windOrderNo')}`}
+              </span>
+            )}
           </span>
           <i className="fas fa-wrench" aria-hidden="true" />
           <span className="sr-only">{t('match.manual.editRules')}</span>
@@ -350,9 +313,11 @@ export default function RegistrarFinalizada({
           pontosAtuais={pontosNumeros}
           editando={regrasAbertas}
           setEditando={setRegrasAbertas}
-          aoSalvar={(novo, editadas) =>
-            guardar(novo, novo === 'personalizado' ? editadas : personalizado)
-          }
+          opcoes={{ tipoPartida, ordemVentos: mesaClube ? undefined : ordemEscolhida }}
+          aoSalvar={(novo, editadas, opcoes) => {
+            guardar(novo, novo === 'personalizado' ? editadas : personalizado, opcoes.tipoPartida)
+            if (opcoes.ordemVentos !== undefined) setOrdemEscolhida(opcoes.ordemVentos)
+          }}
         />
       )}
 

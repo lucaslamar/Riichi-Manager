@@ -17,6 +17,13 @@ import BotoesOpcao from './BotoesOpcao'
 import CampoUma, { CampoInteiro } from './CampoUma'
 import EscolhaOka from './EscolhaOka'
 
+/** Tipo de partida e ordem dos ventos, que ficam junto das regras. */
+export interface OpcoesPartidaRegistro {
+  tipoPartida: 'leste' | 'hanchan'
+  /** undefined: a mesa já vem com os ventos (clube) e a pergunta some. */
+  ordemVentos?: boolean
+}
+
 /** Deslize (px) bem mais horizontal que vertical para trocar de conjunto. */
 const DISTANCIA_DESLIZE = 60
 
@@ -40,6 +47,7 @@ export function useResumo() {
 export default function RegrasPontuacaoRegistro({
   conjunto,
   regras,
+  opcoes,
   aoSalvar,
   pontosAtuais,
   editando,
@@ -47,7 +55,12 @@ export default function RegrasPontuacaoRegistro({
 }: {
   conjunto: ConjuntoRegistro
   regras: RegrasPontuacao
-  aoSalvar: (conjunto: ConjuntoRegistro, regras: RegrasPontuacao) => void
+  opcoes: OpcoesPartidaRegistro
+  aoSalvar: (
+    conjunto: ConjuntoRegistro,
+    regras: RegrasPontuacao,
+    opcoes: OpcoesPartidaRegistro,
+  ) => void
   pontosAtuais?: readonly number[]
   /** Folha aberta: quem abre é o ícone do topo da tela. */
   editando: boolean
@@ -58,10 +71,11 @@ export default function RegrasPontuacaoRegistro({
     <FolhaRegras
       conjuntoInicial={conjunto}
       inicial={regras}
+      opcoesIniciais={opcoes}
       pontosAtuais={pontosAtuais}
       aoFechar={() => setEditando(false)}
-      aoSalvar={(novoConjunto, novas) => {
-        aoSalvar(novoConjunto, novas)
+      aoSalvar={(novoConjunto, novas, novasOpcoes) => {
+        aoSalvar(novoConjunto, novas, novasOpcoes)
         setEditando(false)
       }}
     />
@@ -77,8 +91,11 @@ function AjudaConjuntos() {
       <ul className="reg-ajuda-lista">
         {CONJUNTOS_REGISTRO.map((id) => (
           <li key={id}>
-            <strong>{t(`match.manual.rulesets.${id}`)}:</strong> {t(`match.manual.rulesetsHelp.${id}`)}
-            {id !== 'personalizado' && <span className="ptd-apoio"> ({resumo(regrasDoPreset(id))})</span>}
+            <strong>{t(`match.manual.rulesets.${id}`)}:</strong>{' '}
+            {t(`match.manual.rulesetsHelp.${id}`)}
+            {id !== 'personalizado' && (
+              <span className="ptd-apoio"> ({resumo(regrasDoPreset(id))})</span>
+            )}
           </li>
         ))}
       </ul>
@@ -96,23 +113,31 @@ function AjudaConjuntos() {
 function FolhaRegras({
   conjuntoInicial,
   inicial,
+  opcoesIniciais,
   pontosAtuais,
   aoFechar,
   aoSalvar,
 }: {
   conjuntoInicial: ConjuntoRegistro
   inicial: RegrasPontuacao
+  opcoesIniciais: OpcoesPartidaRegistro
   pontosAtuais?: readonly number[]
   aoFechar: () => void
-  aoSalvar: (conjunto: ConjuntoRegistro, regras: RegrasPontuacao) => void
+  aoSalvar: (
+    conjunto: ConjuntoRegistro,
+    regras: RegrasPontuacao,
+    opcoes: OpcoesPartidaRegistro,
+  ) => void
 }) {
   const { t } = useI18n()
   const [rascunho, setRascunho] = useState(inicial)
+  const [opcoes, setOpcoes] = useState(opcoesIniciais)
   // O preset tocado por último: EMA e WRC têm os mesmos números, e um não vira o outro.
   const [tocado, setTocado] = useState<ConjuntoRegistro>(conjuntoInicial)
   const conjunto = conjuntoDasRegras(rascunho, tocado)
   const { pontosPartida, pontosRetorno, uma } = rascunho
-  const mudar = (mudanca: Partial<RegrasPontuacao>) => setRascunho((atual) => ({ ...atual, ...mudanca }))
+  const mudar = (mudanca: Partial<RegrasPontuacao>) =>
+    setRascunho((atual) => ({ ...atual, ...mudanca }))
   const escolher = (id: ConjuntoRegistro) => {
     setTocado(id)
     if (id !== 'personalizado') setRascunho(regrasDoPreset(id))
@@ -136,9 +161,14 @@ function FolhaRegras({
       const deltaX = toque.clientX - comeco.x
       const deltaY = toque.clientY - comeco.y
       if (Math.abs(deltaX) < DISTANCIA_DESLIZE || Math.abs(deltaX) < Math.abs(deltaY) * 1.5) return
-      const atual = Math.max(0, PRESETS_REGISTRO.indexOf(tocado as (typeof PRESETS_REGISTRO)[number]))
+      const atual = Math.max(
+        0,
+        PRESETS_REGISTRO.indexOf(tocado as (typeof PRESETS_REGISTRO)[number]),
+      )
       const passo = deltaX < 0 ? 1 : -1
-      escolher(PRESETS_REGISTRO[(atual + passo + PRESETS_REGISTRO.length) % PRESETS_REGISTRO.length])
+      escolher(
+        PRESETS_REGISTRO[(atual + passo + PRESETS_REGISTRO.length) % PRESETS_REGISTRO.length],
+      )
     },
   }
 
@@ -158,7 +188,7 @@ function FolhaRegras({
             type="button"
             className="btn-primario"
             disabled={!umaValida(uma)}
-            onClick={() => aoSalvar(conjunto, rascunho)}
+            onClick={() => aoSalvar(conjunto, rascunho, opcoes)}
           >
             {t('players.save')}
           </button>
@@ -166,64 +196,97 @@ function FolhaRegras({
       }
     >
       <div className="reg-folha-corpo" {...propsToque}>
-      <div className="cfg-campo reg-regras">
-        <span className="cfg-campo-rotulo">
-          {t('tableConfig.preset')}
-          <AjudaCampo rotulo={t('tableConfig.preset')}>
-            <AjudaConjuntos />
-          </AjudaCampo>
-        </span>
-        {/* Personalizado não é botão: nenhum fica marcado quando os valores são outros. */}
-        <BotoesOpcao<ConjuntoRegistro>
-          rotulo={t('tableConfig.preset')}
-          valor={conjunto}
-          aoEscolher={escolher}
-          className="reg-conjuntos"
-          opcoes={PRESETS_REGISTRO.map((id) => ({ valor: id, rotulo: t(`match.manual.rulesets.${id}`) }))}
-        />
-        {conjunto === 'personalizado' && (
-          <p className="cfg-ajuda reg-personalizado">{t('match.manual.customNote')}</p>
-        )}
-      </div>
-
-      <div className="cfg-duas-colunas">
-        <label className="cfg-campo">
-          <span>{t('tableConfig.startPoints')}</span>
-          <CampoInteiro
-            rotulo={t('tableConfig.startPoints')}
-            valor={pontosPartida}
-            negativo={false}
-            // Sem oka, o retorno acompanha a partida.
-            aoMudar={(novo) =>
-              mudar({ pontosPartida: novo, ...(pontosRetorno <= pontosPartida ? { pontosRetorno: novo } : {}) })
-            }
+        <div className="cfg-campo">
+          <span className="cfg-campo-rotulo">{t('tableConfig.gameType')}</span>
+          <BotoesOpcao<OpcoesPartidaRegistro['tipoPartida']>
+            rotulo={t('tableConfig.gameType')}
+            valor={opcoes.tipoPartida}
+            aoEscolher={(tipoPartida) => setOpcoes({ ...opcoes, tipoPartida })}
+            opcoes={[
+              { valor: 'hanchan', rotulo: t('tableConfig.gameHanchan') },
+              { valor: 'leste', rotulo: t('tableConfig.gameEast') },
+            ]}
           />
-        </label>
-        {pontosRetorno > pontosPartida && (
+        </div>
+        {opcoes.ordemVentos !== undefined && (
+          <div className="cfg-campo">
+            <span className="cfg-campo-rotulo">{t('match.manual.windOrder')}</span>
+            <BotoesOpcao<'sim' | 'nao'>
+              rotulo={t('match.manual.windOrder')}
+              valor={opcoes.ordemVentos ? 'sim' : 'nao'}
+              aoEscolher={(valor) => setOpcoes({ ...opcoes, ordemVentos: valor === 'sim' })}
+              opcoes={[
+                { valor: 'sim', rotulo: t('match.manual.windOrderYes') },
+                { valor: 'nao', rotulo: t('match.manual.windOrderNo') },
+              ]}
+            />
+            <p className="cfg-ajuda">{t('match.manual.windOrderHelp')}</p>
+          </div>
+        )}
+        <div className="cfg-campo reg-regras">
+          <span className="cfg-campo-rotulo">
+            {t('tableConfig.preset')}
+            <AjudaCampo rotulo={t('tableConfig.preset')}>
+              <AjudaConjuntos />
+            </AjudaCampo>
+          </span>
+          {/* Personalizado não é botão: nenhum fica marcado quando os valores são outros. */}
+          <BotoesOpcao<ConjuntoRegistro>
+            rotulo={t('tableConfig.preset')}
+            valor={conjunto}
+            aoEscolher={escolher}
+            className="reg-conjuntos"
+            opcoes={PRESETS_REGISTRO.map((id) => ({
+              valor: id,
+              rotulo: t(`match.manual.rulesets.${id}`),
+            }))}
+          />
+          {conjunto === 'personalizado' && (
+            <p className="cfg-ajuda reg-personalizado">{t('match.manual.customNote')}</p>
+          )}
+        </div>
+
+        <div className="cfg-duas-colunas">
           <label className="cfg-campo">
-            <span>{t('tableConfig.returnPoints')}</span>
+            <span>{t('tableConfig.startPoints')}</span>
             <CampoInteiro
-              rotulo={t('tableConfig.returnPoints')}
-              valor={pontosRetorno}
+              rotulo={t('tableConfig.startPoints')}
+              valor={pontosPartida}
               negativo={false}
-              aoMudar={(novo) => mudar({ pontosRetorno: novo })}
+              // Sem oka, o retorno acompanha a partida.
+              aoMudar={(novo) =>
+                mudar({
+                  pontosPartida: novo,
+                  ...(pontosRetorno <= pontosPartida ? { pontosRetorno: novo } : {}),
+                })
+              }
             />
           </label>
-        )}
-      </div>
-      <EscolhaOka
-        pontosPartida={pontosPartida}
-        pontosRetorno={pontosRetorno}
-        aoMudarRetorno={(novo) => mudar({ pontosRetorno: novo })}
-      />
-      <CampoUma
-        // Trocar de preset troca a uma por fora: o campo recomeça com ela.
-        key={tocado}
-        valor={uma}
-        aoMudar={(novo) => mudar({ uma: novo })}
-        pontosRetorno={pontosRetorno}
-        pontosAtuais={pontosAtuais}
-      />
+          {pontosRetorno > pontosPartida && (
+            <label className="cfg-campo">
+              <span>{t('tableConfig.returnPoints')}</span>
+              <CampoInteiro
+                rotulo={t('tableConfig.returnPoints')}
+                valor={pontosRetorno}
+                negativo={false}
+                aoMudar={(novo) => mudar({ pontosRetorno: novo })}
+              />
+            </label>
+          )}
+        </div>
+        <EscolhaOka
+          pontosPartida={pontosPartida}
+          pontosRetorno={pontosRetorno}
+          aoMudarRetorno={(novo) => mudar({ pontosRetorno: novo })}
+        />
+        <CampoUma
+          // Trocar de preset troca a uma por fora: o campo recomeça com ela.
+          key={tocado}
+          valor={uma}
+          aoMudar={(novo) => mudar({ uma: novo })}
+          pontosRetorno={pontosRetorno}
+          pontosAtuais={pontosAtuais}
+        />
       </div>
     </Modal>
   )
