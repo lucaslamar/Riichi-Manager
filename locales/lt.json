@@ -495,17 +495,17 @@
       "declaration": "Pareiškimas, daromas su uždara ranka, kuriai iki užbaigimo trūksta vieno žingsnio (tenpai). Kainuoja 1 000 taškų statymą.",
       "value": "Vertas 1 han ir yra yaku, todėl vien jis jau padaro ranką galiojančią. Taip pat atveria ura-dora. Paskelbus ranka nebegali būti keičiama.",
       "doubleRiichi": "Riichi, paskelbtas per pirmąjį išmetimą, be ankstesnių iškvietimų. Vertas 2 han vietoj 1 ir taip pat yra yaku.",
-      "ippatsu": "Laimėjimas per vieną ratą po Riichi, be iškvietimų tarpe. Vertas +1 han. Tai yaku, bet egzistuoja tik kartu su Riichi.",
+      "ippatsu": "Laimėjimas per vieną ratą po Riichi, be iškvietimų tarpe. Tai yaku, bet egzistuoja tik kartu su Riichi.",
       "uraDora": "Akmuo po kiekvienu dora indikatoriumi mirusioje sienoje. Veikia kaip dar vienas dora indikatorius, bet atskleidžiamas tik tam, kuris laimi paskelbęs Riichi."
     },
     "specialConditions": {
       "allYaku": "Visos jos yra yaku, todėl bet kuri iš jų jau padaro ranką galiojančią, net be kito yaku.",
       "tenhouChiihouTitle": "Tenhou ir Chiihou",
-      "tenhouChiihou": "Laimėjimas su pradine ranka. Tenhou – dalintojo, Chiihou – kitų žaidėjų. Verti Yakuman.",
-      "rinshan": "Laimėjimas akmeniu, paimtu po kan. Vertas +1 han.",
-      "chankan": "Ron ant akmens, kurį kitas žaidėjas pridėjo prie pon, kad sudarytų kan. Vertas +1 han.",
-      "haitei": "Laimėjimas tsumo būdu su paskutiniu sienos akmeniu. Vertas +1 han.",
-      "houtei": "Laimėjimas ron būdu su paskutiniu partijos išmestu akmeniu. Vertas +1 han."
+      "tenhouChiihou": "Laimėjimas su pradine ranka. Tenhou – dalintojo, Chiihou – kitų žaidėjų.",
+      "rinshan": "Laimėjimas akmeniu, paimtu po kan.",
+      "chankan": "Ron ant akmens, kurį kitas žaidėjas pridėjo prie pon, kad sudarytų kan.",
+      "haitei": "Laimėjimas tsumo būdu su paskutiniu sienos akmeniu.",
+      "houtei": "Laimėjimas ron būdu su paskutiniu partijos išmestu akmeniu."
     },
     "notation": {
       "intro": "Rašykite akmenų skaičius, o po jų rūšį: m (Man), p (Pin), s (Sou) ir z (garbės akmenys). Keli skaičiai prieš tą pačią rūšį visi priklauso jai: 2388m447p yra Man 2, 3, 8 ir 8 bei Pin 4, 4 ir 7.",
@@ -560,7 +560,9 @@
       "caseHand": "Iš rankos",
       "caseHold": "Laikant 5",
       "caseFourth": "Ketvirtas 5"
-    }
+    },
+    "value1han": "Vertė: 1 han",
+    "valueYakuman": "Vertė: Yakuman"
   },
   "rulesModal": {
     "open": "Atidaryti skaičiavimo taisykles",
@@ -706,10 +708,10 @@
     "title": "Išmok žaisti",
     "short": "Mokytis",
     "tagline": {
-      "one": "Pirmasis modulis moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
-      "few": "Pirmieji {{count}} moduliai moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
-      "many": "Pirmieji {{count}} modulio moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
-      "other": "Pirmieji {{count}} modulių moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus."
+      "one": "Tai vienas trumpas modulis. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina.",
+      "few": "Tai {{count}} trumpi moduliai. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina.",
+      "many": "Tai {{count}} trumpo modulio. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina.",
+      "other": "Tai {{count}} trumpų modulių. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina."
     },
     "howToUse": "Kaip naudotis",
     "howToTurn": "Palieskite ekrano kraštus arba perbraukite, kad verstumėte puslapį.",
@@ -1654,6 +1656,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "Ieškoti stalų, susitikimų ir turnyrų",
+      "searchPlaceholder": "Ieškoti pagal pavadinimą, žaidėją ar datą",
+      "order": "Rikiuoti pagal",
+      "noResults": "Nieko nerasta pagal šią paiešką ir filtrus.",
+      "periods": {
+        "hoje": "Šiandien",
+        "semana": "Paskutinės 7 dienos",
+        "mes": "Šis mėnuo",
+        "tudo": "Visi"
+      },
+      "orders": {
+        "recentes": "Naujausi",
+        "antigos": "Seniausi",
+        "nome": "Pavadinimas"
+      }
     }
   },
   "spokenTiles": {
@@ -1758,7 +1777,8 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings"
+      "pickSeason": "Pick or create the season in the settings",
+      "memoryHint": "Išsaugoti šį sąrašą arba įkelti išsaugotą"
     },
     "settings": {
       "title": "Tournament settings",
@@ -2017,6 +2037,35 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "Taškai",
+      "sum": "Suma {{sum}} / {{total}}",
+      "depositsLeft": "Ant stalo likę riichi užstatai: {{count}}",
+      "seatEmpty": "{{wind}}, {{name}}, be taškų",
+      "seatFilled": "{{wind}}, {{name}}, taškai: {{points}}",
+      "swapHint": "Bakstelėkite kortelę taškams įvesti. Ilgas paspaudimas pakeičia žaidėją.",
+      "ok": "OK",
+      "limits": "Limito vertės",
+      "nonDealer": "Ne dalintojas",
+      "dealer": "Dalintojas",
+      "mangan": "Mangan",
+      "haneman": "Haneman",
+      "baiman": "Baiman",
+      "sanbaiman": "Sanbaiman",
+      "yakuman": "Yakuman",
+      "riichi": "Riichi",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "Skaičiuoti ranką",
+      "clear": "išvalyti",
+      "backspace": "trinti",
+      "minus": "minus",
+      "plus": "plius",
+      "equals": "lygu",
+      "thousand": "trys nuliai",
+      "useHand": "Naudoti skaičiavime",
+      "previousPlayer": "Ankstesnis žaidėjas",
+      "nextPlayer": "Kitas žaidėjas"
     }
   },
   "backup": {
@@ -2145,6 +2194,25 @@
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
-    "why": "Why:"
+    "why": "Why:",
+    "localTag": "Vietinis yaku",
+    "conditionsHelp": "Namų taisyklės, ne standartas: čia rodomi tik įjungti Skaičiavimo taisyklės → Vietiniai yaku. Pažymėkite, kai pergalė įvyko tokioje situacijoje.",
+    "value": "Vertė: {{value}}",
+    "combo": {
+      "label": "Deriniai: {{list}}",
+      "title": "Deriniai:",
+      "soRon": "Tik su Ron",
+      "soTsumo": "Tik su Tsumo",
+      "exigeRiichi": "reikia Riichi",
+      "semRiichi": "Nesiderina su Riichi",
+      "exigeRinshan": "reikia Rinshan",
+      "semKan": "Nesiderina su Rinshan ar Chankan",
+      "semUltimaPedra": "Nesiderina su Haitei ar Houtei",
+      "semTenhou": "Nesiderina su Tenhou ar Chiihou",
+      "semOutro": "Nesiderina su {{name}}",
+      "notWith": "Nesiderina su {{list}}.",
+      "and": "ir"
+    },
+    "count": "Įjungta {{on}} iš {{total}}"
   }
 }

@@ -507,17 +507,17 @@
       "declaration": "Declaración hecha con la mano cerrada y a un paso de completarla (tenpai). Cuesta una apuesta de 1.000 puntos.",
       "value": "Vale 1 han y es un yaku, así que por sí solo ya hace válida tu mano. También habilita la ura-dora. Después de declararlo, ya no puedes cambiar la mano.",
       "doubleRiichi": "Riichi declarado en el primer descarte, sin llamadas antes. Vale 2 han en lugar de 1 y también es un yaku.",
-      "ippatsu": "Victoria dentro de una vuelta después del Riichi, sin llamadas en el medio. Vale +1 han. Es un yaku, pero solo existe junto con el Riichi.",
+      "ippatsu": "Victoria dentro de una vuelta después del Riichi, sin llamadas en el medio. Es un yaku, pero solo existe junto con el Riichi.",
       "uraDora": "La ficha que está debajo de cada indicador de dora en el muro muerto. Funciona como un indicador de dora más, pero solo se revela a quien gana después de declarar Riichi."
     },
     "specialConditions": {
       "allYaku": "Todas son yaku, así que cualquiera de ellas ya hace válida tu mano, incluso sin otro yaku.",
       "tenhouChiihouTitle": "Tenhou y Chiihou",
-      "tenhouChiihou": "Victoria con la mano inicial. Tenhou es la del oya y Chiihou la de los demás jugadores. Valen Yakuman.",
-      "rinshan": "Victoria con la ficha robada después de un kan. Vale +1 han.",
-      "chankan": "Ron sobre la ficha que otro jugador agregó a un pon para formar kan. Vale +1 han.",
-      "haitei": "Victoria por tsumo con la última ficha del muro. Vale +1 han.",
-      "houtei": "Victoria por ron con el último descarte de la partida. Vale +1 han."
+      "tenhouChiihou": "Victoria con la mano inicial. Tenhou es la del oya y Chiihou la de los demás jugadores.",
+      "rinshan": "Victoria con la ficha robada después de un kan.",
+      "chankan": "Ron sobre la ficha que otro jugador agregó a un pon para formar kan.",
+      "haitei": "Victoria por tsumo con la última ficha del muro.",
+      "houtei": "Victoria por ron con el último descarte de la partida."
     },
     "notation": {
       "intro": "Escribe los números de las fichas y después el palo: m (Man), p (Pin), s (Sou) y z (honores). Varios números antes del mismo palo valen todos para él: 2388m447p son 2, 3, 8 y 8 de Man y 4, 4 y 7 de Pin.",
@@ -554,7 +554,9 @@
       "finishTitle": "Finalizar mano",
       "finish": "Con la mano completa, Finalizar mano lleva a las opciones de la victoria: ron o tsumo, vientos, Riichi, doras y honba. Cada parte tiene su propio ?.",
       "tip": "¿Prefieres escribir? MPSZ cambia el teclado de fichas por la notación, como 123m. Para volver, toca Fichas."
-    }
+    },
+    "value1han": "Vale: 1 han",
+    "valueYakuman": "Vale: Yakuman"
   },
   "rulesModal": {
     "open": "Abrir reglas de cálculo",
@@ -700,9 +702,9 @@
     "title": "Aprender a jugar",
     "short": "Aprender",
     "tagline": {
-      "one": "El primer módulo enseña lo básico. Antes de seguir, juega una partida para afianzar la base.",
-      "many": "Los {{count}} primeros módulos enseñan lo básico. Antes de seguir, juega una partida para afianzar la base.",
-      "other": "Los {{count}} primeros módulos enseñan lo básico. Antes de seguir, juega una partida para afianzar la base."
+      "one": "Es un módulo corto. Al terminar, juega una partida antes de seguir: es lo que fija lo aprendido.",
+      "many": "Son {{count}} módulos cortos. Al terminar, juega una partida antes de seguir: es lo que fija lo aprendido.",
+      "other": "Son {{count}} módulos cortos. Al terminar, juega una partida antes de seguir: es lo que fija lo aprendido."
     },
     "howToUse": "Cómo usar",
     "howToTurn": "Toca los lados de la pantalla o desliza para pasar la página.",
@@ -1617,6 +1619,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "Buscar mesas, encuentros y torneos",
+      "searchPlaceholder": "Buscar por nombre, jugador o fecha",
+      "order": "Ordenar por",
+      "noResults": "Nada coincide con esta búsqueda y estos filtros.",
+      "periods": {
+        "hoje": "Hoy",
+        "semana": "Últimos 7 días",
+        "mes": "Este mes",
+        "tudo": "Todo"
+      },
+      "orders": {
+        "recentes": "Más recientes",
+        "antigos": "Más antiguos",
+        "nome": "Nombre"
+      }
     }
   },
   "spokenTiles": {
@@ -1715,7 +1734,8 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings"
+      "pickSeason": "Pick or create the season in the settings",
+      "memoryHint": "Guardar esta lista o cargar una guardada"
     },
     "settings": {
       "title": "Tournament settings",
@@ -1966,6 +1986,35 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "Puntos",
+      "sum": "Suma {{sum}} / {{total}}",
+      "depositsLeft": "Depósitos de riichi en la mesa: {{count}}",
+      "seatEmpty": "{{wind}}, {{name}}, sin puntos",
+      "seatFilled": "{{wind}}, {{name}}, {{points}} puntos",
+      "swapHint": "Toca la tarjeta para anotar los puntos. Mantén pulsado para cambiar el jugador.",
+      "ok": "OK",
+      "limits": "Valores límite",
+      "nonDealer": "No dealer",
+      "dealer": "Dealer",
+      "mangan": "Mangan",
+      "haneman": "Haneman",
+      "baiman": "Baiman",
+      "sanbaiman": "Sanbaiman",
+      "yakuman": "Yakuman",
+      "riichi": "Riichi",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "Calcular mano",
+      "clear": "borrar todo",
+      "backspace": "borrar",
+      "minus": "menos",
+      "plus": "más",
+      "equals": "igual",
+      "thousand": "tres ceros",
+      "useHand": "Usar en la cuenta",
+      "previousPlayer": "Jugador anterior",
+      "nextPlayer": "Siguiente jugador"
     }
   },
   "backup": {
@@ -2086,6 +2135,25 @@
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
-    "why": "Why:"
+    "why": "Why:",
+    "localTag": "Yaku local",
+    "conditionsHelp": "Reglas de la casa, fuera del estándar: aquí solo aparecen los activados en Reglas de cálculo → Yakus locales. Márcalo cuando la victoria ocurrió en esa situación.",
+    "value": "Vale: {{value}}",
+    "combo": {
+      "label": "Combinaciones: {{list}}",
+      "title": "Combinaciones:",
+      "soRon": "Solo con Ron",
+      "soTsumo": "Solo con Tsumo",
+      "exigeRiichi": "necesita Riichi",
+      "semRiichi": "No combina con Riichi",
+      "exigeRinshan": "necesita Rinshan",
+      "semKan": "No combina con Rinshan ni Chankan",
+      "semUltimaPedra": "No combina con Haitei ni Houtei",
+      "semTenhou": "No combina con Tenhou ni Chiihou",
+      "semOutro": "No combina con {{name}}",
+      "notWith": "No combina con {{list}}.",
+      "and": "y"
+    },
+    "count": "{{on}} de {{total}} activados"
   }
 }

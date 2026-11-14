@@ -477,17 +477,17 @@
       "declaration": "멘젠으로 텐파이일 때 하는 선언입니다. 1,000점을 공탁해야 합니다.",
       "value": "1판이며 역이므로, 그것만으로 화료할 수 있습니다. 뒷도라도 열립니다. 선언 후에는 손패를 바꿀 수 없습니다.",
       "doubleRiichi": "울기 없이 첫 타패에서 하는 리치입니다. 1판이 아니라 2판이며 역입니다.",
-      "ippatsu": "리치 후 울기 없이 한 바퀴 안에 화료하는 것. +1판. 역이지만 리치와 함께만 성립합니다.",
+      "ippatsu": "리치 후 울기 없이 한 바퀴 안에 화료하는 것. 역이지만 리치와 함께만 성립합니다.",
       "uraDora": "왕패에서 각 도라 표시패 아래에 있는 패입니다. 도라 표시패가 하나 더 있는 것처럼 작동하지만, 리치 후 화료한 사람에게만 공개됩니다."
     },
     "specialConditions": {
       "allYaku": "모두 역이므로, 다른 역이 없어도 어느 하나만으로 화료할 수 있습니다.",
       "tenhouChiihouTitle": "천화와 지화",
-      "tenhouChiihou": "배패 그대로 화료하는 것. 친이면 천화, 자면 지화. 역만입니다.",
-      "rinshan": "깡 후에 뽑은 패로 화료하는 것. +1판.",
-      "chankan": "다른 플레이어가 퐁에 더해 깡으로 만든 패를 론하는 것. +1판.",
-      "haitei": "패산의 마지막 패로 쯔모 화료하는 것. +1판.",
-      "houtei": "그 국의 마지막 버림패로 론 화료하는 것. +1판."
+      "tenhouChiihou": "배패 그대로 화료하는 것. 친이면 천화, 자면 지화.",
+      "rinshan": "깡 후에 뽑은 패로 화료하는 것.",
+      "chankan": "다른 플레이어가 퐁에 더해 깡으로 만든 패를 론하는 것.",
+      "haitei": "패산의 마지막 패로 쯔모 화료하는 것.",
+      "houtei": "그 국의 마지막 버림패로 론 화료하는 것."
     },
     "notation": {
       "intro": "패의 숫자를 쓰고 그 뒤에 종류를 씁니다: m(만수), p(통수), s(삭수), z(자패). 같은 종류 앞의 숫자는 모두 그 종류입니다: 2388m447p는 만수 2, 3, 8, 8과 통수 4, 4, 7입니다.",
@@ -542,7 +542,9 @@
       "caseHand": "손패의 패로",
       "caseHold": "5 길게 누르기",
       "caseFourth": "네 번째 5"
-    }
+    },
+    "value1han": "값: 1판",
+    "valueYakuman": "값: 역만"
   },
   "rulesModal": {
     "open": "계산 규칙 열기",
@@ -688,7 +690,7 @@
     "title": "배우기",
     "short": "배우기",
     "tagline": {
-      "other": "처음 {{count}}개 모듈에서 기본을 배웁니다. 다음으로 넘어가기 전에 한 판 쳐 보며 기초를 다지세요."
+      "other": "짧은 모듈 {{count}}개입니다. 다 읽고 나면 넘어가기 전에 한 판 쳐 보세요. 그래야 익숙해집니다."
     },
     "howToUse": "사용 방법",
     "howToTurn": "화면 양쪽을 누르거나 밀어서 페이지를 넘기세요.",
@@ -1588,6 +1590,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "테이블, 모임, 대회 검색",
+      "searchPlaceholder": "이름, 플레이어 또는 날짜로 검색",
+      "order": "정렬",
+      "noResults": "이 검색과 필터에 맞는 항목이 없습니다.",
+      "periods": {
+        "hoje": "오늘",
+        "semana": "최근 7일",
+        "mes": "이번 달",
+        "tudo": "전체"
+      },
+      "orders": {
+        "recentes": "최신순",
+        "antigos": "오래된순",
+        "nome": "이름"
+      }
     }
   },
   "spokenTiles": {
@@ -1686,7 +1705,8 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings"
+      "pickSeason": "Pick or create the season in the settings",
+      "memoryHint": "이 목록을 저장하거나 저장된 목록 불러오기"
     },
     "settings": {
       "title": "Tournament settings",
@@ -1937,6 +1957,35 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "점수",
+      "sum": "합계 {{sum}} / {{total}}",
+      "depositsLeft": "테이블에 남은 리치봉: {{count}}",
+      "seatEmpty": "{{wind}}, {{name}}, 점수 없음",
+      "seatFilled": "{{wind}}, {{name}}, {{points}}점",
+      "swapHint": "카드를 눌러 점수를 입력하세요. 길게 누르면 플레이어를 바꿉니다.",
+      "ok": "OK",
+      "limits": "만관 이상 점수",
+      "nonDealer": "자",
+      "dealer": "친",
+      "mangan": "만관",
+      "haneman": "하네만",
+      "baiman": "배만",
+      "sanbaiman": "삼배만",
+      "yakuman": "역만",
+      "riichi": "리치",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "손패 계산",
+      "clear": "지우기",
+      "backspace": "삭제",
+      "minus": "빼기",
+      "plus": "더하기",
+      "equals": "같음",
+      "thousand": "영 세 개",
+      "useHand": "계산에 사용",
+      "previousPlayer": "이전 플레이어",
+      "nextPlayer": "다음 플레이어"
     }
   },
   "backup": {
@@ -2053,6 +2102,25 @@
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
-    "why": "Why:"
+    "why": "Why:",
+    "localTag": "로컬 역",
+    "conditionsHelp": "표준이 아닌 하우스 룰입니다. 계산 규칙 → 로컬 역에서 켠 것만 여기에 나타납니다. 그 상황에서 화료했을 때 선택하세요.",
+    "value": "값: {{value}}",
+    "combo": {
+      "label": "조합: {{list}}",
+      "title": "조합:",
+      "soRon": "론만",
+      "soTsumo": "쯔모만",
+      "exigeRiichi": "리치 필요",
+      "semRiichi": "리치와 복합 불가",
+      "exigeRinshan": "영상개화 필요",
+      "semKan": "영상개화·창깡과 복합 불가",
+      "semUltimaPedra": "해저·하저와 복합 불가",
+      "semTenhou": "천화·지화와 복합 불가",
+      "semOutro": "{{name}}와 복합 불가",
+      "notWith": "{{list}}와 복합 불가.",
+      "and": "및"
+    },
+    "count": "{{total}}개 중 {{on}}개 켬"
   }
 }

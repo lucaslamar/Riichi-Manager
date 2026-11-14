@@ -477,17 +477,17 @@
       "declaration": "門前でテンパイのときに行う宣言です。1,000点の供託が必要です。",
       "value": "1翻の役で、それだけで和了できます。裏ドラも有効になります。宣言後は手牌を変えられません。",
       "doubleRiichi": "鳴きのない第一打でのリーチです。1翻ではなく2翻の役です。",
-      "ippatsu": "リーチ後、鳴きが入らず一巡以内に和了すること。+1翻。役ですが、リーチと一緒にしか成立しません。",
+      "ippatsu": "リーチ後、鳴きが入らず一巡以内に和了すること。役ですが、リーチと一緒にしか成立しません。",
       "uraDora": "王牌の各ドラ表示牌の下にある牌です。もう1枚のドラ表示牌として働きますが、リーチして和了した人にだけ公開されます。"
     },
     "specialConditions": {
       "allYaku": "すべて役なので、他に役がなくてもどれか1つで和了できます。",
       "tenhouChiihouTitle": "天和と地和",
-      "tenhouChiihou": "配牌で和了すること。親なら天和、子なら地和。役満です。",
-      "rinshan": "槓の後に引いた牌で和了すること。+1翻。",
-      "chankan": "他家がポンに加えて槓にした牌でロンすること。+1翻。",
-      "haitei": "山の最後の牌でツモ和了すること。+1翻。",
-      "houtei": "局の最後の捨て牌でロン和了すること。+1翻。"
+      "tenhouChiihou": "配牌で和了すること。親なら天和、子なら地和。",
+      "rinshan": "槓の後に引いた牌で和了すること。",
+      "chankan": "他家がポンに加えて槓にした牌でロンすること。",
+      "haitei": "山の最後の牌でツモ和了すること。",
+      "houtei": "局の最後の捨て牌でロン和了すること。"
     },
     "notation": {
       "intro": "牌の数字のあとに種類を書きます: m（萬子）、p（筒子）、s（索子）、z（字牌）。同じ種類の前に並べた数字はすべてその種類です: 2388m447p は萬子の2・3・8・8と筒子の4・4・7。",
@@ -542,7 +542,9 @@
       "caseHand": "手牌の牌で",
       "caseHold": "5を長押し",
       "caseFourth": "4枚目の5"
-    }
+    },
+    "value1han": "翻数: 1翻",
+    "valueYakuman": "翻数: 役満"
   },
   "rulesModal": {
     "open": "計算ルールを開く",
@@ -688,7 +690,7 @@
     "title": "遊び方を学ぶ",
     "short": "学ぶ",
     "tagline": {
-      "other": "最初の{{count}}つのモジュールで基本を学びます。先に進む前に、一度対局して基礎を固めましょう。"
+      "other": "短いモジュールが{{count}}つあります。読み終えたら、先に進む前に一度対局してみましょう。それで身につきます。"
     },
     "howToUse": "使い方",
     "howToTurn": "画面の左右をタップするか、スワイプしてページをめくります。",
@@ -1588,6 +1590,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "卓・集まり・大会を検索",
+      "searchPlaceholder": "名前・プレイヤー・日付で検索",
+      "order": "並べ替え",
+      "noResults": "この検索と絞り込みに合うものはありません。",
+      "periods": {
+        "hoje": "今日",
+        "semana": "過去7日",
+        "mes": "今月",
+        "tudo": "すべて"
+      },
+      "orders": {
+        "recentes": "新しい順",
+        "antigos": "古い順",
+        "nome": "名前"
+      }
     }
   },
   "spokenTiles": {
@@ -1686,7 +1705,8 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings"
+      "pickSeason": "Pick or create the season in the settings",
+      "memoryHint": "このリストを保存、または保存済みを読み込む"
     },
     "settings": {
       "title": "Tournament settings",
@@ -1937,6 +1957,35 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "点数",
+      "sum": "合計 {{sum}} / {{total}}",
+      "depositsLeft": "卓に残った供託棒: {{count}}",
+      "seatEmpty": "{{wind}}、{{name}}、点数なし",
+      "seatFilled": "{{wind}}、{{name}}、{{points}}点",
+      "swapHint": "カードをタップして点数を入力。長押しでプレイヤーを交代。",
+      "ok": "OK",
+      "limits": "満貫以上の点数",
+      "nonDealer": "子",
+      "dealer": "親",
+      "mangan": "満貫",
+      "haneman": "跳満",
+      "baiman": "倍満",
+      "sanbaiman": "三倍満",
+      "yakuman": "役満",
+      "riichi": "リーチ",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "手を計算",
+      "clear": "クリア",
+      "backspace": "削除",
+      "minus": "マイナス",
+      "plus": "プラス",
+      "equals": "イコール",
+      "thousand": "ゼロ3つ",
+      "useHand": "計算に使う",
+      "previousPlayer": "前のプレイヤー",
+      "nextPlayer": "次のプレイヤー"
     }
   },
   "backup": {
@@ -2053,6 +2102,25 @@
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
-    "why": "Why:"
+    "why": "Why:",
+    "localTag": "ローカル役",
+    "conditionsHelp": "標準外のハウスルールです。計算ルール → ローカル役でオンにしたものだけがここに表示されます。その状況で和了したときに選んでください。",
+    "value": "点数: {{value}}",
+    "combo": {
+      "label": "組み合わせ: {{list}}",
+      "title": "組み合わせ:",
+      "soRon": "ロンのみ",
+      "soTsumo": "ツモのみ",
+      "exigeRiichi": "リーチが必要",
+      "semRiichi": "リーチと複合しない",
+      "exigeRinshan": "嶺上開花が必要",
+      "semKan": "嶺上開花・槍槓と複合しない",
+      "semUltimaPedra": "海底・河底と複合しない",
+      "semTenhou": "天和・地和と複合しない",
+      "semOutro": "{{name}}と複合しない",
+      "notWith": "{{list}}と複合しない。",
+      "and": "と"
+    },
+    "count": "{{total}}件中{{on}}件オン"
   }
 }
