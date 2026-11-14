@@ -1992,7 +1992,9 @@
       "plus": "más",
       "equals": "igual",
       "thousand": "tres ceros",
-      "useHand": "Usar en la cuenta"
+      "useHand": "Usar en la cuenta",
+      "previousPlayer": "Jugador anterior",
+      "nextPlayer": "Siguiente jugador"
     }
   },
   "backup": {

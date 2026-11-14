@@ -1985,7 +1985,9 @@
       "plus": "plus",
       "equals": "equals",
       "thousand": "three zeros",
-      "useHand": "Use in the sum"
+      "useHand": "Use in the sum",
+      "previousPlayer": "Previous player",
+      "nextPlayer": "Next player"
     }
   },
   "backup": {

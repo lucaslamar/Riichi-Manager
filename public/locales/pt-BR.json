@@ -1985,7 +1985,9 @@
       "plus": "mais",
       "equals": "igual",
       "thousand": "três zeros",
-      "useHand": "Usar na conta"
+      "useHand": "Usar na conta",
+      "previousPlayer": "Jogador anterior",
+      "nextPlayer": "Próximo jogador"
     }
   },
   "backup": {

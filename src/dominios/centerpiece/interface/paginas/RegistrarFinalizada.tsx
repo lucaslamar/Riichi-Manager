@@ -360,6 +360,7 @@ export default function RegistrarFinalizada({
       {calculando !== null && (
         <CalculadoraPontosSheet
           cadeira={calculando}
+          marca={ordemDosVentos ? undefined : calculando + 1}
           nome={(() => {
             const cadastrado = jogadores.find((item) => item.id === assentos[calculando])
             return cadastrado
@@ -368,6 +369,14 @@ export default function RegistrarFinalizada({
           })()}
           inicial={lerPontos(pontos[calculando]) ?? pontosPartida}
           aoFechar={() => setCalculando(null)}
+          aoNavegar={(passo, valor) => {
+            if (valor !== undefined) mudarPontos(calculando, valor === null ? '' : String(valor))
+            // Próximo lugar com jogador, na ordem dos ventos (dá a volta na mesa).
+            const vizinho = [1, 2, 3]
+              .map((volta) => (calculando + passo * volta + 4) % 4)
+              .find((lugar) => assentos[lugar])
+            if (vizinho !== undefined) setCalculando(vizinho as Cadeira)
+          }}
           aoConfirmar={(valor) => {
             mudarPontos(calculando, valor === null ? '' : String(valor))
             setCalculando(null)

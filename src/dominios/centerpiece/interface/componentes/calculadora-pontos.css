@@ -46,54 +46,10 @@
   color: var(--texto-erro);
 }
 
-/* Não-dealer/Dealer e Calcular mão na mesma linha. */
-.cpt-linha {
-  display: flex;
-  align-items: stretch;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.cpt-dealer {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.cpt-atalhos {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.cpt-atalho {
-  display: flex;
-  min-height: 48px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--linha-divisoria);
-  border-radius: 10px;
-  padding: 4px;
-  color: var(--texto-principal);
-  background: var(--superficie);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.75rem;
-  line-height: 1.2;
-}
-
-.cpt-atalho strong {
-  font-size: 0.9rem;
-  font-variant-numeric: tabular-nums;
-}
-
 .cpt-calcular {
-  flex: 0 1 auto;
+  width: 100%;
   min-height: 44px;
-  padding-inline: 10px;
-  font-size: 0.8rem;
-  white-space: nowrap;
+  margin-bottom: 10px;
 }
 
 .cpt-teclado {
@@ -194,20 +150,11 @@
     font-size: 1.9rem;
   }
 
-  .cpt-atalho {
-    min-height: 38px;
-  }
-
   .cpt-teclado {
     grid-auto-rows: 40px;
   }
 }
 
-.cpt-dealer .ptd-segmento {
-  padding-inline: 6px;
-  font-size: 0.8rem;
-  white-space: nowrap;
-}
 
 /* 360×640 e menores: o teclado inteiro cabe sem rolar. */
 @media (max-height: 680px) {
@@ -219,18 +166,12 @@
     font-size: 1.6rem;
   }
 
-  .cpt-linha .ptd-segmento,
   .cpt-calcular {
     min-height: 38px;
   }
 
-  .cpt-atalhos,
   .cpt-teclado {
     gap: 4px;
-  }
-
-  .cpt-atalho {
-    min-height: 34px;
   }
 
   .cpt-teclado {

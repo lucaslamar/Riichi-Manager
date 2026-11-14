@@ -1963,7 +1963,9 @@
       "plus": "加",
       "equals": "等于",
       "thousand": "三个零",
-      "useHand": "用于计算"
+      "useHand": "用于计算",
+      "previousPlayer": "上一位玩家",
+      "nextPlayer": "下一位玩家"
     }
   },
   "backup": {

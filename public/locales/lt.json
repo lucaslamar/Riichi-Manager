@@ -2043,7 +2043,9 @@
       "plus": "plius",
       "equals": "lygu",
       "thousand": "trys nuliai",
-      "useHand": "Naudoti skaičiavime"
+      "useHand": "Naudoti skaičiavime",
+      "previousPlayer": "Ankstesnis žaidėjas",
+      "nextPlayer": "Kitas žaidėjas"
     }
   },
   "backup": {
