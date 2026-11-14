@@ -187,15 +187,6 @@ export default function PaginaListaTorneio({
             >
               <i className="fas fa-file-import" aria-hidden="true" />
             </button>
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('tournament.list.settings')}
-              title={t('tournament.list.settings')}
-              onClick={() => setConfigurando(true)}
-            >
-              <i className="fas fa-sliders" aria-hidden="true" />
-            </button>
             <BotaoConfiguracoes />
           </span>
         }
@@ -350,6 +341,16 @@ export default function PaginaListaTorneio({
             onClick={() => setLimpando(true)}
           >
             <i className="fas fa-trash" aria-hidden="true" />
+          </button>
+          {/* Configurações do torneio junto das ações da lista, antes do cadastro. */}
+          <button
+            type="button"
+            className="trn-adicionar-cadastro"
+            aria-label={t('tournament.list.settings')}
+            title={t('tournament.list.settings')}
+            onClick={() => setConfigurando(true)}
+          >
+            <i className="fas fa-sliders" aria-hidden="true" />
           </button>
           <button
             type="button"
