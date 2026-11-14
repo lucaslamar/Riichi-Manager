@@ -344,6 +344,47 @@
   line-height: 1;
 }
 
+/* Nomes e pontos do card de assento (CardAssento). */
+.ptd-assento-nomes {
+  display: flex;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+  /* A fonte do nome encolhe com a largura do card, até ~80%, e depois corta. */
+  container-type: inline-size;
+  width: 100%;
+}
+
+.ptd-assento-nome,
+.ptd-assento-apoio {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ptd-assento-nome {
+  font-size: clamp(0.8em, 9cqi, 1em);
+}
+
+.ptd-assento-apoio {
+  color: var(--texto-apoio);
+  font-size: clamp(0.65rem, 7cqi, 0.8rem);
+  font-weight: 500;
+}
+
+.ptd-assento-pontos {
+  font-size: clamp(1.15rem, 5.5vw, 1.5rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.ptd-assento-pontos--vazio {
+  color: var(--texto-apoio);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 .ptd-resumo-regras {
   display: flex;
   min-height: 56px;

@@ -2017,6 +2017,33 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "Taškai",
+      "sum": "Suma {{sum}} / {{total}}",
+      "depositsLeft": "Ant stalo likę riichi užstatai: {{count}}",
+      "seatEmpty": "{{wind}}, {{name}}, be taškų",
+      "seatFilled": "{{wind}}, {{name}}, taškai: {{points}}",
+      "swapHint": "Bakstelėkite kortelę taškams įvesti. Ilgas paspaudimas pakeičia žaidėją.",
+      "ok": "OK",
+      "limits": "Limito vertės",
+      "nonDealer": "Ne dalintojas",
+      "dealer": "Dalintojas",
+      "mangan": "Mangan",
+      "haneman": "Haneman",
+      "baiman": "Baiman",
+      "sanbaiman": "Sanbaiman",
+      "yakuman": "Yakuman",
+      "riichi": "Riichi",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "Skaičiuoti ranką",
+      "clear": "išvalyti",
+      "backspace": "trinti",
+      "minus": "minus",
+      "plus": "plius",
+      "equals": "lygu",
+      "thousand": "trys nuliai",
+      "useHand": "Naudoti skaičiavime"
     }
   },
   "backup": {

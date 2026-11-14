@@ -1937,6 +1937,33 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "点数",
+      "sum": "合计 {{sum}} / {{total}}",
+      "depositsLeft": "桌上剩余的立直棒: {{count}}",
+      "seatEmpty": "{{wind}}，{{name}}，无点数",
+      "seatFilled": "{{wind}}，{{name}}，{{points}} 点",
+      "swapHint": "点击卡片输入点数。长按更换玩家。",
+      "ok": "OK",
+      "limits": "满贯以上点数",
+      "nonDealer": "闲家",
+      "dealer": "庄家",
+      "mangan": "满贯",
+      "haneman": "跳满",
+      "baiman": "倍满",
+      "sanbaiman": "三倍满",
+      "yakuman": "役满",
+      "riichi": "立直",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "计算手牌",
+      "clear": "清除",
+      "backspace": "删除",
+      "minus": "减",
+      "plus": "加",
+      "equals": "等于",
+      "thousand": "三个零",
+      "useHand": "用于计算"
     }
   },
   "backup": {

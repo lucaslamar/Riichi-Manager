@@ -8,6 +8,7 @@ import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { alterarConfig, type ConfigMesa } from '../../logica/configMesa'
 import { CADEIRAS, CADEIRAS_SANMA, KANJI_VENTO, ORDEM_VENTOS, sortearAssentos, type Cadeira } from '../../logica/partida'
 import { carregarUltimaConfig, salvarUltimaConfig } from '../../persistencia/repositorioConfigMesa'
+import CardAssento from '../componentes/CardAssento'
 import ConfigMesaSheet from '../componentes/ConfigMesaSheet'
 import ResumoRegrasCalculo from '../componentes/ResumoRegrasCalculo'
 import { usePartidas } from '../hooks/usePartidas'
@@ -91,21 +92,17 @@ export default function SetupPartida({
           const nome = nomeDe(assentos[cadeira])
           const vento = t(`winds.${['east', 'south', 'west', 'north'][cadeira]}`)
           return (
-            <button
+            <CardAssento
               key={cadeira}
-              type="button"
-              className={`ptd-assento${nome ? ' ptd-assento--ocupado' : ''}`}
-              aria-label={t(nome ? 'match.setup.seatFilled' : 'match.setup.seatEmpty', {
+              cadeira={cadeira}
+              principal={nome ?? t('match.setup.assign')}
+              ocupado={!!nome}
+              rotulo={t(nome ? 'match.setup.seatFilled' : 'match.setup.seatEmpty', {
                 wind: vento,
                 name: nome ?? '',
               })}
-              onClick={() => setEscolhendo(cadeira)}
-            >
-              <span className="ptd-assento-kanji" aria-hidden="true">
-                {KANJI_VENTO[ORDEM_VENTOS[cadeira]]}
-              </span>
-              <span>{nome ?? t('match.setup.assign')}</span>
-            </button>
+              aoTocar={() => setEscolhendo(cadeira)}
+            />
           )
         })}
       </div>

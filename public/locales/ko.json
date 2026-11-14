@@ -1937,6 +1937,33 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "점수",
+      "sum": "합계 {{sum}} / {{total}}",
+      "depositsLeft": "테이블에 남은 리치봉: {{count}}",
+      "seatEmpty": "{{wind}}, {{name}}, 점수 없음",
+      "seatFilled": "{{wind}}, {{name}}, {{points}}점",
+      "swapHint": "카드를 눌러 점수를 입력하세요. 길게 누르면 플레이어를 바꿉니다.",
+      "ok": "OK",
+      "limits": "만관 이상 점수",
+      "nonDealer": "자",
+      "dealer": "친",
+      "mangan": "만관",
+      "haneman": "하네만",
+      "baiman": "배만",
+      "sanbaiman": "삼배만",
+      "yakuman": "역만",
+      "riichi": "리치",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "손패 계산",
+      "clear": "지우기",
+      "backspace": "삭제",
+      "minus": "빼기",
+      "plus": "더하기",
+      "equals": "같음",
+      "thousand": "영 세 개",
+      "useHand": "계산에 사용"
     }
   },
   "backup": {

@@ -1,0 +1,239 @@
+/* Calculadora de pontos da mesa do Torneio (folha inferior). */
+
+.cpt-titulo {
+  display: inline-flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.cpt-visor {
+  display: flex;
+  min-height: 84px;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 2px;
+  margin-bottom: 12px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: var(--fundo);
+  font-variant-numeric: tabular-nums;
+}
+
+.cpt-expressao {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--texto-apoio);
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cpt-resultado {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--texto-principal);
+  font-size: clamp(2rem, 10vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cpt-negativo {
+  color: var(--texto-erro);
+}
+
+/* Não-dealer/Dealer e Calcular mão na mesma linha. */
+.cpt-linha {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.cpt-dealer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cpt-atalhos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.cpt-atalho {
+  display: flex;
+  min-height: 48px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 10px;
+  padding: 4px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.cpt-atalho strong {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.cpt-calcular {
+  flex: 0 1 auto;
+  min-height: 44px;
+  padding-inline: 10px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.cpt-teclado {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 50px;
+  gap: 6px;
+}
+
+.cpt-tecla {
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 10px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.cpt-tecla:active {
+  background: var(--linha-divisoria);
+}
+
+.cpt-tecla--acao {
+  color: var(--texto-apoio);
+}
+
+.cpt-tecla--op {
+  color: var(--primario);
+}
+
+/* "=" desce pela coluna da direita, ao lado dos dígitos. */
+.cpt-tecla--igual {
+  grid-column: 4;
+  grid-row: 2 / 6;
+  border-color: var(--primario);
+  color: var(--sobre-primario);
+  background: var(--primario);
+}
+
+.cpt-tecla--zero {
+  grid-column: span 2;
+}
+
+.cpt-ok {
+  width: 100%;
+  min-height: 48px;
+}
+
+/* Cards quadrados: a grade cresce com eles, sem o teto da Nova partida, e não passa de 520px. */
+.trn-mesa-assentos {
+  width: 100%;
+  max-width: 520px;
+  max-height: none;
+  flex: 0 0 auto;
+  grid-auto-rows: auto;
+  margin-inline: auto;
+}
+
+.trn-mesa-assentos .ptd-assento {
+  gap: 6px;
+  aspect-ratio: 1;
+}
+
+.trn-mesa-assentos .ptd-assento-kanji {
+  font-size: clamp(2rem, 10vw, 3rem);
+}
+
+.trn-soma {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: center;
+}
+
+.trn-soma--erro {
+  color: var(--texto-erro);
+}
+
+.trn-soma-apoio {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Celular baixo: tudo um pouco menor para o teclado caber sem rolar. */
+@media (max-height: 720px) {
+  .cpt-visor {
+    min-height: 64px;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+  }
+
+  .cpt-resultado {
+    font-size: 1.9rem;
+  }
+
+  .cpt-atalho {
+    min-height: 38px;
+  }
+
+  .cpt-teclado {
+    grid-auto-rows: 40px;
+  }
+}
+
+.cpt-dealer .ptd-segmento {
+  padding-inline: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* 360×640 e menores: o teclado inteiro cabe sem rolar. */
+@media (max-height: 680px) {
+  .cpt-visor {
+    min-height: 54px;
+  }
+
+  .cpt-resultado {
+    font-size: 1.6rem;
+  }
+
+  .cpt-linha .ptd-segmento,
+  .cpt-calcular {
+    min-height: 38px;
+  }
+
+  .cpt-atalhos,
+  .cpt-teclado {
+    gap: 4px;
+  }
+
+  .cpt-atalho {
+    min-height: 34px;
+  }
+
+  .cpt-teclado {
+    grid-auto-rows: 36px;
+  }
+}

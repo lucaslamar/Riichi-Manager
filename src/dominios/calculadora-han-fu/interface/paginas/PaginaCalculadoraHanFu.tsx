@@ -33,6 +33,10 @@ interface PropsPaginaCalculadoraHanFu {
   pagadorId?: string
   /** Variante da mesa, quando aberta pela partida. */
   variante?: Variante
+  /** Aberta fora da partida (mesa do Torneio): mostra dealer e ron/tsumo. */
+  comSeletores?: boolean
+  /** Texto do botão de usar o resultado. */
+  rotuloUsar?: string
 }
 
 /** Renderiza a calculadora direta por Han/Fu, sem montar a mao pedra por pedra. */
@@ -45,6 +49,8 @@ export default function PaginaCalculadoraHanFu({
   vencedorId,
   pagadorId,
   variante: varianteDaMesa,
+  comSeletores = false,
+  rotuloUsar,
 }: PropsPaginaCalculadoraHanFu = {}) {
   const { t } = useI18n()
   const { regrasSanma } = useConfigSanma()
@@ -93,11 +99,19 @@ export default function PaginaCalculadoraHanFu({
   return (
     <main className="calculadora-han-fu">
       {/* Engrenagem no cabeçalho do app (aberta pelo Centerpiece, a tela é da mesa). */}
-      {!aoUsarResultado && <TituloTela titulo={t('menu.quickCalculatorShort')} acoes={<BotaoConfiguracoes />} />}
+      {!aoUsarResultado && (
+        <TituloTela titulo={t('menu.quickCalculatorShort')} acoes={<BotaoConfiguracoes />} />
+      )}
       <section className="painel-principal-han-fu">
-        {!aoUsarResultado && (
+        {(!aoUsarResultado || comSeletores) && (
           <div className="seletores-topo-han-fu">
-            <SeletorVariante valor={variante} aoMudar={setVariante} className="seletor-variante-han-fu" />
+            {!aoUsarResultado && (
+              <SeletorVariante
+                valor={variante}
+                aoMudar={setVariante}
+                className="seletor-variante-han-fu"
+              />
+            )}
             <SeletorDealer isOya={isOya} aoMudar={setIsOya} />
             <SeletorTipoVitoria agari={agari} aoMudar={setAgari} />
           </div>
@@ -122,7 +136,7 @@ export default function PaginaCalculadoraHanFu({
             disabled={!podeUsar}
           >
             <i className="fas fa-check" aria-hidden="true" />
-            {t('centerpiece.win.useResult')}
+            {rotuloUsar ?? t('centerpiece.win.useResult')}
           </button>
         )}
       </section>

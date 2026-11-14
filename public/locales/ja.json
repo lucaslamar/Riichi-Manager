@@ -1937,6 +1937,33 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "点数",
+      "sum": "合計 {{sum}} / {{total}}",
+      "depositsLeft": "卓に残った供託棒: {{count}}",
+      "seatEmpty": "{{wind}}、{{name}}、点数なし",
+      "seatFilled": "{{wind}}、{{name}}、{{points}}点",
+      "swapHint": "カードをタップして点数を入力。長押しでプレイヤーを交代。",
+      "ok": "OK",
+      "limits": "満貫以上の点数",
+      "nonDealer": "子",
+      "dealer": "親",
+      "mangan": "満貫",
+      "haneman": "跳満",
+      "baiman": "倍満",
+      "sanbaiman": "三倍満",
+      "yakuman": "役満",
+      "riichi": "リーチ",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "手を計算",
+      "clear": "クリア",
+      "backspace": "削除",
+      "minus": "マイナス",
+      "plus": "プラス",
+      "equals": "イコール",
+      "thousand": "ゼロ3つ",
+      "useHand": "計算に使う"
     }
   },
   "backup": {

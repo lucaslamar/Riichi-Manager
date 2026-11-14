@@ -1966,6 +1966,33 @@
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
       "windsTitle": "Winds per player"
+    },
+    "points": {
+      "points": "Puntos",
+      "sum": "Suma {{sum}} / {{total}}",
+      "depositsLeft": "Depósitos de riichi en la mesa: {{count}}",
+      "seatEmpty": "{{wind}}, {{name}}, sin puntos",
+      "seatFilled": "{{wind}}, {{name}}, {{points}} puntos",
+      "swapHint": "Toca la tarjeta para anotar los puntos. Mantén pulsado para cambiar el jugador.",
+      "ok": "OK",
+      "limits": "Valores límite",
+      "nonDealer": "No dealer",
+      "dealer": "Dealer",
+      "mangan": "Mangan",
+      "haneman": "Haneman",
+      "baiman": "Baiman",
+      "sanbaiman": "Sanbaiman",
+      "yakuman": "Yakuman",
+      "riichi": "Riichi",
+      "spokenValue": "{{name}}, {{value}}",
+      "calculateHand": "Calcular mano",
+      "clear": "borrar todo",
+      "backspace": "borrar",
+      "minus": "menos",
+      "plus": "más",
+      "equals": "igual",
+      "thousand": "tres ceros",
+      "useHand": "Usar en la cuenta"
     }
   },
   "backup": {
