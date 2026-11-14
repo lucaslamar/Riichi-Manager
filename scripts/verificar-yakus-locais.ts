@@ -73,6 +73,14 @@ teste('Daisharin e Shousharin', () => {
   assert.ok(ids(mao('11223344556677s')).includes('shousharin'))
 })
 
+teste('American Civil War sai da mão, sem condição marcada', () => {
+  assert.ok(ids(mao('1168m1568p222z444z')).includes('americanCivilWar'))
+  // Os dois anos no mesmo naipe não valem.
+  assert.ok(!ids(mao('11156688m222z444z')).includes('americanCivilWar'))
+  const resultado = calcularMao(mao('1168m1568p222z444z'), configuracaoPadrao, tudo())
+  assert.ok(resultado.yakuman >= 1)
+})
+
 teste('Sanrenkou e Suurenkou', () => {
   assert.ok(ids(mao('444555666m789p11z')).includes('sanrenkou'))
   assert.ok(ids(mao('33344455566677m')).includes('suurenkou'))

@@ -866,9 +866,21 @@ export const YAKUS_LOCAIS: readonly YakuLocal[] = [
     kanji: '南北戦争',
     categoria: 'yakuman',
     valor: YAKUMAN,
-    situacao: true,
+    // Só da mão: a calculadora reconhece sozinha (não é botão de condição).
+    formatoIrregular: true,
     pt: { valor: 'Yakuman', traducao: 'Guerra de Secessão', descricao: 'Mão fechada com trincas de Sul e Norte e as pedras 1861 e 1865 em naipes diferentes (os anos da guerra).' },
     en: { valor: 'Yakuman', traducao: 'American Civil War', descricao: 'Closed hand with South and North triplets plus 1861 and 1865 in different suits (the war years).' },
+    detectar: (contexto) => {
+      if (contexto.mao.melds.length > 0 || contexto.pedras.length !== 14) return false
+      if (contexto.contagem[28] !== 3 || contexto.contagem[30] !== 3) return false
+      const numeros = contexto.pedras.filter((indice) => !ehHonra(indice))
+      if (numeros.length !== 8) return false
+      // Cada ano num naipe: 1861 (1, 1, 6, 8) num e 1865 (1, 5, 6, 8) no outro.
+      const porNaipe = new Map<number, number[]>()
+      numeros.forEach((indice) => porNaipe.set(naipe(indice), [...(porNaipe.get(naipe(indice)) ?? []), numero(indice)]))
+      const anos = [...porNaipe.values()].map((lista) => [...lista].sort((x, y) => x - y).join(''))
+      return anos.length === 2 && anos.includes('1168') && anos.includes('1568')
+    },
   },
   {
     id: 'touhokuExpressway',

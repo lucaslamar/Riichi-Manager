@@ -54,7 +54,7 @@ export const EXEMPLOS_YAKUS_LOCAIS: Record<string, string> = {
   kokuiisou: '222p444p888p111z22z',
   ryuuiisourin: '234s234s666s888s55s',
   goldenGateBridge: '123p345p567p789p55p',
-  americanCivilWar: '222z444z186m1s865p',
+  americanCivilWar: '1168m1568p222z444z',
   touhokuExpressway: '222p444p666p111z44z',
   touhokuShinkansen: '123p456p789p111z44z',
   blueTunnel: '222p444p888p666z11z',
