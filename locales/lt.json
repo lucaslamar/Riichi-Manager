@@ -1213,10 +1213,9 @@
       "newDrawLabel": "Nauji burtai su tuo pačiu sąrašu kitam ratui",
       "registerResult": "Įrašyti rezultatą",
       "tableRegistered": "Partija užregistruota",
-      "tableAborted": "Stalas nutrauktas",
-      "abortTable": "Nutraukti stalą",
-      "abortTableTitle": "Nutraukti {{number}} stalą?",
-      "abortTableHelp": "Stalas liks be rezultato ir nebebus laikomas laukiančiu susitikime. Atšaukti negalima.",
+      "abortMeeting": "Nutraukti susitikimą",
+      "abortMeetingTitle": "Nutraukti susitikimą?",
+      "abortMeetingHelp": "Burtai atšaukiami, o sąrašą galėsite redaguoti ir burti iš naujo. Jau užregistruotos partijos lieka istorijoje.",
       "meetingDone": "done"
     },
     "cards": {

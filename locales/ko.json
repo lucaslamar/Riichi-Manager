@@ -1159,10 +1159,9 @@
       "newDrawLabel": "같은 명단으로 다음 라운드 새 추첨",
       "registerResult": "결과 기록",
       "tableRegistered": "대국 기록됨",
-      "tableAborted": "중단된 테이블",
-      "abortTable": "테이블 중단",
-      "abortTableTitle": "{{number}}번 테이블을 중단할까요?",
-      "abortTableHelp": "이 테이블은 결과 없이 끝나며 모임의 미기록 테이블에서 빠집니다. 되돌릴 수 없습니다.",
+      "abortMeeting": "모임 중단",
+      "abortMeetingTitle": "모임을 중단할까요?",
+      "abortMeetingHelp": "추첨이 취소되고 명단을 수정해 다시 추첨할 수 있습니다. 이미 기록된 대국은 기록에 남습니다.",
       "meetingDone": "done"
     },
     "cards": {

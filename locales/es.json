@@ -1184,10 +1184,9 @@
       "newDrawLabel": "Nuevo sorteo con la misma lista, para la próxima ronda",
       "registerResult": "Registrar resultado",
       "tableRegistered": "Partida registrada",
-      "tableAborted": "Mesa abortada",
-      "abortTable": "Abortar mesa",
-      "abortTableTitle": "¿Abortar la Mesa {{number}}?",
-      "abortTableHelp": "La mesa queda sin resultado y deja de contar como pendiente en el encuentro. No se puede deshacer.",
+      "abortMeeting": "Abortar encuentro",
+      "abortMeetingTitle": "¿Abortar el encuentro?",
+      "abortMeetingHelp": "El sorteo se deshace y la lista vuelve para que la edites y sortees de nuevo. Las partidas ya registradas siguen en el historial.",
       "meetingDone": "done"
     },
     "cards": {
