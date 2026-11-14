@@ -49,9 +49,9 @@ export function CartaoYakuLocal({ yaku }: { yaku: YakuLocal }) {
       <p className="yaku-card__pt">{texto.traducao}</p>
       <p className="yaku-card__descricao">{texto.descricao}</p>
       <p className="yaku-card__valor-local">{texto.valor}</p>
-      {textoCombinacoes(yaku.id, t) && (
+      {textoCombinacoes(yaku.id, t, idioma) && (
         <p className="yaku-card__combinacoes">
-          <strong>{t('localYaku.combo.title')}</strong> {textoCombinacoes(yaku.id, t)}
+          <strong>{t('localYaku.combo.title')}</strong> {textoCombinacoes(yaku.id, t, idioma)}
         </p>
       )}
       {PORQUE_YAKUS_LOCAIS[yaku.id] && (

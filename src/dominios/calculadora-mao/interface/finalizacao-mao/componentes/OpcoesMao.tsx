@@ -68,10 +68,11 @@ export default function OpcoesMao({
               subtitulo: `${yaku.nome} (${t('localYaku.localTag')})`,
               item: true,
               literal: true,
-              paragrafos: [
-                texto.descricao,
+              paragrafos: [texto.descricao],
+              // Valor e combinações em letra menor, sem os links do glossário.
+              apoio: [
                 t('localYaku.value', { value: texto.valor }),
-                ...(textoCombinacoes(yaku.id, t) ? [t('localYaku.combo.label', { list: textoCombinacoes(yaku.id, t) })] : []),
+                ...(textoCombinacoes(yaku.id, t, idioma) ? [textoCombinacoes(yaku.id, t, idioma)] : []),
               ],
             }
           }),

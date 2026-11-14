@@ -182,3 +182,11 @@
   padding-top: 14px;
   border-top: 2px solid var(--linha-divisoria);
 }
+
+/* Valor e combinações de um yaku local: letra menor, em cinza, sem links. */
+.glossario-item__apoio {
+  margin: 4px 0 0;
+  color: var(--texto-apoio);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
