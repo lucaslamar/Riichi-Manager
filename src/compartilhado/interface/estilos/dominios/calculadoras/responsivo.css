@@ -5537,3 +5537,33 @@
 .construtor-mao-montagem .menu-acoes-teclado-mobile .opcoes-acoes-mao-mobile--sanma.opcoes-acoes-mao-mobile--sem-mpsz {
   grid-template-columns: 1fr 1fr 1.5fr;
 }
+
+/* Contraste no claro e no escuro: o Tsumo | Ron ganha contorno e uma linha no
+   meio, e o Calcular ainda bloqueado tem borda, para não sumir no fundo. */
+.toggle-agari-mao {
+  border: 2px solid var(--entrada-borda);
+}
+
+/* Linha reta no meio (os dois botões têm a mesma largura). As regras de cada tela
+   zeram a borda dos botões, por isso a linha é do contorno, não deles. */
+.toggle-agari-mao {
+  position: relative;
+}
+
+.toggle-agari-mao::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: var(--entrada-borda);
+  content: "";
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.btn-calcular-mao:disabled {
+  border: 2px solid var(--entrada-borda);
+  background: transparent;
+  color: var(--texto-apoio);
+}
