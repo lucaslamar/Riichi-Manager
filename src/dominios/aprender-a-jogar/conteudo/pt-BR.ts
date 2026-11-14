@@ -2095,7 +2095,7 @@ export const tutorialParts: TutorialPart[] = [
     id: 'primeiras-partidas',
     number: 1,
     title: 'Primeiras partidas',
-    cover: 'Tudo o que você precisa para jogar uma rodada, sem yaku e sem contar pontos.',
+    cover: 'O essencial para jogar sua primeira partida, ainda sem yaku e sem contar pontos.',
     modules: ['pedras', 'mesa', 'mao', 'turno', 'fim-partida'].map(modulo),
   },
   {

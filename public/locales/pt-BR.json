@@ -696,8 +696,8 @@
     "title": "Tutorial",
     "short": "Tutorial",
     "tagline": {
-      "one": "O primeiro módulo ensina o básico. Antes de seguir, jogue uma partida para firmar a base.",
-      "other": "Os {{count}} primeiros módulos ensinam o básico. Antes de seguir, jogue uma partida para firmar a base."
+      "one": "É um módulo curto. Ao terminar, jogue uma partida antes de seguir: é ela que fixa o que você aprendeu.",
+      "other": "São {{count}} módulos curtos. Ao terminar, jogue uma partida antes de seguir: é ela que fixa o que você aprendeu."
     },
     "howToUse": "Como usar",
     "howToTurn": "Toque nas laterais da tela ou deslize para virar a página.",
