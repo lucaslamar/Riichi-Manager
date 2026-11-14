@@ -350,14 +350,6 @@ export default function PaginaListaClube({
       {inserirApos !== null && (
         <FolhaCadastrados
           idsNaLista={idsNaLista}
-          ultimoEncontro={
-            ultimoEncontro
-              ? {
-                  criadoEm: ultimoEncontro.criadoEm,
-                  nomes: ultimoEncontro.jogadores.map((entrada) => entrada.nome),
-                }
-              : undefined
-          }
           aoAbrirListasSalvas={() => {
             setInserirApos(null)
             setListasSalvas(true)
@@ -372,6 +364,19 @@ export default function PaginaListaClube({
         <FolhaListasSalvas
           listas={listas}
           podeGuardar={entradas.length > 0}
+          // Os nomes do último sorteio ficam junto das listas salvas.
+          ultimoEncontro={
+            ultimoEncontro
+              ? {
+                  criadoEm: ultimoEncontro.criadoEm,
+                  nomes: ultimoEncontro.jogadores.map((entrada) => entrada.nome),
+                }
+              : undefined
+          }
+          aoUsarNomes={(nomes) => {
+            acrescentar(nomes)
+            setListasSalvas(false)
+          }}
           aoFechar={() => setListasSalvas(false)}
           aoGuardar={(nome) => {
             guardarLista(nome, entradas.map((entrada) => entrada.nome).join('\n'))

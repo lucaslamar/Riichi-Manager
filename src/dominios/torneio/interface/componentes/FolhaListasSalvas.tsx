@@ -3,12 +3,15 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { linhasDoTexto } from '@/dominios/centerpiece/logica/listaClube'
 import type { ListaSalva } from '../../logica/tipos'
+import '@/dominios/centerpiece/interface/clube.css'
 import '../torneio.css'
 
 /** Listas salvas: guardar a lista com um nome ou carregar uma guardada (torneio e clube). */
 export default function FolhaListasSalvas({
   listas,
   podeGuardar,
+  ultimoEncontro,
+  aoUsarNomes,
   aoFechar,
   aoGuardar,
   aoCarregar,
@@ -16,6 +19,9 @@ export default function FolhaListasSalvas({
 }: {
   listas: readonly ListaSalva[]
   podeGuardar: boolean
+  /** Clube: os nomes do último sorteio, para repetir a lista de uma vez. */
+  ultimoEncontro?: { criadoEm: string; nomes: string[] }
+  aoUsarNomes?: (nomes: string[]) => void
   aoFechar: () => void
   aoGuardar: (nome: string) => void
   aoCarregar: (lista: ListaSalva) => void
@@ -33,6 +39,31 @@ export default function FolhaListasSalvas({
       tamanho="pequena"
       className="trn-folha-memoria"
     >
+      {/* Atalho do clube: a lista inteira do último sorteio, convidados inclusive. */}
+      {ultimoEncontro && ultimoEncontro.nomes.length > 0 && aoUsarNomes && (
+        <button
+          type="button"
+          className="clb-ultimo-encontro"
+          onClick={() => aoUsarNomes(ultimoEncontro.nomes)}
+        >
+          <i className="fas fa-clock-rotate-left" aria-hidden="true" />
+          <span className="clb-ultimo-encontro-texto">
+            <strong>{t('match.club.lastDrawNames')}</strong>
+            <span className="ptd-apoio">
+              <time dateTime={ultimoEncontro.criadoEm}>
+                {new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
+                  new Date(ultimoEncontro.criadoEm),
+                )}
+              </time>
+              {' · '}
+              {ultimoEncontro.nomes.join(', ')}
+            </span>
+          </span>
+          <span className="clb-ultimo-encontro-acao">
+            {t('match.club.useNames', { count: ultimoEncontro.nomes.length })}
+          </span>
+        </button>
+      )}
       <form
         className="trn-guardar"
         onSubmit={(evento) => {
