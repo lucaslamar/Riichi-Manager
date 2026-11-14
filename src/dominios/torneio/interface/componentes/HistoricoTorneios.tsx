@@ -1,19 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { historicoDeTorneios, type FiltroHistorico } from '../../logica/torneio'
 import type { FormatoTorneio, Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import '../torneio.css'
-import BuscaFiltrosLista from '@/dominios/centerpiece/interface/componentes/BuscaFiltrosLista'
-import {
-  FILTROS_LISTA_PADRAO,
-  filtrarLista,
-  type FiltrosLista,
-} from '@/dominios/centerpiece/logica/filtrosAndamento'
+import { filtrarLista, type FiltrosLista } from '@/dominios/centerpiece/logica/filtrosAndamento'
 import { nomeNoTorneio } from '../../logica/torneio'
 
-const FORMATOS: readonly FormatoTorneio[] = [
+export const FORMATOS_TORNEIO: readonly FormatoTorneio[] = [
   'rodizio',
   'suico',
   'eliminatorio',
@@ -21,19 +16,24 @@ const FORMATOS: readonly FormatoTorneio[] = [
   'temporada',
 ]
 
-/** Torneios finalizados, com busca por jogador, formato e datas. Fica na aba do Histórico. */
+/**
+ * Torneios finalizados e temporadas. A busca e os filtros vêm do Histórico,
+ * que mostra esta lista quando o tipo escolhido é Torneios.
+ */
 export default function HistoricoTorneios({
   aoAbrir,
   aoAbrirTemporada,
+  busca,
+  filtrosLista,
 }: {
   aoAbrir: (torneio: Torneio) => void
   aoAbrirTemporada: (temporadaId: string) => void
+  busca: string
+  filtrosLista: FiltrosLista
 }) {
   const { t, idioma } = useI18n()
   const { torneios, temporadas } = useTorneios()
   const { jogadores } = useJogadores()
-  const [busca, setBusca] = useState('')
-  const [filtrosLista, setFiltrosLista] = useState<FiltrosLista>(FILTROS_LISTA_PADRAO)
   const filtro: FiltroHistorico = {
     busca,
     formato: (filtrosLista.formato ?? 'todos') as FiltroHistorico['formato'],
@@ -94,20 +94,6 @@ export default function HistoricoTorneios({
         <p className="ptd-vazio">{t('tournament.history.empty')}</p>
       ) : (
         <>
-          <BuscaFiltrosLista
-            busca={busca}
-            aoBuscar={setBusca}
-            filtros={filtrosLista}
-            aoFiltrar={setFiltrosLista}
-            placeholder={t('tournament.history.search')}
-            formatos={[
-              { valor: 'todos', rotulo: t('tournament.history.allFormats') },
-              ...FORMATOS.map((formato) => ({
-                valor: formato,
-                rotulo: t(`tournament.formats.${formato}`),
-              })),
-            ]}
-          />
           {historico.length === 0 ? (
             <p className="ptd-vazio">{t('tournament.history.noMatch')}</p>
           ) : (

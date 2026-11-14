@@ -3,14 +3,15 @@ import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
-import HistoricoTorneios from '@/dominios/torneio/interface/componentes/HistoricoTorneios'
+import HistoricoTorneios, {
+  FORMATOS_TORNEIO,
+} from '@/dominios/torneio/interface/componentes/HistoricoTorneios'
 import type { Torneio } from '@/dominios/torneio/logica/tipos'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import type { Cadeira, Partida } from '../../logica/partida'
 import { partidasDoHistorico } from '../../logica/ranking'
 import { cadeirasDaPartida } from '../../logica/partida'
 import { filtrarHistorico, type FiltroTipoMesa } from '../../logica/tipoDaMesa'
-import BotoesOpcao from '../componentes/BotoesOpcao'
 import FiltroTipo from '../componentes/FiltroTipo'
 import BuscaFiltrosLista from '../componentes/BuscaFiltrosLista'
 import {
@@ -28,7 +29,10 @@ import { usePartidas } from '../hooks/usePartidas'
 import { nomeDoAssento } from '../nomeDoAssento'
 import { textoDaPartida } from '../textoPartida'
 
-/** Partidas finalizadas e, na outra aba, os torneios finalizados. */
+/**
+ * Partidas finalizadas. No tipo Torneios, a lista vira a dos torneios
+ * finalizados (e temporadas), com a mesma busca e os mesmos filtros.
+ */
 export default function PaginaHistorico({
   aoVoltar,
   aoAbrirTorneio,
@@ -45,7 +49,6 @@ export default function PaginaHistorico({
   const [abertaId, setAbertaId] = useState<string | null>(null)
   const [paraExcluir, setParaExcluir] = useState<string | null>(null)
   const [acoesAbertas, setAcoesAbertas] = useState(false)
-  const [aba, setAba] = useState<'partidas' | 'torneios'>('partidas')
   const [tipo, setTipo] = useState<FiltroTipoMesa>('todas')
   const [busca, setBusca] = useState('')
   const [filtrosLista, setFiltrosLista] = useState<FiltrosLista>(FILTROS_LISTA_PADRAO)
@@ -157,31 +160,46 @@ export default function PaginaHistorico({
   return (
     <section className="ptd-inicio cm-pagina">
       <TituloTela titulo={t('match.home.history')} aoVoltar={aoVoltar} />
-      <BotoesOpcao
-        rotulo={t('match.home.history')}
-        opcoes={[
-          { valor: 'partidas', rotulo: t('match.history.tabMatches') },
-          { valor: 'torneios', rotulo: t('match.history.tabTournaments') },
-        ]}
-        valor={aba}
-        aoEscolher={setAba}
-      />
-      {aba === 'torneios' ? (
-        <HistoricoTorneios aoAbrir={aoAbrirTorneio} aoAbrirTemporada={aoAbrirTemporada} />
+      <div className="ptd-filtro-historico">
+        <BuscaFiltrosLista
+          busca={busca}
+          aoBuscar={setBusca}
+          filtros={filtrosLista}
+          aoFiltrar={setFiltrosLista}
+          placeholder={t(tipo === 'torneio' ? 'tournament.history.search' : 'match.history.search')}
+          // Formato só faz sentido na lista de torneios.
+          formatos={
+            tipo === 'torneio'
+              ? [
+                  { valor: 'todos', rotulo: t('tournament.history.allFormats') },
+                  ...FORMATOS_TORNEIO.map((formato) => ({
+                    valor: formato,
+                    rotulo: t(`tournament.formats.${formato}`),
+                  })),
+                ]
+              : undefined
+          }
+        />
+        <FiltroTipo
+          valor={tipo}
+          aoMudar={(novo) => {
+            setTipo(novo)
+            // O formato é só dos torneios: fora deles, volta para todos.
+            if (novo !== 'torneio') setFiltrosLista((atuais) => ({ ...atuais, formato: 'todos' }))
+          }}
+        />
+      </div>
+      {tipo === 'torneio' ? (
+        <HistoricoTorneios
+          aoAbrir={aoAbrirTorneio}
+          aoAbrirTemporada={aoAbrirTemporada}
+          busca={busca}
+          filtrosLista={filtrosLista}
+        />
       ) : historico.length === 0 ? (
         <p className="ptd-vazio">{t('match.history.empty')}</p>
       ) : (
         <>
-          <div className="ptd-filtro-historico">
-            <BuscaFiltrosLista
-              busca={busca}
-              aoBuscar={setBusca}
-              filtros={filtrosLista}
-              aoFiltrar={setFiltrosLista}
-              placeholder={t('match.history.search')}
-            />
-            <FiltroTipo valor={tipo} aoMudar={setTipo} />
-          </div>
           {filtrado.length === 0 && <p className="ptd-vazio">{t('match.history.noMatch')}</p>}
           <ul className="cm-lista ptd-lista-historico">
             {filtrado.map((partida) => (
