@@ -24,12 +24,11 @@ export default function PaginaMesasSorteadas({
   aoRegistrarMesa: (mesa: MesaDoSorteio) => void
 }) {
   const { t, idioma } = useI18n()
-  const { sorteio, sortearDeNovo, abortarMesa, abortarEncontro } = useClube()
+  const { sorteio, sortearDeNovo, abortarEncontro } = useClube()
   const [abortandoEncontro, setAbortandoEncontro] = useState(false)
   const { partidas } = usePartidas()
   const { aviso, mostrar } = useAviso()
   const [refazendo, setRefazendo] = useState(false)
-  const [paraAbortar, setParaAbortar] = useState<number | null>(null)
 
   if (!sorteio) {
     return (
@@ -50,8 +49,7 @@ export default function PaginaMesasSorteadas({
 
   /** A mesa conta como registrada enquanto a partida dela existir no histórico. */
   const registrada = (mesa: MesaDoSorteio) =>
-    !mesa.abortada && !!mesa.partidaId && partidas.some((partida) => partida.id === mesa.partidaId)
-  const resolvida = (mesa: MesaDoSorteio) => !!mesa.abortada || registrada(mesa)
+    !!mesa.partidaId && partidas.some((partida) => partida.id === mesa.partidaId)
 
   const compartilhar = async () => {
     const texto = textoDasMesas(sorteio.mesas, {
@@ -109,7 +107,7 @@ export default function PaginaMesasSorteadas({
           {t('match.club.meeting')} · <time dateTime={sorteio.encontro.criadoEm}>{dataHora}</time>
         </span>
         <small>
-          {sorteio.mesas.every(resolvida)
+          {sorteio.mesas.every(registrada)
             ? t('match.club.meetingDone')
             : t('match.types.inProgressTag')}
         </small>
@@ -119,10 +117,7 @@ export default function PaginaMesasSorteadas({
         {sorteio.mesas.map((mesa) => {
           const rotulo = t('match.table.number', { number: mesa.numero })
           return (
-            <li
-              key={mesa.numero}
-              className={`clb-mesa${mesa.abortada ? ' clb-mesa--abortada' : ''}`}
-            >
+            <li key={mesa.numero} className="clb-mesa">
               <h3 className="clb-mesa-titulo">{rotulo}</h3>
               <ul className="clb-mesa-assentos" aria-label={rotulo}>
                 {mesa.assentos.map(({ vento, jogador }) => (
@@ -143,36 +138,21 @@ export default function PaginaMesasSorteadas({
                   </li>
                 ))}
               </ul>
-              {mesa.abortada ? (
-                <p className="clb-mesa-abortada" role="status">
-                  <i className="fas fa-ban" aria-hidden="true" /> {t('match.club.tableAborted')}
-                </p>
-              ) : registrada(mesa) ? (
+              {registrada(mesa) ? (
                 <p className="clb-mesa-feita" role="status">
                   <i className="fas fa-circle-check" aria-hidden="true" />{' '}
                   {t('match.club.tableRegistered')}
                 </p>
               ) : (
-                <div className="clb-mesa-acoes">
-                  <button
-                    type="button"
-                    className="btn-contorno clb-mesa-botao"
-                    aria-label={`${t('match.club.registerResult')}, ${rotulo}`}
-                    onClick={() => aoRegistrarMesa(mesa)}
-                  >
-                    <i className="fas fa-clipboard-check" aria-hidden="true" />{' '}
-                    {t('match.club.registerResult')}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-contorno clb-mesa-abortar"
-                    aria-label={`${t('match.club.abortTable')}, ${rotulo}`}
-                    title={t('match.club.abortTable')}
-                    onClick={() => setParaAbortar(mesa.numero)}
-                  >
-                    <i className="fas fa-ban" aria-hidden="true" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="btn-contorno clb-mesa-botao"
+                  aria-label={`${t('match.club.registerResult')}, ${rotulo}`}
+                  onClick={() => aoRegistrarMesa(mesa)}
+                >
+                  <i className="fas fa-clipboard-check" aria-hidden="true" />{' '}
+                  {t('match.club.registerResult')}
+                </button>
               )}
             </li>
           )
@@ -183,20 +163,6 @@ export default function PaginaMesasSorteadas({
         <p className="ptd-aviso" role="status">
           {aviso}
         </p>
-      )}
-
-      {paraAbortar !== null && (
-        <ModalConfirmacao
-          titulo={t('match.club.abortTableTitle', { number: paraAbortar })}
-          texto={t('match.club.abortTableHelp')}
-          rotuloConfirmar={t('match.club.abortTable')}
-          perigo
-          aoFechar={() => setParaAbortar(null)}
-          aoConfirmar={() => {
-            abortarMesa(paraAbortar)
-            setParaAbortar(null)
-          }}
-        />
       )}
 
       {abortandoEncontro && (

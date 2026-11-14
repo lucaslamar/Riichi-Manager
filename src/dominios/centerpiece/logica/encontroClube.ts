@@ -16,8 +16,6 @@ export interface EncontroClube {
 export interface MesaDoSorteio extends MesaSorteada<EntradaLista> {
   /** Partida registrada a partir desta mesa. */
   partidaId?: string
-  /** A mesa foi abortada: não terá resultado e não conta como pendente. */
-  abortada?: boolean
 }
 
 /** Último sorteio, guardado até ser refeito ou a lista ser limpa. */
@@ -59,11 +57,7 @@ export function agruparAbertas(abertas: readonly Partida[]): GrupoAbertas[] {
 }
 
 /** Marca a mesa do sorteio como registrada, sem perder as outras. */
-export function marcarMesaRegistrada(
-  sorteio: SorteioClube,
-  numero: number,
-  partidaId: string,
-): SorteioClube {
+export function marcarMesaRegistrada(sorteio: SorteioClube, numero: number, partidaId: string): SorteioClube {
   return {
     ...sorteio,
     mesas: sorteio.mesas.map((mesa) => (mesa.numero === numero ? { ...mesa, partidaId } : mesa)),
@@ -71,34 +65,7 @@ export function marcarMesaRegistrada(
 }
 
 /** Quantas mesas do sorteio já têm resultado (a partida existe no histórico). */
-export function mesasRegistradas(
-  sorteio: SorteioClube,
-  partidas: readonly Pick<Partida, 'id'>[],
-): number {
+export function mesasRegistradas(sorteio: SorteioClube, partidas: readonly Pick<Partida, 'id'>[]): number {
   const ids = new Set(partidas.map((partida) => partida.id))
-  return sorteio.mesas.filter((mesa) => !mesa.abortada && mesa.partidaId && ids.has(mesa.partidaId))
-    .length
-}
-
-/** Aborta a mesa do sorteio: ela sai das pendentes e não registra resultado. */
-export function abortarMesa(sorteio: SorteioClube, numero: number): SorteioClube {
-  return {
-    ...sorteio,
-    mesas: sorteio.mesas.map((mesa) =>
-      mesa.numero === numero ? { ...mesa, abortada: true } : mesa,
-    ),
-  }
-}
-
-/** Mesas que valem no encontro (as abortadas ficam de fora). */
-export function mesasValidas(sorteio: SorteioClube): number {
-  return sorteio.mesas.filter((mesa) => !mesa.abortada).length
-}
-
-/** Ainda há mesa sem resultado e não abortada? */
-export function temMesaPendente(
-  sorteio: SorteioClube,
-  partidas: readonly Pick<Partida, 'id'>[],
-): boolean {
-  return mesasRegistradas(sorteio, partidas) < mesasValidas(sorteio)
+  return sorteio.mesas.filter((mesa) => mesa.partidaId && ids.has(mesa.partidaId)).length
 }

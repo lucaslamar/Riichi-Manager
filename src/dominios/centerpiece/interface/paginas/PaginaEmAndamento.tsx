@@ -5,7 +5,7 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
-import { mesasRegistradas, mesasValidas, temMesaPendente } from '../../logica/encontroClube'
+import { mesasRegistradas } from '../../logica/encontroClube'
 import type { FiltroTipoMesa } from '../../logica/tipoDaMesa'
 import FiltroTipo from '../componentes/FiltroTipo'
 import BuscaFiltrosLista from '../componentes/BuscaFiltrosLista'
@@ -56,7 +56,7 @@ export default function PaginaEmAndamento({
     (torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm,
   )
   const registradas = sorteio ? mesasRegistradas(sorteio, partidas) : 0
-  const sorteioPendente = sorteio && temMesaPendente(sorteio, partidas) ? sorteio : null
+  const sorteioPendente = sorteio && registradas < sorteio.mesas.length ? sorteio : null
   const mostra = (tipo: FiltroTipoMesa) => filtro === 'todas' || filtro === tipo
   const dataHora = (iso: string) =>
     new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
@@ -160,7 +160,7 @@ export default function PaginaEmAndamento({
                       {dataHora(sorteioPendente.encontro.criadoEm)} ·{' '}
                       {t('match.types.registeredOf', {
                         count: registradas,
-                        total: mesasValidas(sorteioPendente),
+                        total: sorteioPendente.mesas.length,
                       })}
                     </small>
                   </span>
