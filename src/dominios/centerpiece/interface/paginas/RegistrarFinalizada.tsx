@@ -28,7 +28,7 @@ import CardAssento from '../componentes/CardAssento'
 import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
 import { somaFecha } from '../../logica/expressaoPontos'
-import RegrasPontuacaoRegistro from '../componentes/RegrasPontuacaoRegistro'
+import RegrasPontuacaoRegistro, { useResumo } from '../componentes/RegrasPontuacaoRegistro'
 import { assentosDaMesa } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
 import '../config-mesa.css'
@@ -68,6 +68,7 @@ export default function RegistrarFinalizada({
   const { partidas, adicionar } = usePartidas()
   const [confirmando, setConfirmando] = useState(false)
   const [regrasAbertas, setRegrasAbertas] = useState(false)
+  const resumoRegras = useResumo()
   // Conjunto de regras: o último usado aqui (mesa do clube sempre começa no Clube).
   const [salvas] = useState(() => carregarRegrasRegistro(armazenamentoLocal))
   const [conjunto, setConjunto] = useState<ConjuntoRegistro>(clube ? 'padrao' : salvas.conjunto)
@@ -197,23 +198,6 @@ export default function RegistrarFinalizada({
               : t('match.manual.title')
         }
         aoVoltar={aoVoltar}
-        acoes={
-          // Regras de pontuação: o ícone de controles, como nas regras da Calculadora.
-          torneio ? undefined : (
-            <span className="clb-acoes-titulo">
-              <button
-                type="button"
-                className="cm-btn-icone"
-                aria-label={t('match.manual.editRules')}
-                title={t('match.manual.editRules')}
-                aria-haspopup="dialog"
-                onClick={() => setRegrasAbertas(true)}
-              >
-                <i className="fas fa-sliders" aria-hidden="true" />
-              </button>
-            </span>
-          )
-        }
       />
 
       {/* Títulos das seções no estilo do Han e Fu (caixa alta, pequenos). */}
@@ -330,9 +314,36 @@ export default function RegistrarFinalizada({
         <p className="cfg-ajuda">{t('tournament.points.swapHint')}</p>
       </>
 
+      {/* Regras num card, como o resumo da Nova partida. No torneio, só leitura. */}
       {torneio ? (
-        <p className="cfg-ajuda">{t('tournament.tables.rulesLocked')}</p>
+        <div className="ptd-resumo-regras fin-regras-travadas">
+          <span>
+            <strong>
+              {`${t(base.tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t('match.manual.rulesTitle')}`}
+            </strong>
+            <span className="ptd-apoio">{resumoRegras(regras)}</span>
+          </span>
+          <i className="fas fa-lock" aria-hidden="true" />
+          <span className="sr-only">{t('tournament.tables.rulesLocked')}</span>
+        </div>
       ) : (
+        <button
+          type="button"
+          className="ptd-resumo-regras"
+          aria-haspopup="dialog"
+          onClick={() => setRegrasAbertas(true)}
+        >
+          <span>
+            <strong>
+              {`${t(tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t(`match.manual.rulesets.${conjunto}`)}`}
+            </strong>
+            <span className="ptd-apoio">{resumoRegras(regras)}</span>
+          </span>
+          <i className="fas fa-wrench" aria-hidden="true" />
+          <span className="sr-only">{t('match.manual.editRules')}</span>
+        </button>
+      )}
+      {!torneio && (
         <RegrasPontuacaoRegistro
           conjunto={conjunto}
           regras={regras}

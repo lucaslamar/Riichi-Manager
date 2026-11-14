@@ -21,7 +21,7 @@ import EscolhaOka from './EscolhaOka'
 const DISTANCIA_DESLIZE = 60
 
 /** "25.000 pontos · retorno 30.000 · uma 15/5", igual ao resumo da criação de mesa. */
-function useResumo() {
+export function useResumo() {
   const { t, numero, idioma } = useI18n()
   return (regras: RegrasPontuacao) =>
     t('match.setup.rulesSummary', {

@@ -237,3 +237,12 @@
     grid-auto-rows: 36px;
   }
 }
+
+/* Regras do torneio: o mesmo card, só para ler. */
+.fin-regras-travadas {
+  cursor: default;
+}
+
+.fin-regras-travadas > i {
+  color: var(--texto-apoio);
+}
