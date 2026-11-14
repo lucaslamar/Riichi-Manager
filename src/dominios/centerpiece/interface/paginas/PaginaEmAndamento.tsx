@@ -185,7 +185,12 @@ export default function PaginaEmAndamento({
         card: <ul className="cm-lista ptd-lista-mesas">{card(partida)}</ul>,
       })),
     ]
-  const visiveis = filtrarLista(itens, busca, filtrosLista, new Date(), idioma)
+  // Sempre em grupos, na ordem dos botões: Partidas, Clube e Torneios. A ordem
+  // dos filtros vale dentro de cada grupo (o sort é estável).
+  const grupo = (chave: string) => (chave.startsWith('m-') ? 0 : chave === 'encontro' ? 1 : 2)
+  const visiveis = filtrarLista(itens, busca, filtrosLista, new Date(), idioma).sort(
+    (um, outro) => grupo(um.chave) - grupo(outro.chave),
+  )
 
   return (
     <section className="ptd-inicio cm-pagina">
