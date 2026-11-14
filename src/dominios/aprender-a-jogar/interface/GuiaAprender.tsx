@@ -452,9 +452,6 @@ export default function GuiaAprender({
           <div className="guia-capa">
             <i className="fas fa-book-open guia-capa__icone" aria-hidden="true" />
             <h1 className="guia-capa__titulo">{t('learn.title')}</h1>
-            <p className="guia-capa__frase">
-              {t('learn.tagline', { count: conteudo.tutorialParts[0].modules.length })}
-            </p>
             <section className="guia-capa__como-usar" aria-labelledby="guia-como-usar">
               <h2 id="guia-como-usar">{t('learn.howToUse')}</h2>
               <ul>
@@ -526,6 +523,12 @@ export default function GuiaAprender({
               {t('learn.part', { number: pagina.parte.number })} · {pagina.parte.title}
             </p>
             <p className="guia-capitulo__frase">{pagina.parte.cover}</p>
+            {/* Na abertura da Parte 1: quantos módulos são o básico e o conselho de jogar antes de seguir. */}
+            {pagina.parte.number === 1 && (
+              <p className="guia-capitulo__frase">
+                {t('learn.tagline', { count: pagina.parte.modules.length })}
+              </p>
+            )}
           </div>
         )
       case 'capaModulo':
