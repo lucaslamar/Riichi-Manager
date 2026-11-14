@@ -2116,6 +2116,7 @@
       "semUltimaPedra": "不与海底或河底复合",
       "semTenhou": "不与天和或地和复合",
       "semOutro": "不与{{name}}复合"
-    }
+    },
+    "count": "已开启 {{on}}/{{total}}"
   }
 }

@@ -2149,6 +2149,7 @@
       "semUltimaPedra": "No combina con Haitei ni Houtei",
       "semTenhou": "No combina con Tenhou ni Chiihou",
       "semOutro": "No combina con {{name}}"
-    }
+    },
+    "count": "{{on}} de {{total}} activados"
   }
 }

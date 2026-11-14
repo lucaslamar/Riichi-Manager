@@ -2142,6 +2142,7 @@
       "semUltimaPedra": "Não combina com Haitei nem Houtei",
       "semTenhou": "Não combina com Tenhou nem Chiihou",
       "semOutro": "Não combina com {{name}}"
-    }
+    },
+    "count": "{{on}} de {{total}} ligados"
   }
 }

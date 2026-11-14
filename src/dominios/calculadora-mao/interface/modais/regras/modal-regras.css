@@ -175,8 +175,26 @@
 .secao-yakus-locais__cabecalho {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
+  padding-inline: 2px;
+}
+
+/* Mesmo tamanho e cor das caixas de cada yaku logo abaixo. */
+.secao-yakus-locais__todos {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--primario);
+  cursor: pointer;
+}
+
+.secao-yakus-locais__contagem {
+  margin-left: auto;
+  color: var(--cor-texto-suave, #607080);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .secao-yakus-locais__cabecalho h3 {

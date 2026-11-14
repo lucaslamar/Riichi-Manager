@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useYakusLocais, type VariacaoPaarenchan } from '@/compartilhado/configuracoes/useYakusLocais'
@@ -78,6 +78,12 @@ export default function SecaoYakusLocais({ mostrar }: { mostrar?: (texto: string
   const { yakusLocais, mudarYakusLocais, alternarYakuLocal } = useYakusLocais()
   const ativos = new Set(yakusLocais.ativos)
   const todosLigados = ativos.size === YAKUS_LOCAIS.length
+  // Caixa "todos": marcada com todos, meio marcada com alguns, vazia com nenhum.
+  const caixaTodos = useRef<HTMLInputElement>(null)
+  const algunsLigados = ativos.size > 0 && !todosLigados
+  useEffect(() => {
+    if (caixaTodos.current) caixaTodos.current.indeterminate = algunsLigados
+  }, [algunsLigados])
   const ligado = [
     { valor: true, rotulo: t('rulesModal.akadora.on') },
     { valor: false, rotulo: t('rulesModal.akadora.off') },
@@ -93,17 +99,23 @@ export default function SecaoYakusLocais({ mostrar }: { mostrar?: (texto: string
 
   return (
     <section id="regra-yakusLocais" className="secao-yakus-locais" aria-labelledby="titulo-yakus-locais">
+      {/* Caixa de marcar todos ao lado do título, alinhada com as caixas da lista. */}
       <div className="secao-yakus-locais__cabecalho">
+        <input
+          ref={caixaTodos}
+          type="checkbox"
+          className="secao-yakus-locais__todos"
+          checked={todosLigados}
+          aria-label={t(todosLigados ? 'localYaku.disableAll' : 'localYaku.enableAll')}
+          title={t(todosLigados ? 'localYaku.disableAll' : 'localYaku.enableAll')}
+          onChange={() => mudarYakusLocais({ ativos: todosLigados ? [] : YAKUS_LOCAIS.map((yaku) => yaku.id) })}
+        />
         <h3 id="titulo-yakus-locais">
           <TermoYakusLocais />
         </h3>
-        <button
-          type="button"
-          className="btn-contorno"
-          onClick={() => mudarYakusLocais({ ativos: todosLigados ? [] : YAKUS_LOCAIS.map((yaku) => yaku.id) })}
-        >
-          {t(todosLigados ? 'localYaku.disableAll' : 'localYaku.enableAll')}
-        </button>
+        <span className="secao-yakus-locais__contagem" aria-live="polite">
+          {t('localYaku.count', { on: ativos.size, total: YAKUS_LOCAIS.length })}
+        </span>
       </div>
       <p className="secao-yakus-locais__ajuda">{t('localYaku.help')}</p>
 

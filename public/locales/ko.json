@@ -2116,6 +2116,7 @@
       "semUltimaPedra": "해저·하저와 복합 불가",
       "semTenhou": "천화·지화와 복합 불가",
       "semOutro": "{{name}}와 복합 불가"
-    }
+    },
+    "count": "{{total}}개 중 {{on}}개 켬"
   }
 }

@@ -2142,6 +2142,7 @@
       "semUltimaPedra": "Not with Haitei or Houtei",
       "semTenhou": "Not with Tenhou or Chiihou",
       "semOutro": "Not with {{name}}"
-    }
+    },
+    "count": "{{on}} of {{total}} on"
   }
 }

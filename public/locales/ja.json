@@ -2116,6 +2116,7 @@
       "semUltimaPedra": "海底・河底と複合しない",
       "semTenhou": "天和・地和と複合しない",
       "semOutro": "{{name}}と複合しない"
-    }
+    },
+    "count": "{{total}}件中{{on}}件オン"
   }
 }

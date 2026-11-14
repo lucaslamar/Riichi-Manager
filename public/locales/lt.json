@@ -2208,6 +2208,7 @@
       "semUltimaPedra": "Nesiderina su Haitei ar Houtei",
       "semTenhou": "Nesiderina su Tenhou ar Chiihou",
       "semOutro": "Nesiderina su {{name}}"
-    }
+    },
+    "count": "Įjungta {{on}} iš {{total}}"
   }
 }
