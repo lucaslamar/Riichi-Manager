@@ -1610,6 +1610,23 @@
       "windOrderYes": "Leste, Sul, Oeste, Norte",
       "windOrderNo": "Foi aleatório",
       "windOrderHelp": "Com a ordem, a partida entra na estatística de vento inicial de cada jogador."
+    },
+    "listFilters": {
+      "search": "Buscar mesas, encontros e torneios",
+      "searchPlaceholder": "Nome, jogador ou data",
+      "order": "Ordenar por",
+      "noResults": "Nada encontrado com essa busca e esses filtros.",
+      "periods": {
+        "hoje": "Hoje",
+        "semana": "Últimos 7 dias",
+        "mes": "Este mês",
+        "tudo": "Tudo"
+      },
+      "orders": {
+        "recentes": "Mais recentes",
+        "antigos": "Mais antigos",
+        "nome": "Nome"
+      }
     }
   },
   "spokenTiles": {

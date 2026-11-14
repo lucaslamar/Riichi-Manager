@@ -1654,6 +1654,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "Ieškoti stalų, susitikimų ir turnyrų",
+      "searchPlaceholder": "Ieškoti pagal pavadinimą, žaidėją ar datą",
+      "order": "Rikiuoti pagal",
+      "noResults": "Nieko nerasta pagal šią paiešką ir filtrus.",
+      "periods": {
+        "hoje": "Šiandien",
+        "semana": "Paskutinės 7 dienos",
+        "mes": "Šis mėnuo",
+        "tudo": "Visi"
+      },
+      "orders": {
+        "recentes": "Naujausi",
+        "antigos": "Seniausi",
+        "nome": "Pavadinimas"
+      }
     }
   },
   "spokenTiles": {

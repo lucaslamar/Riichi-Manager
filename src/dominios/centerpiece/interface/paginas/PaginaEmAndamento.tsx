@@ -8,6 +8,14 @@ import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
 import { mesasRegistradas } from '../../logica/encontroClube'
 import type { FiltroTipoMesa } from '../../logica/tipoDaMesa'
 import FiltroTipo from '../componentes/FiltroTipo'
+import BuscaFiltrosLista from '../componentes/BuscaFiltrosLista'
+import {
+  FILTROS_LISTA_PADRAO,
+  filtrarLista,
+  type FiltrosLista,
+} from '../../logica/filtrosAndamento'
+import { nomeNoTorneio } from '@/dominios/torneio/logica/torneio'
+import type { ReactNode } from 'react'
 import type { Cadeira, Partida } from '../../logica/partida'
 import CardMesa from '../componentes/CardMesa'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
@@ -42,19 +50,34 @@ export default function PaginaEmAndamento({
   const { torneios } = useTorneios()
   const subtituloTorneio = useSubtituloTorneio()
   const [filtro, setFiltro] = useState<FiltroTipoMesa>('todas')
-  const torneiosEmJogo = torneios.filter((torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm)
+  const [busca, setBusca] = useState('')
+  const [filtrosLista, setFiltrosLista] = useState<FiltrosLista>(FILTROS_LISTA_PADRAO)
+  const torneiosEmJogo = torneios.filter(
+    (torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm,
+  )
   const registradas = sorteio ? mesasRegistradas(sorteio, partidas) : 0
   const sorteioPendente = sorteio && registradas < sorteio.mesas.length ? sorteio : null
   const mostra = (tipo: FiltroTipoMesa) => filtro === 'todas' || filtro === tipo
   const dataHora = (iso: string) =>
-    new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(new Date(iso))
+    new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
+      new Date(iso),
+    )
   const { aviso, mostrar } = useAviso()
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
 
+  // Nome completo e apelido do cadastro: a busca acha por qualquer um dos dois.
+  const nomesDe = (id: string | undefined) => {
+    const jogador = jogadores.find((item) => item.id === id)
+    return jogador ? [jogador.nome, jogador.apelido ?? ''] : []
+  }
+
   const nomeNa = (partida: Partida) => (cadeira: Cadeira) =>
-    nomeDoAssento(jogadores, partida.assentos[cadeira], (nome) => t('players.deletedName', { name: nome }))
+    nomeDoAssento(jogadores, partida.assentos[cadeira], (nome) =>
+      t('players.deletedName', { name: nome }),
+    )
   // O mesmo número do seletor "Mesa N" do placar.
-  const rotuloDa = (partida: Partida) => t('match.table.number', { number: abertas.indexOf(partida) + 1 })
+  const rotuloDa = (partida: Partida) =>
+    t('match.table.number', { number: abertas.indexOf(partida) + 1 })
 
   const compartilhar = async (partida: Partida) => {
     const texto = textoDaPartida(partida, rotuloDa(partida), nomeNa(partida), t, numero)
@@ -80,21 +103,26 @@ export default function PaginaEmAndamento({
   // Mesas abertas no placar: todas são partidas (clube e torneio só registram resultado).
   const mesas = mostra('avulsa') ? abertas : []
   const nada = abertas.length === 0 && !sorteioPendente && torneiosEmJogo.length === 0
-  const vazioNoFiltro =
-    !nada && mesas.length === 0 && !(sorteioPendente && mostra('clube')) && !(torneiosEmJogo.length && mostra('torneio'))
 
-  return (
-    <section className="ptd-inicio cm-pagina">
-      <TituloTela titulo={t('match.home.inProgress')} aoVoltar={aoVoltar} />
-      {!nada && <FiltroTipo valor={filtro} aoMudar={setFiltro} />}
-      {nada || vazioNoFiltro ? (
-        <p className="ptd-vazio">{t('match.home.noneOpen')}</p>
-      ) : (
-        <div className="cm-grupos">
-          {mostra('torneio') &&
-            torneiosEmJogo.map((torneio) => (
+  // Um item por card, com o que a busca enxerga (nome, jogadores e data escrita).
+  const itens: { chave: string; data: string; nome: string; textos: string[]; card: ReactNode }[] =
+    [
+      ...(mostra('torneio')
+        ? torneiosEmJogo.map((torneio) => ({
+            chave: `t-${torneio.id}`,
+            data: torneio.criadoEm,
+            nome: torneio.nome,
+            textos: [
+              torneio.nome,
+              subtituloTorneio(torneio),
+              dataHora(torneio.criadoEm),
+              ...torneio.jogadorIds.flatMap((id) => [
+                nomeNoTorneio(torneio, jogadores, id),
+                ...nomesDe(id),
+              ]),
+            ],
+            card: (
               <button
-                key={torneio.id}
                 type="button"
                 className="cm-andamento-item"
                 onClick={() => aoAbrirTorneio(torneio.id)}
@@ -106,21 +134,80 @@ export default function PaginaEmAndamento({
                 </span>
                 <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" />
               </button>
-            ))}
-          {mostra('clube') && sorteioPendente && (
-            <button type="button" className="cm-andamento-item" onClick={aoAbrirSorteio}>
-              <i className="fas fa-people-group" aria-hidden="true" />
-              <span>
-                <strong>{t('match.club.meeting')}</strong>
-                <small>
-                  {dataHora(sorteioPendente.encontro.criadoEm)} ·{' '}
-                  {t('match.types.registeredOf', { count: registradas, total: sorteioPendente.mesas.length })}
-                </small>
-              </span>
-              <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" />
-            </button>
-          )}
-          {mesas.length > 0 && <ul className="cm-lista ptd-lista-mesas">{mesas.map(card)}</ul>}
+            ),
+          }))
+        : []),
+      ...(mostra('clube') && sorteioPendente
+        ? [
+            {
+              chave: 'encontro',
+              data: sorteioPendente.encontro.criadoEm,
+              nome: t('match.club.meeting'),
+              textos: [
+                t('match.club.meeting'),
+                dataHora(sorteioPendente.encontro.criadoEm),
+                ...sorteioPendente.encontro.jogadores.flatMap((entrada) => [
+                  entrada.nome,
+                  ...nomesDe(entrada.jogadorId),
+                ]),
+              ],
+              card: (
+                <button type="button" className="cm-andamento-item" onClick={aoAbrirSorteio}>
+                  <i className="fas fa-people-group" aria-hidden="true" />
+                  <span>
+                    <strong>{t('match.club.meeting')}</strong>
+                    <small>
+                      {dataHora(sorteioPendente.encontro.criadoEm)} ·{' '}
+                      {t('match.types.registeredOf', {
+                        count: registradas,
+                        total: sorteioPendente.mesas.length,
+                      })}
+                    </small>
+                  </span>
+                  <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" />
+                </button>
+              ),
+            },
+          ]
+        : []),
+      ...mesas.map((partida) => ({
+        chave: `m-${partida.id}`,
+        data: partida.criadaEm,
+        nome: rotuloDa(partida),
+        textos: [
+          rotuloDa(partida),
+          dataHora(partida.criadaEm),
+          ...([0, 1, 2, 3] as const).flatMap((cadeira) => [
+            nomeNa(partida)(cadeira),
+            ...nomesDe(partida.assentos[cadeira].jogadorId),
+          ]),
+        ],
+        card: <ul className="cm-lista ptd-lista-mesas">{card(partida)}</ul>,
+      })),
+    ]
+  const visiveis = filtrarLista(itens, busca, filtrosLista, new Date(), idioma)
+
+  return (
+    <section className="ptd-inicio cm-pagina">
+      <TituloTela titulo={t('match.home.inProgress')} aoVoltar={aoVoltar} />
+      {!nada && (
+        <BuscaFiltrosLista
+          busca={busca}
+          aoBuscar={setBusca}
+          filtros={filtrosLista}
+          aoFiltrar={setFiltrosLista}
+        />
+      )}
+      {!nada && <FiltroTipo valor={filtro} aoMudar={setFiltro} />}
+      {nada ? (
+        <p className="ptd-vazio">{t('match.home.noneOpen')}</p>
+      ) : visiveis.length === 0 ? (
+        <p className="ptd-vazio">{t('match.listFilters.noResults')}</p>
+      ) : (
+        <div className="cm-grupos">
+          {visiveis.map((item) => (
+            <div key={item.chave}>{item.card}</div>
+          ))}
         </div>
       )}
 

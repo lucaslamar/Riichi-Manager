@@ -1588,6 +1588,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "테이블, 모임, 대회 검색",
+      "searchPlaceholder": "이름, 플레이어 또는 날짜로 검색",
+      "order": "정렬",
+      "noResults": "이 검색과 필터에 맞는 항목이 없습니다.",
+      "periods": {
+        "hoje": "오늘",
+        "semana": "최근 7일",
+        "mes": "이번 달",
+        "tudo": "전체"
+      },
+      "orders": {
+        "recentes": "최신순",
+        "antigos": "오래된순",
+        "nome": "이름"
+      }
     }
   },
   "spokenTiles": {

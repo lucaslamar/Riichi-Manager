@@ -1617,6 +1617,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "Buscar mesas, encuentros y torneos",
+      "searchPlaceholder": "Buscar por nombre, jugador o fecha",
+      "order": "Ordenar por",
+      "noResults": "Nada coincide con esta búsqueda y estos filtros.",
+      "periods": {
+        "hoje": "Hoy",
+        "semana": "Últimos 7 días",
+        "mes": "Este mes",
+        "tudo": "Todo"
+      },
+      "orders": {
+        "recentes": "Más recientes",
+        "antigos": "Más antiguos",
+        "nome": "Nombre"
+      }
     }
   },
   "spokenTiles": {

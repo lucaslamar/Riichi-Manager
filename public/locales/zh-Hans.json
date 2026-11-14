@@ -1588,6 +1588,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "搜索牌桌、聚会和比赛",
+      "searchPlaceholder": "按名称、玩家或日期搜索",
+      "order": "排序",
+      "noResults": "没有符合此搜索和筛选的结果。",
+      "periods": {
+        "hoje": "今天",
+        "semana": "最近7天",
+        "mes": "本月",
+        "tudo": "全部"
+      },
+      "orders": {
+        "recentes": "最新",
+        "antigos": "最早",
+        "nome": "名称"
+      }
     }
   },
   "spokenTiles": {

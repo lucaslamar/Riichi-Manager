@@ -1588,6 +1588,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "卓・集まり・大会を検索",
+      "searchPlaceholder": "名前・プレイヤー・日付で検索",
+      "order": "並べ替え",
+      "noResults": "この検索と絞り込みに合うものはありません。",
+      "periods": {
+        "hoje": "今日",
+        "semana": "過去7日",
+        "mes": "今月",
+        "tudo": "すべて"
+      },
+      "orders": {
+        "recentes": "新しい順",
+        "antigos": "古い順",
+        "nome": "名前"
+      }
     }
   },
   "spokenTiles": {

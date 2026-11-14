@@ -1610,6 +1610,23 @@
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "It was random",
       "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+    },
+    "listFilters": {
+      "search": "Search tables, meetups and tournaments",
+      "searchPlaceholder": "Name, player or date",
+      "order": "Sort by",
+      "noResults": "Nothing matches this search and these filters.",
+      "periods": {
+        "hoje": "Today",
+        "semana": "Last 7 days",
+        "mes": "This month",
+        "tudo": "All"
+      },
+      "orders": {
+        "recentes": "Newest",
+        "antigos": "Oldest",
+        "nome": "Name"
+      }
     }
   },
   "spokenTiles": {
