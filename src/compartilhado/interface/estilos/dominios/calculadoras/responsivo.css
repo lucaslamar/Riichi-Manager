@@ -5538,30 +5538,41 @@
   grid-template-columns: 1fr 1fr 1.5fr;
 }
 
-/* Contraste no claro e no escuro: o Tsumo | Ron ganha contorno e uma linha no
-   meio, e o Calcular ainda bloqueado tem borda, para não sumir no fundo. */
+/* Batida, Riichi e Condições especiais no padrão dos botões de vento: cada opção
+   é um botão separado, com a mesma borda, e a escolhida fica preenchida. Vale nos
+   dois temas e passa por cima do trilho cinza do celular (que zerava as bordas). */
+.toggle-agari-mao,
+.linha-opcoes-mao {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
 .toggle-agari-mao {
-  border: 2px solid var(--entrada-borda);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-/* Linha reta no meio (os dois botões têm a mesma largura). As regras de cada tela
-   zeram a borda dos botões, por isso a linha é do contorno, não deles. */
-.toggle-agari-mao {
-  position: relative;
+.toggle-agari-mao button,
+.linha-opcoes-mao .btn-toggle-mao {
+  border: 2px solid var(--entrada-borda) !important;
+  border-radius: 8px;
+  background: var(--superficie);
+  color: var(--texto-principal);
+  box-shadow: none;
 }
 
-.toggle-agari-mao::after {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: var(--entrada-borda);
-  content: "";
-  pointer-events: none;
-  transform: translateX(-50%);
+.toggle-agari-mao button.ativo,
+.linha-opcoes-mao .btn-toggle-mao.ativo {
+  border-color: var(--primario) !important;
+  background: var(--primario);
+  color: var(--sobre-primario);
 }
 
+/* O Calcular ainda bloqueado tem borda, para não sumir no fundo. */
 .btn-calcular-mao:disabled {
   border: 2px solid var(--entrada-borda);
   background: transparent;
