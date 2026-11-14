@@ -24,7 +24,8 @@ export default function PaginaMesasSorteadas({
   aoRegistrarMesa: (mesa: MesaDoSorteio) => void
 }) {
   const { t, idioma } = useI18n()
-  const { sorteio, sortearDeNovo, abortarMesa } = useClube()
+  const { sorteio, sortearDeNovo, abortarMesa, abortarEncontro } = useClube()
+  const [abortandoEncontro, setAbortandoEncontro] = useState(false)
   const { partidas } = usePartidas()
   const { aviso, mostrar } = useAviso()
   const [refazendo, setRefazendo] = useState(false)
@@ -78,6 +79,15 @@ export default function PaginaMesasSorteadas({
               onClick={() => setRefazendo(true)}
             >
               <i className="fas fa-rotate" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('match.club.abortMeeting')}
+              title={t('match.club.abortMeeting')}
+              onClick={() => setAbortandoEncontro(true)}
+            >
+              <i className="fas fa-ban" aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -185,6 +195,21 @@ export default function PaginaMesasSorteadas({
           aoConfirmar={() => {
             abortarMesa(paraAbortar)
             setParaAbortar(null)
+          }}
+        />
+      )}
+
+      {abortandoEncontro && (
+        <ModalConfirmacao
+          titulo={t('match.club.abortMeetingTitle')}
+          texto={t('match.club.abortMeetingHelp')}
+          rotuloConfirmar={t('match.club.abortMeeting')}
+          perigo
+          aoFechar={() => setAbortandoEncontro(false)}
+          aoConfirmar={() => {
+            setAbortandoEncontro(false)
+            abortarEncontro()
+            aoVoltar()
           }}
         />
       )}

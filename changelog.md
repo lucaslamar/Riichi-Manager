@@ -4,7 +4,7 @@
 
 ### Adicionado
 
-- **Abortar mesa do encontro do clube**: cada mesa sorteada ainda sem resultado ganhou, ao lado do Registrar resultado, um botão para abortá-la. Depois de confirmar, o card mostra Mesa abortada e ela deixa de contar como pendente, então o encontro pode terminar sem o resultado dela. A contagem em Em andamento passa a considerar só as mesas que valem.
+- **Abortar mesa do encontro do clube**: cada mesa sorteada ainda sem resultado ganhou, ao lado do Registrar resultado, um botão para abortá-la. Depois de confirmar, o card mostra Mesa abortada e ela deixa de contar como pendente, então o encontro pode terminar sem o resultado dela. A contagem em Em andamento passa a considerar só as mesas que valem. O encontro inteiro também pode ser abortado, pelo botão ao lado do Novo sorteio: o sorteio é desfeito, a lista volta para editar e sortear de novo, e as partidas já registradas continuam no histórico.
 
 ## 6.0.0 - 2026-11-14
 

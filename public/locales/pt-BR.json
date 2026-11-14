@@ -1181,6 +1181,9 @@
       "abortTable": "Abortar mesa",
       "abortTableTitle": "Abortar a Mesa {{number}}?",
       "abortTableHelp": "A mesa fica sem resultado e deixa de contar como pendente no encontro. Não dá para desfazer.",
+      "abortMeeting": "Abortar encontro",
+      "abortMeetingTitle": "Abortar o encontro?",
+      "abortMeetingHelp": "O sorteio é desfeito e a lista volta para você editar e sortear de novo. As partidas já registradas continuam no histórico.",
       "meetingDone": "concluído"
     },
     "cards": {

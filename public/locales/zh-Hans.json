@@ -1163,6 +1163,9 @@
       "abortTable": "中止此桌",
       "abortTableTitle": "中止第 {{number}} 桌？",
       "abortTableHelp": "此桌将没有结果，也不再计为聚会中待记录的桌。无法撤销。",
+      "abortMeeting": "中止聚会",
+      "abortMeetingTitle": "中止这次聚会？",
+      "abortMeetingHelp": "抽签将被撤销，名单可以重新编辑并再次抽签。已记录的对局仍保留在历史中。",
       "meetingDone": "done"
     },
     "cards": {

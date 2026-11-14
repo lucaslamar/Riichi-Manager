@@ -1163,6 +1163,9 @@
       "abortTable": "卓を中止",
       "abortTableTitle": "{{number}}卓を中止しますか？",
       "abortTableHelp": "この卓は結果なしとなり、未記録の卓に数えられなくなります。元に戻せません。",
+      "abortMeeting": "集まりを中止",
+      "abortMeetingTitle": "集まりを中止しますか？",
+      "abortMeetingHelp": "抽選は取り消され、リストを編集して再抽選できます。記録済みの対局は履歴に残ります。",
       "meetingDone": "done"
     },
     "cards": {

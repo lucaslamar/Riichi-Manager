@@ -42,7 +42,6 @@ export function assentosDaMesa(mesa: MesaDoSorteio) {
   return { ids, nomes: mesa.assentos.map(({ jogador }) => jogador.nome) }
 }
 
-
 export const acoesClube = {
   definirLista(lista: string) {
     const atual = lerEstado()
@@ -58,7 +57,12 @@ export const acoesClube = {
     // Encontro que não chegou a começar nenhuma mesa não precisa ficar guardado.
     const anterior = atual.sorteio
     const encontros = atual.encontros.filter(
-      (item) => !(anterior && item.id === anterior.encontro.id && anterior.mesas.every((mesa) => !mesa.partidaId)),
+      (item) =>
+        !(
+          anterior &&
+          item.id === anterior.encontro.id &&
+          anterior.mesas.every((mesa) => !mesa.partidaId)
+        ),
     )
     definir({ ...atual, sorteio, encontros: [...encontros, encontro] })
     return true
@@ -85,7 +89,27 @@ export const acoesClube = {
       ...atual,
       lista: novos.lista ?? (sorteioAtualEhTeste ? '' : atual.lista),
       sorteio: novos.sorteio ?? (sorteioAtualEhTeste ? null : atual.sorteio),
-      encontros: [...atual.encontros.filter((item) => !item.id.startsWith(prefixo)), ...novos.encontros],
+      encontros: [
+        ...atual.encontros.filter((item) => !item.id.startsWith(prefixo)),
+        ...novos.encontros,
+      ],
+    })
+  },
+  /**
+   * Aborta o encontro inteiro: o sorteio some e a lista volta para editar. As
+   * partidas já registradas seguem no histórico. Sem nenhuma, o encontro some também.
+   */
+  abortarEncontro() {
+    const atual = lerEstado()
+    const sorteio = atual.sorteio
+    if (!sorteio) return
+    const semResultado = sorteio.mesas.every((mesa) => !mesa.partidaId)
+    definir({
+      ...atual,
+      sorteio: null,
+      encontros: semResultado
+        ? atual.encontros.filter((item) => item.id !== sorteio.encontro.id)
+        : atual.encontros,
     })
   },
   /** A mesa não vai ter resultado: sai das pendentes do encontro. */
@@ -96,7 +120,8 @@ export const acoesClube = {
   /** A mesa já teve a partida registrada: o card mostra isso em vez do botão. */
   marcarRegistrada(numero: number, partidaId: string) {
     const atual = lerEstado()
-    if (atual.sorteio) definir({ ...atual, sorteio: marcarMesaRegistrada(atual.sorteio, numero, partidaId) })
+    if (atual.sorteio)
+      definir({ ...atual, sorteio: marcarMesaRegistrada(atual.sorteio, numero, partidaId) })
   },
 }
 
