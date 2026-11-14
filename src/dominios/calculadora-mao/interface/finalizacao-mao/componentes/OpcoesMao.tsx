@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
@@ -19,6 +19,8 @@ import { useAvancoAutomatico } from '../hooks/useAvancoAutomatico'
 import { useYakusLocais } from '@/compartilhado/configuracoes/useYakusLocais'
 import { textoYakuLocal, YAKUS_LOCAIS } from '../../../logica/yakusLocais'
 import type { BlocoAjuda } from '../../modais/ajuda-secoes/topicosAjuda'
+import { bloqueiosDe, locaisQueCombinam, type EstadoCondicoes } from '../../../logica/combinacoesLocais'
+import { textoCombinacoes } from '../../compartilhado/textoCombinacoes'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
@@ -66,7 +68,11 @@ export default function OpcoesMao({
               subtitulo: `${yaku.nome} (${t('localYaku.localTag')})`,
               item: true,
               literal: true,
-              paragrafos: [texto.descricao, t('localYaku.value', { value: texto.valor })],
+              paragrafos: [
+                texto.descricao,
+                t('localYaku.value', { value: texto.valor }),
+                ...(textoCombinacoes(yaku.id, t) ? [t('localYaku.combo.label', { list: textoCombinacoes(yaku.id, t) })] : []),
+              ],
             }
           }),
         ]
@@ -87,6 +93,26 @@ export default function OpcoesMao({
     marcarVentoAssentoDefinido,
   } = estado
   const avancar = useAvancoAutomatico()
+  // O que está marcado, para saber quais yakus locais ainda combinam.
+  const estadoCondicoes: EstadoCondicoes = {
+    agari: mao.agari,
+    riichi: mao.riichi !== null,
+    kan: mao.kan,
+    ultimaPedra: mao.ultimaPedra,
+    bencao: mao.bencao,
+    locais: mao.condicoesLocais ?? [],
+  }
+  // Mudou a batida, o Riichi ou outra condição: sai o yaku local que não combina mais.
+  const locaisValidos = locaisQueCombinam(estadoCondicoes)
+  const sobrouInvalido = locaisValidos.length !== estadoCondicoes.locais.length
+  useEffect(() => {
+    if (!sobrouInvalido) return
+    atualizarMao((rascunho) => {
+      rascunho.condicoesLocais = locaisValidos
+    })
+    // Só reage quando aparece um marcado que não combina.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sobrouInvalido])
   const [descartesExpandidos, setDescartesExpandidos] = useState(false)
   const [painelContextualAberto, setPainelContextualAberto] = useState<'dora' | 'descartes' | null>(
     null,
@@ -584,7 +610,10 @@ export default function OpcoesMao({
                       key={yaku.id}
                       rotulo={yaku.nome}
                       ativo={!!mao.condicoesLocais?.includes(yaku.id)}
-                      desabilitado={false}
+                      // Não combina com o que está marcado: fica apagado, como o Ippatsu.
+                      desabilitado={
+                        !mao.condicoesLocais?.includes(yaku.id) && bloqueiosDe(yaku.id, estadoCondicoes).length > 0
+                      }
                       aoClicar={() =>
                         atualizarMao((rascunho) => {
                           const atuais = rascunho.condicoesLocais ?? []

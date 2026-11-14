@@ -2103,6 +2103,19 @@
     "why": "Why:",
     "localTag": "ローカル役",
     "conditionsHelp": "標準外のハウスルールです。計算ルール → ローカル役でオンにしたものだけがここに表示されます。その状況で和了したときに選んでください。",
-    "value": "点数: {{value}}"
+    "value": "点数: {{value}}",
+    "combo": {
+      "label": "組み合わせ: {{list}}",
+      "title": "組み合わせ:",
+      "soRon": "ロンのみ",
+      "soTsumo": "ツモのみ",
+      "exigeRiichi": "リーチが必要",
+      "semRiichi": "リーチと複合しない",
+      "exigeRinshan": "嶺上開花が必要",
+      "semKan": "嶺上開花・槍槓と複合しない",
+      "semUltimaPedra": "海底・河底と複合しない",
+      "semTenhou": "天和・地和と複合しない",
+      "semOutro": "{{name}}と複合しない"
+    }
   }
 }

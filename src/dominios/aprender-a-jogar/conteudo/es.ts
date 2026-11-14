@@ -1375,6 +1375,10 @@ const topicosRegras: TopicoRegras[] = [
       ...tabelaYakusLocais(),
       {
         type: 'tip',
+        md: 'Algunos yakus locales dependen de cómo fue la victoria y **no combinan entre sí**. Tsubame gaeshi, Kanburi y Renhou solo valen con Ron. Renkaihou y Toukanhou solo valen con Tsumo en Rinshan. El Renhou ocurre antes de tu primera robada, así que no combina con Riichi, Kanburi ni Maneman. La calculadora apaga el botón que no combina con lo ya marcado, y la Guía de bolsillo muestra las combinaciones de cada uno.',
+      },
+      {
+        type: 'tip',
         md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',
       },
     ],

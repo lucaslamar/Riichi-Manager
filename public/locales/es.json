@@ -2136,6 +2136,19 @@
     "why": "Why:",
     "localTag": "Yaku local",
     "conditionsHelp": "Reglas de la casa, fuera del estándar: aquí solo aparecen los activados en Reglas de cálculo → Yakus locales. Márcalo cuando la victoria ocurrió en esa situación.",
-    "value": "Vale: {{value}}"
+    "value": "Vale: {{value}}",
+    "combo": {
+      "label": "Combinaciones: {{list}}",
+      "title": "Combinaciones:",
+      "soRon": "Solo con Ron",
+      "soTsumo": "Solo con Tsumo",
+      "exigeRiichi": "Necesita Riichi marcado",
+      "semRiichi": "No combina con Riichi",
+      "exigeRinshan": "Necesita Rinshan marcado",
+      "semKan": "No combina con Rinshan ni Chankan",
+      "semUltimaPedra": "No combina con Haitei ni Houtei",
+      "semTenhou": "No combina con Tenhou ni Chiihou",
+      "semOutro": "No combina con {{name}}"
+    }
   }
 }

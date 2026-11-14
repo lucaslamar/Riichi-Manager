@@ -1345,6 +1345,10 @@ const topicosRegras: TopicoRegras[] = [
       ...tabelaYakusLocais(),
       {
         type: 'tip',
+        md: '有些地方役取决于和牌的情况，**彼此不能复合**。燕返、杠振和人和只在荣和时成立；连开花和东杠和只在岭上自摸时成立。人和发生在第一次摸牌之前，所以不与立直、杠振或模仿满贯复合。计算器会把与已勾选项不兼容的按钮变灰，口袋指南列出了每个役的组合。',
+      },
+      {
+        type: 'tip',
         md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',
       },
     ],

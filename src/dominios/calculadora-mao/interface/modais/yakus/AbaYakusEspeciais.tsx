@@ -7,6 +7,7 @@ import { PedrasExemplo } from './PedrasExemplo'
 import { parseMpszGrupos } from '../../../logica/yakus'
 import { EXEMPLOS_YAKUS_LOCAIS } from '../../../logica/exemplosYakusLocais'
 import { PORQUE_YAKUS_LOCAIS } from '../../../logica/porqueYakusLocais'
+import { textoCombinacoes } from '../../compartilhado/textoCombinacoes'
 
 import './modal-yakus.css'
 
@@ -48,6 +49,11 @@ export function CartaoYakuLocal({ yaku }: { yaku: YakuLocal }) {
       <p className="yaku-card__pt">{texto.traducao}</p>
       <p className="yaku-card__descricao">{texto.descricao}</p>
       <p className="yaku-card__valor-local">{texto.valor}</p>
+      {textoCombinacoes(yaku.id, t) && (
+        <p className="yaku-card__combinacoes">
+          <strong>{t('localYaku.combo.title')}</strong> {textoCombinacoes(yaku.id, t)}
+        </p>
+      )}
       {PORQUE_YAKUS_LOCAIS[yaku.id] && (
         <p className="yaku-card__porque">
           <strong>{t('localYaku.why')}</strong> {PORQUE_YAKUS_LOCAIS[yaku.id][idioma === 'pt-BR' ? 'pt' : 'en']}

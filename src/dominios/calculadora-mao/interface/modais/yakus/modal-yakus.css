@@ -230,3 +230,11 @@
 .yaku-card__porque strong {
   font-style: normal;
 }
+
+/* Yakus locais de situação: com o que combinam (Só com Ron, Não combina com…). */
+.yaku-card__combinacoes {
+  margin: 6px 0 0;
+  color: var(--texto-apoio);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}

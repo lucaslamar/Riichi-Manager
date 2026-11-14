@@ -1378,6 +1378,10 @@ const topicosRegras: TopicoRegras[] = [
       ...tabelaYakusLocais(),
       {
         type: 'tip',
+        md: 'Some local yaku depend on how the win happened and **do not combine with each other**. Tsubame gaeshi, Kanburi and Renhou only count on Ron. Renkaihou and Toukanhou only count on Tsumo from Rinshan. Renhou happens before your first draw, so it does not combine with Riichi, Kanburi or Maneman. The calculator greys out the button that does not fit what is already marked, and the Pocket guide lists the combinations of each one.',
+      },
+      {
+        type: 'tip',
         md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',
       },
     ],

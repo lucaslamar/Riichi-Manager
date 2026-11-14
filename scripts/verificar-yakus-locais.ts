@@ -101,9 +101,22 @@ teste('Aka sanshoku doujun pede o Sanshoku com os três 5 vermelhos', () => {
 })
 
 teste('condição de partida só vale marcada', () => {
-  const m = mao('123m456p789s11122z')
+  const m = mao('123m456p789s11122z', { agari: 'ron' })
   assert.ok(!ids(m).includes('tsubameGaeshi'))
   assert.ok(ids(m, tudo(['tsubameGaeshi'])).includes('tsubameGaeshi'))
+})
+
+teste('condições que não combinam não contam', () => {
+  // Tsubame gaeshi é só com Ron: no Tsumo, marcado ou não, não vale.
+  assert.ok(!ids(mao('123m456p789s11122z'), tudo(['tsubameGaeshi'])).includes('tsubameGaeshi'))
+  // Renhou e Kanburi não andam juntos: fica o primeiro marcado.
+  const juntos = ids(mao('123m456p789s11122z', { agari: 'ron' }), tudo(['renhou', 'kanburi']))
+  assert.ok(juntos.includes('renhou') && !juntos.includes('kanburi'))
+  // Open riichi sem Riichi não existe.
+  assert.ok(!ids(mao('123m456p789s11122z'), tudo(['openRiichi'])).includes('openRiichi'))
+  // Renkaihou precisa do Tsumo no Rinshan.
+  assert.ok(ids(mao('123m456p789s11122z', { kan: true }), tudo(['renkaihou'])).includes('renkaihou'))
+  assert.ok(!ids(mao('123m456p789s11122z'), tudo(['renkaihou'])).includes('renkaihou'))
 })
 
 teste('Daisharin desligado: a calculadora segue com Chinitsu e cia.', () => {

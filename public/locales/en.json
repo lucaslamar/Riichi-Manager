@@ -2129,6 +2129,19 @@
     "why": "Why:",
     "localTag": "Local yaku",
     "conditionsHelp": "House rules, not standard: only the ones turned on in Scoring rules → Local yaku show up here. Mark one when the win happened in that situation.",
-    "value": "Worth: {{value}}"
+    "value": "Worth: {{value}}",
+    "combo": {
+      "label": "Combinations: {{list}}",
+      "title": "Combinations:",
+      "soRon": "Ron only",
+      "soTsumo": "Tsumo only",
+      "exigeRiichi": "Needs Riichi marked",
+      "semRiichi": "Not with Riichi",
+      "exigeRinshan": "Needs Rinshan marked",
+      "semKan": "Not with Rinshan or Chankan",
+      "semUltimaPedra": "Not with Haitei or Houtei",
+      "semTenhou": "Not with Tenhou or Chiihou",
+      "semOutro": "Not with {{name}}"
+    }
   }
 }

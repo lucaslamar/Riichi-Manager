@@ -1358,6 +1358,10 @@ const topicosRegras: TopicoRegras[] = [
       ...tabelaYakusLocais(),
       {
         type: 'tip',
+        md: 'ローカル役の中には和了の状況で決まり、**互いに複合しない**ものがあります。燕返し・槓振り・人和はロンのみ、連開花・東槓和は嶺上ツモのみです。人和は最初のツモの前に起きるので、リーチ・槓振り・マネ満とは複合しません。電卓はすでに選んだものと合わないボタンを無効にし、ポケットガイドには各役の組み合わせが載っています。',
+      },
+      {
+        type: 'tip',
         md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',
       },
     ],

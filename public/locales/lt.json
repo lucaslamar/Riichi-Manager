@@ -2195,6 +2195,19 @@
     "why": "Why:",
     "localTag": "Vietinis yaku",
     "conditionsHelp": "Namų taisyklės, ne standartas: čia rodomi tik įjungti Skaičiavimo taisyklės → Vietiniai yaku. Pažymėkite, kai pergalė įvyko tokioje situacijoje.",
-    "value": "Vertė: {{value}}"
+    "value": "Vertė: {{value}}",
+    "combo": {
+      "label": "Deriniai: {{list}}",
+      "title": "Deriniai:",
+      "soRon": "Tik su Ron",
+      "soTsumo": "Tik su Tsumo",
+      "exigeRiichi": "Reikia pažymėti Riichi",
+      "semRiichi": "Nesiderina su Riichi",
+      "exigeRinshan": "Reikia pažymėti Rinshan",
+      "semKan": "Nesiderina su Rinshan ar Chankan",
+      "semUltimaPedra": "Nesiderina su Haitei ar Houtei",
+      "semTenhou": "Nesiderina su Tenhou ar Chiihou",
+      "semOutro": "Nesiderina su {{name}}"
+    }
   }
 }

@@ -1366,6 +1366,10 @@ const topicosRegras: TopicoRegras[] = [
       ...tabelaYakusLocais(),
       {
         type: 'tip',
+        md: '일부 로컬 역은 화료 상황에 따라 정해지며 **서로 복합되지 않습니다**. 츠바메가에시, 깡부리, 인화는 론일 때만, 연개화와 동깡화는 영상 쯔모일 때만 성립합니다. 인화는 첫 쯔모 전에 일어나므로 리치, 깡부리, 마네만과 복합되지 않습니다. 계산기는 이미 선택한 것과 맞지 않는 버튼을 비활성화하고, 포켓 가이드에 각 역의 조합이 나와 있습니다.',
+      },
+      {
+        type: 'tip',
         md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',
       },
     ],

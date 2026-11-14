@@ -2103,6 +2103,19 @@
     "why": "Why:",
     "localTag": "地方役",
     "conditionsHelp": "非标准的家规：只有在计算规则 → 地方役中开启的才会出现在这里。和牌发生在该情况时勾选。",
-    "value": "价值：{{value}}"
+    "value": "价值：{{value}}",
+    "combo": {
+      "label": "组合：{{list}}",
+      "title": "组合：",
+      "soRon": "仅限荣和",
+      "soTsumo": "仅限自摸",
+      "exigeRiichi": "需要勾选立直",
+      "semRiichi": "不与立直复合",
+      "exigeRinshan": "需要勾选岭上开花",
+      "semKan": "不与岭上开花或抢杠复合",
+      "semUltimaPedra": "不与海底或河底复合",
+      "semTenhou": "不与天和或地和复合",
+      "semOutro": "不与{{name}}复合"
+    }
   }
 }

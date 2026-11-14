@@ -1373,6 +1373,10 @@ const topicosRegras: TopicoRegras[] = [
       ...tabelaYakusLocais(),
       {
         type: 'tip',
+        md: 'Kai kurie vietiniai yaku priklauso nuo to, kaip laimėta, ir **nesiderina tarpusavyje**. Tsubame gaeshi, Kanburi ir Renhou galioja tik su Ron. Renkaihou ir Toukanhou galioja tik su Tsumo iš Rinshan. Renhou įvyksta prieš pirmą traukimą, todėl nesiderina su Riichi, Kanburi ar Maneman. Skaičiuoklė išjungia mygtuką, kuris netinka prie jau pažymėtų, o Kišeniniame vadove nurodyti kiekvieno deriniai.',
+      },
+      {
+        type: 'tip',
         md: 'To use any of them in the calculator, turn it on in **Calculation rules → Local yaku**. They all start off. The full list, with each value, is in the Local yaku tab of the Pocket guide.',
       },
     ],

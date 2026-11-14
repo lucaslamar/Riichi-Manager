@@ -10,6 +10,7 @@
  * (ex.: Isshoku sanjun fechado vale 3, mas o Iipeikou de 1 já entrou, então soma 2).
  */
 import type { Mao } from './tipos'
+import { locaisQueCombinam } from './combinacoesLocais'
 
 export type CategoriaYakuLocal = 'han1' | 'han2' | 'han2mais' | 'han3mais' | 'manganPedra' | 'mangan' | 'yakuman' | 'duplo'
 
@@ -974,10 +975,21 @@ export interface YakuLocalEncontrado {
 export function encontrarYakusLocais(mao: Mao, opcoes: OpcoesLocais): YakuLocalEncontrado[] {
   if (opcoes.ativos.size === 0) return []
   const contexto = montarContexto(mao)
+  // Condições que não combinam entre si (ou com a batida) não contam, mesmo marcadas.
+  const condicoes = new Set(
+    locaisQueCombinam({
+      agari: mao.agari,
+      riichi: mao.riichi !== null,
+      kan: mao.kan,
+      ultimaPedra: mao.ultimaPedra,
+      bencao: mao.bencao,
+      locais: [...opcoes.condicoes],
+    }),
+  )
   const encontrados: YakuLocalEncontrado[] = []
   for (const yaku of YAKUS_LOCAIS) {
     if (!opcoes.ativos.has(yaku.id)) continue
-    const vale = yaku.situacao ? opcoes.condicoes.has(yaku.id) : !!yaku.detectar?.(contexto)
+    const vale = yaku.situacao ? condicoes.has(yaku.id) : !!yaku.detectar?.(contexto)
     if (!vale) continue
     if (yaku.valor.tipo === 'han') {
       const valor = contexto.aberta ? yaku.valor.aberta : yaku.valor.fechada

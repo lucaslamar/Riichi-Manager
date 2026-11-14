@@ -2103,6 +2103,19 @@
     "why": "Why:",
     "localTag": "로컬 역",
     "conditionsHelp": "표준이 아닌 하우스 룰입니다. 계산 규칙 → 로컬 역에서 켠 것만 여기에 나타납니다. 그 상황에서 화료했을 때 선택하세요.",
-    "value": "값: {{value}}"
+    "value": "값: {{value}}",
+    "combo": {
+      "label": "조합: {{list}}",
+      "title": "조합:",
+      "soRon": "론만",
+      "soTsumo": "쯔모만",
+      "exigeRiichi": "리치를 선택해야 함",
+      "semRiichi": "리치와 복합 불가",
+      "exigeRinshan": "영상개화를 선택해야 함",
+      "semKan": "영상개화·창깡과 복합 불가",
+      "semUltimaPedra": "해저·하저와 복합 불가",
+      "semTenhou": "천화·지화와 복합 불가",
+      "semOutro": "{{name}}와 복합 불가"
+    }
   }
 }
