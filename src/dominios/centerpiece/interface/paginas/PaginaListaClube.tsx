@@ -14,6 +14,8 @@ import {
   sugestoesParaLinha,
 } from '../../logica/listaClube'
 import { contagemDeMesas } from '../../logica/sorteioClube'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
+import '@/dominios/torneio/interface/torneio.css'
 import FolhaCadastrados from '../componentes/FolhaCadastrados'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import { useAviso } from '../hooks/useAviso'
@@ -64,7 +66,10 @@ export default function PaginaListaClube({
     [entradas],
   )
   const contagem = contagemDeMesas(entradas.length)
-  const vinculos = useMemo(() => linhas.map((linha) => jogadorDaLinha(jogadores, linha)), [linhas, jogadores])
+  const vinculos = useMemo(
+    () => linhas.map((linha) => jogadorDaLinha(jogadores, linha)),
+    [linhas, jogadores],
+  )
 
   const textoDaLinhaAtual = linhaAtual === null ? '' : (linhas[linhaAtual] ?? '')
   const sugestoes =
@@ -112,7 +117,11 @@ export default function PaginaListaClube({
     mostrar(
       resultado.ok
         ? t('match.club.registered', { name: nome })
-        : t(resultado.erro === 'nomeDuplicado' ? 'players.errorDuplicateName' : 'players.errorEmptyName'),
+        : t(
+            resultado.erro === 'nomeDuplicado'
+              ? 'players.errorDuplicateName'
+              : 'players.errorEmptyName',
+          ),
     )
   }
 
@@ -145,26 +154,7 @@ export default function PaginaListaClube({
         aoVoltar={aoVoltar}
         acoes={
           <span className="clb-acoes-titulo">
-            {/* Cartão de memória: puxar quem já está salvo no cadastro. */}
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('match.club.registeredTitle')}
-              title={t('match.club.registeredTitle')}
-              onClick={abrirCadastrados}
-            >
-              <i className="fas fa-sd-card" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className="cm-btn-icone cm-btn-icone--perigo"
-              aria-label={t('match.club.clear')}
-              title={t('match.club.clear')}
-              disabled={!lista.trim() && !sorteio}
-              onClick={() => setLimpando(true)}
-            >
-              <i className="fas fa-trash" aria-hidden="true" />
-            </button>
+            <BotaoConfiguracoes />
           </span>
         }
       />
@@ -178,7 +168,10 @@ export default function PaginaListaClube({
                   <i className="fas fa-user" />
                 </span>
               ) : linha ? (
-                <span className="clb-marcador clb-marcador--convidado" title={t('match.club.guestShort')}>
+                <span
+                  className="clb-marcador clb-marcador--convidado"
+                  title={t('match.club.guestShort')}
+                >
                   <i className="far fa-user" />
                 </span>
               ) : null}
@@ -243,9 +236,10 @@ export default function PaginaListaClube({
                 >
                   <i className="fas fa-user" aria-hidden="true" />
                   <span>{nomeExibido(jogador)}</span>
-                  {partesDoNome(jogador).apoio && nomeExibido(jogador) !== partesDoNome(jogador).apoio && (
-                    <small>{partesDoNome(jogador).apoio}</small>
-                  )}
+                  {partesDoNome(jogador).apoio &&
+                    nomeExibido(jogador) !== partesDoNome(jogador).apoio && (
+                      <small>{partesDoNome(jogador).apoio}</small>
+                    )}
                 </button>
               </li>
             ))}
@@ -257,50 +251,81 @@ export default function PaginaListaClube({
       <ul className="sr-only" aria-label={t('match.club.listSummary')}>
         {entradas.map((entrada) => (
           <li key={entrada.jogadorId ?? entrada.nome}>
-            {t(entrada.jogadorId ? 'match.club.linked' : 'match.club.guest', { name: entrada.nome })}
+            {t(entrada.jogadorId ? 'match.club.linked' : 'match.club.guest', {
+              name: entrada.nome,
+            })}
           </li>
         ))}
       </ul>
 
-      <div className="ptd-rodape-fixo clb-rodape">
-        <div className="clb-rodape-linha">
-        <p id="clb-contagem" className="clb-contagem" aria-live="polite">
-          {/* Ícones no lugar das palavras; o leitor de tela ouve "12 jogadores, 3 mesas". */}
-          <span className="clb-contadores">
-            <span>
-              <i className="fas fa-user" aria-hidden="true" />
-              <strong aria-hidden="true">{numero(entradas.length)}</strong>
-              <span className="sr-only">{t('match.club.players', { count: entradas.length })}</span>
+      {/* Rodapé como o da lista do torneio: contagem, limpar, cadastro e a seta de sortear. */}
+      <div className="ptd-rodape-fixo clb-rodape trn-rodape">
+        <div className="trn-rodape-topo">
+          <p id="clb-contagem" className="clb-contagem" aria-live="polite">
+            {/* Ícones no lugar das palavras; o leitor de tela ouve "12 jogadores, 3 mesas". */}
+            <span className="clb-contadores">
+              <span>
+                <i className="fas fa-user" aria-hidden="true" />
+                <strong aria-hidden="true">{numero(entradas.length)}</strong>
+                <span className="sr-only">
+                  {t('match.club.players', { count: entradas.length })}
+                </span>
+              </span>
+              <span className="clb-barra" aria-hidden="true" />
+              <span>
+                <IconeMenu icone="centerpiece" />
+                <strong aria-hidden="true">{numero(contagem.mesas)}</strong>
+                <span className="sr-only">{t('match.club.tables', { count: contagem.mesas })}</span>
+              </span>
             </span>
-            <span className="clb-barra" aria-hidden="true" />
-            <span>
-              <IconeMenu icone="centerpiece" />
-              <strong aria-hidden="true">{numero(contagem.mesas)}</strong>
-              <span className="sr-only">{t('match.club.tables', { count: contagem.mesas })}</span>
-            </span>
+            {contagem.podeSortear ? (
+              <span className="trn-status trn-status--ok">
+                {t('tournament.list.ready', { players: entradas.length, tables: contagem.mesas })}{' '}
+                <i className="fas fa-check" aria-hidden="true" />
+              </span>
+            ) : (
+              <span className="clb-falta">
+                {entradas.length < 4
+                  ? t('match.club.minimum', { count: 4 - entradas.length })
+                  : `${t('match.club.missing', { count: contagem.faltam })}, ${t('match.club.leftover', { count: contagem.sobram })}`}
+              </span>
+            )}
+          </p>
+          <span className="trn-rodape-icones">
+            <button
+              type="button"
+              className="trn-adicionar-cadastro"
+              aria-label={t('match.club.clear')}
+              title={t('match.club.clear')}
+              disabled={!lista.trim() && !sorteio}
+              onClick={() => setLimpando(true)}
+            >
+              <i className="fas fa-trash" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="trn-adicionar-cadastro"
+              aria-label={t('match.club.registeredTitle')}
+              title={t('match.club.registeredTitle')}
+              onClick={abrirCadastrados}
+            >
+              <i className="fas fa-address-book" aria-hidden="true" />
+            </button>
+            {/* Com o teclado aberto o Sortear some: a seta, como a de enviar do WhatsApp, sorteia. */}
+            <button
+              type="button"
+              className="trn-adicionar-cadastro clb-enviar"
+              aria-label={t('match.club.draw')}
+              title={t('match.club.draw')}
+              disabled={!contagem.podeSortear}
+              onClick={iniciarSorteio}
+            >
+              {/* Seta deitada, como a de enviar do WhatsApp (o avião do Font Awesome é inclinado). */}
+              <svg className="clb-enviar-seta" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 20.5 21.5 12 3 3.5v6.6L15.5 12 3 13.9z" fill="currentColor" />
+              </svg>
+            </button>
           </span>
-          {!contagem.podeSortear && (
-            <span className="clb-falta">
-              {entradas.length < 4
-                ? t('match.club.minimum', { count: 4 - entradas.length })
-                : `${t('match.club.missing', { count: contagem.faltam })}, ${t('match.club.leftover', { count: contagem.sobram })}`}
-            </span>
-          )}
-        </p>
-        {/* Com o teclado aberto o Sortear some: a seta, como a de enviar do WhatsApp, sorteia. */}
-        <button
-          type="button"
-          className="clb-enviar"
-          aria-label={t('match.club.draw')}
-          title={t('match.club.draw')}
-          disabled={!contagem.podeSortear}
-          onClick={iniciarSorteio}
-        >
-          {/* Seta deitada, como a de enviar do WhatsApp (o avião do Font Awesome é inclinado). */}
-          <svg className="clb-enviar-seta" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 20.5 21.5 12 3 3.5v6.6L15.5 12 3 13.9z" fill="currentColor" />
-          </svg>
-        </button>
         </div>
         <button
           type="button"
@@ -323,7 +348,10 @@ export default function PaginaListaClube({
           idsNaLista={idsNaLista}
           ultimoEncontro={
             ultimoEncontro
-              ? { criadoEm: ultimoEncontro.criadoEm, nomes: ultimoEncontro.jogadores.map((entrada) => entrada.nome) }
+              ? {
+                  criadoEm: ultimoEncontro.criadoEm,
+                  nomes: ultimoEncontro.jogadores.map((entrada) => entrada.nome),
+                }
               : undefined
           }
           aoFechar={() => setInserirApos(null)}
