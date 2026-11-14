@@ -20,11 +20,17 @@ export default function BuscaFiltrosLista({
   aoBuscar,
   filtros,
   aoFiltrar,
+  placeholder,
+  formatos,
 }: {
   busca: string
   aoBuscar: (busca: string) => void
   filtros: FiltrosLista
   aoFiltrar: (filtros: FiltrosLista) => void
+  /** Texto do campo, quando a lista busca outra coisa. */
+  placeholder?: string
+  /** Histórico de torneios: os formatos, com 'todos' primeiro. */
+  formatos?: readonly { valor: string; rotulo: string }[]
 }) {
   const { t, numero } = useI18n()
   const [aberta, setAberta] = useState(false)
@@ -36,7 +42,7 @@ export default function BuscaFiltrosLista({
         valor={busca}
         aoMudar={aoBuscar}
         rotulo={t('match.listFilters.search')}
-        placeholder={t('match.listFilters.searchPlaceholder')}
+        placeholder={placeholder ?? t('match.listFilters.searchPlaceholder')}
         rotuloLimpar={t('actions.clear')}
         className="lsf-busca"
       />
@@ -54,6 +60,7 @@ export default function BuscaFiltrosLista({
       {aberta && (
         <FolhaFiltros
           filtros={filtros}
+          formatos={formatos}
           aoFechar={() => setAberta(false)}
           aoAplicar={(novos) => {
             aoFiltrar(novos)
@@ -67,10 +74,12 @@ export default function BuscaFiltrosLista({
 
 function FolhaFiltros({
   filtros,
+  formatos,
   aoFechar,
   aoAplicar,
 }: {
   filtros: FiltrosLista
+  formatos?: readonly { valor: string; rotulo: string }[]
   aoFechar: () => void
   aoAplicar: (filtros: FiltrosLista) => void
 }) {
@@ -110,7 +119,11 @@ function FolhaFiltros({
       tamanho="pequena"
       rodape={
         <div className="ptd-acoes-folha">
-          <button type="button" className="btn-contorno" onClick={() => setRascunho(FILTROS_LISTA_PADRAO)}>
+          <button
+            type="button"
+            className="btn-contorno"
+            onClick={() => setRascunho(FILTROS_LISTA_PADRAO)}
+          >
             {t('match.ranking.filters.clear')}
           </button>
           <button type="button" className="btn-primario" onClick={() => aoAplicar(rascunho)}>
@@ -120,6 +133,14 @@ function FolhaFiltros({
       }
     >
       <div className="rkf-corpo">
+        {formatos &&
+          grupo(
+            t('tournament.history.format'),
+            formatos.map((formato) => formato.valor),
+            rascunho.formato ?? 'todos',
+            (opcao) => formatos.find((formato) => formato.valor === opcao)?.rotulo ?? opcao,
+            (formato) => setRascunho({ ...rascunho, formato }),
+          )}
         {grupo(
           t('match.ranking.period'),
           PERIODOS_LISTA,

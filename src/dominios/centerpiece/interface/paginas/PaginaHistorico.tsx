@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
-import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import HistoricoTorneios from '@/dominios/torneio/interface/componentes/HistoricoTorneios'
 import type { Torneio } from '@/dominios/torneio/logica/tipos'
@@ -13,6 +12,12 @@ import { cadeirasDaPartida } from '../../logica/partida'
 import { filtrarHistorico, type FiltroTipoMesa } from '../../logica/tipoDaMesa'
 import BotoesOpcao from '../componentes/BotoesOpcao'
 import FiltroTipo from '../componentes/FiltroTipo'
+import BuscaFiltrosLista from '../componentes/BuscaFiltrosLista'
+import {
+  FILTROS_LISTA_PADRAO,
+  filtrarLista,
+  type FiltrosLista,
+} from '../../logica/filtrosAndamento'
 import CardMesa from '../componentes/CardMesa'
 import ListaResultado from '../componentes/ListaResultado'
 import { ListaMaos, ModalConfirmacao } from '../componentes/ModaisPartida'
@@ -43,6 +48,7 @@ export default function PaginaHistorico({
   const [aba, setAba] = useState<'partidas' | 'torneios'>('partidas')
   const [tipo, setTipo] = useState<FiltroTipoMesa>('todas')
   const [busca, setBusca] = useState('')
+  const [filtrosLista, setFiltrosLista] = useState<FiltrosLista>(FILTROS_LISTA_PADRAO)
   const { torneios } = useTorneios()
 
   // Quem saiu do cadastro aparece com o nome guardado na partida.
@@ -61,7 +67,7 @@ export default function PaginaHistorico({
   ]
 
   const historico = useMemo(() => partidasDoHistorico(partidas), [partidas])
-  const filtrado = filtrarHistorico(historico, { tipo, busca }, nomesParaBusca)
+  const porBusca = filtrarHistorico(historico, { tipo, busca }, nomesParaBusca)
   const aberta = historico.find((partida) => partida.id === abertaId)
   const data = (iso: string | undefined) =>
     iso
@@ -83,14 +89,32 @@ export default function PaginaHistorico({
     )
   }
 
+  // Período e ordem da folha de filtros, por cima da busca e do tipo.
+  const filtrado = filtrarLista(
+    porBusca.map((partida) => ({
+      partida,
+      data: partida.finalizadaEm ?? partida.criadaEm,
+      nome: tituloDa(partida),
+      textos: [],
+    })),
+    '',
+    filtrosLista,
+    new Date(),
+    idioma,
+  ).map((item) => item.partida)
+
   /** Rodada e mesa do torneio, na linha da data. */
   const apoioDa = (partida: Partida) => {
     const vinculo = partida.vinculoTorneio
-    return vinculo ? t('match.types.roundTable', { round: vinculo.rodada + 1, table: vinculo.mesa + 1 }) : undefined
+    return vinculo
+      ? t('match.types.roundTable', { round: vinculo.rodada + 1, table: vinculo.mesa + 1 })
+      : undefined
   }
 
   const compartilhar = async (partida: Partida) => {
-    const cabecalho = [tituloDa(partida), apoioDa(partida), data(partida.finalizadaEm)].filter(Boolean).join(' · ')
+    const cabecalho = [tituloDa(partida), apoioDa(partida), data(partida.finalizadaEm)]
+      .filter(Boolean)
+      .join(' · ')
     const resultado = await compartilharTexto(
       textoDaPartida(partida, cabecalho, nomeNa(partida), t, numero),
     )
@@ -110,7 +134,11 @@ export default function PaginaHistorico({
           <>
             <ListaMaos partida={aberta} nomeDe={nomeNa(aberta)} />
             {/* O histórico de ações fica salvo com a partida. */}
-            <button type="button" className="btn-contorno ptd-btn-largo" onClick={() => setAcoesAbertas(true)}>
+            <button
+              type="button"
+              className="btn-contorno ptd-btn-largo"
+              onClick={() => setAcoesAbertas(true)}
+            >
               <i className="fas fa-file-pen" aria-hidden="true" /> {t('match.history.title')}
             </button>
           </>
@@ -145,12 +173,12 @@ export default function PaginaHistorico({
       ) : (
         <>
           <div className="ptd-filtro-historico">
-            <CampoBusca
-              valor={busca}
-              aoMudar={setBusca}
-              rotulo={t('match.history.search')}
+            <BuscaFiltrosLista
+              busca={busca}
+              aoBuscar={setBusca}
+              filtros={filtrosLista}
+              aoFiltrar={setFiltrosLista}
               placeholder={t('match.history.search')}
-              rotuloLimpar={t('actions.clear')}
             />
             <FiltroTipo valor={tipo} aoMudar={setTipo} />
           </div>
@@ -162,7 +190,7 @@ export default function PaginaHistorico({
                   partida={partida}
                   modo="historico"
                   titulo={tituloDa(partida)}
-                apoio={apoioDa(partida)}
+                  apoio={apoioDa(partida)}
                   nomeDe={nomeNa(partida)}
                   aoAbrir={() => setAbertaId(partida.id)}
                   aoCompartilhar={() => void compartilhar(partida)}
@@ -196,4 +224,3 @@ export default function PaginaHistorico({
     </section>
   )
 }
-

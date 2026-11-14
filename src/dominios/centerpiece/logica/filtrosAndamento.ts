@@ -9,9 +9,15 @@ export type OrdemLista = 'recentes' | 'antigos' | 'nome'
 export interface FiltrosLista {
   periodo: PeriodoLista
   ordem: OrdemLista
+  /** Só no histórico de torneios: o formato, ou 'todos'. */
+  formato?: string
 }
 
-export const FILTROS_LISTA_PADRAO: FiltrosLista = { periodo: 'tudo', ordem: 'recentes' }
+export const FILTROS_LISTA_PADRAO: FiltrosLista = {
+  periodo: 'tudo',
+  ordem: 'recentes',
+  formato: 'todos',
+}
 export const PERIODOS_LISTA: readonly PeriodoLista[] = ['hoje', 'semana', 'mes', 'tudo']
 export const ORDENS_LISTA: readonly OrdemLista[] = ['recentes', 'antigos', 'nome']
 
@@ -27,7 +33,11 @@ export interface ItemDaLista {
 
 /** Sem acento nem maiúscula: "joão" acha "João". */
 export function normalizar(texto: string): string {
-  return texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim()
+  return texto
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .trim()
 }
 
 /** Cada palavra da busca tem que aparecer em algum dos textos. */
@@ -51,7 +61,9 @@ export function noPeriodo(iso: string, periodo: PeriodoLista, agora: Date): bool
 /** Quantos filtros da folha estão fora do padrão (o número no botão). */
 export function filtrosListaAtivos(filtros: FiltrosLista): number {
   return (
-    Number(filtros.periodo !== FILTROS_LISTA_PADRAO.periodo) + Number(filtros.ordem !== FILTROS_LISTA_PADRAO.ordem)
+    Number(filtros.periodo !== FILTROS_LISTA_PADRAO.periodo) +
+    Number(filtros.ordem !== FILTROS_LISTA_PADRAO.ordem) +
+    Number((filtros.formato ?? 'todos') !== 'todos')
   )
 }
 
@@ -63,7 +75,9 @@ export function filtrarLista<T extends ItemDaLista>(
   agora: Date,
   idioma: string,
 ): T[] {
-  const visiveis = itens.filter((item) => casaBusca(busca, item.textos) && noPeriodo(item.data, filtros.periodo, agora))
+  const visiveis = itens.filter(
+    (item) => casaBusca(busca, item.textos) && noPeriodo(item.data, filtros.periodo, agora),
+  )
   const tempo = (item: T) => new Date(item.data).getTime() || 0
   return [...visiveis].sort((a, b) =>
     filtros.ordem === 'nome'
