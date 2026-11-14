@@ -22,8 +22,7 @@ import {
   carregarRegrasRegistro,
   salvarRegrasRegistro,
 } from '../../persistencia/repositorioRegrasRegistro'
-import { fecharPontos, formatarPontos, lerPontos, limparPontos } from '../../logica/entradaPontos'
-import { PROPS_TECLADO_COM_SINAL } from '../componentes/CampoUma'
+import { lerPontos } from '../../logica/entradaPontos'
 import CalculadoraPontosSheet from '../componentes/CalculadoraPontosSheet'
 import CardAssento from '../componentes/CardAssento'
 import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
@@ -37,7 +36,6 @@ import '../config-mesa.css'
 const LUGARES = [0, 1, 2, 3] as const
 /** Campo completo: "-" sozinho (ainda digitando) não conta. Negativos entram na soma. */
 const pontosValidos = (texto: string) => lerPontos(texto) !== null
-const semSeparadores = limparPontos
 
 /**
  * Partida jogada fora do app: regras, jogadores, pontos, uma e oka. Com `clube`,
@@ -66,8 +64,6 @@ export default function RegistrarFinalizada({
   }
 }) {
   const { t, numero, idioma } = useI18n()
-  /** Campo em edição: mostra o número cru. Fora de foco, com separador de milhar. */
-  const [focado, setFocado] = useState<number | null>(null)
   const { jogadores } = useJogadores()
   const { partidas, adicionar } = usePartidas()
   const [confirmando, setConfirmando] = useState(false)
@@ -135,26 +131,10 @@ export default function RegistrarFinalizada({
   }
 
   const totalMesa = pontosPartida * 4
-  const preenchidos = pontos.filter(pontosValidos)
-  const indiceVazio = pontos.findIndex((texto) => texto === '')
-  // O último campo vazio fecha a soma sozinho, até a pessoa digitar nele.
-  // No torneio, não: o organizador lança os quatro.
-  const quanto =
-    !torneio && preenchidos.length === 3 && indiceVazio >= 0
-      ? totalMesa - preenchidos.reduce((soma, texto) => soma + Number(semSeparadores(texto)), 0)
-      : null
-  const efetivos = pontos.map((texto, indice) =>
-    indice === indiceVazio && quanto !== null ? String(quanto) : texto,
-  )
+  const efetivos = pontos
   const pontosCompletos = efetivos.every(pontosValidos)
-  const pontosNumeros = pontosCompletos
-    ? efetivos.map((texto) => Number(semSeparadores(texto)))
-    : undefined
-  const diferenca = pontosNumeros
-    ? pontosNumeros.reduce((soma, valor) => soma + valor, 0) - totalMesa
-    : 0
-
-  // Torneio: a soma tem que fechar, contando os depósitos de riichi que ficaram na mesa.
+  const pontosNumeros = pontosCompletos ? efetivos.map((texto) => lerPontos(texto) ?? 0) : undefined
+  // A soma fica vermelha enquanto não fecha. No torneio ela tem que fechar, contando os depósitos de riichi que ficaram na mesa.
   const soma = pontos.reduce((total, texto) => total + (lerPontos(texto) ?? 0), 0)
   const fechamento = somaFecha(soma, totalMesa, torneio?.config.palitosRestantes ?? 'primeiro')
   const completo =
@@ -280,115 +260,75 @@ export default function RegistrarFinalizada({
         </>
       )}
 
-      {torneio && (
-        <>
-          <div className="ptd-assentos trn-mesa-assentos">
-            {LUGARES.map((lugar) => {
-              const id = assentos[lugar]
-              const cadastrado = jogadores.find((item) => item.id === id)
-              const nomes = cadastrado
-                ? nomesNoRanking(cadastrado)
-                : { principal: nomeDe(id) ?? '—', apoio: undefined }
-              const valor = lerPontos(pontos[lugar])
-              const vento = t(`winds.${['east', 'south', 'west', 'north'][lugar]}`)
-              const nomeFalado = nomes.apoio ?? nomes.principal
+      {!torneio && <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>}
+      <>
+        <div className="ptd-assentos trn-mesa-assentos">
+          {LUGARES.map((lugar) => {
+            const id = assentos[lugar]
+            // Avulsa: lugar ainda sem jogador. Tocar escolhe quem senta.
+            if (!id) {
               return (
                 <CardAssento
                   key={lugar}
                   cadeira={lugar}
-                  principal={nomes.principal}
-                  apoio={nomes.apoio}
-                  ocupado={valor !== null}
-                  rotulo={
-                    valor === null
-                      ? t('tournament.points.seatEmpty', { wind: vento, name: nomeFalado })
-                      : t('tournament.points.seatFilled', {
-                          wind: vento,
-                          name: nomeFalado,
-                          points: numero(valor),
-                        })
-                  }
-                  destaque={
-                    <span
-                      className={`ptd-assento-pontos${valor === null ? ' ptd-assento-pontos--vazio' : valor < 0 ? ' fin-negativo' : ''}`}
-                    >
-                      {valor === null ? t('tournament.points.points') : numero(valor)}
-                    </span>
-                  }
-                  aoTocar={() => setCalculando(lugar)}
-                  // Trocar alguém da mesa: toque longo.
-                  aoTocarLongo={() => setEscolhendo(lugar)}
+                  marca={ordemDosVentos ? undefined : lugar + 1}
+                  principal={t('match.setup.assign')}
+                  ocupado={false}
+                  rotulo={t('match.manual.choosePlayer', { number: lugar + 1 })}
+                  aoTocar={() => setEscolhendo(lugar)}
                 />
               )
-            })}
-          </div>
-          <p className={`trn-soma${fechamento.fecha ? '' : ' trn-soma--erro'}`} role="status">
-            {t('tournament.points.sum', { sum: numero(soma), total: numero(totalMesa) })}
-            {fechamento.depositosNaMesa > 0 && (
-              <span className="trn-soma-apoio">
-                {t('tournament.points.depositsLeft', { count: fechamento.depositosNaMesa })}
-              </span>
-            )}
-          </p>
-          <p className="cfg-ajuda">{t('tournament.points.swapHint')}</p>
-        </>
-      )}
-
-      {!torneio && <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>}
-      {!torneio && (
-        <div className="fin-linhas">
-          {LUGARES.map((lugar) => {
-            const nome = nomeDe(assentos[lugar])
-            const rotulo = t('match.manual.points', { name: nome ?? lugar + 1 })
-            const preenchidoSozinho = lugar === indiceVazio && quanto !== null
+            }
+            const cadastrado = jogadores.find((item) => item.id === id)
+            const nomes = cadastrado
+              ? nomesNoRanking(cadastrado)
+              : { principal: nomeDe(id) ?? '—', apoio: undefined }
+            const valor = lerPontos(pontos[lugar])
+            const vento = ordemDosVentos
+              ? t(`winds.${['east', 'south', 'west', 'north'][lugar]}`)
+              : String(lugar + 1)
+            const nomeFalado = nomes.apoio ?? nomes.principal
             return (
-              <div key={lugar} className="fin-linha">
-                <button
-                  type="button"
-                  className={`ptd-assento fin-jogador${nome ? ' ptd-assento--ocupado' : ''}`}
-                  aria-label={nome ?? t('match.manual.choosePlayer', { number: lugar + 1 })}
-                  // Mesa do torneio: os quatro vêm do sorteio e não mudam aqui.
-                  disabled={!!torneio}
-                  onClick={() => setEscolhendo(lugar)}
-                >
-                  {ordemDosVentos && (
-                    <span className="ptd-assento-kanji" aria-hidden="true">
-                      {KANJI_VENTO[ORDEM_VENTOS[lugar]]}
-                    </span>
-                  )}
-                  {nome ?? t('match.setup.assign')}
-                </button>
-                <div className="fin-campo">
-                  <input
-                    className={`cfg-entrada${pontos[lugar].startsWith('-') ? ' fin-negativo' : ''}`}
-                    // Teclado com a tecla "-" (no Android, o de telefone).
-                    {...PROPS_TECLADO_COM_SINAL}
-                    aria-label={rotulo}
-                    autoComplete="off"
-                    value={focado === lugar ? pontos[lugar] : formatarPontos(pontos[lugar], idioma)}
-                    placeholder={preenchidoSozinho ? numero(quanto ?? 0) : undefined}
-                    onFocus={() => setFocado(lugar)}
-                    onBlur={() => {
-                      setFocado(null)
-                      mudarPontos(lugar, fecharPontos(pontos[lugar]))
-                    }}
-                    onChange={(evento) => mudarPontos(lugar, limparPontos(evento.target.value))}
-                  />
-                </div>
-              </div>
+              <CardAssento
+                key={lugar}
+                cadeira={lugar}
+                marca={ordemDosVentos ? undefined : lugar + 1}
+                principal={nomes.principal}
+                apoio={nomes.apoio}
+                ocupado={valor !== null}
+                rotulo={
+                  valor === null
+                    ? t('tournament.points.seatEmpty', { wind: vento, name: nomeFalado })
+                    : t('tournament.points.seatFilled', {
+                        wind: vento,
+                        name: nomeFalado,
+                        points: numero(valor),
+                      })
+                }
+                destaque={
+                  <span
+                    className={`ptd-assento-pontos${valor === null ? ' ptd-assento-pontos--vazio' : valor < 0 ? ' fin-negativo' : ''}`}
+                  >
+                    {valor === null ? t('tournament.points.points') : numero(valor)}
+                  </span>
+                }
+                aoTocar={() => setCalculando(lugar)}
+                // Trocar alguém da mesa: toque longo.
+                aoTocarLongo={() => setEscolhendo(lugar)}
+              />
             )
           })}
         </div>
-      )}
-      {!torneio && pontosCompletos && diferenca !== 0 && (
-        <p className="cfg-aviso fin-aviso-soma" role="status">
-          <i className="fas fa-triangle-exclamation" aria-hidden="true" />
-          {t('match.manual.sumWarning', {
-            difference: numero(diferenca),
-            total: numero(totalMesa),
-          })}
+        <p className={`trn-soma${fechamento.fecha ? '' : ' trn-soma--erro'}`} role="status">
+          {t('tournament.points.sum', { sum: numero(soma), total: numero(totalMesa) })}
+          {fechamento.depositosNaMesa > 0 && (
+            <span className="trn-soma-apoio">
+              {t('tournament.points.depositsLeft', { count: fechamento.depositosNaMesa })}
+            </span>
+          )}
         </p>
-      )}
+        <p className="cfg-ajuda">{t('tournament.points.swapHint')}</p>
+      </>
 
       {torneio ? (
         <p className="cfg-ajuda">{t('tournament.tables.rulesLocked')}</p>
@@ -462,7 +402,7 @@ export default function RegistrarFinalizada({
       {escolhendo !== null && (
         <SeletorJogador
           titulo={
-            torneio
+            ordemDosVentos
               ? KANJI_VENTO[ORDEM_VENTOS[escolhendo]]
               : t('match.manual.choosePlayer', { number: escolhendo + 1 })
           }

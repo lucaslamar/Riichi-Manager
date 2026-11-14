@@ -11,6 +11,7 @@ const TOQUE_LONGO_MS = 550
  */
 export default function CardAssento({
   cadeira,
+  marca,
   principal,
   apoio,
   destaque,
@@ -20,6 +21,8 @@ export default function CardAssento({
   aoTocarLongo,
 }: {
   cadeira: Cadeira
+  /** No lugar do kanji (ex.: o número do lugar, quando a ordem dos ventos não é conhecida). */
+  marca?: ReactNode
   /** Apelido (ou nome) em destaque. */
   principal: ReactNode
   /** Nome completo embaixo do apelido. */
@@ -69,7 +72,7 @@ export default function CardAssento({
       }}
     >
       <span className="ptd-assento-kanji" aria-hidden="true">
-        {KANJI_VENTO[ORDEM_VENTOS[cadeira]]}
+        {marca ?? KANJI_VENTO[ORDEM_VENTOS[cadeira]]}
       </span>
       <span className="ptd-assento-nomes">
         <span className="ptd-assento-nome">{principal}</span>
