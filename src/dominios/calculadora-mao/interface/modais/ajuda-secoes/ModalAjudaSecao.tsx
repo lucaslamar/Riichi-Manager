@@ -53,7 +53,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
 
   return (
     <section className="glossario-bloco">
-      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena, literal }, indice) => {
+      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena, literal, divisoria }, indice) => {
         const tx = (chave: string) => (literal ? chave : t(chave))
         if (dica) {
           return paragrafos.map((chave) => (
@@ -83,7 +83,10 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
         if (!item && paragrafos.length === 0) {
           return (
             // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
-            <h3 key={indice} className="glossario-bloco__titulo">
+            <h3
+              key={indice}
+              className={`glossario-bloco__titulo${divisoria ? ' glossario-bloco__titulo--divisoria' : ''}`}
+            >
               {t(subtitulo)}
             </h3>
           )

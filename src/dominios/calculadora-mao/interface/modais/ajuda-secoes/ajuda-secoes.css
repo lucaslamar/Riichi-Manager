@@ -175,3 +175,10 @@
   font-size: 0.85rem;
   line-height: 1.3;
 }
+
+/* Começo de uma parte nova da ajuda (ex.: os yakus locais): uma linha acima. */
+.glossario-bloco__titulo--divisoria {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 2px solid var(--linha-divisoria);
+}

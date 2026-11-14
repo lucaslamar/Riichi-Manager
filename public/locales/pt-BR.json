@@ -2127,7 +2127,7 @@
       "near": "{{count}} renchan de {{name}}: a próxima vitória é Yakuman (Paarenchan)."
     },
     "why": "Por quê:",
-    "localTag": "yaku local",
+    "localTag": "Yaku local",
     "conditionsHelp": "Regras da casa, fora do padrão: só aparecem aqui os que estão ligados em Regras de cálculo → Yakus locais. Marque quando a vitória aconteceu nessa situação.",
     "value": "Vale: {{value}}"
   }

@@ -58,12 +58,12 @@ export default function OpcoesMao({
     condicoesLocais.length === 0
       ? []
       : [
-          { subtitulo: 'localYaku.title' },
+          { subtitulo: 'localYaku.title', divisoria: true },
           { paragrafos: ['localYaku.conditionsHelp'] },
           ...condicoesLocais.map((yaku) => {
             const texto = textoYakuLocal(yaku, idioma)
             return {
-              subtitulo: `${yaku.nome} · ${t('localYaku.localTag')}`,
+              subtitulo: `${yaku.nome} (${t('localYaku.localTag')})`,
               item: true,
               literal: true,
               paragrafos: [texto.descricao, t('localYaku.value', { value: texto.valor })],

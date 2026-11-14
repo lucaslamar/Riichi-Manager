@@ -2193,7 +2193,7 @@
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
     "why": "Why:",
-    "localTag": "vietinis yaku",
+    "localTag": "Vietinis yaku",
     "conditionsHelp": "Namų taisyklės, ne standartas: čia rodomi tik įjungti Skaičiavimo taisyklės → Vietiniai yaku. Pažymėkite, kai pergalė įvyko tokioje situacijoje.",
     "value": "Vertė: {{value}}"
   }

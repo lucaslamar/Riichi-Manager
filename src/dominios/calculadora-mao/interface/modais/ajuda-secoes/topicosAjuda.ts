@@ -33,6 +33,8 @@ export interface BlocoAjuda {
   cena?: NomeCena
   /** Subtítulo e parágrafos já são o texto (não chaves i18n), como os dos yakus locais. */
   literal?: boolean
+  /** Linha separando este bloco do anterior (ex.: a parte dos yakus locais). */
+  divisoria?: boolean
 }
 
 /** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */
