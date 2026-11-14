@@ -104,7 +104,7 @@ export default function PaginaEmAndamento({
                   <strong>{torneio.nome}</strong>
                   <small>{subtituloTorneio(torneio)}</small>
                 </span>
-                <i className="fas fa-chevron-right" aria-hidden="true" />
+                <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" />
               </button>
             ))}
           {mostra('clube') && sorteioPendente && (
@@ -117,7 +117,7 @@ export default function PaginaEmAndamento({
                   {t('match.types.registeredOf', { count: registradas, total: sorteioPendente.mesas.length })}
                 </small>
               </span>
-              <i className="fas fa-chevron-right" aria-hidden="true" />
+              <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" />
             </button>
           )}
           {mesas.length > 0 && <ul className="cm-lista ptd-lista-mesas">{mesas.map(card)}</ul>}

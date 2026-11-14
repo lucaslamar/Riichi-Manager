@@ -1569,8 +1569,10 @@ body:has(.ptd-modulo) {
   color: var(--texto-apoio);
 }
 
+/* Abrir: o quadrado com seta azul, como o botão de abrir das mesas. */
 .cm-andamento-item > i:last-child {
-  color: var(--texto-apoio);
+  color: var(--primario);
+  font-size: 1.05rem;
 }
 
 /* Filtro de tipo (Todas · Partidas · Clube · Torneios): etiquetas pequenas. */
