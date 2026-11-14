@@ -2100,6 +2100,9 @@
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
-    "why": "Why:"
+    "why": "Why:",
+    "localTag": "로컬 역",
+    "conditionsHelp": "표준이 아닌 하우스 룰입니다. 계산 규칙 → 로컬 역에서 켠 것만 여기에 나타납니다. 그 상황에서 화료했을 때 선택하세요.",
+    "value": "값: {{value}}"
   }
 }

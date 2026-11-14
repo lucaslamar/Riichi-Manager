@@ -31,6 +31,8 @@ export interface BlocoAjuda {
   exemplo?: string
   /** Cena animada do app (mão + teclado + dedo), no lugar do exemplo parado. */
   cena?: NomeCena
+  /** Subtítulo e parágrafos já são o texto (não chaves i18n), como os dos yakus locais. */
+  literal?: boolean
 }
 
 /** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */

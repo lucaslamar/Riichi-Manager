@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import ModalAjudaSecao from './ModalAjudaSecao'
-import { TOPICOS_AJUDA, type TopicoAjuda } from './topicosAjuda'
+import { TOPICOS_AJUDA, type BlocoAjuda, type TopicoAjuda } from './topicosAjuda'
 
 /**
  * Botão "?" discreto ao lado do título de uma seção da finalização. Só abre a
@@ -10,9 +10,11 @@ import { TOPICOS_AJUDA, type TopicoAjuda } from './topicosAjuda'
 export default function BotaoAjuda({
   topico,
   className,
+  blocosExtras,
 }: {
   topico: TopicoAjuda
   className?: string
+  blocosExtras?: BlocoAjuda[]
 }) {
   const { t } = useI18n()
   const [aberto, setAberto] = useState(false)
@@ -39,7 +41,7 @@ export default function BotaoAjuda({
           ?
         </span>
       </button>
-      {aberto && <ModalAjudaSecao topico={topico} aoFechar={fechar} />}
+      {aberto && <ModalAjudaSecao topico={topico} blocosExtras={blocosExtras} aoFechar={fechar} />}
     </>
   )
 }

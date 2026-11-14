@@ -17,7 +17,8 @@ import { TecladoContextual } from '../../compartilhado/componentes/TecladoContex
 import BotaoAjuda from '../../modais/ajuda-secoes/BotaoAjuda'
 import { useAvancoAutomatico } from '../hooks/useAvancoAutomatico'
 import { useYakusLocais } from '@/compartilhado/configuracoes/useYakusLocais'
-import { YAKUS_LOCAIS } from '../../../logica/yakusLocais'
+import { textoYakuLocal, YAKUS_LOCAIS } from '../../../logica/yakusLocais'
+import type { BlocoAjuda } from '../../modais/ajuda-secoes/topicosAjuda'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
@@ -49,9 +50,26 @@ export default function OpcoesMao({
   destinoFuriten = null,
   contextoCenterpiece,
 }: PropsOpcoesMao) {
-  const { t } = useI18n()
+  const { t, idioma } = useI18n()
   const { yakusLocais } = useYakusLocais()
   const condicoesLocais = YAKUS_LOCAIS.filter((yaku) => yaku.situacao && yakusLocais.ativos.includes(yaku.id))
+  // No "?" das Condições especiais: cada yaku local ligado, avisando que é regra da casa.
+  const ajudaLocais: BlocoAjuda[] =
+    condicoesLocais.length === 0
+      ? []
+      : [
+          { subtitulo: 'localYaku.title' },
+          { paragrafos: ['localYaku.conditionsHelp'] },
+          ...condicoesLocais.map((yaku) => {
+            const texto = textoYakuLocal(yaku, idioma)
+            return {
+              subtitulo: `${yaku.nome} · ${t('localYaku.localTag')}`,
+              item: true,
+              literal: true,
+              paragrafos: [texto.descricao, t('localYaku.value', { value: texto.valor })],
+            }
+          }),
+        ]
   const {
     mao,
     atualizarMao,
@@ -504,7 +522,7 @@ export default function OpcoesMao({
           >
             <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
               {t('calculator.specialConditions')}
-              <BotaoAjuda topico="condicoesEspeciais" />
+              <BotaoAjuda topico="condicoesEspeciais" blocosExtras={ajudaLocais} />
             </span>
             <div className="linha-opcoes-mao linha-condicoes-especiais">
               {/* Com Chi/Pon/Kan não existe Tenhou/Chiihou: o botão some, em vez
@@ -559,16 +577,9 @@ export default function OpcoesMao({
                   })
                 }}
               />
-            </div>
-            {comKita && mao.melds.length === 0 && (
-              <p className="aviso-opcao-indisponivel">{t('sanma.tenhouKitaAviso')}</p>
-            )}
-            {/* Yakus locais de situação: só os ligados em Regras de cálculo → Yakus locais. */}
-            {condicoesLocais.length > 0 && (
-              <>
-                <span className="rotulo-bloco-opcoes rotulo-condicoes-locais">{t('localYaku.conditions')}</span>
-                <div className="linha-opcoes-mao linha-condicoes-especiais">
-                  {condicoesLocais.map((yaku) => (
+              {/* Yakus locais de situação, na mesma grade: só os ligados em Regras de
+                  cálculo → Yakus locais. O "?" diz quais são regras da casa. */}
+              {condicoesLocais.map((yaku) => (
                     <BotaoToggle
                       key={yaku.id}
                       rotulo={yaku.nome}
@@ -584,8 +595,9 @@ export default function OpcoesMao({
                       }
                     />
                   ))}
-                </div>
-              </>
+            </div>
+            {comKita && mao.melds.length === 0 && (
+              <p className="aviso-opcao-indisponivel">{t('sanma.tenhouKitaAviso')}</p>
             )}
           </section>
         </div>

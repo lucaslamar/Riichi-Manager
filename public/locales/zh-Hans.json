@@ -2100,6 +2100,9 @@
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
-    "why": "Why:"
+    "why": "Why:",
+    "localTag": "地方役",
+    "conditionsHelp": "非标准的家规：只有在计算规则 → 地方役中开启的才会出现在这里。和牌发生在该情况时勾选。",
+    "value": "价值：{{value}}"
   }
 }

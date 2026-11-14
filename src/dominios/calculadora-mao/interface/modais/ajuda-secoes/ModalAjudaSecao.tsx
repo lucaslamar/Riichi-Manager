@@ -53,7 +53,8 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
 
   return (
     <section className="glossario-bloco">
-      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena }, indice) => {
+      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena, literal }, indice) => {
+        const tx = (chave: string) => (literal ? chave : t(chave))
         if (dica) {
           return paragrafos.map((chave) => (
             <p key={chave} className="bloco-dica ajuda-dica">
@@ -65,7 +66,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
         }
         const textos = paragrafos.map((chave) => (
           <p key={chave} className={subtitulo ? 'glossario-item__texto' : 'glossario-bloco__intro'}>
-            <TextoAjuda texto={t(chave)} ignorar={ignorar} />
+            <TextoAjuda texto={tx(chave)} ignorar={ignorar} />
           </p>
         ))
         if (!subtitulo) {
@@ -91,7 +92,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
           // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
           <div key={indice} className="glossario-item">
             <h4 className="glossario-item__nome">
-              {t(subtitulo)}
+              {tx(subtitulo)}
               {icone && <i className={`fas ${icone} icone-subtitulo-ajuda`} aria-hidden="true" />}
             </h4>
             {textos}
@@ -108,13 +109,17 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
 /** Explica uma seção da finalização (aberta pelo botão "?" ao lado do título). */
 export default function ModalAjudaSecao({
   topico,
+  blocosExtras = [],
   aoFechar,
 }: {
   topico: TopicoAjuda
+  /** Blocos montados na hora, depois dos fixos (ex.: os yakus locais ligados). */
+  blocosExtras?: BlocoAjuda[]
   aoFechar: () => void
 }) {
   const { t } = useI18n()
-  const { titulo, blocos = [], abas, tema, termosProprios } = TOPICOS_AJUDA[topico]
+  const { titulo, blocos: blocosFixos = [], abas, tema, termosProprios } = TOPICOS_AJUDA[topico]
+  const blocos = [...blocosFixos, ...blocosExtras]
   const [indiceAba, setIndiceAba] = useState(0)
 
   return (

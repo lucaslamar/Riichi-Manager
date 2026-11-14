@@ -2126,6 +2126,9 @@
       "dealerStays": "Dealer stays",
       "near": "{{count}} renchan for {{name}}: the next win is a Yakuman (Paarenchan)."
     },
-    "why": "Why:"
+    "why": "Why:",
+    "localTag": "local yaku",
+    "conditionsHelp": "House rules, not standard: only the ones turned on in Scoring rules → Local yaku show up here. Mark one when the win happened in that situation.",
+    "value": "Worth: {{value}}"
   }
 }
