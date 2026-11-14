@@ -55,6 +55,8 @@ export default function RegistrarFinalizada({
   torneio?: {
     titulo: string
     config: ConfigMesa
+    /** O torneio sorteou os ventos. Falso: os lugares não têm vento. */
+    comVentos?: boolean
     jogadorIds: readonly [string, string, string, string]
     /** Nomes dos assentos: convidados do torneio não estão no cadastro. */
     nomes?: readonly string[]
@@ -116,7 +118,7 @@ export default function RegistrarFinalizada({
   // Clube e torneio já vêm do sorteio com os ventos. Avulsa: a pessoa diz se a lista segue a ordem.
   // Padrão: a lista segue Leste, Sul, Oeste, Norte.
   const [ordemEscolhida, setOrdemEscolhida] = useState(true)
-  const ordemDosVentos = !!torneio || !!mesaClube || ordemEscolhida
+  const ordemDosVentos = torneio ? torneio.comVentos !== false : !!mesaClube || ordemEscolhida
   const [assentos, setAssentos] = useState<(string | null)[]>(() =>
     torneio ? [...torneio.jogadorIds] : mesaClube ? [...mesaClube.ids] : [null, null, null, null],
   )

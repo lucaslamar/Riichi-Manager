@@ -12,7 +12,7 @@ import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogado
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
-import { criarRascunho, nomeNoTorneio } from '@/dominios/torneio/logica/torneio'
+import { criarRascunho, nomeNoTorneio, sorteiaVentos } from '@/dominios/torneio/logica/torneio'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { mesasRegistradas, type MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
@@ -319,6 +319,8 @@ function TelasCenterpiece({
           torneio={{
             titulo: t('tournament.tables.badge', { round: tela.rodada, table: tela.mesa }),
             config: torneio.config,
+            // Sem ventos sorteados, a mesa não sabe quem é Leste: os lugares viram 1 a 4.
+            comVentos: sorteiaVentos(torneio),
             jogadorIds: mesa.assentos,
             nomes: mesa.assentos.map((id) => nomeNoTorneio(torneio, jogadores, id)),
             vinculo: {
