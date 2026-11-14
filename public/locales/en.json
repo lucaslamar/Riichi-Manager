@@ -501,17 +501,17 @@
       "declaration": "A declaration made with a closed hand one step away from completion (tenpai). It costs a 1,000-point bet.",
       "value": "Worth 1 han and is a yaku, so on its own it already makes your hand valid. It also unlocks ura-dora. After declaring, you can no longer change your hand.",
       "doubleRiichi": "Riichi declared on the first discard, with no calls before it. Worth 2 han instead of 1 and is also a yaku.",
-      "ippatsu": "Winning within one go-around after Riichi, with no calls in between. Worth +1 han. It is a yaku, but only exists together with Riichi.",
+      "ippatsu": "Winning within one go-around after Riichi, with no calls in between. It is a yaku, but only exists together with Riichi.",
       "uraDora": "The tile under each dora indicator in the dead wall. It works as one more dora indicator, but is only revealed to whoever wins after declaring Riichi."
     },
     "specialConditions": {
       "allYaku": "They are all yaku, so any of them already makes your hand valid, even without another yaku.",
       "tenhouChiihouTitle": "Tenhou and Chiihou",
-      "tenhouChiihou": "Winning with the starting hand. Tenhou is the dealer's and Chiihou the other players'. They are worth Yakuman.",
-      "rinshan": "Winning with the tile drawn after a kan. Worth +1 han.",
-      "chankan": "Ron on the tile another player added to a pon to make a kan. Worth +1 han.",
-      "haitei": "Winning by tsumo with the last tile of the wall. Worth +1 han.",
-      "houtei": "Winning by ron on the last discard of the hand. Worth +1 han."
+      "tenhouChiihou": "Winning with the starting hand. Tenhou is the dealer's and Chiihou the other players'.",
+      "rinshan": "Winning with the tile drawn after a kan.",
+      "chankan": "Ron on the tile another player added to a pon to make a kan.",
+      "haitei": "Winning by tsumo with the last tile of the wall.",
+      "houtei": "Winning by ron on the last discard of the hand."
     },
     "notation": {
       "intro": "Write the tile numbers followed by the suit: m (Man), p (Pin), s (Sou) and z (honors). Several numbers before the same suit all belong to it: 2388m447p is 2, 3, 8 and 8 of Man and 4, 4 and 7 of Pin.",
@@ -548,7 +548,9 @@
       "finishTitle": "Finish hand",
       "finish": "With a complete hand, Finish hand takes you to the win options: ron or tsumo, winds, Riichi, doras and honba. Each part there has its own ?.",
       "tip": "Rather type? MPSZ swaps the tile keyboard for notation, like 123m. To go back, tap Tiles."
-    }
+    },
+    "value1han": "Worth: 1 han",
+    "valueYakuman": "Worth: Yakuman"
   },
   "rulesModal": {
     "open": "Open scoring rules",
@@ -2135,13 +2137,15 @@
       "title": "Combinations:",
       "soRon": "Ron only",
       "soTsumo": "Tsumo only",
-      "exigeRiichi": "Needs Riichi marked",
+      "exigeRiichi": "needs Riichi",
       "semRiichi": "Not with Riichi",
-      "exigeRinshan": "Needs Rinshan marked",
+      "exigeRinshan": "needs Rinshan",
       "semKan": "Not with Rinshan or Chankan",
       "semUltimaPedra": "Not with Haitei or Houtei",
       "semTenhou": "Not with Tenhou or Chiihou",
-      "semOutro": "Not with {{name}}"
+      "semOutro": "Not with {{name}}",
+      "notWith": "Not with {{list}}.",
+      "and": "and"
     },
     "count": "{{on}} of {{total}} on"
   }

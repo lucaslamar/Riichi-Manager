@@ -33,6 +33,8 @@ export interface BlocoAjuda {
   cena?: NomeCena
   /** Subtítulo e parágrafos já são o texto (não chaves i18n), como os dos yakus locais. */
   literal?: boolean
+  /** Linhas curtas depois dos parágrafos, em letra menor e sem glossário (ex.: valor). Chaves i18n, ou texto com `literal`. */
+  apoio?: string[]
   /** Linha separando este bloco do anterior (ex.: a parte dos yakus locais). */
   divisoria?: boolean
 }
@@ -187,7 +189,12 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         item: true,
         paragrafos: ['sectionHelp.riichi.doubleRiichi'],
       },
-      { subtitulo: 'calculator.ippatsu', item: true, paragrafos: ['sectionHelp.riichi.ippatsu'] },
+      {
+        subtitulo: 'calculator.ippatsu',
+        item: true,
+        paragrafos: ['sectionHelp.riichi.ippatsu'],
+        apoio: ['sectionHelp.value1han'],
+      },
       {
         subtitulo: 'sectionHelp.uraDora.term',
         item: true,
@@ -203,26 +210,31 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         subtitulo: 'sectionHelp.specialConditions.tenhouChiihouTitle',
         item: true,
         paragrafos: ['sectionHelp.specialConditions.tenhouChiihou'],
+        apoio: ['sectionHelp.valueYakuman'],
       },
       {
         subtitulo: 'calculator.rinshan',
         item: true,
         paragrafos: ['sectionHelp.specialConditions.rinshan'],
+        apoio: ['sectionHelp.value1han'],
       },
       {
         subtitulo: 'calculator.chankan',
         item: true,
         paragrafos: ['sectionHelp.specialConditions.chankan'],
+        apoio: ['sectionHelp.value1han'],
       },
       {
         subtitulo: 'calculator.haitei',
         item: true,
         paragrafos: ['sectionHelp.specialConditions.haitei'],
+        apoio: ['sectionHelp.value1han'],
       },
       {
         subtitulo: 'calculator.houtei',
         item: true,
         paragrafos: ['sectionHelp.specialConditions.houtei'],
+        apoio: ['sectionHelp.value1han'],
       },
     ],
   },

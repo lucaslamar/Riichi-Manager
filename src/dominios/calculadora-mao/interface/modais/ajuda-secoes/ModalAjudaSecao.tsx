@@ -53,7 +53,7 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
 
   return (
     <section className="glossario-bloco">
-      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena, literal, divisoria }, indice) => {
+      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena, literal, divisoria, apoio = [] }, indice) => {
         const tx = (chave: string) => (literal ? chave : t(chave))
         if (dica) {
           return paragrafos.map((chave) => (
@@ -99,6 +99,11 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
               {icone && <i className={`fas ${icone} icone-subtitulo-ajuda`} aria-hidden="true" />}
             </h4>
             {textos}
+            {apoio.map((linha) => (
+              <p key={linha} className="glossario-item__apoio">
+                {tx(linha)}
+              </p>
+            ))}
             {visual && <VisualAjuda visual={visual} />}
             {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
             {cena && <CenaAjuda nome={cena} />}

@@ -507,17 +507,17 @@
       "declaration": "Declaración hecha con la mano cerrada y a un paso de completarla (tenpai). Cuesta una apuesta de 1.000 puntos.",
       "value": "Vale 1 han y es un yaku, así que por sí solo ya hace válida tu mano. También habilita la ura-dora. Después de declararlo, ya no puedes cambiar la mano.",
       "doubleRiichi": "Riichi declarado en el primer descarte, sin llamadas antes. Vale 2 han en lugar de 1 y también es un yaku.",
-      "ippatsu": "Victoria dentro de una vuelta después del Riichi, sin llamadas en el medio. Vale +1 han. Es un yaku, pero solo existe junto con el Riichi.",
+      "ippatsu": "Victoria dentro de una vuelta después del Riichi, sin llamadas en el medio. Es un yaku, pero solo existe junto con el Riichi.",
       "uraDora": "La ficha que está debajo de cada indicador de dora en el muro muerto. Funciona como un indicador de dora más, pero solo se revela a quien gana después de declarar Riichi."
     },
     "specialConditions": {
       "allYaku": "Todas son yaku, así que cualquiera de ellas ya hace válida tu mano, incluso sin otro yaku.",
       "tenhouChiihouTitle": "Tenhou y Chiihou",
-      "tenhouChiihou": "Victoria con la mano inicial. Tenhou es la del oya y Chiihou la de los demás jugadores. Valen Yakuman.",
-      "rinshan": "Victoria con la ficha robada después de un kan. Vale +1 han.",
-      "chankan": "Ron sobre la ficha que otro jugador agregó a un pon para formar kan. Vale +1 han.",
-      "haitei": "Victoria por tsumo con la última ficha del muro. Vale +1 han.",
-      "houtei": "Victoria por ron con el último descarte de la partida. Vale +1 han."
+      "tenhouChiihou": "Victoria con la mano inicial. Tenhou es la del oya y Chiihou la de los demás jugadores.",
+      "rinshan": "Victoria con la ficha robada después de un kan.",
+      "chankan": "Ron sobre la ficha que otro jugador agregó a un pon para formar kan.",
+      "haitei": "Victoria por tsumo con la última ficha del muro.",
+      "houtei": "Victoria por ron con el último descarte de la partida."
     },
     "notation": {
       "intro": "Escribe los números de las fichas y después el palo: m (Man), p (Pin), s (Sou) y z (honores). Varios números antes del mismo palo valen todos para él: 2388m447p son 2, 3, 8 y 8 de Man y 4, 4 y 7 de Pin.",
@@ -554,7 +554,9 @@
       "finishTitle": "Finalizar mano",
       "finish": "Con la mano completa, Finalizar mano lleva a las opciones de la victoria: ron o tsumo, vientos, Riichi, doras y honba. Cada parte tiene su propio ?.",
       "tip": "¿Prefieres escribir? MPSZ cambia el teclado de fichas por la notación, como 123m. Para volver, toca Fichas."
-    }
+    },
+    "value1han": "Vale: 1 han",
+    "valueYakuman": "Vale: Yakuman"
   },
   "rulesModal": {
     "open": "Abrir reglas de cálculo",
@@ -2142,13 +2144,15 @@
       "title": "Combinaciones:",
       "soRon": "Solo con Ron",
       "soTsumo": "Solo con Tsumo",
-      "exigeRiichi": "Necesita Riichi marcado",
+      "exigeRiichi": "necesita Riichi",
       "semRiichi": "No combina con Riichi",
-      "exigeRinshan": "Necesita Rinshan marcado",
+      "exigeRinshan": "necesita Rinshan",
       "semKan": "No combina con Rinshan ni Chankan",
       "semUltimaPedra": "No combina con Haitei ni Houtei",
       "semTenhou": "No combina con Tenhou ni Chiihou",
-      "semOutro": "No combina con {{name}}"
+      "semOutro": "No combina con {{name}}",
+      "notWith": "No combina con {{list}}.",
+      "and": "y"
     },
     "count": "{{on}} de {{total}} activados"
   }

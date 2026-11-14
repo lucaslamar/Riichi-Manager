@@ -495,17 +495,17 @@
       "declaration": "Pareiškimas, daromas su uždara ranka, kuriai iki užbaigimo trūksta vieno žingsnio (tenpai). Kainuoja 1 000 taškų statymą.",
       "value": "Vertas 1 han ir yra yaku, todėl vien jis jau padaro ranką galiojančią. Taip pat atveria ura-dora. Paskelbus ranka nebegali būti keičiama.",
       "doubleRiichi": "Riichi, paskelbtas per pirmąjį išmetimą, be ankstesnių iškvietimų. Vertas 2 han vietoj 1 ir taip pat yra yaku.",
-      "ippatsu": "Laimėjimas per vieną ratą po Riichi, be iškvietimų tarpe. Vertas +1 han. Tai yaku, bet egzistuoja tik kartu su Riichi.",
+      "ippatsu": "Laimėjimas per vieną ratą po Riichi, be iškvietimų tarpe. Tai yaku, bet egzistuoja tik kartu su Riichi.",
       "uraDora": "Akmuo po kiekvienu dora indikatoriumi mirusioje sienoje. Veikia kaip dar vienas dora indikatorius, bet atskleidžiamas tik tam, kuris laimi paskelbęs Riichi."
     },
     "specialConditions": {
       "allYaku": "Visos jos yra yaku, todėl bet kuri iš jų jau padaro ranką galiojančią, net be kito yaku.",
       "tenhouChiihouTitle": "Tenhou ir Chiihou",
-      "tenhouChiihou": "Laimėjimas su pradine ranka. Tenhou – dalintojo, Chiihou – kitų žaidėjų. Verti Yakuman.",
-      "rinshan": "Laimėjimas akmeniu, paimtu po kan. Vertas +1 han.",
-      "chankan": "Ron ant akmens, kurį kitas žaidėjas pridėjo prie pon, kad sudarytų kan. Vertas +1 han.",
-      "haitei": "Laimėjimas tsumo būdu su paskutiniu sienos akmeniu. Vertas +1 han.",
-      "houtei": "Laimėjimas ron būdu su paskutiniu partijos išmestu akmeniu. Vertas +1 han."
+      "tenhouChiihou": "Laimėjimas su pradine ranka. Tenhou – dalintojo, Chiihou – kitų žaidėjų.",
+      "rinshan": "Laimėjimas akmeniu, paimtu po kan.",
+      "chankan": "Ron ant akmens, kurį kitas žaidėjas pridėjo prie pon, kad sudarytų kan.",
+      "haitei": "Laimėjimas tsumo būdu su paskutiniu sienos akmeniu.",
+      "houtei": "Laimėjimas ron būdu su paskutiniu partijos išmestu akmeniu."
     },
     "notation": {
       "intro": "Rašykite akmenų skaičius, o po jų rūšį: m (Man), p (Pin), s (Sou) ir z (garbės akmenys). Keli skaičiai prieš tą pačią rūšį visi priklauso jai: 2388m447p yra Man 2, 3, 8 ir 8 bei Pin 4, 4 ir 7.",
@@ -560,7 +560,9 @@
       "caseHand": "Iš rankos",
       "caseHold": "Laikant 5",
       "caseFourth": "Ketvirtas 5"
-    }
+    },
+    "value1han": "Vertė: 1 han",
+    "valueYakuman": "Vertė: Yakuman"
   },
   "rulesModal": {
     "open": "Atidaryti skaičiavimo taisykles",
@@ -2201,13 +2203,15 @@
       "title": "Deriniai:",
       "soRon": "Tik su Ron",
       "soTsumo": "Tik su Tsumo",
-      "exigeRiichi": "Reikia pažymėti Riichi",
+      "exigeRiichi": "reikia Riichi",
       "semRiichi": "Nesiderina su Riichi",
-      "exigeRinshan": "Reikia pažymėti Rinshan",
+      "exigeRinshan": "reikia Rinshan",
       "semKan": "Nesiderina su Rinshan ar Chankan",
       "semUltimaPedra": "Nesiderina su Haitei ar Houtei",
       "semTenhou": "Nesiderina su Tenhou ar Chiihou",
-      "semOutro": "Nesiderina su {{name}}"
+      "semOutro": "Nesiderina su {{name}}",
+      "notWith": "Nesiderina su {{list}}.",
+      "and": "ir"
     },
     "count": "Įjungta {{on}} iš {{total}}"
   }
