@@ -14,7 +14,7 @@ import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporad
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
 import { criarRascunho, nomeNoTorneio, sorteiaVentos } from '@/dominios/torneio/logica/torneio'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
-import { mesasRegistradas, type MesaDoSorteio } from '../../logica/encontroClube'
+import { temMesaPendente, type MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
 import { useClube } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
@@ -128,7 +128,7 @@ function TelasCenterpiece({
     (torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm,
   )
   const clubePendente =
-    sorteio && mesasRegistradas(sorteio, partidas) < sorteio.mesas.length ? 1 : 0
+    sorteio && temMesaPendente(sorteio, partidas) ? 1 : 0
   /** O que o Em andamento lista: mesas abertas, o encontro pendente e os torneios em jogo. */
   const totalEmAndamento = abertas.length + clubePendente + torneiosEmJogo.length
   /** Sem torneio em jogo, o card já cria o rascunho e abre a Lista do torneio. */

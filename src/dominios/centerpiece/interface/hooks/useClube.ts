@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import {
+  abortarMesa,
   marcarMesaRegistrada,
   type EncontroClube,
   type MesaDoSorteio,
@@ -86,6 +87,11 @@ export const acoesClube = {
       sorteio: novos.sorteio ?? (sorteioAtualEhTeste ? null : atual.sorteio),
       encontros: [...atual.encontros.filter((item) => !item.id.startsWith(prefixo)), ...novos.encontros],
     })
+  },
+  /** A mesa não vai ter resultado: sai das pendentes do encontro. */
+  abortarMesa(numero: number) {
+    const atual = lerEstado()
+    if (atual.sorteio) definir({ ...atual, sorteio: abortarMesa(atual.sorteio, numero) })
   },
   /** A mesa já teve a partida registrada: o card mostra isso em vez do botão. */
   marcarRegistrada(numero: number, partidaId: string) {

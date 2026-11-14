@@ -504,6 +504,39 @@ body.teclado-aberto .clb-enviar {
   min-height: 48px;
 }
 
+/* Registrar ocupa a linha; o abortar fica ao lado, só com o ícone. */
+.clb-mesa-acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.clb-mesa-acoes .clb-mesa-botao {
+  flex: 1;
+  width: auto;
+}
+
+.clb-mesa-abortar {
+  flex: none;
+  width: 48px;
+  min-height: 48px;
+  padding: 0;
+}
+
+.clb-mesa--abortada .clb-mesa-assentos {
+  opacity: 0.55;
+}
+
+.clb-mesa-abortada {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--texto-apoio);
+  font-weight: 700;
+}
+
 /* ─── Cards de placar (Em andamento e Histórico) ──────────────────────────── */
 .cm-pagina {
   width: min(100%, 720px);

@@ -1159,6 +1159,10 @@
       "newDrawLabel": "同じリストで次の回戦を再抽選",
       "registerResult": "結果を記録",
       "tableRegistered": "記録済み",
+      "tableAborted": "中止した卓",
+      "abortTable": "卓を中止",
+      "abortTableTitle": "{{number}}卓を中止しますか？",
+      "abortTableHelp": "この卓は結果なしとなり、未記録の卓に数えられなくなります。元に戻せません。",
       "meetingDone": "done"
     },
     "cards": {

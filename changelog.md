@@ -1,5 +1,11 @@
 # Changelog - Riichi Manager
 
+## Não lançado
+
+### Adicionado
+
+- **Abortar mesa do encontro do clube**: cada mesa sorteada ainda sem resultado ganhou, ao lado do Registrar resultado, um botão para abortá-la. Depois de confirmar, o card mostra Mesa abortada e ela deixa de contar como pendente, então o encontro pode terminar sem o resultado dela. A contagem em Em andamento passa a considerar só as mesas que valem.
+
 ## 6.0.0 - 2026-11-14
 
 ### Adicionado
