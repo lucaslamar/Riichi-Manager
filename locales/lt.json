@@ -1213,6 +1213,10 @@
       "newDrawLabel": "Nauji burtai su tuo pačiu sąrašu kitam ratui",
       "registerResult": "Įrašyti rezultatą",
       "tableRegistered": "Partija užregistruota",
+      "tableAborted": "Stalas nutrauktas",
+      "abortTable": "Nutraukti stalą",
+      "abortTableTitle": "Nutraukti {{number}} stalą?",
+      "abortTableHelp": "Stalas liks be rezultato ir nebebus laikomas laukiančiu susitikime. Atšaukti negalima.",
       "meetingDone": "done"
     },
     "cards": {

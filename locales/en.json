@@ -1177,6 +1177,10 @@
       "newDrawLabel": "New draw with the same list, for the next round",
       "registerResult": "Record result",
       "tableRegistered": "Game recorded",
+      "tableAborted": "Table aborted",
+      "abortTable": "Abort table",
+      "abortTableTitle": "Abort Table {{number}}?",
+      "abortTableHelp": "The table gets no result and no longer counts as pending in the meeting. This can't be undone.",
       "meetingDone": "done"
     },
     "cards": {

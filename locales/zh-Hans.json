@@ -1159,6 +1159,10 @@
       "newDrawLabel": "用同一份名单为下一轮重新抽签",
       "registerResult": "记录结果",
       "tableRegistered": "对局已记录",
+      "tableAborted": "已中止",
+      "abortTable": "中止此桌",
+      "abortTableTitle": "中止第 {{number}} 桌？",
+      "abortTableHelp": "此桌将没有结果，也不再计为聚会中待记录的桌。无法撤销。",
       "meetingDone": "done"
     },
     "cards": {
