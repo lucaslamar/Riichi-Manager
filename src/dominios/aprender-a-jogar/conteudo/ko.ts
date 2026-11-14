@@ -2076,7 +2076,7 @@ export const tutorialParts: TutorialPart[] = [
     id: 'primeiras-partidas',
     number: 1,
     title: '첫 대국',
-    cover: '역도 점수 계산도 없이 한 판을 치는 데 필요한 모든 것.',
+    cover: '첫 대국에 필요한 핵심만. 아직 역도 점수 계산도 쓰지 않습니다.',
     modules: ['pedras', 'mesa', 'mao', 'turno', 'fim-partida'].map(modulo),
   },
   {

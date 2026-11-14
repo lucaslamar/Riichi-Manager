@@ -2068,7 +2068,7 @@ const tutorialParts: TutorialPart[] = [
     id: 'primeiras-partidas',
     number: 1,
     title: 'はじめての対局',
-    cover: '役なし・点数なしで1回遊ぶために必要なことすべて。',
+    cover: 'はじめての対局に必要なことだけ。役も点数計算もまだ使いません。',
     modules: ['pedras', 'mesa', 'mao', 'turno', 'fim-partida'].map(modulo),
   },
   {

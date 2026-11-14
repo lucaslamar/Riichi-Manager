@@ -708,10 +708,10 @@
     "title": "Išmok žaisti",
     "short": "Mokytis",
     "tagline": {
-      "one": "Pirmasis modulis moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
-      "few": "Pirmieji {{count}} moduliai moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
-      "many": "Pirmieji {{count}} modulio moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus.",
-      "other": "Pirmieji {{count}} modulių moko pagrindų. Prieš tęsdami sužaiskite partiją, kad įtvirtintumėte pagrindus."
+      "one": "Tai vienas trumpas modulis. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina.",
+      "few": "Tai {{count}} trumpi moduliai. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina.",
+      "many": "Tai {{count}} trumpo modulio. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina.",
+      "other": "Tai {{count}} trumpų modulių. Baigę sužaiskite partiją prieš tęsdami: taip išmokta įsitvirtina."
     },
     "howToUse": "Kaip naudotis",
     "howToTurn": "Palieskite ekrano kraštus arba perbraukite, kad verstumėte puslapį.",

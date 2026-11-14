@@ -2088,7 +2088,7 @@ const tutorialParts: TutorialPart[] = [
     id: 'primeiras-partidas',
     number: 1,
     title: 'First games',
-    cover: 'Everything you need to play a round, with no yaku and no point counting.',
+    cover: 'The essentials to play your first game, still with no yaku and no point counting.',
     modules: ['pedras', 'mesa', 'mao', 'turno', 'fim-partida'].map(modulo),
   },
   {

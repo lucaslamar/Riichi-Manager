@@ -702,9 +702,9 @@
     "title": "Aprender a jugar",
     "short": "Aprender",
     "tagline": {
-      "one": "El primer módulo enseña lo básico. Antes de seguir, juega una partida para afianzar la base.",
-      "many": "Los {{count}} primeros módulos enseñan lo básico. Antes de seguir, juega una partida para afianzar la base.",
-      "other": "Los {{count}} primeros módulos enseñan lo básico. Antes de seguir, juega una partida para afianzar la base."
+      "one": "Es un módulo corto. Al terminar, juega una partida antes de seguir: es lo que fija lo aprendido.",
+      "many": "Son {{count}} módulos cortos. Al terminar, juega una partida antes de seguir: es lo que fija lo aprendido.",
+      "other": "Son {{count}} módulos cortos. Al terminar, juega una partida antes de seguir: es lo que fija lo aprendido."
     },
     "howToUse": "Cómo usar",
     "howToTurn": "Toca los lados de la pantalla o desliza para pasar la página.",

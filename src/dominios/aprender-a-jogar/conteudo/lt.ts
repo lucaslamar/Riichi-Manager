@@ -2083,7 +2083,7 @@ const tutorialParts: TutorialPart[] = [
     id: 'primeiras-partidas',
     number: 1,
     title: 'Pirmosios partijos',
-    cover: 'Viskas, ko reikia raundui sužaisti, be yaku ir neskaičiuojant taškų.',
+    cover: 'Svarbiausia, ko reikia pirmai partijai, dar be yaku ir neskaičiuojant taškų.',
     modules: ['pedras', 'mesa', 'mao', 'turno', 'fim-partida'].map(modulo),
   },
   {

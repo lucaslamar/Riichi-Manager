@@ -696,8 +696,8 @@
     "title": "Learn to play",
     "short": "Learn",
     "tagline": {
-      "one": "The first module teaches the basics. Before moving on, play a game to lock them in.",
-      "other": "The first {{count}} modules teach the basics. Before moving on, play a game to lock them in."
+      "one": "It is one short module. When you finish, play a game before moving on: that is what makes it stick.",
+      "other": "These are {{count}} short modules. When you finish, play a game before moving on: that is what makes it stick."
     },
     "howToUse": "How to use",
     "howToTurn": "Tap the sides of the screen or swipe to turn the page.",
