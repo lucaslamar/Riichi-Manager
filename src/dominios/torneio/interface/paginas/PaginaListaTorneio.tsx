@@ -21,8 +21,9 @@ import { rodadasIniciais } from '../../logica/formatos'
 import { formatoValido } from '../../logica/configuracao'
 import { analisarLista, entradasDoTorneio, limparColagem, type StatusLista } from '../../logica/listaTorneio'
 import FolhaImportar from '../componentes/FolhaImportar'
+import FolhaListasSalvas from '../componentes/FolhaListasSalvas'
 import { iniciarTorneio, jogadoresPorMesa } from '../../logica/torneio'
-import type { ListaSalva, Torneio } from '../../logica/tipos'
+import type { Torneio } from '../../logica/tipos'
 import ConfigTorneioSheet from '../componentes/ConfigTorneioSheet'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
@@ -169,15 +170,6 @@ export default function PaginaListaTorneio({
         aoVoltar={aoVoltar}
         acoes={
           <span className="clb-acoes-titulo">
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('tournament.list.memory')}
-              title={t('tournament.list.memory')}
-              onClick={() => setMemoria(true)}
-            >
-              <i className="fas fa-sd-card" aria-hidden="true" />
-            </button>
             <button
               type="button"
               className="cm-btn-icone"
@@ -394,7 +386,7 @@ export default function PaginaListaTorneio({
       )}
 
       {memoria && (
-        <FolhaMemoria
+        <FolhaListasSalvas
           listas={listas}
           podeGuardar={analise.jogadores > 0}
           aoFechar={() => setMemoria(false)}
@@ -415,6 +407,11 @@ export default function PaginaListaTorneio({
       {cadastrados && (
         <FolhaCadastrados
           idsNaLista={idsNaLista}
+          // As listas salvas abrem por dentro do cadastro.
+          aoAbrirListasSalvas={() => {
+            setCadastrados(false)
+            setMemoria(true)
+          }}
           aoFechar={() => setCadastrados(false)}
           aoConfirmar={(escolhidos) => {
             definirLista(acrescentarNomes(lista, escolhidos.map(nomeExibido), jogadores).texto)
@@ -510,87 +507,6 @@ function TextoStatus({
           ? `${t('sanma.jogadoresMultiplo3')} · ${t('tournament.list.nextTable', { count: status.faltam })}`
           : t('tournament.list.nextTable', { count: status.faltam })
   return <span className="clb-falta">{texto}</span>
-}
-
-/** Cartão de memória: guardar a lista com um nome, carregar uma guardada ou puxar do cadastro. */
-function FolhaMemoria({
-  listas,
-  podeGuardar,
-  aoFechar,
-  aoGuardar,
-  aoCarregar,
-  aoExcluir,
-}: {
-  listas: readonly ListaSalva[]
-  podeGuardar: boolean
-  aoFechar: () => void
-  aoGuardar: (nome: string) => void
-  aoCarregar: (lista: ListaSalva) => void
-  aoExcluir: (lista: ListaSalva) => void
-}) {
-  const { t, idioma } = useI18n()
-  const [nome, setNome] = useState('')
-  const contar = (texto: string) => linhasDoTexto(texto).filter(Boolean).length
-
-  return (
-    <Modal
-      titulo={t('tournament.list.memory')}
-      aoFechar={aoFechar}
-      rotuloFechar={t('actions.close')}
-      tamanho="pequena"
-      className="trn-folha-memoria"
-    >
-      <form
-        className="trn-guardar"
-        onSubmit={(evento) => {
-          evento.preventDefault()
-          if (nome.trim() && podeGuardar) aoGuardar(nome.trim())
-        }}
-      >
-        <label className="trn-data">
-          <span>{t('tournament.list.saveAs')}</span>
-          <input
-            className="trn-campo"
-            value={nome}
-            placeholder={t('tournament.list.saveExample')}
-            onChange={(evento) => setNome(evento.target.value)}
-          />
-        </label>
-        <button type="submit" className="btn-primario" disabled={!nome.trim() || !podeGuardar}>
-          {t('tournament.list.save')}
-        </button>
-      </form>
-
-      <h3 className="ptd-rotulo">{t('tournament.list.savedLists')}</h3>
-      {listas.length === 0 ? (
-        <p className="ptd-vazio">{t('tournament.list.noSaved')}</p>
-      ) : (
-        <ul className="cm-lista">
-          {listas.map((salva) => (
-            <li key={salva.id} className="trn-salva">
-              <button type="button" className="trn-card" onClick={() => aoCarregar(salva)}>
-                <i className="fas fa-list" aria-hidden="true" />
-                <strong>{salva.nome}</strong>
-                <span>
-                  {t('tournament.history.players', { count: contar(salva.texto) })} ·{' '}
-                  {new Intl.DateTimeFormat(idioma, { dateStyle: 'short' }).format(new Date(salva.salvaEm))}
-                </span>
-              </button>
-              <button
-                type="button"
-                className="cm-btn-icone cm-btn-icone--perigo"
-                aria-label={t('tournament.list.deleteSaved', { name: salva.nome })}
-                onClick={() => aoExcluir(salva)}
-              >
-                <i className="fas fa-trash" aria-hidden="true" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-    </Modal>
-  )
 }
 
 /** Nome do torneio: aparece no título da Lista e das Mesas sorteadas. */

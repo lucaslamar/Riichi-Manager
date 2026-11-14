@@ -1686,7 +1686,8 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings"
+      "pickSeason": "Pick or create the season in the settings",
+      "memoryHint": "このリストを保存、または保存済みを読み込む"
     },
     "settings": {
       "title": "Tournament settings",

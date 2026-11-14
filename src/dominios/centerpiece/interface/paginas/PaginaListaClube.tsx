@@ -16,6 +16,8 @@ import {
 import { contagemDeMesas } from '../../logica/sorteioClube'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import '@/dominios/torneio/interface/torneio.css'
+import FolhaListasSalvas from '@/dominios/torneio/interface/componentes/FolhaListasSalvas'
+import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import FolhaCadastrados from '../componentes/FolhaCadastrados'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import { useAviso } from '../hooks/useAviso'
@@ -58,6 +60,8 @@ export default function PaginaListaClube({
    */
   const [inserirApos, setInserirApos] = useState<number | null>(null)
   const [limpando, setLimpando] = useState(false)
+  const [listasSalvas, setListasSalvas] = useState(false)
+  const { listas, guardarLista, excluirLista } = useTorneios()
 
   const linhas = useMemo(() => linhasDoTexto(lista), [lista])
   const entradas = useMemo(() => entradasDaLista(lista, jogadores), [lista, jogadores])
@@ -354,9 +358,32 @@ export default function PaginaListaClube({
                 }
               : undefined
           }
+          aoAbrirListasSalvas={() => {
+            setInserirApos(null)
+            setListasSalvas(true)
+          }}
           aoFechar={() => setInserirApos(null)}
           aoConfirmar={(escolhidos) => acrescentar(escolhidos.map(nomeExibido))}
           aoUsarNomes={acrescentar}
+        />
+      )}
+
+      {listasSalvas && (
+        <FolhaListasSalvas
+          listas={listas}
+          podeGuardar={entradas.length > 0}
+          aoFechar={() => setListasSalvas(false)}
+          aoGuardar={(nome) => {
+            guardarLista(nome, entradas.map((entrada) => entrada.nome).join('\n'))
+            mostrar(t('tournament.list.saved', { name: nome }))
+            setListasSalvas(false)
+          }}
+          aoCarregar={(salva) => {
+            definirLista(salva.texto)
+            mostrar(t('tournament.list.loaded', { name: salva.nome }))
+            setListasSalvas(false)
+          }}
+          aoExcluir={(salva) => excluirLista(salva.id)}
         />
       )}
 

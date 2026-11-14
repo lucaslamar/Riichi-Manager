@@ -15,6 +15,7 @@ import '../clube.css'
 export default function FolhaCadastrados({
   idsNaLista,
   ultimoEncontro,
+  aoAbrirListasSalvas,
   aoFechar,
   aoConfirmar,
   aoUsarNomes,
@@ -22,6 +23,8 @@ export default function FolhaCadastrados({
   idsNaLista: ReadonlySet<string>
   /** Nomes do encontro mais recente, para repetir a lista de uma vez. */
   ultimoEncontro?: { criadoEm: string; nomes: string[] }
+  /** Abre as listas salvas (guardar ou carregar uma lista inteira). */
+  aoAbrirListasSalvas?: () => void
   aoFechar: () => void
   aoConfirmar: (jogadores: Jogador[]) => void
   aoUsarNomes: (nomes: string[]) => void
@@ -74,6 +77,16 @@ export default function FolhaCadastrados({
         </div>
       }
     >
+      {aoAbrirListasSalvas && (
+        <button type="button" className="clb-ultimo-encontro" onClick={aoAbrirListasSalvas}>
+          <i className="fas fa-sd-card" aria-hidden="true" />
+          <span className="clb-ultimo-encontro-texto">
+            <strong>{t('tournament.list.memory')}</strong>
+            <span className="ptd-apoio">{t('tournament.list.memoryHint')}</span>
+          </span>
+          <i className="fas fa-chevron-right clb-ultimo-encontro-acao" aria-hidden="true" />
+        </button>
+      )}
       {/* Atalho: a lista inteira do último encontro, convidados inclusive. */}
       {ultimoEncontro && ultimoEncontro.nomes.length > 0 && (
         <button type="button" className="clb-ultimo-encontro" onClick={() => aoUsarNomes(ultimoEncontro.nomes)}>

@@ -1708,7 +1708,8 @@
       "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista",
       "rename": "Renomear o torneio {{name}}",
       "more": "Mais opções da lista",
-      "pickSeason": "Escolha ou crie a temporada nas configurações do torneio"
+      "pickSeason": "Escolha ou crie a temporada nas configurações do torneio",
+      "memoryHint": "Guardar esta lista ou carregar uma guardada"
     },
     "settings": {
       "title": "Configurações do torneio",
