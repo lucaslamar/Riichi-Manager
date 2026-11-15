@@ -6,6 +6,10 @@
 
 - **Abortar encontro do clube**: na tela das mesas sorteadas, um botão ao lado do Novo sorteio aborta o encontro inteiro. Depois de confirmar, o sorteio é desfeito, o encontro sai de Em andamento e a lista volta para editar e sortear de novo. As partidas já registradas continuam no histórico.
 
+### Alterado
+
+- **Pontos começam em 0 no Registrar partida finalizada**: a calculadora de pontos de cada jogador abre zerada, para digitar direto o ponto final sem apagar os pontos de partida antes. Na mesa do torneio ela continua começando com os pontos de partida.
+
 ## 6.0.0 - 2026-11-14
 
 ### Adicionado

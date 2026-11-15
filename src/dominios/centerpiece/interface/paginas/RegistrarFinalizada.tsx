@@ -373,7 +373,8 @@ export default function RegistrarFinalizada({
               ? nomesNoRanking(cadastrado).principal
               : (nomeDe(assentos[calculando]) ?? '')
           })()}
-          inicial={lerPontos(pontos[calculando]) ?? pontosPartida}
+          // Fora do torneio começa em 0: quem só tem o ponto final digita direto, sem apagar antes.
+          inicial={lerPontos(pontos[calculando]) ?? (torneio ? pontosPartida : 0)}
           aoFechar={() => setCalculando(null)}
           aoNavegar={(passo, valor) => {
             if (valor !== undefined) mudarPontos(calculando, valor === null ? '' : String(valor))
