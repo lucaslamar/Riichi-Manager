@@ -17,7 +17,8 @@ import { KANJI_VENTO, ORDEM_VENTOS, type Cadeira } from '../../logica/partida'
 import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
 import './calculadora-pontos.css'
 
-const DIGITOS = ['7', '8', '9', '4', '5', '6', '1', '2', '3'] as const
+// Como no teclado do celular: 1 2 3 em cima.
+const DIGITOS = ['1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
 
 /** Quanto o vencedor ganhou na mão calculada (honba incluído). */
 function ganhoDaMao(resultado: ResultadoCalculoParaCenterpiece): number {
@@ -182,19 +183,19 @@ export default function CalculadoraPontosSheet({
               '⌫',
               t('tournament.points.backspace'),
               () => setExpressao(apagar(expressao)),
-              ' cpt-tecla--acao',
+              ' cpt-tecla--acao cpt-tecla--apagar',
             )}
             {tecla(
               '−',
               t('tournament.points.minus'),
               () => setExpressao(operar(expressao, '-')),
-              ' cpt-tecla--op',
+              ' cpt-tecla--op cpt-tecla--menos',
             )}
             {tecla(
               '+',
               t('tournament.points.plus'),
               () => setExpressao(operar(expressao, '+')),
-              ' cpt-tecla--op',
+              ' cpt-tecla--op cpt-tecla--mais',
             )}
             {DIGITOS.map((digito) => (
               <button

@@ -82,10 +82,24 @@
   color: var(--primario);
 }
 
-/* "=" desce pela coluna da direita, ao lado dos dígitos. */
+/* Coluna da direita: −, + e o "=", que desce ao lado das três últimas linhas. */
+.cpt-tecla--apagar {
+  grid-column: span 2;
+}
+
+.cpt-tecla--menos {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.cpt-tecla--mais {
+  grid-column: 4;
+  grid-row: 2;
+}
+
 .cpt-tecla--igual {
   grid-column: 4;
-  grid-row: 2 / 6;
+  grid-row: 3 / 6;
   border-color: var(--primario);
   color: var(--sobre-primario);
   background: var(--primario);
