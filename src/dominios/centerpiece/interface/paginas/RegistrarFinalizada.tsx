@@ -399,6 +399,13 @@ export default function RegistrarFinalizada({
               : t('match.manual.choosePlayer', { number: escolhendo + 1 })
           }
           idsEscolhidos={assentos.filter((id): id is string => !!id)}
+          // Em Escolhidos, cada um mostra o vento onde está (sem ordem dos ventos, só "Já escolhido").
+          rotuloEscolhido={(jogadorId) => {
+            const lugar = assentos.indexOf(jogadorId)
+            return ordemDosVentos
+              ? t(`winds.${['east', 'south', 'west', 'north'][lugar]}`)
+              : t('players.alreadyChosen')
+          }}
           // Tocar em quem já foi escolhido tira a pessoa do lugar, como na Nova partida.
           // No torneio a mesa nunca fica com lugar vazio: os dois trocam de lugar.
           aoDesmarcar={(jogadorId) =>

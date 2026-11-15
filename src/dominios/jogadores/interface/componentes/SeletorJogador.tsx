@@ -29,8 +29,9 @@ interface PropsSeletorJogador {
 }
 
 /**
- * Folha para escolher um jogador: busca, lista e "+ Novo jogador". Sem busca, um
- * bloco de cima com você e as 4 últimas pessoas que jogaram, e embaixo o resto,
+ * Folha para escolher um jogador: busca, lista e "+ Novo jogador". Sem busca, quem já
+ * está na mesa vem primeiro, em Escolhidos (tocar tira do lugar), depois um
+ * bloco com você e as 4 últimas pessoas que jogaram, e embaixo o resto,
  * com os favoritos primeiro (a estrela de cada linha liga e desliga) e depois a
  * ordem alfabética. Um jogador criado aqui já volta escolhido. Arquivados
  * não aparecem.
@@ -69,8 +70,16 @@ export default function SeletorJogador({
     const ids = jogadoresRecentes(partidas, (id) => id !== euId && ativos.some((jogador) => jogador.id === id), 4)
     return [...(eu ? [eu] : []), ...ids.map((id) => ativos.find((jogador) => jogador.id === id)!)]
   }, [partidas, ativos, euId])
-  // Sem busca: Últimos jogados, depois Favoritos (seção própria) e Todos, sem repetir ninguém.
-  const semTopo = busca ? visiveis : visiveis.filter((jogador) => !topo.includes(jogador))
+  // Sem busca: Escolhidos, Últimos jogados, Favoritos e Todos, sem repetir ninguém.
+  const escolhidos = busca
+    ? []
+    : idsEscolhidos
+        .map((id) => ativos.find((jogador) => jogador.id === id))
+        .filter((jogador): jogador is Jogador => !!jogador)
+  const topoLivre = topo.filter((jogador) => !escolhidos.includes(jogador))
+  const semTopo = busca
+    ? visiveis
+    : visiveis.filter((jogador) => !topo.includes(jogador) && !escolhidos.includes(jogador))
   const favoritos = busca ? [] : semTopo.filter((jogador) => jogador.favorito)
   const resto = busca
     ? [...visiveis.filter((jogador) => jogador.favorito), ...visiveis.filter((jogador) => !jogador.favorito)]
@@ -178,8 +187,14 @@ export default function SeletorJogador({
             </p>
           ) : (
             <>
-              {/* Sem busca: atalhos antes da lista toda. */}
-              {!busca && topo.length > 0 && grupo(t('players.recent'), topo, 'topo')}
+              {/* Sem busca: quem já está na mesa e os atalhos antes da lista toda. */}
+              {escolhidos.length > 0 &&
+                grupo(
+                  aoDesmarcar ? `${t('players.chosen')} · ${t('players.chosenHint')}` : t('players.chosen'),
+                  escolhidos,
+                  'escolhidos',
+                )}
+              {!busca && topoLivre.length > 0 && grupo(t('players.recent'), topoLivre, 'topo')}
               {favoritos.length > 0 && grupo(t('players.favorites'), favoritos, 'favoritos')}
               {resto.length > 0 && grupo(busca ? undefined : t('players.all'), resto, 'todos')}
             </>

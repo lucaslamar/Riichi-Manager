@@ -917,6 +917,8 @@
     "restoreNamed": "Restore {{name}}",
     "archivedCount": "Archived ({{count}})",
     "alreadyChosen": "Already chosen",
+    "chosen": "Pasirinkti",
+    "chosenHint": "palieskite, kad pašalintumėte",
     "empty": "No players yet.",
     "emptyChooser": "No players yet. Create the first one above.",
     "noResults": "No players found.",

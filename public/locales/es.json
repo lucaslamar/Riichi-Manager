@@ -910,6 +910,8 @@
     "restoreNamed": "Restore {{name}}",
     "archivedCount": "Archived ({{count}})",
     "alreadyChosen": "Already chosen",
+    "chosen": "Elegidos",
+    "chosenHint": "toca para quitar",
     "empty": "No players yet.",
     "emptyChooser": "No players yet. Create the first one above.",
     "noResults": "No players found.",

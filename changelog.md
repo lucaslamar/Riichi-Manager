@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Escolhidos no seletor de jogadores**: ao escolher quem joga na Nova partida e no Registrar partida finalizada, quem já está na mesa aparece primeiro, numa seção Escolhidos, com o vento ao lado. Tocar em alguém dali tira a pessoa do lugar, e ela volta para a lista.
 - **Abortar encontro do clube**: na tela das mesas sorteadas, um botão ao lado do Novo sorteio aborta o encontro inteiro. Depois de confirmar, o sorteio é desfeito, o encontro sai de Em andamento e a lista volta para editar e sortear de novo. As partidas já registradas continuam no histórico.
 
 ### Alterado
