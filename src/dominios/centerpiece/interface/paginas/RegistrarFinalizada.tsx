@@ -426,6 +426,9 @@ export default function RegistrarFinalizada({
               .map((passo) => (escolhendo + passo) % 4)
               .find((lugar) => proximos[lugar] === null)
             setEscolhendo(seguinte ?? null)
+            // Mesa completa: já abre a calculadora no primeiro lugar (o Leste), se
+            // ninguém lançou pontos ali ainda.
+            if (seguinte === undefined && lerPontos(pontos[0]) === null) setCalculando(0)
           }}
           aoFechar={() => setEscolhendo(null)}
         />

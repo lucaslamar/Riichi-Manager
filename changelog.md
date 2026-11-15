@@ -9,6 +9,7 @@
 
 ### Alterado
 
+- **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.
 - **Teclado da calculadora de pontos como o do celular**: os números vão de 1 2 3 em cima até 7 8 9 embaixo. O − e o + desceram para a coluna da direita, acima do =, que ficou menor, e o ⌫ ocupa o espaço que sobrou ao lado do C.
 - **Pontos começam em 0 no Registrar partida finalizada**: a calculadora de pontos de cada jogador abre zerada, para digitar direto o ponto final sem apagar os pontos de partida antes. Na mesa do torneio ela continua começando com os pontos de partida.
 
