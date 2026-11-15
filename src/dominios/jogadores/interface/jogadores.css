@@ -464,7 +464,7 @@
   background: var(--modal-fundo);
 }
 
-/* Quem já está na mesa: selos azuis, tocar tira do lugar. */
+/* Quem já está na mesa: selos suaves na cor principal, como as dicas. Tocar tira do lugar. */
 .selos-escolhidos {
   display: flex;
   flex-wrap: wrap;
@@ -475,18 +475,31 @@
 }
 
 .selo-escolhido {
+  position: relative;
   display: inline-flex;
   min-height: 36px;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   border: 0;
-  border-radius: 999px;
-  padding: 4px 12px;
-  color: var(--cor-sobre-primario);
-  background: var(--primario);
+  border-radius: 8px;
+  padding: 4px 10px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 12%, transparent);
   font: inherit;
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* Área de toque de 44px sem engrossar o selo. */
+button.selo-escolhido::after {
+  position: absolute;
+  inset: -4px 0;
+  content: "";
+}
+
+.selo-escolhido i {
+  font-size: 0.75rem;
+  opacity: 0.8;
 }
 
 button.selo-escolhido {

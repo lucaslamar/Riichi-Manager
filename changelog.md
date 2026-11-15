@@ -4,7 +4,7 @@
 
 ### Adicionado
 
-- **Escolhidos no seletor de jogadores**: ao escolher quem joga na Nova partida e no Registrar partida finalizada, quem já está na mesa aparece em selos na cor principal no topo da folha, com o vento ao lado (ex.: Audrey Hall · Sul). Tocar no selo tira a pessoa do lugar. Os selos e a busca ficam presos no topo enquanto a lista rola.
+- **Escolhidos no seletor de jogadores**: ao escolher quem joga na Nova partida e no Registrar partida finalizada, quem já está na mesa aparece em selos suaves no topo da folha, no mesmo tom das dicas, com o vento ao lado (ex.: Audrey Hall · Sul). Tocar no selo tira a pessoa do lugar. Os selos e a busca ficam presos no topo enquanto a lista rola.
 - **Abortar encontro do clube**: na tela das mesas sorteadas, um botão ao lado do Novo sorteio aborta o encontro inteiro. Depois de confirmar, o sorteio é desfeito, o encontro sai de Em andamento e a lista volta para editar e sortear de novo. As partidas já registradas continuam no histórico.
 
 ### Alterado
