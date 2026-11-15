@@ -904,7 +904,7 @@
     "archivedCount": "Arquivados ({{count}})",
     "alreadyChosen": "Já escolhido",
     "chosen": "Escolhidos",
-    "chosenHint": "toque para tirar",
+    "removeChosen": "Tirar {{name}} da mesa",
     "empty": "Nenhum jogador cadastrado ainda.",
     "emptyChooser": "Nenhum jogador cadastrado. Crie o primeiro acima.",
     "noResults": "Nenhum jogador encontrado.",

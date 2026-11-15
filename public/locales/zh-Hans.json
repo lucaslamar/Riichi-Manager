@@ -897,7 +897,7 @@
     "archivedCount": "Archived ({{count}})",
     "alreadyChosen": "Already chosen",
     "chosen": "已选择",
-    "chosenHint": "点击移除",
+    "removeChosen": "将 {{name}} 移出牌桌",
     "empty": "No players yet.",
     "emptyChooser": "No players yet. Create the first one above.",
     "noResults": "No players found.",

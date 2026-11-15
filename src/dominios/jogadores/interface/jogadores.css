@@ -450,3 +450,50 @@
   font-weight: 700;
   vertical-align: middle;
 }
+
+/* Topo do seletor: fica preso ao rolar a lista, cobrindo o respiro do corpo da folha. */
+.topo-seletor-jogador {
+  position: sticky;
+  z-index: 1;
+  top: calc(var(--modal-espaco) * -0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: calc(var(--modal-espaco) * -0.5) 0 0;
+  padding: calc(var(--modal-espaco) * 0.5) 0 8px;
+  background: var(--modal-fundo);
+}
+
+/* Quem já está na mesa: selos azuis, tocar tira do lugar. */
+.selos-escolhidos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.selo-escolhido {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 12px;
+  color: var(--cor-sobre-primario);
+  background: var(--primario);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+button.selo-escolhido {
+  cursor: pointer;
+}
+
+button.selo-escolhido:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}

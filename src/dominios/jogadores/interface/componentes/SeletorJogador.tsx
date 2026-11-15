@@ -29,9 +29,9 @@ interface PropsSeletorJogador {
 }
 
 /**
- * Folha para escolher um jogador: busca, lista e "+ Novo jogador". Sem busca, quem já
- * está na mesa vem primeiro, em Escolhidos (tocar tira do lugar), depois um
- * bloco com você e as 4 últimas pessoas que jogaram, e embaixo o resto,
+ * Folha para escolher um jogador: busca, lista e "+ Novo jogador". No topo, fixos ao
+ * rolar, ficam a busca e quem já está na mesa, em selos azuis (tocar tira do lugar).
+ * Sem busca, um bloco com você e as 4 últimas pessoas que jogaram, e embaixo o resto,
  * com os favoritos primeiro (a estrela de cada linha liga e desliga) e depois a
  * ordem alfabética. Um jogador criado aqui já volta escolhido. Arquivados
  * não aparecem.
@@ -70,16 +70,12 @@ export default function SeletorJogador({
     const ids = jogadoresRecentes(partidas, (id) => id !== euId && ativos.some((jogador) => jogador.id === id), 4)
     return [...(eu ? [eu] : []), ...ids.map((id) => ativos.find((jogador) => jogador.id === id)!)]
   }, [partidas, ativos, euId])
-  // Sem busca: Escolhidos, Últimos jogados, Favoritos e Todos, sem repetir ninguém.
-  const escolhidos = busca
-    ? []
-    : idsEscolhidos
-        .map((id) => ativos.find((jogador) => jogador.id === id))
-        .filter((jogador): jogador is Jogador => !!jogador)
-  const topoLivre = topo.filter((jogador) => !escolhidos.includes(jogador))
-  const semTopo = busca
-    ? visiveis
-    : visiveis.filter((jogador) => !topo.includes(jogador) && !escolhidos.includes(jogador))
+  // Quem já está na mesa, na ordem dos lugares: vira selo no topo.
+  const escolhidos = idsEscolhidos
+    .map((id) => jogadores.find((jogador) => jogador.id === id))
+    .filter((jogador): jogador is Jogador => !!jogador)
+  // Sem busca: Últimos jogados, depois Favoritos (seção própria) e Todos, sem repetir ninguém.
+  const semTopo = busca ? visiveis : visiveis.filter((jogador) => !topo.includes(jogador))
   const favoritos = busca ? [] : semTopo.filter((jogador) => jogador.favorito)
   const resto = busca
     ? [...visiveis.filter((jogador) => jogador.favorito), ...visiveis.filter((jogador) => !jogador.favorito)]
@@ -162,15 +158,44 @@ export default function SeletorJogador({
         />
       ) : (
         <>
-          <input
-            className="entrada-jogador"
-            type="search"
-            value={busca}
-            placeholder={t('players.search')}
-            aria-label={t('players.search')}
-            autoComplete="off"
-            onChange={(evento) => setBusca(evento.target.value)}
-          />
+          {/* Fixos ao rolar a lista: quem já está na mesa e a busca. */}
+          <div className="topo-seletor-jogador">
+            {escolhidos.length > 0 && (
+              <ul className="selos-escolhidos" aria-label={t('players.chosen')}>
+                {escolhidos.map((jogador) => {
+                  const rotulo = `${partesDoNome(jogador).principal}${
+                    rotuloEscolhido ? ` · ${rotuloEscolhido(jogador.id)}` : ''
+                  }`
+                  return (
+                    <li key={jogador.id}>
+                      {aoDesmarcar ? (
+                        <button
+                          type="button"
+                          className="selo-escolhido"
+                          aria-label={t('players.removeChosen', { name: rotulo })}
+                          onClick={() => aoDesmarcar(jogador.id)}
+                        >
+                          {rotulo}
+                          <i className="fas fa-xmark" aria-hidden="true" />
+                        </button>
+                      ) : (
+                        <span className="selo-escolhido">{rotulo}</span>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+            <input
+              className="entrada-jogador"
+              type="search"
+              value={busca}
+              placeholder={t('players.search')}
+              aria-label={t('players.search')}
+              autoComplete="off"
+              onChange={(evento) => setBusca(evento.target.value)}
+            />
+          </div>
 
           <button
             type="button"
@@ -187,14 +212,8 @@ export default function SeletorJogador({
             </p>
           ) : (
             <>
-              {/* Sem busca: quem já está na mesa e os atalhos antes da lista toda. */}
-              {escolhidos.length > 0 &&
-                grupo(
-                  aoDesmarcar ? `${t('players.chosen')} · ${t('players.chosenHint')}` : t('players.chosen'),
-                  escolhidos,
-                  'escolhidos',
-                )}
-              {!busca && topoLivre.length > 0 && grupo(t('players.recent'), topoLivre, 'topo')}
+              {/* Sem busca: atalhos antes da lista toda. */}
+              {!busca && topo.length > 0 && grupo(t('players.recent'), topo, 'topo')}
               {favoritos.length > 0 && grupo(t('players.favorites'), favoritos, 'favoritos')}
               {resto.length > 0 && grupo(busca ? undefined : t('players.all'), resto, 'todos')}
             </>
