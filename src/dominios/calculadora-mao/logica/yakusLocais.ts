@@ -206,9 +206,6 @@ const grupoComTerminalOuHonra = (grupo: Grupo) =>
     ? ehHonra(grupo.pedra) || ehTerminal(grupo.pedra)
     : numero(grupo.pedra) === 1 || numero(grupo.pedra) === 7
 
-const grupoComTerminal = (grupo: Grupo) =>
-  !ehHonra(grupo.pedra) && grupoComTerminalOuHonra(grupo)
-
 /** Par de sequências iguais em dois naipes, duas vezes (Kyandonhou). */
 function kyandonhou(divisao: Divisao): [number, number] | null {
   const lista = sequencias(divisao)
@@ -255,7 +252,6 @@ const VERDES = ['2s', '3s', '4s', '6s', '8s', '6z']
 const han = (fechada: number | null, aberta: number | null): ValorYakuLocal => ({ tipo: 'han', fechada, aberta })
 const MANGAN: ValorYakuLocal = { tipo: 'mangan' }
 const YAKUMAN: ValorYakuLocal = { tipo: 'yakuman', vezes: 1 }
-const DUPLO: ValorYakuLocal = { tipo: 'yakuman', vezes: 2 }
 
 export const YAKUS_LOCAIS: readonly YakuLocal[] = [
   // 1 han

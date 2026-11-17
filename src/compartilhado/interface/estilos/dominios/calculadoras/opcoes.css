@@ -796,85 +796,14 @@
     margin: 0 -10px;
   }
 
-  .barra-progresso-finalizacao,
   .barra-resumo-mao {
     padding-inline: 10px;
   }
 }
 
-/* ─── Barra de progresso da finalização ─────────────────────────────────────── */
-
-.barra-progresso-finalizacao {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 2px;
-  padding: 8px 18px;
-  border-bottom: 0.5px solid color-mix(in srgb, var(--cor-texto, #000000) 10%, transparent);
-}
-
-.barra-progresso-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.barra-progresso-separador {
-  color: color-mix(in srgb, var(--cor-texto, #000000) 25%, transparent);
-  font-size: 10px;
-  margin: 0 2px;
-  user-select: none;
-}
-
-.barra-progresso-etapa {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 6px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  line-height: 1.4;
-  transition: color 0.15s;
-}
-
-.barra-progresso-etapa-concluida {
-  color: var(--cor-primario, #185fa5);
-  cursor: pointer;
-}
-
-.barra-progresso-etapa-concluida:hover {
-  background: var(--cor-primario-suave, #e6f1fb);
-}
-
-.barra-progresso-etapa-atual {
-  color: var(--cor-primario, #185fa5);
-  font-weight: 600;
-  cursor: default;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.barra-progresso-etapa-pendente {
-  color: color-mix(in srgb, var(--cor-texto, #000000) 30%, transparent);
-  cursor: default;
-}
-
-.barra-progresso-check {
-  font-size: 9px;
-  line-height: 1;
-}
-
 @media (min-width: 1024px) {
   .cabecalho-sticky-finalizacao {
     margin: 0 -24px;
-  }
-
-  .barra-progresso-finalizacao {
-    padding: 8px 24px;
   }
 
   .barra-resumo-mao {

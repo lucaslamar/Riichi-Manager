@@ -89,15 +89,6 @@ export function resolver(expressao: string): string {
   return total === null ? '' : String(total)
 }
 
-/** Atalhos de limite: valores de ron (não-dealer e dealer). */
-export const LIMITES = [
-  { chave: 'mangan', naoDealer: 8000, dealer: 12000 },
-  { chave: 'haneman', naoDealer: 12000, dealer: 18000 },
-  { chave: 'baiman', naoDealer: 16000, dealer: 24000 },
-  { chave: 'sanbaiman', naoDealer: 24000, dealer: 36000 },
-  { chave: 'yakuman', naoDealer: 32000, dealer: 48000 },
-] as const
-
 export const VALOR_RIICHI = 1000
 
 /**

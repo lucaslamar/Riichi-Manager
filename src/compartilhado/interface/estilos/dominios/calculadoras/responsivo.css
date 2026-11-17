@@ -2893,22 +2893,6 @@
     margin: 0 -8px;
   }
 
-  .barra-progresso-finalizacao {
-    gap: 1px;
-    padding: 3px 8px;
-  }
-
-  .barra-progresso-etapa {
-    padding: 1px 4px;
-    font-size: 0.56rem;
-    line-height: 1.2;
-  }
-
-  .barra-progresso-separador {
-    margin-inline: 0;
-    font-size: 0.56rem;
-  }
-
   .barra-resumo-mao {
     gap: 2px;
     padding: 4px 8px;

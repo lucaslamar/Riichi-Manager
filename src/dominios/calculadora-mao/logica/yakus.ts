@@ -433,8 +433,6 @@ export function yakusDoIdioma(idioma: IdiomaSuportado = idiomaGlobal()): Yaku[] 
 /** Yakus em pt-BR, para os textos fixos em português (ex.: guia Aprender a jogar). */
 export const YAKU = yakusDoIdioma('pt-BR')
 
-export const DORA_NOTE = conteudoGuiaBolso('pt-BR').notaDora
-
 /** Nota da aba Yakuman: o kazoe não é um yaku, é a soma que chega lá. */
 export const KAZOE_NOTE = conteudoGuiaBolso('pt-BR').notaKazoe
 

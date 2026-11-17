@@ -2,9 +2,7 @@
  * Mesas e rodadas em jogo: relógios, partida de cada mesa, sortear de novo e o
  * texto para compartilhar. Sem tela.
  */
-import { configSoPontuacao } from '@/dominios/centerpiece/logica/configMesa'
-import { REGRAS_SANMA_PADRAO } from '@/compartilhado/mahjong/variante'
-import { criarPartida, KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
+import { KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
 import { proximaRodada, rodadasIniciais } from './formatos'
 import { relogioParado, statusDaMesa, type StatusMesa } from './torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from './tipos'
@@ -62,30 +60,6 @@ export function trocarMesa(
     ...rodada,
     mesas: rodada.mesas.map((mesa) => (mesa.numero === numeroMesa ? transformar(mesa) : mesa)),
   }))
-}
-
-/**
- * Partida do Centerpiece para a mesa: jogadores nas cadeiras na ordem 東 南 西 北 e
- * as regras do torneio. Já nasce guardada: quando terminar, entra nos dois rankings.
- */
-export function partidaDaMesaNova(
-  torneio: Torneio,
-  rodada: RodadaTorneio,
-  mesa: MesaTorneio,
-  contexto: { id: string; agora: string; nomes?: readonly string[] },
-): Partida {
-  return {
-    ...criarPartida(
-      contexto.id,
-      configSoPontuacao(torneio.config),
-      mesa.assentos,
-      contexto.agora,
-      contexto.nomes,
-      // Sanma: a mesa abre no Centerpiece com 3 jogadores e as regras copiadas na criação.
-      torneio.variante === 'sanma' ? { regras: torneio.regrasSanma ?? REGRAS_SANMA_PADRAO } : undefined,
-    ),
-    vinculoTorneio: { torneioId: torneio.id, rodada: rodada.numero - 1, mesa: mesa.numero - 1, guardada: true },
-  }
 }
 
 /** A rodada ainda pode ser sorteada de novo: nenhuma mesa dela foi aberta ou registrada. */

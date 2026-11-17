@@ -9,8 +9,6 @@ import type { ConfigFormato, FormatoTorneio, Relogio, RodadaTorneio, Torneio } f
 
 export const SEGUNDOS_RODADA_PADRAO = 60 * 60
 export const RODADAS_PADRAO = 4
-/** Rodízio de Sanma: cada um é Leste uma vez. */
-export const RODADAS_PADRAO_SANMA = 3
 
 /** Padrão do torneio: 30.000 de partida e de retorno, sem oka. */
 export function configPadraoTorneio(): ConfigMesa {
@@ -63,10 +61,6 @@ export function criarRascunho(contexto: { id: string; agora: Date; nome: string 
 
 export function relogioParado(totalSegundos: number): Relogio {
   return { totalSegundos, acrescimoSegundos: 0, corridoSegundos: 0, iniciadoEm: null }
-}
-
-export function partidasDoTorneio(partidas: readonly Partida[], torneioId: string) {
-  return partidas.filter((partida) => partida.vinculoTorneio?.torneioId === torneioId)
 }
 
 /** `numeroRodada` e `numeroMesa` começam em 1, como na tela. */

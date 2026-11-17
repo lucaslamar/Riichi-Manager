@@ -344,9 +344,6 @@ export function secoesGlossario(idioma?: IdiomaSuportado): SecaoGlossario[] {
   return indice(idioma).secoes
 }
 
-/** Assuntos em pt-BR, para os textos fixos em português (ex.: guia Aprender a jogar). */
-export const SECOES_GLOSSARIO = secoesGlossario('pt-BR')
-
 export function buscarTermoGlossario(id: string, idioma?: IdiomaSuportado): TermoEncontrado | null {
   return indice(idioma).termos.get(id) ?? null
 }

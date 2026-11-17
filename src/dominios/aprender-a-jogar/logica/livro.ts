@@ -29,10 +29,6 @@ export const idCapaModulo = (modulo: TutorialModule) => `capa-${modulo.id}`
 export const idQuizModulo = (modulo: TutorialModule, pergunta = 0) =>
   pergunta === 0 ? `${modulo.id}-quiz` : `${modulo.id}-quiz-${pergunta + 1}`
 
-/** Todos os módulos, na ordem do livro. */
-export const modulosDoLivro = (conteudo: ConteudoTutorial) =>
-  conteudo.tutorialParts.flatMap((parte) => parte.modules)
-
 export function montarLivro(conteudo: ConteudoTutorial): PaginaLivro[] {
   const paginas: PaginaLivro[] = [{ tipo: 'capaGuia', id: ID_CAPA_GUIA }]
   for (const parte of conteudo.tutorialParts) {

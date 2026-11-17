@@ -152,25 +152,6 @@ export function ehPedraNumerada(pedra: CodigoPedra): boolean {
   return ['m', 'p', 's'].includes(pedra[1])
 }
 
-export function podeAdicionarAoChii(selecionadas: CodigoPedra[], pedra: CodigoPedra): boolean {
-  if (!ehPedraNumerada(pedra)) return false
-  if (selecionadas.length >= 3) return false
-  if (
-    selecionadas.some(
-      (pedraSelecionada) => !ehPedraNumerada(pedraSelecionada) || pedraSelecionada[1] !== pedra[1],
-    )
-  ) {
-    return false
-  }
-
-  const numeros = [...selecionadas, pedra].map(valorPedra)
-  if (new Set(numeros).size !== numeros.length) return false
-
-  return [1, 2, 3, 4, 5, 6, 7].some((inicio) =>
-    numeros.every((numero) => numero >= inicio && numero <= inicio + 2),
-  )
-}
-
 /** `sanma`: 1m aponta 9m e 9m aponta 1m (regra compartilhada); sem ele, a conta de sempre. */
 export function proximaDoraIndicada(pedra: CodigoPedra, sanma = false): CodigoPedra {
   if (sanma) return proximaDora(pedra, 'sanma')

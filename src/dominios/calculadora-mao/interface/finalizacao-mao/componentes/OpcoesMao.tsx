@@ -39,13 +39,6 @@ interface PropsOpcoesMao {
  * Cada botao apenas altera estado de configuracao. O calculo final continua
  * concentrado no botao Calcular para preservar previsibilidade do fluxo mobile.
  */
-const NOME_VENTO_MAO: Record<string, string> = {
-  '1': 'Leste',
-  '2': 'Sul',
-  '3': 'Oeste',
-  '4': 'Norte',
-}
-
 export default function OpcoesMao({
   estado,
   embutido = false,
