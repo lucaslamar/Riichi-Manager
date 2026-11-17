@@ -31,7 +31,7 @@ interface PropsControleNumerico {
   valorExibido?: string
 }
 
-export function ControleNumericoHanFu({
+function ControleNumericoHanFu({
   rotulo,
   valor,
   minimo,

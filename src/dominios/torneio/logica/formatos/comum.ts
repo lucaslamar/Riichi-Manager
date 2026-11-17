@@ -10,7 +10,7 @@ export type JogadoresPorMesa = 3 | 4
 /** Ids de quem senta na mesa, sem a cadeira vazia do Sanma. */
 export const ocupantes = (assentos: readonly string[]) => assentos.filter((jogador) => jogador !== '')
 
-export const chaveDoPar = (um: string, outro: string) => (um < outro ? `${um}|${outro}` : `${outro}|${um}`)
+const chaveDoPar = (um: string, outro: string) => (um < outro ? `${um}|${outro}` : `${outro}|${um}`)
 
 /** Quantas vezes cada dupla já se enfrentou. */
 export function contarPares(rodadas: readonly RodadaTorneio[]): Map<string, number> {
@@ -79,7 +79,7 @@ export function assentosDoGrupo(grupo: readonly string[]): AssentosMesa {
  * Senta os 4 da mesa: quem foi Leste menos vezes tem prioridade para Leste, depois
  * o mesmo para os outros ventos. Leste pesa mais porque é quem dá as cartas.
  */
-export function assentarComVentos(
+function assentarComVentos(
   grupo: readonly string[],
   ventos: ReadonlyMap<string, readonly number[]>,
 ): AssentosMesa {

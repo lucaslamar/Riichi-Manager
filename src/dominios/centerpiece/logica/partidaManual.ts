@@ -6,7 +6,7 @@ import { alterarConfig, type ConfigMesa } from './configMesa'
 import { calcularResultado, criarPartida, type Partida } from './partida'
 import type { UmaMesa } from './uma'
 
-export interface DadosPartidaManual {
+interface DadosPartidaManual {
   jogadorIds: readonly [string, string, string, string]
   nomes: readonly string[]
   pontos: readonly [number, number, number, number]

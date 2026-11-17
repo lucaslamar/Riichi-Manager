@@ -6,7 +6,7 @@
  * `kan` segue a mão: no Tsumo é o Rinshan, no Ron é o Chankan.
  */
 
-export interface RegraCombinacao {
+interface RegraCombinacao {
   /** Só vale com esta batida. */
   batida?: 'ron' | 'tsumo'
   /** Precisa do Riichi marcado, ou não pode ter Riichi. */
@@ -21,7 +21,7 @@ export interface RegraCombinacao {
   exclui?: readonly string[]
 }
 
-export const REGRAS_COMBINACAO: Readonly<Record<string, RegraCombinacao>> = {
+const REGRAS_COMBINACAO: Readonly<Record<string, RegraCombinacao>> = {
   // Ron no descarte com que o oponente declarou Riichi.
   tsubameGaeshi: { batida: 'ron', semTenhou: true },
   // Ron no descarte logo depois de um kan: não é o Chankan (roubar o kan).
@@ -58,7 +58,7 @@ export type MotivoBloqueio =
   | { tipo: 'semOutro'; id: string }
 
 /** Os yakus locais que não combinam com `id`, olhando a regra dos dois lados. */
-export function excluidosPor(id: string): string[] {
+function excluidosPor(id: string): string[] {
   const proprios = REGRAS_COMBINACAO[id]?.exclui ?? []
   const deOutros = Object.entries(REGRAS_COMBINACAO)
     .filter(([, regra]) => regra.exclui?.includes(id))

@@ -11,7 +11,7 @@ export type TipoFuriten = 'riichi' | 'descartes' | 'temporario'
 /** Do mais forte para o mais fraco: é o que o aviso mostra primeiro. */
 const PRIORIDADE: readonly TipoFuriten[] = ['riichi', 'descartes', 'temporario']
 
-export interface CausaFuriten {
+interface CausaFuriten {
   tipo: TipoFuriten
   pedra: CodigoPedra
   ordem: number

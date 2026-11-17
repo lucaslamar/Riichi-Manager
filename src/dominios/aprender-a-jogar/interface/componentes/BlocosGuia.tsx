@@ -147,7 +147,7 @@ function TextoSimples({ md }: { md: string }) {
 const nomesPedras = (mpsz: string) => parseMpsz(mpsz).map(nomePedraAcessivel)
 
 /** Pedras grandes e centralizadas; quebram linha entre grupos, nunca no meio. */
-export function MaoGuia({
+function MaoGuia({
   mpsz,
   caption,
   after,

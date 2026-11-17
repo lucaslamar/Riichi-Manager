@@ -33,7 +33,7 @@ export function chavePar(a: string, b: string): ChavePar {
  * @param jogadores - Nomes dos 4 jogadores da mesa.
  * @returns Chave canônica da mesa.
  */
-export function chaveMesaCompleta(jogadores: string[]): string {
+function chaveMesaCompleta(jogadores: string[]): string {
   return [...jogadores].sort((a, b) => a.localeCompare(b)).join('::')
 }
 
@@ -189,7 +189,7 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
   }
 }
 
-export type NotaGrade = 'perfeita' | 'boa' | 'regular' | 'ruim'
+type NotaGrade = 'perfeita' | 'boa' | 'regular' | 'ruim'
 
 export function notaDaGrade(qualidade: RelatorioQualidade): NotaGrade {
   if (qualidade.quantidadeTresVezesMais > 0 || qualidade.mesasCompletasRepetidas > 0) return 'ruim'

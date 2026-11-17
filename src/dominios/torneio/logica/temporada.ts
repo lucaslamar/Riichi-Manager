@@ -40,7 +40,7 @@ export function novoEncontro(temporada: Temporada, contexto: { id: string; agora
   }
 }
 
-export interface LinhaTemporada {
+interface LinhaTemporada {
   jogadorId: string
   /** O número que ordena, conforme o critério. */
   valor: number

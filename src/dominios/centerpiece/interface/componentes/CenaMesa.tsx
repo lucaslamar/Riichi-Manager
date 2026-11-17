@@ -10,7 +10,7 @@ import '../cena-mesa.css'
  * (quem segura o celular), 1 a da direita, 2 a de cima e 3 a da esquerda, como
  * 東 南 西 北 na mesa de verdade.
  */
-export type NomeCenaMesa = 'timer' | 'acoes' | 'honba'
+type NomeCenaMesa = 'timer' | 'acoes' | 'honba'
 
 type ChaveLegendaMesa =
   | 'timerTap'

@@ -16,7 +16,7 @@ import type { EstadoVez } from './vez'
 export type TipoChamada = 'chi' | 'pon' | 'kan' | 'ron'
 
 /** Como a mesa estava antes do lance: é para onde o Desfazer volta. */
-export interface AntesDoLance {
+interface AntesDoLance {
   vezAntes?: EstadoVez
   eventosAntes?: number
 }
@@ -34,7 +34,7 @@ export interface LanceDescarte extends AntesDoLance {
 }
 
 /** Pedra acrescentada a um pon: quem esperava por ela perdeu o chankan. */
-export interface LanceKakan extends AntesDoLance {
+interface LanceKakan extends AntesDoLance {
   tipo: 'kakan'
   ordem: number
   cadeira: Cadeira
@@ -225,7 +225,7 @@ export function removerMao(registro: RegistroMao, cadeira: Cadeira): RegistroMao
   return { ...registro, maos }
 }
 
-export interface LeituraPedras {
+interface LeituraPedras {
   pedras: CodigoPedra[]
   erro: ErroNotacao | null
 }

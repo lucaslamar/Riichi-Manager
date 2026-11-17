@@ -56,7 +56,7 @@ export type TipoAbortivo =
   | 'quatroRiichis'
   | 'ronTriplo'
 
-export interface DetalheEvento {
+interface DetalheEvento {
   vencedores?: Cadeira[]
   pagador?: Cadeira
   han?: number
@@ -85,7 +85,7 @@ export interface EventoPartida {
   lances?: Lance[]
 }
 
-export type MotivoFim = 'ultimaMao' | 'tobi' | 'retorno' | 'agariYame'
+type MotivoFim = 'ultimaMao' | 'tobi' | 'retorno' | 'agariYame'
 
 export interface ResultadoFinal {
   cadeira: Cadeira
@@ -221,7 +221,7 @@ interface AnaliseFim {
 }
 
 /** O que a regra manda depois de uma mão terminada. */
-export function analisarFim(
+function analisarFim(
   antes: Placar,
   pontos: PorCadeira<number>,
   config: ConfigMesa,
@@ -331,7 +331,7 @@ export function declararRiichi(partida: Partida, cadeira: Cadeira, contexto: Con
   }
 }
 
-export interface VencedorRon {
+interface VencedorRon {
   cadeira: Cadeira
   /** Valor pago pelo descarte, já com o honba: vem assim das calculadoras. */
   pontos: number
@@ -443,13 +443,13 @@ export function registrarTsumo(
  * Noten do Sanma: o total das Regras de Sanma (regra compartilhada), só entre as 3
  * cadeiras. O yonma segue com `pagamentosNoten`.
  */
-export function pagamentosNotenSanma(tenpai: readonly Cadeira[], regras: RegrasSanma): PorCadeira<number> {
+function pagamentosNotenSanma(tenpai: readonly Cadeira[], regras: RegrasSanma): PorCadeira<number> {
   const porJogador = calcularNoten(tenpai, CADEIRAS_SANMA, 'sanma', regras)
   return porCadeira((cadeira) => porJogador.get(cadeira) ?? 0)
 }
 
 /** Nagashi Mangan no Sanma: um tsumo de Mangan pago pelos outros 2, sem honba. */
-export function pagamentosNagashiSanma(
+function pagamentosNagashiSanma(
   nagashi: readonly Cadeira[],
   dealer: Cadeira,
   regras: RegrasSanma,
@@ -476,7 +476,7 @@ export function pagamentosNagashiSanma(
 }
 
 /** Pagamento de noten: 3.000 divididos entre quem estava tenpai. */
-export function pagamentosNoten(tenpai: readonly Cadeira[]): PorCadeira<number> {
+function pagamentosNoten(tenpai: readonly Cadeira[]): PorCadeira<number> {
   if (tenpai.length === 0 || tenpai.length === 4) return porCadeira(() => 0)
   const ganho = 3000 / tenpai.length
   const perda = 3000 / (4 - tenpai.length)
@@ -484,7 +484,7 @@ export function pagamentosNoten(tenpai: readonly Cadeira[]): PorCadeira<number> 
 }
 
 /** Nagashi Mangan: paga como um tsumo de Mangan, sem honba, e substitui o noten. */
-export function pagamentosNagashi(nagashi: readonly Cadeira[], dealer: Cadeira): PorCadeira<number> {
+function pagamentosNagashi(nagashi: readonly Cadeira[], dealer: Cadeira): PorCadeira<number> {
   const variacao = porCadeira(() => 0)
   for (const ganhador of nagashi) {
     for (const cadeira of CADEIRAS) {

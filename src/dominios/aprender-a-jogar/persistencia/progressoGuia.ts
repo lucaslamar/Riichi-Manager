@@ -22,7 +22,7 @@ const MOVIDAS_V1: Record<string, string> = {
   'dora-quiz': 'capa-dora',
 }
 
-export interface ProgressoGuia {
+interface ProgressoGuia {
   /** Id da última tela do livro vista. */
   pagina?: string
   /** Ids dos módulos cujo quiz já foi alcançado. */

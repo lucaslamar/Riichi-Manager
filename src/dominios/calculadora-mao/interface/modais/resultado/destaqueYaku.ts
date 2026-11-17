@@ -95,7 +95,7 @@ const MAO_INTEIRA = new Set([
 /** Yakus da forma de vencer: o que conta é a pedra da batida. */
 const SO_BATIDA = new Set(['menzen-tsumo', 'haitei', 'houtei', 'rinshan', 'chankan', 'ippatsu'])
 
-export interface ExplicacaoYaku {
+interface ExplicacaoYaku {
   /** Cartão da referência de yakus; ausente para dora (que não é yaku). */
   yaku?: Yaku
   /** Título no lugar do nome do yaku (ex.: Vento da rodada). */
@@ -173,7 +173,7 @@ function idDoYaku(nome: string): string | null {
  * código base, ou o código exato para 5 vermelho) consumida na ordem em que
  * as pedras aparecem na tela.
  */
-export interface DestaqueYaku {
+interface DestaqueYaku {
   todas: boolean
   batida: boolean
   cotas: Map<CodigoPedra, number>

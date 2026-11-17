@@ -11,7 +11,7 @@ import { PORQUE_YAKUS_LOCAIS } from '../../../logica/porqueYakusLocais'
 
 
 /** "Yakus locais" sublinhado como termo do glossário: abre a lista de todos. */
-export function TermoYakusLocais({ rotulo }: { rotulo?: string }) {
+function TermoYakusLocais({ rotulo }: { rotulo?: string }) {
   const { t } = useI18n()
   const [aberta, setAberta] = useState(false)
   return (
@@ -34,7 +34,7 @@ export function TermoYakusLocais({ rotulo }: { rotulo?: string }) {
 }
 
 /** Todos os yakus locais: nome, kanji, valor e descrição curta. */
-export function ModalListaYakusLocais({ aoFechar }: { aoFechar: () => void }) {
+function ModalListaYakusLocais({ aoFechar }: { aoFechar: () => void }) {
   const { t, idioma } = useI18n()
   return (
     <Modal titulo={t('localYaku.title')} subtitulo={t('localYaku.listHelp')} aoFechar={aoFechar} rotuloFechar={t('actions.close')} tamanho="media">

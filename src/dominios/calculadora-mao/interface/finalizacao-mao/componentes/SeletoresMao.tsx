@@ -3,7 +3,7 @@ import type { Mao } from '../../../logica/mao'
 import { VENTOS_ASSENTO, VENTOS_RODADA } from '../../constantes'
 import { GradeVentos } from '../../compartilhado/componentes/GradeVentos'
 
-export type AtualizarMao = (receita: (rascunho: Mao) => void) => void
+type AtualizarMao = (receita: (rascunho: Mao) => void) => void
 
 export function SeletorVentos({
   mao,

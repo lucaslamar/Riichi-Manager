@@ -7,7 +7,7 @@ import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
  * pedras, criar/remover melds, marcar descartes/furiten e escolher a batida antes de
  * avancar para a finalizacao.
  */
-export function useMontagemMao(estado: EstadoCalculadoraMao) {
+function useMontagemMao(estado: EstadoCalculadoraMao) {
   return {
     mao: estado.mao,
     atualizarMao: estado.atualizarMao,

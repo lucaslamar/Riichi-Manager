@@ -15,7 +15,7 @@ import { criarPartida, type Partida } from '@/dominios/centerpiece/logica/partid
 export type ResumoPartida = Omit<Partida, 'placar' | 'eventos' | 'vez' | 'registro' | 'historico'>
 export type DetalhesPartida = Pick<Partida, 'id' | 'placar' | 'eventos' | 'vez' | 'registro' | 'historico'>
 
-export const LIMITE_DETALHES_PADRAO = 100
+const LIMITE_DETALHES_PADRAO = 100
 
 export function dividirPartida(partida: Partida): { resumo: ResumoPartida; detalhes: DetalhesPartida } {
   const { placar, eventos, vez, registro, historico, ...resumo } = partida

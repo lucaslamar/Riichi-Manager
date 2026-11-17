@@ -40,12 +40,12 @@ export interface BlocoAjuda {
 }
 
 /** Uma aba da modal, quando o assunto se divide em telas (ex.: Dora | Honba). */
-export interface AbaAjuda {
+interface AbaAjuda {
   rotulo: string
   blocos: BlocoAjuda[]
 }
 
-export interface ConteudoAjuda {
+interface ConteudoAjuda {
   titulo: string
   blocos?: BlocoAjuda[]
   /** Em vez de `blocos`: uma tela por assunto, trocadas por abas ou deslize. */

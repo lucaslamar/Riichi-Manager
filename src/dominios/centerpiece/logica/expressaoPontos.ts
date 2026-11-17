@@ -4,7 +4,7 @@
  * (ex.: "30000-8000"), e a tela troca o "-" pelo sinal de menos.
  */
 
-export type Operador = '+' | '-'
+type Operador = '+' | '-'
 
 const ehOperador = (caractere: string | undefined): caractere is Operador =>
   caractere === '+' || caractere === '-'
@@ -89,7 +89,7 @@ export function resolver(expressao: string): string {
   return total === null ? '' : String(total)
 }
 
-export const VALOR_RIICHI = 1000
+const VALOR_RIICHI = 1000
 
 /**
  * A soma da mesa fecha? Com "perdidos", os depósitos de riichi que sobraram

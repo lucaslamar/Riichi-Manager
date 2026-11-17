@@ -20,7 +20,7 @@ import {
  * Chaves no localStorage. As mesmas do script em `index.html`, que aplica o
  * tema e as classes antes do React montar (sem piscar o tema claro).
  */
-export const CHAVES_PREFERENCIAS = {
+const CHAVES_PREFERENCIAS = {
   tema: 'riichi-manager-tema',
   altoContraste: 'riichi-manager-alto-contraste',
   modoCompacto: 'riichi-manager-modo-compacto',
@@ -32,14 +32,14 @@ export const CHAVES_PREFERENCIAS = {
 
 /** Cor das pedras: automático segue o tema (pretas no claro, brancas no escuro). */
 export type PreferenciaPedras = 'automatico' | 'brancas' | 'pretas'
-export type PedrasEfetivas = 'brancas' | 'pretas'
+type PedrasEfetivas = 'brancas' | 'pretas'
 
-export function resolverPedras(pedras: PreferenciaPedras, tema: TemaEfetivo): PedrasEfetivas {
+function resolverPedras(pedras: PreferenciaPedras, tema: TemaEfetivo): PedrasEfetivas {
   if (pedras !== 'automatico') return pedras
   return tema === 'claro' ? 'pretas' : 'brancas'
 }
 
-export interface Preferencias {
+interface Preferencias {
   tema: PreferenciaTema
   altoContraste: boolean
   modoCompacto: boolean

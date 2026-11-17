@@ -17,9 +17,9 @@ export interface MesaSorteada<T> {
   assentos: { vento: Vento; jogador: T }[]
 }
 
-export type ErroSorteio = 'poucos' | 'naoMultiplo'
+type ErroSorteio = 'poucos' | 'naoMultiplo'
 
-export type ResultadoSorteio<T> = { ok: true; mesas: MesaSorteada<T>[] } | { ok: false; erro: ErroSorteio }
+type ResultadoSorteio<T> = { ok: true; mesas: MesaSorteada<T>[] } | { ok: false; erro: ErroSorteio }
 
 const LIMITE_32_BITS = 0x1_0000_0000
 

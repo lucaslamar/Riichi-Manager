@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Variante } from '@/compartilhado/mahjong/variante'
 
-export type ModuloVariante = 'calculadora-mao' | 'han-fu' | 'partida' | 'torneio' | 'ranking' | 'registro'
+type ModuloVariante = 'calculadora-mao' | 'han-fu' | 'partida' | 'torneio' | 'ranking' | 'registro'
 
 /**
  * Variante escolhida na tela. Sempre começa em `yonma` (4 jogadores): o Sanma é

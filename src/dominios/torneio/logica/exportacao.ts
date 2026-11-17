@@ -7,14 +7,14 @@ import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import type { Jogador } from '@/dominios/jogadores/logica/jogadores'
 import type { Temporada, Torneio } from './tipos'
 
-export const VERSAO_PACOTE = 1
+const VERSAO_PACOTE = 1
 export const EXTENSAO_PACOTE = '.mojoca.json'
 /**
  * Tamanho de cada pedaço do código. Com 800 o QR ficava denso demais (versão 20,
  * 97 módulos) e a câmera de outro celular não lia na tela. Com 300 fica
  * na versão 11 (61 módulos): mais QRs na sequência, mas cada um lê de primeira.
  */
-export const TAMANHO_PEDACO_QR = 300
+const TAMANHO_PEDACO_QR = 300
 
 export type ModoExportacao = 'copia' | 'transferencia'
 
@@ -180,12 +180,12 @@ export function leituraCompleta(leitura: LeituraQr): string | null {
 
 /* ---------- Importação ---------- */
 
-export type CasamentoJogador =
+type CasamentoJogador =
   | { tipo: 'id'; localId: string }
   | { tipo: 'nome'; localId: string }
   | { tipo: 'novo' }
 
-export interface PlanoImportacao {
+interface PlanoImportacao {
   resumo: {
     nome: string
     formato: Torneio['formato']['tipo']
@@ -230,7 +230,7 @@ export function planejarImportacao(
   }
 }
 
-export interface EscolhasImportacao {
+interface EscolhasImportacao {
   /** Por id do pacote: true usa o jogador local de mesmo nome, false cria outro. Ausente = true. */
   mesmoNome?: Record<string, boolean>
   /** Só vale quando há conflito. */

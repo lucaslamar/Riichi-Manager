@@ -11,7 +11,7 @@ import type { ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
 import type { EncontroClube, SorteioClube } from '@/dominios/centerpiece/logica/encontroClube'
 import type { ListaSalva, Temporada, Torneio } from '@/dominios/torneio/logica/tipos'
 
-export const SCHEMA_BACKUP = 1
+const SCHEMA_BACKUP = 1
 const MARCA = 'mojoca-backup'
 
 export interface DadosBackup {
@@ -36,7 +36,7 @@ export interface ArquivoBackup {
 }
 
 export type ErroBackup = 'naoEhJson' | 'naoEhBackup' | 'versaoNova' | 'corrompido'
-export type ValidacaoBackup = { ok: true; backup: ArquivoBackup } | { ok: false; erro: ErroBackup }
+type ValidacaoBackup = { ok: true; backup: ArquivoBackup } | { ok: false; erro: ErroBackup }
 
 export function montarBackup(dados: DadosBackup, appVersion: string, agora: Date): ArquivoBackup {
   return { app: MARCA, appVersion, schemaVersion: SCHEMA_BACKUP, exportadoEm: agora.toISOString(), dados }
@@ -116,7 +116,7 @@ function somarPorId<T extends { id: string }>(locais: readonly T[], vindos: read
  * existe fica como está (inclusive configurações, lista e sorteio do clube).
  */
 /** Tolerância entre os dois registros da mesma mesa (cada um registra quando dá). */
-export const CARENCIA_MESMA_PARTIDA_MS = 60 * 60 * 1000
+const CARENCIA_MESMA_PARTIDA_MS = 60 * 60 * 1000
 
 /** Assinatura do resultado: quem jogou e com quantos pontos terminou. */
 function assinatura(partida: Partida) {

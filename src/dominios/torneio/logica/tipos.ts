@@ -53,13 +53,13 @@ export interface RodadaTorneio {
   relogio?: Relogio
 }
 
-export interface TimersTorneio {
+interface TimersTorneio {
   /** Timer geral da rodada, em segundos. */
   rodadaSegundos: number
   porMesa: boolean
 }
 
-export type StatusTorneio = 'rascunho' | 'em_andamento' | 'finalizado'
+type StatusTorneio = 'rascunho' | 'em_andamento' | 'finalizado'
 
 export interface Torneio {
   id: string

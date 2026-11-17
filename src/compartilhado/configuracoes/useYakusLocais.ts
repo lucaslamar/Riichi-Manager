@@ -1,12 +1,12 @@
 import { useCallback, useSyncExternalStore } from 'react'
 import { localStorageDireto } from '@/compartilhado/persistencia/armazenamento'
 
-export const CHAVE_YAKUS_LOCAIS = 'riichi-manager-yakus-locais'
+const CHAVE_YAKUS_LOCAIS = 'riichi-manager-yakus-locais'
 
 /** 1: 8 vitórias seguidas de um jogador · 2: 8 como dealer sem empate · 3: 8 honba como dealer. */
 export type VariacaoPaarenchan = 1 | 2 | 3
 
-export interface ConfigYakusLocais {
+interface ConfigYakusLocais {
   /** Ids ligados. Todos começam desligados. */
   ativos: string[]
   paarenchan: {

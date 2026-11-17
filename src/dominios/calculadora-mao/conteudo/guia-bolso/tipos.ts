@@ -62,7 +62,7 @@ export type IdSecaoGlossario =
   | 'mesa'
   | 'regras'
 
-export interface TextosYaku {
+interface TextosYaku {
   /** Nome no título do cartão; sem ele, o romaji (pt-BR, en, es, lt). */
   titulo?: string
   /** Linha embaixo do título (ex.: "Tudo simples"). */
@@ -74,7 +74,7 @@ export interface TextosYaku {
   apelidos?: string[]
 }
 
-export interface TextosItemGlossario {
+interface TextosItemGlossario {
   nome: string
   /** Leitura do kanji, entre parênteses depois dele (ex.: 鳴き (naki)). */
   leitura?: string
@@ -87,7 +87,7 @@ export interface TextosItemGlossario {
   aliases: string[]
 }
 
-export interface TextosSecaoGlossario {
+interface TextosSecaoGlossario {
   titulo: string
   intro?: string
   /** Rótulo embaixo de cada grupo do exemplo da seção. */
@@ -97,7 +97,7 @@ export interface TextosSecaoGlossario {
   itens: Record<string, TextosItemGlossario>
 }
 
-export interface CicloDora {
+interface CicloDora {
   titulo: string
   detalhe: string
 }

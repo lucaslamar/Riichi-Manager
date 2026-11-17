@@ -4,7 +4,7 @@
  */
 export type ValoresUma = [number, number, number, number]
 
-export interface TabelaUmaFlutuante {
+interface TabelaUmaFlutuante {
   nenhum: ValoresUma
   um: ValoresUma
   dois: ValoresUma

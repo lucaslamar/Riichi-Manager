@@ -6,7 +6,7 @@ import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
  * A finalizacao revisa a mao completa, configura a vitoria e calcula o resultado.
  * Ela nao remove tiles ou melds; a edicao estrutural volta para a montagem pelo lapis.
  */
-export function useFinalizacaoMao(estado: EstadoCalculadoraMao) {
+function useFinalizacaoMao(estado: EstadoCalculadoraMao) {
   return {
     mao: estado.mao,
     atualizarMao: estado.atualizarMao,

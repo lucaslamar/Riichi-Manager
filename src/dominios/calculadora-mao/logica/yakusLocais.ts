@@ -12,14 +12,14 @@
 import type { Mao } from './tipos'
 import { locaisQueCombinam } from './combinacoesLocais'
 
-export type CategoriaYakuLocal = 'han1' | 'han2' | 'han2mais' | 'han3mais' | 'manganPedra' | 'mangan' | 'yakuman' | 'duplo'
+type CategoriaYakuLocal = 'han1' | 'han2' | 'han2mais' | 'han3mais' | 'manganPedra' | 'mangan' | 'yakuman' | 'duplo'
 
-export type ValorYakuLocal =
+type ValorYakuLocal =
   | { tipo: 'han'; fechada: number | null; aberta: number | null }
   | { tipo: 'mangan' }
   | { tipo: 'yakuman'; vezes: 1 | 2 }
 
-export interface TextoYakuLocal {
+interface TextoYakuLocal {
   /** Valor como se lê no guia (ex.: "2 han (1 aberta)"). */
   valor: string
   descricao: string
@@ -54,12 +54,12 @@ export interface Grupo {
   aberto: boolean
 }
 
-export interface Divisao {
+interface Divisao {
   grupos: Grupo[]
   par: Indice
 }
 
-export interface ContextoMao {
+interface ContextoMao {
   mao: Mao
   /** Quantas de cada pedra, contando as chamadas (kan conta 3). */
   contagem: number[]
@@ -76,7 +76,7 @@ export interface ContextoMao {
 
 const NAIPES = 'mpsz'
 
-export function indiceDaPedra(codigo: string): Indice {
+function indiceDaPedra(codigo: string): Indice {
   const numero = codigo[0] === '0' ? 5 : Number(codigo[0])
   return NAIPES.indexOf(codigo[1]) * 9 + numero - 1
 }
@@ -111,7 +111,7 @@ function dividir(contagem: number[], grupos: Grupo[], saida: Grupo[][]) {
   }
 }
 
-export function montarContexto(mao: Mao): ContextoMao {
+function montarContexto(mao: Mao): ContextoMao {
   const fechadas = mao.pedras.map(indiceDaPedra)
   const contagemFechada = Array<number>(34).fill(0)
   fechadas.forEach((indice) => (contagemFechada[indice] += 1))
@@ -950,7 +950,7 @@ export function textoYakuLocal(yaku: YakuLocal, idioma: string): TextoYakuLocal 
 
 // ─── Aplicação no resultado ───────────────────────────────────────────────────
 
-export type ValorRenhou = 'mangan' | 'baiman' | 'yakuman'
+type ValorRenhou = 'mangan' | 'baiman' | 'yakuman'
 
 export interface OpcoesLocais {
   ativos: ReadonlySet<string>
@@ -961,7 +961,7 @@ export interface OpcoesLocais {
   ryanhanShibari?: boolean
 }
 
-export interface YakuLocalEncontrado {
+interface YakuLocalEncontrado {
   yaku: YakuLocal
   /** Han somado, ou null para Mangan/Yakuman. */
   han: number | null

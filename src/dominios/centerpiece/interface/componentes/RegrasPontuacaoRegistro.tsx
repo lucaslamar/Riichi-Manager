@@ -18,7 +18,7 @@ import CampoUma, { CampoInteiro } from './CampoUma'
 import EscolhaOka from './EscolhaOka'
 
 /** Tipo de partida e ordem dos ventos, que ficam junto das regras. */
-export interface OpcoesPartidaRegistro {
+interface OpcoesPartidaRegistro {
   tipoPartida: 'leste' | 'hanchan'
   /** undefined: a mesa já vem com os ventos (clube) e a pergunta some. */
   ordemVentos?: boolean

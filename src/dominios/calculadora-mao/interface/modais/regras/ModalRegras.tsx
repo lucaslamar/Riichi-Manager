@@ -266,7 +266,7 @@ export function LinhaRegraOpcoes<T extends string | boolean>({
  * Aba Sanma: Jogadores (4 ou 3) e, em 3, só as regras que mudam o cálculo da mão
  * (Kita, Norte como yakuhai e pagamento do Tsumo). O honba segue o Basengo.
  */
-export function ListaRegrasSanma({
+function ListaRegrasSanma({
   variante,
   aoMudarVariante,
 }: {
@@ -326,7 +326,7 @@ export function ListaRegrasSanma({
 }
 
 /** Restaurar padrão e Aplicar (as mudanças já valem; Aplicar só fecha). */
-export function RodapeRegras({
+function RodapeRegras({
   aoMudar,
   aoFechar,
 }: {

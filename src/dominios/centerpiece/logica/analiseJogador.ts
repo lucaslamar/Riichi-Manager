@@ -15,7 +15,7 @@ function linhaDe(partida: Partida, jogadorId: string): ResultadoFinal | undefine
 }
 
 /** Partidas do jogador, da mais antiga para a mais recente. */
-export function partidasDoJogador(partidas: readonly Partida[], jogadorId: string) {
+function partidasDoJogador(partidas: readonly Partida[], jogadorId: string) {
   return partidas
     .filter((partida) => linhaDe(partida, jogadorId))
     .sort((uma, outra) => (uma.finalizadaEm ?? '').localeCompare(outra.finalizadaEm ?? ''))

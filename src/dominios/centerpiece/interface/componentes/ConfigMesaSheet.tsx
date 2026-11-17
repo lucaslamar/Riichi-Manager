@@ -40,11 +40,11 @@ const SECOES = [
   { id: 'calculo', chave: 'tableConfig.calcRules' },
   { id: 'mesa', chave: 'tableConfig.indexTable' },
 ] as const
-export type IdSecaoMesa = (typeof SECOES)[number]['id']
+type IdSecaoMesa = (typeof SECOES)[number]['id']
 type IdSecao = IdSecaoMesa | string
 
 /** Aba a mais, antes das de mesa (o Torneio usa para nome, formato e tempo). */
-export interface AbaExtra {
+interface AbaExtra {
   id: string
   rotulo: string
   conteudo: ReactNode

@@ -2,7 +2,7 @@
  * Sorteio dos 2 dados e a parede de onde a mesa abre. O gerador vem de fora para
  * dar para testar. Contagem a partir do dealer, no sentido anti-horário.
  */
-export type ParedeDados = 'dealer' | 'direita' | 'frente' | 'esquerda'
+type ParedeDados = 'dealer' | 'direita' | 'frente' | 'esquerda'
 
 const PAREDES: readonly ParedeDados[] = ['dealer', 'direita', 'frente', 'esquerda']
 /** Sanma: a contagem gira entre 3 (Leste, Sul à direita, Oeste à esquerda). */

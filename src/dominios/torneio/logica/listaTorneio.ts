@@ -7,7 +7,7 @@ import { jogadorDaLinha, linhasDoTexto, PREFIXO_CONVIDADO } from '@/dominios/cen
 import { normalizarTexto, type Jogador } from '@/dominios/jogadores/logica/jogadores'
 
 /** Menor torneio: duas mesas. */
-export const MINIMO_JOGADORES = 8
+const MINIMO_JOGADORES = 8
 
 /** "1.", "2)", "10 -", "-", "•", "*" no começo da linha, como nas listas do WhatsApp. */
 const MARCADOR = /^\s*(?:\d+\s*[.)\-:º°]?|[-–—•·*▪◦>])\s*/
@@ -38,7 +38,7 @@ export type StatusLista =
   | { tipo: 'repetidos'; quantidade: number }
   | { tipo: 'pronta' }
 
-export interface AnaliseLista {
+interface AnaliseLista {
   /** Nomes válidos, sem vazias e sem os repetidos. */
   nomes: string[]
   /** Índice (na lista de linhas) de cada linha repetida, para sublinhar. */

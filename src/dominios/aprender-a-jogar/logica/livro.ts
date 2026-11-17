@@ -21,10 +21,10 @@ export type PaginaLivro =
   | { tipo: 'quiz'; id: string; modulo: TutorialModule; pergunta: number }
   | { tipo: 'conclusao'; id: string }
 
-export const ID_CAPA_GUIA = 'capa-guia'
+const ID_CAPA_GUIA = 'capa-guia'
 
 export const idCapaParte = (parte: TutorialPart) => `parte-${parte.id}`
-export const idCapaModulo = (modulo: TutorialModule) => `capa-${modulo.id}`
+const idCapaModulo = (modulo: TutorialModule) => `capa-${modulo.id}`
 /** A primeira pergunta guarda o id de sempre (o progresso salvo e o índice apontam para ela). */
 export const idQuizModulo = (modulo: TutorialModule, pergunta = 0) =>
   pergunta === 0 ? `${modulo.id}-quiz` : `${modulo.id}-quiz-${pergunta + 1}`

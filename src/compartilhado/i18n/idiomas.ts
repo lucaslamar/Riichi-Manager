@@ -34,7 +34,7 @@ const CODIGOS_ANTIGOS: Record<string, IdiomaSuportado> = {
   'ko-KR': 'ko',
 }
 
-export function ehIdiomaSuportado(idioma: string | null | undefined): idioma is IdiomaSuportado {
+function ehIdiomaSuportado(idioma: string | null | undefined): idioma is IdiomaSuportado {
   return !!idioma && (IDIOMAS_SUPORTADOS as readonly string[]).includes(idioma)
 }
 

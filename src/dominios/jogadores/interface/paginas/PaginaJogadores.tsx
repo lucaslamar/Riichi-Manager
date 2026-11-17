@@ -20,7 +20,7 @@ const DURACAO_DESFAZER_MS = 6000
 type Edicao = { tipo: 'novo' } | { tipo: 'editar'; jogador: Jogador }
 
 /** Onde o jogador aparece; vem de quem conhece as partidas. */
-export interface UsoDoJogador {
+interface UsoDoJogador {
   /** Nome das mesas em andamento: enquanto houver, não dá para arquivar nem excluir. */
   mesasAbertas: string[]
   partidasFinalizadas: number

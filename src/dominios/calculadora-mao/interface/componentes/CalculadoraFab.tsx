@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 
-export interface AcaoFab {
+interface AcaoFab {
   chave: string
   rotulo: string
   icone: string

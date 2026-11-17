@@ -24,7 +24,7 @@ export function regrasDoPreset(preset: IdPreset): RegrasPontuacao {
   return { pontosPartida, pontosRetorno, uma }
 }
 
-export function mesmasRegras(uma: RegrasPontuacao, outra: RegrasPontuacao) {
+function mesmasRegras(uma: RegrasPontuacao, outra: RegrasPontuacao) {
   return (
     uma.pontosPartida === outra.pontosPartida &&
     uma.pontosRetorno === outra.pontosRetorno &&

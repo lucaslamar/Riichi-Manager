@@ -9,7 +9,7 @@ import type { RodadaTorneio, Torneio } from '../tipos'
 import { jogadoresPorMesa } from '../torneio'
 import { mesasPelaOrdem, type JogadoresPorMesa } from './comum'
 
-export function rodadaSuica(
+function rodadaSuica(
   ordem: readonly string[],
   anteriores: readonly RodadaTorneio[],
   numero: number,

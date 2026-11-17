@@ -7,7 +7,7 @@ import { imagemDoRelatorio } from '@/compartilhado/relatorio/imagemRelatorio'
 import { textoDoRelatorio, type Relatorio } from '@/compartilhado/relatorio/relatorio'
 
 /** Opção a mais da folha (ex.: PDF no Ranking, Transferir torneio nas Mesas). */
-export interface OpcaoCompartilhar {
+interface OpcaoCompartilhar {
   icone: string
   rotulo: string
   ajuda?: string

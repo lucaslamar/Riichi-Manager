@@ -24,7 +24,7 @@ export interface SorteioClube {
   mesas: MesaDoSorteio[]
 }
 
-export type GrupoAbertas =
+type GrupoAbertas =
   | { tipo: 'encontro'; encontroId: string; partidas: Partida[] }
   | { tipo: 'avulsa'; partida: Partida }
 

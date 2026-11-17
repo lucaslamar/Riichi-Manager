@@ -3,8 +3,8 @@
  * Funções puras: quem usa monta os itens com os textos que a busca enxerga.
  */
 
-export type PeriodoLista = 'hoje' | 'semana' | 'mes' | 'tudo'
-export type OrdemLista = 'recentes' | 'antigos' | 'nome'
+type PeriodoLista = 'hoje' | 'semana' | 'mes' | 'tudo'
+type OrdemLista = 'recentes' | 'antigos' | 'nome'
 
 export interface FiltrosLista {
   periodo: PeriodoLista
@@ -22,7 +22,7 @@ export const PERIODOS_LISTA: readonly PeriodoLista[] = ['hoje', 'semana', 'mes',
 export const ORDENS_LISTA: readonly OrdemLista[] = ['recentes', 'antigos', 'nome']
 
 /** O que a lista precisa saber de cada item para buscar, filtrar e ordenar. */
-export interface ItemDaLista {
+interface ItemDaLista {
   /** Data ISO de quando o item começou. */
   data: string
   /** Nome para ordenar de A a Z. */

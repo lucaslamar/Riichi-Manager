@@ -2,7 +2,7 @@
  * Timer de vez, em função pura: guarda quanto faltava e quando começou a contar
  * em vez de descontar a cada segundo, então sobrevive a pausa e a fechar o app.
  */
-export type CadeiraVez = 0 | 1 | 2 | 3
+type CadeiraVez = 0 | 1 | 2 | 3
 
 export interface EstadoVez {
   cadeira: CadeiraVez

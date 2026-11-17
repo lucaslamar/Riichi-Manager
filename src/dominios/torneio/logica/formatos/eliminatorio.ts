@@ -14,7 +14,7 @@ type FormatoEliminatorio = Extract<ConfigFormato, { tipo: 'eliminatorio' }>
 export const faseDaRodada = (rodada: RodadaTorneio) => rodada.fase ?? 0
 
 /** Quem joga a fase: quem sentou nas mesas dela (fica certo mesmo se um resultado for corrigido depois). */
-export function participantesDaFase(torneio: Torneio, fase: number): string[] {
+function participantesDaFase(torneio: Torneio, fase: number): string[] {
   if (fase === 0) return torneio.jogadorIds
   const sentados = new Set(
     torneio.rodadas.filter((rodada) => faseDaRodada(rodada) === fase).flatMap((rodada) => rodada.mesas.flatMap((mesa) => mesa.assentos)),
@@ -79,7 +79,7 @@ export function ehMesaFinal(torneio: Torneio, rodada: RodadaTorneio): boolean {
   )
 }
 
-export interface LinhaEliminatorio extends LinhaClassificacao {
+interface LinhaEliminatorio extends LinhaClassificacao {
   /** Até onde o jogador chegou: 0 = classificatória. */
   fase: number
 }

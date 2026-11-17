@@ -14,7 +14,7 @@ interface CasoTestePontuacaoHanFu {
   }
 }
 
-export const casosTestePontuacaoHanFu: CasoTestePontuacaoHanFu[] = [
+const casosTestePontuacaoHanFu: CasoTestePontuacaoHanFu[] = [
   { nome: 'Nao leste ron 1 han 30 fu', entrada: { han: 1, fu: 30, ehDealer: false, tipoVitoria: 'ron', honba: 0 }, esperado: { principal: 1000, categoria: 'normal', ron: 1000 } },
   { nome: 'Nao leste ron 2 han 30 fu', entrada: { han: 2, fu: 30, ehDealer: false, tipoVitoria: 'ron', honba: 0 }, esperado: { principal: 2000, categoria: 'normal', ron: 2000 } },
   { nome: 'Nao leste ron 3 han 30 fu', entrada: { han: 3, fu: 30, ehDealer: false, tipoVitoria: 'ron', honba: 0 }, esperado: { principal: 3900, categoria: 'normal', ron: 3900 } },

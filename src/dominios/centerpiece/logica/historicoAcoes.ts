@@ -77,7 +77,7 @@ export function anotarHistorico(antes: Partida, depois: Partida, agora: string):
 }
 
 /** Uma linha extra, sem evento por trás (ex.: Paarenchan alcançado). */
-export function anotarAcao(partida: Partida, entrada: Omit<EntradaHistorico, 'id'>): Partida {
+function anotarAcao(partida: Partida, entrada: Omit<EntradaHistorico, 'id'>): Partida {
   return {
     ...partida,
     historico: [...historicoDe(partida), { ...entrada, id: `x-${entrada.em}-${entrada.tipo}` }],

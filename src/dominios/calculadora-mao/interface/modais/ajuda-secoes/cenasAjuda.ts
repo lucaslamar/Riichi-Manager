@@ -24,12 +24,12 @@ export type NomeCena =
 export type ChamadaCena = 'chii' | 'pon' | 'kanAberto' | 'kanFechado'
 
 /** Pedra da mão, ou número digitado no MPSZ ainda sem naipe ('#1'). */
-export type ItemMaoCena = CodigoPedra
+type ItemMaoCena = CodigoPedra
 
 /** O que a legenda nomeia: uma pedra, um rótulo do app (chave i18n) ou um texto fixo. */
-export type NomeLegenda = { pedra: CodigoPedra } | { chave: string } | { texto: string }
+type NomeLegenda = { pedra: CodigoPedra } | { chave: string } | { texto: string }
 
-export type ChaveLegenda =
+type ChaveLegenda =
   | 'tap'
   | 'tapHand'
   | 'hold'
@@ -71,7 +71,7 @@ export interface QuadroCena {
   legenda: { chave: ChaveLegenda; nome?: NomeLegenda }
 }
 
-export interface CasoCena {
+interface CasoCena {
   /** Nome do caso no seletor (chave i18n); sem ele, a cena tem um caso só. */
   rotulo?: string
   /** O pedaço do teclado que aparece embaixo da mão. */

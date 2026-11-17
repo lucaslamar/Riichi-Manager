@@ -6,10 +6,10 @@
 import { lerVariante } from '@/compartilhado/mahjong/variante'
 import type { Partida } from './partida'
 
-export type FiltroPeriodo = 'mes' | 'ano' | 'tudo'
-export type FiltroOrigem = 'todas' | 'casuais' | 'torneios'
+type FiltroPeriodo = 'mes' | 'ano' | 'tudo'
+type FiltroOrigem = 'todas' | 'casuais' | 'torneios'
 
-export interface FiltrosRanking {
+interface FiltrosRanking {
   periodo: FiltroPeriodo
   origem: FiltroOrigem
 }

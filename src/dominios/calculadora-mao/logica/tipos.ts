@@ -15,7 +15,7 @@ export type Meld =
   | { tipo: 'kanAberto'; pedras: CodigoPedra[] } // kan declarado (aberto)
   | { tipo: 'kanFechado'; pedras: CodigoPedra[] } // kan concealed (fechado)
 
-export interface AgariMeld {
+interface AgariMeld {
   indiceMeld: number
   indicePedra: number
   pedra: CodigoPedra

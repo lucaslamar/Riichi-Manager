@@ -6,7 +6,7 @@ import {
   type RegrasSanma,
 } from '@/compartilhado/mahjong/variante'
 
-export const CHAVE_SANMA = 'mojoca:sanma'
+const CHAVE_SANMA = 'mojoca:sanma'
 
 interface ConfigSanma {
   regras: RegrasSanma
@@ -25,7 +25,7 @@ function ler(): ConfigSanma {
 }
 
 /** Config de Sanma de agora, fora do React (lógica, telas que só leem uma vez). */
-export function lerConfigSanma(): ConfigSanma {
+function lerConfigSanma(): ConfigSanma {
   atual ??= ler()
   return atual
 }

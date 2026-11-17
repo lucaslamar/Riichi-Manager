@@ -12,7 +12,7 @@ export function relogioDaRodada(torneio: Torneio, rodada: RodadaTorneio): Relogi
 }
 
 /** O relógio já foi ligado alguma vez (correndo ou pausado depois de começar). */
-export function relogioComecou(relogio: Relogio | null): boolean {
+function relogioComecou(relogio: Relogio | null): boolean {
   return !!relogio && (relogio.iniciadoEm !== null || relogio.corridoSegundos > 0)
 }
 

@@ -5,7 +5,7 @@
 import { calcularOka, type ConfigMesa } from './configMesa'
 import { valoresDaUma } from './uma'
 
-export interface LinhaExemplo {
+interface LinhaExemplo {
   colocacao: number
   pontos: number
   menosRetorno: number

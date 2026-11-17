@@ -179,7 +179,7 @@ export function chamadasPossiveis(texto: string): Set<Meld['tipo']> {
 }
 
 /** Um grupo ainda sem naipe: números soltos ou uma chamada marcada (`999c`, `1111a`). */
-export interface GrupoPendente {
+interface GrupoPendente {
   digitos: string
   marca: string
 }
@@ -294,7 +294,7 @@ export function interpretarNotacaoCompleta(
 const SUFIXO_KITA = /\+(\d?)(k?)$/
 
 /** Tira o sufixo `+Nk` da notação; `kita` só vem quando o sufixo está completo. */
-export function separarKita(texto: string): { texto: string; kita?: number } {
+function separarKita(texto: string): { texto: string; kita?: number } {
   const achado = texto.match(SUFIXO_KITA)
   if (!achado) return { texto }
   const semSufixo = texto.slice(0, achado.index)

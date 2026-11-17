@@ -48,7 +48,7 @@ export function maiorMao(partida: Partida): { cadeira: Cadeira; patamar: Patamar
   return melhor
 }
 
-export interface ContadoresJogador {
+interface ContadoresJogador {
   riichi: number
   ron: number
   tsumo: number
@@ -79,7 +79,7 @@ export function contadoresDaPartida(partida: Partida): Record<Cadeira, Contadore
   return contadores
 }
 
-export interface LinhaCardMesa {
+interface LinhaCardMesa {
   cadeira: Cadeira
   /** Vento atual (em andamento). */
   vento: Vento

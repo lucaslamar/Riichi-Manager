@@ -160,7 +160,7 @@ export interface Confronto {
 }
 
 /** Mínimo de partidas juntos para entrar em Rivais ou Fregueses. */
-export const MINIMO_CONFRONTO = 2
+const MINIMO_CONFRONTO = 2
 const LIMITE_LISTA = 3
 
 /** Confronto direto do jogador com cada adversário, nas partidas que jogaram juntos. */

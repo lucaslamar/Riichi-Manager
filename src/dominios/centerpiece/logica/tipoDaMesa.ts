@@ -6,7 +6,7 @@
 import { normalizarTexto } from '@/dominios/jogadores/logica/jogadores'
 import type { Partida } from './partida'
 
-export type TipoMesa = 'avulsa' | 'clube' | 'torneio'
+type TipoMesa = 'avulsa' | 'clube' | 'torneio'
 export type FiltroTipoMesa = 'todas' | TipoMesa
 
 export function tipoDaMesa(partida: Pick<Partida, 'vinculoTorneio' | 'encontro'>): TipoMesa {

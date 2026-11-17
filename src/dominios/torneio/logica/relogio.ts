@@ -5,7 +5,7 @@
  */
 import type { Relogio } from './tipos'
 
-export function segundosCorridos(relogio: Relogio, agora: number): number {
+function segundosCorridos(relogio: Relogio, agora: number): number {
   const rodando = relogio.iniciadoEm === null ? 0 : Math.max(0, (agora - relogio.iniciadoEm) / 1000)
   return relogio.corridoSegundos + rodando
 }

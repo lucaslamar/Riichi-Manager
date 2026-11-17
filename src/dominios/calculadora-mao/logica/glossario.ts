@@ -59,7 +59,7 @@ export interface ItemGlossario {
 }
 
 /** Mão de exemplo com um rótulo (link para o verbete) embaixo de cada grupo. */
-export interface MaoExemploGlossario {
+interface MaoExemploGlossario {
   mpsz: string
   rotulos: string[]
 }
@@ -396,7 +396,7 @@ export function correspondeBusca(texto: string, textos: string[], idioma?: Idiom
   return bate(formasDaBusca(texto), textos, indice(idioma).escrita)
 }
 
-export interface ResultadoBuscaGlossario {
+interface ResultadoBuscaGlossario {
   /** Seções com só os itens que batem (todos, se o título da seção bateu). */
   secoes: SecaoGlossario[]
   yakus: Yaku[]
@@ -436,7 +436,7 @@ export function buscarNoGlossario(
   return { secoes, yakus }
 }
 
-export interface TrechoGlossario {
+interface TrechoGlossario {
   texto: string
   negrito: boolean
   /** Presente quando o trecho é um termo a virar link. */

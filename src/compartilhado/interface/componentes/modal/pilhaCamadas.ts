@@ -5,7 +5,7 @@
  */
 const pilha: object[] = []
 
-export interface CamadaEmpilhada {
+interface CamadaEmpilhada {
   noTopo: () => boolean
   remover: () => void
 }

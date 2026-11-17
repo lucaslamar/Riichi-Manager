@@ -15,10 +15,10 @@ import { ContextoNavegacaoModal, type TelaModal } from './navegacaoModal'
 import { empilharCamada } from './pilhaCamadas'
 import './modal.css'
 
-export type TamanhoModal = 'pequena' | 'media' | 'grande'
-export type TomModal = 'padrao' | 'alerta'
+type TamanhoModal = 'pequena' | 'media' | 'grande'
+type TomModal = 'padrao' | 'alerta'
 
-export interface PropsModal {
+interface PropsModal {
   /** Texto do cabeçalho. Também nomeia a modal para leitores de tela. */
   titulo: ReactNode
   /** Linha de apoio abaixo do título (some em telas muito baixas). */
@@ -53,7 +53,7 @@ export interface PropsModal {
   children: ReactNode
 }
 
-export interface PaginacaoModal {
+interface PaginacaoModal {
   total: number
   /** Índice da página aberta, a partir de 0. */
   atual: number

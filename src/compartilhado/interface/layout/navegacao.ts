@@ -9,7 +9,7 @@ import type { TelaPrincipal } from '@/app/App'
 export type DestinoTela = TelaPrincipal | 'aprender'
 export type DestinoNavegacao = DestinoTela | 'idioma'
 
-export interface ItemNavegacao {
+interface ItemNavegacao {
   destino: DestinoNavegacao
   chave: string
   icone: string
@@ -46,7 +46,7 @@ export type SubtelaPartida =
 /** Itens do menu que têm subitens: as abas do módulo de partidas. */
 export type DestinoComSubitens = 'partidas' | 'ranking'
 
-export interface SubitemNavegacao {
+interface SubitemNavegacao {
   tela: SubtelaPartida
   chave: string
   icone: string

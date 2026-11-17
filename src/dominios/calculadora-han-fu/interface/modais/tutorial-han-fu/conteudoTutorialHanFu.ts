@@ -35,7 +35,7 @@ export type BlocoTutorial =
   | { tipo: 'mao'; mpsz: string; rotulos: string[] }
   | { tipo: 'verTabela' }
 
-export interface TopicoComSub {
+interface TopicoComSub {
   texto: string
   sub: string[]
 }
@@ -52,7 +52,7 @@ export interface SecaoTutorial {
  * Página do tutorial: corrida (`blocos`) ou de consulta (`secoes`), com
  * sumário e busca no topo.
  */
-export type PaginaTutorial =
+type PaginaTutorial =
   | { titulo: string; blocos: BlocoTutorial[]; secoes?: undefined }
   | { titulo: string; secoes: SecaoTutorial[]; blocos?: undefined }
 

@@ -2,7 +2,7 @@
  * Compartilha um texto pela folha do sistema (Web Share API) e, sem ela, copia
  * para a área de transferência. No React Native, trocar por `Share.share`.
  */
-export type ResultadoCompartilhar = 'compartilhado' | 'copiado' | 'cancelado' | 'falhou'
+type ResultadoCompartilhar = 'compartilhado' | 'copiado' | 'cancelado' | 'falhou'
 
 export async function compartilharTexto(texto: string, titulo?: string): Promise<ResultadoCompartilhar> {
   if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
