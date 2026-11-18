@@ -19,9 +19,15 @@ import { useAvancoAutomatico } from '../hooks/useAvancoAutomatico'
 import { useYakusLocais } from '@/compartilhado/configuracoes/useYakusLocais'
 import { textoYakuLocal, YAKUS_LOCAIS } from '../../../logica/yakusLocais'
 import type { BlocoAjuda } from '../../modais/ajuda-secoes/topicosAjuda'
-import { bloqueiosDe, locaisQueCombinam, type EstadoCondicoes } from '../../../logica/combinacoesLocais'
+import {
+  bloqueiosDe,
+  locaisQueCombinam,
+  type EstadoCondicoes,
+} from '../../../logica/combinacoesLocais'
 import { textoCombinacoes } from '../../compartilhado/textoCombinacoes'
 import { SeletorVentos, ToggleAgari } from './SeletoresMao'
+import { ContadorOpcao } from './ContadorOpcao'
+import type { CodigoPedra } from '../../../logica/tipos'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
 interface PropsOpcoesMao {
@@ -47,29 +53,10 @@ export default function OpcoesMao({
 }: PropsOpcoesMao) {
   const { t, idioma } = useI18n()
   const { yakusLocais } = useYakusLocais()
-  const condicoesLocais = YAKUS_LOCAIS.filter((yaku) => yaku.situacao && yakusLocais.ativos.includes(yaku.id))
-  // No "?" das Condições especiais: cada yaku local ligado, avisando que é regra da casa.
-  const ajudaLocais: BlocoAjuda[] =
-    condicoesLocais.length === 0
-      ? []
-      : [
-          { subtitulo: 'localYaku.title', divisoria: true },
-          { paragrafos: ['localYaku.conditionsHelp'] },
-          ...condicoesLocais.map((yaku) => {
-            const texto = textoYakuLocal(yaku, idioma)
-            return {
-              subtitulo: `${yaku.nome} (${t('localYaku.localTag')})`,
-              item: true,
-              literal: true,
-              paragrafos: [texto.descricao],
-              // Valor e combinações em letra menor, sem os links do glossário.
-              apoio: [
-                t('localYaku.value', { value: texto.valor }),
-                ...(textoCombinacoes(yaku.id, t, idioma) ? [textoCombinacoes(yaku.id, t, idioma)] : []),
-              ],
-            }
-          }),
-        ]
+  const condicoesLocais = YAKUS_LOCAIS.filter(
+    (yaku) => yaku.situacao && yakusLocais.ativos.includes(yaku.id),
+  )
+  const ajudaLocais = montarAjudaLocais(condicoesLocais, t, idioma)
   const {
     mao,
     atualizarMao,
@@ -120,21 +107,17 @@ export default function OpcoesMao({
     ? pedrasFisicasMao.filter((pedra) => pedra[0] === '0').length
     : 0
   const flamejante = doraFlamejanteAtiva(configuracao)
-  const contarDorasPorIndicadores = (indicadores: typeof mao.dora) =>
-    indicadores.reduce((total, indicador) => {
-      const doraReal = proximaDoraIndicada(indicador, !!mao.sanma)
-      const hanPorDora = flamejante && indicador[0] === '0' ? 2 : 1
-      return (
-        total +
-        pedrasFisicasMao.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length *
-          hanPorDora
-      )
-    }, 0)
-  const dorasPorIndicadores = contarDorasPorIndicadores(mao.dora)
+  const dorasPorIndicadores = contarDorasPorIndicadores(
+    mao.dora,
+    pedrasFisicasMao,
+    !!mao.sanma,
+    flamejante,
+  )
   const dorasAutomaticas = dorasAutomaticasAka + dorasPorIndicadores
   const dorasNaMaoTotal = Math.min(13, dorasAutomaticas + mao.doraManual)
   const dorasReais = useMemo(
-    () => new Set(mao.dora.map((indicador) => codigoBase(proximaDoraIndicada(indicador, !!mao.sanma)))),
+    () =>
+      new Set(mao.dora.map((indicador) => codigoBase(proximaDoraIndicada(indicador, !!mao.sanma)))),
     [mao.dora, mao.sanma],
   )
   const alternarPainelContextual = (painel: 'dora' | 'descartes') => {
@@ -159,15 +142,7 @@ export default function OpcoesMao({
       aoAdicionarPedra={adicionarPedra}
     />
   )
-  const descartesUnicos = mao.descartes.reduce<
-    Array<{ chave: string; pedra: (typeof mao.descartes)[number]; quantidade: number }>
-  >((lista, pedra) => {
-    const chave = codigoBase(pedra)
-    const existente = lista.find((item) => item.chave === chave)
-    if (existente) existente.quantidade += 1
-    else lista.push({ chave, pedra, quantidade: 1 })
-    return lista
-  }, [])
+  const descartesUnicos = agruparDescartes(mao.descartes)
   const honba = Number.isFinite(mao.honba) ? mao.honba : 0
   const mostrarOpcoesTenpai = slotsUsados >= 13
   const modoCenterpiece = !!contextoCenterpiece
@@ -286,6 +261,23 @@ export default function OpcoesMao({
     </section>
   )
 
+  const mudarDoraManual = (variacao: number) =>
+    atualizarMao((rascunho) => {
+      rascunho.doraManual = Math.min(13, Math.max(0, rascunho.doraManual + variacao))
+    })
+  const mudarKita = (variacao: number) =>
+    atualizarMao((rascunho) => {
+      if (!rascunho.sanma) return
+      rascunho.sanma.kita += variacao
+      // Kita antes da vitória: não existe mais Tenhou/Chiihou.
+      if (rascunho.sanma.kita > 0) rascunho.bencao = false
+    })
+  const mudarHonba = (variacao: number) =>
+    atualizarMao((rascunho) => {
+      const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
+      rascunho.honba = Math.min(99, Math.max(0, atual + variacao))
+    })
+
   const secaoHonbaDoras = (
     <section
       className={`grupo-opcoes-mao grupo-opcoes-dora ${classeEtapa(mostrarConfiguracaoBasica)}`}
@@ -299,64 +291,48 @@ export default function OpcoesMao({
           painelContextualAberto === 'dora' ? ' contadores-dora-honba--com-painel' : ''
         }`}
       >
-        <div className="contador-dora-manual">
-          <span className="rotulo-contador-com-ajuda">
-            {t('calculator.manualDora')}
-            <button
-              type="button"
-              className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
-              aria-label={t('calculator.doraUraIndicators')}
-              aria-expanded={painelContextualAberto === 'dora'}
-              aria-pressed={painelContextualAberto === 'dora'}
-              onClick={() => alternarPainelContextual('dora')}
-            >
-              <i className={`fas ${ICONE_INDICADOR_DORA}`} aria-hidden="true" />
-              {mao.dora.length > 0 && (
-                <span className="badge-indicadores-dora">{mao.dora.length}</span>
-              )}
-            </button>
-          </span>
-          <div>
-            <button
-              type="button"
-              aria-label={`${t('calculator.manualDora')} -`}
-              disabled={mao.doraManual <= 0}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.doraManual = Math.max(0, rascunho.doraManual - 1)
-                })
-              }
-            >
-              -
-            </button>
-            <strong>{dorasNaMaoTotal}</strong>
-            <button
-              type="button"
-              aria-label={`${t('calculator.manualDora')} +`}
-              disabled={dorasNaMaoTotal >= 13}
-              onClick={() =>
-                atualizarMao((rascunho) => {
-                  rascunho.doraManual = Math.min(13, rascunho.doraManual + 1)
-                })
-              }
-            >
-              +
-            </button>
-          </div>
-        </div>
+        <ContadorOpcao
+          className="contador-dora-manual"
+          rotulo={
+            <span className="rotulo-contador-com-ajuda">
+              {t('calculator.manualDora')}
+              <button
+                type="button"
+                className={`btn-expandir-indicadores-dora ${painelContextualAberto === 'dora' ? 'ativo' : ''}`}
+                aria-label={t('calculator.doraUraIndicators')}
+                aria-expanded={painelContextualAberto === 'dora'}
+                aria-pressed={painelContextualAberto === 'dora'}
+                onClick={() => alternarPainelContextual('dora')}
+              >
+                <i className={`fas ${ICONE_INDICADOR_DORA}`} aria-hidden="true" />
+                {mao.dora.length > 0 && (
+                  <span className="badge-indicadores-dora">{mao.dora.length}</span>
+                )}
+              </button>
+            </span>
+          }
+          rotuloMenos={`${t('calculator.manualDora')} -`}
+          rotuloMais={`${t('calculator.manualDora')} +`}
+          valor={dorasNaMaoTotal}
+          desabilitarMenos={mao.doraManual <= 0}
+          desabilitarMais={dorasNaMaoTotal >= 13}
+          aoDiminuir={() => mudarDoraManual(-1)}
+          aoAumentar={() => mudarDoraManual(1)}
+        />
 
         {kitaVisivel && mao.sanma && (
-          <ContadorKita
-            kita={mao.sanma.kita}
-            maximo={maximoKita}
-            aoMudar={(kita) =>
-              atualizarMao((rascunho) => {
-                if (!rascunho.sanma) return
-                rascunho.sanma.kita = kita
-                // Kita antes da vitória: não existe mais Tenhou/Chiihou.
-                if (kita > 0) rascunho.bencao = false
-              })
-            }
+          <ContadorOpcao
+            className="contador-dora-manual contador-kita"
+            rotuloGrupo={t('sanma.kitaAria')}
+            rotulo={<span className="rotulo-contador-com-ajuda">{t('sanma.kita')}</span>}
+            rotuloMenos={t('sanma.kitaMenos')}
+            rotuloMais={t('sanma.kitaMais')}
+            valor={mao.sanma.kita}
+            anunciarValor
+            desabilitarMenos={mao.sanma.kita <= 0}
+            desabilitarMais={mao.sanma.kita >= maximoKita}
+            aoDiminuir={() => mudarKita(-1)}
+            aoAumentar={() => mudarKita(1)}
           />
         )}
 
@@ -379,38 +355,17 @@ export default function OpcoesMao({
         )}
 
         {!modoCenterpiece && (
-          <div className="contador-dora-manual contador-honba">
-            <span>{t('calculator.honba')}</span>
-            <div>
-              <button
-                type="button"
-                aria-label={`${t('calculator.honba')} -`}
-                disabled={honba <= 0}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.max(0, atual - 1)
-                  })
-                }
-              >
-                -
-              </button>
-              <strong>{honba}</strong>
-              <button
-                type="button"
-                aria-label={`${t('calculator.honba')} +`}
-                disabled={honba >= 99}
-                onClick={() =>
-                  atualizarMao((rascunho) => {
-                    const atual = Number.isFinite(rascunho.honba) ? rascunho.honba : 0
-                    rascunho.honba = Math.min(99, atual + 1)
-                  })
-                }
-              >
-                +
-              </button>
-            </div>
-          </div>
+          <ContadorOpcao
+            className="contador-dora-manual contador-honba"
+            rotulo={<span>{t('calculator.honba')}</span>}
+            rotuloMenos={`${t('calculator.honba')} -`}
+            rotuloMais={`${t('calculator.honba')} +`}
+            valor={honba}
+            desabilitarMenos={honba <= 0}
+            desabilitarMais={honba >= 99}
+            aoDiminuir={() => mudarHonba(-1)}
+            aoAumentar={() => mudarHonba(1)}
+          />
         )}
       </div>
     </section>
@@ -521,7 +476,9 @@ export default function OpcoesMao({
                   }}
                 />
               </div>
-              {comKita && mao.riichi && <p className="aviso-opcao-indisponivel">{t('sanma.ippatsuKitaAviso')}</p>}
+              {comKita && mao.riichi && (
+                <p className="aviso-opcao-indisponivel">{t('sanma.ippatsuKitaAviso')}</p>
+              )}
             </section>
           )}
           {/* Mão aberta: o Riichi não se aplica. Em vez de a seção sumir, o título
@@ -600,24 +557,25 @@ export default function OpcoesMao({
               {/* Yakus locais de situação, na mesma grade: só os ligados em Regras de
                   cálculo → Yakus locais. O "?" diz quais são regras da casa. */}
               {condicoesLocais.map((yaku) => (
-                    <BotaoToggle
-                      key={yaku.id}
-                      rotulo={yaku.nome}
-                      ativo={!!mao.condicoesLocais?.includes(yaku.id)}
-                      // Não combina com o que está marcado: fica apagado, como o Ippatsu.
-                      desabilitado={
-                        !mao.condicoesLocais?.includes(yaku.id) && bloqueiosDe(yaku.id, estadoCondicoes).length > 0
-                      }
-                      aoClicar={() =>
-                        atualizarMao((rascunho) => {
-                          const atuais = rascunho.condicoesLocais ?? []
-                          rascunho.condicoesLocais = atuais.includes(yaku.id)
-                            ? atuais.filter((id) => id !== yaku.id)
-                            : [...atuais, yaku.id]
-                        })
-                      }
-                    />
-                  ))}
+                <BotaoToggle
+                  key={yaku.id}
+                  rotulo={yaku.nome}
+                  ativo={!!mao.condicoesLocais?.includes(yaku.id)}
+                  // Não combina com o que está marcado: fica apagado, como o Ippatsu.
+                  desabilitado={
+                    !mao.condicoesLocais?.includes(yaku.id) &&
+                    bloqueiosDe(yaku.id, estadoCondicoes).length > 0
+                  }
+                  aoClicar={() =>
+                    atualizarMao((rascunho) => {
+                      const atuais = rascunho.condicoesLocais ?? []
+                      rascunho.condicoesLocais = atuais.includes(yaku.id)
+                        ? atuais.filter((id) => id !== yaku.id)
+                        : [...atuais, yaku.id]
+                    })
+                  }
+                />
+              ))}
             </div>
             {comKita && mao.melds.length === 0 && (
               <p className="aviso-opcao-indisponivel">{t('sanma.tenhouKitaAviso')}</p>
@@ -629,29 +587,60 @@ export default function OpcoesMao({
   )
 }
 
-/** Sanma: quantos Norte foram retirados (Kita), de 0 até o que sobra dos 4 Norte. */
-function ContadorKita({
-  kita,
-  maximo,
-  aoMudar,
-}: {
-  kita: number
-  maximo: number
-  aoMudar: (kita: number) => void
-}) {
-  const { t } = useI18n()
-  return (
-    <div className="contador-dora-manual contador-kita" role="group" aria-label={t('sanma.kitaAria')}>
-      <span className="rotulo-contador-com-ajuda">{t('sanma.kita')}</span>
-      <div>
-        <button type="button" aria-label={t('sanma.kitaMenos')} disabled={kita <= 0} onClick={() => aoMudar(kita - 1)}>
-          -
-        </button>
-        <strong aria-live="polite">{kita}</strong>
-        <button type="button" aria-label={t('sanma.kitaMais')} disabled={kita >= maximo} onClick={() => aoMudar(kita + 1)}>
-          +
-        </button>
-      </div>
-    </div>
+type Traduzir = Parameters<typeof textoCombinacoes>[1]
+
+/** No "?" das Condições especiais: cada yaku local ligado, avisando que é regra da casa. */
+function montarAjudaLocais(
+  condicoesLocais: typeof YAKUS_LOCAIS,
+  traduzir: Traduzir,
+  idioma: string,
+): BlocoAjuda[] {
+  if (condicoesLocais.length === 0) return []
+  return [
+    { subtitulo: 'localYaku.title', divisoria: true },
+    { paragrafos: ['localYaku.conditionsHelp'] },
+    ...condicoesLocais.map((yaku) => {
+      const texto = textoYakuLocal(yaku, idioma)
+      const combinacoes = textoCombinacoes(yaku.id, traduzir, idioma)
+      return {
+        subtitulo: `${yaku.nome} (${traduzir('localYaku.localTag')})`,
+        item: true,
+        literal: true,
+        paragrafos: [texto.descricao],
+        // Valor e combinações em letra menor, sem os links do glossário.
+        apoio: [
+          traduzir('localYaku.value', { value: texto.valor }),
+          ...(combinacoes ? [combinacoes] : []),
+        ],
+      }
+    }),
+  ]
+}
+
+function contarDorasPorIndicadores(
+  indicadores: CodigoPedra[],
+  pedrasFisicas: CodigoPedra[],
+  sanma: boolean,
+  flamejante: boolean,
+) {
+  return indicadores.reduce((total, indicador) => {
+    const doraReal = codigoBase(proximaDoraIndicada(indicador, sanma))
+    const hanPorDora = flamejante && indicador[0] === '0' ? 2 : 1
+    return (
+      total + pedrasFisicas.filter((pedra) => codigoBase(pedra) === doraReal).length * hanPorDora
+    )
+  }, 0)
+}
+
+function agruparDescartes(descartes: CodigoPedra[]) {
+  return descartes.reduce<Array<{ chave: string; pedra: CodigoPedra; quantidade: number }>>(
+    (lista, pedra) => {
+      const chave = codigoBase(pedra)
+      const existente = lista.find((item) => item.chave === chave)
+      if (existente) existente.quantidade += 1
+      else lista.push({ chave, pedra, quantidade: 1 })
+      return lista
+    },
+    [],
   )
 }
