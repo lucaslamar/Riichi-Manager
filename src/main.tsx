@@ -15,6 +15,7 @@ import './compartilhado/interface/estilos/index.css'
 import App from './app/App'
 import { iniciarInstalacao } from './compartilhado/adaptadores/instalacao'
 import { I18nProvider } from './compartilhado/i18n/I18nProvider'
+import { ModoJogoProvider } from './compartilhado/modo-jogo/ModoJogoProvider'
 import { PreferenciasProvider } from './compartilhado/preferencias/PreferenciasProvider'
 import { iniciarArmazenamento } from './services/storage/iniciarArmazenamento'
 
@@ -30,9 +31,11 @@ void iniciarArmazenamento().finally(() =>
   createRoot(elementoRaiz).render(
     <StrictMode>
       <PreferenciasProvider>
-        <I18nProvider>
-          <App />
-        </I18nProvider>
+        <ModoJogoProvider>
+          <I18nProvider>
+            <App />
+          </I18nProvider>
+        </ModoJogoProvider>
       </PreferenciasProvider>
     </StrictMode>,
   ),

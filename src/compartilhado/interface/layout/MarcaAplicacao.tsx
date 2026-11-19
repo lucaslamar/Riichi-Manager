@@ -8,6 +8,8 @@ import {
   suportaTelaCheia,
 } from '@/compartilhado/adaptadores/telaCheia'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { nomeApp } from '@/compartilhado/marca/nome-app'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 
@@ -21,6 +23,7 @@ const DURACAO_DICA_MS = 6000
  */
 export default function MarcaAplicacao() {
   const { t } = useI18n()
+  const { modo } = useModoJogo()
   const [ativa, setAtiva] = useState(estaEmTelaCheia)
   const [instrucaoAberta, setInstrucaoAberta] = useState(false)
   const [dicaVisivel, setDicaVisivel] = useState(false)
@@ -46,7 +49,7 @@ export default function MarcaAplicacao() {
     return () => window.clearTimeout(timer)
   }, [dicaVisivel])
 
-  const nome = t('global.appName')
+  const nome = nomeApp(modo)
   if (!interativa) return <h1 className="titulo-principal">{nome}</h1>
 
   const rotulo = t(ativa ? 'pages.fullscreenExit' : 'pages.fullscreenEnter')
