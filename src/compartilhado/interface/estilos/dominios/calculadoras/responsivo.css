@@ -3853,9 +3853,9 @@
 
   /* ─── Botões de ação da mão (Chi, Pon, Kan, Descarte) ──────────────────── */
   .btn-acao-mao {
-    min-height: 28px !important;
+    min-height: 36px !important;
     padding: 3px 4px !important;
-    font-size: 0.6875rem !important;
+    font-size: 0.8125rem !important;
     line-height: 1.05 !important;
   }
 
