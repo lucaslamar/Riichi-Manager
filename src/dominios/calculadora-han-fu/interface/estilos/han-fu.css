@@ -776,12 +776,12 @@
   }
 
   .seletor-segmentado-han-fu {
-    min-height: 36px;
+    min-height: 42px;
     padding: 3px;
   }
 
   .seletor-segmentado-han-fu button {
-    min-height: 30px;
+    min-height: 36px;
     font-size: 0.78rem;
   }
 
@@ -805,7 +805,7 @@
   }
 
   .controle-han-fu-corpo {
-    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     gap: 5px;
   }
 
@@ -814,7 +814,7 @@
   }
 
   .botao-stepper-han-fu {
-    min-height: 36px;
+    min-height: 44px;
   }
 
   .botao-stepper-han-fu span {
