@@ -44,7 +44,9 @@ function vozMaisNatural(idioma: string) {
   const base = idioma.split('-')[0]
   const doIdioma = vozes.filter((voz) => voz.lang.replace('_', '-').startsWith(base))
   const exato = (voz: SpeechSynthesisVoice) => voz.lang.replace('_', '-') === idioma
+  // A preferida em português: Microsoft Francisca Online (Natural), do Edge.
   const pontos = (voz: SpeechSynthesisVoice) =>
+    (/francisca/i.test(voz.name) ? 8 : 0) +
     (VOZES_NATURAIS.test(voz.name) ? 4 : 0) + (NOMES_FEMININOS.test(voz.name) ? 2 : 0) + (exato(voz) ? 1 : 0)
   return [...doIdioma].sort((a, b) => pontos(b) - pontos(a))[0]
 }
@@ -54,15 +56,15 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechS
 
 /**
  * Fala em voz alta, mesmo sem leitor de tela: a voz mais natural do idioma do app
- * (de preferência feminina), no tom normal e com calma. Sem `speechSynthesis`, não fala.
+ * (de preferência a Francisca), no tom e na velocidade dela. Sem `speechSynthesis`, não fala.
  */
 export function falar(texto: string) {
   if (!texto || !('speechSynthesis' in window)) return
   const idioma = idiomaGlobal()
   const fala = new SpeechSynthesisUtterance(texto)
   fala.lang = idioma
-  fala.pitch = 1.05
-  fala.rate = 0.95
+  fala.pitch = 1
+  fala.rate = 1
   const voz = vozMaisNatural(idioma)
   if (voz) fala.voice = voz
   window.speechSynthesis.cancel()
