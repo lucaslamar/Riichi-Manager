@@ -673,7 +673,20 @@
     "largeTouchTargets": "Área de toque ampliada",
     "largeTouchTargetsHelp": "Aumenta botões e tiles para uso com mais conforto no toque.",
     "versionLine": "Versão {{version}} · Feito por Lucas Lamar",
-    "themeBlue": "Azul"
+    "themeBlue": "Azul",
+    "narration": "Narração por voz",
+    "narrationHelp": "Fala as pedras da mão, chamadas, dora e o resultado. Para pessoas cegas ou com baixa visão.",
+    "narrationSpeed": "Velocidade da fala",
+    "narrationTileNames": "Nomes das pedras",
+    "narrationTilesPt": "Idioma do app",
+    "narrationTilesJa": "Japonês",
+    "narrationOutput": "Saída",
+    "narrationOutputVoice": "Voz do app",
+    "narrationOutputReader": "Só leitor de tela",
+    "narrationOutputHelp": "Com NVDA, TalkBack ou VoiceOver ligado, escolha Só leitor de tela para não ouvir duas vozes.",
+    "narrationNoVoice": "Este navegador não tem voz. Os anúncios vão para o leitor de tela.",
+    "narrationShortcuts": "Atalhos: Alt+M lê a mão, Alt+D lê os últimos descartes, Alt+R repete o último anúncio e Alt+S para a fala.",
+    "narrationTest": "Testar"
   },
   "windDraw": {
     "title": "Sorteador de Ventos",
@@ -2157,5 +2170,23 @@
       "and": "e"
     },
     "count": "{{on}} de {{total}} ligados"
+  },
+  "narration": {
+    "selected": "Selecionou {{tiles}}",
+    "removed": "Removeu {{tiles}}",
+    "hand": "Mão: {{tiles}}",
+    "handEmpty": "Mão vazia",
+    "meld": "{{call}} de {{tiles}}",
+    "dora": "Indicador de dora: {{tiles}}",
+    "uradora": "Indicador de Ura-dora: {{tiles}}",
+    "red": "vermelho",
+    "noHand": "Nenhuma mão nesta tela.",
+    "noDiscards": "Nenhum descarte nesta tela.",
+    "calls": {
+      "chii": "Chi",
+      "pon": "Pon",
+      "kanAberto": "Kan aberto",
+      "kanFechado": "Kan fechado"
+    }
   }
 }

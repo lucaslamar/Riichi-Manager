@@ -667,7 +667,20 @@
     "largeTouchTargets": "タップ領域を拡大",
     "largeTouchTargetsHelp": "ボタンと牌を大きくして、タッチ操作を快適にします。",
     "versionLine": "Version {{version}} · Made by Lucas Lamar",
-    "themeBlue": "ブルー"
+    "themeBlue": "ブルー",
+    "narration": "音声ナレーション",
+    "narrationHelp": "手牌、鳴き、ドラ、結果を読み上げます。視覚に障がいのある方向けです。",
+    "narrationSpeed": "読み上げの速さ",
+    "narrationTileNames": "牌の名前",
+    "narrationTilesPt": "アプリの言語",
+    "narrationTilesJa": "日本語",
+    "narrationOutput": "出力",
+    "narrationOutputVoice": "アプリの音声",
+    "narrationOutputReader": "スクリーンリーダーのみ",
+    "narrationOutputHelp": "NVDA、TalkBack、VoiceOverを使っている場合は、声が重ならないようスクリーンリーダーのみを選んでください。",
+    "narrationNoVoice": "このブラウザには音声がありません。お知らせはスクリーンリーダーに送られます。",
+    "narrationShortcuts": "ショートカット: Alt+Mで手牌、Alt+Dで最近の捨て牌を読み上げ、Alt+Rで直前のお知らせを繰り返し、Alt+Sで読み上げを止めます。",
+    "narrationTest": "テスト"
   },
   "windDraw": {
     "title": "風牌抽選",
@@ -2131,5 +2144,23 @@
       "and": "と"
     },
     "count": "{{total}}件中{{on}}件オン"
+  },
+  "narration": {
+    "selected": "{{tiles}}を選択",
+    "removed": "{{tiles}}を削除",
+    "hand": "手牌: {{tiles}}",
+    "handEmpty": "手牌は空です",
+    "meld": "{{tiles}}の{{call}}",
+    "dora": "ドラ表示牌: {{tiles}}",
+    "uradora": "裏ドラ表示牌: {{tiles}}",
+    "red": "赤",
+    "noHand": "この画面に手牌はありません。",
+    "noDiscards": "この画面に捨て牌はありません。",
+    "calls": {
+      "chii": "チー",
+      "pon": "ポン",
+      "kanAberto": "明槓",
+      "kanFechado": "暗槓"
+    }
   }
 }

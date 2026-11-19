@@ -667,7 +667,20 @@
     "largeTouchTargets": "터치 영역 확대",
     "largeTouchTargetsHelp": "버튼과 패를 크게 해서 터치를 더 편하게 합니다.",
     "versionLine": "Version {{version}} · Made by Lucas Lamar",
-    "themeBlue": "블루"
+    "themeBlue": "블루",
+    "narration": "음성 내레이션",
+    "narrationHelp": "손패, 울기, 도라, 결과를 읽어 줍니다. 시각 장애가 있는 분을 위한 기능입니다.",
+    "narrationSpeed": "말하기 속도",
+    "narrationTileNames": "패 이름",
+    "narrationTilesPt": "앱 언어",
+    "narrationTilesJa": "일본어",
+    "narrationOutput": "출력",
+    "narrationOutputVoice": "앱 음성",
+    "narrationOutputReader": "스크린 리더만",
+    "narrationOutputHelp": "NVDA, TalkBack, VoiceOver를 켰다면 두 목소리가 겹치지 않도록 스크린 리더만을 고르세요.",
+    "narrationNoVoice": "이 브라우저에는 음성이 없습니다. 알림은 스크린 리더로 갑니다.",
+    "narrationShortcuts": "단축키: Alt+M 손패 읽기, Alt+D 최근 버림패 읽기, Alt+R 마지막 알림 반복, Alt+S 말하기 중지.",
+    "narrationTest": "테스트"
   },
   "windDraw": {
     "title": "바람 뽑기",
@@ -2131,5 +2144,23 @@
       "and": "및"
     },
     "count": "{{total}}개 중 {{on}}개 켬"
+  },
+  "narration": {
+    "selected": "{{tiles}} 선택",
+    "removed": "{{tiles}} 제거",
+    "hand": "손패: {{tiles}}",
+    "handEmpty": "빈 손패",
+    "meld": "{{tiles}} {{call}}",
+    "dora": "도라 표시패: {{tiles}}",
+    "uradora": "뒷도라 표시패: {{tiles}}",
+    "red": "적",
+    "noHand": "이 화면에 손패가 없습니다.",
+    "noDiscards": "이 화면에 버림패가 없습니다.",
+    "calls": {
+      "chii": "치",
+      "pon": "퐁",
+      "kanAberto": "명깡",
+      "kanFechado": "암깡"
+    }
   }
 }

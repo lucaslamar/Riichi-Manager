@@ -679,7 +679,20 @@
     "largeTouchTargets": "Área táctil ampliada",
     "largeTouchTargetsHelp": "Agranda botones y fichas para tocarlos con más comodidad.",
     "versionLine": "Version {{version}} · Made by Lucas Lamar",
-    "themeBlue": "Azul"
+    "themeBlue": "Azul",
+    "narration": "Narración por voz",
+    "narrationHelp": "Lee en voz alta las fichas de la mano, las llamadas, el dora y el resultado. Para personas ciegas o con baja visión.",
+    "narrationSpeed": "Velocidad de la voz",
+    "narrationTileNames": "Nombres de las fichas",
+    "narrationTilesPt": "Idioma de la app",
+    "narrationTilesJa": "Japonés",
+    "narrationOutput": "Salida",
+    "narrationOutputVoice": "Voz de la app",
+    "narrationOutputReader": "Solo lector de pantalla",
+    "narrationOutputHelp": "Con NVDA, TalkBack o VoiceOver activado, elige Solo lector de pantalla para no oír dos voces.",
+    "narrationNoVoice": "Este navegador no tiene voz. Los avisos van al lector de pantalla.",
+    "narrationShortcuts": "Atajos: Alt+M lee la mano, Alt+D lee los últimos descartes, Alt+R repite el último aviso y Alt+S detiene la voz.",
+    "narrationTest": "Probar"
   },
   "windDraw": {
     "title": "Sorteo de Vientos",
@@ -2164,5 +2177,23 @@
       "and": "y"
     },
     "count": "{{on}} de {{total}} activados"
+  },
+  "narration": {
+    "selected": "Seleccionó {{tiles}}",
+    "removed": "Quitó {{tiles}}",
+    "hand": "Mano: {{tiles}}",
+    "handEmpty": "Mano vacía",
+    "meld": "{{call}} de {{tiles}}",
+    "dora": "Indicador de dora: {{tiles}}",
+    "uradora": "Indicador de Ura-dora: {{tiles}}",
+    "red": "rojo",
+    "noHand": "No hay mano en esta pantalla.",
+    "noDiscards": "No hay descartes en esta pantalla.",
+    "calls": {
+      "chii": "Chi",
+      "pon": "Pon",
+      "kanAberto": "Kan abierto",
+      "kanFechado": "Kan cerrado"
+    }
   }
 }
