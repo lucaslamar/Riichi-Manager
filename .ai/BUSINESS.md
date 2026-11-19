@@ -29,8 +29,16 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - A pedra da batida é a última da mão. As condições "última pedra" e "kan" mudam de nome conforme ron ou tsumo: Última pedra da parede ou Último descarte, e Batida com reposição do Kan ou Roubar o Kan. As combinações que o GB-Mahjong recusa ficam bloqueadas em `validarMao`.
 - Trocar de modo limpa a mão da calculadora chinesa e pede confirmação só se ela tiver pedras. A mão da calculadora japonesa fica guardada na memória enquanto o modo Chinês está ativo.
 
+### Guia de Bolso, Tutorial e Placar
+
+- Conteúdo do MCR: "Guia do Mahjong Chinês (MCR) para quem já sabe jogar Riichi Mahjong", do Cerrado Mahjong Club, de Juliana Visoni e Gabriel Souza. Os créditos aparecem no Guia de Bolso e no Tutorial. No modo Chinês, os nomes em português dos fan são os do CMC. O PDF de referência deve ficar em `.ai/referencias/GUIA_DO_MAHJONG_CHINES_CMC.pdf`, mas ainda não foi enviado.
+- O guia do CMC numera Duas Quadras Ocultas (双暗杠) como fan 48, com 8 pontos. Na lista oficial do MCR, que o motor segue, ela é a 53 e vale 6. Os dados do guia foram mantidos como vieram até o usuário decidir. O teste `test:fan-mcr` registra essa única divergência.
+- As diferenças para o Riichi (em vermelho no PDF) aparecem com o selo "Diferente do Riichi", usando o token `--texto-aviso`.
+- Placar MCR: anota vitória (vencedor, ron ou tsumo, quem descartou, fan com as flores) ou empate. A mão precisa de 8 fan ou mais. O placar não confere as flores, então o aviso pede que o mínimo seja contado sem elas. Uma partida tem 16 mãos: o dealer passa a cada mão e o vento da rodada muda a cada 4 mãos. As cadeiras não trocam de lugar entre as rodadas no placar. O timer da vez tem 30 segundos por padrão e pode ser desligado.
+
 ### Decisões em aberto
 
 - Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
-- Placar do modo Chinês: o usuário quer que a Nova partida vire só um placar de pontos MCR, com timer da vez e uma tabela de pontos separada da japonesa, mas com os jogadores compartilhados. Ainda não foi feito. Os pontos de mesa 4/2/1/0 do Torneio no MCR também ficam para essa etapa.
+- Pontos de mesa 4/2/1/0 do Torneio no MCR: o Torneio continua só no Riichi.
+- Backup dos placares MCR: ainda não entram no arquivo de backup.
 - Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.
