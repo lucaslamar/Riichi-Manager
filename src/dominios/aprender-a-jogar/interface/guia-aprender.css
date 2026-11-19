@@ -1417,6 +1417,43 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
     --yaku-pedra: 36px;
   }
 
+  /* Capa da Parte em duas colunas: medalha, rank e parte à esquerda, frases à
+     direita, para caber sem rolar. */
+  .guia-coluna:has(> .guia-parte:not(.guia-parte__marco)) {
+    width: min(100%, 760px);
+  }
+
+  .guia-parte:not(.guia-parte__marco) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    column-gap: 32px;
+    align-content: center;
+    justify-items: center;
+  }
+
+  .guia-parte:not(.guia-parte__marco) > * {
+    grid-column: 1;
+  }
+
+  .guia-parte:not(.guia-parte__marco) > .guia-capitulo__frase {
+    grid-column: 2;
+    grid-row: span 2;
+    align-self: center;
+    max-width: none;
+    margin: 0;
+    text-align: left;
+  }
+
+  .guia-parte:not(.guia-parte__marco) > .guia-capitulo__frase + .guia-capitulo__frase {
+    margin-top: 12px;
+  }
+
+  /* Capas de módulo: a frase usa mais da largura deitada. */
+  .guia-capitulo__frase {
+    max-width: 40ch;
+  }
+
   /* Capa do Tutorial em duas colunas: título e Começar à esquerda, Como usar à
      direita, para o Começar aparecer sem rolar. */
   .guia-coluna:has(.guia-capa__como-usar) {

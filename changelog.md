@@ -25,6 +25,7 @@
 - **Jogadores em duas colunas no tablet**: no iPad, em pé ou deitado, a lista de jogadores aproveita a largura com duas colunas, como no celular deitado.
 - **Mesa maior no iPad em pé**: no Centerpiece simples, a mesa ocupa mais da tela do tablet em pé.
 - **Tutorial mais compacto com o celular deitado**: as lições usam o texto e as pedras no tamanho do celular, não do tablet, e cada página rola menos.
+- **Capas das Partes do Tutorial em duas colunas com o celular deitado**: medalha, rank e nome da parte ficam à esquerda e as frases à direita, sem precisar rolar. As frases das capas de módulo também ficaram mais largas.
 - **Menos movimento quando o celular pede**: com a opção de reduzir movimento ligada no sistema, as animações e transições do app ficam desligadas.
 
 - **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.
