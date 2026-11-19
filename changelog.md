@@ -13,6 +13,7 @@
 - **Textos pequenos mais legíveis**: todos os textos da interface têm no mínimo 11px, incluindo a barra inferior, a Han e Fu, a calculadora de mão, o clube e a análise. Só as miniaturas ilustrativas da ajuda e da mesa continuam menores.
 - **Título do topo sem sobrepor o nome do app**: em celulares estreitos, o nome da tela não fica mais por cima de "Riichi Manager" e é encurtado com reticências.
 - **Botões Chi, Pon e Kan maiores no celular deitado**: na Calculadora de Mão em paisagem, a barra de ações ficou mais alta e com texto maior, mais fácil de tocar e de ler.
+- **Nomes inteiros na barra lateral do celular deitado**: a barra de navegação ficou um pouco mais larga, e "Calculadora" e "Centerpiece" não aparecem mais cortados.
 - **Menos movimento quando o celular pede**: com a opção de reduzir movimento ligada no sistema, as animações e transições do app ficam desligadas.
 
 - **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.

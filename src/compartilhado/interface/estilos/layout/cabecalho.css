@@ -519,7 +519,7 @@
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
   :root {
     --altura-barra-inferior: 0px;
-    --largura-trilho: calc(64px + env(safe-area-inset-left, 0px));
+    --largura-trilho: calc(76px + env(safe-area-inset-left, 0px));
   }
 
   .barra-navegacao-inferior {
