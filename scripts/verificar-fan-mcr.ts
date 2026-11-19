@@ -8,11 +8,29 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { contarFan, FANS, ehBatida } from '../src/dominios/calculadora-mao-chinesa/logica/motor/fan'
-import { grupo, TIPO_GRUPO, type Grupo, type MaoGb, type Pedra } from '../src/dominios/calculadora-mao-chinesa/logica/motor/pedras'
+import {
+  grupo,
+  TIPO_GRUPO,
+  type Grupo,
+  type MaoGb,
+  type Pedra,
+} from '../src/dominios/calculadora-mao-chinesa/logica/motor/pedras'
 import { calcularFanMcr } from '../src/dominios/calculadora-mao-chinesa/logica/fan-mcr'
 import { calcularPagamentoMcr } from '../src/dominios/calculadora-mao-chinesa/logica/pontuacao-mcr'
+import { buscarFansMcr, fanMcrPorId, FANS_MCR } from '../src/compartilhado/mahjong/mcr/fans-mcr'
 
-const BASE: Record<string, number> = { m: 1, s: 10, p: 19, E: 28, S: 29, W: 30, N: 31, C: 32, F: 33, P: 34 }
+const BASE: Record<string, number> = {
+  m: 1,
+  s: 10,
+  p: 19,
+  E: 28,
+  S: 29,
+  W: 30,
+  N: 31,
+  C: 32,
+  F: 33,
+  P: 34,
+}
 
 /** Lê a notação do GB-Mahjong: `[123m,1][EEEE]456p...|EE1000|abc`. */
 function lerNotacaoGb(texto: string): { mao: MaoGb; flores: number } {
@@ -28,7 +46,12 @@ function lerNotacaoGb(texto: string): { mao: MaoGb; flores: number } {
       const ids = /[msp]/.test(naipe)
         ? [...corpo.slice(0, -1)].map((c) => BASE[naipe] - 1 + Number(c))
         : [...corpo].map((c) => BASE[c])
-      const tipo = ids.length === 4 ? TIPO_GRUPO.kan : ids[0] === ids[1] ? TIPO_GRUPO.trinca : TIPO_GRUPO.sequencia
+      const tipo =
+        ids.length === 4
+          ? TIPO_GRUPO.kan
+          : ids[0] === ids[1]
+            ? TIPO_GRUPO.trinca
+            : TIPO_GRUPO.sequencia
       const padrao = ids.length === 4 ? 0 : 1
       chamados.push(grupo(tipo, ids[1], oferta ? Number(oferta) : padrao))
       continue
@@ -60,7 +83,9 @@ function lerNotacaoGb(texto: string): { mao: MaoGb; flores: number } {
 }
 
 const nomes = (r: ReturnType<typeof contarFan>, flores: number) => {
-  const lista = r.fans.flatMap(({ chave, vezes }) => Array<string>(vezes).fill(`FAN_${chave.toUpperCase()}`))
+  const lista = r.fans.flatMap(({ chave, vezes }) =>
+    Array<string>(vezes).fill(`FAN_${chave.toUpperCase()}`),
+  )
   lista.push(...Array<string>(flores).fill('FAN_HUAPAI'))
   const ordem = (n: string) => FANS.findIndex(([c]) => `FAN_${c.toUpperCase()}` === n)
   return lista.sort((a, b) => ordem(a) - ordem(b))
@@ -71,27 +96,33 @@ interface Caso {
   expectedNames: string[]
   altExpectedNames: string[] | null
 }
-const casos: Caso[] = JSON.parse(readFileSync(new URL('./dados/casos-fan-mcr.json', import.meta.url), 'utf8'))
+const casos: Caso[] = JSON.parse(
+  readFileSync(new URL('./dados/casos-fan-mcr.json', import.meta.url), 'utf8'),
+)
 let falhas = 0
 for (const caso of casos) {
   const { mao, flores } = lerNotacaoGb(caso.input)
   const obtido = nomes(contarFan(mao), flores)
   const ordem = (n: string) => FANS.findIndex(([c]) => `FAN_${c.toUpperCase()}` === n)
   const esperado = [...caso.expectedNames].sort((a, b) => ordem(a) - ordem(b))
-  const alternativo = caso.altExpectedNames && [...caso.altExpectedNames].sort((a, b) => ordem(a) - ordem(b))
+  const alternativo =
+    caso.altExpectedNames && [...caso.altExpectedNames].sort((a, b) => ordem(a) - ordem(b))
   const ok =
     JSON.stringify(obtido) === JSON.stringify(esperado) ||
     (alternativo !== null && JSON.stringify(obtido) === JSON.stringify(alternativo))
   if (!ok) {
     falhas++
-    console.error(`✗ ${caso.input}\n  esperado ${esperado.join(' ')}\n  obtido   ${obtido.join(' ')}`)
+    console.error(
+      `✗ ${caso.input}\n  esperado ${esperado.join(' ')}\n  obtido   ${obtido.join(' ')}`,
+    )
   }
 }
 assert.equal(falhas, 0, `${falhas} de ${casos.length} casos do GB-Mahjong falharam`)
 console.log(`✓ ${casos.length} casos do GB-Mahjong`)
 
 // Mãos de teste do brief (seção 9).
-const fanDe = (notacao: string, flores = 0) => calcularFanMcr({ ...lerNotacaoGb(notacao).mao }, flores)
+const fanDe = (notacao: string, flores = 0) =>
+  calcularFanMcr({ ...lerNotacaoGb(notacao).mao }, flores)
 const chaves = (r: ReturnType<typeof fanDe>) => r.fans.map((f) => f.chave)
 
 const puro = fanDe('123345567789s11s|EE1000')
@@ -104,10 +135,16 @@ assert.ok(chaves(setePares).includes('qidui'), 'Seven Pairs 24')
 assert.equal(fanDe('19m19s19pESWNCFPP|EE0000').fanSemFlores, 88, 'Thirteen Orphans 88')
 
 const trincas = fanDe('[111m,1][999p,1][777s,2]CCCEE|EE0000')
-assert.ok(chaves(trincas).includes('pengpenghu') && chaves(trincas).includes('jianke'), 'All Pungs + Dragon Pung')
+assert.ok(
+  chaves(trincas).includes('pengpenghu') && chaves(trincas).includes('jianke'),
+  'All Pungs + Dragon Pung',
+)
 
 const seteComFlores = fanDe('[234m,1][567s,1][345p,1]678m22p|EE0000', 2)
-assert.ok(seteComFlores.fanSemFlores < 8 && !seteComFlores.valido, 'Menos de 8 fan sem flores é inválida')
+assert.ok(
+  seteComFlores.fanSemFlores < 8 && !seteComFlores.valido,
+  'Menos de 8 fan sem flores é inválida',
+)
 assert.equal(seteComFlores.fanTotal, seteComFlores.fanSemFlores + 2, 'Flores somam no total')
 
 assert.ok(!ehBatida(lerNotacaoGb('123m456m789m234s56s|EE0000').mao), 'Mão incompleta não bate')
@@ -129,3 +166,41 @@ assert.deepEqual(calcularPagamentoMcr(8, 'tsumo'), {
   ],
 })
 console.log('✓ mãos e pagamentos do brief')
+
+// Dados de exibição do guia do CMC (fans-mcr.ts).
+assert.equal(FANS_MCR.length, 81, '81 fan')
+assert.deepEqual(
+  FANS_MCR.map((fan) => fan.id),
+  Array.from({ length: 81 }, (_, i) => i + 1),
+  'Ids de 1 a 81 em ordem',
+)
+// O guia do CMC numera Duas Quadras Ocultas como 48 e com 8 pontos. No MCR oficial
+// (e no motor) ela é a 53 e vale 6. Pendente de confirmação com o usuário.
+const DIVERGENCIAS_CONHECIDAS = new Set(['双暗杠'])
+const motorPorHanzi = new Map(FANS.map(([, hanzi, pontos]) => [hanzi.replace('钓', '调'), pontos]))
+FANS_MCR.filter((fan) => !DIVERGENCIAS_CONHECIDAS.has(fan.hanzi)).forEach((fan) =>
+  assert.equal(
+    fan.pontos,
+    motorPorHanzi.get(fan.hanzi),
+    `Fan ${fan.id} tem os mesmos pontos no guia e no motor`,
+  ),
+)
+for (const termo of ['清一色', 'full flush', 'chinitsu', '22', 'naipe puro']) {
+  assert.ok(
+    buscarFansMcr(FANS_MCR, termo).some((fan) => fan.id === 22),
+    `"${termo}" encontra o fan 22`,
+  )
+}
+assert.equal(FANS_MCR.filter((fan) => fan.pontos === 88).length, 7, 'Patamar 88 tem 7 fan')
+assert.equal(FANS_MCR.filter((fan) => fan.pontos === 1).length, 13, 'Patamar 1 tem 13 fan')
+assert.deepEqual(
+  FANS_MCR.filter((fan) => fan.categoria === 'esperas').map((fan) => fan.id),
+  [77, 78, 79],
+  'Esperas: 77, 78 e 79',
+)
+FANS_MCR.forEach((fan) =>
+  fan.naoCombina?.forEach((id) =>
+    assert.ok(fanMcrPorId(id), `Fan ${fan.id} não combina com um fan que existe`),
+  ),
+)
+console.log('✓ 81 fan do guia do CMC')
