@@ -35,27 +35,35 @@ export function anunciar(texto: string) {
   }, 100)
 }
 
-const NOMES_FEMININOS = /female|feminina|mulher|maria|luciana|francisca|helena|joana|camila|vitoria|monica|paulina|kyoko|haruka|ayumi|nanami|sayaka|yuna|heami|tingting|xiaoxiao|samantha|zira|aria|jenny|google/i
+/** Vozes neurais (Edge, Chrome, iPhone): bem menos robóticas que as do sistema. */
+const VOZES_NATURAIS = /natural|neural|online|premium|enhanced|aprimorad|google/i
+const NOMES_FEMININOS = /female|feminina|mulher|francisca|thalita|luciana|maria|helena|joana|camila|vitoria|monica|paulina|elvira|kyoko|nanami|sunhi|heami|xiaoxiao|tingting|ona|samantha|aria|jenny|ava/i
 
-function vozFeminina(idioma: string) {
+function vozMaisNatural(idioma: string) {
   const vozes = window.speechSynthesis.getVoices()
   const base = idioma.split('-')[0]
   const doIdioma = vozes.filter((voz) => voz.lang.replace('_', '-').startsWith(base))
-  return doIdioma.find((voz) => NOMES_FEMININOS.test(voz.name)) ?? doIdioma[0]
+  const exato = (voz: SpeechSynthesisVoice) => voz.lang.replace('_', '-') === idioma
+  const pontos = (voz: SpeechSynthesisVoice) =>
+    (VOZES_NATURAIS.test(voz.name) ? 4 : 0) + (NOMES_FEMININOS.test(voz.name) ? 2 : 0) + (exato(voz) ? 1 : 0)
+  return [...doIdioma].sort((a, b) => pontos(b) - pontos(a))[0]
 }
 
+// As vozes chegam depois da abertura no Chrome: pedir já deixa a lista pronta.
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.getVoices()
+
 /**
- * Fala em voz alta, mesmo sem leitor de tela: voz feminina do idioma do app, aguda
- * e um pouco rápida. Sem `speechSynthesis` (alguns navegadores), não fala.
+ * Fala em voz alta, mesmo sem leitor de tela: a voz mais natural do idioma do app
+ * (de preferência feminina), no tom normal e com calma. Sem `speechSynthesis`, não fala.
  */
 export function falar(texto: string) {
   if (!texto || !('speechSynthesis' in window)) return
   const idioma = idiomaGlobal()
   const fala = new SpeechSynthesisUtterance(texto)
   fala.lang = idioma
-  fala.pitch = 1.8
-  fala.rate = 1.1
-  const voz = vozFeminina(idioma)
+  fala.pitch = 1.05
+  fala.rate = 0.95
+  const voz = vozMaisNatural(idioma)
   if (voz) fala.voice = voz
   window.speechSynthesis.cancel()
   window.speechSynthesis.speak(fala)

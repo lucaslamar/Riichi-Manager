@@ -1,6 +1,6 @@
 # Acessibilidade e modo falado
 
-O adaptador `compartilhado/adaptadores/voz.ts` tem duas saídas. `anunciar()` escreve numa região `aria-live` única, lida pelo leitor de tela (TalkBack, VoiceOver). `falar()` usa `speechSynthesis` com voz feminina aguda e fala mesmo sem leitor de tela.
+O adaptador `compartilhado/adaptadores/voz.ts` tem duas saídas. `anunciar()` escreve numa região `aria-live` única, lida pelo leitor de tela (TalkBack, VoiceOver). `falar()` usa `speechSynthesis` com a voz mais natural do aparelho e fala mesmo sem leitor de tela.
 
 Hoje são anunciados: o nome da tela a cada troca, "Mão apagada" ao limpar a mão, o top 3 do Ranking, o tempo da vez de 10 em 10 segundos e a dica e os ventos do Sorteador. O resultado da Calculadora de Mão é sempre falado com `falar()`. O registro de descartes do Centerpiece (Fase 6) deixa a base pronta para anunciar jogadas.
 
