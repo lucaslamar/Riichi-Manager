@@ -310,7 +310,7 @@
   .modal-resultado .rodape-pedras-rotulo {
     flex: 0 0 42px;
     color: var(--resultado-texto-suave);
-    font-size: 0.54rem;
+    font-size: 0.6875rem;
     font-weight: 900;
     letter-spacing: 0.02em;
     text-align: left;

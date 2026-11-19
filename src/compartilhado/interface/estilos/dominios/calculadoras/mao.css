@@ -88,7 +88,7 @@
   background: transparent;
   color: var(--cor-perigo, #ef5350);
   cursor: pointer;
-  font-size: 0.68rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   text-transform: uppercase;
   transition:
@@ -110,7 +110,7 @@
   border: 1px solid currentcolor;
   border-radius: 999px;
   background: var(--cor-superficie, #ffffff);
-  font-size: 0.62rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   line-height: 1;
   text-align: center;
@@ -214,7 +214,7 @@
 .titulo-melds-finalizacao {
   margin: 0;
   color: var(--cor-texto-suave, #64748b);
-  font-size: 0.62rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -248,7 +248,7 @@
   border-radius: 999px;
   background: var(--cor-superficie, #ffffff);
   cursor: pointer;
-  font-size: 0.64rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -257,7 +257,7 @@
   max-width: none;
   min-height: 22px;
   padding: 3px 7px;
-  font-size: 0.58rem;
+  font-size: 0.6875rem;
   white-space: nowrap;
 }
 
@@ -355,7 +355,7 @@ span.chip-pedra {
 
 .rotulo-meld-seletor {
   margin-right: 1px;
-  font-size: 0.58rem;
+  font-size: 0.6875rem;
   font-weight: 900;
 }
 
@@ -552,7 +552,7 @@ span.chip-pedra {
 
 .descartes-contador {
   font-weight: 700;
-  font-size: 0.62rem;
+  font-size: 0.6875rem;
   color: var(--cor-texto-suave, #64748b);
   letter-spacing: 0;
 }
@@ -563,7 +563,7 @@ span.chip-pedra {
   border-radius: 999px;
   background: var(--cor-perigo-suave, #fff5f5);
   color: var(--cor-perigo, #ef4444);
-  font-size: 0.55rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   text-transform: uppercase;
   white-space: nowrap;

@@ -73,13 +73,13 @@
     right: 5px;
     min-height: 20px;
     padding: 1px 5px;
-    font-size: 0.58rem;
+    font-size: 0.6875rem;
   }
   .status-tenpai-mao {
     top: 26px;
     right: 5px;
     padding: 2px 5px;
-    font-size: 0.56rem;
+    font-size: 0.6875rem;
   }
   .seletores-vento-mao {
     display: grid;
@@ -204,7 +204,7 @@
     border-radius: 4px;
     padding: 1px 3px;
     background: color-mix(in srgb, var(--cor-superficie-alt, #f8fafc) 88%, transparent);
-    font-size: 0.52rem;
+    font-size: 0.6875rem;
     line-height: 1;
   }
   .linha-naipe {
@@ -615,7 +615,7 @@
   .rotulo-naipe-teclado {
     display: block;
     margin: 0 0 3px;
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
   }
 
   .linha-naipe {
@@ -675,7 +675,7 @@
     border-radius: 4px;
     padding: 1px 3px;
     background: color-mix(in srgb, var(--cor-superficie-alt, #f8fafc) 88%, transparent);
-    font-size: 0.52rem;
+    font-size: 0.6875rem;
     line-height: 1;
   }
 
@@ -1208,7 +1208,7 @@
 
   .chip-acao-meld-ativa {
     margin-bottom: 3px;
-    font-size: 0.6rem;
+    font-size: 0.6875rem;
   }
 }
 
@@ -1455,7 +1455,7 @@
     left: 2px;
     min-height: 12px;
     border-radius: 4px;
-    font-size: 0.5rem;
+    font-size: 0.6875rem;
     line-height: 12px;
   }
 
@@ -1504,7 +1504,7 @@
     border-width: 1px;
     padding: 2px 6px;
     background: var(--cor-superficie, #ffffff);
-    font-size: 0.56rem;
+    font-size: 0.6875rem;
   }
 }
 
@@ -1713,7 +1713,7 @@
 
 .grupo-opcoes-ventos .botao-vento-finalizacao .label-vento {
   margin-top: 3px;
-  font-size: 0.65rem;
+  font-size: 0.6875rem;
   line-height: 1;
 }
 
@@ -2566,14 +2566,14 @@
   }
 
   .titulo-mao-editor {
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
     line-height: 1.05;
   }
 
   .status-tenpai-cabecalho {
     min-height: 18px;
     padding: 2px 5px;
-    font-size: 0.52rem;
+    font-size: 0.6875rem;
   }
 
   .pedras-selecionadas {
@@ -2633,7 +2633,7 @@
 
   .grupo-indicador-dora span,
   .descartes-selecionados span {
-    font-size: 0.6rem;
+    font-size: 0.6875rem;
   }
 
   .construtor-mao-montagem .acoes-construtor-mao,
@@ -2655,7 +2655,7 @@
     min-height: 28px;
     padding: 3px 4px;
     border-radius: 6px;
-    font-size: 0.64rem;
+    font-size: 0.6875rem;
     line-height: 1.05;
     white-space: nowrap;
   }
@@ -2769,7 +2769,7 @@
   }
 
   .seletor-chii-pendente > span {
-    font-size: 0.58rem;
+    font-size: 0.6875rem;
   }
 
   .opcao-chii-pendente {
@@ -2839,7 +2839,7 @@
     padding: 2px 6px;
     border-radius: 5px;
     background: var(--cor-aviso-suave, #fff7ed);
-    font-size: 0.58rem;
+    font-size: 0.6875rem;
     line-height: 1.15;
     text-align: center;
   }
@@ -2866,7 +2866,7 @@
   }
 
   .resultado-esperas-compacto .resultado-esperas p {
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
     line-height: 1.15;
   }
 
@@ -2906,7 +2906,7 @@
   .barra-resumo-rotulo,
   .barra-resumo-chip,
   .barra-resumo-texto-secundario {
-    font-size: 0.58rem;
+    font-size: 0.6875rem;
   }
 
   .barra-resumo-tile .tile-img {
@@ -2982,7 +2982,7 @@
   .campo-vento-mao span,
   .rotulo-bloco-opcoes,
   .doras-na-mao-rotulo {
-    font-size: 0.64rem;
+    font-size: 0.6875rem;
     line-height: 1.1;
   }
 
@@ -2996,7 +2996,7 @@
     min-height: 36px;
     padding: 4px 6px;
     border-radius: 6px;
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
     line-height: 1.08;
     overflow-wrap: anywhere;
     white-space: normal;
@@ -3016,7 +3016,7 @@
 
   .contador-dora-manual > span {
     min-width: 0;
-    font-size: 0.62rem;
+    font-size: 0.6875rem;
     line-height: 1.05;
   }
 
@@ -3115,7 +3115,7 @@
   }
 
   .btn-vento-pedra small {
-    font-size: 0.52rem;
+    font-size: 0.6875rem;
     line-height: 1.1;
   }
 
@@ -3272,7 +3272,7 @@
 
   .btn-acao-mao {
     min-height: 24px;
-    font-size: 0.58rem;
+    font-size: 0.6875rem;
   }
 
   .layout-finalizacao-calculadora {
@@ -3778,7 +3778,7 @@
     padding: 3px 4px;
     border: 1px solid var(--action-color);
     border-radius: 0;
-    font-size: 0.66rem;
+    font-size: 0.6875rem;
     line-height: 1.05;
   }
 
@@ -3806,7 +3806,7 @@
   .rotulo-naipe-teclado {
     writing-mode: vertical-rl !important;
     text-orientation: mixed !important;
-    font-size: 0.55rem !important;
+    font-size: 0.6875rem !important;
     padding: 2px 1px !important;
     flex-shrink: 0 !important;
   }
@@ -3855,7 +3855,7 @@
   .btn-acao-mao {
     min-height: 28px !important;
     padding: 3px 4px !important;
-    font-size: 0.62rem !important;
+    font-size: 0.6875rem !important;
     line-height: 1.05 !important;
   }
 
@@ -3870,7 +3870,7 @@
     height: 32px !important;
     min-height: 32px !important;
     padding: 3px 7px !important;
-    font-size: 0.68rem !important;
+    font-size: 0.6875rem !important;
   }
 
   .botao-configuracao-teclado {

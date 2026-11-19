@@ -1523,7 +1523,7 @@ body:has(.ptd-modulo) {
 
 .fin-detalhes dt {
   color: var(--texto-apoio);
-  font-size: 0.68rem;
+  font-size: 0.6875rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   text-transform: uppercase;

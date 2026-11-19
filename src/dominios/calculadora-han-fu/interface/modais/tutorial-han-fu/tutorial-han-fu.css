@@ -120,7 +120,7 @@
   border-top: 0;
   background: var(--cor-superficie-alt, #f8fafc);
   color: var(--cor-texto-suave, #607080);
-  font-size: 0.68rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   text-transform: uppercase;
 }

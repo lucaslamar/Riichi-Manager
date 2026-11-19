@@ -233,7 +233,7 @@
   max-width: 100%;
   overflow: hidden;
   color: var(--cor-texto-suave, #607080);
-  font-size: 0.6rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   line-height: 1.1;
   text-overflow: ellipsis;

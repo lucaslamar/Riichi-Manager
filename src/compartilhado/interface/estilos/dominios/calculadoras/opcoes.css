@@ -45,7 +45,7 @@
 
 .btn-vento-pedra small {
   max-width: 100%;
-  font-size: 0.66rem;
+  font-size: 0.6875rem;
   line-height: 1;
   overflow-wrap: anywhere;
   text-align: center;
@@ -323,7 +323,7 @@
   border-radius: 999px;
   background: var(--cor-destaque, #db2777);
   color: var(--cor-sobre-primario, #ffffff);
-  font-size: 0.6rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   line-height: 1;
   pointer-events: none;
@@ -629,7 +629,7 @@
 .barra-resumo-rotulo {
   min-width: 56px;
   color: color-mix(in srgb, var(--cor-texto, #000000) 40%, transparent);
-  font-size: 10px;
+  font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -696,7 +696,7 @@
 }
 
 .barra-resumo-rotulo-meld {
-  font-size: 9px;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: color-mix(in srgb, var(--cor-texto, #000000) 45%, transparent);
@@ -963,7 +963,7 @@
   border-radius: 999px;
   background: var(--cor-destaque, #c0336a);
   color: var(--cor-sobre-primario, #ffffff);
-  font-size: 0.65rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   line-height: 1;
 }

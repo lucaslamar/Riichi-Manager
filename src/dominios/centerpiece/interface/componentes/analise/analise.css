@@ -147,17 +147,17 @@
 .anl-eixo,
 .anl-rotulo {
   fill: var(--texto-apoio);
-  font-size: 9px;
+  font-size: 0.6875rem;
 }
 
 .anl-rotulo {
   fill: var(--texto-principal);
-  font-size: 10px;
+  font-size: 0.6875rem;
 }
 
 .anl-valor {
   fill: var(--texto-principal);
-  font-size: 10px;
+  font-size: 0.6875rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }

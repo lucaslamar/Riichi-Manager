@@ -718,7 +718,7 @@ body.teclado-aberto .clb-enviar {
   padding: 0 6px;
   color: var(--texto-aviso);
   background: var(--cor-aviso-suave, transparent);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 1.5;
