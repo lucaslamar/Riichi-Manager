@@ -10,7 +10,7 @@
 ### Alterado
 
 - **Zoom liberado no celular**: agora dá para ampliar a tela com dois dedos.
-- **Textos pequenos mais legíveis**: os nomes da barra inferior e os rótulos e a tabela rápida da Han e Fu têm no mínimo 11px.
+- **Textos pequenos mais legíveis**: todos os textos da interface têm no mínimo 11px, incluindo a barra inferior, a Han e Fu, a calculadora de mão, o clube e a análise. Só as miniaturas ilustrativas da ajuda e da mesa continuam menores.
 - **Menos movimento quando o celular pede**: com a opção de reduzir movimento ligada no sistema, as animações e transições do app ficam desligadas.
 
 - **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.
