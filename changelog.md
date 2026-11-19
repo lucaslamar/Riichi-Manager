@@ -16,6 +16,7 @@
 - **Nomes inteiros na barra lateral do celular deitado**: a barra de navegação ficou um pouco mais larga, e "Calculadora" e "Centerpiece" não aparecem mais cortados.
 - **Han e Fu mais fácil de tocar no celular deitado**: os botões − e + de Han, Fu e Honba ficaram com área de toque de 44px, e as escolhas Sim/Não e Ron/Tsumo ficaram mais altas.
 - **Dica da mesa legível com a tela deitada**: no Centerpiece simples, "Toque na mesa para ver as ações" não aparece mais com uma palavra por linha ao lado da mesa.
+- **Gatinho inteiro no Sorteador com o celular deitado**: o gatinho do Sorteador de Ventos ficou um pouco menor em paisagem e não é mais cortado na parte de baixo da tela.
 - **Menos movimento quando o celular pede**: com a opção de reduzir movimento ligada no sistema, as animações e transições do app ficam desligadas.
 
 - **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.
