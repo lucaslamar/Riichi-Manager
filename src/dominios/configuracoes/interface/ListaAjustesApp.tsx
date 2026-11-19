@@ -8,6 +8,7 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { CHAVE_LIMITE_DETALHES } from '@/services/storage/armazenamentoDados'
 import { lerLimiteDetalhes } from '@/services/storage/partidaArmazenada'
 import CartaoNarracao from './CartaoNarracao'
+import CartaoModoMahjong from './CartaoModoMahjong'
 import './pagina-regras.css'
 
 const OPCOES_TEMA: { valor: PreferenciaTema; chave: string }[] = [
@@ -64,6 +65,8 @@ export default function ListaAjustesApp({ antesDaTela }: {
           ))}
         </select>
       </div>
+
+      <CartaoModoMahjong />
 
       <div className="cartao-regras cartao-regras--empilhado" role="radiogroup" aria-labelledby={idTituloTema}>
         <i className="fas fa-moon cartao-regras__icone" aria-hidden="true" />

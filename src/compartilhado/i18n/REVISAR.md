@@ -509,3 +509,9 @@ um termo no texto, troque também nos aliases.
 | Aka dora | 적도라 (빨간 5) | Aka dora (raudonas 5) |
 | Nomes descritivos dos yakus (subtítulo) | — (só o nome em hangul) | ex.: "Vien paprasti", "Septynios poros", "Trylika našlaičių" |
 | Yakuhai no Resultado | 장풍 / 자풍 / 연풍패 | Raundo vėjas / Jūsų vėjas / dvigubas vėjas |
+
+## Modo Chinês (MCR): falta traduzir
+
+As seções `configuracoes`, `mcr` e `menu.handCalculatorChinese` estão em português (pt-BR) e
+inglês (en). Em es, ja, ko e lt elas ficaram em inglês, aguardando tradução. No zh-Hans, os
+nomes dos fan (`mcr.fan`) são os originais em chinês e o resto ficou em inglês.
