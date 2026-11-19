@@ -3,6 +3,7 @@ import { anunciar } from '@/compartilhado/adaptadores/voz'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import AtalhosNarracao from '@/compartilhado/interface/narracao/AtalhosNarracao'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
+import { focarTituloTela, ID_TITULO_TELA } from '@/compartilhado/interface/layout/TituloTela'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
 import { ITENS_NAVEGACAO, ORDEM_TELAS, type DestinoComSubitens, type SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
@@ -110,16 +111,24 @@ export default function App() {
     const destino = ORDEM_TELAS[indiceAprender + passo] ?? 'calculadora'
     if (destino !== 'aprender') navegar(destino)
   }
-  // Leitor de tela: diz o nome da tela a cada troca (o guia conta como tela).
+  // Leitor de tela: a cada troca, o foco vai para o título da tela nova (TituloTela).
+  // O guia e as telas sem título no cabeçalho só têm o nome anunciado.
   const { t } = useI18n()
   const telaAnunciada = guia ? 'aprender' : tela
   const ultimaAnunciada = useRef(telaAnunciada)
   useEffect(() => {
     if (ultimaAnunciada.current === telaAnunciada) return
     ultimaAnunciada.current = telaAnunciada
-    const item = ITENS_NAVEGACAO.find(({ destino }) => destino === telaAnunciada)
-    if (item) anunciar(t(item.chave))
-    // Só a troca de tela é anunciada, não a troca de idioma.
+    const espera = window.setTimeout(() => {
+      if (telaAnunciada !== 'aprender' && document.querySelector(`#${ID_TITULO_TELA} .titulo-tela`)) {
+        focarTituloTela()
+        return
+      }
+      const item = ITENS_NAVEGACAO.find(({ destino }) => destino === telaAnunciada)
+      if (item) anunciar(t(item.chave))
+    }, 150)
+    return () => window.clearTimeout(espera)
+    // Só a troca de tela conta, não a troca de idioma.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [telaAnunciada])
 

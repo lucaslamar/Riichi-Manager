@@ -886,3 +886,8 @@ body.teclado-aberto {
 body.teclado-aberto .barra-navegacao-inferior {
   display: none;
 }
+
+/* O título recebe o foco da troca de tela só para o leitor de tela: sem anel visível. */
+.titulo-tela:focus {
+  outline: none;
+}

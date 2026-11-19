@@ -4,7 +4,7 @@ O adaptador `compartilhado/adaptadores/voz.ts` concentra tudo o que o app fala. 
 
 A Narração fica nas Configurações (`configuracoes/interface/CartaoNarracao.tsx`), com liga/desliga, velocidade, saída (voz do app ou só leitor) e nomes das pedras (idioma do app ou japonês). A narração da mão está em `calculadora-mao/interface/narracao/narrarMao.ts`. Os atalhos (Alt+M mão, Alt+D descartes, Alt+R repetir, Alt+S parar) ficam em `compartilhado/interface/narracao/AtalhosNarracao.tsx`. A leitura dos descartes (Alt+D) ainda não tem tela registrada.
 
-Hoje são anunciados: o nome da tela a cada troca, "Mão apagada" ao limpar a mão, o top 3 do Ranking, o tempo da vez de 10 em 10 segundos e a dica e os ventos do Sorteador. O resultado da Calculadora de Mão é sempre falado com `falar()`. O registro de descartes do Centerpiece (Fase 6) deixa a base pronta para anunciar jogadas.
+Troca de tela não é anúncio: o foco vai para o título da tela nova (`focarTituloTela` em `TituloTela.tsx`, só depois do primeiro toque), que o leitor lê, como o `screenChanged` do iPhone e o `accessibilityPaneTitle` do Android. Só o guia, que não tem título no cabeçalho, tem o nome anunciado. Com a Narração na voz do app, o título também é falado. Hoje são anunciados por `aria-live`: "Mão apagada" ao limpar a mão, o top 3 do Ranking, o tempo da vez de 10 em 10 segundos e a dica e os ventos do Sorteador. O resultado da Calculadora de Mão é sempre falado com `falar()`. O registro de descartes do Centerpiece (Fase 6) deixa a base pronta para anunciar jogadas.
 
 ## O que já está pronto
 
