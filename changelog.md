@@ -11,6 +11,7 @@
 
 ### Alterado
 
+- **Cabeçalho mais limpo no celular**: no celular e no tablet em pé, o topo mostra só o nome da tela inteiro (ex.: Calculadora de Mão), sem "Riichi Manager" ao lado cortando o título. O botão de tela cheia virou um ícone à direita, junto da engrenagem.
 - **Zoom liberado no celular**: agora dá para ampliar a tela com dois dedos.
 - **Textos pequenos mais legíveis**: todos os textos da interface têm no mínimo 11px, incluindo a barra inferior, a Han e Fu, a calculadora de mão, o clube e a análise. Só as miniaturas ilustrativas da ajuda e da mesa continuam menores.
 - **Título do topo sem sobrepor o nome do app**: em celulares estreitos, o nome da tela não fica mais por cima de "Riichi Manager" e é encurtado com reticências.

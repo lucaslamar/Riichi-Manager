@@ -645,6 +645,47 @@
   }
 }
 
+/*
+ * Celular e tablet em pé (HIG): com o título da tela, a barra mostra só onde a
+ * pessoa está. O nome do app sai e a tela cheia vira um ícone de 44px à direita,
+ * junto das outras ações.
+ */
+@media not all and (min-width: 1024px) and (orientation: landscape) {
+  .barra-marca-aplicacao:has(.titulo-tela) .marca-aplicacao {
+    order: 2;
+  }
+
+  .barra-marca-aplicacao:has(.titulo-tela) .marca-aplicacao:not(:has(.botao-marca-tela-cheia)),
+  .barra-marca-aplicacao:has(.titulo-tela) .botao-marca-tela-cheia__nome {
+    display: none;
+  }
+
+  .barra-marca-aplicacao:has(.titulo-tela) .botao-marca-tela-cheia {
+    width: 44px;
+    justify-content: center;
+    padding: 0;
+    color: var(--texto-apoio);
+  }
+
+  .barra-marca-aplicacao:has(.titulo-tela) .botao-marca-tela-cheia i {
+    font-size: 1rem;
+  }
+
+  .barra-marca-aplicacao:has(.titulo-tela) .dica-tela-cheia {
+    right: 0;
+    left: auto;
+  }
+
+  .barra-marca-aplicacao .cabecalho-tela > .titulo-tela:first-child {
+    padding-left: 6px;
+    font-size: 1.06rem;
+  }
+
+  .barra-marca-aplicacao .cabecalho-tela > .titulo-tela:first-child::before {
+    content: none;
+  }
+}
+
 /* Sidebar: o título fica logo abaixo da marca, sem empurrar a navegação. */
 @media (min-width: 1024px) and (orientation: landscape) {
   .cabecalho-tela {

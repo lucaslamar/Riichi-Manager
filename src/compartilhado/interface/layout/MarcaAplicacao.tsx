@@ -68,7 +68,9 @@ export default function MarcaAplicacao() {
           title={soInstrucao ? t('pages.installTitle') : rotulo}
           onClick={tocar}
         >
-          <span aria-hidden="true">{nome}</span>
+          <span className="botao-marca-tela-cheia__nome" aria-hidden="true">
+            {nome}
+          </span>
           <i
             className={`fas ${ativa ? 'fa-down-left-and-up-right-to-center' : 'fa-up-right-and-down-left-from-center'}`}
             aria-hidden="true"
