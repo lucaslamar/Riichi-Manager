@@ -725,6 +725,12 @@ button.mesa-domo {
     text-align: right;
   }
 
+  /* A dica se mede pela tela inteira, não pelo quadrado da mesa
+     (o `position: relative` de partida.css encolhia a dica para uma palavra por linha). */
+  .mesa-tela--simples .mesa-centro-tela {
+    position: static;
+  }
+
   /* Botões um embaixo do outro. */
   .mesa-linha-acoes {
     display: flex;
