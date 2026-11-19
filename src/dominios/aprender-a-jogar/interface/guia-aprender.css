@@ -1402,6 +1402,21 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
     font-size: 4rem;
   }
 
+  /* A largura de 768px+ do celular deitado não traz os tamanhos de tablet:
+     texto e pedras de celular, para cada página rolar menos na altura baixa. */
+  .guia-aprender {
+    --guia-margem: 28px;
+  }
+
+  .guia-coluna {
+    font-size: 1.08rem;
+    line-height: 1.6;
+  }
+
+  .guia-mao .yaku-tile {
+    --yaku-pedra: 36px;
+  }
+
   /* Capa do Tutorial em duas colunas: título e Começar à esquerda, Como usar à
      direita, para o Começar aparecer sem rolar. */
   .guia-coluna:has(.guia-capa__como-usar) {
