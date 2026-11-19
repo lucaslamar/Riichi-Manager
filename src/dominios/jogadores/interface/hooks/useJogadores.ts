@@ -16,6 +16,7 @@ import {
 import { carregarJogadores, salvarJogadores } from '../../persistencia/repositorioJogadores'
 import { lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { lerTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
+import { lerPlacaresMcr } from '@/dominios/placar-mcr/interface/usePlacaresMcr'
 
 /**
  * Cadastro único para o app inteiro: um jogador criado no SeletorJogador já
@@ -69,13 +70,14 @@ export const acoesJogadores = {
   },
 }
 
-/** Quem aparece em alguma partida ou torneio: esses não somem com os pré-cadastrados. */
+/** Quem aparece em alguma partida, torneio ou placar MCR: esses não somem com os pré-cadastrados. */
 function idsEmUso(): Set<string> {
   const ids = new Set<string>()
   for (const partida of lerPartidas()) {
     for (const assento of Object.values(partida.assentos)) ids.add(assento.jogadorId)
   }
   for (const torneio of lerTorneios().torneios) torneio.jogadorIds.forEach((id) => ids.add(id))
+  for (const placar of lerPlacaresMcr()) placar.jogadorIds.forEach((id) => ids.add(id))
   return ids
 }
 

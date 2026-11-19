@@ -30,7 +30,9 @@
     "backToMain": "Back to the main options",
     "handCalculatorChinese": "Chinese Hand Calculator",
     "pocketGuideMcr": "Pocket Guide",
-    "pocketGuideMcrShort": "Guide"
+    "pocketGuideMcrShort": "Guide",
+    "scoreMcr": "Scoreboard",
+    "scoreMcrShort": "Score"
   },
   "actions": {
     "back": "Volver",
@@ -2395,6 +2397,66 @@
       "exemploTsumo": "Tsumo, {{pontos}} pts",
       "pagaRon": "Discarder {{descartador}}, the others {{outro}} and {{outro}}",
       "pagaTsumo": "Each pays {{valor}}"
+    }
+  },
+  "placar": {
+    "mcr": {
+      "novaPartida": "New game",
+      "vazio": "No games yet. Start one to keep score.",
+      "escolherJogador": "Choose player",
+      "jogadorRemovido": "Removed player",
+      "faltamJogadores": "Choose all four players to start.",
+      "timer": "Turn timer",
+      "timerDesligado": "No timer",
+      "segundos": "{{segundos}}s",
+      "comecar": "Start game",
+      "emAndamento": "In progress",
+      "finalizada": "Game finished",
+      "qtdMaos": {
+        "one": "{{count}} hand",
+        "few": "{{count}} hands",
+        "many": "{{count}} hands",
+        "other": "{{count}} hands"
+      },
+      "maoDe": "Hand {{mao}} of {{total}}",
+      "rodadaDealer": "{{vento}} round · dealer: {{dealer}}",
+      "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
+      "dealer": "dealer",
+      "lugar": "#{{lugar}}",
+      "passarVezPara": "Pass the turn to {{nome}}",
+      "comecarVez": "Start turn",
+      "proximaVez": "Next turn",
+      "pausar": "Pause",
+      "retomar": "Resume",
+      "registrarVitoria": "Record win",
+      "empate": "Draw",
+      "maos": "Hands",
+      "semMaos": "No hands recorded.",
+      "historicoEmpate": "Draw",
+      "historicoTsumo": "{{nome}} won by tsumo · {{fan}} fan",
+      "historicoRon": "{{nome}} won by ron from {{descartador}} · {{fan}} fan",
+      "voltarLista": "Back to list",
+      "desfazer": "Undo last hand",
+      "finalizar": "Finish game",
+      "excluir": "Delete game",
+      "confirmarDesfazer": "Undo the last recorded hand?",
+      "confirmarFinalizar": "Finish the game? You won't be able to record more hands.",
+      "confirmarExcluir": "Delete this game? This can't be undone.",
+      "vencedor": "Winner",
+      "descartador": "Discarder",
+      "fan": "Hand points (fan)",
+      "fanAjuda": "Include flowers here. The 8 minimum doesn't count flowers.",
+      "menosFan": "One fan less",
+      "maisFan": "One fan more",
+      "salvarMao": "Save hand",
+      "previa": "Points for this hand",
+      "delta": "{{pontos}}",
+      "erros": {
+        "fanMinimo": "The hand needs at least 8 fan.",
+        "semDescartador": "Choose who discarded.",
+        "descartadorVencedor": "The winner can't be the discarder."
+      },
+      "nenhumaMao": "no hands"
     }
   }
 }

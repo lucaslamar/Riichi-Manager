@@ -96,7 +96,7 @@ const OCULTAS_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set([
 ])
 
 /** Telas que só existem no modo Chinês. */
-const SO_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set(['guiaBolso'])
+const SO_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set(['guiaBolso', 'placarMcr'])
 
 /** O Guia de Bolso do Riichi fica dentro da Calculadora de Mão; o do MCR é uma tela. */
 const ITEM_GUIA_BOLSO_MCR: ItemNavegacao = {
@@ -118,18 +118,28 @@ const NAVEGACAO_RIICHI: NavegacaoDoModo = { paginas: PAGINAS_NAVEGACAO, itens: I
 const paraMcr = (item: ItemNavegacao): ItemNavegacao =>
   item.destino === 'calculadora' ? { ...item, chave: 'menu.handCalculatorChinese' } : item
 
-const comGuiaBolso = (itens: ItemNavegacao[]) => [itens[0], ITEM_GUIA_BOLSO_MCR, ...itens.slice(1)]
+/** Placar MCR: só os pontos, no lugar da Mesa partida do Riichi. */
+const ITEM_PLACAR_MCR: ItemNavegacao = {
+  destino: 'placarMcr',
+  chave: 'menu.scoreMcr',
+  icone: 'fa-gamepad',
+  chaveCurta: 'menu.scoreMcrShort',
+}
 
-const PAGINA_MCR = comGuiaBolso(
+const comExtrasMcr = (itens: ItemNavegacao[]) => [itens[0], ITEM_PLACAR_MCR, ITEM_GUIA_BOLSO_MCR, ...itens.slice(1)]
+
+const ITENS_BARRA_MCR = comExtrasMcr(
   PAGINAS_NAVEGACAO.flat()
     .filter((item) => !OCULTAS_NO_MCR.has(item.destino))
     .map(paraMcr),
 )
+/** Quatro telas por página na barra, como no Riichi: o Tutorial fica na segunda. */
+const PAGINAS_MCR = [ITENS_BARRA_MCR.slice(0, 4), ITENS_BARRA_MCR.slice(4)]
 
 const NAVEGACAO_MCR: NavegacaoDoModo = {
-  paginas: [PAGINA_MCR],
-  itens: comGuiaBolso(ITENS_NAVEGACAO.filter((item) => !OCULTAS_NO_MCR.has(item.destino)).map(paraMcr)),
-  ordem: PAGINA_MCR.flatMap(({ destino }) => (destino === 'idioma' ? [] : [destino])),
+  paginas: PAGINAS_MCR,
+  itens: comExtrasMcr(ITENS_NAVEGACAO.filter((item) => !OCULTAS_NO_MCR.has(item.destino)).map(paraMcr)),
+  ordem: ITENS_BARRA_MCR.flatMap(({ destino }) => (destino === 'idioma' ? [] : [destino])),
 }
 
 export function navegacaoDoModo(modo: ModoJogo): NavegacaoDoModo {

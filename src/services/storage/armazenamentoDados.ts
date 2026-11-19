@@ -37,6 +37,7 @@ export const CHAVES_DE_DADOS: readonly string[] = [
   'riichi-manager-ranking-filtros',
   'riichi-manager-eu',
   CHAVE_LIMITE_DETALHES,
+  'riichi-manager-placares-mcr',
 ]
 
 /** Marca no banco: a cópia do localStorage já foi feita e conferida. */

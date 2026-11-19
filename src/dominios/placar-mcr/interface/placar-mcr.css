@@ -1,0 +1,206 @@
+.placar-mcr {
+  display: grid;
+  width: 100%;
+  max-width: 760px;
+  gap: 16px;
+  margin: 0 auto;
+  padding: 16px;
+  color: var(--cor-texto, #1a3a5a);
+}
+
+.placar-mcr .card {
+  margin-bottom: 0;
+  padding: 16px;
+}
+
+.placar-mcr__aberto,
+.placar-mcr__secao,
+.placar-mcr__formulario {
+  display: grid;
+  gap: 12px;
+}
+
+.placar-mcr__titulo {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.placar-mcr__rotulo {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.placar-mcr__ajuda {
+  margin: 0;
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.875rem;
+}
+
+.placar-mcr__erro {
+  margin: 0;
+  color: var(--texto-aviso);
+  font-weight: 700;
+}
+
+.placar-mcr__cadeiras,
+.placar-mcr__jogadores {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.placar-mcr__cadeira {
+  flex-direction: column;
+  min-height: 64px;
+  text-transform: none;
+}
+
+.placar-mcr__jogador {
+  position: relative;
+  display: grid;
+  min-height: 96px;
+  gap: 2px;
+  border: 2px solid var(--cor-borda, #e2e8f0);
+  border-radius: 12px;
+  padding: 10px;
+  background: var(--cor-superficie, #fff);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.placar-mcr__jogador:disabled {
+  cursor: default;
+}
+
+.placar-mcr__jogador--vez {
+  border-color: var(--cor-primario, #2196f3);
+}
+
+.placar-mcr__vento,
+.placar-mcr__lugar {
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.85rem;
+}
+
+.placar-mcr__nome {
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placar-mcr__jogador--vez .placar-mcr__nome {
+  padding-right: 56px;
+}
+
+.placar-mcr__total {
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.placar-mcr__timer {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: var(--cor-primario, #2196f3);
+  color: var(--cor-sobre-primario, #fff);
+  font-size: 0.9rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.placar-mcr__jogador--esgotado {
+  border-color: var(--texto-aviso);
+}
+
+.placar-mcr__timer--esgotado {
+  background: var(--texto-aviso);
+}
+
+.placar-mcr__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.placar-mcr__acoes > * {
+  flex: 1 1 140px;
+}
+
+.placar-mcr__fan {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.placar-mcr__fan input {
+  width: 6ch;
+  min-height: 44px;
+  border: 1px solid var(--cor-borda-controle, #999);
+  border-radius: 8px;
+  background: var(--cor-superficie, #fff);
+  color: inherit;
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.placar-mcr__passo {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.placar-mcr__previa,
+.placar-mcr__lista,
+.placar-mcr__historico {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.placar-mcr__previa li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.placar-mcr__historico {
+  padding-left: 20px;
+  list-style: decimal;
+}
+
+.placar-mcr__historico li {
+  display: grid;
+  gap: 2px;
+  border-bottom: 1px solid var(--cor-borda, #e2e8f0);
+  padding: 6px 0;
+}
+
+.placar-mcr__deltas,
+.placar-mcr__resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.placar-mcr__item {
+  display: grid;
+  width: 100%;
+  gap: 6px;
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
