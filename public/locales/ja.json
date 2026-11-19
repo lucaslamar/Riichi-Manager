@@ -185,7 +185,9 @@
       "other": "{{count}}符"
     },
     "yakumanShort": "{{count}}倍役満",
-    "pocketGuide": "ひつじのポケットガイド"
+    "pocketGuide": "ひつじのポケットガイド",
+    "handCleared": "手牌を消去しました",
+    "spokenPoints": "{{points}}点"
   },
   "hanFu": {
     "isDealer": "親ですか？",
@@ -1482,7 +1484,9 @@
           "other": "{{count}}局"
         },
         "empty": "他のプレイヤーともっと対局すると対戦成績が表示されます。"
-      }
+      },
+      "spokenPlace": "{{place}}位: {{name}}、{{points}}点",
+      "spokenTop": "ランキング上位3人: {{list}}"
     },
     "fromMatch": {
       "title": "対局からのデータ",

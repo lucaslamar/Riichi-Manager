@@ -197,7 +197,9 @@
       "other": "{{count}} fu"
     },
     "yakumanShort": "{{count}}× YM",
-    "pocketGuide": "Avytės kišeninis vadovas"
+    "pocketGuide": "Avytės kišeninis vadovas",
+    "handCleared": "Ranka išvalyta",
+    "spokenPoints": "{{points}} taškų"
   },
   "hanFu": {
     "isDealer": "Ar dalintojas?",
@@ -1548,7 +1550,9 @@
           "other": "{{count}} partijų"
         },
         "empty": "Sužaiskite daugiau partijų su kitais žaidėjais, kad pamatytumėte akistatas."
-      }
+      },
+      "spokenPlace": "{{place}} vieta: {{name}}, {{points}} taškų",
+      "spokenTop": "Reitingo trejetukas: {{list}}"
     },
     "fromMatch": {
       "title": "Partijos duomenys",

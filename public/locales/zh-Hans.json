@@ -185,7 +185,9 @@
       "other": "{{count}} 符"
     },
     "yakumanShort": "{{count}}倍役满",
-    "pocketGuide": "小羊口袋指南"
+    "pocketGuide": "小羊口袋指南",
+    "handCleared": "手牌已清空",
+    "spokenPoints": "{{points}}点"
   },
   "hanFu": {
     "isDealer": "是庄家吗？",
@@ -1482,7 +1484,9 @@
           "other": "{{count}} 局"
         },
         "empty": "与其他玩家多打几局即可查看对战数据。"
-      }
+      },
+      "spokenPlace": "第{{place}}名: {{name}}，{{points}}点",
+      "spokenTop": "排行榜前三: {{list}}"
     },
     "fromMatch": {
       "title": "来自对局的数据",

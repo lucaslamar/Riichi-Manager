@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { falar, pararFala } from '@/compartilhado/adaptadores/voz'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import {
@@ -9,7 +10,7 @@ import {
 } from '../../../logica/mao'
 import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
-import ExibicaoCompleta, { TagsVentos, VentosPagamento, ventosDosDemais } from './ExibicaoCompleta'
+import ExibicaoCompleta, { falaDoResultado, TagsVentos, VentosPagamento, ventosDosDemais } from './ExibicaoCompleta'
 
 import { consumirDestaque, destaqueDoYaku } from './destaqueYaku'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
@@ -65,6 +66,13 @@ export default function ModalResultado({
   const pedrasFechadas = mao.agariMeld
     ? mao.pedras
     : mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
+
+  // O resultado sempre é falado ao abrir, com ou sem leitor de tela.
+  useEffect(() => {
+    falar(alerta ? descricaoAcessivel : falaDoResultado(resultado, mao.ventoAssento, t, numero))
+    return pararFala
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const titulo = maoInvalida
     ? t('calculator.noYakuTitle')

@@ -189,7 +189,9 @@
       "other": "{{count}} fu"
     },
     "yakumanShort": "{{count}}× YM",
-    "pocketGuide": "Little Sheep pocket guide"
+    "pocketGuide": "Little Sheep pocket guide",
+    "handCleared": "Hand cleared",
+    "spokenPoints": "{{points}} points"
   },
   "hanFu": {
     "isDealer": "Dealer?",
@@ -1504,7 +1506,9 @@
           "other": "{{count}} games"
         },
         "empty": "Play more games with other players to see head-to-head stats."
-      }
+      },
+      "spokenPlace": "Place {{place}}: {{name}}, {{points}} points",
+      "spokenTop": "Ranking top 3: {{list}}"
     },
     "fromMatch": {
       "title": "Data from the match",

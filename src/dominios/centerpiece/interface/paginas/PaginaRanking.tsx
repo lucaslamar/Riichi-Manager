@@ -1,4 +1,5 @@
-import { useState, type KeyboardEvent } from 'react'
+import { useEffect, useState, type KeyboardEvent } from 'react'
+import { anunciar } from '@/compartilhado/adaptadores/voz'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
@@ -50,6 +51,22 @@ export default function PaginaRanking({
   const indiceEu = linhas.findIndex((linha) => linha.jogadorId === euId)
 
   const nomesDe = (id: string) => nomesNoRanking(jogadores.find((item) => item.id === id))
+
+  // Leitor de tela: os 3 primeiros ao abrir e quando mudam (ex.: filtro).
+  const top3 = linhas
+    .slice(0, 3)
+    .map((linha, indice) =>
+      t('match.ranking.spokenPlace', {
+        place: posicoes[indice],
+        name: nomesDe(linha.jogadorId).principal,
+        points: numero(linha.pontuacaoTotal),
+      }),
+    )
+    .join('. ')
+  useEffect(() => {
+    if (top3) anunciar(t('match.ranking.spokenTop', { list: top3 }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [top3])
   /** Texto curto de cada filtro ativo, para o chip removível. */
   const textoDoChip = (ativo: (typeof ativos)[number]) => {
     switch (ativo) {

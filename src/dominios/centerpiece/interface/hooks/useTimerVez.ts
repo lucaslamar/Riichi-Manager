@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { tocarAlarme } from '@/compartilhado/adaptadores/alarme'
 import { vibrar } from '@/compartilhado/adaptadores/vibracao'
+import { anunciar } from '@/compartilhado/adaptadores/voz'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { jogadoresNaMesa, type Cadeira, type Partida } from '../../logica/partida'
 import {
   milissegundosRestantes,
@@ -67,6 +69,16 @@ export function useRelogioVez(
     return () => window.clearInterval(intervalo)
   }, [contando])
 
+  // Leitor de tela: o tempo que resta de 10 em 10 segundos.
+  const { t } = useI18n()
+  const segundos = Math.ceil(milissegundosRestantes(vez, agora) / 1000)
+  useEffect(() => {
+    if (contando && segundos > 0 && segundos % 10 === 0) {
+      anunciar(t('match.timer.remaining', { seconds: segundos }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [segundos])
+
   const silenciar = useRef(alarmeUmaVez)
   silenciar.current = alarmeUmaVez
   useEffect(() => {
@@ -102,7 +114,7 @@ export function useRelogioVez(
     ligado: segundosTotais > 0,
     contando,
     esgotado,
-    segundos: Math.ceil(milissegundosRestantes(vez, agora) / 1000),
+    segundos,
     fracao: segundosTotais > 0 ? milissegundosRestantes(vez, agora) / (segundosTotais * 1000) : 0,
     tocar: () => atualizarVez((atual) => tocarTimer(atual, segundosTotais, Date.now(), jogadores)),
     reiniciar: () => atualizarVez((atual) => reiniciarVez(atual, segundosTotais, Date.now())),

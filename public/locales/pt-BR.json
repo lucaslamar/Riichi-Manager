@@ -189,7 +189,9 @@
       "other": "{{count}} fu"
     },
     "yakumanShort": "{{count}}× YM",
-    "pocketGuide": "Guia de bolso da Ovelhinha"
+    "pocketGuide": "Guia de bolso da Ovelhinha",
+    "handCleared": "Mão apagada",
+    "spokenPoints": "{{points}} pontos"
   },
   "hanFu": {
     "isDealer": "É oya?",
@@ -1504,7 +1506,9 @@
           "other": "{{count}} partidas"
         },
         "empty": "Jogue mais partidas com outros jogadores para ver confrontos."
-      }
+      },
+      "spokenPlace": "{{place}}º lugar: {{name}}, {{points}} pontos",
+      "spokenTop": "Top 3 do ranking: {{list}}"
     },
     "fromMatch": {
       "title": "Dados vindos da partida",

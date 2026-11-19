@@ -185,7 +185,9 @@
       "other": "{{count}}부"
     },
     "yakumanShort": "{{count}}배 역만",
-    "pocketGuide": "아기 양의 포켓 가이드"
+    "pocketGuide": "아기 양의 포켓 가이드",
+    "handCleared": "손패를 지웠습니다",
+    "spokenPoints": "{{points}}점"
   },
   "hanFu": {
     "isDealer": "친인가요?",
@@ -1482,7 +1484,9 @@
           "other": "{{count}}국"
         },
         "empty": "다른 플레이어와 더 대국하면 상대 전적이 보입니다."
-      }
+      },
+      "spokenPlace": "{{place}}위: {{name}}, {{points}}점",
+      "spokenTop": "랭킹 상위 3명: {{list}}"
     },
     "fromMatch": {
       "title": "대국에서 가져온 정보",

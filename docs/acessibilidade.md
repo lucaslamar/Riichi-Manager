@@ -1,6 +1,8 @@
 # Acessibilidade e modo falado
 
-O app ainda não fala: não há `speechSynthesis` nem anúncios automáticos de jogadas. O registro de descartes do Centerpiece (Fase 6) deixa a base pronta para esse módulo.
+O adaptador `compartilhado/adaptadores/voz.ts` tem duas saídas. `anunciar()` escreve numa região `aria-live` única, lida pelo leitor de tela (TalkBack, VoiceOver). `falar()` usa `speechSynthesis` com voz feminina aguda e fala mesmo sem leitor de tela.
+
+Hoje são anunciados: o nome da tela a cada troca, "Mão apagada" ao limpar a mão, o top 3 do Ranking, o tempo da vez de 10 em 10 segundos e a dica e os ventos do Sorteador. O resultado da Calculadora de Mão é sempre falado com `falar()`. O registro de descartes do Centerpiece (Fase 6) deixa a base pronta para anunciar jogadas.
 
 ## O que já está pronto
 
@@ -19,7 +21,7 @@ Tudo em `logica/` é TypeScript puro e pode ser copiado para o React Native.
 
 ## O que falta para o modo falado
 
-- Adaptador de voz (`falar()`), no mesmo padrão de `tocarAlarme()` e `vibrar()`, com implementação para a web e para o React Native.
+- Implementação de `voz.ts` para o React Native.
 - Decidir o que é anunciado sozinho (batida, Riichi, descarte, troca de vez) e o que só é lido a pedido.
 - Ler a mão informada e o estado de furiten sob demanda.
 - Entrada por voz, se fizer sentido.

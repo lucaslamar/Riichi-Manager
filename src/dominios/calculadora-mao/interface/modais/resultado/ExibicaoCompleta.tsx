@@ -49,6 +49,27 @@ function pagamentos(
   ]
 }
 
+/** Resultado por extenso para a voz: patamar, han e fu, total e quanto cada um paga. */
+export function falaDoResultado(
+  resultado: any,
+  ventoVencedor: VentoMao | undefined,
+  traduzir: (chave: string, parametros?: Record<string, string | number>) => string,
+  numero: (valor: number) => string,
+) {
+  const patamar = resultado.nome ? chavePatamar(resultado.nome) : null
+  return [
+    traduzir('calculator.result'),
+    patamar ? traduzir(patamar.chave, patamar.parametros) : resultado.nome,
+    resultado.yakuman > 0
+      ? traduzir('hanFu.limitYakumanTimes', { count: resultado.yakuman })
+      : traduzir('calculator.hanFuSummary', { han: resultado.han, fu: resultado.fu }),
+    traduzir('calculator.spokenPoints', { points: numero(resultado.pontos.total) }),
+    ...pagamentos(resultado, ventoVencedor).map(({ chave, valor }) => `${traduzir(chave)} ${numero(valor)}`),
+  ]
+    .filter(Boolean)
+    .join('. ')
+}
+
 /** Pedras dos ventos de quem paga ou recebe, ao lado da frase (resultado e chombo). */
 export function VentosPagamento({ ventos }: { ventos: VentoMao[] }) {
   if (ventos.length === 0) return null

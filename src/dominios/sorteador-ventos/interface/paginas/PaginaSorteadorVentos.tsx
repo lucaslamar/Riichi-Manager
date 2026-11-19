@@ -168,12 +168,20 @@ export default function PaginaSorteadorVentos({
       )}
 
       <p className="sr-only" aria-live="polite">
-        {revelado && ultimoRevelado
-          ? t('windDraw.playerWind', {
-              player: reveladas,
-              wind: t(chaveNomeVento(ultimoRevelado)),
-            })
-          : ''}
+        {/* O mesmo que o balão: a dica de tocar para sortear e cada vento sorteado. */}
+        {[
+          fase === 'desacelerando' ? '' : fala,
+          dica,
+          concluido
+            ? ventosRevelados
+                .map((vento, indice) =>
+                  t('windDraw.playerWind', { player: indice + 1, wind: t(chaveNomeVento(vento)) }),
+                )
+                .join('. ')
+            : '',
+        ]
+          .filter(Boolean)
+          .join('. ')}
       </p>
     </section>
   )

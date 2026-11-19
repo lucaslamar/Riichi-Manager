@@ -1,8 +1,10 @@
-import { lazy, Suspense, useCallback, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { anunciar } from '@/compartilhado/adaptadores/voz'
+import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
-import { ORDEM_TELAS, type DestinoComSubitens, type SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
+import { ITENS_NAVEGACAO, ORDEM_TELAS, type DestinoComSubitens, type SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
 import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
@@ -107,6 +109,19 @@ export default function App() {
     const destino = ORDEM_TELAS[indiceAprender + passo] ?? 'calculadora'
     if (destino !== 'aprender') navegar(destino)
   }
+  // Leitor de tela: diz o nome da tela a cada troca (o guia conta como tela).
+  const { t } = useI18n()
+  const telaAnunciada = guia ? 'aprender' : tela
+  const ultimaAnunciada = useRef(telaAnunciada)
+  useEffect(() => {
+    if (ultimaAnunciada.current === telaAnunciada) return
+    ultimaAnunciada.current = telaAnunciada
+    const item = ITENS_NAVEGACAO.find(({ destino }) => destino === telaAnunciada)
+    if (item) anunciar(t(item.chave))
+    // Só a troca de tela é anunciada, não a troca de idioma.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [telaAnunciada])
+
   // Teclado do sistema: barras e folhas sobem com ele, a barra inferior some.
   useAlturaTeclado()
   useDeslizeHorizontal({
