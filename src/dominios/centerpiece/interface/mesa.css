@@ -17,6 +17,13 @@
   padding: 10px 12px 12px;
 }
 
+/* Tablet em pé: a mesa do simples cresce para ocupar mais da tela. */
+@media (min-width: 768px) and (orientation: portrait) {
+  .mesa-tela--simples {
+    width: min(100%, 720px);
+  }
+}
+
 .mesa-centro-tela {
   display: flex;
   min-height: 0;
