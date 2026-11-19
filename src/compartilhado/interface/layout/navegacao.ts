@@ -5,6 +5,7 @@
  * tela; a tela Ajustes (com o Sobre e o Instalar) fica só no menu lateral.
  */
 import type { TelaPrincipal } from '@/app/App'
+import type { ModoJogo } from '@/compartilhado/modo-jogo/tipos'
 
 export type DestinoTela = TelaPrincipal | 'aprender'
 export type DestinoNavegacao = DestinoTela | 'idioma'
@@ -81,4 +82,46 @@ export const ORDEM_TELAS: readonly DestinoTela[] = PAGINAS_NAVEGACAO.flat().flat
 
 export function paginaDoDestino(destino: DestinoTela): number {
   return PAGINAS_NAVEGACAO.findIndex((pagina) => pagina.some((item) => item.destino === destino))
+}
+
+/**
+ * Telas que não existem no modo Chinês (MCR): Han e Fu (o MCR não tem fu),
+ * Centerpiece, Partidas e Ranking (pontuação Riichi) e o guia, que ensina Riichi.
+ */
+const OCULTAS_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set([
+  'calculadoraRapida',
+  'centerpiece',
+  'partidas',
+  'ranking',
+  'aprender',
+])
+
+interface NavegacaoDoModo {
+  paginas: readonly (readonly ItemNavegacao[])[]
+  itens: readonly ItemNavegacao[]
+  ordem: readonly DestinoTela[]
+}
+
+const NAVEGACAO_RIICHI: NavegacaoDoModo = { paginas: PAGINAS_NAVEGACAO, itens: ITENS_NAVEGACAO, ordem: ORDEM_TELAS }
+
+/** No MCR, a Calculadora de Mão é a chinesa, no mesmo lugar da japonesa. */
+const paraMcr = (item: ItemNavegacao): ItemNavegacao =>
+  item.destino === 'calculadora' ? { ...item, chave: 'menu.handCalculatorChinese' } : item
+
+const PAGINA_MCR = PAGINAS_NAVEGACAO.flat()
+  .filter((item) => !OCULTAS_NO_MCR.has(item.destino))
+  .map(paraMcr)
+
+const NAVEGACAO_MCR: NavegacaoDoModo = {
+  paginas: [PAGINA_MCR],
+  itens: ITENS_NAVEGACAO.filter((item) => !OCULTAS_NO_MCR.has(item.destino)).map(paraMcr),
+  ordem: ORDEM_TELAS.filter((destino) => !OCULTAS_NO_MCR.has(destino)),
+}
+
+export function navegacaoDoModo(modo: ModoJogo): NavegacaoDoModo {
+  return modo === 'mcr' ? NAVEGACAO_MCR : NAVEGACAO_RIICHI
+}
+
+export function telaExisteNoModo(destino: DestinoNavegacao, modo: ModoJogo): boolean {
+  return modo === 'riichi' || !OCULTAS_NO_MCR.has(destino)
 }

@@ -6,7 +6,14 @@ import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { focarTituloTela, ID_TITULO_TELA } from '@/compartilhado/interface/layout/TituloTela'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
-import { ITENS_NAVEGACAO, ORDEM_TELAS, type DestinoComSubitens, type SubtelaPartida } from '@/compartilhado/interface/layout/navegacao'
+import {
+  navegacaoDoModo,
+  telaExisteNoModo,
+  type DestinoComSubitens,
+  type SubtelaPartida,
+} from '@/compartilhado/interface/layout/navegacao'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
+import CalculadoraMaoChinesa from '@/dominios/calculadora-mao-chinesa/interface/CalculadoraMaoChinesa'
 import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraMao from '@/dominios/calculadora-mao/interface/paginas/PaginaCalculadoraMao'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
@@ -93,10 +100,19 @@ export default function App() {
   // Calculadora de Mão ficam na própria página (a finalização tem um caso a mais).
   // Carrossel infinito: depois da última tela (Configurações) vem a folha de
   // Idioma e, dela, a Calculadora de novo.
-  const indiceTela = ORDEM_TELAS.indexOf(tela)
-  const telaAnterior = indiceTela > 0 ? ORDEM_TELAS[indiceTela - 1] : undefined
+  const { modo, isChines } = useModoJogo()
+  const { itens: itensNavegacao, ordem: ordemTelas } = navegacaoDoModo(modo)
+  // Trocar de modo numa tela que não existe no outro: a Calculadora de Mão troca
+  // de regra no mesmo lugar, as outras voltam para ela.
+  useEffect(() => {
+    if (!telaExisteNoModo(tela, modo)) navegar('calculadora')
+    if (guia && !telaExisteNoModo('aprender', modo)) setGuia(null)
+  }, [modo, tela, guia, navegar])
+
+  const indiceTela = ordemTelas.indexOf(tela)
+  const telaAnterior = indiceTela > 0 ? ordemTelas[indiceTela - 1] : undefined
   const proximaTela =
-    indiceTela >= 0 ? (ORDEM_TELAS[indiceTela + 1] ?? ORDEM_TELAS[0]) : undefined
+    indiceTela >= 0 ? (ordemTelas[indiceTela + 1] ?? ordemTelas[0]) : undefined
 
   // Deslizar até o Aprender abre o guia por cima, e até o Idioma abre a folha
   // por cima. Ao fechar, a pessoa volta para a tela de onde deslizou.
@@ -106,9 +122,9 @@ export default function App() {
     else navegar(destino)
   }
   // Na capa do guia, deslizar vai para a tela vizinha do Aprender na barra.
-  const indiceAprender = ORDEM_TELAS.indexOf('aprender')
+  const indiceAprender = ordemTelas.indexOf('aprender')
   const sairDoGuia = (passo: 1 | -1) => {
-    const destino = ORDEM_TELAS[indiceAprender + passo] ?? 'calculadora'
+    const destino = ordemTelas[indiceAprender + passo] ?? 'calculadora'
     if (destino !== 'aprender') navegar(destino)
   }
   // Leitor de tela: a cada troca, o foco vai para o título da tela nova (TituloTela).
@@ -124,7 +140,7 @@ export default function App() {
         focarTituloTela()
         return
       }
-      const item = ITENS_NAVEGACAO.find(({ destino }) => destino === telaAnunciada)
+      const item = itensNavegacao.find(({ destino }) => destino === telaAnunciada)
       if (item) anunciar(t(item.chave))
     }, 150)
     return () => window.clearTimeout(espera)
@@ -157,9 +173,11 @@ export default function App() {
 
       <main className="conteudo-principal">
         {/* Sempre montada: a mão em andamento continua lá ao voltar de outra tela. */}
+        {/* Montada durante todo o modo Chinês: a mão continua lá ao voltar de outra tela. */}
+        {isChines && <CalculadoraMaoChinesa visivel={tela === 'calculadora'} />}
         <PaginaCalculadoraMao
           aoIrParaProximaTela={() => navegar('calculadoraRapida')}
-          visivel={tela === 'calculadora'}
+          visivel={tela === 'calculadora' && !isChines}
           entradaFixa={entradaDoSimples ?? undefined}
           aoVoltar={entradaDoSimples ? voltarAoSimples : undefined}
         />

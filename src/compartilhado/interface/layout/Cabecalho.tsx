@@ -2,15 +2,14 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { TelaPrincipal } from '@/app/App'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
 import { IconeMenu } from './IconeMenu'
 import {
-  ITENS_NAVEGACAO,
   SUBITENS_NAVEGACAO,
+  navegacaoDoModo,
   type DestinoComSubitens,
   type SubtelaPartida,
-  PAGINAS_NAVEGACAO,
-  paginaDoDestino,
   type DestinoNavegacao,
   type DestinoTela,
 } from './navegacao'
@@ -44,7 +43,12 @@ export default function Cabecalho({
   aoAbrirIdioma,
 }: PropsCabecalho) {
   const { t } = useI18n()
-  const pagina = Math.max(0, paginaDoDestino(telaAtual))
+  const { modo } = useModoJogo()
+  const { paginas, itens } = navegacaoDoModo(modo)
+  const pagina = Math.max(
+    0,
+    paginas.findIndex((itensDaPagina) => itensDaPagina.some((item) => item.destino === telaAtual)),
+  )
   // Só anima ao trocar de página, não ao abrir o app: guarda a página anterior.
   const paginaAnterior = useRef(pagina)
   const trocou = useRef(false)
@@ -135,7 +139,7 @@ export default function Cabecalho({
     <section className="drawer-secao">
       <h2>{t('menu.app')}</h2>
       <div className="drawer-itens">
-        {ITENS_NAVEGACAO.map((item) => {
+        {itens.map((item) => {
           const ativo = item.destino === telaAtual
           return (
             <Fragment key={item.destino}>
@@ -177,7 +181,7 @@ export default function Cabecalho({
         key={pagina}
         className={`barra-pagina${trocou.current ? ` barra-pagina--${pagina === 1 ? 'segunda' : 'primeira'}` : ''}`}
       >
-        {PAGINAS_NAVEGACAO[pagina].map((item) => {
+        {paginas[pagina].map((item) => {
           const ativo = item.destino === telaAtual
           return (
             <button
