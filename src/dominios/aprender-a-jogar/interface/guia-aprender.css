@@ -1401,6 +1401,41 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
   .guia-capitulo__numero {
     font-size: 4rem;
   }
+
+  /* Capa do Tutorial em duas colunas: título e Começar à esquerda, Como usar à
+     direita, para o Começar aparecer sem rolar. */
+  .guia-coluna:has(.guia-capa__como-usar) {
+    width: min(100%, 760px);
+  }
+
+  .guia-capa:has(.guia-capa__como-usar) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: 32px;
+    align-content: center;
+    justify-items: center;
+  }
+
+  .guia-capa:has(.guia-capa__como-usar) > .guia-capa__icone {
+    grid-area: 1 / 1;
+    margin-bottom: 8px;
+  }
+
+  .guia-capa:has(.guia-capa__como-usar) > .guia-capa__titulo {
+    grid-area: 2 / 1;
+  }
+
+  .guia-capa:has(.guia-capa__como-usar) > .guia-capa__acoes {
+    grid-area: 3 / 1;
+    margin-top: 16px;
+  }
+
+  .guia-capa:has(.guia-capa__como-usar) > .guia-capa__como-usar {
+    grid-area: 1 / 2 / 4 / 3;
+    align-self: center;
+    margin-top: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
