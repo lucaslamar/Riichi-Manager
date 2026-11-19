@@ -86,15 +86,25 @@ export function paginaDoDestino(destino: DestinoTela): number {
 
 /**
  * Telas que não existem no modo Chinês (MCR): Han e Fu (o MCR não tem fu),
- * Centerpiece, Partidas e Ranking (pontuação Riichi) e o guia, que ensina Riichi.
+ * Centerpiece, Partidas e Ranking (pontuação Riichi). O Tutorial mostra o MCR.
  */
 const OCULTAS_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set([
   'calculadoraRapida',
   'centerpiece',
   'partidas',
   'ranking',
-  'aprender',
 ])
+
+/** Telas que só existem no modo Chinês. */
+const SO_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set(['guiaBolso'])
+
+/** O Guia de Bolso do Riichi fica dentro da Calculadora de Mão; o do MCR é uma tela. */
+const ITEM_GUIA_BOLSO_MCR: ItemNavegacao = {
+  destino: 'guiaBolso',
+  chave: 'menu.pocketGuideMcr',
+  icone: 'fa-book-bookmark',
+  chaveCurta: 'menu.pocketGuideMcrShort',
+}
 
 interface NavegacaoDoModo {
   paginas: readonly (readonly ItemNavegacao[])[]
@@ -108,14 +118,18 @@ const NAVEGACAO_RIICHI: NavegacaoDoModo = { paginas: PAGINAS_NAVEGACAO, itens: I
 const paraMcr = (item: ItemNavegacao): ItemNavegacao =>
   item.destino === 'calculadora' ? { ...item, chave: 'menu.handCalculatorChinese' } : item
 
-const PAGINA_MCR = PAGINAS_NAVEGACAO.flat()
-  .filter((item) => !OCULTAS_NO_MCR.has(item.destino))
-  .map(paraMcr)
+const comGuiaBolso = (itens: ItemNavegacao[]) => [itens[0], ITEM_GUIA_BOLSO_MCR, ...itens.slice(1)]
+
+const PAGINA_MCR = comGuiaBolso(
+  PAGINAS_NAVEGACAO.flat()
+    .filter((item) => !OCULTAS_NO_MCR.has(item.destino))
+    .map(paraMcr),
+)
 
 const NAVEGACAO_MCR: NavegacaoDoModo = {
   paginas: [PAGINA_MCR],
-  itens: ITENS_NAVEGACAO.filter((item) => !OCULTAS_NO_MCR.has(item.destino)).map(paraMcr),
-  ordem: ORDEM_TELAS.filter((destino) => !OCULTAS_NO_MCR.has(destino)),
+  itens: comGuiaBolso(ITENS_NAVEGACAO.filter((item) => !OCULTAS_NO_MCR.has(item.destino)).map(paraMcr)),
+  ordem: PAGINA_MCR.flatMap(({ destino }) => (destino === 'idioma' ? [] : [destino])),
 }
 
 export function navegacaoDoModo(modo: ModoJogo): NavegacaoDoModo {
@@ -123,5 +137,5 @@ export function navegacaoDoModo(modo: ModoJogo): NavegacaoDoModo {
 }
 
 export function telaExisteNoModo(destino: DestinoNavegacao, modo: ModoJogo): boolean {
-  return modo === 'riichi' || !OCULTAS_NO_MCR.has(destino)
+  return modo === 'riichi' ? !SO_NO_MCR.has(destino) : !OCULTAS_NO_MCR.has(destino)
 }

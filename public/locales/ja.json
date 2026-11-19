@@ -28,7 +28,9 @@
     "more": "More",
     "moreOptions": "More options",
     "backToMain": "Back to the main options",
-    "handCalculatorChinese": "Chinese Hand Calculator"
+    "handCalculatorChinese": "Chinese Hand Calculator",
+    "pocketGuideMcr": "Pocket Guide",
+    "pocketGuideMcrShort": "Guide"
   },
   "actions": {
     "back": "戻る",
@@ -2315,6 +2317,51 @@
       "zimo": "Self-Drawn",
       "huapai": "Flower Tile",
       "mingangang": "Melded and Concealed Kong"
+    }
+  },
+  "guiaBolso": {
+    "mcr": {
+      "titulo": "Pocket Guide · MCR",
+      "rotuloBusca": "Search",
+      "busca": "Search fan, 汉字 or English",
+      "pontos": "Points",
+      "todosPontos": "All points",
+      "categoria": "Category",
+      "todasCategorias": "All categories",
+      "pontosFan": "{{pontos}} points",
+      "numero": "No. {{id}}",
+      "riichi": "Riichi: {{yaku}}",
+      "detalhes": "Details",
+      "naoCombina": "Doesn't combine with:",
+      "irPara": "Go to {{nome}}",
+      "encontrados": {
+        "one": "{{count}} fan found",
+        "few": "{{count}} fan found",
+        "many": "{{count}} fan found",
+        "other": "{{count}} fan found"
+      },
+      "nenhum": "No fan found. Try another name or clear the filters.",
+      "semEquivalenteTitulo": "Riichi Yaku with no equivalent",
+      "semEquivalenteExato": "No exact equivalent: {{lista}}.",
+      "naoExistem": "Don't exist in MCR: {{lista}}.",
+      "creditos": "Content: Guia do Mahjong Chinês (MCR) — Cerrado Mahjong Club. Juliana Visoni and Gabriel Souza."
+    }
+  },
+  "tutorial": {
+    "mcr": {
+      "titulo": "Tutorial · MCR",
+      "anterior": "Previous section",
+      "proxima": "Next section",
+      "diferenteRiichi": "Different from Riichi",
+      "abrirGuiaBolso": "Open the Pocket Guide",
+      "exemplos": "Examples",
+      "exemplo": "Example",
+      "quemPaga": "Who pays",
+      "vencedorRecebe": "Winner receives",
+      "exemploRon": "Ron, {{pontos}} pts",
+      "exemploTsumo": "Tsumo, {{pontos}} pts",
+      "pagaRon": "Discarder {{descartador}}, the others {{outro}} and {{outro}}",
+      "pagaTsumo": "Each pays {{valor}}"
     }
   }
 }
