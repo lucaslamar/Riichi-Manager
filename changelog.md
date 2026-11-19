@@ -1,5 +1,14 @@
 # Changelog - Riichi Manager
 
+## 7.0.0 - 2026-11-19
+
+### Adicionado
+
+- **Modo Chinês (MCR / Guobiao)**: novo cartão Mahjong nas Configurações, logo depois do Idioma, com Japonês e Chinês. A escolha vale na hora em todo o app e fica salva no aparelho. O Japonês continua sendo o padrão e funciona igual a antes.
+- **Calculadora de Mão Chinesa**: no modo Chinês, monte a mão com Chi, Pon e Kan, escolha ron ou tsumo, os ventos, as condições especiais e as flores. O resultado mostra o total de fan, cada fan com o nome em português e em chinês e os pagamentos do MCR. Mãos com menos de 8 fan sem contar as flores aparecem como inválidas.
+- **Navegação do modo Chinês**: a Calculadora de Mão vira a chinesa no mesmo lugar. Han e Fu, Centerpiece, Partidas, Ranking e o guia Aprender a jogar ficam escondidos, porque usam as regras do Riichi. O Sorteador de Ventos continua igual.
+- **Mahjong Manager**: no modo Chinês, o nome do app no topo e na aba do navegador passa a ser Mahjong Manager.
+
 ## Não lançado
 
 ### Adicionado
