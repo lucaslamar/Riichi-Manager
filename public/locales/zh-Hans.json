@@ -667,7 +667,20 @@
     "largeTouchTargets": "放大触控区域",
     "largeTouchTargetsHelp": "放大按钮和牌，触控更舒适。",
     "versionLine": "Version {{version}} · Made by Lucas Lamar",
-    "themeBlue": "蓝色"
+    "themeBlue": "蓝色",
+    "narration": "语音解说",
+    "narrationHelp": "朗读手牌、鸣牌、宝牌和结果。为盲人和低视力玩家设计。",
+    "narrationSpeed": "语速",
+    "narrationTileNames": "牌的名称",
+    "narrationTilesPt": "应用语言",
+    "narrationTilesJa": "日语",
+    "narrationOutput": "输出",
+    "narrationOutputVoice": "应用语音",
+    "narrationOutputReader": "仅屏幕阅读器",
+    "narrationOutputHelp": "开启 NVDA、TalkBack 或 VoiceOver 时，请选择仅屏幕阅读器，以免听到两种声音。",
+    "narrationNoVoice": "此浏览器没有语音。提示会交给屏幕阅读器。",
+    "narrationShortcuts": "快捷键：Alt+M 朗读手牌，Alt+D 朗读最近的弃牌，Alt+R 重复上一条提示，Alt+S 停止朗读。",
+    "narrationTest": "试听"
   },
   "windDraw": {
     "title": "抽风位",
@@ -2131,5 +2144,23 @@
       "and": "和"
     },
     "count": "已开启 {{on}}/{{total}}"
+  },
+  "narration": {
+    "selected": "选择了{{tiles}}",
+    "removed": "移除了{{tiles}}",
+    "hand": "手牌：{{tiles}}",
+    "handEmpty": "手牌为空",
+    "meld": "{{tiles}}的{{call}}",
+    "dora": "宝牌指示牌：{{tiles}}",
+    "uradora": "里宝牌指示牌：{{tiles}}",
+    "red": "赤",
+    "noHand": "此画面没有手牌。",
+    "noDiscards": "此画面没有弃牌。",
+    "calls": {
+      "chii": "吃",
+      "pon": "碰",
+      "kanAberto": "明杠",
+      "kanFechado": "暗杠"
+    }
   }
 }

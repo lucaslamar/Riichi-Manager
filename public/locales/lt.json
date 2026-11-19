@@ -685,7 +685,20 @@
     "largeTouchTargets": "Didesnės lietimo sritys",
     "largeTouchTargetsHelp": "Padidina mygtukus ir akmenis, kad būtų patogiau liesti.",
     "versionLine": "Version {{version}} · Made by Lucas Lamar",
-    "themeBlue": "Mėlyna"
+    "themeBlue": "Mėlyna",
+    "narration": "Balso pasakojimas",
+    "narrationHelp": "Garsiai skaito rankos plyteles, kvietimus, dorą ir rezultatą. Akliems ir silpnaregiams.",
+    "narrationSpeed": "Kalbėjimo greitis",
+    "narrationTileNames": "Plytelių pavadinimai",
+    "narrationTilesPt": "Programėlės kalba",
+    "narrationTilesJa": "Japonų",
+    "narrationOutput": "Išvestis",
+    "narrationOutputVoice": "Programėlės balsas",
+    "narrationOutputReader": "Tik ekrano skaitytuvas",
+    "narrationOutputHelp": "Jei įjungtas NVDA, TalkBack ar VoiceOver, rinkitės Tik ekrano skaitytuvas, kad negirdėtumėte dviejų balsų.",
+    "narrationNoVoice": "Ši naršyklė neturi balso. Pranešimai keliauja į ekrano skaitytuvą.",
+    "narrationShortcuts": "Spartieji klavišai: Alt+M skaito ranką, Alt+D paskutinius išmetimus, Alt+R pakartoja paskutinį pranešimą, Alt+S sustabdo kalbą.",
+    "narrationTest": "Išbandyti"
   },
   "windDraw": {
     "title": "Vėjų burtai",
@@ -2223,5 +2236,23 @@
       "and": "ir"
     },
     "count": "Įjungta {{on}} iš {{total}}"
+  },
+  "narration": {
+    "selected": "Pasirinkta {{tiles}}",
+    "removed": "Pašalinta {{tiles}}",
+    "hand": "Ranka: {{tiles}}",
+    "handEmpty": "Ranka tuščia",
+    "meld": "{{call}}: {{tiles}}",
+    "dora": "Doros rodiklis: {{tiles}}",
+    "uradora": "Ura-doros rodiklis: {{tiles}}",
+    "red": "raudona",
+    "noHand": "Šiame ekrane nėra rankos.",
+    "noDiscards": "Šiame ekrane nėra išmetimų.",
+    "calls": {
+      "chii": "Chi",
+      "pon": "Pon",
+      "kanAberto": "Atviras kan",
+      "kanFechado": "Uždaras kan"
+    }
   }
 }

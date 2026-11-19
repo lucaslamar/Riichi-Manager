@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { anunciar } from '@/compartilhado/adaptadores/voz'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import AtalhosNarracao from '@/compartilhado/interface/narracao/AtalhosNarracao'
 import Cabecalho from '@/compartilhado/interface/layout/Cabecalho'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useAlturaTeclado } from '@/compartilhado/interface/hooks/useAlturaTeclado'
@@ -136,6 +137,7 @@ export default function App() {
 
   return (
     <>
+      <AtalhosNarracao />
       <Cabecalho
         telaAtual={guia ? 'aprender' : tela}
         aoNavegar={navegar}

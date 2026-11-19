@@ -285,3 +285,19 @@ body.toque-ampliado .cartao-regras {
   display: grid;
   gap: 14px;
 }
+
+/* Narração: velocidade, saída e nomes das pedras, abaixo do interruptor. */
+.cartao-narracao__opcoes {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cartao-narracao__opcoes input[type='range'] {
+  width: 100%;
+}
+
+.cartao-narracao__opcoes .segmentos-tema {
+  margin-top: 6px;
+}

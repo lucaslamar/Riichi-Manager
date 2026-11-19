@@ -4,7 +4,7 @@
 
 ### Adicionado
 
-- **Resultado falado**: ao abrir o resultado da Calculadora de Mão, uma voz calma e natural lê o patamar, o han e o fu, o total e quanto cada um paga. Fala sempre, mesmo sem leitor de tela.
+- **Resultado falado**: ao abrir o resultado da Calculadora de Mão, uma voz natural (de preferência a Francisca, do Edge), na velocidade da Narração, lê o patamar, o han e o fu, o total e quanto cada um paga. Fala sempre, mesmo sem leitor de tela.
 - **Mais anúncios para o leitor de tela**: o nome da tela é lido a cada troca. Limpar a mão diz só "Mão apagada". O Ranking lê os 3 primeiros, o timer da vez avisa o tempo que resta de 10 em 10 segundos e o Sorteador de Ventos lê a dica de tocar para sortear e os ventos sorteados.
 - **Escolhidos no seletor de jogadores**: ao escolher quem joga na Nova partida e no Registrar partida finalizada, quem já está na mesa aparece em selos suaves no topo da folha, no mesmo tom das dicas, com o vento ao lado (ex.: Audrey Hall · Sul). Tocar no selo tira a pessoa do lugar. Os selos e a busca ficam presos no topo enquanto a lista rola.
 - **Abortar encontro do clube**: na tela das mesas sorteadas, um botão ao lado do Novo sorteio aborta o encontro inteiro. Depois de confirmar, o sorteio é desfeito, o encontro sai de Em andamento e a lista volta para editar e sortear de novo. As partidas já registradas continuam no histórico.

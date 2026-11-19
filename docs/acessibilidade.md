@@ -1,6 +1,8 @@
 # Acessibilidade e modo falado
 
-O adaptador `compartilhado/adaptadores/voz.ts` tem duas saídas. `anunciar()` escreve numa região `aria-live` única, lida pelo leitor de tela (TalkBack, VoiceOver). `falar()` usa `speechSynthesis` com a voz mais natural do aparelho e fala mesmo sem leitor de tela.
+O adaptador `compartilhado/adaptadores/voz.ts` concentra tudo o que o app fala. `anunciar()` manda avisos curtos: com a Narração ligada na voz do app eles são falados, senão vão para uma região `aria-live` única, lida pelo leitor de tela. `narrar()` só fala com a Narração ligada (as pedras da mão). `falar()` usa `speechSynthesis` sempre, com a voz mais natural do aparelho (de preferência a Microsoft Francisca) e a velocidade da Narração.
+
+A Narração fica nas Configurações (`configuracoes/interface/CartaoNarracao.tsx`), com liga/desliga, velocidade, saída (voz do app ou só leitor) e nomes das pedras (idioma do app ou japonês). A narração da mão está em `calculadora-mao/interface/narracao/narrarMao.ts`. Os atalhos (Alt+M mão, Alt+D descartes, Alt+R repetir, Alt+S parar) ficam em `compartilhado/interface/narracao/AtalhosNarracao.tsx`. A leitura dos descartes (Alt+D) ainda não tem tela registrada.
 
 Hoje são anunciados: o nome da tela a cada troca, "Mão apagada" ao limpar a mão, o top 3 do Ranking, o tempo da vez de 10 em 10 segundos e a dica e os ventos do Sorteador. O resultado da Calculadora de Mão é sempre falado com `falar()`. O registro de descartes do Centerpiece (Fase 6) deixa a base pronta para anunciar jogadas.
 

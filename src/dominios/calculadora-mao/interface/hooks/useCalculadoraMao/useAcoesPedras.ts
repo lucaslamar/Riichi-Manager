@@ -15,8 +15,6 @@ import {
   expandirGrupoMesmoValor,
   trocarQuartoCincoPorAka,
 } from '../../constantes'
-import { anunciar } from '@/compartilhado/adaptadores/voz'
-import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import type { EscolhaChiiPendente, EstadoMaoCalculadora, TipoMeldCalculadora } from './tipos'
 
 const MAXIMO_DESCARTES = 18
@@ -368,7 +366,6 @@ export function useAcoesPedras({
     atualizarMao(MAO_VAZIA)
     setEscolhaChiiPendente(null)
     setAcaoPendente(null)
-    anunciar(traduzirGlobal('calculator.handCleared'))
   }
 
   /**

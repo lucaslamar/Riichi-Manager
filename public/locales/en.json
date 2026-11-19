@@ -673,7 +673,20 @@
     "largeTouchTargets": "Larger touch targets",
     "largeTouchTargetsHelp": "Enlarges buttons and tiles for more comfortable touch use.",
     "versionLine": "Version {{version}} · Made by Lucas Lamar",
-    "themeBlue": "Blue"
+    "themeBlue": "Blue",
+    "narration": "Voice narration",
+    "narrationHelp": "Speaks the hand tiles, calls, dora and the result. For blind and low-vision players.",
+    "narrationSpeed": "Speech rate",
+    "narrationTileNames": "Tile names",
+    "narrationTilesPt": "App language",
+    "narrationTilesJa": "Japanese",
+    "narrationOutput": "Output",
+    "narrationOutputVoice": "App voice",
+    "narrationOutputReader": "Screen reader only",
+    "narrationOutputHelp": "With NVDA, TalkBack or VoiceOver on, choose Screen reader only to avoid two voices.",
+    "narrationNoVoice": "This browser has no voice. Announcements go to the screen reader.",
+    "narrationShortcuts": "Shortcuts: Alt+M reads the hand, Alt+D reads the last discards, Alt+R repeats the last announcement and Alt+S stops speech.",
+    "narrationTest": "Test"
   },
   "windDraw": {
     "title": "Wind Draw",
@@ -2157,5 +2170,23 @@
       "and": "and"
     },
     "count": "{{on}} of {{total}} on"
+  },
+  "narration": {
+    "selected": "Selected {{tiles}}",
+    "removed": "Removed {{tiles}}",
+    "hand": "Hand: {{tiles}}",
+    "handEmpty": "Empty hand",
+    "meld": "{{call}} of {{tiles}}",
+    "dora": "Dora indicator: {{tiles}}",
+    "uradora": "Ura-dora indicator: {{tiles}}",
+    "red": "red",
+    "noHand": "No hand on this screen.",
+    "noDiscards": "No discards on this screen.",
+    "calls": {
+      "chii": "Chi",
+      "pon": "Pon",
+      "kanAberto": "Open kan",
+      "kanFechado": "Closed kan"
+    }
   }
 }

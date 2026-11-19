@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNarracaoMao } from '../../narracao/narrarMao'
 import { candidatasDaBatida, trocarBatida, type CandidataBatida } from '../../../logica/batida'
 import { useAcoesMelds } from './useAcoesMelds'
 import { useAcoesPedras } from './useAcoesPedras'
@@ -58,6 +59,7 @@ export function useCalculadoraMao(opcoes?: OpcionsCalculadoraMao) {
     slotsUsados,
     maoCompleta,
   } = estado
+  useNarracaoMao(mao)
   // Sanma: a mão leva as regras (e o Kita) em `mao.sanma`; no yonma o campo não existe.
   // Limpar a mão também tira o campo, por isso ele volta aqui sempre que faltar.
   const regrasSanma = opcoes?.regrasSanma ?? null
