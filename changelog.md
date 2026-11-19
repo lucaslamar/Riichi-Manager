@@ -20,6 +20,7 @@
 - **Capa do Tutorial em duas colunas com o celular deitado**: título, idioma e Começar ficam à esquerda e o Como usar à direita, então o Começar aparece sem precisar rolar.
 - **Título nas Configurações**: a tela de Configurações agora mostra "· Configurações" ao lado do nome do app no topo, como as outras telas.
 - **Barra inferior mais legível no iPad**: no iPad Air e Mini em pé, os nomes das abas da barra inferior passaram de 11px para 13px.
+- **Barra lateral mais legível no tablet deitado**: os itens da barra lateral passaram para 15px e os subitens da Mesa partida e do Ranking para 14px.
 - **Menos movimento quando o celular pede**: com a opção de reduzir movimento ligada no sistema, as animações e transições do app ficam desligadas.
 
 - **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.
