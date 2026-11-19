@@ -536,11 +536,6 @@
   .painel-principal-han-fu {
     grid-template-columns: minmax(540px, 1fr) minmax(380px, 0.72fr);
   }
-
-  .controle-honba-linha-han-fu {
-    width: min(100%, 360px);
-    justify-self: center;
-  }
 }
 
 @media (max-width: 560px) {
