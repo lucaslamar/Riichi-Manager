@@ -58,5 +58,6 @@
     - ARCHITECTURE.md: Contém a arquitetura do projeto, incluindo a estrutura de pastas, componentes principais e fluxos de dados.
     - BUSINESS.md: Contém as regras de negócio e lógica específica do domínio do Riichi Mahjong.
     - PATTERNS.md: Contém os padrões de desenvolvimento adotados no projeto, como convenções de código e boas práticas.
+    - DESIGN.md: Contém as diretrizes de design de interface mobile baseadas no Human Interface Guidelines da Apple (skill `.claude/skills/apple-design`).
     - CHECKLIST.md: Contém uma lista de verificação para garantir que atendeu a todos os critérios de aceitação e convenções de desenvolvimento do projeto ao realizar alterações na _codebase_.
 - Esses arquivos são _live files_, ou seja, estão sempre atualizados com as informações mais recentes do projeto. Por isso, atualize-os sempre que fizer alterações relevantes no projeto ou perceber que alguma informação mudou.

@@ -17,4 +17,4 @@ Escolha os testes conforme o impacto; os comandos completos estão em `package.j
 - Variantes e yakus locais: `npm run test:sanma` e `npm run test:yakus-locais`.
 - Persistência e backup: `npm run test:armazenamento` e `npm run test:backup`.
 - Traduções e tema: `npm run test:i18n` e `npm run test:tema`.
-- Interface: quando aplicável, confira layouts mobile e desktop, navegação por teclado e acessibilidade; para offline, valide o build, pois o service worker não roda no desenvolvimento.
+- Interface: quando aplicável, siga [DESIGN.md](DESIGN.md) e confira layouts mobile e desktop, navegação por teclado e acessibilidade; para offline, valide o build, pois o service worker não roda no desenvolvimento.
