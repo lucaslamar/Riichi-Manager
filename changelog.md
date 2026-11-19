@@ -18,6 +18,7 @@
 - **Dica da mesa legível com a tela deitada**: no Centerpiece simples, "Toque na mesa para ver as ações" não aparece mais com uma palavra por linha ao lado da mesa.
 - **Gatinho inteiro no Sorteador com o celular deitado**: o gatinho do Sorteador de Ventos ficou um pouco menor em paisagem e não é mais cortado na parte de baixo da tela.
 - **Capa do Tutorial em duas colunas com o celular deitado**: título, idioma e Começar ficam à esquerda e o Como usar à direita, então o Começar aparece sem precisar rolar.
+- **Título nas Configurações**: a tela de Configurações agora mostra "· Configurações" ao lado do nome do app no topo, como as outras telas.
 - **Menos movimento quando o celular pede**: com a opção de reduzir movimento ligada no sistema, as animações e transições do app ficam desligadas.
 
 - **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.

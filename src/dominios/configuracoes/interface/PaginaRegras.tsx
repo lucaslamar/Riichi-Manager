@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useInstalacao } from '@/compartilhado/interface/hooks/useInstalacao'
 import packageJson from '../../../../package.json'
 import ListaAjustesApp, { CartaoAcao } from './ListaAjustesApp'
@@ -17,7 +18,7 @@ export default function PaginaRegras() {
 
   return (
     <section className="pagina-regras" aria-label={t('menu.rulesShort')}>
-      <h2 className="sr-only">{t('menu.rules')}</h2>
+      <TituloTela titulo={t('menu.rules')} />
 
       <ListaAjustesApp
         antesDaTela={
