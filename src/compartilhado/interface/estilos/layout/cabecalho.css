@@ -511,6 +511,13 @@
   }
 }
 
+/* iPad Air / Mini (768–1023, fora o deitado baixo): nomes das abas em 13px, não os 11px do celular. */
+@media (min-width: 768px) and (max-width: 1023px) and (min-height: 561px) {
+  .item-tab-inferior {
+    font-size: 0.8125rem;
+  }
+}
+
 /*
  * Celular deitado: a barra inferior vira trilho à esquerda, com os mesmos itens
  * e páginas, e libera a altura toda. Limite de 1023px para pegar o iPhone Pro Max
