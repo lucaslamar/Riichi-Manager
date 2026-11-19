@@ -392,14 +392,14 @@
 
 .eixo-celula-referencia small {
   color: var(--cor-texto-suave, #607080);
-  font-size: 0.64rem;
+  font-size: 0.6875rem;
   font-weight: 800;
   line-height: 1.1;
 }
 
 .eixo-celula-referencia span {
   color: var(--cor-texto-suave, #607080);
-  font-size: 0.68rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   line-height: 1.2;
 }
@@ -432,7 +432,7 @@
 
 .pagamentos-referencia-han-fu dt {
   color: var(--cor-texto-suave, #607080);
-  font-size: 0.66rem;
+  font-size: 0.6875rem;
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -586,7 +586,7 @@
   }
 
   .grupo-seletor-han-fu > span {
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
   }
 
   .seletor-segmentado-han-fu {
@@ -649,7 +649,7 @@
   }
 
   .aviso-fu-han-fu {
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
     line-height: 1.15;
   }
 
@@ -662,7 +662,7 @@
   }
 
   .titulos-referencia-han-fu small {
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
   }
 
   .tabela-referencia-han-fu {
@@ -801,7 +801,7 @@
 
   .controle-han-fu-rotulo,
   .grupo-seletor-han-fu > span {
-    font-size: 0.66rem;
+    font-size: 0.6875rem;
   }
 
   .controle-han-fu-corpo {

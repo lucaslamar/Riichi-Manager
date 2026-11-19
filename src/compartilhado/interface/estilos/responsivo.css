@@ -73,7 +73,7 @@
 
   .tag-vento {
     width: 50px;
-    font-size: 0.62rem;
+    font-size: 0.6875rem;
   }
 
   .input-pontuacao {
@@ -221,7 +221,7 @@
 
   .controle-han-fu-rotulo,
   .grupo-seletor-han-fu > span {
-    font-size: 0.66rem;
+    font-size: 0.6875rem;
   }
 
   .controle-han-fu-corpo {
@@ -324,7 +324,7 @@
   }
 
   .card-vento__status {
-    font-size: 0.62rem;
+    font-size: 0.6875rem;
   }
 
   .sorteador-ventos__acoes {
@@ -625,7 +625,7 @@
   }
 
   .badge-espera-teclado.sem-yaku {
-    font-size: 0.6rem;
+    font-size: 0.6875rem;
   }
 }
 
