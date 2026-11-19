@@ -67,7 +67,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Quatro Grandes Ventos',
     categoria: 'ventos',
     descricao: 'Trincas ou quadras das quatro peças de Vento.',
-    naoCombina: [38, 49, 60, 61, 73],
+    naoCombina: [38, 48, 60, 61, 73],
     yakuRiichi: 'Daisuushi (Yakuman)',
   },
   {
@@ -148,7 +148,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Todos Terminais',
     categoria: 'series-especificas',
     descricao: 'Trincas/quadras e par só de 1 e 9, sem honras.',
-    naoCombina: [49, 55, 73, 76],
+    naoCombina: [48, 55, 73, 76],
     observacao: 'Combina com Mesma Trinca em Dois e em Três Naipes.',
     yakuRiichi: 'Chinroutou (Yakuman)',
   },
@@ -183,7 +183,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Todas Honras',
     categoria: 'series-especificas',
     descricao: 'Trincas/quadras e par só de honras.',
-    naoCombina: [49, 55, 73],
+    naoCombina: [48, 55, 73],
     yakuRiichi: 'Tsuiisou (Yakuman)',
   },
   {
@@ -194,7 +194,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Quatro Trincas Ocultas',
     categoria: 'pungs',
     descricao: 'Quatro trincas/quadras ocultas.',
-    naoCombina: [49, 62],
+    naoCombina: [48, 62],
     observacao: OCULTA_COMPLETA,
     yakuRiichi: 'Suuankou (Yakuman)',
   },
@@ -228,7 +228,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Quatro Trincas em Sequência de Um Naipe',
     categoria: 'pungs',
     descricao: 'Quatro trincas/quadras do mesmo naipe, subindo de 1 em 1 (111 222 333 444).',
-    naoCombina: [23, 49],
+    naoCombina: [23, 48],
   },
 
   // ── 32 ───────────────────────────────────────────────
@@ -285,7 +285,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Sete Honras Desconectadas',
     categoria: 'maos-especiais',
     descricao: 'Uma de cada honra e peças soltas de 147, 258 e 369, um padrão por naipe.',
-    naoCombina: [52, 62],
+    naoCombina: [51, 62],
     observacao: OCULTA_COMPLETA,
   },
   {
@@ -296,7 +296,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Todas Trincas Pares',
     categoria: 'pungs',
     descricao: 'Só trincas/quadras e par de números pares (2, 4, 6, 8).',
-    naoCombina: [49, 68],
+    naoCombina: [48, 68],
   },
   {
     id: 22,
@@ -430,7 +430,7 @@ export const FANS_MCR: FanMcr[] = [
     pt: 'Honras Incompletas Desconectadas',
     categoria: 'maos-especiais',
     descricao: 'Honras soltas e peças soltas de 147, 258 e 369, cada naipe em um padrão diferente.',
-    naoCombina: [52, 62],
+    naoCombina: [51, 62],
     observacao: OCULTA_COMPLETA,
   },
   {
@@ -565,19 +565,10 @@ export const FANS_MCR: FanMcr[] = [
     observacao: 'Os pontos de "Última Peça/Descarte" não podem ser combinados.',
     yakuRiichi: 'Chankan',
   },
-  {
-    id: 48,
-    pontos: 8,
-    hanzi: '双暗杠',
-    en: 'Two Concealed Kongs',
-    pt: 'Duas Quadras Ocultas',
-    categoria: 'kongs',
-    descricao: 'Duas quadras ocultas.',
-  },
 
   // ── 6 ────────────────────────────────────────────────
   {
-    id: 49,
+    id: 48,
     pontos: 6,
     hanzi: '碰碰和',
     en: 'All Pungs',
@@ -587,7 +578,7 @@ export const FANS_MCR: FanMcr[] = [
     yakuRiichi: 'Toitoi',
   },
   {
-    id: 50,
+    id: 49,
     pontos: 6,
     hanzi: '混一色',
     en: 'Half Flush',
@@ -597,7 +588,7 @@ export const FANS_MCR: FanMcr[] = [
     yakuRiichi: 'Honitsu',
   },
   {
-    id: 51,
+    id: 50,
     pontos: 6,
     hanzi: '三色三步高',
     en: 'Mixed Shifted Chows',
@@ -606,7 +597,7 @@ export const FANS_MCR: FanMcr[] = [
     descricao: 'Três sequências, uma por naipe, subindo de 1 em 1.',
   },
   {
-    id: 52,
+    id: 51,
     pontos: 6,
     hanzi: '五门齐',
     en: 'All Types',
@@ -615,7 +606,7 @@ export const FANS_MCR: FanMcr[] = [
     descricao: 'A mão tem Caracteres, Bambus, Círculos, Ventos e Dragões.',
   },
   {
-    id: 53,
+    id: 52,
     pontos: 6,
     hanzi: '全求人',
     en: 'Melded Hand',
@@ -623,6 +614,15 @@ export const FANS_MCR: FanMcr[] = [
     categoria: 'maos',
     descricao: 'Todos os conjuntos expostos com descartes e vitória por descarte em espera de par.',
     naoCombina: [79],
+  },
+  {
+    id: 53,
+    pontos: 6,
+    hanzi: '双暗杠',
+    en: 'Two Concealed Kongs',
+    pt: 'Duas Quadras Ocultas',
+    categoria: 'kongs',
+    descricao: 'Duas quadras ocultas.',
   },
   {
     id: 54,

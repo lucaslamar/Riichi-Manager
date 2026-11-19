@@ -32,7 +32,7 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 ### Guia de Bolso, Tutorial e Placar
 
 - Conteúdo do MCR: "Guia do Mahjong Chinês (MCR) para quem já sabe jogar Riichi Mahjong", do Cerrado Mahjong Club, de Juliana Visoni e Gabriel Souza. Os créditos aparecem no Guia de Bolso e no Tutorial. No modo Chinês, os nomes em português dos fan são os do CMC. O PDF de referência deve ficar em `.ai/referencias/GUIA_DO_MAHJONG_CHINES_CMC.pdf`, mas ainda não foi enviado.
-- O guia do CMC numera Duas Quadras Ocultas (双暗杠) como fan 48, com 8 pontos. Na lista oficial do MCR, que o motor segue, ela é a 53 e vale 6. Os dados do guia foram mantidos como vieram até o usuário decidir. O teste `test:fan-mcr` registra essa única divergência.
+- O guia do CMC numerava Duas Quadras Ocultas (双暗杠) como fan 48, com 8 pontos. Por decisão do usuário (19/11/2026), vale a lista oficial do MCR: é o fan 53 e vale 6, e Todas Trincas a Mão Completamente Exposta são os fan 48 a 52. `fans-mcr.ts` segue essa numeração, e o `test:fan-mcr` confere os 81 fan contra o motor por número, 汉字 e pontos.
 - As diferenças para o Riichi (em vermelho no PDF) aparecem com o selo "Diferente do Riichi", usando o token `--texto-aviso`.
 - Placar MCR: anota vitória (vencedor, ron ou tsumo, quem descartou, fan com as flores) ou empate. A mão precisa de 8 fan ou mais. O placar não confere as flores, então o aviso pede que o mínimo seja contado sem elas. Uma partida tem 16 mãos: o dealer passa a cada mão e o vento da rodada muda a cada 4 mãos. As cadeiras não trocam de lugar entre as rodadas no placar. O timer da vez tem 30 segundos por padrão e pode ser desligado.
 

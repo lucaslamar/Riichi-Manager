@@ -174,17 +174,14 @@ assert.deepEqual(
   Array.from({ length: 81 }, (_, i) => i + 1),
   'Ids de 1 a 81 em ordem',
 )
-// O guia do CMC numera Duas Quadras Ocultas como 48 e com 8 pontos. No MCR oficial
-// (e no motor) ela é a 53 e vale 6. Pendente de confirmação com o usuário.
-const DIVERGENCIAS_CONHECIDAS = new Set(['双暗杠'])
-const motorPorHanzi = new Map(FANS.map(([, hanzi, pontos]) => [hanzi.replace('钓', '调'), pontos]))
-FANS_MCR.filter((fan) => !DIVERGENCIAS_CONHECIDAS.has(fan.hanzi)).forEach((fan) =>
+FANS_MCR.forEach((fan) => {
+  assert.equal(fan.pontos, FANS[fan.id][2], `Fan ${fan.id} tem os mesmos pontos no guia e no motor`)
   assert.equal(
-    fan.pontos,
-    motorPorHanzi.get(fan.hanzi),
-    `Fan ${fan.id} tem os mesmos pontos no guia e no motor`,
-  ),
-)
+    fan.hanzi.replace('调', '钓'),
+    FANS[fan.id][1],
+    `Fan ${fan.id} é o mesmo no guia e no motor`,
+  )
+})
 for (const termo of ['清一色', 'full flush', 'chinitsu', '22', 'naipe puro']) {
   assert.ok(
     buscarFansMcr(FANS_MCR, termo).some((fan) => fan.id === 22),
