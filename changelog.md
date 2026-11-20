@@ -2,6 +2,10 @@
 
 ## 7.0.0 - 2026-11-19
 
+### Alterado
+
+- **Teclado da Calculadora de Mão**: a barra de ações ficou com 4 botões (Chi, Pon, Kan e Kan fechado). O MPSZ foi para o começo da linha dos ventos e, no fim dela, entrou uma tecla para apagar a última pedra, deixando a linha com 9 teclas, como as dos naipes. O 白 ganhou uma moldura e não parece mais uma tecla vazia.
+
 ### Adicionado
 
 - **Modo Chinês (MCR / Guobiao)**: novo cartão Mahjong nas Configurações, logo depois do Idioma, com Japonês e Chinês. A escolha vale na hora em todo o app e fica salva no aparelho. O Japonês continua sendo o padrão e funciona igual a antes.
