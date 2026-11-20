@@ -2215,7 +2215,8 @@
       "outro": "Each other player pays",
       "cadaJogador": "Each player pays",
       "pontos": "{{pontos}} points",
-      "vezes": "×{{vezes}}"
+      "vezes": "×{{vezes}}",
+      "invalidaTitulo": "Invalid hand"
     },
     "erros": {
       "incompleta": "Build 14 tiles to calculate. A Kan counts as 3.",

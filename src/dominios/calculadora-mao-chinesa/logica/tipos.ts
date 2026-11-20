@@ -9,6 +9,11 @@ export interface FanContado {
   nomeChines: string
   valor: number
   vezes: number
+  /**
+   * As pedras (ids do motor) de cada vez que o fan conta. `null`: vale para a mão
+   * inteira ou para a situação da batida (a interface decide o destaque).
+   */
+  ocorrencias: (number[] | null)[]
 }
 
 export interface ResultadoFanMcr {

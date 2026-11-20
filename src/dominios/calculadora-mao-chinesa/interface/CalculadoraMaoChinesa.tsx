@@ -1,5 +1,4 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { BotaoAcao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
 import type { Acao } from '@/dominios/calculadora-mao/logica/mao'
@@ -8,7 +7,7 @@ import { maoCompleta, pedrasContadas, type TipoChamada } from '../logica/montage
 import '../estilos/calculadora-mao-chinesa.css'
 import ControlesCondicoes from './ControlesCondicoes'
 import MaoChinesaAtual from './MaoChinesaAtual'
-import ResultadoFan from './ResultadoFan'
+import ModalResultadoMcr from './ModalResultadoMcr'
 import TecladoChines from './TecladoChines'
 import { useCalculadoraMaoChinesa } from './useCalculadoraMaoChinesa'
 
@@ -171,13 +170,13 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
       </div>
 
       {calc.resultado && (
-        <Modal
-          titulo={t('mcr.resultado.titulo')}
+        <ModalResultadoMcr
+          mao={mao}
+          condicoes={calc.condicoes}
+          resultado={calc.resultado}
           aoFechar={calc.fecharResultado}
-          rotuloFechar={t('actions.close')}
-        >
-          <ResultadoFan resultado={calc.resultado} />
-        </Modal>
+          aoNovaMao={calc.limpar}
+        />
       )}
     </div>
   )

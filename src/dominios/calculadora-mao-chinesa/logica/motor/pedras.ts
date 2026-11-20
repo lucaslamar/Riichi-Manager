@@ -144,6 +144,10 @@ export function pedrasDoGrupo(g: Grupo): number[] {
       return [g.meio, g.meio, g.meio]
     case TIPO_GRUPO.par:
       return [g.meio, g.meio]
+    case TIPO_GRUPO.dragaoCombinado:
+      return Array.from({ length: 27 }, (_, i) => i + 1).filter(
+        (id) => (MAPAS_DRAGAO_COMBINADO[g.dragaoCombinado] & bit(id)) !== 0n,
+      )
     default:
       return []
   }

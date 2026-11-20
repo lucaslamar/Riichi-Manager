@@ -238,3 +238,17 @@ console.log('✓ montagem da mão chinesa')
   assert.equal(montada.pedras.at(-1), 28, 'Escolher a batida leva a pedra para o fim')
 }
 console.log('✓ troca de batida')
+
+// Pedras de cada fan (destaque no resultado): as quatro 123m de Quatro Sequências Idênticas.
+{
+  const r = fanDe('1111222233334m4m|EE0000')
+  assert.equal(r.fanSemFlores, 88, '1111222233334m + 4m: 88 fan')
+  const quadrupla = r.fans.find((fan) => fan.chave === 'yisesitongshun')
+  assert.deepEqual(
+    [...(quadrupla?.ocorrencias[0] ?? [])].sort((a, b) => a - b),
+    [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3],
+    'Quatro Sequências Idênticas destaca as 12 pedras das quatro 123m',
+  )
+  assert.deepEqual(calcularPagamentoMcr(88, 'ron').ganhadorRecebe, 112)
+}
+console.log('✓ pedras de cada fan')

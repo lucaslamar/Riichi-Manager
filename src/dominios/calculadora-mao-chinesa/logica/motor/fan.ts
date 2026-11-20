@@ -26,6 +26,7 @@ import {
   naipe,
   numero,
   pedraDaBatida,
+  pedrasDoGrupo,
   semChamados,
   temPedraDaBatida,
   TIPO_GRUPO,
@@ -132,8 +133,11 @@ const tabelaVazia = (): Tabela => Array.from({ length: TOTAL_FANS }, () => [])
 const igual = (a: number[], b: number[]) => a.length === b.length && a.every((v, i) => v === b[i])
 
 export interface ResultadoMotor {
-  /** Quantas vezes cada fan conta (sem flores). */
-  fans: { chave: ChaveFan; vezes: number }[]
+  /**
+   * Quantas vezes cada fan conta (sem flores) e, em cada vez, as pedras que o formam.
+   * `null`: o fan vale para a mão inteira ou para a situação da batida.
+   */
+  fans: { chave: ChaveFan; vezes: number; ocorrencias: (number[] | null)[] }[]
   total: number
 }
 
@@ -146,6 +150,13 @@ class ContadorFan {
   total = 0
   tabelaMax: Tabela = tabelaVazia()
   totalMax = 0
+  /**
+   * Grupos da decomposição em contagem e da melhor (`fan_packs_res` no original):
+   * os índices de `tabelaMax` apontam para eles. Só servem para mostrar as pedras de
+   * cada fan; não mudam a contagem.
+   */
+  gruposAtuais: Grupo[] = []
+  gruposMax: Grupo[] = []
 
   private somar(f: number, v: number[]) {
     this.tabela[f].push(v)
@@ -163,6 +174,7 @@ class ContadorFan {
     if (this.total > this.totalMax) {
       this.totalMax = this.total
       this.tabelaMax = this.tabela.map((linha) => [...linha])
+      this.gruposMax = this.gruposAtuais
     }
     this.tabela = tabelaVazia()
     this.excluidos = tabelaVazia()
@@ -232,7 +244,8 @@ class ContadorFan {
         this.tabelaMax[F.wufanhu] = []
         this.totalMax = 0
       }
-      this.tabelaMax[F.zuhelong].push([grupos.length])
+      this.tabelaMax[F.zuhelong].push([this.gruposMax.length])
+      this.gruposMax = [...this.gruposMax, dragao]
       this.totalMax += valor(F.zuhelong)
     } else {
       this.buscar(mao, pedras, 4 - mao.chamados.length, 1, grupos, true)
@@ -854,6 +867,7 @@ class ContadorFan {
           this.contarGrupoIsolado(mao, grupos)
           // Edge, Closed e Single Wait seguem a espera formal: espera múltipla não conta.
           this.contarModoBatida(mao, grupos, dragao, calcularEspera(mao, true))
+          this.gruposAtuais = grupos.map((g) => ({ ...g }))
           this.guardarMaior()
         }
         return true
@@ -1033,8 +1047,14 @@ export function calcularEspera(mao: MaoGb, incluirEsgotadas = false): number[] {
 export function contarFan(mao: MaoGb): ResultadoMotor {
   const contador = new ContadorFan()
   contador.contar(mao)
+  const pedrasDe = (indices: number[]) => {
+    if (!indices.length || indices.some((i) => !contador.gruposMax[i])) return null
+    return indices.flatMap((i) => pedrasDoGrupo(contador.gruposMax[i]))
+  }
   const fans = contador.tabelaMax.flatMap((linha, f) =>
-    f > 0 && linha.length ? [{ chave: FANS[f][0] as ChaveFan, vezes: linha.length }] : [],
+    f > 0 && linha.length
+      ? [{ chave: FANS[f][0] as ChaveFan, vezes: linha.length, ocorrencias: linha.map(pedrasDe) }]
+      : [],
   )
   return { fans, total: contador.totalMax }
 }

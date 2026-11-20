@@ -15,7 +15,7 @@ import { PedraChinesa, PedraFlor } from './PedraChinesa'
 import { nomePedra } from './pedras'
 
 /** Pedras do conjunto como na mesa: a chamada de lado e, no kan fechado, as pontas viradas. */
-function PedrasChamada({ chamada }: { chamada: Chamada }) {
+export function PedrasChamada({ chamada }: { chamada: Chamada }) {
   const pedras = pedrasDaChamada(chamada)
   return (
     <span className="meld-pedras">

@@ -16,10 +16,11 @@ export function calcularFanMcr(mao: MaoGb, flores: number): ResultadoFanMcr {
   return {
     batida: true,
     fans: fans
-      .map(({ chave, vezes }) => ({
+      .map(({ chave, vezes, ocorrencias }) => ({
         id: idDoFan(chave),
         chave,
         vezes,
+        ocorrencias,
         valor: valorDoFan(chave),
         nomeChines: nomeChinesDoFan(chave),
       }))

@@ -2241,7 +2241,8 @@
       "outro": "Cada outro jogador paga",
       "cadaJogador": "Cada jogador paga",
       "pontos": "{{pontos}} pontos",
-      "vezes": "×{{vezes}}"
+      "vezes": "×{{vezes}}",
+      "invalidaTitulo": "Mão inválida"
     },
     "erros": {
       "incompleta": "Monte 14 pedras para calcular. Kan conta como 3.",
