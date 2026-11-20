@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { BotaoAcao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
@@ -42,7 +43,13 @@ const CHAMADAS: { tipo: TipoChamada; acao: Acao['tipo']; chave: string; chaveCom
  * Calculadora de Mão Chinesa (MCR / Guobiao), com o mesmo layout da japonesa:
  * montar a mão no teclado e, com 14 pedras, finalizar com as condições e calcular.
  */
-export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean }) {
+export default function CalculadoraMaoChinesa({
+  visivel,
+  aoIrParaProximaTela,
+}: {
+  visivel: boolean
+  aoIrParaProximaTela?: () => void
+}) {
   const { t } = useI18n()
   const calc = useCalculadoraMaoChinesa()
   const { mao } = calc
@@ -51,14 +58,23 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
   const [textoNotacao, setTextoNotacao] = useState('')
   const [erroNotacao, setErroNotacao] = useState<ErroNotacao | null>(null)
 
-  // Escondida, a mão continua no estado (como na japonesa), mas nada vai para a tela.
-  if (!visivel) return null
-
   const abrirNotacao = () => {
     setTextoNotacao(mao.pedras.length || mao.chamadas.length ? mpszDaMao(mao) : '')
     setErroNotacao(null)
     setEntradaNotacao(true)
   }
+  // Mesmos gestos da japonesa: direita volta da finalização ou alterna o MPSZ, esquerda vai para a próxima tela.
+  useDeslizeHorizontal({
+    ativo: visivel,
+    aoDeslizarDireita: calc.finalizando
+      ? calc.voltarParaMontagem
+      : () => (entradaNotacao ? setEntradaNotacao(false) : abrirNotacao()),
+    aoDeslizarEsquerda: aoIrParaProximaTela,
+  })
+
+  // Escondida, a mão continua no estado (como na japonesa), mas nada vai para a tela.
+  if (!visivel) return null
+
   // Entrada inválida é recusada, como no Riichi: a mão não muda e o erro aparece até o próximo toque.
   const mudarNotacao = (texto: string) => {
     const lida = maoDoMpsz(texto, mao.flores)

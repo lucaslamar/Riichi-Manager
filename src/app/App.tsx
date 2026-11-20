@@ -177,7 +177,12 @@ export default function App() {
       <main className="conteudo-principal">
         {/* Sempre montada: a mão em andamento continua lá ao voltar de outra tela. */}
         {/* Montada durante todo o modo Chinês: a mão continua lá ao voltar de outra tela. */}
-        {isChines && <CalculadoraMaoChinesa visivel={tela === 'calculadora'} />}
+        {isChines && (
+          <CalculadoraMaoChinesa
+            visivel={tela === 'calculadora'}
+            aoIrParaProximaTela={proximaTela && (() => irPara(proximaTela))}
+          />
+        )}
         <PaginaCalculadoraMao
           aoIrParaProximaTela={() => navegar('calculadoraRapida')}
           visivel={tela === 'calculadora' && !isChines}
