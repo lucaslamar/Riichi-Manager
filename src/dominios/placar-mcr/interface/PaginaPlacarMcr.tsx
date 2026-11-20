@@ -1,78 +1,204 @@
 import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import '@/dominios/centerpiece/interface/partida.css'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { totais } from '../logica/placar'
+import { colocacoes, totais, type PlacarMcr } from '../logica/placar'
 import { nomeDaCadeira } from './nomes'
 import NovoPlacarMcr from './NovoPlacarMcr'
 import PlacarAberto from './PlacarAberto'
-import { usePlacaresMcr } from './usePlacaresMcr'
+import { acoesPlacaresMcr, usePlacaresMcr } from './usePlacaresMcr'
 import './placar-mcr.css'
 
-type Vista = { tipo: 'lista' } | { tipo: 'novo' } | { tipo: 'placar'; id: string }
+type Vista =
+  | { tipo: 'hub' }
+  | { tipo: 'novo' }
+  | { tipo: 'lista'; quais: 'andamento' | 'historico' }
+  | { tipo: 'placar'; id: string }
 
-/** Placar do modo Chinês: partidas MCR só com os pontos, separadas das do Riichi. */
-export default function PaginaPlacarMcr() {
+/** Entrada do hub: a mesma tela em cartões da Partida do Riichi. Novas entradas entram na lista. */
+interface EntradaHub {
+  chave: string
+  icone: string
+  titulo: string
+  texto: string
+  desabilitada?: boolean
+  aoTocar: () => void
+}
+
+const ULTIMAS_NO_HUB = 3
+
+/** Linha de uma partida nas listas: data, situação, mãos, o primeiro colocado e os totais. */
+function LinhaPlacar({ placar, aoAbrir }: { placar: PlacarMcr; aoAbrir: () => void }) {
   const { t, numero, idioma } = useI18n()
-  const placares = usePlacaresMcr()
   const { jogadores } = useJogadores()
-  const [vista, setVista] = useState<Vista>({ tipo: 'lista' })
+  const pontos = totais(placar)
+  const primeiro = colocacoes(pontos).indexOf(1)
+  const nome = (id: string) => nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'))
+  return (
+    <li>
+      <button type="button" className="card placar-mcr__item" onClick={aoAbrir}>
+        <span className="placar-mcr__vento">
+          {new Date(placar.finalizadoEm ?? placar.criadoEm).toLocaleDateString(idioma)} ·{' '}
+          {t(placar.finalizadoEm ? 'placar.mcr.finalizada' : 'placar.mcr.emAndamento')} ·{' '}
+          {placar.maos.length
+            ? t('placar.mcr.qtdMaos', { count: placar.maos.length })
+            : t('placar.mcr.nenhumaMao')}
+        </span>
+        {placar.maos.length > 0 && (
+          <strong>
+            {t('placar.mcr.primeiro', {
+              nome: nome(placar.jogadorIds[primeiro]),
+              pontos: (pontos[primeiro] > 0 ? '+' : '') + numero(pontos[primeiro]),
+            })}
+          </strong>
+        )}
+        <span className="placar-mcr__resumo">
+          {placar.jogadorIds.map((id, cadeira) => (
+            <span key={cadeira}>
+              {nome(id)} {numero(pontos[cadeira])}
+            </span>
+          ))}
+        </span>
+      </button>
+    </li>
+  )
+}
+
+/**
+ * Placar do modo Chinês, no mesmo formato da Partida do Riichi: o hub em cartões,
+ * a Nova partida, a mesa e as listas. Os placares ficam numa tabela própria.
+ */
+export default function PaginaPlacarMcr() {
+  const { t } = useI18n()
+  const placares = usePlacaresMcr()
+  const [vista, setVista] = useState<Vista>({ tipo: 'hub' })
   const aberto =
     vista.tipo === 'placar' ? placares.find((placar) => placar.id === vista.id) : undefined
-  const voltar = () => setVista({ tipo: 'lista' })
+  const voltar = () => setVista({ tipo: 'hub' })
+  const abrir = (id: string) => setVista({ tipo: 'placar', id })
+  const emAndamento = placares.filter((placar) => !placar.finalizadoEm)
+  const finalizados = placares
+    .filter((placar) => placar.finalizadoEm)
+    .sort((um, outro) => (outro.finalizadoEm ?? '').localeCompare(um.finalizadoEm ?? ''))
 
-  // A Nova partida e a mesa ocupam a tela como as do Riichi, com o próprio título.
+  // Nova partida e mesa ocupam a tela, como as do Riichi, com o próprio título.
+  if (vista.tipo === 'novo') return <NovoPlacarMcr aoCriar={abrir} aoVoltar={voltar} />
   if (vista.tipo === 'placar' && aberto) return <PlacarAberto placar={aberto} aoVoltar={voltar} />
-  if (vista.tipo === 'novo') {
-    return <NovoPlacarMcr aoCriar={(id) => setVista({ tipo: 'placar', id })} aoVoltar={voltar} />
+
+  if (vista.tipo === 'lista') {
+    const lista = vista.quais === 'andamento' ? emAndamento : finalizados
+    return (
+      <section className="ptd-inicio">
+        <TituloTela
+          titulo={t(vista.quais === 'andamento' ? 'match.home.inProgress' : 'match.home.history')}
+          aoVoltar={voltar}
+        />
+        {lista.length === 0 && (
+          <p className="placar-mcr__ajuda">{t('placar.mcr.nenhumaPartida')}</p>
+        )}
+        <ul className="placar-mcr__lista">
+          {lista.map((placar) => (
+            <LinhaPlacar key={placar.id} placar={placar} aoAbrir={() => abrir(placar.id)} />
+          ))}
+        </ul>
+        {vista.quais === 'historico' && finalizados.length > 0 && (
+          <button
+            type="button"
+            className="btn-perigo placar-mcr__apagar-tudo"
+            onClick={() => {
+              if (
+                !window.confirm(
+                  t('placar.mcr.confirmarApagarHistorico', { count: finalizados.length }),
+                )
+              )
+                return
+              finalizados.forEach((placar) => acoesPlacaresMcr.excluir(placar.id))
+            }}
+          >
+            {t('placar.mcr.apagarHistorico')}
+          </button>
+        )}
+      </section>
+    )
   }
 
-  return (
-    <div className="placar-mcr">
-      <TituloTela
-        titulo={t('menu.scoreMcr')}
-        aoVoltar={vista.tipo === 'lista' ? undefined : voltar}
-      />
+  const entradas: EntradaHub[] = [
+    {
+      chave: 'nova',
+      icone: 'fa-plus',
+      titulo: t('match.home.newGame'),
+      texto: t('placar.mcr.novaPartidaAjuda'),
+      aoTocar: () => setVista({ tipo: 'novo' }),
+    },
+    {
+      chave: 'torneio',
+      icone: 'fa-trophy',
+      titulo: t('tournament.title'),
+      texto: t('placar.mcr.torneioEmBreve'),
+      desabilitada: true,
+      aoTocar: () => undefined,
+    },
+    {
+      chave: 'andamento',
+      icone: 'fa-hourglass-half',
+      titulo: t('match.home.inProgress'),
+      texto: t('match.home.inProgressCount', { count: emAndamento.length }),
+      // Só uma partida aberta: vai direto para ela, como no Riichi.
+      aoTocar: () =>
+        emAndamento.length === 1
+          ? abrir(emAndamento[0].id)
+          : setVista({ tipo: 'lista', quais: 'andamento' }),
+    },
+    {
+      chave: 'historico',
+      icone: 'fa-clock-rotate-left',
+      titulo: t('match.home.history'),
+      texto: finalizados.length
+        ? t('placar.mcr.qtdPartidas', { count: finalizados.length })
+        : t('placar.mcr.nenhumaPartida'),
+      aoTocar: () => setVista({ tipo: 'lista', quais: 'historico' }),
+    },
+  ]
 
-      {(vista.tipo === 'lista' || (vista.tipo === 'placar' && !aberto)) && (
-        <>
-          <button type="button" className="btn-primario" onClick={() => setVista({ tipo: 'novo' })}>
-            <i className="fas fa-plus" aria-hidden="true" /> {t('placar.mcr.novaPartida')}
+  return (
+    <section className="ptd-inicio">
+      <TituloTela titulo={t('menu.scoreMcr')} acoes={<BotaoConfiguracoes />} />
+      <div className="ptd-cards">
+        {entradas.map((entrada) => (
+          <button
+            key={entrada.chave}
+            type="button"
+            className="ptd-card-inicio"
+            disabled={entrada.desabilitada}
+            onClick={entrada.aoTocar}
+          >
+            <i className={`fas ${entrada.icone}`} aria-hidden="true" />
+            <strong>{entrada.titulo}</strong>
+            <span>{entrada.texto}</span>
           </button>
-          {placares.length === 0 && <p className="placar-mcr__ajuda">{t('placar.mcr.vazio')}</p>}
-          <ul className="placar-mcr__lista">
-            {placares.map((placar) => {
-              const pontos = totais(placar)
-              return (
-                <li key={placar.id}>
-                  <button
-                    type="button"
-                    className="card placar-mcr__item"
-                    onClick={() => setVista({ tipo: 'placar', id: placar.id })}
-                  >
-                    <span className="placar-mcr__vento">
-                      {new Date(placar.criadoEm).toLocaleDateString(idioma)} ·{' '}
-                      {t(placar.finalizadoEm ? 'placar.mcr.finalizada' : 'placar.mcr.emAndamento')}{' '}
-                      ·{' '}
-                      {placar.maos.length
-                        ? t('placar.mcr.qtdMaos', { count: placar.maos.length })
-                        : t('placar.mcr.nenhumaMao')}
-                    </span>
-                    <span className="placar-mcr__resumo">
-                      {placar.jogadorIds.map((id, cadeira) => (
-                        <span key={cadeira}>
-                          {nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'))}{' '}
-                          {numero(pontos[cadeira])}
-                        </span>
-                      ))}
-                    </span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </>
+        ))}
+      </div>
+
+      <h3 className="placar-mcr__titulo placar-mcr__ultimas">{t('placar.mcr.ultimas')}</h3>
+      {finalizados.length === 0 && (
+        <p className="placar-mcr__ajuda">{t('placar.mcr.nenhumaPartida')}</p>
       )}
-    </div>
+      <ul className="placar-mcr__lista">
+        {finalizados.slice(0, ULTIMAS_NO_HUB).map((placar) => (
+          <LinhaPlacar key={placar.id} placar={placar} aoAbrir={() => abrir(placar.id)} />
+        ))}
+      </ul>
+      {finalizados.length > ULTIMAS_NO_HUB && (
+        <button
+          type="button"
+          className="btn-contorno"
+          onClick={() => setVista({ tipo: 'lista', quais: 'historico' })}
+        >
+          {t('placar.mcr.verHistorico')}
+        </button>
+      )}
+    </section>
   )
 }

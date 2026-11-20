@@ -211,3 +211,16 @@
   font-size: 0.875rem;
   text-align: center;
 }
+
+.placar-mcr__ultimas {
+  margin-top: 20px;
+}
+
+.placar-mcr__apagar-tudo {
+  margin-top: 16px;
+}
+
+.ptd-card-inicio:disabled {
+  cursor: default;
+  opacity: 0.55;
+}

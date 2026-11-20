@@ -2298,8 +2298,6 @@
   },
   "placar": {
     "mcr": {
-      "novaPartida": "Nova partida",
-      "vazio": "Nenhuma partida ainda. Comece uma para anotar os pontos.",
       "jogadorRemovido": "Jogador removido",
       "timer": "Timer da vez",
       "timerDesligado": "Sem timer",
@@ -2313,15 +2311,7 @@
         "other": "{{count}} mãos"
       },
       "maoDe": "Mão {{mao}} de {{total}}",
-      "rodadaDealer": "Rodada de {{vento}} · dealer: {{dealer}}",
       "partidaCompleta": "As 16 mãos foram jogadas. Finalize a partida quando quiserem.",
-      "dealer": "dealer",
-      "lugar": "{{lugar}}º",
-      "passarVezPara": "Passar a vez para {{nome}}",
-      "comecarVez": "Começar a vez",
-      "proximaVez": "Próxima vez",
-      "pausar": "Pausar",
-      "retomar": "Retomar",
       "registrarVitoria": "Registrar vitória",
       "empate": "Empate",
       "maos": "Mãos",
@@ -2329,7 +2319,6 @@
       "historicoEmpate": "Empate",
       "historicoTsumo": "{{nome}} venceu por tsumo · {{fan}} fan",
       "historicoRon": "{{nome}} venceu por ron de {{descartador}} · {{fan}} fan",
-      "voltarLista": "Voltar à lista",
       "desfazer": "Desfazer última mão",
       "finalizar": "Finalizar partida",
       "excluir": "Excluir partida",
@@ -2353,7 +2342,26 @@
       "nenhumaMao": "nenhuma mão",
       "regrasMcr": "MCR",
       "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan.",
-      "maoCurta": "Mão {{mao}}"
+      "maoCurta": "Mão {{mao}}",
+      "novaPartidaAjuda": "Anotar os pontos de uma partida MCR.",
+      "torneioEmBreve": "Em breve no MCR: pontos de mesa 4, 2, 1 e 0.",
+      "qtdPartidas": {
+        "one": "{{count}} partida",
+        "few": "{{count}} partidas",
+        "many": "{{count}} partidas",
+        "other": "{{count}} partidas"
+      },
+      "ultimas": "Últimas partidas",
+      "nenhumaPartida": "Nenhuma partida ainda.",
+      "verHistorico": "Ver histórico completo",
+      "primeiro": "1º {{nome}} {{pontos}}",
+      "apagarHistorico": "Apagar histórico",
+      "confirmarApagarHistorico": {
+        "one": "Apagar {{count}} partida finalizada? Não dá para desfazer.",
+        "few": "Apagar as {{count}} partidas finalizadas? Não dá para desfazer.",
+        "many": "Apagar as {{count}} partidas finalizadas? Não dá para desfazer.",
+        "other": "Apagar as {{count}} partidas finalizadas? Não dá para desfazer."
+      }
     }
   },
   "glossario": {

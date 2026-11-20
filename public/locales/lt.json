@@ -2364,8 +2364,6 @@
   },
   "placar": {
     "mcr": {
-      "novaPartida": "New game",
-      "vazio": "No games yet. Start one to keep score.",
       "jogadorRemovido": "Removed player",
       "timer": "Turn timer",
       "timerDesligado": "No timer",
@@ -2379,15 +2377,7 @@
         "other": "{{count}} hands"
       },
       "maoDe": "Hand {{mao}} of {{total}}",
-      "rodadaDealer": "{{vento}} round · dealer: {{dealer}}",
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
-      "dealer": "dealer",
-      "lugar": "#{{lugar}}",
-      "passarVezPara": "Pass the turn to {{nome}}",
-      "comecarVez": "Start turn",
-      "proximaVez": "Next turn",
-      "pausar": "Pause",
-      "retomar": "Resume",
       "registrarVitoria": "Record win",
       "empate": "Draw",
       "maos": "Hands",
@@ -2395,7 +2385,6 @@
       "historicoEmpate": "Draw",
       "historicoTsumo": "{{nome}} won by tsumo · {{fan}} fan",
       "historicoRon": "{{nome}} won by ron from {{descartador}} · {{fan}} fan",
-      "voltarLista": "Back to list",
       "desfazer": "Undo last hand",
       "finalizar": "Finish game",
       "excluir": "Delete game",
@@ -2419,7 +2408,26 @@
       "nenhumaMao": "no hands",
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
-      "maoCurta": "Hand {{mao}}"
+      "maoCurta": "Hand {{mao}}",
+      "novaPartidaAjuda": "Keep score of an MCR game.",
+      "torneioEmBreve": "Coming to MCR: table points 4, 2, 1 and 0.",
+      "qtdPartidas": {
+        "one": "{{count}} game",
+        "few": "{{count}} games",
+        "many": "{{count}} games",
+        "other": "{{count}} games"
+      },
+      "ultimas": "Latest games",
+      "nenhumaPartida": "No games yet.",
+      "verHistorico": "See full history",
+      "primeiro": "1st {{nome}} {{pontos}}",
+      "apagarHistorico": "Delete history",
+      "confirmarApagarHistorico": {
+        "one": "Delete {{count}} finished game? This can't be undone.",
+        "few": "Delete the {{count}} finished games? This can't be undone.",
+        "many": "Delete the {{count}} finished games? This can't be undone.",
+        "other": "Delete the {{count}} finished games? This can't be undone."
+      }
     }
   },
   "glossario": {
