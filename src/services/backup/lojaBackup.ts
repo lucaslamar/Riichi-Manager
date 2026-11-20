@@ -4,10 +4,16 @@
  * repositórios, quando forem para SQLite) sem mexer em `backup.ts`.
  */
 import type { ArmazenamentoChaveValor } from '@/compartilhado/persistencia/armazenamento'
-import { carregarJogadores, salvarJogadores } from '@/dominios/jogadores/persistencia/repositorioJogadores'
+import {
+  carregarJogadores,
+  salvarJogadores,
+} from '@/dominios/jogadores/persistencia/repositorioJogadores'
 import { salvarPartidas } from '@/dominios/centerpiece/persistencia/repositorioPartidas'
 import { carregarClube, salvarClube } from '@/dominios/centerpiece/persistencia/repositorioClube'
-import { carregarUltimaConfig, salvarUltimaConfig } from '@/dominios/centerpiece/persistencia/repositorioConfigMesa'
+import {
+  carregarUltimaConfig,
+  salvarUltimaConfig,
+} from '@/dominios/centerpiece/persistencia/repositorioConfigMesa'
 import {
   carregarRegrasRegistro,
   salvarRegrasRegistro,
@@ -16,6 +22,10 @@ import {
 import { salvarTorneios } from '@/dominios/torneio/persistencia/repositorioTorneios'
 import { lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { lerTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
+import {
+  carregarPlacaresMcr,
+  salvarPlacaresMcr,
+} from '@/dominios/placar-mcr/persistencia/repositorioPlacaresMcr'
 import type { DadosBackup } from './backup'
 
 /** Tudo o que vai no backup, como está agora neste aparelho. */
@@ -31,6 +41,7 @@ export function lerDadosLocais(armazenamento: ArmazenamentoChaveValor): DadosBac
     clube: carregarClube(armazenamento),
     configMesa: carregarUltimaConfig(armazenamento),
     regrasRegistro: carregarRegrasRegistro(armazenamento),
+    placaresMcr: carregarPlacaresMcr(armazenamento),
   }
 }
 
@@ -48,5 +59,7 @@ export function gravarDados(armazenamento: ArmazenamentoChaveValor, dados: Dados
   })
   salvarClube(armazenamento, dados.clube)
   if (dados.configMesa) salvarUltimaConfig(armazenamento, dados.configMesa)
-  if (dados.regrasRegistro) salvarRegrasRegistro(armazenamento, dados.regrasRegistro as RegrasRegistroSalvas)
+  if (dados.regrasRegistro)
+    salvarRegrasRegistro(armazenamento, dados.regrasRegistro as RegrasRegistroSalvas)
+  salvarPlacaresMcr(armazenamento, dados.placaresMcr)
 }

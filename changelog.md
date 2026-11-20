@@ -10,7 +10,7 @@
 - **Mahjong Manager**: no modo Chinês, o nome do app no topo e na aba do navegador passa a ser Mahjong Manager.
 - **Guia de Bolso do MCR**: no modo Chinês, uma tela nova com os 81 fan do guia do Cerrado Mahjong Club, por patamar de pontos. Dá para buscar pelo nome em português, em chinês, em inglês, pelo yaku do Riichi ou pelo número, e filtrar por pontos e por categoria. Cada fan mostra o equivalente no Riichi e, ao tocar em Detalhes, o que não combina com ele, com atalho para cada um.
 - **Tutorial do MCR**: no modo Chinês, o Tutorial ensina o MCR para quem já joga Riichi, em oito seções, com as diferenças para o Riichi destacadas e exemplos de pontuação. Créditos a Juliana Visoni e Gabriel Souza, do Cerrado Mahjong Club.
-- **Placar do MCR**: no modo Chinês, a Nova partida vira um placar que só anota as mãos e soma os pontos MCR, com timer da vez, rodada e dealer de cada mão, desfazer e finalizar. Os pontos ficam numa tabela própria, separada das partidas do Riichi, e os jogadores são os mesmos do cadastro, sem cadastrar de novo.
+- **Placar do MCR**: no modo Chinês, a Nova partida vira um placar que só anota as mãos e soma os pontos MCR, com timer da vez, rodada e dealer de cada mão, desfazer e finalizar. Os pontos ficam numa tabela própria, separada das partidas do Riichi, e os jogadores são os mesmos do cadastro, sem cadastrar de novo. Os placares também entram no backup.
 - **Ranking do MCR**: no modo Chinês, o Ranking tem a mesma tela, com os pontos dos placares MCR finalizados. Ficam de fora o tobi, o filtro de duração, o registro manual e a análise do jogador, que são do Riichi.
 
 ## Não lançado

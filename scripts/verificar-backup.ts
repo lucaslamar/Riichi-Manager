@@ -26,6 +26,7 @@ import {
   type DadosBackup,
 } from '../src/services/backup/backup'
 import { gravarDados } from '../src/services/backup/lojaBackup'
+import { novoPlacar, registrarMao, type PlacarMcr } from '../src/dominios/placar-mcr/logica/placar'
 
 let testes = 0
 function teste(nome: string, corpo: () => void) {
@@ -67,7 +68,20 @@ function aparelhoCheio(): DadosBackup {
     clube: { lista: clube.lista, sorteio: clube.sorteio, encontros: clube.encontros },
     configMesa: configDoPreset('wrc'),
     regrasRegistro: { conjunto: 'padrao', personalizado: null },
+    placaresMcr: [placarMcrDeTeste()],
   }
+}
+
+/** Um placar MCR finalizado com os quatro primeiros jogadores de teste. */
+function placarMcrDeTeste(id = 'mcr-1'): PlacarMcr {
+  const [a, b, c, d] = gerarJogadoresDeTeste(AGORA).map((jogador) => jogador.id)
+  const placar = registrarMao(novoPlacar(id, [a, b, c, d], 30, AGORA.toISOString()), {
+    tipo: 'vitoria',
+    vencedor: 0,
+    forma: 'tsumo',
+    fan: 8,
+  })
+  return { ...placar, finalizadoEm: AGORA.toISOString() }
 }
 
 const VAZIO: DadosBackup = {
@@ -79,6 +93,7 @@ const VAZIO: DadosBackup = {
   clube: { lista: '', sorteio: null, encontros: [] },
   configMesa: null,
   regrasRegistro: null,
+  placaresMcr: [],
 }
 
 teste('nome do arquivo com a data local', () => {
@@ -105,7 +120,10 @@ teste('arquivos inválidos dão o erro certo', () => {
   assert.deepEqual(validarBackup('{"app":"outro"}'), { ok: false, erro: 'naoEhBackup' })
   const futuro = { ...montarBackup(VAZIO, '9.0.0', AGORA), schemaVersion: 99 }
   assert.deepEqual(validarBackup(futuro), { ok: false, erro: 'versaoNova' })
-  const quebrado = { ...montarBackup(VAZIO, '5.9.0', AGORA), dados: { ...VAZIO, jogadores: [{ nome: 'sem id' }] } }
+  const quebrado = {
+    ...montarBackup(VAZIO, '5.9.0', AGORA),
+    dados: { ...VAZIO, jogadores: [{ nome: 'sem id' }] },
+  }
   assert.deepEqual(validarBackup(quebrado), { ok: false, erro: 'corrompido' })
 })
 
@@ -150,33 +168,86 @@ teste('a mesma pessoa cadastrada nos dois aparelhos vira uma só', () => {
   const carol = cheio.jogadores.find((jogador) => jogador.apelido === 'Carol')!
   const local = { ...carol, id: 'local-carol', nome: 'ana carolina souza', apelido: undefined }
   const sugestoes = sugerirMesmasPessoas([local], cheio.jogadores)
-  assert.deepEqual(sugestoes.map((item) => [item.vindo.id, item.local.id]), [[carol.id, 'local-carol']])
+  assert.deepEqual(
+    sugestoes.map((item) => [item.vindo.id, item.local.id]),
+    [[carol.id, 'local-carol']],
+  )
   const unificado = unificarJogadores(cheio, { [carol.id]: 'local-carol' })
-  assert.ok(!unificado.jogadores.some((jogador) => jogador.id === carol.id), 'a Carol do backup não entra de novo')
+  assert.ok(
+    !unificado.jogadores.some((jogador) => jogador.id === carol.id),
+    'a Carol do backup não entra de novo',
+  )
   const texto = JSON.stringify([unificado.partidas, unificado.torneios, unificado.clube])
-  assert.ok(!texto.includes(JSON.stringify(carol.id)), 'nenhuma partida, torneio ou mesa aponta para o id antigo')
+  assert.ok(
+    !texto.includes(JSON.stringify(carol.id)),
+    'nenhuma partida, torneio ou mesa aponta para o id antigo',
+  )
   assert.ok(texto.includes('local-carol'))
-  const partidasDela = unificado.partidas.filter((partida) => partida.resultado?.some((linha) => linha.jogadorId === 'local-carol'))
-  assert.equal(partidasDela.length, cheio.partidas.filter((partida) => partida.resultado?.some((linha) => linha.jogadorId === carol.id)).length)
+  const partidasDela = unificado.partidas.filter((partida) =>
+    partida.resultado?.some((linha) => linha.jogadorId === 'local-carol'),
+  )
+  assert.equal(
+    partidasDela.length,
+    cheio.partidas.filter((partida) =>
+      partida.resultado?.some((linha) => linha.jogadorId === carol.id),
+    ).length,
+  )
   assert.deepEqual(unificarJogadores(cheio, {}), cheio, 'sem pares, nada muda')
 })
 
 teste('a mesma mesa registrada nos dois celulares entra uma vez só', () => {
   const [minha, outra] = gerarPartidasDeTeste(AGORA, 2)
-  const depois = (minutos: number) => new Date(Date.parse(minha.finalizadaEm!) + minutos * 60_000).toISOString()
+  const depois = (minutos: number) =>
+    new Date(Date.parse(minha.finalizadaEm!) + minutos * 60_000).toISOString()
   // O Daniel registrou a mesma mesa 40 min depois, com outro id.
   const doDaniel = { ...minha, id: 'daniel-1', finalizadaEm: depois(40) }
   // Mesmos pontos, mas 2 horas depois: é outra partida.
   const outroDia = { ...minha, id: 'daniel-2', finalizadaEm: depois(120) }
   // Um ponto diferente: não dá para saber qual está certo, entram as duas.
-  const linhas = minha.resultado!.map((linha, indice) => (indice === 0 ? { ...linha, pontosBrutos: linha.pontosBrutos + 100 } : linha))
-  const digitadaDiferente = { ...minha, id: 'daniel-3', finalizadaEm: depois(10), resultado: linhas }
-  assert.deepEqual(partidasRepetidas([minha, outra], [doDaniel, outroDia, digitadaDiferente]), ['daniel-1'])
+  const linhas = minha.resultado!.map((linha, indice) =>
+    indice === 0 ? { ...linha, pontosBrutos: linha.pontosBrutos + 100 } : linha,
+  )
+  const digitadaDiferente = {
+    ...minha,
+    id: 'daniel-3',
+    finalizadaEm: depois(10),
+    resultado: linhas,
+  }
+  assert.deepEqual(partidasRepetidas([minha, outra], [doDaniel, outroDia, digitadaDiferente]), [
+    'daniel-1',
+  ])
   const local: DadosBackup = { ...VAZIO, partidas: [minha, outra] }
   const vindo: DadosBackup = { ...VAZIO, partidas: [doDaniel, outroDia, digitadaDiferente] }
   assert.deepEqual(
     mesclarBackup(local, vindo).partidas.map((partida) => partida.id),
     [minha.id, outra.id, 'daniel-2', 'daniel-3'],
+  )
+})
+
+teste('placares MCR: backup antigo, mescla e unificação de jogadores', () => {
+  // Backup de antes da 7.0.0, sem o campo: entra sem placares.
+  const { placaresMcr: _semCampo, ...antigo } = VAZIO
+  const lido = validarBackup(JSON.stringify(montarBackup(antigo as DadosBackup, '6.0.0', AGORA)))
+  assert.ok(lido.ok)
+  assert.deepEqual(lido.backup.dados.placaresMcr, [])
+
+  const local: DadosBackup = { ...VAZIO, placaresMcr: [placarMcrDeTeste('mcr-1')] }
+  const vindo: DadosBackup = {
+    ...VAZIO,
+    placaresMcr: [placarMcrDeTeste('mcr-1'), placarMcrDeTeste('mcr-2')],
+  }
+  assert.deepEqual(
+    mesclarBackup(local, vindo).placaresMcr.map((placar) => placar.id),
+    ['mcr-1', 'mcr-2'],
+    'mesclar não duplica placares',
+  )
+
+  const [primeiro] = vindo.placaresMcr[0].jogadorIds
+  const unificado = unificarJogadores(vindo, { [primeiro]: 'jogador-local' })
+  assert.equal(
+    unificado.placaresMcr[0].jogadorIds[0],
+    'jogador-local',
+    'o placar aponta para o jogador daqui',
   )
 })
 

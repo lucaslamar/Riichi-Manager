@@ -43,5 +43,4 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 
 - Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
 - Pontos de mesa 4/2/1/0 do Torneio no MCR: o Torneio continua só no Riichi.
-- Backup dos placares MCR: ainda não entram no arquivo de backup.
 - Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.
