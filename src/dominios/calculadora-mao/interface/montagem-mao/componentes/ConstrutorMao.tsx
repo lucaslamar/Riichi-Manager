@@ -420,7 +420,6 @@ export default function ConstrutorMao({
                 podeKanAberto={podeKanAberto}
                 podeKanFechado={podeKanFechado}
                 aoAlternarAcao={alternarAcaoMao}
-                aoAbrirNotacao={entradaFixa ? undefined : aoMudarEntradaNotacao && abrirNotacao}
               />
             </div>
           )}
@@ -436,7 +435,7 @@ export default function ConstrutorMao({
           {contexto === 'montagem' && !entradaPorNotacao && (
             <div className="menu-acoes-teclado-mobile" aria-label={t('calculator.actionsMenu')}>
               <div
-                className={`opcoes-acoes-mao-mobile${entradaFixa ? ' opcoes-acoes-mao-mobile--sem-mpsz' : ''}${
+                className={`opcoes-acoes-mao-mobile opcoes-acoes-mao-mobile--sem-mpsz${
                   mao.sanma ? ' opcoes-acoes-mao-mobile--sanma' : ''
                 }`}
               >
@@ -448,7 +447,6 @@ export default function ConstrutorMao({
                   podeKanAberto={podeKanAberto}
                   podeKanFechado={podeKanFechado}
                   aoAlternarAcao={alternarAcaoMao}
-                  aoAbrirNotacao={entradaFixa ? undefined : aoMudarEntradaNotacao && abrirNotacao}
                   compacto
                 />
                 {aoAbrirRegras && !mostrarFinalizacaoNoTeclado && (
@@ -498,6 +496,9 @@ export default function ConstrutorMao({
             escolhaChiiPendente) && (
             <TecladoPedras
               mostrarGrade={!entradaPorNotacao}
+              // MPSZ e apagar a última pedra ficam nas pontas da linha das honras.
+              aoAbrirNotacao={entradaFixa ? undefined : aoMudarEntradaNotacao && abrirNotacao}
+              aoApagarUltima={mao.pedras.length > 0 ? () => removerPedra(mao.pedras.length - 1) : undefined}
               acaoPendente={acaoPendente}
               configuracao={configuracao}
               dorasReais={dorasReais}

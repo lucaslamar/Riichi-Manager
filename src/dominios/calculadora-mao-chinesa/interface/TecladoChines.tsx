@@ -172,7 +172,7 @@ export default function TecladoChines({
         <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
           {t('calculator.honors')}
         </div>
-        <div className="linha-naipe linha-honras-mcr">
+        <div className="linha-naipe linha-honras-9">
           <BotaoFlor
             tipo="flor"
             temFlor={temFlor}

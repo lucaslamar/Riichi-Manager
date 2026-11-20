@@ -198,7 +198,8 @@
     "yakumanShort": "{{count}}× YM",
     "pocketGuide": "Guía de bolsillo de la Ovejita",
     "handCleared": "Mano borrada",
-    "spokenPoints": "{{points}} puntos"
+    "spokenPoints": "{{points}} puntos",
+    "removeLastTile": "Quitar la última ficha"
   },
   "hanFu": {
     "isDealer": "¿Es oya?",

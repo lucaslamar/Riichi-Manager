@@ -190,7 +190,8 @@
     "yakumanShort": "{{count}}배 역만",
     "pocketGuide": "아기 양의 포켓 가이드",
     "handCleared": "손패를 지웠습니다",
-    "spokenPoints": "{{points}}점"
+    "spokenPoints": "{{points}}점",
+    "removeLastTile": "마지막 패 지우기"
   },
   "hanFu": {
     "isDealer": "친인가요?",

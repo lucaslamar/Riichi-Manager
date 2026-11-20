@@ -194,7 +194,8 @@
     "yakumanShort": "{{count}}× YM",
     "pocketGuide": "Guia de bolso da Ovelhinha",
     "handCleared": "Mão apagada",
-    "spokenPoints": "{{points}} pontos"
+    "spokenPoints": "{{points}} pontos",
+    "removeLastTile": "Apagar a última pedra"
   },
   "hanFu": {
     "isDealer": "É oya?",

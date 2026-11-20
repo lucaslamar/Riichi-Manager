@@ -59,6 +59,10 @@ interface PropsTecladoPedras {
   aoAlternarSelecaoPedraAgari?: () => void
   aoEscolherPedraAgariPorCodigo?: (pedra: CodigoPedra) => void
   aoEscolherChiiPendente?: (chamada: CodigoPedra, sequencia: CodigoPedra[]) => void
+  /** Tecla MPSZ no começo da linha das honras (troca para a notação). */
+  aoAbrirNotacao?: () => void
+  /** Tecla no fim da linha das honras: apaga a última pedra da mão. */
+  aoApagarUltima?: () => void
 }
 
 /**
@@ -94,6 +98,8 @@ export function TecladoPedras({
   aoAlternarSelecaoPedraAgari,
   aoEscolherPedraAgariPorCodigo,
   aoEscolherChiiPendente,
+  aoAbrirNotacao,
+  aoApagarUltima,
 }: PropsTecladoPedras) {
   const { t } = useI18n()
   const sanma = useSanmaMao()
@@ -421,7 +427,37 @@ export function TecladoPedras({
           <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
             {t('calculator.honors')}
           </div>
-          <div className="linha-naipe">{HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}</div>
+          {/* Na montagem a linha das honras tem 9 teclas, como os naipes: MPSZ, as honras e apagar. */}
+          {contexto === 'montagem' ? (
+            <div className="linha-naipe linha-honras-9">
+              {aoAbrirNotacao ? (
+                <button
+                  type="button"
+                  className="btn-pedra btn-pedra-utilitaria"
+                  aria-label={t('notation.toggle')}
+                  title={t('notation.toggle')}
+                  onClick={aoAbrirNotacao}
+                >
+                  MPSZ
+                </button>
+              ) : (
+                <span className="btn-pedra espaco-pedra-sanma" aria-hidden="true" />
+              )}
+              {HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}
+              <button
+                type="button"
+                className="btn-pedra btn-pedra-utilitaria"
+                aria-label={t('calculator.removeLastTile')}
+                title={t('calculator.removeLastTile')}
+                disabled={!aoApagarUltima}
+                onClick={aoApagarUltima}
+              >
+                <i className="fas fa-delete-left" aria-hidden="true" />
+              </button>
+            </div>
+          ) : (
+            <div className="linha-naipe">{HONRAS.map((codigo) => renderizarBotaoPedra(codigo))}</div>
+          )}
         </div>
       )}
       {contexto === 'montagem' && maoProntaParaFinalizar && (aoFinalizarMao || aoCalcularDireto) && (

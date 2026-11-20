@@ -190,7 +190,8 @@
     "yakumanShort": "{{count}}倍役满",
     "pocketGuide": "小羊口袋指南",
     "handCleared": "手牌已清空",
-    "spokenPoints": "{{points}}点"
+    "spokenPoints": "{{points}}点",
+    "removeLastTile": "删除最后一张牌"
   },
   "hanFu": {
     "isDealer": "是庄家吗？",

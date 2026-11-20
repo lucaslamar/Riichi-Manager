@@ -194,7 +194,8 @@
     "yakumanShort": "{{count}}× YM",
     "pocketGuide": "Little Sheep pocket guide",
     "handCleared": "Hand cleared",
-    "spokenPoints": "{{points}} points"
+    "spokenPoints": "{{points}} points",
+    "removeLastTile": "Remove last tile"
   },
   "hanFu": {
     "isDealer": "Dealer?",

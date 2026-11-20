@@ -9,11 +9,6 @@
   grid-template-columns: 0.8fr 0.8fr 0.8fr 1.32fr;
 }
 
-/* Flor e Estação nas pontas: a linha das honras tem 9 pedras, como os naipes. */
-.card-mao-completa .construtor-mao-montagem .teclado-pedras .grupo-teclado-honras .linha-naipe.linha-honras-mcr {
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-}
-
 .mcr-flores-mao {
   display: flex;
   flex-wrap: wrap;

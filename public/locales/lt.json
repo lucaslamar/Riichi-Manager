@@ -202,7 +202,8 @@
     "yakumanShort": "{{count}}× YM",
     "pocketGuide": "Avytės kišeninis vadovas",
     "handCleared": "Ranka išvalyta",
-    "spokenPoints": "{{points}} taškų"
+    "spokenPoints": "{{points}} taškų",
+    "removeLastTile": "Pašalinti paskutinį akmenį"
   },
   "hanFu": {
     "isDealer": "Ar dalintojas?",

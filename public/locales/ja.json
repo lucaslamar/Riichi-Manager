@@ -190,7 +190,8 @@
     "yakumanShort": "{{count}}倍役満",
     "pocketGuide": "ひつじのポケットガイド",
     "handCleared": "手牌を消去しました",
-    "spokenPoints": "{{points}}点"
+    "spokenPoints": "{{points}}点",
+    "removeLastTile": "最後の牌を消す"
   },
   "hanFu": {
     "isDealer": "親ですか？",
