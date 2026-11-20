@@ -2,25 +2,15 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { BotaoAcao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
-import { TecladoPedras } from '@/dominios/calculadora-mao/interface/montagem-mao/componentes/TecladoPedras'
-import {
-  configuracaoPadrao,
-  type Acao,
-  type CodigoPedra,
-} from '@/dominios/calculadora-mao/logica/mao'
+import type { Acao } from '@/dominios/calculadora-mao/logica/mao'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
-import { maoCompleta, pedrasContadas, type TipoChamada, type TipoFlor } from '../logica/montagem'
+import { maoCompleta, pedrasContadas, type TipoChamada } from '../logica/montagem'
 import '../estilos/calculadora-mao-chinesa.css'
 import ControlesCondicoes from './ControlesCondicoes'
 import MaoChinesaAtual from './MaoChinesaAtual'
-import { codigoPedra, idDaPedra, nomePedra } from './pedras'
 import ResultadoFan from './ResultadoFan'
+import TecladoChines from './TecladoChines'
 import { useCalculadoraMaoChinesa } from './useCalculadoraMaoChinesa'
-
-/** O MCR não usa aka dora: o teclado da calculadora japonesa fica sem o 5 vermelho. */
-const CONFIGURACAO_TECLADO = { ...configuracaoPadrao, akadora: false }
-const SEM_DORAS = new Set<string>()
-const SEM_ESPERAS = new Map()
 
 const CHAMADAS: { tipo: TipoChamada; acao: Acao['tipo']; chave: string; chaveCompacta: string }[] =
   [
@@ -39,14 +29,6 @@ const CHAMADAS: { tipo: TipoChamada; acao: Acao['tipo']; chave: string; chaveCom
       chaveCompacta: 'melds.kanClosedCompact',
     },
   ]
-const FLORES: { tipo: TipoFlor; chave: string }[] = [
-  { tipo: 'flor', chave: 'mcr.entrada.flor' },
-  { tipo: 'estacao', chave: 'mcr.entrada.estacao' },
-]
-
-const paraAcao = (tipo: TipoChamada): Acao =>
-  tipo === 'chi' ? { tipo: 'chii', pedras: [] } : ({ tipo: tipo === 'pon' ? 'pon' : tipo } as Acao)
-
 /**
  * Calculadora de Mão Chinesa (MCR / Guobiao), com o mesmo layout da japonesa:
  * montar a mão no teclado e, com 14 pedras, finalizar com as condições e calcular.
@@ -70,16 +52,6 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
           ativo={calc.acao === tipo}
           desabilitado={calc.acao !== tipo && !calc.podeChamarAlguma(tipo)}
           aoClicar={() => calc.alternarAcao(tipo)}
-        />
-      ))}
-      {FLORES.map(({ tipo, chave }) => (
-        <BotaoAcao
-          key={tipo}
-          tipo={tipo}
-          rotulo={t(chave)}
-          ativo={false}
-          desabilitado={calc.proximaFlor(tipo) === null}
-          aoClicar={() => calc.adicionarFlor(tipo)}
         />
       ))}
     </>
@@ -120,43 +92,16 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
                       {botoesAcao(true)}
                     </div>
                   </div>
-                  <TecladoPedras
-                    acaoPendente={calc.acao ? paraAcao(calc.acao) : null}
-                    configuracao={CONFIGURACAO_TECLADO}
-                    dorasReais={SEM_DORAS}
-                    esperasPorPedra={SEM_ESPERAS}
-                    filtrarTecladoPorEspera={false}
-                    furitenBloqueiaRon={false}
-                    maoCompleta={completa}
-                    podeSelecionarPedra={(codigo: CodigoPedra) =>
-                      calc.podeTocarPedra(idDaPedra(codigo))
-                    }
-                    rotuloEsperaTeclado={() => ''}
-                    classeEsperaTeclado={() => ''}
-                    contexto="montagem"
-                    rotuloPedra={(codigo) =>
-                      calc.acao
-                        ? t('calculator.chooseMeldTile', {
-                            tile: nomePedra(idDaPedra(codigo)),
-                            meld: t(`melds.${paraAcao(calc.acao).tipo}`),
-                          })
-                        : t('calculator.addTileToHand', { tile: nomePedra(idDaPedra(codigo)) })
-                    }
-                    maoProntaParaFinalizar={completa && !calc.acao}
-                    batidaDefinida
-                    escolhaChiiPendente={
-                      calc.chiPendente && {
-                        chamada: codigoPedra(calc.chiPendente.chamada),
-                        opcoes: calc.chiPendente.meios.map((meio) =>
-                          [meio - 1, meio, meio + 1].map(codigoPedra),
-                        ),
-                      }
-                    }
-                    aoAdicionarPedra={(codigo) => calc.tocarPedra(idDaPedra(codigo))}
-                    aoFinalizarMao={calc.finalizar}
-                    aoEscolherChiiPendente={(_chamada, sequencia) =>
-                      calc.escolherChi(idDaPedra(sequencia[1]))
-                    }
+                  <TecladoChines
+                    acao={calc.acao}
+                    podeTocarPedra={calc.podeTocarPedra}
+                    temFlor={calc.temFlor}
+                    chiPendente={calc.chiPendente}
+                    maoPronta={completa && !calc.acao}
+                    aoTocarPedra={calc.tocarPedra}
+                    aoTocarFlor={calc.adicionarFlor}
+                    aoEscolherChi={calc.escolherChi}
+                    aoFinalizar={calc.finalizar}
                   />
                 </div>
               </div>

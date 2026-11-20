@@ -13,7 +13,6 @@ import {
   paraMotor,
   podeAdicionarPedra,
   podeChamar,
-  proximaFlor,
   removerChamada,
   removerFlor,
   removerPedra,
@@ -23,7 +22,6 @@ import {
   type Flor,
   type MaoChinesa,
   type TipoChamada,
-  type TipoFlor,
 } from '../logica/montagem'
 import { calcularPagamentoMcr } from '../logica/pontuacao-mcr'
 import type { ResultadoFanMcr, ResultadoPagamentoMcr } from '../logica/tipos'
@@ -127,8 +125,8 @@ export function useCalculadoraMaoChinesa() {
     removerPedra: (indice: number) => mudarMao((atual) => removerPedra(atual, indice)),
     removerChamada: (indice: number) => mudarMao((atual) => removerChamada(atual, indice)),
     escolherBatida: (indice: number) => mudarMao((atual) => escolherBatida(atual, indice)),
-    proximaFlor: (tipo: TipoFlor) => proximaFlor(mao, tipo),
-    adicionarFlor: (tipo: TipoFlor) => mudarMao((atual) => adicionarFlor(atual, tipo)),
+    temFlor: (flor: Flor) => mao.flores.includes(flor),
+    adicionarFlor: (flor: Flor) => mudarMao((atual) => adicionarFlor(atual, flor)),
     removerFlor: (flor: Flor) => mudarMao((atual) => removerFlor(atual, flor)),
     finalizar: () => {
       setAcao(null)

@@ -19,7 +19,6 @@ export interface Chamada {
  * função própria: só o desenho muda.
  */
 export type Flor = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
-export type TipoFlor = 'flor' | 'estacao'
 
 export interface MaoChinesa {
   pedras: number[]
@@ -121,20 +120,10 @@ export function escolherBatida(mao: MaoChinesa, indice: number): MaoChinesa {
   return { ...mao, pedras: [...pedras, mao.pedras[indice]] }
 }
 
-const PRIMEIRA: Record<TipoFlor, Flor> = { flor: 1, estacao: 5 }
-
-/** A próxima flor (ou estação) que ainda não está na mão, ou nenhuma se as quatro já estão. */
-export function proximaFlor(mao: MaoChinesa, tipo: TipoFlor): Flor | null {
-  for (let i = 0; i < 4; i++) {
-    const flor = (PRIMEIRA[tipo] + i) as Flor
-    if (!mao.flores.includes(flor)) return flor
-  }
-  return null
-}
-
-export function adicionarFlor(mao: MaoChinesa, tipo: TipoFlor): MaoChinesa {
-  const flor = proximaFlor(mao, tipo)
-  return flor ? { ...mao, flores: [...mao.flores, flor].sort((a, b) => a - b) } : mao
+/** Cada flor existe uma vez: tocar de novo não repete. */
+export function adicionarFlor(mao: MaoChinesa, flor: Flor): MaoChinesa {
+  if (mao.flores.includes(flor)) return mao
+  return { ...mao, flores: [...mao.flores, flor].sort((a, b) => a - b) }
 }
 
 export function removerFlor(mao: MaoChinesa, flor: Flor): MaoChinesa {

@@ -2,19 +2,11 @@
    Mão japonesa (compartilhado/interface/estilos/dominios/calculadoras). Aqui fica
    só o que o MCR tem a mais: flores, condições e resultado em fan. */
 
-/* Chi, Pon, Kan, Kan fechado, Flor e Estação: seis botões na barra do celular. */
+/* Chi, Pon, Kan e Kan fechado: o MPSZ do Riichi não existe aqui. */
 .construtor-mao-montagem
   .menu-acoes-teclado-mobile
   .opcoes-acoes-mao-mobile.opcoes-acoes-mao-mobile--mcr {
-  grid-template-columns: 0.7fr 0.75fr 0.7fr 1.3fr 0.75fr 1fr;
-}
-
-.btn-acao-flor {
-  --action-color: var(--texto-aviso);
-}
-
-.btn-acao-estacao {
-  --action-color: var(--cor-secundario-texto, #155b98);
+  grid-template-columns: 0.8fr 0.8fr 0.8fr 1.32fr;
 }
 
 .mcr-flores-mao {
@@ -22,40 +14,6 @@
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 6px;
-}
-
-.mcr-flor-mao {
-  width: var(--pedra-mao-largura, 2.2rem);
-}
-
-.pedra-flor {
-  width: 100%;
-  height: auto;
-}
-
-.pedra-flor__face {
-  fill: var(--pedra-face, #f6f1e7);
-  stroke: var(--cor-borda-controle, #b9b2a5);
-  stroke-width: 1;
-}
-
-.pedra-flor__numero {
-  fill: #b3261e;
-  font-size: 8px;
-  font-weight: 800;
-}
-
-.pedra-flor__hanzi {
-  font-size: 17px;
-  font-weight: 700;
-}
-
-.pedra-flor--flor .pedra-flor__hanzi {
-  fill: #2e7d32;
-}
-
-.pedra-flor--estacao .pedra-flor__hanzi {
-  fill: #1f4fa3;
 }
 
 .mcr-secao {

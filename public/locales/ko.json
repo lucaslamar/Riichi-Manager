@@ -2181,10 +2181,10 @@
   },
   "mcr": {
     "entrada": {
-      "flor": "Flower",
-      "estacao": "Season",
       "flores": "Flowers and seasons",
-      "removerFlor": "Remove {{flor}}"
+      "removerFlor": "Remove {{flor}}",
+      "floresCurto": "Flow",
+      "adicionarFlor": "Add {{flor}}"
     },
     "condicoes": {
       "titulo": "Conditions",

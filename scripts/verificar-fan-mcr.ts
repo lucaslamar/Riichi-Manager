@@ -21,7 +21,6 @@ import {
   adicionarFlor,
   escolherBatida,
   MAO_CHINESA_VAZIA,
-  proximaFlor,
   removerFlor,
   sequenciasDoChi,
 } from '../src/dominios/calculadora-mao-chinesa/logica/montagem'
@@ -216,10 +215,9 @@ console.log('✓ 81 fan do guia do CMC')
   assert.deepEqual(sequenciasDoChi(vazia, 5), [4, 5, 6], 'Chi no 5m: 345, 456 e 567')
   assert.deepEqual(sequenciasDoChi(vazia, 1), [2], 'Chi no 1m: só 123')
   assert.deepEqual(sequenciasDoChi(vazia, 28), [], 'Honra não faz Chi')
-  let mao = adicionarFlor(adicionarFlor(adicionarFlor(vazia, 'flor'), 'estacao'), 'flor')
-  assert.deepEqual(mao.flores, [1, 2, 5], 'Cada toque traz a próxima flor ou estação')
-  mao = removerFlor(mao, 1)
-  assert.equal(proximaFlor(mao, 'flor'), 1, 'A flor removida volta a ser a próxima')
+  const mao = adicionarFlor(adicionarFlor(adicionarFlor(vazia, 6), 2), 6)
+  assert.deepEqual(mao.flores, [2, 6], 'Cada flor entra uma vez, em ordem')
+  assert.deepEqual(removerFlor(mao, 2).flores, [6], 'Tocar na flor da mão a tira')
   const comPedras = { ...vazia, pedras: [1, 2, 3] }
   assert.deepEqual(
     escolherBatida(comPedras, 0).pedras,

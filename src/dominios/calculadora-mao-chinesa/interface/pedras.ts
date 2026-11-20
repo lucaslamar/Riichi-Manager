@@ -20,12 +20,3 @@ export function codigoPedra(id: number): CodigoPedra {
 }
 
 export const nomePedra = (id: number) => nomePedraAcessivel(codigoPedra(id))
-
-/** O contrário de `codigoPedra`: da notação das artes para o id do motor. */
-export function idDaPedra(codigo: CodigoPedra): number {
-  const numero = Number(codigo[0])
-  if (codigo[1] === 'm') return numero
-  if (codigo[1] === 's') return numero + 9
-  if (codigo[1] === 'p') return numero + 18
-  return Number(Object.entries(HONRAS).find(([, valor]) => valor === codigo)?.[0])
-}

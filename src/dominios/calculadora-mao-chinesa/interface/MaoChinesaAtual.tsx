@@ -1,15 +1,36 @@
 import type { ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ChipMeldMao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/ChipMeldMao'
-import {
-  GradePedrasMao,
-  PedraMao,
-} from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraMao'
-import { PedrasMeld } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
+import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
 import { ESTILO_MELD } from '@/dominios/calculadora-mao/interface/constantes'
-import { pedrasContadas, pedrasDaChamada, type MaoChinesa } from '../logica/montagem'
-import { PedraFlor } from './PedraFlor'
-import { codigoPedra, nomePedra } from './pedras'
+import {
+  pedrasContadas,
+  pedrasDaChamada,
+  type Chamada,
+  type Flor,
+  type MaoChinesa,
+} from '../logica/montagem'
+import { PedraChinesa, PedraFlor } from './PedraChinesa'
+import { nomePedra } from './pedras'
+
+/** Pedras do conjunto como na mesa: a chamada de lado e, no kan fechado, as pontas viradas. */
+function PedrasChamada({ chamada }: { chamada: Chamada }) {
+  const pedras = pedrasDaChamada(chamada)
+  return (
+    <span className="meld-pedras">
+      {pedras.map((id, indice) => {
+        const virada = chamada.tipo === 'kanFechado' && (indice === 0 || indice === 3)
+        const deLado = chamada.tipo !== 'kanFechado' && indice === 0
+        return (
+          <span key={indice} className={`meld-tile${deLado ? ' de-lado' : ''}`}>
+            {/* O verso é o mesmo das pedras do Riichi. */}
+            {virada ? <PedraSvg virada /> : <PedraChinesa id={id} />}
+          </span>
+        )
+      })}
+    </span>
+  )
+}
 
 /**
  * A mão montada, com o mesmo visual da Calculadora de Mão japonesa: pedras soltas,
@@ -30,7 +51,7 @@ export default function MaoChinesaAtual({
   acoesCabecalho?: ReactNode
   aoTocarPedra: (indice: number) => void
   aoRemoverChamada: (indice: number) => void
-  aoRemoverFlor: (flor: MaoChinesa['flores'][number]) => void
+  aoRemoverFlor: (flor: Flor) => void
   aoLimpar: () => void
 }) {
   const { t } = useI18n()
@@ -67,27 +88,32 @@ export default function MaoChinesaAtual({
       </div>
 
       <div className="pedras-selecionadas">
-        <GradePedrasMao className={montagem ? '' : 'mao-principal-finalizacao'}>
+        <div className={`grade-pedras-mao${montagem ? '' : ' mao-principal-finalizacao'}`}>
           {mao.pedras.map((id, indice) => {
             const ehBatida = indice === ultima && (!montagem || pedrasContadas(mao) === 14)
             const tile = nomePedra(id)
+            const rotulo = montagem
+              ? ehBatida
+                ? t('calculator.removeWinningTile', { tile })
+                : t('calculator.removeTile', { tile })
+              : t('calculator.selectWinningTile', { tile })
             return (
-              <PedraMao
+              <button
                 key={indice}
-                pedra={codigoPedra(id)}
-                rotulo={
-                  montagem
-                    ? ehBatida
-                      ? t('calculator.removeWinningTile', { tile })
-                      : t('calculator.removeTile', { tile })
-                    : t('calculator.selectWinningTile', { tile })
-                }
-                ehAgari={ehBatida}
-                aoClicar={() => aoTocarPedra(indice)}
-              />
+                type="button"
+                className={`chip-pedra pedra-mao${ehBatida ? ' agari' : ''}`}
+                title={rotulo}
+                aria-label={rotulo}
+                onClick={() => aoTocarPedra(indice)}
+              >
+                <PedraChinesa id={id} />
+                {ehBatida && (
+                  <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>
+                )}
+              </button>
             )
           })}
-        </GradePedrasMao>
+        </div>
 
         {mao.chamadas.map((chamada, indice) => {
           const tipo = chamada.tipo === 'chi' ? 'chii' : chamada.tipo
@@ -98,13 +124,17 @@ export default function MaoChinesaAtual({
               titulo={t('calculator.removeMeld', { meld: t(ESTILO_MELD[tipo].rotulo) })}
               aoClicar={() => montagem && aoRemoverChamada(indice)}
             >
-              <PedrasMeld meld={{ tipo, pedras: pedrasDaChamada(chamada).map(codigoPedra) }} />
+              <PedrasChamada chamada={chamada} />
             </ChipMeldMao>
           )
         })}
 
         {mao.flores.length > 0 && (
-          <div className="mcr-flores-mao" role="group" aria-label={t('mcr.entrada.flores')}>
+          <div
+            className="grade-pedras-mao mcr-flores-mao"
+            role="group"
+            aria-label={t('mcr.entrada.flores')}
+          >
             {mao.flores.map((flor) => (
               <button
                 key={flor}

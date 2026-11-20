@@ -2207,10 +2207,10 @@
   },
   "mcr": {
     "entrada": {
-      "flor": "Flor",
-      "estacao": "Estação",
       "flores": "Flores e estações",
-      "removerFlor": "Remover {{flor}}"
+      "removerFlor": "Remover {{flor}}",
+      "floresCurto": "Flor",
+      "adicionarFlor": "Adicionar {{flor}}"
     },
     "condicoes": {
       "titulo": "Condições",
