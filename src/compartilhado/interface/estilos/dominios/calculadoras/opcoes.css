@@ -1203,38 +1203,3 @@
   grid-column: 1 / -1;
   min-width: 0;
 }
-
-/* Linha das honras com 9 teclas, como os naipes (os dois modos de jogo):
-   Riichi: MPSZ, as 7 honras e apagar. MCR: Flor, as 7 honras e Estação. */
-.card-mao-completa .construtor-mao-montagem .teclado-pedras .grupo-teclado-honras .linha-naipe.linha-honras-9 {
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-}
-
-/* Com a tecla do 5 vermelho (tablet e computador) os naipes têm 10 colunas:
-   a linha das honras acompanha, e a última fica vazia, embaixo do 5 vermelho. */
-.card-mao-completa .construtor-mao-montagem .teclado-pedras:has(.btn-pedra-aka) .grupo-teclado-honras .linha-naipe.linha-honras-9 {
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  /* No tablet a linha é flex: começa na esquerda, alinhada com os naipes. */
-  justify-content: flex-start;
-}
-
-/* Tecla que não é pedra (MPSZ, apagar): mesmo tamanho, sem face de pedra. */
-.card-mao-completa .teclado-pedras .btn-pedra.btn-pedra-utilitaria {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px dashed var(--cor-borda-controle, #8a94a6);
-  background: transparent;
-  color: var(--cor-texto, #1a3a5a);
-  font-size: 0.75rem;
-  font-weight: 900;
-  letter-spacing: 0;
-}
-
-.card-mao-completa .teclado-pedras .btn-pedra.btn-pedra-utilitaria i {
-  font-size: 1.1rem;
-}
-
-.card-mao-completa .teclado-pedras .btn-pedra.btn-pedra-utilitaria:disabled {
-  opacity: 0.35;
-}
