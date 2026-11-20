@@ -21,7 +21,8 @@ export default function PaginaPlacarMcr() {
     vista.tipo === 'placar' ? placares.find((placar) => placar.id === vista.id) : undefined
   const voltar = () => setVista({ tipo: 'lista' })
 
-  // A Nova partida ocupa a tela como a do Riichi, com o próprio título.
+  // A Nova partida e a mesa ocupam a tela como as do Riichi, com o próprio título.
+  if (vista.tipo === 'placar' && aberto) return <PlacarAberto placar={aberto} aoVoltar={voltar} />
   if (vista.tipo === 'novo') {
     return <NovoPlacarMcr aoCriar={(id) => setVista({ tipo: 'placar', id })} aoVoltar={voltar} />
   }
@@ -32,8 +33,6 @@ export default function PaginaPlacarMcr() {
         titulo={t('menu.scoreMcr')}
         aoVoltar={vista.tipo === 'lista' ? undefined : voltar}
       />
-
-      {vista.tipo === 'placar' && aberto && <PlacarAberto placar={aberto} aoVoltar={voltar} />}
 
       {(vista.tipo === 'lista' || (vista.tipo === 'placar' && !aberto)) && (
         <>

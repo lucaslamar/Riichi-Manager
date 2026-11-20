@@ -9,15 +9,18 @@ import { CADEIRAS, pontosDaMao, validarMao, type Cadeira, type MaoMcr } from '..
 /** Registrar a vitória de uma mão: quem venceu, ron ou tsumo, quem descartou e os fan. */
 export default function ModalMaoMcr({
   nomes,
+  vencedorInicial = 0,
   aoSalvar,
   aoFechar,
 }: {
   nomes: readonly string[]
+  /** Quem a placa tocada indicou como vencedor. */
+  vencedorInicial?: Cadeira
   aoSalvar: (mao: MaoMcr) => void
   aoFechar: () => void
 }) {
   const { t, numero } = useI18n()
-  const [vencedor, setVencedor] = useState<Cadeira>(0)
+  const [vencedor, setVencedor] = useState<Cadeira>(vencedorInicial)
   const [forma, setForma] = useState<FormaBatida>('ron')
   const [descartador, setDescartador] = useState<Cadeira | undefined>(undefined)
   const [fan, setFan] = useState(FAN_MINIMO_MCR)

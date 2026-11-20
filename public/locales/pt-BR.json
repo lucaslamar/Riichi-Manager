@@ -2352,7 +2352,8 @@
       },
       "nenhumaMao": "nenhuma mão",
       "regrasMcr": "MCR",
-      "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan."
+      "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan.",
+      "maoCurta": "Mão {{mao}}"
     }
   },
   "glossario": {

@@ -1,27 +1,43 @@
 import { useCallback, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
+import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import MesaQuadrada from '@/dominios/centerpiece/interface/componentes/MesaQuadrada'
+import PlacaJogador from '@/dominios/centerpiece/interface/componentes/PlacaJogador'
 import { useRelogioVez } from '@/dominios/centerpiece/interface/hooks/useTimerVez'
+import {
+  CHAVE_VENTO,
+  KANJI_VENTO,
+  ORDEM_VENTOS,
+  ventoDaCadeira,
+} from '@/dominios/centerpiece/logica/partida'
 import type { EstadoVez } from '@/dominios/centerpiece/logica/vez'
+import '@/dominios/centerpiece/interface/partida.css'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import {
   CADEIRAS,
-  colocacoes,
   dealerDaMao,
   desfazerUltimaMao,
   finalizar,
+  MAOS_POR_RODADA,
   pontosDaMao,
   registrarMao,
   TOTAL_MAOS,
   totais,
   ventoDaRodada,
+  type Cadeira,
   type MaoMcr,
   type PlacarMcr,
 } from '../logica/placar'
 import ModalMaoMcr from './ModalMaoMcr'
-import { CHAVES_VENTO, nomeDaCadeira } from './nomes'
+import { nomeDaCadeira } from './nomes'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
 
-/** Placar em andamento (ou finalizado): totais, timer da vez, mãos e ações. */
+/**
+ * Mesa do placar MCR com o mesmo layout da mesa do Riichi: as placas dos
+ * jogadores em volta, o centro com a rodada e o timer da vez. Muda só a regra:
+ * 8 pontos obrigatórios, sem honba nem palitos, e o dealer passa a cada mão.
+ */
 export default function PlacarAberto({
   placar,
   aoVoltar,
@@ -31,14 +47,17 @@ export default function PlacarAberto({
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
-  const [registrando, setRegistrando] = useState(false)
+  const [vencedorEscolhido, setVencedorEscolhido] = useState<Cadeira | null>(null)
+  const [maosAbertas, setMaosAbertas] = useState(false)
   const nomes = placar.jogadorIds.map((id) =>
     nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido')),
   )
   const pontos = totais(placar)
-  const lugares = colocacoes(pontos)
   const indiceMao = placar.maos.length
   const emAndamento = !placar.finalizadoEm
+  const dealer = dealerDaMao(indiceMao)
+  const rodada = ORDEM_VENTOS[ventoDaRodada(indiceMao)]
+  const numeroNaRodada = (Math.min(indiceMao, TOTAL_MAOS - 1) % MAOS_POR_RODADA) + 1
   const atualizar = (transformar: (atual: PlacarMcr) => PlacarMcr) =>
     acoesPlacaresMcr.atualizar(placar.id, transformar)
 
@@ -51,189 +70,189 @@ export default function PlacarAberto({
     placar.vez,
     emAndamento ? placar.timerSegundos : 0,
     atualizarVez,
-    registrando,
+    vencedorEscolhido !== null,
   )
 
   const salvarMao = (mao: MaoMcr) => {
     atualizar((atual) => registrarMao(atual, mao))
-    setRegistrando(false)
+    setVencedorEscolhido(null)
   }
   const confirmar = (chave: string) => window.confirm(t(chave))
 
   return (
-    <div className="placar-mcr__aberto">
-      <section className="card placar-mcr__secao" aria-labelledby="placar-mcr-situacao">
-        <h3 id="placar-mcr-situacao" className="placar-mcr__titulo">
-          {emAndamento
-            ? t('placar.mcr.maoDe', {
-                mao: numero(Math.min(indiceMao + 1, TOTAL_MAOS)),
-                total: numero(TOTAL_MAOS),
-              })
-            : t('placar.mcr.finalizada')}
-        </h3>
-        {emAndamento && (
-          <p className="placar-mcr__ajuda">
-            {t('placar.mcr.rodadaDealer', {
-              vento: t(CHAVES_VENTO[ventoDaRodada(indiceMao)]),
-              dealer: nomes[dealerDaMao(indiceMao)],
-            })}
-          </p>
-        )}
-        {emAndamento && indiceMao >= TOTAL_MAOS && (
-          <p className="placar-mcr__ajuda">{t('placar.mcr.partidaCompleta')}</p>
-        )}
+    <section className="mesa-tela">
+      <TituloTela titulo={t('menu.scoreMcr')} aoVoltar={aoVoltar} acoes={<BotaoTelaCheia />} />
 
-        <div className="placar-mcr__jogadores">
-          {CADEIRAS.map((cadeira) => {
-            const daVez = relogio.ligado && placar.vez.cadeira === cadeira
-            return (
-              <button
-                key={cadeira}
-                type="button"
-                className={`placar-mcr__jogador${daVez ? ' placar-mcr__jogador--vez' : ''}${daVez && relogio.esgotado ? ' placar-mcr__jogador--esgotado' : ''}`}
-                aria-label={t('placar.mcr.passarVezPara', { nome: nomes[cadeira] })}
-                disabled={!relogio.ligado}
-                onClick={() => relogio.passarPara(cadeira)}
-              >
-                <span className="placar-mcr__vento">
-                  {t(CHAVES_VENTO[cadeira])}
-                  {emAndamento &&
-                    dealerDaMao(indiceMao) === cadeira &&
-                    ` · ${t('placar.mcr.dealer')}`}
-                </span>
-                <span className="placar-mcr__nome">{nomes[cadeira]}</span>
-                <strong className="placar-mcr__total">{numero(pontos[cadeira])}</strong>
-                <span className="placar-mcr__lugar">
-                  {t('placar.mcr.lugar', { lugar: numero(lugares[cadeira]) })}
-                </span>
-                {daVez && (
-                  <span
-                    className={`placar-mcr__timer${relogio.esgotado ? ' placar-mcr__timer--esgotado' : ''}`}
-                    role="timer"
-                    aria-label={t('match.timer.remaining', { seconds: relogio.segundos })}
-                  >
-                    <i className="fas fa-stopwatch" aria-hidden="true" /> {numero(relogio.segundos)}
-                  </span>
-                )}
-              </button>
-            )
+      <p className="placar-mcr__situacao" aria-live="polite">
+        {emAndamento
+          ? t('placar.mcr.maoDe', {
+              mao: numero(Math.min(indiceMao + 1, TOTAL_MAOS)),
+              total: numero(TOTAL_MAOS),
+            })
+          : t('placar.mcr.finalizada')}
+        {emAndamento && indiceMao >= TOTAL_MAOS && ` · ${t('placar.mcr.partidaCompleta')}`}
+      </p>
+
+      <div className="mesa-centro-tela">
+        <MesaQuadrada
+          cadeiraDealer={dealer}
+          aoTocarMesa={relogio.ligado ? relogio.tocar : undefined}
+          aoTocarDomo={relogio.ligado ? relogio.alternarPausa : undefined}
+          rotuloDomo={t(relogio.contando ? 'match.timer.pause' : 'match.timer.resume')}
+          domo={
+            <>
+              <span className="mesa-domo-rodada" aria-hidden="true">
+                {KANJI_VENTO[rodada]}
+                {numeroNaRodada}
+              </span>
+              <span className="sr-only">
+                {t('match.table.round', { wind: t(CHAVE_VENTO[rodada]), number: numeroNaRodada })}
+              </span>
+              <span className="mesa-domo-info">
+                {relogio.ligado && placar.vez.comecou && !relogio.contando && (
+                  <i className="fas fa-pause" aria-hidden="true" />
+                )}{' '}
+                {t('placar.mcr.maoCurta', { mao: numero(Math.min(indiceMao + 1, TOTAL_MAOS)) })}
+              </span>
+            </>
+          }
+          lado={(cadeira) => ({
+            placa: (
+              <PlacaJogador
+                nome={nomes[cadeira]}
+                vento={ventoDaCadeira(cadeira, dealer)}
+                pontos={pontos[cadeira]}
+                emRiichi={false}
+                timer={
+                  relogio.ligado && placar.vez.cadeira === cadeira
+                    ? {
+                        segundos: relogio.segundos,
+                        fracao: relogio.fracao,
+                        esgotado: relogio.esgotado,
+                      }
+                    : undefined
+                }
+                daVez={placar.vez.cadeira === cadeira}
+                // Tocar na placa: registrar a vitória desse jogador.
+                aoAbrirMenu={() => emAndamento && setVencedorEscolhido(cadeira)}
+                aoSegurar={() => undefined}
+              />
+            ),
           })}
-        </div>
+        />
+      </div>
 
-        {relogio.ligado && (
-          <div className="placar-mcr__acoes">
-            <button type="button" className="btn-primario" onClick={relogio.tocar}>
-              {t(placar.vez.comecou ? 'placar.mcr.proximaVez' : 'placar.mcr.comecarVez')}
-            </button>
-            {placar.vez.comecou && (
-              <button type="button" className="btn-contorno" onClick={relogio.alternarPausa}>
-                {t(relogio.contando ? 'placar.mcr.pausar' : 'placar.mcr.retomar')}
-              </button>
-            )}
-          </div>
-        )}
-
+      <div className="mesa-acoes">
         {emAndamento && (
-          <div className="placar-mcr__acoes">
-            <button type="button" className="btn-primario" onClick={() => setRegistrando(true)}>
+          <>
+            <button
+              type="button"
+              className="mesa-btn-principal"
+              onClick={() => setVencedorEscolhido(placar.vez.cadeira as Cadeira)}
+            >
               {t('placar.mcr.registrarVitoria')}
             </button>
             <button
               type="button"
-              className="btn-contorno"
+              className="mesa-btn-principal"
               onClick={() => salvarMao({ tipo: 'empate' })}
             >
               {t('placar.mcr.empate')}
             </button>
-          </div>
+          </>
         )}
-      </section>
+        <div className="placar-mcr__acoes">
+          <button
+            type="button"
+            className="btn-contorno"
+            aria-expanded={maosAbertas}
+            onClick={() => setMaosAbertas(!maosAbertas)}
+          >
+            {t('placar.mcr.maos')} ({numero(placar.maos.length)})
+          </button>
+          {emAndamento && placar.maos.length > 0 && (
+            <button
+              type="button"
+              className="btn-contorno"
+              onClick={() =>
+                confirmar('placar.mcr.confirmarDesfazer') && atualizar(desfazerUltimaMao)
+              }
+            >
+              {t('placar.mcr.desfazer')}
+            </button>
+          )}
+          {emAndamento ? (
+            <button
+              type="button"
+              className="btn-contorno"
+              onClick={() =>
+                confirmar('placar.mcr.confirmarFinalizar') &&
+                atualizar((atual) => finalizar(atual, new Date().toISOString()))
+              }
+            >
+              {t('placar.mcr.finalizar')}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn-perigo"
+              onClick={() => {
+                if (!confirmar('placar.mcr.confirmarExcluir')) return
+                acoesPlacaresMcr.excluir(placar.id)
+                aoVoltar()
+              }}
+            >
+              {t('placar.mcr.excluir')}
+            </button>
+          )}
+        </div>
 
-      <section className="card placar-mcr__secao" aria-labelledby="placar-mcr-maos">
-        <h3 id="placar-mcr-maos" className="placar-mcr__titulo">
-          {t('placar.mcr.maos')}
-        </h3>
-        {placar.maos.length === 0 && <p className="placar-mcr__ajuda">{t('placar.mcr.semMaos')}</p>}
-        <ol className="placar-mcr__historico">
-          {placar.maos.map((mao, indice) => {
-            const deltas = pontosDaMao(mao)
-            return (
-              <li key={indice}>
-                <span>
-                  {mao.tipo === 'empate'
-                    ? t('placar.mcr.historicoEmpate')
-                    : mao.forma === 'tsumo'
-                      ? t('placar.mcr.historicoTsumo', {
-                          nome: nomes[mao.vencedor],
-                          fan: numero(mao.fan),
-                        })
-                      : t('placar.mcr.historicoRon', {
-                          nome: nomes[mao.vencedor],
-                          descartador: nomes[mao.descartador!],
-                          fan: numero(mao.fan),
-                        })}
-                </span>
-                {mao.tipo === 'vitoria' && (
-                  <span className="placar-mcr__deltas">
-                    {CADEIRAS.map((cadeira) => (
-                      <span key={cadeira}>
-                        {nomes[cadeira]}{' '}
-                        {(deltas[cadeira] > 0 ? '+' : '') + numero(deltas[cadeira])}
-                      </span>
-                    ))}
+        {maosAbertas && (
+          <ol className="placar-mcr__historico">
+            {placar.maos.length === 0 && <li>{t('placar.mcr.semMaos')}</li>}
+            {placar.maos.map((mao, indice) => {
+              const deltas = pontosDaMao(mao)
+              return (
+                <li key={indice}>
+                  <span>
+                    {mao.tipo === 'empate'
+                      ? t('placar.mcr.historicoEmpate')
+                      : mao.forma === 'tsumo'
+                        ? t('placar.mcr.historicoTsumo', {
+                            nome: nomes[mao.vencedor],
+                            fan: numero(mao.fan),
+                          })
+                        : t('placar.mcr.historicoRon', {
+                            nome: nomes[mao.vencedor],
+                            descartador: nomes[mao.descartador!],
+                            fan: numero(mao.fan),
+                          })}
                   </span>
-                )}
-              </li>
-            )
-          })}
-        </ol>
-      </section>
-
-      <div className="placar-mcr__acoes">
-        <button type="button" className="btn-contorno" onClick={aoVoltar}>
-          {t('placar.mcr.voltarLista')}
-        </button>
-        {emAndamento && placar.maos.length > 0 && (
-          <button
-            type="button"
-            className="btn-contorno"
-            onClick={() =>
-              confirmar('placar.mcr.confirmarDesfazer') && atualizar(desfazerUltimaMao)
-            }
-          >
-            {t('placar.mcr.desfazer')}
-          </button>
-        )}
-        {emAndamento && (
-          <button
-            type="button"
-            className="btn-contorno"
-            onClick={() =>
-              confirmar('placar.mcr.confirmarFinalizar') &&
-              atualizar((atual) => finalizar(atual, new Date().toISOString()))
-            }
-          >
-            {t('placar.mcr.finalizar')}
-          </button>
-        )}
-        {!emAndamento && (
-          <button
-            type="button"
-            className="btn-perigo"
-            onClick={() => {
-              if (!confirmar('placar.mcr.confirmarExcluir')) return
-              acoesPlacaresMcr.excluir(placar.id)
-              aoVoltar()
-            }}
-          >
-            {t('placar.mcr.excluir')}
-          </button>
+                  {mao.tipo === 'vitoria' && (
+                    <span className="placar-mcr__deltas">
+                      {CADEIRAS.map((cadeira) => (
+                        <span key={cadeira}>
+                          {nomes[cadeira]}{' '}
+                          {(deltas[cadeira] > 0 ? '+' : '') + numero(deltas[cadeira])}
+                        </span>
+                      ))}
+                    </span>
+                  )}
+                </li>
+              )
+            })}
+          </ol>
         )}
       </div>
 
-      {registrando && (
-        <ModalMaoMcr nomes={nomes} aoSalvar={salvarMao} aoFechar={() => setRegistrando(false)} />
+      {vencedorEscolhido !== null && (
+        <ModalMaoMcr
+          nomes={nomes}
+          vencedorInicial={vencedorEscolhido}
+          aoSalvar={salvarMao}
+          aoFechar={() => setVencedorEscolhido(null)}
+        />
       )}
-    </div>
+    </section>
   )
 }
