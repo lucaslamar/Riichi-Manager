@@ -39,8 +39,12 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Flores no MCR: cada flor ou estação vale 1 fan, sem função própria nem relação com o assento. Na calculadora, as 8 ficam numa linha do teclado: cada uma entra uma vez na mão, e um toque na flor da mão a tira. Flores não contam para o mínimo de 8.
 - Ranking no MCR: soma os pontos MCR dos placares finalizados. Colocação pelo total da partida, com empate dividindo a posição.
 
+- Glossário MCR (`aprender-a-jogar/conteudo/mcr/glossario.ts`): o do guia do CMC, no livro e na aba Glossário do Guia de bolso, com o selo "Diferente do Riichi" no que muda (dealer, Chow com kuikae, Kong oculto, flores, espera sem furiten). Os créditos do CMC saíram da tela: o uso foi autorizado sem crédito.
+- Voz do resultado MCR: "Hu!" no ron e "Zimo!" no tsumo, em chinês, depois os fan, o total e os pagamentos. Mão inválida: só o aviso, sem chamada.
+
 ### Decisões em aberto
 
 - Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
-- Pontos de mesa 4/2/1/0 do Torneio no MCR: o Torneio continua só no Riichi.
+- Torneio MCR (pontos de mesa 4/2/1/0 por sessão, desempate pelo total, sessão de 4 rodadas ou fim do tempo): o cartão está no hub como "em breve". Falta definir como dividir os pontos de mesa num empate de colocação.
+- Exemplos dos 81 fan no Guia de bolso: dependem do novo `fans-mcr.ts` com o campo `exemplo`, que ainda não foi enviado.
 - Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.

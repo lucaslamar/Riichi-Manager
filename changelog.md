@@ -12,6 +12,10 @@
 - **Tutorial do MCR**: no modo Chinês, o Tutorial é o mesmo livro do Riichi, com partes, módulos, ranks e quiz, ensinando o MCR para quem já joga Riichi. As diferenças para o Riichi aparecem em destaque. Créditos a Juliana Visoni e Gabriel Souza, do Cerrado Mahjong Club.
 - **Placar do MCR**: no modo Chinês, a Nova partida tem o mesmo layout da do Riichi (assentos, assentos aleatórios e Iniciar mesa) e vira um placar que só anota as mãos e soma os pontos MCR, com timer da vez, rodada e dealer de cada mão, desfazer e finalizar. Os pontos ficam numa tabela própria, separada das partidas do Riichi, e os jogadores são os mesmos do cadastro, sem cadastrar de novo. Os placares também entram no backup.
 - **Ranking do MCR**: no modo Chinês, o Ranking tem a mesma tela, com os pontos dos placares MCR finalizados. Ficam de fora o tobi, o filtro de duração, o registro manual e a análise do jogador, que são do Riichi.
+- **Resultado do MCR igual ao do Riichi**: mostra a mão com a batida, os conjuntos e as flores. Tocar num fan abre a explicação, com o nome em chinês e em inglês, e acende as pedras que formam aquele fan. Ao abrir, a voz diz "Hu!" ou "Zimo!" em chinês e lê o resultado.
+- **Mudar batida no MCR**: o mesmo botão do Riichi no teclado, e o toque na pedra na finalização. As esperas mudam junto.
+- **Glossário do MCR**: no Tutorial e numa aba do Guia de bolso, com o que é diferente do Riichi em destaque.
+- **Mesa e hub do placar**: a partida MCR usa a mesma mesa do Riichi, com as placas em volta e o timer no centro. O Placar abre num hub igual ao da Partida, com Em andamento, Histórico e as últimas partidas.
 
 ## Não lançado
 
