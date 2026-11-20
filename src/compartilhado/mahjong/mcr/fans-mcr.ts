@@ -31,6 +31,8 @@ export type FanMcr = {
   naoCombina?: number[] // ids
   observacao?: string
   yakuRiichi?: string // equivalente no Riichi
+  /** Mão de exemplo na notação de `notacao.ts`, conferida pelo motor (`npm run test:fan-mcr`). */
+  exemplo: string
 }
 
 export const CATEGORIAS_FAN_MCR: Record<CategoriaFanMcr, string> = {
@@ -61,6 +63,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 88 ───────────────────────────────────────────────
   {
     id: 1,
+    exemplo: 'EEESSSWWWNNN5p5p|EE0000',
     pontos: 88,
     hanzi: '大四喜',
     en: 'Big Four Winds',
@@ -72,6 +75,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 2,
+    exemplo: 'CCCFFFPPP123m5p5p|EE0000',
     pontos: 88,
     hanzi: '大三元',
     en: 'Big Three Dragons',
@@ -83,6 +87,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 3,
+    exemplo: '234666888sFFF2s2s|EE0000',
     pontos: 88,
     hanzi: '绿一色',
     en: 'All Green',
@@ -94,6 +99,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 4,
+    exemplo: '11123456789995m|EE0000',
     pontos: 88,
     hanzi: '九莲宝灯',
     en: 'Nine Gates',
@@ -106,6 +112,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 5,
+    exemplo: '[1111m][2222p,1][3333s,1][EEEE,1]5s5s|EE0000',
     pontos: 88,
     hanzi: '四杠',
     en: 'Four Kongs',
@@ -118,6 +125,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 6,
+    exemplo: '1122334455667p7p|EE0000',
     pontos: 88,
     hanzi: '连七对',
     en: 'Seven Shifted Pairs',
@@ -129,6 +137,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 7,
+    exemplo: '19m19s19pESWNCFPP|EE0000',
     pontos: 88,
     hanzi: '十三幺',
     en: 'Thirteen Orphans',
@@ -142,6 +151,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 64 ───────────────────────────────────────────────
   {
     id: 8,
+    exemplo: '111999m111p999s9p9p|EE0000',
     pontos: 64,
     hanzi: '清幺九',
     en: 'All Terminals',
@@ -154,6 +164,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 9,
+    exemplo: '123mEEESSSWWWNN|EE0000',
     pontos: 64,
     hanzi: '小四喜',
     en: 'Little Four Winds',
@@ -166,6 +177,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 10,
+    exemplo: '123m456pCCCFFFPP|EE0000',
     pontos: 64,
     hanzi: '小三元',
     en: 'Little Three Dragons',
@@ -177,6 +189,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 11,
+    exemplo: 'EEESSSCCCFFFPP|EE0000',
     pontos: 64,
     hanzi: '字一色',
     en: 'All Honors',
@@ -188,6 +201,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 12,
+    exemplo: '111m333p555777s9m9m|EE0000',
     pontos: 64,
     hanzi: '四暗刻',
     en: 'Four Concealed Pungs',
@@ -200,6 +214,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 13,
+    exemplo: '1231237897895s5s|EE0000',
     pontos: 64,
     hanzi: '一色双龙会',
     en: 'Pure Terminal Chows',
@@ -212,6 +227,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 48 ───────────────────────────────────────────────
   {
     id: 14,
+    exemplo: '1111222233334m4m|EE0000',
     pontos: 48,
     hanzi: '一色四同顺',
     en: 'Quadruple Chow',
@@ -222,6 +238,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 15,
+    exemplo: '111222333444p5m5m|EE0000',
     pontos: 48,
     hanzi: '一色四节高',
     en: 'Four Pure Shifted Pungs',
@@ -234,6 +251,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 32 ───────────────────────────────────────────────
   {
     id: 16,
+    exemplo: '123345567789s1s1s|EE0000',
     pontos: 32,
     hanzi: '一色四步高',
     en: 'Four Pure Shifted Chows',
@@ -244,6 +262,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 17,
+    exemplo: '[1111m,1][2222p,1][3333s,1]456m7p7p|EE0000',
     pontos: 32,
     hanzi: '三杠',
     en: 'Three Kongs',
@@ -255,6 +274,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 18,
+    exemplo: '111m999pEEECCC1s1s|EE0000',
     pontos: 32,
     hanzi: '混幺九',
     en: 'All Terminals and Honors',
@@ -267,6 +287,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 24 ───────────────────────────────────────────────
   {
     id: 19,
+    exemplo: '1155m3377s99pEECC|EE0000',
     pontos: 24,
     hanzi: '七对',
     en: 'Seven Pairs',
@@ -279,6 +300,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 20,
+    exemplo: '147m25s36pESWNCFP|EE0000',
     pontos: 24,
     hanzi: '七星不靠',
     en: 'Greater Honors and Knitted Tiles',
@@ -290,6 +312,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 21,
+    exemplo: '222m444p666888s2p2p|EE0000',
     pontos: 24,
     hanzi: '全双刻',
     en: 'All Even Pungs',
@@ -300,6 +323,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 22,
+    exemplo: '12345678934522m|EE0000',
     pontos: 24,
     hanzi: '清一色',
     en: 'Full Flush',
@@ -311,6 +335,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 23,
+    exemplo: '[123m,1][123m,1][123m,1]456p7s7s|EE0000',
     pontos: 24,
     hanzi: '一色三同顺',
     en: 'Pure Triple Chow',
@@ -321,6 +346,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 24,
+    exemplo: '111222333m456p7s7s|EE0000',
     pontos: 24,
     hanzi: '一色三节高',
     en: 'Pure Shifted Pungs',
@@ -331,6 +357,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 25,
+    exemplo: '789999m789p789s8p8p|EE0000',
     pontos: 24,
     hanzi: '全大',
     en: 'Upper Tiles',
@@ -341,6 +368,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 26,
+    exemplo: '456555m456p456s6p6p|EE0000',
     pontos: 24,
     hanzi: '全中',
     en: 'Middle Tiles',
@@ -351,6 +379,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 27,
+    exemplo: '123111m123p123s2p2p|EE0000',
     pontos: 24,
     hanzi: '全小',
     en: 'Lower Tiles',
@@ -363,6 +392,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 16 ───────────────────────────────────────────────
   {
     id: 28,
+    exemplo: '123456789m123s5p5p|EE0000',
     pontos: 16,
     hanzi: '清龙',
     en: 'Pure Straight',
@@ -373,6 +403,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 29,
+    exemplo: '123789m123789s5p5p|EE0000',
     pontos: 16,
     hanzi: '三色双龙会',
     en: 'Three-Suited Terminal Chows',
@@ -383,6 +414,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 30,
+    exemplo: '123234345m789p5s5s|EE0000',
     pontos: 16,
     hanzi: '一色三步高',
     en: 'Pure Shifted Chows',
@@ -392,6 +424,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 31,
+    exemplo: '456m555p345456s5m5m|EE0000',
     pontos: 16,
     hanzi: '全带五',
     en: 'All Fives',
@@ -402,6 +435,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 32,
+    exemplo: '111456m111p111s9p9p|EE0000',
     pontos: 16,
     hanzi: '三同刻',
     en: 'Triple Pung',
@@ -412,6 +446,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 33,
+    exemplo: '111789m333p555s2p2p|EE0000',
     pontos: 16,
     hanzi: '三暗刻',
     en: 'Three Concealed Pungs',
@@ -424,6 +459,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 12 ───────────────────────────────────────────────
   {
     id: 34,
+    exemplo: '147m258s369pESWNC|EE0000',
     pontos: 12,
     hanzi: '全不靠',
     en: 'Lesser Honors and Knitted Tiles',
@@ -435,6 +471,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 35,
+    exemplo: '147m258s369pEEE5m5m|EE0000',
     pontos: 12,
     hanzi: '组合龙',
     en: 'Knitted Straight',
@@ -444,6 +481,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 36,
+    exemplo: '678m789p666999s7m7m|EE0000',
     pontos: 12,
     hanzi: '大于五',
     en: 'Upper Four',
@@ -454,6 +492,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 37,
+    exemplo: '123m234p111444s3m3m|EE0000',
     pontos: 12,
     hanzi: '小于五',
     en: 'Lower Four',
@@ -464,6 +503,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 38,
+    exemplo: 'EEESSSWWW123m5p5p|EE0000',
     pontos: 12,
     hanzi: '三风刻',
     en: 'Big Three Winds',
@@ -475,6 +515,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 8 ────────────────────────────────────────────────
   {
     id: 39,
+    exemplo: '123m456p789sEEE5m5m|EE0000',
     pontos: 8,
     hanzi: '花龙',
     en: 'Mixed Straight',
@@ -484,6 +525,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 40,
+    exemplo: '123345p456888sPP|EE0000',
     pontos: 8,
     hanzi: '推不倒',
     en: 'Reversible Tiles',
@@ -494,6 +536,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 41,
+    exemplo: '123789m123p123s5s5s|EE0000',
     pontos: 8,
     hanzi: '三色三同顺',
     en: 'Mixed Triple Chow',
@@ -504,6 +547,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 42,
+    exemplo: '111789m222p333s5s5s|EE0000',
     pontos: 8,
     hanzi: '三色三节高',
     en: 'Mixed Shifted Pungs',
@@ -513,6 +557,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 43,
+    exemplo: '[234m,1][567p,1][345s,1]45sEE6s|SN0000',
     pontos: 8,
     hanzi: '无番和',
     en: 'Chicken Hand',
@@ -522,6 +567,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 44,
+    exemplo: '123456789m123s5p5p|EE1010',
     pontos: 8,
     hanzi: '妙手回春',
     en: 'Last Tile Draw',
@@ -533,6 +579,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 45,
+    exemplo: '123456789m123s5p5p|EE0010',
     pontos: 8,
     hanzi: '海底捞月',
     en: 'Last Tile Claim',
@@ -543,6 +590,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 46,
+    exemplo: '[1111m,1]456789m123s5p5p|EE1001',
     pontos: 8,
     hanzi: '杠上开花',
     en: 'Out with Replacement Tile',
@@ -555,6 +603,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 47,
+    exemplo: '13m456p789sEEE5s5s2m|EE0001',
     pontos: 8,
     hanzi: '抢杠和',
     en: 'Robbing the Kong',
@@ -569,6 +618,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 6 ────────────────────────────────────────────────
   {
     id: 48,
+    exemplo: '[111m,1][333p,1]555sEEE7m7m|EE0000',
     pontos: 6,
     hanzi: '碰碰和',
     en: 'All Pungs',
@@ -579,6 +629,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 49,
+    exemplo: '123345678mEEE5m5m|EE0000',
     pontos: 6,
     hanzi: '混一色',
     en: 'Half Flush',
@@ -589,6 +640,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 50,
+    exemplo: '123789m234p345s5p5p|EE0000',
     pontos: 6,
     hanzi: '三色三步高',
     en: 'Mixed Shifted Chows',
@@ -598,6 +650,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 51,
+    exemplo: '123m456p789sEEECC|EE0000',
     pontos: 6,
     hanzi: '五门齐',
     en: 'All Types',
@@ -607,6 +660,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 52,
+    exemplo: '[123m,1][456p,1][789s,1][EEE,1]CC|EE0000',
     pontos: 6,
     hanzi: '全求人',
     en: 'Melded Hand',
@@ -617,6 +671,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 53,
+    exemplo: '[1111m][2222p]456789s5m5m|EE0000',
     pontos: 6,
     hanzi: '双暗杠',
     en: 'Two Concealed Kongs',
@@ -626,6 +681,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 54,
+    exemplo: '123m456pCCCFFF7s7s|EE0000',
     pontos: 6,
     hanzi: '双箭刻',
     en: 'Two Dragon Pungs',
@@ -637,6 +693,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 4 ────────────────────────────────────────────────
   {
     id: 55,
+    exemplo: '123m789p111sEEE9m9m|EE0000',
     pontos: 4,
     hanzi: '全带幺',
     en: 'Outside Hand',
@@ -647,6 +704,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 56,
+    exemplo: '123456m789p345s5s5s|EE1000',
     pontos: 4,
     hanzi: '不求人',
     en: 'Fully Concealed Hand',
@@ -657,6 +715,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 57,
+    exemplo: '[1111m,1][2222p,1]456789s5m5m|EE0000',
     pontos: 4,
     hanzi: '双明杠',
     en: 'Two Melded Kongs',
@@ -667,6 +726,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 58,
+    exemplo: '13456m789p345s55p2m|EE0100',
     pontos: 4,
     hanzi: '和绝张',
     en: 'Last Tile',
@@ -678,6 +738,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 2 ────────────────────────────────────────────────
   {
     id: 59,
+    exemplo: '123m456m789pCCC5s5s|EE0000',
     pontos: 2,
     hanzi: '箭刻',
     en: 'Dragon Pung',
@@ -688,6 +749,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 60,
+    exemplo: '123m456m789pSSS5s5s|SE0000',
     pontos: 2,
     hanzi: '圈风刻',
     en: 'Prevalent Wind',
@@ -698,6 +760,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 61,
+    exemplo: '123m456m789pWWW5s5s|EW0000',
     pontos: 2,
     hanzi: '门风刻',
     en: 'Seat Wind',
@@ -708,6 +771,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 62,
+    exemplo: '123456m789p345s5s5s|EE0000',
     pontos: 2,
     hanzi: '门前清',
     en: 'Concealed Hand',
@@ -717,6 +781,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 63,
+    exemplo: '234m567m345p678s2p2p|EE0000',
     pontos: 2,
     hanzi: '平和',
     en: 'All Chows',
@@ -727,6 +792,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 64,
+    exemplo: '111123m456p789s5s5s|EE0000',
     pontos: 2,
     hanzi: '四归一',
     en: 'Tile Hog',
@@ -736,6 +802,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 65,
+    exemplo: '222m222p456789s5m5m|EE0000',
     pontos: 2,
     hanzi: '双同刻',
     en: 'Double Pung',
@@ -745,6 +812,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 66,
+    exemplo: '222m555p456789s1m1m|EE0000',
     pontos: 2,
     hanzi: '双暗刻',
     en: 'Two Concealed Pungs',
@@ -754,6 +822,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 67,
+    exemplo: '[2222m]345m678p456s5p5p|EE0000',
     pontos: 2,
     hanzi: '暗杠',
     en: 'Concealed Kong',
@@ -763,6 +832,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 68,
+    exemplo: '234m555p345678s8m8m|EE0000',
     pontos: 2,
     hanzi: '断幺',
     en: 'All Simples',
@@ -775,6 +845,7 @@ export const FANS_MCR: FanMcr[] = [
   // ── 1 ────────────────────────────────────────────────
   {
     id: 69,
+    exemplo: '123123m456p789s5s5s|EE0000',
     pontos: 1,
     hanzi: '一般高',
     en: 'Pure Double Chow',
@@ -784,6 +855,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 70,
+    exemplo: '123m123p456789sEE|EE0000',
     pontos: 1,
     hanzi: '喜相逢',
     en: 'Mixed Double Chow',
@@ -793,6 +865,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 71,
+    exemplo: '123456m789pEEE5s5s|EE0000',
     pontos: 1,
     hanzi: '连六',
     en: 'Short Straight',
@@ -802,6 +875,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 72,
+    exemplo: '123789m456p345sEE|EE0000',
     pontos: 1,
     hanzi: '老少副',
     en: 'Two Terminal Chows',
@@ -811,6 +885,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 73,
+    exemplo: '111m456p345789sEE|EE0000',
     pontos: 1,
     hanzi: '幺九刻',
     en: 'Pung of Terminals or Honors',
@@ -821,6 +896,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 74,
+    exemplo: '[1111m,1]456p345789sEE|EE0000',
     pontos: 1,
     hanzi: '明杠',
     en: 'Melded Kong',
@@ -830,6 +906,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 75,
+    exemplo: '123m456m789pEEE5p5p|EE0000',
     pontos: 1,
     hanzi: '缺一门',
     en: 'One Voided Suit',
@@ -839,6 +916,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 76,
+    exemplo: '123m456p789s555s1m1m|EE0000',
     pontos: 1,
     hanzi: '无字',
     en: 'No Honors',
@@ -848,6 +926,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 77,
+    exemplo: '12m456p789s345sEE3m|EE0000',
     pontos: 1,
     hanzi: '边张',
     en: 'Edge Wait',
@@ -858,6 +937,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 78,
+    exemplo: '13m456p789s345sEE2m|EE0000',
     pontos: 1,
     hanzi: '坎张',
     en: 'Closed Wait',
@@ -868,6 +948,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 79,
+    exemplo: '123m456p789s345sEE|EE0000',
     pontos: 1,
     hanzi: '单调将',
     en: 'Single Wait',
@@ -878,6 +959,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 80,
+    exemplo: '[123m,1]456p789s345sEE|EE1000',
     pontos: 1,
     hanzi: '自摸',
     en: 'Self-Drawn',
@@ -887,6 +969,7 @@ export const FANS_MCR: FanMcr[] = [
   },
   {
     id: 81,
+    exemplo: '123456789m123s5p5p|EE0000|ab',
     pontos: 1,
     hanzi: '花牌',
     en: 'Flower Tiles',

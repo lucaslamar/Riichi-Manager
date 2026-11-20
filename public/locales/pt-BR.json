@@ -2293,7 +2293,11 @@
         "outros": "Outros"
       },
       "busca": "Buscar fan, 汉字, inglês ou yaku",
-      "rotuloBusca": "Buscar no Guia de bolso"
+      "rotuloBusca": "Buscar no Guia de bolso",
+      "exemplo": "Mão de exemplo: {{pedras}}",
+      "condicoes": "Condições do exemplo",
+      "tambemContam": "Nesta mão também contam:",
+      "totalExemplo": "Total: {{total}} fan"
     }
   },
   "placar": {

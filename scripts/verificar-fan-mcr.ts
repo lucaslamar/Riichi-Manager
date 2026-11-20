@@ -25,6 +25,8 @@ import {
   sequenciasDoChi,
 } from '../src/dominios/calculadora-mao-chinesa/logica/montagem'
 import { buscarFansMcr, fanMcrPorId, FANS_MCR } from '../src/compartilhado/mahjong/mcr/fans-mcr'
+import { lerNotacaoMcr } from '../src/compartilhado/mahjong/mcr/notacao'
+import { calcularNotacaoMcr } from '../src/dominios/calculadora-mao-chinesa/logica/notacao-mcr'
 
 const BASE: Record<string, number> = {
   m: 1,
@@ -252,3 +254,28 @@ console.log('✓ troca de batida')
   assert.deepEqual(calcularPagamentoMcr(88, 'ron').ganhadorRecebe, 112)
 }
 console.log('✓ pedras de cada fan')
+
+// Leitor da notação dos exemplos.
+{
+  const lida = lerNotacaoMcr('[1111m][123p,1]456sEE5s|SW1001|ab')
+  assert.deepEqual(
+    lida.chamadas.map((chamada) => chamada.tipo),
+    ['kanFechado', 'chi'],
+  )
+  assert.deepEqual(lida.pedras, [13, 14, 15, 28, 28, 14], 'Pedras ocultas, batida no fim')
+  assert.equal(lida.ventoRodada, 29)
+  assert.equal(lida.ventoAssento, 30)
+  assert.ok(lida.tsumo && lida.kan && !lida.ultimaDoTipo)
+  assert.equal(lida.flores, 2)
+  assert.throws(() => lerNotacaoMcr('123x'), 'Caractere inválido falha')
+}
+
+// Os 81 exemplos do Guia de bolso: cada um tem o próprio fan, calculado pelo motor.
+for (const fan of FANS_MCR) {
+  const resultado = calcularNotacaoMcr(fan.exemplo)
+  assert.ok(resultado.batida, `Exemplo do fan ${fan.id} é uma mão vencedora`)
+  const tem =
+    fan.id === 81 ? resultado.flores > 0 : resultado.fans.some((contado) => contado.id === fan.id)
+  assert.ok(tem, `Exemplo do fan ${fan.id} (${fan.pt}) tem o próprio fan`)
+}
+console.log('✓ 81 exemplos do Guia de bolso')

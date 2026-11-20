@@ -82,3 +82,69 @@
 .guia-mcr__glossario dd {
   margin: 2px 0 0;
 }
+
+/* Exemplo do fan: as pedras do fan acendem, as outras ficam apagadas. */
+.exemplo-fan-mcr {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.exemplo-fan-mcr .yaku-tile.destaque-yaku {
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--cor-aviso, #e6b800);
+}
+
+.exemplo-fan-mcr .yaku-tile.apagada {
+  opacity: 0.4;
+}
+
+/* Conjunto exposto: separado das pedras ocultas por um traço. */
+.exemplo-fan-mcr__chamada {
+  border-bottom: 2px solid var(--cor-borda-controle, #8a94a6);
+  padding-bottom: 2px;
+}
+
+/* A pedra da batida fica à parte, como na mesa. */
+.exemplo-fan-mcr__batida {
+  margin-left: 6px;
+  border-bottom: 2px solid var(--cor-primario, #2196f3);
+  padding-bottom: 2px;
+}
+
+.exemplo-fan-mcr__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exemplo-fan-mcr__chip {
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  border-radius: 999px;
+  padding: 1px 8px;
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.8rem;
+}
+
+.exemplo-fan-mcr__chip--batida {
+  border-color: var(--cor-primario, #2196f3);
+  color: var(--cor-primario, #2196f3);
+  font-weight: 700;
+}
+
+.exemplo-fan-mcr__outros,
+.exemplo-fan-mcr__total {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.exemplo-fan-mcr__outros .fan-mcr__link {
+  min-height: 32px;
+}
+
+.exemplo-fan-mcr__total {
+  font-weight: 800;
+}

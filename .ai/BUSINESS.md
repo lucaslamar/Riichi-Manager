@@ -47,5 +47,4 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 ### Decisões em aberto
 
 - Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
-- Exemplos dos 81 fan no Guia de bolso: dependem do novo `fans-mcr.ts` com o campo `exemplo`, que ainda não foi enviado.
 - Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.

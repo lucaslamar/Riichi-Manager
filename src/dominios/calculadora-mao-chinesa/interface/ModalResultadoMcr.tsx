@@ -29,7 +29,7 @@ type Destaque =
   | { tipo: 'batida' }
   | { tipo: 'flores' }
 
-interface LinhaResultado {
+export interface LinhaResultado {
   chave: string
   id: number
   nomeMotor: string
@@ -40,7 +40,7 @@ interface LinhaResultado {
   vezes: number
 }
 
-function linhasDoResultado(fans: FanContado[], flores: number): LinhaResultado[] {
+export function linhasDoResultado(fans: FanContado[], flores: number): LinhaResultado[] {
   // Cada vez que um fan conta é uma linha, com as suas próprias pedras.
   const linhas = fans.flatMap((fan) =>
     fan.ocorrencias.map(
@@ -74,13 +74,13 @@ function linhasDoResultado(fans: FanContado[], flores: number): LinhaResultado[]
 }
 
 /** Pedra da tela: onde ela está, para casar com as pedras de cada fan. */
-interface PedraNaTela {
+export interface PedraNaTela {
   chave: string
   id: number
 }
 
 /** Quais pedras da tela acendem para um fan: consome as pedras dele na ordem batida, mão, conjuntos. */
-function pedrasAcesas(destaque: Destaque, ordem: PedraNaTela[]): Set<string> {
+export function pedrasAcesas(destaque: Destaque, ordem: PedraNaTela[]): Set<string> {
   if (destaque.tipo === 'mao') return new Set(ordem.map((pedra) => pedra.chave))
   if (destaque.tipo === 'batida') return new Set(['batida'])
   if (destaque.tipo === 'flores') return new Set(['flores'])

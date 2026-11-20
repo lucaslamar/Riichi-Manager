@@ -12,6 +12,7 @@ import {
   type FanMcr,
 } from '@/compartilhado/mahjong/mcr/fans-mcr'
 import { GLOSSARIO_MCR } from '@/dominios/aprender-a-jogar/conteudo/mcr/glossario'
+import ExemploFanMcr from './ExemploFanMcr'
 import './guia-bolso-mcr.css'
 
 export type AbaGuiaMcr = 'glossario' | 'pontos' | CategoriaFanMcr | 'riichi'
@@ -53,6 +54,7 @@ function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) =
         <span lang="en">{fan.en}</span> · {t('guiaBolso.mcr.numero', { id: numero(fan.id) })}
       </p>
       <p className="yaku-card__descricao">{fan.descricao}</p>
+      <ExemploFanMcr fan={fan} aoIrPara={aoIrPara} />
       {fan.yakuRiichi && (
         <span className="fan-mcr__riichi">
           {t('guiaBolso.mcr.riichi', { yaku: fan.yakuRiichi })}

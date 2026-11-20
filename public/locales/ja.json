@@ -2267,7 +2267,11 @@
         "outros": "Others"
       },
       "busca": "Search fan, 汉字, English or yaku",
-      "rotuloBusca": "Search the Pocket Guide"
+      "rotuloBusca": "Search the Pocket Guide",
+      "exemplo": "Example hand: {{pedras}}",
+      "condicoes": "Example conditions",
+      "tambemContam": "This hand also scores:",
+      "totalExemplo": "Total: {{total}} fan"
     }
   },
   "placar": {
