@@ -135,6 +135,15 @@ export function useCalculadoraMaoChinesa() {
     temFlor: (flor: Flor) => mao.flores.includes(flor),
     adicionarFlor: (flor: Flor) => mudarMao((atual) => adicionarFlor(atual, flor)),
     removerFlor: (flor: Flor) => mudarMao((atual) => removerFlor(atual, flor)),
+    substituirMao: (nova: MaoChinesa) => mudarMao(() => nova),
+    mudarFlores: (variacao: number) =>
+      mudarMao((atual) => ({
+        ...atual,
+        flores: Array.from(
+          { length: Math.min(8, Math.max(0, atual.flores.length + variacao)) },
+          (_, indice) => (indice + 1) as Flor,
+        ),
+      })),
     finalizar: () => {
       setSelecionandoBatida(false)
       setAcao(null)

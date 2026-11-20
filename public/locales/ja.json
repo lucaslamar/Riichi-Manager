@@ -190,8 +190,7 @@
     "yakumanShort": "{{count}}倍役満",
     "pocketGuide": "ひつじのポケットガイド",
     "handCleared": "手牌を消去しました",
-    "spokenPoints": "{{points}}点",
-    "removeLastTile": "最後の牌を消す"
+    "spokenPoints": "{{points}}点"
   },
   "hanFu": {
     "isDealer": "親ですか？",
@@ -2182,11 +2181,7 @@
     "entrada": {
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
-      "adicionarFlor": "Add {{flor}}",
-      "flor": "Flower",
-      "estacao": "Season",
-      "segurarFlor": "Hold to choose which",
-      "escolherFlor": "Choose the flower"
+      "erroQuatro": "同じ牌は4枚までです。"
     },
     "condicoes": {
       "titulo": "Conditions",

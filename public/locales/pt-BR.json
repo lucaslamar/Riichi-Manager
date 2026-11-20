@@ -194,8 +194,7 @@
     "yakumanShort": "{{count}}× YM",
     "pocketGuide": "Guia de bolso da Ovelhinha",
     "handCleared": "Mão apagada",
-    "spokenPoints": "{{points}} pontos",
-    "removeLastTile": "Apagar a última pedra"
+    "spokenPoints": "{{points}} pontos"
   },
   "hanFu": {
     "isDealer": "É oya?",
@@ -2208,11 +2207,7 @@
     "entrada": {
       "flores": "Flores e estações",
       "removerFlor": "Remover {{flor}}",
-      "adicionarFlor": "Adicionar {{flor}}",
-      "flor": "Flor",
-      "estacao": "Estação",
-      "segurarFlor": "Segure para escolher qual",
-      "escolherFlor": "Escolha a flor"
+      "erroQuatro": "Cada pedra existe só quatro vezes."
     },
     "condicoes": {
       "titulo": "Condições",

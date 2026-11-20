@@ -279,3 +279,15 @@ for (const fan of FANS_MCR) {
   assert.ok(tem, `Exemplo do fan ${fan.id} (${fan.pt}) tem o próprio fan`)
 }
 console.log('✓ 81 exemplos do Guia de bolso')
+
+{
+  const { maoDoMpsz, mpszDaMao } = await import('../src/dominios/calculadora-mao-chinesa/logica/mpsz')
+  const lida = maoDoMpsz('123m 456p 555z 123sc 66z', [1, 2])
+  assert.ok(lida.mao, 'MPSZ válido vira mão chinesa')
+  assert.deepEqual(lida.mao.pedras, [1, 2, 3, 22, 23, 24, 34, 34, 34, 33, 33])
+  assert.deepEqual(lida.mao.chamadas, [{ tipo: 'chi', meio: 11 }])
+  assert.deepEqual(lida.mao.flores, [1, 2], 'As flores ficam')
+  assert.equal(maoDoMpsz(mpszDaMao(lida.mao), []).mao?.pedras.length, 11, 'Ida e volta')
+  assert.ok(maoDoMpsz('11111m', []).erro, 'Cinco iguais é erro')
+}
+console.log('✓ entrada MPSZ')

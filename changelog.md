@@ -2,14 +2,10 @@
 
 ## 7.0.0 - 2026-11-19
 
-### Alterado
-
-- **Teclado da Calculadora de Mão**: a barra de ações ficou com 4 botões (Chi, Pon, Kan e Kan fechado). O MPSZ foi para o começo da linha dos ventos e, no fim dela, entrou uma tecla para apagar a última pedra, deixando a linha com 9 teclas, como as dos naipes. O 白 ganhou uma moldura e não parece mais uma tecla vazia.
-
 ### Adicionado
 
 - **Modo Chinês (MCR / Guobiao)**: novo cartão Mahjong nas Configurações, logo depois do Idioma, com Japonês e Chinês. A escolha vale na hora em todo o app e fica salva no aparelho. O Japonês continua sendo o padrão e funciona igual a antes.
-- **Calculadora de Mão Chinesa**: no modo Chinês, a calculadora tem o mesmo layout da japonesa: o mesmo teclado de pedras, a barra de Chi, Pon e Kan, a mão e a finalização com as condições. O Chi oferece as sequências possíveis da pedra tocada, e na finalização um toque escolhe a pedra da batida. As pedras têm o desenho chinês (conjunto da Malásia, de domínio público),. Flor e Estação são duas pedras nas pontas da linha dos ventos: cada toque põe a próxima (1, 2, 3, 4) e o desenho muda, e segurar abre a escolha. No MCR todas valem 1 fan e nenhuma tem função própria. O resultado mostra o total de fan, cada fan com o nome do guia do CMC e o nome em chinês, e os pagamentos do MCR. Mãos com menos de 8 fan sem contar as flores aparecem como inválidas.
+- **Calculadora de Mão Chinesa**: no modo Chinês, a calculadora tem o mesmo layout da japonesa: o mesmo teclado de pedras, a barra de Chi, Pon e Kan, a mão e a finalização com as condições. O Chi oferece as sequências possíveis da pedra tocada, e na finalização um toque escolhe a pedra da batida. As pedras têm o desenho chinês (conjunto da Malásia, de domínio público). O MPSZ também vem, ao lado do Kan fechado, com o mesmo teclado do Riichi. As flores e estações entram na finalização, num contador no lugar das doras: no MCR todas valem 1 fan e nenhuma tem função própria. A finalização tem os mesmos blocos da japonesa: Batida, ventos em pedras e Condições especiais. O resultado mostra o total de fan, cada fan com o nome do guia do CMC e o nome em chinês, e os pagamentos do MCR. Mãos com menos de 8 fan sem contar as flores aparecem como inválidas.
 - **Navegação do modo Chinês**: a Calculadora de Mão vira a chinesa no mesmo lugar. Han e Fu, Centerpiece e Partidas ficam escondidos, porque usam as regras do Riichi. O Sorteador de Ventos continua igual.
 - **Mahjong Manager**: no modo Chinês, o nome do app no topo e na aba do navegador passa a ser Mahjong Manager.
 - **Guia de Bolso do MCR**: no modo Chinês, o chapéu da calculadora abre o mesmo Guia de bolso, agora com os 81 fan do guia do Cerrado Mahjong Club. As abas são as categorias do guia, mais Por pontos e Riichi (os fan com equivalente). A busca acha pelo nome em português, em chinês, em inglês, pelo yaku do Riichi ou pelo número. Cada fan mostra o equivalente no Riichi e, em Detalhes, o que não combina com ele. Cada fan tem uma mão de exemplo, com as pedras dele em destaque, ron ou tsumo e as condições especiais, os outros fan que também contam naquela mão e o total.

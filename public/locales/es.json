@@ -198,8 +198,7 @@
     "yakumanShort": "{{count}}× YM",
     "pocketGuide": "Guía de bolsillo de la Ovejita",
     "handCleared": "Mano borrada",
-    "spokenPoints": "{{points}} puntos",
-    "removeLastTile": "Quitar la última ficha"
+    "spokenPoints": "{{points}} puntos"
   },
   "hanFu": {
     "isDealer": "¿Es oya?",
@@ -2215,11 +2214,7 @@
     "entrada": {
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
-      "adicionarFlor": "Add {{flor}}",
-      "flor": "Flower",
-      "estacao": "Season",
-      "segurarFlor": "Hold to choose which",
-      "escolherFlor": "Choose the flower"
+      "erroQuatro": "Cada ficha existe solo cuatro veces."
     },
     "condicoes": {
       "titulo": "Conditions",

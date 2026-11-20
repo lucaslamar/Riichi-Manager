@@ -190,8 +190,7 @@
     "yakumanShort": "{{count}}배 역만",
     "pocketGuide": "아기 양의 포켓 가이드",
     "handCleared": "손패를 지웠습니다",
-    "spokenPoints": "{{points}}점",
-    "removeLastTile": "마지막 패 지우기"
+    "spokenPoints": "{{points}}점"
   },
   "hanFu": {
     "isDealer": "친인가요?",
@@ -2182,11 +2181,7 @@
     "entrada": {
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
-      "adicionarFlor": "Add {{flor}}",
-      "flor": "Flower",
-      "estacao": "Season",
-      "segurarFlor": "Hold to choose which",
-      "escolherFlor": "Choose the flower"
+      "erroQuatro": "같은 패는 4장까지입니다."
     },
     "condicoes": {
       "titulo": "Conditions",

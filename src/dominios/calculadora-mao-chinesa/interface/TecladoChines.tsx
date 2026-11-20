@@ -1,9 +1,6 @@
-import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import type { Flor } from '../logica/montagem'
 import type { TipoChamada } from '../logica/montagem'
-import BotaoFlor, { FLORES_DO_TIPO, type TipoFlor } from './BotaoFlor'
-import { PedraChinesa, PedraFlor } from './PedraChinesa'
+import { PedraChinesa } from './PedraChinesa'
 import { nomePedra } from './pedras'
 import type { ChiPendente } from './useCalculadoraMaoChinesa'
 
@@ -23,36 +20,33 @@ const CHAVE_CHAMADA: Record<TipoChamada, string> = {
 
 /**
  * Teclado de pedras do MCR com as mesmas classes do teclado do Riichi (o visual
- * vem do mesmo CSS) e a arte chinesa. Flor e estação ficam nas pontas da linha
- * das honras, uma pedra de cada.
+ * vem do mesmo CSS) e a arte chinesa. As flores entram na finalização da mão.
  */
 export default function TecladoChines({
+  mostrarGrade = true,
   acao,
   podeTocarPedra,
-  temFlor,
   chiPendente,
   maoPronta,
   aoTocarPedra,
-  aoTocarFlor,
   aoEscolherChi,
   aoFinalizar,
   selecionandoBatida,
   aoAlternarSelecaoBatida,
 }: {
+  /** Com o MPSZ aberto, só o rodapé (Mudar batida e Finalizar) aparece. */
+  mostrarGrade?: boolean
   acao: TipoChamada | null
   podeTocarPedra: (id: number) => boolean
-  temFlor: (flor: Flor) => boolean
   chiPendente: ChiPendente | null
   maoPronta: boolean
   aoTocarPedra: (id: number) => void
-  aoTocarFlor: (flor: Flor) => void
   aoEscolherChi: (meio: number) => void
   aoFinalizar: () => void
   selecionandoBatida: boolean
   aoAlternarSelecaoBatida: () => void
 }) {
   const { t } = useI18n()
-  const [escolhendoFlor, setEscolhendoFlor] = useState<TipoFlor | null>(null)
 
   const rotulo = (id: number, indisponivel: boolean) => {
     const tile = nomePedra(id)
@@ -115,83 +109,36 @@ export default function TecladoChines({
         </div>
       )}
 
-      {escolhendoFlor && (
-        <div
-          className="seletor-chii-pendente"
-          role="group"
-          aria-label={t('mcr.entrada.escolherFlor')}
-        >
-          <span>{t('mcr.entrada.escolherFlor')}</span>
-          <div>
-            {FLORES_DO_TIPO[escolhendoFlor].map((flor) => (
-              <button
-                key={flor}
-                type="button"
-                className="opcao-chii-pendente"
-                disabled={temFlor(flor)}
-                aria-label={t('mcr.entrada.adicionarFlor', { flor: t(`mcr.flores.${flor}`) })}
-                title={t(`mcr.flores.${flor}`)}
-                onClick={() => {
-                  aoTocarFlor(flor)
-                  setEscolhendoFlor(null)
-                }}
-              >
-                <span className="chip-pedra mini">
-                  <PedraFlor flor={flor} />
-                </span>
-              </button>
-            ))}
-            <button
-              type="button"
-              className="opcao-chii-pendente"
-              onClick={() => setEscolhendoFlor(null)}
+      {mostrarGrade && (
+        <>
+          {NAIPES.map(({ classe, chave, rotuloCurto, inicio }) => (
+            <div
+              key={classe}
+              className={`grupo-teclado-naipe grupo-teclado-${classe}`}
+              role="group"
+              aria-label={t(chave)}
             >
-              {t('actions.cancel')}
-            </button>
+              <div className="rotulo-naipe-teclado" data-mobile-label={rotuloCurto}>
+                {t(chave)}
+              </div>
+              <div className="linha-naipe">
+                {Array.from({ length: 9 }, (_, i) => botaoPedra(inicio + i))}
+              </div>
+            </div>
+          ))}
+
+          <div
+            className="grupo-teclado-naipe grupo-teclado-honras"
+            role="group"
+            aria-label={t('calculator.honors')}
+          >
+            <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
+              {t('calculator.honors')}
+            </div>
+            <div className="linha-naipe">{HONRAS.map(botaoPedra)}</div>
           </div>
-        </div>
+        </>
       )}
-
-      {NAIPES.map(({ classe, chave, rotuloCurto, inicio }) => (
-        <div
-          key={classe}
-          className={`grupo-teclado-naipe grupo-teclado-${classe}`}
-          role="group"
-          aria-label={t(chave)}
-        >
-          <div className="rotulo-naipe-teclado" data-mobile-label={rotuloCurto}>
-            {t(chave)}
-          </div>
-          <div className="linha-naipe">
-            {Array.from({ length: 9 }, (_, i) => botaoPedra(inicio + i))}
-          </div>
-        </div>
-      ))}
-
-      <div
-        className="grupo-teclado-naipe grupo-teclado-honras"
-        role="group"
-        aria-label={t('calculator.honors')}
-      >
-        <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
-          {t('calculator.honors')}
-        </div>
-        <div className="linha-naipe linha-honras-9">
-          <BotaoFlor
-            tipo="flor"
-            temFlor={temFlor}
-            aoTocarFlor={aoTocarFlor}
-            aoEscolher={setEscolhendoFlor}
-          />
-          {HONRAS.map(botaoPedra)}
-          <BotaoFlor
-            tipo="estacao"
-            temFlor={temFlor}
-            aoTocarFlor={aoTocarFlor}
-            aoEscolher={setEscolhendoFlor}
-          />
-        </div>
-      </div>
 
       {maoPronta && (
         <div className="rodape-teclado-finalizacao">
