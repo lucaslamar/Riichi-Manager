@@ -1,119 +1,235 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
-import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
-import { pedrasContadas, pedrasDaChamada, PEDRAS_MCR, type ModoEntrada } from '../logica/montagem'
+import { BotaoAcao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
+import { TecladoPedras } from '@/dominios/calculadora-mao/interface/montagem-mao/componentes/TecladoPedras'
+import {
+  configuracaoPadrao,
+  type Acao,
+  type CodigoPedra,
+} from '@/dominios/calculadora-mao/logica/mao'
+import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
+import { maoCompleta, pedrasContadas, type TipoChamada, type TipoFlor } from '../logica/montagem'
 import '../estilos/calculadora-mao-chinesa.css'
 import ControlesCondicoes from './ControlesCondicoes'
-import { codigoPedra, nomePedra } from './pedras'
+import MaoChinesaAtual from './MaoChinesaAtual'
+import { codigoPedra, idDaPedra, nomePedra } from './pedras'
 import ResultadoFan from './ResultadoFan'
-import Segmentado from './Segmentado'
 import { useCalculadoraMaoChinesa } from './useCalculadoraMaoChinesa'
 
-const MODOS: ModoEntrada[] = ['mao', 'chi', 'pon', 'kanAberto', 'kanFechado']
-/** Linhas do teclado: caracteres, bambus, círculos e honras. */
-const LINHAS_TECLADO = [PEDRAS_MCR.slice(0, 9), PEDRAS_MCR.slice(9, 18), PEDRAS_MCR.slice(18, 27), PEDRAS_MCR.slice(27)]
+/** O MCR não usa aka dora: o teclado da calculadora japonesa fica sem o 5 vermelho. */
+const CONFIGURACAO_TECLADO = { ...configuracaoPadrao, akadora: false }
+const SEM_DORAS = new Set<string>()
+const SEM_ESPERAS = new Map()
 
-/** Calculadora de Mão Chinesa (MCR / Guobiao): monta a mão, conta os fan e mostra os pagamentos. */
+const CHAMADAS: { tipo: TipoChamada; acao: Acao['tipo']; chave: string; chaveCompacta: string }[] =
+  [
+    { tipo: 'chi', acao: 'chii', chave: 'melds.chii', chaveCompacta: 'melds.chii' },
+    { tipo: 'pon', acao: 'pon', chave: 'melds.pon', chaveCompacta: 'melds.pon' },
+    {
+      tipo: 'kanAberto',
+      acao: 'kanAberto',
+      chave: 'melds.kanAberto',
+      chaveCompacta: 'melds.kanCompact',
+    },
+    {
+      tipo: 'kanFechado',
+      acao: 'kanFechado',
+      chave: 'melds.kanFechado',
+      chaveCompacta: 'melds.kanClosedCompact',
+    },
+  ]
+const FLORES: { tipo: TipoFlor; chave: string }[] = [
+  { tipo: 'flor', chave: 'mcr.entrada.flor' },
+  { tipo: 'estacao', chave: 'mcr.entrada.estacao' },
+]
+
+const paraAcao = (tipo: TipoChamada): Acao =>
+  tipo === 'chi' ? { tipo: 'chii', pedras: [] } : ({ tipo: tipo === 'pon' ? 'pon' : tipo } as Acao)
+
+/**
+ * Calculadora de Mão Chinesa (MCR / Guobiao), com o mesmo layout da japonesa:
+ * montar a mão no teclado e, com 14 pedras, finalizar com as condições e calcular.
+ */
 export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean }) {
-  const { t, numero } = useI18n()
+  const { t } = useI18n()
   const calc = useCalculadoraMaoChinesa()
   const { mao } = calc
-  const ultima = mao.pedras.length - 1
+  const completa = maoCompleta(mao)
+
+  const botoesAcao = (compacto: boolean) => (
+    <>
+      {CHAMADAS.map(({ tipo, acao, chave, chaveCompacta }) => (
+        <BotaoAcao
+          key={tipo}
+          tipo={acao}
+          rotulo={t(compacto ? chaveCompacta : chave)}
+          ativo={calc.acao === tipo}
+          desabilitado={calc.acao !== tipo && !calc.podeChamarAlguma(tipo)}
+          aoClicar={() => calc.alternarAcao(tipo)}
+        />
+      ))}
+      {FLORES.map(({ tipo, chave }) => (
+        <BotaoAcao
+          key={tipo}
+          tipo={tipo}
+          rotulo={t(chave)}
+          ativo={false}
+          desabilitado={calc.proximaFlor(tipo) === null}
+          aoClicar={() => calc.adicionarFlor(tipo)}
+        />
+      ))}
+    </>
+  )
 
   return (
     <div className="mcr-calculadora" hidden={!visivel}>
-      {visivel && <TituloTela titulo={t('menu.handCalculatorChinese')} />}
+      {visivel && (
+        <TituloTela titulo={t('menu.handCalculatorChinese')} acoes={<BotaoConfiguracoes />} />
+      )}
 
-      <section className="card mcr-secao" aria-labelledby="mcr-mao-titulo">
-        <div className="mcr-secao__cabecalho">
-          <h3 id="mcr-mao-titulo" className="mcr-secao__titulo">
-            {t('mcr.entrada.titulo')}
-          </h3>
-          <span className="mcr-contador">{t('mcr.entrada.contador', { total: numero(pedrasContadas(mao)) })}</span>
-          <button
-            type="button"
-            className="btn-contorno mcr-limpar"
-            aria-label={t('mcr.entrada.limpar')}
-            title={t('mcr.entrada.limpar')}
-            disabled={pedrasContadas(mao) === 0}
-            onClick={calc.limpar}
+      <div
+        className={`card card-mao-completa fluxo-calculadora ${calc.finalizando ? 'etapa-finalizacao' : 'etapa-montagem'}`}
+      >
+        {!calc.finalizando ? (
+          <section
+            className="calculadora-etapa calculadora-etapa-montagem"
+            aria-labelledby="mcr-etapa-montagem"
           >
-            <i className="fas fa-trash-can" aria-hidden="true" />
-          </button>
-        </div>
-
-        {pedrasContadas(mao) === 0 && <p className="mcr-ajuda">{t('mcr.entrada.vazia')}</p>}
-        <div className="mcr-mao">
-          {mao.chamadas.map((chamada, indice) => {
-            const nome = `${t(`mcr.entrada.${chamada.tipo}`)} ${nomePedra(chamada.meio)}`
-            return (
-              <button
-                key={`c${indice}`}
-                type="button"
-                className="mcr-chamada"
-                aria-label={t('mcr.entrada.removerChamada', { chamada: nome })}
-                onClick={() => calc.removerChamada(indice)}
-              >
-                {pedrasDaChamada(chamada).map((id, i) => (
-                  <PedraSvg key={i} pedra={codigoPedra(id)} virada={chamada.tipo === 'kanFechado' && (i === 0 || i === 3)} />
-                ))}
-              </button>
-            )
-          })}
-          {mao.pedras.map((id, indice) => (
-            <button
-              key={`p${indice}`}
-              type="button"
-              className={`mcr-pedra ${indice === ultima ? 'mcr-pedra--batida' : ''}`}
-              aria-label={`${t('mcr.entrada.removerPedra', { pedra: nomePedra(id) })}${
-                indice === ultima ? `, ${t('mcr.entrada.pedraBatida')}` : ''
-              }`}
-              onClick={() => calc.removerPedra(indice)}
-            >
-              <PedraSvg pedra={codigoPedra(id)} />
-            </button>
-          ))}
-        </div>
-        <p className="mcr-ajuda">{t('mcr.entrada.ajuda')}</p>
-
-        <span className="mcr-rotulo">{t('mcr.entrada.modo')}</span>
-        <Segmentado
-          rotulo={t('mcr.entrada.modo')}
-          valor={calc.modo}
-          aoMudar={calc.setModo}
-          opcoes={MODOS.map((modo) => ({ valor: modo, rotulo: t(`mcr.entrada.${modo}`) }))}
-        />
-
-        <div className="mcr-teclado" role="group" aria-label={t('mcr.entrada.teclado')}>
-          {LINHAS_TECLADO.map((linha, i) => (
-            <div key={i} className="mcr-teclado__linha">
-              {linha.map((id) => (
-                <button
-                  key={id}
-                  type="button"
-                  className="mcr-tecla"
-                  aria-label={nomePedra(id)}
-                  disabled={!calc.podeAdicionar(id)}
-                  onClick={() => calc.adicionarPedra(id)}
-                >
-                  <PedraSvg pedra={codigoPedra(id)} />
-                </button>
-              ))}
+            <h3 id="mcr-etapa-montagem" className="sr-only">
+              {t('calculator.stepBuild')}
+            </h3>
+            <div className="layout-montagem-calculadora sem-esperas">
+              <div className="construtor-mao construtor-mao-montagem">
+                <MaoChinesaAtual
+                  mao={mao}
+                  contexto="montagem"
+                  aoTocarPedra={calc.removerPedra}
+                  aoRemoverChamada={calc.removerChamada}
+                  aoRemoverFlor={calc.removerFlor}
+                  aoLimpar={calc.limpar}
+                />
+                <div className="acoes-construtor-mao mcr-acoes-construtor">{botoesAcao(false)}</div>
+                <div className="painel-teclado-calculadora">
+                  <div
+                    className="menu-acoes-teclado-mobile"
+                    aria-label={t('calculator.actionsMenu')}
+                  >
+                    <div className="opcoes-acoes-mao-mobile opcoes-acoes-mao-mobile--mcr">
+                      {botoesAcao(true)}
+                    </div>
+                  </div>
+                  <TecladoPedras
+                    acaoPendente={calc.acao ? paraAcao(calc.acao) : null}
+                    configuracao={CONFIGURACAO_TECLADO}
+                    dorasReais={SEM_DORAS}
+                    esperasPorPedra={SEM_ESPERAS}
+                    filtrarTecladoPorEspera={false}
+                    furitenBloqueiaRon={false}
+                    maoCompleta={completa}
+                    podeSelecionarPedra={(codigo: CodigoPedra) =>
+                      calc.podeTocarPedra(idDaPedra(codigo))
+                    }
+                    rotuloEsperaTeclado={() => ''}
+                    classeEsperaTeclado={() => ''}
+                    contexto="montagem"
+                    rotuloPedra={(codigo) =>
+                      calc.acao
+                        ? t('calculator.chooseMeldTile', {
+                            tile: nomePedra(idDaPedra(codigo)),
+                            meld: t(`melds.${paraAcao(calc.acao).tipo}`),
+                          })
+                        : t('calculator.addTileToHand', { tile: nomePedra(idDaPedra(codigo)) })
+                    }
+                    maoProntaParaFinalizar={completa && !calc.acao}
+                    batidaDefinida
+                    escolhaChiiPendente={
+                      calc.chiPendente && {
+                        chamada: codigoPedra(calc.chiPendente.chamada),
+                        opcoes: calc.chiPendente.meios.map((meio) =>
+                          [meio - 1, meio, meio + 1].map(codigoPedra),
+                        ),
+                      }
+                    }
+                    aoAdicionarPedra={(codigo) => calc.tocarPedra(idDaPedra(codigo))}
+                    aoFinalizarMao={calc.finalizar}
+                    aoEscolherChiiPendente={(_chamada, sequencia) =>
+                      calc.escolherChi(idDaPedra(sequencia[1]))
+                    }
+                  />
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <ControlesCondicoes condicoes={calc.condicoes} aoMudar={calc.alterarCondicao} />
-
-      <div className="mcr-calcular">
-        {calc.erro && <p className="mcr-ajuda">{t(`mcr.erros.${calc.erro}`)}</p>}
-        <button type="button" className="btn-primario" disabled={calc.erro !== null} onClick={calc.calcular}>
-          {t('mcr.resultado.calcular')}
-        </button>
+          </section>
+        ) : (
+          <section
+            className="calculadora-etapa calculadora-etapa-finalizacao"
+            aria-labelledby="mcr-etapa-finalizacao"
+          >
+            <h3 id="mcr-etapa-finalizacao" className="sr-only">
+              {`${t('calculator.completeHand')} ${pedrasContadas(mao)}/14`}
+            </h3>
+            <div className="pagina-finalizacao-mao">
+              <div className="layout-finalizacao-calculadora">
+                <div className="coluna-finalizacao-mao">
+                  <div className="construtor-mao construtor-mao-finalizacao">
+                    <MaoChinesaAtual
+                      mao={mao}
+                      contexto="finalizacao"
+                      acoesCabecalho={
+                        <div
+                          className="acoes-finalizacao-calculadora"
+                          aria-label={t('calculator.actionsMenu')}
+                        >
+                          <button
+                            className="acao-finalizacao destaque"
+                            type="button"
+                            title={t('actions.editHand')}
+                            aria-label={t('actions.editHand')}
+                            onClick={calc.voltarParaMontagem}
+                          >
+                            <i className="fas fa-pen" aria-hidden="true" />
+                          </button>
+                        </div>
+                      }
+                      aoTocarPedra={calc.escolherBatida}
+                      aoRemoverChamada={() => undefined}
+                      aoRemoverFlor={calc.removerFlor}
+                      aoLimpar={calc.limpar}
+                    />
+                  </div>
+                </div>
+                <div className="coluna-finalizacao-opcoes">
+                  <ControlesCondicoes condicoes={calc.condicoes} aoMudar={calc.alterarCondicao} />
+                  <div className="acao-calcular-mao acao-calcular-mao-ativa rodape-finalizacao-mao">
+                    <button
+                      className="btn-calcular-mao botao-calcular-finalizacao"
+                      type="button"
+                      disabled={calc.erro !== null}
+                      onClick={calc.calcular}
+                    >
+                      {t('actions.calculate')}
+                    </button>
+                    {calc.erro && (
+                      <span className="status-finalizacao-mao">{t(`mcr.erros.${calc.erro}`)}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
       </div>
 
-      {calc.resultado && <ResultadoFan resultado={calc.resultado} />}
+      {calc.resultado && (
+        <Modal
+          titulo={t('mcr.resultado.titulo')}
+          aoFechar={calc.fecharResultado}
+          rotuloFechar={t('actions.close')}
+        >
+          <ResultadoFan resultado={calc.resultado} />
+        </Modal>
+      )}
     </div>
   )
 }

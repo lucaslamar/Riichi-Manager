@@ -5,11 +5,30 @@
  * 19-27 círculos (p), 28-31 ventos (E S W N), 32-34 dragões (C F P).
  */
 
-export const PEDRA = { m1: 1, s1: 10, p1: 19, E: 28, S: 29, W: 30, N: 31, C: 32, F: 33, P: 34 } as const
+export const PEDRA = {
+  m1: 1,
+  s1: 10,
+  p1: 19,
+  E: 28,
+  S: 29,
+  W: 30,
+  N: 31,
+  C: 32,
+  F: 33,
+  P: 34,
+} as const
 /** Fim (exclusivo) dos identificadores válidos, como TILE_SIZE no original (inclui flores). */
 export const FIM_PEDRAS = 43
 
-export const NAIPE = { invalido: 0, caracteres: 1, bambus: 2, circulos: 3, flor: 4, vento: 5, dragao: 6 } as const
+export const NAIPE = {
+  invalido: 0,
+  caracteres: 1,
+  bambus: 2,
+  circulos: 3,
+  flor: 4,
+  vento: 5,
+  dragao: 6,
+} as const
 
 export interface Pedra {
   id: number
@@ -19,7 +38,8 @@ export interface Pedra {
 
 export const bit = (id: number) => 1n << BigInt(id)
 const mapa = (ids: number[]) => ids.reduce((acc, id) => acc | bit(id), 0n)
-const faixa = (inicio: number, fim: number) => mapa(Array.from({ length: fim - inicio + 1 }, (_, i) => inicio + i))
+const faixa = (inicio: number, fim: number) =>
+  mapa(Array.from({ length: fim - inicio + 1 }, (_, i) => inicio + i))
 const numeros = (...valores: number[]) => mapa(valores.flatMap((v) => [v, v + 9, v + 18]))
 
 export const MAPA = (() => {
@@ -70,7 +90,14 @@ export const ehVento = (id: number) => pertence(id, MAPA.ventos)
 export const ehDragao = (id: number) => pertence(id, MAPA.dragoes)
 export const ehYaojiu = (id: number) => pertence(id, MAPA.yaojiu)
 
-export const TIPO_GRUPO = { invalido: 0, sequencia: 1, trinca: 2, kan: 3, par: 4, dragaoCombinado: 5 } as const
+export const TIPO_GRUPO = {
+  invalido: 0,
+  sequencia: 1,
+  trinca: 2,
+  kan: 3,
+  par: 4,
+  dragaoCombinado: 5,
+} as const
 
 /** As seis formas do Knitted Straight (组合龙). */
 export const MAPAS_DRAGAO_COMBINADO: readonly bigint[] = [
@@ -145,14 +172,17 @@ export function mapaChamados(mao: MaoGb): bigint {
 }
 
 export const mapaPedras = (mao: MaoGb) => mao.pedras.reduce((acc, p) => acc | bit(p.id), 0n)
-export const contarNasPedras = (mao: MaoGb, id: number) => mao.pedras.filter((p) => p.id === id).length
+export const contarNasPedras = (mao: MaoGb, id: number) =>
+  mao.pedras.filter((p) => p.id === id).length
 export const contarNosChamados = (mao: MaoGb, id: number) =>
   mao.chamados.flatMap(pedrasDoGrupo).filter((p) => p === id).length
-export const contarNaMao = (mao: MaoGb, id: number) => contarNasPedras(mao, id) + contarNosChamados(mao, id)
+export const contarNaMao = (mao: MaoGb, id: number) =>
+  contarNasPedras(mao, id) + contarNosChamados(mao, id)
 export const pedraDaBatida = (mao: MaoGb) => mao.pedras[mao.pedras.length - 1]
 export const ehMaoFechada = (mao: MaoGb) => mao.chamados.every(ehFechado)
 export const semChamados = (mao: MaoGb) => mao.chamados.length === 0
-export const todaChamada = (mao: MaoGb) => mao.chamados.length === 4 && mao.chamados.every((g) => !ehFechado(g))
+export const todaChamada = (mao: MaoGb) =>
+  mao.chamados.length === 4 && mao.chamados.every((g) => !ehFechado(g))
 
 export function contarBits(n: bigint): number {
   let c = 0

@@ -1,12 +1,11 @@
 /**
- * Montagem da mão chinesa: pedras da mão, chamadas e condições da batida, e a
- * conversão para o formato do motor de fan. A última pedra da mão é a da batida.
+ * Montagem da mão chinesa: pedras da mão, chamadas, flores e condições da batida,
+ * e a conversão para o formato do motor de fan. A última pedra da mão é a da batida.
  */
-import { ehNumerica, grupo, numero, PEDRA, TIPO_GRUPO, type MaoGb } from './motor/pedras'
+import { ehNumerica, grupo, naipe, PEDRA, TIPO_GRUPO, type MaoGb } from './motor/pedras'
 import type { FormaBatida } from './tipos'
 
 export type TipoChamada = 'chi' | 'pon' | 'kanAberto' | 'kanFechado'
-export type ModoEntrada = 'mao' | TipoChamada
 
 export interface Chamada {
   tipo: TipoChamada
@@ -14,9 +13,18 @@ export interface Chamada {
   meio: number
 }
 
+/**
+ * Flores (1 a 4: ameixa, orquídea, crisântemo e bambu) e estações (5 a 8:
+ * primavera, verão, outono e inverno). No MCR todas valem 1 fan e nenhuma tem
+ * função própria: só o desenho muda.
+ */
+export type Flor = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+export type TipoFlor = 'flor' | 'estacao'
+
 export interface MaoChinesa {
   pedras: number[]
   chamadas: Chamada[]
+  flores: Flor[]
 }
 
 export type Vento = typeof PEDRA.E | typeof PEDRA.S | typeof PEDRA.W | typeof PEDRA.N
@@ -31,10 +39,9 @@ export interface CondicoesMcr {
   kan: boolean
   /** Last Tile: a quarta pedra do tipo, as outras três já à vista. */
   ultimaDoTipo: boolean
-  flores: number
 }
 
-export const MAO_CHINESA_VAZIA: MaoChinesa = { pedras: [], chamadas: [] }
+export const MAO_CHINESA_VAZIA: MaoChinesa = { pedras: [], chamadas: [], flores: [] }
 
 export const CONDICOES_PADRAO: CondicoesMcr = {
   forma: 'ron',
@@ -43,10 +50,8 @@ export const CONDICOES_PADRAO: CondicoesMcr = {
   ultimaPedra: false,
   kan: false,
   ultimaDoTipo: false,
-  flores: 0,
 }
 
-export const PEDRAS_MCR: readonly number[] = Array.from({ length: 34 }, (_, i) => i + 1)
 const TAMANHO_MAO = 14
 
 export function pedrasDaChamada({ tipo, meio }: Chamada): number[] {
@@ -55,34 +60,50 @@ export function pedrasDaChamada({ tipo, meio }: Chamada): number[] {
   return [meio, meio, meio, meio]
 }
 
-/** Pedras contadas para o tamanho da mão: kan conta como três. */
+/** Pedras contadas para o tamanho da mão: kan conta como três. Flores não contam. */
 export const pedrasContadas = (mao: MaoChinesa) => mao.pedras.length + mao.chamadas.length * 3
 export const maoCompleta = (mao: MaoChinesa) => pedrasContadas(mao) === TAMANHO_MAO
-export const maoVazia = (mao: MaoChinesa) => mao.pedras.length === 0 && mao.chamadas.length === 0
+export const maoVazia = (mao: MaoChinesa) =>
+  mao.pedras.length === 0 && mao.chamadas.length === 0 && mao.flores.length === 0
 
 function quantas(mao: MaoChinesa, id: number) {
   return [...mao.pedras, ...mao.chamadas.flatMap(pedrasDaChamada)].filter((p) => p === id).length
 }
 
-/** A sequência do chi começa na pedra tocada (1 a 7 de cada naipe). */
-function chamadaDoToque(tipo: TipoChamada, id: number): Chamada | null {
-  if (tipo !== 'chi') return { tipo, meio: id }
-  if (!ehNumerica(id) || numero(id) > 7) return null
-  return { tipo, meio: id + 1 }
-}
-
-export function podeAdicionar(mao: MaoChinesa, modo: ModoEntrada, id: number): boolean {
-  if (modo === 'mao') return pedrasContadas(mao) < TAMANHO_MAO && quantas(mao, id) < 4
-  const chamada = chamadaDoToque(modo, id)
-  if (!chamada || mao.chamadas.length >= 4 || pedrasContadas(mao) + 3 > TAMANHO_MAO) return false
+const cabeChamada = (mao: MaoChinesa, chamada: Chamada) => {
+  if (mao.chamadas.length >= 4 || pedrasContadas(mao) + 3 > TAMANHO_MAO) return false
   const teste = { ...mao, chamadas: [...mao.chamadas, chamada] }
   return pedrasDaChamada(chamada).every((p) => quantas(teste, p) <= 4)
 }
 
-export function adicionar(mao: MaoChinesa, modo: ModoEntrada, id: number): MaoChinesa {
-  if (!podeAdicionar(mao, modo, id)) return mao
-  if (modo === 'mao') return { ...mao, pedras: [...mao.pedras, id] }
-  return { ...mao, chamadas: [...mao.chamadas, chamadaDoToque(modo, id)!] }
+/** Sequências do Chi que usam a pedra tocada (o meio de cada uma), como na calculadora japonesa. */
+export function sequenciasDoChi(mao: MaoChinesa, id: number): number[] {
+  if (!ehNumerica(id)) return []
+  return [id - 1, id, id + 1].filter(
+    (meio) =>
+      ehNumerica(meio - 1) &&
+      ehNumerica(meio + 1) &&
+      naipe(meio - 1) === naipe(id) &&
+      naipe(meio + 1) === naipe(id) &&
+      cabeChamada(mao, { tipo: 'chi', meio }),
+  )
+}
+
+export function podeAdicionarPedra(mao: MaoChinesa, id: number): boolean {
+  return pedrasContadas(mao) < TAMANHO_MAO && quantas(mao, id) < 4
+}
+
+export function podeChamar(mao: MaoChinesa, tipo: TipoChamada, id: number): boolean {
+  if (tipo === 'chi') return sequenciasDoChi(mao, id).length > 0
+  return cabeChamada(mao, { tipo, meio: id })
+}
+
+export function adicionarPedra(mao: MaoChinesa, id: number): MaoChinesa {
+  return podeAdicionarPedra(mao, id) ? { ...mao, pedras: [...mao.pedras, id] } : mao
+}
+
+export function adicionarChamada(mao: MaoChinesa, chamada: Chamada): MaoChinesa {
+  return cabeChamada(mao, chamada) ? { ...mao, chamadas: [...mao.chamadas, chamada] } : mao
 }
 
 export function removerPedra(mao: MaoChinesa, indice: number): MaoChinesa {
@@ -93,15 +114,53 @@ export function removerChamada(mao: MaoChinesa, indice: number): MaoChinesa {
   return { ...mao, chamadas: mao.chamadas.filter((_, i) => i !== indice) }
 }
 
+/** A pedra tocada vira a da batida: vai para o fim da mão. */
+export function escolherBatida(mao: MaoChinesa, indice: number): MaoChinesa {
+  if (indice < 0 || indice >= mao.pedras.length) return mao
+  const pedras = mao.pedras.filter((_, i) => i !== indice)
+  return { ...mao, pedras: [...pedras, mao.pedras[indice]] }
+}
+
+const PRIMEIRA: Record<TipoFlor, Flor> = { flor: 1, estacao: 5 }
+
+/** A próxima flor (ou estação) que ainda não está na mão, ou nenhuma se as quatro já estão. */
+export function proximaFlor(mao: MaoChinesa, tipo: TipoFlor): Flor | null {
+  for (let i = 0; i < 4; i++) {
+    const flor = (PRIMEIRA[tipo] + i) as Flor
+    if (!mao.flores.includes(flor)) return flor
+  }
+  return null
+}
+
+export function adicionarFlor(mao: MaoChinesa, tipo: TipoFlor): MaoChinesa {
+  const flor = proximaFlor(mao, tipo)
+  return flor ? { ...mao, flores: [...mao.flores, flor].sort((a, b) => a - b) } : mao
+}
+
+export function removerFlor(mao: MaoChinesa, flor: Flor): MaoChinesa {
+  return { ...mao, flores: mao.flores.filter((atual) => atual !== flor) }
+}
+
 export type ErroMaoMcr = 'incompleta' | 'semKan' | 'rouboDoKan' | 'ultimaDoTipo'
 
 /** Combinações que o GB-Mahjong recusa ao ler a mão. */
 export function validarMao(mao: MaoChinesa, condicoes: CondicoesMcr): ErroMaoMcr | null {
   if (!maoCompleta(mao)) return 'incompleta'
   const batida = mao.pedras[mao.pedras.length - 1]
-  if (condicoes.kan && condicoes.forma === 'tsumo' && !mao.chamadas.some((c) => c.tipo.startsWith('kan'))) return 'semKan'
-  if (condicoes.kan && condicoes.forma === 'ron' && (condicoes.ultimaPedra || quantas(mao, batida) > 1)) return 'rouboDoKan'
-  if (condicoes.ultimaDoTipo && mao.pedras.filter((p) => p === batida).length > 1) return 'ultimaDoTipo'
+  if (
+    condicoes.kan &&
+    condicoes.forma === 'tsumo' &&
+    !mao.chamadas.some((c) => c.tipo.startsWith('kan'))
+  )
+    return 'semKan'
+  if (
+    condicoes.kan &&
+    condicoes.forma === 'ron' &&
+    (condicoes.ultimaPedra || quantas(mao, batida) > 1)
+  )
+    return 'rouboDoKan'
+  if (condicoes.ultimaDoTipo && mao.pedras.filter((p) => p === batida).length > 1)
+    return 'ultimaDoTipo'
   return null
 }
 

@@ -3,6 +3,8 @@ import type { ChaveFan } from './motor/fan'
 export type FormaBatida = 'ron' | 'tsumo'
 
 export interface FanContado {
+  /** Número oficial (1 a 81), o mesmo do guia do CMC. */
+  id: number
   chave: ChaveFan
   nomeChines: string
   valor: number

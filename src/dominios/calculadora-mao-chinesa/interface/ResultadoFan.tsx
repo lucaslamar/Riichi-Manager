@@ -9,17 +9,19 @@ export default function ResultadoFan({ resultado }: { resultado: ResultadoCalcul
   const pontos = (valor: number) => t('mcr.resultado.pontos', { pontos: numero(valor) })
 
   return (
-    <section className="card mcr-secao mcr-resultado" aria-labelledby="mcr-resultado-titulo" aria-live="polite">
-      <h3 id="mcr-resultado-titulo" className="mcr-secao__titulo">
-        {t('mcr.resultado.titulo')}
-      </h3>
+    <section className="mcr-secao mcr-resultado" aria-live="polite">
       {!fan.batida && <p className="mcr-aviso">{t('mcr.resultado.naoBate')}</p>}
       {fan.batida && (
         <>
-          <p className="mcr-resultado__total">{t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) })}</p>
+          <p className="mcr-resultado__total">
+            {t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) })}
+          </p>
           {fan.flores > 0 && (
             <p className="mcr-resultado__detalhe">
-              {t('mcr.resultado.semFlores', { fan: numero(fan.fanSemFlores), flores: numero(fan.flores) })}
+              {t('mcr.resultado.semFlores', {
+                fan: numero(fan.fanSemFlores),
+                flores: numero(fan.flores),
+              })}
             </p>
           )}
           <ListaFan fans={fan.fans} flores={fan.flores} />

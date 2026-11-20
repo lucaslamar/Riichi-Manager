@@ -17,6 +17,14 @@ import {
 } from '../src/dominios/calculadora-mao-chinesa/logica/motor/pedras'
 import { calcularFanMcr } from '../src/dominios/calculadora-mao-chinesa/logica/fan-mcr'
 import { calcularPagamentoMcr } from '../src/dominios/calculadora-mao-chinesa/logica/pontuacao-mcr'
+import {
+  adicionarFlor,
+  escolherBatida,
+  MAO_CHINESA_VAZIA,
+  proximaFlor,
+  removerFlor,
+  sequenciasDoChi,
+} from '../src/dominios/calculadora-mao-chinesa/logica/montagem'
 import { buscarFansMcr, fanMcrPorId, FANS_MCR } from '../src/compartilhado/mahjong/mcr/fans-mcr'
 
 const BASE: Record<string, number> = {
@@ -201,3 +209,22 @@ FANS_MCR.forEach((fan) =>
   ),
 )
 console.log('✓ 81 fan do guia do CMC')
+
+// Montagem da mão: Chi como na calculadora japonesa, flores e troca da batida.
+{
+  const vazia = MAO_CHINESA_VAZIA
+  assert.deepEqual(sequenciasDoChi(vazia, 5), [4, 5, 6], 'Chi no 5m: 345, 456 e 567')
+  assert.deepEqual(sequenciasDoChi(vazia, 1), [2], 'Chi no 1m: só 123')
+  assert.deepEqual(sequenciasDoChi(vazia, 28), [], 'Honra não faz Chi')
+  let mao = adicionarFlor(adicionarFlor(adicionarFlor(vazia, 'flor'), 'estacao'), 'flor')
+  assert.deepEqual(mao.flores, [1, 2, 5], 'Cada toque traz a próxima flor ou estação')
+  mao = removerFlor(mao, 1)
+  assert.equal(proximaFlor(mao, 'flor'), 1, 'A flor removida volta a ser a próxima')
+  const comPedras = { ...vazia, pedras: [1, 2, 3] }
+  assert.deepEqual(
+    escolherBatida(comPedras, 0).pedras,
+    [2, 3, 1],
+    'A pedra escolhida vira a da batida',
+  )
+}
+console.log('✓ montagem da mão chinesa')

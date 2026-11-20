@@ -1,26 +1,70 @@
-.mcr-calculadora {
-  display: grid;
-  width: 100%;
-  max-width: 760px;
-  gap: 16px;
-  margin: 0 auto;
-  padding: 16px;
+/* O layout (mão, barra de chamadas e teclado) vem dos estilos da Calculadora de
+   Mão japonesa (compartilhado/interface/estilos/dominios/calculadoras). Aqui fica
+   só o que o MCR tem a mais: flores, condições e resultado em fan. */
+
+.mcr-calculadora[hidden] {
+  display: none;
 }
 
-.mcr-calculadora .card {
-  margin-bottom: 0;
-  padding: 16px;
+/* Chi, Pon, Kan, Kan fechado, Flor e Estação: seis botões na barra do celular. */
+.construtor-mao-montagem
+  .menu-acoes-teclado-mobile
+  .opcoes-acoes-mao-mobile.opcoes-acoes-mao-mobile--mcr {
+  grid-template-columns: 0.7fr 0.75fr 0.7fr 1.3fr 0.75fr 1fr;
+}
+
+.btn-acao-flor {
+  --action-color: var(--texto-aviso);
+}
+
+.btn-acao-estacao {
+  --action-color: var(--cor-secundario-texto, #155b98);
+}
+
+.mcr-flores-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.mcr-flor-mao {
+  width: var(--pedra-mao-largura, 2.2rem);
+}
+
+.pedra-flor {
+  width: 100%;
+  height: auto;
+}
+
+.pedra-flor__face {
+  fill: var(--pedra-face, #f6f1e7);
+  stroke: var(--cor-borda-controle, #b9b2a5);
+  stroke-width: 1;
+}
+
+.pedra-flor__numero {
+  fill: #b3261e;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.pedra-flor__hanzi {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.pedra-flor--flor .pedra-flor__hanzi {
+  fill: #2e7d32;
+}
+
+.pedra-flor--estacao .pedra-flor__hanzi {
+  fill: #1f4fa3;
 }
 
 .mcr-secao {
   display: grid;
   gap: 10px;
-}
-
-.mcr-secao__cabecalho {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 .mcr-secao__titulo {
@@ -35,26 +79,12 @@
   font-size: 1rem;
 }
 
-.mcr-contador {
-  color: var(--cor-texto-suave, #40566d);
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
-}
-
-.mcr-limpar {
-  min-width: 44px;
-  min-height: 44px;
-  margin-left: auto;
-  padding: 0 12px;
-}
-
 .mcr-rotulo {
   color: var(--cor-texto, #1a3a5a);
   font-size: 0.9rem;
   font-weight: 700;
 }
 
-.mcr-ajuda,
 .mcr-resultado__detalhe {
   margin: 0;
   color: var(--cor-texto-suave, #40566d);
@@ -63,123 +93,17 @@
 
 .mcr-aviso {
   margin: 0;
-  border: 1px solid var(--cor-perigo-borda, #e57373);
+  border: 1px solid var(--texto-aviso);
   border-radius: 8px;
   padding: 10px 12px;
-  color: var(--cor-perigo, #b3261e);
+  color: var(--texto-aviso);
   font-weight: 700;
-}
-
-.mcr-mao {
-  display: flex;
-  min-height: 52px;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 6px;
-}
-
-.mcr-pedra,
-.mcr-chamada,
-.mcr-tecla {
-  display: inline-flex;
-  min-width: 28px;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 6px;
-  padding: 2px;
-  background: none;
-  cursor: pointer;
-}
-
-.mcr-pedra .tile-img,
-.mcr-chamada .tile-img,
-.mcr-tecla .tile-img {
-  width: 2rem;
-  height: auto;
-}
-
-.mcr-chamada {
-  gap: 1px;
-  border: 1px solid var(--cor-borda, #e2e8f0);
-  background: var(--cor-superficie-alt, #f8f9fa);
-}
-
-.mcr-pedra--batida {
-  margin-left: 8px;
-  outline: 2px solid var(--cor-primario, #2196f3);
-}
-
-.mcr-pedra:focus-visible,
-.mcr-chamada:focus-visible,
-.mcr-tecla:focus-visible {
-  outline: 3px solid var(--cor-foco, #2196f3);
-  outline-offset: 2px;
-}
-
-.mcr-teclado {
-  display: grid;
-  gap: 4px;
-}
-
-.mcr-teclado__linha {
-  display: grid;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-  gap: 4px;
-}
-
-.mcr-tecla {
-  width: 100%;
-  min-width: 0;
-}
-
-.mcr-tecla .tile-img {
-  width: 100%;
-  max-width: 2.6rem;
-}
-
-.mcr-tecla:disabled {
-  cursor: not-allowed;
-  opacity: 0.35;
 }
 
 .mcr-interruptores {
   display: grid;
   gap: 8px;
   margin-top: 6px;
-}
-
-.mcr-flores {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.mcr-flores__controle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.mcr-flores__botao {
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-}
-
-.mcr-flores__valor {
-  min-width: 2ch;
-  color: var(--cor-texto, #1a3a5a);
-  font-size: 1.2rem;
-  font-weight: 800;
-  text-align: center;
-}
-
-.mcr-calcular {
-  display: grid;
-  gap: 8px;
 }
 
 .mcr-resultado__total {
@@ -231,8 +155,4 @@
   font-variant-numeric: tabular-nums;
   font-weight: 800;
   text-align: right;
-}
-
-.mcr-calculadora[hidden] {
-  display: none;
 }

@@ -1,7 +1,7 @@
 /**
  * Fronteira entre a calculadora e o motor de fan: a interface não importa o motor.
  */
-import { contarFan, ehBatida, nomeChinesDoFan, valorDoFan } from './motor/fan'
+import { contarFan, ehBatida, idDoFan, nomeChinesDoFan, valorDoFan } from './motor/fan'
 import type { MaoGb } from './motor/pedras'
 import type { ResultadoFanMcr } from './tipos'
 
@@ -16,7 +16,13 @@ export function calcularFanMcr(mao: MaoGb, flores: number): ResultadoFanMcr {
   return {
     batida: true,
     fans: fans
-      .map(({ chave, vezes }) => ({ chave, vezes, valor: valorDoFan(chave), nomeChines: nomeChinesDoFan(chave) }))
+      .map(({ chave, vezes }) => ({
+        id: idDoFan(chave),
+        chave,
+        vezes,
+        valor: valorDoFan(chave),
+        nomeChines: nomeChinesDoFan(chave),
+      }))
       .sort((a, b) => b.valor - a.valor),
     fanSemFlores: total,
     flores,

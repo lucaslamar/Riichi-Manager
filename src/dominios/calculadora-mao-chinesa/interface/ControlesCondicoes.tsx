@@ -1,5 +1,4 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { MAXIMO_FLORES } from '../logica/fan-mcr'
 import type { CondicoesMcr, Vento } from '../logica/montagem'
 import { PEDRA } from '../logica/motor/pedras'
 import Segmentado from './Segmentado'
@@ -21,15 +20,29 @@ export default function ControlesCondicoes({
   condicoes: CondicoesMcr
   aoMudar: <Chave extends keyof CondicoesMcr>(chave: Chave, valor: CondicoesMcr[Chave]) => void
 }) {
-  const { t, numero } = useI18n()
+  const { t } = useI18n()
   const tsumo = condicoes.forma === 'tsumo'
   const ventos = VENTOS.map(({ valor, chave }) => ({ valor, rotulo: t(chave) }))
 
-  const interruptores: { chave: CondicaoLigavel; icone: string; rotulo: string; ajuda?: string }[] = [
-    { chave: 'ultimaPedra', icone: 'fa-hourglass-end', rotulo: t(tsumo ? 'mcr.condicoes.ultimaParede' : 'mcr.condicoes.ultimoDescarte') },
-    { chave: 'kan', icone: 'fa-layer-group', rotulo: t(tsumo ? 'mcr.condicoes.reposicaoKan' : 'mcr.condicoes.rouboKan') },
-    { chave: 'ultimaDoTipo', icone: 'fa-eye', rotulo: t('mcr.condicoes.ultimaDoTipo'), ajuda: t('mcr.condicoes.ultimaDoTipoAjuda') },
-  ]
+  const interruptores: { chave: CondicaoLigavel; icone: string; rotulo: string; ajuda?: string }[] =
+    [
+      {
+        chave: 'ultimaPedra',
+        icone: 'fa-hourglass-end',
+        rotulo: t(tsumo ? 'mcr.condicoes.ultimaParede' : 'mcr.condicoes.ultimoDescarte'),
+      },
+      {
+        chave: 'kan',
+        icone: 'fa-layer-group',
+        rotulo: t(tsumo ? 'mcr.condicoes.reposicaoKan' : 'mcr.condicoes.rouboKan'),
+      },
+      {
+        chave: 'ultimaDoTipo',
+        icone: 'fa-eye',
+        rotulo: t('mcr.condicoes.ultimaDoTipo'),
+        ajuda: t('mcr.condicoes.ultimaDoTipoAjuda'),
+      },
+    ]
 
   return (
     <section className="card mcr-secao" aria-labelledby="mcr-condicoes-titulo">
@@ -82,36 +95,6 @@ export default function ControlesCondicoes({
             <span className="interruptor" aria-hidden="true" />
           </button>
         ))}
-      </div>
-
-      <div className="mcr-flores">
-        <span className="cartao-regras__texto">
-          <strong>{t('mcr.condicoes.flores')}</strong>
-          <span>{t('mcr.condicoes.floresAjuda')}</span>
-        </span>
-        <div className="mcr-flores__controle">
-          <button
-            type="button"
-            className="btn-contorno mcr-flores__botao"
-            aria-label={t('mcr.condicoes.menosFlor')}
-            disabled={condicoes.flores === 0}
-            onClick={() => aoMudar('flores', condicoes.flores - 1)}
-          >
-            <i className="fas fa-minus" aria-hidden="true" />
-          </button>
-          <output className="mcr-flores__valor" aria-live="polite">
-            {numero(condicoes.flores)}
-          </output>
-          <button
-            type="button"
-            className="btn-contorno mcr-flores__botao"
-            aria-label={t('mcr.condicoes.maisFlor')}
-            disabled={condicoes.flores === MAXIMO_FLORES}
-            onClick={() => aoMudar('flores', condicoes.flores + 1)}
-          >
-            <i className="fas fa-plus" aria-hidden="true" />
-          </button>
-        </div>
       </div>
     </section>
   )
