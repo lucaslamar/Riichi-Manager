@@ -8,6 +8,7 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { ROTULOS_IDIOMA } from '@/compartilhado/i18n/idiomas'
 import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilhaCamadas'
 import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
@@ -92,7 +93,8 @@ export default function GuiaAprender({
   aoTrocarTela: (passo: 1 | -1) => void
 }) {
   const { t, idioma } = useI18n()
-  const conteudo = conteudoGuia(idioma)
+  const { modo } = useModoJogo()
+  const conteudo = conteudoGuia(idioma, modo)
   const livro = useMemo(() => montarLivro(conteudo), [conteudo])
   const [progressoInicial] = useState(lerProgressoGuia)
   // Sempre abre na capa (a tela Aprender a jogar).
@@ -577,7 +579,7 @@ export default function GuiaAprender({
           <div className="guia-capitulo">
             <i className="fas fa-trophy guia-capa__icone" aria-hidden="true" />
             <h1 className="guia-capitulo__titulo">{t('learn.conclusionTitle')}</h1>
-            <p className="guia-capitulo__frase">{t('learn.conclusionText')}</p>
+            <p className="guia-capitulo__frase">{conteudo.textoConclusao ?? t('learn.conclusionText')}</p>
             {/* O Guia de bolso (chapéu de formatura) é para as dúvidas rápidas durante o jogo. */}
             <p className="guia-conclusao__bolso">
               <i className="fas fa-graduation-cap" aria-hidden="true" />
@@ -753,7 +755,7 @@ export default function GuiaAprender({
           indiceAtual={indice}
           concluidos={concluidos}
           rotuloRank={t('learn.yourRank', { rank: nomeRank(rank, conteudo.ranks) })}
-          dicaRank={t('learn.rankHint')}
+          dicaRank={conteudo.dicaRank ?? t('learn.rankHint')}
           aoIrPara={irPara}
           aoAbrirGlossario={() => {
             setIndiceAberto(false)

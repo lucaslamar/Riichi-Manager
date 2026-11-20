@@ -20,8 +20,6 @@ import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/pagi
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import PaginaRegras from '@/dominios/configuracoes/interface/PaginaRegras'
 import GuiaAprender from '@/dominios/aprender-a-jogar/interface/GuiaAprender'
-import TutorialMcr from '@/dominios/aprender-a-jogar/mcr/TutorialMcr'
-import PaginaGuiaBolsoMcr from '@/dominios/guia-bolso/mcr/PaginaGuiaBolsoMcr'
 import PaginaPlacarMcr from '@/dominios/placar-mcr/interface/PaginaPlacarMcr'
 
 const PaginaCenterpiece = lazy(
@@ -36,8 +34,6 @@ export type TelaPrincipal =
   | 'partidas'
   | 'ranking'
   | 'regras'
-  /** Só no modo Chinês: o Guia de Bolso do Riichi fica dentro da Calculadora de Mão. */
-  | 'guiaBolso'
   /** Só no modo Chinês: placar de pontos MCR, no lugar da Mesa partida. */
   | 'placarMcr'
 
@@ -207,18 +203,10 @@ export default function App() {
           )}
         </Suspense>
         {tela === 'regras' && <PaginaRegras />}
-        {tela === 'guiaBolso' && <PaginaGuiaBolsoMcr />}
         {tela === 'placarMcr' && <PaginaPlacarMcr />}
       </main>
 
-      {guia && isChines && (
-        <TutorialMcr
-          key={guia.chave}
-          aoFechar={() => setGuia(null)}
-          aoAbrirGuiaBolso={() => navegar('guiaBolso')}
-        />
-      )}
-      {guia && !isChines && (
+      {guia && (
         <GuiaAprender
           key={guia.chave}
           aoFechar={() => setGuia(null)}

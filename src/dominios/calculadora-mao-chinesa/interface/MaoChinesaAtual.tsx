@@ -3,6 +3,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ChipMeldMao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/ChipMeldMao'
 import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
 import { ESTILO_MELD } from '@/dominios/calculadora-mao/interface/constantes'
+import BotaoYakus from '@/dominios/calculadora-mao/interface/modais/yakus/BotaoYakus'
 import {
   pedrasContadas,
   pedrasDaChamada,
@@ -73,6 +74,8 @@ export default function MaoChinesaAtual({
         </div>
         <div className="acoes-cabecalho-mao">
           {acoesCabecalho}
+          {/* Guia de bolso: o mesmo do Riichi, com os fan do MCR. */}
+          {montagem && <BotaoYakus classeBase="btn-configuracao-mao-cabecalho" />}
           {(pedrasContadas(mao) > 0 || mao.flores.length > 0) && (
             <button
               className="btn-limpar-mao-cabecalho"

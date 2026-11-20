@@ -1,70 +1,7 @@
-.guia-mcr {
-  display: grid;
-  width: 100%;
-  max-width: 760px;
-  gap: 16px;
-  margin: 0 auto;
-  padding: 16px;
-  color: var(--cor-texto, #1a3a5a);
-}
-
-.guia-mcr__filtros {
-  display: grid;
-  gap: 8px;
-}
-
-.guia-mcr__rotulo {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.guia-mcr__busca,
-.guia-mcr__selects select {
-  width: 100%;
-  min-height: 44px;
-  border: 1px solid var(--cor-borda-controle, #999);
-  border-radius: 10px;
-  padding: 8px 12px;
-  background: var(--cor-superficie, #fff);
-  color: var(--cor-texto, #1a3a5a);
-  font: inherit;
-}
-
-.guia-mcr__selects {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.guia-mcr__contagem,
-.guia-mcr__vazio {
-  margin: 0;
-  color: var(--cor-texto-suave, #40566d);
-  font-size: 0.875rem;
-}
-
-.guia-mcr__patamar {
-  display: grid;
-  gap: 10px;
-  scroll-margin-top: 80px;
-}
-
-.guia-mcr__patamar-titulo {
-  margin: 8px 0 0;
-  border-bottom: 2px solid var(--cor-borda, #e2e8f0);
-  padding-bottom: 6px;
-  font-size: 1.1rem;
-}
+/* O cartão, as abas e a busca vêm do Guia de bolso do Riichi (modal-yakus.css).
+   Aqui fica só o que o MCR tem a mais: equivalente no Riichi e "Não combina com". */
 
 .fan-mcr {
-  display: grid;
-  gap: 6px;
-  border: 1px solid var(--cor-borda, #e2e8f0);
-  border-radius: 12px;
-  padding: 12px;
-  background: var(--cor-superficie, #fff);
   scroll-margin-top: 80px;
 }
 
@@ -73,40 +10,7 @@
   outline-offset: 2px;
 }
 
-.fan-mcr__topo {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
-.fan-mcr__pontos {
-  min-width: 2.2ch;
-  color: var(--cor-primario, #2196f3);
-  font-size: 1.4rem;
-  font-weight: 900;
-  font-variant-numeric: tabular-nums;
-}
-
-.fan-mcr__nome {
-  flex: 1;
-  margin: 0;
-  font-size: 1.05rem;
-}
-
-.fan-mcr__numero,
-.fan-mcr__outros-nomes {
-  color: var(--cor-texto-suave, #40566d);
-  font-size: 0.85rem;
-}
-
-.fan-mcr__outros-nomes,
-.fan-mcr__descricao,
-.fan-mcr__observacao {
-  margin: 0;
-}
-
-.fan-mcr__riichi,
-.badge-diferente-riichi {
+.fan-mcr__riichi {
   justify-self: start;
   border: 1px solid var(--texto-aviso);
   border-radius: 999px;
@@ -150,6 +54,10 @@
   padding-left: 18px;
 }
 
+.fan-mcr__observacao {
+  margin: 0;
+}
+
 .guia-mcr__sem-equivalente {
   border-left: 5px solid var(--texto-aviso);
   border-radius: 8px;
@@ -157,17 +65,12 @@
   background: var(--cor-superficie-alt, #f8f9fa);
 }
 
-.guia-mcr__sem-equivalente h3 {
-  margin: 0 0 6px;
-  font-size: 1rem;
-}
-
 .guia-mcr__sem-equivalente p {
   margin: 4px 0 0;
 }
 
 .creditos-cmc {
-  margin: 0;
+  margin: 12px 0 0;
   color: var(--cor-texto-suave, #40566d);
   font-size: 0.85rem;
   text-align: center;

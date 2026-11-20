@@ -29,8 +29,6 @@
     "moreOptions": "Mais opções",
     "backToMain": "Voltar para as opções principais",
     "handCalculatorChinese": "Calculadora de Mão Chinesa",
-    "pocketGuideMcr": "Guia de Bolso",
-    "pocketGuideMcrShort": "Guia",
     "scoreMcr": "Placar",
     "scoreMcrShort": "Placar"
   },
@@ -2266,47 +2264,35 @@
   },
   "guiaBolso": {
     "mcr": {
-      "titulo": "Guia de Bolso · MCR",
-      "rotuloBusca": "Buscar",
-      "busca": "Buscar fan, 汉字 ou inglês",
-      "pontos": "Pontos",
-      "todosPontos": "Todos os pontos",
-      "categoria": "Categoria",
-      "todasCategorias": "Todas as categorias",
       "pontosFan": "{{pontos}} pontos",
       "numero": "Nº {{id}}",
       "riichi": "Riichi: {{yaku}}",
       "detalhes": "Detalhes",
       "naoCombina": "Não combina com:",
       "irPara": "Ir para {{nome}}",
-      "encontrados": {
-        "one": "{{count}} fan encontrado",
-        "few": "{{count}} fan encontrados",
-        "many": "{{count}} fan encontrados",
-        "other": "{{count}} fan encontrados"
-      },
-      "nenhum": "Nenhum fan encontrado. Tente outro nome ou limpe os filtros.",
       "semEquivalenteTitulo": "Yaku do Riichi sem equivalente",
       "semEquivalenteExato": "Sem equivalente exato: {{lista}}.",
       "naoExistem": "Não existem no MCR: {{lista}}.",
-      "creditos": "Conteúdo: Guia do Mahjong Chinês (MCR) — Cerrado Mahjong Club. Juliana Visoni e Gabriel Souza."
-    }
-  },
-  "tutorial": {
-    "mcr": {
-      "titulo": "Tutorial · MCR",
-      "anterior": "Seção anterior",
-      "proxima": "Próxima seção",
-      "diferenteRiichi": "Diferente do Riichi",
-      "abrirGuiaBolso": "Abrir o Guia de Bolso",
-      "exemplos": "Exemplos",
-      "exemplo": "Exemplo",
-      "quemPaga": "Quem paga",
-      "vencedorRecebe": "Vencedor recebe",
-      "exemploRon": "Ron, {{pontos}} pts",
-      "exemploTsumo": "Tsumo, {{pontos}} pts",
-      "pagaRon": "Quem descartou {{descartador}}, os outros {{outro}} e {{outro}}",
-      "pagaTsumo": "Cada um {{valor}}"
+      "creditos": "Conteúdo: Guia do Mahjong Chinês (MCR) — Cerrado Mahjong Club. Juliana Visoni e Gabriel Souza.",
+      "porPontos": "Por pontos",
+      "abaRiichi": "Riichi",
+      "abas": {
+        "chows": "Chows",
+        "pungs": "Pungs",
+        "kongs": "Kongs",
+        "ventos": "Ventos",
+        "dragoes": "Dragões",
+        "naipes": "Naipes",
+        "series-especificas": "Séries",
+        "pecas-especificas": "Peças",
+        "maos": "Mãos",
+        "maos-especiais": "Especiais",
+        "esperas": "Esperas",
+        "ultima-peca": "Última peça",
+        "outros": "Outros"
+      },
+      "busca": "Buscar fan, 汉字, inglês ou yaku",
+      "rotuloBusca": "Buscar no Guia de bolso"
     }
   },
   "placar": {

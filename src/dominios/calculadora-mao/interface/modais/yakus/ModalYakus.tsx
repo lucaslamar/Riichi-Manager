@@ -2,6 +2,15 @@ import { useMemo, useState } from 'react'
 import AbasModal, { type AbaModal } from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
+import {
+  ABAS_GUIA_MCR,
+  CampoBuscaGuiaMcr,
+  ConteudoGuiaMcr,
+  idCartaoFan,
+  rotuloAbaGuiaMcr,
+  type AbaGuiaMcr,
+} from '@/dominios/guia-bolso/mcr/ConteudoGuiaMcr'
 import { conteudoGuiaBolso } from '../../../conteudo/guia-bolso'
 import {
   GRUPOS_INICIANTE,
@@ -99,6 +108,72 @@ function ConteudoAba({ aba }: { aba: AbaYakus }) {
  * do conteúdo da aba; trocar de aba limpa a busca.
  */
 export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
+  const { isChines } = useModoJogo()
+  return isChines ? <ModalGuiaMcr aoFechar={aoFechar} /> : <ModalGuiaRiichi aoFechar={aoFechar} />
+}
+
+/** Título do Guia de bolso, igual nos dois modos. */
+function TituloGuia() {
+  const { t } = useI18n()
+  return (
+    <>
+      {t('pocketGuide.title')}{' '}
+      {/* Font Awesome grátis não tem ovelha: emoji, com nome para leitor de tela. */}
+      <span className="yaku-modal__ovelha" role="img" aria-label={t('pocketGuide.sheep')}>
+        🐑
+      </span>
+    </>
+  )
+}
+
+/**
+ * Guia de bolso do modo Chinês: a mesma modal, abas e busca do Riichi, com os 81
+ * fan do guia do CMC por categoria e uma aba com todos por pontos.
+ */
+function ModalGuiaMcr({ aoFechar }: { aoFechar: () => void }) {
+  const { t } = useI18n()
+  const [aba, setAba] = useState<AbaGuiaMcr>('pontos')
+  const [busca, setBusca] = useState('')
+  const abas = useMemo<AbaModal<AbaGuiaMcr>[]>(
+    () => ABAS_GUIA_MCR.map((chave) => ({ chave, rotulo: rotuloAbaGuiaMcr(chave, t) })),
+    [t],
+  )
+  const escolherAba = (novaAba: AbaGuiaMcr) => {
+    setAba(novaAba)
+    setBusca('')
+  }
+  // Fan citado em "Não combina com": abre a aba com todos e leva o foco até ele.
+  const irPara = (id: number) => {
+    escolherAba('pontos')
+    window.setTimeout(() => {
+      const cartao = document.getElementById(idCartaoFan(id))
+      cartao?.scrollIntoView({ block: 'start' })
+      cartao?.focus({ preventScroll: true })
+    })
+  }
+  return (
+    <Modal
+      titulo={<TituloGuia />}
+      aoFechar={aoFechar}
+      rotuloFechar={t('actions.close')}
+      tamanho="media"
+      className="yaku-modal"
+    >
+      <AbasModal
+        abas={abas}
+        ativa={aba}
+        aoEscolher={escolherAba}
+        rotulo={t('pocketGuide.tabsLabel')}
+        colunas={4}
+        fixo={<CampoBuscaGuiaMcr valor={busca} aoMudar={setBusca} />}
+      >
+        <ConteudoGuiaMcr aba={aba} busca={busca} aoIrPara={irPara} />
+      </AbasModal>
+    </Modal>
+  )
+}
+
+function ModalGuiaRiichi({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()
   // Abre sempre no Glossário (a primeira aba), sem lembrar a última aberta.
   const [aba, setAba] = useState<AbaYakus>('glossario')
@@ -126,15 +201,7 @@ export default function ModalYakus({ aoFechar }: { aoFechar: () => void }) {
 
   return (
     <Modal
-      titulo={
-        <>
-          {t('pocketGuide.title')}{' '}
-          {/* Font Awesome grátis não tem ovelha: emoji, com nome para leitor de tela. */}
-          <span className="yaku-modal__ovelha" role="img" aria-label={t('pocketGuide.sheep')}>
-            🐑
-          </span>
-        </>
-      }
+      titulo={<TituloGuia />}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="media"

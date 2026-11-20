@@ -98,15 +98,7 @@ const OCULTAS_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set([
 export const SUBITENS_SO_RIICHI: ReadonlySet<SubtelaPartida> = new Set(['registrarFinalizada'])
 
 /** Telas que só existem no modo Chinês. */
-const SO_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set(['guiaBolso', 'placarMcr'])
-
-/** O Guia de Bolso do Riichi fica dentro da Calculadora de Mão; o do MCR é uma tela. */
-const ITEM_GUIA_BOLSO_MCR: ItemNavegacao = {
-  destino: 'guiaBolso',
-  chave: 'menu.pocketGuideMcr',
-  icone: 'fa-book-bookmark',
-  chaveCurta: 'menu.pocketGuideMcrShort',
-}
+const SO_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set(['placarMcr'])
 
 interface NavegacaoDoModo {
   paginas: readonly (readonly ItemNavegacao[])[]
@@ -128,7 +120,7 @@ const ITEM_PLACAR_MCR: ItemNavegacao = {
   chaveCurta: 'menu.scoreMcrShort',
 }
 
-const comExtrasMcr = (itens: ItemNavegacao[]) => [itens[0], ITEM_PLACAR_MCR, ITEM_GUIA_BOLSO_MCR, ...itens.slice(1)]
+const comExtrasMcr = (itens: ItemNavegacao[]) => [itens[0], ITEM_PLACAR_MCR, ...itens.slice(1)]
 
 const ITENS_BARRA_MCR = comExtrasMcr(
   PAGINAS_NAVEGACAO.flat()

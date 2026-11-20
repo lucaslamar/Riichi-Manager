@@ -192,4 +192,8 @@ export interface ConteudoTutorial {
   /** O rank de quem está em cada parte, e o último (com tudo concluído). */
   ranks: [string, string, string, string, string]
   ilustracoes: TextosIlustracoes
+  /** Texto do livro de outro modo de jogo no lugar do de `learn.rankHint` (o Riichi não usa). */
+  dicaRank?: string
+  /** Idem, para `learn.conclusionText`. */
+  textoConclusao?: string
 }
