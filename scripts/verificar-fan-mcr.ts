@@ -226,3 +226,15 @@ console.log('✓ 81 fan do guia do CMC')
   )
 }
 console.log('✓ montagem da mão chinesa')
+
+// Troca de batida (brief): a mesma mão com batida 3m tem Espera de Ponta; com batida E, Espera Única.
+{
+  const comBatida3m = fanDe('12m456p234789sEE3m|EE0000')
+  const comBatidaE = fanDe('12m3m456p234789sE E|EE0000')
+  assert.ok(chaves(comBatida3m).includes('bianzhang'), 'Batida 3m: Espera de Ponta')
+  assert.ok(!chaves(comBatidaE).includes('bianzhang'), 'Batida E: sem Espera de Ponta')
+  assert.ok(chaves(comBatidaE).includes('dandiaojiang'), 'Batida E: Espera Única')
+  const montada = escolherBatida({ ...MAO_CHINESA_VAZIA, pedras: [1, 2, 3, 28] }, 3)
+  assert.equal(montada.pedras.at(-1), 28, 'Escolher a batida leva a pedra para o fim')
+}
+console.log('✓ troca de batida')

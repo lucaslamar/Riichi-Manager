@@ -36,6 +36,8 @@ export default function TecladoChines({
   aoTocarFlor,
   aoEscolherChi,
   aoFinalizar,
+  selecionandoBatida,
+  aoAlternarSelecaoBatida,
 }: {
   acao: TipoChamada | null
   podeTocarPedra: (id: number) => boolean
@@ -46,6 +48,8 @@ export default function TecladoChines({
   aoTocarFlor: (flor: Flor) => void
   aoEscolherChi: (meio: number) => void
   aoFinalizar: () => void
+  selecionandoBatida: boolean
+  aoAlternarSelecaoBatida: () => void
 }) {
   const { t } = useI18n()
   const [escolhendoFlor, setEscolhendoFlor] = useState<TipoFlor | null>(null)
@@ -191,10 +195,22 @@ export default function TecladoChines({
 
       {maoPronta && (
         <div className="rodape-teclado-finalizacao">
+          {/* O mesmo "Mudar batida" da calculadora japonesa. */}
+          <button
+            className={`botao-mudar-batida-teclado ${selecionandoBatida ? 'ativo' : ''}`}
+            type="button"
+            aria-label={t('calculator.changeWinningTile')}
+            aria-pressed={selecionandoBatida}
+            onClick={aoAlternarSelecaoBatida}
+          >
+            <span className="texto-batida-completo">{t('calculator.changeWinningTile')}</span>
+            <span className="texto-batida-curto">{t('calculator.changeWinningTileShort')}</span>
+          </button>
           <button
             className="botao-finalizar-mao-teclado"
             type="button"
             aria-label={t('calculator.finalTitle')}
+            disabled={selecionandoBatida}
             onClick={aoFinalizar}
           >
             {t('calculator.finalTitle')}

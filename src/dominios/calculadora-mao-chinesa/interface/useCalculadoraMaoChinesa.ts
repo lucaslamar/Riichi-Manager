@@ -46,6 +46,8 @@ export function useCalculadoraMaoChinesa() {
   const [acao, setAcao] = useState<TipoChamada | null>(null)
   const [chiPendente, setChiPendente] = useState<ChiPendente | null>(null)
   const [finalizando, setFinalizando] = useState(false)
+  /** "Mudar batida" ligado: o próximo toque numa pedra da mão a torna a batida. */
+  const [selecionandoBatida, setSelecionandoBatida] = useState(false)
   const [condicoes, setCondicoes] = useState<CondicoesMcr>(CONDICOES_PADRAO)
   const [resultado, setResultado] = useState<ResultadoCalculoMcr | null>(null)
 
@@ -124,11 +126,17 @@ export function useCalculadoraMaoChinesa() {
     escolherChi,
     removerPedra: (indice: number) => mudarMao((atual) => removerPedra(atual, indice)),
     removerChamada: (indice: number) => mudarMao((atual) => removerChamada(atual, indice)),
-    escolherBatida: (indice: number) => mudarMao((atual) => escolherBatida(atual, indice)),
+    escolherBatida: (indice: number) => {
+      mudarMao((atual) => escolherBatida(atual, indice))
+      setSelecionandoBatida(false)
+    },
+    selecionandoBatida,
+    alternarSelecaoBatida: () => setSelecionandoBatida((atual) => !atual),
     temFlor: (flor: Flor) => mao.flores.includes(flor),
     adicionarFlor: (flor: Flor) => mudarMao((atual) => adicionarFlor(atual, flor)),
     removerFlor: (flor: Flor) => mudarMao((atual) => removerFlor(atual, flor)),
     finalizar: () => {
+      setSelecionandoBatida(false)
       setAcao(null)
       setChiPendente(null)
       setFinalizando(true)

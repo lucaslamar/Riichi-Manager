@@ -43,6 +43,7 @@ export default function MaoChinesaAtual({
   contexto,
   acoesCabecalho,
   aoTocarPedra,
+  selecionandoBatida = false,
   aoRemoverChamada,
   aoRemoverFlor,
   aoLimpar,
@@ -51,6 +52,8 @@ export default function MaoChinesaAtual({
   contexto: 'montagem' | 'finalizacao'
   acoesCabecalho?: ReactNode
   aoTocarPedra: (indice: number) => void
+  /** Montagem com "Mudar batida" ligado: o toque escolhe a batida, não remove. */
+  selecionandoBatida?: boolean
   aoRemoverChamada: (indice: number) => void
   aoRemoverFlor: (flor: Flor) => void
   aoLimpar: () => void
@@ -90,16 +93,17 @@ export default function MaoChinesaAtual({
         </div>
       </div>
 
-      <div className="pedras-selecionadas">
+      <div className={`pedras-selecionadas${selecionandoBatida ? ' modo-agari-ativo' : ''}`}>
         <div className={`grade-pedras-mao${montagem ? '' : ' mao-principal-finalizacao'}`}>
           {mao.pedras.map((id, indice) => {
             const ehBatida = indice === ultima && (!montagem || pedrasContadas(mao) === 14)
             const tile = nomePedra(id)
-            const rotulo = montagem
-              ? ehBatida
-                ? t('calculator.removeWinningTile', { tile })
-                : t('calculator.removeTile', { tile })
-              : t('calculator.selectWinningTile', { tile })
+            const rotulo =
+              montagem && !selecionandoBatida
+                ? ehBatida
+                  ? t('calculator.removeWinningTile', { tile })
+                  : t('calculator.removeTile', { tile })
+                : t('calculator.selectWinningTile', { tile })
             return (
               <button
                 key={indice}

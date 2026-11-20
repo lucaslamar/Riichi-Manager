@@ -77,7 +77,8 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
                 <MaoChinesaAtual
                   mao={mao}
                   contexto="montagem"
-                  aoTocarPedra={calc.removerPedra}
+                  aoTocarPedra={calc.selecionandoBatida ? calc.escolherBatida : calc.removerPedra}
+                  selecionandoBatida={calc.selecionandoBatida}
                   aoRemoverChamada={calc.removerChamada}
                   aoRemoverFlor={calc.removerFlor}
                   aoLimpar={calc.limpar}
@@ -102,6 +103,8 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
                     aoTocarFlor={calc.adicionarFlor}
                     aoEscolherChi={calc.escolherChi}
                     aoFinalizar={calc.finalizar}
+                    selecionandoBatida={calc.selecionandoBatida}
+                    aoAlternarSelecaoBatida={calc.alternarSelecaoBatida}
                   />
                 </div>
               </div>
