@@ -2,10 +2,6 @@
    Mão japonesa (compartilhado/interface/estilos/dominios/calculadoras). Aqui fica
    só o que o MCR tem a mais: flores, condições e resultado em fan. */
 
-.mcr-calculadora[hidden] {
-  display: none;
-}
-
 /* Chi, Pon, Kan, Kan fechado, Flor e Estação: seis botões na barra do celular. */
 .construtor-mao-montagem
   .menu-acoes-teclado-mobile

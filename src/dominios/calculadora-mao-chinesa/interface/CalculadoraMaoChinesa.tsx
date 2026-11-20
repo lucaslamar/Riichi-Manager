@@ -57,6 +57,9 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
   const { mao } = calc
   const completa = maoCompleta(mao)
 
+  // Escondida, a mão continua no estado (como na japonesa), mas nada vai para a tela.
+  if (!visivel) return null
+
   const botoesAcao = (compacto: boolean) => (
     <>
       {CHAMADAS.map(({ tipo, acao, chave, chaveCompacta }) => (
@@ -83,10 +86,8 @@ export default function CalculadoraMaoChinesa({ visivel }: { visivel: boolean })
   )
 
   return (
-    <div className="mcr-calculadora" hidden={!visivel}>
-      {visivel && (
-        <TituloTela titulo={t('menu.handCalculatorChinese')} acoes={<BotaoConfiguracoes />} />
-      )}
+    <div className="mcr-calculadora">
+      <TituloTela titulo={t('menu.handCalculatorChinese')} acoes={<BotaoConfiguracoes />} />
 
       <div
         className={`card card-mao-completa fluxo-calculadora ${calc.finalizando ? 'etapa-finalizacao' : 'etapa-montagem'}`}

@@ -5,6 +5,7 @@ import { useGestoHorizontal } from '@/compartilhado/interface/hooks/useGestoHori
 import { useVoltarInterno } from '@/compartilhado/interface/hooks/voltarInterno'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
@@ -97,6 +98,7 @@ function TelasCenterpiece({
   raiz,
 }: PropsCenterpiece & { raiz: RefObject<HTMLElement | null> }) {
   const { t, idioma } = useI18n()
+  const { isChines } = useModoJogo()
   const { partidas, abertas, guardarNome, descartar } = usePartidas()
   const { sorteio, marcarRegistrada } = useClube()
   // A aba Ranking abre direto na lista: ela é a raiz desse modo.
@@ -281,8 +283,9 @@ function TelasCenterpiece({
       <PaginaRanking
         aoVoltar={modo === 'ranking' ? undefined : voltar}
         aoAbrirJogadores={() => abrir({ nome: 'jogadores' })}
-        aoAbrirJogador={(id) => abrir({ nome: 'jogador', id })}
-        aoRegistrarPartida={() => abrir({ nome: 'registrarFinalizada' })}
+        // No modo Chinês, a análise do jogador e o registro manual são do Riichi.
+        aoAbrirJogador={isChines ? undefined : (id) => abrir({ nome: 'jogador', id })}
+        aoRegistrarPartida={isChines ? undefined : () => abrir({ nome: 'registrarFinalizada' })}
       />
     )
   }

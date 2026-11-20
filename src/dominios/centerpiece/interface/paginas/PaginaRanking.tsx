@@ -4,6 +4,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { posicoesDoRanking, semExcluidos } from '../../logica/ranking'
 import { FILTROS_PADRAO, filtrosAtivos } from '../../logica/filtrosRanking'
 import { useRankingGeral } from '../hooks/useRankingGeral'
@@ -41,6 +42,7 @@ export default function PaginaRanking({
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
+  const { isChines } = useModoJogo()
   const { filtros, setFiltros, linhas: todas, confrontos } = useRankingGeral()
   const [filtrosAbertos, setFiltrosAbertos] = useState(false)
   const [backupAberto, setBackupAberto] = useState(false)
@@ -164,15 +166,18 @@ export default function PaginaRanking({
         >
           <i className="fas fa-calendar-days" aria-hidden="true" />
         </button>
-        <button
-          type="button"
-          className={`rkf-icone${filtros.duracao !== 'todas' ? ' rkf-icone--ativo' : ''}`}
-          aria-label={`${t('match.ranking.filters.duration')}: ${t(`match.ranking.filters.durations.${filtros.duracao}`)}`}
-          title={`${t('match.ranking.filters.duration')}: ${t(`match.ranking.filters.durations.${filtros.duracao}`)}`}
-          onClick={() => setFiltros({ ...filtros, duracao: proximo(DURACOES_RAPIDAS, filtros.duracao) })}
-        >
-          <i className="fas fa-stopwatch" aria-hidden="true" />
-        </button>
+        {/* O MCR não tem hanchan nem leste: a duração só existe no Riichi. */}
+        {!isChines && (
+          <button
+            type="button"
+            className={`rkf-icone${filtros.duracao !== 'todas' ? ' rkf-icone--ativo' : ''}`}
+            aria-label={`${t('match.ranking.filters.duration')}: ${t(`match.ranking.filters.durations.${filtros.duracao}`)}`}
+            title={`${t('match.ranking.filters.duration')}: ${t(`match.ranking.filters.durations.${filtros.duracao}`)}`}
+            onClick={() => setFiltros({ ...filtros, duracao: proximo(DURACOES_RAPIDAS, filtros.duracao) })}
+          >
+            <i className="fas fa-stopwatch" aria-hidden="true" />
+          </button>
+        )}
         <span className="rkf-separador" aria-hidden="true" />
         <button
           type="button"
@@ -293,10 +298,13 @@ export default function PaginaRanking({
                   <dt>{t('match.ranking.fourth')}</dt>
                   <dd>{numero(linha.percentualQuarto)}%</dd>
                 </div>
-                <div>
-                  <dt>{t('match.ranking.tobi')}</dt>
-                  <dd>{numero(linha.percentualTobi)}%</dd>
-                </div>
+                {/* Tobi (ficar abaixo de zero) não existe no MCR. */}
+                {!isChines && (
+                  <div>
+                    <dt>{t('match.ranking.tobi')}</dt>
+                    <dd>{numero(linha.percentualTobi)}%</dd>
+                  </div>
+                )}
               </dl>
             </li>
             )

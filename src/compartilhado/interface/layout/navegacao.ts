@@ -86,14 +86,16 @@ export function paginaDoDestino(destino: DestinoTela): number {
 
 /**
  * Telas que não existem no modo Chinês (MCR): Han e Fu (o MCR não tem fu),
- * Centerpiece, Partidas e Ranking (pontuação Riichi). O Tutorial mostra o MCR.
+ * Centerpiece e Partidas (pontuação Riichi). Ranking e Tutorial mostram o MCR.
  */
 const OCULTAS_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set([
   'calculadoraRapida',
   'centerpiece',
   'partidas',
-  'ranking',
 ])
+
+/** Subitens do menu lateral que só existem no Riichi. */
+export const SUBITENS_SO_RIICHI: ReadonlySet<SubtelaPartida> = new Set(['registrarFinalizada'])
 
 /** Telas que só existem no modo Chinês. */
 const SO_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set(['guiaBolso', 'placarMcr'])
