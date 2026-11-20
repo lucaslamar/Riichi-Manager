@@ -2209,8 +2209,11 @@
     "entrada": {
       "flores": "Flores e estações",
       "removerFlor": "Remover {{flor}}",
-      "floresCurto": "Flor",
-      "adicionarFlor": "Adicionar {{flor}}"
+      "adicionarFlor": "Adicionar {{flor}}",
+      "flor": "Flor",
+      "estacao": "Estação",
+      "segurarFlor": "Segure para escolher qual",
+      "escolherFlor": "Escolha a flor"
     },
     "condicoes": {
       "titulo": "Condições",

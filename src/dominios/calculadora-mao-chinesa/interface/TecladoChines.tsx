@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { Flor } from '../logica/montagem'
 import type { TipoChamada } from '../logica/montagem'
+import BotaoFlor, { FLORES_DO_TIPO, type TipoFlor } from './BotaoFlor'
 import { PedraChinesa, PedraFlor } from './PedraChinesa'
 import { nomePedra } from './pedras'
 import type { ChiPendente } from './useCalculadoraMaoChinesa'
@@ -12,7 +14,6 @@ const NAIPES = [
 ] as const
 /** Mesma ordem do teclado do Riichi: ventos e depois dragões branco, verde e vermelho. */
 const HONRAS = [28, 29, 30, 31, 34, 33, 32]
-const FLORES: Flor[] = [1, 2, 3, 4, 5, 6, 7, 8]
 const CHAVE_CHAMADA: Record<TipoChamada, string> = {
   chi: 'melds.chii',
   pon: 'melds.pon',
@@ -22,7 +23,8 @@ const CHAVE_CHAMADA: Record<TipoChamada, string> = {
 
 /**
  * Teclado de pedras do MCR com as mesmas classes do teclado do Riichi (o visual
- * vem do mesmo CSS), a arte chinesa e uma linha de flores e estações.
+ * vem do mesmo CSS) e a arte chinesa. Flor e estação ficam nas pontas da linha
+ * das honras, uma pedra de cada.
  */
 export default function TecladoChines({
   acao,
@@ -46,6 +48,7 @@ export default function TecladoChines({
   aoFinalizar: () => void
 }) {
   const { t } = useI18n()
+  const [escolhendoFlor, setEscolhendoFlor] = useState<TipoFlor | null>(null)
 
   const rotulo = (id: number, indisponivel: boolean) => {
     const tile = nomePedra(id)
@@ -108,6 +111,43 @@ export default function TecladoChines({
         </div>
       )}
 
+      {escolhendoFlor && (
+        <div
+          className="seletor-chii-pendente"
+          role="group"
+          aria-label={t('mcr.entrada.escolherFlor')}
+        >
+          <span>{t('mcr.entrada.escolherFlor')}</span>
+          <div>
+            {FLORES_DO_TIPO[escolhendoFlor].map((flor) => (
+              <button
+                key={flor}
+                type="button"
+                className="opcao-chii-pendente"
+                disabled={temFlor(flor)}
+                aria-label={t('mcr.entrada.adicionarFlor', { flor: t(`mcr.flores.${flor}`) })}
+                title={t(`mcr.flores.${flor}`)}
+                onClick={() => {
+                  aoTocarFlor(flor)
+                  setEscolhendoFlor(null)
+                }}
+              >
+                <span className="chip-pedra mini">
+                  <PedraFlor flor={flor} />
+                </span>
+              </button>
+            ))}
+            <button
+              type="button"
+              className="opcao-chii-pendente"
+              onClick={() => setEscolhendoFlor(null)}
+            >
+              {t('actions.cancel')}
+            </button>
+          </div>
+        </div>
+      )}
+
       {NAIPES.map(({ classe, chave, rotuloCurto, inicio }) => (
         <div
           key={classe}
@@ -132,38 +172,20 @@ export default function TecladoChines({
         <div className="rotulo-naipe-teclado" data-mobile-label="Hon">
           {t('calculator.honors')}
         </div>
-        <div className="linha-naipe">{HONRAS.map(botaoPedra)}</div>
-      </div>
-
-      <div
-        className="grupo-teclado-naipe grupo-teclado-flores"
-        role="group"
-        aria-label={t('mcr.entrada.flores')}
-      >
-        <div className="rotulo-naipe-teclado" data-mobile-label={t('mcr.entrada.floresCurto')}>
-          {t('mcr.entrada.flores')}
-        </div>
-        <div className="linha-naipe">
-          {FLORES.map((flor) => {
-            const usada = temFlor(flor)
-            return (
-              <button
-                key={flor}
-                type="button"
-                className={`btn-pedra${usada ? ' indisponivel' : ''}`}
-                title={t(`mcr.flores.${flor}`)}
-                aria-label={
-                  usada
-                    ? t('calculator.disabledTile', { tile: t(`mcr.flores.${flor}`) })
-                    : t('mcr.entrada.adicionarFlor', { flor: t(`mcr.flores.${flor}`) })
-                }
-                disabled={usada}
-                onClick={() => aoTocarFlor(flor)}
-              >
-                <PedraFlor flor={flor} />
-              </button>
-            )
-          })}
+        <div className="linha-naipe linha-honras-mcr">
+          <BotaoFlor
+            tipo="flor"
+            temFlor={temFlor}
+            aoTocarFlor={aoTocarFlor}
+            aoEscolher={setEscolhendoFlor}
+          />
+          {HONRAS.map(botaoPedra)}
+          <BotaoFlor
+            tipo="estacao"
+            temFlor={temFlor}
+            aoTocarFlor={aoTocarFlor}
+            aoEscolher={setEscolhendoFlor}
+          />
         </div>
       </div>
 
