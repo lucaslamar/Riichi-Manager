@@ -21,6 +21,11 @@ export default function PaginaPlacarMcr() {
     vista.tipo === 'placar' ? placares.find((placar) => placar.id === vista.id) : undefined
   const voltar = () => setVista({ tipo: 'lista' })
 
+  // A Nova partida ocupa a tela como a do Riichi, com o próprio título.
+  if (vista.tipo === 'novo') {
+    return <NovoPlacarMcr aoCriar={(id) => setVista({ tipo: 'placar', id })} aoVoltar={voltar} />
+  }
+
   return (
     <div className="placar-mcr">
       <TituloTela
@@ -28,9 +33,6 @@ export default function PaginaPlacarMcr() {
         aoVoltar={vista.tipo === 'lista' ? undefined : voltar}
       />
 
-      {vista.tipo === 'novo' && (
-        <NovoPlacarMcr aoCriar={(id) => setVista({ tipo: 'placar', id })} aoCancelar={voltar} />
-      )}
       {vista.tipo === 'placar' && aberto && <PlacarAberto placar={aberto} aoVoltar={voltar} />}
 
       {(vista.tipo === 'lista' || (vista.tipo === 'placar' && !aberto)) && (

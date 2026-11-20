@@ -33,6 +33,12 @@ Estes padrões orientam novas alterações, implementações e refatorações fu
 - Respeite as fronteiras de persistência e use os adaptadores existentes para recursos de plataforma. Preserve o funcionamento no GitHub Pages.
 - Evite duplicar estados ou manter informações derivadas que possam ser calculadas a partir dos dados existentes.
 
+## Modos de jogo
+
+- O layout é um só para todos os modos de jogo (Riichi, MCR e os que vierem, como o coreano). Cada modo troca só as regras, os cálculos e o conteúdo do guia e do tutorial. Melhorias de UX e design valem para todos os modos.
+- Antes de criar uma tela para um modo, parametrize a do Riichi pelo `useModoJogo()` ou por props, com o conteúdo e as regras do modo. O Riichi deve continuar idêntico, conferido por testes e no navegador.
+- Exemplos: o Guia de bolso (`ModalYakus`) e o Tutorial (`GuiaAprender` com `conteudoGuia(idioma, modo)`) são os mesmos nos dois modos. A Nova partida do placar MCR usa `CardAssento`, `sortearAssentos` e as classes `ptd-*` da Nova partida do Riichi.
+
 ## Manutenção e refatoração
 
 - Faça alterações incrementais e preserve o funcionamento existente.

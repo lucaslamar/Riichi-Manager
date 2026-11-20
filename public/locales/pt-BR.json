@@ -2299,13 +2299,10 @@
     "mcr": {
       "novaPartida": "Nova partida",
       "vazio": "Nenhuma partida ainda. Comece uma para anotar os pontos.",
-      "escolherJogador": "Escolher jogador",
       "jogadorRemovido": "Jogador removido",
-      "faltamJogadores": "Escolha os quatro jogadores para começar.",
       "timer": "Timer da vez",
       "timerDesligado": "Sem timer",
       "segundos": "{{segundos}}s",
-      "comecar": "Começar partida",
       "emAndamento": "Em andamento",
       "finalizada": "Partida finalizada",
       "qtdMaos": {
@@ -2352,7 +2349,9 @@
         "semDescartador": "Escolha quem descartou.",
         "descartadorVencedor": "Quem venceu não pode ter descartado."
       },
-      "nenhumaMao": "nenhuma mão"
+      "nenhumaMao": "nenhuma mão",
+      "regrasMcr": "MCR",
+      "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan."
     }
   }
 }

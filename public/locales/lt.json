@@ -2365,13 +2365,10 @@
     "mcr": {
       "novaPartida": "New game",
       "vazio": "No games yet. Start one to keep score.",
-      "escolherJogador": "Choose player",
       "jogadorRemovido": "Removed player",
-      "faltamJogadores": "Choose all four players to start.",
       "timer": "Turn timer",
       "timerDesligado": "No timer",
       "segundos": "{{segundos}}s",
-      "comecar": "Start game",
       "emAndamento": "In progress",
       "finalizada": "Game finished",
       "qtdMaos": {
@@ -2418,7 +2415,9 @@
         "semDescartador": "Choose who discarded.",
         "descartadorVencedor": "The winner can't be the discarder."
       },
-      "nenhumaMao": "no hands"
+      "nenhumaMao": "no hands",
+      "regrasMcr": "MCR",
+      "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum."
     }
   }
 }
