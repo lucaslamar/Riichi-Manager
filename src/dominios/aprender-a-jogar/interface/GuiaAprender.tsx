@@ -611,9 +611,12 @@ export default function GuiaAprender({
       <>
         <h1 className="guia-titulo">{t('learn.glossary')}</h1>
         <dl className="guia-glossario">
-          {conteudo.glossary.map(({ term, definition }) => (
+          {conteudo.glossary.map(({ term, definition, diferenteRiichi }) => (
             <div key={term} className="guia-glossario__item">
-              <dt>{term}</dt>
+              <dt>
+                {term}
+                {diferenteRiichi && <span className="selo-diferente-riichi">{t('glossario.mcr.diferenteRiichi')}</span>}
+              </dt>
               <dd>{definition}</dd>
             </div>
           ))}

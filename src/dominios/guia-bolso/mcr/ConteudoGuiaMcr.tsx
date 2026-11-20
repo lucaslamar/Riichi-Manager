@@ -11,12 +11,13 @@ import {
   type CategoriaFanMcr,
   type FanMcr,
 } from '@/compartilhado/mahjong/mcr/fans-mcr'
-import CreditosCmc from './CreditosCmc'
+import { GLOSSARIO_MCR } from '@/dominios/aprender-a-jogar/conteudo/mcr/glossario'
 import './guia-bolso-mcr.css'
 
-export type AbaGuiaMcr = 'pontos' | CategoriaFanMcr | 'riichi'
+export type AbaGuiaMcr = 'glossario' | 'pontos' | CategoriaFanMcr | 'riichi'
 
 export const ABAS_GUIA_MCR: AbaGuiaMcr[] = [
+  'glossario',
   'pontos',
   ...(Object.keys(CATEGORIAS_FAN_MCR) as CategoriaFanMcr[]),
   'riichi',
@@ -172,6 +173,28 @@ export function ConteudoGuiaMcr({
       </div>
     )
   }
+  if (aba === 'glossario') {
+    return (
+      <section className="yaku-grupo">
+        <h3 className="yaku-grupo__titulo">{t('pocketGuide.tabs.glossary')}</h3>
+        <dl className="guia-mcr__glossario">
+          {GLOSSARIO_MCR.map(({ term, definition, diferenteRiichi }) => (
+            <div key={term}>
+              <dt>
+                {term}
+                {diferenteRiichi && (
+                  <span className="selo-diferente-riichi">
+                    {t('glossario.mcr.diferenteRiichi')}
+                  </span>
+                )}
+              </dt>
+              <dd>{definition}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )
+  }
   if (aba === 'riichi') {
     return (
       <>
@@ -189,7 +212,6 @@ export function ConteudoGuiaMcr({
           </p>
         </section>
         <ListaPorPatamar fans={FANS_MCR.filter((fan) => fan.yakuRiichi)} aoIrPara={aoIrPara} />
-        <CreditosCmc />
       </>
     )
   }
@@ -197,15 +219,16 @@ export function ConteudoGuiaMcr({
   return (
     <>
       <ListaPorPatamar fans={fans} aoIrPara={aoIrPara} />
-      <CreditosCmc />
     </>
   )
 }
 
 /** Rótulo curto da aba (o nome completo da categoria fica no guia do CMC). */
 export const rotuloAbaGuiaMcr = (aba: AbaGuiaMcr, t: (chave: string) => string) =>
-  aba === 'pontos'
-    ? t('guiaBolso.mcr.porPontos')
-    : aba === 'riichi'
-      ? t('guiaBolso.mcr.abaRiichi')
-      : t(`guiaBolso.mcr.abas.${aba}`)
+  aba === 'glossario'
+    ? t('pocketGuide.tabs.glossary')
+    : aba === 'pontos'
+      ? t('guiaBolso.mcr.porPontos')
+      : aba === 'riichi'
+        ? t('guiaBolso.mcr.abaRiichi')
+        : t(`guiaBolso.mcr.abas.${aba}`)

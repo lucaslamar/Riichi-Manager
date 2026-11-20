@@ -2280,7 +2280,6 @@
       "semEquivalenteTitulo": "Riichi Yaku with no equivalent",
       "semEquivalenteExato": "No exact equivalent: {{lista}}.",
       "naoExistem": "Don't exist in MCR: {{lista}}.",
-      "creditos": "Content: Guia do Mahjong Chinês (MCR) — Cerrado Mahjong Club. Juliana Visoni and Gabriel Souza.",
       "porPontos": "By points",
       "abaRiichi": "Riichi",
       "abas": {
@@ -2359,6 +2358,11 @@
       "nenhumaMao": "no hands",
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum."
+    }
+  },
+  "glossario": {
+    "mcr": {
+      "diferenteRiichi": "Different from Riichi"
     }
   }
 }

@@ -2,16 +2,14 @@
  * Tutorial do modo Chinês (MCR), no mesmo formato do Aprender a jogar do Riichi:
  * o livro, o índice, os ranks e os quizzes são os mesmos; só o conteúdo muda.
  *
- * Fonte: "Guia do Mahjong Chinês (MCR) para quem já sabe jogar Riichi Mahjong",
- * Cerrado Mahjong Club (Juliana Visoni e Gabriel Souza). O que o guia marca em
+ * Fonte: "Guia do Mahjong Chinês (MCR) para quem já sabe jogar Riichi Mahjong", do
+ * Cerrado Mahjong Club (o uso foi autorizado, sem crédito na tela). O que o guia marca em
  * vermelho (as diferenças para o Riichi) aparece com `==...==`, também em vermelho.
  */
 import { calcularPagamentoMcr } from '@/dominios/calculadora-mao-chinesa/logica/pontuacao-mcr'
 import { conteudoPtBR } from '../pt-BR'
 import type { ConteudoTutorial } from '../tipos'
-
-const CREDITOS =
-  'Conteúdo: Guia do Mahjong Chinês (MCR), do Cerrado Mahjong Club, de Juliana Visoni e Gabriel Souza.'
+import { GLOSSARIO_MCR } from './glossario'
 
 /** Linha da tabela de exemplos, calculada pelo mesmo pagamento da calculadora. */
 function exemplo(forma: 'ron' | 'tsumo', pontos: number): string[] {
@@ -29,29 +27,8 @@ export const conteudoMcrPtBR: ConteudoTutorial = {
   ilustracoes: conteudoPtBR.ilustracoes,
   dicaRank:
     'Cada módulo concluído vale uma estrela. Complete uma parte para subir de rank: Novato, Adepto, Veterano e Mestre do MCR.',
-  textoConclusao: `Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos. ${CREDITOS}`,
-  glossary: [
-    { term: 'Lun', definition: 'Uma volta: cada jogador foi dealer uma vez.' },
-    { term: 'Pan', definition: 'Uma mão.' },
-    { term: 'Quan', definition: 'Uma rodada, com o mesmo Vento da Rodada.' },
-    { term: 'Ju', definition: 'O jogo completo, ou a sessão.' },
-    { term: 'Vento da Rodada', definition: 'O vento da rodada atual, igual para todos.' },
-    { term: 'Vento da Posição', definition: 'O vento do lugar de cada jogador.' },
-    { term: 'Dealer', definition: 'O jogador Leste, que começa a mão.' },
-    { term: 'Peças ocultas', definition: 'As peças da mão que não foram expostas.' },
-    { term: 'Par', definition: 'Duas peças iguais, a cabeça da mão.' },
-    { term: 'Chow', definition: 'Sequência de três números seguidos do mesmo naipe.' },
-    { term: 'Pung', definition: 'Trinca de três peças iguais.' },
-    { term: 'Kong', definition: 'Quadra de quatro peças iguais.' },
-    { term: 'Honras', definition: 'Ventos e Dragões.' },
-    { term: 'Terminais', definition: 'As peças 1 e 9 dos naipes.' },
-    { term: 'Bu Hua', definition: 'Repor uma Flor: expor a Flor e comprar outra peça.' },
-    { term: 'Espera', definition: 'As peças que completam a sua mão.' },
-    { term: 'Hu', definition: 'Vencer a mão.' },
-    { term: 'Falso Hu', definition: 'Declarar Hu sem ter uma mão válida.' },
-    { term: 'Muro', definition: 'As peças ainda não compradas.' },
-    { term: 'Piso', definition: 'A área dos descartes, no centro da mesa.' },
-  ],
+  textoConclusao: `Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos.`,
+  glossary: GLOSSARIO_MCR,
   tutorialParts: [
     {
       id: 'mcr-parte-1',
@@ -376,7 +353,6 @@ export const conteudoMcrPtBR: ConteudoTutorial = {
                   type: 'text',
                   md: '- ==Sem Honba nem Renchan==: o dealer passa a cada mão.\n- ==O dealer não recebe nem paga a mais.==\n- ==Kuikae é permitido.==\n- ==O Kong oculto fica virado para baixo== até o fim.\n- ==Furiten não é penalizado.==\n- ==Só um vencedor== por descarte.\n- Abrir a mão só invalida os fan de mão oculta.\n- ==Riichi, Daburu Riichi, Ippatsu, Tenhou e Chiihou não existem.==\n- A pontuação de uma rodada não passa para a próxima.',
                 },
-                { type: 'tip', md: CREDITOS },
               ],
             },
           ],

@@ -132,7 +132,8 @@ function TituloGuia() {
  */
 function ModalGuiaMcr({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()
-  const [aba, setAba] = useState<AbaGuiaMcr>('pontos')
+  // Abre no Glossário, como o do Riichi.
+  const [aba, setAba] = useState<AbaGuiaMcr>('glossario')
   const [busca, setBusca] = useState('')
   const abas = useMemo<AbaModal<AbaGuiaMcr>[]>(
     () => ABAS_GUIA_MCR.map((chave) => ({ chave, rotulo: rotuloAbaGuiaMcr(chave, t) })),

@@ -2273,7 +2273,6 @@
       "semEquivalenteTitulo": "Yaku do Riichi sem equivalente",
       "semEquivalenteExato": "Sem equivalente exato: {{lista}}.",
       "naoExistem": "Não existem no MCR: {{lista}}.",
-      "creditos": "Conteúdo: Guia do Mahjong Chinês (MCR) — Cerrado Mahjong Club. Juliana Visoni e Gabriel Souza.",
       "porPontos": "Por pontos",
       "abaRiichi": "Riichi",
       "abas": {
@@ -2352,6 +2351,11 @@
       "nenhumaMao": "nenhuma mão",
       "regrasMcr": "MCR",
       "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan."
+    }
+  },
+  "glossario": {
+    "mcr": {
+      "diferenteRiichi": "Diferente do Riichi"
     }
   }
 }

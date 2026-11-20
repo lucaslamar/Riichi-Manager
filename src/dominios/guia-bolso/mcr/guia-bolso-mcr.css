@@ -69,9 +69,16 @@
   margin: 4px 0 0;
 }
 
-.creditos-cmc {
-  margin: 12px 0 0;
-  color: var(--cor-texto-suave, #40566d);
-  font-size: 0.85rem;
-  text-align: center;
+.guia-mcr__glossario {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.guia-mcr__glossario dt {
+  font-weight: 800;
+}
+
+.guia-mcr__glossario dd {
+  margin: 2px 0 0;
 }

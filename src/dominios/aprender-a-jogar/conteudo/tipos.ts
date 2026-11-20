@@ -151,6 +151,8 @@ export interface TutorialPart {
 export interface TermoGlossarioGuia {
   term: string
   definition: string
+  /** Selo "Diferente do Riichi" (glossário de outros modos de jogo). */
+  diferenteRiichi?: boolean
 }
 
 /** Textos desenhados dentro das ilustrações. */
