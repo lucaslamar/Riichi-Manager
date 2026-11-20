@@ -2318,7 +2318,6 @@
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
       "maoCurta": "Hand {{mao}}",
       "novaPartidaAjuda": "Keep score of an MCR game.",
-      "torneioEmBreve": "Coming to MCR: table points 4, 2, 1 and 0.",
       "qtdPartidas": {
         "one": "{{count}} game",
         "few": "{{count}} games",
@@ -2335,6 +2334,31 @@
         "few": "Delete the {{count}} finished games? This can't be undone.",
         "many": "Delete the {{count}} finished games? This can't be undone.",
         "other": "Delete the {{count}} finished games? This can't be undone."
+      },
+      "torneio": {
+        "ajuda": "Table points 4, 2, 1 and 0 per session.",
+        "novo": "New tournament",
+        "criar": "Create tournament",
+        "nome": "Tournament name",
+        "nomePadrao": "MCR Tournament",
+        "duracao": "Session length",
+        "minutos": "{{minutos}} min",
+        "semLimite": "No limit",
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "sessao": "Sessions of {{minutos}} min or 4 rounds.",
+        "sessaoSemLimite": "Sessions of 4 rounds, no time limit.",
+        "classificacao": "Standings",
+        "semMesas": "No finished tables yet.",
+        "jogador": "Player",
+        "pontosMesa": "Table",
+        "pontosPartidas": "Points",
+        "mesas": "Tables",
+        "novaMesa": "New table",
+        "mesasTitulo": "Tournament tables",
+        "encerrar": "Finish tournament",
+        "confirmarEncerrar": "Finish the tournament? You won't be able to open new tables.",
+        "restam": "session: {{minutos}} min",
+        "tempoAcabou": "session time is up: finish the table"
       }
     }
   },

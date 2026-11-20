@@ -26,6 +26,10 @@ import {
   carregarPlacaresMcr,
   salvarPlacaresMcr,
 } from '@/dominios/placar-mcr/persistencia/repositorioPlacaresMcr'
+import {
+  carregarTorneiosMcr,
+  salvarTorneiosMcr,
+} from '@/dominios/placar-mcr/persistencia/repositorioTorneiosMcr'
 import type { DadosBackup } from './backup'
 
 /** Tudo o que vai no backup, como está agora neste aparelho. */
@@ -42,6 +46,7 @@ export function lerDadosLocais(armazenamento: ArmazenamentoChaveValor): DadosBac
     configMesa: carregarUltimaConfig(armazenamento),
     regrasRegistro: carregarRegrasRegistro(armazenamento),
     placaresMcr: carregarPlacaresMcr(armazenamento),
+    torneiosMcr: carregarTorneiosMcr(armazenamento),
   }
 }
 
@@ -62,4 +67,5 @@ export function gravarDados(armazenamento: ArmazenamentoChaveValor, dados: Dados
   if (dados.regrasRegistro)
     salvarRegrasRegistro(armazenamento, dados.regrasRegistro as RegrasRegistroSalvas)
   salvarPlacaresMcr(armazenamento, dados.placaresMcr)
+  salvarTorneiosMcr(armazenamento, dados.torneiosMcr)
 }

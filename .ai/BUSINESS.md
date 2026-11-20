@@ -42,9 +42,10 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Glossário MCR (`aprender-a-jogar/conteudo/mcr/glossario.ts`): o do guia do CMC, no livro e na aba Glossário do Guia de bolso, com o selo "Diferente do Riichi" no que muda (dealer, Chow com kuikae, Kong oculto, flores, espera sem furiten). Os créditos do CMC saíram da tela: o uso foi autorizado sem crédito.
 - Voz do resultado MCR: "Hu!" no ron e "Zimo!" no tsumo, em chinês, depois os fan, o total e os pagamentos. Mão inválida: só o aviso, sem chamada.
 
+- Torneio MCR (decidido com o usuário em 20/11/2026, regra da EMA): cada mesa dá pontos de mesa 4, 2, 1 e 0 pela colocação. Empatados dividem igualmente os pontos das colocações que ocupam juntos (dois em 1º ficam com 3 cada). A classificação soma os pontos de mesa e desempata pela soma dos pontos das partidas. Cada sessão (mesa) acaba nas 16 mãos ou no fim do tempo configurado (0 = sem limite). Um torneio aberto por vez. A regra veio de memória: vale conferir com o regulamento da EMA.
+
 ### Decisões em aberto
 
 - Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
-- Torneio MCR (pontos de mesa 4/2/1/0 por sessão, desempate pelo total, sessão de 4 rodadas ou fim do tempo): o cartão está no hub como "em breve". Falta definir como dividir os pontos de mesa num empate de colocação.
 - Exemplos dos 81 fan no Guia de bolso: dependem do novo `fans-mcr.ts` com o campo `exemplo`, que ainda não foi enviado.
 - Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.

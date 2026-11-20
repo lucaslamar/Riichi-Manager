@@ -20,6 +20,7 @@
 - **Mudar batida no MCR**: o mesmo botão do Riichi no teclado, e o toque na pedra na finalização. As esperas mudam junto.
 - **Glossário do MCR**: no Tutorial e numa aba do Guia de bolso, com o que é diferente do Riichi em destaque.
 - **Mesa e hub do placar**: a partida MCR usa a mesma mesa do Riichi, com as placas em volta e o timer no centro. O Placar abre num hub igual ao da Partida, com Em andamento, Histórico e as últimas partidas.
+- **Torneio do MCR**: pelo cartão Torneio do Placar, crie um torneio com o tempo de cada sessão. Cada mesa dá pontos de mesa 4, 2, 1 e 0 pela colocação, e empatados dividem os pontos. A classificação desempata pela soma dos pontos, e a mesa mostra quanto tempo falta na sessão.
 
 ## Não lançado
 

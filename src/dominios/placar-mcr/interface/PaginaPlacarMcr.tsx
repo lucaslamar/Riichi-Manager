@@ -8,12 +8,15 @@ import { colocacoes, totais, type PlacarMcr } from '../logica/placar'
 import { nomeDaCadeira } from './nomes'
 import NovoPlacarMcr from './NovoPlacarMcr'
 import PlacarAberto from './PlacarAberto'
+import TorneioMcrTela, { ModalNovoTorneioMcr } from './TorneioMcrTela'
 import { acoesPlacaresMcr, usePlacaresMcr } from './usePlacaresMcr'
+import { useTorneiosMcr } from './useTorneiosMcr'
 import './placar-mcr.css'
 
 type Vista =
   | { tipo: 'hub' }
-  | { tipo: 'novo' }
+  | { tipo: 'novo'; torneioId?: string }
+  | { tipo: 'torneio'; id: string }
   | { tipo: 'lista'; quais: 'andamento' | 'historico' }
   | { tipo: 'placar'; id: string }
 
@@ -30,7 +33,7 @@ interface EntradaHub {
 const ULTIMAS_NO_HUB = 3
 
 /** Linha de uma partida nas listas: data, situação, mãos, o primeiro colocado e os totais. */
-function LinhaPlacar({ placar, aoAbrir }: { placar: PlacarMcr; aoAbrir: () => void }) {
+export function LinhaPlacar({ placar, aoAbrir }: { placar: PlacarMcr; aoAbrir: () => void }) {
   const { t, numero, idioma } = useI18n()
   const { jogadores } = useJogadores()
   const pontos = totais(placar)
@@ -73,7 +76,10 @@ function LinhaPlacar({ placar, aoAbrir }: { placar: PlacarMcr; aoAbrir: () => vo
 export default function PaginaPlacarMcr() {
   const { t } = useI18n()
   const placares = usePlacaresMcr()
+  const torneios = useTorneiosMcr()
   const [vista, setVista] = useState<Vista>({ tipo: 'hub' })
+  const [criandoTorneio, setCriandoTorneio] = useState(false)
+  const torneioAtivo = torneios.find((torneio) => !torneio.encerradoEm)
   const aberto =
     vista.tipo === 'placar' ? placares.find((placar) => placar.id === vista.id) : undefined
   const voltar = () => setVista({ tipo: 'hub' })
@@ -84,7 +90,25 @@ export default function PaginaPlacarMcr() {
     .sort((um, outro) => (outro.finalizadoEm ?? '').localeCompare(um.finalizadoEm ?? ''))
 
   // Nova partida e mesa ocupam a tela, como as do Riichi, com o próprio título.
-  if (vista.tipo === 'novo') return <NovoPlacarMcr aoCriar={abrir} aoVoltar={voltar} />
+  if (vista.tipo === 'novo') {
+    const torneio = torneios.find((candidato) => candidato.id === vista.torneioId)
+    return <NovoPlacarMcr aoCriar={abrir} aoVoltar={voltar} torneio={torneio} />
+  }
+  if (vista.tipo === 'torneio') {
+    const torneio = torneios.find((candidato) => candidato.id === vista.id)
+    if (torneio) {
+      return (
+        <TorneioMcrTela
+          torneio={torneio}
+          placares={placares}
+          aoVoltar={voltar}
+          aoNovaMesa={() => setVista({ tipo: 'novo', torneioId: torneio.id })}
+          aoAbrirMesa={abrir}
+          linha={LinhaPlacar}
+        />
+      )
+    }
+  }
   if (vista.tipo === 'placar' && aberto) return <PlacarAberto placar={aberto} aoVoltar={voltar} />
 
   if (vista.tipo === 'lista') {
@@ -136,9 +160,10 @@ export default function PaginaPlacarMcr() {
       chave: 'torneio',
       icone: 'fa-trophy',
       titulo: t('tournament.title'),
-      texto: t('placar.mcr.torneioEmBreve'),
-      desabilitada: true,
-      aoTocar: () => undefined,
+      texto: torneioAtivo ? torneioAtivo.nome : t('placar.mcr.torneio.ajuda'),
+      // Um torneio aberto por vez: o cartão volta para ele, senão cria um novo.
+      aoTocar: () =>
+        torneioAtivo ? setVista({ tipo: 'torneio', id: torneioAtivo.id }) : setCriandoTorneio(true),
     },
     {
       chave: 'andamento',
@@ -198,6 +223,16 @@ export default function PaginaPlacarMcr() {
         >
           {t('placar.mcr.verHistorico')}
         </button>
+      )}
+
+      {criandoTorneio && (
+        <ModalNovoTorneioMcr
+          aoFechar={() => setCriandoTorneio(false)}
+          aoCriar={(torneio) => {
+            setCriandoTorneio(false)
+            setVista({ tipo: 'torneio', id: torneio.id })
+          }}
+        />
       )}
     </section>
   )

@@ -32,6 +32,8 @@ export interface PlacarMcr {
   timerSegundos: number
   vez: EstadoVez
   finalizadoEm: string | null
+  /** Mesa de um torneio MCR: o id dele e quando a sessão acaba (fim do tempo). */
+  torneio?: { id: string; fimSessaoEm: string | null }
 }
 
 export function novoPlacar(

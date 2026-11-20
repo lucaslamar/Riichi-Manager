@@ -16,6 +16,7 @@ import {
   TIMER_PADRAO_SEGUNDOS,
   type Cadeira,
 } from '../logica/placar'
+import { fimDaSessao, type TorneioMcr } from '../logica/torneio'
 import { CHAVES_VENTO } from './nomes'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
 // O mesmo visual da Nova partida do Riichi (assentos, resumo das regras e rodapé).
@@ -29,9 +30,12 @@ import '@/dominios/centerpiece/interface/partida.css'
 export default function NovoPlacarMcr({
   aoCriar,
   aoVoltar,
+  torneio,
 }: {
   aoCriar: (id: string) => void
   aoVoltar: () => void
+  /** Mesa de um torneio: a sessão já começa com o tempo dele. */
+  torneio?: TorneioMcr
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
@@ -52,12 +56,16 @@ export default function NovoPlacarMcr({
 
   const iniciar = () => {
     if (!completos) return
-    const placar = novoPlacar(
-      gerarId(),
-      assentos as [string, string, string, string],
-      timer,
-      new Date().toISOString(),
-    )
+    const agora = new Date()
+    const placar = {
+      ...novoPlacar(
+        gerarId(),
+        assentos as [string, string, string, string],
+        timer,
+        agora.toISOString(),
+      ),
+      ...(torneio ? { torneio: { id: torneio.id, fimSessaoEm: fimDaSessao(torneio, agora) } } : {}),
+    }
     acoesPlacaresMcr.criar(placar)
     aoCriar(placar.id)
   }
