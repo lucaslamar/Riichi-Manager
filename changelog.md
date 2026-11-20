@@ -5,12 +5,13 @@
 ### Adicionado
 
 - **Modo Chinês (MCR / Guobiao)**: novo cartão Mahjong nas Configurações, logo depois do Idioma, com Japonês e Chinês. A escolha vale na hora em todo o app e fica salva no aparelho. O Japonês continua sendo o padrão e funciona igual a antes.
-- **Calculadora de Mão Chinesa**: no modo Chinês, monte a mão com Chi, Pon e Kan, escolha ron ou tsumo, os ventos, as condições especiais e as flores. O resultado mostra o total de fan, cada fan com o nome em português e em chinês e os pagamentos do MCR. Mãos com menos de 8 fan sem contar as flores aparecem como inválidas.
-- **Navegação do modo Chinês**: a Calculadora de Mão vira a chinesa no mesmo lugar. Han e Fu, Centerpiece, Partidas e Ranking ficam escondidos, porque usam as regras do Riichi. O Sorteador de Ventos continua igual.
+- **Calculadora de Mão Chinesa**: no modo Chinês, a calculadora tem o mesmo layout da japonesa: o mesmo teclado de pedras, a barra de Chi, Pon e Kan, a mão e a finalização com as condições. O Chi oferece as sequências possíveis da pedra tocada, e na finalização um toque escolhe a pedra da batida. Os botões Flor e Estação põem as flores na mão, trocando o desenho a cada toque. No MCR todas valem 1 fan e nenhuma tem função própria. O resultado mostra o total de fan, cada fan com o nome do guia do CMC e o nome em chinês, e os pagamentos do MCR. Mãos com menos de 8 fan sem contar as flores aparecem como inválidas.
+- **Navegação do modo Chinês**: a Calculadora de Mão vira a chinesa no mesmo lugar. Han e Fu, Centerpiece e Partidas ficam escondidos, porque usam as regras do Riichi. O Sorteador de Ventos continua igual.
 - **Mahjong Manager**: no modo Chinês, o nome do app no topo e na aba do navegador passa a ser Mahjong Manager.
 - **Guia de Bolso do MCR**: no modo Chinês, uma tela nova com os 81 fan do guia do Cerrado Mahjong Club, por patamar de pontos. Dá para buscar pelo nome em português, em chinês, em inglês, pelo yaku do Riichi ou pelo número, e filtrar por pontos e por categoria. Cada fan mostra o equivalente no Riichi e, ao tocar em Detalhes, o que não combina com ele, com atalho para cada um.
 - **Tutorial do MCR**: no modo Chinês, o Tutorial ensina o MCR para quem já joga Riichi, em oito seções, com as diferenças para o Riichi destacadas e exemplos de pontuação. Créditos a Juliana Visoni e Gabriel Souza, do Cerrado Mahjong Club.
 - **Placar do MCR**: no modo Chinês, a Nova partida vira um placar que só anota as mãos e soma os pontos MCR, com timer da vez, rodada e dealer de cada mão, desfazer e finalizar. Os pontos ficam numa tabela própria, separada das partidas do Riichi, e os jogadores são os mesmos do cadastro, sem cadastrar de novo.
+- **Ranking do MCR**: no modo Chinês, o Ranking tem a mesma tela, com os pontos dos placares MCR finalizados. Ficam de fora o tobi, o filtro de duração, o registro manual e a análise do jogador, que são do Riichi.
 
 ## Não lançado
 

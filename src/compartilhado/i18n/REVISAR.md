@@ -513,5 +513,5 @@ um termo no texto, troque também nos aliases.
 ## Modo Chinês (MCR): falta traduzir
 
 As seções `configuracoes`, `mcr` e `menu.handCalculatorChinese` estão em português (pt-BR) e
-inglês (en). Em es, ja, ko e lt elas ficaram em inglês, aguardando tradução. No zh-Hans, os
-nomes dos fan (`mcr.fan`) são os originais em chinês e o resto ficou em inglês.
+inglês (en). Em es, ja, ko e lt elas ficaram em inglês, aguardando tradução. Os nomes dos fan
+vêm do guia do CMC (`fans-mcr.ts`), em português, com o 汉字 ao lado.
