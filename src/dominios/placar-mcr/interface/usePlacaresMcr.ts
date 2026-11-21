@@ -29,6 +29,9 @@ export const acoesPlacaresMcr = {
   atualizar: (id: string, transformar: (placar: PlacarMcr) => PlacarMcr) =>
     definir(lerPlacaresMcr().map((placar) => (placar.id === id ? transformar(placar) : placar))),
   excluir: (id: string) => definir(lerPlacaresMcr().filter((placar) => placar.id !== id)),
+  /** Dados de teste (só em dev): troca os placares com o `prefixo` no id pelos novos. */
+  substituirTeste: (prefixo: string, novos: PlacarMcr[]) =>
+    definir([...lerPlacaresMcr().filter((placar) => !placar.id.startsWith(prefixo)), ...novos]),
 }
 
 export function usePlacaresMcr() {
