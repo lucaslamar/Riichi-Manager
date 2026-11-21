@@ -1,4 +1,8 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { nomeApp } from '@/compartilhado/marca/nome-app'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
+import { acoesPlacaresMcr, usePlacaresMcr } from '@/dominios/placar-mcr/interface/usePlacaresMcr'
+import { partidasAbertasMcr } from '@/dominios/placar-mcr/logica/rankingMcr'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -44,9 +48,17 @@ export default function PaginaEmAndamento({
   aoAbrirTorneio: (id: string) => void
 }) {
   const { t, numero, idioma } = useI18n()
-  const { partidas, abertas, descartar } = usePartidas()
+  const riichi = usePartidas()
+  // Modo Chinês: as mesas são os placares MCR abertos, e não há Clube.
+  const chines = useModoJogoAtual() === 'mcr'
+  const placaresMcr = usePlacaresMcr()
+  const abertasMcr = useMemo(() => partidasAbertasMcr(placaresMcr), [placaresMcr])
+  const { partidas } = riichi
+  const abertas = chines ? abertasMcr : riichi.abertas
+  const descartar = chines ? acoesPlacaresMcr.excluir : riichi.descartar
   const { jogadores } = useJogadores()
-  const { sorteio } = useClube()
+  const clube = useClube()
+  const sorteio = chines ? null : clube.sorteio
   const { torneios } = useTorneios()
   const subtituloTorneio = useSubtituloTorneio()
   const [filtro, setFiltro] = useState<FiltroTipoMesa>('todas')
@@ -80,7 +92,14 @@ export default function PaginaEmAndamento({
     t('match.table.number', { number: abertas.indexOf(partida) + 1 })
 
   const compartilhar = async (partida: Partida) => {
-    const texto = textoDaPartida(partida, rotuloDa(partida), nomeNa(partida), t, numero)
+    const texto = textoDaPartida(
+      partida,
+      rotuloDa(partida),
+      nomeNa(partida),
+      t,
+      numero,
+      nomeApp(chines ? 'mcr' : 'riichi'),
+    )
     const resultado = await compartilharTexto(texto)
     if (resultado === 'copiado') mostrar(t('match.club.copied'))
     if (resultado === 'falhou') mostrar(t('match.club.shareFailed'))
@@ -96,6 +115,7 @@ export default function PaginaEmAndamento({
         aoAbrir={() => aoAbrirMesa(partida.id)}
         aoCompartilhar={() => void compartilhar(partida)}
         aoExcluir={() => setParaDescartar(partida.id)}
+        semRiichi={chines}
       />
     </li>
   )
@@ -203,7 +223,13 @@ export default function PaginaEmAndamento({
           aoFiltrar={setFiltrosLista}
         />
       )}
-      {!nada && <FiltroTipo valor={filtro} aoMudar={setFiltro} />}
+      {!nada && (
+        <FiltroTipo
+          valor={filtro}
+          aoMudar={setFiltro}
+          tipos={chines ? ['todas', 'avulsa', 'torneio'] : undefined}
+        />
+      )}
       {nada ? (
         <p className="ptd-vazio">{t('match.home.noneOpen')}</p>
       ) : visiveis.length === 0 ? (

@@ -18,6 +18,7 @@ import {
   type PlacarMcr,
 } from '../logica/placar'
 import { nomeDaCadeira } from './nomes'
+import PaginaEmAndamento from '@/dominios/centerpiece/interface/paginas/PaginaEmAndamento'
 import HistoricoPlacarMcr from './HistoricoPlacarMcr'
 import NovoPlacarMcr from './NovoPlacarMcr'
 import PlacarAberto from './PlacarAberto'
@@ -128,7 +129,12 @@ export default function PaginaPlacarMcr() {
     vista.tipo === 'placar' ? placares.find((placar) => placar.id === vista.id) : undefined
   const voltar = () => setVista({ tipo: 'hub' })
   const abrir = (id: string) => setVista({ tipo: 'placar', id })
-  const emAndamento = placares.filter((placar) => !placar.finalizadoEm)
+  // Como no Riichi: as mesas avulsas abertas e os torneios em jogo (as mesas deles ficam no torneio).
+  const emAndamento = placares.filter((placar) => !placar.finalizadoEm && !placar.torneio)
+  const torneiosEmJogo = torneios.filter(
+    (torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm,
+  )
+  const totalEmAndamento = emAndamento.length + torneiosEmJogo.length
   const finalizados = placares
     .filter((placar) => placar.finalizadoEm)
     .sort((um, outro) => (outro.finalizadoEm ?? '').localeCompare(um.finalizadoEm ?? ''))
@@ -180,19 +186,14 @@ export default function PaginaPlacarMcr() {
     )
   }
   if (vista.tipo === 'lista') {
-    const lista = emAndamento
+    // A mesma tela Em andamento do Riichi, com os placares MCR e os torneios em jogo.
     return (
-      <section className="ptd-inicio">
-        <TituloTela titulo={t('match.home.inProgress')} aoVoltar={voltar} />
-        {lista.length === 0 && (
-          <p className="placar-mcr__ajuda">{t('placar.mcr.nenhumaPartida')}</p>
-        )}
-        <ul className="placar-mcr__lista">
-          {lista.map((placar) => (
-            <LinhaPlacar key={placar.id} placar={placar} aoAbrir={() => abrir(placar.id)} />
-          ))}
-        </ul>
-      </section>
+      <PaginaEmAndamento
+        aoVoltar={voltar}
+        aoAbrirMesa={abrir}
+        aoAbrirSorteio={() => undefined}
+        aoAbrirTorneio={(id) => setVista({ tipo: 'torneio', id })}
+      />
     )
   }
 
@@ -215,10 +216,10 @@ export default function PaginaPlacarMcr() {
       chave: 'andamento',
       icone: 'fa-hourglass-half',
       titulo: t('match.home.inProgress'),
-      texto: t('match.home.inProgressCount', { count: emAndamento.length }),
-      // Só uma partida aberta: vai direto para ela, como no Riichi.
+      texto: t('match.home.inProgressCount', { count: totalEmAndamento }),
+      // Só uma partida aberta e nada mais: vai direto para ela, como no Riichi.
       aoTocar: () =>
-        emAndamento.length === 1
+        emAndamento.length === 1 && totalEmAndamento === 1
           ? abrir(emAndamento[0].id)
           : setVista({ tipo: 'lista', quais: 'andamento' }),
     },

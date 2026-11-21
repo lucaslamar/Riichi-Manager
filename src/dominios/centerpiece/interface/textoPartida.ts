@@ -8,6 +8,7 @@ export function textoDaPartida(
   nomeDe: (cadeira: Cadeira) => string,
   t: (chave: string, parametros?: Record<string, string | number>) => string,
   numero: (valor: number) => string,
+  nomeDoApp = 'Riichi Manager',
 ) {
   const historico = partida.status === 'finalizada'
   const linhas = (historico ? linhasDoHistorico(partida) : linhasEmAndamento(partida)).map((linha) => {
@@ -18,5 +19,5 @@ export function textoDaPartida(
       historico && linha.delta !== undefined ? ` (${linha.delta > 0 ? '+' : ''}${numero(linha.delta)})` : ''
     return `${posicao} ${nomeDe(linha.cadeira)} ${numero(linha.pontos)}${delta}`
   })
-  return [`Riichi Manager · ${cabecalho}`, '', ...linhas].join('\n')
+  return [`${nomeDoApp} · ${cabecalho}`, '', ...linhas].join('\n')
 }
