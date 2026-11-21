@@ -1,4 +1,5 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { Flor } from '../logica/montagem'
 import { nomePedra } from './pedras'
 
@@ -27,11 +28,22 @@ const arquivoDaFlor = (flor: Flor) => (flor <= 4 ? `Flor${flor}` : `Estacao${flo
  * public/tiles/chines. Usa a classe `tile-img`, então ocupa o mesmo lugar das
  * pedras do Riichi no teclado, na mão e nos conjuntos.
  */
+/**
+ * Endereço da arte chinesa na cor das pedras escolhida, como no Riichi: brancas
+ * (bege) ou pretas, e as pretas do tema escuro com o rosa
+ * (scripts/gerar-pedras-chinesas-pretas.ts).
+ */
+export function urlPedraChinesa(arquivo: string, cor: 'brancas' | 'pretas', temaEscuro: boolean) {
+  const pasta = cor === 'pretas' ? (temaEscuro ? 'chines-black-rosa' : 'chines-black') : 'chines'
+  return `${import.meta.env.BASE_URL}tiles/${pasta}/${arquivo}.svg?v=1`
+}
+
 function ImagemPedra({ arquivo, nome }: { arquivo: string; nome: string }) {
+  const { pedrasEfetivas, temaEfetivo } = usePreferencias()
   return (
     <img
       className="tile-img tile-img-chinesa"
-      src={`${import.meta.env.BASE_URL}tiles/chines/${arquivo}.svg?v=1`}
+      src={urlPedraChinesa(arquivo, pedrasEfetivas, temaEfetivo === 'escuro')}
       alt={nome}
       draggable={false}
       decoding="sync"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { falar, pararFala } from '@/compartilhado/adaptadores/voz'
+import { falar, lerNarracao, pararFala } from '@/compartilhado/adaptadores/voz'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import {
@@ -10,7 +10,12 @@ import {
 } from '../../../logica/mao'
 import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
-import ExibicaoCompleta, { falaDoResultado, TagsVentos, VentosPagamento, ventosDosDemais } from './ExibicaoCompleta'
+import ExibicaoCompleta, {
+  falaDoResultado,
+  TagsVentos,
+  VentosPagamento,
+  ventosDosDemais,
+} from './ExibicaoCompleta'
 
 import { consumirDestaque, destaqueDoYaku } from './destaqueYaku'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
@@ -67,9 +72,13 @@ export default function ModalResultado({
     ? mao.pedras
     : mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
 
-  // O resultado sempre é falado ao abrir, com ou sem leitor de tela.
+  // O resultado sempre é falado ao abrir. Sem a Narração ligada, só os pontos e os pagamentos.
   useEffect(() => {
-    falar(alerta ? descricaoAcessivel : falaDoResultado(resultado, mao.ventoAssento, t, numero))
+    falar(
+      alerta
+        ? descricaoAcessivel
+        : falaDoResultado(resultado, mao.ventoAssento, t, numero, !lerNarracao().ativa),
+    )
     return pararFala
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -211,7 +220,11 @@ export default function ModalResultado({
             contextoCenterpiece={contextoCenterpiece}
           />
           {aoUsarMao && (
-            <button type="button" className="btn-primario cp-btn-usar-resultado" onClick={aoUsarMao}>
+            <button
+              type="button"
+              className="btn-primario cp-btn-usar-resultado"
+              onClick={aoUsarMao}
+            >
               <i className="fas fa-check" aria-hidden="true" />
               {t('centerpiece.win.useResult')}
             </button>

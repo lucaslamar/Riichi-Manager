@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
 import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
+import { urlPedraChinesa } from '@/dominios/calculadora-mao-chinesa/interface/PedraChinesa'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { CodigoPedra, Meld } from '../../../logica/mao'
 import { arquivoPedra, nomePedraAcessivel, urlPedra } from '../../constantes'
@@ -38,7 +39,8 @@ export function PedraSvg({
       className={`tile-img ${pedra === '5z' ? 'tile-img-haku' : ''} ${deLado ? 'tile-img-lado' : ''}`}
       src={
         chinesa
-          ? `${import.meta.env.BASE_URL}tiles/chines/${nomeArquivo.replace('-Dora', '')}.svg?v=1`
+          ? // Ton-Vermelho e Man5-Dora: a arte chinesa só tem a pedra comum.
+            urlPedraChinesa(nomeArquivo.split('-')[0], pedrasEfetivas, temaEfetivo === 'escuro')
           : urlPedra(nomeArquivo, formato, pedrasEfetivas, temaEfetivo === 'escuro')
       }
       alt={alt}

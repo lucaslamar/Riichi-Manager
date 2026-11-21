@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react'
-import { falarEmPartes, pararFala } from '@/compartilhado/adaptadores/voz'
+import { falarEmPartes, lerNarracao, pararFala } from '@/compartilhado/adaptadores/voz'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { fanMcrPorId } from '@/compartilhado/mahjong/mcr/fans-mcr'
@@ -147,8 +147,9 @@ export default function ModalResultadoMcr({
     acesa(chave) ? ' destaque-yaku' : acesas ? ' apagada' : ''
   const descricaoDe = (chave: string) => (acesa(chave) ? idDescricao : undefined)
 
-  // O resultado é falado ao abrir, como no Riichi.
+  // O resultado é falado ao abrir, como no Riichi. Sem a Narração ligada, só o fan e os pagamentos.
   useEffect(() => {
+    const curta = !lerNarracao().ativa
     const textoPagamentos = pagamento
       ? [
           `${t('mcr.resultado.vencedorRecebe')} ${numero(pagamento.ganhadorRecebe)}`,
@@ -163,13 +164,16 @@ export default function ModalResultadoMcr({
     const resumo = invalida
       ? t(fan.batida ? 'mcr.resultado.invalida' : 'mcr.resultado.naoBate')
       : [
-          ...[...linhas].sort((a, b) => b.valor - a.valor).map(nomeDe),
+          ...(curta ? [] : [...linhas].sort((a, b) => b.valor - a.valor).map(nomeDe)),
           t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) }),
           ...textoPagamentos,
         ].join('. ')
     falarEmPartes([
       // A chamada de vitória em chinês: Hu (ron) ou Zimo (tsumo).
-      { texto: invalida ? '' : condicoes.forma === 'tsumo' ? '自摸！' : '胡！', idioma: 'zh-CN' },
+      {
+        texto: invalida || curta ? '' : condicoes.forma === 'tsumo' ? '自摸！' : '胡！',
+        idioma: 'zh-CN',
+      },
       { texto: resumo },
     ])
     return pararFala

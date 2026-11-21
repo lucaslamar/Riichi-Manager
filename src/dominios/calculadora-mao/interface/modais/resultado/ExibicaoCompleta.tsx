@@ -55,8 +55,17 @@ export function falaDoResultado(
   ventoVencedor: VentoMao | undefined,
   traduzir: (chave: string, parametros?: Record<string, string | number>) => string,
   numero: (valor: number) => string,
+  /** Sem a Narração ligada: só os pontos e quanto cada um paga. */
+  curta = false,
 ) {
   const patamar = resultado.nome ? chavePatamar(resultado.nome) : null
+  const pontosEPagamentos = [
+    traduzir('calculator.spokenPoints', { points: numero(resultado.pontos.total) }),
+    ...pagamentos(resultado, ventoVencedor).map(
+      ({ chave, valor }) => `${traduzir(chave)} ${numero(valor)}`,
+    ),
+  ]
+  if (curta) return pontosEPagamentos.join('. ')
   return [
     traduzir('calculator.result'),
     patamar ? traduzir(patamar.chave, patamar.parametros) : resultado.nome,
@@ -64,7 +73,9 @@ export function falaDoResultado(
       ? traduzir('hanFu.limitYakumanTimes', { count: resultado.yakuman })
       : traduzir('calculator.hanFuSummary', { han: resultado.han, fu: resultado.fu }),
     traduzir('calculator.spokenPoints', { points: numero(resultado.pontos.total) }),
-    ...pagamentos(resultado, ventoVencedor).map(({ chave, valor }) => `${traduzir(chave)} ${numero(valor)}`),
+    ...pagamentos(resultado, ventoVencedor).map(
+      ({ chave, valor }) => `${traduzir(chave)} ${numero(valor)}`,
+    ),
   ]
     .filter(Boolean)
     .join('. ')
@@ -140,7 +151,9 @@ export default function ExibicaoCompleta({
       {contextoCenterpiece && (
         <div className="detalhes-contexto-resultado">
           <span>{contextoCenterpiece.vencedorNome}</span>
-          <span>{t(contextoCenterpiece.tipoVitoria === 'ron' ? 'calculator.ron' : 'calculator.tsumo')}</span>
+          <span>
+            {t(contextoCenterpiece.tipoVitoria === 'ron' ? 'calculator.ron' : 'calculator.tsumo')}
+          </span>
           <span>
             {t(CHAVE_VENTO[contextoCenterpiece.ventoRodada])} {contextoCenterpiece.rodadaNumero}
           </span>

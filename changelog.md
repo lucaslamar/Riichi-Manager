@@ -4,6 +4,9 @@
 
 ### Alterado
 
+- **Resultado falado mais curto sem a Narração**: com a Narração desligada, a voz do resultado diz só os pontos (no Riichi) ou o fan (no MCR) e quanto cada um paga. Com a Narração ligada, continua lendo o resultado inteiro.
+- **Pedras chinesas na cor escolhida**: no modo Chinês, as pedras seguem a cor de Ajustes, como as do Riichi: brancas em bege e pretas, com o rosa no tema escuro.
+
 - **Ajuda da montagem da mão**: a cena da Batida mostra o teclado apagado, com Mudar batida e Finalizar mão embaixo, como no app. No modo Chinês, a ajuda sai sem o que é só do Riichi (han nas esperas e Aka dora), e a cena do Guia de bolso mostra as abas e o fan do MCR.
 - **Teclado da Calculadora de Mão**: no celular em pé, o espaço vazio entre o teclado e a barra inferior ficou menor, no Riichi e no MCR.
 - **Cabeçalho mais limpo no celular**: no celular e no tablet em pé, o topo mostra só o nome da tela inteiro (ex.: Calculadora de Mão), sem "Riichi Manager" ao lado cortando o título. O botão de tela cheia virou um ícone à direita, junto da engrenagem.
@@ -28,6 +31,10 @@
 - **Calculadora abre no Leste depois dos jogadores**: no Registrar partida finalizada, ao escolher o quarto jogador a calculadora de pontos já abre no Leste (ou no lugar 1), se ninguém lançou pontos ali ainda.
 - **Teclado da calculadora de pontos como o do celular**: os números vão de 1 2 3 em cima até 7 8 9 embaixo. O − e o + desceram para a coluna da direita, acima do =, que ficou menor, e o ⌫ ocupa o espaço que sobrou ao lado do C.
 - **Pontos começam em 0 no Registrar partida finalizada**: a calculadora de pontos de cada jogador abre zerada, para digitar direto o ponto final sem apagar os pontos de partida antes. Na mesa do torneio ela continua começando com os pontos de partida.
+
+### Corrigido
+
+- **Leste no modo Chinês**: a pedra do Leste não aparecia na escolha dos ventos da finalização.
 
 ### Adicionado
 
