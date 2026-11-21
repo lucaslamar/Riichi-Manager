@@ -2275,14 +2275,7 @@
       "timer": "Turn timer",
       "timerDesligado": "No timer",
       "segundos": "{{segundos}}s",
-      "emAndamento": "In progress",
       "finalizada": "Game finished",
-      "qtdMaos": {
-        "one": "{{count}} hand",
-        "few": "{{count}} hands",
-        "many": "{{count}} hands",
-        "other": "{{count}} hands"
-      },
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
       "semMaos": "No hands recorded.",
@@ -2304,7 +2297,6 @@
         "semDescartador": "Choose who discarded.",
         "descartadorVencedor": "The winner can't be the discarder."
       },
-      "nenhumaMao": "no hands",
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
       "maoCurta": "Hand {{mao}}",
@@ -2316,24 +2308,18 @@
         "other": "{{count}} games"
       },
       "nenhumaPartida": "No games yet.",
-      "primeiro": "1st {{nome}} {{pontos}}",
-      "apagarHistorico": "Delete history",
-      "confirmarApagarHistorico": {
-        "one": "Delete {{count}} finished game? This can't be undone.",
-        "few": "Delete the {{count}} finished games? This can't be undone.",
-        "many": "Delete the {{count}} finished games? This can't be undone.",
-        "other": "Delete the {{count}} finished games? This can't be undone."
-      },
       "torneio": {
         "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
       },
       "usarFan": "점수판에 사용",
       "porFan": "번",
       "porFanAjuda": "번 수를 입력",
-      "quemFezHu": "이 버림패로 화료한 사람이 있나요?",
-      "ninguemFezHu": "없음: 다음 차례",
       "qtdFan": "{{fan}}번",
-      "empateTexto": "화료 없이 패산이 끝났습니다. 지불 없이 친이 넘어갑니다."
+      "empateTexto": "화료 없이 패산이 끝났습니다. 지불 없이 친이 넘어갑니다.",
+      "ronDe": "{{name}}의 론",
+      "falsoHu": "착화",
+      "falsoHuDe": "{{name}}의 착화?",
+      "falsoHuTexto": "틀린 사람이 다른 세 명에게 10점씩 내고, 판은 계속됩니다."
     }
   },
   "glossario": {

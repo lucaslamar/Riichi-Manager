@@ -3,6 +3,7 @@
  * cadastro único do app; os placares ficam numa tabela própria, separada das
  * partidas do Riichi.
  */
+import type { RegistroMao } from '@/dominios/centerpiece/logica/descartes'
 import type { EstadoVez } from '@/dominios/centerpiece/logica/vez'
 import { vezInicial } from '@/dominios/centerpiece/logica/vez'
 import { calcularPagamentoMcr } from '@/dominios/calculadora-mao-chinesa/logica/pontuacao-mcr'
@@ -34,6 +35,10 @@ export interface PlacarMcr {
   finalizadoEm: string | null
   /** Mesa de um torneio: o id dele e a rodada e a mesa do sorteio, começando em 0. */
   torneio?: { id: string; rodada?: number; mesa?: number }
+  /** Falsos Hu: quem errou paga 10 a cada um dos outros três, e a mão continua. */
+  falsosHu?: { cadeira: Cadeira; aposMao: number }[]
+  /** Descartes e chamadas da mão em jogo (o mesmo registro da mesa do Riichi). Zera a cada mão. */
+  registro?: RegistroMao
   /** Nomes dos convidados do torneio (jogam sem cadastro), por id. */
   convidados?: Record<string, string>
 }
@@ -91,10 +96,27 @@ export function pontosDaMao(mao: MaoMcr): [number, number, number, number] {
   return pontos
 }
 
-export function totais(placar: Pick<PlacarMcr, 'maos'>): [number, number, number, number] {
-  return placar.maos.reduce<[number, number, number, number]>(
-    (soma, mao) => {
-      const pontos = pontosDaMao(mao)
+/** Regra da EMA para o Falso Hu: 10 pontos para cada um dos outros três. */
+export const PONTOS_FALSO_HU = 10
+
+export function pontosDoFalsoHu(cadeira: Cadeira): [number, number, number, number] {
+  return CADEIRAS.map((outra) => (outra === cadeira ? -3 * PONTOS_FALSO_HU : PONTOS_FALSO_HU)) as [
+    number,
+    number,
+    number,
+    number,
+  ]
+}
+
+export function totais(
+  placar: Pick<PlacarMcr, 'maos'> & Pick<Partial<PlacarMcr>, 'falsosHu'>,
+): [number, number, number, number] {
+  const lances = [
+    ...placar.maos.map(pontosDaMao),
+    ...(placar.falsosHu ?? []).map(({ cadeira }) => pontosDoFalsoHu(cadeira)),
+  ]
+  return lances.reduce<[number, number, number, number]>(
+    (soma, pontos) => {
       return [soma[0] + pontos[0], soma[1] + pontos[1], soma[2] + pontos[2], soma[3] + pontos[3]]
     },
     [0, 0, 0, 0],
@@ -109,12 +131,31 @@ export function colocacoes(pontos: readonly number[]): number[] {
 export function registrarMao(placar: PlacarMcr, mao: MaoMcr): PlacarMcr {
   if (validarMao(mao) || placar.finalizadoEm) return placar
   const maos = [...placar.maos, mao]
-  // A próxima mão começa com a vez do novo dealer, parada até o primeiro toque.
-  return { ...placar, maos, vez: vezInicial(dealerDaMao(maos.length), placar.timerSegundos) }
+  // A próxima mão começa com a vez do novo dealer, parada até o primeiro toque, e sem descartes.
+  return {
+    ...placar,
+    maos,
+    registro: undefined,
+    vez: vezInicial(dealerDaMao(maos.length), placar.timerSegundos),
+  }
+}
+
+export function registrarFalsoHu(placar: PlacarMcr, cadeira: Cadeira): PlacarMcr {
+  if (placar.finalizadoEm) return placar
+  return {
+    ...placar,
+    falsosHu: [...(placar.falsosHu ?? []), { cadeira, aposMao: placar.maos.length }],
+  }
 }
 
 export function desfazerUltimaMao(placar: PlacarMcr): PlacarMcr {
-  if (!placar.maos.length || placar.finalizadoEm) return placar
+  if (placar.finalizadoEm) return placar
+  // Primeiro o Falso Hu desta mão, depois a última mão registrada.
+  const falsos = placar.falsosHu ?? []
+  if (falsos[falsos.length - 1]?.aposMao === placar.maos.length) {
+    return { ...placar, falsosHu: falsos.slice(0, -1) }
+  }
+  if (!placar.maos.length) return placar
   const maos = placar.maos.slice(0, -1)
   return { ...placar, maos, vez: vezInicial(dealerDaMao(maos.length), placar.timerSegundos) }
 }

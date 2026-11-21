@@ -2301,14 +2301,7 @@
       "timer": "Turn timer",
       "timerDesligado": "No timer",
       "segundos": "{{segundos}}s",
-      "emAndamento": "In progress",
       "finalizada": "Game finished",
-      "qtdMaos": {
-        "one": "{{count}} hand",
-        "few": "{{count}} hands",
-        "many": "{{count}} hands",
-        "other": "{{count}} hands"
-      },
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
       "semMaos": "No hands recorded.",
@@ -2330,7 +2323,6 @@
         "semDescartador": "Choose who discarded.",
         "descartadorVencedor": "The winner can't be the discarder."
       },
-      "nenhumaMao": "no hands",
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
       "maoCurta": "Hand {{mao}}",
@@ -2342,24 +2334,18 @@
         "other": "{{count}} games"
       },
       "nenhumaPartida": "No games yet.",
-      "primeiro": "1st {{nome}} {{pontos}}",
-      "apagarHistorico": "Delete history",
-      "confirmarApagarHistorico": {
-        "one": "Delete {{count}} finished game? This can't be undone.",
-        "few": "Delete the {{count}} finished games? This can't be undone.",
-        "many": "Delete the {{count}} finished games? This can't be undone.",
-        "other": "Delete the {{count}} finished games? This can't be undone."
-      },
       "torneio": {
         "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
       },
       "usarFan": "Use on the scoreboard",
       "porFan": "Fan",
       "porFanAjuda": "Type the hand fan",
-      "quemFezHu": "Did anyone declare Hu on this discard?",
-      "ninguemFezHu": "Nobody: next turn",
       "qtdFan": "{{fan}} fan",
-      "empateTexto": "The wall ran out with no winner. Nobody pays and the dealer passes."
+      "empateTexto": "The wall ran out with no winner. Nobody pays and the dealer passes.",
+      "ronDe": "Ron by {{name}}",
+      "falsoHu": "False Hu",
+      "falsoHuDe": "False Hu by {{name}}?",
+      "falsoHuTexto": "The player pays 10 points to each of the other three, and the hand goes on."
     }
   },
   "glossario": {

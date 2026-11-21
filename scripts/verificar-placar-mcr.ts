@@ -11,6 +11,7 @@ import {
   finalizar,
   novoPlacar,
   pontosDaMao,
+  registrarFalsoHu,
   registrarMao,
   totais,
   validarMao,
@@ -108,4 +109,12 @@ assert.deepEqual(pontosDeMesa([0, 0, 0, 0]), [1.75, 1.75, 1.75, 1.75], 'Quatro e
   assert.equal(tabela[0].pontos, tabela[1].pontos)
   assert.equal(tabela[0].partidas, 2)
 }
-console.log('Placar MCR ok: 22 testes.')
+{
+  // Falso Hu (regra da EMA): paga 10 a cada um, a mão e o dealer não mudam.
+  const base = novoPlacar('f', ['a', 'b', 'c', 'd'], 0, '2026-11-21')
+  const comErro = registrarFalsoHu(base, 2)
+  assert.deepEqual(totais(comErro), [10, 10, -30, 10])
+  assert.equal(comErro.maos.length, 0, 'Falso Hu não encerra a mão')
+  assert.equal(desfazerUltimaMao(comErro).falsosHu?.length, 0, 'Desfazer tira o Falso Hu')
+}
+console.log('Placar MCR ok: 25 testes.')

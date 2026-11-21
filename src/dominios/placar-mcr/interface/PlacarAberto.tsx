@@ -5,11 +5,28 @@ import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import CalculadoraMaoChinesa from '@/dominios/calculadora-mao-chinesa/interface/CalculadoraMaoChinesa'
-import { FAN_MINIMO_MCR } from '@/dominios/calculadora-mao-chinesa/logica/fan-mcr'
 import type { Vento as VentoMcr } from '@/dominios/calculadora-mao-chinesa/logica/montagem'
 import JogarDados from '@/dominios/centerpiece/interface/componentes/JogarDados'
 import MesaQuadrada from '@/dominios/centerpiece/interface/componentes/MesaQuadrada'
-import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
+import {
+  MenuJogador,
+  ModalConfirmacao,
+  ModalDiferenca,
+} from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
+import ModalDescartes, {
+  type DecisaoDescarte,
+} from '@/dominios/centerpiece/interface/componentes/ModalDescartes'
+import ModalRio from '@/dominios/centerpiece/interface/componentes/ModalRio'
+import type { AcoesDescartes } from '@/dominios/centerpiece/interface/hooks/useDescartes'
+import {
+  adicionarDescartes,
+  adicionarKakan,
+  desfazerUltimoLance,
+  marcarChamada,
+  REGISTRO_VAZIO,
+  type RegistroMao,
+} from '@/dominios/centerpiece/logica/descartes'
+import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import PlacaJogador from '@/dominios/centerpiece/interface/componentes/PlacaJogador'
 import { useRelogioVez } from '@/dominios/centerpiece/interface/hooks/useTimerVez'
 import {
@@ -28,6 +45,8 @@ import {
   finalizar,
   MAOS_POR_RODADA,
   pontosDaMao,
+  pontosDoFalsoHu,
+  registrarFalsoHu,
   registrarMao,
   TOTAL_MAOS,
   totais,
@@ -36,11 +55,11 @@ import {
   type MaoMcr,
   type PlacarMcr,
 } from '../logica/placar'
-import ModalBatidaMcr, { maoDaBatida, type BatidaMcr } from './ModalBatidaMcr'
+import ModalBatidaMcr, { maoDaBatida, novaBatidaMcr, type BatidaMcr } from './ModalBatidaMcr'
 import { nomeDaCadeira } from './nomes'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
 
-type Confirmacao = 'desfazer' | 'finalizar' | 'excluir'
+type Confirmacao = 'desfazer' | 'finalizar' | 'excluir' | 'abortar'
 
 const TEXTOS_CONFIRMACAO: Record<Confirmacao, { titulo: string; texto: string; botao: string }> = {
   desfazer: {
@@ -57,6 +76,11 @@ const TEXTOS_CONFIRMACAO: Record<Confirmacao, { titulo: string; texto: string; b
     titulo: 'placar.mcr.excluir',
     texto: 'placar.mcr.confirmarExcluir',
     botao: 'placar.mcr.excluir',
+  },
+  abortar: {
+    titulo: 'match.table.abortTitle',
+    texto: 'match.table.abortHelp',
+    botao: 'match.table.abortConfirm',
   },
 }
 
@@ -83,6 +107,11 @@ export default function PlacarAberto({
   const [empateAberto, setEmpateAberto] = useState(false)
   const [confirmando, setConfirmando] = useState<Confirmacao | null>(null)
   const [dadosAbertos, setDadosAbertos] = useState(false)
+  const [descarteDe, setDescarteDe] = useState<Cadeira | null>(null)
+  const [menuDe, setMenuDe] = useState<Cadeira | null>(null)
+  const [rioDe, setRioDe] = useState<Cadeira | null>(null)
+  const [diferencaDe, setDiferencaDe] = useState<Cadeira | null>(null)
+  const [falsoHuDe, setFalsoHuDe] = useState<Cadeira | null>(null)
   const nomes = placar.jogadorIds.map((id) =>
     nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'), placar.convidados),
   )
@@ -106,25 +135,113 @@ export default function PlacarAberto({
     placar.vez,
     emAndamento ? placar.timerSegundos : 0,
     atualizarVez,
-    batida !== null || maosAbertas || empateAberto || confirmando !== null || dadosAbertos,
+    batida !== null ||
+      maosAbertas ||
+      empateAberto ||
+      confirmando !== null ||
+      dadosAbertos ||
+      menuDe !== null ||
+      rioDe !== null ||
+      diferencaDe !== null ||
+      falsoHuDe !== null,
   )
 
   const salvarMao = (mao: MaoMcr) => {
     atualizar((atual) => registrarMao(atual, mao))
     setBatida(null)
   }
-  const novaBatida = (forma: BatidaMcr['forma']): BatidaMcr => ({
-    forma,
-    daVez,
-    vencedor: forma === 'tsumo' ? daVez : null,
-    passo: forma === 'tsumo' ? 'calculo' : 'descarte',
-    fan: FAN_MINIMO_MCR,
-    calculadora: null,
-  })
+  const registro = placar.registro ?? REGISTRO_VAZIO
+  const nomeDe = (cadeira: Cadeira) => nomes[cadeira]
+  /**
+   * O que os descartes, o rio, o menu e a diferença do Riichi leem da partida: o
+   * registro da mão, o dealer e os pontos. O MCR não tem Riichi nem ron múltiplo.
+   */
+  const partidaDaMesa = {
+    id: placar.id,
+    variante: 'yonma',
+    registro,
+    eventos: [],
+    assentos: Object.fromEntries(
+      CADEIRAS.map((cadeira) => [cadeira, { jogadorId: placar.jogadorIds[cadeira] }]),
+    ),
+    placar: { pontos, cadeiraDealer: dealer, riichi: [], honba: 0, palitos: 0 },
+    config: {
+      ronMultiplo: 'atamaHane',
+      checarFuriten: false,
+      regrasCalculo: { akadora: false },
+    },
+  } as unknown as Partida
+  const mudarRegistro = (transformar: (registro: RegistroMao) => RegistroMao) =>
+    atualizar((atual) => ({ ...atual, registro: transformar(atual.registro ?? REGISTRO_VAZIO) }))
+  const acoesDescartes = {
+    descartar: (cadeira: Cadeira, pedras: Parameters<AcoesDescartes['descartar']>[1]) =>
+      mudarRegistro((atual) => adicionarDescartes(atual, cadeira, pedras)),
+    desfazerUltimos: (quantos: number) =>
+      mudarRegistro((atual) => {
+        let proximo = atual
+        for (let vez = 0; vez < quantos; vez++) {
+          const ultimo = proximo.lances[proximo.lances.length - 1]
+          if (ultimo) proximo = desfazerUltimoLance(proximo, ultimo.cadeira)
+        }
+        return proximo
+      }),
+    kakan: (cadeira: Cadeira, pedra: Parameters<AcoesDescartes['kakan']>[1], fechado = false) =>
+      mudarRegistro((atual) => adicionarKakan(atual, cadeira, pedra, undefined, fechado)),
+  } as unknown as AcoesDescartes
+
+  /** Depois do descarte, como na mesa do Riichi: quem chamou fica com a vez, e o ron abre a batida. */
+  const decidirDescarte = (origem: Cadeira, decisao: DecisaoDescarte) => {
+    setDescarteDe(null)
+    if (decisao.tipo === 'ron') {
+      const vencedor = decisao.cadeiras[0]
+      mudarRegistro((atual) =>
+        marcarChamada(atual, decisao.ordem, {
+          cadeira: vencedor,
+          jogadorId: placar.jogadorIds[vencedor],
+          tipo: 'ron',
+        }),
+      )
+      setBatida(novaBatidaMcr('ron', vencedor, origem))
+    } else if (decisao.tipo === 'chamada') {
+      const { cadeira, chamada, ordem } = decisao
+      mudarRegistro((atual) =>
+        marcarChamada(atual, ordem, {
+          cadeira,
+          jogadorId: placar.jogadorIds[cadeira],
+          tipo: chamada,
+        }),
+      )
+      relogio.passarPara(cadeira)
+      setDescarteDe(cadeira)
+    } else {
+      relogio.passarPara(((origem + 1) % 4) as Cadeira)
+    }
+  }
+
+  const aoEscolherNoMenu = (cadeira: Cadeira, acao: string) => {
+    setMenuDe(null)
+    if (acao === 'vez') relogio.passarPara(cadeira)
+    else if (acao === 'chombo') setFalsoHuDe(cadeira)
+    else if (acao === 'descartes') setRioDe(cadeira)
+    else if (acao === 'diferenca') setDiferencaDe(cadeira)
+    else if (acao === 'ron') setBatida(novaBatidaMcr('ron', cadeira))
+    else if (acao === 'tsumo') setBatida(novaBatidaMcr('tsumo', cadeira))
+  }
+
+  /** Desfazer, como no Riichi: primeiro o último descarte da mão, depois o Falso Hu ou a mão. */
+  const desfazer = () => {
+    const ultimo = registro.lances[registro.lances.length - 1]
+    if (ultimo) {
+      mudarRegistro((atual) => desfazerUltimoLance(atual, ultimo.cadeira))
+      relogio.passarPara(ultimo.cadeira)
+    } else {
+      setConfirmando('desfazer')
+    }
+  }
   const confirmar = (qual: Confirmacao) => {
     if (qual === 'desfazer') atualizar(desfazerUltimaMao)
     if (qual === 'finalizar') atualizar((atual) => finalizar(atual, new Date().toISOString()))
-    if (qual === 'excluir') {
+    if (qual === 'excluir' || qual === 'abortar') {
       acoesPlacaresMcr.excluir(placar.id)
       aoVoltar()
     }
@@ -140,7 +257,20 @@ export default function PlacarAberto({
           {/* Com a calculadora aberta, o título é o dela (fica no mesmo cabeçalho). */}
           {!batida?.calculadora && (
             <TituloTela
-              titulo={t('menu.scoreMcr')}
+              titulo={
+                <>
+                  {t('menu.scoreMcr')}
+                  {emAndamento && (
+                    <button
+                      type="button"
+                      className="mesa-abortar"
+                      onClick={() => setConfirmando('abortar')}
+                    >
+                      <i className="fas fa-ban" aria-hidden="true" /> {t('match.table.abort')}
+                    </button>
+                  )}
+                </>
+              }
               aoVoltar={aoVoltar}
               acoes={<BotaoTelaCheia />}
             />
@@ -189,7 +319,7 @@ export default function PlacarAberto({
                         : undefined
                     }
                     daVez={daVez === cadeira}
-                    aoAbrirMenu={() => undefined}
+                    aoAbrirMenu={() => emAndamento && setMenuDe(cadeira)}
                     aoSegurar={() => undefined}
                   />
                 ),
@@ -208,14 +338,17 @@ export default function PlacarAberto({
                 <button
                   type="button"
                   className="mesa-btn-principal mesa-btn-descarte"
-                  onClick={() => setBatida(novaBatida('ron'))}
+                  onClick={() => {
+                    if (!placar.vez.comecou) relogio.tocar()
+                    setDescarteDe(daVez)
+                  }}
                 >
                   {t('match.table.discard', { name: nomes[daVez] })}
                 </button>
                 <button
                   type="button"
                   className="mesa-btn-principal"
-                  onClick={() => setBatida(novaBatida('tsumo'))}
+                  onClick={() => setBatida(novaBatidaMcr('tsumo', daVez))}
                 >
                   {t('match.win.tsumoOf', { name: nomes[daVez] })}
                 </button>
@@ -252,8 +385,12 @@ export default function PlacarAberto({
                   </button>
                   <button
                     type="button"
-                    disabled={placar.maos.length === 0}
-                    onClick={() => setConfirmando('desfazer')}
+                    disabled={
+                      placar.maos.length === 0 &&
+                      registro.lances.length === 0 &&
+                      !placar.falsosHu?.length
+                    }
+                    onClick={desfazer}
                   >
                     <i className="fas fa-rotate-left" aria-hidden="true" />
                     {t('match.table.undo')}
@@ -288,10 +425,6 @@ export default function PlacarAberto({
           pontos={pontos}
           dealer={dealer}
           aoMudar={setBatida}
-          aoPassarVez={() => {
-            relogio.passarPara(((daVez + 1) % 4) as Cadeira)
-            setBatida(null)
-          }}
           aoAplicar={() => salvarMao(maoDaBatida(batida))}
           aoFechar={() => setBatida(null)}
         />
@@ -320,6 +453,78 @@ export default function PlacarAberto({
           />,
           document.querySelector('main.conteudo-principal') ?? document.body,
         )}
+
+      {descarteDe !== null && (
+        <ModalDescartes
+          key={descarteDe}
+          partida={partidaDaMesa}
+          cadeira={descarteDe}
+          nomeDe={nomeDe}
+          acoes={acoesDescartes}
+          timer={
+            relogio.ligado ? { segundos: relogio.segundos, fracao: relogio.fracao } : undefined
+          }
+          aoDecidir={(decisao) => decidirDescarte(descarteDe, decisao)}
+          aoFechar={() => setDescarteDe(null)}
+        />
+      )}
+
+      {menuDe !== null && (
+        <MenuJogador
+          partida={partidaDaMesa}
+          cadeira={menuDe}
+          nome={nomes[menuDe]}
+          podeReceberVez={daVez !== menuDe}
+          aoEscolher={(acao) => aoEscolherNoMenu(menuDe, acao)}
+          aoFechar={() => setMenuDe(null)}
+        />
+      )}
+
+      {rioDe !== null && (
+        <ModalRio
+          partida={partidaDaMesa}
+          cadeira={rioDe}
+          nomeDe={nomeDe}
+          aoFechar={() => setRioDe(null)}
+        />
+      )}
+
+      {diferencaDe !== null && (
+        <ModalDiferenca
+          partida={partidaDaMesa}
+          cadeira={diferencaDe}
+          nomeDe={nomeDe}
+          aoFechar={() => setDiferencaDe(null)}
+        />
+      )}
+
+      {falsoHuDe !== null && (
+        <ModalConfirmacao
+          titulo={t('placar.mcr.falsoHuDe', { name: nomes[falsoHuDe] })}
+          texto={t('placar.mcr.falsoHuTexto')}
+          rotuloConfirmar={t('placar.mcr.falsoHu')}
+          perigo
+          aoFechar={() => setFalsoHuDe(null)}
+          aoConfirmar={() => {
+            atualizar((atual) => registrarFalsoHu(atual, falsoHuDe))
+            setFalsoHuDe(null)
+          }}
+        >
+          <ul className="ptd-linhas">
+            {CADEIRAS.map((cadeira) => {
+              const variacao = pontosDoFalsoHu(falsoHuDe)[cadeira]
+              return (
+                <li key={cadeira}>
+                  <span>{nomes[cadeira]}</span>
+                  <strong className={variacao < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
+                    {(variacao > 0 ? '+' : '') + numero(variacao)}
+                  </strong>
+                </li>
+              )
+            })}
+          </ul>
+        </ModalConfirmacao>
+      )}
 
       {empateAberto && (
         <ModalConfirmacao

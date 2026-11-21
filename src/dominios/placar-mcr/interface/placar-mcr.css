@@ -78,7 +78,6 @@
   border-color: var(--cor-primario, #2196f3);
 }
 
-.placar-mcr__vento,
 .placar-mcr__lugar {
   color: var(--cor-texto-suave, #40566d);
   font-size: 0.85rem;
@@ -146,7 +145,6 @@
   padding: 0;
 }
 
-.placar-mcr__lista,
 .placar-mcr__historico {
   display: grid;
   gap: 6px;
@@ -167,8 +165,7 @@
   padding: 6px 0;
 }
 
-.placar-mcr__deltas,
-.placar-mcr__resumo {
+.placar-mcr__deltas {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 12px;
@@ -177,20 +174,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.placar-mcr__item {
-  display: grid;
-  width: 100%;
-  gap: 6px;
-  border: 1px solid var(--cor-borda, #e2e8f0);
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.placar-mcr__apagar-tudo {
-  margin-top: 16px;
-}
 
 .ptd-card-inicio:disabled {
   cursor: default;

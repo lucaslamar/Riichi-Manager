@@ -2308,14 +2308,7 @@
       "timer": "Turn timer",
       "timerDesligado": "No timer",
       "segundos": "{{segundos}}s",
-      "emAndamento": "In progress",
       "finalizada": "Game finished",
-      "qtdMaos": {
-        "one": "{{count}} hand",
-        "few": "{{count}} hands",
-        "many": "{{count}} hands",
-        "other": "{{count}} hands"
-      },
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
       "semMaos": "No hands recorded.",
@@ -2337,7 +2330,6 @@
         "semDescartador": "Choose who discarded.",
         "descartadorVencedor": "The winner can't be the discarder."
       },
-      "nenhumaMao": "no hands",
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
       "maoCurta": "Hand {{mao}}",
@@ -2349,24 +2341,18 @@
         "other": "{{count}} games"
       },
       "nenhumaPartida": "No games yet.",
-      "primeiro": "1st {{nome}} {{pontos}}",
-      "apagarHistorico": "Delete history",
-      "confirmarApagarHistorico": {
-        "one": "Delete {{count}} finished game? This can't be undone.",
-        "few": "Delete the {{count}} finished games? This can't be undone.",
-        "many": "Delete the {{count}} finished games? This can't be undone.",
-        "other": "Delete the {{count}} finished games? This can't be undone."
-      },
       "torneio": {
         "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
       },
       "usarFan": "Usar en el marcador",
       "porFan": "Fan",
       "porFanAjuda": "Escribe el fan de la mano",
-      "quemFezHu": "¿Alguien hizo Hu con este descarte?",
-      "ninguemFezHu": "Nadie: pasa el turno",
       "qtdFan": "{{fan}} fan",
-      "empateTexto": "Se acabó el muro sin ganador. Nadie paga y el dealer pasa."
+      "empateTexto": "Se acabó el muro sin ganador. Nadie paga y el dealer pasa.",
+      "ronDe": "Ron de {{name}}",
+      "falsoHu": "Falso Hu",
+      "falsoHuDe": "¿Falso Hu de {{name}}?",
+      "falsoHuTexto": "Quien se equivocó paga 10 puntos a cada uno de los otros tres, y la mano sigue."
     }
   },
   "glossario": {

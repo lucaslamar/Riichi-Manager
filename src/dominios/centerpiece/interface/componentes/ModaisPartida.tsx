@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import { ListaHistoricoAcoes } from './ModalHistoricoAcoes'
@@ -126,6 +127,8 @@ export function MenuJogador({
   const { t } = useI18n()
   const { numero } = useFormato()
   const vento = ventoDaCadeira(cadeira, partida.placar.cadeiraDealer, jogadoresNaMesa(partida))
+  // MCR: sem Riichi, e o chombo é o Falso Hu.
+  const chines = useModoJogoAtual() === 'mcr'
   const Acao = ({
     acao,
     icone,
@@ -162,7 +165,8 @@ export function MenuJogador({
         )}
         <Acao acao="ron" icone="fa-trophy" rotulo={t('match.menu.ron')} />
         <Acao acao="tsumo" icone="fa-trophy" rotulo={t('match.menu.tsumo')} />
-        {podeDeclararRiichi(partida.placar, cadeira) &&
+        {!chines &&
+          podeDeclararRiichi(partida.placar, cadeira) &&
           muroPermiteRiichi(partida.registro?.lances ?? [], jogadoresNaMesa(partida)) && (
           <Acao acao="riichi" icone="fa-flag" rotulo={t('match.menu.riichi')} />
         )}
@@ -170,7 +174,7 @@ export function MenuJogador({
         <Acao
           acao="chombo"
           icone="fa-triangle-exclamation"
-          rotulo={t('match.menu.chombo')}
+          rotulo={t(chines ? 'placar.mcr.falsoHu' : 'match.menu.chombo')}
           perigo
         />
         {/* Por último: passar a vez sem querer bagunça o timer e o muro. */}

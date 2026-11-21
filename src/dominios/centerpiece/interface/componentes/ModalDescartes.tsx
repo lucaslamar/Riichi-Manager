@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import type { CodigoPedra } from '@/dominios/calculadora-mao/logica/tipos'
@@ -78,7 +79,9 @@ export default function ModalDescartes({
   // Descartes que ainda esperam a resposta de "o que aconteceu?".
   const [semResposta, setSemResposta] = useState(0)
 
-  const emRiichi = placar.riichi.includes(cadeira)
+  // O MCR não tem Riichi: a marca some, o resto do registro é o mesmo.
+  const semRiichi = useModoJogoAtual() === 'mcr'
+  const emRiichi = semRiichi || placar.riichi.includes(cadeira)
   const seguinte = ((cadeira + 1) % jogadoresNaMesa(partida)) as Cadeira
   const ultimo = descartesDe(lances, cadeira).pop()
   const maximoRon = MAXIMO_VENCEDORES[config.ronMultiplo]

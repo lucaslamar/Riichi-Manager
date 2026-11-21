@@ -1,18 +1,20 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
-import { KANJI_VENTO, ventoDaCadeira } from '@/dominios/centerpiece/logica/partida'
 import { FAN_MINIMO_MCR } from '@/dominios/calculadora-mao-chinesa/logica/fan-mcr'
+import { KANJI_VENTO, ventoDaCadeira } from '@/dominios/centerpiece/logica/partida'
 import { CADEIRAS, pontosDaMao, validarMao, type Cadeira, type MaoMcr } from '../logica/placar'
 
-export type PassoBatidaMcr = 'descarte' | 'calculo' | 'fan' | 'confirmacao'
+export type PassoBatidaMcr = 'pagador' | 'calculo' | 'fan' | 'confirmacao'
 
-/** Registro de uma mão, no mesmo passo a passo da batida do Riichi. */
+/** Registro de uma vitória, nas mesmas etapas da batida do Riichi. */
 export interface BatidaMcr {
   forma: 'ron' | 'tsumo'
-  /** Quem descartou (ron) ou quem tirou (tsumo): o da vez. */
-  daVez: Cadeira
-  vencedor: Cadeira | null
+  vencedor: Cadeira
+  /** Quem descartou a pedra do ron (do descarte já vem escolhido). */
+  descartador: Cadeira | null
   passo: PassoBatidaMcr
+  /** Etapas desta batida: o ron do descarte não pergunta quem pagou. */
+  etapas: PassoBatidaMcr[]
   fan: number
   /** Calculadora de Mão aberta por cima da mesa. */
   calculadora: 'pedras' | 'notacao' | null
@@ -39,22 +41,41 @@ const FORMAS_DE_CALCULAR = [
   },
 ] as const
 
+export function novaBatidaMcr(
+  forma: BatidaMcr['forma'],
+  vencedor: Cadeira,
+  descartador: Cadeira | null = null,
+): BatidaMcr {
+  const etapas: PassoBatidaMcr[] =
+    forma === 'ron' && descartador === null
+      ? ['pagador', 'calculo', 'fan', 'confirmacao']
+      : ['calculo', 'fan', 'confirmacao']
+  return {
+    forma,
+    vencedor,
+    descartador,
+    passo: etapas[0],
+    etapas,
+    fan: FAN_MINIMO_MCR,
+    calculadora: null,
+  }
+}
+
 export function maoDaBatida(batida: BatidaMcr): MaoMcr {
   return batida.forma === 'tsumo'
-    ? { tipo: 'vitoria', vencedor: batida.vencedor!, forma: 'tsumo', fan: batida.fan }
+    ? { tipo: 'vitoria', vencedor: batida.vencedor, forma: 'tsumo', fan: batida.fan }
     : {
         tipo: 'vitoria',
-        vencedor: batida.vencedor!,
+        vencedor: batida.vencedor,
         forma: 'ron',
-        descartador: batida.daVez,
+        descartador: batida.descartador ?? undefined,
         fan: batida.fan,
       }
 }
 
 /**
- * As etapas da batida do Riichi no MCR: no descarte, quem fez Hu (ou ninguém, e a
- * vez passa); depois como calcular (fan direto, teclado de pedras ou MPSZ) e a
- * confirmação com os pagamentos.
+ * As etapas da batida do Riichi no MCR: quem pagou (no ron do menu), como
+ * calcular (fan direto, teclado de pedras ou MPSZ), o fan e a confirmação.
  */
 export default function ModalBatidaMcr({
   batida,
@@ -62,7 +83,6 @@ export default function ModalBatidaMcr({
   pontos,
   dealer,
   aoMudar,
-  aoPassarVez,
   aoAplicar,
   aoFechar,
 }: {
@@ -71,50 +91,22 @@ export default function ModalBatidaMcr({
   pontos: readonly number[]
   dealer: Cadeira
   aoMudar: (proxima: BatidaMcr) => void
-  aoPassarVez: () => void
   aoAplicar: () => void
   aoFechar: () => void
 }) {
   const { t, numero } = useI18n()
-  const { passo, forma, daVez, vencedor, fan } = batida
-  const etapas: PassoBatidaMcr[] =
-    forma === 'ron'
-      ? ['descarte', 'calculo', 'fan', 'confirmacao']
-      : ['calculo', 'fan', 'confirmacao']
+  const { passo, etapas, forma, vencedor, descartador, fan } = batida
   const indice = etapas.indexOf(passo)
-  const erro = vencedor === null ? null : validarMao(maoDaBatida(batida))
-  const deltas = vencedor === null ? null : pontosDaMao(maoDaBatida(batida))
+  const erro = validarMao(maoDaBatida(batida))
+  const deltas = pontosDaMao(maoDaBatida(batida))
 
   const voltar = () => (indice > 0 ? aoMudar({ ...batida, passo: etapas[indice - 1] }) : aoFechar())
 
-  const Jogador = ({
-    cadeira,
-    ativo,
-    aoTocar,
-  }: {
-    cadeira: Cadeira
-    ativo: boolean
-    aoTocar: () => void
-  }) => (
-    <button
-      type="button"
-      className={`ptd-opcao${ativo ? ' ptd-opcao--ativa' : ''}`}
-      aria-pressed={ativo}
-      onClick={aoTocar}
-    >
-      <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(cadeira, dealer)]}</span>
-      <span className="ptd-opcao-nome">{nomes[cadeira]}</span>
-      <span className="ptd-opcao-valor">{numero(pontos[cadeira])}</span>
-    </button>
-  )
-
   return (
     <Modal
-      titulo={
-        forma === 'tsumo'
-          ? t('match.win.tsumoOf', { name: nomes[daVez] })
-          : t('match.table.discard', { name: nomes[daVez] })
-      }
+      titulo={t(forma === 'tsumo' ? 'match.win.tsumoOf' : 'placar.mcr.ronDe', {
+        name: nomes[vencedor],
+      })}
       subtitulo={t('match.win.step', { current: indice + 1, total: etapas.length })}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
@@ -147,26 +139,28 @@ export default function ModalBatidaMcr({
         </div>
       }
     >
-      {passo === 'descarte' && (
+      {passo === 'pagador' && (
         <>
-          <p className="ptd-rotulo">{t('placar.mcr.quemFezHu')}</p>
+          <p className="ptd-rotulo">{t('match.win.payer')}</p>
           <div className="ptd-lista-opcoes">
-            {CADEIRAS.filter((cadeira) => cadeira !== daVez).map((cadeira) => (
-              <Jogador
+            {CADEIRAS.filter((cadeira) => cadeira !== vencedor).map((cadeira) => (
+              <button
                 key={cadeira}
-                cadeira={cadeira}
-                ativo={vencedor === cadeira}
-                aoTocar={() => aoMudar({ ...batida, vencedor: cadeira, passo: 'calculo' })}
-              />
+                type="button"
+                className={`ptd-opcao${descartador === cadeira ? ' ptd-opcao--ativa' : ''}`}
+                aria-pressed={descartador === cadeira}
+                onClick={() => aoMudar({ ...batida, descartador: cadeira, passo: 'calculo' })}
+              >
+                <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(cadeira, dealer)]}</span>
+                <span className="ptd-opcao-nome">{nomes[cadeira]}</span>
+                <span className="ptd-opcao-valor">{numero(pontos[cadeira])}</span>
+              </button>
             ))}
           </div>
-          <button type="button" className="btn-contorno ptd-btn-largo" onClick={aoPassarVez}>
-            {t('placar.mcr.ninguemFezHu')}
-          </button>
         </>
       )}
 
-      {passo === 'calculo' && vencedor !== null && (
+      {passo === 'calculo' && (
         <>
           <p className="ptd-rotulo">{t('match.win.howToScore', { name: nomes[vencedor] })}</p>
           <div className="ptd-lista-opcoes">
@@ -235,12 +229,18 @@ export default function ModalBatidaMcr({
         </>
       )}
 
-      {passo === 'confirmacao' && deltas && (
+      {passo === 'confirmacao' && (
         <>
           <p className="ptd-rotulo">
             {t(`calculator.${forma}`)} · {t('placar.mcr.qtdFan', { fan: numero(fan) })}
           </p>
           <ul className="ptd-linhas">
+            {descartador !== null && (
+              <li>
+                <span>{t('match.win.paidBy')}</span>
+                <strong>{nomes[descartador]}</strong>
+              </li>
+            )}
             {CADEIRAS.map((cadeira) => (
               <li key={cadeira}>
                 <span>{nomes[cadeira]}</span>

@@ -2301,14 +2301,7 @@
       "timer": "Timer da vez",
       "timerDesligado": "Sem timer",
       "segundos": "{{segundos}}s",
-      "emAndamento": "Em andamento",
       "finalizada": "Partida finalizada",
-      "qtdMaos": {
-        "one": "{{count}} mão",
-        "few": "{{count}} mãos",
-        "many": "{{count}} mãos",
-        "other": "{{count}} mãos"
-      },
       "partidaCompleta": "As 16 mãos foram jogadas. Finalize a partida quando quiserem.",
       "empate": "Empate",
       "semMaos": "Nenhuma mão registrada.",
@@ -2330,7 +2323,6 @@
         "semDescartador": "Escolha quem descartou.",
         "descartadorVencedor": "Quem venceu não pode ter descartado."
       },
-      "nenhumaMao": "nenhuma mão",
       "regrasMcr": "MCR",
       "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan.",
       "maoCurta": "Mão {{mao}}",
@@ -2342,24 +2334,18 @@
         "other": "{{count}} partidas"
       },
       "nenhumaPartida": "Nenhuma partida ainda.",
-      "primeiro": "1º {{nome}} {{pontos}}",
-      "apagarHistorico": "Apagar histórico",
-      "confirmarApagarHistorico": {
-        "one": "Apagar {{count}} partida finalizada? Não dá para desfazer.",
-        "few": "Apagar as {{count}} partidas finalizadas? Não dá para desfazer.",
-        "many": "Apagar as {{count}} partidas finalizadas? Não dá para desfazer.",
-        "other": "Apagar as {{count}} partidas finalizadas? Não dá para desfazer."
-      },
       "torneio": {
         "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo."
       },
       "usarFan": "Usar no placar",
       "porFan": "Fan",
       "porFanAjuda": "Digite o fan da mão",
-      "quemFezHu": "Alguém fez Hu com esse descarte?",
-      "ninguemFezHu": "Ninguém: passa a vez",
       "qtdFan": "{{fan}} fan",
-      "empateTexto": "O muro acabou sem ninguém vencer. Ninguém paga e o dealer passa."
+      "empateTexto": "O muro acabou sem ninguém vencer. Ninguém paga e o dealer passa.",
+      "ronDe": "Ron de {{name}}",
+      "falsoHu": "Falso Hu",
+      "falsoHuDe": "Falso Hu de {{name}}?",
+      "falsoHuTexto": "Quem errou paga 10 pontos a cada um dos outros três, e a mão continua."
     }
   },
   "glossario": {

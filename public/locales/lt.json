@@ -2367,14 +2367,7 @@
       "timer": "Turn timer",
       "timerDesligado": "No timer",
       "segundos": "{{segundos}}s",
-      "emAndamento": "In progress",
       "finalizada": "Game finished",
-      "qtdMaos": {
-        "one": "{{count}} hand",
-        "few": "{{count}} hands",
-        "many": "{{count}} hands",
-        "other": "{{count}} hands"
-      },
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
       "semMaos": "No hands recorded.",
@@ -2396,7 +2389,6 @@
         "semDescartador": "Choose who discarded.",
         "descartadorVencedor": "The winner can't be the discarder."
       },
-      "nenhumaMao": "no hands",
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
       "maoCurta": "Hand {{mao}}",
@@ -2408,24 +2400,18 @@
         "other": "{{count}} games"
       },
       "nenhumaPartida": "No games yet.",
-      "primeiro": "1st {{nome}} {{pontos}}",
-      "apagarHistorico": "Delete history",
-      "confirmarApagarHistorico": {
-        "one": "Delete {{count}} finished game? This can't be undone.",
-        "few": "Delete the {{count}} finished games? This can't be undone.",
-        "many": "Delete the {{count}} finished games? This can't be undone.",
-        "other": "Delete the {{count}} finished games? This can't be undone."
-      },
       "torneio": {
         "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
       },
       "usarFan": "Naudoti rezultatų lentelėje",
       "porFan": "Fan",
       "porFanAjuda": "Įveskite rankos fan",
-      "quemFezHu": "Ar kas nors paskelbė Hu iš šio išmesto akmens?",
-      "ninguemFezHu": "Niekas: kitas ėjimas",
       "qtdFan": "{{fan}} fan",
-      "empateTexto": "Siena baigėsi be laimėtojo. Niekas nemoka, dalintojas keičiasi."
+      "empateTexto": "Siena baigėsi be laimėtojo. Niekas nemoka, dalintojas keičiasi.",
+      "ronDe": "{{name}} ron",
+      "falsoHu": "Klaidingas Hu",
+      "falsoHuDe": "{{name}} klaidingas Hu?",
+      "falsoHuTexto": "Suklydęs žaidėjas moka po 10 taškų kitiems trims, o ranka tęsiasi."
     }
   },
   "glossario": {

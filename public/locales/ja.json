@@ -2275,14 +2275,7 @@
       "timer": "Turn timer",
       "timerDesligado": "No timer",
       "segundos": "{{segundos}}s",
-      "emAndamento": "In progress",
       "finalizada": "Game finished",
-      "qtdMaos": {
-        "one": "{{count}} hand",
-        "few": "{{count}} hands",
-        "many": "{{count}} hands",
-        "other": "{{count}} hands"
-      },
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
       "semMaos": "No hands recorded.",
@@ -2304,7 +2297,6 @@
         "semDescartador": "Choose who discarded.",
         "descartadorVencedor": "The winner can't be the discarder."
       },
-      "nenhumaMao": "no hands",
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
       "maoCurta": "Hand {{mao}}",
@@ -2316,24 +2308,18 @@
         "other": "{{count}} games"
       },
       "nenhumaPartida": "No games yet.",
-      "primeiro": "1st {{nome}} {{pontos}}",
-      "apagarHistorico": "Delete history",
-      "confirmarApagarHistorico": {
-        "one": "Delete {{count}} finished game? This can't be undone.",
-        "few": "Delete the {{count}} finished games? This can't be undone.",
-        "many": "Delete the {{count}} finished games? This can't be undone.",
-        "other": "Delete the {{count}} finished games? This can't be undone."
-      },
       "torneio": {
         "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
       },
       "usarFan": "点数表に使う",
       "porFan": "番数",
       "porFanAjuda": "番数を入力",
-      "quemFezHu": "この捨て牌で和了した人は？",
-      "ninguemFezHu": "なし：次の手番へ",
       "qtdFan": "{{fan}}番",
-      "empateTexto": "和了者なしで山が尽きました。支払いはなく、親が移ります。"
+      "empateTexto": "和了者なしで山が尽きました。支払いはなく、親が移ります。",
+      "ronDe": "{{name}}のロン",
+      "falsoHu": "錯和",
+      "falsoHuDe": "{{name}}の錯和？",
+      "falsoHuTexto": "誤った人が他の3人に10点ずつ払い、局は続きます。"
     }
   },
   "glossario": {

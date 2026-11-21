@@ -1,4 +1,12 @@
 import { useState } from 'react'
+import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
+import CardMesa from '@/dominios/centerpiece/interface/componentes/CardMesa'
+import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
+import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
+import { textoDaPartida } from '@/dominios/centerpiece/interface/textoPartida'
+import type { Cadeira } from '@/dominios/centerpiece/logica/partida'
+import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
+import { partidaDoHistoricoMcr } from '../logica/rankingMcr'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BuscaFiltrosLista from '@/dominios/centerpiece/interface/componentes/BuscaFiltrosLista'
@@ -15,7 +23,6 @@ import HistoricoTorneios, {
 } from '@/dominios/torneio/interface/componentes/HistoricoTorneios'
 import type { PlacarMcr } from '../logica/placar'
 import { nomeDaCadeira } from './nomes'
-import { LinhaPlacar } from './PaginaPlacarMcr'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
 
 /** O MCR não tem Clube: Todas, Partidas e Torneios. */
@@ -38,7 +45,10 @@ export default function HistoricoPlacarMcr({
   aoAbrirTorneio: (id: string) => void
   aoAbrirTemporada: (id: string) => void
 }) {
-  const { t, idioma } = useI18n()
+  const { t, idioma, numero } = useI18n()
+  const { torneios } = useTorneios()
+  const { aviso, mostrar } = useAviso()
+  const [paraExcluir, setParaExcluir] = useState<string | null>(null)
   const { jogadores } = useJogadores()
   const [tipo, setTipo] = useState<FiltroTipoMesa>('todas')
   const [busca, setBusca] = useState('')
@@ -61,7 +71,7 @@ export default function HistoricoPlacarMcr({
   ).map((item) => item.placar)
 
   return (
-    <section className="ptd-inicio">
+    <section className="ptd-inicio cm-pagina">
       <TituloTela titulo={t('match.home.history')} aoVoltar={aoVoltar} />
       <div className="ptd-filtro-historico">
         <BuscaFiltrosLista
@@ -104,27 +114,71 @@ export default function HistoricoPlacarMcr({
       ) : (
         <>
           {lista.length === 0 && <p className="ptd-vazio">{t('match.history.noMatch')}</p>}
-          <ul className="placar-mcr__lista">
-            {lista.map((placar) => (
-              <LinhaPlacar key={placar.id} placar={placar} aoAbrir={() => aoAbrir(placar.id)} />
-            ))}
-          </ul>
-          <button
-            type="button"
-            className="btn-perigo placar-mcr__apagar-tudo"
-            onClick={() => {
-              if (
-                !window.confirm(
-                  t('placar.mcr.confirmarApagarHistorico', { count: finalizados.length }),
+          {/* Os mesmos cards do Histórico do Riichi. */}
+          <ul className="cm-lista ptd-lista-historico">
+            {lista.map((placar) => {
+              const partida = partidaDoHistoricoMcr(placar)
+              const nomeNa = (cadeira: Cadeira) =>
+                nomeDaCadeira(
+                  jogadores,
+                  placar.jogadorIds[cadeira],
+                  t('placar.mcr.jogadorRemovido'),
+                  placar.convidados,
                 )
+              const titulo = placar.torneio
+                ? (torneios.find((torneio) => torneio.id === placar.torneio?.id)?.nome ??
+                  t('match.types.torneio'))
+                : t('placar.mcr.regrasMcr')
+              const apoio =
+                placar.torneio?.rodada !== undefined && placar.torneio.mesa !== undefined
+                  ? t('match.types.roundTable', {
+                      round: placar.torneio.rodada + 1,
+                      table: placar.torneio.mesa + 1,
+                    })
+                  : undefined
+              return (
+                <li key={placar.id}>
+                  <CardMesa
+                    partida={partida}
+                    modo="historico"
+                    titulo={titulo}
+                    apoio={apoio}
+                    nomeDe={nomeNa}
+                    semRiichi
+                    aoAbrir={() => aoAbrir(placar.id)}
+                    aoExcluir={() => setParaExcluir(placar.id)}
+                    aoCompartilhar={async () => {
+                      const resultado = await compartilharTexto(
+                        textoDaPartida(partida, titulo, nomeNa, t, numero, 'Mahjong Manager'),
+                      )
+                      if (resultado === 'copiado') mostrar(t('match.club.copied'))
+                      if (resultado === 'falhou') mostrar(t('match.club.shareFailed'))
+                    }}
+                  />
+                </li>
               )
-                return
-              finalizados.forEach((placar) => acoesPlacaresMcr.excluir(placar.id))
-            }}
-          >
-            {t('placar.mcr.apagarHistorico')}
-          </button>
+            })}
+          </ul>
         </>
+      )}
+      {aviso && (
+        <p className="ptd-aviso" role="status">
+          {aviso}
+        </p>
+      )}
+
+      {paraExcluir && (
+        <ModalConfirmacao
+          titulo={t('placar.mcr.excluir')}
+          texto={t('placar.mcr.confirmarExcluir')}
+          rotuloConfirmar={t('placar.mcr.excluir')}
+          perigo
+          aoFechar={() => setParaExcluir(null)}
+          aoConfirmar={() => {
+            acoesPlacaresMcr.excluir(paraExcluir)
+            setParaExcluir(null)
+          }}
+        />
       )}
     </section>
   )

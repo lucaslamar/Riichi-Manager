@@ -4,20 +4,12 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import '@/dominios/centerpiece/interface/partida.css'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
-import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
 import { criarRascunho } from '@/dominios/torneio/logica/torneio'
 import type { MesaTorneio, RodadaTorneio } from '@/dominios/torneio/logica/tipos'
-import {
-  colocacoes,
-  novoPlacar,
-  TIMER_PADRAO_SEGUNDOS,
-  totais,
-  type PlacarMcr,
-} from '../logica/placar'
-import { nomeDaCadeira } from './nomes'
+import { novoPlacar, TIMER_PADRAO_SEGUNDOS } from '../logica/placar'
 import PaginaEmAndamento from '@/dominios/centerpiece/interface/paginas/PaginaEmAndamento'
 import HistoricoPlacarMcr from './HistoricoPlacarMcr'
 import NovoPlacarMcr from './NovoPlacarMcr'
@@ -44,43 +36,6 @@ interface EntradaHub {
   aoTocar: () => void
 }
 
-/** Linha de uma partida nas listas: data, situação, mãos, o primeiro colocado e os totais. */
-export function LinhaPlacar({ placar, aoAbrir }: { placar: PlacarMcr; aoAbrir: () => void }) {
-  const { t, numero, idioma } = useI18n()
-  const { jogadores } = useJogadores()
-  const pontos = totais(placar)
-  const primeiro = colocacoes(pontos).indexOf(1)
-  const nome = (id: string) =>
-    nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'), placar.convidados)
-  return (
-    <li>
-      <button type="button" className="card placar-mcr__item" onClick={aoAbrir}>
-        <span className="placar-mcr__vento">
-          {new Date(placar.finalizadoEm ?? placar.criadoEm).toLocaleDateString(idioma)} ·{' '}
-          {t(placar.finalizadoEm ? 'placar.mcr.finalizada' : 'placar.mcr.emAndamento')} ·{' '}
-          {placar.maos.length
-            ? t('placar.mcr.qtdMaos', { count: placar.maos.length })
-            : t('placar.mcr.nenhumaMao')}
-        </span>
-        {placar.maos.length > 0 && (
-          <strong>
-            {t('placar.mcr.primeiro', {
-              nome: nome(placar.jogadorIds[primeiro]),
-              pontos: (pontos[primeiro] > 0 ? '+' : '') + numero(pontos[primeiro]),
-            })}
-          </strong>
-        )}
-        <span className="placar-mcr__resumo">
-          {placar.jogadorIds.map((id, cadeira) => (
-            <span key={cadeira}>
-              {nome(id)} {numero(pontos[cadeira])}
-            </span>
-          ))}
-        </span>
-      </button>
-    </li>
-  )
-}
 
 /**
  * Placar do modo Chinês, no mesmo formato da Partida do Riichi: o hub em cartões,

@@ -102,3 +102,41 @@ export function partidasAbertasMcr(placares: readonly PlacarMcr[]): Partida[] {
       } as unknown as Partida
     })
 }
+
+/**
+ * Placar finalizado como a partida que o card do Histórico do Riichi lê: o
+ * resultado, as cadeiras com os nomes dos convidados e os ron e tsumo da partida.
+ */
+export function partidaDoHistoricoMcr(placar: PlacarMcr): Partida {
+  const [base] = partidasDoRankingMcr([placar])
+  return {
+    ...base,
+    // Como no Riichi: o card lista do 1º ao 4º.
+    resultado: [...(base.resultado ?? [])].sort((uma, outra) => uma.colocacao - outra.colocacao),
+    criadaEm: placar.criadoEm,
+    eventos: placar.maos.flatMap((mao) =>
+      mao.tipo === 'empate'
+        ? []
+        : [{ tipo: mao.forma, detalhe: { vencedores: [mao.vencedor], pagador: mao.descartador } }],
+    ),
+    assentos: Object.fromEntries(
+      CADEIRAS.map((cadeira) => [
+        cadeira,
+        {
+          jogadorId: placar.jogadorIds[cadeira],
+          ventoInicial: ORDEM_VENTOS[cadeira],
+          nome: placar.convidados?.[placar.jogadorIds[cadeira]],
+        },
+      ]),
+    ),
+    ...(placar.torneio?.rodada !== undefined && placar.torneio.mesa !== undefined
+      ? {
+          vinculoTorneio: {
+            torneioId: placar.torneio.id,
+            rodada: placar.torneio.rodada,
+            mesa: placar.torneio.mesa,
+          },
+        }
+      : {}),
+  } as unknown as Partida
+}
