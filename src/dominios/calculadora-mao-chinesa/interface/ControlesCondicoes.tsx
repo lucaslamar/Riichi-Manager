@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useAvancoAutomatico } from '@/dominios/calculadora-mao/interface/finalizacao-mao/hooks/useAvancoAutomatico'
 import BotaoAjuda from '@/dominios/calculadora-mao/interface/modais/ajuda-secoes/BotaoAjuda'
 import { BotaoToggle } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
 import { GradeVentos } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/GradeVentos'
@@ -37,6 +38,8 @@ export default function ControlesCondicoes({
   const { t } = useI18n()
   // Como o dragão das Doras no Riichi: a flor abre as 8 pedras para escolher.
   const [escolhendoFlores, setEscolhendoFlores] = useState(false)
+  // Como no Riichi: a batida leva aos ventos, e o seu vento leva ao Calcular.
+  const avancar = useAvancoAutomatico()
   const tsumo = condicoes.forma === 'tsumo'
   const ventoDuplo = condicoes.ventoRodada === condicoes.ventoAssento
 
@@ -124,7 +127,10 @@ export default function ControlesCondicoes({
               type="button"
               className={condicoes.forma === forma ? 'ativo' : undefined}
               aria-pressed={condicoes.forma === forma}
-              onClick={() => aoMudar('forma', forma)}
+              onClick={() => {
+                aoMudar('forma', forma)
+                avancar('secao-ventos')
+              }}
             >
               {t(forma === 'ron' ? 'calculator.ron' : 'calculator.tsumo')}
             </button>
@@ -133,7 +139,10 @@ export default function ControlesCondicoes({
       </div>
 
       <div className="colunas-assuntos-finalizacao">
-        <section className="grupo-opcoes-mao grupo-opcoes-ventos etapa-opcoes-mao etapa-opcoes-ativa">
+        <section
+          id="secao-ventos"
+          className="grupo-opcoes-mao grupo-opcoes-ventos etapa-opcoes-mao etapa-opcoes-ativa"
+        >
           <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
             {t('calculator.winds')}
             <BotaoAjuda topico="mcrVentos" />
@@ -145,7 +154,10 @@ export default function ControlesCondicoes({
               selecionado={paraVentoMao(condicoes.ventoAssento)}
               destacarIgual={ventoDuplo}
               rotuloAcessivel={(wind) => t('calculator.chooseSeatWind', { wind })}
-              aoEscolher={(valor) => aoMudar('ventoAssento', paraVento(valor))}
+              aoEscolher={(valor) => {
+                aoMudar('ventoAssento', paraVento(valor))
+                avancar('secao-calcular', 'base')
+              }}
             />
             <GradeVentos
               titulo={t('calculator.roundWind')}

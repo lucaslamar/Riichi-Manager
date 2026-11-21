@@ -326,7 +326,10 @@ export default function CalculadoraMaoChinesa({
                     }
                     aoMudarFlores={calc.mudarFlores}
                   />
-                  <div className="acao-calcular-mao acao-calcular-mao-ativa rodape-finalizacao-mao">
+                  <div
+                    id="secao-calcular"
+                    className="acao-calcular-mao acao-calcular-mao-ativa rodape-finalizacao-mao"
+                  >
                     <button
                       className="btn-calcular-mao botao-calcular-finalizacao"
                       type="button"
