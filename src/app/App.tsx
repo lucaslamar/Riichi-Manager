@@ -208,7 +208,12 @@ export default function App() {
           )}
         </Suspense>
         {tela === 'regras' && <PaginaRegras />}
-        {tela === 'placarMcr' && <PaginaPlacarMcr />}
+        {/* O mesmo invólucro do módulo de Partida do Riichi: acerta a altura com a barra inferior. */}
+        {tela === 'placarMcr' && (
+          <section className="ptd-modulo">
+            <PaginaPlacarMcr />
+          </section>
+        )}
       </main>
 
       {guia && (
