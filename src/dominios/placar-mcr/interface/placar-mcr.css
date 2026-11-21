@@ -121,16 +121,6 @@
   background: var(--texto-aviso);
 }
 
-.placar-mcr__acoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.placar-mcr__acoes > * {
-  flex: 1 1 140px;
-}
-
 .placar-mcr__fan {
   display: flex;
   align-items: center;
@@ -156,7 +146,6 @@
   padding: 0;
 }
 
-.placar-mcr__previa,
 .placar-mcr__lista,
 .placar-mcr__historico {
   display: grid;
@@ -164,12 +153,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.placar-mcr__previa li {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
 }
 
 .placar-mcr__historico {
@@ -203,13 +186,6 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-}
-
-.placar-mcr__situacao {
-  margin: 0;
-  color: var(--cor-texto-suave, #40566d);
-  font-size: 0.875rem;
-  text-align: center;
 }
 
 .placar-mcr__apagar-tudo {

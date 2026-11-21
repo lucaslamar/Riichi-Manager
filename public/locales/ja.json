@@ -2283,11 +2283,8 @@
         "many": "{{count}} hands",
         "other": "{{count}} hands"
       },
-      "maoDe": "Hand {{mao}} of {{total}}",
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
-      "registrarVitoria": "Record win",
       "empate": "Draw",
-      "maos": "Hands",
       "semMaos": "No hands recorded.",
       "historicoEmpate": "Draw",
       "historicoTsumo": "{{nome}} won by tsumo · {{fan}} fan",
@@ -2298,15 +2295,10 @@
       "confirmarDesfazer": "Undo the last recorded hand?",
       "confirmarFinalizar": "Finish the game? You won't be able to record more hands.",
       "confirmarExcluir": "Delete this game? This can't be undone.",
-      "vencedor": "Winner",
-      "descartador": "Discarder",
       "fan": "Hand points (fan)",
       "fanAjuda": "Include flowers here. The 8 minimum doesn't count flowers.",
       "menosFan": "One fan less",
       "maisFan": "One fan more",
-      "salvarMao": "Save hand",
-      "previa": "Points for this hand",
-      "delta": "{{pontos}}",
       "erros": {
         "fanMinimo": "The hand needs at least 8 fan.",
         "semDescartador": "Choose who discarded.",
@@ -2334,7 +2326,14 @@
       },
       "torneio": {
         "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
-      }
+      },
+      "usarFan": "点数表に使う",
+      "porFan": "番数",
+      "porFanAjuda": "番数を入力",
+      "quemFezHu": "この捨て牌で和了した人は？",
+      "ninguemFezHu": "なし：次の手番へ",
+      "qtdFan": "{{fan}}番",
+      "empateTexto": "和了者なしで山が尽きました。支払いはなく、親が移ります。"
     }
   },
   "glossario": {

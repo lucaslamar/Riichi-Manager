@@ -109,12 +109,15 @@ export default function ModalResultadoMcr({
   resultado,
   aoFechar,
   aoNovaMao,
+  aoUsarResultado,
 }: {
   mao: MaoChinesa
   condicoes: CondicoesMcr
   resultado: ResultadoCalculoMcr
   aoFechar: () => void
   aoNovaMao: () => void
+  /** Aberta pelo Placar: leva o fan da mão para a mesa, como no Centerpiece do Riichi. */
+  aoUsarResultado?: () => void
 }) {
   const { t, numero } = useI18n()
   const idDescricao = useId()
@@ -360,6 +363,16 @@ export default function ModalResultadoMcr({
             )}
           </dl>
         </>
+      )}
+      {aoUsarResultado && (
+        <button
+          type="button"
+          className="btn-primario cp-btn-usar-resultado"
+          onClick={aoUsarResultado}
+        >
+          <i className="fas fa-check" aria-hidden="true" />
+          {t('placar.mcr.usarFan')}
+        </button>
       )}
     </Modal>
   )

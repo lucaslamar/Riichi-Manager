@@ -1,8 +1,15 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import BotaoTelaCheia from '@/compartilhado/interface/componentes/BotaoTelaCheia'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import CalculadoraMaoChinesa from '@/dominios/calculadora-mao-chinesa/interface/CalculadoraMaoChinesa'
+import { FAN_MINIMO_MCR } from '@/dominios/calculadora-mao-chinesa/logica/fan-mcr'
+import type { Vento as VentoMcr } from '@/dominios/calculadora-mao-chinesa/logica/montagem'
+import JogarDados from '@/dominios/centerpiece/interface/componentes/JogarDados'
 import MesaQuadrada from '@/dominios/centerpiece/interface/componentes/MesaQuadrada'
+import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import PlacaJogador from '@/dominios/centerpiece/interface/componentes/PlacaJogador'
 import { useRelogioVez } from '@/dominios/centerpiece/interface/hooks/useTimerVez'
 import {
@@ -29,14 +36,38 @@ import {
   type MaoMcr,
   type PlacarMcr,
 } from '../logica/placar'
-import ModalMaoMcr from './ModalMaoMcr'
+import ModalBatidaMcr, { maoDaBatida, type BatidaMcr } from './ModalBatidaMcr'
 import { nomeDaCadeira } from './nomes'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
 
+type Confirmacao = 'desfazer' | 'finalizar' | 'excluir'
+
+const TEXTOS_CONFIRMACAO: Record<Confirmacao, { titulo: string; texto: string; botao: string }> = {
+  desfazer: {
+    titulo: 'placar.mcr.desfazer',
+    texto: 'placar.mcr.confirmarDesfazer',
+    botao: 'match.table.undo',
+  },
+  finalizar: {
+    titulo: 'placar.mcr.finalizar',
+    texto: 'placar.mcr.confirmarFinalizar',
+    botao: 'placar.mcr.finalizar',
+  },
+  excluir: {
+    titulo: 'placar.mcr.excluir',
+    texto: 'placar.mcr.confirmarExcluir',
+    botao: 'placar.mcr.excluir',
+  },
+}
+
+/** Vento da mesa (Leste a Norte) no id de pedra do motor MCR (28 a 31). */
+const paraVentoMcr = (indice: number) => (28 + indice) as VentoMcr
+
 /**
- * Mesa do placar MCR com o mesmo layout da mesa do Riichi: as placas dos
- * jogadores em volta, o centro com a rodada e o timer da vez. Muda só a regra:
- * 8 pontos obrigatórios, sem honba nem palitos, e o dealer passa a cada mão.
+ * Mesa do placar MCR com a mesma tela da mesa do Riichi: as placas em volta, o
+ * centro com a rodada e o timer da vez, Descarte e Tsumo de quem está na vez e a
+ * linha Iniciar, Dados, Empate, Histórico e Desfazer. Muda só a regra: 8 pontos
+ * obrigatórios, sem honba nem palitos, e o dealer passa a cada mão.
  */
 export default function PlacarAberto({
   placar,
@@ -47,8 +78,11 @@ export default function PlacarAberto({
 }) {
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
-  const [vencedorEscolhido, setVencedorEscolhido] = useState<Cadeira | null>(null)
+  const [batida, setBatida] = useState<BatidaMcr | null>(null)
   const [maosAbertas, setMaosAbertas] = useState(false)
+  const [empateAberto, setEmpateAberto] = useState(false)
+  const [confirmando, setConfirmando] = useState<Confirmacao | null>(null)
+  const [dadosAbertos, setDadosAbertos] = useState(false)
   const nomes = placar.jogadorIds.map((id) =>
     nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'), placar.convidados),
   )
@@ -56,8 +90,10 @@ export default function PlacarAberto({
   const indiceMao = placar.maos.length
   const emAndamento = !placar.finalizadoEm
   const dealer = dealerDaMao(indiceMao)
-  const rodada = ORDEM_VENTOS[ventoDaRodada(indiceMao)]
+  const indiceRodada = ventoDaRodada(Math.min(indiceMao, TOTAL_MAOS - 1))
+  const rodada = ORDEM_VENTOS[indiceRodada]
   const numeroNaRodada = (Math.min(indiceMao, TOTAL_MAOS - 1) % MAOS_POR_RODADA) + 1
+  const daVez = placar.vez.cadeira as Cadeira
   const atualizar = (transformar: (atual: PlacarMcr) => PlacarMcr) =>
     acoesPlacaresMcr.atualizar(placar.id, transformar)
 
@@ -70,144 +106,268 @@ export default function PlacarAberto({
     placar.vez,
     emAndamento ? placar.timerSegundos : 0,
     atualizarVez,
-    vencedorEscolhido !== null,
+    batida !== null || maosAbertas || empateAberto || confirmando !== null || dadosAbertos,
   )
 
   const salvarMao = (mao: MaoMcr) => {
     atualizar((atual) => registrarMao(atual, mao))
-    setVencedorEscolhido(null)
+    setBatida(null)
   }
-  const confirmar = (chave: string) => window.confirm(t(chave))
+  const novaBatida = (forma: BatidaMcr['forma']): BatidaMcr => ({
+    forma,
+    daVez,
+    vencedor: forma === 'tsumo' ? daVez : null,
+    passo: forma === 'tsumo' ? 'calculo' : 'descarte',
+    fan: FAN_MINIMO_MCR,
+    calculadora: null,
+  })
+  const confirmar = (qual: Confirmacao) => {
+    if (qual === 'desfazer') atualizar(desfazerUltimaMao)
+    if (qual === 'finalizar') atualizar((atual) => finalizar(atual, new Date().toISOString()))
+    if (qual === 'excluir') {
+      acoesPlacaresMcr.excluir(placar.id)
+      aoVoltar()
+    }
+    setConfirmando(null)
+  }
 
   return (
-    <section className="mesa-tela">
-      <TituloTela titulo={t('menu.scoreMcr')} aoVoltar={aoVoltar} acoes={<BotaoTelaCheia />} />
+    // O mesmo invólucro da mesa do Riichi (ptd-modulo), que acerta a altura com a barra inferior.
+    <section className="ptd-modulo">
+      {/* A mesa continua montada atrás da calculadora, como no Riichi. */}
+      <div hidden={!!batida?.calculadora}>
+        <section className="mesa-tela">
+          {/* Com a calculadora aberta, o título é o dela (fica no mesmo cabeçalho). */}
+          {!batida?.calculadora && (
+            <TituloTela
+              titulo={t('menu.scoreMcr')}
+              aoVoltar={aoVoltar}
+              acoes={<BotaoTelaCheia />}
+            />
+          )}
 
-      <p className="placar-mcr__situacao" aria-live="polite">
-        {emAndamento
-          ? t('placar.mcr.maoDe', {
-              mao: numero(Math.min(indiceMao + 1, TOTAL_MAOS)),
-              total: numero(TOTAL_MAOS),
-            })
-          : t('placar.mcr.finalizada')}
-        {emAndamento && indiceMao >= TOTAL_MAOS && ` · ${t('placar.mcr.partidaCompleta')}`}
-      </p>
+          <div className="mesa-centro-tela">
+            <MesaQuadrada
+              cadeiraDealer={dealer}
+              aoTocarMesa={relogio.ligado ? relogio.tocar : undefined}
+              aoTocarDomo={relogio.ligado ? relogio.alternarPausa : undefined}
+              rotuloDomo={t(relogio.contando ? 'match.timer.pause' : 'match.timer.resume')}
+              domo={
+                <>
+                  <span className="mesa-domo-rodada" aria-hidden="true">
+                    {KANJI_VENTO[rodada]}
+                    {numeroNaRodada}
+                  </span>
+                  <span className="sr-only">
+                    {t('match.table.round', {
+                      wind: t(CHAVE_VENTO[rodada]),
+                      number: numeroNaRodada,
+                    })}
+                  </span>
+                  <span className="mesa-domo-info">
+                    {relogio.ligado && placar.vez.comecou && !relogio.contando && (
+                      <i className="fas fa-pause" aria-hidden="true" />
+                    )}{' '}
+                    {t('placar.mcr.maoCurta', { mao: numero(Math.min(indiceMao + 1, TOTAL_MAOS)) })}
+                  </span>
+                </>
+              }
+              lado={(cadeira) => ({
+                placa: (
+                  <PlacaJogador
+                    nome={nomes[cadeira]}
+                    vento={ventoDaCadeira(cadeira, dealer)}
+                    pontos={pontos[cadeira]}
+                    emRiichi={false}
+                    timer={
+                      relogio.ligado && daVez === cadeira
+                        ? {
+                            segundos: relogio.segundos,
+                            fracao: relogio.fracao,
+                            esgotado: relogio.esgotado,
+                          }
+                        : undefined
+                    }
+                    daVez={daVez === cadeira}
+                    aoAbrirMenu={() => undefined}
+                    aoSegurar={() => undefined}
+                  />
+                ),
+              })}
+            />
+          </div>
 
-      <div className="mesa-centro-tela">
-        <MesaQuadrada
-          cadeiraDealer={dealer}
-          aoTocarMesa={relogio.ligado ? relogio.tocar : undefined}
-          aoTocarDomo={relogio.ligado ? relogio.alternarPausa : undefined}
-          rotuloDomo={t(relogio.contando ? 'match.timer.pause' : 'match.timer.resume')}
-          domo={
-            <>
-              <span className="mesa-domo-rodada" aria-hidden="true">
-                {KANJI_VENTO[rodada]}
-                {numeroNaRodada}
-              </span>
-              <span className="sr-only">
-                {t('match.table.round', { wind: t(CHAVE_VENTO[rodada]), number: numeroNaRodada })}
-              </span>
-              <span className="mesa-domo-info">
-                {relogio.ligado && placar.vez.comecou && !relogio.contando && (
-                  <i className="fas fa-pause" aria-hidden="true" />
-                )}{' '}
-                {t('placar.mcr.maoCurta', { mao: numero(Math.min(indiceMao + 1, TOTAL_MAOS)) })}
-              </span>
-            </>
-          }
-          lado={(cadeira) => ({
-            placa: (
-              <PlacaJogador
-                nome={nomes[cadeira]}
-                vento={ventoDaCadeira(cadeira, dealer)}
-                pontos={pontos[cadeira]}
-                emRiichi={false}
-                timer={
-                  relogio.ligado && placar.vez.cadeira === cadeira
-                    ? {
-                        segundos: relogio.segundos,
-                        fracao: relogio.fracao,
-                        esgotado: relogio.esgotado,
-                      }
-                    : undefined
-                }
-                daVez={placar.vez.cadeira === cadeira}
-                // Tocar na placa: registrar a vitória desse jogador.
-                aoAbrirMenu={() => emAndamento && setVencedorEscolhido(cadeira)}
-                aoSegurar={() => undefined}
-              />
-            ),
-          })}
-        />
+          <div className="mesa-acoes">
+            {emAndamento ? (
+              <>
+                {indiceMao >= TOTAL_MAOS && (
+                  <p className="mesa-aviso" role="status">
+                    {t('placar.mcr.partidaCompleta')}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  className="mesa-btn-principal mesa-btn-descarte"
+                  onClick={() => setBatida(novaBatida('ron'))}
+                >
+                  {t('match.table.discard', { name: nomes[daVez] })}
+                </button>
+                <button
+                  type="button"
+                  className="mesa-btn-principal"
+                  onClick={() => setBatida(novaBatida('tsumo'))}
+                >
+                  {t('match.win.tsumoOf', { name: nomes[daVez] })}
+                </button>
+                <div
+                  className={`mesa-linha-acoes${relogio.ligado ? ' mesa-linha-acoes--timer' : ''}`}
+                >
+                  {relogio.ligado && (
+                    <button
+                      type="button"
+                      className={relogio.contando ? undefined : 'mesa-btn-timer--parado'}
+                      onClick={relogio.alternarPausa}
+                    >
+                      <i
+                        className={`fas ${relogio.contando ? 'fa-pause' : 'fa-play'}`}
+                        aria-hidden="true"
+                      />
+                      {t(
+                        relogio.contando
+                          ? 'match.timer.pauseShort'
+                          : placar.vez.comecou
+                            ? 'match.timer.resumeShort'
+                            : 'match.timer.start',
+                      )}
+                    </button>
+                  )}
+                  <JogarDados cadeiraDealer={dealer} aoMudarAberto={setDadosAbertos} />
+                  <button type="button" onClick={() => setEmpateAberto(true)}>
+                    <i className="fas fa-equals" aria-hidden="true" />
+                    {t('placar.mcr.empate')}
+                  </button>
+                  <button type="button" onClick={() => setMaosAbertas(true)}>
+                    <i className="fas fa-file-pen" aria-hidden="true" />
+                    {t('match.history.open')}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={placar.maos.length === 0}
+                    onClick={() => setConfirmando('desfazer')}
+                  >
+                    <i className="fas fa-rotate-left" aria-hidden="true" />
+                    {t('match.table.undo')}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="mesa-aviso" role="status">
+                  {t('placar.mcr.finalizada')}
+                </p>
+                <div className="mesa-linha-acoes">
+                  <button type="button" onClick={() => setMaosAbertas(true)}>
+                    <i className="fas fa-file-pen" aria-hidden="true" />
+                    {t('match.history.open')}
+                  </button>
+                  <button type="button" onClick={() => setConfirmando('excluir')}>
+                    <i className="fas fa-trash" aria-hidden="true" />
+                    {t('placar.mcr.excluir')}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </section>
       </div>
 
-      <div className="mesa-acoes">
-        {emAndamento && (
-          <>
-            <button
-              type="button"
-              className="mesa-btn-principal"
-              onClick={() => setVencedorEscolhido(placar.vez.cadeira as Cadeira)}
-            >
-              {t('placar.mcr.registrarVitoria')}
-            </button>
-            <button
-              type="button"
-              className="mesa-btn-principal"
-              onClick={() => salvarMao({ tipo: 'empate' })}
-            >
-              {t('placar.mcr.empate')}
-            </button>
-          </>
-        )}
-        <div className="placar-mcr__acoes">
-          <button
-            type="button"
-            className="btn-contorno"
-            aria-expanded={maosAbertas}
-            onClick={() => setMaosAbertas(!maosAbertas)}
-          >
-            {t('placar.mcr.maos')} ({numero(placar.maos.length)})
-          </button>
-          {emAndamento && placar.maos.length > 0 && (
-            <button
-              type="button"
-              className="btn-contorno"
-              onClick={() =>
-                confirmar('placar.mcr.confirmarDesfazer') && atualizar(desfazerUltimaMao)
-              }
-            >
-              {t('placar.mcr.desfazer')}
-            </button>
-          )}
-          {emAndamento ? (
-            <button
-              type="button"
-              className="btn-contorno"
-              onClick={() =>
-                confirmar('placar.mcr.confirmarFinalizar') &&
-                atualizar((atual) => finalizar(atual, new Date().toISOString()))
-              }
-            >
-              {t('placar.mcr.finalizar')}
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="btn-perigo"
-              onClick={() => {
-                if (!confirmar('placar.mcr.confirmarExcluir')) return
-                acoesPlacaresMcr.excluir(placar.id)
-                aoVoltar()
-              }}
-            >
-              {t('placar.mcr.excluir')}
-            </button>
-          )}
-        </div>
+      {batida && !batida.calculadora && (
+        <ModalBatidaMcr
+          batida={batida}
+          nomes={nomes}
+          pontos={pontos}
+          dealer={dealer}
+          aoMudar={setBatida}
+          aoPassarVez={() => {
+            relogio.passarPara(((daVez + 1) % 4) as Cadeira)
+            setBatida(null)
+          }}
+          aoAplicar={() => salvarMao(maoDaBatida(batida))}
+          aoFechar={() => setBatida(null)}
+        />
+      )}
 
-        {maosAbertas && (
+      {/* O CSS das calculadoras conta com elas como filhas diretas do `main`. */}
+      {batida?.calculadora &&
+        batida.vencedor !== null &&
+        createPortal(
+          <CalculadoraMaoChinesa
+            key={batida.calculadora}
+            visivel
+            titulo={`${nomes[batida.vencedor]} · ${t(`calculator.${batida.forma}`)}`}
+            aoVoltar={() => setBatida({ ...batida, calculadora: null })}
+            entradaInicial={batida.calculadora}
+            condicoesIniciais={{
+              forma: batida.forma,
+              ventoRodada: paraVentoMcr(indiceRodada),
+              ventoAssento: paraVentoMcr(
+                ORDEM_VENTOS.indexOf(ventoDaCadeira(batida.vencedor, dealer)),
+              ),
+            }}
+            aoUsarFan={(fan) =>
+              setBatida({ ...batida, fan, calculadora: null, passo: 'confirmacao' })
+            }
+          />,
+          document.querySelector('main.conteudo-principal') ?? document.body,
+        )}
+
+      {empateAberto && (
+        <ModalConfirmacao
+          titulo={t('placar.mcr.empate')}
+          texto={t('placar.mcr.empateTexto')}
+          rotuloConfirmar={t('placar.mcr.empate')}
+          aoConfirmar={() => {
+            salvarMao({ tipo: 'empate' })
+            setEmpateAberto(false)
+          }}
+          aoFechar={() => setEmpateAberto(false)}
+        />
+      )}
+
+      {confirmando && (
+        <ModalConfirmacao
+          titulo={t(TEXTOS_CONFIRMACAO[confirmando].titulo)}
+          texto={t(TEXTOS_CONFIRMACAO[confirmando].texto)}
+          rotuloConfirmar={t(TEXTOS_CONFIRMACAO[confirmando].botao)}
+          perigo={confirmando === 'excluir'}
+          aoConfirmar={() => confirmar(confirmando)}
+          aoFechar={() => setConfirmando(null)}
+        />
+      )}
+
+      {maosAbertas && (
+        <Modal
+          titulo={t('match.history.open')}
+          aoFechar={() => setMaosAbertas(false)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+          rodape={
+            emAndamento ? (
+              <div className="ptd-acoes-folha">
+                <button
+                  type="button"
+                  className="btn-primario"
+                  onClick={() => {
+                    setMaosAbertas(false)
+                    setConfirmando('finalizar')
+                  }}
+                >
+                  {t('placar.mcr.finalizar')}
+                </button>
+              </div>
+            ) : undefined
+          }
+        >
           <ol className="placar-mcr__historico">
             {placar.maos.length === 0 && <li>{t('placar.mcr.semMaos')}</li>}
             {placar.maos.map((mao, indice) => {
@@ -242,16 +402,7 @@ export default function PlacarAberto({
               )
             })}
           </ol>
-        )}
-      </div>
-
-      {vencedorEscolhido !== null && (
-        <ModalMaoMcr
-          nomes={nomes}
-          vencedorInicial={vencedorEscolhido}
-          aoSalvar={salvarMao}
-          aoFechar={() => setVencedorEscolhido(null)}
-        />
+        </Modal>
       )}
     </section>
   )

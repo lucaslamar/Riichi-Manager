@@ -2309,11 +2309,8 @@
         "many": "{{count}} mãos",
         "other": "{{count}} mãos"
       },
-      "maoDe": "Mão {{mao}} de {{total}}",
       "partidaCompleta": "As 16 mãos foram jogadas. Finalize a partida quando quiserem.",
-      "registrarVitoria": "Registrar vitória",
       "empate": "Empate",
-      "maos": "Mãos",
       "semMaos": "Nenhuma mão registrada.",
       "historicoEmpate": "Empate",
       "historicoTsumo": "{{nome}} venceu por tsumo · {{fan}} fan",
@@ -2324,15 +2321,10 @@
       "confirmarDesfazer": "Desfazer a última mão registrada?",
       "confirmarFinalizar": "Finalizar a partida? Depois não dá para registrar mais mãos.",
       "confirmarExcluir": "Excluir esta partida? Não dá para desfazer.",
-      "vencedor": "Quem venceu",
-      "descartador": "Quem descartou",
       "fan": "Pontos da mão (fan)",
       "fanAjuda": "Some as flores aqui. O mínimo de 8 não conta as flores.",
       "menosFan": "Um fan a menos",
       "maisFan": "Um fan a mais",
-      "salvarMao": "Salvar mão",
-      "previa": "Pontos desta mão",
-      "delta": "{{pontos}}",
       "erros": {
         "fanMinimo": "A mão precisa de no mínimo 8 fan.",
         "semDescartador": "Escolha quem descartou.",
@@ -2360,7 +2352,14 @@
       },
       "torneio": {
         "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo."
-      }
+      },
+      "usarFan": "Usar no placar",
+      "porFan": "Fan",
+      "porFanAjuda": "Digite o fan da mão",
+      "quemFezHu": "Alguém fez Hu com esse descarte?",
+      "ninguemFezHu": "Ninguém: passa a vez",
+      "qtdFan": "{{fan}} fan",
+      "empateTexto": "O muro acabou sem ninguém vencer. Ninguém paga e o dealer passa."
     }
   },
   "glossario": {

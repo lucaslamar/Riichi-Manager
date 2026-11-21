@@ -13,7 +13,12 @@ import {
 } from '@/dominios/calculadora-mao/logica/mao'
 import type { ErroNotacao } from '@/dominios/calculadora-mao/logica/notacao'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
-import { maoCompleta, pedrasContadas, type TipoChamada } from '../logica/montagem'
+import {
+  maoCompleta,
+  pedrasContadas,
+  type CondicoesMcr,
+  type TipoChamada,
+} from '../logica/montagem'
 import { maoDoMpsz, mpszDaMao } from '../logica/mpsz'
 import '../estilos/calculadora-mao-chinesa.css'
 import ControlesCondicoes from './ControlesCondicoes'
@@ -52,15 +57,27 @@ const CHAMADAS: { tipo: TipoChamada; acao: Acao['tipo']; chave: string; chaveCom
 export default function CalculadoraMaoChinesa({
   visivel,
   aoIrParaProximaTela,
+  condicoesIniciais,
+  entradaInicial,
+  titulo,
+  aoVoltar,
+  aoUsarFan,
 }: {
   visivel: boolean
   aoIrParaProximaTela?: () => void
+  /** Aberta pelo Placar: batida e ventos já vêm da mesa. */
+  condicoesIniciais?: Partial<CondicoesMcr>
+  entradaInicial?: 'pedras' | 'notacao'
+  titulo?: string
+  aoVoltar?: () => void
+  /** Aberta pelo Placar: o resultado ganha o botão que leva o fan total para a mesa. */
+  aoUsarFan?: (fan: number) => void
 }) {
   const { t } = useI18n()
-  const calc = useCalculadoraMaoChinesa()
+  const calc = useCalculadoraMaoChinesa(condicoesIniciais)
   const { mao } = calc
   const completa = maoCompleta(mao)
-  const [entradaNotacao, setEntradaNotacao] = useState(false)
+  const [entradaNotacao, setEntradaNotacao] = useState(entradaInicial === 'notacao')
   const [textoNotacao, setTextoNotacao] = useState('')
   const [erroNotacao, setErroNotacao] = useState<ErroNotacao | null>(null)
   // Como no Riichi: o que espera o naipe aparece na mão, tracejado.
@@ -172,7 +189,11 @@ export default function CalculadoraMaoChinesa({
 
   return (
     <div className="mcr-calculadora">
-      <TituloTela titulo={t('menu.handCalculatorChinese')} acoes={<BotaoConfiguracoes />} />
+      <TituloTela
+        titulo={titulo ?? t('menu.handCalculatorChinese')}
+        aoVoltar={aoVoltar}
+        acoes={aoVoltar ? undefined : <BotaoConfiguracoes />}
+      />
 
       <div
         className={`card card-mao-completa fluxo-calculadora ${calc.finalizando ? 'etapa-finalizacao' : 'etapa-montagem'}`}
@@ -329,6 +350,11 @@ export default function CalculadoraMaoChinesa({
           resultado={calc.resultado}
           aoFechar={calc.fecharResultado}
           aoNovaMao={calc.limpar}
+          aoUsarResultado={
+            aoUsarFan && calc.resultado.fan.valido
+              ? () => aoUsarFan(calc.resultado!.fan.fanTotal)
+              : undefined
+          }
         />
       )}
     </div>

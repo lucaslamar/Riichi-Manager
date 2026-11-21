@@ -41,14 +41,17 @@ export interface ChiPendente {
  * Estado da Calculadora de Mão Chinesa: montar a mão e, com 14 pedras, finalizar
  * (condições e cálculo). Não compartilha estado nem hooks com a japonesa.
  */
-export function useCalculadoraMaoChinesa() {
+export function useCalculadoraMaoChinesa(condicoesIniciais?: Partial<CondicoesMcr>) {
   const [mao, setMao] = useState<MaoChinesa>(MAO_CHINESA_VAZIA)
   const [acao, setAcao] = useState<TipoChamada | null>(null)
   const [chiPendente, setChiPendente] = useState<ChiPendente | null>(null)
   const [finalizando, setFinalizando] = useState(false)
   /** "Mudar batida" ligado: o próximo toque numa pedra da mão a torna a batida. */
   const [selecionandoBatida, setSelecionandoBatida] = useState(false)
-  const [condicoes, setCondicoes] = useState<CondicoesMcr>(CONDICOES_PADRAO)
+  const [condicoes, setCondicoes] = useState<CondicoesMcr>({
+    ...CONDICOES_PADRAO,
+    ...condicoesIniciais,
+  })
   const [resultado, setResultado] = useState<ResultadoCalculoMcr | null>(null)
 
   useEffect(() => marcarMaoEmAndamento(!maoVazia(mao)), [mao])
