@@ -52,6 +52,8 @@ export function useRankingGeral() {
   )
 
   return {
+    /** As partidas do modo (no Chinês, os placares MCR), para a análise do jogador. */
+    partidas,
     filtros,
     setFiltros,
     linhas,

@@ -3,7 +3,11 @@
  * placares MCR finalizados viram partidas só com o que o ranking lê (resultado,
  * data e origem). Pontos são os do MCR; não há uma, oka nem multa.
  */
-import type { Partida, ResultadoFinal } from '@/dominios/centerpiece/logica/partida'
+import {
+  ORDEM_VENTOS,
+  type Partida,
+  type ResultadoFinal,
+} from '@/dominios/centerpiece/logica/partida'
 import { CADEIRAS, colocacoes, totais, type PlacarMcr } from './placar'
 
 export function partidasDoRankingMcr(placares: readonly PlacarMcr[]): Partida[] {
@@ -31,7 +35,13 @@ export function partidasDoRankingMcr(placares: readonly PlacarMcr[]): Partida[] 
         variante: 'yonma',
         registradaManual: false,
         config: {},
-        assentos: {},
+        // A análise do jogador lê o vento de cada um na primeira mão.
+        assentos: Object.fromEntries(
+          CADEIRAS.map((cadeira) => [
+            cadeira,
+            { jogadorId: placar.jogadorIds[cadeira], ventoInicial: ORDEM_VENTOS[cadeira] },
+          ]),
+        ),
       } as unknown as Partida
     })
 }

@@ -283,8 +283,8 @@ function TelasCenterpiece({
       <PaginaRanking
         aoVoltar={modo === 'ranking' ? undefined : voltar}
         aoAbrirJogadores={() => abrir({ nome: 'jogadores' })}
-        // No modo Chinês, a análise do jogador e o registro manual são do Riichi.
-        aoAbrirJogador={isChines ? undefined : (id) => abrir({ nome: 'jogador', id })}
+        // No modo Chinês, o registro manual é do Riichi. A análise do jogador usa os placares MCR.
+        aoAbrirJogador={(id) => abrir({ nome: 'jogador', id })}
         aoRegistrarPartida={isChines ? undefined : () => abrir({ nome: 'registrarFinalizada' })}
       />
     )
