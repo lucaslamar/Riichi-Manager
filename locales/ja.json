@@ -27,7 +27,10 @@
     "ranking": "ランキング",
     "more": "More",
     "moreOptions": "More options",
-    "backToMain": "Back to the main options"
+    "backToMain": "Back to the main options",
+    "handCalculatorChinese": "Chinese Hand Calculator",
+    "scoreMcr": "Scoreboard",
+    "scoreMcrShort": "Score"
   },
   "actions": {
     "back": "戻る",
@@ -546,7 +549,13 @@
       "caseFourth": "4枚目の5"
     },
     "value1han": "翻数: 1翻",
-    "valueYakuman": "翻数: 役満"
+    "valueYakuman": "翻数: 役満",
+    "mcr": {
+      "guide": "帽子でポケットガイドを開きます。例つきの81番種、用語集、検索を対局中に確認できます。",
+      "finish": "手牌が揃ったら「手牌を確定」で和了の設定へ：花牌、ロン/ツモ、風、特殊条件。",
+      "notationTip": "複数の数字を入れてから最後にスートを押すと全部に適用されます。各数字の下にzで変わる字牌が出ます。ACで全消去。牌キーボードへ戻るには「牌」をタップか右にスワイプ。",
+      "guideCard": "各番種の例と点数"
+    }
   },
   "rulesModal": {
     "open": "計算ルールを開く",
@@ -1546,7 +1555,8 @@
         "pon": "Who called pon?",
         "kan": "Who called kan?",
         "ron": "Who called ron?"
-      }
+      },
+      "count": "各牌の捨て枚数"
     },
     "furiten": {
       "waiting": "waiting on {{tiles}}",
@@ -2161,6 +2171,165 @@
       "pon": "ポン",
       "kanAberto": "明槓",
       "kanFechado": "暗槓"
+    }
+  },
+  "configuracoes": {
+    "mahjong": {
+      "titulo": "Mahjong",
+      "descricao": "Rules used across the whole app.",
+      "japones": "Japanese",
+      "chines": "Chinese",
+      "ajudaJapones": "Japanese: Riichi (han, fu, Yaku).",
+      "ajudaChines": "Chinese: MCR / Guobiao (81 fan, 8 minimum).",
+      "confirmarTroca": "Switching modes clears the current hand. Continue?"
+    }
+  },
+  "mcr": {
+    "entrada": {
+      "flores": "Flowers and seasons",
+      "removerFlor": "Remove {{flor}}",
+      "erroQuatro": "同じ牌は4枚までです。"
+    },
+    "condicoes": {
+      "titulo": "Conditions",
+      "forma": "Win",
+      "ron": "Ron (discard)",
+      "tsumo": "Tsumo (self-drawn)",
+      "ventoRodada": "Prevalent wind",
+      "ventoAssento": "Seat wind",
+      "ultimaParede": "Last tile from the wall",
+      "ultimoDescarte": "Last discard",
+      "reposicaoKan": "Win on a Kan replacement tile",
+      "rouboKan": "Robbing the Kan",
+      "ultimaDoTipo": "Last tile of its kind",
+      "ultimaDoTipoAjuda": "The other three are already visible."
+    },
+    "resultado": {
+      "calcular": "Calculate",
+      "titulo": "Result",
+      "fanTotal": "{{total}} fan",
+      "semFlores": "{{fan}} fan without flowers + {{flores}} from flowers",
+      "invalida": "Invalid hand: 8 fan minimum (not counting flowers).",
+      "naoBate": "These tiles don't form a winning hand.",
+      "pagamentos": "Payments",
+      "vencedorRecebe": "Winner receives",
+      "descartador": "Discarder pays",
+      "outro": "Each other player pays",
+      "cadaJogador": "Each player pays",
+      "pontos": "{{pontos}} points",
+      "vezes": "×{{vezes}}",
+      "invalidaTitulo": "Invalid hand"
+    },
+    "erros": {
+      "incompleta": "Build 14 tiles to calculate. A Kan counts as 3.",
+      "semKan": "Winning on a Kan replacement tile needs a Kan in the hand.",
+      "rouboDoKan": "Robbing the Kan can't combine with the last discard or another identical tile in the hand.",
+      "ultimaDoTipo": "Last tile of its kind doesn't apply with another identical tile in the hand."
+    },
+    "fan": {
+      "mingangang": "Melded and Concealed Kong"
+    },
+    "flores": {
+      "1": "Plum flower",
+      "2": "Orchid flower",
+      "3": "Chrysanthemum flower",
+      "4": "Bamboo flower",
+      "5": "Spring",
+      "6": "Summer",
+      "7": "Autumn",
+      "8": "Winter"
+    }
+  },
+  "guiaBolso": {
+    "mcr": {
+      "pontosFan": "{{pontos}} points",
+      "numero": "No. {{id}}",
+      "riichi": "Riichi: {{yaku}}",
+      "detalhes": "Details",
+      "naoCombina": "Doesn't combine with:",
+      "irPara": "Go to {{nome}}",
+      "semEquivalenteTitulo": "Riichi Yaku with no equivalent",
+      "semEquivalenteExato": "No exact equivalent: {{lista}}.",
+      "naoExistem": "Don't exist in MCR: {{lista}}.",
+      "porPontos": "By points",
+      "abaRiichi": "Riichi",
+      "abas": {
+        "chows": "Chows",
+        "pungs": "Pungs",
+        "kongs": "Kongs",
+        "ventos": "Winds",
+        "dragoes": "Dragons",
+        "naipes": "Suits",
+        "series-especificas": "Series",
+        "pecas-especificas": "Tiles",
+        "maos": "Hands",
+        "maos-especiais": "Special",
+        "esperas": "Waits",
+        "ultima-peca": "Last tile",
+        "outros": "Others"
+      },
+      "busca": "Search fan, 汉字, English or yaku",
+      "rotuloBusca": "Search the Pocket Guide",
+      "exemplo": "Example hand: {{pedras}}",
+      "condicoes": "Example conditions",
+      "tambemContam": "This hand also scores:",
+      "totalExemplo": "Total: {{total}} fan"
+    }
+  },
+  "placar": {
+    "mcr": {
+      "jogadorRemovido": "Removed player",
+      "timer": "Turn timer",
+      "timerDesligado": "No timer",
+      "segundos": "{{segundos}}s",
+      "finalizada": "Game finished",
+      "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
+      "empate": "Draw",
+      "desfazer": "Undo last hand",
+      "finalizar": "Finish game",
+      "excluir": "Delete game",
+      "confirmarDesfazer": "Undo the last recorded hand?",
+      "confirmarFinalizar": "Finish the game? You won't be able to record more hands.",
+      "confirmarExcluir": "Delete this game? This can't be undone.",
+      "fan": "Hand points (fan)",
+      "fanAjuda": "Include flowers here. The 8 minimum doesn't count flowers.",
+      "menosFan": "One fan less",
+      "maisFan": "One fan more",
+      "erros": {
+        "fanMinimo": "The hand needs at least 8 fan.",
+        "semDescartador": "Choose who discarded.",
+        "descartadorVencedor": "The winner can't be the discarder."
+      },
+      "regrasMcr": "MCR",
+      "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
+      "maoCurta": "Hand {{mao}}",
+      "novaPartidaAjuda": "Keep score of an MCR game.",
+      "qtdPartidas": {
+        "one": "{{count}} game",
+        "few": "{{count}} games",
+        "many": "{{count}} games",
+        "other": "{{count}} games"
+      },
+      "nenhumaPartida": "No games yet.",
+      "torneio": {
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+      },
+      "usarFan": "点数表に使う",
+      "porFan": "番数",
+      "porFanAjuda": "番数を入力",
+      "qtdFan": "{{fan}}番",
+      "empateTexto": "和了者なしで山が尽きました。支払いはなく、親が移ります。",
+      "ronDe": "{{name}}のロン",
+      "falsoHu": "錯和",
+      "falsoHuDe": "{{name}}の錯和？",
+      "falsoHuTexto": "誤った人が他の3人に10点ずつ払い、局は続きます。",
+      "qtdPontos": "{{pontos}}点",
+      "verMesa": "卓を見る"
+    }
+  },
+  "glossario": {
+    "mcr": {
+      "diferenteRiichi": "Different from Riichi"
     }
   }
 }
