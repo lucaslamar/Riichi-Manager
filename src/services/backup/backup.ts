@@ -28,6 +28,8 @@ export interface DadosBackup {
   regrasRegistro: unknown
   /** Placares do modo Chinês (MCR). Backups anteriores à 7.0.0 não têm: vira lista vazia. */
   placaresMcr: PlacarMcr[]
+  /** Clube do modo Chinês (lista, sorteio e encontros). Backups anteriores não têm: vazio. */
+  clubeMcr?: DadosBackup['clube']
 }
 
 export interface ArquivoBackup {
@@ -108,6 +110,7 @@ export function validarBackup(entrada: string | unknown): ValidacaoBackup {
         configMesa: dados.configMesa ?? null,
         regrasRegistro: dados.regrasRegistro ?? null,
         placaresMcr: dados.placaresMcr ?? [],
+        ...(dados.clubeMcr ? { clubeMcr: dados.clubeMcr } : {}),
       },
     },
   }
@@ -187,6 +190,18 @@ export function mesclarBackup(locais: DadosBackup, vindos: DadosBackup): DadosBa
     temporadas: somarPorId(locais.temporadas, vindos.temporadas),
     listasTorneio: somarPorId(locais.listasTorneio, vindos.listasTorneio),
     placaresMcr: somarPorId(locais.placaresMcr, vindos.placaresMcr),
+    ...(locais.clubeMcr || vindos.clubeMcr
+      ? {
+          clubeMcr:
+            locais.clubeMcr && vindos.clubeMcr
+              ? {
+                  ...locais.clubeMcr,
+                  sorteio: locais.clubeMcr.sorteio ?? vindos.clubeMcr.sorteio,
+                  encontros: somarPorId(locais.clubeMcr.encontros, vindos.clubeMcr.encontros),
+                }
+              : (locais.clubeMcr ?? vindos.clubeMcr),
+        }
+      : {}),
     clube: {
       ...locais.clube,
       sorteio: locais.clube.sorteio ?? vindos.clube.sorteio,
@@ -247,5 +262,6 @@ export function unificarJogadores(
     torneios: trocar(dados.torneios),
     clube: trocar(dados.clube),
     placaresMcr: trocar(dados.placaresMcr),
+    ...(dados.clubeMcr ? { clubeMcr: trocar(dados.clubeMcr) } : {}),
   }
 }

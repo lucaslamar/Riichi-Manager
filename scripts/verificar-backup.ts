@@ -251,4 +251,18 @@ teste('placares MCR: backup antigo, mescla e unificação de jogadores', () => {
   )
 })
 
+teste('clube MCR: vai no backup e mescla os encontros', () => {
+  const clube = gerarClubeDeTeste(AGORA)
+  const encontro = clube.encontros[0]
+  const comClube: DadosBackup = {
+    ...VAZIO,
+    clubeMcr: { lista: 'Ana', sorteio: null, encontros: [encontro] },
+  }
+  const lido = validarBackup(JSON.stringify(montarBackup(comClube, '7.0.0', AGORA)))
+  assert.ok(lido.ok)
+  assert.equal(lido.backup.dados.clubeMcr?.encontros[0].id, encontro.id)
+  assert.equal(mesclarBackup(VAZIO, comClube).clubeMcr?.encontros.length, 1, 'o clube MCR vindo entra')
+  assert.equal(mesclarBackup(VAZIO, VAZIO).clubeMcr, undefined, 'sem clube MCR, nada muda')
+})
+
 console.log(`Backup ok: ${testes} testes.`)

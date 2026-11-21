@@ -42,6 +42,7 @@ export function lerDadosLocais(armazenamento: ArmazenamentoChaveValor): DadosBac
     configMesa: carregarUltimaConfig(armazenamento),
     regrasRegistro: carregarRegrasRegistro(armazenamento),
     placaresMcr: carregarPlacaresMcr(armazenamento),
+    clubeMcr: carregarClube(armazenamento, '-mcr'),
   }
 }
 
@@ -62,4 +63,5 @@ export function gravarDados(armazenamento: ArmazenamentoChaveValor, dados: Dados
   if (dados.regrasRegistro)
     salvarRegrasRegistro(armazenamento, dados.regrasRegistro as RegrasRegistroSalvas)
   salvarPlacaresMcr(armazenamento, dados.placaresMcr)
+  if (dados.clubeMcr) salvarClube(armazenamento, dados.clubeMcr, '-mcr')
 }
