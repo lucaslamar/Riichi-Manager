@@ -566,7 +566,19 @@
       "guide": "El gorro abre la Guía de bolsillo: los 81 fan con ejemplos, el glosario y la búsqueda para consultar durante el juego.",
       "finish": "Con la mano completa, Finalizar mano lleva a las opciones de la victoria: flores, ron o tsumo, vientos y condiciones especiales.",
       "notationTip": "Puedes armar varios grupos y números y tocar el palo solo al final, y vale para todos. Cada número muestra abajo el honor que se vuelve con la z. AC borra todo. Para volver al teclado de fichas, toca Fichas o desliza a la derecha.",
-      "guideCard": "Cada fan con ejemplo y cuánto vale"
+      "guideCard": "Cada fan con ejemplo y cuánto vale",
+      "tsumo": "Ganaste con la ficha que robaste. Vale Autorrobo (1 fan), y cada uno de los otros tres paga 8 más el fan de la mano.",
+      "ron": "Ganaste con el descarte de otro jugador. Quien descartó paga 8 más el fan de la mano, y los otros dos pagan 8 cada uno.",
+      "oculta": "Sin Chi, Pon ni Kan abiertos: en ron vale Mano Oculta (2 fan), y en tsumo, Mano Totalmente Oculta (4 fan) en lugar de ella y del Autorrobo.",
+      "ventoAssento": "El viento de quien ganó. Un trío o cuarteto de él vale Viento del Asiento (2 fan). El dealer es el Este.",
+      "ventoRodada": "El viento de la ronda. Un trío o cuarteto de él vale Viento de la Mesa (2 fan). Si es también el del asiento, el trío cuenta los dos.",
+      "flores": "Las 8 fichas de flor y estación valen 1 fan cada una. En MCR ninguna tiene relación con el asiento.",
+      "floresMinimo": "Las flores no cuentan para el mínimo de 8 fan: solo suman cuando la mano ya vale 8.",
+      "ultimaTitulo": "Última ficha",
+      "ultima": "Ganar con la última ficha del muro (tsumo) vale Última Ficha del Muro (8 fan). Ganar con el último descarte (ron) vale Último Descarte (8 fan).",
+      "kanTitulo": "Kan",
+      "kan": "En tsumo, ganar con la ficha de reposición del Kan vale Victoria con Reposición (8 fan). En ron, ganar con la ficha que otro añade a su Pon vale Robo del Kong (8 fan).",
+      "ultimaDoTipo": "Ganar con la última copia de una ficha, con las otras tres a la vista, vale Última Copia (4 fan)."
     }
   },
   "rulesModal": {
@@ -2211,7 +2223,7 @@
       "titulo": "Mahjong",
       "descricao": "Rules used across the whole app.",
       "japones": "Japanese",
-      "chines": "Chinese",
+      "chines": "Chino (MCR)",
       "ajudaJapones": "Japanese: Riichi (han, fu, Yaku).",
       "ajudaChines": "Chinese: MCR / Guobiao (81 fan, 8 minimum).",
       "confirmarTroca": "Switching modes clears the current hand. Continue?"
@@ -2221,7 +2233,8 @@
     "entrada": {
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
-      "erroQuatro": "Cada ficha existe solo cuatro veces."
+      "erroQuatro": "Cada ficha existe solo cuatro veces.",
+      "escolherFlores": "Elegir las flores"
     },
     "condicoes": {
       "titulo": "Conditions",

@@ -554,7 +554,19 @@
       "guide": "帽子でポケットガイドを開きます。例つきの81番種、用語集、検索を対局中に確認できます。",
       "finish": "手牌が揃ったら「手牌を確定」で和了の設定へ：花牌、ロン/ツモ、風、特殊条件。",
       "notationTip": "複数の数字を入れてから最後にスートを押すと全部に適用されます。各数字の下にzで変わる字牌が出ます。ACで全消去。牌キーボードへ戻るには「牌」をタップか右にスワイプ。",
-      "guideCard": "各番種の例と点数"
+      "guideCard": "各番種の例と点数",
+      "tsumo": "自分で引いた牌で和了。自摸(1番)がつき、他の3人がそれぞれ8点+番数を払います。",
+      "ron": "他家の捨て牌で和了。放銃者が8点+番数、他の2人が8点ずつ払います。",
+      "oculta": "副露がなければ、ロンで門前清(2番)、ツモでは不求人(4番)が門前清と自摸の代わりにつきます。",
+      "ventoAssento": "和了者の風。その刻子・槓子で門風刻(2番)。親が東です。",
+      "ventoRodada": "場の風。その刻子・槓子で圈風刻(2番)。自風と同じなら両方つきます。",
+      "flores": "花牌と季節牌の8枚は1枚1番。MCRでは席との関係はありません。",
+      "floresMinimo": "花牌は8番縛りに数えません。手が8番以上のときだけ加算されます。",
+      "ultimaTitulo": "最後の牌",
+      "ultima": "山の最後の牌でツモ和了すると妙手回春(8番)、最後の捨て牌でロン和了すると海底捞月(8番)。",
+      "kanTitulo": "槓",
+      "kan": "ツモで槓の嶺上牌で和了すると杠上开花(8番)。ロンで他家の加槓の牌で和了すると抢杠和(8番)。",
+      "ultimaDoTipo": "他の3枚が見えている牌の最後の1枚で和了すると和绝张(4番)。"
     }
   },
   "rulesModal": {
@@ -2178,7 +2190,7 @@
       "titulo": "Mahjong",
       "descricao": "Rules used across the whole app.",
       "japones": "Japanese",
-      "chines": "Chinese",
+      "chines": "中国麻雀 (MCR)",
       "ajudaJapones": "Japanese: Riichi (han, fu, Yaku).",
       "ajudaChines": "Chinese: MCR / Guobiao (81 fan, 8 minimum).",
       "confirmarTroca": "Switching modes clears the current hand. Continue?"
@@ -2188,7 +2200,8 @@
     "entrada": {
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
-      "erroQuatro": "同じ牌は4枚までです。"
+      "erroQuatro": "同じ牌は4枚までです。",
+      "escolherFlores": "花牌を選ぶ"
     },
     "condicoes": {
       "titulo": "Conditions",

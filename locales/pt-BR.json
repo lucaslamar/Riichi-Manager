@@ -560,7 +560,19 @@
       "guide": "O chapéu abre o Guia de bolso: os 81 fan com exemplos, o glossário e a busca para consultar durante o jogo.",
       "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: flores, ron ou tsumo, ventos e condições especiais. Cada parte de lá tem o próprio ?.",
       "notationTip": "Dá para montar vários grupos e números e tocar no naipe só no fim, e ele vale para todos. Cada número mostra embaixo a honra que vira com o z. AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize o dedo para a direita.",
-      "guideCard": "Cada fan com exemplo e quanto vale"
+      "guideCard": "Cada fan com exemplo e quanto vale",
+      "tsumo": "Você bateu com a pedra que comprou. Vale Compra Própria (1 fan), e cada um dos três paga 8 mais o fan da mão.",
+      "ron": "Você bateu com o descarte de outro jogador. Quem descartou paga 8 mais o fan da mão, e os outros dois pagam 8 cada.",
+      "oculta": "Sem Chi, Pon ou Kan aberto: no ron vale Mão Oculta (2 fan), e no tsumo, Mão Completamente Oculta (4 fan) no lugar dela e da Compra Própria.",
+      "ventoAssento": "O vento de quem bateu. Uma trinca ou quadra dele vale Vento da Posição (2 fan). O dealer é o Leste.",
+      "ventoRodada": "O vento da rodada. Uma trinca ou quadra dele vale Vento da Mesa (2 fan). Se for o mesmo vento do assento, a trinca conta os dois.",
+      "flores": "As 8 pedras de flor e estação (ameixa, orquídea, crisântemo, bambu, primavera, verão, outono e inverno) valem 1 fan cada. No MCR nenhuma tem relação com o assento.",
+      "floresMinimo": "As flores não contam para o mínimo de 8 fan: só somam depois que a mão já vale 8.",
+      "ultimaTitulo": "Última pedra",
+      "ultima": "Bater com a última pedra da parede (tsumo) vale Última Peça do Muro (8 fan). Bater com o último descarte (ron) vale Último Descarte (8 fan).",
+      "kanTitulo": "Kan",
+      "kan": "No tsumo, bater com a pedra de reposição do Kan vale Vitória na Peça de Reposição (8 fan). No ron, bater com a pedra que outro jogador pôs no Pon para virar Kan vale Assalto ao Kong (8 fan).",
+      "ultimaDoTipo": "Bater com a última cópia de uma pedra, quando as outras três já estão à vista na mesa, vale Última Cópia (4 fan)."
     }
   },
   "rulesModal": {
@@ -2204,7 +2216,7 @@
       "titulo": "Mahjong",
       "descricao": "Regras usadas em todo o app.",
       "japones": "Japonês",
-      "chines": "Chinês",
+      "chines": "Chinês (MCR)",
       "ajudaJapones": "Japonês: Riichi (han, fu, Yaku).",
       "ajudaChines": "Chinês: MCR / Guobiao (81 fan, mínimo 8).",
       "confirmarTroca": "Trocar de modo limpa a mão atual. Continuar?"
@@ -2214,7 +2226,8 @@
     "entrada": {
       "flores": "Flores e estações",
       "removerFlor": "Remover {{flor}}",
-      "erroQuatro": "Cada pedra existe só quatro vezes."
+      "erroQuatro": "Cada pedra existe só quatro vezes.",
+      "escolherFlores": "Escolher as flores"
     },
     "condicoes": {
       "titulo": "Condições",
