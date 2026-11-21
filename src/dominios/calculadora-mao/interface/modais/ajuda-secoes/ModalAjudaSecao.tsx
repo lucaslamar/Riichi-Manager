@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
@@ -53,68 +54,97 @@ function BlocosAjuda({ blocos, ignorar }: { blocos: BlocoAjuda[]; ignorar?: stri
 
   return (
     <section className="glossario-bloco">
-      {blocos.map(({ subtitulo, item, icone, dica, paragrafos = [], visual, exemplo, cena, literal, divisoria, apoio = [] }, indice) => {
-        const tx = (chave: string) => (literal ? chave : t(chave))
-        if (dica) {
-          return paragrafos.map((chave) => (
-            <p key={chave} className="bloco-dica ajuda-dica">
-              <i className="fas fa-circle-info" aria-hidden="true" />{' '}
-              {subtitulo && <strong>{t(subtitulo)}: </strong>}
-              <TextoAjuda texto={t(chave)} ignorar={ignorar} />
+      {blocos.map(
+        (
+          {
+            subtitulo,
+            item,
+            icone,
+            dica,
+            paragrafos = [],
+            visual,
+            exemplo,
+            cena,
+            literal,
+            divisoria,
+            apoio = [],
+          },
+          indice,
+        ) => {
+          const tx = (chave: string) => (literal ? chave : t(chave))
+          if (dica) {
+            return paragrafos.map((chave) => (
+              <p key={chave} className="bloco-dica ajuda-dica">
+                <i className="fas fa-circle-info" aria-hidden="true" />{' '}
+                {subtitulo && <strong>{t(subtitulo)}: </strong>}
+                <TextoAjuda texto={t(chave)} ignorar={ignorar} />
+              </p>
+            ))
+          }
+          const textos = paragrafos.map((chave) => (
+            <p
+              key={chave}
+              className={subtitulo ? 'glossario-item__texto' : 'glossario-bloco__intro'}
+            >
+              <TextoAjuda texto={tx(chave)} ignorar={ignorar} />
             </p>
           ))
-        }
-        const textos = paragrafos.map((chave) => (
-          <p key={chave} className={subtitulo ? 'glossario-item__texto' : 'glossario-bloco__intro'}>
-            <TextoAjuda texto={tx(chave)} ignorar={ignorar} />
-          </p>
-        ))
-        if (!subtitulo) {
+          if (!subtitulo) {
+            return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
+              <Fragment key={indice}>
+                {textos}
+                {visual && <VisualAjuda visual={visual} />}
+                {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
+                {cena && <CenaAjuda nome={cena} />}
+              </Fragment>
+            )
+          }
+          if (!item && paragrafos.length === 0) {
+            return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
+              <h3
+                key={indice}
+                className={`glossario-bloco__titulo${divisoria ? ' glossario-bloco__titulo--divisoria' : ''}`}
+              >
+                {t(subtitulo)}
+              </h3>
+            )
+          }
           return (
             // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
-            <Fragment key={indice}>
+            <div key={indice} className="glossario-item">
+              <h4 className="glossario-item__nome">
+                {tx(subtitulo)}
+                {icone && <i className={`fas ${icone} icone-subtitulo-ajuda`} aria-hidden="true" />}
+              </h4>
               {textos}
+              {apoio.map((linha) => (
+                <p key={linha} className="glossario-item__apoio">
+                  {tx(linha)}
+                </p>
+              ))}
               {visual && <VisualAjuda visual={visual} />}
               {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
               {cena && <CenaAjuda nome={cena} />}
-            </Fragment>
+            </div>
           )
-        }
-        if (!item && paragrafos.length === 0) {
-          return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
-            <h3
-              key={indice}
-              className={`glossario-bloco__titulo${divisoria ? ' glossario-bloco__titulo--divisoria' : ''}`}
-            >
-              {t(subtitulo)}
-            </h3>
-          )
-        }
-        return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos, nunca reordenados
-          <div key={indice} className="glossario-item">
-            <h4 className="glossario-item__nome">
-              {tx(subtitulo)}
-              {icone && <i className={`fas ${icone} icone-subtitulo-ajuda`} aria-hidden="true" />}
-            </h4>
-            {textos}
-            {apoio.map((linha) => (
-              <p key={linha} className="glossario-item__apoio">
-                {tx(linha)}
-              </p>
-            ))}
-            {visual && <VisualAjuda visual={visual} />}
-            {exemplo && <PedrasExemplo grupos={parseMpszGrupos(exemplo)} rotulo={exemplo} />}
-            {cena && <CenaAjuda nome={cena} />}
-          </div>
-        )
-      })}
+        },
+      )}
     </section>
   )
 }
 
 /** Explica uma seção da finalização (aberta pelo botão "?" ao lado do título). */
+/** Trechos que só fazem sentido no Riichi. */
+const SO_RIICHI = new Set(['sectionHelp.tiles.waits', 'sectionHelp.tiles.akaHan'])
+/** Trechos do Riichi com uma versão do MCR. */
+const TEXTO_MCR: Record<string, string> = {
+  'sectionHelp.tiles.guide': 'sectionHelp.mcr.guide',
+  'sectionHelp.tiles.finish': 'sectionHelp.mcr.finish',
+  'sectionHelp.notation.tip': 'sectionHelp.mcr.notationTip',
+}
+
 export default function ModalAjudaSecao({
   topico,
   blocosExtras = [],
@@ -127,7 +157,16 @@ export default function ModalAjudaSecao({
 }) {
   const { t } = useI18n()
   const { titulo, blocos: blocosFixos = [], abas, tema, termosProprios } = TOPICOS_AJUDA[topico]
-  const blocos = [...blocosFixos, ...blocosExtras]
+  const chines = useModoJogoAtual() === 'mcr'
+  // MCR: a mesma ajuda, sem o que é só do Riichi (han nas esperas, Aka dora) e com o texto do MCR.
+  const blocos = [...blocosFixos, ...blocosExtras].flatMap((bloco) => {
+    if (!chines) return [bloco]
+    if (bloco.cena === 'pecasAka' || bloco.cena === 'mpszAka') return []
+    const paragrafos = bloco.paragrafos
+      ?.filter((chave) => !SO_RIICHI.has(chave))
+      .map((chave) => TEXTO_MCR[chave] ?? chave)
+    return [{ ...bloco, paragrafos }]
+  })
   const [indiceAba, setIndiceAba] = useState(0)
 
   return (

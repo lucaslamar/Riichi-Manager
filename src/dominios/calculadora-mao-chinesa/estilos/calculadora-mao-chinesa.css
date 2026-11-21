@@ -1,0 +1,170 @@
+/* O layout (mão, barra de chamadas e teclado) vem dos estilos da Calculadora de
+   Mão japonesa (compartilhado/interface/estilos/dominios/calculadoras). Aqui fica
+   só o que o MCR tem a mais: flores, condições e resultado em fan. */
+
+.mcr-flores-mao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.mcr-secao {
+  display: grid;
+  gap: 10px;
+}
+
+.mcr-secao__titulo {
+  margin: 0;
+  color: var(--cor-texto, #1a3a5a);
+  font-size: 1.1rem;
+}
+
+.mcr-secao__subtitulo {
+  margin: 8px 0 0;
+  color: var(--cor-texto, #1a3a5a);
+  font-size: 1rem;
+}
+
+.mcr-rotulo {
+  color: var(--cor-texto, #1a3a5a);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.mcr-resultado__detalhe {
+  margin: 0;
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.875rem;
+}
+
+.mcr-aviso {
+  margin: 0;
+  border: 1px solid var(--texto-aviso);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--texto-aviso);
+  font-weight: 700;
+}
+
+.mcr-interruptores {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.mcr-resultado__total {
+  margin: 0;
+  color: var(--cor-primario, #2196f3);
+  font-size: 2.2rem;
+  font-weight: 900;
+}
+
+.mcr-lista-fan {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mcr-lista-fan__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--cor-borda, #e2e8f0);
+  padding: 6px 0;
+  color: var(--cor-texto, #1a3a5a);
+}
+
+.mcr-lista-fan__chines {
+  margin-left: 8px;
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.85rem;
+}
+
+.mcr-lista-fan__valor {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.mcr-pagamentos {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  margin: 0;
+  color: var(--cor-texto, #1a3a5a);
+}
+
+.mcr-pagamentos dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  text-align: right;
+}
+
+/* Resultado: ao abrir um fan, as pedras dele acendem e as outras ficam apagadas. */
+.modal-resultado .mcr-destacando .apagada,
+.modal-resultado .mcr-destacando .resultado-meld.apagada {
+  opacity: 0.4;
+}
+
+.modal-resultado .mcr-flores-resultado.destaque-yaku .resultado-pedra {
+  border-radius: 5px;
+  background: var(--cor-aviso, #ffd700);
+  box-shadow: 0 0 0 2px var(--cor-aviso, #e6b800);
+}
+
+.mcr-lista-fan__item--abre {
+  display: block;
+  padding: 0;
+}
+
+.mcr-lista-fan__botao {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  padding: 6px 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mcr-lista-fan__botao .mcr-lista-fan__nome {
+  flex: 1;
+}
+
+.mcr-lista-fan__detalhe {
+  display: grid;
+  gap: 6px;
+  padding: 0 0 10px;
+  color: var(--cor-texto-suave, #40566d);
+}
+
+.mcr-lista-fan__detalhe[hidden] {
+  display: none;
+}
+
+.mcr-lista-fan__detalhe p {
+  margin: 0;
+}
+
+.mcr-lista-fan__meta {
+  font-weight: 700;
+}
+
+.fan-mcr__riichi {
+  justify-self: start;
+  border: 1px solid var(--texto-aviso);
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: var(--texto-aviso);
+  font-size: 0.85rem;
+  font-weight: 700;
+}

@@ -1,0 +1,135 @@
+/* O cartão, as abas e a busca vêm do Guia de bolso do Riichi (modal-yakus.css).
+   Aqui fica só o que o MCR tem a mais: equivalente no Riichi e "Não combina com". */
+
+.fan-mcr {
+  scroll-margin-top: 80px;
+}
+
+.fan-mcr:focus-visible {
+  outline: 3px solid var(--cor-foco, #2196f3);
+  outline-offset: 2px;
+}
+
+.fan-mcr__riichi {
+  justify-self: start;
+  border: 1px solid var(--texto-aviso);
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: var(--texto-aviso);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.fan-mcr__expandir,
+.fan-mcr__link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--cor-secundario-texto, #155b98);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fan-mcr__link {
+  text-decoration: underline;
+}
+
+.fan-mcr__detalhes {
+  display: grid;
+  gap: 4px;
+}
+
+.fan-mcr__detalhes[hidden] {
+  display: none;
+}
+
+.fan-mcr__lista-exclusoes {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.fan-mcr__observacao {
+  margin: 0;
+}
+
+.guia-mcr__sem-equivalente {
+  border-left: 5px solid var(--texto-aviso);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: var(--cor-superficie-alt, #f8f9fa);
+}
+
+.guia-mcr__sem-equivalente p {
+  margin: 4px 0 0;
+}
+
+/* Exemplo do fan: as pedras do fan acendem, as outras ficam apagadas. */
+.exemplo-fan-mcr {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.exemplo-fan-mcr .yaku-tile.destaque-yaku {
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--cor-aviso, #e6b800);
+}
+
+.exemplo-fan-mcr .yaku-tile.apagada {
+  opacity: 0.4;
+}
+
+/* Conjunto exposto: separado das pedras ocultas por um traço. */
+.exemplo-fan-mcr__chamada {
+  border-bottom: 2px solid var(--cor-borda-controle, #8a94a6);
+  padding-bottom: 2px;
+}
+
+/* A pedra da batida fica à parte, como na mesa. */
+.exemplo-fan-mcr__batida {
+  position: relative;
+}
+
+.exemplo-fan-mcr__batida .badge-pedra-agari {
+  min-height: 0;
+  font-size: 0.36rem;
+  line-height: 1.4;
+}
+
+.exemplo-fan-mcr__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exemplo-fan-mcr__chip {
+  border: 1px solid var(--cor-borda, #e2e8f0);
+  border-radius: 999px;
+  padding: 1px 8px;
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.8rem;
+}
+
+
+.exemplo-fan-mcr__outros,
+.exemplo-fan-mcr__total {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.exemplo-fan-mcr__outros .fan-mcr__link {
+  min-height: 32px;
+}
+
+.exemplo-fan-mcr__total {
+  font-weight: 800;
+}

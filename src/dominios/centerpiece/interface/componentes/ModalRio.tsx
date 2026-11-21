@@ -1,4 +1,5 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { REGISTRO_VAZIO } from '../../logica/descartes'
 import type { Cadeira, Partida } from '../../logica/partida'
@@ -18,9 +19,11 @@ export default function ModalRio({
 }) {
   const { t } = useI18n()
   const { lances } = partida.registro ?? REGISTRO_VAZIO
+  // MCR, sem furiten: o rio geral da mão.
+  const geral = useModoJogoAtual() === 'mcr'
   return (
     <Modal
-      titulo={t('match.discards.title', { name: nomeDe(cadeira) })}
+      titulo={geral ? t('match.menu.discards') : t('match.discards.title', { name: nomeDe(cadeira) })}
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       rodape={
@@ -31,7 +34,13 @@ export default function ModalRio({
         </div>
       }
     >
-      <RioPedras lances={lances} cadeira={cadeira} nomeDe={nomeDe} destacarAposRiichi />
+      <RioPedras
+        lances={lances}
+        cadeira={cadeira}
+        nomeDe={nomeDe}
+        destacarAposRiichi={!geral}
+        geral={geral}
+      />
     </Modal>
   )
 }

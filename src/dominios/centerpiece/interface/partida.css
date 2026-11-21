@@ -1767,3 +1767,25 @@ body:has(.ptd-modulo) {
 .fin-tela > .mesa-btn-principal {
   margin-top: 20px;
 }
+
+/* Rio geral do MCR: quantas de cada pedra já saíram. */
+.dsc-contagem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 10px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--cor-borda, #e2e8f0);
+  list-style: none;
+}
+
+.dsc-contagem-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dsc-contagem-numero {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}

@@ -4,7 +4,7 @@ import { gerarQr } from '@/compartilhado/adaptadores/qr'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
-import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
+import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import {
   exportarTorneio,
@@ -31,7 +31,7 @@ export default function FolhaExportar({
   aoFechar: () => void
 }) {
   const { t } = useI18n()
-  const { partidas } = usePartidas()
+  const { partidas } = usePartidasDoTorneio()
   const { jogadores } = useJogadores()
   const { temporadas, marcarTransferido } = useTorneios()
   const [modo, setModo] = useState<ModoExportacao>('copia')

@@ -28,6 +28,8 @@ interface PropsCardMesa {
   aoAbrir: () => void
   aoCompartilhar: () => void
   aoExcluir: () => void
+  /** Modo Chinês: sem a coluna de Riichi nos detalhes. */
+  semRiichi?: boolean
 }
 
 /**
@@ -43,6 +45,7 @@ export default function CardMesa({
   aoAbrir,
   aoCompartilhar,
   aoExcluir,
+  semRiichi = false,
 }: PropsCardMesa) {
   const { t, numero, idioma } = useI18n()
   const [aberto, setAberto] = useState(false)
@@ -167,7 +170,7 @@ export default function CardMesa({
                     <abbr title={t('match.cards.deltaHelp')}>Δ</abbr>
                   </th>
                 )}
-                <th scope="col">{t('match.event.riichi')}</th>
+                {!semRiichi && <th scope="col">{t('match.event.riichi')}</th>}
                 <th scope="col">{t('match.event.ron')}</th>
                 <th scope="col">{t('match.event.tsumo')}</th>
                 <th scope="col">{t('match.cards.dealIn')}</th>
@@ -188,7 +191,7 @@ export default function CardMesa({
                       {linha.delta === undefined ? '–' : comSinal(linha.delta)}
                     </td>
                   )}
-                  <td>{contador(linha.cadeira, 'riichi')}</td>
+                  {!semRiichi && <td>{contador(linha.cadeira, 'riichi')}</td>}
                   <td>{contador(linha.cadeira, 'ron')}</td>
                   <td>{contador(linha.cadeira, 'tsumo')}</td>
                   <td>{contador(linha.cadeira, 'dealIn')}</td>

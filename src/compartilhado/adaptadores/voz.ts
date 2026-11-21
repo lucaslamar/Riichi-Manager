@@ -23,9 +23,15 @@ const CHAVE_NARRACAO = 'riichi-manager-narracao'
 export const VELOCIDADE_MINIMA = 0.5
 export const VELOCIDADE_MAXIMA = 2
 const VELOCIDADE_PADRAO = 1.2
-const PADRAO: ConfigNarracao = { ativa: false, velocidade: VELOCIDADE_PADRAO, idiomaPedras: 'pt', saida: 'voz' }
+const PADRAO: ConfigNarracao = {
+  ativa: false,
+  velocidade: VELOCIDADE_PADRAO,
+  idiomaPedras: 'pt',
+  saida: 'voz',
+}
 
-const limitarVelocidade = (valor: number) => Math.min(VELOCIDADE_MAXIMA, Math.max(VELOCIDADE_MINIMA, valor))
+const limitarVelocidade = (valor: number) =>
+  Math.min(VELOCIDADE_MAXIMA, Math.max(VELOCIDADE_MINIMA, valor))
 
 function lerConfig(): ConfigNarracao {
   try {
@@ -54,14 +60,20 @@ export function assinarNarracao(ouvinte: () => void) {
 }
 
 export function alterarNarracao(mudanca: Partial<ConfigNarracao>) {
-  config = { ...config, ...mudanca, velocidade: limitarVelocidade(mudanca.velocidade ?? config.velocidade) }
+  config = {
+    ...config,
+    ...mudanca,
+    velocidade: limitarVelocidade(mudanca.velocidade ?? config.velocidade),
+  }
   if (!config.ativa || config.saida === 'leitor') pararFala()
   armazenamentoLocal.gravar(CHAVE_NARRACAO, JSON.stringify(config))
   ouvintes.forEach((ouvinte) => ouvinte())
 }
 
 export const vozDisponivel = () =>
-  typeof window !== 'undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined'
+  typeof window !== 'undefined' &&
+  'speechSynthesis' in window &&
+  typeof SpeechSynthesisUtterance !== 'undefined'
 
 const falaPelaVoz = () => config.ativa && config.saida === 'voz' && vozDisponivel()
 
@@ -136,7 +148,8 @@ export function lerSobDemanda(chave: string, semLeitura: string) {
 // ─── Voz do app ──────────────────────────────────────────────────────────────
 /** Vozes neurais (Edge, Chrome, iPhone): bem menos robóticas que as do sistema. */
 const VOZES_NATURAIS = /natural|neural|online|premium|enhanced|aprimorad|google/i
-const NOMES_FEMININOS = /female|feminina|mulher|francisca|thalita|luciana|maria|helena|joana|camila|vitoria|monica|paulina|elvira|kyoko|nanami|sunhi|heami|xiaoxiao|tingting|ona|samantha|aria|jenny|ava/i
+const NOMES_FEMININOS =
+  /female|feminina|mulher|francisca|thalita|luciana|maria|helena|joana|camila|vitoria|monica|paulina|elvira|kyoko|nanami|sunhi|heami|xiaoxiao|tingting|ona|samantha|aria|jenny|ava/i
 
 function vozMaisNatural(idioma: string) {
   const vozes = window.speechSynthesis.getVoices()
@@ -169,6 +182,24 @@ export function falar(texto: string) {
   if (voz) fala.voice = voz
   window.speechSynthesis.cancel()
   window.speechSynthesis.speak(fala)
+}
+
+/**
+ * Fala várias frases em sequência, cada uma no seu idioma (ex.: "Hu!" em chinês e
+ * o resultado no idioma do app), com a mesma voz preferida e velocidade de `falar`.
+ */
+export function falarEmPartes(partes: { texto: string; idioma?: string }[]) {
+  if (!vozDisponivel()) return
+  window.speechSynthesis.cancel()
+  for (const { texto, idioma = idiomaGlobal() } of partes) {
+    if (!texto) continue
+    const fala = new SpeechSynthesisUtterance(texto)
+    fala.lang = idioma
+    fala.rate = config.velocidade
+    const voz = vozMaisNatural(idioma)
+    if (voz) fala.voice = voz
+    window.speechSynthesis.speak(fala)
+  }
 }
 
 export function pararFala() {

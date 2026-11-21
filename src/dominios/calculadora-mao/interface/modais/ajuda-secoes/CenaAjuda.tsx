@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { fanMcrPorId } from '@/compartilhado/mahjong/mcr/fans-mcr'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import type { CodigoPedra } from '../../../logica/mao'
@@ -43,6 +45,7 @@ const SLOTS_CHAMADA = 3
  */
 export default function CenaAjuda({ nome }: { nome: NomeCena }) {
   const { t } = useI18n()
+  const chines = useModoJogoAtual() === 'mcr'
   const { casos } = CENAS_AJUDA[nome]
   const semMovimento = useMediaQuery('(prefers-reduced-motion: reduce)')
   const [indiceCaso, setIndiceCaso] = useState(0)
@@ -81,8 +84,14 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
       : 'pedra' in alvo
         ? nomePedraAcessivel(alvo.pedra)
         : 'chave' in alvo
-          ? t(alvo.chave)
+          ? t(
+              chines && alvo.chave === 'pocketGuide.tabs.yakuman'
+                ? 'guiaBolso.mcr.abas.dragoes'
+                : alvo.chave,
+            )
           : alvo.texto
+    // MCR: o cartão do guia é de fan, não de Yaku.
+    if (chines && chave === 'guideCard') return t('sectionHelp.mcr.guideCard')
     return t(`sectionHelp.demo.${chave}`, { name: nomeAlvo })
   }
 
@@ -90,7 +99,9 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
   const quadro = caso.quadros[semMovimento ? ultimo : indice]
   const toque = semMovimento ? undefined : quadro.toque
   const tocando = (alvo: string) =>
-    toque === alvo ? ` cena-ajuda__tocando${quadro.segurando ? ' cena-ajuda__tocando--segurando' : ''}` : ''
+    toque === alvo
+      ? ` cena-ajuda__tocando${quadro.segurando ? ' cena-ajuda__tocando--segurando' : ''}`
+      : ''
 
   const renderizarItemMao = (item: CodigoPedra, posicao: number) => {
     const classe = `cena-ajuda__pedra-mao${quadro.escolhendoBatida ? ' cena-ajuda__pedra-mao--opcao' : ''}${
@@ -129,6 +140,11 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
   const renderizarGuia = () => {
     if (!quadro.guia) return null
     const { aba } = quadro.guia
+    // MCR: o mesmo guia, com as abas e o fan do MCR (Glossário e Dragões, Três Grandes Dragões).
+    const rotuloAba = (chave: (typeof ABAS_GUIA)[number]) =>
+      chines
+        ? t(chave === 'beginner' ? 'pocketGuide.tabs.glossary' : 'guiaBolso.mcr.abas.dragoes')
+        : t(`pocketGuide.tabs.${chave}`)
     return (
       <div className="cena-ajuda__guia">
         <strong>{t('pocketGuide.title')}</strong>
@@ -140,15 +156,17 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                 `aba:${chave}`,
               )}`}
             >
-              {t(`pocketGuide.tabs.${chave}`)}
+              {rotuloAba(chave)}
             </span>
           ))}
         </div>
         {aba === 'yakuman' && (
           <div className="cena-ajuda__cartao-guia">
             <div>
-              <strong>Daisangen</strong> <span>大三元</span>
-              <span className="cena-ajuda__selo-yakuman">{t('pocketGuide.yakumanBadge')}</span>
+              <strong>{chines ? fanMcrPorId(2)?.pt : 'Daisangen'}</strong> <span>大三元</span>
+              <span className="cena-ajuda__selo-yakuman">
+                {chines ? t('placar.mcr.qtdFan', { fan: 88 }) : t('pocketGuide.yakumanBadge')}
+              </span>
             </div>
             <div className="cena-ajuda__pedras-cartao">
               {PEDRAS_CARTAO_GUIA.map((pedra, posicao) => (
@@ -200,7 +218,9 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
         <div className="cena-ajuda__mao">
           {quadro.mao?.map(renderizarItemMao)}
           {quadro.meld && (
-            <span className={`cena-ajuda__meld cena-ajuda__meld--${CLASSE_CHAMADA[quadro.meld.tipo]}`}>
+            <span
+              className={`cena-ajuda__meld cena-ajuda__meld--${CLASSE_CHAMADA[quadro.meld.tipo]}`}
+            >
               <small>{t(rotuloChamadaCena(quadro.meld.tipo))}</small>
               {quadro.meld.pedras.map((pedra, posicao) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: cena fixa
@@ -266,7 +286,10 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                   <div>
                     {quadro.opcoes.map((sequencia, posicao) => (
                       // biome-ignore lint/suspicious/noArrayIndexKey: cena fixa
-                      <span key={posicao} className={`cena-ajuda__opcao${tocando(`opcao:${posicao}`)}`}>
+                      <span
+                        key={posicao}
+                        className={`cena-ajuda__opcao${tocando(`opcao:${posicao}`)}`}
+                      >
                         {sequencia.map((pedra) => (
                           <PedraYaku key={pedra} pedra={pedra} />
                         ))}
@@ -275,17 +298,31 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                   </div>
                 </div>
               ) : caso.painel === 'batida' ? (
-                // Mão completa: no lugar do teclado, Mudar batida e Finalizar mão.
-                <div className="cena-ajuda__rodape-batida">
-                  <span
-                    className={`cena-ajuda__botao-batida${tocando('mudarBatida')}${
-                      quadro.escolhendoBatida ? ' cena-ajuda__botao-batida--ativo' : ''
-                    }`}
+                // Mão completa, como no app: o teclado apagado e, embaixo, Mudar batida e Finalizar mão.
+                <>
+                  <div
+                    className="cena-ajuda__teclado-pedras cena-ajuda__teclado-pedras--apagado"
+                    aria-hidden="true"
                   >
-                    {t('calculator.changeWinningTileShort')}
-                  </span>
-                  <span className="cena-ajuda__botao-finalizar">{t('calculator.finalTitle')}</span>
-                </div>
+                    {FILEIRAS_TECLADO.map((fileira) => (
+                      <div key={fileira[0]} className="cena-ajuda__fileira-pedras">
+                        {fileira.map(renderizarTeclaPedra)}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="cena-ajuda__rodape-batida">
+                    <span
+                      className={`cena-ajuda__botao-batida${tocando('mudarBatida')}${
+                        quadro.escolhendoBatida ? ' cena-ajuda__botao-batida--ativo' : ''
+                      }`}
+                    >
+                      {t('calculator.changeWinningTileShort')}
+                    </span>
+                    <span className="cena-ajuda__botao-finalizar">
+                      {t('calculator.finalTitle')}
+                    </span>
+                  </div>
+                </>
               ) : (
                 <div className="cena-ajuda__teclado-pedras">
                   {FILEIRAS_TECLADO.map((fileira) => (

@@ -27,7 +27,10 @@
     "ranking": "Ranking",
     "more": "Mais",
     "moreOptions": "Mais opções",
-    "backToMain": "Voltar para as opções principais"
+    "backToMain": "Voltar para as opções principais",
+    "handCalculatorChinese": "Calculadora de Mão Chinesa",
+    "scoreMcr": "Placar",
+    "scoreMcrShort": "Placar"
   },
   "actions": {
     "back": "Voltar",
@@ -552,7 +555,13 @@
       "tip": "Prefere digitar? MPSZ troca o teclado de pedras pela notação, como 123m. Para voltar, toque em Peças."
     },
     "value1han": "Vale: 1 han",
-    "valueYakuman": "Vale: Yakuman"
+    "valueYakuman": "Vale: Yakuman",
+    "mcr": {
+      "guide": "O chapéu abre o Guia de bolso: os 81 fan com exemplos, o glossário e a busca para consultar durante o jogo.",
+      "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: flores, ron ou tsumo, ventos e condições especiais. Cada parte de lá tem o próprio ?.",
+      "notationTip": "Dá para montar vários grupos e números e tocar no naipe só no fim, e ele vale para todos. Cada número mostra embaixo a honra que vira com o z. AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize o dedo para a direita.",
+      "guideCard": "Cada fan com exemplo e quanto vale"
+    }
   },
   "rulesModal": {
     "open": "Abrir regras de cálculo",
@@ -1568,7 +1577,8 @@
         "pon": "Quem fez pon?",
         "kan": "Quem fez kan?",
         "ron": "Quem fez ron?"
-      }
+      },
+      "count": "Quantas de cada pedra já saíram"
     },
     "furiten": {
       "waiting": "espera {{tiles}}",
@@ -2187,6 +2197,165 @@
       "pon": "Pon",
       "kanAberto": "Kan aberto",
       "kanFechado": "Kan fechado"
+    }
+  },
+  "configuracoes": {
+    "mahjong": {
+      "titulo": "Mahjong",
+      "descricao": "Regras usadas em todo o app.",
+      "japones": "Japonês",
+      "chines": "Chinês",
+      "ajudaJapones": "Japonês: Riichi (han, fu, Yaku).",
+      "ajudaChines": "Chinês: MCR / Guobiao (81 fan, mínimo 8).",
+      "confirmarTroca": "Trocar de modo limpa a mão atual. Continuar?"
+    }
+  },
+  "mcr": {
+    "entrada": {
+      "flores": "Flores e estações",
+      "removerFlor": "Remover {{flor}}",
+      "erroQuatro": "Cada pedra existe só quatro vezes."
+    },
+    "condicoes": {
+      "titulo": "Condições",
+      "forma": "Batida",
+      "ron": "Ron (descarte)",
+      "tsumo": "Tsumo (compra)",
+      "ventoRodada": "Vento da rodada",
+      "ventoAssento": "Vento do assento",
+      "ultimaParede": "Última pedra da parede",
+      "ultimoDescarte": "Último descarte",
+      "reposicaoKan": "Batida com pedra de reposição do Kan",
+      "rouboKan": "Roubar o Kan",
+      "ultimaDoTipo": "Última pedra do tipo",
+      "ultimaDoTipoAjuda": "As outras três já estão à vista."
+    },
+    "resultado": {
+      "calcular": "Calcular",
+      "titulo": "Resultado",
+      "fanTotal": "{{total}} fan",
+      "semFlores": "{{fan}} fan sem flores + {{flores}} de flores",
+      "invalida": "Mão inválida: mínimo de 8 fan (sem contar flores).",
+      "naoBate": "Essas pedras não formam uma mão de batida.",
+      "pagamentos": "Pagamentos",
+      "vencedorRecebe": "Vencedor recebe",
+      "descartador": "Quem descartou paga",
+      "outro": "Cada outro jogador paga",
+      "cadaJogador": "Cada jogador paga",
+      "pontos": "{{pontos}} pontos",
+      "vezes": "×{{vezes}}",
+      "invalidaTitulo": "Mão inválida"
+    },
+    "erros": {
+      "incompleta": "Monte 14 pedras para calcular. Kan conta como 3.",
+      "semKan": "Batida com pedra de reposição do Kan precisa de um Kan na mão.",
+      "rouboDoKan": "Roubar o Kan não combina com o último descarte nem com outra pedra igual na mão.",
+      "ultimaDoTipo": "Última pedra do tipo não vale com outra pedra igual na mão."
+    },
+    "fan": {
+      "mingangang": "Kan Aberto e Kan Fechado"
+    },
+    "flores": {
+      "1": "Flor da ameixa",
+      "2": "Flor da orquídea",
+      "3": "Flor do crisântemo",
+      "4": "Flor do bambu",
+      "5": "Primavera",
+      "6": "Verão",
+      "7": "Outono",
+      "8": "Inverno"
+    }
+  },
+  "guiaBolso": {
+    "mcr": {
+      "pontosFan": "{{pontos}} pontos",
+      "numero": "Nº {{id}}",
+      "riichi": "Riichi: {{yaku}}",
+      "detalhes": "Detalhes",
+      "naoCombina": "Não combina com:",
+      "irPara": "Ir para {{nome}}",
+      "semEquivalenteTitulo": "Yaku do Riichi sem equivalente",
+      "semEquivalenteExato": "Sem equivalente exato: {{lista}}.",
+      "naoExistem": "Não existem no MCR: {{lista}}.",
+      "porPontos": "Por pontos",
+      "abaRiichi": "Riichi",
+      "abas": {
+        "chows": "Chows",
+        "pungs": "Pungs",
+        "kongs": "Kongs",
+        "ventos": "Ventos",
+        "dragoes": "Dragões",
+        "naipes": "Naipes",
+        "series-especificas": "Séries",
+        "pecas-especificas": "Peças",
+        "maos": "Mãos",
+        "maos-especiais": "Especiais",
+        "esperas": "Esperas",
+        "ultima-peca": "Última peça",
+        "outros": "Outros"
+      },
+      "busca": "Buscar fan, 汉字, inglês ou yaku",
+      "rotuloBusca": "Buscar no Guia de bolso",
+      "exemplo": "Mão de exemplo: {{pedras}}",
+      "condicoes": "Condições do exemplo",
+      "tambemContam": "Nesta mão também contam:",
+      "totalExemplo": "Total: {{total}} fan"
+    }
+  },
+  "placar": {
+    "mcr": {
+      "jogadorRemovido": "Jogador removido",
+      "timer": "Timer da vez",
+      "timerDesligado": "Sem timer",
+      "segundos": "{{segundos}}s",
+      "finalizada": "Partida finalizada",
+      "partidaCompleta": "As 16 mãos foram jogadas. Finalize a partida quando quiserem.",
+      "empate": "Empate",
+      "desfazer": "Desfazer última mão",
+      "finalizar": "Finalizar partida",
+      "excluir": "Excluir partida",
+      "confirmarDesfazer": "Desfazer a última mão registrada?",
+      "confirmarFinalizar": "Finalizar a partida? Depois não dá para registrar mais mãos.",
+      "confirmarExcluir": "Excluir esta partida? Não dá para desfazer.",
+      "fan": "Pontos da mão (fan)",
+      "fanAjuda": "Some as flores aqui. O mínimo de 8 não conta as flores.",
+      "menosFan": "Um fan a menos",
+      "maisFan": "Um fan a mais",
+      "erros": {
+        "fanMinimo": "A mão precisa de no mínimo 8 fan.",
+        "semDescartador": "Escolha quem descartou.",
+        "descartadorVencedor": "Quem venceu não pode ter descartado."
+      },
+      "regrasMcr": "MCR",
+      "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan.",
+      "maoCurta": "Mão {{mao}}",
+      "novaPartidaAjuda": "Anotar os pontos de uma partida MCR.",
+      "qtdPartidas": {
+        "one": "{{count}} partida",
+        "few": "{{count}} partidas",
+        "many": "{{count}} partidas",
+        "other": "{{count}} partidas"
+      },
+      "nenhumaPartida": "Nenhuma partida ainda.",
+      "torneio": {
+        "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo."
+      },
+      "usarFan": "Usar no placar",
+      "porFan": "Fan",
+      "porFanAjuda": "Digite o fan da mão",
+      "qtdFan": "{{fan}} fan",
+      "empateTexto": "O muro acabou sem ninguém vencer. Ninguém paga e o dealer passa.",
+      "ronDe": "Ron de {{name}}",
+      "falsoHu": "Falso Hu",
+      "falsoHuDe": "Falso Hu de {{name}}?",
+      "falsoHuTexto": "Quem errou paga 10 pontos a cada um dos outros três, e a mão continua.",
+      "qtdPontos": "{{pontos}} pontos",
+      "verMesa": "Ver a mesa"
+    }
+  },
+  "glossario": {
+    "mcr": {
+      "diferenteRiichi": "Diferente do Riichi"
     }
   }
 }

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { secoesGlossario } from '../../../logica/glossario'
+import { secoesGlossario, type SecaoGlossario } from '../../../logica/glossario'
 import BlocoGlossario from '../glossario/BlocoGlossario'
 import './aba-glossario.css'
 
@@ -15,9 +15,14 @@ const RESPIRO_ROLAGEM = 8
  * No topo, o sumário: um link por assunto que rola até o bloco. A busca é do
  * Guia de bolso inteiro (ModalYakus).
  */
-export default function AbaGlossario() {
+export default function AbaGlossario({
+  secoes: secoesDoModo,
+}: {
+  /** Glossário de outro modo de jogo (ex.: MCR) no mesmo formato. */
+  secoes?: SecaoGlossario[]
+} = {}) {
   const { t, idioma } = useI18n()
-  const secoes = secoesGlossario(idioma)
+  const secoes = secoesDoModo ?? secoesGlossario(idioma)
   const raizRef = useRef<HTMLDivElement>(null)
 
   const irPara = (secao: string) => {

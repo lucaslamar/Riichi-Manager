@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import { ListaHistoricoAcoes } from './ModalHistoricoAcoes'
@@ -120,12 +121,16 @@ export function MenuJogador({
   cadeira: Cadeira
   nome: string
   podeReceberVez: boolean
-  aoEscolher: (acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes' | 'furiten') => void
+  aoEscolher: (
+    acao: 'vez' | 'ron' | 'tsumo' | 'riichi' | 'chombo' | 'diferenca' | 'descartes' | 'furiten',
+  ) => void
   aoFechar: () => void
 }) {
   const { t } = useI18n()
   const { numero } = useFormato()
   const vento = ventoDaCadeira(cadeira, partida.placar.cadeiraDealer, jogadoresNaMesa(partida))
+  // MCR: sem Riichi, e o chombo é o Falso Hu.
+  const chines = useModoJogoAtual() === 'mcr'
   const Acao = ({
     acao,
     icone,
@@ -162,15 +167,16 @@ export function MenuJogador({
         )}
         <Acao acao="ron" icone="fa-trophy" rotulo={t('match.menu.ron')} />
         <Acao acao="tsumo" icone="fa-trophy" rotulo={t('match.menu.tsumo')} />
-        {podeDeclararRiichi(partida.placar, cadeira) &&
+        {!chines &&
+          podeDeclararRiichi(partida.placar, cadeira) &&
           muroPermiteRiichi(partida.registro?.lances ?? [], jogadoresNaMesa(partida)) && (
-          <Acao acao="riichi" icone="fa-flag" rotulo={t('match.menu.riichi')} />
-        )}
+            <Acao acao="riichi" icone="fa-flag" rotulo={t('match.menu.riichi')} />
+          )}
         <Acao acao="diferenca" icone="fa-scale-balanced" rotulo={t('match.menu.difference')} />
         <Acao
           acao="chombo"
           icone="fa-triangle-exclamation"
-          rotulo={t('match.menu.chombo')}
+          rotulo={t(chines ? 'placar.mcr.falsoHu' : 'match.menu.chombo')}
           perigo
         />
         {/* Por último: passar a vez sem querer bagunça o timer e o muro. */}
@@ -203,16 +209,18 @@ export function ModalDiferenca({
       tamanho="pequena"
     >
       <ul className="ptd-linhas">
-        {diferencasDePontos(partida.placar, cadeira, cadeirasDaPartida(partida)).map(({ cadeira: outra, diferenca }) => (
-          <li key={outra}>
-            <span>{nomeDe(outra)}</span>
-            <strong className={diferenca < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
-              {diferenca < 0
-                ? t('match.difference.behind', { points: numero(-diferenca) })
-                : t('match.difference.ahead', { points: numero(diferenca) })}
-            </strong>
-          </li>
-        ))}
+        {diferencasDePontos(partida.placar, cadeira, cadeirasDaPartida(partida)).map(
+          ({ cadeira: outra, diferenca }) => (
+            <li key={outra}>
+              <span>{nomeDe(outra)}</span>
+              <strong className={diferenca < 0 ? 'ptd-negativo' : 'ptd-positivo'}>
+                {diferenca < 0
+                  ? t('match.difference.behind', { points: numero(-diferenca) })
+                  : t('match.difference.ahead', { points: numero(diferenca) })}
+              </strong>
+            </li>
+          ),
+        )}
       </ul>
     </Modal>
   )
@@ -288,7 +296,9 @@ export function ModalRyukyoku({
             aria-pressed={tenpai.includes(cadeira)}
             onClick={() => setTenpai((lista) => alternar(lista, cadeira))}
           >
-            <span aria-hidden="true">{KANJI_VENTO[ventoDaCadeira(cadeira, placar.cadeiraDealer, jogadoresNaMesa(partida))]}</span>
+            <span aria-hidden="true">
+              {KANJI_VENTO[ventoDaCadeira(cadeira, placar.cadeiraDealer, jogadoresNaMesa(partida))]}
+            </span>
             <span className="ptd-opcao-nome">{nomeDe(cadeira)}</span>
             <span className="ptd-opcao-valor">{comSinal(variacao[cadeira])}</span>
           </button>
@@ -298,7 +308,9 @@ export function ModalRyukyoku({
       {config.nagashiMangan && (
         <>
           <p className="ptd-rotulo">{t('match.draw.whoNagashi')}</p>
-          {detectados.length > 0 && <p className="ptd-apoio">{t('match.discards.nagashiDetected')}</p>}
+          {detectados.length > 0 && (
+            <p className="ptd-apoio">{t('match.discards.nagashiDetected')}</p>
+          )}
           <div className="ptd-lista-opcoes ptd-lista-opcoes--linha">
             {cadeirasDaPartida(partida).map((cadeira) => (
               <button
@@ -336,7 +348,18 @@ export function ModalRyukyoku({
   )
 }
 
-function rotuloEvento(evento: EventoPartida, t: (chave: string) => string) {
+function rotuloEvento(
+  evento: EventoPartida,
+  t: (chave: string, parametros?: Record<string, string | number>) => string,
+  chines = false,
+) {
+  // MCR: empate em vez de Ryukyoku, Falso Hu em vez de chombo e o fan da vitória.
+  if (chines) {
+    if (evento.tipo === 'ryukyoku') return t('placar.mcr.empate')
+    if (evento.tipo === 'chombo') return t('placar.mcr.falsoHu')
+    const fan = (evento.detalhe as { fan?: number } | undefined)?.fan
+    if (fan) return `${t(`match.event.${evento.tipo}`)} · ${t('placar.mcr.qtdFan', { fan })}`
+  }
   if (evento.tipo === 'abortivo' && evento.detalhe?.abortivo) {
     return t(`match.abortive.${evento.detalhe.abortivo}`)
   }
@@ -348,6 +371,7 @@ export function ListaMaos({ partida, nomeDe }: { partida: Partida; nomeDe: NomeD
   const { t } = useI18n()
   const { comSinal } = useFormato()
   const maos = partida.eventos.filter((evento) => evento.tipo !== 'riichi').reverse()
+  const chines = useModoJogoAtual() === 'mcr'
 
   if (maos.length === 0) return <p className="ptd-vazio">{t('match.hands.empty')}</p>
 
@@ -361,7 +385,7 @@ export function ListaMaos({ partida, nomeDe }: { partida: Partida; nomeDe: NomeD
               {evento.rodada.numero}
               {evento.rodada.honba > 0 ? ` · 本${evento.rodada.honba}` : ''}
             </strong>
-            <span>{rotuloEvento(evento, t)}</span>
+            <span>{rotuloEvento(evento, t, chines)}</span>
           </div>
           <ul className="ptd-linhas">
             {cadeirasDaPartida(partida).map((cadeira) => (
@@ -394,12 +418,16 @@ export function ListaMaos({ partida, nomeDe }: { partida: Partida; nomeDe: NomeD
           {evento.lances && (
             <details className="dsc-historico">
               <summary>{t('match.discards.history')}</summary>
-              {cadeirasDaPartida(partida).map((cadeira) => (
-                <div key={cadeira}>
-                  <p className="ptd-rotulo">{nomeDe(cadeira)}</p>
-                  <RioPedras lances={evento.lances ?? []} cadeira={cadeira} nomeDe={nomeDe} />
-                </div>
-              ))}
+              {chines ? (
+                <RioPedras lances={evento.lances ?? []} cadeira={0} nomeDe={nomeDe} geral />
+              ) : (
+                cadeirasDaPartida(partida).map((cadeira) => (
+                  <div key={cadeira}>
+                    <p className="ptd-rotulo">{nomeDe(cadeira)}</p>
+                    <RioPedras lances={evento.lances ?? []} cadeira={cadeira} nomeDe={nomeDe} />
+                  </div>
+                ))
+              )}
             </details>
           )}
         </li>

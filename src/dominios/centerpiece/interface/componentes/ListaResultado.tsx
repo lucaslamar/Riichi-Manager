@@ -1,4 +1,5 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import type { Cadeira, ResultadoFinal } from '../../logica/partida'
 
 /** Colocação, pontos brutos, uma/oka aplicados e pontuação final. */
@@ -10,6 +11,7 @@ export default function ListaResultado({
   nomeDe: (cadeira: Cadeira) => string
 }) {
   const { t, numero } = useI18n()
+  const chines = useModoJogoAtual() === 'mcr'
   const comSinal = (valor: number) => `${valor > 0 ? '+' : ''}${numero(valor)}`
 
   return (
@@ -22,11 +24,13 @@ export default function ListaResultado({
           <div className="ptd-resultado-dados">
             <strong>{nomeDe(linha.cadeira)}</strong>
             <span className="ptd-apoio">
-              {t('match.result.breakdown', {
-                raw: numero(linha.pontosBrutos),
-                uma: comSinal(linha.uma),
-                oka: comSinal(linha.oka),
-              })}
+              {chines
+                ? t('placar.mcr.qtdPontos', { pontos: numero(linha.pontosBrutos) })
+                : t('match.result.breakdown', {
+                    raw: numero(linha.pontosBrutos),
+                    uma: comSinal(linha.uma),
+                    oka: comSinal(linha.oka),
+                  })}
               {linha.multa > 0
                 ? ` · ${t('match.result.penalty', { points: numero(linha.multa) })}`
                 : ''}

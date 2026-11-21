@@ -5562,3 +5562,14 @@
   background: transparent;
   color: var(--texto-apoio);
 }
+
+/* Celular em pé: só um respiro curto entre o teclado e a barra inferior (Riichi e MCR). */
+@media (max-width: 767px) and (orientation: portrait) {
+  .card-mao-completa .construtor-mao-montagem .teclado-pedras {
+    padding-bottom: 4px;
+  }
+
+  .card-mao-completa .construtor-mao-montagem .painel-teclado-calculadora {
+    padding-bottom: 0;
+  }
+}

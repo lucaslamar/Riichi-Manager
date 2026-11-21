@@ -48,3 +48,16 @@
   font-size: 0.9rem;
   font-weight: 600;
 }
+
+/* Selo "Diferente do Riichi" (glossário e tutorial de outros modos de jogo). */
+.selo-diferente-riichi {
+  display: inline-block;
+  margin-left: 8px;
+  border: 1px solid var(--texto-aviso);
+  border-radius: 999px;
+  padding: 0 8px;
+  color: var(--texto-aviso);
+  font-size: 0.75rem;
+  font-weight: 700;
+  vertical-align: middle;
+}

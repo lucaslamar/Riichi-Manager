@@ -533,3 +533,9 @@
     animation: none;
   }
 }
+
+/* Mão completa: o teclado fica, apagado, como no app. */
+.cena-ajuda__teclado-pedras--apagado {
+  opacity: 0.35;
+  filter: grayscale(0.6);
+}

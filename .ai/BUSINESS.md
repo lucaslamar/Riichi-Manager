@@ -20,3 +20,32 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 ## Privacidade e acessibilidade
 
 Na checagem de furiten da mesa, as esperas são informação privada do jogador. Não as anuncie automaticamente ou exponha à mesa. O modo falado ainda não está implementado; suas possíveis funcionalidades não são regras atuais. Consulte [acessibilidade](../docs/acessibilidade.md).
+
+## Modo Chinês (MCR / Guobiao)
+
+- O modo Japonês é o padrão e a referência. Nada nele muda com o modo Chinês.
+- O motor de fan é um porte em TypeScript do GB-Mahjong (Zheng Fan, MIT). O pacote `gb-mahjong-js` foi recusado porque conta os fan chamando um binário C++ pelo Node e não roda no navegador. O porte é conferido com os 130 casos do gb-mahjong-js em `npm run test:fan-mcr`. Ao mexer no motor, preserve a equivalência com o original, incluindo as regras de exclusão.
+- Regras adotadas: mínimo de 8 fan sem contar as flores. Cada flor vale 1 fan e soma no total e no pagamento. O pagamento usa F = fan total com flores. No ron, quem descartou paga F + 8 e os outros dois pagam 8. No tsumo, os três pagam F + 8. Não há bônus do dealer, honba nem limite. Mão abaixo do mínimo não mostra pagamento. O MCR não tem furiten, Riichi, Ippatsu, dora nem fu.
+- A pedra da batida é a última da mão. As condições "última pedra" e "kan" mudam de nome conforme ron ou tsumo: Última pedra da parede ou Último descarte, e Batida com reposição do Kan ou Roubar o Kan. As combinações que o GB-Mahjong recusa ficam bloqueadas em `validarMao`.
+- Trocar de modo limpa a mão da calculadora chinesa e pede confirmação só se ela tiver pedras. A mão da calculadora japonesa fica guardada na memória enquanto o modo Chinês está ativo.
+
+### Guia de Bolso, Tutorial e Placar
+
+- Conteúdo do MCR: "Guia do Mahjong Chinês (MCR) para quem já sabe jogar Riichi Mahjong", do Cerrado Mahjong Club, de Juliana Visoni e Gabriel Souza. Os créditos aparecem no Guia de Bolso e no Tutorial. No modo Chinês, os nomes em português dos fan são os do CMC. O PDF de referência deve ficar em `.ai/referencias/GUIA_DO_MAHJONG_CHINES_CMC.pdf`, mas ainda não foi enviado.
+- O guia do CMC numerava Duas Quadras Ocultas (双暗杠) como fan 48, com 8 pontos. Por decisão do usuário (19/11/2026), vale a lista oficial do MCR: é o fan 53 e vale 6, e Todas Trincas a Mão Completamente Exposta são os fan 48 a 52. `fans-mcr.ts` segue essa numeração, e o `test:fan-mcr` confere os 81 fan contra o motor por número, 汉字 e pontos.
+- As diferenças para o Riichi (em vermelho no PDF) aparecem com o selo "Diferente do Riichi", usando o token `--texto-aviso`.
+- Falso Hu no MCR (decidido com o usuário em 21/11/2026, regra da EMA): quem errou paga 10 pontos a cada um dos outros três (−30 e +10 cada). A mão continua e o dealer não muda. Fica em `PlacarMcr.falsosHu` e entra em `totais`.
+- Placar MCR: anota vitória (vencedor, ron ou tsumo, quem descartou, fan com as flores) ou empate. A mão precisa de 8 fan ou mais. O placar não confere as flores, então o aviso pede que o mínimo seja contado sem elas. Uma partida tem 16 mãos: o dealer passa a cada mão e o vento da rodada muda a cada 4 mãos. As cadeiras não trocam de lugar entre as rodadas no placar. O timer da vez tem 30 segundos por padrão e pode ser desligado.
+
+- Flores no MCR: cada flor ou estação vale 1 fan, sem função própria nem relação com o assento. Na calculadora, entram na finalização da mão, num contador de 0 a 8. Flores não contam para o mínimo de 8.
+- Ranking no MCR: soma os pontos MCR dos placares finalizados. Colocação pelo total da partida, com empate dividindo a posição.
+
+- Glossário MCR (`aprender-a-jogar/conteudo/mcr/glossario.ts`): o do guia do CMC, no livro e na aba Glossário do Guia de bolso, com o selo "Diferente do Riichi" no que muda (dealer, Chow com kuikae, Kong oculto, flores, espera sem furiten). Os créditos do CMC saíram da tela: o uso foi autorizado sem crédito.
+- Voz do resultado MCR: "Hu!" no ron e "Zimo!" no tsumo, em chinês, depois os fan, o total e os pagamentos. Mão inválida: só o aviso, sem chamada.
+
+- Torneio MCR (decidido com o usuário em 20/11/2026, regra da EMA, e trocado pelo Torneio do Riichi em 21/11/2026): os mesmos formatos, sorteio, timers e ranking do Riichi. Cada mesa dá pontos de mesa 4, 2, 1 e 0 pela colocação. Empatados dividem igualmente os pontos das colocações que ocupam juntos (dois em 1º ficam com 3 cada). A classificação soma os pontos de mesa e desempata pela soma dos pontos das partidas. A regra veio de memória: vale conferir com o regulamento da EMA.
+
+### Decisões em aberto
+
+- Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
+- Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.

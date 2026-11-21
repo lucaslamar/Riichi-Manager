@@ -10,6 +10,7 @@ import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import type { ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
 import type { EncontroClube, SorteioClube } from '@/dominios/centerpiece/logica/encontroClube'
 import type { ListaSalva, Temporada, Torneio } from '@/dominios/torneio/logica/tipos'
+import type { PlacarMcr } from '@/dominios/placar-mcr/logica/placar'
 
 const SCHEMA_BACKUP = 1
 const MARCA = 'mojoca-backup'
@@ -25,6 +26,10 @@ export interface DadosBackup {
   /** Configurações de mesa: a última usada e as regras do Registrar partida. */
   configMesa: ConfigMesa | null
   regrasRegistro: unknown
+  /** Placares do modo Chinês (MCR). Backups anteriores à 7.0.0 não têm: vira lista vazia. */
+  placaresMcr: PlacarMcr[]
+  /** Clube do modo Chinês (lista, sorteio e encontros). Backups anteriores não têm: vazio. */
+  clubeMcr?: DadosBackup['clube']
 }
 
 export interface ArquivoBackup {
@@ -39,7 +44,13 @@ export type ErroBackup = 'naoEhJson' | 'naoEhBackup' | 'versaoNova' | 'corrompid
 type ValidacaoBackup = { ok: true; backup: ArquivoBackup } | { ok: false; erro: ErroBackup }
 
 export function montarBackup(dados: DadosBackup, appVersion: string, agora: Date): ArquivoBackup {
-  return { app: MARCA, appVersion, schemaVersion: SCHEMA_BACKUP, exportadoEm: agora.toISOString(), dados }
+  return {
+    app: MARCA,
+    appVersion,
+    schemaVersion: SCHEMA_BACKUP,
+    exportadoEm: agora.toISOString(),
+    dados,
+  }
 }
 
 /** `mojoca-backup-AAAA-MM-DD.json`, com a data local. */
@@ -52,7 +63,8 @@ export function nomeDoBackup(agora: Date): string {
 const ehLista = (valor: unknown) => Array.isArray(valor)
 /** Todos os itens com `id` texto: o mínimo para mesclar sem duplicar. */
 const comIds = (valor: unknown) =>
-  ehLista(valor) && (valor as { id?: unknown }[]).every((item) => !!item && typeof item.id === 'string')
+  ehLista(valor) &&
+  (valor as { id?: unknown }[]).every((item) => !!item && typeof item.id === 'string')
 
 /** Confere a casca do arquivo e as listas que a mescla usa. Texto ou objeto já lido. */
 export function validarBackup(entrada: string | unknown): ValidacaoBackup {
@@ -65,7 +77,8 @@ export function validarBackup(entrada: string | unknown): ValidacaoBackup {
     }
   }
   const arquivo = lido as Partial<ArquivoBackup> | null
-  if (!arquivo || typeof arquivo !== 'object' || arquivo.app !== MARCA) return { ok: false, erro: 'naoEhBackup' }
+  if (!arquivo || typeof arquivo !== 'object' || arquivo.app !== MARCA)
+    return { ok: false, erro: 'naoEhBackup' }
   if (typeof arquivo.schemaVersion !== 'number' || arquivo.schemaVersion > SCHEMA_BACKUP) {
     return { ok: false, erro: 'versaoNova' }
   }
@@ -78,6 +91,7 @@ export function validarBackup(entrada: string | unknown): ValidacaoBackup {
     comIds(dados.torneios) &&
     comIds(dados.temporadas) &&
     comIds(dados.listasTorneio ?? []) &&
+    comIds(dados.placaresMcr ?? []) &&
     !!clube &&
     comIds(clube.encontros)
   if (!valido) return { ok: false, erro: 'corrompido' }
@@ -88,9 +102,15 @@ export function validarBackup(entrada: string | unknown): ValidacaoBackup {
       dados: {
         ...(dados as DadosBackup),
         listasTorneio: dados.listasTorneio ?? [],
-        clube: { lista: typeof clube.lista === 'string' ? clube.lista : '', sorteio: clube.sorteio ?? null, encontros: clube.encontros ?? [] },
+        clube: {
+          lista: typeof clube.lista === 'string' ? clube.lista : '',
+          sorteio: clube.sorteio ?? null,
+          encontros: clube.encontros ?? [],
+        },
         configMesa: dados.configMesa ?? null,
         regrasRegistro: dados.regrasRegistro ?? null,
+        placaresMcr: dados.placaresMcr ?? [],
+        ...(dados.clubeMcr ? { clubeMcr: dados.clubeMcr } : {}),
       },
     },
   }
@@ -132,12 +152,18 @@ function assinatura(partida: Partida) {
  * diferença. É o caso de duas pessoas da mesma mesa que registraram cada uma
  * no seu celular. Devolve os ids do backup.
  */
-export function partidasRepetidas(locais: readonly Partida[], vindas: readonly Partida[]): string[] {
+export function partidasRepetidas(
+  locais: readonly Partida[],
+  vindas: readonly Partida[],
+): string[] {
   const idsLocais = new Set(locais.map((partida) => partida.id))
-  const finalizadas = locais.filter((partida) => partida.status === 'finalizada' && partida.resultado?.length)
+  const finalizadas = locais.filter(
+    (partida) => partida.status === 'finalizada' && partida.resultado?.length,
+  )
   return vindas
     .filter((vinda) => {
-      if (idsLocais.has(vinda.id) || vinda.status !== 'finalizada' || !vinda.resultado?.length) return false
+      if (idsLocais.has(vinda.id) || vinda.status !== 'finalizada' || !vinda.resultado?.length)
+        return false
       const chave = assinatura(vinda)
       const quando = Date.parse(vinda.finalizadaEm ?? '')
       return finalizadas.some(
@@ -163,6 +189,19 @@ export function mesclarBackup(locais: DadosBackup, vindos: DadosBackup): DadosBa
     torneios: somarPorId(locais.torneios, vindos.torneios),
     temporadas: somarPorId(locais.temporadas, vindos.temporadas),
     listasTorneio: somarPorId(locais.listasTorneio, vindos.listasTorneio),
+    placaresMcr: somarPorId(locais.placaresMcr, vindos.placaresMcr),
+    ...(locais.clubeMcr || vindos.clubeMcr
+      ? {
+          clubeMcr:
+            locais.clubeMcr && vindos.clubeMcr
+              ? {
+                  ...locais.clubeMcr,
+                  sorteio: locais.clubeMcr.sorteio ?? vindos.clubeMcr.sorteio,
+                  encontros: somarPorId(locais.clubeMcr.encontros, vindos.clubeMcr.encontros),
+                }
+              : (locais.clubeMcr ?? vindos.clubeMcr),
+        }
+      : {}),
     clube: {
       ...locais.clube,
       sorteio: locais.clube.sorteio ?? vindos.clube.sorteio,
@@ -173,7 +212,12 @@ export function mesclarBackup(locais: DadosBackup, vindos: DadosBackup): DadosBa
 
 /** Mesmo texto sem acento, maiúscula ou espaço sobrando. */
 const comparavel = (texto: string | undefined) =>
-  (texto ?? '').normalize('NFD').replace(/\p{Diacritic}/gu, '').trim().replace(/\s+/g, ' ').toLowerCase()
+  (texto ?? '')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase()
 
 /**
  * Pessoas do backup que parecem ser alguém daqui: id diferente, mas o mesmo nome
@@ -185,7 +229,9 @@ export function sugerirMesmasPessoas(locais: readonly Jogador[], vindos: readonl
     if (idsLocais.has(vindo.id)) return []
     const nomes = [comparavel(vindo.nome), comparavel(vindo.apelido)].filter(Boolean)
     const local = locais.find((jogador) =>
-      [comparavel(jogador.nome), comparavel(jogador.apelido)].some((nome) => nome && nomes.includes(nome)),
+      [comparavel(jogador.nome), comparavel(jogador.apelido)].some(
+        (nome) => nome && nomes.includes(nome),
+      ),
     )
     return local ? [{ vindo, local }] : []
   })
@@ -194,15 +240,19 @@ export function sugerirMesmasPessoas(locais: readonly Jogador[], vindos: readonl
 /**
  * Troca, nos dados que chegaram, cada pessoa do backup pela daqui (`mapa`: id do
  * backup → id local). Ela some da lista de jogadores do backup, e partidas,
- * torneios e clube passam a apontar para o jogador local.
+ * torneios, clube e placares MCR passam a apontar para o jogador local.
  */
-export function unificarJogadores(dados: DadosBackup, mapa: Readonly<Record<string, string>>): DadosBackup {
+export function unificarJogadores(
+  dados: DadosBackup,
+  mapa: Readonly<Record<string, string>>,
+): DadosBackup {
   const pares = Object.entries(mapa)
   if (pares.length === 0) return dados
   // Os ids são UUIDs: trocar o valor exato "id" no JSON não acerta mais nada.
   const trocar = <T>(valor: T): T => {
     let texto = JSON.stringify(valor)
-    for (const [vindo, local] of pares) texto = texto.split(JSON.stringify(vindo)).join(JSON.stringify(local))
+    for (const [vindo, local] of pares)
+      texto = texto.split(JSON.stringify(vindo)).join(JSON.stringify(local))
     return JSON.parse(texto) as T
   }
   return {
@@ -211,5 +261,7 @@ export function unificarJogadores(dados: DadosBackup, mapa: Readonly<Record<stri
     partidas: trocar(dados.partidas),
     torneios: trocar(dados.torneios),
     clube: trocar(dados.clube),
+    placaresMcr: trocar(dados.placaresMcr),
+    ...(dados.clubeMcr ? { clubeMcr: trocar(dados.clubeMcr) } : {}),
   }
 }

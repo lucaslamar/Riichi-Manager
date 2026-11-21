@@ -19,7 +19,7 @@ import {
   redeDeConfrontos,
   resumoDoJogador,
 } from '../../logica/analiseJogador'
-import { usePartidas } from '../hooks/usePartidas'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { useRankingGeral } from '../hooks/useRankingGeral'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
 import MapaConfrontos from '../componentes/analise/MapaConfrontos'
@@ -59,8 +59,9 @@ export default function PaginaJogador({
   const [editando, setEditando] = useState(false)
   const jogador = jogadores.find((item) => item.id === jogadorId)
   const souEu = euId === jogadorId
-  const { partidas } = usePartidas()
-  const { filtros } = useRankingGeral()
+  // As partidas do modo: no Chinês, os placares MCR, como no Ranking.
+  const { partidas, filtros } = useRankingGeral()
+  const { isChines } = useModoJogo()
   const [densidade, setDensidade] = useState<(typeof DENSIDADES)[number]['chave']>('normal')
   const [selecionado, setSelecionado] = useState<string | null>(null)
   const [aviso, setAviso] = useState<string | null>(null)
@@ -337,6 +338,8 @@ export default function PaginaJogador({
         />
       </CardGrafico>
 
+      {/* Leste e Hanchan são do Riichi: o MCR joga sempre as 16 mãos. */}
+      {!isChines && (
       <CardGrafico
         titulo={t('match.player.charts.formats')}
         icone="fa-stopwatch"
@@ -371,6 +374,7 @@ export default function PaginaJogador({
           ))}
         </div>
       </CardGrafico>
+      )}
 
       <CardGrafico
         titulo={t('match.player.charts.partners')}

@@ -5,7 +5,7 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import AnelTimer from '@/dominios/centerpiece/interface/componentes/AnelTimer'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
-import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
+import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { CHAVE_VENTO, KANJI_VENTO, ORDEM_VENTOS, type Partida } from '@/dominios/centerpiece/logica/partida'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { deveLembrarBackup } from '../../logica/exportacao'
@@ -73,7 +73,7 @@ export default function PaginaMesasTorneio({
 }: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode; aoAbrirRanking: () => void } & AcoesMesa) {
   const { t, idioma, numero } = useI18n()
   const { salvar, definirLista, marcarTransferido } = useTorneios()
-  const { partidas, descartarDoTorneio } = usePartidas()
+  const { partidas, descartarDoTorneio } = usePartidasDoTorneio()
   const { jogadores } = useJogadores()
   const { aviso, mostrar } = useAviso()
   const emJogo = rodadaAtual(torneio, partidas)

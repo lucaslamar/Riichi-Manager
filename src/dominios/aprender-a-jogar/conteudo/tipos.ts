@@ -151,6 +151,8 @@ export interface TutorialPart {
 export interface TermoGlossarioGuia {
   term: string
   definition: string
+  /** Selo "Diferente do Riichi" (glossário de outros modos de jogo). */
+  diferenteRiichi?: boolean
 }
 
 /** Textos desenhados dentro das ilustrações. */
@@ -192,4 +194,8 @@ export interface ConteudoTutorial {
   /** O rank de quem está em cada parte, e o último (com tudo concluído). */
   ranks: [string, string, string, string, string]
   ilustracoes: TextosIlustracoes
+  /** Texto do livro de outro modo de jogo no lugar do de `learn.rankHint` (o Riichi não usa). */
+  dicaRank?: string
+  /** Idem, para `learn.conclusionText`. */
+  textoConclusao?: string
 }

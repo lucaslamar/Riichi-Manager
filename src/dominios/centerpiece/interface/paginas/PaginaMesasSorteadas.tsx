@@ -9,6 +9,8 @@ import { CHAVE_VENTO, KANJI_VENTO } from '../../logica/partida'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import { useAviso } from '../hooks/useAviso'
 import { useClube } from '../hooks/useClube'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
+import { usePlacaresMcr } from '@/dominios/placar-mcr/interface/usePlacaresMcr'
 import { usePartidas } from '../hooks/usePartidas'
 
 /**
@@ -26,7 +28,13 @@ export default function PaginaMesasSorteadas({
   const { t, idioma } = useI18n()
   const { sorteio, sortearDeNovo, abortarEncontro } = useClube()
   const [abortandoEncontro, setAbortandoEncontro] = useState(false)
-  const { partidas } = usePartidas()
+  const { partidas: partidasRiichi } = usePartidas()
+  // MCR: as mesas são placares, registradas quando a partida termina.
+  const chines = useModoJogoAtual() === 'mcr'
+  const placaresMcr = usePlacaresMcr()
+  const partidas = chines
+    ? placaresMcr.filter((placar) => placar.finalizadoEm !== null)
+    : partidasRiichi
   const { aviso, mostrar } = useAviso()
   const [refazendo, setRefazendo] = useState(false)
 

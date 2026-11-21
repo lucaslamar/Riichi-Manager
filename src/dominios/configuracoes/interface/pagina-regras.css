@@ -301,3 +301,9 @@ body.toque-ampliado .cartao-regras {
 .cartao-narracao__opcoes .segmentos-tema {
   margin-top: 6px;
 }
+
+.cartao-regras__ajuda-modo {
+  grid-column: 1 / -1;
+  color: var(--cor-texto-suave, #40566d);
+  font-size: 0.875rem;
+}

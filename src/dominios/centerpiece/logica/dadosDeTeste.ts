@@ -49,7 +49,7 @@ const PESSOAS: readonly { nome: string; apelido?: string; forca: number }[] = [
 const CONVIDADO = { id: 'convidado-teste-1', nome: 'Rafael (visitante)' }
 
 /** Gerador pseudoaleatório com semente (mulberry32). */
-function sorteador(semente: number) {
+export function sorteador(semente: number) {
   let estado = semente >>> 0
   return () => {
     estado = (estado + 0x6d2b79f5) >>> 0
@@ -71,7 +71,7 @@ export function gerarJogadoresDeTeste(agora: Date): Jogador[] {
   }))
 }
 
-const IDS = PESSOAS.map((_, indice) => `${PREFIXO_TESTE}jogador-${indice + 1}`)
+export const IDS = PESSOAS.map((_, indice) => `${PREFIXO_TESTE}jogador-${indice + 1}`)
 const forcaDe = (id: string) => PESSOAS[IDS.indexOf(id)]?.forca ?? 1
 const nomeDe = (id: string) => {
   if (id === CONVIDADO.id) return CONVIDADO.nome
