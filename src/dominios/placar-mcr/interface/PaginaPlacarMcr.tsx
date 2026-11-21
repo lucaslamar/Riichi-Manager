@@ -18,6 +18,7 @@ import {
   type PlacarMcr,
 } from '../logica/placar'
 import { nomeDaCadeira } from './nomes'
+import HistoricoPlacarMcr from './HistoricoPlacarMcr'
 import NovoPlacarMcr from './NovoPlacarMcr'
 import PlacarAberto from './PlacarAberto'
 import { acoesPlacaresMcr, usePlacaresMcr } from './usePlacaresMcr'
@@ -167,14 +168,22 @@ export default function PaginaPlacarMcr() {
     )
   }
 
+  if (vista.tipo === 'lista' && vista.quais === 'historico') {
+    return (
+      <HistoricoPlacarMcr
+        finalizados={finalizados}
+        aoVoltar={voltar}
+        aoAbrir={abrir}
+        aoAbrirTorneio={(id) => setVista({ tipo: 'torneio', id })}
+        aoAbrirTemporada={(id) => setVista({ tipo: 'temporada', id })}
+      />
+    )
+  }
   if (vista.tipo === 'lista') {
-    const lista = vista.quais === 'andamento' ? emAndamento : finalizados
+    const lista = emAndamento
     return (
       <section className="ptd-inicio">
-        <TituloTela
-          titulo={t(vista.quais === 'andamento' ? 'match.home.inProgress' : 'match.home.history')}
-          aoVoltar={voltar}
-        />
+        <TituloTela titulo={t('match.home.inProgress')} aoVoltar={voltar} />
         {lista.length === 0 && (
           <p className="placar-mcr__ajuda">{t('placar.mcr.nenhumaPartida')}</p>
         )}
@@ -183,23 +192,6 @@ export default function PaginaPlacarMcr() {
             <LinhaPlacar key={placar.id} placar={placar} aoAbrir={() => abrir(placar.id)} />
           ))}
         </ul>
-        {vista.quais === 'historico' && finalizados.length > 0 && (
-          <button
-            type="button"
-            className="btn-perigo placar-mcr__apagar-tudo"
-            onClick={() => {
-              if (
-                !window.confirm(
-                  t('placar.mcr.confirmarApagarHistorico', { count: finalizados.length }),
-                )
-              )
-                return
-              finalizados.forEach((placar) => acoesPlacaresMcr.excluir(placar.id))
-            }}
-          >
-            {t('placar.mcr.apagarHistorico')}
-          </button>
-        )}
       </section>
     )
   }

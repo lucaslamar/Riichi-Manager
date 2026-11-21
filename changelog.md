@@ -16,7 +16,7 @@
 - **Mudar batida no MCR**: o mesmo botão do Riichi no teclado, e o toque na pedra na finalização. As esperas mudam junto.
 - **Glossário do MCR**: no Tutorial e numa aba do Guia de bolso. A aba usa o mesmo glossário do Riichi, com sumário, assuntos em blocos e pedras de exemplo, e o que é diferente do Riichi vem numa nota no fim do termo.
 - **Telas do Riichi no modo Chinês**: as pedras dos exemplos e do glossário aparecem com o desenho chinês. No MPSZ, os números ainda sem naipe aparecem na mão como no Riichi, e o "?" ao lado de MÃO explica como montar a mão e usar Chi, Pon e Kan.
-- **Mesa e hub do placar**: a partida MCR usa a mesma mesa do Riichi, com as placas em volta e o timer no centro. O Placar abre num hub igual ao da Partida, com Nova partida, Torneio, Em andamento e Histórico.
+- **Mesa e hub do placar**: a partida MCR usa a mesma mesa do Riichi, com as placas em volta e o timer no centro. O Placar abre num hub igual ao da Partida, com Nova partida, Torneio, Em andamento e Histórico. O Histórico tem a busca, os filtros e os tipos do Riichi (Todas, Partidas e Torneios), e em Torneios ficam os torneios MCR encerrados.
 - **Torneio do MCR**: o cartão Torneio do Placar abre o mesmo Torneio do Riichi, com Rodízio, Suíço, Eliminatório, Brasileirão e Temporada, sorteio das mesas, timers e ranking. Cada mesa abre um placar MCR com os jogadores do sorteio e dá pontos de mesa 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos, e o ranking desempata pela soma dos pontos das partidas.
 
 ## Não lançado

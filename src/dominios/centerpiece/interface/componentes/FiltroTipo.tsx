@@ -7,14 +7,17 @@ const TIPOS: readonly FiltroTipoMesa[] = ['todas', 'avulsa', 'clube', 'torneio']
 export default function FiltroTipo({
   valor,
   aoMudar,
+  tipos = TIPOS,
 }: {
   valor: FiltroTipoMesa
   aoMudar: (tipo: FiltroTipoMesa) => void
+  /** Outro modo de jogo pode não ter todos (o MCR não tem Clube). */
+  tipos?: readonly FiltroTipoMesa[]
 }) {
   const { t } = useI18n()
   return (
     <div className="ptd-filtro-tipo" role="group" aria-label={t('match.types.label')}>
-      {TIPOS.map((opcao) => (
+      {tipos.map((opcao) => (
         <button
           key={opcao}
           type="button"
