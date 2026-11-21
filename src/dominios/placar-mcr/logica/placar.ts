@@ -132,10 +132,11 @@ export function registrarMao(placar: PlacarMcr, mao: MaoMcr): PlacarMcr {
   if (validarMao(mao) || placar.finalizadoEm) return placar
   const maos = [...placar.maos, mao]
   // A próxima mão começa com a vez do novo dealer, parada até o primeiro toque, e sem descartes.
+  // Sem a chave do registro (undefined não volta igual do backup).
+  const { registro: _registroDaMao, ...semRegistro } = placar
   return {
-    ...placar,
+    ...semRegistro,
     maos,
-    registro: undefined,
     vez: vezInicial(dealerDaMao(maos.length), placar.timerSegundos),
   }
 }
