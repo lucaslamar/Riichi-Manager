@@ -97,10 +97,10 @@ export default function ExemploFanMcr({
               <PedraChinesa id={id} />
             </span>
           ))}
-        </span>
-        <span className="yaku-tiles__grupo exemplo-fan-mcr__batida">
-          <span className={classe('batida')}>
+          {/* A batida fecha a linha, com o selo da montagem da mão. */}
+          <span className={classe('batida') + ' exemplo-fan-mcr__batida'}>
             <PedraChinesa id={batida} />
+            <span className="badge-pedra-agari">{t('calculator.winningTile')}</span>
           </span>
         </span>
         {mao.flores.length > 0 && (
@@ -117,9 +117,6 @@ export default function ExemploFanMcr({
         )}
       </div>
       <ul className="exemplo-fan-mcr__chips" aria-label={t('guiaBolso.mcr.condicoes')}>
-        <li className="exemplo-fan-mcr__chip exemplo-fan-mcr__chip--batida">
-          {t('calculator.winningTile')}
-        </li>
         {chips.map((chip) => (
           <li key={chip} className="exemplo-fan-mcr__chip">
             {chip}

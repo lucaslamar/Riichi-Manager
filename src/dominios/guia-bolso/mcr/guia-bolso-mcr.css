@@ -93,9 +93,13 @@
 
 /* A pedra da batida fica à parte, como na mesa. */
 .exemplo-fan-mcr__batida {
-  margin-left: 6px;
-  border-bottom: 2px solid var(--cor-primario, #2196f3);
-  padding-bottom: 2px;
+  position: relative;
+}
+
+.exemplo-fan-mcr__batida .badge-pedra-agari {
+  min-height: 0;
+  font-size: 0.36rem;
+  line-height: 1.4;
 }
 
 .exemplo-fan-mcr__chips {
@@ -115,11 +119,6 @@
   font-size: 0.8rem;
 }
 
-.exemplo-fan-mcr__chip--batida {
-  border-color: var(--cor-primario, #2196f3);
-  color: var(--cor-primario, #2196f3);
-  font-weight: 700;
-}
 
 .exemplo-fan-mcr__outros,
 .exemplo-fan-mcr__total {
