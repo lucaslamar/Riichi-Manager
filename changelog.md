@@ -4,7 +4,7 @@
 
 ### Alterado
 
-- **Teclado da Calculadora de Mão**: no celular em pé, as teclas ficam um pouco mais altas e ocupam a sobra que havia embaixo, no Riichi e no MCR.
+- **Teclado da Calculadora de Mão**: no celular em pé, o espaço vazio entre o teclado e a barra inferior ficou menor, no Riichi e no MCR.
 
 ### Adicionado
 

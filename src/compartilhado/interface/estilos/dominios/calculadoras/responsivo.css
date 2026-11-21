@@ -5563,8 +5563,7 @@
   color: var(--texto-apoio);
 }
 
-/* Celular em pé: o teclado usa a sobra de baixo (Riichi e MCR). Teclas um pouco
-   mais altas e só um respiro curto até a barra inferior. */
+/* Celular em pé: só um respiro curto entre o teclado e a barra inferior (Riichi e MCR). */
 @media (max-width: 767px) and (orientation: portrait) {
   .card-mao-completa .construtor-mao-montagem .teclado-pedras {
     padding-bottom: 4px;
@@ -5572,9 +5571,5 @@
 
   .card-mao-completa .construtor-mao-montagem .painel-teclado-calculadora {
     padding-bottom: 0;
-  }
-
-  .card-mao-completa .construtor-mao-montagem .teclado-pedras .btn-pedra {
-    height: clamp(56px, 12.5dvh, 120px);
   }
 }
