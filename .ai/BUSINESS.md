@@ -42,7 +42,7 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Glossário MCR (`aprender-a-jogar/conteudo/mcr/glossario.ts`): o do guia do CMC, no livro e na aba Glossário do Guia de bolso, com o selo "Diferente do Riichi" no que muda (dealer, Chow com kuikae, Kong oculto, flores, espera sem furiten). Os créditos do CMC saíram da tela: o uso foi autorizado sem crédito.
 - Voz do resultado MCR: "Hu!" no ron e "Zimo!" no tsumo, em chinês, depois os fan, o total e os pagamentos. Mão inválida: só o aviso, sem chamada.
 
-- Torneio MCR (decidido com o usuário em 20/11/2026, regra da EMA): cada mesa dá pontos de mesa 4, 2, 1 e 0 pela colocação. Empatados dividem igualmente os pontos das colocações que ocupam juntos (dois em 1º ficam com 3 cada). A classificação soma os pontos de mesa e desempata pela soma dos pontos das partidas. Cada sessão (mesa) acaba nas 16 mãos ou no fim do tempo configurado (0 = sem limite). Um torneio aberto por vez. A regra veio de memória: vale conferir com o regulamento da EMA.
+- Torneio MCR (decidido com o usuário em 20/11/2026, regra da EMA, e trocado pelo Torneio do Riichi em 21/11/2026): os mesmos formatos, sorteio, timers e ranking do Riichi. Cada mesa dá pontos de mesa 4, 2, 1 e 0 pela colocação. Empatados dividem igualmente os pontos das colocações que ocupam juntos (dois em 1º ficam com 3 cada). A classificação soma os pontos de mesa e desempata pela soma dos pontos das partidas. A regra veio de memória: vale conferir com o regulamento da EMA.
 
 ### Decisões em aberto
 

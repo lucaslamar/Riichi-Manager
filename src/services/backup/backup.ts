@@ -11,7 +11,6 @@ import type { ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
 import type { EncontroClube, SorteioClube } from '@/dominios/centerpiece/logica/encontroClube'
 import type { ListaSalva, Temporada, Torneio } from '@/dominios/torneio/logica/tipos'
 import type { PlacarMcr } from '@/dominios/placar-mcr/logica/placar'
-import type { TorneioMcr } from '@/dominios/placar-mcr/logica/torneio'
 
 const SCHEMA_BACKUP = 1
 const MARCA = 'mojoca-backup'
@@ -29,8 +28,6 @@ export interface DadosBackup {
   regrasRegistro: unknown
   /** Placares do modo Chinês (MCR). Backups anteriores à 7.0.0 não têm: vira lista vazia. */
   placaresMcr: PlacarMcr[]
-  /** Torneios MCR (as mesas estão em `placaresMcr`). Sem o campo: lista vazia. */
-  torneiosMcr: TorneioMcr[]
 }
 
 export interface ArquivoBackup {
@@ -93,7 +90,6 @@ export function validarBackup(entrada: string | unknown): ValidacaoBackup {
     comIds(dados.temporadas) &&
     comIds(dados.listasTorneio ?? []) &&
     comIds(dados.placaresMcr ?? []) &&
-    comIds(dados.torneiosMcr ?? []) &&
     !!clube &&
     comIds(clube.encontros)
   if (!valido) return { ok: false, erro: 'corrompido' }
@@ -112,7 +108,6 @@ export function validarBackup(entrada: string | unknown): ValidacaoBackup {
         configMesa: dados.configMesa ?? null,
         regrasRegistro: dados.regrasRegistro ?? null,
         placaresMcr: dados.placaresMcr ?? [],
-        torneiosMcr: dados.torneiosMcr ?? [],
       },
     },
   }
@@ -192,7 +187,6 @@ export function mesclarBackup(locais: DadosBackup, vindos: DadosBackup): DadosBa
     temporadas: somarPorId(locais.temporadas, vindos.temporadas),
     listasTorneio: somarPorId(locais.listasTorneio, vindos.listasTorneio),
     placaresMcr: somarPorId(locais.placaresMcr, vindos.placaresMcr),
-    torneiosMcr: somarPorId(locais.torneiosMcr, vindos.torneiosMcr),
     clube: {
       ...locais.clube,
       sorteio: locais.clube.sorteio ?? vindos.clube.sorteio,

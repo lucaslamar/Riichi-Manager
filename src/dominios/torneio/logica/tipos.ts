@@ -85,6 +85,8 @@ export interface Torneio {
   variante?: Variante
   /** Regras de Sanma copiadas ao criar, para as mesas abertas no Centerpiece. */
   regrasSanma?: RegrasSanma
+  /** Torneio do modo Chinês: as mesas são placares MCR. Ausente = Riichi. */
+  jogo?: 'mcr'
 }
 
 export type CriterioTemporada =
@@ -100,6 +102,8 @@ export interface Temporada {
   criterio: CriterioTemporada
   config: ConfigMesa
   criadaEm: string
+  /** Temporada do modo Chinês. Ausente = Riichi. */
+  jogo?: 'mcr'
 }
 
 /** Lista guardada pelo cartão de memória. */

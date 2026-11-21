@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/ConfigMesaSheet'
@@ -196,6 +197,9 @@ export default function ConfigTorneioSheet({
     </>
   )
 
+  // Modo Chinês: a pontuação é a do torneio MCR (pontos de mesa), não a uma e oka do Riichi.
+  const chines = useModoJogoAtual() === 'mcr'
+
   // Temporada nova ainda sem id: quem confere é `temporadaValida`.
   const porMesa = jogadoresPorMesa(torneio)
   const cortesValidos =
@@ -207,7 +211,7 @@ export default function ConfigTorneioSheet({
       inicial={torneio.config}
       rodapeSalvar
       // Só Torneio e Pontuação: o resto usa o padrão até haver login e Centerpiece.
-      secoes={['pontuacao']}
+      secoes={chines ? [] : ['pontuacao']}
       soPlacar
       podeConcluir={cortesValidos && temporadaValida}
       abasExtras={[
@@ -221,6 +225,19 @@ export default function ConfigTorneioSheet({
             </>
           ),
         },
+        ...(chines
+          ? [
+              {
+                id: 'pontuacaoMcr',
+                rotulo: t('tableConfig.scoring'),
+                conteudo: (
+                  <div className="cfg-campo">
+                    <p className="cfg-ajuda">{t('placar.mcr.torneio.regra')}</p>
+                  </div>
+                ),
+              },
+            ]
+          : []),
       ]}
       aoFechar={aoFechar}
       aoConcluir={(config) => {

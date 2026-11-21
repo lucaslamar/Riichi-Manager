@@ -1,31 +1,22 @@
 /**
- * Torneio MCR: cada mesa é um placar ligado ao torneio. A classificação soma os
- * pontos de mesa (4, 2, 1 e 0 pela colocação), com o empate dividindo os pontos
- * das colocações empatadas, como nas regras de torneio MCR da EMA. Desempate da
- * classificação: a soma dos pontos das partidas.
+ * Torneio do modo Chinês: o mesmo Torneio do Riichi (formatos, sorteio, mesas e
+ * ranking), com cada mesa sendo um placar MCR. Aqui os placares viram as partidas
+ * que o torneio lê. A pontuação de cada mesa são os pontos de mesa 4, 2, 1 e 0
+ * pela colocação, com empatados dividindo os pontos das colocações que ocupam
+ * juntos (regras de torneio MCR da EMA). O desempate é a soma dos pontos MCR.
  */
-import { colocacoes, totais, type PlacarMcr } from './placar'
+import { ORDEM_VENTOS, type Partida, type ResultadoFinal } from '@/dominios/centerpiece/logica/partida'
+import {
+  CADEIRAS,
+  colocacoes,
+  MAOS_POR_RODADA,
+  TOTAL_MAOS,
+  totais,
+  ventoDaRodada,
+  type PlacarMcr,
+} from './placar'
 
 export const PONTOS_DE_MESA = [4, 2, 1, 0] as const
-export const DURACAO_SESSAO_PADRAO_MIN = 120
-
-export interface TorneioMcr {
-  id: string
-  nome: string
-  criadoEm: string
-  /** Tempo de cada sessão (mesa), em minutos. 0 = sem limite, só as 4 rodadas. */
-  duracaoSessaoMin: number
-  encerradoEm: string | null
-}
-
-export function novoTorneio(
-  id: string,
-  nome: string,
-  duracaoSessaoMin: number,
-  agora: string,
-): TorneioMcr {
-  return { id, nome: nome.trim(), criadoEm: agora, duracaoSessaoMin, encerradoEm: null }
-}
 
 /**
  * Pontos de mesa de cada cadeira pelos totais da partida. Empatados dividem
@@ -42,52 +33,47 @@ export function pontosDeMesa(pontos: readonly number[]): number[] {
   })
 }
 
-export interface LinhaClassificacaoMcr {
-  jogadorId: string
-  pontosMesa: number
-  pontosPartidas: number
-  mesas: number
-}
-
-/** Classificação do torneio com as mesas finalizadas: pontos de mesa e, no empate, a soma das partidas. */
-export function classificacao(
-  torneioId: string,
-  placares: readonly PlacarMcr[],
-): LinhaClassificacaoMcr[] {
-  const linhas = new Map<string, LinhaClassificacaoMcr>()
-  for (const placar of placares) {
-    if (placar.torneio?.id !== torneioId || !placar.finalizadoEm) continue
+/** Os placares de torneio como as partidas que o Torneio do Riichi lê (vínculo, situação e resultado). */
+export function partidasDoTorneioMcr(placares: readonly PlacarMcr[]): Partida[] {
+  return placares.flatMap((placar) => {
+    const vinculo = placar.torneio
+    if (vinculo?.rodada === undefined || vinculo.mesa === undefined) return []
     const pontos = totais(placar)
+    const lugares = colocacoes(pontos)
     const mesa = pontosDeMesa(pontos)
-    placar.jogadorIds.forEach((jogadorId, cadeira) => {
-      const atual = linhas.get(jogadorId) ?? {
-        jogadorId,
-        pontosMesa: 0,
-        pontosPartidas: 0,
-        mesas: 0,
-      }
-      atual.pontosMesa += mesa[cadeira]
-      atual.pontosPartidas += pontos[cadeira]
-      atual.mesas += 1
-      linhas.set(jogadorId, atual)
-    })
-  }
-  return [...linhas.values()].sort(
-    (uma, outra) => outra.pontosMesa - uma.pontosMesa || outra.pontosPartidas - uma.pontosPartidas,
-  )
-}
-
-/** Quando a sessão de uma mesa nova acaba, ou `null` se o torneio não tem limite de tempo. */
-export function fimDaSessao(torneio: TorneioMcr, agora: Date): string | null {
-  if (!torneio.duracaoSessaoMin) return null
-  return new Date(agora.getTime() + torneio.duracaoSessaoMin * 60_000).toISOString()
-}
-
-/** Minutos que faltam na sessão (0 quando acabou); `null` sem limite. */
-export function minutosRestantes(
-  fimSessaoEm: string | null | undefined,
-  agora: Date,
-): number | null {
-  if (!fimSessaoEm) return null
-  return Math.max(0, Math.ceil((Date.parse(fimSessaoEm) - agora.getTime()) / 60_000))
+    const resultado: ResultadoFinal[] = CADEIRAS.map((cadeira) => ({
+      cadeira,
+      jogadorId: placar.jogadorIds[cadeira],
+      colocacao: lugares[cadeira],
+      pontosBrutos: pontos[cadeira],
+      uma: 0,
+      oka: 0,
+      multa: 0,
+      final: mesa[cadeira],
+      desempate: pontos[cadeira],
+    }))
+    const finalizada = placar.finalizadoEm !== null
+    // A mão em jogo, para o card da mesa mostrar "Em andamento · 南2".
+    const indiceMao = Math.min(placar.maos.length, TOTAL_MAOS - 1)
+    // Só os campos que o Torneio lê; o resto da Partida é do Riichi.
+    return [
+      {
+        id: placar.id,
+        status: finalizada ? 'finalizada' : 'em_andamento',
+        criadaEm: placar.criadoEm,
+        finalizadaEm: placar.finalizadoEm,
+        resultado: finalizada ? resultado : undefined,
+        placar: {
+          rodadaVento: ORDEM_VENTOS[ventoDaRodada(indiceMao)],
+          rodadaNumero: (indiceMao % MAOS_POR_RODADA) + 1,
+          pontos,
+        },
+        vinculoTorneio: { torneioId: vinculo.id, rodada: vinculo.rodada, mesa: vinculo.mesa },
+        variante: 'yonma',
+        registradaManual: false,
+        config: {},
+        assentos: {},
+      } as unknown as Partida,
+    ]
+  })
 }

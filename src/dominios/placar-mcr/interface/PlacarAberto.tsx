@@ -29,7 +29,6 @@ import {
   type MaoMcr,
   type PlacarMcr,
 } from '../logica/placar'
-import { minutosRestantes } from '../logica/torneio'
 import ModalMaoMcr from './ModalMaoMcr'
 import { nomeDaCadeira } from './nomes'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
@@ -51,7 +50,7 @@ export default function PlacarAberto({
   const [vencedorEscolhido, setVencedorEscolhido] = useState<Cadeira | null>(null)
   const [maosAbertas, setMaosAbertas] = useState(false)
   const nomes = placar.jogadorIds.map((id) =>
-    nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido')),
+    nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'), placar.convidados),
   )
   const pontos = totais(placar)
   const indiceMao = placar.maos.length
@@ -59,14 +58,6 @@ export default function PlacarAberto({
   const dealer = dealerDaMao(indiceMao)
   const rodada = ORDEM_VENTOS[ventoDaRodada(indiceMao)]
   const numeroNaRodada = (Math.min(indiceMao, TOTAL_MAOS - 1) % MAOS_POR_RODADA) + 1
-  // Tempo da sessão (mesa de torneio): atualiza a cada 30 segundos.
-  const [agora, setAgora] = useState(() => new Date())
-  useEffect(() => {
-    if (!placar.torneio?.fimSessaoEm || !emAndamento) return
-    const intervalo = window.setInterval(() => setAgora(new Date()), 30_000)
-    return () => window.clearInterval(intervalo)
-  }, [placar.torneio?.fimSessaoEm, emAndamento])
-  const restam = emAndamento ? minutosRestantes(placar.torneio?.fimSessaoEm, agora) : null
   const atualizar = (transformar: (atual: PlacarMcr) => PlacarMcr) =>
     acoesPlacaresMcr.atualizar(placar.id, transformar)
 
@@ -100,8 +91,6 @@ export default function PlacarAberto({
             })
           : t('placar.mcr.finalizada')}
         {emAndamento && indiceMao >= TOTAL_MAOS && ` · ${t('placar.mcr.partidaCompleta')}`}
-        {restam !== null &&
-          ` · ${restam > 0 ? t('placar.mcr.torneio.restam', { minutos: numero(restam) }) : t('placar.mcr.torneio.tempoAcabou')}`}
       </p>
 
       <div className="mesa-centro-tela">

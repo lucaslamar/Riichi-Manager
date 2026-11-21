@@ -22,6 +22,7 @@ export function rankingDoTorneio(torneio: Torneio, partidas: readonly Partida[])
     while (
       primeiro > 0 &&
       linhas[primeiro - 1].pontos === linha.pontos &&
+      linhas[primeiro - 1].desempate === linha.desempate &&
       linhas[primeiro - 1].fase === linha.fase
     ) {
       primeiro--

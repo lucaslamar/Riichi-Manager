@@ -96,6 +96,8 @@ export interface ResultadoFinal {
   oka: number
   multa: number
   final: number
+  /** Desempate no torneio quando `final` empata (MCR: a soma dos pontos). Ausente no Riichi. */
+  desempate?: number
 }
 
 export interface Partida {

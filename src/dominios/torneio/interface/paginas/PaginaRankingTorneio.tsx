@@ -4,7 +4,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
-import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
+import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { rankingDoTorneio } from '../../logica/ranking'
 import { relatorioDoRanking } from '../../logica/relatorios'
@@ -31,7 +31,7 @@ export default function PaginaRankingTorneio({
   const { t, idioma, numero } = useI18n()
   // Deslizar para qualquer lado volta para a tela do torneio.
   useVoltarPorDeslize(aoVoltar)
-  const { partidas } = usePartidas()
+  const { partidas } = usePartidasDoTorneio()
   const { jogadores } = useJogadores()
   const { finalizar } = useTorneios()
   const { aviso, mostrar } = useAviso()

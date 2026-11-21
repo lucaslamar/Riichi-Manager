@@ -1,4 +1,5 @@
-import { useSyncExternalStore } from 'react'
+import { useMemo, useSyncExternalStore } from 'react'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { acoesPartidas, lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
@@ -144,8 +145,27 @@ export const acoesTorneios = {
   },
 }
 
+/**
+ * Cada modo de jogo vê só os seus torneios e temporadas, e o que salva sai marcado
+ * com ele: no modo Chinês, as mesas são placares MCR.
+ */
 export function useTorneios() {
   const estado = useSyncExternalStore(assinar, lerTorneios)
   const texto = useSyncExternalStore(assinar, lerLista)
-  return { ...estado, lista: texto, ...acoesTorneios }
+  const jogo = useModoJogoAtual() === 'mcr' ? 'mcr' : undefined
+  return useMemo(() => {
+    const doModo = <Item extends { jogo?: 'mcr' }>(itens: Item[]) =>
+      itens.filter((item) => item.jogo === jogo)
+    const marcar = <Item extends { jogo?: 'mcr' }>(item: Item): Item =>
+      jogo ? { ...item, jogo } : item
+    return {
+      ...estado,
+      torneios: doModo(estado.torneios),
+      temporadas: doModo(estado.temporadas),
+      lista: texto,
+      ...acoesTorneios,
+      salvar: (torneio: Torneio) => acoesTorneios.salvar(marcar(torneio)),
+      salvarTemporada: (temporada: Temporada) => acoesTorneios.salvarTemporada(marcar(temporada)),
+    }
+  }, [estado, texto, jogo])
 }

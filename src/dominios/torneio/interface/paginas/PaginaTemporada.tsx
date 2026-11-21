@@ -3,7 +3,7 @@ import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
-import { usePartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
+import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { encontrosDaTemporada, novoEncontro, rankingTemporada } from '../../logica/temporada'
 import type { CriterioTemporada, Torneio } from '../../logica/tipos'
@@ -27,7 +27,7 @@ export default function PaginaTemporada({
 }) {
   const { t, idioma, numero } = useI18n()
   const { torneios, temporadas, salvar, salvarTemporada } = useTorneios()
-  const { partidas } = usePartidas()
+  const { partidas } = usePartidasDoTorneio()
   const { jogadores } = useJogadores()
   const subtitulo = useSubtituloTorneio()
   const temporada = temporadas.find((item) => item.id === temporadaId)

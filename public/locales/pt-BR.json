@@ -2361,29 +2361,7 @@
         "other": "Apagar as {{count}} partidas finalizadas? Não dá para desfazer."
       },
       "torneio": {
-        "ajuda": "Pontos de mesa 4, 2, 1 e 0 por sessão.",
-        "novo": "Novo torneio",
-        "criar": "Criar torneio",
-        "nome": "Nome do torneio",
-        "nomePadrao": "Torneio MCR",
-        "duracao": "Tempo de cada sessão",
-        "minutos": "{{minutos}} min",
-        "semLimite": "Sem limite",
-        "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo.",
-        "sessao": "Sessões de {{minutos}} min ou 4 rodadas.",
-        "sessaoSemLimite": "Sessões de 4 rodadas, sem limite de tempo.",
-        "classificacao": "Classificação",
-        "semMesas": "Nenhuma mesa finalizada ainda.",
-        "jogador": "Jogador",
-        "pontosMesa": "Mesa",
-        "pontosPartidas": "Pontos",
-        "mesas": "Mesas",
-        "novaMesa": "Nova mesa",
-        "mesasTitulo": "Mesas do torneio",
-        "encerrar": "Encerrar torneio",
-        "confirmarEncerrar": "Encerrar o torneio? Não dá para abrir mesas novas depois.",
-        "restam": "sessão: {{minutos}} min",
-        "tempoAcabou": "o tempo da sessão acabou: finalize a mesa"
+        "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo."
       }
     }
   },

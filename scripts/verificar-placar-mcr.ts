@@ -16,11 +16,9 @@ import {
   validarMao,
   ventoDaRodada,
 } from '../src/dominios/placar-mcr/logica/placar'
-import {
-  classificacao,
-  minutosRestantes,
-  pontosDeMesa,
-} from '../src/dominios/placar-mcr/logica/torneio'
+import { partidasDoTorneioMcr, pontosDeMesa } from '../src/dominios/placar-mcr/logica/torneio'
+import { classificar } from '../src/dominios/torneio/logica/classificacao'
+import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
 
 assert.deepEqual(
   pontosDaMao({ tipo: 'vitoria', vencedor: 0, forma: 'ron', descartador: 2, fan: 8 }),
@@ -85,27 +83,29 @@ assert.deepEqual(pontosDeMesa([60, 60, -40, -80]), [3, 3, 1, 0], 'Dois em 1º di
 assert.deepEqual(pontosDeMesa([80, 0, 0, -80]), [4, 1.5, 1.5, 0], 'Dois em 2º dividem 2 e 1')
 assert.deepEqual(pontosDeMesa([0, 0, 0, 0]), [1.75, 1.75, 1.75, 1.75], 'Quatro empatados')
 {
-  const mesa = (id: string, mao: Parameters<typeof registrarMao>[1]) => ({
+  const mesa = (id: string, numero: number, mao: Parameters<typeof registrarMao>[1]) => ({
     ...registrarMao(novoPlacar(id, ['a', 'b', 'c', 'd'], 0, '2026-11-20'), mao),
     finalizadoEm: '2026-11-20',
-    torneio: { id: 't1', fimSessaoEm: null },
+    torneio: { id: 't1', rodada: numero, mesa: 0 },
   })
   // a vence a 1ª mesa (tsumo 8: +48) e b a 2ª (tsumo 24: +96): os dois somam 4 + 0 de mesa.
-  const mesas = [
-    mesa('m1', { tipo: 'vitoria', vencedor: 0, forma: 'tsumo', fan: 8 }),
-    mesa('m2', { tipo: 'vitoria', vencedor: 1, forma: 'tsumo', fan: 24 }),
+  const partidas = partidasDoTorneioMcr([
+    mesa('m1', 0, { tipo: 'vitoria', vencedor: 0, forma: 'tsumo', fan: 8 }),
+    mesa('m2', 1, { tipo: 'vitoria', vencedor: 1, forma: 'tsumo', fan: 24 }),
     { ...novoPlacar('fora', ['a', 'b', 'c', 'd'], 0, '2026-11-20'), finalizadoEm: '2026-11-20' },
-  ]
-  const tabela = classificacao('t1', mesas)
+  ])
+  assert.equal(partidas.length, 2, 'Só os placares de torneio viram partidas dele')
+  const torneio = {
+    ...criarRascunho({ id: 't1', agora: new Date('2026-11-20'), nome: 'T' }),
+    jogadorIds: ['a', 'b', 'c', 'd'],
+  }
+  const tabela = classificar(torneio, partidas)
   assert.deepEqual(
     tabela.map((linha) => linha.jogadorId).slice(0, 2),
     ['b', 'a'],
     'Mesmos pontos de mesa: desempata pela soma das partidas',
   )
-  assert.equal(tabela[0].pontosMesa, tabela[1].pontosMesa)
-  assert.equal(tabela[0].mesas, 2, 'Só as mesas do torneio contam')
+  assert.equal(tabela[0].pontos, tabela[1].pontos)
+  assert.equal(tabela[0].partidas, 2)
 }
-assert.equal(minutosRestantes(null, new Date()), null)
-assert.equal(minutosRestantes('2026-11-20T10:30:00Z', new Date('2026-11-20T10:00:00Z')), 30)
-assert.equal(minutosRestantes('2026-11-20T10:00:00Z', new Date('2026-11-20T11:00:00Z')), 0)
-console.log('Placar MCR ok: 24 testes.')
+console.log('Placar MCR ok: 22 testes.')

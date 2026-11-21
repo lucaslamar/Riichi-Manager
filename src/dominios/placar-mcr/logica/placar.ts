@@ -32,8 +32,10 @@ export interface PlacarMcr {
   timerSegundos: number
   vez: EstadoVez
   finalizadoEm: string | null
-  /** Mesa de um torneio MCR: o id dele e quando a sessão acaba (fim do tempo). */
-  torneio?: { id: string; fimSessaoEm: string | null }
+  /** Mesa de um torneio: o id dele e a rodada e a mesa do sorteio, começando em 0. */
+  torneio?: { id: string; rodada?: number; mesa?: number }
+  /** Nomes dos convidados do torneio (jogam sem cadastro), por id. */
+  convidados?: Record<string, string>
 }
 
 export function novoPlacar(

@@ -69,7 +69,6 @@ function aparelhoCheio(): DadosBackup {
     configMesa: configDoPreset('wrc'),
     regrasRegistro: { conjunto: 'padrao', personalizado: null },
     placaresMcr: [placarMcrDeTeste()],
-    torneiosMcr: [],
   }
 }
 
@@ -95,7 +94,6 @@ const VAZIO: DadosBackup = {
   configMesa: null,
   regrasRegistro: null,
   placaresMcr: [],
-  torneiosMcr: [],
 }
 
 teste('nome do arquivo com a data local', () => {
@@ -228,7 +226,7 @@ teste('a mesma mesa registrada nos dois celulares entra uma vez só', () => {
 
 teste('placares MCR: backup antigo, mescla e unificação de jogadores', () => {
   // Backup de antes da 7.0.0, sem o campo: entra sem placares.
-  const { placaresMcr: _semCampo, torneiosMcr: _semTorneios, ...antigo } = VAZIO
+  const { placaresMcr: _semCampo, ...antigo } = VAZIO
   const lido = validarBackup(JSON.stringify(montarBackup(antigo as DadosBackup, '6.0.0', AGORA)))
   assert.ok(lido.ok)
   assert.deepEqual(lido.backup.dados.placaresMcr, [])

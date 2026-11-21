@@ -9,6 +9,8 @@ export interface LinhaClassificacao {
   jogadorId: string
   pontos: number
   partidas: number
+  /** Soma do desempate das mesas (MCR: pontos das partidas). 0 no Riichi. */
+  desempate: number
   /** 0 sem partidas. */
   mediaColocacao: number
 }
@@ -27,7 +29,7 @@ export function classificar(
   rodadas?: ReadonlySet<number>,
 ): LinhaClassificacao[] {
   const acumulado = new Map(
-    torneio.jogadorIds.map((id) => [id, { pontos: 0, partidas: 0, colocacoes: 0 }]),
+    torneio.jogadorIds.map((id) => [id, { pontos: 0, partidas: 0, colocacoes: 0, desempate: 0 }]),
   )
   for (const partida of partidas) {
     const vinculo = partida.vinculoTorneio
@@ -39,6 +41,7 @@ export function classificar(
       atual.pontos += linha.final
       atual.partidas += 1
       atual.colocacoes += linha.colocacao
+      atual.desempate += linha.desempate ?? 0
     }
   }
   const ordemOriginal = new Map(torneio.jogadorIds.map((id, indice) => [id, indice]))
@@ -47,11 +50,13 @@ export function classificar(
       jogadorId,
       pontos: arredondar(dados.pontos),
       partidas: dados.partidas,
+      desempate: dados.desempate,
       mediaColocacao: dados.partidas ? Math.round((dados.colocacoes / dados.partidas) * 100) / 100 : 0,
     }))
     .sort(
       (uma, outra) =>
         outra.pontos - uma.pontos ||
+        outra.desempate - uma.desempate ||
         (uma.mediaColocacao || 5) - (outra.mediaColocacao || 5) ||
         (ordemOriginal.get(uma.jogadorId) ?? 0) - (ordemOriginal.get(outra.jogadorId) ?? 0),
     )
