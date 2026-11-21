@@ -43,6 +43,8 @@ export interface PlacarMcr {
   falsosHu?: { cadeira: Cadeira; aposMao: number }[]
   /** Descartes e chamadas da mão em jogo (o mesmo registro da mesa do Riichi). Zera a cada mão. */
   registro?: RegistroMao
+  /** Mesa sorteada num encontro do clube (`mesa` começa em 1, como no sorteio). */
+  encontro?: { id: string; mesa: number }
   /** Nomes dos convidados do torneio (jogam sem cadastro), por id. */
   convidados?: Record<string, string>
 }

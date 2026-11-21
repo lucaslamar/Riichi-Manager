@@ -29,19 +29,24 @@ function gravarJson(armazenamento: ArmazenamentoChaveValor, chave: string, dados
   armazenamento.gravar(chave, JSON.stringify({ versao: VERSAO, dados }))
 }
 
-export function carregarClube(armazenamento: ArmazenamentoChaveValor): EstadoClube {
-  const sorteio = lerJson<SorteioClube>(armazenamento, CHAVE_SORTEIO)
-  const encontros = lerJson<EncontroClube[]>(armazenamento, CHAVE_ENCONTROS)
+/** `sufixo`: o clube do modo Chinês fica em chaves próprias ('-mcr'). */
+export function carregarClube(armazenamento: ArmazenamentoChaveValor, sufixo = ''): EstadoClube {
+  const sorteio = lerJson<SorteioClube>(armazenamento, CHAVE_SORTEIO + sufixo)
+  const encontros = lerJson<EncontroClube[]>(armazenamento, CHAVE_ENCONTROS + sufixo)
   return {
-    lista: armazenamento.ler(CHAVE_LISTA) ?? '',
+    lista: armazenamento.ler(CHAVE_LISTA + sufixo) ?? '',
     sorteio: sorteio && Array.isArray(sorteio.mesas) && sorteio.encontro ? sorteio : null,
     encontros: Array.isArray(encontros) ? encontros : [],
   }
 }
 
-export function salvarClube(armazenamento: ArmazenamentoChaveValor, estado: EstadoClube) {
-  armazenamento.gravar(CHAVE_LISTA, estado.lista)
-  if (estado.sorteio) gravarJson(armazenamento, CHAVE_SORTEIO, estado.sorteio)
-  else armazenamento.remover?.(CHAVE_SORTEIO)
-  gravarJson(armazenamento, CHAVE_ENCONTROS, estado.encontros.slice(-LIMITE_ENCONTROS))
+export function salvarClube(
+  armazenamento: ArmazenamentoChaveValor,
+  estado: EstadoClube,
+  sufixo = '',
+) {
+  armazenamento.gravar(CHAVE_LISTA + sufixo, estado.lista)
+  if (estado.sorteio) gravarJson(armazenamento, CHAVE_SORTEIO + sufixo, estado.sorteio)
+  else armazenamento.remover?.(CHAVE_SORTEIO + sufixo)
+  gravarJson(armazenamento, CHAVE_ENCONTROS + sufixo, estado.encontros.slice(-LIMITE_ENCONTROS))
 }

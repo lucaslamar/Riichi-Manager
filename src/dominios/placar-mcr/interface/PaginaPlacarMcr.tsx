@@ -11,6 +11,11 @@ import { criarRascunho } from '@/dominios/torneio/logica/torneio'
 import type { MesaTorneio, RodadaTorneio } from '@/dominios/torneio/logica/tipos'
 import { novoPlacar, TIMER_PADRAO_SEGUNDOS } from '../logica/placar'
 import PaginaEmAndamento from '@/dominios/centerpiece/interface/paginas/PaginaEmAndamento'
+import PaginaListaClube from '@/dominios/centerpiece/interface/paginas/PaginaListaClube'
+import PaginaMesasSorteadas from '@/dominios/centerpiece/interface/paginas/PaginaMesasSorteadas'
+import { acoesClubeMcr, assentosDaMesa } from '@/dominios/centerpiece/interface/hooks/useClube'
+import { mesasRegistradas, type MesaDoSorteio } from '@/dominios/centerpiece/logica/encontroClube'
+import { useClube } from '@/dominios/centerpiece/interface/hooks/useClube'
 import HistoricoPlacarMcr from './HistoricoPlacarMcr'
 import NovoPlacarMcr from './NovoPlacarMcr'
 import PlacarAberto from './PlacarAberto'
@@ -22,6 +27,8 @@ type Vista =
   | { tipo: 'novo' }
   | { tipo: 'torneio'; id: string }
   | { tipo: 'temporada'; id: string }
+  | { tipo: 'listaClube' }
+  | { tipo: 'mesasClube' }
   | { tipo: 'lista'; quais: 'andamento' | 'historico' }
   /** `torneioId`: mesa aberta pelo torneio, para onde o voltar leva. */
   | { tipo: 'placar'; id: string; torneioId?: string }
@@ -44,6 +51,35 @@ export default function PaginaPlacarMcr() {
   const { t, idioma } = useI18n()
   const placares = usePlacaresMcr()
   const { torneios, salvar: salvarTorneio } = useTorneios()
+  const { sorteio } = useClube()
+  /** Mesa do clube: abre o placar dela, ou cria um com os assentos do sorteio. */
+  const abrirMesaDoClube = (mesa: MesaDoSorteio) => {
+    if (!sorteio) return
+    const existente = placares.find((placar) => placar.id === mesa.partidaId)
+    if (existente) {
+      setVista({ tipo: 'placar', id: existente.id })
+      return
+    }
+    const { ids, nomes } = assentosDaMesa(mesa)
+    const id = gerarId()
+    const convidados = Object.fromEntries(
+      ids.flatMap((jogadorId, indice) =>
+        mesa.assentos[indice].jogador.jogadorId ? [] : [[jogadorId, nomes[indice]]],
+      ),
+    )
+    acoesPlacaresMcr.criar({
+      ...novoPlacar(
+        id,
+        [...ids] as [string, string, string, string],
+        TIMER_PADRAO_SEGUNDOS,
+        new Date().toISOString(),
+      ),
+      encontro: { id: sorteio.encontro.id, mesa: mesa.numero },
+      ...(Object.keys(convidados).length ? { convidados } : {}),
+    })
+    acoesClubeMcr.marcarRegistrada(mesa.numero, id)
+    setVista({ tipo: 'placar', id })
+  }
   const [vista, setVista] = useState<Vista>({ tipo: 'hub' })
   // O mesmo Torneio do Riichi: continua no que está em jogo ou no rascunho, senão cria um.
   const torneioAtivo = [...torneios]
@@ -88,7 +124,16 @@ export default function PaginaPlacarMcr() {
   const torneiosEmJogo = torneios.filter(
     (torneio) => torneio.status === 'em_andamento' && !torneio.transferidoEm,
   )
-  const totalEmAndamento = emAndamento.length + torneiosEmJogo.length
+  // O encontro do clube com mesa sem resultado conta, como no Riichi.
+  const clubePendente =
+    sorteio &&
+    mesasRegistradas(
+      sorteio,
+      placares.filter((placar) => placar.finalizadoEm),
+    ) < sorteio.mesas.length
+      ? 1
+      : 0
+  const totalEmAndamento = emAndamento.length + torneiosEmJogo.length + clubePendente
   const finalizados = placares
     .filter((placar) => placar.finalizadoEm)
     .sort((um, outro) => (outro.finalizadoEm ?? '').localeCompare(um.finalizadoEm ?? ''))
@@ -108,6 +153,13 @@ export default function PaginaPlacarMcr() {
         aoLancarResultado={(rodada, mesa) => abrirMesaDoTorneio(vista.id, rodada, mesa)}
       />
     )
+  }
+  // Clube: as mesmas telas do Riichi. Cada mesa sorteada vira um placar MCR.
+  if (vista.tipo === 'listaClube') {
+    return <PaginaListaClube aoVoltar={voltar} aoSortear={() => setVista({ tipo: 'mesasClube' })} />
+  }
+  if (vista.tipo === 'mesasClube') {
+    return <PaginaMesasSorteadas aoVoltar={voltar} aoRegistrarMesa={abrirMesaDoClube} />
   }
   if (vista.tipo === 'temporada') {
     return (
@@ -145,7 +197,7 @@ export default function PaginaPlacarMcr() {
       <PaginaEmAndamento
         aoVoltar={voltar}
         aoAbrirMesa={abrir}
-        aoAbrirSorteio={() => undefined}
+        aoAbrirSorteio={() => setVista({ tipo: 'mesasClube' })}
         aoAbrirTorneio={(id) => setVista({ tipo: 'torneio', id })}
       />
     )
@@ -165,6 +217,13 @@ export default function PaginaPlacarMcr() {
       titulo: t('tournament.title'),
       texto: torneioAtivo ? torneioAtivo.nome : t('tournament.create'),
       aoTocar: () => setVista({ tipo: 'torneio', id: torneioAtivo?.id ?? criarTorneio() }),
+    },
+    {
+      chave: 'clube',
+      icone: 'fa-table-cells-large',
+      titulo: t('match.home.clubTitle'),
+      texto: t('match.home.clubHelp'),
+      aoTocar: () => setVista({ tipo: 'listaClube' }),
     },
     {
       chave: 'andamento',

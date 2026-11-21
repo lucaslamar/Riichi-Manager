@@ -53,12 +53,16 @@ export default function PaginaEmAndamento({
   const chines = useModoJogoAtual() === 'mcr'
   const placaresMcr = usePlacaresMcr()
   const abertasMcr = useMemo(() => partidasAbertasMcr(placaresMcr), [placaresMcr])
-  const { partidas } = riichi
+  const partidas = chines
+    ? (placaresMcr.filter(
+        (placar) => placar.finalizadoEm !== null,
+      ) as unknown as typeof riichi.partidas)
+    : riichi.partidas
   const abertas = chines ? abertasMcr : riichi.abertas
   const descartar = chines ? acoesPlacaresMcr.excluir : riichi.descartar
   const { jogadores } = useJogadores()
   const clube = useClube()
-  const sorteio = chines ? null : clube.sorteio
+  const { sorteio } = clube
   const { torneios } = useTorneios()
   const subtituloTorneio = useSubtituloTorneio()
   const [filtro, setFiltro] = useState<FiltroTipoMesa>('todas')
@@ -223,13 +227,7 @@ export default function PaginaEmAndamento({
           aoFiltrar={setFiltrosLista}
         />
       )}
-      {!nada && (
-        <FiltroTipo
-          valor={filtro}
-          aoMudar={setFiltro}
-          tipos={chines ? ['todas', 'avulsa', 'torneio'] : undefined}
-        />
-      )}
+      {!nada && <FiltroTipo valor={filtro} aoMudar={setFiltro} />}
       {nada ? (
         <p className="ptd-vazio">{t('match.home.noneOpen')}</p>
       ) : visiveis.length === 0 ? (
