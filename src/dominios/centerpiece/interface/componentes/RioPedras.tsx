@@ -21,14 +21,19 @@ export default function RioPedras({
   cadeira,
   nomeDe,
   destacarAposRiichi = false,
+  geral = false,
 }: {
   lances: readonly Lance[]
   cadeira: Cadeira
   nomeDe: (cadeira: Cadeira) => string
   destacarAposRiichi?: boolean
+  /** MCR (sem furiten): um rio só, com os descartes de todos na ordem. */
+  geral?: boolean
 }) {
   const { t } = useI18n()
-  const descartes = descartesDe(lances, cadeira)
+  const descartes = geral
+    ? lances.filter((lance) => lance.tipo === 'descarte')
+    : descartesDe(lances, cadeira)
   if (descartes.length === 0) return <p className="ptd-vazio">{t('match.discards.empty')}</p>
 
   const indiceRiichi = descartes.findIndex((descarte) => descarte.riichi)
@@ -63,7 +68,7 @@ export default function RioPedras({
               : []),
           ].join(', ')
           const seta = descarte.chamadaPor
-            ? SETA_POR_POSICAO[(descarte.chamadaPor.cadeira - cadeira + 4) % 4]
+            ? SETA_POR_POSICAO[(descarte.chamadaPor.cadeira - descarte.cadeira + 4) % 4]
             : undefined
           return (
             <li key={descarte.ordem} className="dsc-rio-lugar">

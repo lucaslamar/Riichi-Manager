@@ -150,6 +150,13 @@ export default function ModalDescartes({
         timer && <AnelTimer segundos={timer.segundos} fracao={timer.fracao} esgotado={timer.segundos === 0} />
       }
     >
+      {semRiichi ? (
+        // Sem furiten, o MCR não precisa do rio de cada um: um geral, na ordem.
+        <div className="dsc-rio-visto">
+          <RioPedras lances={lances} cadeira={cadeira} nomeDe={nomeDe} geral />
+        </div>
+      ) : (
+      <>
       <BotoesOpcao
         rotulo={t('match.discards.rivers')}
         valor={rioVisto}
@@ -194,6 +201,9 @@ export default function ModalDescartes({
           </div>
           {kansDe(rioVisto) && <p className="ptd-apoio">{kansDe(rioVisto)}</p>}
         </>
+      )}
+
+      </>
       )}
 
       {etapa === 'entrada' && (
