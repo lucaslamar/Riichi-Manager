@@ -1,6 +1,7 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { PedraSvg } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/PedraSvg'
-import { descartesDe, type Lance } from '../../logica/descartes'
+import { ordenarPedras } from '@/dominios/calculadora-mao/logica/ordenacao'
+import { descartesDe, pedraBase, type Lance } from '../../logica/descartes'
 import { descreverPedra, descreverRio } from '../../logica/descreverPedras'
 import type { Cadeira } from '../../logica/partida'
 
@@ -41,7 +42,9 @@ export default function RioPedras({
   return (
     <>
       {destacarAposRiichi && indiceRiichi >= 0 && (
-        <p className="dsc-riichi-desde">{t('match.discards.riichiSince', { order: indiceRiichi + 1 })}</p>
+        <p className="dsc-riichi-desde">
+          {t('match.discards.riichiSince', { order: indiceRiichi + 1 })}
+        </p>
       )}
       <ol className="dsc-rio" aria-label={descreverRio(nomeDe(cadeira), descartes, nomeDe, t)}>
         {descartes.map((descarte, indice) => {
@@ -50,7 +53,9 @@ export default function RioPedras({
             'dsc-pedra',
             descarte.riichi ? 'dsc-pedra--riichi' : '',
             descarte.chamadaPor ? 'dsc-pedra--chamada' : '',
-            destacarAposRiichi && indiceRiichi >= 0 && indice > indiceRiichi ? 'dsc-pedra--apos-riichi' : '',
+            destacarAposRiichi && indiceRiichi >= 0 && indice > indiceRiichi
+              ? 'dsc-pedra--apos-riichi'
+              : '',
           ]
             .filter(Boolean)
             .join(' ')
@@ -80,6 +85,33 @@ export default function RioPedras({
           )
         })}
       </ol>
+      {/* Rio geral (MCR): quantas de cada pedra já saíram, para a conta da última do tipo. */}
+      {geral && (
+        <ul
+          className="dsc-contagem"
+          aria-label={t('match.discards.count')}
+        >
+          {[...new Set(ordenarPedras(descartes.map((descarte) => pedraBase(descarte.pedra))))].map(
+            (pedra) => {
+              const quantas = descartes.filter(
+                (descarte) => pedraBase(descarte.pedra) === pedra,
+              ).length
+              return (
+                <li
+                  key={pedra}
+                  className="dsc-contagem-item"
+                  aria-label={`${descreverPedra(pedra, t)} x${quantas}`}
+                >
+                  <span className="chip-pedra dsc-pedra" aria-hidden="true">
+                    <PedraSvg pedra={pedra} />
+                  </span>
+                  <span className="dsc-contagem-numero" aria-hidden="true">x{quantas}</span>
+                </li>
+              )
+            },
+          )}
+        </ul>
+      )}
     </>
   )
 }

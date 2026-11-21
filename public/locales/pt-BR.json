@@ -1571,7 +1571,8 @@
         "pon": "Quem fez pon?",
         "kan": "Quem fez kan?",
         "ron": "Quem fez ron?"
-      }
+      },
+      "count": "Quantas de cada pedra já saíram"
     },
     "furiten": {
       "waiting": "espera {{tiles}}",

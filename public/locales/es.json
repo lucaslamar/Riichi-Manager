@@ -1578,7 +1578,8 @@
         "pon": "Who called pon?",
         "kan": "Who called kan?",
         "ron": "Who called ron?"
-      }
+      },
+      "count": "Cuántas de cada ficha ya salieron"
     },
     "furiten": {
       "waiting": "waiting on {{tiles}}",

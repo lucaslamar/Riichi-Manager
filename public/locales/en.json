@@ -1571,7 +1571,8 @@
         "pon": "Who called pon?",
         "kan": "Who called kan?",
         "ron": "Who called ron?"
-      }
+      },
+      "count": "How many of each tile are out"
     },
     "furiten": {
       "waiting": "waiting on {{tiles}}",

@@ -1549,7 +1549,8 @@
         "pon": "Who called pon?",
         "kan": "Who called kan?",
         "ron": "Who called ron?"
-      }
+      },
+      "count": "各牌の捨て枚数"
     },
     "furiten": {
       "waiting": "waiting on {{tiles}}",

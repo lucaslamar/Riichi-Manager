@@ -1549,7 +1549,8 @@
         "pon": "Who called pon?",
         "kan": "Who called kan?",
         "ron": "Who called ron?"
-      }
+      },
+      "count": "패별 버린 수"
     },
     "furiten": {
       "waiting": "waiting on {{tiles}}",

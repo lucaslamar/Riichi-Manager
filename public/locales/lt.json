@@ -1615,7 +1615,8 @@
         "pon": "Who called pon?",
         "kan": "Who called kan?",
         "ron": "Who called ron?"
-      }
+      },
+      "count": "Kiek kiekvieno akmens jau išmesta"
     },
     "furiten": {
       "waiting": "waiting on {{tiles}}",
