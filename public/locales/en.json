@@ -2305,10 +2305,6 @@
       "finalizada": "Game finished",
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
-      "semMaos": "No hands recorded.",
-      "historicoEmpate": "Draw",
-      "historicoTsumo": "{{nome}} won by tsumo · {{fan}} fan",
-      "historicoRon": "{{nome}} won by ron from {{descartador}} · {{fan}} fan",
       "desfazer": "Undo last hand",
       "finalizar": "Finish game",
       "excluir": "Delete game",
@@ -2346,7 +2342,9 @@
       "ronDe": "Ron by {{name}}",
       "falsoHu": "False Hu",
       "falsoHuDe": "False Hu by {{name}}?",
-      "falsoHuTexto": "The player pays 10 points to each of the other three, and the hand goes on."
+      "falsoHuTexto": "The player pays 10 points to each of the other three, and the hand goes on.",
+      "qtdPontos": "{{pontos}} points",
+      "verMesa": "View the table"
     }
   },
   "glossario": {

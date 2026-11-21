@@ -5,6 +5,7 @@
  */
 import {
   ORDEM_VENTOS,
+  type EventoPartida,
   type Partida,
   type ResultadoFinal,
 } from '@/dominios/centerpiece/logica/partida'
@@ -13,6 +14,8 @@ import {
   colocacoes,
   dealerDaMao,
   MAOS_POR_RODADA,
+  pontosDaMao,
+  pontosDoFalsoHu,
   TOTAL_MAOS,
   totais,
   ventoDaRodada,
@@ -64,16 +67,7 @@ export function partidasAbertasMcr(placares: readonly PlacarMcr[]): Partida[] {
     .filter((placar) => placar.finalizadoEm === null && !placar.torneio)
     .map((placar) => {
       const indiceMao = Math.min(placar.maos.length, TOTAL_MAOS - 1)
-      const eventos = placar.maos.flatMap((mao) =>
-        mao.tipo === 'empate'
-          ? []
-          : [
-              {
-                tipo: mao.forma,
-                detalhe: { vencedores: [mao.vencedor], pagador: mao.descartador },
-              },
-            ],
-      )
+      const eventos = eventosDoPlacarMcr(placar)
       return {
         id: placar.id,
         status: 'em_andamento',
@@ -114,11 +108,7 @@ export function partidaDoHistoricoMcr(placar: PlacarMcr): Partida {
     // Como no Riichi: o card lista do 1º ao 4º.
     resultado: [...(base.resultado ?? [])].sort((uma, outra) => uma.colocacao - outra.colocacao),
     criadaEm: placar.criadoEm,
-    eventos: placar.maos.flatMap((mao) =>
-      mao.tipo === 'empate'
-        ? []
-        : [{ tipo: mao.forma, detalhe: { vencedores: [mao.vencedor], pagador: mao.descartador } }],
-    ),
+    eventos: eventosDoPlacarMcr(placar),
     assentos: Object.fromEntries(
       CADEIRAS.map((cadeira) => [
         cadeira,
@@ -139,4 +129,47 @@ export function partidaDoHistoricoMcr(placar: PlacarMcr): Partida {
         }
       : {}),
   } as unknown as Partida
+}
+
+/** Mãos, empates e Falsos Hu na ordem, no formato de evento da partida do Riichi. */
+export function eventosDoPlacarMcr(placar: PlacarMcr): EventoPartida[] {
+  const rodada = (indice: number) => {
+    const mao = Math.min(indice, TOTAL_MAOS - 1)
+    return {
+      vento: ORDEM_VENTOS[ventoDaRodada(mao)],
+      numero: (mao % MAOS_POR_RODADA) + 1,
+      honba: 0,
+    }
+  }
+  const eventos: EventoPartida[] = []
+  const falsosAte = (indice: number) =>
+    (placar.falsosHu ?? [])
+      .filter((falso) => falso.aposMao === indice)
+      .forEach((falso, ordem) =>
+        eventos.push({
+          id: `${placar.id}-f${indice}-${ordem}`,
+          em: placar.criadoEm,
+          tipo: 'chombo',
+          rodada: rodada(indice),
+          variacao: pontosDoFalsoHu(falso.cadeira),
+          detalhe: { cadeira: falso.cadeira },
+        } as unknown as EventoPartida),
+      )
+  placar.maos.forEach((mao, indice) => {
+    falsosAte(indice)
+    eventos.push({
+      id: `${placar.id}-m${indice}`,
+      em: placar.criadoEm,
+      tipo: mao.tipo === 'empate' ? 'ryukyoku' : mao.forma,
+      rodada: rodada(indice),
+      variacao: pontosDaMao(mao),
+      detalhe:
+        mao.tipo === 'empate'
+          ? {}
+          : { vencedores: [mao.vencedor], pagador: mao.descartador, fan: mao.fan },
+      lances: mao.lances,
+    } as unknown as EventoPartida)
+  })
+  falsosAte(placar.maos.length)
+  return eventos
 }

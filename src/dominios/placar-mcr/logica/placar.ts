@@ -3,7 +3,7 @@
  * cadastro único do app; os placares ficam numa tabela própria, separada das
  * partidas do Riichi.
  */
-import type { RegistroMao } from '@/dominios/centerpiece/logica/descartes'
+import type { Lance, RegistroMao } from '@/dominios/centerpiece/logica/descartes'
 import type { EstadoVez } from '@/dominios/centerpiece/logica/vez'
 import { vezInicial } from '@/dominios/centerpiece/logica/vez'
 import { calcularPagamentoMcr } from '@/dominios/calculadora-mao-chinesa/logica/pontuacao-mcr'
@@ -20,9 +20,13 @@ export const TOTAL_MAOS = 16
 export const OPCOES_TIMER_SEGUNDOS = [0, 15, 20, 30, 45, 60] as const
 export const TIMER_PADRAO_SEGUNDOS = 30
 
-export type MaoMcr =
+export type MaoMcr = (
   | { tipo: 'vitoria'; vencedor: Cadeira; forma: FormaBatida; descartador?: Cadeira; fan: number }
   | { tipo: 'empate' }
+) & {
+  /** Descartes da mão, quando foram registrados na mesa (para o histórico). */
+  lances?: Lance[]
+}
 
 export interface PlacarMcr {
   id: string
@@ -130,7 +134,8 @@ export function colocacoes(pontos: readonly number[]): number[] {
 
 export function registrarMao(placar: PlacarMcr, mao: MaoMcr): PlacarMcr {
   if (validarMao(mao) || placar.finalizadoEm) return placar
-  const maos = [...placar.maos, mao]
+  const lances = placar.registro?.lances ?? []
+  const maos = [...placar.maos, lances.length ? { ...mao, lances } : mao]
   // A próxima mão começa com a vez do novo dealer, parada até o primeiro toque, e sem descartes.
   // Sem a chave do registro (undefined não volta igual do backup).
   const { registro: _registroDaMao, ...semRegistro } = placar

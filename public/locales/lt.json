@@ -2371,10 +2371,6 @@
       "finalizada": "Game finished",
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
-      "semMaos": "No hands recorded.",
-      "historicoEmpate": "Draw",
-      "historicoTsumo": "{{nome}} won by tsumo · {{fan}} fan",
-      "historicoRon": "{{nome}} won by ron from {{descartador}} · {{fan}} fan",
       "desfazer": "Undo last hand",
       "finalizar": "Finish game",
       "excluir": "Delete game",
@@ -2412,7 +2408,9 @@
       "ronDe": "{{name}} ron",
       "falsoHu": "Klaidingas Hu",
       "falsoHuDe": "{{name}} klaidingas Hu?",
-      "falsoHuTexto": "Suklydęs žaidėjas moka po 10 taškų kitiems trims, o ranka tęsiasi."
+      "falsoHuTexto": "Suklydęs žaidėjas moka po 10 taškų kitiems trims, o ranka tęsiasi.",
+      "qtdPontos": "{{pontos}} taškų",
+      "verMesa": "Žiūrėti stalą"
     }
   },
   "glossario": {

@@ -36,7 +36,6 @@ interface EntradaHub {
   aoTocar: () => void
 }
 
-
 /**
  * Placar do modo Chinês, no mesmo formato da Partida do Riichi: o hub em cartões,
  * a Nova partida, a mesa e as listas. Os placares ficam numa tabela própria.

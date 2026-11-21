@@ -2279,10 +2279,6 @@
       "finalizada": "Game finished",
       "partidaCompleta": "All 16 hands were played. Finish the game whenever you like.",
       "empate": "Draw",
-      "semMaos": "No hands recorded.",
-      "historicoEmpate": "Draw",
-      "historicoTsumo": "{{nome}} won by tsumo · {{fan}} fan",
-      "historicoRon": "{{nome}} won by ron from {{descartador}} · {{fan}} fan",
       "desfazer": "Undo last hand",
       "finalizar": "Finish game",
       "excluir": "Delete game",
@@ -2320,7 +2316,9 @@
       "ronDe": "{{name}}의 론",
       "falsoHu": "착화",
       "falsoHuDe": "{{name}}의 착화?",
-      "falsoHuTexto": "틀린 사람이 다른 세 명에게 10점씩 내고, 판은 계속됩니다."
+      "falsoHuTexto": "틀린 사람이 다른 세 명에게 10점씩 내고, 판은 계속됩니다.",
+      "qtdPontos": "{{pontos}}점",
+      "verMesa": "테이블 보기"
     }
   },
   "glossario": {

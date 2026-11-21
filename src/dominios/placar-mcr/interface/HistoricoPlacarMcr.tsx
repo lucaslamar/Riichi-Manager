@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import CardMesa from '@/dominios/centerpiece/interface/componentes/CardMesa'
-import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
+import ListaResultado from '@/dominios/centerpiece/interface/componentes/ListaResultado'
+import {
+  ListaMaos,
+  ModalConfirmacao,
+} from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { textoDaPartida } from '@/dominios/centerpiece/interface/textoPartida'
 import type { Cadeira } from '@/dominios/centerpiece/logica/partida'
@@ -49,6 +53,7 @@ export default function HistoricoPlacarMcr({
   const { torneios } = useTorneios()
   const { aviso, mostrar } = useAviso()
   const [paraExcluir, setParaExcluir] = useState<string | null>(null)
+  const [abertoId, setAbertoId] = useState<string | null>(null)
   const { jogadores } = useJogadores()
   const [tipo, setTipo] = useState<FiltroTipoMesa>('todas')
   const [busca, setBusca] = useState('')
@@ -69,6 +74,40 @@ export default function HistoricoPlacarMcr({
     new Date(),
     idioma,
   ).map((item) => item.placar)
+
+  // A partida finalizada aberta: a mesma tela do Histórico do Riichi.
+  const aberto = finalizados.find((placar) => placar.id === abertoId)
+  if (aberto) {
+    const partida = partidaDoHistoricoMcr(aberto)
+    const nomeNa = (cadeira: Cadeira) =>
+      nomeDaCadeira(
+        jogadores,
+        aberto.jogadorIds[cadeira],
+        t('placar.mcr.jogadorRemovido'),
+        aberto.convidados,
+      )
+    return (
+      <section className="ptd-inicio ptd-detalhe-historico">
+        <TituloTela
+          titulo={new Intl.DateTimeFormat(idioma, {
+            dateStyle: 'short',
+            timeStyle: 'short',
+          }).format(new Date(aberto.finalizadoEm ?? aberto.criadoEm))}
+          aoVoltar={() => setAbertoId(null)}
+        />
+        <ListaResultado linhas={partida.resultado ?? []} nomeDe={nomeNa} />
+        <h3 className="ptd-rotulo">{t('match.hands.title')}</h3>
+        <ListaMaos partida={partida} nomeDe={nomeNa} />
+        <button
+          type="button"
+          className="btn-contorno ptd-btn-largo"
+          onClick={() => aoAbrir(aberto.id)}
+        >
+          <i className="fas fa-table-cells-large" aria-hidden="true" /> {t('placar.mcr.verMesa')}
+        </button>
+      </section>
+    )
+  }
 
   return (
     <section className="ptd-inicio cm-pagina">
@@ -145,7 +184,7 @@ export default function HistoricoPlacarMcr({
                     apoio={apoio}
                     nomeDe={nomeNa}
                     semRiichi
-                    aoAbrir={() => aoAbrir(placar.id)}
+                    aoAbrir={() => setAbertoId(placar.id)}
                     aoExcluir={() => setParaExcluir(placar.id)}
                     aoCompartilhar={async () => {
                       const resultado = await compartilharTexto(

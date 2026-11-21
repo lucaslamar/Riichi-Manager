@@ -9,6 +9,7 @@ import type { Vento as VentoMcr } from '@/dominios/calculadora-mao-chinesa/logic
 import JogarDados from '@/dominios/centerpiece/interface/componentes/JogarDados'
 import MesaQuadrada from '@/dominios/centerpiece/interface/componentes/MesaQuadrada'
 import {
+  ListaMaos,
   MenuJogador,
   ModalConfirmacao,
   ModalDiferenca,
@@ -44,7 +45,6 @@ import {
   desfazerUltimaMao,
   finalizar,
   MAOS_POR_RODADA,
-  pontosDaMao,
   pontosDoFalsoHu,
   registrarFalsoHu,
   registrarMao,
@@ -56,6 +56,7 @@ import {
   type PlacarMcr,
 } from '../logica/placar'
 import ModalBatidaMcr, { maoDaBatida, novaBatidaMcr, type BatidaMcr } from './ModalBatidaMcr'
+import { eventosDoPlacarMcr } from '../logica/rankingMcr'
 import { nomeDaCadeira } from './nomes'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
 
@@ -573,40 +574,10 @@ export default function PlacarAberto({
             ) : undefined
           }
         >
-          <ol className="placar-mcr__historico">
-            {placar.maos.length === 0 && <li>{t('placar.mcr.semMaos')}</li>}
-            {placar.maos.map((mao, indice) => {
-              const deltas = pontosDaMao(mao)
-              return (
-                <li key={indice}>
-                  <span>
-                    {mao.tipo === 'empate'
-                      ? t('placar.mcr.historicoEmpate')
-                      : mao.forma === 'tsumo'
-                        ? t('placar.mcr.historicoTsumo', {
-                            nome: nomes[mao.vencedor],
-                            fan: numero(mao.fan),
-                          })
-                        : t('placar.mcr.historicoRon', {
-                            nome: nomes[mao.vencedor],
-                            descartador: nomes[mao.descartador!],
-                            fan: numero(mao.fan),
-                          })}
-                  </span>
-                  {mao.tipo === 'vitoria' && (
-                    <span className="placar-mcr__deltas">
-                      {CADEIRAS.map((cadeira) => (
-                        <span key={cadeira}>
-                          {nomes[cadeira]}{' '}
-                          {(deltas[cadeira] > 0 ? '+' : '') + numero(deltas[cadeira])}
-                        </span>
-                      ))}
-                    </span>
-                  )}
-                </li>
-              )
-            })}
-          </ol>
+          <ListaMaos
+            partida={{ ...partidaDaMesa, eventos: eventosDoPlacarMcr(placar) } as Partida}
+            nomeDe={nomeDe}
+          />
         </Modal>
       )}
     </section>

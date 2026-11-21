@@ -5,7 +5,11 @@
  * pela colocação, com empatados dividindo os pontos das colocações que ocupam
  * juntos (regras de torneio MCR da EMA). O desempate é a soma dos pontos MCR.
  */
-import { ORDEM_VENTOS, type Partida, type ResultadoFinal } from '@/dominios/centerpiece/logica/partida'
+import {
+  ORDEM_VENTOS,
+  type Partida,
+  type ResultadoFinal,
+} from '@/dominios/centerpiece/logica/partida'
 import {
   CADEIRAS,
   colocacoes,
