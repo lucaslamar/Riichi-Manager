@@ -1,4 +1,5 @@
-import { useId, useState } from 'react'
+import { useId, useState, useContext } from 'react'
+import { ContextoNavegacaoModal } from '@/compartilhado/interface/componentes/modal/navegacaoModal'
 import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import {
@@ -34,6 +35,26 @@ export const idCartaoFan = (id: number) => `fan-mcr-${id}`
  */
 function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) => void }) {
   const { t, numero } = useI18n()
+  // Fan citado (também conta, não combina): abre como tela do Guia, com voltar, sem perder o lugar.
+  const abrirTela = useContext(ContextoNavegacaoModal)
+  const irPara = (id: number) => {
+    const outro = fanMcrPorId(id)
+    if (!abrirTela || !outro) {
+      aoIrPara(id)
+      return
+    }
+    abrirTela({
+      titulo: (
+        <span>
+          {outro.pt}{' '}
+          <span className="yaku-card__kanji" lang="zh-Hans">
+            {outro.hanzi}
+          </span>
+        </span>
+      ),
+      conteudo: <CartaoFanMcr fan={outro} aoIrPara={aoIrPara} />,
+    })
+  }
   const [aberto, setAberto] = useState(false)
   const idDetalhes = useId()
   const temDetalhes = Boolean(fan.naoCombina?.length || fan.observacao)
@@ -55,7 +76,7 @@ function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) =
         <span lang="en">{fan.en}</span> · {t('guiaBolso.mcr.numero', { id: numero(fan.id) })}
       </p>
       <p className="yaku-card__descricao">{fan.descricao}</p>
-      <ExemploFanMcr fan={fan} aoIrPara={aoIrPara} />
+      <ExemploFanMcr fan={fan} aoIrPara={irPara} />
       {fan.yakuRiichi && (
         <span className="fan-mcr__riichi">
           {t('guiaBolso.mcr.riichi', { yaku: fan.yakuRiichi })}
@@ -90,7 +111,7 @@ function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) =
                           type="button"
                           className="fan-mcr__link"
                           aria-label={t('guiaBolso.mcr.irPara', { nome: outro.pt })}
-                          onClick={() => aoIrPara(id)}
+                          onClick={() => irPara(id)}
                         >
                           {outro.pt} · {t('guiaBolso.mcr.numero', { id: numero(id) })}
                         </button>
