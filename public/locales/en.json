@@ -555,7 +555,13 @@
       "tip": "Rather type? MPSZ swaps the tile keyboard for notation, like 123m. To go back, tap Tiles."
     },
     "value1han": "Worth: 1 han",
-    "valueYakuman": "Worth: Yakuman"
+    "valueYakuman": "Worth: Yakuman",
+    "mcr": {
+      "guide": "The cap opens the Pocket guide: the 81 fan with examples, the glossary and search to check during the game.",
+      "finish": "With a complete hand, Finish hand opens the win options: flowers, ron or tsumo, winds and special conditions.",
+      "notationTip": "You can enter several groups and numbers and tap the suit only at the end; it applies to all. Each number shows the honor it becomes with z. AC clears everything. To go back to the tile keyboard, tap Tiles or swipe right.",
+      "guideCard": "Each fan with an example and its value"
+    }
   },
   "rulesModal": {
     "open": "Open scoring rules",

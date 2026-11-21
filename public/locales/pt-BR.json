@@ -555,7 +555,13 @@
       "tip": "Prefere digitar? MPSZ troca o teclado de pedras pela notação, como 123m. Para voltar, toque em Peças."
     },
     "value1han": "Vale: 1 han",
-    "valueYakuman": "Vale: Yakuman"
+    "valueYakuman": "Vale: Yakuman",
+    "mcr": {
+      "guide": "O chapéu abre o Guia de bolso: os 81 fan com exemplos, o glossário e a busca para consultar durante o jogo.",
+      "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: flores, ron ou tsumo, ventos e condições especiais. Cada parte de lá tem o próprio ?.",
+      "notationTip": "Dá para montar vários grupos e números e tocar no naipe só no fim, e ele vale para todos. Cada número mostra embaixo a honra que vira com o z. AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize o dedo para a direita.",
+      "guideCard": "Cada fan com exemplo e quanto vale"
+    }
   },
   "rulesModal": {
     "open": "Abrir regras de cálculo",

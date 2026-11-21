@@ -561,7 +561,13 @@
       "tip": "¿Prefieres escribir? MPSZ cambia el teclado de fichas por la notación, como 123m. Para volver, toca Fichas."
     },
     "value1han": "Vale: 1 han",
-    "valueYakuman": "Vale: Yakuman"
+    "valueYakuman": "Vale: Yakuman",
+    "mcr": {
+      "guide": "El gorro abre la Guía de bolsillo: los 81 fan con ejemplos, el glosario y la búsqueda para consultar durante el juego.",
+      "finish": "Con la mano completa, Finalizar mano lleva a las opciones de la victoria: flores, ron o tsumo, vientos y condiciones especiales.",
+      "notationTip": "Puedes armar varios grupos y números y tocar el palo solo al final, y vale para todos. Cada número muestra abajo el honor que se vuelve con la z. AC borra todo. Para volver al teclado de fichas, toca Fichas o desliza a la derecha.",
+      "guideCard": "Cada fan con ejemplo y cuánto vale"
+    }
   },
   "rulesModal": {
     "open": "Abrir reglas de cálculo",

@@ -4,6 +4,7 @@
 
 ### Alterado
 
+- **Ajuda da montagem da mão**: a cena da Batida mostra o teclado apagado, com Mudar batida e Finalizar mão embaixo, como no app. No modo Chinês, a ajuda sai sem o que é só do Riichi (han nas esperas e Aka dora), e a cena do Guia de bolso mostra as abas e o fan do MCR.
 - **Teclado da Calculadora de Mão**: no celular em pé, o espaço vazio entre o teclado e a barra inferior ficou menor, no Riichi e no MCR.
 
 ### Adicionado

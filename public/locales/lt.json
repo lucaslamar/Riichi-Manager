@@ -567,7 +567,13 @@
       "caseFourth": "Ketvirtas 5"
     },
     "value1han": "Vertė: 1 han",
-    "valueYakuman": "Vertė: Yakuman"
+    "valueYakuman": "Vertė: Yakuman",
+    "mcr": {
+      "guide": "Kepurė atidaro kišeninį gidą: 81 fan su pavyzdžiais, žodynas ir paieška žaidimo metu.",
+      "finish": "Kai ranka pilna, „Baigti ranką“ atidaro pergalės parinktis: gėlės, ron ar tsumo, vėjai ir ypatingos sąlygos.",
+      "notationTip": "Galite įvesti kelias grupes ir skaičius, o rūšį paspausti tik pabaigoje – ji tiks visiems. Po kiekvienu skaičiumi matosi garbės akmuo su z. AC viską išvalo. Grįžti į akmenų klaviatūrą: paspauskite Akmenys arba braukite į dešinę.",
+      "guideCard": "Kiekvienas fan su pavyzdžiu ir verte"
+    }
   },
   "rulesModal": {
     "open": "Atidaryti skaičiavimo taisykles",
