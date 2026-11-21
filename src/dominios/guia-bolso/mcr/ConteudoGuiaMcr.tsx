@@ -11,7 +11,8 @@ import {
   type CategoriaFanMcr,
   type FanMcr,
 } from '@/compartilhado/mahjong/mcr/fans-mcr'
-import { GLOSSARIO_MCR } from '@/dominios/aprender-a-jogar/conteudo/mcr/glossario'
+import { SECOES_GLOSSARIO_MCR } from '@/dominios/aprender-a-jogar/conteudo/mcr/glossario'
+import AbaGlossario from '@/dominios/calculadora-mao/interface/modais/yakus/AbaGlossario'
 import ExemploFanMcr from './ExemploFanMcr'
 import './guia-bolso-mcr.css'
 
@@ -175,28 +176,7 @@ export function ConteudoGuiaMcr({
       </div>
     )
   }
-  if (aba === 'glossario') {
-    return (
-      <section className="yaku-grupo">
-        <h3 className="yaku-grupo__titulo">{t('pocketGuide.tabs.glossary')}</h3>
-        <dl className="guia-mcr__glossario">
-          {GLOSSARIO_MCR.map(({ term, definition, diferenteRiichi }) => (
-            <div key={term}>
-              <dt>
-                {term}
-                {diferenteRiichi && (
-                  <span className="selo-diferente-riichi">
-                    {t('glossario.mcr.diferenteRiichi')}
-                  </span>
-                )}
-              </dt>
-              <dd>{definition}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-    )
-  }
+  if (aba === 'glossario') return <AbaGlossario secoes={SECOES_GLOSSARIO_MCR} />
   if (aba === 'riichi') {
     return (
       <>

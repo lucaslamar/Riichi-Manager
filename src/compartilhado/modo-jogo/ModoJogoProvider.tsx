@@ -42,3 +42,8 @@ export function useModoJogo() {
   if (!contexto) throw new Error('useModoJogo deve ser usado dentro de ModoJogoProvider')
   return contexto
 }
+
+/** O modo atual, ou o Riichi fora do provedor (telas isoladas e testes). */
+export function useModoJogoAtual(): ModoJogo {
+  return useContext(ModoJogoContext)?.modo ?? 'riichi'
+}

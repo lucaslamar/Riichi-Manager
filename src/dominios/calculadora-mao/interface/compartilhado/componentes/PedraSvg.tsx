@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { traduzirGlobal } from '@/compartilhado/i18n/tradutorGlobal'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import type { CodigoPedra, Meld } from '../../../logica/mao'
 import { arquivoPedra, nomePedraAcessivel, urlPedra } from '../../constantes'
@@ -20,6 +21,8 @@ export function PedraSvg({
   // Pretas no tema claro e brancas no escuro, ou o que a pessoa escolheu em Ajustes.
   const { pedrasEfetivas, temaEfetivo } = usePreferencias()
   const nomeArquivo = virada ? 'Back' : (arquivo ?? (pedra ? arquivoPedra(pedra) : 'Blank'))
+  // Modo Chinês: as telas do Riichi reaproveitadas mostram a arte chinesa.
+  const chinesa = useModoJogoAtual() === 'mcr' && !virada && !!pedra
   const alt = virada ? traduzirGlobal('tiles.back') : nomePedraAcessivel(pedra)
 
   if (formato === 'texto') {
@@ -33,7 +36,11 @@ export function PedraSvg({
   return (
     <img
       className={`tile-img ${pedra === '5z' ? 'tile-img-haku' : ''} ${deLado ? 'tile-img-lado' : ''}`}
-      src={urlPedra(nomeArquivo, formato, pedrasEfetivas, temaEfetivo === 'escuro')}
+      src={
+        chinesa
+          ? `${import.meta.env.BASE_URL}tiles/chines/${nomeArquivo.replace('-Dora', '')}.svg?v=1`
+          : urlPedra(nomeArquivo, formato, pedrasEfetivas, temaEfetivo === 'escuro')
+      }
       alt={alt}
       draggable={false}
       // Em telas de alta densidade (iPhone 16, Pixel, Galaxy) o Chrome adiava a
