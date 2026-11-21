@@ -560,7 +560,19 @@
       "guide": "The cap opens the Pocket guide: the 81 fan with examples, the glossary and search to check during the game.",
       "finish": "With a complete hand, Finish hand opens the win options: flowers, ron or tsumo, winds and special conditions.",
       "notationTip": "You can enter several groups and numbers and tap the suit only at the end; it applies to all. Each number shows the honor it becomes with z. AC clears everything. To go back to the tile keyboard, tap Tiles or swipe right.",
-      "guideCard": "Each fan with an example and its value"
+      "guideCard": "Each fan with an example and its value",
+      "tsumo": "You won with a tile you drew. It scores Self-Drawn (1 fan), and each of the three others pays 8 plus the hand fan.",
+      "ron": "You won on another player's discard. The discarder pays 8 plus the hand fan, and the other two pay 8 each.",
+      "oculta": "With no open Chi, Pon or Kan: on ron it scores Concealed Hand (2 fan), and on tsumo Fully Concealed Hand (4 fan) instead of it and Self-Drawn.",
+      "ventoAssento": "The winner's wind. A pung or kong of it scores Seat Wind (2 fan). The dealer is East.",
+      "ventoRodada": "The round wind. A pung or kong of it scores Prevalent Wind (2 fan). If it is also the seat wind, the pung scores both.",
+      "flores": "The 8 flower and season tiles score 1 fan each. In MCR none of them is tied to the seat.",
+      "floresMinimo": "Flowers do not count toward the 8 fan minimum: they only add once the hand is already worth 8.",
+      "ultimaTitulo": "Last tile",
+      "ultima": "Winning on the last wall tile (tsumo) scores Last Tile Draw (8 fan). Winning on the last discard (ron) scores Last Tile Claim (8 fan).",
+      "kanTitulo": "Kong",
+      "kan": "On tsumo, winning on the kong replacement tile scores Out with Replacement Tile (8 fan). On ron, winning on the tile another player adds to a pung scores Robbing the Kong (8 fan).",
+      "ultimaDoTipo": "Winning on the last copy of a tile, with the other three already visible, scores Last Tile (4 fan)."
     }
   },
   "rulesModal": {
@@ -2214,7 +2226,8 @@
     "entrada": {
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
-      "erroQuatro": "Each tile only exists four times."
+      "erroQuatro": "Each tile only exists four times.",
+      "escolherFlores": "Choose the flowers"
     },
     "condicoes": {
       "titulo": "Conditions",

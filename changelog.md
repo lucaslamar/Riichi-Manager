@@ -5,6 +5,7 @@
 ### Alterado
 
 - **Resultado falado mais curto sem a Narração**: com a Narração desligada, a voz do resultado diz só os pontos (no Riichi) ou o fan (no MCR) e quanto cada um paga. Com a Narração ligada, continua lendo o resultado inteiro.
+- **Flores na finalização do MCR como as Doras**: o contador de Flores e estações ganha o botão da flor, que abre as 8 pedras para escolher quais. As escolhidas aparecem na mão, num grupo depois das pedras, e o + e o − continuam funcionando. Batida, Ventos, Flores e Condições especiais ganharam o ? com as regras do MCR.
 - **Pedras chinesas na cor escolhida**: no modo Chinês, as pedras seguem a cor de Ajustes, como as do Riichi: brancas em bege e pretas, com o rosa no tema escuro.
 
 - **Ajuda da montagem da mão**: a cena da Batida mostra o teclado apagado, com Mudar batida e Finalizar mão embaixo, como no app. No modo Chinês, a ajuda sai sem o que é só do Riichi (han nas esperas e Aka dora), e a cena do Guia de bolso mostra as abas e o fan do MCR.

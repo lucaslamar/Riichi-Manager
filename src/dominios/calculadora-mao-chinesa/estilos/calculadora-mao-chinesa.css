@@ -168,3 +168,25 @@
   font-size: 0.85rem;
   font-weight: 700;
 }
+
+/* Escolha das flores na finalização, como o painel dos indicadores de Dora. */
+.mcr-escolha-flores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.mcr-opcao-flor {
+  width: 100%;
+  min-height: 56px;
+  padding: 2px;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.mcr-opcao-flor--escolhida {
+  border-color: var(--cor-destaque, #e06ab0);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cor-destaque, #e06ab0) 40%, transparent);
+  opacity: 1;
+}

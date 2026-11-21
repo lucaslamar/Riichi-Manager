@@ -140,13 +140,13 @@ export function useCalculadoraMaoChinesa(condicoesIniciais?: Partial<CondicoesMc
     removerFlor: (flor: Flor) => mudarMao((atual) => removerFlor(atual, flor)),
     substituirMao: (nova: MaoChinesa) => mudarMao(() => nova),
     mudarFlores: (variacao: number) =>
-      mudarMao((atual) => ({
-        ...atual,
-        flores: Array.from(
-          { length: Math.min(8, Math.max(0, atual.flores.length + variacao)) },
-          (_, indice) => (indice + 1) as Flor,
-        ),
-      })),
+      mudarMao((atual) => {
+        if (variacao < 0) return { ...atual, flores: atual.flores.slice(0, -1) }
+        const livre = ([1, 2, 3, 4, 5, 6, 7, 8] as Flor[]).find(
+          (flor) => !atual.flores.includes(flor),
+        )
+        return livre ? { ...atual, flores: [...atual.flores, livre] } : atual
+      }),
     finalizar: () => {
       setSelecionandoBatida(false)
       setAcao(null)

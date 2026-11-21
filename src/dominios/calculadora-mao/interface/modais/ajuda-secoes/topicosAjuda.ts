@@ -14,6 +14,10 @@ export type TopicoAjuda =
   | 'condicoesEspeciais'
   | 'notacao'
   | 'pecas'
+  | 'mcrBatida'
+  | 'mcrVentos'
+  | 'mcrFlores'
+  | 'mcrCondicoes'
 
 /** Um trecho da explicação; com `subtitulo` quando a seção agrupa assuntos. */
 export interface BlocoAjuda {
@@ -86,6 +90,36 @@ export const TOPICOS_AJUDA: Record<TopicoAjuda, ConteudoAjuda> = {
         dica: true,
         paragrafos: ['sectionHelp.furiten.register'],
       },
+    ],
+  },
+  // Finalização da mão no modo Chinês: as mesmas ajudas, com as regras do MCR.
+  mcrBatida: {
+    termosProprios: ['tsumo', 'ron'],
+    titulo: 'calculator.victory',
+    blocos: [
+      { subtitulo: 'calculator.tsumo', paragrafos: ['sectionHelp.mcr.tsumo'] },
+      { subtitulo: 'calculator.ron', paragrafos: ['sectionHelp.mcr.ron'] },
+      { paragrafos: ['sectionHelp.mcr.oculta'] },
+    ],
+  },
+  mcrVentos: {
+    titulo: 'calculator.winds',
+    blocos: [
+      { subtitulo: 'calculator.seatWind', paragrafos: ['sectionHelp.mcr.ventoAssento'] },
+      { subtitulo: 'calculator.roundWind', paragrafos: ['sectionHelp.mcr.ventoRodada'] },
+    ],
+  },
+  mcrFlores: {
+    titulo: 'mcr.entrada.flores',
+    blocos: [{ paragrafos: ['sectionHelp.mcr.flores', 'sectionHelp.mcr.floresMinimo'] }],
+  },
+  mcrCondicoes: {
+    termosProprios: ['tsumo', 'ron'],
+    titulo: 'calculator.specialConditions',
+    blocos: [
+      { subtitulo: 'sectionHelp.mcr.ultimaTitulo', paragrafos: ['sectionHelp.mcr.ultima'] },
+      { subtitulo: 'sectionHelp.mcr.kanTitulo', paragrafos: ['sectionHelp.mcr.kan'] },
+      { subtitulo: 'mcr.condicoes.ultimaDoTipo', paragrafos: ['sectionHelp.mcr.ultimaDoTipo'] },
     ],
   },
   vitoria: {

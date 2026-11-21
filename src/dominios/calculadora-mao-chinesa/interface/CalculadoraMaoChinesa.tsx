@@ -320,7 +320,10 @@ export default function CalculadoraMaoChinesa({
                   <ControlesCondicoes
                     condicoes={calc.condicoes}
                     aoMudar={calc.alterarCondicao}
-                    flores={mao.flores.length}
+                    flores={mao.flores}
+                    aoAlternarFlor={(flor) =>
+                      mao.flores.includes(flor) ? calc.removerFlor(flor) : calc.adicionarFlor(flor)
+                    }
                     aoMudarFlores={calc.mudarFlores}
                   />
                   <div className="acao-calcular-mao acao-calcular-mao-ativa rodape-finalizacao-mao">

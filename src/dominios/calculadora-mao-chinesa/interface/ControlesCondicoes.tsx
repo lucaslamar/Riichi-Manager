@@ -1,10 +1,15 @@
+import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import BotaoAjuda from '@/dominios/calculadora-mao/interface/modais/ajuda-secoes/BotaoAjuda'
 import { BotaoToggle } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
 import { GradeVentos } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/GradeVentos'
 import { VENTOS_ASSENTO, VENTOS_RODADA } from '@/dominios/calculadora-mao/interface/constantes'
 import { ContadorOpcao } from '@/dominios/calculadora-mao/interface/finalizacao-mao/componentes/ContadorOpcao'
 import type { VentoMao } from '@/dominios/calculadora-mao/logica/mao'
-import type { CondicoesMcr, Vento } from '../logica/montagem'
+import type { CondicoesMcr, Flor, Vento } from '../logica/montagem'
+import { PedraFlor } from './PedraChinesa'
+
+const TODAS_AS_FLORES: Flor[] = [1, 2, 3, 4, 5, 6, 7, 8]
 
 const paraVento = (valor: VentoMao) => (27 + Number(valor)) as Vento
 const paraVentoMao = (vento: Vento) => String(vento - 27) as VentoMao
@@ -20,13 +25,18 @@ export default function ControlesCondicoes({
   aoMudar,
   flores,
   aoMudarFlores,
+  aoAlternarFlor,
 }: {
   condicoes: CondicoesMcr
   aoMudar: <Chave extends keyof CondicoesMcr>(chave: Chave, valor: CondicoesMcr[Chave]) => void
-  flores: number
+  flores: readonly Flor[]
   aoMudarFlores: (variacao: number) => void
+  /** Escolher (ou tirar) uma flor específica, pelo painel da flor. */
+  aoAlternarFlor: (flor: Flor) => void
 }) {
   const { t } = useI18n()
+  // Como o dragão das Doras no Riichi: a flor abre as 8 pedras para escolher.
+  const [escolhendoFlores, setEscolhendoFlores] = useState(false)
   const tsumo = condicoes.forma === 'tsumo'
   const ventoDuplo = condicoes.ventoRodada === condicoes.ventoAssento
 
@@ -42,25 +52,71 @@ export default function ControlesCondicoes({
   return (
     <div className="opcoes-mao-embutidas mcr-opcoes-finalizacao">
       <section className="grupo-opcoes-mao grupo-opcoes-dora etapa-opcoes-mao etapa-opcoes-ativa">
-        <span className="rotulo-bloco-opcoes">{t('mcr.entrada.flores')}</span>
-        <div className="contadores-dora-honba">
+        <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+          {t('mcr.entrada.flores')}
+          <BotaoAjuda topico="mcrFlores" />
+        </span>
+        <div
+          className={`contadores-dora-honba${escolhendoFlores ? ' contadores-dora-honba--com-painel' : ''}`}
+        >
           <ContadorOpcao
             className="contador-dora-manual"
-            rotulo={<span>{t('mcr.entrada.flores')}</span>}
+            rotulo={
+              <span className="rotulo-contador-com-ajuda">
+                {t('mcr.entrada.flores')}
+                <button
+                  type="button"
+                  className={`btn-expandir-indicadores-dora${escolhendoFlores ? ' ativo' : ''}`}
+                  aria-label={t('mcr.entrada.escolherFlores')}
+                  aria-expanded={escolhendoFlores}
+                  aria-pressed={escolhendoFlores}
+                  onClick={() => setEscolhendoFlores(!escolhendoFlores)}
+                >
+                  <i className="fas fa-spa" aria-hidden="true" />
+                </button>
+              </span>
+            }
             rotuloMenos={`${t('mcr.entrada.flores')} -`}
             rotuloMais={`${t('mcr.entrada.flores')} +`}
-            valor={flores}
+            valor={flores.length}
             anunciarValor
-            desabilitarMenos={flores <= 0}
-            desabilitarMais={flores >= 8}
+            desabilitarMenos={flores.length <= 0}
+            desabilitarMais={flores.length >= 8}
             aoDiminuir={() => aoMudarFlores(-1)}
             aoAumentar={() => aoMudarFlores(1)}
           />
+          {escolhendoFlores && (
+            <div
+              className="painel-contextual-finalizacao mcr-escolha-flores"
+              role="group"
+              aria-label={t('mcr.entrada.escolherFlores')}
+            >
+              {TODAS_AS_FLORES.map((flor) => {
+                const escolhida = flores.includes(flor)
+                return (
+                  <button
+                    key={flor}
+                    type="button"
+                    className={`chip-pedra mcr-opcao-flor${escolhida ? ' mcr-opcao-flor--escolhida' : ''}`}
+                    aria-pressed={escolhida}
+                    aria-label={t(`mcr.flores.${flor}`)}
+                    title={t(`mcr.flores.${flor}`)}
+                    onClick={() => aoAlternarFlor(flor)}
+                  >
+                    <PedraFlor flor={flor} />
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
 
       <div className="campo-vitoria-mao etapa-opcoes-mao etapa-opcoes-ativa">
-        <span className="rotulo-com-ajuda">{t('calculator.victory')}</span>
+        <span className="rotulo-com-ajuda">
+          {t('calculator.victory')}
+          <BotaoAjuda topico="mcrBatida" />
+        </span>
         <div className="toggle-agari-mao">
           {(['tsumo', 'ron'] as const).map((forma) => (
             <button
@@ -78,7 +134,10 @@ export default function ControlesCondicoes({
 
       <div className="colunas-assuntos-finalizacao">
         <section className="grupo-opcoes-mao grupo-opcoes-ventos etapa-opcoes-mao etapa-opcoes-ativa">
-          <span className="rotulo-bloco-opcoes">{t('calculator.winds')}</span>
+          <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+            {t('calculator.winds')}
+            <BotaoAjuda topico="mcrVentos" />
+          </span>
           <div className="seletores-vento-mao">
             <GradeVentos
               titulo={t('calculator.seatWind')}
@@ -101,7 +160,10 @@ export default function ControlesCondicoes({
 
         <div className="grupos-opcoes-mao grupos-opcoes-ativos">
           <section className="grupo-opcoes-mao etapa-opcoes-mao etapa-opcoes-ativa">
-            <span className="rotulo-bloco-opcoes">{t('calculator.specialConditions')}</span>
+            <span className="rotulo-bloco-opcoes rotulo-com-ajuda">
+              {t('calculator.specialConditions')}
+              <BotaoAjuda topico="mcrCondicoes" />
+            </span>
             <div className="linha-opcoes-mao linha-condicoes-especiais">
               {especiais.map(({ chave, rotulo }) => (
                 <BotaoToggle

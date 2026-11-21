@@ -572,7 +572,19 @@
       "guide": "Kepurė atidaro kišeninį gidą: 81 fan su pavyzdžiais, žodynas ir paieška žaidimo metu.",
       "finish": "Kai ranka pilna, „Baigti ranką“ atidaro pergalės parinktis: gėlės, ron ar tsumo, vėjai ir ypatingos sąlygos.",
       "notationTip": "Galite įvesti kelias grupes ir skaičius, o rūšį paspausti tik pabaigoje – ji tiks visiems. Po kiekvienu skaičiumi matosi garbės akmuo su z. AC viską išvalo. Grįžti į akmenų klaviatūrą: paspauskite Akmenys arba braukite į dešinę.",
-      "guideCard": "Kiekvienas fan su pavyzdžiu ir verte"
+      "guideCard": "Kiekvienas fan su pavyzdžiu ir verte",
+      "tsumo": "Laimėjote su paimtu akmeniu. Tai Pats paimtas (1 fan), o kiti trys moka po 8 ir rankos fan.",
+      "ron": "Laimėjote iš kito žaidėjo išmesto akmens. Išmetęs moka 8 ir rankos fan, kiti du po 8.",
+      "oculta": "Be atvirų Chi, Pon ar Kan: ron metu Paslėpta ranka (2 fan), tsumo metu Visiškai paslėpta ranka (4 fan) vietoje jų.",
+      "ventoAssento": "Laimėtojo vėjas. Jo trejetas ar ketvertas – Vietos vėjas (2 fan). Dalintojas yra Rytai.",
+      "ventoRodada": "Raundo vėjas. Jo trejetas ar ketvertas – Stalo vėjas (2 fan). Jei sutampa su vietos vėju, skaičiuojami abu.",
+      "flores": "8 gėlių ir metų laikų akmenys verti po 1 fan. MCR jie nesusiję su vieta.",
+      "floresMinimo": "Gėlės neskaičiuojamos į 8 fan minimumą: jos pridedamos tik kai ranka jau verta 8.",
+      "ultimaTitulo": "Paskutinis akmuo",
+      "ultima": "Laimėti su paskutiniu sienos akmeniu (tsumo) – 8 fan. Laimėti su paskutiniu išmestu akmeniu (ron) – 8 fan.",
+      "kanTitulo": "Kan",
+      "kan": "Tsumo metu laimėti su Kan papildomu akmeniu – 8 fan. Ron metu laimėti su akmeniu, kurį kitas prideda prie Pon – 8 fan.",
+      "ultimaDoTipo": "Laimėti su paskutine akmens kopija, kai kitos trys matomos – Paskutinė kopija (4 fan)."
     }
   },
   "rulesModal": {
@@ -2280,7 +2292,8 @@
     "entrada": {
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
-      "erroQuatro": "Kiekvienas akmuo yra tik keturis kartus."
+      "erroQuatro": "Kiekvienas akmuo yra tik keturis kartus.",
+      "escolherFlores": "Pasirinkti gėles"
     },
     "condicoes": {
       "titulo": "Conditions",
