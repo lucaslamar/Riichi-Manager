@@ -1,10 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { BotaoAcao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
 import { CampoNotacaoMao } from '@/dominios/calculadora-mao/interface/montagem-mao/componentes/CampoNotacaoMao'
-import type { Acao, Meld } from '@/dominios/calculadora-mao/logica/mao'
+import {
+  lerPendentes,
+  separarPendentes,
+  tipoDoGrupoPendente,
+  type Acao,
+  type Meld,
+} from '@/dominios/calculadora-mao/logica/mao'
 import type { ErroNotacao } from '@/dominios/calculadora-mao/logica/notacao'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { maoCompleta, pedrasContadas, type TipoChamada } from '../logica/montagem'
@@ -57,6 +63,55 @@ export default function CalculadoraMaoChinesa({
   const [entradaNotacao, setEntradaNotacao] = useState(false)
   const [textoNotacao, setTextoNotacao] = useState('')
   const [erroNotacao, setErroNotacao] = useState<ErroNotacao | null>(null)
+  // Como no Riichi: o que espera o naipe aparece na mão, tracejado.
+  const { completo: notacaoCompleta, pendentes: textoPendente } = separarPendentes(textoNotacao)
+  const gruposPendentes = lerPendentes(textoPendente).map((grupo) => ({
+    ...grupo,
+    tipo: tipoDoGrupoPendente(grupo),
+  }))
+  // A mão mudou fora do campo (toque numa pedra, lixeira): o texto acompanha.
+  const assinatura = (alvo: typeof mao) =>
+    JSON.stringify([[...alvo.pedras].sort(), alvo.chamadas.map((c) => c.tipo + c.meio).sort()])
+  useEffect(() => {
+    if (!entradaNotacao) return
+    const lida = maoDoMpsz(notacaoCompleta, mao.flores).mao
+    if (lida && assinatura(lida) === assinatura(mao)) return
+    setTextoNotacao(mpszDaMao(mao) + textoPendente)
+    // Só reage à mão; reagir ao texto desfaria a digitação.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mao, entradaNotacao])
+  const reescreverPendentes = (grupos: string[]) => mudarNotacao(notacaoCompleta + grupos.join(''))
+  const pendentes = entradaNotacao
+    ? {
+        pedras: gruposPendentes
+          .filter((grupo) => !grupo.tipo)
+          .flatMap((grupo) => [...grupo.digitos]),
+        melds: gruposPendentes.flatMap((grupo, indice) =>
+          grupo.tipo ? [{ indice, tipo: grupo.tipo, pedras: [...grupo.digitos] }] : [],
+        ),
+        aoRemoverMeld: (indice: number) =>
+          reescreverPendentes(
+            gruposPendentes
+              .filter((_grupo, posicao) => posicao !== indice)
+              .map((grupo) => grupo.digitos + grupo.marca),
+          ),
+        aoRemoverPedra: (posicao: number) => {
+          let restante = posicao
+          reescreverPendentes(
+            gruposPendentes.map((grupo) => {
+              if (grupo.tipo || restante < 0) return grupo.digitos + grupo.marca
+              if (restante >= grupo.digitos.length) {
+                restante -= grupo.digitos.length
+                return grupo.digitos + grupo.marca
+              }
+              const digitos = grupo.digitos.slice(0, restante) + grupo.digitos.slice(restante + 1)
+              restante = -1
+              return digitos && digitos + grupo.marca
+            }),
+          )
+        },
+      }
+    : undefined
 
   const abrirNotacao = () => {
     setTextoNotacao(mao.pedras.length || mao.chamadas.length ? mpszDaMao(mao) : '')
@@ -142,6 +197,7 @@ export default function CalculadoraMaoChinesa({
                   aoRemoverChamada={calc.removerChamada}
                   aoRemoverFlor={calc.removerFlor}
                   aoLimpar={calc.limpar}
+                  pendentes={pendentes}
                 />
                 {!entradaNotacao && (
                   <div className="acoes-construtor-mao mcr-acoes-construtor">
