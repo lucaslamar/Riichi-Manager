@@ -42,15 +42,14 @@ interface EntradaHub {
   aoTocar: () => void
 }
 
-const ULTIMAS_NO_HUB = 3
-
 /** Linha de uma partida nas listas: data, situação, mãos, o primeiro colocado e os totais. */
 export function LinhaPlacar({ placar, aoAbrir }: { placar: PlacarMcr; aoAbrir: () => void }) {
   const { t, numero, idioma } = useI18n()
   const { jogadores } = useJogadores()
   const pontos = totais(placar)
   const primeiro = colocacoes(pontos).indexOf(1)
-  const nome = (id: string) => nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'), placar.convidados)
+  const nome = (id: string) =>
+    nomeDaCadeira(jogadores, id, t('placar.mcr.jogadorRemovido'), placar.convidados)
   return (
     <li>
       <button type="button" className="card placar-mcr__item" onClick={aoAbrir}>
@@ -260,25 +259,6 @@ export default function PaginaPlacarMcr() {
           </button>
         ))}
       </div>
-
-      <h3 className="placar-mcr__titulo placar-mcr__ultimas">{t('placar.mcr.ultimas')}</h3>
-      {finalizados.length === 0 && (
-        <p className="placar-mcr__ajuda">{t('placar.mcr.nenhumaPartida')}</p>
-      )}
-      <ul className="placar-mcr__lista">
-        {finalizados.slice(0, ULTIMAS_NO_HUB).map((placar) => (
-          <LinhaPlacar key={placar.id} placar={placar} aoAbrir={() => abrir(placar.id)} />
-        ))}
-      </ul>
-      {finalizados.length > ULTIMAS_NO_HUB && (
-        <button
-          type="button"
-          className="btn-contorno"
-          onClick={() => setVista({ tipo: 'lista', quais: 'historico' })}
-        >
-          {t('placar.mcr.verHistorico')}
-        </button>
-      )}
     </section>
   )
 }

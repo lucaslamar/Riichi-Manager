@@ -2349,9 +2349,7 @@
         "many": "{{count}} games",
         "other": "{{count}} games"
       },
-      "ultimas": "Latest games",
       "nenhumaPartida": "No games yet.",
-      "verHistorico": "See full history",
       "primeiro": "1st {{nome}} {{pontos}}",
       "apagarHistorico": "Delete history",
       "confirmarApagarHistorico": {

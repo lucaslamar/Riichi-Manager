@@ -2349,9 +2349,7 @@
         "many": "{{count}} partidas",
         "other": "{{count}} partidas"
       },
-      "ultimas": "Últimas partidas",
       "nenhumaPartida": "Nenhuma partida ainda.",
-      "verHistorico": "Ver histórico completo",
       "primeiro": "1º {{nome}} {{pontos}}",
       "apagarHistorico": "Apagar histórico",
       "confirmarApagarHistorico": {
