@@ -2644,7 +2644,10 @@
         "anotado": "手書き",
         "total": "合計",
         "notas": "メモ",
-        "notasAjuda": "紙のように自由に書けます"
+        "notasAjuda": "紙のように自由に書けます",
+        "mesaNoPlacar": "点数表示で対局",
+        "mesaNoPlacarAjuda": "タイマーと捨て牌つきのアプリの卓",
+        "mesaNaSumula": "点数表か合計"
       }
     }
   },

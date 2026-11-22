@@ -2699,7 +2699,10 @@
         "anotado": "Anotado a mano",
         "total": "Total",
         "notas": "Notas",
-        "notasAjuda": "Escribe lo que quieras, como en papel"
+        "notasAjuda": "Escribe lo que quieras, como en papel",
+        "mesaNoPlacar": "Jugar en el Marcador",
+        "mesaNoPlacarAjuda": "La mesa de la app, con temporizador y descartes",
+        "mesaNaSumula": "Planilla o totales"
       }
     }
   },

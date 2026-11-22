@@ -2644,7 +2644,10 @@
         "anotado": "手写记录",
         "total": "总分",
         "notas": "备注",
-        "notasAjuda": "像在纸上一样随意书写"
+        "notasAjuda": "像在纸上一样随意书写",
+        "mesaNoPlacar": "在计分板上对局",
+        "mesaNoPlacarAjuda": "应用牌桌，带计时和弃牌",
+        "mesaNaSumula": "记分表或总分"
       }
     }
   },

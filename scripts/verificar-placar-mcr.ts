@@ -28,8 +28,15 @@ import {
   placarDaSumula,
   pontosDaSumula,
   SUMULA_VAZIA,
+  sumulaDoPlacar,
+  trocarLugares,
   type RascunhoSumula,
 } from '../src/dominios/placar-mcr/logica/sumula'
+import {
+  carregarSumulaMcr,
+  carregarSumulaMesa,
+  salvarSumulaMcr,
+} from '../src/dominios/placar-mcr/persistencia/repositorioSumulaMcr'
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
 import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
 
@@ -161,3 +168,33 @@ console.log('Placar MCR ok: 25 testes.')
   assert.deepEqual(normalizarSumula({ maos: 3 }), SUMULA_VAZIA)
 }
 console.log('Súmula MCR ok.')
+
+{
+  // Súmula de mesa sorteada: trocar de lugar, corrigir e um rascunho por mesa.
+  const base: RascunhoSumula = { ...SUMULA_VAZIA, assentos: ['a', 'b', 'c', 'd'] }
+  const jogada = anotarFalsoHu(
+    anotarMao(base, { tipo: 'vitoria', vencedor: 1, forma: 'ron', descartador: 2, fan: 24 }),
+    3,
+  )
+  const trocada = trocarLugares(jogada, 0, 1)
+  assert.deepEqual(trocada.assentos, ['b', 'a', 'c', 'd'])
+  assert.deepEqual(pontosDaSumula(trocada), [58, 2, -22, -38], 'os pontos vão com o jogador')
+  assert.deepEqual(pontosDaSumula(jogada), [2, 58, -22, -38])
+
+  const registrado = placarDaSumula(jogada, 'mesa', '2026-11-22T10:00:00.000Z')
+  assert.deepEqual(pontosDaSumula(sumulaDoPlacar(registrado)), [2, 58, -22, -38])
+
+  const guardado = new Map<string, string>()
+  const armazenamento = {
+    ler: (chave: string) => guardado.get(chave) ?? null,
+    gravar: (chave: string, valor: string) => void guardado.set(chave, valor),
+  }
+  salvarSumulaMcr(armazenamento, base)
+  salvarSumulaMcr(armazenamento, jogada, 'mesa-1')
+  assert.deepEqual(carregarSumulaMcr(armazenamento), base, 'a avulsa não muda')
+  assert.deepEqual(carregarSumulaMesa(armazenamento, 'mesa-1'), jogada)
+  assert.equal(carregarSumulaMesa(armazenamento, 'mesa-2'), null)
+  salvarSumulaMcr(armazenamento, null, 'mesa-1')
+  assert.equal(carregarSumulaMesa(armazenamento, 'mesa-1'), null)
+}
+console.log('Súmula das mesas sorteadas ok.')

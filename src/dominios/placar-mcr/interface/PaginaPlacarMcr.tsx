@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ComponentProps } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
@@ -9,7 +9,14 @@ import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporad
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
 import { criarRascunho } from '@/dominios/torneio/logica/torneio'
 import type { MesaTorneio, RodadaTorneio } from '@/dominios/torneio/logica/tipos'
-import { novoPlacar, TIMER_PADRAO_SEGUNDOS } from '../logica/placar'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
+import { useNomeNoTorneio } from '@/dominios/torneio/interface/hooks/useNomeNoTorneio'
+import { mudancaAoRegistrar } from '@/dominios/torneio/logica/ranking'
+import { novoPlacar, TIMER_PADRAO_SEGUNDOS, type PlacarMcr } from '../logica/placar'
+import { placarDaSumula, SUMULA_VAZIA, sumulaDoPlacar, type RascunhoSumula } from '../logica/sumula'
+import { partidasDoTorneioMcr } from '../logica/torneio'
+import { carregarSumulaMesa } from '../persistencia/repositorioSumulaMcr'
 import PaginaEmAndamento from '@/dominios/centerpiece/interface/paginas/PaginaEmAndamento'
 import RegistrarFinalizada from '@/dominios/centerpiece/interface/paginas/RegistrarFinalizada'
 import PaginaListaClube from '@/dominios/centerpiece/interface/paginas/PaginaListaClube'
@@ -23,10 +30,20 @@ import PlacarAberto from './PlacarAberto'
 import { acoesPlacaresMcr, usePlacaresMcr } from './usePlacaresMcr'
 import './placar-mcr.css'
 
+type MesaParaRegistrar = NonNullable<ComponentProps<typeof RegistrarFinalizada>['mesaMcr']>
+
+/** O que se decide ao tocar em Registrar resultado numa mesa sorteada. */
+interface EscolhaDaMesa {
+  jogar: () => void
+  sumula: () => void
+}
+
 type Vista =
   | { tipo: 'hub' }
   | { tipo: 'novo' }
   | { tipo: 'registrar' }
+  /** Súmula de uma mesa sorteada: volta para as mesas dela. */
+  | { tipo: 'registrarMesa'; mesa: MesaParaRegistrar; volta: Vista }
   | { tipo: 'torneio'; id: string }
   | { tipo: 'temporada'; id: string }
   | { tipo: 'listaClube' }
@@ -54,6 +71,163 @@ export default function PaginaPlacarMcr() {
   const placares = usePlacaresMcr()
   const { torneios, salvar: salvarTorneio } = useTorneios()
   const { sorteio } = useClube()
+  const nomeDoTorneio = useNomeNoTorneio()
+  const [escolha, setEscolha] = useState<EscolhaDaMesa | null>(null)
+  /** Mesa sem mão jogada: escolhe. Súmula já começada: continua nela. */
+  const decidirMesa = (opcoes: EscolhaDaMesa, chave: string, placar?: PlacarMcr) => {
+    const jogando = !!placar && (placar.maos.length > 0 || !!placar.falsosHu?.length)
+    if (placar?.finalizadoEm) {
+      // Veio da súmula: corrige nela. Jogada no app: a mesa, como sempre.
+      if (placar.registradoManual) opcoes.sumula()
+      else opcoes.jogar()
+    } else if (jogando) opcoes.jogar()
+    else if (carregarSumulaMesa(armazenamentoLocal, chave)) opcoes.sumula()
+    else setEscolha(opcoes)
+  }
+  /** A súmula vira o placar da mesa, no lugar do que existia (corrigir mantém id e datas). */
+  const gravarSumula = (
+    sumula: RascunhoSumula,
+    vinculo: Pick<PlacarMcr, 'torneio' | 'encontro' | 'convidados'>,
+    existente?: PlacarMcr,
+  ) => {
+    const agora = new Date().toISOString()
+    const id = existente?.id ?? gerarId()
+    const placar: PlacarMcr = {
+      ...placarDaSumula(sumula, id, agora),
+      ...vinculo,
+      ...(existente && {
+        criadoEm: existente.criadoEm,
+        finalizadoEm: existente.finalizadoEm ?? agora,
+      }),
+    }
+    if (existente) acoesPlacaresMcr.atualizar(id, () => placar)
+    else acoesPlacaresMcr.criar(placar)
+    return id
+  }
+  const registrarMesaDoClube = (mesa: MesaDoSorteio) => {
+    if (!sorteio) return
+    const encontro = { id: sorteio.encontro.id, mesa: mesa.numero }
+    const chave = `clube-${encontro.id}-${mesa.numero}`
+    const existente = placares.find((placar) => placar.id === mesa.partidaId)
+    const sumula = () => {
+      // Os convidados ganham o id uma vez: o do rascunho ou o do placar, se já houver.
+      const rascunho = carregarSumulaMesa(armazenamentoLocal, chave)
+      const sorteados = assentosDaMesa(mesa)
+      const ids = rascunho?.assentos ?? existente?.jogadorIds ?? sorteados.ids
+      // O convidado se acha pelo id, porque os lugares podem ter sido trocados na súmula.
+      const salvos = rascunho?.convidados ?? existente?.convidados
+      const nomes: Record<string, string> =
+        salvos ??
+        Object.fromEntries(
+          sorteados.ids.flatMap((id, lugar) =>
+            mesa.assentos[lugar].jogador.jogadorId ? [] : [[id, sorteados.nomes[lugar]]],
+          ),
+        )
+      const inicial: RascunhoSumula = {
+        ...(existente?.registradoManual
+          ? sumulaDoPlacar(existente)
+          : { ...SUMULA_VAZIA, assentos: [...ids] }),
+        convidados: nomes,
+      }
+      setVista({
+        tipo: 'registrarMesa',
+        volta: { tipo: 'mesasClube' },
+        mesa: {
+          chave,
+          titulo: t('match.table.number', { number: mesa.numero }),
+          inicial,
+          nomes,
+          registrar: (folha) => {
+            const id = gravarSumula(
+              folha,
+              { encontro, ...(Object.keys(nomes).length && { convidados: nomes }) },
+              existente,
+            )
+            acoesClubeMcr.marcarRegistrada(mesa.numero, id)
+            return id
+          },
+        },
+      })
+    }
+    decidirMesa({ jogar: () => abrirMesaDoClube(mesa), sumula }, chave, existente)
+  }
+  const registrarMesaDoTorneio = (torneioId: string, rodada: RodadaTorneio, mesa: MesaTorneio) => {
+    const torneio = torneios.find((item) => item.id === torneioId)
+    if (!torneio) return
+    const vinculo = { id: torneioId, rodada: rodada.numero - 1, mesa: mesa.numero - 1 }
+    // Com os jogadores na chave, um novo sorteio da rodada não herda a súmula antiga.
+    const chave = `torneio-${torneioId}-${rodada.numero}-${mesa.numero}-${mesa.assentos.join('-')}`
+    const existente = placares.find(
+      (placar) =>
+        placar.torneio?.id === torneioId &&
+        placar.torneio.rodada === vinculo.rodada &&
+        placar.torneio.mesa === vinculo.mesa,
+    )
+    const extras = {
+      torneio: vinculo,
+      ...(torneio.convidados && { convidados: torneio.convidados }),
+    }
+    const sumula = () =>
+      setVista({
+        tipo: 'registrarMesa',
+        volta: { tipo: 'torneio', id: torneioId },
+        mesa: {
+          chave,
+          titulo: t('tournament.tables.badge', { round: rodada.numero, table: mesa.numero }),
+          inicial: existente?.registradoManual
+            ? sumulaDoPlacar(existente)
+            : { ...SUMULA_VAZIA, assentos: [...mesa.assentos] },
+          nomes: Object.fromEntries(mesa.assentos.map((id) => [id, nomeDoTorneio(torneio, id)])),
+          torneio: {
+            previa: (folha) =>
+              partidasDoTorneioMcr([
+                { ...placarDaSumula(folha, 'previa', new Date().toISOString()), ...extras },
+              ])[0],
+            mudancas: (previa) =>
+              mudancaAoRegistrar(torneio, partidasDoTorneioMcr(placares), previa, existente?.id),
+          },
+          registrar: (folha) => gravarSumula(folha, extras, existente),
+        },
+      })
+    decidirMesa(
+      { jogar: () => abrirMesaDoTorneio(torneioId, rodada, mesa), sumula },
+      chave,
+      existente,
+    )
+  }
+  const janelaEscolha = escolha && (
+    <Modal
+      titulo={t('match.club.registerResult')}
+      aoFechar={() => setEscolha(null)}
+      rotuloFechar={t('actions.close')}
+      tamanho="pequena"
+    >
+      <div className="ptd-lista-opcoes">
+        {(
+          [
+            ['jogar', 'fa-table-cells-large', 'mesaNoPlacar', 'mesaNoPlacarAjuda'],
+            ['sumula', 'fa-file-pen', 'mesaNaSumula', 'cartao'],
+          ] as const
+        ).map(([opcao, icone, rotulo, ajuda]) => (
+          <button
+            key={opcao}
+            type="button"
+            className="ptd-opcao"
+            onClick={() => {
+              setEscolha(null)
+              escolha[opcao]()
+            }}
+          >
+            <i className={`fas ${icone} ptd-opcao-icone`} aria-hidden="true" />
+            <span className="ptd-opcao-nome">
+              {t(`placar.mcr.sumula.${rotulo}`)}
+              <small className="ptd-opcao-dica">{t(`placar.mcr.sumula.${ajuda}`)}</small>
+            </span>
+          </button>
+        ))}
+      </div>
+    </Modal>
+  )
   /** Mesa do clube: abre o placar dela, ou cria um com os assentos do sorteio. */
   const abrirMesaDoClube = (mesa: MesaDoSorteio) => {
     if (!sorteio) return
@@ -152,16 +326,30 @@ export default function PaginaPlacarMcr() {
       />
     )
   }
+  if (vista.tipo === 'registrarMesa') {
+    const { mesa, volta } = vista
+    return (
+      <RegistrarFinalizada
+        key={mesa.chave}
+        mesaMcr={mesa}
+        aoVoltar={() => setVista(volta)}
+        aoRegistrar={() => setVista(volta)}
+      />
+    )
+  }
   if (vista.tipo === 'torneio') {
     return (
-      <PaginaTorneio
-        key={vista.id}
-        torneioId={vista.id}
-        aoVoltar={voltar}
-        aoAbrirTorneio={(id) => setVista({ tipo: 'torneio', id })}
-        aoAbrirTemporada={(id) => setVista({ tipo: 'temporada', id })}
-        aoLancarResultado={(rodada, mesa) => abrirMesaDoTorneio(vista.id, rodada, mesa)}
-      />
+      <>
+        <PaginaTorneio
+          key={vista.id}
+          torneioId={vista.id}
+          aoVoltar={voltar}
+          aoAbrirTorneio={(id) => setVista({ tipo: 'torneio', id })}
+          aoAbrirTemporada={(id) => setVista({ tipo: 'temporada', id })}
+          aoLancarResultado={(rodada, mesa) => registrarMesaDoTorneio(vista.id, rodada, mesa)}
+        />
+        {janelaEscolha}
+      </>
     )
   }
   // Clube: as mesmas telas do Riichi. Cada mesa sorteada vira um placar MCR.
@@ -169,7 +357,12 @@ export default function PaginaPlacarMcr() {
     return <PaginaListaClube aoVoltar={voltar} aoSortear={() => setVista({ tipo: 'mesasClube' })} />
   }
   if (vista.tipo === 'mesasClube') {
-    return <PaginaMesasSorteadas aoVoltar={voltar} aoRegistrarMesa={abrirMesaDoClube} />
+    return (
+      <>
+        <PaginaMesasSorteadas aoVoltar={voltar} aoRegistrarMesa={registrarMesaDoClube} />
+        {janelaEscolha}
+      </>
+    )
   }
   if (vista.tipo === 'temporada') {
     return (

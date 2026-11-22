@@ -13,6 +13,7 @@ export default function ConfirmarRegistro({
   nomeDe,
   mudancas,
   semUma = false,
+  comPontos = false,
   tituloRanking = 'match.manual.rankingTitle',
   aoConfirmar,
   aoFechar,
@@ -23,6 +24,8 @@ export default function ConfirmarRegistro({
   mudancas: readonly MudancaRanking[]
   /** MCR: o total já é o ponto da mesa, sem uma nem oka. */
   semUma?: boolean
+  /** Torneio MCR: os pontos da partida, ao lado dos pontos de mesa. */
+  comPontos?: boolean
   /** Chave do texto que diz qual ranking é. */
   tituloRanking?: string
   aoConfirmar: () => void
@@ -66,16 +69,18 @@ export default function ConfirmarRegistro({
               <div className="ptd-resultado-dados">
                 <strong className="fin-mudanca-nome">{nomeDe(linha.cadeira)}</strong>
                 {/* Pontos, uma e oka em colunas pequenas, com o título em cima. */}
-                {!semUma && (
+                {(!semUma || comPontos) && (
                   <dl className="fin-detalhes">
                     <div>
                       <dt>{t('match.cards.points')}</dt>
                       <dd>{numero(linha.pontosBrutos)}</dd>
                     </div>
-                    <div>
-                      <dt>{t('tableConfig.umaLabel')}</dt>
-                      <dd>{comSinal(linha.uma)}</dd>
-                    </div>
+                    {!semUma && (
+                      <div>
+                        <dt>{t('tableConfig.umaLabel')}</dt>
+                        <dd>{comSinal(linha.uma)}</dd>
+                      </div>
+                    )}
                     {comOka && (
                       <div>
                         <dt>{t('tableConfig.okaLabel')}</dt>

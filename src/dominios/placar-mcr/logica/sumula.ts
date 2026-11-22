@@ -24,6 +24,8 @@ export interface RascunhoSumula {
   /** Quem teve o total digitado direto. */
   digitado: boolean[]
   notas: string
+  /** Mesa do clube: nomes de quem joga sem cadastro, por id. */
+  convidados?: Record<string, string>
 }
 
 export const SUMULA_VAZIA: RascunhoSumula = {
@@ -134,4 +136,42 @@ export function normalizarSumula(salvo: unknown): RascunhoSumula {
     Array.isArray(lido.falsosHu) &&
     typeof lido.notas === 'string'
   return valida ? (lido as RascunhoSumula) : SUMULA_VAZIA
+}
+
+/** Um placar já registrado de volta na súmula, para corrigir. */
+export function sumulaDoPlacar(placar: PlacarMcr): RascunhoSumula {
+  const ajuste: Quatro = placar.ajuste ? [...placar.ajuste] : [0, 0, 0, 0]
+  return {
+    assentos: [...placar.jogadorIds],
+    maos: placar.maos,
+    falsosHu: placar.falsosHu ?? [],
+    ajuste,
+    // Registrado, os quatro têm total, mesmo que seja zero.
+    digitado: CADEIRAS.map(() => true),
+    notas: placar.notas ?? '',
+  }
+}
+
+/** Dois jogadores trocam de lugar e levam o que foi anotado para cada um. */
+export function trocarLugares(sumula: RascunhoSumula, um: Cadeira, outro: Cadeira): RascunhoSumula {
+  const novaCadeira = (cadeira: Cadeira) =>
+    cadeira === um ? outro : cadeira === outro ? um : cadeira
+  const trocar = <Item>(itens: readonly Item[]) =>
+    CADEIRAS.map((cadeira) => itens[novaCadeira(cadeira)])
+  return {
+    ...sumula,
+    assentos: trocar(sumula.assentos),
+    ajuste: trocar(sumula.ajuste) as Quatro,
+    digitado: trocar(sumula.digitado),
+    falsosHu: sumula.falsosHu.map((falso) => ({ ...falso, cadeira: novaCadeira(falso.cadeira) })),
+    maos: sumula.maos.map((mao): MaoMcr => {
+      if (mao.tipo === 'anotada') return { ...mao, pontos: trocar(mao.pontos) as Quatro }
+      if (mao.tipo === 'empate') return mao
+      return {
+        ...mao,
+        vencedor: novaCadeira(mao.vencedor),
+        ...(mao.descartador !== undefined && { descartador: novaCadeira(mao.descartador) }),
+      }
+    }),
+  }
 }

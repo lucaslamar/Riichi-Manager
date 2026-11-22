@@ -2681,7 +2681,10 @@
         "anotado": "Written by hand",
         "total": "Total",
         "notas": "Notes",
-        "notasAjuda": "Write anything, like on paper"
+        "notasAjuda": "Write anything, like on paper",
+        "mesaNoPlacar": "Play on the Scoreboard",
+        "mesaNoPlacarAjuda": "The app table, with timer and discards",
+        "mesaNaSumula": "Score sheet or totals"
       }
     }
   },

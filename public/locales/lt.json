@@ -2767,7 +2767,10 @@
         "anotado": "Įrašyta ranka",
         "total": "Suma",
         "notas": "Pastabos",
-        "notasAjuda": "Rašykite bet ką, kaip popieriuje"
+        "notasAjuda": "Rašykite bet ką, kaip popieriuje",
+        "mesaNoPlacar": "Žaisti švieslentėje",
+        "mesaNoPlacarAjuda": "Programėlės stalas su laikmačiu ir išmetimais",
+        "mesaNaSumula": "Taškų lapas arba sumos"
       }
     }
   },

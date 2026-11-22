@@ -335,7 +335,11 @@ export default function SumulaMcr({
         perigo
         aoFechar={voltar}
         aoConfirmar={() => {
-          aoMudar({ ...SUMULA_VAZIA, assentos: sumula.assentos })
+          aoMudar({
+            ...SUMULA_VAZIA,
+            assentos: sumula.assentos,
+            ...(sumula.convidados && { convidados: sumula.convidados }),
+          })
           voltar()
         }}
       />

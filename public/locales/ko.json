@@ -2644,7 +2644,10 @@
         "anotado": "직접 기록",
         "total": "합계",
         "notas": "메모",
-        "notasAjuda": "종이처럼 자유롭게 쓰세요"
+        "notasAjuda": "종이처럼 자유롭게 쓰세요",
+        "mesaNoPlacar": "점수판으로 플레이",
+        "mesaNoPlacarAjuda": "타이머와 버림패가 있는 앱 탁자",
+        "mesaNaSumula": "점수표 또는 합계"
       }
     }
   },
