@@ -12,3 +12,26 @@
   border-color: var(--cor-primario-borda, #bfdbfe);
   background: var(--cor-primario-suave, #eff6ff);
 }
+
+/* iPad deitado e PC: a engrenagem vai para a barra de ações, o guia só existe aqui. */
+@media (min-width: 768px) and (min-height: 561px) and (orientation: landscape),
+  (min-width: 1024px) and (orientation: landscape) {
+  .btn-configuracao-mao-cabecalho.yaku-btn {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    min-height: 44px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Tablet em pé: o guia vem com outra classe, mesmo alvo de 44px. */
+@media (min-width: 641px) and (min-height: 561px) and (orientation: portrait) {
+  .yaku-btn.yaku-btn {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+    min-height: 44px;
+  }
+}
