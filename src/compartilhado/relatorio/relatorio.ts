@@ -28,6 +28,8 @@ export interface BlocoRelatorio {
   larguraEsquerda?: number
   /** Cabeçalho da tabela no texto: a coluna da esquerda e as da direita. */
   colunas?: readonly string[]
+  /** Na imagem, as colunas da direita ficam alinhadas e só a última leva a cor da linha. */
+  corSoNaUltima?: boolean
   /** Só no texto ou só na imagem (ex.: o pódio do texto, que a imagem já destaca). */
   so?: 'texto' | 'imagem'
 }

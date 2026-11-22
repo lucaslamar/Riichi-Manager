@@ -6,6 +6,8 @@ const RESPIRO_CARTAO = 32
 const ALTURA_LINHA = 56
 const ALTURA_TITULO_BLOCO = 64
 const ESPACO_BLOCOS = 28
+/** Cada coluna da direita, quando alinhadas. */
+const LARGURA_COLUNA = 190
 
 /** Cor de uma variável do tema aberto, com reserva (a imagem segue o tema). */
 function corDoTema(variavel: string, reserva: string): string {
@@ -122,11 +124,22 @@ export async function imagemDoRelatorio(relatorio: Relatorio, rodape: string): P
       const meio = yLinha + ALTURA_LINHA / 2
       contexto.textAlign = 'right'
       contexto.font = `800 32px ${fonte}`
-      contexto.fillStyle =
+      const corDoTom =
         linha.tom === 'positivo' ? cores.positivo : linha.tom === 'negativo' ? cores.negativo : cores.texto
-      const direita = colunasDaDireita(linha).join('   ')
-      const larguraDireita = direita ? contexto.measureText(direita).width + 24 : 0
-      if (direita) contexto.fillText(direita, xDireita, meio)
+      const colunas = colunasDaDireita(linha)
+      let larguraDireita = 0
+      if (bloco.corSoNaUltima) {
+        for (let coluna = colunas.length - 1; coluna >= 0; coluna--) {
+          contexto.fillStyle = coluna === colunas.length - 1 ? corDoTom : cores.apoio
+          contexto.fillText(colunas[coluna], xDireita - larguraDireita, meio)
+          larguraDireita += LARGURA_COLUNA
+        }
+      } else if (colunas.length) {
+        const direita = colunas.join('   ')
+        contexto.fillStyle = corDoTom
+        contexto.fillText(direita, xDireita, meio)
+        larguraDireita = contexto.measureText(direita).width + 24
+      }
       contexto.textAlign = 'left'
       contexto.fillStyle = cores.texto
       contexto.font = `${linha.destaque ? 800 : 600} 32px ${fonte}`

@@ -23,7 +23,7 @@ function tomDe(valor: number): { tom?: TomLinha } {
 
 /**
  * Rodada: um bloco por mesa. Mesa com resultado vira tabela, na ordem de colocação
- * e com os pontos finais. Sem resultado, os quatro na ordem das cadeiras.
+ * com os pontos que ficaram na mesa e os finais. Sem resultado, os quatro na ordem das cadeiras.
  */
 export function relatorioDaRodada(
   torneio: Torneio,
@@ -41,6 +41,8 @@ export function relatorioDaRodada(
     ventos: boolean
     colocacao: (colocacao: number) => string
     pontos: (valor: number) => string
+    /** Os pontos que ficaram na mesa, sem uma e oka. */
+    pontosDaMesa: (valor: number) => string
   },
 ): Relatorio {
   const final = ehMesaFinal(torneio, rodada)
@@ -56,10 +58,10 @@ export function relatorioDaRodada(
         .sort((a, b) => a.colocacao - b.colocacao)
         .map((resultado) => ({
           esquerda: `${rotulos.colocacao(resultado.colocacao)} ${rotulos.nome(mesa.assentos[resultado.cadeira])}`,
-          direita: rotulos.pontos(resultado.final),
+          direita: [rotulos.pontosDaMesa(resultado.pontosBrutos), rotulos.pontos(resultado.final)],
           ...tomDe(resultado.final),
         }))
-      return { ...cabecalho, tabela: true, linhas }
+      return { ...cabecalho, tabela: true, corSoNaUltima: true, linhas }
     }
     return {
       ...cabecalho,

@@ -1086,3 +1086,18 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
     min-width: 28px;
   }
 }
+
+/* Pontos que ficaram na mesa, acima do resultado com uma. */
+.trn-assento-pontos.trn-assento-bruto {
+  position: relative;
+  color: var(--texto-principal);
+  font-weight: 700;
+}
+
+.trn-mesa .clb-assento:has(.trn-assento-bruto) {
+  grid-template-rows: none;
+}
+
+.trn-mesa .clb-assento:has(.trn-assento-bruto) .clb-assento-kanji {
+  grid-row: 1 / span 4;
+}

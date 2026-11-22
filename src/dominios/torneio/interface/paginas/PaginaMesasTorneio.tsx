@@ -145,7 +145,8 @@ export default function PaginaMesasTorneio({
   const relatorio = () =>
     relatorioDaRodada(torneio, rodada, partidas, {
       titulo: torneio.nome,
-      subtitulo: titulo,
+      subtitulo: `${titulo} · ${t(`tournament.formatsShort.${torneio.formato.tipo}`)}`,
+      pontosDaMesa: (valor) => numero(valor),
       mesa: (numeroMesa) => t('match.table.number', { number: numeroMesa }),
       mesaFinal: t('tournament.tables.finalTable'),
       status: (status) => t(`tournament.tables.status.${status}`),
@@ -385,6 +386,12 @@ export default function PaginaMesasTorneio({
                       <strong className="clb-assento-nome">{nomeDe(jogadorId)}</strong>
                       {status === 'em_andamento' && partida && (
                         <span className="trn-assento-pontos">{numero(partida.placar.pontos[indice as 0 | 1 | 2 | 3])}</span>
+                      )}
+                      {linha && (
+                        <span className="trn-assento-pontos trn-assento-bruto">
+                          <span className="sr-only">{t('tournament.points.points')}: </span>
+                          {numero(linha.pontosBrutos)}
+                        </span>
                       )}
                       {linha && (
                         <span className={`trn-assento-pontos ${linha.final >= 0 ? 'trn-positivo' : 'trn-negativo'}`}>

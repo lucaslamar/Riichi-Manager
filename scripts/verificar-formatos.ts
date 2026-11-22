@@ -312,8 +312,11 @@ for (const total of [8, 12, 16]) {
     ventos: false,
     colocacao: (colocacao) => `${colocacao}º`,
     pontos: (final) => String(final),
+    pontosDaMesa: (valor) => `${valor} na mesa`,
   })
   const primeira = relatorio.blocos[0]
+  assert.match(primeira.linhas[0].direita?.[0] ?? '', / na mesa$/, 'pontos que ficaram na mesa')
+  assert.ok(primeira.corSoNaUltima)
   assert.equal(primeira.detalhe, '✅ finalizada')
   assert.ok(primeira.tabela, 'mesa com resultado vira tabela')
   assert.deepEqual(

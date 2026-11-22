@@ -59,7 +59,7 @@ export default function PaginaRankingTorneio({
   const relatorio = () =>
     relatorioDoRanking(linhas, {
       titulo: torneio.nome,
-      subtitulo: t('tournament.ranking.title'),
+      subtitulo: `${t('tournament.ranking.title')} · ${t(`tournament.formatsShort.${torneio.formato.tipo}`)}`,
       nome: nomeDe,
       colunas: [
         ` # ${t('tournament.ranking.player')}`,
