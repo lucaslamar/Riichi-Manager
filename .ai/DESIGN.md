@@ -41,3 +41,5 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Encerrar fica ao lado do Ranking, sempre com confirmação.
 - Cabeçalho da rodada: quatro ações de 44px no celular. No desktop ele mora no menu lateral estreito, com ações de 28px de largura.
 - Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.
+- Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.
+- Sortear de novo é secundário com nota perfeita ou ótima e principal nas outras. A comparação com o anterior fica 5 s, e o Voltar ao anterior continua no painel.

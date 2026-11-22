@@ -14,6 +14,7 @@ Escolha os testes conforme o impacto; os comandos completos estão em `package.j
 
 - Partidas, ranking e clubes: `npm run test:partida`, `npm run test:ranking` e `npm run test:clube`.
 - Torneios e formatos: `npm run test:torneio` e `npm run test:formatos`.
+- Sorteio e grade: `npm run test:formatos` (8, 12, 16 e Sanma de 9) e `npm run test:clube`. Ao mexer na busca, meça o tempo de 8 a 172 jogadores: no PC ficou abaixo de 100 ms por rodada.
 - Ranking do torneio: `npm run test:torneio` (setas, confirmação e placares MCR convertidos). Confira as cores das setas no navegador.
 - Folha de pontos: `npm run test:expressao-pontos`, e no navegador Enter depois de tocar numa tecla, Enter para abrir a folha e toque no visor.
 - Toda tarefa: registre no `.ai` regras, mudanças de UX, ideias adiadas e inspirações, sem dados de pessoas reais.

@@ -31,7 +31,22 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 
 ### Sorteio
 
-- Sortear de novo: só enquanto nenhuma mesa da última rodada tem partida. A grade do Rodízio (e da classificatória em Rodízio) sai inteira e equilibrada, então só se refaz antes da primeira partida do torneio. Depois disso, o caminho é Reiniciar sorteio. Mantendo os ventos, refazer só a última rodada não tem alternativa tão boa.
+- É "aleatório mitigado": embaralha, testa várias combinações e fica com a de menor custo. As regras são comparadas em ordem, nunca somadas com pesos: ventos (Leste de novo antes dos outros) > dupla pela 3ª vez > trio repetido > repetições espalhadas entre as pessoas (soma dos quadrados) > total de duplas repetidas.
+- Ventos na mesa: não entram no custo nem na nota, e a estatística não mostra ventos.
+- Suíço e cortes: a ordem é a classificação, com trocas entre vizinhos pelas mesmas regras.
+- 16 jogadores em mesas de 4 fecham 5 rodadas sem repetir, e 9 em mesas de 3 fecham 4: o sorteio por rodada só aceita rodadas que ainda deixam fechar (lista fixa).
+- Mínimo de duplas repetidas em 2, 3 e 4 rodadas, provado por busca exaustiva: 8 jogadores = 4, 12, 24. 12 jogadores = 3, 9, 18. Sanma de 6 = 2, 6, 12. Com 12 e 3 rodadas, ninguém precisa repetir mais de 2 adversários.
+- Rodadas ideais: 12 jogadores até 3 (a 4ª só se todos precisarem ser Leste uma vez), 8 repete sempre a partir da 2ª, 16 até 5 sem repetir.
+- Nota: perfeita (sem repetição), ótima (no mínimo), boa (até 20% acima), regular (acima), ruim (dupla 3x, trio evitável ou Leste desequilibrado). No Eliminatório, vale só para a classificatória. Com uma mesa só não há nota.
+- Sortear de novo: antes da primeira partida do torneio, em qualquer formato. Depois, só a última rodada do Brasileirão e da Temporada, sem mesa iniciada: a grade do Rodízio sai inteira, e o Suíço e os cortes saem da classificação (refazer devolve as mesmas mesas). O sorteio anterior fica só em memória, para voltar.
+
+### Clube
+
+- Novo sorteio no mesmo dia (data local) é uma nova rodada do mesmo grupo, com o mesmo sorteio mitigado. O 1º do dia é aleatório puro.
+- Só contam sorteios com mesa iniciada ou registrada, e só entre quem está na lista agora. Sorteio refeito antes de jogar não conta.
+- Convidado é reconhecido pelo nome sem acento e sem maiúscula, também se for cadastrado no meio do dia.
+- "Começar do zero" marca os sorteios de hoje com `foraDoDia`: deixam de contar, sem sair do histórico.
+- O clube continua só de 4 pessoas por mesa (Sanma no clube ainda não existe).
 
 ### Ranking do torneio
 

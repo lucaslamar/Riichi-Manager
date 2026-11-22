@@ -34,6 +34,8 @@ Estes padrões orientam novas alterações, implementações e refatorações fu
 - Evite duplicar estados ou manter informações derivadas que possam ser calculadas a partir dos dados existentes.
 
 - Relatórios para compartilhar saem de funções puras que devolvem `Relatorio` (`src/compartilhado/relatorio`). Tela nova que compartilha cria uma função `relatorioDe…` em vez de montar imagem na interface.
+- O sorteio mitigado (custos, ventos, tentativas) fica em `src/compartilhado/sorteio/`, usado pelo Torneio e pelo Clube. Não crie custo por formato nem por tela.
+- Antes de oferecer "sortear de novo", confirme que o resultado pode mudar (sorteio, e não classificação ou grade pronta).
 - Texto novo entra nos 7 idiomas: o `test:i18n` falha se faltar uma chave.
 
 ## Modos de jogo

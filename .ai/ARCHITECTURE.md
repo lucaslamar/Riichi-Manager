@@ -54,3 +54,10 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 - `logica/ranking.ts`: classificação com posições, `rankingAteRodada`, `mudancasDoRanking` (setas) e `mudancaAoRegistrar` (confirmação). Lê só partidas, então vale para o Riichi e para os placares MCR convertidos.
 - `RegistrarFinalizada` não depende da lógica do Torneio: `PaginaCenterpiece` passa a função `mudancas` por prop.
 - `interface/componentes/SetaPosicao` e `GuiaFormatos`: seta do ranking e conteúdo do ? do Formato.
+
+## Sorteio
+
+- `src/compartilhado/sorteio`: `aleatorio`, `contagens`, `custo` (regras em ordem), `mesas` (trocas entre vizinhos), `rodada` (tentativas com orçamento por tamanho), `semRepeticao` (16 em 4 e 9 em 3), `minimos` e `estatistica`. Não importa domínios.
+- `src/compartilhado/interface/componentes/sorteio`: painel `QualidadeSorteio` e folha `DetalhesSorteio`, usados pelo Torneio (`logica/estatisticaGrade.ts`) e pelo Clube (`situacaoDoDia`).
+- A grade do Rodízio de 4 continua em `torneio/logica/formatos/rodizio`, comparando `criterios` em ordem.
+- `EncontroClube.mesas` e `foraDoDia` são opcionais: backups antigos continuam valendo.
