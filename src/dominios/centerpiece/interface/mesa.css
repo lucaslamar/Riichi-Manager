@@ -1165,8 +1165,12 @@ button.mesa-domo {
 @media (orientation: landscape) and (max-height: 500px) {
   .mesa-tela.mesa-tela--simples > .mesa-simples-dica {
     top: 10px;
+    /* Encostada na mesa, que fica no meio, e não na borda da tela. */
+    right: calc(50% + var(--mesa-lado) / 2 + 12px);
+    left: auto;
     justify-content: center;
     padding: 12px 8px;
+    font-size: clamp(0.875rem, 4.4dvh, 1.125rem);
     writing-mode: vertical-rl;
     -webkit-text-orientation: sideways;
     text-orientation: sideways;
