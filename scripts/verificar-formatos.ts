@@ -20,6 +20,8 @@ import {
 import { minimoDeRepetidas } from '../src/compartilhado/sorteio/minimos'
 import { sortearRodada } from '../src/compartilhado/sorteio/rodada'
 import { compararCustos } from '../src/compartilhado/sorteio/custo'
+import { compararSorteios, estatisticaDaGrade, pedeAtencao } from '../src/compartilhado/sorteio/estatistica'
+import { estatisticaDoTorneio } from '../src/dominios/torneio/logica/estatisticaGrade'
 import { notaDaGrade } from '../src/dominios/torneio/logica/formatos/rodizio/qualidade'
 import { proximaRodada, rodadaFechada, rodadasIniciais } from '../src/dominios/torneio/logica/formatos'
 import {
@@ -28,7 +30,7 @@ import {
   faseDaRodada,
   rankingEliminatorio,
 } from '../src/dominios/torneio/logica/formatos/eliminatorio'
-import { podeSortearDeNovo, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
+import { podeSortearDeNovo, podeSortearRodada, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
 import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
 import { relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
@@ -464,6 +466,63 @@ for (const total of [8, 12, 16]) {
     assert.ok(nota === 'perfeita' || nota === 'boa', `Rodízio 12 com ${quantas}: ${nota}`)
   }
   console.log('Sorteio mitigado ok.')
+}
+
+// ─── Estatística da grade ───────────────────────────────────────────────────
+{
+  const doze = jogadores(12)
+  const tres: RodadaTorneio[] = []
+  for (let numero = 1; numero <= 3; numero++) {
+    tres.push({ numero, geradaEm: agora, mesas: sortearRodada(doze, tres, { comVentos: false }) })
+  }
+  const boa = estatisticaDaGrade(tres, doze, 4, false)
+  assert.equal(boa.nota, 'otima', '12 e 3 rodadas no mínimo')
+  assert.equal(boa.duplasRepetidas, 9)
+  assert.equal(boa.maxRepetidosPorJogador, 2)
+  assert.equal(boa.ventos, null, 'ventos na mesa: o app não sabe')
+  assert.equal(boa.porJogador[0].repetiuCom.length, 2, 'quem repetiu mais vem primeiro')
+  assert.ok(!pedeAtencao(boa))
+
+  const oito = jogadores(8)
+  const igual = (numero: number): RodadaTorneio => ({
+    numero,
+    geradaEm: agora,
+    mesas: [
+      { numero: 1, assentos: ['j1', 'j2', 'j3', 'j4'] },
+      { numero: 2, assentos: ['j5', 'j6', 'j7', 'j8'] },
+    ],
+  })
+  const ruim = estatisticaDaGrade([1, 2, 3].map(igual), oito, 4, false)
+  assert.equal(ruim.nota, 'ruim', 'dupla 3x')
+  assert.ok(pedeAtencao(ruim))
+  assert.equal(compararSorteios(boa, ruim), 'better')
+  assert.equal(compararSorteios({ nota: 'boa', duplasRepetidas: 9 }, { nota: 'boa', duplasRepetidas: 10 }), 'better')
+  assert.equal(compararSorteios({ nota: 'boa', duplasRepetidas: 10 }, { nota: 'boa', duplasRepetidas: 10 }), 'same')
+  assert.equal(compararSorteios(ruim, boa), 'worse')
+  assert.equal(estatisticaDaGrade([igual(1)], oito, 4, false).nota, 'perfeita')
+  assert.equal(estatisticaDaGrade([igual(1), igual(2)], oito, 4, true).nota, 'ruim', 'Leste de novo e trio repetido')
+
+  const nove = jogadores(9)
+  const sanma: RodadaTorneio[] = []
+  for (let numero = 1; numero <= 4; numero++) {
+    sanma.push({ numero, geradaEm: agora, mesas: sortearRodada(nove, sanma, { porMesa: 3 }) })
+  }
+  const deTres = estatisticaDaGrade(sanma, nove, 3, true)
+  assert.equal(deTres.nota, 'perfeita', 'Sanma')
+  assert.ok(deTres.porJogador.every((linha) => linha.adversariosDiferentes === 8))
+
+  const rodizio = simular({ tipo: 'rodizio', rodadas: 4 }, 12)
+  assert.equal(estatisticaDoTorneio(rodizio.torneio, 1)?.duplasRepetidas, 18, 'Rodízio conta a grade inteira')
+  assert.equal(estatisticaDoTorneio(rodizio.torneio)?.nota, 'otima')
+  assert.ok(podeSortearRodada(rodizio.torneio, [], 1), 'sem partida, refaz de qualquer aba')
+  assert.ok(!podeSortearRodada(rodizio.torneio, rodizio.partidas, 4))
+  const livre = simular({ tipo: 'corridos' }, 12, 2)
+  assert.ok(podeSortearRodada(livre.torneio, livre.partidas, 3), 'Brasileirão refaz a última')
+  assert.ok(!podeSortearRodada(livre.torneio, livre.partidas, 1))
+  assert.equal(estatisticaDoTorneio(livre.torneio, 1)?.duplasRepetidas, 0, 'Brasileirão conta até a rodada')
+  const refeita = sortearDeNovo(livre.torneio, livre.partidas, agora)
+  assert.equal(compararSorteios(estatisticaDoTorneio(refeita)!, estatisticaDoTorneio(livre.torneio)!) === 'worse', false)
+  console.log('Estatística ok.')
 }
 
 console.log('Formatos ok.')

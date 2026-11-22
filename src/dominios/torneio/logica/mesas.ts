@@ -76,6 +76,13 @@ export function podeSortearDeNovo(torneio: Torneio, partidas: readonly Partida[]
   return !doTorneio.some((partida) => partida.vinculoTorneio?.rodada === ultima.numero - 1)
 }
 
+/** O Sortear de novo aparece nesta rodada: antes da primeira partida, em qualquer aba. Depois, só na última. */
+export function podeSortearRodada(torneio: Torneio, partidas: readonly Partida[], numero: number): boolean {
+  if (torneio.transferidoEm || !podeSortearDeNovo(torneio, partidas)) return false
+  if (numero === torneio.rodadas[torneio.rodadas.length - 1]?.numero) return true
+  return !partidas.some((partida) => partida.vinculoTorneio?.torneioId === torneio.id)
+}
+
 function sorteiaCadaRodada({ formato }: Torneio): boolean {
   return formato.tipo === 'corridos' || formato.tipo === 'temporada'
 }
