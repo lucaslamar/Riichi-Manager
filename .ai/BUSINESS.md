@@ -137,7 +137,7 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Há mesa em que a partida não acaba quando alguém fica negativado. A escolha (Acaba ou Continua) fica no Registrar partida finalizada, no clube e no torneio, e é copiada para cada partida.
 - O padrão é o do preset: Clube acaba, EMA e WRC continuam. Mudar vira Personalizado. Torneio já criado segue com o que tinha salvo.
 - Pontos negativos sempre podem ser registrados, com as duas regras. Salvar para continuar com negativado e tobi ligado avisa, sem impedir.
-- O "% tobi" do Ranking e o "mandou pro tobi" ainda contam todo final abaixo de zero, com as duas regras.
+- O "% tobi" do Ranking e o "mandou pro tobi" contam todo final abaixo de zero, com as duas regras (confirmado pelo usuário em 22/11/2026: não filtrar por tobi nem tratar como bug).
 
 ### Partida em andamento (pedido do usuário em 22/11/2026)
 
