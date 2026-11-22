@@ -12,7 +12,7 @@
 - **Diferença em pontos de mesa**: 7,2 no ranking aparece também como 7.200 pontos, sem uma.
 - **Estatísticas do jogador**: no torneio, no Brasileirão e no Ranking geral, com média, posições, maior mão e taxas de vitória, deal-in e riichi. As taxas e a maior mão só aparecem para partidas jogadas com o placar do app.
 - **Distância para o próximo**: no Ranking geral sem data de fim, a projeção diz em quantos jogos o jogador passa quem está acima, pela média de cada um.
-- **Menu do torneio**: Estatísticas do torneio e Compartilhar resultado em Métricas, separadas das Ações do torneio.
+- **Menu do torneio**: Estatísticas do torneio e Compartilhar resultado em Métricas, separadas das Ações do torneio. O menu também tem Encerrar, a rodada em texto ou imagem e Exportar, sem depender dos ícones.
 - **WO no meio da partida**: no teclado de pontos, marca quem precisou sair. Por padrão fica em 4º com os pontos da saída, e a regra muda nas configurações. A soma não trava o registro, e as estatísticas podem tirar essas partidas.
 - **Salvar para continuar**: o Registrar partida finalizada guarda rodada, honba, dealer, pontos, sticks, jogadores e regras. A partida fica em Em andamento para retomar ou descartar, e vai no backup.
 - **Registrar partida finalizada no modo Chinês**: no Placar, no Ranking e nas mesas de torneio e de clube. É uma calculadora para ir somando e subtraindo os pontos de cada um, que ficam salvos durante a partida. Calcular mão já desconta dos outros.
