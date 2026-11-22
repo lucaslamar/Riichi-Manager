@@ -1043,9 +1043,18 @@ button.mesa-domo {
 
 .mesa-tri-caixa > .mesa-tri-domo {
   position: absolute;
-  inset: 40%;
+  inset: 39.5%;
   width: auto;
   height: auto;
+}
+
+/* O círculo é menor que o da mesa de 4: a letra encolhe com ele. */
+.mesa-tri-domo .mesa-domo-segundos {
+  font-size: 7cqw;
+}
+
+.mesa-tri-domo .mesa-domo-info {
+  font-size: min(0.75rem, 3.6cqw);
 }
 
 .mesa-tri-domo .mesa-domo-rodada {
@@ -1124,9 +1133,12 @@ button.mesa-domo {
 @media (orientation: landscape) and (max-height: 560px) {
   .mesa-tela.mesa-tela--simples {
     --mesa-lado: min(620px, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - 20px));
-    /* A faixa está ao lado, então a mesa de 3 não reserva a altura dela. */
-    --mesa-altura-acoes: 56px;
     grid-template-rows: none;
+  }
+
+  /* A faixa está ao lado: a mesa de 3 usa o mesmo quadrado da de 4. */
+  .mesa-tela--simples .mesa-tri-caixa {
+    width: 100%;
   }
 
   .mesa-tela.mesa-tela--simples > .mesa-simples-dica {
