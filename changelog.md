@@ -30,6 +30,10 @@
 
 ### Alterado
 
+- **Ranking no iPad deitado e no PC**: uma linha por jogador, com as colunas alinhadas para comparar.
+- **Mesas em monitor grande**: cabem até seis por linha no Torneio e no clube.
+- **Menu lateral**: com mouse os itens ficam mais baixos, para caber sem rolar na maioria das telas.
+- **Botões no tablet**: filtros, atalhos do Ranking, Han e Fu e ajuda com área de toque de 44 px.
 - **Dragão Branco do Riichi**: liso, só a cor da pedra, sem a linha azul.
 - **QR das imagens mais discreto**: menor, em lilás e sem a faixa branca, com o convite em texto leve embaixo das mesas.
 - **Modo Riichi**: nas Configurações, a opção Japonês agora se chama Riichi, como os jogadores chamam a variante.
@@ -41,6 +45,14 @@
 
 ### Corrigido
 
+- **Sortear sempre à vista**: no iPad deitado e no PC, o botão fica preso na base da lista do Torneio e do clube, mesmo com muitos nomes.
+- **Timer da rodada**: fica preso no topo enquanto as mesas rolam, no iPad e no PC.
+- **Nomes compridos nas mesas**: quebram linha em vez de serem cortados.
+- **Registrar resultado do torneio**: o botão cabe na tela no iPad deitado e no PC.
+- **Títulos no menu lateral**: rodada e mesa aparecem inteiras, com as ações embaixo.
+- **Guia de bolso no PC**: o botão voltou à Calculadora de Mão.
+- **Nova partida no iPad e no PC**: ocupa a tela sem criar rolagem à toa.
+- **Nomes dos ventos**: não quebram mais no meio em coluna estreita.
 - **MPSZ em tela baixa**: com o celular deitado a última linha não fica mais cortada, e em pé as duas fileiras da mão aparecem inteiras.
 - **MPSZ do modo Chinês**: sem a tecla 0 do 5 vermelho, que não existe no MCR, com um apagar largo no lugar dela.
 - **Teclado de pontos no iPhone e com toque ampliado**: as linhas não montam mais uma na outra. No Riichi a última tem 0, 00 e 000. No Chinês, sem 00 e 000, o − e o + ficaram maiores.

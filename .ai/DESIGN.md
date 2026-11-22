@@ -28,6 +28,17 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Navegação leva a lugares, botões executam ações. Não misture os dois papéis.
 - Modais: um por vez, com forma clara de sair além do botão de confirmar.
 
+## iPad e PC
+
+- Prioridade: Torneio, Organizar mesas do clube e Ranking, as telas mais usadas por clubes. Teste com lista cheia (40 a 64 pessoas) e nomes compridos.
+- Menu lateral a partir de 1024px deitado. Em pé ou dividido, barra inferior.
+- Toque: 44px no tablet (`any-pointer: coarse`). Só com mouse os itens do menu encolhem, menos com a Área de toque ampliada.
+- A ação principal fica à vista sem rolar: Sortear preso na base, Registrar dentro da tela, timer da rodada preso no topo.
+- `sticky` dentro do conteúdo principal só funciona com `overflow-x: clip`. Com `hidden` o main vira área de rolagem e nada gruda.
+- Nome de jogador nas mesas quebra linha, nunca é cortado.
+- Ranking deitado: uma linha por jogador, com as métricas em colunas alinhadas. A tabela do torneio vai até 960px.
+- Controle escondido numa largura precisa existir em outro lugar dela (o Guia de bolso sumia no PC).
+
 ## Seleção de pedras
 
 - Não escolhida não é desabilitada: a pedra fica com a aparência cheia (opacidade, face e cor das Pedras). Escolhida ganha só um contorno por sombra na cor `--cor-destaque` (a do botão Gang, rosa no tema escuro), com `aria-pressed` e sem mudar de tamanho. No Alto contraste o contorno engrossa. O foco fica por fora dele. Exemplo: Flores e Estações do MCR.
@@ -71,7 +82,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Registrar ausência é o ícone ao lado de Registrar resultado. A folha mostra os pontos de cada um antes de confirmar.
 - WO usa selo neutro e "Faltou" ou "Presente" no lugar dos pontos da mesa, sem colocação.
 - QR das imagens é uma assinatura discreta (pedido do usuário em 22/11/2026): 148 px em 1080, escuro em fundo lilás claro só no QR, nos dois temas, com o convite e o endereço em texto leve na cor de apoio. Não usar caixa clara na largura toda nem competir com as mesas. Ao mudar, confira a leitura com jsqr também na imagem reduzida à metade.
-- Cabeçalho da rodada: quatro ações de 44px no celular. No desktop ele mora no menu lateral estreito, com ações de 28px de largura.
+- Cabeçalho da rodada: quatro ações de 44px no celular. No menu lateral elas descem para uma linha abaixo do título, também com 44px.
 - Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.
 - Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.
 - Sortear de novo é secundário com nota perfeita ou ótima e principal nas outras. A comparação com o anterior fica 5 s, e o Voltar ao anterior continua no painel.

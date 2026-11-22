@@ -24,3 +24,7 @@ Fontes usadas em regras e telas. Ao usar uma fonte nova, registre aqui. O reposi
 
 - **Guia do Mahjong Chinês (MCR) do Cerrado Mahjong Club**: base dos 81 fan, do Guia de bolso e do Tutorial, pelo texto enviado pelo usuário (o PDF não está no repositório).
 - **Fontes secundárias do Tutorial MCR** (Wikipédia em chinês, Geekdaxue e um rascunho da Wikipédia em inglês): regra por regra em [REFERENCIAS-MCR.md](REFERENCIAS-MCR.md).
+
+## Revisão de iPad e PC
+
+- [Human Interface Guidelines da Apple](https://developer.apple.com/design/human-interface-guidelines), páginas Layout, Accessibility, Designing for iPadOS e Designing for macOS: ação principal à vista, alvos de 44px no toque e 28px no mouse, mais conteúdo e menos rolagem em tela grande.

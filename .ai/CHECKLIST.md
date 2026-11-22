@@ -24,4 +24,5 @@ Escolha os testes conforme o impacto; os comandos completos estão em `package.j
 - Modo Chinês (motor de fan e pagamento MCR): `npm run test:fan-mcr` (inclui os 81 fan do guia do CMC), `npm run test:placar-mcr` e `npm run test:tutorial-mcr`. Ao mexer em componente compartilhado, confira o Riichi no navegador e procure termos do Riichi nas telas do MCR. Regra nova no Tutorial sem base no guia do CMC entra em [REFERENCIAS-MCR.md](REFERENCIAS-MCR.md).
 - Persistência e backup: `npm run test:armazenamento` e `npm run test:backup`.
 - Traduções e tema: `npm run test:i18n` e `npm run test:tema`.
+- iPad e PC: confira 678×1024, 820×1180, 1024×768, 1024×1366, 1180×820, 1280×650, 1440×900 e 1920×1080. No Torneio, no Clube e no Ranking, use lista cheia e role até o fim.
 - Interface: quando aplicável, siga [DESIGN.md](DESIGN.md) e confira layouts mobile e desktop, navegação por teclado e acessibilidade; para offline, valide o build, pois o service worker não roda no desenvolvimento.

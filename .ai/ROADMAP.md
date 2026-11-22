@@ -24,7 +24,11 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 ## Desktop
 
-- Revisar a tela de desktop, inclusive o título que trunca com quatro ações no menu lateral.
+- Marcar no menu lateral o subitem aberto (hoje marca só Mesa partida ou Ranking).
+- Proposta aguardando aprovação: lista de presença em duas áreas no iPad deitado e PC (nomes de um lado, contagem e Sortear do outro).
+- Proposta aguardando aprovação: digitar a mão pelo teclado físico sem abrir o MPSZ.
+- Proposta aguardando aprovação: limitar a largura da Calculadora e do Han e Fu em monitor grande.
+- Conferir num iPad de verdade (Safari, teclado do sistema, Split View).
 - Na folha de pontos, apagar o valor anterior ao começar a digitar (só no desktop).
 
 ## Modo Chinês
