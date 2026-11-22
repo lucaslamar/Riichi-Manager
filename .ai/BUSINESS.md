@@ -38,7 +38,7 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Falso Hu no MCR (decidido com o usuário em 21/11/2026, regra da EMA): quem errou paga 10 pontos a cada um dos outros três (−30 e +10 cada). A mão continua e o dealer não muda. Fica em `PlacarMcr.falsosHu` e entra em `totais`.
 - Placar MCR: anota vitória (vencedor, Dianhe ou Zimo, quem descartou, fan com as flores) ou empate. A mão precisa de 8 fan ou mais. O placar não confere as flores, então o aviso pede que o mínimo seja contado sem elas. Uma partida tem 16 mãos: o dealer passa a cada mão e o vento da rodada muda a cada 4 mãos. As cadeiras não trocam de lugar entre as rodadas no placar. O timer da vez tem 30 segundos por padrão e pode ser desligado.
 
-- Flores no MCR: cada flor ou estação vale 1 fan, sem função própria nem relação com o assento. Na calculadora, entram na finalização da mão, num contador de 0 a 8. Flores não contam para o mínimo de 8.
+- Flores no MCR: cada flor ou estação vale 1 fan, sem função própria nem relação com o assento. Na calculadora, entram na finalização da mão, num contador de 0 a 8 ligado às 8 pedras, que podem ser escolhidas uma a uma. Flores não contam para o mínimo de 8.
 - Ranking no MCR: soma os pontos MCR dos placares finalizados. Colocação pelo total da partida, com empate dividindo a posição.
 
 - Glossário MCR (`aprender-a-jogar/conteudo/mcr/glossario.ts`): o do guia do CMC, no livro e na aba Glossário do Guia de bolso, com o selo "Diferente do Riichi" no que muda (dealer, Chow com kuikae, Kong oculto, flores, espera sem furiten). Os créditos do CMC saíram da tela: o uso foi autorizado sem crédito.

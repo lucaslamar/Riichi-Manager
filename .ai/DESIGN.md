@@ -28,6 +28,10 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Navegação leva a lugares, botões executam ações. Não misture os dois papéis.
 - Modais: um por vez, com forma clara de sair além do botão de confirmar.
 
+## Seleção de pedras
+
+- Não escolhida não é desabilitada: a pedra fica com a aparência cheia (opacidade, face e cor das Pedras). Escolhida ganha só um contorno por sombra na cor `--cor-destaque` (a do botão Gang, rosa no tema escuro), com `aria-pressed` e sem mudar de tamanho. No Alto contraste o contorno engrossa. O foco fica por fora dele. Exemplo: Flores e Estações do MCR.
+
 ## Escrita
 
 - Rótulos dizem o que vai acontecer ("Salvar partida", não "OK").
