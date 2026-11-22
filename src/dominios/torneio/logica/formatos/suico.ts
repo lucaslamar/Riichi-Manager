@@ -7,7 +7,7 @@ import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { classificar } from '../classificacao'
 import type { RodadaTorneio, Torneio } from '../tipos'
 import { jogadoresPorMesa } from '../torneio'
-import { mesasPelaOrdem, type JogadoresPorMesa } from './comum'
+import { mesasPelaOrdem, type JogadoresPorMesa } from '@/compartilhado/sorteio/mesas'
 
 function rodadaSuica(
   ordem: readonly string[],

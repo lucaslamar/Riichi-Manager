@@ -6,7 +6,7 @@
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { classificar, type LinhaClassificacao } from '../classificacao'
 import type { ConfigFormato, RodadaTorneio, Torneio } from '../tipos'
-import { mesasPelaOrdem } from './comum'
+import { mesasPelaOrdem } from '@/compartilhado/sorteio/mesas'
 import { jogadoresPorMesa } from '../torneio'
 
 type FormatoEliminatorio = Extract<ConfigFormato, { tipo: 'eliminatorio' }>

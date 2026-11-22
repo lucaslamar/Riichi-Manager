@@ -1,8 +1,20 @@
 /**
- * Regras que valem para todo formato que monta rodada a rodada (Suíço, fases do
- * Eliminatório, Pontos corridos): repetição de adversários e ventos equilibrados.
+ * Regras do sorteio de mesas usadas pelo Torneio e pelo Clube: repetição de
+ * adversários e ventos equilibrados. Sem tela e sem domínio.
  */
-import type { AssentosMesa, MesaTorneio, RodadaTorneio } from '../tipos'
+
+/** Assentos na ordem 東 南 西 北. No Sanma, o 北 fica `''`. */
+type Assentos = [string, string, string, string]
+
+/** Só o que o sorteio lê de uma rodada. */
+export interface RodadaDoSorteio {
+  mesas: readonly { assentos: readonly string[] }[]
+}
+
+export interface MesaDaRodada {
+  numero: number
+  assentos: Assentos
+}
 
 /** Jogadores por mesa: 4 no yonma, 3 no Sanma (a 4ª cadeira da mesa fica vazia, `''`). */
 export type JogadoresPorMesa = 3 | 4
@@ -13,7 +25,7 @@ export const ocupantes = (assentos: readonly string[]) => assentos.filter((jogad
 const chaveDoPar = (um: string, outro: string) => (um < outro ? `${um}|${outro}` : `${outro}|${um}`)
 
 /** Quantas vezes cada dupla já se enfrentou. */
-export function contarPares(rodadas: readonly RodadaTorneio[]): Map<string, number> {
+export function contarPares(rodadas: readonly RodadaDoSorteio[]): Map<string, number> {
   const contagem = new Map<string, number>()
   for (const rodada of rodadas) {
     for (const mesa of rodada.mesas) {
@@ -42,7 +54,7 @@ export function custoDaMesa(jogadores: readonly string[], pares: ReadonlyMap<str
 }
 
 /** Vezes em cada vento (東 南 西 北) por jogador. */
-export function contarVentos(rodadas: readonly RodadaTorneio[]): Map<string, [number, number, number, number]> {
+export function contarVentos(rodadas: readonly RodadaDoSorteio[]): Map<string, [number, number, number, number]> {
   const contagem = new Map<string, [number, number, number, number]>()
   for (const rodada of rodadas) {
     for (const mesa of rodada.mesas) {
@@ -71,8 +83,8 @@ function permutacoes(tamanho: number): number[][] {
 const PERMUTACOES: Record<JogadoresPorMesa, number[][]> = { 3: permutacoes(3), 4: permutacoes(4) }
 
 /** Assentos da mesa; no Sanma a 4ª cadeira (Norte) fica vazia. */
-export function assentosDoGrupo(grupo: readonly string[]): AssentosMesa {
-  return [grupo[0], grupo[1], grupo[2], grupo[3] ?? ''] as AssentosMesa
+export function assentosDoGrupo(grupo: readonly string[]): Assentos {
+  return [grupo[0], grupo[1], grupo[2], grupo[3] ?? ''] as Assentos
 }
 
 /**
@@ -82,7 +94,7 @@ export function assentosDoGrupo(grupo: readonly string[]): AssentosMesa {
 function assentarComVentos(
   grupo: readonly string[],
   ventos: ReadonlyMap<string, readonly number[]>,
-): AssentosMesa {
+): Assentos {
   const PESOS = [100, 10, 10, 10]
   const ordens = PERMUTACOES[grupo.length === 3 ? 3 : 4]
   let melhor = ordens[0]
@@ -108,9 +120,9 @@ function assentarComVentos(
  */
 export function mesasPelaOrdem(
   ordem: readonly string[],
-  anteriores: readonly RodadaTorneio[],
+  anteriores: readonly RodadaDoSorteio[],
   porMesa: JogadoresPorMesa = 4,
-): MesaTorneio[] {
+): MesaDaRodada[] {
   const pares = contarPares(anteriores)
   const ventos = contarVentos(anteriores)
   const fila = [...ordem]

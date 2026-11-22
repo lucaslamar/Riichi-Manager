@@ -9,7 +9,7 @@ import { qualidadeDasRodadas, gerarRodizio } from '../src/dominios/torneio/logic
 import type { Partida } from '../src/dominios/centerpiece/logica/partida'
 import { criarPartidaManual } from '../src/dominios/centerpiece/logica/partidaManual'
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
-import { contarPares, contarVentos, custoDaMesa } from '../src/dominios/torneio/logica/formatos/comum'
+import { contarPares, contarVentos, custoDaMesa } from '../src/compartilhado/sorteio/mesas'
 import { proximaRodada, rodadaFechada, rodadasIniciais } from '../src/dominios/torneio/logica/formatos'
 import {
   classificacaoDaFase,

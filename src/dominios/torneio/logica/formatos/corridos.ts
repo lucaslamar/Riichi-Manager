@@ -3,9 +3,9 @@
  * rodada), tentando várias ordens e ficando com a que menos repete adversários.
  * Não há número de rodadas: o organizador encerra quando quiser.
  */
-import { embaralhar, inteiroAleatorioSeguro, type InteiroAleatorio } from '@/dominios/centerpiece/logica/sorteioClube'
+import { embaralhar, inteiroAleatorioSeguro, type InteiroAleatorio } from '@/compartilhado/sorteio/aleatorio'
 import type { RodadaTorneio } from '../tipos'
-import { contarPares, custoDaMesa, mesasPelaOrdem, ocupantes, type JogadoresPorMesa } from './comum'
+import { contarPares, custoDaMesa, mesasPelaOrdem, ocupantes, type JogadoresPorMesa } from '@/compartilhado/sorteio/mesas'
 
 const TENTATIVAS = 300
 
