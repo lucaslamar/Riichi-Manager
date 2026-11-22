@@ -1715,11 +1715,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1768,7 +1768,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "このリストを保存、または保存済みを読み込む"
     },
     "settings": {
@@ -1824,20 +1824,20 @@
       "temporada": "複数の例会で通算ランキング。"
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1851,7 +1851,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
@@ -1860,15 +1860,15 @@
         "one": "Sum of each player's best game result.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season",
-      "criterionShort": "集計方法はシーズン画面で選択。"
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "集計方法はリーグ画面で選択。"
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1938,7 +1938,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -2098,8 +2098,43 @@
     "idealRounds": {
       "short8": "8人では2回戦から再戦します。",
       "short12": "12人なら3回戦までが理想。",
-      "help8": "2卓では、2回戦の各卓に前の2卓からしか人が来ないため、各卓で少なくとも2組が再戦します。3回戦では各自最大3人と再戦します。再戦を減らすには12人か16人を集めてください。",
-      "help12": "3卓では2回戦以降、必ず誰かが再戦します。抽選ではなく数学的な限界です。3回戦なら再戦相手を各自2人までに抑えられます。4回戦目は全員が一度ずつ東家になる必要がある場合向けです。16人なら5回戦まで再戦なしで打てます。"
+      "guide12": {
+        "title": "12人・3卓",
+        "repeats": {
+          "label": "2回戦以降",
+          "text": "必ず誰かが再戦します。"
+        },
+        "three": {
+          "label": "3回戦：理想",
+          "text": "再戦相手は各自2人まで。"
+        },
+        "four": {
+          "label": "4回戦：All East",
+          "text": "再戦は増えますが全員が一度東家。"
+        },
+        "sixteen": {
+          "label": "16人なら",
+          "text": "5回戦まで再戦なし。"
+        },
+        "why": "再戦は抽選ではなく数学上の限界です。"
+      },
+      "guide8": {
+        "title": "8人・2卓",
+        "repeats": {
+          "label": "2回戦以降",
+          "text": "各卓で少なくとも2組が再戦。"
+        },
+        "three": {
+          "label": "3回戦",
+          "text": "各自最大3人と再戦。"
+        },
+        "fewer": {
+          "label": "再戦を減らすには",
+          "text": "12人か16人を集めましょう。"
+        },
+        "why": "2卓しか混ぜられない、数学上の限界です。"
+      },
+      "short12AllEast": "12人では4回戦目に再戦が増えます。"
     },
     "gridStats": {
       "title": "抽選の質",

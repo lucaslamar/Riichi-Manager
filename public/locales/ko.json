@@ -1715,11 +1715,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1768,7 +1768,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "이 목록을 저장하거나 저장된 목록 불러오기"
     },
     "settings": {
@@ -1824,20 +1824,20 @@
       "temporada": "여러 모임, 하나의 랭킹."
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1851,7 +1851,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
@@ -1860,15 +1860,15 @@
         "one": "Sum of each player's best game result.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season",
-      "criterionShort": "집계 방식은 시즌 화면에서 선택."
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "집계 방식은 리그 화면에서 선택."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1938,7 +1938,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -2098,8 +2098,43 @@
     "idealRounds": {
       "short8": "8명이면 2라운드부터 재대결.",
       "short12": "12명이면 3라운드까지가 이상적.",
-      "help8": "테이블이 2개면 2라운드 각 테이블에는 이전 2개 테이블의 사람만 모이므로 테이블마다 최소 2쌍이 다시 만납니다. 3라운드면 각자 최대 3명과 다시 만납니다. 재대결을 줄이려면 12명이나 16명을 모으세요.",
-      "help12": "테이블이 3개면 2라운드부터 누군가는 재대결합니다. 추첨이 아니라 수학의 한계입니다. 3라운드면 각자 재대결 상대를 2명까지로 줄일 수 있습니다. 4라운드는 모두 한 번씩 동가가 되어야 할 때만 좋습니다. 16명이면 5라운드까지 재대결 없이 할 수 있습니다."
+      "guide12": {
+        "title": "12명, 테이블 3개",
+        "repeats": {
+          "label": "2라운드부터",
+          "text": "누군가는 재대결합니다."
+        },
+        "three": {
+          "label": "3라운드: 이상적",
+          "text": "재대결 상대는 각자 최대 2명."
+        },
+        "four": {
+          "label": "4라운드: All East",
+          "text": "재대결은 늘지만 모두 한 번씩 동가."
+        },
+        "sixteen": {
+          "label": "16명이면",
+          "text": "5라운드까지 재대결 없음."
+        },
+        "why": "재대결은 추첨이 아니라 수학의 한계입니다."
+      },
+      "guide8": {
+        "title": "8명, 테이블 2개",
+        "repeats": {
+          "label": "2라운드부터",
+          "text": "테이블마다 최소 2쌍이 재대결."
+        },
+        "three": {
+          "label": "3라운드",
+          "text": "각자 최대 3명과 재대결."
+        },
+        "fewer": {
+          "label": "재대결을 줄이려면",
+          "text": "12명이나 16명을 모으세요."
+        },
+        "why": "섞을 테이블이 2개뿐인 수학의 한계입니다."
+      },
+      "short12AllEast": "12명이면 4라운드에 재대결 증가."
     },
     "gridStats": {
       "title": "추첨 품질",

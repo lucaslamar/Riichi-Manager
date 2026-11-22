@@ -20,7 +20,7 @@ export default function GuiaFormatos({
       <ul className="trn-guia-formatos">
         {formatos.map((tipo) => (
           <li key={tipo} aria-current={tipo === atual ? 'true' : undefined}>
-            <strong>{t(`tournament.formatsShort.${tipo}`)}</strong>
+            <strong>{t(`tournament.formats.${tipo}`)}</strong>
             <span>{t(`tournament.formatGuide.${tipo}.what`)}</span>
             <span>{t(`tournament.formatGuide.${tipo}.for`)}</span>
           </li>

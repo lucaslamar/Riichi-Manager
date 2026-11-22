@@ -1781,11 +1781,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1840,7 +1840,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "Išsaugoti šį sąrašą arba įkelti išsaugotą"
     },
     "settings": {
@@ -1899,20 +1899,20 @@
       "temporada": "Keli susitikimai, vienas reitingas."
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1928,7 +1928,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "few": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked.",
@@ -1941,15 +1941,15 @@
         "many": "Sum of each player's {{count}} best game results.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season",
-      "criterionShort": "Kriterijus: sezono ekrane."
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "Kriterijus: lygos ekrane."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -2019,7 +2019,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -2185,8 +2185,43 @@
     "idealRounds": {
       "short8": "Su 8 kartojasi nuo 2 turo.",
       "short12": "Su 12 geriausia iki 3 turų.",
-      "help8": "Esant 2 stalams, 2 turo stale susitinka žmonės tik iš 2 ankstesnių stalų, todėl kiekviename stale kartojasi bent 2 poros. Per 3 turus kiekvienas pakartoja iki 3 varžovų. Kad kartotųsi mažiau, surinkite 12 ar 16 žaidėjų.",
-      "help12": "Esant 3 stalams, nuo 2 turo kas nors visada pakartoja varžovą: tai matematikos, o ne burtų riba. Per 3 turus kiekvienas gali pakartoti ne daugiau kaip 2 varžovus. 4 turas vertas tik jei visi turi kartą būti Rytais. Su 16 žaidėjų galima žaisti iki 5 turų be pakartojimų."
+      "guide12": {
+        "title": "12 žaidėjų, 3 stalai",
+        "repeats": {
+          "label": "Nuo 2 turo",
+          "text": "Kas nors visada pakartoja varžovą."
+        },
+        "three": {
+          "label": "3 turai: geriausia",
+          "text": "Kiekvienas pakartoja iki 2 varžovų."
+        },
+        "four": {
+          "label": "4 turai: All East",
+          "text": "Daugiau kartojimų, bet visi kartą Rytai."
+        },
+        "sixteen": {
+          "label": "Su 16 žaidėjų",
+          "text": "Iki 5 turų be pakartojimų."
+        },
+        "why": "Kartojimai yra matematikos, o ne burtų riba."
+      },
+      "guide8": {
+        "title": "8 žaidėjai, 2 stalai",
+        "repeats": {
+          "label": "Nuo 2 turo",
+          "text": "Kiekviename stale kartojasi bent 2 poros."
+        },
+        "three": {
+          "label": "3 turai",
+          "text": "Kiekvienas pakartoja iki 3 varžovų."
+        },
+        "fewer": {
+          "label": "Kad kartotųsi mažiau",
+          "text": "Surinkite 12 ar 16 žaidėjų."
+        },
+        "why": "Tai matematikos riba: maišyti galima tik 2 stalus."
+      },
+      "short12AllEast": "Su 12 4 ture kartojasi daugiau."
     },
     "gridStats": {
       "title": "Burtų kokybė",

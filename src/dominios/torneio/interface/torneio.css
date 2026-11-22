@@ -1499,3 +1499,12 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .trn-wo-campos > label {
   min-width: 0;
 }
+
+/* ? do Número de rodadas. */
+.trn-guia-rodadas {
+  margin-top: 10px;
+}
+
+.trn-guia-rodadas li.trn-guia-rodadas--atual {
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+}

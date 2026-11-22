@@ -1737,11 +1737,11 @@
     "active": "Torneio em andamento",
     "continue": "Continuar",
     "formats": {
-      "rodizio": "Rodízio",
+      "rodizio": "All Leste",
       "suico": "Suíço",
       "eliminatorio": "Eliminatório",
-      "corridos": "Brasileirão",
-      "temporada": "Brasileirão (temporada)"
+      "corridos": "Pontos corridos rápido",
+      "temporada": "Brasileirão"
     },
     "history": {
       "title": "Torneios finalizados",
@@ -1790,7 +1790,7 @@
       "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista",
       "rename": "Renomear o torneio {{name}}",
       "more": "Mais opções da lista",
-      "pickSeason": "Escolha ou crie a temporada nas configurações do torneio",
+      "pickSeason": "Escolha ou crie o Brasileirão nas configurações do torneio",
       "memoryHint": "Guardar esta lista ou carregar uma guardada"
     },
     "settings": {
@@ -1847,20 +1847,20 @@
       "temporada": "Vários encontros somando num ranking só."
     },
     "formatsShort": {
-      "rodizio": "Rodízio",
+      "rodizio": "All Leste",
       "suico": "Suíço",
       "eliminatorio": "Eliminatório",
-      "corridos": "Brasileirão",
-      "temporada": "Temporada"
+      "corridos": "Rápido",
+      "temporada": "Brasileirão"
     },
     "season": {
-      "title": "Temporada",
-      "new": "Nova temporada",
-      "name": "Nome da temporada",
-      "defaultName": "Temporada {{year}}",
+      "title": "Brasileirão",
+      "new": "Novo Brasileirão",
+      "name": "Nome do Brasileirão",
+      "defaultName": "Brasileirão {{year}}",
       "start": "Início",
       "end": "Fim",
-      "criterionLater": "O critério do ranking (soma, média ou melhores resultados) se escolhe na tela da temporada.",
+      "criterionLater": "O critério do ranking (soma, média ou melhores resultados) se escolhe na tela do Brasileirão.",
       "meetupName": "{{season}} · Encontro {{number}}",
       "meetups": {
         "one": "{{count}} encontro",
@@ -1874,7 +1874,7 @@
       "criterionBest": "Melhores",
       "minimum": "Mínimo de partidas",
       "best": "Quantos resultados contam",
-      "criterionSumHelp": "Soma dos pontos de todas as partidas da temporada.",
+      "criterionSumHelp": "Soma dos pontos de todas as partidas do Brasileirão.",
       "criterionAverageHelp": {
         "one": "Média de pontos por partida. Quem jogou menos de {{count}} partida fica no fim, sem posição.",
         "other": "Média de pontos por partida. Quem jogou menos de {{count}} partidas fica no fim, sem posição."
@@ -1883,15 +1883,15 @@
         "one": "Soma do melhor resultado de partida de cada jogador.",
         "other": "Soma dos {{count}} melhores resultados de partida de cada jogador."
       },
-      "ranking": "Ranking da temporada",
+      "ranking": "Ranking do Brasileirão",
       "noResults": "Nenhum resultado ainda.",
       "points": "Pontos",
       "games": "Partidas",
       "meetupsTitle": "Encontros",
       "noMeetups": "Nenhum encontro ainda.",
-      "listTitle": "Temporadas",
-      "open": "Ver a temporada",
-      "criterionShort": "Critério: na tela da temporada."
+      "listTitle": "Brasileirões",
+      "open": "Ver o Brasileirão",
+      "criterionShort": "Critério: na tela do Brasileirão."
     },
     "tables": {
       "roundOf": "Rodada {{round}} de {{total}}",
@@ -1961,7 +1961,7 @@
       "finish": "Encerrar torneio",
       "finishTitle": "Encerrar o torneio?",
       "finishHelp": "O torneio vai para o histórico e não recebe mais resultados.",
-      "seasonRanking": "Ranking da temporada",
+      "seasonRanking": "Ranking do Brasileirão",
       "seasonRankingHelp": "Acumulado de todos os encontros",
       "player": "Jogador"
     },
@@ -2116,15 +2116,50 @@
         "for": "Indicado para encontro casual em que não se sabe quantas rodadas vão dar."
       },
       "temporada": {
-        "what": "Igual ao Brasileirão, mas cada encontro soma num ranking acumulado (soma, média ou melhores resultados).",
+        "what": "Rodadas sorteadas na hora, e cada encontro soma num ranking acumulado (soma, média ou melhores resultados).",
         "for": "Indicado para liga do clube ao longo de meses ou do ano."
       }
     },
     "idealRounds": {
       "short8": "Com 8, repete sempre a partir da 2ª.",
       "short12": "Com 12, até 3 rodadas é o ideal.",
-      "help8": "Com 2 mesas, cada mesa da 2ª rodada junta pessoas de só 2 mesas anteriores. Por isso, pelo menos 2 duplas se repetem em cada mesa. Com 3 rodadas, cada jogador repete até 3 adversários. Para menos repetição, junte 12 ou 16 jogadores.",
-      "help12": "Com 3 mesas, a partir da 2ª rodada sempre tem alguém repetindo adversário: é limite da matemática, não do sorteio. Com 3 rodadas, dá para cada um repetir no máximo 2 adversários. A 4ª rodada só vale se todos precisarem ser Leste uma vez. Com 16 jogadores dá para fazer até 5 rodadas sem repetir ninguém."
+      "guide12": {
+        "title": "12 jogadores, 3 mesas",
+        "repeats": {
+          "label": "A partir da 2ª rodada",
+          "text": "Alguém sempre repete adversário."
+        },
+        "three": {
+          "label": "3 rodadas: o ideal",
+          "text": "Cada um repete no máximo 2 adversários."
+        },
+        "four": {
+          "label": "4 rodadas: All Leste",
+          "text": "Repete mais, mas todos são Leste uma vez."
+        },
+        "sixteen": {
+          "label": "Com 16 jogadores",
+          "text": "Até 5 rodadas sem repetir ninguém."
+        },
+        "why": "A repetição é limite da matemática, não do sorteio."
+      },
+      "guide8": {
+        "title": "8 jogadores, 2 mesas",
+        "repeats": {
+          "label": "A partir da 2ª rodada",
+          "text": "Pelo menos 2 duplas se repetem em cada mesa."
+        },
+        "three": {
+          "label": "3 rodadas",
+          "text": "Cada um repete até 3 adversários."
+        },
+        "fewer": {
+          "label": "Para repetir menos",
+          "text": "Junte 12 ou 16 jogadores."
+        },
+        "why": "É limite da matemática: só há 2 mesas para misturar."
+      },
+      "short12AllEast": "Com 12, a 4ª rodada repete mais."
     },
     "gridStats": {
       "title": "Qualidade do sorteio",
@@ -2260,8 +2295,8 @@
       "rounding": "+ {{value}} de arredondamento",
       "installmentLine": "{{count}}x de {{value}}",
       "sumMustBe100": "A soma precisa dar 100%. Agora: {{sum}}.",
-      "whyFee": "R$ 100 numa temporada de 6 a 12 encontros sai entre R$ 8 e R$ 17 por encontro. O prêmio fica atraente (R$ 600 para o 1º com 16 jogadores) e quem pagou falta menos. Se não tiver certeza de juntar o mínimo, comece com R$ 50 numa temporada de lançamento e suba depois.",
-      "whyInstallments": "Parcelar tira o peso do valor de entrada. 5x de R$ 20 cabe para quase todo mundo e acompanha os meses da temporada.",
+      "whyFee": "R$ 100 num Brasileirão de 6 a 12 encontros sai entre R$ 8 e R$ 17 por encontro. O prêmio fica atraente (R$ 600 para o 1º com 16 jogadores) e quem pagou falta menos. Se não tiver certeza de juntar o mínimo, comece com R$ 50 num Brasileirão de lançamento e suba depois.",
+      "whyInstallments": "Parcelar tira o peso do valor de entrada. 5x de R$ 20 cabe para quase todo mundo e acompanha os meses do Brasileirão.",
       "whyEarly": "Um valor menor até uma data puxa as inscrições para o começo e ajuda a garantir o mínimo antes da primeira rodada. Informe quantos pagaram esse valor, porque o app não controla pagamento por pessoa.",
       "whyClub": "25% dá para comprar algo concreto (um set ou parte de uma mesa) sem parecer que o clube fica com o prêmio. Acima de 30% costuma gerar reclamação.",
       "whySplit": "Pagar até o 3º mantém metade da tabela com chance real até o fim. 50/30/20 é a divisão mais comum: o campeão leva bem mais, mas o 2º e o 3º não saem com algo simbólico. Vale também com menos de 16. Com 20 jogadores a automática paga até o 4º, e com 28 até o 5º.",

@@ -7,7 +7,7 @@ import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/Config
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
-import { dataDoDia, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
+import { dataDoDia, exigeVentos, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
 import { useTorneios } from '../hooks/useTorneios'
 import { premiacaoPadrao, premiacaoValida } from '../../logica/premiacao'
 import { rankingTemporada, encontrosDaTemporada } from '../../logica/temporada'
@@ -18,6 +18,7 @@ import CamposWo from './CamposWo'
 import type { RegrasWo } from '@/compartilhado/modo-jogo/regrasDoModo'
 import { regrasWoDe, regrasWoValidas } from '../../logica/wo'
 import GuiaFormatos from './GuiaFormatos'
+import GuiaRodadas from './GuiaRodadas'
 import '../torneio.css'
 
 const FORMATOS: readonly FormatoTorneio[] = ['rodizio', 'suico', 'eliminatorio', 'corridos', 'temporada']
@@ -51,6 +52,8 @@ export default function ConfigTorneioSheet({
   const donoPremiacao = formato.tipo === 'temporada' ? `temporada:${formato.temporadaId}` : 'torneio'
   const premiacaoSalva = formato.tipo === 'temporada' ? temporada?.premiacao : torneio.premiacao
   const premiacao = premiacoes[donoPremiacao] ?? premiacaoSalva ?? premiacaoPadrao(idioma)
+  const ventosFixos = exigeVentos(formato)
+  const comVentos = ventosFixos || ventos
   const [woEditado, setWoEditado] = useState<RegrasWo | null>(null)
   const woPadrao = regrasWoDe({
     jogo: useModoJogoAtual() === 'mcr' ? 'mcr' : undefined,
@@ -105,11 +108,12 @@ export default function ConfigTorneioSheet({
             setVentos(ventosPadrao(tipo))
           }}
           className="cfg-presets trn-formatos-botoes"
-          opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formatsShort.${tipo}`) }))}
+          opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formats.${tipo}`) }))}
         />
         <p className="cfg-ajuda">{t(`tournament.formatHelp.${formato.tipo}`)}</p>
       </div>
 
+      {!ventosFixos && (
       <Grupo
         rotulo={t('tournament.settings.winds')}
         ajuda={
@@ -133,14 +137,19 @@ export default function ConfigTorneioSheet({
           ]}
         />
       </Grupo>
-      <p className="cfg-ajuda">{t(ventos ? 'tournament.settings.windsAppShort' : 'tournament.settings.windsTableShort')}</p>
+      )}
+      <p className="cfg-ajuda">{t(comVentos ? 'tournament.settings.windsAppShort' : 'tournament.settings.windsTableShort')}</p>
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
       {porMesa === 4 && formato.tipo !== 'eliminatorio' && (jogadores === 8 || jogadores === 12) && (
         <p className="cfg-ajuda cfg-ajuda--com-botao">
-          {t(`tournament.idealRounds.short${jogadores}`)}
+          {t(
+            jogadores === 12 && formato.tipo === 'rodizio'
+              ? 'tournament.idealRounds.short12AllEast'
+              : `tournament.idealRounds.short${jogadores}`,
+          )}
           <AjudaCampo rotulo={t('tournament.settings.rounds')}>
-            <p>{t(`tournament.idealRounds.help${jogadores}`)}</p>
+            <GuiaRodadas jogadores={jogadores} allLeste={formato.tipo === 'rodizio'} />
           </AjudaCampo>
         </p>
       )}
@@ -336,7 +345,7 @@ export default function ConfigTorneioSheet({
           })
         }
         const doTorneio = formato.tipo !== 'temporada' && premiacao.ativa ? premiacao : undefined
-        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos, premiacao: doTorneio, wo: woEditado ?? torneio.wo ?? temporada?.wo })
+        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: comVentos, premiacao: doTorneio, wo: woEditado ?? torneio.wo ?? temporada?.wo })
       }}
     />
   )

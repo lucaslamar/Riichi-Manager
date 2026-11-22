@@ -1737,11 +1737,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1790,7 +1790,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "Save this list or load a saved one"
     },
     "settings": {
@@ -1847,20 +1847,20 @@
       "temporada": "Several meetings, one shared ranking."
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1874,7 +1874,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
@@ -1883,15 +1883,15 @@
         "one": "Sum of each player's best game result.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season",
-      "criterionShort": "Criterion: on the season screen."
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "Criterion: on the league screen."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1961,7 +1961,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -2123,8 +2123,43 @@
     "idealRounds": {
       "short8": "With 8, repeats start in round 2.",
       "short12": "With 12, up to 3 rounds is ideal.",
-      "help8": "With 2 tables, each round 2 table mixes people from only 2 earlier tables, so at least 2 pairs repeat at each table. With 3 rounds, each player repeats up to 3 opponents. For fewer repeats, gather 12 or 16 players.",
-      "help12": "With 3 tables, someone always repeats an opponent from round 2 on: that is a limit of the math, not of the draw. With 3 rounds, each player can repeat at most 2 opponents. A 4th round is only worth it if everyone must be East once. With 16 players you can play up to 5 rounds with no repeats."
+      "guide12": {
+        "title": "12 players, 3 tables",
+        "repeats": {
+          "label": "From round 2 on",
+          "text": "Someone always repeats an opponent."
+        },
+        "three": {
+          "label": "3 rounds: ideal",
+          "text": "Each player repeats 2 opponents at most."
+        },
+        "four": {
+          "label": "4 rounds: All East",
+          "text": "More repeats, but everyone is East once."
+        },
+        "sixteen": {
+          "label": "With 16 players",
+          "text": "Up to 5 rounds with no repeats."
+        },
+        "why": "Repeats are a limit of the math, not of the draw."
+      },
+      "guide8": {
+        "title": "8 players, 2 tables",
+        "repeats": {
+          "label": "From round 2 on",
+          "text": "At least 2 pairs repeat at each table."
+        },
+        "three": {
+          "label": "3 rounds",
+          "text": "Each player repeats up to 3 opponents."
+        },
+        "fewer": {
+          "label": "For fewer repeats",
+          "text": "Gather 12 or 16 players."
+        },
+        "why": "It is a limit of the math: only 2 tables to mix."
+      },
+      "short12AllEast": "With 12, round 4 repeats more."
     },
     "gridStats": {
       "title": "Draw quality",

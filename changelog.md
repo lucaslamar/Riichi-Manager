@@ -13,7 +13,7 @@
 - **Sorteio do clube com memória do dia**: sortear de novo no mesmo dia evita repetir quem já jogou junto e reveza o Leste, contando só os sorteios com mesa jogada. As mesas mostram a rodada do dia com a qualidade do sorteio, e Começar do zero, no menu ⋮, serve para quando o grupo for outro.
 - **QR Code do app nas imagens**: as imagens de resultado trazem o QR e o endereço do site, com um convite para usar o app. Dá para desligar em Ajustes, e o texto compartilhado termina com o link.
 - **Pontos da mesa nos resultados**: além do + e −, as mesas, a imagem e o texto da rodada mostram os pontos com que cada um terminou. No card, a colocação fica em cor neutra, separada do resultado.
-- **Inscrição e premiação**: a nova aba Premiação calcula a parte do clube e o prêmio de cada posição, com parcelas, inscrição antecipada e o porquê de cada padrão no ?. O prêmio aparece no Ranking, na Disputa do pódio, na Temporada e nas imagens.
+- **Inscrição e premiação**: a nova aba Premiação calcula a parte do clube e o prêmio de cada posição, com parcelas, inscrição antecipada e o porquê de cada padrão no ?. O prêmio aparece no Ranking, na Disputa do pódio, no Brasileirão e nas imagens.
 - **WO no torneio**: a mesa registra quem faltou, com −30,0 para o ausente e +10,0 por presente. Se outra mesa da rodada tem WO, dá para remontar as mesas. Os valores mudam na aba Pontuação. Vale no Riichi de 4.
 - **Atraso**: o registro do resultado desconta 1,0 por minuto de atraso, até 10 minutos.
 - **Distância para o pódio**: tocar num jogador no ranking do torneio mostra quanto falta para o 1º, 2º e 3º, em pontos e em mãos (no Chinês, em vitórias de mesa), quem está logo acima e abaixo e a comparação com qualquer um. Dá para passar de jogador deslizando.
@@ -23,15 +23,21 @@
 - **Tipo do torneio**: aparece nos cards de Em andamento e nas imagens e textos da rodada e do ranking.
 - **Qualidade do sorteio em todos os formatos**: uma linha com a nota em cada rodada, que abre sozinha quando pede atenção. Mostra as repetições, os detalhes por jogador e, quando dá para refazer, Sortear de novo com comparação e Voltar ao anterior. No Ranking, o novo botão Estatística da grade abre os detalhes.
 - **Aviso de rodadas ideais**: com 8 ou 12 jogadores, as configurações avisam a partir de quando a repetição é inevitável.
-- **Sorteio que espalha as repetições**: o Torneio evita, nesta ordem, Leste repetido, dupla 3 vezes junta, trio repetido e repetições concentradas numa pessoa. Com os ventos na mesa, eles não pesam. Com 16 jogadores, o Brasileirão faz 5 rodadas sem repetir adversário.
+- **Sorteio que espalha as repetições**: o Torneio evita, nesta ordem, Leste repetido, dupla 3 vezes junta, trio repetido e repetições concentradas numa pessoa. Com os ventos na mesa, eles não pesam. Com 16 jogadores, o Pontos corridos rápido faz 5 rodadas sem repetir adversário.
+
+### Alterado
+
+- **Novos nomes dos formatos**: Rodízio virou All Leste, a antiga Temporada virou Brasileirão e o antigo Brasileirão virou Pontos corridos rápido. Os torneios salvos continuam iguais, com o nome novo do formato.
+- **Ajuda do Número de rodadas**: o ? mostra um caso por linha, com o do formato escolhido em destaque, no lugar do texto corrido.
+- **All Leste só com ventos**: o app sempre sorteia os ventos, também na classificatória do Eliminatório, e a escolha some das configurações. Torneio que já começou segue como estava.
 
 ### Corrigido
 
 - **Nomes que viravam "?" no Torneio**: quem saiu do cadastro continua com o nome nas mesas, no ranking e nas imagens. Se não sobrou registro do nome, aparece Jogador 1, Jogador 2 e assim por diante.
 - **Nome longo no card da mesa**: no resultado, termina com reticências em vez de ser cortado no meio da letra.
 - **Nota da grade com 8 e 12 jogadores**: uma grade no mínimo possível de repetições não aparece mais como Regular.
-- **Sortear de novo no Suíço e nos cortes do Eliminatório**: a opção devolvia as mesmas mesas, porque elas saem da classificação. Agora, depois da primeira partida, ela aparece só no Brasileirão e na Temporada, que sorteiam cada rodada.
-- **Sortear de novo no Rodízio**: a opção aparecia depois do primeiro resultado e não mudava nada. Agora aparece só antes da primeira partida, porque a grade sai inteira e equilibrada. Para refazer depois, use Reiniciar sorteio.
+- **Sortear de novo no Suíço e nos cortes do Eliminatório**: a opção devolvia as mesmas mesas, porque elas saem da classificação. Agora, depois da primeira partida, ela aparece só no Pontos corridos rápido e no Brasileirão, que sorteiam cada rodada.
+- **Sortear de novo no All Leste**: a opção aparecia depois do primeiro resultado e não mudava nada. Agora aparece só antes da primeira partida, porque a grade sai inteira e equilibrada. Para refazer depois, use Reiniciar sorteio.
 
 ## 7.0.0 - 2026-11-21
 

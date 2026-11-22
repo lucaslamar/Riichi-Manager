@@ -43,6 +43,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Ranking: a linha inteira abre a folha da distância, com um botão no nome para teclado e leitor de tela. A folha mostra Mangan, Haneman e Yakuman, e o Baiman fica no leitor de tela e em "Distância em".
 - Quem está sendo acompanhado fica destacado e, fora da tela, fixo acima da navegação. Use `position: fixed`: `sticky` não gruda dentro do conteúdo principal.
 - Colocação e pontos se separam por espaço e cor (a colocação neutra, os pontos em verde ou vermelho), sem "·" depois do "º".
+- O ? com mais de uma ideia não é parágrafo corrido: título curto, uma linha por caso (rótulo em negrito e frase curta embaixo), o caso atual em destaque e o porquê no fim.
 - Valor padrão escolhido pelo app tem um ? com o porquê do padrão, não só o que o campo faz.
 - Registrar ausência é o ícone ao lado de Registrar resultado. A folha mostra os pontos de cada um antes de confirmar.
 - WO usa selo neutro e "Faltou" ou "Presente" no lugar dos pontos da mesa, sem colocação.

@@ -21,13 +21,14 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 
 ### Formatos
 
-- Rodízio: grade inteira sorteada no início, cada jogador é Leste uma vez. Indicado para encontro com hora para acabar e para iniciantes.
+- All Leste: grade inteira sorteada no início, cada jogador é Leste uma vez. Indicado para encontro com hora para acabar e para iniciantes.
 - Suíço: rodada 1 sorteada, depois as mesas seguem a classificação. Indicado para torneio competitivo de um dia.
 - Eliminatório: classificatória e cortes até a mesa final. Indicado para evento com final e muitos jogadores.
-- Brasileirão (`corridos`, o padrão): cada rodada é sorteada na hora, sem número de rodadas. O organizador encerra.
-- Temporada: como o Brasileirão, com cada encontro somando num ranking acumulado.
+- Pontos corridos rápido (`corridos`, o padrão): cada rodada é sorteada na hora, sem número de rodadas. O organizador encerra.
+- Brasileirão: como o Pontos corridos rápido, com cada encontro somando num ranking acumulado.
 - O Torneio é sempre de 4: mesas fecham com 8, 12, 16… jogadores. O código de mesas de 3 (sorteio, mínimos) continua, mas nenhuma tela cria torneio de Sanma. Confirmado pelo usuário em 22/11/2026: não religar nem tratar como bug, e o "Jogar Sanma quando falta um" do brief fica descartado.
-- Ventos: no Rodízio o padrão é o app sortear. Nos outros, saem na mesa, então o app não sabe quem foi Leste.
+- Ventos: o All Leste (e a classificatória All Leste do Eliminatório) é só com ventos sorteados pelo app, sem escolha. Nos outros, o padrão é sair na mesa, então o app não sabe quem foi Leste. Torneio já sorteado segue como começou.
+- Nomes de 22/11/2026: os ids não mudaram. `rodizio` = All Leste, `corridos` = Pontos corridos rápido ("Rápido" nos selos), `temporada` = Brasileirão. No código, "Temporada" é o Brasileirão.
 
 ### Sorteio
 
@@ -38,7 +39,7 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Mínimo de duplas repetidas em 2, 3 e 4 rodadas, provado por busca exaustiva: 8 jogadores = 4, 12, 24. 12 jogadores = 3, 9, 18. Sanma de 6 = 2, 6, 12. Com 12 e 3 rodadas, ninguém precisa repetir mais de 2 adversários.
 - Rodadas ideais: 12 jogadores até 3 (a 4ª só se todos precisarem ser Leste uma vez), 8 repete sempre a partir da 2ª, 16 até 5 sem repetir.
 - Nota: perfeita (sem repetição), ótima (no mínimo), boa (até 20% acima), regular (acima), ruim (dupla 3x, trio evitável ou Leste desequilibrado). No Eliminatório, vale só para a classificatória. Com uma mesa só não há nota.
-- Sortear de novo: antes da primeira partida do torneio, em qualquer formato. Depois, só a última rodada do Brasileirão e da Temporada, sem mesa iniciada: a grade do Rodízio sai inteira, e o Suíço e os cortes saem da classificação (refazer devolve as mesmas mesas). O sorteio anterior fica só em memória, para voltar.
+- Sortear de novo: antes da primeira partida do torneio, em qualquer formato. Depois, só a última rodada do Pontos corridos rápido e do Brasileirão, sem mesa iniciada: a grade do All Leste sai inteira, e o Suíço e os cortes saem da classificação (refazer devolve as mesmas mesas). O sorteio anterior fica só em memória, para voltar.
 
 ### Clube
 
@@ -71,16 +72,16 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Automática: 50/30/20 até 19 jogadores (também abaixo de 16, com aviso do mínimo), 45/27/18/10 de 20 a 27, 40/25/17/11/7 com 28 ou mais.
 - Antecipada: o organizador informa só quantos pagaram o valor menor. O app não controla pagamento por pessoa.
 - Cada prêmio desce para múltiplo de 5 e a sobra vai para o clube. A personalizada precisa somar 100%.
-- Empate divide a soma das posições ocupadas. Quem não jogou, ou está abaixo do mínimo de partidas da Temporada, não recebe.
-- Na Temporada a premiação é dela, não do encontro, e conta quem esteve em algum encontro.
+- Empate divide a soma das posições ocupadas. Quem não jogou, ou está abaixo do mínimo de partidas do Brasileirão, não recebe.
+- No Brasileirão a premiação é dele, não do encontro, e conta quem esteve em algum encontro.
 - A moeda é a do idioma ao ligar e fica guardada.
 
 ### WO e atraso
 
 - Aprovado em 22/11/2026, só no Riichi de 4: −30,0 para cada ausente e +10,0 para cada presente. Com 2 ou mais ausentes a mesa não fecha em zero, de propósito.
 - Atraso: −1,0 por minuto até 10 minutos, sem mudar a colocação. Passou disso é WO.
-- Os valores mudam por torneio, na aba Pontuação. O encontro novo herda os da Temporada.
-- WO soma pontos e conta como partida no torneio (e no mínimo da Temporada), mas não entra na média de colocação, na melhor rodada do "Ainda alcança", no histórico nem no Ranking geral.
+- Os valores mudam por torneio, na aba Pontuação. O encontro novo herda os do Brasileirão.
+- WO soma pontos e conta como partida no torneio (e no mínimo do Brasileirão), mas não entra na média de colocação, na melhor rodada do "Ainda alcança", no histórico nem no Ranking geral.
 - O desconto de atraso faz parte do resultado da partida, então vale também no Ranking geral.
 - Remontar: com outra mesa em WO na rodada, os presentes dela completam a mesa atual e os ausentes vão para ela.
 - Faltar ao encontro inteiro não é WO: a pessoa só não entra na lista do dia.
