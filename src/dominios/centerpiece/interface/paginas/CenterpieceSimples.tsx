@@ -297,27 +297,29 @@ export default function CenterpieceSimples({
                 <span className="mesa-honba-rotulo">
                   <i className="fas fa-repeat" aria-hidden="true" /> {t('match.simple.honba')}
                 </span>
-                <button
-                  type="button"
-                  className="mesa-honba-botao"
-                  aria-label={t('match.simple.honbaMinus')}
-                  disabled={estado.honba === 0}
-                  onClick={() => mudar(ajustarHonba(estado, -1))}
-                >
-                  <i className="fas fa-minus" aria-hidden="true" />
-                </button>
-                <span className="mesa-honba-valor" aria-live="polite">
-                  {estado.honba}
-                  <small aria-hidden="true">本</small>
-                </span>
-                <button
-                  type="button"
-                  className="mesa-honba-botao"
-                  aria-label={t('match.simple.honbaPlus')}
-                  onClick={() => mudar(repetirDealer(estado), true)}
-                >
-                  <i className="fas fa-plus" aria-hidden="true" />
-                </button>
+                <div className="mesa-honba-controle">
+                  <button
+                    type="button"
+                    className="mesa-honba-botao"
+                    aria-label={t('match.simple.honbaMinus')}
+                    disabled={estado.honba === 0}
+                    onClick={() => mudar(ajustarHonba(estado, -1))}
+                  >
+                    <i className="fas fa-minus" aria-hidden="true" />
+                  </button>
+                  <span className="mesa-honba-valor" aria-live="polite">
+                    {estado.honba}
+                    <small aria-hidden="true">本</small>
+                  </span>
+                  <button
+                    type="button"
+                    className="mesa-honba-botao"
+                    aria-label={t('match.simple.honbaPlus')}
+                    onClick={() => mudar(repetirDealer(estado), true)}
+                  >
+                    <i className="fas fa-plus" aria-hidden="true" />
+                  </button>
+                </div>
               </div>
             )}
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>

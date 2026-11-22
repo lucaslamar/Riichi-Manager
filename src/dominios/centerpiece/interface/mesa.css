@@ -692,7 +692,7 @@ button.mesa-domo {
   min-height: 44px;
   border: 1px solid var(--entrada-borda);
   border-radius: 12px;
-  padding: 2px 6px 2px 12px;
+  padding: 2px 4px 2px 12px;
   gap: 12px;
   font-size: 0.875rem;
 }
@@ -1071,21 +1071,42 @@ button.mesa-domo {
 }
 
 
-/* Honba das ações: − e + iguais (só o − apaga no 0), número no meio, 本 pequeno ao lado. */
+/* Honba das ações: uma pílula só, − e + iguais (só o − apaga no 0) e o número no meio. */
+.mesa-honba-controle {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primario) 16%, transparent);
+}
+
 .mesa-honba-botao {
   display: inline-flex;
   flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 44px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--entrada-borda);
-  border-radius: 10px;
+  border: 0;
+  border-radius: 999px;
   padding: 0;
-  color: var(--texto-principal);
-  background: var(--superficie);
+  color: var(--primario);
+  background: transparent;
+  box-shadow: none;
   font: inherit;
+  font-size: 1rem;
   cursor: pointer;
+  touch-action: manipulation;
+}
+
+.mesa-honba-botao:active:not(:disabled) {
+  background: color-mix(in srgb, var(--primario) 28%, transparent);
+}
+
+.mesa-honba-botao:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
 }
 
 .mesa-honba-botao:disabled {
@@ -1096,11 +1117,11 @@ button.mesa-domo {
 
 .mesa-honba-valor {
   display: inline-flex;
-  min-width: 3ch;
+  min-width: 48px;
   align-items: baseline;
   justify-content: center;
   gap: 3px;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
