@@ -644,51 +644,42 @@
   }
 }
 
-/* Sem o 0 (MCR): os números ganham a linha dele. Cada um ocupa 4 trilhas e cada naipe, 3.
-   O espaço entre as linhas é margem da tecla, para as trilhas não somarem vãos. */
-.campo-notacao-mao--sem-zero .teclado-notacao-mao:not(#_) {
-  grid-auto-rows: 1fr;
+/*
+ * Sem o 0 (MCR): números em três colunas largas e os naipes na linha de baixo,
+ * alinhados com as chamadas. Toda linha tem a mesma altura.
+ *
+ *   Chi  Peng  Gang  An Gang
+ *     1      2      3
+ *     4      5      6
+ *     7      8      9
+ *    M    P     S     Z
+ */
+.campo-notacao-mao--sem-zero .teclado-notacao-mao {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-areas:
-    'n1 n2 n3 m'
-    'n1 n2 n3 m'
-    'n1 n2 n3 m'
-    'n1 n2 n3 p'
-    'n4 n5 n6 p'
-    'n4 n5 n6 p'
-    'n4 n5 n6 s'
-    'n4 n5 n6 s'
-    'n7 n8 n9 s'
-    'n7 n8 n9 z'
-    'n7 n8 n9 z'
-    'n7 n8 n9 z';
-  row-gap: 0;
+    'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3'
+    'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6'
+    'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9'
+    'm m m p p p s s s z z z';
 }
 
-.campo-notacao-mao--sem-zero .teclado-notacao-mao .tecla-notacao-mao:not(#_) {
-  margin-block: 3px;
-}
-
+/* Deitado, as chamadas ficam na coluna da direita e os naipes embaixo dos números. */
 @media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
   .campo-notacao-mao.campo-notacao-mao--sem-zero {
-    grid-template-rows: auto repeat(12, minmax(0, auto));
     grid-template-areas:
       'pec pec fx fx fx fx fx fx fx fx fx fx fx ac del'
-      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi m'
-      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi m'
-      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi m'
-      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 pon pon p'
-      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon pon p'
-      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon pon p'
-      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 kan kan s'
-      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 kan kan s'
-      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kan kan s'
-      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kanf kanf z'
-      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kanf kanf z'
-      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kanf kanf z';
-    row-gap: 0;
+      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi chi'
+      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon pon pon'
+      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kan kan kan'
+      'm m m p p p s s s z z z kanf kanf kanf';
   }
+}
 
-  .campo-notacao-mao--sem-zero :is(.tecla-notacao-mao, .botao-voltar-pedras-notacao, .acao-barra-notacao-mao):not(#_) {
-    margin-block: 2px;
-  }
+/* A letra do naipe é maior: sem a folga dela, a linha de baixo fica da altura das dos números. */
+.campo-notacao-mao--sem-zero .tecla-notacao-mao.naipe {
+  gap: 1px;
+}
+
+.campo-notacao-mao--sem-zero .tecla-notacao-mao.naipe .rotulo-tecla-notacao-mao {
+  line-height: 1.05;
 }
