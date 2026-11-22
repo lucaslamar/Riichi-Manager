@@ -80,11 +80,23 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Brasileirão por média ou melhores N: só a distância, sem cenários, porque mãos não viram pontos um para um.
 - Ranking geral sem fim: distância para quem está logo acima em pontos e projeção pela média. Passar é ficar acima, então na divisão exata é o jogo seguinte. Não projeta com menos de 3 jogos de qualquer um, média menor ou igual, ou mais de 100 jogos (suposições a confirmar).
 
+### Como costuma terminar e chance de virar (pedido do usuário em 22/11/2026)
+
+- Em torneio ninguém lança mão. As estatísticas e a projeção saem só do resultado das mesas.
+- Base de cada jogador: as rodadas do torneio (ou do Brasileirão) mais as outras mesas finalizadas dele, de 4, sem repetir. Fora: WO de quem não apareceu e a mesa em que ele mesmo saiu por W.O. "Até a rodada" não usa mesa que terminou depois. No geral valem os filtros.
+- Cada mesa entra pelo saldo (final − partida) e pela colocação, com a uma das regras atuais. Assim 25.000 e 30.000 se misturam sem distorcer.
+- Costuma terminar com: pontos de partida atuais + saldo médio, em centenas. Por jogo: média de saldo + uma, retorno e oka da colocação.
+- Se terminarem assim: os dois jogam o que falta para cada um (sem fim conhecido, 1 jogo). O que sobra da diferença vira Mangans e diretos.
+- Chance de virar: curva normal com a média e a variação de cada um, jogos independentes. Só com 3 mesas ou mais de cada um que ainda joga. Empatar não é virar. Nunca mostra 0% nem 100%.
+- É estimativa: não considera adversários nem se os dois caem na mesma mesa.
+- Só no Riichi: no Chinês os pontos de mesa do torneio não se misturam com os das partidas.
+- A diferença só é final quando nenhum dos dois joga mais.
+
 ### Estatísticas do jogador (pedido do usuário em 22/11/2026)
 
 - Os mesmos números nos escopos torneio, temporada e geral. O geral segue os filtros do Ranking.
-- Taxas de vitória, deal-in e riichi: vezes ÷ mãos jogadas (ron, tsumo, ryukyoku e abortivo, sem chombo). Só entram partidas com mão a mão. Sem elas aparece "—", nunca 0%.
-- Mesa de torneio e de clube e partida registrada à mão não têm mãos no Riichi. A tela avisa e diz quantos jogos entraram na conta.
+- Taxas de vitória, deal-in e riichi: vezes ÷ mãos jogadas (ron, tsumo, ryukyoku e abortivo, sem chombo). Só entram partidas com mão a mão. Sem elas o campo nem aparece, nem a maior mão.
+- Mesa de torneio e de clube e partida registrada à mão não têm mãos no Riichi, e o app não pede. Quando só parte dos jogos tem mãos, a tela diz quantos entraram na conta.
 - Maior mão: valor até o Mangan, depois patamar e múltiplos de Yakuman. Empate fica com a primeira. No Chinês, os fan.
 - Média de pontos: pontos do ranking por jogo. O WO de quem não apareceu fica fora das estatísticas. Partida com W.O. entra, com opção de tirar.
 

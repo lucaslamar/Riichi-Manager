@@ -65,7 +65,7 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 
 ## Estatísticas e partida em andamento
 
-- `src/dominios/estatisticas`: `logica/viradas` (direto, líder, uma), `logica/projecao` (média), `logica/estatisticas` (números) e `logica/escopo` (o que cada escopo enxerga), tudo puro. Testes em `test:viradas` e `test:estatisticas`.
+- `src/dominios/estatisticas`: `logica/viradas` (direto, líder, uma), `logica/projecao` (média), `logica/forma` (como costuma terminar e chance, só por resultado, `test:forma`), `logica/estatisticas` (números) e `logica/escopo` (o que cada escopo enxerga), tudo puro. Testes em `test:viradas` e `test:estatisticas`.
 - `EstatisticasJogador` é o componente único, por `EscopoEstatisticas` (`torneio`, `temporada` ou `geral`): card do ranking do torneio (compacto), `PaginaEstatisticasTorneio`, Brasileirão e `PaginaJogador`. Não crie outra tela de números por escopo.
 - `useCompartilharResultado`: a classificação para compartilhar, no Ranking e no menu do torneio.
 - As taxas leem `resumoDasMaos`. Antes de podar o mão a mão, o armazenamento grava esse resumo em `Partida.maos`.

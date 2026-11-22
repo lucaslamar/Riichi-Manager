@@ -5,7 +5,8 @@
 ### Adicionado
 
 - **Cenários de virada**: tocar numa distância do ranking do torneio mostra quantas mãos faltam por ron de terceiros e por ron direto no líder, o alvo se o líder ficar em 4º, no zero ou em 1º e o que falta com a uma de cada colocação.
-- **Estatísticas do jogador**: no torneio, no Brasileirão e no Ranking geral, com média, posições, maior mão e taxas de vitória, deal-in e riichi. As taxas e a maior mão precisam de partidas jogadas com o placar do app.
+- **Como costuma terminar e chance de virar**: sem lançar mão nenhuma, o app usa as rodadas do torneio e as outras mesas finalizadas de cada um para dizer com quantos pontos costuma terminar, quantos Mangans faltam se terminar assim e a chance de virar.
+- **Estatísticas do jogador**: no torneio, no Brasileirão e no Ranking geral, com média, posições, maior mão e taxas de vitória, deal-in e riichi. As taxas e a maior mão só aparecem para partidas jogadas com o placar do app.
 - **Distância para o próximo**: no Ranking geral sem data de fim, a projeção diz em quantos jogos o jogador passa quem está acima, pela média de cada um.
 - **Menu do torneio**: Estatísticas do torneio e Compartilhar resultado.
 - **W.O. no meio da partida**: no teclado de pontos, marca quem precisou sair. Por padrão fica em 4º com os pontos da saída, e a regra muda nas configurações. A soma não trava o registro, e as estatísticas podem tirar essas partidas.

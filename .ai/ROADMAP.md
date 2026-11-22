@@ -11,7 +11,7 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 - **WO no Chinês:** sem valores definidos, por isso o botão não aparece. Conferir atraso e WO na WRC 2025 e na EMA (os números vieram do brief).
 
-- **Estatísticas de mãos em torneio e clube:** hoje as mesas só registram o resultado, então taxas e maior mão ficam vazias. Opções: abrir o placar do app nessas mesas, ou pedir a maior mão e as contagens ao registrar.
+- **Chance de virar:** conferir com torneios reais se a porcentagem acerta (curva normal, jogos independentes) e confirmar o mínimo de 3 mesas.
 - **Cenários de virada:** confirmar a linha da uma flutuante (hoje 2 acima do retorno) e os limites da projeção (3 a 100 jogos).
 - **W.O. no meio da partida:** confirmar a ordem com dois ou mais W.O. e definir valores para o Chinês.
 - **Salvar para continuar:** levar ao Chinês (hoje o rascunho dele já salva sozinho, sem rodada nem lista) e ao Finalizar mesa do torneio.

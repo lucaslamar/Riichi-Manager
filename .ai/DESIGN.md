@@ -83,6 +83,8 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Ranking: a linha inteira abre a folha da distância, com um botão no nome para teclado e leitor de tela. A folha mostra Mangan, Haneman e Yakuman, e o Baiman fica no leitor de tela e em "Distância em".
 - Card do jogador, nesta ordem: cabeçalho (nome, posição, pontos, compartilhar, setas, fechar), Comparar com (é filtro, vem antes do que filtra), divisória, lista e o rodapé Aproximado. Os números ficam recolhidos numa linha antes do rodapé.
 - A linha da distância expande no lugar, com chevron e `aria-expanded`, uma por vez. Os cenários usam o nome, sem artigo nem pronome ("1 direto", não "1 nela").
+- Na linha aberta, "Se terminarem como costumam" vem primeiro: é a resposta. As tabelas de cenário vêm depois.
+- Número que depende de mão lançada some quando não existe. Nada de coluna de "—" em torneio.
 - Menu ⋮ do torneio: Estatísticas, Compartilhar resultado, divisória, as ações que mudam o torneio e, por último em vermelho, Abortar.
 - Quem está sendo acompanhado fica destacado e, fora da tela, fixo acima da navegação. Use `position: fixed`: `sticky` não gruda dentro do conteúdo principal.
 - Colocação e pontos se separam por espaço e cor (a colocação neutra, os pontos em verde ou vermelho), sem "·" depois do "º".
