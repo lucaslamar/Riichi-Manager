@@ -1,6 +1,11 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { RegrasDoModo, UnidadeDistancia } from '@/compartilhado/modo-jogo/regrasDoModo'
-import { MINIMO_PARA_CHANCE, projetarPelaForma, type FormaDoJogador } from '../logica/forma'
+import {
+  MESAS_RECENTES,
+  MINIMO_PARA_CHANCE,
+  projetarPelaForma,
+  type FormaDoJogador,
+} from '../logica/forma'
 import { necessidade } from '../logica/viradas'
 import { useFormatoEstatisticas } from './useFormatoEstatisticas'
 
@@ -76,7 +81,7 @@ export default function ProjecaoForma({
           {t('stats.form.chance')} <strong>{textoChance(chance)}</strong>
         </p>
       )}
-      <p className="est-apoio">{t('stats.form.help')}</p>
+      <p className="est-apoio">{t('stats.form.help', { count: MESAS_RECENTES })}</p>
     </div>
   )
 }

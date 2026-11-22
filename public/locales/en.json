@@ -3654,11 +3654,11 @@
       "jaEmpata": "At this rate, {{name}} ties.",
       "chance": "Chance to overtake:",
       "fewGames": "Chance to overtake needs {{count}} or more tables each.",
-      "help": "Estimate from each player’s finished tables.",
+      "help": "Estimate from each player’s last {{count}} finished tables.",
       "usualShort": "Usually ends with",
       "basedOn": {
         "one": "over {{count}} finished table",
-        "other": "over {{count}} finished tables"
+        "other": "over the last {{count}} tables"
       }
     }
   }

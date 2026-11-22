@@ -3613,10 +3613,10 @@
       "jaEmpata": "このままなら{{name}}が追いつく。",
       "chance": "逆転確率：",
       "fewGames": "逆転確率は各{{count}}卓以上で表示。",
-      "help": "各自の終了した卓の結果による推定。",
+      "help": "各自の直近{{count}}卓の結果による推定。",
       "usualShort": "平均終了点",
       "basedOn": {
-        "other": "終了{{count}}卓"
+        "other": "直近{{count}}卓"
       }
     }
   }

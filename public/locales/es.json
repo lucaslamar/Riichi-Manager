@@ -3676,12 +3676,12 @@
       "jaEmpata": "Si termina así, {{name}} empata.",
       "chance": "Probabilidad de remontar:",
       "fewGames": "La probabilidad requiere {{count}} mesas o más de cada uno.",
-      "help": "Estimación según las mesas finalizadas de cada uno.",
+      "help": "Estimación según las últimas {{count}} mesas finalizadas de cada uno.",
       "usualShort": "Suele terminar con",
       "basedOn": {
         "one": "en {{count}} mesa finalizada",
-        "many": "en {{count}} mesas finalizadas",
-        "other": "en {{count}} mesas finalizadas"
+        "many": "en las últimas {{count}} mesas",
+        "other": "en las últimas {{count}} mesas"
       }
     }
   }

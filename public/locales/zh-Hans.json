@@ -3613,10 +3613,10 @@
       "jaEmpata": "照此发展，{{name}}将追平。",
       "chance": "反超概率：",
       "fewGames": "反超概率需每人至少{{count}}桌。",
-      "help": "根据各自已结束牌桌的成绩估算。",
+      "help": "根据各自最近{{count}}桌的成绩估算。",
       "usualShort": "通常结束点数",
       "basedOn": {
-        "other": "已结束{{count}}桌"
+        "other": "最近{{count}}桌"
       }
     }
   }

@@ -62,6 +62,23 @@ teste('junta 25.000 e 30.000 pelo saldo, com a uma de agora', () => {
   assert.deepEqual([forma.pontosNaMesa, forma.porJogo], [40000, 25])
 })
 
+teste('só as últimas 20, pela data e não pela ordem da lista', () => {
+  const antigas = [1, 2, 3, 4, 5].map((numero) =>
+    mesa(`antiga${numero}`, [10000, 40000, 35000, 35000], WRC, [], 10),
+  )
+  const novas = Array.from({ length: 20 }, (_, indice) =>
+    mesa(`nova${indice}`, [40000, 30000, 25000, 25000], WRC, [], 11),
+  )
+  for (const partidas of [[...antigas, ...novas], [...novas, ...antigas]]) {
+    const forma = formaDoJogador({ ...BASE, partidas }, 'a')!
+    assert.deepEqual([forma.jogos, forma.pontosNaMesa], [20, 40000])
+  }
+  // A saída dele não gasta uma das 20 vagas.
+  const saida = mesa('saida', [5000, 45000, 35000, 35000], WRC, [0], 12)
+  const comSaida = formaDoJogador({ ...BASE, partidas: [saida, ...novas, ...antigas] }, 'a')!
+  assert.deepEqual([comSaida.jogos, comSaida.pontosNaMesa], [20, 40000])
+})
+
 teste('empate divide a uma', () => {
   const partidas = [mesa('1', [35000, 35000, 25000, 25000])]
   assert.equal(formaDoJogador({ ...BASE, partidas }, 'b')?.porJogo, 15)

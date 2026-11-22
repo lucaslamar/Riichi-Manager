@@ -3748,13 +3748,13 @@
       "jaEmpata": "Taip baigus, {{name}} sulygins.",
       "chance": "Tikimybė aplenkti:",
       "fewGames": "Tikimybei reikia bent {{count}} stalų kiekvienam.",
-      "help": "Įvertinta pagal baigtų stalų rezultatus.",
+      "help": "Įvertinta pagal kiekvieno paskutinius baigtus stalus (iki {{count}}).",
       "usualShort": "Paprastai baigia su",
       "basedOn": {
-        "one": "baigtų stalų: {{count}}",
-        "few": "baigtų stalų: {{count}}",
-        "many": "baigtų stalų: {{count}}",
-        "other": "baigtų stalų: {{count}}"
+        "one": "paskutiniai stalai: {{count}}",
+        "few": "paskutiniai stalai: {{count}}",
+        "many": "paskutiniai stalai: {{count}}",
+        "other": "paskutiniai stalai: {{count}}"
       }
     }
   }

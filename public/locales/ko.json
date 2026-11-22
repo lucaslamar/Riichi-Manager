@@ -3613,10 +3613,10 @@
       "jaEmpata": "이대로면 {{name}} 동점.",
       "chance": "역전 확률:",
       "fewGames": "역전 확률은 각 {{count}}테이블 이상부터 표시.",
-      "help": "각자 종료한 테이블 결과 기반 추정.",
+      "help": "각자 최근 {{count}}테이블 결과 기반 추정.",
       "usualShort": "평균 종료 점수",
       "basedOn": {
-        "other": "종료 {{count}}테이블"
+        "other": "최근 {{count}}테이블"
       }
     }
   }

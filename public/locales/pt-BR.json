@@ -3654,11 +3654,11 @@
       "jaEmpata": "Se terminar assim, {{name}} empata.",
       "chance": "Chance de virar:",
       "fewGames": "Chance de virar só com {{count}} mesas ou mais de cada um.",
-      "help": "Estimativa pelo resultado das mesas finalizadas de cada um.",
+      "help": "Estimativa pelas últimas {{count}} mesas finalizadas de cada um.",
       "usualShort": "Costuma terminar com",
       "basedOn": {
         "one": "em {{count}} mesa finalizada",
-        "other": "em {{count}} mesas finalizadas"
+        "other": "nas últimas {{count}} mesas"
       }
     }
   }

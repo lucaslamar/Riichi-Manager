@@ -7,6 +7,8 @@ import type { ValoresUma } from '@/dominios/centerpiece/logica/uma'
 
 /** Com menos jogos que isto o app projeta, mas não dá porcentagem. */
 export const MINIMO_PARA_CHANCE = 3
+/** O costume é o de agora: só as mesas mais recentes de cada um. */
+export const MESAS_RECENTES = 20
 
 const media = (valores: readonly number[]) =>
   valores.reduce((soma, valor) => soma + valor, 0) / valores.length
@@ -33,13 +35,18 @@ export interface FormaDoJogador {
  * 25.000 e de 30.000, com umas diferentes. A saída por W.O. do próprio jogador não conta.
  */
 export function formaDoJogador(base: BaseDaForma, jogadorId: string): FormaDoJogador | null {
-  const jogos = base.partidas.flatMap(({ resultado = [], config }) => {
-    const linha = resultado.find((item) => item.jogadorId === jogadorId)
-    if (!linha || linha.saiu) return []
+  const recentes = base.partidas
+    .flatMap(({ resultado = [], config, finalizadaEm = '' }) => {
+      const linha = resultado.find((item) => item.jogadorId === jogadorId)
+      return linha && !linha.saiu ? [{ resultado, config, finalizadaEm, linha }] : []
+    })
+    .sort((uma, outra) => outra.finalizadaEm.localeCompare(uma.finalizadaEm))
+    .slice(0, MESAS_RECENTES)
+  const jogos = recentes.map(({ resultado, config, linha }) => {
     const empatados = resultado.filter((item) => item.colocacao === linha.colocacao).length
     const lugares = base.bonus.slice(linha.colocacao - 1, linha.colocacao - 1 + empatados)
     const saldo = (linha.pontosBrutos - config.pontosPartida) / 1000
-    return [{ saldo, resultado: saldo + media(lugares) }]
+    return { saldo, resultado: saldo + media(lugares) }
   })
   if (jogos.length === 0) return null
 
