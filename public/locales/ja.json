@@ -1632,7 +1632,6 @@
       "sumWarning": "卓の合計は{{total}}と{{difference}}違います。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "{{name}} の点数の符号を反転",
@@ -1650,7 +1649,8 @@
       "clear": "クリア",
       "clearTitle": "この卓の入力を消しますか？",
       "clearHelp": "この画面のプレイヤー、点数、WOを消します。ルールと保存済みのデータは残ります。",
-      "clearHelpSeated": "この画面の点数、WO、遅刻を消します。抽選のプレイヤーは残ります。"
+      "clearHelpSeated": "この画面の点数、WO、遅刻を消します。抽選のプレイヤーは残ります。",
+      "tapHint": "タップしてプレイヤーと点数を登録。長押しでプレイヤーを交代。"
     },
     "listFilters": {
       "search": "卓・集まり・大会を検索",

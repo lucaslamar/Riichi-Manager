@@ -343,10 +343,13 @@
   color: var(--texto-aviso);
 }
 
-/* Só leitura: sem borda nem fundo de botão, rente à barra de baixo. */
+/* Quadro só visual (não é botão), rente à barra de baixo. */
 .fin-preset {
   margin-top: auto;
-  padding: 4px 4px 0;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: var(--superficie);
   color: var(--texto-principal);
   text-align: left;
 }

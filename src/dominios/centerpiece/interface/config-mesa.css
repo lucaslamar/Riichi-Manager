@@ -349,7 +349,7 @@
 /* A barra do registro (a da Lista): o conteúdo rola por trás e termina acima dela. */
 .ptd-inicio.fin-tela:not(#_) {
   box-sizing: border-box;
-  padding-bottom: 130px;
+  padding-bottom: 138px;
 }
 
 /* No celular a tela enche a altura, para o preset descer até a barra. */
@@ -367,7 +367,7 @@
 /* No tablet a barra é mais alta, com a letra maior. */
 @media (min-width: 641px) and (max-width: 1023px), (min-width: 641px) and (orientation: portrait) {
   .ptd-inicio.fin-tela:not(#_) {
-    padding-bottom: 148px;
+    padding-bottom: 152px;
   }
 }
 

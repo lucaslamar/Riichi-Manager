@@ -1632,7 +1632,6 @@
       "sumWarning": "牌桌总点数与 {{total}} 相差 {{difference}}。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "切换 {{name}} 分数的正负号",
@@ -1650,7 +1649,8 @@
       "clear": "清空",
       "clearTitle": "清空本桌？",
       "clearHelp": "清除本页的玩家、点数和WO。规则与已保存内容保留。",
-      "clearHelpSeated": "清除本页的点数、WO与迟到。抽签玩家保留。"
+      "clearHelpSeated": "清除本页的点数、WO与迟到。抽签玩家保留。",
+      "tapHint": "点击登记玩家和点数。长按更换玩家。"
     },
     "listFilters": {
       "search": "搜索牌桌、聚会和比赛",

@@ -493,13 +493,12 @@ export default function RegistrarFinalizada({
           <span className="sr-only">{t('match.paused.edit')}</span>
         </button>
       )}
-      {!torneio && <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>}
       <>
         {/* Dica no topo. Na retomada a rodada ocupa o lugar dela. */}
         {!retomada && (
           <p className="fin-dica">
             <i className="fas fa-hand-pointer" aria-hidden="true" />
-            <span>{t('tournament.points.swapHint')}</span>
+            <span>{t(lugaresDoSorteio ? 'tournament.points.swapHint' : 'match.manual.tapHint')}</span>
           </p>
         )}
         <div className="ptd-assentos trn-mesa-assentos">

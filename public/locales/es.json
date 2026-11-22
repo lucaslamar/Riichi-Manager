@@ -1661,7 +1661,6 @@
       "sumWarning": "La suma de la mesa difiere en {{difference}} del total de {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "Cambiar el signo de los puntos de {{name}}",
@@ -1679,7 +1678,8 @@
       "clear": "Limpiar",
       "clearTitle": "¿Limpiar esta mesa?",
       "clearHelp": "Quita jugadores, puntos y WO de esta pantalla. Las reglas y lo guardado se conservan.",
-      "clearHelpSeated": "Quita puntos, WO y retrasos de esta pantalla. Los jugadores del sorteo se conservan."
+      "clearHelpSeated": "Quita puntos, WO y retrasos de esta pantalla. Los jugadores del sorteo se conservan.",
+      "tapHint": "Toca para registrar jugadores y puntos. Mantén pulsado para cambiar el jugador."
     },
     "listFilters": {
       "search": "Buscar mesas, encuentros y torneos",

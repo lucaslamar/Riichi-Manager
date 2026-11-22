@@ -1698,7 +1698,6 @@
       "sumWarning": "Stalo suma skiriasi {{difference}} nuo {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "Pakeisti {{name}} taškų ženklą",
@@ -1716,7 +1715,8 @@
       "clear": "Išvalyti",
       "clearTitle": "Išvalyti šį stalą?",
       "clearHelp": "Pašalina žaidėjus, taškus ir WO iš šio ekrano. Taisyklės ir išsaugoti duomenys lieka.",
-      "clearHelpSeated": "Pašalina taškus, WO ir vėlavimus. Ištraukti žaidėjai lieka."
+      "clearHelpSeated": "Pašalina taškus, WO ir vėlavimus. Ištraukti žaidėjai lieka.",
+      "tapHint": "Bakstelėkite žaidėjams ir taškams įvesti. Ilgas paspaudimas pakeičia žaidėją."
     },
     "listFilters": {
       "search": "Ieškoti stalų, susitikimų ir turnyrų",

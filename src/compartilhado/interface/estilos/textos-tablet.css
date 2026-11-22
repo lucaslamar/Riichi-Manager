@@ -8,7 +8,6 @@
   /* Leitura: títulos de seção, dicas, ajudas, contagem e opções. */
   :root:root:root
     :is(
-      .fin-titulo,
       .fin-dica,
       .fin-tela > details > summary,
       .ptd-apoio,

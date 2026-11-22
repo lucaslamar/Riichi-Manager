@@ -1632,7 +1632,6 @@
       "sumWarning": "탁 합계가 {{total}}과 {{difference}} 차이 납니다.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "{{name}} 점수 부호 바꾸기",
@@ -1650,7 +1649,8 @@
       "clear": "지우기",
       "clearTitle": "이 테이블 입력을 지울까요?",
       "clearHelp": "이 화면의 플레이어, 점수, WO를 지웁니다. 규칙과 저장된 데이터는 유지됩니다.",
-      "clearHelpSeated": "이 화면의 점수, WO, 지각을 지웁니다. 추첨된 플레이어는 유지됩니다."
+      "clearHelpSeated": "이 화면의 점수, WO, 지각을 지웁니다. 추첨된 플레이어는 유지됩니다.",
+      "tapHint": "눌러서 플레이어와 점수를 기록하세요. 길게 누르면 플레이어를 바꿉니다."
     },
     "listFilters": {
       "search": "테이블, 모임, 대회 검색",

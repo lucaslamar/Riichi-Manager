@@ -1654,7 +1654,6 @@
       "sumWarning": "The table total differs by {{difference}} from {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "Flip the sign of {{name}}’s points",
@@ -1672,7 +1671,8 @@
       "clear": "Clear",
       "clearTitle": "Clear this table?",
       "clearHelp": "Removes players, points and WO from this screen. Rules and saved data stay.",
-      "clearHelpSeated": "Removes points, WO and lateness from this screen. Drawn players stay."
+      "clearHelpSeated": "Removes points, WO and lateness from this screen. Drawn players stay.",
+      "tapHint": "Tap to enter players and points. Long press swaps the player."
     },
     "listFilters": {
       "search": "Search tables, meetups and tournaments",
