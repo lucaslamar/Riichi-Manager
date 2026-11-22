@@ -9,7 +9,7 @@
  */
 
 /** Ferramenta do app que o guia abre (Sorteador e Han e Fu por cima do guia). */
-export type FerramentaGuia = 'sorteador' | 'calculadora' | 'hanFu'
+export type FerramentaGuia = 'sorteador' | 'calculadora' | 'hanFu' | 'guiaBolso'
 
 /** Ilustrações em preto e branco do guia (desenhadas no app, sem imagens de fora). */
 export type IlustracaoGuia =
@@ -113,6 +113,10 @@ export type TutorialBlock =
   | { type: 'hanFuTutorial' }
   /** Os palitos de pontos desenhados, com o valor e quantos cada jogador recebe. */
   | { type: 'sticks' }
+  /** Cartões de fan do MCR, os mesmos do Guia de bolso (ids de fans-mcr). */
+  | { type: 'fans'; ids: number[] }
+  /** As 8 Flores e Estações do MCR. */
+  | { type: 'flowers'; caption?: string }
   /** Dica em cinza, como as das ajudas "?" (ex.: onde achar o assunto no app). */
   | { type: 'tip'; md: string }
 

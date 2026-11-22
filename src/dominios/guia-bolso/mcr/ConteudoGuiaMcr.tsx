@@ -31,7 +31,7 @@ export const idCartaoFan = (id: number) => `fan-mcr-${id}`
  * nome do CMC e 汉字 no título, pontos no selo, inglês, descrição e, ao abrir os
  * detalhes, o que não combina com ele.
  */
-function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) => void }) {
+export function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) => void }) {
   const { t, numero } = useI18n()
   // Fan citado (também conta, não combina): abre como tela do Guia, com voltar, sem perder o lugar.
   const abrirTela = useContext(ContextoNavegacaoModal)

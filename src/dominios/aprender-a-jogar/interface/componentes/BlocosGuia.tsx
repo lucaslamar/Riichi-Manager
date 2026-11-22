@@ -24,6 +24,7 @@ import type {
   PassoGuia,
   TutorialBlock,
 } from '../../conteudo/tipos'
+import BlocoFansMcr, { BlocoFloresMcr } from './BlocosMcr'
 import IlustracaoGuia from './IlustracaoGuia'
 import PalitosGuia from './PalitosGuia'
 
@@ -580,6 +581,12 @@ export default function BlocosGuia({
                 <i className="fas fa-arrow-right" aria-hidden="true" />
               </button>
             )
+          case 'fans':
+            // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
+            return <BlocoFansMcr key={indice} ids={bloco.ids} />
+          case 'flowers':
+            // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
+            return <BlocoFloresMcr key={indice} legenda={bloco.caption} />
           case 'tip':
             return (
               <BlocoDica

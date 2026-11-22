@@ -1506,3 +1506,22 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
     animation: guia-aparecer 150ms ease;
   }
 }
+
+/* Blocos do livro do MCR. */
+.guia-fans-mcr {
+  margin: 12px 0 20px;
+  text-align: start;
+}
+
+.guia-flores-mcr__pedras {
+  display: grid;
+  grid-template-columns: repeat(4, 52px);
+  justify-content: center;
+  gap: 8px;
+}
+
+.guia-flores-mcr__pedra {
+  width: 52px;
+  height: 70px;
+  background: var(--pedra-face, var(--branco));
+}

@@ -2518,6 +2518,52 @@
         "compra": "A compra segue no horário",
         "fimMuro": "As contadas são o fim do muro",
         "saltada": "O Leste pula uma pilha"
+      },
+      "fans": {
+        "porZimo": "A vitória foi por Zimo e a última pedra é a da batida.",
+        "porDianhe": "A vitória foi por Dianhe e a última pedra é a da batida.",
+        "qualFan": "Qual destes fan esta mão tem?",
+        "quantosFan": "Quantos fan esta mão faz?",
+        "verTodos": "Ver todos no Guia de Bolso",
+        "comecar": {
+          "titulo": "Fan para começar",
+          "capa": "Os fan mais comuns e como somar 8 pontos com eles.",
+          "somar": "Como chegar a 8",
+          "texto": "Escolha um fan principal e some outros que combinam com ele. Alguns já valem 8 ou mais sozinhos.",
+          "combinacao": "Combinação",
+          "pontos": "Pontos",
+          "aviso": "Todas Sequências e Mão Oculta somam 4. Faltam mais 4 de outros fan. E as flores nunca entram nessa conta."
+        },
+        "sequencias": {
+          "titulo": "Sequências (Chows)",
+          "capa": "Sequências iguais, seguidas e deslocadas."
+        },
+        "trincas": {
+          "titulo": "Trincas e quadras",
+          "capa": "Pungs, Kongs e quanto vale mantê-los ocultos."
+        },
+        "honras": {
+          "titulo": "Honras: ventos e dragões",
+          "capa": "Trincas, quadras e pares de ventos e dragões."
+        },
+        "naipes": {
+          "titulo": "Naipes e números",
+          "capa": "Mãos definidas pelos naipes e números que usam."
+        },
+        "especiais": {
+          "titulo": "Mãos especiais",
+          "capa": "Sete Pares, Treze Órfãos, mãos desconectadas e os casos à parte."
+        },
+        "esperas": {
+          "titulo": "Esperas e última peça",
+          "capa": "O que vale pelo jeito de completar a mão."
+        }
+      },
+      "parte5": {
+        "titulo": "Os 81 fan",
+        "capa": "Cada fan com a sua mão de exemplo, das combinações comuns às raras.",
+        "marco": "Você já sabe jogar e pontuar!",
+        "marcoTexto": "Agora é conhecer os fan para planejar mãos que chegam a 8."
       }
     }
   }
