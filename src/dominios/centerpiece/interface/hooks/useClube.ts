@@ -3,13 +3,18 @@ import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import {
+  comecarDiaDoZero,
   marcarMesaRegistrada,
+  mesasParaGuardar,
+  rodadasDoDia,
+  sortearDoDia,
   type EncontroClube,
   type MesaDoSorteio,
   type SorteioClube,
 } from '../../logica/encontroClube'
 import { PREFIXO_CONVIDADO, type EntradaLista } from '../../logica/listaClube'
-import { sortearMesas } from '../../logica/sorteioClube'
+import { lerPlacaresMcr } from '@/dominios/placar-mcr/interface/usePlacaresMcr'
+import { lerPartidas } from './usePartidas'
 import { carregarClube, salvarClube, type EstadoClube } from '../../persistencia/repositorioClube'
 
 /** Ids e nomes dos 4 assentos; quem não tem cadastro ganha um id de convidado. */
@@ -21,9 +26,10 @@ export function assentosDaMesa(mesa: MesaDoSorteio) {
 }
 /**
  * Lista do clube, último sorteio e encontros: um estado só, salvo a cada mudança.
- * Cada modo de jogo tem o seu (o do MCR em chaves com '-mcr').
+ * Cada modo de jogo tem o seu (o do MCR em chaves com '-mcr'), com as jogadas
+ * dele: partidas no Riichi, placares no MCR.
  */
-function criarClube(sufixo: string) {
+function criarClube(sufixo: string, lerJogadas: () => readonly { encontro?: { id: string } }[]) {
   let estado: EstadoClube | null = null
   const ouvintes = new Set<() => void>()
 
@@ -52,28 +58,38 @@ function criarClube(sufixo: string) {
     },
     /** Novo encontro com a lista dada; devolve false se a conta de mesas não fecha. */
     sortear(jogadores: EntradaLista[]): boolean {
-      const resultado = sortearMesas(jogadores)
-      if (!resultado.ok) return false
       const atual = lerEstado()
-      const encontro = { id: gerarId(), criadoEm: new Date().toISOString(), jogadores }
-      const sorteio: SorteioClube = { encontro, mesas: resultado.mesas }
-      // Encontro que não chegou a começar nenhuma mesa não precisa ficar guardado.
+      const jogadas = lerJogadas()
       const anterior = atual.sorteio
-      const encontros = atual.encontros.filter(
-        (item) =>
-          !(
-            anterior &&
-            item.id === anterior.encontro.id &&
-            anterior.mesas.every((mesa) => !mesa.partidaId)
-          ),
-      )
-      definir({ ...atual, sorteio, encontros: [...encontros, encontro] })
+      // Encontro que não chegou a começar nenhuma mesa não precisa ficar guardado.
+      const naoComecou =
+        !!anterior &&
+        anterior.mesas.every((mesa) => !mesa.partidaId) &&
+        jogadas.every((jogada) => jogada.encontro?.id !== anterior.encontro.id)
+      const agora = new Date()
+      const anteriores = rodadasDoDia(atual.encontros, jogadas, agora, jogadores)
+      const evitar = naoComecou && anterior ? mesasParaGuardar(anterior.mesas) : undefined
+      const resultado = sortearDoDia(jogadores, anteriores, { evitar })
+      if (!resultado.ok) return false
+      const encontro = { id: gerarId(), criadoEm: agora.toISOString(), jogadores }
+      const sorteio: SorteioClube = { encontro, mesas: resultado.mesas }
+      const encontros = atual.encontros.filter((item) => !(naoComecou && item.id === anterior?.encontro.id))
+      definir({
+        ...atual,
+        sorteio,
+        encontros: [...encontros, { ...encontro, mesas: mesasParaGuardar(resultado.mesas) }],
+      })
       return true
     },
     /** "Novo sorteio" de um encontro: mesma lista, próxima rodada. */
     sortearDeNovo(encontroId: string): boolean {
       const encontro = lerEstado().encontros.find((item) => item.id === encontroId)
       return encontro ? acoesClube.sortear(encontro.jogadores) : false
+    },
+    /** O próximo sorteio não considera quem já jogou junto hoje. */
+    comecarDoZero() {
+      const atual = lerEstado()
+      definir({ ...atual, encontros: comecarDiaDoZero(atual.encontros, new Date()) })
     },
     limpar() {
       definir({ ...lerEstado(), lista: '', sorteio: null })
@@ -126,8 +142,8 @@ function criarClube(sufixo: string) {
   return { lerEstado, assinar, acoes: acoesClube }
 }
 
-const CLUBE_RIICHI = criarClube('')
-const CLUBE_MCR = criarClube('-mcr')
+const CLUBE_RIICHI = criarClube('', () => lerPartidas())
+const CLUBE_MCR = criarClube('-mcr', () => lerPlacaresMcr())
 
 export const acoesClube = CLUBE_RIICHI.acoes
 export const acoesClubeMcr = CLUBE_MCR.acoes

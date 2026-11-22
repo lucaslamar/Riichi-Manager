@@ -5,9 +5,21 @@
  */
 import assert from 'node:assert/strict'
 import { configDoPreset } from '../src/dominios/centerpiece/logica/configMesa'
-import { agruparAbertas, marcarMesaRegistrada } from '../src/dominios/centerpiece/logica/encontroClube'
+import {
+  agruparAbertas,
+  comecarDiaDoZero,
+  marcarMesaRegistrada,
+  mesasParaGuardar,
+  rodadasDoDia,
+  situacaoDoDia,
+  sortearDoDia,
+  type EncontroClube,
+  type SorteioClube,
+} from '../src/dominios/centerpiece/logica/encontroClube'
+import { contarPares, contarVentos, jogadoresDaChave } from '../src/compartilhado/sorteio/contagens'
 import {
   acrescentarNomes,
+  chaveDaEntrada,
   ehConvidado,
   entradasDaLista,
   jogadorDaLinha,
@@ -325,6 +337,90 @@ teste('card: partida registrada à mão não tem contadores', () => {
     CTX.agora,
   )
   assert.equal(contadoresDaPartida(manual), null)
+})
+
+const DIA = new Date(2026, 10, 22, 14, 0)
+const doze = Array.from({ length: 12 }, (_, indice) =>
+  indice % 2 ? { nome: `Pessoa ${indice}` } : { nome: `Pessoa ${indice}`, jogadorId: `p${indice}` },
+)
+
+/** Sorteia uma rodada do dia e guarda como o hook guarda. */
+function sortearNoDia(encontros: EncontroClube[], jogadas: { encontro: { id: string } }[], lista = doze, dia = DIA) {
+  const resultado = sortearDoDia(lista, rodadasDoDia(encontros, jogadas, dia, lista))
+  assert.ok(resultado.ok)
+  const encontro = { id: `e${encontros.length}`, criadoEm: dia.toISOString(), jogadores: lista }
+  const sorteio: SorteioClube = { encontro, mesas: resultado.mesas }
+  return { sorteio, guardado: { ...encontro, mesas: mesasParaGuardar(resultado.mesas) } as EncontroClube }
+}
+
+teste('clube: 3 sorteios no dia com 12 ficam no mínimo', () => {
+  for (let vez = 0; vez < 30; vez++) {
+    const encontros: EncontroClube[] = []
+    const jogadas: { encontro: { id: string } }[] = []
+    let ultimo: SorteioClube | null = null
+    for (let rodada = 0; rodada < 3; rodada++) {
+      const { sorteio, guardado } = sortearNoDia(encontros, jogadas)
+      encontros.push(guardado)
+      jogadas.push({ encontro: { id: guardado.id } })
+      ultimo = sorteio
+    }
+    const rodadas = rodadasDoDia(encontros, jogadas, DIA, doze)
+    const repetidas = [...contarPares(rodadas)].filter(([, vezes]) => vezes > 1)
+    assert.equal(repetidas.length, 9)
+    assert.ok(repetidas.every(([, vezes]) => vezes === 2), 'ninguém 3x')
+    for (const entrada of doze) {
+      const chave = chaveDaEntrada(entrada)
+      assert.ok(repetidas.filter(([par]) => jogadoresDaChave(par).includes(chave)).length <= 2, 'até 2 repetidos')
+    }
+    for (const ventos of contarVentos(rodadas).values()) assert.ok(ventos[0] <= 1, 'Leste uma vez')
+    const situacao = situacaoDoDia(ultimo!, encontros, jogadas, DIA)
+    assert.equal(situacao.numero, 3)
+    assert.equal(situacao.proxima, 4)
+    assert.equal(situacao.estatistica?.nota, 'otima')
+  }
+})
+
+teste('clube: só conta sorteio de hoje com mesa iniciada', () => {
+  const { guardado } = sortearNoDia([], [])
+  const jogada = [{ encontro: { id: guardado.id } }]
+  assert.equal(rodadasDoDia([guardado], [], DIA, doze).length, 0, 'sem mesa iniciada')
+  assert.equal(rodadasDoDia([guardado], jogada, DIA, doze).length, 1)
+  assert.equal(rodadasDoDia([guardado], jogada, new Date(2026, 10, 23, 0, 5), doze).length, 0, 'ontem')
+  assert.equal(rodadasDoDia([{ ...guardado, mesas: undefined }], jogada, DIA, doze).length, 0, 'encontro antigo')
+})
+
+teste('clube: começar do zero ignora o dia', () => {
+  const { sorteio, guardado } = sortearNoDia([], [])
+  const jogada = [{ encontro: { id: guardado.id } }]
+  const zerado = comecarDiaDoZero([guardado], DIA)
+  assert.equal(rodadasDoDia(zerado, jogada, DIA, doze).length, 0)
+  assert.equal(situacaoDoDia(sorteio, zerado, jogada, DIA).proxima, 1)
+  assert.equal(comecarDiaDoZero([guardado], new Date(2026, 10, 23))[0].foraDoDia, undefined, 'outro dia não muda')
+})
+
+teste('clube: quem chega depois entra sem histórico e quem saiu não conta', () => {
+  const { guardado } = sortearNoDia([], [])
+  const jogada = [{ encontro: { id: guardado.id } }]
+  const tarde = [...doze.slice(0, 11), { nome: 'Recém-chegada' }]
+  const rodadas = rodadasDoDia([guardado], jogada, DIA, tarde)
+  const vistos = new Set(rodadas.flatMap((rodada) => rodada.mesas.flatMap((mesa) => mesa.assentos)))
+  assert.ok(!vistos.has(chaveDaEntrada({ nome: 'Recém-chegada' })))
+  assert.ok(!vistos.has(chaveDaEntrada(doze[11])))
+  const novo = sortearDoDia(tarde, rodadas)
+  assert.ok(novo.ok)
+  assert.equal(new Set(novo.mesas.flatMap((mesa) => mesa.assentos.map(({ jogador }) => jogador.nome))).size, 12)
+})
+
+teste('clube: convidado com o mesmo nome é a mesma pessoa', () => {
+  const manha = [{ nome: 'Dudu' }, ...doze.slice(1)]
+  const { guardado } = sortearNoDia([], [], manha)
+  const jogada = [{ encontro: { id: guardado.id } }]
+  for (const entrada of [{ nome: 'dudú' }, { nome: 'Dudu', jogadorId: 'cadastrado-depois' }]) {
+    const rodadas = rodadasDoDia([guardado], jogada, DIA, [entrada, ...doze.slice(1)])
+    const sentados = rodadas[0].mesas.flatMap((mesa) => mesa.assentos)
+    assert.ok(sentados.includes(chaveDaEntrada(entrada)), entrada.nome)
+    assert.ok(!sentados.includes(''))
+  }
 })
 
 console.log(`Clube: ${testes} testes passaram.`)

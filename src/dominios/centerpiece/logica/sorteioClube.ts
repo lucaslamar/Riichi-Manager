@@ -19,7 +19,7 @@ export interface MesaSorteada<T> {
 
 type ErroSorteio = 'poucos' | 'naoMultiplo'
 
-type ResultadoSorteio<T> = { ok: true; mesas: MesaSorteada<T>[] } | { ok: false; erro: ErroSorteio }
+export type ResultadoSorteio<T> = { ok: true; mesas: MesaSorteada<T>[] } | { ok: false; erro: ErroSorteio }
 
 /** Quantas mesas fecham e quanto falta ou sobra para fechar a próxima. */
 export function contagemDeMesas(total: number) {
