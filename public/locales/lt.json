@@ -1864,7 +1864,8 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "Sanma staluose visada 3 žaidėjai: turnyrui reikia 6, 9, 12… žaidėjų."
     },
     "formatHelp": {
       "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
@@ -2130,6 +2131,29 @@
       "newShort": "naujas",
       "legend": "Rodyklės: pokytis nuo {{round}} turo.",
       "confirmTitle": "Turnyro reitingas: prieš → po"
+    },
+    "formatGuide": {
+      "intro": "Kurį formatą rinktis?",
+      "rodizio": {
+        "what": "Visas tvarkaraštis sudaromas traukiant burtus. Kiekvienas kartą būna Rytais ir susitinka su kuo daugiau skirtingų varžovų.",
+        "for": "Tinka klubo susitikimams su pabaigos laiku ir pradedantiesiems. Teisingiausias vėjų atžvilgiu."
+      },
+      "suico": {
+        "what": "1 turui traukiami burtai. Vėliau stalai sudaromi pagal lentelę, vengiant tų pačių varžovų.",
+        "for": "Tinka vienos dienos varžyboms su nustatytu turų skaičiumi."
+      },
+      "eliminatorio": {
+        "what": "Atrankos turai, po jų atrankos (pvz., 8, tada 4) iki finalinio stalo.",
+        "for": "Tinka renginiams su finalu ir daug žaidėjų. Reikia daugiau laiko."
+      },
+      "corridos": {
+        "what": "Kiekvieno turo burtai traukiami vietoje, vengiant tų pačių varžovų. Turų skaičius nenustatytas.",
+        "for": "Tinka neformaliems susitikimams, kai neaišku, kiek bus turų."
+      },
+      "temporada": {
+        "what": "Burtai traukiami vietoje, o kiekvienas susitikimas pridedamas prie bendro reitingo (suma, vidurkis ar geriausi rezultatai).",
+        "for": "Tinka klubo lygai, trunkančiai mėnesius ar metus."
+      }
     }
   },
   "backup": {

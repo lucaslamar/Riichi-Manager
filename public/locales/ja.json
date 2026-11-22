@@ -1790,7 +1790,8 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "三人麻雀の卓は必ず3人です。大会には6、9、12…人が必要です。"
     },
     "formatHelp": {
       "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
@@ -2044,6 +2045,29 @@
       "newShort": "新",
       "legend": "矢印：第{{round}}回戦からの変化。",
       "confirmTitle": "大会ランキング：前 → 後"
+    },
+    "formatGuide": {
+      "intro": "どの形式を使う？",
+      "rodizio": {
+        "what": "抽選で全卓組が決まります。全員が一度ずつ東家になり、できるだけ多くの相手と対戦します。",
+        "for": "終了時刻のある例会や初心者向け。風の面で最も公平です。"
+      },
+      "suico": {
+        "what": "1回戦は抽選。その後は再戦を避けつつ順位に沿って卓を組みます。",
+        "for": "回戦数の決まった1日の競技大会向け。"
+      },
+      "eliminatorio": {
+        "what": "予選の後、決勝卓まで人数を絞ります（例：8人、4人）。",
+        "for": "決勝のある大人数のイベント向け。時間が多めに必要です。"
+      },
+      "corridos": {
+        "what": "毎回その場で再戦を避けて抽選します。回戦数は決めません。",
+        "for": "何回戦できるか分からない気軽な集まり向け。"
+      },
+      "temporada": {
+        "what": "毎回その場で抽選し、各例会の成績を通算ランキングに加算します（合計、平均、上位成績）。",
+        "for": "数か月から1年続くクラブリーグ向け。"
+      }
     }
   },
   "backup": {

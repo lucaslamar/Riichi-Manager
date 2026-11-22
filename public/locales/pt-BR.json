@@ -1812,7 +1812,8 @@
       "windsApp": "Sorteados no app",
       "windsTable": "Na mesa",
       "windsAppHelp": "Cada mesa já sai com o vento de cada jogador.",
-      "windsTableHelp": "O app só diz quem senta em cada mesa. Os ventos são sorteados na hora, com as pedras."
+      "windsTableHelp": "O app só diz quem senta em cada mesa. Os ventos são sorteados na hora, com as pedras.",
+      "multipleOfThree": "As mesas de Sanma fecham sempre com 3: o torneio precisa de 6, 9, 12… jogadores."
     },
     "formatHelp": {
       "rodizio": "Grade inteira sorteada no início. Cada um é Leste uma vez.",
@@ -2068,6 +2069,29 @@
       "newShort": "novo",
       "legend": "Setas: mudança desde a rodada {{round}}.",
       "confirmTitle": "Ranking do torneio: antes → depois"
+    },
+    "formatGuide": {
+      "intro": "Qual formato usar?",
+      "rodizio": {
+        "what": "A grade inteira sai no sorteio. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes.",
+        "for": "Indicado para encontro de clube com hora para acabar e para iniciantes. É o mais justo nos ventos."
+      },
+      "suico": {
+        "what": "A rodada 1 é sorteada. Depois, as mesas seguem a classificação, evitando repetir adversário.",
+        "for": "Indicado para torneio competitivo de um dia, com número de rodadas definido."
+      },
+      "eliminatorio": {
+        "what": "Rodadas classificatórias e depois cortes (por exemplo 8, depois 4) até a mesa final.",
+        "for": "Indicado para evento com final e muitos jogadores. Pede mais tempo."
+      },
+      "corridos": {
+        "what": "Cada rodada é sorteada na hora, evitando repetir adversário. Não tem número de rodadas.",
+        "for": "Indicado para encontro casual em que não se sabe quantas rodadas vão dar."
+      },
+      "temporada": {
+        "what": "Igual ao Brasileirão, mas cada encontro soma num ranking acumulado (soma, média ou melhores resultados).",
+        "for": "Indicado para liga do clube ao longo de meses ou do ano."
+      }
     }
   },
   "backup": {

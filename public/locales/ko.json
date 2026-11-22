@@ -1790,7 +1790,8 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "삼마 테이블은 항상 3명입니다. 대회에는 6, 9, 12…명이 필요합니다."
     },
     "formatHelp": {
       "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
@@ -2044,6 +2045,29 @@
       "newShort": "신규",
       "legend": "화살표: {{round}}라운드 이후 변화.",
       "confirmTitle": "대회 랭킹: 이전 → 이후"
+    },
+    "formatGuide": {
+      "intro": "어떤 형식을 쓸까요?",
+      "rodizio": {
+        "what": "추첨 때 전체 대진이 정해집니다. 모두 한 번씩 동가가 되고 가능한 한 많은 상대와 만납니다.",
+        "for": "종료 시각이 있는 클럽 모임과 초보자에게 좋습니다. 바람 배분이 가장 공평합니다."
+      },
+      "suico": {
+        "what": "1라운드는 추첨합니다. 이후에는 재대결을 피하며 순위대로 테이블을 짭니다.",
+        "for": "라운드 수가 정해진 하루짜리 경쟁 대회에 좋습니다."
+      },
+      "eliminatorio": {
+        "what": "예선 후 결승 테이블까지 인원을 줄입니다(예: 8명, 4명).",
+        "for": "결승이 있고 참가자가 많은 행사에 좋습니다. 시간이 더 필요합니다."
+      },
+      "corridos": {
+        "what": "매 라운드 재대결을 피해 그 자리에서 추첨합니다. 라운드 수는 정하지 않습니다.",
+        "for": "몇 라운드를 할지 모르는 가벼운 모임에 좋습니다."
+      },
+      "temporada": {
+        "what": "매 라운드 추첨하고 각 모임의 결과를 누적 랭킹에 더합니다(합계, 평균, 최고 성적).",
+        "for": "몇 달에서 1년 동안 하는 클럽 리그에 좋습니다."
+      }
     }
   },
   "backup": {

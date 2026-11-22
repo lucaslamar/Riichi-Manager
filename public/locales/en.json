@@ -1812,7 +1812,8 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "Sanma tables always seat 3: the tournament needs 6, 9, 12… players."
     },
     "formatHelp": {
       "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
@@ -2068,6 +2069,29 @@
       "newShort": "new",
       "legend": "Arrows: change since round {{round}}.",
       "confirmTitle": "Tournament ranking: before → after"
+    },
+    "formatGuide": {
+      "intro": "Which format to use?",
+      "rodizio": {
+        "what": "The whole schedule comes out of the draw. Each player is East once and meets as many different opponents as possible.",
+        "for": "Good for club meetings with an end time and for beginners. The fairest on winds."
+      },
+      "suico": {
+        "what": "Round 1 is drawn. After that, tables follow the standings, avoiding repeat opponents.",
+        "for": "Good for a competitive one-day tournament with a set number of rounds."
+      },
+      "eliminatorio": {
+        "what": "Qualifying rounds, then cuts (for example 8, then 4) down to the final table.",
+        "for": "Good for events with a final and many players. Needs more time."
+      },
+      "corridos": {
+        "what": "Each round is drawn on the spot, avoiding repeat opponents. There is no set number of rounds.",
+        "for": "Good for casual meetings where you do not know how many rounds will fit."
+      },
+      "temporada": {
+        "what": "Rounds drawn on the spot, with each meeting adding to a cumulative ranking (total, average or best results).",
+        "for": "Good for a club league over months or a year."
+      }
     }
   },
   "backup": {

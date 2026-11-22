@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/ConfigMesaSheet'
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
@@ -9,6 +10,7 @@ import { criarTemporada } from '../../logica/temporada'
 import { dataDoDia, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
 import { useTorneios } from '../hooks/useTorneios'
 import type { ConfigFormato, FormatoTorneio, Torneio } from '../../logica/tipos'
+import GuiaFormatos from './GuiaFormatos'
 import '../torneio.css'
 
 const FORMATOS: readonly FormatoTorneio[] = ['rodizio', 'suico', 'eliminatorio', 'corridos', 'temporada']
@@ -53,10 +55,16 @@ export default function ConfigTorneioSheet({
   const minutos = Math.round(timers.rodadaSegundos / 60)
   const personalizado = !OPCOES_TIMER_RODADA.some((segundos) => segundos === timers.rodadaSegundos)
 
+  const porMesa = jogadoresPorMesa(torneio)
   const abaTorneio = (
     <>
       <div className="cfg-conjunto-regras">
-        <span className="cfg-campo-rotulo">{t('tournament.settings.format')}</span>
+        <span className="cfg-campo-rotulo">
+          {t('tournament.settings.format')}
+          <AjudaCampo rotulo={t('tournament.settings.format')}>
+            <GuiaFormatos formatos={FORMATOS} atual={formato.tipo} porMesa={porMesa} />
+          </AjudaCampo>
+        </span>
         <BotoesOpcao<FormatoTorneio>
           rotulo={t('tournament.settings.format')}
           valor={formato.tipo}
@@ -201,7 +209,6 @@ export default function ConfigTorneioSheet({
   const chines = useModoJogoAtual() === 'mcr'
 
   // Temporada nova ainda sem id: quem confere é `temporadaValida`.
-  const porMesa = jogadoresPorMesa(torneio)
   const cortesValidos =
     formato.tipo === 'temporada' || formatoValido(formato, jogadores >= porMesa * 2 ? jogadores : undefined, porMesa)
 

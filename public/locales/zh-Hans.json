@@ -1790,7 +1790,8 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "三人麻将每桌总是3人：比赛需要6、9、12…名选手。"
     },
     "formatHelp": {
       "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
@@ -2044,6 +2045,29 @@
       "newShort": "新",
       "legend": "箭头：自第{{round}}轮以来的变化。",
       "confirmTitle": "赛事排名：之前 → 之后"
+    },
+    "formatGuide": {
+      "intro": "该用哪种赛制？",
+      "rodizio": {
+        "what": "抽签时排出全部对阵。每人各当一次东家，并尽量遇到不同对手。",
+        "for": "适合有结束时间的俱乐部聚会和新手。风位最公平。"
+      },
+      "suico": {
+        "what": "第1轮抽签。之后按排名分桌，并避免重复对手。",
+        "for": "适合轮数固定的一日竞技赛。"
+      },
+      "eliminatorio": {
+        "what": "先进行预赛，再逐步淘汰（例如8人、4人）直到决赛桌。",
+        "for": "适合有决赛、人数多的活动。需要更多时间。"
+      },
+      "corridos": {
+        "what": "每轮现场抽签，并避免重复对手。不设轮数。",
+        "for": "适合不确定能打几轮的休闲聚会。"
+      },
+      "temporada": {
+        "what": "每轮现场抽签，每次聚会计入累计排名（总分、平均或最好成绩）。",
+        "for": "适合持续数月或一年的俱乐部联赛。"
+      }
     }
   },
   "backup": {

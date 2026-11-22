@@ -1123,3 +1123,27 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .cfg-ajuda.trn-legenda-setas {
   margin-top: 8px;
 }
+
+/* ? do Formato: um bloco por formato, com o escolhido em destaque. */
+.trn-guia-formatos {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.trn-guia-formatos li {
+  display: grid;
+  gap: 2px;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.trn-guia-formatos li[aria-current] {
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+}
+
+.trn-guia-formatos li > span:last-child {
+  color: var(--texto-apoio);
+}
