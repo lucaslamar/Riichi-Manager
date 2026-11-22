@@ -24,6 +24,8 @@ export interface BlocoRelatorio {
   linhas: LinhaRelatorio[]
   /** No texto, as linhas viram uma tabela em bloco monoespaçado. */
   tabela?: boolean
+  /** Caracteres da 1ª coluna da tabela, quando ela leva mais que o nome. */
+  larguraEsquerda?: number
   /** Cabeçalho da tabela no texto: a coluna da esquerda e as da direita. */
   colunas?: readonly string[]
   /** Só no texto ou só na imagem (ex.: o pódio do texto, que a imagem já destaca). */
@@ -37,7 +39,7 @@ export interface Relatorio {
 }
 
 /** Nomes longos cortados na tabela: no celular, o bloco monoespaçado tem pouca largura. */
-const LARGURA_ESQUERDA = 16
+export const LARGURA_ESQUERDA = 16
 
 /** Tamanho em caracteres que aparecem (acentos contam um só). */
 function largura(texto: string): number {
@@ -63,7 +65,7 @@ export function colunasDaDireita(linha: LinhaRelatorio): readonly string[] {
 function tabelaEmTexto(bloco: BlocoRelatorio): string {
   const linhas = [
     ...(bloco.colunas ? [bloco.colunas] : []),
-    ...bloco.linhas.map((linha) => [cortar(linha.esquerda, LARGURA_ESQUERDA), ...colunasDaDireita(linha)]),
+    ...bloco.linhas.map((linha) => [cortar(linha.esquerda, bloco.larguraEsquerda ?? LARGURA_ESQUERDA), ...colunasDaDireita(linha)]),
   ]
   const totalColunas = Math.max(...linhas.map((linha) => linha.length))
   const larguras = Array.from({ length: totalColunas }, (_, coluna) =>

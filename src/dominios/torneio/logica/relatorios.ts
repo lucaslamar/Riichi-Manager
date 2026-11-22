@@ -2,7 +2,7 @@
  * Relatórios do torneio para mandar no grupo (texto do WhatsApp ou imagem): a
  * rodada com as mesas e os resultados, e a classificação. Sem tela.
  */
-import type { BlocoRelatorio, LinhaRelatorio, Relatorio, TomLinha } from '@/compartilhado/relatorio/relatorio'
+import { LARGURA_ESQUERDA, type BlocoRelatorio, type LinhaRelatorio, type Relatorio, type TomLinha } from '@/compartilhado/relatorio/relatorio'
 import { KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
 import { ehMesaFinal } from './formatos/eliminatorio'
 import type { LinhaRankingTorneio } from './ranking'
@@ -112,6 +112,7 @@ export function relatorioDoRanking(
   const tabela: BlocoRelatorio = {
     so: 'texto',
     tabela: true,
+    ...(larguraSeta ? { larguraEsquerda: LARGURA_ESQUERDA + larguraSeta } : {}),
     colunas: rotulos.colunas,
     linhas: linhas.map((linha) => ({
       esquerda: `${(linha.partidas > 0 ? String(linha.posicao) : '–').padStart(2)}${setaDe(linha).padEnd(larguraSeta)} ${rotulos.nome(linha.jogadorId)}`,
@@ -121,7 +122,7 @@ export function relatorioDoRanking(
   const lista: BlocoRelatorio = {
     so: 'imagem',
     linhas: linhas.map((linha) => ({
-      esquerda: `${linha.partidas === 0 ? '–' : (MEDALHAS[linha.posicao - 1] ?? `${linha.posicao}.`)}${setaDe(linha)} ${rotulos.nome(linha.jogadorId)}`,
+      esquerda: `${linha.partidas === 0 ? '–' : (MEDALHAS[linha.posicao - 1] ?? `${linha.posicao}.`)}${setaDe(linha) ? ` ${setaDe(linha)}` : ''} ${rotulos.nome(linha.jogadorId)}`,
       direita: rotulos.valores(linha),
       destaque: linha.partidas > 0 && linha.posicao <= 3,
       ...tomDe(linha.pontos),

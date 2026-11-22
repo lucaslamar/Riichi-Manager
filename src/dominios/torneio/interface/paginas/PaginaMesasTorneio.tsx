@@ -149,7 +149,7 @@ export default function PaginaMesasTorneio({
         titulo={titulo}
         aoVoltar={aoVoltar}
         acoes={
-          <span className="clb-acoes-titulo">
+          <span className="clb-acoes-titulo trn-acoes-rodada">
             <button
               type="button"
               className="cm-btn-icone"

@@ -74,6 +74,13 @@
   text-align: right;
 }
 
+/* O anel de foco fica no visor inteiro, não dobrado no campo. */
+.cpt-visor .cpt-campo:focus,
+.cpt-visor .cpt-campo:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 .cpt-campo.cpt-negativo {
   color: var(--texto-erro);
 }

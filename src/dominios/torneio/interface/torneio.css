@@ -1121,6 +1121,14 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   white-space: nowrap;
 }
 
+.trn-seta-posicao.trn-positivo {
+  color: var(--texto-positivo);
+}
+
+.trn-seta-posicao.trn-negativo {
+  color: var(--texto-erro);
+}
+
 .trn-tabela-ranking td:first-child {
   white-space: nowrap;
 }
@@ -1155,4 +1163,23 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 
 .cfg-ajuda.trn-regra-curta {
   margin-top: 0;
+}
+
+/* Quatro ações no cabeçalho da rodada: 44px cada, encostadas para o título caber. */
+.trn-acoes-rodada {
+  gap: 0;
+}
+
+.trn-acoes-rodada .cm-btn-icone {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* No desktop o cabeçalho mora no menu lateral, estreito: mouse, botões menores. */
+@media (min-width: 1024px) {
+  .trn-acoes-rodada .cm-btn-icone {
+    width: 28px;
+    min-width: 28px;
+  }
 }
