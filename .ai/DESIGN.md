@@ -56,7 +56,9 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - MPSZ em tela baixa: primeiro saem as folgas, depois as pedras e as teclas encolhem, estas nunca abaixo de 44px. Deitado, se ainda não couber (320px de altura), o painel rola em vez de cortar.
 - Teclado de pontos com W.O.: o botão fica acima do Calcular mão. Em tela baixa os dois botões e o visor encolhem, e até 600px de altura eles dividem a linha. A folha não rola em 360×640.
 - Na tela é sempre "WO", sem pontinhos, também para quem saiu no meio (pedido do usuário em 22/11/2026). O botão do teclado diz só WO, sem explicação junto: ligado muda o fundo, a borda e o ícone para ✓, e tocar de novo desfaz. A explicação fica no ? da regra.
-- Registrar partida e Finalizar mesa usam a barra da Lista (pedido do usuário em 22/11/2026, substitui o par de botões): presa embaixo, soma e status à esquerda, ícones de 44px à direita (disquete para Salvar para continuar, ampulheta com contagem para as salvas) e Registrar na largura toda, com ícone. Nada de segundo botão largo. No celular deitado vira coluna à direita. Na retomada, a faixa da rodada ocupa o lugar da dica.
+- Registrar partida e Finalizar mesa usam a barra da Lista (pedido do usuário em 22/11/2026, substitui o par de botões): presa embaixo, soma e status à esquerda, ícones de 44px à direita na ordem da Lista (lixeira, configs, disquete) e Registrar na largura toda, com ícone. Nada de segundo botão largo. No celular deitado vira coluna à direita. Na retomada, a faixa da rodada ocupa o lugar da dica.
+- Na barra do registro cabem no máximo 3 ícones em 320px: a ampulheta das salvas fica no cabeçalho. Regras travadas (torneio e Chinês) não têm configs. A lixeira confirma e não tira quem veio do sorteio.
+- O preset no registro é só leitura (pedido do usuário em 22/11/2026): sem borda, fundo, chave ou cadeado, descido até rente à barra, com a linha do negativado. Quem edita é o ícone de configs.
 - Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
 
 ## Pedras brancas

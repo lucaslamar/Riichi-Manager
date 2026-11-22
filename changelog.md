@@ -4,6 +4,8 @@
 
 ### Adicionado
 
+- **Negativado acaba ou continua**: o Registrar partida finalizada e o torneio deixam escolher se a partida acaba quando alguém fica negativado (tobi).
+- **Limpar a mesa no registro**: a lixeira da barra apaga o que foi digitado, com confirmação. As configs também foram para a barra, e o preset aparece só para leitura logo acima dela.
 - **Cenários de virada**: tocar numa distância do ranking do torneio mostra quantas mãos faltam por ron de terceiros e por ron direto no líder, o alvo se o líder ficar em 4º, no zero ou em 1º e o que falta com a uma de cada colocação.
 - **Como costuma terminar e chance de virar**: sem lançar mão nenhuma, o app usa as últimas 20 mesas finalizadas de cada um, do torneio e de fora dele, para dizer com quantos pontos costuma terminar, quantos Mangans faltam se terminar assim e a chance de virar.
 - **Mãos sem e com a média**: cada distância mostra as mãos que cobrem a diferença de agora e, logo abaixo, a conta pelo costume de cada um. No Ranking geral as mãos aparecem mesmo quando não dá para projetar.
