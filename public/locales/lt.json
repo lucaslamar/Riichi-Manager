@@ -2132,7 +2132,8 @@
       "useHand": "Naudoti skaičiavime",
       "previousPlayer": "Ankstesnis žaidėjas",
       "nextPlayer": "Kitas žaidėjas",
-      "typeFor": "Įvesti {{name}} taškus"
+      "typeFor": "Įvesti {{name}} taškus",
+      "hundred": "Du nuliai"
     },
     "positionChange": {
       "up": {

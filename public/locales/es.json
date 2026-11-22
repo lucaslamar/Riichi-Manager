@@ -2083,7 +2083,8 @@
       "useHand": "Usar en la cuenta",
       "previousPlayer": "Jugador anterior",
       "nextPlayer": "Siguiente jugador",
-      "typeFor": "Escribir los puntos de {{name}}"
+      "typeFor": "Escribir los puntos de {{name}}",
+      "hundred": "Dos ceros"
     },
     "positionChange": {
       "up": {

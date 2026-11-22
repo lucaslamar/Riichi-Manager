@@ -2076,7 +2076,8 @@
       "useHand": "Use in the sum",
       "previousPlayer": "Previous player",
       "nextPlayer": "Next player",
-      "typeFor": "Type the points for {{name}}"
+      "typeFor": "Type the points for {{name}}",
+      "hundred": "Double zero"
     },
     "positionChange": {
       "up": {

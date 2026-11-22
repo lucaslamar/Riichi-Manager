@@ -15,10 +15,10 @@ function numeroFinal(expressao: string): string {
   return casamento ? casamento[0] : ''
 }
 
-/** Dígito ou "000". Zeros à esquerda não se acumulam e "000" não abre número. */
+/** Dígito, "00" ou "000". Zeros à esquerda não se acumulam, e "00" e "000" não abrem número. */
 export function digitar(expressao: string, digitos: string): string {
   const atual = numeroFinal(expressao)
-  if (digitos === '000' && (atual === '' || atual === '0')) return expressao
+  if ((digitos === '00' || digitos === '000') && (atual === '' || atual === '0')) return expressao
   if (atual === '0') return expressao.slice(0, -1) + digitos
   return expressao + digitos
 }

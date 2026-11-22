@@ -51,3 +51,7 @@ assert.equal(expressaoDigitada('30000--800'), '30000-800')
 assert.equal(expressaoDigitada('007'), '7')
 assert.equal(expressaoDigitada('12a3'), '123')
 console.log('Expressão de pontos ok.')
+
+assert.equal(digitar('3', '00'), '300', '00 completa o número')
+assert.equal(digitar('', '00'), '', '00 não abre número')
+assert.equal(digitar('0', '00'), '0', '00 não acumula zero à esquerda')

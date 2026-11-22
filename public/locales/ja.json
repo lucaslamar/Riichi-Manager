@@ -2054,7 +2054,8 @@
       "useHand": "計算に使う",
       "previousPlayer": "前のプレイヤー",
       "nextPlayer": "次のプレイヤー",
-      "typeFor": "{{name}} の点数を入力"
+      "typeFor": "{{name}} の点数を入力",
+      "hundred": "ゼロ2つ"
     },
     "positionChange": {
       "up": {

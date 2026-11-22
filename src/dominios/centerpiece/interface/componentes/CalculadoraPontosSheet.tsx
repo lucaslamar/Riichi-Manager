@@ -292,7 +292,10 @@ export default function CalculadoraPontosSheet({
               () => setExpressao(resolver(expressao)),
               ' cpt-tecla--igual',
             )}
-            {tecla('0', '0', () => setExpressao(digitar(expressao, '0')), ' cpt-tecla--zero')}
+            {tecla('0', '0', () => setExpressao(digitar(expressao, '0')))}
+            {tecla('00', t('tournament.points.hundred'), () =>
+              setExpressao(digitar(expressao, '00')),
+            )}
             {tecla('000', t('tournament.points.thousand'), () =>
               setExpressao(digitar(expressao, '000')),
             )}

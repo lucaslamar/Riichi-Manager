@@ -41,6 +41,7 @@
 ### Corrigido
 
 - **MPSZ do modo Chinês**: sem a tecla 0 do 5 vermelho, que não existe no MCR.
+- **Teclado de pontos no iPhone e com toque ampliado**: as linhas não montam mais uma na outra, e a última tem 0, 00 e 000.
 - **Flores e Estações**: as peças não parecem mais desabilitadas. A selecionada ganha contorno rosa.
 - **QR do Exportar torneio nítido**: os QRs saíam pequenos e borrados ao ampliar. Voltaram ao tamanho grande, mais fácil de ler pela câmera.
 - **Nomes que viravam "?" no Torneio**: quem saiu do cadastro continua com o nome nas mesas, no ranking e nas imagens. Se não sobrou registro do nome, aparece Jogador 1, Jogador 2 e assim por diante.

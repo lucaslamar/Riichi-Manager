@@ -32,6 +32,11 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 
 - Não escolhida não é desabilitada: a pedra fica com a aparência cheia (opacidade, face e cor das Pedras). Escolhida ganha só um contorno por sombra na cor `--cor-destaque` (a do botão Gang, rosa no tema escuro), com `aria-pressed` e sem mudar de tamanho. No Alto contraste o contorno engrossa. O foco fica por fora dele. Exemplo: Flores e Estações do MCR.
 
+## Teclados em grade
+
+- Linha de botões nunca tem altura fixa menor que o mínimo de toque (44px, 46px com a Área de toque ampliada): use `minmax(44px, auto)`. Com altura fixa, as linhas montam uma na outra. Em tela baixa, encolha o visor, não as teclas.
+- A última linha do teclado de pontos tem 0, 00 e 000.
+
 ## Dragão Branco (pedido do usuário em 22/11/2026)
 
 - No Riichi é liso, só a cor da pedra: sem moldura nem linha interna, em qualquer cor de pedra.
