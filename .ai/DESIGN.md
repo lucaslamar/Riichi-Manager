@@ -32,6 +32,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 
 - Prioridade: Torneio, Organizar mesas do clube e Ranking, as telas mais usadas por clubes. Teste com lista cheia (40 a 64 pessoas) e nomes compridos.
 - Menu lateral a partir de 1024px deitado. Em pé ou dividido, barra inferior.
+- Histórico e Em andamento no celular deitado: uma coluna, com todos os cards na largura da busca (pedido do usuário em 22/11/2026). Card não encolhe até o texto, e duas colunas só quando o nome cabe.
 - Toque: 44px no tablet (`any-pointer: coarse`). Só com mouse os itens do menu encolhem, menos com a Área de toque ampliada.
 - A ação principal fica à vista sem rolar: Sortear preso na base, Registrar dentro da tela, timer da rodada preso no topo.
 - `sticky` dentro do conteúdo principal só funciona com `overflow-x: clip`. Com `hidden` o main vira área de rolagem e nada gruda.
