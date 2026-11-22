@@ -114,6 +114,7 @@ export default function IndiceGuia({
                   onClick={() => aoIrPara(indiceDe(idCapaParte(parte)))}
                 >
                   {t('learn.part', { number: parte.number })} · {parte.title}
+                  {parte.optional && ` (${parte.optional})`}
                 </button>
               </h3>
               {parte.modules.map(moduloNoIndice)}

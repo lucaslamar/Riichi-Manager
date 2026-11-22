@@ -1525,3 +1525,18 @@ body.guia-barra-app-visivel .barra-navegacao-inferior {
   height: 70px;
   background: var(--pedra-face, var(--branco));
 }
+
+.guia-diferencas {
+  display: grid;
+  gap: 14px;
+  margin: 12px 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.guia-diferencas li {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  text-align: start;
+}

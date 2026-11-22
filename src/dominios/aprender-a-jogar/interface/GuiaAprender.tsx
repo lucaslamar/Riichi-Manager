@@ -135,8 +135,8 @@ export default function GuiaAprender({
 
   /** Selo com o rank atual (capa do guia e capas de módulo). */
   const seloRank = () => (
-    <p className={`guia-rank${ehDan(rank) ? ' guia-rank--dan' : ''}`}>
-      <i className={`fas ${ehDan(rank) ? 'fa-crown' : 'fa-medal'}`} aria-hidden="true" />
+    <p className={`guia-rank${ehDan(rank, conteudo.ranks) ? ' guia-rank--dan' : ''}`}>
+      <i className={`fas ${ehDan(rank, conteudo.ranks) ? 'fa-crown' : 'fa-medal'}`} aria-hidden="true" />
       {t('learn.yourRank', { rank: nomeRank(rank, conteudo.ranks) })}
     </p>
   )
@@ -517,9 +517,11 @@ export default function GuiaAprender({
         return (
           <div className="guia-capitulo guia-parte">
             <i className="fas fa-medal guia-capa__icone guia-parte__medalha" aria-hidden="true" />
-            <span className="guia-parte__rotulo">{t('learn.rankTier')}</span>
+            <span className="guia-parte__rotulo">{pagina.parte.optional ?? t('learn.rankTier')}</span>
             <h1 className="guia-capitulo__titulo">
-              {rankDaParte(pagina.parte.number - 1, conteudo.ranks)}
+              {pagina.parte.optional
+                ? pagina.parte.title
+                : rankDaParte(pagina.parte.number - 1, conteudo.ranks)}
             </h1>
             <p className="guia-parte__nome">
               {t('learn.part', { number: pagina.parte.number })} · {pagina.parte.title}
@@ -586,7 +588,7 @@ export default function GuiaAprender({
               <span>{t('learn.conclusionPocketGuide')}</span>
             </p>
             {/* Recado secreto: só aparece para quem concluiu tudo (1º dan). */}
-            {ehDan(rank) && (
+            {ehDan(rank, conteudo.ranks) && (
               <p className="guia-conclusao__secreto">
                 <i className="fas fa-crown" aria-hidden="true" />
                 <span>{t('learn.conclusionSecret')}</span>
@@ -611,12 +613,9 @@ export default function GuiaAprender({
       <>
         <h1 className="guia-titulo">{t('learn.glossary')}</h1>
         <dl className="guia-glossario">
-          {conteudo.glossary.map(({ term, definition, diferenteRiichi }) => (
+          {conteudo.glossary.map(({ term, definition }) => (
             <div key={term} className="guia-glossario__item">
-              <dt>
-                {term}
-                {diferenteRiichi && <span className="selo-diferente-riichi">{t('glossario.mcr.diferenteRiichi')}</span>}
-              </dt>
+              <dt>{term}</dt>
               <dd>{definition}</dd>
             </div>
           ))}
@@ -803,13 +802,13 @@ export default function GuiaAprender({
       <div className="guia-rank-aviso__regiao" role="status" aria-live="polite">
         {aviso && (
           <div
-            className={`guia-rank-aviso${ehDan(aviso.rank) ? ' guia-rank-aviso--dan' : ''}${
+            className={`guia-rank-aviso${ehDan(aviso.rank, conteudo.ranks) ? ' guia-rank-aviso--dan' : ''}${
               aviso.subiu ? '' : ' guia-rank-aviso--estrela'
             }`}
           >
             <i
               className={`fas ${
-                ehDan(aviso.rank) ? 'fa-crown' : aviso.subiu ? 'fa-medal' : 'fa-star'
+                ehDan(aviso.rank, conteudo.ranks) ? 'fa-crown' : aviso.subiu ? 'fa-medal' : 'fa-star'
               } guia-rank-aviso__icone`}
               aria-hidden="true"
             />

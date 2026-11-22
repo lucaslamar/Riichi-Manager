@@ -587,6 +587,18 @@ export default function BlocosGuia({
           case 'flowers':
             // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
             return <BlocoFloresMcr key={indice} legenda={bloco.caption} />
+          case 'differences':
+            return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: blocos fixos
+              <ul key={indice} className="guia-diferencas">
+                {bloco.items.map((item) => (
+                  <li key={item}>
+                    <span className="selo-diferente-riichi">{bloco.label}</span>
+                    {linhaTexto(item, ligar)}
+                  </li>
+                ))}
+              </ul>
+            )
           case 'tip':
             return (
               <BlocoDica

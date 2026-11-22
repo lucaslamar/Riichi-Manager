@@ -2557,6 +2557,82 @@
         "capa": "Cada fan com a sua mão de exemplo, das combinações comuns às raras.",
         "marco": "Você já sabe jogar e pontuar!",
         "marcoTexto": "Agora é conhecer os fan para planejar mãos que chegam a 8."
+      },
+      "diferencas": {
+        "q1": {
+          "pergunta": "Você descartou um 5 de Círculos e depois ele completaria a sua mão. Pode vencer com ele no MCR?",
+          "resposta": "Pode. No MCR o furiten não é penalizado.",
+          "op1": "Pode",
+          "op2": "Não pode, é furiten"
+        },
+        "q2": {
+          "pergunta": "O dealer venceu. Ele continua como dealer?",
+          "resposta": "Não. Não há renchan: o dealer passa a cada mão.",
+          "op1": "Continua",
+          "op2": "Não, passa para o próximo"
+        },
+        "q3": {
+          "pergunta": "Chi com 123 e descartar o 4 é permitido?",
+          "resposta": "É. O MCR permite kuikae.",
+          "op1": "É proibido",
+          "op2": "É permitido"
+        },
+        "titulo": "O que muda do japonês",
+        "capa": "Os hábitos do Riichi que é preciso deixar de lado.",
+        "naoExiste": "O que não existe",
+        "semRiichi": "Riichi, Daburu Riichi, Ippatsu, Tenhou e Chiihou não existem.",
+        "semDora": "Não há dora, Ura-dora nem Aka dora.",
+        "semFu": "Não há han nem fu. A mão vale a soma dos fan, com mínimo de 8.",
+        "semHonba": "Não há honba nem renchan. A pontuação de uma rodada não passa para a seguinte.",
+        "semMuroMorto": "Não há muro morto. O jogo vai até a última pedra.",
+        "naMesa": "Na mesa",
+        "dealer": "O dealer passa a cada mão, vencendo ou não, e não recebe nem paga a mais.",
+        "kuikae": "Kuikae é permitido. Dá para fazer Chi com 123 e descartar o 4.",
+        "kanFechado": "O kan fechado vira An Gang e fica virado para baixo até o fim da mão.",
+        "maoAberta": "Abrir a mão só invalida os fan que são de mão oculta.",
+        "flores": "Há 8 flores e estações, que valem 1 ponto cada.",
+        "naVitoria": "Na vitória",
+        "furiten": "Furiten não é penalizado. Você pode vencer com uma pedra que descartou.",
+        "umVencedor": "Só um vencedor por descarte, o mais próximo de quem descartou.",
+        "todosPagam": "No ron, chamado de Dianhe, os três pagam. Quem descartou paga o fan além dos 8.",
+        "chombo": "No lugar do chombo há o Falso Hu: 10 pontos para cada um dos outros três."
+      },
+      "equivalentes": {
+        "q1": {
+          "pergunta": "Qual fan corresponde ao Toitoi?",
+          "resposta": "Todas Trincas 碰碰和 vale 6.",
+          "op1": "Todas Sequências",
+          "op2": "Todas Trincas",
+          "op3": "Três Quadras"
+        },
+        "q2": {
+          "pergunta": "E ao Chiitoitsu?",
+          "resposta": "Sete Pares 七对 vale 24.",
+          "op1": "Sete Pares",
+          "op2": "Quatro sem Quadra",
+          "op3": "Treze Órfãos"
+        },
+        "q3": {
+          "pergunta": "Qual destes não tem equivalente exato no MCR?",
+          "resposta": "Pinfu não tem um fan exatamente igual. Todas Sequências só é parecido.",
+          "op1": "Honitsu",
+          "op2": "Chinitsu",
+          "op3": "Pinfu"
+        },
+        "titulo": "Yaku e fan equivalentes",
+        "capa": "O yaku que você conhece e o fan mais parecido.",
+        "yaku": "Yaku",
+        "fan": "Fan (pontos)",
+        "sem": "Sem equivalente",
+        "semExato": "Sem equivalente exato",
+        "naoExistem": "Não existem no MCR"
+      },
+      "parte6": {
+        "opcional": "Opcional",
+        "titulo": "Para quem vem do Riichi",
+        "capa": "Só para quem já joga Riichi. Não é preciso para aprender MCR nem para o rank.",
+        "marco": "O livro do MCR está completo!",
+        "marcoTexto": "Com todos os módulos até aqui, você é Mestre do MCR. A parte seguinte é opcional."
       }
     }
   }

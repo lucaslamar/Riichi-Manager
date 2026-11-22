@@ -117,6 +117,8 @@ export type TutorialBlock =
   | { type: 'fans'; ids: number[] }
   /** As 8 Flores e Estações do MCR. */
   | { type: 'flowers'; caption?: string }
+  /** O que muda do Riichi, cada item com o selo vermelho (Parte 6 do MCR). */
+  | { type: 'differences'; label: string; items: string[] }
   /** Dica em cinza, como as das ajudas "?" (ex.: onde achar o assunto no app). */
   | { type: 'tip'; md: string }
 
@@ -155,14 +157,14 @@ export interface TutorialPart {
   /** Frase da capa da parte. */
   cover: string
   milestone?: { title: string; md: string }
+  /** Parte fora do rank, com este rótulo (ex.: "Opcional") no lugar dele. */
+  optional?: string
   modules: TutorialModule[]
 }
 
 export interface TermoGlossarioGuia {
   term: string
   definition: string
-  /** Selo "Diferente do Riichi" (glossário de outros modos de jogo). */
-  diferenteRiichi?: boolean
 }
 
 /** Textos desenhados dentro das ilustrações. */
@@ -202,7 +204,7 @@ export interface ConteudoTutorial {
   tutorialParts: TutorialPart[]
   glossary: TermoGlossarioGuia[]
   /** O rank de quem está em cada parte, e o último (com tudo concluído). */
-  ranks: [string, string, string, string, string]
+  ranks: string[]
   ilustracoes: TextosIlustracoes
   /** Texto do livro de outro modo de jogo no lugar do de `learn.rankHint` (o Riichi não usa). */
   dicaRank?: string
