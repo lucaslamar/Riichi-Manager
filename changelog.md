@@ -45,7 +45,7 @@
 - **Posição anterior no ranking do torneio**: embaixo da seta aparece de onde a pessoa veio ("era 2º"), e o card diz em qual rodada.
 - **Barra no registro da partida**: como na Lista, fica presa embaixo com a soma da mesa, o disquete de salvar para continuar e o Registrar.
 - **Dica no Centerpiece**: uma faixa roxa sempre visível, embaixo da mesa, ensina a abrir o menu e a iniciar e reiniciar o cronômetro tocando nos ventos. Com o celular deitado, ela fica virada na lateral.
-- **Timer na mesa de 3**: em tela pequena, o número e a rodada cabem dentro do anel, e deitada a mesa aproveita a altura.
+- **Timer do Centerpiece**: em tela pequena, o número e a rodada cabem dentro do anel, e a mesa de 3 deitada aproveita a altura.
 - **Topo da rodada do torneio**: Encerrar e Ranking trocaram de lugar.
 - **Registrar partida mais limpo**: saiu o título Jogadores e pontos, que virou o recado da faixa roxa.
 - **Pontos sem apagar**: no teclado de pontos o primeiro dígito substitui o valor, e a soma da mesa acompanha o que é digitado.
