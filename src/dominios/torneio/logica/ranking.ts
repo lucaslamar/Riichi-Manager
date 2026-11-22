@@ -43,10 +43,21 @@ export function rankingAteRodada(
   partidas: readonly Partida[],
   rodada: number,
 ): LinhaRankingTorneio[] {
-  return rankingDoTorneio(
-    { ...torneio, rodadas: torneio.rodadas.filter((item) => item.numero <= rodada) },
-    partidas.filter((partida) => partida.vinculoTorneio && partida.vinculoTorneio.rodada < rodada),
-  )
+  const recorte = recorteAteRodada(torneio, partidas, rodada)
+  return rankingDoTorneio(recorte.torneio, recorte.partidas)
+}
+
+/** O torneio e as partidas como estavam no fim da rodada. Com null, tudo. */
+export function recorteAteRodada(
+  torneio: Torneio,
+  partidas: readonly Partida[],
+  rodada: number | null,
+): { torneio: Torneio; partidas: readonly Partida[] } {
+  if (rodada === null) return { torneio, partidas }
+  return {
+    torneio: { ...torneio, rodadas: torneio.rodadas.filter((item) => item.numero <= rodada) },
+    partidas: partidas.filter((partida) => partida.vinculoTorneio && partida.vinculoTorneio.rodada < rodada),
+  }
 }
 
 export interface MudancaPosicao {
