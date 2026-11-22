@@ -291,7 +291,7 @@ export function CampoNotacaoMao({
   }, [])
 
   return (
-    <div className="campo-notacao-mao">
+    <div className={`campo-notacao-mao${semZero ? ' campo-notacao-mao--sem-zero' : ''}`}>
       <div className="barra-notacao-mao" role="toolbar" aria-label={t('notation.toggle')}>
         {aoVoltar && (
           <button className="botao-voltar-pedras-notacao" type="button" onClick={aoVoltar}>

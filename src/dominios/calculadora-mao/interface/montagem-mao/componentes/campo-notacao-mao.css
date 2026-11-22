@@ -643,3 +643,52 @@
     display: none;
   }
 }
+
+/* Sem o 0 (MCR): os números ganham a linha dele. Cada um ocupa 4 trilhas e cada naipe, 3.
+   O espaço entre as linhas é margem da tecla, para as trilhas não somarem vãos. */
+.campo-notacao-mao--sem-zero .teclado-notacao-mao:not(#_) {
+  grid-auto-rows: 1fr;
+  grid-template-areas:
+    'n1 n2 n3 m'
+    'n1 n2 n3 m'
+    'n1 n2 n3 m'
+    'n1 n2 n3 p'
+    'n4 n5 n6 p'
+    'n4 n5 n6 p'
+    'n4 n5 n6 s'
+    'n4 n5 n6 s'
+    'n7 n8 n9 s'
+    'n7 n8 n9 z'
+    'n7 n8 n9 z'
+    'n7 n8 n9 z';
+  row-gap: 0;
+}
+
+.campo-notacao-mao--sem-zero .teclado-notacao-mao .tecla-notacao-mao:not(#_) {
+  margin-block: 3px;
+}
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+  .campo-notacao-mao.campo-notacao-mao--sem-zero {
+    grid-template-rows: auto repeat(12, minmax(0, auto));
+    grid-template-areas:
+      'pec pec fx fx fx fx fx fx fx fx fx fx fx ac del'
+      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi m'
+      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi m'
+      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 chi chi m'
+      'n1 n1 n1 n1 n2 n2 n2 n2 n3 n3 n3 n3 pon pon p'
+      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon pon p'
+      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 pon pon p'
+      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 kan kan s'
+      'n4 n4 n4 n4 n5 n5 n5 n5 n6 n6 n6 n6 kan kan s'
+      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kan kan s'
+      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kanf kanf z'
+      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kanf kanf z'
+      'n7 n7 n7 n7 n8 n8 n8 n8 n9 n9 n9 n9 kanf kanf z';
+    row-gap: 0;
+  }
+
+  .campo-notacao-mao--sem-zero :is(.tecla-notacao-mao, .botao-voltar-pedras-notacao, .acao-barra-notacao-mao):not(#_) {
+    margin-block: 2px;
+  }
+}

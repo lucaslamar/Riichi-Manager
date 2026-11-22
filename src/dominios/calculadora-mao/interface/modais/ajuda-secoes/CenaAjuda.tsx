@@ -241,7 +241,7 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                 <span className="cena-ajuda__ac">AC</span>
                 <i className="fas fa-delete-left" />
               </div>
-              <div className="cena-ajuda__teclado-numeros">
+              <div className={`cena-ajuda__teclado-numeros${chines ? ' cena-ajuda__teclado-numeros--sem-zero' : ''}`}>
                 {CHAMADAS.map((chamada) => (
                   <span
                     key={chamada}
@@ -252,11 +252,11 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                     {t(rotuloChamadaCena(chamada))}
                   </span>
                 ))}
-                {TECLAS_NUMEROS.map((tecla) => (
+                {TECLAS_NUMEROS.filter((tecla) => !chines || tecla !== '0').map((tecla) => (
                   <span
                     key={tecla}
-                    // MCR: sem 5 vermelho, o lugar do 0 fica vazio.
-                    style={chines && tecla === '0' ? { visibility: 'hidden' } : undefined}
+                    // MCR: sem 5 vermelho, os números crescem no lugar do 0, como no teclado.
+                    style={chines ? { gridArea: /\d/.test(tecla) ? `n${tecla}` : tecla } : undefined}
                     className={`cena-ajuda__tecla${/[mpsz]/.test(tecla) ? ' cena-ajuda__tecla--naipe' : ''}${
                       tecla === '0' ? ' cena-ajuda__tecla--zero' : ''
                     }${tocando(`tecla:${tecla}`)}`}

@@ -41,7 +41,7 @@
 
 ### Corrigido
 
-- **MPSZ do modo Chinês**: sem a tecla 0 do 5 vermelho, que não existe no MCR.
+- **MPSZ do modo Chinês**: sem a tecla 0 do 5 vermelho, que não existe no MCR, e com os números maiores no lugar dela.
 - **Teclado de pontos no iPhone e com toque ampliado**: as linhas não montam mais uma na outra. No Riichi a última tem 0, 00 e 000. No Chinês, sem 00 e 000, o − e o + ficaram maiores.
 - **Flores e Estações**: as peças não parecem mais desabilitadas. A selecionada ganha contorno rosa.
 - **QR do Exportar torneio nítido**: os QRs saíam pequenos e borrados ao ampliar. Voltaram ao tamanho grande, mais fácil de ler pela câmera.

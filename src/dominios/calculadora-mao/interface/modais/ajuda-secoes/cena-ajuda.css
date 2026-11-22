@@ -442,6 +442,28 @@
 }
 
 /* 0 ocupa a largura dos três números, como no teclado de verdade. */
+.cena-ajuda__teclado-numeros--sem-zero {
+  grid-auto-rows: 1fr;
+  grid-template-areas:
+    'n1 n2 n3 m'
+    'n1 n2 n3 m'
+    'n1 n2 n3 m'
+    'n1 n2 n3 p'
+    'n4 n5 n6 p'
+    'n4 n5 n6 p'
+    'n4 n5 n6 s'
+    'n4 n5 n6 s'
+    'n7 n8 n9 s'
+    'n7 n8 n9 z'
+    'n7 n8 n9 z'
+    'n7 n8 n9 z';
+  row-gap: 0;
+}
+
+.cena-ajuda__teclado-numeros--sem-zero .cena-ajuda__tecla {
+  margin-block: 2px;
+}
+
 .cena-ajuda__tecla--zero {
   grid-column: span 3;
 }
