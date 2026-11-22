@@ -1,6 +1,8 @@
 import { useVoltarPorDeslize } from '@/compartilhado/interface/hooks/voltarInterno'
 import { useMemo, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import DetalhesSorteio from '@/compartilhado/interface/componentes/sorteio/DetalhesSorteio'
+import { estatisticaDoTorneio } from '../../logica/estatisticaGrade'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
@@ -41,6 +43,8 @@ export default function PaginaRankingTorneio({
   const linhas = useMemo(() => rankingDoTorneio(torneio, partidas), [torneio, partidas])
   const mudancas = useMemo(() => mudancasDoRanking(torneio, partidas), [torneio, partidas])
   const mudancaDe = (id: string) => mudancas?.jogadores.find((item) => item.jogadorId === id)
+  const estatistica = useMemo(() => estatisticaDoTorneio(torneio), [torneio])
+  const [vendoEstatistica, setVendoEstatistica] = useState(false)
   const eliminatorio = torneio.formato.tipo === 'eliminatorio'
 
   const nomeDe = (id: string) => nomeNoTorneio(torneio, jogadores, id)
@@ -80,7 +84,7 @@ export default function PaginaRankingTorneio({
         titulo={t('tournament.ranking.title')}
         aoVoltar={aoVoltar}
         acoes={
-          <span className="clb-acoes-titulo">
+          <span className="clb-acoes-titulo trn-acoes-rodada">
             <button
               type="button"
               className="cm-btn-icone"
@@ -91,6 +95,18 @@ export default function PaginaRankingTorneio({
             >
               <i className="fas fa-share-nodes" aria-hidden="true" />
             </button>
+            {estatistica && (
+              <button
+                type="button"
+                className="cm-btn-icone"
+                aria-label={t('tournament.gridStats.openStats')}
+                title={t('tournament.gridStats.openStats')}
+                aria-haspopup="dialog"
+                onClick={() => setVendoEstatistica(true)}
+              >
+                <i className="fas fa-chart-simple" aria-hidden="true" />
+              </button>
+            )}
             {podeEncerrar(torneio) && (
               <button
                 type="button"
@@ -187,6 +203,10 @@ export default function PaginaRankingTorneio({
           aoAvisar={mostrar}
           aoFechar={() => setCompartilhando(false)}
         />
+      )}
+
+      {vendoEstatistica && estatistica && (
+        <DetalhesSorteio estatistica={estatistica} nomeDe={nomeDe} aoFechar={() => setVendoEstatistica(false)} />
       )}
 
       {aviso && (
