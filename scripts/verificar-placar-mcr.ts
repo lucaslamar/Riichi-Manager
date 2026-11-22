@@ -19,24 +19,20 @@ import {
 } from '../src/dominios/placar-mcr/logica/placar'
 import { partidasDoTorneioMcr, pontosDeMesa } from '../src/dominios/placar-mcr/logica/torneio'
 import {
-  anotarFalsoHu,
-  anotarMao,
-  apagarMao,
   digitarTotal,
-  fecharMaoEscrita,
-  normalizarSumula,
-  placarDaSumula,
-  pontosDaSumula,
-  SUMULA_VAZIA,
-  sumulaDoPlacar,
+  normalizarRegistro,
+  placarDoRegistro,
+  REGISTRO_EM_BRANCO,
+  registroDoPlacar,
+  somarMao,
   trocarLugares,
-  type RascunhoSumula,
-} from '../src/dominios/placar-mcr/logica/sumula'
+  type RascunhoRegistro,
+} from '../src/dominios/placar-mcr/logica/registroFinalizado'
 import {
-  carregarSumulaMcr,
-  carregarSumulaMesa,
-  salvarSumulaMcr,
-} from '../src/dominios/placar-mcr/persistencia/repositorioSumulaMcr'
+  carregarRegistroDaMesa,
+  carregarRegistroMcr,
+  salvarRegistroMcr,
+} from '../src/dominios/placar-mcr/persistencia/repositorioRegistroMcr'
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
 import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
 
@@ -139,62 +135,34 @@ assert.deepEqual(pontosDeMesa([0, 0, 0, 0]), [1.75, 1.75, 1.75, 1.75], 'Quatro e
 console.log('Placar MCR ok: 25 testes.')
 
 {
-  // Súmula do Registrar partida finalizada: papel e caneta com a conta feita.
-  let s: RascunhoSumula = { ...SUMULA_VAZIA, assentos: ['a', 'b', 'c', 'd'] }
-  assert.deepEqual(pontosDaSumula(s), [null, null, null, null])
-  s = anotarMao(s, { tipo: 'vitoria', vencedor: 1, forma: 'ron', descartador: 2, fan: 24 })
-  assert.deepEqual(pontosDaSumula(s), [-8, 48, -32, -8], 'a mão calculada desconta dos outros')
-  s = anotarMao(s, { tipo: 'anotada', pontos: [30, -10, -10, -10] })
-  assert.deepEqual(pontosDaSumula(s), [22, 38, -42, -18])
-  assert.equal(anotarMao(s, { tipo: 'anotada', pontos: [1, 0, 0, 0] }), s, 'linha que não fecha')
-  assert.deepEqual(fecharMaoEscrita([30, -10, -10, null]), [30, -10, -10, -10])
-  assert.equal(fecharMaoEscrita([30, null, null, 0]), null)
-  assert.equal(fecharMaoEscrita([1, 0, 0, 0]), null)
+  // Registrar partida finalizada: só os totais, somando e subtraindo do que já tem.
+  let r: RascunhoRegistro = { ...REGISTRO_EM_BRANCO, assentos: ['a', 'b', 'c', 'd'] }
+  r = digitarTotal(r, 0, 10)
+  assert.deepEqual(r.pontos, [10, null, null, null])
+  r = somarMao(r, { tipo: 'vitoria', vencedor: 1, forma: 'ron', descartador: 2, fan: 24 })
+  assert.deepEqual(r.pontos, [2, 48, -32, -8], 'Calcular mão soma no que já tinha e tira dos outros')
+  assert.equal(somarMao(r, { tipo: 'vitoria', vencedor: 1, forma: 'tsumo', fan: 3 }), r, 'mão inválida')
+  assert.deepEqual(trocarLugares(r, 0, 1).assentos, ['b', 'a', 'c', 'd'])
+  assert.deepEqual(trocarLugares(r, 0, 1).pontos, [48, 2, -32, -8], 'os pontos vão com o jogador')
 
-  s = anotarFalsoHu(s, 0)
-  assert.deepEqual(pontosDaSumula(s), [-8, 48, -32, -8], 'Falso Hu: 10 a cada um')
-  const digitada = digitarTotal(s, 0, 100)
-  assert.equal(pontosDaSumula(digitada)[0], 100, 'o total digitado vale')
-  assert.equal(pontosDaSumula(anotarMao(digitada, { tipo: 'anotada', pontos: [5, -5, 0, 0] }))[0], 105)
-  assert.deepEqual(apagarMao(s, 0).falsosHu, [{ cadeira: 0, aposMao: 1 }])
-
-  const final = placarDaSumula(digitada, 'sumula', '2026-11-22T10:00:00.000Z')
-  assert.deepEqual(totais(final), [100, 48, -32, -8])
+  const final = placarDoRegistro(r, 'registro', '2026-11-22T10:00:00.000Z')
+  assert.deepEqual(totais(final), [2, 48, -32, -8])
   assert.equal(final.finalizadoEm, '2026-11-22T10:00:00.000Z')
-  assert.equal(final.registradoManual, true)
-  assert.deepEqual(final.falsosHu, [{ cadeira: 0, aposMao: 2 }])
   assert.deepEqual(JSON.parse(JSON.stringify(final)), final, 'volta igual do backup')
-  assert.deepEqual(normalizarSumula(JSON.parse(JSON.stringify(digitada))), digitada)
-  assert.deepEqual(normalizarSumula({ maos: 3 }), SUMULA_VAZIA)
-}
-console.log('Súmula MCR ok.')
-
-{
-  // Súmula de mesa sorteada: trocar de lugar, corrigir e um rascunho por mesa.
-  const base: RascunhoSumula = { ...SUMULA_VAZIA, assentos: ['a', 'b', 'c', 'd'] }
-  const jogada = anotarFalsoHu(
-    anotarMao(base, { tipo: 'vitoria', vencedor: 1, forma: 'ron', descartador: 2, fan: 24 }),
-    3,
-  )
-  const trocada = trocarLugares(jogada, 0, 1)
-  assert.deepEqual(trocada.assentos, ['b', 'a', 'c', 'd'])
-  assert.deepEqual(pontosDaSumula(trocada), [58, 2, -22, -38], 'os pontos vão com o jogador')
-  assert.deepEqual(pontosDaSumula(jogada), [2, 58, -22, -38])
-
-  const registrado = placarDaSumula(jogada, 'mesa', '2026-11-22T10:00:00.000Z')
-  assert.deepEqual(pontosDaSumula(sumulaDoPlacar(registrado)), [2, 58, -22, -38])
+  assert.deepEqual(registroDoPlacar(final), r, 'corrigir abre os mesmos totais')
+  assert.deepEqual(normalizarRegistro({ pontos: 3 }), REGISTRO_EM_BRANCO)
 
   const guardado = new Map<string, string>()
   const armazenamento = {
     ler: (chave: string) => guardado.get(chave) ?? null,
     gravar: (chave: string, valor: string) => void guardado.set(chave, valor),
   }
-  salvarSumulaMcr(armazenamento, base)
-  salvarSumulaMcr(armazenamento, jogada, 'mesa-1')
-  assert.deepEqual(carregarSumulaMcr(armazenamento), base, 'a avulsa não muda')
-  assert.deepEqual(carregarSumulaMesa(armazenamento, 'mesa-1'), jogada)
-  assert.equal(carregarSumulaMesa(armazenamento, 'mesa-2'), null)
-  salvarSumulaMcr(armazenamento, null, 'mesa-1')
-  assert.equal(carregarSumulaMesa(armazenamento, 'mesa-1'), null)
+  salvarRegistroMcr(armazenamento, r)
+  salvarRegistroMcr(armazenamento, REGISTRO_EM_BRANCO, 'mesa-1')
+  assert.deepEqual(carregarRegistroMcr(armazenamento), r, 'o avulso não muda')
+  assert.deepEqual(carregarRegistroDaMesa(armazenamento, 'mesa-1'), REGISTRO_EM_BRANCO)
+  salvarRegistroMcr(armazenamento, null, 'mesa-1')
+  assert.equal(carregarRegistroDaMesa(armazenamento, 'mesa-1'), null)
+  assert.deepEqual(carregarRegistroMcr(armazenamento), r)
 }
-console.log('Súmula das mesas sorteadas ok.')
+console.log('Registro MCR ok.')

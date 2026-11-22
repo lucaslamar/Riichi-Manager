@@ -2630,8 +2630,7 @@
       "erros": {
         "fanMinimo": "The hand needs at least 8 fan.",
         "semDescartador": "Choose who discarded.",
-        "descartadorVencedor": "The winner can't be the discarder.",
-        "naoFecha": "The four values must add up to zero."
+        "descartadorVencedor": "The winner can't be the discarder."
       },
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
@@ -2659,32 +2658,12 @@
       "falsoHuTexto": "The player pays 10 points to each of the other three, and the hand goes on.",
       "qtdPontos": "{{pontos}} points",
       "verMesa": "View the table",
-      "sumula": {
-        "titulo": "Score sheet",
-        "cartao": "Totals or a hand-by-hand score sheet",
-        "resumo": "Pen and paper, with the math done",
-        "faltamJogadores": "Choose the 4 players first",
-        "contagem": "{{feitas}} of {{total}} hands",
-        "calcular": "Score a hand",
-        "escrever": "Write points",
-        "escreverAjuda": "Tap each player. The one left blank is filled so the sum is zero.",
-        "anotar": "Write it down",
-        "quemVenceu": "Who won?",
+      "registro": {
         "comoVenceu": "How did {{name}} win?",
-        "colunaMao": "Hand",
-        "mao": "Hand {{numero}}",
-        "corrigir": "Correct hand {{numero}}",
-        "apagarLinha": "Delete row",
-        "limpar": "Clear score sheet",
-        "limparAjuda": "Hands, totals and notes are removed. The players stay.",
-        "digitado": "Typed total",
-        "anotado": "Written by hand",
-        "total": "Total",
-        "notas": "Notes",
-        "notasAjuda": "Write anything, like on paper",
-        "mesaNoPlacar": "Play on the Scoreboard",
-        "mesaNoPlacarAjuda": "The app table, with timer and discards",
-        "mesaNaSumula": "Score sheet or totals"
+        "jogar": "Play on the Scoreboard",
+        "jogarAjuda": "The app table, with timer and discards",
+        "totais": "Totals",
+        "cartao": "Add and subtract each player's points"
       }
     }
   },

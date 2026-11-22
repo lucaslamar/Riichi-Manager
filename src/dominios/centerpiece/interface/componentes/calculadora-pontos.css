@@ -148,6 +148,27 @@
   background: var(--primario);
 }
 
+/* MCR, sem 00 e 000: o − e o + com duas linhas cada, e o 0 na largura dos números. */
+.cpt-teclado--sem-zeros .cpt-tecla--menos {
+  grid-row: 1 / 3;
+}
+
+.cpt-teclado--sem-zeros .cpt-tecla--mais {
+  grid-row: 3 / 5;
+}
+
+.cpt-teclado--sem-zeros :is(.cpt-tecla--menos, .cpt-tecla--mais) {
+  font-size: 2.2rem;
+}
+
+.cpt-teclado--sem-zeros .cpt-tecla--igual {
+  grid-row: 5;
+}
+
+.cpt-teclado--sem-zeros .cpt-tecla--zero {
+  grid-column: 1 / 4;
+}
+
 .cpt-ok {
   width: 100%;
   min-height: 48px;

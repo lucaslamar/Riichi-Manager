@@ -35,7 +35,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 ## Teclados em grade
 
 - Linha de botões nunca tem altura fixa menor que o mínimo de toque (44px, 46px com a Área de toque ampliada): use `minmax(44px, auto)`. Com altura fixa, as linhas montam uma na outra. Em tela baixa, encolha o visor, não as teclas.
-- A última linha do teclado de pontos tem 0, 00 e 000.
+- Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
 
 ## Dragão Branco (pedido do usuário em 22/11/2026)
 

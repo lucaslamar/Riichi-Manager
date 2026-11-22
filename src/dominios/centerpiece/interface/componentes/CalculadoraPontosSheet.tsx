@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode, type TouchEvent } from 'react'
 import { flushSync } from 'react-dom'
 import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
@@ -44,7 +45,6 @@ export default function CalculadoraPontosSheet({
   aoConfirmar,
   aoNavegar,
   aoCalcularMao,
-  semCalcularMao = false,
   aoFechar,
 }: {
   cadeira: Cadeira
@@ -60,15 +60,15 @@ export default function CalculadoraPontosSheet({
    */
   aoNavegar?: (passo: 1 | -1, pontos: number | null | undefined) => void
   /**
-   * No lugar do Han e Fu (MCR: a súmula). `pontos` vem só quando a conta foi mexida,
+   * No lugar do Han e Fu (MCR: a batida chinesa). `pontos` vem só quando a conta foi mexida,
    * para gravar antes.
    */
   aoCalcularMao?: (pontos: number | null | undefined) => void
-  /** Linha escrita à mão: só o teclado. */
-  semCalcularMao?: boolean
   aoFechar: () => void
 }) {
   const { t, numero } = useI18n()
+  // No MCR os pontos são pequenos: sem 00 e 000, com − e + maiores.
+  const comZeros = useModoJogoAtual() !== 'mcr'
   const [expressao, setExpressaoCrua] = useState(String(inicial))
   const [mexeu, setMexeu] = useState(false)
   const setExpressao = (nova: string) => {
@@ -256,22 +256,18 @@ export default function CalculadoraPontosSheet({
             )}
           </div>
 
-          {!semCalcularMao && (
-            <button
-              type="button"
-              className="btn-contorno cpt-calcular"
-              onClick={() =>
-                aoCalcularMao
-                  ? aoCalcularMao(mexeu ? resultado : undefined)
-                  : setCalculandoMao(true)
-              }
-            >
-              <i className="fas fa-calculator" aria-hidden="true" />{' '}
-              {t('tournament.points.calculateHand')}
-            </button>
-          )}
+          <button
+            type="button"
+            className="btn-contorno cpt-calcular"
+            onClick={() =>
+              aoCalcularMao ? aoCalcularMao(mexeu ? resultado : undefined) : setCalculandoMao(true)
+            }
+          >
+            <i className="fas fa-calculator" aria-hidden="true" />{' '}
+            {t('tournament.points.calculateHand')}
+          </button>
 
-          <div className="cpt-teclado">
+          <div className={`cpt-teclado${comZeros ? '' : ' cpt-teclado--sem-zeros'}`}>
             {tecla('C', t('tournament.points.clear'), () => setExpressao(''), ' cpt-tecla--acao')}
             {tecla(
               '⌫',
@@ -307,13 +303,15 @@ export default function CalculadoraPontosSheet({
               () => setExpressao(resolver(expressao)),
               ' cpt-tecla--igual',
             )}
-            {tecla('0', '0', () => setExpressao(digitar(expressao, '0')))}
-            {tecla('00', t('tournament.points.hundred'), () =>
-              setExpressao(digitar(expressao, '00')),
-            )}
-            {tecla('000', t('tournament.points.thousand'), () =>
-              setExpressao(digitar(expressao, '000')),
-            )}
+            {tecla('0', '0', () => setExpressao(digitar(expressao, '0')), ' cpt-tecla--zero')}
+            {comZeros &&
+              tecla('00', t('tournament.points.hundred'), () =>
+                setExpressao(digitar(expressao, '00')),
+              )}
+            {comZeros &&
+              tecla('000', t('tournament.points.thousand'), () =>
+                setExpressao(digitar(expressao, '000')),
+              )}
           </div>
         </div>
       </Modal>

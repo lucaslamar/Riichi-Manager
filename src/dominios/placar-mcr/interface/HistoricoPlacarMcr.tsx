@@ -28,7 +28,6 @@ import HistoricoTorneios, {
 import type { PlacarMcr } from '../logica/placar'
 import { nomeDaCadeira } from './nomes'
 import { acoesPlacaresMcr } from './usePlacaresMcr'
-import './sumula-mcr.css'
 
 /** O MCR não tem Clube: Todas, Partidas e Torneios. */
 const TIPOS_MCR: readonly FiltroTipoMesa[] = ['todas', 'avulsa', 'torneio']
@@ -97,12 +96,11 @@ export default function HistoricoPlacarMcr({
           aoVoltar={() => setAbertoId(null)}
         />
         <ListaResultado linhas={partida.resultado ?? []} nomeDe={nomeNa} />
-        <h3 className="ptd-rotulo">{t('match.hands.title')}</h3>
-        <ListaMaos partida={partida} nomeDe={nomeNa} />
-        {aberto.notas && (
+        {/* Registrada só com os totais, a partida não tem mãos para listar. */}
+        {!aberto.pontosRegistrados && (
           <>
-            <h3 className="ptd-rotulo">{t('placar.mcr.sumula.notas')}</h3>
-            <p className="sumula-mcr__notas-salvas">{aberto.notas}</p>
+            <h3 className="ptd-rotulo">{t('match.hands.title')}</h3>
+            <ListaMaos partida={partida} nomeDe={nomeNa} />
           </>
         )}
         <button

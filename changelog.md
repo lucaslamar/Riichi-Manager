@@ -4,8 +4,7 @@
 
 ### Adicionado
 
-- **Registrar partida finalizada no modo Chinês**: no Placar e no Ranking, com os totais ou com a Súmula, o papel e caneta da mesa. Calcular mão já desconta dos outros, e também dá para escrever os pontos à mão e fazer anotações.
-- **Súmula nas mesas de torneio e de clube do modo Chinês**: Registrar resultado deixa escolher entre jogar no Placar e anotar na Súmula ou só os totais. Um resultado vindo da Súmula pode ser corrigido no torneio.
+- **Registrar partida finalizada no modo Chinês**: no Placar, no Ranking e nas mesas de torneio e de clube. É uma calculadora para ir somando e subtraindo os pontos de cada um, que ficam salvos durante a partida. Calcular mão já desconta dos outros.
 - **Centerpiece simples no modo Chinês**: a mesa no meio, com timer, dados, Sorteador e atalhos da calculadora, sem honba e sempre com 4 jogadores.
 - **Tutorial MCR completo**: ensina do zero (peças, muro, distribuição, Chi/Peng/Gang, pontuação e os 81 fan). As diferenças do Riichi viraram parte opcional.
 - **Guia de formatos**: o ? ao lado de Formato explica os cinco formatos e para que cada um é indicado.
@@ -43,7 +42,7 @@
 ### Corrigido
 
 - **MPSZ do modo Chinês**: sem a tecla 0 do 5 vermelho, que não existe no MCR.
-- **Teclado de pontos no iPhone e com toque ampliado**: as linhas não montam mais uma na outra, e a última tem 0, 00 e 000.
+- **Teclado de pontos no iPhone e com toque ampliado**: as linhas não montam mais uma na outra. No Riichi a última tem 0, 00 e 000. No Chinês, sem 00 e 000, o − e o + ficaram maiores.
 - **Flores e Estações**: as peças não parecem mais desabilitadas. A selecionada ganha contorno rosa.
 - **QR do Exportar torneio nítido**: os QRs saíam pequenos e borrados ao ampliar. Voltaram ao tamanho grande, mais fácil de ler pela câmera.
 - **Nomes que viravam "?" no Torneio**: quem saiu do cadastro continua com o nome nas mesas, no ranking e nas imagens. Se não sobrou registro do nome, aparece Jogador 1, Jogador 2 e assim por diante.

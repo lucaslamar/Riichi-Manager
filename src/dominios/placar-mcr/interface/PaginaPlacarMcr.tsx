@@ -14,9 +14,14 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { useNomeNoTorneio } from '@/dominios/torneio/interface/hooks/useNomeNoTorneio'
 import { mudancaAoRegistrar } from '@/dominios/torneio/logica/ranking'
 import { novoPlacar, TIMER_PADRAO_SEGUNDOS, type PlacarMcr } from '../logica/placar'
-import { placarDaSumula, SUMULA_VAZIA, sumulaDoPlacar, type RascunhoSumula } from '../logica/sumula'
+import {
+  placarDoRegistro,
+  REGISTRO_EM_BRANCO,
+  registroDoPlacar,
+  type RascunhoRegistro,
+} from '../logica/registroFinalizado'
 import { partidasDoTorneioMcr } from '../logica/torneio'
-import { carregarSumulaMesa } from '../persistencia/repositorioSumulaMcr'
+import { carregarRegistroDaMesa } from '../persistencia/repositorioRegistroMcr'
 import PaginaEmAndamento from '@/dominios/centerpiece/interface/paginas/PaginaEmAndamento'
 import RegistrarFinalizada from '@/dominios/centerpiece/interface/paginas/RegistrarFinalizada'
 import PaginaListaClube from '@/dominios/centerpiece/interface/paginas/PaginaListaClube'
@@ -35,14 +40,14 @@ type MesaParaRegistrar = NonNullable<ComponentProps<typeof RegistrarFinalizada>[
 /** O que se decide ao tocar em Registrar resultado numa mesa sorteada. */
 interface EscolhaDaMesa {
   jogar: () => void
-  sumula: () => void
+  totais: () => void
 }
 
 type Vista =
   | { tipo: 'hub' }
   | { tipo: 'novo' }
   | { tipo: 'registrar' }
-  /** Súmula de uma mesa sorteada: volta para as mesas dela. */
+  /** Totais de uma mesa sorteada: volta para as mesas dela. */
   | { tipo: 'registrarMesa'; mesa: MesaParaRegistrar; volta: Vista }
   | { tipo: 'torneio'; id: string }
   | { tipo: 'temporada'; id: string }
@@ -73,27 +78,27 @@ export default function PaginaPlacarMcr() {
   const { sorteio } = useClube()
   const nomeDoTorneio = useNomeNoTorneio()
   const [escolha, setEscolha] = useState<EscolhaDaMesa | null>(null)
-  /** Mesa sem mão jogada: escolhe. Súmula já começada: continua nela. */
+  /** Mesa sem mão jogada: escolhe. Totais já começados: continua neles. */
   const decidirMesa = (opcoes: EscolhaDaMesa, chave: string, placar?: PlacarMcr) => {
     const jogando = !!placar && (placar.maos.length > 0 || !!placar.falsosHu?.length)
     if (placar?.finalizadoEm) {
-      // Veio da súmula: corrige nela. Jogada no app: a mesa, como sempre.
-      if (placar.registradoManual) opcoes.sumula()
+      // Veio dos totais: corrige neles. Jogada no app: a mesa, como sempre.
+      if (placar.pontosRegistrados) opcoes.totais()
       else opcoes.jogar()
     } else if (jogando) opcoes.jogar()
-    else if (carregarSumulaMesa(armazenamentoLocal, chave)) opcoes.sumula()
+    else if (carregarRegistroDaMesa(armazenamentoLocal, chave)) opcoes.totais()
     else setEscolha(opcoes)
   }
-  /** A súmula vira o placar da mesa, no lugar do que existia (corrigir mantém id e datas). */
-  const gravarSumula = (
-    sumula: RascunhoSumula,
+  /** Os totais viram o placar da mesa, no lugar do que existia (corrigir mantém id e datas). */
+  const gravarRegistro = (
+    registro: RascunhoRegistro,
     vinculo: Pick<PlacarMcr, 'torneio' | 'encontro' | 'convidados'>,
     existente?: PlacarMcr,
   ) => {
     const agora = new Date().toISOString()
     const id = existente?.id ?? gerarId()
     const placar: PlacarMcr = {
-      ...placarDaSumula(sumula, id, agora),
+      ...placarDoRegistro(registro, id, agora),
       ...vinculo,
       ...(existente && {
         criadoEm: existente.criadoEm,
@@ -109,12 +114,12 @@ export default function PaginaPlacarMcr() {
     const encontro = { id: sorteio.encontro.id, mesa: mesa.numero }
     const chave = `clube-${encontro.id}-${mesa.numero}`
     const existente = placares.find((placar) => placar.id === mesa.partidaId)
-    const sumula = () => {
+    const lancarTotais = () => {
       // Os convidados ganham o id uma vez: o do rascunho ou o do placar, se já houver.
-      const rascunho = carregarSumulaMesa(armazenamentoLocal, chave)
+      const rascunho = carregarRegistroDaMesa(armazenamentoLocal, chave)
       const sorteados = assentosDaMesa(mesa)
       const ids = rascunho?.assentos ?? existente?.jogadorIds ?? sorteados.ids
-      // O convidado se acha pelo id, porque os lugares podem ter sido trocados na súmula.
+      // O convidado se acha pelo id, porque os lugares podem ter sido trocados no registro.
       const salvos = rascunho?.convidados ?? existente?.convidados
       const nomes: Record<string, string> =
         salvos ??
@@ -123,10 +128,10 @@ export default function PaginaPlacarMcr() {
             mesa.assentos[lugar].jogador.jogadorId ? [] : [[id, sorteados.nomes[lugar]]],
           ),
         )
-      const inicial: RascunhoSumula = {
-        ...(existente?.registradoManual
-          ? sumulaDoPlacar(existente)
-          : { ...SUMULA_VAZIA, assentos: [...ids] }),
+      const inicial: RascunhoRegistro = {
+        ...(existente?.pontosRegistrados
+          ? registroDoPlacar(existente)
+          : { ...REGISTRO_EM_BRANCO, assentos: [...ids] }),
         convidados: nomes,
       }
       setVista({
@@ -138,7 +143,7 @@ export default function PaginaPlacarMcr() {
           inicial,
           nomes,
           registrar: (folha) => {
-            const id = gravarSumula(
+            const id = gravarRegistro(
               folha,
               { encontro, ...(Object.keys(nomes).length && { convidados: nomes }) },
               existente,
@@ -149,13 +154,13 @@ export default function PaginaPlacarMcr() {
         },
       })
     }
-    decidirMesa({ jogar: () => abrirMesaDoClube(mesa), sumula }, chave, existente)
+    decidirMesa({ jogar: () => abrirMesaDoClube(mesa), totais: lancarTotais }, chave, existente)
   }
   const registrarMesaDoTorneio = (torneioId: string, rodada: RodadaTorneio, mesa: MesaTorneio) => {
     const torneio = torneios.find((item) => item.id === torneioId)
     if (!torneio) return
     const vinculo = { id: torneioId, rodada: rodada.numero - 1, mesa: mesa.numero - 1 }
-    // Com os jogadores na chave, um novo sorteio da rodada não herda a súmula antiga.
+    // Com os jogadores na chave, um novo sorteio da rodada não herda os totais antigos.
     const chave = `torneio-${torneioId}-${rodada.numero}-${mesa.numero}-${mesa.assentos.join('-')}`
     const existente = placares.find(
       (placar) =>
@@ -167,30 +172,30 @@ export default function PaginaPlacarMcr() {
       torneio: vinculo,
       ...(torneio.convidados && { convidados: torneio.convidados }),
     }
-    const sumula = () =>
+    const lancarTotais = () =>
       setVista({
         tipo: 'registrarMesa',
         volta: { tipo: 'torneio', id: torneioId },
         mesa: {
           chave,
           titulo: t('tournament.tables.badge', { round: rodada.numero, table: mesa.numero }),
-          inicial: existente?.registradoManual
-            ? sumulaDoPlacar(existente)
-            : { ...SUMULA_VAZIA, assentos: [...mesa.assentos] },
+          inicial: existente?.pontosRegistrados
+            ? registroDoPlacar(existente)
+            : { ...REGISTRO_EM_BRANCO, assentos: [...mesa.assentos] },
           nomes: Object.fromEntries(mesa.assentos.map((id) => [id, nomeDoTorneio(torneio, id)])),
           torneio: {
             previa: (folha) =>
               partidasDoTorneioMcr([
-                { ...placarDaSumula(folha, 'previa', new Date().toISOString()), ...extras },
+                { ...placarDoRegistro(folha, 'previa', new Date().toISOString()), ...extras },
               ])[0],
             mudancas: (previa) =>
               mudancaAoRegistrar(torneio, partidasDoTorneioMcr(placares), previa, existente?.id),
           },
-          registrar: (folha) => gravarSumula(folha, extras, existente),
+          registrar: (folha) => gravarRegistro(folha, extras, existente),
         },
       })
     decidirMesa(
-      { jogar: () => abrirMesaDoTorneio(torneioId, rodada, mesa), sumula },
+      { jogar: () => abrirMesaDoTorneio(torneioId, rodada, mesa), totais: lancarTotais },
       chave,
       existente,
     )
@@ -205,8 +210,8 @@ export default function PaginaPlacarMcr() {
       <div className="ptd-lista-opcoes">
         {(
           [
-            ['jogar', 'fa-table-cells-large', 'mesaNoPlacar', 'mesaNoPlacarAjuda'],
-            ['sumula', 'fa-file-pen', 'mesaNaSumula', 'cartao'],
+            ['jogar', 'fa-table-cells-large', 'jogar', 'jogarAjuda'],
+            ['totais', 'fa-calculator', 'totais', 'cartao'],
           ] as const
         ).map(([opcao, icone, rotulo, ajuda]) => (
           <button
@@ -220,8 +225,8 @@ export default function PaginaPlacarMcr() {
           >
             <i className={`fas ${icone} ptd-opcao-icone`} aria-hidden="true" />
             <span className="ptd-opcao-nome">
-              {t(`placar.mcr.sumula.${rotulo}`)}
-              <small className="ptd-opcao-dica">{t(`placar.mcr.sumula.${ajuda}`)}</small>
+              {t(`placar.mcr.registro.${rotulo}`)}
+              <small className="ptd-opcao-dica">{t(`placar.mcr.registro.${ajuda}`)}</small>
             </span>
           </button>
         ))}
@@ -452,7 +457,7 @@ export default function PaginaPlacarMcr() {
       chave: 'registrar',
       icone: 'fa-clipboard-check',
       titulo: t('match.manual.title'),
-      texto: t('placar.mcr.sumula.cartao'),
+      texto: t('placar.mcr.registro.cartao'),
       aoTocar: () => setVista({ tipo: 'registrar' }),
     },
   ]

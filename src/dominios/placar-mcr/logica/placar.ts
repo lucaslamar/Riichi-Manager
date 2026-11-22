@@ -25,8 +25,6 @@ export const TIMER_PADRAO_SEGUNDOS = 30
 export type MaoMcr = (
   | { tipo: 'vitoria'; vencedor: Cadeira; forma: FormaBatida; descartador?: Cadeira; fan: number }
   | { tipo: 'empate' }
-  /** Escrita na súmula, com a conta feita no papel. */
-  | { tipo: 'anotada'; pontos: Quatro }
 ) & {
   /** Descartes da mão, quando foram registrados na mesa (para o histórico). */
   lances?: Lance[]
@@ -49,12 +47,8 @@ export interface PlacarMcr {
   registro?: RegistroMao
   /** Mesa sorteada num encontro do clube (`mesa` começa em 1, como no sorteio). */
   encontro?: { id: string; mesa: number }
-  /** Veio do Registrar partida finalizada, não da mesa do app. */
-  registradoManual?: boolean
-  /** Diferença entre os totais digitados no registro e a soma das mãos. */
-  ajuste?: Quatro
-  /** Anotações da súmula. */
-  notas?: string
+  /** Totais do Registrar partida finalizada: a partida não passou pela mesa do app. */
+  pontosRegistrados?: Quatro
   /** Nomes dos convidados do torneio (jogam sem cadastro), por id. */
   convidados?: Record<string, string>
 }
@@ -85,14 +79,10 @@ export function ventoDaRodada(indiceMao: number): Cadeira {
   return Math.min(3, Math.floor(indiceMao / MAOS_POR_RODADA)) as Cadeira
 }
 
-export type ErroMaoMcr = 'fanMinimo' | 'semDescartador' | 'descartadorVencedor' | 'naoFecha'
+export type ErroMaoMcr = 'fanMinimo' | 'semDescartador' | 'descartadorVencedor'
 
 export function validarMao(mao: MaoMcr): ErroMaoMcr | null {
   if (mao.tipo === 'empate') return null
-  if (mao.tipo === 'anotada') {
-    const fecha = mao.pontos.every(Number.isInteger) && mao.pontos.reduce((a, b) => a + b, 0) === 0
-    return fecha ? null : 'naoFecha'
-  }
   if (!Number.isInteger(mao.fan) || mao.fan < FAN_MINIMO_MCR) return 'fanMinimo'
   if (mao.forma === 'ron' && mao.descartador === undefined) return 'semDescartador'
   if (mao.forma === 'ron' && mao.descartador === mao.vencedor) return 'descartadorVencedor'
@@ -103,7 +93,6 @@ export function validarMao(mao: MaoMcr): ErroMaoMcr | null {
 export function pontosDaMao(mao: MaoMcr): [number, number, number, number] {
   const pontos: [number, number, number, number] = [0, 0, 0, 0]
   if (mao.tipo === 'empate' || validarMao(mao)) return pontos
-  if (mao.tipo === 'anotada') return [...mao.pontos]
   const { ganhadorRecebe, pagamentos } = calcularPagamentoMcr(mao.fan, mao.forma)
   const perdedores = CADEIRAS.filter((cadeira) => cadeira !== mao.vencedor)
   if (mao.forma === 'tsumo') {
@@ -130,12 +119,12 @@ export function pontosDoFalsoHu(cadeira: Cadeira): [number, number, number, numb
 }
 
 export function totais(
-  placar: Pick<PlacarMcr, 'maos'> & Pick<Partial<PlacarMcr>, 'falsosHu' | 'ajuste'>,
+  placar: Pick<PlacarMcr, 'maos'> & Pick<Partial<PlacarMcr>, 'falsosHu' | 'pontosRegistrados'>,
 ): [number, number, number, number] {
   const lances = [
     ...placar.maos.map(pontosDaMao),
     ...(placar.falsosHu ?? []).map(({ cadeira }) => pontosDoFalsoHu(cadeira)),
-    ...(placar.ajuste ? [placar.ajuste] : []),
+    ...(placar.pontosRegistrados ? [placar.pontosRegistrados] : []),
   ]
   return lances.reduce<[number, number, number, number]>(
     (soma, pontos) => {
