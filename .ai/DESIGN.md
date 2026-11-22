@@ -38,6 +38,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Nome de jogador nas mesas quebra linha, nunca é cortado.
 - iPad em pé é tela grande, não celular esticado: usa a largura (880 a 1040px), os assentos crescem até a ação principal fechar embaixo e a letra sobe no Pro 13.
 - O Pro 13 atual tem 1032×1376. Faixas de iPad vão até 1376px, não 1366.
+- Tocar na aba Ranking com a análise de um jogador aberta volta à lista, com os filtros. Formulário aberto não sai com esse toque, para não perder o digitado.
 - MPSZ em tela alta: teclas de 72 a 100px conforme a altura, todas iguais. O ? do Sorteador tem 34px, na linha da escolha de jogadores.
 - Ranking a partir de 768px, em pé ou deitado: uma linha por jogador, com as métricas em colunas alinhadas. A tabela do torneio vai até 960px.
 - Controle escondido numa largura precisa existir em outro lugar dela (o Guia de bolso sumia no PC).

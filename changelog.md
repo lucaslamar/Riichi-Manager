@@ -49,6 +49,7 @@
 ### Corrigido
 
 - **iPad Pro 13 atual**: com 1376 px, recebe os mesmos ajustes dos outros iPad Pro.
+- **Aba Ranking**: com a análise de um jogador aberta, tocar nela volta à lista, com os filtros mantidos.
 - **Sortear sempre à vista**: no iPad deitado e no PC, o botão fica preso na base da lista do Torneio e do clube, mesmo com muitos nomes.
 - **Timer da rodada**: fica preso no topo enquanto as mesas rolam, no iPad e no PC.
 - **Nomes compridos nas mesas**: quebram linha em vez de serem cortados.

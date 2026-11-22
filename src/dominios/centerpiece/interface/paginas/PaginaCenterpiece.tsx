@@ -86,6 +86,8 @@ interface PropsCenterpiece {
   aoProximaTela?: () => void
   /** Subitem do menu lateral: abre direto nesta tela (voltar leva à raiz do módulo). */
   telaInicial?: SubtelaPartida
+  /** Muda a cada toque na navegação, inclusive na aba já aberta. */
+  toquesAba: number
 }
 
 /** Tela inicial do módulo (cards) e a navegação entre as telas dele. */
@@ -96,6 +98,7 @@ function TelasCenterpiece({
   aoTelaAnterior,
   aoProximaTela,
   telaInicial,
+  toquesAba,
   raiz,
 }: PropsCenterpiece & { raiz: RefObject<HTMLElement | null> }) {
   const { t, idioma } = useI18n()
@@ -120,6 +123,11 @@ function TelasCenterpiece({
   /** Troca a tela de cima (ex.: Nova partida vira o placar; voltar não reabre o setup). */
   const trocar = (proxima: TelaModulo) => setPilha((atual) => [...atual.slice(0, -1), proxima])
   const voltar = () => setPilha((atual) => (atual.length > 1 ? atual.slice(0, -1) : [telaRaiz]))
+  // Tocar na aba Ranking com a análise aberta volta à lista. Os formulários não saem, para não perder o digitado.
+  useEffect(() => {
+    if (modo !== 'ranking') return
+    setPilha((atual) => (atual[atual.length - 1].nome === 'jogador' ? [{ nome: 'ranking' }] : atual))
+  }, [toquesAba, modo])
   const { telaCheiaMesa } = usePreferencias()
   const { torneios, salvar: salvarTorneio } = useTorneios()
   /** Rascunho ainda sem sorteio: o card Torneio continua nele em vez de criar outro. */

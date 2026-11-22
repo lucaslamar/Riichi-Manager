@@ -52,6 +52,7 @@ export default function App() {
   const [subtela, setSubtela] = useState<{ tela: SubtelaPartida; chave: number } | null>(null)
   // Contador próprio: `navegar` zera a subtela no mesmo ciclo, então a chave não pode vir dela.
   const toquesSubtela = useRef(0)
+  const [toquesAba, setToquesAba] = useState(0)
 
   // Guia Aprender a jogar: tela cheia por cima de tudo. `chave` remonta o guia
   // a cada abertura, sempre na capa.
@@ -66,6 +67,7 @@ export default function App() {
     setSimplesAberto(false)
     setEntradaDoSimples(null)
     setSubtela(null)
+    setToquesAba((toques) => toques + 1)
     setTela(proxima)
   }, [])
   const navegarSubtela = useCallback(
@@ -201,6 +203,7 @@ export default function App() {
             <PaginaCenterpiece
               key={`${modo}-${subtela ? `${tela}-${subtela.chave}` : tela}`}
               modo={tela === 'centerpiece' ? 'simples' : tela}
+              toquesAba={toquesAba}
               telaInicial={tela === 'partidas' || tela === 'ranking' ? subtela?.tela : undefined}
               aoAbrirSorteador={abrirSorteadorDoSimples}
               aoAbrirCalculo={abrirCalculoDoSimples}
