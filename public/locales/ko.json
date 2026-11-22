@@ -2029,7 +2029,8 @@
       "thousand": "영 세 개",
       "useHand": "계산에 사용",
       "previousPlayer": "이전 플레이어",
-      "nextPlayer": "다음 플레이어"
+      "nextPlayer": "다음 플레이어",
+      "typeFor": "{{name}} 점수 입력"
     }
   },
   "backup": {

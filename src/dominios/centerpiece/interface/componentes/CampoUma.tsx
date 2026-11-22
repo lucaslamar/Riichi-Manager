@@ -32,7 +32,7 @@ const CHAVE_LINHA: Record<LinhaUmaFlutuante, string> = {
  * texto com teclado decimal. No React Native: "numbers-and-punctuation" no iOS e
  * "numeric" no Android.
  */
-const PROPS_TECLADO_COM_SINAL = ehIos()
+export const PROPS_TECLADO_COM_SINAL = ehIos()
   ? ({ type: 'text', inputMode: 'numeric' } as const)
   : /Android/i.test(navigator.userAgent)
     ? ({ type: 'text', inputMode: 'tel' } as const)

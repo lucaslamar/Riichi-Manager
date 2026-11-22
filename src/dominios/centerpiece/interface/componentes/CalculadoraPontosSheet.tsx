@@ -1,4 +1,5 @@
-import { useRef, useState, type ReactNode, type TouchEvent } from 'react'
+import { useEffect, useRef, useState, type ReactNode, type TouchEvent } from 'react'
+import { flushSync } from 'react-dom'
 import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
@@ -7,6 +8,7 @@ import {
   apagar,
   avaliar,
   digitar,
+  expressaoDigitada,
   inserirValor,
   operar,
   partesDaExpressao,
@@ -15,6 +17,7 @@ import {
 } from '../../logica/expressaoPontos'
 import { KANJI_VENTO, ORDEM_VENTOS, type Cadeira } from '../../logica/partida'
 import type { ResultadoCalculoParaCenterpiece } from '../../logica/tipos-integracao'
+import { PROPS_TECLADO_COM_SINAL } from './CampoUma'
 import './calculadora-pontos.css'
 
 // Como no teclado do celular: 1 2 3 em cima.
@@ -63,12 +66,16 @@ export default function CalculadoraPontosSheet({
     setExpressaoCrua(nova)
     setMexeu(true)
   }
+  /** Visor tocado: vira campo e chama o teclado do sistema. */
+  const [editando, setEditando] = useState(false)
+  const campo = useRef<HTMLInputElement | null>(null)
   // Outro jogador: a conta recomeça com os pontos dele.
   const [cadeiraAtual, setCadeiraAtual] = useState(cadeira)
   if (cadeiraAtual !== cadeira) {
     setCadeiraAtual(cadeira)
     setExpressaoCrua(String(inicial))
     setMexeu(false)
+    setEditando(false)
   }
   const [calculandoMao, setCalculandoMao] = useState(false)
   const resultado = avaliar(expressao)
@@ -79,6 +86,56 @@ export default function CalculadoraPontosSheet({
     .join(' ')
     // "-" no começo é o sinal do número, colado nele.
     .replace(/^− /, '−')
+
+  // Enter só aciona o botão em foco quando a pessoa chegou nele pelo Tab. Depois de
+  // tocar numa tecla, o foco fica nela e o Enter repetiria o dígito em vez de dar OK.
+  const focoPorTab = useRef(false)
+  const aoTeclar = useRef<(evento: KeyboardEvent) => void>(() => {})
+  aoTeclar.current = (evento) => {
+    if (calculandoMao || evento.defaultPrevented) return
+    if (evento.ctrlKey || evento.metaKey || evento.altKey) return
+    const alvo = evento.target as HTMLElement
+    // Fora da folha (ex.: o Enter que acabou de abri-la): não é com ela.
+    if (alvo !== document.body && !alvo.closest('.cpt-modal')) return
+    if (evento.key === 'Tab') {
+      focoPorTab.current = true
+      return
+    }
+    if (evento.key === 'Enter') {
+      if (evento.repeat || (focoPorTab.current && alvo.closest('button'))) return
+      evento.preventDefault()
+      aoConfirmar(resultado)
+      return
+    }
+    // No campo do visor quem trata os caracteres é o onChange.
+    if (alvo.matches('input, textarea')) return
+    let nova: string
+    if (/^\d$/.test(evento.key)) nova = digitar(expressao, evento.key)
+    else if (evento.key === '+' || evento.key === '-') nova = operar(expressao, evento.key)
+    else if (evento.key === 'Backspace') nova = apagar(expressao)
+    else return
+    evento.preventDefault()
+    focoPorTab.current = false
+    setExpressao(nova)
+  }
+  useEffect(() => {
+    const ouvir = (evento: KeyboardEvent) => aoTeclar.current(evento)
+    const esquecerTab = () => {
+      focoPorTab.current = false
+    }
+    window.addEventListener('keydown', ouvir)
+    window.addEventListener('pointerdown', esquecerTab, true)
+    return () => {
+      window.removeEventListener('keydown', ouvir)
+      window.removeEventListener('pointerdown', esquecerTab, true)
+    }
+  }, [])
+
+  // O foco precisa acontecer dentro do toque para o iPhone abrir o teclado.
+  const editarNoTeclado = () => {
+    flushSync(() => setEditando(true))
+    campo.current?.focus()
+  }
 
   const navegar = (passo: 1 | -1) => aoNavegar?.(passo, mexeu ? resultado : undefined)
 
@@ -161,11 +218,33 @@ export default function CalculadoraPontosSheet({
         <div className="cpt-corpo" {...propsToque}>
           <div className="cpt-visor" aria-live="polite" aria-atomic="true">
             <span className="cpt-expressao">{conta ? `${textoExpressao} =` : ' '}</span>
-            <span
-              className={`cpt-resultado${resultado !== null && resultado < 0 ? ' cpt-negativo' : ''}`}
-            >
-              {resultado === null ? (expressao === '-' ? '−' : '0') : numero(resultado)}
-            </span>
+            {editando ? (
+              <input
+                ref={campo}
+                className={`cpt-resultado cpt-campo${resultado !== null && resultado < 0 ? ' cpt-negativo' : ''}`}
+                {...PROPS_TECLADO_COM_SINAL}
+                autoComplete="off"
+                enterKeyHint="done"
+                aria-label={t('tournament.points.typeFor', { name: nome })}
+                value={expressao}
+                onChange={(evento) => setExpressao(expressaoDigitada(evento.target.value))}
+                onBlur={() => setEditando(false)}
+              />
+            ) : (
+              <>
+                <span
+                  className={`cpt-resultado${resultado !== null && resultado < 0 ? ' cpt-negativo' : ''}`}
+                >
+                  {resultado === null ? (expressao === '-' ? '−' : '0') : numero(resultado)}
+                </span>
+                <button
+                  type="button"
+                  className="cpt-visor-toque"
+                  aria-label={t('tournament.points.typeFor', { name: nome })}
+                  onClick={editarNoTeclado}
+                />
+              </>
+            )}
           </div>
 
           <button

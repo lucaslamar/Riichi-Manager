@@ -2,6 +2,10 @@
 
 ## Não lançado
 
+### Adicionado
+
+- **Pontos pelo teclado**: a folha de pontos do registro aceita o teclado físico (números, + e −, apagar, Enter para OK e Esc para fechar). No celular, tocar no visor abre o teclado do sistema, com o sinal de menos.
+
 ### Corrigido
 
 - **Sortear de novo no Rodízio**: a opção aparecia depois do primeiro resultado e não mudava nada. Agora aparece só antes da primeira partida, porque a grade sai inteira e equilibrada. Para refazer depois, use Reiniciar sorteio.

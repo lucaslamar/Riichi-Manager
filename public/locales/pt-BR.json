@@ -2051,7 +2051,8 @@
       "thousand": "três zeros",
       "useHand": "Usar na conta",
       "previousPlayer": "Jogador anterior",
-      "nextPlayer": "Próximo jogador"
+      "nextPlayer": "Próximo jogador",
+      "typeFor": "Digitar os pontos de {{name}}"
     }
   },
   "backup": {

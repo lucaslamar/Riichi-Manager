@@ -2058,7 +2058,8 @@
       "thousand": "tres ceros",
       "useHand": "Usar en la cuenta",
       "previousPlayer": "Jugador anterior",
-      "nextPlayer": "Siguiente jugador"
+      "nextPlayer": "Siguiente jugador",
+      "typeFor": "Escribir los puntos de {{name}}"
     }
   },
   "backup": {

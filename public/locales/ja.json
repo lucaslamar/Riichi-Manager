@@ -2029,7 +2029,8 @@
       "thousand": "ゼロ3つ",
       "useHand": "計算に使う",
       "previousPlayer": "前のプレイヤー",
-      "nextPlayer": "次のプレイヤー"
+      "nextPlayer": "次のプレイヤー",
+      "typeFor": "{{name}} の点数を入力"
     }
   },
   "backup": {

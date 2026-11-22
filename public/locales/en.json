@@ -2051,7 +2051,8 @@
       "thousand": "three zeros",
       "useHand": "Use in the sum",
       "previousPlayer": "Previous player",
-      "nextPlayer": "Next player"
+      "nextPlayer": "Next player",
+      "typeFor": "Type the points for {{name}}"
     }
   },
   "backup": {
