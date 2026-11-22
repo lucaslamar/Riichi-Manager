@@ -56,6 +56,21 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - A confirmação do resultado mostra o ranking do torneio antes e depois, inclusive ao corrigir.
 - Encerrar: só torneio em andamento e não transferido (`podeEncerrar`).
 
+### Distância para o pódio
+
+- Diferença em pontos do ranking, com 1 casa. Mãos: diferença × 1000 ÷ ron fora do Leste (Mangan 8000, Haneman 12000, Baiman 16000, Yakuman 32000), para cima, sem contar uma. Arredonde antes de subir: 16,0 são 2 Mangans, não 3.
+- MCR: vitórias de mesa = diferença ÷ 4, para cima (proposta, a confirmar). Com pontos de mesa empatados, mostra a diferença do desempate.
+- Diferença 0 é "Empatado". Quem não jogou não entra. No Eliminatório, compara só na mesma fase, e a Disputa mostra a fase de cima.
+- Quem está no pódio vê a vantagem até o 4º. Os vizinhos não repetem o que o pódio já mostra.
+- Candidatos ao 1º: metade de cima, de 4 a 8. "Ainda alcança": diferença ≤ rodadas que faltam para ele × melhor resultado de uma rodada do torneio. É estimativa, sem marca em formato sem número de rodadas, torneio encerrado ou Eliminatório antes de zerar os pontos.
+- "Até a rodada" refaz ranking, setas e estimativa como estavam no fim daquela rodada.
+
+### Nomes e compartilhamento
+
+- Quem sai do cadastro mantém o nome no torneio (`Torneio.nomes`, depois o guardado na partida). Sem registro nenhum, "Jogador N" pela posição na lista, nunca "?".
+- O resultado da mesa mostra os pontos que ficaram na mesa e o resultado com uma.
+- Imagens e textos da rodada, do ranking e da disputa dizem o tipo do torneio. A imagem leva o QR do app (desligável em Ajustes) e o texto termina com o link. O QR leva à página inicial, porque o torneio só existe no aparelho do organizador.
+
 ### Registro de pontos
 
 - A folha de pontos aceita teclado físico (dígitos, `-`, `+`, Backspace, Enter, Esc) com as mesmas regras das teclas. O teclado do sistema só abre ao tocar no visor, e usa `PROPS_TECLADO_COM_SINAL`, porque `numeric` não tem o menos no Samsung.

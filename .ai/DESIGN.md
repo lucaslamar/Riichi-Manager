@@ -39,6 +39,10 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - `AjudaCampo` não vai dentro de `<label>` que envolve um campo: use um `div` e dê `aria-label` ao campo.
 - Selo do formato ao lado de "em andamento" no card, na rodada e no ranking. O nome trunca, os selos não.
 - Encerrar fica ao lado do Ranking, sempre com confirmação.
+- Ranking: visão e filtros ficam numa barra abaixo do nome do torneio, não no cabeçalho (no desktop ele é estreito).
+- Ranking: a linha inteira abre a folha da distância, com um botão no nome para teclado e leitor de tela. A folha mostra Mangan, Haneman e Yakuman, e o Baiman fica no leitor de tela e em "Distância em".
+- Quem está sendo acompanhado fica destacado e, fora da tela, fixo acima da navegação. Use `position: fixed`: `sticky` não gruda dentro do conteúdo principal.
+- QR das imagens sempre escuro em caixa branca, nos dois temas.
 - Cabeçalho da rodada: quatro ações de 44px no celular. No desktop ele mora no menu lateral estreito, com ações de 28px de largura.
 - Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.
 - Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.
