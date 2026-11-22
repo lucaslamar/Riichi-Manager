@@ -6,6 +6,8 @@
 
 - **Cenários de virada**: tocar numa distância do ranking do torneio mostra quantas mãos faltam por ron de terceiros e por ron direto no líder, o alvo se o líder ficar em 4º, no zero ou em 1º e o que falta com a uma de cada colocação.
 - **Como costuma terminar e chance de virar**: sem lançar mão nenhuma, o app usa as últimas 20 mesas finalizadas de cada um, do torneio e de fora dele, para dizer com quantos pontos costuma terminar, quantos Mangans faltam se terminar assim e a chance de virar.
+- **Mãos sem e com a média**: cada distância mostra as mãos que cobrem a diferença de agora e, logo abaixo, a conta pelo costume de cada um. No Ranking geral as mãos aparecem mesmo quando não dá para projetar.
+- **Diferença em pontos de mesa**: 7,2 no ranking aparece também como 7.200 pontos, sem uma.
 - **Estatísticas do jogador**: no torneio, no Brasileirão e no Ranking geral, com média, posições, maior mão e taxas de vitória, deal-in e riichi. As taxas e a maior mão só aparecem para partidas jogadas com o placar do app.
 - **Distância para o próximo**: no Ranking geral sem data de fim, a projeção diz em quantos jogos o jogador passa quem está acima, pela média de cada um.
 - **Menu do torneio**: Estatísticas do torneio e Compartilhar resultado.

@@ -72,13 +72,14 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Quem persegue é sempre quem está atrás, também na linha "Vantagem sobre". Só no Riichi e com diferença maior que zero.
 - Por ron de terceiros: a conta da distância. Por ron direto no líder cada ponto conta em dobro (Mangan = 16,0). Como na distância, cobrir é chegar a pelo menos o mesmo total.
 - Líder no próximo jogo: em 4º, no zero ou em 1º. O valor do 4º e do 1º é o de quem termina com os pontos de partida: uma + (partida − retorno) ÷ 1000, e a oka para o 1º. Nunca número fixo.
+- Diferença aparece também em pontos de mesa (7,2 = 7.200, pedido do usuário em 22/11/2026), sem contar uma. Por jogo sobe para o décimo de cima: 14,5 em 2 jogos são 7,3.
 - Com uma: o perseguidor em 1º, 2º ou 3º, com o líder no zero, pela mesma conta.
 - Suposição a confirmar: uma flutuante usa a linha de 2 acima do retorno, porque a linha real só se sabe no fim da mesa.
 - Ficam de fora tsumo e mão de oya, e o rodapé diz isso.
 - Jogos que faltam: rodadas do formato menos as jogadas. Cortado e torneio encerrado têm 0 (a diferença é final). Com pontos zerados no corte, conta só até o fim da fase. "Até a rodada" volta no tempo.
 - Fim por data (Brasileirão, ou Ranking geral com período personalizado com data final): estima os jogos pelo ritmo de cada um, a partir de 7 dias e 3 jogos. Este mês e Este ano não contam como fim.
 - Brasileirão por média ou melhores N: só a distância, sem cenários, porque mãos não viram pontos um para um.
-- Ranking geral sem fim: distância para quem está logo acima em pontos e projeção pela média. Passar é ficar acima, então na divisão exata é o jogo seguinte. Não projeta com menos de 3 jogos de qualquer um, média menor ou igual, ou mais de 100 jogos (suposições a confirmar).
+- Ranking geral sem fim: distância para quem está logo acima em pontos, com as mãos sem média (terceiros e direto, só no Riichi) e a projeção pela média. As mãos aparecem mesmo quando não dá para projetar. Passar é ficar acima, então na divisão exata é o jogo seguinte. Não projeta com menos de 3 jogos de qualquer um, média menor ou igual, ou mais de 100 jogos (suposições a confirmar).
 
 ### Como costuma terminar e chance de virar (pedido do usuário em 22/11/2026)
 
