@@ -1048,6 +1048,15 @@ button.mesa-domo {
   height: auto;
 }
 
+/* Em mesa pequena a letra do centro encolhe com o anel. */
+.mesa-tela--simples .mesa-painel .mesa-domo-segundos {
+  font-size: 8cqw;
+}
+
+.mesa-tela--simples .mesa-painel .mesa-domo-info {
+  font-size: min(0.75rem, 4cqw);
+}
+
 /* O círculo é menor que o da mesa de 4: a letra encolhe com ele. */
 .mesa-tri-domo .mesa-domo-segundos {
   font-size: 7cqw;
