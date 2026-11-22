@@ -43,7 +43,7 @@ interface PropsCampoNotacaoMao {
   aoEscolherEspera: (pedra: CodigoPedra) => void
   /** Sem Aka dora nas regras, o 0 (5 vermelho) fica desabilitado. */
   akadora: boolean
-  /** Modo sem 5 vermelho (MCR): a tecla 0 não existe. */
+  /** Modo sem 5 vermelho (MCR): no lugar do 0 fica um apagar largo. */
   semZero?: boolean
   /** Nome acessível de cada chamada, quando diz mais que o rótulo. */
   descricoesChamada?: Record<Meld['tipo'], string>
@@ -291,7 +291,7 @@ export function CampoNotacaoMao({
   }, [])
 
   return (
-    <div className={`campo-notacao-mao${semZero ? ' campo-notacao-mao--sem-zero' : ''}`}>
+    <div className="campo-notacao-mao">
       <div className="barra-notacao-mao" role="toolbar" aria-label={t('notation.toggle')}>
         {aoVoltar && (
           <button className="botao-voltar-pedras-notacao" type="button" onClick={aoVoltar}>
@@ -432,6 +432,17 @@ export function CampoNotacaoMao({
             {tecla.dica && <span className="dica-tecla-notacao-mao">{t(tecla.dica)}</span>}
           </button>
         ))}
+        {semZero && (
+          <button
+            className="tecla-notacao-mao area-n0"
+            type="button"
+            aria-label={t('notation.keys.backspace')}
+            title={t('notation.keys.backspace')}
+            onClick={apagar}
+          >
+            <i className="fas fa-delete-left rotulo-tecla-notacao-mao" aria-hidden="true" />
+          </button>
+        )}
       </div>
     </div>
   )

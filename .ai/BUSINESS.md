@@ -146,7 +146,7 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Riichi, dora e honba não existem no MCR e não aparecem nas telas do modo. Exceções: o nome do modo em Configurações e a parte opcional do Tutorial para quem vem do Riichi. Os nomes descritivos do CMC (Chow, Pung, Kong, trinca, quadra) podem ficar nas descrições.
 - O Guia de bolso do MCR perdeu a aba Riichi e o selo com o yaku equivalente, por esse critério. Os equivalentes ficam no módulo 24 do Tutorial. A busca continua achando pelo nome do yaku.
 - Nos códigos e nas chaves, os nomes internos seguem `pon`, `kanAberto`, `kanFechado`, `ron` e `tsumo`, para não mexer em dados salvos.
-- O MCR não tem 5 vermelho: o teclado MPSZ e a cena de ajuda não mostram o 0. Os números ficam em três colunas largas e M P S Z numa linha embaixo, tudo com a mesma altura. A cena de ajuda sempre repete o layout do teclado.
+- O MCR não tem 5 vermelho: o teclado MPSZ e a cena de ajuda não mostram o 0. M P S Z ficam sempre na coluna da direita, como no Riichi (o usuário recusou os naipes numa linha embaixo e também os números esticados em oval). O lugar do 0 é um ⌫ largo, e o ⌫ de cima continua, porque é o que sobra com a mão completa. A cena de ajuda sempre repete o layout do teclado.
 - Botões do MCR como os do Riichi (pedido do usuário em 22/11/2026, substitui o brief do mesmo dia): só o nome (Chi, Peng, Gang, An Gang, Zimo, Dianhe), sem ideogramas, e o MPSZ na mesma linha, sem menu ⋯. Os ideogramas continuam no Tutorial, no Glossário, no nome dos fan e no nome acessível das chamadas.
 
 ### Decisões em aberto

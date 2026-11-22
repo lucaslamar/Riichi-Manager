@@ -241,7 +241,7 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                 <span className="cena-ajuda__ac">AC</span>
                 <i className="fas fa-delete-left" />
               </div>
-              <div className={`cena-ajuda__teclado-numeros${chines ? ' cena-ajuda__teclado-numeros--sem-zero' : ''}`}>
+              <div className="cena-ajuda__teclado-numeros">
                 {CHAMADAS.map((chamada) => (
                   <span
                     key={chamada}
@@ -252,14 +252,19 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                     {t(rotuloChamadaCena(chamada))}
                   </span>
                 ))}
-                {TECLAS_NUMEROS.filter((tecla) => !chines || tecla !== '0').map((tecla) => (
+                {TECLAS_NUMEROS.map((tecla) => (
                   <span
                     key={tecla}
                     className={`cena-ajuda__tecla${/[mpsz]/.test(tecla) ? ' cena-ajuda__tecla--naipe' : ''}${
                       tecla === '0' ? ' cena-ajuda__tecla--zero' : ''
                     }${tocando(`tecla:${tecla}`)}`}
                   >
-                    {tecla.toUpperCase()}
+                    {/* MCR: sem 5 vermelho, o lugar do 0 é o apagar, como no teclado. */}
+                    {chines && tecla === '0' ? (
+                      <i className="fas fa-delete-left" />
+                    ) : (
+                      tecla.toUpperCase()
+                    )}
                   </span>
                 ))}
               </div>

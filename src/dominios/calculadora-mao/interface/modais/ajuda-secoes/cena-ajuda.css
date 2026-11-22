@@ -441,23 +441,6 @@
   color: var(--cor-primario, #1565c0);
 }
 
-/* MCR, como no teclado de verdade: chamadas, números em três colunas e os naipes por último. */
-.cena-ajuda__teclado-numeros--sem-zero {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-}
-
-.cena-ajuda__teclado-numeros--sem-zero > * {
-  grid-column: span 3;
-}
-
-.cena-ajuda__teclado-numeros--sem-zero > .cena-ajuda__tecla:not(.cena-ajuda__tecla--naipe) {
-  grid-column: span 4;
-}
-
-.cena-ajuda__teclado-numeros--sem-zero > .cena-ajuda__tecla--naipe {
-  order: 1;
-}
-
 /* 0 ocupa a largura dos três números, como no teclado de verdade. */
 .cena-ajuda__tecla--zero {
   grid-column: span 3;
