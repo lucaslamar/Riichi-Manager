@@ -84,6 +84,7 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 
 - Em torneio ninguém lança mão. As estatísticas e a projeção saem só do resultado das mesas.
 - Base de cada jogador: as rodadas do torneio (ou do Brasileirão) mais as outras mesas finalizadas dele, de 4, sem repetir. Fora: WO de quem não apareceu e a mesa em que ele mesmo saiu por W.O. "Até a rodada" não usa mesa que terminou depois. No geral valem os filtros.
+- Dessa base valem só as 20 mesas mais recentes de cada um, pela data (decidido com o usuário em 22/11/2026). O corte vem depois de tirar o que fica fora, então um W.O. não gasta vaga.
 - Cada mesa entra pelo saldo (final − partida) e pela colocação, com a uma das regras atuais. Assim 25.000 e 30.000 se misturam sem distorcer.
 - Costuma terminar com: pontos de partida atuais + saldo médio, em centenas. Por jogo: média de saldo + uma, retorno e oka da colocação.
 - Se terminarem assim: os dois jogam o que falta para cada um (sem fim conhecido, 1 jogo). O que sobra da diferença vira Mangans e diretos.
