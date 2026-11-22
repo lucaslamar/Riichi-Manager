@@ -1017,3 +1017,21 @@ body.teclado-aberto .clb-enviar {
     padding-inline: max(16px, calc((100% - 880px) / 2 + 16px));
   }
 }
+
+/* Histórico e Em andamento: com o menu lateral, duas colunas só quando o nome cabe. */
+@media (min-width: 1024px) and (max-width: 1279px) and (orientation: landscape) {
+  .cm-grupos,
+  .cm-grupo > .cm-lista,
+  .cm-pagina > .cm-lista {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Tablet e PC: nome inteiro no placar, quebrando linha se precisar. */
+@media (min-width: 768px) and (min-height: 561px) {
+  .cm-celula .cm-nome-texto {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+  }
+}
