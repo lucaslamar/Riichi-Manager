@@ -4,6 +4,15 @@
  */
 import { LARGURA_ESQUERDA, type BlocoRelatorio, type LinhaRelatorio, type Relatorio, type TomLinha } from '@/compartilhado/relatorio/relatorio'
 import { KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
+import {
+  candidatosAoPrimeiro,
+  compararCom,
+  disputantes,
+  distanciaParaPodio,
+  distanciasDoPodio,
+  vizinhosDoJogador,
+  type DistanciaAlvo,
+} from './distanciaPodio'
 import { ehMesaFinal } from './formatos/eliminatorio'
 import type { LinhaRankingTorneio } from './ranking'
 import type { RodadaTorneio, Torneio } from './tipos'
@@ -135,4 +144,116 @@ export function relatorioDoRanking(
     ...(rotulos.subtitulo ? { subtitulo: rotulos.subtitulo } : {}),
     blocos: [...(jaJogaram ? [podio] : []), tabela, lista],
   }
+}
+
+interface RotulosDistancia {
+  titulo: string
+  subtitulo: string
+  chamada: string
+  nome: (jogadorId: string) => string
+  pontos: (valor: number) => string
+  lugar: (posicao: number) => string
+  /** "Para o 1º (Fulano)". */
+  rotulo: (alvo: DistanciaAlvo) => string
+  valor: (alvo: DistanciaAlvo) => string
+  detalhe: (alvo: DistanciaAlvo) => string
+  /** "15,4 · 2 Mangans". */
+  resumo: (alvo: DistanciaAlvo) => string
+}
+
+/** Cada distância em duas linhas: a diferença e, embaixo, as mãos. */
+function linhasDeDistancia(alvos: readonly DistanciaAlvo[], rotulos: RotulosDistancia): LinhaRelatorio[] {
+  return alvos.flatMap((alvo) => {
+    const detalhe = rotulos.detalhe(alvo)
+    const vantagem = alvo.relacao === 'vantagem' || alvo.relacao === 'sobreOUltimo'
+    const linha: LinhaRelatorio = {
+      esquerda: rotulos.rotulo(alvo),
+      direita: rotulos.valor(alvo),
+      destaque: true,
+      ...(vantagem ? { tom: 'positivo' as const } : {}),
+    }
+    return detalhe ? [linha, { esquerda: detalhe }] : [linha]
+  })
+}
+
+/** Disputa do pódio: a faixa, os candidatos, quem está sendo acompanhado e os 2 últimos. */
+export function relatorioDaDisputa(
+  torneio: Torneio,
+  partidas: readonly Partida[],
+  linhas: readonly LinhaRankingTorneio[],
+  acompanhadoId: string | null,
+  rotulos: RotulosDistancia & {
+    podio: string
+    candidatos: string
+    fundo: string
+    versus: (acima: string, abaixo: string) => string
+    soComAjuda: string
+    vantagemNoFundo: (valor: string) => string
+    paraSair: (valor: string) => string
+  },
+): Relatorio {
+  const { lugar, nome } = rotulos
+  const blocos: BlocoRelatorio[] = [
+    {
+      titulo: rotulos.podio,
+      linhas: distanciasDoPodio(linhas).faixa.map(({ acima, abaixo, distancia }) => ({
+        esquerda: rotulos.versus(lugar(acima), lugar(abaixo)),
+        direita: rotulos.resumo(distancia),
+      })),
+    },
+    {
+      titulo: rotulos.candidatos,
+      linhas: candidatosAoPrimeiro(torneio, partidas, linhas).map(({ linha, paraOLider, alcanca }) => ({
+        esquerda: `${MEDALHAS[linha.posicao - 1] ?? lugar(linha.posicao)} ${nome(linha.jogadorId)}${alcanca === false ? ` (${rotulos.soComAjuda})` : ''}`,
+        direita: !paraOLider
+          ? rotulos.pontos(linha.pontos)
+          : `${paraOLider.diferenca ? '−' : ''}${rotulos.resumo(paraOLider)}`,
+        destaque: linha.posicao <= 3,
+      })),
+    },
+  ]
+
+  if (acompanhadoId) {
+    const { faltam, vantagem } = distanciaParaPodio(linhas, acompanhadoId)
+    const alvos = [...faltam, ...vantagem, ...vizinhosDoJogador(linhas, acompanhadoId)]
+    if (alvos.length) blocos.push({ titulo: nome(acompanhadoId), linhas: linhasDeDistancia(alvos, rotulos) })
+  }
+
+  const disputa = disputantes(linhas)
+  // Com 4 ou menos, o fundo já está inteiro no pódio.
+  if (disputa.length > 4) {
+    const [penultimo, ultimo] = disputa.slice(-2)
+    const distancia = compararCom(linhas, ultimo.jogadorId, penultimo.jogadorId)
+    if (distancia) {
+      blocos.push({
+        titulo: rotulos.fundo,
+        linhas: [
+          {
+            esquerda: `${lugar(penultimo.posicao)} ${nome(penultimo.jogadorId)}`,
+            direita: rotulos.vantagemNoFundo(rotulos.valor(distancia)),
+          },
+          {
+            esquerda: `${lugar(ultimo.posicao)} ${nome(ultimo.jogadorId)}`,
+            direita: rotulos.paraSair(rotulos.resumo(distancia)),
+          },
+        ],
+      })
+    }
+  }
+  return { titulo: rotulos.titulo, subtitulo: rotulos.subtitulo, chamada: rotulos.chamada, blocos }
+}
+
+/** A folha de um jogador: pódio, vizinhos e a comparação escolhida. */
+export function relatorioDoJogador(
+  linhas: readonly LinhaRankingTorneio[],
+  jogadorId: string,
+  comparadoId: string | undefined,
+  rotulos: RotulosDistancia,
+): Relatorio {
+  const { faltam, vantagem } = distanciaParaPodio(linhas, jogadorId)
+  const comparado = comparadoId ? compararCom(linhas, jogadorId, comparadoId) : null
+  const blocos = [[...faltam, ...vantagem], vizinhosDoJogador(linhas, jogadorId), comparado ? [comparado] : []]
+    .filter((alvos) => alvos.length > 0)
+    .map((alvos): BlocoRelatorio => ({ linhas: linhasDeDistancia(alvos, rotulos) }))
+  return { titulo: rotulos.titulo, subtitulo: rotulos.subtitulo, chamada: rotulos.chamada, blocos }
 }

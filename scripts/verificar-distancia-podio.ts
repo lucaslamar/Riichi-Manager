@@ -16,6 +16,7 @@ import {
 } from '../src/dominios/torneio/logica/distanciaPodio'
 import { FILTROS_PADRAO_TORNEIO, filtrosAtivos } from '../src/dominios/torneio/logica/filtrosRankingTorneio'
 import { rankingAteRodada, rankingDoTorneio, type LinhaRankingTorneio } from '../src/dominios/torneio/logica/ranking'
+import { relatorioDaDisputa, relatorioDoJogador } from '../src/dominios/torneio/logica/relatorios'
 import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
 import type { Torneio } from '../src/dominios/torneio/logica/tipos'
 
@@ -150,6 +151,41 @@ teste('MCR: vitórias de mesa e desempate', () => {
   assert.equal(maosParaCobrir(0.5, vitorias, MCR), 1)
   const linhas = linhasDe([8, 8]).map((linha, indice) => ({ ...linha, desempate: indice ? 20 : 57 }))
   assert.equal(distanciaParaPodio(linhas, 'p2').faltam[0].desempate, 37)
+})
+
+const ROTULOS = {
+  titulo: 'T',
+  subtitulo: 'S',
+  chamada: 'C',
+  nome: (id: string) => id,
+  pontos: String,
+  lugar: String,
+  rotulo: (alvo: { relacao: string }) => alvo.relacao,
+  valor: (alvo: { diferenca: number }) => String(alvo.diferenca),
+  detalhe: () => 'maos',
+  resumo: (alvo: { diferenca: number }) => String(alvo.diferenca),
+}
+
+teste('relatório da disputa', () => {
+  const relatorio = relatorioDaDisputa(torneio({ tipo: 'corridos' }), [], DOZE, null, {
+    ...ROTULOS,
+    podio: 'P',
+    candidatos: 'K',
+    fundo: 'F',
+    versus: (a, b) => a + 'x' + b,
+    soComAjuda: 'A',
+    vantagemNoFundo: (valor) => 'v' + valor,
+    paraSair: (valor) => 's' + valor,
+  })
+  assert.deepEqual(relatorio.blocos.map((bloco) => [bloco.titulo, bloco.linhas.length]), [['P', 3], ['K', 6], ['F', 2]])
+  assert.deepEqual(relatorio.blocos[2].linhas.map((linha) => [linha.esquerda, linha.direita]), [['11 p11', 'v4.2'], ['12 p12', 's4.2']])
+  assert.equal(relatorio.chamada, 'C')
+})
+
+teste('relatório do jogador', () => {
+  const relatorio = relatorioDoJogador(DOZE, 'p12', 'p7', ROTULOS)
+  assert.deepEqual(relatorio.blocos.map((bloco) => bloco.linhas.length), [6, 2, 2], 'cada distância em 2 linhas')
+  assert.equal(relatorio.blocos[1].linhas[0].esquerda, 'sairDoUltimo')
 })
 
 teste('filtros ativos', () => {
