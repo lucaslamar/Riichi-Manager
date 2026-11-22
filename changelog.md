@@ -14,6 +14,7 @@
 
 ### Corrigido
 
+- **Nota da grade com 8 e 12 jogadores**: uma grade no mínimo possível de repetições não aparece mais como Regular.
 - **Sortear de novo no Suíço e nos cortes do Eliminatório**: a opção devolvia as mesmas mesas, porque elas saem da classificação. Agora, depois da primeira partida, ela aparece só no Brasileirão e na Temporada, que sorteiam cada rodada.
 - **Sortear de novo no Rodízio**: a opção aparecia depois do primeiro resultado e não mudava nada. Agora aparece só antes da primeira partida, porque a grade sai inteira e equilibrada. Para refazer depois, use Reiniciar sorteio.
 

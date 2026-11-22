@@ -8,7 +8,7 @@
  * Estratégia:
  * 1. Embaralha a lista de jogadores.
  * 2. Tenta gerar a grade várias vezes (MAX_TENTATIVAS_SORTEIO).
- * 3. Guarda a melhor grade encontrada (menor score de qualidade).
+ * 3. Guarda a melhor grade encontrada (critérios de qualidade em ordem).
  */
 
 import { MAX_TENTATIVAS_SORTEIO, RODADAS_PADRAO, VENTOS } from './constantes'
@@ -28,6 +28,11 @@ function penalPar(jogadores: string[], contagem: Map<ChavePar, number>): number 
     }
   }
   return penalidade
+}
+
+function ehMelhor(um: readonly number[], outro: readonly number[]): boolean {
+  const diferente = um.findIndex((valor, indice) => valor !== outro[indice])
+  return diferente >= 0 && um[diferente] < outro[diferente]
 }
 
 /** Registra todos os pares de uma mesa no mapa de contagem. */
@@ -135,12 +140,12 @@ export function gerarGrade(
     const qualidade = avaliarGrade(rodadas, jogadores.length)
     const candidato: CandidatoGrade = { rodadas, qualidade }
 
-    if (melhorCandidato === null || qualidade.score < melhorCandidato.qualidade.score) {
+    if (melhorCandidato === null || ehMelhor(qualidade.criterios, melhorCandidato.qualidade.criterios)) {
       melhorCandidato = candidato
     }
 
     // Se a grade for perfeita, para cedo.
-    if (qualidade.score === 0) break
+    if (qualidade.criterios.every((valor) => valor === 0)) break
   }
 
   return equilibrarVentos ? melhorCandidato! : sortearVentos(melhorCandidato!, jogadores.length)

@@ -8,6 +8,8 @@
  * - Mesas completamente iguais (todos os 4 jogadores repetidos)
  */
 
+import { contarTrios } from '@/compartilhado/sorteio/contagens'
+import { minimoDeRepetidas } from '@/compartilhado/sorteio/minimos'
 import { MAX_ADVERSARIOS_REPETIDOS, MIN_JOGADORES_DISPERSAO, VENTOS } from './constantes'
 import type { ParRepetido, RelatorioQualidade, RepetidosPorJogador, Rodada } from './tipos'
 
@@ -119,7 +121,8 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
   const mesas = totalJogadores / VENTOS.length
   const totalPares = (totalJogadores * (totalJogadores - 1)) / 2
   const paresPorRodada = mesas * 6 // C(4,2) = 6 pares por mesa
-  const idealRepetidos = Math.max(0, paresPorRodada * rodadas.length - totalPares)
+  const idealRepetidos =
+    minimoDeRepetidas(totalJogadores, rodadas.length, 4) ?? Math.max(0, paresPorRodada * rodadas.length - totalPares)
 
   // Verificar se cada jogador jogou exatamente uma vez como Leste.
   const contadorLeste = new Map<string, number>()
@@ -154,26 +157,41 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
   }
 
   let maxRepetidosPorJogador = 0
+  /** A mesma medida do sorteio mitigado: concentrar num jogador custa ao quadrado. */
+  let espalhamento = 0
   const jogadoresComExcesso: RepetidosPorJogador[] = []
 
   for (const [jogador, adversarios] of adversariosRepetidosPorJogador) {
     const quantidade = adversarios.size
+    espalhamento += quantidade * quantidade
     if (quantidade > maxRepetidosPorJogador) maxRepetidosPorJogador = quantidade
     if (limiteRepetidos !== null && quantidade > limiteRepetidos) {
       jogadoresComExcesso.push({ jogador, quantidade, adversarios: [...adversarios] })
     }
   }
 
-  // Pontuação de qualidade: quanto menor, melhor.
-  const score =
-    tresVezesMais * 1000 +
-    duasVezes * 10 +
-    repeticoesVento +
-    mesasRepetidas * 500 +
-    (lesteExato ? 0 : 50)
+  const triosRepetidos = [
+    ...contarTrios(
+      rodadas.map((rodada) => ({
+        mesas: rodada.mesas.map((mesa) => ({ assentos: mesa.assentos.map((assento) => assento.jogador) })),
+      })),
+    ).values(),
+  ].filter((vezes) => vezes > 1).length
+
+  // As regras em ordem, como no sorteio mitigado: somar pesos quebraria a prioridade.
+  const criterios = [
+    lesteExato ? 0 : 1,
+    tresVezesMais,
+    mesasRepetidas,
+    triosRepetidos,
+    espalhamento,
+    duasVezes,
+    repeticoesVento,
+  ]
 
   return {
-    score,
+    criterios,
+    quantidadeTriosRepetidos: triosRepetidos,
     maxRepeticioesPar: maxRepeticoes,
     paresRepetidos: paresRepetidos.sort((a, b) => b.vezes - a.vezes),
     quantidadeParesRepetidos: paresRepetidos.length,

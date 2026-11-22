@@ -9,7 +9,18 @@ import { qualidadeDasRodadas, gerarRodizio } from '../src/dominios/torneio/logic
 import type { Partida } from '../src/dominios/centerpiece/logica/partida'
 import { criarPartidaManual } from '../src/dominios/centerpiece/logica/partidaManual'
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
-import { contarPares, contarVentos, custoDaMesa } from '../src/compartilhado/sorteio/mesas'
+import {
+  chaveDoPar,
+  contarPares,
+  contarTrios,
+  contarVentos,
+  jogadoresDaChave,
+  paresDaMesa,
+} from '../src/compartilhado/sorteio/contagens'
+import { minimoDeRepetidas } from '../src/compartilhado/sorteio/minimos'
+import { sortearRodada } from '../src/compartilhado/sorteio/rodada'
+import { compararCustos } from '../src/compartilhado/sorteio/custo'
+import { notaDaGrade } from '../src/dominios/torneio/logica/formatos/rodizio/qualidade'
 import { proximaRodada, rodadaFechada, rodadasIniciais } from '../src/dominios/torneio/logica/formatos'
 import {
   classificacaoDaFase,
@@ -65,7 +76,7 @@ for (const total of [8, 12, 16]) {
     assert.deepEqual(ventos, [1, 1, 1, 1], `Rodízio ${total}: ${jogador} uma vez em cada vento`)
   }
   const convertida = qualidadeDasRodadas(rodadas, total)
-  assert.equal(convertida.score, qualidade.score, 'conversão da grade não muda a nota')
+  assert.deepEqual(convertida.criterios, qualidade.criterios, 'conversão da grade não muda a nota')
   assert.equal(convertida.quantidadeParesRepetidos, qualidade.quantidadeParesRepetidos)
   // Com 8 jogadores e 4 rodadas a repetição é inevitável; com mais, cada par se cruza no máximo 2 vezes.
   assert.ok(qualidade.maxRepeticioesPar <= (total === 8 ? 3 : 2), `Rodízio ${total}: repetição máxima ${qualidade.maxRepeticioesPar}`)
@@ -104,7 +115,7 @@ function jogarRodada(torneio: Torneio, rodada: RodadaTorneio): Partida[] {
 /** Joga o torneio inteiro até não haver próxima rodada. */
 export function simular(formato: ConfigFormato, total: number, limite = 12) {
   const ids = jogadores(total)
-  const base = { ...criarRascunho({ id: `t-${formato.tipo}-${total}`, agora: new Date(agora), nome: 'Teste' }), formato }
+  const base = { ...criarRascunho({ id: `t-${formato.tipo}-${total}`, agora: new Date(agora), nome: 'Teste' }), formato, sortearVentos: true }
   let torneio = iniciarTorneio(base, ids, rodadasIniciais(base, ids, agora), agora)
   let partidas: Partida[] = []
   for (let volta = 0; volta < limite; volta++) {
@@ -128,6 +139,9 @@ function lesteEquilibrado(rodadas: readonly RodadaTorneio[], nome: string) {
   const leste = [...contarVentos(rodadas).values()].map((ventos) => ventos[0])
   assert.ok(Math.max(...leste) - Math.min(...leste) <= 1, `${nome}: Leste equilibrado (${leste.join(',')})`)
 }
+
+const custoDaMesa = (mesa: readonly string[], pares: ReadonlyMap<string, number>) =>
+  paresDaMesa(mesa).reduce((soma, [um, outro]) => soma + (pares.get(chaveDoPar(um, outro)) ?? 0) ** 2, 0)
 
 // ─── Suíço ──────────────────────────────────────────────────────────────────
 for (const total of [8, 12, 16]) {
@@ -401,6 +415,55 @@ for (const total of [8, 12, 16]) {
     assert.ok(corte, 'corte gerado')
     assert.ok(!podeSortearDeNovo({ ...grade, rodadas: [...grade.rodadas, corte] }, jogadas), 'corte não é sorteio')
   }
+}
+
+// ─── Sorteio mitigado: 50 torneios de cada, com semente fixa ────────────────
+{
+  assert.ok(compararCustos([0, 0, 1, 0, 0], [0, 0, 0, 999, 999]) > 0, 'trio pesa mais que qualquer repetição leve')
+  assert.ok(compararCustos([1, 0, 0, 0, 0], [0, 99, 0, 0, 0]) > 0, 'ventos primeiro')
+
+  let base = 42
+  const inteiro = (limite: number) => {
+    base = (base * 16807) % 2147483647
+    return Math.floor((base / 2147483647) * limite)
+  }
+  for (const comVentos of [true, false]) {
+    for (const [total, porMesa, quantas, maximo] of [
+      [8, 4, 3, 3],
+      [12, 4, 3, 2],
+      [16, 4, 4, 0],
+      [16, 4, 5, 0],
+      [9, 3, 4, 0],
+    ] as const) {
+      for (let vez = 0; vez < 50; vez++) {
+        const ids = jogadores(total)
+        const rodadas: RodadaTorneio[] = []
+        for (let numero = 1; numero <= quantas; numero++) {
+          const mesas = sortearRodada(ids, rodadas, { porMesa, comVentos, aleatorio: inteiro })
+          rodadas.push({ numero, geradaEm: agora, mesas })
+        }
+        const nome = `Mitigado ${total}/${porMesa}, ${quantas} rodadas${comVentos ? ' com ventos' : ''}, vez ${vez}`
+        const repetidas = [...contarPares(rodadas)].filter(([, vezes]) => vezes > 1)
+        assert.ok(repetidas.every(([, vezes]) => vezes === 2), `${nome}: ninguém 3x`)
+        assert.equal(repetidas.length, minimoDeRepetidas(total, quantas, porMesa), `${nome}: no mínimo`)
+        assert.ok([...contarTrios(rodadas).values()].every((vezes) => vezes === 1), `${nome}: sem trio repetido`)
+        for (const id of ids) {
+          const quantos = repetidas.filter(([par]) => jogadoresDaChave(par).includes(id)).length
+          assert.ok(quantos <= maximo, `${nome}: ${id} repetiu ${quantos}`)
+        }
+        if (comVentos) {
+          for (const ventos of contarVentos(rodadas).values()) {
+            assert.ok(ventos[0] <= Math.ceil(quantas / porMesa), `${nome}: Leste em ordem`)
+          }
+        }
+      }
+    }
+  }
+  for (const quantas of [3, 4]) {
+    const nota = notaDaGrade(gerarRodizio(jogadores(12), quantas, agora).qualidade)
+    assert.ok(nota === 'perfeita' || nota === 'boa', `Rodízio 12 com ${quantas}: ${nota}`)
+  }
+  console.log('Sorteio mitigado ok.')
 }
 
 console.log('Formatos ok.')
