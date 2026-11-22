@@ -184,11 +184,35 @@ export function sorteiaVentos(torneio: Pick<Torneio, 'sortearVentos' | 'formato'
   return torneio.sortearVentos ?? ventosPadrao(torneio.formato.tipo)
 }
 
-/** Nome de quem está no torneio: o do cadastro ou o escrito na lista (convidado). */
-export function nomeNoTorneio(torneio: Pick<Torneio, 'convidados'>, jogadores: readonly Jogador[], id: string): string {
+/** "?" foi gravado por versões que já não achavam o nome: não é um nome. */
+const SEM_NOME = new Set(['', '?', '—'])
+
+/**
+ * Nome de quem está no torneio: o do cadastro, o de convidado, o guardado no torneio
+ * ou o guardado numa partida. null quando não sobrou registro nenhum.
+ */
+export function nomeNoTorneio(
+  torneio: Pick<Torneio, 'convidados' | 'nomes'>,
+  jogadores: readonly Jogador[],
+  id: string,
+  partidas: readonly Pick<Partida, 'assentos'>[] = [],
+): string | null {
   const jogador = jogadores.find((item) => item.id === id)
   if (jogador) return nomeExibido(jogador)
-  return torneio.convidados?.[id] ?? '?'
+  const guardado = torneio.convidados?.[id] ?? torneio.nomes?.[id]
+  if (guardado && !SEM_NOME.has(guardado)) return guardado
+  for (const { assentos } of partidas) {
+    for (const assento of Object.values(assentos ?? {})) {
+      if (assento.jogadorId === id && assento.nome && !SEM_NOME.has(assento.nome)) return assento.nome
+    }
+  }
+  return null
+}
+
+/** Ao excluir do cadastro: o nome fica nos torneios em que a pessoa está. */
+export function guardarNomeNoTorneio(torneio: Torneio, id: string, nome: string): Torneio {
+  if (!torneio.jogadorIds.includes(id)) return torneio
+  return { ...torneio, nomes: { ...torneio.nomes, [id]: nome } }
 }
 
 export function iniciarTorneio(

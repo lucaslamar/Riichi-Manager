@@ -11,6 +11,7 @@ import { rodadaAleatoria } from '../src/dominios/torneio/logica/formatos/rodadaA
 import type { Jogador } from '../src/dominios/jogadores/logica/jogadores'
 import { migrarTorneiosV1, migrarTorneioV5 } from '../src/dominios/torneio/logica/migrarTorneioAntigo'
 import {
+  guardarNomeNoTorneio,
   nomeNoTorneio,
   configPadraoTorneio,
   criarRascunho,
@@ -213,7 +214,7 @@ assert.equal(formatoValido({ tipo: 'eliminatorio', classificatoria: 'suico', rod
   assert.ok(idsLista[0].startsWith('convidado-'))
   assert.deepEqual(convidados, { [idsLista[0]]: 'Novo 1' })
   assert.equal(nomeNoTorneio({ convidados }, cadastro, idsLista[0]), 'Novo 1')
-  assert.equal(nomeNoTorneio({}, cadastro, 'sumiu'), '?')
+  assert.equal(nomeNoTorneio({}, cadastro, 'sumiu'), null)
 }
 
 assert.equal(renomearPadraoAntigo('Encontro do clube 08/11'), 'Torneio 08/11')
@@ -311,6 +312,16 @@ assert.equal(renomearPadraoAntigo('Club meetup 11/8'), 'Tournament 11/8')
   const doMcr = partidasDoTorneioMcr(placares as unknown as Parameters<typeof partidasDoTorneioMcr>[0])
   const setasMcr = mudancasDoRanking(chines, doMcr)
   assert.ok((de(setasMcr, 'b')?.variacao ?? 0) > 0, 'MCR: vencedor da rodada 2 subiu')
+}
+
+// Excluído do cadastro: o nome vem do torneio ou da partida, nunca "?".
+{
+  const base = { ...criarRascunho({ id: 't-nomes', agora, nome: 'Nomes' }), jogadorIds: ['x'] }
+  assert.equal(nomeNoTorneio(guardarNomeNoTorneio(base, 'x', 'Saiu'), [], 'x'), 'Saiu')
+  assert.equal(guardarNomeNoTorneio(base, 'outro', 'Nada'), base)
+  const naPartida = (nome: string) => [{ assentos: { 0: { jogadorId: 'x', nome } } }] as unknown as Partida[]
+  assert.equal(nomeNoTorneio(base, [], 'x', naPartida('Da partida')), 'Da partida')
+  assert.equal(nomeNoTorneio(base, [], 'x', naPartida('?')), null)
 }
 
 assert.ok(podeEncerrar({ status: 'em_andamento' }))

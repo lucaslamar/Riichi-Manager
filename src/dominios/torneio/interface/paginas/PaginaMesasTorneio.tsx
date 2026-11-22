@@ -9,7 +9,6 @@ import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/M
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { CHAVE_VENTO, KANJI_VENTO, ORDEM_VENTOS, type Partida } from '@/dominios/centerpiece/logica/partida'
-import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { estatisticaDoTorneio } from '../../logica/estatisticaGrade'
 import { deveLembrarBackup } from '../../logica/exportacao'
 import { ACRESCIMO_SEGUNDOS } from '../../logica/configuracao'
@@ -45,7 +44,7 @@ import { relatorioDaRodada } from '../../logica/relatorios'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
 import '../torneio.css'
-import { nomeNoTorneio } from '../../logica/torneio'
+import { useNomeNoTorneio } from '../hooks/useNomeNoTorneio'
 
 /** Agora, atualizado a cada segundo enquanto algum relógio corre. */
 function useAgora(ativo: boolean) {
@@ -83,7 +82,7 @@ export default function PaginaMesasTorneio({
   const { t, idioma, numero } = useI18n()
   const { salvar, definirLista, finalizar, marcarTransferido } = useTorneios()
   const { partidas, descartarDoTorneio } = usePartidasDoTorneio()
-  const { jogadores } = useJogadores()
+  const nomeDoTorneio = useNomeNoTorneio()
   const { aviso, mostrar } = useAviso()
   const emJogo = rodadaAtual(torneio, partidas)
   const [abaRodada, setAbaRodada] = useState(emJogo?.numero ?? 1)
@@ -123,7 +122,7 @@ export default function PaginaMesasTorneio({
 
   if (!rodada) return null
 
-  const nomeDe = (id: string) => nomeNoTorneio(torneio, jogadores, id)
+  const nomeDe = (id: string) => nomeDoTorneio(torneio, id)
   const total = totalDeRodadas(torneio.formato)
   const titulo = total
     ? t('tournament.tables.roundOf', { round: rodada.numero, total })

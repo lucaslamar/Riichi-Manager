@@ -141,7 +141,7 @@ export default function PaginaEmAndamento({
               subtituloTorneio(torneio),
               dataHora(torneio.criadoEm),
               ...torneio.jogadorIds.flatMap((id) => [
-                nomeNoTorneio(torneio, jogadores, id),
+                nomeNoTorneio(torneio, jogadores, id, riichi.partidas) ?? '',
                 ...nomesDe(id),
               ]),
             ],

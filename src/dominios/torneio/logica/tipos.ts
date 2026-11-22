@@ -72,6 +72,8 @@ export interface Torneio {
   jogadorIds: string[]
   /** Quem joga sem cadastro: id de convidado e o nome escrito na lista. */
   convidados?: Record<string, string>
+  /** Nome de cada um quando entrou (ou saiu do cadastro): o torneio sobrevive à exclusão. */
+  nomes?: Record<string, string>
   /** O app já diz o vento de cada um. Ausente: o padrão do formato (`sorteiaVentos`). */
   sortearVentos?: boolean
   rodadas: RodadaTorneio[]

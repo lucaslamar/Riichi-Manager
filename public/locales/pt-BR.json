@@ -2155,7 +2155,8 @@
         "one": "{{count}} adversário",
         "other": "{{count}} adversários"
       }
-    }
+    },
+    "unknownPlayer": "Jogador {{number}}"
   },
   "backup": {
     "samePerson": {

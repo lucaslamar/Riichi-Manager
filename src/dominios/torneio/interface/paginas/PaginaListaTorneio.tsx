@@ -135,7 +135,8 @@ export default function PaginaListaTorneio({
     const agora = new Date().toISOString()
     // Ninguém é cadastrado sozinho: quem não está no cadastro entra como convidado.
     const { ids, convidados } = entradasDoTorneio(analise.nomes, jogadores, gerarId)
-    salvar(iniciarTorneio({ ...torneio, convidados }, ids, rodadasIniciais(torneio, ids, agora), agora))
+    const nomes = Object.fromEntries(ids.map((id, indice) => [id, analise.nomes[indice]]))
+    salvar(iniciarTorneio({ ...torneio, convidados, nomes }, ids, rodadasIniciais(torneio, ids, agora), agora))
     aoSortear()
   }
 

@@ -2221,7 +2221,8 @@
         "many": "{{count}} varžovo",
         "other": "{{count}} varžovų"
       }
-    }
+    },
+    "unknownPlayer": "Žaidėjas {{number}}"
   },
   "backup": {
     "samePerson": {

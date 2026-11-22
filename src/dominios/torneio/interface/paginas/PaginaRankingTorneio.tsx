@@ -7,7 +7,6 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
-import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { mudancasDoRanking, rankingDoTorneio, textoDaSeta } from '../../logica/ranking'
 import { relatorioDoRanking } from '../../logica/relatorios'
 import FolhaCompartilhar from '../componentes/FolhaCompartilhar'
@@ -16,7 +15,8 @@ import { nomeDeArquivo } from '@/compartilhado/relatorio/relatorio'
 import type { Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import '../torneio.css'
-import { nomeNoTorneio, podeEncerrar } from '../../logica/torneio'
+import { podeEncerrar } from '../../logica/torneio'
+import { useNomeNoTorneio } from '../hooks/useNomeNoTorneio'
 
 /**
  * Ranking do torneio: posição, jogador, pontos, média de colocação e partidas.
@@ -35,7 +35,7 @@ export default function PaginaRankingTorneio({
   // Deslizar para qualquer lado volta para a tela do torneio.
   useVoltarPorDeslize(aoVoltar)
   const { partidas } = usePartidasDoTorneio()
-  const { jogadores } = useJogadores()
+  const nomeDoTorneio = useNomeNoTorneio()
   const { finalizar } = useTorneios()
   const { aviso, mostrar } = useAviso()
   const [encerrando, setEncerrando] = useState(false)
@@ -47,7 +47,7 @@ export default function PaginaRankingTorneio({
   const [vendoEstatistica, setVendoEstatistica] = useState(false)
   const eliminatorio = torneio.formato.tipo === 'eliminatorio'
 
-  const nomeDe = (id: string) => nomeNoTorneio(torneio, jogadores, id)
+  const nomeDe = (id: string) => nomeDoTorneio(torneio, id)
   const pontos = (valor: number) =>
     `${valor > 0 ? '+' : ''}${new Intl.NumberFormat(idioma, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(valor)}`
   const media = (valor: number) =>

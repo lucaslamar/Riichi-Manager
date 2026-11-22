@@ -4,13 +4,12 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
-import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { encontrosDaTemporada, novoEncontro, rankingTemporada } from '../../logica/temporada'
 import type { CriterioTemporada, Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import { useSubtituloTorneio } from '../textoTorneio'
 import '../torneio.css'
-import { nomeNoTorneio } from '../../logica/torneio'
+import { useNomeNoTorneio } from '../hooks/useNomeNoTorneio'
 
 const OPCOES_MINIMO = [2, 4, 6, 8, 10] as const
 const OPCOES_MELHORES = [3, 5, 8, 10, 15] as const
@@ -28,7 +27,7 @@ export default function PaginaTemporada({
   const { t, idioma, numero } = useI18n()
   const { torneios, temporadas, salvar, salvarTemporada } = useTorneios()
   const { partidas } = usePartidasDoTorneio()
-  const { jogadores } = useJogadores()
+  const nomeDoTorneio = useNomeNoTorneio()
   const subtitulo = useSubtituloTorneio()
   const temporada = temporadas.find((item) => item.id === temporadaId)
   const encontros = useMemo(() => encontrosDaTemporada(torneios, temporadaId), [torneios, temporadaId])
@@ -49,7 +48,14 @@ export default function PaginaTemporada({
     new Intl.DateTimeFormat(idioma, { dateStyle: 'medium' }).format(new Date(`${dia}T12:00:00`))
   // Convidados: o nome vem do encontro em que jogaram.
   const nomeDe = (id: string) =>
-    nomeNoTorneio({ convidados: Object.assign({}, ...torneios.map((item) => item.convidados ?? {})) }, jogadores, id)
+    nomeDoTorneio(
+      {
+        convidados: Object.assign({}, ...torneios.map((item) => item.convidados ?? {})),
+        nomes: Object.assign({}, ...torneios.map((item) => item.nomes ?? {})),
+        jogadorIds: torneios.find((item) => item.jogadorIds.includes(id))?.jogadorIds ?? [],
+      },
+      id,
+    )
   const emAberto = encontros.find((encontro) => encontro.status !== 'finalizado')
   const mudarCriterio = (criterio: CriterioTemporada) => salvarTemporada({ ...temporada, criterio })
 

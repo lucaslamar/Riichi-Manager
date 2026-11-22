@@ -2128,7 +2128,8 @@
       "opponents": {
         "other": "상대 {{count}}명"
       }
-    }
+    },
+    "unknownPlayer": "선수 {{number}}"
   },
   "backup": {
     "samePerson": {

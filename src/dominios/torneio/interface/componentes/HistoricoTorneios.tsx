@@ -4,6 +4,7 @@ import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { historicoDeTorneios, type FiltroHistorico } from '../../logica/torneio'
 import type { FormatoTorneio, Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
+import { usePartidasDoTorneio } from '../hooks/usePartidasDoTorneio'
 import '../torneio.css'
 import { filtrarLista, type FiltrosLista } from '@/dominios/centerpiece/logica/filtrosAndamento'
 import { nomeNoTorneio } from '../../logica/torneio'
@@ -34,6 +35,7 @@ export default function HistoricoTorneios({
   const { t, idioma } = useI18n()
   const { torneios, temporadas } = useTorneios()
   const { jogadores } = useJogadores()
+  const { partidas } = usePartidasDoTorneio()
   const filtro: FiltroHistorico = {
     busca,
     formato: (filtrosLista.formato ?? 'todos') as FiltroHistorico['formato'],
@@ -44,7 +46,8 @@ export default function HistoricoTorneios({
   const finalizados = torneios.filter((torneio) => torneio.status === 'finalizado')
   const historico = useMemo(() => {
     const convidados = Object.assign({}, ...torneios.map((item) => item.convidados ?? {}))
-    const nomeDe = (id: string) => nomeNoTorneio({ convidados }, jogadores, id)
+    const nomes = Object.assign({}, ...torneios.map((item) => item.nomes ?? {}))
+    const nomeDe = (id: string) => nomeNoTorneio({ convidados, nomes }, jogadores, id, partidas) ?? ''
     const encontrados = historicoDeTorneios(torneios, filtro, nomeDe)
     // Período e ordem da folha de filtros, pelo dia do torneio.
     return filtrarLista(
@@ -61,7 +64,7 @@ export default function HistoricoTorneios({
     ).map((item) => item.torneio)
     // filtro sai de busca e filtrosLista.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [torneios, busca, filtrosLista, jogadores, idioma])
+  }, [torneios, busca, filtrosLista, jogadores, partidas, idioma])
   const data = (dia: string) =>
     new Intl.DateTimeFormat(idioma, { dateStyle: 'medium' }).format(new Date(`${dia}T12:00:00`))
 
