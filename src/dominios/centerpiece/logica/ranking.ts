@@ -28,7 +28,7 @@ const arredondar = (valor: number) => Math.round(valor * 100) / 100
 
 /**
  * Só as finalizadas, da mais recente para a mais antiga. Mesa de torneio só entra
- * depois de guardada pelo organizador.
+ * depois de guardada pelo organizador. WO não é partida jogada: fica só no torneio.
  */
 export function partidasDoHistorico(partidas: readonly Partida[]): Partida[] {
   return partidas
@@ -37,6 +37,7 @@ export function partidasDoHistorico(partidas: readonly Partida[]): Partida[] {
         partida.status === 'finalizada' &&
         partida.resultado &&
         partida.finalizadaEm &&
+        !partida.wo &&
         (!partida.vinculoTorneio || partida.vinculoTorneio.guardada),
     )
     .sort((uma, outra) => (outra.finalizadaEm ?? '').localeCompare(uma.finalizadaEm ?? ''))

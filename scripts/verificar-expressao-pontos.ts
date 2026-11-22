@@ -8,6 +8,7 @@ import {
   apagar,
   avaliar,
   digitar,
+  expressaoDigitada,
   inserirValor,
   operar,
   resolver,
@@ -42,4 +43,11 @@ assert.deepEqual(somaFecha(118000, 120000, 'primeiro'), { fecha: false, deposito
 assert.deepEqual(somaFecha(118000, 120000, 'perdidos'), { fecha: true, depositosNaMesa: 2 })
 assert.deepEqual(somaFecha(118500, 120000, 'perdidos'), { fecha: false, depositosNaMesa: 0 })
 assert.deepEqual(somaFecha(121000, 120000, 'perdidos'), { fecha: false, depositosNaMesa: 0 })
+// Teclado do sistema: mesmas regras das teclas
+assert.equal(expressaoDigitada('-12300'), '-12300')
+assert.equal(expressaoDigitada('-12.300'), '-12300')
+assert.equal(expressaoDigitada('+500'), '500')
+assert.equal(expressaoDigitada('30000--800'), '30000-800')
+assert.equal(expressaoDigitada('007'), '7')
+assert.equal(expressaoDigitada('12a3'), '123')
 console.log('Expressão de pontos ok.')

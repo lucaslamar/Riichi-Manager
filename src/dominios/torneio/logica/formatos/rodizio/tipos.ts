@@ -27,9 +27,10 @@ export type RepetidosPorJogador = {
   adversarios: string[]
 }
 
-/** Quanto menor o `score`, melhor a grade. */
+/** Grade melhor: menor no primeiro dos `criterios` em que diferir. */
 export type RelatorioQualidade = {
-  score: number
+  criterios: readonly number[]
+  quantidadeTriosRepetidos: number
   maxRepeticioesPar: number
   paresRepetidos: ParRepetido[]
   quantidadeParesRepetidos: number

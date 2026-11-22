@@ -261,111 +261,16 @@
   }
 }
 
-/* ─── Diagnóstico da Grade (do Torneio antigo) ─────────────────────────────── */
-.trn-subtitulo {
-  margin: 12px 0 6px;
-  font-size: 0.9rem;
-  font-weight: 800;
-}
-
-.trn-bloco-painel {
-  border: 1px solid var(--linha-divisoria);
-  border-radius: 12px;
-  padding: 12px 14px;
-  background: var(--superficie);
-}
-
-.trn-cabecalho-painel {
-  display: flex;
-  width: 100%;
-  min-height: 44px;
-  align-items: center;
-  gap: 10px;
-  border: 0;
-  padding: 0;
-  color: var(--texto-principal);
-  background: transparent;
-  cursor: pointer;
-  font: inherit;
-  text-align: left;
-}
-
-.trn-cabecalho-painel strong {
-  flex: 1 1 auto;
-}
-
-.trn-pilula {
-  border-radius: 999px;
-  padding: 2px 10px;
-  color: var(--superficie);
-  font-size: 0.8125rem;
-  font-weight: 800;
-}
-
-.trn-pilula--perfeita,
-.trn-pilula--boa {
-  background: var(--texto-positivo);
-}
-
-.trn-pilula--regular {
-  background: var(--texto-aviso);
-}
-
-.trn-pilula--ruim {
-  background: var(--texto-erro);
-}
-
-.trn-metricas {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 10px 0 0;
-}
-
-.trn-metrica dt {
-  font-size: 0.8125rem;
-  font-weight: 700;
-}
-
-.trn-metrica dd {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-
-.trn-metrica p {
-  margin: 0;
-  color: var(--texto-apoio);
-  font-size: 0.75rem;
-}
-
-.trn-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.trn-chip {
-  border: 1px solid var(--linha-divisoria);
-  border-radius: 999px;
-  padding: 2px 10px;
-  font-size: 0.8125rem;
-}
-
 .trn-tabela-rolagem {
   overflow-x: auto;
 }
 
-.trn-tabela-ventos,
 .trn-ranking {
   width: 100%;
   border-collapse: collapse;
   font-variant-numeric: tabular-nums;
 }
 
-.trn-tabela-ventos th,
-.trn-tabela-ventos td,
 .trn-ranking th,
 .trn-ranking td {
   border-bottom: 1px solid var(--linha-divisoria);
@@ -373,8 +278,6 @@
   text-align: left;
 }
 
-.trn-tabela-ventos th:not(:first-child),
-.trn-tabela-ventos td:not(:first-child),
 .trn-numero {
   text-align: right;
 }
@@ -1022,7 +925,7 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   align-items: center;
   gap: 8px;
   width: 100%;
-  min-height: 36px;
+  min-height: 44px;
   margin: 8px 0 4px;
   padding: 0 12px;
   border: 0;
@@ -1043,9 +946,14 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   white-space: nowrap;
 }
 
+/* Formato e "em andamento": pílulas que não cortam (quem trunca é o nome). */
 .trn-selo-em-jogo small {
-  font-weight: 400;
-  opacity: 0.8;
+  flex: none;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 /* Torneio transferido: notificação compacta, com o Desfazer pequeno à direita. */
@@ -1102,4 +1010,510 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 /* Exportar torneio: a explicação de Copiar ou Transferir com respiro abaixo do seletor. */
 .cfg-ajuda.trn-exportar-ajuda {
   margin-top: 10px;
+}
+
+/* Mudança de posição: junto do número, sem coluna nova. */
+.trn-seta-posicao {
+  position: relative;
+  display: inline-block;
+  min-width: 22px;
+  margin-left: 2px;
+  color: var(--texto-apoio);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.trn-seta-posicao.trn-positivo {
+  color: var(--texto-positivo);
+}
+
+.trn-seta-posicao.trn-negativo {
+  color: var(--texto-erro);
+}
+
+.trn-tabela-ranking td:first-child {
+  white-space: nowrap;
+}
+
+.cfg-ajuda.trn-legenda-setas {
+  margin-top: 8px;
+}
+
+/* ? do Formato: um bloco por formato, com o escolhido em destaque. */
+.trn-guia-formatos {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.trn-guia-formatos li {
+  display: grid;
+  gap: 2px;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.trn-guia-formatos li[aria-current] {
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+}
+
+.trn-guia-formatos li > span:last-child {
+  color: var(--texto-apoio);
+}
+
+.cfg-ajuda.trn-regra-curta {
+  margin-top: 0;
+}
+
+/* Quatro ações no cabeçalho da rodada: 44px cada, encostadas para o título caber. */
+.trn-acoes-rodada {
+  gap: 0;
+}
+
+.trn-acoes-rodada .cm-btn-icone {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* No desktop o cabeçalho mora no menu lateral, estreito: mouse, botões menores. */
+@media (min-width: 1024px) {
+  .trn-acoes-rodada .cm-btn-icone {
+    width: 28px;
+    min-width: 28px;
+  }
+}
+
+/* Pontos que ficaram na mesa, acima do resultado com uma. */
+.trn-assento-pontos.trn-assento-bruto {
+  position: relative;
+  color: var(--texto-principal);
+  font-weight: 700;
+}
+
+.trn-mesa .clb-assento:has(.trn-assento-bruto) {
+  grid-template-rows: none;
+}
+
+.trn-mesa .clb-assento:has(.trn-assento-bruto) .clb-assento-kanji {
+  grid-row: 1 / span 4;
+}
+
+/* Em flex o text-overflow não vale e o nome longo era cortado sem "…". */
+.trn-mesa .clb-assento:has(.trn-assento-bruto) .clb-assento-nome {
+  display: block;
+}
+
+/* A colocação é neutra e separada pelo espaço: só os pontos levam a cor. */
+.trn-colocacao {
+  margin-right: 6px;
+  color: var(--texto-apoio);
+  font-weight: 700;
+}
+
+/* Ranking: visão, filtros e linha tocável. */
+.trn-barra-ranking {
+  justify-content: flex-start;
+}
+
+.trn-barra-ranking .rkf-icone {
+  width: 44px;
+  height: 44px;
+}
+
+.trn-barra-ranking .rkf-contagem {
+  top: 6px;
+  right: 6px;
+}
+
+.trn-alternar-visao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 6px;
+  border: 0;
+  color: var(--texto-apoio);
+  background: transparent;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.trn-alternar-visao[aria-pressed='true'],
+.trn-disputa-seguido > span {
+  color: var(--primario);
+}
+
+.trn-ate-rodada {
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+}
+
+.trn-tabela-ranking .trn-linha-toque {
+  cursor: pointer;
+}
+
+.trn-tabela-ranking .trn-linha-toque > td:nth-child(2) {
+  padding-block: 0;
+}
+
+.trn-nome-ranking {
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.trn-tabela-ranking .trn-linha-toque:hover,
+.trn-tabela-ranking .trn-linha-toque:active,
+.trn-tabela-ranking .trn-linha-seguida {
+  background: color-mix(in srgb, var(--primario) 12%, transparent);
+}
+
+.trn-tabela-ranking.trn-tabela-disputa th,
+.trn-tabela-ranking.trn-tabela-disputa td {
+  padding-inline: 4px;
+}
+
+.trn-tabela-ranking.trn-tabela-disputa th:nth-child(n + 4) {
+  min-width: 52px;
+}
+
+.trn-ranking:has(> .trn-seguido-fixo) {
+  padding-bottom: 72px;
+}
+
+/* Fixa, e não sticky: o conteúdo principal tem overflow e não é quem rola. */
+.trn-seguido-fixo {
+  position: fixed;
+  z-index: 20;
+  bottom: calc(var(--altura-barra-inferior, 0px) + env(safe-area-inset-bottom, 0px) + 6px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(440px, calc(100vw - var(--largura-trilho, 0px) - 24px));
+  min-height: 48px;
+  padding: 0 12px;
+  border: 2px solid var(--primario);
+  border-radius: 12px;
+  color: var(--texto-principal);
+  background: var(--fundo);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trn-seguido-fixo > strong {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trn-acompanhado {
+  justify-content: space-between;
+}
+
+/* Disputa do pódio. */
+.trn-disputa-lista,
+.trn-distancia-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.trn-disputa-lista li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 10px;
+  min-height: 38px;
+  padding: 4px;
+  border-bottom: 1px solid var(--linha-divisoria);
+}
+
+.trn-disputa-lista li > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.trn-disputa-lista li > span > small {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+}
+
+.trn-disputa-lista li > span > small.trn-positivo {
+  color: var(--texto-positivo);
+}
+
+.trn-disputa-lista li > strong {
+  flex-shrink: 0;
+  max-width: 65%;
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.trn-disputa-lista .trn-fora-de-alcance {
+  color: var(--texto-apoio);
+}
+
+.rkf-titulo.trn-disputa-titulo {
+  margin: 16px 0 4px;
+}
+
+.cfg-ajuda.trn-disputa-aviso {
+  margin: 6px 0 12px;
+}
+
+/* Folha da distância de um jogador. */
+.trn-distancia-lista + .trn-distancia-lista {
+  margin-top: 6px;
+  border-top: 2px solid var(--linha-divisoria);
+}
+
+.trn-distancia-lista li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
+  padding: 7px 0;
+}
+
+.trn-distancia-lista .trn-medalha {
+  grid-row: span 2;
+}
+
+.trn-distancia-rotulo {
+  grid-column: 2;
+  overflow-wrap: anywhere;
+}
+
+.trn-distancia-lista strong {
+  grid-column: 3;
+}
+
+.trn-distancia-lista small {
+  grid-column: 2 / -1;
+  color: var(--texto-apoio);
+}
+
+.trn-distancia-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.trn-distancia-acoes select {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 2px solid var(--entrada-borda);
+  border-radius: 10px;
+  color: var(--texto-principal);
+  background: var(--fundo);
+  font: inherit;
+}
+
+.trn-distancia-acoes .cm-btn-icone {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  margin-left: auto;
+}
+
+.cfg-ajuda.trn-distancia-aviso {
+  margin-top: 6px;
+}
+
+/* Inscrição e premiação. */
+.trn-premio-resumo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 1px solid var(--linha-divisoria);
+  color: var(--texto-principal);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trn-premio-resumo > i {
+  color: var(--primario);
+}
+
+.trn-premio-resumo > span {
+  flex: 1;
+}
+
+.trn-premio-linha {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.trn-premio-antecipada {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 10px;
+}
+
+.trn-premio-antecipada > label {
+  min-width: 0;
+}
+
+.trn-premio-antecipada > .trn-premio-ate {
+  grid-column: 1 / -1;
+}
+
+.trn-quadro-premio {
+  margin: 14px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.trn-quadro-premio > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--linha-divisoria);
+}
+
+.trn-quadro-premio dt small {
+  display: block;
+  color: var(--texto-apoio);
+}
+
+.trn-quadro-premio dd {
+  margin: 0;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.trn-quadro-premio .trn-quadro-posicao {
+  padding-left: 14px;
+}
+
+/* WO e atraso. */
+.trn-mesa-acoes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trn-mesa-acoes > .clb-mesa-botao {
+  flex: 1;
+  min-width: 0;
+}
+
+.trn-mesa-acoes > .cm-btn-icone {
+  flex-shrink: 0;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.trn-atraso,
+.trn-wo-linha {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cfg-ajuda.trn-wo-pergunta {
+  margin: 0 0 4px;
+}
+
+.trn-wo-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trn-wo-lista label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  cursor: pointer;
+}
+
+.trn-wo-lista input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--primario);
+}
+
+.trn-wo-lista label > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.trn-wo-remontar {
+  margin-top: 12px;
+}
+
+.trn-wo-remontar > p {
+  margin: 0 0 8px;
+}
+
+.trn-wo-remontar > button {
+  width: 100%;
+  min-height: 44px;
+}
+
+.trn-wo-campos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 10px;
+}
+
+.trn-wo-campos > label {
+  min-width: 0;
+}
+
+/* ? do Número de rodadas. */
+.trn-guia-rodadas {
+  margin-top: 10px;
+}
+
+.trn-guia-rodadas li.trn-guia-rodadas--atual {
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+}
+
+/* Duas linhas de resumo logo abaixo do formato, juntas. */
+.trn-resumo-formato > span {
+  display: block;
+}
+
+.trn-guia-formatos + p + p {
+  margin-top: 16px;
 }

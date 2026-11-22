@@ -25,7 +25,7 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 
 ## Modo de jogo (versão 7.0.0)
 
-- A versão atual é a 7.0.0, que introduziu o modo de jogo global. A versão exibida e a do backup vêm do `package.json` (`__VERSAO_APP__` no `vite.config.ts`).
+- O modo de jogo global entrou na 7.0.0. A versão exibida e a do backup vêm do `package.json` (`__VERSAO_APP__` no `vite.config.ts`).
 - `src/compartilhado/modo-jogo`: `ModoJogo` é `'riichi' | 'mcr'`, com padrão `'riichi'`. O `ModoJogoProvider` envolve o app em `src/main.tsx`, abaixo do `PreferenciasProvider`, e grava o modo em `localStorage` na chave `rm.modoJogo`. `useModoJogo()` devolve `modo`, `setModo` e `isChines`. O provider também põe `data-modo` no `<html>` e atualiza o `document.title`. `maoEmAndamento.ts` avisa ao cartão de modo se a calculadora chinesa tem pedras.
 - `src/compartilhado/marca/nome-app.ts`: o nome exibido é Riichi Manager no Japonês e Mahjong Manager no Chinês. Repositório, `base`, manifesto, ícones e chaves de armazenamento não mudam.
 - `src/compartilhado/interface/layout/navegacao.ts`: `navegacaoDoModo(modo)` devolve páginas, itens e ordem do carrossel. No Riichi devolve as listas originais, sem mudança. No MCR ficam ocultas a Han e Fu, o Centerpiece e as Partidas, e entra a tela `placarMcr`, que só existe no MCR. A barra do MCR tem duas páginas: Calculadora, Placar, Ranking e Sorteador, e depois o Tutorial. O subitem Registrar partida finalizada (`SUBITENS_SO_RIICHI`) some no MCR. A Calculadora de Mão continua no mesmo lugar e, no App, mostra a calculadora chinesa. O Tutorial abre o `TutorialMcr` no lugar do `GuiaAprender`. Ao trocar de modo numa tela que não existe no outro, o App volta para a Calculadora.
@@ -48,3 +48,21 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 - Hub do placar MCR: `PaginaPlacarMcr` usa a tela em cartões da Partida do Riichi (`ptd-inicio`, `ptd-cards`), montada de uma lista de entradas. O histórico do MCR são os placares finalizados na chave `riichi-manager-placares-mcr` (banco local, no backup). Não foi criada uma chave nova `rm.historico.v1`: as partidas do Riichi já têm o próprio histórico, e duplicar os dados criaria duas fontes da verdade.
 - Torneio MCR: é o Torneio do Riichi (`dominios/torneio`, mesmas telas e formatos), aberto pelo cartão Torneio do hub do Placar. `Torneio.jogo = 'mcr'` separa os torneios e temporadas por modo em `useTorneios`. As mesas são placares MCR com `torneio: { id, rodada, mesa }` (e `convidados` para os nomes sem cadastro). `usePartidasDoTorneio` entrega ao Torneio as partidas do modo: no Chinês, `partidasDoTorneioMcr` converte os placares com `final` = pontos de mesa e `desempate` = soma dos pontos. `classificar` e o ranking usam `desempate` (sempre 0 no Riichi). Na configuração, a aba Pontuação do Riichi dá lugar à regra MCR.
 - Exemplos do Guia de bolso MCR: cada fan de `fans-mcr.ts` tem `exemplo` na notação de `compartilhado/mahjong/mcr/notacao.ts` (lida por `lerNotacaoMcr`). Os 81 foram escritos aqui e conferidos pelo motor: `test:fan-mcr` roda todos e exige o próprio fan na mão. Os fan da mão e o total não ficam gravados, são calculados na hora (`calcularNotacaoMcr`), então nunca ficam desatualizados. `ExemploFanMcr` desenha com as classes do exemplo do Riichi (`yaku-tiles`) e acende as pedras pela mesma regra do resultado.
+
+## Torneio
+
+- `logica/ranking.ts`: classificação com posições, `rankingAteRodada`, `mudancasDoRanking` (setas) e `mudancaAoRegistrar` (confirmação). Lê só partidas, então vale para o Riichi e para os placares MCR convertidos.
+- `RegistrarFinalizada` não depende da lógica do Torneio: `PaginaCenterpiece` passa a função `mudancas` por prop.
+- `logica/distanciaPodio.ts` e `logica/filtrosRankingTorneio.ts`: distâncias, candidatos e filtros, sem tela. `useTextosDistancia` dá os mesmos textos à tela, à folha e aos relatórios.
+- `logica/premiacao.ts`: cálculo puro. `Torneio.premiacao` e `Temporada.premiacao` são opcionais, então arquivos antigos continuam valendo.
+- `logica/wo.ts`: o WO é uma `Partida` com `wo.ausentes`, e o atraso fica em `ResultadoFinal.atraso`, já descontado do `final`. `partidasDoHistorico` tira o WO.
+- `src/compartilhado/modo-jogo/regrasDoModo.ts`: o que muda por modo no ranking (nome dos pontos, unidades da distância e padrão de WO). Escolha por `torneio.jogo`, sem `if` de modo nas telas.
+- `src/compartilhado/marca/url-app.ts`: `URL_DO_APP`, único endereço do site para QR e textos.
+- `interface/componentes/SetaPosicao` e `GuiaFormatos`: seta do ranking e conteúdo do ? do Formato.
+
+## Sorteio
+
+- `src/compartilhado/sorteio`: `aleatorio`, `contagens`, `custo` (regras em ordem), `mesas` (trocas entre vizinhos), `rodada` (tentativas com orçamento por tamanho), `semRepeticao` (16 em 4 e 9 em 3), `minimos` e `estatistica`. Não importa domínios.
+- `src/compartilhado/interface/componentes/sorteio`: painel `QualidadeSorteio` e folha `DetalhesSorteio`, usados pelo Torneio (`logica/estatisticaGrade.ts`) e pelo Clube (`situacaoDoDia`).
+- A grade do Rodízio de 4 continua em `torneio/logica/formatos/rodizio`, comparando `criterios` em ordem.
+- `EncontroClube.mesas` e `foraDoDia` são opcionais: backups antigos continuam valendo.

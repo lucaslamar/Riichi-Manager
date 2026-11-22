@@ -5,6 +5,10 @@
  * Uso: npm run test:exportacao
  */
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import QRCode from 'qrcode'
+import jsQR from 'jsqr'
+import { URL_DO_APP } from '../src/compartilhado/marca/url-app'
 import { criarPartida, type Partida } from '../src/dominios/centerpiece/logica/partida'
 import type { Jogador } from '../src/dominios/jogadores/logica/jogadores'
 import {
@@ -182,4 +186,27 @@ console.log('Exportação ok.')
   assert.equal(cameraPrincipal([{ deviceId: 'a', label: 'Câmera traseira' }]), 'a')
   assert.equal(cameraPrincipal([{ deviceId: 'b', label: '' }]), null)
   console.log('Câmera do leitor ok.')
+}
+
+// QR das imagens: aponta para o homepage, com módulos inteiros em 222 px, e o jsQR lê.
+{
+  assert.equal(URL_DO_APP, JSON.parse(readFileSync('package.json', 'utf8')).homepage)
+  const { modules } = QRCode.create(URL_DO_APP, { errorCorrectionLevel: 'L' })
+  const lado = modules.size + 8
+  const escala = Math.floor(222 / lado)
+  assert.equal(222 % lado, 0, `222 px não é múltiplo de ${lado} módulos`)
+  assert.ok(modules.size * escala >= 160, 'pelo menos 160 px de QR')
+  const pixels = new Uint8ClampedArray(222 * 222 * 4)
+  for (let y = 0; y < 222; y++) {
+    for (let x = 0; x < 222; x++) {
+      const linha = Math.floor(y / escala) - 4
+      const coluna = Math.floor(x / escala) - 4
+      const dentro = linha >= 0 && coluna >= 0 && linha < modules.size && coluna < modules.size
+      const tom = dentro && modules.get(linha, coluna) ? 0 : 255
+      pixels.set([tom, tom, tom, 255], (y * 222 + x) * 4)
+    }
+  }
+  const ler = ((jsQR as unknown as { default?: typeof jsQR }).default ?? jsQR) as typeof jsQR
+  assert.equal(ler(pixels, 222, 222)?.data, URL_DO_APP)
+  console.log('QR das imagens ok.')
 }

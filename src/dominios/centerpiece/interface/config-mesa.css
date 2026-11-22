@@ -310,3 +310,35 @@
   padding: 0;
   list-style: none;
 }
+
+/* Registro no torneio: atraso opcional. */
+.fin-atraso > summary {
+  min-height: 44px;
+  padding-block: 12px;
+  color: var(--texto-apoio);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.fin-atraso-linha {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+}
+
+.fin-atraso-linha > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.fin-atraso-linha > select {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 2px solid var(--entrada-borda);
+  border-radius: 10px;
+  color: var(--texto-principal);
+  background: var(--fundo);
+  font: inherit;
+}

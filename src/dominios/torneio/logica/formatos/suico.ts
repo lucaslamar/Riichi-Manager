@@ -6,8 +6,9 @@
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { classificar } from '../classificacao'
 import type { RodadaTorneio, Torneio } from '../tipos'
-import { jogadoresPorMesa } from '../torneio'
-import { mesasPelaOrdem, type JogadoresPorMesa } from './comum'
+import { jogadoresPorMesa, sorteiaVentos } from '../torneio'
+import type { JogadoresPorMesa } from '@/compartilhado/sorteio/contagens'
+import { mesasPelaOrdem } from '@/compartilhado/sorteio/mesas'
 
 function rodadaSuica(
   ordem: readonly string[],
@@ -15,11 +16,12 @@ function rodadaSuica(
   numero: number,
   agora: string,
   porMesa: JogadoresPorMesa = 4,
+  comVentos = true,
 ): RodadaTorneio {
-  return { numero, geradaEm: agora, mesas: mesasPelaOrdem(ordem, anteriores, porMesa) }
+  return { numero, geradaEm: agora, mesas: mesasPelaOrdem(ordem, anteriores, porMesa, comVentos) }
 }
 
 export function proximaRodadaSuica(torneio: Torneio, partidas: readonly Partida[], agora: string) {
   const ordem = classificar(torneio, partidas).map((linha) => linha.jogadorId)
-  return rodadaSuica(ordem, torneio.rodadas, torneio.rodadas.length + 1, agora, jogadoresPorMesa(torneio))
+  return rodadaSuica(ordem, torneio.rodadas, torneio.rodadas.length + 1, agora, jogadoresPorMesa(torneio), sorteiaVentos(torneio))
 }

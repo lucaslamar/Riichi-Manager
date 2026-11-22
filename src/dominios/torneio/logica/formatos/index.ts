@@ -2,7 +2,7 @@
  * Geração das rodadas de cada formato. Tudo puro: a tela chama e salva.
  */
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
-import { jogadoresPorMesa, progressoDaRodada } from '../torneio'
+import { jogadoresPorMesa, sorteiaVentos, progressoDaRodada } from '../torneio'
 import type { RodadaTorneio, Torneio } from '../tipos'
 import { rodadaCorridos } from './corridos'
 import { proximaRodadaEliminatoria } from './eliminatorio'
@@ -18,7 +18,7 @@ import { gerarRodizio } from './rodizio/rodizio'
 export function gerarRodizioSanma(jogadorIds: readonly string[], totalRodadas: number, agora: string): RodadaTorneio[] {
   const rodadas: RodadaTorneio[] = []
   for (let numero = 1; numero <= totalRodadas; numero++) {
-    rodadas.push(rodadaCorridos(jogadorIds, rodadas, numero, agora, undefined, 3))
+    rodadas.push(rodadaCorridos(jogadorIds, rodadas, numero, agora, { porMesa: 3 }))
   }
   return rodadas
 }
@@ -53,7 +53,13 @@ export function rodadaFechada(torneio: Torneio, partidas: readonly Partida[]): b
  * A próxima rodada, se o formato tiver uma e a atual estiver fechada. `null` quando
  * ainda falta resultado ou o formato acabou (o Rodízio já sai inteiro no sorteio).
  */
-export function proximaRodada(torneio: Torneio, partidas: readonly Partida[], agora: string): RodadaTorneio | null {
+export function proximaRodada(
+  torneio: Torneio,
+  partidas: readonly Partida[],
+  agora: string,
+  /** Sortear de novo: as mesas que acabaram de sair. */
+  evitar?: RodadaTorneio['mesas'],
+): RodadaTorneio | null {
   if (!rodadaFechada(torneio, partidas)) return null
   const { formato } = torneio
   if (formato.tipo === 'suico' && torneio.rodadas.length < formato.rodadas) {
@@ -66,8 +72,7 @@ export function proximaRodada(torneio: Torneio, partidas: readonly Partida[], ag
       torneio.rodadas,
       torneio.rodadas.length + 1,
       agora,
-      undefined,
-      jogadoresPorMesa(torneio),
+      { porMesa: jogadoresPorMesa(torneio), comVentos: sorteiaVentos(torneio), evitar },
     )
   }
   return null

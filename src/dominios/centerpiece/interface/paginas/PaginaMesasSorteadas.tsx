@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
-import type { MesaDoSorteio } from '../../logica/encontroClube'
-import { textoDasMesas } from '../../logica/listaClube'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import QualidadeSorteio from '@/compartilhado/interface/componentes/sorteio/QualidadeSorteio'
+import { situacaoDoDia, type MesaDoSorteio } from '../../logica/encontroClube'
+import { chaveDaEntrada, textoDasMesas } from '../../logica/listaClube'
 import { CHAVE_VENTO, KANJI_VENTO } from '../../logica/partida'
 import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import { useAviso } from '../hooks/useAviso'
@@ -26,7 +28,9 @@ export default function PaginaMesasSorteadas({
   aoRegistrarMesa: (mesa: MesaDoSorteio) => void
 }) {
   const { t, idioma } = useI18n()
-  const { sorteio, sortearDeNovo, abortarEncontro } = useClube()
+  const { sorteio, encontros, sortearDeNovo, abortarEncontro, comecarDoZero } = useClube()
+  const [menu, setMenu] = useState(false)
+  const [zerando, setZerando] = useState(false)
   const [abortandoEncontro, setAbortandoEncontro] = useState(false)
   const { partidas: partidasRiichi } = usePartidas()
   // MCR: as mesas são placares, registradas quando a partida termina.
@@ -59,6 +63,12 @@ export default function PaginaMesasSorteadas({
   const registrada = (mesa: MesaDoSorteio) =>
     !!mesa.partidaId && partidas.some((partida) => partida.id === mesa.partidaId)
 
+  const jogadas: readonly { encontro?: { id: string } }[] = chines ? placaresMcr : partidasRiichi
+  const dia = situacaoDoDia(sorteio, encontros, jogadas, new Date())
+  const nomes = new Map(sorteio.encontro.jogadores.map((entrada) => [chaveDaEntrada(entrada), entrada.nome]))
+  const pessoas = sorteio.encontro.jogadores.length
+  const dica = dia.proxima > 1 ? t('match.clubDay.newDrawHint', { n: dia.proxima }) : undefined
+
   const compartilhar = async () => {
     const texto = textoDasMesas(sorteio.mesas, {
       titulo: t('match.club.shareTitle', { date: data }),
@@ -76,12 +86,13 @@ export default function PaginaMesasSorteadas({
         titulo={t('match.club.resultTitle')}
         aoVoltar={aoVoltar}
         acoes={
-          <span className="clb-acoes-titulo">
+          <span className="clb-acoes-titulo trn-acoes-rodada">
             <button
               type="button"
               className="cm-btn-icone"
               aria-label={t('match.club.redraw')}
-              title={t('match.club.redraw')}
+              title={dica ?? t('match.club.redraw')}
+              aria-description={dica}
               onClick={() => setRefazendo(true)}
             >
               <i className="fas fa-rotate" aria-hidden="true" />
@@ -104,6 +115,16 @@ export default function PaginaMesasSorteadas({
             >
               <i className="fas fa-share-nodes" aria-hidden="true" />
             </button>
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('match.clubDay.more')}
+              title={t('match.clubDay.more')}
+              aria-haspopup="dialog"
+              onClick={() => setMenu(true)}
+            >
+              <i className="fas fa-ellipsis-vertical" aria-hidden="true" />
+            </button>
           </span>
         }
       />
@@ -120,6 +141,17 @@ export default function PaginaMesasSorteadas({
             : t('match.types.inProgressTag')}
         </small>
       </p>
+
+      {dia.estatistica && (
+        <QualidadeSorteio
+          key={sorteio.encontro.id}
+          estatistica={dia.estatistica}
+          nomeDe={(chave) => nomes.get(chave) ?? '?'}
+          antesDeJogar={jogadas.every((jogada) => jogada.encontro?.id !== sorteio.encontro.id)}
+          rotulo={t('match.clubDay.roundOfDay', { n: dia.numero })}
+          dica={pessoas === 8 || pessoas === 12 ? t(`tournament.idealRounds.short${pessoas}`) : undefined}
+        />
+      )}
 
       <ul className="clb-mesas">
         {sorteio.mesas.map((mesa) => {
@@ -173,6 +205,44 @@ export default function PaginaMesasSorteadas({
         </p>
       )}
 
+      {menu && (
+        <Modal
+          titulo={t('match.club.meeting')}
+          aoFechar={() => setMenu(false)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+        >
+          <ul className="trn-menu">
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu(false)
+                  setZerando(true)
+                }}
+              >
+                <i className="fas fa-arrow-rotate-left" aria-hidden="true" />
+                <span>{t('match.clubDay.resetDay')}</span>
+              </button>
+            </li>
+          </ul>
+        </Modal>
+      )}
+
+      {zerando && (
+        <ModalConfirmacao
+          titulo={t('match.clubDay.resetDayTitle')}
+          texto={t('match.clubDay.resetDayHelp')}
+          rotuloConfirmar={t('match.clubDay.resetDay')}
+          aoFechar={() => setZerando(false)}
+          aoConfirmar={() => {
+            comecarDoZero()
+            setZerando(false)
+            mostrar(t('match.clubDay.resetDone'))
+          }}
+        />
+      )}
+
       {abortandoEncontro && (
         <ModalConfirmacao
           titulo={t('match.club.abortMeetingTitle')}
@@ -191,7 +261,7 @@ export default function PaginaMesasSorteadas({
       {refazendo && (
         <ModalConfirmacao
           titulo={t('match.club.redrawTitle')}
-          texto={t('match.club.redrawHelp')}
+          texto={[t('match.club.redrawHelp'), ...(dica ? [`${dica}.`] : [])].join(' ')}
           rotuloConfirmar={t('match.club.redraw')}
           aoFechar={() => setRefazendo(false)}
           aoConfirmar={() => {

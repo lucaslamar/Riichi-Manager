@@ -53,6 +53,16 @@ export function apagar(expressao: string): string {
   return expressao.slice(0, -1)
 }
 
+/** Texto vindo do teclado do sistema: passa pelas mesmas regras das teclas da folha. */
+export function expressaoDigitada(texto: string): string {
+  let expressao = ''
+  for (const caractere of texto) {
+    if (caractere >= '0' && caractere <= '9') expressao = digitar(expressao, caractere)
+    else if (ehOperador(caractere)) expressao = operar(expressao, caractere)
+  }
+  return expressao
+}
+
 /** Partes da expressão: números e operadores, na ordem. Operador pendente no fim fica de fora. */
 export function partesDaExpressao(expressao: string): (number | Operador)[] {
   const partes: (number | Operador)[] = []

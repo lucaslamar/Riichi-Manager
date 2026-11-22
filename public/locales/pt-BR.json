@@ -707,7 +707,9 @@
     "narrationOutputHelp": "Com NVDA, TalkBack ou VoiceOver ligado, escolha Só leitor de tela para não ouvir duas vozes.",
     "narrationNoVoice": "Este navegador não tem voz. Os anúncios vão para o leitor de tela.",
     "narrationShortcuts": "Atalhos: Alt+M lê a mão, Alt+D lê os últimos descartes, Alt+R repete o último anúncio e Alt+S para a fala.",
-    "narrationTest": "Testar"
+    "narrationTest": "Testar",
+    "shareQr": "QR Code nas imagens compartilhadas",
+    "shareQrHelp": "Quem vê a imagem no grupo pode abrir o app pelo QR."
   },
   "windDraw": {
     "title": "Sorteador de Ventos",
@@ -1084,7 +1086,8 @@
       "inProgressTag": "em andamento",
       "roundTable": "Rodada {{round}} · Mesa {{table}}",
       "registeredOf": "{{count}} de {{total}} mesas registradas",
-      "openTournament": "Abrir o torneio {{name}}"
+      "openTournament": "Abrir o torneio {{name}}",
+      "openTournamentFormat": "Abrir torneio {{name}}, {{format}}"
     },
     "player": {
       "open": "Abrir a análise de {{name}}",
@@ -1673,6 +1676,15 @@
         "antigos": "Mais antigos",
         "nome": "Nome"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "Rodada {{n}} do dia",
+      "newDrawHint": "Rodada {{n}} do dia · evita repetir quem já jogou junto",
+      "more": "Mais opções do encontro",
+      "resetDay": "Começar do zero",
+      "resetDayTitle": "Começar o dia do zero?",
+      "resetDayHelp": "O próximo sorteio não vai considerar quem já jogou junto hoje. Use quando o grupo for outro.",
+      "resetDone": "O próximo sorteio começa do zero"
     }
   },
   "spokenTiles": {
@@ -1707,7 +1719,14 @@
       "textHelp": "Pronto para colar no grupo, com negrito e tabela",
       "imageHelp": "Um PNG com as cores do app",
       "pdfHelp": "A tabela completa para imprimir ou guardar",
-      "transferHelp": "O torneio inteiro para outro aparelho (arquivo, QR ou código)"
+      "transferHelp": "O torneio inteiro para outro aparelho (arquivo, QR ou código)",
+      "ctaResults": "Resultados feitos no {{app}}. Organize o seu torneio também.",
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "até a rodada {{round}}",
+      "bottom": "Fundo da tabela",
+      "bottomLead": "vantagem {{value}}",
+      "bottomLeave": "para sair {{value}}",
+      "ctaRace": "Quer ver quanto falta para você? Filtre no {{app}}"
     },
     "title": "Torneio",
     "create": "Criar torneio",
@@ -1718,11 +1737,11 @@
     "active": "Torneio em andamento",
     "continue": "Continuar",
     "formats": {
-      "rodizio": "Rodízio",
+      "rodizio": "All Leste",
       "suico": "Suíço",
       "eliminatorio": "Eliminatório",
-      "corridos": "Brasileirão",
-      "temporada": "Brasileirão (temporada)"
+      "corridos": "Pontos corridos rápido",
+      "temporada": "Brasileirão"
     },
     "history": {
       "title": "Torneios finalizados",
@@ -1771,7 +1790,7 @@
       "cutsTooBig": "Os cortes do Eliminatório precisam ser menores que a lista",
       "rename": "Renomear o torneio {{name}}",
       "more": "Mais opções da lista",
-      "pickSeason": "Escolha ou crie a temporada nas configurações do torneio",
+      "pickSeason": "Escolha ou crie o Brasileirão nas configurações do torneio",
       "memoryHint": "Guardar esta lista ou carregar uma guardada"
     },
     "settings": {
@@ -1783,10 +1802,6 @@
       "name": "Nome do torneio",
       "format": "Formato",
       "multipleOfFour": "As mesas fecham sempre com 4: o torneio precisa de 8, 12, 16… jogadores, sem folga e sem mesa de 3.",
-      "rotationRounds": {
-        "one": "{{count}} rodada. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes.",
-        "other": "{{count}} rodadas. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes."
-      },
       "rounds": "Número de rodadas",
       "qualifier": "Fase classificatória",
       "qualifierRounds": "Rodadas da classificatória",
@@ -1812,30 +1827,36 @@
       "windsApp": "Sorteados no app",
       "windsTable": "Na mesa",
       "windsAppHelp": "Cada mesa já sai com o vento de cada jogador.",
-      "windsTableHelp": "O app só diz quem senta em cada mesa. Os ventos são sorteados na hora, com as pedras."
+      "windsTableHelp": "O app só diz quem senta em cada mesa. Os ventos são sorteados na hora, com as pedras.",
+      "multipleOfThree": "As mesas de Sanma fecham sempre com 3: o torneio precisa de 6, 9, 12… jogadores.",
+      "multipleOfFourShort": "Precisa de 8, 12, 16… jogadores.",
+      "multipleOfThreeShort": "Precisa de 6, 9, 12… jogadores.",
+      "windsAppShort": "A mesa já sai com os ventos.",
+      "windsTableShort": "Ventos sorteados na mesa, com as pedras.",
+      "cutsShort": "Múltiplos de 4. Exemplo: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Grade inteira sorteada no início. Cada um é Leste uma vez.",
-      "suico": "Rodada 1 sorteada. Depois, as mesas seguem a classificação.",
-      "eliminatorio": "Classificatória e cortes até a mesa final.",
-      "corridos": "Liga em um encontro: cada rodada é sorteada na hora.",
-      "temporada": "Liga com vários encontros e ranking acumulado."
+      "rodizio": "4 rodadas. Cada um é Leste uma vez.",
+      "suico": "Depois da 1ª, mesas pela classificação.",
+      "eliminatorio": "Cortes a cada fase até a mesa final.",
+      "corridos": "Rodadas livres, sorteadas na hora. Você encerra.",
+      "temporada": "Vários encontros somando num ranking só."
     },
     "formatsShort": {
-      "rodizio": "Rodízio",
+      "rodizio": "All Leste",
       "suico": "Suíço",
       "eliminatorio": "Eliminatório",
-      "corridos": "Brasileirão",
-      "temporada": "Temporada"
+      "corridos": "Rápido",
+      "temporada": "Brasileirão"
     },
     "season": {
-      "title": "Temporada",
-      "new": "Nova temporada",
-      "name": "Nome da temporada",
-      "defaultName": "Temporada {{year}}",
+      "title": "Brasileirão",
+      "new": "Novo Brasileirão",
+      "name": "Nome do Brasileirão",
+      "defaultName": "Brasileirão {{year}}",
       "start": "Início",
       "end": "Fim",
-      "criterionLater": "O critério do ranking (soma, média ou melhores resultados) se escolhe na tela da temporada.",
+      "criterionLater": "O critério do ranking (soma, média ou melhores resultados) se escolhe na tela do Brasileirão.",
       "meetupName": "{{season}} · Encontro {{number}}",
       "meetups": {
         "one": "{{count}} encontro",
@@ -1849,7 +1870,7 @@
       "criterionBest": "Melhores",
       "minimum": "Mínimo de partidas",
       "best": "Quantos resultados contam",
-      "criterionSumHelp": "Soma dos pontos de todas as partidas da temporada.",
+      "criterionSumHelp": "Soma dos pontos de todas as partidas do Brasileirão.",
       "criterionAverageHelp": {
         "one": "Média de pontos por partida. Quem jogou menos de {{count}} partida fica no fim, sem posição.",
         "other": "Média de pontos por partida. Quem jogou menos de {{count}} partidas fica no fim, sem posição."
@@ -1858,14 +1879,15 @@
         "one": "Soma do melhor resultado de partida de cada jogador.",
         "other": "Soma dos {{count}} melhores resultados de partida de cada jogador."
       },
-      "ranking": "Ranking da temporada",
+      "ranking": "Ranking do Brasileirão",
       "noResults": "Nenhum resultado ainda.",
       "points": "Pontos",
       "games": "Partidas",
       "meetupsTitle": "Encontros",
       "noMeetups": "Nenhum encontro ainda.",
-      "listTitle": "Temporadas",
-      "open": "Ver a temporada"
+      "listTitle": "Brasileirões",
+      "open": "Ver o Brasileirão",
+      "criterionShort": "Critério: na tela do Brasileirão."
     },
     "tables": {
       "roundOf": "Rodada {{round}} de {{total}}",
@@ -1935,7 +1957,7 @@
       "finish": "Encerrar torneio",
       "finishTitle": "Encerrar o torneio?",
       "finishHelp": "O torneio vai para o histórico e não recebe mais resultados.",
-      "seasonRanking": "Ranking da temporada",
+      "seasonRanking": "Ranking do Brasileirão",
       "seasonRankingHelp": "Acumulado de todos os encontros",
       "player": "Jogador"
     },
@@ -2005,13 +2027,6 @@
       "cameraRetry": "Tentar de novo"
     },
     "diagnosis": {
-      "title": "Diagnóstico da Grade",
-      "grade": {
-        "perfeita": "Perfeita",
-        "boa": "Boa",
-        "regular": "Regular",
-        "ruim": "Ruim"
-      },
       "maxMeetings": "Máx. de encontros",
       "maxMeetingsHelp": "Quantas vezes a mesma dupla se enfrenta, no pior caso.",
       "repeatedPairs": "Duplas repetidas",
@@ -2022,7 +2037,16 @@
       "indirectHelp": "Duplas que nunca se enfrentam, mas têm um adversário em comum.",
       "indirectAll": "Todos se enfrentam",
       "pairsTitle": "Duplas que se repetem",
-      "windsTitle": "Ventos por jogador"
+      "windsTitle": "Ventos por jogador",
+      "repeatedTrios": "Trios repetidos",
+      "repeatedTriosHelp": "Três pessoas que dividiram mesa mais de uma vez.",
+      "maxPerPlayer": "Repetições por pessoa",
+      "maxPerPlayerHelp": "Adversários repetidos de quem mais repetiu.",
+      "differentOpponents": "Adversários diferentes",
+      "differentOpponentsHelp": "Média por pessoa e o menor valor.",
+      "averageAndLowest": "{{average}} (mín. {{lowest}})",
+      "eastTimes": "Vezes como Leste",
+      "eastTimesHelp": "De quem foi menos a quem foi mais."
     },
     "points": {
       "points": "Pontos",
@@ -2051,7 +2075,260 @@
       "thousand": "três zeros",
       "useHand": "Usar na conta",
       "previousPlayer": "Jogador anterior",
-      "nextPlayer": "Próximo jogador"
+      "nextPlayer": "Próximo jogador",
+      "typeFor": "Digitar os pontos de {{name}}"
+    },
+    "positionChange": {
+      "up": {
+        "one": "Subiu {{count}} posição",
+        "other": "Subiu {{count}} posições"
+      },
+      "down": {
+        "one": "Caiu {{count}} posição",
+        "other": "Caiu {{count}} posições"
+      },
+      "same": "Manteve a posição",
+      "new": "Estreia no ranking",
+      "newShort": "novo",
+      "legend": "Setas: mudança desde a rodada {{round}}.",
+      "confirmTitle": "Ranking do torneio: antes → depois"
+    },
+    "formatGuide": {
+      "intro": "Qual formato usar?",
+      "rodizio": {
+        "what": "A grade inteira sai no sorteio. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes.",
+        "for": "Indicado para encontro de clube com hora para acabar e para iniciantes. É o mais justo nos ventos."
+      },
+      "suico": {
+        "what": "A rodada 1 é sorteada. Depois, as mesas seguem a classificação, evitando repetir adversário.",
+        "for": "Indicado para torneio competitivo de um dia, com número de rodadas definido."
+      },
+      "eliminatorio": {
+        "what": "Rodadas classificatórias e depois cortes (por exemplo 8, depois 4) até a mesa final.",
+        "for": "Indicado para evento com final e muitos jogadores. Pede mais tempo."
+      },
+      "corridos": {
+        "what": "Cada rodada é sorteada na hora, evitando repetir adversário. Não tem número de rodadas.",
+        "for": "Indicado para encontro casual em que não se sabe quantas rodadas vão dar."
+      },
+      "temporada": {
+        "what": "Rodadas sorteadas na hora, e cada encontro soma num ranking acumulado (soma, média ou melhores resultados).",
+        "for": "Indicado para liga do clube ao longo de meses ou do ano."
+      }
+    },
+    "idealRounds": {
+      "short8": "Com 8, repete sempre a partir da 2ª.",
+      "short12": "Com 12, até 3 rodadas é o ideal.",
+      "guide12": {
+        "title": "12 jogadores, 3 mesas",
+        "repeats": {
+          "label": "A partir da 2ª rodada",
+          "text": "Alguém sempre repete adversário."
+        },
+        "three": {
+          "label": "3 rodadas: o ideal",
+          "text": "Cada um repete no máximo 2 adversários."
+        },
+        "four": {
+          "label": "4 rodadas: All Leste",
+          "text": "Repete mais, mas todos são Leste uma vez."
+        },
+        "sixteen": {
+          "label": "Com 16 jogadores",
+          "text": "Até 5 rodadas sem repetir ninguém."
+        },
+        "why": "A repetição é limite da matemática, não do sorteio."
+      },
+      "guide8": {
+        "title": "8 jogadores, 2 mesas",
+        "repeats": {
+          "label": "A partir da 2ª rodada",
+          "text": "Pelo menos 2 duplas se repetem em cada mesa."
+        },
+        "three": {
+          "label": "3 rodadas",
+          "text": "Cada um repete até 3 adversários."
+        },
+        "fewer": {
+          "label": "Para repetir menos",
+          "text": "Junte 12 ou 16 jogadores."
+        },
+        "why": "É limite da matemática: só há 2 mesas para misturar."
+      }
+    },
+    "gridStats": {
+      "title": "Qualidade do sorteio",
+      "details": "Ver detalhes",
+      "detailsLabel": "Ver detalhes da qualidade do sorteio",
+      "redraw": "Sortear de novo",
+      "redrawLabel": "Sortear a rodada {{round}} de novo",
+      "openStats": "Estatística da grade",
+      "grade": {
+        "perfeita": "Perfeita",
+        "otima": "Ótima",
+        "boa": "Boa",
+        "regular": "Regular",
+        "ruim": "Ruim"
+      },
+      "none": "Nenhum adversário repetido",
+      "atMinimum": "mínimo possível",
+      "aboveMinimum": "mínimo possível: {{min}}",
+      "noTriple": "Ninguém jogou 3x junto",
+      "hasTriple": "Dupla jogou 3x junta",
+      "windsOk": "ventos ok",
+      "windsBad": "ventos desiguais",
+      "better": "Melhor que o anterior",
+      "same": "Igual ao anterior",
+      "worse": "Pior que o anterior",
+      "undo": "Voltar ao anterior",
+      "undoLabel": "Voltar ao sorteio anterior",
+      "perPlayer": "Por jogador",
+      "repeatedWith": "Repetiu com",
+      "eastCount": "Leste {{count}}x",
+      "searchPlayer": "Buscar jogador",
+      "repeats": {
+        "one": "{{count}} dupla repetida",
+        "other": "{{count}} duplas repetidas"
+      },
+      "opponents": {
+        "one": "{{count}} adversário",
+        "other": "{{count}} adversários"
+      }
+    },
+    "unknownPlayer": "Jogador {{number}}",
+    "podiumGap": {
+      "ordinal": "{{place}}º",
+      "open": "Ver distância para o pódio de {{name}}",
+      "toPlace": "Para o {{place}} ({{name}})",
+      "lead": "Vantagem sobre o {{place}} ({{name}})",
+      "upOne": "Para subir ao {{place}} ({{name}})",
+      "leaveLast": "Para sair do último ({{name}})",
+      "overLast": "Vantagem sobre o último ({{name}})",
+      "tied": "Empatado",
+      "tiebreak": "{{points}} pontos MCR no desempate",
+      "tablePoints": "Pontos de mesa",
+      "units": {
+        "mangan": "Mangan",
+        "haneman": "Haneman",
+        "baiman": "Baiman",
+        "yakuman": "Yakuman",
+        "vitorias": "Vitórias de mesa"
+      },
+      "approx": {
+        "riichi": "Aproximado: ron fora do Leste, sem uma.",
+        "mcr": "Aproximado: vencer a mesa vale 4 pontos."
+      },
+      "race": "Disputa do pódio",
+      "podium": "Pódio",
+      "toThird": "Para o 3º",
+      "toFirst": "Para o 1º",
+      "leadLegend": "Em verde: vantagem sobre o 4º.",
+      "inUnit": "Distâncias em {{unit}}.",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "Comparar com…",
+      "share": "Compartilhar a distância de {{name}} para o pódio",
+      "contenders": "Candidatos ao 1º",
+      "canReach": "Ainda alcança",
+      "needsHelp": "Só com ajuda",
+      "reachEstimate": "Estimativa pelo melhor resultado de uma rodada.",
+      "hands": {
+        "mangan": {
+          "one": "{{count}} Mangan",
+          "other": "{{count}} Mangans"
+        },
+        "haneman": {
+          "one": "{{count}} Haneman",
+          "other": "{{count}} Hanemans"
+        },
+        "baiman": {
+          "one": "{{count}} Baiman",
+          "other": "{{count}} Baimans"
+        },
+        "yakuman": {
+          "one": "{{count}} Yakuman",
+          "other": "{{count}} Yakumans"
+        },
+        "vitorias": {
+          "one": "{{count}} vitória de mesa",
+          "other": "{{count}} vitórias de mesa"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "Filtros do ranking",
+      "view": "Visão",
+      "viewTable": "Classificação",
+      "follow": "Acompanhar jogador",
+      "unfollow": "Parar de acompanhar",
+      "untilRound": "Até a rodada",
+      "allRounds": "Todas",
+      "unit": "Distância em"
+    },
+    "prize": {
+      "tab": "Premiação",
+      "enable": "Torneio com inscrição",
+      "fee": "Inscrição",
+      "other": "Outro",
+      "installments": "Parcelas",
+      "early": "Inscrição antecipada",
+      "earlyValue": "Valor antecipado",
+      "earlyCount": "Quantos pagaram",
+      "earlyUntil": "Até",
+      "club": "Parte do clube",
+      "split": "Divisão do prêmio",
+      "splitAuto": "Automática",
+      "splitFirst": "Só o 1º",
+      "splitCustom": "Personalizada",
+      "splitList": "Porcentagem de cada posição, a partir do 1º",
+      "minimum": "Mínimo de jogadores",
+      "total": "{{players}} jogadores × {{fee}}",
+      "clubLine": "Clube ({{percent}})",
+      "poolLine": "Prêmio ({{percent}})",
+      "pool": "Prêmio total",
+      "byPlace": "Prêmio por posição",
+      "atStake": "{{value}} a mais de prêmio",
+      "rounding": "+ {{value}} de arredondamento",
+      "installmentLine": "{{count}}x de {{value}}",
+      "sumMustBe100": "A soma precisa dar 100%. Agora: {{sum}}.",
+      "whyFee": "R$ 100 num Brasileirão de 6 a 12 encontros sai entre R$ 8 e R$ 17 por encontro. O prêmio fica atraente (R$ 600 para o 1º com 16 jogadores) e quem pagou falta menos. Se não tiver certeza de juntar o mínimo, comece com R$ 50 num Brasileirão de lançamento e suba depois.",
+      "whyInstallments": "Parcelar tira o peso do valor de entrada. 5x de R$ 20 cabe para quase todo mundo e acompanha os meses do Brasileirão.",
+      "whyEarly": "Um valor menor até uma data puxa as inscrições para o começo e ajuda a garantir o mínimo antes da primeira rodada. Informe quantos pagaram esse valor, porque o app não controla pagamento por pessoa.",
+      "whyClub": "25% dá para comprar algo concreto (um set ou parte de uma mesa) sem parecer que o clube fica com o prêmio. Acima de 30% costuma gerar reclamação.",
+      "whySplit": "Pagar até o 3º mantém metade da tabela com chance real até o fim. 50/30/20 é a divisão mais comum: o campeão leva bem mais, mas o 2º e o 3º não saem com algo simbólico. Vale também com menos de 16. Com 20 jogadores a automática paga até o 4º, e com 28 até o 5º.",
+      "whyMinimum": "Com 16 jogadores dá para fazer até 5 rodadas sem ninguém repetir adversário, e o prêmio já compensa. Com 8 ou 12 a repetição começa na 2ª rodada.",
+      "missing": {
+        "one": "Falta {{count}} jogador para o mínimo de {{min}}.",
+        "other": "Faltam {{count}} jogadores para o mínimo de {{min}}."
+      },
+      "totalMixed": {
+        "one": "{{count}} inscrição",
+        "other": "{{count}} inscrições"
+      }
+    },
+    "wo": {
+      "tag": "WO",
+      "register": "Registrar ausência",
+      "who": "Marque quem faltou.",
+      "confirm": "Confirmar WO",
+      "remove": "Remover WO",
+      "missed": "Faltou",
+      "attended": "Presente",
+      "times": "WO: {{times}}",
+      "rebuild": "Remontar mesas",
+      "rebuildHelp": "A Mesa {{table}} fica completa com os presentes da Mesa {{other}}, que fica com o WO.",
+      "rebuilt": "Mesas remontadas.",
+      "late": "Atraso (opcional)",
+      "lateHelp": "Desconta {{rate}} por minuto. Mais de {{max}} min é WO.",
+      "minutesShort": "{{minutes}} min",
+      "lateBy": "Atraso de {{minutes}} min",
+      "settings": "WO e atraso",
+      "absent": "Quem faltou",
+      "present": "Cada presente",
+      "tolerance": "Tolerância (min)",
+      "perMinute": "Por minuto",
+      "whyAbsent": "Os −30 de quem falta vêm da EMA (15.000 pontos e 15.000 de uma por sessão perdida) e equivalem aos 30P da WRC.",
+      "whyPresent": "Os +10 de cada presente são regra da casa. Com 1 ausente a mesa fecha em zero. Com mais não fecha, de propósito, para ninguém ganhar muito sem jogar.",
+      "whyLate": "O atraso segue WRC e EMA: −1 por minuto até 10 minutos. Depois disso é WO."
     }
   },
   "backup": {
@@ -2351,7 +2628,8 @@
       },
       "nenhumaPartida": "Nenhuma partida ainda.",
       "torneio": {
-        "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo."
+        "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo.",
+        "regraCurta": "Pontos de mesa: 4, 2, 1 e 0."
       },
       "usarFan": "Usar no placar",
       "porFan": "Fan",

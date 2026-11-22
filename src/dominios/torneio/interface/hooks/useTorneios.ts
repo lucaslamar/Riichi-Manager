@@ -5,7 +5,7 @@ import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { acoesPartidas, lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { acoesJogadores, garantirJogadoresPorNomes } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import type { ResultadoImportacao } from '../../logica/exportacao'
-import { finalizarTorneio } from '../../logica/torneio'
+import { finalizarTorneio, guardarNomeNoTorneio } from '../../logica/torneio'
 import type { ListaSalva, Temporada, Torneio } from '../../logica/tipos'
 import {
   carregarLista,
@@ -92,6 +92,11 @@ export const acoesTorneios = {
   atualizar(id: string, transformar: (torneio: Torneio) => Torneio) {
     const torneio = lerTorneios().torneios.find((item) => item.id === id)
     if (torneio) acoesTorneios.salvar(transformar(torneio))
+  },
+  /** Antes de excluir do cadastro. Não muda a data do torneio. */
+  guardarNome(jogadorId: string, nome: string) {
+    const atual = lerTorneios()
+    definir({ ...atual, torneios: atual.torneios.map((torneio) => guardarNomeNoTorneio(torneio, jogadorId, nome)) })
   },
   finalizar(id: string) {
     acoesTorneios.atualizar(id, (torneio) => finalizarTorneio(torneio, new Date().toISOString()))

@@ -24,20 +24,26 @@ export interface BlocoRelatorio {
   linhas: LinhaRelatorio[]
   /** No texto, as linhas viram uma tabela em bloco monoespaçado. */
   tabela?: boolean
+  /** Caracteres da 1ª coluna da tabela, quando ela leva mais que o nome. */
+  larguraEsquerda?: number
   /** Cabeçalho da tabela no texto: a coluna da esquerda e as da direita. */
   colunas?: readonly string[]
+  /** Na imagem, as colunas da direita ficam alinhadas e só a última leva a cor da linha. */
+  corSoNaUltima?: boolean
   /** Só no texto ou só na imagem (ex.: o pódio do texto, que a imagem já destaca). */
   so?: 'texto' | 'imagem'
 }
 
 export interface Relatorio {
   titulo: string
+  /** Convite no rodapé da imagem, ao lado do QR do app. */
+  chamada?: string
   subtitulo?: string
   blocos: BlocoRelatorio[]
 }
 
 /** Nomes longos cortados na tabela: no celular, o bloco monoespaçado tem pouca largura. */
-const LARGURA_ESQUERDA = 16
+export const LARGURA_ESQUERDA = 16
 
 /** Tamanho em caracteres que aparecem (acentos contam um só). */
 function largura(texto: string): number {
@@ -63,7 +69,7 @@ export function colunasDaDireita(linha: LinhaRelatorio): readonly string[] {
 function tabelaEmTexto(bloco: BlocoRelatorio): string {
   const linhas = [
     ...(bloco.colunas ? [bloco.colunas] : []),
-    ...bloco.linhas.map((linha) => [cortar(linha.esquerda, LARGURA_ESQUERDA), ...colunasDaDireita(linha)]),
+    ...bloco.linhas.map((linha) => [cortar(linha.esquerda, bloco.larguraEsquerda ?? LARGURA_ESQUERDA), ...colunasDaDireita(linha)]),
   ]
   const totalColunas = Math.max(...linhas.map((linha) => linha.length))
   const larguras = Array.from({ length: totalColunas }, (_, coluna) =>
@@ -82,7 +88,7 @@ function tabelaEmTexto(bloco: BlocoRelatorio): string {
  * Texto do WhatsApp: título em negrito e subtítulo em itálico, um bloco por
  * parágrafo, tabelas alinhadas em monoespaçado e "—" antes do valor nas listas.
  */
-export function textoDoRelatorio(relatorio: Relatorio): string {
+export function textoDoRelatorio(relatorio: Relatorio, linhaFinal?: string): string {
   const topo = [`*${relatorio.titulo}*`, ...(relatorio.subtitulo ? [`_${relatorio.subtitulo}_`] : [])].join('\n')
   const blocos = relatorio.blocos
     .filter((bloco) => bloco.so !== 'imagem')
@@ -96,7 +102,7 @@ export function textoDoRelatorio(relatorio: Relatorio): string {
       })
       return [...titulo, ...linhas].join('\n')
     })
-  return [topo, ...blocos].join('\n\n')
+  return [topo, ...blocos, ...(linhaFinal ? [linhaFinal] : [])].join('\n\n')
 }
 
 /** Nome de arquivo a partir de textos ("Torneio 09/11", "Rodada 1" → "torneio-09-11-rodada-1"). */
