@@ -1731,22 +1731,20 @@
       "resetDone": "Kiti burtai prasidės iš naujo"
     },
     "leftGame": {
-      "tag": "W.O.",
-      "withTag": "Su W.O.",
-      "mark": "W.O.: paliko partiją",
-      "undo": "Atšaukti W.O.",
-      "needPoints": "W.O.: taškai išeinant",
-      "sumFree": "Su W.O. suma neturi sutapti.",
-      "seat": "{{wind}}, {{name}}, W.O., taškai: {{points}}",
-      "settings": "W.O. partijos metu",
+      "tag": "WO",
+      "withTag": "Su WO",
+      "needPoints": "WO: taškai išeinant",
+      "sumFree": "Su WO suma neturi sutapti.",
+      "seat": "{{wind}}, {{name}}, WO, taškai: {{points}}",
+      "settings": "WO partijos metu",
       "last": "Lieka 4-as",
       "byPoints": "Pagal taškus",
       "penalty": "Bauda rezultatui",
       "helpDefault": "Pagal numatymą išėjęs žaidėjas lieka 4-as su tuo metu turėtais taškais.",
       "helpPenalty": "Bauda atimama po uma. 30 atima 30,0 reitingo taško.",
-      "helpSum": "Su W.O. stalą galima įrašyti, net jei suma nesutampa.",
-      "summaryLast": "W.O. lieka 4-as",
-      "summaryPoints": "W.O. pagal taškus"
+      "helpSum": "Su WO stalą galima įrašyti, net jei suma nesutampa.",
+      "summaryLast": "WO lieka 4-as",
+      "summaryPoints": "WO pagal taškus"
     },
     "paused": {
       "save": "Išsaugoti ir tęsti vėliau",
@@ -3735,7 +3733,7 @@
       "longeDemais": "prognozės nėra, nes vidurkiai per panašūs.",
       "withAverage": "Su vidurkiu"
     },
-    "withoutWo": "Be partijų su W.O. ({{count}})",
+    "withoutWo": "Be partijų su WO ({{count}})",
     "form": {
       "title": {
         "fim": "Su vidurkiu: jei baigs kaip įprastai, iki pabaigos",

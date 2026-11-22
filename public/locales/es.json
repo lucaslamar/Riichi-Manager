@@ -1694,22 +1694,20 @@
       "resetDone": "El próximo sorteo empieza de cero"
     },
     "leftGame": {
-      "tag": "W.O.",
-      "withTag": "Con W.O.",
-      "mark": "W.O.: dejó la partida",
-      "undo": "Deshacer W.O.",
-      "needPoints": "W.O.: puntos al salir",
-      "sumFree": "Con W.O., la suma no necesita cuadrar.",
-      "seat": "{{wind}}, {{name}}, W.O. con {{points}} puntos",
-      "settings": "W.O. durante la partida",
+      "tag": "WO",
+      "withTag": "Con WO",
+      "needPoints": "WO: puntos al salir",
+      "sumFree": "Con WO, la suma no necesita cuadrar.",
+      "seat": "{{wind}}, {{name}}, WO con {{points}} puntos",
+      "settings": "WO durante la partida",
       "last": "Queda 4.º",
       "byPoints": "Por puntos",
       "penalty": "Penalización en el resultado",
       "helpDefault": "Por defecto, quien sale a mitad queda 4.º con los puntos que tenía al salir.",
       "helpPenalty": "La penalización se descuenta del resultado final, tras la uma. 30 resta 30,0 en el ranking.",
-      "helpSum": "Con W.O., la mesa se registra aunque la suma no cuadre.",
-      "summaryLast": "W.O. queda 4.º",
-      "summaryPoints": "W.O. por puntos"
+      "helpSum": "Con WO, la mesa se registra aunque la suma no cuadre.",
+      "summaryLast": "WO queda 4.º",
+      "summaryPoints": "WO por puntos"
     },
     "paused": {
       "save": "Guardar para continuar",
@@ -3664,7 +3662,7 @@
       "longeDemais": "no se puede proyectar, porque los promedios están demasiado cerca.",
       "withAverage": "Con el promedio"
     },
-    "withoutWo": "Sin partidas con W.O. ({{count}})",
+    "withoutWo": "Sin partidas con WO ({{count}})",
     "form": {
       "title": {
         "fim": "Con el promedio: si terminan como suelen, hasta el final",

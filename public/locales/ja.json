@@ -1665,22 +1665,20 @@
       "resetDone": "次の抽選は最初からです"
     },
     "leftGame": {
-      "tag": "W.O.",
-      "withTag": "W.O.あり",
-      "mark": "W.O.：途中退席",
-      "undo": "W.O.を取り消す",
-      "needPoints": "W.O.：退席時の点数",
-      "sumFree": "W.O.がある場合、合計は一致しなくても登録できます。",
-      "seat": "{{wind}}、{{name}}、W.O.、{{points}}点",
-      "settings": "対局中のW.O.",
+      "tag": "WO",
+      "withTag": "WOあり",
+      "needPoints": "WO：退席時の点数",
+      "sumFree": "WOがある場合、合計は一致しなくても登録できます。",
+      "seat": "{{wind}}、{{name}}、WO、{{points}}点",
+      "settings": "対局中のWO",
       "last": "4着になる",
       "byPoints": "点数どおり",
       "penalty": "成績へのペナルティ",
       "helpDefault": "初期設定では、途中退席者は退席時の点数のまま4着になります。",
       "helpPenalty": "ペナルティはウマ適用後の成績から引かれます。30なら30.0ポイント減。",
-      "helpSum": "W.O.がある卓は合計が一致しなくても登録できます。",
-      "summaryLast": "W.O.は4着",
-      "summaryPoints": "W.O.は点数どおり"
+      "helpSum": "WOがある卓は合計が一致しなくても登録できます。",
+      "summaryLast": "WOは4着",
+      "summaryPoints": "WOは点数どおり"
     },
     "paused": {
       "save": "保存して後で続ける",
@@ -3603,7 +3601,7 @@
       "longeDemais": "平均が近すぎて予測できません。",
       "withAverage": "平均込み"
     },
-    "withoutWo": "W.O.のある対局を除く（{{count}}）",
+    "withoutWo": "WOのある対局を除く（{{count}}）",
     "form": {
       "title": {
         "fim": "平均込み：いつもどおりの成績なら（最終まで）",

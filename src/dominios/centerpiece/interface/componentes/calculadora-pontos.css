@@ -118,9 +118,11 @@
   margin-bottom: 10px;
 }
 
-.cpt-wo--ativo {
+/* O texto é sempre WO: ligado se vê pelo fundo, pela borda e pelo ✓. */
+.cpt-calcular.cpt-wo--ativo:not(#_) {
   border-color: var(--texto-aviso);
   color: var(--texto-aviso);
+  background: color-mix(in srgb, var(--texto-aviso) 18%, transparent);
 }
 
 .cpt-soma--aviso {

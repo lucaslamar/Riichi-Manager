@@ -303,8 +303,8 @@ export default function CalculadoraPontosSheet({
               aria-pressed={saiu}
               onClick={() => setSaiu(!saiu)}
             >
-              <i className={`fas ${saiu ? 'fa-rotate-left' : 'fa-user-slash'}`} aria-hidden="true" />{' '}
-              {t(saiu ? 'match.leftGame.undo' : 'match.leftGame.mark')}
+              <i className={`fas ${saiu ? 'fa-check' : 'fa-user-slash'}`} aria-hidden="true" />{' '}
+              {t('match.leftGame.tag')}
             </button>
           )}
           <button

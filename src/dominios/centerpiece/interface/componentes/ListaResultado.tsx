@@ -35,7 +35,7 @@ export default function ListaResultado({
                 ? ` · ${t('match.result.penalty', { points: numero(linha.multa) })}`
                 : ''}
             </span>
-            {linha.saiu && <span className="ptd-apoio">{t('match.leftGame.mark')}</span>}
+            {linha.saiu && <span className="ptd-apoio">{t('match.leftGame.tag')}</span>}
             {!!linha.atraso && (
               <span className="ptd-apoio">{t('tournament.wo.lateBy', { minutes: linha.atraso })}</span>
             )}

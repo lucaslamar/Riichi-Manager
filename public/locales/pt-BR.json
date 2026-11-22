@@ -1687,22 +1687,20 @@
       "resetDone": "O próximo sorteio começa do zero"
     },
     "leftGame": {
-      "tag": "W.O.",
-      "withTag": "Com W.O.",
-      "mark": "W.O.: saiu da partida",
-      "undo": "Desfazer W.O.",
-      "needPoints": "W.O.: pontos na saída",
-      "sumFree": "Com W.O., a soma não precisa fechar.",
-      "seat": "{{wind}}, {{name}}, W.O. com {{points}} pontos",
-      "settings": "W.O. no meio da partida",
+      "tag": "WO",
+      "withTag": "Com WO",
+      "needPoints": "WO: pontos na saída",
+      "sumFree": "Com WO, a soma não precisa fechar.",
+      "seat": "{{wind}}, {{name}}, WO com {{points}} pontos",
+      "settings": "WO no meio da partida",
       "last": "Fica em 4º",
       "byPoints": "Pelos pontos",
       "penalty": "Penalidade no resultado",
       "helpDefault": "Por padrão, quem sai no meio fica em 4º com os pontos que tinha na hora da saída.",
       "helpPenalty": "A penalidade sai do resultado final, depois da uma. 30 tira 30,0 no ranking.",
-      "helpSum": "Com W.O., a mesa registra mesmo que a soma não feche.",
-      "summaryLast": "W.O. fica em 4º",
-      "summaryPoints": "W.O. pelos pontos"
+      "helpSum": "Com WO, a mesa registra mesmo que a soma não feche.",
+      "summaryLast": "WO fica em 4º",
+      "summaryPoints": "WO pelos pontos"
     },
     "paused": {
       "save": "Salvar para continuar",
@@ -3643,7 +3641,7 @@
       "longeDemais": "não dá para projetar, porque as médias estão próximas demais.",
       "withAverage": "Com a média"
     },
-    "withoutWo": "Sem partidas com W.O. ({{count}})",
+    "withoutWo": "Sem partidas com WO ({{count}})",
     "form": {
       "title": {
         "fim": "Com a média: se terminarem como costumam, até o fim",

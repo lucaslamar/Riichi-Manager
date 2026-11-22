@@ -1665,22 +1665,20 @@
       "resetDone": "다음 추첨은 처음부터 시작합니다"
     },
     "leftGame": {
-      "tag": "W.O.",
-      "withTag": "W.O. 있음",
-      "mark": "W.O.: 중도 퇴장",
-      "undo": "W.O. 취소",
-      "needPoints": "W.O.: 퇴장 시 점수",
-      "sumFree": "W.O.가 있으면 합계가 맞지 않아도 됩니다.",
-      "seat": "{{wind}}, {{name}}, W.O., {{points}}점",
-      "settings": "대국 중 W.O.",
+      "tag": "WO",
+      "withTag": "WO 있음",
+      "needPoints": "WO: 퇴장 시 점수",
+      "sumFree": "WO가 있으면 합계가 맞지 않아도 됩니다.",
+      "seat": "{{wind}}, {{name}}, WO, {{points}}점",
+      "settings": "대국 중 WO",
       "last": "4위 처리",
       "byPoints": "점수순",
       "penalty": "결과 페널티",
       "helpDefault": "기본값: 중도 퇴장자는 퇴장 시 점수로 4위가 됩니다.",
       "helpPenalty": "페널티는 우마 적용 후 결과에서 차감됩니다. 30이면 30.0 감점.",
-      "helpSum": "W.O.가 있으면 합계가 달라도 기록할 수 있습니다.",
-      "summaryLast": "W.O. 4위",
-      "summaryPoints": "W.O. 점수순"
+      "helpSum": "WO가 있으면 합계가 달라도 기록할 수 있습니다.",
+      "summaryLast": "WO 4위",
+      "summaryPoints": "WO 점수순"
     },
     "paused": {
       "save": "저장 후 나중에 계속",
@@ -3603,7 +3601,7 @@
       "longeDemais": "평균이 너무 비슷해 예측할 수 없습니다.",
       "withAverage": "평균 반영"
     },
-    "withoutWo": "W.O. 대국 제외 ({{count}})",
+    "withoutWo": "WO 대국 제외 ({{count}})",
     "form": {
       "title": {
         "fim": "평균 반영: 평소대로라면 (끝까지)",

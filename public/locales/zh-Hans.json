@@ -1665,22 +1665,20 @@
       "resetDone": "下次抽签将从头开始"
     },
     "leftGame": {
-      "tag": "W.O.",
-      "withTag": "含W.O.",
-      "mark": "W.O.：中途离场",
-      "undo": "撤销W.O.",
-      "needPoints": "W.O.：离场时点数",
-      "sumFree": "有W.O.时，总分无需相符。",
-      "seat": "{{wind}}，{{name}}，W.O.，{{points}}点",
-      "settings": "中途W.O.",
+      "tag": "WO",
+      "withTag": "含WO",
+      "needPoints": "WO：离场时点数",
+      "sumFree": "有WO时，总分无需相符。",
+      "seat": "{{wind}}，{{name}}，WO，{{points}}点",
+      "settings": "中途WO",
       "last": "判为第4名",
       "byPoints": "按点数",
       "penalty": "成绩扣分",
       "helpDefault": "默认情况下，中途离场者保留离场时点数并判为第4名。",
       "helpPenalty": "扣分在计算马点后进行。30表示排行扣30.0分。",
-      "helpSum": "有W.O.的牌桌即使总分不符也可登记。",
-      "summaryLast": "W.O.判第4",
-      "summaryPoints": "W.O.按点数"
+      "helpSum": "有WO的牌桌即使总分不符也可登记。",
+      "summaryLast": "WO判第4",
+      "summaryPoints": "WO按点数"
     },
     "paused": {
       "save": "保存稍后继续",
@@ -3603,7 +3601,7 @@
       "longeDemais": "平均成绩过于接近，无法预测。",
       "withAverage": "计入平均"
     },
-    "withoutWo": "排除含W.O.的对局（{{count}}）",
+    "withoutWo": "排除含WO的对局（{{count}}）",
     "form": {
       "title": {
         "fim": "计入平均：若保持一贯成绩（至结束）",
