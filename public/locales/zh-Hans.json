@@ -2593,7 +2593,8 @@
       "erros": {
         "fanMinimo": "The hand needs at least 8 fan.",
         "semDescartador": "Choose who discarded.",
-        "descartadorVencedor": "The winner can't be the discarder."
+        "descartadorVencedor": "The winner can't be the discarder.",
+        "naoFecha": "四个数值之和必须为零。"
       },
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
@@ -2620,7 +2621,31 @@
       "falsoHuDe": "{{name}}错和？",
       "falsoHuTexto": "错和者付给其他三家各10分，本局继续。",
       "qtdPontos": "{{pontos}}分",
-      "verMesa": "查看牌桌"
+      "verMesa": "查看牌桌",
+      "sumula": {
+        "titulo": "记分表",
+        "cartao": "总分或逐盘记分表",
+        "resumo": "像纸笔一样，自动算分",
+        "faltamJogadores": "请先选择4位玩家",
+        "contagem": "{{feitas}}/{{total}}盘",
+        "calcular": "计算一盘",
+        "escrever": "手写分数",
+        "escreverAjuda": "点按每位玩家。留空的一位会自动补齐，使总和为零。",
+        "anotar": "记下",
+        "quemVenceu": "谁和牌？",
+        "comoVenceu": "{{name}}如何和牌？",
+        "colunaMao": "盘",
+        "mao": "第{{numero}}盘",
+        "corrigir": "更正第{{numero}}盘",
+        "apagarLinha": "删除这一行",
+        "limpar": "清空记分表",
+        "limparAjuda": "各盘、总分和备注将被清除。玩家会保留。",
+        "digitado": "手动输入的总分",
+        "anotado": "手写记录",
+        "total": "总分",
+        "notas": "备注",
+        "notasAjuda": "像在纸上一样随意书写"
+      }
     }
   },
   "glossario": {

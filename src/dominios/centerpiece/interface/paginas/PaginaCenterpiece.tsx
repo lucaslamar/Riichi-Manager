@@ -290,7 +290,7 @@ function TelasCenterpiece({
         aoAbrirJogadores={() => abrir({ nome: 'jogadores' })}
         // No modo Chinês, o registro manual é do Riichi. A análise do jogador usa os placares MCR.
         aoAbrirJogador={(id) => abrir({ nome: 'jogador', id })}
-        aoRegistrarPartida={isChines ? undefined : () => abrir({ nome: 'registrarFinalizada' })}
+        aoRegistrarPartida={() => abrir({ nome: 'registrarFinalizada' })}
       />
     )
   }

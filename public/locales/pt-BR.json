@@ -2630,7 +2630,8 @@
       "erros": {
         "fanMinimo": "A mão precisa de no mínimo 8 fan.",
         "semDescartador": "Escolha quem descartou.",
-        "descartadorVencedor": "Quem venceu não pode ter descartado."
+        "descartadorVencedor": "Quem venceu não pode ter descartado.",
+        "naoFecha": "Os quatro valores precisam somar zero."
       },
       "regrasMcr": "MCR",
       "resumoRegras": "Pagamento MCR: 8 pontos obrigatórios + os pontos da mão. Mínimo de 8 fan.",
@@ -2657,7 +2658,31 @@
       "falsoHuDe": "Falso Hu de {{name}}?",
       "falsoHuTexto": "Quem errou paga 10 pontos a cada um dos outros três, e a mão continua.",
       "qtdPontos": "{{pontos}} pontos",
-      "verMesa": "Ver a mesa"
+      "verMesa": "Ver a mesa",
+      "sumula": {
+        "titulo": "Súmula",
+        "cartao": "Totais ou súmula mão a mão",
+        "resumo": "Papel e caneta, com a conta feita",
+        "faltamJogadores": "Escolha os 4 jogadores primeiro",
+        "contagem": "{{feitas}} de {{total}} mãos",
+        "calcular": "Calcular mão",
+        "escrever": "Escrever pontos",
+        "escreverAjuda": "Toque em cada um. O que ficar em branco é completado para a soma dar zero.",
+        "anotar": "Anotar",
+        "quemVenceu": "Quem venceu?",
+        "comoVenceu": "Como {{name}} venceu?",
+        "colunaMao": "Mão",
+        "mao": "Mão {{numero}}",
+        "corrigir": "Corrigir a mão {{numero}}",
+        "apagarLinha": "Apagar linha",
+        "limpar": "Limpar súmula",
+        "limparAjuda": "As mãos, os totais e as anotações somem. Os jogadores ficam.",
+        "digitado": "Total digitado",
+        "anotado": "Anotado à mão",
+        "total": "Total",
+        "notas": "Anotações",
+        "notasAjuda": "Escreva o que quiser, como no papel"
+      }
     }
   },
   "glossario": {

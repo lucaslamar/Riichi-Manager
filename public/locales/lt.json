@@ -2716,7 +2716,8 @@
       "erros": {
         "fanMinimo": "The hand needs at least 8 fan.",
         "semDescartador": "Choose who discarded.",
-        "descartadorVencedor": "The winner can't be the discarder."
+        "descartadorVencedor": "The winner can't be the discarder.",
+        "naoFecha": "Keturių reikšmių suma turi būti nulis."
       },
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
@@ -2743,7 +2744,31 @@
       "falsoHuDe": "{{name}} klaidingas Hu?",
       "falsoHuTexto": "Suklydęs žaidėjas moka po 10 taškų kitiems trims, o ranka tęsiasi.",
       "qtdPontos": "{{pontos}} taškų",
-      "verMesa": "Žiūrėti stalą"
+      "verMesa": "Žiūrėti stalą",
+      "sumula": {
+        "titulo": "Taškų lapas",
+        "cartao": "Sumos arba lapas kiekvienai rankai",
+        "resumo": "Popierius ir rašiklis, o skaičiuoja programėlė",
+        "faltamJogadores": "Pirma pasirinkite 4 žaidėjus",
+        "contagem": "{{feitas}} iš {{total}} rankų",
+        "calcular": "Skaičiuoti ranką",
+        "escrever": "Įrašyti taškus",
+        "escreverAjuda": "Palieskite kiekvieną. Tuščias langelis užpildomas taip, kad suma būtų nulis.",
+        "anotar": "Užrašyti",
+        "quemVenceu": "Kas laimėjo?",
+        "comoVenceu": "Kaip laimėjo {{name}}?",
+        "colunaMao": "Ranka",
+        "mao": "Ranka {{numero}}",
+        "corrigir": "Taisyti ranką {{numero}}",
+        "apagarLinha": "Ištrinti eilutę",
+        "limpar": "Išvalyti lapą",
+        "limparAjuda": "Rankos, sumos ir pastabos dingsta. Žaidėjai lieka.",
+        "digitado": "Įvesta suma",
+        "anotado": "Įrašyta ranka",
+        "total": "Suma",
+        "notas": "Pastabos",
+        "notasAjuda": "Rašykite bet ką, kaip popieriuje"
+      }
     }
   },
   "glossario": {

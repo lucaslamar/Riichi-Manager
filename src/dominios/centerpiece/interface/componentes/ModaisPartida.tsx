@@ -357,6 +357,7 @@ function rotuloEvento(
   if (chines) {
     if (evento.tipo === 'ryukyoku') return t('placar.mcr.empate')
     if (evento.tipo === 'chombo') return t('placar.mcr.falsoHu')
+    if (evento.tipo === 'legado') return t('placar.mcr.sumula.anotado')
     const fan = (evento.detalhe as { fan?: number } | undefined)?.fan
     if (fan) return `${t(`match.event.${evento.tipo}`)} · ${t('placar.mcr.qtdFan', { fan })}`
   }

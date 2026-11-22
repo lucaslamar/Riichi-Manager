@@ -11,6 +11,7 @@ import { criarRascunho } from '@/dominios/torneio/logica/torneio'
 import type { MesaTorneio, RodadaTorneio } from '@/dominios/torneio/logica/tipos'
 import { novoPlacar, TIMER_PADRAO_SEGUNDOS } from '../logica/placar'
 import PaginaEmAndamento from '@/dominios/centerpiece/interface/paginas/PaginaEmAndamento'
+import RegistrarFinalizada from '@/dominios/centerpiece/interface/paginas/RegistrarFinalizada'
 import PaginaListaClube from '@/dominios/centerpiece/interface/paginas/PaginaListaClube'
 import PaginaMesasSorteadas from '@/dominios/centerpiece/interface/paginas/PaginaMesasSorteadas'
 import { acoesClubeMcr, assentosDaMesa } from '@/dominios/centerpiece/interface/hooks/useClube'
@@ -25,6 +26,7 @@ import './placar-mcr.css'
 type Vista =
   | { tipo: 'hub' }
   | { tipo: 'novo' }
+  | { tipo: 'registrar' }
   | { tipo: 'torneio'; id: string }
   | { tipo: 'temporada'; id: string }
   | { tipo: 'listaClube' }
@@ -142,6 +144,14 @@ export default function PaginaPlacarMcr() {
   if (vista.tipo === 'novo') {
     return <NovoPlacarMcr aoCriar={abrir} aoVoltar={voltar} />
   }
+  if (vista.tipo === 'registrar') {
+    return (
+      <RegistrarFinalizada
+        aoVoltar={voltar}
+        aoRegistrar={() => setVista({ tipo: 'lista', quais: 'historico' })}
+      />
+    )
+  }
   if (vista.tipo === 'torneio') {
     return (
       <PaginaTorneio
@@ -244,6 +254,13 @@ export default function PaginaPlacarMcr() {
         ? t('placar.mcr.qtdPartidas', { count: finalizados.length })
         : t('placar.mcr.nenhumaPartida'),
       aoTocar: () => setVista({ tipo: 'lista', quais: 'historico' }),
+    },
+    {
+      chave: 'registrar',
+      icone: 'fa-clipboard-check',
+      titulo: t('match.manual.title'),
+      texto: t('placar.mcr.sumula.cartao'),
+      aoTocar: () => setVista({ tipo: 'registrar' }),
     },
   ]
 

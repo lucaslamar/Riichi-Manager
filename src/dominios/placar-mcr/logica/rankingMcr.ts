@@ -45,7 +45,8 @@ export function partidasDoRankingMcr(placares: readonly PlacarMcr[]): Partida[] 
         finalizadaEm: placar.finalizadoEm,
         resultado,
         variante: 'yonma',
-        registradaManual: false,
+        registradaManual: !!placar.registradoManual,
+        ordemDosVentos: true,
         config: {},
         // A análise do jogador lê o vento de cada um na primeira mão.
         assentos: Object.fromEntries(
@@ -160,16 +161,26 @@ export function eventosDoPlacarMcr(placar: PlacarMcr): EventoPartida[] {
     eventos.push({
       id: `${placar.id}-m${indice}`,
       em: placar.criadoEm,
-      tipo: mao.tipo === 'empate' ? 'ryukyoku' : mao.forma,
+      tipo: mao.tipo === 'empate' ? 'ryukyoku' : mao.tipo === 'anotada' ? 'legado' : mao.forma,
       rodada: rodada(indice),
       variacao: pontosDaMao(mao),
       detalhe:
-        mao.tipo === 'empate'
-          ? {}
-          : { vencedores: [mao.vencedor], pagador: mao.descartador, fan: mao.fan },
+        mao.tipo === 'vitoria'
+          ? { vencedores: [mao.vencedor], pagador: mao.descartador, fan: mao.fan }
+          : {},
       lances: mao.lances,
     } as unknown as EventoPartida)
   })
   falsosAte(placar.maos.length)
+  if (placar.ajuste) {
+    eventos.push({
+      id: `${placar.id}-a`,
+      em: placar.criadoEm,
+      tipo: 'legado',
+      rodada: rodada(placar.maos.length),
+      variacao: placar.ajuste,
+      detalhe: {},
+    } as unknown as EventoPartida)
+  }
   return eventos
 }

@@ -1,11 +1,23 @@
 import { useMemo, useState } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import SeletorJogador from '@/dominios/jogadores/interface/componentes/SeletorJogador'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
+import SumulaMcr from '@/dominios/placar-mcr/interface/SumulaMcr'
+import { acoesPlacaresMcr, usePlacaresMcr } from '@/dominios/placar-mcr/interface/usePlacaresMcr'
+import { useSumulaMcr } from '@/dominios/placar-mcr/interface/useSumulaMcr'
+import { TOTAL_MAOS } from '@/dominios/placar-mcr/logica/placar'
+import { partidasDoRankingMcr } from '@/dominios/placar-mcr/logica/rankingMcr'
+import {
+  digitarTotal,
+  placarDaSumula,
+  pontosDaSumula,
+  SUMULA_VAZIA,
+} from '@/dominios/placar-mcr/logica/sumula'
 import { alterarConfig, type ConfigMesa } from '../../logica/configMesa'
 import type { MesaDoSorteio } from '../../logica/encontroClube'
 import { KANJI_VENTO, ORDEM_VENTOS, type Cadeira, type Partida } from '../../logica/partida'
@@ -44,6 +56,8 @@ const pontosValidos = (texto: string) => lerPontos(texto) !== null
  * vem de uma mesa sorteada: os quatro já preenchidos na ordem dos ventos (convidados
  * pelo nome), as regras de clube e a partida ligada ao encontro. Com `torneio`, os
  * quatro e as regras vêm travados da mesa do torneio (e os pontos, ao corrigir).
+ * No modo Chinês é a mesma tela com a regra MCR (soma zero, sem uma nem oka) e a
+ * súmula, que também guarda quem senta e os totais.
  */
 export default function RegistrarFinalizada({
   aoVoltar,
@@ -79,6 +93,12 @@ export default function RegistrarFinalizada({
   const { t, numero } = useI18n()
   const { jogadores } = useJogadores()
   const { partidas, adicionar } = usePartidas()
+  const chines = useModoJogoAtual() === 'mcr'
+  const placaresMcr = usePlacaresMcr()
+  const [sumula, mudarSumula] = useSumulaMcr()
+  /** Súmula aberta, com o vencedor quando veio do Calcular mão dele. */
+  const [sumulaAberta, setSumulaAberta] = useState<{ vencedor?: Cadeira } | null>(null)
+  const [calculadoraAberta, setCalculadoraAberta] = useState(false)
   const [confirmando, setConfirmando] = useState(false)
   const [regrasAbertas, setRegrasAbertas] = useState(false)
   const resumoRegras = useResumo()
@@ -130,12 +150,18 @@ export default function RegistrarFinalizada({
   // Padrão: a lista segue Leste, Sul, Oeste, Norte.
   const [ordemEscolhida, setOrdemEscolhida] = useState(true)
   const ordemDosVentos = torneio ? torneio.comVentos !== false : !!mesaClube || ordemEscolhida
-  const [assentos, setAssentos] = useState<(string | null)[]>(() =>
+  const [assentosRiichi, setAssentosRiichi] = useState<(string | null)[]>(() =>
     torneio ? [...torneio.jogadorIds] : mesaClube ? [...mesaClube.ids] : [null, null, null, null],
   )
-  const [pontos, setPontos] = useState(() =>
+  const [pontosRiichi, setPontos] = useState(() =>
     torneio?.pontosIniciais ? torneio.pontosIniciais.map(String) : ['', '', '', ''],
   )
+  const assentos = chines ? sumula.assentos : assentosRiichi
+  const setAssentos = (proximos: (string | null)[]) =>
+    chines ? mudarSumula({ ...sumula, assentos: proximos }) : setAssentosRiichi(proximos)
+  const pontos = chines
+    ? pontosDaSumula(sumula).map((valor) => (valor === null ? '' : String(valor)))
+    : pontosRiichi
   const [atrasos, setAtrasos] = useState<Readonly<Record<string, number>>>(() => torneio?.atraso?.iniciais ?? {})
   const [escolhendo, setEscolhendo] = useState<number | null>(null)
   /** Torneio: jogador com a calculadora de pontos aberta. */
@@ -147,7 +173,8 @@ export default function RegistrarFinalizada({
     return (id && convidados.get(id)) || null
   }
 
-  const totalMesa = pontosPartida * 4
+  // No MCR o que um ganha sai dos outros: a mesa soma zero.
+  const totalMesa = chines ? 0 : pontosPartida * 4
   const efetivos = pontos
   const pontosCompletos = efetivos.every(pontosValidos)
   const pontosNumeros = pontosCompletos ? efetivos.map((texto) => lerPontos(texto) ?? 0) : undefined
@@ -155,11 +182,14 @@ export default function RegistrarFinalizada({
   const soma = pontos.reduce((total, texto) => total + (lerPontos(texto) ?? 0), 0)
   const fechamento = somaFecha(soma, totalMesa, torneio?.config.palitosRestantes ?? 'primeiro')
   const completo =
-    assentos.every(Boolean) && pontosCompletos && umaValida(uma) && (!torneio || fechamento.fecha)
+    assentos.every(Boolean) &&
+    pontosCompletos &&
+    (chines || umaValida(uma)) &&
+    (!torneio || fechamento.fecha)
 
   const semAtraso = useMemo(
     () =>
-      completo && pontosNumeros
+      completo && pontosNumeros && !chines
         ? criarPartidaManual(
             'previa',
             base,
@@ -180,7 +210,15 @@ export default function RegistrarFinalizada({
     [completo, assentos, efetivos.join(), pontosPartida, pontosRetorno, uma, base],
   )
 
-  const previa = semAtraso && torneio?.atraso ? torneio.atraso.aplicar(semAtraso, atrasos) : semAtraso
+  const previaMcr =
+    chines && completo
+      ? partidasDoRankingMcr([placarDaSumula(sumula, 'previa', new Date().toISOString())])[0]
+      : null
+  const previa = chines
+    ? previaMcr
+    : semAtraso && torneio?.atraso
+      ? torneio.atraso.aplicar(semAtraso, atrasos)
+      : semAtraso
 
   /**
    * Torneio: põe o jogador no lugar e fecha a folha. Se ele já estava na mesa,
@@ -203,20 +241,28 @@ export default function RegistrarFinalizada({
 
   const nomeDaPrevia = (cadeira: number) => nomeDe(assentos[cadeira]) ?? '—'
   const mudarPontos = (lugar: number, valor: string) =>
-    setPontos(pontos.map((atual, indice) => (indice === lugar ? valor : atual)))
+    chines
+      ? mudarSumula(digitarTotal(sumula, lugar as Cadeira, lerPontos(valor)))
+      : setPontos(pontos.map((atual, indice) => (indice === lugar ? valor : atual)))
 
   return (
-    <section className="ptd-inicio fin-tela">
-      <TituloTela
-        titulo={
-          torneio
-            ? torneio.titulo
-            : clube
-              ? t('match.table.number', { number: clube.mesa.numero })
-              : t('match.manual.title')
-        }
-        aoVoltar={aoVoltar}
-      />
+    // Com a calculadora da súmula aberta, a tela some e o título é o dela.
+    <section
+      className="ptd-inicio fin-tela"
+      style={calculadoraAberta ? { display: 'none' } : undefined}
+    >
+      {!calculadoraAberta && (
+        <TituloTela
+          titulo={
+            torneio
+              ? torneio.titulo
+              : clube
+                ? t('match.table.number', { number: clube.mesa.numero })
+                : t('match.manual.title')
+          }
+          aoVoltar={aoVoltar}
+        />
+      )}
 
       {!torneio && <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>}
       <>
@@ -302,8 +348,40 @@ export default function RegistrarFinalizada({
         />
       )}
 
-      {/* Regras num card, como o resumo da Nova partida. No torneio, só leitura. */}
-      {torneio ? (
+      {chines && (
+        <button
+          type="button"
+          className="ptd-resumo-regras"
+          aria-haspopup="dialog"
+          disabled={!assentos.every(Boolean)}
+          onClick={() => setSumulaAberta({})}
+        >
+          <span>
+            <strong>{t('placar.mcr.sumula.titulo')}</strong>
+            <span className="ptd-apoio">
+              {assentos.every(Boolean)
+                ? t('placar.mcr.sumula.contagem', {
+                    feitas: numero(sumula.maos.length),
+                    total: numero(TOTAL_MAOS),
+                  })
+                : t('placar.mcr.sumula.faltamJogadores')}
+            </span>
+            <span className="ptd-apoio">{t('placar.mcr.sumula.resumo')}</span>
+          </span>
+          <i className="fas fa-file-pen" aria-hidden="true" />
+        </button>
+      )}
+
+      {/* Regras num card, como o resumo da Nova partida. No torneio e no MCR, só leitura. */}
+      {chines ? (
+        <div className="ptd-resumo-regras fin-regras-travadas">
+          <span>
+            <strong>{t('placar.mcr.regrasMcr')}</strong>
+            <span className="ptd-apoio">{t('placar.mcr.resumoRegras')}</span>
+          </span>
+          <i className="fas fa-lock" aria-hidden="true" />
+        </div>
+      ) : torneio ? (
         <div className="ptd-resumo-regras fin-regras-travadas">
           <span>
             <strong>
@@ -336,7 +414,7 @@ export default function RegistrarFinalizada({
           <span className="sr-only">{t('match.manual.editRules')}</span>
         </button>
       )}
-      {!torneio && (
+      {!torneio && !chines && (
         <RegrasPontuacaoRegistro
           conjunto={conjunto}
           regras={regras}
@@ -365,18 +443,29 @@ export default function RegistrarFinalizada({
         <ConfirmarRegistro
           resultado={previa.resultado}
           nomeDe={nomeDaPrevia}
+          semUma={chines}
           // Torneio: a mesa vale para o ranking do torneio, não para o geral.
           tituloRanking={torneio ? 'tournament.positionChange.confirmTitle' : undefined}
           mudancas={
             torneio
               ? torneio.mudancas(previa)
-              : mudancaNoRanking(partidas, previa, new Date(), (id) =>
+              : mudancaNoRanking(
+                  chines ? partidasDoRankingMcr(placaresMcr) : partidas,
+                  previa,
+                  new Date(),
+                  (id) =>
                   jogadores.some((jogador) => jogador.id === id),
                 )
           }
           aoFechar={() => setConfirmando(false)}
           aoConfirmar={() => {
             const id = gerarId()
+            if (chines) {
+              acoesPlacaresMcr.criar(placarDaSumula(sumula, id, new Date().toISOString()))
+              mudarSumula(SUMULA_VAZIA)
+              aoRegistrar(id)
+              return
+            }
             adicionar({
               ...previa,
               id,
@@ -400,6 +489,16 @@ export default function RegistrarFinalizada({
           })()}
           // Fora do torneio começa em 0: quem só tem o ponto final digita direto, sem apagar antes.
           inicial={lerPontos(pontos[calculando]) ?? (torneio ? pontosPartida : 0)}
+          aoCalcularMao={
+            chines
+              ? (valor) => {
+                  if (valor !== undefined)
+                    mudarPontos(calculando, valor === null ? '' : String(valor))
+                  setSumulaAberta({ vencedor: calculando })
+                  setCalculando(null)
+                }
+              : undefined
+          }
           aoFechar={() => setCalculando(null)}
           aoNavegar={(passo, valor) => {
             if (valor !== undefined) mudarPontos(calculando, valor === null ? '' : String(valor))
@@ -413,6 +512,17 @@ export default function RegistrarFinalizada({
             mudarPontos(calculando, valor === null ? '' : String(valor))
             setCalculando(null)
           }}
+        />
+      )}
+
+      {sumulaAberta && (
+        <SumulaMcr
+          sumula={sumula}
+          nomes={LUGARES.map((lugar) => nomeDe(assentos[lugar]) ?? '—')}
+          vencedorInicial={sumulaAberta.vencedor}
+          aoMudar={mudarSumula}
+          aoMostrarCalculadora={setCalculadoraAberta}
+          aoFechar={() => setSumulaAberta(null)}
         />
       )}
 

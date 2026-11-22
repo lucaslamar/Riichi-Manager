@@ -1,0 +1,116 @@
+/* Súmula do MCR: a folha de papel da mesa, com pauta. */
+
+.sumula-mcr__folha {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: var(--texto-principal);
+  font-variant-numeric: tabular-nums;
+}
+
+.sumula-mcr__folha th,
+.sumula-mcr__folha td {
+  height: 44px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 2px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.sumula-mcr__folha thead th:first-child {
+  width: 56px;
+}
+
+.sumula-mcr__folha td {
+  border-left: 1px solid var(--linha-divisoria);
+  font-weight: 700;
+}
+
+.sumula-mcr__folha tfoot th,
+.sumula-mcr__folha tfoot td {
+  border-top: 2px solid var(--texto-apoio);
+  font-weight: 900;
+}
+
+.sumula-mcr__nome {
+  display: block;
+  overflow: hidden;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sumula-mcr__linha {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  color: var(--primario);
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.sumula-mcr__linha small {
+  color: var(--texto-apoio);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+.sumula-mcr__acoes {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sumula-mcr__acoes button {
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  padding-inline: 4px;
+}
+
+.sumula-mcr__notas {
+  display: grid;
+  gap: 6px;
+  margin-top: 16px;
+  color: var(--texto-principal);
+  font-weight: 700;
+}
+
+.sumula-mcr__notas textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--texto-principal);
+  background: var(--fundo);
+  /* Abaixo de 16px o iPhone dá zoom ao tocar no campo. */
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  resize: vertical;
+}
+
+.sumula-mcr__completado,
+.sumula-mcr__ajuda {
+  color: var(--texto-apoio);
+}
+
+.sumula-mcr__ajuda {
+  font-size: 0.85rem;
+}
+
+.sumula-mcr__notas-salvas {
+  margin: 0;
+  color: var(--texto-principal);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

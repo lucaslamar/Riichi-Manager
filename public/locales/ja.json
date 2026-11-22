@@ -2593,7 +2593,8 @@
       "erros": {
         "fanMinimo": "The hand needs at least 8 fan.",
         "semDescartador": "Choose who discarded.",
-        "descartadorVencedor": "The winner can't be the discarder."
+        "descartadorVencedor": "The winner can't be the discarder.",
+        "naoFecha": "4人の合計は0にしてください。"
       },
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
@@ -2620,7 +2621,31 @@
       "falsoHuDe": "{{name}}の錯和？",
       "falsoHuTexto": "誤った人が他の3人に10点ずつ払い、局は続きます。",
       "qtdPontos": "{{pontos}}点",
-      "verMesa": "卓を見る"
+      "verMesa": "卓を見る",
+      "sumula": {
+        "titulo": "点数表",
+        "cartao": "合計か局ごとの点数表",
+        "resumo": "紙とペン、計算は自動",
+        "faltamJogadores": "先に4人を選んでください",
+        "contagem": "{{total}}局中{{feitas}}局",
+        "calcular": "手を計算",
+        "escrever": "点数を書く",
+        "escreverAjuda": "各プレイヤーをタップします。空欄の1人は合計が0になるよう補われます。",
+        "anotar": "記入",
+        "quemVenceu": "誰が和了？",
+        "comoVenceu": "{{name}}の和了方法は？",
+        "colunaMao": "局",
+        "mao": "第{{numero}}局",
+        "corrigir": "第{{numero}}局を修正",
+        "apagarLinha": "行を削除",
+        "limpar": "点数表を消去",
+        "limparAjuda": "局、合計、メモが消えます。プレイヤーは残ります。",
+        "digitado": "入力した合計",
+        "anotado": "手書き",
+        "total": "合計",
+        "notas": "メモ",
+        "notasAjuda": "紙のように自由に書けます"
+      }
     }
   },
   "glossario": {

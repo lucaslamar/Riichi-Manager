@@ -39,6 +39,7 @@ export const CHAVES_DE_DADOS: readonly string[] = [
   'riichi-manager-eu',
   CHAVE_LIMITE_DETALHES,
   'riichi-manager-placares-mcr',
+  'riichi-manager-sumula-mcr',
   'riichi-manager-clube-lista-mcr',
   'riichi-manager-clube-sorteio-mcr',
   'riichi-manager-clube-encontros-mcr',

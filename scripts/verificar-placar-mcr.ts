@@ -18,6 +18,18 @@ import {
   ventoDaRodada,
 } from '../src/dominios/placar-mcr/logica/placar'
 import { partidasDoTorneioMcr, pontosDeMesa } from '../src/dominios/placar-mcr/logica/torneio'
+import {
+  anotarFalsoHu,
+  anotarMao,
+  apagarMao,
+  digitarTotal,
+  fecharMaoEscrita,
+  normalizarSumula,
+  placarDaSumula,
+  pontosDaSumula,
+  SUMULA_VAZIA,
+  type RascunhoSumula,
+} from '../src/dominios/placar-mcr/logica/sumula'
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
 import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
 
@@ -118,3 +130,34 @@ assert.deepEqual(pontosDeMesa([0, 0, 0, 0]), [1.75, 1.75, 1.75, 1.75], 'Quatro e
   assert.equal(desfazerUltimaMao(comErro).falsosHu?.length, 0, 'Desfazer tira o Falso Hu')
 }
 console.log('Placar MCR ok: 25 testes.')
+
+{
+  // Súmula do Registrar partida finalizada: papel e caneta com a conta feita.
+  let s: RascunhoSumula = { ...SUMULA_VAZIA, assentos: ['a', 'b', 'c', 'd'] }
+  assert.deepEqual(pontosDaSumula(s), [null, null, null, null])
+  s = anotarMao(s, { tipo: 'vitoria', vencedor: 1, forma: 'ron', descartador: 2, fan: 24 })
+  assert.deepEqual(pontosDaSumula(s), [-8, 48, -32, -8], 'a mão calculada desconta dos outros')
+  s = anotarMao(s, { tipo: 'anotada', pontos: [30, -10, -10, -10] })
+  assert.deepEqual(pontosDaSumula(s), [22, 38, -42, -18])
+  assert.equal(anotarMao(s, { tipo: 'anotada', pontos: [1, 0, 0, 0] }), s, 'linha que não fecha')
+  assert.deepEqual(fecharMaoEscrita([30, -10, -10, null]), [30, -10, -10, -10])
+  assert.equal(fecharMaoEscrita([30, null, null, 0]), null)
+  assert.equal(fecharMaoEscrita([1, 0, 0, 0]), null)
+
+  s = anotarFalsoHu(s, 0)
+  assert.deepEqual(pontosDaSumula(s), [-8, 48, -32, -8], 'Falso Hu: 10 a cada um')
+  const digitada = digitarTotal(s, 0, 100)
+  assert.equal(pontosDaSumula(digitada)[0], 100, 'o total digitado vale')
+  assert.equal(pontosDaSumula(anotarMao(digitada, { tipo: 'anotada', pontos: [5, -5, 0, 0] }))[0], 105)
+  assert.deepEqual(apagarMao(s, 0).falsosHu, [{ cadeira: 0, aposMao: 1 }])
+
+  const final = placarDaSumula(digitada, 'sumula', '2026-11-22T10:00:00.000Z')
+  assert.deepEqual(totais(final), [100, 48, -32, -8])
+  assert.equal(final.finalizadoEm, '2026-11-22T10:00:00.000Z')
+  assert.equal(final.registradoManual, true)
+  assert.deepEqual(final.falsosHu, [{ cadeira: 0, aposMao: 2 }])
+  assert.deepEqual(JSON.parse(JSON.stringify(final)), final, 'volta igual do backup')
+  assert.deepEqual(normalizarSumula(JSON.parse(JSON.stringify(digitada))), digitada)
+  assert.deepEqual(normalizarSumula({ maos: 3 }), SUMULA_VAZIA)
+}
+console.log('Súmula MCR ok.')

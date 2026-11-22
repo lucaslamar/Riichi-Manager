@@ -43,6 +43,8 @@ export default function CalculadoraPontosSheet({
   inicial,
   aoConfirmar,
   aoNavegar,
+  aoCalcularMao,
+  semCalcularMao = false,
   aoFechar,
 }: {
   cadeira: Cadeira
@@ -57,6 +59,13 @@ export default function CalculadoraPontosSheet({
    * `pontos` vem só quando a conta foi mexida: aí ela é gravada antes de passar.
    */
   aoNavegar?: (passo: 1 | -1, pontos: number | null | undefined) => void
+  /**
+   * No lugar do Han e Fu (MCR: a súmula). `pontos` vem só quando a conta foi mexida,
+   * para gravar antes.
+   */
+  aoCalcularMao?: (pontos: number | null | undefined) => void
+  /** Linha escrita à mão: só o teclado. */
+  semCalcularMao?: boolean
   aoFechar: () => void
 }) {
   const { t, numero } = useI18n()
@@ -247,14 +256,20 @@ export default function CalculadoraPontosSheet({
             )}
           </div>
 
-          <button
-            type="button"
-            className="btn-contorno cpt-calcular"
-            onClick={() => setCalculandoMao(true)}
-          >
-            <i className="fas fa-calculator" aria-hidden="true" />{' '}
-            {t('tournament.points.calculateHand')}
-          </button>
+          {!semCalcularMao && (
+            <button
+              type="button"
+              className="btn-contorno cpt-calcular"
+              onClick={() =>
+                aoCalcularMao
+                  ? aoCalcularMao(mexeu ? resultado : undefined)
+                  : setCalculandoMao(true)
+              }
+            >
+              <i className="fas fa-calculator" aria-hidden="true" />{' '}
+              {t('tournament.points.calculateHand')}
+            </button>
+          )}
 
           <div className="cpt-teclado">
             {tecla('C', t('tournament.points.clear'), () => setExpressao(''), ' cpt-tecla--acao')}

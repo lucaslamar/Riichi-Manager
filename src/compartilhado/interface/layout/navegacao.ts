@@ -93,9 +93,6 @@ const OCULTAS_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set([
   'partidas',
 ])
 
-/** Subitens do menu lateral que só existem no Riichi. */
-export const SUBITENS_SO_RIICHI: ReadonlySet<SubtelaPartida> = new Set(['registrarFinalizada'])
-
 /** Telas que só existem no modo Chinês. */
 const SO_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set(['placarMcr'])
 

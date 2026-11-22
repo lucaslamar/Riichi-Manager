@@ -12,6 +12,7 @@ export default function ConfirmarRegistro({
   resultado,
   nomeDe,
   mudancas,
+  semUma = false,
   tituloRanking = 'match.manual.rankingTitle',
   aoConfirmar,
   aoFechar,
@@ -20,6 +21,8 @@ export default function ConfirmarRegistro({
   nomeDe: (cadeira: Cadeira) => string
   /** No ranking geral, convidados (fora do cadastro) não têm linha aqui. */
   mudancas: readonly MudancaRanking[]
+  /** MCR: o total já é o ponto da mesa, sem uma nem oka. */
+  semUma?: boolean
   /** Chave do texto que diz qual ranking é. */
   tituloRanking?: string
   aoConfirmar: () => void
@@ -63,22 +66,24 @@ export default function ConfirmarRegistro({
               <div className="ptd-resultado-dados">
                 <strong className="fin-mudanca-nome">{nomeDe(linha.cadeira)}</strong>
                 {/* Pontos, uma e oka em colunas pequenas, com o título em cima. */}
-                <dl className="fin-detalhes">
-                  <div>
-                    <dt>{t('match.cards.points')}</dt>
-                    <dd>{numero(linha.pontosBrutos)}</dd>
-                  </div>
-                  <div>
-                    <dt>{t('tableConfig.umaLabel')}</dt>
-                    <dd>{comSinal(linha.uma)}</dd>
-                  </div>
-                  {comOka && (
+                {!semUma && (
+                  <dl className="fin-detalhes">
                     <div>
-                      <dt>{t('tableConfig.okaLabel')}</dt>
-                      <dd>{comSinal(linha.oka)}</dd>
+                      <dt>{t('match.cards.points')}</dt>
+                      <dd>{numero(linha.pontosBrutos)}</dd>
                     </div>
-                  )}
-                </dl>
+                    <div>
+                      <dt>{t('tableConfig.umaLabel')}</dt>
+                      <dd>{comSinal(linha.uma)}</dd>
+                    </div>
+                    {comOka && (
+                      <div>
+                        <dt>{t('tableConfig.okaLabel')}</dt>
+                        <dd>{comSinal(linha.oka)}</dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
                 {!!linha.atraso && (
                   <span className="ptd-apoio">{t('tournament.wo.lateBy', { minutes: linha.atraso })}</span>
                 )}

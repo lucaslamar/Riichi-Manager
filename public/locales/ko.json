@@ -2593,7 +2593,8 @@
       "erros": {
         "fanMinimo": "The hand needs at least 8 fan.",
         "semDescartador": "Choose who discarded.",
-        "descartadorVencedor": "The winner can't be the discarder."
+        "descartadorVencedor": "The winner can't be the discarder.",
+        "naoFecha": "네 값의 합은 0이어야 합니다."
       },
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
@@ -2620,7 +2621,31 @@
       "falsoHuDe": "{{name}}의 착화?",
       "falsoHuTexto": "틀린 사람이 다른 세 명에게 10점씩 내고, 판은 계속됩니다.",
       "qtdPontos": "{{pontos}}점",
-      "verMesa": "테이블 보기"
+      "verMesa": "테이블 보기",
+      "sumula": {
+        "titulo": "점수표",
+        "cartao": "합계 또는 판별 점수표",
+        "resumo": "종이와 펜, 계산은 자동",
+        "faltamJogadores": "먼저 4명을 선택하세요",
+        "contagem": "{{total}}판 중 {{feitas}}판",
+        "calcular": "손패 계산",
+        "escrever": "점수 쓰기",
+        "escreverAjuda": "각 플레이어를 누르세요. 비워 둔 한 명은 합이 0이 되도록 채워집니다.",
+        "anotar": "기록",
+        "quemVenceu": "누가 화료했나요?",
+        "comoVenceu": "{{name}}은(는) 어떻게 화료했나요?",
+        "colunaMao": "판",
+        "mao": "{{numero}}번째 판",
+        "corrigir": "{{numero}}번째 판 수정",
+        "apagarLinha": "줄 삭제",
+        "limpar": "점수표 지우기",
+        "limparAjuda": "판, 합계, 메모가 지워집니다. 플레이어는 남습니다.",
+        "digitado": "입력한 합계",
+        "anotado": "직접 기록",
+        "total": "합계",
+        "notas": "메모",
+        "notasAjuda": "종이처럼 자유롭게 쓰세요"
+      }
     }
   },
   "glossario": {

@@ -2648,7 +2648,8 @@
       "erros": {
         "fanMinimo": "The hand needs at least 8 fan.",
         "semDescartador": "Choose who discarded.",
-        "descartadorVencedor": "The winner can't be the discarder."
+        "descartadorVencedor": "The winner can't be the discarder.",
+        "naoFecha": "Los cuatro valores deben sumar cero."
       },
       "regrasMcr": "MCR",
       "resumoRegras": "MCR payment: 8 mandatory points + the hand points. 8 fan minimum.",
@@ -2675,7 +2676,31 @@
       "falsoHuDe": "¿Falso Hu de {{name}}?",
       "falsoHuTexto": "Quien se equivocó paga 10 puntos a cada uno de los otros tres, y la mano sigue.",
       "qtdPontos": "{{pontos}} puntos",
-      "verMesa": "Ver la mesa"
+      "verMesa": "Ver la mesa",
+      "sumula": {
+        "titulo": "Planilla",
+        "cartao": "Totales o planilla mano a mano",
+        "resumo": "Papel y lápiz, con la cuenta hecha",
+        "faltamJogadores": "Elige primero a los 4 jugadores",
+        "contagem": "{{feitas}} de {{total}} manos",
+        "calcular": "Calcular mano",
+        "escrever": "Escribir puntos",
+        "escreverAjuda": "Toca a cada uno. El que quede en blanco se completa para que la suma dé cero.",
+        "anotar": "Anotar",
+        "quemVenceu": "¿Quién ganó?",
+        "comoVenceu": "¿Cómo ganó {{name}}?",
+        "colunaMao": "Mano",
+        "mao": "Mano {{numero}}",
+        "corrigir": "Corregir la mano {{numero}}",
+        "apagarLinha": "Borrar línea",
+        "limpar": "Limpiar planilla",
+        "limparAjuda": "Se borran las manos, los totales y las notas. Los jugadores se quedan.",
+        "digitado": "Total escrito",
+        "anotado": "Anotado a mano",
+        "total": "Total",
+        "notas": "Notas",
+        "notasAjuda": "Escribe lo que quieras, como en papel"
+      }
     }
   },
   "glossario": {
