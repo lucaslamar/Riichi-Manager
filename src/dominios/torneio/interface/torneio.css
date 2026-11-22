@@ -1079,11 +1079,20 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   min-height: 44px;
 }
 
-/* No desktop o cabeçalho mora no menu lateral, estreito: mouse, botões menores. */
-@media (min-width: 1024px) {
-  .trn-acoes-rodada .cm-btn-icone {
-    width: 28px;
-    min-width: 28px;
+/* No menu lateral, estreito, as ações descem para baixo do título. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .cabecalho-tela:has(> .trn-acoes-rodada) {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .cabecalho-tela:has(> .trn-acoes-rodada) > .titulo-tela {
+    flex: 1;
+  }
+
+  .cabecalho-tela > .trn-acoes-rodada {
+    flex-basis: 100%;
+    justify-content: space-around;
   }
 }
 
@@ -1516,4 +1525,44 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 
 .trn-guia-formatos + p + p {
   margin-top: 16px;
+}
+
+/* Tablet: cabeçalho de altura fixa na rodada, para o timer parar logo abaixo dele. */
+@media (min-width: 641px) and (min-height: 561px) and (max-width: 1023px),
+  (min-width: 1024px) and (orientation: portrait) {
+  body:has(.trn-mesas) .cabecalho-principal {
+    height: 80px;
+  }
+
+  .conteudo-principal:has(.trn-mesas) {
+    overflow-x: clip;
+  }
+
+  .trn-mesas .trn-timer-geral {
+    top: 80px;
+  }
+}
+
+/* Preso no topo, o timer encolhe para sobrar tela para as mesas. */
+@media (min-width: 641px) and (min-height: 561px) {
+  .trn-mesas .trn-timer-geral {
+    padding-block: 6px;
+  }
+
+  .trn-mesas .trn-timer-geral .trn-anel {
+    width: 88px;
+    height: 88px;
+  }
+
+  .trn-mesa-acoes > .clb-mesa-botao {
+    padding-inline: 8px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Tabela larga demais afasta o nome dos pontos. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .ptd-inicio.trn-ranking {
+    width: min(100%, 960px);
+  }
 }

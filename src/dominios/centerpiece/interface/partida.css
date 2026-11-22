@@ -416,7 +416,7 @@
   background: var(--fundo);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (orientation: landscape) {
   .ptd-rodape-fixo {
     position: sticky;
     bottom: 0;
@@ -1813,4 +1813,57 @@ body:has(.ptd-modulo) {
   background: color-mix(in srgb, var(--primario) 14%, transparent);
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+/* Tablet em pé ou dividido: o cabeçalho muda de altura, a tela ocupa o que sobra. */
+@media (min-width: 641px) and (min-height: 561px) and (max-width: 1023px),
+  (min-width: 1024px) and (orientation: portrait) {
+  body:has(.ptd-setup, .trn-lista),
+  body:has(.ptd-setup, .trn-lista) > #app,
+  body:has(.ptd-setup, .trn-lista) .conteudo-principal:not(#_),
+  .ptd-modulo:has(> .ptd-setup, > .trn-lista) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  body:has(.ptd-setup, .trn-lista) {
+    min-height: 100dvh;
+  }
+
+  body:has(.ptd-setup, .trn-lista) > #app,
+  body:has(.ptd-setup, .trn-lista) .conteudo-principal:not(#_),
+  .ptd-modulo:has(> .ptd-setup, > .trn-lista),
+  .ptd-modulo > .ptd-setup,
+  .ptd-modulo > .trn-lista {
+    flex: 1 0 auto;
+    min-height: 0;
+  }
+}
+
+@media (min-width: 1024px) and (orientation: landscape) {
+  /* clip, e não hidden: hidden vira área de rolagem e nada dentro fica preso. */
+  .conteudo-principal:has(> .ptd-modulo) {
+    overflow-x: clip;
+  }
+
+  /* O rodapé preso encosta na base, sem a folga do rodapé fixo do celular. */
+  .conteudo-principal:has(.clb-lista, .ptd-setup) {
+    padding-bottom: 0;
+  }
+
+  .ptd-modulo > .clb-lista,
+  .ptd-modulo > .ptd-setup {
+    padding-bottom: 0;
+  }
+
+  .ptd-modulo > .ptd-setup {
+    min-height: calc(100dvh - 24px);
+  }
+
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
+  .ptd-modulo > .ptd-setup {
+    min-height: 100dvh;
+  }
 }
