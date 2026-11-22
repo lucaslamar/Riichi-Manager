@@ -1860,7 +1860,16 @@ body:has(.ptd-modulo) {
     min-height: calc(100dvh - 24px);
   }
 
-  /* Ranking: uma linha por jogador, com as métricas alinhadas para comparar. */
+}
+
+@media (min-width: 1024px) and (max-width: 1376px) and (min-height: 700px) and (orientation: landscape) {
+  .ptd-modulo > .ptd-setup {
+    min-height: 100dvh;
+  }
+}
+
+/* Tablet (em pé ou deitado) e PC: uma linha por jogador, com as métricas alinhadas. */
+@media (min-width: 768px) and (min-height: 561px), (min-width: 1024px) and (orientation: landscape) {
   .ptd-inicio:has(> .ptd-ranking) {
     width: min(100%, 1040px);
   }
@@ -1883,8 +1892,41 @@ body:has(.ptd-modulo) {
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
+/* iPad grande: usa a largura e aumenta a letra. */
+@media (min-width: 1000px) and (min-height: 1000px) {
+  .ptd-linha-ranking {
+    min-height: 76px;
+  }
+
+  .ptd-linha-ranking-topo {
+    font-size: 1.25rem;
+  }
+
+  .ptd-linha-ranking .ptd-ranking-nome-completo,
+  .ptd-linha-ranking .ptd-metricas dt {
+    font-size: 0.875rem;
+  }
+
+  .ptd-linha-ranking .ptd-metricas dd {
+    font-size: 1.0625rem;
+  }
+}
+
+/* iPad grande: Nova partida usa a largura, e os assentos a altura. */
+@media (min-width: 1000px) and (min-height: 1000px) {
   .ptd-modulo > .ptd-setup {
-    min-height: 100dvh;
+    width: min(100%, 880px);
+  }
+
+  .ptd-setup > .ptd-assentos {
+    max-height: none;
+  }
+
+  .ptd-setup .ptd-assento {
+    font-size: 1.375rem;
+  }
+
+  .ptd-setup .ptd-assento-kanji {
+    font-size: 4.5rem;
   }
 }

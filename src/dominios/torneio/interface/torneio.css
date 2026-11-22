@@ -1566,3 +1566,21 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
     width: min(100%, 960px);
   }
 }
+
+/* iPad grande: ranking e disputa legíveis a um braço de distância. */
+@media (min-width: 1000px) and (min-height: 1000px) {
+  .ptd-inicio.trn-ranking {
+    width: min(100%, 960px);
+  }
+
+  .trn-tabela-ranking,
+  .trn-tabela-ranking .trn-nome-ranking,
+  .trn-disputa-lista li,
+  .trn-disputa-lista li > strong {
+    font-size: 1.125rem;
+  }
+
+  .trn-tabela-ranking tbody td {
+    height: 60px;
+  }
+}

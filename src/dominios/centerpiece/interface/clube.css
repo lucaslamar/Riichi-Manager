@@ -999,3 +999,21 @@ body.teclado-aberto .clb-enviar {
     margin-top: 2px;
   }
 }
+
+/* iPad grande: lista mais larga, com o rodapé alinhado a ela, e mesas legíveis de longe. */
+@media (min-width: 1000px) and (min-height: 1000px) {
+  .clb-lista {
+    width: min(100%, 880px);
+  }
+
+  .clb-resultado .clb-assento-nome,
+  .clb-resultado .clb-mesa-titulo {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1000px) and (min-height: 1000px) and (orientation: portrait) {
+  .clb-rodape {
+    padding-inline: max(16px, calc((100% - 880px) / 2 + 16px));
+  }
+}
