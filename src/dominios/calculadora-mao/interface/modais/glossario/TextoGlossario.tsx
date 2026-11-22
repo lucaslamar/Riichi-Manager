@@ -1,5 +1,6 @@
 import { Fragment, useContext, useMemo, useState, type MouseEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { ContextoNavegacaoModal } from '@/compartilhado/interface/componentes/modal/navegacaoModal'
 import { dividirTextoGlossario } from '../../../logica/glossario'
 import ModalTermo, { ConteudoTermo, TituloTermo } from './ModalTermo'
@@ -24,10 +25,15 @@ export default function TextoGlossario({
   const { t, idioma } = useI18n()
   const abrirTela = useContext(ContextoNavegacaoModal)
   const [termoAberto, setTermoAberto] = useState<string | null>(null)
+  // Os verbetes são do Riichi: no MCR o texto fica sem esses links.
+  const semLinks = useModoJogoAtual() === 'mcr'
   const chaveIgnorar = ignorar?.join('|')
   const trechos = useMemo(
-    () => dividirTextoGlossario(texto, chaveIgnorar?.split('|'), idioma),
-    [texto, chaveIgnorar, idioma],
+    () =>
+      dividirTextoGlossario(texto, chaveIgnorar?.split('|'), idioma).map((trecho) =>
+        semLinks ? { ...trecho, termo: undefined } : trecho,
+      ),
+    [texto, chaveIgnorar, idioma, semLinks],
   )
 
   const abrir = (evento: MouseEvent, termo: string) => {

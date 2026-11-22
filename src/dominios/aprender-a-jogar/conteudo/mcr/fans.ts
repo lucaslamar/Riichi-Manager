@@ -52,8 +52,32 @@ function opcoes(certa: string, erradas: string[], semente: number) {
   return lista
 }
 
-const situacao = (t: Traduzir, notacao: string) =>
-  lerNotacaoMcr(notacao).tsumo ? t('tutorial.mcr.fans.porZimo') : t('tutorial.mcr.fans.porDianhe')
+const VENTOS = ['winds.east', 'winds.south', 'winds.west', 'winds.north']
+
+/** O que muda a conta e não se vê nas pedras: exposição, vitória, ventos e situação. */
+function situacao(t: Traduzir, notacao: string) {
+  const mao = lerNotacaoMcr(notacao)
+  const expostos = mao.chamadas.filter(({ tipo }) => tipo !== 'kanFechado').length
+  const anGang = mao.chamadas.length - expostos
+  return [
+    expostos
+      ? t('tutorial.mcr.fans.expostos', { total: expostos })
+      : t('tutorial.mcr.fans.semExpostos'),
+    anGang ? t('tutorial.mcr.fans.comAnGang', { total: anGang }) : '',
+    t(mao.tsumo ? 'tutorial.mcr.fans.porZimo' : 'tutorial.mcr.fans.porDianhe'),
+    t('tutorial.mcr.fans.ventos', {
+      rodada: t(VENTOS[mao.ventoRodada - 28]),
+      posicao: t(VENTOS[mao.ventoAssento - 28]),
+    }),
+    mao.ultimaDaParede
+      ? t(mao.tsumo ? 'tutorial.mcr.fans.ultimaMuro' : 'tutorial.mcr.fans.ultimoDescarte')
+      : '',
+    mao.kan ? t(mao.tsumo ? 'tutorial.mcr.fans.reposicao' : 'tutorial.mcr.fans.roubo') : '',
+    mao.ultimaDoTipo ? t('tutorial.mcr.fans.ultimaCopia') : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
 
 function qualFan(t: Traduzir, id: number): Quiz {
   const fan = fanDe(id)
@@ -87,8 +111,21 @@ function quantosFan(t: Traduzir, id: number): Quiz {
     question: `${t('tutorial.mcr.fans.quantosFan')} ${situacao(t, exemplo)}`,
     hand: mpszDoExemplo(exemplo),
     answer: `${t('mcr.resultado.fanTotal', { total: fanTotal })}: ${contados}.`,
-    options: opcoes(String(fanTotal), [String(fanTotal + 2), String(fanTotal + 6)], id),
+    options: opcoesDeTotal(fanTotal, id),
   }
+}
+
+/** Totais em ordem, com o certo no começo, no meio ou no fim. */
+function opcoesDeTotal(total: number, semente: number) {
+  const desvios = [
+    [0, 3, 6],
+    [-3, 0, 3],
+    [-6, -3, 0],
+  ][semente % 3]
+  return desvios.map((desvio) => ({
+    label: String(total + desvio),
+    ...(desvio === 0 && { correct: true }),
+  }))
 }
 
 const linkGuia = (t: Traduzir): TutorialBlock => ({
@@ -129,7 +166,9 @@ export function parteDosFan(t: Traduzir): TutorialPart {
   }
   const soma = (...ids: number[]) => [
     ids.map((id) => fanDe(id).pt).join(' + '),
-    String(ids.reduce((total, id) => total + fanDe(id).pontos, 0)),
+    t('guiaBolso.mcr.pontosFan', {
+      pontos: ids.reduce((total, id) => total + fanDe(id).pontos, 0),
+    }),
   ]
   const comecar = t('tutorial.mcr.fans.comecar.titulo')
 
@@ -153,6 +192,7 @@ export function parteDosFan(t: Traduzir): TutorialPart {
             texto(t('tutorial.mcr.fans.comecar.texto')),
             {
               type: 'table',
+              compact: true,
               headers: [
                 t('tutorial.mcr.fans.comecar.combinacao'),
                 t('tutorial.mcr.fans.comecar.pontos'),
@@ -211,7 +251,7 @@ export function parteDosFan(t: Traduzir): TutorialPart {
         t('tutorial.mcr.fans.esperas.titulo'),
         t('tutorial.mcr.fans.esperas.capa'),
         ['esperas', 'ultima-peca'],
-        [78, 47, 44],
+        [78, 47, 80],
       ),
     ],
   }

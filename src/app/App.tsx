@@ -218,7 +218,7 @@ export default function App() {
 
       {guia && (
         <GuiaAprender
-          key={guia.chave}
+          key={`${modo}-${guia.chave}`}
           aoFechar={() => setGuia(null)}
           aoAbrirCalculadora={() => navegar('calculadora')}
           aoTrocarTela={sairDoGuia}

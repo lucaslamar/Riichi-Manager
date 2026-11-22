@@ -90,6 +90,7 @@ export function parteParaQuemVemDoRiichi(t: Traduzir): TutorialPart {
             pagina(`${tituloEquivalentes} (${indice + 1}/${totalPaginas})`, [
               {
                 type: 'table',
+                compact: true,
                 headers: [t('tutorial.mcr.equivalentes.yaku'), t('tutorial.mcr.equivalentes.fan')],
                 rows: linhas.slice(indice * LINHAS_POR_PAGINA, (indice + 1) * LINHAS_POR_PAGINA),
               },

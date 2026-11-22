@@ -15,8 +15,10 @@ import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizon
 import { useDeslizePaginas } from '@/compartilhado/interface/hooks/useDeslizePaginas'
 import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
+import ModalYakus from '@/dominios/calculadora-mao/interface/modais/yakus/ModalYakus'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import { conteudoGuia } from '../conteudo'
+import { criarConteudoMcr } from '../conteudo/mcr/livro'
 import type { FerramentaGuia } from '../conteudo/tipos'
 import { fimDoModulo, montarLivro, moduloDaPagina, type PaginaLivro } from '../logica/livro'
 import { ehDan, nomeRank, rankDaParte, rankPorConcluidos, type RankGuia } from '../logica/rank'
@@ -94,9 +96,12 @@ export default function GuiaAprender({
 }) {
   const { t, idioma } = useI18n()
   const { modo } = useModoJogo()
-  const conteudo = conteudoGuia(idioma, modo)
+  const conteudo = useMemo(
+    () => (modo === 'mcr' ? criarConteudoMcr(t) : conteudoGuia(idioma)),
+    [modo, idioma, t],
+  )
   const livro = useMemo(() => montarLivro(conteudo), [conteudo])
-  const [progressoInicial] = useState(lerProgressoGuia)
+  const [progressoInicial] = useState(() => lerProgressoGuia(modo))
   // Sempre abre na capa (a tela Aprender a jogar).
   const [indice, setIndice] = useState(0)
   const [vista, setVista] = useState<Vista>(VISTA_LIVRO)
@@ -104,6 +109,7 @@ export default function GuiaAprender({
   const [barraVisivel, setBarraVisivel] = useState(true)
   const [indiceAberto, setIndiceAberto] = useState(false)
   const [idiomaAberto, setIdiomaAberto] = useState(false)
+  const [guiaBolsoAberto, setGuiaBolsoAberto] = useState(false)
   const [ferramenta, setFerramenta] = useState<FerramentaGuia | null>(null)
   const raizRef = useRef<HTMLDivElement>(null)
   const palcoRef = useRef<HTMLDivElement>(null)
@@ -167,8 +173,8 @@ export default function GuiaAprender({
     if (pagina.tipo !== 'capaGuia') setPaginaSalvaId(pagina.id)
   }, [pagina])
   useEffect(() => {
-    salvarProgressoGuia({ pagina: paginaSalvaId, concluidos })
-  }, [paginaSalvaId, concluidos])
+    salvarProgressoGuia(modo, { pagina: paginaSalvaId, concluidos })
+  }, [modo, paginaSalvaId, concluidos])
 
   useEffect(() => {
     consultaRef.current?.scrollTo({ top: 0 })
@@ -275,6 +281,7 @@ export default function GuiaAprender({
 
   const abrirFerramenta = (qual: FerramentaGuia) => {
     if (qual === 'calculadora') aoAbrirCalculadora()
+    else if (qual === 'guiaBolso') setGuiaBolsoAberto(true)
     else setFerramenta(qual)
   }
 
@@ -748,6 +755,7 @@ export default function GuiaAprender({
         </div>
       )}
 
+      {guiaBolsoAberto && <ModalYakus aoFechar={() => setGuiaBolsoAberto(false)} />}
       {idiomaAberto && <ModalIdioma aoFechar={() => setIdiomaAberto(false)} />}
 
       {indiceAberto && (
