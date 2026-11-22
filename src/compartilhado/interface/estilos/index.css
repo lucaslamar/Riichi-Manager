@@ -8,6 +8,7 @@
 @import './componentes/placeholder.css';
 @import './dominios/calculadoras/index.css';
 @import './responsivo.css';
+@import './textos-tablet.css';
 @import '../../tema/tema-escuro.css';
 @import '../../tema/tema-claro.css';
 @import '../../tema/tema-azul.css';

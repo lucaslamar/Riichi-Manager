@@ -1,0 +1,81 @@
+/*
+ * Textos de apoio no iPad: 17px para o que se lê, 15px para selos e metadados.
+ * O :root repetido vence os tamanhos de celular de cada domínio.
+ * PC com mouse deitado fica com a densidade normal.
+ */
+@media (min-width: 768px) and (min-height: 900px) and (orientation: portrait),
+  (min-width: 768px) and (min-height: 700px) and (any-pointer: coarse) {
+  /* Leitura: títulos de seção, dicas, ajudas, contagem e opções. */
+  :root:root:root
+    :is(
+      .fin-titulo,
+      .fin-dica,
+      .fin-tela > details > summary,
+      .ptd-apoio,
+      .ptd-card-inicio > span,
+      .cfg-ajuda,
+      .cfg-ajuda > span,
+      .cfg-campo-rotulo,
+      .cfg-opcoes button,
+      .abas-modal__aba,
+      .trn-status--ok,
+      .trn-status--erro,
+      .clb-contagem > :not(.clb-contadores),
+      .trn-selo-em-jogo > span,
+      .ptd-faixa-titulo > span,
+      .ptd-faixa-titulo > time,
+      .qds-linha,
+      .rkf-titulo,
+      .rkf-segmentos .ptd-segmento,
+      .rkf-voce > span,
+      .rkf-voce > strong
+    ) {
+    font-size: 1.0625rem;
+  }
+
+  /* Metadados: selos, abas, horários, colunas e rótulos curtos. */
+  :root:root:root
+    :is(
+      .trn-selo-em-jogo small,
+      .ptd-faixa-titulo small,
+      .trn-status:not(.trn-status--ok, .trn-status--erro),
+      .trn-abas-rodadas button,
+      .qds-pilula,
+      .trn-assento-pontos,
+      .trn-colocacao,
+      .trn-mesa-acoes > .clb-mesa-botao,
+      .trn-alternar-visao,
+      .trn-tabela-ranking th,
+      .trn-tabela-ranking th abbr,
+      .trn-disputa-lista small,
+      .clb-cadastrar,
+      .clb-assento-vento,
+      .ptd-filtro-tipo-opcao,
+      .cm-hora,
+      .cm-hora time,
+      .cm-posicao,
+      .cm-tabela th,
+      .cm-tabela td,
+      .cm-andamento-item small,
+      .cm-andamento-tipo,
+      .qds-acoes > button,
+      .rkf-chip,
+      .selo-eu,
+      .ptd-ranking-nome-completo,
+      .ptd-metricas dt,
+      .ptd-metricas dd,
+      .trn-disputa-lista li > strong,
+      .fin-tela .ptd-assento-apoio,
+      .anl-legenda li,
+      .anl-formato-partidas,
+      .anl-formato dt,
+      .apelido-jogador
+    ) {
+    font-size: 0.9375rem;
+  }
+
+  /* Dentro de círculo pequeno: só até onde cabe. */
+  :root:root:root :is(.trn-mais-tempo small, .rkf-contagem, .ajuda-campo > span) {
+    font-size: 0.8125rem;
+  }
+}
