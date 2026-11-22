@@ -13,6 +13,9 @@
 - **Sorteio do clube com memória do dia**: sortear de novo no mesmo dia evita repetir quem já jogou junto e reveza o Leste, contando só os sorteios com mesa jogada. As mesas mostram a rodada do dia com a qualidade do sorteio, e Começar do zero, no menu ⋮, serve para quando o grupo for outro.
 - **QR Code do app nas imagens**: as imagens de resultado trazem o QR e o endereço do site, com um convite para usar o app. Dá para desligar em Ajustes, e o texto compartilhado termina com o link.
 - **Pontos da mesa nos resultados**: além do + e −, as mesas, a imagem e o texto da rodada mostram os pontos com que cada um terminou. No card, a colocação fica em cor neutra, separada do resultado.
+- **Inscrição e premiação**: a nova aba Premiação calcula a parte do clube e o prêmio de cada posição, com parcelas, inscrição antecipada e o porquê de cada padrão no ?. O prêmio aparece no Ranking, na Disputa do pódio, na Temporada e nas imagens.
+- **WO no torneio**: a mesa registra quem faltou, com −30,0 para o ausente e +10,0 por presente. Se outra mesa da rodada tem WO, dá para remontar as mesas. Os valores mudam na aba Pontuação. Vale no Riichi de 4.
+- **Atraso**: o registro do resultado desconta 1,0 por minuto de atraso, até 10 minutos.
 - **Distância para o pódio**: tocar num jogador no ranking do torneio mostra quanto falta para o 1º, 2º e 3º, em pontos e em mãos (no Chinês, em vitórias de mesa), quem está logo acima e abaixo e a comparação com qualquer um. Dá para passar de jogador deslizando.
 - **Disputa do pódio**: nova visão do ranking do torneio, com a diferença entre as primeiras posições, os candidatos ao 1º e quem ainda alcança.
 - **Filtros no ranking do torneio**: acompanhar um jogador, ver o ranking até uma rodada e escolher a unidade das distâncias.

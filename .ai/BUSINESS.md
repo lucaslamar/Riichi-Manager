@@ -59,11 +59,31 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 ### Distância para o pódio
 
 - Diferença em pontos do ranking, com 1 casa. Mãos: diferença × 1000 ÷ ron fora do Leste (Mangan 8000, Haneman 12000, Baiman 16000, Yakuman 32000), para cima, sem contar uma. Arredonde antes de subir: 16,0 são 2 Mangans, não 3.
-- MCR: vitórias de mesa = diferença ÷ 4, para cima (proposta, a confirmar). Com pontos de mesa empatados, mostra a diferença do desempate.
+- MCR: vitórias de mesa = diferença ÷ 4, para cima (confirmado em 22/11/2026). Com pontos de mesa empatados, mostra a diferença do desempate.
 - Diferença 0 é "Empatado". Quem não jogou não entra. No Eliminatório, compara só na mesma fase, e a Disputa mostra a fase de cima.
 - Quem está no pódio vê a vantagem até o 4º. Os vizinhos não repetem o que o pódio já mostra.
 - Candidatos ao 1º: metade de cima, de 4 a 8. "Ainda alcança": diferença ≤ rodadas que faltam para ele × melhor resultado de uma rodada do torneio. É estimativa, sem marca em formato sem número de rodadas, torneio encerrado ou Eliminatório antes de zerar os pontos.
 - "Até a rodada" refaz ranking, setas e estimativa como estavam no fim daquela rodada.
+
+### Inscrição e premiação
+
+- Desligada por padrão, em todos os formatos e modos. Padrões: 100, 5 parcelas, clube 25%, divisão automática, mínimo 16.
+- Automática: 50/30/20 até 19 jogadores (também abaixo de 16, com aviso do mínimo), 45/27/18/10 de 20 a 27, 40/25/17/11/7 com 28 ou mais.
+- Antecipada: o organizador informa só quantos pagaram o valor menor. O app não controla pagamento por pessoa.
+- Cada prêmio desce para múltiplo de 5 e a sobra vai para o clube. A personalizada precisa somar 100%.
+- Empate divide a soma das posições ocupadas. Quem não jogou, ou está abaixo do mínimo de partidas da Temporada, não recebe.
+- Na Temporada a premiação é dela, não do encontro, e conta quem esteve em algum encontro.
+- A moeda é a do idioma ao ligar e fica guardada.
+
+### WO e atraso
+
+- Aprovado em 22/11/2026, só no Riichi de 4: −30,0 para cada ausente e +10,0 para cada presente. Com 2 ou mais ausentes a mesa não fecha em zero, de propósito.
+- Atraso: −1,0 por minuto até 10 minutos, sem mudar a colocação. Passou disso é WO.
+- Os valores mudam por torneio, na aba Pontuação. O encontro novo herda os da Temporada.
+- WO soma pontos e conta como partida no torneio (e no mínimo da Temporada), mas não entra na média de colocação, na melhor rodada do "Ainda alcança", no histórico nem no Ranking geral.
+- O desconto de atraso faz parte do resultado da partida, então vale também no Ranking geral.
+- Remontar: com outra mesa em WO na rodada, os presentes dela completam a mesa atual e os ausentes vão para ela.
+- Faltar ao encontro inteiro não é WO: a pessoa só não entra na lista do dia.
 
 ### Nomes e compartilhamento
 

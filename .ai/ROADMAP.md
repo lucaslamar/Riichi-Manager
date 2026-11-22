@@ -4,16 +4,20 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 ## Brief do Torneio de 21/11/2026: próximas fases
 
-- Fases 0 a 6 e 8 feitas, menos a 3C. Faltam a 7 e a 7B, que dependem das decisões abaixo.
-- Ao fazer a 7, acrescentar o padrão de WO por modo em `RegrasDoModo`.
+- Todas as fases feitas, menos a 3C.
 - Fora por enquanto: PDF com QR (o app não gera PDF), link do QR direto para o torneio (precisa de backend) e a dica de uma na folha da distância.
 
 ## Aguardando decisão
 
 - **3C, grades ZAPS:** só com autorização do autor (licença NC).
-- **5 no MCR:** "vitórias de mesa = diferença ÷ 4" foi implementado como proposto, mas o usuário ainda não confirmou. Muda só em `regrasDoModo.ts`.
-- **7, WO:** proposta de −30,0 para o ausente e +10,0 por presente, aguardando o clube. Valores do MCR em aberto. Conferir atraso e WO na WRC 2025.
-- **7B, inscrição e premiação:** falta a divisão com menos de 16 jogadores e como marcar pagamento antecipado.
+- **WO no Chinês e no Sanma:** sem valores definidos, por isso o botão não aparece. Conferir atraso e WO na WRC 2025 e na EMA (os números vieram do brief).
+- **Jogar Sanma quando falta um:** proposto no brief e fora por enquanto, porque o registro manual só aceita 4 jogadores.
+
+## Premiação
+
+- Controle de pagamento de parcelas por jogador.
+- Inscritos da temporada que ainda não jogaram nenhum encontro: hoje a conta usa quem já esteve em algum.
+- Escolher a moeda na tela (hoje é a do idioma ao ligar) e conferir moeda e divisão do modo Chinês com o clube.
 
 ## Clube
 

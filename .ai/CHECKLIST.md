@@ -17,6 +17,7 @@ Escolha os testes conforme o impacto; os comandos completos estão em `package.j
 - Sorteio e grade: `npm run test:formatos` (8, 12, 16 e Sanma de 9) e `npm run test:clube`. Ao mexer na busca, meça o tempo de 8 a 172 jogadores: no PC ficou abaixo de 100 ms por rodada.
 - Ranking do torneio: `npm run test:torneio` (setas, confirmação e placares MCR convertidos). Confira as cores das setas no navegador.
 - Distância para o pódio e relatórios da disputa: `npm run test:distancia-podio`. No navegador, leia o QR da imagem gerada (jsqr) e confira os dois temas.
+- Premiação: `npm run test:premiacao`. WO, remontagem e atraso: `npm run test:wo`, e confira que o WO não entra no histórico nem no Ranking geral.
 - Folha de pontos: `npm run test:expressao-pontos`, e no navegador Enter depois de tocar numa tecla, Enter para abrir a folha e toque no visor.
 - Toda tarefa: registre no `.ai` regras, mudanças de UX, ideias adiadas e inspirações, sem dados de pessoas reais.
 - Variantes e yakus locais: `npm run test:sanma` e `npm run test:yakus-locais`.

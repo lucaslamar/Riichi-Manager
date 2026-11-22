@@ -54,7 +54,9 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 - `logica/ranking.ts`: classificação com posições, `rankingAteRodada`, `mudancasDoRanking` (setas) e `mudancaAoRegistrar` (confirmação). Lê só partidas, então vale para o Riichi e para os placares MCR convertidos.
 - `RegistrarFinalizada` não depende da lógica do Torneio: `PaginaCenterpiece` passa a função `mudancas` por prop.
 - `logica/distanciaPodio.ts` e `logica/filtrosRankingTorneio.ts`: distâncias, candidatos e filtros, sem tela. `useTextosDistancia` dá os mesmos textos à tela, à folha e aos relatórios.
-- `src/compartilhado/modo-jogo/regrasDoModo.ts`: o que muda por modo no ranking (nome dos pontos e unidades da distância). Escolha por `torneio.jogo`, sem `if` de modo nas telas.
+- `logica/premiacao.ts`: cálculo puro. `Torneio.premiacao` e `Temporada.premiacao` são opcionais, então arquivos antigos continuam valendo.
+- `logica/wo.ts`: o WO é uma `Partida` com `wo.ausentes`, e o atraso fica em `ResultadoFinal.atraso`, já descontado do `final`. `partidasDoHistorico` tira o WO.
+- `src/compartilhado/modo-jogo/regrasDoModo.ts`: o que muda por modo no ranking (nome dos pontos, unidades da distância e padrão de WO). Escolha por `torneio.jogo`, sem `if` de modo nas telas.
 - `src/compartilhado/marca/url-app.ts`: `URL_DO_APP`, único endereço do site para QR e textos.
 - `interface/componentes/SetaPosicao` e `GuiaFormatos`: seta do ranking e conteúdo do ? do Formato.
 
