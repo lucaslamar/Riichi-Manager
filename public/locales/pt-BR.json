@@ -3584,7 +3584,8 @@
       },
       "jaPassa": "já passa",
       "jaEmpata": "já empata",
-      "title": "Cenários de virada"
+      "title": "Cenários de virada",
+      "onlyLeader": "{{name}} não joga mais. Passa se {{leader}} perder mais de {{value}}."
     },
     "title": "Estatísticas",
     "tournamentTitle": "Estatísticas do torneio",

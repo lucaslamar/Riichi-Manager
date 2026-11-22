@@ -29,6 +29,15 @@ export function necessidade(
   }
 }
 
+/** A diferença só é final quando nenhum dos dois joga mais: o líder ainda pode cair. */
+export function situacaoDaVirada(
+  restantesPerseguidor: number | null,
+  restantesLider: number | null,
+): 'final' | 'soLiderJoga' | 'aberta' {
+  if (restantesPerseguidor !== 0) return 'aberta'
+  return restantesLider === 0 ? 'final' : 'soLiderJoga'
+}
+
 type RegrasBonus = Pick<ConfigMesa, 'uma' | 'pontosPartida' | 'pontosRetorno'>
 
 /**

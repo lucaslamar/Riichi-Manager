@@ -89,6 +89,7 @@ export default function ListaViradas({
               regras={regras}
               unidade={regras.unidadesDistancia.find((opcao) => opcao.id === unidade)}
               restantes={restantesDe(perseguidorId)}
+              restantesLider={restantesDe(liderId)}
             />
           </div>
         )}

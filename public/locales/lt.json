@@ -3674,7 +3674,8 @@
       },
       "jaPassa": "jau lenkia",
       "jaEmpata": "jau lygu",
-      "title": "Persvaros scenarijai"
+      "title": "Persvaros scenarijai",
+      "onlyLeader": "{{name}} partijų nebeturi. Lenkia, jei {{leader}} praras daugiau nei {{value}}."
     },
     "title": "Statistika",
     "tournamentTitle": "Turnyro statistika",

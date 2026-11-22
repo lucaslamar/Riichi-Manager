@@ -1,7 +1,7 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { RegrasDoModo, UnidadeDistancia } from '@/compartilhado/modo-jogo/regrasDoModo'
 import type { ValoresUma } from '@/dominios/centerpiece/logica/uma'
-import { cenariosComUma, cenariosDoLider, necessidade } from '../logica/viradas'
+import { cenariosComUma, cenariosDoLider, necessidade, situacaoDaVirada } from '../logica/viradas'
 import { useFormatoEstatisticas } from './useFormatoEstatisticas'
 
 /** O que abre ao tocar numa distância: terceiros, direto, o líder e a uma. */
@@ -13,6 +13,7 @@ export default function DetalheVirada({
   regras,
   unidade,
   restantes,
+  restantesLider,
 }: {
   diferenca: number
   perseguidor: string
@@ -23,11 +24,24 @@ export default function DetalheVirada({
   unidade?: UnidadeDistancia
   /** Jogos que faltam para quem persegue. null: sem número definido. */
   restantes: number | null
+  restantesLider: number | null
 }) {
   const { t } = useI18n()
   const { decimal, comSinal } = useFormatoEstatisticas()
 
-  if (restantes === 0) return <p className="est-apoio">{t('stats.turn.noGamesLeft')}</p>
+  const situacao = situacaoDaVirada(restantes, restantesLider)
+  if (situacao === 'final') return <p className="est-apoio">{t('stats.turn.noGamesLeft')}</p>
+  if (situacao === 'soLiderJoga') {
+    return (
+      <p className="est-apoio">
+        {t('stats.turn.onlyLeader', {
+          name: perseguidor,
+          leader: lider,
+          value: decimal(diferenca),
+        })}
+      </p>
+    )
+  }
 
   const unidades = unidade ? [unidade] : regras.unidadesDistancia.filter((item) => item.resumida)
   const referencia = unidades[0]

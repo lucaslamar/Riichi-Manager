@@ -3604,7 +3604,8 @@
       },
       "jaPassa": "ya lo supera",
       "jaEmpata": "ya empata",
-      "title": "Escenarios de remontada"
+      "title": "Escenarios de remontada",
+      "onlyLeader": "{{name}} ya no juega. Adelanta si {{leader}} pierde más de {{value}}."
     },
     "title": "Estadísticas",
     "tournamentTitle": "Estadísticas del torneo",

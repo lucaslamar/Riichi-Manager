@@ -13,6 +13,7 @@ import {
   cenariosComUma,
   cenariosDoLider,
   necessidade,
+  situacaoDaVirada,
 } from '../src/dominios/estatisticas/logica/viradas'
 import { jogosRestantes } from '../src/dominios/torneio/logica/jogosRestantes'
 import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
@@ -57,6 +58,14 @@ teste('líder em 4º, no zero e em 1º', () => {
     cenarios.map((item) => precisa(item.alvo)),
     [{ situacao: 'jaPassa' }, maos(2, 1), maos(4, 2)],
   )
+})
+
+teste('só é final quando nenhum dos dois joga mais', () => {
+  assert.equal(situacaoDaVirada(0, 0), 'final')
+  assert.equal(situacaoDaVirada(0, 1), 'soLiderJoga')
+  assert.equal(situacaoDaVirada(0, null), 'soLiderJoga')
+  assert.equal(situacaoDaVirada(1, 0), 'aberta')
+  assert.equal(situacaoDaVirada(null, null), 'aberta')
 })
 
 teste('com uma', () => {

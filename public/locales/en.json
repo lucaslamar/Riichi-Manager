@@ -3584,7 +3584,8 @@
       },
       "jaPassa": "already ahead",
       "jaEmpata": "already tied",
-      "title": "Comeback scenarios"
+      "title": "Comeback scenarios",
+      "onlyLeader": "{{name}} has no games left. Moves ahead if {{leader}} loses more than {{value}}."
     },
     "title": "Statistics",
     "tournamentTitle": "Tournament statistics",
