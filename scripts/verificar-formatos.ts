@@ -383,4 +383,22 @@ for (const total of [8, 12, 16]) {
   console.log('Validação de ponta a ponta ok.')
 }
 
+// Grade pronta: Sortear de novo só antes da primeira partida. O corte do Eliminatório segue por rodada.
+{
+  const cortes = { classificatoria: 'rodizio', rodadasClassificatoria: 4, cortes: [4], rodadasPorFase: 1, pontosCarregados: true } as const
+  for (const formato of [{ tipo: 'rodizio', rodadas: 4 }, { tipo: 'eliminatorio', ...cortes }] as ConfigFormato[]) {
+    const ids = jogadores(8)
+    const base = { ...criarRascunho({ id: 't-grade', agora: new Date(agora), nome: 'T' }), formato }
+    const grade = iniciarTorneio(base, ids, rodadasIniciais(base, ids, agora), agora)
+    assert.ok(podeSortearDeNovo(grade, []), `${formato.tipo}: grade sem partida`)
+    const primeira = jogarRodada(grade, grade.rodadas[0]).slice(0, 1)
+    assert.ok(!podeSortearDeNovo(grade, primeira), `${formato.tipo}: grade com partida`)
+    if (formato.tipo !== 'eliminatorio') continue
+    const jogadas = grade.rodadas.flatMap((rodada) => jogarRodada(grade, rodada))
+    const corte = proximaRodada(grade, jogadas, agora)
+    assert.ok(corte, 'corte gerado')
+    assert.ok(podeSortearDeNovo({ ...grade, rodadas: [...grade.rodadas, corte] }, jogadas), 'corte ainda sem partida')
+  }
+}
+
 console.log('Formatos ok.')

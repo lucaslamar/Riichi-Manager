@@ -4,6 +4,7 @@
  */
 import { KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
 import { proximaRodada, rodadasIniciais } from './formatos'
+import { faseDaRodada } from './formatos/eliminatorio'
 import { relogioParado, statusDaMesa, type StatusMesa } from './torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from './tipos'
 
@@ -62,12 +63,23 @@ export function trocarMesa(
   }))
 }
 
-/** A rodada ainda pode ser sorteada de novo: nenhuma mesa dela foi aberta ou registrada. */
+/**
+ * A rodada ainda pode ser sorteada de novo: nenhuma mesa dela foi aberta ou registrada.
+ * A grade do Rodízio sai inteira e equilibrada, então só se refaz antes da primeira partida.
+ */
 export function podeSortearDeNovo(torneio: Torneio, partidas: readonly Partida[]): boolean {
   const ultima = torneio.rodadas[torneio.rodadas.length - 1]
   if (!ultima || torneio.status !== 'em_andamento') return false
-  return !partidas.some(
-    (partida) => partida.vinculoTorneio?.torneioId === torneio.id && partida.vinculoTorneio.rodada === ultima.numero - 1,
+  const doTorneio = partidas.filter((partida) => partida.vinculoTorneio?.torneioId === torneio.id)
+  if (saiNaGrade(torneio, ultima)) return doTorneio.length === 0
+  return !doTorneio.some((partida) => partida.vinculoTorneio?.rodada === ultima.numero - 1)
+}
+
+/** Rodízio e classificatória em Rodízio. */
+function saiNaGrade({ formato }: Torneio, rodada: RodadaTorneio): boolean {
+  return (
+    formato.tipo === 'rodizio' ||
+    (formato.tipo === 'eliminatorio' && formato.classificatoria === 'rodizio' && faseDaRodada(rodada) === 0)
   )
 }
 

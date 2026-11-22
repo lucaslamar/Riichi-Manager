@@ -1,5 +1,11 @@
 # Changelog - Riichi Manager
 
+## Não lançado
+
+### Corrigido
+
+- **Sortear de novo no Rodízio**: a opção aparecia depois do primeiro resultado e não mudava nada. Agora aparece só antes da primeira partida, porque a grade sai inteira e equilibrada. Para refazer depois, use Reiniciar sorteio.
+
 ## 7.0.0 - 2026-11-21
 
 ### Alterado
