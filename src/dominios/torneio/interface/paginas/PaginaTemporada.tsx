@@ -12,7 +12,9 @@ import { useDinheiro } from '../hooks/useDinheiro'
 import { useTorneios } from '../hooks/useTorneios'
 import { useSubtituloTorneio } from '../textoTorneio'
 import '../torneio.css'
-import { useNomeNoTorneio } from '../hooks/useNomeNoTorneio'
+import { useNomeNaTemporada } from '../hooks/useNomeNoTorneio'
+import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import EstatisticasJogador from '@/dominios/estatisticas/interface/EstatisticasJogador'
 
 const OPCOES_MINIMO = [2, 4, 6, 8, 10] as const
 const OPCOES_MELHORES = [3, 5, 8, 10, 15] as const
@@ -30,7 +32,8 @@ export default function PaginaTemporada({
   const { t, idioma, numero } = useI18n()
   const { torneios, temporadas, salvar, salvarTemporada } = useTorneios()
   const { partidas } = usePartidasDoTorneio()
-  const nomeDoTorneio = useNomeNoTorneio()
+  const nomeDe = useNomeNaTemporada()
+  const [vendoJogadorId, setVendoJogadorId] = useState<string | null>(null)
   const subtitulo = useSubtituloTorneio()
   const emMoeda = useDinheiro()
   const [vendoPremiacao, setVendoPremiacao] = useState(false)
@@ -51,16 +54,7 @@ export default function PaginaTemporada({
 
   const data = (dia: string) =>
     new Intl.DateTimeFormat(idioma, { dateStyle: 'medium' }).format(new Date(`${dia}T12:00:00`))
-  // Convidados: o nome vem do encontro em que jogaram.
-  const nomeDe = (id: string) =>
-    nomeDoTorneio(
-      {
-        convidados: Object.assign({}, ...torneios.map((item) => item.convidados ?? {})),
-        nomes: Object.assign({}, ...torneios.map((item) => item.nomes ?? {})),
-        jogadorIds: torneios.find((item) => item.jogadorIds.includes(id))?.jogadorIds ?? [],
-      },
-      id,
-    )
+
   const premio = premiacaoDe(temporada.premiacao, ranking.length)
   const premios = premio ? premioDaTemporada(premio, ranking) : null
   const dinheiro = (valor: number) => emMoeda(valor, temporada.premiacao?.moeda ?? 'BRL')
@@ -164,7 +158,15 @@ export default function PaginaTemporada({
                 <tr key={linha.jogadorId} className={linha.abaixoDoMinimo ? 'trn-abaixo-minimo' : undefined}>
                   <td>{linha.abaixoDoMinimo ? '–' : indice + 1}</td>
                   <td>
-                    {nomeDe(linha.jogadorId)}
+                    <button
+                      type="button"
+                      className="trn-nome-ranking"
+                      aria-haspopup="dialog"
+                      aria-label={t('stats.open', { name: nomeDe(linha.jogadorId) })}
+                      onClick={() => setVendoJogadorId(linha.jogadorId)}
+                    >
+                      {nomeDe(linha.jogadorId)}
+                    </button>
                     {premios?.has(linha.jogadorId) && (
                       <small className="trn-premio-linha">{dinheiro(premios.get(linha.jogadorId) ?? 0)}</small>
                     )}
@@ -197,6 +199,21 @@ export default function PaginaTemporada({
             </li>
           ))}
         </ul>
+      )}
+
+      {vendoJogadorId && (
+        <Modal
+          titulo={nomeDe(vendoJogadorId)}
+          subtitulo={temporada.nome}
+          aoFechar={() => setVendoJogadorId(null)}
+          rotuloFechar={t('actions.close')}
+          tamanho="pequena"
+        >
+          <EstatisticasJogador
+            escopo={{ tipo: 'temporada', id: temporadaId }}
+            jogadorId={vendoJogadorId}
+          />
+        </Modal>
       )}
 
       {vendoPremiacao && (

@@ -25,6 +25,7 @@ import { nomesNoRanking } from '../componentes/nomesNoRanking'
 import MapaConfrontos from '../componentes/analise/MapaConfrontos'
 import { corDoSaldo } from '../componentes/analise/formatacao'
 import FolhaConfronto from '../componentes/analise/FolhaConfronto'
+import EstatisticasJogador from '@/dominios/estatisticas/interface/EstatisticasJogador'
 import {
   CardGrafico,
   GraficoBarras,
@@ -185,6 +186,14 @@ export default function PaginaJogador({
           />
         </Modal>
       )}
+
+      <section className="anl-card">
+        <header className="anl-card-topo">
+          <i className="fas fa-chart-simple" aria-hidden="true" />
+          <h3>{t('stats.title')}</h3>
+        </header>
+        <EstatisticasJogador escopo={{ tipo: 'geral' }} jogadorId={jogadorId} semPosicoes />
+      </section>
 
       <section className="anl-card">
         <header className="anl-card-topo">
