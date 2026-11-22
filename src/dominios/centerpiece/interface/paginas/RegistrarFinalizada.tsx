@@ -265,6 +265,16 @@ export default function RegistrarFinalizada({
     setEscolhendo(null)
   }
 
+  /** A soma da mesa com o que está sendo digitado na folha do lugar. */
+  const textoDaSoma = (lugar: number, valor: number | null) => {
+    const somaAgora = soma - (lerPontos(pontos[lugar]) ?? 0) + (valor ?? 0)
+    const { fecha } = somaFecha(somaAgora, totalMesa, torneio?.config.palitosRestantes ?? 'primeiro')
+    return (
+      <span className={fecha ? undefined : 'cpt-soma--erro'}>
+        {t('tournament.points.sum', { sum: numero(somaAgora), total: numero(totalMesa) })}
+      </span>
+    )
+  }
   const nomeDaPrevia = (cadeira: number) => nomeDe(assentos[cadeira]) ?? '—'
   const mudarPontos = (lugar: number, valor: string) =>
     chines
@@ -498,8 +508,10 @@ export default function RegistrarFinalizada({
               ? nomesNoRanking(cadastrado).principal
               : (nomeDe(assentos[calculando]) ?? '')
           })()}
-          // Fora do torneio começa em 0: quem só tem o ponto final digita direto, sem apagar antes.
-          inicial={lerPontos(pontos[calculando]) ?? (torneio ? pontosPartida : 0)}
+          // Sem pontos o 0 é só placeholder: o primeiro dígito entra direto.
+          inicial={lerPontos(pontos[calculando])}
+          baseDaConta={torneio ? pontosPartida : undefined}
+          textoSoma={(valor) => textoDaSoma(calculando, valor)}
           aoCalcularMao={
             chines
               ? (valor) => {

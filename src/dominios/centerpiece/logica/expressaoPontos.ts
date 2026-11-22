@@ -23,6 +23,35 @@ export function digitar(expressao: string, digitos: string): string {
   return expressao + digitos
 }
 
+/**
+ * Tecla na folha recém-aberta (`substituir`): o dígito troca o valor inteiro, sem apagar
+ * antes. "00" e "000" não abrem número, então não trocam nada.
+ */
+export function digitarSobre(expressao: string, digitos: string, substituir: boolean): string {
+  if (!substituir) return digitar(expressao, digitos)
+  return digitar('', digitos) || expressao
+}
+
+/**
+ * O mesmo pelo teclado do sistema, que entrega o texto inteiro do campo: na folha
+ * recém-aberta, o que entrou troca o valor. Apagar continua tirando só o último.
+ */
+export function digitadoSobre(anterior: string, texto: string, substituir: boolean): string {
+  if (!substituir || texto.length <= anterior.length) return expressaoDigitada(texto)
+  let inicio = 0
+  while (inicio < anterior.length && anterior[inicio] === texto[inicio]) inicio += 1
+  let fim = 0
+  while (
+    fim < anterior.length - inicio &&
+    anterior[anterior.length - 1 - fim] === texto[texto.length - 1 - fim]
+  ) {
+    fim += 1
+  }
+  const entrou = texto.slice(inicio, texto.length - fim)
+  if (!/^\d+$/.test(entrou)) return expressaoDigitada(texto)
+  return expressaoDigitada(entrou) || anterior
+}
+
 /** + ou −. Troca o operador pendente. Com a expressão vazia, só o − (número negativo). */
 export function operar(expressao: string, operador: Operador): string {
   if (expressao === '') return operador === '-' ? '-' : ''

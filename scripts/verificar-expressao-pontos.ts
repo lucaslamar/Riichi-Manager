@@ -8,6 +8,8 @@ import {
   apagar,
   avaliar,
   digitar,
+  digitadoSobre,
+  digitarSobre,
   expressaoDigitada,
   inserirValor,
   operar,
@@ -48,6 +50,22 @@ assert.equal(expressaoDigitada('-12300'), '-12300')
 assert.equal(expressaoDigitada('-12.300'), '-12300')
 assert.equal(expressaoDigitada('+500'), '500')
 assert.equal(expressaoDigitada('30000--800'), '30000-800')
+// Folha recém-aberta: o primeiro dígito troca o valor inteiro
+assert.equal(digitarSobre('25000', '3', true), '3')
+assert.equal(digitarSobre('-1200', '4', true), '4')
+assert.equal(digitarSobre('25000', '0', true), '0')
+assert.equal(digitarSobre('', '3', true), '3')
+assert.equal(digitarSobre('25000', '000', true), '25000', '000 não abre número')
+assert.equal(digitarSobre('3', '2', false), '32', 'depois continua')
+assert.equal(digitarSobre('0', '7', false), '7')
+// O mesmo pelo teclado do sistema, com o cursor em qualquer lugar
+assert.equal(digitadoSobre('25000', '250003', true), '3')
+assert.equal(digitadoSobre('25000', '325000', true), '3')
+assert.equal(digitadoSobre('25000', '25500', true), '25500', 'trocar um dígito é correção')
+assert.equal(digitadoSobre('25000', '2500', true), '2500', 'apagar tira só o último')
+assert.equal(digitadoSobre('25000', '25000-', true), '25000-', 'operador continua a conta')
+assert.equal(digitadoSobre('25000', '250003', false), '250003')
+assert.equal(digitadoSobre('', '4', true), '4')
 assert.equal(expressaoDigitada('007'), '7')
 assert.equal(expressaoDigitada('12a3'), '123')
 console.log('Expressão de pontos ok.')

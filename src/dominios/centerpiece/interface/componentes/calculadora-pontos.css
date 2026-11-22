@@ -23,7 +23,34 @@
   font-variant-numeric: tabular-nums;
 }
 
+.cpt-linha-topo {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cpt-soma {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cpt-soma--erro {
+  color: var(--texto-erro);
+}
+
+.cpt-resultado.cpt-resultado--vazio,
+.cpt-campo::placeholder {
+  color: var(--texto-apoio);
+  opacity: 0.6;
+}
+
 .cpt-expressao {
+  min-width: 0;
   max-width: 100%;
   overflow: hidden;
   color: var(--texto-apoio);

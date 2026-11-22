@@ -8,8 +8,8 @@ import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/pagi
 import {
   apagar,
   avaliar,
-  digitar,
-  expressaoDigitada,
+  digitadoSobre,
+  digitarSobre,
   inserirValor,
   operar,
   partesDaExpressao,
@@ -42,6 +42,8 @@ export default function CalculadoraPontosSheet({
   marca,
   nome,
   inicial,
+  baseDaConta,
+  textoSoma,
   aoConfirmar,
   aoNavegar,
   aoCalcularMao,
@@ -51,8 +53,12 @@ export default function CalculadoraPontosSheet({
   /** No lugar do kanji, quando a ordem dos ventos não é conhecida. */
   marca?: ReactNode
   nome: string
-  /** Pontos atuais do jogador, ou os de partida do torneio. */
-  inicial: number
+  /** Pontos já lançados. null: o visor mostra 0 só como placeholder. */
+  inicial: number | null
+  /** Com o visor ainda vazio, o + e o Calcular mão somam daqui (os pontos de partida). */
+  baseDaConta?: number
+  /** "Soma X / 100.000" com o que está no visor. */
+  textoSoma?: (pontos: number | null) => ReactNode
   aoConfirmar: (pontos: number | null) => void
   /**
    * Deslizar para o lado (ou ‹ ›) passa para o jogador vizinho na ordem dos ventos.
@@ -69,12 +75,26 @@ export default function CalculadoraPontosSheet({
   const { t, numero } = useI18n()
   // No MCR os pontos são pequenos: sem 00 e 000, com − e + maiores.
   const comZeros = useModoJogoAtual() !== 'mcr'
-  const [expressao, setExpressaoCrua] = useState(String(inicial))
+  const textoInicial = inicial === null ? '' : String(inicial)
+  const [expressao, setExpressaoCrua] = useState(textoInicial)
+  // Enquanto ninguém mexeu, o primeiro dígito troca o valor inteiro.
   const [mexeu, setMexeu] = useState(false)
   const setExpressao = (nova: string) => {
+    // Tecla que não fez nada (00 no início) não gasta a troca do valor.
+    if (nova === expressao) return
     setExpressaoCrua(nova)
     setMexeu(true)
   }
+  const digitarTecla = (digitos: string) => {
+    const nova = digitarSobre(expressao, digitos, !mexeu)
+    setExpressao(nova)
+    // O mesmo dígito que já estava (0 sobre 0) também conta como digitado.
+    if (/^[1-9]|^0$/.test(digitos)) setMexeu(true)
+  }
+  /** De onde a conta sai: o visor ou, intocado e vazio, os pontos de partida. */
+  const inicioDaConta = () =>
+    !mexeu && expressao === '' && baseDaConta !== undefined ? String(baseDaConta) : expressao
+  const somarNoVisor = () => setExpressao(operar(inicioDaConta(), '+'))
   /** Visor tocado: vira campo e chama o teclado do sistema. */
   const [editando, setEditando] = useState(false)
   const campo = useRef<HTMLInputElement | null>(null)
@@ -82,7 +102,7 @@ export default function CalculadoraPontosSheet({
   const [cadeiraAtual, setCadeiraAtual] = useState(cadeira)
   if (cadeiraAtual !== cadeira) {
     setCadeiraAtual(cadeira)
-    setExpressaoCrua(String(inicial))
+    setExpressaoCrua(textoInicial)
     setMexeu(false)
     setEditando(false)
   }
@@ -118,14 +138,13 @@ export default function CalculadoraPontosSheet({
     }
     // No campo do visor quem trata os caracteres é o onChange.
     if (alvo.matches('input, textarea')) return
-    let nova: string
-    if (/^\d$/.test(evento.key)) nova = digitar(expressao, evento.key)
-    else if (evento.key === '+' || evento.key === '-') nova = operar(expressao, evento.key)
-    else if (evento.key === 'Backspace') nova = apagar(expressao)
+    if (/^\d$/.test(evento.key)) digitarTecla(evento.key)
+    else if (evento.key === '+') somarNoVisor()
+    else if (evento.key === '-') setExpressao(operar(expressao, '-'))
+    else if (evento.key === 'Backspace') setExpressao(apagar(expressao))
     else return
     evento.preventDefault()
     focoPorTab.current = false
-    setExpressao(nova)
   }
   useEffect(() => {
     const ouvir = (evento: KeyboardEvent) => aoTeclar.current(evento)
@@ -226,7 +245,10 @@ export default function CalculadoraPontosSheet({
       >
         <div className="cpt-corpo" {...propsToque}>
           <div className="cpt-visor" aria-live="polite" aria-atomic="true">
-            <span className="cpt-expressao">{conta ? `${textoExpressao} =` : ' '}</span>
+            <span className="cpt-linha-topo">
+              {textoSoma && <span className="cpt-soma">{textoSoma(resultado)}</span>}
+              <span className="cpt-expressao">{conta ? `${textoExpressao} =` : ' '}</span>
+            </span>
             {editando ? (
               <input
                 ref={campo}
@@ -235,14 +257,19 @@ export default function CalculadoraPontosSheet({
                 autoComplete="off"
                 enterKeyHint="done"
                 aria-label={t('tournament.points.typeFor', { name: nome })}
+                placeholder="0"
                 value={expressao}
-                onChange={(evento) => setExpressao(expressaoDigitada(evento.target.value))}
+                onChange={(evento) => {
+                  const texto = evento.target.value
+                  setExpressao(digitadoSobre(expressao, texto, !mexeu))
+                  setMexeu(true)
+                }}
                 onBlur={() => setEditando(false)}
               />
             ) : (
               <>
                 <span
-                  className={`cpt-resultado${resultado !== null && resultado < 0 ? ' cpt-negativo' : ''}`}
+                  className={`cpt-resultado${resultado !== null && resultado < 0 ? ' cpt-negativo' : ''}${expressao === '' ? ' cpt-resultado--vazio' : ''}`}
                 >
                   {resultado === null ? (expressao === '-' ? '−' : '0') : numero(resultado)}
                 </span>
@@ -284,7 +311,7 @@ export default function CalculadoraPontosSheet({
             {tecla(
               '+',
               t('tournament.points.plus'),
-              () => setExpressao(operar(expressao, '+')),
+              somarNoVisor,
               ' cpt-tecla--op cpt-tecla--mais',
             )}
             {DIGITOS.map((digito) => (
@@ -292,7 +319,7 @@ export default function CalculadoraPontosSheet({
                 key={digito}
                 type="button"
                 className="cpt-tecla"
-                onClick={() => setExpressao(digitar(expressao, digito))}
+                onClick={() => digitarTecla(digito)}
               >
                 {digito}
               </button>
@@ -303,15 +330,9 @@ export default function CalculadoraPontosSheet({
               () => setExpressao(resolver(expressao)),
               ' cpt-tecla--igual',
             )}
-            {tecla('0', '0', () => setExpressao(digitar(expressao, '0')), ' cpt-tecla--zero')}
-            {comZeros &&
-              tecla('00', t('tournament.points.hundred'), () =>
-                setExpressao(digitar(expressao, '00')),
-              )}
-            {comZeros &&
-              tecla('000', t('tournament.points.thousand'), () =>
-                setExpressao(digitar(expressao, '000')),
-              )}
+            {tecla('0', '0', () => digitarTecla('0'), ' cpt-tecla--zero')}
+            {comZeros && tecla('00', t('tournament.points.hundred'), () => digitarTecla('00'))}
+            {comZeros && tecla('000', t('tournament.points.thousand'), () => digitarTecla('000'))}
           </div>
         </div>
       </Modal>
@@ -328,7 +349,7 @@ export default function CalculadoraPontosSheet({
             comSeletores
             rotuloUsar={t('tournament.points.useHand')}
             aoUsarResultado={(calculado) => {
-              setExpressao(inserirValor(expressao, ganhoDaMao(calculado)))
+              setExpressao(inserirValor(inicioDaConta(), ganhoDaMao(calculado)))
               setCalculandoMao(false)
             }}
           />
