@@ -15,6 +15,7 @@ import {
   configPadraoTorneio,
   criarRascunho,
   finalizarTorneio,
+  podeEncerrar,
   formatoPadrao,
   historicoDeTorneios,
   torneioAtivo,
@@ -311,5 +312,10 @@ assert.equal(renomearPadraoAntigo('Club meetup 11/8'), 'Tournament 11/8')
   const setasMcr = mudancasDoRanking(chines, doMcr)
   assert.ok((de(setasMcr, 'b')?.variacao ?? 0) > 0, 'MCR: vencedor da rodada 2 subiu')
 }
+
+assert.ok(podeEncerrar({ status: 'em_andamento' }))
+assert.ok(!podeEncerrar({ status: 'rascunho' }))
+assert.ok(!podeEncerrar({ status: 'finalizado' }))
+assert.ok(!podeEncerrar({ status: 'em_andamento', transferidoEm: '2026-11-21' }))
 
 console.log('Torneio: modelo, histórico, migração, lista e configurações ok.')

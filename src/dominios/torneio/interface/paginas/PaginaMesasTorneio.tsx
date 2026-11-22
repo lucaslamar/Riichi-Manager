@@ -33,7 +33,7 @@ import {
   pausar,
   segundosRestantes,
 } from '../../logica/relogio'
-import { abortarTorneio, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, totalDeRodadas } from '../../logica/torneio'
+import { abortarTorneio, podeEncerrar, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
 import FolhaExportar from '../componentes/FolhaExportar'
 import FolhaCompartilhar from '../componentes/FolhaCompartilhar'
@@ -72,7 +72,7 @@ export default function PaginaMesasTorneio({
   aoAbrirRanking,
 }: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode; aoAbrirRanking: () => void } & AcoesMesa) {
   const { t, idioma, numero } = useI18n()
-  const { salvar, definirLista, marcarTransferido } = useTorneios()
+  const { salvar, definirLista, finalizar, marcarTransferido } = useTorneios()
   const { partidas, descartarDoTorneio } = usePartidasDoTorneio()
   const { jogadores } = useJogadores()
   const { aviso, mostrar } = useAviso()
@@ -85,6 +85,7 @@ export default function PaginaMesasTorneio({
   const [menu, setMenu] = useState(false)
   const [compartilhando, setCompartilhando] = useState(false)
   const [reiniciando, setReiniciando] = useState(false)
+  const [encerrando, setEncerrando] = useState(false)
   /** Rodada cujo lembrete de backup já foi dispensado. */
   const [lembreteDispensado, setLembreteDispensado] = useState<number>()
 
@@ -158,6 +159,18 @@ export default function PaginaMesasTorneio({
             >
               <i className="fas fa-ranking-star" aria-hidden="true" />
             </button>
+            {podeEncerrar(torneio) && (
+              <button
+                type="button"
+                className="cm-btn-icone"
+                aria-label={t('tournament.ranking.finish')}
+                title={t('tournament.ranking.finish')}
+                aria-haspopup="dialog"
+                onClick={() => setEncerrando(true)}
+              >
+                <i className="fas fa-flag-checkered" aria-hidden="true" />
+              </button>
+            )}
             <button
               type="button"
               className="cm-btn-icone"
@@ -469,6 +482,20 @@ export default function PaginaMesasTorneio({
           )}
           </ul>
         </Modal>
+      )}
+
+      {encerrando && (
+        <ModalConfirmacao
+          titulo={t('tournament.ranking.finishTitle')}
+          texto={t('tournament.ranking.finishHelp')}
+          rotuloConfirmar={t('tournament.ranking.finish')}
+          aoFechar={() => setEncerrando(false)}
+          aoConfirmar={() => {
+            finalizar(torneio.id)
+            setEncerrando(false)
+            aoVoltar()
+          }}
+        />
       )}
 
       {reiniciando && (

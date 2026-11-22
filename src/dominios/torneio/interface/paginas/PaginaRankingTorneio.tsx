@@ -14,7 +14,7 @@ import { nomeDeArquivo } from '@/compartilhado/relatorio/relatorio'
 import type { Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
 import '../torneio.css'
-import { nomeNoTorneio } from '../../logica/torneio'
+import { nomeNoTorneio, podeEncerrar } from '../../logica/torneio'
 
 /**
  * Ranking do torneio: posição, jogador, pontos, média de colocação e partidas.
@@ -38,7 +38,6 @@ export default function PaginaRankingTorneio({
   const { aviso, mostrar } = useAviso()
   const [encerrando, setEncerrando] = useState(false)
   const [compartilhando, setCompartilhando] = useState(false)
-  const podeEncerrar = torneio.status === 'em_andamento' && !torneio.transferidoEm
   const linhas = useMemo(() => rankingDoTorneio(torneio, partidas), [torneio, partidas])
   const mudancas = useMemo(() => mudancasDoRanking(torneio, partidas), [torneio, partidas])
   const mudancaDe = (id: string) => mudancas?.jogadores.find((item) => item.jogadorId === id)
@@ -92,7 +91,7 @@ export default function PaginaRankingTorneio({
             >
               <i className="fas fa-share-nodes" aria-hidden="true" />
             </button>
-            {podeEncerrar && (
+            {podeEncerrar(torneio) && (
               <button
                 type="button"
                 className="cm-btn-icone"

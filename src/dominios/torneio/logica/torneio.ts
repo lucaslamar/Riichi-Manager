@@ -163,6 +163,10 @@ export function historicoDeTorneios(
     .sort((um, outro) => outro.data.localeCompare(um.data) || outro.criadoEm.localeCompare(um.criadoEm))
 }
 
+export function podeEncerrar(torneio: Pick<Torneio, 'status' | 'transferidoEm'>): boolean {
+  return torneio.status === 'em_andamento' && !torneio.transferidoEm
+}
+
 export function finalizarTorneio(torneio: Torneio, agora: string): Torneio {
   return { ...torneio, status: 'finalizado', finalizadoEm: agora, atualizadoEm: agora }
 }
