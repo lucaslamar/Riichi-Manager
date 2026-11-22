@@ -1235,7 +1235,8 @@
       "expand": "자세히 보기",
       "collapse": "접기",
       "deleteTitle": "이 대국을 삭제할까요?",
-      "deleteHelp": "기록과 랭킹에서 사라져요. 되돌릴 수 없어요."
+      "deleteHelp": "기록과 랭킹에서 사라져요. 되돌릴 수 없어요.",
+      "details": "자세히"
     },
     "home": {
       "inProgressCount": {

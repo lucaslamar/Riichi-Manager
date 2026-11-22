@@ -1235,7 +1235,8 @@
       "expand": "显示详情",
       "collapse": "隐藏详情",
       "deleteTitle": "删除这局对局？",
-      "deleteHelp": "对局会从历史和排名中移除，且无法撤销。"
+      "deleteHelp": "对局会从历史和排名中移除，且无法撤销。",
+      "details": "详情"
     },
     "home": {
       "inProgressCount": {

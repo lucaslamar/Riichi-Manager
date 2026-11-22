@@ -1261,7 +1261,8 @@
       "expand": "Mostrar detalles",
       "collapse": "Ocultar detalles",
       "deleteTitle": "¿Eliminar esta partida?",
-      "deleteHelp": "La partida sale del historial y del ranking. No se puede deshacer."
+      "deleteHelp": "La partida sale del historial y del ranking. No se puede deshacer.",
+      "details": "Detalles"
     },
     "home": {
       "inProgressCount": {

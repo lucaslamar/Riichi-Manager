@@ -587,9 +587,24 @@ body.teclado-aberto .clb-enviar {
   gap: 10px;
   border: 1px solid var(--linha-divisoria);
   border-radius: 14px;
-  padding: 10px 10px 34px;
+  padding: 10px;
   color: var(--texto-principal);
   background: var(--superficie);
+}
+
+.cm-card--expansivel {
+  cursor: pointer;
+}
+
+.cm-card--expansivel:hover {
+  border-color: var(--primario);
+}
+
+.cm-apoio {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 2px 8px;
 }
 
 .cm-topo {
@@ -742,7 +757,10 @@ body.teclado-aberto .clb-enviar {
 .cm-detalhes {
   display: grid;
   grid-template-rows: 0fr;
+  /* Fechado, não deixa o vão do gap no fim do card. */
+  margin-top: -10px;
   transition:
+    margin-top 200ms ease,
     grid-template-rows 200ms ease,
     visibility 200ms;
   visibility: hidden;
@@ -750,6 +768,7 @@ body.teclado-aberto .clb-enviar {
 
 .cm-card--aberto .cm-detalhes {
   grid-template-rows: 1fr;
+  margin-top: 0;
   visibility: visible;
 }
 
@@ -807,19 +826,31 @@ body.teclado-aberto .clb-enviar {
 }
 
 .cm-expandir {
-  position: absolute;
-  right: 6px;
-  bottom: 2px;
+  position: relative;
   display: inline-flex;
-  width: 36px;
-  height: 32px;
+  flex: none;
+  min-height: 0;
+  height: 20px;
   align-items: center;
   justify-content: center;
+  gap: 5px;
   border: 0;
-  border-radius: 8px;
-  color: var(--texto-apoio);
-  background: transparent;
+  border-radius: 999px;
+  padding: 0 8px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  box-shadow: none;
   cursor: pointer;
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+/* A pílula é baixa para não criar linha, o toque continua com 44px. */
+.cm-expandir::after {
+  content: '';
+  position: absolute;
+  inset: -12px -8px;
 }
 
 .cm-expandir > i {
@@ -830,9 +861,33 @@ body.teclado-aberto .clb-enviar {
   transform: rotate(180deg);
 }
 
-.cm-expandir:hover,
 .cm-expandir:focus-visible {
-  color: var(--primario);
+  outline: 2px solid var(--primario);
+  outline-offset: 2px;
+}
+
+/* Sem largura para a palavra, fica só a seta ao lado da data. */
+@media (max-width: 479px) {
+  .cm-expandir {
+    padding: 0 2px;
+    background: transparent;
+  }
+
+  .cm-expandir::after {
+    inset: -12px -14px;
+  }
+
+  .cm-apoio {
+    gap: 4px;
+  }
+
+  .cm-card--expansivel .cm-acoes {
+    gap: 0;
+  }
+
+  .cm-expandir-texto {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1254,7 +1254,8 @@
       "expand": "Show details",
       "collapse": "Hide details",
       "deleteTitle": "Delete this game?",
-      "deleteHelp": "The game leaves the history and the ranking. This cannot be undone."
+      "deleteHelp": "The game leaves the history and the ranking. This cannot be undone.",
+      "details": "Details"
     },
     "home": {
       "inProgressCount": {

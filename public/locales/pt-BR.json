@@ -1254,7 +1254,8 @@
       "expand": "Mostrar detalhes",
       "collapse": "Esconder detalhes",
       "deleteTitle": "Excluir esta partida?",
-      "deleteHelp": "A partida sai do histórico e do ranking. Não dá para desfazer."
+      "deleteHelp": "A partida sai do histórico e do ranking. Não dá para desfazer.",
+      "details": "Detalhes"
     },
     "home": {
       "inProgressCount": {

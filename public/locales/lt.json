@@ -1292,7 +1292,8 @@
       "expand": "Rodyti daugiau",
       "collapse": "Slėpti",
       "deleteTitle": "Ištrinti šią partiją?",
-      "deleteHelp": "Partija dings iš istorijos ir reitingo. Atšaukti nebus galima."
+      "deleteHelp": "Partija dings iš istorijos ir reitingo. Atšaukti nebus galima.",
+      "details": "Daugiau"
     },
     "home": {
       "inProgressCount": {

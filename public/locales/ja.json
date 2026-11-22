@@ -1235,7 +1235,8 @@
       "expand": "詳細を表示",
       "collapse": "詳細を隠す",
       "deleteTitle": "この対局を削除しますか？",
-      "deleteHelp": "履歴とランキングから消えます。元に戻せません。"
+      "deleteHelp": "履歴とランキングから消えます。元に戻せません。",
+      "details": "詳細"
     },
     "home": {
       "inProgressCount": {

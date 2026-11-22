@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useId, useState, type MouseEvent } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { CHAVE_VENTO, KANJI_VENTO, type Cadeira, type Partida } from '../../logica/partida'
 import {
@@ -26,7 +26,7 @@ interface PropsCardMesa {
 
 /**
  * Card de placar: cabeçalho com a rodada e as ações, grade 2×2 com os quatro
- * jogadores e, ao expandir, a tabela com os contadores do registro de mãos.
+ * jogadores e, ao tocar no card, a tabela com os contadores do registro de mãos.
  */
 export default function CardMesa({
   partida,
@@ -42,6 +42,11 @@ export default function CardMesa({
   const { t, numero, idioma } = useI18n()
   const [aberto, setAberto] = useState(false)
   const idDetalhes = useId()
+  const alternar = () => setAberto((atual) => !atual)
+  const tocarCard = (evento: MouseEvent<HTMLElement>) => {
+    if ((evento.target as Element).closest('button') || window.getSelection()?.toString()) return
+    alternar()
+  }
   const historico = modo === 'historico'
 
   const linhas = historico ? linhasDoHistorico(partida) : linhasEmAndamento(partida)
@@ -72,19 +77,37 @@ export default function CardMesa({
     contadores ? numero(contadores[cadeira][campo]) : '–'
 
   return (
-    <article className={`cm-card${aberto ? ' cm-card--aberto' : ''}`} aria-label={cabecalho}>
+    // Toque é atalho: teclado e leitor de tela usam o botão Detalhes.
+    <article
+      className={`cm-card cm-card--expansivel${aberto ? ' cm-card--aberto' : ''}`}
+      aria-label={cabecalho}
+      onClick={tocarCard}
+    >
       <header className="cm-topo">
         <div className="cm-titulo">
           <strong>{cabecalho}</strong>
           {!!partida.saidas?.length && (
             <span className="cm-selo">{t('match.leftGame.withTag')}</span>
           )}
-          {(apoio || hora) && (
-            <span className="cm-hora">
-              {apoio && `${apoio} · `}
-              {hora && <time dateTime={momento}>{hora}</time>}
-            </span>
-          )}
+          <div className="cm-apoio">
+            {(apoio || hora) && (
+              <span className="cm-hora">
+                {apoio && `${apoio} · `}
+                {hora && <time dateTime={momento}>{hora}</time>}
+              </span>
+            )}
+            <button
+              type="button"
+              className="cm-expandir"
+              aria-expanded={aberto}
+              aria-controls={idDetalhes}
+              aria-label={t(aberto ? 'match.cards.collapse' : 'match.cards.expand')}
+              onClick={alternar}
+            >
+              <span className="cm-expandir-texto">{t('match.cards.details')}</span>
+              <i className="fas fa-chevron-down" aria-hidden="true" />
+            </button>
+          </div>
         </div>
         <div className="cm-acoes">
           <button
@@ -200,17 +223,6 @@ export default function CardMesa({
           </table>
         </div>
       </div>
-
-      <button
-        type="button"
-        className="cm-expandir"
-        aria-expanded={aberto}
-        aria-controls={idDetalhes}
-        aria-label={t(aberto ? 'match.cards.collapse' : 'match.cards.expand')}
-        onClick={() => setAberto((atual) => !atual)}
-      >
-        <i className="fas fa-chevron-down" aria-hidden="true" />
-      </button>
     </article>
   )
 }
