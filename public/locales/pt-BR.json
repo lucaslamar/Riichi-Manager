@@ -2754,6 +2754,11 @@
           "other": "São {{count}} módulos curtos para conhecer o jogo."
         },
         "conclusionSecret": "Recado secreto, só para quem virou Mestre do MCR: o muro tem 144 pedras, e nenhuma delas é segredo para você."
+      },
+      "notation": {
+        "errors": {
+          "akaDisabled": "O MCR não tem 5 vermelho: use 5 em vez de 0"
+        }
       }
     }
   },

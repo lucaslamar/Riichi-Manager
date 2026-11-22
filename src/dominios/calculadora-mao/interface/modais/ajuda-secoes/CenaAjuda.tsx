@@ -255,6 +255,8 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                 {TECLAS_NUMEROS.map((tecla) => (
                   <span
                     key={tecla}
+                    // MCR: sem 5 vermelho, o lugar do 0 fica vazio.
+                    style={chines && tecla === '0' ? { visibility: 'hidden' } : undefined}
                     className={`cena-ajuda__tecla${/[mpsz]/.test(tecla) ? ' cena-ajuda__tecla--naipe' : ''}${
                       tecla === '0' ? ' cena-ajuda__tecla--zero' : ''
                     }${tocando(`tecla:${tecla}`)}`}

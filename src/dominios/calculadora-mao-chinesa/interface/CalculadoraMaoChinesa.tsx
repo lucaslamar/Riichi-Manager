@@ -240,6 +240,7 @@ export default function CalculadoraMaoChinesa({
                     <CampoNotacaoMao
                       valor={textoNotacao}
                       akadora={false}
+                      semZero
                       descricoesChamada={descricoesChamada}
                       aoMudar={mudarNotacao}
                       aoVoltar={() => setEntradaNotacao(false)}

@@ -2716,6 +2716,11 @@
           "other": "게임을 알아보는 짧은 모듈 {{count}}개."
         },
         "conclusionSecret": "MCR 마스터만을 위한 비밀 메시지: 패산은 144장, 이제 모르는 패는 없습니다."
+      },
+      "notation": {
+        "errors": {
+          "akaDisabled": "MCR에는 빨간 5가 없습니다. 0 대신 5를 쓰세요"
+        }
       }
     }
   },

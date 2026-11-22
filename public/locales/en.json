@@ -2754,6 +2754,11 @@
           "other": "{{count}} short modules to get to know the game."
         },
         "conclusionSecret": "A secret note, only for MCR Masters: the wall has 144 tiles, and none of them is a secret to you."
+      },
+      "notation": {
+        "errors": {
+          "akaDisabled": "MCR has no red five: use 5 instead of 0"
+        }
       }
     }
   },

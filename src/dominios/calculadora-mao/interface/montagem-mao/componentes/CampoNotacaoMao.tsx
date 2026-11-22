@@ -43,6 +43,8 @@ interface PropsCampoNotacaoMao {
   aoEscolherEspera: (pedra: CodigoPedra) => void
   /** Sem Aka dora nas regras, o 0 (5 vermelho) fica desabilitado. */
   akadora: boolean
+  /** Modo sem 5 vermelho (MCR): a tecla 0 não existe. */
+  semZero?: boolean
   /** Nome acessível de cada chamada, quando diz mais que o rótulo. */
   descricoesChamada?: Record<Meld['tipo'], string>
 }
@@ -132,6 +134,7 @@ export function CampoNotacaoMao({
   descricoesChamada,
   aoEscolherEspera,
   akadora,
+  semZero = false,
 }: PropsCampoNotacaoMao) {
   const sanma = !!useSanmaMao()
   const { t } = useI18n()
@@ -410,7 +413,7 @@ export function CampoNotacaoMao({
         aria-label={t('notation.keyboard')}
         aria-describedby={erro ? idMensagem : undefined}
       >
-        {TECLAS.map((tecla) => (
+        {TECLAS.filter((tecla) => !semZero || tecla.valor !== '0').map((tecla) => (
           <button
             key={tecla.valor}
             className={`tecla-notacao-mao area-${tecla.area} ${tecla.classe ?? ''}`.trim()}

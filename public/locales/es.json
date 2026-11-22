@@ -2773,6 +2773,11 @@
           "other": "{{count}} módulos cortos para conocer el juego."
         },
         "conclusionSecret": "Mensaje secreto, solo para Maestros del MCR: el muro tiene 144 fichas y ninguna es un secreto para ti."
+      },
+      "notation": {
+        "errors": {
+          "akaDisabled": "El MCR no tiene 5 rojo: usa 5 en vez de 0"
+        }
       }
     }
   },

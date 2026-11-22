@@ -2716,6 +2716,11 @@
           "other": "{{count}}个短模块，带你认识这项游戏。"
         },
         "conclusionSecret": "只给MCR大师的秘密留言：牌墙有144张，对你已没有秘密。"
+      },
+      "notation": {
+        "errors": {
+          "akaDisabled": "国标麻将没有红5，请用5代替0"
+        }
       }
     }
   },

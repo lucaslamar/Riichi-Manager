@@ -2842,6 +2842,11 @@
           "other": "{{count}} trumpi moduliai pažinti žaidimą."
         },
         "conclusionSecret": "Slapta žinutė tik MCR meistrams: sienoje 144 akmenys, ir nė vienas jums nebe paslaptis."
+      },
+      "notation": {
+        "errors": {
+          "akaDisabled": "MCR neturi raudono penketo: naudokite 5 vietoje 0"
+        }
       }
     }
   },
