@@ -361,3 +361,63 @@
 .anl-marcas .anl-sou-eu {
   margin-top: 0;
 }
+
+/* iPad e PC: a análise usa a largura, com botões de toque e letra de leitura. */
+@media (min-width: 768px) and (min-height: 561px) {
+  .ptd-inicio.anl-tela {
+    width: min(100%, 980px);
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .anl-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+
+  .anl-nome {
+    min-height: 44px;
+  }
+
+  .anl-nome strong {
+    font-size: 1.75rem;
+  }
+
+  .anl-nome > i,
+  .anl-cabecalho-texto small,
+  .anl-resumo {
+    font-size: 1rem;
+  }
+
+  .anl-marcas {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .anl-marcas .anl-sou-eu {
+    min-height: 44px;
+    padding-inline: 16px;
+    font-size: 0.9375rem;
+  }
+
+  .anl-card-topo h3 {
+    font-size: 1.125rem;
+  }
+
+  .anl-densidade .ptd-segmento,
+  .anl-tela .anl-compartilhar {
+    min-height: 48px;
+    font-size: 1rem;
+  }
+
+  .anl-mapa {
+    max-width: 560px;
+  }
+
+  .anl-legenda,
+  .anl-formato-partidas,
+  .anl-formato dt {
+    font-size: 0.875rem;
+  }
+}
