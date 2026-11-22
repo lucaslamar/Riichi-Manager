@@ -5,7 +5,7 @@
  */
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import { configPadraoTorneio, criarRascunho } from './torneio'
-import type { CriterioTemporada, Temporada, Torneio } from './tipos'
+import type { CriterioTemporada, LinhaTemporada, Temporada, Torneio } from './tipos'
 
 export function criarTemporada(dados: {
   id: string
@@ -38,17 +38,6 @@ export function novoEncontro(temporada: Temporada, contexto: { id: string; agora
     formato: { tipo: 'temporada', temporadaId: temporada.id },
     config: temporada.config,
   }
-}
-
-interface LinhaTemporada {
-  jogadorId: string
-  /** O número que ordena, conforme o critério. */
-  valor: number
-  partidas: number
-  encontros: number
-  soma: number
-  /** Média: não chegou ao mínimo de partidas (fica no fim, fora da ordem). */
-  abaixoDoMinimo: boolean
 }
 
 const arredondar = (valor: number) => Math.round(valor * 10) / 10
