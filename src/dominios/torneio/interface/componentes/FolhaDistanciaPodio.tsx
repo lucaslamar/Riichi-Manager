@@ -3,13 +3,15 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import type { RegrasDoModo } from '@/compartilhado/modo-jogo/regrasDoModo'
+import type { ValoresUma } from '@/dominios/centerpiece/logica/uma'
+import ListaViradas from '@/dominios/estatisticas/interface/ListaViradas'
 import {
   compararCom,
   disputantes,
   distanciaParaPodio,
   vizinhosDoJogador,
-  type DistanciaAlvo,
 } from '../../logica/distanciaPodio'
+import type { FiltrosRankingTorneio } from '../../logica/filtrosRankingTorneio'
 import type { LinhaRankingTorneio } from '../../logica/ranking'
 import type { TextosDistancia } from '../hooks/useTextosDistancia'
 
@@ -18,6 +20,9 @@ export default function FolhaDistanciaPodio({
   linhas,
   jogadorId,
   regras,
+  bonus,
+  unidade,
+  restantesDe,
   textos,
   nome,
   pontos,
@@ -29,6 +34,9 @@ export default function FolhaDistanciaPodio({
   linhas: readonly LinhaRankingTorneio[]
   jogadorId: string
   regras: RegrasDoModo
+  bonus: ValoresUma | null
+  unidade: FiltrosRankingTorneio['unidade']
+  restantesDe: (jogadorId: string) => number | null
   textos: TextosDistancia
   nome: (jogadorId: string) => string
   pontos: (valor: number) => string
@@ -57,31 +65,14 @@ export default function FolhaDistanciaPodio({
 
   const { faltam, vantagem } = distanciaParaPodio(linhas, jogadorId)
   const comparado = compararCom(linhas, jogadorId, comparadoId)
+  // A comparação escolhida vem primeiro, colada no seletor.
   const secoes = [
+    { id: 'comparado', alvos: comparado ? [comparado] : [] },
     { id: 'podio', alvos: [...faltam, ...vantagem] },
     { id: 'vizinhos', alvos: vizinhosDoJogador(linhas, jogadorId) },
-    { id: 'comparado', alvos: comparado ? [comparado] : [] },
   ].filter((secao) => secao.alvos.length > 0)
   const rivais = disputantes(linhas, jogadorId).filter((outra) => outra.jogadorId !== jogadorId)
 
-  const item = (alvo: DistanciaAlvo) => (
-    <li key={`${alvo.relacao}-${alvo.jogadorId}`} className={alvo.posicao <= 3 ? `trn-podio--${alvo.posicao}` : undefined}>
-      {alvo.posicao <= 3 && (
-        <span className="trn-medalha" aria-hidden="true">
-          {alvo.posicao}
-        </span>
-      )}
-      <span className="trn-distancia-rotulo">{textos.rotulo(alvo)}</span>
-      <strong className={alvo.relacao === 'vantagem' || alvo.relacao === 'sobreOUltimo' ? 'trn-positivo' : undefined}>
-        {textos.valor(alvo)}
-        {alvo.diferenca > 0 && <span className="sr-only"> {t(regras.rotuloPontos)}</span>}
-      </strong>
-      <small>
-        {textos.detalhe(alvo)}
-        {textos.detalheOculto(alvo) && <span className="sr-only"> · {textos.detalheOculto(alvo)}</span>}
-      </small>
-    </li>
-  )
 
   return (
     <Modal
@@ -96,7 +87,18 @@ export default function FolhaDistanciaPodio({
       tamanho="pequena"
       className="trn-distancia"
       acoes={
-        jogaram.length > 1 && (
+        <>
+          <button
+            type="button"
+            className="modal-acao"
+            aria-label={t('tournament.podiumGap.share', { name: nome(jogadorId) })}
+            title={t('tournament.share.title')}
+            aria-haspopup="dialog"
+            onClick={() => aoCompartilhar(comparado ? comparadoId : undefined)}
+          >
+            <i className="fas fa-share-nodes" aria-hidden="true" />
+          </button>
+          {jogaram.length > 1 && (
           <>
             <button
               type="button"
@@ -117,18 +119,12 @@ export default function FolhaDistanciaPodio({
               <i className="fas fa-chevron-right" aria-hidden="true" />
             </button>
           </>
-        )
+          )}
+        </>
       }
     >
-      <div aria-live="polite">
-        {secoes.map((secao) => (
-          <ul key={secao.id} className="trn-distancia-lista">
-            {secao.alvos.map(item)}
-          </ul>
-        ))}
-      </div>
-      <div className="trn-distancia-acoes">
-        {rivais.length > 0 && (
+      {rivais.length > 0 && (
+        <div className="trn-distancia-filtro">
           <select
             aria-label={t('tournament.podiumGap.compareWith')}
             value={comparado ? comparadoId : ''}
@@ -141,17 +137,19 @@ export default function FolhaDistanciaPodio({
               </option>
             ))}
           </select>
-        )}
-        <button
-          type="button"
-          className="cm-btn-icone"
-          aria-label={t('tournament.podiumGap.share', { name: nome(jogadorId) })}
-          title={t('tournament.share.title')}
-          aria-haspopup="dialog"
-          onClick={() => aoCompartilhar(comparado ? comparadoId : undefined)}
-        >
-          <i className="fas fa-share-nodes" aria-hidden="true" />
-        </button>
+        </div>
+      )}
+      <div aria-live="polite">
+        <ListaViradas
+          secoes={secoes}
+          jogadorId={jogadorId}
+          regras={regras}
+          bonus={bonus}
+          unidade={unidade}
+          textos={textos}
+          nome={nome}
+          restantesDe={restantesDe}
+        />
       </div>
       <p className="cfg-ajuda trn-distancia-aviso">{t(`tournament.podiumGap.approx.${regras.modo}`)}</p>
     </Modal>

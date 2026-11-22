@@ -2189,7 +2189,7 @@
         "vitorias": "桌次第一"
       },
       "approx": {
-        "riichi": "估算：闲家荣和，不计马点。",
+        "riichi": "估算：不含自摸和亲家和牌。",
         "mcr": "估算：每桌第一得4分。"
       },
       "race": "领奖台之争",
@@ -3486,6 +3486,29 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "没有剩余对局，分差已确定。",
+      "perGame": "剩余对局：{{games}}。每局需追回{{value}}。",
+      "thirdParty": "荣和其他人",
+      "direct": "直击{{name}}",
+      "directHelp": "直击时，每一分都按两倍缩小分差。",
+      "ifLeader": "若{{name}}…",
+      "needs": "{{name}}需要",
+      "finish": {
+        "ultimo": "第4名（{{value}}）",
+        "zero": "不赚不亏",
+        "primeiro": "第1名（{{value}}）"
+      },
+      "withUma": "含马点：{{name}}名次",
+      "needsToo": "还需要",
+      "inPlace": "第{{place}}名（{{value}}）",
+      "umaHelp": "按已设置的马点计算，假设{{name}}不赚不亏。",
+      "either": "{{hands}}或直击{{direct}}次",
+      "jaPassa": "已经反超",
+      "jaEmpata": "已经追平"
     }
   }
 }

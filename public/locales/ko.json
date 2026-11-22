@@ -2189,7 +2189,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "대략치: 자의 론, 우마 제외.",
+        "riichi": "근사치: 쯔모와 오야 화료는 제외.",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "시상대 경쟁",
@@ -3486,6 +3486,29 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "남은 대국이 없어 이 차이로 확정됩니다.",
+      "perGame": "남은 대국: {{games}}. 대국마다 {{value}}씩 좁혀야 합니다.",
+      "thirdParty": "다른 사람에게 론",
+      "direct": "{{name}} 직격 론",
+      "directHelp": "직격하면 점수 차가 두 배로 줄어듭니다.",
+      "ifLeader": "{{name}} 결과",
+      "needs": "{{name}} 필요",
+      "finish": {
+        "ultimo": "4위 ({{value}})",
+        "zero": "±0",
+        "primeiro": "1위 ({{value}})"
+      },
+      "withUma": "우마 포함: {{name}} 순위",
+      "needsToo": "추가로 필요",
+      "inPlace": "{{place}}위 ({{value}})",
+      "umaHelp": "설정된 규칙의 우마, {{name}} ±0 기준.",
+      "either": "{{hands}} 또는 직격 {{direct}}회",
+      "jaPassa": "이미 역전",
+      "jaEmpata": "이미 동점"
     }
   }
 }

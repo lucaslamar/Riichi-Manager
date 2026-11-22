@@ -1,0 +1,96 @@
+/* Estatísticas do jogador e cenários de virada. */
+
+.est-linha {
+  display: grid;
+  width: 100%;
+  min-height: 48px;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
+  margin: 0;
+  border: 0;
+  padding: 7px 0;
+  color: inherit;
+  background: none;
+  font: inherit;
+  text-align: left;
+}
+
+button.est-linha {
+  cursor: pointer;
+}
+
+.est-linha:focus-visible {
+  outline: 2px solid var(--primario);
+}
+
+.est-linha > strong {
+  white-space: nowrap;
+}
+
+.est-chevron {
+  margin-left: 8px;
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+}
+
+.est-linha[aria-expanded='true'] .est-chevron {
+  transform: rotate(180deg);
+}
+
+.est-virada {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0 12px;
+}
+
+.est-apoio {
+  margin: 0;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.est-caminhos {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.est-caminhos dt {
+  color: var(--texto-apoio);
+}
+
+.est-caminhos dd {
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.est-cenarios {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  table-layout: fixed;
+}
+
+.est-cenarios :is(th, td) {
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding: 6px 4px;
+  color: var(--texto-principal);
+  background: none;
+  overflow-wrap: anywhere;
+  text-align: left;
+  vertical-align: top;
+}
+
+.est-cenarios thead th {
+  color: var(--texto-apoio);
+}
+
+.est-cenarios tbody th {
+  font-weight: 400;
+}
+
+.est-cenarios td {
+  font-weight: 700;
+}

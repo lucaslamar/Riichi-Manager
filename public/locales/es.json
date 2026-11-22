@@ -2226,7 +2226,7 @@
         "vitorias": "Victorias de mesa"
       },
       "approx": {
-        "riichi": "Aproximado: ron fuera del Este, sin uma.",
+        "riichi": "Aproximado: no cuenta tsumo ni manos de oya.",
         "mcr": "Aproximado: ganar la mesa vale 4 puntos."
       },
       "race": "Lucha por el podio",
@@ -3543,6 +3543,29 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "No quedan partidas: la diferencia es definitiva.",
+      "perGame": "Partidas restantes: {{games}}. Debe recortar {{value}} por partida.",
+      "thirdParty": "Por ron a terceros",
+      "direct": "Por ron directo a {{name}}",
+      "directHelp": "En el ron directo, cada punto cuenta doble en la diferencia.",
+      "ifLeader": "Si {{name}}…",
+      "needs": "{{name}} necesita",
+      "finish": {
+        "ultimo": "queda 4.º ({{value}})",
+        "zero": "queda en cero",
+        "primeiro": "queda 1.º ({{value}})"
+      },
+      "withUma": "Con uma, si {{name}} termina",
+      "needsToo": "Todavía necesita",
+      "inPlace": "en {{place}}.º ({{value}})",
+      "umaHelp": "Uma según las reglas configuradas, con {{name}} en cero.",
+      "either": "{{hands}} o {{direct}} directo",
+      "jaPassa": "ya lo supera",
+      "jaEmpata": "ya empata"
     }
   }
 }

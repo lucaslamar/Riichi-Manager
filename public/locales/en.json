@@ -2215,7 +2215,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "Approximate: non-East ron, no uma.",
+        "riichi": "Approximate: excludes tsumo and dealer hands.",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "Podium race",
@@ -3524,6 +3524,29 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "No games left: the gap is final.",
+      "perGame": "Games left: {{games}}. Needs to gain {{value}} per game.",
+      "thirdParty": "By ron from others",
+      "direct": "By direct ron on {{name}}",
+      "directHelp": "On a direct ron, every point counts twice in the gap.",
+      "ifLeader": "If {{name}}…",
+      "needs": "{{name}} needs",
+      "finish": {
+        "ultimo": "finishes 4th ({{value}})",
+        "zero": "breaks even",
+        "primeiro": "finishes 1st ({{value}})"
+      },
+      "withUma": "With uma, if {{name}} finishes",
+      "needsToo": "Still needs",
+      "inPlace": "in place {{place}} ({{value}})",
+      "umaHelp": "Uma from the configured rules, with {{name}} breaking even.",
+      "either": "{{hands}} or {{direct}} direct",
+      "jaPassa": "already ahead",
+      "jaEmpata": "already tied"
     }
   }
 }

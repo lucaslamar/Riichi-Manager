@@ -20,6 +20,8 @@ import {
 } from '../../logica/filtrosRankingTorneio'
 import { mudancasDoRanking, rankingDoTorneio, recorteAteRodada, textoDaSeta } from '../../logica/ranking'
 import { ausenciasPorWo } from '../../logica/wo'
+import { jogosRestantes } from '../../logica/jogosRestantes'
+import { bonusDasPosicoes } from '@/dominios/estatisticas/logica/viradas'
 import { premiacaoDe, premioDaPosicao } from '../../logica/premiacao'
 import { blocoDaPremiacao, relatorioDaDisputa, relatorioDoJogador, relatorioDoRanking } from '../../logica/relatorios'
 import FolhaPremiacao from '../componentes/FolhaPremiacao'
@@ -517,6 +519,16 @@ export default function PaginaRankingTorneio({
           linhas={linhas}
           jogadorId={abertoId}
           regras={regras}
+          bonus={regras.modo === 'riichi' ? bonusDasPosicoes(torneio.config) : null}
+          unidade={filtros.unidade}
+          // "Até a rodada" volta no tempo: ali o torneio ainda não tinha acabado.
+          restantesDe={(id) =>
+            jogosRestantes(
+              filtros.ateRodada === null ? torneio : { ...recorte.torneio, status: 'em_andamento' },
+              recorte.partidas,
+              id,
+            )
+          }
           textos={textos}
           nome={nomeDe}
           pontos={pontos}

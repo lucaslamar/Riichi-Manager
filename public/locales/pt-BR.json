@@ -2215,7 +2215,7 @@
         "vitorias": "Vitórias de mesa"
       },
       "approx": {
-        "riichi": "Aproximado: ron fora do Leste, sem uma.",
+        "riichi": "Aproximado: não conta tsumo nem mão de oya.",
         "mcr": "Aproximado: vencer a mesa vale 4 pontos."
       },
       "race": "Disputa do pódio",
@@ -3524,6 +3524,29 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "Não há mais jogos: a diferença é final.",
+      "perGame": "Jogos que faltam: {{games}}. Precisa tirar {{value}} por jogo.",
+      "thirdParty": "Por ron de terceiros",
+      "direct": "Por ron direto em {{name}}",
+      "directHelp": "No ron direto, cada ponto conta em dobro na diferença.",
+      "ifLeader": "Se {{name}}…",
+      "needs": "{{name}} precisa de",
+      "finish": {
+        "ultimo": "ficar em 4º ({{value}})",
+        "zero": "ficar no zero",
+        "primeiro": "ficar em 1º ({{value}})"
+      },
+      "withUma": "Com uma, se {{name}} terminar",
+      "needsToo": "Ainda precisa de",
+      "inPlace": "em {{place}}º ({{value}})",
+      "umaHelp": "Uma das regras configuradas, com {{name}} no zero.",
+      "either": "{{hands}} ou {{direct}} direto",
+      "jaPassa": "já passa",
+      "jaEmpata": "já empata"
     }
   }
 }

@@ -2279,7 +2279,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "Apytiksliai: ne Rytų ron, be uma.",
+        "riichi": "Apytiksliai: be tsumo ir oya kombinacijų.",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "Kova dėl prizų",
@@ -3612,6 +3612,29 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "Partijų nebeliko: skirtumas galutinis.",
+      "perGame": "Liko partijų: {{games}}. Reikia atsigriebti po {{value}} per partiją.",
+      "thirdParty": "Ron iš kitų",
+      "direct": "Tiesioginis ron: {{name}}",
+      "directHelp": "Tiesioginio ron taškai skirtumą mažina dvigubai.",
+      "ifLeader": "Jei {{name}}…",
+      "needs": "{{name}}: reikia",
+      "finish": {
+        "ultimo": "bus 4-as ({{value}})",
+        "zero": "liks ties nuliu",
+        "primeiro": "bus 1-as ({{value}})"
+      },
+      "withUma": "Su uma: {{name}} vieta",
+      "needsToo": "Dar reikia",
+      "inPlace": "{{place}} vieta ({{value}})",
+      "umaHelp": "Uma pagal nustatytas taisykles, {{name}}: 0.",
+      "either": "{{hands}} arba tiesiogiai {{direct}}",
+      "jaPassa": "jau lenkia",
+      "jaEmpata": "jau lygu"
     }
   }
 }

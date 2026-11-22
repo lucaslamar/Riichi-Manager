@@ -1294,13 +1294,6 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   border-top: 2px solid var(--linha-divisoria);
 }
 
-.trn-distancia-lista li {
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
-  align-items: center;
-  column-gap: 8px;
-  padding: 7px 0;
-}
 
 .trn-distancia-lista .trn-medalha {
   grid-row: span 2;
@@ -1320,16 +1313,15 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   color: var(--texto-apoio);
 }
 
-.trn-distancia-acoes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
+/* O filtro vem antes do que filtra, separado por uma linha. */
+.trn-distancia-filtro {
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  padding-bottom: 10px;
 }
 
-.trn-distancia-acoes select {
-  flex: 1;
-  min-width: 0;
+.trn-distancia-filtro select {
+  width: 100%;
   min-height: 44px;
   padding: 0 8px;
   border: 2px solid var(--entrada-borda);
@@ -1339,12 +1331,6 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   font: inherit;
 }
 
-.trn-distancia-acoes .cm-btn-icone {
-  width: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  margin-left: auto;
-}
 
 .cfg-ajuda.trn-distancia-aviso {
   margin-top: 6px;

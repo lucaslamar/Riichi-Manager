@@ -2189,7 +2189,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "目安：子のロン、ウマ抜き。",
+        "riichi": "概算：ツモと親の和了は含みません。",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "表彰台争い",
@@ -3486,6 +3486,29 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "残りの対局がないため、この差で確定です。",
+      "perGame": "残り対局数: {{games}}。1局あたり{{value}}縮める必要があります。",
+      "thirdParty": "他家からのロン",
+      "direct": "{{name}}から直撃",
+      "directHelp": "直撃では点差が2倍縮まります。",
+      "ifLeader": "{{name}}が…",
+      "needs": "{{name}}に必要",
+      "finish": {
+        "ultimo": "4着 ({{value}})",
+        "zero": "±0",
+        "primeiro": "1着 ({{value}})"
+      },
+      "withUma": "ウマ込み：{{name}}の着順",
+      "needsToo": "さらに必要",
+      "inPlace": "{{place}}着 ({{value}})",
+      "umaHelp": "設定ルールのウマ。{{name}}は±0とします。",
+      "either": "{{hands}}または直撃{{direct}}回",
+      "jaPassa": "すでに逆転",
+      "jaEmpata": "すでに同点"
     }
   }
 }
