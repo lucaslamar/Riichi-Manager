@@ -34,6 +34,7 @@ export const CHAVES_DE_DADOS: readonly string[] = [
   'riichi-manager-config-mesa',
   'riichi-manager-regras-registro',
   'riichi-manager-centerpiece-simples',
+  'riichi-manager-centerpiece-simples-mcr',
   'riichi-manager-ranking-filtros',
   'riichi-manager-eu',
   CHAVE_LIMITE_DETALHES,

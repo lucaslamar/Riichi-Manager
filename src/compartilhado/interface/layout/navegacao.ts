@@ -85,12 +85,11 @@ export function paginaDoDestino(destino: DestinoTela): number {
 }
 
 /**
- * Telas que não existem no modo Chinês (MCR): Han e Fu (o MCR não tem fu),
- * Centerpiece e Partidas (pontuação Riichi). Ranking e Tutorial mostram o MCR.
+ * Telas que não existem no modo Chinês (MCR): Han e Fu (o MCR não tem fu) e
+ * Partidas (pontuação Riichi). Centerpiece, Ranking e Tutorial mostram o MCR.
  */
 const OCULTAS_NO_MCR: ReadonlySet<DestinoNavegacao> = new Set([
   'calculadoraRapida',
-  'centerpiece',
   'partidas',
 ])
 
@@ -120,7 +119,8 @@ const ITEM_PLACAR_MCR: ItemNavegacao = {
   chaveCurta: 'menu.scoreMcrShort',
 }
 
-const comExtrasMcr = (itens: ItemNavegacao[]) => [itens[0], ITEM_PLACAR_MCR, ...itens.slice(1)]
+/** Como no Riichi: o Placar vem logo depois do Centerpiece. */
+const comExtrasMcr = (itens: ItemNavegacao[]) => [...itens.slice(0, 2), ITEM_PLACAR_MCR, ...itens.slice(2)]
 
 const ITENS_BARRA_MCR = comExtrasMcr(
   PAGINAS_NAVEGACAO.flat()

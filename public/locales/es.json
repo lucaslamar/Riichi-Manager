@@ -2734,6 +2734,18 @@
         "event": {
           "ron": "Dianhe",
           "tsumo": "Zimo"
+        },
+        "simple": {
+          "nextRound": "Siguiente mano",
+          "restartHelp": "La ronda y el dealer vuelven al inicio.",
+          "guide": {
+            "timer": "El temporizador de 30 s ya viene activado. En tu turno, toca la placa de tu viento y el tiempo vuelve a empezar en el centro. Como Peng, Chi y Gang saltan jugadores, el temporizador no adivina de quién es el turno: toca quien va a jugar. Si se acaba el tiempo, el centro parpadea y suena la alarma.",
+            "actions": "Tocar la mesa fuera de las placas, también en el centro, abre las acciones: siguiente mano, dados, Sorteo de vientos, reiniciar desde 東1 y el tiempo del temporizador.",
+            "dealer": "En MCR el dealer pasa al final de cada mano, con victoria o empate: toca Siguiente mano y 東 pasa al siguiente jugador. Gira el móvil para que 東 siga mirando al dealer. La mesa sigue al móvil aunque la pantalla gire sola, pero la cabecera y la barra cambian de lado. Para evitarlo, bloquea la rotación en los ajustes del móvil."
+          },
+          "demo": {
+            "nextRound": "Toca Siguiente mano"
+          }
         }
       },
       "tournament": {
@@ -2778,6 +2790,9 @@
         "errors": {
           "akaDisabled": "El MCR no tiene 5 rojo: usa 5 en vez de 0"
         }
+      },
+      "menu": {
+        "handCalculator": "Chinese Hand Calculator"
       }
     }
   },

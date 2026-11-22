@@ -38,5 +38,6 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 - Confirmar as regras do Tutorial marcadas em [REFERENCIAS-MCR.md](REFERENCIAS-MCR.md).
 - Traduzir `tutorial.mcr.*` (hoje em português nos 7 idiomas).
+- Decidir se os dados das mesas do MCR usam os dois lançamentos da regra chinesa (hoje um lançamento escolhe a parede, como no Riichi).
 - Decidir se o Placar troca as cadeiras entre as rodadas.
 - Decidir se a calculadora mostra o An Gang com as 4 pedras viradas, como o Tutorial, ou só as pontas.

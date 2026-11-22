@@ -53,6 +53,7 @@ export default function CalculadoraMaoChinesa({
   titulo,
   aoVoltar,
   aoUsarFan,
+  entradaFixa,
 }: {
   visivel: boolean
   aoIrParaProximaTela?: () => void
@@ -63,6 +64,8 @@ export default function CalculadoraMaoChinesa({
   aoVoltar?: () => void
   /** Aberta pelo Placar: o resultado ganha o botão que leva o fan total para a mesa. */
   aoUsarFan?: (fan: number) => void
+  /** Aberta pelo Centerpiece simples: a entrada já vem escolhida e deslizar volta para lá. */
+  entradaFixa?: 'pedras' | 'notacao'
 }) {
   const { t } = useI18n()
   const calc = useCalculadoraMaoChinesa(condicoesIniciais)
@@ -130,13 +133,26 @@ export default function CalculadoraMaoChinesa({
     setErroNotacao(null)
     setEntradaNotacao(true)
   }
+  // A entrada fixa pode mudar com a calculadora montada (atalhos do Centerpiece simples).
+  useEffect(() => {
+    if (entradaFixa === 'notacao') abrirNotacao()
+    else if (entradaFixa === 'pedras') setEntradaNotacao(false)
+    return () => {
+      if (entradaFixa) setEntradaNotacao(false)
+    }
+    // Só a troca da entrada conta, não a mão.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entradaFixa])
+
   // Mesmos gestos da japonesa: direita volta da finalização ou alterna o MPSZ, esquerda vai para a próxima tela.
   useDeslizeHorizontal({
     ativo: visivel,
     aoDeslizarDireita: calc.finalizando
       ? calc.voltarParaMontagem
-      : () => (entradaNotacao ? setEntradaNotacao(false) : abrirNotacao()),
-    aoDeslizarEsquerda: aoIrParaProximaTela,
+      : entradaFixa
+        ? aoVoltar
+        : () => (entradaNotacao ? setEntradaNotacao(false) : abrirNotacao()),
+    aoDeslizarEsquerda: entradaFixa ? aoVoltar : aoIrParaProximaTela,
   })
 
   // Escondida, a mão continua no estado (como na japonesa), mas nada vai para a tela.
@@ -179,13 +195,15 @@ export default function CalculadoraMaoChinesa({
           aoClicar={() => calc.alternarAcao(tipo)}
         />
       ))}
-      <BotaoAcao
-        tipo="notacao"
-        rotulo={t('notation.toggle')}
-        ativo={false}
-        desabilitado={false}
-        aoClicar={abrirNotacao}
-      />
+      {!entradaFixa && (
+        <BotaoAcao
+          tipo="notacao"
+          rotulo={t('notation.toggle')}
+          ativo={false}
+          desabilitado={false}
+          aoClicar={abrirNotacao}
+        />
+      )}
     </>
   )
 
@@ -231,7 +249,9 @@ export default function CalculadoraMaoChinesa({
                       className="menu-acoes-teclado-mobile"
                       aria-label={t('calculator.actionsMenu')}
                     >
-                      <div className="opcoes-acoes-mao-mobile opcoes-acoes-mao-mobile--mcr">
+                      <div
+                        className={`opcoes-acoes-mao-mobile opcoes-acoes-mao-mobile--mcr${entradaFixa ? ' opcoes-acoes-mao-mobile--sem-mpsz' : ''}`}
+                      >
                         {botoesAcao()}
                       </div>
                     </div>
@@ -243,7 +263,7 @@ export default function CalculadoraMaoChinesa({
                       semZero
                       descricoesChamada={descricoesChamada}
                       aoMudar={mudarNotacao}
-                      aoVoltar={() => setEntradaNotacao(false)}
+                      aoVoltar={entradaFixa ? undefined : () => setEntradaNotacao(false)}
                       aoLimpar={() => {
                         setTextoNotacao('')
                         setErroNotacao(null)

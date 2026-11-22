@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import { KANJI_VENTO, ORDEM_VENTOS, type Cadeira } from '../../logica/partida'
 import '../cena-mesa.css'
@@ -69,6 +70,7 @@ const CADEIRAS_CENA: Cadeira[] = [0, 1, 2, 3]
 
 export default function CenaMesa({ nome }: { nome: NomeCenaMesa }) {
   const { t } = useI18n()
+  const temHonba = useModoJogoAtual() !== 'mcr'
   const quadros = CENAS[nome]
   const semMovimento = useMediaQuery('(prefers-reduced-motion: reduce)')
   const [indice, setIndice] = useState(0)
@@ -125,13 +127,14 @@ export default function CenaMesa({ nome }: { nome: NomeCenaMesa }) {
                 </svg>
                 <b>{quadro.timer}</b>
                 <small>
-                  {rodada} 本{quadro.honba}
+                  {rodada}
+                  {temHonba && ` 本${quadro.honba}`}
                 </small>
               </>
             ) : (
               <>
                 <b>{rodada}</b>
-                <small>本{quadro.honba}</small>
+                {temHonba && <small>本{quadro.honba}</small>}
               </>
             )}
           </span>
@@ -143,13 +146,15 @@ export default function CenaMesa({ nome }: { nome: NomeCenaMesa }) {
             <span className={`cena-mesa__acao cena-mesa__acao--principal${tocando('acao:proxima')}`}>
               {t('match.simple.nextRound')}
             </span>
-            <span className="cena-mesa__acao cena-mesa__acao--honba">
-              {t('match.simple.honba')}
-              <span className="cena-mesa__honba-botoes">
-                <span>−</span>
-                <span className={`cena-mesa__mais${tocando('acao:honba')}`}>+</span>
+            {temHonba && (
+              <span className="cena-mesa__acao cena-mesa__acao--honba">
+                {t('match.simple.honba')}
+                <span className="cena-mesa__honba-botoes">
+                  <span>−</span>
+                  <span className={`cena-mesa__mais${tocando('acao:honba')}`}>+</span>
+                </span>
               </span>
-            </span>
+            )}
           </div>
         )}
       </div>

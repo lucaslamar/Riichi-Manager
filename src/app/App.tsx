@@ -181,6 +181,8 @@ export default function App() {
           <CalculadoraMaoChinesa
             visivel={tela === 'calculadora'}
             aoIrParaProximaTela={proximaTela && (() => irPara(proximaTela))}
+            entradaFixa={entradaDoSimples ?? undefined}
+            aoVoltar={entradaDoSimples ? voltarAoSimples : undefined}
           />
         )}
         <PaginaCalculadoraMao
@@ -197,7 +199,7 @@ export default function App() {
           {/* O botão Centerpiece abre direto o simples; Mesa partida é o menu das partidas com pontos e Ranking, o dos resultados. */}
           {(tela === 'centerpiece' || tela === 'partidas' || tela === 'ranking') && (
             <PaginaCenterpiece
-              key={subtela ? `${tela}-${subtela.chave}` : tela}
+              key={`${modo}-${subtela ? `${tela}-${subtela.chave}` : tela}`}
               modo={tela === 'centerpiece' ? 'simples' : tela}
               telaInicial={tela === 'partidas' || tela === 'ranking' ? subtela?.tela : undefined}
               aoAbrirSorteador={abrirSorteadorDoSimples}

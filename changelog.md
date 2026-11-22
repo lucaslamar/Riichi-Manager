@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Centerpiece simples no modo Chinês**: a mesa no meio, com timer, dados, Sorteador e atalhos da calculadora, sem honba e sempre com 4 jogadores.
 - **Tutorial MCR completo**: ensina do zero (peças, muro, distribuição, Chi/Peng/Gang, pontuação e os 81 fan). As diferenças do Riichi viraram parte opcional.
 - **Guia de formatos**: o ? ao lado de Formato explica os cinco formatos e para que cada um é indicado.
 - **Configurações do torneio mais curtas**: cada ajuda cabe em uma linha, e a explicação completa fica no ? ao lado do campo.

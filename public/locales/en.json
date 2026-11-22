@@ -2716,6 +2716,18 @@
         "event": {
           "ron": "Dianhe",
           "tsumo": "Zimo"
+        },
+        "simple": {
+          "nextRound": "Next hand",
+          "restartHelp": "The round and the dealer go back to the start.",
+          "guide": {
+            "timer": "The 30 s timer starts on. On your turn, tap the plate with your wind and the time restarts full in the center. Peng, Chi and Gang skip players, so the timer does not guess whose turn it is: whoever plays taps. When time runs out, the center blinks and the alarm sounds.",
+            "actions": "Tapping anywhere on the table outside the plates, including the center, opens the actions: next hand, dice, Wind Draw, restart from 東1 and the timer length.",
+            "dealer": "In MCR the deal passes after every hand, win or draw: tap Next hand and 東 moves to the next player. Turn the phone so 東 keeps facing the dealer. The table follows the phone even if the screen rotates, but the header and bar change sides. To avoid that, lock rotation in the phone settings."
+          },
+          "demo": {
+            "nextRound": "Tap Next hand"
+          }
         }
       },
       "tournament": {
@@ -2759,6 +2771,9 @@
         "errors": {
           "akaDisabled": "MCR has no red five: use 5 instead of 0"
         }
+      },
+      "menu": {
+        "handCalculator": "Chinese Hand Calculator"
       }
     }
   },

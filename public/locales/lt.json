@@ -2802,6 +2802,18 @@
         "event": {
           "ron": "Dianhe",
           "tsumo": "Zimo"
+        },
+        "simple": {
+          "nextRound": "Kita ranka",
+          "restartHelp": "Raundas ir dalintojas grįžta į pradžią.",
+          "guide": {
+            "timer": "30 s laikmatis įjungtas iš karto. Savo eilės metu palieskite savo vėjo lentelę ir laikas centre prasidės iš naujo. Peng, Chi ir Gang praleidžia žaidėjus, todėl paliečia tas, kas žais. Laikui pasibaigus centras mirksi ir skamba signalas.",
+            "actions": "Palietus stalą už lentelių, taip pat centre, atsidaro veiksmai: kita ranka, kauliukai, vėjų burtai, pradėti nuo 東1 ir laikmačio trukmė.",
+            "dealer": "MCR dalintojas keičiasi po kiekvienos rankos, pergalės ar lygiųjų atveju: palieskite „Kita ranka“ ir 東 pereis kitam žaidėjui. Pasukite telefoną, kad 東 būtų prieš dalintoją. Stalas seka telefoną, net jei ekranas pasisuka, bet antraštė ir juosta persikelia. Kad to išvengtumėte, užrakinkite ekrano sukimą."
+          },
+          "demo": {
+            "nextRound": "Palieskite „Kita ranka“"
+          }
         }
       },
       "tournament": {
@@ -2847,6 +2859,9 @@
         "errors": {
           "akaDisabled": "MCR neturi raudono penketo: naudokite 5 vietoje 0"
         }
+      },
+      "menu": {
+        "handCalculator": "Chinese Hand Calculator"
       }
     }
   },
