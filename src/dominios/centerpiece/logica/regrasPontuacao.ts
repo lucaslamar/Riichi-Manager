@@ -17,17 +17,20 @@ export interface RegrasPontuacao {
   pontosPartida: number
   pontosRetorno: number
   uma: UmaMesa
+  /** A partida acaba quando alguém fica negativado. */
+  tobi: boolean
 }
 
 export function regrasDoPreset(preset: IdPreset): RegrasPontuacao {
-  const { pontosPartida, pontosRetorno, uma } = configDoPreset(preset)
-  return { pontosPartida, pontosRetorno, uma }
+  const { pontosPartida, pontosRetorno, uma, tobi } = configDoPreset(preset)
+  return { pontosPartida, pontosRetorno, uma, tobi }
 }
 
 function mesmasRegras(uma: RegrasPontuacao, outra: RegrasPontuacao) {
   return (
     uma.pontosPartida === outra.pontosPartida &&
     uma.pontosRetorno === outra.pontosRetorno &&
+    uma.tobi === outra.tobi &&
     JSON.stringify(uma.uma) === JSON.stringify(outra.uma)
   )
 }

@@ -42,6 +42,8 @@ export function carregarRegrasRegistro(armazenamento: ArmazenamentoChaveValor): 
           pontosPartida: numeroValido(bruto.pontosPartida) ? bruto.pontosPartida : clube.pontosPartida,
           pontosRetorno: numeroValido(bruto.pontosRetorno) ? bruto.pontosRetorno : clube.pontosRetorno,
           uma: normalizarUma(bruto.uma, clube.uma),
+          // Salvas antes do tobi: o Personalizado partia do Clube.
+          tobi: typeof bruto.tobi === 'boolean' ? bruto.tobi : clube.tobi,
         }
       : null
     const tipoPartida = lido.tipoPartida === 'leste' || lido.tipoPartida === 'hanchan' ? lido.tipoPartida : null

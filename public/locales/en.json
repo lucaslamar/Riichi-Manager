@@ -1074,7 +1074,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "When someone goes negative",
+      "ends": "Ends (tobi)",
+      "goesOn": "Goes on",
+      "helpEnds": "Ends: the game finishes when someone drops below zero. The Club default.",
+      "helpGoesOn": "Goes on: play to the end, even when negative. The EMA and WRC rule.",
+      "summaryEnds": "Negative: game ends (tobi)",
+      "summaryGoesOn": "Negative: game goes on",
+      "saveWarning": "Someone is negative and, under this rule, the game is over. If your table plays on, switch to Goes on in the settings."
+    }
   },
   "match": {
     "types": {
@@ -1658,7 +1668,11 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "It was random",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "Clear",
+      "clearTitle": "Clear this table?",
+      "clearHelp": "Removes players, points and WO from this screen. Rules and saved data stay.",
+      "clearHelpSeated": "Removes points, WO and lateness from this screen. Drawn players stay."
     },
     "listFilters": {
       "search": "Search tables, meetups and tournaments",

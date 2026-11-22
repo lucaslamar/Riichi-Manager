@@ -1088,7 +1088,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "Kai kas nors turi neigiamą balansą",
+      "ends": "Baigiasi (tobi)",
+      "goesOn": "Tęsiasi",
+      "helpEnds": "Baigiasi: partija baigiasi, kai kas nors nukrenta žemiau nulio. Klubo numatymas.",
+      "helpGoesOn": "Tęsiasi: žaidžiama iki galo, net su minusu. EMA ir WRC taisyklė.",
+      "summaryEnds": "Minusas: partija baigiasi (tobi)",
+      "summaryGoesOn": "Minusas: partija tęsiasi",
+      "saveWarning": "Kažkas turi minusą, tad pagal taisyklę partija baigta. Jei žaidžiate toliau, nustatymuose pasirinkite „Tęsiasi“."
+    }
   },
   "match": {
     "types": {
@@ -1702,7 +1712,11 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "Išvalyti",
+      "clearTitle": "Išvalyti šį stalą?",
+      "clearHelp": "Pašalina žaidėjus, taškus ir WO iš šio ekrano. Taisyklės ir išsaugoti duomenys lieka.",
+      "clearHelpSeated": "Pašalina taškus, WO ir vėlavimus. Ištraukti žaidėjai lieka."
     },
     "listFilters": {
       "search": "Ieškoti stalų, susitikimų ir turnyrų",

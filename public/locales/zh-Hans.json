@@ -1067,7 +1067,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "有人点数为负时",
+      "ends": "结束（击飞）",
+      "goesOn": "继续",
+      "helpEnds": "结束：有人低于0点时对局结束。俱乐部默认规则。",
+      "helpGoesOn": "继续：即使为负也打到终局。EMA与WRC规则。",
+      "summaryEnds": "点数为负：对局结束（击飞）",
+      "summaryGoesOn": "点数为负：继续对局",
+      "saveWarning": "有人点数为负，按此规则对局已结束。若继续对局，请在设置中改为“继续”。"
+    }
   },
   "match": {
     "types": {
@@ -1636,7 +1646,11 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "清空",
+      "clearTitle": "清空本桌？",
+      "clearHelp": "清除本页的玩家、点数和WO。规则与已保存内容保留。",
+      "clearHelpSeated": "清除本页的点数、WO与迟到。抽签玩家保留。"
     },
     "listFilters": {
       "search": "搜索牌桌、聚会和比赛",

@@ -1074,7 +1074,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Checagem de furiten",
-    "checkFuritenHelp": "Cada jogador pode informar a própria mão para o app avisar se está em furiten."
+    "checkFuritenHelp": "Cada jogador pode informar a própria mão para o app avisar se está em furiten.",
+    "negative": {
+      "title": "Quando alguém fica negativado",
+      "ends": "Acaba (tobi)",
+      "goesOn": "Continua",
+      "helpEnds": "Acaba: a partida termina quando alguém fica abaixo de zero. É o padrão do Clube.",
+      "helpGoesOn": "Continua: joga até o fim, mesmo negativado. É a regra da EMA e da WRC.",
+      "summaryEnds": "Negativado: a partida acaba (tobi)",
+      "summaryGoesOn": "Negativado: a partida continua",
+      "saveWarning": "Alguém está negativado e, por esta regra, a partida já acabou. Se na sua mesa continua, mude para Continua nas configs."
+    }
   },
   "match": {
     "types": {
@@ -1658,7 +1668,11 @@
       "windOrder": "Ordem dos ventos",
       "windOrderYes": "Leste, Sul, Oeste, Norte",
       "windOrderNo": "Foi aleatório",
-      "windOrderHelp": "Com a ordem, a partida entra na estatística de vento inicial de cada jogador."
+      "windOrderHelp": "Com a ordem, a partida entra na estatística de vento inicial de cada jogador.",
+      "clear": "Limpar",
+      "clearTitle": "Limpar esta mesa?",
+      "clearHelp": "Tira os jogadores, os pontos e os WO desta tela. As regras e o que já foi salvo ficam.",
+      "clearHelpSeated": "Tira os pontos, os WO e os atrasos desta tela. Os jogadores do sorteio ficam."
     },
     "listFilters": {
       "search": "Buscar mesas, encontros e torneios",

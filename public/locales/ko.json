@@ -1067,7 +1067,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "점수가 마이너스가 되면",
+      "ends": "종료 (토비)",
+      "goesOn": "계속",
+      "helpEnds": "종료: 누군가 0점 미만이 되면 대국 종료. 클럽 기본값.",
+      "helpGoesOn": "계속: 마이너스여도 끝까지 진행. EMA와 WRC 규칙.",
+      "summaryEnds": "마이너스: 종료 (토비)",
+      "summaryGoesOn": "마이너스: 계속",
+      "saveWarning": "마이너스인 사람이 있어 이 규칙상 종료입니다. 계속한다면 설정에서 계속으로 바꾸세요."
+    }
   },
   "match": {
     "types": {
@@ -1636,7 +1646,11 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "지우기",
+      "clearTitle": "이 테이블 입력을 지울까요?",
+      "clearHelp": "이 화면의 플레이어, 점수, WO를 지웁니다. 규칙과 저장된 데이터는 유지됩니다.",
+      "clearHelpSeated": "이 화면의 점수, WO, 지각을 지웁니다. 추첨된 플레이어는 유지됩니다."
     },
     "listFilters": {
       "search": "테이블, 모임, 대회 검색",

@@ -15,6 +15,7 @@ import {
 import { umaValida } from '../../logica/uma'
 import { regraSaidaValida, type RegraSaida } from '../../logica/saidaDaPartida'
 import CamposSaida from './CamposSaida'
+import CampoTobi from './CampoTobi'
 import BotoesOpcao from './BotoesOpcao'
 import CampoUma, { CampoInteiro } from './CampoUma'
 import EscolhaOka from './EscolhaOka'
@@ -33,7 +34,7 @@ const DISTANCIA_DESLIZE = 60
 /** "25.000 pontos · retorno 30.000 · uma 15/5", igual ao resumo da criação de mesa. */
 export function useResumo() {
   const { t, numero, idioma } = useI18n()
-  return (regras: RegrasPontuacao) =>
+  return (regras: Omit<RegrasPontuacao, 'tobi'>) =>
     t('match.setup.rulesSummary', {
       start: numero(regras.pontosPartida),
       target: numero(regras.pontosRetorno),
@@ -290,6 +291,7 @@ function FolhaRegras({
           pontosRetorno={pontosRetorno}
           pontosAtuais={pontosAtuais}
         />
+        <CampoTobi tobi={rascunho.tobi} aoMudar={(tobi) => mudar({ tobi })} />
         <CamposSaida regra={opcoes.saida} aoMudar={(saida) => setOpcoes({ ...opcoes, saida })} />
       </div>
     </Modal>

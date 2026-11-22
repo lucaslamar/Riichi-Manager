@@ -176,11 +176,12 @@ export default function RegistrarFinalizada({
         pontosPartida: configFixa.pontosPartida,
         pontosRetorno: configFixa.pontosRetorno,
         uma: configFixa.uma,
+        tobi: configFixa.tobi,
       }
     : conjunto === 'personalizado' && personalizado
       ? personalizado
       : regrasDoPreset(conjunto === 'personalizado' ? 'padrao' : conjunto)
-  const { pontosPartida, pontosRetorno, uma } = regras
+  const { pontosPartida, pontosRetorno, uma, tobi } = regras
   const baseConjunto = configBaseDoConjunto(conjunto)
   // Tipo de partida: o último usado aqui, senão o do conjunto. No torneio vem da mesa.
   const [tipoPartida, setTipoPartida] = useState<ConfigMesa['tipoPartida']>(
@@ -191,7 +192,7 @@ export default function RegistrarFinalizada({
   const [regraSaida, setRegraSaida] = useState<RegraSaida>(
     (configFixa ? configFixa.saida : salvas.saida) ?? REGRA_SAIDA_PADRAO,
   )
-  const base = configFixa ?? alterarConfig(baseConjunto, { tipoPartida })
+  const base = configFixa ?? alterarConfig(baseConjunto, { tipoPartida, tobi })
   const guardar = (
     novo: ConjuntoRegistro,
     valores: RegrasPontuacao | null,
@@ -403,6 +404,9 @@ export default function RegistrarFinalizada({
     aoVerSalvas?.()
   }
 
+  const resumoTobi = t(tobi ? 'tableConfig.negative.summaryEnds' : 'tableConfig.negative.summaryGoesOn')
+  const negativado = pontos.some((texto) => (lerPontos(texto) ?? 0) < 0)
+
   const tirarDoLugar = (jogadorId: string) => {
     setAssentos(assentos.map((id) => (id === jogadorId ? null : id)))
     setSaidas(saidas.map((saiu, lugar) => saiu && assentos[lugar] !== jogadorId))
@@ -546,6 +550,7 @@ export default function RegistrarFinalizada({
               {`${t(base.tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t('match.manual.rulesTitle')}`}
             </strong>
             <span className="ptd-apoio">{resumoRegras(regras)}</span>
+            <span className="ptd-apoio">{resumoTobi}</span>
             {cadeirasQueSairam.length > 0 && <span className="ptd-apoio">{resumoSaida}</span>}
           </span>
           <i className="fas fa-lock" aria-hidden="true" />
@@ -563,6 +568,7 @@ export default function RegistrarFinalizada({
               {`${t(tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t(`match.manual.rulesets.${conjunto}`)}`}
             </strong>
             <span className="ptd-apoio">{resumoRegras(regras)}</span>
+            <span className="ptd-apoio">{resumoTobi}</span>
             {cadeirasQueSairam.length > 0 && <span className="ptd-apoio">{resumoSaida}</span>}
             {!encontro && (
               <span className="ptd-apoio">
@@ -607,6 +613,7 @@ export default function RegistrarFinalizada({
               nomeDe(assentos[lugar]) ?? t('match.manual.choosePlayer', { number: lugar + 1 }),
           )}
           ordemDosVentos={ordemDosVentos}
+          aviso={tobi && negativado ? t('tableConfig.negative.saveWarning') : undefined}
           aoSalvar={(novo) => {
             if (folhaAndamento === 'salvar') return pausar(novo)
             setAndamento(novo)

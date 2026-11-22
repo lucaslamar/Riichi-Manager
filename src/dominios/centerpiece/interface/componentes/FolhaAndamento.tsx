@@ -23,6 +23,7 @@ export default function FolhaAndamento({
   inicial,
   nomes,
   ordemDosVentos,
+  aviso,
   aoSalvar,
   aoFechar,
 }: {
@@ -31,6 +32,8 @@ export default function FolhaAndamento({
   nomes: readonly string[]
   /** Com a ordem, trocar a rodada já troca o dealer. */
   ordemDosVentos: boolean
+  /** Ex.: pela regra de tobi a partida já tinha acabado. Não impede salvar. */
+  aviso?: string
   aoSalvar: (andamento: Andamento) => void
   aoFechar: () => void
 }) {
@@ -66,6 +69,11 @@ export default function FolhaAndamento({
         </div>
       }
     >
+      {aviso && (
+        <p className="cfg-aviso fin-andamento-aviso" role="status">
+          {aviso}
+        </p>
+      )}
       <div className="fin-andamento">
         <label className="cfg-campo">
           <span>{t('match.paused.round')}</span>

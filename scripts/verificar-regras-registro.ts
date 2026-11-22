@@ -88,6 +88,7 @@ teste('Personalizado: os valores escolhidos valem no resultado', () => {
     pontosPartida: 25000,
     pontosRetorno: 25000,
     uma: umaFixa([10, 5, -5, -10]),
+    tobi: true,
   }
   assert.deepEqual(finais('personalizado', proprias, [40000, 30000, 20000, 10000]), [25, 10, -10, -25])
 })
@@ -96,7 +97,7 @@ teste('Empate divide a uma e a oka entre os empatados', () => {
   // Clube, empate no 1º: dividem a uma do 1º e do 2º (8 + 4).
   assert.deepEqual(finais('padrao', regrasDoPreset('padrao'), [35000, 35000, 20000, 10000]), [16, 16, -9, -23])
   // Com oka (Personalizado 25.000/30.000, uma 15/5): dividem 15 + 5 e os 20 de oka.
-  const comOka: RegrasPontuacao = { pontosPartida: 25000, pontosRetorno: 30000, uma: umaFixa([15, 5, -5, -15]) }
+  const comOka: RegrasPontuacao = { pontosPartida: 25000, pontosRetorno: 30000, uma: umaFixa([15, 5, -5, -15]), tobi: false }
   assert.deepEqual(finais('personalizado', comOka, [35000, 35000, 20000, 10000]), [25, 25, -15, -35])
 })
 
@@ -126,7 +127,7 @@ teste('Personalizado lembra os últimos valores', () => {
     gravar: (chave: string, valor: string) => void memoria.set(chave, valor),
   }
   assert.deepEqual(carregarRegrasRegistro(armazenamento), { conjunto: 'padrao', personalizado: null })
-  const proprias: RegrasPontuacao = { pontosPartida: 30000, pontosRetorno: 35000, uma: umaFixa([20, 10, -10, -20]) }
+  const proprias: RegrasPontuacao = { pontosPartida: 30000, pontosRetorno: 35000, uma: umaFixa([20, 10, -10, -20]), tobi: false }
   salvarRegrasRegistro(armazenamento, { conjunto: 'personalizado', personalizado: proprias })
   assert.deepEqual(carregarRegrasRegistro(armazenamento), { conjunto: 'personalizado', personalizado: proprias })
   // Dado estragado não derruba a tela.
@@ -135,6 +136,14 @@ teste('Personalizado lembra os últimos valores', () => {
   // Tipo de partida (Leste apenas ou Hanchan) também fica guardado.
   salvarRegrasRegistro(armazenamento, { conjunto: 'padrao', personalizado: null, tipoPartida: 'hanchan' })
   assert.equal(carregarRegrasRegistro(armazenamento).tipoPartida, 'hanchan')
+})
+
+teste('tobi: Clube acaba, EMA e WRC continuam, e mudar vira Personalizado', () => {
+  const clube = regrasDoPreset('padrao')
+  assert.equal(clube.tobi, true)
+  assert.equal(regrasDoPreset('ema').tobi, false)
+  assert.equal(regrasDoPreset('wrc').tobi, false)
+  assert.equal(conjuntoDasRegras({ ...clube, tobi: false }, 'padrao'), 'personalizado')
 })
 
 console.log(`Regras de registro: ${testes} testes passaram.`)

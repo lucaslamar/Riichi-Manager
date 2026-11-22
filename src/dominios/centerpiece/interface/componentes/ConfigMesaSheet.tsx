@@ -20,6 +20,7 @@ import { exemploPontuacao } from '../../logica/exemploPontuacao'
 import { umaValida, valoresDaUma } from '../../logica/uma'
 import { useConfigMesa } from '../hooks/useConfigMesa'
 import BotoesOpcao from './BotoesOpcao'
+import CampoTobi from './CampoTobi'
 import CampoUma from './CampoUma'
 import EscolhaOka from './EscolhaOka'
 import '../config-mesa.css'
@@ -385,6 +386,10 @@ export default function ConfigMesaSheet({
       </>
       )}
 
+      {/* Sem a aba Regras (torneio), o tobi fica junto da pontuação. */}
+      {soPlacar && !sanma && (
+        <CampoTobi tobi={config.tobi} aoMudar={(tobi) => alterar({ tobi })} />
+      )}
       {fimPontuacao}
       </section>
       )}

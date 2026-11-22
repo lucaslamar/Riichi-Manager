@@ -1067,7 +1067,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "持ち点がマイナスになったら",
+      "ends": "終了（飛び）",
+      "goesOn": "続行",
+      "helpEnds": "終了：誰かが0点未満になると対局終了。クラブの初期設定です。",
+      "helpGoesOn": "続行：マイナスでも最後まで打ちます。EMAとWRCのルールです。",
+      "summaryEnds": "マイナス：終了（飛び）",
+      "summaryGoesOn": "マイナス：続行",
+      "saveWarning": "マイナスの人がいるため、このルールでは終局です。続行する卓なら設定で「続行」に変更してください。"
+    }
   },
   "match": {
     "types": {
@@ -1636,7 +1646,11 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "クリア",
+      "clearTitle": "この卓の入力を消しますか？",
+      "clearHelp": "この画面のプレイヤー、点数、WOを消します。ルールと保存済みのデータは残ります。",
+      "clearHelpSeated": "この画面の点数、WO、遅刻を消します。抽選のプレイヤーは残ります。"
     },
     "listFilters": {
       "search": "卓・集まり・大会を検索",
