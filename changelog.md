@@ -28,6 +28,7 @@
 
 ### Alterado
 
+- **QR das imagens mais discreto**: menor, em lilás e sem a faixa branca, com o convite em texto leve embaixo das mesas.
 - **Modo Riichi**: nas Configurações, a opção Japonês agora se chama Riichi, como os jogadores chamam a variante.
 - **Modo Chinês**: botões e textos usam os termos chineses (吃 Chi, 碰 Peng, 明杠 Gang, 暗杠 An Gang, 点和 Dianhe, 自摸 Zimo, 番 Fan).
 - **Novos nomes dos formatos**: Rodízio virou All Leste, a antiga Temporada virou Brasileirão e o antigo Brasileirão virou Pontos corridos rápido. Os torneios salvos continuam iguais, com o nome novo do formato.
@@ -38,6 +39,7 @@
 ### Corrigido
 
 - **Flores e Estações**: as peças não parecem mais desabilitadas. A selecionada ganha contorno rosa.
+- **QR do Exportar torneio nítido**: os QRs saíam pequenos e borrados ao ampliar. Voltaram ao tamanho grande, mais fácil de ler pela câmera.
 - **Nomes que viravam "?" no Torneio**: quem saiu do cadastro continua com o nome nas mesas, no ranking e nas imagens. Se não sobrou registro do nome, aparece Jogador 1, Jogador 2 e assim por diante.
 - **Nome longo no card da mesa**: no resultado, termina com reticências em vez de ser cortado no meio da letra.
 - **Nota da grade com 8 e 12 jogadores**: uma grade no mínimo possível de repetições não aparece mais como Regular.

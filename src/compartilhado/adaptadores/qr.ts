@@ -5,11 +5,15 @@
  */
 
 /** Imagem do QR como data URL. */
-export async function gerarQr(texto: string, largura = 720): Promise<string> {
+export async function gerarQr(
+  texto: string,
+  largura = 720,
+  color?: { dark: string; light: string },
+): Promise<string> {
   const { toDataURL } = await import('qrcode')
   // Margem de 4 módulos (a "zona quieta" do padrão) e imagem grande: a tela
   // reduz sem borrar, e a câmera acha as bordas do QR mais fácil.
-  return toDataURL(texto, { errorCorrectionLevel: 'L', margin: 4, width: largura })
+  return toDataURL(texto, { errorCorrectionLevel: 'L', margin: 4, width: largura, color })
 }
 
 export interface LeitorQr {

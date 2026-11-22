@@ -53,7 +53,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Valor padrão escolhido pelo app tem um ? com o porquê do padrão, não só o que o campo faz.
 - Registrar ausência é o ícone ao lado de Registrar resultado. A folha mostra os pontos de cada um antes de confirmar.
 - WO usa selo neutro e "Faltou" ou "Presente" no lugar dos pontos da mesa, sem colocação.
-- QR das imagens sempre escuro em caixa branca, nos dois temas.
+- QR das imagens é uma assinatura discreta (pedido do usuário em 22/11/2026): 148 px em 1080, escuro em fundo lilás claro só no QR, nos dois temas, com o convite e o endereço em texto leve na cor de apoio. Não usar caixa clara na largura toda nem competir com as mesas. Ao mudar, confira a leitura com jsqr também na imagem reduzida à metade.
 - Cabeçalho da rodada: quatro ações de 44px no celular. No desktop ele mora no menu lateral estreito, com ações de 28px de largura.
 - Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.
 - Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.
