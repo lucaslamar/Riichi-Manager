@@ -553,7 +553,10 @@ export default function PaginaMesasTorneio({
 
       {menu && (
         <Modal titulo={torneio.nome} aoFechar={() => setMenu(false)} rotuloFechar={t('actions.close')} tamanho="pequena">
-          <ul className="trn-menu">
+          <h3 id="trn-menu-metricas" className="trn-menu-titulo">
+            {t('tournament.tables.menuMetrics')}
+          </h3>
+          <ul className="trn-menu trn-menu-grupo" aria-labelledby="trn-menu-metricas">
           <li>
             <button
               type="button"
@@ -579,9 +582,13 @@ export default function PaginaMesasTorneio({
               <span>{t('tournament.share.result')}</span>
             </button>
           </li>
+          </ul>
           {(podeRefazer || (torneio.status === 'em_andamento' && !somenteLeitura)) && (
-            <li className="trn-menu-divisoria" role="separator" />
-          )}
+          <>
+          <h3 id="trn-menu-acoes" className="trn-menu-titulo">
+            {t('tournament.tables.menuActions')}
+          </h3>
+          <ul className="trn-menu trn-menu-grupo" aria-labelledby="trn-menu-acoes">
           {podeRefazer && (
             <li>
               <button
@@ -626,6 +633,8 @@ export default function PaginaMesasTorneio({
             </li>
           )}
           </ul>
+          </>
+          )}
         </Modal>
       )}
 

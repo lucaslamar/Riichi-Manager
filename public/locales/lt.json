@@ -2039,7 +2039,9 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "Rodikliai",
+      "menuActions": "Turnyro veiksmai"
     },
     "ranking": {
       "title": "Tournament ranking",

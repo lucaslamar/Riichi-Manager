@@ -249,10 +249,23 @@
   cursor: default;
 }
 
-.trn-menu-divisoria {
-  height: 0;
-  margin: 8px 0;
-  border-top: 2px solid var(--linha-divisoria);
+/* Menu ⋮ em grupos: o título separa, sem linha dupla entre eles. */
+.trn-menu-titulo {
+  margin: 0;
+  padding-bottom: 4px;
+  color: var(--primario);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.trn-menu-grupo + .trn-menu-titulo {
+  margin-top: 20px;
+}
+
+.trn-menu-grupo > li:last-child > button {
+  border-bottom: 0;
 }
 
 .trn-menu .trn-menu--perigo,

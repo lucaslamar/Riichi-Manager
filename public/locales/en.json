@@ -1983,7 +1983,9 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "Metrics",
+      "menuActions": "Tournament actions"
     },
     "ranking": {
       "title": "Tournament ranking",

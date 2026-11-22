@@ -1983,7 +1983,9 @@
       "restart": "Recomeçar o torneio do zero",
       "restartTitle": "Recomeçar o torneio do zero?",
       "restartHelp": "As mesas são sorteadas de novo desde a primeira rodada, com os mesmos jogadores. Os resultados já lançados neste torneio são apagados.",
-      "undoShort": "Desfazer"
+      "undoShort": "Desfazer",
+      "menuMetrics": "Métricas",
+      "menuActions": "Ações do torneio"
     },
     "ranking": {
       "title": "Ranking do torneio",
