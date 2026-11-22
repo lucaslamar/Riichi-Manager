@@ -79,6 +79,9 @@ export default function ConfirmarRegistro({
                     </div>
                   )}
                 </dl>
+                {!!linha.atraso && (
+                  <span className="ptd-apoio">{t('tournament.wo.lateBy', { minutes: linha.atraso })}</span>
+                )}
                 {depois && (
                   // Posição e total antes → depois.
                   <span className="fin-mudanca-ranking">

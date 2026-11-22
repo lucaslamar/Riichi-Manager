@@ -363,7 +363,7 @@ export default function PaginaMesasTorneio({
                 <h3 className="clb-mesa-titulo">
                   {final && <i className="fas fa-crown" aria-hidden="true" />} {final ? t('tournament.tables.finalTable') : rotulo}
                 </h3>
-                <span className={`trn-status trn-status--${status}`}>
+                <span className={`trn-status trn-status--${partida?.wo ? 'wo' : status}`}>
                   {partida?.wo
                     ? t('tournament.wo.tag')
                     : status === 'em_andamento' && partida
