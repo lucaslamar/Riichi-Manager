@@ -23,7 +23,8 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 
 ## Modo Chinês (MCR / Guobiao)
 
-- O modo Japonês é o padrão e a referência. Nada nele muda com o modo Chinês.
+- Os modos de jogo se chamam **Riichi** e **Chinês (MCR)** na interface. Não usar 'Japonês' para o modo; 'japonês' só para o idioma.
+- O modo Riichi é o padrão e a referência. Nada nele muda com o modo Chinês.
 - O motor de fan é um porte em TypeScript do GB-Mahjong (Zheng Fan, MIT). O pacote `gb-mahjong-js` foi recusado porque conta os fan chamando um binário C++ pelo Node e não roda no navegador. O porte é conferido com os 130 casos do gb-mahjong-js em `npm run test:fan-mcr`. Ao mexer no motor, preserve a equivalência com o original, incluindo as regras de exclusão.
 - Regras adotadas: mínimo de 8 fan sem contar as flores. Cada flor vale 1 fan e soma no total e no pagamento. O pagamento usa F = fan total com flores. No ron, quem descartou paga F + 8 e os outros dois pagam 8. No tsumo, os três pagam F + 8. Não há bônus do dealer, honba nem limite. Mão abaixo do mínimo não mostra pagamento. O MCR não tem furiten, Riichi, Ippatsu, dora nem fu.
 - A pedra da batida é a última da mão. As condições "última pedra" e "kan" mudam de nome conforme ron ou tsumo: Última pedra da parede ou Último descarte, e Batida com reposição do Kan ou Roubar o Kan. As combinações que o GB-Mahjong recusa ficam bloqueadas em `validarMao`.

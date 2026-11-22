@@ -32,3 +32,4 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 
 - Rótulos dizem o que vai acontecer ("Salvar partida", não "OK").
 - Erros explicam o problema e como resolver. Estados vazios orientam o próximo passo.
+- Variantes de mahjong pelo nome que os jogadores usam (Riichi, MCR), não pelo país.

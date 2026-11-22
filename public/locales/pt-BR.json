@@ -2215,9 +2215,9 @@
     "mahjong": {
       "titulo": "Mahjong",
       "descricao": "Regras usadas em todo o app.",
-      "japones": "Japonês",
+      "riichi": "Riichi",
       "chines": "Chinês (MCR)",
-      "ajudaJapones": "Japonês: Riichi (han, fu, Yaku).",
+      "ajudaRiichi": "Riichi: han, fu e yaku.",
       "ajudaChines": "Chinês: MCR / Guobiao (81 fan, mínimo 8).",
       "confirmarTroca": "Trocar de modo limpa a mão atual. Continuar?"
     }

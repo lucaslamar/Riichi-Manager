@@ -2189,9 +2189,9 @@
     "mahjong": {
       "titulo": "Mahjong",
       "descricao": "Rules used across the whole app.",
-      "japones": "Japanese",
+      "riichi": "立直麻将 (Riichi)",
       "chines": "国标麻将 (MCR)",
-      "ajudaJapones": "Japanese: Riichi (han, fu, Yaku).",
+      "ajudaRiichi": "立直麻将: 番、符、役",
       "ajudaChines": "Chinese: MCR / Guobiao (81 fan, 8 minimum).",
       "confirmarTroca": "Switching modes clears the current hand. Continue?"
     }
