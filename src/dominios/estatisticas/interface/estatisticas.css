@@ -94,3 +94,141 @@ button.est-linha {
 .est-cenarios td {
   font-weight: 700;
 }
+
+.est-jogador {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  text-align: left;
+}
+
+.est-numeros {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.est-metricas,
+.est-posicoes,
+.est-maos {
+  margin: 0;
+}
+
+.est-metricas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.est-metricas dt,
+.est-posicoes dt,
+.est-maos dt {
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+}
+
+.est-metricas dd,
+.est-posicoes dd,
+.est-maos dd {
+  margin: 0;
+  color: var(--texto-principal);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.est-metricas dd {
+  font-size: 1.125rem;
+}
+
+.est-posicoes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-block: 1px solid var(--linha-divisoria);
+  padding-block: 8px;
+  text-align: center;
+}
+
+.est-posicoes small,
+.est-maos small {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.est-maos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.est-destaque {
+  border: 1px solid var(--entrada-borda);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.est-titulo {
+  margin: 8px 0 4px;
+  font-size: 0.95rem;
+}
+
+.est-projecao {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.est-recolhido {
+  border-top: 1px solid var(--linha-divisoria);
+}
+
+.est-recolhido > summary {
+  min-height: 44px;
+  padding-block: 12px;
+  color: var(--texto-apoio);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.est-pagina {
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.est-jogadores {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.est-jogadores > li {
+  border-bottom: 1px solid var(--linha-divisoria);
+}
+
+.est-jogador-topo {
+  display: grid;
+  width: 100%;
+  min-height: 52px;
+  grid-template-columns: 36px minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: 8px;
+  margin: 0;
+  border: 0;
+  padding: 0 4px;
+  color: var(--texto-principal);
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.est-jogador-topo > strong {
+  overflow-wrap: anywhere;
+}
+
+.est-jogador-topo[aria-expanded='true'] .est-chevron {
+  transform: rotate(180deg);
+}

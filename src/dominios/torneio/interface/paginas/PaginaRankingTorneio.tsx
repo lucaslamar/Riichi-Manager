@@ -18,12 +18,12 @@ import {
   filtrosAtivos,
   type FiltrosRankingTorneio,
 } from '../../logica/filtrosRankingTorneio'
-import { mudancasDoRanking, rankingDoTorneio, recorteAteRodada, textoDaSeta } from '../../logica/ranking'
+import { mudancasDoRanking, rankingDoTorneio, recorteAteRodada } from '../../logica/ranking'
+import { useCompartilharResultado } from '../hooks/useCompartilharResultado'
 import { ausenciasPorWo } from '../../logica/wo'
-import { jogosRestantes } from '../../logica/jogosRestantes'
-import { bonusDasPosicoes } from '@/dominios/estatisticas/logica/viradas'
+
 import { premiacaoDe, premioDaPosicao } from '../../logica/premiacao'
-import { blocoDaPremiacao, relatorioDaDisputa, relatorioDoJogador, relatorioDoRanking } from '../../logica/relatorios'
+import { relatorioDaDisputa, relatorioDoJogador } from '../../logica/relatorios'
 import FolhaPremiacao from '../componentes/FolhaPremiacao'
 import { useDinheiro } from '../hooks/useDinheiro'
 import FolhaDistanciaPodio from '../componentes/FolhaDistanciaPodio'
@@ -60,6 +60,7 @@ export default function PaginaRankingTorneio({
   useVoltarPorDeslize(aoVoltar)
   const { partidas } = usePartidasDoTorneio()
   const nomeDoTorneio = useNomeNoTorneio()
+  const { classificacao, comPremio } = useCompartilharResultado(torneio)
   const { finalizar, salvar } = useTorneios()
   const emMoeda = useDinheiro()
   const [vendoPremiacao, setVendoPremiacao] = useState(false)
@@ -145,34 +146,11 @@ export default function PaginaRankingTorneio({
     const diferenca = valorDe(acima) - valorDe(abaixo)
     return diferenca > 0 ? t('tournament.prize.atStake', { value: dinheiro(diferenca) }) : null
   }
-  const comPremio = (base: Relatorio): Relatorio =>
-    premio
-      ? {
-          ...base,
-          blocos: [
-            ...base.blocos,
-            blocoDaPremiacao(premio, { titulo: t('tournament.prize.byPlace'), lugar: textos.lugar, dinheiro }),
-          ],
-        }
-      : base
 
   const textoWo = (id: string) => {
     const vezes = ausencias.get(id)
     return vezes ? t('tournament.wo.times', { times: vezes }) : null
   }
-  const comWo = (base: Relatorio): Relatorio =>
-    ausencias.size
-      ? {
-          ...base,
-          blocos: [
-            ...base.blocos,
-            {
-              titulo: t('tournament.wo.tag'),
-              linhas: [...ausencias].map(([id, vezes]) => ({ esquerda: nomeDe(id), direita: numero(vezes) })),
-            },
-          ],
-        }
-      : base
 
   const relatorioDisputa = () =>
     relatorioDaDisputa(recorte.torneio, recorte.partidas, linhas, filtros.acompanharId, {
@@ -223,28 +201,6 @@ export default function PaginaRankingTorneio({
       '–'
     )
 
-  /** A classificação, para a área Exportar. */
-  const relatorio = () =>
-    relatorioDoRanking(linhas, {
-      titulo: torneio.nome,
-      subtitulo: subtituloDe(t('tournament.ranking.title')),
-      nome: nomeDe,
-      colunas: [
-        ` # ${t('tournament.ranking.player')}`,
-        t('tournament.ranking.pointsShort'),
-        t('tournament.ranking.averagePlaceShort'),
-        t('tournament.ranking.gamesShort'),
-        ...(eliminatorio ? [t('tournament.ranking.phase')] : []),
-      ],
-      valores: (linha) => [
-        pontos(linha.pontos),
-        media(linha.mediaColocacao),
-        numero(linha.partidas),
-        ...(eliminatorio ? [fase(linha.fase ?? 0)] : []),
-      ],
-      pontos,
-      seta: (id) => textoDaSeta(mudancaDe(id)),
-    })
 
   return (
     <section className="ptd-inicio trn-pagina trn-ranking">
@@ -261,7 +217,8 @@ export default function PaginaRankingTorneio({
               aria-haspopup="dialog"
               onClick={() =>
                 setCompartilhando({
-                  relatorio: () => comPremio(disputa ? relatorioDisputa() : comWo(relatorio())),
+                  relatorio: () =>
+                    disputa ? comPremio(relatorioDisputa()) : classificacao(filtros.ateRodada),
                   arquivo: nomeDeArquivo(
                     torneio.nome,
                     t(disputa ? 'tournament.podiumGap.race' : 'tournament.ranking.title'),
@@ -518,17 +475,8 @@ export default function PaginaRankingTorneio({
         <FolhaDistanciaPodio
           linhas={linhas}
           jogadorId={abertoId}
-          regras={regras}
-          bonus={regras.modo === 'riichi' ? bonusDasPosicoes(torneio.config) : null}
+          escopo={{ tipo: 'torneio', id: torneio.id, ateRodada: filtros.ateRodada }}
           unidade={filtros.unidade}
-          // "Até a rodada" volta no tempo: ali o torneio ainda não tinha acabado.
-          restantesDe={(id) =>
-            jogosRestantes(
-              filtros.ateRodada === null ? torneio : { ...recorte.torneio, status: 'em_andamento' },
-              recorte.partidas,
-              id,
-            )
-          }
           textos={textos}
           nome={nomeDe}
           pontos={pontos}

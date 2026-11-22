@@ -2,27 +2,19 @@ import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
-import type { RegrasDoModo } from '@/compartilhado/modo-jogo/regrasDoModo'
-import type { ValoresUma } from '@/dominios/centerpiece/logica/uma'
-import ListaViradas from '@/dominios/estatisticas/interface/ListaViradas'
-import {
-  compararCom,
-  disputantes,
-  distanciaParaPodio,
-  vizinhosDoJogador,
-} from '../../logica/distanciaPodio'
+import EstatisticasJogador from '@/dominios/estatisticas/interface/EstatisticasJogador'
+import type { EscopoEstatisticas } from '@/dominios/estatisticas/logica/escopo'
+import { compararCom, disputantes } from '../../logica/distanciaPodio'
 import type { FiltrosRankingTorneio } from '../../logica/filtrosRankingTorneio'
 import type { LinhaRankingTorneio } from '../../logica/ranking'
 import type { TextosDistancia } from '../hooks/useTextosDistancia'
 
-/** Quanto falta para o pódio, os vizinhos e a comparação livre de um jogador. */
+/** O card do jogador no ranking: cabeçalho, comparação e as estatísticas no escopo do torneio. */
 export default function FolhaDistanciaPodio({
   linhas,
   jogadorId,
-  regras,
-  bonus,
+  escopo,
   unidade,
-  restantesDe,
   textos,
   nome,
   pontos,
@@ -33,10 +25,8 @@ export default function FolhaDistanciaPodio({
 }: {
   linhas: readonly LinhaRankingTorneio[]
   jogadorId: string
-  regras: RegrasDoModo
-  bonus: ValoresUma | null
+  escopo: EscopoEstatisticas
   unidade: FiltrosRankingTorneio['unidade']
-  restantesDe: (jogadorId: string) => number | null
   textos: TextosDistancia
   nome: (jogadorId: string) => string
   pontos: (valor: number) => string
@@ -63,14 +53,9 @@ export default function FolhaDistanciaPodio({
   const linha = jogaram[indice]
   if (!linha) return null
 
-  const { faltam, vantagem } = distanciaParaPodio(linhas, jogadorId)
+
   const comparado = compararCom(linhas, jogadorId, comparadoId)
-  // A comparação escolhida vem primeiro, colada no seletor.
-  const secoes = [
-    { id: 'comparado', alvos: comparado ? [comparado] : [] },
-    { id: 'podio', alvos: [...faltam, ...vantagem] },
-    { id: 'vizinhos', alvos: vizinhosDoJogador(linhas, jogadorId) },
-  ].filter((secao) => secao.alvos.length > 0)
+
   const rivais = disputantes(linhas, jogadorId).filter((outra) => outra.jogadorId !== jogadorId)
 
 
@@ -139,19 +124,13 @@ export default function FolhaDistanciaPodio({
           </select>
         </div>
       )}
-      <div aria-live="polite">
-        <ListaViradas
-          secoes={secoes}
-          jogadorId={jogadorId}
-          regras={regras}
-          bonus={bonus}
-          unidade={unidade}
-          textos={textos}
-          nome={nome}
-          restantesDe={restantesDe}
-        />
-      </div>
-      <p className="cfg-ajuda trn-distancia-aviso">{t(`tournament.podiumGap.approx.${regras.modo}`)}</p>
+      <EstatisticasJogador
+        escopo={escopo}
+        jogadorId={jogadorId}
+        compacto
+        comparadoId={comparado ? comparadoId : undefined}
+        unidade={unidade}
+      />
     </Modal>
   )
 }

@@ -28,7 +28,11 @@
       .rkf-titulo,
       .rkf-segmentos .ptd-segmento,
       .rkf-voce > span,
-      .rkf-voce > strong
+      .rkf-voce > strong,
+      .est-apoio,
+      .est-projecao,
+      .est-caminhos,
+      .est-recolhido > summary
     ) {
     font-size: 1.0625rem;
   }
@@ -69,6 +73,13 @@
       .anl-legenda li,
       .anl-formato-partidas,
       .anl-formato dt,
+      .est-cenarios th,
+      .est-cenarios td,
+      .est-metricas dt,
+      .est-posicoes dt,
+      .est-posicoes small,
+      .est-maos dt,
+      .est-maos small,
       .apelido-jogador
     ) {
     font-size: 0.9375rem;

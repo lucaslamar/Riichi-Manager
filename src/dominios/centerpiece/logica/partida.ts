@@ -6,6 +6,7 @@
  * Cadeiras em ordem de turno: 0 embaixo, 1 à direita, 2 em cima, 3 à esquerda.
  */
 import type { EntradaHistorico } from './historicoAcoes'
+import type { ResumoMaos } from './resumoPartida'
 import { pagamentosChombo } from './aplicarChombo'
 import { calcularOka, type ConfigMesa } from './configMesa'
 import { desmarcarRiichi, type Lance, type RegistroMao } from './descartes'
@@ -62,6 +63,8 @@ interface DetalheEvento {
   han?: number
   fu?: number
   yakuman?: number
+  /** MCR: os fan da mão. */
+  fan?: number
   tenpai?: Cadeira[]
   nagashi?: Cadeira[]
   abortivo?: TipoAbortivo
@@ -120,6 +123,8 @@ export interface Partida {
   /** Dealer em 1º na última mão: a pessoa escolhe encerrar ou seguir. */
   agariYameDisponivel?: boolean
   resultado?: ResultadoFinal[]
+  /** Guardado ao podar o mão a mão, para as estatísticas não perderem as mãos. */
+  maos?: ResumoMaos
   /** Jogada fora do app: só tem o resultado, sem mãos. */
   registradaManual?: boolean
   /** Registrada à mão: os jogadores foram listados na ordem dos ventos (Leste, Sul, Oeste, Norte). */

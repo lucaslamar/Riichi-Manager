@@ -10,6 +10,7 @@ import {
   type Partida,
   type ResultadoFinal,
 } from '@/dominios/centerpiece/logica/partida'
+import { eventosDoPlacarMcr } from './rankingMcr'
 import {
   CADEIRAS,
   colocacoes,
@@ -75,6 +76,8 @@ export function partidasDoTorneioMcr(placares: readonly PlacarMcr[]): Partida[] 
         vinculoTorneio: { torneioId: vinculo.id, rodada: vinculo.rodada, mesa: vinculo.mesa },
         variante: 'yonma',
         registradaManual: false,
+        // As estatísticas leem as vitórias, os deal-in e os fan.
+        eventos: eventosDoPlacarMcr(placar),
         config: {},
         assentos: Object.fromEntries(
           CADEIRAS.map((cadeira) => [

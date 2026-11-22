@@ -1726,7 +1726,8 @@
       "bottom": "Bottom of the table",
       "bottomLead": "lead {{value}}",
       "bottomLeave": "to escape {{value}}",
-      "ctaRace": "Want to see how far you are? Filter in {{app}}"
+      "ctaRace": "Want to see how far you are? Filter in {{app}}",
+      "result": "Share results"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -3546,7 +3547,62 @@
       "umaHelp": "Uma from the configured rules, with {{name}} breaking even.",
       "either": "{{hands}} or {{direct}} direct",
       "jaPassa": "already ahead",
-      "jaEmpata": "already tied"
+      "jaEmpata": "already tied",
+      "title": "Comeback scenarios"
+    },
+    "title": "Statistics",
+    "tournamentTitle": "Tournament statistics",
+    "open": "View statistics for {{name}}",
+    "empty": "No results yet. Record a table to see statistics.",
+    "numbers": {
+      "torneio": "Tournament numbers",
+      "temporada": "Season numbers",
+      "geral": "Ranking numbers"
+    },
+    "averageHanchan": "Average per hanchan",
+    "averageGame": "Average per game",
+    "winRate": "Win rate",
+    "dealInRate": "Deal-in rate",
+    "riichiRate": "Riichi rate",
+    "positions": "Placement distribution",
+    "playerBest": "Player’s biggest hand",
+    "best": {
+      "torneio": "Biggest hand of the tournament",
+      "temporada": "Biggest hand of the season",
+      "geral": "Biggest hand in the ranking"
+    },
+    "noBest": "Tables recorded with results only do not store hands.",
+    "noHands": "No hand records: rates and biggest hands need games played with the app scoreboard.",
+    "someHands": "Rates and biggest hand use {{count}} of {{total}} games, those with hand records.",
+    "handFan": "{{fan}} fan",
+    "handHanFu": "{{han}} han {{fu}} fu",
+    "handHan": "{{han}} han",
+    "deadline": {
+      "over": "Ended on {{date}}: gaps are final.",
+      "unknown": "Until {{date}}. Scenarios apply to the next game.",
+      "estimate": "Until {{date}}. At this pace, games left: about {{games}}."
+    },
+    "onlySum": "Comeback scenarios only exist when the ranking sums points.",
+    "projection": {
+      "title": "Gap to the next player",
+      "approx": "Approximate: assumes both keep their average and play as many games.",
+      "outside": "Outside the ranking with the current filters.",
+      "first": "Nobody ahead in the ranking.",
+      "behind": {
+        "you": "You are {{value}} behind {{other}}.",
+        "player": "{{name}} is {{value}} behind {{other}}."
+      },
+      "averages": {
+        "you": "At your average ({{mine}}/game) and that of {{other}} ({{theirs}}/game):",
+        "player": "At the average of {{name}} ({{mine}}/game) and {{other}} ({{theirs}}/game):"
+      },
+      "passes": {
+        "one": "passes in ~{{count}} game.",
+        "other": "passes in ~{{count}} games."
+      },
+      "poucosJogos": "Too few games to project (at least {{count}} each).",
+      "mediaMenor": "no projection, as the average is not higher.",
+      "longeDemais": "no projection, as the averages are too close."
     }
   }
 }

@@ -47,6 +47,7 @@ import '../torneio.css'
 import { useNomeNoTorneio } from '../hooks/useNomeNoTorneio'
 import { regrasWoDe } from '../../logica/wo'
 import FolhaAusencia from '../componentes/FolhaAusencia'
+import { useCompartilharResultado } from '../hooks/useCompartilharResultado'
 
 /** Agora, atualizado a cada segundo enquanto algum relógio corre. */
 function useAgora(ativo: boolean) {
@@ -80,7 +81,14 @@ export default function PaginaMesasTorneio({
   aoLancarResultado,
   rodape,
   aoAbrirRanking,
-}: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode; aoAbrirRanking: () => void } & AcoesMesa) {
+  aoAbrirEstatisticas,
+}: {
+  torneio: Torneio
+  aoVoltar: () => void
+  rodape?: ReactNode
+  aoAbrirRanking: () => void
+  aoAbrirEstatisticas: () => void
+} & AcoesMesa) {
   const { t, idioma, numero } = useI18n()
   const { salvar, definirLista, finalizar, marcarTransferido } = useTorneios()
   const { partidas, descartarDoTorneio, adicionar, descartar } = usePartidasDoTorneio()
@@ -99,6 +107,8 @@ export default function PaginaMesasTorneio({
   const [exportando, setExportando] = useState(false)
   const [menu, setMenu] = useState(false)
   const [compartilhando, setCompartilhando] = useState(false)
+  const [compartilhandoResultado, setCompartilhandoResultado] = useState(false)
+  const { classificacao } = useCompartilharResultado(torneio)
   const [reiniciando, setReiniciando] = useState(false)
   const [encerrando, setEncerrando] = useState(false)
   /** Rodada cujo lembrete de backup já foi dispensado. */
@@ -540,6 +550,34 @@ export default function PaginaMesasTorneio({
       {menu && (
         <Modal titulo={torneio.nome} aoFechar={() => setMenu(false)} rotuloFechar={t('actions.close')} tamanho="pequena">
           <ul className="trn-menu">
+          <li>
+            <button
+              type="button"
+              onClick={() => {
+                setMenu(false)
+                aoAbrirEstatisticas()
+              }}
+            >
+              <i className="fas fa-chart-simple" aria-hidden="true" />
+              <span>{t('stats.tournamentTitle')}</span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => {
+                setMenu(false)
+                setCompartilhandoResultado(true)
+              }}
+            >
+              <i className="fas fa-share-nodes" aria-hidden="true" />
+              <span>{t('tournament.share.result')}</span>
+            </button>
+          </li>
+          {(podeRefazer || (torneio.status === 'em_andamento' && !somenteLeitura)) && (
+            <li className="trn-menu-divisoria" role="separator" />
+          )}
           {podeRefazer && (
             <li>
               <button
@@ -656,6 +694,15 @@ export default function PaginaMesasTorneio({
               },
             },
           ]}
+        />
+      )}
+
+      {compartilhandoResultado && (
+        <FolhaCompartilhar
+          relatorio={() => classificacao()}
+          nomeArquivo={nomeDeArquivo(torneio.nome, t('tournament.ranking.title'))}
+          aoAvisar={mostrar}
+          aoFechar={() => setCompartilhandoResultado(false)}
         />
       )}
 

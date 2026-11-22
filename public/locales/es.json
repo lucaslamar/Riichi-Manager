@@ -1733,7 +1733,8 @@
       "bottom": "Fondo de la tabla",
       "bottomLead": "ventaja {{value}}",
       "bottomLeave": "para salir {{value}}",
-      "ctaRace": "¿Quieres ver cuánto te falta? Filtra en {{app}}"
+      "ctaRace": "¿Quieres ver cuánto te falta? Filtra en {{app}}",
+      "result": "Compartir resultado"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -3565,7 +3566,63 @@
       "umaHelp": "Uma según las reglas configuradas, con {{name}} en cero.",
       "either": "{{hands}} o {{direct}} directo",
       "jaPassa": "ya lo supera",
-      "jaEmpata": "ya empata"
+      "jaEmpata": "ya empata",
+      "title": "Escenarios de remontada"
+    },
+    "title": "Estadísticas",
+    "tournamentTitle": "Estadísticas del torneo",
+    "open": "Ver estadísticas de {{name}}",
+    "empty": "Aún no hay resultados. Registra una mesa para ver las estadísticas.",
+    "numbers": {
+      "torneio": "Números en el torneo",
+      "temporada": "Números en la temporada",
+      "geral": "Números en el ranking"
+    },
+    "averageHanchan": "Promedio por hanchan",
+    "averageGame": "Promedio por partida",
+    "winRate": "Tasa de victoria",
+    "dealInRate": "Tasa de deal-in",
+    "riichiRate": "Tasa de riichi",
+    "positions": "Distribución de posiciones",
+    "playerBest": "Mejor mano del jugador",
+    "best": {
+      "torneio": "Mejor mano del torneo",
+      "temporada": "Mejor mano de la temporada",
+      "geral": "Mejor mano del ranking"
+    },
+    "noBest": "Las mesas registradas solo con el resultado no guardan las manos.",
+    "noHands": "Sin registro de manos: las tasas y la mejor mano requieren el marcador de la app.",
+    "someHands": "Las tasas y la mejor mano usan {{count}} de {{total}} partidas, las que tienen registro de manos.",
+    "handFan": "{{fan}} fan",
+    "handHanFu": "{{han}} han {{fu}} fu",
+    "handHan": "{{han}} han",
+    "deadline": {
+      "over": "Terminó el {{date}}: las diferencias son definitivas.",
+      "unknown": "Hasta el {{date}}. Los escenarios valen para la próxima partida.",
+      "estimate": "Hasta el {{date}}. A este ritmo, partidas restantes: unas {{games}}."
+    },
+    "onlySum": "Los escenarios de remontada solo existen cuando el ranking suma puntos.",
+    "projection": {
+      "title": "Distancia al siguiente",
+      "approx": "Aproximado: supone que ambos mantienen su promedio y juegan las mismas partidas.",
+      "outside": "Fuera del ranking con los filtros actuales.",
+      "first": "Nadie por delante en el ranking.",
+      "behind": {
+        "you": "Estás {{value}} por detrás de {{other}}.",
+        "player": "{{name}} está {{value}} por detrás de {{other}}."
+      },
+      "averages": {
+        "you": "Con tu promedio ({{mine}}/partida) y el de {{other}} ({{theirs}}/partida):",
+        "player": "Con el promedio de {{name}} ({{mine}}/partida) y el de {{other}} ({{theirs}}/partida):"
+      },
+      "passes": {
+        "one": "adelanta en ~{{count}} partida.",
+        "many": "adelanta en ~{{count}} partidas.",
+        "other": "adelanta en ~{{count}} partidas."
+      },
+      "poucosJogos": "Pocas partidas para proyectar (mínimo {{count}} cada uno).",
+      "mediaMenor": "no se puede proyectar, porque el promedio no es mayor.",
+      "longeDemais": "no se puede proyectar, porque los promedios están demasiado cerca."
     }
   }
 }

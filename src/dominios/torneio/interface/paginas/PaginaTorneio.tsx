@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { useTorneios } from '../hooks/useTorneios'
+import PaginaEstatisticasTorneio from './PaginaEstatisticasTorneio'
 import PaginaListaTorneio from './PaginaListaTorneio'
 import PaginaMesasTorneio, { type AcoesMesa } from './PaginaMesasTorneio'
 import PaginaRankingTorneio from './PaginaRankingTorneio'
@@ -24,6 +25,7 @@ export default function PaginaTorneio({
   const { torneios, temporadas } = useTorneios()
   const torneio = torneios.find((item) => item.id === torneioId)
   const [vendoRanking, setVendoRanking] = useState(false)
+  const [vendoEstatisticas, setVendoEstatisticas] = useState(false)
 
   if (!torneio) {
     return (
@@ -35,6 +37,10 @@ export default function PaginaTorneio({
 
   if (torneio.status === 'rascunho') {
     return <PaginaListaTorneio torneio={torneio} aoVoltar={aoVoltar} aoSortear={() => undefined} aoImportado={aoAbrirTorneio} aoAbrirTorneio={aoAbrirTorneio} />
+  }
+
+  if (vendoEstatisticas) {
+    return <PaginaEstatisticasTorneio torneio={torneio} aoVoltar={() => setVendoEstatisticas(false)} />
   }
 
   if (vendoRanking) {
@@ -54,6 +60,7 @@ export default function PaginaTorneio({
       torneio={torneio}
       aoVoltar={aoVoltar}
       aoAbrirRanking={() => setVendoRanking(true)}
+      aoAbrirEstatisticas={() => setVendoEstatisticas(true)}
       {...acoes}
       rodape={
         formato.tipo === 'temporada' && (

@@ -1704,7 +1704,8 @@
       "bottom": "垫底之争",
       "bottomLead": "领先 {{value}}",
       "bottomLeave": "摆脱需 {{value}}",
-      "ctaRace": "想知道自己还差多少？在{{app}}里筛选"
+      "ctaRace": "想知道自己还差多少？在{{app}}里筛选",
+      "result": "分享结果"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -3508,7 +3509,61 @@
       "umaHelp": "按已设置的马点计算，假设{{name}}不赚不亏。",
       "either": "{{hands}}或直击{{direct}}次",
       "jaPassa": "已经反超",
-      "jaEmpata": "已经追平"
+      "jaEmpata": "已经追平",
+      "title": "逆转条件"
+    },
+    "title": "统计",
+    "tournamentTitle": "比赛统计",
+    "open": "查看{{name}}的统计",
+    "empty": "暂无结果。登记一桌成绩后即可查看统计。",
+    "numbers": {
+      "torneio": "比赛数据",
+      "temporada": "赛季数据",
+      "geral": "排行数据"
+    },
+    "averageHanchan": "每半庄平均",
+    "averageGame": "每局平均",
+    "winRate": "和牌率",
+    "dealInRate": "放铳率",
+    "riichiRate": "立直率",
+    "positions": "顺位分布",
+    "playerBest": "个人最大和牌",
+    "best": {
+      "torneio": "比赛最大和牌",
+      "temporada": "赛季最大和牌",
+      "geral": "排行最大和牌"
+    },
+    "noBest": "只登记结果的牌桌不保存和牌记录。",
+    "noHands": "没有逐局记录：和牌率与最大和牌需要使用应用计分板。",
+    "someHands": "数据基于{{total}}局中有逐局记录的{{count}}局。",
+    "handFan": "{{fan}}番",
+    "handHanFu": "{{han}}番{{fu}}符",
+    "handHan": "{{han}}番",
+    "deadline": {
+      "over": "已于{{date}}结束，分差已确定。",
+      "unknown": "截至{{date}}。条件针对下一局。",
+      "estimate": "截至{{date}}。按当前节奏约剩{{games}}局。"
+    },
+    "onlySum": "仅在累计积分排行中显示逆转条件。",
+    "projection": {
+      "title": "与前一名的差距",
+      "approx": "估算：假设两人保持平均成绩且对局数相同。",
+      "outside": "按当前筛选未进入排行。",
+      "first": "排行中无人领先。",
+      "behind": {
+        "you": "你落后{{other}} {{value}}。",
+        "player": "{{name}}落后{{other}} {{value}}。"
+      },
+      "averages": {
+        "you": "按你的平均（{{mine}}/局）与{{other}}的平均（{{theirs}}/局）：",
+        "player": "按{{name}}的平均（{{mine}}/局）与{{other}}的平均（{{theirs}}/局）："
+      },
+      "passes": {
+        "other": "约{{count}}局后反超。"
+      },
+      "poucosJogos": "对局太少，无法预测（每人至少{{count}}局）。",
+      "mediaMenor": "平均成绩未更高，无法预测。",
+      "longeDemais": "平均成绩过于接近，无法预测。"
     }
   }
 }

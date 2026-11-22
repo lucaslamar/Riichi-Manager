@@ -7,15 +7,26 @@ import {
   cadeirasDaPartida,
   jogadoresNaMesa,
   ORDEM_VENTOS,
+  porCadeira,
   ventoDaCadeira,
   type Cadeira,
+  type EventoPartida,
   type Partida,
+  type PorCadeira,
   type Vento,
 } from './partida'
 
 export type Patamar = 'mangan' | 'haneman' | 'baiman' | 'sanbaiman' | 'yakuman'
 
 const ORDEM_PATAMAR: readonly Patamar[] = ['mangan', 'haneman', 'baiman', 'sanbaiman', 'yakuman']
+
+export const CHAVE_PATAMAR: Record<Patamar, string> = {
+  mangan: 'hanFu.limitMangan',
+  haneman: 'hanFu.limitHaneman',
+  baiman: 'hanFu.limitBaiman',
+  sanbaiman: 'hanFu.limitSanbaiman',
+  yakuman: 'hanFu.limitYakuman',
+}
 
 /** Patamar de uma mão pelo han e fu; abaixo de Mangan não ganha selo. */
 export function patamarDaMao(han?: number, fu?: number, yakuman?: number): Patamar | null {
@@ -77,6 +88,78 @@ export function contadoresDaPartida(partida: Partida): Record<Cadeira, Contadore
     }
   }
   return contadores
+}
+
+export interface MaoDestacada {
+  cadeira: Cadeira
+  han?: number
+  fu?: number
+  yakuman?: number
+  fan?: number
+}
+
+export interface ResumoMaos {
+  jogadas: number
+  porCadeira: PorCadeira<{ vitorias: number; dealIn: number; riichi: number }>
+  /** A maior mão de cada cadeira, na ordem em que saíram. */
+  maiores: MaoDestacada[]
+}
+
+/** Para comparar mãos: o valor base até o Mangan, depois o patamar e os yakuman. */
+export function forcaDaMao({ han, fu, yakuman, fan }: MaoDestacada): number {
+  if (fan !== undefined) return fan
+  const patamar = patamarDaMao(han, fu, yakuman)
+  if (patamar === 'yakuman') return 1_000_000 * Math.max(1, yakuman ?? 1)
+  if (patamar) return 10_000 * (ORDEM_PATAMAR.indexOf(patamar) + 1)
+  return han ? (fu ?? 30) * 2 ** (han + 2) : 0
+}
+
+function maosDoEvento({ detalhe }: EventoPartida): MaoDestacada[] {
+  const vencedores = detalhe?.vencedores ?? []
+  return vencedores.flatMap((cadeira): MaoDestacada[] => {
+    // No ron duplo os valores ficam só na mão montada de cada um.
+    const origem =
+      vencedores.length === 1
+        ? detalhe
+        : detalhe?.maosMontadas?.find((mao) => mao.cadeira === cadeira)?.montada.resultado
+    if (!origem) return []
+    const { han, fu, yakuman } = origem
+    const fan = vencedores.length === 1 ? detalhe?.fan : undefined
+    return han || yakuman || fan ? [{ cadeira, han, fu, yakuman, fan }] : []
+  })
+}
+
+/** As mãos da partida resumidas. null: só tem o resultado. */
+export function resumoDasMaos(partida: Partida): ResumoMaos | null {
+  if (partida.maos) return partida.maos
+  const eventos = partida.eventos ?? []
+  // Mesa migrada de versões antigas: os eventos não dizem quem bateu.
+  if (eventos.some((evento) => evento.tipo === 'legado')) return null
+  const jogadas = eventos.filter(
+    ({ tipo }) => tipo === 'ron' || tipo === 'tsumo' || tipo === 'ryukyoku' || tipo === 'abortivo',
+  ).length
+  const contadores = jogadas ? contadoresDaPartida(partida) : null
+  if (!contadores) return null
+
+  const maiores = new Map<Cadeira, MaoDestacada>()
+  for (const evento of eventos) {
+    if (evento.tipo !== 'ron' && evento.tipo !== 'tsumo') continue
+    for (const mao of maosDoEvento(evento)) {
+      const atual = maiores.get(mao.cadeira)
+      if (atual && forcaDaMao(mao) <= forcaDaMao(atual)) continue
+      // Sai e entra de novo, para a ordem ser a de quando a mão saiu.
+      maiores.delete(mao.cadeira)
+      maiores.set(mao.cadeira, mao)
+    }
+  }
+  return {
+    jogadas,
+    porCadeira: porCadeira((cadeira) => {
+      const { ron, tsumo, dealIn, riichi } = contadores[cadeira]
+      return { vitorias: ron + tsumo, dealIn, riichi }
+    }),
+    maiores: [...maiores.values()],
+  }
 }
 
 interface LinhaCardMesa {

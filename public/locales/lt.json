@@ -1770,7 +1770,8 @@
       "bottom": "Lentelės apačia",
       "bottomLead": "persvara {{value}}",
       "bottomLeave": "išsigelbėti {{value}}",
-      "ctaRace": "Nori žinoti, kiek tau trūksta? Filtruok {{app}}"
+      "ctaRace": "Nori žinoti, kiek tau trūksta? Filtruok {{app}}",
+      "result": "Dalytis rezultatais"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -3634,7 +3635,64 @@
       "umaHelp": "Uma pagal nustatytas taisykles, {{name}}: 0.",
       "either": "{{hands}} arba tiesiogiai {{direct}}",
       "jaPassa": "jau lenkia",
-      "jaEmpata": "jau lygu"
+      "jaEmpata": "jau lygu",
+      "title": "Persvaros scenarijai"
+    },
+    "title": "Statistika",
+    "tournamentTitle": "Turnyro statistika",
+    "open": "Žiūrėti statistiką: {{name}}",
+    "empty": "Rezultatų dar nėra. Įrašykite stalo rezultatą.",
+    "numbers": {
+      "torneio": "Turnyro skaičiai",
+      "temporada": "Sezono skaičiai",
+      "geral": "Reitingo skaičiai"
+    },
+    "averageHanchan": "Vidurkis per hanchan",
+    "averageGame": "Vidurkis per partiją",
+    "winRate": "Laimėjimų dalis",
+    "dealInRate": "Deal-in dalis",
+    "riichiRate": "Riichi dalis",
+    "positions": "Vietų pasiskirstymas",
+    "playerBest": "Didžiausia žaidėjo kombinacija",
+    "best": {
+      "torneio": "Didžiausia turnyro kombinacija",
+      "temporada": "Didžiausia sezono kombinacija",
+      "geral": "Didžiausia reitingo kombinacija"
+    },
+    "noBest": "Stalai, kuriems įrašytas tik rezultatas, kombinacijų nesaugo.",
+    "noHands": "Nėra kombinacijų įrašų: rodikliams reikia programėlės rezultatų lentos.",
+    "someHands": "Rodikliai: partijos su įrašais, {{count}} iš {{total}}.",
+    "handFan": "{{fan}} fan",
+    "handHanFu": "{{han}} han {{fu}} fu",
+    "handHan": "{{han}} han",
+    "deadline": {
+      "over": "Baigėsi {{date}}: skirtumai galutiniai.",
+      "unknown": "Iki {{date}}. Scenarijai taikomi kitai partijai.",
+      "estimate": "Iki {{date}}. Tokiu tempu liko apie {{games}} part."
+    },
+    "onlySum": "Scenarijai galimi tik kai sumuojami taškai.",
+    "projection": {
+      "title": "Atstumas iki kito",
+      "approx": "Apytiksliai: abu išlaiko vidurkį ir žaidžia po tiek pat.",
+      "outside": "Su dabartiniais filtrais reitinge nėra.",
+      "first": "Reitinge priekyje nieko nėra.",
+      "behind": {
+        "you": "Atsiliekate {{value}} (priekyje {{other}}).",
+        "player": "{{name}} atsilieka {{value}} (priekyje {{other}})."
+      },
+      "averages": {
+        "you": "Jūsų vidurkis {{mine}}, {{other}}: {{theirs}}:",
+        "player": "Vidurkiai {{name}}: {{mine}}, {{other}}: {{theirs}}:"
+      },
+      "passes": {
+        "one": "aplenks po ~{{count}} partijos.",
+        "few": "aplenks po ~{{count}} partijų.",
+        "many": "aplenks po ~{{count}} partijos.",
+        "other": "aplenks po ~{{count}} partijų."
+      },
+      "poucosJogos": "Per mažai partijų prognozei (bent {{count}} kiekvienam).",
+      "mediaMenor": "prognozės nėra, nes vidurkis ne didesnis.",
+      "longeDemais": "prognozės nėra, nes vidurkiai per panašūs."
     }
   }
 }

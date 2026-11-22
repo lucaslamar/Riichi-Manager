@@ -249,6 +249,12 @@
   cursor: default;
 }
 
+.trn-menu-divisoria {
+  height: 0;
+  margin: 8px 0;
+  border-top: 2px solid var(--linha-divisoria);
+}
+
 .trn-menu .trn-menu--perigo,
 .trn-menu .trn-menu--perigo > i {
   color: var(--texto-erro);

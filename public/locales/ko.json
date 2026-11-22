@@ -1704,7 +1704,8 @@
       "bottom": "최하위 경쟁",
       "bottomLead": "앞섬 {{value}}",
       "bottomLeave": "탈출까지 {{value}}",
-      "ctaRace": "나는 얼마나 남았을까? {{app}}에서 확인"
+      "ctaRace": "나는 얼마나 남았을까? {{app}}에서 확인",
+      "result": "결과 공유"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -3508,7 +3509,61 @@
       "umaHelp": "설정된 규칙의 우마, {{name}} ±0 기준.",
       "either": "{{hands}} 또는 직격 {{direct}}회",
       "jaPassa": "이미 역전",
-      "jaEmpata": "이미 동점"
+      "jaEmpata": "이미 동점",
+      "title": "역전 조건"
+    },
+    "title": "통계",
+    "tournamentTitle": "대회 통계",
+    "open": "{{name}} 통계 보기",
+    "empty": "아직 결과가 없습니다. 테이블 결과를 기록하면 통계가 표시됩니다.",
+    "numbers": {
+      "torneio": "대회 기록",
+      "temporada": "시즌 기록",
+      "geral": "랭킹 기록"
+    },
+    "averageHanchan": "반장 평균",
+    "averageGame": "대국당 평균",
+    "winRate": "화료율",
+    "dealInRate": "방총률",
+    "riichiRate": "리치율",
+    "positions": "순위 분포",
+    "playerBest": "플레이어 최고 타점",
+    "best": {
+      "torneio": "대회 최고 타점",
+      "temporada": "시즌 최고 타점",
+      "geral": "랭킹 최고 타점"
+    },
+    "noBest": "결과만 기록한 테이블에는 손패 기록이 없습니다.",
+    "noHands": "국별 기록이 없습니다. 비율과 최고 타점은 앱 점수판을 사용한 대국에만 있습니다.",
+    "someHands": "비율과 최고 타점은 기록이 있는 대국 {{count}}/{{total}} 기준.",
+    "handFan": "{{fan}}판",
+    "handHanFu": "{{han}}판 {{fu}}부",
+    "handHan": "{{han}}판",
+    "deadline": {
+      "over": "{{date}} 종료: 점수 차 확정.",
+      "unknown": "{{date}}까지. 조건은 다음 대국 기준.",
+      "estimate": "{{date}}까지. 현재 속도로 약 {{games}}국 남음."
+    },
+    "onlySum": "역전 조건은 점수 합산 랭킹에서만 표시됩니다.",
+    "projection": {
+      "title": "바로 위와의 차이",
+      "approx": "근사치: 두 사람이 평균을 유지하고 같은 수만큼 대국한다고 가정.",
+      "outside": "현재 필터에서는 랭킹에 없습니다.",
+      "first": "랭킹에서 앞선 사람이 없습니다.",
+      "behind": {
+        "you": "{{other}}보다 {{value}} 뒤에 있습니다.",
+        "player": "{{name}}: {{other}}보다 {{value}} 뒤."
+      },
+      "averages": {
+        "you": "내 평균({{mine}}/국)과 {{other}} 평균({{theirs}}/국) 기준:",
+        "player": "{{name}} 평균({{mine}}/국)과 {{other}} 평균({{theirs}}/국) 기준:"
+      },
+      "passes": {
+        "other": "약 {{count}}국 후 역전."
+      },
+      "poucosJogos": "예측하기에 대국 수 부족(각 {{count}}국 이상).",
+      "mediaMenor": "평균이 더 높지 않아 예측할 수 없습니다.",
+      "longeDemais": "평균이 너무 비슷해 예측할 수 없습니다."
     }
   }
 }

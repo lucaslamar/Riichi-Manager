@@ -2,20 +2,12 @@ import { useId, useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { CHAVE_VENTO, KANJI_VENTO, type Cadeira, type Partida } from '../../logica/partida'
 import {
+  CHAVE_PATAMAR,
   contadoresDaPartida,
   linhasDoHistorico,
   linhasEmAndamento,
   maiorMao,
-  type Patamar,
 } from '../../logica/resumoPartida'
-
-const CHAVE_PATAMAR: Record<Patamar, string> = {
-  mangan: 'hanFu.limitMangan',
-  haneman: 'hanFu.limitHaneman',
-  baiman: 'hanFu.limitBaiman',
-  sanbaiman: 'hanFu.limitSanbaiman',
-  yakuman: 'hanFu.limitYakuman',
-}
 
 interface PropsCardMesa {
   partida: Partida

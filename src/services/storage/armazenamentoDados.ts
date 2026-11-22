@@ -8,6 +8,7 @@
  */
 import type { ArmazenamentoChaveValor } from '@/compartilhado/persistencia/armazenamento'
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
+import { resumoDasMaos } from '@/dominios/centerpiece/logica/resumoPartida'
 import type { BancoDados, ConteudoBanco } from './banco'
 import {
   dividirPartida,
@@ -61,7 +62,9 @@ function partesDasPartidas(partidas: readonly Partida[], limite: number) {
   const resumos: ResumoPartida[] = []
   const detalhes: DetalhesPartida[] = []
   for (const partida of partidas) {
-    const partes = dividirPartida(partida)
+    // Antes de podar, as mãos viram números no resumo.
+    const maos = podar.has(partida.id) ? resumoDasMaos(partida) : null
+    const partes = dividirPartida(maos ? { ...partida, maos } : partida)
     resumos.push(partes.resumo)
     if (!podar.has(partida.id)) detalhes.push(partes.detalhes)
   }

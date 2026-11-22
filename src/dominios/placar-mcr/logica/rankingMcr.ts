@@ -46,6 +46,7 @@ export function partidasDoRankingMcr(placares: readonly PlacarMcr[]): Partida[] 
         resultado,
         variante: 'yonma',
         registradaManual: !!placar.pontosRegistrados,
+        eventos: eventosDoPlacarMcr(placar),
         ordemDosVentos: true,
         config: {},
         // A análise do jogador lê o vento de cada um na primeira mão.

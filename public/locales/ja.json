@@ -1704,7 +1704,8 @@
       "bottom": "最下位争い",
       "bottomLead": "リード {{value}}",
       "bottomLeave": "脱出まで {{value}}",
-      "ctaRace": "自分はあと何点？ {{app}}で確認"
+      "ctaRace": "自分はあと何点？ {{app}}で確認",
+      "result": "結果を共有"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -3508,7 +3509,61 @@
       "umaHelp": "設定ルールのウマ。{{name}}は±0とします。",
       "either": "{{hands}}または直撃{{direct}}回",
       "jaPassa": "すでに逆転",
-      "jaEmpata": "すでに同点"
+      "jaEmpata": "すでに同点",
+      "title": "逆転条件"
+    },
+    "title": "統計",
+    "tournamentTitle": "大会の統計",
+    "open": "{{name}}の統計を見る",
+    "empty": "結果がまだありません。卓の結果を登録すると統計が表示されます。",
+    "numbers": {
+      "torneio": "大会での成績",
+      "temporada": "シーズンの成績",
+      "geral": "ランキングでの成績"
+    },
+    "averageHanchan": "半荘平均",
+    "averageGame": "1局平均",
+    "winRate": "和了率",
+    "dealInRate": "放銃率",
+    "riichiRate": "立直率",
+    "positions": "着順分布",
+    "playerBest": "本人の最高打点",
+    "best": {
+      "torneio": "大会の最高打点",
+      "temporada": "シーズンの最高打点",
+      "geral": "ランキングの最高打点"
+    },
+    "noBest": "結果のみ登録した卓には和了の記録がありません。",
+    "noHands": "局ごとの記録がありません。率と最高打点はアプリの点数表で打った対局のみです。",
+    "someHands": "率と最高打点は記録のある{{total}}局中{{count}}局から算出。",
+    "handFan": "{{fan}}番",
+    "handHanFu": "{{han}}翻{{fu}}符",
+    "handHan": "{{han}}翻",
+    "deadline": {
+      "over": "{{date}}に終了。点差は確定です。",
+      "unknown": "{{date}}まで。条件は次の対局が対象です。",
+      "estimate": "{{date}}まで。現在のペースで残り約{{games}}局。"
+    },
+    "onlySum": "逆転条件はポイント合計方式のランキングでのみ表示します。",
+    "projection": {
+      "title": "一つ上との差",
+      "approx": "概算：両者が平均を維持し同数打つと仮定。",
+      "outside": "現在の絞り込みではランキング外です。",
+      "first": "ランキングで上にいる人はいません。",
+      "behind": {
+        "you": "あなたは{{other}}と{{value}}差です。",
+        "player": "{{name}}は{{other}}と{{value}}差です。"
+      },
+      "averages": {
+        "you": "あなたの平均（{{mine}}/局）と{{other}}の平均（{{theirs}}/局）では：",
+        "player": "{{name}}の平均（{{mine}}/局）と{{other}}の平均（{{theirs}}/局）では："
+      },
+      "passes": {
+        "other": "約{{count}}局で逆転。"
+      },
+      "poucosJogos": "予測には対局数が不足（各{{count}}局以上）。",
+      "mediaMenor": "平均が上回らないため予測できません。",
+      "longeDemais": "平均が近すぎて予測できません。"
     }
   }
 }
