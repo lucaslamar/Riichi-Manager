@@ -198,15 +198,6 @@ export default function PaginaMesasTorneio({
         aoVoltar={aoVoltar}
         acoes={
           <span className="clb-acoes-titulo trn-acoes-rodada">
-            <button
-              type="button"
-              className="cm-btn-icone"
-              aria-label={t('tournament.ranking.title')}
-              title={t('tournament.ranking.title')}
-              onClick={aoAbrirRanking}
-            >
-              <i className="fas fa-ranking-star" aria-hidden="true" />
-            </button>
             {podeEncerrar(torneio) && (
               <button
                 type="button"
@@ -219,6 +210,15 @@ export default function PaginaMesasTorneio({
                 <i className="fas fa-flag-checkered" aria-hidden="true" />
               </button>
             )}
+            <button
+              type="button"
+              className="cm-btn-icone"
+              aria-label={t('tournament.ranking.title')}
+              title={t('tournament.ranking.title')}
+              onClick={aoAbrirRanking}
+            >
+              <i className="fas fa-ranking-star" aria-hidden="true" />
+            </button>
             <button
               type="button"
               className="cm-btn-icone"
