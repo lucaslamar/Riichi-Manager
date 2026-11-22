@@ -520,3 +520,7 @@ vêm do guia do CMC (`fans-mcr.ts`), em português, com o 汉字 ao lado.
 
 Sem revisão nativa: `configuracoes.mahjong.riichi` e `configuracoes.mahjong.ajudaRiichi`.
 Em es, ko e lt o texto está em inglês. Em ja e zh-Hans, conferir リーチ麻雀 e 立直麻将 como nome do modo.
+
+## Tutorial MCR (`tutorial.mcr.*`)
+
+O livro do modo Chinês só existe em português. Os outros 6 idiomas têm o texto em pt-BR copiado, para traduzir e revisar com falante nativo. Ao mudar um texto no pt-BR antes da tradução, mude nas cópias também. Os termos do MCR em `modo.mcr.*` e `acoes.mcr.*` também pedem revisão em es, ja, ko, lt e zh-Hans.
