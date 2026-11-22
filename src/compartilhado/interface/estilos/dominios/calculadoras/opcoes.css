@@ -1203,3 +1203,16 @@
   grid-column: 1 / -1;
   min-width: 0;
 }
+
+/* Coluna estreita em tela larga: 2 × 2, para o nome do vento não quebrar no meio. */
+@media (min-width: 900px) and (min-height: 600px) {
+  .secao-vento-finalizacao {
+    container-type: inline-size;
+  }
+
+  @container (max-width: 279px) {
+    .grupo-opcoes-ventos .secao-vento-finalizacao > .grade-ventos-finalizacao {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
