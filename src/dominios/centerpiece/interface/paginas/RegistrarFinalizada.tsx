@@ -624,7 +624,7 @@ export default function RegistrarFinalizada({
           aria-haspopup="dialog"
           onClick={() => setFolhaAndamento('salvar')}
         >
-          <i className="fas fa-floppy-disk" aria-hidden="true" /> {t('match.paused.save')}
+          {t('match.paused.save')}
         </button>
       )}
 

@@ -360,15 +360,31 @@
   flex: 1 1 0;
 }
 
-.fin-acoes > .fin-salvar {
-  padding: 4px 8px;
-  font-size: 0.8125rem;
-  line-height: 1.25;
+/* Um par: mesma altura, canto, letra e caixa, cada texto numa linha. */
+.fin-acoes:has(> .fin-salvar) > button:not(#_) {
+  height: auto;
+  min-height: 52px;
+  margin: 0;
+  border-radius: 14px;
+  padding: 4px 6px;
+  font-size: clamp(0.8125rem, 3.9vw, 1.0625rem);
+  font-weight: 800;
+  letter-spacing: normal;
+  line-height: 1.2;
+  text-transform: none;
+  text-wrap: balance;
 }
 
 /* Sem a seta de expandir, o card não guarda o espaço dela. */
 .fin-pausada.fin-pausada {
   padding-bottom: 10px;
+}
+
+/* No iPad o par mantém os 56px do Registrar. */
+@media (min-width: 768px) and (min-height: 900px) {
+  .fin-acoes:has(> .fin-salvar) > button:not(#_) {
+    min-height: 56px;
+  }
 }
 
 .fin-pausada-acoes {
