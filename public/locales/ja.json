@@ -2705,8 +2705,8 @@
         }
       },
       "calculator": {
-        "ron": "Dianhe 点和",
-        "tsumo": "Zimo 自摸"
+        "ron": "Dianhe",
+        "tsumo": "Zimo"
       },
       "windDraw": {
         "ronRon": "胡胡！"
@@ -2722,27 +2722,17 @@
   "acoes": {
     "mcr": {
       "chii": {
-        "nome": "Chi",
-        "hanzi": "吃",
         "aria": "Chi (吃): 順子を宣言"
       },
       "pon": {
-        "nome": "Peng",
-        "hanzi": "碰",
         "aria": "Peng (碰): 刻子を宣言"
       },
       "kanAberto": {
-        "nome": "Gang",
-        "hanzi": "明杠",
         "aria": "Gang (明杠): 明杠を宣言"
       },
       "kanFechado": {
-        "nome": "An Gang",
-        "hanzi": "暗杠",
         "aria": "An Gang (暗杠): 暗杠を宣言"
-      },
-      "mpsz": "MPSZで入力",
-      "mais": "その他の入力方法"
+      }
     }
   },
   "tutorial": {

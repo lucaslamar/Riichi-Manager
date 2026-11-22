@@ -2828,8 +2828,8 @@
         }
       },
       "calculator": {
-        "ron": "Dianhe 点和",
-        "tsumo": "Zimo 自摸"
+        "ron": "Dianhe",
+        "tsumo": "Zimo"
       },
       "windDraw": {
         "ronRon": "Hu hu!"
@@ -2848,27 +2848,17 @@
   "acoes": {
     "mcr": {
       "chii": {
-        "nome": "Chi",
-        "hanzi": "吃",
         "aria": "Chi (吃): skelbti seką"
       },
       "pon": {
-        "nome": "Peng",
-        "hanzi": "碰",
         "aria": "Peng (碰): skelbti trejetą"
       },
       "kanAberto": {
-        "nome": "Gang",
-        "hanzi": "明杠",
         "aria": "Gang (明杠): skelbti atvirą kongą"
       },
       "kanFechado": {
-        "nome": "An Gang",
-        "hanzi": "暗杠",
         "aria": "An Gang (暗杠): skelbti paslėptą kongą"
-      },
-      "mpsz": "Rašyti MPSZ",
-      "mais": "Kiti įvedimo būdai"
+      }
     }
   },
   "tutorial": {

@@ -2722,27 +2722,17 @@
   "acoes": {
     "mcr": {
       "chii": {
-        "nome": "Chi",
-        "hanzi": "吃",
         "aria": "Chi (吃): 宣告顺子"
       },
       "pon": {
-        "nome": "Peng",
-        "hanzi": "碰",
         "aria": "Peng (碰): 宣告刻子"
       },
       "kanAberto": {
-        "nome": "Gang",
-        "hanzi": "明杠",
         "aria": "Gang (明杠): 宣告明杠"
       },
       "kanFechado": {
-        "nome": "An Gang",
-        "hanzi": "暗杠",
         "aria": "An Gang (暗杠): 宣告暗杠"
-      },
-      "mpsz": "用MPSZ输入",
-      "mais": "更多输入方式"
+      }
     }
   },
   "tutorial": {

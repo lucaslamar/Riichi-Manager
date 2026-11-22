@@ -2742,8 +2742,8 @@
         }
       },
       "calculator": {
-        "ron": "Dianhe 点和",
-        "tsumo": "Zimo 自摸"
+        "ron": "Dianhe",
+        "tsumo": "Zimo"
       },
       "windDraw": {
         "ronRon": "Hu hu!"
@@ -2760,27 +2760,17 @@
   "acoes": {
     "mcr": {
       "chii": {
-        "nome": "Chi",
-        "hanzi": "吃",
         "aria": "Chi (吃): declare a sequence"
       },
       "pon": {
-        "nome": "Peng",
-        "hanzi": "碰",
         "aria": "Peng (碰): declare a triplet"
       },
       "kanAberto": {
-        "nome": "Gang",
-        "hanzi": "明杠",
         "aria": "Gang (明杠): declare a melded kong"
       },
       "kanFechado": {
-        "nome": "An Gang",
-        "hanzi": "暗杠",
         "aria": "An Gang (暗杠): declare a concealed kong"
-      },
-      "mpsz": "Type in MPSZ",
-      "mais": "More input methods"
+      }
     }
   },
   "tutorial": {

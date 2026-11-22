@@ -1,7 +1,6 @@
 export function BotaoAcao({
   tipo,
   rotulo,
-  hanzi,
   descricao,
   ativo,
   desabilitado,
@@ -9,8 +8,6 @@ export function BotaoAcao({
 }: {
   tipo: string
   rotulo: string
-  /** Termo em chinês, acima do rótulo. */
-  hanzi?: string
   /** Nome acessível, quando diz mais que o rótulo. */
   descricao?: string
   ativo: boolean
@@ -38,16 +35,7 @@ export function BotaoAcao({
       onClick={aoClicar}
     >
       {tipo === 'descarte' && <i className="fas fa-ban" aria-hidden="true" />}
-      {hanzi ? (
-        <span className="rotulo-chamada-dupla">
-          <span className="rotulo-chamada-dupla__hanzi" lang="zh-Hans">
-            {hanzi}
-          </span>
-          <span className="rotulo-chamada-dupla__nome">{rotulo}</span>
-        </span>
-      ) : (
-        <span>{rotulo}</span>
-      )}
+      <span>{rotulo}</span>
     </button>
   )
 }

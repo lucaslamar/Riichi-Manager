@@ -23,7 +23,6 @@ import {
 import { maoDoMpsz, mpszDaMao } from '../logica/mpsz'
 import '../estilos/calculadora-mao-chinesa.css'
 import ControlesCondicoes from './ControlesCondicoes'
-import MenuEntradaMcr from './MenuEntradaMcr'
 import MaoChinesaAtual from './MaoChinesaAtual'
 import ModalResultadoMcr from './ModalResultadoMcr'
 import TecladoChines from './TecladoChines'
@@ -35,11 +34,11 @@ const TIPO_DO_MELD: Record<Meld['tipo'], TipoChamada> = {
   kanAberto: 'kanAberto',
   kanFechado: 'kanFechado',
 }
-const CHAMADAS: { tipo: TipoChamada; acao: Meld['tipo'] }[] = [
-  { tipo: 'chi', acao: 'chii' },
-  { tipo: 'pon', acao: 'pon' },
-  { tipo: 'kanAberto', acao: 'kanAberto' },
-  { tipo: 'kanFechado', acao: 'kanFechado' },
+const CHAMADAS: { tipo: TipoChamada; acao: Meld['tipo']; chave: string }[] = [
+  { tipo: 'chi', acao: 'chii', chave: 'melds.chii' },
+  { tipo: 'pon', acao: 'pon', chave: 'melds.pon' },
+  { tipo: 'kanAberto', acao: 'kanAberto', chave: 'melds.kanCompact' },
+  { tipo: 'kanFechado', acao: 'kanFechado', chave: 'melds.kanClosedCompact' },
 ]
 
 /**
@@ -161,31 +160,32 @@ export default function CalculadoraMaoChinesa({
     kanFechado: 'kanFechado',
   }
 
-  const rotuloDaAcao = (acao: Meld['tipo']) => ({
-    nome: t(`acoes.mcr.${acao}.nome`),
-    hanzi: t(`acoes.mcr.${acao}.hanzi`),
-    descricao: t(`acoes.mcr.${acao}.aria`),
-  })
-  const rotulosChamada = {
-    chii: rotuloDaAcao('chii'),
-    pon: rotuloDaAcao('pon'),
-    kanAberto: rotuloDaAcao('kanAberto'),
-    kanFechado: rotuloDaAcao('kanFechado'),
+  const descricoesChamada: Record<Meld['tipo'], string> = {
+    chii: t('acoes.mcr.chii.aria'),
+    pon: t('acoes.mcr.pon.aria'),
+    kanAberto: t('acoes.mcr.kanAberto.aria'),
+    kanFechado: t('acoes.mcr.kanFechado.aria'),
   }
   const botoesAcao = () => (
     <>
-      {CHAMADAS.map(({ tipo, acao }) => (
+      {CHAMADAS.map(({ tipo, acao, chave }) => (
         <BotaoAcao
           key={tipo}
           tipo={acao}
-          rotulo={rotulosChamada[acao].nome}
-          hanzi={rotulosChamada[acao].hanzi}
-          descricao={rotulosChamada[acao].descricao}
+          rotulo={t(chave)}
+          descricao={descricoesChamada[acao]}
           ativo={calc.acao === tipo}
           desabilitado={calc.acao !== tipo && !calc.podeChamarAlguma(tipo)}
           aoClicar={() => calc.alternarAcao(tipo)}
         />
       ))}
+      <BotaoAcao
+        tipo="notacao"
+        rotulo={t('notation.toggle')}
+        ativo={false}
+        desabilitado={false}
+        aoClicar={abrirNotacao}
+      />
     </>
   )
 
@@ -215,9 +215,6 @@ export default function CalculadoraMaoChinesa({
                 <MaoChinesaAtual
                   mao={mao}
                   contexto="montagem"
-                  acoesCabecalho={
-                    !entradaNotacao && <MenuEntradaMcr aoAbrirNotacao={abrirNotacao} />
-                  }
                   aoTocarPedra={calc.selecionandoBatida ? calc.escolherBatida : calc.removerPedra}
                   selecionandoBatida={calc.selecionandoBatida}
                   aoRemoverChamada={calc.removerChamada}
@@ -243,7 +240,7 @@ export default function CalculadoraMaoChinesa({
                     <CampoNotacaoMao
                       valor={textoNotacao}
                       akadora={false}
-                      rotulosChamada={rotulosChamada}
+                      descricoesChamada={descricoesChamada}
                       aoMudar={mudarNotacao}
                       aoVoltar={() => setEntradaNotacao(false)}
                       aoLimpar={() => {

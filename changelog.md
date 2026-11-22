@@ -30,7 +30,7 @@
 
 - **QR das imagens mais discreto**: menor, em lilás e sem a faixa branca, com o convite em texto leve embaixo das mesas.
 - **Modo Riichi**: nas Configurações, a opção Japonês agora se chama Riichi, como os jogadores chamam a variante.
-- **Modo Chinês**: botões e textos usam os termos chineses (吃 Chi, 碰 Peng, 明杠 Gang, 暗杠 An Gang, 点和 Dianhe, 自摸 Zimo, 番 Fan).
+- **Modo Chinês**: botões e textos usam os termos chineses (Chi, Peng, Gang, An Gang, Dianhe, Zimo e Fan). Os botões têm o mesmo formato dos do Riichi, com o MPSZ na mesma linha.
 - **Novos nomes dos formatos**: Rodízio virou All Leste, a antiga Temporada virou Brasileirão e o antigo Brasileirão virou Pontos corridos rápido. Os torneios salvos continuam iguais, com o nome novo do formato.
 - **Configurações do formato mais limpas**: duas linhas embaixo do Formato, sem ? no meio do texto. Com 8 ou 12 jogadores, o ? do Formato mostra também quantas rodadas valem a pena, um caso por linha.
 - **Classificatória All Leste com 4 rodadas**: fica travada em 4, para todos serem Leste uma vez.

@@ -2705,8 +2705,8 @@
         }
       },
       "calculator": {
-        "ron": "Dianhe 点和",
-        "tsumo": "Zimo 自摸"
+        "ron": "Dianhe",
+        "tsumo": "Zimo"
       },
       "windDraw": {
         "ronRon": "Hu hu!"
@@ -2722,27 +2722,17 @@
   "acoes": {
     "mcr": {
       "chii": {
-        "nome": "Chi",
-        "hanzi": "吃",
         "aria": "Chi (吃): 슌쯔 선언"
       },
       "pon": {
-        "nome": "Peng",
-        "hanzi": "碰",
         "aria": "Peng (碰): 커쯔 선언"
       },
       "kanAberto": {
-        "nome": "Gang",
-        "hanzi": "明杠",
         "aria": "Gang (明杠): 공개된 kong 선언"
       },
       "kanFechado": {
-        "nome": "An Gang",
-        "hanzi": "暗杠",
         "aria": "An Gang (暗杠): 숨긴 kong 선언"
-      },
-      "mpsz": "MPSZ로 입력",
-      "mais": "다른 입력 방법"
+      }
     }
   },
   "tutorial": {
