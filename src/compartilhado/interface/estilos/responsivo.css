@@ -363,7 +363,7 @@
  * qualquer valor ali reaparece como uma faixa de fundo visivel ao redor do
  * cartao, exatamente o "encaixotado" que estamos removendo.
  */
-@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
+@media (min-width: 1024px) and (max-width: 1376px) and (min-height: 700px) and (orientation: landscape) {
   .conteudo-principal,
   main {
     padding: 0;
@@ -448,7 +448,7 @@
  * ========================================================================== */
 
 /* Texto compartilhado da calculadora — iPad Pro em retrato (11" + 12.9"/13") */
-@media (min-width: 834px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse) {
+@media (min-width: 834px) and (max-width: 1376px) and (orientation: portrait) and (any-pointer: coarse) {
   /* Cabeçalho da mão: "MÃO 14/14 • 18 FÍSICAS" e o selo tenpai ao lado.
      O segundo seletor iguala a especificidade da regra existente
      `.construtor-mao-montagem .titulo-mao-editor` (Pro 12.9" retrato), que
@@ -499,7 +499,7 @@
 }
 
 /* Texto da calculadora + rótulos da sidebar — iPad Pro em paisagem (11" + 12.9"/13") */
-@media (min-width: 1194px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) and (any-pointer: coarse) {
+@media (min-width: 1194px) and (max-width: 1376px) and (min-height: 700px) and (orientation: landscape) and (any-pointer: coarse) {
   /* Rótulos da navegação lateral (sidebar) e cabeçalhos de seção */
   .sidebar-navegacao-desktop .item-menu-global {
     font-size: 1rem;
@@ -585,7 +585,7 @@
  * A barra já vem com controles maiores (72px, ícone 1.75rem); aqui só o rótulo
  * ganha o incremento de leitura, mantendo altura e ícone inalterados.
  */
-@media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse) {
+@media (min-width: 1024px) and (max-width: 1376px) and (orientation: portrait) and (any-pointer: coarse) {
   .item-tab-inferior {
     font-size: 0.95rem;
   }
@@ -636,8 +636,8 @@
  * acima para vencer a cascata (mesma especificidade); assim iPad Mini/Air
  * conservam o 0.7rem daquele bloco e só o Pro recebe este tamanho.
  */
-@media (min-width: 834px) and (max-width: 1366px) and (orientation: portrait) and (any-pointer: coarse),
-  (min-width: 1194px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) and (any-pointer: coarse) {
+@media (min-width: 834px) and (max-width: 1376px) and (orientation: portrait) and (any-pointer: coarse),
+  (min-width: 1194px) and (max-width: 1376px) and (min-height: 700px) and (orientation: landscape) and (any-pointer: coarse) {
   .badge-espera-teclado {
     min-height: 22px;
     font-size: 0.95rem;

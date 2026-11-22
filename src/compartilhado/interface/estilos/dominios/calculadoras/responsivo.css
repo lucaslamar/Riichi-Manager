@@ -4394,7 +4394,7 @@
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) {
+@media (min-width: 1024px) and (max-width: 1376px) and (min-height: 700px) {
   /* Escopo em .etapa-montagem (ver comentário no bloco 768–1023 acima). */
   .card-mao-completa.fluxo-calculadora.etapa-montagem {
     width: min(100%, 1040px);
@@ -4509,7 +4509,7 @@
  * and the MAN/PIN/SOU/HONRAS label column should give its width back to
  * the tiles instead of sitting next to them.
  */
-@media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
+@media (min-width: 1024px) and (max-width: 1376px) and (min-height: 700px) and (orientation: landscape) {
   /* Escopo em .etapa-montagem: sem ele, o card da finalização era forçado a
      display:flex + height:100dvh (vazio enorme abaixo do Calcular) e margin:0
      (alinhado à esquerda, deixando a faixa do fundo do app à direita — o
