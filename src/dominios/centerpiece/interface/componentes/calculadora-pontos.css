@@ -298,10 +298,88 @@
   line-height: 1.3;
 }
 
-/* iPad deitado e PC: os assentos cedem altura para o Registrar caber na tela. */
-@media (min-width: 1024px) and (orientation: landscape) {
+/* Tablet e PC: a tela ocupa a altura livre, os assentos crescem e o Registrar fecha embaixo. */
+@media (min-width: 641px) and (min-height: 561px) {
+  body:has(.fin-tela),
+  body:has(.fin-tela) > #app,
+  body:has(.fin-tela) .conteudo-principal:not(#_):has(> .ptd-modulo):not(:has(> div > .card-mao-completa, > .calculadora-han-fu)),
+  .ptd-modulo:has(> .fin-tela:only-child) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  body:has(.fin-tela) {
+    min-height: 100dvh;
+  }
+
+  body:has(.fin-tela) > #app,
+  body:has(.fin-tela) .conteudo-principal:not(#_),
+  .ptd-modulo:has(> .fin-tela:only-child),
+  .ptd-modulo > .fin-tela {
+    flex: 1 0 auto;
+  }
+
+  .ptd-modulo > .fin-tela {
+    width: min(100%, 880px);
+    gap: 12px;
+    padding: 16px 24px;
+  }
+
+  .fin-tela > .trn-mesa-assentos {
+    max-width: none;
+    flex: 1 0 auto;
+    grid-auto-rows: minmax(112px, 1fr);
+  }
+
   .fin-tela > .trn-mesa-assentos > .ptd-assento {
     aspect-ratio: auto;
-    height: clamp(112px, calc((100dvh - 400px) / 2), 240px);
+  }
+}
+
+/* Tela alta (iPad): a letra acompanha o card. */
+@media (min-width: 768px) and (min-height: 900px) {
+  .fin-tela > .fin-dica,
+  .fin-tela > details > summary,
+  .fin-tela .ptd-resumo-regras .ptd-apoio {
+    font-size: 1rem;
+  }
+
+  .fin-tela > .trn-soma,
+  .fin-tela .ptd-resumo-regras strong {
+    font-size: 1.125rem;
+  }
+
+  .fin-tela > .trn-mesa-assentos > .ptd-assento {
+    gap: 12px;
+    font-size: 1.375rem;
+  }
+
+  .fin-tela > .trn-mesa-assentos .ptd-assento-kanji {
+    font-size: 4.5rem;
+  }
+
+  .fin-tela > .trn-mesa-assentos .ptd-assento-apoio {
+    font-size: 1rem;
+  }
+
+  .fin-tela > .trn-mesa-assentos .ptd-assento-pontos {
+    font-size: 2rem;
+  }
+
+  .fin-tela > .trn-mesa-assentos .ptd-assento-pontos--vazio {
+    font-size: 1.125rem;
+  }
+
+  .fin-tela > .mesa-btn-principal {
+    min-height: 56px;
+    font-size: 1.125rem;
+  }
+}
+
+/* No tablet e no PC cabe o nome inteiro, em mais de uma linha. */
+@media (min-width: 641px) and (min-height: 561px) {
+  .fin-tela .ptd-assento-nome,
+  .fin-tela .ptd-assento-apoio {
+    white-space: normal;
   }
 }
