@@ -21,6 +21,9 @@ import {
   totalDeRodadas,
 } from '../src/dominios/torneio/logica/torneio'
 import type { Torneio } from '../src/dominios/torneio/logica/tipos'
+import { mudancaAoRegistrar, mudancasDoRanking, rankingDoTorneio } from '../src/dominios/torneio/logica/ranking'
+import type { Partida } from '../src/dominios/centerpiece/logica/partida'
+import { partidasDoTorneioMcr } from '../src/dominios/placar-mcr/logica/torneio'
 import { carregarTorneios, renomearPadraoAntigo, salvarTorneios } from '../src/dominios/torneio/persistencia/repositorioTorneios'
 
 let contador = 0
@@ -215,5 +218,98 @@ assert.equal(formatoValido({ tipo: 'eliminatorio', classificatoria: 'suico', rod
 assert.equal(renomearPadraoAntigo('Encontro do clube 08/11'), 'Torneio 08/11')
 assert.equal(renomearPadraoAntigo('Encontro do clube especial'), 'Encontro do clube especial')
 assert.equal(renomearPadraoAntigo('Club meetup 11/8'), 'Tournament 11/8')
+
+// Mudança de posição no ranking do torneio.
+{
+  const ids = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+  type Rodadas = Torneio['rodadas']
+  const rodada = (numero: number, mesas: string[][], fase?: number): Rodadas[number] => ({
+    numero,
+    fase,
+    geradaEm: '',
+    mesas: mesas.map((assentos, indice) => ({ numero: indice + 1, assentos: assentos as [string, string, string, string] })),
+  })
+  const mesa = (numero: number, numeroMesa: number, pontos: Record<string, number>) =>
+    ({
+      id: `${numero}-${numeroMesa}`,
+      status: 'finalizada',
+      vinculoTorneio: { torneioId: 't-setas', rodada: numero - 1, mesa: numeroMesa - 1 },
+      resultado: Object.entries(pontos).map(([jogadorId, final], indice) => ({ jogadorId, final, colocacao: indice + 1 })),
+    }) as unknown as Partida
+  const torneio = (rodadas: Rodadas, formato: Torneio['formato'] = { tipo: 'corridos' }): Torneio => ({
+    ...criarRascunho({ id: 't-setas', agora, nome: 'Setas' }),
+    formato,
+    jogadorIds: ids,
+    status: 'em_andamento',
+    rodadas,
+  })
+  const de = (resposta: ReturnType<typeof mudancasDoRanking>, id: string) =>
+    resposta?.jogadores.find((item) => item.jogadorId === id)
+
+  const duas = torneio([rodada(1, [ids.slice(0, 4), ids.slice(4)]), rodada(2, [ids.slice(0, 4), ids.slice(4)])])
+  const primeira = [mesa(1, 1, { a: 30, b: 20, c: 10, d: -60 }), mesa(1, 2, { e: 5, f: 0, g: 0, h: -5 })]
+  const segunda = [mesa(2, 1, { c: 50, a: 0, b: 0, d: -50 }), mesa(2, 2, { e: 0, f: 0, g: 0, h: 0 })]
+  const setas = mudancasDoRanking(duas, [...primeira, ...segunda])
+  assert.equal(setas?.desde, 1)
+  assert.deepEqual(de(setas, 'c'), { jogadorId: 'c', antes: 3, agora: 1, variacao: 2 })
+  assert.equal(de(setas, 'a')?.variacao, -1)
+  assert.equal(de(setas, 'e')?.variacao, 0)
+  assert.equal(mudancasDoRanking(duas, primeira), null, 'rodada 1 não mostra')
+  assert.equal(mudancasDoRanking(duas, [...primeira, segunda[0]]), null, 'rodada pela metade não mostra')
+
+  // Entrou na rodada 2.
+  const chegada = torneio([rodada(1, [ids.slice(0, 4)]), rodada(2, [ids.slice(4)])])
+  assert.equal(de(mudancasDoRanking(chegada, [primeira[0], mesa(2, 1, { e: 40, f: 0, g: 0, h: -40 })]), 'e')?.antes, null)
+
+  const empatado = torneio([rodada(1, [ids.slice(0, 4)])])
+  const posicoes = rankingDoTorneio({ ...empatado, jogadorIds: ids.slice(0, 4) }, [mesa(1, 1, { a: 10, b: 0, c: 0, d: -10 })])
+  assert.deepEqual(posicoes.map((linha) => linha.posicao), [1, 2, 2, 4])
+
+  // Eliminatório: dentro da fase, sem seta para cortado nem depois de zerar os pontos.
+  const corte = (pontosCarregados: boolean) =>
+    torneio([rodada(1, [ids.slice(0, 4), ids.slice(4)], 0), rodada(2, [['a', 'b', 'c', 'e']], 1)], {
+      tipo: 'eliminatorio',
+      classificatoria: 'suico',
+      rodadasClassificatoria: 1,
+      cortes: [4],
+      rodadasPorFase: 1,
+      pontosCarregados,
+    })
+  const jogosDoCorte = [...primeira, mesa(2, 1, { c: 50, a: 0, b: 0, e: -50 })]
+  const naFase = mudancasDoRanking(corte(true), jogosDoCorte)
+  assert.deepEqual(naFase?.jogadores.map((item) => item.jogadorId).sort(), ['a', 'b', 'c', 'e'])
+  assert.equal(de(naFase, 'c')?.variacao, 2)
+  assert.equal(mudancasDoRanking(corte(false), jogosDoCorte), null, 'pontos zerados')
+  assert.equal(mudancasDoRanking(corte(true), primeira), null, 'só rodada 1')
+
+  // Confirmação: registrar e corrigir.
+  const ids2 = (lista: ReturnType<typeof mudancaAoRegistrar>) => lista.find((item) => item.jogadorId === 'c')
+  assert.deepEqual(ids2(mudancaAoRegistrar(duas, primeira, segunda[0])), {
+    jogadorId: 'c',
+    antes: { total: 10, posicao: 3 },
+    depois: { total: 60, posicao: 1 },
+  })
+  assert.equal(ids2(mudancaAoRegistrar(duas, [], primeira[0]))?.antes, null, 'estreia')
+  const correcao = { ...mesa(2, 1, { c: 0, a: 0, b: 0, d: 0 }), id: 'nova' }
+  assert.equal(ids2(mudancaAoRegistrar(duas, [...primeira, ...segunda], correcao, '2-1'))?.depois.total, 10)
+
+  // Os mesmos cálculos com placares MCR convertidos.
+  const placar = (numero: number, jogadorIds: string[], vencedor: number) => ({
+    id: `mcr-${numero}-${vencedor}`,
+    criadoEm: agora.toISOString(),
+    finalizadoEm: agora.toISOString(),
+    jogadorIds,
+    nomes: jogadorIds,
+    maos: [{ tipo: 'vitoria', vencedor, forma: 'tsumo', fan: 8 }],
+    falsosHu: [],
+    torneio: { id: 't-setas', rodada: numero - 1, mesa: 0 },
+  })
+  const quatro = ids.slice(0, 4)
+  const chines = { ...torneio([rodada(1, [quatro]), rodada(2, [quatro])]), jogadorIds: quatro, jogo: 'mcr' as const }
+  const placares = [placar(1, quatro, 0), placar(2, quatro, 1)]
+  const doMcr = partidasDoTorneioMcr(placares as unknown as Parameters<typeof partidasDoTorneioMcr>[0])
+  const setasMcr = mudancasDoRanking(chines, doMcr)
+  assert.ok((de(setasMcr, 'b')?.variacao ?? 0) > 0, 'MCR: vencedor da rodada 2 subiu')
+}
 
 console.log('Torneio: modelo, histórico, migração, lista e configurações ok.')
