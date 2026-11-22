@@ -1860,6 +1860,27 @@ body:has(.ptd-modulo) {
     min-height: calc(100dvh - 24px);
   }
 
+  /* Ranking: uma linha por jogador, com as métricas alinhadas para comparar. */
+  .ptd-inicio:has(> .ptd-ranking) {
+    width: min(100%, 1040px);
+  }
+
+  .ptd-linha-ranking {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-block: 8px;
+  }
+
+  .ptd-linha-ranking > .ptd-linha-ranking-topo {
+    flex: 0 0 42%;
+    min-width: 0;
+  }
+
+  .ptd-linha-ranking > .ptd-metricas {
+    flex: 1;
+    margin-top: 0;
+  }
 }
 
 @media (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (orientation: landscape) {
