@@ -1088,7 +1088,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "Kai kas nors turi neigiamą balansą",
+      "ends": "Baigiasi (tobi)",
+      "goesOn": "Tęsiasi",
+      "helpEnds": "Baigiasi: partija baigiasi, kai kas nors nukrenta žemiau nulio. Klubo numatymas.",
+      "helpGoesOn": "Tęsiasi: žaidžiama iki galo, net su minusu. EMA ir WRC taisyklė.",
+      "summaryEnds": "Minusas: partija baigiasi (tobi)",
+      "summaryGoesOn": "Minusas: partija tęsiasi",
+      "saveWarning": "Kažkas turi minusą, tad pagal taisyklę partija baigta. Jei žaidžiate toliau, nustatymuose pasirinkite „Tęsiasi“."
+    }
   },
   "match": {
     "types": {
@@ -1282,7 +1292,8 @@
       "expand": "Rodyti daugiau",
       "collapse": "Slėpti",
       "deleteTitle": "Ištrinti šią partiją?",
-      "deleteHelp": "Partija dings iš istorijos ir reitingo. Atšaukti nebus galima."
+      "deleteHelp": "Partija dings iš istorijos ir reitingo. Atšaukti nebus galima.",
+      "details": "Daugiau"
     },
     "home": {
       "inProgressCount": {
@@ -1345,13 +1356,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "Bakstelėkite stalą Centerpiece meniu atverti",
       "adjustHonba": "Koreguoti honba, dabar {{count}}",
       "timerStart": "Pradėti laikmatį",
       "calculate": "Skaičiuoti ranką",
       "drawSection": "Burtai",
       "calcMpsz": "Skaičiuotuvas MPSZ žymėjimu",
-      "timerPass": "Perduoti ėjimą"
+      "timerPass": "Perduoti ėjimą",
+      "hintTimer": "Bakstelėkite vėjus laikmačiui paleisti ir atstatyti"
     },
     "setup": {
       "title": "New game",
@@ -1688,7 +1700,6 @@
       "sumWarning": "Stalo suma skiriasi {{difference}} nuo {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "Pakeisti {{name}} taškų ženklą",
@@ -1702,7 +1713,12 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "Išvalyti",
+      "clearTitle": "Išvalyti šį stalą?",
+      "clearHelp": "Pašalina žaidėjus, taškus ir WO iš šio ekrano. Taisyklės ir išsaugoti duomenys lieka.",
+      "clearHelpSeated": "Pašalina taškus, WO ir vėlavimus. Ištraukti žaidėjai lieka.",
+      "tapHint": "Bakstelėkite žaidėjams ir taškams įvesti. Ilgas paspaudimas pakeičia žaidėją."
     },
     "listFilters": {
       "search": "Ieškoti stalų, susitikimų ir turnyrų",
@@ -1729,6 +1745,37 @@
       "resetDayTitle": "Pradėti dieną iš naujo?",
       "resetDayHelp": "Kiti burtai neatsižvelgs, kas šiandien jau žaidė kartu. Naudokite, kai grupė kita.",
       "resetDone": "Kiti burtai prasidės iš naujo"
+    },
+    "leftGame": {
+      "tag": "WO",
+      "withTag": "Su WO",
+      "needPoints": "WO: taškai išeinant",
+      "sumFree": "Su WO suma neturi sutapti.",
+      "seat": "{{wind}}, {{name}}, WO, taškai: {{points}}",
+      "settings": "WO partijos metu",
+      "last": "Lieka 4-as",
+      "byPoints": "Pagal taškus",
+      "penalty": "Bauda rezultatui",
+      "helpDefault": "Pagal numatymą išėjęs žaidėjas lieka 4-as su tuo metu turėtais taškais.",
+      "helpPenalty": "Bauda atimama po uma. 30 atima 30,0 reitingo taško.",
+      "helpSum": "Su WO stalą galima įrašyti, net jei suma nesutampa.",
+      "summaryLast": "WO lieka 4-as",
+      "summaryPoints": "WO pagal taškus"
+    },
+    "paused": {
+      "save": "Išsaugoti ir tęsti vėliau",
+      "help": "Kur partija sustojo.",
+      "round": "Dabartinis raundas",
+      "honba": "Honba",
+      "dealer": "Dabartinis dalytojas (Rytai)",
+      "dealerIs": "Dalytojas: {{name}}",
+      "sticks": "Riichi lazdelės ant stalo",
+      "sticksShort": "riichi ant stalo: {{count}}",
+      "list": "Vykstančios partijos",
+      "listCount": "Vykstančios partijos: {{count}}",
+      "resume": "Tęsti",
+      "edit": "Keisti raundą, honba ir dalytoją",
+      "discardTitle": "Atmesti šią išsaugotą partiją?"
     }
   },
   "spokenTiles": {
@@ -1770,7 +1817,8 @@
       "bottom": "Lentelės apačia",
       "bottomLead": "persvara {{value}}",
       "bottomLeave": "išsigelbėti {{value}}",
-      "ctaRace": "Nori žinoti, kiek tau trūksta? Filtruok {{app}}"
+      "ctaRace": "Nori žinoti, kiek tau trūksta? Filtruok {{app}}",
+      "result": "Dalytis rezultatais"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1993,7 +2041,12 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "Rodikliai",
+      "menuActions": "Turnyro veiksmai",
+      "menuShare": "Dalytis ir eksportuoti",
+      "menuText": "Ratas tekstu",
+      "menuImage": "Ratas paveikslėliu"
     },
     "ranking": {
       "title": "Tournament ranking",
@@ -2132,7 +2185,10 @@
       "previousPlayer": "Ankstesnis žaidėjas",
       "nextPlayer": "Kitas žaidėjas",
       "typeFor": "Įvesti {{name}} taškus",
-      "hundred": "Du nuliai"
+      "hundred": "Du nuliai",
+      "sumOk": "Suma sutampa",
+      "sumShort": "Trūksta {{points}}",
+      "sumOver": "Viršija {{points}}"
     },
     "positionChange": {
       "up": {
@@ -2151,7 +2207,9 @@
       "new": "Reitinge pirmą kartą",
       "newShort": "naujas",
       "legend": "Rodyklės: pokytis nuo {{round}} turo.",
-      "confirmTitle": "Turnyro reitingas: prieš → po"
+      "confirmTitle": "Turnyro reitingas: prieš → po",
+      "was": "buvo {{place}}",
+      "wasInRound": "{{round}} rate buvo {{place}}"
     },
     "formatGuide": {
       "intro": "Kurį formatą rinktis?",
@@ -2279,7 +2337,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "Apytiksliai: ne Rytų ron, be uma.",
+        "riichi": "Apytiksliai: be tsumo ir oya kombinacijų.",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "Kova dėl prizų",
@@ -3612,6 +3670,118 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "Partijų nebeliko: skirtumas galutinis.",
+      "perGame": "Liko partijų: {{games}}. Reikia atsigriebti po {{value}} per partiją (stalo taškais be uma: {{points}}).",
+      "thirdParty": "Ron iš kitų",
+      "direct": "Tiesioginis ron: {{name}}",
+      "directHelp": "Tiesioginio ron taškai skirtumą mažina dvigubai.",
+      "ifLeader": "Jei {{name}}…",
+      "needs": "{{name}}: reikia",
+      "finish": {
+        "ultimo": "bus 4-as ({{value}})",
+        "zero": "liks ties nuliu",
+        "primeiro": "bus 1-as ({{value}})"
+      },
+      "withUma": "Su uma: {{name}} vieta",
+      "needsToo": "Dar reikia",
+      "inPlace": "{{place}} vieta ({{value}})",
+      "umaHelp": "Uma pagal nustatytas taisykles, {{name}}: 0.",
+      "either": {
+        "one": "{{hands}} arba tiesiogiai {{count}}",
+        "few": "{{hands}} arba tiesiogiai {{count}}",
+        "many": "{{hands}} arba tiesiogiai {{count}}",
+        "other": "{{hands}} arba tiesiogiai {{count}}"
+      },
+      "jaPassa": "jau lenkia",
+      "jaEmpata": "jau lygu",
+      "title": "Persvaros scenarijai",
+      "onlyLeader": "{{name}} partijų nebeturi. Lenkia, jei {{leader}} praras daugiau nei {{value}}.",
+      "withoutAverage": "Be vidurkio: dabartinis skirtumas {{value}} (taškais: {{points}})"
+    },
+    "title": "Statistika",
+    "tournamentTitle": "Turnyro statistika",
+    "open": "Žiūrėti statistiką: {{name}}",
+    "empty": "Rezultatų dar nėra. Įrašykite stalo rezultatą.",
+    "numbers": {
+      "torneio": "Turnyro skaičiai",
+      "temporada": "Sezono skaičiai",
+      "geral": "Reitingo skaičiai"
+    },
+    "averageHanchan": "Vidurkis per hanchan",
+    "averageGame": "Vidurkis per partiją",
+    "winRate": "Laimėjimų dalis",
+    "dealInRate": "Deal-in dalis",
+    "riichiRate": "Riichi dalis",
+    "positions": "Vietų pasiskirstymas",
+    "playerBest": "Didžiausia žaidėjo kombinacija",
+    "best": {
+      "torneio": "Didžiausia turnyro kombinacija",
+      "temporada": "Didžiausia sezono kombinacija",
+      "geral": "Didžiausia reitingo kombinacija"
+    },
+    "someHands": "Rodikliai: partijos su įrašais, {{count}} iš {{total}}.",
+    "handFan": "{{fan}} fan",
+    "handHanFu": "{{han}} han {{fu}} fu",
+    "handHan": "{{han}} han",
+    "deadline": {
+      "over": "Baigėsi {{date}}: skirtumai galutiniai.",
+      "unknown": "Iki {{date}}. Scenarijai taikomi kitai partijai.",
+      "estimate": "Iki {{date}}. Tokiu tempu liko apie {{games}} part."
+    },
+    "onlySum": "Scenarijai galimi tik kai sumuojami taškai.",
+    "projection": {
+      "title": "Atstumas iki kito",
+      "approx": "Apytiksliai: abu išlaiko vidurkį ir žaidžia po tiek pat.",
+      "outside": "Su dabartiniais filtrais reitinge nėra.",
+      "first": "Reitinge priekyje nieko nėra.",
+      "behind": {
+        "you": "Atsiliekate {{value}} (priekyje {{other}}).",
+        "player": "{{name}} atsilieka {{value}} (priekyje {{other}})."
+      },
+      "averages": {
+        "you": "Jūsų vidurkis {{mine}}, {{other}}: {{theirs}}:",
+        "player": "Vidurkiai {{name}}: {{mine}}, {{other}}: {{theirs}}:"
+      },
+      "passes": {
+        "one": "aplenks po ~{{count}} partijos.",
+        "few": "aplenks po ~{{count}} partijų.",
+        "many": "aplenks po ~{{count}} partijos.",
+        "other": "aplenks po ~{{count}} partijų."
+      },
+      "poucosJogos": "Per mažai partijų prognozei (bent {{count}} kiekvienam).",
+      "mediaMenor": "prognozės nėra, nes vidurkis ne didesnis.",
+      "longeDemais": "prognozės nėra, nes vidurkiai per panašūs.",
+      "withAverage": "Su vidurkiu"
+    },
+    "withoutWo": "Be partijų su WO ({{count}})",
+    "form": {
+      "title": {
+        "fim": "Su vidurkiu: jei baigs kaip įprastai, iki pabaigos",
+        "proximo": "Su vidurkiu: jei baigs kaip įprastai, kitoje partijoje"
+      },
+      "usual": {
+        "one": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
+        "few": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
+        "many": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
+        "other": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})"
+      },
+      "short": "Taip baigus, {{name}} atsiliks {{value}} (taškais: {{points}}). Pasivyti: {{hands}}.",
+      "jaPassa": "Taip baigus, {{name}} aplenks {{value}} skirtumu (taškais: {{points}}).",
+      "jaEmpata": "Taip baigus, {{name}} sulygins.",
+      "chance": "Tikimybė aplenkti:",
+      "fewGames": "Tikimybei reikia bent {{count}} stalų kiekvienam.",
+      "help": "Įvertinta pagal kiekvieno paskutinius baigtus stalus (iki {{count}}).",
+      "usualShort": "Paprastai baigia su",
+      "basedOn": {
+        "one": "paskutiniai stalai: {{count}}",
+        "few": "paskutiniai stalai: {{count}}",
+        "many": "paskutiniai stalai: {{count}}",
+        "other": "paskutiniai stalai: {{count}}"
+      }
     }
   }
 }

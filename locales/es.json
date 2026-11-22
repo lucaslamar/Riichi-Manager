@@ -1081,7 +1081,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "Cuando alguien queda en negativo",
+      "ends": "Termina (tobi)",
+      "goesOn": "Continúa",
+      "helpEnds": "Termina: la partida acaba cuando alguien baja de cero. Es lo predeterminado del Club.",
+      "helpGoesOn": "Continúa: se juega hasta el final, incluso en negativo. Regla de EMA y WRC.",
+      "summaryEnds": "En negativo: la partida termina (tobi)",
+      "summaryGoesOn": "En negativo: la partida continúa",
+      "saveWarning": "Alguien está en negativo y, según esta regla, la partida terminó. Si en tu mesa continúa, cambia a Continúa en la configuración."
+    }
   },
   "match": {
     "types": {
@@ -1251,7 +1261,8 @@
       "expand": "Mostrar detalles",
       "collapse": "Ocultar detalles",
       "deleteTitle": "¿Eliminar esta partida?",
-      "deleteHelp": "La partida sale del historial y del ranking. No se puede deshacer."
+      "deleteHelp": "La partida sale del historial y del ranking. No se puede deshacer.",
+      "details": "Detalles"
     },
     "home": {
       "inProgressCount": {
@@ -1312,13 +1323,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "Toca la mesa para abrir el menú del Centerpiece",
       "adjustHonba": "Ajustar honba, actual {{count}}",
       "timerStart": "Iniciar el temporizador",
       "calculate": "Calcular mano",
       "drawSection": "Sortear",
       "calcMpsz": "Calculadora por notación MPSZ",
-      "timerPass": "Pasar el turno"
+      "timerPass": "Pasar el turno",
+      "hintTimer": "Toca los vientos para iniciar y reiniciar el cronómetro"
     },
     "setup": {
       "title": "New game",
@@ -1651,7 +1663,6 @@
       "sumWarning": "La suma de la mesa difiere en {{difference}} del total de {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "Cambiar el signo de los puntos de {{name}}",
@@ -1665,7 +1676,12 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "Limpiar",
+      "clearTitle": "¿Limpiar esta mesa?",
+      "clearHelp": "Quita jugadores, puntos y WO de esta pantalla. Las reglas y lo guardado se conservan.",
+      "clearHelpSeated": "Quita puntos, WO y retrasos de esta pantalla. Los jugadores del sorteo se conservan.",
+      "tapHint": "Toca para registrar jugadores y puntos. Mantén pulsado para cambiar el jugador."
     },
     "listFilters": {
       "search": "Buscar mesas, encuentros y torneos",
@@ -1692,6 +1708,37 @@
       "resetDayTitle": "¿Empezar el día de cero?",
       "resetDayHelp": "El próximo sorteo no tendrá en cuenta quién jugó junto hoy. Úsalo cuando el grupo sea otro.",
       "resetDone": "El próximo sorteo empieza de cero"
+    },
+    "leftGame": {
+      "tag": "WO",
+      "withTag": "Con WO",
+      "needPoints": "WO: puntos al salir",
+      "sumFree": "Con WO, la suma no necesita cuadrar.",
+      "seat": "{{wind}}, {{name}}, WO con {{points}} puntos",
+      "settings": "WO durante la partida",
+      "last": "Queda 4.º",
+      "byPoints": "Por puntos",
+      "penalty": "Penalización en el resultado",
+      "helpDefault": "Por defecto, quien sale a mitad queda 4.º con los puntos que tenía al salir.",
+      "helpPenalty": "La penalización se descuenta del resultado final, tras la uma. 30 resta 30,0 en el ranking.",
+      "helpSum": "Con WO, la mesa se registra aunque la suma no cuadre.",
+      "summaryLast": "WO queda 4.º",
+      "summaryPoints": "WO por puntos"
+    },
+    "paused": {
+      "save": "Guardar para continuar",
+      "help": "Dónde quedó la partida.",
+      "round": "Ronda actual",
+      "honba": "Honba",
+      "dealer": "Dealer (Este) actual",
+      "dealerIs": "Dealer: {{name}}",
+      "sticks": "Palitos de riichi en la mesa",
+      "sticksShort": "riichi en mesa: {{count}}",
+      "list": "Partidas en curso",
+      "listCount": "Partidas en curso: {{count}}",
+      "resume": "Retomar",
+      "edit": "Editar ronda, honba y dealer",
+      "discardTitle": "¿Descartar esta partida guardada?"
     }
   },
   "spokenTiles": {
@@ -1733,7 +1780,8 @@
       "bottom": "Fondo de la tabla",
       "bottomLead": "ventaja {{value}}",
       "bottomLeave": "para salir {{value}}",
-      "ctaRace": "¿Quieres ver cuánto te falta? Filtra en {{app}}"
+      "ctaRace": "¿Quieres ver cuánto te falta? Filtra en {{app}}",
+      "result": "Compartir resultado"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1944,7 +1992,12 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "Métricas",
+      "menuActions": "Acciones del torneo",
+      "menuShare": "Compartir y exportar",
+      "menuText": "Ronda en texto",
+      "menuImage": "Ronda en imagen"
     },
     "ranking": {
       "title": "Tournament ranking",
@@ -2083,7 +2136,10 @@
       "previousPlayer": "Jugador anterior",
       "nextPlayer": "Siguiente jugador",
       "typeFor": "Escribir los puntos de {{name}}",
-      "hundred": "Dos ceros"
+      "hundred": "Dos ceros",
+      "sumOk": "La suma cuadra",
+      "sumShort": "Faltan {{points}}",
+      "sumOver": "Sobran {{points}}"
     },
     "positionChange": {
       "up": {
@@ -2100,7 +2156,9 @@
       "new": "Debuta en el ranking",
       "newShort": "nuevo",
       "legend": "Flechas: cambio desde la ronda {{round}}.",
-      "confirmTitle": "Ranking del torneo: antes → después"
+      "confirmTitle": "Ranking del torneo: antes → después",
+      "was": "era {{place}}",
+      "wasInRound": "era {{place}} en la ronda {{round}}"
     },
     "formatGuide": {
       "intro": "¿Qué formato usar?",
@@ -2226,7 +2284,7 @@
         "vitorias": "Victorias de mesa"
       },
       "approx": {
-        "riichi": "Aproximado: ron fuera del Este, sin uma.",
+        "riichi": "Aproximado: no cuenta tsumo ni manos de oya.",
         "mcr": "Aproximado: ganar la mesa vale 4 puntos."
       },
       "race": "Lucha por el podio",
@@ -3543,6 +3601,114 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "No quedan partidas: la diferencia es definitiva.",
+      "perGame": "Partidas restantes: {{games}}. Debe recortar {{value}} por partida, que son {{points}} puntos de mesa sin contar uma.",
+      "thirdParty": "Por ron a terceros",
+      "direct": "Por ron directo a {{name}}",
+      "directHelp": "En el ron directo, cada punto cuenta doble en la diferencia.",
+      "ifLeader": "Si {{name}}…",
+      "needs": "{{name}} necesita",
+      "finish": {
+        "ultimo": "queda 4.º ({{value}})",
+        "zero": "queda en cero",
+        "primeiro": "queda 1.º ({{value}})"
+      },
+      "withUma": "Con uma, si {{name}} termina",
+      "needsToo": "Todavía necesita",
+      "inPlace": "en {{place}}.º ({{value}})",
+      "umaHelp": "Uma según las reglas configuradas, con {{name}} en cero.",
+      "either": {
+        "one": "{{hands}} o {{count}} directo",
+        "many": "{{hands}} o {{count}} directos",
+        "other": "{{hands}} o {{count}} directos"
+      },
+      "jaPassa": "ya lo supera",
+      "jaEmpata": "ya empata",
+      "title": "Escenarios de remontada",
+      "onlyLeader": "{{name}} ya no juega. Adelanta si {{leader}} pierde más de {{value}}.",
+      "withoutAverage": "Sin el promedio: {{value}} de diferencia ahora ({{points}} puntos)"
+    },
+    "title": "Estadísticas",
+    "tournamentTitle": "Estadísticas del torneo",
+    "open": "Ver estadísticas de {{name}}",
+    "empty": "Aún no hay resultados. Registra una mesa para ver las estadísticas.",
+    "numbers": {
+      "torneio": "Números en el torneo",
+      "temporada": "Números en la temporada",
+      "geral": "Números en el ranking"
+    },
+    "averageHanchan": "Promedio por hanchan",
+    "averageGame": "Promedio por partida",
+    "winRate": "Tasa de victoria",
+    "dealInRate": "Tasa de deal-in",
+    "riichiRate": "Tasa de riichi",
+    "positions": "Distribución de posiciones",
+    "playerBest": "Mejor mano del jugador",
+    "best": {
+      "torneio": "Mejor mano del torneo",
+      "temporada": "Mejor mano de la temporada",
+      "geral": "Mejor mano del ranking"
+    },
+    "someHands": "Las tasas y la mejor mano usan {{count}} de {{total}} partidas, las que tienen registro de manos.",
+    "handFan": "{{fan}} fan",
+    "handHanFu": "{{han}} han {{fu}} fu",
+    "handHan": "{{han}} han",
+    "deadline": {
+      "over": "Terminó el {{date}}: las diferencias son definitivas.",
+      "unknown": "Hasta el {{date}}. Los escenarios valen para la próxima partida.",
+      "estimate": "Hasta el {{date}}. A este ritmo, partidas restantes: unas {{games}}."
+    },
+    "onlySum": "Los escenarios de remontada solo existen cuando el ranking suma puntos.",
+    "projection": {
+      "title": "Distancia al siguiente",
+      "approx": "Aproximado: supone que ambos mantienen su promedio y juegan las mismas partidas.",
+      "outside": "Fuera del ranking con los filtros actuales.",
+      "first": "Nadie por delante en el ranking.",
+      "behind": {
+        "you": "Estás {{value}} por detrás de {{other}}.",
+        "player": "{{name}} está {{value}} por detrás de {{other}}."
+      },
+      "averages": {
+        "you": "Con tu promedio ({{mine}}/partida) y el de {{other}} ({{theirs}}/partida):",
+        "player": "Con el promedio de {{name}} ({{mine}}/partida) y el de {{other}} ({{theirs}}/partida):"
+      },
+      "passes": {
+        "one": "adelanta en ~{{count}} partida.",
+        "many": "adelanta en ~{{count}} partidas.",
+        "other": "adelanta en ~{{count}} partidas."
+      },
+      "poucosJogos": "Pocas partidas para proyectar (mínimo {{count}} cada uno).",
+      "mediaMenor": "no se puede proyectar, porque el promedio no es mayor.",
+      "longeDemais": "no se puede proyectar, porque los promedios están demasiado cerca.",
+      "withAverage": "Con el promedio"
+    },
+    "withoutWo": "Sin partidas con WO ({{count}})",
+    "form": {
+      "title": {
+        "fim": "Con el promedio: si terminan como suelen, hasta el final",
+        "proximo": "Con el promedio: si terminan como suelen, en la próxima partida"
+      },
+      "usual": {
+        "one": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesa)",
+        "many": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesas)",
+        "other": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesas)"
+      },
+      "short": "Si termina así, {{name}} queda {{value}} por detrás ({{points}} puntos). Para adelantar o empatar: {{hands}}.",
+      "jaPassa": "Si termina así, {{name}} adelanta por {{value}} ({{points}} puntos).",
+      "jaEmpata": "Si termina así, {{name}} empata.",
+      "chance": "Probabilidad de remontar:",
+      "fewGames": "La probabilidad requiere {{count}} mesas o más de cada uno.",
+      "help": "Estimación según las últimas {{count}} mesas finalizadas de cada uno.",
+      "usualShort": "Suele terminar con",
+      "basedOn": {
+        "one": "en {{count}} mesa finalizada",
+        "many": "en las últimas {{count}} mesas",
+        "other": "en las últimas {{count}} mesas"
+      }
     }
   }
 }

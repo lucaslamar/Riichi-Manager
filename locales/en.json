@@ -1074,7 +1074,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "When someone goes negative",
+      "ends": "Ends (tobi)",
+      "goesOn": "Goes on",
+      "helpEnds": "Ends: the game finishes when someone drops below zero. The Club default.",
+      "helpGoesOn": "Goes on: play to the end, even when negative. The EMA and WRC rule.",
+      "summaryEnds": "Negative: game ends (tobi)",
+      "summaryGoesOn": "Negative: game goes on",
+      "saveWarning": "Someone is negative and, under this rule, the game is over. If your table plays on, switch to Goes on in the settings."
+    }
   },
   "match": {
     "types": {
@@ -1244,7 +1254,8 @@
       "expand": "Show details",
       "collapse": "Hide details",
       "deleteTitle": "Delete this game?",
-      "deleteHelp": "The game leaves the history and the ranking. This cannot be undone."
+      "deleteHelp": "The game leaves the history and the ranking. This cannot be undone.",
+      "details": "Details"
     },
     "home": {
       "inProgressCount": {
@@ -1305,13 +1316,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "Tap the table to open the Centerpiece menu",
       "adjustHonba": "Adjust honba, currently {{count}}",
       "timerStart": "Start the timer",
       "calculate": "Calculate hand",
       "drawSection": "Draw",
       "calcMpsz": "Calculator by MPSZ notation",
-      "timerPass": "Pass the turn"
+      "timerPass": "Pass the turn",
+      "hintTimer": "Tap the winds to start and reset the timer"
     },
     "setup": {
       "title": "New game",
@@ -1644,7 +1656,6 @@
       "sumWarning": "The table total differs by {{difference}} from {{total}}.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "Flip the sign of {{name}}’s points",
@@ -1658,7 +1669,12 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "It was random",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "Clear",
+      "clearTitle": "Clear this table?",
+      "clearHelp": "Removes players, points and WO from this screen. Rules and saved data stay.",
+      "clearHelpSeated": "Removes points, WO and lateness from this screen. Drawn players stay.",
+      "tapHint": "Tap to enter players and points. Long press swaps the player."
     },
     "listFilters": {
       "search": "Search tables, meetups and tournaments",
@@ -1685,6 +1701,37 @@
       "resetDayTitle": "Start the day from scratch?",
       "resetDayHelp": "The next draw will not consider who already played together today. Use it when the group is different.",
       "resetDone": "The next draw starts from scratch"
+    },
+    "leftGame": {
+      "tag": "WO",
+      "withTag": "With WO",
+      "needPoints": "WO: points on leaving",
+      "sumFree": "With a WO, the sum does not need to match.",
+      "seat": "{{wind}}, {{name}}, WO with {{points}} points",
+      "settings": "WO during a game",
+      "last": "Finishes 4th",
+      "byPoints": "By points",
+      "penalty": "Penalty on the result",
+      "helpDefault": "By default, whoever leaves mid-game finishes 4th with the points held when leaving.",
+      "helpPenalty": "The penalty comes off the final result, after uma. 30 takes 30.0 from the ranking.",
+      "helpSum": "With a WO, the table can be recorded even if the sum does not match.",
+      "summaryLast": "WO finishes 4th",
+      "summaryPoints": "WO by points"
+    },
+    "paused": {
+      "save": "Save to continue",
+      "help": "Where the game stopped.",
+      "round": "Current round",
+      "honba": "Honba",
+      "dealer": "Current dealer (East)",
+      "dealerIs": "Dealer: {{name}}",
+      "sticks": "Riichi sticks on the table",
+      "sticksShort": "riichi on table: {{count}}",
+      "list": "Games in progress",
+      "listCount": "Games in progress: {{count}}",
+      "resume": "Resume",
+      "edit": "Edit round, honba and dealer",
+      "discardTitle": "Discard this saved game?"
     }
   },
   "spokenTiles": {
@@ -1726,7 +1773,8 @@
       "bottom": "Bottom of the table",
       "bottomLead": "lead {{value}}",
       "bottomLeave": "to escape {{value}}",
-      "ctaRace": "Want to see how far you are? Filter in {{app}}"
+      "ctaRace": "Want to see how far you are? Filter in {{app}}",
+      "result": "Share results"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1937,7 +1985,12 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "Metrics",
+      "menuActions": "Tournament actions",
+      "menuShare": "Share and export",
+      "menuText": "Round as text",
+      "menuImage": "Round as image"
     },
     "ranking": {
       "title": "Tournament ranking",
@@ -2076,7 +2129,10 @@
       "previousPlayer": "Previous player",
       "nextPlayer": "Next player",
       "typeFor": "Type the points for {{name}}",
-      "hundred": "Double zero"
+      "hundred": "Double zero",
+      "sumOk": "Sum matches",
+      "sumShort": "{{points}} short",
+      "sumOver": "{{points}} over"
     },
     "positionChange": {
       "up": {
@@ -2091,7 +2147,9 @@
       "new": "New in the ranking",
       "newShort": "new",
       "legend": "Arrows: change since round {{round}}.",
-      "confirmTitle": "Tournament ranking: before → after"
+      "confirmTitle": "Tournament ranking: before → after",
+      "was": "was {{place}}",
+      "wasInRound": "was {{place}} in round {{round}}"
     },
     "formatGuide": {
       "intro": "Which format to use?",
@@ -2215,7 +2273,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "Approximate: non-East ron, no uma.",
+        "riichi": "Approximate: excludes tsumo and dealer hands.",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "Podium race",
@@ -3524,6 +3582,110 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "No games left: the gap is final.",
+      "perGame": "Games left: {{games}}. Needs to gain {{value}} per game, which is {{points}} table points before uma.",
+      "thirdParty": "By ron from others",
+      "direct": "By direct ron on {{name}}",
+      "directHelp": "On a direct ron, every point counts twice in the gap.",
+      "ifLeader": "If {{name}}…",
+      "needs": "{{name}} needs",
+      "finish": {
+        "ultimo": "finishes 4th ({{value}})",
+        "zero": "breaks even",
+        "primeiro": "finishes 1st ({{value}})"
+      },
+      "withUma": "With uma, if {{name}} finishes",
+      "needsToo": "Still needs",
+      "inPlace": "in place {{place}} ({{value}})",
+      "umaHelp": "Uma from the configured rules, with {{name}} breaking even.",
+      "either": {
+        "one": "{{hands}} or {{count}} direct",
+        "other": "{{hands}} or {{count}} direct"
+      },
+      "jaPassa": "already ahead",
+      "jaEmpata": "already tied",
+      "title": "Comeback scenarios",
+      "onlyLeader": "{{name}} has no games left. Moves ahead if {{leader}} loses more than {{value}}.",
+      "withoutAverage": "Without averages: current gap of {{value}} ({{points}} points)"
+    },
+    "title": "Statistics",
+    "tournamentTitle": "Tournament statistics",
+    "open": "View statistics for {{name}}",
+    "empty": "No results yet. Record a table to see statistics.",
+    "numbers": {
+      "torneio": "Tournament numbers",
+      "temporada": "Season numbers",
+      "geral": "Ranking numbers"
+    },
+    "averageHanchan": "Average per hanchan",
+    "averageGame": "Average per game",
+    "winRate": "Win rate",
+    "dealInRate": "Deal-in rate",
+    "riichiRate": "Riichi rate",
+    "positions": "Placement distribution",
+    "playerBest": "Player’s biggest hand",
+    "best": {
+      "torneio": "Biggest hand of the tournament",
+      "temporada": "Biggest hand of the season",
+      "geral": "Biggest hand in the ranking"
+    },
+    "someHands": "Rates and biggest hand use {{count}} of {{total}} games, those with hand records.",
+    "handFan": "{{fan}} fan",
+    "handHanFu": "{{han}} han {{fu}} fu",
+    "handHan": "{{han}} han",
+    "deadline": {
+      "over": "Ended on {{date}}: gaps are final.",
+      "unknown": "Until {{date}}. Scenarios apply to the next game.",
+      "estimate": "Until {{date}}. At this pace, games left: about {{games}}."
+    },
+    "onlySum": "Comeback scenarios only exist when the ranking sums points.",
+    "projection": {
+      "title": "Gap to the next player",
+      "approx": "Approximate: assumes both keep their average and play as many games.",
+      "outside": "Outside the ranking with the current filters.",
+      "first": "Nobody ahead in the ranking.",
+      "behind": {
+        "you": "You are {{value}} behind {{other}}.",
+        "player": "{{name}} is {{value}} behind {{other}}."
+      },
+      "averages": {
+        "you": "At your average ({{mine}}/game) and that of {{other}} ({{theirs}}/game):",
+        "player": "At the average of {{name}} ({{mine}}/game) and {{other}} ({{theirs}}/game):"
+      },
+      "passes": {
+        "one": "passes in ~{{count}} game.",
+        "other": "passes in ~{{count}} games."
+      },
+      "poucosJogos": "Too few games to project (at least {{count}} each).",
+      "mediaMenor": "no projection, as the average is not higher.",
+      "longeDemais": "no projection, as the averages are too close.",
+      "withAverage": "With averages"
+    },
+    "withoutWo": "Exclude games with WO ({{count}})",
+    "form": {
+      "title": {
+        "fim": "With averages: if they finish as usual, until the end",
+        "proximo": "With averages: if they finish as usual, next game"
+      },
+      "usual": {
+        "one": "{{name}} usually ends with {{points}} ({{value}}/game, {{count}} table)",
+        "other": "{{name}} usually ends with {{points}} ({{value}}/game, {{count}} tables)"
+      },
+      "short": "At this rate, {{name}} ends {{value}} behind ({{points}} points). To pass or tie: {{hands}}.",
+      "jaPassa": "At this rate, {{name}} moves ahead by {{value}} ({{points}} points).",
+      "jaEmpata": "At this rate, {{name}} ties.",
+      "chance": "Chance to overtake:",
+      "fewGames": "Chance to overtake needs {{count}} or more tables each.",
+      "help": "Estimate from each player’s last {{count}} finished tables.",
+      "usualShort": "Usually ends with",
+      "basedOn": {
+        "one": "over {{count}} finished table",
+        "other": "over the last {{count}} tables"
+      }
     }
   }
 }

@@ -1067,7 +1067,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "持ち点がマイナスになったら",
+      "ends": "終了（飛び）",
+      "goesOn": "続行",
+      "helpEnds": "終了：誰かが0点未満になると対局終了。クラブの初期設定です。",
+      "helpGoesOn": "続行：マイナスでも最後まで打ちます。EMAとWRCのルールです。",
+      "summaryEnds": "マイナス：終了（飛び）",
+      "summaryGoesOn": "マイナス：続行",
+      "saveWarning": "マイナスの人がいるため、このルールでは終局です。続行する卓なら設定で「続行」に変更してください。"
+    }
   },
   "match": {
     "types": {
@@ -1225,7 +1235,8 @@
       "expand": "詳細を表示",
       "collapse": "詳細を隠す",
       "deleteTitle": "この対局を削除しますか？",
-      "deleteHelp": "履歴とランキングから消えます。元に戻せません。"
+      "deleteHelp": "履歴とランキングから消えます。元に戻せません。",
+      "details": "詳細"
     },
     "home": {
       "inProgressCount": {
@@ -1285,13 +1296,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "卓をタップでCenterpieceメニュー",
       "adjustHonba": "本場を調整、現在 {{count}}",
       "timerStart": "タイマーを開始",
       "calculate": "手牌を計算",
       "drawSection": "抽選",
       "calcMpsz": "MPSZ表記で計算",
-      "timerPass": "手番を回す"
+      "timerPass": "手番を回す",
+      "hintTimer": "風をタップでタイマー開始・リセット"
     },
     "setup": {
       "title": "New game",
@@ -1622,7 +1634,6 @@
       "sumWarning": "卓の合計は{{total}}と{{difference}}違います。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "{{name}} の点数の符号を反転",
@@ -1636,7 +1647,12 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "クリア",
+      "clearTitle": "この卓の入力を消しますか？",
+      "clearHelp": "この画面のプレイヤー、点数、WOを消します。ルールと保存済みのデータは残ります。",
+      "clearHelpSeated": "この画面の点数、WO、遅刻を消します。抽選のプレイヤーは残ります。",
+      "tapHint": "タップしてプレイヤーと点数を登録。長押しでプレイヤーを交代。"
     },
     "listFilters": {
       "search": "卓・集まり・大会を検索",
@@ -1663,6 +1679,37 @@
       "resetDayTitle": "今日の記録を考慮せずに始めますか？",
       "resetDayHelp": "次の抽選では今日の同卓歴を考慮しません。別のグループのときに使ってください。",
       "resetDone": "次の抽選は最初からです"
+    },
+    "leftGame": {
+      "tag": "WO",
+      "withTag": "WOあり",
+      "needPoints": "WO：退席時の点数",
+      "sumFree": "WOがある場合、合計は一致しなくても登録できます。",
+      "seat": "{{wind}}、{{name}}、WO、{{points}}点",
+      "settings": "対局中のWO",
+      "last": "4着になる",
+      "byPoints": "点数どおり",
+      "penalty": "成績へのペナルティ",
+      "helpDefault": "初期設定では、途中退席者は退席時の点数のまま4着になります。",
+      "helpPenalty": "ペナルティはウマ適用後の成績から引かれます。30なら30.0ポイント減。",
+      "helpSum": "WOがある卓は合計が一致しなくても登録できます。",
+      "summaryLast": "WOは4着",
+      "summaryPoints": "WOは点数どおり"
+    },
+    "paused": {
+      "save": "保存して後で続ける",
+      "help": "対局が止まった場所。",
+      "round": "現在の局",
+      "honba": "本場",
+      "dealer": "現在の親（東家）",
+      "dealerIs": "親：{{name}}",
+      "sticks": "供託のリーチ棒",
+      "sticksShort": "供託：{{count}}",
+      "list": "進行中の対局",
+      "listCount": "進行中の対局：{{count}}",
+      "resume": "再開",
+      "edit": "局・本場・親を編集",
+      "discardTitle": "この保存した対局を破棄しますか？"
     }
   },
   "spokenTiles": {
@@ -1704,7 +1751,8 @@
       "bottom": "最下位争い",
       "bottomLead": "リード {{value}}",
       "bottomLeave": "脱出まで {{value}}",
-      "ctaRace": "自分はあと何点？ {{app}}で確認"
+      "ctaRace": "自分はあと何点？ {{app}}で確認",
+      "result": "結果を共有"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1915,7 +1963,12 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "データ",
+      "menuActions": "大会の操作",
+      "menuShare": "共有と書き出し",
+      "menuText": "ラウンドをテキストで",
+      "menuImage": "ラウンドを画像で"
     },
     "ranking": {
       "title": "Tournament ranking",
@@ -2054,7 +2107,10 @@
       "previousPlayer": "前のプレイヤー",
       "nextPlayer": "次のプレイヤー",
       "typeFor": "{{name}} の点数を入力",
-      "hundred": "ゼロ2つ"
+      "hundred": "ゼロ2つ",
+      "sumOk": "合計一致",
+      "sumShort": "{{points}}不足",
+      "sumOver": "{{points}}超過"
     },
     "positionChange": {
       "up": {
@@ -2067,7 +2123,9 @@
       "new": "ランキング初登場",
       "newShort": "新",
       "legend": "矢印：第{{round}}回戦からの変化。",
-      "confirmTitle": "大会ランキング：前 → 後"
+      "confirmTitle": "大会ランキング：前 → 後",
+      "was": "前{{place}}",
+      "wasInRound": "第{{round}}回戦では{{place}}"
     },
     "formatGuide": {
       "intro": "どの形式を使う？",
@@ -2189,7 +2247,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "目安：子のロン、ウマ抜き。",
+        "riichi": "概算：ツモと親の和了は含みません。",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "表彰台争い",
@@ -3486,6 +3544,106 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "残りの対局がないため、この差で確定です。",
+      "perGame": "残り対局数: {{games}}。1局あたり{{value}}（ウマ抜きで{{points}}点）縮める必要があります。",
+      "thirdParty": "他家からのロン",
+      "direct": "{{name}}から直撃",
+      "directHelp": "直撃では点差が2倍縮まります。",
+      "ifLeader": "{{name}}が…",
+      "needs": "{{name}}に必要",
+      "finish": {
+        "ultimo": "4着 ({{value}})",
+        "zero": "±0",
+        "primeiro": "1着 ({{value}})"
+      },
+      "withUma": "ウマ込み：{{name}}の着順",
+      "needsToo": "さらに必要",
+      "inPlace": "{{place}}着 ({{value}})",
+      "umaHelp": "設定ルールのウマ。{{name}}は±0とします。",
+      "either": {
+        "other": "{{hands}}または直撃{{count}}回"
+      },
+      "jaPassa": "すでに逆転",
+      "jaEmpata": "すでに同点",
+      "title": "逆転条件",
+      "onlyLeader": "{{name}}は対局終了。{{leader}}が{{value}}より多く失えば逆転。",
+      "withoutAverage": "平均なし：現在の差 {{value}}（{{points}}点）"
+    },
+    "title": "統計",
+    "tournamentTitle": "大会の統計",
+    "open": "{{name}}の統計を見る",
+    "empty": "結果がまだありません。卓の結果を登録すると統計が表示されます。",
+    "numbers": {
+      "torneio": "大会での成績",
+      "temporada": "シーズンの成績",
+      "geral": "ランキングでの成績"
+    },
+    "averageHanchan": "半荘平均",
+    "averageGame": "1局平均",
+    "winRate": "和了率",
+    "dealInRate": "放銃率",
+    "riichiRate": "立直率",
+    "positions": "着順分布",
+    "playerBest": "本人の最高打点",
+    "best": {
+      "torneio": "大会の最高打点",
+      "temporada": "シーズンの最高打点",
+      "geral": "ランキングの最高打点"
+    },
+    "someHands": "率と最高打点は記録のある{{total}}局中{{count}}局から算出。",
+    "handFan": "{{fan}}番",
+    "handHanFu": "{{han}}翻{{fu}}符",
+    "handHan": "{{han}}翻",
+    "deadline": {
+      "over": "{{date}}に終了。点差は確定です。",
+      "unknown": "{{date}}まで。条件は次の対局が対象です。",
+      "estimate": "{{date}}まで。現在のペースで残り約{{games}}局。"
+    },
+    "onlySum": "逆転条件はポイント合計方式のランキングでのみ表示します。",
+    "projection": {
+      "title": "一つ上との差",
+      "approx": "概算：両者が平均を維持し同数打つと仮定。",
+      "outside": "現在の絞り込みではランキング外です。",
+      "first": "ランキングで上にいる人はいません。",
+      "behind": {
+        "you": "あなたは{{other}}と{{value}}差です。",
+        "player": "{{name}}は{{other}}と{{value}}差です。"
+      },
+      "averages": {
+        "you": "あなたの平均（{{mine}}/局）と{{other}}の平均（{{theirs}}/局）では：",
+        "player": "{{name}}の平均（{{mine}}/局）と{{other}}の平均（{{theirs}}/局）では："
+      },
+      "passes": {
+        "other": "約{{count}}局で逆転。"
+      },
+      "poucosJogos": "予測には対局数が不足（各{{count}}局以上）。",
+      "mediaMenor": "平均が上回らないため予測できません。",
+      "longeDemais": "平均が近すぎて予測できません。",
+      "withAverage": "平均込み"
+    },
+    "withoutWo": "WOのある対局を除く（{{count}}）",
+    "form": {
+      "title": {
+        "fim": "平均込み：いつもどおりの成績なら（最終まで）",
+        "proximo": "平均込み：いつもどおりの成績なら（次の対局）"
+      },
+      "usual": {
+        "other": "{{name}}：平均{{points}}点（{{value}}/局、{{count}}卓）"
+      },
+      "short": "このままなら{{name}}は{{value}}（{{points}}点）届かず。追いつくには{{hands}}。",
+      "jaPassa": "このままなら{{name}}が{{value}}差（{{points}}点）で逆転。",
+      "jaEmpata": "このままなら{{name}}が追いつく。",
+      "chance": "逆転確率：",
+      "fewGames": "逆転確率は各{{count}}卓以上で表示。",
+      "help": "各自の直近{{count}}卓の結果による推定。",
+      "usualShort": "平均終了点",
+      "basedOn": {
+        "other": "直近{{count}}卓"
+      }
     }
   }
 }

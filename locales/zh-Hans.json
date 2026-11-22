@@ -1067,7 +1067,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "有人点数为负时",
+      "ends": "结束（击飞）",
+      "goesOn": "继续",
+      "helpEnds": "结束：有人低于0点时对局结束。俱乐部默认规则。",
+      "helpGoesOn": "继续：即使为负也打到终局。EMA与WRC规则。",
+      "summaryEnds": "点数为负：对局结束（击飞）",
+      "summaryGoesOn": "点数为负：继续对局",
+      "saveWarning": "有人点数为负，按此规则对局已结束。若继续对局，请在设置中改为“继续”。"
+    }
   },
   "match": {
     "types": {
@@ -1225,7 +1235,8 @@
       "expand": "显示详情",
       "collapse": "隐藏详情",
       "deleteTitle": "删除这局对局？",
-      "deleteHelp": "对局会从历史和排名中移除，且无法撤销。"
+      "deleteHelp": "对局会从历史和排名中移除，且无法撤销。",
+      "details": "详情"
     },
     "home": {
       "inProgressCount": {
@@ -1285,13 +1296,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "点击牌桌打开Centerpiece菜单",
       "adjustHonba": "调整本场，当前 {{count}}",
       "timerStart": "开始计时",
       "calculate": "计算手牌",
       "drawSection": "抽签",
       "calcMpsz": "用 MPSZ 记法计算",
-      "timerPass": "传递回合"
+      "timerPass": "传递回合",
+      "hintTimer": "点击风位开始或重置计时器"
     },
     "setup": {
       "title": "New game",
@@ -1622,7 +1634,6 @@
       "sumWarning": "牌桌总点数与 {{total}} 相差 {{difference}}。",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "切换 {{name}} 分数的正负号",
@@ -1636,7 +1647,12 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "清空",
+      "clearTitle": "清空本桌？",
+      "clearHelp": "清除本页的玩家、点数和WO。规则与已保存内容保留。",
+      "clearHelpSeated": "清除本页的点数、WO与迟到。抽签玩家保留。",
+      "tapHint": "点击登记玩家和点数。长按更换玩家。"
     },
     "listFilters": {
       "search": "搜索牌桌、聚会和比赛",
@@ -1663,6 +1679,37 @@
       "resetDayTitle": "今天从头开始吗？",
       "resetDayHelp": "下次抽签不会考虑今天已同桌的记录。换了一批人时使用。",
       "resetDone": "下次抽签将从头开始"
+    },
+    "leftGame": {
+      "tag": "WO",
+      "withTag": "含WO",
+      "needPoints": "WO：离场时点数",
+      "sumFree": "有WO时，总分无需相符。",
+      "seat": "{{wind}}，{{name}}，WO，{{points}}点",
+      "settings": "中途WO",
+      "last": "判为第4名",
+      "byPoints": "按点数",
+      "penalty": "成绩扣分",
+      "helpDefault": "默认情况下，中途离场者保留离场时点数并判为第4名。",
+      "helpPenalty": "扣分在计算马点后进行。30表示排行扣30.0分。",
+      "helpSum": "有WO的牌桌即使总分不符也可登记。",
+      "summaryLast": "WO判第4",
+      "summaryPoints": "WO按点数"
+    },
+    "paused": {
+      "save": "保存稍后继续",
+      "help": "对局暂停的位置。",
+      "round": "当前局数",
+      "honba": "本场",
+      "dealer": "当前庄家（东家）",
+      "dealerIs": "庄家：{{name}}",
+      "sticks": "场上立直棒",
+      "sticksShort": "供托：{{count}}",
+      "list": "进行中的对局",
+      "listCount": "进行中的对局：{{count}}",
+      "resume": "继续",
+      "edit": "编辑局数、本场和庄家",
+      "discardTitle": "放弃这场已保存的对局？"
     }
   },
   "spokenTiles": {
@@ -1704,7 +1751,8 @@
       "bottom": "垫底之争",
       "bottomLead": "领先 {{value}}",
       "bottomLeave": "摆脱需 {{value}}",
-      "ctaRace": "想知道自己还差多少？在{{app}}里筛选"
+      "ctaRace": "想知道自己还差多少？在{{app}}里筛选",
+      "result": "分享结果"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1915,7 +1963,12 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "数据",
+      "menuActions": "比赛操作",
+      "menuShare": "分享与导出",
+      "menuText": "本轮文字",
+      "menuImage": "本轮图片"
     },
     "ranking": {
       "title": "Tournament ranking",
@@ -2054,7 +2107,10 @@
       "previousPlayer": "上一位玩家",
       "nextPlayer": "下一位玩家",
       "typeFor": "输入 {{name}} 的分数",
-      "hundred": "两个零"
+      "hundred": "两个零",
+      "sumOk": "总分相符",
+      "sumShort": "还差{{points}}",
+      "sumOver": "多出{{points}}"
     },
     "positionChange": {
       "up": {
@@ -2067,7 +2123,9 @@
       "new": "首次进入排名",
       "newShort": "新",
       "legend": "箭头：自第{{round}}轮以来的变化。",
-      "confirmTitle": "赛事排名：之前 → 之后"
+      "confirmTitle": "赛事排名：之前 → 之后",
+      "was": "原{{place}}",
+      "wasInRound": "第{{round}}轮时{{place}}"
     },
     "formatGuide": {
       "intro": "该用哪种赛制？",
@@ -2189,7 +2247,7 @@
         "vitorias": "桌次第一"
       },
       "approx": {
-        "riichi": "估算：闲家荣和，不计马点。",
+        "riichi": "估算：不含自摸和亲家和牌。",
         "mcr": "估算：每桌第一得4分。"
       },
       "race": "领奖台之争",
@@ -3486,6 +3544,106 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "没有剩余对局，分差已确定。",
+      "perGame": "剩余对局：{{games}}。每局需追回{{value}}（不计马点为{{points}}点）。",
+      "thirdParty": "荣和其他人",
+      "direct": "直击{{name}}",
+      "directHelp": "直击时，每一分都按两倍缩小分差。",
+      "ifLeader": "若{{name}}…",
+      "needs": "{{name}}需要",
+      "finish": {
+        "ultimo": "第4名（{{value}}）",
+        "zero": "不赚不亏",
+        "primeiro": "第1名（{{value}}）"
+      },
+      "withUma": "含马点：{{name}}名次",
+      "needsToo": "还需要",
+      "inPlace": "第{{place}}名（{{value}}）",
+      "umaHelp": "按已设置的马点计算，假设{{name}}不赚不亏。",
+      "either": {
+        "other": "{{hands}}或直击{{count}}次"
+      },
+      "jaPassa": "已经反超",
+      "jaEmpata": "已经追平",
+      "title": "逆转条件",
+      "onlyLeader": "{{name}}已无对局。若{{leader}}失去超过{{value}}分则反超。",
+      "withoutAverage": "不计平均：当前分差{{value}}（{{points}}点）"
+    },
+    "title": "统计",
+    "tournamentTitle": "比赛统计",
+    "open": "查看{{name}}的统计",
+    "empty": "暂无结果。登记一桌成绩后即可查看统计。",
+    "numbers": {
+      "torneio": "比赛数据",
+      "temporada": "赛季数据",
+      "geral": "排行数据"
+    },
+    "averageHanchan": "每半庄平均",
+    "averageGame": "每局平均",
+    "winRate": "和牌率",
+    "dealInRate": "放铳率",
+    "riichiRate": "立直率",
+    "positions": "顺位分布",
+    "playerBest": "个人最大和牌",
+    "best": {
+      "torneio": "比赛最大和牌",
+      "temporada": "赛季最大和牌",
+      "geral": "排行最大和牌"
+    },
+    "someHands": "数据基于{{total}}局中有逐局记录的{{count}}局。",
+    "handFan": "{{fan}}番",
+    "handHanFu": "{{han}}番{{fu}}符",
+    "handHan": "{{han}}番",
+    "deadline": {
+      "over": "已于{{date}}结束，分差已确定。",
+      "unknown": "截至{{date}}。条件针对下一局。",
+      "estimate": "截至{{date}}。按当前节奏约剩{{games}}局。"
+    },
+    "onlySum": "仅在累计积分排行中显示逆转条件。",
+    "projection": {
+      "title": "与前一名的差距",
+      "approx": "估算：假设两人保持平均成绩且对局数相同。",
+      "outside": "按当前筛选未进入排行。",
+      "first": "排行中无人领先。",
+      "behind": {
+        "you": "你落后{{other}} {{value}}。",
+        "player": "{{name}}落后{{other}} {{value}}。"
+      },
+      "averages": {
+        "you": "按你的平均（{{mine}}/局）与{{other}}的平均（{{theirs}}/局）：",
+        "player": "按{{name}}的平均（{{mine}}/局）与{{other}}的平均（{{theirs}}/局）："
+      },
+      "passes": {
+        "other": "约{{count}}局后反超。"
+      },
+      "poucosJogos": "对局太少，无法预测（每人至少{{count}}局）。",
+      "mediaMenor": "平均成绩未更高，无法预测。",
+      "longeDemais": "平均成绩过于接近，无法预测。",
+      "withAverage": "计入平均"
+    },
+    "withoutWo": "排除含WO的对局（{{count}}）",
+    "form": {
+      "title": {
+        "fim": "计入平均：若保持一贯成绩（至结束）",
+        "proximo": "计入平均：若保持一贯成绩（下一局）"
+      },
+      "usual": {
+        "other": "{{name}}通常以{{points}}点结束（{{value}}/局，{{count}}桌）"
+      },
+      "short": "照此发展，{{name}}还差{{value}}（{{points}}点）。追平或反超需要{{hands}}。",
+      "jaPassa": "照此发展，{{name}}将以{{value}}（{{points}}点）优势反超。",
+      "jaEmpata": "照此发展，{{name}}将追平。",
+      "chance": "反超概率：",
+      "fewGames": "反超概率需每人至少{{count}}桌。",
+      "help": "根据各自最近{{count}}桌的成绩估算。",
+      "usualShort": "通常结束点数",
+      "basedOn": {
+        "other": "最近{{count}}桌"
+      }
     }
   }
 }

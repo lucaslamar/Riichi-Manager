@@ -1067,7 +1067,17 @@
     "exOka": "+ oka",
     "exFinal": "Final",
     "checkFuriten": "Furiten check",
-    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten."
+    "checkFuritenHelp": "Each player can enter their own hand so the app warns if they are in furiten.",
+    "negative": {
+      "title": "점수가 마이너스가 되면",
+      "ends": "종료 (토비)",
+      "goesOn": "계속",
+      "helpEnds": "종료: 누군가 0점 미만이 되면 대국 종료. 클럽 기본값.",
+      "helpGoesOn": "계속: 마이너스여도 끝까지 진행. EMA와 WRC 규칙.",
+      "summaryEnds": "마이너스: 종료 (토비)",
+      "summaryGoesOn": "마이너스: 계속",
+      "saveWarning": "마이너스인 사람이 있어 이 규칙상 종료입니다. 계속한다면 설정에서 계속으로 바꾸세요."
+    }
   },
   "match": {
     "types": {
@@ -1225,7 +1235,8 @@
       "expand": "자세히 보기",
       "collapse": "접기",
       "deleteTitle": "이 대국을 삭제할까요?",
-      "deleteHelp": "기록과 랭킹에서 사라져요. 되돌릴 수 없어요."
+      "deleteHelp": "기록과 랭킹에서 사라져요. 되돌릴 수 없어요.",
+      "details": "자세히"
     },
     "home": {
       "inProgressCount": {
@@ -1285,13 +1296,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "테이블을 누르면 Centerpiece 메뉴",
       "adjustHonba": "본장 조정, 현재 {{count}}",
       "timerStart": "타이머 시작",
       "calculate": "손패 계산",
       "drawSection": "추첨",
       "calcMpsz": "MPSZ 표기로 계산",
-      "timerPass": "차례 넘기기"
+      "timerPass": "차례 넘기기",
+      "hintTimer": "바람을 누르면 타이머 시작 및 초기화"
     },
     "setup": {
       "title": "New game",
@@ -1622,7 +1634,6 @@
       "sumWarning": "탁 합계가 {{total}}과 {{difference}} 차이 납니다.",
       "title": "Record finished game",
       "help": "Played outside the app: points, uma and oka",
-      "players": "Players and points",
       "choosePlayer": "Choose player {{number}}",
       "points": "{{name}}'s points",
       "toggleSign": "{{name}} 점수 부호 바꾸기",
@@ -1636,7 +1647,12 @@
       "windOrder": "Wind order",
       "windOrderYes": "East, South, West, North",
       "windOrderNo": "Unknown",
-      "windOrderHelp": "With the order, the match counts in each player's starting wind stats."
+      "windOrderHelp": "With the order, the match counts in each player's starting wind stats.",
+      "clear": "지우기",
+      "clearTitle": "이 테이블 입력을 지울까요?",
+      "clearHelp": "이 화면의 플레이어, 점수, WO를 지웁니다. 규칙과 저장된 데이터는 유지됩니다.",
+      "clearHelpSeated": "이 화면의 점수, WO, 지각을 지웁니다. 추첨된 플레이어는 유지됩니다.",
+      "tapHint": "눌러서 플레이어와 점수를 기록하세요. 길게 누르면 플레이어를 바꿉니다."
     },
     "listFilters": {
       "search": "테이블, 모임, 대회 검색",
@@ -1663,6 +1679,37 @@
       "resetDayTitle": "오늘을 처음부터 시작할까요?",
       "resetDayHelp": "다음 추첨은 오늘 같이 친 기록을 고려하지 않습니다. 다른 그룹일 때 쓰세요.",
       "resetDone": "다음 추첨은 처음부터 시작합니다"
+    },
+    "leftGame": {
+      "tag": "WO",
+      "withTag": "WO 있음",
+      "needPoints": "WO: 퇴장 시 점수",
+      "sumFree": "WO가 있으면 합계가 맞지 않아도 됩니다.",
+      "seat": "{{wind}}, {{name}}, WO, {{points}}점",
+      "settings": "대국 중 WO",
+      "last": "4위 처리",
+      "byPoints": "점수순",
+      "penalty": "결과 페널티",
+      "helpDefault": "기본값: 중도 퇴장자는 퇴장 시 점수로 4위가 됩니다.",
+      "helpPenalty": "페널티는 우마 적용 후 결과에서 차감됩니다. 30이면 30.0 감점.",
+      "helpSum": "WO가 있으면 합계가 달라도 기록할 수 있습니다.",
+      "summaryLast": "WO 4위",
+      "summaryPoints": "WO 점수순"
+    },
+    "paused": {
+      "save": "저장 후 나중에 계속",
+      "help": "대국이 멈춘 지점.",
+      "round": "현재 국",
+      "honba": "본장",
+      "dealer": "현재 오야(동가)",
+      "dealerIs": "오야: {{name}}",
+      "sticks": "공탁 리치봉",
+      "sticksShort": "공탁: {{count}}",
+      "list": "진행 중인 대국",
+      "listCount": "진행 중인 대국: {{count}}",
+      "resume": "이어하기",
+      "edit": "국, 본장, 오야 수정",
+      "discardTitle": "저장한 대국을 삭제할까요?"
     }
   },
   "spokenTiles": {
@@ -1704,7 +1751,8 @@
       "bottom": "최하위 경쟁",
       "bottomLead": "앞섬 {{value}}",
       "bottomLeave": "탈출까지 {{value}}",
-      "ctaRace": "나는 얼마나 남았을까? {{app}}에서 확인"
+      "ctaRace": "나는 얼마나 남았을까? {{app}}에서 확인",
+      "result": "결과 공유"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1915,7 +1963,12 @@
       "restart": "Restart draw",
       "restartTitle": "Restart the draw?",
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
-      "undoShort": "Undo"
+      "undoShort": "Undo",
+      "menuMetrics": "지표",
+      "menuActions": "대회 관리",
+      "menuShare": "공유 및 내보내기",
+      "menuText": "라운드 텍스트",
+      "menuImage": "라운드 이미지"
     },
     "ranking": {
       "title": "Tournament ranking",
@@ -2054,7 +2107,10 @@
       "previousPlayer": "이전 플레이어",
       "nextPlayer": "다음 플레이어",
       "typeFor": "{{name}} 점수 입력",
-      "hundred": "영 두 개"
+      "hundred": "영 두 개",
+      "sumOk": "합계 일치",
+      "sumShort": "{{points}} 부족",
+      "sumOver": "{{points}} 초과"
     },
     "positionChange": {
       "up": {
@@ -2067,7 +2123,9 @@
       "new": "랭킹 첫 등장",
       "newShort": "신규",
       "legend": "화살표: {{round}}라운드 이후 변화.",
-      "confirmTitle": "대회 랭킹: 이전 → 이후"
+      "confirmTitle": "대회 랭킹: 이전 → 이후",
+      "was": "전 {{place}}",
+      "wasInRound": "{{round}}라운드 {{place}}"
     },
     "formatGuide": {
       "intro": "어떤 형식을 쓸까요?",
@@ -2189,7 +2247,7 @@
         "vitorias": "Table wins"
       },
       "approx": {
-        "riichi": "대략치: 자의 론, 우마 제외.",
+        "riichi": "근사치: 쯔모와 오야 화료는 제외.",
         "mcr": "Approximate: a table win is worth 4."
       },
       "race": "시상대 경쟁",
@@ -3486,6 +3544,106 @@
       },
       "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
       "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
+    }
+  },
+  "stats": {
+    "turn": {
+      "noGamesLeft": "남은 대국이 없어 이 차이로 확정됩니다.",
+      "perGame": "남은 대국: {{games}}. 대국마다 {{value}}(우마 제외 {{points}}점)씩 좁혀야 합니다.",
+      "thirdParty": "다른 사람에게 론",
+      "direct": "{{name}} 직격 론",
+      "directHelp": "직격하면 점수 차가 두 배로 줄어듭니다.",
+      "ifLeader": "{{name}} 결과",
+      "needs": "{{name}} 필요",
+      "finish": {
+        "ultimo": "4위 ({{value}})",
+        "zero": "±0",
+        "primeiro": "1위 ({{value}})"
+      },
+      "withUma": "우마 포함: {{name}} 순위",
+      "needsToo": "추가로 필요",
+      "inPlace": "{{place}}위 ({{value}})",
+      "umaHelp": "설정된 규칙의 우마, {{name}} ±0 기준.",
+      "either": {
+        "other": "{{hands}} 또는 직격 {{count}}회"
+      },
+      "jaPassa": "이미 역전",
+      "jaEmpata": "이미 동점",
+      "title": "역전 조건",
+      "onlyLeader": "{{name}}: 남은 대국 없음. {{leader}}: {{value}} 넘게 잃으면 역전.",
+      "withoutAverage": "평균 제외: 현재 차이 {{value}} ({{points}}점)"
+    },
+    "title": "통계",
+    "tournamentTitle": "대회 통계",
+    "open": "{{name}} 통계 보기",
+    "empty": "아직 결과가 없습니다. 테이블 결과를 기록하면 통계가 표시됩니다.",
+    "numbers": {
+      "torneio": "대회 기록",
+      "temporada": "시즌 기록",
+      "geral": "랭킹 기록"
+    },
+    "averageHanchan": "반장 평균",
+    "averageGame": "대국당 평균",
+    "winRate": "화료율",
+    "dealInRate": "방총률",
+    "riichiRate": "리치율",
+    "positions": "순위 분포",
+    "playerBest": "플레이어 최고 타점",
+    "best": {
+      "torneio": "대회 최고 타점",
+      "temporada": "시즌 최고 타점",
+      "geral": "랭킹 최고 타점"
+    },
+    "someHands": "비율과 최고 타점은 기록이 있는 대국 {{count}}/{{total}} 기준.",
+    "handFan": "{{fan}}판",
+    "handHanFu": "{{han}}판 {{fu}}부",
+    "handHan": "{{han}}판",
+    "deadline": {
+      "over": "{{date}} 종료: 점수 차 확정.",
+      "unknown": "{{date}}까지. 조건은 다음 대국 기준.",
+      "estimate": "{{date}}까지. 현재 속도로 약 {{games}}국 남음."
+    },
+    "onlySum": "역전 조건은 점수 합산 랭킹에서만 표시됩니다.",
+    "projection": {
+      "title": "바로 위와의 차이",
+      "approx": "근사치: 두 사람이 평균을 유지하고 같은 수만큼 대국한다고 가정.",
+      "outside": "현재 필터에서는 랭킹에 없습니다.",
+      "first": "랭킹에서 앞선 사람이 없습니다.",
+      "behind": {
+        "you": "{{other}}보다 {{value}} 뒤에 있습니다.",
+        "player": "{{name}}: {{other}}보다 {{value}} 뒤."
+      },
+      "averages": {
+        "you": "내 평균({{mine}}/국)과 {{other}} 평균({{theirs}}/국) 기준:",
+        "player": "{{name}} 평균({{mine}}/국)과 {{other}} 평균({{theirs}}/국) 기준:"
+      },
+      "passes": {
+        "other": "약 {{count}}국 후 역전."
+      },
+      "poucosJogos": "예측하기에 대국 수 부족(각 {{count}}국 이상).",
+      "mediaMenor": "평균이 더 높지 않아 예측할 수 없습니다.",
+      "longeDemais": "평균이 너무 비슷해 예측할 수 없습니다.",
+      "withAverage": "평균 반영"
+    },
+    "withoutWo": "WO 대국 제외 ({{count}})",
+    "form": {
+      "title": {
+        "fim": "평균 반영: 평소대로라면 (끝까지)",
+        "proximo": "평균 반영: 평소대로라면 (다음 대국)"
+      },
+      "usual": {
+        "other": "{{name}}: 평균 {{points}}점 ({{value}}/국, {{count}}테이블)"
+      },
+      "short": "이대로면 {{name}}: {{value}} ({{points}}점) 부족. 동점 이상까지 {{hands}}.",
+      "jaPassa": "이대로면 {{name}}: {{value}} ({{points}}점) 차로 역전.",
+      "jaEmpata": "이대로면 {{name}} 동점.",
+      "chance": "역전 확률:",
+      "fewGames": "역전 확률은 각 {{count}}테이블 이상부터 표시.",
+      "help": "각자 최근 {{count}}테이블 결과 기반 추정.",
+      "usualShort": "평균 종료 점수",
+      "basedOn": {
+        "other": "최근 {{count}}테이블"
+      }
     }
   }
 }
