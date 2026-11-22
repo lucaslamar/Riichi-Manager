@@ -32,3 +32,12 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 
 - Rótulos dizem o que vai acontecer ("Salvar partida", não "OK").
 - Erros explicam o problema e como resolver. Estados vazios orientam o próximo passo.
+
+## Padrões de tela do Torneio
+
+- Texto de ajuda visível tem no máximo 1 linha em 360px (cerca de 331px úteis), nos 7 idiomas. O resto vai para o ? (`AjudaCampo`) ao lado do rótulo.
+- `AjudaCampo` não vai dentro de `<label>` que envolve um campo: use um `div` e dê `aria-label` ao campo.
+- Selo do formato ao lado de "em andamento" no card, na rodada e no ranking. O nome trunca, os selos não.
+- Encerrar fica ao lado do Ranking, sempre com confirmação.
+- Cabeçalho da rodada: quatro ações de 44px no celular. No desktop ele mora no menu lateral estreito, com ações de 28px de largura.
+- Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.

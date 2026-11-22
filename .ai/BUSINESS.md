@@ -17,6 +17,35 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Partidas de torneio são vinculadas ao torneio e constituem a fonte dos resultados usados nas classificações. Encontros de clube agrupam partidas originadas de um sorteio; não são torneios. Consulte `src/dominios/torneio/logica` e `src/dominios/centerpiece/logica/encontroClube.ts`.
 - Preserve as configurações de mesa, variantes e yakus locais existentes. Consulte a lógica e os testes da área antes de mudar regras ou dados persistidos.
 
+## Torneio: formatos, sorteio e ranking
+
+### Formatos
+
+- Rodízio: grade inteira sorteada no início, cada jogador é Leste uma vez. Indicado para encontro com hora para acabar e para iniciantes.
+- Suíço: rodada 1 sorteada, depois as mesas seguem a classificação. Indicado para torneio competitivo de um dia.
+- Eliminatório: classificatória e cortes até a mesa final. Indicado para evento com final e muitos jogadores.
+- Brasileirão (`corridos`, o padrão): cada rodada é sorteada na hora, sem número de rodadas. O organizador encerra.
+- Temporada: como o Brasileirão, com cada encontro somando num ranking acumulado.
+- As mesas fecham com 4 (ou 3 no Sanma): 8, 12, 16… jogadores (ou 6, 9, 12… no Sanma).
+- Ventos: no Rodízio o padrão é o app sortear. Nos outros, saem na mesa, então o app não sabe quem foi Leste.
+
+### Sorteio
+
+- Sortear de novo: só enquanto nenhuma mesa da última rodada tem partida. A grade do Rodízio (e da classificatória em Rodízio) sai inteira e equilibrada, então só se refaz antes da primeira partida do torneio. Depois disso, o caminho é Reiniciar sorteio. Mantendo os ventos, refazer só a última rodada não tem alternativa tão boa.
+
+### Ranking do torneio
+
+- Mudança de posição: compara o ranking atual com o do fim da rodada anterior à última com resultado, e só com todas as rodadas até ela fechadas. Com mesa faltando não há seta, porque quem ainda não jogou pareceria cair.
+- A rodada 1 não mostra seta. Empate segue 1, 2, 2, 4. Quem não tinha jogado aparece como estreia.
+- Eliminatório: compara dentro da fase. Cortado não tem seta, e a primeira rodada depois de zerar os pontos também não.
+- A confirmação do resultado mostra o ranking do torneio antes e depois, inclusive ao corrigir.
+- Encerrar: só torneio em andamento e não transferido (`podeEncerrar`).
+
+### Registro de pontos
+
+- A folha de pontos aceita teclado físico (dígitos, `-`, `+`, Backspace, Enter, Esc) com as mesmas regras das teclas. O teclado do sistema só abre ao tocar no visor, e usa `PROPS_TECLADO_COM_SINAL`, porque `numeric` não tem o menos no Samsung.
+- Digitar continua o valor que está no visor. Não apaga o anterior.
+
 ## Privacidade e acessibilidade
 
 Na checagem de furiten da mesa, as esperas são informação privada do jogador. Não as anuncie automaticamente ou exponha à mesa. O modo falado ainda não está implementado; suas possíveis funcionalidades não são regras atuais. Consulte [acessibilidade](../docs/acessibilidade.md).

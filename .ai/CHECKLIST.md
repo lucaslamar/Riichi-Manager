@@ -14,6 +14,9 @@ Escolha os testes conforme o impacto; os comandos completos estão em `package.j
 
 - Partidas, ranking e clubes: `npm run test:partida`, `npm run test:ranking` e `npm run test:clube`.
 - Torneios e formatos: `npm run test:torneio` e `npm run test:formatos`.
+- Ranking do torneio: `npm run test:torneio` (setas, confirmação e placares MCR convertidos). Confira as cores das setas no navegador.
+- Folha de pontos: `npm run test:expressao-pontos`, e no navegador Enter depois de tocar numa tecla, Enter para abrir a folha e toque no visor.
+- Toda tarefa: registre no `.ai` regras, mudanças de UX, ideias adiadas e inspirações, sem dados de pessoas reais.
 - Variantes e yakus locais: `npm run test:sanma` e `npm run test:yakus-locais`.
 - Modo Chinês (motor de fan e pagamento MCR): `npm run test:fan-mcr` (inclui os 81 fan do guia do CMC) e `npm run test:placar-mcr`. Confira também que `git diff main -- src/dominios/calculadora-mao` continua vazio.
 - Persistência e backup: `npm run test:armazenamento` e `npm run test:backup`.

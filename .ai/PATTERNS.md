@@ -33,6 +33,9 @@ Estes padrões orientam novas alterações, implementações e refatorações fu
 - Respeite as fronteiras de persistência e use os adaptadores existentes para recursos de plataforma. Preserve o funcionamento no GitHub Pages.
 - Evite duplicar estados ou manter informações derivadas que possam ser calculadas a partir dos dados existentes.
 
+- Relatórios para compartilhar saem de funções puras que devolvem `Relatorio` (`src/compartilhado/relatorio`). Tela nova que compartilha cria uma função `relatorioDe…` em vez de montar imagem na interface.
+- Texto novo entra nos 7 idiomas: o `test:i18n` falha se faltar uma chave.
+
 ## Modos de jogo
 
 - O layout é um só para todos os modos de jogo (Riichi, MCR e os que vierem, como o coreano). Cada modo troca só as regras, os cálculos e o conteúdo do guia e do tutorial. Melhorias de UX e design valem para todos os modos.
