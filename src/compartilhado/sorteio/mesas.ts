@@ -1,73 +1,12 @@
-/**
- * Regras do sorteio de mesas usadas pelo Torneio e pelo Clube: repetição de
- * adversários e ventos equilibrados. Sem tela e sem domínio.
- */
-
-/** Assentos na ordem 東 南 西 北. No Sanma, o 北 fica `''`. */
-type Assentos = [string, string, string, string]
-
-/** Só o que o sorteio lê de uma rodada. */
-export interface RodadaDoSorteio {
-  mesas: readonly { assentos: readonly string[] }[]
-}
-
-export interface MesaDaRodada {
-  numero: number
-  assentos: Assentos
-}
-
-/** Jogadores por mesa: 4 no yonma, 3 no Sanma (a 4ª cadeira da mesa fica vazia, `''`). */
-export type JogadoresPorMesa = 3 | 4
-
-/** Ids de quem senta na mesa, sem a cadeira vazia do Sanma. */
-export const ocupantes = (assentos: readonly string[]) => assentos.filter((jogador) => jogador !== '')
-
-const chaveDoPar = (um: string, outro: string) => (um < outro ? `${um}|${outro}` : `${outro}|${um}`)
-
-/** Quantas vezes cada dupla já se enfrentou. */
-export function contarPares(rodadas: readonly RodadaDoSorteio[]): Map<string, number> {
-  const contagem = new Map<string, number>()
-  for (const rodada of rodadas) {
-    for (const mesa of rodada.mesas) {
-      const jogadores = ocupantes(mesa.assentos)
-      for (let um = 0; um < jogadores.length; um++) {
-        for (let outro = um + 1; outro < jogadores.length; outro++) {
-          const chave = chaveDoPar(jogadores[um], jogadores[outro])
-          contagem.set(chave, (contagem.get(chave) ?? 0) + 1)
-        }
-      }
-    }
-  }
-  return contagem
-}
-
-/** Custo de juntar estes jogadores: cada encontro anterior pesa ao quadrado. */
-export function custoDaMesa(jogadores: readonly string[], pares: ReadonlyMap<string, number>): number {
-  let custo = 0
-  for (let um = 0; um < jogadores.length; um++) {
-    for (let outro = um + 1; outro < jogadores.length; outro++) {
-      const vezes = pares.get(chaveDoPar(jogadores[um], jogadores[outro])) ?? 0
-      custo += vezes * vezes
-    }
-  }
-  return custo
-}
-
-/** Vezes em cada vento (東 南 西 北) por jogador. */
-export function contarVentos(rodadas: readonly RodadaDoSorteio[]): Map<string, [number, number, number, number]> {
-  const contagem = new Map<string, [number, number, number, number]>()
-  for (const rodada of rodadas) {
-    for (const mesa of rodada.mesas) {
-      mesa.assentos.forEach((jogador, vento) => {
-        if (jogador === '') return
-        const linha = contagem.get(jogador) ?? [0, 0, 0, 0]
-        linha[vento] += 1
-        contagem.set(jogador, linha)
-      })
-    }
-  }
-  return contagem
-}
+/** Mesas a partir de uma ordem, usadas pelo Torneio e pelo Clube. Sem tela e sem domínio. */
+import {
+  contarVentos,
+  type Assentos,
+  type JogadoresPorMesa,
+  type MesaDaRodada,
+  type RodadaDoSorteio,
+} from './contagens'
+import { compararCustos, criarAvaliador, REGRAS, type AvaliadorDeMesas } from './custo'
 
 /** Todas as ordens de N posições: 24 para 4, 6 para 3. */
 function permutacoes(tamanho: number): number[][] {
@@ -81,17 +20,18 @@ function permutacoes(tamanho: number): number[][] {
 }
 
 const PERMUTACOES: Record<JogadoresPorMesa, number[][]> = { 3: permutacoes(3), 4: permutacoes(4) }
+const PASSADAS = 20
 
 /** Assentos da mesa; no Sanma a 4ª cadeira (Norte) fica vazia. */
 export function assentosDoGrupo(grupo: readonly string[]): Assentos {
-  return [grupo[0], grupo[1], grupo[2], grupo[3] ?? ''] as Assentos
+  return [grupo[0], grupo[1], grupo[2], grupo[3] ?? '']
 }
 
 /**
  * Senta os 4 da mesa: quem foi Leste menos vezes tem prioridade para Leste, depois
  * o mesmo para os outros ventos. Leste pesa mais porque é quem dá as cartas.
  */
-function assentarComVentos(
+export function assentarComVentos(
   grupo: readonly string[],
   ventos: ReadonlyMap<string, readonly number[]>,
 ): Assentos {
@@ -114,62 +54,86 @@ function assentarComVentos(
 }
 
 /**
- * Mesas a partir de uma ordem (classificação ou sorteio): de 4 em 4. Quando alguém
- * já enfrentou outro da mesa, ou quando a mesa não tem ninguém "na vez" de ser
- * Leste, troca com o vizinho de ordem mais próximo em outra mesa, se isso melhorar.
+ * Troca jogadores entre mesas, dos vizinhos de ordem para os mais distantes,
+ * enquanto o custo cair. Altera a `fila` e devolve o custo da rodada.
  */
-export function mesasPelaOrdem(
-  ordem: readonly string[],
-  anteriores: readonly RodadaDoSorteio[],
-  porMesa: JogadoresPorMesa = 4,
-): MesaDaRodada[] {
-  const pares = contarPares(anteriores)
-  const ventos = contarVentos(anteriores)
-  const fila = [...ordem]
+export function melhorarFila(fila: Int32Array, porMesa: number, avaliador: AvaliadorDeMesas): Float64Array {
   const totalMesas = Math.floor(fila.length / porMesa)
-  const grupo = (mesa: number) => fila.slice(mesa * porMesa, mesa * porMesa + porMesa)
-  const leste = (jogador: string) => ventos.get(jogador)?.[0] ?? 0
-  const menorLeste = Math.min(...fila.map(leste))
-  /**
-   * Cada mesa precisa de alguém com o menor número de Leste do torneio; sem isso,
-   * um jogador seria Leste de novo enquanto outro ainda não foi. Isso pesa mais
-   * que repetir adversário.
-   */
-  const custo = (mesa: number) => {
-    const jogadores = grupo(mesa)
-    return custoDaMesa(jogadores, pares) * 100 + (Math.min(...jogadores.map(leste)) - menorLeste) * 1_000_000
-  }
+  const custos = Array.from({ length: totalMesas }, (_, mesa) => {
+    const custo = new Float64Array(REGRAS)
+    avaliador.somar(fila, mesa * porMesa, custo)
+    return custo
+  })
+  const antes = new Float64Array(REGRAS)
+  const depois = new Float64Array(REGRAS)
 
-  for (let passada = 0; passada < 20; passada++) {
+  for (let passada = 0; passada < PASSADAS; passada++) {
     let melhorou = false
     for (let mesa = 0; mesa < totalMesas; mesa++) {
-      if (custo(mesa) === 0) continue
-      // Trocas com as outras mesas, da menor distância de posição para a maior.
-      const trocas: [number, number][] = []
-      for (let vizinha = 0; vizinha < totalMesas; vizinha++) {
-        if (vizinha === mesa) continue
-        for (let de = mesa * porMesa; de < mesa * porMesa + porMesa; de++) {
-          for (let para = vizinha * porMesa; para < vizinha * porMesa + porMesa; para++) trocas.push([de, para])
+      if (custos[mesa].every((valor) => valor === 0)) continue
+      const inicio = mesa * porMesa
+      let trocou = false
+      for (let distancia = 1; distancia < fila.length && !trocou; distancia++) {
+        for (let de = inicio; de < inicio + porMesa && !trocou; de++) {
+          for (let sentido = -1; sentido <= 1; sentido += 2) {
+            const para = de + distancia * sentido
+            if (para < 0 || para >= totalMesas * porMesa || (para >= inicio && para < inicio + porMesa)) continue
+            const vizinha = Math.floor(para / porMesa)
+            for (let regra = 0; regra < REGRAS; regra++) antes[regra] = custos[mesa][regra] + custos[vizinha][regra]
+            const saindo = fila[de]
+            fila[de] = fila[para]
+            fila[para] = saindo
+            for (let regra = 0; regra < REGRAS; regra++) depois[regra] = 0
+            avaliador.somar(fila, inicio, depois)
+            avaliador.somar(fila, vizinha * porMesa, depois)
+            if (compararCustos(depois, antes) < 0) {
+              custos[mesa].fill(0)
+              custos[vizinha].fill(0)
+              avaliador.somar(fila, inicio, custos[mesa])
+              avaliador.somar(fila, vizinha * porMesa, custos[vizinha])
+              trocou = true
+              melhorou = true
+              break
+            }
+            fila[para] = fila[de]
+            fila[de] = saindo
+          }
         }
-      }
-      trocas.sort(([de1, para1], [de2, para2]) => Math.abs(de1 - para1) - Math.abs(de2 - para2))
-      for (const [de, para] of trocas) {
-        const vizinha = Math.floor(para / porMesa)
-        const antes = custo(mesa) + custo(vizinha)
-        ;[fila[de], fila[para]] = [fila[para], fila[de]]
-        const depois = custo(mesa) + custo(vizinha)
-        if (depois < antes) {
-          melhorou = true
-          break
-        }
-        ;[fila[de], fila[para]] = [fila[para], fila[de]]
       }
     }
     if (!melhorou) break
   }
 
-  return Array.from({ length: totalMesas }, (_, mesa) => ({
-    numero: mesa + 1,
-    assentos: assentarComVentos(grupo(mesa), ventos),
-  }))
+  const total = new Float64Array(REGRAS)
+  for (const custo of custos) for (let regra = 0; regra < REGRAS; regra++) total[regra] += custo[regra]
+  return total
+}
+
+export function mesasDaFila(
+  fila: readonly string[],
+  anteriores: readonly RodadaDoSorteio[],
+  porMesa: JogadoresPorMesa,
+  comVentos: boolean,
+): MesaDaRodada[] {
+  const ventos = contarVentos(anteriores)
+  return Array.from({ length: Math.floor(fila.length / porMesa) }, (_, mesa) => {
+    const grupo = fila.slice(mesa * porMesa, (mesa + 1) * porMesa)
+    return { numero: mesa + 1, assentos: comVentos ? assentarComVentos(grupo, ventos) : assentosDoGrupo(grupo) }
+  })
+}
+
+/**
+ * Mesas a partir de uma ordem (a classificação, no Suíço e nos cortes): de 4 em 4,
+ * com trocas entre vizinhos para cumprir as regras de `custo.ts`. Sem ventos
+ * sorteados (`comVentos` falso) os ventos não pesam.
+ */
+export function mesasPelaOrdem(
+  ordem: readonly string[],
+  anteriores: readonly RodadaDoSorteio[],
+  porMesa: JogadoresPorMesa = 4,
+  comVentos = true,
+): MesaDaRodada[] {
+  const fila = Int32Array.from(ordem, (_, indice) => indice)
+  melhorarFila(fila, porMesa, criarAvaliador(ordem, anteriores, porMesa, comVentos))
+  return mesasDaFila(Array.from(fila, (indice) => ordem[indice]), anteriores, porMesa, comVentos)
 }

@@ -1,32 +1,17 @@
 /**
  * Pontos corridos: liga em um encontro. Cada rodada é sorteada na hora (botão Nova
- * rodada), tentando várias ordens e ficando com a que menos repete adversários.
+ * rodada) pelo sorteio mitigado, que espalha as repetições de adversários.
  * Não há número de rodadas: o organizador encerra quando quiser.
  */
-import { embaralhar, inteiroAleatorioSeguro, type InteiroAleatorio } from '@/compartilhado/sorteio/aleatorio'
+import { sortearRodada, type OpcoesDoSorteio } from '@/compartilhado/sorteio/rodada'
 import type { RodadaTorneio } from '../tipos'
-import { contarPares, custoDaMesa, mesasPelaOrdem, ocupantes, type JogadoresPorMesa } from '@/compartilhado/sorteio/mesas'
-
-const TENTATIVAS = 300
 
 export function rodadaCorridos(
   jogadorIds: readonly string[],
   anteriores: readonly RodadaTorneio[],
   numero: number,
   agora: string,
-  aleatorio: InteiroAleatorio = inteiroAleatorioSeguro,
-  porMesa: JogadoresPorMesa = 4,
+  opcoes?: OpcoesDoSorteio,
 ): RodadaTorneio {
-  const pares = contarPares(anteriores)
-  let melhor = mesasPelaOrdem(embaralhar(jogadorIds, aleatorio), anteriores, porMesa)
-  let melhorCusto = Infinity
-  for (let tentativa = 0; tentativa < TENTATIVAS && melhorCusto > 0; tentativa++) {
-    const mesas = tentativa === 0 ? melhor : mesasPelaOrdem(embaralhar(jogadorIds, aleatorio), anteriores, porMesa)
-    const custo = mesas.reduce((soma, mesa) => soma + custoDaMesa(ocupantes(mesa.assentos), pares), 0)
-    if (custo < melhorCusto) {
-      melhorCusto = custo
-      melhor = mesas
-    }
-  }
-  return { numero, geradaEm: agora, mesas: melhor }
+  return { numero, geradaEm: agora, mesas: sortearRodada(jogadorIds, anteriores, opcoes) }
 }

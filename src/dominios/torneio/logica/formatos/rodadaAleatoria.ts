@@ -4,7 +4,8 @@
  */
 import { embaralhar, inteiroAleatorioSeguro, type InteiroAleatorio } from '@/compartilhado/sorteio/aleatorio'
 import type { RodadaTorneio } from '../tipos'
-import { assentosDoGrupo, type JogadoresPorMesa } from '@/compartilhado/sorteio/mesas'
+import type { JogadoresPorMesa } from '@/compartilhado/sorteio/contagens'
+import { assentosDoGrupo } from '@/compartilhado/sorteio/mesas'
 
 export function rodadaAleatoria(
   jogadorIds: readonly string[],

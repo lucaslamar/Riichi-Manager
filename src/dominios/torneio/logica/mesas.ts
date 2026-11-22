@@ -88,7 +88,8 @@ export function sortearDeNovo(torneio: Torneio, partidas: readonly Partida[], ag
   const temPartida = partidas.some((partida) => partida.vinculoTorneio?.torneioId === torneio.id)
   if (!temPartida) return { ...torneio, rodadas: rodadasIniciais(torneio, torneio.jogadorIds, agora) }
   const semUltima = { ...torneio, rodadas: torneio.rodadas.slice(0, -1) }
-  const nova = proximaRodada(semUltima, partidas, agora)
+  const evitar = torneio.rodadas[torneio.rodadas.length - 1]?.mesas
+  const nova = proximaRodada(semUltima, partidas, agora, evitar)
   return nova ? { ...semUltima, rodadas: [...semUltima.rodadas, nova] } : torneio
 }
 
