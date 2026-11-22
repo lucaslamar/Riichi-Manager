@@ -225,7 +225,7 @@ export default function CenterpieceSimples({
       </div>
 
       {/* Embaixo, para não concorrer com o ?. O toque passa por ela e abre o menu, como no fundo. */}
-      <div className="mesa-simples-dica">
+      <div className={`mesa-simples-dica${giro === 270 ? ' mesa-simples-dica--invertida' : ''}`}>
         <p>
           <i className="fas fa-hand-pointer" aria-hidden="true" />
           <span>{t('match.simple.hint')}</span>

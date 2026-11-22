@@ -1151,3 +1151,25 @@ button.mesa-domo {
     max-width: calc((100% - var(--mesa-lado)) / 2 - 16px);
   }
 }
+
+/* No celular deitado a faixa vira uma tira, lida por quem senta na lateral. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mesa-tela.mesa-tela--simples > .mesa-simples-dica {
+    top: 10px;
+    justify-content: center;
+    padding: 12px 8px;
+    writing-mode: vertical-rl;
+    -webkit-text-orientation: sideways;
+    text-orientation: sideways;
+  }
+
+  .mesa-simples-dica i {
+    width: auto;
+    inline-size: 1.2em;
+  }
+
+  /* A mesa girou para o outro lado: a tira acompanha. */
+  .mesa-tela.mesa-tela--simples > .mesa-simples-dica--invertida {
+    transform: rotate(180deg);
+  }
+}
