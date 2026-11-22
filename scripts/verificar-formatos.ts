@@ -268,7 +268,9 @@ for (const total of [8, 12, 16]) {
   assert.equal(formatarRelogio(5400), '1:30:00')
   assert.equal(formatarRelogio(90), '1:30')
 
-  const { torneio, partidas } = simular({ tipo: 'suico', rodadas: 3 }, 8, 1)
+  const suico = simular({ tipo: 'suico', rodadas: 3 }, 8, 1)
+  assert.ok(!podeSortearDeNovo(suico.torneio, suico.partidas), 'Suíço: a rodada 2 sai da classificação')
+  const { torneio, partidas } = simular({ tipo: 'corridos' }, 8, 1)
   assert.ok(podeSortearDeNovo(torneio, partidas), 'rodada 2 sem mesa aberta')
   const refeito = sortearDeNovo(torneio, partidas, agora)
   assert.equal(refeito.rodadas.length, 2)
@@ -383,7 +385,7 @@ for (const total of [8, 12, 16]) {
   console.log('Validação de ponta a ponta ok.')
 }
 
-// Grade pronta: Sortear de novo só antes da primeira partida. O corte do Eliminatório segue por rodada.
+// Grade pronta: Sortear de novo só antes da primeira partida. O corte sai da classificação.
 {
   const cortes = { classificatoria: 'rodizio', rodadasClassificatoria: 4, cortes: [4], rodadasPorFase: 1, pontosCarregados: true } as const
   for (const formato of [{ tipo: 'rodizio', rodadas: 4 }, { tipo: 'eliminatorio', ...cortes }] as ConfigFormato[]) {
@@ -397,7 +399,7 @@ for (const total of [8, 12, 16]) {
     const jogadas = grade.rodadas.flatMap((rodada) => jogarRodada(grade, rodada))
     const corte = proximaRodada(grade, jogadas, agora)
     assert.ok(corte, 'corte gerado')
-    assert.ok(podeSortearDeNovo({ ...grade, rodadas: [...grade.rodadas, corte] }, jogadas), 'corte ainda sem partida')
+    assert.ok(!podeSortearDeNovo({ ...grade, rodadas: [...grade.rodadas, corte] }, jogadas), 'corte não é sorteio')
   }
 }
 

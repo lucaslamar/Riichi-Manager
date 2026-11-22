@@ -13,6 +13,7 @@
 
 ### Corrigido
 
+- **Sortear de novo no Suíço e nos cortes do Eliminatório**: a opção devolvia as mesmas mesas, porque elas saem da classificação. Agora, depois da primeira partida, ela aparece só no Brasileirão e na Temporada, que sorteiam cada rodada.
 - **Sortear de novo no Rodízio**: a opção aparecia depois do primeiro resultado e não mudava nada. Agora aparece só antes da primeira partida, porque a grade sai inteira e equilibrada. Para refazer depois, use Reiniciar sorteio.
 
 ## 7.0.0 - 2026-11-21
