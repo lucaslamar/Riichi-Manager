@@ -1990,13 +1990,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2007,7 +2000,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "3人組の再戦",
+      "repeatedTriosHelp": "同卓が2回以上あった3人組。",
+      "maxPerPlayer": "1人あたりの再戦",
+      "maxPerPlayerHelp": "最も再戦が多い人の再戦相手数。",
+      "differentOpponents": "異なる対戦相手",
+      "differentOpponentsHelp": "1人あたりの平均と最少。",
+      "averageAndLowest": "{{average}}（最少{{lowest}}）",
+      "eastTimes": "東家の回数",
+      "eastTimesHelp": "最少の人から最多の人まで。"
     },
     "points": {
       "points": "点数",
@@ -2080,6 +2082,43 @@
       "short12": "12人なら3回戦までが理想。",
       "help8": "2卓では、2回戦の各卓に前の2卓からしか人が来ないため、各卓で少なくとも2組が再戦します。3回戦では各自最大3人と再戦します。再戦を減らすには12人か16人を集めてください。",
       "help12": "3卓では2回戦以降、必ず誰かが再戦します。抽選ではなく数学的な限界です。3回戦なら再戦相手を各自2人までに抑えられます。4回戦目は全員が一度ずつ東家になる必要がある場合向けです。16人なら5回戦まで再戦なしで打てます。"
+    },
+    "gridStats": {
+      "title": "抽選の質",
+      "details": "詳細",
+      "detailsLabel": "抽選の質の詳細を見る",
+      "redraw": "再抽選",
+      "redrawLabel": "第{{round}}回戦を再抽選",
+      "openStats": "卓組の統計",
+      "grade": {
+        "perfeita": "完璧",
+        "otima": "最良",
+        "boa": "良い",
+        "regular": "普通",
+        "ruim": "悪い"
+      },
+      "none": "再戦なし",
+      "atMinimum": "最少",
+      "aboveMinimum": "最少：{{min}}",
+      "noTriple": "3回同卓なし",
+      "hasTriple": "3回同卓あり",
+      "windsOk": "風は均等",
+      "windsBad": "風が偏り",
+      "better": "前より良い",
+      "same": "前と同等",
+      "worse": "前より悪い",
+      "undo": "前に戻す",
+      "undoLabel": "前の抽選に戻す",
+      "perPlayer": "プレイヤー別",
+      "repeatedWith": "再戦相手",
+      "eastCount": "東家{{count}}回",
+      "searchPlayer": "プレイヤーを検索",
+      "repeats": {
+        "other": "再戦{{count}}組"
+      },
+      "opponents": {
+        "other": "相手{{count}}人"
+      }
     }
   },
   "backup": {

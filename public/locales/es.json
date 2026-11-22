@@ -2021,13 +2021,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2038,7 +2031,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "Tríos repetidos",
+      "repeatedTriosHelp": "Tres personas que compartieron mesa más de una vez.",
+      "maxPerPlayer": "Repeticiones por persona",
+      "maxPerPlayerHelp": "Rivales repetidos de quien más repitió.",
+      "differentOpponents": "Rivales distintos",
+      "differentOpponentsHelp": "Media por persona y el menor valor.",
+      "averageAndLowest": "{{average}} (mín. {{lowest}})",
+      "eastTimes": "Veces como Este",
+      "eastTimesHelp": "De quien menos fue a quien más."
     },
     "points": {
       "points": "Puntos",
@@ -2115,6 +2117,47 @@
       "short12": "Con 12, lo ideal es hasta 3 rondas.",
       "help8": "Con 2 mesas, cada mesa de la 2.ª ronda junta personas de solo 2 mesas anteriores. Por eso se repiten al menos 2 parejas por mesa. Con 3 rondas, cada jugador repite hasta 3 rivales. Para repetir menos, reúne 12 o 16 jugadores.",
       "help12": "Con 3 mesas, desde la 2.ª ronda siempre alguien repite rival: es un límite matemático, no del sorteo. Con 3 rondas, cada uno puede repetir como máximo 2 rivales. La 4.ª solo conviene si todos deben ser Este una vez. Con 16 jugadores se pueden jugar hasta 5 rondas sin repetir."
+    },
+    "gridStats": {
+      "title": "Calidad del sorteo",
+      "details": "Ver detalles",
+      "detailsLabel": "Ver detalles de la calidad del sorteo",
+      "redraw": "Sortear de nuevo",
+      "redrawLabel": "Sortear de nuevo la ronda {{round}}",
+      "openStats": "Estadística del calendario",
+      "grade": {
+        "perfeita": "Perfecta",
+        "otima": "Óptima",
+        "boa": "Buena",
+        "regular": "Regular",
+        "ruim": "Mala"
+      },
+      "none": "Ningún rival repetido",
+      "atMinimum": "mínimo posible",
+      "aboveMinimum": "mínimo posible: {{min}}",
+      "noTriple": "Nadie jugó 3 veces junto",
+      "hasTriple": "Una pareja jugó 3 veces junta",
+      "windsOk": "vientos ok",
+      "windsBad": "vientos desiguales",
+      "better": "Mejor que el anterior",
+      "same": "Igual que el anterior",
+      "worse": "Peor que el anterior",
+      "undo": "Volver al anterior",
+      "undoLabel": "Volver al sorteo anterior",
+      "perPlayer": "Por jugador",
+      "repeatedWith": "Repitió con",
+      "eastCount": "Este {{count}}x",
+      "searchPlayer": "Buscar jugador",
+      "repeats": {
+        "one": "{{count}} pareja repetida",
+        "many": "{{count}} de parejas repetidas",
+        "other": "{{count}} parejas repetidas"
+      },
+      "opponents": {
+        "one": "{{count}} rival",
+        "many": "{{count}} de rivales",
+        "other": "{{count}} rivales"
+      }
     }
   },
   "backup": {

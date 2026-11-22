@@ -1990,13 +1990,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2007,7 +2000,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "重复三人组",
+      "repeatedTriosHelp": "同桌超过一次的三个人。",
+      "maxPerPlayer": "每人重复数",
+      "maxPerPlayerHelp": "重复最多者的重复对手数。",
+      "differentOpponents": "不同对手",
+      "differentOpponentsHelp": "每人平均值和最小值。",
+      "averageAndLowest": "{{average}}（最少{{lowest}}）",
+      "eastTimes": "东家次数",
+      "eastTimesHelp": "从最少到最多。"
     },
     "points": {
       "points": "点数",
@@ -2080,6 +2082,43 @@
       "short12": "12人时最好不超过3轮。",
       "help8": "只有2桌时，第2轮每桌只能来自之前的2桌，因此每桌至少有2对重复。打3轮时每人最多重复3名对手。想减少重复，请凑齐12或16人。",
       "help12": "只有3桌时，从第2轮起总会有人遇到重复对手：这是数学限制，不是抽签问题。打3轮时每人最多可只重复2名对手。只有要求人人当一次东家时才值得打第4轮。16人时可以打5轮而不重复。"
+    },
+    "gridStats": {
+      "title": "抽签质量",
+      "details": "查看详情",
+      "detailsLabel": "查看抽签质量详情",
+      "redraw": "重新抽签",
+      "redrawLabel": "重新抽取第{{round}}轮",
+      "openStats": "对阵统计",
+      "grade": {
+        "perfeita": "完美",
+        "otima": "最佳",
+        "boa": "良好",
+        "regular": "一般",
+        "ruim": "较差"
+      },
+      "none": "没有重复对手",
+      "atMinimum": "已是最少",
+      "aboveMinimum": "最少可为：{{min}}",
+      "noTriple": "无人同桌3次",
+      "hasTriple": "有人同桌3次",
+      "windsOk": "风位均衡",
+      "windsBad": "风位不均",
+      "better": "比之前好",
+      "same": "与之前相同",
+      "worse": "比之前差",
+      "undo": "恢复上次",
+      "undoLabel": "恢复上一次抽签",
+      "perPlayer": "按选手",
+      "repeatedWith": "重复对手",
+      "eastCount": "东家{{count}}次",
+      "searchPlayer": "搜索选手",
+      "repeats": {
+        "other": "重复{{count}}对"
+      },
+      "opponents": {
+        "other": "{{count}}名对手"
+      }
     }
   },
   "backup": {

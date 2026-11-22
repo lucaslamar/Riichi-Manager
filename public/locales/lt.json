@@ -2071,13 +2071,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2088,7 +2081,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "Pasikartojantys trejetai",
+      "repeatedTriosHelp": "Trys žmonės, sėdėję kartu daugiau nei kartą.",
+      "maxPerPlayer": "Pakartojimai žmogui",
+      "maxPerPlayerHelp": "Daugiausia kartojusiojo pakartoti varžovai.",
+      "differentOpponents": "Skirtingi varžovai",
+      "differentOpponentsHelp": "Vidurkis žmogui ir mažiausia reikšmė.",
+      "averageAndLowest": "{{average}} (min. {{lowest}})",
+      "eastTimes": "Kartai Rytuose",
+      "eastTimesHelp": "Nuo rečiausiai iki dažniausiai."
     },
     "points": {
       "points": "Taškai",
@@ -2167,6 +2169,49 @@
       "short12": "Su 12 geriausia iki 3 turų.",
       "help8": "Esant 2 stalams, 2 turo stale susitinka žmonės tik iš 2 ankstesnių stalų, todėl kiekviename stale kartojasi bent 2 poros. Per 3 turus kiekvienas pakartoja iki 3 varžovų. Kad kartotųsi mažiau, surinkite 12 ar 16 žaidėjų.",
       "help12": "Esant 3 stalams, nuo 2 turo kas nors visada pakartoja varžovą: tai matematikos, o ne burtų riba. Per 3 turus kiekvienas gali pakartoti ne daugiau kaip 2 varžovus. 4 turas vertas tik jei visi turi kartą būti Rytais. Su 16 žaidėjų galima žaisti iki 5 turų be pakartojimų."
+    },
+    "gridStats": {
+      "title": "Burtų kokybė",
+      "details": "Išsamiau",
+      "detailsLabel": "Išsamiau apie burtų kokybę",
+      "redraw": "Traukti iš naujo",
+      "redrawLabel": "Iš naujo traukti {{round}} turo burtus",
+      "openStats": "Tvarkaraščio statistika",
+      "grade": {
+        "perfeita": "Tobula",
+        "otima": "Puiki",
+        "boa": "Gera",
+        "regular": "Vidutinė",
+        "ruim": "Prasta"
+      },
+      "none": "Varžovai nesikartoja",
+      "atMinimum": "mažiausia įmanoma",
+      "aboveMinimum": "mažiausia įmanoma: {{min}}",
+      "noTriple": "Niekas nežaidė 3 kartus kartu",
+      "hasTriple": "Pora žaidė 3 kartus kartu",
+      "windsOk": "vėjai gerai",
+      "windsBad": "vėjai netolygūs",
+      "better": "Geriau nei anksčiau",
+      "same": "Kaip anksčiau",
+      "worse": "Blogiau nei anksčiau",
+      "undo": "Grąžinti ankstesnį",
+      "undoLabel": "Grąžinti ankstesnius burtus",
+      "perPlayer": "Pagal žaidėją",
+      "repeatedWith": "Kartojosi su",
+      "eastCount": "Rytai {{count}}x",
+      "searchPlayer": "Ieškoti žaidėjo",
+      "repeats": {
+        "one": "{{count}} pora kartojasi",
+        "few": "{{count}} poros kartojasi",
+        "many": "{{count}} poros kartojasi",
+        "other": "{{count}} porų kartojasi"
+      },
+      "opponents": {
+        "one": "{{count}} varžovas",
+        "few": "{{count}} varžovai",
+        "many": "{{count}} varžovo",
+        "other": "{{count}} varžovų"
+      }
     }
   },
   "backup": {

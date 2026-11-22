@@ -1990,13 +1990,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2007,7 +2000,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "3인조 재대결",
+      "repeatedTriosHelp": "두 번 이상 같은 테이블에 앉은 3명.",
+      "maxPerPlayer": "1인당 재대결",
+      "maxPerPlayerHelp": "재대결이 가장 많은 사람의 상대 수.",
+      "differentOpponents": "서로 다른 상대",
+      "differentOpponentsHelp": "1인당 평균과 최솟값.",
+      "averageAndLowest": "{{average}} (최소 {{lowest}})",
+      "eastTimes": "동가 횟수",
+      "eastTimesHelp": "가장 적은 사람부터 가장 많은 사람까지."
     },
     "points": {
       "points": "점수",
@@ -2080,6 +2082,43 @@
       "short12": "12명이면 3라운드까지가 이상적.",
       "help8": "테이블이 2개면 2라운드 각 테이블에는 이전 2개 테이블의 사람만 모이므로 테이블마다 최소 2쌍이 다시 만납니다. 3라운드면 각자 최대 3명과 다시 만납니다. 재대결을 줄이려면 12명이나 16명을 모으세요.",
       "help12": "테이블이 3개면 2라운드부터 누군가는 재대결합니다. 추첨이 아니라 수학의 한계입니다. 3라운드면 각자 재대결 상대를 2명까지로 줄일 수 있습니다. 4라운드는 모두 한 번씩 동가가 되어야 할 때만 좋습니다. 16명이면 5라운드까지 재대결 없이 할 수 있습니다."
+    },
+    "gridStats": {
+      "title": "추첨 품질",
+      "details": "자세히",
+      "detailsLabel": "추첨 품질 자세히 보기",
+      "redraw": "다시 추첨",
+      "redrawLabel": "{{round}}라운드 다시 추첨",
+      "openStats": "대진 통계",
+      "grade": {
+        "perfeita": "완벽",
+        "otima": "최상",
+        "boa": "좋음",
+        "regular": "보통",
+        "ruim": "나쁨"
+      },
+      "none": "재대결 없음",
+      "atMinimum": "최소",
+      "aboveMinimum": "최소: {{min}}",
+      "noTriple": "3번 동석 없음",
+      "hasTriple": "3번 동석 있음",
+      "windsOk": "바람 균등",
+      "windsBad": "바람 불균형",
+      "better": "이전보다 좋음",
+      "same": "이전과 같음",
+      "worse": "이전보다 나쁨",
+      "undo": "이전으로",
+      "undoLabel": "이전 추첨으로 되돌리기",
+      "perPlayer": "선수별",
+      "repeatedWith": "재대결 상대",
+      "eastCount": "동가 {{count}}회",
+      "searchPlayer": "선수 검색",
+      "repeats": {
+        "other": "재대결 {{count}}쌍"
+      },
+      "opponents": {
+        "other": "상대 {{count}}명"
+      }
     }
   },
   "backup": {

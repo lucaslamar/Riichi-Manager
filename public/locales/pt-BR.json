@@ -2013,13 +2013,6 @@
       "cameraRetry": "Tentar de novo"
     },
     "diagnosis": {
-      "title": "Diagnóstico da Grade",
-      "grade": {
-        "perfeita": "Perfeita",
-        "boa": "Boa",
-        "regular": "Regular",
-        "ruim": "Ruim"
-      },
       "maxMeetings": "Máx. de encontros",
       "maxMeetingsHelp": "Quantas vezes a mesma dupla se enfrenta, no pior caso.",
       "repeatedPairs": "Duplas repetidas",
@@ -2030,7 +2023,16 @@
       "indirectHelp": "Duplas que nunca se enfrentam, mas têm um adversário em comum.",
       "indirectAll": "Todos se enfrentam",
       "pairsTitle": "Duplas que se repetem",
-      "windsTitle": "Ventos por jogador"
+      "windsTitle": "Ventos por jogador",
+      "repeatedTrios": "Trios repetidos",
+      "repeatedTriosHelp": "Três pessoas que dividiram mesa mais de uma vez.",
+      "maxPerPlayer": "Repetições por pessoa",
+      "maxPerPlayerHelp": "Adversários repetidos de quem mais repetiu.",
+      "differentOpponents": "Adversários diferentes",
+      "differentOpponentsHelp": "Média por pessoa e o menor valor.",
+      "averageAndLowest": "{{average}} (mín. {{lowest}})",
+      "eastTimes": "Vezes como Leste",
+      "eastTimesHelp": "De quem foi menos a quem foi mais."
     },
     "points": {
       "points": "Pontos",
@@ -2105,6 +2107,45 @@
       "short12": "Com 12, até 3 rodadas é o ideal.",
       "help8": "Com 2 mesas, cada mesa da 2ª rodada junta pessoas de só 2 mesas anteriores. Por isso, pelo menos 2 duplas se repetem em cada mesa. Com 3 rodadas, cada jogador repete até 3 adversários. Para menos repetição, junte 12 ou 16 jogadores.",
       "help12": "Com 3 mesas, a partir da 2ª rodada sempre tem alguém repetindo adversário: é limite da matemática, não do sorteio. Com 3 rodadas, dá para cada um repetir no máximo 2 adversários. A 4ª rodada só vale se todos precisarem ser Leste uma vez. Com 16 jogadores dá para fazer até 5 rodadas sem repetir ninguém."
+    },
+    "gridStats": {
+      "title": "Qualidade do sorteio",
+      "details": "Ver detalhes",
+      "detailsLabel": "Ver detalhes da qualidade do sorteio",
+      "redraw": "Sortear de novo",
+      "redrawLabel": "Sortear a rodada {{round}} de novo",
+      "openStats": "Estatística da grade",
+      "grade": {
+        "perfeita": "Perfeita",
+        "otima": "Ótima",
+        "boa": "Boa",
+        "regular": "Regular",
+        "ruim": "Ruim"
+      },
+      "none": "Nenhum adversário repetido",
+      "atMinimum": "mínimo possível",
+      "aboveMinimum": "mínimo possível: {{min}}",
+      "noTriple": "Ninguém jogou 3x junto",
+      "hasTriple": "Tem dupla que jogou 3x junta",
+      "windsOk": "ventos ok",
+      "windsBad": "ventos desequilibrados",
+      "better": "Melhor que o anterior",
+      "same": "Igual ao anterior",
+      "worse": "Pior que o anterior",
+      "undo": "Voltar ao anterior",
+      "undoLabel": "Voltar ao sorteio anterior",
+      "perPlayer": "Por jogador",
+      "repeatedWith": "Repetiu com",
+      "eastCount": "Leste {{count}}x",
+      "searchPlayer": "Buscar jogador",
+      "repeats": {
+        "one": "{{count}} dupla repetida",
+        "other": "{{count}} duplas repetidas"
+      },
+      "opponents": {
+        "one": "{{count}} adversário",
+        "other": "{{count}} adversários"
+      }
     }
   },
   "backup": {

@@ -10,6 +10,7 @@
 - **Encerrar torneio na rodada**: o botão fica ao lado do Ranking, com a mesma confirmação.
 - **Setas no ranking do torneio**: quando a rodada fecha, o ranking mostra quem subiu, caiu ou estreou, também no texto e na imagem compartilhados. A confirmação do resultado mostra como cada um fica no ranking do torneio.
 - **Pontos pelo teclado**: a folha de pontos do registro aceita o teclado físico (números, + e −, apagar, Enter para OK e Esc para fechar). No celular, tocar no visor abre o teclado do sistema, com o sinal de menos.
+- **Qualidade do sorteio em todos os formatos**: uma linha com a nota em cada rodada, que abre sozinha quando pede atenção. Mostra as repetições, os detalhes por jogador e, quando dá para refazer, Sortear de novo com comparação e Voltar ao anterior. No Ranking, o novo botão Estatística da grade abre os detalhes.
 - **Aviso de rodadas ideais**: com 8 ou 12 jogadores, as configurações avisam a partir de quando a repetição é inevitável.
 - **Sorteio que espalha as repetições**: o Torneio evita, nesta ordem, Leste repetido, dupla 3 vezes junta, trio repetido e repetições concentradas numa pessoa. Com os ventos na mesa, eles não pesam. Com 16 jogadores (e 9 no Sanma), o Brasileirão faz 5 (e 4) rodadas sem repetir adversário.
 

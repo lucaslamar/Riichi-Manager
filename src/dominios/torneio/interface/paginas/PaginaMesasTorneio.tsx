@@ -1,6 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import QualidadeSorteio from '@/compartilhado/interface/componentes/sorteio/QualidadeSorteio'
+import { compararSorteios, type Comparacao } from '@/compartilhado/sorteio/estatistica'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import AnelTimer from '@/dominios/centerpiece/interface/componentes/AnelTimer'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
@@ -8,13 +10,14 @@ import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { CHAVE_VENTO, KANJI_VENTO, ORDEM_VENTOS, type Partida } from '@/dominios/centerpiece/logica/partida'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { estatisticaDoTorneio } from '../../logica/estatisticaGrade'
 import { deveLembrarBackup } from '../../logica/exportacao'
 import { ACRESCIMO_SEGUNDOS } from '../../logica/configuracao'
 import { proximaRodada, rodadaFechada } from '../../logica/formatos'
 import { ehMesaFinal } from '../../logica/formatos/eliminatorio'
 import {
   maoAtual,
-  podeSortearDeNovo,
+  podeSortearRodada,
   relogioDaMesa,
   relogioDaRodada,
   reiniciarSorteio,
@@ -60,6 +63,12 @@ export interface AcoesMesa {
   aoLancarResultado: (rodada: RodadaTorneio, mesa: MesaTorneio, corrigir?: Partida) => void
 }
 
+const DURACAO_COMPARACAO_MS = 5000
+
+/** Identifica o sorteio atual: cada rodada sorteada ganha o próprio `geradaEm`. */
+const assinaturaDoSorteio = (rodadas: readonly RodadaTorneio[]) =>
+  rodadas.map((rodada) => `${rodada.numero}:${rodada.geradaEm}`).join()
+
 /**
  * Mesas sorteadas do torneio: abas por rodada, timer geral, um card por mesa com
  * os quatro ventos, o status ao vivo e o registro do resultado.
@@ -80,6 +89,9 @@ export default function PaginaMesasTorneio({
   const [abaRodada, setAbaRodada] = useState(emJogo?.numero ?? 1)
   const rodada = torneio.rodadas.find((item) => item.numero === abaRodada) ?? emJogo
   const [refazendo, setRefazendo] = useState(false)
+  /** Só em memória: o sorteio de antes do Sortear de novo. */
+  const [anterior, setAnterior] = useState<{ rodadas: RodadaTorneio[]; substituidoPor: string } | null>(null)
+  const [comparacao, setComparacao] = useState<Comparacao | null>(null)
   const [abortando, setAbortando] = useState(false)
   const [exportando, setExportando] = useState(false)
   const [menu, setMenu] = useState(false)
@@ -97,6 +109,12 @@ export default function PaginaMesasTorneio({
         return !!relogio && estaRodando(relogio)
       }))
   const agora = useAgora(algumRodando)
+
+  useEffect(() => {
+    if (!comparacao) return
+    const espera = window.setTimeout(() => setComparacao(null), DURACAO_COMPARACAO_MS)
+    return () => window.clearTimeout(espera)
+  }, [comparacao])
 
   // Rodada nova gerada: a aba acompanha.
   useEffect(() => {
@@ -142,6 +160,17 @@ export default function PaginaMesasTorneio({
 
   const fechada = rodadaFechada(torneio, partidas) && rodada.numero === torneio.rodadas.length
   const proxima = fechada && !somenteLeitura ? proximaRodada(torneio, partidas, new Date().toISOString()) : null
+
+  const estatistica = estatisticaDoTorneio(torneio, rodada.numero)
+  const podeRefazer = podeSortearRodada(torneio, partidas, rodada.numero)
+  const podeVoltarSorteio =
+    !!anterior && podeRefazer && anterior.substituidoPor === assinaturaDoSorteio(torneio.rodadas)
+  const voltarSorteio = () => {
+    if (!anterior) return
+    salvar({ ...torneio, rodadas: anterior.rodadas })
+    setAnterior(null)
+    setComparacao(null)
+  }
 
   return (
     <section className="ptd-inicio clb-resultado trn-mesas">
@@ -287,7 +316,29 @@ export default function PaginaMesasTorneio({
         </div>
       )}
 
-      {/* Diagnóstico da Grade (e a temporada) antes das mesas. */}
+      {estatistica && (
+        <QualidadeSorteio
+          key={`${rodada.numero}-${rodada.geradaEm}`}
+          estatistica={estatistica}
+          nomeDe={nomeDe}
+          antesDeJogar={
+            !somenteLeitura &&
+            rodada.mesas.every((mesa) => !partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero))
+          }
+          sortear={
+            podeRefazer
+              ? {
+                  rotulo: t('tournament.gridStats.redrawLabel', { round: rodada.numero }),
+                  aoTocar: () => setRefazendo(true),
+                }
+              : undefined
+          }
+          voltar={
+            podeVoltarSorteio ? { rotulo: t('tournament.gridStats.undoLabel'), aoTocar: voltarSorteio } : undefined
+          }
+        />
+      )}
+      {/* A temporada, antes das mesas. */}
       {rodape}
 
       <ul className="clb-mesas">
@@ -428,6 +479,15 @@ export default function PaginaMesasTorneio({
         </button>
       )}
 
+      {comparacao && podeVoltarSorteio && (
+        <p className="ptd-aviso qds-comparacao" role="status">
+          {t(`tournament.gridStats.${comparacao}`)}
+          <button type="button" aria-label={t('tournament.gridStats.undoLabel')} onClick={voltarSorteio}>
+            {t('tournament.gridStats.undo')}
+          </button>
+        </p>
+      )}
+
       {aviso && (
         <p className="ptd-aviso" role="status">
           {aviso}
@@ -437,7 +497,7 @@ export default function PaginaMesasTorneio({
       {menu && (
         <Modal titulo={torneio.nome} aoFechar={() => setMenu(false)} rotuloFechar={t('actions.close')} tamanho="pequena">
           <ul className="trn-menu">
-          {podeSortearDeNovo(torneio, partidas) && rodada.numero === torneio.rodadas.length && !somenteLeitura && (
+          {podeRefazer && (
             <li>
               <button
                 type="button"
@@ -559,7 +619,11 @@ export default function PaginaMesasTorneio({
           rotuloConfirmar={t('tournament.tables.redraw')}
           aoFechar={() => setRefazendo(false)}
           aoConfirmar={() => {
-            salvar(sortearDeNovo(torneio, partidas, new Date().toISOString()))
+            const refeito = sortearDeNovo(torneio, partidas, new Date().toISOString())
+            const nova = estatisticaDoTorneio(refeito, rodada.numero)
+            setAnterior({ rodadas: torneio.rodadas, substituidoPor: assinaturaDoSorteio(refeito.rodadas) })
+            if (nova && estatistica) setComparacao(compararSorteios(nova, estatistica))
+            salvar(refeito)
             setRefazendo(false)
           }}
         />

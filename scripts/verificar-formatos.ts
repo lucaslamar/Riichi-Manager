@@ -22,7 +22,6 @@ import { sortearRodada } from '../src/compartilhado/sorteio/rodada'
 import { compararCustos } from '../src/compartilhado/sorteio/custo'
 import { compararSorteios, estatisticaDaGrade, pedeAtencao } from '../src/compartilhado/sorteio/estatistica'
 import { estatisticaDoTorneio } from '../src/dominios/torneio/logica/estatisticaGrade'
-import { notaDaGrade } from '../src/dominios/torneio/logica/formatos/rodizio/qualidade'
 import { proximaRodada, rodadaFechada, rodadasIniciais } from '../src/dominios/torneio/logica/formatos'
 import {
   classificacaoDaFase,
@@ -462,8 +461,9 @@ for (const total of [8, 12, 16]) {
     }
   }
   for (const quantas of [3, 4]) {
-    const nota = notaDaGrade(gerarRodizio(jogadores(12), quantas, agora).qualidade)
-    assert.ok(nota === 'perfeita' || nota === 'boa', `Rodízio 12 com ${quantas}: ${nota}`)
+    const ids = jogadores(12)
+    const { nota } = estatisticaDaGrade(gerarRodizio(ids, quantas, agora).rodadas, ids, 4, true)
+    assert.ok(nota === 'otima' || nota === 'boa', `Rodízio 12 com ${quantas}: ${nota}`)
   }
   console.log('Sorteio mitigado ok.')
 }

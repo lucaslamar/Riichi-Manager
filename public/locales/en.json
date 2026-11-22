@@ -2013,13 +2013,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2030,7 +2023,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "Repeated trios",
+      "repeatedTriosHelp": "Three people who shared a table more than once.",
+      "maxPerPlayer": "Repeats per person",
+      "maxPerPlayerHelp": "Repeat opponents of whoever repeated most.",
+      "differentOpponents": "Different opponents",
+      "differentOpponentsHelp": "Average per person and the lowest.",
+      "averageAndLowest": "{{average}} (min. {{lowest}})",
+      "eastTimes": "Times as East",
+      "eastTimesHelp": "From the fewest to the most."
     },
     "points": {
       "points": "Points",
@@ -2105,6 +2107,45 @@
       "short12": "With 12, up to 3 rounds is ideal.",
       "help8": "With 2 tables, each round 2 table mixes people from only 2 earlier tables, so at least 2 pairs repeat at each table. With 3 rounds, each player repeats up to 3 opponents. For fewer repeats, gather 12 or 16 players.",
       "help12": "With 3 tables, someone always repeats an opponent from round 2 on: that is a limit of the math, not of the draw. With 3 rounds, each player can repeat at most 2 opponents. A 4th round is only worth it if everyone must be East once. With 16 players you can play up to 5 rounds with no repeats."
+    },
+    "gridStats": {
+      "title": "Draw quality",
+      "details": "See details",
+      "detailsLabel": "See details of the draw quality",
+      "redraw": "Draw again",
+      "redrawLabel": "Draw round {{round}} again",
+      "openStats": "Schedule statistics",
+      "grade": {
+        "perfeita": "Perfect",
+        "otima": "Excellent",
+        "boa": "Good",
+        "regular": "Fair",
+        "ruim": "Poor"
+      },
+      "none": "No repeat opponents",
+      "atMinimum": "lowest possible",
+      "aboveMinimum": "lowest possible: {{min}}",
+      "noTriple": "No pair met 3 times",
+      "hasTriple": "A pair met 3 times",
+      "windsOk": "winds ok",
+      "windsBad": "uneven winds",
+      "better": "Better than before",
+      "same": "Same as before",
+      "worse": "Worse than before",
+      "undo": "Back to previous",
+      "undoLabel": "Go back to the previous draw",
+      "perPlayer": "By player",
+      "repeatedWith": "Repeated with",
+      "eastCount": "East {{count}}x",
+      "searchPlayer": "Search player",
+      "repeats": {
+        "one": "{{count}} repeated pair",
+        "other": "{{count}} repeated pairs"
+      },
+      "opponents": {
+        "one": "{{count}} opponent",
+        "other": "{{count}} opponents"
+      }
     }
   },
   "backup": {
