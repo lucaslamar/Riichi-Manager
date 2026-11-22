@@ -1124,6 +1124,8 @@ button.mesa-domo {
 @media (orientation: landscape) and (max-height: 560px) {
   .mesa-tela.mesa-tela--simples {
     --mesa-lado: min(620px, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - 20px));
+    /* A faixa está ao lado, então a mesa de 3 não reserva a altura dela. */
+    --mesa-altura-acoes: 56px;
     grid-template-rows: none;
   }
 
