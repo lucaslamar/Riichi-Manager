@@ -35,7 +35,7 @@ const arquivoDaFlor = (flor: Flor) => (flor <= 4 ? `Flor${flor}` : `Estacao${flo
  */
 export function urlPedraChinesa(arquivo: string, cor: 'brancas' | 'pretas', temaEscuro: boolean) {
   const pasta = cor === 'pretas' ? (temaEscuro ? 'chines-black-rosa' : 'chines-black') : 'chines'
-  return `${import.meta.env.BASE_URL}tiles/${pasta}/${arquivo}.svg?v=2`
+  return `${import.meta.env.BASE_URL}tiles/${pasta}/${arquivo}.svg?v=3`
 }
 
 function ImagemPedra({ arquivo, nome }: { arquivo: string; nome: string }) {

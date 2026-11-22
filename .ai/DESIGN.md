@@ -40,7 +40,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 ## Dragão Branco (pedido do usuário em 22/11/2026)
 
 - No Riichi é liso, só a cor da pedra: sem moldura nem linha interna, em qualquer cor de pedra.
-- No Chinês o desenho tem uma cor só: rosa nas pretas do tema escuro e amarelo nas outras (pretas do claro e do Azul, e brancas). As cores saem de `scripts/gerar-pedras-chinesas-pretas.ts`.
+- No Chinês o desenho mistura as cores da arte: verde com vermelho, e verde com rosa nas pretas do tema escuro. A versão de uma cor só foi testada e o usuário preferiu esta (22/11/2026).
 
 ## Escrita
 
