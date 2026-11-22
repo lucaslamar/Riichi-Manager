@@ -227,6 +227,32 @@
   }
 }
 
+/* iPhone SE com as barras do Safari: o visor divide a linha com o Calcular mão. */
+@media (max-height: 600px) {
+  .cpt-corpo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .cpt-visor {
+    min-width: 0;
+    flex: 1;
+    margin: 0;
+  }
+
+  .cpt-calcular {
+    width: 42%;
+    margin: 0;
+    padding-inline: 6px;
+    font-size: 0.75rem;
+  }
+
+  .cpt-teclado {
+    width: 100%;
+  }
+}
+
 /* Regras do torneio: o mesmo card, só para ler. */
 .fin-regras-travadas {
   cursor: default;
