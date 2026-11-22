@@ -10,6 +10,7 @@ export default function ResumoDisputa({
   textos,
   nome,
   pontos,
+  premioEmJogo,
 }: {
   distancias: DistanciasDoPodio
   candidatos: readonly Candidato[]
@@ -17,6 +18,8 @@ export default function ResumoDisputa({
   textos: TextosDistancia
   nome: (jogadorId: string) => string
   pontos: (valor: number) => string
+  /** A diferença de prêmio entre as duas posições, já escrita. */
+  premioEmJogo: (acima: number, abaixo: number) => string | null
 }) {
   const { t } = useI18n()
   const acompanhado = acompanhadoId ? distancias.porJogador.get(acompanhadoId)?.paraTerceiro : null
@@ -26,7 +29,10 @@ export default function ResumoDisputa({
       <ul className="trn-disputa-lista trn-disputa-faixa" aria-label={t('tournament.podiumGap.podium')}>
         {distancias.faixa.map(({ acima, abaixo, distancia }) => (
           <li key={acima}>
-            <span>{t('tournament.podiumGap.versus', { a: textos.lugar(acima), b: textos.lugar(abaixo) })}</span>
+            <span>
+              {t('tournament.podiumGap.versus', { a: textos.lugar(acima), b: textos.lugar(abaixo) })}
+              {premioEmJogo(acima, abaixo) && <small>{premioEmJogo(acima, abaixo)}</small>}
+            </span>
             <strong>{textos.resumo(distancia)}</strong>
           </li>
         ))}

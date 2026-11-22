@@ -1,11 +1,14 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { encontrosDaTemporada, novoEncontro, rankingTemporada } from '../../logica/temporada'
+import { premiacaoDe, premiacaoPadrao, premioDaTemporada } from '../../logica/premiacao'
 import type { CriterioTemporada, Torneio } from '../../logica/tipos'
+import FolhaPremiacao from '../componentes/FolhaPremiacao'
+import { useDinheiro } from '../hooks/useDinheiro'
 import { useTorneios } from '../hooks/useTorneios'
 import { useSubtituloTorneio } from '../textoTorneio'
 import '../torneio.css'
@@ -29,6 +32,8 @@ export default function PaginaTemporada({
   const { partidas } = usePartidasDoTorneio()
   const nomeDoTorneio = useNomeNoTorneio()
   const subtitulo = useSubtituloTorneio()
+  const emMoeda = useDinheiro()
+  const [vendoPremiacao, setVendoPremiacao] = useState(false)
   const temporada = temporadas.find((item) => item.id === temporadaId)
   const encontros = useMemo(() => encontrosDaTemporada(torneios, temporadaId), [torneios, temporadaId])
   const ranking = useMemo(
@@ -56,6 +61,9 @@ export default function PaginaTemporada({
       },
       id,
     )
+  const premio = premiacaoDe(temporada.premiacao, ranking.length)
+  const premios = premio ? premioDaTemporada(premio, ranking) : null
+  const dinheiro = (valor: number) => emMoeda(valor, temporada.premiacao?.moeda ?? 'BRL')
   const emAberto = encontros.find((encontro) => encontro.status !== 'finalizado')
   const mudarCriterio = (criterio: CriterioTemporada) => salvarTemporada({ ...temporada, criterio })
 
@@ -85,6 +93,13 @@ export default function PaginaTemporada({
       >
         <i className={`fas ${emAberto ? 'fa-play' : 'fa-plus'}`} aria-hidden="true" />{' '}
         {t(emAberto ? 'tournament.season.continueMeetup' : 'tournament.season.newMeetup')}
+      </button>
+
+      <button type="button" className="trn-premio-resumo" aria-haspopup="dialog" onClick={() => setVendoPremiacao(true)}>
+        <i className="fas fa-gift" aria-hidden="true" />
+        <span>{t('tournament.prize.tab')}</span>
+        <strong>{premio ? dinheiro(premio.premio) : t('tournament.settings.off')}</strong>
+        <i className="fas fa-chevron-right" aria-hidden="true" />
       </button>
 
       <h3 className="ptd-rotulo">{t('tournament.season.criterion')}</h3>
@@ -148,7 +163,12 @@ export default function PaginaTemporada({
               {ranking.map((linha, indice) => (
                 <tr key={linha.jogadorId} className={linha.abaixoDoMinimo ? 'trn-abaixo-minimo' : undefined}>
                   <td>{linha.abaixoDoMinimo ? '–' : indice + 1}</td>
-                  <td>{nomeDe(linha.jogadorId)}</td>
+                  <td>
+                    {nomeDe(linha.jogadorId)}
+                    {premios?.has(linha.jogadorId) && (
+                      <small className="trn-premio-linha">{dinheiro(premios.get(linha.jogadorId) ?? 0)}</small>
+                    )}
+                  </td>
                   <td className={linha.valor >= 0 ? 'trn-positivo' : 'trn-negativo'}>
                     {new Intl.NumberFormat(idioma, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(linha.valor)}
                   </td>
@@ -177,6 +197,15 @@ export default function PaginaTemporada({
             </li>
           ))}
         </ul>
+      )}
+
+      {vendoPremiacao && (
+        <FolhaPremiacao
+          inicial={temporada.premiacao ?? premiacaoPadrao(idioma)}
+          jogadores={ranking.length}
+          aoSalvar={(premiacao) => salvarTemporada({ ...temporada, premiacao })}
+          aoFechar={() => setVendoPremiacao(false)}
+        />
       )}
     </section>
   )

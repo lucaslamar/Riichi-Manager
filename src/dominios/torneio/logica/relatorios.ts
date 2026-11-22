@@ -14,6 +14,7 @@ import {
   type DistanciaAlvo,
 } from './distanciaPodio'
 import { ehMesaFinal } from './formatos/eliminatorio'
+import type { ResultadoPremiacao } from './premiacao'
 import type { LinhaRankingTorneio } from './ranking'
 import type { RodadaTorneio, Torneio } from './tipos'
 import { statusNaTela } from './mesas'
@@ -256,4 +257,18 @@ export function relatorioDoJogador(
     .filter((alvos) => alvos.length > 0)
     .map((alvos): BlocoRelatorio => ({ linhas: linhasDeDistancia(alvos, rotulos) }))
   return { titulo: rotulos.titulo, subtitulo: rotulos.subtitulo, chamada: rotulos.chamada, blocos }
+}
+
+/** O prêmio de cada posição, para o ranking e a disputa. */
+export function blocoDaPremiacao(
+  resultado: ResultadoPremiacao,
+  rotulos: { titulo: string; lugar: (posicao: number) => string; dinheiro: (valor: number) => string },
+): BlocoRelatorio {
+  return {
+    titulo: rotulos.titulo,
+    linhas: resultado.posicoes.map(({ posicao, valor }) => ({
+      esquerda: MEDALHAS[posicao - 1] ? `${MEDALHAS[posicao - 1]} ${rotulos.lugar(posicao)}` : rotulos.lugar(posicao),
+      direita: rotulos.dinheiro(valor),
+    })),
+  }
 }

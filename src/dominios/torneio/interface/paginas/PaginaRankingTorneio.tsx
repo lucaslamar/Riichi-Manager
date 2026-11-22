@@ -19,7 +19,10 @@ import {
   type FiltrosRankingTorneio,
 } from '../../logica/filtrosRankingTorneio'
 import { mudancasDoRanking, rankingDoTorneio, recorteAteRodada, textoDaSeta } from '../../logica/ranking'
-import { relatorioDaDisputa, relatorioDoJogador, relatorioDoRanking } from '../../logica/relatorios'
+import { premiacaoDe, premioDaPosicao } from '../../logica/premiacao'
+import { blocoDaPremiacao, relatorioDaDisputa, relatorioDoJogador, relatorioDoRanking } from '../../logica/relatorios'
+import FolhaPremiacao from '../componentes/FolhaPremiacao'
+import { useDinheiro } from '../hooks/useDinheiro'
 import FolhaDistanciaPodio from '../componentes/FolhaDistanciaPodio'
 import ModalFiltrosRankingTorneio from '../componentes/ModalFiltrosRankingTorneio'
 import ResumoDisputa from '../componentes/ResumoDisputa'
@@ -54,7 +57,9 @@ export default function PaginaRankingTorneio({
   useVoltarPorDeslize(aoVoltar)
   const { partidas } = usePartidasDoTorneio()
   const nomeDoTorneio = useNomeNoTorneio()
-  const { finalizar } = useTorneios()
+  const { finalizar, salvar } = useTorneios()
+  const emMoeda = useDinheiro()
+  const [vendoPremiacao, setVendoPremiacao] = useState(false)
   const { aviso, mostrar } = useAviso()
   const [encerrando, setEncerrando] = useState(false)
   const [compartilhando, setCompartilhando] = useState<{ relatorio: () => Relatorio; arquivo: string } | null>(null)
@@ -124,6 +129,28 @@ export default function PaginaRankingTorneio({
     filtros.ateRodada === null ? null : t('tournament.share.untilRound', { round: filtros.ateRodada })
   const subtituloDe = (...partes: (string | null)[]) => [...partes, formatoCurto, ateRodada].filter(Boolean).join(' · ')
   const chamada = t('tournament.share.ctaRace', { app: nomeDoApp })
+
+  // O encontro de temporada não tem prêmio próprio: ele é da Temporada.
+  const premiacao = torneio.formato.tipo === 'temporada' ? undefined : torneio.premiacao
+  const premio = premiacaoDe(premiacao, torneio.jogadorIds.length)
+  const premios = premio ? premioDaPosicao(premio, linhas) : null
+  const dinheiro = (valor: number) => emMoeda(valor, premiacao?.moeda ?? 'BRL')
+  const premioEmJogo = (acima: number, abaixo: number) => {
+    if (!premio) return null
+    const valorDe = (posicao: number) => premio.posicoes[posicao - 1]?.valor ?? 0
+    const diferenca = valorDe(acima) - valorDe(abaixo)
+    return diferenca > 0 ? t('tournament.prize.atStake', { value: dinheiro(diferenca) }) : null
+  }
+  const comPremio = (base: Relatorio): Relatorio =>
+    premio
+      ? {
+          ...base,
+          blocos: [
+            ...base.blocos,
+            blocoDaPremiacao(premio, { titulo: t('tournament.prize.byPlace'), lugar: textos.lugar, dinheiro }),
+          ],
+        }
+      : base
 
   const relatorioDisputa = () =>
     relatorioDaDisputa(recorte.torneio, recorte.partidas, linhas, filtros.acompanharId, {
@@ -212,7 +239,7 @@ export default function PaginaRankingTorneio({
               aria-haspopup="dialog"
               onClick={() =>
                 setCompartilhando({
-                  relatorio: disputa ? relatorioDisputa : relatorio,
+                  relatorio: () => comPremio(disputa ? relatorioDisputa() : relatorio()),
                   arquivo: nomeDeArquivo(
                     torneio.nome,
                     t(disputa ? 'tournament.podiumGap.race' : 'tournament.ranking.title'),
@@ -269,6 +296,15 @@ export default function PaginaRankingTorneio({
         </button>
       )}
 
+      {premio && (
+        <button type="button" className="trn-premio-resumo" aria-haspopup="dialog" onClick={() => setVendoPremiacao(true)}>
+          <i className="fas fa-gift" aria-hidden="true" />
+          <span>{t('tournament.prize.pool')}</span>
+          <strong>{dinheiro(premio.premio)}</strong>
+          <i className="fas fa-chevron-right" aria-hidden="true" />
+        </button>
+      )}
+
       {jaJogaram && (
         <div className="rkf-barra trn-barra-ranking">
           <button
@@ -304,6 +340,7 @@ export default function PaginaRankingTorneio({
           textos={textos}
           nome={nomeDe}
           pontos={pontos}
+          premioEmJogo={premioEmJogo}
         />
       )}
 
@@ -340,6 +377,8 @@ export default function PaginaRankingTorneio({
                 linha.jogadorId === filtros.acompanharId && 'trn-linha-seguida',
               ].filter(Boolean)
               const distancia = distancias.porJogador.get(linha.jogadorId)
+              const valorPremio = premios?.get(linha.jogadorId)
+              const premioDele = valorPremio ? dinheiro(valorPremio) : null
               return (
                 // Quem ainda não jogou não tem posição: sem isso, todos empatavam em 1º.
                 <tr
@@ -366,10 +405,13 @@ export default function PaginaRankingTorneio({
                       <button
                         type="button"
                         className="trn-nome-ranking"
-                        aria-label={t('tournament.podiumGap.open', { name: nomeDe(linha.jogadorId) })}
+                        aria-label={[t('tournament.podiumGap.open', { name: nomeDe(linha.jogadorId) }), premioDele]
+                          .filter(Boolean)
+                          .join(', ')}
                         aria-haspopup="dialog"
                       >
                         {nomeDe(linha.jogadorId)}
+                        {premioDele && <small className="trn-premio-linha">{premioDele}</small>}
                       </button>
                     ) : (
                       nomeDe(linha.jogadorId)
@@ -422,6 +464,19 @@ export default function PaginaRankingTorneio({
           <strong>{nomeDe(seguida.jogadorId)}</strong>
           <span>{pontos(seguida.pontos)}</span>
         </button>
+      )}
+
+      {vendoPremiacao && premiacao && (
+        <FolhaPremiacao
+          inicial={premiacao}
+          jogadores={torneio.jogadorIds.length}
+          aoSalvar={
+            torneio.transferidoEm || torneio.status === 'finalizado'
+              ? undefined
+              : (nova) => salvar({ ...torneio, premiacao: nova })
+          }
+          aoFechar={() => setVendoPremiacao(false)}
+        />
       )}
 
       {filtrando && (
