@@ -43,6 +43,8 @@ interface PropsCampoNotacaoMao {
   aoEscolherEspera: (pedra: CodigoPedra) => void
   /** Sem Aka dora nas regras, o 0 (5 vermelho) fica desabilitado. */
   akadora: boolean
+  /** Chamadas com o termo em chinês e o nome acessível, em vez do rótulo simples. */
+  rotulosChamada?: Record<Meld['tipo'], { nome: string; hanzi: string; descricao: string }>
 }
 
 interface Tecla {
@@ -127,6 +129,7 @@ export function CampoNotacaoMao({
   aoArmarChamada,
   esperas,
   rotuloEspera,
+  rotulosChamada,
   aoEscolherEspera,
   akadora,
 }: PropsCampoNotacaoMao) {
@@ -391,11 +394,23 @@ export function CampoNotacaoMao({
             }`.trim()}
             type="button"
             aria-pressed={chamadaArmada === chamada.tipo}
+            aria-label={rotulosChamada?.[chamada.tipo].descricao}
             // Acende quando cabe no último grupo, ou para marcar antes de um grupo novo.
             disabled={!possiveis.has(chamada.tipo) && /\d$/.test(pendentes)}
             onClick={() => tocarChamada(chamada)}
           >
-            <span className="rotulo-tecla-notacao-mao">{t(chamada.rotulo)}</span>
+            {rotulosChamada ? (
+              <span className="rotulo-tecla-notacao-mao rotulo-chamada-dupla">
+                <span className="rotulo-chamada-dupla__hanzi" lang="zh-Hans">
+                  {rotulosChamada[chamada.tipo].hanzi}
+                </span>
+                <span className="rotulo-chamada-dupla__nome">
+                  {rotulosChamada[chamada.tipo].nome}
+                </span>
+              </span>
+            ) : (
+              <span className="rotulo-tecla-notacao-mao">{t(chamada.rotulo)}</span>
+            )}
           </button>
         ))}
       </div>

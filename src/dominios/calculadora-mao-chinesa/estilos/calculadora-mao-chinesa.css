@@ -159,16 +159,6 @@
   font-weight: 700;
 }
 
-.fan-mcr__riichi {
-  justify-self: start;
-  border: 1px solid var(--texto-aviso);
-  border-radius: 999px;
-  padding: 2px 10px;
-  color: var(--texto-aviso);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
 /* Escolha das flores na finalização, como o painel dos indicadores de Dora. */
 .mcr-escolha-flores {
   display: grid;
@@ -189,4 +179,72 @@
   border-color: var(--cor-destaque, #e06ab0);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--cor-destaque, #e06ab0) 40%, transparent);
   opacity: 1;
+}
+
+/* Chamadas em duas linhas: 汉字 em cima, pinyin embaixo. As grades vêm da barra do Riichi, com 4 colunas. */
+.rotulo-chamada-dupla {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.rotulo-chamada-dupla__hanzi {
+  font-size: 1.15em;
+  font-weight: 900;
+}
+
+.rotulo-chamada-dupla__nome {
+  font-size: 0.8em;
+}
+
+.rotulo-tecla-notacao-mao.rotulo-chamada-dupla {
+  font-size: 0.95rem;
+}
+
+.mcr-calculadora .acoes-construtor-mao.mcr-acoes-construtor:not(#_),
+.mcr-calculadora .opcoes-acoes-mao-mobile--mcr:not(#_) {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.mcr-calculadora .btn-configuracao-mao-cabecalho.mcr-mais-entradas:not(#_) {
+  display: inline-flex;
+}
+
+/* Sem altura para duas linhas: "碰 Peng" numa linha só. */
+body.modo-compacto .mcr-calculadora .rotulo-chamada-dupla,
+body.modo-compacto .mcr-calculadora .rotulo-tecla-notacao-mao.rotulo-chamada-dupla {
+  flex-direction: row;
+  gap: 3px;
+}
+
+@media (max-height: 500px) {
+  .mcr-calculadora .rotulo-chamada-dupla {
+    flex-direction: row;
+    gap: 3px;
+  }
+}
+
+.mcr-item-entrada {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--linha-divisoria);
+  border-radius: 12px;
+  padding: 0 14px;
+  color: var(--texto-principal);
+  background: var(--superficie);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mcr-resultado__batida {
+  margin: 0;
+  color: var(--cor-texto, #1a3a5a);
+  font-weight: 800;
 }

@@ -570,20 +570,20 @@
     "valueYakuman": "Vertė: Yakuman",
     "mcr": {
       "guide": "Kepurė atidaro kišeninį gidą: 81 fan su pavyzdžiais, žodynas ir paieška žaidimo metu.",
-      "finish": "Kai ranka pilna, „Baigti ranką“ atidaro pergalės parinktis: gėlės, ron ar tsumo, vėjai ir ypatingos sąlygos.",
+      "finish": "Kai ranka pilna, „Baigti ranką“ atidaro pergalės parinktis: gėlės, Dianhe ar Zimo, vėjai ir ypatingos sąlygos.",
       "notationTip": "Galite įvesti kelias grupes ir skaičius, o rūšį paspausti tik pabaigoje – ji tiks visiems. Po kiekvienu skaičiumi matosi garbės akmuo su z. AC viską išvalo. Grįžti į akmenų klaviatūrą: paspauskite Akmenys arba braukite į dešinę.",
       "guideCard": "Kiekvienas fan su pavyzdžiu ir verte",
       "tsumo": "Laimėjote su paimtu akmeniu. Tai Pats paimtas (1 fan), o kiti trys moka po 8 ir rankos fan.",
       "ron": "Laimėjote iš kito žaidėjo išmesto akmens. Išmetęs moka 8 ir rankos fan, kiti du po 8.",
-      "oculta": "Be atvirų Chi, Pon ar Kan: ron metu Paslėpta ranka (2 fan), tsumo metu Visiškai paslėpta ranka (4 fan) vietoje jų.",
+      "oculta": "Be atvirų Chi, Peng ar Gang: Dianhe metu Paslėpta ranka (2 fan), Zimo metu Visiškai paslėpta ranka (4 fan) vietoje jų.",
       "ventoAssento": "Laimėtojo vėjas. Jo trejetas ar ketvertas – Vietos vėjas (2 fan). Dalintojas yra Rytai.",
       "ventoRodada": "Raundo vėjas. Jo trejetas ar ketvertas – Stalo vėjas (2 fan). Jei sutampa su vietos vėju, skaičiuojami abu.",
       "flores": "8 gėlių ir metų laikų akmenys verti po 1 fan. MCR jie nesusiję su vieta.",
       "floresMinimo": "Gėlės neskaičiuojamos į 8 fan minimumą: jos pridedamos tik kai ranka jau verta 8.",
       "ultimaTitulo": "Paskutinis akmuo",
-      "ultima": "Laimėti su paskutiniu sienos akmeniu (tsumo) – 8 fan. Laimėti su paskutiniu išmestu akmeniu (ron) – 8 fan.",
-      "kanTitulo": "Kan",
-      "kan": "Tsumo metu laimėti su Kan papildomu akmeniu – 8 fan. Ron metu laimėti su akmeniu, kurį kitas prideda prie Pon – 8 fan.",
+      "ultima": "Laimėti su paskutiniu sienos akmeniu (Zimo) – 8 fan. Laimėti su paskutiniu išmestu akmeniu (Dianhe) – 8 fan.",
+      "kanTitulo": "Gang",
+      "kan": "Zimo metu laimėti su Gang papildomu akmeniu – 8 fan. Dianhe metu laimėti su akmeniu, kurį kitas prideda prie Peng – 8 fan.",
       "ultimaDoTipo": "Laimėti su paskutine akmens kopija, kai kitos trys matomos – Paskutinė kopija (4 fan)."
     }
   },
@@ -2298,14 +2298,14 @@
     "condicoes": {
       "titulo": "Conditions",
       "forma": "Win",
-      "ron": "Ron (discard)",
-      "tsumo": "Tsumo (self-drawn)",
+      "ron": "Dianhe (discard)",
+      "tsumo": "Zimo (self-drawn)",
       "ventoRodada": "Prevalent wind",
       "ventoAssento": "Seat wind",
       "ultimaParede": "Last tile from the wall",
       "ultimoDescarte": "Last discard",
-      "reposicaoKan": "Win on a Kan replacement tile",
-      "rouboKan": "Robbing the Kan",
+      "reposicaoKan": "Win on a Gang replacement tile",
+      "rouboKan": "Robbing the Gang",
       "ultimaDoTipo": "Last tile of its kind",
       "ultimaDoTipoAjuda": "The other three are already visible."
     },
@@ -2323,12 +2323,13 @@
       "cadaJogador": "Each player pays",
       "pontos": "{{pontos}} points",
       "vezes": "×{{vezes}}",
-      "invalidaTitulo": "Invalid hand"
+      "invalidaTitulo": "Invalid hand",
+      "tituloFan": "Fan"
     },
     "erros": {
-      "incompleta": "Build 14 tiles to calculate. A Kan counts as 3.",
-      "semKan": "Winning on a Kan replacement tile needs a Kan in the hand.",
-      "rouboDoKan": "Robbing the Kan can't combine with the last discard or another identical tile in the hand.",
+      "incompleta": "Build 14 tiles to calculate. A Gang counts as 3.",
+      "semKan": "Winning on a Gang replacement tile needs a Gang in the hand.",
+      "rouboDoKan": "Robbing the Gang can't combine with the last discard or another identical tile in the hand.",
       "ultimaDoTipo": "Last tile of its kind doesn't apply with another identical tile in the hand."
     },
     "fan": {
@@ -2343,21 +2344,24 @@
       "6": "Summer",
       "7": "Autumn",
       "8": "Winter"
+    },
+    "voz": {
+      "chi": "Chi!",
+      "pon": "Peng!",
+      "kanAberto": "Gang!",
+      "kanFechado": "An Gang!",
+      "ron": "Hu!",
+      "tsumo": "Zimo!"
     }
   },
   "guiaBolso": {
     "mcr": {
       "pontosFan": "{{pontos}} points",
       "numero": "No. {{id}}",
-      "riichi": "Riichi: {{yaku}}",
       "detalhes": "Details",
       "naoCombina": "Doesn't combine with:",
       "irPara": "Go to {{nome}}",
-      "semEquivalenteTitulo": "Riichi Yaku with no equivalent",
-      "semEquivalenteExato": "No exact equivalent: {{lista}}.",
-      "naoExistem": "Don't exist in MCR: {{lista}}.",
       "porPontos": "By points",
-      "abaRiichi": "Riichi",
       "abas": {
         "chows": "Chows",
         "pungs": "Pungs",
@@ -2373,7 +2377,7 @@
         "ultima-peca": "Last tile",
         "outros": "Others"
       },
-      "busca": "Search fan, 汉字, English or yaku",
+      "busca": "Ieškoti fan, 汉字 ar angliškai",
       "rotuloBusca": "Search the Pocket Guide",
       "exemplo": "Example hand: {{pedras}}",
       "condicoes": "Example conditions",
@@ -2424,7 +2428,7 @@
       "porFanAjuda": "Įveskite rankos fan",
       "qtdFan": "{{fan}} fan",
       "empateTexto": "Siena baigėsi be laimėtojo. Niekas nemoka, dalintojas keičiasi.",
-      "ronDe": "{{name}} ron",
+      "ronDe": "{{name}} Dianhe",
       "falsoHu": "Klaidingas Hu",
       "falsoHuDe": "{{name}} klaidingas Hu?",
       "falsoHuTexto": "Suklydęs žaidėjas moka po 10 taškų kitiems trims, o ranka tęsiasi.",
@@ -2435,6 +2439,118 @@
   "glossario": {
     "mcr": {
       "diferenteRiichi": "Different from Riichi"
+    }
+  },
+  "modo": {
+    "mcr": {
+      "sectionHelp": {
+        "tiles": {
+          "pon": "Palieskite Peng ir tada akmenėlį. Visi trys įeina kaip Peng, naudojant jau rankoje esančius.",
+          "kan": "Palieskite Gang ir tada akmenėlį. Visi keturi įeina kaip Gang.",
+          "closedKan": "Palieskite An Gang ir tada akmenėlį. Jei rankoje jau yra trys ar keturi tokie, jie tampa Gang."
+        },
+        "notation": {
+          "pon": "Trejetas, paimtas iš bet kurio žaidėjo išmesto akmens. Įveskite 111p ir palieskite Peng. Arba pirma Peng, paskui 1: atsiranda trys 1, laukiantys rūšies; palieskite p.",
+          "kan": "4 vienodi, ketvirtas paimtas iš kito žaidėjo išmesto akmens. Įveskite 1111s ir palieskite Gang. Arba pirma Gang, paskui 1: atsiranda keturi 1; palieskite s.",
+          "closedKan": "4 vienodi, visi iš jūsų rankos. Įveskite 7777z ir palieskite An Gang. Arba pirma An Gang, paskui 7: atsiranda keturi 7; palieskite z.",
+          "display": "Su fizine klaviatūra skambinimas yra raidė grupės gale: c – Chi, Peng ir Gang (123mc, 111pc, 1111sc), a – An Gang (7777za)."
+        }
+      },
+      "pages": {
+        "installTitle": "Įdiegti Mahjong Manager",
+        "installSuggestion": "Įdiekite Mahjong Manager ir žaiskite be naršyklės juostos.",
+        "fullscreenHeaderHint": "Bakstelėkite Mahjong Manager – visas ekranas",
+        "aboutTitle": "Apie Mahjong Manager",
+        "aboutText": "Programėlė, sukurta padėti madžongo žaidėjams ir klubams skaičiuoti rankas, organizuoti partijas ir išbandyti turnyrų idėjas. Madžongas visiems.",
+        "narrationHelp": "Garsiai skaito kvietimus, pergalę ir rezultatą. Akliems ir silpnaregiams."
+      },
+      "match": {
+        "club": {
+          "shareTitle": "Mahjong Manager · Klubo stalai · {{date}}"
+        },
+        "menu": {
+          "ron": "Won by Dianhe",
+          "tsumo": "Won by Zimo"
+        },
+        "win": {
+          "tsumoOf": "{{name}} Zimo"
+        },
+        "discards": {
+          "kakan": "Bu Gang",
+          "kakanInput": "Bu Gang tile in notation (3m)",
+          "whoCalled": {
+            "ron": "Who called Dianhe?",
+            "pon": "Who called Peng?",
+            "kan": "Who called Gang?"
+          },
+          "call": {
+            "pon": "Peng",
+            "kan": "Gang",
+            "ron": "Dianhe"
+          },
+          "closedKan": "An Gang"
+        },
+        "event": {
+          "ron": "Dianhe",
+          "tsumo": "Zimo"
+        }
+      },
+      "tournament": {
+        "import": {
+          "errorInvalid": "This is not a Mahjong Manager tournament."
+        }
+      },
+      "backup": {
+        "importHelp": "Atidaro Mahjong Manager atsarginės kopijos failą (.json)."
+      },
+      "melds": {
+        "chii": "Chi",
+        "pon": "Peng",
+        "kanAberto": "Gang",
+        "kanCompact": "Gang",
+        "kanFechado": "An Gang",
+        "kanClosedCompact": "An Gang"
+      },
+      "narration": {
+        "calls": {
+          "pon": "Peng",
+          "kanAberto": "Gang",
+          "kanFechado": "An Gang"
+        }
+      },
+      "calculator": {
+        "ron": "Dianhe 点和",
+        "tsumo": "Zimo 自摸"
+      },
+      "windDraw": {
+        "ronRon": "Hu hu!"
+      }
+    }
+  },
+  "acoes": {
+    "mcr": {
+      "chii": {
+        "nome": "Chi",
+        "hanzi": "吃",
+        "aria": "Chi (吃): skelbti seką"
+      },
+      "pon": {
+        "nome": "Peng",
+        "hanzi": "碰",
+        "aria": "Peng (碰): skelbti trejetą"
+      },
+      "kanAberto": {
+        "nome": "Gang",
+        "hanzi": "明杠",
+        "aria": "Gang (明杠): skelbti atvirą kongą"
+      },
+      "kanFechado": {
+        "nome": "An Gang",
+        "hanzi": "暗杠",
+        "aria": "An Gang (暗杠): skelbti paslėptą kongą"
+      },
+      "mpsz": "Rašyti MPSZ",
+      "mais": "Kiti įvedimo būdai"
     }
   }
 }

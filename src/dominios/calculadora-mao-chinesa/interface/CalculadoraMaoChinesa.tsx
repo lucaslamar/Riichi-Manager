@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useNarrarMudanca } from '@/compartilhado/interface/narracao/useNarracao'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { BotaoAcao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
 import { CampoNotacaoMao } from '@/dominios/calculadora-mao/interface/montagem-mao/componentes/CampoNotacaoMao'
@@ -22,6 +23,7 @@ import {
 import { maoDoMpsz, mpszDaMao } from '../logica/mpsz'
 import '../estilos/calculadora-mao-chinesa.css'
 import ControlesCondicoes from './ControlesCondicoes'
+import MenuEntradaMcr from './MenuEntradaMcr'
 import MaoChinesaAtual from './MaoChinesaAtual'
 import ModalResultadoMcr from './ModalResultadoMcr'
 import TecladoChines from './TecladoChines'
@@ -33,23 +35,13 @@ const TIPO_DO_MELD: Record<Meld['tipo'], TipoChamada> = {
   kanAberto: 'kanAberto',
   kanFechado: 'kanFechado',
 }
-const CHAMADAS: { tipo: TipoChamada; acao: Acao['tipo']; chave: string; chaveCompacta: string }[] =
-  [
-    { tipo: 'chi', acao: 'chii', chave: 'melds.chii', chaveCompacta: 'melds.chii' },
-    { tipo: 'pon', acao: 'pon', chave: 'melds.pon', chaveCompacta: 'melds.pon' },
-    {
-      tipo: 'kanAberto',
-      acao: 'kanAberto',
-      chave: 'melds.kanAberto',
-      chaveCompacta: 'melds.kanCompact',
-    },
-    {
-      tipo: 'kanFechado',
-      acao: 'kanFechado',
-      chave: 'melds.kanFechado',
-      chaveCompacta: 'melds.kanClosedCompact',
-    },
-  ]
+const CHAMADAS: { tipo: TipoChamada; acao: Meld['tipo'] }[] = [
+  { tipo: 'chi', acao: 'chii' },
+  { tipo: 'pon', acao: 'pon' },
+  { tipo: 'kanAberto', acao: 'kanAberto' },
+  { tipo: 'kanFechado', acao: 'kanFechado' },
+]
+
 /**
  * Calculadora de Mão Chinesa (MCR / Guobiao), com o mesmo layout da japonesa:
  * montar a mão no teclado e, com 14 pedras, finalizar com as condições e calcular.
@@ -86,6 +78,10 @@ export default function CalculadoraMaoChinesa({
     ...grupo,
     tipo: tipoDoGrupoPendente(grupo),
   }))
+  useNarrarMudanca({ chamadas: mao.chamadas, forma: calc.condicoes.forma }, (antes, depois) => [
+    ...depois.chamadas.slice(antes.chamadas.length).map(({ tipo }) => t(`mcr.voz.${tipo}`)),
+    ...(antes.forma === depois.forma ? [] : [t(`mcr.voz.${depois.forma}`)]),
+  ])
   // A mão mudou fora do campo (toque numa pedra, lixeira): o texto acompanha.
   const assinatura = (alvo: typeof mao) =>
     JSON.stringify([[...alvo.pedras].sort(), alvo.chamadas.map((c) => c.tipo + c.meio).sort()])
@@ -165,25 +161,31 @@ export default function CalculadoraMaoChinesa({
     kanFechado: 'kanFechado',
   }
 
-  const botoesAcao = (compacto: boolean) => (
+  const rotuloDaAcao = (acao: Meld['tipo']) => ({
+    nome: t(`acoes.mcr.${acao}.nome`),
+    hanzi: t(`acoes.mcr.${acao}.hanzi`),
+    descricao: t(`acoes.mcr.${acao}.aria`),
+  })
+  const rotulosChamada = {
+    chii: rotuloDaAcao('chii'),
+    pon: rotuloDaAcao('pon'),
+    kanAberto: rotuloDaAcao('kanAberto'),
+    kanFechado: rotuloDaAcao('kanFechado'),
+  }
+  const botoesAcao = () => (
     <>
-      {CHAMADAS.map(({ tipo, acao, chave, chaveCompacta }) => (
+      {CHAMADAS.map(({ tipo, acao }) => (
         <BotaoAcao
           key={tipo}
           tipo={acao}
-          rotulo={t(compacto ? chaveCompacta : chave)}
+          rotulo={rotulosChamada[acao].nome}
+          hanzi={rotulosChamada[acao].hanzi}
+          descricao={rotulosChamada[acao].descricao}
           ativo={calc.acao === tipo}
           desabilitado={calc.acao !== tipo && !calc.podeChamarAlguma(tipo)}
           aoClicar={() => calc.alternarAcao(tipo)}
         />
       ))}
-      <BotaoAcao
-        tipo="notacao"
-        rotulo={t('notation.toggle')}
-        ativo={false}
-        desabilitado={false}
-        aoClicar={abrirNotacao}
-      />
     </>
   )
 
@@ -213,6 +215,9 @@ export default function CalculadoraMaoChinesa({
                 <MaoChinesaAtual
                   mao={mao}
                   contexto="montagem"
+                  acoesCabecalho={
+                    !entradaNotacao && <MenuEntradaMcr aoAbrirNotacao={abrirNotacao} />
+                  }
                   aoTocarPedra={calc.selecionandoBatida ? calc.escolherBatida : calc.removerPedra}
                   selecionandoBatida={calc.selecionandoBatida}
                   aoRemoverChamada={calc.removerChamada}
@@ -221,9 +226,7 @@ export default function CalculadoraMaoChinesa({
                   pendentes={pendentes}
                 />
                 {!entradaNotacao && (
-                  <div className="acoes-construtor-mao mcr-acoes-construtor">
-                    {botoesAcao(false)}
-                  </div>
+                  <div className="acoes-construtor-mao mcr-acoes-construtor">{botoesAcao()}</div>
                 )}
                 <div className="painel-teclado-calculadora">
                   {!entradaNotacao && (
@@ -232,7 +235,7 @@ export default function CalculadoraMaoChinesa({
                       aria-label={t('calculator.actionsMenu')}
                     >
                       <div className="opcoes-acoes-mao-mobile opcoes-acoes-mao-mobile--mcr">
-                        {botoesAcao(true)}
+                        {botoesAcao()}
                       </div>
                     </div>
                   )}
@@ -240,6 +243,7 @@ export default function CalculadoraMaoChinesa({
                     <CampoNotacaoMao
                       valor={textoNotacao}
                       akadora={false}
+                      rotulosChamada={rotulosChamada}
                       aoMudar={mudarNotacao}
                       aoVoltar={() => setEntradaNotacao(false)}
                       aoLimpar={() => {

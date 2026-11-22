@@ -558,20 +558,20 @@
     "valueYakuman": "Vale: Yakuman",
     "mcr": {
       "guide": "O chapéu abre o Guia de bolso: os 81 fan com exemplos, o glossário e a busca para consultar durante o jogo.",
-      "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: flores, ron ou tsumo, ventos e condições especiais. Cada parte de lá tem o próprio ?.",
+      "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: flores, Dianhe ou Zimo, ventos e condições especiais. Cada parte de lá tem o próprio ?.",
       "notationTip": "Dá para montar vários grupos e números e tocar no naipe só no fim, e ele vale para todos. Cada número mostra embaixo a honra que vira com o z. AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize o dedo para a direita.",
       "guideCard": "Cada fan com exemplo e quanto vale",
       "tsumo": "Você bateu com a pedra que comprou. Vale Compra Própria (1 fan), e cada um dos três paga 8 mais o fan da mão.",
       "ron": "Você bateu com o descarte de outro jogador. Quem descartou paga 8 mais o fan da mão, e os outros dois pagam 8 cada.",
-      "oculta": "Sem Chi, Pon ou Kan aberto: no ron vale Mão Oculta (2 fan), e no tsumo, Mão Completamente Oculta (4 fan) no lugar dela e da Compra Própria.",
+      "oculta": "Sem Chi, Peng ou Gang: no Dianhe vale Mão Oculta (2 fan), e no Zimo, Mão Completamente Oculta (4 fan) no lugar dela e da Compra Própria.",
       "ventoAssento": "O vento de quem bateu. Uma trinca ou quadra dele vale Vento da Posição (2 fan). O dealer é o Leste.",
       "ventoRodada": "O vento da rodada. Uma trinca ou quadra dele vale Vento da Mesa (2 fan). Se for o mesmo vento do assento, a trinca conta os dois.",
       "flores": "As 8 pedras de flor e estação (ameixa, orquídea, crisântemo, bambu, primavera, verão, outono e inverno) valem 1 fan cada. No MCR nenhuma tem relação com o assento.",
       "floresMinimo": "As flores não contam para o mínimo de 8 fan: só somam depois que a mão já vale 8.",
       "ultimaTitulo": "Última pedra",
-      "ultima": "Bater com a última pedra da parede (tsumo) vale Última Peça do Muro (8 fan). Bater com o último descarte (ron) vale Último Descarte (8 fan).",
-      "kanTitulo": "Kan",
-      "kan": "No tsumo, bater com a pedra de reposição do Kan vale Vitória na Peça de Reposição (8 fan). No ron, bater com a pedra que outro jogador pôs no Pon para virar Kan vale Assalto ao Kong (8 fan).",
+      "ultima": "Bater com a última pedra da parede (Zimo) vale Última Peça do Muro (8 fan). Bater com o último descarte (Dianhe) vale Último Descarte (8 fan).",
+      "kanTitulo": "Gang",
+      "kan": "No Zimo, bater com a pedra de reposição do Gang vale Vitória na Peça de Reposição (8 fan). No Dianhe, bater com a pedra que outro jogador pôs no Peng para virar Gang vale Assalto ao Kong (8 fan).",
       "ultimaDoTipo": "Bater com a última cópia de uma pedra, quando as outras três já estão à vista na mesa, vale Última Cópia (4 fan)."
     }
   },
@@ -2232,14 +2232,14 @@
     "condicoes": {
       "titulo": "Condições",
       "forma": "Batida",
-      "ron": "Ron (descarte)",
-      "tsumo": "Tsumo (compra)",
+      "ron": "Dianhe (descarte)",
+      "tsumo": "Zimo (compra)",
       "ventoRodada": "Vento da rodada",
       "ventoAssento": "Vento do assento",
       "ultimaParede": "Última pedra da parede",
       "ultimoDescarte": "Último descarte",
-      "reposicaoKan": "Batida com pedra de reposição do Kan",
-      "rouboKan": "Roubar o Kan",
+      "reposicaoKan": "Batida com pedra de reposição do Gang",
+      "rouboKan": "Roubar o Gang",
       "ultimaDoTipo": "Última pedra do tipo",
       "ultimaDoTipoAjuda": "As outras três já estão à vista."
     },
@@ -2257,16 +2257,17 @@
       "cadaJogador": "Cada jogador paga",
       "pontos": "{{pontos}} pontos",
       "vezes": "×{{vezes}}",
-      "invalidaTitulo": "Mão inválida"
+      "invalidaTitulo": "Mão inválida",
+      "tituloFan": "Fan"
     },
     "erros": {
-      "incompleta": "Monte 14 pedras para calcular. Kan conta como 3.",
-      "semKan": "Batida com pedra de reposição do Kan precisa de um Kan na mão.",
-      "rouboDoKan": "Roubar o Kan não combina com o último descarte nem com outra pedra igual na mão.",
+      "incompleta": "Monte 14 pedras para calcular. Gang conta como 3.",
+      "semKan": "Batida com pedra de reposição do Gang precisa de um Gang na mão.",
+      "rouboDoKan": "Roubar o Gang não combina com o último descarte nem com outra pedra igual na mão.",
       "ultimaDoTipo": "Última pedra do tipo não vale com outra pedra igual na mão."
     },
     "fan": {
-      "mingangang": "Kan Aberto e Kan Fechado"
+      "mingangang": "Gang e An Gang"
     },
     "flores": {
       "1": "Flor da ameixa",
@@ -2277,21 +2278,24 @@
       "6": "Verão",
       "7": "Outono",
       "8": "Inverno"
+    },
+    "voz": {
+      "chi": "Chi!",
+      "pon": "Peng!",
+      "kanAberto": "Gang!",
+      "kanFechado": "An Gang!",
+      "ron": "Hu!",
+      "tsumo": "Zimo!"
     }
   },
   "guiaBolso": {
     "mcr": {
       "pontosFan": "{{pontos}} pontos",
       "numero": "Nº {{id}}",
-      "riichi": "Riichi: {{yaku}}",
       "detalhes": "Detalhes",
       "naoCombina": "Não combina com:",
       "irPara": "Ir para {{nome}}",
-      "semEquivalenteTitulo": "Yaku do Riichi sem equivalente",
-      "semEquivalenteExato": "Sem equivalente exato: {{lista}}.",
-      "naoExistem": "Não existem no MCR: {{lista}}.",
       "porPontos": "Por pontos",
-      "abaRiichi": "Riichi",
       "abas": {
         "chows": "Chows",
         "pungs": "Pungs",
@@ -2307,7 +2311,7 @@
         "ultima-peca": "Última peça",
         "outros": "Outros"
       },
-      "busca": "Buscar fan, 汉字, inglês ou yaku",
+      "busca": "Buscar fan, 汉字 ou inglês",
       "rotuloBusca": "Buscar no Guia de bolso",
       "exemplo": "Mão de exemplo: {{pedras}}",
       "condicoes": "Condições do exemplo",
@@ -2358,7 +2362,7 @@
       "porFanAjuda": "Digite o fan da mão",
       "qtdFan": "{{fan}} fan",
       "empateTexto": "O muro acabou sem ninguém vencer. Ninguém paga e o dealer passa.",
-      "ronDe": "Ron de {{name}}",
+      "ronDe": "Dianhe de {{name}}",
       "falsoHu": "Falso Hu",
       "falsoHuDe": "Falso Hu de {{name}}?",
       "falsoHuTexto": "Quem errou paga 10 pontos a cada um dos outros três, e a mão continua.",
@@ -2369,6 +2373,118 @@
   "glossario": {
     "mcr": {
       "diferenteRiichi": "Diferente do Riichi"
+    }
+  },
+  "modo": {
+    "mcr": {
+      "sectionHelp": {
+        "tiles": {
+          "pon": "Toque em Peng e depois na pedra. As três entram como Peng, usando as que já estão na mão.",
+          "kan": "Toque em Gang e depois na pedra. As quatro entram como Gang.",
+          "closedKan": "Toque em An Gang e depois na pedra. Se a mão já tem três ou quatro dela, elas viram o Gang."
+        },
+        "notation": {
+          "pon": "Trinca pega do descarte de qualquer jogador. Digite 111p e toque em Peng. Ou toque em Peng antes e depois no 1: aparecem três 1 esperando o naipe. Então toque em p.",
+          "kan": "4 iguais, a 4ª pega do descarte de outro jogador. Digite 1111s e toque em Gang. Ou toque em Gang antes e depois no 1: aparecem quatro 1 esperando o naipe. Então toque em s.",
+          "closedKan": "4 iguais, todas da sua própria mão. Digite 7777z e toque em An Gang. Ou toque em An Gang antes e depois no 7: aparecem quatro 7 esperando o naipe. Então toque em z.",
+          "display": "Pelo teclado físico, a chamada é uma letra no fim do grupo: c para Chi, Peng e Gang (123mc, 111pc, 1111sc) e a para An Gang (7777za)."
+        }
+      },
+      "pages": {
+        "installTitle": "Instalar o Mahjong Manager",
+        "installSuggestion": "Instale o Mahjong Manager para jogar sem a barra do navegador.",
+        "fullscreenHeaderHint": "Toque em Mahjong Manager para tela cheia",
+        "aboutTitle": "Sobre o Mahjong Manager",
+        "aboutText": "Um app feito para ajudar jogadores e clubes de mahjong a calcular mãos, organizar partidas e testar ideias de torneio, levando o mahjong para todos.",
+        "narrationHelp": "Fala as chamadas, a batida e o resultado. Para pessoas cegas ou com baixa visão."
+      },
+      "match": {
+        "club": {
+          "shareTitle": "Mahjong Manager · Mesas do clube · {{date}}"
+        },
+        "menu": {
+          "ron": "Venceu por Dianhe",
+          "tsumo": "Venceu por Zimo"
+        },
+        "win": {
+          "tsumoOf": "Zimo de {{name}}"
+        },
+        "discards": {
+          "kakan": "Bu Gang",
+          "kakanInput": "Pedra do Bu Gang em notação (3m)",
+          "whoCalled": {
+            "ron": "Quem fez Dianhe?",
+            "pon": "Quem fez Peng?",
+            "kan": "Quem fez Gang?"
+          },
+          "call": {
+            "pon": "Peng",
+            "kan": "Gang",
+            "ron": "Dianhe"
+          },
+          "closedKan": "An Gang"
+        },
+        "event": {
+          "ron": "Dianhe",
+          "tsumo": "Zimo"
+        }
+      },
+      "tournament": {
+        "import": {
+          "errorInvalid": "Isso não é um torneio do Mahjong Manager."
+        }
+      },
+      "backup": {
+        "importHelp": "Abre um arquivo de backup do Mahjong Manager (.json)."
+      },
+      "melds": {
+        "chii": "Chi",
+        "pon": "Peng",
+        "kanAberto": "Gang",
+        "kanCompact": "Gang",
+        "kanFechado": "An Gang",
+        "kanClosedCompact": "An Gang"
+      },
+      "narration": {
+        "calls": {
+          "pon": "Peng",
+          "kanAberto": "Gang",
+          "kanFechado": "An Gang"
+        }
+      },
+      "calculator": {
+        "ron": "Dianhe 点和",
+        "tsumo": "Zimo 自摸"
+      },
+      "windDraw": {
+        "ronRon": "Hu hu!"
+      }
+    }
+  },
+  "acoes": {
+    "mcr": {
+      "chii": {
+        "nome": "Chi",
+        "hanzi": "吃",
+        "aria": "Chi (吃): declarar sequência"
+      },
+      "pon": {
+        "nome": "Peng",
+        "hanzi": "碰",
+        "aria": "Peng (碰): declarar trinca"
+      },
+      "kanAberto": {
+        "nome": "Gang",
+        "hanzi": "明杠",
+        "aria": "Gang (明杠): declarar kong exposto"
+      },
+      "kanFechado": {
+        "nome": "An Gang",
+        "hanzi": "暗杠",
+        "aria": "An Gang (暗杠): declarar kong oculto"
+      },
+      "mpsz": "Digitar em MPSZ",
+      "mais": "Mais formas de entrada"
     }
   }
 }

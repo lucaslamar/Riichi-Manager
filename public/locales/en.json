@@ -558,20 +558,20 @@
     "valueYakuman": "Worth: Yakuman",
     "mcr": {
       "guide": "The cap opens the Pocket guide: the 81 fan with examples, the glossary and search to check during the game.",
-      "finish": "With a complete hand, Finish hand opens the win options: flowers, ron or tsumo, winds and special conditions.",
+      "finish": "With a complete hand, Finish hand opens the win options: flowers, Dianhe or Zimo, winds and special conditions.",
       "notationTip": "You can enter several groups and numbers and tap the suit only at the end; it applies to all. Each number shows the honor it becomes with z. AC clears everything. To go back to the tile keyboard, tap Tiles or swipe right.",
       "guideCard": "Each fan with an example and its value",
       "tsumo": "You won with a tile you drew. It scores Self-Drawn (1 fan), and each of the three others pays 8 plus the hand fan.",
       "ron": "You won on another player's discard. The discarder pays 8 plus the hand fan, and the other two pay 8 each.",
-      "oculta": "With no open Chi, Pon or Kan: on ron it scores Concealed Hand (2 fan), and on tsumo Fully Concealed Hand (4 fan) instead of it and Self-Drawn.",
+      "oculta": "With no open Chi, Peng or Gang: on Dianhe it scores Concealed Hand (2 fan), and on Zimo Fully Concealed Hand (4 fan) instead of it and Self-Drawn.",
       "ventoAssento": "The winner's wind. A pung or kong of it scores Seat Wind (2 fan). The dealer is East.",
       "ventoRodada": "The round wind. A pung or kong of it scores Prevalent Wind (2 fan). If it is also the seat wind, the pung scores both.",
       "flores": "The 8 flower and season tiles score 1 fan each. In MCR none of them is tied to the seat.",
       "floresMinimo": "Flowers do not count toward the 8 fan minimum: they only add once the hand is already worth 8.",
       "ultimaTitulo": "Last tile",
-      "ultima": "Winning on the last wall tile (tsumo) scores Last Tile Draw (8 fan). Winning on the last discard (ron) scores Last Tile Claim (8 fan).",
-      "kanTitulo": "Kong",
-      "kan": "On tsumo, winning on the kong replacement tile scores Out with Replacement Tile (8 fan). On ron, winning on the tile another player adds to a pung scores Robbing the Kong (8 fan).",
+      "ultima": "Winning on the last wall tile (Zimo) scores Last Tile Draw (8 fan). Winning on the last discard (Dianhe) scores Last Tile Claim (8 fan).",
+      "kanTitulo": "Gang",
+      "kan": "On Zimo, winning on the kong replacement tile scores Out with Replacement Tile (8 fan). On Dianhe, winning on the tile another player adds to a pung scores Robbing the Kong (8 fan).",
       "ultimaDoTipo": "Winning on the last copy of a tile, with the other three already visible, scores Last Tile (4 fan)."
     }
   },
@@ -2232,14 +2232,14 @@
     "condicoes": {
       "titulo": "Conditions",
       "forma": "Win",
-      "ron": "Ron (discard)",
-      "tsumo": "Tsumo (self-drawn)",
+      "ron": "Dianhe (discard)",
+      "tsumo": "Zimo (self-drawn)",
       "ventoRodada": "Prevalent wind",
       "ventoAssento": "Seat wind",
       "ultimaParede": "Last tile from the wall",
       "ultimoDescarte": "Last discard",
-      "reposicaoKan": "Win on a Kan replacement tile",
-      "rouboKan": "Robbing the Kan",
+      "reposicaoKan": "Win on a Gang replacement tile",
+      "rouboKan": "Robbing the Gang",
       "ultimaDoTipo": "Last tile of its kind",
       "ultimaDoTipoAjuda": "The other three are already visible."
     },
@@ -2257,12 +2257,13 @@
       "cadaJogador": "Each player pays",
       "pontos": "{{pontos}} points",
       "vezes": "×{{vezes}}",
-      "invalidaTitulo": "Invalid hand"
+      "invalidaTitulo": "Invalid hand",
+      "tituloFan": "Fan"
     },
     "erros": {
-      "incompleta": "Build 14 tiles to calculate. A Kan counts as 3.",
-      "semKan": "Winning on a Kan replacement tile needs a Kan in the hand.",
-      "rouboDoKan": "Robbing the Kan can't combine with the last discard or another identical tile in the hand.",
+      "incompleta": "Build 14 tiles to calculate. A Gang counts as 3.",
+      "semKan": "Winning on a Gang replacement tile needs a Gang in the hand.",
+      "rouboDoKan": "Robbing the Gang can't combine with the last discard or another identical tile in the hand.",
       "ultimaDoTipo": "Last tile of its kind doesn't apply with another identical tile in the hand."
     },
     "fan": {
@@ -2277,21 +2278,24 @@
       "6": "Summer",
       "7": "Autumn",
       "8": "Winter"
+    },
+    "voz": {
+      "chi": "Chi!",
+      "pon": "Peng!",
+      "kanAberto": "Gang!",
+      "kanFechado": "An Gang!",
+      "ron": "Hu!",
+      "tsumo": "Zimo!"
     }
   },
   "guiaBolso": {
     "mcr": {
       "pontosFan": "{{pontos}} points",
       "numero": "No. {{id}}",
-      "riichi": "Riichi: {{yaku}}",
       "detalhes": "Details",
       "naoCombina": "Doesn't combine with:",
       "irPara": "Go to {{nome}}",
-      "semEquivalenteTitulo": "Riichi Yaku with no equivalent",
-      "semEquivalenteExato": "No exact equivalent: {{lista}}.",
-      "naoExistem": "Don't exist in MCR: {{lista}}.",
       "porPontos": "By points",
-      "abaRiichi": "Riichi",
       "abas": {
         "chows": "Chows",
         "pungs": "Pungs",
@@ -2307,7 +2311,7 @@
         "ultima-peca": "Last tile",
         "outros": "Others"
       },
-      "busca": "Search fan, 汉字, English or yaku",
+      "busca": "Search fan, 汉字 or English",
       "rotuloBusca": "Search the Pocket Guide",
       "exemplo": "Example hand: {{pedras}}",
       "condicoes": "Example conditions",
@@ -2358,7 +2362,7 @@
       "porFanAjuda": "Type the hand fan",
       "qtdFan": "{{fan}} fan",
       "empateTexto": "The wall ran out with no winner. Nobody pays and the dealer passes.",
-      "ronDe": "Ron by {{name}}",
+      "ronDe": "Dianhe by {{name}}",
       "falsoHu": "False Hu",
       "falsoHuDe": "False Hu by {{name}}?",
       "falsoHuTexto": "The player pays 10 points to each of the other three, and the hand goes on.",
@@ -2369,6 +2373,118 @@
   "glossario": {
     "mcr": {
       "diferenteRiichi": "Different from Riichi"
+    }
+  },
+  "modo": {
+    "mcr": {
+      "sectionHelp": {
+        "tiles": {
+          "pon": "Tap Peng and then the tile. All three go in as a Peng, using the ones already in the hand.",
+          "kan": "Tap Gang and then the tile. All four go in as a Gang.",
+          "closedKan": "Tap An Gang and then the tile. If the hand already has three or four of it, they become the Gang."
+        },
+        "notation": {
+          "pon": "A triplet taken from any player’s discard. Type 111p and tap Peng. Or tap Peng first and then 1: three blank 1s wait for the suit; tap p.",
+          "kan": "4 of a kind, the 4th taken from another player’s discard. Type 1111s and tap Gang. Or tap Gang first and then 1: four 1s appear; tap s.",
+          "closedKan": "4 of a kind, all from your own hand. Type 7777z and tap An Gang. Or tap An Gang first and then 7: four 7s appear; tap z.",
+          "display": "With a physical keyboard, a call is a letter at the end of the group: c for Chi, Peng and Gang (123mc, 111pc, 1111sc) and a for An Gang (7777za)."
+        }
+      },
+      "pages": {
+        "installTitle": "Install Mahjong Manager",
+        "installSuggestion": "Install Mahjong Manager to play without the browser bar.",
+        "fullscreenHeaderHint": "Tap Mahjong Manager for full screen",
+        "aboutTitle": "About Mahjong Manager",
+        "aboutText": "An app made to help mahjong players and clubs score hands, organize games and try out tournament ideas, bringing mahjong to everyone.",
+        "narrationHelp": "Speaks calls, the win and the result. For blind and low-vision players."
+      },
+      "match": {
+        "club": {
+          "shareTitle": "Mahjong Manager · Club tables · {{date}}"
+        },
+        "menu": {
+          "ron": "Won by Dianhe",
+          "tsumo": "Won by Zimo"
+        },
+        "win": {
+          "tsumoOf": "{{name}}'s Zimo"
+        },
+        "discards": {
+          "kakan": "Bu Gang",
+          "kakanInput": "Bu Gang tile in notation (3m)",
+          "whoCalled": {
+            "ron": "Who called Dianhe?",
+            "pon": "Who called Peng?",
+            "kan": "Who called Gang?"
+          },
+          "call": {
+            "pon": "Peng",
+            "kan": "Gang",
+            "ron": "Dianhe"
+          },
+          "closedKan": "An Gang"
+        },
+        "event": {
+          "ron": "Dianhe",
+          "tsumo": "Zimo"
+        }
+      },
+      "tournament": {
+        "import": {
+          "errorInvalid": "This is not a Mahjong Manager tournament."
+        }
+      },
+      "backup": {
+        "importHelp": "Opens a Mahjong Manager backup file (.json)."
+      },
+      "melds": {
+        "chii": "Chi",
+        "pon": "Peng",
+        "kanAberto": "Gang",
+        "kanCompact": "Gang",
+        "kanFechado": "An Gang",
+        "kanClosedCompact": "An Gang"
+      },
+      "narration": {
+        "calls": {
+          "pon": "Peng",
+          "kanAberto": "Gang",
+          "kanFechado": "An Gang"
+        }
+      },
+      "calculator": {
+        "ron": "Dianhe 点和",
+        "tsumo": "Zimo 自摸"
+      },
+      "windDraw": {
+        "ronRon": "Hu hu!"
+      }
+    }
+  },
+  "acoes": {
+    "mcr": {
+      "chii": {
+        "nome": "Chi",
+        "hanzi": "吃",
+        "aria": "Chi (吃): declare a sequence"
+      },
+      "pon": {
+        "nome": "Peng",
+        "hanzi": "碰",
+        "aria": "Peng (碰): declare a triplet"
+      },
+      "kanAberto": {
+        "nome": "Gang",
+        "hanzi": "明杠",
+        "aria": "Gang (明杠): declare a melded kong"
+      },
+      "kanFechado": {
+        "nome": "An Gang",
+        "hanzi": "暗杠",
+        "aria": "An Gang (暗杠): declare a concealed kong"
+      },
+      "mpsz": "Type in MPSZ",
+      "mais": "More input methods"
     }
   }
 }

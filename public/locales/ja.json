@@ -552,20 +552,20 @@
     "valueYakuman": "翻数: 役満",
     "mcr": {
       "guide": "帽子でポケットガイドを開きます。例つきの81番種、用語集、検索を対局中に確認できます。",
-      "finish": "手牌が揃ったら「手牌を確定」で和了の設定へ：花牌、ロン/ツモ、風、特殊条件。",
+      "finish": "手牌が揃ったら「手牌を確定」で和了の設定へ：花牌、点和/自摸、風、特殊条件。",
       "notationTip": "複数の数字を入れてから最後にスートを押すと全部に適用されます。各数字の下にzで変わる字牌が出ます。ACで全消去。牌キーボードへ戻るには「牌」をタップか右にスワイプ。",
       "guideCard": "各番種の例と点数",
       "tsumo": "自分で引いた牌で和了。自摸(1番)がつき、他の3人がそれぞれ8点+番数を払います。",
       "ron": "他家の捨て牌で和了。放銃者が8点+番数、他の2人が8点ずつ払います。",
-      "oculta": "副露がなければ、ロンで門前清(2番)、ツモでは不求人(4番)が門前清と自摸の代わりにつきます。",
+      "oculta": "副露がなければ、点和で門前清(2番)、自摸では不求人(4番)が門前清と自摸の代わりにつきます。",
       "ventoAssento": "和了者の風。その刻子・槓子で門風刻(2番)。親が東です。",
       "ventoRodada": "場の風。その刻子・槓子で圈風刻(2番)。自風と同じなら両方つきます。",
       "flores": "花牌と季節牌の8枚は1枚1番。MCRでは席との関係はありません。",
       "floresMinimo": "花牌は8番縛りに数えません。手が8番以上のときだけ加算されます。",
       "ultimaTitulo": "最後の牌",
-      "ultima": "山の最後の牌でツモ和了すると妙手回春(8番)、最後の捨て牌でロン和了すると海底捞月(8番)。",
-      "kanTitulo": "槓",
-      "kan": "ツモで槓の嶺上牌で和了すると杠上开花(8番)。ロンで他家の加槓の牌で和了すると抢杠和(8番)。",
+      "ultima": "山の最後の牌で自摸和了すると妙手回春(8番)、最後の捨て牌で点和和了すると海底捞月(8番)。",
+      "kanTitulo": "杠",
+      "kan": "自摸で杠の嶺上牌で和了すると杠上开花(8番)。点和で他家の加杠の牌で和了すると抢杠和(8番)。",
       "ultimaDoTipo": "他の3枚が見えている牌の最後の1枚で和了すると和绝张(4番)。"
     }
   },
@@ -2206,14 +2206,14 @@
     "condicoes": {
       "titulo": "Conditions",
       "forma": "Win",
-      "ron": "Ron (discard)",
-      "tsumo": "Tsumo (self-drawn)",
+      "ron": "Dianhe (discard)",
+      "tsumo": "Zimo (self-drawn)",
       "ventoRodada": "Prevalent wind",
       "ventoAssento": "Seat wind",
       "ultimaParede": "Last tile from the wall",
       "ultimoDescarte": "Last discard",
-      "reposicaoKan": "Win on a Kan replacement tile",
-      "rouboKan": "Robbing the Kan",
+      "reposicaoKan": "Win on a Gang replacement tile",
+      "rouboKan": "Robbing the Gang",
       "ultimaDoTipo": "Last tile of its kind",
       "ultimaDoTipoAjuda": "The other three are already visible."
     },
@@ -2231,12 +2231,13 @@
       "cadaJogador": "Each player pays",
       "pontos": "{{pontos}} points",
       "vezes": "×{{vezes}}",
-      "invalidaTitulo": "Invalid hand"
+      "invalidaTitulo": "Invalid hand",
+      "tituloFan": "番"
     },
     "erros": {
-      "incompleta": "Build 14 tiles to calculate. A Kan counts as 3.",
-      "semKan": "Winning on a Kan replacement tile needs a Kan in the hand.",
-      "rouboDoKan": "Robbing the Kan can't combine with the last discard or another identical tile in the hand.",
+      "incompleta": "Build 14 tiles to calculate. A Gang counts as 3.",
+      "semKan": "Winning on a Gang replacement tile needs a Gang in the hand.",
+      "rouboDoKan": "Robbing the Gang can't combine with the last discard or another identical tile in the hand.",
       "ultimaDoTipo": "Last tile of its kind doesn't apply with another identical tile in the hand."
     },
     "fan": {
@@ -2251,21 +2252,24 @@
       "6": "Summer",
       "7": "Autumn",
       "8": "Winter"
+    },
+    "voz": {
+      "chi": "吃！",
+      "pon": "碰！",
+      "kanAberto": "杠！",
+      "kanFechado": "暗杠！",
+      "ron": "胡！",
+      "tsumo": "自摸！"
     }
   },
   "guiaBolso": {
     "mcr": {
       "pontosFan": "{{pontos}} points",
       "numero": "No. {{id}}",
-      "riichi": "Riichi: {{yaku}}",
       "detalhes": "Details",
       "naoCombina": "Doesn't combine with:",
       "irPara": "Go to {{nome}}",
-      "semEquivalenteTitulo": "Riichi Yaku with no equivalent",
-      "semEquivalenteExato": "No exact equivalent: {{lista}}.",
-      "naoExistem": "Don't exist in MCR: {{lista}}.",
       "porPontos": "By points",
-      "abaRiichi": "Riichi",
       "abas": {
         "chows": "Chows",
         "pungs": "Pungs",
@@ -2281,7 +2285,7 @@
         "ultima-peca": "Last tile",
         "outros": "Others"
       },
-      "busca": "Search fan, 汉字, English or yaku",
+      "busca": "番、汉字、英語で検索",
       "rotuloBusca": "Search the Pocket Guide",
       "exemplo": "Example hand: {{pedras}}",
       "condicoes": "Example conditions",
@@ -2332,7 +2336,7 @@
       "porFanAjuda": "番数を入力",
       "qtdFan": "{{fan}}番",
       "empateTexto": "和了者なしで山が尽きました。支払いはなく、親が移ります。",
-      "ronDe": "{{name}}のロン",
+      "ronDe": "{{name}}の点和",
       "falsoHu": "錯和",
       "falsoHuDe": "{{name}}の錯和？",
       "falsoHuTexto": "誤った人が他の3人に10点ずつ払い、局は続きます。",
@@ -2343,6 +2347,118 @@
   "glossario": {
     "mcr": {
       "diferenteRiichi": "Different from Riichi"
+    }
+  },
+  "modo": {
+    "mcr": {
+      "sectionHelp": {
+        "tiles": {
+          "pon": "碰をタップしてから牌をタップします。手牌にある牌を使って3枚が碰になります。",
+          "kan": "杠をタップしてから牌をタップします。4枚が明杠になります。",
+          "closedKan": "暗杠をタップしてから牌をタップします。手牌に3枚か4枚あれば、それが暗杠になります。"
+        },
+        "notation": {
+          "pon": "だれかの捨て牌で作る刻子。111p と入力して「碰」。または先に「碰」を押して 1：種類待ちの 1 が3枚出るので p をタップ。",
+          "kan": "同じ牌4枚で、4枚目は他家の捨て牌。1111s と入力して「杠」。または先に「杠」を押して 1：1 が4枚出るので s をタップ。",
+          "closedKan": "同じ牌4枚がすべて自分の手牌。7777z と入力して「暗杠」。または先に「暗杠」を押して 7：7 が4枚出るので z をタップ。",
+          "display": "物理キーボードでは、鳴きはグループの最後の文字です: 吃・碰・杠は c（123mc、111pc、1111sc）、暗杠は a（7777za）。"
+        }
+      },
+      "pages": {
+        "installTitle": "Mahjong Managerをインストール",
+        "installSuggestion": "Mahjong Managerをインストールすると、ブラウザのバーなしで遊べます。",
+        "fullscreenHeaderHint": "Mahjong Managerをタップで全画面",
+        "aboutTitle": "Mahjong Managerについて",
+        "aboutText": "麻雀のプレイヤーとクラブが手牌を計算し、対局を管理し、大会のアイデアを試せるように作ったアプリです。麻雀をすべての人に。",
+        "narrationHelp": "鳴き、和了、結果を読み上げます。視覚に障がいのある方向けです。"
+      },
+      "match": {
+        "club": {
+          "shareTitle": "Mahjong Manager · クラブの卓 · {{date}}"
+        },
+        "menu": {
+          "ron": "Won by Dianhe",
+          "tsumo": "Won by Zimo"
+        },
+        "win": {
+          "tsumoOf": "{{name}}の自摸"
+        },
+        "discards": {
+          "kakan": "Bu Gang",
+          "kakanInput": "Bu Gang tile in notation (3m)",
+          "whoCalled": {
+            "ron": "Who called Dianhe?",
+            "pon": "Who called Peng?",
+            "kan": "Who called Gang?"
+          },
+          "call": {
+            "pon": "Peng",
+            "kan": "Gang",
+            "ron": "Dianhe"
+          },
+          "closedKan": "An Gang"
+        },
+        "event": {
+          "ron": "Dianhe",
+          "tsumo": "Zimo"
+        }
+      },
+      "tournament": {
+        "import": {
+          "errorInvalid": "This is not a Mahjong Manager tournament."
+        }
+      },
+      "backup": {
+        "importHelp": "Mahjong Manager のバックアップファイル (.json) を開きます。"
+      },
+      "melds": {
+        "chii": "Chi",
+        "pon": "Peng",
+        "kanAberto": "Gang",
+        "kanCompact": "Gang",
+        "kanFechado": "An Gang",
+        "kanClosedCompact": "An Gang"
+      },
+      "narration": {
+        "calls": {
+          "pon": "Peng",
+          "kanAberto": "Gang",
+          "kanFechado": "An Gang"
+        }
+      },
+      "calculator": {
+        "ron": "Dianhe 点和",
+        "tsumo": "Zimo 自摸"
+      },
+      "windDraw": {
+        "ronRon": "胡胡！"
+      }
+    }
+  },
+  "acoes": {
+    "mcr": {
+      "chii": {
+        "nome": "Chi",
+        "hanzi": "吃",
+        "aria": "Chi (吃): 順子を宣言"
+      },
+      "pon": {
+        "nome": "Peng",
+        "hanzi": "碰",
+        "aria": "Peng (碰): 刻子を宣言"
+      },
+      "kanAberto": {
+        "nome": "Gang",
+        "hanzi": "明杠",
+        "aria": "Gang (明杠): 明杠を宣言"
+      },
+      "kanFechado": {
+        "nome": "An Gang",
+        "hanzi": "暗杠",
+        "aria": "An Gang (暗杠): 暗杠を宣言"
+      },
+      "mpsz": "MPSZで入力",
+      "mais": "その他の入力方法"
     }
   }
 }

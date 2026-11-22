@@ -552,20 +552,20 @@
     "valueYakuman": "값: 역만",
     "mcr": {
       "guide": "모자 아이콘으로 포켓 가이드를 엽니다. 예시가 있는 81개 번, 용어집과 검색을 대국 중에 볼 수 있습니다.",
-      "finish": "손패가 완성되면 손패 확정에서 화료 옵션으로: 꽃패, 론/쯔모, 바람, 특수 조건.",
+      "finish": "손패가 완성되면 손패 확정에서 화료 옵션으로: 꽃패, Dianhe/Zimo, 바람, 특수 조건.",
       "notationTip": "여러 숫자를 넣고 마지막에 수트를 누르면 모두에 적용됩니다. 각 숫자 아래에 z로 바뀌는 자패가 보입니다. AC는 모두 지웁니다. 패 키보드로 돌아가려면 패를 누르거나 오른쪽으로 밀어요.",
       "guideCard": "각 번의 예시와 점수",
       "tsumo": "직접 뽑은 패로 화료. 자모(1번)가 붙고, 다른 세 명이 각각 8점+번을 냅니다.",
       "ron": "다른 사람의 버림패로 화료. 버린 사람이 8점+번, 나머지 두 명이 8점씩 냅니다.",
-      "oculta": "부로가 없으면 론은 문전청(2번), 쯔모는 불구인(4번)이 문전청과 자모 대신 붙습니다.",
+      "oculta": "부로가 없으면 Dianhe은 문전청(2번), Zimo는 불구인(4번)이 문전청과 자모 대신 붙습니다.",
       "ventoAssento": "화료자의 바람. 그 커쯔·깡쯔는 문풍각(2번). 친이 동입니다.",
       "ventoRodada": "장의 바람. 그 커쯔·깡쯔는 권풍각(2번). 자풍과 같으면 둘 다 붙습니다.",
       "flores": "꽃패와 계절패 8장은 각각 1번. MCR에서는 자리와 관계없습니다.",
       "floresMinimo": "꽃패는 8번 최소에 포함되지 않습니다. 손이 이미 8번일 때만 더해집니다.",
       "ultimaTitulo": "마지막 패",
-      "ultima": "패산의 마지막 패로 쯔모하면 묘수회춘(8번), 마지막 버림패로 론하면 해저노월(8번).",
-      "kanTitulo": "깡",
-      "kan": "쯔모에서 깡 보충패로 화료하면 깡상개화(8번). 론에서 다른 사람이 가깡한 패로 화료하면 창깡화(8번).",
+      "ultima": "패산의 마지막 패로 Zimo하면 묘수회춘(8번), 마지막 버림패로 Dianhe하면 해저노월(8번).",
+      "kanTitulo": "Gang",
+      "kan": "Zimo에서 Gang 보충패로 화료하면 깡상개화(8번). Dianhe에서 다른 사람이 Bu Gang한 패로 화료하면 창깡화(8번).",
       "ultimaDoTipo": "나머지 세 장이 보이는 패의 마지막 한 장으로 화료하면 화절장(4번)."
     }
   },
@@ -2206,14 +2206,14 @@
     "condicoes": {
       "titulo": "Conditions",
       "forma": "Win",
-      "ron": "Ron (discard)",
-      "tsumo": "Tsumo (self-drawn)",
+      "ron": "Dianhe (discard)",
+      "tsumo": "Zimo (self-drawn)",
       "ventoRodada": "Prevalent wind",
       "ventoAssento": "Seat wind",
       "ultimaParede": "Last tile from the wall",
       "ultimoDescarte": "Last discard",
-      "reposicaoKan": "Win on a Kan replacement tile",
-      "rouboKan": "Robbing the Kan",
+      "reposicaoKan": "Win on a Gang replacement tile",
+      "rouboKan": "Robbing the Gang",
       "ultimaDoTipo": "Last tile of its kind",
       "ultimaDoTipoAjuda": "The other three are already visible."
     },
@@ -2231,12 +2231,13 @@
       "cadaJogador": "Each player pays",
       "pontos": "{{pontos}} points",
       "vezes": "×{{vezes}}",
-      "invalidaTitulo": "Invalid hand"
+      "invalidaTitulo": "Invalid hand",
+      "tituloFan": "Fan"
     },
     "erros": {
-      "incompleta": "Build 14 tiles to calculate. A Kan counts as 3.",
-      "semKan": "Winning on a Kan replacement tile needs a Kan in the hand.",
-      "rouboDoKan": "Robbing the Kan can't combine with the last discard or another identical tile in the hand.",
+      "incompleta": "Build 14 tiles to calculate. A Gang counts as 3.",
+      "semKan": "Winning on a Gang replacement tile needs a Gang in the hand.",
+      "rouboDoKan": "Robbing the Gang can't combine with the last discard or another identical tile in the hand.",
       "ultimaDoTipo": "Last tile of its kind doesn't apply with another identical tile in the hand."
     },
     "fan": {
@@ -2251,21 +2252,24 @@
       "6": "Summer",
       "7": "Autumn",
       "8": "Winter"
+    },
+    "voz": {
+      "chi": "Chi!",
+      "pon": "Peng!",
+      "kanAberto": "Gang!",
+      "kanFechado": "An Gang!",
+      "ron": "Hu!",
+      "tsumo": "Zimo!"
     }
   },
   "guiaBolso": {
     "mcr": {
       "pontosFan": "{{pontos}} points",
       "numero": "No. {{id}}",
-      "riichi": "Riichi: {{yaku}}",
       "detalhes": "Details",
       "naoCombina": "Doesn't combine with:",
       "irPara": "Go to {{nome}}",
-      "semEquivalenteTitulo": "Riichi Yaku with no equivalent",
-      "semEquivalenteExato": "No exact equivalent: {{lista}}.",
-      "naoExistem": "Don't exist in MCR: {{lista}}.",
       "porPontos": "By points",
-      "abaRiichi": "Riichi",
       "abas": {
         "chows": "Chows",
         "pungs": "Pungs",
@@ -2281,7 +2285,7 @@
         "ultima-peca": "Last tile",
         "outros": "Others"
       },
-      "busca": "Search fan, 汉字, English or yaku",
+      "busca": "판, 汉字, 영어로 검색",
       "rotuloBusca": "Search the Pocket Guide",
       "exemplo": "Example hand: {{pedras}}",
       "condicoes": "Example conditions",
@@ -2332,7 +2336,7 @@
       "porFanAjuda": "번 수를 입력",
       "qtdFan": "{{fan}}번",
       "empateTexto": "화료 없이 패산이 끝났습니다. 지불 없이 친이 넘어갑니다.",
-      "ronDe": "{{name}}의 론",
+      "ronDe": "{{name}}의 Dianhe",
       "falsoHu": "착화",
       "falsoHuDe": "{{name}}의 착화?",
       "falsoHuTexto": "틀린 사람이 다른 세 명에게 10점씩 내고, 판은 계속됩니다.",
@@ -2343,6 +2347,118 @@
   "glossario": {
     "mcr": {
       "diferenteRiichi": "Different from Riichi"
+    }
+  },
+  "modo": {
+    "mcr": {
+      "sectionHelp": {
+        "tiles": {
+          "pon": "Peng을 누른 뒤 패를 누르세요. 손패에 있는 패를 써서 3장이 Peng이 됩니다.",
+          "kan": "Gang을 누른 뒤 패를 누르세요. 4장이 Gang이 됩니다.",
+          "closedKan": "An Gang을 누른 뒤 패를 누르세요. 손패에 3장이나 4장이 있으면 그 패가 Gang이 됩니다."
+        },
+        "notation": {
+          "pon": "누군가 버린 패로 만든 커쯔. 111p를 입력하고 「Peng」. 또는 먼저 「Peng」을 누르고 1: 종류를 기다리는 1이 세 장 나오면 p를 누르세요.",
+          "kan": "같은 패 4장, 4번째는 다른 사람이 버린 패. 1111s를 입력하고 「Gang」. 또는 먼저 「Gang」을 누르고 1: 1이 네 장 나오면 s를 누르세요.",
+          "closedKan": "같은 패 4장이 모두 내 손패. 7777z를 입력하고 「An Gang」. 또는 먼저 「An Gang」을 누르고 7: 7이 네 장 나오면 z를 누르세요.",
+          "display": "실제 키보드에서는 울기가 그룹 끝의 글자입니다: 치·Peng·Gang은 c(123mc, 111pc, 1111sc), An Gang은 a(7777za)."
+        }
+      },
+      "pages": {
+        "installTitle": "Mahjong Manager 설치",
+        "installSuggestion": "Mahjong Manager를 설치하면 브라우저 막대 없이 플레이할 수 있습니다.",
+        "fullscreenHeaderHint": "Mahjong Manager를 탭하면 전체 화면",
+        "aboutTitle": "Mahjong Manager 소개",
+        "aboutText": "마작 플레이어와 클럽이 손패를 계산하고, 대국을 관리하고, 대회 아이디어를 시험해 볼 수 있도록 만든 앱입니다. 모두를 위한 마작.",
+        "narrationHelp": "울기, 화료, 결과를 읽어 줍니다. 시각 장애가 있는 분을 위한 기능입니다."
+      },
+      "match": {
+        "club": {
+          "shareTitle": "Mahjong Manager · 클럽 탁 · {{date}}"
+        },
+        "menu": {
+          "ron": "Won by Dianhe",
+          "tsumo": "Won by Zimo"
+        },
+        "win": {
+          "tsumoOf": "{{name}}의 Zimo"
+        },
+        "discards": {
+          "kakan": "Bu Gang",
+          "kakanInput": "Bu Gang tile in notation (3m)",
+          "whoCalled": {
+            "ron": "Who called Dianhe?",
+            "pon": "Who called Peng?",
+            "kan": "Who called Gang?"
+          },
+          "call": {
+            "pon": "Peng",
+            "kan": "Gang",
+            "ron": "Dianhe"
+          },
+          "closedKan": "An Gang"
+        },
+        "event": {
+          "ron": "Dianhe",
+          "tsumo": "Zimo"
+        }
+      },
+      "tournament": {
+        "import": {
+          "errorInvalid": "This is not a Mahjong Manager tournament."
+        }
+      },
+      "backup": {
+        "importHelp": "Mahjong Manager 백업 파일(.json)을 엽니다."
+      },
+      "melds": {
+        "chii": "Chi",
+        "pon": "Peng",
+        "kanAberto": "Gang",
+        "kanCompact": "Gang",
+        "kanFechado": "An Gang",
+        "kanClosedCompact": "An Gang"
+      },
+      "narration": {
+        "calls": {
+          "pon": "Peng",
+          "kanAberto": "Gang",
+          "kanFechado": "An Gang"
+        }
+      },
+      "calculator": {
+        "ron": "Dianhe 点和",
+        "tsumo": "Zimo 自摸"
+      },
+      "windDraw": {
+        "ronRon": "Hu hu!"
+      }
+    }
+  },
+  "acoes": {
+    "mcr": {
+      "chii": {
+        "nome": "Chi",
+        "hanzi": "吃",
+        "aria": "Chi (吃): 슌쯔 선언"
+      },
+      "pon": {
+        "nome": "Peng",
+        "hanzi": "碰",
+        "aria": "Peng (碰): 커쯔 선언"
+      },
+      "kanAberto": {
+        "nome": "Gang",
+        "hanzi": "明杠",
+        "aria": "Gang (明杠): 공개된 kong 선언"
+      },
+      "kanFechado": {
+        "nome": "An Gang",
+        "hanzi": "暗杠",
+        "aria": "An Gang (暗杠): 숨긴 kong 선언"
+      },
+      "mpsz": "MPSZ로 입력",
+      "mais": "다른 입력 방법"
     }
   }
 }

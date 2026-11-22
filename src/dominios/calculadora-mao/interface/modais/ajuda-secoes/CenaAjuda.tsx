@@ -266,7 +266,7 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
             </>
           ) : (
             <>
-              <div className="cena-ajuda__chamadas">
+              <div className={`cena-ajuda__chamadas${chines ? ' cena-ajuda__chamadas--quatro' : ''}`}>
                 {CHAMADAS.map((chamada) => (
                   <span
                     key={chamada}
@@ -277,7 +277,10 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                     {t(rotuloChamadaCena(chamada))}
                   </span>
                 ))}
-                <span className="cena-ajuda__chamada cena-ajuda__chamada--mpsz">MPSZ</span>
+                {/* No MCR o MPSZ fica no menu, fora da linha. */}
+                {!chines && (
+                  <span className="cena-ajuda__chamada cena-ajuda__chamada--mpsz">MPSZ</span>
+                )}
               </div>
 
               {quadro.opcoes ? (

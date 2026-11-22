@@ -288,6 +288,14 @@ export default function ModalResultadoMcr({
       )}
 
       {fan.batida && (
+        <>
+          <p className="mcr-resultado__batida">
+            {t(condicoes.forma === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron')}
+          </p>
+          <h4 className="mcr-secao__subtitulo">{t('mcr.resultado.tituloFan')}</h4>
+        </>
+      )}
+      {fan.batida && (
         <ul className="mcr-lista-fan">
           {linhas.map((linha) => {
             const dados = fanMcrPorId(linha.id)
@@ -326,11 +334,6 @@ export default function ModalResultadoMcr({
                       </p>
                       <p>{dados.descricao}</p>
                       {dados.observacao && <p>{dados.observacao}</p>}
-                      {dados.yakuRiichi && (
-                        <span className="fan-mcr__riichi">
-                          {t('guiaBolso.mcr.riichi', { yaku: dados.yakuRiichi })}
-                        </span>
-                      )}
                     </>
                   )}
                 </div>
