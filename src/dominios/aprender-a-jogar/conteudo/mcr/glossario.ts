@@ -1,16 +1,9 @@
 import type { ItemGlossario, SecaoGlossario } from '@/dominios/calculadora-mao/logica/glossario'
 import type { TermoGlossarioGuia } from '../tipos'
 
-/** Item do MCR: `diferente` vira a nota "Diferente do Riichi" no fim, como as dicas do glossário japonês. */
-type ItemMcr = Omit<ItemGlossario, 'aliases'> & { diferente?: string }
+type ItemMcr = Omit<ItemGlossario, 'aliases'>
 
-const NOTA_DIFERENTE = 'Diferente do Riichi: '
-
-const item = ({ diferente, ...resto }: ItemMcr): ItemGlossario => ({
-  ...resto,
-  aliases: [],
-  nota: diferente ? NOTA_DIFERENTE + diferente : resto.nota,
-})
+const item = (dados: ItemMcr): ItemGlossario => ({ ...dados, aliases: [] })
 
 /**
  * Glossário do MCR (guia do Cerrado Mahjong Club, seção 1) no formato do
@@ -21,7 +14,7 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
   {
     id: 'mcr-pecas',
     titulo: 'Peças',
-    intro: '144 peças: 136 iguais às do Riichi, sem as vermelhas, mais 8 flores.',
+    intro: '144 peças: 108 de naipe, 28 honras e 8 flores e estações.',
     itens: [
       item({
         id: 'mcr-naipes',
@@ -48,7 +41,6 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
         leitura: 'Hua / Bu Hua',
         texto:
           'Flores e Estações. Expor, dizer "Hua" e pegar reposição do fim do muro. Cada uma vale 1 ponto e não conta para o mínimo de 8.',
-        diferente: 'o Riichi não tem flores.',
       }),
     ],
   },
@@ -58,7 +50,7 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
     intro: 'A mão normal tem 4 conjuntos e 1 par.',
     exemplo: {
       mpsz: '123m 456p 777s 222z 55m',
-      rotulos: ['Chow', 'Chow', 'Pung', 'Pung', 'Par'],
+      rotulos: ['Chi', 'Chi', 'Peng', 'Peng', 'Par'],
     },
     itens: [
       item({
@@ -76,7 +68,7 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
         texto:
           'Sequência de 3 números seguidos do mesmo naipe. Só pode pegar descarte do jogador à esquerda.',
         pedras: { tipo: 'mpsz', mpsz: '123m' },
-        diferente: 'Kuikae é permitido.',
+        nota: 'Depois do Chi, pode descartar uma peça que completaria o mesmo conjunto.',
       }),
       item({
         id: 'mcr-pung',
@@ -99,7 +91,9 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
         id: 'mcr-kong-oculto',
         nome: 'Kong Oculto',
         texto: 'Kong com as 4 peças próprias.',
-        diferente: 'fica virado para baixo até o fim da mão.',
+        kanji: '暗杠',
+        leitura: 'An Gang',
+        nota: 'Fica virado para baixo até o fim da mão.',
       }),
       item({
         id: 'mcr-ocultas',
@@ -153,7 +147,7 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
         nome: 'Dealer',
         texto:
           'Jogador na posição Leste. Passa os dados para a direita ao fim de toda mão, vencendo ou não.',
-        diferente: 'não tem bônus nem Honba.',
+        nota: 'Não paga nem recebe a mais.',
       }),
       item({ id: 'mcr-muro', nome: 'Muro', texto: 'As 4 fileiras de 18 pilhas.' }),
       item({
@@ -172,7 +166,7 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
         id: 'mcr-espera',
         nome: 'Espera',
         texto: 'Aguardar uma peça para completar a mão.',
-        diferente: 'não há furiten. Dá para vencer com uma peça que você descartou.',
+        nota: 'Dá para vencer com uma peça que você descartou.',
       }),
       item({
         id: 'mcr-hu',
@@ -184,13 +178,13 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
         id: 'mcr-zimo',
         nome: 'Zimo',
         kanji: '自摸',
-        texto: 'Vitória por compra própria (Tsumo).',
+        texto: 'Vitória por compra própria.',
       }),
       item({
         id: 'mcr-dianhe',
         nome: 'Dianhe',
         kanji: '点和',
-        texto: 'Vitória por descarte (Ron).',
+        texto: 'Vitória por descarte.',
       }),
       item({
         id: 'mcr-peca-vitoria',
@@ -237,14 +231,8 @@ export const SECOES_GLOSSARIO_MCR: SecaoGlossario[] = [
 
 /** A mesma lista em termos soltos, para o glossário do livro (Tutorial). */
 export const GLOSSARIO_MCR: TermoGlossarioGuia[] = SECOES_GLOSSARIO_MCR.flatMap((secao) =>
-  secao.itens.map(({ nome, apelido, leitura, texto, nota }) => {
-    const diferenteRiichi = !!nota?.startsWith(NOTA_DIFERENTE)
-    return {
-      term: [nome, leitura ?? apelido].filter(Boolean).join(' / '),
-      definition: [texto, diferenteRiichi ? nota?.slice(NOTA_DIFERENTE.length) : undefined]
-        .filter(Boolean)
-        .join(' '),
-      diferenteRiichi,
-    }
-  }),
+  secao.itens.map(({ nome, apelido, leitura, texto, nota }) => ({
+    term: [nome, leitura ?? apelido].filter(Boolean).join(' / '),
+    definition: [texto, nota].filter(Boolean).join(' '),
+  })),
 )

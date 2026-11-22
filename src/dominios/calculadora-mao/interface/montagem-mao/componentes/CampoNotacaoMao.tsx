@@ -43,6 +43,10 @@ interface PropsCampoNotacaoMao {
   aoEscolherEspera: (pedra: CodigoPedra) => void
   /** Sem Aka dora nas regras, o 0 (5 vermelho) fica desabilitado. */
   akadora: boolean
+  /** Modo sem 5 vermelho (MCR): no lugar do 0 fica um apagar largo. */
+  semZero?: boolean
+  /** Nome acessível de cada chamada, quando diz mais que o rótulo. */
+  descricoesChamada?: Record<Meld['tipo'], string>
 }
 
 interface Tecla {
@@ -127,8 +131,10 @@ export function CampoNotacaoMao({
   aoArmarChamada,
   esperas,
   rotuloEspera,
+  descricoesChamada,
   aoEscolherEspera,
   akadora,
+  semZero = false,
 }: PropsCampoNotacaoMao) {
   const sanma = !!useSanmaMao()
   const { t } = useI18n()
@@ -391,6 +397,7 @@ export function CampoNotacaoMao({
             }`.trim()}
             type="button"
             aria-pressed={chamadaArmada === chamada.tipo}
+            aria-label={descricoesChamada?.[chamada.tipo]}
             // Acende quando cabe no último grupo, ou para marcar antes de um grupo novo.
             disabled={!possiveis.has(chamada.tipo) && /\d$/.test(pendentes)}
             onClick={() => tocarChamada(chamada)}
@@ -406,7 +413,7 @@ export function CampoNotacaoMao({
         aria-label={t('notation.keyboard')}
         aria-describedby={erro ? idMensagem : undefined}
       >
-        {TECLAS.map((tecla) => (
+        {TECLAS.filter((tecla) => !semZero || tecla.valor !== '0').map((tecla) => (
           <button
             key={tecla.valor}
             className={`tecla-notacao-mao area-${tecla.area} ${tecla.classe ?? ''}`.trim()}
@@ -425,6 +432,17 @@ export function CampoNotacaoMao({
             {tecla.dica && <span className="dica-tecla-notacao-mao">{t(tecla.dica)}</span>}
           </button>
         ))}
+        {semZero && (
+          <button
+            className="tecla-notacao-mao area-n0"
+            type="button"
+            aria-label={t('notation.keys.backspace')}
+            title={t('notation.keys.backspace')}
+            onClick={apagar}
+          >
+            <i className="fas fa-delete-left rotulo-tecla-notacao-mao" aria-hidden="true" />
+          </button>
+        )}
       </div>
     </div>
   )

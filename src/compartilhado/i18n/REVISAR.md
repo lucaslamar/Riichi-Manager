@@ -515,3 +515,12 @@ um termo no texto, troque também nos aliases.
 As seções `configuracoes`, `mcr` e `menu.handCalculatorChinese` estão em português (pt-BR) e
 inglês (en). Em es, ja, ko e lt elas ficaram em inglês, aguardando tradução. Os nomes dos fan
 vêm do guia do CMC (`fans-mcr.ts`), em português, com o 汉字 ao lado.
+
+## Nome do modo Riichi (es, ja, ko, lt e zh-Hans)
+
+Sem revisão nativa: `configuracoes.mahjong.riichi` e `configuracoes.mahjong.ajudaRiichi`.
+Em es, ko e lt o texto está em inglês. Em ja e zh-Hans, conferir リーチ麻雀 e 立直麻将 como nome do modo.
+
+## Tutorial MCR (`tutorial.mcr.*`)
+
+O livro do modo Chinês só existe em português. Os outros 6 idiomas têm o texto em pt-BR copiado, para traduzir e revisar com falante nativo. Ao mudar um texto no pt-BR antes da tradução, mude nas cópias também. Os termos do MCR em `modo.mcr.*` e `acoes.mcr.*` também pedem revisão em es, ja, ko, lt e zh-Hans.

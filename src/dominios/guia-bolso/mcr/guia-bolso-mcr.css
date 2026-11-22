@@ -10,16 +10,6 @@
   outline-offset: 2px;
 }
 
-.fan-mcr__riichi {
-  justify-self: start;
-  border: 1px solid var(--texto-aviso);
-  border-radius: 999px;
-  padding: 2px 10px;
-  color: var(--texto-aviso);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
 .fan-mcr__expandir,
 .fan-mcr__link {
   display: inline-flex;
@@ -56,17 +46,6 @@
 
 .fan-mcr__observacao {
   margin: 0;
-}
-
-.guia-mcr__sem-equivalente {
-  border-left: 5px solid var(--texto-aviso);
-  border-radius: 8px;
-  padding: 12px 14px;
-  background: var(--cor-superficie-alt, #f8f9fa);
-}
-
-.guia-mcr__sem-equivalente p {
-  margin: 4px 0 0;
 }
 
 /* Exemplo do fan: as pedras do fan acendem, as outras ficam apagadas. */

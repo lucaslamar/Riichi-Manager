@@ -558,20 +558,20 @@
     "valueYakuman": "Vale: Yakuman",
     "mcr": {
       "guide": "O chapéu abre o Guia de bolso: os 81 fan com exemplos, o glossário e a busca para consultar durante o jogo.",
-      "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: flores, ron ou tsumo, ventos e condições especiais. Cada parte de lá tem o próprio ?.",
+      "finish": "Com a mão completa, Finalizar mão leva às opções da vitória: flores, Dianhe ou Zimo, ventos e condições especiais. Cada parte de lá tem o próprio ?.",
       "notationTip": "Dá para montar vários grupos e números e tocar no naipe só no fim, e ele vale para todos. Cada número mostra embaixo a honra que vira com o z. AC limpa tudo. Para voltar ao teclado de pedras, toque em Peças ou deslize o dedo para a direita.",
       "guideCard": "Cada fan com exemplo e quanto vale",
       "tsumo": "Você bateu com a pedra que comprou. Vale Compra Própria (1 fan), e cada um dos três paga 8 mais o fan da mão.",
       "ron": "Você bateu com o descarte de outro jogador. Quem descartou paga 8 mais o fan da mão, e os outros dois pagam 8 cada.",
-      "oculta": "Sem Chi, Pon ou Kan aberto: no ron vale Mão Oculta (2 fan), e no tsumo, Mão Completamente Oculta (4 fan) no lugar dela e da Compra Própria.",
+      "oculta": "Sem Chi, Peng ou Gang: no Dianhe vale Mão Oculta (2 fan), e no Zimo, Mão Completamente Oculta (4 fan) no lugar dela e da Compra Própria.",
       "ventoAssento": "O vento de quem bateu. Uma trinca ou quadra dele vale Vento da Posição (2 fan). O dealer é o Leste.",
       "ventoRodada": "O vento da rodada. Uma trinca ou quadra dele vale Vento da Mesa (2 fan). Se for o mesmo vento do assento, a trinca conta os dois.",
       "flores": "As 8 pedras de flor e estação (ameixa, orquídea, crisântemo, bambu, primavera, verão, outono e inverno) valem 1 fan cada. No MCR nenhuma tem relação com o assento.",
       "floresMinimo": "As flores não contam para o mínimo de 8 fan: só somam depois que a mão já vale 8.",
       "ultimaTitulo": "Última pedra",
-      "ultima": "Bater com a última pedra da parede (tsumo) vale Última Peça do Muro (8 fan). Bater com o último descarte (ron) vale Último Descarte (8 fan).",
-      "kanTitulo": "Kan",
-      "kan": "No tsumo, bater com a pedra de reposição do Kan vale Vitória na Peça de Reposição (8 fan). No ron, bater com a pedra que outro jogador pôs no Pon para virar Kan vale Assalto ao Kong (8 fan).",
+      "ultima": "Bater com a última pedra da parede (Zimo) vale Última Peça do Muro (8 fan). Bater com o último descarte (Dianhe) vale Último Descarte (8 fan).",
+      "kanTitulo": "Gang",
+      "kan": "No Zimo, bater com a pedra de reposição do Gang vale Vitória na Peça de Reposição (8 fan). No Dianhe, bater com a pedra que outro jogador pôs no Peng para virar Gang vale Assalto ao Kong (8 fan).",
       "ultimaDoTipo": "Bater com a última cópia de uma pedra, quando as outras três já estão à vista na mesa, vale Última Cópia (4 fan)."
     }
   },
@@ -1822,7 +1822,6 @@
       "off": "Desligado",
       "tableTimerHelp": "Cada mesa tem o próprio relógio, que começa quando ela inicia e pode receber +5 min.",
       "timeUpHelp": "Quando o tempo acaba, a partida termina na mão atual.",
-      "turnTimerHelp": "O timer de vez de cada jogador segue a aba Mesa.",
       "winds": "Ventos",
       "windsApp": "Sorteados no app",
       "windsTable": "Na mesa",
@@ -2076,7 +2075,8 @@
       "useHand": "Usar na conta",
       "previousPlayer": "Jogador anterior",
       "nextPlayer": "Próximo jogador",
-      "typeFor": "Digitar os pontos de {{name}}"
+      "typeFor": "Digitar os pontos de {{name}}",
+      "hundred": "Dois zeros"
     },
     "positionChange": {
       "up": {
@@ -2492,9 +2492,9 @@
     "mahjong": {
       "titulo": "Mahjong",
       "descricao": "Regras usadas em todo o app.",
-      "japones": "Japonês",
+      "riichi": "Riichi",
       "chines": "Chinês (MCR)",
-      "ajudaJapones": "Japonês: Riichi (han, fu, Yaku).",
+      "ajudaRiichi": "Riichi: han, fu e yaku.",
       "ajudaChines": "Chinês: MCR / Guobiao (81 fan, mínimo 8).",
       "confirmarTroca": "Trocar de modo limpa a mão atual. Continuar?"
     }
@@ -2504,19 +2504,30 @@
       "flores": "Flores e estações",
       "removerFlor": "Remover {{flor}}",
       "erroQuatro": "Cada pedra existe só quatro vezes.",
-      "escolherFlores": "Escolher as flores"
+      "escolherFlores": "Escolher as flores",
+      "opcaoFlor": {
+        "1": "Flor 梅 Ameixa, 1",
+        "2": "Flor 兰 Orquídea, 2",
+        "3": "Flor 菊 Crisântemo, 3",
+        "4": "Flor 竹 Bambu, 4",
+        "5": "Estação 春 Primavera, 1",
+        "6": "Estação 夏 Verão, 2",
+        "7": "Estação 秋 Outono, 3",
+        "8": "Estação 冬 Inverno, 4"
+      },
+      "florEscolhida": "{{flor}}: selecionada"
     },
     "condicoes": {
       "titulo": "Condições",
       "forma": "Batida",
-      "ron": "Ron (descarte)",
-      "tsumo": "Tsumo (compra)",
+      "ron": "Dianhe (descarte)",
+      "tsumo": "Zimo (compra)",
       "ventoRodada": "Vento da rodada",
       "ventoAssento": "Vento do assento",
       "ultimaParede": "Última pedra da parede",
       "ultimoDescarte": "Último descarte",
-      "reposicaoKan": "Batida com pedra de reposição do Kan",
-      "rouboKan": "Roubar o Kan",
+      "reposicaoKan": "Batida com pedra de reposição do Gang",
+      "rouboKan": "Roubar o Gang",
       "ultimaDoTipo": "Última pedra do tipo",
       "ultimaDoTipoAjuda": "As outras três já estão à vista."
     },
@@ -2534,16 +2545,17 @@
       "cadaJogador": "Cada jogador paga",
       "pontos": "{{pontos}} pontos",
       "vezes": "×{{vezes}}",
-      "invalidaTitulo": "Mão inválida"
+      "invalidaTitulo": "Mão inválida",
+      "tituloFan": "Fan"
     },
     "erros": {
-      "incompleta": "Monte 14 pedras para calcular. Kan conta como 3.",
-      "semKan": "Batida com pedra de reposição do Kan precisa de um Kan na mão.",
-      "rouboDoKan": "Roubar o Kan não combina com o último descarte nem com outra pedra igual na mão.",
+      "incompleta": "Monte 14 pedras para calcular. Gang conta como 3.",
+      "semKan": "Batida com pedra de reposição do Gang precisa de um Gang na mão.",
+      "rouboDoKan": "Roubar o Gang não combina com o último descarte nem com outra pedra igual na mão.",
       "ultimaDoTipo": "Última pedra do tipo não vale com outra pedra igual na mão."
     },
     "fan": {
-      "mingangang": "Kan Aberto e Kan Fechado"
+      "mingangang": "Gang e An Gang"
     },
     "flores": {
       "1": "Flor da ameixa",
@@ -2554,21 +2566,24 @@
       "6": "Verão",
       "7": "Outono",
       "8": "Inverno"
+    },
+    "voz": {
+      "chi": "Chi!",
+      "pon": "Peng!",
+      "kanAberto": "Gang!",
+      "kanFechado": "An Gang!",
+      "ron": "Hu!",
+      "tsumo": "Zimo!"
     }
   },
   "guiaBolso": {
     "mcr": {
       "pontosFan": "{{pontos}} pontos",
       "numero": "Nº {{id}}",
-      "riichi": "Riichi: {{yaku}}",
       "detalhes": "Detalhes",
       "naoCombina": "Não combina com:",
       "irPara": "Ir para {{nome}}",
-      "semEquivalenteTitulo": "Yaku do Riichi sem equivalente",
-      "semEquivalenteExato": "Sem equivalente exato: {{lista}}.",
-      "naoExistem": "Não existem no MCR: {{lista}}.",
       "porPontos": "Por pontos",
-      "abaRiichi": "Riichi",
       "abas": {
         "chows": "Chows",
         "pungs": "Pungs",
@@ -2584,7 +2599,7 @@
         "ultima-peca": "Última peça",
         "outros": "Outros"
       },
-      "busca": "Buscar fan, 汉字, inglês ou yaku",
+      "busca": "Buscar fan, 汉字 ou inglês",
       "rotuloBusca": "Buscar no Guia de bolso",
       "exemplo": "Mão de exemplo: {{pedras}}",
       "condicoes": "Condições do exemplo",
@@ -2636,17 +2651,879 @@
       "porFanAjuda": "Digite o fan da mão",
       "qtdFan": "{{fan}} fan",
       "empateTexto": "O muro acabou sem ninguém vencer. Ninguém paga e o dealer passa.",
-      "ronDe": "Ron de {{name}}",
+      "ronDe": "Dianhe de {{name}}",
       "falsoHu": "Falso Hu",
       "falsoHuDe": "Falso Hu de {{name}}?",
       "falsoHuTexto": "Quem errou paga 10 pontos a cada um dos outros três, e a mão continua.",
       "qtdPontos": "{{pontos}} pontos",
-      "verMesa": "Ver a mesa"
+      "verMesa": "Ver a mesa",
+      "registro": {
+        "comoVenceu": "Como {{name}} venceu?",
+        "jogar": "Jogar no Placar",
+        "jogarAjuda": "A mesa do app, com timer e descartes",
+        "totais": "Totais",
+        "cartao": "Some e subtraia os pontos de cada um"
+      }
     }
   },
   "glossario": {
     "mcr": {
       "diferenteRiichi": "Diferente do Riichi"
+    }
+  },
+  "modo": {
+    "mcr": {
+      "sectionHelp": {
+        "tiles": {
+          "pon": "Toque em Peng e depois na pedra. As três entram como Peng, usando as que já estão na mão.",
+          "kan": "Toque em Gang e depois na pedra. As quatro entram como Gang.",
+          "closedKan": "Toque em An Gang e depois na pedra. Se a mão já tem três ou quatro dela, elas viram o Gang."
+        },
+        "notation": {
+          "pon": "Trinca pega do descarte de qualquer jogador. Digite 111p e toque em Peng. Ou toque em Peng antes e depois no 1: aparecem três 1 esperando o naipe. Então toque em p.",
+          "kan": "4 iguais, a 4ª pega do descarte de outro jogador. Digite 1111s e toque em Gang. Ou toque em Gang antes e depois no 1: aparecem quatro 1 esperando o naipe. Então toque em s.",
+          "closedKan": "4 iguais, todas da sua própria mão. Digite 7777z e toque em An Gang. Ou toque em An Gang antes e depois no 7: aparecem quatro 7 esperando o naipe. Então toque em z.",
+          "display": "Pelo teclado físico, a chamada é uma letra no fim do grupo: c para Chi, Peng e Gang (123mc, 111pc, 1111sc) e a para An Gang (7777za)."
+        }
+      },
+      "pages": {
+        "installTitle": "Instalar o Mahjong Manager",
+        "installSuggestion": "Instale o Mahjong Manager para jogar sem a barra do navegador.",
+        "fullscreenHeaderHint": "Toque em Mahjong Manager para tela cheia",
+        "aboutTitle": "Sobre o Mahjong Manager",
+        "aboutText": "Um app feito para ajudar jogadores e clubes de mahjong a calcular mãos, organizar partidas e testar ideias de torneio, levando o mahjong para todos.",
+        "narrationHelp": "Fala as chamadas, a batida e o resultado. Para pessoas cegas ou com baixa visão."
+      },
+      "match": {
+        "club": {
+          "shareTitle": "Mahjong Manager · Mesas do clube · {{date}}"
+        },
+        "menu": {
+          "ron": "Venceu por Dianhe",
+          "tsumo": "Venceu por Zimo"
+        },
+        "win": {
+          "tsumoOf": "Zimo de {{name}}"
+        },
+        "discards": {
+          "kakan": "Bu Gang",
+          "kakanInput": "Pedra do Bu Gang em notação (3m)",
+          "whoCalled": {
+            "ron": "Quem fez Dianhe?",
+            "pon": "Quem fez Peng?",
+            "kan": "Quem fez Gang?"
+          },
+          "call": {
+            "pon": "Peng",
+            "kan": "Gang",
+            "ron": "Dianhe"
+          },
+          "closedKan": "An Gang"
+        },
+        "event": {
+          "ron": "Dianhe",
+          "tsumo": "Zimo"
+        },
+        "simple": {
+          "nextRound": "Próxima mão",
+          "restartHelp": "A rodada e o dealer voltam ao início.",
+          "guide": {
+            "timer": "O timer de 30 s já vem ligado. Na sua vez, toque na placa do seu vento e o tempo recomeça cheio no centro. Como Peng, Chi e Gang pulam jogadores, o timer não adivinha de quem é a vez: quem vai jogar é que toca. Se o tempo acabar, o centro pisca e o alarme toca.",
+            "actions": "Tocar em qualquer ponto da mesa fora das placas, inclusive no centro, abre as ações: próxima mão, dados, Sorteador de Ventos, recomeçar do 東1 e o tempo do timer.",
+            "dealer": "No MCR o dealer passa ao fim de toda mão, com vitória ou empate: toque em Próxima mão e o 東 vai para o próximo jogador. Gire o celular para o 東 continuar virado para o dealer. A mesa acompanha o celular mesmo se a tela girar sozinha, mas o cabeçalho e a barra mudam de lado. Para evitar isso, trave a rotação nos ajustes do celular."
+          },
+          "demo": {
+            "nextRound": "Toque em Próxima mão"
+          }
+        }
+      },
+      "tournament": {
+        "import": {
+          "errorInvalid": "Isso não é um torneio do Mahjong Manager."
+        }
+      },
+      "backup": {
+        "importHelp": "Abre um arquivo de backup do Mahjong Manager (.json)."
+      },
+      "melds": {
+        "chii": "Chi",
+        "pon": "Peng",
+        "kanAberto": "Gang",
+        "kanCompact": "Gang",
+        "kanFechado": "An Gang",
+        "kanClosedCompact": "An Gang"
+      },
+      "narration": {
+        "calls": {
+          "pon": "Peng",
+          "kanAberto": "Gang",
+          "kanFechado": "An Gang"
+        }
+      },
+      "calculator": {
+        "ron": "Dianhe",
+        "tsumo": "Zimo"
+      },
+      "windDraw": {
+        "ronRon": "Hu hu!"
+      },
+      "learn": {
+        "tagline": {
+          "one": "São {{count}} módulos curtos para conhecer o jogo.",
+          "other": "São {{count}} módulos curtos para conhecer o jogo."
+        },
+        "conclusionSecret": "Recado secreto, só para quem virou Mestre do MCR: o muro tem 144 pedras, e nenhuma delas é segredo para você."
+      },
+      "notation": {
+        "errors": {
+          "akaDisabled": "O MCR não tem 5 vermelho: use 5 em vez de 0"
+        }
+      },
+      "menu": {
+        "handCalculator": "Calculadora de Mão Chinesa"
+      }
+    }
+  },
+  "acoes": {
+    "mcr": {
+      "chii": {
+        "aria": "Chi (吃): declarar sequência"
+      },
+      "pon": {
+        "aria": "Peng (碰): declarar trinca"
+      },
+      "kanAberto": {
+        "aria": "Gang (明杠): declarar kong exposto"
+      },
+      "kanFechado": {
+        "aria": "An Gang (暗杠): declarar kong oculto"
+      }
+    }
+  },
+  "tutorial": {
+    "mcr": {
+      "diagrama": {
+        "viradas": "144 pedras viradas para baixo",
+        "pilhas": "18 pilhas",
+        "porPilha": "2 pedras em cada, 36 por jogador",
+        "muralha": "A Grande Muralha",
+        "piso": "Dentro fica o Piso",
+        "dados": "Dados: 6 e depois 4",
+        "contadas": "Conte 10 pilhas da direita",
+        "compra": "A compra segue no horário",
+        "fimMuro": "As contadas são o fim do muro",
+        "saltada": "O Leste pula uma pilha"
+      },
+      "fans": {
+        "porZimo": "Vitória por Zimo, com a última pedra.",
+        "porDianhe": "Vitória por Dianhe, com a última pedra.",
+        "qualFan": "Qual destes fan esta mão tem?",
+        "quantosFan": "Quantos fan esta mão faz?",
+        "verTodos": "Ver todos no Guia de Bolso",
+        "comecar": {
+          "titulo": "Fan para começar",
+          "capa": "Os fan mais comuns e como somar 8 pontos com eles.",
+          "somar": "Como chegar a 8",
+          "texto": "Escolha um fan principal e some outros que combinam com ele. Alguns já valem 8 ou mais sozinhos.",
+          "combinacao": "Combinação",
+          "pontos": "Pontos",
+          "aviso": "Todas Sequências e Mão Oculta somam 4. Faltam mais 4 de outros fan. E as flores nunca entram nessa conta."
+        },
+        "sequencias": {
+          "titulo": "Sequências (Chows)",
+          "capa": "Sequências iguais, seguidas e deslocadas."
+        },
+        "trincas": {
+          "titulo": "Trincas e quadras",
+          "capa": "Pungs, Kongs e quanto vale mantê-los ocultos."
+        },
+        "honras": {
+          "titulo": "Honras: ventos e dragões",
+          "capa": "Trincas, quadras e pares de ventos e dragões."
+        },
+        "naipes": {
+          "titulo": "Naipes e números",
+          "capa": "Mãos definidas pelos naipes e números que usam."
+        },
+        "especiais": {
+          "titulo": "Mãos especiais",
+          "capa": "Sete Pares, Treze Órfãos, mãos desconectadas e os casos à parte."
+        },
+        "esperas": {
+          "titulo": "Esperas e última peça",
+          "capa": "O que vale pelo jeito de completar a mão."
+        },
+        "expostos": "Grupos expostos: {{total}}, os primeiros.",
+        "semExpostos": "Nenhum grupo exposto.",
+        "comAnGang": "An Gang: {{total}}.",
+        "ventos": "Vento da rodada: {{rodada}}. Seu vento: {{posicao}}.",
+        "ultimaMuro": "Era a última pedra do muro.",
+        "ultimoDescarte": "Era o último descarte.",
+        "reposicao": "A pedra veio da reposição de um Gang.",
+        "roubo": "A pedra ia virar o Gang adicionado de outro jogador.",
+        "ultimaCopia": "As outras três cópias da última pedra já estavam à vista."
+      },
+      "parte5": {
+        "titulo": "Os 81 fan",
+        "capa": "Cada fan com a sua mão de exemplo, das combinações comuns às raras.",
+        "marco": "Você já sabe jogar e pontuar!",
+        "marcoTexto": "Agora é conhecer os fan para planejar mãos que chegam a 8."
+      },
+      "diferencas": {
+        "q1": {
+          "pergunta": "Você descartou um 5 de Círculos e depois ele completaria a sua mão. Pode vencer com ele no MCR?",
+          "resposta": "Pode. No MCR o furiten não é penalizado.",
+          "op1": "Pode",
+          "op2": "Não pode, é furiten"
+        },
+        "q2": {
+          "pergunta": "O dealer venceu. Ele continua como dealer?",
+          "resposta": "Não. Não há renchan: o dealer passa a cada mão.",
+          "op1": "Continua",
+          "op2": "Não, passa para o próximo"
+        },
+        "q3": {
+          "pergunta": "Chi com 123 e descartar o 4 é permitido?",
+          "resposta": "É. O MCR permite kuikae.",
+          "op1": "É proibido",
+          "op2": "É permitido"
+        },
+        "titulo": "O que muda do japonês",
+        "capa": "Os hábitos do Riichi que é preciso deixar de lado.",
+        "naoExiste": "O que não existe",
+        "semRiichi": "Riichi, Daburu Riichi, Ippatsu, Tenhou e Chiihou não existem.",
+        "semDora": "Não há dora, Ura-dora nem Aka dora.",
+        "semFu": "Não há han nem fu. A mão vale a soma dos fan, com mínimo de 8.",
+        "semHonba": "Não há honba nem renchan. A pontuação de uma rodada não passa para a seguinte.",
+        "semMuroMorto": "Não há muro morto. O jogo vai até a última pedra.",
+        "naMesa": "Na mesa",
+        "dealer": "O dealer passa a cada mão, vencendo ou não, e não recebe nem paga a mais.",
+        "kuikae": "Kuikae é permitido. Dá para fazer Chi com 123 e descartar o 4.",
+        "kanFechado": "O kan fechado vira An Gang e fica virado para baixo até o fim da mão.",
+        "maoAberta": "Abrir a mão só invalida os fan que são de mão oculta.",
+        "flores": "Há 8 flores e estações, que valem 1 ponto cada.",
+        "naVitoria": "Na vitória",
+        "furiten": "Furiten não é penalizado. Você pode vencer com uma pedra que descartou.",
+        "umVencedor": "Só um vencedor por descarte, o mais próximo de quem descartou.",
+        "todosPagam": "No ron, chamado de Dianhe, os três pagam. Quem descartou paga o fan além dos 8.",
+        "chombo": "No lugar do chombo há o Falso Hu: 10 pontos para cada um dos outros três."
+      },
+      "equivalentes": {
+        "q1": {
+          "pergunta": "Qual fan corresponde ao Toitoi?",
+          "resposta": "Todas Trincas 碰碰和 vale 6.",
+          "op1": "Todas Sequências",
+          "op2": "Todas Trincas",
+          "op3": "Três Quadras"
+        },
+        "q2": {
+          "pergunta": "E ao Chiitoitsu?",
+          "resposta": "Sete Pares 七对 vale 24.",
+          "op1": "Sete Pares",
+          "op2": "Quatro sem Quadra",
+          "op3": "Treze Órfãos"
+        },
+        "q3": {
+          "pergunta": "Qual destes não tem equivalente exato no MCR?",
+          "resposta": "Pinfu não tem um fan exatamente igual. Todas Sequências só é parecido.",
+          "op1": "Honitsu",
+          "op2": "Chinitsu",
+          "op3": "Pinfu"
+        },
+        "titulo": "Yaku e fan equivalentes",
+        "capa": "O yaku que você conhece e o fan mais parecido.",
+        "yaku": "Yaku",
+        "fan": "Fan (pontos)",
+        "sem": "Sem equivalente",
+        "semExato": "Sem equivalente exato",
+        "naoExistem": "Não existem no MCR"
+      },
+      "parte6": {
+        "opcional": "Opcional",
+        "titulo": "Para quem vem do Riichi",
+        "capa": "Só para quem já joga Riichi. Não é preciso para aprender MCR nem para o rank.",
+        "marco": "O livro do MCR está completo!",
+        "marcoTexto": "Com todos os módulos até aqui, você é Mestre do MCR. A parte seguinte é opcional."
+      },
+      "mcr": {
+        "q1": {
+          "pergunta": "Quantas pessoas jogam MCR?",
+          "resposta": "São 4 jogadores, cada um por si.",
+          "op1": "2",
+          "op2": "3",
+          "op3": "4"
+        },
+        "q2": {
+          "pergunta": "Quantos fan existem no MCR?",
+          "resposta": "São 81, de 1 a 88 pontos.",
+          "op1": "81",
+          "op2": "88",
+          "op3": "144"
+        },
+        "q3": {
+          "pergunta": "Quantos pontos de fan uma mão precisa ter, no mínimo, para vencer?",
+          "resposta": "8 pontos, sem contar as flores.",
+          "op1": "1",
+          "op2": "8",
+          "op3": "13"
+        },
+        "titulo": "O que é o MCR",
+        "capa": "O mahjong oficial de competição da China.",
+        "regras": "Mahjong Competition Rules",
+        "oficial": "O **Mahjong Competition Rules (MCR)**, em chinês 国标麻将 (Guobiao Majiang), é a regra oficial da China desde 1998, usada em torneios.",
+        "numeros": "- 4 jogadores, cada um por si.\n- 144 pedras.\n- 81 fan 番, as combinações que pontuam.\n- 12 valores de fan, de 1 a 88 pontos.\n- ==No mínimo 8 pontos de fan para vencer.==",
+        "comoE": "Como é uma mão",
+        "resumo": "Cada jogador recebe 13 pedras. Na sua vez compra uma e descarta outra, melhorando a mão. Quem completar primeiro uma mão de 8 pontos ou mais diz **\"Hu\"** e vence.",
+        "dica": "Este livro começa do zero: não é preciso conhecer nenhum outro mahjong."
+      },
+      "pecas": {
+        "q1": {
+          "pergunta": "Quantas pedras tem o jogo completo?",
+          "resposta": "108 de naipe, 16 ventos, 12 dragões e 8 flores: 144.",
+          "op1": "108",
+          "op2": "136",
+          "op3": "144"
+        },
+        "q2": {
+          "pergunta": "Quais são as Honras?",
+          "resposta": "Ventos e dragões são as Honras.",
+          "op1": "Ventos e dragões",
+          "op2": "Os 1 e os 9",
+          "op3": "Flores e Estações"
+        },
+        "q3": {
+          "pergunta": "Quantas cópias existem do 5 de Bambus?",
+          "resposta": "Cada pedra de naipe e de honra tem 4 cópias.",
+          "op1": "1",
+          "op2": "2",
+          "op3": "4"
+        },
+        "titulo": "As peças",
+        "capa": "144 pedras: naipes, honras, flores e estações.",
+        "naipes": "Os três naipes",
+        "naipesTexto": "Cada naipe vai de 1 a 9, com 4 cópias de cada pedra. São 108 pedras.",
+        "caracteres": "Caracteres 萬",
+        "circulos": "Círculos 筒",
+        "bambus": "Bambus 条",
+        "honras": "As honras",
+        "honrasTexto": "Não têm número e não formam sequência. Há 4 cópias de cada.",
+        "ventos": "Ventos: Leste, Sul, Oeste e Norte. São 16 pedras.",
+        "dragoes": "Dragões: Vermelho 中, Verde 發 e Branco 白. São 12 pedras.",
+        "flores": "Flores e Estações",
+        "floresLegenda": "Flores 梅 兰 菊 竹 e Estações 春 夏 秋 冬",
+        "floresTexto": "Há uma de cada, 8 pedras ao todo. Elas não formam conjuntos. Cada uma vale 1 ponto para quem vencer.",
+        "grupos": "Nomes que vão aparecer",
+        "terminais": "Terminais: os 1 e os 9 de cada naipe",
+        "honrasLegenda": "Honras: ventos e dragões",
+        "simples": "Simples: de 2 a 8, em qualquer naipe"
+      },
+      "objetivo": {
+        "q1": {
+          "pergunta": "Qual é a forma normal de uma mão vencedora?",
+          "resposta": "Quatro conjuntos e um par.",
+          "op1": "4 conjuntos e 1 par",
+          "op2": "3 conjuntos e 2 pares",
+          "op3": "14 pedras quaisquer"
+        },
+        "q2": {
+          "pergunta": "A mão tem 7 pontos de fan e 2 flores. Pode vencer?",
+          "resposta": "Não. As flores não contam para o mínimo de 8.",
+          "op1": "Pode, soma 9",
+          "op2": "Não pode"
+        },
+        "q3": {
+          "pergunta": "Qual destas é uma mão especial, sem 4 conjuntos e 1 par?",
+          "resposta": "Sete Pares é formada só por pares.",
+          "op1": "Todas Trincas",
+          "op2": "Sete Pares",
+          "op3": "Todas Sequências"
+        },
+        "titulo": "O objetivo",
+        "capa": "Uma forma completa e pelo menos 8 pontos.",
+        "forma": "A forma da mão",
+        "formaTexto": "A mão normal tem **4 conjuntos e 1 par**. Um conjunto é uma sequência (Chi), uma trinca (Peng) ou uma quadra (Gang).",
+        "sequencia": "Sequência",
+        "sequencia2": "Sequência",
+        "sequencia3": "Sequência",
+        "trinca": "Trinca",
+        "par": "Par",
+        "especiais": "Há também mãos especiais, como Sete Pares, Treze Órfãos e as mãos desconectadas.",
+        "minimo": "Os 8 pontos",
+        "minimoTexto": "Só a forma não basta. Os fan da mão precisam somar ==no mínimo 8 pontos==. As flores não contam para os 8.",
+        "especial": "Uma mão especial",
+        "especialTexto": "Sete Pares troca os conjuntos por pares e já passa dos 8 sozinha."
+      },
+      "sorteio": {
+        "q1": {
+          "pergunta": "Quem começa como dealer?",
+          "resposta": "Quem tirou o Leste.",
+          "op1": "Quem embaralhou",
+          "op2": "Quem tirou o Leste",
+          "op3": "O mais velho"
+        },
+        "q2": {
+          "pergunta": "Quem senta à direita do Leste?",
+          "resposta": "O Sul.",
+          "op1": "Sul",
+          "op2": "Norte",
+          "op3": "Oeste"
+        },
+        "q3": {
+          "pergunta": "Quem senta em frente ao Leste?",
+          "resposta": "O Oeste.",
+          "op1": "Norte",
+          "op2": "Sul",
+          "op3": "Oeste"
+        },
+        "titulo": "Sorteio dos ventos e assentos",
+        "capa": "Quem senta onde e quem começa.",
+        "sortear": "O sorteio",
+        "passo1": "Separe um vento de cada.",
+        "passo2": "Vire os quatro para baixo e embaralhe.",
+        "passo3": "Cada jogador tira um. Quem embaralhou tira por último.",
+        "passo4": "Quem tirou o Leste começa como dealer.",
+        "abrir": "Abrir Sorteador de Ventos",
+        "assentos": "Os assentos",
+        "assentosTexto": "Visto de quem é Leste:\n- À direita fica o Sul.\n- Em frente fica o Oeste.\n- À esquerda fica o Norte.",
+        "assentosAlt": "Mesa vista de cima: Leste embaixo, Sul à direita, Oeste em cima e Norte à esquerda."
+      },
+      "muro": {
+        "q1": {
+          "pergunta": "Quantas pilhas cada jogador monta?",
+          "resposta": "18 pilhas.",
+          "op1": "17",
+          "op2": "18",
+          "op3": "36"
+        },
+        "q2": {
+          "pergunta": "Quantas pedras há no muro de cada jogador?",
+          "resposta": "18 pilhas de 2: 36 pedras.",
+          "op1": "36",
+          "op2": "34",
+          "op3": "18"
+        },
+        "q3": {
+          "pergunta": "O que é o Piso?",
+          "resposta": "A área dentro dos muros, onde ficam os descartes.",
+          "op1": "A fileira de baixo do muro",
+          "op2": "A área dos descartes",
+          "op3": "As pedras da mão"
+        },
+        "titulo": "Montando o muro",
+        "capa": "18 pilhas de 2 pedras na frente de cada um.",
+        "passos": "Passo a passo",
+        "passo1": "Embaralhem as pedras viradas para baixo.",
+        "alt1": "Pedras viradas para baixo, espalhadas e sendo misturadas.",
+        "passo2": "Cada um monta 18 pilhas de 2 pedras, 36 ao todo, na sua frente.",
+        "alt2": "Uma fileira de 18 pilhas, com duas pedras em cada.",
+        "passo3": "Empurrem os muros para o centro até formar um quadrado.",
+        "alt3": "Os quatro muros de 18 pilhas formam um quadrado, com o Piso no meio.",
+        "piso": "A muralha e o Piso",
+        "pisoTexto": "O quadrado é chamado de **A Grande Muralha**. A área de dentro é **o Piso**, onde ficam os descartes."
+      },
+      "distribuicao": {
+        "q1": {
+          "pergunta": "Com quantas pedras o dealer começa?",
+          "resposta": "14. Por isso descarta primeiro.",
+          "op1": "12",
+          "op2": "13",
+          "op3": "14"
+        },
+        "q2": {
+          "pergunta": "Em que sentido as pedras saem do muro?",
+          "resposta": "No horário, enquanto a vez passa no anti-horário.",
+          "op1": "Horário",
+          "op2": "Anti-horário"
+        },
+        "q3": {
+          "pergunta": "De onde vêm as pedras de reposição?",
+          "resposta": "Do fim do muro.",
+          "op1": "Do Piso",
+          "op2": "Do fim do muro",
+          "op3": "Da mão do dealer"
+        },
+        "titulo": "Abrindo o muro e distribuindo",
+        "capa": "Dados, ponto de abertura e 13 pedras para cada um.",
+        "abrir": "Abrindo o muro",
+        "dado1": "O dealer lança 2 dados e conta os jogadores no anti-horário, começando por ele. Onde a conta parar fica quem abre.",
+        "dado2": "Esse jogador lança os 2 dados. Somam-se os dois lançamentos.",
+        "dado3": "No próprio muro, ele conta esse número de pilhas a partir da sua direita e abre logo depois.",
+        "aberturaAlt": "Com 6 e depois 4 nos dados, o Sul abre o seu muro depois de 10 pilhas da direita. A compra segue no sentido horário e as 10 pilhas contadas são o fim do muro.",
+        "sentido": "As pedras saem do muro no **sentido horário**, mas a vez passa no **anti-horário**.",
+        "distribuir": "Distribuindo",
+        "distribuirTexto": "Começando pelo dealer, cada um pega 2 pilhas, 4 pedras, por três voltas. Na última volta o dealer pega 2 pedras e os outros, 1.",
+        "voltasAlt": "Leste recebe 4, 4, 4 e 2 pedras, 14 ao todo. Sul, Oeste e Norte recebem 4, 4, 4 e 1, 13 cada.",
+        "ultima": "A última volta",
+        "ultimaTexto": "O dealer pega a pedra de cima de duas pilhas, pulando a do meio. Os outros pegam uma cada, na ordem.",
+        "ultimaAlt": "Nas três pilhas seguintes, Leste pega a de cima da primeira e da terceira, Sul a de baixo da primeira, Oeste a de cima da segunda e Norte a de baixo da segunda.",
+        "inicio": "O dealer fica com 14 e descarta primeiro. As reposições de Gang e de flor vêm do **fim do muro**."
+      },
+      "flores": {
+        "q1": {
+          "pergunta": "O que se diz ao expor uma flor?",
+          "resposta": "Hua.",
+          "op1": "Hu",
+          "op2": "Hua",
+          "op3": "Chi"
+        },
+        "q2": {
+          "pergunta": "Quem repõe flores primeiro?",
+          "resposta": "O dealer.",
+          "op1": "O dealer",
+          "op2": "O Norte",
+          "op3": "Quem tiver mais flores"
+        },
+        "q3": {
+          "pergunta": "As flores expostas contam entre as 13 pedras da mão?",
+          "resposta": "Não. Elas ficam à parte e são repostas.",
+          "op1": "Contam",
+          "op2": "Não contam"
+        },
+        "titulo": "Flores no início da mão",
+        "capa": "Hua: expor e repor.",
+        "repor": "Expondo as flores",
+        "passo1": "O dealer mostra as flores que tiver e diz \"Hua\".",
+        "passo2": "Compra uma reposição do fim do muro para cada uma.",
+        "passo3": "Os outros fazem o mesmo, na ordem da vez.",
+        "passo4": "Repete-se até ninguém ter flor na mão. Só então o dealer descarta.",
+        "dica": "Comprou uma flor durante a mão? Também exponha, diga \"Hua\" e compre a reposição."
+      },
+      "parte1": {
+        "titulo": "Conhecendo o jogo",
+        "capa": "O que é o MCR, as pedras e o que é preciso para vencer."
+      },
+      "parte2": {
+        "titulo": "Preparando a mesa",
+        "capa": "Dos assentos até as 13 pedras na mão de cada um.",
+        "marco": "Você já conhece o jogo!",
+        "marcoTexto": "Agora é montar a mesa."
+      },
+      "turno": {
+        "q1": {
+          "pergunta": "Em que sentido passa a vez?",
+          "resposta": "No anti-horário.",
+          "op1": "Horário",
+          "op2": "Anti-horário"
+        },
+        "q2": {
+          "pergunta": "Quando você pode comprar?",
+          "resposta": "Depois que o jogador anterior descartar.",
+          "op1": "Depois do descarte anterior",
+          "op2": "A qualquer momento"
+        },
+        "q3": {
+          "pergunta": "Quantas pedras vão em cada fileira de descartes?",
+          "resposta": "Seis.",
+          "op1": "5",
+          "op2": "6",
+          "op3": "9"
+        },
+        "titulo": "O turno: comprar e descartar",
+        "capa": "Comprar, decidir e descartar.",
+        "vez": "A sua vez",
+        "ordem": "A vez passa no **anti-horário**, a partir do dealer.",
+        "passo1": "Compre a próxima pedra do muro, depois que o jogador anterior descartar.",
+        "passo2": "Se puder e quiser, faça Gang, exponha uma flor ou declare Hu.",
+        "passo3": "Descarte uma pedra.",
+        "treze": "Entre turnos você tem sempre **13 pedras**, sem contar flores e a quarta pedra de cada Gang.",
+        "descartes": "Os descartes",
+        "descartesTexto": "Mostre o descarte a todos e coloque-o no Piso, na sua frente, da esquerda para a direita, em fileiras de 6.",
+        "fileiras": "A primeira fileira tem 6, e a seguinte começa embaixo ou ao lado."
+      },
+      "conjuntos": {
+        "q1": {
+          "pergunta": "De quem você pode fazer Chi?",
+          "resposta": "Só do jogador à esquerda.",
+          "op1": "De qualquer um",
+          "op2": "Do jogador à esquerda",
+          "op3": "Do jogador à direita"
+        },
+        "q2": {
+          "pergunta": "O Peng veio do jogador da frente. Onde fica a pedra deitada?",
+          "resposta": "No meio.",
+          "op1": "À esquerda",
+          "op2": "No meio",
+          "op3": "À direita"
+        },
+        "q3": {
+          "pergunta": "Qual destes não abre a mão?",
+          "resposta": "O An Gang, com as quatro pedras próprias.",
+          "op1": "An Gang",
+          "op2": "Peng",
+          "op3": "Gang exposto"
+        },
+        "q4": {
+          "pergunta": "De onde vem a reposição do Gang?",
+          "resposta": "Do fim do muro.",
+          "op1": "Do Piso",
+          "op2": "Do fim do muro"
+        },
+        "titulo": "Chi, Peng e Gang",
+        "capa": "Como se forma e se coloca cada conjunto.",
+        "chi": "Chi 吃",
+        "chiTexto": "Sequência de três números do mesmo naipe com o descarte do **jogador à sua esquerda**. Depois de chamar, descarte.",
+        "chiMesa": "O 2 veio da esquerda: fica deitado à esquerda.",
+        "peng": "Peng 碰",
+        "pengTexto": "Trinca com o descarte de **qualquer jogador**. A pedra deitada mostra de quem veio.",
+        "daEsquerda": "Da esquerda",
+        "daFrente": "Da frente",
+        "daDireita": "Da direita",
+        "gang": "Gang 杠",
+        "gangTexto": "Quadra. Sempre compra uma reposição do fim do muro.",
+        "exposto": "Exposto 明杠: com um descarte",
+        "adicionado": "Adicionado: a quarta pedra sobre um Peng",
+        "oculto": "An Gang 暗杠: quatro próprias, viradas até o fim",
+        "quando": "O adicionado e o An Gang só depois de comprar. ==Não faça Gang no mesmo turno de um Chi ou Peng.==",
+        "aberta": "Mão aberta e mão oculta",
+        "abertaTexto": "- Chi, Peng e Gang exposto abrem a mão.\n- An Gang não abre.\n- Abrir só tira os fan que pedem mão oculta.",
+        "troca": "Depois de chamar, você pode descartar uma pedra que completaria o mesmo conjunto. Por exemplo, Chi com 123 e descartar o 4."
+      },
+      "chamadas": {
+        "q1": {
+          "pergunta": "Um pede Chi e outro, Peng. Quem fica com a pedra?",
+          "resposta": "Peng tem prioridade sobre Chi.",
+          "op1": "Chi",
+          "op2": "Peng"
+        },
+        "q2": {
+          "pergunta": "Qual chamada ganha de todas?",
+          "resposta": "Hu.",
+          "op1": "Gang",
+          "op2": "Hua",
+          "op3": "Hu"
+        },
+        "q3": {
+          "pergunta": "O Leste descartou. Sul e Oeste pedem Hu. Quem vence?",
+          "resposta": "O Sul, que vem primeiro na ordem da vez.",
+          "op1": "Sul",
+          "op2": "Oeste",
+          "op3": "Os dois"
+        },
+        "titulo": "Chamadas e prioridades",
+        "capa": "O que dizer e quem fica com o descarte.",
+        "dizer": "Diga antes de agir",
+        "fala": "Você diz",
+        "para": "Para",
+        "chi": "Chi 吃",
+        "paraChi": "Fazer uma sequência",
+        "peng": "Peng 碰",
+        "paraPeng": "Fazer uma trinca",
+        "gang": "Gang 杠",
+        "paraGang": "Fazer uma quadra",
+        "hua": "Hua 花",
+        "paraHua": "Expor uma flor",
+        "hu": "Hu 和",
+        "paraHu": "Vencer",
+        "prioridade": "Quem tem prioridade",
+        "ordem1": "Hu",
+        "ordem2": "Gang ou Peng",
+        "ordem3": "Chi",
+        "doisHu": "Se dois pedem Hu no mesmo descarte, vence o mais próximo de quem descartou, na ordem da vez. ==Só há um vencedor.=="
+      },
+      "vencer": {
+        "q1": {
+          "pergunta": "Você venceu com o descarte de outro jogador. Como se chama?",
+          "resposta": "Dianhe 点和.",
+          "op1": "Zimo",
+          "op2": "Dianhe",
+          "op3": "Hua"
+        },
+        "q2": {
+          "pergunta": "Você tem 4 e 6 e espera o 5. Que espera é essa?",
+          "resposta": "Espera de centro.",
+          "op1": "Ponta",
+          "op2": "Centro",
+          "op3": "Dois lados"
+        },
+        "q3": {
+          "pergunta": "Pode vencer com uma pedra que você já descartou?",
+          "resposta": "Pode.",
+          "op1": "Pode",
+          "op2": "Não pode"
+        },
+        "falta": "falta",
+        "titulo": "Como vencer (Hu)",
+        "capa": "Zimo, Dianhe e os tipos de espera.",
+        "formas": "As duas vitórias",
+        "formasTexto": "- **Zimo 自摸:** a última pedra veio da sua compra.\n- **Dianhe 点和:** veio do descarte de outro jogador.",
+        "condicoes": "Diga \"Hu\" com uma forma válida e 8 pontos ou mais. Você pode vencer com uma pedra que já descartou.",
+        "separada": "Deixe a pedra da vitória separada da mão, para a conferência.",
+        "esperas": "Os tipos de espera",
+        "ponta": "Ponta: só o 3 completa 12.",
+        "centro": "Centro: só a pedra do meio.",
+        "unica": "Única: falta o par.",
+        "doisLados": "Dois lados: serve o 3 ou o 6.",
+        "esperasFan": "Ponta, centro e única valem 1 fan quando são a única espera da mão."
+      },
+      "erros": {
+        "q1": {
+          "pergunta": "O muro acabou sem vencedor. Quem paga?",
+          "resposta": "Ninguém.",
+          "op1": "O dealer",
+          "op2": "Ninguém",
+          "op3": "Todos"
+        },
+        "q2": {
+          "pergunta": "Quanto paga quem faz Falso Hu?",
+          "resposta": "10 a cada um, 30 ao todo.",
+          "op1": "8 no total",
+          "op2": "10 a cada um",
+          "op3": "88 no total"
+        },
+        "q3": {
+          "pergunta": "Você tem 12 pedras entre turnos. Pode declarar Hu?",
+          "resposta": "Não. A contagem incorreta impede o Hu.",
+          "op1": "Não pode",
+          "op2": "Pode, se tiver 8 pontos"
+        },
+        "titulo": "Empate e erros",
+        "capa": "Quando ninguém vence e quando algo sai errado.",
+        "empate": "Empate",
+        "empateTexto": "O muro acabou e ninguém venceu com o último descarte. Ninguém paga e o dealer passa.",
+        "erros": "Erros",
+        "falsoHu": "**Falso Hu:** declarar Hu sem uma mão válida ou sem os 8 pontos. Quem errou paga 10 a cada um dos outros três.",
+        "contagem": "**Contagem incorreta:** ter mais ou menos de 13 pedras entre turnos impede o Hu naquela mão.",
+        "obrigatorio": "**Descarte obrigatório:** a pedra exposta de forma incorreta deve ser descartada no turno seguinte."
+      },
+      "pagamentos": {
+        "q1": {
+          "pergunta": "Dianhe de 8 fan: quanto paga quem descartou?",
+          "resposta": "16: os 8 obrigatórios e os 8 da mão.",
+          "op1": "8",
+          "op2": "16",
+          "op3": "24"
+        },
+        "q2": {
+          "pergunta": "Dianhe de 24 fan: quanto recebe o vencedor?",
+          "resposta": "32 de quem descartou e 8 de cada um dos outros: 48.",
+          "op1": "32",
+          "op2": "48",
+          "op3": "96"
+        },
+        "q3": {
+          "pergunta": "Zimo de 24 fan: quanto recebe o vencedor?",
+          "resposta": "Cada um paga 32: 96 ao todo.",
+          "op1": "48",
+          "op2": "72",
+          "op3": "96"
+        },
+        "titulo": "Pagamentos",
+        "capa": "Os 8 obrigatórios e o fan da mão.",
+        "quem": "Quem paga",
+        "obrigatorios": "Cada um dos três perdedores paga **8 pontos obrigatórios**.",
+        "formulas": "- **Zimo:** cada um paga 8 + fan.\n- **Dianhe:** todos pagam 8, e quem descartou paga também o fan.",
+        "dealer": "O dealer não paga nem recebe a mais. As flores entram no fan pago.",
+        "exemplos": "Exemplos",
+        "vitoria": "Vitória e fan",
+        "quemPaga": "Quem paga",
+        "recebe": "Recebe",
+        "abrir": "Abrir Calculadora de Fan",
+        "cadaUm": "cada um paga {{valor}}",
+        "descartador": "quem descartou paga {{valor}}, os outros {{outros}} cada"
+      },
+      "contagem": {
+        "q1": {
+          "pergunta": "A mão pode ser lida de dois jeitos. Qual vale?",
+          "resposta": "O que dá mais pontos.",
+          "op1": "O primeiro",
+          "op2": "O de maior valor",
+          "op3": "A soma dos dois"
+        },
+        "q2": {
+          "pergunta": "A mão tem Três Grandes Dragões. Duas Trincas de Dragões também conta?",
+          "resposta": "Não. Já está implícito, pela Não Repetição.",
+          "op1": "Conta",
+          "op2": "Não conta"
+        },
+        "q3": {
+          "pergunta": "O mesmo fan pode contar duas vezes na mão?",
+          "resposta": "Pode, com conjuntos diferentes.",
+          "op1": "Pode",
+          "op2": "Nunca"
+        },
+        "contam": "Contam",
+        "fan": "Fan",
+        "pontos": "Pontos",
+        "total": "**Total**",
+        "naoContam": "Não contam, já estão no principal",
+        "titulo": "Contando os fan",
+        "capa": "O principal primeiro e depois o que combina com ele.",
+        "principios": "Os cinco princípios",
+        "comeco": "Comece pelo **fan principal**. Depois some os outros seguindo:",
+        "principio": "Princípio",
+        "regra": "Regra",
+        "repeticao": "Não Repetição",
+        "repeticaoTexto": "Um fan já implícito em outro não conta de novo.",
+        "decomposicao": "Não Decomposição",
+        "decomposicaoTexto": "Um conjunto usado num fan não é desmontado para formar outro.",
+        "reutilizacao": "Não Reutilização",
+        "reutilizacaoTexto": "Conjuntos que já formaram um fan não formam o mesmo fan com outro conjunto.",
+        "maior": "Maior Valor",
+        "maiorTexto": "Com mais de uma leitura da mão, vale a que dá mais pontos.",
+        "unica": "Contagem Única",
+        "unicaTexto": "Um conjunto se combina com os outros só uma vez em fan de combinação.",
+        "repetido": "O mesmo fan pode contar mais de uma vez, se forem conjuntos diferentes.",
+        "exemplo": "Um exemplo"
+      },
+      "rodadas": {
+        "q1": {
+          "pergunta": "O dealer venceu. Continua dealer?",
+          "resposta": "Não. Passa ao fim de toda mão.",
+          "op1": "Continua",
+          "op2": "Não continua"
+        },
+        "q2": {
+          "pergunta": "Quantas mãos tem um jogo completo?",
+          "resposta": "4 rodadas de 4 mãos: 16.",
+          "op1": "4",
+          "op2": "8",
+          "op3": "16"
+        },
+        "q3": {
+          "pergunta": "Qual é o vento da segunda rodada?",
+          "resposta": "Sul.",
+          "op1": "Leste",
+          "op2": "Sul",
+          "op3": "Norte"
+        },
+        "titulo": "Rodadas e jogo completo",
+        "capa": "Pan, Quan e Ju.",
+        "nomes": "Mão, rodada e jogo",
+        "nome": "Nome",
+        "oQueE": "O que é",
+        "pan": "Pan 盘",
+        "panTexto": "Uma mão",
+        "quan": "Quan 圈",
+        "quanTexto": "Uma rodada: 4 mãos",
+        "ju": "Ju 局",
+        "juTexto": "O jogo: 4 rodadas, 16 mãos",
+        "dealer": "O dealer passa ao fim de **toda** mão, vencendo ou não. A pontuação de uma rodada não passa para a seguinte.",
+        "ventos": "Os dois ventos",
+        "ventosTexto": "- **Vento da rodada:** Leste, Sul, Oeste e Norte, um por rodada.\n- **Vento da posição:** o do seu assento, que muda quando o dealer passa.",
+        "torneio": "Em torneio, os jogadores trocam de lugar entre as rodadas e a sessão também pode terminar pelo tempo."
+      },
+      "parte3": {
+        "titulo": "Jogando",
+        "capa": "A vez, as chamadas e a vitória.",
+        "marco": "A mesa está pronta!",
+        "marcoTexto": "Todos têm 13 pedras e o dealer, 14. É hora de jogar."
+      },
+      "parte4": {
+        "titulo": "Pontuação",
+        "capa": "Quanto a mão vale e quanto cada um paga.",
+        "marco": "Você já pode jogar!",
+        "marcoTexto": "Falta saber quanto a mão vale."
+      },
+      "ranks": {
+        "r1": "Novato",
+        "r2": "Adepto",
+        "r3": "Veterano",
+        "r4": "Especialista",
+        "r5": "Perito",
+        "r6": "Mestre do MCR"
+      },
+      "dicaRank": "Cada módulo concluído vale uma estrela. Complete as Partes 1 a 5 para virar Mestre do MCR. A Parte 6 é opcional.",
+      "conclusao": "Agora é jogar! O Placar anota as mãos e o Ranking soma os pontos."
     }
   }
 }

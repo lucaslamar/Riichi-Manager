@@ -96,13 +96,14 @@ export default function ControlesCondicoes({
             >
               {TODAS_AS_FLORES.map((flor) => {
                 const escolhida = flores.includes(flor)
+                const nome = t(`mcr.entrada.opcaoFlor.${flor}`)
                 return (
                   <button
                     key={flor}
                     type="button"
-                    className={`chip-pedra mcr-opcao-flor${escolhida ? ' mcr-opcao-flor--escolhida' : ''}`}
+                    className="chip-pedra mcr-opcao-flor"
                     aria-pressed={escolhida}
-                    aria-label={t(`mcr.flores.${flor}`)}
+                    aria-label={escolhida ? t('mcr.entrada.florEscolhida', { flor: nome }) : nome}
                     title={t(`mcr.flores.${flor}`)}
                     onClick={() => aoAlternarFlor(flor)}
                   >

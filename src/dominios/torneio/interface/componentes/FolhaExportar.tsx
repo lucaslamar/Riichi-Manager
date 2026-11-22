@@ -153,7 +153,7 @@ function SequenciaQr({
 
   useEffect(() => {
     let vivo = true
-    void Promise.all(pedacos.map(gerarQr)).then((geradas) => vivo && setImagens(geradas))
+    void Promise.all(pedacos.map((pedaco) => gerarQr(pedaco))).then((geradas) => vivo && setImagens(geradas))
     return () => {
       vivo = false
     }

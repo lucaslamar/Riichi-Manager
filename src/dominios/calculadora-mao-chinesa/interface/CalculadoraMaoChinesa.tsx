@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDeslizeHorizontal } from '@/compartilhado/interface/hooks/useDeslizeHorizontal'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useNarrarMudanca } from '@/compartilhado/interface/narracao/useNarracao'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import { BotaoAcao } from '@/dominios/calculadora-mao/interface/compartilhado/componentes/Botoes'
 import { CampoNotacaoMao } from '@/dominios/calculadora-mao/interface/montagem-mao/componentes/CampoNotacaoMao'
@@ -33,23 +34,13 @@ const TIPO_DO_MELD: Record<Meld['tipo'], TipoChamada> = {
   kanAberto: 'kanAberto',
   kanFechado: 'kanFechado',
 }
-const CHAMADAS: { tipo: TipoChamada; acao: Acao['tipo']; chave: string; chaveCompacta: string }[] =
-  [
-    { tipo: 'chi', acao: 'chii', chave: 'melds.chii', chaveCompacta: 'melds.chii' },
-    { tipo: 'pon', acao: 'pon', chave: 'melds.pon', chaveCompacta: 'melds.pon' },
-    {
-      tipo: 'kanAberto',
-      acao: 'kanAberto',
-      chave: 'melds.kanAberto',
-      chaveCompacta: 'melds.kanCompact',
-    },
-    {
-      tipo: 'kanFechado',
-      acao: 'kanFechado',
-      chave: 'melds.kanFechado',
-      chaveCompacta: 'melds.kanClosedCompact',
-    },
-  ]
+const CHAMADAS: { tipo: TipoChamada; acao: Meld['tipo']; chave: string }[] = [
+  { tipo: 'chi', acao: 'chii', chave: 'melds.chii' },
+  { tipo: 'pon', acao: 'pon', chave: 'melds.pon' },
+  { tipo: 'kanAberto', acao: 'kanAberto', chave: 'melds.kanCompact' },
+  { tipo: 'kanFechado', acao: 'kanFechado', chave: 'melds.kanClosedCompact' },
+]
+
 /**
  * Calculadora de Mão Chinesa (MCR / Guobiao), com o mesmo layout da japonesa:
  * montar a mão no teclado e, com 14 pedras, finalizar com as condições e calcular.
@@ -62,6 +53,7 @@ export default function CalculadoraMaoChinesa({
   titulo,
   aoVoltar,
   aoUsarFan,
+  entradaFixa,
 }: {
   visivel: boolean
   aoIrParaProximaTela?: () => void
@@ -72,6 +64,8 @@ export default function CalculadoraMaoChinesa({
   aoVoltar?: () => void
   /** Aberta pelo Placar: o resultado ganha o botão que leva o fan total para a mesa. */
   aoUsarFan?: (fan: number) => void
+  /** Aberta pelo Centerpiece simples: a entrada já vem escolhida e deslizar volta para lá. */
+  entradaFixa?: 'pedras' | 'notacao'
 }) {
   const { t } = useI18n()
   const calc = useCalculadoraMaoChinesa(condicoesIniciais)
@@ -86,6 +80,10 @@ export default function CalculadoraMaoChinesa({
     ...grupo,
     tipo: tipoDoGrupoPendente(grupo),
   }))
+  useNarrarMudanca({ chamadas: mao.chamadas, forma: calc.condicoes.forma }, (antes, depois) => [
+    ...depois.chamadas.slice(antes.chamadas.length).map(({ tipo }) => t(`mcr.voz.${tipo}`)),
+    ...(antes.forma === depois.forma ? [] : [t(`mcr.voz.${depois.forma}`)]),
+  ])
   // A mão mudou fora do campo (toque numa pedra, lixeira): o texto acompanha.
   const assinatura = (alvo: typeof mao) =>
     JSON.stringify([[...alvo.pedras].sort(), alvo.chamadas.map((c) => c.tipo + c.meio).sort()])
@@ -135,13 +133,26 @@ export default function CalculadoraMaoChinesa({
     setErroNotacao(null)
     setEntradaNotacao(true)
   }
+  // A entrada fixa pode mudar com a calculadora montada (atalhos do Centerpiece simples).
+  useEffect(() => {
+    if (entradaFixa === 'notacao') abrirNotacao()
+    else if (entradaFixa === 'pedras') setEntradaNotacao(false)
+    return () => {
+      if (entradaFixa) setEntradaNotacao(false)
+    }
+    // Só a troca da entrada conta, não a mão.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entradaFixa])
+
   // Mesmos gestos da japonesa: direita volta da finalização ou alterna o MPSZ, esquerda vai para a próxima tela.
   useDeslizeHorizontal({
     ativo: visivel,
     aoDeslizarDireita: calc.finalizando
       ? calc.voltarParaMontagem
-      : () => (entradaNotacao ? setEntradaNotacao(false) : abrirNotacao()),
-    aoDeslizarEsquerda: aoIrParaProximaTela,
+      : entradaFixa
+        ? aoVoltar
+        : () => (entradaNotacao ? setEntradaNotacao(false) : abrirNotacao()),
+    aoDeslizarEsquerda: entradaFixa ? aoVoltar : aoIrParaProximaTela,
   })
 
   // Escondida, a mão continua no estado (como na japonesa), mas nada vai para a tela.
@@ -165,25 +176,34 @@ export default function CalculadoraMaoChinesa({
     kanFechado: 'kanFechado',
   }
 
-  const botoesAcao = (compacto: boolean) => (
+  const descricoesChamada: Record<Meld['tipo'], string> = {
+    chii: t('acoes.mcr.chii.aria'),
+    pon: t('acoes.mcr.pon.aria'),
+    kanAberto: t('acoes.mcr.kanAberto.aria'),
+    kanFechado: t('acoes.mcr.kanFechado.aria'),
+  }
+  const botoesAcao = () => (
     <>
-      {CHAMADAS.map(({ tipo, acao, chave, chaveCompacta }) => (
+      {CHAMADAS.map(({ tipo, acao, chave }) => (
         <BotaoAcao
           key={tipo}
           tipo={acao}
-          rotulo={t(compacto ? chaveCompacta : chave)}
+          rotulo={t(chave)}
+          descricao={descricoesChamada[acao]}
           ativo={calc.acao === tipo}
           desabilitado={calc.acao !== tipo && !calc.podeChamarAlguma(tipo)}
           aoClicar={() => calc.alternarAcao(tipo)}
         />
       ))}
-      <BotaoAcao
-        tipo="notacao"
-        rotulo={t('notation.toggle')}
-        ativo={false}
-        desabilitado={false}
-        aoClicar={abrirNotacao}
-      />
+      {!entradaFixa && (
+        <BotaoAcao
+          tipo="notacao"
+          rotulo={t('notation.toggle')}
+          ativo={false}
+          desabilitado={false}
+          aoClicar={abrirNotacao}
+        />
+      )}
     </>
   )
 
@@ -221,9 +241,7 @@ export default function CalculadoraMaoChinesa({
                   pendentes={pendentes}
                 />
                 {!entradaNotacao && (
-                  <div className="acoes-construtor-mao mcr-acoes-construtor">
-                    {botoesAcao(false)}
-                  </div>
+                  <div className="acoes-construtor-mao mcr-acoes-construtor">{botoesAcao()}</div>
                 )}
                 <div className="painel-teclado-calculadora">
                   {!entradaNotacao && (
@@ -231,8 +249,10 @@ export default function CalculadoraMaoChinesa({
                       className="menu-acoes-teclado-mobile"
                       aria-label={t('calculator.actionsMenu')}
                     >
-                      <div className="opcoes-acoes-mao-mobile opcoes-acoes-mao-mobile--mcr">
-                        {botoesAcao(true)}
+                      <div
+                        className={`opcoes-acoes-mao-mobile opcoes-acoes-mao-mobile--mcr${entradaFixa ? ' opcoes-acoes-mao-mobile--sem-mpsz' : ''}`}
+                      >
+                        {botoesAcao()}
                       </div>
                     </div>
                   )}
@@ -240,8 +260,10 @@ export default function CalculadoraMaoChinesa({
                     <CampoNotacaoMao
                       valor={textoNotacao}
                       akadora={false}
+                      semZero
+                      descricoesChamada={descricoesChamada}
                       aoMudar={mudarNotacao}
-                      aoVoltar={() => setEntradaNotacao(false)}
+                      aoVoltar={entradaFixa ? undefined : () => setEntradaNotacao(false)}
                       aoLimpar={() => {
                         setTextoNotacao('')
                         setErroNotacao(null)

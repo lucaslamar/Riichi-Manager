@@ -96,8 +96,13 @@ export default function HistoricoPlacarMcr({
           aoVoltar={() => setAbertoId(null)}
         />
         <ListaResultado linhas={partida.resultado ?? []} nomeDe={nomeNa} />
-        <h3 className="ptd-rotulo">{t('match.hands.title')}</h3>
-        <ListaMaos partida={partida} nomeDe={nomeNa} />
+        {/* Registrada só com os totais, a partida não tem mãos para listar. */}
+        {!aberto.pontosRegistrados && (
+          <>
+            <h3 className="ptd-rotulo">{t('match.hands.title')}</h3>
+            <ListaMaos partida={partida} nomeDe={nomeNa} />
+          </>
+        )}
         <button
           type="button"
           className="btn-contorno ptd-btn-largo"

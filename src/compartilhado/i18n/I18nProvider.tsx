@@ -15,6 +15,7 @@ import {
   normalizarIdiomaSalvo,
   type IdiomaSuportado,
 } from './idiomas'
+import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { definirTradutorGlobal } from './tradutorGlobal'
 import {
   formatarNumero,
@@ -93,11 +94,13 @@ function carregarFonte(idioma: IdiomaSuportado) {
 
 /**
  * Textos visíveis a partir de `public/locales`. A troca de idioma vale na hora,
- * sem recarregar; chave ausente cai no inglês e depois no pt-BR.
+ * sem recarregar; chave ausente cai no inglês e depois no pt-BR. No modo Chinês,
+ * `modo.mcr.<chave>` tem preferência, e as telas compartilhadas não mudam.
  *
  * Componentes novos devem usar `useI18n` para evitar textos fixos.
  */
 export function I18nProvider({ children }: { children: ReactNode }) {
+  const modo = useModoJogoAtual()
   const [idioma, setIdioma] = useState<IdiomaSuportado>(idiomaInicial)
   const [dicionarios, setDicionarios] = useState<Partial<Record<IdiomaSuportado, Dicionario>>>({})
 
@@ -126,12 +129,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     (chave: string, parametros?: Parametros) => {
       for (const codigo of [idioma, ...CADEIA_RESERVA]) {
         const dicionario = dicionarios[codigo]
-        const texto = dicionario && textoDaChave(dicionario, chave, codigo, parametros)
+        if (!dicionario) continue
+        const texto =
+          textoDaChave(dicionario, `modo.${modo}.${chave}`, codigo, parametros) ??
+          textoDaChave(dicionario, chave, codigo, parametros)
         if (texto !== undefined) return interpolar(texto, idioma, parametros)
       }
       return chave
     },
-    [dicionarios, idioma],
+    [dicionarios, idioma, modo],
   )
 
   // Antes dos filhos renderizarem: funções fora de componentes já usam o idioma novo.

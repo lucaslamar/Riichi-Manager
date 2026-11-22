@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { conteudoGuia } from '../../conteudo'
+import { ILUSTRACOES_MCR } from './IlustracoesMcr'
 import type { IlustracaoGuia as IdIlustracao, TextosIlustracoes } from '../../conteudo/tipos'
 
 /*
@@ -1342,6 +1343,7 @@ const ILUSTRACOES: Record<IdIlustracao, (props: PropsDesenho) => ReactNode> = {
       }}
     />
   ),
+  ...ILUSTRACOES_MCR,
 }
 
 /** Uma ilustração do guia, com legenda opcional. */

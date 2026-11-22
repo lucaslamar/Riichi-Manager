@@ -1,17 +1,20 @@
 export function BotaoAcao({
   tipo,
   rotulo,
+  descricao,
   ativo,
   desabilitado,
   aoClicar,
 }: {
   tipo: string
   rotulo: string
+  /** Nome acessível, quando diz mais que o rótulo. */
+  descricao?: string
   ativo: boolean
   desabilitado: boolean
   aoClicar: () => void
 }) {
-  const rotuloAcessivel = tipo === 'descarte' ? 'Bloqueios / descartes / furiten' : rotulo
+  const rotuloAcessivel = tipo === 'descarte' ? 'Bloqueios / descartes / furiten' : (descricao ?? rotulo)
   const variante = {
     chii: 'chi',
     pon: 'pon',

@@ -21,7 +21,7 @@ Escolha os testes conforme o impacto; os comandos completos estão em `package.j
 - Folha de pontos: `npm run test:expressao-pontos`, e no navegador Enter depois de tocar numa tecla, Enter para abrir a folha e toque no visor.
 - Toda tarefa: registre no `.ai` regras, mudanças de UX, ideias adiadas e inspirações, sem dados de pessoas reais.
 - Variantes e yakus locais: `npm run test:sanma` e `npm run test:yakus-locais`.
-- Modo Chinês (motor de fan e pagamento MCR): `npm run test:fan-mcr` (inclui os 81 fan do guia do CMC) e `npm run test:placar-mcr`. Confira também que `git diff main -- src/dominios/calculadora-mao` continua vazio.
+- Modo Chinês (motor de fan e pagamento MCR): `npm run test:fan-mcr` (inclui os 81 fan do guia do CMC), `npm run test:placar-mcr` e `npm run test:tutorial-mcr`. Ao mexer em componente compartilhado, confira o Riichi no navegador e procure termos do Riichi nas telas do MCR. Regra nova no Tutorial sem base no guia do CMC entra em [REFERENCIAS-MCR.md](REFERENCIAS-MCR.md).
 - Persistência e backup: `npm run test:armazenamento` e `npm run test:backup`.
 - Traduções e tema: `npm run test:i18n` e `npm run test:tema`.
 - Interface: quando aplicável, siga [DESIGN.md](DESIGN.md) e confira layouts mobile e desktop, navegação por teclado e acessibilidade; para offline, valide o build, pois o service worker não roda no desenvolvimento.

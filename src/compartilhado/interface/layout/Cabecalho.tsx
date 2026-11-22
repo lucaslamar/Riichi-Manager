@@ -7,7 +7,6 @@ import { empilharCamada } from '@/compartilhado/interface/componentes/modal/pilh
 import { IconeMenu } from './IconeMenu'
 import {
   SUBITENS_NAVEGACAO,
-  SUBITENS_SO_RIICHI,
   navegacaoDoModo,
   type DestinoComSubitens,
   type SubtelaPartida,
@@ -156,7 +155,6 @@ export default function Cabecalho({
               {/* Atalhos para as telas de dentro da Mesa partida e do Ranking. */}
               {(item.destino === 'partidas' || item.destino === 'ranking') &&
                 SUBITENS_NAVEGACAO[item.destino]
-                  .filter((sub) => modo === 'riichi' || !SUBITENS_SO_RIICHI.has(sub.tela))
                   .map((sub) => (
                   <button
                     key={sub.tela}

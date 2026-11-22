@@ -8,7 +8,6 @@ import {
   FANS_MCR,
   fanMcrPorId,
   PATAMARES_FAN_MCR,
-  YAKUS_SEM_EQUIVALENTE_MCR,
   type CategoriaFanMcr,
   type FanMcr,
 } from '@/compartilhado/mahjong/mcr/fans-mcr'
@@ -17,23 +16,22 @@ import AbaGlossario from '@/dominios/calculadora-mao/interface/modais/yakus/AbaG
 import ExemploFanMcr from './ExemploFanMcr'
 import './guia-bolso-mcr.css'
 
-export type AbaGuiaMcr = 'glossario' | 'pontos' | CategoriaFanMcr | 'riichi'
+export type AbaGuiaMcr = 'glossario' | 'pontos' | CategoriaFanMcr
 
 export const ABAS_GUIA_MCR: AbaGuiaMcr[] = [
   'glossario',
   'pontos',
   ...(Object.keys(CATEGORIAS_FAN_MCR) as CategoriaFanMcr[]),
-  'riichi',
 ]
 
 export const idCartaoFan = (id: number) => `fan-mcr-${id}`
 
 /**
  * Cartão de um fan no Guia de bolso, com as classes do cartão de yaku do Riichi:
- * nome do CMC e 汉字 no título, pontos no selo, inglês, descrição, equivalente no
- * Riichi e, ao abrir os detalhes, o que não combina com ele.
+ * nome do CMC e 汉字 no título, pontos no selo, inglês, descrição e, ao abrir os
+ * detalhes, o que não combina com ele.
  */
-function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) => void }) {
+export function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) => void }) {
   const { t, numero } = useI18n()
   // Fan citado (também conta, não combina): abre como tela do Guia, com voltar, sem perder o lugar.
   const abrirTela = useContext(ContextoNavegacaoModal)
@@ -77,11 +75,6 @@ function CartaoFanMcr({ fan, aoIrPara }: { fan: FanMcr; aoIrPara: (id: number) =
       </p>
       <p className="yaku-card__descricao">{fan.descricao}</p>
       <ExemploFanMcr fan={fan} aoIrPara={irPara} />
-      {fan.yakuRiichi && (
-        <span className="fan-mcr__riichi">
-          {t('guiaBolso.mcr.riichi', { yaku: fan.yakuRiichi })}
-        </span>
-      )}
       {temDetalhes && (
         <>
           <button
@@ -198,26 +191,6 @@ export function ConteudoGuiaMcr({
     )
   }
   if (aba === 'glossario') return <AbaGlossario secoes={SECOES_GLOSSARIO_MCR} />
-  if (aba === 'riichi') {
-    return (
-      <>
-        <section className="yaku-grupo guia-mcr__sem-equivalente">
-          <h3 className="yaku-grupo__titulo">{t('guiaBolso.mcr.semEquivalenteTitulo')}</h3>
-          <p>
-            {t('guiaBolso.mcr.semEquivalenteExato', {
-              lista: YAKUS_SEM_EQUIVALENTE_MCR.semEquivalenteExato.join(', '),
-            })}
-          </p>
-          <p>
-            {t('guiaBolso.mcr.naoExistem', {
-              lista: YAKUS_SEM_EQUIVALENTE_MCR.naoExistem.join(', '),
-            })}
-          </p>
-        </section>
-        <ListaPorPatamar fans={FANS_MCR.filter((fan) => fan.yakuRiichi)} aoIrPara={aoIrPara} />
-      </>
-    )
-  }
   const fans = aba === 'pontos' ? FANS_MCR : FANS_MCR.filter((fan) => fan.categoria === aba)
   return (
     <>
@@ -232,6 +205,4 @@ export const rotuloAbaGuiaMcr = (aba: AbaGuiaMcr, t: (chave: string) => string) 
     ? t('pocketGuide.tabs.glossary')
     : aba === 'pontos'
       ? t('guiaBolso.mcr.porPontos')
-      : aba === 'riichi'
-        ? t('guiaBolso.mcr.abaRiichi')
-        : t(`guiaBolso.mcr.abas.${aba}`)
+      : t(`guiaBolso.mcr.abas.${aba}`)

@@ -5,7 +5,7 @@ import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import type { ModoJogo } from '@/compartilhado/modo-jogo/tipos'
 
 const OPCOES_MODO: { valor: ModoJogo; chave: string }[] = [
-  { valor: 'riichi', chave: 'configuracoes.mahjong.japones' },
+  { valor: 'riichi', chave: 'configuracoes.mahjong.riichi' },
   { valor: 'mcr', chave: 'configuracoes.mahjong.chines' },
 ]
 
@@ -51,7 +51,7 @@ export default function CartaoModoMahjong() {
         ))}
       </div>
       <span id={idAjuda} className="cartao-regras__ajuda-modo">
-        {t(modo === 'mcr' ? 'configuracoes.mahjong.ajudaChines' : 'configuracoes.mahjong.ajudaJapones')}
+        {t(modo === 'mcr' ? 'configuracoes.mahjong.ajudaChines' : 'configuracoes.mahjong.ajudaRiichi')}
       </span>
     </div>
   )

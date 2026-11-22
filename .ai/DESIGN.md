@@ -28,10 +28,32 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Navegação leva a lugares, botões executam ações. Não misture os dois papéis.
 - Modais: um por vez, com forma clara de sair além do botão de confirmar.
 
+## Seleção de pedras
+
+- Não escolhida não é desabilitada: a pedra fica com a aparência cheia (opacidade, face e cor das Pedras). Escolhida ganha só um contorno por sombra na cor `--cor-destaque` (a do botão Gang, rosa no tema escuro), com `aria-pressed` e sem mudar de tamanho. No Alto contraste o contorno engrossa. O foco fica por fora dele. Exemplo: Flores e Estações do MCR.
+
+## Teclados em grade
+
+- Linha de botões nunca tem altura fixa menor que o mínimo de toque (44px, 46px com a Área de toque ampliada): use `minmax(44px, auto)`. Com altura fixa, as linhas montam uma na outra. Em tela baixa, encolha o visor, não as teclas.
+- Colunas vizinhas de um teclado têm as linhas alinhadas: não esticar só uma delas (teclas em oval desalinhadas foram recusadas pelo usuário).
+- Mudou um teclado, abra o "?" dele: a cena de ajuda é um desenho à parte e precisa ser conferida na tela.
+- MPSZ em tela baixa: primeiro saem as folgas, depois as pedras e as teclas encolhem, estas nunca abaixo de 44px. Deitado, se ainda não couber (320px de altura), o painel rola em vez de cortar.
+- Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
+
+## Pedras brancas
+
+- Nunca branco puro: creme, para não chocar com o fundo (pedido do usuário). `--pedra-face` é #F2EFE6 no Dark e #FAFAE8 no Azul, igual no Riichi e no Chinês.
+
+## Dragão Branco (pedido do usuário em 22/11/2026)
+
+- No Riichi é liso, só a cor da pedra: sem moldura nem linha interna, em qualquer cor de pedra.
+- No Chinês o desenho mistura as cores da arte: verde com vermelho, e verde com rosa nas pretas do tema escuro. A versão de uma cor só foi testada e o usuário preferiu esta (22/11/2026).
+
 ## Escrita
 
 - Rótulos dizem o que vai acontecer ("Salvar partida", não "OK").
 - Erros explicam o problema e como resolver. Estados vazios orientam o próximo passo.
+- Variantes de mahjong pelo nome que os jogadores usam (Riichi, MCR), não pelo país.
 
 ## Padrões de tela do Torneio
 
@@ -48,7 +70,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Valor padrão escolhido pelo app tem um ? com o porquê do padrão, não só o que o campo faz.
 - Registrar ausência é o ícone ao lado de Registrar resultado. A folha mostra os pontos de cada um antes de confirmar.
 - WO usa selo neutro e "Faltou" ou "Presente" no lugar dos pontos da mesa, sem colocação.
-- QR das imagens sempre escuro em caixa branca, nos dois temas.
+- QR das imagens é uma assinatura discreta (pedido do usuário em 22/11/2026): 148 px em 1080, escuro em fundo lilás claro só no QR, nos dois temas, com o convite e o endereço em texto leve na cor de apoio. Não usar caixa clara na largura toda nem competir com as mesas. Ao mudar, confira a leitura com jsqr também na imagem reduzida à metade.
 - Cabeçalho da rodada: quatro ações de 44px no celular. No desktop ele mora no menu lateral estreito, com ações de 28px de largura.
 - Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.
 - Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.

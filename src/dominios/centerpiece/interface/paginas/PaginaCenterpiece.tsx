@@ -5,7 +5,6 @@ import { useGestoHorizontal } from '@/compartilhado/interface/hooks/useGestoHori
 import { useVoltarInterno } from '@/compartilhado/interface/hooks/voltarInterno'
 import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
-import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
@@ -100,7 +99,6 @@ function TelasCenterpiece({
   raiz,
 }: PropsCenterpiece & { raiz: RefObject<HTMLElement | null> }) {
   const { t, idioma } = useI18n()
-  const { isChines } = useModoJogo()
   const { partidas, abertas, guardarNome, descartar } = usePartidas()
   const nomeDoTorneio = useNomeNoTorneio()
   const { sorteio, marcarRegistrada } = useClube()
@@ -290,7 +288,7 @@ function TelasCenterpiece({
         aoAbrirJogadores={() => abrir({ nome: 'jogadores' })}
         // No modo Chinês, o registro manual é do Riichi. A análise do jogador usa os placares MCR.
         aoAbrirJogador={(id) => abrir({ nome: 'jogador', id })}
-        aoRegistrarPartida={isChines ? undefined : () => abrir({ nome: 'registrarFinalizada' })}
+        aoRegistrarPartida={() => abrir({ nome: 'registrarFinalizada' })}
       />
     )
   }

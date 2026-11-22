@@ -259,7 +259,12 @@ export default function CenaAjuda({ nome }: { nome: NomeCena }) {
                       tecla === '0' ? ' cena-ajuda__tecla--zero' : ''
                     }${tocando(`tecla:${tecla}`)}`}
                   >
-                    {tecla.toUpperCase()}
+                    {/* MCR: sem 5 vermelho, o lugar do 0 é o apagar, como no teclado. */}
+                    {chines && tecla === '0' ? (
+                      <i className="fas fa-delete-left" />
+                    ) : (
+                      tecla.toUpperCase()
+                    )}
                   </span>
                 ))}
               </div>

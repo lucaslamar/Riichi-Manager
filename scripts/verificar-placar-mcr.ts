@@ -18,6 +18,21 @@ import {
   ventoDaRodada,
 } from '../src/dominios/placar-mcr/logica/placar'
 import { partidasDoTorneioMcr, pontosDeMesa } from '../src/dominios/placar-mcr/logica/torneio'
+import {
+  digitarTotal,
+  normalizarRegistro,
+  placarDoRegistro,
+  REGISTRO_EM_BRANCO,
+  registroDoPlacar,
+  somarMao,
+  trocarLugares,
+  type RascunhoRegistro,
+} from '../src/dominios/placar-mcr/logica/registroFinalizado'
+import {
+  carregarRegistroDaMesa,
+  carregarRegistroMcr,
+  salvarRegistroMcr,
+} from '../src/dominios/placar-mcr/persistencia/repositorioRegistroMcr'
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
 import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
 
@@ -118,3 +133,36 @@ assert.deepEqual(pontosDeMesa([0, 0, 0, 0]), [1.75, 1.75, 1.75, 1.75], 'Quatro e
   assert.equal(desfazerUltimaMao(comErro).falsosHu?.length, 0, 'Desfazer tira o Falso Hu')
 }
 console.log('Placar MCR ok: 25 testes.')
+
+{
+  // Registrar partida finalizada: só os totais, somando e subtraindo do que já tem.
+  let r: RascunhoRegistro = { ...REGISTRO_EM_BRANCO, assentos: ['a', 'b', 'c', 'd'] }
+  r = digitarTotal(r, 0, 10)
+  assert.deepEqual(r.pontos, [10, null, null, null])
+  r = somarMao(r, { tipo: 'vitoria', vencedor: 1, forma: 'ron', descartador: 2, fan: 24 })
+  assert.deepEqual(r.pontos, [2, 48, -32, -8], 'Calcular mão soma no que já tinha e tira dos outros')
+  assert.equal(somarMao(r, { tipo: 'vitoria', vencedor: 1, forma: 'tsumo', fan: 3 }), r, 'mão inválida')
+  assert.deepEqual(trocarLugares(r, 0, 1).assentos, ['b', 'a', 'c', 'd'])
+  assert.deepEqual(trocarLugares(r, 0, 1).pontos, [48, 2, -32, -8], 'os pontos vão com o jogador')
+
+  const final = placarDoRegistro(r, 'registro', '2026-11-22T10:00:00.000Z')
+  assert.deepEqual(totais(final), [2, 48, -32, -8])
+  assert.equal(final.finalizadoEm, '2026-11-22T10:00:00.000Z')
+  assert.deepEqual(JSON.parse(JSON.stringify(final)), final, 'volta igual do backup')
+  assert.deepEqual(registroDoPlacar(final), r, 'corrigir abre os mesmos totais')
+  assert.deepEqual(normalizarRegistro({ pontos: 3 }), REGISTRO_EM_BRANCO)
+
+  const guardado = new Map<string, string>()
+  const armazenamento = {
+    ler: (chave: string) => guardado.get(chave) ?? null,
+    gravar: (chave: string, valor: string) => void guardado.set(chave, valor),
+  }
+  salvarRegistroMcr(armazenamento, r)
+  salvarRegistroMcr(armazenamento, REGISTRO_EM_BRANCO, 'mesa-1')
+  assert.deepEqual(carregarRegistroMcr(armazenamento), r, 'o avulso não muda')
+  assert.deepEqual(carregarRegistroDaMesa(armazenamento, 'mesa-1'), REGISTRO_EM_BRANCO)
+  salvarRegistroMcr(armazenamento, null, 'mesa-1')
+  assert.equal(carregarRegistroDaMesa(armazenamento, 'mesa-1'), null)
+  assert.deepEqual(carregarRegistroMcr(armazenamento), r)
+}
+console.log('Registro MCR ok.')

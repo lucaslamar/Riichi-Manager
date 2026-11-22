@@ -11,17 +11,21 @@ const ESPACO_BLOCOS = 28
 /** Cada coluna da direita, quando alinhadas. */
 const LARGURA_COLUNA = 190
 /** Múltiplo dos módulos do QR do endereço: sai nítido e lê da tela de outro celular. */
-const LADO_QR = 222
-const RESPIRO_QR = 16
+const LADO_QR = 148
+const ALTURA_LINHA_RODAPE = 34
 const ALTURA_RODAPE_SIMPLES = 56
-// Caixa do QR sempre clara, nos dois temas: QR claro sobre escuro falha em muitos leitores.
-const CAIXA_QR = { fundo: '#ffffff', texto: '#1b1724', apoio: '#4b4459' }
+// QR sempre escuro no claro, nos dois temas: claro sobre escuro falha em muitos leitores.
+// Lilás em vez de preto e branco, para assinar a imagem sem chamar mais atenção que as mesas.
+const CORES_QR = { dark: '#2a2438', light: '#e6dff2' }
 
 /** Cor de uma variável do tema aberto, com reserva (a imagem segue o tema). */
 function corDoTema(variavel: string, reserva: string): string {
   const valor = getComputedStyle(document.body).getPropertyValue(variavel).trim()
   return valor || reserva
 }
+
+/** Cada frase do convite começa uma linha. */
+const FIM_DE_FRASE = /(?<=[.?!])\s+|(?<=[。？！])/
 
 /** Corta o texto com "…" para caber na largura. */
 function caber(contexto: CanvasRenderingContext2D, texto: string, largura: number): string {
@@ -85,7 +89,7 @@ export async function imagemDoRelatorio(
   rodape: { nomeDoApp: string; comQr: boolean },
 ): Promise<Blob> {
   await document.fonts?.ready
-  const qr = rodape.comQr ? await carregarImagem(await gerarQr(URL_DO_APP, LADO_QR)) : null
+  const qr = rodape.comQr ? await carregarImagem(await gerarQr(URL_DO_APP, LADO_QR, CORES_QR)) : null
   const fonte = getComputedStyle(document.body).fontFamily || 'sans-serif'
   const cores = {
     fundo: corDoTema('--fundo', '#14111c'),
@@ -104,7 +108,7 @@ export async function imagemDoRelatorio(
   // Blocos só do texto (ex.: o pódio) não entram na imagem.
   const blocosDaImagem = relatorio.blocos.filter((bloco) => bloco.so !== 'texto')
   const alturaBlocos = blocosDaImagem.reduce((soma, bloco) => soma + alturaBloco(bloco) + ESPACO_BLOCOS, 0)
-  const alturaRodape = qr ? LADO_QR + RESPIRO_QR * 2 : ALTURA_RODAPE_SIMPLES
+  const alturaRodape = qr ? LADO_QR : ALTURA_RODAPE_SIMPLES
   const altura = MARGEM + alturaTopo + alturaBlocos + alturaRodape + MARGEM
 
   const tela = document.createElement('canvas')
@@ -190,26 +194,30 @@ export async function imagemDoRelatorio(
   }
 
   if (qr) {
-    retanguloArredondado(contexto, MARGEM, y, larguraUtil, alturaRodape, 24)
-    contexto.fillStyle = CAIXA_QR.fundo
-    contexto.fill()
-    contexto.drawImage(qr, MARGEM + RESPIRO_QR, y + RESPIRO_QR, LADO_QR, LADO_QR)
+    // Só o QR tem fundo claro: o texto fica no fundo da imagem, na cor de apoio.
+    contexto.save()
+    retanguloArredondado(contexto, MARGEM, y, LADO_QR, LADO_QR, 16)
+    contexto.clip()
+    contexto.drawImage(qr, MARGEM, y, LADO_QR, LADO_QR)
+    contexto.restore()
 
-    const xChamada = MARGEM + RESPIRO_QR + LADO_QR + 20
-    const larguraChamada = MARGEM + larguraUtil - RESPIRO_CARTAO - xChamada
+    const xChamada = MARGEM + LADO_QR + 24
+    const larguraChamada = MARGEM + larguraUtil - xChamada
     contexto.textAlign = 'left'
-    contexto.font = `800 36px ${fonte}`
-    const linhas = quebrar(contexto, relatorio.chamada ?? rodape.nomeDoApp, larguraChamada).slice(0, 3)
-    let yChamada = y + alturaRodape / 2 - (linhas.length * 46) / 2
-    contexto.fillStyle = CAIXA_QR.texto
+    contexto.fillStyle = cores.apoio
+    contexto.font = `600 26px ${fonte}`
+    const linhas = (relatorio.chamada ?? rodape.nomeDoApp)
+      .split(FIM_DE_FRASE)
+      .flatMap((frase) => quebrar(contexto, frase, larguraChamada))
+      .slice(0, 3)
+    let yChamada = y + LADO_QR / 2 - (linhas.length * ALTURA_LINHA_RODAPE) / 2
     for (const linha of linhas) {
       contexto.fillText(caber(contexto, linha, larguraChamada), xChamada, yChamada)
-      yChamada += 46
+      yChamada += ALTURA_LINHA_RODAPE
     }
-    contexto.fillStyle = CAIXA_QR.apoio
-    contexto.font = `700 26px ${fonte}`
+    contexto.font = `400 22px ${fonte}`
     const endereco = URL_DO_APP.replace(/^https:\/\//, '').replace(/\/$/, '')
-    contexto.fillText(caber(contexto, endereco, larguraChamada), xChamada, yChamada + 8)
+    contexto.fillText(caber(contexto, endereco, larguraChamada), xChamada, yChamada)
   } else {
     contexto.textAlign = 'right'
     contexto.fillStyle = cores.apoio

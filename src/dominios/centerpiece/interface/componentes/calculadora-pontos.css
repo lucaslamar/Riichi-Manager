@@ -94,11 +94,15 @@
 .cpt-teclado {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-auto-rows: 50px;
+  /* A linha cresce com o botão: com altura fixa, o mínimo de toque montava uma na outra. */
+  grid-auto-rows: minmax(50px, auto);
   gap: 6px;
 }
 
 .cpt-tecla {
+  min-height: 44px;
+  margin: 0;
+  padding: 0;
   border: 1px solid var(--linha-divisoria);
   border-radius: 10px;
   color: var(--texto-principal);
@@ -144,8 +148,25 @@
   background: var(--primario);
 }
 
-.cpt-tecla--zero {
-  grid-column: span 2;
+/* MCR, sem 00 e 000: o − e o + com duas linhas cada, e o 0 na largura dos números. */
+.cpt-teclado--sem-zeros .cpt-tecla--menos {
+  grid-row: 1 / 3;
+}
+
+.cpt-teclado--sem-zeros .cpt-tecla--mais {
+  grid-row: 3 / 5;
+}
+
+.cpt-teclado--sem-zeros :is(.cpt-tecla--menos, .cpt-tecla--mais) {
+  font-size: 2.2rem;
+}
+
+.cpt-teclado--sem-zeros .cpt-tecla--igual {
+  grid-row: 5;
+}
+
+.cpt-teclado--sem-zeros .cpt-tecla--zero {
+  grid-column: 1 / 4;
 }
 
 .cpt-ok {
@@ -204,12 +225,11 @@
   }
 
   .cpt-teclado {
-    grid-auto-rows: 40px;
+    grid-auto-rows: minmax(44px, auto);
   }
 }
 
-
-/* 360×640 e menores: o teclado inteiro cabe sem rolar. */
+/* 360×640 e menores: encolhe o visor, nunca as teclas abaixo de 44px. */
 @media (max-height: 680px) {
   .cpt-visor {
     min-height: 54px;
@@ -226,9 +246,31 @@
   .cpt-teclado {
     gap: 4px;
   }
+}
+
+/* iPhone SE com as barras do Safari: o visor divide a linha com o Calcular mão. */
+@media (max-height: 600px) {
+  .cpt-corpo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .cpt-visor {
+    min-width: 0;
+    flex: 1;
+    margin: 0;
+  }
+
+  .cpt-calcular {
+    width: 42%;
+    margin: 0;
+    padding-inline: 6px;
+    font-size: 0.75rem;
+  }
 
   .cpt-teclado {
-    grid-auto-rows: 36px;
+    width: 100%;
   }
 }
 

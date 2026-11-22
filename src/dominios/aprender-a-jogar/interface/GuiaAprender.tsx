@@ -15,8 +15,10 @@ import { toqueIgnorado } from '@/compartilhado/interface/hooks/useDeslizeHorizon
 import { useDeslizePaginas } from '@/compartilhado/interface/hooks/useDeslizePaginas'
 import ModalIdioma from '@/compartilhado/interface/layout/ModalIdioma'
 import PaginaCalculadoraHanFu from '@/dominios/calculadora-han-fu/interface/paginas/PaginaCalculadoraHanFu'
+import ModalYakus from '@/dominios/calculadora-mao/interface/modais/yakus/ModalYakus'
 import PaginaSorteadorVentos from '@/dominios/sorteador-ventos/interface/paginas/PaginaSorteadorVentos'
 import { conteudoGuia } from '../conteudo'
+import { criarConteudoMcr } from '../conteudo/mcr/livro'
 import type { FerramentaGuia } from '../conteudo/tipos'
 import { fimDoModulo, montarLivro, moduloDaPagina, type PaginaLivro } from '../logica/livro'
 import { ehDan, nomeRank, rankDaParte, rankPorConcluidos, type RankGuia } from '../logica/rank'
@@ -94,9 +96,12 @@ export default function GuiaAprender({
 }) {
   const { t, idioma } = useI18n()
   const { modo } = useModoJogo()
-  const conteudo = conteudoGuia(idioma, modo)
+  const conteudo = useMemo(
+    () => (modo === 'mcr' ? criarConteudoMcr(t) : conteudoGuia(idioma)),
+    [modo, idioma, t],
+  )
   const livro = useMemo(() => montarLivro(conteudo), [conteudo])
-  const [progressoInicial] = useState(lerProgressoGuia)
+  const [progressoInicial] = useState(() => lerProgressoGuia(modo))
   // Sempre abre na capa (a tela Aprender a jogar).
   const [indice, setIndice] = useState(0)
   const [vista, setVista] = useState<Vista>(VISTA_LIVRO)
@@ -104,6 +109,7 @@ export default function GuiaAprender({
   const [barraVisivel, setBarraVisivel] = useState(true)
   const [indiceAberto, setIndiceAberto] = useState(false)
   const [idiomaAberto, setIdiomaAberto] = useState(false)
+  const [guiaBolsoAberto, setGuiaBolsoAberto] = useState(false)
   const [ferramenta, setFerramenta] = useState<FerramentaGuia | null>(null)
   const raizRef = useRef<HTMLDivElement>(null)
   const palcoRef = useRef<HTMLDivElement>(null)
@@ -135,8 +141,8 @@ export default function GuiaAprender({
 
   /** Selo com o rank atual (capa do guia e capas de módulo). */
   const seloRank = () => (
-    <p className={`guia-rank${ehDan(rank) ? ' guia-rank--dan' : ''}`}>
-      <i className={`fas ${ehDan(rank) ? 'fa-crown' : 'fa-medal'}`} aria-hidden="true" />
+    <p className={`guia-rank${ehDan(rank, conteudo.ranks) ? ' guia-rank--dan' : ''}`}>
+      <i className={`fas ${ehDan(rank, conteudo.ranks) ? 'fa-crown' : 'fa-medal'}`} aria-hidden="true" />
       {t('learn.yourRank', { rank: nomeRank(rank, conteudo.ranks) })}
     </p>
   )
@@ -167,8 +173,8 @@ export default function GuiaAprender({
     if (pagina.tipo !== 'capaGuia') setPaginaSalvaId(pagina.id)
   }, [pagina])
   useEffect(() => {
-    salvarProgressoGuia({ pagina: paginaSalvaId, concluidos })
-  }, [paginaSalvaId, concluidos])
+    salvarProgressoGuia(modo, { pagina: paginaSalvaId, concluidos })
+  }, [modo, paginaSalvaId, concluidos])
 
   useEffect(() => {
     consultaRef.current?.scrollTo({ top: 0 })
@@ -275,6 +281,7 @@ export default function GuiaAprender({
 
   const abrirFerramenta = (qual: FerramentaGuia) => {
     if (qual === 'calculadora') aoAbrirCalculadora()
+    else if (qual === 'guiaBolso') setGuiaBolsoAberto(true)
     else setFerramenta(qual)
   }
 
@@ -517,9 +524,11 @@ export default function GuiaAprender({
         return (
           <div className="guia-capitulo guia-parte">
             <i className="fas fa-medal guia-capa__icone guia-parte__medalha" aria-hidden="true" />
-            <span className="guia-parte__rotulo">{t('learn.rankTier')}</span>
+            <span className="guia-parte__rotulo">{pagina.parte.optional ?? t('learn.rankTier')}</span>
             <h1 className="guia-capitulo__titulo">
-              {rankDaParte(pagina.parte.number - 1, conteudo.ranks)}
+              {pagina.parte.optional
+                ? pagina.parte.title
+                : rankDaParte(pagina.parte.number - 1, conteudo.ranks)}
             </h1>
             <p className="guia-parte__nome">
               {t('learn.part', { number: pagina.parte.number })} · {pagina.parte.title}
@@ -586,7 +595,7 @@ export default function GuiaAprender({
               <span>{t('learn.conclusionPocketGuide')}</span>
             </p>
             {/* Recado secreto: só aparece para quem concluiu tudo (1º dan). */}
-            {ehDan(rank) && (
+            {ehDan(rank, conteudo.ranks) && (
               <p className="guia-conclusao__secreto">
                 <i className="fas fa-crown" aria-hidden="true" />
                 <span>{t('learn.conclusionSecret')}</span>
@@ -611,12 +620,9 @@ export default function GuiaAprender({
       <>
         <h1 className="guia-titulo">{t('learn.glossary')}</h1>
         <dl className="guia-glossario">
-          {conteudo.glossary.map(({ term, definition, diferenteRiichi }) => (
+          {conteudo.glossary.map(({ term, definition }) => (
             <div key={term} className="guia-glossario__item">
-              <dt>
-                {term}
-                {diferenteRiichi && <span className="selo-diferente-riichi">{t('glossario.mcr.diferenteRiichi')}</span>}
-              </dt>
+              <dt>{term}</dt>
               <dd>{definition}</dd>
             </div>
           ))}
@@ -749,6 +755,7 @@ export default function GuiaAprender({
         </div>
       )}
 
+      {guiaBolsoAberto && <ModalYakus aoFechar={() => setGuiaBolsoAberto(false)} />}
       {idiomaAberto && <ModalIdioma aoFechar={() => setIdiomaAberto(false)} />}
 
       {indiceAberto && (
@@ -803,13 +810,13 @@ export default function GuiaAprender({
       <div className="guia-rank-aviso__regiao" role="status" aria-live="polite">
         {aviso && (
           <div
-            className={`guia-rank-aviso${ehDan(aviso.rank) ? ' guia-rank-aviso--dan' : ''}${
+            className={`guia-rank-aviso${ehDan(aviso.rank, conteudo.ranks) ? ' guia-rank-aviso--dan' : ''}${
               aviso.subiu ? '' : ' guia-rank-aviso--estrela'
             }`}
           >
             <i
               className={`fas ${
-                ehDan(aviso.rank) ? 'fa-crown' : aviso.subiu ? 'fa-medal' : 'fa-star'
+                ehDan(aviso.rank, conteudo.ranks) ? 'fa-crown' : aviso.subiu ? 'fa-medal' : 'fa-star'
               } guia-rank-aviso__icone`}
               aria-hidden="true"
             />

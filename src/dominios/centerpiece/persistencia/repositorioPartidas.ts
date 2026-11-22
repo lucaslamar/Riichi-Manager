@@ -1,3 +1,4 @@
+import type { ModoJogo } from '../../../compartilhado/modo-jogo/tipos'
 import type { ArmazenamentoChaveValor } from '../../../compartilhado/persistencia/armazenamento'
 import { normalizarSimples, SIMPLES_INICIAL, type EstadoSimples } from '../logica/centerpieceSimples'
 import { normalizarConfig } from '../logica/configMesa'
@@ -7,7 +8,11 @@ import { pausarVez } from '../logica/vez'
 
 const CHAVE_PARTIDAS = 'riichi-manager-partidas'
 const CHAVE_MESA_ANTIGA = 'riichi-manager-centerpiece'
-const CHAVE_SIMPLES = 'riichi-manager-centerpiece-simples'
+// Uma mesa por modo: o honba e o Sanma do Riichi não passam para o Chinês.
+const CHAVES_SIMPLES: Record<ModoJogo, string> = {
+  riichi: 'riichi-manager-centerpiece-simples',
+  mcr: 'riichi-manager-centerpiece-simples-mcr',
+}
 const CHAVE_DICA_SIMPLES = 'riichi-manager-dica-simples'
 const VERSAO = 1
 /** Preferência da visualização em lista, que saiu do app. */
@@ -69,8 +74,11 @@ export function salvarPartidas(armazenamento: ArmazenamentoChaveValor, partidas:
   armazenamento.gravar(CHAVE_PARTIDAS, JSON.stringify({ versao: VERSAO, partidas }))
 }
 
-export function carregarSimples(armazenamento: ArmazenamentoChaveValor): EstadoSimples {
-  const salvo = armazenamento.ler(CHAVE_SIMPLES)
+export function carregarSimples(
+  armazenamento: ArmazenamentoChaveValor,
+  modo: ModoJogo = 'riichi',
+): EstadoSimples {
+  const salvo = armazenamento.ler(CHAVES_SIMPLES[modo])
   if (!salvo) return SIMPLES_INICIAL
   try {
     return normalizarSimples((JSON.parse(salvo) as { estado?: unknown }).estado)
@@ -79,6 +87,10 @@ export function carregarSimples(armazenamento: ArmazenamentoChaveValor): EstadoS
   }
 }
 
-export function salvarSimples(armazenamento: ArmazenamentoChaveValor, estado: EstadoSimples) {
-  armazenamento.gravar(CHAVE_SIMPLES, JSON.stringify({ versao: VERSAO, estado }))
+export function salvarSimples(
+  armazenamento: ArmazenamentoChaveValor,
+  estado: EstadoSimples,
+  modo: ModoJogo = 'riichi',
+) {
+  armazenamento.gravar(CHAVES_SIMPLES[modo], JSON.stringify({ versao: VERSAO, estado }))
 }

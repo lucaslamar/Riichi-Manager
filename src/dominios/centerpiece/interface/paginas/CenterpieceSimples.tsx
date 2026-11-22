@@ -4,6 +4,7 @@ import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfigur
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import { armazenamentoLocal } from '@/compartilhado/persistencia/armazenamento'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import { useModoJogo } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import {
   ajustarHonba,
@@ -43,7 +44,8 @@ import RecursosDaMesa from '../componentes/RecursosDaMesa'
 /**
  * Só o centro da mesa, para deixar no meio da mesa e ir girando o celular: tocar
  * nela abre as ações. Abre direto, sem jogadores, e lembra o estado se o app fechar.
- * É a tela do botão Centerpiece da barra, então não tem seta de voltar.
+ * É a tela do botão Centerpiece da barra, então não tem seta de voltar. No modo
+ * Chinês é a mesma mesa, sem honba e sempre com 4 jogadores.
  */
 export default function CenterpieceSimples({
   aoAbrirSorteador,
@@ -53,7 +55,9 @@ export default function CenterpieceSimples({
   aoAbrirCalculo: (calculo: 'mao' | 'hanFu' | 'mpsz') => void
 }) {
   const { t } = useI18n()
-  const [estado, setEstado] = useState<EstadoSimples>(() => carregarSimples(armazenamentoLocal))
+  const { modo, isChines } = useModoJogo()
+  const temHonba = !isChines
+  const [estado, setEstado] = useState<EstadoSimples>(() => carregarSimples(armazenamentoLocal, modo))
   const [confirmando, setConfirmando] = useState(false)
   const [acoesAbertas, setAcoesAbertas] = useState(false)
   const [dicaVisivel, setDicaVisivel] = useState(() => !dicaSimplesFoiVista(armazenamentoLocal))
@@ -63,7 +67,7 @@ export default function CenterpieceSimples({
   const giro = useGiroDaMesa()
   const jogadores = estado.jogadores ?? 4
   const sanma = jogadores === 3
-  const rodada = `${KANJI_VENTO[estado.rodadaVento]}${estado.rodadaNumero} 本${estado.honba}`
+  const rodada = `${KANJI_VENTO[estado.rodadaVento]}${estado.rodadaNumero}${temHonba ? ` 本${estado.honba}` : ''}`
   // Timer desligado: o domo mostra só a rodada, em destaque.
   const rodadaNoDomo = (
     <>
@@ -71,7 +75,7 @@ export default function CenterpieceSimples({
         {KANJI_VENTO[estado.rodadaVento]}
         {estado.rodadaNumero}
       </span>
-      <span className="mesa-domo-info">本{estado.honba}</span>
+      {temHonba && <span className="mesa-domo-info">本{estado.honba}</span>}
     </>
   )
 
@@ -100,7 +104,7 @@ export default function CenterpieceSimples({
       setRetomarAoFechar(false)
     }
     setEstado(proximo)
-    salvarSimples(armazenamentoLocal, proximo)
+    salvarSimples(armazenamentoLocal, proximo, modo)
   }
 
   const fecharAcoes = (retomar = retomarAoFechar) => {
@@ -200,9 +204,13 @@ export default function CenterpieceSimples({
             <h4>{t('match.simple.guide.dealerTitle')}</h4>
             <p>{t('match.simple.guide.dealer')}</p>
             <CenaMesa nome="acoes" />
-            <h4>{t('match.simple.guide.honbaTitle')}</h4>
-            <p>{t('match.simple.guide.honba')}</p>
-            <CenaMesa nome="honba" />
+            {temHonba && (
+              <>
+                <h4>{t('match.simple.guide.honbaTitle')}</h4>
+                <p>{t('match.simple.guide.honba')}</p>
+                <CenaMesa nome="honba" />
+              </>
+            )}
             <h4>{t('match.simple.guide.screenTitle')}</h4>
             <p>{t('match.simple.guide.screen')}</p>
           </div>
@@ -232,23 +240,28 @@ export default function CenterpieceSimples({
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
         >
-          {/* Jogadores primeiro, à parte das ações: trocar recomeça a mesa do 東1. */}
-          <section className="mesa-simples-acoes mesa-simples-bloco mesa-simples-bloco--primeiro" aria-labelledby="mesa-simples-jogadores">
-            <h3 id="mesa-simples-jogadores" className="mesa-simples-bloco-titulo">
-              {t('sanma.jogadoresTitulo')}
-            </h3>
-            <BotoesOpcao<3 | 4>
-              rotulo={t('sanma.jogadoresTitulo')}
-              valor={jogadores}
-              aoEscolher={(quantos) => mudar(mudarJogadores(estado, quantos))}
-              opcoes={[
-                { valor: 4, rotulo: t('sanma.variante4') },
-                { valor: 3, rotulo: t('sanma.variante3') },
-              ]}
-            />
-          </section>
+          {/* Jogadores primeiro, à parte das ações: trocar recomeça a mesa do 東1. No Chinês são sempre 4. */}
+          {!isChines && (
+            <section className="mesa-simples-acoes mesa-simples-bloco mesa-simples-bloco--primeiro" aria-labelledby="mesa-simples-jogadores">
+              <h3 id="mesa-simples-jogadores" className="mesa-simples-bloco-titulo">
+                {t('sanma.jogadoresTitulo')}
+              </h3>
+              <BotoesOpcao<3 | 4>
+                rotulo={t('sanma.jogadoresTitulo')}
+                valor={jogadores}
+                aoEscolher={(quantos) => mudar(mudarJogadores(estado, quantos))}
+                opcoes={[
+                  { valor: 4, rotulo: t('sanma.variante4') },
+                  { valor: 3, rotulo: t('sanma.variante3') },
+                ]}
+              />
+            </section>
+          )}
 
-          <section className="mesa-simples-acoes mesa-simples-bloco" aria-labelledby="mesa-simples-mesa">
+          <section
+            className={`mesa-simples-acoes mesa-simples-bloco${isChines ? ' mesa-simples-bloco--primeiro' : ''}`}
+            aria-labelledby="mesa-simples-mesa"
+          >
             <h3 id="mesa-simples-mesa" className="mesa-simples-bloco-titulo">
               {t('match.simple.actions')}
             </h3>
@@ -273,32 +286,34 @@ export default function CenterpieceSimples({
               <i className="fas fa-forward" aria-hidden="true" /> {t('match.simple.nextRound')}
             </button>
             {/* Um controle só: o + é o renchan (a mão recomeça) e o − corrige um toque a mais. */}
-            <div className="mesa-honba mesa-honba--acoes" role="group" aria-label={t('calculator.honba')}>
-              <span className="mesa-honba-rotulo">
-                <i className="fas fa-repeat" aria-hidden="true" /> {t('match.simple.honba')}
-              </span>
-              <button
-                type="button"
-                className="mesa-honba-botao"
-                aria-label={t('match.simple.honbaMinus')}
-                disabled={estado.honba === 0}
-                onClick={() => mudar(ajustarHonba(estado, -1))}
-              >
-                <i className="fas fa-minus" aria-hidden="true" />
-              </button>
-              <span className="mesa-honba-valor" aria-live="polite">
-                {estado.honba}
-                <small aria-hidden="true">本</small>
-              </span>
-              <button
-                type="button"
-                className="mesa-honba-botao"
-                aria-label={t('match.simple.honbaPlus')}
-                onClick={() => mudar(repetirDealer(estado), true)}
-              >
-                <i className="fas fa-plus" aria-hidden="true" />
-              </button>
-            </div>
+            {temHonba && (
+              <div className="mesa-honba mesa-honba--acoes" role="group" aria-label={t('calculator.honba')}>
+                <span className="mesa-honba-rotulo">
+                  <i className="fas fa-repeat" aria-hidden="true" /> {t('match.simple.honba')}
+                </span>
+                <button
+                  type="button"
+                  className="mesa-honba-botao"
+                  aria-label={t('match.simple.honbaMinus')}
+                  disabled={estado.honba === 0}
+                  onClick={() => mudar(ajustarHonba(estado, -1))}
+                >
+                  <i className="fas fa-minus" aria-hidden="true" />
+                </button>
+                <span className="mesa-honba-valor" aria-live="polite">
+                  {estado.honba}
+                  <small aria-hidden="true">本</small>
+                </span>
+                <button
+                  type="button"
+                  className="mesa-honba-botao"
+                  aria-label={t('match.simple.honbaPlus')}
+                  onClick={() => mudar(repetirDealer(estado), true)}
+                >
+                  <i className="fas fa-plus" aria-hidden="true" />
+                </button>
+              </div>
+            )}
             <button type="button" className="mesa-btn-secundario" onClick={() => setConfirmando(true)}>
               <i className="fas fa-rotate-left" aria-hidden="true" /> {t('match.simple.restart')}
             </button>
@@ -337,9 +352,12 @@ export default function CenterpieceSimples({
             <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mao')}>
               <i className="fas fa-calculator" aria-hidden="true" /> {t('menu.handCalculator')}
             </button>
-            <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('hanFu')}>
-              <i className="fas fa-table-cells" aria-hidden="true" /> {t('menu.quickCalculator')}
-            </button>
+            {/* O MCR não tem fu. */}
+            {!isChines && (
+              <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('hanFu')}>
+                <i className="fas fa-table-cells" aria-hidden="true" /> {t('menu.quickCalculator')}
+              </button>
+            )}
             <button type="button" className="mesa-btn-secundario" onClick={() => aoAbrirCalculo('mpsz')}>
               <i className="fas fa-keyboard" aria-hidden="true" /> {t('match.simple.calcMpsz')}
             </button>

@@ -12,6 +12,8 @@ import type { FormaBatida } from '@/dominios/calculadora-mao-chinesa/logica/tipo
 
 export type Cadeira = 0 | 1 | 2 | 3
 export const CADEIRAS: readonly Cadeira[] = [0, 1, 2, 3]
+/** Um valor por cadeira. */
+export type Quatro = [number, number, number, number]
 
 /** Uma partida completa tem 4 rodadas (Quan) de 4 mãos. */
 export const MAOS_POR_RODADA = 4
@@ -45,6 +47,8 @@ export interface PlacarMcr {
   registro?: RegistroMao
   /** Mesa sorteada num encontro do clube (`mesa` começa em 1, como no sorteio). */
   encontro?: { id: string; mesa: number }
+  /** Totais do Registrar partida finalizada: a partida não passou pela mesa do app. */
+  pontosRegistrados?: Quatro
   /** Nomes dos convidados do torneio (jogam sem cadastro), por id. */
   convidados?: Record<string, string>
 }
@@ -115,11 +119,12 @@ export function pontosDoFalsoHu(cadeira: Cadeira): [number, number, number, numb
 }
 
 export function totais(
-  placar: Pick<PlacarMcr, 'maos'> & Pick<Partial<PlacarMcr>, 'falsosHu'>,
+  placar: Pick<PlacarMcr, 'maos'> & Pick<Partial<PlacarMcr>, 'falsosHu' | 'pontosRegistrados'>,
 ): [number, number, number, number] {
   const lances = [
     ...placar.maos.map(pontosDaMao),
     ...(placar.falsosHu ?? []).map(({ cadeira }) => pontosDoFalsoHu(cadeira)),
+    ...(placar.pontosRegistrados ? [placar.pontosRegistrados] : []),
   ]
   return lances.reduce<[number, number, number, number]>(
     (soma, pontos) => {
