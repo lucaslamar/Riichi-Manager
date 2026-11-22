@@ -2201,6 +2201,45 @@
       "untilRound": "截至轮次",
       "allRounds": "全部",
       "unit": "差距单位"
+    },
+    "prize": {
+      "tab": "奖金",
+      "enable": "收取报名费",
+      "fee": "报名费",
+      "other": "其他",
+      "installments": "分期",
+      "early": "提前报名",
+      "earlyValue": "提前报名费",
+      "earlyCount": "已付人数",
+      "earlyUntil": "截止",
+      "club": "俱乐部分成",
+      "split": "奖金分配",
+      "splitAuto": "自动",
+      "splitFirst": "仅第1名",
+      "splitCustom": "自定义",
+      "splitList": "从第1名起各名次的百分比",
+      "minimum": "最少人数",
+      "total": "{{players}}人 × {{fee}}",
+      "clubLine": "俱乐部（{{percent}}）",
+      "poolLine": "奖金（{{percent}}）",
+      "pool": "奖金总额",
+      "byPlace": "各名次奖金",
+      "atStake": "奖金差{{value}}",
+      "rounding": "取整 + {{value}}",
+      "installmentLine": "{{value}} × {{count}}期",
+      "sumMustBe100": "总和必须为100%。当前：{{sum}}。",
+      "whyFee": "6到12次聚会的赛季收100，平均每次8到17。16人时第1名可得600，已付费的人也较少缺席。若不确定能否凑够人数，可先收50，以后再提高。",
+      "whyInstallments": "分期可减轻负担。分5次、每次20，大多数人都能接受，也与赛季月份相符。",
+      "whyEarly": "截止日前的优惠能让报名提前，有助于在首轮前凑够人数。应用不记录个人付款，请填写按优惠价付款的人数。",
+      "whyClub": "25%足以添置牌具或补贴牌桌，又不显得俱乐部拿走奖金。超过30%容易引起不满。",
+      "whySplit": "奖励到第3名可让半数选手争到最后。50/30/20最常见，少于16人时同样适用。20人起奖励到第4名，28人起到第5名。",
+      "whyMinimum": "16人可打5轮不重复对手，奖金也有吸引力。8人或12人从第2轮起就会重复。",
+      "missing": {
+        "other": "距最少{{min}}人还差{{count}}人。"
+      },
+      "totalMixed": {
+        "other": "{{count}}份报名"
+      }
     }
   },
   "backup": {

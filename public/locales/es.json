@@ -2250,6 +2250,49 @@
       "untilRound": "Hasta la ronda",
       "allRounds": "Todas",
       "unit": "Distancia en"
+    },
+    "prize": {
+      "tab": "Premios",
+      "enable": "Torneo con inscripción",
+      "fee": "Inscripción",
+      "other": "Otro",
+      "installments": "Cuotas",
+      "early": "Inscripción anticipada",
+      "earlyValue": "Importe anticipado",
+      "earlyCount": "Cuántos pagaron",
+      "earlyUntil": "Hasta",
+      "club": "Parte del club",
+      "split": "Reparto del premio",
+      "splitAuto": "Automático",
+      "splitFirst": "Solo el 1.º",
+      "splitCustom": "Personalizado",
+      "splitList": "Porcentaje de cada puesto, desde el 1.º",
+      "minimum": "Mínimo de jugadores",
+      "total": "{{players}} jugadores × {{fee}}",
+      "clubLine": "Club ({{percent}})",
+      "poolLine": "Premio ({{percent}})",
+      "pool": "Premio total",
+      "byPlace": "Premio por puesto",
+      "atStake": "{{value}} más de premio",
+      "rounding": "+ {{value}} de redondeo",
+      "installmentLine": "{{count}}x de {{value}}",
+      "sumMustBe100": "La suma debe ser 100 %. Ahora: {{sum}}.",
+      "whyFee": "Una inscripción de 100 en una temporada de 6 a 12 encuentros sale entre 8 y 17 por encuentro. El premio resulta atractivo (600 para el 1.º con 16 jugadores) y quien pagó falta menos. Si no es seguro llegar al mínimo, empieza con 50 y súbela después.",
+      "whyInstallments": "Las cuotas alivian la inscripción. 5 pagos de 20 le sirven a casi todos y acompañan los meses de la temporada.",
+      "whyEarly": "Un importe menor hasta una fecha adelanta las inscripciones y ayuda a llegar al mínimo antes de la primera ronda. Indica cuántos lo pagaron, porque la app no controla pagos por persona.",
+      "whyClub": "Con 25 % se compra algo concreto (un set o parte de una mesa) sin que parezca que el club se queda el premio. Más de 30 % suele generar quejas.",
+      "whySplit": "Pagar hasta el 3.º mantiene a media tabla con opciones hasta el final. 50/30/20 es lo más común: el campeón gana bastante más y el 2.º y el 3.º reciben algo real. También vale con menos de 16. Con 20 jugadores paga hasta el 4.º y con 28 hasta el 5.º.",
+      "whyMinimum": "Con 16 jugadores se juegan hasta 5 rondas sin repetir rival y el premio ya compensa. Con 8 o 12 se repite desde la 2.ª ronda.",
+      "missing": {
+        "one": "Falta {{count}} jugador para el mínimo de {{min}}.",
+        "many": "Faltan {{count}} jugadores para el mínimo de {{min}}.",
+        "other": "Faltan {{count}} jugadores para el mínimo de {{min}}."
+      },
+      "totalMixed": {
+        "one": "{{count}} inscripción",
+        "many": "{{count}} inscripciones",
+        "other": "{{count}} inscripciones"
+      }
     }
   },
   "backup": {

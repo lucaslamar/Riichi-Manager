@@ -1340,3 +1340,79 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .cfg-ajuda.trn-distancia-aviso {
   margin-top: 6px;
 }
+
+/* Inscrição e premiação. */
+.trn-premio-resumo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 1px solid var(--linha-divisoria);
+  color: var(--texto-principal);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trn-premio-resumo > i {
+  color: var(--primario);
+}
+
+.trn-premio-resumo > span {
+  flex: 1;
+}
+
+.trn-premio-linha {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.trn-premio-antecipada {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 10px;
+}
+
+.trn-premio-antecipada > label {
+  min-width: 0;
+}
+
+.trn-premio-antecipada > .trn-premio-ate {
+  grid-column: 1 / -1;
+}
+
+.trn-quadro-premio {
+  margin: 14px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.trn-quadro-premio > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--linha-divisoria);
+}
+
+.trn-quadro-premio dt small {
+  display: block;
+  color: var(--texto-apoio);
+}
+
+.trn-quadro-premio dd {
+  margin: 0;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.trn-quadro-premio .trn-quadro-posicao {
+  padding-left: 14px;
+}

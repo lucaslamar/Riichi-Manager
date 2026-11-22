@@ -2201,6 +2201,45 @@
       "untilRound": "라운드까지",
       "allRounds": "전체",
       "unit": "차이 단위"
+    },
+    "prize": {
+      "tab": "상금",
+      "enable": "참가비 있음",
+      "fee": "참가비",
+      "other": "기타",
+      "installments": "분할 납부",
+      "early": "조기 신청",
+      "earlyValue": "조기 참가비",
+      "earlyCount": "납부 인원",
+      "earlyUntil": "마감",
+      "club": "클럽 몫",
+      "split": "상금 분배",
+      "splitAuto": "자동",
+      "splitFirst": "1위만",
+      "splitCustom": "직접 설정",
+      "splitList": "1위부터 각 순위의 비율",
+      "minimum": "최소 인원",
+      "total": "{{players}}명 × {{fee}}",
+      "clubLine": "클럽 ({{percent}})",
+      "poolLine": "상금 ({{percent}})",
+      "pool": "총상금",
+      "byPlace": "순위별 상금",
+      "atStake": "상금 차이 {{value}}",
+      "rounding": "반올림 + {{value}}",
+      "installmentLine": "{{value}} × {{count}}회",
+      "sumMustBe100": "합계가 100%여야 합니다. 현재: {{sum}}.",
+      "whyFee": "6~12회 시즌에서 100이면 회당 8~17입니다. 16명이면 1위 상금이 600이고, 낸 사람은 덜 빠집니다. 최소 인원이 걱정되면 50으로 시작해 나중에 올리세요.",
+      "whyInstallments": "나눠 내면 부담이 줄어듭니다. 20씩 5회면 대부분 낼 수 있고 시즌 기간과도 맞습니다.",
+      "whyEarly": "마감 전 할인은 신청을 앞당기고 시작 전에 최소 인원을 모으는 데 도움이 됩니다. 앱은 개인별 납부를 관리하지 않으므로 할인 납부 인원을 입력하세요.",
+      "whyClub": "25%면 패나 테이블 비용에 보탬이 되면서 상금을 가져간다는 인상도 없습니다. 30%를 넘으면 불만이 생기기 쉽습니다.",
+      "whySplit": "3위까지 주면 절반이 끝까지 경쟁합니다. 50/30/20이 가장 흔하며 16명 미만에도 같습니다. 20명부터는 4위, 28명부터는 5위까지 줍니다.",
+      "whyMinimum": "16명이면 5라운드까지 상대가 겹치지 않고 상금도 충분합니다. 8명이나 12명은 2라운드부터 겹칩니다.",
+      "missing": {
+        "other": "최소 {{min}}명까지 {{count}}명 남았습니다."
+      },
+      "totalMixed": {
+        "other": "{{count}}명분"
+      }
     }
   },
   "backup": {

@@ -2233,6 +2233,47 @@
       "untilRound": "Até a rodada",
       "allRounds": "Todas",
       "unit": "Distância em"
+    },
+    "prize": {
+      "tab": "Premiação",
+      "enable": "Torneio com inscrição",
+      "fee": "Inscrição",
+      "other": "Outro",
+      "installments": "Parcelas",
+      "early": "Inscrição antecipada",
+      "earlyValue": "Valor antecipado",
+      "earlyCount": "Quantos pagaram",
+      "earlyUntil": "Até",
+      "club": "Parte do clube",
+      "split": "Divisão do prêmio",
+      "splitAuto": "Automática",
+      "splitFirst": "Só o 1º",
+      "splitCustom": "Personalizada",
+      "splitList": "Porcentagem de cada posição, a partir do 1º",
+      "minimum": "Mínimo de jogadores",
+      "total": "{{players}} jogadores × {{fee}}",
+      "clubLine": "Clube ({{percent}})",
+      "poolLine": "Prêmio ({{percent}})",
+      "pool": "Prêmio total",
+      "byPlace": "Prêmio por posição",
+      "atStake": "{{value}} a mais de prêmio",
+      "rounding": "+ {{value}} de arredondamento",
+      "installmentLine": "{{count}}x de {{value}}",
+      "sumMustBe100": "A soma precisa dar 100%. Agora: {{sum}}.",
+      "whyFee": "R$ 100 numa temporada de 6 a 12 encontros sai entre R$ 8 e R$ 17 por encontro. O prêmio fica atraente (R$ 600 para o 1º com 16 jogadores) e quem pagou falta menos. Se não tiver certeza de juntar o mínimo, comece com R$ 50 numa temporada de lançamento e suba depois.",
+      "whyInstallments": "Parcelar tira o peso do valor de entrada. 5x de R$ 20 cabe para quase todo mundo e acompanha os meses da temporada.",
+      "whyEarly": "Um valor menor até uma data puxa as inscrições para o começo e ajuda a garantir o mínimo antes da primeira rodada. Informe quantos pagaram esse valor, porque o app não controla pagamento por pessoa.",
+      "whyClub": "25% dá para comprar algo concreto (um set ou parte de uma mesa) sem parecer que o clube fica com o prêmio. Acima de 30% costuma gerar reclamação.",
+      "whySplit": "Pagar até o 3º mantém metade da tabela com chance real até o fim. 50/30/20 é a divisão mais comum: o campeão leva bem mais, mas o 2º e o 3º não saem com algo simbólico. Vale também com menos de 16. Com 20 jogadores a automática paga até o 4º, e com 28 até o 5º.",
+      "whyMinimum": "Com 16 jogadores dá para fazer até 5 rodadas sem ninguém repetir adversário, e o prêmio já compensa. Com 8 ou 12 a repetição começa na 2ª rodada.",
+      "missing": {
+        "one": "Falta {{count}} jogador para o mínimo de {{min}}.",
+        "other": "Faltam {{count}} jogadores para o mínimo de {{min}}."
+      },
+      "totalMixed": {
+        "one": "{{count}} inscrição",
+        "other": "{{count}} inscrições"
+      }
     }
   },
   "backup": {

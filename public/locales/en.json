@@ -2233,6 +2233,47 @@
       "untilRound": "Up to round",
       "allRounds": "All",
       "unit": "Gap in"
+    },
+    "prize": {
+      "tab": "Prizes",
+      "enable": "Entry fee tournament",
+      "fee": "Entry fee",
+      "other": "Other",
+      "installments": "Installments",
+      "early": "Early registration",
+      "earlyValue": "Early fee",
+      "earlyCount": "How many paid",
+      "earlyUntil": "Until",
+      "club": "Club's share",
+      "split": "Prize split",
+      "splitAuto": "Automatic",
+      "splitFirst": "1st only",
+      "splitCustom": "Custom",
+      "splitList": "Percentage for each place, from 1st",
+      "minimum": "Minimum players",
+      "total": "{{players}} players × {{fee}}",
+      "clubLine": "Club ({{percent}})",
+      "poolLine": "Prize pool ({{percent}})",
+      "pool": "Prize pool",
+      "byPlace": "Prize by place",
+      "atStake": "{{value}} more in prizes",
+      "rounding": "+ {{value}} from rounding",
+      "installmentLine": "{{count}}x {{value}}",
+      "sumMustBe100": "The total must be 100%. Now: {{sum}}.",
+      "whyFee": "A fee of 100 over a season of 6 to 12 meetups is 8 to 17 per meetup. The prize is appealing (600 for 1st with 16 players) and people who paid skip less. If you may not reach the minimum, start with 50 for a launch season and raise it later.",
+      "whyInstallments": "Installments make the fee lighter. 5 payments of 20 suit almost everyone and follow the months of the season.",
+      "whyEarly": "A lower fee until a date brings sign-ups forward and helps reach the minimum before round one. Enter how many paid it, as the app does not track payments per person.",
+      "whyClub": "25% buys something real (a set or part of a table) without the club seeming to keep the prize. Above 30% tends to draw complaints.",
+      "whySplit": "Paying down to 3rd keeps half the table in contention to the end. 50/30/20 is the most common split: the champion takes much more, yet 2nd and 3rd get a real prize. It also applies under 16. With 20 players automatic pays to 4th, and with 28 to 5th.",
+      "whyMinimum": "With 16 players you can play up to 5 rounds with no repeat opponents, and the prize is worthwhile. With 8 or 12, repeats start in round 2.",
+      "missing": {
+        "one": "{{count}} player short of the minimum of {{min}}.",
+        "other": "{{count}} players short of the minimum of {{min}}."
+      },
+      "totalMixed": {
+        "one": "{{count}} entry",
+        "other": "{{count}} entries"
+      }
     }
   },
   "backup": {

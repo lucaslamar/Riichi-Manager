@@ -2309,6 +2309,51 @@
       "untilRound": "Iki rato",
       "allRounds": "Visi",
       "unit": "Skirtumo vienetas"
+    },
+    "prize": {
+      "tab": "Prizai",
+      "enable": "Turnyras su mokesčiu",
+      "fee": "Dalyvio mokestis",
+      "other": "Kita",
+      "installments": "Dalys",
+      "early": "Išankstinė registracija",
+      "earlyValue": "Išankstinė kaina",
+      "earlyCount": "Kiek sumokėjo",
+      "earlyUntil": "Iki",
+      "club": "Klubo dalis",
+      "split": "Prizų padalijimas",
+      "splitAuto": "Automatinis",
+      "splitFirst": "Tik 1 vietai",
+      "splitCustom": "Savas",
+      "splitList": "Kiekvienos vietos procentas nuo 1-os",
+      "minimum": "Mažiausiai žaidėjų",
+      "total": "Žaidėjai: {{players}} × {{fee}}",
+      "clubLine": "Klubas ({{percent}})",
+      "poolLine": "Prizų fondas ({{percent}})",
+      "pool": "Prizų fondas",
+      "byPlace": "Prizai pagal vietą",
+      "atStake": "Prizo skirtumas {{value}}",
+      "rounding": "+ {{value}} nuo apvalinimo",
+      "installmentLine": "{{count}}x po {{value}}",
+      "sumMustBe100": "Suma turi būti 100%. Dabar: {{sum}}.",
+      "whyFee": "100 už 6–12 susitikimų sezoną yra 8–17 už susitikimą. Prizas patrauklus (600 už 1 vietą su 16 žaidėjų), o sumokėję rečiau praleidžia. Jei minimumas abejotinas, pradėk nuo 50 ir vėliau padidink.",
+      "whyInstallments": "Dalimis mokėti lengviau. 5 įmokos po 20 tinka beveik visiems ir sutampa su sezono mėnesiais.",
+      "whyEarly": "Mažesnė kaina iki datos paankstina registraciją ir padeda surinkti minimumą. Įrašyk, kiek ją sumokėjo, nes programa nestebi kiekvieno mokėjimų.",
+      "whyClub": "25% užtenka rinkiniui ar stalo daliai, ir neatrodo, kad klubas pasiima prizą. Virš 30% dažnai sulaukia skundų.",
+      "whySplit": "Mokant iki 3 vietos, pusė lentelės kovoja iki galo. 50/30/20 yra dažniausias padalijimas, tinka ir mažiau nei 16. Nuo 20 žaidėjų mokama iki 4 vietos, nuo 28 iki 5.",
+      "whyMinimum": "Su 16 žaidėjų galima 5 ratus nekartoti varžovų, o prizas jau vertas. Su 8 ar 12 kartojasi nuo 2 rato.",
+      "missing": {
+        "one": "Iki {{min}} žaidėjų trūksta: {{count}}.",
+        "few": "Iki {{min}} žaidėjų trūksta: {{count}}.",
+        "many": "Iki {{min}} žaidėjų trūksta: {{count}}.",
+        "other": "Iki {{min}} žaidėjų trūksta: {{count}}."
+      },
+      "totalMixed": {
+        "one": "Registracijos: {{count}}",
+        "few": "Registracijos: {{count}}",
+        "many": "Registracijos: {{count}}",
+        "other": "Registracijos: {{count}}"
+      }
     }
   },
   "backup": {

@@ -9,7 +9,11 @@ import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
 import { dataDoDia, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
 import { useTorneios } from '../hooks/useTorneios'
-import type { ConfigFormato, FormatoTorneio, Torneio } from '../../logica/tipos'
+import { premiacaoPadrao, premiacaoValida } from '../../logica/premiacao'
+import { rankingTemporada, encontrosDaTemporada } from '../../logica/temporada'
+import type { ConfigFormato, ConfigPremiacao, FormatoTorneio, Torneio } from '../../logica/tipos'
+import { usePartidasDoTorneio } from '../hooks/usePartidasDoTorneio'
+import EditorPremiacao from './EditorPremiacao'
 import GuiaFormatos from './GuiaFormatos'
 import '../torneio.css'
 
@@ -32,11 +36,24 @@ export default function ConfigTorneioSheet({
   aoSalvar: (torneio: Torneio) => void
   aoFechar: () => void
 }) {
-  const { t } = useI18n()
+  const { t, idioma } = useI18n()
   const [formato, setFormato] = useState<ConfigFormato>(torneio.formato)
   const [timers, setTimers] = useState(torneio.timers)
   const [ventos, setVentos] = useState(() => sorteiaVentos(torneio))
-  const { temporadas, salvarTemporada } = useTorneios()
+  const { temporadas, torneios, salvarTemporada } = useTorneios()
+  const { partidas } = usePartidasDoTorneio()
+  // Na Temporada a premiação é dela: cada escolha tem o próprio rascunho.
+  const [premiacoes, setPremiacoes] = useState<Record<string, ConfigPremiacao>>({})
+  const temporada = formato.tipo === 'temporada' ? temporadas.find((item) => item.id === formato.temporadaId) : undefined
+  const donoPremiacao = formato.tipo === 'temporada' ? `temporada:${formato.temporadaId}` : 'torneio'
+  const premiacaoSalva = formato.tipo === 'temporada' ? temporada?.premiacao : torneio.premiacao
+  const premiacao = premiacoes[donoPremiacao] ?? premiacaoSalva ?? premiacaoPadrao(idioma)
+  const inscritos = temporada
+    ? Math.max(
+        jogadores,
+        rankingTemporada(encontrosDaTemporada(torneios, temporada.id), partidas, temporada.criterio).length,
+      )
+    : jogadores
   const [novaTemporada, setNovaTemporada] = useState(() => {
     const hoje = new Date()
     const fim = new Date(hoje)
@@ -248,7 +265,7 @@ export default function ConfigTorneioSheet({
       // Só Torneio e Pontuação: o resto usa o padrão até haver login e Centerpiece.
       secoes={chines ? [] : ['pontuacao']}
       soPlacar
-      podeConcluir={cortesValidos && temporadaValida}
+      podeConcluir={cortesValidos && temporadaValida && premiacaoValida(premiacao)}
       abasExtras={[
         {
           id: 'torneio',
@@ -258,6 +275,18 @@ export default function ConfigTorneioSheet({
               {abaTorneio}
               {secaoTempo}
             </>
+          ),
+        },
+        {
+          id: 'premiacao',
+          rotulo: t('tournament.prize.tab'),
+          conteudo: (
+            <EditorPremiacao
+              key={donoPremiacao}
+              config={premiacao}
+              jogadores={inscritos}
+              aoMudar={(nova) => setPremiacoes({ ...premiacoes, [donoPremiacao]: nova })}
+            />
           ),
         },
         ...(chines
@@ -282,11 +311,14 @@ export default function ConfigTorneioSheet({
           const temporada = {
             ...criarTemporada({ id: gerarId(), ...novaTemporada, nome: novaTemporada.nome.trim(), agora: new Date().toISOString() }),
             config,
+            ...(premiacao.ativa ? { premiacao } : {}),
           }
           salvarTemporada(temporada)
           formatoFinal = { tipo: 'temporada', temporadaId: temporada.id }
         }
-        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos })
+        if (temporada && premiacoes[donoPremiacao]) salvarTemporada({ ...temporada, premiacao })
+        const doTorneio = formato.tipo !== 'temporada' && premiacao.ativa ? premiacao : undefined
+        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos, premiacao: doTorneio })
       }}
     />
   )
