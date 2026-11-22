@@ -2109,6 +2109,12 @@
         "what": "Rondas sorteadas en el momento, y cada encuentro suma a un ranking acumulado (suma, media o mejores resultados).",
         "for": "Indicado para una liga del club durante meses o el año."
       }
+    },
+    "idealRounds": {
+      "short8": "Con 8, se repite desde la 2.ª.",
+      "short12": "Con 12, lo ideal es hasta 3 rondas.",
+      "help8": "Con 2 mesas, cada mesa de la 2.ª ronda junta personas de solo 2 mesas anteriores. Por eso se repiten al menos 2 parejas por mesa. Con 3 rondas, cada jugador repite hasta 3 rivales. Para repetir menos, reúne 12 o 16 jugadores.",
+      "help12": "Con 3 mesas, desde la 2.ª ronda siempre alguien repite rival: es un límite matemático, no del sorteo. Con 3 rondas, cada uno puede repetir como máximo 2 rivales. La 4.ª solo conviene si todos deben ser Este una vez. Con 16 jugadores se pueden jugar hasta 5 rondas sin repetir."
     }
   },
   "backup": {

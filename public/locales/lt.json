@@ -2161,6 +2161,12 @@
         "what": "Burtai traukiami vietoje, o kiekvienas susitikimas pridedamas prie bendro reitingo (suma, vidurkis ar geriausi rezultatai).",
         "for": "Tinka klubo lygai, trunkančiai mėnesius ar metus."
       }
+    },
+    "idealRounds": {
+      "short8": "Su 8 kartojasi nuo 2 turo.",
+      "short12": "Su 12 geriausia iki 3 turų.",
+      "help8": "Esant 2 stalams, 2 turo stale susitinka žmonės tik iš 2 ankstesnių stalų, todėl kiekviename stale kartojasi bent 2 poros. Per 3 turus kiekvienas pakartoja iki 3 varžovų. Kad kartotųsi mažiau, surinkite 12 ar 16 žaidėjų.",
+      "help12": "Esant 3 stalams, nuo 2 turo kas nors visada pakartoja varžovą: tai matematikos, o ne burtų riba. Per 3 turus kiekvienas gali pakartoti ne daugiau kaip 2 varžovus. 4 turas vertas tik jei visi turi kartą būti Rytais. Su 16 žaidėjų galima žaisti iki 5 turų be pakartojimų."
     }
   },
   "backup": {

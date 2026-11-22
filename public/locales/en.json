@@ -2099,6 +2099,12 @@
         "what": "Rounds drawn on the spot, with each meeting adding to a cumulative ranking (total, average or best results).",
         "for": "Good for a club league over months or a year."
       }
+    },
+    "idealRounds": {
+      "short8": "With 8, repeats start in round 2.",
+      "short12": "With 12, up to 3 rounds is ideal.",
+      "help8": "With 2 tables, each round 2 table mixes people from only 2 earlier tables, so at least 2 pairs repeat at each table. With 3 rounds, each player repeats up to 3 opponents. For fewer repeats, gather 12 or 16 players.",
+      "help12": "With 3 tables, someone always repeats an opponent from round 2 on: that is a limit of the math, not of the draw. With 3 rounds, each player can repeat at most 2 opponents. A 4th round is only worth it if everyone must be East once. With 16 players you can play up to 5 rounds with no repeats."
     }
   },
   "backup": {

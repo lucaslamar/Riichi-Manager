@@ -2099,6 +2099,12 @@
         "what": "Igual ao Brasileirão, mas cada encontro soma num ranking acumulado (soma, média ou melhores resultados).",
         "for": "Indicado para liga do clube ao longo de meses ou do ano."
       }
+    },
+    "idealRounds": {
+      "short8": "Com 8, repete sempre a partir da 2ª.",
+      "short12": "Com 12, até 3 rodadas é o ideal.",
+      "help8": "Com 2 mesas, cada mesa da 2ª rodada junta pessoas de só 2 mesas anteriores. Por isso, pelo menos 2 duplas se repetem em cada mesa. Com 3 rodadas, cada jogador repete até 3 adversários. Para menos repetição, junte 12 ou 16 jogadores.",
+      "help12": "Com 3 mesas, a partir da 2ª rodada sempre tem alguém repetindo adversário: é limite da matemática, não do sorteio. Com 3 rodadas, dá para cada um repetir no máximo 2 adversários. A 4ª rodada só vale se todos precisarem ser Leste uma vez. Com 16 jogadores dá para fazer até 5 rodadas sem repetir ninguém."
     }
   },
   "backup": {

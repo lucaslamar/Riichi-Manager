@@ -109,6 +109,14 @@ export default function ConfigTorneioSheet({
       <p className="cfg-ajuda">{t(ventos ? 'tournament.settings.windsAppShort' : 'tournament.settings.windsTableShort')}</p>
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
+      {porMesa === 4 && formato.tipo !== 'eliminatorio' && (jogadores === 8 || jogadores === 12) && (
+        <p className="cfg-ajuda cfg-ajuda--com-botao">
+          {t(`tournament.idealRounds.short${jogadores}`)}
+          <AjudaCampo rotulo={t('tournament.settings.rounds')}>
+            <p>{t(`tournament.idealRounds.help${jogadores}`)}</p>
+          </AjudaCampo>
+        </p>
+      )}
       {formato.tipo === 'temporada' && (
         <>
           <Campo rotulo={t('tournament.season.title')} ajuda={<p>{t('tournament.season.criterionLater')}</p>}>
