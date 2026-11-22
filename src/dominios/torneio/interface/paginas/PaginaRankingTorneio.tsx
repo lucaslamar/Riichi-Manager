@@ -150,7 +150,7 @@ export default function PaginaRankingTorneio({
       relatorio: () =>
         relatorioDoJogador(linhas, id, comparadoId, {
           ...textos,
-          titulo: `${nomeDe(id)} · ${textos.lugar(linha.posicao)} · ${pontos(linha.pontos)}`,
+          titulo: `${nomeDe(id)}, ${textos.lugar(linha.posicao)} (${pontos(linha.pontos)})`,
           subtitulo: subtituloDe(torneio.nome),
           chamada,
           nome: nomeDe,

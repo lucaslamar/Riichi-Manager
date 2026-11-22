@@ -86,7 +86,11 @@ export default function FolhaDistanciaPodio({
   return (
     <Modal
       titulo={nome(jogadorId)}
-      subtitulo={`${textos.lugar(linha.posicao)} · ${pontos(linha.pontos)}`}
+      subtitulo={
+        <>
+          <span className="trn-colocacao">{textos.lugar(linha.posicao)}</span> {pontos(linha.pontos)}
+        </>
+      }
       aoFechar={aoFechar}
       rotuloFechar={t('actions.close')}
       tamanho="pequena"

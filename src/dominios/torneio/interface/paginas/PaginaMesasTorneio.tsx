@@ -395,7 +395,7 @@ export default function PaginaMesasTorneio({
                       )}
                       {linha && (
                         <span className={`trn-assento-pontos ${linha.final >= 0 ? 'trn-positivo' : 'trn-negativo'}`}>
-                          {t('tournament.tables.place', { place: linha.colocacao })} ·{' '}
+                          <span className="trn-colocacao">{t('tournament.tables.place', { place: linha.colocacao })}</span>{' '}
                           {linha.final > 0 ? '+' : ''}
                           {new Intl.NumberFormat(idioma, { maximumFractionDigits: 1 }).format(linha.final)}
                         </span>

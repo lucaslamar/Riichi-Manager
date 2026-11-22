@@ -1102,6 +1102,18 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   grid-row: 1 / span 4;
 }
 
+/* Em flex o text-overflow não vale e o nome longo era cortado sem "…". */
+.trn-mesa .clb-assento:has(.trn-assento-bruto) .clb-assento-nome {
+  display: block;
+}
+
+/* A colocação é neutra e separada pelo espaço: só os pontos levam a cor. */
+.trn-colocacao {
+  margin-right: 6px;
+  color: var(--texto-apoio);
+  font-weight: 700;
+}
+
 /* Ranking: visão, filtros e linha tocável. */
 .trn-barra-ranking {
   justify-content: flex-start;
