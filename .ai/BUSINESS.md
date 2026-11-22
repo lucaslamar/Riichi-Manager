@@ -26,7 +26,7 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Eliminatório: classificatória e cortes até a mesa final. Indicado para evento com final e muitos jogadores.
 - Brasileirão (`corridos`, o padrão): cada rodada é sorteada na hora, sem número de rodadas. O organizador encerra.
 - Temporada: como o Brasileirão, com cada encontro somando num ranking acumulado.
-- O Torneio é sempre de 4: mesas fecham com 8, 12, 16… jogadores. O código de mesas de 3 (sorteio, mínimos) continua, mas nenhuma tela cria torneio de Sanma.
+- O Torneio é sempre de 4: mesas fecham com 8, 12, 16… jogadores. O código de mesas de 3 (sorteio, mínimos) continua, mas nenhuma tela cria torneio de Sanma. Confirmado pelo usuário em 22/11/2026: não religar nem tratar como bug, e o "Jogar Sanma quando falta um" do brief fica descartado.
 - Ventos: no Rodízio o padrão é o app sortear. Nos outros, saem na mesa, então o app não sabe quem foi Leste.
 
 ### Sorteio
