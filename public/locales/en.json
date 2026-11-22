@@ -2108,7 +2108,10 @@
       "previousPlayer": "Previous player",
       "nextPlayer": "Next player",
       "typeFor": "Type the points for {{name}}",
-      "hundred": "Double zero"
+      "hundred": "Double zero",
+      "sumOk": "Sum matches",
+      "sumShort": "{{points}} short",
+      "sumOver": "{{points}} over"
     },
     "positionChange": {
       "up": {

@@ -37,6 +37,7 @@ import {
 import { lerPontos } from '../../logica/entradaPontos'
 import CalculadoraPontosSheet from '../componentes/CalculadoraPontosSheet'
 import AtrasoRegistro from '../componentes/AtrasoRegistro'
+import RodapeRegistro from '../componentes/RodapeRegistro'
 import CardAssento from '../componentes/CardAssento'
 import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
@@ -428,12 +429,6 @@ export default function RegistrarFinalizada({
         />
       )}
 
-      {podeSalvar && !encontro && !retomada && pausadas.length > 0 && (
-        <button type="button" className="btn-contorno fin-salvas" onClick={aoVerSalvas}>
-          <i className="fas fa-hourglass-half" aria-hidden="true" />{' '}
-          {t('match.paused.listCount', { count: pausadas.length })}
-        </button>
-      )}
       {podeSalvar && retomada && (
         <button
           type="button"
@@ -523,17 +518,6 @@ export default function RegistrarFinalizada({
             )
           })}
         </div>
-        <p className={`trn-soma${fechamento.fecha ? '' : ' trn-soma--erro'}`} role="status">
-          {t('tournament.points.sum', { sum: numero(soma), total: numero(totalMesa) })}
-          {fechamento.porSaida && (
-            <span className="trn-soma-apoio">{t('match.leftGame.sumFree')}</span>
-          )}
-          {fechamento.depositosNaMesa > 0 && (
-            <span className="trn-soma-apoio">
-              {t('tournament.points.depositsLeft', { count: fechamento.depositosNaMesa })}
-            </span>
-          )}
-        </p>
       </>
 
       {torneio?.atraso && (
@@ -614,20 +598,6 @@ export default function RegistrarFinalizada({
         />
       )}
 
-      {/* Lado a lado, para o Registrar continuar dentro da tela. */}
-      <div className="fin-acoes">
-      {podeSalvar && (
-        <button
-          type="button"
-          className="btn-contorno fin-salvar"
-          disabled={!assentos.some(Boolean)}
-          aria-haspopup="dialog"
-          onClick={() => setFolhaAndamento('salvar')}
-        >
-          {t('match.paused.save')}
-        </button>
-      )}
-
       {folhaAndamento && (
         <FolhaAndamento
           titulo={t(folhaAndamento === 'salvar' ? 'match.paused.save' : 'match.paused.edit')}
@@ -647,15 +617,23 @@ export default function RegistrarFinalizada({
       )}
 
       {/* O resultado aparece na confirmação, antes de gravar. */}
-      <button
-        type="button"
-        className="mesa-btn-principal"
-        disabled={!previa}
-        onClick={() => setConfirmando(true)}
-      >
-        {t('match.manual.save')}
-      </button>
-      </div>
+      <RodapeRegistro
+        soma={soma}
+        total={totalMesa}
+        fechamento={fechamento}
+        podeRegistrar={!!previa}
+        aoRegistrar={() => setConfirmando(true)}
+        salvar={
+          podeSalvar
+            ? { pode: assentos.some(Boolean), aoTocar: () => setFolhaAndamento('salvar') }
+            : undefined
+        }
+        salvas={
+          podeSalvar && !encontro && !retomada && pausadas.length > 0 && aoVerSalvas
+            ? { quantas: pausadas.length, aoTocar: aoVerSalvas }
+            : undefined
+        }
+      />
 
       {confirmando && previa?.resultado && (
         <ConfirmarRegistro

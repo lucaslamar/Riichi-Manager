@@ -2164,7 +2164,10 @@
       "previousPlayer": "Ankstesnis žaidėjas",
       "nextPlayer": "Kitas žaidėjas",
       "typeFor": "Įvesti {{name}} taškus",
-      "hundred": "Du nuliai"
+      "hundred": "Du nuliai",
+      "sumOk": "Suma sutampa",
+      "sumShort": "Trūksta {{points}}",
+      "sumOver": "Viršija {{points}}"
     },
     "positionChange": {
       "up": {

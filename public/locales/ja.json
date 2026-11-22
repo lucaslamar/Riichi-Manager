@@ -2086,7 +2086,10 @@
       "previousPlayer": "前のプレイヤー",
       "nextPlayer": "次のプレイヤー",
       "typeFor": "{{name}} の点数を入力",
-      "hundred": "ゼロ2つ"
+      "hundred": "ゼロ2つ",
+      "sumOk": "合計一致",
+      "sumShort": "{{points}}不足",
+      "sumOver": "{{points}}超過"
     },
     "positionChange": {
       "up": {

@@ -2108,7 +2108,10 @@
       "previousPlayer": "Jogador anterior",
       "nextPlayer": "Próximo jogador",
       "typeFor": "Digitar os pontos de {{name}}",
-      "hundred": "Dois zeros"
+      "hundred": "Dois zeros",
+      "sumOk": "A soma fecha",
+      "sumShort": "Faltam {{points}}",
+      "sumOver": "Sobram {{points}}"
     },
     "positionChange": {
       "up": {

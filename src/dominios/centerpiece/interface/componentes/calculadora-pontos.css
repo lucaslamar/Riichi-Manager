@@ -231,25 +231,6 @@
   font-size: clamp(2rem, 10vw, 3rem);
 }
 
-.trn-soma {
-  margin: 4px 0 0;
-  font-size: 0.95rem;
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
-  text-align: center;
-}
-
-.trn-soma--erro {
-  color: var(--texto-erro);
-}
-
-.trn-soma-apoio {
-  display: block;
-  color: var(--texto-apoio);
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
 /* Celular baixo: tudo um pouco menor para o teclado caber sem rolar. */
 @media (max-height: 720px) {
   .cpt-visor {
@@ -432,7 +413,6 @@
     font-size: 1rem;
   }
 
-  .fin-tela > .trn-soma,
   .fin-tela .ptd-resumo-regras strong {
     font-size: 1.125rem;
   }
@@ -455,11 +435,6 @@
   }
 
   .fin-tela > .trn-mesa-assentos .ptd-assento-pontos--vazio {
-    font-size: 1.125rem;
-  }
-
-  .fin-tela > .fin-acoes > button {
-    min-height: 56px;
     font-size: 1.125rem;
   }
 }

@@ -2086,7 +2086,10 @@
       "previousPlayer": "이전 플레이어",
       "nextPlayer": "다음 플레이어",
       "typeFor": "{{name}} 점수 입력",
-      "hundred": "영 두 개"
+      "hundred": "영 두 개",
+      "sumOk": "합계 일치",
+      "sumShort": "{{points}} 부족",
+      "sumOver": "{{points}} 초과"
     },
     "positionChange": {
       "up": {

@@ -2115,7 +2115,10 @@
       "previousPlayer": "Jugador anterior",
       "nextPlayer": "Siguiente jugador",
       "typeFor": "Escribir los puntos de {{name}}",
-      "hundred": "Dos ceros"
+      "hundred": "Dos ceros",
+      "sumOk": "La suma cuadra",
+      "sumShort": "Faltan {{points}}",
+      "sumOver": "Sobran {{points}}"
     },
     "positionChange": {
       "up": {

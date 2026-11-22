@@ -2086,7 +2086,10 @@
       "previousPlayer": "上一位玩家",
       "nextPlayer": "下一位玩家",
       "typeFor": "输入 {{name}} 的分数",
-      "hundred": "两个零"
+      "hundred": "两个零",
+      "sumOk": "总分相符",
+      "sumShort": "还差{{points}}",
+      "sumOver": "多出{{points}}"
     },
     "positionChange": {
       "up": {
