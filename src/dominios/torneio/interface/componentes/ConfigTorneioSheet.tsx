@@ -14,6 +14,9 @@ import { rankingTemporada, encontrosDaTemporada } from '../../logica/temporada'
 import type { ConfigFormato, ConfigPremiacao, FormatoTorneio, Torneio } from '../../logica/tipos'
 import { usePartidasDoTorneio } from '../hooks/usePartidasDoTorneio'
 import EditorPremiacao from './EditorPremiacao'
+import CamposWo from './CamposWo'
+import type { RegrasWo } from '@/compartilhado/modo-jogo/regrasDoModo'
+import { regrasWoDe, regrasWoValidas } from '../../logica/wo'
 import GuiaFormatos from './GuiaFormatos'
 import '../torneio.css'
 
@@ -48,6 +51,13 @@ export default function ConfigTorneioSheet({
   const donoPremiacao = formato.tipo === 'temporada' ? `temporada:${formato.temporadaId}` : 'torneio'
   const premiacaoSalva = formato.tipo === 'temporada' ? temporada?.premiacao : torneio.premiacao
   const premiacao = premiacoes[donoPremiacao] ?? premiacaoSalva ?? premiacaoPadrao(idioma)
+  const [woEditado, setWoEditado] = useState<RegrasWo | null>(null)
+  const woPadrao = regrasWoDe({
+    jogo: useModoJogoAtual() === 'mcr' ? 'mcr' : undefined,
+    variante: torneio.variante,
+    wo: torneio.wo ?? temporada?.wo,
+  })
+  const wo = woPadrao && (woEditado ?? woPadrao)
   const inscritos = temporada
     ? Math.max(
         jogadores,
@@ -265,7 +275,8 @@ export default function ConfigTorneioSheet({
       // Só Torneio e Pontuação: o resto usa o padrão até haver login e Centerpiece.
       secoes={chines ? [] : ['pontuacao']}
       soPlacar
-      podeConcluir={cortesValidos && temporadaValida && premiacaoValida(premiacao)}
+      fimPontuacao={wo && <CamposWo regras={wo} aoMudar={setWoEditado} />}
+      podeConcluir={cortesValidos && temporadaValida && premiacaoValida(premiacao) && (!wo || regrasWoValidas(wo))}
       abasExtras={[
         {
           id: 'torneio',
@@ -312,13 +323,20 @@ export default function ConfigTorneioSheet({
             ...criarTemporada({ id: gerarId(), ...novaTemporada, nome: novaTemporada.nome.trim(), agora: new Date().toISOString() }),
             config,
             ...(premiacao.ativa ? { premiacao } : {}),
+            ...(woEditado ? { wo: woEditado } : {}),
           }
           salvarTemporada(temporada)
           formatoFinal = { tipo: 'temporada', temporadaId: temporada.id }
         }
-        if (temporada && premiacoes[donoPremiacao]) salvarTemporada({ ...temporada, premiacao })
+        if (temporada && (premiacoes[donoPremiacao] || woEditado)) {
+          salvarTemporada({
+            ...temporada,
+            ...(premiacoes[donoPremiacao] ? { premiacao } : {}),
+            ...(woEditado ? { wo: woEditado } : {}),
+          })
+        }
         const doTorneio = formato.tipo !== 'temporada' && premiacao.ativa ? premiacao : undefined
-        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos, premiacao: doTorneio })
+        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos, premiacao: doTorneio, wo: woEditado ?? torneio.wo ?? temporada?.wo })
       }}
     />
   )

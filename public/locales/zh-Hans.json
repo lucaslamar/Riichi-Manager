@@ -2240,6 +2240,31 @@
       "totalMixed": {
         "other": "{{count}}份报名"
       }
+    },
+    "wo": {
+      "tag": "弃权",
+      "register": "记录缺席",
+      "who": "请选择缺席者。",
+      "confirm": "确认弃权",
+      "remove": "取消弃权",
+      "missed": "缺席",
+      "attended": "出席",
+      "times": "弃权：{{times}}",
+      "rebuild": "重组牌桌",
+      "rebuildHelp": "用{{other}}号桌的出席者补齐{{table}}号桌，{{other}}号桌记为弃权。",
+      "rebuilt": "牌桌已重组。",
+      "late": "迟到（可选）",
+      "lateHelp": "每分钟扣{{rate}}分。超过{{max}}分钟记为弃权。",
+      "minutesShort": "{{minutes}}分钟",
+      "lateBy": "迟到{{minutes}}分钟",
+      "settings": "弃权与迟到",
+      "absent": "缺席者",
+      "present": "出席者",
+      "tolerance": "宽限（分钟）",
+      "perMinute": "每分钟",
+      "whyAbsent": "缺席−30源自EMA（每场15,000点加15,000马点），相当于WRC的30P。",
+      "whyPresent": "出席者+10为自定规则。缺1人时合计为零。缺更多人时特意不归零，避免未对局却大量得分。",
+      "whyLate": "迟到遵循WRC与EMA：10分钟内每分钟−1，之后记为弃权。"
     }
   },
   "backup": {

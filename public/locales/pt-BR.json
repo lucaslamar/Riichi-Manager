@@ -2274,6 +2274,31 @@
         "one": "{{count}} inscrição",
         "other": "{{count}} inscrições"
       }
+    },
+    "wo": {
+      "tag": "WO",
+      "register": "Registrar ausência",
+      "who": "Marque quem faltou.",
+      "confirm": "Confirmar WO",
+      "remove": "Remover WO",
+      "missed": "Faltou",
+      "attended": "Presente",
+      "times": "WO: {{times}}",
+      "rebuild": "Remontar mesas",
+      "rebuildHelp": "A Mesa {{table}} fica completa com os presentes da Mesa {{other}}, que fica com o WO.",
+      "rebuilt": "Mesas remontadas.",
+      "late": "Atraso (opcional)",
+      "lateHelp": "Desconta {{rate}} por minuto. Mais de {{max}} min é WO.",
+      "minutesShort": "{{minutes}} min",
+      "lateBy": "Atraso de {{minutes}} min",
+      "settings": "WO e atraso",
+      "absent": "Quem faltou",
+      "present": "Cada presente",
+      "tolerance": "Tolerância (min)",
+      "perMinute": "Por minuto",
+      "whyAbsent": "Os −30 de quem falta vêm da EMA (15.000 pontos e 15.000 de uma por sessão perdida) e equivalem aos 30P da WRC.",
+      "whyPresent": "Os +10 de cada presente são regra da casa. Com 1 ausente a mesa fecha em zero. Com mais não fecha, de propósito, para ninguém ganhar muito sem jogar.",
+      "whyLate": "O atraso segue WRC e EMA: −1 por minuto até 10 minutos. Depois disso é WO."
     }
   },
   "backup": {

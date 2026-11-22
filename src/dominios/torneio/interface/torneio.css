@@ -1416,3 +1416,86 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .trn-quadro-premio .trn-quadro-posicao {
   padding-left: 14px;
 }
+
+/* WO e atraso. */
+.trn-mesa-acoes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trn-mesa-acoes > .clb-mesa-botao {
+  flex: 1;
+  min-width: 0;
+}
+
+.trn-mesa-acoes > .cm-btn-icone {
+  flex-shrink: 0;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.trn-atraso,
+.trn-wo-linha {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cfg-ajuda.trn-wo-pergunta {
+  margin: 0 0 4px;
+}
+
+.trn-wo-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trn-wo-lista label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  border-bottom: 1px solid var(--linha-divisoria);
+  cursor: pointer;
+}
+
+.trn-wo-lista input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--primario);
+}
+
+.trn-wo-lista label > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.trn-wo-remontar {
+  margin-top: 12px;
+}
+
+.trn-wo-remontar > p {
+  margin: 0 0 8px;
+}
+
+.trn-wo-remontar > button {
+  width: 100%;
+  min-height: 44px;
+}
+
+.trn-wo-campos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 10px;
+}
+
+.trn-wo-campos > label {
+  min-width: 0;
+}

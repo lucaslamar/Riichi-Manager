@@ -2240,6 +2240,31 @@
       "totalMixed": {
         "other": "{{count}}人分"
       }
+    },
+    "wo": {
+      "tag": "不戦",
+      "register": "欠席を記録",
+      "who": "欠席者を選んでください。",
+      "confirm": "不戦を確定",
+      "remove": "不戦を取消",
+      "missed": "欠席",
+      "attended": "出席",
+      "times": "不戦：{{times}}",
+      "rebuild": "卓を組み直す",
+      "rebuildHelp": "卓{{other}}の出席者で卓{{table}}を埋め、卓{{other}}が不戦になります。",
+      "rebuilt": "卓を組み直しました。",
+      "late": "遅刻（任意）",
+      "lateHelp": "1分ごとに{{rate}}減点。{{max}}分を超えると不戦。",
+      "minutesShort": "{{minutes}}分",
+      "lateBy": "{{minutes}}分遅刻",
+      "settings": "不戦と遅刻",
+      "absent": "欠席者",
+      "present": "出席者",
+      "tolerance": "猶予（分）",
+      "perMinute": "1分ごと",
+      "whyAbsent": "欠席の−30はEMA（1回につき15,000点とウマ15,000）に基づき、WRCの30Pに相当します。",
+      "whyPresent": "出席者の+10はハウスルールです。欠席1人なら合計0になります。2人以上で0にならないのは、対局せずに大きく稼がないためです。",
+      "whyLate": "遅刻はWRCとEMAに従い、10分まで1分ごとに−1。それを超えると不戦です。"
     }
   },
   "backup": {

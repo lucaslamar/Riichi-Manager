@@ -2354,6 +2354,31 @@
         "many": "Registracijos: {{count}}",
         "other": "Registracijos: {{count}}"
       }
+    },
+    "wo": {
+      "tag": "WO",
+      "register": "Žymėti nebuvimą",
+      "who": "Pažymėk, kas neatvyko.",
+      "confirm": "Patvirtinti WO",
+      "remove": "Šalinti WO",
+      "missed": "Neatvyko",
+      "attended": "Atvyko",
+      "times": "WO: {{times}}",
+      "rebuild": "Perdėlioti stalus",
+      "rebuildHelp": "Stalas {{table}} papildomas žaidėjais iš stalo {{other}}, kuriam lieka WO.",
+      "rebuilt": "Stalai perdėlioti.",
+      "late": "Vėlavimas (nebūtina)",
+      "lateHelp": "Minus {{rate}} už minutę. Daugiau nei {{max}} min yra WO.",
+      "minutesShort": "{{minutes}} min",
+      "lateBy": "Vėlavo {{minutes}} min",
+      "settings": "WO ir vėlavimas",
+      "absent": "Neatvykęs",
+      "present": "Atvykęs",
+      "tolerance": "Laukimas (min)",
+      "perMinute": "Už minutę",
+      "whyAbsent": "−30 už nebuvimą ateina iš EMA (15 000 taškų ir 15 000 uma už sesiją) ir atitinka WRC 30P.",
+      "whyPresent": "+10 atvykusiems yra namų taisyklė. Trūkstant 1 suma lygi nuliui. Trūkstant daugiau tyčia ne, kad niekas daug nelaimėtų nežaidęs.",
+      "whyLate": "Vėlavimas pagal WRC ir EMA: −1 už minutę iki 10 minučių. Vėliau WO."
     }
   },
   "backup": {

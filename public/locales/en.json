@@ -2274,6 +2274,31 @@
         "one": "{{count}} entry",
         "other": "{{count}} entries"
       }
+    },
+    "wo": {
+      "tag": "WO",
+      "register": "Record absence",
+      "who": "Mark who was absent.",
+      "confirm": "Confirm WO",
+      "remove": "Remove WO",
+      "missed": "Absent",
+      "attended": "Present",
+      "times": "WO: {{times}}",
+      "rebuild": "Rebuild tables",
+      "rebuildHelp": "Table {{table}} fills up with players from Table {{other}}, which keeps the WO.",
+      "rebuilt": "Tables rebuilt.",
+      "late": "Lateness (optional)",
+      "lateHelp": "Deducts {{rate}} per minute. Over {{max}} min is a WO.",
+      "minutesShort": "{{minutes}} min",
+      "lateBy": "{{minutes}} min late",
+      "settings": "WO and lateness",
+      "absent": "Absent player",
+      "present": "Each present",
+      "tolerance": "Grace period (min)",
+      "perMinute": "Per minute",
+      "whyAbsent": "The −30 for an absence comes from EMA (15,000 points and 15,000 uma per missed session) and equals the 30P of WRC.",
+      "whyPresent": "The +10 for each player present is a house rule. With 1 absent the table sums to zero. With more it does not, on purpose, so nobody wins big without playing.",
+      "whyLate": "Lateness follows WRC and EMA: −1 per minute up to 10 minutes. After that it is a WO."
     }
   },
   "backup": {
