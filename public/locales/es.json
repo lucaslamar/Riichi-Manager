@@ -1091,7 +1091,8 @@
       "inProgressTag": "en curso",
       "roundTable": "Ronda {{round}} · Mesa {{table}}",
       "registeredOf": "{{count}} de {{total}} mesas registradas",
-      "openTournament": "Abrir el torneo {{name}}"
+      "openTournament": "Abrir el torneo {{name}}",
+      "openTournamentFormat": "Abrir el torneo {{name}}, {{format}}"
     },
     "player": {
       "open": "Abrir el análisis de {{name}}",

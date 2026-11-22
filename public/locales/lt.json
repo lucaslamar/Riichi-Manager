@@ -1098,7 +1098,8 @@
       "inProgressTag": "vyksta",
       "roundTable": "{{round}} ratas · {{table}} stalas",
       "registeredOf": "Užregistruota {{count}} iš {{total}} stalų",
-      "openTournament": "Atidaryti turnyrą {{name}}"
+      "openTournament": "Atidaryti turnyrą {{name}}",
+      "openTournamentFormat": "Atidaryti turnyrą {{name}}, {{format}}"
     },
     "player": {
       "open": "Atidaryti {{name}} analizę",

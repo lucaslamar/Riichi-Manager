@@ -1077,7 +1077,8 @@
       "inProgressTag": "進行中",
       "roundTable": "第{{round}}回戦 · {{table}}卓",
       "registeredOf": "{{total}}卓中 {{count}}卓 記録済み",
-      "openTournament": "大会「{{name}}」を開く"
+      "openTournament": "大会「{{name}}」を開く",
+      "openTournamentFormat": "大会 {{name}}（{{format}}）を開く"
     },
     "player": {
       "open": "{{name}} の分析を開く",

@@ -1084,7 +1084,8 @@
       "inProgressTag": "in progress",
       "roundTable": "Round {{round}} · Table {{table}}",
       "registeredOf": "{{count}} of {{total}} tables recorded",
-      "openTournament": "Open tournament {{name}}"
+      "openTournament": "Open tournament {{name}}",
+      "openTournamentFormat": "Open tournament {{name}}, {{format}}"
     },
     "player": {
       "open": "Open {{name}} analysis",

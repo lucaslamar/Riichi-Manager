@@ -187,6 +187,7 @@ export default function PaginaMesasTorneio({
         <span>
           {torneio.nome} · <time dateTime={rodada.geradaEm}>{dataHora}</time>
         </span>
+        <small>{t(`tournament.formatsShort.${torneio.formato.tipo}`)}</small>
         <small>{torneio.status === 'finalizado' ? t('match.club.meetingDone') : t('match.types.inProgressTag')}</small>
       </p>
 

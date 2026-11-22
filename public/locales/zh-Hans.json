@@ -1077,7 +1077,8 @@
       "inProgressTag": "进行中",
       "roundTable": "第 {{round}} 轮 · 第 {{table}} 桌",
       "registeredOf": "已记录 {{count}}/{{total}} 桌",
-      "openTournament": "打开比赛 {{name}}"
+      "openTournament": "打开比赛 {{name}}",
+      "openTournamentFormat": "打开赛事 {{name}}，{{format}}"
     },
     "player": {
       "open": "打开 {{name}} 的分析",

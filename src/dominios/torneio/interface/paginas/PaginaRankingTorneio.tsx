@@ -111,6 +111,7 @@ export default function PaginaRankingTorneio({
       <p className="ptd-faixa-titulo">
         <i className="fas fa-trophy" aria-hidden="true" />
         <span>{torneio.nome}</span>
+        <small>{t(`tournament.formatsShort.${torneio.formato.tipo}`)}</small>
         <small>{torneio.status === 'finalizado' ? t('match.club.meetingDone') : t('match.types.inProgressTag')}</small>
       </p>
 

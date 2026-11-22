@@ -188,11 +188,15 @@ export default function PaginaListaTorneio({
         <button
           type="button"
           className="trn-selo-em-jogo"
-          aria-label={t('match.types.openTournament', { name: emJogo.nome })}
+          aria-label={t('match.types.openTournamentFormat', {
+            name: emJogo.nome,
+            format: t(`tournament.formatsShort.${emJogo.formato.tipo}`),
+          })}
           onClick={() => aoAbrirTorneio(emJogo.id)}
         >
           <i className="fas fa-circle-play" aria-hidden="true" />
           <span>{emJogo.nome}</span>
+          <small>{t(`tournament.formatsShort.${emJogo.formato.tipo}`)}</small>
           <small>{t('match.types.inProgressTag')}</small>
         </button>
       )}
