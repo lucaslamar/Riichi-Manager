@@ -1,5 +1,20 @@
 # Changelog - Riichi Manager
 
+## Não lançado
+
+### Adicionado
+
+- **Tutorial MCR completo**: ensina do zero (peças, muro, distribuição, Chi/Peng/Gang, pontuação e os 81 fan). As diferenças do Riichi viraram parte opcional.
+
+### Alterado
+
+- **Modo Riichi**: nas Configurações, a opção Japonês agora se chama Riichi, como os jogadores chamam a variante.
+- **Modo Chinês**: botões e textos usam os termos chineses (吃 Chi, 碰 Peng, 明杠 Gang, 暗杠 An Gang, 点和 Dianhe, 自摸 Zimo, 番 Fan).
+
+### Corrigido
+
+- **Flores e Estações**: as peças não parecem mais desabilitadas. A selecionada ganha contorno rosa.
+
 ## 7.0.0 - 2026-11-21
 
 ### Alterado

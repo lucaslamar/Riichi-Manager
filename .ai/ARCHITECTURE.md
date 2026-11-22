@@ -23,9 +23,9 @@ Dentro dos domínios, mantenha regras em `logica` e estado e componentes em `int
 
 Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.md) e [fluxo da calculadora](../docs/calculadora-fluxo.md). Em caso de divergência, confira o código: a documentação de arquitetura ainda menciona apenas `localStorage`.
 
-## Modo de jogo (versão 7.0.0)
+## Modo de jogo (desde a 7.0.0)
 
-- A versão atual é a 7.0.0, que introduziu o modo de jogo global. A versão exibida e a do backup vêm do `package.json` (`__VERSAO_APP__` no `vite.config.ts`).
+- A versão atual é a 7.11.0 (termos chineses e Tutorial MCR completo). O modo de jogo global veio na 7.0.0. A branch `chinese` pulou de 7.0.0 para 7.11.0 porque a `main` já tinha publicado até a 7.10.0. A versão exibida e a do backup vêm do `package.json` (`__VERSAO_APP__` no `vite.config.ts`).
 - `src/compartilhado/modo-jogo`: `ModoJogo` é `'riichi' | 'mcr'`, com padrão `'riichi'`. O `ModoJogoProvider` envolve o app em `src/main.tsx`, abaixo do `PreferenciasProvider`, e grava o modo em `localStorage` na chave `rm.modoJogo`. `useModoJogo()` devolve `modo`, `setModo` e `isChines`. O provider também põe `data-modo` no `<html>` e atualiza o `document.title`. `maoEmAndamento.ts` avisa ao cartão de modo se a calculadora chinesa tem pedras.
 - `src/compartilhado/marca/nome-app.ts`: o nome exibido é Riichi Manager no modo Riichi e Mahjong Manager no Chinês. Repositório, `base`, manifesto, ícones e chaves de armazenamento não mudam.
 - `src/compartilhado/interface/layout/navegacao.ts`: `navegacaoDoModo(modo)` devolve páginas, itens e ordem do carrossel. No Riichi devolve as listas originais, sem mudança. No MCR ficam ocultas a Han e Fu, o Centerpiece e as Partidas, e entra a tela `placarMcr`, que só existe no MCR. A barra do MCR tem duas páginas: Calculadora, Placar, Ranking e Sorteador, e depois o Tutorial. O subitem Registrar partida finalizada (`SUBITENS_SO_RIICHI`) some no MCR. A Calculadora de Mão continua no mesmo lugar e, no App, mostra a calculadora chinesa. O Tutorial é o mesmo `GuiaAprender`, com o conteúdo do modo. Ao trocar de modo numa tela que não existe no outro, o App volta para a Calculadora.
