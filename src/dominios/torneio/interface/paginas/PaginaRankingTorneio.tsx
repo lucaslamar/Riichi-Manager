@@ -474,6 +474,7 @@ export default function PaginaRankingTorneio({
       {abertoId && (
         <FolhaDistanciaPodio
           linhas={linhas}
+          mudancas={mudancas}
           jogadorId={abertoId}
           escopo={{ tipo: 'torneio', id: torneio.id, ateRodada: filtros.ateRodada }}
           unidade={filtros.unidade}

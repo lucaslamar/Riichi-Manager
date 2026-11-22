@@ -2185,7 +2185,9 @@
       "new": "Reitinge pirmą kartą",
       "newShort": "naujas",
       "legend": "Rodyklės: pokytis nuo {{round}} turo.",
-      "confirmTitle": "Turnyro reitingas: prieš → po"
+      "confirmTitle": "Turnyro reitingas: prieš → po",
+      "was": "buvo {{place}}",
+      "wasInRound": "{{round}} rate buvo {{place}}"
     },
     "formatGuide": {
       "intro": "Kurį formatą rinktis?",

@@ -2134,7 +2134,9 @@
       "new": "Debuta en el ranking",
       "newShort": "nuevo",
       "legend": "Flechas: cambio desde la ronda {{round}}.",
-      "confirmTitle": "Ranking del torneo: antes → después"
+      "confirmTitle": "Ranking del torneo: antes → después",
+      "was": "era {{place}}",
+      "wasInRound": "era {{place}} en la ronda {{round}}"
     },
     "formatGuide": {
       "intro": "¿Qué formato usar?",

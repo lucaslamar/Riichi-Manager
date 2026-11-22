@@ -2125,7 +2125,9 @@
       "new": "New in the ranking",
       "newShort": "new",
       "legend": "Arrows: change since round {{round}}.",
-      "confirmTitle": "Tournament ranking: before → after"
+      "confirmTitle": "Tournament ranking: before → after",
+      "was": "was {{place}}",
+      "wasInRound": "was {{place}} in round {{round}}"
     },
     "formatGuide": {
       "intro": "Which format to use?",

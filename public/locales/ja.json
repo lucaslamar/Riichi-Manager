@@ -2101,7 +2101,9 @@
       "new": "ランキング初登場",
       "newShort": "新",
       "legend": "矢印：第{{round}}回戦からの変化。",
-      "confirmTitle": "大会ランキング：前 → 後"
+      "confirmTitle": "大会ランキング：前 → 後",
+      "was": "前{{place}}",
+      "wasInRound": "第{{round}}回戦では{{place}}"
     },
     "formatGuide": {
       "intro": "どの形式を使う？",

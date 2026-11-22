@@ -2125,7 +2125,9 @@
       "new": "Estreia no ranking",
       "newShort": "novo",
       "legend": "Setas: mudança desde a rodada {{round}}.",
-      "confirmTitle": "Ranking do torneio: antes → depois"
+      "confirmTitle": "Ranking do torneio: antes → depois",
+      "was": "era {{place}}",
+      "wasInRound": "era {{place}} na rodada {{round}}"
     },
     "formatGuide": {
       "intro": "Qual formato usar?",

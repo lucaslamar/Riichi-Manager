@@ -6,12 +6,13 @@ import EstatisticasJogador from '@/dominios/estatisticas/interface/EstatisticasJ
 import type { EscopoEstatisticas } from '@/dominios/estatisticas/logica/escopo'
 import { compararCom, disputantes } from '../../logica/distanciaPodio'
 import type { FiltrosRankingTorneio } from '../../logica/filtrosRankingTorneio'
-import type { LinhaRankingTorneio } from '../../logica/ranking'
+import type { LinhaRankingTorneio, MudancasDoRanking } from '../../logica/ranking'
 import type { TextosDistancia } from '../hooks/useTextosDistancia'
 
 /** O card do jogador no ranking: cabeçalho, comparação e as estatísticas no escopo do torneio. */
 export default function FolhaDistanciaPodio({
   linhas,
+  mudancas,
   jogadorId,
   escopo,
   unidade,
@@ -24,6 +25,7 @@ export default function FolhaDistanciaPodio({
   aoFechar,
 }: {
   linhas: readonly LinhaRankingTorneio[]
+  mudancas: MudancasDoRanking | null
   jogadorId: string
   escopo: EscopoEstatisticas
   unidade: FiltrosRankingTorneio['unidade']
@@ -54,6 +56,14 @@ export default function FolhaDistanciaPodio({
   if (!linha) return null
 
 
+  const mudanca = mudancas?.jogadores.find((item) => item.jogadorId === jogadorId)
+  const eraNaRodada =
+    mudancas && mudanca?.variacao && mudanca.antes !== null
+      ? t('tournament.positionChange.wasInRound', {
+          place: textos.lugar(mudanca.antes),
+          round: mudancas.desde,
+        })
+      : null
   const comparado = compararCom(linhas, jogadorId, comparadoId)
 
   const rivais = disputantes(linhas, jogadorId).filter((outra) => outra.jogadorId !== jogadorId)
@@ -65,6 +75,7 @@ export default function FolhaDistanciaPodio({
       subtitulo={
         <>
           <span className="trn-colocacao">{textos.lugar(linha.posicao)}</span> {pontos(linha.pontos)}
+          {eraNaRodada && <span className="trn-era-no-card">{eraNaRodada}</span>}
         </>
       }
       aoFechar={aoFechar}

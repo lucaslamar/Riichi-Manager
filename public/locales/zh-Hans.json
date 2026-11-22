@@ -2101,7 +2101,9 @@
       "new": "首次进入排名",
       "newShort": "新",
       "legend": "箭头：自第{{round}}轮以来的变化。",
-      "confirmTitle": "赛事排名：之前 → 之后"
+      "confirmTitle": "赛事排名：之前 → 之后",
+      "was": "原{{place}}",
+      "wasInRound": "第{{round}}轮时{{place}}"
     },
     "formatGuide": {
       "intro": "该用哪种赛制？",

@@ -1,11 +1,17 @@
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { textoDaSeta, type MudancaPosicao } from '../../logica/ranking'
 
-/** Mudança de posição junto do número da posição. */
+/** Mudança de posição junto do número da posição, com a de antes embaixo ("era 2º"). */
 export default function SetaPosicao({ mudanca }: { mudanca: MudancaPosicao | undefined }) {
   const { t } = useI18n()
   if (!mudanca) return null
   const { antes, variacao } = mudanca
+  const era =
+    antes !== null && variacao !== 0
+      ? t('tournament.positionChange.was', {
+          place: t('tournament.podiumGap.ordinal', { place: antes }),
+        })
+      : null
   const falado =
     antes === null
       ? t('tournament.positionChange.new')
@@ -18,7 +24,12 @@ export default function SetaPosicao({ mudanca }: { mudanca: MudancaPosicao | und
   return (
     <span className={`trn-seta-posicao${tom}`}>
       <span aria-hidden="true">{visivel}</span>
-      <span className="sr-only">{falado}</span>
+      {era && (
+        <span className="trn-posicao-anterior" aria-hidden="true">
+          {era}
+        </span>
+      )}
+      <span className="sr-only">{era ? `${falado}, ${era}` : falado}</span>
     </span>
   )
 }

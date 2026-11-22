@@ -2101,7 +2101,9 @@
       "new": "랭킹 첫 등장",
       "newShort": "신규",
       "legend": "화살표: {{round}}라운드 이후 변화.",
-      "confirmTitle": "대회 랭킹: 이전 → 이후"
+      "confirmTitle": "대회 랭킹: 이전 → 이후",
+      "was": "전 {{place}}",
+      "wasInRound": "{{round}}라운드 {{place}}"
     },
     "formatGuide": {
       "intro": "어떤 형식을 쓸까요?",

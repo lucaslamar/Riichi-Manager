@@ -1021,9 +1021,14 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 /* Mudança de posição: junto do número, sem coluna nova. */
 .trn-seta-posicao {
   position: relative;
-  display: inline-block;
-  min-width: 22px;
+  display: inline-flex;
+  /* Cabe "era 12º": sem isso os números da coluna saem do prumo. */
+  min-width: 3.4em;
+  flex-direction: column;
+  align-items: flex-start;
   margin-left: 2px;
+  line-height: 1.15;
+  vertical-align: middle;
   color: var(--texto-apoio);
   font-size: 0.6875rem;
   font-weight: 700;
@@ -1038,8 +1043,31 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
   color: var(--texto-erro);
 }
 
+/* Nos outros idiomas é mais largo: "buvo 12 v.", "was #12", "原第12名". */
+.trn-seta-posicao:not(:lang(pt)) {
+  min-width: 4.8em;
+}
+
+/* Neutro: quem dá o sentido é a seta. */
+.trn-posicao-anterior {
+  color: var(--texto-apoio);
+  font-weight: 400;
+}
+
+.trn-era-no-card {
+  display: block;
+  font-size: 0.8125rem;
+}
+
 .trn-tabela-ranking td:first-child {
   white-space: nowrap;
+}
+
+/* 320px: o "era 2º" não pode partir o nome no meio da palavra. */
+@media (max-width: 359px) {
+  .trn-tabela-ranking.trn-tabela-ranking :is(th, td) {
+    padding-inline: 3px;
+  }
 }
 
 .cfg-ajuda.trn-legenda-setas {
