@@ -24,6 +24,7 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 ## Desktop
 
+- Tocar na aba Ranking dentro da análise de um jogador deveria voltar para a lista (hoje não faz nada).
 - Marcar no menu lateral o subitem aberto (hoje marca só Mesa partida ou Ranking).
 - Proposta aguardando aprovação: lista de presença em duas áreas no iPad deitado e PC (nomes de um lado, contagem e Sortear do outro).
 - Proposta aguardando aprovação: digitar a mão pelo teclado físico sem abrir o MPSZ.

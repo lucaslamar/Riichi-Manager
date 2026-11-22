@@ -30,7 +30,10 @@
 
 ### Alterado
 
-- **Ranking no iPad deitado e no PC**: uma linha por jogador, com as colunas alinhadas para comparar.
+- **Ranking no iPad e no PC**: uma linha por jogador, com as colunas alinhadas para comparar.
+- **iPad em pé**: Registrar partida, Nova partida, listas, Ranking e análise do jogador usam a tela inteira, com letra maior no Pro 13.
+- **MPSZ no iPad**: teclas e letras maiores.
+- **? do Sorteador**: maior no iPad e no PC, ao lado da escolha de jogadores.
 - **Mesas em monitor grande**: cabem até seis por linha no Torneio e no clube.
 - **Menu lateral**: com mouse os itens ficam mais baixos, para caber sem rolar na maioria das telas.
 - **Botões no tablet**: filtros, atalhos do Ranking, Han e Fu e ajuda com área de toque de 44 px.
@@ -45,6 +48,7 @@
 
 ### Corrigido
 
+- **iPad Pro 13 atual**: com 1376 px, recebe os mesmos ajustes dos outros iPad Pro.
 - **Sortear sempre à vista**: no iPad deitado e no PC, o botão fica preso na base da lista do Torneio e do clube, mesmo com muitos nomes.
 - **Timer da rodada**: fica preso no topo enquanto as mesas rolam, no iPad e no PC.
 - **Nomes compridos nas mesas**: quebram linha em vez de serem cortados.
