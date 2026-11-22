@@ -1674,6 +1674,15 @@
         "antigos": "Mais antigos",
         "nome": "Nome"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "Rodada {{n}} do dia",
+      "newDrawHint": "Rodada {{n}} do dia · evita repetir quem já jogou junto",
+      "more": "Mais opções do encontro",
+      "resetDay": "Começar do zero",
+      "resetDayTitle": "Começar o dia do zero?",
+      "resetDayHelp": "O próximo sorteio não vai considerar quem já jogou junto hoje. Use quando o grupo for outro.",
+      "resetDone": "O próximo sorteio começa do zero"
     }
   },
   "spokenTiles": {

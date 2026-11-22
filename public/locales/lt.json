@@ -1718,6 +1718,15 @@
         "antigos": "Seniausi",
         "nome": "Pavadinimas"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "{{n}} dienos turas",
+      "newDrawHint": "{{n}} dienos turas · vengia jau žaidusių kartu",
+      "more": "Daugiau susitikimo parinkčių",
+      "resetDay": "Pradėti iš naujo",
+      "resetDayTitle": "Pradėti dieną iš naujo?",
+      "resetDayHelp": "Kiti burtai neatsižvelgs, kas šiandien jau žaidė kartu. Naudokite, kai grupė kita.",
+      "resetDone": "Kiti burtai prasidės iš naujo"
     }
   },
   "spokenTiles": {

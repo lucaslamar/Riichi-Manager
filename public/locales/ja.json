@@ -1652,6 +1652,15 @@
         "antigos": "古い順",
         "nome": "名前"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "本日の第{{n}}回戦",
+      "newDrawHint": "本日の第{{n}}回戦・同卓した人の再戦を避けます",
+      "more": "例会のその他の操作",
+      "resetDay": "最初からにする",
+      "resetDayTitle": "今日の記録を考慮せずに始めますか？",
+      "resetDayHelp": "次の抽選では今日の同卓歴を考慮しません。別のグループのときに使ってください。",
+      "resetDone": "次の抽選は最初からです"
     }
   },
   "spokenTiles": {

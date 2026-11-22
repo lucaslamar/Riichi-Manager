@@ -1674,6 +1674,15 @@
         "antigos": "Oldest",
         "nome": "Name"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "Round {{n}} of the day",
+      "newDrawHint": "Round {{n}} of the day · avoids repeating who already played together",
+      "more": "More meeting options",
+      "resetDay": "Start from scratch",
+      "resetDayTitle": "Start the day from scratch?",
+      "resetDayHelp": "The next draw will not consider who already played together today. Use it when the group is different.",
+      "resetDone": "The next draw starts from scratch"
     }
   },
   "spokenTiles": {

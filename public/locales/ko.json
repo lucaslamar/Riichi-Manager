@@ -1652,6 +1652,15 @@
         "antigos": "오래된순",
         "nome": "이름"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "오늘의 {{n}}라운드",
+      "newDrawHint": "오늘의 {{n}}라운드 · 이미 같이 친 사람을 피합니다",
+      "more": "모임 옵션 더보기",
+      "resetDay": "처음부터 시작",
+      "resetDayTitle": "오늘을 처음부터 시작할까요?",
+      "resetDayHelp": "다음 추첨은 오늘 같이 친 기록을 고려하지 않습니다. 다른 그룹일 때 쓰세요.",
+      "resetDone": "다음 추첨은 처음부터 시작합니다"
     }
   },
   "spokenTiles": {

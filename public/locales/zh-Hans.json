@@ -1652,6 +1652,15 @@
         "antigos": "最早",
         "nome": "名称"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "今日第{{n}}轮",
+      "newDrawHint": "今日第{{n}}轮 · 避免已同桌的人再次同桌",
+      "more": "更多聚会选项",
+      "resetDay": "从头开始",
+      "resetDayTitle": "今天从头开始吗？",
+      "resetDayHelp": "下次抽签不会考虑今天已同桌的记录。换了一批人时使用。",
+      "resetDone": "下次抽签将从头开始"
     }
   },
   "spokenTiles": {
