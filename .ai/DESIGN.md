@@ -37,3 +37,24 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Rótulos dizem o que vai acontecer ("Salvar partida", não "OK").
 - Erros explicam o problema e como resolver. Estados vazios orientam o próximo passo.
 - Variantes de mahjong pelo nome que os jogadores usam (Riichi, MCR), não pelo país.
+
+## Padrões de tela do Torneio
+
+- Texto de ajuda visível tem no máximo 1 linha em 360px (cerca de 331px úteis), nos 7 idiomas. O resto vai para o ? (`AjudaCampo`) ao lado do rótulo.
+- `AjudaCampo` não vai dentro de `<label>` que envolve um campo: use um `div` e dê `aria-label` ao campo.
+- Selo do formato ao lado de "em andamento" no card, na rodada e no ranking. O nome trunca, os selos não.
+- Encerrar fica ao lado do Ranking, sempre com confirmação.
+- Ranking: visão e filtros ficam numa barra abaixo do nome do torneio, não no cabeçalho (no desktop ele é estreito).
+- Ranking: a linha inteira abre a folha da distância, com um botão no nome para teclado e leitor de tela. A folha mostra Mangan, Haneman e Yakuman, e o Baiman fica no leitor de tela e em "Distância em".
+- Quem está sendo acompanhado fica destacado e, fora da tela, fixo acima da navegação. Use `position: fixed`: `sticky` não gruda dentro do conteúdo principal.
+- Colocação e pontos se separam por espaço e cor (a colocação neutra, os pontos em verde ou vermelho), sem "·" depois do "º".
+- O ? fica sempre ao lado de um título, nunca no meio ou no fim de um texto de apoio. Embaixo do Formato vão no máximo duas linhas: o que é e quantos jogadores precisa. O resto vai no ? do Formato.
+- O ? com mais de uma ideia não é parágrafo corrido: título curto, uma linha por caso (rótulo em negrito e frase curta embaixo), o caso atual em destaque e o porquê no fim.
+- Valor padrão escolhido pelo app tem um ? com o porquê do padrão, não só o que o campo faz.
+- Registrar ausência é o ícone ao lado de Registrar resultado. A folha mostra os pontos de cada um antes de confirmar.
+- WO usa selo neutro e "Faltou" ou "Presente" no lugar dos pontos da mesa, sem colocação.
+- QR das imagens sempre escuro em caixa branca, nos dois temas.
+- Cabeçalho da rodada: quatro ações de 44px no celular. No desktop ele mora no menu lateral estreito, com ações de 28px de largura.
+- Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.
+- Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.
+- Sortear de novo é secundário com nota perfeita ou ótima e principal nas outras. A comparação com o anterior fica 5 s, e o Voltar ao anterior continua no painel.

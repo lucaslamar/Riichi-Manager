@@ -719,7 +719,9 @@
     "narrationOutputHelp": "Jei įjungtas NVDA, TalkBack ar VoiceOver, rinkitės Tik ekrano skaitytuvas, kad negirdėtumėte dviejų balsų.",
     "narrationNoVoice": "Ši naršyklė neturi balso. Pranešimai keliauja į ekrano skaitytuvą.",
     "narrationShortcuts": "Spartieji klavišai: Alt+M skaito ranką, Alt+D paskutinius išmetimus, Alt+R pakartoja paskutinį pranešimą, Alt+S sustabdo kalbą.",
-    "narrationTest": "Išbandyti"
+    "narrationTest": "Išbandyti",
+    "shareQr": "QR kodas bendrinamuose vaizduose",
+    "shareQrHelp": "Pamatę vaizdą grupėje gali atidaryti programą per QR."
   },
   "windDraw": {
     "title": "Vėjų burtai",
@@ -1098,7 +1100,8 @@
       "inProgressTag": "vyksta",
       "roundTable": "{{round}} ratas · {{table}} stalas",
       "registeredOf": "Užregistruota {{count}} iš {{total}} stalų",
-      "openTournament": "Atidaryti turnyrą {{name}}"
+      "openTournament": "Atidaryti turnyrą {{name}}",
+      "openTournamentFormat": "Atidaryti turnyrą {{name}}, {{format}}"
     },
     "player": {
       "open": "Atidaryti {{name}} analizę",
@@ -1717,6 +1720,15 @@
         "antigos": "Seniausi",
         "nome": "Pavadinimas"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "{{n}} dienos turas",
+      "newDrawHint": "{{n}} dienos turas · vengia jau žaidusių kartu",
+      "more": "Daugiau susitikimo parinkčių",
+      "resetDay": "Pradėti iš naujo",
+      "resetDayTitle": "Pradėti dieną iš naujo?",
+      "resetDayHelp": "Kiti burtai neatsižvelgs, kas šiandien jau žaidė kartu. Naudokite, kai grupė kita.",
+      "resetDone": "Kiti burtai prasidės iš naujo"
     }
   },
   "spokenTiles": {
@@ -1751,7 +1763,14 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "Rezultatai sukurti su {{app}}. Surenkite ir savo turnyrą.",
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "iki {{round}} rato",
+      "bottom": "Lentelės apačia",
+      "bottomLead": "persvara {{value}}",
+      "bottomLeave": "išsigelbėti {{value}}",
+      "ctaRace": "Nori žinoti, kiek tau trūksta? Filtruok {{app}}"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1762,11 +1781,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1821,7 +1840,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "Išsaugoti šį sąrašą arba įkelti išsaugotą"
     },
     "settings": {
@@ -1833,12 +1852,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "few": "{{count}} rounds. Each player is East once and faces as many different opponents as possible.",
-        "many": "{{count}} rounds. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1864,30 +1877,36 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "Sanma staluose visada 3 žaidėjai: turnyrui reikia 6, 9, 12… žaidėjų.",
+      "multipleOfFourShort": "Reikia 8, 12, 16… žaidėjų.",
+      "multipleOfThreeShort": "Reikia 6, 9, 12… žaidėjų.",
+      "windsAppShort": "Vėjai paskiriami kartu su stalais.",
+      "windsTableShort": "Vėjai traukiami prie stalo.",
+      "cutsShort": "4 kartotiniai. Pvz.: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "4 turai. Visi kartą Rytai.",
+      "suico": "Nuo 2 turo stalai pagal lentelę.",
+      "eliminatorio": "Atrankos iki finalinio stalo.",
+      "corridos": "Laisvi turai, burtai vietoje.",
+      "temporada": "Keli susitikimai, vienas reitingas."
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1903,7 +1922,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "few": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked.",
@@ -1916,14 +1935,15 @@
         "many": "Sum of each player's {{count}} best game results.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season"
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "Kriterijus: lygos ekrane."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1993,7 +2013,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -2063,13 +2083,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2080,7 +2093,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "Pasikartojantys trejetai",
+      "repeatedTriosHelp": "Trys žmonės, sėdėję kartu daugiau nei kartą.",
+      "maxPerPlayer": "Pakartojimai žmogui",
+      "maxPerPlayerHelp": "Daugiausia kartojusiojo pakartoti varžovai.",
+      "differentOpponents": "Skirtingi varžovai",
+      "differentOpponentsHelp": "Vidurkis žmogui ir mažiausia reikšmė.",
+      "averageAndLowest": "{{average}} (min. {{lowest}})",
+      "eastTimes": "Kartai Rytuose",
+      "eastTimesHelp": "Nuo rečiausiai iki dažniausiai."
     },
     "points": {
       "points": "Taškai",
@@ -2109,7 +2131,282 @@
       "thousand": "trys nuliai",
       "useHand": "Naudoti skaičiavime",
       "previousPlayer": "Ankstesnis žaidėjas",
-      "nextPlayer": "Kitas žaidėjas"
+      "nextPlayer": "Kitas žaidėjas",
+      "typeFor": "Įvesti {{name}} taškus"
+    },
+    "positionChange": {
+      "up": {
+        "one": "Pakilo {{count}} vieta",
+        "few": "Pakilo {{count}} vietomis",
+        "many": "Pakilo {{count}} vietos",
+        "other": "Pakilo {{count}} vietų"
+      },
+      "down": {
+        "one": "Nukrito {{count}} vieta",
+        "few": "Nukrito {{count}} vietomis",
+        "many": "Nukrito {{count}} vietos",
+        "other": "Nukrito {{count}} vietų"
+      },
+      "same": "Vieta nepakito",
+      "new": "Reitinge pirmą kartą",
+      "newShort": "naujas",
+      "legend": "Rodyklės: pokytis nuo {{round}} turo.",
+      "confirmTitle": "Turnyro reitingas: prieš → po"
+    },
+    "formatGuide": {
+      "intro": "Kurį formatą rinktis?",
+      "rodizio": {
+        "what": "Visas tvarkaraštis sudaromas traukiant burtus. Kiekvienas kartą būna Rytais ir susitinka su kuo daugiau skirtingų varžovų.",
+        "for": "Tinka klubo susitikimams su pabaigos laiku ir pradedantiesiems. Teisingiausias vėjų atžvilgiu."
+      },
+      "suico": {
+        "what": "1 turui traukiami burtai. Vėliau stalai sudaromi pagal lentelę, vengiant tų pačių varžovų.",
+        "for": "Tinka vienos dienos varžyboms su nustatytu turų skaičiumi."
+      },
+      "eliminatorio": {
+        "what": "Atrankos turai, po jų atrankos (pvz., 8, tada 4) iki finalinio stalo.",
+        "for": "Tinka renginiams su finalu ir daug žaidėjų. Reikia daugiau laiko."
+      },
+      "corridos": {
+        "what": "Kiekvieno turo burtai traukiami vietoje, vengiant tų pačių varžovų. Turų skaičius nenustatytas.",
+        "for": "Tinka neformaliems susitikimams, kai neaišku, kiek bus turų."
+      },
+      "temporada": {
+        "what": "Burtai traukiami vietoje, o kiekvienas susitikimas pridedamas prie bendro reitingo (suma, vidurkis ar geriausi rezultatai).",
+        "for": "Tinka klubo lygai, trunkančiai mėnesius ar metus."
+      }
+    },
+    "idealRounds": {
+      "short8": "Su 8 kartojasi nuo 2 turo.",
+      "short12": "Su 12 geriausia iki 3 turų.",
+      "guide12": {
+        "title": "12 žaidėjų, 3 stalai",
+        "repeats": {
+          "label": "Nuo 2 turo",
+          "text": "Kas nors visada pakartoja varžovą."
+        },
+        "three": {
+          "label": "3 turai: geriausia",
+          "text": "Kiekvienas pakartoja iki 2 varžovų."
+        },
+        "four": {
+          "label": "4 turai: All East",
+          "text": "Daugiau kartojimų, bet visi kartą Rytai."
+        },
+        "sixteen": {
+          "label": "Su 16 žaidėjų",
+          "text": "Iki 5 turų be pakartojimų."
+        },
+        "why": "Kartojimai yra matematikos, o ne burtų riba."
+      },
+      "guide8": {
+        "title": "8 žaidėjai, 2 stalai",
+        "repeats": {
+          "label": "Nuo 2 turo",
+          "text": "Kiekviename stale kartojasi bent 2 poros."
+        },
+        "three": {
+          "label": "3 turai",
+          "text": "Kiekvienas pakartoja iki 3 varžovų."
+        },
+        "fewer": {
+          "label": "Kad kartotųsi mažiau",
+          "text": "Surinkite 12 ar 16 žaidėjų."
+        },
+        "why": "Tai matematikos riba: maišyti galima tik 2 stalus."
+      }
+    },
+    "gridStats": {
+      "title": "Burtų kokybė",
+      "details": "Išsamiau",
+      "detailsLabel": "Išsamiau apie burtų kokybę",
+      "redraw": "Traukti iš naujo",
+      "redrawLabel": "Iš naujo traukti {{round}} turo burtus",
+      "openStats": "Tvarkaraščio statistika",
+      "grade": {
+        "perfeita": "Tobula",
+        "otima": "Puiki",
+        "boa": "Gera",
+        "regular": "Vidutinė",
+        "ruim": "Prasta"
+      },
+      "none": "Varžovai nesikartoja",
+      "atMinimum": "mažiausia įmanoma",
+      "aboveMinimum": "mažiausia įmanoma: {{min}}",
+      "noTriple": "Niekas nežaidė 3 kartus kartu",
+      "hasTriple": "Pora žaidė 3 kartus kartu",
+      "windsOk": "vėjai gerai",
+      "windsBad": "vėjai netolygūs",
+      "better": "Geriau nei anksčiau",
+      "same": "Kaip anksčiau",
+      "worse": "Blogiau nei anksčiau",
+      "undo": "Grąžinti ankstesnį",
+      "undoLabel": "Grąžinti ankstesnius burtus",
+      "perPlayer": "Pagal žaidėją",
+      "repeatedWith": "Kartojosi su",
+      "eastCount": "Rytai {{count}}x",
+      "searchPlayer": "Ieškoti žaidėjo",
+      "repeats": {
+        "one": "{{count}} pora kartojasi",
+        "few": "{{count}} poros kartojasi",
+        "many": "{{count}} poros kartojasi",
+        "other": "{{count}} porų kartojasi"
+      },
+      "opponents": {
+        "one": "{{count}} varžovas",
+        "few": "{{count}} varžovai",
+        "many": "{{count}} varžovo",
+        "other": "{{count}} varžovų"
+      }
+    },
+    "unknownPlayer": "Žaidėjas {{number}}",
+    "podiumGap": {
+      "ordinal": "{{place}} v.",
+      "open": "Žiūrėti {{name}} atstumą iki prizininkų",
+      "toPlace": "Iki {{place}} ({{name}})",
+      "lead": "Persvara prieš {{place}} ({{name}})",
+      "upOne": "Pakilti į {{place}} ({{name}})",
+      "leaveLast": "Palikti paskutinę vietą ({{name}})",
+      "overLast": "Persvara prieš paskutinį ({{name}})",
+      "tied": "Lygu",
+      "tiebreak": "{{points}} MCR points on tiebreak",
+      "tablePoints": "Table points",
+      "units": {
+        "mangan": "Mangan",
+        "haneman": "Haneman",
+        "baiman": "Baiman",
+        "yakuman": "Yakuman",
+        "vitorias": "Table wins"
+      },
+      "approx": {
+        "riichi": "Apytiksliai: ne Rytų ron, be uma.",
+        "mcr": "Approximate: a table win is worth 4."
+      },
+      "race": "Kova dėl prizų",
+      "podium": "Prizininkai",
+      "toThird": "Iki 3 v.",
+      "toFirst": "Iki 1 v.",
+      "leadLegend": "Žalia: persvara prieš 4 vietą.",
+      "inUnit": "Skirtumai: {{unit}}.",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "Palyginti su…",
+      "share": "Bendrinti {{name}} atstumą iki prizininkų",
+      "contenders": "Pretendentai į 1 vietą",
+      "canReach": "Dar gali pasivyti",
+      "needsHelp": "Reikia pagalbos",
+      "reachEstimate": "Pagal geriausią vieno rato rezultatą.",
+      "hands": {
+        "mangan": {
+          "one": "{{count}} Mangan",
+          "few": "{{count}} Mangan",
+          "many": "{{count}} Mangan",
+          "other": "{{count}} Mangan"
+        },
+        "haneman": {
+          "one": "{{count}} Haneman",
+          "few": "{{count}} Haneman",
+          "many": "{{count}} Haneman",
+          "other": "{{count}} Haneman"
+        },
+        "baiman": {
+          "one": "{{count}} Baiman",
+          "few": "{{count}} Baiman",
+          "many": "{{count}} Baiman",
+          "other": "{{count}} Baiman"
+        },
+        "yakuman": {
+          "one": "{{count}} Yakuman",
+          "few": "{{count}} Yakuman",
+          "many": "{{count}} Yakuman",
+          "other": "{{count}} Yakuman"
+        },
+        "vitorias": {
+          "one": "{{count}} table win",
+          "few": "{{count}} table wins",
+          "many": "{{count}} table wins",
+          "other": "{{count}} table wins"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "Reitingo filtrai",
+      "view": "Rodinys",
+      "viewTable": "Lentelė",
+      "follow": "Sekti žaidėją",
+      "unfollow": "Nebesekti",
+      "untilRound": "Iki rato",
+      "allRounds": "Visi",
+      "unit": "Skirtumo vienetas"
+    },
+    "prize": {
+      "tab": "Prizai",
+      "enable": "Turnyras su mokesčiu",
+      "fee": "Dalyvio mokestis",
+      "other": "Kita",
+      "installments": "Dalys",
+      "early": "Išankstinė registracija",
+      "earlyValue": "Išankstinė kaina",
+      "earlyCount": "Kiek sumokėjo",
+      "earlyUntil": "Iki",
+      "club": "Klubo dalis",
+      "split": "Prizų padalijimas",
+      "splitAuto": "Automatinis",
+      "splitFirst": "Tik 1 vietai",
+      "splitCustom": "Savas",
+      "splitList": "Kiekvienos vietos procentas nuo 1-os",
+      "minimum": "Mažiausiai žaidėjų",
+      "total": "Žaidėjai: {{players}} × {{fee}}",
+      "clubLine": "Klubas ({{percent}})",
+      "poolLine": "Prizų fondas ({{percent}})",
+      "pool": "Prizų fondas",
+      "byPlace": "Prizai pagal vietą",
+      "atStake": "Prizo skirtumas {{value}}",
+      "rounding": "+ {{value}} nuo apvalinimo",
+      "installmentLine": "{{count}}x po {{value}}",
+      "sumMustBe100": "Suma turi būti 100%. Dabar: {{sum}}.",
+      "whyFee": "100 už 6–12 susitikimų sezoną yra 8–17 už susitikimą. Prizas patrauklus (600 už 1 vietą su 16 žaidėjų), o sumokėję rečiau praleidžia. Jei minimumas abejotinas, pradėk nuo 50 ir vėliau padidink.",
+      "whyInstallments": "Dalimis mokėti lengviau. 5 įmokos po 20 tinka beveik visiems ir sutampa su sezono mėnesiais.",
+      "whyEarly": "Mažesnė kaina iki datos paankstina registraciją ir padeda surinkti minimumą. Įrašyk, kiek ją sumokėjo, nes programa nestebi kiekvieno mokėjimų.",
+      "whyClub": "25% užtenka rinkiniui ar stalo daliai, ir neatrodo, kad klubas pasiima prizą. Virš 30% dažnai sulaukia skundų.",
+      "whySplit": "Mokant iki 3 vietos, pusė lentelės kovoja iki galo. 50/30/20 yra dažniausias padalijimas, tinka ir mažiau nei 16. Nuo 20 žaidėjų mokama iki 4 vietos, nuo 28 iki 5.",
+      "whyMinimum": "Su 16 žaidėjų galima 5 ratus nekartoti varžovų, o prizas jau vertas. Su 8 ar 12 kartojasi nuo 2 rato.",
+      "missing": {
+        "one": "Iki {{min}} žaidėjų trūksta: {{count}}.",
+        "few": "Iki {{min}} žaidėjų trūksta: {{count}}.",
+        "many": "Iki {{min}} žaidėjų trūksta: {{count}}.",
+        "other": "Iki {{min}} žaidėjų trūksta: {{count}}."
+      },
+      "totalMixed": {
+        "one": "Registracijos: {{count}}",
+        "few": "Registracijos: {{count}}",
+        "many": "Registracijos: {{count}}",
+        "other": "Registracijos: {{count}}"
+      }
+    },
+    "wo": {
+      "tag": "WO",
+      "register": "Žymėti nebuvimą",
+      "who": "Pažymėk, kas neatvyko.",
+      "confirm": "Patvirtinti WO",
+      "remove": "Šalinti WO",
+      "missed": "Neatvyko",
+      "attended": "Atvyko",
+      "times": "WO: {{times}}",
+      "rebuild": "Perdėlioti stalus",
+      "rebuildHelp": "Stalas {{table}} papildomas žaidėjais iš stalo {{other}}, kuriam lieka WO.",
+      "rebuilt": "Stalai perdėlioti.",
+      "late": "Vėlavimas (nebūtina)",
+      "lateHelp": "Minus {{rate}} už minutę. Daugiau nei {{max}} min yra WO.",
+      "minutesShort": "{{minutes}} min",
+      "lateBy": "Vėlavo {{minutes}} min",
+      "settings": "WO ir vėlavimas",
+      "absent": "Neatvykęs",
+      "present": "Atvykęs",
+      "tolerance": "Laukimas (min)",
+      "perMinute": "Už minutę",
+      "whyAbsent": "−30 už nebuvimą ateina iš EMA (15 000 taškų ir 15 000 uma už sesiją) ir atitinka WRC 30P.",
+      "whyPresent": "+10 atvykusiems yra namų taisyklė. Trūkstant 1 suma lygi nuliui. Trūkstant daugiau tyčia ne, kad niekas daug nelaimėtų nežaidęs.",
+      "whyLate": "Vėlavimas pagal WRC ir EMA: −1 už minutę iki 10 minučių. Vėliau WO."
     }
   },
   "backup": {
@@ -2432,7 +2729,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "Table points: 4, 2, 1 and 0."
       },
       "usarFan": "Naudoti rezultatų lentelėje",
       "porFan": "Fan",

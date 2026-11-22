@@ -284,6 +284,9 @@ export function importarTorneio(
     id: torneioId,
     nome: manterAmbos ? `${pacote.torneio.nome} ${escolhas.sufixoImportado}` : pacote.torneio.nome,
     jogadorIds: pacote.torneio.jogadorIds.map(trocar),
+    ...(pacote.torneio.nomes
+      ? { nomes: Object.fromEntries(Object.entries(pacote.torneio.nomes).map(([id, nome]) => [trocar(id), nome])) }
+      : {}),
     rodadas: pacote.torneio.rodadas.map((rodada) => ({
       ...rodada,
       mesas: rodada.mesas.map((mesa) => ({

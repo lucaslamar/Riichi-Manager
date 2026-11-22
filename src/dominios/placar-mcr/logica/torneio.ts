@@ -76,7 +76,12 @@ export function partidasDoTorneioMcr(placares: readonly PlacarMcr[]): Partida[] 
         variante: 'yonma',
         registradaManual: false,
         config: {},
-        assentos: {},
+        assentos: Object.fromEntries(
+          CADEIRAS.map((cadeira) => [
+            cadeira,
+            { jogadorId: placar.jogadorIds[cadeira], nome: placar.convidados?.[placar.jogadorIds[cadeira]] },
+          ]),
+        ),
       } as unknown as Partida,
     ]
   })

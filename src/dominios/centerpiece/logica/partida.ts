@@ -98,6 +98,8 @@ export interface ResultadoFinal {
   final: number
   /** Desempate no torneio quando `final` empata (MCR: a soma dos pontos). Ausente no Riichi. */
   desempate?: number
+  /** Torneio: minutos de atraso, já descontados do `final`. */
+  atraso?: number
 }
 
 export interface Partida {
@@ -122,6 +124,8 @@ export interface Partida {
   registradaManual?: boolean
   /** Registrada à mão: os jogadores foram listados na ordem dos ventos (Leste, Sul, Oeste, Norte). */
   ordemDosVentos?: boolean
+  /** Torneio: mesa não jogada, com quem faltou. */
+  wo?: { ausentes: Cadeira[] }
   /** Índices base zero na grade. `guardada`: o organizador conferiu e confirmou. */
   vinculoTorneio?: { torneioId: string; rodada: number; mesa: number; guardada?: boolean }
   /** Mesa que saiu do sorteio de um encontro do clube. `mesa` começa em 1. */

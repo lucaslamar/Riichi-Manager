@@ -3,6 +3,7 @@
  * do Centerpiece com `vinculoTorneio`, que é a fonte única para os dois rankings.
  */
 import type { ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
+import type { RegrasWo } from '@/compartilhado/modo-jogo/regrasDoModo'
 import type { RegrasSanma, Variante } from '@/compartilhado/mahjong/variante'
 
 export type FormatoTorneio = 'rodizio' | 'suico' | 'eliminatorio' | 'corridos' | 'temporada'
@@ -59,6 +60,21 @@ interface TimersTorneio {
   porMesa: boolean
 }
 
+/** Inscrição e prêmio. Na Temporada fica nela, não em cada encontro. */
+export interface ConfigPremiacao {
+  ativa: boolean
+  /** Código ISO, guardado para o prêmio não mudar com o idioma. */
+  moeda: string
+  inscricao: number
+  parcelas: number
+  /** O app não controla quem pagou, só quantos pagaram o valor menor. */
+  antecipada?: { valor: number; ate: string; quantidade: number }
+  /** 0,25 = 25%. */
+  parteClube: number
+  divisao: 'automatica' | 'so-primeiro' | { personalizada: number[] }
+  minimoJogadores: number
+}
+
 type StatusTorneio = 'rascunho' | 'em_andamento' | 'finalizado'
 
 export interface Torneio {
@@ -72,6 +88,8 @@ export interface Torneio {
   jogadorIds: string[]
   /** Quem joga sem cadastro: id de convidado e o nome escrito na lista. */
   convidados?: Record<string, string>
+  /** Nome de cada um quando entrou (ou saiu do cadastro): o torneio sobrevive à exclusão. */
+  nomes?: Record<string, string>
   /** O app já diz o vento de cada um. Ausente: o padrão do formato (`sorteiaVentos`). */
   sortearVentos?: boolean
   rodadas: RodadaTorneio[]
@@ -85,6 +103,9 @@ export interface Torneio {
   variante?: Variante
   /** Regras de Sanma copiadas ao criar, para as mesas abertas no Centerpiece. */
   regrasSanma?: RegrasSanma
+  premiacao?: ConfigPremiacao
+  /** Ausente: o padrão do modo. */
+  wo?: RegrasWo
   /** Torneio do modo Chinês: as mesas são placares MCR. Ausente = Riichi. */
   jogo?: 'mcr'
 }
@@ -102,8 +123,22 @@ export interface Temporada {
   criterio: CriterioTemporada
   config: ConfigMesa
   criadaEm: string
+  premiacao?: ConfigPremiacao
+  /** Copiado para cada encontro novo. */
+  wo?: RegrasWo
   /** Temporada do modo Chinês. Ausente = Riichi. */
   jogo?: 'mcr'
+}
+
+export interface LinhaTemporada {
+  jogadorId: string
+  /** O número que ordena, conforme o critério. */
+  valor: number
+  partidas: number
+  encontros: number
+  soma: number
+  /** Média: não chegou ao mínimo de partidas (fica no fim, fora da ordem). */
+  abaixoDoMinimo: boolean
 }
 
 /** Lista guardada pelo cartão de memória. */

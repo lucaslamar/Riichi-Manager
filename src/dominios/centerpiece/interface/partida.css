@@ -1789,3 +1789,28 @@ body:has(.ptd-modulo) {
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
+
+/* Em andamento: tipo do torneio ao lado do nome, que é quem trunca. */
+.cm-andamento-titulo {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.cm-andamento-titulo > strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-andamento-tipo {
+  flex: none;
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}

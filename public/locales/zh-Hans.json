@@ -701,7 +701,9 @@
     "narrationOutputHelp": "开启 NVDA、TalkBack 或 VoiceOver 时，请选择仅屏幕阅读器，以免听到两种声音。",
     "narrationNoVoice": "此浏览器没有语音。提示会交给屏幕阅读器。",
     "narrationShortcuts": "快捷键：Alt+M 朗读手牌，Alt+D 朗读最近的弃牌，Alt+R 重复上一条提示，Alt+S 停止朗读。",
-    "narrationTest": "试听"
+    "narrationTest": "试听",
+    "shareQr": "分享图片中的二维码",
+    "shareQrHelp": "群里看到图片的人可以扫码打开应用。"
   },
   "windDraw": {
     "title": "抽风位",
@@ -1077,7 +1079,8 @@
       "inProgressTag": "进行中",
       "roundTable": "第 {{round}} 轮 · 第 {{table}} 桌",
       "registeredOf": "已记录 {{count}}/{{total}} 桌",
-      "openTournament": "打开比赛 {{name}}"
+      "openTournament": "打开比赛 {{name}}",
+      "openTournamentFormat": "打开赛事 {{name}}，{{format}}"
     },
     "player": {
       "open": "打开 {{name}} 的分析",
@@ -1651,6 +1654,15 @@
         "antigos": "最早",
         "nome": "名称"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "今日第{{n}}轮",
+      "newDrawHint": "今日第{{n}}轮 · 避免已同桌的人再次同桌",
+      "more": "更多聚会选项",
+      "resetDay": "从头开始",
+      "resetDayTitle": "今天从头开始吗？",
+      "resetDayHelp": "下次抽签不会考虑今天已同桌的记录。换了一批人时使用。",
+      "resetDone": "下次抽签将从头开始"
     }
   },
   "spokenTiles": {
@@ -1685,7 +1697,14 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "成绩由{{app}}生成。你也来办一场比赛吧。",
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "截至第{{round}}轮",
+      "bottom": "垫底之争",
+      "bottomLead": "领先 {{value}}",
+      "bottomLeave": "摆脱需 {{value}}",
+      "ctaRace": "想知道自己还差多少？在{{app}}里筛选"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1696,11 +1715,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1749,7 +1768,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "保存此名单或载入已保存的名单"
     },
     "settings": {
@@ -1761,10 +1780,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1790,30 +1805,36 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "三人麻将每桌总是3人：比赛需要6、9、12…名选手。",
+      "multipleOfFourShort": "需要8、12、16…名选手。",
+      "multipleOfThreeShort": "需要6、9、12…名选手。",
+      "windsAppShort": "分桌时已定好风位。",
+      "windsTableShort": "风位在桌上摸牌决定。",
+      "cutsShort": "4的倍数。例如：8, 4"
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "4轮。每人各当一次东家。",
+      "suico": "第2轮起按排名分桌。",
+      "eliminatorio": "逐阶段淘汰，直到决赛桌。",
+      "corridos": "轮数不限，现场抽签。",
+      "temporada": "多次聚会，同一排名。"
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1827,7 +1848,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
@@ -1836,14 +1857,15 @@
         "one": "Sum of each player's best game result.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season"
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "计分方式在联赛页面选择。"
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1913,7 +1935,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -1983,13 +2005,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2000,7 +2015,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "重复三人组",
+      "repeatedTriosHelp": "同桌超过一次的三个人。",
+      "maxPerPlayer": "每人重复数",
+      "maxPerPlayerHelp": "重复最多者的重复对手数。",
+      "differentOpponents": "不同对手",
+      "differentOpponentsHelp": "每人平均值和最小值。",
+      "averageAndLowest": "{{average}}（最少{{lowest}}）",
+      "eastTimes": "东家次数",
+      "eastTimesHelp": "从最少到最多。"
     },
     "points": {
       "points": "点数",
@@ -2029,7 +2053,249 @@
       "thousand": "三个零",
       "useHand": "用于计算",
       "previousPlayer": "上一位玩家",
-      "nextPlayer": "下一位玩家"
+      "nextPlayer": "下一位玩家",
+      "typeFor": "输入 {{name}} 的分数"
+    },
+    "positionChange": {
+      "up": {
+        "other": "上升{{count}}位"
+      },
+      "down": {
+        "other": "下降{{count}}位"
+      },
+      "same": "名次不变",
+      "new": "首次进入排名",
+      "newShort": "新",
+      "legend": "箭头：自第{{round}}轮以来的变化。",
+      "confirmTitle": "赛事排名：之前 → 之后"
+    },
+    "formatGuide": {
+      "intro": "该用哪种赛制？",
+      "rodizio": {
+        "what": "抽签时排出全部对阵。每人各当一次东家，并尽量遇到不同对手。",
+        "for": "适合有结束时间的俱乐部聚会和新手。风位最公平。"
+      },
+      "suico": {
+        "what": "第1轮抽签。之后按排名分桌，并避免重复对手。",
+        "for": "适合轮数固定的一日竞技赛。"
+      },
+      "eliminatorio": {
+        "what": "先进行预赛，再逐步淘汰（例如8人、4人）直到决赛桌。",
+        "for": "适合有决赛、人数多的活动。需要更多时间。"
+      },
+      "corridos": {
+        "what": "每轮现场抽签，并避免重复对手。不设轮数。",
+        "for": "适合不确定能打几轮的休闲聚会。"
+      },
+      "temporada": {
+        "what": "每轮现场抽签，每次聚会计入累计排名（总分、平均或最好成绩）。",
+        "for": "适合持续数月或一年的俱乐部联赛。"
+      }
+    },
+    "idealRounds": {
+      "short8": "8人时第2轮起会重复。",
+      "short12": "12人时最好不超过3轮。",
+      "guide12": {
+        "title": "12人、3桌",
+        "repeats": {
+          "label": "第2轮起",
+          "text": "总会有人遇到重复对手。"
+        },
+        "three": {
+          "label": "3轮：最理想",
+          "text": "每人最多重复2名对手。"
+        },
+        "four": {
+          "label": "4轮：All East",
+          "text": "重复更多，但人人各当一次东家。"
+        },
+        "sixteen": {
+          "label": "16人时",
+          "text": "可打5轮而不重复。"
+        },
+        "why": "重复是数学限制，不是抽签问题。"
+      },
+      "guide8": {
+        "title": "8人、2桌",
+        "repeats": {
+          "label": "第2轮起",
+          "text": "每桌至少有2对重复。"
+        },
+        "three": {
+          "label": "3轮",
+          "text": "每人最多重复3名对手。"
+        },
+        "fewer": {
+          "label": "想减少重复",
+          "text": "凑齐12或16人。"
+        },
+        "why": "这是数学限制：只有2桌可供混合。"
+      }
+    },
+    "gridStats": {
+      "title": "抽签质量",
+      "details": "查看详情",
+      "detailsLabel": "查看抽签质量详情",
+      "redraw": "重新抽签",
+      "redrawLabel": "重新抽取第{{round}}轮",
+      "openStats": "对阵统计",
+      "grade": {
+        "perfeita": "完美",
+        "otima": "最佳",
+        "boa": "良好",
+        "regular": "一般",
+        "ruim": "较差"
+      },
+      "none": "没有重复对手",
+      "atMinimum": "已是最少",
+      "aboveMinimum": "最少可为：{{min}}",
+      "noTriple": "无人同桌3次",
+      "hasTriple": "有人同桌3次",
+      "windsOk": "风位均衡",
+      "windsBad": "风位不均",
+      "better": "比之前好",
+      "same": "与之前相同",
+      "worse": "比之前差",
+      "undo": "恢复上次",
+      "undoLabel": "恢复上一次抽签",
+      "perPlayer": "按选手",
+      "repeatedWith": "重复对手",
+      "eastCount": "东家{{count}}次",
+      "searchPlayer": "搜索选手",
+      "repeats": {
+        "other": "重复{{count}}对"
+      },
+      "opponents": {
+        "other": "{{count}}名对手"
+      }
+    },
+    "unknownPlayer": "选手{{number}}",
+    "podiumGap": {
+      "ordinal": "第{{place}}名",
+      "open": "查看{{name}}距离领奖台的差距",
+      "toPlace": "距{{place}}（{{name}}）",
+      "lead": "领先{{place}}（{{name}}）",
+      "upOne": "升至{{place}}（{{name}}）",
+      "leaveLast": "摆脱垫底（{{name}}）",
+      "overLast": "领先垫底者（{{name}}）",
+      "tied": "平分",
+      "tiebreak": "小分相差{{points}}",
+      "tablePoints": "标准分",
+      "units": {
+        "mangan": "满贯",
+        "haneman": "跳满",
+        "baiman": "倍满",
+        "yakuman": "役满",
+        "vitorias": "桌次第一"
+      },
+      "approx": {
+        "riichi": "估算：闲家荣和，不计马点。",
+        "mcr": "估算：每桌第一得4分。"
+      },
+      "race": "领奖台之争",
+      "podium": "领奖台",
+      "toThird": "距第3",
+      "toFirst": "距第1",
+      "leadLegend": "绿色：对第4名的领先。",
+      "inUnit": "差距单位：{{unit}}。",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "与…比较",
+      "share": "分享{{name}}距离领奖台的差距",
+      "contenders": "第1名争夺者",
+      "canReach": "仍可追上",
+      "needsHelp": "需他人相助",
+      "reachEstimate": "按单轮最佳成绩估算。",
+      "hands": {
+        "mangan": {
+          "other": "{{count}}次满贯"
+        },
+        "haneman": {
+          "other": "{{count}}次跳满"
+        },
+        "baiman": {
+          "other": "{{count}}次倍满"
+        },
+        "yakuman": {
+          "other": "{{count}}次役满"
+        },
+        "vitorias": {
+          "other": "{{count}}次桌次第一"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "排名筛选",
+      "view": "视图",
+      "viewTable": "排名表",
+      "follow": "关注玩家",
+      "unfollow": "取消关注",
+      "untilRound": "截至轮次",
+      "allRounds": "全部",
+      "unit": "差距单位"
+    },
+    "prize": {
+      "tab": "奖金",
+      "enable": "收取报名费",
+      "fee": "报名费",
+      "other": "其他",
+      "installments": "分期",
+      "early": "提前报名",
+      "earlyValue": "提前报名费",
+      "earlyCount": "已付人数",
+      "earlyUntil": "截止",
+      "club": "俱乐部分成",
+      "split": "奖金分配",
+      "splitAuto": "自动",
+      "splitFirst": "仅第1名",
+      "splitCustom": "自定义",
+      "splitList": "从第1名起各名次的百分比",
+      "minimum": "最少人数",
+      "total": "{{players}}人 × {{fee}}",
+      "clubLine": "俱乐部（{{percent}}）",
+      "poolLine": "奖金（{{percent}}）",
+      "pool": "奖金总额",
+      "byPlace": "各名次奖金",
+      "atStake": "奖金差{{value}}",
+      "rounding": "取整 + {{value}}",
+      "installmentLine": "{{value}} × {{count}}期",
+      "sumMustBe100": "总和必须为100%。当前：{{sum}}。",
+      "whyFee": "6到12次聚会的赛季收100，平均每次8到17。16人时第1名可得600，已付费的人也较少缺席。若不确定能否凑够人数，可先收50，以后再提高。",
+      "whyInstallments": "分期可减轻负担。分5次、每次20，大多数人都能接受，也与赛季月份相符。",
+      "whyEarly": "截止日前的优惠能让报名提前，有助于在首轮前凑够人数。应用不记录个人付款，请填写按优惠价付款的人数。",
+      "whyClub": "25%足以添置牌具或补贴牌桌，又不显得俱乐部拿走奖金。超过30%容易引起不满。",
+      "whySplit": "奖励到第3名可让半数选手争到最后。50/30/20最常见，少于16人时同样适用。20人起奖励到第4名，28人起到第5名。",
+      "whyMinimum": "16人可打5轮不重复对手，奖金也有吸引力。8人或12人从第2轮起就会重复。",
+      "missing": {
+        "other": "距最少{{min}}人还差{{count}}人。"
+      },
+      "totalMixed": {
+        "other": "{{count}}份报名"
+      }
+    },
+    "wo": {
+      "tag": "弃权",
+      "register": "记录缺席",
+      "who": "请选择缺席者。",
+      "confirm": "确认弃权",
+      "remove": "取消弃权",
+      "missed": "缺席",
+      "attended": "出席",
+      "times": "弃权：{{times}}",
+      "rebuild": "重组牌桌",
+      "rebuildHelp": "用{{other}}号桌的出席者补齐{{table}}号桌，{{other}}号桌记为弃权。",
+      "rebuilt": "牌桌已重组。",
+      "late": "迟到（可选）",
+      "lateHelp": "每分钟扣{{rate}}分。超过{{max}}分钟记为弃权。",
+      "minutesShort": "{{minutes}}分钟",
+      "lateBy": "迟到{{minutes}}分钟",
+      "settings": "弃权与迟到",
+      "absent": "缺席者",
+      "present": "出席者",
+      "tolerance": "宽限（分钟）",
+      "perMinute": "每分钟",
+      "whyAbsent": "缺席−30源自EMA（每场15,000点加15,000马点），相当于WRC的30P。",
+      "whyPresent": "出席者+10为自定规则。缺1人时合计为零。缺更多人时特意不归零，避免未对局却大量得分。",
+      "whyLate": "迟到遵循WRC与EMA：10分钟内每分钟−1，之后记为弃权。"
     }
   },
   "backup": {
@@ -2340,7 +2606,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "桌分：4、2、1、0。"
       },
       "usarFan": "用于记分",
       "porFan": "番数",

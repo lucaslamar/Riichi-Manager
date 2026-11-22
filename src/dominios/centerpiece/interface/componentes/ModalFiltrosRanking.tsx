@@ -3,6 +3,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
 import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import Segmentos from './Segmentos'
 import { nomesNoRanking } from './nomesNoRanking'
 import {
   FILTROS_PADRAO,
@@ -23,40 +24,6 @@ const ORDENS: readonly OrdemRanking[] = ['pontuacao', 'media', 'primeiro', 'part
 /** Normaliza para buscar sem acento nem maiúscula. */
 const normalizar = (texto: string) =>
   texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
-
-/** Grupo de opções em segmentos, como os atalhos de período da tela. */
-function Segmentos<T extends string | number>({
-  rotulo,
-  opcoes,
-  valor,
-  aoMudar,
-  texto,
-}: {
-  rotulo: string
-  opcoes: readonly T[]
-  valor: T
-  aoMudar: (valor: T) => void
-  texto: (opcao: T) => string
-}) {
-  return (
-    <fieldset className="rkf-grupo">
-      <legend className="rkf-titulo">{rotulo}</legend>
-      <div className="ptd-segmentos rkf-segmentos">
-        {opcoes.map((opcao) => (
-          <button
-            key={opcao}
-            type="button"
-            className={`ptd-segmento${valor === opcao ? ' ptd-segmento--ativo' : ''}`}
-            aria-pressed={valor === opcao}
-            onClick={() => aoMudar(opcao)}
-          >
-            {texto(opcao)}
-          </button>
-        ))}
-      </div>
-    </fieldset>
-  )
-}
 
 /** Bottom sheet com todos os filtros. Só vale depois de Aplicar. */
 export default function ModalFiltrosRanking({

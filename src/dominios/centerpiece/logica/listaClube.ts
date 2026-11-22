@@ -23,6 +23,11 @@ export function ehConvidado(jogadorId: string) {
   return jogadorId.startsWith(PREFIXO_CONVIDADO)
 }
 
+/** Identidade na lista: o cadastro ou, no convidado, o nome sem acento e sem maiúscula. */
+export function chaveDaEntrada(entrada: EntradaLista): string {
+  return entrada.jogadorId ? `id:${entrada.jogadorId}` : `nome:${normalizarTexto(entrada.nome)}`
+}
+
 /** Linhas como a pessoa escreveu, sem espaços sobrando. Vazias continuam lá. */
 export function linhasDoTexto(texto: string): string[] {
   return texto.split(/\r?\n/).map((linha) => linha.trim().replace(/\s+/g, ' '))
@@ -53,7 +58,7 @@ export function limparLista(texto: string, jogadores: readonly Jogador[]) {
   for (const linha of linhasDoTexto(texto)) {
     if (!linha) continue
     const jogador = jogadorDaLinha(jogadores, linha)
-    const chave = jogador ? `id:${jogador.id}` : `nome:${normalizarTexto(linha)}`
+    const chave = chaveDaEntrada({ nome: linha, jogadorId: jogador?.id })
     if (vistos.has(chave)) {
       repetidos += 1
       continue

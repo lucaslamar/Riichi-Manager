@@ -163,6 +163,13 @@ export default function ListaAjustesApp({ antesDaTela }: {
           aoMudar={(ligado) => preferencias.alterar('telaAcesaMesa', ligado)}
         />
       )}
+      <CartaoSwitch
+        icone="fa-qrcode"
+        titulo={t('pages.shareQr')}
+        descricao={t('pages.shareQrHelp')}
+        ligado={preferencias.qrNasImagens}
+        aoMudar={(ligado) => preferencias.alterar('qrNasImagens', ligado)}
+      />
       <CartaoLimiteDetalhes />
     </>
   )

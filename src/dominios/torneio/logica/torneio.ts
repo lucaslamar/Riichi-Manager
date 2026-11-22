@@ -163,6 +163,10 @@ export function historicoDeTorneios(
     .sort((um, outro) => outro.data.localeCompare(um.data) || outro.criadoEm.localeCompare(um.criadoEm))
 }
 
+export function podeEncerrar(torneio: Pick<Torneio, 'status' | 'transferidoEm'>): boolean {
+  return torneio.status === 'em_andamento' && !torneio.transferidoEm
+}
+
 export function finalizarTorneio(torneio: Torneio, agora: string): Torneio {
   return { ...torneio, status: 'finalizado', finalizadoEm: agora, atualizadoEm: agora }
 }
@@ -176,15 +180,58 @@ export function ventosPadrao(formato: FormatoTorneio): boolean {
   return formato === 'rodizio'
 }
 
-export function sorteiaVentos(torneio: Pick<Torneio, 'sortearVentos' | 'formato'>): boolean {
+/** All Leste (rodízio), também na classificatória: sem vento sorteado a grade não garante um Leste para cada. */
+export function exigeVentos(formato: ConfigFormato): boolean {
+  return formato.tipo === 'rodizio' || (formato.tipo === 'eliminatorio' && formato.classificatoria === 'rodizio')
+}
+
+/** Torneio já sorteado segue como começou, mesmo se a regra do formato mudou depois. */
+export function sorteiaVentos(torneio: Pick<Torneio, 'sortearVentos' | 'formato' | 'status'>): boolean {
+  if (torneio.status === 'rascunho' && exigeVentos(torneio.formato)) return true
   return torneio.sortearVentos ?? ventosPadrao(torneio.formato.tipo)
 }
 
-/** Nome de quem está no torneio: o do cadastro ou o escrito na lista (convidado). */
-export function nomeNoTorneio(torneio: Pick<Torneio, 'convidados'>, jogadores: readonly Jogador[], id: string): string {
+/** Todo sorteio do zero do All Leste: com ventos e uma rodada por cadeira, para todos serem Leste uma vez. */
+export function comRegrasDoFormato(torneio: Torneio): Torneio {
+  const { formato } = torneio
+  if (!exigeVentos(formato)) return torneio
+  const rodadas = jogadoresPorMesa(torneio)
+  const travado: ConfigFormato =
+    formato.tipo === 'eliminatorio'
+      ? { ...formato, rodadasClassificatoria: rodadas }
+      : { tipo: 'rodizio', rodadas }
+  return { ...torneio, formato: travado, sortearVentos: true }
+}
+
+/** "?" foi gravado por versões que já não achavam o nome: não é um nome. */
+const SEM_NOME = new Set(['', '?', '—'])
+
+/**
+ * Nome de quem está no torneio: o do cadastro, o de convidado, o guardado no torneio
+ * ou o guardado numa partida. null quando não sobrou registro nenhum.
+ */
+export function nomeNoTorneio(
+  torneio: Pick<Torneio, 'convidados' | 'nomes'>,
+  jogadores: readonly Jogador[],
+  id: string,
+  partidas: readonly Pick<Partida, 'assentos'>[] = [],
+): string | null {
   const jogador = jogadores.find((item) => item.id === id)
   if (jogador) return nomeExibido(jogador)
-  return torneio.convidados?.[id] ?? '?'
+  const guardado = torneio.convidados?.[id] ?? torneio.nomes?.[id]
+  if (guardado && !SEM_NOME.has(guardado)) return guardado
+  for (const { assentos } of partidas) {
+    for (const assento of Object.values(assentos ?? {})) {
+      if (assento.jogadorId === id && assento.nome && !SEM_NOME.has(assento.nome)) return assento.nome
+    }
+  }
+  return null
+}
+
+/** Ao excluir do cadastro: o nome fica nos torneios em que a pessoa está. */
+export function guardarNomeNoTorneio(torneio: Torneio, id: string, nome: string): Torneio {
+  if (!torneio.jogadorIds.includes(id)) return torneio
+  return { ...torneio, nomes: { ...torneio.nomes, [id]: nome } }
 }
 
 export function iniciarTorneio(
@@ -193,7 +240,7 @@ export function iniciarTorneio(
   rodadas: RodadaTorneio[],
   agora: string,
 ): Torneio {
-  return { ...torneio, jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
+  return { ...comRegrasDoFormato(torneio), jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
 }
 
 /** Aborta o sorteio: o torneio volta a ser rascunho, sem rodadas, para editar a lista e sortear de novo. */

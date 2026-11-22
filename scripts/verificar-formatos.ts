@@ -9,7 +9,19 @@ import { qualidadeDasRodadas, gerarRodizio } from '../src/dominios/torneio/logic
 import type { Partida } from '../src/dominios/centerpiece/logica/partida'
 import { criarPartidaManual } from '../src/dominios/centerpiece/logica/partidaManual'
 import { classificar } from '../src/dominios/torneio/logica/classificacao'
-import { contarPares, contarVentos, custoDaMesa } from '../src/dominios/torneio/logica/formatos/comum'
+import {
+  chaveDoPar,
+  contarPares,
+  contarTrios,
+  contarVentos,
+  jogadoresDaChave,
+  paresDaMesa,
+} from '../src/compartilhado/sorteio/contagens'
+import { minimoDeRepetidas } from '../src/compartilhado/sorteio/minimos'
+import { sortearRodada } from '../src/compartilhado/sorteio/rodada'
+import { compararCustos } from '../src/compartilhado/sorteio/custo'
+import { compararSorteios, estatisticaDaGrade, pedeAtencao } from '../src/compartilhado/sorteio/estatistica'
+import { estatisticaDoTorneio } from '../src/dominios/torneio/logica/estatisticaGrade'
 import { proximaRodada, rodadaFechada, rodadasIniciais } from '../src/dominios/torneio/logica/formatos'
 import {
   classificacaoDaFase,
@@ -17,9 +29,9 @@ import {
   faseDaRodada,
   rankingEliminatorio,
 } from '../src/dominios/torneio/logica/formatos/eliminatorio'
-import { podeSortearDeNovo, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
+import { reiniciarSorteio, podeSortearDeNovo, podeSortearRodada, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
 import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
-import { relogioParado } from '../src/dominios/torneio/logica/torneio'
+import { comRegrasDoFormato, sorteiaVentos, relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
 import { relatorioDaRodada, relatorioDoRanking } from '../src/dominios/torneio/logica/relatorios'
 import { nomeDeArquivo, textoDoRelatorio } from '../src/compartilhado/relatorio/relatorio'
@@ -65,7 +77,7 @@ for (const total of [8, 12, 16]) {
     assert.deepEqual(ventos, [1, 1, 1, 1], `Rodízio ${total}: ${jogador} uma vez em cada vento`)
   }
   const convertida = qualidadeDasRodadas(rodadas, total)
-  assert.equal(convertida.score, qualidade.score, 'conversão da grade não muda a nota')
+  assert.deepEqual(convertida.criterios, qualidade.criterios, 'conversão da grade não muda a nota')
   assert.equal(convertida.quantidadeParesRepetidos, qualidade.quantidadeParesRepetidos)
   // Com 8 jogadores e 4 rodadas a repetição é inevitável; com mais, cada par se cruza no máximo 2 vezes.
   assert.ok(qualidade.maxRepeticioesPar <= (total === 8 ? 3 : 2), `Rodízio ${total}: repetição máxima ${qualidade.maxRepeticioesPar}`)
@@ -104,7 +116,7 @@ function jogarRodada(torneio: Torneio, rodada: RodadaTorneio): Partida[] {
 /** Joga o torneio inteiro até não haver próxima rodada. */
 export function simular(formato: ConfigFormato, total: number, limite = 12) {
   const ids = jogadores(total)
-  const base = { ...criarRascunho({ id: `t-${formato.tipo}-${total}`, agora: new Date(agora), nome: 'Teste' }), formato }
+  const base = { ...criarRascunho({ id: `t-${formato.tipo}-${total}`, agora: new Date(agora), nome: 'Teste' }), formato, sortearVentos: true }
   let torneio = iniciarTorneio(base, ids, rodadasIniciais(base, ids, agora), agora)
   let partidas: Partida[] = []
   for (let volta = 0; volta < limite; volta++) {
@@ -128,6 +140,9 @@ function lesteEquilibrado(rodadas: readonly RodadaTorneio[], nome: string) {
   const leste = [...contarVentos(rodadas).values()].map((ventos) => ventos[0])
   assert.ok(Math.max(...leste) - Math.min(...leste) <= 1, `${nome}: Leste equilibrado (${leste.join(',')})`)
 }
+
+const custoDaMesa = (mesa: readonly string[], pares: ReadonlyMap<string, number>) =>
+  paresDaMesa(mesa).reduce((soma, [um, outro]) => soma + (pares.get(chaveDoPar(um, outro)) ?? 0) ** 2, 0)
 
 // ─── Suíço ──────────────────────────────────────────────────────────────────
 for (const total of [8, 12, 16]) {
@@ -268,7 +283,9 @@ for (const total of [8, 12, 16]) {
   assert.equal(formatarRelogio(5400), '1:30:00')
   assert.equal(formatarRelogio(90), '1:30')
 
-  const { torneio, partidas } = simular({ tipo: 'suico', rodadas: 3 }, 8, 1)
+  const suico = simular({ tipo: 'suico', rodadas: 3 }, 8, 1)
+  assert.ok(!podeSortearDeNovo(suico.torneio, suico.partidas), 'Suíço: a rodada 2 sai da classificação')
+  const { torneio, partidas } = simular({ tipo: 'corridos' }, 8, 1)
   assert.ok(podeSortearDeNovo(torneio, partidas), 'rodada 2 sem mesa aberta')
   const refeito = sortearDeNovo(torneio, partidas, agora)
   assert.equal(refeito.rodadas.length, 2)
@@ -295,8 +312,11 @@ for (const total of [8, 12, 16]) {
     ventos: false,
     colocacao: (colocacao) => `${colocacao}º`,
     pontos: (final) => String(final),
+    pontosDaMesa: (valor) => `${valor} na mesa`,
   })
   const primeira = relatorio.blocos[0]
+  assert.match(primeira.linhas[0].direita?.[0] ?? '', / na mesa$/, 'pontos que ficaram na mesa')
+  assert.ok(primeira.corSoNaUltima)
   assert.equal(primeira.detalhe, '✅ finalizada')
   assert.ok(primeira.tabela, 'mesa com resultado vira tabela')
   assert.deepEqual(
@@ -383,4 +403,180 @@ for (const total of [8, 12, 16]) {
   console.log('Validação de ponta a ponta ok.')
 }
 
+// Grade pronta: Sortear de novo só antes da primeira partida. O corte sai da classificação.
+{
+  const cortes = { classificatoria: 'rodizio', rodadasClassificatoria: 4, cortes: [4], rodadasPorFase: 1, pontosCarregados: true } as const
+  for (const formato of [{ tipo: 'rodizio', rodadas: 4 }, { tipo: 'eliminatorio', ...cortes }] as ConfigFormato[]) {
+    const ids = jogadores(8)
+    const base = { ...criarRascunho({ id: 't-grade', agora: new Date(agora), nome: 'T' }), formato }
+    const grade = iniciarTorneio(base, ids, rodadasIniciais(base, ids, agora), agora)
+    assert.ok(podeSortearDeNovo(grade, []), `${formato.tipo}: grade sem partida`)
+    const primeira = jogarRodada(grade, grade.rodadas[0]).slice(0, 1)
+    assert.ok(!podeSortearDeNovo(grade, primeira), `${formato.tipo}: grade com partida`)
+    if (formato.tipo !== 'eliminatorio') continue
+    const jogadas = grade.rodadas.flatMap((rodada) => jogarRodada(grade, rodada))
+    const corte = proximaRodada(grade, jogadas, agora)
+    assert.ok(corte, 'corte gerado')
+    assert.ok(!podeSortearDeNovo({ ...grade, rodadas: [...grade.rodadas, corte] }, jogadas), 'corte não é sorteio')
+  }
+}
+
+// ─── Sorteio mitigado: 50 torneios de cada, com semente fixa ────────────────
+{
+  assert.ok(compararCustos([0, 0, 1, 0, 0], [0, 0, 0, 999, 999]) > 0, 'trio pesa mais que qualquer repetição leve')
+  assert.ok(compararCustos([1, 0, 0, 0, 0], [0, 99, 0, 0, 0]) > 0, 'ventos primeiro')
+
+  let base = 42
+  const inteiro = (limite: number) => {
+    base = (base * 16807) % 2147483647
+    return Math.floor((base / 2147483647) * limite)
+  }
+  for (const comVentos of [true, false]) {
+    for (const [total, porMesa, quantas, maximo] of [
+      [8, 4, 3, 3],
+      [12, 4, 3, 2],
+      [16, 4, 4, 0],
+      [16, 4, 5, 0],
+      [9, 3, 4, 0],
+    ] as const) {
+      for (let vez = 0; vez < 50; vez++) {
+        const ids = jogadores(total)
+        const rodadas: RodadaTorneio[] = []
+        for (let numero = 1; numero <= quantas; numero++) {
+          const mesas = sortearRodada(ids, rodadas, { porMesa, comVentos, aleatorio: inteiro })
+          rodadas.push({ numero, geradaEm: agora, mesas })
+        }
+        const nome = `Mitigado ${total}/${porMesa}, ${quantas} rodadas${comVentos ? ' com ventos' : ''}, vez ${vez}`
+        const repetidas = [...contarPares(rodadas)].filter(([, vezes]) => vezes > 1)
+        assert.ok(repetidas.every(([, vezes]) => vezes === 2), `${nome}: ninguém 3x`)
+        assert.equal(repetidas.length, minimoDeRepetidas(total, quantas, porMesa), `${nome}: no mínimo`)
+        assert.ok([...contarTrios(rodadas).values()].every((vezes) => vezes === 1), `${nome}: sem trio repetido`)
+        for (const id of ids) {
+          const quantos = repetidas.filter(([par]) => jogadoresDaChave(par).includes(id)).length
+          assert.ok(quantos <= maximo, `${nome}: ${id} repetiu ${quantos}`)
+        }
+        if (comVentos) {
+          for (const ventos of contarVentos(rodadas).values()) {
+            assert.ok(ventos[0] <= Math.ceil(quantas / porMesa), `${nome}: Leste em ordem`)
+          }
+        }
+      }
+    }
+  }
+  for (const quantas of [3, 4]) {
+    const ids = jogadores(12)
+    const { nota } = estatisticaDaGrade(gerarRodizio(ids, quantas, agora).rodadas, ids, 4, true)
+    assert.ok(nota === 'otima' || nota === 'boa', `Rodízio 12 com ${quantas}: ${nota}`)
+  }
+  console.log('Sorteio mitigado ok.')
+}
+
+// ─── Estatística da grade ───────────────────────────────────────────────────
+{
+  const doze = jogadores(12)
+  const tres: RodadaTorneio[] = []
+  for (let numero = 1; numero <= 3; numero++) {
+    tres.push({ numero, geradaEm: agora, mesas: sortearRodada(doze, tres, { comVentos: false }) })
+  }
+  const boa = estatisticaDaGrade(tres, doze, 4, false)
+  assert.equal(boa.nota, 'otima', '12 e 3 rodadas no mínimo')
+  assert.equal(boa.duplasRepetidas, 9)
+  assert.equal(boa.maxRepetidosPorJogador, 2)
+  assert.equal(boa.ventos, null, 'ventos na mesa: o app não sabe')
+  assert.equal(boa.porJogador[0].repetiuCom.length, 2, 'quem repetiu mais vem primeiro')
+  assert.ok(!pedeAtencao(boa))
+
+  const oito = jogadores(8)
+  const igual = (numero: number): RodadaTorneio => ({
+    numero,
+    geradaEm: agora,
+    mesas: [
+      { numero: 1, assentos: ['j1', 'j2', 'j3', 'j4'] },
+      { numero: 2, assentos: ['j5', 'j6', 'j7', 'j8'] },
+    ],
+  })
+  const ruim = estatisticaDaGrade([1, 2, 3].map(igual), oito, 4, false)
+  assert.equal(ruim.nota, 'ruim', 'dupla 3x')
+  assert.ok(pedeAtencao(ruim))
+  assert.equal(compararSorteios(boa, ruim), 'better')
+  assert.equal(compararSorteios({ nota: 'boa', duplasRepetidas: 9 }, { nota: 'boa', duplasRepetidas: 10 }), 'better')
+  assert.equal(compararSorteios({ nota: 'boa', duplasRepetidas: 10 }, { nota: 'boa', duplasRepetidas: 10 }), 'same')
+  assert.equal(compararSorteios(ruim, boa), 'worse')
+  assert.equal(estatisticaDaGrade([igual(1)], oito, 4, false).nota, 'perfeita')
+  assert.equal(estatisticaDaGrade([igual(1), igual(2)], oito, 4, true).nota, 'ruim', 'Leste de novo e trio repetido')
+
+  const nove = jogadores(9)
+  const sanma: RodadaTorneio[] = []
+  for (let numero = 1; numero <= 4; numero++) {
+    sanma.push({ numero, geradaEm: agora, mesas: sortearRodada(nove, sanma, { porMesa: 3 }) })
+  }
+  const deTres = estatisticaDaGrade(sanma, nove, 3, true)
+  assert.equal(deTres.nota, 'perfeita', 'Sanma')
+  assert.ok(deTres.porJogador.every((linha) => linha.adversariosDiferentes === 8))
+
+  const rodizio = simular({ tipo: 'rodizio', rodadas: 4 }, 12)
+  assert.equal(estatisticaDoTorneio(rodizio.torneio, 1)?.duplasRepetidas, 18, 'Rodízio conta a grade inteira')
+  assert.equal(estatisticaDoTorneio(rodizio.torneio)?.nota, 'otima')
+  assert.ok(podeSortearRodada(rodizio.torneio, [], 1), 'sem partida, refaz de qualquer aba')
+  assert.ok(!podeSortearRodada(rodizio.torneio, rodizio.partidas, 4))
+  const livre = simular({ tipo: 'corridos' }, 12, 2)
+  assert.ok(podeSortearRodada(livre.torneio, livre.partidas, 3), 'Brasileirão refaz a última')
+  assert.ok(!podeSortearRodada(livre.torneio, livre.partidas, 1))
+  assert.equal(estatisticaDoTorneio(livre.torneio, 1)?.duplasRepetidas, 0, 'Brasileirão conta até a rodada')
+  const refeita = sortearDeNovo(livre.torneio, livre.partidas, agora)
+  assert.equal(compararSorteios(estatisticaDoTorneio(refeita)!, estatisticaDoTorneio(livre.torneio)!) === 'worse', false)
+  console.log('Estatística ok.')
+}
+
 console.log('Formatos ok.')
+
+// ─── All Leste só com ventos ─────────────────────────────────────────────────
+{
+  const agoraVentos = new Date(2026, 10, 22)
+  const semVentos = { ...criarRascunho({ id: 'ventos', agora: agoraVentos, nome: 'T' }), sortearVentos: false }
+  const rodizio = { ...semVentos, formato: { tipo: 'rodizio' as const, rodadas: 4 } }
+  const classificatoria = {
+    ...semVentos,
+    formato: {
+      tipo: 'eliminatorio' as const,
+      classificatoria: 'rodizio' as const,
+      rodadasClassificatoria: 4,
+      cortes: [4],
+      rodadasPorFase: 1,
+      pontosCarregados: true,
+    },
+  }
+  assert.ok(sorteiaVentos(rodizio), 'rascunho de All Leste tem ventos mesmo salvo sem')
+  assert.ok(sorteiaVentos(classificatoria), 'classificatória All Leste também')
+  assert.ok(!sorteiaVentos(semVentos), 'os outros formatos seguem a escolha')
+  assert.equal(iniciarTorneio(rodizio, [], [], '').sortearVentos, true, 'começa com ventos')
+  assert.ok(!sorteiaVentos({ ...rodizio, status: 'em_andamento' }), 'o que já começou não muda')
+  console.log('All Leste só com ventos: ok')
+}
+
+// ─── Classificatória All Leste travada em 4 ──────────────────────────────────
+{
+  const ids = Array.from({ length: 12 }, (_, indice) => `q${indice}`)
+  const antigo = {
+    ...criarRascunho({ id: 'trava', agora: new Date(2026, 10, 22), nome: 'T' }),
+    jogadorIds: ids,
+    formato: {
+      tipo: 'eliminatorio' as const,
+      classificatoria: 'rodizio' as const,
+      rodadasClassificatoria: 3,
+      cortes: [4],
+      rodadasPorFase: 1,
+      pontosCarregados: true,
+    },
+  }
+  const refeito = reiniciarSorteio(antigo, '')
+  assert.equal(refeito.formato.tipo === 'eliminatorio' && refeito.formato.rodadasClassificatoria, 4, 'trava em 4')
+  assert.equal(refeito.rodadas.length, 4, 'sai com 4 rodadas')
+  for (const id of ids) {
+    const vezes = refeito.rodadas.flatMap((rodada) => rodada.mesas).filter((mesa) => mesa.assentos[0] === id).length
+    assert.equal(vezes, 1, `${id} é Leste uma vez`)
+  }
+  const suico = { ...antigo, formato: { ...antigo.formato, classificatoria: 'suico' as const } }
+  assert.equal(comRegrasDoFormato(suico), suico, 'classificatória Suíço segue livre')
+  console.log('Classificatória All Leste em 4: ok')
+}

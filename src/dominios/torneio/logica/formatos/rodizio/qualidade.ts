@@ -8,6 +8,8 @@
  * - Mesas completamente iguais (todos os 4 jogadores repetidos)
  */
 
+import { contarTrios } from '@/compartilhado/sorteio/contagens'
+import { minimoDeRepetidas } from '@/compartilhado/sorteio/minimos'
 import { MAX_ADVERSARIOS_REPETIDOS, MIN_JOGADORES_DISPERSAO, VENTOS } from './constantes'
 import type { ParRepetido, RelatorioQualidade, RepetidosPorJogador, Rodada } from './tipos'
 
@@ -119,7 +121,8 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
   const mesas = totalJogadores / VENTOS.length
   const totalPares = (totalJogadores * (totalJogadores - 1)) / 2
   const paresPorRodada = mesas * 6 // C(4,2) = 6 pares por mesa
-  const idealRepetidos = Math.max(0, paresPorRodada * rodadas.length - totalPares)
+  const idealRepetidos =
+    minimoDeRepetidas(totalJogadores, rodadas.length, 4) ?? Math.max(0, paresPorRodada * rodadas.length - totalPares)
 
   // Verificar se cada jogador jogou exatamente uma vez como Leste.
   const contadorLeste = new Map<string, number>()
@@ -154,26 +157,41 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
   }
 
   let maxRepetidosPorJogador = 0
+  /** A mesma medida do sorteio mitigado: concentrar num jogador custa ao quadrado. */
+  let espalhamento = 0
   const jogadoresComExcesso: RepetidosPorJogador[] = []
 
   for (const [jogador, adversarios] of adversariosRepetidosPorJogador) {
     const quantidade = adversarios.size
+    espalhamento += quantidade * quantidade
     if (quantidade > maxRepetidosPorJogador) maxRepetidosPorJogador = quantidade
     if (limiteRepetidos !== null && quantidade > limiteRepetidos) {
       jogadoresComExcesso.push({ jogador, quantidade, adversarios: [...adversarios] })
     }
   }
 
-  // Pontuação de qualidade: quanto menor, melhor.
-  const score =
-    tresVezesMais * 1000 +
-    duasVezes * 10 +
-    repeticoesVento +
-    mesasRepetidas * 500 +
-    (lesteExato ? 0 : 50)
+  const triosRepetidos = [
+    ...contarTrios(
+      rodadas.map((rodada) => ({
+        mesas: rodada.mesas.map((mesa) => ({ assentos: mesa.assentos.map((assento) => assento.jogador) })),
+      })),
+    ).values(),
+  ].filter((vezes) => vezes > 1).length
+
+  // As regras em ordem, como no sorteio mitigado: somar pesos quebraria a prioridade.
+  const criterios = [
+    lesteExato ? 0 : 1,
+    tresVezesMais,
+    mesasRepetidas,
+    triosRepetidos,
+    espalhamento,
+    duasVezes,
+    repeticoesVento,
+  ]
 
   return {
-    score,
+    criterios,
+    quantidadeTriosRepetidos: triosRepetidos,
     maxRepeticioesPar: maxRepeticoes,
     paresRepetidos: paresRepetidos.sort((a, b) => b.vezes - a.vezes),
     quantidadeParesRepetidos: paresRepetidos.length,
@@ -189,59 +207,3 @@ export function avaliarGrade(rodadas: Rodada[], totalJogadores: number): Relator
   }
 }
 
-type NotaGrade = 'perfeita' | 'boa' | 'regular' | 'ruim'
-
-export function notaDaGrade(qualidade: RelatorioQualidade): NotaGrade {
-  if (qualidade.quantidadeTresVezesMais > 0 || qualidade.mesasCompletasRepetidas > 0) return 'ruim'
-  if (qualidade.quantidadeDuasVezes === 0) return 'perfeita'
-  if (qualidade.quantidadeDuasVezes <= qualidade.quantidadeIdealRepetidos) return 'boa'
-  return 'regular'
-}
-
-/** Quantas vezes cada jogador ficou em cada vento, nesta ordem: Leste, Sul, Oeste, Norte. */
-export function distribuicaoDeVentos(rodadas: Rodada[]): Map<string, [number, number, number, number]> {
-  const contagem = new Map<string, [number, number, number, number]>()
-  for (const rodada of rodadas) {
-    for (const mesa of rodada.mesas) {
-      for (const assento of mesa.assentos) {
-        const linha = contagem.get(assento.jogador) ?? [0, 0, 0, 0]
-        linha[VENTOS.indexOf(assento.vento)] += 1
-        contagem.set(assento.jogador, linha)
-      }
-    }
-  }
-  return contagem
-}
-
-/**
- * Encontros indiretos: pares que não jogam juntos, mas enfrentam ao menos um
- * adversário em comum. Devolve quantos pares nunca se enfrentam e quantos deles
- * têm adversário em comum.
- */
-export function coberturaIndireta(rodadas: Rodada[]) {
-  const adversarios = new Map<string, Set<string>>()
-  for (const rodada of rodadas) {
-    for (const mesa of rodada.mesas) {
-      for (const assento of mesa.assentos) {
-        const conjunto = adversarios.get(assento.jogador) ?? new Set<string>()
-        for (const outro of mesa.assentos) {
-          if (outro.jogador !== assento.jogador) conjunto.add(outro.jogador)
-        }
-        adversarios.set(assento.jogador, conjunto)
-      }
-    }
-  }
-  const jogadores = [...adversarios.keys()]
-  let semEncontro = 0
-  let comIndireto = 0
-  for (let primeiro = 0; primeiro < jogadores.length; primeiro += 1) {
-    for (let segundo = primeiro + 1; segundo < jogadores.length; segundo += 1) {
-      const deA = adversarios.get(jogadores[primeiro])
-      const deB = adversarios.get(jogadores[segundo])
-      if (!deA || !deB || deA.has(jogadores[segundo])) continue
-      semEncontro += 1
-      if ([...deA].some((nome) => deB.has(nome))) comIndireto += 1
-    }
-  }
-  return { semEncontro, comIndireto }
-}

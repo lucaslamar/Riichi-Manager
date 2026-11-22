@@ -59,5 +59,8 @@
     - BUSINESS.md: Contém as regras de negócio e lógica específica do domínio do Riichi Mahjong.
     - PATTERNS.md: Contém os padrões de desenvolvimento adotados no projeto, como convenções de código e boas práticas.
     - DESIGN.md: Contém as diretrizes de design de interface mobile baseadas no Human Interface Guidelines da Apple (skill `.claude/skills/apple-design`).
+    - REFERENCES.md: Fontes e inspirações usadas em regras e telas (regulamentos oficiais, artigos, apps de referência), com o que foi aproveitado de cada uma.
+    - ROADMAP.md: Ideias discutidas e ainda não implementadas, decisões adiadas e propostas aguardando aprovação.
     - CHECKLIST.md: Contém uma lista de verificação para garantir que atendeu a todos os critérios de aceitação e convenções de desenvolvimento do projeto ao realizar alterações na _codebase_.
+- Toda regra de negócio, mudança de UX, decisão de design, ideia adiada e fonte de inspiração discutida com o usuário deve ser registrada no arquivo `.ai` correspondente, no mesmo commit ou num commit `docs` logo em seguida. Isso é obrigatório em toda tarefa. O repositório é público: não registre nomes, resultados de pessoas reais nem links de conversas.
 - Esses arquivos são _live files_, ou seja, estão sempre atualizados com as informações mais recentes do projeto. Por isso, atualize-os sempre que fizer alterações relevantes no projeto ou perceber que alguma informação mudou.

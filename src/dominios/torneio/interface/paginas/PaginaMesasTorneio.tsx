@@ -1,20 +1,22 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import Modal from '@/compartilhado/interface/componentes/modal/Modal'
+import QualidadeSorteio from '@/compartilhado/interface/componentes/sorteio/QualidadeSorteio'
+import { compararSorteios, type Comparacao } from '@/compartilhado/sorteio/estatistica'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import AnelTimer from '@/dominios/centerpiece/interface/componentes/AnelTimer'
 import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/ModaisPartida'
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { CHAVE_VENTO, KANJI_VENTO, ORDEM_VENTOS, type Partida } from '@/dominios/centerpiece/logica/partida'
-import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
+import { estatisticaDoTorneio } from '../../logica/estatisticaGrade'
 import { deveLembrarBackup } from '../../logica/exportacao'
 import { ACRESCIMO_SEGUNDOS } from '../../logica/configuracao'
 import { proximaRodada, rodadaFechada } from '../../logica/formatos'
 import { ehMesaFinal } from '../../logica/formatos/eliminatorio'
 import {
   maoAtual,
-  podeSortearDeNovo,
+  podeSortearRodada,
   relogioDaMesa,
   relogioDaRodada,
   reiniciarSorteio,
@@ -33,7 +35,7 @@ import {
   pausar,
   segundosRestantes,
 } from '../../logica/relogio'
-import { abortarTorneio, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, totalDeRodadas } from '../../logica/torneio'
+import { abortarTorneio, podeEncerrar, sorteiaVentos, partidaDaMesa, progressoDaRodada, rodadaAtual, totalDeRodadas } from '../../logica/torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from '../../logica/tipos'
 import FolhaExportar from '../componentes/FolhaExportar'
 import FolhaCompartilhar from '../componentes/FolhaCompartilhar'
@@ -42,7 +44,9 @@ import { relatorioDaRodada } from '../../logica/relatorios'
 import { useTorneios } from '../hooks/useTorneios'
 import '@/dominios/centerpiece/interface/clube.css'
 import '../torneio.css'
-import { nomeNoTorneio } from '../../logica/torneio'
+import { useNomeNoTorneio } from '../hooks/useNomeNoTorneio'
+import { regrasWoDe } from '../../logica/wo'
+import FolhaAusencia from '../componentes/FolhaAusencia'
 
 /** Agora, atualizado a cada segundo enquanto algum relógio corre. */
 function useAgora(ativo: boolean) {
@@ -60,6 +64,12 @@ export interface AcoesMesa {
   aoLancarResultado: (rodada: RodadaTorneio, mesa: MesaTorneio, corrigir?: Partida) => void
 }
 
+const DURACAO_COMPARACAO_MS = 5000
+
+/** Identifica o sorteio atual: cada rodada sorteada ganha o próprio `geradaEm`. */
+const assinaturaDoSorteio = (rodadas: readonly RodadaTorneio[]) =>
+  rodadas.map((rodada) => `${rodada.numero}:${rodada.geradaEm}`).join()
+
 /**
  * Mesas sorteadas do torneio: abas por rodada, timer geral, um card por mesa com
  * os quatro ventos, o status ao vivo e o registro do resultado.
@@ -72,19 +82,25 @@ export default function PaginaMesasTorneio({
   aoAbrirRanking,
 }: { torneio: Torneio; aoVoltar: () => void; rodape?: ReactNode; aoAbrirRanking: () => void } & AcoesMesa) {
   const { t, idioma, numero } = useI18n()
-  const { salvar, definirLista, marcarTransferido } = useTorneios()
-  const { partidas, descartarDoTorneio } = usePartidasDoTorneio()
-  const { jogadores } = useJogadores()
+  const { salvar, definirLista, finalizar, marcarTransferido } = useTorneios()
+  const { partidas, descartarDoTorneio, adicionar, descartar } = usePartidasDoTorneio()
+  /** Número da mesa com a folha de ausência aberta. */
+  const [mesaAusencia, setMesaAusencia] = useState<number | null>(null)
+  const nomeDoTorneio = useNomeNoTorneio()
   const { aviso, mostrar } = useAviso()
   const emJogo = rodadaAtual(torneio, partidas)
   const [abaRodada, setAbaRodada] = useState(emJogo?.numero ?? 1)
   const rodada = torneio.rodadas.find((item) => item.numero === abaRodada) ?? emJogo
   const [refazendo, setRefazendo] = useState(false)
+  /** Só em memória: o sorteio de antes do Sortear de novo. */
+  const [anterior, setAnterior] = useState<{ rodadas: RodadaTorneio[]; substituidoPor: string } | null>(null)
+  const [comparacao, setComparacao] = useState<Comparacao | null>(null)
   const [abortando, setAbortando] = useState(false)
   const [exportando, setExportando] = useState(false)
   const [menu, setMenu] = useState(false)
   const [compartilhando, setCompartilhando] = useState(false)
   const [reiniciando, setReiniciando] = useState(false)
+  const [encerrando, setEncerrando] = useState(false)
   /** Rodada cujo lembrete de backup já foi dispensado. */
   const [lembreteDispensado, setLembreteDispensado] = useState<number>()
 
@@ -97,6 +113,12 @@ export default function PaginaMesasTorneio({
       }))
   const agora = useAgora(algumRodando)
 
+  useEffect(() => {
+    if (!comparacao) return
+    const espera = window.setTimeout(() => setComparacao(null), DURACAO_COMPARACAO_MS)
+    return () => window.clearTimeout(espera)
+  }, [comparacao])
+
   // Rodada nova gerada: a aba acompanha.
   useEffect(() => {
     if (emJogo) setAbaRodada(emJogo.numero)
@@ -104,7 +126,7 @@ export default function PaginaMesasTorneio({
 
   if (!rodada) return null
 
-  const nomeDe = (id: string) => nomeNoTorneio(torneio, jogadores, id)
+  const nomeDe = (id: string) => nomeDoTorneio(torneio, id)
   const total = totalDeRodadas(torneio.formato)
   const titulo = total
     ? t('tournament.tables.roundOf', { round: rodada.numero, total })
@@ -127,10 +149,13 @@ export default function PaginaMesasTorneio({
   const relatorio = () =>
     relatorioDaRodada(torneio, rodada, partidas, {
       titulo: torneio.nome,
-      subtitulo: titulo,
+      subtitulo: `${titulo} · ${t(`tournament.formatsShort.${torneio.formato.tipo}`)}`,
+      pontosDaMesa: (valor) => numero(valor),
       mesa: (numeroMesa) => t('match.table.number', { number: numeroMesa }),
       mesaFinal: t('tournament.tables.finalTable'),
       status: (status) => t(`tournament.tables.status.${status}`),
+      wo: t('tournament.wo.tag'),
+      atraso: (minutos) => t('tournament.wo.minutesShort', { minutes: minutos }),
       vento: (vento) => t(CHAVE_VENTO[vento]),
       nome: nomeDe,
       ventos: comVentos,
@@ -142,13 +167,26 @@ export default function PaginaMesasTorneio({
   const fechada = rodadaFechada(torneio, partidas) && rodada.numero === torneio.rodadas.length
   const proxima = fechada && !somenteLeitura ? proximaRodada(torneio, partidas, new Date().toISOString()) : null
 
+  const regrasWo = regrasWoDe(torneio)
+  const mesaDaAusencia = rodada.mesas.find((mesa) => mesa.numero === mesaAusencia)
+  const estatistica = estatisticaDoTorneio(torneio, rodada.numero)
+  const podeRefazer = podeSortearRodada(torneio, partidas, rodada.numero)
+  const podeVoltarSorteio =
+    !!anterior && podeRefazer && anterior.substituidoPor === assinaturaDoSorteio(torneio.rodadas)
+  const voltarSorteio = () => {
+    if (!anterior) return
+    salvar({ ...torneio, rodadas: anterior.rodadas })
+    setAnterior(null)
+    setComparacao(null)
+  }
+
   return (
     <section className="ptd-inicio clb-resultado trn-mesas">
       <TituloTela
         titulo={titulo}
         aoVoltar={aoVoltar}
         acoes={
-          <span className="clb-acoes-titulo">
+          <span className="clb-acoes-titulo trn-acoes-rodada">
             <button
               type="button"
               className="cm-btn-icone"
@@ -158,6 +196,18 @@ export default function PaginaMesasTorneio({
             >
               <i className="fas fa-ranking-star" aria-hidden="true" />
             </button>
+            {podeEncerrar(torneio) && (
+              <button
+                type="button"
+                className="cm-btn-icone"
+                aria-label={t('tournament.ranking.finish')}
+                title={t('tournament.ranking.finish')}
+                aria-haspopup="dialog"
+                onClick={() => setEncerrando(true)}
+              >
+                <i className="fas fa-flag-checkered" aria-hidden="true" />
+              </button>
+            )}
             <button
               type="button"
               className="cm-btn-icone"
@@ -187,6 +237,7 @@ export default function PaginaMesasTorneio({
         <span>
           {torneio.nome} · <time dateTime={rodada.geradaEm}>{dataHora}</time>
         </span>
+        <small>{t(`tournament.formatsShort.${torneio.formato.tipo}`)}</small>
         <small>{torneio.status === 'finalizado' ? t('match.club.meetingDone') : t('match.types.inProgressTag')}</small>
       </p>
 
@@ -273,7 +324,29 @@ export default function PaginaMesasTorneio({
         </div>
       )}
 
-      {/* Diagnóstico da Grade (e a temporada) antes das mesas. */}
+      {estatistica && (
+        <QualidadeSorteio
+          key={`${rodada.numero}-${rodada.geradaEm}`}
+          estatistica={estatistica}
+          nomeDe={nomeDe}
+          antesDeJogar={
+            !somenteLeitura &&
+            rodada.mesas.every((mesa) => !partidaDaMesa(partidas, torneio.id, rodada.numero, mesa.numero))
+          }
+          sortear={
+            podeRefazer
+              ? {
+                  rotulo: t('tournament.gridStats.redrawLabel', { round: rodada.numero }),
+                  aoTocar: () => setRefazendo(true),
+                }
+              : undefined
+          }
+          voltar={
+            podeVoltarSorteio ? { rotulo: t('tournament.gridStats.undoLabel'), aoTocar: voltarSorteio } : undefined
+          }
+        />
+      )}
+      {/* A temporada, antes das mesas. */}
       {rodape}
 
       <ul className="clb-mesas">
@@ -290,10 +363,12 @@ export default function PaginaMesasTorneio({
                 <h3 className="clb-mesa-titulo">
                   {final && <i className="fas fa-crown" aria-hidden="true" />} {final ? t('tournament.tables.finalTable') : rotulo}
                 </h3>
-                <span className={`trn-status trn-status--${status}`}>
-                  {status === 'em_andamento' && partida
-                    ? `${t('tournament.tables.status.em_andamento')} · ${maoAtual(partida)}`
-                    : t(`tournament.tables.status.${status}`)}
+                <span className={`trn-status trn-status--${partida?.wo ? 'wo' : status}`}>
+                  {partida?.wo
+                    ? t('tournament.wo.tag')
+                    : status === 'em_andamento' && partida
+                      ? `${t('tournament.tables.status.em_andamento')} · ${maoAtual(partida)}`
+                      : t(`tournament.tables.status.${status}`)}
                 </span>
               </div>
 
@@ -323,10 +398,29 @@ export default function PaginaMesasTorneio({
                         <span className="trn-assento-pontos">{numero(partida.placar.pontos[indice as 0 | 1 | 2 | 3])}</span>
                       )}
                       {linha && (
+                        <span className="trn-assento-pontos trn-assento-bruto">
+                          {partida?.wo ? (
+                            t(partida.wo.ausentes.includes(linha.cadeira) ? 'tournament.wo.missed' : 'tournament.wo.attended')
+                          ) : (
+                            <>
+                              <span className="sr-only">{t('tournament.points.points')}: </span>
+                              {numero(linha.pontosBrutos)}
+                            </>
+                          )}
+                        </span>
+                      )}
+                      {linha && (
                         <span className={`trn-assento-pontos ${linha.final >= 0 ? 'trn-positivo' : 'trn-negativo'}`}>
-                          {t('tournament.tables.place', { place: linha.colocacao })} ·{' '}
+                          {!partida?.wo && (
+                            <>
+                              <span className="trn-colocacao">{t('tournament.tables.place', { place: linha.colocacao })}</span>{' '}
+                            </>
+                          )}
                           {linha.final > 0 ? '+' : ''}
                           {new Intl.NumberFormat(idioma, { maximumFractionDigits: 1 }).format(linha.final)}
+                          {!!linha.atraso && (
+                            <small className="trn-atraso">{t('tournament.wo.lateBy', { minutes: linha.atraso })}</small>
+                          )}
                         </span>
                       )}
                     </li>
@@ -364,16 +458,30 @@ export default function PaginaMesasTorneio({
               )}
 
               {!somenteLeitura && (
+                <div className="trn-mesa-acoes">
                 <button
                   type="button"
                   className="btn-contorno clb-mesa-botao"
                   aria-label={`${t(status === 'finalizada' ? 'tournament.tables.fix' : 'match.club.registerResult')}, ${rotulo}`}
                   // O adm lança o resultado final. Mesa já registrada: a correção substitui a partida.
-                  onClick={() => aoLancarResultado(rodada, mesa, partida)}
+                  onClick={() => (partida?.wo ? setMesaAusencia(mesa.numero) : aoLancarResultado(rodada, mesa, partida))}
                 >
                   <i className={`fas ${status === 'finalizada' ? 'fa-pen' : 'fa-clipboard-check'}`} aria-hidden="true" />{' '}
                   {t(status === 'finalizada' ? 'tournament.tables.fix' : 'match.club.registerResult')}
                 </button>
+                {regrasWo && status !== 'finalizada' && !partida && (
+                  <button
+                    type="button"
+                    className="cm-btn-icone"
+                    aria-label={`${t('tournament.wo.register')}, ${rotulo}`}
+                    title={t('tournament.wo.register')}
+                    aria-haspopup="dialog"
+                    onClick={() => setMesaAusencia(mesa.numero)}
+                  >
+                    <i className="fas fa-user-slash" aria-hidden="true" />
+                  </button>
+                )}
+                </div>
               )}
             </li>
           )
@@ -414,6 +522,15 @@ export default function PaginaMesasTorneio({
         </button>
       )}
 
+      {comparacao && podeVoltarSorteio && (
+        <p className="ptd-aviso qds-comparacao" role="status">
+          {t(`tournament.gridStats.${comparacao}`)}
+          <button type="button" aria-label={t('tournament.gridStats.undoLabel')} onClick={voltarSorteio}>
+            {t('tournament.gridStats.undo')}
+          </button>
+        </p>
+      )}
+
       {aviso && (
         <p className="ptd-aviso" role="status">
           {aviso}
@@ -423,7 +540,7 @@ export default function PaginaMesasTorneio({
       {menu && (
         <Modal titulo={torneio.nome} aoFechar={() => setMenu(false)} rotuloFechar={t('actions.close')} tamanho="pequena">
           <ul className="trn-menu">
-          {podeSortearDeNovo(torneio, partidas) && rodada.numero === torneio.rodadas.length && !somenteLeitura && (
+          {podeRefazer && (
             <li>
               <button
                 type="button"
@@ -468,6 +585,42 @@ export default function PaginaMesasTorneio({
           )}
           </ul>
         </Modal>
+      )}
+
+      {regrasWo && mesaDaAusencia && (
+        <FolhaAusencia
+          key={mesaDaAusencia.numero}
+          torneio={torneio}
+          rodada={rodada}
+          mesa={mesaDaAusencia}
+          partida={partidaDaMesa(partidas, torneio.id, rodada.numero, mesaDaAusencia.numero)}
+          partidas={partidas}
+          regras={regrasWo}
+          nome={nomeDe}
+          aoAplicar={({ remover, adicionar: novas, torneio: remontado }) => {
+            remover.forEach(descartar)
+            novas.forEach(adicionar)
+            if (remontado) {
+              salvar(remontado)
+              mostrar(t('tournament.wo.rebuilt'))
+            }
+          }}
+          aoFechar={() => setMesaAusencia(null)}
+        />
+      )}
+
+      {encerrando && (
+        <ModalConfirmacao
+          titulo={t('tournament.ranking.finishTitle')}
+          texto={t('tournament.ranking.finishHelp')}
+          rotuloConfirmar={t('tournament.ranking.finish')}
+          aoFechar={() => setEncerrando(false)}
+          aoConfirmar={() => {
+            finalizar(torneio.id)
+            setEncerrando(false)
+            aoVoltar()
+          }}
+        />
       )}
 
       {reiniciando && (
@@ -531,7 +684,11 @@ export default function PaginaMesasTorneio({
           rotuloConfirmar={t('tournament.tables.redraw')}
           aoFechar={() => setRefazendo(false)}
           aoConfirmar={() => {
-            salvar(sortearDeNovo(torneio, partidas, new Date().toISOString()))
+            const refeito = sortearDeNovo(torneio, partidas, new Date().toISOString())
+            const nova = estatisticaDoTorneio(refeito, rodada.numero)
+            setAnterior({ rodadas: torneio.rodadas, substituidoPor: assinaturaDoSorteio(refeito.rodadas) })
+            if (nova && estatistica) setComparacao(compararSorteios(nova, estatistica))
+            salvar(refeito)
             setRefazendo(false)
           }}
         />

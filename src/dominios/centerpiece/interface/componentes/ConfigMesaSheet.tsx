@@ -83,6 +83,8 @@ interface PropsConfigMesaSheet {
    * que sobram e sem Chombo, que só valem com a partida jogada no app.
    */
   soPlacar?: boolean
+  /** O que o módulo acrescenta no fim da Pontuação (o Torneio põe WO e atraso). */
+  fimPontuacao?: ReactNode
   /**
    * Abas depois das de mesa, que valem na hora e por isso escondem o rodapé
    * (o Torneio põe a "Ajustes do app").
@@ -109,6 +111,7 @@ export default function ConfigMesaSheet({
   podeConcluir = true,
   secoes = SECOES.map(({ id }) => id),
   soPlacar = false,
+  fimPontuacao,
   abasFim = [],
   variante,
   aoMudarVariante,
@@ -382,6 +385,7 @@ export default function ConfigMesaSheet({
       </>
       )}
 
+      {fimPontuacao}
       </section>
       )}
 

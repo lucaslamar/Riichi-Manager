@@ -139,9 +139,10 @@ export default function PaginaEmAndamento({
             textos: [
               torneio.nome,
               subtituloTorneio(torneio),
+              t(`tournament.formatsShort.${torneio.formato.tipo}`),
               dataHora(torneio.criadoEm),
               ...torneio.jogadorIds.flatMap((id) => [
-                nomeNoTorneio(torneio, jogadores, id),
+                nomeNoTorneio(torneio, jogadores, id, riichi.partidas) ?? '',
                 ...nomesDe(id),
               ]),
             ],
@@ -153,7 +154,10 @@ export default function PaginaEmAndamento({
               >
                 <i className="fas fa-trophy" aria-hidden="true" />
                 <span>
-                  <strong>{torneio.nome}</strong>
+                  <span className="cm-andamento-titulo">
+                    <strong>{torneio.nome}</strong>
+                    <span className="cm-andamento-tipo">{t(`tournament.formatsShort.${torneio.formato.tipo}`)}</span>
+                  </span>
                   <small>{subtituloTorneio(torneio)}</small>
                 </span>
                 <i className="fas fa-arrow-up-right-from-square" aria-hidden="true" />

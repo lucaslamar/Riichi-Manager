@@ -10,10 +10,13 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogadores'
-import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
+import { aplicarAtrasos, regrasWoDe } from '@/dominios/torneio/logica/wo'
+import { acoesTorneios, useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
-import { criarRascunho, nomeNoTorneio, sorteiaVentos } from '@/dominios/torneio/logica/torneio'
+import { criarRascunho, sorteiaVentos } from '@/dominios/torneio/logica/torneio'
+import { useNomeNoTorneio } from '@/dominios/torneio/interface/hooks/useNomeNoTorneio'
+import { mudancaAoRegistrar } from '@/dominios/torneio/logica/ranking'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { mesasRegistradas, type MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
@@ -30,7 +33,6 @@ import PlacarPartida from './PlacarPartida'
 import RegistrarFinalizada from './RegistrarFinalizada'
 import SetupPartida from './SetupPartida'
 import '../mesa.css'
-import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import '../partida.css'
 import '../clube.css'
 
@@ -100,6 +102,7 @@ function TelasCenterpiece({
   const { t, idioma } = useI18n()
   const { isChines } = useModoJogo()
   const { partidas, abertas, guardarNome, descartar } = usePartidas()
+  const nomeDoTorneio = useNomeNoTorneio()
   const { sorteio, marcarRegistrada } = useClube()
   // A aba Ranking abre direto na lista: ela é a raiz desse modo.
   const telaRaiz: TelaModulo = {
@@ -121,7 +124,6 @@ function TelasCenterpiece({
   const voltar = () => setPilha((atual) => (atual.length > 1 ? atual.slice(0, -1) : [telaRaiz]))
   const { telaCheiaMesa } = usePreferencias()
   const { torneios, salvar: salvarTorneio } = useTorneios()
-  const { jogadores } = useJogadores()
   /** Rascunho ainda sem sorteio: o card Torneio continua nele em vez de criar outro. */
   const rascunho = [...torneios]
     .filter((torneio) => torneio.status === 'rascunho' && !torneio.transferidoEm)
@@ -255,7 +257,10 @@ function TelasCenterpiece({
             ),
           }
         }}
-        aoExcluir={(jogador) => guardarNome(jogador.id, nomeExibido(jogador))}
+        aoExcluir={(jogador) => {
+          guardarNome(jogador.id, nomeExibido(jogador))
+          acoesTorneios.guardarNome(jogador.id, nomeExibido(jogador))
+        }}
       />
     )
   }
@@ -316,6 +321,7 @@ function TelasCenterpiece({
       ?.mesas.find((item) => item.numero === tela.mesa)
     const substituir = partidas.find((item) => item.id === tela.substituirId)
     if (torneio && mesa) {
+      const regrasWo = regrasWoDe(torneio)
       return (
         <RegistrarFinalizada
           key={`${tela.torneioId}-${tela.rodada}-${tela.mesa}`}
@@ -325,7 +331,7 @@ function TelasCenterpiece({
             // Sem ventos sorteados, a mesa não sabe quem é Leste: os lugares viram 1 a 4.
             comVentos: sorteiaVentos(torneio),
             jogadorIds: mesa.assentos,
-            nomes: mesa.assentos.map((id) => nomeNoTorneio(torneio, jogadores, id)),
+            nomes: mesa.assentos.map((id) => (id ? nomeDoTorneio(torneio, id) : '')),
             vinculo: {
               torneioId: torneio.id,
               rodada: tela.rodada - 1,
@@ -339,6 +345,26 @@ function TelasCenterpiece({
                       ?.pontosBrutos ?? substituir.placar.pontos[cadeira as 0 | 1 | 2 | 3],
                 )
               : undefined,
+            atraso: regrasWo
+              ? {
+                  limite: regrasWo.toleranciaMinutos,
+                  porMinuto: regrasWo.porMinuto,
+                  iniciais: Object.fromEntries(
+                    (substituir?.resultado ?? []).map((linha) => [linha.jogadorId, linha.atraso ?? 0]),
+                  ),
+                  aplicar: (previa, minutos) => aplicarAtrasos(previa, minutos, regrasWo),
+                }
+              : undefined,
+            mudancas: (previa) =>
+              mudancaAoRegistrar(
+                torneio,
+                partidas,
+                {
+                  ...previa,
+                  vinculoTorneio: { torneioId: torneio.id, rodada: tela.rodada - 1, mesa: tela.mesa - 1 },
+                },
+                substituir?.id,
+              ),
           }}
           aoVoltar={voltar}
           aoRegistrar={() => {

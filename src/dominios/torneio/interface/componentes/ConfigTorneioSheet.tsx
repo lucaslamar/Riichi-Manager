@@ -1,14 +1,24 @@
 import { useState, type ReactNode } from 'react'
 import { useModoJogoAtual } from '@/compartilhado/modo-jogo/ModoJogoProvider'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import AjudaCampo from '@/compartilhado/interface/componentes/AjudaCampo'
 import BotoesOpcao from '@/dominios/centerpiece/interface/componentes/BotoesOpcao'
 import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/ConfigMesaSheet'
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
-import { dataDoDia, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
+import { comRegrasDoFormato, dataDoDia, exigeVentos, formatoPadrao, jogadoresPorMesa, RODADAS_PADRAO, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
 import { useTorneios } from '../hooks/useTorneios'
-import type { ConfigFormato, FormatoTorneio, Torneio } from '../../logica/tipos'
+import { premiacaoPadrao, premiacaoValida } from '../../logica/premiacao'
+import { rankingTemporada, encontrosDaTemporada } from '../../logica/temporada'
+import type { ConfigFormato, ConfigPremiacao, FormatoTorneio, Torneio } from '../../logica/tipos'
+import { usePartidasDoTorneio } from '../hooks/usePartidasDoTorneio'
+import EditorPremiacao from './EditorPremiacao'
+import CamposWo from './CamposWo'
+import type { RegrasWo } from '@/compartilhado/modo-jogo/regrasDoModo'
+import { regrasWoDe, regrasWoValidas } from '../../logica/wo'
+import GuiaFormatos from './GuiaFormatos'
+import GuiaRodadas from './GuiaRodadas'
 import '../torneio.css'
 
 const FORMATOS: readonly FormatoTorneio[] = ['rodizio', 'suico', 'eliminatorio', 'corridos', 'temporada']
@@ -30,11 +40,33 @@ export default function ConfigTorneioSheet({
   aoSalvar: (torneio: Torneio) => void
   aoFechar: () => void
 }) {
-  const { t } = useI18n()
-  const [formato, setFormato] = useState<ConfigFormato>(torneio.formato)
+  const { t, idioma } = useI18n()
+  const [formato, setFormato] = useState<ConfigFormato>(() => comRegrasDoFormato(torneio).formato)
   const [timers, setTimers] = useState(torneio.timers)
   const [ventos, setVentos] = useState(() => sorteiaVentos(torneio))
-  const { temporadas, salvarTemporada } = useTorneios()
+  const { temporadas, torneios, salvarTemporada } = useTorneios()
+  const { partidas } = usePartidasDoTorneio()
+  // Na Temporada a premiação é dela: cada escolha tem o próprio rascunho.
+  const [premiacoes, setPremiacoes] = useState<Record<string, ConfigPremiacao>>({})
+  const temporada = formato.tipo === 'temporada' ? temporadas.find((item) => item.id === formato.temporadaId) : undefined
+  const donoPremiacao = formato.tipo === 'temporada' ? `temporada:${formato.temporadaId}` : 'torneio'
+  const premiacaoSalva = formato.tipo === 'temporada' ? temporada?.premiacao : torneio.premiacao
+  const premiacao = premiacoes[donoPremiacao] ?? premiacaoSalva ?? premiacaoPadrao(idioma)
+  const ventosFixos = exigeVentos(formato)
+  const comVentos = ventosFixos || ventos
+  const [woEditado, setWoEditado] = useState<RegrasWo | null>(null)
+  const woPadrao = regrasWoDe({
+    jogo: useModoJogoAtual() === 'mcr' ? 'mcr' : undefined,
+    variante: torneio.variante,
+    wo: torneio.wo ?? temporada?.wo,
+  })
+  const wo = woPadrao && (woEditado ?? woPadrao)
+  const inscritos = temporada
+    ? Math.max(
+        jogadores,
+        rankingTemporada(encontrosDaTemporada(torneios, temporada.id), partidas, temporada.criterio).length,
+      )
+    : jogadores
   const [novaTemporada, setNovaTemporada] = useState(() => {
     const hoje = new Date()
     const fim = new Date(hoje)
@@ -53,10 +85,19 @@ export default function ConfigTorneioSheet({
   const minutos = Math.round(timers.rodadaSegundos / 60)
   const personalizado = !OPCOES_TIMER_RODADA.some((segundos) => segundos === timers.rodadaSegundos)
 
+  const porMesa = jogadoresPorMesa(torneio)
   const abaTorneio = (
     <>
       <div className="cfg-conjunto-regras">
-        <span className="cfg-campo-rotulo">{t('tournament.settings.format')}</span>
+        <span className="cfg-campo-rotulo">
+          {t('tournament.settings.format')}
+          <AjudaCampo rotulo={t('tournament.settings.format')}>
+            <GuiaFormatos formatos={FORMATOS} atual={formato.tipo} porMesa={porMesa} />
+            {porMesa === 4 && formato.tipo !== 'eliminatorio' && (jogadores === 8 || jogadores === 12) && (
+              <GuiaRodadas jogadores={jogadores} allLeste={formato.tipo === 'rodizio'} />
+            )}
+          </AjudaCampo>
+        </span>
         <BotoesOpcao<FormatoTorneio>
           rotulo={t('tournament.settings.format')}
           valor={formato.tipo}
@@ -70,12 +111,31 @@ export default function ConfigTorneioSheet({
             setVentos(ventosPadrao(tipo))
           }}
           className="cfg-presets trn-formatos-botoes"
-          opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formatsShort.${tipo}`) }))}
+          opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formats.${tipo}`) }))}
         />
-        <p className="cfg-ajuda">{t(`tournament.formatHelp.${formato.tipo}`)}</p>
+        <p className="cfg-ajuda trn-resumo-formato">
+          <span>{t(`tournament.formatHelp.${formato.tipo}`)}</span>
+          <span>
+            {t(porMesa === 3 ? 'tournament.settings.multipleOfThreeShort' : 'tournament.settings.multipleOfFourShort')}
+          </span>
+        </p>
       </div>
 
-      <Grupo rotulo={t('tournament.settings.winds')}>
+      {!ventosFixos && (
+      <>
+      <Grupo
+        rotulo={t('tournament.settings.winds')}
+        ajuda={
+          <>
+            <p>
+              <strong>{t('tournament.settings.windsApp')}.</strong> {t('tournament.settings.windsAppHelp')}
+            </p>
+            <p>
+              <strong>{t('tournament.settings.windsTable')}.</strong> {t('tournament.settings.windsTableHelp')}
+            </p>
+          </>
+        }
+      >
         <BotoesOpcao<'app' | 'mesa'>
           rotulo={t('tournament.settings.winds')}
           valor={ventos ? 'app' : 'mesa'}
@@ -86,14 +146,17 @@ export default function ConfigTorneioSheet({
           ]}
         />
       </Grupo>
-      <p className="cfg-ajuda">{t(ventos ? 'tournament.settings.windsAppHelp' : 'tournament.settings.windsTableHelp')}</p>
+      <p className="cfg-ajuda">{t(comVentos ? 'tournament.settings.windsAppShort' : 'tournament.settings.windsTableShort')}</p>
+      </>
+      )}
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
       {formato.tipo === 'temporada' && (
         <>
-          <Campo rotulo={t('tournament.season.title')}>
+          <Campo rotulo={t('tournament.season.title')} ajuda={<p>{t('tournament.season.criterionLater')}</p>}>
             <select
               className="trn-campo"
+              aria-label={t('tournament.season.title')}
               value={temporadaNova ? '' : formato.temporadaId}
               onChange={(evento) => setFormato({ tipo: 'temporada', temporadaId: evento.target.value })}
             >
@@ -133,20 +196,26 @@ export default function ConfigTorneioSheet({
                   />
                 </Campo>
               </div>
-              <p className="cfg-ajuda">{t('tournament.season.criterionLater')}</p>
+              <p className="cfg-ajuda">{t('tournament.season.criterionShort')}</p>
             </>
           )}
         </>
       )}
-
-      <p className="cfg-ajuda">{t('tournament.settings.multipleOfFour')}</p>
     </>
   )
 
   const secaoTempo = (
     <>
       <h3 className="cfg-grupo">{t('tournament.settings.tabTime')}</h3>
-      <Grupo rotulo={t('tournament.settings.roundTimer')}>
+      <Grupo
+        rotulo={t('tournament.settings.roundTimer')}
+        ajuda={
+          <>
+            <p>{t('tournament.settings.timeUpHelp')}</p>
+            <p>{t('tournament.settings.turnTimerHelp')}</p>
+          </>
+        }
+      >
         <BotoesOpcao<number>
           rotulo={t('tournament.settings.roundTimer')}
           valor={personalizado ? -1 : timers.rodadaSegundos}
@@ -180,7 +249,7 @@ export default function ConfigTorneioSheet({
         </Campo>
       )}
 
-      <Grupo rotulo={t('tournament.settings.tableTimer')}>
+      <Grupo rotulo={t('tournament.settings.tableTimer')} ajuda={<p>{t('tournament.settings.tableTimerHelp')}</p>}>
         <BotoesOpcao<'sim' | 'nao'>
           rotulo={t('tournament.settings.tableTimer')}
           valor={timers.porMesa ? 'sim' : 'nao'}
@@ -191,9 +260,6 @@ export default function ConfigTorneioSheet({
           ]}
         />
       </Grupo>
-      <p className="cfg-ajuda">{t('tournament.settings.tableTimerHelp')}</p>
-      <p className="cfg-ajuda">{t('tournament.settings.timeUpHelp')}</p>
-      <p className="cfg-ajuda">{t('tournament.settings.turnTimerHelp')}</p>
     </>
   )
 
@@ -201,7 +267,6 @@ export default function ConfigTorneioSheet({
   const chines = useModoJogoAtual() === 'mcr'
 
   // Temporada nova ainda sem id: quem confere é `temporadaValida`.
-  const porMesa = jogadoresPorMesa(torneio)
   const cortesValidos =
     formato.tipo === 'temporada' || formatoValido(formato, jogadores >= porMesa * 2 ? jogadores : undefined, porMesa)
 
@@ -213,7 +278,8 @@ export default function ConfigTorneioSheet({
       // Só Torneio e Pontuação: o resto usa o padrão até haver login e Centerpiece.
       secoes={chines ? [] : ['pontuacao']}
       soPlacar
-      podeConcluir={cortesValidos && temporadaValida}
+      fimPontuacao={wo && <CamposWo regras={wo} aoMudar={setWoEditado} />}
+      podeConcluir={cortesValidos && temporadaValida && premiacaoValida(premiacao) && (!wo || regrasWoValidas(wo))}
       abasExtras={[
         {
           id: 'torneio',
@@ -225,15 +291,27 @@ export default function ConfigTorneioSheet({
             </>
           ),
         },
+        {
+          id: 'premiacao',
+          rotulo: t('tournament.prize.tab'),
+          conteudo: (
+            <EditorPremiacao
+              key={donoPremiacao}
+              config={premiacao}
+              jogadores={inscritos}
+              aoMudar={(nova) => setPremiacoes({ ...premiacoes, [donoPremiacao]: nova })}
+            />
+          ),
+        },
         ...(chines
           ? [
               {
                 id: 'pontuacaoMcr',
                 rotulo: t('tableConfig.scoring'),
                 conteudo: (
-                  <div className="cfg-campo">
-                    <p className="cfg-ajuda">{t('placar.mcr.torneio.regra')}</p>
-                  </div>
+                  <Grupo rotulo={t('tableConfig.scoring')} ajuda={<p>{t('placar.mcr.torneio.regra')}</p>}>
+                    <p className="cfg-ajuda trn-regra-curta">{t('placar.mcr.torneio.regraCurta')}</p>
+                  </Grupo>
                 ),
               },
             ]
@@ -247,11 +325,21 @@ export default function ConfigTorneioSheet({
           const temporada = {
             ...criarTemporada({ id: gerarId(), ...novaTemporada, nome: novaTemporada.nome.trim(), agora: new Date().toISOString() }),
             config,
+            ...(premiacao.ativa ? { premiacao } : {}),
+            ...(woEditado ? { wo: woEditado } : {}),
           }
           salvarTemporada(temporada)
           formatoFinal = { tipo: 'temporada', temporadaId: temporada.id }
         }
-        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: ventos })
+        if (temporada && (premiacoes[donoPremiacao] || woEditado)) {
+          salvarTemporada({
+            ...temporada,
+            ...(premiacoes[donoPremiacao] ? { premiacao } : {}),
+            ...(woEditado ? { wo: woEditado } : {}),
+          })
+        }
+        const doTorneio = formato.tipo !== 'temporada' && premiacao.ativa ? premiacao : undefined
+        aoSalvar({ ...torneio, formato: formatoFinal, timers, config, sortearVentos: comVentos, premiacao: doTorneio, wo: woEditado ?? torneio.wo ?? temporada?.wo })
       }}
     />
   )
@@ -273,9 +361,6 @@ function OpcoesFormato({
   )
   const opcoesRodadas = RODADAS.map((numero) => ({ valor: numero, rotulo: String(numero) }))
 
-  if (formato.tipo === 'rodizio') {
-    return <p className="cfg-ajuda">{t('tournament.settings.rotationRounds', { count: formato.rodadas })}</p>
-  }
   if (formato.tipo === 'suico') {
     return (
       <Grupo rotulo={t('tournament.settings.rounds')}>
@@ -296,13 +381,22 @@ function OpcoesFormato({
           <BotoesOpcao<'rodizio' | 'suico'>
             rotulo={t('tournament.settings.qualifier')}
             valor={formato.classificatoria}
-            aoEscolher={(classificatoria) => aoMudar({ ...formato, classificatoria })}
+            aoEscolher={(classificatoria) =>
+              aoMudar({
+                ...formato,
+                classificatoria,
+                ...(classificatoria === 'rodizio' ? { rodadasClassificatoria: RODADAS_PADRAO } : {}),
+              })
+            }
             opcoes={[
               { valor: 'rodizio', rotulo: t('tournament.formats.rodizio') },
               { valor: 'suico', rotulo: t('tournament.formats.suico') },
             ]}
           />
         </Grupo>
+        {formato.classificatoria === 'rodizio' ? (
+          <p className="cfg-ajuda">{t('tournament.formatHelp.rodizio')}</p>
+        ) : (
         <Grupo rotulo={t('tournament.settings.qualifierRounds')}>
           <BotoesOpcao<number>
             rotulo={t('tournament.settings.qualifierRounds')}
@@ -311,9 +405,11 @@ function OpcoesFormato({
             opcoes={opcoesRodadas}
           />
         </Grupo>
-        <Campo rotulo={t('tournament.settings.cuts')}>
+        )}
+        <Campo rotulo={t('tournament.settings.cuts')} ajuda={<p>{t('tournament.settings.cutsHelp')}</p>}>
           <input
             className={`trn-campo${cortes ? '' : ' trn-campo--erro'}`}
+            aria-label={t('tournament.settings.cuts')}
             value={textoCortes}
             inputMode="numeric"
             placeholder="8, 4"
@@ -325,7 +421,7 @@ function OpcoesFormato({
             }}
           />
         </Campo>
-        <p className={`cfg-ajuda${cortes ? '' : ' trn-erro'}`}>{t('tournament.settings.cutsHelp')}</p>
+        <p className={`cfg-ajuda${cortes ? '' : ' trn-erro'}`}>{t('tournament.settings.cutsShort')}</p>
         <Grupo rotulo={t('tournament.settings.roundsPerPhase')}>
           <BotoesOpcao<number>
             rotulo={t('tournament.settings.roundsPerPhase')}
@@ -351,7 +447,22 @@ function OpcoesFormato({
   return null
 }
 
-function Campo({ rotulo, children }: { rotulo: string; children: ReactNode }) {
+interface PropsCampo {
+  rotulo: string
+  /** Conteúdo do ? ao lado do rótulo. */
+  ajuda?: ReactNode
+  children: ReactNode
+}
+
+function Campo({ rotulo, ajuda, children }: PropsCampo) {
+  // Dentro de um <label>, o ? viraria o controle rotulado no lugar do campo.
+  if (ajuda) {
+    return (
+      <Grupo rotulo={rotulo} ajuda={ajuda}>
+        {children}
+      </Grupo>
+    )
+  }
   return (
     <label className="cfg-campo">
       <span className="cfg-campo-rotulo">{rotulo}</span>
@@ -360,10 +471,13 @@ function Campo({ rotulo, children }: { rotulo: string; children: ReactNode }) {
   )
 }
 
-function Grupo({ rotulo, children }: { rotulo: string; children: ReactNode }) {
+function Grupo({ rotulo, ajuda, children }: PropsCampo) {
   return (
     <div className="cfg-campo">
-      <span className="cfg-campo-rotulo">{rotulo}</span>
+      <span className="cfg-campo-rotulo">
+        {rotulo}
+        {ajuda && <AjudaCampo rotulo={rotulo}>{ajuda}</AjudaCampo>}
+      </span>
       {children}
     </div>
   )
