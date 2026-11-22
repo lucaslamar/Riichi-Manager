@@ -27,7 +27,6 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 - O fim do tempo não encerra a partida na mão atual, embora a ajuda diga que sim.
 - A ajuda do timer de vez cita a aba Mesa, que não existe mais nas configurações do torneio.
-- `npm run lint` varre `.claude/skills` e falha num script de lá.
 
 ## Desktop
 
