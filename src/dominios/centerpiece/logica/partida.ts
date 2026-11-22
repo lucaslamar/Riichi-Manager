@@ -10,6 +10,7 @@ import type { ResumoMaos } from './resumoPartida'
 import { pagamentosChombo } from './aplicarChombo'
 import { calcularOka, type ConfigMesa } from './configMesa'
 import { desmarcarRiichi, type Lance, type RegistroMao } from './descartes'
+import { pontosParaColocacao, REGRA_SAIDA_PADRAO } from './saidaDaPartida'
 import { calcularUma } from './uma'
 import type { MaoMontada } from './tipos-integracao'
 import { vezInicial, type EstadoVez } from './vez'
@@ -103,6 +104,8 @@ export interface ResultadoFinal {
   desempate?: number
   /** Torneio: minutos de atraso, já descontados do `final`. */
   atraso?: number
+  /** W.O.: saiu no meio. A penalidade já está em `multa`. */
+  saiu?: true
 }
 
 export interface Partida {
@@ -129,6 +132,8 @@ export interface Partida {
   registradaManual?: boolean
   /** Registrada à mão: os jogadores foram listados na ordem dos ventos (Leste, Sul, Oeste, Norte). */
   ordemDosVentos?: boolean
+  /** W.O. no meio da partida: quem saiu. A regra fica em `config.saida`. */
+  saidas?: Cadeira[]
   /** Torneio: mesa não jogada, com quem faltou. */
   wo?: { ausentes: Cadeira[] }
   /** Índices base zero na grade. `guardada`: o organizador conferiu e confirmou. */
@@ -645,19 +650,27 @@ const arredondar = (valor: number) => Math.round(valor * 100) / 100
  */
 export function calcularResultado(partida: Partida): ResultadoFinal[] {
   if (partida.variante === 'sanma') return calcularResultadoSanma(partida)
-  const { placar, config, assentos, eventos } = partida
+  const { placar, config, assentos, eventos, saidas = [] } = partida
   const pontos = { ...placar.pontos }
+  const regraSaida = config.saida ?? REGRA_SAIDA_PADRAO
+  const paraColocar = (cadeira: Cadeira) =>
+    pontosParaColocacao(pontos[cadeira], saidas.includes(cadeira), regraSaida)
 
-  const maiorAntes = Math.max(...CADEIRAS.map((cadeira) => pontos[cadeira]))
+  const maiorAntes = Math.max(...CADEIRAS.map(paraColocar))
   if (config.palitosRestantes === 'primeiro' && placar.palitos > 0) {
-    const primeiros = CADEIRAS.filter((cadeira) => pontos[cadeira] === maiorAntes)
+    const primeiros = CADEIRAS.filter((cadeira) => paraColocar(cadeira) === maiorAntes)
     const parte = Math.floor((placar.palitos * 1000) / primeiros.length / 100) * 100
     for (const cadeira of primeiros) pontos[cadeira] += parte
   }
 
-  const ordenadas = [...CADEIRAS].sort((uma, outra) => pontos[outra] - pontos[uma] || uma - outra)
+  const colocar = porCadeira(paraColocar)
+  const ordenadas = [...CADEIRAS].sort((uma, outra) => colocar[outra] - colocar[uma] || uma - outra)
   const oka = calcularOka(config) / 1000
-  const umas = calcularUma(config, CADEIRAS.map((cadeira) => pontos[cadeira]))
+  const umas = calcularUma(
+    config,
+    CADEIRAS.map((cadeira) => pontos[cadeira]),
+    CADEIRAS.map((cadeira) => colocar[cadeira]),
+  )
   const multas = porCadeira(() => 0)
   for (const evento of eventos) {
     const multa = evento.detalhe?.multa
@@ -665,12 +678,14 @@ export function calcularResultado(partida: Partida): ResultadoFinal[] {
   }
 
   return ordenadas.map((cadeira) => {
-    const empatadas = ordenadas.filter((outra) => pontos[outra] === pontos[cadeira])
+    const empatadas = ordenadas.filter((outra) => colocar[outra] === colocar[cadeira])
     const inicio = ordenadas.indexOf(empatadas[0])
     const uma = umas[cadeira]
     const okaAqui = inicio === 0 ? oka / empatadas.length : 0
-    const multa = multas[cadeira] / 1000
+    const saiu = saidas.includes(cadeira)
+    const multa = multas[cadeira] / 1000 + (saiu ? regraSaida.penalidade : 0)
     return {
+      ...(saiu ? { saiu: true as const } : {}),
       cadeira,
       jogadorId: assentos[cadeira].jogadorId,
       colocacao: inicio + 1,

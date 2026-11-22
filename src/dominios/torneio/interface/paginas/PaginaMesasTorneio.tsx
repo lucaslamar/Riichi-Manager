@@ -165,6 +165,7 @@ export default function PaginaMesasTorneio({
       mesaFinal: t('tournament.tables.finalTable'),
       status: (status) => t(`tournament.tables.status.${status}`),
       wo: t('tournament.wo.tag'),
+      saiu: t('match.leftGame.tag'),
       atraso: (minutos) => t('tournament.wo.minutesShort', { minutes: minutos }),
       vento: (vento) => t(CHAVE_VENTO[vento]),
       nome: nomeDe,
@@ -378,7 +379,9 @@ export default function PaginaMesasTorneio({
                     ? t('tournament.wo.tag')
                     : status === 'em_andamento' && partida
                       ? `${t('tournament.tables.status.em_andamento')} · ${maoAtual(partida)}`
-                      : t(`tournament.tables.status.${status}`)}
+                      : partida?.saidas?.length
+                        ? t('match.leftGame.withTag')
+                        : t(`tournament.tables.status.${status}`)}
                 </span>
               </div>
 
@@ -414,6 +417,7 @@ export default function PaginaMesasTorneio({
                           ) : (
                             <>
                               <span className="sr-only">{t('tournament.points.points')}: </span>
+                              {linha.saiu && `${t('match.leftGame.tag')} `}
                               {numero(linha.pontosBrutos)}
                             </>
                           )}

@@ -13,6 +13,8 @@ import {
   type RegrasPontuacao,
 } from '../../logica/regrasPontuacao'
 import { umaValida } from '../../logica/uma'
+import { regraSaidaValida, type RegraSaida } from '../../logica/saidaDaPartida'
+import CamposSaida from './CamposSaida'
 import BotoesOpcao from './BotoesOpcao'
 import CampoUma, { CampoInteiro } from './CampoUma'
 import EscolhaOka from './EscolhaOka'
@@ -22,6 +24,7 @@ interface OpcoesPartidaRegistro {
   tipoPartida: 'leste' | 'hanchan'
   /** undefined: a mesa já vem com os ventos (clube) e a pergunta some. */
   ordemVentos?: boolean
+  saida: RegraSaida
 }
 
 /** Deslize (px) bem mais horizontal que vertical para trocar de conjunto. */
@@ -187,7 +190,7 @@ function FolhaRegras({
           <button
             type="button"
             className="btn-primario"
-            disabled={!umaValida(uma)}
+            disabled={!umaValida(uma) || !regraSaidaValida(opcoes.saida)}
             onClick={() => aoSalvar(conjunto, rascunho, opcoes)}
           >
             {t('players.save')}
@@ -287,6 +290,7 @@ function FolhaRegras({
           pontosRetorno={pontosRetorno}
           pontosAtuais={pontosAtuais}
         />
+        <CamposSaida regra={opcoes.saida} aoMudar={(saida) => setOpcoes({ ...opcoes, saida })} />
       </div>
     </Modal>
   )

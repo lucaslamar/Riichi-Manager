@@ -53,6 +53,17 @@ export function maiorMaoDoEscopo(
   return maior
 }
 
+/** Partidas do jogador em que alguém saiu no meio (W.O.). */
+export function partidasComSaida(partidas: readonly Partida[], jogadorId: string): number {
+  return partidas.filter(
+    ({ saidas, resultado }) =>
+      !!saidas?.length && resultado?.some((linha) => linha.jogadorId === jogadorId),
+  ).length
+}
+
+export const semSaidas = (partidas: readonly Partida[]): Partida[] =>
+  partidas.filter((partida) => !partida.saidas?.length)
+
 export function estatisticasDoJogador(
   partidas: readonly Partida[],
   jogadorId: string,

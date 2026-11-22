@@ -1729,6 +1729,24 @@
       "resetDayTitle": "Pradėti dieną iš naujo?",
       "resetDayHelp": "Kiti burtai neatsižvelgs, kas šiandien jau žaidė kartu. Naudokite, kai grupė kita.",
       "resetDone": "Kiti burtai prasidės iš naujo"
+    },
+    "leftGame": {
+      "tag": "W.O.",
+      "withTag": "Su W.O.",
+      "mark": "W.O.: paliko partiją",
+      "undo": "Atšaukti W.O.",
+      "needPoints": "W.O.: taškai išeinant",
+      "sumFree": "Su W.O. suma neturi sutapti.",
+      "seat": "{{wind}}, {{name}}, W.O., taškai: {{points}}",
+      "settings": "W.O. partijos metu",
+      "last": "Lieka 4-as",
+      "byPoints": "Pagal taškus",
+      "penalty": "Bauda rezultatui",
+      "helpDefault": "Pagal numatymą išėjęs žaidėjas lieka 4-as su tuo metu turėtais taškais.",
+      "helpPenalty": "Bauda atimama po uma. 30 atima 30,0 reitingo taško.",
+      "helpSum": "Su W.O. stalą galima įrašyti, net jei suma nesutampa.",
+      "summaryLast": "W.O. lieka 4-as",
+      "summaryPoints": "W.O. pagal taškus"
     }
   },
   "spokenTiles": {
@@ -3693,6 +3711,7 @@
       "poucosJogos": "Per mažai partijų prognozei (bent {{count}} kiekvienam).",
       "mediaMenor": "prognozės nėra, nes vidurkis ne didesnis.",
       "longeDemais": "prognozės nėra, nes vidurkiai per panašūs."
-    }
+    },
+    "withoutWo": "Be partijų su W.O. ({{count}})"
   }
 }

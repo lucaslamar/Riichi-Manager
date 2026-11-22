@@ -351,6 +351,7 @@ function TelasCenterpiece({
                       ?.pontosBrutos ?? substituir.placar.pontos[cadeira as 0 | 1 | 2 | 3],
                 )
               : undefined,
+            saidasIniciais: substituir?.saidas,
             atraso: regrasWo
               ? {
                   limite: regrasWo.toleranciaMinutos,

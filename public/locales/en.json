@@ -1685,6 +1685,24 @@
       "resetDayTitle": "Start the day from scratch?",
       "resetDayHelp": "The next draw will not consider who already played together today. Use it when the group is different.",
       "resetDone": "The next draw starts from scratch"
+    },
+    "leftGame": {
+      "tag": "W.O.",
+      "withTag": "With W.O.",
+      "mark": "W.O.: left the game",
+      "undo": "Undo W.O.",
+      "needPoints": "W.O.: points on leaving",
+      "sumFree": "With a W.O., the sum does not need to match.",
+      "seat": "{{wind}}, {{name}}, W.O. with {{points}} points",
+      "settings": "W.O. during a game",
+      "last": "Finishes 4th",
+      "byPoints": "By points",
+      "penalty": "Penalty on the result",
+      "helpDefault": "By default, whoever leaves mid-game finishes 4th with the points held when leaving.",
+      "helpPenalty": "The penalty comes off the final result, after uma. 30 takes 30.0 from the ranking.",
+      "helpSum": "With a W.O., the table can be recorded even if the sum does not match.",
+      "summaryLast": "W.O. finishes 4th",
+      "summaryPoints": "W.O. by points"
     }
   },
   "spokenTiles": {
@@ -3603,6 +3621,7 @@
       "poucosJogos": "Too few games to project (at least {{count}} each).",
       "mediaMenor": "no projection, as the average is not higher.",
       "longeDemais": "no projection, as the averages are too close."
-    }
+    },
+    "withoutWo": "Exclude games with W.O. ({{count}})"
   }
 }

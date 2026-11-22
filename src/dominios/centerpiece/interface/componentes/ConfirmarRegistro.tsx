@@ -67,7 +67,20 @@ export default function ConfirmarRegistro({
             <li key={linha.cadeira}>
               <span className="ptd-resultado-lugar">{lugar(linha.colocacao)}</span>
               <div className="ptd-resultado-dados">
-                <strong className="fin-mudanca-nome">{nomeDe(linha.cadeira)}</strong>
+                <strong className="fin-mudanca-nome">
+                  {nomeDe(linha.cadeira)}
+                  {linha.saiu && (
+                    <>
+                      {' '}
+                      <small className="fin-selo-wo">{t('match.leftGame.tag')}</small>
+                    </>
+                  )}
+                </strong>
+                {linha.saiu && linha.multa > 0 && (
+                  <span className="ptd-apoio">
+                    {t('match.result.penalty', { points: numero(linha.multa) })}
+                  </span>
+                )}
                 {/* Pontos, uma e oka em colunas pequenas, com o título em cima. */}
                 {(!semUma || comPontos) && (
                   <dl className="fin-detalhes">

@@ -17,6 +17,12 @@ import EditorPremiacao from './EditorPremiacao'
 import CamposWo from './CamposWo'
 import type { RegrasWo } from '@/compartilhado/modo-jogo/regrasDoModo'
 import { regrasWoDe, regrasWoValidas } from '../../logica/wo'
+import CamposSaida from '@/dominios/centerpiece/interface/componentes/CamposSaida'
+import {
+  REGRA_SAIDA_PADRAO,
+  regraSaidaValida,
+  type RegraSaida,
+} from '@/dominios/centerpiece/logica/saidaDaPartida'
 import GuiaFormatos from './GuiaFormatos'
 import GuiaRodadas from './GuiaRodadas'
 import '../torneio.css'
@@ -61,6 +67,8 @@ export default function ConfigTorneioSheet({
     wo: torneio.wo ?? temporada?.wo,
   })
   const wo = woPadrao && (woEditado ?? woPadrao)
+  const [saidaEditada, setSaidaEditada] = useState<RegraSaida | null>(null)
+  const saida = saidaEditada ?? torneio.config.saida ?? temporada?.config.saida ?? REGRA_SAIDA_PADRAO
   const inscritos = temporada
     ? Math.max(
         jogadores,
@@ -273,8 +281,20 @@ export default function ConfigTorneioSheet({
       // Só Torneio e Pontuação: o resto usa o padrão até haver login e Centerpiece.
       secoes={chines ? [] : ['pontuacao']}
       soPlacar
-      fimPontuacao={wo && <CamposWo regras={wo} aoMudar={setWoEditado} />}
-      podeConcluir={cortesValidos && temporadaValida && premiacaoValida(premiacao) && (!wo || regrasWoValidas(wo))}
+      fimPontuacao={
+        wo && (
+          <>
+            <CamposWo regras={wo} aoMudar={setWoEditado} />
+            <CamposSaida regra={saida} aoMudar={setSaidaEditada} />
+          </>
+        )
+      }
+      podeConcluir={
+        cortesValidos &&
+        temporadaValida &&
+        premiacaoValida(premiacao) &&
+        (!wo || (regrasWoValidas(wo) && regraSaidaValida(saida)))
+      }
       abasExtras={[
         {
           id: 'torneio',
@@ -313,8 +333,10 @@ export default function ConfigTorneioSheet({
           : []),
       ]}
       aoFechar={aoFechar}
-      aoConcluir={(config) => {
+      aoConcluir={(configDaFolha) => {
         if (!cortesValidos || !temporadaValida) return
+        // A regra do W.O. não é do preset: trocar de preset não a apaga.
+        const config = wo ? { ...configDaFolha, saida } : configDaFolha
         let formatoFinal = formato
         if (formato.tipo === 'temporada' && temporadaNova) {
           const temporada = {
@@ -326,9 +348,10 @@ export default function ConfigTorneioSheet({
           salvarTemporada(temporada)
           formatoFinal = { tipo: 'temporada', temporadaId: temporada.id }
         }
-        if (temporada && (premiacoes[donoPremiacao] || woEditado)) {
+        if (temporada && (premiacoes[donoPremiacao] || woEditado || saidaEditada)) {
           salvarTemporada({
             ...temporada,
+            ...(saidaEditada ? { config: { ...temporada.config, saida: saidaEditada } } : {}),
             ...(premiacoes[donoPremiacao] ? { premiacao } : {}),
             ...(woEditado ? { wo: woEditado } : {}),
           })

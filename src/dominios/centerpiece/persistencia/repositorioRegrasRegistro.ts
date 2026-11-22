@@ -1,5 +1,6 @@
 import type { ArmazenamentoChaveValor } from '../../../compartilhado/persistencia/armazenamento'
 import type { ConfigMesa } from '../logica/configMesa'
+import { lerRegraSaida, type RegraSaida } from '../logica/saidaDaPartida'
 import { normalizarUma } from '../logica/uma'
 import {
   CONJUNTOS_REGISTRO,
@@ -19,6 +20,8 @@ export interface RegrasRegistroSalvas {
   conjunto: ConjuntoRegistro
   personalizado: RegrasPontuacao | null
   tipoPartida?: ConfigMesa['tipoPartida']
+  /** W.O. no meio da partida. Ausente: o padrão. */
+  saida?: RegraSaida
 }
 
 const numeroValido = (valor: unknown): valor is number => typeof valor === 'number' && Number.isFinite(valor)
@@ -42,8 +45,10 @@ export function carregarRegrasRegistro(armazenamento: ArmazenamentoChaveValor): 
         }
       : null
     const tipoPartida = lido.tipoPartida === 'leste' || lido.tipoPartida === 'hanchan' ? lido.tipoPartida : null
+    const saida = lerRegraSaida(lido.saida)
     // Personalizado sem valores guardados volta para o Clube.
     return {
+      ...(saida ? { saida } : {}),
       conjunto: conjunto === 'personalizado' && !personalizado ? 'padrao' : conjunto,
       personalizado,
       ...(tipoPartida ? { tipoPartida } : {}),

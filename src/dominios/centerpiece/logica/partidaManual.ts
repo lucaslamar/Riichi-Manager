@@ -3,7 +3,7 @@
  * histórico e no ranking como qualquer outra, sem mãos.
  */
 import { alterarConfig, type ConfigMesa } from './configMesa'
-import { calcularResultado, criarPartida, type Partida } from './partida'
+import { calcularResultado, criarPartida, type Cadeira, type Partida } from './partida'
 import type { UmaMesa } from './uma'
 
 interface DadosPartidaManual {
@@ -15,6 +15,8 @@ interface DadosPartidaManual {
   uma: UmaMesa
   /** A lista segue Leste, Sul, Oeste e Norte: a partida conta nas estatísticas por vento. */
   ordemDosVentos?: boolean
+  /** W.O.: quem saiu no meio. */
+  saidas?: readonly Cadeira[]
 }
 
 export function criarPartidaManual(
@@ -39,6 +41,7 @@ export function criarPartidaManual(
     finalizadaEm: agora,
     registradaManual: true,
     ordemDosVentos: !!dados.ordemDosVentos,
+    ...(dados.saidas?.length ? { saidas: [...dados.saidas] } : {}),
   }
   return { ...comPontos, resultado: calcularResultado(comPontos) }
 }

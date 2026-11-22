@@ -54,6 +54,8 @@ export function relatorioDaRodada(
     /** Os pontos que ficaram na mesa, sem uma e oka. */
     pontosDaMesa: (valor: number) => string
     wo: string
+    /** Quem saiu no meio: "W.O.". */
+    saiu?: string
     /** "5 min". */
     atraso: (minutos: number) => string
   },
@@ -81,16 +83,18 @@ export function relatorioDaRodada(
       const linhas: LinhaRelatorio[] = [...partida.resultado]
         .sort((a, b) => a.colocacao - b.colocacao)
         .map((resultado) => ({
-          esquerda: `${rotulos.colocacao(resultado.colocacao)} ${rotulos.nome(mesa.assentos[resultado.cadeira])}${resultado.atraso ? ` (${rotulos.atraso(resultado.atraso)})` : ''}`,
+          esquerda: `${rotulos.colocacao(resultado.colocacao)} ${rotulos.nome(mesa.assentos[resultado.cadeira])}${resultado.saiu && rotulos.saiu ? ` (${rotulos.saiu})` : ''}${resultado.atraso ? ` (${rotulos.atraso(resultado.atraso)})` : ''}`,
           direita: [rotulos.pontosDaMesa(resultado.pontosBrutos), rotulos.pontos(resultado.final)],
           ...tomDe(resultado.final),
         }))
-      const comAtraso = partida.resultado.some((resultado) => resultado.atraso)
+      const comObservacao = partida.resultado.some(
+        (resultado) => resultado.atraso || resultado.saiu,
+      )
       return {
         ...cabecalho,
         tabela: true,
         corSoNaUltima: true,
-        ...(comAtraso ? { larguraEsquerda: LARGURA_ESQUERDA + 9 } : {}),
+        ...(comObservacao ? { larguraEsquerda: LARGURA_ESQUERDA + 9 } : {}),
         linhas,
       }
     }

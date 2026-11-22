@@ -42,6 +42,7 @@ export default function CalculadoraPontosSheet({
   marca,
   nome,
   inicial,
+  saiu: saiuInicial,
   baseDaConta,
   textoSoma,
   aoConfirmar,
@@ -58,13 +59,15 @@ export default function CalculadoraPontosSheet({
   /** Com o visor ainda vazio, o + e o Calcular mão somam daqui (os pontos de partida). */
   baseDaConta?: number
   /** "Soma X / 100.000" com o que está no visor. */
-  textoSoma?: (pontos: number | null) => ReactNode
-  aoConfirmar: (pontos: number | null) => void
+  textoSoma?: (pontos: number | null, saiu: boolean) => ReactNode
+  /** W.O. do jogador. Ausente: a folha não oferece W.O. (MCR). */
+  saiu?: boolean
+  aoConfirmar: (pontos: number | null, saiu: boolean) => void
   /**
    * Deslizar para o lado (ou ‹ ›) passa para o jogador vizinho na ordem dos ventos.
    * `pontos` vem só quando a conta foi mexida: aí ela é gravada antes de passar.
    */
-  aoNavegar?: (passo: 1 | -1, pontos: number | null | undefined) => void
+  aoNavegar?: (passo: 1 | -1, pontos: number | null | undefined, saiu: boolean) => void
   /**
    * No lugar do Han e Fu (MCR: a batida chinesa). `pontos` vem só quando a conta foi mexida,
    * para gravar antes.
@@ -95,6 +98,7 @@ export default function CalculadoraPontosSheet({
   const inicioDaConta = () =>
     !mexeu && expressao === '' && baseDaConta !== undefined ? String(baseDaConta) : expressao
   const somarNoVisor = () => setExpressao(operar(inicioDaConta(), '+'))
+  const [saiu, setSaiu] = useState(!!saiuInicial)
   /** Visor tocado: vira campo e chama o teclado do sistema. */
   const [editando, setEditando] = useState(false)
   const campo = useRef<HTMLInputElement | null>(null)
@@ -103,12 +107,15 @@ export default function CalculadoraPontosSheet({
   if (cadeiraAtual !== cadeira) {
     setCadeiraAtual(cadeira)
     setExpressaoCrua(textoInicial)
+    setSaiu(!!saiuInicial)
     setMexeu(false)
     setEditando(false)
   }
   const [calculandoMao, setCalculandoMao] = useState(false)
   const resultado = avaliar(expressao)
   const conta = temOperacao(expressao)
+  // O W.O. guarda os pontos da saída: sem eles não confirma.
+  const faltamPontos = saiu && resultado === null
 
   const textoExpressao = partesDaExpressao(expressao)
     .map((parte) => (typeof parte === 'number' ? numero(parte) : parte === '-' ? '−' : '+'))
@@ -133,7 +140,7 @@ export default function CalculadoraPontosSheet({
     if (evento.key === 'Enter') {
       if (evento.repeat || (focoPorTab.current && alvo.closest('button'))) return
       evento.preventDefault()
-      aoConfirmar(resultado)
+      if (!faltamPontos) aoConfirmar(resultado, saiu)
       return
     }
     // No campo do visor quem trata os caracteres é o onChange.
@@ -165,7 +172,8 @@ export default function CalculadoraPontosSheet({
     campo.current?.focus()
   }
 
-  const navegar = (passo: 1 | -1) => aoNavegar?.(passo, mexeu ? resultado : undefined)
+  const navegar = (passo: 1 | -1) =>
+    aoNavegar?.(passo, mexeu ? resultado : undefined, saiu && !faltamPontos)
 
   // Deslize bem mais horizontal que vertical, como nas folhas de regras.
   const inicioToque = useRef<{ x: number; y: number } | null>(null)
@@ -237,7 +245,8 @@ export default function CalculadoraPontosSheet({
           <button
             type="button"
             className="btn-primario cpt-ok"
-            onClick={() => aoConfirmar(resultado)}
+            disabled={faltamPontos}
+            onClick={() => aoConfirmar(resultado, saiu)}
           >
             {t('tournament.points.ok')}
           </button>
@@ -246,7 +255,11 @@ export default function CalculadoraPontosSheet({
         <div className="cpt-corpo" {...propsToque}>
           <div className="cpt-visor" aria-live="polite" aria-atomic="true">
             <span className="cpt-linha-topo">
-              {textoSoma && <span className="cpt-soma">{textoSoma(resultado)}</span>}
+              {faltamPontos ? (
+                <span className="cpt-soma cpt-soma--aviso">{t('match.leftGame.needPoints')}</span>
+              ) : (
+                textoSoma && <span className="cpt-soma">{textoSoma(resultado, saiu)}</span>
+              )}
               <span className="cpt-expressao">{conta ? `${textoExpressao} =` : ' '}</span>
             </span>
             {editando ? (
@@ -283,6 +296,17 @@ export default function CalculadoraPontosSheet({
             )}
           </div>
 
+          {saiuInicial !== undefined && (
+            <button
+              type="button"
+              className={`btn-contorno cpt-calcular cpt-wo${saiu ? ' cpt-wo--ativo' : ''}`}
+              aria-pressed={saiu}
+              onClick={() => setSaiu(!saiu)}
+            >
+              <i className={`fas ${saiu ? 'fa-rotate-left' : 'fa-user-slash'}`} aria-hidden="true" />{' '}
+              {t(saiu ? 'match.leftGame.undo' : 'match.leftGame.mark')}
+            </button>
+          )}
           <button
             type="button"
             className="btn-contorno cpt-calcular"

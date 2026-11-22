@@ -118,6 +118,15 @@
   margin-bottom: 10px;
 }
 
+.cpt-wo--ativo {
+  border-color: var(--texto-aviso);
+  color: var(--texto-aviso);
+}
+
+.cpt-soma--aviso {
+  color: var(--texto-aviso);
+}
+
 .cpt-teclado {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -299,6 +308,25 @@
   .cpt-teclado {
     width: 100%;
   }
+
+  /* Com W.O., o visor ganha a linha inteira e os dois botões dividem a de baixo. */
+  .cpt-corpo:has(> .cpt-wo) > .cpt-visor {
+    flex-basis: 100%;
+  }
+
+  .cpt-corpo:has(> .cpt-wo) > .cpt-calcular {
+    width: auto;
+    flex: 1;
+  }
+}
+
+/* Selo do W.O., no lugar dos pontos e ao lado de quem saiu. */
+.ptd-assento-pontos.ptd-assento-pontos--wo,
+.fin-selo-wo {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0 10px;
+  color: var(--texto-aviso);
 }
 
 /* Regras do torneio: o mesmo card, só para ler. */

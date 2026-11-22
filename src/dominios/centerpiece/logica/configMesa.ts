@@ -6,6 +6,7 @@ import {
   configuracaoPadrao,
   type ConfiguracaoCalculo,
 } from '@/compartilhado/mahjong/pontuacao/configuracao'
+import { lerRegraSaida, type RegraSaida } from './saidaDaPartida'
 import { normalizarUma, somaUma, TABELA_FLUTUANTE_EXEMPLO, umaFixa, type UmaMesa } from './uma'
 
 export { somaUma }
@@ -45,6 +46,8 @@ export interface ConfigMesa {
   /** Segundos por vez; 0 = desligado. */
   timerVez: 0 | 30 | 60 | 90
   checarFuriten: boolean
+  /** W.O. no meio da partida. Ausente: fica em 4º com os pontos da saída. */
+  saida?: RegraSaida
 }
 
 export const IDS_PRESET: readonly IdPreset[] = ['padrao', 'wrc', 'ema', 'mleague']
@@ -78,7 +81,7 @@ const regrasOficiais = (akadora: boolean): ConfiguracaoCalculo => ({
 /** Regras próprias de cada preset; timer e descartes são preferências da mesa. */
 type RegrasPreset = Omit<
   ConfigMesa,
-  'preset' | 'presetBase' | 'timerVez' | 'checarFuriten'
+  'preset' | 'presetBase' | 'timerVez' | 'checarFuriten' | 'saida'
 >
 
 /**
@@ -265,8 +268,10 @@ export function normalizarConfig(salva: unknown): ConfigMesa {
     (chombo?.tipo === 'fixo' && numeroValido(chombo.valor))
   const booleano = (valor: unknown, reserva: boolean) =>
     typeof valor === 'boolean' ? valor : reserva
+  const saida = lerRegraSaida(lida.saida)
 
   return {
+    ...(saida ? { saida } : {}),
     preset:
       presetSalvo === 'cerrado'
         ? 'personalizado'

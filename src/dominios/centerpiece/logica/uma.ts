@@ -68,15 +68,17 @@ export function valoresDaUma(uma: UmaMesa, pontosFinais: readonly number[], reto
 
 /**
  * Uma de cada jogador, na ordem de `pontosFinais`. Empate de pontos soma a uma das
- * colocações empatadas e divide entre os empatados.
+ * colocações empatadas e divide entre os empatados. `paraColocar` troca quem decide a
+ * colocação (W.O.), e a flutuante continua contando pelos pontos de verdade.
  */
 export function calcularUma(
   config: { uma: UmaMesa; pontosRetorno: number },
   pontosFinais: readonly number[],
+  paraColocar: readonly number[] = pontosFinais,
 ): number[] {
   const valores = valoresDaUma(config.uma, pontosFinais, config.pontosRetorno)
-  const ordenados = [...pontosFinais].sort((um, outro) => outro - um)
-  return pontosFinais.map((pontos) => {
+  const ordenados = [...paraColocar].sort((um, outro) => outro - um)
+  return paraColocar.map((pontos) => {
     const inicio = ordenados.indexOf(pontos)
     const empatados = ordenados.filter((outro) => outro === pontos).length
     const lugares = valores.slice(inicio, inicio + empatados)

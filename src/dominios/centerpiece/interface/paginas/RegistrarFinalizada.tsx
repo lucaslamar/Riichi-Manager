@@ -40,7 +40,11 @@ import AtrasoRegistro from '../componentes/AtrasoRegistro'
 import CardAssento from '../componentes/CardAssento'
 import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
-import { somaFecha } from '../../logica/expressaoPontos'
+import {
+  fechamentoDoRegistro,
+  REGRA_SAIDA_PADRAO,
+  type RegraSaida,
+} from '../../logica/saidaDaPartida'
 import type { MudancaRanking } from '../../logica/ranking'
 import RegrasPontuacaoRegistro, { useResumo } from '../componentes/RegrasPontuacaoRegistro'
 import { assentosDaMesa } from '../hooks/useClube'
@@ -95,6 +99,8 @@ export default function RegistrarFinalizada({
     vinculo: NonNullable<Partida['vinculoTorneio']>
     /** Corrigir: os pontos do resultado que já existe. */
     pontosIniciais?: readonly number[]
+    /** Corrigir: quem saiu no meio (W.O.). */
+    saidasIniciais?: readonly Cadeira[]
     atraso?: {
       limite: number
       porMinuto: number
@@ -138,12 +144,17 @@ export default function RegistrarFinalizada({
     // Padrão: hanchan.
     salvas.tipoPartida ?? 'hanchan',
   )
+  const [regraSaida, setRegraSaida] = useState<RegraSaida>(
+    torneio?.config.saida ?? salvas.saida ?? REGRA_SAIDA_PADRAO,
+  )
   const base = torneio?.config ?? alterarConfig(baseConjunto, { tipoPartida })
   const guardar = (
     novo: ConjuntoRegistro,
     valores: RegrasPontuacao | null,
-    tipo: ConfigMesa['tipoPartida'] = tipoPartida,
+    tipo: ConfigMesa['tipoPartida'],
+    saida: RegraSaida,
   ) => {
+    setRegraSaida(saida)
     setConjunto(novo)
     setPersonalizado(valores)
     setTipoPartida(tipo)
@@ -151,6 +162,7 @@ export default function RegistrarFinalizada({
       conjunto: novo,
       personalizado: valores,
       tipoPartida: tipo,
+      saida,
     })
   }
   // Convidados do clube: id gerado na hora e o nome escrito na lista.
@@ -178,6 +190,9 @@ export default function RegistrarFinalizada({
   const pontos = chines
     ? registro.pontos.map((valor) => (valor === null ? '' : String(valor)))
     : pontosRiichi
+  const [saidas, setSaidas] = useState<readonly boolean[]>(() =>
+    LUGARES.map((lugar) => !!torneio?.saidasIniciais?.includes(lugar)),
+  )
   const [atrasos, setAtrasos] = useState<Readonly<Record<string, number>>>(() => torneio?.atraso?.iniciais ?? {})
   const [escolhendo, setEscolhendo] = useState<number | null>(null)
   /** Torneio: jogador com a calculadora de pontos aberta. */
@@ -196,7 +211,13 @@ export default function RegistrarFinalizada({
   const pontosNumeros = pontosCompletos ? efetivos.map((texto) => lerPontos(texto) ?? 0) : undefined
   // A soma fica vermelha enquanto não fecha. No torneio ela tem que fechar, contando os depósitos de riichi que ficaram na mesa.
   const soma = pontos.reduce((total, texto) => total + (lerPontos(texto) ?? 0), 0)
-  const fechamento = somaFecha(soma, totalMesa, torneio?.config.palitosRestantes ?? 'primeiro')
+  const fechar = (valor: number, comSaida: boolean) =>
+    fechamentoDoRegistro(valor, totalMesa, {
+      palitosRestantes: torneio?.config.palitosRestantes ?? 'primeiro',
+      comSaida,
+    })
+  const cadeirasQueSairam = LUGARES.filter((lugar) => saidas[lugar])
+  const fechamento = fechar(soma, cadeirasQueSairam.length > 0)
   const completo =
     assentos.every(Boolean) &&
     pontosCompletos &&
@@ -208,7 +229,7 @@ export default function RegistrarFinalizada({
       completo && pontosNumeros && !chines
         ? criarPartidaManual(
             'previa',
-            base,
+            { ...base, saida: regraSaida },
             {
               jogadorIds: assentos as unknown as readonly [string, string, string, string],
               nomes: assentos.map((id) => nomeDe(id) ?? ''),
@@ -217,13 +238,14 @@ export default function RegistrarFinalizada({
               pontosRetorno,
               uma,
               ordemDosVentos,
+              saidas: cadeirasQueSairam,
             },
             new Date().toISOString(),
           )
         : null,
     // A prévia só depende do que foi digitado.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [completo, assentos, efetivos.join(), pontosPartida, pontosRetorno, uma, base],
+    [completo, assentos, efetivos.join(), pontosPartida, pontosRetorno, uma, base, ordemDosVentos, saidas, regraSaida],
   )
 
   const previaMcr =
@@ -260,26 +282,43 @@ export default function RegistrarFinalizada({
       pontosTrocados[lugar] = pontos[origem]
       pontosTrocados[origem] = pontos[lugar]
       setPontos(pontosTrocados)
+      // O W.O. anda com a pessoa.
+      setSaidas(LUGARES.map((i) => saidas[i === lugar ? origem : i === origem ? lugar : i]))
+    } else if (origem < 0) {
+      setSaidas(saidas.map((saiu, i) => i !== lugar && saiu))
     }
     setAssentos(proximos)
     setEscolhendo(null)
   }
 
   /** A soma da mesa com o que está sendo digitado na folha do lugar. */
-  const textoDaSoma = (lugar: number, valor: number | null) => {
+  const textoDaSoma = (lugar: number, valor: number | null, saiu: boolean) => {
     const somaAgora = soma - (lerPontos(pontos[lugar]) ?? 0) + (valor ?? 0)
-    const { fecha } = somaFecha(somaAgora, totalMesa, torneio?.config.palitosRestantes ?? 'primeiro')
+    const { fecha } = fechar(somaAgora, saiu || cadeirasQueSairam.some((outro) => outro !== lugar))
     return (
       <span className={fecha ? undefined : 'cpt-soma--erro'}>
         {t('tournament.points.sum', { sum: numero(somaAgora), total: numero(totalMesa) })}
       </span>
     )
   }
+  const resumoSaida = [
+    t(regraSaida.ficaEmUltimo ? 'match.leftGame.summaryLast' : 'match.leftGame.summaryPoints'),
+    regraSaida.penalidade > 0 ? `−${numero(regraSaida.penalidade)}` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ')
   const nomeDaPrevia = (cadeira: number) => nomeDe(assentos[cadeira]) ?? '—'
+  const mudarSaida = (lugar: number, saiu: boolean) =>
+    setSaidas((atuais) => atuais.map((atual, indice) => (indice === lugar ? saiu : atual)))
   const mudarPontos = (lugar: number, valor: string) =>
     chines
       ? mudarRegistro(digitarTotal(registro, lugar as Cadeira, lerPontos(valor)))
       : setPontos(pontos.map((atual, indice) => (indice === lugar ? valor : atual)))
+
+  const tirarDoLugar = (jogadorId: string) => {
+    setAssentos(assentos.map((id) => (id === jogadorId ? null : id)))
+    setSaidas(saidas.map((saiu, lugar) => saiu && assentos[lugar] !== jogadorId))
+  }
 
   return (
     // Com a calculadora de mão aberta, a tela some e o título é o dela.
@@ -346,18 +385,24 @@ export default function RegistrarFinalizada({
                 rotulo={
                   valor === null
                     ? t('tournament.points.seatEmpty', { wind: vento, name: nomeFalado })
-                    : t('tournament.points.seatFilled', {
+                    : t(saidas[lugar] ? 'match.leftGame.seat' : 'tournament.points.seatFilled', {
                         wind: vento,
                         name: nomeFalado,
                         points: numero(valor),
                       })
                 }
                 destaque={
-                  <span
-                    className={`ptd-assento-pontos${valor === null ? ' ptd-assento-pontos--vazio' : valor < 0 ? ' fin-negativo' : ''}`}
-                  >
-                    {valor === null ? t('tournament.points.points') : numero(valor)}
-                  </span>
+                  saidas[lugar] ? (
+                    <span className="ptd-assento-pontos ptd-assento-pontos--wo">
+                      {t('match.leftGame.tag')}
+                    </span>
+                  ) : (
+                    <span
+                      className={`ptd-assento-pontos${valor === null ? ' ptd-assento-pontos--vazio' : valor < 0 ? ' fin-negativo' : ''}`}
+                    >
+                      {valor === null ? t('tournament.points.points') : numero(valor)}
+                    </span>
+                  )
                 }
                 aoTocar={() => setCalculando(lugar)}
                 // Trocar alguém da mesa: toque longo.
@@ -368,6 +413,9 @@ export default function RegistrarFinalizada({
         </div>
         <p className={`trn-soma${fechamento.fecha ? '' : ' trn-soma--erro'}`} role="status">
           {t('tournament.points.sum', { sum: numero(soma), total: numero(totalMesa) })}
+          {fechamento.porSaida && (
+            <span className="trn-soma-apoio">{t('match.leftGame.sumFree')}</span>
+          )}
           {fechamento.depositosNaMesa > 0 && (
             <span className="trn-soma-apoio">
               {t('tournament.points.depositsLeft', { count: fechamento.depositosNaMesa })}
@@ -402,6 +450,7 @@ export default function RegistrarFinalizada({
               {`${t(base.tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t('match.manual.rulesTitle')}`}
             </strong>
             <span className="ptd-apoio">{resumoRegras(regras)}</span>
+            {cadeirasQueSairam.length > 0 && <span className="ptd-apoio">{resumoSaida}</span>}
           </span>
           <i className="fas fa-lock" aria-hidden="true" />
           <span className="sr-only">{t('tournament.tables.rulesLocked')}</span>
@@ -418,6 +467,7 @@ export default function RegistrarFinalizada({
               {`${t(tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t(`match.manual.rulesets.${conjunto}`)}`}
             </strong>
             <span className="ptd-apoio">{resumoRegras(regras)}</span>
+            {cadeirasQueSairam.length > 0 && <span className="ptd-apoio">{resumoSaida}</span>}
             {!mesaClube && (
               <span className="ptd-apoio">
                 {`${t('match.manual.windOrder')}: ${t(ordemEscolhida ? 'match.manual.windOrderYes' : 'match.manual.windOrderNo')}`}
@@ -435,9 +485,18 @@ export default function RegistrarFinalizada({
           pontosAtuais={pontosNumeros}
           editando={regrasAbertas}
           setEditando={setRegrasAbertas}
-          opcoes={{ tipoPartida, ordemVentos: mesaClube ? undefined : ordemEscolhida }}
+          opcoes={{
+            tipoPartida,
+            ordemVentos: mesaClube ? undefined : ordemEscolhida,
+            saida: regraSaida,
+          }}
           aoSalvar={(novo, editadas, opcoes) => {
-            guardar(novo, novo === 'personalizado' ? editadas : personalizado, opcoes.tipoPartida)
+            guardar(
+              novo,
+              novo === 'personalizado' ? editadas : personalizado,
+              opcoes.tipoPartida,
+              opcoes.saida,
+            )
             if (opcoes.ordemVentos !== undefined) setOrdemEscolhida(opcoes.ordemVentos)
           }}
         />
@@ -511,7 +570,9 @@ export default function RegistrarFinalizada({
           // Sem pontos o 0 é só placeholder: o primeiro dígito entra direto.
           inicial={lerPontos(pontos[calculando])}
           baseDaConta={torneio ? pontosPartida : undefined}
-          textoSoma={(valor) => textoDaSoma(calculando, valor)}
+          textoSoma={(valor, saiu) => textoDaSoma(calculando, valor, saiu)}
+          // O W.O. do MCR ainda não tem valores definidos.
+          saiu={chines ? undefined : saidas[calculando]}
           aoCalcularMao={
             chines
               ? (valor) => {
@@ -523,7 +584,8 @@ export default function RegistrarFinalizada({
               : undefined
           }
           aoFechar={() => setCalculando(null)}
-          aoNavegar={(passo, valor) => {
+          aoNavegar={(passo, valor, saiu) => {
+            mudarSaida(calculando, saiu)
             if (valor !== undefined) mudarPontos(calculando, valor === null ? '' : String(valor))
             // Próximo lugar com jogador, na ordem dos ventos (dá a volta na mesa).
             const vizinho = [1, 2, 3]
@@ -531,7 +593,8 @@ export default function RegistrarFinalizada({
               .find((lugar) => assentos[lugar])
             if (vizinho !== undefined) setCalculando(vizinho as Cadeira)
           }}
-          aoConfirmar={(valor) => {
+          aoConfirmar={(valor, saiu) => {
+            mudarSaida(calculando, saiu)
             mudarPontos(calculando, valor === null ? '' : String(valor))
             setCalculando(null)
           }}
@@ -577,7 +640,7 @@ export default function RegistrarFinalizada({
           aoDesmarcar={(jogadorId) =>
             torneio || mesaMcr
               ? trocarNoTorneio(escolhendo, jogadorId)
-              : setAssentos(assentos.map((id) => (id === jogadorId ? null : id)))
+              : tirarDoLugar(jogadorId)
           }
           aoEscolher={(jogador) => {
             if (torneio || mesaMcr) {
@@ -586,6 +649,7 @@ export default function RegistrarFinalizada({
             }
             const proximos = assentos.map((atual, i) => (i === escolhendo ? jogador.id : atual))
             setAssentos(proximos)
+            mudarSaida(escolhendo, false)
             // Como na Nova partida: a folha segue aberta no próximo jogador vazio
             // e só fecha quando os quatro estão escolhidos.
             const seguinte = [1, 2, 3]

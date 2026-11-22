@@ -1,7 +1,13 @@
+import { useState } from 'react'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import type { ModoJogo } from '@/compartilhado/modo-jogo/tipos'
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
-import { estatisticasDoJogador, maiorMaoDoEscopo } from '../logica/estatisticas'
+import {
+  estatisticasDoJogador,
+  maiorMaoDoEscopo,
+  partidasComSaida,
+  semSaidas,
+} from '../logica/estatisticas'
 import type { EscopoEstatisticas } from '../logica/escopo'
 import TextoMao from './TextoMao'
 import { useFormatoEstatisticas } from './useFormatoEstatisticas'
@@ -10,7 +16,7 @@ const LUGARES = [1, 2, 3, 4] as const
 
 /** Média, taxas, posições e maior mão. */
 export default function NumerosJogador({
-  partidas,
+  partidas: todas,
   jogadorId,
   escopo,
   modo,
@@ -29,12 +35,21 @@ export default function NumerosJogador({
   const { t, numero } = useI18n()
   const { comSinal, percentual } = useFormatoEstatisticas()
 
+  const [semWo, setSemWo] = useState(false)
+  const comWo = partidasComSaida(todas, jogadorId)
+  const partidas = semWo && comWo > 0 ? semSaidas(todas) : todas
   const numeros = estatisticasDoJogador(partidas, jogadorId)
   const maiorDeTodos = semMaiorDeTodos ? null : maiorMaoDoEscopo(partidas)
   const taxa = (valor: number | undefined) => (valor === undefined ? '—' : percentual(valor))
 
   return (
     <div className="est-numeros">
+      {comWo > 0 && (
+        <label className="est-filtro-wo">
+          <input type="checkbox" checked={semWo} onChange={() => setSemWo(!semWo)} />
+          <span>{t('stats.withoutWo', { count: comWo })}</span>
+        </label>
+      )}
       <dl className="est-metricas">
         <div>
           <dt>{t(escopo === 'torneio' ? 'stats.averageHanchan' : 'stats.averageGame')}</dt>

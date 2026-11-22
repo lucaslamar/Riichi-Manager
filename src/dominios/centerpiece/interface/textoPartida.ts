@@ -17,7 +17,8 @@ export function textoDaPartida(
       : `${KANJI_VENTO[linha.vento]} ${t(CHAVE_VENTO[linha.vento])}:`
     const delta =
       historico && linha.delta !== undefined ? ` (${linha.delta > 0 ? '+' : ''}${numero(linha.delta)})` : ''
-    return `${posicao} ${nomeDe(linha.cadeira)} ${numero(linha.pontos)}${delta}`
+    const saiu = partida.saidas?.includes(linha.cadeira) ? ` ${t('match.leftGame.tag')}` : ''
+    return `${posicao} ${nomeDe(linha.cadeira)} ${numero(linha.pontos)}${delta}${saiu}`
   })
   return [`${nomeDoApp} · ${cabecalho}`, '', ...linhas].join('\n')
 }

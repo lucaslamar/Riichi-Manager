@@ -76,6 +76,9 @@ export default function CardMesa({
       <header className="cm-topo">
         <div className="cm-titulo">
           <strong>{cabecalho}</strong>
+          {!!partida.saidas?.length && (
+            <span className="cm-selo">{t('match.leftGame.withTag')}</span>
+          )}
           {(apoio || hora) && (
             <span className="cm-hora">
               {apoio && `${apoio} · `}
@@ -124,6 +127,7 @@ export default function CardMesa({
             nome,
             t('match.cards.pointsSpoken', { points: numero(linha.pontos) }),
             !historico && linha.destaque ? t('match.cards.dealer') : null,
+            partida.saidas?.includes(linha.cadeira) ? t('match.leftGame.tag') : null,
             selo ? t('match.cards.biggestHand', { hand: selo }) : null,
           ]
             .filter(Boolean)
@@ -140,6 +144,9 @@ export default function CardMesa({
               <span className="cm-nome" aria-hidden="true">
                 <span className="cm-nome-texto">{nome}</span>
                 {selo && <span className="cm-selo">{selo}</span>}
+                {partida.saidas?.includes(linha.cadeira) && (
+                  <span className="cm-selo">{t('match.leftGame.tag')}</span>
+                )}
               </span>
               <span className={`cm-pontos${linha.pontos < 0 ? ' cm-negativo' : ''}`} aria-hidden="true">
                 {numero(linha.pontos)}

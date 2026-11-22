@@ -1685,6 +1685,24 @@
       "resetDayTitle": "Começar o dia do zero?",
       "resetDayHelp": "O próximo sorteio não vai considerar quem já jogou junto hoje. Use quando o grupo for outro.",
       "resetDone": "O próximo sorteio começa do zero"
+    },
+    "leftGame": {
+      "tag": "W.O.",
+      "withTag": "Com W.O.",
+      "mark": "W.O.: saiu da partida",
+      "undo": "Desfazer W.O.",
+      "needPoints": "W.O.: pontos na saída",
+      "sumFree": "Com W.O., a soma não precisa fechar.",
+      "seat": "{{wind}}, {{name}}, W.O. com {{points}} pontos",
+      "settings": "W.O. no meio da partida",
+      "last": "Fica em 4º",
+      "byPoints": "Pelos pontos",
+      "penalty": "Penalidade no resultado",
+      "helpDefault": "Por padrão, quem sai no meio fica em 4º com os pontos que tinha na hora da saída.",
+      "helpPenalty": "A penalidade sai do resultado final, depois da uma. 30 tira 30,0 no ranking.",
+      "helpSum": "Com W.O., a mesa registra mesmo que a soma não feche.",
+      "summaryLast": "W.O. fica em 4º",
+      "summaryPoints": "W.O. pelos pontos"
     }
   },
   "spokenTiles": {
@@ -3603,6 +3621,7 @@
       "poucosJogos": "Poucos jogos para projetar (mínimo de {{count}} para cada um).",
       "mediaMenor": "não dá para projetar, porque a média não é maior.",
       "longeDemais": "não dá para projetar, porque as médias estão próximas demais."
-    }
+    },
+    "withoutWo": "Sem partidas com W.O. ({{count}})"
   }
 }
