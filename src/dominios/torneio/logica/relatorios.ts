@@ -53,6 +53,9 @@ export function relatorioDaRodada(
     pontos: (valor: number) => string
     /** Os pontos que ficaram na mesa, sem uma e oka. */
     pontosDaMesa: (valor: number) => string
+    wo: string
+    /** "5 min". */
+    atraso: (minutos: number) => string
   },
 ): Relatorio {
   const final = ehMesaFinal(torneio, rodada)
@@ -61,17 +64,35 @@ export function relatorioDaRodada(
     const status = statusNaTela(torneio, rodada, mesa, partida)
     const cabecalho = {
       titulo: final ? rotulos.mesaFinal : rotulos.mesa(mesa.numero),
-      detalhe: `${ICONE_STATUS[status]} ${rotulos.status(status)}`,
+      detalhe: partida?.wo ? `🚫 ${rotulos.wo}` : `${ICONE_STATUS[status]} ${rotulos.status(status)}`,
+    }
+    if (partida?.wo && partida.resultado) {
+      const { ausentes } = partida.wo
+      const linhas = partida.resultado.map(
+        (resultado): LinhaRelatorio => ({
+          esquerda: `${rotulos.nome(mesa.assentos[resultado.cadeira])}${ausentes.includes(resultado.cadeira) ? ` (${rotulos.wo})` : ''}`,
+          direita: rotulos.pontos(resultado.final),
+          ...tomDe(resultado.final),
+        }),
+      )
+      return { ...cabecalho, tabela: true, larguraEsquerda: LARGURA_ESQUERDA + 5, linhas }
     }
     if (partida?.resultado?.length) {
       const linhas: LinhaRelatorio[] = [...partida.resultado]
         .sort((a, b) => a.colocacao - b.colocacao)
         .map((resultado) => ({
-          esquerda: `${rotulos.colocacao(resultado.colocacao)} ${rotulos.nome(mesa.assentos[resultado.cadeira])}`,
+          esquerda: `${rotulos.colocacao(resultado.colocacao)} ${rotulos.nome(mesa.assentos[resultado.cadeira])}${resultado.atraso ? ` (${rotulos.atraso(resultado.atraso)})` : ''}`,
           direita: [rotulos.pontosDaMesa(resultado.pontosBrutos), rotulos.pontos(resultado.final)],
           ...tomDe(resultado.final),
         }))
-      return { ...cabecalho, tabela: true, corSoNaUltima: true, linhas }
+      const comAtraso = partida.resultado.some((resultado) => resultado.atraso)
+      return {
+        ...cabecalho,
+        tabela: true,
+        corSoNaUltima: true,
+        ...(comAtraso ? { larguraEsquerda: LARGURA_ESQUERDA + 9 } : {}),
+        linhas,
+      }
     }
     return {
       ...cabecalho,

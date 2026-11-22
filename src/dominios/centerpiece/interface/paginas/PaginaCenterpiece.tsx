@@ -10,6 +10,7 @@ import TituloTela from '@/compartilhado/interface/layout/TituloTela'
 import BotaoConfiguracoes from '@/dominios/configuracoes/interface/BotaoConfiguracoes'
 import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import PaginaJogadores from '@/dominios/jogadores/interface/paginas/PaginaJogadores'
+import { aplicarAtrasos, regrasWoDe } from '@/dominios/torneio/logica/wo'
 import { acoesTorneios, useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
@@ -320,6 +321,7 @@ function TelasCenterpiece({
       ?.mesas.find((item) => item.numero === tela.mesa)
     const substituir = partidas.find((item) => item.id === tela.substituirId)
     if (torneio && mesa) {
+      const regrasWo = regrasWoDe(torneio)
       return (
         <RegistrarFinalizada
           key={`${tela.torneioId}-${tela.rodada}-${tela.mesa}`}
@@ -342,6 +344,16 @@ function TelasCenterpiece({
                     substituir.resultado?.find((linha) => linha.cadeira === cadeira)
                       ?.pontosBrutos ?? substituir.placar.pontos[cadeira as 0 | 1 | 2 | 3],
                 )
+              : undefined,
+            atraso: regrasWo
+              ? {
+                  limite: regrasWo.toleranciaMinutos,
+                  porMinuto: regrasWo.porMinuto,
+                  iniciais: Object.fromEntries(
+                    (substituir?.resultado ?? []).map((linha) => [linha.jogadorId, linha.atraso ?? 0]),
+                  ),
+                  aplicar: (previa, minutos) => aplicarAtrasos(previa, minutos, regrasWo),
+                }
               : undefined,
             mudancas: (previa) =>
               mudancaAoRegistrar(

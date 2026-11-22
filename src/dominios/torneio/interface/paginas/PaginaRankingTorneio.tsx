@@ -19,6 +19,7 @@ import {
   type FiltrosRankingTorneio,
 } from '../../logica/filtrosRankingTorneio'
 import { mudancasDoRanking, rankingDoTorneio, recorteAteRodada, textoDaSeta } from '../../logica/ranking'
+import { ausenciasPorWo } from '../../logica/wo'
 import { premiacaoDe, premioDaPosicao } from '../../logica/premiacao'
 import { blocoDaPremiacao, relatorioDaDisputa, relatorioDoJogador, relatorioDoRanking } from '../../logica/relatorios'
 import FolhaPremiacao from '../componentes/FolhaPremiacao'
@@ -78,6 +79,7 @@ export default function PaginaRankingTorneio({
   )
   const linhas = useMemo(() => rankingDoTorneio(recorte.torneio, recorte.partidas), [recorte])
   const mudancas = useMemo(() => mudancasDoRanking(recorte.torneio, recorte.partidas), [recorte])
+  const ausencias = useMemo(() => ausenciasPorWo(recorte.torneio, recorte.partidas), [recorte])
   const distancias = useMemo(() => distanciasDoPodio(linhas), [linhas])
   const rodadasComResultado = useMemo(() => {
     const numeros = partidas.flatMap(({ status, vinculoTorneio }) =>
@@ -148,6 +150,24 @@ export default function PaginaRankingTorneio({
           blocos: [
             ...base.blocos,
             blocoDaPremiacao(premio, { titulo: t('tournament.prize.byPlace'), lugar: textos.lugar, dinheiro }),
+          ],
+        }
+      : base
+
+  const textoWo = (id: string) => {
+    const vezes = ausencias.get(id)
+    return vezes ? t('tournament.wo.times', { times: vezes }) : null
+  }
+  const comWo = (base: Relatorio): Relatorio =>
+    ausencias.size
+      ? {
+          ...base,
+          blocos: [
+            ...base.blocos,
+            {
+              titulo: t('tournament.wo.tag'),
+              linhas: [...ausencias].map(([id, vezes]) => ({ esquerda: nomeDe(id), direita: numero(vezes) })),
+            },
           ],
         }
       : base
@@ -239,7 +259,7 @@ export default function PaginaRankingTorneio({
               aria-haspopup="dialog"
               onClick={() =>
                 setCompartilhando({
-                  relatorio: () => comPremio(disputa ? relatorioDisputa() : relatorio()),
+                  relatorio: () => comPremio(disputa ? relatorioDisputa() : comWo(relatorio())),
                   arquivo: nomeDeArquivo(
                     torneio.nome,
                     t(disputa ? 'tournament.podiumGap.race' : 'tournament.ranking.title'),
@@ -405,12 +425,13 @@ export default function PaginaRankingTorneio({
                       <button
                         type="button"
                         className="trn-nome-ranking"
-                        aria-label={[t('tournament.podiumGap.open', { name: nomeDe(linha.jogadorId) }), premioDele]
+                        aria-label={[t('tournament.podiumGap.open', { name: nomeDe(linha.jogadorId) }), textoWo(linha.jogadorId), premioDele]
                           .filter(Boolean)
                           .join(', ')}
                         aria-haspopup="dialog"
                       >
                         {nomeDe(linha.jogadorId)}
+                        {textoWo(linha.jogadorId) && <small className="trn-wo-linha">{textoWo(linha.jogadorId)}</small>}
                         {premioDele && <small className="trn-premio-linha">{premioDele}</small>}
                       </button>
                     ) : (

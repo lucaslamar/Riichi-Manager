@@ -24,6 +24,7 @@ import {
 } from '../../persistencia/repositorioRegrasRegistro'
 import { lerPontos } from '../../logica/entradaPontos'
 import CalculadoraPontosSheet from '../componentes/CalculadoraPontosSheet'
+import AtrasoRegistro from '../componentes/AtrasoRegistro'
 import CardAssento from '../componentes/CardAssento'
 import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
@@ -64,6 +65,13 @@ export default function RegistrarFinalizada({
     vinculo: NonNullable<Partida['vinculoTorneio']>
     /** Corrigir: os pontos do resultado que já existe. */
     pontosIniciais?: readonly number[]
+    atraso?: {
+      limite: number
+      porMinuto: number
+      /** Por jogador, para trocar de lugar sem perder. */
+      iniciais: Readonly<Record<string, number>>
+      aplicar: (previa: Partida, minutos: Readonly<Record<string, number>>) => Partida
+    }
     /** Como o ranking do torneio fica com este resultado. */
     mudancas: (previa: Partida) => MudancaRanking[]
   }
@@ -128,6 +136,7 @@ export default function RegistrarFinalizada({
   const [pontos, setPontos] = useState(() =>
     torneio?.pontosIniciais ? torneio.pontosIniciais.map(String) : ['', '', '', ''],
   )
+  const [atrasos, setAtrasos] = useState<Readonly<Record<string, number>>>(() => torneio?.atraso?.iniciais ?? {})
   const [escolhendo, setEscolhendo] = useState<number | null>(null)
   /** Torneio: jogador com a calculadora de pontos aberta. */
   const [calculando, setCalculando] = useState<Cadeira | null>(null)
@@ -148,7 +157,7 @@ export default function RegistrarFinalizada({
   const completo =
     assentos.every(Boolean) && pontosCompletos && umaValida(uma) && (!torneio || fechamento.fecha)
 
-  const previa = useMemo(
+  const semAtraso = useMemo(
     () =>
       completo && pontosNumeros
         ? criarPartidaManual(
@@ -170,6 +179,8 @@ export default function RegistrarFinalizada({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [completo, assentos, efetivos.join(), pontosPartida, pontosRetorno, uma, base],
   )
+
+  const previa = semAtraso && torneio?.atraso ? torneio.atraso.aplicar(semAtraso, atrasos) : semAtraso
 
   /**
    * Torneio: põe o jogador no lugar e fecha a folha. Se ele já estava na mesa,
@@ -280,6 +291,16 @@ export default function RegistrarFinalizada({
           )}
         </p>
       </>
+
+      {torneio?.atraso && (
+        <AtrasoRegistro
+          jogadores={assentos.flatMap((id) => (id ? [{ id, nome: nomeDe(id) ?? '—' }] : []))}
+          minutos={atrasos}
+          limite={torneio.atraso.limite}
+          porMinuto={torneio.atraso.porMinuto}
+          aoMudar={(id, minutos) => setAtrasos({ ...atrasos, [id]: minutos })}
+        />
+      )}
 
       {/* Regras num card, como o resumo da Nova partida. No torneio, só leitura. */}
       {torneio ? (
