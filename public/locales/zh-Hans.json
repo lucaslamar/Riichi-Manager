@@ -1699,7 +1699,12 @@
       "pdfHelp": "The full table to print or keep",
       "transferHelp": "The whole tournament to another device (file, QR or code)",
       "ctaResults": "成绩由{{app}}生成。你也来办一场比赛吧。",
-      "linkLine": "{{app}}: {{url}}"
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "截至第{{round}}轮",
+      "bottom": "垫底之争",
+      "bottomLead": "领先 {{value}}",
+      "bottomLeave": "摆脱需 {{value}}",
+      "ctaRace": "想知道自己还差多少？在{{app}}里筛选"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -2133,7 +2138,70 @@
         "other": "{{count}}名对手"
       }
     },
-    "unknownPlayer": "选手{{number}}"
+    "unknownPlayer": "选手{{number}}",
+    "podiumGap": {
+      "ordinal": "第{{place}}名",
+      "open": "查看{{name}}距离领奖台的差距",
+      "toPlace": "距{{place}}（{{name}}）",
+      "lead": "领先{{place}}（{{name}}）",
+      "upOne": "升至{{place}}（{{name}}）",
+      "leaveLast": "摆脱垫底（{{name}}）",
+      "overLast": "领先垫底者（{{name}}）",
+      "tied": "平分",
+      "tiebreak": "小分相差{{points}}",
+      "tablePoints": "标准分",
+      "units": {
+        "mangan": "满贯",
+        "haneman": "跳满",
+        "baiman": "倍满",
+        "yakuman": "役满",
+        "vitorias": "桌次第一"
+      },
+      "approx": {
+        "riichi": "估算：闲家荣和，不计马点。",
+        "mcr": "估算：每桌第一得4分。"
+      },
+      "race": "领奖台之争",
+      "podium": "领奖台",
+      "toThird": "距第3",
+      "toFirst": "距第1",
+      "leadLegend": "绿色：对第4名的领先。",
+      "inUnit": "差距单位：{{unit}}。",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "与…比较",
+      "share": "分享{{name}}距离领奖台的差距",
+      "contenders": "第1名争夺者",
+      "canReach": "仍可追上",
+      "needsHelp": "需他人相助",
+      "reachEstimate": "按单轮最佳成绩估算。",
+      "hands": {
+        "mangan": {
+          "other": "{{count}}次满贯"
+        },
+        "haneman": {
+          "other": "{{count}}次跳满"
+        },
+        "baiman": {
+          "other": "{{count}}次倍满"
+        },
+        "yakuman": {
+          "other": "{{count}}次役满"
+        },
+        "vitorias": {
+          "other": "{{count}}次桌次第一"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "排名筛选",
+      "view": "视图",
+      "viewTable": "排名表",
+      "follow": "关注玩家",
+      "unfollow": "取消关注",
+      "untilRound": "截至轮次",
+      "allRounds": "全部",
+      "unit": "差距单位"
+    }
   },
   "backup": {
     "samePerson": {

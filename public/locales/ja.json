@@ -1699,7 +1699,12 @@
       "pdfHelp": "The full table to print or keep",
       "transferHelp": "The whole tournament to another device (file, QR or code)",
       "ctaResults": "{{app}}で集計しました。あなたも大会を開けます。",
-      "linkLine": "{{app}}: {{url}}"
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "{{round}}回戦まで",
+      "bottom": "最下位争い",
+      "bottomLead": "リード {{value}}",
+      "bottomLeave": "脱出まで {{value}}",
+      "ctaRace": "自分はあと何点？ {{app}}で確認"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -2133,7 +2138,70 @@
         "other": "相手{{count}}人"
       }
     },
-    "unknownPlayer": "プレイヤー{{number}}"
+    "unknownPlayer": "プレイヤー{{number}}",
+    "podiumGap": {
+      "ordinal": "{{place}}位",
+      "open": "{{name}}の表彰台までの差を見る",
+      "toPlace": "{{place}}（{{name}}）まで",
+      "lead": "{{place}}（{{name}}）とのリード",
+      "upOne": "{{place}}（{{name}}）に上がるまで",
+      "leaveLast": "最下位脱出まで（{{name}}）",
+      "overLast": "最下位（{{name}}）とのリード",
+      "tied": "同点",
+      "tiebreak": "{{points}} MCR points on tiebreak",
+      "tablePoints": "Table points",
+      "units": {
+        "mangan": "満貫",
+        "haneman": "跳満",
+        "baiman": "倍満",
+        "yakuman": "役満",
+        "vitorias": "Table wins"
+      },
+      "approx": {
+        "riichi": "目安：子のロン、ウマ抜き。",
+        "mcr": "Approximate: a table win is worth 4."
+      },
+      "race": "表彰台争い",
+      "podium": "表彰台",
+      "toThird": "3位まで",
+      "toFirst": "1位まで",
+      "leadLegend": "緑：4位とのリード。",
+      "inUnit": "差の単位：{{unit}}。",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "比較する相手…",
+      "share": "{{name}}の表彰台までの差を共有",
+      "contenders": "1位候補",
+      "canReach": "逆転圏内",
+      "needsHelp": "他力が必要",
+      "reachEstimate": "1回戦の最高得点からの目安。",
+      "hands": {
+        "mangan": {
+          "other": "満貫{{count}}回"
+        },
+        "haneman": {
+          "other": "跳満{{count}}回"
+        },
+        "baiman": {
+          "other": "倍満{{count}}回"
+        },
+        "yakuman": {
+          "other": "役満{{count}}回"
+        },
+        "vitorias": {
+          "other": "{{count}} table wins"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "ランキングの絞り込み",
+      "view": "表示",
+      "viewTable": "順位表",
+      "follow": "プレイヤーを追う",
+      "unfollow": "追うのをやめる",
+      "untilRound": "何回戦まで",
+      "allRounds": "すべて",
+      "unit": "差の単位"
+    }
   },
   "backup": {
     "samePerson": {

@@ -1728,7 +1728,12 @@
       "pdfHelp": "The full table to print or keep",
       "transferHelp": "The whole tournament to another device (file, QR or code)",
       "ctaResults": "Resultados hechos con {{app}}. Organiza también tu torneo.",
-      "linkLine": "{{app}}: {{url}}"
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "hasta la ronda {{round}}",
+      "bottom": "Fondo de la tabla",
+      "bottomLead": "ventaja {{value}}",
+      "bottomLeave": "para salir {{value}}",
+      "ctaRace": "¿Quieres ver cuánto te falta? Filtra en {{app}}"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -2172,7 +2177,80 @@
         "other": "{{count}} rivales"
       }
     },
-    "unknownPlayer": "Jugador {{number}}"
+    "unknownPlayer": "Jugador {{number}}",
+    "podiumGap": {
+      "ordinal": "{{place}}.º",
+      "open": "Ver la distancia al podio de {{name}}",
+      "toPlace": "Para el {{place}} ({{name}})",
+      "lead": "Ventaja sobre el {{place}} ({{name}})",
+      "upOne": "Para subir al {{place}} ({{name}})",
+      "leaveLast": "Para salir del último ({{name}})",
+      "overLast": "Ventaja sobre el último ({{name}})",
+      "tied": "Empatado",
+      "tiebreak": "{{points}} puntos MCR de desempate",
+      "tablePoints": "Puntos de mesa",
+      "units": {
+        "mangan": "Mangan",
+        "haneman": "Haneman",
+        "baiman": "Baiman",
+        "yakuman": "Yakuman",
+        "vitorias": "Victorias de mesa"
+      },
+      "approx": {
+        "riichi": "Aproximado: ron fuera del Este, sin uma.",
+        "mcr": "Aproximado: ganar la mesa vale 4 puntos."
+      },
+      "race": "Lucha por el podio",
+      "podium": "Podio",
+      "toThird": "Para el 3.º",
+      "toFirst": "Para el 1.º",
+      "leadLegend": "En verde: ventaja sobre el 4.º.",
+      "inUnit": "Distancias en {{unit}}.",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "Comparar con…",
+      "share": "Compartir la distancia al podio de {{name}}",
+      "contenders": "Candidatos al 1.º",
+      "canReach": "Aún alcanza",
+      "needsHelp": "Solo con ayuda",
+      "reachEstimate": "Estimado con la mejor ronda individual.",
+      "hands": {
+        "mangan": {
+          "one": "{{count}} Mangan",
+          "many": "{{count}} Mangans",
+          "other": "{{count}} Mangans"
+        },
+        "haneman": {
+          "one": "{{count}} Haneman",
+          "many": "{{count}} Hanemans",
+          "other": "{{count}} Hanemans"
+        },
+        "baiman": {
+          "one": "{{count}} Baiman",
+          "many": "{{count}} Baimans",
+          "other": "{{count}} Baimans"
+        },
+        "yakuman": {
+          "one": "{{count}} Yakuman",
+          "many": "{{count}} Yakumans",
+          "other": "{{count}} Yakumans"
+        },
+        "vitorias": {
+          "one": "{{count}} victoria de mesa",
+          "many": "{{count}} victorias de mesa",
+          "other": "{{count}} victorias de mesa"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "Filtros del ranking",
+      "view": "Vista",
+      "viewTable": "Clasificación",
+      "follow": "Seguir a un jugador",
+      "unfollow": "Dejar de seguir",
+      "untilRound": "Hasta la ronda",
+      "allRounds": "Todas",
+      "unit": "Distancia en"
+    }
   },
   "backup": {
     "samePerson": {

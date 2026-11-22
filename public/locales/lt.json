@@ -1765,7 +1765,12 @@
       "pdfHelp": "The full table to print or keep",
       "transferHelp": "The whole tournament to another device (file, QR or code)",
       "ctaResults": "Rezultatai sukurti su {{app}}. Surenkite ir savo turnyrą.",
-      "linkLine": "{{app}}: {{url}}"
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "iki {{round}} rato",
+      "bottom": "Lentelės apačia",
+      "bottomLead": "persvara {{value}}",
+      "bottomLeave": "išsigelbėti {{value}}",
+      "ctaRace": "Nori žinoti, kiek tau trūksta? Filtruok {{app}}"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -2226,7 +2231,85 @@
         "other": "{{count}} varžovų"
       }
     },
-    "unknownPlayer": "Žaidėjas {{number}}"
+    "unknownPlayer": "Žaidėjas {{number}}",
+    "podiumGap": {
+      "ordinal": "{{place}} v.",
+      "open": "Žiūrėti {{name}} atstumą iki prizininkų",
+      "toPlace": "Iki {{place}} ({{name}})",
+      "lead": "Persvara prieš {{place}} ({{name}})",
+      "upOne": "Pakilti į {{place}} ({{name}})",
+      "leaveLast": "Palikti paskutinę vietą ({{name}})",
+      "overLast": "Persvara prieš paskutinį ({{name}})",
+      "tied": "Lygu",
+      "tiebreak": "{{points}} MCR points on tiebreak",
+      "tablePoints": "Table points",
+      "units": {
+        "mangan": "Mangan",
+        "haneman": "Haneman",
+        "baiman": "Baiman",
+        "yakuman": "Yakuman",
+        "vitorias": "Table wins"
+      },
+      "approx": {
+        "riichi": "Apytiksliai: ne Rytų ron, be uma.",
+        "mcr": "Approximate: a table win is worth 4."
+      },
+      "race": "Kova dėl prizų",
+      "podium": "Prizininkai",
+      "toThird": "Iki 3 v.",
+      "toFirst": "Iki 1 v.",
+      "leadLegend": "Žalia: persvara prieš 4 vietą.",
+      "inUnit": "Skirtumai: {{unit}}.",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "Palyginti su…",
+      "share": "Bendrinti {{name}} atstumą iki prizininkų",
+      "contenders": "Pretendentai į 1 vietą",
+      "canReach": "Dar gali pasivyti",
+      "needsHelp": "Reikia pagalbos",
+      "reachEstimate": "Pagal geriausią vieno rato rezultatą.",
+      "hands": {
+        "mangan": {
+          "one": "{{count}} Mangan",
+          "few": "{{count}} Mangan",
+          "many": "{{count}} Mangan",
+          "other": "{{count}} Mangan"
+        },
+        "haneman": {
+          "one": "{{count}} Haneman",
+          "few": "{{count}} Haneman",
+          "many": "{{count}} Haneman",
+          "other": "{{count}} Haneman"
+        },
+        "baiman": {
+          "one": "{{count}} Baiman",
+          "few": "{{count}} Baiman",
+          "many": "{{count}} Baiman",
+          "other": "{{count}} Baiman"
+        },
+        "yakuman": {
+          "one": "{{count}} Yakuman",
+          "few": "{{count}} Yakuman",
+          "many": "{{count}} Yakuman",
+          "other": "{{count}} Yakuman"
+        },
+        "vitorias": {
+          "one": "{{count}} table win",
+          "few": "{{count}} table wins",
+          "many": "{{count}} table wins",
+          "other": "{{count}} table wins"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "Reitingo filtrai",
+      "view": "Rodinys",
+      "viewTable": "Lentelė",
+      "follow": "Sekti žaidėją",
+      "unfollow": "Nebesekti",
+      "untilRound": "Iki rato",
+      "allRounds": "Visi",
+      "unit": "Skirtumo vienetas"
+    }
   },
   "backup": {
     "samePerson": {

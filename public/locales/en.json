@@ -1721,7 +1721,12 @@
       "pdfHelp": "The full table to print or keep",
       "transferHelp": "The whole tournament to another device (file, QR or code)",
       "ctaResults": "Results made with {{app}}. Run your own tournament too.",
-      "linkLine": "{{app}}: {{url}}"
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "up to round {{round}}",
+      "bottom": "Bottom of the table",
+      "bottomLead": "lead {{value}}",
+      "bottomLeave": "to escape {{value}}",
+      "ctaRace": "Want to see how far you are? Filter in {{app}}"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -2160,7 +2165,75 @@
         "other": "{{count}} opponents"
       }
     },
-    "unknownPlayer": "Player {{number}}"
+    "unknownPlayer": "Player {{number}}",
+    "podiumGap": {
+      "ordinal": "#{{place}}",
+      "open": "See how far {{name}} is from the podium",
+      "toPlace": "To {{place}} ({{name}})",
+      "lead": "Lead over {{place}} ({{name}})",
+      "upOne": "To climb to {{place}} ({{name}})",
+      "leaveLast": "To leave last place ({{name}})",
+      "overLast": "Lead over last ({{name}})",
+      "tied": "Tied",
+      "tiebreak": "{{points}} MCR points on tiebreak",
+      "tablePoints": "Table points",
+      "units": {
+        "mangan": "Mangan",
+        "haneman": "Haneman",
+        "baiman": "Baiman",
+        "yakuman": "Yakuman",
+        "vitorias": "Table wins"
+      },
+      "approx": {
+        "riichi": "Approximate: non-East ron, no uma.",
+        "mcr": "Approximate: a table win is worth 4."
+      },
+      "race": "Podium race",
+      "podium": "Podium",
+      "toThird": "To 3rd",
+      "toFirst": "To 1st",
+      "leadLegend": "In green: lead over 4th.",
+      "inUnit": "Gaps in {{unit}}.",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "Compare with…",
+      "share": "Share how far {{name}} is from the podium",
+      "contenders": "Contenders for 1st",
+      "canReach": "Can still reach",
+      "needsHelp": "Needs help",
+      "reachEstimate": "Estimated from the best single round.",
+      "hands": {
+        "mangan": {
+          "one": "{{count}} Mangan",
+          "other": "{{count}} Mangan"
+        },
+        "haneman": {
+          "one": "{{count}} Haneman",
+          "other": "{{count}} Haneman"
+        },
+        "baiman": {
+          "one": "{{count}} Baiman",
+          "other": "{{count}} Baiman"
+        },
+        "yakuman": {
+          "one": "{{count}} Yakuman",
+          "other": "{{count}} Yakuman"
+        },
+        "vitorias": {
+          "one": "{{count}} table win",
+          "other": "{{count}} table wins"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "Ranking filters",
+      "view": "View",
+      "viewTable": "Standings",
+      "follow": "Follow a player",
+      "unfollow": "Stop following",
+      "untilRound": "Up to round",
+      "allRounds": "All",
+      "unit": "Gap in"
+    }
   },
   "backup": {
     "samePerson": {
