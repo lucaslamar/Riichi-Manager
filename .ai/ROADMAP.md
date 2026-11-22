@@ -10,6 +10,7 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 ## Aguardando decisão
 
 - **3C, grades ZAPS:** só com autorização do autor (licença NC).
+- **Fim do tempo no torneio:** hoje o app avisa que as partidas terminam na mão atual e quem registra é o usuário. Decidir se fica assim ou se o app deve encerrar a partida.
 - **WO no Chinês:** sem valores definidos, por isso o botão não aparece. Conferir atraso e WO na WRC 2025 e na EMA (os números vieram do brief).
 
 ## Premiação
@@ -22,11 +23,6 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 - Lembrar repetições entre dias diferentes (hoje só o mesmo dia).
 - Sanma no clube, com mesas de 3. O sorteio compartilhado já aceita.
-
-## Problemas conhecidos
-
-- O fim do tempo não encerra a partida na mão atual, embora a ajuda diga que sim.
-- A ajuda do timer de vez cita a aba Mesa, que não existe mais nas configurações do torneio.
 
 ## Desktop
 

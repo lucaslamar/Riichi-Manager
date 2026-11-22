@@ -1872,7 +1872,6 @@
       "off": "Off",
       "tableTimerHelp": "Each table has its own clock, which starts when the table starts and can get +5 min.",
       "timeUpHelp": "When time is up, the game ends with the current hand.",
-      "turnTimerHelp": "The per-turn timer follows the Table tab.",
       "winds": "Winds",
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",

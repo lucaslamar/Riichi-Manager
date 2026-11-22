@@ -209,12 +209,7 @@ export default function ConfigTorneioSheet({
       <h3 className="cfg-grupo">{t('tournament.settings.tabTime')}</h3>
       <Grupo
         rotulo={t('tournament.settings.roundTimer')}
-        ajuda={
-          <>
-            <p>{t('tournament.settings.timeUpHelp')}</p>
-            <p>{t('tournament.settings.turnTimerHelp')}</p>
-          </>
-        }
+        ajuda={<p>{t('tournament.settings.timeUpHelp')}</p>}
       >
         <BotoesOpcao<number>
           rotulo={t('tournament.settings.roundTimer')}
