@@ -11,6 +11,7 @@
 - **Setas no ranking do torneio**: quando a rodada fecha, o ranking mostra quem subiu, caiu ou estreou, também no texto e na imagem compartilhados. A confirmação do resultado mostra como cada um fica no ranking do torneio.
 - **Pontos pelo teclado**: a folha de pontos do registro aceita o teclado físico (números, + e −, apagar, Enter para OK e Esc para fechar). No celular, tocar no visor abre o teclado do sistema, com o sinal de menos.
 - **Sorteio do clube com memória do dia**: sortear de novo no mesmo dia evita repetir quem já jogou junto e reveza o Leste, contando só os sorteios com mesa jogada. As mesas mostram a rodada do dia com a qualidade do sorteio, e Começar do zero, no menu ⋮, serve para quando o grupo for outro.
+- **QR Code do app nas imagens**: as imagens de resultado trazem o QR e o endereço do site, com um convite para usar o app. Dá para desligar em Ajustes, e o texto compartilhado termina com o link.
 - **Pontos da mesa nos resultados**: além do + e −, as mesas, a imagem e o texto da rodada mostram os pontos com que cada um terminou.
 - **Tipo do torneio**: aparece nos cards de Em andamento e nas imagens e textos da rodada e do ranking.
 - **Qualidade do sorteio em todos os formatos**: uma linha com a nota em cada rodada, que abre sozinha quando pede atenção. Mostra as repetições, os detalhes por jogador e, quando dá para refazer, Sortear de novo com comparação e Voltar ao anterior. No Ranking, o novo botão Estatística da grade abre os detalhes.

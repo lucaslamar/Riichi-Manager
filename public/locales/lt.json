@@ -719,7 +719,9 @@
     "narrationOutputHelp": "Jei įjungtas NVDA, TalkBack ar VoiceOver, rinkitės Tik ekrano skaitytuvas, kad negirdėtumėte dviejų balsų.",
     "narrationNoVoice": "Ši naršyklė neturi balso. Pranešimai keliauja į ekrano skaitytuvą.",
     "narrationShortcuts": "Spartieji klavišai: Alt+M skaito ranką, Alt+D paskutinius išmetimus, Alt+R pakartoja paskutinį pranešimą, Alt+S sustabdo kalbą.",
-    "narrationTest": "Išbandyti"
+    "narrationTest": "Išbandyti",
+    "shareQr": "QR kodas bendrinamuose vaizduose",
+    "shareQrHelp": "Pamatę vaizdą grupėje gali atidaryti programą per QR."
   },
   "windDraw": {
     "title": "Vėjų burtai",
@@ -1761,7 +1763,9 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "Rezultatai sukurti su {{app}}. Surenkite ir savo turnyrą.",
+      "linkLine": "{{app}}: {{url}}"
     },
     "title": "Tournament",
     "create": "Create tournament",

@@ -1,3 +1,5 @@
+import { gerarQr } from '@/compartilhado/adaptadores/qr'
+import { URL_DO_APP } from '@/compartilhado/marca/url-app'
 import { colunasDaDireita, type Relatorio } from './relatorio'
 
 const LARGURA = 1080
@@ -8,6 +10,12 @@ const ALTURA_TITULO_BLOCO = 64
 const ESPACO_BLOCOS = 28
 /** Cada coluna da direita, quando alinhadas. */
 const LARGURA_COLUNA = 190
+/** Múltiplo dos módulos do QR do endereço: sai nítido e lê da tela de outro celular. */
+const LADO_QR = 222
+const RESPIRO_QR = 16
+const ALTURA_RODAPE_SIMPLES = 56
+// Caixa do QR sempre clara, nos dois temas: QR claro sobre escuro falha em muitos leitores.
+const CAIXA_QR = { fundo: '#ffffff', texto: '#1b1724', apoio: '#4b4459' }
 
 /** Cor de uma variável do tema aberto, com reserva (a imagem segue o tema). */
 function corDoTema(variavel: string, reserva: string): string {
@@ -40,13 +48,44 @@ function retanguloArredondado(
   contexto.closePath()
 }
 
+/** Quebra em linhas que cabem na largura. */
+function quebrar(contexto: CanvasRenderingContext2D, texto: string, largura: number): string[] {
+  const linhas: string[] = []
+  // Japonês, chinês e coreano podem não ter espaço: aí quebra por caractere.
+  const separador = texto.includes(' ') ? ' ' : ''
+  let atual = ''
+  for (const parte of texto.split(separador)) {
+    const junto = atual ? atual + separador + parte : parte
+    if (atual && contexto.measureText(junto).width > largura) {
+      linhas.push(atual)
+      atual = parte
+    } else {
+      atual = junto
+    }
+  }
+  return atual ? [...linhas, atual] : linhas
+}
+
+function carregarImagem(endereco: string): Promise<HTMLImageElement> {
+  return new Promise((resolver, rejeitar) => {
+    const imagem = new Image()
+    imagem.onload = () => resolver(imagem)
+    imagem.onerror = () => rejeitar(new Error('QR não carregou'))
+    imagem.src = endereco
+  })
+}
+
 /**
  * Desenha o relatório numa imagem PNG (1080 px de largura), nas cores do tema:
  * título no roxo do app, um cartão por bloco e os valores em verde ou vermelho.
  * No React Native, trocar por react-native-view-shot.
  */
-export async function imagemDoRelatorio(relatorio: Relatorio, rodape: string): Promise<Blob> {
+export async function imagemDoRelatorio(
+  relatorio: Relatorio,
+  rodape: { nomeDoApp: string; comQr: boolean },
+): Promise<Blob> {
   await document.fonts?.ready
+  const qr = rodape.comQr ? await carregarImagem(await gerarQr(URL_DO_APP, LADO_QR)) : null
   const fonte = getComputedStyle(document.body).fontFamily || 'sans-serif'
   const cores = {
     fundo: corDoTema('--fundo', '#14111c'),
@@ -65,7 +104,8 @@ export async function imagemDoRelatorio(relatorio: Relatorio, rodape: string): P
   // Blocos só do texto (ex.: o pódio) não entram na imagem.
   const blocosDaImagem = relatorio.blocos.filter((bloco) => bloco.so !== 'texto')
   const alturaBlocos = blocosDaImagem.reduce((soma, bloco) => soma + alturaBloco(bloco) + ESPACO_BLOCOS, 0)
-  const altura = MARGEM + alturaTopo + alturaBlocos + 56 + MARGEM
+  const alturaRodape = qr ? LADO_QR + RESPIRO_QR * 2 : ALTURA_RODAPE_SIMPLES
+  const altura = MARGEM + alturaTopo + alturaBlocos + alturaRodape + MARGEM
 
   const tela = document.createElement('canvas')
   tela.width = LARGURA
@@ -149,10 +189,33 @@ export async function imagemDoRelatorio(relatorio: Relatorio, rodape: string): P
     y += alturaCartao + ESPACO_BLOCOS
   }
 
-  contexto.textAlign = 'right'
-  contexto.fillStyle = cores.apoio
-  contexto.font = `700 26px ${fonte}`
-  contexto.fillText(rodape, LARGURA - MARGEM, y + 24)
+  if (qr) {
+    retanguloArredondado(contexto, MARGEM, y, larguraUtil, alturaRodape, 24)
+    contexto.fillStyle = CAIXA_QR.fundo
+    contexto.fill()
+    contexto.drawImage(qr, MARGEM + RESPIRO_QR, y + RESPIRO_QR, LADO_QR, LADO_QR)
+
+    const xChamada = MARGEM + RESPIRO_QR + LADO_QR + 20
+    const larguraChamada = MARGEM + larguraUtil - RESPIRO_CARTAO - xChamada
+    contexto.textAlign = 'left'
+    contexto.font = `800 36px ${fonte}`
+    const linhas = quebrar(contexto, relatorio.chamada ?? rodape.nomeDoApp, larguraChamada).slice(0, 3)
+    let yChamada = y + alturaRodape / 2 - (linhas.length * 46) / 2
+    contexto.fillStyle = CAIXA_QR.texto
+    for (const linha of linhas) {
+      contexto.fillText(caber(contexto, linha, larguraChamada), xChamada, yChamada)
+      yChamada += 46
+    }
+    contexto.fillStyle = CAIXA_QR.apoio
+    contexto.font = `700 26px ${fonte}`
+    const endereco = URL_DO_APP.replace(/^https:\/\//, '').replace(/\/$/, '')
+    contexto.fillText(caber(contexto, endereco, larguraChamada), xChamada, yChamada + 8)
+  } else {
+    contexto.textAlign = 'right'
+    contexto.fillStyle = cores.apoio
+    contexto.font = `700 26px ${fonte}`
+    contexto.fillText(rodape.nomeDoApp, LARGURA - MARGEM, y + 24)
+  }
 
   return new Promise((resolver, rejeitar) =>
     tela.toBlob((blob) => (blob ? resolver(blob) : rejeitar(new Error('Imagem vazia'))), 'image/png'),

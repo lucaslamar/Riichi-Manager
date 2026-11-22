@@ -27,6 +27,7 @@ const CHAVES_PREFERENCIAS = {
   toqueAmpliado: 'riichi-manager-toque-ampliado',
   telaCheiaMesa: 'riichi-manager-tela-cheia-mesa',
   telaAcesaMesa: 'riichi-manager-tela-acesa-mesa',
+  qrNasImagens: 'riichi-manager-qr-nas-imagens',
   pedras: 'riichi-manager-pedras',
 } as const
 
@@ -47,6 +48,8 @@ interface Preferencias {
   /** Entra em tela cheia no toque que abre uma mesa. */
   telaCheiaMesa: boolean
   telaAcesaMesa: boolean
+  /** QR do app no rodapé das imagens compartilhadas. */
+  qrNasImagens: boolean
   pedras: PreferenciaPedras
 }
 
@@ -91,6 +94,7 @@ function lerPreferencias(): Preferencias {
     toqueAmpliado: lerArmazenado(CHAVES_PREFERENCIAS.toqueAmpliado) === 'true',
     telaCheiaMesa: lerArmazenado(CHAVES_PREFERENCIAS.telaCheiaMesa) === 'true',
     telaAcesaMesa: lerArmazenado(CHAVES_PREFERENCIAS.telaAcesaMesa) !== 'false',
+    qrNasImagens: lerArmazenado(CHAVES_PREFERENCIAS.qrNasImagens) !== 'false',
     pedras: lerPedras(lerArmazenado(CHAVES_PREFERENCIAS.pedras)),
   }
 }
@@ -137,7 +141,7 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
   }, [temaEfetivo])
 
   useEffect(() => {
-    const { tema, altoContraste, modoCompacto, toqueAmpliado, telaCheiaMesa, telaAcesaMesa, pedras } = preferencias
+    const { tema, altoContraste, modoCompacto, toqueAmpliado, telaCheiaMesa, telaAcesaMesa, qrNasImagens, pedras } = preferencias
     document.body.classList.toggle('alto-contraste', altoContraste)
     document.body.classList.toggle('modo-compacto', modoCompacto)
     document.body.classList.toggle('toque-ampliado', toqueAmpliado)
@@ -147,6 +151,7 @@ export function PreferenciasProvider({ children }: { children: ReactNode }) {
     salvar(CHAVES_PREFERENCIAS.toqueAmpliado, String(toqueAmpliado))
     salvar(CHAVES_PREFERENCIAS.telaCheiaMesa, String(telaCheiaMesa))
     salvar(CHAVES_PREFERENCIAS.telaAcesaMesa, String(telaAcesaMesa))
+    salvar(CHAVES_PREFERENCIAS.qrNasImagens, String(qrNasImagens))
     salvar(CHAVES_PREFERENCIAS.pedras, pedras)
   }, [preferencias])
 

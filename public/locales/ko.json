@@ -701,7 +701,9 @@
     "narrationOutputHelp": "NVDA, TalkBack, VoiceOver를 켰다면 두 목소리가 겹치지 않도록 스크린 리더만을 고르세요.",
     "narrationNoVoice": "이 브라우저에는 음성이 없습니다. 알림은 스크린 리더로 갑니다.",
     "narrationShortcuts": "단축키: Alt+M 손패 읽기, Alt+D 최근 버림패 읽기, Alt+R 마지막 알림 반복, Alt+S 말하기 중지.",
-    "narrationTest": "테스트"
+    "narrationTest": "테스트",
+    "shareQr": "공유 이미지에 QR 코드",
+    "shareQrHelp": "이미지를 본 사람이 QR로 앱을 열 수 있습니다."
   },
   "windDraw": {
     "title": "바람 뽑기",
@@ -1695,7 +1697,9 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "{{app}}로 만든 결과입니다. 대회를 직접 열어 보세요.",
+      "linkLine": "{{app}}: {{url}}"
     },
     "title": "Tournament",
     "create": "Create tournament",

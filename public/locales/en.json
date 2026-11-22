@@ -707,7 +707,9 @@
     "narrationOutputHelp": "With NVDA, TalkBack or VoiceOver on, choose Screen reader only to avoid two voices.",
     "narrationNoVoice": "This browser has no voice. Announcements go to the screen reader.",
     "narrationShortcuts": "Shortcuts: Alt+M reads the hand, Alt+D reads the last discards, Alt+R repeats the last announcement and Alt+S stops speech.",
-    "narrationTest": "Test"
+    "narrationTest": "Test",
+    "shareQr": "QR code on shared images",
+    "shareQrHelp": "Anyone who sees the image in the group can open the app with the QR."
   },
   "windDraw": {
     "title": "Wind Draw",
@@ -1717,7 +1719,9 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "Results made with {{app}}. Run your own tournament too.",
+      "linkLine": "{{app}}: {{url}}"
     },
     "title": "Tournament",
     "create": "Create tournament",

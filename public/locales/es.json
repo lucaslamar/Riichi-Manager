@@ -713,7 +713,9 @@
     "narrationOutputHelp": "Con NVDA, TalkBack o VoiceOver activado, elige Solo lector de pantalla para no oír dos voces.",
     "narrationNoVoice": "Este navegador no tiene voz. Los avisos van al lector de pantalla.",
     "narrationShortcuts": "Atajos: Alt+M lee la mano, Alt+D lee los últimos descartes, Alt+R repite el último aviso y Alt+S detiene la voz.",
-    "narrationTest": "Probar"
+    "narrationTest": "Probar",
+    "shareQr": "Código QR en las imágenes compartidas",
+    "shareQrHelp": "Quien vea la imagen en el grupo puede abrir la app con el QR."
   },
   "windDraw": {
     "title": "Sorteo de Vientos",
@@ -1724,7 +1726,9 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "Resultados hechos con {{app}}. Organiza también tu torneo.",
+      "linkLine": "{{app}}: {{url}}"
     },
     "title": "Tournament",
     "create": "Create tournament",

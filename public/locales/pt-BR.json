@@ -707,7 +707,9 @@
     "narrationOutputHelp": "Com NVDA, TalkBack ou VoiceOver ligado, escolha Só leitor de tela para não ouvir duas vozes.",
     "narrationNoVoice": "Este navegador não tem voz. Os anúncios vão para o leitor de tela.",
     "narrationShortcuts": "Atalhos: Alt+M lê a mão, Alt+D lê os últimos descartes, Alt+R repete o último anúncio e Alt+S para a fala.",
-    "narrationTest": "Testar"
+    "narrationTest": "Testar",
+    "shareQr": "QR Code nas imagens compartilhadas",
+    "shareQrHelp": "Quem vê a imagem no grupo pode abrir o app pelo QR."
   },
   "windDraw": {
     "title": "Sorteador de Ventos",
@@ -1717,7 +1719,9 @@
       "textHelp": "Pronto para colar no grupo, com negrito e tabela",
       "imageHelp": "Um PNG com as cores do app",
       "pdfHelp": "A tabela completa para imprimir ou guardar",
-      "transferHelp": "O torneio inteiro para outro aparelho (arquivo, QR ou código)"
+      "transferHelp": "O torneio inteiro para outro aparelho (arquivo, QR ou código)",
+      "ctaResults": "Resultados feitos no {{app}}. Organize o seu torneio também.",
+      "linkLine": "{{app}}: {{url}}"
     },
     "title": "Torneio",
     "create": "Criar torneio",

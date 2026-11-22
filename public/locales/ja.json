@@ -701,7 +701,9 @@
     "narrationOutputHelp": "NVDA、TalkBack、VoiceOverを使っている場合は、声が重ならないようスクリーンリーダーのみを選んでください。",
     "narrationNoVoice": "このブラウザには音声がありません。お知らせはスクリーンリーダーに送られます。",
     "narrationShortcuts": "ショートカット: Alt+Mで手牌、Alt+Dで最近の捨て牌を読み上げ、Alt+Rで直前のお知らせを繰り返し、Alt+Sで読み上げを止めます。",
-    "narrationTest": "テスト"
+    "narrationTest": "テスト",
+    "shareQr": "共有画像にQRコード",
+    "shareQrHelp": "画像を見た人がQRからアプリを開けます。"
   },
   "windDraw": {
     "title": "風牌抽選",
@@ -1695,7 +1697,9 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "{{app}}で集計しました。あなたも大会を開けます。",
+      "linkLine": "{{app}}: {{url}}"
     },
     "title": "Tournament",
     "create": "Create tournament",

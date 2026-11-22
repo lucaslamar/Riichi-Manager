@@ -701,7 +701,9 @@
     "narrationOutputHelp": "开启 NVDA、TalkBack 或 VoiceOver 时，请选择仅屏幕阅读器，以免听到两种声音。",
     "narrationNoVoice": "此浏览器没有语音。提示会交给屏幕阅读器。",
     "narrationShortcuts": "快捷键：Alt+M 朗读手牌，Alt+D 朗读最近的弃牌，Alt+R 重复上一条提示，Alt+S 停止朗读。",
-    "narrationTest": "试听"
+    "narrationTest": "试听",
+    "shareQr": "分享图片中的二维码",
+    "shareQrHelp": "群里看到图片的人可以扫码打开应用。"
   },
   "windDraw": {
     "title": "抽风位",
@@ -1695,7 +1697,9 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "成绩由{{app}}生成。你也来办一场比赛吧。",
+      "linkLine": "{{app}}: {{url}}"
     },
     "title": "Tournament",
     "create": "Create tournament",

@@ -36,6 +36,8 @@ export interface BlocoRelatorio {
 
 export interface Relatorio {
   titulo: string
+  /** Convite no rodapé da imagem, ao lado do QR do app. */
+  chamada?: string
   subtitulo?: string
   blocos: BlocoRelatorio[]
 }
@@ -86,7 +88,7 @@ function tabelaEmTexto(bloco: BlocoRelatorio): string {
  * Texto do WhatsApp: título em negrito e subtítulo em itálico, um bloco por
  * parágrafo, tabelas alinhadas em monoespaçado e "—" antes do valor nas listas.
  */
-export function textoDoRelatorio(relatorio: Relatorio): string {
+export function textoDoRelatorio(relatorio: Relatorio, linhaFinal?: string): string {
   const topo = [`*${relatorio.titulo}*`, ...(relatorio.subtitulo ? [`_${relatorio.subtitulo}_`] : [])].join('\n')
   const blocos = relatorio.blocos
     .filter((bloco) => bloco.so !== 'imagem')
@@ -100,7 +102,7 @@ export function textoDoRelatorio(relatorio: Relatorio): string {
       })
       return [...titulo, ...linhas].join('\n')
     })
-  return [topo, ...blocos].join('\n\n')
+  return [topo, ...blocos, ...(linhaFinal ? [linhaFinal] : [])].join('\n\n')
 }
 
 /** Nome de arquivo a partir de textos ("Torneio 09/11", "Rodada 1" → "torneio-09-11-rodada-1"). */
