@@ -23,7 +23,7 @@ export default function CardPausada({
   )
 
   return (
-    <article className="cm-card" aria-label={titulo}>
+    <article className="cm-card fin-pausada" aria-label={titulo}>
       <header className="cm-topo">
         <div className="cm-titulo">
           <strong>{titulo}</strong>

@@ -349,10 +349,31 @@
   margin: 0;
 }
 
+.fin-acoes {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.fin-acoes > button {
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.fin-acoes > .fin-salvar {
+  padding: 4px 8px;
+  font-size: 0.8125rem;
+  line-height: 1.25;
+}
+
+/* Sem a seta de expandir, o card não guarda o espaço dela. */
+.fin-pausada.fin-pausada {
+  padding-bottom: 10px;
+}
+
 .fin-pausada-acoes {
   display: flex;
   gap: 10px;
-  padding: 10px 12px 12px;
 }
 
 .fin-pausada-acoes > button {

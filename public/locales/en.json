@@ -3578,7 +3578,10 @@
       "needsToo": "Still needs",
       "inPlace": "in place {{place}} ({{value}})",
       "umaHelp": "Uma from the configured rules, with {{name}} breaking even.",
-      "either": "{{hands}} or {{direct}} direct",
+      "either": {
+        "one": "{{hands}} or {{count}} direct",
+        "other": "{{hands}} or {{count}} direct"
+      },
       "jaPassa": "already ahead",
       "jaEmpata": "already tied",
       "title": "Comeback scenarios"

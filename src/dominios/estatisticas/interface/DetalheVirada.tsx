@@ -45,7 +45,7 @@ export default function DetalheVirada({
     return precisa.situacao === 'precisa'
       ? t('stats.turn.either', {
           hands: maos(precisa.terceiros, referencia),
-          direct: precisa.direto,
+          count: precisa.direto,
         })
       : t(`stats.turn.${precisa.situacao}`)
   }

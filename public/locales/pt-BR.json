@@ -3578,7 +3578,10 @@
       "needsToo": "Ainda precisa de",
       "inPlace": "em {{place}}º ({{value}})",
       "umaHelp": "Uma das regras configuradas, com {{name}} no zero.",
-      "either": "{{hands}} ou {{direct}} direto",
+      "either": {
+        "one": "{{hands}} ou {{count}} direto",
+        "other": "{{hands}} ou {{count}} diretos"
+      },
       "jaPassa": "já passa",
       "jaEmpata": "já empata",
       "title": "Cenários de virada"
@@ -3613,7 +3616,7 @@
     "deadline": {
       "over": "Encerrou em {{date}}: as diferenças são finais.",
       "unknown": "Até {{date}}. Os cenários valem para o próximo jogo.",
-      "estimate": "Até {{date}}. No ritmo atual, faltam cerca de {{games}} jogos."
+      "estimate": "Até {{date}}. Jogos que faltam no ritmo atual: cerca de {{games}}."
     },
     "onlySum": "Os cenários de virada só existem quando o ranking soma os pontos.",
     "projection": {

@@ -3540,7 +3540,9 @@
       "needsToo": "还需要",
       "inPlace": "第{{place}}名（{{value}}）",
       "umaHelp": "按已设置的马点计算，假设{{name}}不赚不亏。",
-      "either": "{{hands}}或直击{{direct}}次",
+      "either": {
+        "other": "{{hands}}或直击{{count}}次"
+      },
       "jaPassa": "已经反超",
       "jaEmpata": "已经追平",
       "title": "逆转条件"

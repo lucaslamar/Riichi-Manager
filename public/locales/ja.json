@@ -3540,7 +3540,9 @@
       "needsToo": "さらに必要",
       "inPlace": "{{place}}着 ({{value}})",
       "umaHelp": "設定ルールのウマ。{{name}}は±0とします。",
-      "either": "{{hands}}または直撃{{direct}}回",
+      "either": {
+        "other": "{{hands}}または直撃{{count}}回"
+      },
       "jaPassa": "すでに逆転",
       "jaEmpata": "すでに同点",
       "title": "逆転条件"

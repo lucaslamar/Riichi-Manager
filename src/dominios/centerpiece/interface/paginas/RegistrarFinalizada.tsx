@@ -453,11 +453,13 @@ export default function RegistrarFinalizada({
       )}
       {!torneio && <p className="fin-titulo fin-titulo-jogadores">{t('match.manual.players')}</p>}
       <>
-        {/* Dica no topo, numa faixa como o selo de torneio em andamento. */}
-        <p className="fin-dica">
-          <i className="fas fa-hand-pointer" aria-hidden="true" />
-          <span>{t('tournament.points.swapHint')}</span>
-        </p>
+        {/* Dica no topo. Na retomada a rodada ocupa o lugar dela. */}
+        {!retomada && (
+          <p className="fin-dica">
+            <i className="fas fa-hand-pointer" aria-hidden="true" />
+            <span>{t('tournament.points.swapHint')}</span>
+          </p>
+        )}
         <div className="ptd-assentos trn-mesa-assentos">
           {LUGARES.map((lugar) => {
             const id = assentos[lugar]
@@ -612,6 +614,8 @@ export default function RegistrarFinalizada({
         />
       )}
 
+      {/* Lado a lado, para o Registrar continuar dentro da tela. */}
+      <div className="fin-acoes">
       {podeSalvar && (
         <button
           type="button"
@@ -651,6 +655,7 @@ export default function RegistrarFinalizada({
       >
         {t('match.manual.save')}
       </button>
+      </div>
 
       {confirmando && previa?.resultado && (
         <ConfirmarRegistro

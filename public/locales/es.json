@@ -3597,7 +3597,11 @@
       "needsToo": "Todavía necesita",
       "inPlace": "en {{place}}.º ({{value}})",
       "umaHelp": "Uma según las reglas configuradas, con {{name}} en cero.",
-      "either": "{{hands}} o {{direct}} directo",
+      "either": {
+        "one": "{{hands}} o {{count}} directo",
+        "many": "{{hands}} o {{count}} directos",
+        "other": "{{hands}} o {{count}} directos"
+      },
       "jaPassa": "ya lo supera",
       "jaEmpata": "ya empata",
       "title": "Escenarios de remontada"

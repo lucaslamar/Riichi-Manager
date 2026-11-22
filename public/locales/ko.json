@@ -3540,7 +3540,9 @@
       "needsToo": "추가로 필요",
       "inPlace": "{{place}}위 ({{value}})",
       "umaHelp": "설정된 규칙의 우마, {{name}} ±0 기준.",
-      "either": "{{hands}} 또는 직격 {{direct}}회",
+      "either": {
+        "other": "{{hands}} 또는 직격 {{count}}회"
+      },
       "jaPassa": "이미 역전",
       "jaEmpata": "이미 동점",
       "title": "역전 조건"

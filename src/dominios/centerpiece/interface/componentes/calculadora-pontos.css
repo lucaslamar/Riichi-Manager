@@ -320,6 +320,37 @@
   }
 }
 
+/* Tela baixa: com o W.O. são dois botões, então eles e o visor encolhem, nunca as teclas. */
+@media (max-height: 680px) {
+  .cpt-corpo > .cpt-calcular:not(#_) {
+    height: 44px;
+    min-height: 44px;
+    margin-bottom: 4px;
+    padding-block: 0;
+  }
+
+  .cpt-corpo:has(> .cpt-wo) > .cpt-visor {
+    min-height: 50px;
+    margin-bottom: 4px;
+    padding-block: 2px;
+  }
+}
+
+@media (max-height: 600px) {
+  .cpt-corpo:has(> .cpt-wo) {
+    gap: 4px;
+  }
+
+  .cpt-corpo:has(> .cpt-wo) > .cpt-visor,
+  .cpt-corpo > .cpt-calcular:not(#_) {
+    margin-bottom: 0;
+  }
+
+  .cpt-corpo:has(> .cpt-wo) .cpt-resultado {
+    font-size: 1.4rem;
+  }
+}
+
 /* Selo do W.O., no lugar dos pontos e ao lado de quem saiu. */
 .ptd-assento-pontos.ptd-assento-pontos--wo,
 .fin-selo-wo {
@@ -425,7 +456,7 @@
     font-size: 1.125rem;
   }
 
-  .fin-tela > .mesa-btn-principal {
+  .fin-tela > .fin-acoes > button {
     min-height: 56px;
     font-size: 1.125rem;
   }

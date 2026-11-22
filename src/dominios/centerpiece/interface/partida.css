@@ -1764,8 +1764,8 @@ body:has(.ptd-modulo) {
 }
 
 /* Registrar partida: um respiro em relação ao bloco de jogadores e pontos. */
-.fin-tela > .mesa-btn-principal {
-  margin-top: 20px;
+.fin-tela > .fin-acoes {
+  margin-top: 12px;
 }
 
 /* Rio geral do MCR: quantas de cada pedra já saíram. */

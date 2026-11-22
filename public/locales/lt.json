@@ -3666,7 +3666,12 @@
       "needsToo": "Dar reikia",
       "inPlace": "{{place}} vieta ({{value}})",
       "umaHelp": "Uma pagal nustatytas taisykles, {{name}}: 0.",
-      "either": "{{hands}} arba tiesiogiai {{direct}}",
+      "either": {
+        "one": "{{hands}} arba tiesiogiai {{count}}",
+        "few": "{{hands}} arba tiesiogiai {{count}}",
+        "many": "{{hands}} arba tiesiogiai {{count}}",
+        "other": "{{hands}} arba tiesiogiai {{count}}"
+      },
       "jaPassa": "jau lenkia",
       "jaEmpata": "jau lygu",
       "title": "Persvaros scenarijai"
