@@ -518,6 +518,8 @@ body.teclado-aberto .clb-enviar {
 .cm-lista {
   display: flex;
   flex-direction: column;
+  /* Anula o start da grade de partida.css, que encolhia cada card até o texto. */
+  align-items: stretch;
   gap: 12px;
   margin: 0;
   padding: 0;
