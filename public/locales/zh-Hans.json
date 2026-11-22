@@ -2201,7 +2201,18 @@
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
       "erroQuatro": "同一张牌最多只有四张。",
-      "escolherFlores": "选择花牌"
+      "escolherFlores": "选择花牌",
+      "opcaoFlor": {
+        "1": "花牌 梅, 1",
+        "2": "花牌 兰, 2",
+        "3": "花牌 菊, 3",
+        "4": "花牌 竹, 4",
+        "5": "季牌 春, 1",
+        "6": "季牌 夏, 2",
+        "7": "季牌 秋, 3",
+        "8": "季牌 冬, 4"
+      },
+      "florEscolhida": "{{flor}}: 已选"
     },
     "condicoes": {
       "titulo": "Conditions",

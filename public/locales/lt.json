@@ -2293,7 +2293,18 @@
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
       "erroQuatro": "Kiekvienas akmuo yra tik keturis kartus.",
-      "escolherFlores": "Pasirinkti gėles"
+      "escolherFlores": "Pasirinkti gėles",
+      "opcaoFlor": {
+        "1": "Gėlė 梅 Slyva, 1",
+        "2": "Gėlė 兰 Orchidėja, 2",
+        "3": "Gėlė 菊 Chrizantema, 3",
+        "4": "Gėlė 竹 Bambukas, 4",
+        "5": "Metų laikas 春 Pavasaris, 1",
+        "6": "Metų laikas 夏 Vasara, 2",
+        "7": "Metų laikas 秋 Ruduo, 3",
+        "8": "Metų laikas 冬 Žiema, 4"
+      },
+      "florEscolhida": "{{flor}}: pasirinkta"
     },
     "condicoes": {
       "titulo": "Conditions",

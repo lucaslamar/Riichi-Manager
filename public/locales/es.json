@@ -2234,7 +2234,18 @@
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
       "erroQuatro": "Cada ficha existe solo cuatro veces.",
-      "escolherFlores": "Elegir las flores"
+      "escolherFlores": "Elegir las flores",
+      "opcaoFlor": {
+        "1": "Flor 梅 Ciruelo, 1",
+        "2": "Flor 兰 Orquídea, 2",
+        "3": "Flor 菊 Crisantemo, 3",
+        "4": "Flor 竹 Bambú, 4",
+        "5": "Estación 春 Primavera, 1",
+        "6": "Estación 夏 Verano, 2",
+        "7": "Estación 秋 Otoño, 3",
+        "8": "Estación 冬 Invierno, 4"
+      },
+      "florEscolhida": "{{flor}}: seleccionada"
     },
     "condicoes": {
       "titulo": "Conditions",

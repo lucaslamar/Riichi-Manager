@@ -2227,7 +2227,18 @@
       "flores": "Flores e estações",
       "removerFlor": "Remover {{flor}}",
       "erroQuatro": "Cada pedra existe só quatro vezes.",
-      "escolherFlores": "Escolher as flores"
+      "escolherFlores": "Escolher as flores",
+      "opcaoFlor": {
+        "1": "Flor 梅 Ameixa, 1",
+        "2": "Flor 兰 Orquídea, 2",
+        "3": "Flor 菊 Crisântemo, 3",
+        "4": "Flor 竹 Bambu, 4",
+        "5": "Estação 春 Primavera, 1",
+        "6": "Estação 夏 Verão, 2",
+        "7": "Estação 秋 Outono, 3",
+        "8": "Estação 冬 Inverno, 4"
+      },
+      "florEscolhida": "{{flor}}: selecionada"
     },
     "condicoes": {
       "titulo": "Condições",

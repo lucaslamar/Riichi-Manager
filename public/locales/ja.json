@@ -2201,7 +2201,18 @@
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
       "erroQuatro": "同じ牌は4枚までです。",
-      "escolherFlores": "花牌を選ぶ"
+      "escolherFlores": "花牌を選ぶ",
+      "opcaoFlor": {
+        "1": "花 梅, 1",
+        "2": "花 兰, 2",
+        "3": "花 菊, 3",
+        "4": "花 竹, 4",
+        "5": "季節 春, 1",
+        "6": "季節 夏, 2",
+        "7": "季節 秋, 3",
+        "8": "季節 冬, 4"
+      },
+      "florEscolhida": "{{flor}}: 選択中"
     },
     "condicoes": {
       "titulo": "Conditions",

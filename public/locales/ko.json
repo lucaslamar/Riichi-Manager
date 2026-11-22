@@ -2201,7 +2201,18 @@
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
       "erroQuatro": "같은 패는 4장까지입니다.",
-      "escolherFlores": "꽃패 고르기"
+      "escolherFlores": "꽃패 고르기",
+      "opcaoFlor": {
+        "1": "꽃 梅 매화, 1",
+        "2": "꽃 兰 난초, 2",
+        "3": "꽃 菊 국화, 3",
+        "4": "꽃 竹 대나무, 4",
+        "5": "계절 春 봄, 1",
+        "6": "계절 夏 여름, 2",
+        "7": "계절 秋 가을, 3",
+        "8": "계절 冬 겨울, 4"
+      },
+      "florEscolhida": "{{flor}}: 선택됨"
     },
     "condicoes": {
       "titulo": "Conditions",

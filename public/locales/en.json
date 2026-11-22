@@ -2227,7 +2227,18 @@
       "flores": "Flowers and seasons",
       "removerFlor": "Remove {{flor}}",
       "erroQuatro": "Each tile only exists four times.",
-      "escolherFlores": "Choose the flowers"
+      "escolherFlores": "Choose the flowers",
+      "opcaoFlor": {
+        "1": "Flower 梅 Plum, 1",
+        "2": "Flower 兰 Orchid, 2",
+        "3": "Flower 菊 Chrysanthemum, 3",
+        "4": "Flower 竹 Bamboo, 4",
+        "5": "Season 春 Spring, 1",
+        "6": "Season 夏 Summer, 2",
+        "7": "Season 秋 Autumn, 3",
+        "8": "Season 冬 Winter, 4"
+      },
+      "florEscolhida": "{{flor}}: selected"
     },
     "condicoes": {
       "titulo": "Conditions",
