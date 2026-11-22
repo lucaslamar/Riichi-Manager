@@ -55,6 +55,8 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Mudou um teclado, abra o "?" dele: a cena de ajuda é um desenho à parte e precisa ser conferida na tela.
 - MPSZ em tela baixa: primeiro saem as folgas, depois as pedras e as teclas encolhem, estas nunca abaixo de 44px. Deitado, se ainda não couber (320px de altura), o painel rola em vez de cortar.
 - Teclado de pontos com W.O.: o botão fica acima do Calcular mão. Em tela baixa os dois botões e o visor encolhem, e até 600px de altura eles dividem a linha. A folha não rola em 360×640.
+- Na tela é sempre "WO", sem pontinhos, também para quem saiu no meio (pedido do usuário em 22/11/2026). O botão do teclado diz só WO, sem explicação junto: ligado muda o fundo, a borda e o ícone para ✓, e tocar de novo desfaz. A explicação fica no ? da regra.
+- Salvar e Registrar são um par: mesma altura, canto, letra e caixa, uma linha cada, sem ícone (o usuário achou feio o Salvar em maiúsculas, em duas linhas e com o ícone solto).
 - Salvar para continuar fica ao lado de Registrar partida, para o Registrar não sair da tela. Na retomada, a faixa da rodada ocupa o lugar da dica.
 - Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
 
