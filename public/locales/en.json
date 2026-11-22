@@ -1802,10 +1802,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} round · everyone is East once.",
-        "other": "{{count}} rounds · everyone is East once."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1840,7 +1836,7 @@
       "cutsShort": "Multiples of 4. Example: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Fixed rounds. Everyone is East once.",
+      "rodizio": "4 rounds. Everyone is East once.",
       "suico": "After round 1, tables follow standings.",
       "eliminatorio": "Cuts each phase until the final table.",
       "corridos": "Open rounds, drawn live. You end it.",
@@ -2158,8 +2154,7 @@
           "text": "Gather 12 or 16 players."
         },
         "why": "It is a limit of the math: only 2 tables to mix."
-      },
-      "short12AllEast": "With 12, round 4 repeats more."
+      }
     },
     "gridStats": {
       "title": "Draw quality",

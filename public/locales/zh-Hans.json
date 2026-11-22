@@ -1780,9 +1780,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "other": "{{count}}轮 · 每人各当一次东家。"
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1817,7 +1814,7 @@
       "cutsShort": "4的倍数。例如：8, 4"
     },
     "formatHelp": {
-      "rodizio": "轮数固定。每人各当一次东家。",
+      "rodizio": "4轮。每人各当一次东家。",
       "suico": "第2轮起按排名分桌。",
       "eliminatorio": "逐阶段淘汰，直到决赛桌。",
       "corridos": "轮数不限，现场抽签。",
@@ -2133,8 +2130,7 @@
           "text": "凑齐12或16人。"
         },
         "why": "这是数学限制：只有2桌可供混合。"
-      },
-      "short12AllEast": "12人时第4轮重复更多。"
+      }
     },
     "gridStats": {
       "title": "抽签质量",

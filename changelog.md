@@ -22,13 +22,14 @@
 - **Compartilhar a disputa**: a Disputa do pódio e a distância de cada jogador saem em texto ou imagem.
 - **Tipo do torneio**: aparece nos cards de Em andamento e nas imagens e textos da rodada e do ranking.
 - **Qualidade do sorteio em todos os formatos**: uma linha com a nota em cada rodada, que abre sozinha quando pede atenção. Mostra as repetições, os detalhes por jogador e, quando dá para refazer, Sortear de novo com comparação e Voltar ao anterior. No Ranking, o novo botão Estatística da grade abre os detalhes.
-- **Aviso de rodadas ideais**: com 8 ou 12 jogadores, as configurações avisam a partir de quando a repetição é inevitável.
+- **Aviso de rodadas ideais**: com 8 ou 12 jogadores, o ? do Formato mostra a partir de quando a repetição é inevitável.
 - **Sorteio que espalha as repetições**: o Torneio evita, nesta ordem, Leste repetido, dupla 3 vezes junta, trio repetido e repetições concentradas numa pessoa. Com os ventos na mesa, eles não pesam. Com 16 jogadores, o Pontos corridos rápido faz 5 rodadas sem repetir adversário.
 
 ### Alterado
 
 - **Novos nomes dos formatos**: Rodízio virou All Leste, a antiga Temporada virou Brasileirão e o antigo Brasileirão virou Pontos corridos rápido. Os torneios salvos continuam iguais, com o nome novo do formato.
-- **Ajuda do Número de rodadas**: o ? mostra um caso por linha, com o do formato escolhido em destaque, no lugar do texto corrido.
+- **Configurações do formato mais limpas**: duas linhas embaixo do Formato, sem ? no meio do texto. Com 8 ou 12 jogadores, o ? do Formato mostra também quantas rodadas valem a pena, um caso por linha.
+- **Classificatória All Leste com 4 rodadas**: fica travada em 4, para todos serem Leste uma vez.
 - **All Leste só com ventos**: o app sempre sorteia os ventos, também na classificatória do Eliminatório, e a escolha some das configurações. Torneio que já começou segue como estava.
 
 ### Corrigido

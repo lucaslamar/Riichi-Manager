@@ -1780,9 +1780,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "other": "全{{count}}回戦・全員が一度ずつ東家。"
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1817,7 +1814,7 @@
       "cutsShort": "4の倍数。例：8, 4"
     },
     "formatHelp": {
-      "rodizio": "回戦数固定。全員が一度ずつ東家。",
+      "rodizio": "4回戦。全員が一度ずつ東家。",
       "suico": "2回戦から順位で卓組み。",
       "eliminatorio": "段階ごとに絞って決勝卓へ。",
       "corridos": "回戦数自由。その場で抽選。",
@@ -2133,8 +2130,7 @@
           "text": "12人か16人を集めましょう。"
         },
         "why": "2卓しか混ぜられない、数学上の限界です。"
-      },
-      "short12AllEast": "12人では4回戦目に再戦が増えます。"
+      }
     },
     "gridStats": {
       "title": "抽選の質",

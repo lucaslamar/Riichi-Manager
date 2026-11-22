@@ -1852,12 +1852,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} turas · visi kartą Rytai.",
-        "few": "{{count}} turai · visi kartą Rytai.",
-        "many": "{{count}} turo · visi kartą Rytai.",
-        "other": "{{count}} turų · visi kartą Rytai."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1892,7 +1886,7 @@
       "cutsShort": "4 kartotiniai. Pvz.: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Fiksuoti turai. Visi kartą Rytai.",
+      "rodizio": "4 turai. Visi kartą Rytai.",
       "suico": "Nuo 2 turo stalai pagal lentelę.",
       "eliminatorio": "Atrankos iki finalinio stalo.",
       "corridos": "Laisvi turai, burtai vietoje.",
@@ -2220,8 +2214,7 @@
           "text": "Surinkite 12 ar 16 žaidėjų."
         },
         "why": "Tai matematikos riba: maišyti galima tik 2 stalus."
-      },
-      "short12AllEast": "Su 12 4 ture kartojasi daugiau."
+      }
     },
     "gridStats": {
       "title": "Burtų kokybė",

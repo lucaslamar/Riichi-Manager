@@ -7,7 +7,7 @@ import ConfigMesaSheet from '@/dominios/centerpiece/interface/componentes/Config
 import { formatoValido, lerCortes, OPCOES_TIMER_RODADA } from '../../logica/configuracao'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { criarTemporada } from '../../logica/temporada'
-import { dataDoDia, exigeVentos, formatoPadrao, jogadoresPorMesa, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
+import { comRegrasDoFormato, dataDoDia, exigeVentos, formatoPadrao, jogadoresPorMesa, RODADAS_PADRAO, sorteiaVentos, ventosPadrao } from '../../logica/torneio'
 import { useTorneios } from '../hooks/useTorneios'
 import { premiacaoPadrao, premiacaoValida } from '../../logica/premiacao'
 import { rankingTemporada, encontrosDaTemporada } from '../../logica/temporada'
@@ -41,7 +41,7 @@ export default function ConfigTorneioSheet({
   aoFechar: () => void
 }) {
   const { t, idioma } = useI18n()
-  const [formato, setFormato] = useState<ConfigFormato>(torneio.formato)
+  const [formato, setFormato] = useState<ConfigFormato>(() => comRegrasDoFormato(torneio).formato)
   const [timers, setTimers] = useState(torneio.timers)
   const [ventos, setVentos] = useState(() => sorteiaVentos(torneio))
   const { temporadas, torneios, salvarTemporada } = useTorneios()
@@ -93,6 +93,9 @@ export default function ConfigTorneioSheet({
           {t('tournament.settings.format')}
           <AjudaCampo rotulo={t('tournament.settings.format')}>
             <GuiaFormatos formatos={FORMATOS} atual={formato.tipo} porMesa={porMesa} />
+            {porMesa === 4 && formato.tipo !== 'eliminatorio' && (jogadores === 8 || jogadores === 12) && (
+              <GuiaRodadas jogadores={jogadores} allLeste={formato.tipo === 'rodizio'} />
+            )}
           </AjudaCampo>
         </span>
         <BotoesOpcao<FormatoTorneio>
@@ -110,10 +113,16 @@ export default function ConfigTorneioSheet({
           className="cfg-presets trn-formatos-botoes"
           opcoes={FORMATOS.map((tipo) => ({ valor: tipo, rotulo: t(`tournament.formats.${tipo}`) }))}
         />
-        <p className="cfg-ajuda">{t(`tournament.formatHelp.${formato.tipo}`)}</p>
+        <p className="cfg-ajuda trn-resumo-formato">
+          <span>{t(`tournament.formatHelp.${formato.tipo}`)}</span>
+          <span>
+            {t(porMesa === 3 ? 'tournament.settings.multipleOfThreeShort' : 'tournament.settings.multipleOfFourShort')}
+          </span>
+        </p>
       </div>
 
       {!ventosFixos && (
+      <>
       <Grupo
         rotulo={t('tournament.settings.winds')}
         ajuda={
@@ -137,22 +146,11 @@ export default function ConfigTorneioSheet({
           ]}
         />
       </Grupo>
-      )}
       <p className="cfg-ajuda">{t(comVentos ? 'tournament.settings.windsAppShort' : 'tournament.settings.windsTableShort')}</p>
+      </>
+      )}
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
-      {porMesa === 4 && formato.tipo !== 'eliminatorio' && (jogadores === 8 || jogadores === 12) && (
-        <p className="cfg-ajuda cfg-ajuda--com-botao">
-          {t(
-            jogadores === 12 && formato.tipo === 'rodizio'
-              ? 'tournament.idealRounds.short12AllEast'
-              : `tournament.idealRounds.short${jogadores}`,
-          )}
-          <AjudaCampo rotulo={t('tournament.settings.rounds')}>
-            <GuiaRodadas jogadores={jogadores} allLeste={formato.tipo === 'rodizio'} />
-          </AjudaCampo>
-        </p>
-      )}
       {formato.tipo === 'temporada' && (
         <>
           <Campo rotulo={t('tournament.season.title')} ajuda={<p>{t('tournament.season.criterionLater')}</p>}>
@@ -203,10 +201,6 @@ export default function ConfigTorneioSheet({
           )}
         </>
       )}
-
-      <p className="cfg-ajuda">
-        {t(porMesa === 3 ? 'tournament.settings.multipleOfThreeShort' : 'tournament.settings.multipleOfFourShort')}
-      </p>
     </>
   )
 
@@ -367,9 +361,6 @@ function OpcoesFormato({
   )
   const opcoesRodadas = RODADAS.map((numero) => ({ valor: numero, rotulo: String(numero) }))
 
-  if (formato.tipo === 'rodizio') {
-    return <p className="cfg-ajuda">{t('tournament.settings.rotationRounds', { count: formato.rodadas })}</p>
-  }
   if (formato.tipo === 'suico') {
     return (
       <Grupo rotulo={t('tournament.settings.rounds')}>
@@ -390,13 +381,22 @@ function OpcoesFormato({
           <BotoesOpcao<'rodizio' | 'suico'>
             rotulo={t('tournament.settings.qualifier')}
             valor={formato.classificatoria}
-            aoEscolher={(classificatoria) => aoMudar({ ...formato, classificatoria })}
+            aoEscolher={(classificatoria) =>
+              aoMudar({
+                ...formato,
+                classificatoria,
+                ...(classificatoria === 'rodizio' ? { rodadasClassificatoria: RODADAS_PADRAO } : {}),
+              })
+            }
             opcoes={[
               { valor: 'rodizio', rotulo: t('tournament.formats.rodizio') },
               { valor: 'suico', rotulo: t('tournament.formats.suico') },
             ]}
           />
         </Grupo>
+        {formato.classificatoria === 'rodizio' ? (
+          <p className="cfg-ajuda">{t('tournament.formatHelp.rodizio')}</p>
+        ) : (
         <Grupo rotulo={t('tournament.settings.qualifierRounds')}>
           <BotoesOpcao<number>
             rotulo={t('tournament.settings.qualifierRounds')}
@@ -405,6 +405,7 @@ function OpcoesFormato({
             opcoes={opcoesRodadas}
           />
         </Grupo>
+        )}
         <Campo rotulo={t('tournament.settings.cuts')} ajuda={<p>{t('tournament.settings.cutsHelp')}</p>}>
           <input
             className={`trn-campo${cortes ? '' : ' trn-campo--erro'}`}

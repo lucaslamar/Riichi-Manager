@@ -1508,3 +1508,12 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .trn-guia-rodadas li.trn-guia-rodadas--atual {
   background: color-mix(in srgb, var(--primario) 14%, transparent);
 }
+
+/* Duas linhas de resumo logo abaixo do formato, juntas. */
+.trn-resumo-formato > span {
+  display: block;
+}
+
+.trn-guia-formatos + p + p {
+  margin-top: 16px;
+}

@@ -1780,9 +1780,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "other": "{{count}}라운드 · 모두 한 번씩 동가."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1817,7 +1814,7 @@
       "cutsShort": "4의 배수. 예: 8, 4"
     },
     "formatHelp": {
-      "rodizio": "라운드 고정. 모두 한 번씩 동가.",
+      "rodizio": "4라운드. 모두 한 번씩 동가.",
       "suico": "2라운드부터 순위대로 배정.",
       "eliminatorio": "단계마다 줄여 결승 테이블로.",
       "corridos": "라운드 자유. 그 자리에서 추첨.",
@@ -2133,8 +2130,7 @@
           "text": "12명이나 16명을 모으세요."
         },
         "why": "섞을 테이블이 2개뿐인 수학의 한계입니다."
-      },
-      "short12AllEast": "12명이면 4라운드에 재대결 증가."
+      }
     },
     "gridStats": {
       "title": "추첨 품질",

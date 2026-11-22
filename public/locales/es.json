@@ -1809,11 +1809,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} ronda · cada uno es Este una vez.",
-        "many": "{{count}} de rondas · cada uno es Este una vez.",
-        "other": "{{count}} rondas · cada uno es Este una vez."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1848,7 +1843,7 @@
       "cutsShort": "Múltiplos de 4. Ejemplo: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Rondas fijas. Cada uno es Este una vez.",
+      "rodizio": "4 rondas. Cada uno es Este una vez.",
       "suico": "Tras la 1.ª, mesas según la tabla.",
       "eliminatorio": "Cortes por fase hasta la mesa final.",
       "corridos": "Rondas libres, sorteadas al momento.",
@@ -2168,8 +2163,7 @@
           "text": "Reúne 12 o 16 jugadores."
         },
         "why": "Es un límite matemático: solo hay 2 mesas que mezclar."
-      },
-      "short12AllEast": "Con 12, la 4.ª repite más."
+      }
     },
     "gridStats": {
       "title": "Calidad del sorteo",

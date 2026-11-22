@@ -28,6 +28,7 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Brasileirão: como o Pontos corridos rápido, com cada encontro somando num ranking acumulado.
 - O Torneio é sempre de 4: mesas fecham com 8, 12, 16… jogadores. O código de mesas de 3 (sorteio, mínimos) continua, mas nenhuma tela cria torneio de Sanma. Confirmado pelo usuário em 22/11/2026: não religar nem tratar como bug, e o "Jogar Sanma quando falta um" do brief fica descartado.
 - Ventos: o All Leste (e a classificatória All Leste do Eliminatório) é só com ventos sorteados pelo app, sem escolha. Nos outros, o padrão é sair na mesa, então o app não sabe quem foi Leste. Torneio já sorteado segue como começou.
+- All Leste tem 4 rodadas travadas, também como classificatória do Eliminatório, para todos serem Leste uma vez. Vale em todo sorteio do zero. O que já foi sorteado segue como está.
 - Nomes de 22/11/2026: os ids não mudaram. `rodizio` = All Leste, `corridos` = Pontos corridos rápido ("Rápido" nos selos), `temporada` = Brasileirão. No código, "Temporada" é o Brasileirão.
 
 ### Sorteio
