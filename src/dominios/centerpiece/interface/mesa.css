@@ -62,13 +62,12 @@
   margin: 0;
 }
 
-/* Faixa roxa, como a do registro, com lugar para o ? ao lado. */
+/* Faixa roxa, como a do registro, embaixo da mesa: o ? fica sozinho no topo. */
 .mesa-simples-dica {
   display: flex;
   flex: none;
   flex-direction: column;
   gap: 4px;
-  margin-right: 36px;
   border-radius: 8px;
   padding: 8px 12px;
   color: var(--primario);
@@ -747,17 +746,16 @@ button.mesa-domo {
     grid-template-columns: var(--mesa-lado);
   }
 
-  /* Com altura, a faixa fica em cima e a mesa encolhe o que ela ocupa. */
+  /* Com altura, a faixa fica embaixo e a mesa encolhe o que ela ocupa. */
   .mesa-tela--simples {
     --mesa-lado: min(620px, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - 112px));
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 1fr auto;
   }
 
   .mesa-simples-dica {
     width: min(100%, 620px);
     box-sizing: border-box;
     margin: 0;
-    padding-right: 40px;
     justify-self: center;
   }
 
@@ -1133,10 +1131,9 @@ button.mesa-domo {
     position: absolute;
     /* Sem área de grade, mede pela tela e não pela coluna da mesa. */
     grid-area: auto;
-    top: 10px;
+    bottom: 10px;
     left: 8px;
     width: auto;
     max-width: calc((100% - var(--mesa-lado)) / 2 - 16px);
-    padding-right: 12px;
   }
 }

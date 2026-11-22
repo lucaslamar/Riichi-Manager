@@ -184,20 +184,6 @@ export default function CenterpieceSimples({
       <TituloTela titulo={t('match.simple.title')} acoes={<BotaoConfiguracoes />} />
       <RecursosDaMesa />
 
-      {/* A faixa roxa do registro. O toque passa por ela e abre o menu, como no fundo. */}
-      <div className="mesa-simples-dica">
-        <p>
-          <i className="fas fa-hand-pointer" aria-hidden="true" />
-          <span>{t('match.simple.hint')}</span>
-        </p>
-        {timer.ligado && (
-          <p>
-            <i className="fas fa-stopwatch" aria-hidden="true" />
-            <span>{t('match.simple.hintTimer')}</span>
-          </p>
-        )}
-      </div>
-
       <div className="mesa-simples-ajuda">
         <AjudaCampo rotulo={t('match.simple.title')}>
           <div className="cfg-ajuda-texto ajuda-simples">
@@ -236,7 +222,20 @@ export default function CenterpieceSimples({
             lado={(cadeira) => ({ placa: placaDaCadeira(cadeira) })}
           />
         )}
+      </div>
 
+      {/* Embaixo, para não concorrer com o ?. O toque passa por ela e abre o menu, como no fundo. */}
+      <div className="mesa-simples-dica">
+        <p>
+          <i className="fas fa-hand-pointer" aria-hidden="true" />
+          <span>{t('match.simple.hint')}</span>
+        </p>
+        {timer.ligado && (
+          <p>
+            <i className="fas fa-stopwatch" aria-hidden="true" />
+            <span>{t('match.simple.hintTimer')}</span>
+          </p>
+        )}
       </div>
 
       {acoesAbertas && (
