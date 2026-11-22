@@ -28,6 +28,7 @@
 
 ### Alterado
 
+- **Dragão Branco**: no Riichi fica liso, sem a linha azul. No Chinês fica rosa nas pedras com rosa e amarelo nas outras.
 - **QR das imagens mais discreto**: menor, em lilás e sem a faixa branca, com o convite em texto leve embaixo das mesas.
 - **Modo Riichi**: nas Configurações, a opção Japonês agora se chama Riichi, como os jogadores chamam a variante.
 - **Modo Chinês**: botões e textos usam os termos chineses (Chi, Peng, Gang, An Gang, Dianhe, Zimo e Fan). Os botões têm o mesmo formato dos do Riichi, com o MPSZ na mesma linha.

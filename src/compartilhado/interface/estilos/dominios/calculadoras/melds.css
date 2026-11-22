@@ -9,13 +9,9 @@
 
 .tile-img-haku {
   box-sizing: border-box;
-  border: 1px solid var(--pedra-borda, #d7dde6);
   border-radius: 5px;
+  /* 白 liso: só a cor da pedra, sem moldura. */
   background: var(--pedra-face, #ffffff);
-  /* Moldura interna visível: o 白 parece pedra, não tecla vazia, em todas as cores de pedra. */
-  box-shadow:
-    inset 0 0 0 4px var(--pedra-face, #ffffff),
-    inset 0 0 0 6px color-mix(in srgb, #2f5fb8 70%, var(--pedra-face, #ffffff));
 }
 
 .tile-fallback {

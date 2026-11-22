@@ -32,6 +32,11 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 
 - Não escolhida não é desabilitada: a pedra fica com a aparência cheia (opacidade, face e cor das Pedras). Escolhida ganha só um contorno por sombra na cor `--cor-destaque` (a do botão Gang, rosa no tema escuro), com `aria-pressed` e sem mudar de tamanho. No Alto contraste o contorno engrossa. O foco fica por fora dele. Exemplo: Flores e Estações do MCR.
 
+## Dragão Branco (pedido do usuário em 22/11/2026)
+
+- No Riichi é liso, só a cor da pedra: sem moldura nem linha interna, em qualquer cor de pedra.
+- No Chinês o desenho tem uma cor só: rosa nas pretas do tema escuro e amarelo nas outras (pretas do claro e do Azul, e brancas). As cores saem de `scripts/gerar-pedras-chinesas-pretas.ts`.
+
 ## Escrita
 
 - Rótulos dizem o que vai acontecer ("Salvar partida", não "OK").
