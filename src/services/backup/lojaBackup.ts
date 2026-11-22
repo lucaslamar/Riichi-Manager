@@ -19,6 +19,10 @@ import {
   salvarRegrasRegistro,
   type RegrasRegistroSalvas,
 } from '@/dominios/centerpiece/persistencia/repositorioRegrasRegistro'
+import {
+  carregarPartidasPausadas,
+  salvarPartidasPausadas,
+} from '@/dominios/centerpiece/persistencia/repositorioPartidasPausadas'
 import { salvarTorneios } from '@/dominios/torneio/persistencia/repositorioTorneios'
 import { lerPartidas } from '@/dominios/centerpiece/interface/hooks/usePartidas'
 import { lerTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
@@ -43,6 +47,7 @@ export function lerDadosLocais(armazenamento: ArmazenamentoChaveValor): DadosBac
     regrasRegistro: carregarRegrasRegistro(armazenamento),
     placaresMcr: carregarPlacaresMcr(armazenamento),
     clubeMcr: carregarClube(armazenamento, '-mcr'),
+    partidasPausadas: carregarPartidasPausadas(armazenamento),
   }
 }
 
@@ -64,4 +69,6 @@ export function gravarDados(armazenamento: ArmazenamentoChaveValor, dados: Dados
     salvarRegrasRegistro(armazenamento, dados.regrasRegistro as RegrasRegistroSalvas)
   salvarPlacaresMcr(armazenamento, dados.placaresMcr)
   if (dados.clubeMcr) salvarClube(armazenamento, dados.clubeMcr, '-mcr')
+  // Backup antigo não tem: substituir esvazia, como nos placares MCR.
+  salvarPartidasPausadas(armazenamento, dados.partidasPausadas ?? [])
 }

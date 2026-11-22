@@ -1681,6 +1681,21 @@
       "helpSum": "W.O.가 있으면 합계가 달라도 기록할 수 있습니다.",
       "summaryLast": "W.O. 4위",
       "summaryPoints": "W.O. 점수순"
+    },
+    "paused": {
+      "save": "저장 후 나중에 계속",
+      "help": "대국이 멈춘 지점.",
+      "round": "현재 국",
+      "honba": "본장",
+      "dealer": "현재 오야(동가)",
+      "dealerIs": "오야: {{name}}",
+      "sticks": "공탁 리치봉",
+      "sticksShort": "공탁: {{count}}",
+      "list": "진행 중인 대국",
+      "listCount": "진행 중인 대국: {{count}}",
+      "resume": "이어하기",
+      "edit": "국, 본장, 오야 수정",
+      "discardTitle": "저장한 대국을 삭제할까요?"
     }
   },
   "spokenTiles": {

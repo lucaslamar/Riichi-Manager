@@ -1681,6 +1681,21 @@
       "helpSum": "有W.O.的牌桌即使总分不符也可登记。",
       "summaryLast": "W.O.判第4",
       "summaryPoints": "W.O.按点数"
+    },
+    "paused": {
+      "save": "保存稍后继续",
+      "help": "对局暂停的位置。",
+      "round": "当前局数",
+      "honba": "本场",
+      "dealer": "当前庄家（东家）",
+      "dealerIs": "庄家：{{name}}",
+      "sticks": "场上立直棒",
+      "sticksShort": "供托：{{count}}",
+      "list": "进行中的对局",
+      "listCount": "进行中的对局：{{count}}",
+      "resume": "继续",
+      "edit": "编辑局数、本场和庄家",
+      "discardTitle": "放弃这场已保存的对局？"
     }
   },
   "spokenTiles": {

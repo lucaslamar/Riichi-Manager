@@ -1747,6 +1747,21 @@
       "helpSum": "Su W.O. stalą galima įrašyti, net jei suma nesutampa.",
       "summaryLast": "W.O. lieka 4-as",
       "summaryPoints": "W.O. pagal taškus"
+    },
+    "paused": {
+      "save": "Išsaugoti ir tęsti vėliau",
+      "help": "Kur partija sustojo.",
+      "round": "Dabartinis raundas",
+      "honba": "Honba",
+      "dealer": "Dabartinis dalytojas (Rytai)",
+      "dealerIs": "Dalytojas: {{name}}",
+      "sticks": "Riichi lazdelės ant stalo",
+      "sticksShort": "riichi ant stalo: {{count}}",
+      "list": "Vykstančios partijos",
+      "listCount": "Vykstančios partijos: {{count}}",
+      "resume": "Tęsti",
+      "edit": "Keisti raundą, honba ir dalytoją",
+      "discardTitle": "Atmesti šią išsaugotą partiją?"
     }
   },
   "spokenTiles": {

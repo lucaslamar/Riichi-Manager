@@ -1710,6 +1710,21 @@
       "helpSum": "Con W.O., la mesa se registra aunque la suma no cuadre.",
       "summaryLast": "W.O. queda 4.º",
       "summaryPoints": "W.O. por puntos"
+    },
+    "paused": {
+      "save": "Guardar para continuar",
+      "help": "Dónde quedó la partida.",
+      "round": "Ronda actual",
+      "honba": "Honba",
+      "dealer": "Dealer (Este) actual",
+      "dealerIs": "Dealer: {{name}}",
+      "sticks": "Palitos de riichi en la mesa",
+      "sticksShort": "riichi en mesa: {{count}}",
+      "list": "Partidas en curso",
+      "listCount": "Partidas en curso: {{count}}",
+      "resume": "Retomar",
+      "edit": "Editar ronda, honba y dealer",
+      "discardTitle": "¿Descartar esta partida guardada?"
     }
   },
   "spokenTiles": {

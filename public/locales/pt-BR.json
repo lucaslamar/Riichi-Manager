@@ -1703,6 +1703,21 @@
       "helpSum": "Com W.O., a mesa registra mesmo que a soma não feche.",
       "summaryLast": "W.O. fica em 4º",
       "summaryPoints": "W.O. pelos pontos"
+    },
+    "paused": {
+      "save": "Salvar para continuar",
+      "help": "Onde a partida parou.",
+      "round": "Rodada atual",
+      "honba": "Honba",
+      "dealer": "Dealer (Leste) atual",
+      "dealerIs": "Dealer: {{name}}",
+      "sticks": "Sticks de riichi na mesa",
+      "sticksShort": "riichi na mesa: {{count}}",
+      "list": "Partidas em andamento",
+      "listCount": "Partidas em andamento: {{count}}",
+      "resume": "Retomar",
+      "edit": "Editar rodada, honba e dealer",
+      "discardTitle": "Descartar esta partida salva?"
     }
   },
   "spokenTiles": {

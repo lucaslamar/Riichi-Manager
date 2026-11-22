@@ -17,6 +17,8 @@ interface DadosPartidaManual {
   ordemDosVentos?: boolean
   /** W.O.: quem saiu no meio. */
   saidas?: readonly Cadeira[]
+  /** Sticks que ficaram na mesa, fora dos pontos de cada um. */
+  palitos?: number
 }
 
 export function criarPartidaManual(
@@ -35,6 +37,7 @@ export function criarPartidaManual(
     ...partida,
     placar: {
       ...partida.placar,
+      palitos: dados.palitos ?? 0,
       pontos: { 0: dados.pontos[0], 1: dados.pontos[1], 2: dados.pontos[2], 3: dados.pontos[3] },
     },
     status: 'finalizada',

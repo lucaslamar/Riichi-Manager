@@ -21,6 +21,7 @@ import { mesasRegistradas, type MesaDoSorteio } from '../../logica/encontroClube
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
 import { useClube } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
+import { usePartidasPausadas } from '../hooks/usePartidasPausadas'
 import CenterpieceSimples from './CenterpieceSimples'
 import PaginaEmAndamento from './PaginaEmAndamento'
 import PaginaHistorico from './PaginaHistorico'
@@ -42,6 +43,7 @@ type TelaModulo =
   | { nome: 'mesasSorteadas' }
   | { nome: 'registrarClube'; mesa: MesaDoSorteio; encontroId: string }
   | { nome: 'registrarFinalizada' }
+  | { nome: 'retomar'; id: string }
   | { nome: 'simples' }
   | { nome: 'andamento' }
   | { nome: 'jogadores' }
@@ -104,6 +106,7 @@ function TelasCenterpiece({
   const { t, idioma } = useI18n()
   const { partidas, abertas, guardarNome, descartar } = usePartidas()
   const nomeDoTorneio = useNomeNoTorneio()
+  const { pausadas } = usePartidasPausadas()
   const { sorteio, marcarRegistrada } = useClube()
   // A aba Ranking abre direto na lista: ela é a raiz desse modo.
   const telaRaiz: TelaModulo = {
@@ -140,7 +143,8 @@ function TelasCenterpiece({
   const clubePendente =
     sorteio && mesasRegistradas(sorteio, partidas) < sorteio.mesas.length ? 1 : 0
   /** O que o Em andamento lista: mesas abertas, o encontro pendente e os torneios em jogo. */
-  const totalEmAndamento = abertas.length + clubePendente + torneiosEmJogo.length
+  const totalEmAndamento =
+    abertas.length + pausadas.length + clubePendente + torneiosEmJogo.length
   /** Sem torneio em jogo, o card já cria o rascunho e abre a Lista do torneio. */
   const criarTorneio = () => {
     const agora = new Date()
@@ -214,6 +218,7 @@ function TelasCenterpiece({
         key={`${tela.encontroId}-${tela.mesa.numero}`}
         clube={{ mesa: tela.mesa, encontroId: tela.encontroId }}
         aoVoltar={voltar}
+        aoVerSalvas={() => trocar({ nome: 'andamento' })}
         aoRegistrar={(id) => {
           // Volta às mesas: o organizador costuma registrar uma atrás da outra.
           marcarRegistrada(tela.mesa.numero, id)
@@ -226,10 +231,32 @@ function TelasCenterpiece({
     return (
       <RegistrarFinalizada
         aoVoltar={voltar}
+        aoVerSalvas={() => trocar({ nome: 'andamento' })}
         // Depois de registrar, o Ranking: na aba Ranking é só voltar a ele.
         aoRegistrar={() => (modo === 'ranking' ? voltar() : trocar({ nome: 'ranking' }))}
       />
     )
+  }
+  if (tela.nome === 'retomar') {
+    const pausada = pausadas.find((item) => item.id === tela.id)
+    if (pausada) {
+      return (
+        <RegistrarFinalizada
+          key={pausada.id}
+          retomar={pausada}
+          aoVoltar={voltar}
+          // Salvar de novo volta à lista de onde veio.
+          aoVerSalvas={voltar}
+          aoRegistrar={(id) => {
+            const { encontro } = pausada
+            if (encontro && sorteio?.encontro.id === encontro.id)
+              marcarRegistrada(encontro.mesa, id)
+            if (modo === 'ranking') setPilha([telaRaiz])
+            else trocar({ nome: 'ranking' })
+          }}
+        />
+      )
+    }
   }
   if (tela.nome === 'simples') {
     return (
@@ -399,6 +426,7 @@ function TelasCenterpiece({
         aoVoltar={voltar}
         aoAbrirMesa={(id) => abrirMesa({ nome: 'mesa', id })}
         aoAbrirSorteio={() => abrir({ nome: 'mesasSorteadas' })}
+        aoRetomar={(id) => abrir({ nome: 'retomar', id })}
         aoAbrirTorneio={(id) => abrir({ nome: 'torneio', id })}
       />
     )

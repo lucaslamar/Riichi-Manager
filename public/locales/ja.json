@@ -1681,6 +1681,21 @@
       "helpSum": "W.O.がある卓は合計が一致しなくても登録できます。",
       "summaryLast": "W.O.は4着",
       "summaryPoints": "W.O.は点数どおり"
+    },
+    "paused": {
+      "save": "保存して後で続ける",
+      "help": "対局が止まった場所。",
+      "round": "現在の局",
+      "honba": "本場",
+      "dealer": "現在の親（東家）",
+      "dealerIs": "親：{{name}}",
+      "sticks": "供託のリーチ棒",
+      "sticksShort": "供託：{{count}}",
+      "list": "進行中の対局",
+      "listCount": "進行中の対局：{{count}}",
+      "resume": "再開",
+      "edit": "局・本場・親を編集",
+      "discardTitle": "この保存した対局を破棄しますか？"
     }
   },
   "spokenTiles": {

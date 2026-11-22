@@ -128,7 +128,7 @@ export function resolver(expressao: string): string {
   return total === null ? '' : String(total)
 }
 
-const VALOR_RIICHI = 1000
+export const VALOR_RIICHI = 1000
 
 /**
  * A soma da mesa fecha? Com "perdidos", os depósitos de riichi que sobraram

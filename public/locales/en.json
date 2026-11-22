@@ -1703,6 +1703,21 @@
       "helpSum": "With a W.O., the table can be recorded even if the sum does not match.",
       "summaryLast": "W.O. finishes 4th",
       "summaryPoints": "W.O. by points"
+    },
+    "paused": {
+      "save": "Save to continue",
+      "help": "Where the game stopped.",
+      "round": "Current round",
+      "honba": "Honba",
+      "dealer": "Current dealer (East)",
+      "dealerIs": "Dealer: {{name}}",
+      "sticks": "Riichi sticks on the table",
+      "sticksShort": "riichi on table: {{count}}",
+      "list": "Games in progress",
+      "listCount": "Games in progress: {{count}}",
+      "resume": "Resume",
+      "edit": "Edit round, honba and dealer",
+      "discardTitle": "Discard this saved game?"
     }
   },
   "spokenTiles": {

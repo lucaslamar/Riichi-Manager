@@ -320,6 +320,46 @@
   cursor: pointer;
 }
 
+/* Salvar para continuar. */
+.fin-andamento {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 10px;
+}
+
+.fin-andamento-inteiro {
+  grid-column: 1 / -1;
+}
+
+.fin-andamento select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 2px solid var(--entrada-borda);
+  border-radius: 10px;
+  color: var(--texto-principal);
+  background: var(--fundo);
+  font: inherit;
+}
+
+.fin-salvas,
+.fin-salvar {
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+}
+
+.fin-pausada-acoes {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px 12px;
+}
+
+.fin-pausada-acoes > button {
+  min-height: 44px;
+  flex: 1;
+}
+
 .cfg-saida-penalidade {
   margin: 4px 0 0;
 }

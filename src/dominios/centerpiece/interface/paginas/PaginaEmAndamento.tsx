@@ -6,6 +6,7 @@ import { partidasAbertasMcr } from '@/dominios/placar-mcr/logica/rankingMcr'
 import { compartilharTexto } from '@/compartilhado/adaptadores/compartilhar'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import TituloTela from '@/compartilhado/interface/layout/TituloTela'
+import { nomeExibido } from '@/dominios/jogadores/logica/jogadores'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
 import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import { useSubtituloTorneio } from '@/dominios/torneio/interface/textoTorneio'
@@ -26,6 +27,10 @@ import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import { useAviso } from '../hooks/useAviso'
 import { useClube } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
+import { usePartidasPausadas } from '../hooks/usePartidasPausadas'
+import { useTextoAndamento } from '../hooks/useTextoAndamento'
+import CardPausada from '../componentes/CardPausada'
+import '../config-mesa.css'
 import { nomeDoAssento } from '../nomeDoAssento'
 import { textoDaPartida } from '../textoPartida'
 
@@ -41,11 +46,14 @@ export default function PaginaEmAndamento({
   aoAbrirMesa,
   aoAbrirSorteio,
   aoAbrirTorneio,
+  aoRetomar,
 }: {
   aoVoltar: () => void
   aoAbrirMesa: (id: string) => void
   aoAbrirSorteio: () => void
   aoAbrirTorneio: (id: string) => void
+  /** Retomar uma salva para continuar. Sem ela (MCR), a lista não mostra salvas. */
+  aoRetomar?: (id: string) => void
 }) {
   const { t, numero, idioma } = useI18n()
   const riichi = usePartidas()
@@ -78,6 +86,10 @@ export default function PaginaEmAndamento({
     new Intl.DateTimeFormat(idioma, { dateStyle: 'short', timeStyle: 'short' }).format(
       new Date(iso),
     )
+  const { pausadas, descartar: descartarPausada } = usePartidasPausadas()
+  const salvas = aoRetomar && !chines ? pausadas : []
+  const textoAndamento = useTextoAndamento()
+  const [pausadaParaDescartar, setPausadaParaDescartar] = useState<string | null>(null)
   const { aviso, mostrar } = useAviso()
   const [paraDescartar, setParaDescartar] = useState<string | null>(null)
 
@@ -126,7 +138,8 @@ export default function PaginaEmAndamento({
 
   // Mesas abertas no placar: todas são partidas (clube e torneio só registram resultado).
   const mesas = mostra('avulsa') ? abertas : []
-  const nada = abertas.length === 0 && !sorteioPendente && torneiosEmJogo.length === 0
+  const nada =
+    abertas.length === 0 && salvas.length === 0 && !sorteioPendente && torneiosEmJogo.length === 0
 
   // Um item por card, com o que a busca enxerga (nome, jogadores e data escrita).
   const itens: { chave: string; data: string; nome: string; textos: string[]; card: ReactNode }[] =
@@ -198,6 +211,36 @@ export default function PaginaEmAndamento({
             },
           ]
         : []),
+      ...salvas
+        .filter((pausada) => mostra(pausada.encontro ? 'clube' : 'avulsa'))
+        .map((pausada) => {
+          const nomeDe = (cadeira: number) => {
+            const { jogadorId, nome } = pausada.assentos[cadeira]
+            const jogador = jogadores.find((item) => item.id === jogadorId)
+            return (jogador ? nomeExibido(jogador) : nome) || '—'
+          }
+          return {
+            chave: `p-${pausada.id}`,
+            data: pausada.salvaEm,
+            nome: textoAndamento(pausada),
+            textos: [
+              textoAndamento(pausada),
+              dataHora(pausada.salvaEm),
+              ...pausada.assentos.flatMap(({ cadeira, jogadorId }) => [
+                nomeDe(cadeira),
+                ...nomesDe(jogadorId ?? undefined),
+              ]),
+            ],
+            card: (
+              <CardPausada
+                pausada={pausada}
+                nomeDe={nomeDe}
+                aoRetomar={() => aoRetomar?.(pausada.id)}
+                aoDescartar={() => setPausadaParaDescartar(pausada.id)}
+              />
+            ),
+          }
+        }),
       ...mesas.map((partida) => ({
         chave: `m-${partida.id}`,
         data: partida.criadaEm,
@@ -215,7 +258,8 @@ export default function PaginaEmAndamento({
     ]
   // Sempre em grupos, na ordem dos botões: Partidas, Clube e Torneios. A ordem
   // dos filtros vale dentro de cada grupo (o sort é estável).
-  const grupo = (chave: string) => (chave.startsWith('m-') ? 0 : chave === 'encontro' ? 1 : 2)
+  const grupo = (chave: string) =>
+    chave.startsWith('p-') ? 0 : chave.startsWith('m-') ? 1 : chave === 'encontro' ? 2 : 3
   const visiveis = filtrarLista(itens, busca, filtrosLista, new Date(), idioma).sort(
     (um, outro) => grupo(um.chave) - grupo(outro.chave),
   )
@@ -238,8 +282,13 @@ export default function PaginaEmAndamento({
         <p className="ptd-vazio">{t('match.listFilters.noResults')}</p>
       ) : (
         <div className="cm-grupos">
-          {visiveis.map((item) => (
-            <div key={item.chave}>{item.card}</div>
+          {visiveis.map((item, indice) => (
+            <div key={item.chave}>
+              {indice === 0 && item.chave.startsWith('p-') && (
+                <h3 className="ptd-rotulo">{t('match.paused.list')}</h3>
+              )}
+              {item.card}
+            </div>
           ))}
         </div>
       )}
@@ -248,6 +297,20 @@ export default function PaginaEmAndamento({
         <p className="ptd-aviso" role="status">
           {aviso}
         </p>
+      )}
+
+      {pausadaParaDescartar && (
+        <ModalConfirmacao
+          titulo={t('match.paused.discardTitle')}
+          texto={t('match.home.discardHelp')}
+          rotuloConfirmar={t('match.home.discard')}
+          perigo
+          aoFechar={() => setPausadaParaDescartar(null)}
+          aoConfirmar={() => {
+            descartarPausada(pausadaParaDescartar)
+            setPausadaParaDescartar(null)
+          }}
+        />
       )}
 
       {paraDescartar && (

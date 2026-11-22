@@ -8,6 +8,7 @@
 import type { Jogador } from '@/dominios/jogadores/logica/jogadores'
 import type { Partida } from '@/dominios/centerpiece/logica/partida'
 import type { ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
+import type { PartidaPausada } from '@/dominios/centerpiece/logica/partidaPausada'
 import type { EncontroClube, SorteioClube } from '@/dominios/centerpiece/logica/encontroClube'
 import type { ListaSalva, Temporada, Torneio } from '@/dominios/torneio/logica/tipos'
 import type { PlacarMcr } from '@/dominios/placar-mcr/logica/placar'
@@ -30,6 +31,8 @@ export interface DadosBackup {
   placaresMcr: PlacarMcr[]
   /** Clube do modo Chinês (lista, sorteio e encontros). Backups anteriores não têm: vazio. */
   clubeMcr?: DadosBackup['clube']
+  /** Salvas para continuar. Backups anteriores não têm: vazio. */
+  partidasPausadas?: PartidaPausada[]
 }
 
 export interface ArquivoBackup {
@@ -92,6 +95,7 @@ export function validarBackup(entrada: string | unknown): ValidacaoBackup {
     comIds(dados.temporadas) &&
     comIds(dados.listasTorneio ?? []) &&
     comIds(dados.placaresMcr ?? []) &&
+    comIds(dados.partidasPausadas ?? []) &&
     !!clube &&
     comIds(clube.encontros)
   if (!valido) return { ok: false, erro: 'corrompido' }
@@ -190,6 +194,14 @@ export function mesclarBackup(locais: DadosBackup, vindos: DadosBackup): DadosBa
     temporadas: somarPorId(locais.temporadas, vindos.temporadas),
     listasTorneio: somarPorId(locais.listasTorneio, vindos.listasTorneio),
     placaresMcr: somarPorId(locais.placaresMcr, vindos.placaresMcr),
+    ...(locais.partidasPausadas || vindos.partidasPausadas
+      ? {
+          partidasPausadas: somarPorId(
+            locais.partidasPausadas ?? [],
+            vindos.partidasPausadas ?? [],
+          ),
+        }
+      : {}),
     ...(locais.clubeMcr || vindos.clubeMcr
       ? {
           clubeMcr:
@@ -263,5 +275,6 @@ export function unificarJogadores(
     clube: trocar(dados.clube),
     placaresMcr: trocar(dados.placaresMcr),
     ...(dados.clubeMcr ? { clubeMcr: trocar(dados.clubeMcr) } : {}),
+    ...(dados.partidasPausadas ? { partidasPausadas: trocar(dados.partidasPausadas) } : {}),
   }
 }

@@ -2,7 +2,7 @@
  * W.O. no meio da partida: quem precisou sair. Não é o WO do torneio (`partida.wo`),
  * que é a mesa de quem nem apareceu. Puro, para o React Native.
  */
-import { somaFecha } from './expressaoPontos'
+import { somaFecha, VALOR_RIICHI } from './expressaoPontos'
 
 export interface RegraSaida {
   ficaEmUltimo: boolean
@@ -47,8 +47,17 @@ export interface Fechamento {
 export function fechamentoDoRegistro(
   soma: number,
   total: number,
-  mesa: { palitosRestantes: 'primeiro' | 'perdidos'; comSaida: boolean },
+  mesa: {
+    palitosRestantes: 'primeiro' | 'perdidos'
+    comSaida: boolean
+    /** Salva para continuar: os sticks que estavam na mesa. */
+    palitosNaMesa?: number
+  },
 ): Fechamento {
+  const { palitosNaMesa = 0 } = mesa
+  if (palitosNaMesa > 0 && total - soma === palitosNaMesa * VALOR_RIICHI) {
+    return { fecha: true, depositosNaMesa: palitosNaMesa, porSaida: false }
+  }
   const fechamento = somaFecha(soma, total, mesa.palitosRestantes)
   if (fechamento.fecha || !mesa.comSaida) return { ...fechamento, porSaida: false }
   return { fecha: true, depositosNaMesa: 0, porSaida: true }
