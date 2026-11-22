@@ -50,6 +50,8 @@ interface PropsModal {
   paginacao?: PaginacaoModal
   /** Classe da modal específica, para os estilos e funcionalidades próprios dela. */
   className?: string
+  /** No celular deitado (painel à direita), arrastar para a direita também fecha. Não usar com abas ou páginas. */
+  fechaParaOLado?: boolean
   children: ReactNode
 }
 
@@ -124,6 +126,7 @@ export default function Modal({
   semBotaoFechar = false,
   paginacao,
   className,
+  fechaParaOLado = false,
   children,
 }: PropsModal) {
   const id = useId()
@@ -187,7 +190,7 @@ export default function Modal({
     corpoRef.current?.scrollTo({ top: 0 })
   }, [paginaAtual])
 
-  useDeslizeParaFechar(dialogoRef, fundoRef, aoFechar)
+  useDeslizeParaFechar(dialogoRef, fundoRef, aoFechar, fechaParaOLado)
 
   // X, fundo e Esc saem com animação; quem fecha por fora (ex.: Aplicar) só desmonta.
   const [fechando, setFechando] = useState(false)

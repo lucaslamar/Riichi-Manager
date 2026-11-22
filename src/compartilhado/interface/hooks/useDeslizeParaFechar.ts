@@ -53,6 +53,11 @@ function elastico(distancia: number, limite: number): number {
   return Math.sign(distancia) * limite * (1 - 1 / ((absoluta * 0.9) / limite + 1))
 }
 
+/** O modal.css encosta a modal na direita no celular deitado. */
+function painelNaDireita(fundo: HTMLElement): boolean {
+  return getComputedStyle(fundo).justifyContent === 'flex-end'
+}
+
 function movimentoReduzido(): boolean {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 }
@@ -62,7 +67,8 @@ function movimentoReduzido(): boolean {
  * não tem o bounce nativo):
  * - no topo da rolagem, arrastar para baixo fecha; no fim, arrastar para cima;
  * - sem rolagem (conteúdo cabe na tela) ou tocando no cabeçalho/rodapé, os dois;
- * - fora do limite a rolagem funciona normal, e gesto horizontal fica para as abas.
+ * - fora do limite a rolagem funciona normal, e gesto horizontal fica para as abas;
+ * - com `paraOLado`, o painel da direita também fecha arrastando para a direita.
  *
  * A modal acompanha o dedo e o fundo clareia; ao soltar, fecha se passou de
  * ~120 px ou foi rápido (> 1000 px/s), saindo na direção do gesto, ou volta
@@ -75,6 +81,7 @@ export function useDeslizeParaFechar(
   dialogoRef: RefObject<HTMLElement>,
   fundoRef: RefObject<HTMLElement>,
   aoFechar: () => void,
+  paraOLado = false,
 ) {
   // Ref: os listeners ficam fixos e sempre chamam a versão atual.
   const aoFecharRef = useRef(aoFechar)
@@ -89,13 +96,14 @@ export function useDeslizeParaFechar(
       inicioX: number
       inicioY: number
       ultimoY: number
+      eixo: 'x' | 'y'
       rolavel: HTMLElement | null
       decidido: boolean
       ativo: boolean
       /** Direção que ativou o gesto; `0` = sem rolagem, vale para os dois lados. */
       direcao: 1 | -1 | 0
-      origemY: number
-      amostras: { y: number; tempo: number }[]
+      origem: number
+      amostras: { posicao: number; tempo: number }[]
       reduzido: boolean
     } | null = null
     let fechando = false
@@ -110,10 +118,11 @@ export function useDeslizeParaFechar(
       )
     }
 
-    const aplicar = (deslocamento: number, reduzido: boolean) => {
-      const progresso = Math.min(1, Math.abs(deslocamento) / Math.max(dialogo.offsetHeight, 1))
+    const aplicar = (deslocamento: number, reduzido: boolean, eixo: 'x' | 'y') => {
+      const tamanho = eixo === 'x' ? dialogo.offsetWidth : dialogo.offsetHeight
+      const progresso = Math.min(1, Math.abs(deslocamento) / Math.max(tamanho, 1))
       if (reduzido) dialogo.style.opacity = String(1 - progresso * 0.6)
-      else dialogo.style.transform = `translateY(${deslocamento}px)`
+      else dialogo.style.transform = `translate${eixo.toUpperCase()}(${deslocamento}px)`
       fundo.style.setProperty('--modal-escurecido-opacidade', String(1 - progresso))
     }
 
@@ -125,15 +134,15 @@ export function useDeslizeParaFechar(
       fundo.style.removeProperty('--modal-escurecido-opacidade')
     }
 
-    const voltar = (reduzido: boolean) => {
+    const voltar = (reduzido: boolean, eixo: 'x' | 'y') => {
       const duracao = reduzido ? DURACAO_FADE : DURACAO_VOLTA
       transicao(duracao, reduzido ? 'ease-out' : CURVA_MOLA, reduzido)
-      aplicar(0, reduzido)
+      aplicar(0, reduzido, eixo)
       window.clearTimeout(limpeza)
       limpeza = window.setTimeout(limparEstilos, duracao + 20)
     }
 
-    const fechar = (direcao: 1 | -1, reduzido: boolean) => {
+    const fechar = (direcao: 1 | -1, reduzido: boolean, eixo: 'x' | 'y') => {
       fechando = true
       const duracao = reduzido ? DURACAO_FADE : DURACAO_SAIDA
       transicao(duracao, 'ease-in', reduzido)
@@ -142,10 +151,10 @@ export function useDeslizeParaFechar(
         fundo.style.setProperty('--modal-escurecido-opacidade', '0')
       } else {
         // Sai pela borda da tela na direção do gesto.
-        const { top, bottom } = dialogo.getBoundingClientRect()
-        const atual = new DOMMatrixReadOnly(getComputedStyle(dialogo).transform).m42
-        const ateBorda = direcao > 0 ? window.innerHeight - top : bottom
-        aplicar(atual + direcao * ateBorda, false)
+        const { top, bottom, left } = dialogo.getBoundingClientRect()
+        const { m41, m42 } = new DOMMatrixReadOnly(getComputedStyle(dialogo).transform)
+        if (eixo === 'x') aplicar(m41 + window.innerWidth - left, false, eixo)
+        else aplicar(m42 + direcao * (direcao > 0 ? window.innerHeight - top : bottom), false, eixo)
         fundo.style.setProperty('--modal-escurecido-opacidade', '0')
       }
       window.clearTimeout(limpeza)
@@ -155,7 +164,7 @@ export function useDeslizeParaFechar(
         window.requestAnimationFrame(() => {
           if (!dialogo.isConnected) return
           fechando = false
-          voltar(reduzido)
+          voltar(reduzido, eixo)
         })
       }, duracao)
     }
@@ -168,11 +177,12 @@ export function useDeslizeParaFechar(
         inicioX: toque.clientX,
         inicioY: toque.clientY,
         ultimoY: toque.clientY,
+        eixo: 'y',
         rolavel: areaRolavel(evento.target as Element, dialogo),
         decidido: false,
         ativo: false,
         direcao: 0,
-        origemY: 0,
+        origem: 0,
         amostras: [],
         reduzido: movimentoReduzido(),
       }
@@ -181,7 +191,7 @@ export function useDeslizeParaFechar(
     const aoMover = (evento: TouchEvent) => {
       if (!gesto) return
       if (evento.touches.length !== 1) {
-        if (gesto.ativo) voltar(gesto.reduzido)
+        if (gesto.ativo) voltar(gesto.reduzido, gesto.eixo)
         gesto = null
         return
       }
@@ -192,10 +202,18 @@ export function useDeslizeParaFechar(
         const deltaY = y - gesto.inicioY
         if (Math.abs(deltaX) < FOLGA_DIRECAO && Math.abs(deltaY) < FOLGA_DIRECAO) return
         gesto.decidido = true
-        // Gesto horizontal: fica para as abas (AbasModal) e áreas que rolam de lado.
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          gesto = null
-          return
+          // Fora do painel lateral, o horizontal fica para as abas (AbasModal) e áreas que rolam de lado.
+          if (!paraOLado || deltaX < 0 || !evento.cancelable || !painelNaDireita(fundo)) {
+            gesto = null
+            return
+          }
+          gesto.eixo = 'x'
+          gesto.ativo = true
+          gesto.direcao = 1
+          gesto.origem = gesto.inicioX
+          window.clearTimeout(limpeza)
+          transicao(0, '', gesto.reduzido)
         }
       }
 
@@ -209,19 +227,21 @@ export function useDeslizeParaFechar(
         if (!noLimite(gesto.rolavel, direcao) || !evento.cancelable) return
         gesto.ativo = true
         gesto.direcao = gesto.rolavel ? direcao : 0
-        gesto.origemY = y
+        gesto.origem = y
         window.clearTimeout(limpeza)
         transicao(0, '', gesto.reduzido)
       }
 
       evento.preventDefault()
-      let distancia = y - gesto.origemY
+      const posicao = gesto.eixo === 'x' ? x : y
+      let distancia = posicao - gesto.origem
       // Com rolagem, só anda para o lado do limite (voltar o dedo não empurra o conteúdo).
       if (gesto.direcao > 0) distancia = Math.max(0, distancia)
       if (gesto.direcao < 0) distancia = Math.min(0, distancia)
-      aplicar(elastico(distancia, window.innerHeight), gesto.reduzido)
+      const limite = gesto.eixo === 'x' ? window.innerWidth : window.innerHeight
+      aplicar(elastico(distancia, limite), gesto.reduzido, gesto.eixo)
 
-      gesto.amostras.push({ y, tempo: evento.timeStamp })
+      gesto.amostras.push({ posicao, tempo: evento.timeStamp })
       while (
         gesto.amostras.length > 2 &&
         evento.timeStamp - gesto.amostras[0].tempo > JANELA_VELOCIDADE
@@ -237,17 +257,17 @@ export function useDeslizeParaFechar(
 
       const ultima = atual.amostras[atual.amostras.length - 1]
       const primeira = atual.amostras[0]
-      const distancia = (ultima?.y ?? atual.origemY) - atual.origemY
+      const distancia = (ultima?.posicao ?? atual.origem) - atual.origem
       const intervalo = ultima && primeira ? (ultima.tempo - primeira.tempo) / 1000 : 0
-      const velocidade = intervalo > 0 ? (ultima.y - primeira.y) / intervalo : 0
+      const velocidade = intervalo > 0 ? (ultima.posicao - primeira.posicao) / intervalo : 0
       const direcao = distancia >= 0 ? 1 : -1
       const longe = Math.abs(distancia) > LIMIAR_DISTANCIA
       const rapido = Math.abs(velocidade) > LIMIAR_VELOCIDADE && Math.sign(velocidade) === direcao
 
       if (evento.type === 'touchend' && distancia !== 0 && (longe || rapido)) {
-        fechar(direcao, atual.reduzido)
+        fechar(direcao, atual.reduzido, atual.eixo)
       } else {
-        voltar(atual.reduzido)
+        voltar(atual.reduzido, atual.eixo)
       }
     }
 
@@ -263,5 +283,5 @@ export function useDeslizeParaFechar(
       dialogo.removeEventListener('touchend', aoSoltar)
       dialogo.removeEventListener('touchcancel', aoSoltar)
     }
-  }, [dialogoRef, fundoRef])
+  }, [dialogoRef, fundoRef, paraOLado])
 }

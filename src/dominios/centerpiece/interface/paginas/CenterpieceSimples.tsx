@@ -244,6 +244,7 @@ export default function CenterpieceSimples({
           aoFechar={() => fecharAcoes()}
           rotuloFechar={t('actions.close')}
           tamanho="pequena"
+          fechaParaOLado
         >
           {/* Jogadores primeiro, à parte das ações: trocar recomeça a mesa do 東1. No Chinês são sempre 4. */}
           {!isChines && (
