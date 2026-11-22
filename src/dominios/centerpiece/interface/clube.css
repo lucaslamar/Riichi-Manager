@@ -1021,7 +1021,8 @@ body.teclado-aberto .clb-enviar {
 }
 
 /* Histórico e Em andamento: com o menu lateral, duas colunas só quando o nome cabe. */
-@media (min-width: 1024px) and (max-width: 1279px) and (orientation: landscape) {
+@media (min-width: 1024px) and (max-width: 1279px) and (orientation: landscape),
+  (min-width: 1000px) and (max-height: 560px) {
   .cm-grupos,
   .cm-grupo > .cm-lista,
   .cm-pagina > .cm-lista {
