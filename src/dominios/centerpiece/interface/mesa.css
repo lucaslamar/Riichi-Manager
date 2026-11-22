@@ -1164,7 +1164,9 @@ button.mesa-domo {
 /* No celular deitado a faixa vira uma tira, lida por quem senta na lateral. */
 @media (orientation: landscape) and (max-height: 500px) {
   .mesa-tela.mesa-tela--simples > .mesa-simples-dica {
-    top: 10px;
+    /* No meio da altura da mesa, sem ir de canto a canto. */
+    top: calc(10px + var(--mesa-lado) * 0.1);
+    bottom: calc(10px + var(--mesa-lado) * 0.1);
     /* Encostada na mesa, que fica no meio, e não na borda da tela. */
     right: calc(50% + var(--mesa-lado) / 2 + 12px);
     left: auto;
@@ -1179,6 +1181,14 @@ button.mesa-domo {
   .mesa-simples-dica i {
     width: auto;
     inline-size: 1.2em;
+  }
+
+  /* Deitado e estreito, o texto só cabe com a altura toda. */
+  @media (max-width: 659px), (max-aspect-ratio: 7/4) {
+    .mesa-tela.mesa-tela--simples > .mesa-simples-dica {
+      top: 10px;
+      bottom: 10px;
+    }
   }
 
   /* A mesa girou para o outro lado: a tira acompanha. */
