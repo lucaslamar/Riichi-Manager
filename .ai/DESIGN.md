@@ -58,7 +58,8 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Na tela é sempre "WO", sem pontinhos, também para quem saiu no meio (pedido do usuário em 22/11/2026). O botão do teclado diz só WO, sem explicação junto: ligado muda o fundo, a borda e o ícone para ✓, e tocar de novo desfaz. A explicação fica no ? da regra.
 - Registrar partida e Finalizar mesa usam a barra da Lista (pedido do usuário em 22/11/2026, substitui o par de botões): presa embaixo, soma e status à esquerda, ícones de 44px à direita na ordem da Lista (lixeira, configs, disquete) e Registrar na largura toda, com ícone. Nada de segundo botão largo. No celular deitado vira coluna à direita. Na retomada, a faixa da rodada ocupa o lugar da dica.
 - Na barra do registro cabem no máximo 3 ícones em 320px: a ampulheta das salvas fica no cabeçalho. Regras travadas (torneio e Chinês) não têm configs. A lixeira confirma e não tira quem veio do sorteio.
-- O preset no registro é só leitura (pedido do usuário em 22/11/2026): sem borda, fundo, chave ou cadeado, descido até rente à barra, com a linha do negativado. Quem edita é o ícone de configs.
+- Registrar partida não tem título "Jogadores e pontos" (pedido do usuário em 22/11/2026: era tímido e repetia a faixa). A faixa roxa diz "Toque para registrar jogadores e pontos". Quando os jogadores vêm do sorteio, ela fala só dos pontos.
+- O preset no registro é só leitura (pedido do usuário em 22/11/2026): num quadro com borda e fundo apenas visual (sem toque, chave ou cadeado), descido até rente à barra, com a linha do negativado. Quem edita é o ícone de configs.
 - Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
 
 ## Pedras brancas
