@@ -2471,5 +2471,21 @@
       "mpsz": "MPSZ로 입력",
       "mais": "다른 입력 방법"
     }
+  },
+  "tutorial": {
+    "mcr": {
+      "diagrama": {
+        "viradas": "144 pedras viradas para baixo",
+        "pilhas": "18 pilhas",
+        "porPilha": "2 pedras em cada, 36 por jogador",
+        "muralha": "A Grande Muralha",
+        "piso": "Dentro fica o Piso",
+        "dados": "Dados: 6 e depois 4",
+        "contadas": "Conte 10 pilhas da direita",
+        "compra": "A compra segue no horário",
+        "fimMuro": "As contadas são o fim do muro",
+        "saltada": "O Leste pula uma pilha"
+      }
+    }
   }
 }

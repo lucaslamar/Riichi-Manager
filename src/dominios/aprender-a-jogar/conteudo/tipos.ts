@@ -24,6 +24,12 @@ export type IlustracaoGuia =
   | 'muroMortoCurto'
   | 'mesaCompra'
   | 'mesaDescartes'
+  | 'mcrEmbaralhar'
+  | 'mcrPilhas'
+  | 'mcrQuadrado'
+  | 'mcrAbertura'
+  | 'mcrDistribuicao'
+  | 'mcrUltimaVolta'
 
 /** Cartão que abre ao tocar (ex.: um yaku para iniciantes). */
 export interface CartaoGuia {
