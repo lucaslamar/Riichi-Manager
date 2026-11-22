@@ -8,6 +8,17 @@ export interface UnidadeDistancia {
   resumida: boolean
 }
 
+/** Pontos do ranking no WO e no atraso. */
+export interface RegrasWo {
+  /** Perdido por quem faltou. */
+  penalidade: number
+  /** Ganho por cada presente. */
+  presente: number
+  /** Passou disso é WO. */
+  toleranciaMinutos: number
+  porMinuto: number
+}
+
 /** O que muda entre os modos fora da pontuação e dos yaku/fan. */
 export interface RegrasDoModo {
   modo: ModoJogo
@@ -17,6 +28,8 @@ export interface RegrasDoModo {
   escalaPontos: number
   /** A primeira é a unidade de referência. */
   unidadesDistancia: readonly UnidadeDistancia[]
+  /** null: o modo ainda não tem WO. */
+  woPadrao: RegrasWo | null
 }
 
 const REGRAS: Record<ModoJogo, RegrasDoModo> = {
@@ -31,6 +44,8 @@ const REGRAS: Record<ModoJogo, RegrasDoModo> = {
       { id: 'baiman', valor: 16000, resumida: false },
       { id: 'yakuman', valor: 32000, resumida: true },
     ],
+    // Aprovado pelo clube: −30 da EMA, +10 da casa, atraso da WRC e da EMA.
+    woPadrao: { penalidade: 30, presente: 10, toleranciaMinutos: 10, porMinuto: 1 },
   },
   mcr: {
     modo: 'mcr',
@@ -38,6 +53,7 @@ const REGRAS: Record<ModoJogo, RegrasDoModo> = {
     escalaPontos: 1,
     // Vencer a mesa vale 4 pontos de mesa.
     unidadesDistancia: [{ id: 'vitorias', valor: 4, resumida: true }],
+    woPadrao: null,
   },
 }
 

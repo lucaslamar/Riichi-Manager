@@ -3,6 +3,7 @@
  * do Centerpiece com `vinculoTorneio`, que é a fonte única para os dois rankings.
  */
 import type { ConfigMesa } from '@/dominios/centerpiece/logica/configMesa'
+import type { RegrasWo } from '@/compartilhado/modo-jogo/regrasDoModo'
 import type { RegrasSanma, Variante } from '@/compartilhado/mahjong/variante'
 
 export type FormatoTorneio = 'rodizio' | 'suico' | 'eliminatorio' | 'corridos' | 'temporada'
@@ -103,6 +104,8 @@ export interface Torneio {
   /** Regras de Sanma copiadas ao criar, para as mesas abertas no Centerpiece. */
   regrasSanma?: RegrasSanma
   premiacao?: ConfigPremiacao
+  /** Ausente: o padrão do modo. */
+  wo?: RegrasWo
   /** Torneio do modo Chinês: as mesas são placares MCR. Ausente = Riichi. */
   jogo?: 'mcr'
 }
@@ -121,6 +124,8 @@ export interface Temporada {
   config: ConfigMesa
   criadaEm: string
   premiacao?: ConfigPremiacao
+  /** Copiado para cada encontro novo. */
+  wo?: RegrasWo
   /** Temporada do modo Chinês. Ausente = Riichi. */
   jogo?: 'mcr'
 }

@@ -29,7 +29,7 @@ export function classificar(
   rodadas?: ReadonlySet<number>,
 ): LinhaClassificacao[] {
   const acumulado = new Map(
-    torneio.jogadorIds.map((id) => [id, { pontos: 0, partidas: 0, colocacoes: 0, desempate: 0 }]),
+    torneio.jogadorIds.map((id) => [id, { pontos: 0, partidas: 0, colocacoes: 0, colocados: 0, desempate: 0 }]),
   )
   for (const partida of partidas) {
     const vinculo = partida.vinculoTorneio
@@ -40,7 +40,10 @@ export function classificar(
       if (!atual) continue
       atual.pontos += linha.final
       atual.partidas += 1
-      atual.colocacoes += linha.colocacao
+      if (!partida.wo) {
+        atual.colocacoes += linha.colocacao
+        atual.colocados += 1
+      }
       atual.desempate += linha.desempate ?? 0
     }
   }
@@ -51,7 +54,7 @@ export function classificar(
       pontos: arredondar(dados.pontos),
       partidas: dados.partidas,
       desempate: dados.desempate,
-      mediaColocacao: dados.partidas ? Math.round((dados.colocacoes / dados.partidas) * 100) / 100 : 0,
+      mediaColocacao: dados.colocados ? Math.round((dados.colocacoes / dados.colocados) * 100) / 100 : 0,
     }))
     .sort(
       (uma, outra) =>

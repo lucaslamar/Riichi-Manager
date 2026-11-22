@@ -154,11 +154,11 @@ export function candidatosAoPrimeiro(
 
   const jogadas = new Map<string, number>()
   let melhorRodada = 0
-  for (const { status, vinculoTorneio, resultado } of partidas) {
+  for (const { status, vinculoTorneio, resultado, wo } of partidas) {
     if (status !== 'finalizada' || vinculoTorneio?.torneioId !== torneio.id) continue
     for (const { jogadorId, final } of resultado ?? []) {
       jogadas.set(jogadorId, (jogadas.get(jogadorId) ?? 0) + 1)
-      melhorRodada = Math.max(melhorRodada, final)
+      if (!wo) melhorRodada = Math.max(melhorRodada, final)
     }
   }
 

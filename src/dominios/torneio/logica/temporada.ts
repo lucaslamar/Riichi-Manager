@@ -37,6 +37,7 @@ export function novoEncontro(temporada: Temporada, contexto: { id: string; agora
     ...criarRascunho(contexto),
     formato: { tipo: 'temporada', temporadaId: temporada.id },
     config: temporada.config,
+    ...(temporada.wo ? { wo: temporada.wo } : {}),
   }
 }
 
