@@ -10,8 +10,9 @@ export default function RodapeRegistro({
   fechamento,
   podeRegistrar,
   aoRegistrar,
+  limpar,
+  configurar,
   salvar,
-  salvas,
 }: {
   soma: number
   total: number
@@ -20,8 +21,9 @@ export default function RodapeRegistro({
   aoRegistrar: () => void
   /** O disquete. Ausente: a tela não salva para continuar (torneio e MCR). */
   salvar?: { pode: boolean; aoTocar: () => void }
-  /** A ampulheta das partidas em andamento. */
-  salvas?: { quantas: number; aoTocar: () => void }
+  limpar: { pode: boolean; aoTocar: () => void }
+  /** Ausente: regras travadas (torneio e MCR). */
+  configurar?: () => void
 }) {
   const { t, numero } = useI18n()
   const { fecha, porSaida, depositosNaMesa } = fechamento
@@ -35,7 +37,6 @@ export default function RodapeRegistro({
         : t(soma < total ? 'tournament.points.sumShort' : 'tournament.points.sumOver', {
             points: numero(Math.abs(total - soma)),
           })
-  const rotuloSalvas = salvas ? t('match.paused.listCount', { count: salvas.quantas }) : ''
 
   return (
     <div className="ptd-rodape-fixo clb-rodape trn-rodape fin-rodape">
@@ -57,20 +58,29 @@ export default function RodapeRegistro({
             {fecha && <i className="fas fa-check fin-rodape-ok" aria-hidden="true" />}
           </span>
         </p>
-        {(salvar || salvas) && (
+          {/* A ordem da Lista: lixeira, configs e a ação da tela. */}
           <span className="trn-rodape-icones">
-            {salvas && (
+            <button
+              type="button"
+              className="trn-adicionar-cadastro"
+              aria-label={t('match.manual.clear')}
+              title={t('match.manual.clear')}
+              aria-haspopup="dialog"
+              disabled={!limpar.pode}
+              onClick={limpar.aoTocar}
+            >
+              <i className="fas fa-trash" aria-hidden="true" />
+            </button>
+            {configurar && (
               <button
                 type="button"
-                className="trn-adicionar-cadastro fin-rodape-salvas"
-                aria-label={rotuloSalvas}
-                title={rotuloSalvas}
-                onClick={salvas.aoTocar}
+                className="trn-adicionar-cadastro"
+                aria-label={t('match.manual.editRules')}
+                title={t('match.manual.editRules')}
+                aria-haspopup="dialog"
+                onClick={configurar}
               >
-                <i className="fas fa-hourglass-half" aria-hidden="true" />
-                <span className="rkf-contagem" aria-hidden="true">
-                  {numero(salvas.quantas)}
-                </span>
+                <i className="fas fa-sliders" aria-hidden="true" />
               </button>
             )}
             {salvar && (
@@ -87,7 +97,6 @@ export default function RodapeRegistro({
               </button>
             )}
           </span>
-        )}
       </div>
       <button
         type="button"

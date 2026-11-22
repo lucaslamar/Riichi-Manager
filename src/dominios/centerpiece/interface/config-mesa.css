@@ -327,6 +327,10 @@
   column-gap: 10px;
 }
 
+.fin-andamento-aviso {
+  margin: 0 0 12px;
+}
+
 .fin-andamento-inteiro {
   grid-column: 1 / -1;
 }
@@ -344,12 +348,27 @@
 
 /* A barra do registro (a da Lista): o conteúdo rola por trás e termina acima dela. */
 .ptd-inicio.fin-tela:not(#_) {
-  padding-bottom: 148px;
+  box-sizing: border-box;
+  padding-bottom: 130px;
+}
+
+/* No celular a tela enche a altura, para o preset descer até a barra. */
+@media (max-width: 640px) {
+  .ptd-inicio.fin-tela:not(#_) {
+    min-height: calc(100dvh - 47px - var(--altura-barra-inferior, 0px));
+  }
 }
 
 .ptd-rodape-fixo.fin-rodape {
   gap: 0;
   padding-inline: max(16px, calc((100% - 880px) / 2 + 24px));
+}
+
+/* No tablet a barra é mais alta, com a letra maior. */
+@media (min-width: 641px) and (max-width: 1023px), (min-width: 641px) and (orientation: portrait) {
+  .ptd-inicio.fin-tela:not(#_) {
+    padding-bottom: 148px;
+  }
 }
 
 /* Na mesma margem dos cards. */
@@ -363,8 +382,38 @@
   margin-left: 4px;
 }
 
-.fin-rodape-salvas {
+.fin-topo-salvas.fin-topo-salvas {
   position: relative;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  margin-left: auto;
+}
+
+.fin-topo-salvas > .rkf-contagem {
+  top: 2px;
+  right: 2px;
+}
+
+/* 320 a 379px: os 3 ícones e a soma dividem a linha. */
+@media (max-width: 379px) {
+  .fin-rodape > .trn-rodape-topo {
+    gap: 4px;
+  }
+
+  .fin-rodape .clb-contadores {
+    gap: 5px;
+    font-size: 0.8125rem;
+  }
+
+  .fin-rodape .trn-rodape-icones {
+    gap: 0;
+  }
+
+  .fin-rodape .clb-falta,
+  .fin-rodape .trn-status--ok {
+    font-size: 0.8125rem;
+  }
 }
 
 @media (min-width: 1024px) and (orientation: landscape) {

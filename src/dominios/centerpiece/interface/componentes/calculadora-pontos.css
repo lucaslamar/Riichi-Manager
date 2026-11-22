@@ -343,13 +343,17 @@
   color: var(--texto-aviso);
 }
 
-/* Regras do torneio: o mesmo card, só para ler. */
-.fin-regras-travadas {
-  cursor: default;
+/* Só leitura: sem borda nem fundo de botão, rente à barra de baixo. */
+.fin-preset {
+  margin-top: auto;
+  padding: 4px 4px 0;
+  color: var(--texto-principal);
+  text-align: left;
 }
 
-.fin-regras-travadas > i {
-  color: var(--texto-apoio);
+.fin-preset > span:first-child,
+.fin-preset .ptd-apoio {
+  display: block;
 }
 
 /* Dica acima da grade, na pegada do selo de torneio em andamento. */
@@ -409,10 +413,12 @@
 @media (min-width: 768px) and (min-height: 900px) {
   .fin-tela > .fin-dica,
   .fin-tela > details > summary,
+  .fin-tela .fin-preset .ptd-apoio,
   .fin-tela .ptd-resumo-regras .ptd-apoio {
     font-size: 1rem;
   }
 
+  .fin-tela .fin-preset strong,
   .fin-tela .ptd-resumo-regras strong {
     font-size: 1.125rem;
   }

@@ -37,6 +37,7 @@ import {
 import { lerPontos } from '../../logica/entradaPontos'
 import CalculadoraPontosSheet from '../componentes/CalculadoraPontosSheet'
 import AtrasoRegistro from '../componentes/AtrasoRegistro'
+import { ModalConfirmacao } from '../componentes/ModaisPartida'
 import RodapeRegistro from '../componentes/RodapeRegistro'
 import CardAssento from '../componentes/CardAssento'
 import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
@@ -182,6 +183,7 @@ export default function RegistrarFinalizada({
       ? personalizado
       : regrasDoPreset(conjunto === 'personalizado' ? 'padrao' : conjunto)
   const { pontosPartida, pontosRetorno, uma, tobi } = regras
+  const [limpando, setLimpando] = useState(false)
   const baseConjunto = configBaseDoConjunto(conjunto)
   // Tipo de partida: o último usado aqui, senão o do conjunto. No torneio vem da mesa.
   const [tipoPartida, setTipoPartida] = useState<ConfigMesa['tipoPartida']>(
@@ -404,6 +406,30 @@ export default function RegistrarFinalizada({
     aoVerSalvas?.()
   }
 
+  /** Torneio e mesa sorteada: quem senta vem do sorteio e fica. */
+  const lugaresDoSorteio = !!(torneio || encontro || mesaMcr)
+  const temAlgo =
+    pontos.some(Boolean) ||
+    cadeirasQueSairam.length > 0 ||
+    Object.values(atrasos).some(Boolean) ||
+    (!lugaresDoSorteio && assentos.some(Boolean))
+  const limparMesa = () => {
+    const vazios = [null, null, null, null]
+    if (chines) {
+      mudarRegistro({
+        ...registro,
+        assentos: lugaresDoSorteio ? registro.assentos : vazios,
+        pontos: vazios,
+      })
+    } else {
+      if (!lugaresDoSorteio) setAssentosRiichi(vazios)
+      setPontos(['', '', '', ''])
+      setSaidas([false, false, false, false])
+      setAtrasos({})
+      setAndamento(ANDAMENTO_INICIAL)
+    }
+    setLimpando(false)
+  }
   const resumoTobi = t(tobi ? 'tableConfig.negative.summaryEnds' : 'tableConfig.negative.summaryGoesOn')
   const negativado = pontos.some((texto) => (lerPontos(texto) ?? 0) < 0)
 
@@ -430,6 +456,23 @@ export default function RegistrarFinalizada({
                 : t('match.manual.title')
           }
           aoVoltar={aoVoltar}
+          acoes={
+            // No topo: a barra de baixo só comporta 3 ícones em 320px.
+            podeSalvar && !encontro && !retomada && pausadas.length > 0 ? (
+              <button
+                type="button"
+                className="cm-btn-icone fin-topo-salvas"
+                aria-label={t('match.paused.listCount', { count: pausadas.length })}
+                title={t('match.paused.listCount', { count: pausadas.length })}
+                onClick={aoVerSalvas}
+              >
+                <i className="fas fa-hourglass-half" aria-hidden="true" />
+                <span className="rkf-contagem" aria-hidden="true">
+                  {numero(pausadas.length)}
+                </span>
+              </button>
+            ) : undefined
+          }
         />
       )}
 
@@ -534,17 +577,16 @@ export default function RegistrarFinalizada({
         />
       )}
 
-      {/* Regras num card, como o resumo da Nova partida. No torneio e no MCR, só leitura. */}
+      {/* Só mostra o preset, rente à barra. Quem muda é o ícone de configs dela. */}
       {chines ? (
-        <div className="ptd-resumo-regras fin-regras-travadas">
+        <div className="fin-preset">
           <span>
             <strong>{t('placar.mcr.regrasMcr')}</strong>
             <span className="ptd-apoio">{t('placar.mcr.resumoRegras')}</span>
           </span>
-          <i className="fas fa-lock" aria-hidden="true" />
         </div>
       ) : torneio ? (
-        <div className="ptd-resumo-regras fin-regras-travadas">
+        <div className="fin-preset">
           <span>
             <strong>
               {`${t(base.tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t('match.manual.rulesTitle')}`}
@@ -553,16 +595,10 @@ export default function RegistrarFinalizada({
             <span className="ptd-apoio">{resumoTobi}</span>
             {cadeirasQueSairam.length > 0 && <span className="ptd-apoio">{resumoSaida}</span>}
           </span>
-          <i className="fas fa-lock" aria-hidden="true" />
           <span className="sr-only">{t('tournament.tables.rulesLocked')}</span>
         </div>
       ) : (
-        <button
-          type="button"
-          className="ptd-resumo-regras"
-          aria-haspopup="dialog"
-          onClick={() => setRegrasAbertas(true)}
-        >
+        <div className="fin-preset">
           <span>
             <strong>
               {`${t(tipoPartida === 'leste' ? 'tableConfig.gameEast' : 'tableConfig.gameHanchan')} · ${t(`match.manual.rulesets.${conjunto}`)}`}
@@ -576,9 +612,18 @@ export default function RegistrarFinalizada({
               </span>
             )}
           </span>
-          <i className="fas fa-wrench" aria-hidden="true" />
-          <span className="sr-only">{t('match.manual.editRules')}</span>
-        </button>
+        </div>
+      )}
+
+      {limpando && (
+        <ModalConfirmacao
+          titulo={t('match.manual.clearTitle')}
+          texto={t(lugaresDoSorteio ? 'match.manual.clearHelpSeated' : 'match.manual.clearHelp')}
+          rotuloConfirmar={t('match.manual.clear')}
+          perigo
+          aoFechar={() => setLimpando(false)}
+          aoConfirmar={limparMesa}
+        />
       )}
       {!torneio && !chines && (
         <RegrasPontuacaoRegistro
@@ -635,11 +680,8 @@ export default function RegistrarFinalizada({
             ? { pode: assentos.some(Boolean), aoTocar: () => setFolhaAndamento('salvar') }
             : undefined
         }
-        salvas={
-          podeSalvar && !encontro && !retomada && pausadas.length > 0 && aoVerSalvas
-            ? { quantas: pausadas.length, aoTocar: aoVerSalvas }
-            : undefined
-        }
+        limpar={{ pode: temAlgo, aoTocar: () => setLimpando(true) }}
+        configurar={torneio || chines ? undefined : () => setRegrasAbertas(true)}
       />
 
       {confirmando && previa?.resultado && (
