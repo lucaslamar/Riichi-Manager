@@ -89,6 +89,7 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 
 ### Nomes e compartilhamento
 
+- Fim do tempo no torneio (decidido com o usuário em 22/11/2026): o app só avisa que as partidas terminam na mão atual. Não encerra partida sozinho, quem registra o resultado é o usuário.
 - Quem sai do cadastro mantém o nome no torneio (`Torneio.nomes`, depois o guardado na partida). Sem registro nenhum, "Jogador N" pela posição na lista, nunca "?".
 - O resultado da mesa mostra os pontos que ficaram na mesa e o resultado com uma.
 - Imagens e textos da rodada, do ranking e da disputa dizem o tipo do torneio. A imagem leva o QR do app (desligável em Ajustes) e o texto termina com o link. O QR leva à página inicial, porque o torneio só existe no aparelho do organizador.
