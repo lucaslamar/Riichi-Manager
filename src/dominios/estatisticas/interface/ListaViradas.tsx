@@ -5,6 +5,7 @@ import type { ValoresUma } from '@/dominios/centerpiece/logica/uma'
 import type { TextosDistancia } from '@/dominios/torneio/interface/hooks/useTextosDistancia'
 import type { DistanciaAlvo } from '@/dominios/torneio/logica/distanciaPodio'
 import type { FiltrosRankingTorneio } from '@/dominios/torneio/logica/filtrosRankingTorneio'
+import type { FormaDoJogador } from '../logica/forma'
 import DetalheVirada from './DetalheVirada'
 import '@/dominios/torneio/interface/torneio.css'
 import './estatisticas.css'
@@ -19,6 +20,7 @@ export default function ListaViradas({
   textos,
   nome,
   restantesDe,
+  formaDe,
 }: {
   secoes: readonly { id: string; alvos: readonly DistanciaAlvo[] }[]
   jogadorId: string
@@ -29,6 +31,7 @@ export default function ListaViradas({
   textos: TextosDistancia
   nome: (jogadorId: string) => string
   restantesDe: (jogadorId: string) => number | null
+  formaDe: (jogadorId: string) => FormaDoJogador | null
 }) {
   const { t } = useI18n()
   const base = useId()
@@ -90,6 +93,8 @@ export default function ListaViradas({
               unidade={regras.unidadesDistancia.find((opcao) => opcao.id === unidade)}
               restantes={restantesDe(perseguidorId)}
               restantesLider={restantesDe(liderId)}
+              formaPerseguidor={formaDe(perseguidorId)}
+              formaLider={formaDe(liderId)}
             />
           </div>
         )}

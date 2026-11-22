@@ -39,21 +39,17 @@ export default function PaginaEstatisticasTorneio({
         <p className="ptd-vazio">{t('stats.empty')}</p>
       ) : (
         <>
-          <dl className="est-maos est-destaque">
-            <div>
-              <dt>{t('stats.best.torneio')}</dt>
-              <dd>
-                {maior ? (
-                  <>
-                    <TextoMao mao={maior} />
-                    <small>{nome(maior.jogadorId, maior.nome)}</small>
-                  </>
-                ) : (
-                  <small>{t('stats.noBest')}</small>
-                )}
-              </dd>
-            </div>
-          </dl>
+          {maior && (
+            <dl className="est-maos est-destaque">
+              <div>
+                <dt>{t('stats.best.torneio')}</dt>
+                <dd>
+                  <TextoMao mao={maior} />
+                  <small>{nome(maior.jogadorId, maior.nome)}</small>
+                </dd>
+              </div>
+            </dl>
+          )}
 
           <ul className="est-jogadores">
             {jogaram.map((linha) => {

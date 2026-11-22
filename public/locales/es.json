@@ -3628,8 +3628,6 @@
       "temporada": "Mejor mano de la temporada",
       "geral": "Mejor mano del ranking"
     },
-    "noBest": "Las mesas registradas solo con el resultado no guardan las manos.",
-    "noHands": "Sin registro de manos: las tasas y la mejor mano requieren el marcador de la app.",
     "someHands": "Las tasas y la mejor mano usan {{count}} de {{total}} partidas, las que tienen registro de manos.",
     "handFan": "{{fan}} fan",
     "handHanFu": "{{han}} han {{fu}} fu",
@@ -3662,6 +3660,29 @@
       "mediaMenor": "no se puede proyectar, porque el promedio no es mayor.",
       "longeDemais": "no se puede proyectar, porque los promedios están demasiado cerca."
     },
-    "withoutWo": "Sin partidas con W.O. ({{count}})"
+    "withoutWo": "Sin partidas con W.O. ({{count}})",
+    "form": {
+      "title": {
+        "fim": "Si terminan como suelen, hasta el final",
+        "proximo": "Si terminan como suelen, en la próxima partida"
+      },
+      "usual": {
+        "one": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesa)",
+        "many": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesas)",
+        "other": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesas)"
+      },
+      "short": "Si termina así, {{name}} queda a {{value}}: faltan {{hands}}.",
+      "jaPassa": "Si termina así, {{name}} adelanta por {{value}}.",
+      "jaEmpata": "Si termina así, {{name}} empata.",
+      "chance": "Probabilidad de remontar:",
+      "fewGames": "La probabilidad requiere {{count}} mesas o más de cada uno.",
+      "help": "Estimación según las mesas finalizadas de cada uno.",
+      "usualShort": "Suele terminar con",
+      "basedOn": {
+        "one": "en {{count}} mesa finalizada",
+        "many": "en {{count}} mesas finalizadas",
+        "other": "en {{count}} mesas finalizadas"
+      }
+    }
   }
 }

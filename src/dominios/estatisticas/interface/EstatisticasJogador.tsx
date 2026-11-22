@@ -7,6 +7,7 @@ import {
 } from '@/dominios/torneio/logica/distanciaPodio'
 import type { FiltrosRankingTorneio } from '@/dominios/torneio/logica/filtrosRankingTorneio'
 import type { EscopoEstatisticas } from '../logica/escopo'
+import { formaDoJogador } from '../logica/forma'
 import ListaViradas from './ListaViradas'
 import NumerosJogador from './NumerosJogador'
 import ProjecaoProximo from './ProjecaoProximo'
@@ -50,6 +51,7 @@ export default function EstatisticasJogador({
     { id: 'vizinhos', alvos: vizinhosDoJogador(linhas, jogadorId) },
   ].filter((secao) => secao.alvos.length > 0)
 
+  const formaDe = (id: string) => (visao.forma ? formaDoJogador(visao.forma, id) : null)
   const numeros = (
     <NumerosJogador
       partidas={partidas}
@@ -59,6 +61,7 @@ export default function EstatisticasJogador({
       nome={nome}
       semPosicoes={semPosicoes}
       semMaiorDeTodos={semMaiorDeTodos}
+      forma={formaDe(jogadorId)}
     />
   )
 
@@ -104,6 +107,7 @@ export default function EstatisticasJogador({
             textos={textos}
             nome={nome}
             restantesDe={viradas.restantesDe}
+            formaDe={formaDe}
           />
         </div>
       )}

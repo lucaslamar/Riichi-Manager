@@ -3698,8 +3698,6 @@
       "temporada": "Didžiausia sezono kombinacija",
       "geral": "Didžiausia reitingo kombinacija"
     },
-    "noBest": "Stalai, kuriems įrašytas tik rezultatas, kombinacijų nesaugo.",
-    "noHands": "Nėra kombinacijų įrašų: rodikliams reikia programėlės rezultatų lentos.",
     "someHands": "Rodikliai: partijos su įrašais, {{count}} iš {{total}}.",
     "handFan": "{{fan}} fan",
     "handHanFu": "{{han}} han {{fu}} fu",
@@ -3733,6 +3731,31 @@
       "mediaMenor": "prognozės nėra, nes vidurkis ne didesnis.",
       "longeDemais": "prognozės nėra, nes vidurkiai per panašūs."
     },
-    "withoutWo": "Be partijų su W.O. ({{count}})"
+    "withoutWo": "Be partijų su W.O. ({{count}})",
+    "form": {
+      "title": {
+        "fim": "Jei baigs kaip įprastai, iki pabaigos",
+        "proximo": "Jei baigs kaip įprastai, kitoje partijoje"
+      },
+      "usual": {
+        "one": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
+        "few": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
+        "many": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
+        "other": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})"
+      },
+      "short": "Taip baigus, {{name}} pritrūks {{value}}: reikia {{hands}}.",
+      "jaPassa": "Taip baigus, {{name}} aplenks {{value}} skirtumu.",
+      "jaEmpata": "Taip baigus, {{name}} sulygins.",
+      "chance": "Tikimybė aplenkti:",
+      "fewGames": "Tikimybei reikia bent {{count}} stalų kiekvienam.",
+      "help": "Įvertinta pagal baigtų stalų rezultatus.",
+      "usualShort": "Paprastai baigia su",
+      "basedOn": {
+        "one": "baigtų stalų: {{count}}",
+        "few": "baigtų stalų: {{count}}",
+        "many": "baigtų stalų: {{count}}",
+        "other": "baigtų stalų: {{count}}"
+      }
+    }
   }
 }

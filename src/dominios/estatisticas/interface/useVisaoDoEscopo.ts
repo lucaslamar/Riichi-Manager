@@ -20,7 +20,7 @@ import {
   type VisaoDoEscopo,
 } from '../logica/escopo'
 
-const VAZIA: VisaoDoEscopo = { partidas: [], linhas: [], viradas: { tipo: 'projecao' } }
+const VAZIA: VisaoDoEscopo = { partidas: [], linhas: [], forma: null, viradas: { tipo: 'projecao' } }
 
 /** Liga o escopo aos dados do app. As contas ficam em `logica/escopo`. */
 export function useVisaoDoEscopo(escopo: EscopoEstatisticas) {

@@ -3569,8 +3569,6 @@
       "temporada": "赛季最大和牌",
       "geral": "排行最大和牌"
     },
-    "noBest": "只登记结果的牌桌不保存和牌记录。",
-    "noHands": "没有逐局记录：和牌率与最大和牌需要使用应用计分板。",
     "someHands": "数据基于{{total}}局中有逐局记录的{{count}}局。",
     "handFan": "{{fan}}番",
     "handHanFu": "{{han}}番{{fu}}符",
@@ -3601,6 +3599,25 @@
       "mediaMenor": "平均成绩未更高，无法预测。",
       "longeDemais": "平均成绩过于接近，无法预测。"
     },
-    "withoutWo": "排除含W.O.的对局（{{count}}）"
+    "withoutWo": "排除含W.O.的对局（{{count}}）",
+    "form": {
+      "title": {
+        "fim": "若保持一贯成绩（至结束）",
+        "proximo": "若保持一贯成绩（下一局）"
+      },
+      "usual": {
+        "other": "{{name}}通常以{{points}}点结束（{{value}}/局，{{count}}桌）"
+      },
+      "short": "照此发展，{{name}}还差{{value}}：需要{{hands}}。",
+      "jaPassa": "照此发展，{{name}}将以{{value}}优势反超。",
+      "jaEmpata": "照此发展，{{name}}将追平。",
+      "chance": "反超概率：",
+      "fewGames": "反超概率需每人至少{{count}}桌。",
+      "help": "根据各自已结束牌桌的成绩估算。",
+      "usualShort": "通常结束点数",
+      "basedOn": {
+        "other": "已结束{{count}}桌"
+      }
+    }
   }
 }

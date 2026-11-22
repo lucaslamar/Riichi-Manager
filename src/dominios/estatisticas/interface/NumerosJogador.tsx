@@ -9,6 +9,7 @@ import {
   semSaidas,
 } from '../logica/estatisticas'
 import type { EscopoEstatisticas } from '../logica/escopo'
+import type { FormaDoJogador } from '../logica/forma'
 import TextoMao from './TextoMao'
 import { useFormatoEstatisticas } from './useFormatoEstatisticas'
 
@@ -23,6 +24,7 @@ export default function NumerosJogador({
   nome,
   semPosicoes,
   semMaiorDeTodos,
+  forma,
 }: {
   partidas: readonly Partida[]
   jogadorId: string
@@ -31,6 +33,7 @@ export default function NumerosJogador({
   nome: (jogadorId: string, guardado?: string) => string
   semPosicoes: boolean
   semMaiorDeTodos: boolean
+  forma: FormaDoJogador | null
 }) {
   const { t, numero } = useI18n()
   const { comSinal, percentual } = useFormatoEstatisticas()
@@ -40,7 +43,7 @@ export default function NumerosJogador({
   const partidas = semWo && comWo > 0 ? semSaidas(todas) : todas
   const numeros = estatisticasDoJogador(partidas, jogadorId)
   const maiorDeTodos = semMaiorDeTodos ? null : maiorMaoDoEscopo(partidas)
-  const taxa = (valor: number | undefined) => (valor === undefined ? '—' : percentual(valor))
+  const { taxas } = numeros
 
   return (
     <div className="est-numeros">
@@ -55,19 +58,33 @@ export default function NumerosJogador({
           <dt>{t(escopo === 'torneio' ? 'stats.averageHanchan' : 'stats.averageGame')}</dt>
           <dd>{numeros.mediaPontos === null ? '—' : comSinal(numeros.mediaPontos)}</dd>
         </div>
-        <div>
-          <dt>{t('stats.winRate')}</dt>
-          <dd>{taxa(numeros.taxas?.vitoria)}</dd>
-        </div>
-        <div>
-          <dt>{t('stats.dealInRate')}</dt>
-          <dd>{taxa(numeros.taxas?.dealIn)}</dd>
-        </div>
-        {modo === 'riichi' && (
+        {forma && (
           <div>
-            <dt>{t('stats.riichiRate')}</dt>
-            <dd>{taxa(numeros.taxas?.riichi)}</dd>
+            <dt>{t('stats.form.usualShort')}</dt>
+            <dd>
+              {numero(forma.pontosNaMesa)}
+              <small>{t('stats.form.basedOn', { count: forma.jogos })}</small>
+            </dd>
           </div>
+        )}
+        {/* Sem mão lançada (o normal em torneio), o que depende de mão nem aparece. */}
+        {taxas && (
+          <>
+            <div>
+              <dt>{t('stats.winRate')}</dt>
+              <dd>{percentual(taxas.vitoria)}</dd>
+            </div>
+            <div>
+              <dt>{t('stats.dealInRate')}</dt>
+              <dd>{percentual(taxas.dealIn)}</dd>
+            </div>
+            {modo === 'riichi' && (
+              <div>
+                <dt>{t('stats.riichiRate')}</dt>
+                <dd>{percentual(taxas.riichi)}</dd>
+              </div>
+            )}
+          </>
         )}
       </dl>
 
@@ -89,27 +106,31 @@ export default function NumerosJogador({
         </dl>
       )}
 
-      <dl className="est-maos">
-        <div>
-          <dt>{t('stats.playerBest')}</dt>
-          <dd>{numeros.maior ? <TextoMao mao={numeros.maior} /> : '—'}</dd>
-        </div>
-        {maiorDeTodos && (
-          <div>
-            <dt>{t(`stats.best.${escopo}`)}</dt>
-            <dd>
-              <TextoMao mao={maiorDeTodos} />
-              <small>{nome(maiorDeTodos.jogadorId, maiorDeTodos.nome)}</small>
-            </dd>
-          </div>
-        )}
-      </dl>
+      {(numeros.maior || maiorDeTodos) && (
+        <dl className="est-maos">
+          {numeros.maior && (
+            <div>
+              <dt>{t('stats.playerBest')}</dt>
+              <dd>
+                <TextoMao mao={numeros.maior} />
+              </dd>
+            </div>
+          )}
+          {maiorDeTodos && (
+            <div>
+              <dt>{t(`stats.best.${escopo}`)}</dt>
+              <dd>
+                <TextoMao mao={maiorDeTodos} />
+                <small>{nome(maiorDeTodos.jogadorId, maiorDeTodos.nome)}</small>
+              </dd>
+            </div>
+          )}
+        </dl>
+      )}
 
-      {numeros.partidasComMaos < numeros.partidas && (
+      {taxas && numeros.partidasComMaos < numeros.partidas && (
         <p className="est-apoio">
-          {numeros.partidasComMaos === 0
-            ? t('stats.noHands')
-            : t('stats.someHands', { count: numeros.partidasComMaos, total: numeros.partidas })}
+          {t('stats.someHands', { count: numeros.partidasComMaos, total: numeros.partidas })}
         </p>
       )}
     </div>

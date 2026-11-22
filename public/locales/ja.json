@@ -3569,8 +3569,6 @@
       "temporada": "シーズンの最高打点",
       "geral": "ランキングの最高打点"
     },
-    "noBest": "結果のみ登録した卓には和了の記録がありません。",
-    "noHands": "局ごとの記録がありません。率と最高打点はアプリの点数表で打った対局のみです。",
     "someHands": "率と最高打点は記録のある{{total}}局中{{count}}局から算出。",
     "handFan": "{{fan}}番",
     "handHanFu": "{{han}}翻{{fu}}符",
@@ -3601,6 +3599,25 @@
       "mediaMenor": "平均が上回らないため予測できません。",
       "longeDemais": "平均が近すぎて予測できません。"
     },
-    "withoutWo": "W.O.のある対局を除く（{{count}}）"
+    "withoutWo": "W.O.のある対局を除く（{{count}}）",
+    "form": {
+      "title": {
+        "fim": "いつもどおりの成績なら（最終まで）",
+        "proximo": "いつもどおりの成績なら（次の対局）"
+      },
+      "usual": {
+        "other": "{{name}}：平均{{points}}点（{{value}}/局、{{count}}卓）"
+      },
+      "short": "このままなら{{name}}は{{value}}届かず、あと{{hands}}必要。",
+      "jaPassa": "このままなら{{name}}が{{value}}差で逆転。",
+      "jaEmpata": "このままなら{{name}}が追いつく。",
+      "chance": "逆転確率：",
+      "fewGames": "逆転確率は各{{count}}卓以上で表示。",
+      "help": "各自の終了した卓の結果による推定。",
+      "usualShort": "平均終了点",
+      "basedOn": {
+        "other": "終了{{count}}卓"
+      }
+    }
   }
 }

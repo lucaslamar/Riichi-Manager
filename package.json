@@ -10,7 +10,7 @@
     "lint": "eslint . && npm run -s i18n:check",
     "i18n:check": "tsx scripts/checar-traducoes.ts",
     "typecheck": "tsc --noEmit",
-    "test": "npm run test:i18n && npm run test:guia && npm run test:tema && npm run test:notacao && npm run test:jogadores && npm run test:config-mesa && npm run test:partida && npm run test:ranking && npm run test:furiten && npm run test:batida && npm run test:clube && npm run test:regras-registro && npm run test:torneio && npm run test:formatos && npm run test:exportacao && npm run test:backup && npm run test:armazenamento && npm run test:sanma && npm run test:yakus-locais && npm run test:expressao-pontos && npm run test:filtros-lista && npm run test:fan-mcr && npm run test:placar-mcr && npm run test:distancia-podio && npm run test:premiacao && npm run test:wo && npm run test:tutorial-mcr && npm run test:viradas && npm run test:estatisticas && npm run test:saida && npm run test:partida-pausada",
+    "test": "npm run test:i18n && npm run test:guia && npm run test:tema && npm run test:notacao && npm run test:jogadores && npm run test:config-mesa && npm run test:partida && npm run test:ranking && npm run test:furiten && npm run test:batida && npm run test:clube && npm run test:regras-registro && npm run test:torneio && npm run test:formatos && npm run test:exportacao && npm run test:backup && npm run test:armazenamento && npm run test:sanma && npm run test:yakus-locais && npm run test:expressao-pontos && npm run test:filtros-lista && npm run test:fan-mcr && npm run test:placar-mcr && npm run test:distancia-podio && npm run test:premiacao && npm run test:wo && npm run test:tutorial-mcr && npm run test:viradas && npm run test:estatisticas && npm run test:saida && npm run test:partida-pausada && npm run test:forma",
     "test:filtros-lista": "tsx scripts/verificar-filtros-lista.ts",
     "test:expressao-pontos": "tsx scripts/verificar-expressao-pontos.ts",
     "test:yakus-locais": "tsx scripts/verificar-yakus-locais.ts",
@@ -45,6 +45,7 @@
     "test:estatisticas": "tsx scripts/verificar-estatisticas.ts",
     "test:saida": "tsx scripts/verificar-saida.ts",
     "test:partida-pausada": "tsx scripts/verificar-partida-pausada.ts",
+    "test:forma": "tsx scripts/verificar-forma.ts",
     "test:fan-mcr": "tsx scripts/verificar-fan-mcr.ts",
     "test:placar-mcr": "tsx scripts/verificar-placar-mcr.ts",
     "test:tutorial-mcr": "tsx scripts/verificar-tutorial-mcr.ts"

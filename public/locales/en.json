@@ -3608,8 +3608,6 @@
       "temporada": "Biggest hand of the season",
       "geral": "Biggest hand in the ranking"
     },
-    "noBest": "Tables recorded with results only do not store hands.",
-    "noHands": "No hand records: rates and biggest hands need games played with the app scoreboard.",
     "someHands": "Rates and biggest hand use {{count}} of {{total}} games, those with hand records.",
     "handFan": "{{fan}} fan",
     "handHanFu": "{{han}} han {{fu}} fu",
@@ -3641,6 +3639,27 @@
       "mediaMenor": "no projection, as the average is not higher.",
       "longeDemais": "no projection, as the averages are too close."
     },
-    "withoutWo": "Exclude games with W.O. ({{count}})"
+    "withoutWo": "Exclude games with W.O. ({{count}})",
+    "form": {
+      "title": {
+        "fim": "If they finish as usual, until the end",
+        "proximo": "If they finish as usual, next game"
+      },
+      "usual": {
+        "one": "{{name}} usually ends with {{points}} ({{value}}/game, {{count}} table)",
+        "other": "{{name}} usually ends with {{points}} ({{value}}/game, {{count}} tables)"
+      },
+      "short": "At this rate, {{name}} ends {{value}} short: needs {{hands}}.",
+      "jaPassa": "At this rate, {{name}} moves ahead by {{value}}.",
+      "jaEmpata": "At this rate, {{name}} ties.",
+      "chance": "Chance to overtake:",
+      "fewGames": "Chance to overtake needs {{count}} or more tables each.",
+      "help": "Estimate from each player’s finished tables.",
+      "usualShort": "Usually ends with",
+      "basedOn": {
+        "one": "over {{count}} finished table",
+        "other": "over {{count}} finished tables"
+      }
+    }
   }
 }

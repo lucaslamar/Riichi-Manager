@@ -3569,8 +3569,6 @@
       "temporada": "시즌 최고 타점",
       "geral": "랭킹 최고 타점"
     },
-    "noBest": "결과만 기록한 테이블에는 손패 기록이 없습니다.",
-    "noHands": "국별 기록이 없습니다. 비율과 최고 타점은 앱 점수판을 사용한 대국에만 있습니다.",
     "someHands": "비율과 최고 타점은 기록이 있는 대국 {{count}}/{{total}} 기준.",
     "handFan": "{{fan}}판",
     "handHanFu": "{{han}}판 {{fu}}부",
@@ -3601,6 +3599,25 @@
       "mediaMenor": "평균이 더 높지 않아 예측할 수 없습니다.",
       "longeDemais": "평균이 너무 비슷해 예측할 수 없습니다."
     },
-    "withoutWo": "W.O. 대국 제외 ({{count}})"
+    "withoutWo": "W.O. 대국 제외 ({{count}})",
+    "form": {
+      "title": {
+        "fim": "평소대로라면 (끝까지)",
+        "proximo": "평소대로라면 (다음 대국)"
+      },
+      "usual": {
+        "other": "{{name}}: 평균 {{points}}점 ({{value}}/국, {{count}}테이블)"
+      },
+      "short": "이대로면 {{name}}: {{value}} 부족, {{hands}} 필요.",
+      "jaPassa": "이대로면 {{name}}: {{value}} 차로 역전.",
+      "jaEmpata": "이대로면 {{name}} 동점.",
+      "chance": "역전 확률:",
+      "fewGames": "역전 확률은 각 {{count}}테이블 이상부터 표시.",
+      "help": "각자 종료한 테이블 결과 기반 추정.",
+      "usualShort": "평균 종료 점수",
+      "basedOn": {
+        "other": "종료 {{count}}테이블"
+      }
+    }
   }
 }

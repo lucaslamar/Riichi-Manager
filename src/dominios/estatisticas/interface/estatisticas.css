@@ -52,6 +52,49 @@ button.est-linha {
   line-height: 1.4;
 }
 
+.est-forma {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--entrada-borda);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.est-forma ul,
+.est-forma p {
+  margin: 0;
+}
+
+/* A lista fica dentro de .trn-distancia-lista, que não tem marcador. */
+.est-forma ul {
+  padding: 0;
+  color: var(--texto-apoio);
+  list-style: none;
+}
+
+.est-forma-titulo {
+  color: var(--primario);
+}
+
+.est-forma-conclusao {
+  font-weight: 700;
+}
+
+.est-forma-chance > strong {
+  color: var(--primario);
+  font-size: 1.125rem;
+}
+
+.est-metricas small {
+  display: block;
+  color: var(--texto-apoio);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
 .est-caminhos {
   margin: 0;
   font-size: 0.875rem;

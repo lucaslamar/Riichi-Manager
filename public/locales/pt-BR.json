@@ -3608,8 +3608,6 @@
       "temporada": "Maior mão da temporada",
       "geral": "Maior mão do ranking"
     },
-    "noBest": "As mesas registradas só com o resultado não guardam as mãos.",
-    "noHands": "Sem mão a mão: as taxas e a maior mão só existem em partidas jogadas com o placar do app.",
     "someHands": "Taxas e maior mão usam {{count}} de {{total}} jogos, os que têm mão a mão.",
     "handFan": "{{fan}} fan",
     "handHanFu": "{{han}} han {{fu}} fu",
@@ -3641,6 +3639,27 @@
       "mediaMenor": "não dá para projetar, porque a média não é maior.",
       "longeDemais": "não dá para projetar, porque as médias estão próximas demais."
     },
-    "withoutWo": "Sem partidas com W.O. ({{count}})"
+    "withoutWo": "Sem partidas com W.O. ({{count}})",
+    "form": {
+      "title": {
+        "fim": "Se terminarem como costumam, até o fim",
+        "proximo": "Se terminarem como costumam, no próximo jogo"
+      },
+      "usual": {
+        "one": "{{name}} costuma terminar com {{points}} ({{value}}/jogo, {{count}} mesa)",
+        "other": "{{name}} costuma terminar com {{points}} ({{value}}/jogo, {{count}} mesas)"
+      },
+      "short": "Se terminar assim, {{name}} fica {{value}} atrás. Para passar ou empatar: {{hands}}.",
+      "jaPassa": "Se terminar assim, {{name}} passa com {{value}} de folga.",
+      "jaEmpata": "Se terminar assim, {{name}} empata.",
+      "chance": "Chance de virar:",
+      "fewGames": "Chance de virar só com {{count}} mesas ou mais de cada um.",
+      "help": "Estimativa pelo resultado das mesas finalizadas de cada um.",
+      "usualShort": "Costuma terminar com",
+      "basedOn": {
+        "one": "em {{count}} mesa finalizada",
+        "other": "em {{count}} mesas finalizadas"
+      }
+    }
   }
 }
