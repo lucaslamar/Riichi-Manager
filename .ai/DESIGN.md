@@ -96,5 +96,6 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - QR das imagens é uma assinatura discreta (pedido do usuário em 22/11/2026): 148 px em 1080, escuro em fundo lilás claro só no QR, nos dois temas, com o convite e o endereço em texto leve na cor de apoio. Não usar caixa clara na largura toda nem competir com as mesas. Ao mudar, confira a leitura com jsqr também na imagem reduzida à metade.
 - Cabeçalho da rodada: quatro ações de 44px no celular. No menu lateral elas descem para uma linha abaixo do título, também com 44px.
 - Mudança de posição fica junto do número, sem coluna nova, com seta, cor e texto para leitor de tela.
+- A seta nunca deixa a conta para quem lê (pedido do usuário em 22/11/2026): embaixo dela vai a posição de antes, em cor neutra ("era 2º"), e no card "era 2º na rodada 1". O leitor de tela fala os dois. Quem manteve ou estreou não tem "era".
 - Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.
 - Sortear de novo é secundário com nota perfeita ou ótima e principal nas outras. A comparação com o anterior fica 5 s, e o Voltar ao anterior continua no painel.
