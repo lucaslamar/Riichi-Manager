@@ -41,6 +41,7 @@
 
 ### Corrigido
 
+- **MPSZ em tela baixa**: com o celular deitado a última linha não fica mais cortada, e em pé as duas fileiras da mão aparecem inteiras.
 - **MPSZ do modo Chinês**: sem a tecla 0 do 5 vermelho, que não existe no MCR, com um apagar largo no lugar dela.
 - **Teclado de pontos no iPhone e com toque ampliado**: as linhas não montam mais uma na outra. No Riichi a última tem 0, 00 e 000. No Chinês, sem 00 e 000, o − e o + ficaram maiores.
 - **Flores e Estações**: as peças não parecem mais desabilitadas. A selecionada ganha contorno rosa.

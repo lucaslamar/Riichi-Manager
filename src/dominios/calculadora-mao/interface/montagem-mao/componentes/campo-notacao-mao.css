@@ -618,6 +618,38 @@
 }
 
 /*
+ * Celular deitado: a altura das 5 fileiras sai das folgas em volta delas e da mão,
+ * nunca das teclas (44px). Se mesmo assim não couber, o painel rola em vez de cortar.
+ */
+@media (orientation: landscape) and (max-height: 400px) and (max-width: 1023px) {
+  .card-mao-completa.etapa-montagem:has(.campo-notacao-mao):not(#_) {
+    padding-block: 0;
+    --respiro-card-y: 0px;
+  }
+
+  .construtor-mao-montagem.com-notacao:not(#_) {
+    row-gap: 0;
+  }
+
+  .com-notacao .cabecalho-mao-editor:not(#_) {
+    margin-bottom: 0;
+  }
+
+  .com-notacao .pedras-selecionadas:not(#_) {
+    padding-block: 1px;
+  }
+
+  .com-notacao .campo-notacao-mao:not(#_) {
+    row-gap: 2px;
+    padding-block: 0;
+  }
+
+  .com-notacao .painel-teclado-calculadora:not(#_) {
+    overflow-y: auto;
+  }
+}
+
+/*
  * Celular em pé com MPSZ: o teclado de notação é mais alto que o de pedras e
  * deixava a mão com uma fileira só (as outras ficavam escondidas na rolagem).
  * - A mão usa 7 pedras por fileira: as 14 cabem em 2.
@@ -641,5 +673,56 @@
 
   .construtor-mao.com-notacao:has(.rodape-teclado-finalizacao):not(.selecionando-batida) .teclado-notacao-mao {
     display: none;
+  }
+}
+
+/* Em pé numa tela mais baixa: primeiro saem as folgas, para as 2 fileiras da mão caberem. */
+@media (max-width: 640px) and (max-height: 680px) and (orientation: portrait) {
+  .com-notacao .campo-notacao-mao:not(#_) {
+    padding-block: 2px 8px;
+  }
+
+  .com-notacao .pedras-selecionadas:not(#_) {
+    padding-bottom: 2px;
+  }
+}
+
+/* Bem baixa (iPhone SE com as barras): aí teclas nos 44px de toque e pedras menores. */
+@media (max-width: 640px) and (max-height: 600px) and (orientation: portrait) {
+  .com-notacao .painel-teclado-calculadora:not(#_) {
+    padding-top: 2px;
+  }
+
+  .com-notacao .mao-editor-fixo:not(#_) {
+    padding-block: 4px 2px;
+  }
+
+  .com-notacao .campo-notacao-mao:not(#_) {
+    row-gap: 4px;
+    padding-block: 0 4px;
+  }
+
+  .com-notacao .barra-notacao-mao:not(#_) {
+    padding-bottom: 0;
+  }
+
+  .com-notacao .teclado-notacao-mao:not(#_) {
+    row-gap: 4px;
+    margin-top: 0;
+  }
+
+  .com-notacao .teclado-notacao-mao .tecla-notacao-mao:not(#_) {
+    gap: 0;
+    height: 44px;
+    padding-block: 0;
+  }
+
+  .com-notacao .teclado-notacao-mao .rotulo-tecla-notacao-mao:not(#_) {
+    font-size: 1.3rem;
+    line-height: 1.1;
+  }
+
+  .construtor-mao-montagem.com-notacao .grade-pedras-mao:not(#_) {
+    --pedra-mao-largura: 34px;
   }
 }

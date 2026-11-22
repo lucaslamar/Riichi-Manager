@@ -37,6 +37,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Linha de botões nunca tem altura fixa menor que o mínimo de toque (44px, 46px com a Área de toque ampliada): use `minmax(44px, auto)`. Com altura fixa, as linhas montam uma na outra. Em tela baixa, encolha o visor, não as teclas.
 - Colunas vizinhas de um teclado têm as linhas alinhadas: não esticar só uma delas (teclas em oval desalinhadas foram recusadas pelo usuário).
 - Mudou um teclado, abra o "?" dele: a cena de ajuda é um desenho à parte e precisa ser conferida na tela.
+- MPSZ em tela baixa: primeiro saem as folgas, depois as pedras e as teclas encolhem, estas nunca abaixo de 44px. Deitado, se ainda não couber (320px de altura), o painel rola em vez de cortar.
 - Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
 
 ## Pedras brancas

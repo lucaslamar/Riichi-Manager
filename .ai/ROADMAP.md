@@ -25,7 +25,6 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 ## Problemas conhecidos
 
-- Celular deitado (780×360): com pedras na mão, a última linha do teclado MPSZ passa uns 10 px da tela, no Riichi e no Chinês.
 - O fim do tempo não encerra a partida na mão atual, embora a ajuda diga que sim.
 - A ajuda do timer de vez cita a aba Mesa, que não existe mais nas configurações do torneio.
 - `npm run lint` varre `.claude/skills` e falha num script de lá.
