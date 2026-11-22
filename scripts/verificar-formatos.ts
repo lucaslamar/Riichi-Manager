@@ -29,9 +29,9 @@ import {
   faseDaRodada,
   rankingEliminatorio,
 } from '../src/dominios/torneio/logica/formatos/eliminatorio'
-import { podeSortearDeNovo, podeSortearRodada, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
+import { reiniciarSorteio, podeSortearDeNovo, podeSortearRodada, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
 import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
-import { sorteiaVentos, relogioParado } from '../src/dominios/torneio/logica/torneio'
+import { comRegrasDoFormato, sorteiaVentos, relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
 import { relatorioDaRodada, relatorioDoRanking } from '../src/dominios/torneio/logica/relatorios'
 import { nomeDeArquivo, textoDoRelatorio } from '../src/compartilhado/relatorio/relatorio'
@@ -552,4 +552,31 @@ console.log('Formatos ok.')
   assert.equal(iniciarTorneio(rodizio, [], [], '').sortearVentos, true, 'começa com ventos')
   assert.ok(!sorteiaVentos({ ...rodizio, status: 'em_andamento' }), 'o que já começou não muda')
   console.log('All Leste só com ventos: ok')
+}
+
+// ─── Classificatória All Leste travada em 4 ──────────────────────────────────
+{
+  const ids = Array.from({ length: 12 }, (_, indice) => `q${indice}`)
+  const antigo = {
+    ...criarRascunho({ id: 'trava', agora: new Date(2026, 10, 22), nome: 'T' }),
+    jogadorIds: ids,
+    formato: {
+      tipo: 'eliminatorio' as const,
+      classificatoria: 'rodizio' as const,
+      rodadasClassificatoria: 3,
+      cortes: [4],
+      rodadasPorFase: 1,
+      pontosCarregados: true,
+    },
+  }
+  const refeito = reiniciarSorteio(antigo, '')
+  assert.equal(refeito.formato.tipo === 'eliminatorio' && refeito.formato.rodadasClassificatoria, 4, 'trava em 4')
+  assert.equal(refeito.rodadas.length, 4, 'sai com 4 rodadas')
+  for (const id of ids) {
+    const vezes = refeito.rodadas.flatMap((rodada) => rodada.mesas).filter((mesa) => mesa.assentos[0] === id).length
+    assert.equal(vezes, 1, `${id} é Leste uma vez`)
+  }
+  const suico = { ...antigo, formato: { ...antigo.formato, classificatoria: 'suico' as const } }
+  assert.equal(comRegrasDoFormato(suico), suico, 'classificatória Suíço segue livre')
+  console.log('Classificatória All Leste em 4: ok')
 }

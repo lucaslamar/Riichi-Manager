@@ -4,7 +4,7 @@
  */
 import { KANJI_VENTO, ORDEM_VENTOS, type Partida, type Vento } from '@/dominios/centerpiece/logica/partida'
 import { proximaRodada, rodadasIniciais } from './formatos'
-import { comVentosDoFormato, relogioParado, statusDaMesa, type StatusMesa } from './torneio'
+import { comRegrasDoFormato, relogioParado, statusDaMesa, type StatusMesa } from './torneio'
 import type { MesaTorneio, Relogio, RodadaTorneio, Torneio } from './tipos'
 
 export function relogioDaRodada(torneio: Torneio, rodada: RodadaTorneio): Relogio {
@@ -93,7 +93,10 @@ function sorteiaCadaRodada({ formato }: Torneio): boolean {
  */
 export function sortearDeNovo(torneio: Torneio, partidas: readonly Partida[], agora: string): Torneio {
   const temPartida = partidas.some((partida) => partida.vinculoTorneio?.torneioId === torneio.id)
-  if (!temPartida) return { ...comVentosDoFormato(torneio), rodadas: rodadasIniciais(torneio, torneio.jogadorIds, agora) }
+  if (!temPartida) {
+    const doZero = comRegrasDoFormato(torneio)
+    return { ...doZero, rodadas: rodadasIniciais(doZero, doZero.jogadorIds, agora) }
+  }
   const semUltima = { ...torneio, rodadas: torneio.rodadas.slice(0, -1) }
   const evitar = torneio.rodadas[torneio.rodadas.length - 1]?.mesas
   const nova = proximaRodada(semUltima, partidas, agora, evitar)
@@ -105,7 +108,8 @@ export function sortearDeNovo(torneio: Torneio, partidas: readonly Partida[], ag
  * novo (no Rodízio, a grade inteira). Os resultados do torneio saem junto, por fora.
  */
 export function reiniciarSorteio(torneio: Torneio, agora: string): Torneio {
-  return { ...comVentosDoFormato(torneio), rodadas: rodadasIniciais(torneio, torneio.jogadorIds, agora), atualizadoEm: agora }
+  const doZero = comRegrasDoFormato(torneio)
+  return { ...doZero, rodadas: rodadasIniciais(doZero, doZero.jogadorIds, agora), atualizadoEm: agora }
 }
 
 /** "南2": rodada do vento e número da mão em jogo. */

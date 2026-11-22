@@ -191,9 +191,16 @@ export function sorteiaVentos(torneio: Pick<Torneio, 'sortearVentos' | 'formato'
   return torneio.sortearVentos ?? ventosPadrao(torneio.formato.tipo)
 }
 
-/** Todo sorteio do zero do All Leste sai com ventos. */
-export function comVentosDoFormato(torneio: Torneio): Torneio {
-  return exigeVentos(torneio.formato) ? { ...torneio, sortearVentos: true } : torneio
+/** Todo sorteio do zero do All Leste: com ventos e uma rodada por cadeira, para todos serem Leste uma vez. */
+export function comRegrasDoFormato(torneio: Torneio): Torneio {
+  const { formato } = torneio
+  if (!exigeVentos(formato)) return torneio
+  const rodadas = jogadoresPorMesa(torneio)
+  const travado: ConfigFormato =
+    formato.tipo === 'eliminatorio'
+      ? { ...formato, rodadasClassificatoria: rodadas }
+      : { tipo: 'rodizio', rodadas }
+  return { ...torneio, formato: travado, sortearVentos: true }
 }
 
 /** "?" foi gravado por versões que já não achavam o nome: não é um nome. */
@@ -233,7 +240,7 @@ export function iniciarTorneio(
   rodadas: RodadaTorneio[],
   agora: string,
 ): Torneio {
-  return { ...comVentosDoFormato(torneio), jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
+  return { ...comRegrasDoFormato(torneio), jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
 }
 
 /** Aborta o sorteio: o torneio volta a ser rascunho, sem rodadas, para editar a lista e sortear de novo. */

@@ -22,7 +22,7 @@ import { formatoValido } from '../../logica/configuracao'
 import { analisarLista, entradasDoTorneio, limparColagem, type StatusLista } from '../../logica/listaTorneio'
 import FolhaImportar from '../componentes/FolhaImportar'
 import FolhaListasSalvas from '../componentes/FolhaListasSalvas'
-import { iniciarTorneio, jogadoresPorMesa } from '../../logica/torneio'
+import { comRegrasDoFormato, iniciarTorneio, jogadoresPorMesa } from '../../logica/torneio'
 import type { Torneio } from '../../logica/tipos'
 import ConfigTorneioSheet from '../componentes/ConfigTorneioSheet'
 import { useTorneios } from '../hooks/useTorneios'
@@ -136,7 +136,8 @@ export default function PaginaListaTorneio({
     // Ninguém é cadastrado sozinho: quem não está no cadastro entra como convidado.
     const { ids, convidados } = entradasDoTorneio(analise.nomes, jogadores, gerarId)
     const nomes = Object.fromEntries(ids.map((id, indice) => [id, analise.nomes[indice]]))
-    salvar(iniciarTorneio({ ...torneio, convidados, nomes }, ids, rodadasIniciais(torneio, ids, agora), agora))
+    const pronto = comRegrasDoFormato({ ...torneio, convidados, nomes })
+    salvar(iniciarTorneio(pronto, ids, rodadasIniciais(pronto, ids, agora), agora))
     aoSortear()
   }
 
