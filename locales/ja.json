@@ -701,7 +701,9 @@
     "narrationOutputHelp": "NVDA、TalkBack、VoiceOverを使っている場合は、声が重ならないようスクリーンリーダーのみを選んでください。",
     "narrationNoVoice": "このブラウザには音声がありません。お知らせはスクリーンリーダーに送られます。",
     "narrationShortcuts": "ショートカット: Alt+Mで手牌、Alt+Dで最近の捨て牌を読み上げ、Alt+Rで直前のお知らせを繰り返し、Alt+Sで読み上げを止めます。",
-    "narrationTest": "テスト"
+    "narrationTest": "テスト",
+    "shareQr": "共有画像にQRコード",
+    "shareQrHelp": "画像を見た人がQRからアプリを開けます。"
   },
   "windDraw": {
     "title": "風牌抽選",
@@ -1077,7 +1079,8 @@
       "inProgressTag": "進行中",
       "roundTable": "第{{round}}回戦 · {{table}}卓",
       "registeredOf": "{{total}}卓中 {{count}}卓 記録済み",
-      "openTournament": "大会「{{name}}」を開く"
+      "openTournament": "大会「{{name}}」を開く",
+      "openTournamentFormat": "大会 {{name}}（{{format}}）を開く"
     },
     "player": {
       "open": "{{name}} の分析を開く",
@@ -1651,6 +1654,15 @@
         "antigos": "古い順",
         "nome": "名前"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "本日の第{{n}}回戦",
+      "newDrawHint": "本日の第{{n}}回戦・同卓した人の再戦を避けます",
+      "more": "例会のその他の操作",
+      "resetDay": "最初からにする",
+      "resetDayTitle": "今日の記録を考慮せずに始めますか？",
+      "resetDayHelp": "次の抽選では今日の同卓歴を考慮しません。別のグループのときに使ってください。",
+      "resetDone": "次の抽選は最初からです"
     }
   },
   "spokenTiles": {
@@ -1685,7 +1697,14 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "{{app}}で集計しました。あなたも大会を開けます。",
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "{{round}}回戦まで",
+      "bottom": "最下位争い",
+      "bottomLead": "リード {{value}}",
+      "bottomLeave": "脱出まで {{value}}",
+      "ctaRace": "自分はあと何点？ {{app}}で確認"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1696,11 +1715,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1749,7 +1768,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "このリストを保存、または保存済みを読み込む"
     },
     "settings": {
@@ -1761,10 +1780,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1790,30 +1805,36 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "三人麻雀の卓は必ず3人です。大会には6、9、12…人が必要です。",
+      "multipleOfFourShort": "8、12、16…人が必要です。",
+      "multipleOfThreeShort": "6、9、12…人が必要です。",
+      "windsAppShort": "卓組みと一緒に風も決まります。",
+      "windsTableShort": "風は卓で牌を引いて決めます。",
+      "cutsShort": "4の倍数。例：8, 4"
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "4回戦。全員が一度ずつ東家。",
+      "suico": "2回戦から順位で卓組み。",
+      "eliminatorio": "段階ごとに絞って決勝卓へ。",
+      "corridos": "回戦数自由。その場で抽選。",
+      "temporada": "複数の例会で通算ランキング。"
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1827,7 +1848,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
@@ -1836,14 +1857,15 @@
         "one": "Sum of each player's best game result.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season"
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "集計方法はリーグ画面で選択。"
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1913,7 +1935,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -1983,13 +2005,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2000,7 +2015,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "3人組の再戦",
+      "repeatedTriosHelp": "同卓が2回以上あった3人組。",
+      "maxPerPlayer": "1人あたりの再戦",
+      "maxPerPlayerHelp": "最も再戦が多い人の再戦相手数。",
+      "differentOpponents": "異なる対戦相手",
+      "differentOpponentsHelp": "1人あたりの平均と最少。",
+      "averageAndLowest": "{{average}}（最少{{lowest}}）",
+      "eastTimes": "東家の回数",
+      "eastTimesHelp": "最少の人から最多の人まで。"
     },
     "points": {
       "points": "点数",
@@ -2029,7 +2053,249 @@
       "thousand": "ゼロ3つ",
       "useHand": "計算に使う",
       "previousPlayer": "前のプレイヤー",
-      "nextPlayer": "次のプレイヤー"
+      "nextPlayer": "次のプレイヤー",
+      "typeFor": "{{name}} の点数を入力"
+    },
+    "positionChange": {
+      "up": {
+        "other": "{{count}}つ上昇"
+      },
+      "down": {
+        "other": "{{count}}つ下降"
+      },
+      "same": "順位変わらず",
+      "new": "ランキング初登場",
+      "newShort": "新",
+      "legend": "矢印：第{{round}}回戦からの変化。",
+      "confirmTitle": "大会ランキング：前 → 後"
+    },
+    "formatGuide": {
+      "intro": "どの形式を使う？",
+      "rodizio": {
+        "what": "抽選で全卓組が決まります。全員が一度ずつ東家になり、できるだけ多くの相手と対戦します。",
+        "for": "終了時刻のある例会や初心者向け。風の面で最も公平です。"
+      },
+      "suico": {
+        "what": "1回戦は抽選。その後は再戦を避けつつ順位に沿って卓を組みます。",
+        "for": "回戦数の決まった1日の競技大会向け。"
+      },
+      "eliminatorio": {
+        "what": "予選の後、決勝卓まで人数を絞ります（例：8人、4人）。",
+        "for": "決勝のある大人数のイベント向け。時間が多めに必要です。"
+      },
+      "corridos": {
+        "what": "毎回その場で再戦を避けて抽選します。回戦数は決めません。",
+        "for": "何回戦できるか分からない気軽な集まり向け。"
+      },
+      "temporada": {
+        "what": "毎回その場で抽選し、各例会の成績を通算ランキングに加算します（合計、平均、上位成績）。",
+        "for": "数か月から1年続くクラブリーグ向け。"
+      }
+    },
+    "idealRounds": {
+      "short8": "8人では2回戦から再戦します。",
+      "short12": "12人なら3回戦までが理想。",
+      "guide12": {
+        "title": "12人・3卓",
+        "repeats": {
+          "label": "2回戦以降",
+          "text": "必ず誰かが再戦します。"
+        },
+        "three": {
+          "label": "3回戦：理想",
+          "text": "再戦相手は各自2人まで。"
+        },
+        "four": {
+          "label": "4回戦：All East",
+          "text": "再戦は増えますが全員が一度東家。"
+        },
+        "sixteen": {
+          "label": "16人なら",
+          "text": "5回戦まで再戦なし。"
+        },
+        "why": "再戦は抽選ではなく数学上の限界です。"
+      },
+      "guide8": {
+        "title": "8人・2卓",
+        "repeats": {
+          "label": "2回戦以降",
+          "text": "各卓で少なくとも2組が再戦。"
+        },
+        "three": {
+          "label": "3回戦",
+          "text": "各自最大3人と再戦。"
+        },
+        "fewer": {
+          "label": "再戦を減らすには",
+          "text": "12人か16人を集めましょう。"
+        },
+        "why": "2卓しか混ぜられない、数学上の限界です。"
+      }
+    },
+    "gridStats": {
+      "title": "抽選の質",
+      "details": "詳細",
+      "detailsLabel": "抽選の質の詳細を見る",
+      "redraw": "再抽選",
+      "redrawLabel": "第{{round}}回戦を再抽選",
+      "openStats": "卓組の統計",
+      "grade": {
+        "perfeita": "完璧",
+        "otima": "最良",
+        "boa": "良い",
+        "regular": "普通",
+        "ruim": "悪い"
+      },
+      "none": "再戦なし",
+      "atMinimum": "最少",
+      "aboveMinimum": "最少：{{min}}",
+      "noTriple": "3回同卓なし",
+      "hasTriple": "3回同卓あり",
+      "windsOk": "風は均等",
+      "windsBad": "風が偏り",
+      "better": "前より良い",
+      "same": "前と同等",
+      "worse": "前より悪い",
+      "undo": "前に戻す",
+      "undoLabel": "前の抽選に戻す",
+      "perPlayer": "プレイヤー別",
+      "repeatedWith": "再戦相手",
+      "eastCount": "東家{{count}}回",
+      "searchPlayer": "プレイヤーを検索",
+      "repeats": {
+        "other": "再戦{{count}}組"
+      },
+      "opponents": {
+        "other": "相手{{count}}人"
+      }
+    },
+    "unknownPlayer": "プレイヤー{{number}}",
+    "podiumGap": {
+      "ordinal": "{{place}}位",
+      "open": "{{name}}の表彰台までの差を見る",
+      "toPlace": "{{place}}（{{name}}）まで",
+      "lead": "{{place}}（{{name}}）とのリード",
+      "upOne": "{{place}}（{{name}}）に上がるまで",
+      "leaveLast": "最下位脱出まで（{{name}}）",
+      "overLast": "最下位（{{name}}）とのリード",
+      "tied": "同点",
+      "tiebreak": "{{points}} MCR points on tiebreak",
+      "tablePoints": "Table points",
+      "units": {
+        "mangan": "満貫",
+        "haneman": "跳満",
+        "baiman": "倍満",
+        "yakuman": "役満",
+        "vitorias": "Table wins"
+      },
+      "approx": {
+        "riichi": "目安：子のロン、ウマ抜き。",
+        "mcr": "Approximate: a table win is worth 4."
+      },
+      "race": "表彰台争い",
+      "podium": "表彰台",
+      "toThird": "3位まで",
+      "toFirst": "1位まで",
+      "leadLegend": "緑：4位とのリード。",
+      "inUnit": "差の単位：{{unit}}。",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "比較する相手…",
+      "share": "{{name}}の表彰台までの差を共有",
+      "contenders": "1位候補",
+      "canReach": "逆転圏内",
+      "needsHelp": "他力が必要",
+      "reachEstimate": "1回戦の最高得点からの目安。",
+      "hands": {
+        "mangan": {
+          "other": "満貫{{count}}回"
+        },
+        "haneman": {
+          "other": "跳満{{count}}回"
+        },
+        "baiman": {
+          "other": "倍満{{count}}回"
+        },
+        "yakuman": {
+          "other": "役満{{count}}回"
+        },
+        "vitorias": {
+          "other": "{{count}} table wins"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "ランキングの絞り込み",
+      "view": "表示",
+      "viewTable": "順位表",
+      "follow": "プレイヤーを追う",
+      "unfollow": "追うのをやめる",
+      "untilRound": "何回戦まで",
+      "allRounds": "すべて",
+      "unit": "差の単位"
+    },
+    "prize": {
+      "tab": "賞金",
+      "enable": "参加費あり",
+      "fee": "参加費",
+      "other": "その他",
+      "installments": "分割払い",
+      "early": "早期申込",
+      "earlyValue": "早期料金",
+      "earlyCount": "支払った人数",
+      "earlyUntil": "締切",
+      "club": "クラブの取り分",
+      "split": "賞金の配分",
+      "splitAuto": "自動",
+      "splitFirst": "1位のみ",
+      "splitCustom": "カスタム",
+      "splitList": "1位からの各順位の割合",
+      "minimum": "最少人数",
+      "total": "{{players}}人 × {{fee}}",
+      "clubLine": "クラブ（{{percent}}）",
+      "poolLine": "賞金（{{percent}}）",
+      "pool": "賞金総額",
+      "byPlace": "順位別の賞金",
+      "atStake": "賞金差 {{value}}",
+      "rounding": "端数 + {{value}}",
+      "installmentLine": "{{value}} × {{count}}回",
+      "sumMustBe100": "合計を100%にしてください。現在：{{sum}}。",
+      "whyFee": "6〜12回のシーズンで100なら1回あたり8〜17です。16人なら1位の賞金は600になり、支払った人は欠席しにくくなります。最少人数に届くか不安なら、最初は50で始めて後から上げましょう。",
+      "whyInstallments": "分割にすると負担が軽くなります。20ずつ5回なら払いやすく、シーズンの月数にも合います。",
+      "whyEarly": "期限までの割引で早めの申込が増え、開始前に最少人数が集まりやすくなります。アプリは個人の支払いを管理しないため、割引で払った人数を入力してください。",
+      "whyClub": "25%なら牌や卓代の足しになり、賞金を取りすぎる印象もありません。30%を超えると不満が出やすくなります。",
+      "whySplit": "3位まで払うと半数が最後まで争えます。50/30/20が一般的で、優勝が多く、2位と3位にも十分な額です。16人未満も同じです。20人以上は4位、28人以上は5位まで払います。",
+      "whyMinimum": "16人なら5回戦まで同じ相手なしで組め、賞金も十分です。8人や12人では2回戦から再戦が出ます。",
+      "missing": {
+        "other": "最少{{min}}人まであと{{count}}人です。"
+      },
+      "totalMixed": {
+        "other": "{{count}}人分"
+      }
+    },
+    "wo": {
+      "tag": "不戦",
+      "register": "欠席を記録",
+      "who": "欠席者を選んでください。",
+      "confirm": "不戦を確定",
+      "remove": "不戦を取消",
+      "missed": "欠席",
+      "attended": "出席",
+      "times": "不戦：{{times}}",
+      "rebuild": "卓を組み直す",
+      "rebuildHelp": "卓{{other}}の出席者で卓{{table}}を埋め、卓{{other}}が不戦になります。",
+      "rebuilt": "卓を組み直しました。",
+      "late": "遅刻（任意）",
+      "lateHelp": "1分ごとに{{rate}}減点。{{max}}分を超えると不戦。",
+      "minutesShort": "{{minutes}}分",
+      "lateBy": "{{minutes}}分遅刻",
+      "settings": "不戦と遅刻",
+      "absent": "欠席者",
+      "present": "出席者",
+      "tolerance": "猶予（分）",
+      "perMinute": "1分ごと",
+      "whyAbsent": "欠席の−30はEMA（1回につき15,000点とウマ15,000）に基づき、WRCの30Pに相当します。",
+      "whyPresent": "出席者の+10はハウスルールです。欠席1人なら合計0になります。2人以上で0にならないのは、対局せずに大きく稼がないためです。",
+      "whyLate": "遅刻はWRCとEMAに従い、10分まで1分ごとに−1。それを超えると不戦です。"
     }
   },
   "backup": {
@@ -2325,7 +2591,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "Table points: 4, 2, 1 and 0."
       },
       "usarFan": "点数表に使う",
       "porFan": "番数",

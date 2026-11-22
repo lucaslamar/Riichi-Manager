@@ -707,7 +707,9 @@
     "narrationOutputHelp": "With NVDA, TalkBack or VoiceOver on, choose Screen reader only to avoid two voices.",
     "narrationNoVoice": "This browser has no voice. Announcements go to the screen reader.",
     "narrationShortcuts": "Shortcuts: Alt+M reads the hand, Alt+D reads the last discards, Alt+R repeats the last announcement and Alt+S stops speech.",
-    "narrationTest": "Test"
+    "narrationTest": "Test",
+    "shareQr": "QR code on shared images",
+    "shareQrHelp": "Anyone who sees the image in the group can open the app with the QR."
   },
   "windDraw": {
     "title": "Wind Draw",
@@ -1084,7 +1086,8 @@
       "inProgressTag": "in progress",
       "roundTable": "Round {{round}} · Table {{table}}",
       "registeredOf": "{{count}} of {{total}} tables recorded",
-      "openTournament": "Open tournament {{name}}"
+      "openTournament": "Open tournament {{name}}",
+      "openTournamentFormat": "Open tournament {{name}}, {{format}}"
     },
     "player": {
       "open": "Open {{name}} analysis",
@@ -1673,6 +1676,15 @@
         "antigos": "Oldest",
         "nome": "Name"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "Round {{n}} of the day",
+      "newDrawHint": "Round {{n}} of the day · avoids repeating who already played together",
+      "more": "More meeting options",
+      "resetDay": "Start from scratch",
+      "resetDayTitle": "Start the day from scratch?",
+      "resetDayHelp": "The next draw will not consider who already played together today. Use it when the group is different.",
+      "resetDone": "The next draw starts from scratch"
     }
   },
   "spokenTiles": {
@@ -1707,7 +1719,14 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "Results made with {{app}}. Run your own tournament too.",
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "up to round {{round}}",
+      "bottom": "Bottom of the table",
+      "bottomLead": "lead {{value}}",
+      "bottomLeave": "to escape {{value}}",
+      "ctaRace": "Want to see how far you are? Filter in {{app}}"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1718,11 +1737,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1771,7 +1790,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "Save this list or load a saved one"
     },
     "settings": {
@@ -1783,10 +1802,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1812,30 +1827,36 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "Sanma tables always seat 3: the tournament needs 6, 9, 12… players.",
+      "multipleOfFourShort": "Needs 8, 12, 16… players.",
+      "multipleOfThreeShort": "Needs 6, 9, 12… players.",
+      "windsAppShort": "Tables come with winds set.",
+      "windsTableShort": "Winds drawn at the table, with tiles.",
+      "cutsShort": "Multiples of 4. Example: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "4 rounds. Everyone is East once.",
+      "suico": "After round 1, tables follow standings.",
+      "eliminatorio": "Cuts each phase until the final table.",
+      "corridos": "Open rounds, drawn live. You end it.",
+      "temporada": "Several meetings, one shared ranking."
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1849,7 +1870,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
@@ -1858,14 +1879,15 @@
         "one": "Sum of each player's best game result.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season"
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "Criterion: on the league screen."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1935,7 +1957,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -2005,13 +2027,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2022,7 +2037,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "Repeated trios",
+      "repeatedTriosHelp": "Three people who shared a table more than once.",
+      "maxPerPlayer": "Repeats per person",
+      "maxPerPlayerHelp": "Repeat opponents of whoever repeated most.",
+      "differentOpponents": "Different opponents",
+      "differentOpponentsHelp": "Average per person and the lowest.",
+      "averageAndLowest": "{{average}} (min. {{lowest}})",
+      "eastTimes": "Times as East",
+      "eastTimesHelp": "From the fewest to the most."
     },
     "points": {
       "points": "Points",
@@ -2051,7 +2075,260 @@
       "thousand": "three zeros",
       "useHand": "Use in the sum",
       "previousPlayer": "Previous player",
-      "nextPlayer": "Next player"
+      "nextPlayer": "Next player",
+      "typeFor": "Type the points for {{name}}"
+    },
+    "positionChange": {
+      "up": {
+        "one": "Up {{count}} place",
+        "other": "Up {{count}} places"
+      },
+      "down": {
+        "one": "Down {{count}} place",
+        "other": "Down {{count}} places"
+      },
+      "same": "Same position",
+      "new": "New in the ranking",
+      "newShort": "new",
+      "legend": "Arrows: change since round {{round}}.",
+      "confirmTitle": "Tournament ranking: before → after"
+    },
+    "formatGuide": {
+      "intro": "Which format to use?",
+      "rodizio": {
+        "what": "The whole schedule comes out of the draw. Each player is East once and meets as many different opponents as possible.",
+        "for": "Good for club meetings with an end time and for beginners. The fairest on winds."
+      },
+      "suico": {
+        "what": "Round 1 is drawn. After that, tables follow the standings, avoiding repeat opponents.",
+        "for": "Good for a competitive one-day tournament with a set number of rounds."
+      },
+      "eliminatorio": {
+        "what": "Qualifying rounds, then cuts (for example 8, then 4) down to the final table.",
+        "for": "Good for events with a final and many players. Needs more time."
+      },
+      "corridos": {
+        "what": "Each round is drawn on the spot, avoiding repeat opponents. There is no set number of rounds.",
+        "for": "Good for casual meetings where you do not know how many rounds will fit."
+      },
+      "temporada": {
+        "what": "Rounds drawn on the spot, with each meeting adding to a cumulative ranking (total, average or best results).",
+        "for": "Good for a club league over months or a year."
+      }
+    },
+    "idealRounds": {
+      "short8": "With 8, repeats start in round 2.",
+      "short12": "With 12, up to 3 rounds is ideal.",
+      "guide12": {
+        "title": "12 players, 3 tables",
+        "repeats": {
+          "label": "From round 2 on",
+          "text": "Someone always repeats an opponent."
+        },
+        "three": {
+          "label": "3 rounds: ideal",
+          "text": "Each player repeats 2 opponents at most."
+        },
+        "four": {
+          "label": "4 rounds: All East",
+          "text": "More repeats, but everyone is East once."
+        },
+        "sixteen": {
+          "label": "With 16 players",
+          "text": "Up to 5 rounds with no repeats."
+        },
+        "why": "Repeats are a limit of the math, not of the draw."
+      },
+      "guide8": {
+        "title": "8 players, 2 tables",
+        "repeats": {
+          "label": "From round 2 on",
+          "text": "At least 2 pairs repeat at each table."
+        },
+        "three": {
+          "label": "3 rounds",
+          "text": "Each player repeats up to 3 opponents."
+        },
+        "fewer": {
+          "label": "For fewer repeats",
+          "text": "Gather 12 or 16 players."
+        },
+        "why": "It is a limit of the math: only 2 tables to mix."
+      }
+    },
+    "gridStats": {
+      "title": "Draw quality",
+      "details": "See details",
+      "detailsLabel": "See details of the draw quality",
+      "redraw": "Draw again",
+      "redrawLabel": "Draw round {{round}} again",
+      "openStats": "Schedule statistics",
+      "grade": {
+        "perfeita": "Perfect",
+        "otima": "Excellent",
+        "boa": "Good",
+        "regular": "Fair",
+        "ruim": "Poor"
+      },
+      "none": "No repeat opponents",
+      "atMinimum": "lowest possible",
+      "aboveMinimum": "lowest possible: {{min}}",
+      "noTriple": "No pair met 3 times",
+      "hasTriple": "A pair met 3 times",
+      "windsOk": "winds ok",
+      "windsBad": "uneven winds",
+      "better": "Better than before",
+      "same": "Same as before",
+      "worse": "Worse than before",
+      "undo": "Back to previous",
+      "undoLabel": "Go back to the previous draw",
+      "perPlayer": "By player",
+      "repeatedWith": "Repeated with",
+      "eastCount": "East {{count}}x",
+      "searchPlayer": "Search player",
+      "repeats": {
+        "one": "{{count}} repeated pair",
+        "other": "{{count}} repeated pairs"
+      },
+      "opponents": {
+        "one": "{{count}} opponent",
+        "other": "{{count}} opponents"
+      }
+    },
+    "unknownPlayer": "Player {{number}}",
+    "podiumGap": {
+      "ordinal": "#{{place}}",
+      "open": "See how far {{name}} is from the podium",
+      "toPlace": "To {{place}} ({{name}})",
+      "lead": "Lead over {{place}} ({{name}})",
+      "upOne": "To climb to {{place}} ({{name}})",
+      "leaveLast": "To leave last place ({{name}})",
+      "overLast": "Lead over last ({{name}})",
+      "tied": "Tied",
+      "tiebreak": "{{points}} MCR points on tiebreak",
+      "tablePoints": "Table points",
+      "units": {
+        "mangan": "Mangan",
+        "haneman": "Haneman",
+        "baiman": "Baiman",
+        "yakuman": "Yakuman",
+        "vitorias": "Table wins"
+      },
+      "approx": {
+        "riichi": "Approximate: non-East ron, no uma.",
+        "mcr": "Approximate: a table win is worth 4."
+      },
+      "race": "Podium race",
+      "podium": "Podium",
+      "toThird": "To 3rd",
+      "toFirst": "To 1st",
+      "leadLegend": "In green: lead over 4th.",
+      "inUnit": "Gaps in {{unit}}.",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "Compare with…",
+      "share": "Share how far {{name}} is from the podium",
+      "contenders": "Contenders for 1st",
+      "canReach": "Can still reach",
+      "needsHelp": "Needs help",
+      "reachEstimate": "Estimated from the best single round.",
+      "hands": {
+        "mangan": {
+          "one": "{{count}} Mangan",
+          "other": "{{count}} Mangan"
+        },
+        "haneman": {
+          "one": "{{count}} Haneman",
+          "other": "{{count}} Haneman"
+        },
+        "baiman": {
+          "one": "{{count}} Baiman",
+          "other": "{{count}} Baiman"
+        },
+        "yakuman": {
+          "one": "{{count}} Yakuman",
+          "other": "{{count}} Yakuman"
+        },
+        "vitorias": {
+          "one": "{{count}} table win",
+          "other": "{{count}} table wins"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "Ranking filters",
+      "view": "View",
+      "viewTable": "Standings",
+      "follow": "Follow a player",
+      "unfollow": "Stop following",
+      "untilRound": "Up to round",
+      "allRounds": "All",
+      "unit": "Gap in"
+    },
+    "prize": {
+      "tab": "Prizes",
+      "enable": "Entry fee tournament",
+      "fee": "Entry fee",
+      "other": "Other",
+      "installments": "Installments",
+      "early": "Early registration",
+      "earlyValue": "Early fee",
+      "earlyCount": "How many paid",
+      "earlyUntil": "Until",
+      "club": "Club's share",
+      "split": "Prize split",
+      "splitAuto": "Automatic",
+      "splitFirst": "1st only",
+      "splitCustom": "Custom",
+      "splitList": "Percentage for each place, from 1st",
+      "minimum": "Minimum players",
+      "total": "{{players}} players × {{fee}}",
+      "clubLine": "Club ({{percent}})",
+      "poolLine": "Prize pool ({{percent}})",
+      "pool": "Prize pool",
+      "byPlace": "Prize by place",
+      "atStake": "{{value}} more in prizes",
+      "rounding": "+ {{value}} from rounding",
+      "installmentLine": "{{count}}x {{value}}",
+      "sumMustBe100": "The total must be 100%. Now: {{sum}}.",
+      "whyFee": "A fee of 100 over a season of 6 to 12 meetups is 8 to 17 per meetup. The prize is appealing (600 for 1st with 16 players) and people who paid skip less. If you may not reach the minimum, start with 50 for a launch season and raise it later.",
+      "whyInstallments": "Installments make the fee lighter. 5 payments of 20 suit almost everyone and follow the months of the season.",
+      "whyEarly": "A lower fee until a date brings sign-ups forward and helps reach the minimum before round one. Enter how many paid it, as the app does not track payments per person.",
+      "whyClub": "25% buys something real (a set or part of a table) without the club seeming to keep the prize. Above 30% tends to draw complaints.",
+      "whySplit": "Paying down to 3rd keeps half the table in contention to the end. 50/30/20 is the most common split: the champion takes much more, yet 2nd and 3rd get a real prize. It also applies under 16. With 20 players automatic pays to 4th, and with 28 to 5th.",
+      "whyMinimum": "With 16 players you can play up to 5 rounds with no repeat opponents, and the prize is worthwhile. With 8 or 12, repeats start in round 2.",
+      "missing": {
+        "one": "{{count}} player short of the minimum of {{min}}.",
+        "other": "{{count}} players short of the minimum of {{min}}."
+      },
+      "totalMixed": {
+        "one": "{{count}} entry",
+        "other": "{{count}} entries"
+      }
+    },
+    "wo": {
+      "tag": "WO",
+      "register": "Record absence",
+      "who": "Mark who was absent.",
+      "confirm": "Confirm WO",
+      "remove": "Remove WO",
+      "missed": "Absent",
+      "attended": "Present",
+      "times": "WO: {{times}}",
+      "rebuild": "Rebuild tables",
+      "rebuildHelp": "Table {{table}} fills up with players from Table {{other}}, which keeps the WO.",
+      "rebuilt": "Tables rebuilt.",
+      "late": "Lateness (optional)",
+      "lateHelp": "Deducts {{rate}} per minute. Over {{max}} min is a WO.",
+      "minutesShort": "{{minutes}} min",
+      "lateBy": "{{minutes}} min late",
+      "settings": "WO and lateness",
+      "absent": "Absent player",
+      "present": "Each present",
+      "tolerance": "Grace period (min)",
+      "perMinute": "Per minute",
+      "whyAbsent": "The −30 for an absence comes from EMA (15,000 points and 15,000 uma per missed session) and equals the 30P of WRC.",
+      "whyPresent": "The +10 for each player present is a house rule. With 1 absent the table sums to zero. With more it does not, on purpose, so nobody wins big without playing.",
+      "whyLate": "Lateness follows WRC and EMA: −1 per minute up to 10 minutes. After that it is a WO."
     }
   },
   "backup": {
@@ -2351,7 +2628,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "Table points: 4, 2, 1 and 0."
       },
       "usarFan": "Use on the scoreboard",
       "porFan": "Fan",

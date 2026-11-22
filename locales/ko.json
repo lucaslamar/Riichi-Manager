@@ -701,7 +701,9 @@
     "narrationOutputHelp": "NVDA, TalkBack, VoiceOver를 켰다면 두 목소리가 겹치지 않도록 스크린 리더만을 고르세요.",
     "narrationNoVoice": "이 브라우저에는 음성이 없습니다. 알림은 스크린 리더로 갑니다.",
     "narrationShortcuts": "단축키: Alt+M 손패 읽기, Alt+D 최근 버림패 읽기, Alt+R 마지막 알림 반복, Alt+S 말하기 중지.",
-    "narrationTest": "테스트"
+    "narrationTest": "테스트",
+    "shareQr": "공유 이미지에 QR 코드",
+    "shareQrHelp": "이미지를 본 사람이 QR로 앱을 열 수 있습니다."
   },
   "windDraw": {
     "title": "바람 뽑기",
@@ -1077,7 +1079,8 @@
       "inProgressTag": "진행 중",
       "roundTable": "{{round}}라운드 · {{table}}번 탁",
       "registeredOf": "{{total}}탁 중 {{count}}탁 기록됨",
-      "openTournament": "{{name}} 대회 열기"
+      "openTournament": "{{name}} 대회 열기",
+      "openTournamentFormat": "대회 {{name}}, {{format}} 열기"
     },
     "player": {
       "open": "{{name}} 분석 열기",
@@ -1651,6 +1654,15 @@
         "antigos": "오래된순",
         "nome": "이름"
       }
+    },
+    "clubDay": {
+      "roundOfDay": "오늘의 {{n}}라운드",
+      "newDrawHint": "오늘의 {{n}}라운드 · 이미 같이 친 사람을 피합니다",
+      "more": "모임 옵션 더보기",
+      "resetDay": "처음부터 시작",
+      "resetDayTitle": "오늘을 처음부터 시작할까요?",
+      "resetDayHelp": "다음 추첨은 오늘 같이 친 기록을 고려하지 않습니다. 다른 그룹일 때 쓰세요.",
+      "resetDone": "다음 추첨은 처음부터 시작합니다"
     }
   },
   "spokenTiles": {
@@ -1685,7 +1697,14 @@
       "textHelp": "Ready to paste in the group, with bold and a table",
       "imageHelp": "A PNG in the app colors",
       "pdfHelp": "The full table to print or keep",
-      "transferHelp": "The whole tournament to another device (file, QR or code)"
+      "transferHelp": "The whole tournament to another device (file, QR or code)",
+      "ctaResults": "{{app}}로 만든 결과입니다. 대회를 직접 열어 보세요.",
+      "linkLine": "{{app}}: {{url}}",
+      "untilRound": "{{round}}라운드까지",
+      "bottom": "최하위 경쟁",
+      "bottomLead": "앞섬 {{value}}",
+      "bottomLeave": "탈출까지 {{value}}",
+      "ctaRace": "나는 얼마나 남았을까? {{app}}에서 확인"
     },
     "title": "Tournament",
     "create": "Create tournament",
@@ -1696,11 +1715,11 @@
     "active": "Tournament in progress",
     "continue": "Continue",
     "formats": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "League (season)"
+      "corridos": "Quick league",
+      "temporada": "League"
     },
     "history": {
       "title": "Finished tournaments",
@@ -1749,7 +1768,7 @@
       "cutsTooBig": "Knockout cuts must be smaller than the list",
       "rename": "Rename tournament {{name}}",
       "more": "More list options",
-      "pickSeason": "Pick or create the season in the settings",
+      "pickSeason": "Pick or create the league in the settings",
       "memoryHint": "이 목록을 저장하거나 저장된 목록 불러오기"
     },
     "settings": {
@@ -1761,10 +1780,6 @@
       "name": "Tournament name",
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
-      "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
-      },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
       "qualifierRounds": "Qualifying rounds",
@@ -1790,30 +1805,36 @@
       "windsApp": "Drawn by the app",
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
-      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles."
+      "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
+      "multipleOfThree": "삼마 테이블은 항상 3명입니다. 대회에는 6, 9, 12…명이 필요합니다.",
+      "multipleOfFourShort": "8, 12, 16…명이 필요합니다.",
+      "multipleOfThreeShort": "6, 9, 12…명이 필요합니다.",
+      "windsAppShort": "테이블과 함께 바람도 정해집니다.",
+      "windsTableShort": "바람은 테이블에서 패로 정합니다.",
+      "cutsShort": "4의 배수. 예: 8, 4"
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "4라운드. 모두 한 번씩 동가.",
+      "suico": "2라운드부터 순위대로 배정.",
+      "eliminatorio": "단계마다 줄여 결승 테이블로.",
+      "corridos": "라운드 자유. 그 자리에서 추첨.",
+      "temporada": "여러 모임, 하나의 랭킹."
     },
     "formatsShort": {
-      "rodizio": "Rotation",
+      "rodizio": "All East",
       "suico": "Swiss",
       "eliminatorio": "Knockout",
-      "corridos": "League",
-      "temporada": "Season"
+      "corridos": "Quick",
+      "temporada": "League"
     },
     "season": {
-      "title": "Season",
-      "new": "New season",
-      "name": "Season name",
-      "defaultName": "Season {{year}}",
+      "title": "League",
+      "new": "New league",
+      "name": "League name",
+      "defaultName": "League {{year}}",
       "start": "Start",
       "end": "End",
-      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the season screen.",
+      "criterionLater": "The ranking criterion (sum, average or best results) is chosen on the league screen.",
       "meetupName": "{{season}} · Meetup {{number}}",
       "meetups": {
         "one": "{{count}} meetup",
@@ -1827,7 +1848,7 @@
       "criterionBest": "Best",
       "minimum": "Minimum games",
       "best": "How many results count",
-      "criterionSumHelp": "Sum of points from every game in the season.",
+      "criterionSumHelp": "Sum of points from every game in the league.",
       "criterionAverageHelp": {
         "one": "Average points per game. Players with fewer than {{count}} game go to the bottom, unranked.",
         "other": "Average points per game. Players with fewer than {{count}} games go to the bottom, unranked."
@@ -1836,14 +1857,15 @@
         "one": "Sum of each player's best game result.",
         "other": "Sum of each player's {{count}} best game results."
       },
-      "ranking": "Season ranking",
+      "ranking": "League ranking",
       "noResults": "No results yet.",
       "points": "Points",
       "games": "Games",
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
-      "listTitle": "Seasons",
-      "open": "Open the season"
+      "listTitle": "Leagues",
+      "open": "Open the league",
+      "criterionShort": "집계 방식은 리그 화면에서 선택."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -1913,7 +1935,7 @@
       "finish": "Finish tournament",
       "finishTitle": "Finish the tournament?",
       "finishHelp": "The tournament goes to history and takes no more results.",
-      "seasonRanking": "Season ranking",
+      "seasonRanking": "League ranking",
       "seasonRankingHelp": "All meetups combined",
       "player": "Player"
     },
@@ -1983,13 +2005,6 @@
       "cameraRetry": "Try again"
     },
     "diagnosis": {
-      "title": "Grid diagnosis",
-      "grade": {
-        "perfeita": "Perfect",
-        "boa": "Good",
-        "regular": "Fair",
-        "ruim": "Poor"
-      },
       "maxMeetings": "Max meetings",
       "maxMeetingsHelp": "How many times the same pair meets, at worst.",
       "repeatedPairs": "Repeated pairs",
@@ -2000,7 +2015,16 @@
       "indirectHelp": "Pairs who never meet but share an opponent.",
       "indirectAll": "Everyone meets",
       "pairsTitle": "Pairs that repeat",
-      "windsTitle": "Winds per player"
+      "windsTitle": "Winds per player",
+      "repeatedTrios": "3인조 재대결",
+      "repeatedTriosHelp": "두 번 이상 같은 테이블에 앉은 3명.",
+      "maxPerPlayer": "1인당 재대결",
+      "maxPerPlayerHelp": "재대결이 가장 많은 사람의 상대 수.",
+      "differentOpponents": "서로 다른 상대",
+      "differentOpponentsHelp": "1인당 평균과 최솟값.",
+      "averageAndLowest": "{{average}} (최소 {{lowest}})",
+      "eastTimes": "동가 횟수",
+      "eastTimesHelp": "가장 적은 사람부터 가장 많은 사람까지."
     },
     "points": {
       "points": "점수",
@@ -2029,7 +2053,249 @@
       "thousand": "영 세 개",
       "useHand": "계산에 사용",
       "previousPlayer": "이전 플레이어",
-      "nextPlayer": "다음 플레이어"
+      "nextPlayer": "다음 플레이어",
+      "typeFor": "{{name}} 점수 입력"
+    },
+    "positionChange": {
+      "up": {
+        "other": "{{count}}계단 상승"
+      },
+      "down": {
+        "other": "{{count}}계단 하락"
+      },
+      "same": "순위 유지",
+      "new": "랭킹 첫 등장",
+      "newShort": "신규",
+      "legend": "화살표: {{round}}라운드 이후 변화.",
+      "confirmTitle": "대회 랭킹: 이전 → 이후"
+    },
+    "formatGuide": {
+      "intro": "어떤 형식을 쓸까요?",
+      "rodizio": {
+        "what": "추첨 때 전체 대진이 정해집니다. 모두 한 번씩 동가가 되고 가능한 한 많은 상대와 만납니다.",
+        "for": "종료 시각이 있는 클럽 모임과 초보자에게 좋습니다. 바람 배분이 가장 공평합니다."
+      },
+      "suico": {
+        "what": "1라운드는 추첨합니다. 이후에는 재대결을 피하며 순위대로 테이블을 짭니다.",
+        "for": "라운드 수가 정해진 하루짜리 경쟁 대회에 좋습니다."
+      },
+      "eliminatorio": {
+        "what": "예선 후 결승 테이블까지 인원을 줄입니다(예: 8명, 4명).",
+        "for": "결승이 있고 참가자가 많은 행사에 좋습니다. 시간이 더 필요합니다."
+      },
+      "corridos": {
+        "what": "매 라운드 재대결을 피해 그 자리에서 추첨합니다. 라운드 수는 정하지 않습니다.",
+        "for": "몇 라운드를 할지 모르는 가벼운 모임에 좋습니다."
+      },
+      "temporada": {
+        "what": "매 라운드 추첨하고 각 모임의 결과를 누적 랭킹에 더합니다(합계, 평균, 최고 성적).",
+        "for": "몇 달에서 1년 동안 하는 클럽 리그에 좋습니다."
+      }
+    },
+    "idealRounds": {
+      "short8": "8명이면 2라운드부터 재대결.",
+      "short12": "12명이면 3라운드까지가 이상적.",
+      "guide12": {
+        "title": "12명, 테이블 3개",
+        "repeats": {
+          "label": "2라운드부터",
+          "text": "누군가는 재대결합니다."
+        },
+        "three": {
+          "label": "3라운드: 이상적",
+          "text": "재대결 상대는 각자 최대 2명."
+        },
+        "four": {
+          "label": "4라운드: All East",
+          "text": "재대결은 늘지만 모두 한 번씩 동가."
+        },
+        "sixteen": {
+          "label": "16명이면",
+          "text": "5라운드까지 재대결 없음."
+        },
+        "why": "재대결은 추첨이 아니라 수학의 한계입니다."
+      },
+      "guide8": {
+        "title": "8명, 테이블 2개",
+        "repeats": {
+          "label": "2라운드부터",
+          "text": "테이블마다 최소 2쌍이 재대결."
+        },
+        "three": {
+          "label": "3라운드",
+          "text": "각자 최대 3명과 재대결."
+        },
+        "fewer": {
+          "label": "재대결을 줄이려면",
+          "text": "12명이나 16명을 모으세요."
+        },
+        "why": "섞을 테이블이 2개뿐인 수학의 한계입니다."
+      }
+    },
+    "gridStats": {
+      "title": "추첨 품질",
+      "details": "자세히",
+      "detailsLabel": "추첨 품질 자세히 보기",
+      "redraw": "다시 추첨",
+      "redrawLabel": "{{round}}라운드 다시 추첨",
+      "openStats": "대진 통계",
+      "grade": {
+        "perfeita": "완벽",
+        "otima": "최상",
+        "boa": "좋음",
+        "regular": "보통",
+        "ruim": "나쁨"
+      },
+      "none": "재대결 없음",
+      "atMinimum": "최소",
+      "aboveMinimum": "최소: {{min}}",
+      "noTriple": "3번 동석 없음",
+      "hasTriple": "3번 동석 있음",
+      "windsOk": "바람 균등",
+      "windsBad": "바람 불균형",
+      "better": "이전보다 좋음",
+      "same": "이전과 같음",
+      "worse": "이전보다 나쁨",
+      "undo": "이전으로",
+      "undoLabel": "이전 추첨으로 되돌리기",
+      "perPlayer": "선수별",
+      "repeatedWith": "재대결 상대",
+      "eastCount": "동가 {{count}}회",
+      "searchPlayer": "선수 검색",
+      "repeats": {
+        "other": "재대결 {{count}}쌍"
+      },
+      "opponents": {
+        "other": "상대 {{count}}명"
+      }
+    },
+    "unknownPlayer": "선수 {{number}}",
+    "podiumGap": {
+      "ordinal": "{{place}}위",
+      "open": "{{name}}의 시상대까지 차이 보기",
+      "toPlace": "{{place}}({{name}})까지",
+      "lead": "{{place}}({{name}})보다 앞섬",
+      "upOne": "{{place}}({{name}})로 오르기까지",
+      "leaveLast": "최하위 탈출까지 ({{name}})",
+      "overLast": "최하위({{name}})보다 앞섬",
+      "tied": "동점",
+      "tiebreak": "{{points}} MCR points on tiebreak",
+      "tablePoints": "Table points",
+      "units": {
+        "mangan": "만관",
+        "haneman": "하네만",
+        "baiman": "배만",
+        "yakuman": "역만",
+        "vitorias": "Table wins"
+      },
+      "approx": {
+        "riichi": "대략치: 자의 론, 우마 제외.",
+        "mcr": "Approximate: a table win is worth 4."
+      },
+      "race": "시상대 경쟁",
+      "podium": "시상대",
+      "toThird": "3위까지",
+      "toFirst": "1위까지",
+      "leadLegend": "초록: 4위보다 앞선 점수.",
+      "inUnit": "차이 단위: {{unit}}.",
+      "versus": "{{a}} × {{b}}",
+      "compareWith": "비교 상대…",
+      "share": "{{name}}의 시상대까지 차이 공유",
+      "contenders": "1위 후보",
+      "canReach": "역전 가능",
+      "needsHelp": "자력 불가",
+      "reachEstimate": "한 라운드 최고 득점 기준 추정.",
+      "hands": {
+        "mangan": {
+          "other": "만관 {{count}}회"
+        },
+        "haneman": {
+          "other": "하네만 {{count}}회"
+        },
+        "baiman": {
+          "other": "배만 {{count}}회"
+        },
+        "yakuman": {
+          "other": "역만 {{count}}회"
+        },
+        "vitorias": {
+          "other": "{{count}} table wins"
+        }
+      }
+    },
+    "rankingFilters": {
+      "open": "순위 필터",
+      "view": "보기",
+      "viewTable": "순위표",
+      "follow": "플레이어 따라가기",
+      "unfollow": "따라가기 해제",
+      "untilRound": "라운드까지",
+      "allRounds": "전체",
+      "unit": "차이 단위"
+    },
+    "prize": {
+      "tab": "상금",
+      "enable": "참가비 있음",
+      "fee": "참가비",
+      "other": "기타",
+      "installments": "분할 납부",
+      "early": "조기 신청",
+      "earlyValue": "조기 참가비",
+      "earlyCount": "납부 인원",
+      "earlyUntil": "마감",
+      "club": "클럽 몫",
+      "split": "상금 분배",
+      "splitAuto": "자동",
+      "splitFirst": "1위만",
+      "splitCustom": "직접 설정",
+      "splitList": "1위부터 각 순위의 비율",
+      "minimum": "최소 인원",
+      "total": "{{players}}명 × {{fee}}",
+      "clubLine": "클럽 ({{percent}})",
+      "poolLine": "상금 ({{percent}})",
+      "pool": "총상금",
+      "byPlace": "순위별 상금",
+      "atStake": "상금 차이 {{value}}",
+      "rounding": "반올림 + {{value}}",
+      "installmentLine": "{{value}} × {{count}}회",
+      "sumMustBe100": "합계가 100%여야 합니다. 현재: {{sum}}.",
+      "whyFee": "6~12회 시즌에서 100이면 회당 8~17입니다. 16명이면 1위 상금이 600이고, 낸 사람은 덜 빠집니다. 최소 인원이 걱정되면 50으로 시작해 나중에 올리세요.",
+      "whyInstallments": "나눠 내면 부담이 줄어듭니다. 20씩 5회면 대부분 낼 수 있고 시즌 기간과도 맞습니다.",
+      "whyEarly": "마감 전 할인은 신청을 앞당기고 시작 전에 최소 인원을 모으는 데 도움이 됩니다. 앱은 개인별 납부를 관리하지 않으므로 할인 납부 인원을 입력하세요.",
+      "whyClub": "25%면 패나 테이블 비용에 보탬이 되면서 상금을 가져간다는 인상도 없습니다. 30%를 넘으면 불만이 생기기 쉽습니다.",
+      "whySplit": "3위까지 주면 절반이 끝까지 경쟁합니다. 50/30/20이 가장 흔하며 16명 미만에도 같습니다. 20명부터는 4위, 28명부터는 5위까지 줍니다.",
+      "whyMinimum": "16명이면 5라운드까지 상대가 겹치지 않고 상금도 충분합니다. 8명이나 12명은 2라운드부터 겹칩니다.",
+      "missing": {
+        "other": "최소 {{min}}명까지 {{count}}명 남았습니다."
+      },
+      "totalMixed": {
+        "other": "{{count}}명분"
+      }
+    },
+    "wo": {
+      "tag": "부전",
+      "register": "결석 기록",
+      "who": "결석자를 선택하세요.",
+      "confirm": "부전 확정",
+      "remove": "부전 취소",
+      "missed": "결석",
+      "attended": "출석",
+      "times": "부전: {{times}}",
+      "rebuild": "테이블 재편성",
+      "rebuildHelp": "테이블 {{other}}의 출석자로 테이블 {{table}}을 채우고 테이블 {{other}}은 부전이 됩니다.",
+      "rebuilt": "테이블을 재편성했습니다.",
+      "late": "지각 (선택)",
+      "lateHelp": "1분마다 {{rate}} 감점. {{max}}분 초과는 부전.",
+      "minutesShort": "{{minutes}}분",
+      "lateBy": "{{minutes}}분 지각",
+      "settings": "부전과 지각",
+      "absent": "결석자",
+      "present": "출석자",
+      "tolerance": "유예 (분)",
+      "perMinute": "1분마다",
+      "whyAbsent": "결석 −30은 EMA(1회당 15,000점과 우마 15,000)에서 왔으며 WRC의 30P와 같습니다.",
+      "whyPresent": "출석자 +10은 하우스 룰입니다. 결석 1명이면 합계 0이고, 더 많으면 일부러 0이 되지 않게 했습니다.",
+      "whyLate": "지각은 WRC와 EMA 기준으로 10분까지 1분당 −1이며, 이후는 부전입니다."
     }
   },
   "backup": {
@@ -2325,7 +2591,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "Table points: 4, 2, 1 and 0."
       },
       "usarFan": "점수판에 사용",
       "porFan": "번",
