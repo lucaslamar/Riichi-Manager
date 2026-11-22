@@ -4,12 +4,11 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 ## Brief do Torneio de 21/11/2026: próximas fases
 
-- Todas as fases feitas, menos a 3C.
+- Fases concluídas.
 - Fora por enquanto: PDF com QR (o app não gera PDF), link do QR direto para o torneio (precisa de backend) e a dica de uma na folha da distância.
 
 ## Aguardando decisão
 
-- **3C, grades ZAPS:** só com autorização do autor (licença NC).
 - **WO no Chinês:** sem valores definidos, por isso o botão não aparece. Conferir atraso e WO na WRC 2025 e na EMA (os números vieram do brief).
 
 ## Premiação
