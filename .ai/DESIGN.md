@@ -54,6 +54,8 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Colunas vizinhas de um teclado têm as linhas alinhadas: não esticar só uma delas (teclas em oval desalinhadas foram recusadas pelo usuário).
 - Mudou um teclado, abra o "?" dele: a cena de ajuda é um desenho à parte e precisa ser conferida na tela.
 - MPSZ em tela baixa: primeiro saem as folgas, depois as pedras e as teclas encolhem, estas nunca abaixo de 44px. Deitado, se ainda não couber (320px de altura), o painel rola em vez de cortar.
+- Teclado de pontos com W.O.: o botão fica acima do Calcular mão. Em tela baixa os dois botões e o visor encolhem, e até 600px de altura eles dividem a linha. A folha não rola em 360×640.
+- Salvar para continuar fica ao lado de Registrar partida, para o Registrar não sair da tela. Na retomada, a faixa da rodada ocupa o lugar da dica.
 - Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
 
 ## Pedras brancas
@@ -79,6 +81,9 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Encerrar fica ao lado do Ranking, sempre com confirmação.
 - Ranking: visão e filtros ficam numa barra abaixo do nome do torneio, não no cabeçalho (no desktop ele é estreito).
 - Ranking: a linha inteira abre a folha da distância, com um botão no nome para teclado e leitor de tela. A folha mostra Mangan, Haneman e Yakuman, e o Baiman fica no leitor de tela e em "Distância em".
+- Card do jogador, nesta ordem: cabeçalho (nome, posição, pontos, compartilhar, setas, fechar), Comparar com (é filtro, vem antes do que filtra), divisória, lista e o rodapé Aproximado. Os números ficam recolhidos numa linha antes do rodapé.
+- A linha da distância expande no lugar, com chevron e `aria-expanded`, uma por vez. Os cenários usam o nome, sem artigo nem pronome ("1 direto", não "1 nela").
+- Menu ⋮ do torneio: Estatísticas, Compartilhar resultado, divisória, as ações que mudam o torneio e, por último em vermelho, Abortar.
 - Quem está sendo acompanhado fica destacado e, fora da tela, fixo acima da navegação. Use `position: fixed`: `sticky` não gruda dentro do conteúdo principal.
 - Colocação e pontos se separam por espaço e cor (a colocação neutra, os pontos em verde ou vermelho), sem "·" depois do "º".
 - O ? fica sempre ao lado de um título, nunca no meio ou no fim de um texto de apoio. Embaixo do Formato vão no máximo duas linhas: o que é e quantos jogadores precisa. O resto vai no ? do Formato.

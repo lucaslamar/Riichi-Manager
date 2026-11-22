@@ -19,6 +19,7 @@ Escolha os testes conforme o impacto; os comandos completos estão em `package.j
 - Distância para o pódio e relatórios da disputa: `npm run test:distancia-podio`. No navegador, leia o QR da imagem gerada (jsqr) e confira os dois temas.
 - Premiação: `npm run test:premiacao`. WO, remontagem e atraso: `npm run test:wo`, e confira que o WO não entra no histórico nem no Ranking geral.
 - Folha de pontos: `npm run test:expressao-pontos`, e no navegador Enter depois de tocar numa tecla, Enter para abrir a folha e toque no visor.
+- Viradas, estatísticas, W.O. no meio e salvar para continuar: `npm run test:viradas`, `test:estatisticas`, `test:saida` e `test:partida-pausada`. No navegador, confira a folha de pontos com W.O. em 360×640 e 375×548.
 - Toda tarefa: registre no `.ai` regras, mudanças de UX, ideias adiadas e inspirações, sem dados de pessoas reais.
 - Variantes e yakus locais: `npm run test:sanma` e `npm run test:yakus-locais`.
 - Modo Chinês (motor de fan e pagamento MCR): `npm run test:fan-mcr` (inclui os 81 fan do guia do CMC), `npm run test:placar-mcr` e `npm run test:tutorial-mcr`. Ao mexer em componente compartilhado, confira o Riichi no navegador e procure termos do Riichi nas telas do MCR. Regra nova no Tutorial sem base no guia do CMC entra em [REFERENCIAS-MCR.md](REFERENCIAS-MCR.md).

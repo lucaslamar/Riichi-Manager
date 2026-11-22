@@ -63,6 +63,15 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 - `src/compartilhado/marca/url-app.ts`: `URL_DO_APP`, único endereço do site para QR e textos.
 - `interface/componentes/SetaPosicao` e `GuiaFormatos`: seta do ranking e conteúdo do ? do Formato.
 
+## Estatísticas e partida em andamento
+
+- `src/dominios/estatisticas`: `logica/viradas` (direto, líder, uma), `logica/projecao` (média), `logica/estatisticas` (números) e `logica/escopo` (o que cada escopo enxerga), tudo puro. Testes em `test:viradas` e `test:estatisticas`.
+- `EstatisticasJogador` é o componente único, por `EscopoEstatisticas` (`torneio`, `temporada` ou `geral`): card do ranking do torneio (compacto), `PaginaEstatisticasTorneio`, Brasileirão e `PaginaJogador`. Não crie outra tela de números por escopo.
+- `useCompartilharResultado`: a classificação para compartilhar, no Ranking e no menu do torneio.
+- As taxas leem `resumoDasMaos`. Antes de podar o mão a mão, o armazenamento grava esse resumo em `Partida.maos`.
+- `centerpiece/logica/saidaDaPartida`: regra e soma do W.O. `Partida.saidas` diz quem saiu e `ConfigMesa.saida` é a regra. Não confundir com `Partida.wo` (não apareceu).
+- `centerpiece/logica/partidaPausada`: modelo próprio e serializável da partida salva para continuar, com versão. Fica na chave `riichi-manager-partidas-pausadas` e no backup como `partidasPausadas` (opcional, sem subir o esquema).
+
 ## Sorteio
 
 - `src/compartilhado/sorteio`: `aleatorio`, `contagens`, `custo` (regras em ordem), `mesas` (trocas entre vizinhos), `rodada` (tentativas com orçamento por tamanho), `semRepeticao` (16 em 4 e 9 em 3), `minimos` e `estatistica`. Não importa domínios.

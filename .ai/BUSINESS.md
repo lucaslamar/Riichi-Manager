@@ -60,12 +60,33 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 
 ### Distância para o pódio
 
-- Diferença em pontos do ranking, com 1 casa. Mãos: diferença × 1000 ÷ ron fora do Leste (Mangan 8000, Haneman 12000, Baiman 16000, Yakuman 32000), para cima, sem contar uma. Arredonde antes de subir: 16,0 são 2 Mangans, não 3.
+- Diferença em pontos do ranking, com 1 casa. Mãos da linha resumida: diferença × 1000 ÷ ron fora do Leste (Mangan 8000, Haneman 12000, Baiman 16000, Yakuman 32000), para cima, sem contar uma. Arredonde antes de subir: 16,0 são 2 Mangans, não 3.
 - MCR: vitórias de mesa = diferença ÷ 4, para cima (confirmado em 22/11/2026). Com pontos de mesa empatados, mostra a diferença do desempate.
 - Diferença 0 é "Empatado". Quem não jogou não entra. No Eliminatório, compara só na mesma fase, e a Disputa mostra a fase de cima.
 - Quem está no pódio vê a vantagem até o 4º. Os vizinhos não repetem o que o pódio já mostra.
 - Candidatos ao 1º: metade de cima, de 4 a 8. "Ainda alcança": diferença ≤ rodadas que faltam para ele × melhor resultado de uma rodada do torneio. É estimativa, sem marca em formato sem número de rodadas, torneio encerrado ou Eliminatório antes de zerar os pontos.
 - "Até a rodada" refaz ranking, setas e estimativa como estavam no fim daquela rodada.
+
+### Cenários de virada (pedido do usuário em 22/11/2026)
+
+- Quem persegue é sempre quem está atrás, também na linha "Vantagem sobre". Só no Riichi e com diferença maior que zero.
+- Por ron de terceiros: a conta da distância. Por ron direto no líder cada ponto conta em dobro (Mangan = 16,0). Como na distância, cobrir é chegar a pelo menos o mesmo total.
+- Líder no próximo jogo: em 4º, no zero ou em 1º. O valor do 4º e do 1º é o de quem termina com os pontos de partida: uma + (partida − retorno) ÷ 1000, e a oka para o 1º. Nunca número fixo.
+- Com uma: o perseguidor em 1º, 2º ou 3º, com o líder no zero, pela mesma conta.
+- Suposição a confirmar: uma flutuante usa a linha de 2 acima do retorno, porque a linha real só se sabe no fim da mesa.
+- Ficam de fora tsumo e mão de oya, e o rodapé diz isso.
+- Jogos que faltam: rodadas do formato menos as jogadas. Cortado e torneio encerrado têm 0 (a diferença é final). Com pontos zerados no corte, conta só até o fim da fase. "Até a rodada" volta no tempo.
+- Fim por data (Brasileirão, ou Ranking geral com período personalizado com data final): estima os jogos pelo ritmo de cada um, a partir de 7 dias e 3 jogos. Este mês e Este ano não contam como fim.
+- Brasileirão por média ou melhores N: só a distância, sem cenários, porque mãos não viram pontos um para um.
+- Ranking geral sem fim: distância para quem está logo acima em pontos e projeção pela média. Passar é ficar acima, então na divisão exata é o jogo seguinte. Não projeta com menos de 3 jogos de qualquer um, média menor ou igual, ou mais de 100 jogos (suposições a confirmar).
+
+### Estatísticas do jogador (pedido do usuário em 22/11/2026)
+
+- Os mesmos números nos escopos torneio, temporada e geral. O geral segue os filtros do Ranking.
+- Taxas de vitória, deal-in e riichi: vezes ÷ mãos jogadas (ron, tsumo, ryukyoku e abortivo, sem chombo). Só entram partidas com mão a mão. Sem elas aparece "—", nunca 0%.
+- Mesa de torneio e de clube e partida registrada à mão não têm mãos no Riichi. A tela avisa e diz quantos jogos entraram na conta.
+- Maior mão: valor até o Mangan, depois patamar e múltiplos de Yakuman. Empate fica com a primeira. No Chinês, os fan.
+- Média de pontos: pontos do ranking por jogo. O WO de quem não apareceu fica fora das estatísticas. Partida com W.O. entra, com opção de tirar.
 
 ### Inscrição e premiação
 
@@ -87,6 +108,23 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 - Remontar: com outra mesa em WO na rodada, os presentes dela completam a mesa atual e os ausentes vão para ela.
 - Faltar ao encontro inteiro não é WO: a pessoa só não entra na lista do dia.
 
+### W.O. no meio da partida (pedido do usuário em 22/11/2026)
+
+- É quem saiu durante o jogo. Não é o WO de quem não apareceu (acima): a partida foi jogada, entra no histórico e nos rankings e fica marcada "Com W.O.".
+- Padrão: fica em 4º com os pontos que tinha na saída, sem penalidade. Editável nas regras do torneio e nas do Registrar partida finalizada, e copiado para cada partida.
+- Penalidade em pontos do ranking, depois da uma, dentro de `multa`.
+- Os pontos da saída são obrigatórios: vazio não vira zero.
+- Forçado em 4º, a uma, a oka e os sticks que sobram seguem a colocação nova. A uma flutuante continua contando os acima do retorno pelos pontos reais.
+- Suposição a confirmar: dois ou mais W.O. ocupam os últimos lugares, ordenados pelos pontos entre si.
+- Com W.O. a soma não precisa fechar. Só no Riichi de 4: o Chinês não tem valores definidos.
+
+### Partida em andamento (pedido do usuário em 22/11/2026)
+
+- Salvar para continuar existe no registro avulso e no do clube do Riichi. Guarda rodada, honba, dealer, pontos, sticks, jogadores e assentos, W.O., regras inteiras e data e hora.
+- Retomar abre tudo como foi salvo, mesmo que o preset tenha mudado. Registrar apaga a salva.
+- Os sticks salvos fecham a soma se os pontos ainda faltam exatamente esse valor, e aí seguem a regra de palitos que sobram.
+- Não entra no histórico nem no ranking até registrar. Vai no backup.
+
 ### Nomes e compartilhamento
 
 - Fim do tempo no torneio (decidido com o usuário em 22/11/2026): o app só avisa que as partidas terminam na mão atual. Não encerra partida sozinho, quem registra o resultado é o usuário.
@@ -97,7 +135,9 @@ Para detalhes, consulte [regras de negócio](../docs/regras-de-negocio.md) e [fl
 ### Registro de pontos
 
 - A folha de pontos aceita teclado físico (dígitos, `-`, `+`, Backspace, Enter, Esc) com as mesmas regras das teclas. O teclado do sistema só abre ao tocar no visor, e usa `PROPS_TECLADO_COM_SINAL`, porque `numeric` não tem o menos no Samsung.
-- Digitar continua o valor que está no visor. Não apaga o anterior.
+- O primeiro dígito troca o valor inteiro, também ao reabrir (pedido do usuário em 22/11/2026, substitui "digitar continua o valor"). Sem valor, o 0 é só placeholder e OK deixa vazio. ⌫ tira só o último, e + ou − continuam a conta.
+- No torneio, com o visor intocado e vazio, o + e o Calcular mão somam dos pontos de partida. O − começa um número negativo.
+- "Soma X / total" acompanha o que está sendo digitado.
 
 ## Privacidade e acessibilidade
 

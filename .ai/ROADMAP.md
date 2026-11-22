@@ -5,11 +5,16 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 ## Brief do Torneio de 21/11/2026: próximas fases
 
 - Fases concluídas.
-- Fora por enquanto: PDF com QR (o app não gera PDF), link do QR direto para o torneio (precisa de backend) e a dica de uma na folha da distância.
+- Fora por enquanto: PDF com QR (o app não gera PDF) e link do QR direto para o torneio (precisa de backend).
 
 ## Aguardando decisão
 
 - **WO no Chinês:** sem valores definidos, por isso o botão não aparece. Conferir atraso e WO na WRC 2025 e na EMA (os números vieram do brief).
+
+- **Estatísticas de mãos em torneio e clube:** hoje as mesas só registram o resultado, então taxas e maior mão ficam vazias. Opções: abrir o placar do app nessas mesas, ou pedir a maior mão e as contagens ao registrar.
+- **Cenários de virada:** confirmar a linha da uma flutuante (hoje 2 acima do retorno) e os limites da projeção (3 a 100 jogos).
+- **W.O. no meio da partida:** confirmar a ordem com dois ou mais W.O. e definir valores para o Chinês.
+- **Salvar para continuar:** levar ao Chinês (hoje o rascunho dele já salva sozinho, sem rodada nem lista) e ao Finalizar mesa do torneio.
 
 ## Premiação
 
@@ -29,7 +34,7 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 - Proposta aguardando aprovação: digitar a mão pelo teclado físico sem abrir o MPSZ.
 - Proposta aguardando aprovação: limitar a largura da Calculadora e do Han e Fu em monitor grande.
 - Conferir num iPad de verdade (Safari, teclado do sistema, Split View).
-- Na folha de pontos, apagar o valor anterior ao começar a digitar (só no desktop).
+
 
 ## Modo Chinês
 

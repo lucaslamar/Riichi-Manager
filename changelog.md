@@ -4,6 +4,12 @@
 
 ### Adicionado
 
+- **Cenários de virada**: tocar numa distância do ranking do torneio mostra quantas mãos faltam por ron de terceiros e por ron direto no líder, o alvo se o líder ficar em 4º, no zero ou em 1º e o que falta com a uma de cada colocação.
+- **Estatísticas do jogador**: no torneio, no Brasileirão e no Ranking geral, com média, posições, maior mão e taxas de vitória, deal-in e riichi. As taxas e a maior mão precisam de partidas jogadas com o placar do app.
+- **Distância para o próximo**: no Ranking geral sem data de fim, a projeção diz em quantos jogos o jogador passa quem está acima, pela média de cada um.
+- **Menu do torneio**: Estatísticas do torneio e Compartilhar resultado.
+- **W.O. no meio da partida**: no teclado de pontos, marca quem precisou sair. Por padrão fica em 4º com os pontos da saída, e a regra muda nas configurações. A soma não trava o registro, e as estatísticas podem tirar essas partidas.
+- **Salvar para continuar**: o Registrar partida finalizada guarda rodada, honba, dealer, pontos, sticks, jogadores e regras. A partida fica em Em andamento para retomar ou descartar, e vai no backup.
 - **Registrar partida finalizada no modo Chinês**: no Placar, no Ranking e nas mesas de torneio e de clube. É uma calculadora para ir somando e subtraindo os pontos de cada um, que ficam salvos durante a partida. Calcular mão já desconta dos outros.
 - **Centerpiece simples no modo Chinês**: a mesa no meio, com timer, dados, Sorteador e atalhos da calculadora, sem honba e sempre com 4 jogadores.
 - **Tutorial MCR completo**: ensina do zero (peças, muro, distribuição, Chi/Peng/Gang, pontuação e os 81 fan). As diferenças do Riichi viraram parte opcional.
@@ -30,6 +36,8 @@
 
 ### Alterado
 
+- **Card do jogador no ranking do torneio**: o compartilhar foi para o topo e o Comparar com vem antes da lista.
+- **Pontos sem apagar**: no teclado de pontos o primeiro dígito substitui o valor, e a soma da mesa acompanha o que é digitado.
 - **Ranking no iPad e no PC**: uma linha por jogador, com as colunas alinhadas para comparar.
 - **iPad em pé**: Registrar partida, Nova partida, listas, Ranking e análise do jogador usam a tela inteira, com letra maior no Pro 13.
 - **Textos maiores no iPad**: dicas, títulos de seção, contagem de jogadores, faixas, selos e ajudas com pelo menos 15 px, e 17 px no que é para ler.
