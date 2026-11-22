@@ -1784,8 +1784,8 @@
       "format": "Formato",
       "multipleOfFour": "As mesas fecham sempre com 4: o torneio precisa de 8, 12, 16… jogadores, sem folga e sem mesa de 3.",
       "rotationRounds": {
-        "one": "{{count}} rodada. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes.",
-        "other": "{{count}} rodadas. Cada jogador é Leste uma vez e enfrenta o máximo de adversários diferentes."
+        "one": "{{count}} rodada · cada um é Leste uma vez.",
+        "other": "{{count}} rodadas · cada um é Leste uma vez."
       },
       "rounds": "Número de rodadas",
       "qualifier": "Fase classificatória",
@@ -1813,14 +1813,19 @@
       "windsTable": "Na mesa",
       "windsAppHelp": "Cada mesa já sai com o vento de cada jogador.",
       "windsTableHelp": "O app só diz quem senta em cada mesa. Os ventos são sorteados na hora, com as pedras.",
-      "multipleOfThree": "As mesas de Sanma fecham sempre com 3: o torneio precisa de 6, 9, 12… jogadores."
+      "multipleOfThree": "As mesas de Sanma fecham sempre com 3: o torneio precisa de 6, 9, 12… jogadores.",
+      "multipleOfFourShort": "Precisa de 8, 12, 16… jogadores.",
+      "multipleOfThreeShort": "Precisa de 6, 9, 12… jogadores.",
+      "windsAppShort": "A mesa já sai com os ventos.",
+      "windsTableShort": "Ventos sorteados na mesa, com as pedras.",
+      "cutsShort": "Múltiplos de 4. Exemplo: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Grade inteira sorteada no início. Cada um é Leste uma vez.",
-      "suico": "Rodada 1 sorteada. Depois, as mesas seguem a classificação.",
-      "eliminatorio": "Classificatória e cortes até a mesa final.",
-      "corridos": "Liga em um encontro: cada rodada é sorteada na hora.",
-      "temporada": "Liga com vários encontros e ranking acumulado."
+      "rodizio": "Rodadas fixas. Cada um é Leste uma vez.",
+      "suico": "Depois da 1ª, mesas pela classificação.",
+      "eliminatorio": "Cortes a cada fase até a mesa final.",
+      "corridos": "Rodadas livres, sorteadas na hora. Você encerra.",
+      "temporada": "Vários encontros somando num ranking só."
     },
     "formatsShort": {
       "rodizio": "Rodízio",
@@ -1866,7 +1871,8 @@
       "meetupsTitle": "Encontros",
       "noMeetups": "Nenhum encontro ainda.",
       "listTitle": "Temporadas",
-      "open": "Ver a temporada"
+      "open": "Ver a temporada",
+      "criterionShort": "Critério: na tela da temporada."
     },
     "tables": {
       "roundOf": "Rodada {{round}} de {{total}}",
@@ -2391,7 +2397,8 @@
       },
       "nenhumaPartida": "Nenhuma partida ainda.",
       "torneio": {
-        "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo."
+        "regra": "Cada mesa vale pontos de mesa: 4, 2, 1 e 0 pela colocação. Empatados dividem os pontos das colocações. A classificação desempata pela soma dos pontos das partidas. A sessão acaba nas 4 rodadas ou no fim do tempo.",
+        "regraCurta": "Pontos de mesa: 4, 2, 1 e 0."
       },
       "usarFan": "Usar no placar",
       "porFan": "Fan",

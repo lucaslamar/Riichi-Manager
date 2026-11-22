@@ -1762,8 +1762,7 @@
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
       "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
+        "other": "{{count}}轮 · 每人各当一次东家。"
       },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
@@ -1791,14 +1790,19 @@
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
       "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
-      "multipleOfThree": "三人麻将每桌总是3人：比赛需要6、9、12…名选手。"
+      "multipleOfThree": "三人麻将每桌总是3人：比赛需要6、9、12…名选手。",
+      "multipleOfFourShort": "需要8、12、16…名选手。",
+      "multipleOfThreeShort": "需要6、9、12…名选手。",
+      "windsAppShort": "分桌时已定好风位。",
+      "windsTableShort": "风位在桌上摸牌决定。",
+      "cutsShort": "4的倍数。例如：8, 4"
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "轮数固定。每人各当一次东家。",
+      "suico": "第2轮起按排名分桌。",
+      "eliminatorio": "逐阶段淘汰，直到决赛桌。",
+      "corridos": "轮数不限，现场抽签。",
+      "temporada": "多次聚会，同一排名。"
     },
     "formatsShort": {
       "rodizio": "Rotation",
@@ -1844,7 +1848,8 @@
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
       "listTitle": "Seasons",
-      "open": "Open the season"
+      "open": "Open the season",
+      "criterionShort": "计分方式在赛季页面选择。"
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -2363,7 +2368,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "桌分：4、2、1、0。"
       },
       "usarFan": "用于记分",
       "porFan": "番数",

@@ -1762,8 +1762,7 @@
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
       "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
+        "other": "{{count}}라운드 · 모두 한 번씩 동가."
       },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
@@ -1791,14 +1790,19 @@
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
       "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
-      "multipleOfThree": "삼마 테이블은 항상 3명입니다. 대회에는 6, 9, 12…명이 필요합니다."
+      "multipleOfThree": "삼마 테이블은 항상 3명입니다. 대회에는 6, 9, 12…명이 필요합니다.",
+      "multipleOfFourShort": "8, 12, 16…명이 필요합니다.",
+      "multipleOfThreeShort": "6, 9, 12…명이 필요합니다.",
+      "windsAppShort": "테이블과 함께 바람도 정해집니다.",
+      "windsTableShort": "바람은 테이블에서 패로 정합니다.",
+      "cutsShort": "4의 배수. 예: 8, 4"
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "라운드 고정. 모두 한 번씩 동가.",
+      "suico": "2라운드부터 순위대로 배정.",
+      "eliminatorio": "단계마다 줄여 결승 테이블로.",
+      "corridos": "라운드 자유. 그 자리에서 추첨.",
+      "temporada": "여러 모임, 하나의 랭킹."
     },
     "formatsShort": {
       "rodizio": "Rotation",
@@ -1844,7 +1848,8 @@
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
       "listTitle": "Seasons",
-      "open": "Open the season"
+      "open": "Open the season",
+      "criterionShort": "집계 방식은 시즌 화면에서 선택."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -2363,7 +2368,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "Table points: 4, 2, 1 and 0."
       },
       "usarFan": "점수판에 사용",
       "porFan": "번",

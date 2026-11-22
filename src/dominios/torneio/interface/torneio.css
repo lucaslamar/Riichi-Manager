@@ -1147,3 +1147,7 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .trn-guia-formatos li > span:last-child {
   color: var(--texto-apoio);
 }
+
+.cfg-ajuda.trn-regra-curta {
+  margin-top: 0;
+}

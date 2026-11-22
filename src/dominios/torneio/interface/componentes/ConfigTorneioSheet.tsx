@@ -83,7 +83,19 @@ export default function ConfigTorneioSheet({
         <p className="cfg-ajuda">{t(`tournament.formatHelp.${formato.tipo}`)}</p>
       </div>
 
-      <Grupo rotulo={t('tournament.settings.winds')}>
+      <Grupo
+        rotulo={t('tournament.settings.winds')}
+        ajuda={
+          <>
+            <p>
+              <strong>{t('tournament.settings.windsApp')}.</strong> {t('tournament.settings.windsAppHelp')}
+            </p>
+            <p>
+              <strong>{t('tournament.settings.windsTable')}.</strong> {t('tournament.settings.windsTableHelp')}
+            </p>
+          </>
+        }
+      >
         <BotoesOpcao<'app' | 'mesa'>
           rotulo={t('tournament.settings.winds')}
           valor={ventos ? 'app' : 'mesa'}
@@ -94,14 +106,15 @@ export default function ConfigTorneioSheet({
           ]}
         />
       </Grupo>
-      <p className="cfg-ajuda">{t(ventos ? 'tournament.settings.windsAppHelp' : 'tournament.settings.windsTableHelp')}</p>
+      <p className="cfg-ajuda">{t(ventos ? 'tournament.settings.windsAppShort' : 'tournament.settings.windsTableShort')}</p>
 
       <OpcoesFormato key={formato.tipo} formato={formato} jogadores={jogadores} aoMudar={setFormato} />
       {formato.tipo === 'temporada' && (
         <>
-          <Campo rotulo={t('tournament.season.title')}>
+          <Campo rotulo={t('tournament.season.title')} ajuda={<p>{t('tournament.season.criterionLater')}</p>}>
             <select
               className="trn-campo"
+              aria-label={t('tournament.season.title')}
               value={temporadaNova ? '' : formato.temporadaId}
               onChange={(evento) => setFormato({ tipo: 'temporada', temporadaId: evento.target.value })}
             >
@@ -141,20 +154,30 @@ export default function ConfigTorneioSheet({
                   />
                 </Campo>
               </div>
-              <p className="cfg-ajuda">{t('tournament.season.criterionLater')}</p>
+              <p className="cfg-ajuda">{t('tournament.season.criterionShort')}</p>
             </>
           )}
         </>
       )}
 
-      <p className="cfg-ajuda">{t('tournament.settings.multipleOfFour')}</p>
+      <p className="cfg-ajuda">
+        {t(porMesa === 3 ? 'tournament.settings.multipleOfThreeShort' : 'tournament.settings.multipleOfFourShort')}
+      </p>
     </>
   )
 
   const secaoTempo = (
     <>
       <h3 className="cfg-grupo">{t('tournament.settings.tabTime')}</h3>
-      <Grupo rotulo={t('tournament.settings.roundTimer')}>
+      <Grupo
+        rotulo={t('tournament.settings.roundTimer')}
+        ajuda={
+          <>
+            <p>{t('tournament.settings.timeUpHelp')}</p>
+            <p>{t('tournament.settings.turnTimerHelp')}</p>
+          </>
+        }
+      >
         <BotoesOpcao<number>
           rotulo={t('tournament.settings.roundTimer')}
           valor={personalizado ? -1 : timers.rodadaSegundos}
@@ -188,7 +211,7 @@ export default function ConfigTorneioSheet({
         </Campo>
       )}
 
-      <Grupo rotulo={t('tournament.settings.tableTimer')}>
+      <Grupo rotulo={t('tournament.settings.tableTimer')} ajuda={<p>{t('tournament.settings.tableTimerHelp')}</p>}>
         <BotoesOpcao<'sim' | 'nao'>
           rotulo={t('tournament.settings.tableTimer')}
           valor={timers.porMesa ? 'sim' : 'nao'}
@@ -199,9 +222,6 @@ export default function ConfigTorneioSheet({
           ]}
         />
       </Grupo>
-      <p className="cfg-ajuda">{t('tournament.settings.tableTimerHelp')}</p>
-      <p className="cfg-ajuda">{t('tournament.settings.timeUpHelp')}</p>
-      <p className="cfg-ajuda">{t('tournament.settings.turnTimerHelp')}</p>
     </>
   )
 
@@ -238,9 +258,9 @@ export default function ConfigTorneioSheet({
                 id: 'pontuacaoMcr',
                 rotulo: t('tableConfig.scoring'),
                 conteudo: (
-                  <div className="cfg-campo">
-                    <p className="cfg-ajuda">{t('placar.mcr.torneio.regra')}</p>
-                  </div>
+                  <Grupo rotulo={t('tableConfig.scoring')} ajuda={<p>{t('placar.mcr.torneio.regra')}</p>}>
+                    <p className="cfg-ajuda trn-regra-curta">{t('placar.mcr.torneio.regraCurta')}</p>
+                  </Grupo>
                 ),
               },
             ]
@@ -318,9 +338,10 @@ function OpcoesFormato({
             opcoes={opcoesRodadas}
           />
         </Grupo>
-        <Campo rotulo={t('tournament.settings.cuts')}>
+        <Campo rotulo={t('tournament.settings.cuts')} ajuda={<p>{t('tournament.settings.cutsHelp')}</p>}>
           <input
             className={`trn-campo${cortes ? '' : ' trn-campo--erro'}`}
+            aria-label={t('tournament.settings.cuts')}
             value={textoCortes}
             inputMode="numeric"
             placeholder="8, 4"
@@ -332,7 +353,7 @@ function OpcoesFormato({
             }}
           />
         </Campo>
-        <p className={`cfg-ajuda${cortes ? '' : ' trn-erro'}`}>{t('tournament.settings.cutsHelp')}</p>
+        <p className={`cfg-ajuda${cortes ? '' : ' trn-erro'}`}>{t('tournament.settings.cutsShort')}</p>
         <Grupo rotulo={t('tournament.settings.roundsPerPhase')}>
           <BotoesOpcao<number>
             rotulo={t('tournament.settings.roundsPerPhase')}
@@ -358,7 +379,22 @@ function OpcoesFormato({
   return null
 }
 
-function Campo({ rotulo, children }: { rotulo: string; children: ReactNode }) {
+interface PropsCampo {
+  rotulo: string
+  /** Conteúdo do ? ao lado do rótulo. */
+  ajuda?: ReactNode
+  children: ReactNode
+}
+
+function Campo({ rotulo, ajuda, children }: PropsCampo) {
+  // Dentro de um <label>, o ? viraria o controle rotulado no lugar do campo.
+  if (ajuda) {
+    return (
+      <Grupo rotulo={rotulo} ajuda={ajuda}>
+        {children}
+      </Grupo>
+    )
+  }
   return (
     <label className="cfg-campo">
       <span className="cfg-campo-rotulo">{rotulo}</span>
@@ -367,10 +403,13 @@ function Campo({ rotulo, children }: { rotulo: string; children: ReactNode }) {
   )
 }
 
-function Grupo({ rotulo, children }: { rotulo: string; children: ReactNode }) {
+function Grupo({ rotulo, ajuda, children }: PropsCampo) {
   return (
     <div className="cfg-campo">
-      <span className="cfg-campo-rotulo">{rotulo}</span>
+      <span className="cfg-campo-rotulo">
+        {rotulo}
+        {ajuda && <AjudaCampo rotulo={rotulo}>{ajuda}</AjudaCampo>}
+      </span>
       {children}
     </div>
   )

@@ -1791,8 +1791,9 @@
       "format": "Format",
       "multipleOfFour": "Tables always have 4: the tournament needs 8, 12, 16… players, with no byes and no 3-player tables.",
       "rotationRounds": {
-        "one": "{{count}} round. Each player is East once and faces as many different opponents as possible.",
-        "other": "{{count}} rounds. Each player is East once and faces as many different opponents as possible."
+        "one": "{{count}} ronda · cada uno es Este una vez.",
+        "many": "{{count}} de rondas · cada uno es Este una vez.",
+        "other": "{{count}} rondas · cada uno es Este una vez."
       },
       "rounds": "Number of rounds",
       "qualifier": "Qualifying stage",
@@ -1820,14 +1821,19 @@
       "windsTable": "At the table",
       "windsAppHelp": "Each table comes with every player’s wind.",
       "windsTableHelp": "The app only says who sits at each table. Winds are drawn there, with the tiles.",
-      "multipleOfThree": "Las mesas de Sanma son siempre de 3: el torneo necesita 6, 9, 12… jugadores."
+      "multipleOfThree": "Las mesas de Sanma son siempre de 3: el torneo necesita 6, 9, 12… jugadores.",
+      "multipleOfFourShort": "Necesita 8, 12, 16… jugadores.",
+      "multipleOfThreeShort": "Necesita 6, 9, 12… jugadores.",
+      "windsAppShort": "La mesa sale con los vientos.",
+      "windsTableShort": "Vientos sorteados en la mesa.",
+      "cutsShort": "Múltiplos de 4. Ejemplo: 8, 4."
     },
     "formatHelp": {
-      "rodizio": "Whole schedule drawn at the start. Everyone is East once.",
-      "suico": "Round 1 drawn. Then tables follow the standings.",
-      "eliminatorio": "Qualifying stage and cuts down to the final table.",
-      "corridos": "One-day league: each round is drawn on the spot.",
-      "temporada": "League over several meetups with a cumulative ranking."
+      "rodizio": "Rondas fijas. Cada uno es Este una vez.",
+      "suico": "Tras la 1.ª, mesas según la tabla.",
+      "eliminatorio": "Cortes por fase hasta la mesa final.",
+      "corridos": "Rondas libres, sorteadas al momento.",
+      "temporada": "Varios encuentros, un solo ranking."
     },
     "formatsShort": {
       "rodizio": "Rotation",
@@ -1873,7 +1879,8 @@
       "meetupsTitle": "Meetups",
       "noMeetups": "No meetups yet.",
       "listTitle": "Seasons",
-      "open": "Open the season"
+      "open": "Open the season",
+      "criterionShort": "Criterio: en la pantalla de la temporada."
     },
     "tables": {
       "roundOf": "Round {{round}} of {{total}}",
@@ -2400,7 +2407,8 @@
       },
       "nenhumaPartida": "No games yet.",
       "torneio": {
-        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out."
+        "regra": "Each table gives table points: 4, 2, 1 and 0 by placement. Tied players split the points of their placements. The standings break ties by the sum of game points. A session ends after 4 rounds or when time runs out.",
+        "regraCurta": "Puntos de mesa: 4, 2, 1 y 0."
       },
       "usarFan": "Usar en el marcador",
       "porFan": "Fan",
