@@ -1295,13 +1295,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "테이블을 누르면 Centerpiece 메뉴",
       "adjustHonba": "본장 조정, 현재 {{count}}",
       "timerStart": "타이머 시작",
       "calculate": "손패 계산",
       "drawSection": "추첨",
       "calcMpsz": "MPSZ 표기로 계산",
-      "timerPass": "차례 넘기기"
+      "timerPass": "차례 넘기기",
+      "hintTimer": "바람을 누르면 타이머 시작 및 초기화"
     },
     "setup": {
       "title": "New game",

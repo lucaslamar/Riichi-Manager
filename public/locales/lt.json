@@ -1355,13 +1355,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "Bakstelėkite stalą Centerpiece meniu atverti",
       "adjustHonba": "Koreguoti honba, dabar {{count}}",
       "timerStart": "Pradėti laikmatį",
       "calculate": "Skaičiuoti ranką",
       "drawSection": "Burtai",
       "calcMpsz": "Skaičiuotuvas MPSZ žymėjimu",
-      "timerPass": "Perduoti ėjimą"
+      "timerPass": "Perduoti ėjimą",
+      "hintTimer": "Bakstelėkite vėjus laikmačiui paleisti ir atstatyti"
     },
     "setup": {
       "title": "New game",

@@ -13,7 +13,7 @@ const CHAVES_SIMPLES: Record<ModoJogo, string> = {
   riichi: 'riichi-manager-centerpiece-simples',
   mcr: 'riichi-manager-centerpiece-simples-mcr',
 }
-const CHAVE_DICA_SIMPLES = 'riichi-manager-dica-simples'
+
 const VERSAO = 1
 /** Preferência da visualização em lista, que saiu do app. */
 const CHAVE_MODO_ANTIGA = 'riichi-manager-modo-mesa'
@@ -58,13 +58,6 @@ export function carregarPartidas(
   return partidas
 }
 
-export function dicaSimplesFoiVista(armazenamento: ArmazenamentoChaveValor) {
-  return armazenamento.ler(CHAVE_DICA_SIMPLES) !== null
-}
-
-export function marcarDicaSimples(armazenamento: ArmazenamentoChaveValor) {
-  armazenamento.gravar(CHAVE_DICA_SIMPLES, '1')
-}
 
 export function limparPreferenciasAntigas(armazenamento: ArmazenamentoChaveValor) {
   armazenamento.remover?.(CHAVE_MODO_ANTIGA)

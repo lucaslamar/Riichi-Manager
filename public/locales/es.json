@@ -1322,13 +1322,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "Toca la mesa para abrir el menú del Centerpiece",
       "adjustHonba": "Ajustar honba, actual {{count}}",
       "timerStart": "Iniciar el temporizador",
       "calculate": "Calcular mano",
       "drawSection": "Sortear",
       "calcMpsz": "Calculadora por notación MPSZ",
-      "timerPass": "Pasar el turno"
+      "timerPass": "Pasar el turno",
+      "hintTimer": "Toca los vientos para iniciar y reiniciar el cronómetro"
     },
     "setup": {
       "title": "New game",

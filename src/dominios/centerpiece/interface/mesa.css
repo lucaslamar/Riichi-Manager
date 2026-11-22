@@ -42,7 +42,8 @@
 
 /* O simples tem mais botões: a mesa encolhe, sem passar do mínimo legível. */
 .mesa-tela--simples {
-  --mesa-altura-acoes: 56px;
+  /* Reserva a faixa roxa, para a mesa encolher em vez de passar da tela. */
+  --mesa-altura-acoes: 132px;
   position: relative;
 }
 
@@ -61,11 +62,34 @@
   margin: 0;
 }
 
+/* Faixa roxa, como a do registro, com lugar para o ? ao lado. */
 .mesa-simples-dica {
-  margin: 12px 0 0;
-  color: var(--texto-apoio);
-  font-size: 0.875rem;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 4px;
+  margin-right: 36px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--primario);
+  background: color-mix(in srgb, var(--primario) 14%, transparent);
+  font-size: 0.82rem;
   font-weight: 600;
+  line-height: 1.3;
+  pointer-events: none;
+  text-align: left;
+}
+
+.mesa-simples-dica > p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.mesa-simples-dica i {
+  width: 1.2em;
+  flex: none;
   text-align: center;
 }
 
@@ -723,13 +747,18 @@ button.mesa-domo {
     grid-template-columns: var(--mesa-lado);
   }
 
+  /* Com altura, a faixa fica em cima e a mesa encolhe o que ela ocupa. */
+  .mesa-tela--simples {
+    --mesa-lado: min(620px, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - 112px));
+    grid-template-rows: auto 1fr;
+  }
+
   .mesa-simples-dica {
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
-    max-width: calc((100% - var(--mesa-lado)) / 2 - 16px);
+    width: min(100%, 620px);
+    box-sizing: border-box;
     margin: 0;
-    text-align: right;
+    padding-right: 40px;
+    justify-self: center;
   }
 
   /* A dica se mede pela tela inteira, não pelo quadrado da mesa
@@ -1091,4 +1120,23 @@ button.mesa-domo {
 
 .mesa-tela--fundo-tocavel {
   cursor: pointer;
+}
+
+/* Celular deitado: não há altura, então a faixa vai para o lado da mesa. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .mesa-tela.mesa-tela--simples {
+    --mesa-lado: min(620px, calc(100dvh - var(--mesa-altura-cabecalho) - var(--altura-barra-inferior, 0px) - 20px));
+    grid-template-rows: none;
+  }
+
+  .mesa-tela.mesa-tela--simples > .mesa-simples-dica {
+    position: absolute;
+    /* Sem área de grade, mede pela tela e não pela coluna da mesa. */
+    grid-area: auto;
+    top: 10px;
+    left: 8px;
+    width: auto;
+    max-width: calc((100% - var(--mesa-lado)) / 2 - 16px);
+    padding-right: 12px;
+  }
 }

@@ -1315,13 +1315,14 @@
       "honbaMinus": "Decrease honba",
       "windDraw": "Wind Draw",
       "actions": "Table actions",
-      "hint": "Tap the table to see the actions",
+      "hint": "Tap the table to open the Centerpiece menu",
       "adjustHonba": "Adjust honba, currently {{count}}",
       "timerStart": "Start the timer",
       "calculate": "Calculate hand",
       "drawSection": "Draw",
       "calcMpsz": "Calculator by MPSZ notation",
-      "timerPass": "Pass the turn"
+      "timerPass": "Pass the turn",
+      "hintTimer": "Tap the winds to start and reset the timer"
     },
     "setup": {
       "title": "New game",

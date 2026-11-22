@@ -9,6 +9,7 @@
   :root:root:root
     :is(
       .fin-dica,
+      .mesa-simples-dica,
       .fin-tela > details > summary,
       .ptd-apoio,
       .ptd-card-inicio > span,
