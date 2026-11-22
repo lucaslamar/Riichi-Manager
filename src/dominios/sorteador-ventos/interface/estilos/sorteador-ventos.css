@@ -744,3 +744,11 @@ body:has(.sorteador-ventos-page) {
 .sorteio-historico--tres {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+
+/* Tablet: alvo de 44px. */
+@media (min-width: 641px) and (min-height: 561px) and (any-pointer: coarse) {
+  .sorteio-ajuda {
+    width: 44px;
+    height: 44px;
+  }
+}

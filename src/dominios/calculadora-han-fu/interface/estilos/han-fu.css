@@ -1036,3 +1036,10 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+/* Tablet: alvo de 44px. */
+@media (min-width: 641px) and (min-height: 561px) and (any-pointer: coarse) {
+  .seletor-segmentado-han-fu button {
+    min-height: 44px;
+  }
+}

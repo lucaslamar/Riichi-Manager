@@ -432,3 +432,24 @@
   flex: 1 1 auto;
   min-width: 0;
 }
+
+/* Tablet: alvo de 44px. */
+@media (min-width: 641px) and (min-height: 561px) and (any-pointer: coarse) {
+  .rkf-icone {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+
+  .ptd-filtro-historico button {
+    min-height: 44px;
+  }
+}
+
+@media (min-width: 641px) and (min-height: 561px) and (any-pointer: coarse) {
+  .rkf-segmentos .ptd-segmento,
+  .anl-densidade .ptd-segmento,
+  .anl-tela .anl-compartilhar {
+    min-height: 44px;
+  }
+}
