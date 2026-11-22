@@ -26,6 +26,7 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 ## Problemas conhecidos
 
+- Torneio de Sanma: pelo código, Registrar resultado não habilita, porque exige os 4 lugares e a soma de 4 (visto na leitura, sem teste na tela).
 - O fim do tempo não encerra a partida na mão atual, embora a ajuda diga que sim.
 - A ajuda do timer de vez cita a aba Mesa, que não existe mais nas configurações do torneio.
 - Os cortes do Eliminatório no Sanma são lidos como múltiplos de 4 no campo.
