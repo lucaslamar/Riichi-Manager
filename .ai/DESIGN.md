@@ -37,6 +37,10 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - Linha de botões nunca tem altura fixa menor que o mínimo de toque (44px, 46px com a Área de toque ampliada): use `minmax(44px, auto)`. Com altura fixa, as linhas montam uma na outra. Em tela baixa, encolha o visor, não as teclas.
 - Teclado de pontos: no Riichi a última linha tem 0, 00 e 000. No Chinês os pontos são pequenos, então não tem 00 nem 000, e o − e o + ocupam duas linhas cada.
 
+## Pedras brancas
+
+- Nunca branco puro: creme, para não chocar com o fundo (pedido do usuário). `--pedra-face` é #F2EFE6 no Dark e #FAFAE8 no Azul, igual no Riichi e no Chinês.
+
 ## Dragão Branco (pedido do usuário em 22/11/2026)
 
 - No Riichi é liso, só a cor da pedra: sem moldura nem linha interna, em qualquer cor de pedra.
