@@ -3525,7 +3525,7 @@
   "stats": {
     "turn": {
       "noGamesLeft": "残りの対局がないため、この差で確定です。",
-      "perGame": "残り対局数: {{games}}。1局あたり{{value}}縮める必要があります。",
+      "perGame": "残り対局数: {{games}}。1局あたり{{value}}（ウマ抜きで{{points}}点）縮める必要があります。",
       "thirdParty": "他家からのロン",
       "direct": "{{name}}から直撃",
       "directHelp": "直撃では点差が2倍縮まります。",
@@ -3546,7 +3546,8 @@
       "jaPassa": "すでに逆転",
       "jaEmpata": "すでに同点",
       "title": "逆転条件",
-      "onlyLeader": "{{name}}は対局終了。{{leader}}が{{value}}より多く失えば逆転。"
+      "onlyLeader": "{{name}}は対局終了。{{leader}}が{{value}}より多く失えば逆転。",
+      "withoutAverage": "平均なし：現在の差 {{value}}（{{points}}点）"
     },
     "title": "統計",
     "tournamentTitle": "大会の統計",
@@ -3597,19 +3598,20 @@
       },
       "poucosJogos": "予測には対局数が不足（各{{count}}局以上）。",
       "mediaMenor": "平均が上回らないため予測できません。",
-      "longeDemais": "平均が近すぎて予測できません。"
+      "longeDemais": "平均が近すぎて予測できません。",
+      "withAverage": "平均込み"
     },
     "withoutWo": "W.O.のある対局を除く（{{count}}）",
     "form": {
       "title": {
-        "fim": "いつもどおりの成績なら（最終まで）",
-        "proximo": "いつもどおりの成績なら（次の対局）"
+        "fim": "平均込み：いつもどおりの成績なら（最終まで）",
+        "proximo": "平均込み：いつもどおりの成績なら（次の対局）"
       },
       "usual": {
         "other": "{{name}}：平均{{points}}点（{{value}}/局、{{count}}卓）"
       },
-      "short": "このままなら{{name}}は{{value}}届かず、あと{{hands}}必要。",
-      "jaPassa": "このままなら{{name}}が{{value}}差で逆転。",
+      "short": "このままなら{{name}}は{{value}}（{{points}}点）届かず。追いつくには{{hands}}。",
+      "jaPassa": "このままなら{{name}}が{{value}}差（{{points}}点）で逆転。",
       "jaEmpata": "このままなら{{name}}が追いつく。",
       "chance": "逆転確率：",
       "fewGames": "逆転確率は各{{count}}卓以上で表示。",

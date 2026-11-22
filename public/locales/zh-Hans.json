@@ -3525,7 +3525,7 @@
   "stats": {
     "turn": {
       "noGamesLeft": "没有剩余对局，分差已确定。",
-      "perGame": "剩余对局：{{games}}。每局需追回{{value}}。",
+      "perGame": "剩余对局：{{games}}。每局需追回{{value}}（不计马点为{{points}}点）。",
       "thirdParty": "荣和其他人",
       "direct": "直击{{name}}",
       "directHelp": "直击时，每一分都按两倍缩小分差。",
@@ -3546,7 +3546,8 @@
       "jaPassa": "已经反超",
       "jaEmpata": "已经追平",
       "title": "逆转条件",
-      "onlyLeader": "{{name}}已无对局。若{{leader}}失去超过{{value}}分则反超。"
+      "onlyLeader": "{{name}}已无对局。若{{leader}}失去超过{{value}}分则反超。",
+      "withoutAverage": "不计平均：当前分差{{value}}（{{points}}点）"
     },
     "title": "统计",
     "tournamentTitle": "比赛统计",
@@ -3597,19 +3598,20 @@
       },
       "poucosJogos": "对局太少，无法预测（每人至少{{count}}局）。",
       "mediaMenor": "平均成绩未更高，无法预测。",
-      "longeDemais": "平均成绩过于接近，无法预测。"
+      "longeDemais": "平均成绩过于接近，无法预测。",
+      "withAverage": "计入平均"
     },
     "withoutWo": "排除含W.O.的对局（{{count}}）",
     "form": {
       "title": {
-        "fim": "若保持一贯成绩（至结束）",
-        "proximo": "若保持一贯成绩（下一局）"
+        "fim": "计入平均：若保持一贯成绩（至结束）",
+        "proximo": "计入平均：若保持一贯成绩（下一局）"
       },
       "usual": {
         "other": "{{name}}通常以{{points}}点结束（{{value}}/局，{{count}}桌）"
       },
-      "short": "照此发展，{{name}}还差{{value}}：需要{{hands}}。",
-      "jaPassa": "照此发展，{{name}}将以{{value}}优势反超。",
+      "short": "照此发展，{{name}}还差{{value}}（{{points}}点）。追平或反超需要{{hands}}。",
+      "jaPassa": "照此发展，{{name}}将以{{value}}（{{points}}点）优势反超。",
       "jaEmpata": "照此发展，{{name}}将追平。",
       "chance": "反超概率：",
       "fewGames": "反超概率需每人至少{{count}}桌。",

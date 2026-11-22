@@ -3582,7 +3582,7 @@
   "stats": {
     "turn": {
       "noGamesLeft": "No quedan partidas: la diferencia es definitiva.",
-      "perGame": "Partidas restantes: {{games}}. Debe recortar {{value}} por partida.",
+      "perGame": "Partidas restantes: {{games}}. Debe recortar {{value}} por partida, que son {{points}} puntos de mesa sin contar uma.",
       "thirdParty": "Por ron a terceros",
       "direct": "Por ron directo a {{name}}",
       "directHelp": "En el ron directo, cada punto cuenta doble en la diferencia.",
@@ -3605,7 +3605,8 @@
       "jaPassa": "ya lo supera",
       "jaEmpata": "ya empata",
       "title": "Escenarios de remontada",
-      "onlyLeader": "{{name}} ya no juega. Adelanta si {{leader}} pierde más de {{value}}."
+      "onlyLeader": "{{name}} ya no juega. Adelanta si {{leader}} pierde más de {{value}}.",
+      "withoutAverage": "Sin el promedio: {{value}} de diferencia ahora ({{points}} puntos)"
     },
     "title": "Estadísticas",
     "tournamentTitle": "Estadísticas del torneo",
@@ -3658,21 +3659,22 @@
       },
       "poucosJogos": "Pocas partidas para proyectar (mínimo {{count}} cada uno).",
       "mediaMenor": "no se puede proyectar, porque el promedio no es mayor.",
-      "longeDemais": "no se puede proyectar, porque los promedios están demasiado cerca."
+      "longeDemais": "no se puede proyectar, porque los promedios están demasiado cerca.",
+      "withAverage": "Con el promedio"
     },
     "withoutWo": "Sin partidas con W.O. ({{count}})",
     "form": {
       "title": {
-        "fim": "Si terminan como suelen, hasta el final",
-        "proximo": "Si terminan como suelen, en la próxima partida"
+        "fim": "Con el promedio: si terminan como suelen, hasta el final",
+        "proximo": "Con el promedio: si terminan como suelen, en la próxima partida"
       },
       "usual": {
         "one": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesa)",
         "many": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesas)",
         "other": "{{name}} suele terminar con {{points}} ({{value}}/partida, {{count}} mesas)"
       },
-      "short": "Si termina así, {{name}} queda a {{value}}: faltan {{hands}}.",
-      "jaPassa": "Si termina así, {{name}} adelanta por {{value}}.",
+      "short": "Si termina así, {{name}} queda {{value}} por detrás ({{points}} puntos). Para adelantar o empatar: {{hands}}.",
+      "jaPassa": "Si termina así, {{name}} adelanta por {{value}} ({{points}} puntos).",
       "jaEmpata": "Si termina así, {{name}} empata.",
       "chance": "Probabilidad de remontar:",
       "fewGames": "La probabilidad requiere {{count}} mesas o más de cada uno.",

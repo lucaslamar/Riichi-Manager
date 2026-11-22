@@ -29,6 +29,16 @@ export function necessidade(
   }
 }
 
+/** 7,2 no ranking são 7.200 pontos de mesa, sem contar uma. */
+export function pontosDeMesa(valor: number, regras: RegrasDoModo): number {
+  return Math.round(valor * 10) * (regras.escalaPontos / 10)
+}
+
+/** Quanto tirar por jogo. Para cima: 14,5 em 2 jogos são 7,3, porque 7,2 não cobre. */
+export function tirarPorJogo(diferenca: number, jogos: number): number {
+  return Math.ceil(Math.round(diferenca * 10) / jogos) / 10
+}
+
 /** A diferença só é final quando nenhum dos dois joga mais: o líder ainda pode cair. */
 export function situacaoDaVirada(
   restantesPerseguidor: number | null,

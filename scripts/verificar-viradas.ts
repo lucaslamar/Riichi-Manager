@@ -13,7 +13,9 @@ import {
   cenariosComUma,
   cenariosDoLider,
   necessidade,
+  pontosDeMesa,
   situacaoDaVirada,
+  tirarPorJogo,
 } from '../src/dominios/estatisticas/logica/viradas'
 import { jogosRestantes } from '../src/dominios/torneio/logica/jogosRestantes'
 import { criarRascunho } from '../src/dominios/torneio/logica/torneio'
@@ -66,6 +68,18 @@ teste('só é final quando nenhum dos dois joga mais', () => {
   assert.equal(situacaoDaVirada(0, null), 'soLiderJoga')
   assert.equal(situacaoDaVirada(1, 0), 'aberta')
   assert.equal(situacaoDaVirada(null, null), 'aberta')
+})
+
+teste('em pontos de mesa', () => {
+  assert.equal(pontosDeMesa(7.2, RIICHI), 7200)
+  assert.equal(pontosDeMesa(67.9 - 51.9, RIICHI), 16000)
+  assert.equal(pontosDeMesa(0.1, RIICHI), 100)
+})
+
+teste('por jogo arredonda para cima', () => {
+  assert.equal(tirarPorJogo(14.4, 2), 7.2)
+  assert.equal(tirarPorJogo(14.5, 2), 7.3)
+  assert.equal(tirarPorJogo(67.9 - 51.9, 4), 4)
 })
 
 teste('com uma', () => {

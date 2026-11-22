@@ -3525,7 +3525,7 @@
   "stats": {
     "turn": {
       "noGamesLeft": "남은 대국이 없어 이 차이로 확정됩니다.",
-      "perGame": "남은 대국: {{games}}. 대국마다 {{value}}씩 좁혀야 합니다.",
+      "perGame": "남은 대국: {{games}}. 대국마다 {{value}}(우마 제외 {{points}}점)씩 좁혀야 합니다.",
       "thirdParty": "다른 사람에게 론",
       "direct": "{{name}} 직격 론",
       "directHelp": "직격하면 점수 차가 두 배로 줄어듭니다.",
@@ -3546,7 +3546,8 @@
       "jaPassa": "이미 역전",
       "jaEmpata": "이미 동점",
       "title": "역전 조건",
-      "onlyLeader": "{{name}}: 남은 대국 없음. {{leader}}: {{value}} 넘게 잃으면 역전."
+      "onlyLeader": "{{name}}: 남은 대국 없음. {{leader}}: {{value}} 넘게 잃으면 역전.",
+      "withoutAverage": "평균 제외: 현재 차이 {{value}} ({{points}}점)"
     },
     "title": "통계",
     "tournamentTitle": "대회 통계",
@@ -3597,19 +3598,20 @@
       },
       "poucosJogos": "예측하기에 대국 수 부족(각 {{count}}국 이상).",
       "mediaMenor": "평균이 더 높지 않아 예측할 수 없습니다.",
-      "longeDemais": "평균이 너무 비슷해 예측할 수 없습니다."
+      "longeDemais": "평균이 너무 비슷해 예측할 수 없습니다.",
+      "withAverage": "평균 반영"
     },
     "withoutWo": "W.O. 대국 제외 ({{count}})",
     "form": {
       "title": {
-        "fim": "평소대로라면 (끝까지)",
-        "proximo": "평소대로라면 (다음 대국)"
+        "fim": "평균 반영: 평소대로라면 (끝까지)",
+        "proximo": "평균 반영: 평소대로라면 (다음 대국)"
       },
       "usual": {
         "other": "{{name}}: 평균 {{points}}점 ({{value}}/국, {{count}}테이블)"
       },
-      "short": "이대로면 {{name}}: {{value}} 부족, {{hands}} 필요.",
-      "jaPassa": "이대로면 {{name}}: {{value}} 차로 역전.",
+      "short": "이대로면 {{name}}: {{value}} ({{points}}점) 부족. 동점 이상까지 {{hands}}.",
+      "jaPassa": "이대로면 {{name}}: {{value}} ({{points}}점) 차로 역전.",
       "jaEmpata": "이대로면 {{name}} 동점.",
       "chance": "역전 확률:",
       "fewGames": "역전 확률은 각 {{count}}테이블 이상부터 표시.",

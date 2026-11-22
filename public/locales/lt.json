@@ -3651,7 +3651,7 @@
   "stats": {
     "turn": {
       "noGamesLeft": "Partijų nebeliko: skirtumas galutinis.",
-      "perGame": "Liko partijų: {{games}}. Reikia atsigriebti po {{value}} per partiją.",
+      "perGame": "Liko partijų: {{games}}. Reikia atsigriebti po {{value}} per partiją (stalo taškais be uma: {{points}}).",
       "thirdParty": "Ron iš kitų",
       "direct": "Tiesioginis ron: {{name}}",
       "directHelp": "Tiesioginio ron taškai skirtumą mažina dvigubai.",
@@ -3675,7 +3675,8 @@
       "jaPassa": "jau lenkia",
       "jaEmpata": "jau lygu",
       "title": "Persvaros scenarijai",
-      "onlyLeader": "{{name}} partijų nebeturi. Lenkia, jei {{leader}} praras daugiau nei {{value}}."
+      "onlyLeader": "{{name}} partijų nebeturi. Lenkia, jei {{leader}} praras daugiau nei {{value}}.",
+      "withoutAverage": "Be vidurkio: dabartinis skirtumas {{value}} (taškais: {{points}})"
     },
     "title": "Statistika",
     "tournamentTitle": "Turnyro statistika",
@@ -3729,13 +3730,14 @@
       },
       "poucosJogos": "Per mažai partijų prognozei (bent {{count}} kiekvienam).",
       "mediaMenor": "prognozės nėra, nes vidurkis ne didesnis.",
-      "longeDemais": "prognozės nėra, nes vidurkiai per panašūs."
+      "longeDemais": "prognozės nėra, nes vidurkiai per panašūs.",
+      "withAverage": "Su vidurkiu"
     },
     "withoutWo": "Be partijų su W.O. ({{count}})",
     "form": {
       "title": {
-        "fim": "Jei baigs kaip įprastai, iki pabaigos",
-        "proximo": "Jei baigs kaip įprastai, kitoje partijoje"
+        "fim": "Su vidurkiu: jei baigs kaip įprastai, iki pabaigos",
+        "proximo": "Su vidurkiu: jei baigs kaip įprastai, kitoje partijoje"
       },
       "usual": {
         "one": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
@@ -3743,8 +3745,8 @@
         "many": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})",
         "other": "{{name}} paprastai baigia su {{points}} ({{value}}/part., stalų: {{count}})"
       },
-      "short": "Taip baigus, {{name}} pritrūks {{value}}: reikia {{hands}}.",
-      "jaPassa": "Taip baigus, {{name}} aplenks {{value}} skirtumu.",
+      "short": "Taip baigus, {{name}} atsiliks {{value}} (taškais: {{points}}). Pasivyti: {{hands}}.",
+      "jaPassa": "Taip baigus, {{name}} aplenks {{value}} skirtumu (taškais: {{points}}).",
       "jaEmpata": "Taip baigus, {{name}} sulygins.",
       "chance": "Tikimybė aplenkti:",
       "fewGames": "Tikimybei reikia bent {{count}} stalų kiekvienam.",

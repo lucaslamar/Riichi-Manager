@@ -95,7 +95,7 @@ export default function EstatisticasJogador({
       )}
       {textoPrazo && <p className="est-apoio">{textoPrazo}</p>}
       {viradas.tipo === 'projecao' ? (
-        <ProjecaoProximo linhas={linhas} jogadorId={jogadorId} nome={nome} />
+        <ProjecaoProximo linhas={linhas} jogadorId={jogadorId} nome={nome} regras={regras} />
       ) : (
         <div aria-live="polite">
           <ListaViradas

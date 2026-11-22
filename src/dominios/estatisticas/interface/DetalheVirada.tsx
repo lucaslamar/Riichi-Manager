@@ -3,6 +3,7 @@ import type { RegrasDoModo, UnidadeDistancia } from '@/compartilhado/modo-jogo/r
 import type { ValoresUma } from '@/dominios/centerpiece/logica/uma'
 import { cenariosComUma, cenariosDoLider, necessidade, situacaoDaVirada } from '../logica/viradas'
 import type { FormaDoJogador } from '../logica/forma'
+import MaosSemMedia from './MaosSemMedia'
 import ProjecaoForma from './ProjecaoForma'
 import { useFormatoEstatisticas } from './useFormatoEstatisticas'
 
@@ -64,13 +65,7 @@ export default function DetalheVirada({
   }
   const maos = (quantas: number, item: UnidadeDistancia) =>
     t(`tournament.podiumGap.hands.${item.id}`, { count: quantas })
-  const porCaminho = (caminho: 'terceiros' | 'direto') =>
-    unidades
-      .map((item) => {
-        const precisa = necessidade(diferenca, item, regras)
-        return precisa.situacao === 'precisa' ? maos(precisa[caminho], item) : ''
-      })
-      .join(' · ')
+
   const oQuePrecisa = (alvo: number) => {
     const precisa = necessidade(alvo, referencia, regras)
     return precisa.situacao === 'precisa'
@@ -83,19 +78,15 @@ export default function DetalheVirada({
 
   return (
     <div className="est-virada">
+      {/* Os dois, sempre nesta ordem: a conta seca e depois pelo costume de cada um. */}
+      <MaosSemMedia
+        diferenca={diferenca}
+        lider={lider}
+        regras={regras}
+        unidades={unidades}
+        restantes={restantes}
+      />
       {projecao}
-      {restantes !== null && restantes > 1 && (
-        <p className="est-apoio">
-          {t('stats.turn.perGame', { games: restantes, value: decimal(diferenca / restantes) })}
-        </p>
-      )}
-      <dl className="est-caminhos">
-        <dt>{t('stats.turn.thirdParty')}</dt>
-        <dd>{porCaminho('terceiros')}</dd>
-        <dt>{t('stats.turn.direct', { name: lider })}</dt>
-        <dd>{porCaminho('direto')}</dd>
-      </dl>
-      <p className="est-apoio">{t('stats.turn.directHelp')}</p>
       <table className="est-cenarios">
         <thead>
           <tr>

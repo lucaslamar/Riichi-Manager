@@ -52,7 +52,7 @@ button.est-linha {
   line-height: 1.4;
 }
 
-.est-forma {
+.est-bloco {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -64,7 +64,7 @@ button.est-linha {
 }
 
 .est-forma ul,
-.est-forma p {
+.est-bloco p {
   margin: 0;
 }
 
@@ -75,7 +75,7 @@ button.est-linha {
   list-style: none;
 }
 
-.est-forma-titulo {
+.est-bloco-titulo {
   color: var(--primario);
 }
 
@@ -229,6 +229,12 @@ button.est-linha {
 .est-titulo {
   margin: 8px 0 4px;
   font-size: 0.95rem;
+}
+
+.est-proximo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .est-projecao {

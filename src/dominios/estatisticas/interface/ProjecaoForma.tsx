@@ -6,7 +6,7 @@ import {
   projetarPelaForma,
   type FormaDoJogador,
 } from '../logica/forma'
-import { necessidade } from '../logica/viradas'
+import { necessidade, pontosDeMesa } from '../logica/viradas'
 import { useFormatoEstatisticas } from './useFormatoEstatisticas'
 
 interface Lado {
@@ -41,12 +41,17 @@ export default function ProjecaoForma({
       ? t('stats.form.short', {
           name: perseguidor.nome,
           value: decimal(falta),
+          points: numero(pontosDeMesa(falta, regras)),
           hands: t('stats.turn.either', {
             hands: t(`tournament.podiumGap.hands.${unidade.id}`, { count: precisa.terceiros }),
             count: precisa.direto,
           }),
         })
-      : t(`stats.form.${precisa.situacao}`, { name: perseguidor.nome, value: decimal(-falta) })
+      : t(`stats.form.${precisa.situacao}`, {
+          name: perseguidor.nome,
+          value: decimal(-falta),
+          points: numero(pontosDeMesa(-falta, regras)),
+        })
 
   // 0% e 100% dariam certeza, e isto é estimativa.
   const textoChance = (valor: number) => {
@@ -57,8 +62,8 @@ export default function ProjecaoForma({
   }
 
   return (
-    <div className="est-forma">
-      <strong className="est-forma-titulo">{t(`stats.form.title.${ate}`)}</strong>
+    <div className="est-bloco est-forma">
+      <strong className="est-bloco-titulo">{t(`stats.form.title.${ate}`)}</strong>
       <ul>
         {[perseguidor, lider].map(({ nome, forma, restantes }) =>
           forma && restantes !== 0 ? (

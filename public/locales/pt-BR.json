@@ -3563,7 +3563,7 @@
   "stats": {
     "turn": {
       "noGamesLeft": "Não há mais jogos: a diferença é final.",
-      "perGame": "Jogos que faltam: {{games}}. Precisa tirar {{value}} por jogo.",
+      "perGame": "Jogos que faltam: {{games}}. Precisa tirar {{value}} por jogo, que são {{points}} pontos de mesa sem contar uma.",
       "thirdParty": "Por ron de terceiros",
       "direct": "Por ron direto em {{name}}",
       "directHelp": "No ron direto, cada ponto conta em dobro na diferença.",
@@ -3585,7 +3585,8 @@
       "jaPassa": "já passa",
       "jaEmpata": "já empata",
       "title": "Cenários de virada",
-      "onlyLeader": "{{name}} não joga mais. Passa se {{leader}} perder mais de {{value}}."
+      "onlyLeader": "{{name}} não joga mais. Passa se {{leader}} perder mais de {{value}}.",
+      "withoutAverage": "Sem a média: {{value}} de diferença agora ({{points}} pontos)"
     },
     "title": "Estatísticas",
     "tournamentTitle": "Estatísticas do torneio",
@@ -3637,20 +3638,21 @@
       },
       "poucosJogos": "Poucos jogos para projetar (mínimo de {{count}} para cada um).",
       "mediaMenor": "não dá para projetar, porque a média não é maior.",
-      "longeDemais": "não dá para projetar, porque as médias estão próximas demais."
+      "longeDemais": "não dá para projetar, porque as médias estão próximas demais.",
+      "withAverage": "Com a média"
     },
     "withoutWo": "Sem partidas com W.O. ({{count}})",
     "form": {
       "title": {
-        "fim": "Se terminarem como costumam, até o fim",
-        "proximo": "Se terminarem como costumam, no próximo jogo"
+        "fim": "Com a média: se terminarem como costumam, até o fim",
+        "proximo": "Com a média: se terminarem como costumam, no próximo jogo"
       },
       "usual": {
         "one": "{{name}} costuma terminar com {{points}} ({{value}}/jogo, {{count}} mesa)",
         "other": "{{name}} costuma terminar com {{points}} ({{value}}/jogo, {{count}} mesas)"
       },
-      "short": "Se terminar assim, {{name}} fica {{value}} atrás. Para passar ou empatar: {{hands}}.",
-      "jaPassa": "Se terminar assim, {{name}} passa com {{value}} de folga.",
+      "short": "Se terminar assim, {{name}} fica {{value}} atrás ({{points}} pontos). Para passar ou empatar: {{hands}}.",
+      "jaPassa": "Se terminar assim, {{name}} passa com {{value}} de folga ({{points}} pontos).",
       "jaEmpata": "Se terminar assim, {{name}} empata.",
       "chance": "Chance de virar:",
       "fewGames": "Chance de virar só com {{count}} mesas ou mais de cada um.",
