@@ -891,3 +891,28 @@ body.teclado-aberto .barra-navegacao-inferior {
 .titulo-tela:focus {
   outline: none;
 }
+
+/* Mouse: itens mais baixos, para o menu caber inteiro. No toque seguem com 44px. */
+@media (min-width: 1024px) and (orientation: landscape) and (hover: hover) and (pointer: fine) {
+  body:not(.toque-ampliado) .sidebar-navegacao-desktop .item-menu-global {
+    min-height: 36px;
+    padding-block: 4px;
+  }
+
+  body:not(.toque-ampliado) .sidebar-navegacao-desktop .item-menu-sub {
+    min-height: 30px;
+  }
+
+  body:not(.toque-ampliado) .sidebar-navegacao-desktop .drawer-itens {
+    gap: 2px;
+  }
+}
+
+/* Menu lateral: título comprido quebra linha em vez de cortar o número da mesa. */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .barra-marca-aplicacao > .cabecalho-tela > .titulo-tela {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.3;
+  }
+}
