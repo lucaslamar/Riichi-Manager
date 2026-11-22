@@ -23,7 +23,7 @@
 - **Tipo do torneio**: aparece nos cards de Em andamento e nas imagens e textos da rodada e do ranking.
 - **Qualidade do sorteio em todos os formatos**: uma linha com a nota em cada rodada, que abre sozinha quando pede atenção. Mostra as repetições, os detalhes por jogador e, quando dá para refazer, Sortear de novo com comparação e Voltar ao anterior. No Ranking, o novo botão Estatística da grade abre os detalhes.
 - **Aviso de rodadas ideais**: com 8 ou 12 jogadores, as configurações avisam a partir de quando a repetição é inevitável.
-- **Sorteio que espalha as repetições**: o Torneio evita, nesta ordem, Leste repetido, dupla 3 vezes junta, trio repetido e repetições concentradas numa pessoa. Com os ventos na mesa, eles não pesam. Com 16 jogadores (e 9 no Sanma), o Brasileirão faz 5 (e 4) rodadas sem repetir adversário.
+- **Sorteio que espalha as repetições**: o Torneio evita, nesta ordem, Leste repetido, dupla 3 vezes junta, trio repetido e repetições concentradas numa pessoa. Com os ventos na mesa, eles não pesam. Com 16 jogadores, o Brasileirão faz 5 rodadas sem repetir adversário.
 
 ### Corrigido
 

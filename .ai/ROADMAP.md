@@ -10,8 +10,8 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 ## Aguardando decisão
 
 - **3C, grades ZAPS:** só com autorização do autor (licença NC).
-- **WO no Chinês e no Sanma:** sem valores definidos, por isso o botão não aparece. Conferir atraso e WO na WRC 2025 e na EMA (os números vieram do brief).
-- **Jogar Sanma quando falta um:** proposto no brief e fora por enquanto, porque o registro manual só aceita 4 jogadores.
+- **WO no Chinês:** sem valores definidos, por isso o botão não aparece. Conferir atraso e WO na WRC 2025 e na EMA (os números vieram do brief).
+- **Sanma no Torneio:** saiu de propósito em `ef63b2b` (10/11/2026), antes de ser publicado, e o Torneio é sempre de 4. Só voltar se o usuário decidir. Aí faltam a escolha de 3 ou 4, o registro de 3 (hoje exige os 4 lugares), os cortes em múltiplos de 3, os valores de WO e o "Jogar Sanma quando falta um" do brief.
 
 ## Premiação
 
@@ -26,10 +26,8 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 
 ## Problemas conhecidos
 
-- Torneio de Sanma: pelo código, Registrar resultado não habilita, porque exige os 4 lugares e a soma de 4 (visto na leitura, sem teste na tela).
 - O fim do tempo não encerra a partida na mão atual, embora a ajuda diga que sim.
 - A ajuda do timer de vez cita a aba Mesa, que não existe mais nas configurações do torneio.
-- Os cortes do Eliminatório no Sanma são lidos como múltiplos de 4 no campo.
 - `npm run lint` varre `.claude/skills` e falha num script de lá.
 
 ## Desktop
