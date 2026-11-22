@@ -28,6 +28,7 @@ import CardAssento from '../componentes/CardAssento'
 import ConfirmarRegistro from '../componentes/ConfirmarRegistro'
 import { nomesNoRanking } from '../componentes/nomesNoRanking'
 import { somaFecha } from '../../logica/expressaoPontos'
+import type { MudancaRanking } from '../../logica/ranking'
 import RegrasPontuacaoRegistro, { useResumo } from '../componentes/RegrasPontuacaoRegistro'
 import { assentosDaMesa } from '../hooks/useClube'
 import { usePartidas } from '../hooks/usePartidas'
@@ -63,6 +64,8 @@ export default function RegistrarFinalizada({
     vinculo: NonNullable<Partida['vinculoTorneio']>
     /** Corrigir: os pontos do resultado que já existe. */
     pontosIniciais?: readonly number[]
+    /** Como o ranking do torneio fica com este resultado. */
+    mudancas: (previa: Partida) => MudancaRanking[]
   }
 }) {
   const { t, numero } = useI18n()
@@ -342,9 +345,10 @@ export default function RegistrarFinalizada({
           resultado={previa.resultado}
           nomeDe={nomeDaPrevia}
           // Torneio: a mesa vale para o ranking do torneio, não para o geral.
+          tituloRanking={torneio ? 'tournament.positionChange.confirmTitle' : undefined}
           mudancas={
             torneio
-              ? []
+              ? torneio.mudancas(previa)
               : mudancaNoRanking(partidas, previa, new Date(), (id) =>
                   jogadores.some((jogador) => jogador.id === id),
                 )

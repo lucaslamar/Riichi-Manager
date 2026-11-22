@@ -139,6 +139,12 @@ export function mudancaAoRegistrar(
   })
 }
 
+/** "▲2", "▼1" ou vazio, para o compartilhamento. */
+export function textoDaSeta(mudanca: MudancaPosicao | undefined): string {
+  if (!mudanca?.variacao) return ''
+  return mudanca.variacao > 0 ? `▲${mudanca.variacao}` : `▼${-mudanca.variacao}`
+}
+
 /** Texto do ranking para o WhatsApp. */
 export function textoDoRanking(
   linhas: readonly LinhaRankingTorneio[],

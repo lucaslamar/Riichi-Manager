@@ -2031,6 +2031,19 @@
       "previousPlayer": "前のプレイヤー",
       "nextPlayer": "次のプレイヤー",
       "typeFor": "{{name}} の点数を入力"
+    },
+    "positionChange": {
+      "up": {
+        "other": "{{count}}つ上昇"
+      },
+      "down": {
+        "other": "{{count}}つ下降"
+      },
+      "same": "順位変わらず",
+      "new": "ランキング初登場",
+      "newShort": "新",
+      "legend": "矢印：第{{round}}回戦からの変化。",
+      "confirmTitle": "大会ランキング：前 → 後"
     }
   },
   "backup": {

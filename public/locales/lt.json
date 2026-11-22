@@ -2111,6 +2111,25 @@
       "previousPlayer": "Ankstesnis žaidėjas",
       "nextPlayer": "Kitas žaidėjas",
       "typeFor": "Įvesti {{name}} taškus"
+    },
+    "positionChange": {
+      "up": {
+        "one": "Pakilo {{count}} vieta",
+        "few": "Pakilo {{count}} vietomis",
+        "many": "Pakilo {{count}} vietos",
+        "other": "Pakilo {{count}} vietų"
+      },
+      "down": {
+        "one": "Nukrito {{count}} vieta",
+        "few": "Nukrito {{count}} vietomis",
+        "many": "Nukrito {{count}} vietos",
+        "other": "Nukrito {{count}} vietų"
+      },
+      "same": "Vieta nepakito",
+      "new": "Reitinge pirmą kartą",
+      "newShort": "naujas",
+      "legend": "Rodyklės: pokytis nuo {{round}} turo.",
+      "confirmTitle": "Turnyro reitingas: prieš → po"
     }
   },
   "backup": {

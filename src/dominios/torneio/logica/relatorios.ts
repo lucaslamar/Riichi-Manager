@@ -90,8 +90,13 @@ export function relatorioDoRanking(
     valores: (linha: LinhaRankingTorneio) => readonly string[]
     /** Só os pontos, para o pódio. */
     pontos: (valor: number) => string
+    /** Seta da mudança de posição ("▲2", "▼1" ou vazio), quando há comparação. */
+    seta?: (jogadorId: string) => string
   },
 ): Relatorio {
+  const setas = new Map(linhas.map((linha) => [linha.jogadorId, rotulos.seta?.(linha.jogadorId) ?? '']))
+  const larguraSeta = Math.max(0, ...[...setas.values()].map((seta) => seta.length))
+  const setaDe = (linha: LinhaRankingTorneio) => setas.get(linha.jogadorId) ?? ''
   const jaJogaram = linhas.some((linha) => linha.partidas > 0)
   const podio: BlocoRelatorio = {
     so: 'texto',
@@ -109,14 +114,14 @@ export function relatorioDoRanking(
     tabela: true,
     colunas: rotulos.colunas,
     linhas: linhas.map((linha) => ({
-      esquerda: `${(linha.partidas > 0 ? String(linha.posicao) : '–').padStart(2)} ${rotulos.nome(linha.jogadorId)}`,
+      esquerda: `${(linha.partidas > 0 ? String(linha.posicao) : '–').padStart(2)}${setaDe(linha).padEnd(larguraSeta)} ${rotulos.nome(linha.jogadorId)}`,
       direita: rotulos.valores(linha),
     })),
   }
   const lista: BlocoRelatorio = {
     so: 'imagem',
     linhas: linhas.map((linha) => ({
-      esquerda: `${linha.partidas === 0 ? '–' : (MEDALHAS[linha.posicao - 1] ?? `${linha.posicao}.`)} ${rotulos.nome(linha.jogadorId)}`,
+      esquerda: `${linha.partidas === 0 ? '–' : (MEDALHAS[linha.posicao - 1] ?? `${linha.posicao}.`)}${setaDe(linha)} ${rotulos.nome(linha.jogadorId)}`,
       direita: rotulos.valores(linha),
       destaque: linha.partidas > 0 && linha.posicao <= 3,
       ...tomDe(linha.pontos),

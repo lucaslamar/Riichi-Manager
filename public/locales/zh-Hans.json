@@ -2031,6 +2031,19 @@
       "previousPlayer": "上一位玩家",
       "nextPlayer": "下一位玩家",
       "typeFor": "输入 {{name}} 的分数"
+    },
+    "positionChange": {
+      "up": {
+        "other": "上升{{count}}位"
+      },
+      "down": {
+        "other": "下降{{count}}位"
+      },
+      "same": "名次不变",
+      "new": "首次进入排名",
+      "newShort": "新",
+      "legend": "箭头：自第{{round}}轮以来的变化。",
+      "confirmTitle": "赛事排名：之前 → 之后"
     }
   },
   "backup": {

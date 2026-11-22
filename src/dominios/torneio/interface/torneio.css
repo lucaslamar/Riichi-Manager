@@ -1103,3 +1103,23 @@ body.teclado-aberto .trn-rodape-icones .clb-enviar {
 .cfg-ajuda.trn-exportar-ajuda {
   margin-top: 10px;
 }
+
+/* Mudança de posição: junto do número, sem coluna nova. */
+.trn-seta-posicao {
+  position: relative;
+  display: inline-block;
+  min-width: 22px;
+  margin-left: 2px;
+  color: var(--texto-apoio);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.trn-tabela-ranking td:first-child {
+  white-space: nowrap;
+}
+
+.cfg-ajuda.trn-legenda-setas {
+  margin-top: 8px;
+}

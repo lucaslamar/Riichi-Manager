@@ -6,9 +6,10 @@ import { ModalConfirmacao } from '@/dominios/centerpiece/interface/componentes/M
 import { useAviso } from '@/dominios/centerpiece/interface/hooks/useAviso'
 import { usePartidasDoTorneio } from '@/dominios/torneio/interface/hooks/usePartidasDoTorneio'
 import { useJogadores } from '@/dominios/jogadores/interface/hooks/useJogadores'
-import { rankingDoTorneio } from '../../logica/ranking'
+import { mudancasDoRanking, rankingDoTorneio, textoDaSeta } from '../../logica/ranking'
 import { relatorioDoRanking } from '../../logica/relatorios'
 import FolhaCompartilhar from '../componentes/FolhaCompartilhar'
+import SetaPosicao from '../componentes/SetaPosicao'
 import { nomeDeArquivo } from '@/compartilhado/relatorio/relatorio'
 import type { Torneio } from '../../logica/tipos'
 import { useTorneios } from '../hooks/useTorneios'
@@ -39,6 +40,8 @@ export default function PaginaRankingTorneio({
   const [compartilhando, setCompartilhando] = useState(false)
   const podeEncerrar = torneio.status === 'em_andamento' && !torneio.transferidoEm
   const linhas = useMemo(() => rankingDoTorneio(torneio, partidas), [torneio, partidas])
+  const mudancas = useMemo(() => mudancasDoRanking(torneio, partidas), [torneio, partidas])
+  const mudancaDe = (id: string) => mudancas?.jogadores.find((item) => item.jogadorId === id)
   const eliminatorio = torneio.formato.tipo === 'eliminatorio'
 
   const nomeDe = (id: string) => nomeNoTorneio(torneio, jogadores, id)
@@ -69,8 +72,8 @@ export default function PaginaRankingTorneio({
         ...(eliminatorio ? [fase(linha.fase ?? 0)] : []),
       ],
       pontos,
+      seta: (id) => textoDaSeta(mudancaDe(id)),
     })
-
 
   return (
     <section className="ptd-inicio trn-pagina trn-ranking">
@@ -156,6 +159,7 @@ export default function PaginaRankingTorneio({
                   ) : (
                     linha.posicao
                   )}
+                  <SetaPosicao mudanca={mudancaDe(linha.jogadorId)} />
                 </td>
                 <td>{nomeDe(linha.jogadorId)}</td>
                 <td className={linha.pontos > 0 ? 'trn-positivo' : linha.pontos < 0 ? 'trn-negativo' : undefined}>
@@ -169,6 +173,11 @@ export default function PaginaRankingTorneio({
           </tbody>
         </table>
       </div>
+      {mudancas && (
+        <p className="cfg-ajuda trn-legenda-setas">
+          {t('tournament.positionChange.legend', { round: mudancas.desde })}
+        </p>
+      )}
 
       {/* Compartilhar: a classificação em texto, imagem ou PDF. */}
       {compartilhando && (

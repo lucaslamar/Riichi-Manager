@@ -14,6 +14,7 @@ import { useTorneios } from '@/dominios/torneio/interface/hooks/useTorneios'
 import PaginaTemporada from '@/dominios/torneio/interface/paginas/PaginaTemporada'
 import PaginaTorneio from '@/dominios/torneio/interface/paginas/PaginaTorneio'
 import { criarRascunho, nomeNoTorneio, sorteiaVentos } from '@/dominios/torneio/logica/torneio'
+import { mudancaAoRegistrar } from '@/dominios/torneio/logica/ranking'
 import { gerarId } from '@/compartilhado/adaptadores/identificador'
 import { mesasRegistradas, type MesaDoSorteio } from '../../logica/encontroClube'
 import { usoDoJogadorNasPartidas } from '../../logica/ranking'
@@ -339,6 +340,16 @@ function TelasCenterpiece({
                       ?.pontosBrutos ?? substituir.placar.pontos[cadeira as 0 | 1 | 2 | 3],
                 )
               : undefined,
+            mudancas: (previa) =>
+              mudancaAoRegistrar(
+                torneio,
+                partidas,
+                {
+                  ...previa,
+                  vinculoTorneio: { torneioId: torneio.id, rodada: tela.rodada - 1, mesa: tela.mesa - 1 },
+                },
+                substituir?.id,
+              ),
           }}
           aoVoltar={voltar}
           aoRegistrar={() => {

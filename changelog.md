@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Setas no ranking do torneio**: quando a rodada fecha, o ranking mostra quem subiu, caiu ou estreou, também no texto e na imagem compartilhados. A confirmação do resultado mostra como cada um fica no ranking do torneio.
 - **Pontos pelo teclado**: a folha de pontos do registro aceita o teclado físico (números, + e −, apagar, Enter para OK e Esc para fechar). No celular, tocar no visor abre o teclado do sistema, com o sinal de menos.
 
 ### Corrigido

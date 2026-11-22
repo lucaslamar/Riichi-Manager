@@ -6,19 +6,22 @@ import type { Cadeira, ResultadoFinal } from '../../logica/partida'
 /**
  * Confirmação do Registrar partida finalizada: uma linha por jogador com a
  * colocação, os pontos da mesa e, para quem está no cadastro, como fica no
- * ranking geral (posição e total, antes → depois).
+ * ranking (o geral ou, no torneio, o do torneio): posição e total, antes → depois.
  */
 export default function ConfirmarRegistro({
   resultado,
   nomeDe,
   mudancas,
+  tituloRanking = 'match.manual.rankingTitle',
   aoConfirmar,
   aoFechar,
 }: {
   resultado: readonly ResultadoFinal[]
   nomeDe: (cadeira: Cadeira) => string
-  /** Vazio no torneio; convidados (fora do cadastro) não têm linha aqui. */
+  /** No ranking geral, convidados (fora do cadastro) não têm linha aqui. */
   mudancas: readonly MudancaRanking[]
+  /** Chave do texto que diz qual ranking é. */
+  tituloRanking?: string
   aoConfirmar: () => void
   aoFechar: () => void
 }) {
@@ -77,10 +80,10 @@ export default function ConfirmarRegistro({
                   )}
                 </dl>
                 {depois && (
-                  // Ranking geral: posição e total antes → depois.
+                  // Posição e total antes → depois.
                   <span className="fin-mudanca-ranking">
                     <i className="fas fa-ranking-star" aria-hidden="true" />
-                    <span className="sr-only">{t('match.manual.rankingTitle')}: </span>
+                    <span className="sr-only">{t(tituloRanking)}: </span>
                     {antes ? lugar(antes.posicao) : t('match.manual.firstGame')}
                     <i className="fas fa-arrow-right fin-seta" aria-hidden="true" />
                     <strong>{lugar(depois.posicao)}</strong>
@@ -105,7 +108,7 @@ export default function ConfirmarRegistro({
           )
         })}
       </ol>
-      {mudancas.length > 0 && <p className="cfg-ajuda fin-legenda">{t('match.manual.rankingTitle')}</p>}
+      {mudancas.length > 0 && <p className="cfg-ajuda fin-legenda">{t(tituloRanking)}</p>}
     </Modal>
   )
 }

@@ -2031,6 +2031,19 @@
       "previousPlayer": "이전 플레이어",
       "nextPlayer": "다음 플레이어",
       "typeFor": "{{name}} 점수 입력"
+    },
+    "positionChange": {
+      "up": {
+        "other": "{{count}}계단 상승"
+      },
+      "down": {
+        "other": "{{count}}계단 하락"
+      },
+      "same": "순위 유지",
+      "new": "랭킹 첫 등장",
+      "newShort": "신규",
+      "legend": "화살표: {{round}}라운드 이후 변화.",
+      "confirmTitle": "대회 랭킹: 이전 → 이후"
     }
   },
   "backup": {

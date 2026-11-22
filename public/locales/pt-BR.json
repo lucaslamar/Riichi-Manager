@@ -2053,6 +2053,21 @@
       "previousPlayer": "Jogador anterior",
       "nextPlayer": "Próximo jogador",
       "typeFor": "Digitar os pontos de {{name}}"
+    },
+    "positionChange": {
+      "up": {
+        "one": "Subiu {{count}} posição",
+        "other": "Subiu {{count}} posições"
+      },
+      "down": {
+        "one": "Caiu {{count}} posição",
+        "other": "Caiu {{count}} posições"
+      },
+      "same": "Manteve a posição",
+      "new": "Estreia no ranking",
+      "newShort": "novo",
+      "legend": "Setas: mudança desde a rodada {{round}}.",
+      "confirmTitle": "Ranking do torneio: antes → depois"
     }
   },
   "backup": {

@@ -2060,6 +2060,23 @@
       "previousPlayer": "Jugador anterior",
       "nextPlayer": "Siguiente jugador",
       "typeFor": "Escribir los puntos de {{name}}"
+    },
+    "positionChange": {
+      "up": {
+        "one": "Subió {{count}} puesto",
+        "many": "Subió {{count}} de puestos",
+        "other": "Subió {{count}} puestos"
+      },
+      "down": {
+        "one": "Bajó {{count}} puesto",
+        "many": "Bajó {{count}} de puestos",
+        "other": "Bajó {{count}} puestos"
+      },
+      "same": "Mantuvo el puesto",
+      "new": "Debuta en el ranking",
+      "newShort": "nuevo",
+      "legend": "Flechas: cambio desde la ronda {{round}}.",
+      "confirmTitle": "Ranking del torneo: antes → después"
     }
   },
   "backup": {

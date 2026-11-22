@@ -2053,6 +2053,21 @@
       "previousPlayer": "Previous player",
       "nextPlayer": "Next player",
       "typeFor": "Type the points for {{name}}"
+    },
+    "positionChange": {
+      "up": {
+        "one": "Up {{count}} place",
+        "other": "Up {{count}} places"
+      },
+      "down": {
+        "one": "Down {{count}} place",
+        "other": "Down {{count}} places"
+      },
+      "same": "Same position",
+      "new": "New in the ranking",
+      "newShort": "new",
+      "legend": "Arrows: change since round {{round}}.",
+      "confirmTitle": "Tournament ranking: before → after"
     }
   },
   "backup": {
