@@ -82,6 +82,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - `AjudaCampo` não vai dentro de `<label>` que envolve um campo: use um `div` e dê `aria-label` ao campo.
 - Selo do formato ao lado de "em andamento" no card, na rodada e no ranking. O nome trunca, os selos não.
 - Encerrar fica ao lado do Ranking, sempre com confirmação.
+- Ordem no topo da rodada (pedido do usuário em 22/11/2026): Encerrar, Ranking, Compartilhar, ⋮. Sem Encerrar (torneio finalizado), começa no Ranking.
 - Ranking: visão e filtros ficam numa barra abaixo do nome do torneio, não no cabeçalho (no desktop ele é estreito).
 - Ranking: a linha inteira abre a folha da distância, com um botão no nome para teclado e leitor de tela. A folha mostra Mangan, Haneman e Yakuman, e o Baiman fica no leitor de tela e em "Distância em".
 - Card do jogador, nesta ordem: cabeçalho (nome, posição, pontos, compartilhar, setas, fechar), Comparar com (é filtro, vem antes do que filtra), divisória, lista e o rodapé Aproximado. Os números ficam recolhidos numa linha antes do rodapé.

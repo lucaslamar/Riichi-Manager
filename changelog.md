@@ -44,6 +44,7 @@
 - **Card do jogador no ranking do torneio**: o compartilhar foi para o topo e o Comparar com vem antes da lista.
 - **Posição anterior no ranking do torneio**: embaixo da seta aparece de onde a pessoa veio ("era 2º"), e o card diz em qual rodada.
 - **Barra no registro da partida**: como na Lista, fica presa embaixo com a soma da mesa, o disquete de salvar para continuar e o Registrar.
+- **Topo da rodada do torneio**: Encerrar e Ranking trocaram de lugar.
 - **Pontos sem apagar**: no teclado de pontos o primeiro dígito substitui o valor, e a soma da mesa acompanha o que é digitado.
 - **Ranking no iPad e no PC**: uma linha por jogador, com as colunas alinhadas para comparar.
 - **iPad em pé**: Registrar partida, Nova partida, listas, Ranking e análise do jogador usam a tela inteira, com letra maior no Pro 13.
