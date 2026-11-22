@@ -180,8 +180,20 @@ export function ventosPadrao(formato: FormatoTorneio): boolean {
   return formato === 'rodizio'
 }
 
-export function sorteiaVentos(torneio: Pick<Torneio, 'sortearVentos' | 'formato'>): boolean {
+/** All Leste (rodízio), também na classificatória: sem vento sorteado a grade não garante um Leste para cada. */
+export function exigeVentos(formato: ConfigFormato): boolean {
+  return formato.tipo === 'rodizio' || (formato.tipo === 'eliminatorio' && formato.classificatoria === 'rodizio')
+}
+
+/** Torneio já sorteado segue como começou, mesmo se a regra do formato mudou depois. */
+export function sorteiaVentos(torneio: Pick<Torneio, 'sortearVentos' | 'formato' | 'status'>): boolean {
+  if (torneio.status === 'rascunho' && exigeVentos(torneio.formato)) return true
   return torneio.sortearVentos ?? ventosPadrao(torneio.formato.tipo)
+}
+
+/** Todo sorteio do zero do All Leste sai com ventos. */
+export function comVentosDoFormato(torneio: Torneio): Torneio {
+  return exigeVentos(torneio.formato) ? { ...torneio, sortearVentos: true } : torneio
 }
 
 /** "?" foi gravado por versões que já não achavam o nome: não é um nome. */
@@ -221,7 +233,7 @@ export function iniciarTorneio(
   rodadas: RodadaTorneio[],
   agora: string,
 ): Torneio {
-  return { ...torneio, jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
+  return { ...comVentosDoFormato(torneio), jogadorIds, rodadas, status: 'em_andamento', atualizadoEm: agora }
 }
 
 /** Aborta o sorteio: o torneio volta a ser rascunho, sem rodadas, para editar a lista e sortear de novo. */

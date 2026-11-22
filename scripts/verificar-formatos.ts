@@ -31,7 +31,7 @@ import {
 } from '../src/dominios/torneio/logica/formatos/eliminatorio'
 import { podeSortearDeNovo, podeSortearRodada, relogioDaRodada, sortearDeNovo, statusNaTela, textoDaRodada } from '../src/dominios/torneio/logica/mesas'
 import { acrescentar, formatarRelogio, iniciar, pausar, segundosRestantes } from '../src/dominios/torneio/logica/relogio'
-import { relogioParado } from '../src/dominios/torneio/logica/torneio'
+import { sorteiaVentos, relogioParado } from '../src/dominios/torneio/logica/torneio'
 import { rankingDoTorneio, textoDoRanking } from '../src/dominios/torneio/logica/ranking'
 import { relatorioDaRodada, relatorioDoRanking } from '../src/dominios/torneio/logica/relatorios'
 import { nomeDeArquivo, textoDoRelatorio } from '../src/compartilhado/relatorio/relatorio'
@@ -529,3 +529,27 @@ for (const total of [8, 12, 16]) {
 }
 
 console.log('Formatos ok.')
+
+// ─── All Leste só com ventos ─────────────────────────────────────────────────
+{
+  const agoraVentos = new Date(2026, 10, 22)
+  const semVentos = { ...criarRascunho({ id: 'ventos', agora: agoraVentos, nome: 'T' }), sortearVentos: false }
+  const rodizio = { ...semVentos, formato: { tipo: 'rodizio' as const, rodadas: 4 } }
+  const classificatoria = {
+    ...semVentos,
+    formato: {
+      tipo: 'eliminatorio' as const,
+      classificatoria: 'rodizio' as const,
+      rodadasClassificatoria: 4,
+      cortes: [4],
+      rodadasPorFase: 1,
+      pontosCarregados: true,
+    },
+  }
+  assert.ok(sorteiaVentos(rodizio), 'rascunho de All Leste tem ventos mesmo salvo sem')
+  assert.ok(sorteiaVentos(classificatoria), 'classificatória All Leste também')
+  assert.ok(!sorteiaVentos(semVentos), 'os outros formatos seguem a escolha')
+  assert.equal(iniciarTorneio(rodizio, [], [], '').sortearVentos, true, 'começa com ventos')
+  assert.ok(!sorteiaVentos({ ...rodizio, status: 'em_andamento' }), 'o que já começou não muda')
+  console.log('All Leste só com ventos: ok')
+}

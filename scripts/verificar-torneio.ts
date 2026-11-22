@@ -46,7 +46,7 @@ assert.equal(config.pontosRetorno, 30000)
 const rascunho = criarRascunho({ id: 'r', agora, nome: 'Encontro do clube 08/11' })
 assert.equal(rascunho.status, 'rascunho')
 assert.equal(rascunho.data, '2026-11-08')
-// Padrão: Brasileirão (rodadas sorteadas na hora, sem total fixo) e 1h por rodada.
+// Padrão: Pontos corridos rápido (rodadas sorteadas na hora, sem total fixo) e 1h por rodada.
 assert.equal(rascunho.formato.tipo, 'corridos')
 assert.equal(rascunho.timers.rodadaSegundos, 60 * 60)
 assert.equal(totalDeRodadas(formatoPadrao('rodizio')), 4)
