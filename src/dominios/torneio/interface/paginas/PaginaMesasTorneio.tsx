@@ -47,6 +47,7 @@ import '../torneio.css'
 import { useNomeNoTorneio } from '../hooks/useNomeNoTorneio'
 import { regrasWoDe } from '../../logica/wo'
 import FolhaAusencia from '../componentes/FolhaAusencia'
+import { useEnviarRelatorio } from '../hooks/useEnviarRelatorio'
 import { useCompartilharResultado } from '../hooks/useCompartilharResultado'
 
 /** Agora, atualizado a cada segundo enquanto algum relógio corre. */
@@ -133,6 +134,16 @@ export default function PaginaMesasTorneio({
   useEffect(() => {
     if (emJogo) setAbaRodada(emJogo.numero)
   }, [emJogo?.numero]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Os mesmos Texto e Imagem do ícone Compartilhar, chamados direto do menu.
+  const envio = useEnviarRelatorio({
+    relatorio: () => relatorio(),
+    nomeArquivo: rodada
+      ? nomeDeArquivo(torneio.nome, t('tournament.tables.round', { round: rodada.numero }))
+      : '',
+    aoAvisar: mostrar,
+    aoFechar: () => setMenu(false),
+  })
 
   if (!rodada) return null
 
@@ -583,12 +594,49 @@ export default function PaginaMesasTorneio({
             </button>
           </li>
           </ul>
-          {(podeRefazer || (torneio.status === 'em_andamento' && !somenteLeitura)) && (
+          <h3 id="trn-menu-enviar" className="trn-menu-titulo">
+            {t('tournament.tables.menuShare')}
+          </h3>
+          <ul className="trn-menu trn-menu-grupo" aria-labelledby="trn-menu-enviar">
+            <li>
+              <button type="button" disabled={envio.gerando} onClick={envio.texto}>
+                <i className="fas fa-align-left" aria-hidden="true" />
+                <span>{t('tournament.tables.menuText')}</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" disabled={envio.gerando} onClick={envio.imagem}>
+                <i className="fas fa-image" aria-hidden="true" />
+                <span>{t('tournament.tables.menuImage')}</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" onClick={() => {
+                setMenu(false)
+                setExportando(true)
+              }}>
+                <i className="fas fa-file-export" aria-hidden="true" />
+                <span>{t('tournament.export.button')}</span>
+              </button>
+            </li>
+          </ul>
+          {(podeEncerrar(torneio) || podeRefazer || (torneio.status === 'em_andamento' && !somenteLeitura)) && (
           <>
           <h3 id="trn-menu-acoes" className="trn-menu-titulo">
             {t('tournament.tables.menuActions')}
           </h3>
           <ul className="trn-menu trn-menu-grupo" aria-labelledby="trn-menu-acoes">
+          {podeEncerrar(torneio) && (
+            <li>
+              <button type="button" onClick={() => {
+                setMenu(false)
+                setEncerrando(true)
+              }}>
+                <i className="fas fa-flag-checkered" aria-hidden="true" />
+                <span>{t('tournament.ranking.finish')}</span>
+              </button>
+            </li>
+          )}
           {podeRefazer && (
             <li>
               <button

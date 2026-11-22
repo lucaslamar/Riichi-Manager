@@ -1963,7 +1963,10 @@
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
       "undoShort": "Undo",
       "menuMetrics": "지표",
-      "menuActions": "대회 관리"
+      "menuActions": "대회 관리",
+      "menuShare": "공유 및 내보내기",
+      "menuText": "라운드 텍스트",
+      "menuImage": "라운드 이미지"
     },
     "ranking": {
       "title": "Tournament ranking",

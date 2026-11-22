@@ -1963,7 +1963,10 @@
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
       "undoShort": "Undo",
       "menuMetrics": "数据",
-      "menuActions": "比赛操作"
+      "menuActions": "比赛操作",
+      "menuShare": "分享与导出",
+      "menuText": "本轮文字",
+      "menuImage": "本轮图片"
     },
     "ranking": {
       "title": "Tournament ranking",

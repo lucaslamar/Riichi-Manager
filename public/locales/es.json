@@ -1992,7 +1992,10 @@
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
       "undoShort": "Undo",
       "menuMetrics": "Métricas",
-      "menuActions": "Acciones del torneo"
+      "menuActions": "Acciones del torneo",
+      "menuShare": "Compartir y exportar",
+      "menuText": "Ronda en texto",
+      "menuImage": "Ronda en imagen"
     },
     "ranking": {
       "title": "Tournament ranking",

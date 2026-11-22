@@ -1963,7 +1963,10 @@
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
       "undoShort": "Undo",
       "menuMetrics": "データ",
-      "menuActions": "大会の操作"
+      "menuActions": "大会の操作",
+      "menuShare": "共有と書き出し",
+      "menuText": "ラウンドをテキストで",
+      "menuImage": "ラウンドを画像で"
     },
     "ranking": {
       "title": "Tournament ranking",

@@ -2041,7 +2041,10 @@
       "restartHelp": "The tables are drawn again from the first round, with the same players. Results already entered in this tournament are deleted.",
       "undoShort": "Undo",
       "menuMetrics": "Rodikliai",
-      "menuActions": "Turnyro veiksmai"
+      "menuActions": "Turnyro veiksmai",
+      "menuShare": "Dalytis ir eksportuoti",
+      "menuText": "Ratas tekstu",
+      "menuImage": "Ratas paveikslėliu"
     },
     "ranking": {
       "title": "Tournament ranking",
