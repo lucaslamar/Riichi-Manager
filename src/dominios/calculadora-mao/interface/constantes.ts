@@ -235,7 +235,8 @@ export const CONFIGURACOES_REGRAS: {
     titulo: 'Dora Eclipse',
     ligado: 'Ativar',
     desligado: 'Desativar',
-    ajuda: 'Começa com 50.000 pontos e 3 indicadores de dora',
+    ajuda:
+      'Começa com 50.000 pontos e 3 indicadores de dora. Cada dora vale 2 han, e cada pedra igual a um indicador tira 1 han.',
   },
   {
     chave: 'tanyaoAberto',

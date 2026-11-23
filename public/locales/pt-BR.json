@@ -596,7 +596,7 @@
     },
     "eclipse": {
       "title": "Dora Eclipse / Sombra",
-      "help": "Começa com 50.000 pontos e 3 indicadores de dora",
+      "help": "Começa com 50.000 pontos e 3 indicadores de dora. Cada dora vale 2 han, e cada pedra igual a um indicador tira 1 han.",
       "on": "Ativar",
       "off": "Desativar"
     },

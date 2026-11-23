@@ -608,7 +608,7 @@
     },
     "eclipse": {
       "title": "Dora Eclipse / Shadow",
-      "help": "Pradedama nuo 50 000 taškų ir 3 dora indikatorių",
+      "help": "Pradedama nuo 50 000 taškų ir 3 dora indikatorių. Kiekviena dora vertė 2 han, o kiekviena plytelė, lygi indikatoriui, atima 1 han.",
       "on": "Įjungti",
       "off": "Išjungti"
     },

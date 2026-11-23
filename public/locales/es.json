@@ -602,7 +602,7 @@
     },
     "eclipse": {
       "title": "Dora Eclipse / Sombra",
-      "help": "Empieza con 50.000 puntos y 3 indicadores de dora",
+      "help": "Empieza con 50.000 puntos y 3 indicadores de dora. Cada dora vale 2 han, y cada ficha igual a un indicador quita 1 han.",
       "on": "Activar",
       "off": "Desactivar"
     },
