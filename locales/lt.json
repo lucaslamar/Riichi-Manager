@@ -606,6 +606,12 @@
       "on": "Įjungti",
       "off": "Išjungti"
     },
+    "eclipse": {
+      "title": "Dora Eclipse / Shadow",
+      "help": "Pradedama nuo 50 000 taškų ir 3 dora indikatorių. Kiekviena dora vertė 2 han, o kiekviena plytelė, lygi indikatoriui, atima 1 han.",
+      "on": "Įjungti",
+      "off": "Išjungti"
+    },
     "tanyaoAberto": {
       "title": "Atviras Tanyao",
       "help": "Nustato, ar Tanyao galioja su atvirais iškvietimais. Įprasta šiuolaikinėse japoniškose taisyklėse, bet kai kurios grupės žaidžia kuitan nashi.",
