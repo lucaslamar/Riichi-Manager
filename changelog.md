@@ -4,7 +4,7 @@
 
 ### Adicionado
 
-- **Modo Eclipse**: nas regras de cálculo e na Nova partida. Começa com 50.000 pontos e 3 indicadores de dora, cada dora vale 2 han e guardar a pedra indicadora (Sombra) tira 1 han, sem deixar a mão abaixo de 1. O Guia de bolso ganhou o card do Eclipse.
+- **Dora Eclipse**: nas regras de cálculo e na Nova partida. Começa com 50.000 pontos e 3 indicadores de dora, cada dora vale 2 han e guardar a pedra indicadora (Sombra) tira 1 han, sem deixar a mão abaixo de 1. O Guia de bolso ganhou o card do Eclipse.
 - **Negativado acaba ou continua**: o Registrar partida finalizada e o torneio deixam escolher se a partida acaba quando alguém fica negativado (tobi).
 - **Limpar a mesa no registro**: a lixeira da barra apaga o que foi digitado, com confirmação. As configs também foram para a barra, e o preset aparece só para leitura logo acima dela.
 - **Cenários de virada**: tocar numa distância do ranking do torneio mostra quantas mãos faltam por ron de terceiros e por ron direto no líder, o alvo se o líder ficar em 4º, no zero ou em 1º e o que falta com a uma de cada colocação.

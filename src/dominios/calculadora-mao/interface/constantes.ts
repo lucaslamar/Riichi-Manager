@@ -232,7 +232,7 @@ export const CONFIGURACOES_REGRAS: {
   },
   {
     chave: 'eclipse',
-    titulo: 'Eclipse',
+    titulo: 'Dora Eclipse',
     ligado: 'Ativar',
     desligado: 'Desativar',
     ajuda: 'Começa com 50.000 pontos e 3 indicadores de dora',

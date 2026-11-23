@@ -536,7 +536,7 @@ export const conteudo: ConteudoGuiaBolso = {
           aliases: ['kita', 'nukidora'],
         },
         eclipse: {
-          nome: 'Eclipse / Sombra',
+          nome: 'Dora Eclipse / Sombra',
           texto: 'Modo de mesa com mais dora e um castigo para quem guarda a própria pedra indicadora.',
           topicos: [
             'Pontuação inicial: 50.000.',
@@ -547,7 +547,7 @@ export const conteudo: ConteudoGuiaBolso = {
             'A Sombra não reduz a mão abaixo de 1 han.',
             'Exemplo: Riichi + Tsumo + Pinfu + 2 Ura-dora − 1 Sombra = 4 han 20 fu = 5.200.',
           ],
-          aliases: ['eclipse', 'sombra'],
+          aliases: ['dora eclipse', 'eclipse', 'sombra'],
         },
       },
     },

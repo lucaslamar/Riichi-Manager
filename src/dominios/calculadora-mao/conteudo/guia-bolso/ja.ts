@@ -565,7 +565,7 @@ export const conteudo: ConteudoGuiaBolso = {
           aliases: ['kita', 'nukidora'],
         },
         eclipse: {
-          nome: 'エクリプス / 影ドラ',
+          nome: 'ドラ・エクリプス / 影ドラ',
           texto: 'Table mode with more dora and a penalty for holding the indicator tile itself.',
           topicos: [
             'Starting score: 50,000.',
@@ -576,7 +576,7 @@ export const conteudo: ConteudoGuiaBolso = {
             'The Shadow never takes the hand below 1 han.',
             'Example: Riichi + Tsumo + Pinfu + 2 ura dora − 1 Shadow = 4 han 20 fu = 5,200.',
           ],
-          aliases: ['eclipse', 'エクリプス', '影ドラ'],
+          aliases: ['dora eclipse', 'eclipse', 'ドラ・エクリプス', 'エクリプス', '影ドラ'],
         },
       },
     },
