@@ -516,6 +516,11 @@ export const conteudo: ConteudoGuiaBolso = {
           texto: 'Bauda už rimtą klaidą, pavyzdžiui, laimėjimą be yaku ar ron esant furiten.',
           aliases: ['chombo'],
         },
+        tobi: {
+          nome: 'Tobi',
+          texto: 'Kai kas nors lieka su neigiamais taškais, partija baigiasi iš karto, net prieš paskutinį ratą. Kai kurios taisyklės, pvz. WRC, jo nenaudoja ir leidžia žaisti toliau.',
+          aliases: ['tobi'],
+        },
       },
     },
     regras: {

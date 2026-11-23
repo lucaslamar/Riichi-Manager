@@ -189,6 +189,7 @@ const SECOES_BASE: SecaoBase[] = [
       { id: 'empate', kanji: '流局' },
       { id: 'empate-abortivo', kanji: '途中流局', sub: true },
       { id: 'chombo', kanji: '錯和' },
+      { id: 'tobi', kanji: '飛び' },
     ],
   },
   {

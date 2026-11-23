@@ -1168,7 +1168,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: 'Pirmosiose partijose, neskaičiuojant taškų, laimi daugiausia rankų laimėjęs. Pradėjus skaičiuoti, laimi turintis daugiausia taškų, o partija baigiasi ir tada, kai kas nors lieka su neigiamais taškais.',
+            md: 'Pirmosiose partijose, neskaičiuojant taškų, laimi daugiausia rankų laimėjęs. Pradėjus skaičiuoti, laimi turintis daugiausia taškų, o partija baigiasi ir tada, kai kas nors lieka su neigiamais taškais (tobi).',
           },
         ],
       },

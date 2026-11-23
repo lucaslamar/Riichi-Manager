@@ -428,6 +428,12 @@ export const conteudo: ConteudoGuiaBolso = {
           texto: '对严重错误的罚则，例如无役和牌，或在振听时荣和。',
           aliases: ['错和', '诈和'],
         },
+        tobi: {
+          nome: '击飞',
+          leitura: 'tobi',
+          texto: '有人点数变成负数时，即使还没到最后一局，牌局也当场结束。WRC 等规则不采用，继续对局。',
+          aliases: ['击飞', '被飞', 'tobi'],
+        },
       },
     },
     regras: {

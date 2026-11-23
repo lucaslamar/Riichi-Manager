@@ -527,6 +527,12 @@ export const conteudo: ConteudoGuiaBolso = {
           texto: '役なしで和了する、フリテンでロンするなど、重大なミスへの罰則。',
           aliases: ['錯和', 'チョンボ'],
         },
+        tobi: {
+          nome: '飛び',
+          leitura: 'とび',
+          texto: '誰かの持ち点がマイナスになると、最終局の前でもその場で対局が終わる。WRCルールなど、採用せず続行するルールもある。',
+          aliases: ['飛び', 'トビ', 'tobi'],
+        },
       },
     },
     regras: {

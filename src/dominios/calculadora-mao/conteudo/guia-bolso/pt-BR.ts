@@ -498,6 +498,11 @@ export const conteudo: ConteudoGuiaBolso = {
           texto: 'Penalidade por erro grave, como vencer sem yaku ou dar ron em furiten.',
           aliases: ['chombo'],
         },
+        tobi: {
+          nome: 'Tobi',
+          texto: 'Quando alguém fica com pontos negativos, a partida acaba na hora, mesmo antes da última rodada. Algumas regras, como a da WRC, não usam e deixam o jogo continuar.',
+          aliases: ['tobi', 'pontos negativos', 'negativado'],
+        },
       },
     },
     regras: {

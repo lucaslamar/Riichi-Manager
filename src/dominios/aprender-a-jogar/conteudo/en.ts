@@ -1170,7 +1170,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: 'In your first games, without counting points, whoever won the most hands wins. Once you start counting, whoever has the most points wins, and the game also ends if someone goes below zero.',
+            md: 'In your first games, without counting points, whoever won the most hands wins. Once you start counting, whoever has the most points wins, and the game also ends if someone goes below zero (tobi).',
           },
         ],
       },

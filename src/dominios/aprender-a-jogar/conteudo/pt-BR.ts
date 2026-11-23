@@ -1178,7 +1178,7 @@ const modulos: TutorialModule[] = [
           },
           {
             type: 'text',
-            md: 'Nas primeiras partidas, sem contar pontos, vence quem ganhou mais mãos. Quando vocês passarem a contar, vence quem tiver mais pontos, e a partida também acaba se alguém ficar com pontos negativos.',
+            md: 'Nas primeiras partidas, sem contar pontos, vence quem ganhou mais mãos. Quando vocês passarem a contar, vence quem tiver mais pontos, e a partida também acaba se alguém ficar com pontos negativos (tobi).',
           },
         ],
       },

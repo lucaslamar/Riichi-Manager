@@ -445,6 +445,12 @@ export const conteudo: ConteudoGuiaBolso = {
           texto: '역 없이 화료하거나 후리텐으로 론을 하는 등, 큰 실수에 대한 벌칙.',
           aliases: ['촌보', '착화'],
         },
+        tobi: {
+          nome: '토비',
+          leitura: 'tobi',
+          texto: '누군가 점수가 마이너스가 되면 마지막 국 전이라도 그 자리에서 대국이 끝납니다. WRC 룰처럼 쓰지 않고 계속하는 룰도 있습니다.',
+          aliases: ['토비', 'tobi'],
+        },
       },
     },
     regras: {

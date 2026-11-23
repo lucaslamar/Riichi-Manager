@@ -483,6 +483,11 @@ export const conteudo: ConteudoGuiaBolso = {
             'Penalty for a serious mistake, such as winning without a yaku or declaring ron in furiten.',
           aliases: ['chombo'],
         },
+        tobi: {
+          nome: 'Tobi',
+          texto: 'When someone goes below zero points, the game ends right away, even before the last round. Some rules, such as the WRC, do not use it and let play continue.',
+          aliases: ['tobi', 'bust', 'busted'],
+        },
       },
     },
     regras: {
