@@ -10,7 +10,7 @@ import { ordenarPedras, type CodigoPedra, type ConfiguracaoCalculo, type Mao } f
 import type { EscolhaChiiPendente } from './tipos'
 import type { RegrasSanma } from '@/compartilhado/mahjong/variante'
 
-const YAKU_APENAS_BONUS = new Set(['Dora', 'Uradora', 'Akadora', 'Dora manual'])
+const YAKU_APENAS_BONUS = new Set(['Dora', 'Uradora', 'Akadora', 'Dora manual', 'Sombra'])
 
 function resultadoTemYakuValido(resultado: ReturnType<typeof useResultadoMao>['resultado']) {
   if (!resultado || resultado.agari == null) return false

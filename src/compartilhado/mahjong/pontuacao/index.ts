@@ -3,6 +3,7 @@ export {
   configuracaoPadrao,
   doraFlamejanteAtiva,
   pagamentoChombo,
+  PONTOS_INICIAIS_ECLIPSE,
   valorPorHonba,
 } from './configuracao'
 export type { DetalheFu, PontosCalculados, ResultadoMao } from './resultado'

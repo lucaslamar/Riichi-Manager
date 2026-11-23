@@ -56,18 +56,29 @@ function contarDorasPorIndicadores(
   mao: Mao,
   indicadores: string[],
   doraFlamejante: boolean,
+  eclipse = false,
 ): number {
   const pedrasFisicas = pedrasDaMaoFisica(mao)
   return indicadores.reduce((total, indicador) => {
     // Sanma: 1m aponta 9m e 9m aponta 1m; o yonma segue com a conta de sempre.
     const doraReal = mao.sanma ? proximaDoraDaVariante(indicador, 'sanma') : proximaDora(indicador)
-    const hanPorDora = doraFlamejante && indicador[0] === '0' ? 2 : 1
+    const hanPorDora = eclipse || (doraFlamejante && indicador[0] === '0') ? 2 : 1
     return (
       total +
       pedrasFisicas.filter((pedra) => codigoBase(pedra) === codigoBase(doraReal)).length *
         hanPorDora
     )
   }, 0)
+}
+
+/** Eclipse: cada pedra da mão igual a um indicador é uma Sombra (−1 han). */
+function contarSombras(mao: Mao, indicadores: string[]): number {
+  const pedrasFisicas = pedrasDaMaoFisica(mao)
+  return indicadores.reduce(
+    (total, indicador) =>
+      total + pedrasFisicas.filter((pedra) => codigoBase(pedra) === codigoBase(indicador)).length,
+    0,
+  )
 }
 
 /** Kita que vale como Nukidora (0 no yonma ou com a regra desligada). */
@@ -143,7 +154,7 @@ export function calcularMao(mao: Mao, config: ConfiguracaoCalculo, locais?: Opco
   // Ryanhan-shibari do Paarenchan: do 5º honba em diante, 2 han sem contar dora.
   if (locais?.ryanhanShibari && mao.honba >= 5 && resultado.agari !== null && resultado.yakuman === 0) {
     const semDora = resultado.yaku
-      .filter(([nome]) => !/dora/i.test(nome))
+      .filter(([nome]) => !/dora|sombra/i.test(nome))
       .reduce((soma, [, han]) => soma + han, 0)
     if (semDora < 2) return { ...resultado, semYaku: true }
   }
@@ -232,16 +243,20 @@ function aplicarYakusLocais(
 function calcularMaoPadrao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
   const dorasAutomaticasAka = config.akadora ? contarAkaDora(mao) : 0
   const flamejante = doraFlamejanteAtiva(config)
+  const eclipse = config.eclipse
   const dorasPorIndicadores =
-    contarDorasPorIndicadores(mao, mao.dora, flamejante) + doraDoKitaPorIndicador(mao, mao.dora)
+    contarDorasPorIndicadores(mao, mao.dora, flamejante, eclipse) + doraDoKitaPorIndicador(mao, mao.dora)
   const dorasNaMaoTotal = Math.min(13, dorasAutomaticasAka + dorasPorIndicadores + mao.doraManual)
   const uradorasTotal = mao.riichi
-    ? contarDorasPorIndicadores(mao, mao.uradora, flamejante) +
+    ? contarDorasPorIndicadores(mao, mao.uradora, flamejante, eclipse) +
       doraDoKitaPorIndicador(mao, mao.uradora) +
       mao.uradoraManual
     : 0
+  const sombras = eclipse
+    ? contarSombras(mao, mao.dora) + (mao.riichi ? contarSombras(mao, mao.uradora) : 0)
+    : 0
   const dorasBonusTotal = dorasNaMaoTotal + uradorasTotal
-  const usaDoraManual = dorasBonusTotal > 0
+  const usaDoraManual = dorasBonusTotal > 0 || sombras > 0
   const kita = kitaDaMao(mao)
   // Sanma: `+nN` é o Norte retirado; a biblioteca conta o Nukidora e tira Tenhou/Chiihou.
   const stringMao = converterMaoParaString(mao) + (kita > 0 ? `+n${kita}` : '')
@@ -272,7 +287,7 @@ function calcularMaoPadrao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao 
   const fu = resultadoBiblioteca.fu ?? 0
   const hanFinal =
     usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku
-      ? hanBase + dorasBonusTotal
+      ? Math.max(1, hanBase + dorasBonusTotal - sombras)
       : hanBase
   const patamarManual =
     usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku
@@ -330,6 +345,7 @@ function calcularMaoPadrao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao 
   if (usaDoraManual && yakuman === 0 && resultadoBiblioteca.isAgari && !semYaku) {
     if (dorasNaMaoTotal > 0) yaku.push(['Dora manual', dorasNaMaoTotal, false])
     if (uradorasTotal > 0) yaku.push(['Uradora', uradorasTotal, false])
+    if (sombras > 0) yaku.push(['Sombra', -sombras, false])
   }
 
   return {

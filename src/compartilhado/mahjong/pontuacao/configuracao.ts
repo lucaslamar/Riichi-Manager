@@ -11,6 +11,11 @@ export interface ConfiguracaoCalculo {
   akadora: boolean
   /** Regra local: indicador 5 vermelho faz cada dora dele valer 2 han. Depende de `akadora`. */
   doraFlamejante: boolean
+  /**
+   * Modo Eclipse: cada dora e ura dora vale 2 han e cada pedra igual a um
+   * indicador (Sombra) tira 1 han, sem deixar a mão abaixo de 1 han.
+   */
+  eclipse: boolean
   /** Regra local (場千五): cada honba vale 1500 em vez de 300. */
   basengo: boolean
   /** Multa do chombo: valor de mangan (padrão) ou, desligado, de yakuman. */
@@ -27,6 +32,7 @@ export const configuracaoPadrao: ConfiguracaoCalculo = {
   fuRinshan: true,
   akadora: true,
   doraFlamejante: false,
+  eclipse: false,
   basengo: false,
   chomboMangan: true,
 }
@@ -35,6 +41,9 @@ export const configuracaoPadrao: ConfiguracaoCalculo = {
 export function doraFlamejanteAtiva(config: ConfiguracaoCalculo): boolean {
   return config.akadora && config.doraFlamejante
 }
+
+/** Pontuação inicial da mesa com o modo Eclipse. */
+export const PONTOS_INICIAIS_ECLIPSE = 50000
 
 /**
  * Multa do chombo, paga como um tsumo invertido: quem errou paga a cada

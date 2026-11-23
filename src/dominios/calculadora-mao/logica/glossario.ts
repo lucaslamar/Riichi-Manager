@@ -199,6 +199,7 @@ const SECOES_BASE: SecaoBase[] = [
       { id: 'm-league', semLink: ['riichi', 'yaku:riichi'] },
       { id: 'sanma', kanji: '三麻' },
       { id: 'kita', kanji: '北抜き', sub: true },
+      { id: 'eclipse' },
     ],
   },
 ]

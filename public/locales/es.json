@@ -600,6 +600,12 @@
       "on": "Activar",
       "off": "Desactivar"
     },
+    "eclipse": {
+      "title": "Eclipse / Sombra",
+      "help": "Empieza con 50.000 puntos y 3 indicadores de dora",
+      "on": "Activar",
+      "off": "Desactivar"
+    },
     "tanyaoAberto": {
       "title": "Tan'yao abierto",
       "help": "Define si Tan'yao vale con llamadas abiertas. Es común en las reglas japonesas modernas, pero algunos grupos usan kuitan nashi.",

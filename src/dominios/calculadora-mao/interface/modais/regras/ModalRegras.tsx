@@ -47,6 +47,12 @@ const CHAVES_REGRAS: Record<
     ligado: 'rulesModal.doraFlamejante.on',
     desligado: 'rulesModal.doraFlamejante.off',
   },
+  eclipse: {
+    titulo: 'rulesModal.eclipse.title',
+    ajuda: 'rulesModal.eclipse.help',
+    ligado: 'rulesModal.eclipse.on',
+    desligado: 'rulesModal.eclipse.off',
+  },
   tanyaoAberto: {
     titulo: 'rulesModal.tanyaoAberto.title',
     ajuda: 'rulesModal.tanyaoAberto.help',

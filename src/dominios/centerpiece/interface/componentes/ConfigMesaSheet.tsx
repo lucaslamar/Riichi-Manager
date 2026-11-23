@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { PONTOS_INICIAIS_ECLIPSE, type ConfiguracaoCalculo } from '@/compartilhado/mahjong/pontuacao'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { ListaRegrasCalculo } from '@/dominios/calculadora-mao/interface/modais/regras/ModalRegras'
 import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
@@ -124,6 +125,17 @@ export default function ConfigMesaSheet({
   const { regrasSanma, setRegrasSanma } = useConfigSanma()
   const mudarSanma = (parcial: Partial<RegrasSanma>) => setRegrasSanma({ ...regrasSanma, ...parcial })
   const semOka = calcularOka(config) <= 0
+  // Sem oka, o retorno acompanha a partida.
+  const mudarPontosPartida = (pontosPartida: number) =>
+    semOka ? { pontosPartida, pontosRetorno: pontosPartida } : { pontosPartida }
+  // Eclipse começa com 50.000; ao desligar, volta para a pontuação de antes.
+  const pontosAntesDoEclipse = useRef(config.pontosPartida)
+  const mudarRegrasCalculo = (regrasCalculo: ConfiguracaoCalculo) => {
+    if (regrasCalculo.eclipse === config.regrasCalculo.eclipse) return alterar({ regrasCalculo })
+    if (regrasCalculo.eclipse) pontosAntesDoEclipse.current = config.pontosPartida
+    const pontosPartida = regrasCalculo.eclipse ? PONTOS_INICIAIS_ECLIPSE : pontosAntesDoEclipse.current
+    alterar({ regrasCalculo, ...mudarPontosPartida(pontosPartida) })
+  }
   const [texto, setTexto] = useState('')
   const busca = normalizarTexto(texto)
   const [aba, setAba] = useState<IdSecao>(abasExtras[0]?.id ?? 'pontuacao')
@@ -290,10 +302,7 @@ export default function ConfigMesaSheet({
             valor={config.pontosPartida}
             passo={1000}
             minimo={0}
-            // Sem oka, o retorno acompanha a partida.
-            aoMudar={(pontosPartida) =>
-              alterar(semOka ? { pontosPartida, pontosRetorno: pontosPartida } : { pontosPartida })
-            }
+            aoMudar={(pontosPartida) => alterar(mudarPontosPartida(pontosPartida))}
           />
         </Campo>
         {!semOka && (
@@ -514,7 +523,7 @@ export default function ConfigMesaSheet({
       <ListaRegrasCalculo
         semChombo
         configuracao={config.regrasCalculo}
-        aoMudar={(regrasCalculo) => alterar({ regrasCalculo })}
+        aoMudar={mudarRegrasCalculo}
         mostrar={(textoRegra) => bate(busca, textoRegra)}
       />
       </section>

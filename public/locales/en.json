@@ -594,6 +594,12 @@
       "on": "On",
       "off": "Off"
     },
+    "eclipse": {
+      "title": "Eclipse / Shadow",
+      "help": "Starts with 50,000 points and 3 dora indicators",
+      "on": "On",
+      "off": "Off"
+    },
     "tanyaoAberto": {
       "title": "Open Tanyao",
       "help": "Whether Tanyao counts with open calls. Common in modern Japanese rules, but some groups play kuitan nashi.",

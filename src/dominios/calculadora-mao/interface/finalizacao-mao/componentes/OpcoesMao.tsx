@@ -112,6 +112,7 @@ export default function OpcoesMao({
     pedrasFisicasMao,
     !!mao.sanma,
     flamejante,
+    configuracao.eclipse,
   )
   const dorasAutomaticas = dorasAutomaticasAka + dorasPorIndicadores
   const dorasNaMaoTotal = Math.min(13, dorasAutomaticas + mao.doraManual)
@@ -622,10 +623,11 @@ function contarDorasPorIndicadores(
   pedrasFisicas: CodigoPedra[],
   sanma: boolean,
   flamejante: boolean,
+  eclipse: boolean,
 ) {
   return indicadores.reduce((total, indicador) => {
     const doraReal = codigoBase(proximaDoraIndicada(indicador, sanma))
-    const hanPorDora = flamejante && indicador[0] === '0' ? 2 : 1
+    const hanPorDora = eclipse || (flamejante && indicador[0] === '0') ? 2 : 1
     return (
       total + pedrasFisicas.filter((pedra) => codigoBase(pedra) === doraReal).length * hanPorDora
     )

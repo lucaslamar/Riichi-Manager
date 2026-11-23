@@ -231,6 +231,13 @@ export const CONFIGURACOES_REGRAS: {
       'Quando o indicador de dora é um 5 vermelho, cada dora vale 2 han. Exige Aka dora ativado.',
   },
   {
+    chave: 'eclipse',
+    titulo: 'Eclipse',
+    ligado: 'Ativar',
+    desligado: 'Desativar',
+    ajuda: 'Começa com 50.000 pontos e 3 indicadores de dora',
+  },
+  {
     chave: 'tanyaoAberto',
     titulo: "Tan'yao aberto",
     ligado: 'Permitido',

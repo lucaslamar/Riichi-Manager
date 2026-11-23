@@ -278,7 +278,9 @@ export default function ExibicaoCompleta({
                       <strong>
                         {ehYakuman
                           ? t('calculator.yakumanShort', { count: valor })
-                          : t('calculator.hanCount', { count: valor })}
+                          : valor < 0
+                            ? `−${t('calculator.hanCount', { count: -valor })}`
+                            : t('calculator.hanCount', { count: valor })}
                       </strong>
                     </button>
                     {aberto && explicacao && (

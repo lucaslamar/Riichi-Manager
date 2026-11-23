@@ -13,6 +13,7 @@ export default function ResumoRegrasCalculo({
   const ativas = [
     regras.akadora && t('rulesModal.akadora.title'),
     regras.akadora && regras.doraFlamejante && t('rulesModal.doraFlamejante.title'),
+    regras.eclipse && t('rulesModal.eclipse.title'),
     regras.tanyaoAberto && t('tableConfig.ruleKuitan'),
     regras.basengo && t('rulesModal.basengo.title'),
     regras.kiriageMangan && t('rulesModal.kiriageMangan.title'),
