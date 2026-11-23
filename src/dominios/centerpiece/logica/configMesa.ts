@@ -74,6 +74,7 @@ const regrasOficiais = (akadora: boolean): ConfiguracaoCalculo => ({
   tanyaoAberto: true,
   doraFlamejante: false,
   eclipse: false,
+  chiitoitsuQuatroIguais: false,
   basengo: false,
   kiriageMangan: false,
   fuVentosDuplo: false,

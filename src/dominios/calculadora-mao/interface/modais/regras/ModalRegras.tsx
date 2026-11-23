@@ -53,6 +53,12 @@ const CHAVES_REGRAS: Record<
     ligado: 'rulesModal.eclipse.on',
     desligado: 'rulesModal.eclipse.off',
   },
+  chiitoitsuQuatroIguais: {
+    titulo: 'rulesModal.chiitoitsuQuatroIguais.title',
+    ajuda: 'rulesModal.chiitoitsuQuatroIguais.help',
+    ligado: 'rulesModal.chiitoitsuQuatroIguais.on',
+    desligado: 'rulesModal.chiitoitsuQuatroIguais.off',
+  },
   tanyaoAberto: {
     titulo: 'rulesModal.tanyaoAberto.title',
     ajuda: 'rulesModal.tanyaoAberto.help',

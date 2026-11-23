@@ -600,6 +600,12 @@
       "on": "Ativar",
       "off": "Desativar"
     },
+    "chiitoitsuQuatroIguais": {
+      "title": "Chiitoitsu com quatro iguais",
+      "help": "No Chiitoitsu, quatro pedras iguais contam como dois pares.",
+      "on": "Permitir",
+      "off": "Não permitir"
+    },
     "tanyaoAberto": {
       "title": "Tan'yao aberto",
       "help": "Define se Tan'yao vale com chamadas abertas. É comum em regras japonesas modernas, mas alguns grupos usam kuitan nashi.",

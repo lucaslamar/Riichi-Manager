@@ -16,6 +16,8 @@ export interface ConfiguracaoCalculo {
    * indicador (Sombra) tira 1 han, sem deixar a mão abaixo de 1 han.
    */
   eclipse: boolean
+  /** Regra local: no Chiitoitsu, quatro pedras iguais valem como dois pares. */
+  chiitoitsuQuatroIguais: boolean
   /** Regra local (場千五): cada honba vale 1500 em vez de 300. */
   basengo: boolean
   /** Multa do chombo: valor de mangan (padrão) ou, desligado, de yakuman. */
@@ -33,6 +35,7 @@ export const configuracaoPadrao: ConfiguracaoCalculo = {
   akadora: true,
   doraFlamejante: false,
   eclipse: false,
+  chiitoitsuQuatroIguais: false,
   basengo: false,
   chomboMangan: true,
 }

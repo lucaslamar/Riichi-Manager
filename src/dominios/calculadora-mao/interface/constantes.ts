@@ -239,6 +239,13 @@ export const CONFIGURACOES_REGRAS: {
       'Começa com 50.000 pontos e 3 indicadores de dora. Cada dora vale 2 han, e cada pedra igual a um indicador tira 1 han.',
   },
   {
+    chave: 'chiitoitsuQuatroIguais',
+    titulo: 'Chiitoitsu com quatro iguais',
+    ligado: 'Permitir',
+    desligado: 'Não permitir',
+    ajuda: 'No Chiitoitsu, quatro pedras iguais contam como dois pares.',
+  },
+  {
     chave: 'tanyaoAberto',
     titulo: "Tan'yao aberto",
     ligado: 'Permitido',

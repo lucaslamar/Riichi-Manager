@@ -3,6 +3,7 @@ import type { Mao, MaoSanma } from './tipos'
 import { converterMaoParaString } from './conversor-riichi'
 import type { ConfiguracaoCalculo, PontosCalculados, ResultadoMao } from '@/compartilhado/mahjong/pontuacao'
 import { ORDEM_YAKU, traduzirDetalhesFu, traduzirPatamares, traduzirYaku } from './traducoes'
+import { ehChiitoitsuComQuatroIguais, yakusChiitoitsuQuatroIguais } from './chiitoitsuQuatroIguais'
 import { encontrarYakusLocais, HAN_MINIMO, type OpcoesLocais } from './yakusLocais'
 import {
   aplicarHonba,
@@ -240,6 +241,40 @@ function aplicarYakusLocais(
   } as ResultadoMao
 }
 
+/** Chiitoitsu com quatro iguais (regra local): Yaku contados aqui, 25 fu, dora como no cálculo padrão. */
+function calcularChiitoitsuQuatroIguais(
+  mao: Mao,
+  config: ConfiguracaoCalculo,
+  dorasNaMao: number,
+  uradoras: number,
+  sombras: number,
+): ResultadoMao {
+  const fu = 25
+  const yaku = yakusChiitoitsuQuatroIguais(mao)
+  const yakuman = yaku.some(([, , ehYakuman]) => ehYakuman) ? 1 : 0
+  if (yakuman === 0) {
+    if (dorasNaMao > 0) yaku.push(['Dora manual', dorasNaMao, false])
+    if (uradoras > 0) yaku.push(['Uradora', uradoras, false])
+    if (sombras > 0) yaku.push(['Sombra', -sombras, false])
+  }
+  const somaHan = yaku.reduce((soma, [, han]) => soma + han, 0)
+  const han = yakuman > 0 ? 0 : Math.max(1, somaHan)
+  const { pontos, pontosHonba, patamar } = pontuar(mao, config, han, fu, yakuman)
+  const yakumanFinal = patamar.yakuman ?? yakuman
+  return {
+    ...pontos,
+    isOya: mao.ventoAssento === '1',
+    yakuman: yakumanFinal,
+    yaku,
+    fuDetalhes: [],
+    semYaku: false,
+    han,
+    fu,
+    pontosHonba,
+    nome: yakumanFinal > 0 ? 'Yakuman' : patamar.nome,
+  } as ResultadoMao
+}
+
 function calcularMaoPadrao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao {
   const dorasAutomaticasAka = config.akadora ? contarAkaDora(mao) : 0
   const flamejante = doraFlamejanteAtiva(config)
@@ -278,6 +313,10 @@ function calcularMaoPadrao(mao: Mao, config: ConfiguracaoCalculo): ResultadoMao 
         }
       : {}),
   })
+
+  if (config.chiitoitsuQuatroIguais && ehChiitoitsuComQuatroIguais(mao)) {
+    return calcularChiitoitsuQuatroIguais(mao, config, dorasNaMaoTotal, uradorasTotal, sombras)
+  }
 
   const resultadoBiblioteca = riichi.calc()
   const isOya = mao.ventoAssento === '1'

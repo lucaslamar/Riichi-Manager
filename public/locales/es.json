@@ -606,6 +606,12 @@
       "on": "Activar",
       "off": "Desactivar"
     },
+    "chiitoitsuQuatroIguais": {
+      "title": "Chiitoitsu con cuatro iguales",
+      "help": "En el Chiitoitsu, cuatro fichas iguales cuentan como dos pares.",
+      "on": "Permitir",
+      "off": "No permitir"
+    },
     "tanyaoAberto": {
       "title": "Tan'yao abierto",
       "help": "Define si Tan'yao vale con llamadas abiertas. Es común en las reglas japonesas modernas, pero algunos grupos usan kuitan nashi.",

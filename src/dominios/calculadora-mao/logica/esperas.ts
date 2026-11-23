@@ -1,3 +1,4 @@
+import { ehChiitoitsuComQuatroIguais, yakusChiitoitsuQuatroIguais } from './chiitoitsuQuatroIguais'
 import Riichi from 'riichi'
 import type { ConfiguracaoCalculo } from '@/compartilhado/mahjong/pontuacao'
 import { converterMaoParaString } from './conversor-riichi'
@@ -124,6 +125,23 @@ export function calcularEsperasPossiveis(
       ...mao,
       pedras: [...mao.pedras, pedra],
       indiceAgari: mao.pedras.length,
+    }
+
+    if (config.chiitoitsuQuatroIguais && ehChiitoitsuComQuatroIguais(candidata)) {
+      const yakus = yakusChiitoitsuQuatroIguais(candidata)
+      const yakuman = yakus.some(([, , ehYakuman]) => ehYakuman) ? 1 : 0
+      return [
+        {
+          pedra,
+          yakus: yakus.map(([nome]) => nome),
+          han: yakuman ? 0 : yakus.reduce((soma, [, han]) => soma + han, 0),
+          fu: 25,
+          yakuman,
+          nome: null,
+          semYaku: false,
+          furiten: false,
+        },
+      ]
     }
 
     try {
