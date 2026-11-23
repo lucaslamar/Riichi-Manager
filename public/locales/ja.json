@@ -2501,7 +2501,9 @@
       "notWith": "{{list}}と複合しない。",
       "and": "と"
     },
-    "count": "{{total}}件中{{on}}件オン"
+    "count": "{{total}}件中{{on}}件オン",
+    "defaultOnNote": "初期設定でオン。いつでもオフにできます。",
+    "defaultOnBadge": "初期設定でオン"
   },
   "narration": {
     "selected": "{{tiles}}を選択",

@@ -207,6 +207,10 @@ export const PORQUE_YAKUS_LOCAIS: Record<string, { pt: string; en: string }> = {
     pt: 'Sul e Norte são os lados da guerra, e 1861 e 1865 são o ano de início e de fim.',
     en: 'South and North are the sides of the war, and 1861 and 1865 are the years it began and ended.',
   },
+  aniversarioCerrado: {
+    pt: 'Homenagem à fundação do Cerrado Mahjong Club, em 10/10/2023. O 白 é a pedra em branco, os três zeros da data, e 中 + 西 formam Centro-Oeste, a região do Cerrado. Inspirado no Nanboku sensou (American Civil War) da Riichi Wiki. Pode ser desativado em Regras de cálculo > Yakumans locais.',
+    en: 'A tribute to the founding of Cerrado Mahjong Club on 10/10/2023. 白 is the blank tile, the three zeros of the date, and 中 + 西 spell Centro-Oeste (Centre-West), the Cerrado region. Inspired by Nanboku sensou (American Civil War) on the Riichi Wiki. It can be turned off in Calculation rules > Local yakuman.',
+  },
   touhokuExpressway: {
     pt: 'Leste e Norte formam "Touhoku", a região do nordeste do Japão. As pedras pares de pin são a estrada.',
     en: 'East and North spell "Touhoku", Japan’s northeast region. The even pin tiles are the road.',

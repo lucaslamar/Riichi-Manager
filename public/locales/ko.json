@@ -2501,7 +2501,9 @@
       "notWith": "{{list}}와 복합 불가.",
       "and": "및"
     },
-    "count": "{{total}}개 중 {{on}}개 켬"
+    "count": "{{total}}개 중 {{on}}개 켬",
+    "defaultOnNote": "기본으로 켜져 있습니다. 언제든 끌 수 있습니다.",
+    "defaultOnBadge": "기본으로 켜짐"
   },
   "narration": {
     "selected": "{{tiles}} 선택",

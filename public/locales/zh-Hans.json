@@ -2501,7 +2501,9 @@
       "notWith": "不与{{list}}复合。",
       "and": "和"
     },
-    "count": "已开启 {{on}}/{{total}}"
+    "count": "已开启 {{on}}/{{total}}",
+    "defaultOnNote": "默认开启，可随时关闭。",
+    "defaultOnBadge": "默认开启"
   },
   "narration": {
     "selected": "选择了{{tiles}}",

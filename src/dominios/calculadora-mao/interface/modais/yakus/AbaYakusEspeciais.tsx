@@ -46,6 +46,7 @@ export function CartaoYakuLocal({ yaku }: { yaku: YakuLocal }) {
           </span>
         )}
       </header>
+      {yaku.ativoPorPadrao && <span className="yaku-badge yaku-badge--padrao">{t('localYaku.defaultOnBadge')}</span>}
       <p className="yaku-card__pt">{texto.traducao}</p>
       <p className="yaku-card__descricao">{texto.descricao}</p>
       <p className="yaku-card__valor-local">{texto.valor}</p>

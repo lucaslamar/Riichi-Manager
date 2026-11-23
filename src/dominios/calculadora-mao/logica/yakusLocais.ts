@@ -1,7 +1,7 @@
 /**
  * Yakus locais (regras da casa), da página "Local yaku" da Riichi Wiki.
  *
- * Nenhum vale por padrão: cada um é ligado em Regras de cálculo → Yakus locais.
+ * Só o Aniversário do Cerrado vale por padrão: os outros são ligados em Regras de cálculo → Yakus locais.
  * Os que dependem só da mão têm um detector, que olha a mão já dividida em grupos.
  * Os que dependem da partida (Tsubame gaeshi, Renhou…) viram condições marcáveis
  * na calculadora, como Haitei e Rinshan, e só aparecem quando estão ligados.
@@ -40,6 +40,8 @@ export interface YakuLocal {
   pt: TextoYakuLocal
   en: TextoYakuLocal
   detectar?: (contexto: ContextoMao) => boolean
+  /** Começa ligado (easter egg do clube); quem quiser desliga nas Regras de cálculo. */
+  ativoPorPadrao?: boolean
 }
 
 // ─── Mão em grupos ────────────────────────────────────────────────────────────
@@ -877,6 +879,28 @@ export const YAKUS_LOCAIS: readonly YakuLocal[] = [
       numeros.forEach((indice) => porNaipe.set(naipe(indice), [...(porNaipe.get(naipe(indice)) ?? []), numero(indice)]))
       const anos = [...porNaipe.values()].map((lista) => [...lista].sort((x, y) => x - y).join(''))
       return anos.length === 2 && anos.includes('1168') && anos.includes('1568')
+    },
+  },
+  {
+    id: 'aniversarioCerrado',
+    nome: 'Aniversário do Cerrado',
+    kanji: 'セラード誕生日',
+    categoria: 'yakuman',
+    valor: YAKUMAN,
+    formatoIrregular: true,
+    ativoPorPadrao: true,
+    pt: { valor: 'Yakuman', traducao: 'Cerrado Tanjōbi', descricao: 'Mão fechada com trincas de 白, 西 e 中, dois 1 de um naipe e 2, 2 e 3 de outro naipe (10/10/2023).' },
+    en: { valor: 'Yakuman', traducao: 'Cerrado Tanjōbi', descricao: 'Closed hand with triplets of 白, 西 and 中, two 1s of one suit and 2, 2 and 3 of another suit (10/10/2023).' },
+    detectar: (contexto) => {
+      if (contexto.mao.melds.length > 0 || contexto.pedras.length !== 14) return false
+      // 白 (zeros da data), 西 e 中 (Centro-Oeste), nenhuma outra honra.
+      if (contexto.contagem[29] !== 3 || contexto.contagem[31] !== 3 || contexto.contagem[33] !== 3) return false
+      const numeros = contexto.pedras.filter((indice) => !ehHonra(indice))
+      if (numeros.length !== 5) return false
+      const porNaipe = new Map<number, number[]>()
+      numeros.forEach((indice) => porNaipe.set(naipe(indice), [...(porNaipe.get(naipe(indice)) ?? []), numero(indice)]))
+      const partes = [...porNaipe.values()].map((lista) => [...lista].sort((x, y) => x - y).join(''))
+      return partes.length === 2 && partes.includes('11') && partes.includes('223')
     },
   },
   {

@@ -2556,7 +2556,9 @@
       "notWith": "No combina con {{list}}.",
       "and": "y"
     },
-    "count": "{{on}} de {{total}} activados"
+    "count": "{{on}} de {{total}} activados",
+    "defaultOnNote": "Activado por defecto. Puedes desactivarlo cuando quieras.",
+    "defaultOnBadge": "Activado por defecto"
   },
   "narration": {
     "selected": "Seleccionó {{tiles}}",

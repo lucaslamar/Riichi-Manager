@@ -3,12 +3,17 @@ import { localStorageDireto } from '@/compartilhado/persistencia/armazenamento'
 
 const CHAVE_YAKUS_LOCAIS = 'riichi-manager-yakus-locais'
 
+/** Yakus locais que começam ligados (easter egg do clube); valem também para quem já tinha a config salva. */
+export const YAKUS_LOCAIS_LIGADOS_POR_PADRAO: readonly string[] = ['aniversarioCerrado']
+
 /** 1: 8 vitórias seguidas de um jogador · 2: 8 como dealer sem empate · 3: 8 honba como dealer. */
 export type VariacaoPaarenchan = 1 | 2 | 3
 
 interface ConfigYakusLocais {
-  /** Ids ligados. Todos começam desligados. */
+  /** Ids ligados. Só os de `YAKUS_LOCAIS_LIGADOS_POR_PADRAO` começam ligados. */
   ativos: string[]
+  /** Ligados por padrão que a pessoa desligou. */
+  desligados: string[]
   paarenchan: {
     variacao: VariacaoPaarenchan
     /** A partir do 5º honba, a mão precisa de 2 han sem contar dora. */
@@ -20,7 +25,8 @@ interface ConfigYakusLocais {
 }
 
 export const YAKUS_LOCAIS_PADRAO: ConfigYakusLocais = {
-  ativos: [],
+  ativos: [...YAKUS_LOCAIS_LIGADOS_POR_PADRAO],
+  desligados: [],
   paarenchan: { variacao: 1, ryanhanShibari: false, depois: 'passa' },
   renhou: 'mangan',
 }
@@ -30,8 +36,11 @@ let atual: ConfigYakusLocais | null = null
 
 function normalizar(valor: Partial<ConfigYakusLocais> | null | undefined): ConfigYakusLocais {
   const paarenchan: Partial<ConfigYakusLocais['paarenchan']> = valor?.paarenchan ?? {}
+  const ativos = Array.isArray(valor?.ativos) ? valor.ativos.filter((id) => typeof id === 'string') : []
+  const desligados = Array.isArray(valor?.desligados) ? valor.desligados.filter((id) => typeof id === 'string') : []
   return {
-    ativos: Array.isArray(valor?.ativos) ? valor.ativos.filter((id) => typeof id === 'string') : [],
+    ativos: [...ativos, ...YAKUS_LOCAIS_LIGADOS_POR_PADRAO.filter((id) => !ativos.includes(id) && !desligados.includes(id))],
+    desligados,
     paarenchan: {
       variacao: paarenchan.variacao === 2 || paarenchan.variacao === 3 ? paarenchan.variacao : 1,
       ryanhanShibari: paarenchan.ryanhanShibari === true,
@@ -75,13 +84,22 @@ function inscrever(ouvinte: () => void) {
   }
 }
 
+/** Ligados por padrão que ficaram fora da lista de ativos. */
+function desligadosDe(ativos: readonly string[]): string[] {
+  return YAKUS_LOCAIS_LIGADOS_POR_PADRAO.filter((id) => !ativos.includes(id))
+}
+
 /** Yakus locais ligados em Regras de cálculo → Yakus locais, iguais em todas as telas. */
 export function useYakusLocais() {
   const config = useSyncExternalStore(inscrever, lerYakusLocais, lerYakusLocais)
-  const mudar = useCallback((parcial: Partial<ConfigYakusLocais>) => gravar(normalizar({ ...lerYakusLocais(), ...parcial })), [])
+  const mudar = useCallback((parcial: Partial<ConfigYakusLocais>) => {
+    const desligados = parcial.ativos ? desligadosDe(parcial.ativos) : lerYakusLocais().desligados
+    gravar(normalizar({ ...lerYakusLocais(), ...parcial, desligados }))
+  }, [])
   const alternar = useCallback((id: string, ligado: boolean) => {
-    const ativos = lerYakusLocais().ativos.filter((outro) => outro !== id)
-    gravar({ ...lerYakusLocais(), ativos: ligado ? [...ativos, id] : ativos })
+    const outros = lerYakusLocais().ativos.filter((outro) => outro !== id)
+    const ativos = ligado ? [...outros, id] : outros
+    gravar({ ...lerYakusLocais(), ativos, desligados: desligadosDe(ativos) })
   }, [])
   return { yakusLocais: config, mudarYakusLocais: mudar, alternarYakuLocal: alternar }
 }

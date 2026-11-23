@@ -4,6 +4,7 @@
 
 ### Adicionado
 
+- **Aniversário do Cerrado**: yakuman local ativado por padrão, em homenagem à fundação do Cerrado Mahjong Club (10/10/2023). Trincas de 白, 西 e 中 com 11 de um naipe e 223 de outro. Pode ser desativado em Regras de cálculo.
 - **Chiitoitsu com quatro iguais**: regra local nas regras de cálculo, desligada por padrão. Com ela, quatro pedras iguais contam como dois pares no Chiitoitsu.
 - **Dora Eclipse**: nas regras de cálculo e na Nova partida. Começa com 50.000 pontos e 3 indicadores de dora, cada dora vale 2 han e guardar a pedra indicadora (Sombra) tira 1 han, sem deixar a mão abaixo de 1. O Guia de bolso ganhou o card do Eclipse.
 - **Negativado acaba ou continua**: o Registrar partida finalizada e o torneio deixam escolher se a partida acaba quando alguém fica negativado (tobi).

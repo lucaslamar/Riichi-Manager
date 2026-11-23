@@ -2538,7 +2538,9 @@
       "notWith": "Not with {{list}}.",
       "and": "and"
     },
-    "count": "{{on}} of {{total}} on"
+    "count": "{{on}} of {{total}} on",
+    "defaultOnNote": "On by default. You can turn it off anytime.",
+    "defaultOnBadge": "On by default"
   },
   "narration": {
     "selected": "Selected {{tiles}}",

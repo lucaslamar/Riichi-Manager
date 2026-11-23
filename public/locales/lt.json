@@ -2624,7 +2624,9 @@
       "notWith": "Nesiderina su {{list}}.",
       "and": "ir"
     },
-    "count": "Įjungta {{on}} iš {{total}}"
+    "count": "Įjungta {{on}} iš {{total}}",
+    "defaultOnNote": "Įjungta pagal numatytuosius nustatymus. Galite bet kada išjungti.",
+    "defaultOnBadge": "Įjungta pagal nutylėjimą"
   },
   "narration": {
     "selected": "Pasirinkta {{tiles}}",

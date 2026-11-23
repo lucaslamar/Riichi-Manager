@@ -81,12 +81,14 @@ const NOMES: Record<string, NomesCjk> = {
   Renhou: { ja: '人和', zh: '人和', ko: '인화' },
   Daichiishin: { ja: '大七星', zh: '大七星', ko: '대칠성' },
   'Dora manual': { ja: 'ドラ（手入力）', zh: '宝牌（手动）', ko: '도라 (수동)' },
+  'Aniversário do Cerrado': { ja: 'セラード誕生日', zh: 'Cerrado Tanjōbi', ko: 'Cerrado Tanjōbi' },
   Sombra: { ja: '影ドラ', zh: '影宝牌', ko: '그림자 도라' },
 }
 
 /** Nomes com português no id que mudam também em inglês, espanhol e lituano. */
 const NOMES_LATINOS: Record<string, { en: string; es: string; lt: string }> = {
   'Dora manual': { en: 'Dora (manual)', es: 'Dora (manual)', lt: 'Dora (rankinė)' },
+  'Aniversário do Cerrado': { en: 'Cerrado Anniversary', es: 'Cerrado Tanjōbi', lt: 'Cerrado Tanjōbi' },
   Sombra: { en: 'Shadow', es: 'Sombra', lt: 'Šešėlis' },
 }
 

@@ -6,6 +6,7 @@
  */
 import assert from 'node:assert/strict'
 import { calcularMao, configuracaoPadrao, type Mao } from '../src/dominios/calculadora-mao/logica/mao'
+import { YAKUS_LOCAIS_PADRAO } from '../src/compartilhado/configuracoes/useYakusLocais'
 import { encontrarYakusLocais, YAKUS_LOCAIS, type OpcoesLocais } from '../src/dominios/calculadora-mao/logica/yakusLocais'
 
 let testes = 0
@@ -141,6 +142,24 @@ teste('Paarenchan sozinho não salva mão sem yaku', () => {
   if (!padrao.semYaku) return
   const comLocal = calcularMao(m, configuracaoPadrao, { ...tudo(['paarenchan']), ativos: new Set(['paarenchan']) })
   assert.equal(comLocal.semYaku, true)
+})
+
+teste('Aniversário do Cerrado: ligado por padrão, mão fechada, yakuman sem dora', () => {
+  const padrao: OpcoesLocais = { ativos: new Set(YAKUS_LOCAIS_PADRAO.ativos), condicoes: new Set(), renhou: 'mangan' }
+  for (const notacao of ['11m223p333z555z777z', '11s223m333z555z777z', '11p223s333z555z777z']) {
+    for (const agari of ['tsumo', 'ron'] as const) {
+      const resultado = calcularMao(mao(notacao, { agari, dora: ['2z'] }), configuracaoPadrao, padrao)
+      assert.equal(resultado.yakuman, 1, notacao)
+      assert.deepEqual(resultado.yaku.map(([nome]) => nome), ['Aniversário do Cerrado'])
+    }
+  }
+  // Mesmo naipe, 發 no lugar de 西 e pon de 白 não valem.
+  assert.ok(!ids(mao('11223m333z555z777z'), padrao).includes('aniversarioCerrado'))
+  assert.ok(!ids(mao('11m223p333z555z666z'), padrao).includes('aniversarioCerrado'))
+  const aberta = mao('11m223p333z777z', { melds: [{ tipo: 'pon', pedras: ['5z', '5z', '5z'] }] })
+  assert.ok(!ids(aberta, padrao).includes('aniversarioCerrado'))
+  // Desligado pela pessoa: não vale.
+  assert.ok(!ids(mao('11m223p333z555z777z'), { ...padrao, ativos: new Set() }).includes('aniversarioCerrado'))
 })
 
 console.log(`Yakus locais ok: ${testes} testes.`)
