@@ -594,6 +594,12 @@
       "on": "开启",
       "off": "关闭"
     },
+    "chiitoitsuQuatroIguais": {
+      "title": "七对子四张相同",
+      "help": "七对子中四张相同的牌算作两对。",
+      "on": "允许",
+      "off": "不允许"
+    },
     "tanyaoAberto": {
       "title": "副露断幺",
       "help": "副露后是否承认断幺九。现代日本规则中很常见，但有些团体采用“无食断”。",
@@ -2495,7 +2501,9 @@
       "notWith": "不与{{list}}复合。",
       "and": "和"
     },
-    "count": "已开启 {{on}}/{{total}}"
+    "count": "已开启 {{on}}/{{total}}",
+    "defaultOnNote": "默认开启，可随时关闭。",
+    "defaultOnBadge": "默认开启"
   },
   "narration": {
     "selected": "选择了{{tiles}}",

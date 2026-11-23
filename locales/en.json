@@ -600,6 +600,12 @@
       "on": "On",
       "off": "Off"
     },
+    "chiitoitsuQuatroIguais": {
+      "title": "Seven Pairs with four of a kind",
+      "help": "In Chiitoitsu, four identical tiles count as two pairs.",
+      "on": "Allow",
+      "off": "Disallow"
+    },
     "tanyaoAberto": {
       "title": "Open Tanyao",
       "help": "Whether Tanyao counts with open calls. Common in modern Japanese rules, but some groups play kuitan nashi.",
@@ -2532,7 +2538,9 @@
       "notWith": "Not with {{list}}.",
       "and": "and"
     },
-    "count": "{{on}} of {{total}} on"
+    "count": "{{on}} of {{total}} on",
+    "defaultOnNote": "On by default. You can turn it off anytime.",
+    "defaultOnBadge": "On by default"
   },
   "narration": {
     "selected": "Selected {{tiles}}",

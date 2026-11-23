@@ -594,6 +594,12 @@
       "on": "켜기",
       "off": "끄기"
     },
+    "chiitoitsuQuatroIguais": {
+      "title": "치또이츠 같은 패 4장",
+      "help": "치또이츠에서 같은 패 4장을 두 쌍으로 셉니다.",
+      "on": "허용",
+      "off": "불허"
+    },
     "tanyaoAberto": {
       "title": "쿠이탕",
       "help": "운 손패에서 탕야오를 인정할지 정합니다. 현대 일본 규칙에서는 흔하지만, 쿠이탕 없음으로 하는 모임도 있습니다.",
@@ -2495,7 +2501,9 @@
       "notWith": "{{list}}와 복합 불가.",
       "and": "및"
     },
-    "count": "{{total}}개 중 {{on}}개 켬"
+    "count": "{{total}}개 중 {{on}}개 켬",
+    "defaultOnNote": "기본으로 켜져 있습니다. 언제든 끌 수 있습니다.",
+    "defaultOnBadge": "기본으로 켜짐"
   },
   "narration": {
     "selected": "{{tiles}} 선택",
