@@ -208,8 +208,8 @@ export const PORQUE_YAKUS_LOCAIS: Record<string, { pt: string; en: string }> = {
     en: 'South and North are the sides of the war, and 1861 and 1865 are the years it began and ended.',
   },
   aniversarioCerrado: {
-    pt: 'Homenagem à fundação do Cerrado Mahjong Club, em 10/10/2023. O 白 é a pedra em branco, os três zeros da data, e 中 + 西 formam Centro-Oeste, a região do Cerrado. Inspirado no Nanboku sensou (American Civil War) da Riichi Wiki. Pode ser desativado em Regras de cálculo > Yakumans locais.',
-    en: 'A tribute to the founding of Cerrado Mahjong Club on 10/10/2023. 白 is the blank tile, the three zeros of the date, and 中 + 西 spell Centro-Oeste (Centre-West), the Cerrado region. Inspired by Nanboku sensou (American Civil War) on the Riichi Wiki. It can be turned off in Calculation rules > Local yakuman.',
+    pt: 'Homenagem à fundação do Cerrado Mahjong Club, em 10/10/2023. O 11 são os 1 de 10/10, o 223 são os 2, 2 e 3 de 2023, e o 白, a pedra em branco, são os três zeros da data. 中 + 西 formam Centro-Oeste, a região do Cerrado. Inspirado no Nanboku sensou (American Civil War) da Riichi Wiki. Pode ser desativado em Regras de cálculo > Yakumans locais.',
+    en: 'A tribute to the founding of Cerrado Mahjong Club on 10/10/2023. The 11 are the 1s of 10/10, the 223 are the 2, 2 and 3 of 2023, and 白, the blank tile, is the three zeros of the date. 中 + 西 spell Centro-Oeste (Centre-West), the Cerrado region. Inspired by Nanboku sensou (American Civil War) on the Riichi Wiki. It can be turned off in Calculation rules > Local yakuman.',
   },
   touhokuExpressway: {
     pt: 'Leste e Norte formam "Touhoku", a região do nordeste do Japão. As pedras pares de pin são a estrada.',

@@ -889,8 +889,8 @@ export const YAKUS_LOCAIS: readonly YakuLocal[] = [
     valor: YAKUMAN,
     formatoIrregular: true,
     ativoPorPadrao: true,
-    pt: { valor: 'Yakuman', traducao: 'Cerrado Tanjōbi', descricao: 'Mão fechada com trincas de 白, 西 e 中, dois 1 de um naipe e 2, 2 e 3 de outro naipe (10/10/2023).' },
-    en: { valor: 'Yakuman', traducao: 'Cerrado Tanjōbi', descricao: 'Closed hand with triplets of 白, 西 and 中, two 1s of one suit and 2, 2 and 3 of another suit (10/10/2023).' },
+    pt: { valor: 'Yakuman', traducao: 'Cerrado Tanjōbi', descricao: 'Mão fechada com trincas de 白, 西 e 中, mais 11 num naipe e 223 em outro. Os dois naipes precisam ser diferentes.' },
+    en: { valor: 'Yakuman', traducao: 'Cerrado Tanjōbi', descricao: 'Closed hand with triplets of 白, 西 and 中, plus 11 in one suit and 223 in another. The two suits must be different.' },
     detectar: (contexto) => {
       if (contexto.mao.melds.length > 0 || contexto.pedras.length !== 14) return false
       // 白 (zeros da data), 西 e 中 (Centro-Oeste), nenhuma outra honra.
