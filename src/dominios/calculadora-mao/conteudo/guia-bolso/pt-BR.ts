@@ -541,7 +541,8 @@ export const conteudo: ConteudoGuiaBolso = {
           topicos: [
             'Pontuação inicial: 50.000.',
             '3 indicadores de dora abertos desde o início (máximo 5 com kans).',
-            'Dora +2 han. Sombra −1 han (pedra igual ao indicador).',
+            'Dora +2 han.',
+            'Sombra −1 han (pedra igual ao indicador).',
             'Ura-dora e Sombra do ura valem com riichi.',
             'Dora e Sombra não contam como Yaku.',
             'A Sombra não reduz a mão abaixo de 1 han.',

@@ -570,7 +570,8 @@ export const conteudo: ConteudoGuiaBolso = {
           topicos: [
             'Starting score: 50,000.',
             '3 dora indicators open from the start (up to 5 with kans).',
-            'Dora +2 han. Shadow −1 han (a tile equal to the indicator).',
+            'Dora +2 han.',
+            'Shadow −1 han (a tile equal to the indicator).',
             'Ura dora and the ura Shadow count with riichi.',
             'Dora and Shadow do not count as yaku.',
             'The Shadow never takes the hand below 1 han.',
