@@ -28,3 +28,4 @@ Fontes usadas em regras e telas. Ao usar uma fonte nova, registre aqui. O reposi
 ## Revisão de iPad e PC
 
 - [Human Interface Guidelines da Apple](https://developer.apple.com/design/human-interface-guidelines), páginas Layout, Accessibility, Designing for iPadOS e Designing for macOS: ação principal à vista, alvos de 44px no toque e 28px no mouse, mais conteúdo e menos rolagem em tela grande.
+- Riichi Wiki, yakuman local Nanboku sensou (American Civil War): inspirou o Aniversário do Cerrado, com a data e a região formadas pelas pedras.
