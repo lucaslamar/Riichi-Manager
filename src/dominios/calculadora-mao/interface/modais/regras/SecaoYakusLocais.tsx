@@ -139,7 +139,8 @@ export default function SecaoYakusLocais({ mostrar }: { mostrar?: (texto: string
                     <em>{texto.valor}</em>
                   </span>
                   <small>
-                    {yaku.ativoPorPadrao ? t('localYaku.defaultOnNote') : texto.descricao}
+                    {texto.descricao}
+                    {yaku.ativoPorPadrao && <> {t('localYaku.defaultOnNote')}</>}
                     {yaku.situacao && <> {t('localYaku.conditionNote')}</>}
                   </small>
                   {EXEMPLOS_YAKUS_LOCAIS[yaku.id] && (
