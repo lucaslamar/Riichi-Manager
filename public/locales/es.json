@@ -3724,5 +3724,26 @@
         "other": "en las últimas {{count}} mesas"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "Compartir mano",
+    "titulo": "Compartir mano",
+    "virarCamera": "Girar cámara",
+    "enquadre": "Encuadra la mano",
+    "galeria": "Elegir de la galería",
+    "fotografar": "Tomar foto",
+    "semCamera": "Sin acceso a la cámara. Puedes elegir una foto de la galería.",
+    "convite": "Abre la app",
+    "dica": "Consejo: en Instagram, añade también el sticker de Enlace.",
+    "layout": "Diseño de la imagen",
+    "layout_foto": "Foto",
+    "layout_resultado": "Resultado",
+    "refazer": "Repetir",
+    "salvar": "Guardar imagen",
+    "compartilhar": "Compartir",
+    "salva": "Imagen guardada",
+    "imagem": "Vista previa de la imagen para compartir",
+    "montando": "Creando la imagen",
+    "falhou": "No se pudo crear la imagen."
   }
 }

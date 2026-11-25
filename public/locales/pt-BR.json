@@ -3701,5 +3701,26 @@
         "other": "nas últimas {{count}} mesas"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "Compartilhar mão",
+    "titulo": "Compartilhar mão",
+    "virarCamera": "Virar câmera",
+    "enquadre": "Enquadre a mão",
+    "galeria": "Escolher da galeria",
+    "fotografar": "Tirar foto",
+    "semCamera": "Sem acesso à câmera. Você pode escolher uma foto da galeria.",
+    "convite": "Acesse o app",
+    "dica": "Dica: no Instagram, adicione também a figurinha de Link.",
+    "layout": "Layout da imagem",
+    "layout_foto": "Foto",
+    "layout_resultado": "Resultado",
+    "refazer": "Refazer",
+    "salvar": "Salvar imagem",
+    "compartilhar": "Compartilhar",
+    "salva": "Imagem salva",
+    "imagem": "Prévia da imagem para compartilhar",
+    "montando": "Montando a imagem",
+    "falhou": "Não foi possível montar a imagem."
   }
 }

@@ -55,3 +55,9 @@ Estes padrões orientam novas alterações, implementações e refatorações fu
 - Considere que outras pessoas precisarão compreender, revisar e dar continuidade ao código.
 
 Consulte [arquitetura](../docs/arquitetura.md), [fluxo da calculadora](../docs/calculadora-fluxo.md) e [acessibilidade](../docs/acessibilidade.md) para detalhes, conferindo o código quando necessário.
+
+## Câmera e compartilhar arquivo
+
+- Monte o arquivo antes do toque e chame `navigator.share` direto no toque, sem `await` antes: o iOS perde o gesto e não abre a folha. A prévia recompõe a imagem ao trocar o layout.
+- Sempre desligue as faixas da câmera ao capturar, fechar, desmontar e quando o app vai para o segundo plano (`visibilitychange`).
+- Imagens para compartilhar são desenhadas no Canvas 2D por funções que recebem tudo por argumento, sem html2canvas.

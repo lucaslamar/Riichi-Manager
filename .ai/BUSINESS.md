@@ -220,3 +220,10 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
 - Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.
 - Voz do Resultado (Riichi e MCR, pedido do usuário em 26/11/2026): só fala com a Narração ligada. Antes, sem a Narração, ele dizia os pontos e os pagamentos ao abrir, o que incomodava quem não usa a narração.
+
+## Compartilhar a mão
+
+- Objetivo: tornar o app "instagramável". Cada Story com a mão e a assinatura do app (logo, nome e QR para o site) divulga o Riichi Manager. O formato de referência é o dos Stories (9:16), e o resto (WhatsApp, Discord) deve ficar bom também.
+- Privacidade: a foto nunca sai do aparelho. Sem envio, sem gravar, e a câmera desliga ao capturar, fechar ou sair do app.
+- Só aparece com um resultado válido: some no chombo, na mão sem yaku e na mão MCR inválida.
+- O cartão mostra até 4 yaku ou fan e "+N" para o resto, e o nome de quem bateu quando o resultado vem do Centerpiece.
