@@ -47,7 +47,11 @@ function Chave({
   return (
     <g className={destaque ? 'historia-mao-ajuda-destaque' : undefined}>
       <path d={`M${x} ${y} v4 h${largura} v-4`} fill="none" strokeWidth={1.2} />
-      <text x={x + largura / 2} y={y + (destaque ? 32 : 17)} textAnchor="middle">
+      <text
+        x={destaque ? x + largura : x + largura / 2}
+        y={y + (destaque ? 32 : 17)}
+        textAnchor={destaque ? 'end' : 'middle'}
+      >
         {texto}
       </text>
     </g>
@@ -56,7 +60,7 @@ function Chave({
 
 /**
  * Como fotografar a mão, aberta pelo ? da câmera: um desenho da disposição na
- * mesa (mão, espaço, batida, espaço, chamadas) e as dicas em uma linha cada.
+ * mesa (mão, chamadas e a batida na ponta) e as dicas em uma linha cada.
  */
 export default function AjudaFoto({ aoFechar }: { aoFechar: () => void }) {
   const { t } = useI18n()
@@ -79,9 +83,9 @@ export default function AjudaFoto({ aoFechar }: { aoFechar: () => void }) {
     }
   }, [aoFechar])
   const mao = Array.from({ length: 10 }, (_, indice) => 4 + indice * PASSO)
-  const xBatida = 4 + 10 * PASSO + 10
-  const xChi = xBatida + PASSO + 10
+  const xChi = 4 + 10 * PASSO + 10
   const xKan = xChi + ALTURA + 1 + 2 * PASSO + 8
+  const xBatida = xKan + 4 * PASSO + 10
 
   return (
     <div
