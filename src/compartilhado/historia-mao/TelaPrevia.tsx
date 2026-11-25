@@ -10,7 +10,7 @@ import {
   type TemaHistoria,
 } from './comporHistoria'
 
-const LAYOUTS: LayoutHistoria[] = ['foto', 'resultado']
+const LAYOUTS: LayoutHistoria[] = ['foto', 'resultado', 'cabine']
 
 function temaAtual(): TemaHistoria {
   const estilo = getComputedStyle(document.body)
@@ -54,6 +54,21 @@ function MiniaturaLayout({ layout }: { layout: LayoutHistoria }) {
             width="13"
             height="12"
             rx="1.5"
+            className="historia-mao-miniatura-cartao"
+          />
+        </>
+      ) : layout === 'cabine' ? (
+        <>
+          <rect x="2" y="4" width="8.5" height="12" className="historia-mao-miniatura-foto" />
+          <rect x="12" y="4" width="4" height="1.5" className="historia-mao-miniatura-cartao" />
+          <rect x="12" y="7" width="4" height="1.5" className="historia-mao-miniatura-cartao" />
+          <rect x="12" y="10" width="3" height="1.5" className="historia-mao-miniatura-cartao" />
+          <rect
+            x="2"
+            y="18"
+            width="14"
+            height="5"
+            rx="1"
             className="historia-mao-miniatura-cartao"
           />
         </>

@@ -25,7 +25,7 @@ const ESPACO_GRUPO = 16
 const ESPACO_LINHAS = 20
 const QUIETA_QR = 16
 
-export type LayoutHistoria = 'foto' | 'resultado'
+export type LayoutHistoria = 'foto' | 'resultado' | 'cabine'
 
 export interface DadosHistoria {
   /** Endereços das pedras da mão fechada, sem a da batida. */
@@ -92,6 +92,7 @@ export async function comporHistoria(
   ])
   const desenho = { ...opcoes, qr: create(opcoes.url, { errorCorrectionLevel: 'M' }).modules }
   if (opcoes.layout === 'foto') desenharFocoFoto(contexto, foto, dados, pedras, logo, desenho)
+  else if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, logo, desenho)
   else desenharFocoResultado(contexto, foto, dados, pedras, logo, desenho)
 
   return new Promise((resolver, rejeitar) =>
@@ -239,6 +240,238 @@ function desenharFocoResultado(
 
   desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 24, interna)
   desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
+}
+
+const FONTE_SERIFADA = 'Georgia, "Times New Roman", serif'
+
+/**
+ * Estilo Cabine, com cara de cabine de fotos. A foto tirada é a protagonista e
+ * as pedras do app não se repetem: ela já mostra a mão. Foto deitada (a mão em
+ * fila) vai inteira na largura, com o resultado embaixo em duas colunas. Foto em
+ * pé vai grande à esquerda, com o resultado na coluna ao lado. Pedrinhas em pixel
+ * enfeitam os cantos que o Instagram cobre.
+ */
+function desenharCabine(
+  contexto: CanvasRenderingContext2D,
+  foto: ImageBitmap,
+  dados: DadosHistoria,
+  logo: HTMLImageElement | null,
+  opcoes: OpcoesDesenho,
+) {
+  const { tema } = opcoes
+  contexto.fillStyle = tema.superficie
+  contexto.fillRect(0, 0, LARGURA, ALTURA)
+  desenharPixels(contexto, tema)
+
+  const interna = LARGURA - SAFE_SIDE * 2
+  const ladoQr = 200
+  const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
+  const fimConteudo = yAssinatura - 36
+
+  if (foto.width > foto.height) {
+    const alturaFoto = Math.round(interna * 0.75)
+    desenharFotoCabine(contexto, foto, SAFE_SIDE, SAFE_TOP, interna, alturaFoto)
+    const topo = SAFE_TOP + alturaFoto + 36
+    const meia = (interna - 36) / 2
+    desenharPlacarCabine(contexto, dados, opcoes, SAFE_SIDE, topo, meia)
+    desenharNomesCabine(contexto, dados, opcoes, SAFE_SIDE + meia + 36, topo + 10, meia)
+  } else {
+    const larguraFoto = 620
+    desenharFotoCabine(contexto, foto, SAFE_SIDE, SAFE_TOP, larguraFoto, fimConteudo - SAFE_TOP)
+    const xLado = SAFE_SIDE + larguraFoto + 36
+    const larguraLado = LARGURA - SAFE_SIDE - xLado
+    const fim = desenharPlacarCabine(contexto, dados, opcoes, xLado, SAFE_TOP, larguraLado)
+    desenharNomesCabine(contexto, dados, opcoes, xLado, fim + 24, larguraLado)
+  }
+
+  desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 18, interna)
+  desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
+}
+
+function desenharFotoCabine(
+  contexto: CanvasRenderingContext2D,
+  foto: ImageBitmap,
+  x: number,
+  y: number,
+  largura: number,
+  altura: number,
+) {
+  contexto.save()
+  retanguloArredondado(contexto, x, y, largura, altura, 8)
+  contexto.clip()
+  desenharCobrindo(contexto, foto, x, y, largura, altura)
+  contexto.restore()
+}
+
+/** Escreve linha a linha, quebrando no espaço; devolve onde terminou. */
+function escreverQuebrando(
+  contexto: CanvasRenderingContext2D,
+  texto: string,
+  fonte: string,
+  cor: string,
+  x: number,
+  y: number,
+  largura: number,
+  alturaLinha: number,
+) {
+  contexto.font = fonte
+  contexto.fillStyle = cor
+  contexto.textAlign = 'left'
+  contexto.textBaseline = 'top'
+  let cursor = y
+  for (const linha of quebrarLinhas(contexto, texto, largura)) {
+    contexto.fillText(linha, x, cursor)
+    cursor += alturaLinha
+  }
+  return cursor
+}
+
+/** Patamar, quem bateu, pontos, ron/tsumo e han/fu, em letra serifada. */
+function desenharPlacarCabine(
+  contexto: CanvasRenderingContext2D,
+  dados: DadosHistoria,
+  { tema }: OpcoesDesenho,
+  x: number,
+  y: number,
+  largura: number,
+) {
+  let cursor = y
+  if (dados.patamar) {
+    cursor = escreverQuebrando(
+      contexto,
+      dados.patamar,
+      `700 60px ${FONTE_SERIFADA}`,
+      tema.destaque,
+      x,
+      cursor,
+      largura,
+      70,
+    )
+    cursor += 8
+  }
+  if (dados.vencedor) {
+    cursor = escreverQuebrando(
+      contexto,
+      dados.vencedor,
+      `700 36px ${FONTE}`,
+      tema.texto,
+      x,
+      cursor,
+      largura,
+      46,
+    )
+  }
+  cursor = escreverQuebrando(
+    contexto,
+    dados.pontos,
+    `700 80px ${FONTE_SERIFADA}`,
+    tema.texto,
+    x,
+    cursor,
+    largura,
+    92,
+  )
+  cursor = escreverQuebrando(
+    contexto,
+    dados.forma.toUpperCase(),
+    `700 36px ${FONTE}`,
+    tema.destaque,
+    x,
+    cursor,
+    largura,
+    52,
+  )
+  if (resumoVisivel(dados)) {
+    cursor = escreverQuebrando(
+      contexto,
+      dados.resumo,
+      `500 30px ${FONTE}`,
+      tema.textoSuave,
+      x,
+      cursor,
+      largura,
+      42,
+    )
+  }
+  return cursor
+}
+
+/** Os yaku, um por linha, em itálico. */
+function desenharNomesCabine(
+  contexto: CanvasRenderingContext2D,
+  dados: DadosHistoria,
+  { tema, textos }: OpcoesDesenho,
+  x: number,
+  y: number,
+  largura: number,
+) {
+  const fonte = `italic 400 34px ${FONTE_SERIFADA}`
+  let cursor = y
+  for (const nome of dados.nomes.slice(0, MAX_NOMES)) {
+    cursor = escreverQuebrando(contexto, nome, fonte, tema.texto, x, cursor, largura, 46)
+  }
+  const resto = dados.nomes.length - MAX_NOMES
+  if (resto > 0)
+    escreverQuebrando(contexto, textos.mais(resto), fonte, tema.textoSuave, x, cursor, largura, 46)
+}
+
+/** Quebra o texto em linhas que cabem na largura (por espaço, ou por letra em CJK). */
+function quebrarLinhas(
+  contexto: CanvasRenderingContext2D,
+  texto: string,
+  largura: number,
+): string[] {
+  const separador = texto.includes(' ') ? ' ' : ''
+  const linhas: string[] = []
+  let atual = ''
+  for (const parte of texto.split(separador)) {
+    const junto = atual ? atual + separador + parte : parte
+    if (atual && contexto.measureText(junto).width > largura) {
+      linhas.push(atual)
+      atual = parte
+    } else {
+      atual = junto
+    }
+  }
+  return (atual ? [...linhas, atual] : linhas).map((linha) => caber(contexto, linha, largura))
+}
+
+/**
+ * Pedrinhas em pixel: blocos do tamanho de uma pedra pequena (3×4 quadradinhos),
+ * em escada no canto de baixo e de leve no de cima, onde o Instagram cobre.
+ */
+function desenharPixels(contexto: CanvasRenderingContext2D, tema: TemaHistoria) {
+  const lado = 12
+  const pedra = (x: number, y: number, cor: string) => {
+    contexto.fillStyle = cor
+    for (let linha = 0; linha < 4; linha++) {
+      for (let coluna = 0; coluna < 3; coluna++) {
+        const borda = linha === 0 || linha === 3 || coluna === 0 || coluna === 2
+        contexto.globalAlpha = borda ? 0.9 : 0.35
+        contexto.fillRect(x + coluna * (lado + 2), y + linha * (lado + 2), lado, lado)
+      }
+    }
+    contexto.globalAlpha = 1
+  }
+  // Escada embaixo à esquerda: mais alta na ponta, baixando para a direita.
+  const larguraPedra = 3 * (lado + 2) + 8
+  const alturaPedra = 4 * (lado + 2) + 8
+  for (let coluna = 0; coluna < 9; coluna++) {
+    const altura = Math.max(1, 5 - Math.floor(coluna / 2))
+    for (let linha = 0; linha < altura; linha++) {
+      const cor = (coluna + linha) % 3 === 0 ? tema.textoSuave : tema.destaque
+      pedra(coluna * larguraPedra + 8, ALTURA - (linha + 1) * alturaPedra, cor)
+    }
+  }
+  // Algumas soltas no topo à direita.
+  for (const [coluna, linha] of [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [2, 0],
+  ]) {
+    pedra(LARGURA - (coluna + 1) * larguraPedra - 8, 24 + linha * alturaPedra, tema.textoSuave)
+  }
 }
 
 /** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
