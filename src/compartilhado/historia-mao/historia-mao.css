@@ -398,3 +398,24 @@
     white-space: nowrap;
   }
 }
+
+.historia-mao-miniatura {
+  display: block;
+  width: 20px;
+  height: 34px;
+}
+
+.historia-mao-miniatura-tela {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
+.historia-mao-miniatura-foto {
+  fill: #5b8fc7;
+}
+
+.historia-mao-miniatura-cartao {
+  fill: currentColor;
+  opacity: 0.85;
+}
