@@ -3701,5 +3701,26 @@
         "other": "over the last {{count}} tables"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "Share hand",
+    "titulo": "Share hand",
+    "virarCamera": "Flip camera",
+    "enquadre": "Frame the hand",
+    "galeria": "Choose from gallery",
+    "fotografar": "Take photo",
+    "semCamera": "No camera access. You can choose a photo from the gallery.",
+    "convite": "Get the app",
+    "dica": "Tip: on Instagram, also add the Link sticker.",
+    "layout": "Image layout",
+    "layout_foto": "Photo",
+    "layout_resultado": "Result",
+    "refazer": "Retake",
+    "salvar": "Save image",
+    "compartilhar": "Share",
+    "salva": "Image saved",
+    "imagem": "Preview of the image to share",
+    "montando": "Building the image",
+    "falhou": "Could not build the image."
   }
 }

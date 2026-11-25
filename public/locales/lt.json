@@ -3797,5 +3797,26 @@
         "other": "paskutiniai stalai: {{count}}"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "Dalintis ranka",
+    "titulo": "Dalintis ranka",
+    "virarCamera": "Apversti kamerą",
+    "enquadre": "Įrėminkite ranką",
+    "galeria": "Pasirinkti iš galerijos",
+    "fotografar": "Fotografuoti",
+    "semCamera": "Nėra prieigos prie kameros. Galite pasirinkti nuotrauką iš galerijos.",
+    "convite": "Atidarykite programėlę",
+    "dica": "Patarimas: „Instagram“ pridėkite ir nuorodos lipduką.",
+    "layout": "Vaizdo išdėstymas",
+    "layout_foto": "Nuotrauka",
+    "layout_resultado": "Rezultatas",
+    "refazer": "Fotografuoti iš naujo",
+    "salvar": "Išsaugoti vaizdą",
+    "compartilhar": "Dalintis",
+    "salva": "Vaizdas išsaugotas",
+    "imagem": "Dalinamo vaizdo peržiūra",
+    "montando": "Kuriamas vaizdas",
+    "falhou": "Nepavyko sukurti vaizdo."
   }
 }

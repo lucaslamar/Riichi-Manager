@@ -8,7 +8,16 @@ import '@/dominios/calculadora-mao/interface/modais/resultado/modal-resultado.cs
 import { pedrasDaChamada, type CondicoesMcr, type Flor, type MaoChinesa } from '../logica/montagem'
 import type { FanContado } from '../logica/tipos'
 import { PedrasChamada } from './MaoChinesaAtual'
-import { PedraChinesa, PedraFlor } from './PedraChinesa'
+import BotaoCompartilharMao from '@/compartilhado/historia-mao/BotaoCompartilharMao'
+import type { DadosHistoria } from '@/compartilhado/historia-mao/comporHistoria'
+import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
+import {
+  arquivoDaFlor,
+  arquivoDaPedra,
+  PedraChinesa,
+  PedraFlor,
+  urlPedraChinesa,
+} from './PedraChinesa'
 import type { ResultadoCalculoMcr } from './useCalculadoraMaoChinesa'
 
 /** Número das Flores no guia do CMC. */
@@ -147,6 +156,29 @@ export default function ModalResultadoMcr({
     acesa(chave) ? ' destaque-yaku' : acesas ? ' apagada' : ''
   const descricaoDe = (chave: string) => (acesa(chave) ? idDescricao : undefined)
 
+  const { pedrasEfetivas, temaEfetivo } = usePreferencias()
+  const dadosDaHistoria = (): DadosHistoria => {
+    const url = (arquivo: string) =>
+      urlPedraChinesa(arquivo, pedrasEfetivas, temaEfetivo === 'escuro')
+    const grupos = mao.chamadas.map((chamada) =>
+      pedrasDaChamada(chamada).map((id) => url(arquivoDaPedra(id))),
+    )
+    if (mao.flores.length > 0) grupos.push(mao.flores.map((flor) => url(arquivoDaFlor(flor))))
+    return {
+      mao: ocultas.map((id) => url(arquivoDaPedra(id))),
+      batida: url(arquivoDaPedra(batida)),
+      grupos,
+      resumo: t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) }),
+      nomes: linhas.map((linha) =>
+        linha.vezes > 1
+          ? `${nomeDe(linha)} ${t('mcr.resultado.vezes', { vezes: numero(linha.vezes) })}`
+          : nomeDe(linha),
+      ),
+      pontos: numero(pagamento?.ganhadorRecebe ?? fan.fanTotal),
+      forma: t(condicoes.forma === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
+    }
+  }
+
   // O resultado é falado ao abrir, como no Riichi. Sem a Narração ligada, só o fan e os pagamentos.
   useEffect(() => {
     const curta = !lerNarracao().ativa
@@ -191,6 +223,7 @@ export default function ModalResultadoMcr({
       semBotaoFechar
       acoes={
         <>
+          {!invalida && <BotaoCompartilharMao dados={dadosDaHistoria} />}
           <button
             type="button"
             className="modal-acao"

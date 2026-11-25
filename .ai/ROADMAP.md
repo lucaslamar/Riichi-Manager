@@ -44,3 +44,4 @@ Ideias discutidas e ainda não implementadas. Ao implementar, mova a regra para 
 - Decidir se Corrigir também edita um resultado MCR jogado no Placar (hoje só abre a mesa finalizada).
 - Decidir se o Placar troca as cadeiras entre as rodadas.
 - Decidir se a calculadora mostra o An Gang com as 4 pedras viradas, como o Tutorial, ou só as pontas.
+- Compartilhar a mão: abrir direto o editor dos Stories (`instagram-stories://`) só na versão React Native, pois precisa de Facebook App ID e não funciona bem na web. Preencher `SHARE_HANDLE` quando houver um @ ou site curto.

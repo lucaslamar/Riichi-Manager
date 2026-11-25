@@ -25,7 +25,7 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 
 ## Modo de jogo (desde a 7.0.0)
 
-- A versão atual é a 7.11.0 (termos chineses e Tutorial MCR completo). O modo de jogo global entrou na 7.0.0. A versão exibida e a do backup vêm do `package.json` (`__VERSAO_APP__` no `vite.config.ts`).
+- A versão atual é a 7.12.0 (compartilhar a mão em imagem para os Stories). O modo de jogo global entrou na 7.0.0. A versão exibida e a do backup vêm do `package.json` (`__VERSAO_APP__` no `vite.config.ts`).
 - `src/compartilhado/modo-jogo`: `ModoJogo` é `'riichi' | 'mcr'`, com padrão `'riichi'`. O `ModoJogoProvider` envolve o app em `src/main.tsx`, abaixo do `PreferenciasProvider`, e grava o modo em `localStorage` na chave `rm.modoJogo`. `useModoJogo()` devolve `modo`, `setModo` e `isChines`. O provider também põe `data-modo` no `<html>` e atualiza o `document.title`. `maoEmAndamento.ts` avisa ao cartão de modo se a calculadora chinesa tem pedras.
 - `src/compartilhado/marca/nome-app.ts`: o nome exibido é Riichi Manager no modo Riichi e Mahjong Manager no Chinês. Repositório, `base`, manifesto, ícones e chaves de armazenamento não mudam.
 - `src/compartilhado/interface/layout/navegacao.ts`: `navegacaoDoModo(modo)` devolve páginas, itens e ordem do carrossel. No Riichi devolve as listas originais, sem mudança. No MCR ficam ocultas a Han e Fu e as Partidas, e entra a tela `placarMcr`, que só existe no MCR. A barra do MCR tem duas páginas: Calculadora, Centerpiece, Placar e Ranking, e depois Sorteador e Tutorial. O `CenterpieceSimples` é o mesmo componente, com a chave `riichi-manager-centerpiece-simples-mcr`. A Calculadora de Mão continua no mesmo lugar e, no App, mostra a calculadora chinesa. O Tutorial é o mesmo `GuiaAprender`, com o conteúdo do modo. Ao trocar de modo numa tela que não existe no outro, o App volta para a Calculadora.
@@ -78,3 +78,10 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 - `src/compartilhado/interface/componentes/sorteio`: painel `QualidadeSorteio` e folha `DetalhesSorteio`, usados pelo Torneio (`logica/estatisticaGrade.ts`) e pelo Clube (`situacaoDoDia`).
 - A grade do Rodízio de 4 continua em `torneio/logica/formatos/rodizio`, comparando `criterios` em ordem.
 - `EncontroClube.mesas` e `foraDoDia` são opcionais: backups antigos continuam valendo.
+
+## Compartilhar a mão (7.12.0)
+
+- `src/compartilhado/historia-mao`: o fluxo é um só para o Riichi e o MCR. Cada resultado (`ModalResultado` e `ModalResultadoMcr`) só monta um `DadosHistoria` (endereços das pedras, nomes, han/fu ou fan, pontos, ron/tsumo e vencedor) a partir do resultado já calculado e passa ao `BotaoCompartilharMao`. Nada é recalculado.
+- `comporHistoria.ts` desenha a imagem 1080×1920 só com o Canvas 2D (sem html2canvas). Recebe foto, dados, cores do tema e textos por argumento, sem ler o estado do app. O QR usa o `qrcode` que o app já tinha (carregado só na hora), com o `URL_DO_APP`. Nenhuma dependência nova.
+- Plataforma: `adaptadores/camera.ts` (getUserMedia, quadro, galeria com EXIF) e `adaptadores/arquivo.ts` (`salvarArquivo` para a folha do sistema e `baixarArquivo`). No React Native, trocar só os adaptadores e o desenho.
+- O fluxo abre por portal no `body`, acima do Resultado, e entra na pilha de camadas: o Esc fecha o fluxo, não o Resultado.

@@ -111,3 +111,15 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 - A seta nunca deixa a conta para quem lê (pedido do usuário em 22/11/2026): embaixo dela vai a posição de antes, em cor neutra ("era 2º"), e no card "era 2º na rodada 1". O leitor de tela fala os dois. Quem manteve ou estreou não tem "era".
 - Painéis secundários (Qualidade do sorteio) vêm fechados, numa linha, com pílula e chevron. Abrem sozinhos só com nota regular ou ruim antes de a rodada começar. Abertos, 2 linhas curtas e os botões. O resto vai para a folha de detalhes.
 - Sortear de novo é secundário com nota perfeita ou ótima e principal nas outras. A comparação com o anterior fica 5 s, e o Voltar ao anterior continua no painel.
+
+## Compartilhar a mão (imagem dos Stories)
+
+- Ícone de compartilhar no cabeçalho do Resultado, antes do lápis, com 44px como os outros. O resto do Resultado não muda.
+- Imagem de 1080×1920. Zonas que o Instagram cobre: 250px no topo, 340px na base e 48px nos lados (`SAFE_TOP`, `SAFE_BOTTOM`, `SAFE_SIDE` em `comporHistoria.ts`). Pedras, textos, assinatura e a foto pequena ficam dentro delas.
+- Layout Foto (padrão): foto em tela cheia, degradê escuro embaixo e o cartão do resultado (raio 40px, 92% opaco, na cor de superfície do tema) terminando em y = 1580.
+- Layout Resultado: fundo na cor do tema, foto de 360×480 com raio 32px e borda branca no canto de cima, e pedras e textos no meio do espaço livre.
+- Pedras desenhadas com a face e a borda do tema (`--pedra-face`, `--pedra-borda`), a batida separada por 24px e cada conjunto aberto ou as flores por 16px.
+- Assinatura: logo 48px, "Riichi Manager" 32px, "Acesse o app" e a data em 28px. `SHARE_HANDLE` reserva uma linha para site ou @, vazia por enquanto.
+- QR: nível M, 200px no layout Foto e 220px no Resultado, com 16px de margem branca e raio 16px. Sempre preto no branco, em qualquer tema, sem logo dentro. Esta é uma exceção ao QR lilás das imagens do torneio: na imagem dos Stories ele precisa ser lido da tela de outro celular, por cima de uma foto.
+- Câmera: tela cheia preta, X e virar câmera (só com mais de uma) em 44px no topo, guia tracejada "Enquadre a mão", galeria 48px e obturador 72px embaixo. Sem câmera ou sem permissão, aviso no meio da tela e a galeria, sem alerta.
+- Prévia: a imagem inteira (contain), a dica da figurinha de Link, o seletor Foto/Resultado, Refazer e Salvar imagem lado a lado e Compartilhar na largura toda embaixo, ao alcance do polegar.
