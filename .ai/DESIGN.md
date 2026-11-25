@@ -116,7 +116,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 
 - Ícone de compartilhar no cabeçalho do Resultado, antes do lápis, com 44px como os outros. O resto do Resultado não muda.
 - Imagem de 1080×1920. Zonas que o Instagram cobre: 250px no topo, 340px na base e 48px nos lados (`SAFE_TOP`, `SAFE_BOTTOM`, `SAFE_SIDE` em `comporHistoria.ts`). Pedras, textos, assinatura e a foto pequena ficam dentro delas.
-- Layout Foto (padrão): foto em tela cheia, degradê escuro embaixo e o cartão do resultado (raio 40px, 92% opaco, na cor de superfície do tema) terminando em y = 1580.
+- Layout Foto (padrão): foto em tela cheia, degradê escuro embaixo e o cartão do resultado (raio 40px, 92% opaco, na cor de superfície do tema) terminando em y = 1580. A mão vai no topo do cartão em duas linhas centralizadas, com até 120px de altura por pedra, para ter destaque sem cobrir mais que a metade de baixo da foto (pedido do usuário em 25/11/2026).
 - Layout Resultado: a mão é o destaque (pedido do usuário em 25/11/2026). Fundo na cor do tema, foto de 360×480 com raio 32px e borda branca no canto de cima e, ao lado dela, patamar, pontos, ron/tsumo e han/fu. No meio, a mão em duas linhas grandes (até 220px de altura por pedra, a fechada dividida ao meio e a batida e os conjuntos na segunda), com os nomes dos yaku embaixo.
 - Pedras desenhadas com a face e a borda do tema (`--pedra-face`, `--pedra-borda`), a batida separada por 24px e cada conjunto aberto ou as flores por 16px.
 - Assinatura: logo 48px, "Riichi Manager" 32px, "Acesse o app" e a data em 28px. `SHARE_HANDLE` reserva uma linha para site ou @, vazia por enquanto.

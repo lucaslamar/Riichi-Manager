@@ -22,6 +22,7 @@ const FONTE = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 const MAX_NOMES = 4
 const ESPACO_BATIDA = 24
 const ESPACO_GRUPO = 16
+const ESPACO_LINHAS = 20
 const QUIETA_QR = 16
 
 export type LayoutHistoria = 'foto' | 'resultado'
@@ -156,11 +157,14 @@ function desenharFocoFoto(
   const largura = LARGURA - SAFE_SIDE * 2
   const respiro = 40
   const interna = largura - respiro * 2
-  const alturaPedra = alturaDasPedras(pedras, interna, 96)
+  // Mão em destaque também aqui: duas linhas, sem cobrir demais a foto.
+  const linhas = emDuasLinhas(pedras)
+  const alturaPedra = Math.min(...linhas.map((linha) => alturaDasPedras(linha, interna, 120)))
+  const alturaMao = alturaPedra * 2 + ESPACO_LINHAS
   const ladoQr = 200
   const alturaAssinatura = ladoQr + QUIETA_QR * 2
   const linhasTexto = alturaDosTextos(dados)
-  const altura = respiro + alturaPedra + 32 + linhasTexto + 32 + alturaAssinatura + respiro
+  const altura = respiro + alturaMao + 32 + linhasTexto + 32 + alturaAssinatura + respiro
   const y = LIMITE_BAIXO - altura
 
   contexto.save()
@@ -171,8 +175,11 @@ function desenharFocoFoto(
   contexto.restore()
 
   let cursor = y + respiro
-  desenharPedras(contexto, tema, pedras, x + respiro, cursor, interna, alturaPedra, 'inicio')
-  cursor += alturaPedra + 32
+  for (const linha of linhas) {
+    desenharPedras(contexto, tema, linha, x + respiro, cursor, interna, alturaPedra, 'meio')
+    cursor += alturaPedra + ESPACO_LINHAS
+  }
+  cursor += 32 - ESPACO_LINHAS
   cursor = desenharTextos(contexto, dados, opcoes, x + respiro, cursor, interna)
   cursor += 32
   desenharSeparador(contexto, tema, x + respiro, cursor - 16, interna)
@@ -226,27 +233,21 @@ function desenharFocoResultado(
   const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
 
   // A mão é o destaque: duas linhas grandes no meio, e os nomes embaixo.
-  const total = totalDePedras(pedras)
-  const metade = Math.min(pedras.mao.length, Math.ceil(total / 2))
-  const linhas: Pedras[] = [
-    { mao: pedras.mao.slice(0, metade), batida: null, grupos: [] },
-    { mao: pedras.mao.slice(metade), batida: pedras.batida, grupos: pedras.grupos },
-  ]
+  const linhas = emDuasLinhas(pedras)
   const topo = SAFE_TOP + alturaFoto + 48
   const livre = yAssinatura - 48 - topo
-  const espacoLinhas = 20
   const alturaNomes = 52
   const alturaPedra = Math.min(
     ...linhas.map((linha) => alturaDasPedras(linha, interna, 220)),
-    (livre - espacoLinhas - 40 - alturaNomes) / 2,
+    (livre - ESPACO_LINHAS - 40 - alturaNomes) / 2,
   )
-  const bloco = alturaPedra * 2 + espacoLinhas + 40 + alturaNomes
+  const bloco = alturaPedra * 2 + ESPACO_LINHAS + 40 + alturaNomes
   let cursor = topo + (livre - bloco) / 2
   for (const linha of linhas) {
     desenharPedras(contexto, tema, linha, SAFE_SIDE, cursor, interna, alturaPedra, 'meio')
-    cursor += alturaPedra + espacoLinhas
+    cursor += alturaPedra + ESPACO_LINHAS
   }
-  cursor += 40 - espacoLinhas
+  cursor += 40 - ESPACO_LINHAS
   const nomes = dados.nomes.slice(0, MAX_NOMES).join(' · ')
   const resto = dados.nomes.length - MAX_NOMES
   contexto.textAlign = 'center'
@@ -500,4 +501,13 @@ function retanguloArredondado(
   contexto.arcTo(x, y + altura, x, y, raio)
   contexto.arcTo(x, y, x + largura, y, raio)
   contexto.closePath()
+}
+
+/** A mão fechada dividida ao meio; a batida e os conjuntos vão na segunda linha. */
+function emDuasLinhas(pedras: Pedras): Pedras[] {
+  const metade = Math.min(pedras.mao.length, Math.ceil(totalDePedras(pedras) / 2))
+  return [
+    { mao: pedras.mao.slice(0, metade), batida: null, grupos: [] },
+    { mao: pedras.mao.slice(metade), batida: pedras.batida, grupos: pedras.grupos },
+  ]
 }
