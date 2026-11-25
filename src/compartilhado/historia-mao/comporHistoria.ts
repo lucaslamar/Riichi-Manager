@@ -173,7 +173,7 @@ function desenharFotoNaFaixa(
   contexto.fillRect(0, 0, LARGURA, ALTURA)
 
   const interna = LARGURA - SAFE_SIDE * 2
-  const alturaFoto = 500
+  const alturaFoto = 420
   contexto.save()
   contexto.fillStyle = '#ffffff'
   retanguloArredondado(contexto, SAFE_SIDE - 4, SAFE_TOP - 4, interna + 8, alturaFoto + 8, 36)
@@ -258,7 +258,11 @@ function desenharFotoCabine(
   contexto.restore()
 }
 
-/** Escreve linha a linha, quebrando no espaço; devolve onde terminou. */
+/**
+ * Escreve linha a linha, quebrando no espaço; devolve onde terminou. Palavra
+ * maior que a largura ("Sanbaiman" na coluna estreita) diminui a letra em vez
+ * de ser cortada.
+ */
 function escreverQuebrando(
   contexto: CanvasRenderingContext2D,
   texto: string,
@@ -270,13 +274,25 @@ function escreverQuebrando(
   alturaLinha: number,
 ) {
   contexto.font = fonte
+  const maiorPalavra = Math.max(
+    ...(temCjk(texto)
+      ? [0]
+      : texto.split(' ').map((palavra) => contexto.measureText(palavra).width)),
+  )
+  const reducao = maiorPalavra > largura ? largura / maiorPalavra : 1
+  if (reducao < 1) {
+    contexto.font = fonte.replace(
+      /(\d+)px/,
+      (_, px: string) => `${Math.floor(Number(px) * reducao)}px`,
+    )
+  }
   contexto.fillStyle = cor
   contexto.textAlign = 'left'
   contexto.textBaseline = 'top'
   let cursor = y
   for (const linha of quebrarLinhas(contexto, texto, largura)) {
     contexto.fillText(linha, x, cursor)
-    cursor += alturaLinha
+    cursor += alturaLinha * reducao
   }
   return cursor
 }
@@ -370,13 +386,19 @@ function desenharNomesCabine(
     escreverQuebrando(contexto, textos.mais(resto), fonte, tema.textoSuave, x, cursor, largura, 46)
 }
 
+/** Japonês, chinês ou coreano: dá para quebrar entre caracteres. */
+function temCjk(texto: string) {
+  return /[぀-ヿ㐀-鿿가-힯]/.test(texto)
+}
+
 /** Quebra o texto em linhas que cabem na largura (por espaço, ou por letra em CJK). */
 function quebrarLinhas(
   contexto: CanvasRenderingContext2D,
   texto: string,
   largura: number,
 ): string[] {
-  const separador = texto.includes(' ') ? ' ' : ''
+  // Só japonês, chinês e coreano quebram por caractere; palavra sem espaço fica inteira.
+  const separador = temCjk(texto) && !texto.includes(' ') ? '' : ' '
   const linhas: string[] = []
   let atual = ''
   for (const parte of texto.split(separador)) {
@@ -490,8 +512,8 @@ function resumoVisivel(dados: DadosHistoria) {
   return dados.resumo.toLowerCase() !== (dados.patamar ?? '').toLowerCase()
 }
 
-const ALTURA_CARTAO_YAKU = 64
-const ESPACO_CARTOES = 12
+const ALTURA_CARTAO_YAKU = 56
+const ESPACO_CARTOES = 8
 
 /** Os cartões que cabem: até 4 yaku; com mais, 3 e um "+N". */
 function cartoesDeYaku(dados: DadosHistoria, textos: TextosHistoria): YakuHistoria[] {
@@ -502,7 +524,7 @@ function cartoesDeYaku(dados: DadosHistoria, textos: TextosHistoria): YakuHistor
 
 /** Mesma soma das linhas de `desenharResultado`. */
 function alturaDoResultado(dados: DadosHistoria, escala: number) {
-  const linhasDeCartoes = Math.ceil(Math.min(dados.yaku.length, MAX_NOMES) / 2)
+  const linhasDeCartoes = Math.min(dados.yaku.length, MAX_NOMES)
   return (
     (dados.patamar ? 64 * escala : 0) +
     64 +
@@ -516,7 +538,7 @@ function alturaDoResultado(dados: DadosHistoria, escala: number) {
 /**
  * Bloco do resultado com o visual do Resultado do app, sem os pagamentos:
  * patamar, a pílula do Ron/Tsumo, quem bateu, han/fu, os pontos grandes na cor
- * primária e os yaku em cartões de duas colunas, com o valor à direita.
+ * primária e os yaku em cartões, um embaixo do outro, com o valor à direita.
  * Devolve onde terminou.
  */
 function desenharResultado(
@@ -565,15 +587,11 @@ function desenharResultado(
     return cursor
   }
   cursor += 16
-  const larguraCartao = (largura - ESPACO_CARTOES) / 2
-  // Com número ímpar, o último cartão fica sozinho e centralizado.
+  // Um embaixo do outro, na largura toda, como a lista de yaku do Resultado.
+  const larguraCartao = largura
   cartoes.forEach((yaku, indice) => {
-    const linha = Math.floor(indice / 2)
-    const sozinho = indice === cartoes.length - 1 && cartoes.length % 2 === 1
-    const xCartao = sozinho
-      ? meio - larguraCartao / 2
-      : x + (indice % 2) * (larguraCartao + ESPACO_CARTOES)
-    const yCartao = cursor + linha * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
+    const xCartao = x
+    const yCartao = cursor + indice * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
     retanguloArredondado(contexto, xCartao, yCartao, larguraCartao, ALTURA_CARTAO_YAKU, 14)
     contexto.fillStyle = tema.cartao
     contexto.fill()
@@ -591,7 +609,7 @@ function desenharResultado(
     contexto.fillText(caber(contexto, yaku.nome, larguraNome), xCartao + 20, meioCartao)
     contexto.textBaseline = 'top'
   })
-  cursor += Math.ceil(cartoes.length / 2) * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
+  cursor += cartoes.length * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
   contexto.textAlign = 'left'
   return cursor
 }
