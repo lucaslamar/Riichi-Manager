@@ -6,6 +6,7 @@
   "description": "Um app feito para ajudar jogadores e clubes de Riichi Mahjong a calcular mãos, organizar partidas e testar ideias de torneio, levando Riichi Mahjong para todos.",
   "scripts": {
     "dev": "vite",
+    "dev:celular": "vite --host --mode celular",
     "build": "tsc && vite build",
     "lint": "eslint . && npm run -s i18n:check",
     "i18n:check": "tsx scripts/checar-traducoes.ts",
@@ -71,6 +72,7 @@
     "@types/qrcode": "^1.5.6",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
     "@vitejs/plugin-react": "^4.2.0",
     "eslint": "^9.0.0",
     "eslint-plugin-react-hooks": "^5.0.0",

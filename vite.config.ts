@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import { createHash } from 'crypto'
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
 import path from 'path'
@@ -46,8 +47,9 @@ function serviceWorker(): Plugin {
   }
 }
 
-export default defineConfig({
-  plugins: [react(), serviceWorker()],
+// `npm run dev:celular`: HTTPS com certificado local, para testar câmera e compartilhar no celular pela rede.
+export default defineConfig(({ mode }) => ({
+  plugins: [react(), serviceWorker(), ...(mode === 'celular' ? [basicSsl()] : [])],
 
   define: {
     __VERSAO_TEXTOS__: JSON.stringify(versaoDosTextos()),
@@ -68,4 +70,4 @@ export default defineConfig({
   },
 
   base: '/Riichi-Manager/',
-})
+}))
