@@ -9,6 +9,7 @@ import {
   type LadoCamera,
 } from '@/compartilhado/adaptadores/camera'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
+import AjudaFoto from './AjudaFoto'
 
 export default function TelaCamera({
   aoCapturar,
@@ -25,6 +26,7 @@ export default function TelaCamera({
   const [lado, setLado] = useState<LadoCamera>('environment')
   const [semCamera, setSemCamera] = useState(!temCamera())
   const [podeVirar, setPodeVirar] = useState(false)
+  const [ajuda, setAjuda] = useState(false)
   const [visivel, setVisivel] = useState(document.visibilityState === 'visible')
 
   // App em segundo plano desliga a câmera e, de volta, liga de novo.
@@ -107,8 +109,20 @@ export default function TelaCamera({
       ) : (
         <>
           <video ref={videoRef} className="historia-mao-video" autoPlay playsInline muted />
+          <p className="historia-mao-girar" aria-live="polite">
+            <i className="fas fa-mobile-screen-button" aria-hidden="true" />
+            {t('historiaMao.girar')}
+          </p>
           <div className="historia-mao-guia" aria-hidden="true">
-            <span>{t('historiaMao.enquadre')}</span>
+            <span className="historia-mao-zona historia-mao-zona--mao">
+              {t('historiaMao.zonaMao')}
+            </span>
+            <span className="historia-mao-zona historia-mao-zona--batida">
+              {t('historiaMao.zonaBatida')}
+            </span>
+            <span className="historia-mao-zona historia-mao-zona--chamadas">
+              {t('historiaMao.zonaChamadas')}
+            </span>
           </div>
         </>
       )}
@@ -128,12 +142,17 @@ export default function TelaCamera({
           aria-label={t('historiaMao.fotografar')}
           onClick={fotografar}
         />
-        <span
+        <button
+          type="button"
           className="historia-mao-galeria"
-          aria-hidden="true"
-          style={{ visibility: 'hidden' }}
-        />
+          aria-label={t('historiaMao.comoFotografar')}
+          onClick={() => setAjuda(true)}
+        >
+          <i className="fas fa-question" aria-hidden="true" />
+        </button>
       </div>
+
+      {ajuda && <AjudaFoto aoFechar={() => setAjuda(false)} />}
 
       <input
         ref={capturaRef}

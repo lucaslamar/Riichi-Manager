@@ -3729,7 +3729,6 @@
     "botao": "Compartir mano",
     "titulo": "Compartir mano",
     "virarCamera": "Girar cámara",
-    "enquadre": "Encuadra la mano",
     "galeria": "Elegir de la galería",
     "fotografar": "Tomar foto",
     "semCamera": "Sin acceso a la cámara. Puedes elegir una foto de la galería.",
@@ -3744,6 +3743,17 @@
     "salva": "Imagen guardada",
     "imagem": "Vista previa de la imagen para compartir",
     "montando": "Creando la imagen",
-    "falhou": "No se pudo crear la imagen."
+    "falhou": "No se pudo crear la imagen.",
+    "zonaMao": "Mano",
+    "zonaBatida": "Ficha ganadora",
+    "zonaChamadas": "Llamadas",
+    "comoFotografar": "Cómo fotografiar la mano",
+    "dicaDeitadas": "Fichas acostadas en la mesa, boca arriba y todas giradas hacia el mismo lado.",
+    "dicaDeCima": "Foto desde arriba, con el móvil paralelo a la mesa.",
+    "dicaOrdem": "Mano cerrada, un espacio, la ficha ganadora, otro espacio y las llamadas.",
+    "dicaChamadas": "Chi, Pon y Kan con la ficha llamada de lado. Kan cerrado con los extremos boca abajo.",
+    "dicaLuz": "Buena luz, sin reflejos, y solo la mano en el cuadro.",
+    "entendi": "Entendido",
+    "girar": "Gira el móvil en horizontal"
   }
 }

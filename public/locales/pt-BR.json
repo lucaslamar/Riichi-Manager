@@ -3706,7 +3706,6 @@
     "botao": "Compartilhar mão",
     "titulo": "Compartilhar mão",
     "virarCamera": "Virar câmera",
-    "enquadre": "Enquadre a mão",
     "galeria": "Escolher da galeria",
     "fotografar": "Tirar foto",
     "semCamera": "Sem acesso à câmera. Você pode escolher uma foto da galeria.",
@@ -3721,6 +3720,17 @@
     "salva": "Imagem salva",
     "imagem": "Prévia da imagem para compartilhar",
     "montando": "Montando a imagem",
-    "falhou": "Não foi possível montar a imagem."
+    "falhou": "Não foi possível montar a imagem.",
+    "zonaMao": "Mão",
+    "zonaBatida": "Batida",
+    "zonaChamadas": "Chamadas",
+    "comoFotografar": "Como fotografar a mão",
+    "dicaDeitadas": "Pedras deitadas na mesa, com a face para cima e todas viradas para o mesmo lado.",
+    "dicaDeCima": "Foto de cima, com o celular paralelo à mesa.",
+    "dicaOrdem": "Mão fechada, um espaço, a batida, outro espaço e as chamadas.",
+    "dicaChamadas": "Chi, Pon e Kan com a pedra chamada de lado. Kan fechado com as pontas viradas.",
+    "dicaLuz": "Boa luz, sem reflexo, e só a mão no quadro.",
+    "entendi": "Entendi",
+    "girar": "Gire o celular para deitado"
   }
 }
