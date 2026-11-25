@@ -117,11 +117,11 @@ export default function TelaCamera({
             <span className="historia-mao-zona historia-mao-zona--mao">
               {t('historiaMao.zonaMao')}
             </span>
-            <span className="historia-mao-zona historia-mao-zona--batida">
-              {t('historiaMao.zonaBatida')}
-            </span>
             <span className="historia-mao-zona historia-mao-zona--chamadas">
               {t('historiaMao.zonaChamadas')}
+            </span>
+            <span className="historia-mao-zona historia-mao-zona--batida">
+              {t('historiaMao.zonaBatida')}
             </span>
           </div>
         </>

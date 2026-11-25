@@ -361,14 +361,15 @@ function desenharPedras(
     }
     cursor += larguraPedra
   }
+  // Mesma ordem da foto na mesa: mão, chamadas e a batida na ponta.
   pedras.mao.forEach(desenhar)
-  if (pedras.batida) {
-    cursor += ESPACO_BATIDA
-    desenhar(pedras.batida)
-  }
   for (const grupo of pedras.grupos) {
     cursor += ESPACO_GRUPO
     grupo.forEach(desenhar)
+  }
+  if (pedras.batida) {
+    cursor += ESPACO_BATIDA
+    desenhar(pedras.batida)
   }
 }
 
@@ -543,7 +544,7 @@ function retanguloArredondado(
   contexto.closePath()
 }
 
-/** A mão fechada dividida ao meio; a batida e os conjuntos vão na segunda linha. */
+/** A mão fechada dividida ao meio; os conjuntos e a batida vão na segunda linha. */
 function emDuasLinhas(pedras: Pedras): Pedras[] {
   const metade = Math.min(pedras.mao.length, Math.ceil(totalDePedras(pedras) / 2))
   return [
