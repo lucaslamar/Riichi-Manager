@@ -10,14 +10,7 @@ import type { FanContado } from '../logica/tipos'
 import { PedrasChamada } from './MaoChinesaAtual'
 import BotaoCompartilharMao from '@/compartilhado/historia-mao/BotaoCompartilharMao'
 import type { DadosHistoria } from '@/compartilhado/historia-mao/comporHistoria'
-import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
-import {
-  arquivoDaFlor,
-  arquivoDaPedra,
-  PedraChinesa,
-  PedraFlor,
-  urlPedraChinesa,
-} from './PedraChinesa'
+import { PedraChinesa, PedraFlor } from './PedraChinesa'
 import type { ResultadoCalculoMcr } from './useCalculadoraMaoChinesa'
 
 /** Número das Flores no guia do CMC. */
@@ -156,18 +149,8 @@ export default function ModalResultadoMcr({
     acesa(chave) ? ' destaque-yaku' : acesas ? ' apagada' : ''
   const descricaoDe = (chave: string) => (acesa(chave) ? idDescricao : undefined)
 
-  const { pedrasEfetivas, temaEfetivo } = usePreferencias()
   const dadosDaHistoria = (): DadosHistoria => {
-    const url = (arquivo: string) =>
-      urlPedraChinesa(arquivo, pedrasEfetivas, temaEfetivo === 'escuro')
-    const grupos = mao.chamadas.map((chamada) =>
-      pedrasDaChamada(chamada).map((id) => url(arquivoDaPedra(id))),
-    )
-    if (mao.flores.length > 0) grupos.push(mao.flores.map((flor) => url(arquivoDaFlor(flor))))
     return {
-      mao: ocultas.map((id) => url(arquivoDaPedra(id))),
-      batida: url(arquivoDaPedra(batida)),
-      grupos,
       resumo: t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) }),
       nomes: linhas.map((linha) =>
         linha.vezes > 1

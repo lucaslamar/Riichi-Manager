@@ -14,14 +14,14 @@ const ARQUIVO_HONRAS: Record<number, string> = {
   34: 'Haku',
 }
 
-export function arquivoDaPedra(id: number): string {
+function arquivoDaPedra(id: number): string {
   if (id <= 9) return `Man${id}`
   if (id <= 18) return `Sou${id - 9}`
   if (id <= 27) return `Pin${id - 18}`
   return ARQUIVO_HONRAS[id]
 }
 
-export const arquivoDaFlor = (flor: Flor) => (flor <= 4 ? `Flor${flor}` : `Estacao${flor - 4}`)
+const arquivoDaFlor = (flor: Flor) => (flor <= 4 ? `Flor${flor}` : `Estacao${flor - 4}`)
 
 /**
  * Arte do modo Chinês: conjunto da Malásia de samoheen/mahjong-tiles (CC0), em

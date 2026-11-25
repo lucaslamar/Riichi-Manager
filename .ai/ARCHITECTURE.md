@@ -81,7 +81,7 @@ Para detalhes de módulos e fluxos, consulte [arquitetura](../docs/arquitetura.m
 
 ## Compartilhar a mão (7.12.0)
 
-- `src/compartilhado/historia-mao`: o fluxo é um só para o Riichi e o MCR. Cada resultado (`ModalResultado` e `ModalResultadoMcr`) só monta um `DadosHistoria` (endereços das pedras, nomes, han/fu ou fan, pontos, ron/tsumo e vencedor) a partir do resultado já calculado e passa ao `BotaoCompartilharMao`. Nada é recalculado.
+- `src/compartilhado/historia-mao`: o fluxo é um só para o Riichi e o MCR. Cada resultado (`ModalResultado` e `ModalResultadoMcr`) só monta um `DadosHistoria` (patamar, nomes, han/fu ou fan, pontos, ron/tsumo e vencedor; as pedras do app não entram, a foto já mostra a mão) a partir do resultado já calculado e passa ao `BotaoCompartilharMao`. Nada é recalculado.
 - `comporHistoria.ts` desenha a imagem 1080×1920 só com o Canvas 2D (sem html2canvas). Recebe foto, dados, cores do tema e textos por argumento, sem ler o estado do app. O QR usa o `qrcode` que o app já tinha (carregado só na hora), com o `URL_DO_APP`. Nenhuma dependência nova.
 - Plataforma: `adaptadores/camera.ts` (getUserMedia, quadro, galeria com EXIF) e `adaptadores/arquivo.ts` (`salvarArquivo` para a folha do sistema e `baixarArquivo`). No React Native, trocar só os adaptadores e o desenho.
 - O fluxo abre por portal no `body`, acima do Resultado, e entra na pilha de camadas: o Esc fecha o fluxo, não o Resultado.
