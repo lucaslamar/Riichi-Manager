@@ -83,10 +83,15 @@ export default function ModalResultado({
         resultado.yakuman > 0
           ? t('hanFu.limitYakumanTimes', { count: resultado.yakuman })
           : t('calculator.hanFuSummary', { han: resultado.han, fu: resultado.fu }),
-      nomes: (resultado.yaku ?? []).map(([nome, valor]: [string, number]) => {
-        const exibido = nomeYakuExibido(nome, idioma)
-        return /dora/i.test(nome) ? `${exibido} ${valor}` : exibido
-      }),
+      // Valor escrito como na lista de yaku do Resultado.
+      yaku: (resultado.yaku ?? []).map(([nome, valor, ehYakuman]: [string, number, boolean]) => ({
+        nome: nomeYakuExibido(nome, idioma),
+        valor: ehYakuman
+          ? t('calculator.yakumanShort', { count: valor })
+          : valor < 0
+            ? `−${t('calculator.hanCount', { count: -valor })}`
+            : t('calculator.hanCount', { count: valor }),
+      })),
       pontos: numero(resultado.pontos.total),
       forma: t(resultado.agari === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
       vencedor: contextoCenterpiece?.vencedorNome,

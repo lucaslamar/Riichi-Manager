@@ -152,11 +152,13 @@ export default function ModalResultadoMcr({
   const dadosDaHistoria = (): DadosHistoria => {
     return {
       resumo: t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) }),
-      nomes: linhas.map((linha) =>
-        linha.vezes > 1
-          ? `${nomeDe(linha)} ${t('mcr.resultado.vezes', { vezes: numero(linha.vezes) })}`
-          : nomeDe(linha),
-      ),
+      yaku: linhas.map((linha) => ({
+        nome:
+          linha.vezes > 1
+            ? `${nomeDe(linha)} ${t('mcr.resultado.vezes', { vezes: numero(linha.vezes) })}`
+            : nomeDe(linha),
+        valor: t('mcr.resultado.fanTotal', { total: numero(linha.valor * linha.vezes) }),
+      })),
       pontos: numero(pagamento?.ganhadorRecebe ?? fan.fanTotal),
       forma: t(condicoes.forma === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
     }

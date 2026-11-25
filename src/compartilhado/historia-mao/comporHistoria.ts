@@ -31,12 +31,17 @@ export interface DadosHistoria {
   patamar?: string
   /** "4 han 30 fu" ou "12 fan". */
   resumo: string
-  /** Nomes dos yaku ou fan, na ordem do resultado. */
-  nomes: string[]
+  /** Yaku ou fan na ordem do resultado, com o valor já escrito ("6 han", "8 fan"). */
+  yaku: YakuHistoria[]
   pontos: string
   /** "Ron" ou "Tsumo". */
   forma: string
   vencedor?: string
+}
+
+export interface YakuHistoria {
+  nome: string
+  valor: string
 }
 
 export interface TemaHistoria {
@@ -44,6 +49,9 @@ export interface TemaHistoria {
   texto: string
   textoSuave: string
   destaque: string
+  /** Cor dos pontos e dos valores, e o fundo dos cartões, como no Resultado do app. */
+  primario: string
+  cartao: string
 }
 
 export interface TextosHistoria {
@@ -165,7 +173,7 @@ function desenharFotoNaFaixa(
   contexto.fillRect(0, 0, LARGURA, ALTURA)
 
   const interna = LARGURA - SAFE_SIDE * 2
-  const alturaFoto = Math.round(interna * 0.75)
+  const alturaFoto = 500
   contexto.save()
   contexto.fillStyle = '#ffffff'
   retanguloArredondado(contexto, SAFE_SIDE - 4, SAFE_TOP - 4, interna + 8, alturaFoto + 8, 36)
@@ -354,10 +362,10 @@ function desenharNomesCabine(
 ) {
   const fonte = `italic 400 34px ${FONTE_SERIFADA}`
   let cursor = y
-  for (const nome of dados.nomes.slice(0, MAX_NOMES)) {
+  for (const { nome } of dados.yaku.slice(0, MAX_NOMES)) {
     cursor = escreverQuebrando(contexto, nome, fonte, tema.texto, x, cursor, largura, 46)
   }
-  const resto = dados.nomes.length - MAX_NOMES
+  const resto = dados.yaku.length - MAX_NOMES
   if (resto > 0)
     escreverQuebrando(contexto, textos.mais(resto), fonte, tema.textoSuave, x, cursor, largura, 46)
 }
@@ -482,20 +490,34 @@ function resumoVisivel(dados: DadosHistoria) {
   return dados.resumo.toLowerCase() !== (dados.patamar ?? '').toLowerCase()
 }
 
+const ALTURA_CARTAO_YAKU = 64
+const ESPACO_CARTOES = 12
+
+/** Os cartões que cabem: até 4 yaku; com mais, 3 e um "+N". */
+function cartoesDeYaku(dados: DadosHistoria, textos: TextosHistoria): YakuHistoria[] {
+  if (dados.yaku.length <= MAX_NOMES) return dados.yaku
+  const resto = dados.yaku.length - (MAX_NOMES - 1)
+  return [...dados.yaku.slice(0, MAX_NOMES - 1), { nome: textos.mais(resto), valor: '' }]
+}
+
 /** Mesma soma das linhas de `desenharResultado`. */
 function alturaDoResultado(dados: DadosHistoria, escala: number) {
+  const linhasDeCartoes = Math.ceil(Math.min(dados.yaku.length, MAX_NOMES) / 2)
   return (
-    (dados.patamar ? 76 * escala : 0) +
-    (dados.vencedor ? 52 : 0) +
-    116 * escala +
-    52 +
-    (resumoVisivel(dados) ? 48 : 0)
+    (dados.patamar ? 64 * escala : 0) +
+    64 +
+    (dados.vencedor ? 50 : 0) +
+    (resumoVisivel(dados) ? 46 : 0) +
+    132 * escala +
+    (linhasDeCartoes > 0 ? 16 + linhasDeCartoes * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES) : 0)
   )
 }
 
 /**
- * Bloco do resultado, centralizado: patamar, quem bateu, pontos com
- * ron/tsumo ao lado, yaku e han/fu. Devolve onde terminou.
+ * Bloco do resultado com o visual do Resultado do app, sem os pagamentos:
+ * patamar, a pílula do Ron/Tsumo, quem bateu, han/fu, os pontos grandes na cor
+ * primária e os yaku em cartões de duas colunas, com o valor à direita.
+ * Devolve onde terminou.
  */
 function desenharResultado(
   contexto: CanvasRenderingContext2D,
@@ -517,38 +539,59 @@ function desenharResultado(
     cursor += altura
   }
 
-  if (dados.patamar) {
-    escrever(
-      dados.patamar.toUpperCase(),
-      `900 ${Math.round(64 * escala)}px`,
-      tema.destaque,
-      76 * escala,
-    )
+  if (dados.patamar)
+    escrever(dados.patamar, `500 ${Math.round(52 * escala)}px`, tema.texto, 64 * escala)
+
+  // Pílula do Ron/Tsumo, como as dos ventos no Resultado.
+  contexto.font = `700 28px ${FONTE}`
+  const forma = dados.forma.toUpperCase()
+  const larguraPilula = contexto.measureText(forma).width + 48
+  retanguloArredondado(contexto, meio - larguraPilula / 2, cursor, larguraPilula, 48, 24)
+  contexto.fillStyle = tema.cartao
+  contexto.fill()
+  contexto.fillStyle = tema.primario
+  contexto.textBaseline = 'middle'
+  contexto.fillText(forma, meio, cursor + 25)
+  contexto.textBaseline = 'top'
+  cursor += 64
+
+  if (dados.vencedor) escrever(dados.vencedor, '800 36px', tema.texto, 50)
+  if (resumoVisivel(dados)) escrever(dados.resumo, '500 32px', tema.texto, 46)
+  escrever(dados.pontos, `900 ${Math.round(120 * escala)}px`, tema.primario, 132 * escala)
+
+  const cartoes = cartoesDeYaku(dados, textos)
+  if (cartoes.length === 0) {
+    contexto.textAlign = 'left'
+    return cursor
   }
-  if (dados.vencedor) escrever(dados.vencedor, '800 38px', tema.texto, 52)
-
-  // Pontos grandes com ron/tsumo ao lado, os dois centralizados juntos.
-  const fontePontos = `800 ${Math.round(104 * escala)}px ${FONTE}`
-  const fonteForma = `700 ${Math.round(40 * escala)}px ${FONTE}`
-  const forma = `  ${dados.forma.toUpperCase()}`
-  contexto.font = fontePontos
-  const larguraPontos = contexto.measureText(dados.pontos).width
-  contexto.font = fonteForma
-  const inicio = meio - (larguraPontos + contexto.measureText(forma).width) / 2
-  contexto.textAlign = 'left'
-  contexto.font = fontePontos
-  contexto.fillStyle = tema.texto
-  contexto.fillText(dados.pontos, inicio, cursor)
-  contexto.font = fonteForma
-  contexto.fillStyle = tema.destaque
-  contexto.fillText(forma, inicio + larguraPontos, cursor + 54 * escala)
-  contexto.textAlign = 'center'
-  cursor += 116 * escala
-
-  const nomes = dados.nomes.slice(0, MAX_NOMES).join(' · ')
-  const resto = dados.nomes.length - MAX_NOMES
-  escrever(resto > 0 ? `${nomes} ${textos.mais(resto)}` : nomes, '600 36px', tema.texto, 52)
-  if (resumoVisivel(dados)) escrever(dados.resumo, '500 34px', tema.textoSuave, 48)
+  cursor += 16
+  const larguraCartao = (largura - ESPACO_CARTOES) / 2
+  // Com número ímpar, o último cartão fica sozinho e centralizado.
+  cartoes.forEach((yaku, indice) => {
+    const linha = Math.floor(indice / 2)
+    const sozinho = indice === cartoes.length - 1 && cartoes.length % 2 === 1
+    const xCartao = sozinho
+      ? meio - larguraCartao / 2
+      : x + (indice % 2) * (larguraCartao + ESPACO_CARTOES)
+    const yCartao = cursor + linha * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
+    retanguloArredondado(contexto, xCartao, yCartao, larguraCartao, ALTURA_CARTAO_YAKU, 14)
+    contexto.fillStyle = tema.cartao
+    contexto.fill()
+    contexto.textBaseline = 'middle'
+    const meioCartao = yCartao + ALTURA_CARTAO_YAKU / 2 + 1
+    contexto.font = `700 26px ${FONTE}`
+    const larguraValor = yaku.valor ? contexto.measureText(yaku.valor).width : 0
+    contexto.textAlign = 'right'
+    contexto.fillStyle = tema.primario
+    if (yaku.valor) contexto.fillText(yaku.valor, xCartao + larguraCartao - 20, meioCartao)
+    contexto.textAlign = 'left'
+    contexto.font = `700 28px ${FONTE}`
+    contexto.fillStyle = tema.texto
+    const larguraNome = larguraCartao - 40 - (larguraValor ? larguraValor + 16 : 0)
+    contexto.fillText(caber(contexto, yaku.nome, larguraNome), xCartao + 20, meioCartao)
+    contexto.textBaseline = 'top'
+  })
+  cursor += Math.ceil(cartoes.length / 2) * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
   contexto.textAlign = 'left'
   return cursor
 }
