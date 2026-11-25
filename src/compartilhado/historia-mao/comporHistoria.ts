@@ -145,27 +145,32 @@ function desenharFocoFoto(
   logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
-  desenharCobrindo(contexto, foto, 0, 0, LARGURA, ALTURA)
-  const gradiente = contexto.createLinearGradient(0, ALTURA * 0.6, 0, ALTURA)
-  gradiente.addColorStop(0, 'rgba(0,0,0,0)')
-  gradiente.addColorStop(1, 'rgba(0,0,0,0.45)')
-  contexto.fillStyle = gradiente
-  contexto.fillRect(0, ALTURA * 0.6, LARGURA, ALTURA * 0.4)
-
   const { tema } = opcoes
   const x = SAFE_SIDE
   const largura = LARGURA - SAFE_SIDE * 2
   const respiro = 40
   const interna = largura - respiro * 2
-  // Mão em destaque também aqui: duas linhas, sem cobrir demais a foto.
   const linhas = emDuasLinhas(pedras)
   const alturaPedra = Math.min(...linhas.map((linha) => alturaDasPedras(linha, interna, 120)))
   const alturaMao = alturaPedra * 2 + ESPACO_LINHAS
   const ladoQr = 200
   const alturaAssinatura = ladoQr + QUIETA_QR * 2
-  const linhasTexto = alturaDosTextos(dados)
-  const altura = respiro + alturaMao + 32 + linhasTexto + 32 + alturaAssinatura + respiro
+  const altura =
+    respiro + alturaMao + 32 + alturaDoResultado(dados, 1) + 32 + alturaAssinatura + respiro
   const y = LIMITE_BAIXO - altura
+
+  if (foto.width > foto.height) {
+    // Foto deitada (a mão em fila): inteira acima do cartão, sem cortar os lados.
+    desenharFundoDesfocado(contexto, foto)
+    desenharContido(contexto, foto, 0, 0, LARGURA, y - 24)
+  } else {
+    desenharCobrindo(contexto, foto, 0, 0, LARGURA, ALTURA)
+    const gradiente = contexto.createLinearGradient(0, ALTURA * 0.6, 0, ALTURA)
+    gradiente.addColorStop(0, 'rgba(0,0,0,0)')
+    gradiente.addColorStop(1, 'rgba(0,0,0,0.45)')
+    contexto.fillStyle = gradiente
+    contexto.fillRect(0, ALTURA * 0.6, LARGURA, ALTURA * 0.4)
+  }
 
   contexto.save()
   contexto.globalAlpha = 0.92
@@ -180,7 +185,7 @@ function desenharFocoFoto(
     cursor += alturaPedra + ESPACO_LINHAS
   }
   cursor += 32 - ESPACO_LINHAS
-  cursor = desenharTextos(contexto, dados, opcoes, x + respiro, cursor, interna)
+  cursor = desenharResultado(contexto, dados, opcoes, x + respiro, cursor, interna, 1)
   cursor += 32
   desenharSeparador(contexto, tema, x + respiro, cursor - 16, interna)
   desenharAssinatura(contexto, opcoes, logo, x + respiro, cursor, interna, ladoQr)
@@ -198,70 +203,73 @@ function desenharFocoResultado(
   contexto.fillStyle = tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
 
-  // Foto pequena no canto, com borda branca.
-  const [larguraFoto, alturaFoto] = [360, 480]
+  // Foto em faixa larga no topo, com borda branca: a mão na mesa é uma fila.
+  const interna = LARGURA - SAFE_SIDE * 2
+  const alturaFoto = 420
   contexto.save()
   contexto.fillStyle = '#ffffff'
-  retanguloArredondado(contexto, SAFE_SIDE - 4, SAFE_TOP - 4, larguraFoto + 8, alturaFoto + 8, 36)
+  retanguloArredondado(contexto, SAFE_SIDE - 4, SAFE_TOP - 4, interna + 8, alturaFoto + 8, 36)
   contexto.fill()
-  retanguloArredondado(contexto, SAFE_SIDE, SAFE_TOP, larguraFoto, alturaFoto, 32)
+  retanguloArredondado(contexto, SAFE_SIDE, SAFE_TOP, interna, alturaFoto, 32)
   contexto.clip()
-  desenharCobrindo(contexto, foto, SAFE_SIDE, SAFE_TOP, larguraFoto, alturaFoto)
+  desenharCobrindo(contexto, foto, SAFE_SIDE, SAFE_TOP, interna, alturaFoto)
   contexto.restore()
 
-  // Ao lado da foto: patamar, quem bateu, pontos, ron/tsumo e han/fu.
-  const xLado = SAFE_SIDE + larguraFoto + 40
-  const larguraLado = LARGURA - SAFE_SIDE - xLado
-  const alturaLado = (dados.patamar ? 64 : 0) + (dados.vencedor ? 52 : 0) + 104 + 56 + 48
-  let yLado = SAFE_TOP + (alturaFoto - alturaLado) / 2
-  contexto.textAlign = 'left'
-  contexto.textBaseline = 'top'
-  const escrever = (texto: string, fonte: string, cor: string, altura: number) => {
-    contexto.font = `${fonte} ${FONTE}`
-    contexto.fillStyle = cor
-    contexto.fillText(caber(contexto, texto, larguraLado), xLado, yLado)
-    yLado += altura
-  }
-  if (dados.patamar) escrever(dados.patamar.toUpperCase(), '800 48px', tema.destaque, 64)
-  if (dados.vencedor) escrever(dados.vencedor, '800 38px', tema.texto, 52)
-  escrever(dados.pontos, '800 96px', tema.texto, 104)
-  escrever(dados.forma.toUpperCase(), '700 40px', tema.destaque, 56)
-  escrever(dados.resumo, '500 34px', tema.textoSuave, 48)
-
-  const interna = LARGURA - SAFE_SIDE * 2
   const ladoQr = 220
   const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
+  const escala = 1.2
 
-  // A mão é o destaque: duas linhas grandes no meio, e os nomes embaixo.
+  // A mão em duas linhas e, logo embaixo, o patamar e os pontos.
   const linhas = emDuasLinhas(pedras)
-  const topo = SAFE_TOP + alturaFoto + 48
-  const livre = yAssinatura - 48 - topo
-  const alturaNomes = 52
+  const topo = SAFE_TOP + alturaFoto + 40
+  const livre = yAssinatura - 40 - topo
+  const alturaTexto = alturaDoResultado(dados, escala)
   const alturaPedra = Math.min(
     ...linhas.map((linha) => alturaDasPedras(linha, interna, 220)),
-    (livre - ESPACO_LINHAS - 40 - alturaNomes) / 2,
+    (livre - ESPACO_LINHAS - 32 - alturaTexto) / 2,
   )
-  const bloco = alturaPedra * 2 + ESPACO_LINHAS + 40 + alturaNomes
+  const bloco = alturaPedra * 2 + ESPACO_LINHAS + 32 + alturaTexto
   let cursor = topo + (livre - bloco) / 2
   for (const linha of linhas) {
     desenharPedras(contexto, tema, linha, SAFE_SIDE, cursor, interna, alturaPedra, 'meio')
     cursor += alturaPedra + ESPACO_LINHAS
   }
-  cursor += 40 - ESPACO_LINHAS
-  const nomes = dados.nomes.slice(0, MAX_NOMES).join(' · ')
-  const resto = dados.nomes.length - MAX_NOMES
-  contexto.textAlign = 'center'
-  contexto.font = `600 36px ${FONTE}`
-  contexto.fillStyle = tema.texto
-  contexto.fillText(
-    caber(contexto, resto > 0 ? `${nomes} ${opcoes.textos.mais(resto)}` : nomes, interna),
-    LARGURA / 2,
-    cursor,
-  )
-  contexto.textAlign = 'left'
+  cursor += 32 - ESPACO_LINHAS
+  desenharResultado(contexto, dados, opcoes, SAFE_SIDE, cursor, interna, escala)
 
   desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 24, interna)
   desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
+}
+
+/** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
+function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageBitmap) {
+  contexto.save()
+  contexto.filter = 'blur(40px)'
+  desenharCobrindo(contexto, foto, -80, -80, LARGURA + 160, ALTURA + 160)
+  contexto.restore()
+  contexto.fillStyle = 'rgba(0,0,0,0.35)'
+  contexto.fillRect(0, 0, LARGURA, ALTURA)
+}
+
+/** A foto inteira, centralizada no espaço, sem cortar. */
+function desenharContido(
+  contexto: CanvasRenderingContext2D,
+  foto: ImageBitmap,
+  x: number,
+  y: number,
+  largura: number,
+  altura: number,
+) {
+  const escala = Math.min(largura / foto.width, altura / foto.height)
+  const larguraFinal = foto.width * escala
+  const alturaFinal = foto.height * escala
+  contexto.drawImage(
+    foto,
+    x + (largura - larguraFinal) / 2,
+    y + (altura - alturaFinal) / 2,
+    larguraFinal,
+    alturaFinal,
+  )
 }
 
 /** Recorte do meio, sem esticar. */
@@ -364,48 +372,80 @@ function desenharPedras(
   }
 }
 
-/** Mesma soma das linhas de `desenharTextos`. */
-function alturaDosTextos(dados: DadosHistoria) {
-  return (dados.patamar ? 64 : 0) + 52 + 48 + (dados.vencedor ? 52 : 0) + 104
+/** Han/fu some quando só repete o patamar (ex.: "Yakuman" duas vezes). */
+function resumoVisivel(dados: DadosHistoria) {
+  return dados.resumo.toLowerCase() !== (dados.patamar ?? '').toLowerCase()
 }
 
-/** Devolve onde o texto terminou. */
-function desenharTextos(
+/** Mesma soma das linhas de `desenharResultado`. */
+function alturaDoResultado(dados: DadosHistoria, escala: number) {
+  return (
+    (dados.patamar ? 76 * escala : 0) +
+    (dados.vencedor ? 52 : 0) +
+    116 * escala +
+    52 +
+    (resumoVisivel(dados) ? 48 : 0)
+  )
+}
+
+/**
+ * Logo abaixo das pedras e centralizado: patamar, quem bateu, pontos com
+ * ron/tsumo ao lado, yaku e han/fu. Devolve onde terminou.
+ */
+function desenharResultado(
   contexto: CanvasRenderingContext2D,
   dados: DadosHistoria,
   { tema, textos }: OpcoesDesenho,
   x: number,
   y: number,
   largura: number,
+  escala: number,
 ) {
-  contexto.textAlign = 'left'
+  const meio = x + largura / 2
+  contexto.textAlign = 'center'
   contexto.textBaseline = 'top'
   let cursor = y
-
-  const escrever = (texto: string, tamanho: number, peso: number, cor: string, altura: number) => {
-    contexto.font = `${peso} ${tamanho}px ${FONTE}`
+  const escrever = (texto: string, fonte: string, cor: string, altura: number) => {
+    contexto.font = `${fonte} ${FONTE}`
     contexto.fillStyle = cor
-    contexto.fillText(caber(contexto, texto, largura), x, cursor)
+    contexto.fillText(caber(contexto, texto, largura), meio, cursor)
     cursor += altura
   }
 
-  if (dados.patamar) escrever(dados.patamar.toUpperCase(), 48, 800, tema.destaque, 64)
+  if (dados.patamar) {
+    escrever(
+      dados.patamar.toUpperCase(),
+      `900 ${Math.round(64 * escala)}px`,
+      tema.destaque,
+      76 * escala,
+    )
+  }
+  if (dados.vencedor) escrever(dados.vencedor, '800 38px', tema.texto, 52)
+
+  // Pontos grandes com ron/tsumo ao lado, os dois centralizados juntos.
+  const fontePontos = `800 ${Math.round(104 * escala)}px ${FONTE}`
+  const fonteForma = `700 ${Math.round(40 * escala)}px ${FONTE}`
+  const forma = `  ${dados.forma.toUpperCase()}`
+  contexto.font = fontePontos
+  const larguraPontos = contexto.measureText(dados.pontos).width
+  contexto.font = fonteForma
+  const inicio = meio - (larguraPontos + contexto.measureText(forma).width) / 2
+  contexto.textAlign = 'left'
+  contexto.font = fontePontos
+  contexto.fillStyle = tema.texto
+  contexto.fillText(dados.pontos, inicio, cursor)
+  contexto.font = fonteForma
+  contexto.fillStyle = tema.destaque
+  contexto.fillText(forma, inicio + larguraPontos, cursor + 54 * escala)
+  contexto.textAlign = 'center'
+  cursor += 116 * escala
+
   const nomes = dados.nomes.slice(0, MAX_NOMES).join(' · ')
   const resto = dados.nomes.length - MAX_NOMES
-  escrever(resto > 0 ? `${nomes} ${textos.mais(resto)}` : nomes, 36, 600, tema.texto, 52)
-  escrever(dados.resumo, 34, 500, tema.textoSuave, 48)
-  if (dados.vencedor) escrever(dados.vencedor, 38, 800, tema.texto, 52)
-
-  // Pontos grandes e a forma da batida na ponta direita.
-  contexto.font = `800 88px ${FONTE}`
-  contexto.fillStyle = tema.texto
-  contexto.fillText(dados.pontos, x, cursor)
-  contexto.font = `700 40px ${FONTE}`
-  contexto.fillStyle = tema.destaque
-  contexto.textAlign = 'right'
-  contexto.fillText(dados.forma.toUpperCase(), x + largura, cursor + 40)
+  escrever(resto > 0 ? `${nomes} ${textos.mais(resto)}` : nomes, '600 36px', tema.texto, 52)
+  if (resumoVisivel(dados)) escrever(dados.resumo, '500 34px', tema.textoSuave, 48)
   contexto.textAlign = 'left'
-  return cursor + 104
+  return cursor
 }
 
 function desenharSeparador(
