@@ -5,6 +5,7 @@ import { CONFIGURACOES_REGRAS } from '../../constantes'
 import { useId, useState } from 'react'
 import AbasModal from '@/compartilhado/interface/componentes/modal/AbasModal'
 import { useConfigSanma } from '@/compartilhado/configuracoes/useConfigSanma'
+import { useYakusLocais, YAKUS_LOCAIS_PADRAO } from '@/compartilhado/configuracoes/useYakusLocais'
 import { REGRAS_SANMA_PADRAO, type RegrasSanma, type Variante } from '@/compartilhado/mahjong/variante'
 import TextoGlossario from '../glossario/TextoGlossario'
 import CampoBusca from '@/compartilhado/interface/componentes/busca/CampoBusca'
@@ -141,6 +142,7 @@ export default function ModalRegras({
 }) {
   const { t } = useI18n()
   const { setRegrasSanma } = useConfigSanma()
+  const { mudarYakusLocais } = useYakusLocais()
   const [aba, setAba] = useState<'regras' | 'sanma'>('regras')
   const [busca, setBusca] = useState('')
   const comSanma = !!variante && !!aoMudarVariante
@@ -185,9 +187,19 @@ export default function ModalRegras({
       <SecaoYakusLocais mostrar={mostrar} />
     </>
   )
-  // Restaurar padrão vale para a aba aberta.
-  const restaurar = (config: ConfiguracaoCalculo) =>
-    aba === 'sanma' ? setRegrasSanma({ ...REGRAS_SANMA_PADRAO, uma: [...REGRAS_SANMA_PADRAO.uma] }) : aoMudar(config)
+  // Restaurar padrão vale para a aba aberta. Na de regras, volta também os Yakus locais.
+  const restaurar = (config: ConfiguracaoCalculo) => {
+    if (aba === 'sanma') {
+      setRegrasSanma({ ...REGRAS_SANMA_PADRAO, uma: [...REGRAS_SANMA_PADRAO.uma] })
+      return
+    }
+    aoMudar(config)
+    mudarYakusLocais({
+      ...YAKUS_LOCAIS_PADRAO,
+      ativos: [...YAKUS_LOCAIS_PADRAO.ativos],
+      paarenchan: { ...YAKUS_LOCAIS_PADRAO.paarenchan },
+    })
+  }
 
   return (
     <Modal

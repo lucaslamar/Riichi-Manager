@@ -77,6 +77,8 @@
 
 ### Corrigido
 
+- **Restaurar padrão nas Regras de cálculo**: agora também volta os Yakus locais ao padrão (só o Aniversário do Cerrado ligado). Antes eles continuavam ligados.
+
 - **iPad Pro 13 atual**: com 1376 px, recebe os mesmos ajustes dos outros iPad Pro.
 - **Aba Ranking**: com a análise de um jogador aberta, tocar nela volta à lista, com os filtros mantidos.
 - **Nomes no Histórico**: inteiros no iPad e no PC, com uma coluna quando o menu lateral aperta.
