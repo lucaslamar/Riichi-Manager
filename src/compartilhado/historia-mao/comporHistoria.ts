@@ -1,7 +1,9 @@
 /**
- * Imagem da mão para os Stories (1080×1920): a foto da mesa e o resultado do
- * app. Recebe tudo por argumento (foto, textos, cores e endereços das pedras) e
- * só usa um canvas fora da tela, para o React Native trocar apenas o desenho.
+ * Imagem da mão para os Stories (1080×1920): a foto que a pessoa tirou é a
+ * protagonista, com o resultado do app e a assinatura com o QR. As pedras do app
+ * não se repetem, porque a foto já mostra a mão. Recebe tudo por argumento
+ * (foto, textos e cores) e só usa um canvas fora da tela, para o React Native
+ * trocar apenas o desenho.
  */
 import type { QRCode } from 'qrcode'
 
@@ -20,20 +22,11 @@ export const SHARE_HANDLE = ''
 const LIMITE_BAIXO = ALTURA - SAFE_BOTTOM
 const FONTE = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 const MAX_NOMES = 4
-const ESPACO_BATIDA = 24
-const ESPACO_GRUPO = 16
-const ESPACO_LINHAS = 20
 const QUIETA_QR = 16
 
 export type LayoutHistoria = 'foto' | 'resultado' | 'cabine'
 
 export interface DadosHistoria {
-  /** Endereços das pedras da mão fechada, sem a da batida. */
-  mao: string[]
-  /** Pedra da batida, separada no fim. */
-  batida: string | null
-  /** Conjuntos abertos e flores, cada um um grupo. */
-  grupos: string[][]
   /** Mangan, Haneman, Yakuman... */
   patamar?: string
   /** "4 han 30 fu" ou "12 fan". */
@@ -51,9 +44,6 @@ export interface TemaHistoria {
   texto: string
   textoSuave: string
   destaque: string
-  /** Face e borda das pedras (as artes são transparentes, como na tela). */
-  pedraFace: string
-  pedraBorda: string
 }
 
 export interface TextosHistoria {
@@ -85,15 +75,11 @@ export async function comporHistoria(
   const contexto = tela.getContext('2d')
   if (!contexto) throw new Error('Canvas indisponível')
 
-  const [pedras, logo, { create }] = await Promise.all([
-    carregarPedras(dados),
-    carregarImagem(opcoes.logo),
-    import('qrcode'),
-  ])
+  const [logo, { create }] = await Promise.all([carregarImagem(opcoes.logo), import('qrcode')])
   const desenho = { ...opcoes, qr: create(opcoes.url, { errorCorrectionLevel: 'M' }).modules }
-  if (opcoes.layout === 'foto') desenharFocoFoto(contexto, foto, dados, pedras, logo, desenho)
+  if (opcoes.layout === 'foto') desenharFotoCheia(contexto, foto, dados, logo, desenho)
   else if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, logo, desenho)
-  else desenharFocoResultado(contexto, foto, dados, pedras, logo, desenho)
+  else desenharFotoNaFaixa(contexto, foto, dados, logo, desenho)
 
   return new Promise((resolver, rejeitar) =>
     tela.toBlob(
@@ -110,23 +96,7 @@ export function nomeDoArquivo(agora: Date): string {
   return `riichi-manager-${dia}-${dois(agora.getHours())}${dois(agora.getMinutes())}.jpg`
 }
 
-interface Pedras {
-  mao: (HTMLImageElement | null)[]
-  batida: HTMLImageElement | null
-  grupos: (HTMLImageElement | null)[][]
-}
-
-async function carregarPedras(dados: DadosHistoria): Promise<Pedras> {
-  const carregar = (lista: string[]) => Promise.all(lista.map(carregarImagem))
-  const [mao, batida, grupos] = await Promise.all([
-    carregar(dados.mao),
-    dados.batida ? carregarImagem(dados.batida) : null,
-    Promise.all(dados.grupos.map(carregar)),
-  ])
-  return { mao, batida, grupos }
-}
-
-/** Pedra que não carrega vira um espaço vazio: a imagem sai mesmo assim. */
+/** Logo que não carrega fica de fora: a imagem sai mesmo assim. */
 async function carregarImagem(endereco: string): Promise<HTMLImageElement | null> {
   const imagem = new Image()
   imagem.src = endereco
@@ -138,11 +108,11 @@ async function carregarImagem(endereco: string): Promise<HTMLImageElement | null
   }
 }
 
-function desenharFocoFoto(
+/** Foto em toda a tela e o cartão do resultado com a assinatura por cima, embaixo. */
+function desenharFotoCheia(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
   dados: DadosHistoria,
-  pedras: Pedras,
   logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
@@ -151,13 +121,9 @@ function desenharFocoFoto(
   const largura = LARGURA - SAFE_SIDE * 2
   const respiro = 40
   const interna = largura - respiro * 2
-  const linhas = emDuasLinhas(pedras)
-  const alturaPedra = Math.min(...linhas.map((linha) => alturaDasPedras(linha, interna, 120)))
-  const alturaMao = alturaPedra * 2 + ESPACO_LINHAS
   const ladoQr = 200
   const alturaAssinatura = ladoQr + QUIETA_QR * 2
-  const altura =
-    respiro + alturaMao + 32 + alturaDoResultado(dados, 1) + 32 + alturaAssinatura + respiro
+  const altura = respiro + alturaDoResultado(dados, 1) + 32 + alturaAssinatura + respiro
   const y = LIMITE_BAIXO - altura
 
   if (foto.width > foto.height) {
@@ -180,23 +146,17 @@ function desenharFocoFoto(
   contexto.fill()
   contexto.restore()
 
-  let cursor = y + respiro
-  for (const linha of linhas) {
-    desenharPedras(contexto, tema, linha, x + respiro, cursor, interna, alturaPedra, 'meio')
-    cursor += alturaPedra + ESPACO_LINHAS
-  }
-  cursor += 32 - ESPACO_LINHAS
-  cursor = desenharResultado(contexto, dados, opcoes, x + respiro, cursor, interna, 1)
+  let cursor = desenharResultado(contexto, dados, opcoes, x + respiro, y + respiro, interna, 1)
   cursor += 32
   desenharSeparador(contexto, tema, x + respiro, cursor - 16, interna)
   desenharAssinatura(contexto, opcoes, logo, x + respiro, cursor, interna, ladoQr)
 }
 
-function desenharFocoResultado(
+/** Fundo do tema, a foto em 4:3 na largura toda e o resultado grande embaixo. */
+function desenharFotoNaFaixa(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
   dados: DadosHistoria,
-  pedras: Pedras,
   logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
@@ -204,9 +164,8 @@ function desenharFocoResultado(
   contexto.fillStyle = tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
 
-  // Foto em faixa larga no topo, com borda branca: a mão na mesa é uma fila.
   const interna = LARGURA - SAFE_SIDE * 2
-  const alturaFoto = 420
+  const alturaFoto = Math.round(interna * 0.75)
   contexto.save()
   contexto.fillStyle = '#ffffff'
   retanguloArredondado(contexto, SAFE_SIDE - 4, SAFE_TOP - 4, interna + 8, alturaFoto + 8, 36)
@@ -218,24 +177,12 @@ function desenharFocoResultado(
 
   const ladoQr = 220
   const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
-  const escala = 1.2
-
-  // A mão em duas linhas e, logo embaixo, o patamar e os pontos.
-  const linhas = emDuasLinhas(pedras)
-  const topo = SAFE_TOP + alturaFoto + 40
-  const livre = yAssinatura - 40 - topo
-  const alturaTexto = alturaDoResultado(dados, escala)
-  const alturaPedra = Math.min(
-    ...linhas.map((linha) => alturaDasPedras(linha, interna, 220)),
-    (livre - ESPACO_LINHAS - 32 - alturaTexto) / 2,
-  )
-  const bloco = alturaPedra * 2 + ESPACO_LINHAS + 32 + alturaTexto
-  let cursor = topo + (livre - bloco) / 2
-  for (const linha of linhas) {
-    desenharPedras(contexto, tema, linha, SAFE_SIDE, cursor, interna, alturaPedra, 'meio')
-    cursor += alturaPedra + ESPACO_LINHAS
-  }
-  cursor += 32 - ESPACO_LINHAS
+  const topo = SAFE_TOP + alturaFoto
+  const livre = yAssinatura - 24 - topo
+  // O maior tamanho (até 20% acima do normal) que cabe entre a foto e a assinatura, com 24px de folga.
+  const fixa = alturaDoResultado(dados, 0)
+  const escala = Math.min(1.2, (livre - 48 - fixa) / (alturaDoResultado(dados, 1) - fixa))
+  const cursor = topo + (livre - alturaDoResultado(dados, escala)) / 2
   desenharResultado(contexto, dados, opcoes, SAFE_SIDE, cursor, interna, escala)
 
   desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 24, interna)
@@ -530,82 +477,6 @@ function desenharCobrindo(
   )
 }
 
-/** Proporção das artes das pedras (largura / altura). */
-const PROPORCAO_PEDRA = 3 / 4
-
-function totalDePedras(pedras: Pedras) {
-  return (
-    pedras.mao.length +
-    (pedras.batida ? 1 : 0) +
-    pedras.grupos.reduce((soma, grupo) => soma + grupo.length, 0)
-  )
-}
-
-function espacos(pedras: Pedras) {
-  return (pedras.batida ? ESPACO_BATIDA : 0) + pedras.grupos.length * ESPACO_GRUPO
-}
-
-/** Altura que faz a mão inteira caber numa linha, até o máximo. */
-function alturaDasPedras(pedras: Pedras, largura: number, maxima: number) {
-  const total = Math.max(1, totalDePedras(pedras))
-  const larguraPedra = (largura - espacos(pedras)) / total
-  return Math.min(maxima, Math.floor(larguraPedra / PROPORCAO_PEDRA))
-}
-
-function desenharPedras(
-  contexto: CanvasRenderingContext2D,
-  tema: TemaHistoria,
-  pedras: Pedras,
-  x: number,
-  y: number,
-  largura: number,
-  altura: number,
-  alinhar: 'inicio' | 'meio',
-) {
-  const larguraPedra = altura * PROPORCAO_PEDRA
-  const ocupada = totalDePedras(pedras) * larguraPedra + espacos(pedras)
-  let cursor = alinhar === 'meio' ? x + (largura - ocupada) / 2 : x
-  const desenhar = (imagem: HTMLImageElement | null) => {
-    // Face com borda e um fio de espaço entre as pedras, como o chip da tela.
-    const folga = larguraPedra * 0.04
-    const borda = larguraPedra * 0.045
-    retanguloArredondado(
-      contexto,
-      cursor + folga,
-      y,
-      larguraPedra - folga * 2,
-      altura,
-      larguraPedra * 0.16,
-    )
-    contexto.fillStyle = tema.pedraFace
-    contexto.fill()
-    contexto.lineWidth = borda
-    contexto.strokeStyle = tema.pedraBorda
-    contexto.stroke()
-    const margem = folga + borda
-    if (imagem) {
-      contexto.drawImage(
-        imagem,
-        cursor + margem,
-        y + borda,
-        larguraPedra - margem * 2,
-        altura - borda * 2,
-      )
-    }
-    cursor += larguraPedra
-  }
-  // Mesma ordem da foto na mesa: mão, chamadas e a batida na ponta.
-  pedras.mao.forEach(desenhar)
-  for (const grupo of pedras.grupos) {
-    cursor += ESPACO_GRUPO
-    grupo.forEach(desenhar)
-  }
-  if (pedras.batida) {
-    cursor += ESPACO_BATIDA
-    desenhar(pedras.batida)
-  }
-}
-
 /** Han/fu some quando só repete o patamar (ex.: "Yakuman" duas vezes). */
 function resumoVisivel(dados: DadosHistoria) {
   return dados.resumo.toLowerCase() !== (dados.patamar ?? '').toLowerCase()
@@ -623,7 +494,7 @@ function alturaDoResultado(dados: DadosHistoria, escala: number) {
 }
 
 /**
- * Logo abaixo das pedras e centralizado: patamar, quem bateu, pontos com
+ * Bloco do resultado, centralizado: patamar, quem bateu, pontos com
  * ron/tsumo ao lado, yaku e han/fu. Devolve onde terminou.
  */
 function desenharResultado(
@@ -775,13 +646,4 @@ function retanguloArredondado(
   contexto.arcTo(x, y + altura, x, y, raio)
   contexto.arcTo(x, y, x + largura, y, raio)
   contexto.closePath()
-}
-
-/** A mão fechada dividida ao meio; os conjuntos e a batida vão na segunda linha. */
-function emDuasLinhas(pedras: Pedras): Pedras[] {
-  const metade = Math.min(pedras.mao.length, Math.ceil(totalDePedras(pedras) / 2))
-  return [
-    { mao: pedras.mao.slice(0, metade), batida: null, grupos: [] },
-    { mao: pedras.mao.slice(metade), batida: pedras.batida, grupos: pedras.grupos },
-  ]
 }

@@ -8,11 +8,10 @@ import {
   type CodigoPedra,
   type Mao,
 } from '../../../logica/mao'
-import { usePreferencias } from '@/compartilhado/preferencias/PreferenciasProvider'
 import BotaoCompartilharMao from '@/compartilhado/historia-mao/BotaoCompartilharMao'
 import type { DadosHistoria } from '@/compartilhado/historia-mao/comporHistoria'
 import { chavePatamar, nomeYakuExibido } from '../../../logica/nomesYaku'
-import { arquivoPedra, ESTILO_MELD, HONRAS, NAIPES, urlPedra } from '../../constantes'
+import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 import ExibicaoCompleta, {
   falaDoResultado,
@@ -64,7 +63,6 @@ export default function ModalResultado({
   contextoCenterpiece,
 }: PropsModalResultado) {
   const { t, numero, idioma } = useI18n()
-  const { pedrasEfetivas, temaEfetivo } = usePreferencias()
   const [yakuSelecionado, setYakuSelecionado] = useState<string | null>(null)
   // Recalculado a cada render: as cotas são consumidas na ordem das pedras na tela.
   const destaque = yakuSelecionado ? destaqueDoYaku(yakuSelecionado, mao) : null
@@ -78,13 +76,8 @@ export default function ModalResultado({
     : mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
 
   const dadosDaHistoria = (): DadosHistoria => {
-    const url = (pedra: CodigoPedra) =>
-      urlPedra(arquivoPedra(pedra), 'png', pedrasEfetivas, temaEfetivo === 'escuro')
     const patamar = resultado.nome ? chavePatamar(resultado.nome) : null
     return {
-      mao: pedrasFechadas.map(url),
-      batida: pedraAgari ? url(pedraAgari) : null,
-      grupos: mao.melds.map((meld) => meld.pedras.map(url)),
       patamar: patamar ? t(patamar.chave, patamar.parametros) : resultado.nome || undefined,
       resumo:
         resultado.yakuman > 0

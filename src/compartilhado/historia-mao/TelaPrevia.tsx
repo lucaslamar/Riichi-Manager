@@ -21,8 +21,6 @@ function temaAtual(): TemaHistoria {
     texto: cor('--cor-texto', '#1c1724'),
     textoSuave: cor('--cor-texto-suave', '#5d5470'),
     destaque: cor('--cor-destaque', cor('--primario', '#7a3fb0')),
-    pedraFace: cor('--pedra-face', '#f2efe6'),
-    pedraBorda: cor('--pedra-borda', '#dddddd'),
   }
 }
 
