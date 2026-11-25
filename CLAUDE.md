@@ -39,6 +39,7 @@
 - @types/qrcode na versão ^1.5.6
 - @types/react na versão ^18.2.0
 - @types/react-dom na versão ^18.2.0
+- @vitejs/plugin-basic-ssl na versão ^1.2.0
 - @vitejs/plugin-react na versão ^4.2.0
 - eslint na versão ^9.0.0
 - eslint-plugin-react-hooks na versão ^5.0.0
