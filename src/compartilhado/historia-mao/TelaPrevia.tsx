@@ -132,6 +132,8 @@ export default function TelaPrevia({
           <i className="fas fa-xmark" aria-hidden="true" />
         </button>
         <div className="historia-mao-barra-acoes">
+          {/* Título do cartão de ações, só com o celular deitado (tela dividida). */}
+          <p className="historia-mao-titulo-painel">{t('historiaMao.titulo')}</p>
           <button
             type="button"
             className="historia-mao-icone"
@@ -140,6 +142,9 @@ export default function TelaPrevia({
             onClick={aoRefazer}
           >
             <i className="fas fa-camera" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.refazer')}
+            </span>
           </button>
           <button
             type="button"
@@ -150,6 +155,9 @@ export default function TelaPrevia({
             onClick={() => setComYaku(!comYaku)}
           >
             <i className="fas fa-list" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.mostrarYaku')}
+            </span>
           </button>
           <button
             type="button"
@@ -160,6 +168,9 @@ export default function TelaPrevia({
             onClick={() => setDeitada(!deitada)}
           >
             <i className="fas fa-rotate-right" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.deitar')}
+            </span>
           </button>
           <button
             type="button"
@@ -170,6 +181,9 @@ export default function TelaPrevia({
             disabled={!arquivo}
           >
             <i className="fas fa-download" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.salvar')}
+            </span>
           </button>
           <button
             type="button"
@@ -180,6 +194,9 @@ export default function TelaPrevia({
             disabled={!arquivo}
           >
             <i className="fas fa-arrow-up-from-bracket" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.compartilhar')}
+            </span>
           </button>
         </div>
       </div>

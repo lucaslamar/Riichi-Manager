@@ -404,3 +404,113 @@
     transition: none;
   }
 }
+
+/* Em pé, as ações são só ícones: o título do cartão e os nomes ficam para a tela dividida. */
+.historia-mao-titulo-painel,
+.historia-mao-rotulo {
+  display: none;
+}
+
+/*
+ * Celular deitado (e telas largas): tela dividida, como numa página de entrada.
+ * À esquerda a imagem com as bolinhas; à direita um painel lilás com o cartão
+ * das ações, cada uma com o nome escrito, e o Compartilhar em destaque.
+ */
+@media (orientation: landscape) {
+  .historia-mao-previa {
+    display: grid;
+    grid-template-areas:
+      'fechar painel'
+      'imagem painel'
+      'paginas painel';
+    grid-template-columns: 1fr minmax(300px, 40%);
+    grid-template-rows: auto 1fr auto;
+    background: linear-gradient(to right, #141019 60%, var(--primario, #b39ddb) 60%);
+  }
+
+  .historia-mao-previa .historia-mao-barra,
+  .historia-mao-previa .historia-mao-rodape {
+    display: contents;
+  }
+
+  .historia-mao-previa .historia-mao-barra > .historia-mao-icone {
+    grid-area: fechar;
+    margin: 8px 0 0 max(8px, env(safe-area-inset-left));
+  }
+
+  .historia-mao-previa .historia-mao-imagem {
+    grid-area: imagem;
+  }
+
+  .historia-mao-previa .historia-mao-paginas {
+    grid-area: paginas;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes {
+    display: flex;
+    width: min(320px, 85%);
+    max-height: calc(100% - 24px);
+    grid-area: painel;
+    flex-direction: column;
+    align-items: stretch;
+    align-self: center;
+    justify-self: center;
+    gap: 2px;
+    padding: 16px;
+    overflow-y: auto;
+    border-radius: 20px;
+    background: #141019;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .historia-mao-titulo-painel {
+    display: block;
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
+    width: 100%;
+    height: 44px;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 0 12px;
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone i {
+    width: 20px;
+    text-align: center;
+  }
+
+  .historia-mao-rotulo {
+    display: inline;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  /* O Compartilhar vai por último, largo e em destaque. */
+  .historia-mao-previa .historia-mao-barra .historia-mao-compartilhar {
+    justify-content: center;
+    margin: 8px 0 0;
+    background: var(--primario, #b39ddb);
+    color: #141019;
+  }
+
+  /* A dica dos Stories some; o aviso (Imagem salva, falha) fica embaixo do cartão. */
+  .historia-mao-previa .historia-mao-dica {
+    display: none;
+  }
+
+  .historia-mao-previa .historia-mao-status {
+    grid-area: painel;
+    align-self: end;
+    justify-self: center;
+    margin-bottom: 12px;
+    color: #141019;
+    font-weight: 600;
+  }
+}
