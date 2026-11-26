@@ -1,10 +1,9 @@
 /**
- * Imagem da mão para os Stories, sempre 1080×1920: a foto que a pessoa tirou é a
- * protagonista, com o resultado do app e a assinatura com o QR, igual à das
- * imagens do Torneio. A foto entra deitada (4:3) ou em pé (3:4), conforme o
- * botão Deitada. Recebe tudo por argumento (foto, textos e cores) e só usa um
- * canvas fora da tela, separado da prévia, para o React Native trocar apenas o
- * desenho.
+ * Imagem da mão para os Stories, sempre 1080×1920, num layout só: a foto que a
+ * pessoa tirou é a estrela e nunca é cortada nem coberta. Ela vai inteira no
+ * topo, com a própria foto desfocada atrás para não sobrar faixa vazia. Embaixo
+ * vem o resultado e, no canto, o mascote inclinado segurando a placa com o QR.
+ * Recebe tudo por argumento e só usa um canvas fora da tela, separado da prévia.
  */
 import type { QRCode } from 'qrcode'
 import { MASCOTE_AREA_QR } from './mascote'
@@ -25,12 +24,14 @@ export const SAFE_SIDE = 48
 const LIMITE_BAIXO = ALTURA - SAFE_BOTTOM
 const FONTE = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 const ESPACO = 28
-/** Mascote da assinatura: 400×500 (prancheta 4:5), com o QR de 160px na placa. */
+const MAX_YAKU = 8
+/** Mascote: 400×500 (prancheta 4:5), com o QR de 160px na placa. */
 const LARGURA_MASCOTE = 400
 const ALTURA_MASCOTE = 500
-const MAX_YAKU = 8
-
-export type LayoutHistoria = 'foto' | 'cabine'
+/** Inclinação do mascote, como numa pose de vitória. Só no plano: o QR continua legível. */
+const GIRO_MASCOTE = (-5 * Math.PI) / 180
+/** Quanto do mascote passa da borda direita, "entrando" na imagem. */
+const SAIDA_MASCOTE = 0.1
 
 export interface YakuHistoria {
   nome: string
@@ -60,19 +61,10 @@ export interface TemaHistoria {
   cartao: string
 }
 
-export interface TextosHistoria {
-  nomeApp: string
-  convite: string
-}
-
 export interface OpcoesHistoria {
-  layout: LayoutHistoria
   tema: TemaHistoria
-  textos: TextosHistoria
-  /** Endereço que o QR abre e que aparece escrito na assinatura. */
+  /** Endereço que o QR abre. */
   url: string
-  /** A foto em 4:3 (deitada) ou 3:4 (em pé). Não muda o tamanho da imagem. */
-  fotoDeitada: boolean
   /** Arte do mascote com a placa (`MASCOTE_QR_SRC`). */
   mascoteSrc: string
 }
@@ -94,9 +86,7 @@ export async function comporHistoria(
     carregarImagem(opcoes.mascoteSrc),
   ])
   const qr = create(opcoes.url, { errorCorrectionLevel: 'M' }).modules
-  const desenho = { ...opcoes, qr, mascote }
-  if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, desenho)
-  else desenharFotoCheia(contexto, foto, dados, desenho)
+  desenharHistoria(contexto, foto, dados, { ...opcoes, qr, mascote })
 
   return new Promise((resolver, rejeitar) =>
     tela.toBlob(
@@ -114,48 +104,11 @@ export function nomeDoArquivo(agora: Date): string {
 }
 
 /**
- * Foto cheia: o cartão do resultado com a assinatura embaixo, por cima da foto.
- * Em pé, a foto ocupa a tela toda. Deitada, vai em 4:3 na largura toda acima
- * do cartão, com a própria foto desfocada no fundo.
+ * Foto inteira no topo, com o tamanho natural dela na largura toda; se faltar
+ * altura, ela encolhe (sem cortar) e o fundo desfocado preenche os lados.
+ * Embaixo, o resultado à esquerda e o mascote no canto direito, sem cobrir nada.
  */
-function desenharFotoCheia(
-  contexto: CanvasRenderingContext2D,
-  foto: ImageBitmap,
-  dados: DadosHistoria,
-  opcoes: OpcoesDesenho,
-) {
-  const largura = LARGURA - SAFE_SIDE * 2
-  const respiro = 40
-  const interna = largura - respiro * 2
-  const altura =
-    respiro + alturaDoResultado(contexto, dados, interna, 1) + ESPACO + ALTURA_MASCOTE + respiro
-  const y = LIMITE_BAIXO - altura
-
-  if (opcoes.fotoDeitada) {
-    desenharFundoDesfocado(contexto, foto)
-    const alturaFoto = Math.min(LARGURA * 0.75, y - 24)
-    desenharCobrindo(contexto, foto, 0, (y - 24 - alturaFoto) / 2, LARGURA, alturaFoto)
-  } else {
-    desenharCobrindo(contexto, foto, 0, 0, LARGURA, ALTURA)
-    const gradiente = contexto.createLinearGradient(0, ALTURA * 0.6, 0, ALTURA)
-    gradiente.addColorStop(0, 'rgba(0,0,0,0)')
-    gradiente.addColorStop(1, 'rgba(0,0,0,0.45)')
-    contexto.fillStyle = gradiente
-    contexto.fillRect(0, ALTURA * 0.6, LARGURA, ALTURA * 0.4)
-  }
-
-  desenharCartao(contexto, opcoes.tema, SAFE_SIDE, y, largura, altura)
-  const x = SAFE_SIDE + respiro
-  const fim = desenharResultado(contexto, dados, opcoes, x, y + respiro, interna, 1)
-  desenharAssinatura(contexto, opcoes, x, fim + ESPACO, interna)
-}
-
-/**
- * Estilo Cabine, como um vídeo no YouTube: a foto de borda a borda no topo, sem
- * moldura, em 4:3 (deitada) ou 3:4 (em pé), e o resultado com a assinatura
- * embaixo, no fundo do tema. A foto cede altura para o resultado caber.
- */
-function desenharCabine(
+function desenharHistoria(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
   dados: DadosHistoria,
@@ -163,50 +116,69 @@ function desenharCabine(
 ) {
   contexto.fillStyle = opcoes.tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
-  const interna = LARGURA - SAFE_SIDE * 2
-  const yAssinatura = LIMITE_BAIXO - ALTURA_MASCOTE
-  const fimResultado = yAssinatura - ESPACO
 
-  const alturaMaxima = opcoes.fotoDeitada ? LARGURA * 0.75 : (LARGURA * 4) / 3
-  const espaco = fimResultado - ESPACO * 2
-  const alturaFoto = Math.round(
-    Math.min(alturaMaxima, espaco - alturaDoResultado(contexto, dados, interna, 1)),
+  const larguraMascoteVisivel = LARGURA_MASCOTE * (1 - SAIDA_MASCOTE)
+  const larguraResultado = LARGURA - SAFE_SIDE - ESPACO - larguraMascoteVisivel
+  const alturaResultado = alturaDoResultado(contexto, dados, larguraResultado, 1)
+  // A faixa de baixo tem a altura do que for maior: o resultado ou o mascote.
+  const alturaFaixa = Math.max(alturaResultado, ALTURA_MASCOTE * 0.92)
+  const topoFaixa = LIMITE_BAIXO - alturaFaixa
+
+  const alturaNatural = (LARGURA * foto.height) / foto.width
+  const alturaFoto = Math.min(alturaNatural, topoFaixa - ESPACO)
+  desenharFotoInteira(contexto, foto, 0, 0, LARGURA, alturaFoto)
+
+  desenharResultadoCabendo(
+    contexto,
+    dados,
+    opcoes,
+    SAFE_SIDE,
+    alturaFoto + ESPACO,
+    larguraResultado,
+    LIMITE_BAIXO,
   )
-  desenharCobrindo(contexto, foto, 0, 0, LARGURA, alturaFoto)
-  const topo = alturaFoto + ESPACO
-  desenharResultadoCabendo(contexto, dados, opcoes, SAFE_SIDE, topo, interna, fimResultado)
-  desenharAssinatura(contexto, opcoes, SAFE_SIDE, yAssinatura, interna)
+  // O QR (56% a 88% da altura da arte) termina dentro da área segura.
+  const yMascote = LIMITE_BAIXO - ALTURA_MASCOTE * 0.92
+  desenharMascote(contexto, opcoes, LARGURA - larguraMascoteVisivel, yMascote)
 }
 
-/** Cartão do tema, 92% opaco, por cima da foto. */
-function desenharCartao(
+/** A foto inteira (sem cortar) no espaço, com ela mesma desfocada e escurecida atrás. */
+function desenharFotoInteira(
   contexto: CanvasRenderingContext2D,
-  tema: TemaHistoria,
+  foto: ImageBitmap,
   x: number,
   y: number,
   largura: number,
   altura: number,
 ) {
   contexto.save()
-  contexto.globalAlpha = 0.92
-  contexto.fillStyle = tema.superficie
-  retanguloArredondado(contexto, x, y, largura, altura, 40)
-  contexto.fill()
+  contexto.beginPath()
+  contexto.rect(x, y, largura, altura)
+  contexto.clip()
+  contexto.filter = 'blur(24px) brightness(0.45)'
+  const margem = Math.max(largura, altura) * 0.05
+  desenharCobrindo(
+    contexto,
+    foto,
+    x - margem,
+    y - margem,
+    largura + margem * 2,
+    altura + margem * 2,
+  )
+  contexto.filter = 'none'
+  const escala = Math.min(largura / foto.width, altura / foto.height)
+  const [larguraFinal, alturaFinal] = [foto.width * escala, foto.height * escala]
+  contexto.drawImage(
+    foto,
+    x + (largura - larguraFinal) / 2,
+    y + (altura - alturaFinal) / 2,
+    larguraFinal,
+    alturaFinal,
+  )
   contexto.restore()
 }
 
-/** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
-function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageBitmap) {
-  const { width: largura, height: altura } = contexto.canvas
-  contexto.save()
-  contexto.filter = 'blur(40px)'
-  desenharCobrindo(contexto, foto, -80, -80, largura + 160, altura + 160)
-  contexto.restore()
-  contexto.fillStyle = 'rgba(0,0,0,0.35)'
-  contexto.fillRect(0, 0, largura, altura)
-}
-
-/** Recorte do meio, sem esticar. */
+/** Recorte do meio, sem esticar (só para o fundo desfocado). */
 function desenharCobrindo(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
@@ -229,6 +201,36 @@ function desenharCobrindo(
     largura,
     altura,
   )
+}
+
+/**
+ * O mascote inclinado, entrando pela borda direita, com o QR desenhado na placa
+ * em resolução cheia (preto no branco, nas medidas de `mascote.ts`). Sem a arte
+ * (não carregou), fica só o QR com uma margem branca, inclinado igual.
+ */
+function desenharMascote(
+  contexto: CanvasRenderingContext2D,
+  { qr, mascote }: OpcoesDesenho,
+  x: number,
+  y: number,
+) {
+  contexto.save()
+  contexto.translate(x + LARGURA_MASCOTE / 2, y + ALTURA_MASCOTE / 2)
+  contexto.rotate(GIRO_MASCOTE)
+  const origemX = -LARGURA_MASCOTE / 2
+  const origemY = -ALTURA_MASCOTE / 2
+  const ladoQr = LARGURA_MASCOTE * MASCOTE_AREA_QR.largura
+  const xQr = origemX + LARGURA_MASCOTE * MASCOTE_AREA_QR.esquerda
+  const yQr = origemY + ALTURA_MASCOTE * MASCOTE_AREA_QR.topo
+  if (mascote) {
+    contexto.drawImage(mascote, origemX, origemY, LARGURA_MASCOTE, ALTURA_MASCOTE)
+  } else {
+    contexto.fillStyle = '#ffffff'
+    retanguloArredondado(contexto, xQr - 24, yQr - 24, ladoQr + 48, ladoQr + 48, 16)
+    contexto.fill()
+  }
+  desenharQr(contexto, qr, xQr, yQr, ladoQr)
+  contexto.restore()
 }
 
 /** Han/fu some quando só repete o patamar (ex.: "Yakuman" duas vezes). */
@@ -419,45 +421,6 @@ function desenharPilulasYaku(
   }
   contexto.textBaseline = 'top'
   return cursor - ESPACO_PILULAS
-}
-
-/**
- * Assinatura: o mascote segurando a placa, no canto direito, com o QR desenhado
- * dentro dela (preto no branco, em resolução cheia, nas medidas de `mascote.ts`).
- * À esquerda, o nome do app e o convite em texto pequeno. Sem a arte (não
- * carregou), fica só o QR simples, com margem branca.
- */
-function desenharAssinatura(
-  contexto: CanvasRenderingContext2D,
-  { tema, textos, qr, mascote }: OpcoesDesenho,
-  x: number,
-  y: number,
-  largura: number,
-) {
-  const xMascote = x + largura - LARGURA_MASCOTE
-  const ladoQr = LARGURA_MASCOTE * MASCOTE_AREA_QR.largura
-  const xQr = xMascote + LARGURA_MASCOTE * MASCOTE_AREA_QR.esquerda
-  const yQr = y + ALTURA_MASCOTE * MASCOTE_AREA_QR.topo
-  if (mascote) {
-    contexto.drawImage(mascote, xMascote, y, LARGURA_MASCOTE, ALTURA_MASCOTE)
-  } else {
-    // Sem a placa: um fundo branco faz a margem que ela daria.
-    contexto.fillStyle = '#ffffff'
-    retanguloArredondado(contexto, xQr - 24, yQr - 24, ladoQr + 48, ladoQr + 48, 16)
-    contexto.fill()
-  }
-  desenharQr(contexto, qr, xQr, yQr, ladoQr)
-
-  const larguraTexto = xMascote - x - 24
-  const meio = yQr + ladoQr / 2
-  contexto.textAlign = 'left'
-  contexto.textBaseline = 'middle'
-  contexto.fillStyle = tema.textoSuave
-  contexto.font = `600 32px ${FONTE}`
-  contexto.fillText(caber(contexto, textos.nomeApp, larguraTexto), x, meio - 22)
-  contexto.font = `500 28px ${FONTE}`
-  contexto.fillText(caber(contexto, textos.convite, larguraTexto), x, meio + 22)
-  contexto.textBaseline = 'top'
 }
 
 /** Módulos pretos no branco, nível M, ocupando o lado todo (a margem é da placa). */

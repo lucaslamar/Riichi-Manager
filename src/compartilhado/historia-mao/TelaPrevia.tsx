@@ -8,11 +8,11 @@ import {
   comporHistoria,
   nomeDoArquivo,
   type DadosHistoria,
-  type LayoutHistoria,
   type TemaHistoria,
 } from './comporHistoria'
 
-const LAYOUTS: LayoutHistoria[] = ['foto', 'cabine']
+const LAYOUTS = ['foto', 'cabine'] as const
+type LayoutHistoria = (typeof LAYOUTS)[number]
 /** Quanto o dedo precisa andar de lado para trocar o estilo. */
 const DESLIZE_MINIMO = 50
 
@@ -57,15 +57,9 @@ export default function TelaPrevia({
     setAviso('')
     const agora = new Date()
     comporHistoria(foto, dados, {
-      layout,
-      fotoDeitada: deitada,
       tema: temaAtual(),
       url: URL_DO_APP,
       mascoteSrc: MASCOTE_QR_SRC,
-      textos: {
-        nomeApp: t('global.appName'),
-        convite: t('historiaMao.convite'),
-      },
     })
       .then((blob) => {
         if (ativo) setArquivo(new File([blob], nomeDoArquivo(agora), { type: 'image/jpeg' }))
@@ -74,7 +68,7 @@ export default function TelaPrevia({
     return () => {
       ativo = false
     }
-  }, [foto, dados, layout, deitada, t])
+  }, [foto, dados, t])
 
   // A foto tirada, para a tela com o celular deitado (foto à esquerda, resultado à direita).
   useEffect(() => {
