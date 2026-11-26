@@ -3713,7 +3713,6 @@
     "dica": "Tip: on Instagram, also add the Link sticker.",
     "layout": "Image layout",
     "layout_foto": "Full photo",
-    "layout_resultado": "Strip",
     "refazer": "Retake",
     "salvar": "Save image",
     "compartilhar": "Share",
@@ -3734,8 +3733,6 @@
     "girar": "Turn your phone sideways",
     "layout_cabine": "Booth",
     "deitar": "Landscape image",
-    "mostrarYaku": "Show yaku on the image",
-    "rotuloYaku": "Yaku",
     "rotuloDeitada": "Landscape",
     "rotuloSalvar": "Save"
   }

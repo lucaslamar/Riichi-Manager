@@ -3671,7 +3671,6 @@
     "dica": "ヒント：Instagramではリンクスタンプも追加しましょう。",
     "layout": "画像のレイアウト",
     "layout_foto": "全面写真",
-    "layout_resultado": "帯",
     "refazer": "撮り直す",
     "salvar": "画像を保存",
     "compartilhar": "共有",
@@ -3692,8 +3691,6 @@
     "girar": "スマホを横向きにしてください",
     "layout_cabine": "ブース",
     "deitar": "横向きの画像",
-    "mostrarYaku": "画像に役を表示",
-    "rotuloYaku": "役",
     "rotuloDeitada": "横向き",
     "rotuloSalvar": "保存"
   }

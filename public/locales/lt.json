@@ -3809,7 +3809,6 @@
     "dica": "Patarimas: „Instagram“ pridėkite ir nuorodos lipduką.",
     "layout": "Vaizdo išdėstymas",
     "layout_foto": "Visa nuotrauka",
-    "layout_resultado": "Juosta",
     "refazer": "Fotografuoti iš naujo",
     "salvar": "Išsaugoti vaizdą",
     "compartilhar": "Dalintis",
@@ -3830,8 +3829,6 @@
     "girar": "Pasukite telefoną gulsčiai",
     "layout_cabine": "Būdelė",
     "deitar": "Gulsčias vaizdas",
-    "mostrarYaku": "Rodyti yaku vaizde",
-    "rotuloYaku": "Yaku",
     "rotuloDeitada": "Gulsčias",
     "rotuloSalvar": "Išsaugoti"
   }

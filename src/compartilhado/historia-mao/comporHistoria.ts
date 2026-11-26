@@ -1,9 +1,9 @@
 /**
- * Imagem da mão para os Stories (1080×1920): a foto que a pessoa tirou é a
- * protagonista, com o resultado do app e a assinatura com o QR. As pedras do app
- * não se repetem, porque a foto já mostra a mão. Recebe tudo por argumento
- * (foto, textos e cores) e só usa um canvas fora da tela, para o React Native
- * trocar apenas o desenho.
+ * Imagem da mão para os Stories (1080×1920) ou deitada (1920×1080): a foto que a
+ * pessoa tirou é a protagonista, com o resultado do app e a assinatura com o QR,
+ * igual à das imagens do Torneio. Recebe tudo por argumento (foto, textos e
+ * cores) e só usa um canvas fora da tela, para o React Native trocar apenas o
+ * desenho.
  */
 import type { QRCode } from 'qrcode'
 
@@ -16,22 +16,34 @@ export const ALTURA = 1920
 export const SAFE_TOP = 250
 export const SAFE_BOTTOM = 340
 export const SAFE_SIDE = 48
-/** Linha extra da assinatura (site ou @), vazia por enquanto. */
-export const SHARE_HANDLE = ''
 
 const LIMITE_BAIXO = ALTURA - SAFE_BOTTOM
 const FONTE = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
-const MAX_NOMES = 4
-const QUIETA_QR = 16
+/**
+ * Onde a foto começa na Cabine. Ela sobe acima de SAFE_TOP: no Story, só a
+ * borda de cima fica sob a barra do perfil, e os textos ficam na área segura.
+ */
+const TOPO_FOTO = 170
+const ESPACO = 28
+/** Assinatura como a das imagens do Torneio: QR de 148px, escuro no lilás claro. */
+const LADO_QR = 148
+const CORES_QR = { escuro: '#2a2438', claro: '#e6dff2' }
+const MAX_YAKU = 8
 
-export type LayoutHistoria = 'foto' | 'resultado' | 'cabine'
+export type LayoutHistoria = 'foto' | 'cabine'
+
+export interface YakuHistoria {
+  nome: string
+  /** Já escrito: "6 han", "8 fan". */
+  valor: string
+}
 
 export interface DadosHistoria {
   /** Mangan, Haneman, Yakuman... */
   patamar?: string
   /** "4 han 30 fu" ou "12 fan". */
   resumo: string
-  /** Yaku ou fan na ordem do resultado, com o valor já escrito ("6 han", "8 fan"). */
+  /** Na ordem do resultado. */
   yaku: YakuHistoria[]
   pontos: string
   /** "Ron" ou "Tsumo". */
@@ -39,17 +51,11 @@ export interface DadosHistoria {
   vencedor?: string
 }
 
-export interface YakuHistoria {
-  nome: string
-  valor: string
-}
-
 export interface TemaHistoria {
   superficie: string
   texto: string
   textoSuave: string
-  destaque: string
-  /** Cor dos pontos e dos valores, e o fundo dos cartões, como no Resultado do app. */
+  /** Cor dos pontos e dos valores, e o fundo das pílulas, como no Resultado do app. */
   primario: string
   cartao: string
 }
@@ -57,18 +63,14 @@ export interface TemaHistoria {
 export interface TextosHistoria {
   nomeApp: string
   convite: string
-  data: string
-  /** "+2" quando há mais nomes que cabem. */
-  mais: (quantos: number) => string
 }
 
 export interface OpcoesHistoria {
   layout: LayoutHistoria
   tema: TemaHistoria
   textos: TextosHistoria
-  /** Endereço que o QR abre. */
+  /** Endereço que o QR abre e que aparece escrito na assinatura. */
   url: string
-  logo: string
   /** Deitada: 1920×1080, para o feed e o WhatsApp na horizontal. */
   deitada?: boolean
 }
@@ -85,12 +87,11 @@ export async function comporHistoria(
   const contexto = tela.getContext('2d')
   if (!contexto) throw new Error('Canvas indisponível')
 
-  const [logo, { create }] = await Promise.all([carregarImagem(opcoes.logo), import('qrcode')])
+  const { create } = await import('qrcode')
   const desenho = { ...opcoes, qr: create(opcoes.url, { errorCorrectionLevel: 'M' }).modules }
-  if (opcoes.deitada) desenharDeitada(contexto, foto, dados, logo, desenho)
-  else if (opcoes.layout === 'foto') desenharFotoCheia(contexto, foto, dados, logo, desenho)
-  else if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, logo, desenho)
-  else desenharFotoNaFaixa(contexto, foto, dados, logo, desenho)
+  if (opcoes.deitada) desenharDeitada(contexto, foto, dados, desenho)
+  else if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, desenho)
+  else desenharFotoCheia(contexto, foto, dados, desenho)
 
   return new Promise((resolver, rejeitar) =>
     tela.toBlob(
@@ -107,34 +108,18 @@ export function nomeDoArquivo(agora: Date): string {
   return `riichi-manager-${dia}-${dois(agora.getHours())}${dois(agora.getMinutes())}.jpg`
 }
 
-/** Logo que não carrega fica de fora: a imagem sai mesmo assim. */
-async function carregarImagem(endereco: string): Promise<HTMLImageElement | null> {
-  const imagem = new Image()
-  imagem.src = endereco
-  try {
-    await imagem.decode()
-    return imagem
-  } catch {
-    return null
-  }
-}
-
 /** Foto em toda a tela e o cartão do resultado com a assinatura por cima, embaixo. */
 function desenharFotoCheia(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
   dados: DadosHistoria,
-  logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
-  const { tema } = opcoes
-  const x = SAFE_SIDE
   const largura = LARGURA - SAFE_SIDE * 2
   const respiro = 40
   const interna = largura - respiro * 2
-  const ladoQr = 200
-  const alturaAssinatura = ladoQr + QUIETA_QR * 2
-  const altura = respiro + alturaDoResultado(dados, 1) + 32 + alturaAssinatura + respiro
+  const altura =
+    respiro + alturaDoResultado(contexto, dados, interna, 1) + ESPACO + LADO_QR + respiro
   const y = LIMITE_BAIXO - altura
 
   if (foto.width > foto.height) {
@@ -150,121 +135,110 @@ function desenharFotoCheia(
     contexto.fillRect(0, ALTURA * 0.6, LARGURA, ALTURA * 0.4)
   }
 
+  desenharCartao(contexto, opcoes.tema, SAFE_SIDE, y, largura, altura)
+  const x = SAFE_SIDE + respiro
+  const fim = desenharResultado(contexto, dados, opcoes, x, y + respiro, interna, 1)
+  desenharAssinatura(contexto, opcoes, x, fim + ESPACO, interna)
+}
+
+/**
+ * Estilo Cabine: fundo do tema e a foto a maior possível, com borda branca.
+ * Deitada (a mão em fila), vai na largura toda com o resultado embaixo. Em pé,
+ * ocupa a esquerda, com o resultado na coluna ao lado. A assinatura fica na
+ * largura toda, embaixo.
+ */
+function desenharCabine(
+  contexto: CanvasRenderingContext2D,
+  foto: ImageBitmap,
+  dados: DadosHistoria,
+  opcoes: OpcoesDesenho,
+) {
+  contexto.fillStyle = opcoes.tema.superficie
+  contexto.fillRect(0, 0, LARGURA, ALTURA)
+  const interna = LARGURA - SAFE_SIDE * 2
+  const yAssinatura = LIMITE_BAIXO - LADO_QR
+  const fimResultado = yAssinatura - ESPACO
+
+  if (foto.width > foto.height) {
+    // A foto vai até 4:3 e cede altura para o resultado caber no tamanho normal.
+    const espaco = fimResultado - ESPACO * 2 - TOPO_FOTO
+    const alturaFoto = Math.min(
+      Math.round(interna * 0.75),
+      espaco - alturaDoResultado(contexto, dados, interna, 1),
+    )
+    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
+    const topo = TOPO_FOTO + alturaFoto + ESPACO
+    desenharResultadoCabendo(contexto, dados, opcoes, SAFE_SIDE, topo, interna, fimResultado)
+  } else {
+    const larguraFoto = 600
+    const alturaFoto = fimResultado - TOPO_FOTO
+    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, larguraFoto, alturaFoto)
+    const xLado = SAFE_SIDE + larguraFoto + ESPACO
+    const larguraLado = LARGURA - SAFE_SIDE - xLado
+    desenharResultadoCabendo(contexto, dados, opcoes, xLado, SAFE_TOP, larguraLado, fimResultado)
+  }
+  desenharAssinatura(contexto, opcoes, SAFE_SIDE, yAssinatura, interna)
+}
+
+/**
+ * Imagem deitada (1920×1080), nos dois estilos: a foto inteira com borda branca
+ * à esquerda e o resultado com a assinatura na coluna à direita. Na Foto cheia,
+ * o fundo é a própria foto desfocada e a coluna vai num cartão.
+ */
+function desenharDeitada(
+  contexto: CanvasRenderingContext2D,
+  foto: ImageBitmap,
+  dados: DadosHistoria,
+  opcoes: OpcoesDesenho,
+) {
+  const larguraTela = ALTURA
+  const alturaTela = LARGURA
+  const margem = 64
+  if (opcoes.layout === 'foto') desenharFundoDesfocado(contexto, foto)
+  else {
+    contexto.fillStyle = opcoes.tema.superficie
+    contexto.fillRect(0, 0, larguraTela, alturaTela)
+  }
+  const larguraColuna = 680
+  const xColuna = larguraTela - margem - larguraColuna
+  const larguraFoto = xColuna - 56 - margem
+  const alturaArea = alturaTela - margem * 2
+  // A foto entra inteira, sem cortar a mão, e a borda acompanha o tamanho dela.
+  const ajuste = Math.min(larguraFoto / foto.width, alturaArea / foto.height)
+  const [largura, altura] = [foto.width * ajuste, foto.height * ajuste]
+  desenharFotoComBorda(
+    contexto,
+    foto,
+    margem + (larguraFoto - largura) / 2,
+    margem + (alturaArea - altura) / 2,
+    largura,
+    altura,
+  )
+  if (opcoes.layout === 'foto') {
+    desenharCartao(contexto, opcoes.tema, xColuna - 28, margem, larguraColuna + 56, alturaArea)
+  }
+  const yAssinatura = margem + alturaArea - 24 - LADO_QR
+  const topo = margem + 24
+  const fim = yAssinatura - ESPACO
+  desenharResultadoCabendo(contexto, dados, opcoes, xColuna, topo, larguraColuna, fim, 1.6)
+  desenharAssinatura(contexto, opcoes, xColuna, yAssinatura, larguraColuna)
+}
+
+/** Cartão do tema, 92% opaco, por cima da foto. */
+function desenharCartao(
+  contexto: CanvasRenderingContext2D,
+  tema: TemaHistoria,
+  x: number,
+  y: number,
+  largura: number,
+  altura: number,
+) {
   contexto.save()
   contexto.globalAlpha = 0.92
   contexto.fillStyle = tema.superficie
   retanguloArredondado(contexto, x, y, largura, altura, 40)
   contexto.fill()
   contexto.restore()
-
-  let cursor = desenharResultado(contexto, dados, opcoes, x + respiro, y + respiro, interna, 1)
-  cursor += 32
-  desenharSeparador(contexto, tema, x + respiro, cursor - 16, interna)
-  desenharAssinatura(contexto, opcoes, logo, x + respiro, cursor, interna, ladoQr)
-}
-
-/**
- * Onde a foto começa nos estilos de fundo liso. Ela sobe acima de SAFE_TOP: no
- * Story, só a borda de cima dela fica sob a barra do perfil, e os textos
- * continuam dentro da área segura.
- */
-const TOPO_FOTO = 170
-const ESPACO = 28
-
-/** Fundo do tema, a foto na largura toda e o resultado grande embaixo. */
-function desenharFotoNaFaixa(
-  contexto: CanvasRenderingContext2D,
-  foto: ImageBitmap,
-  dados: DadosHistoria,
-  logo: HTMLImageElement | null,
-  opcoes: OpcoesDesenho,
-) {
-  contexto.fillStyle = opcoes.tema.superficie
-  contexto.fillRect(0, 0, LARGURA, ALTURA)
-  const interna = LARGURA - SAFE_SIDE * 2
-  // Até 520px; com os yaku, a foto cede espaço para o placar não encolher.
-  const espacoTotal = LIMITE_BAIXO - 200 - QUIETA_QR * 2 - ESPACO * 3 - TOPO_FOTO
-  const alturaFoto = Math.min(520, espacoTotal - alturaDoResultado(dados, 1))
-  desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
-  desenharColunaResultado(
-    contexto,
-    dados,
-    opcoes,
-    logo,
-    true,
-    SAFE_SIDE,
-    TOPO_FOTO + alturaFoto + ESPACO,
-    interna,
-    LIMITE_BAIXO,
-  )
-}
-
-/**
- * Estilo Cabine: a foto é a maior possível. Em pé, ocupa a esquerda até a
- * assinatura, com o resultado na coluna ao lado. Deitada (a mão em fila), vai
- * em 4:3 na largura toda, com o resultado embaixo. Os yaku ficam sempre
- * embaixo do placar.
- */
-function desenharCabine(
-  contexto: CanvasRenderingContext2D,
-  foto: ImageBitmap,
-  dados: DadosHistoria,
-  logo: HTMLImageElement | null,
-  opcoes: OpcoesDesenho,
-) {
-  const { tema } = opcoes
-  contexto.fillStyle = tema.superficie
-  contexto.fillRect(0, 0, LARGURA, ALTURA)
-  const interna = LARGURA - SAFE_SIDE * 2
-  const ladoQr = 200
-  const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
-
-  if (foto.width > foto.height) {
-    // Foto em 4:3 na largura toda e o resultado embaixo, com os yaku embaixo do
-    // placar como nos outros estilos. Com os yaku, a foto cede altura.
-    const espacoTotal = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2 - ESPACO * 3 - TOPO_FOTO
-    const alturaFoto = Math.min(
-      Math.round(interna * 0.75),
-      espacoTotal - alturaDoResultado(dados, 1),
-    )
-    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
-    desenharColunaResultado(
-      contexto,
-      dados,
-      opcoes,
-      logo,
-      true,
-      SAFE_SIDE,
-      TOPO_FOTO + alturaFoto + ESPACO,
-      interna,
-      LIMITE_BAIXO,
-    )
-    return
-  }
-
-  const larguraFoto = 600
-  desenharFotoComBorda(
-    contexto,
-    foto,
-    SAFE_SIDE,
-    TOPO_FOTO,
-    larguraFoto,
-    yAssinatura - ESPACO - TOPO_FOTO,
-  )
-  const xLado = SAFE_SIDE + larguraFoto + ESPACO
-  desenharColunaResultado(
-    contexto,
-    dados,
-    opcoes,
-    logo,
-    false,
-    xLado,
-    SAFE_TOP,
-    LARGURA - SAFE_SIDE - xLado,
-    yAssinatura - ESPACO,
-  )
-  desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 20, interna)
-  desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
 }
 
 /** Foto recortada no espaço, com cantos arredondados e borda branca. */
@@ -286,37 +260,6 @@ function desenharFotoComBorda(
   contexto.restore()
 }
 
-/**
- * O bloco do resultado no maior tamanho que cabe (até 20% acima do normal),
- * centralizado entre o topo e a assinatura. Sem `comAssinatura`, ela fica por
- * conta de quem chamou (ex.: na largura toda, embaixo).
- */
-function desenharColunaResultado(
-  contexto: CanvasRenderingContext2D,
-  dados: DadosHistoria,
-  opcoes: OpcoesDesenho,
-  logo: HTMLImageElement | null,
-  comAssinatura: boolean,
-  x: number,
-  topo: number,
-  largura: number,
-  fim: number,
-  /** Quanto o bloco pode crescer: 1,2 em pé; mais na deitada, onde sobra altura. */
-  escalaMaxima = 1.2,
-) {
-  const ladoQr = 200
-  const yAssinatura = fim - ladoQr - QUIETA_QR * 2
-  const limite = comAssinatura ? yAssinatura - ESPACO : fim
-  const livre = limite - topo
-  const fixa = alturaDoResultado(dados, 0)
-  const escala = Math.min(escalaMaxima, (livre - fixa) / (alturaDoResultado(dados, 1) - fixa))
-  const y = topo + (livre - alturaDoResultado(dados, escala)) / 2
-  desenharResultado(contexto, dados, opcoes, x, y, largura, escala)
-  if (!comAssinatura) return
-  desenharSeparador(contexto, opcoes.tema, x, yAssinatura - 20, largura)
-  desenharAssinatura(contexto, opcoes, logo, x, yAssinatura, largura, ladoQr)
-}
-
 /** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
 function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageBitmap) {
   const { width: largura, height: altura } = contexto.canvas
@@ -326,71 +269,6 @@ function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageB
   contexto.restore()
   contexto.fillStyle = 'rgba(0,0,0,0.35)'
   contexto.fillRect(0, 0, largura, altura)
-}
-
-/**
- * Imagem deitada (1920×1080): o mesmo padrão nos três estilos, com a foto de
- * borda branca à esquerda e o resultado com a assinatura na coluna à direita.
- * Na Foto cheia, o fundo é a própria foto desfocada.
- */
-function desenharDeitada(
-  contexto: CanvasRenderingContext2D,
-  foto: ImageBitmap,
-  dados: DadosHistoria,
-  logo: HTMLImageElement | null,
-  opcoes: OpcoesDesenho,
-) {
-  const larguraTela = ALTURA
-  const alturaTela = LARGURA
-  const margem = 64
-  if (opcoes.layout === 'foto') desenharFundoDesfocado(contexto, foto)
-  else {
-    contexto.fillStyle = opcoes.tema.superficie
-    contexto.fillRect(0, 0, larguraTela, alturaTela)
-  }
-  const larguraColuna = 680
-  const xColuna = larguraTela - margem - larguraColuna
-  const larguraFoto = xColuna - 56 - margem
-  // A foto entra inteira, sem cortar a mão, e a borda acompanha o tamanho dela.
-  const alturaArea = alturaTela - margem * 2
-  const ajuste = Math.min(larguraFoto / foto.width, alturaArea / foto.height)
-  const [largura, altura] = [foto.width * ajuste, foto.height * ajuste]
-  desenharFotoComBorda(
-    contexto,
-    foto,
-    margem + (larguraFoto - largura) / 2,
-    margem + (alturaArea - altura) / 2,
-    largura,
-    altura,
-  )
-  if (opcoes.layout === 'foto') {
-    // Sobre a foto desfocada, o resultado vai num cartão, como na Foto cheia em pé.
-    contexto.save()
-    contexto.globalAlpha = 0.92
-    contexto.fillStyle = opcoes.tema.superficie
-    retanguloArredondado(
-      contexto,
-      xColuna - 28,
-      margem,
-      larguraColuna + 56,
-      alturaTela - margem * 2,
-      40,
-    )
-    contexto.fill()
-    contexto.restore()
-  }
-  desenharColunaResultado(
-    contexto,
-    dados,
-    opcoes,
-    logo,
-    true,
-    xColuna,
-    margem + 24,
-    larguraColuna,
-    alturaTela - margem - 24,
-    1.6,
-  )
 }
 
 /** A foto inteira, centralizada no espaço, sem cortar. */
@@ -444,39 +322,55 @@ function resumoVisivel(dados: DadosHistoria) {
   return dados.resumo.toLowerCase() !== (dados.patamar ?? '').toLowerCase()
 }
 
-const ALTURA_CARTAO_YAKU = 76
-const ESPACO_CARTOES = 12
-
-/** Os cartões que cabem: até 4 yaku; com mais, 3 e um "+N". */
-function cartoesDeYaku(dados: DadosHistoria, textos: TextosHistoria): YakuHistoria[] {
-  if (dados.yaku.length <= MAX_NOMES) return dados.yaku
-  const resto = dados.yaku.length - (MAX_NOMES - 1)
-  return [...dados.yaku.slice(0, MAX_NOMES - 1), { nome: textos.mais(resto), valor: '' }]
+/**
+ * O bloco do resultado no maior tamanho que cabe entre `topo` e `fim` (até
+ * `escalaMaxima`), centralizado na altura.
+ */
+function desenharResultadoCabendo(
+  contexto: CanvasRenderingContext2D,
+  dados: DadosHistoria,
+  opcoes: OpcoesDesenho,
+  x: number,
+  topo: number,
+  largura: number,
+  fim: number,
+  escalaMaxima = 1.2,
+) {
+  const livre = fim - topo
+  const fixa = alturaDoResultado(contexto, dados, largura, 0)
+  const porEscala = alturaDoResultado(contexto, dados, largura, 1) - fixa
+  const escala = Math.max(0.6, Math.min(escalaMaxima, (livre - fixa) / porEscala))
+  const sobra = livre - alturaDoResultado(contexto, dados, largura, escala)
+  desenharResultado(contexto, dados, opcoes, x, topo + Math.max(0, sobra / 2), largura, escala)
 }
 
 /** Mesma soma das linhas de `desenharResultado`. */
-function alturaDoResultado(dados: DadosHistoria, escala: number) {
-  const linhasDeCartoes = Math.min(dados.yaku.length, MAX_NOMES)
+function alturaDoResultado(
+  contexto: CanvasRenderingContext2D,
+  dados: DadosHistoria,
+  largura: number,
+  escala: number,
+) {
+  const linhasDePilulas = linhasDeYaku(contexto, pilulasDeYaku(dados), largura).length
   return (
     (dados.patamar ? 64 * escala : 0) +
     64 * escala +
     (dados.vencedor ? 50 : 0) +
     (resumoVisivel(dados) ? 46 * escala : 0) +
     132 * escala +
-    (linhasDeCartoes > 0 ? 16 + linhasDeCartoes * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES) : 0)
+    (linhasDePilulas > 0 ? 20 + linhasDePilulas * (ALTURA_PILULA + ESPACO_PILULAS) : 0)
   )
 }
 
 /**
  * Bloco do resultado com o visual do Resultado do app, sem os pagamentos:
  * patamar, a pílula do Ron/Tsumo, quem bateu, han/fu, os pontos grandes na cor
- * primária e os yaku em cartões, um embaixo do outro, com o valor à direita.
- * Devolve onde terminou.
+ * primária e os yaku em pílulas. Devolve onde terminou.
  */
 function desenharResultado(
   contexto: CanvasRenderingContext2D,
   dados: DadosHistoria,
-  { tema, textos }: OpcoesDesenho,
+  { tema }: OpcoesDesenho,
   x: number,
   y: number,
   largura: number,
@@ -493,23 +387,17 @@ function desenharResultado(
     cursor += altura
   }
 
-  if (dados.patamar)
+  if (dados.patamar) {
     escrever(dados.patamar, `500 ${Math.round(52 * escala)}px`, tema.texto, 64 * escala)
+  }
 
-  // Pílula do Ron/Tsumo, como as dos ventos no Resultado.
-  // Pílula e han/fu crescem junto com os pontos.
+  // Pílula do Ron/Tsumo, como as dos ventos no Resultado. Cresce com os pontos.
   contexto.font = `700 ${Math.round(28 * escala)}px ${FONTE}`
   const forma = dados.forma.toUpperCase()
   const alturaPilula = 48 * escala
   const larguraPilula = contexto.measureText(forma).width + 48 * escala
-  retanguloArredondado(
-    contexto,
-    meio - larguraPilula / 2,
-    cursor,
-    larguraPilula,
-    alturaPilula,
-    alturaPilula / 2,
-  )
+  const xPilula = meio - larguraPilula / 2
+  retanguloArredondado(contexto, xPilula, cursor, larguraPilula, alturaPilula, alturaPilula / 2)
   contexto.fillStyle = tema.cartao
   contexto.fill()
   contexto.fillStyle = tema.primario
@@ -524,95 +412,130 @@ function desenharResultado(
   }
   escrever(dados.pontos, `900 ${Math.round(120 * escala)}px`, tema.primario, 132 * escala)
 
-  const cartoes = cartoesDeYaku(dados, textos)
-  if (cartoes.length === 0) {
-    contexto.textAlign = 'left'
-    return cursor
+  const pilulas = pilulasDeYaku(dados)
+  if (pilulas.length > 0) {
+    cursor = desenharPilulasYaku(contexto, pilulas, tema, x, cursor + 20, largura)
   }
-  cursor += 16
-  cursor = desenharCartoesYaku(contexto, cartoes, tema, x, cursor, largura)
   contexto.textAlign = 'left'
   return cursor
 }
 
-/** Cartões de yaku um embaixo do outro, como a lista do Resultado. Devolve onde terminou. */
-function desenharCartoesYaku(
+const ALTURA_PILULA = 54
+const ESPACO_PILULAS = 12
+const RESPIRO_PILULA = 22
+const FONTE_PILULA = `700 26px ${FONTE}`
+
+/** Até 8 yaku; com mais, 7 e um "+N". */
+function pilulasDeYaku(dados: DadosHistoria): YakuHistoria[] {
+  if (dados.yaku.length <= MAX_YAKU) return dados.yaku
+  const resto = dados.yaku.length - (MAX_YAKU - 1)
+  return [...dados.yaku.slice(0, MAX_YAKU - 1), { nome: `+${resto}`, valor: '' }]
+}
+
+function larguraDaPilula(contexto: CanvasRenderingContext2D, yaku: YakuHistoria, maxima: number) {
+  contexto.font = FONTE_PILULA
+  const texto = yaku.valor ? `${yaku.nome}  ${yaku.valor}` : yaku.nome
+  return Math.min(maxima, contexto.measureText(texto).width + RESPIRO_PILULA * 2)
+}
+
+/** Distribui as pílulas em linhas que cabem na largura. */
+function linhasDeYaku(
   contexto: CanvasRenderingContext2D,
-  cartoes: YakuHistoria[],
+  pilulas: YakuHistoria[],
+  largura: number,
+) {
+  const linhas: YakuHistoria[][] = []
+  let atual: YakuHistoria[] = []
+  let ocupada = 0
+  for (const pilula of pilulas) {
+    const comEspaco = larguraDaPilula(contexto, pilula, largura) + ESPACO_PILULAS
+    if (atual.length > 0 && ocupada + comEspaco - ESPACO_PILULAS > largura) {
+      linhas.push(atual)
+      atual = []
+      ocupada = 0
+    }
+    atual.push(pilula)
+    ocupada += comEspaco
+  }
+  if (atual.length > 0) linhas.push(atual)
+  return linhas
+}
+
+/**
+ * Os yaku em pílulas compactas e centralizadas, com o valor na cor primária:
+ * ocupam pouca altura e a foto não encolhe. Devolve onde terminou.
+ */
+function desenharPilulasYaku(
+  contexto: CanvasRenderingContext2D,
+  pilulas: YakuHistoria[],
   tema: TemaHistoria,
   x: number,
   y: number,
   largura: number,
 ) {
-  // Coluna estreita (Cabine com foto em pé): letra menor para nome e valor caberem.
-  const estreita = largura < 500
-  cartoes.forEach((yaku, indice) => {
-    const yCartao = y + indice * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
-    retanguloArredondado(contexto, x, yCartao, largura, ALTURA_CARTAO_YAKU, 20)
-    contexto.fillStyle = tema.cartao
-    contexto.fill()
-    contexto.textBaseline = 'middle'
-    const meioCartao = yCartao + ALTURA_CARTAO_YAKU / 2 + 1
-    contexto.font = `700 ${estreita ? 24 : 30}px ${FONTE}`
-    const larguraValor = yaku.valor ? contexto.measureText(yaku.valor).width : 0
-    contexto.textAlign = 'right'
-    contexto.fillStyle = tema.primario
-    if (yaku.valor) contexto.fillText(yaku.valor, x + largura - 28, meioCartao)
-    contexto.textAlign = 'left'
-    contexto.font = `700 ${estreita ? 26 : 30}px ${FONTE}`
-    contexto.fillStyle = tema.texto
-    const larguraNome = largura - 56 - (larguraValor ? larguraValor + 16 : 0)
-    contexto.fillText(caber(contexto, yaku.nome, larguraNome), x + 28, meioCartao)
-    contexto.textBaseline = 'top'
-  })
-  return y + cartoes.length * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
+  let cursor = y
+  for (const linha of linhasDeYaku(contexto, pilulas, largura)) {
+    const larguras = linha.map((pilula) => larguraDaPilula(contexto, pilula, largura))
+    const total =
+      larguras.reduce((soma, valor) => soma + valor, 0) + ESPACO_PILULAS * (linha.length - 1)
+    let xPilula = x + (largura - total) / 2
+    linha.forEach((pilula, indice) => {
+      const larguraPilula = larguras[indice]
+      const raio = ALTURA_PILULA / 2
+      retanguloArredondado(contexto, xPilula, cursor, larguraPilula, ALTURA_PILULA, raio)
+      contexto.fillStyle = tema.cartao
+      contexto.fill()
+      contexto.font = FONTE_PILULA
+      contexto.textAlign = 'left'
+      contexto.textBaseline = 'middle'
+      const meioY = cursor + ALTURA_PILULA / 2 + 1
+      const larguraValor = pilula.valor ? contexto.measureText(`  ${pilula.valor}`).width : 0
+      const larguraNome = larguraPilula - RESPIRO_PILULA * 2 - larguraValor
+      const nome = caber(contexto, pilula.nome, larguraNome)
+      contexto.fillStyle = tema.texto
+      contexto.fillText(nome, xPilula + RESPIRO_PILULA, meioY)
+      if (pilula.valor) {
+        const xValor = xPilula + RESPIRO_PILULA + contexto.measureText(nome).width
+        contexto.fillStyle = tema.primario
+        contexto.fillText(`  ${pilula.valor}`, xValor, meioY)
+      }
+      xPilula += larguraPilula + ESPACO_PILULAS
+    })
+    cursor += ALTURA_PILULA + ESPACO_PILULAS
+  }
+  contexto.textBaseline = 'top'
+  return cursor - ESPACO_PILULAS
 }
 
-function desenharSeparador(
-  contexto: CanvasRenderingContext2D,
-  tema: TemaHistoria,
-  x: number,
-  y: number,
-  largura: number,
-) {
-  contexto.save()
-  contexto.globalAlpha = 0.3
-  contexto.fillStyle = tema.textoSuave
-  contexto.fillRect(x, y, largura, 2)
-  contexto.restore()
-}
-
-/** Logo, nome, convite e data à esquerda; QR escuro no branco à direita. */
+/**
+ * Assinatura como a das imagens do Torneio: o QR à esquerda, escuro no lilás
+ * claro só nele, e ao lado o nome do app, o convite e o endereço em texto leve.
+ */
 function desenharAssinatura(
   contexto: CanvasRenderingContext2D,
-  { tema, textos, qr }: OpcoesDesenho,
-  logo: HTMLImageElement | null,
+  { tema, textos, qr, url }: OpcoesDesenho,
   x: number,
   y: number,
   largura: number,
-  ladoQr: number,
 ) {
-  const caixa = ladoQr + QUIETA_QR * 2
-  const xQr = x + largura - caixa
-  desenharQr(contexto, qr, xQr, y, ladoQr)
-
-  const larguraTexto = largura - caixa - 24
+  desenharQr(contexto, qr, x, y, LADO_QR)
+  const xTexto = x + LADO_QR + 24
+  const larguraTexto = largura - LADO_QR - 24
+  const endereco = url.replace(/^https:\/\//, '').replace(/\/$/, '')
+  const meio = y + LADO_QR / 2
   contexto.textAlign = 'left'
   contexto.textBaseline = 'middle'
-  const meio = y + caixa / 2
-  if (logo) contexto.drawImage(logo, x, meio - 70, 48, 48)
-  contexto.font = `600 32px ${FONTE}`
-  contexto.fillStyle = tema.texto
-  contexto.fillText(caber(contexto, textos.nomeApp, larguraTexto - 64), x + 64, meio - 46)
-  contexto.font = `400 28px ${FONTE}`
   contexto.fillStyle = tema.textoSuave
-  contexto.fillText(caber(contexto, textos.convite, larguraTexto), x, meio + 6)
-  contexto.fillText(caber(contexto, textos.data, larguraTexto), x, meio + 46)
-  if (SHARE_HANDLE) contexto.fillText(caber(contexto, SHARE_HANDLE, larguraTexto), x, meio + 86)
+  contexto.font = `600 30px ${FONTE}`
+  contexto.fillText(caber(contexto, textos.nomeApp, larguraTexto), xTexto, meio - 40)
+  contexto.font = `500 26px ${FONTE}`
+  contexto.fillText(caber(contexto, textos.convite, larguraTexto), xTexto, meio)
+  contexto.font = `400 22px ${FONTE}`
+  contexto.fillText(caber(contexto, endereco, larguraTexto), xTexto, meio + 36)
   contexto.textBaseline = 'top'
 }
 
-/** Módulos desenhados direto no canvas, nível M, sempre escuro no branco. */
+/** Módulos desenhados direto no canvas, nível M, com a zona quieta de 4 módulos. */
 function desenharQr(
   contexto: CanvasRenderingContext2D,
   modules: QRCode['modules'],
@@ -620,23 +543,25 @@ function desenharQr(
   y: number,
   lado: number,
 ) {
-  const caixa = lado + QUIETA_QR * 2
-  contexto.fillStyle = '#ffffff'
-  retanguloArredondado(contexto, x, y, caixa, caixa, 16)
-  contexto.fill()
-  const modulo = lado / modules.size
-  contexto.fillStyle = '#000000'
+  const modulo = lado / (modules.size + 8)
+  contexto.save()
+  retanguloArredondado(contexto, x, y, lado, lado, 16)
+  contexto.clip()
+  contexto.fillStyle = CORES_QR.claro
+  contexto.fillRect(x, y, lado, lado)
+  contexto.fillStyle = CORES_QR.escuro
   for (let linha = 0; linha < modules.size; linha++) {
     for (let coluna = 0; coluna < modules.size; coluna++) {
       if (!modules.get(linha, coluna)) continue
       // Arredonda as bordas de cada módulo para não sobrar fresta entre eles.
-      const x0 = Math.floor(x + QUIETA_QR + coluna * modulo)
-      const y0 = Math.floor(y + QUIETA_QR + linha * modulo)
-      const x1 = Math.ceil(x + QUIETA_QR + (coluna + 1) * modulo)
-      const y1 = Math.ceil(y + QUIETA_QR + (linha + 1) * modulo)
+      const x0 = Math.floor(x + (coluna + 4) * modulo)
+      const y0 = Math.floor(y + (linha + 4) * modulo)
+      const x1 = Math.ceil(x + (coluna + 5) * modulo)
+      const y1 = Math.ceil(y + (linha + 5) * modulo)
       contexto.fillRect(x0, y0, x1 - x0, y1 - y0)
     }
   }
+  contexto.restore()
 }
 
 function caber(contexto: CanvasRenderingContext2D, texto: string, largura: number): string {

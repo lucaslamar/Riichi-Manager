@@ -517,7 +517,7 @@
 
 /*
  * Em pé: a imagem em cima com as bolinhas e, embaixo, o painel lilás com o
- * cartão das ações (pedido do usuário em 26/11/2026). As quatro ações ficam lado
+ * cartão das ações (pedido do usuário em 26/11/2026). As três ações ficam lado
  * a lado, com o nome curto embaixo do ícone, e o Compartilhar largo por último.
  */
 @media (orientation: portrait) {
@@ -562,7 +562,7 @@
   .historia-mao-previa .historia-mao-barra-acoes {
     display: grid;
     grid-area: painel;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 4px;
     margin: 14px 16px calc(14px + env(safe-area-inset-bottom));
     padding: 10px;

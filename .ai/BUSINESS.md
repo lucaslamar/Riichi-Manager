@@ -227,4 +227,4 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Privacidade: a foto nunca sai do aparelho. Sem envio, sem gravar, e a câmera desliga ao capturar, fechar ou sair do app.
 - Só aparece com um resultado válido: some no chombo, na mão sem yaku e na mão MCR inválida.
 - O cartão mostra até 4 yaku ou fan e "+N" para o resto, e o nome de quem bateu quando o resultado vem do Centerpiece.
-- Yaku na imagem (pedido do usuário em 25/11/2026): começam desligados. A foto e o placar (patamar, pontos, han/fu) bastam. O ícone de lista na prévia põe os yaku, para quem quer mostrar a mão por escrito (por exemplo, para quem não ouve a narração).
+- Yaku na imagem (pedido do usuário em 26/11/2026): aparecem sempre, sem botão para tirar, em pílulas compactas embaixo do placar. Dois estilos de imagem: Foto cheia e Cabine (a Faixa foi descartada).

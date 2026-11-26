@@ -10,7 +10,7 @@ import {
   type TemaHistoria,
 } from './comporHistoria'
 
-const LAYOUTS: LayoutHistoria[] = ['foto', 'resultado', 'cabine']
+const LAYOUTS: LayoutHistoria[] = ['foto', 'cabine']
 /** Quanto o dedo precisa andar de lado para trocar o estilo. */
 const DESLIZE_MINIMO = 50
 
@@ -22,7 +22,6 @@ function temaAtual(): TemaHistoria {
     superficie: cor('--cor-superficie', '#ffffff'),
     texto: cor('--cor-texto', '#1c1724'),
     textoSuave: cor('--cor-texto-suave', '#5d5470'),
-    destaque: cor('--cor-destaque', cor('--primario', '#7a3fb0')),
     primario: cor('--primario', '#7a3fb0'),
     cartao: cor('--cor-primario-suave', '#2a2438'),
   }
@@ -39,11 +38,9 @@ export default function TelaPrevia({
   aoRefazer: () => void
   aoFechar: () => void
 }) {
-  const { t, idioma } = useI18n()
+  const { t } = useI18n()
   const [layout, setLayout] = useState<LayoutHistoria>('foto')
   const [deitada, setDeitada] = useState(false)
-  // Os yaku começam fora da imagem: a foto e o placar já contam a história.
-  const [comYaku, setComYaku] = useState(false)
   const [arquivo, setArquivo] = useState<File | null>(null)
   const [endereco, setEndereco] = useState<string | null>(null)
   const [aviso, setAviso] = useState('')
@@ -55,17 +52,14 @@ export default function TelaPrevia({
     setArquivo(null)
     setAviso('')
     const agora = new Date()
-    comporHistoria(foto, comYaku ? dados : { ...dados, yaku: [] }, {
+    comporHistoria(foto, dados, {
       layout,
       deitada,
       tema: temaAtual(),
       url: URL_DO_APP,
-      logo: `${import.meta.env.BASE_URL}icones/icone-192.png`,
       textos: {
         nomeApp: t('global.appName'),
         convite: t('historiaMao.convite'),
-        data: new Intl.DateTimeFormat(idioma, { dateStyle: 'short' }).format(agora),
-        mais: (quantos) => `+${quantos}`,
       },
     })
       .then((blob) => {
@@ -75,7 +69,7 @@ export default function TelaPrevia({
     return () => {
       ativo = false
     }
-  }, [foto, dados, comYaku, layout, deitada, idioma, t])
+  }, [foto, dados, layout, deitada, t])
 
   useEffect(() => {
     if (!arquivo) return
@@ -144,19 +138,6 @@ export default function TelaPrevia({
             <i className="fas fa-camera" aria-hidden="true" />
             <span className="historia-mao-rotulo" aria-hidden="true">
               {t('historiaMao.refazer')}
-            </span>
-          </button>
-          <button
-            type="button"
-            className="historia-mao-icone"
-            aria-label={t('historiaMao.mostrarYaku')}
-            title={t('historiaMao.mostrarYaku')}
-            aria-pressed={comYaku}
-            onClick={() => setComYaku(!comYaku)}
-          >
-            <i className="fas fa-list" aria-hidden="true" />
-            <span className="historia-mao-rotulo" aria-hidden="true">
-              {t('historiaMao.rotuloYaku')}
             </span>
           </button>
           <button

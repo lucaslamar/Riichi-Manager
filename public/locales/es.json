@@ -3736,7 +3736,6 @@
     "dica": "Consejo: en Instagram, añade también el sticker de Enlace.",
     "layout": "Diseño de la imagen",
     "layout_foto": "Foto completa",
-    "layout_resultado": "Franja",
     "refazer": "Repetir",
     "salvar": "Guardar imagen",
     "compartilhar": "Compartir",
@@ -3757,8 +3756,6 @@
     "girar": "Gira el móvil en horizontal",
     "layout_cabine": "Cabina",
     "deitar": "Imagen horizontal",
-    "mostrarYaku": "Mostrar yaku en la imagen",
-    "rotuloYaku": "Yaku",
     "rotuloDeitada": "Horizontal",
     "rotuloSalvar": "Guardar"
   }
