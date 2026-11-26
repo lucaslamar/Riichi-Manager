@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { baixarArquivo, salvarArquivo } from '@/compartilhado/adaptadores/arquivo'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { URL_DO_APP } from '@/compartilhado/marca/url-app'
+import { MASCOTE_QR_SRC } from './mascote'
 import {
   comporHistoria,
   nomeDoArquivo,
@@ -58,6 +59,7 @@ export default function TelaPrevia({
       fotoDeitada: deitada,
       tema: temaAtual(),
       url: URL_DO_APP,
+      mascoteSrc: MASCOTE_QR_SRC,
       textos: {
         nomeApp: t('global.appName'),
         convite: t('historiaMao.convite'),

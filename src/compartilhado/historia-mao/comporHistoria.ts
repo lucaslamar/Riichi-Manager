@@ -7,9 +7,13 @@
  * desenho.
  */
 import type { QRCode } from 'qrcode'
+import { MASCOTE_AREA_QR } from './mascote'
 
-/** Opções com o QR já calculado (a biblioteca só carrega na hora de montar). */
-type OpcoesDesenho = OpcoesHistoria & { qr: QRCode['modules'] }
+/** Opções com o QR e a arte do mascote já carregados. */
+type OpcoesDesenho = OpcoesHistoria & {
+  qr: QRCode['modules']
+  mascote: HTMLImageElement | null
+}
 
 export const LARGURA = 1080
 export const ALTURA = 1920
@@ -21,9 +25,9 @@ export const SAFE_SIDE = 48
 const LIMITE_BAIXO = ALTURA - SAFE_BOTTOM
 const FONTE = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 const ESPACO = 28
-/** Assinatura como a das imagens do Torneio: QR de 148px, escuro no lilás claro. */
-const LADO_QR = 148
-const CORES_QR = { escuro: '#2a2438', claro: '#e6dff2' }
+/** Mascote da assinatura: 400×500 (prancheta 4:5), com o QR de 160px na placa. */
+const LARGURA_MASCOTE = 400
+const ALTURA_MASCOTE = 500
 const MAX_YAKU = 8
 
 export type LayoutHistoria = 'foto' | 'cabine'
@@ -69,6 +73,8 @@ export interface OpcoesHistoria {
   url: string
   /** A foto em 4:3 (deitada) ou 3:4 (em pé). Não muda o tamanho da imagem. */
   fotoDeitada: boolean
+  /** Arte do mascote com a placa (`MASCOTE_QR_SRC`). */
+  mascoteSrc: string
 }
 
 export async function comporHistoria(
@@ -83,8 +89,12 @@ export async function comporHistoria(
   const contexto = tela.getContext('2d')
   if (!contexto) throw new Error('Canvas indisponível')
 
-  const { create } = await import('qrcode')
-  const desenho = { ...opcoes, qr: create(opcoes.url, { errorCorrectionLevel: 'M' }).modules }
+  const [{ create }, mascote] = await Promise.all([
+    import('qrcode'),
+    carregarImagem(opcoes.mascoteSrc),
+  ])
+  const qr = create(opcoes.url, { errorCorrectionLevel: 'M' }).modules
+  const desenho = { ...opcoes, qr, mascote }
   if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, desenho)
   else desenharFotoCheia(contexto, foto, dados, desenho)
 
@@ -118,7 +128,7 @@ function desenharFotoCheia(
   const respiro = 40
   const interna = largura - respiro * 2
   const altura =
-    respiro + alturaDoResultado(contexto, dados, interna, 1) + ESPACO + LADO_QR + respiro
+    respiro + alturaDoResultado(contexto, dados, interna, 1) + ESPACO + ALTURA_MASCOTE + respiro
   const y = LIMITE_BAIXO - altura
 
   if (opcoes.fotoDeitada) {
@@ -154,7 +164,7 @@ function desenharCabine(
   contexto.fillStyle = opcoes.tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
   const interna = LARGURA - SAFE_SIDE * 2
-  const yAssinatura = LIMITE_BAIXO - LADO_QR
+  const yAssinatura = LIMITE_BAIXO - ALTURA_MASCOTE
   const fimResultado = yAssinatura - ESPACO
 
   const alturaMaxima = opcoes.fotoDeitada ? LARGURA * 0.75 : (LARGURA * 4) / 3
@@ -412,34 +422,45 @@ function desenharPilulasYaku(
 }
 
 /**
- * Assinatura como a das imagens do Torneio: o QR à esquerda, escuro no lilás
- * claro só nele, e ao lado o nome do app, o convite e o endereço em texto leve.
+ * Assinatura: o mascote segurando a placa, no canto direito, com o QR desenhado
+ * dentro dela (preto no branco, em resolução cheia, nas medidas de `mascote.ts`).
+ * À esquerda, o nome do app e o convite em texto pequeno. Sem a arte (não
+ * carregou), fica só o QR simples, com margem branca.
  */
 function desenharAssinatura(
   contexto: CanvasRenderingContext2D,
-  { tema, textos, qr, url }: OpcoesDesenho,
+  { tema, textos, qr, mascote }: OpcoesDesenho,
   x: number,
   y: number,
   largura: number,
 ) {
-  desenharQr(contexto, qr, x, y, LADO_QR)
-  const xTexto = x + LADO_QR + 24
-  const larguraTexto = largura - LADO_QR - 24
-  const endereco = url.replace(/^https:\/\//, '').replace(/\/$/, '')
-  const meio = y + LADO_QR / 2
+  const xMascote = x + largura - LARGURA_MASCOTE
+  const ladoQr = LARGURA_MASCOTE * MASCOTE_AREA_QR.largura
+  const xQr = xMascote + LARGURA_MASCOTE * MASCOTE_AREA_QR.esquerda
+  const yQr = y + ALTURA_MASCOTE * MASCOTE_AREA_QR.topo
+  if (mascote) {
+    contexto.drawImage(mascote, xMascote, y, LARGURA_MASCOTE, ALTURA_MASCOTE)
+  } else {
+    // Sem a placa: um fundo branco faz a margem que ela daria.
+    contexto.fillStyle = '#ffffff'
+    retanguloArredondado(contexto, xQr - 24, yQr - 24, ladoQr + 48, ladoQr + 48, 16)
+    contexto.fill()
+  }
+  desenharQr(contexto, qr, xQr, yQr, ladoQr)
+
+  const larguraTexto = xMascote - x - 24
+  const meio = yQr + ladoQr / 2
   contexto.textAlign = 'left'
   contexto.textBaseline = 'middle'
   contexto.fillStyle = tema.textoSuave
-  contexto.font = `600 30px ${FONTE}`
-  contexto.fillText(caber(contexto, textos.nomeApp, larguraTexto), xTexto, meio - 40)
-  contexto.font = `500 26px ${FONTE}`
-  contexto.fillText(caber(contexto, textos.convite, larguraTexto), xTexto, meio)
-  contexto.font = `400 22px ${FONTE}`
-  contexto.fillText(caber(contexto, endereco, larguraTexto), xTexto, meio + 36)
+  contexto.font = `600 32px ${FONTE}`
+  contexto.fillText(caber(contexto, textos.nomeApp, larguraTexto), x, meio - 22)
+  contexto.font = `500 28px ${FONTE}`
+  contexto.fillText(caber(contexto, textos.convite, larguraTexto), x, meio + 22)
   contexto.textBaseline = 'top'
 }
 
-/** Módulos desenhados direto no canvas, nível M, com a zona quieta de 4 módulos. */
+/** Módulos pretos no branco, nível M, ocupando o lado todo (a margem é da placa). */
 function desenharQr(
   contexto: CanvasRenderingContext2D,
   modules: QRCode['modules'],
@@ -447,25 +468,33 @@ function desenharQr(
   y: number,
   lado: number,
 ) {
-  const modulo = lado / (modules.size + 8)
-  contexto.save()
-  retanguloArredondado(contexto, x, y, lado, lado, 16)
-  contexto.clip()
-  contexto.fillStyle = CORES_QR.claro
+  const modulo = lado / modules.size
+  contexto.fillStyle = '#ffffff'
   contexto.fillRect(x, y, lado, lado)
-  contexto.fillStyle = CORES_QR.escuro
+  contexto.fillStyle = '#000000'
   for (let linha = 0; linha < modules.size; linha++) {
     for (let coluna = 0; coluna < modules.size; coluna++) {
       if (!modules.get(linha, coluna)) continue
       // Arredonda as bordas de cada módulo para não sobrar fresta entre eles.
-      const x0 = Math.floor(x + (coluna + 4) * modulo)
-      const y0 = Math.floor(y + (linha + 4) * modulo)
-      const x1 = Math.ceil(x + (coluna + 5) * modulo)
-      const y1 = Math.ceil(y + (linha + 5) * modulo)
+      const x0 = Math.floor(x + coluna * modulo)
+      const y0 = Math.floor(y + linha * modulo)
+      const x1 = Math.ceil(x + (coluna + 1) * modulo)
+      const y1 = Math.ceil(y + (linha + 1) * modulo)
       contexto.fillRect(x0, y0, x1 - x0, y1 - y0)
     }
   }
-  contexto.restore()
+}
+
+/** Arte que não carrega fica de fora: a imagem sai mesmo assim. */
+async function carregarImagem(endereco: string): Promise<HTMLImageElement | null> {
+  const imagem = new Image()
+  imagem.src = endereco
+  try {
+    await imagem.decode()
+    return imagem
+  } catch {
+    return null
+  }
 }
 
 function caber(contexto: CanvasRenderingContext2D, texto: string, largura: number): string {

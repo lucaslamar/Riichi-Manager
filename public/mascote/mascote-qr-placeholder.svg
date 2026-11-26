@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <!-- Placeholder do mascote com a placa do QR. A arte final deve manter estas medidas:
+       moldura da placa 176,496 448x448; área branca 208,528 384x384; área do QR 240,560 320x320. -->
+  <!-- Boné de hélice -->
+  <rect x="392" y="40" width="16" height="70" rx="6" fill="#5b4b7a" />
+  <ellipse cx="340" cy="44" rx="64" ry="16" fill="#e06ab0" />
+  <ellipse cx="460" cy="44" rx="64" ry="16" fill="#b39ddb" />
+  <path d="M250 200 Q400 60 550 200 Z" fill="#b39ddb" />
+  <path d="M250 200 Q400 150 550 200" fill="none" stroke="#5b4b7a" stroke-width="10" />
+  <!-- Cabeça e orelhas -->
+  <ellipse cx="225" cy="290" rx="55" ry="95" fill="#8a5a3a" transform="rotate(20 225 290)" />
+  <ellipse cx="575" cy="290" rx="55" ry="95" fill="#8a5a3a" transform="rotate(-20 575 290)" />
+  <ellipse cx="400" cy="300" rx="165" ry="140" fill="#d9a066" />
+  <ellipse cx="400" cy="360" rx="80" ry="60" fill="#f2d3a8" />
+  <circle cx="340" cy="280" r="16" fill="#2a2438" />
+  <circle cx="460" cy="280" r="16" fill="#2a2438" />
+  <ellipse cx="400" cy="340" rx="24" ry="17" fill="#2a2438" />
+  <path d="M370 385 Q400 410 430 385" fill="none" stroke="#2a2438" stroke-width="8" stroke-linecap="round" />
+  <!-- Corpo -->
+  <ellipse cx="400" cy="560" rx="190" ry="140" fill="#d9a066" />
+  <!-- Moldura da placa -->
+  <rect x="176" y="496" width="448" height="448" rx="32" fill="#5b4b7a" />
+  <!-- Área branca -->
+  <rect x="208" y="528" width="384" height="384" rx="16" fill="#ffffff" />
+  <!-- Área do QR (o app desenha o QR aqui) -->
+  <rect x="240" y="560" width="320" height="320" fill="none" stroke="#b39ddb" stroke-width="4" stroke-dasharray="16 12" />
+  <!-- Patas segurando a placa -->
+  <ellipse cx="172" cy="600" rx="32" ry="30" fill="#d9a066" />
+  <ellipse cx="628" cy="600" rx="32" ry="30" fill="#d9a066" />
+</svg>
