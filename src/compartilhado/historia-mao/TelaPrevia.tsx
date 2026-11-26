@@ -156,7 +156,7 @@ export default function TelaPrevia({
           >
             <i className="fas fa-list" aria-hidden="true" />
             <span className="historia-mao-rotulo" aria-hidden="true">
-              {t('historiaMao.mostrarYaku')}
+              {t('historiaMao.rotuloYaku')}
             </span>
           </button>
           <button
@@ -169,7 +169,7 @@ export default function TelaPrevia({
           >
             <i className="fas fa-rotate-right" aria-hidden="true" />
             <span className="historia-mao-rotulo" aria-hidden="true">
-              {t('historiaMao.deitar')}
+              {t('historiaMao.rotuloDeitada')}
             </span>
           </button>
           <button
@@ -182,7 +182,7 @@ export default function TelaPrevia({
           >
             <i className="fas fa-download" aria-hidden="true" />
             <span className="historia-mao-rotulo" aria-hidden="true">
-              {t('historiaMao.salvar')}
+              {t('historiaMao.rotuloSalvar')}
             </span>
           </button>
           <button

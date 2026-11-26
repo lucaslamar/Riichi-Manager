@@ -3734,6 +3734,9 @@
     "girar": "Turn your phone sideways",
     "layout_cabine": "Booth",
     "deitar": "Landscape image",
-    "mostrarYaku": "Show yaku on the image"
+    "mostrarYaku": "Show yaku on the image",
+    "rotuloYaku": "Yaku",
+    "rotuloDeitada": "Landscape",
+    "rotuloSalvar": "Save"
   }
 }

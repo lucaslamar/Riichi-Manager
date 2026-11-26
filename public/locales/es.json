@@ -3757,6 +3757,9 @@
     "girar": "Gira el móvil en horizontal",
     "layout_cabine": "Cabina",
     "deitar": "Imagen horizontal",
-    "mostrarYaku": "Mostrar yaku en la imagen"
+    "mostrarYaku": "Mostrar yaku en la imagen",
+    "rotuloYaku": "Yaku",
+    "rotuloDeitada": "Horizontal",
+    "rotuloSalvar": "Guardar"
   }
 }

@@ -514,3 +514,103 @@
     font-weight: 600;
   }
 }
+
+/*
+ * Em pé: a imagem em cima com as bolinhas e, embaixo, o painel lilás com o
+ * cartão das ações (pedido do usuário em 26/11/2026). As quatro ações ficam lado
+ * a lado, com o nome curto embaixo do ícone, e o Compartilhar largo por último.
+ */
+@media (orientation: portrait) {
+  .historia-mao-previa {
+    display: grid;
+    grid-template-areas:
+      'fechar'
+      'imagem'
+      'paginas'
+      'status'
+      'painel'
+      'dica';
+    grid-template-rows: auto 1fr auto auto auto auto;
+    overflow: hidden;
+  }
+
+  .historia-mao-previa .historia-mao-barra,
+  .historia-mao-previa .historia-mao-rodape {
+    display: contents;
+  }
+
+  .historia-mao-previa .historia-mao-barra > .historia-mao-icone {
+    grid-area: fechar;
+    justify-self: start;
+    margin: 4px 0 0 max(8px, env(safe-area-inset-left));
+  }
+
+  .historia-mao-previa .historia-mao-imagem {
+    grid-area: imagem;
+  }
+
+  .historia-mao-previa .historia-mao-paginas {
+    grid-area: paginas;
+  }
+
+  .historia-mao-previa .historia-mao-status {
+    grid-area: status;
+  }
+
+  /* O cartão escuro; a sombra lilás sem desfoque, cortada acima dele, faz o painel até a base. */
+  .historia-mao-previa .historia-mao-barra-acoes {
+    display: grid;
+    grid-area: painel;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    margin: 14px 16px calc(14px + env(safe-area-inset-bottom));
+    padding: 10px;
+    border-radius: 20px;
+    background: #141019;
+    box-shadow:
+      0 0 0 14px var(--primario, #b39ddb),
+      0 0 0 100vmax var(--primario, #b39ddb);
+    clip-path: inset(-14px -100vmax -100vmax -100vmax);
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
+    width: auto;
+    height: auto;
+    min-height: 56px;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 2px;
+    border-radius: 12px;
+  }
+
+  .historia-mao-previa .historia-mao-rotulo {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .historia-mao-previa .historia-mao-barra .historia-mao-compartilhar {
+    grid-column: 1 / -1;
+    min-height: 48px;
+    flex-direction: row;
+    gap: 10px;
+    margin: 4px 0 0;
+    background: var(--primario, #b39ddb);
+    color: #141019;
+  }
+
+  .historia-mao-previa .historia-mao-compartilhar .historia-mao-rotulo {
+    font-size: 0.9375rem;
+  }
+
+  .historia-mao-previa .historia-mao-dica {
+    position: relative;
+    grid-area: dica;
+    margin: 0;
+    padding: 0 16px calc(10px + env(safe-area-inset-bottom));
+    margin-top: calc(-1 * env(safe-area-inset-bottom));
+    color: #141019;
+    font-weight: 600;
+  }
+}

@@ -3734,6 +3734,9 @@
     "girar": "Gire o celular para deitado",
     "layout_cabine": "Cabine",
     "deitar": "Imagem deitada",
-    "mostrarYaku": "Mostrar yaku na imagem"
+    "mostrarYaku": "Mostrar yaku na imagem",
+    "rotuloYaku": "Yaku",
+    "rotuloDeitada": "Deitada",
+    "rotuloSalvar": "Salvar"
   }
 }

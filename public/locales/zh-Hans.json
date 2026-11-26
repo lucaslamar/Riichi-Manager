@@ -3692,6 +3692,9 @@
     "girar": "请把手机横过来",
     "layout_cabine": "拍照亭",
     "deitar": "横向图片",
-    "mostrarYaku": "在图片中显示番种"
+    "mostrarYaku": "在图片中显示番种",
+    "rotuloYaku": "番种",
+    "rotuloDeitada": "横向",
+    "rotuloSalvar": "保存"
   }
 }

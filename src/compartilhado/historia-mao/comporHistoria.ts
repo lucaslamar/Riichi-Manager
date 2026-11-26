@@ -202,8 +202,8 @@ function desenharFotoNaFaixa(
 /**
  * Estilo Cabine: a foto é a maior possível. Em pé, ocupa a esquerda até a
  * assinatura, com o resultado na coluna ao lado. Deitada (a mão em fila), vai
- * em 4:3 na largura toda, com o resultado embaixo em duas colunas: placar à
- * esquerda e yaku à direita.
+ * em 4:3 na largura toda, com o resultado embaixo. Os yaku ficam sempre
+ * embaixo do placar.
  */
 function desenharCabine(
   contexto: CanvasRenderingContext2D,
@@ -212,7 +212,7 @@ function desenharCabine(
   logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
-  const { tema, textos } = opcoes
+  const { tema } = opcoes
   contexto.fillStyle = tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
   const interna = LARGURA - SAFE_SIDE * 2
@@ -220,40 +220,25 @@ function desenharCabine(
   const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
 
   if (foto.width > foto.height) {
-    const alturaFoto = Math.round(interna * 0.75)
-    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
-    const topo = TOPO_FOTO + alturaFoto + ESPACO
-    if (dados.yaku.length === 0) {
-      // Sem os yaku, o resultado ocupa a largura toda, centralizado.
-      desenharColunaResultado(
-        contexto,
-        dados,
-        opcoes,
-        logo,
-        true,
-        SAFE_SIDE,
-        topo,
-        interna,
-        LIMITE_BAIXO,
-      )
-      return
-    }
-    const meia = (interna - ESPACO) / 2
-    const livre = yAssinatura - ESPACO - topo
-    const semYaku = { ...dados, yaku: [] }
-    const fixa = alturaDoResultado(semYaku, 0)
-    const escala = Math.min(1, (livre - fixa) / (alturaDoResultado(semYaku, 1) - fixa))
-    desenharResultado(contexto, semYaku, opcoes, SAFE_SIDE, topo, meia, escala)
-    desenharCartoesYaku(
-      contexto,
-      cartoesDeYaku(dados, textos),
-      tema,
-      SAFE_SIDE + meia + ESPACO,
-      topo,
-      meia,
+    // Foto em 4:3 na largura toda e o resultado embaixo, com os yaku embaixo do
+    // placar como nos outros estilos. Com os yaku, a foto cede altura.
+    const espacoTotal = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2 - ESPACO * 3 - TOPO_FOTO
+    const alturaFoto = Math.min(
+      Math.round(interna * 0.75),
+      espacoTotal - alturaDoResultado(dados, 1),
     )
-    desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 20, interna)
-    desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
+    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
+    desenharColunaResultado(
+      contexto,
+      dados,
+      opcoes,
+      logo,
+      true,
+      SAFE_SIDE,
+      TOPO_FOTO + alturaFoto + ESPACO,
+      interna,
+      LIMITE_BAIXO,
+    )
     return
   }
 

@@ -3830,6 +3830,9 @@
     "girar": "Pasukite telefoną gulsčiai",
     "layout_cabine": "Būdelė",
     "deitar": "Gulsčias vaizdas",
-    "mostrarYaku": "Rodyti yaku vaizde"
+    "mostrarYaku": "Rodyti yaku vaizde",
+    "rotuloYaku": "Yaku",
+    "rotuloDeitada": "Gulsčias",
+    "rotuloSalvar": "Išsaugoti"
   }
 }
