@@ -203,8 +203,8 @@ const FONTE_SERIFADA = 'Georgia, "Times New Roman", serif'
  * Estilo Cabine, com cara de cabine de fotos. A foto tirada é a protagonista e
  * as pedras do app não se repetem: ela já mostra a mão. Foto deitada (a mão em
  * fila) vai inteira na largura, com o resultado embaixo em duas colunas. Foto em
- * pé vai grande à esquerda, com o resultado na coluna ao lado. Pedrinhas em pixel
- * enfeitam os cantos que o Instagram cobre.
+ * pé vai grande à esquerda, com o resultado na coluna ao lado. Os yaku vão
+ * nos mesmos cartões do Resultado.
  */
 function desenharCabine(
   contexto: CanvasRenderingContext2D,
@@ -216,7 +216,6 @@ function desenharCabine(
   const { tema } = opcoes
   contexto.fillStyle = tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
-  desenharPixels(contexto, tema)
 
   const interna = LARGURA - SAFE_SIDE * 2
   const ladoQr = 200
@@ -367,7 +366,7 @@ function desenharPlacarCabine(
   return cursor
 }
 
-/** Os yaku, um por linha, em itálico. */
+/** Os yaku nos mesmos cartões do Resultado, com o valor à direita. */
 function desenharNomesCabine(
   contexto: CanvasRenderingContext2D,
   dados: DadosHistoria,
@@ -376,14 +375,7 @@ function desenharNomesCabine(
   y: number,
   largura: number,
 ) {
-  const fonte = `italic 400 34px ${FONTE_SERIFADA}`
-  let cursor = y
-  for (const { nome } of dados.yaku.slice(0, MAX_NOMES)) {
-    cursor = escreverQuebrando(contexto, nome, fonte, tema.texto, x, cursor, largura, 46)
-  }
-  const resto = dados.yaku.length - MAX_NOMES
-  if (resto > 0)
-    escreverQuebrando(contexto, textos.mais(resto), fonte, tema.textoSuave, x, cursor, largura, 46)
+  desenharCartoesYaku(contexto, cartoesDeYaku(dados, textos), tema, x, y, largura)
 }
 
 /** Japonês, chinês ou coreano: dá para quebrar entre caracteres. */
@@ -411,44 +403,6 @@ function quebrarLinhas(
     }
   }
   return (atual ? [...linhas, atual] : linhas).map((linha) => caber(contexto, linha, largura))
-}
-
-/**
- * Pedrinhas em pixel: blocos do tamanho de uma pedra pequena (3×4 quadradinhos),
- * em escada no canto de baixo e de leve no de cima, onde o Instagram cobre.
- */
-function desenharPixels(contexto: CanvasRenderingContext2D, tema: TemaHistoria) {
-  const lado = 12
-  const pedra = (x: number, y: number, cor: string) => {
-    contexto.fillStyle = cor
-    for (let linha = 0; linha < 4; linha++) {
-      for (let coluna = 0; coluna < 3; coluna++) {
-        const borda = linha === 0 || linha === 3 || coluna === 0 || coluna === 2
-        contexto.globalAlpha = borda ? 0.9 : 0.35
-        contexto.fillRect(x + coluna * (lado + 2), y + linha * (lado + 2), lado, lado)
-      }
-    }
-    contexto.globalAlpha = 1
-  }
-  // Escada embaixo à esquerda: mais alta na ponta, baixando para a direita.
-  const larguraPedra = 3 * (lado + 2) + 8
-  const alturaPedra = 4 * (lado + 2) + 8
-  for (let coluna = 0; coluna < 9; coluna++) {
-    const altura = Math.max(1, 5 - Math.floor(coluna / 2))
-    for (let linha = 0; linha < altura; linha++) {
-      const cor = (coluna + linha) % 3 === 0 ? tema.textoSuave : tema.destaque
-      pedra(coluna * larguraPedra + 8, ALTURA - (linha + 1) * alturaPedra, cor)
-    }
-  }
-  // Algumas soltas no topo à direita.
-  for (const [coluna, linha] of [
-    [0, 0],
-    [1, 0],
-    [1, 1],
-    [2, 0],
-  ]) {
-    pedra(LARGURA - (coluna + 1) * larguraPedra - 8, 24 + linha * alturaPedra, tema.textoSuave)
-  }
 }
 
 /** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
@@ -587,31 +541,42 @@ function desenharResultado(
     return cursor
   }
   cursor += 16
-  // Um embaixo do outro, na largura toda, como a lista de yaku do Resultado.
-  const larguraCartao = largura
+  cursor = desenharCartoesYaku(contexto, cartoes, tema, x, cursor, largura)
+  contexto.textAlign = 'left'
+  return cursor
+}
+
+/** Cartões de yaku um embaixo do outro, como a lista do Resultado. Devolve onde terminou. */
+function desenharCartoesYaku(
+  contexto: CanvasRenderingContext2D,
+  cartoes: YakuHistoria[],
+  tema: TemaHistoria,
+  x: number,
+  y: number,
+  largura: number,
+) {
+  // Coluna estreita (Cabine com foto em pé): letra menor para nome e valor caberem.
+  const estreita = largura < 500
   cartoes.forEach((yaku, indice) => {
-    const xCartao = x
-    const yCartao = cursor + indice * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
-    retanguloArredondado(contexto, xCartao, yCartao, larguraCartao, ALTURA_CARTAO_YAKU, 14)
+    const yCartao = y + indice * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
+    retanguloArredondado(contexto, x, yCartao, largura, ALTURA_CARTAO_YAKU, 14)
     contexto.fillStyle = tema.cartao
     contexto.fill()
     contexto.textBaseline = 'middle'
     const meioCartao = yCartao + ALTURA_CARTAO_YAKU / 2 + 1
-    contexto.font = `700 26px ${FONTE}`
+    contexto.font = `700 ${estreita ? 22 : 26}px ${FONTE}`
     const larguraValor = yaku.valor ? contexto.measureText(yaku.valor).width : 0
     contexto.textAlign = 'right'
     contexto.fillStyle = tema.primario
-    if (yaku.valor) contexto.fillText(yaku.valor, xCartao + larguraCartao - 20, meioCartao)
+    if (yaku.valor) contexto.fillText(yaku.valor, x + largura - 18, meioCartao)
     contexto.textAlign = 'left'
-    contexto.font = `700 28px ${FONTE}`
+    contexto.font = `700 ${estreita ? 24 : 28}px ${FONTE}`
     contexto.fillStyle = tema.texto
-    const larguraNome = larguraCartao - 40 - (larguraValor ? larguraValor + 16 : 0)
-    contexto.fillText(caber(contexto, yaku.nome, larguraNome), xCartao + 20, meioCartao)
+    const larguraNome = largura - 36 - (larguraValor ? larguraValor + 12 : 0)
+    contexto.fillText(caber(contexto, yaku.nome, larguraNome), x + 18, meioCartao)
     contexto.textBaseline = 'top'
   })
-  cursor += cartoes.length * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
-  contexto.textAlign = 'left'
-  return cursor
+  return y + cartoes.length * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
 }
 
 function desenharSeparador(
