@@ -112,6 +112,8 @@ export default function TelaPrevia({
   const { t, idioma } = useI18n()
   const [layout, setLayout] = useState<LayoutHistoria>('foto')
   const [deitada, setDeitada] = useState(false)
+  // Os yaku começam fora da imagem: a foto e o placar já contam a história.
+  const [comYaku, setComYaku] = useState(false)
   const [arquivo, setArquivo] = useState<File | null>(null)
   const [endereco, setEndereco] = useState<string | null>(null)
   const [aviso, setAviso] = useState('')
@@ -123,7 +125,7 @@ export default function TelaPrevia({
     setArquivo(null)
     setAviso('')
     const agora = new Date()
-    comporHistoria(foto, dados, {
+    comporHistoria(foto, comYaku ? dados : { ...dados, yaku: [] }, {
       layout,
       deitada,
       tema: temaAtual(),
@@ -143,7 +145,7 @@ export default function TelaPrevia({
     return () => {
       ativo = false
     }
-  }, [foto, dados, layout, deitada, idioma, t])
+  }, [foto, dados, comYaku, layout, deitada, idioma, t])
 
   useEffect(() => {
     if (!arquivo) return
@@ -208,6 +210,16 @@ export default function TelaPrevia({
             onClick={aoRefazer}
           >
             <i className="fas fa-camera" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="historia-mao-icone"
+            aria-label={t('historiaMao.mostrarYaku')}
+            title={t('historiaMao.mostrarYaku')}
+            aria-pressed={comYaku}
+            onClick={() => setComYaku(!comYaku)}
+          >
+            <i className="fas fa-list" aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -284,6 +296,9 @@ export default function TelaPrevia({
               onClick={() => setLayout(opcao)}
             >
               <MiniaturaLayout layout={opcao} />
+              <span className="historia-mao-segmentado-nome" aria-hidden="true">
+                {t(`historiaMao.layout_${opcao}`)}
+              </span>
             </button>
           ))}
         </div>

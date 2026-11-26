@@ -3713,7 +3713,7 @@
     "dica": "Dica: no Instagram, adicione também a figurinha de Link.",
     "layout": "Layout da imagem",
     "layout_foto": "Foto cheia",
-    "layout_resultado": "Foto na faixa",
+    "layout_resultado": "Faixa",
     "refazer": "Refazer",
     "salvar": "Salvar imagem",
     "compartilhar": "Compartilhar",
@@ -3732,7 +3732,8 @@
     "dicaLuz": "Boa luz, sem reflexo, e só a mão no quadro.",
     "entendi": "Entendi",
     "girar": "Gire o celular para deitado",
-    "layout_cabine": "Cabine de fotos",
-    "deitar": "Imagem deitada"
+    "layout_cabine": "Cabine",
+    "deitar": "Imagem deitada",
+    "mostrarYaku": "Mostrar yaku na imagem"
   }
 }

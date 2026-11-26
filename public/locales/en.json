@@ -3713,7 +3713,7 @@
     "dica": "Tip: on Instagram, also add the Link sticker.",
     "layout": "Image layout",
     "layout_foto": "Full photo",
-    "layout_resultado": "Photo strip",
+    "layout_resultado": "Strip",
     "refazer": "Retake",
     "salvar": "Save image",
     "compartilhar": "Share",
@@ -3732,7 +3732,8 @@
     "dicaLuz": "Good light, no glare, and only the hand in the frame.",
     "entendi": "Got it",
     "girar": "Turn your phone sideways",
-    "layout_cabine": "Photo booth",
-    "deitar": "Landscape image"
+    "layout_cabine": "Booth",
+    "deitar": "Landscape image",
+    "mostrarYaku": "Show yaku on the image"
   }
 }

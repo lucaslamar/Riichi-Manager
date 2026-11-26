@@ -221,6 +221,21 @@ function desenharCabine(
     const alturaFoto = Math.round(interna * 0.75)
     desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
     const topo = TOPO_FOTO + alturaFoto + ESPACO
+    if (dados.yaku.length === 0) {
+      // Sem os yaku, o resultado ocupa a largura toda, centralizado.
+      desenharColunaResultado(
+        contexto,
+        dados,
+        opcoes,
+        logo,
+        true,
+        SAFE_SIDE,
+        topo,
+        interna,
+        LIMITE_BAIXO,
+      )
+      return
+    }
     const meia = (interna - ESPACO) / 2
     const livre = yAssinatura - ESPACO - topo
     const semYaku = { ...dados, yaku: [] }
