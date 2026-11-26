@@ -242,13 +242,6 @@
   display: none;
 }
 
-.historia-mao-acoes {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 12px 16px;
-}
-
 .historia-mao-segmentado {
   display: flex;
   align-self: center;
@@ -272,29 +265,6 @@
   background: #fff;
   color: #000;
   font-weight: 600;
-}
-
-.historia-mao-botoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.historia-mao-botoes > .btn-primario {
-  flex-basis: 100%;
-  order: 1;
-}
-
-.historia-mao-botoes > button {
-  min-width: 0;
-  flex: 1 1 0;
-  padding: 0 8px;
-  font-size: 0.875rem;
-}
-
-.historia-mao-botoes .btn-contorno {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* A mão é uma fila: a foto sai melhor com o celular deitado. Em pé, a câmera pede para girar. */
@@ -356,49 +326,6 @@
   }
 }
 
-/* Prévia com o celular deitado: a imagem em toda a altura à esquerda e os controles à direita. */
-@media (orientation: landscape) {
-  .historia-mao-previa {
-    display: grid;
-    grid-template-areas:
-      'imagem dica'
-      'imagem status'
-      'imagem acoes'
-      'imagem .';
-    grid-template-columns: 1fr minmax(300px, 400px);
-    grid-template-rows: 1fr auto auto 1fr;
-    column-gap: 8px;
-  }
-
-  .historia-mao-previa .historia-mao-topo {
-    position: absolute;
-    top: env(safe-area-inset-top);
-    left: env(safe-area-inset-left);
-  }
-
-  .historia-mao-previa .historia-mao-imagem {
-    grid-area: imagem;
-    padding: 12px 0 12px 64px;
-  }
-
-  .historia-mao-previa .historia-mao-dica {
-    grid-area: dica;
-    align-self: end;
-  }
-
-  .historia-mao-previa .historia-mao-status {
-    grid-area: status;
-  }
-
-  .historia-mao-previa .historia-mao-acoes {
-    grid-area: acoes;
-  }
-
-  .historia-mao-previa .historia-mao-botoes > button {
-    white-space: nowrap;
-  }
-}
-
 .historia-mao-miniatura {
   display: block;
   width: 20px;
@@ -418,4 +345,70 @@
 .historia-mao-miniatura-cartao {
   fill: currentColor;
   opacity: 0.85;
+}
+
+/* Prévia: barra de ícones no topo, a imagem no maior espaço possível e o seletor de estilo embaixo. */
+.historia-mao-barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.historia-mao-barra-acoes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.historia-mao-barra .historia-mao-icone {
+  background: transparent;
+}
+
+.historia-mao-barra .historia-mao-icone[aria-pressed='true'] {
+  background: #fff;
+  color: #000;
+}
+
+.historia-mao-barra .historia-mao-icone:disabled {
+  opacity: 0.4;
+}
+
+/* A única ação principal, separada dos ícones (HIG: texto longe de símbolo). */
+.historia-mao-compartilhar {
+  min-height: 44px;
+  margin-left: 6px;
+  padding: 0 12px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.historia-mao-barra {
+  padding-right: max(12px, env(safe-area-inset-right));
+  padding-left: max(8px, env(safe-area-inset-left));
+}
+
+.historia-mao-previa .historia-mao-imagem {
+  padding: 4px 8px;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.historia-mao-montando {
+  opacity: 0.5;
+  transition: opacity 120ms;
+}
+
+.historia-mao-rodape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+}
+
+.historia-mao-rodape .historia-mao-dica,
+.historia-mao-rodape .historia-mao-status {
+  margin: 0;
 }

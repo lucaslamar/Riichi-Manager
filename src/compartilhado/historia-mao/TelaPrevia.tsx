@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { baixarArquivo, salvarArquivo } from '@/compartilhado/adaptadores/arquivo'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { URL_DO_APP } from '@/compartilhado/marca/url-app'
@@ -11,6 +11,8 @@ import {
 } from './comporHistoria'
 
 const LAYOUTS: LayoutHistoria[] = ['foto', 'resultado', 'cabine']
+/** Quanto o dedo precisa andar de lado para trocar o estilo. */
+const DESLIZE_MINIMO = 50
 
 function temaAtual(): TemaHistoria {
   const estilo = getComputedStyle(document.body)
@@ -109,17 +111,21 @@ export default function TelaPrevia({
 }) {
   const { t, idioma } = useI18n()
   const [layout, setLayout] = useState<LayoutHistoria>('foto')
+  const [deitada, setDeitada] = useState(false)
   const [arquivo, setArquivo] = useState<File | null>(null)
   const [endereco, setEndereco] = useState<string | null>(null)
   const [aviso, setAviso] = useState('')
+  const inicioDeslize = useRef<number | null>(null)
 
   // A imagem fica pronta antes do toque: o iOS só abre a folha se o share vier direto do toque.
   useEffect(() => {
     let ativo = true
     setArquivo(null)
+    setAviso('')
     const agora = new Date()
     comporHistoria(foto, dados, {
       layout,
+      deitada,
       tema: temaAtual(),
       url: URL_DO_APP,
       logo: `${import.meta.env.BASE_URL}icones/icone-192.png`,
@@ -137,7 +143,7 @@ export default function TelaPrevia({
     return () => {
       ativo = false
     }
-  }, [foto, dados, layout, idioma, t])
+  }, [foto, dados, layout, deitada, idioma, t])
 
   useEffect(() => {
     if (!arquivo) return
@@ -157,6 +163,24 @@ export default function TelaPrevia({
     if (arquivo && baixarArquivo(arquivo) === 'baixado') setAviso(t('historiaMao.salva'))
   }
 
+  // Deslizar para o lado (ou as setas do teclado) troca o estilo, como páginas.
+  const irPara = (passo: number) => {
+    const indice = LAYOUTS.indexOf(layout) + passo
+    if (indice >= 0 && indice < LAYOUTS.length) setLayout(LAYOUTS[indice])
+  }
+  const aoSoltar = (x: number) => {
+    if (inicioDeslize.current === null) return
+    const distancia = x - inicioDeslize.current
+    inicioDeslize.current = null
+    if (Math.abs(distancia) > DESLIZE_MINIMO) irPara(distancia < 0 ? 1 : -1)
+  }
+  const aoTeclarEstilo = (evento: KeyboardEvent<HTMLDivElement>) => {
+    if (evento.key === 'ArrowRight') irPara(1)
+    else if (evento.key === 'ArrowLeft') irPara(-1)
+    else return
+    evento.preventDefault()
+  }
+
   return (
     <div
       className="historia-mao-tela historia-mao-previa"
@@ -164,34 +188,87 @@ export default function TelaPrevia({
       aria-modal="true"
       aria-label={t('historiaMao.titulo')}
     >
-      <div className="historia-mao-topo">
+      {/* Barra do topo, como no HIG: fechar à esquerda, ações em ícones e o Compartilhar, a única ação principal, na ponta direita. */}
+      <div className="historia-mao-barra">
         <button
           type="button"
           className="historia-mao-icone"
           aria-label={t('actions.close')}
+          title={t('actions.close')}
           onClick={aoFechar}
         >
           <i className="fas fa-xmark" aria-hidden="true" />
         </button>
+        <div className="historia-mao-barra-acoes">
+          <button
+            type="button"
+            className="historia-mao-icone"
+            aria-label={t('historiaMao.refazer')}
+            title={t('historiaMao.refazer')}
+            onClick={aoRefazer}
+          >
+            <i className="fas fa-camera" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="historia-mao-icone"
+            aria-label={t('historiaMao.deitar')}
+            title={t('historiaMao.deitar')}
+            aria-pressed={deitada}
+            onClick={() => setDeitada(!deitada)}
+          >
+            <i className="fas fa-rotate-right" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="historia-mao-icone"
+            aria-label={t('historiaMao.salvar')}
+            title={t('historiaMao.salvar')}
+            onClick={salvar}
+            disabled={!arquivo}
+          >
+            <i className="fas fa-download" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="btn-primario historia-mao-compartilhar"
+            onClick={compartilhar}
+            disabled={!arquivo}
+          >
+            <i className="fas fa-arrow-up-from-bracket" aria-hidden="true" />
+            {t('historiaMao.compartilhar')}
+          </button>
+        </div>
       </div>
 
-      <div className="historia-mao-imagem">
-        {endereco && arquivo ? (
-          <img src={endereco} alt={t('historiaMao.imagem')} />
+      <div
+        className="historia-mao-imagem"
+        onPointerDown={(evento) => {
+          inicioDeslize.current = evento.clientX
+        }}
+        onPointerUp={(evento) => aoSoltar(evento.clientX)}
+        onPointerCancel={() => {
+          inicioDeslize.current = null
+        }}
+      >
+        {endereco ? (
+          <img
+            src={endereco}
+            alt={t('historiaMao.imagem')}
+            className={arquivo ? undefined : 'historia-mao-montando'}
+            draggable={false}
+          />
         ) : (
           <i className="fas fa-spinner fa-spin" aria-label={t('historiaMao.montando')} />
         )}
       </div>
-      <p className="historia-mao-dica">{t('historiaMao.dica')}</p>
-      <p className="historia-mao-status" aria-live="polite">
-        {aviso}
-      </p>
 
-      <div className="historia-mao-acoes">
+      <div className="historia-mao-rodape">
         <div
           className="historia-mao-segmentado"
           role="radiogroup"
           aria-label={t('historiaMao.layout')}
+          onKeyDown={aoTeclarEstilo}
         >
           {LAYOUTS.map((opcao) => (
             <button
@@ -199,6 +276,7 @@ export default function TelaPrevia({
               type="button"
               role="radio"
               aria-checked={layout === opcao}
+              tabIndex={layout === opcao ? 0 : -1}
               className={layout === opcao ? 'ativo' : ''}
               aria-label={t(`historiaMao.layout_${opcao}`)}
               title={t(`historiaMao.layout_${opcao}`)}
@@ -208,18 +286,11 @@ export default function TelaPrevia({
             </button>
           ))}
         </div>
-        <div className="historia-mao-botoes">
-          <button type="button" className="btn-contorno" onClick={aoRefazer}>
-            <i className="fas fa-rotate-left" aria-hidden="true" /> {t('historiaMao.refazer')}
-          </button>
-          <button type="button" className="btn-contorno" onClick={salvar} disabled={!arquivo}>
-            <i className="fas fa-download" aria-hidden="true" /> {t('historiaMao.salvar')}
-          </button>
-          <button type="button" className="btn-primario" onClick={compartilhar} disabled={!arquivo}>
-            <i className="fas fa-share-from-square" aria-hidden="true" />{' '}
-            {t('historiaMao.compartilhar')}
-          </button>
-        </div>
+        {/* A dica é dos Stories, que são em pé. */}
+        {!deitada && <p className="historia-mao-dica">{t('historiaMao.dica')}</p>}
+        <p className="historia-mao-status" aria-live="polite">
+          {aviso}
+        </p>
       </div>
     </div>
   )

@@ -69,6 +69,8 @@ export interface OpcoesHistoria {
   /** Endereço que o QR abre. */
   url: string
   logo: string
+  /** Deitada: 1920×1080, para o feed e o WhatsApp na horizontal. */
+  deitada?: boolean
 }
 
 export async function comporHistoria(
@@ -78,14 +80,15 @@ export async function comporHistoria(
 ): Promise<Blob> {
   await document.fonts?.ready
   const tela = document.createElement('canvas')
-  tela.width = LARGURA
-  tela.height = ALTURA
+  tela.width = opcoes.deitada ? ALTURA : LARGURA
+  tela.height = opcoes.deitada ? LARGURA : ALTURA
   const contexto = tela.getContext('2d')
   if (!contexto) throw new Error('Canvas indisponível')
 
   const [logo, { create }] = await Promise.all([carregarImagem(opcoes.logo), import('qrcode')])
   const desenho = { ...opcoes, qr: create(opcoes.url, { errorCorrectionLevel: 'M' }).modules }
-  if (opcoes.layout === 'foto') desenharFotoCheia(contexto, foto, dados, logo, desenho)
+  if (opcoes.deitada) desenharDeitada(contexto, foto, dados, logo, desenho)
+  else if (opcoes.layout === 'foto') desenharFotoCheia(contexto, foto, dados, logo, desenho)
   else if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, logo, desenho)
   else desenharFotoNaFaixa(contexto, foto, dados, logo, desenho)
 
@@ -407,12 +410,88 @@ function quebrarLinhas(
 
 /** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
 function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageBitmap) {
+  const { width: largura, height: altura } = contexto.canvas
   contexto.save()
   contexto.filter = 'blur(40px)'
-  desenharCobrindo(contexto, foto, -80, -80, LARGURA + 160, ALTURA + 160)
+  desenharCobrindo(contexto, foto, -80, -80, largura + 160, altura + 160)
   contexto.restore()
   contexto.fillStyle = 'rgba(0,0,0,0.35)'
-  contexto.fillRect(0, 0, LARGURA, ALTURA)
+  contexto.fillRect(0, 0, largura, altura)
+}
+
+/**
+ * Imagem deitada (1920×1080), nos três estilos: a foto à esquerda e, numa coluna
+ * à direita, o resultado com a assinatura embaixo. Sem as áreas dos Stories,
+ * só uma margem igual em volta.
+ */
+function desenharDeitada(
+  contexto: CanvasRenderingContext2D,
+  foto: ImageBitmap,
+  dados: DadosHistoria,
+  logo: HTMLImageElement | null,
+  opcoes: OpcoesDesenho,
+) {
+  const { tema, layout } = opcoes
+  const larguraTela = ALTURA
+  const alturaTela = LARGURA
+  const margem = 64
+  const larguraColuna = 720
+  const xColuna = larguraTela - margem - larguraColuna
+  const larguraFoto = xColuna - 48 - margem
+  const alturaConteudo = alturaTela - margem * 2
+
+  if (layout === 'foto') {
+    desenharFundoDesfocado(contexto, foto)
+    desenharContido(contexto, foto, margem, margem, larguraFoto, alturaConteudo)
+    contexto.save()
+    contexto.globalAlpha = 0.92
+    contexto.fillStyle = tema.superficie
+    retanguloArredondado(contexto, xColuna - 24, margem, larguraColuna + 24, alturaConteudo, 40)
+    contexto.fill()
+    contexto.restore()
+  } else {
+    contexto.fillStyle = tema.superficie
+    contexto.fillRect(0, 0, larguraTela, alturaTela)
+    if (layout === 'cabine') {
+      desenharFotoCabine(contexto, foto, margem, margem, larguraFoto, alturaConteudo)
+    } else {
+      contexto.save()
+      contexto.fillStyle = '#ffffff'
+      retanguloArredondado(
+        contexto,
+        margem - 4,
+        margem - 4,
+        larguraFoto + 8,
+        alturaConteudo + 8,
+        36,
+      )
+      contexto.fill()
+      retanguloArredondado(contexto, margem, margem, larguraFoto, alturaConteudo, 32)
+      contexto.clip()
+      desenharCobrindo(contexto, foto, margem, margem, larguraFoto, alturaConteudo)
+      contexto.restore()
+    }
+  }
+
+  // Coluna: resultado no meio do espaço de cima e a assinatura embaixo.
+  const respiro = layout === 'foto' ? 16 : 0
+  const xTexto = xColuna + respiro
+  const larguraTexto = larguraColuna - respiro * 2
+  const ladoQr = 200
+  const yAssinatura = margem + alturaConteudo - 32 - ladoQr - QUIETA_QR * 2
+  const topo = margem + 32
+  const livre = yAssinatura - 32 - topo
+  if (layout === 'cabine') {
+    const fim = desenharPlacarCabine(contexto, dados, opcoes, xTexto, topo, larguraTexto)
+    desenharNomesCabine(contexto, dados, opcoes, xTexto, fim + 24, larguraTexto)
+  } else {
+    const fixa = alturaDoResultado(dados, 0)
+    const escala = Math.min(1.2, (livre - fixa) / (alturaDoResultado(dados, 1) - fixa))
+    const y = topo + (livre - alturaDoResultado(dados, escala)) / 2
+    desenharResultado(contexto, dados, opcoes, xTexto, y, larguraTexto, escala)
+  }
+  desenharSeparador(contexto, tema, xTexto, yAssinatura - 20, larguraTexto)
+  desenharAssinatura(contexto, opcoes, logo, xTexto, yAssinatura, larguraTexto, ladoQr)
 }
 
 /** A foto inteira, centralizada no espaço, sem cortar. */
