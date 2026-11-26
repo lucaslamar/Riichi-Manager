@@ -19,11 +19,6 @@ export const SAFE_SIDE = 48
 
 const LIMITE_BAIXO = ALTURA - SAFE_BOTTOM
 const FONTE = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
-/**
- * Onde a foto começa na Cabine. Ela sobe acima de SAFE_TOP: no Story, só a
- * borda de cima fica sob a barra do perfil, e os textos ficam na área segura.
- */
-const TOPO_FOTO = 170
 const ESPACO = 28
 /** Assinatura como a das imagens do Torneio: QR de 148px, escuro no lilás claro. */
 const LADO_QR = 148
@@ -142,10 +137,9 @@ function desenharFotoCheia(
 }
 
 /**
- * Estilo Cabine: fundo do tema e a foto a maior possível, com borda branca.
- * Deitada (a mão em fila), vai na largura toda com o resultado embaixo. Em pé,
- * ocupa a esquerda, com o resultado na coluna ao lado. A assinatura fica na
- * largura toda, embaixo.
+ * Estilo Cabine, como um vídeo no YouTube: a foto de borda a borda no topo, sem
+ * moldura, e o resultado com a assinatura embaixo, no fundo do tema. A foto vai
+ * até 4:3 (deitada) ou 1:1 (em pé) e cede altura para o resultado caber.
  */
 function desenharCabine(
   contexto: CanvasRenderingContext2D,
@@ -159,24 +153,14 @@ function desenharCabine(
   const yAssinatura = LIMITE_BAIXO - LADO_QR
   const fimResultado = yAssinatura - ESPACO
 
-  if (foto.width > foto.height) {
-    // A foto vai até 4:3 e cede altura para o resultado caber no tamanho normal.
-    const espaco = fimResultado - ESPACO * 2 - TOPO_FOTO
-    const alturaFoto = Math.min(
-      Math.round(interna * 0.75),
-      espaco - alturaDoResultado(contexto, dados, interna, 1),
-    )
-    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
-    const topo = TOPO_FOTO + alturaFoto + ESPACO
-    desenharResultadoCabendo(contexto, dados, opcoes, SAFE_SIDE, topo, interna, fimResultado)
-  } else {
-    const larguraFoto = 600
-    const alturaFoto = fimResultado - TOPO_FOTO
-    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, larguraFoto, alturaFoto)
-    const xLado = SAFE_SIDE + larguraFoto + ESPACO
-    const larguraLado = LARGURA - SAFE_SIDE - xLado
-    desenharResultadoCabendo(contexto, dados, opcoes, xLado, SAFE_TOP, larguraLado, fimResultado)
-  }
+  const alturaMaxima = foto.width > foto.height ? LARGURA * 0.75 : LARGURA
+  const espaco = fimResultado - ESPACO * 2
+  const alturaFoto = Math.round(
+    Math.min(alturaMaxima, espaco - alturaDoResultado(contexto, dados, interna, 1)),
+  )
+  desenharCobrindo(contexto, foto, 0, 0, LARGURA, alturaFoto)
+  const topo = alturaFoto + ESPACO
+  desenharResultadoCabendo(contexto, dados, opcoes, SAFE_SIDE, topo, interna, fimResultado)
   desenharAssinatura(contexto, opcoes, SAFE_SIDE, yAssinatura, interna)
 }
 
@@ -203,17 +187,22 @@ function desenharDeitada(
   const xColuna = larguraTela - margem - larguraColuna
   const larguraFoto = xColuna - 56 - margem
   const alturaArea = alturaTela - margem * 2
-  // A foto entra inteira, sem cortar a mão, e a borda acompanha o tamanho dela.
-  const ajuste = Math.min(larguraFoto / foto.width, alturaArea / foto.height)
-  const [largura, altura] = [foto.width * ajuste, foto.height * ajuste]
-  desenharFotoComBorda(
-    contexto,
-    foto,
-    margem + (larguraFoto - largura) / 2,
-    margem + (alturaArea - altura) / 2,
-    largura,
-    altura,
-  )
+  if (opcoes.layout === 'cabine') {
+    // Cabine: a foto de borda a borda, na altura toda, como um vídeo.
+    desenharCobrindo(contexto, foto, 0, 0, xColuna - 56, alturaTela)
+  } else {
+    // A foto entra inteira, sem cortar a mão, e a borda acompanha o tamanho dela.
+    const ajuste = Math.min(larguraFoto / foto.width, alturaArea / foto.height)
+    const [largura, altura] = [foto.width * ajuste, foto.height * ajuste]
+    desenharFotoComBorda(
+      contexto,
+      foto,
+      margem + (larguraFoto - largura) / 2,
+      margem + (alturaArea - altura) / 2,
+      largura,
+      altura,
+    )
+  }
   if (opcoes.layout === 'foto') {
     desenharCartao(contexto, opcoes.tema, xColuna - 28, margem, larguraColuna + 56, alturaArea)
   }
