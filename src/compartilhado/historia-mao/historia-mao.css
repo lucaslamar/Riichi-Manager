@@ -423,8 +423,8 @@
       'fechar painel'
       'imagem painel'
       'paginas painel';
-    grid-template-columns: 1fr minmax(300px, 40%);
-    grid-template-rows: auto 1fr auto;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 40%);
+    grid-template-rows: auto minmax(0, 1fr) auto;
     background: linear-gradient(to right, #141019 60%, var(--primario, #b39ddb) 60%);
   }
 
@@ -530,7 +530,8 @@
       'status'
       'painel'
       'dica';
-    grid-template-rows: auto 1fr auto auto auto auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
     overflow: hidden;
   }
 
