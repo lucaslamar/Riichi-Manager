@@ -316,13 +316,15 @@ function desenharColunaResultado(
   topo: number,
   largura: number,
   fim: number,
+  /** Quanto o bloco pode crescer: 1,2 em pé; mais na deitada, onde sobra altura. */
+  escalaMaxima = 1.2,
 ) {
   const ladoQr = 200
   const yAssinatura = fim - ladoQr - QUIETA_QR * 2
   const limite = comAssinatura ? yAssinatura - ESPACO : fim
   const livre = limite - topo
   const fixa = alturaDoResultado(dados, 0)
-  const escala = Math.min(1.2, (livre - fixa) / (alturaDoResultado(dados, 1) - fixa))
+  const escala = Math.min(escalaMaxima, (livre - fixa) / (alturaDoResultado(dados, 1) - fixa))
   const y = topo + (livre - alturaDoResultado(dados, escala)) / 2
   desenharResultado(contexto, dados, opcoes, x, y, largura, escala)
   if (!comAssinatura) return
@@ -402,6 +404,7 @@ function desenharDeitada(
     margem + 24,
     larguraColuna,
     alturaTela - margem - 24,
+    1.6,
   )
 }
 
@@ -471,9 +474,9 @@ function alturaDoResultado(dados: DadosHistoria, escala: number) {
   const linhasDeCartoes = Math.min(dados.yaku.length, MAX_NOMES)
   return (
     (dados.patamar ? 64 * escala : 0) +
-    64 +
+    64 * escala +
     (dados.vencedor ? 50 : 0) +
-    (resumoVisivel(dados) ? 46 : 0) +
+    (resumoVisivel(dados) ? 46 * escala : 0) +
     132 * escala +
     (linhasDeCartoes > 0 ? 16 + linhasDeCartoes * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES) : 0)
   )
@@ -509,20 +512,31 @@ function desenharResultado(
     escrever(dados.patamar, `500 ${Math.round(52 * escala)}px`, tema.texto, 64 * escala)
 
   // Pílula do Ron/Tsumo, como as dos ventos no Resultado.
-  contexto.font = `700 28px ${FONTE}`
+  // Pílula e han/fu crescem junto com os pontos.
+  contexto.font = `700 ${Math.round(28 * escala)}px ${FONTE}`
   const forma = dados.forma.toUpperCase()
-  const larguraPilula = contexto.measureText(forma).width + 48
-  retanguloArredondado(contexto, meio - larguraPilula / 2, cursor, larguraPilula, 48, 24)
+  const alturaPilula = 48 * escala
+  const larguraPilula = contexto.measureText(forma).width + 48 * escala
+  retanguloArredondado(
+    contexto,
+    meio - larguraPilula / 2,
+    cursor,
+    larguraPilula,
+    alturaPilula,
+    alturaPilula / 2,
+  )
   contexto.fillStyle = tema.cartao
   contexto.fill()
   contexto.fillStyle = tema.primario
   contexto.textBaseline = 'middle'
-  contexto.fillText(forma, meio, cursor + 25)
+  contexto.fillText(forma, meio, cursor + alturaPilula / 2 + 1)
   contexto.textBaseline = 'top'
-  cursor += 64
+  cursor += 64 * escala
 
   if (dados.vencedor) escrever(dados.vencedor, '800 36px', tema.texto, 50)
-  if (resumoVisivel(dados)) escrever(dados.resumo, '500 32px', tema.texto, 46)
+  if (resumoVisivel(dados)) {
+    escrever(dados.resumo, `500 ${Math.round(32 * escala)}px`, tema.texto, 46 * escala)
+  }
   escrever(dados.pontos, `900 ${Math.round(120 * escala)}px`, tema.primario, 132 * escala)
 
   const cartoes = cartoesDeYaku(dados, textos)

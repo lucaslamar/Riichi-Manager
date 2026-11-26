@@ -242,31 +242,6 @@
   display: none;
 }
 
-.historia-mao-segmentado {
-  display: flex;
-  align-self: center;
-  padding: 3px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.historia-mao-segmentado button {
-  min-height: 44px;
-  padding: 0 16px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: #fff;
-  font: inherit;
-  cursor: pointer;
-}
-
-.historia-mao-segmentado button.ativo {
-  background: #fff;
-  color: #000;
-  font-weight: 600;
-}
-
 /* A mão é uma fila: a foto sai melhor com o celular deitado. Em pé, a câmera pede para girar. */
 .historia-mao-girar {
   position: absolute;
@@ -324,27 +299,6 @@
   .historia-mao-base {
     bottom: calc(12px + env(safe-area-inset-bottom));
   }
-}
-
-.historia-mao-miniatura {
-  display: block;
-  width: 26px;
-  height: 44px;
-}
-
-.historia-mao-miniatura-tela {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1;
-}
-
-.historia-mao-miniatura-foto {
-  fill: #5b8fc7;
-}
-
-.historia-mao-miniatura-cartao {
-  fill: currentColor;
-  opacity: 0.85;
 }
 
 /* Prévia: barra de ícones no topo, a imagem no maior espaço possível e o seletor de estilo embaixo. */
@@ -410,41 +364,43 @@
   margin: 0;
 }
 
-/* Seletor de estilo: miniatura com o nome embaixo (HIG: rótulo embaixo de segmentos com ícone). */
-.historia-mao-previa .historia-mao-segmentado {
-  gap: 4px;
-  padding: 4px;
-  border-radius: 16px;
-}
-
-.historia-mao-previa .historia-mao-segmentado button {
-  display: flex;
-  min-width: 76px;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 10px;
-  border-radius: 12px;
-}
-
-.historia-mao-segmentado-nome {
-  font-size: 0.75rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.historia-mao-previa .historia-mao-segmentado button.ativo {
-  background: rgba(255, 255, 255, 0.22);
-  color: #fff;
-  box-shadow: inset 0 0 0 2px #fff;
-}
-
-.historia-mao-previa .historia-mao-segmentado-nome {
-  font-size: 0.75rem;
-  line-height: 1;
-}
-
 /* Fundo da prévia no roxo escuro do app, no lugar do preto: a imagem deitada se mistura com a tela. */
 .historia-mao-previa {
   background: #141019;
+}
+
+/* Estilo da imagem: três bolinhas discretas, como páginas. Alvo de 44px, ponto de 8px. */
+.historia-mao-paginas {
+  display: flex;
+  justify-content: center;
+}
+
+.historia-mao-paginas button {
+  display: inline-flex;
+  width: 32px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.historia-mao-paginas span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: transform 120ms;
+}
+
+.historia-mao-paginas [aria-checked='true'] span {
+  background: #fff;
+  transform: scale(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .historia-mao-paginas span {
+    transition: none;
+  }
 }

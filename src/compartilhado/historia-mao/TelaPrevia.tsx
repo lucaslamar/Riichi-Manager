@@ -28,76 +28,6 @@ function temaAtual(): TemaHistoria {
   }
 }
 
-/** Desenho de cada estilo no seletor: os dois têm foto e resultado, muda o tamanho da foto. */
-function MiniaturaLayout({ layout }: { layout: LayoutHistoria }) {
-  return (
-    <svg viewBox="0 0 18 32" className="historia-mao-miniatura" aria-hidden="true">
-      <rect
-        x="0.5"
-        y="0.5"
-        width="17"
-        height="31"
-        rx="2.5"
-        className="historia-mao-miniatura-tela"
-      />
-      {layout === 'foto' ? (
-        <>
-          <rect
-            x="0.5"
-            y="0.5"
-            width="17"
-            height="31"
-            rx="2.5"
-            className="historia-mao-miniatura-foto"
-          />
-          <rect
-            x="2.5"
-            y="15"
-            width="13"
-            height="12"
-            rx="1.5"
-            className="historia-mao-miniatura-cartao"
-          />
-        </>
-      ) : layout === 'cabine' ? (
-        <>
-          <rect x="2" y="4" width="8.5" height="12" className="historia-mao-miniatura-foto" />
-          <rect x="12" y="4" width="4" height="1.5" className="historia-mao-miniatura-cartao" />
-          <rect x="12" y="7" width="4" height="1.5" className="historia-mao-miniatura-cartao" />
-          <rect x="12" y="10" width="3" height="1.5" className="historia-mao-miniatura-cartao" />
-          <rect
-            x="2"
-            y="18"
-            width="14"
-            height="5"
-            rx="1"
-            className="historia-mao-miniatura-cartao"
-          />
-        </>
-      ) : (
-        <>
-          <rect
-            x="2.5"
-            y="4"
-            width="13"
-            height="8"
-            rx="1.5"
-            className="historia-mao-miniatura-foto"
-          />
-          <rect
-            x="2.5"
-            y="14"
-            width="13"
-            height="13"
-            rx="1.5"
-            className="historia-mao-miniatura-cartao"
-          />
-        </>
-      )}
-    </svg>
-  )
-}
-
 export default function TelaPrevia({
   foto,
   dados,
@@ -277,8 +207,9 @@ export default function TelaPrevia({
       </div>
 
       <div className="historia-mao-rodape">
+        {/* Bolinhas discretas, como páginas (HIG): deslizar a imagem é o jeito principal de trocar. */}
         <div
-          className="historia-mao-segmentado"
+          className="historia-mao-paginas"
           role="radiogroup"
           aria-label={t('historiaMao.layout')}
           onKeyDown={aoTeclarEstilo}
@@ -290,15 +221,11 @@ export default function TelaPrevia({
               role="radio"
               aria-checked={layout === opcao}
               tabIndex={layout === opcao ? 0 : -1}
-              className={layout === opcao ? 'ativo' : ''}
               aria-label={t(`historiaMao.layout_${opcao}`)}
               title={t(`historiaMao.layout_${opcao}`)}
               onClick={() => setLayout(opcao)}
             >
-              <MiniaturaLayout layout={opcao} />
-              <span className="historia-mao-segmentado-nome" aria-hidden="true">
-                {t(`historiaMao.layout_${opcao}`)}
-              </span>
+              <span aria-hidden="true" />
             </button>
           ))}
         </div>
