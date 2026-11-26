@@ -163,7 +163,15 @@ function desenharFotoCheia(
   desenharAssinatura(contexto, opcoes, logo, x + respiro, cursor, interna, ladoQr)
 }
 
-/** Fundo do tema, a foto em 4:3 na largura toda e o resultado grande embaixo. */
+/**
+ * Onde a foto começa nos estilos de fundo liso. Ela sobe acima de SAFE_TOP: no
+ * Story, só a borda de cima dela fica sob a barra do perfil, e os textos
+ * continuam dentro da área segura.
+ */
+const TOPO_FOTO = 170
+const ESPACO = 28
+
+/** Fundo do tema, a foto na largura toda e o resultado grande embaixo. */
 function desenharFotoNaFaixa(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
@@ -171,43 +179,29 @@ function desenharFotoNaFaixa(
   logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
-  const { tema } = opcoes
-  contexto.fillStyle = tema.superficie
+  contexto.fillStyle = opcoes.tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
-
   const interna = LARGURA - SAFE_SIDE * 2
-  const alturaFoto = 420
-  contexto.save()
-  contexto.fillStyle = '#ffffff'
-  retanguloArredondado(contexto, SAFE_SIDE - 4, SAFE_TOP - 4, interna + 8, alturaFoto + 8, 36)
-  contexto.fill()
-  retanguloArredondado(contexto, SAFE_SIDE, SAFE_TOP, interna, alturaFoto, 32)
-  contexto.clip()
-  desenharCobrindo(contexto, foto, SAFE_SIDE, SAFE_TOP, interna, alturaFoto)
-  contexto.restore()
-
-  const ladoQr = 220
-  const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
-  const topo = SAFE_TOP + alturaFoto
-  const livre = yAssinatura - 24 - topo
-  // O maior tamanho (até 20% acima do normal) que cabe entre a foto e a assinatura, com 24px de folga.
-  const fixa = alturaDoResultado(dados, 0)
-  const escala = Math.min(1.2, (livre - 48 - fixa) / (alturaDoResultado(dados, 1) - fixa))
-  const cursor = topo + (livre - alturaDoResultado(dados, escala)) / 2
-  desenharResultado(contexto, dados, opcoes, SAFE_SIDE, cursor, interna, escala)
-
-  desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 24, interna)
-  desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
+  const alturaFoto = 520
+  desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
+  desenharColunaResultado(
+    contexto,
+    dados,
+    opcoes,
+    logo,
+    true,
+    SAFE_SIDE,
+    TOPO_FOTO + alturaFoto + ESPACO,
+    interna,
+    LIMITE_BAIXO,
+  )
 }
 
-const FONTE_SERIFADA = 'Georgia, "Times New Roman", serif'
-
 /**
- * Estilo Cabine, com cara de cabine de fotos. A foto tirada é a protagonista e
- * as pedras do app não se repetem: ela já mostra a mão. Foto deitada (a mão em
- * fila) vai inteira na largura, com o resultado embaixo em duas colunas. Foto em
- * pé vai grande à esquerda, com o resultado na coluna ao lado. Os yaku vão
- * nos mesmos cartões do Resultado.
+ * Estilo Cabine: a foto é a maior possível. Em pé, ocupa a esquerda até a
+ * assinatura, com o resultado na coluna ao lado. Deitada (a mão em fila), vai
+ * em 4:3 na largura toda, com o resultado embaixo em duas colunas: placar à
+ * esquerda e yaku à direita.
  */
 function desenharCabine(
   contexto: CanvasRenderingContext2D,
@@ -216,36 +210,63 @@ function desenharCabine(
   logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
-  const { tema } = opcoes
+  const { tema, textos } = opcoes
   contexto.fillStyle = tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
-
   const interna = LARGURA - SAFE_SIDE * 2
   const ladoQr = 200
   const yAssinatura = LIMITE_BAIXO - ladoQr - QUIETA_QR * 2
-  const fimConteudo = yAssinatura - 36
 
   if (foto.width > foto.height) {
     const alturaFoto = Math.round(interna * 0.75)
-    desenharFotoCabine(contexto, foto, SAFE_SIDE, SAFE_TOP, interna, alturaFoto)
-    const topo = SAFE_TOP + alturaFoto + 36
-    const meia = (interna - 36) / 2
-    desenharPlacarCabine(contexto, dados, opcoes, SAFE_SIDE, topo, meia)
-    desenharNomesCabine(contexto, dados, opcoes, SAFE_SIDE + meia + 36, topo + 10, meia)
-  } else {
-    const larguraFoto = 620
-    desenharFotoCabine(contexto, foto, SAFE_SIDE, SAFE_TOP, larguraFoto, fimConteudo - SAFE_TOP)
-    const xLado = SAFE_SIDE + larguraFoto + 36
-    const larguraLado = LARGURA - SAFE_SIDE - xLado
-    const fim = desenharPlacarCabine(contexto, dados, opcoes, xLado, SAFE_TOP, larguraLado)
-    desenharNomesCabine(contexto, dados, opcoes, xLado, fim + 24, larguraLado)
+    desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
+    const topo = TOPO_FOTO + alturaFoto + ESPACO
+    const meia = (interna - ESPACO) / 2
+    const livre = yAssinatura - ESPACO - topo
+    const semYaku = { ...dados, yaku: [] }
+    const fixa = alturaDoResultado(semYaku, 0)
+    const escala = Math.min(1, (livre - fixa) / (alturaDoResultado(semYaku, 1) - fixa))
+    desenharResultado(contexto, semYaku, opcoes, SAFE_SIDE, topo, meia, escala)
+    desenharCartoesYaku(
+      contexto,
+      cartoesDeYaku(dados, textos),
+      tema,
+      SAFE_SIDE + meia + ESPACO,
+      topo,
+      meia,
+    )
+    desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 20, interna)
+    desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
+    return
   }
 
-  desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 18, interna)
+  const larguraFoto = 600
+  desenharFotoComBorda(
+    contexto,
+    foto,
+    SAFE_SIDE,
+    TOPO_FOTO,
+    larguraFoto,
+    yAssinatura - ESPACO - TOPO_FOTO,
+  )
+  const xLado = SAFE_SIDE + larguraFoto + ESPACO
+  desenharColunaResultado(
+    contexto,
+    dados,
+    opcoes,
+    logo,
+    false,
+    xLado,
+    SAFE_TOP,
+    LARGURA - SAFE_SIDE - xLado,
+    yAssinatura - ESPACO,
+  )
+  desenharSeparador(contexto, tema, SAFE_SIDE, yAssinatura - 20, interna)
   desenharAssinatura(contexto, opcoes, logo, SAFE_SIDE, yAssinatura, interna, ladoQr)
 }
 
-function desenharFotoCabine(
+/** Foto recortada no espaço, com cantos arredondados e borda branca. */
+function desenharFotoComBorda(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
   x: number,
@@ -254,158 +275,42 @@ function desenharFotoCabine(
   altura: number,
 ) {
   contexto.save()
-  retanguloArredondado(contexto, x, y, largura, altura, 8)
+  contexto.fillStyle = '#ffffff'
+  retanguloArredondado(contexto, x - 4, y - 4, largura + 8, altura + 8, 36)
+  contexto.fill()
+  retanguloArredondado(contexto, x, y, largura, altura, 32)
   contexto.clip()
   desenharCobrindo(contexto, foto, x, y, largura, altura)
   contexto.restore()
 }
 
 /**
- * Escreve linha a linha, quebrando no espaço; devolve onde terminou. Palavra
- * maior que a largura ("Sanbaiman" na coluna estreita) diminui a letra em vez
- * de ser cortada.
+ * O bloco do resultado no maior tamanho que cabe (até 20% acima do normal),
+ * centralizado entre o topo e a assinatura. Sem `comAssinatura`, ela fica por
+ * conta de quem chamou (ex.: na largura toda, embaixo).
  */
-function escreverQuebrando(
-  contexto: CanvasRenderingContext2D,
-  texto: string,
-  fonte: string,
-  cor: string,
-  x: number,
-  y: number,
-  largura: number,
-  alturaLinha: number,
-) {
-  contexto.font = fonte
-  const maiorPalavra = Math.max(
-    ...(temCjk(texto)
-      ? [0]
-      : texto.split(' ').map((palavra) => contexto.measureText(palavra).width)),
-  )
-  const reducao = maiorPalavra > largura ? largura / maiorPalavra : 1
-  if (reducao < 1) {
-    contexto.font = fonte.replace(
-      /(\d+)px/,
-      (_, px: string) => `${Math.floor(Number(px) * reducao)}px`,
-    )
-  }
-  contexto.fillStyle = cor
-  contexto.textAlign = 'left'
-  contexto.textBaseline = 'top'
-  let cursor = y
-  for (const linha of quebrarLinhas(contexto, texto, largura)) {
-    contexto.fillText(linha, x, cursor)
-    cursor += alturaLinha * reducao
-  }
-  return cursor
-}
-
-/** Patamar, quem bateu, pontos, ron/tsumo e han/fu, em letra serifada. */
-function desenharPlacarCabine(
+function desenharColunaResultado(
   contexto: CanvasRenderingContext2D,
   dados: DadosHistoria,
-  { tema }: OpcoesDesenho,
+  opcoes: OpcoesDesenho,
+  logo: HTMLImageElement | null,
+  comAssinatura: boolean,
   x: number,
-  y: number,
+  topo: number,
   largura: number,
+  fim: number,
 ) {
-  let cursor = y
-  if (dados.patamar) {
-    cursor = escreverQuebrando(
-      contexto,
-      dados.patamar,
-      `700 60px ${FONTE_SERIFADA}`,
-      tema.destaque,
-      x,
-      cursor,
-      largura,
-      70,
-    )
-    cursor += 8
-  }
-  if (dados.vencedor) {
-    cursor = escreverQuebrando(
-      contexto,
-      dados.vencedor,
-      `700 36px ${FONTE}`,
-      tema.texto,
-      x,
-      cursor,
-      largura,
-      46,
-    )
-  }
-  cursor = escreverQuebrando(
-    contexto,
-    dados.pontos,
-    `700 80px ${FONTE_SERIFADA}`,
-    tema.texto,
-    x,
-    cursor,
-    largura,
-    92,
-  )
-  cursor = escreverQuebrando(
-    contexto,
-    dados.forma.toUpperCase(),
-    `700 36px ${FONTE}`,
-    tema.destaque,
-    x,
-    cursor,
-    largura,
-    52,
-  )
-  if (resumoVisivel(dados)) {
-    cursor = escreverQuebrando(
-      contexto,
-      dados.resumo,
-      `500 30px ${FONTE}`,
-      tema.textoSuave,
-      x,
-      cursor,
-      largura,
-      42,
-    )
-  }
-  return cursor
-}
-
-/** Os yaku nos mesmos cartões do Resultado, com o valor à direita. */
-function desenharNomesCabine(
-  contexto: CanvasRenderingContext2D,
-  dados: DadosHistoria,
-  { tema, textos }: OpcoesDesenho,
-  x: number,
-  y: number,
-  largura: number,
-) {
-  desenharCartoesYaku(contexto, cartoesDeYaku(dados, textos), tema, x, y, largura)
-}
-
-/** Japonês, chinês ou coreano: dá para quebrar entre caracteres. */
-function temCjk(texto: string) {
-  return /[぀-ヿ㐀-鿿가-힯]/.test(texto)
-}
-
-/** Quebra o texto em linhas que cabem na largura (por espaço, ou por letra em CJK). */
-function quebrarLinhas(
-  contexto: CanvasRenderingContext2D,
-  texto: string,
-  largura: number,
-): string[] {
-  // Só japonês, chinês e coreano quebram por caractere; palavra sem espaço fica inteira.
-  const separador = temCjk(texto) && !texto.includes(' ') ? '' : ' '
-  const linhas: string[] = []
-  let atual = ''
-  for (const parte of texto.split(separador)) {
-    const junto = atual ? atual + separador + parte : parte
-    if (atual && contexto.measureText(junto).width > largura) {
-      linhas.push(atual)
-      atual = parte
-    } else {
-      atual = junto
-    }
-  }
-  return (atual ? [...linhas, atual] : linhas).map((linha) => caber(contexto, linha, largura))
+  const ladoQr = 200
+  const yAssinatura = fim - ladoQr - QUIETA_QR * 2
+  const limite = comAssinatura ? yAssinatura - ESPACO : fim
+  const livre = limite - topo
+  const fixa = alturaDoResultado(dados, 0)
+  const escala = Math.min(1.2, (livre - fixa) / (alturaDoResultado(dados, 1) - fixa))
+  const y = topo + (livre - alturaDoResultado(dados, escala)) / 2
+  desenharResultado(contexto, dados, opcoes, x, y, largura, escala)
+  if (!comAssinatura) return
+  desenharSeparador(contexto, opcoes.tema, x, yAssinatura - 20, largura)
+  desenharAssinatura(contexto, opcoes, logo, x, yAssinatura, largura, ladoQr)
 }
 
 /** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
@@ -420,9 +325,9 @@ function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageB
 }
 
 /**
- * Imagem deitada (1920×1080), nos três estilos: a foto à esquerda e, numa coluna
- * à direita, o resultado com a assinatura embaixo. Sem as áreas dos Stories,
- * só uma margem igual em volta.
+ * Imagem deitada (1920×1080): o mesmo padrão nos três estilos, com a foto de
+ * borda branca à esquerda e o resultado com a assinatura na coluna à direita.
+ * Na Foto cheia, o fundo é a própria foto desfocada.
  */
 function desenharDeitada(
   contexto: CanvasRenderingContext2D,
@@ -431,67 +336,56 @@ function desenharDeitada(
   logo: HTMLImageElement | null,
   opcoes: OpcoesDesenho,
 ) {
-  const { tema, layout } = opcoes
   const larguraTela = ALTURA
   const alturaTela = LARGURA
   const margem = 64
-  const larguraColuna = 720
+  if (opcoes.layout === 'foto') desenharFundoDesfocado(contexto, foto)
+  else {
+    contexto.fillStyle = opcoes.tema.superficie
+    contexto.fillRect(0, 0, larguraTela, alturaTela)
+  }
+  const larguraColuna = 680
   const xColuna = larguraTela - margem - larguraColuna
-  const larguraFoto = xColuna - 48 - margem
-  const alturaConteudo = alturaTela - margem * 2
-
-  if (layout === 'foto') {
-    desenharFundoDesfocado(contexto, foto)
-    desenharContido(contexto, foto, margem, margem, larguraFoto, alturaConteudo)
+  const larguraFoto = xColuna - 56 - margem
+  // A foto entra inteira, sem cortar a mão, e a borda acompanha o tamanho dela.
+  const alturaArea = alturaTela - margem * 2
+  const ajuste = Math.min(larguraFoto / foto.width, alturaArea / foto.height)
+  const [largura, altura] = [foto.width * ajuste, foto.height * ajuste]
+  desenharFotoComBorda(
+    contexto,
+    foto,
+    margem + (larguraFoto - largura) / 2,
+    margem + (alturaArea - altura) / 2,
+    largura,
+    altura,
+  )
+  if (opcoes.layout === 'foto') {
+    // Sobre a foto desfocada, o resultado vai num cartão, como na Foto cheia em pé.
     contexto.save()
     contexto.globalAlpha = 0.92
-    contexto.fillStyle = tema.superficie
-    retanguloArredondado(contexto, xColuna - 24, margem, larguraColuna + 24, alturaConteudo, 40)
+    contexto.fillStyle = opcoes.tema.superficie
+    retanguloArredondado(
+      contexto,
+      xColuna - 28,
+      margem,
+      larguraColuna + 56,
+      alturaTela - margem * 2,
+      40,
+    )
     contexto.fill()
     contexto.restore()
-  } else {
-    contexto.fillStyle = tema.superficie
-    contexto.fillRect(0, 0, larguraTela, alturaTela)
-    if (layout === 'cabine') {
-      desenharFotoCabine(contexto, foto, margem, margem, larguraFoto, alturaConteudo)
-    } else {
-      contexto.save()
-      contexto.fillStyle = '#ffffff'
-      retanguloArredondado(
-        contexto,
-        margem - 4,
-        margem - 4,
-        larguraFoto + 8,
-        alturaConteudo + 8,
-        36,
-      )
-      contexto.fill()
-      retanguloArredondado(contexto, margem, margem, larguraFoto, alturaConteudo, 32)
-      contexto.clip()
-      desenharCobrindo(contexto, foto, margem, margem, larguraFoto, alturaConteudo)
-      contexto.restore()
-    }
   }
-
-  // Coluna: resultado no meio do espaço de cima e a assinatura embaixo.
-  const respiro = layout === 'foto' ? 16 : 0
-  const xTexto = xColuna + respiro
-  const larguraTexto = larguraColuna - respiro * 2
-  const ladoQr = 200
-  const yAssinatura = margem + alturaConteudo - 32 - ladoQr - QUIETA_QR * 2
-  const topo = margem + 32
-  const livre = yAssinatura - 32 - topo
-  if (layout === 'cabine') {
-    const fim = desenharPlacarCabine(contexto, dados, opcoes, xTexto, topo, larguraTexto)
-    desenharNomesCabine(contexto, dados, opcoes, xTexto, fim + 24, larguraTexto)
-  } else {
-    const fixa = alturaDoResultado(dados, 0)
-    const escala = Math.min(1.2, (livre - fixa) / (alturaDoResultado(dados, 1) - fixa))
-    const y = topo + (livre - alturaDoResultado(dados, escala)) / 2
-    desenharResultado(contexto, dados, opcoes, xTexto, y, larguraTexto, escala)
-  }
-  desenharSeparador(contexto, tema, xTexto, yAssinatura - 20, larguraTexto)
-  desenharAssinatura(contexto, opcoes, logo, xTexto, yAssinatura, larguraTexto, ladoQr)
+  desenharColunaResultado(
+    contexto,
+    dados,
+    opcoes,
+    logo,
+    true,
+    xColuna,
+    margem + 24,
+    larguraColuna,
+    alturaTela - margem - 24,
+  )
 }
 
 /** A foto inteira, centralizada no espaço, sem cortar. */

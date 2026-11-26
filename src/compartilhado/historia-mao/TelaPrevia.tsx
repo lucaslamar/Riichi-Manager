@@ -231,12 +231,13 @@ export default function TelaPrevia({
           </button>
           <button
             type="button"
-            className="btn-primario historia-mao-compartilhar"
+            className="historia-mao-icone historia-mao-compartilhar"
+            aria-label={t('historiaMao.compartilhar')}
+            title={t('historiaMao.compartilhar')}
             onClick={compartilhar}
             disabled={!arquivo}
           >
             <i className="fas fa-arrow-up-from-bracket" aria-hidden="true" />
-            {t('historiaMao.compartilhar')}
           </button>
         </div>
       </div>
