@@ -3692,6 +3692,8 @@
     "layout_cabine": "拍照亭",
     "deitar": "横向图片",
     "rotuloDeitada": "横向",
-    "rotuloSalvar": "保存"
+    "rotuloSalvar": "保存",
+    "descartar": "丢弃照片",
+    "rotuloDescartar": "丢弃"
   }
 }

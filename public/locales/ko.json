@@ -3692,6 +3692,8 @@
     "layout_cabine": "부스",
     "deitar": "가로 이미지",
     "rotuloDeitada": "가로",
-    "rotuloSalvar": "저장"
+    "rotuloSalvar": "저장",
+    "descartar": "사진 버리기",
+    "rotuloDescartar": "버리기"
   }
 }

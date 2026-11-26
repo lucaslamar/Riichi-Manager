@@ -3734,6 +3734,8 @@
     "layout_cabine": "Cabine",
     "deitar": "Imagem deitada",
     "rotuloDeitada": "Deitada",
-    "rotuloSalvar": "Salvar"
+    "rotuloSalvar": "Salvar",
+    "descartar": "Descartar foto",
+    "rotuloDescartar": "Descartar"
   }
 }

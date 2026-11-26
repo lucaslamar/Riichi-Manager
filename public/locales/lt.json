@@ -3830,6 +3830,8 @@
     "layout_cabine": "Būdelė",
     "deitar": "Gulsčias vaizdas",
     "rotuloDeitada": "Gulsčias",
-    "rotuloSalvar": "Išsaugoti"
+    "rotuloSalvar": "Išsaugoti",
+    "descartar": "Atmesti nuotrauką",
+    "rotuloDescartar": "Atmesti"
   }
 }

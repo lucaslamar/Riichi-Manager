@@ -116,15 +116,6 @@ export default function TelaPrevia({
     >
       {/* Barra do topo, como no HIG: fechar à esquerda, ações em ícones e o Compartilhar, a única ação principal, na ponta direita. */}
       <div className="historia-mao-barra">
-        <button
-          type="button"
-          className="historia-mao-icone"
-          aria-label={t('actions.close')}
-          title={t('actions.close')}
-          onClick={aoFechar}
-        >
-          <i className="fas fa-xmark" aria-hidden="true" />
-        </button>
         <div className="historia-mao-barra-acoes">
           {/* Título do cartão de ações, só com o celular deitado (tela dividida). */}
           <p className="historia-mao-titulo-painel">{t('historiaMao.titulo')}</p>
@@ -164,6 +155,18 @@ export default function TelaPrevia({
             <i className="fas fa-download" aria-hidden="true" />
             <span className="historia-mao-rotulo" aria-hidden="true">
               {t('historiaMao.rotuloSalvar')}
+            </span>
+          </button>
+          <button
+            type="button"
+            className="historia-mao-icone historia-mao-descartar"
+            aria-label={t('historiaMao.descartar')}
+            title={t('historiaMao.descartar')}
+            onClick={aoFechar}
+          >
+            <i className="fas fa-trash" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.rotuloDescartar')}
             </span>
           </button>
           <button

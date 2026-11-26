@@ -3734,6 +3734,8 @@
     "layout_cabine": "Booth",
     "deitar": "Landscape image",
     "rotuloDeitada": "Landscape",
-    "rotuloSalvar": "Save"
+    "rotuloSalvar": "Save",
+    "descartar": "Discard photo",
+    "rotuloDescartar": "Discard"
   }
 }

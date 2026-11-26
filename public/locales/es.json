@@ -3757,6 +3757,8 @@
     "layout_cabine": "Cabina",
     "deitar": "Imagen horizontal",
     "rotuloDeitada": "Horizontal",
-    "rotuloSalvar": "Guardar"
+    "rotuloSalvar": "Guardar",
+    "descartar": "Descartar foto",
+    "rotuloDescartar": "Descartar"
   }
 }
