@@ -376,12 +376,11 @@
 }
 
 /* A única ação principal, separada dos ícones (HIG: texto longe de símbolo). */
-.historia-mao-compartilhar {
-  min-height: 44px;
+/* A única ação principal: o mesmo ícone redondo, em destaque (HIG: uma só, na ponta direita). */
+.historia-mao-barra .historia-mao-compartilhar {
   margin-left: 6px;
-  padding: 0 12px;
-  font-size: 0.875rem;
-  white-space: nowrap;
+  background: var(--primario, #b39ddb);
+  color: var(--branco, #fff);
 }
 
 .historia-mao-barra {
