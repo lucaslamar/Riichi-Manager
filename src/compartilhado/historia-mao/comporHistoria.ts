@@ -1,8 +1,9 @@
 /**
- * Imagem da mão para os Stories (1080×1920) ou deitada (1920×1080): a foto que a
- * pessoa tirou é a protagonista, com o resultado do app e a assinatura com o QR,
- * igual à das imagens do Torneio. Recebe tudo por argumento (foto, textos e
- * cores) e só usa um canvas fora da tela, para o React Native trocar apenas o
+ * Imagem da mão para os Stories, sempre 1080×1920: a foto que a pessoa tirou é a
+ * protagonista, com o resultado do app e a assinatura com o QR, igual à das
+ * imagens do Torneio. A foto entra deitada (4:3) ou em pé (3:4), conforme o
+ * botão Deitada. Recebe tudo por argumento (foto, textos e cores) e só usa um
+ * canvas fora da tela, separado da prévia, para o React Native trocar apenas o
  * desenho.
  */
 import type { QRCode } from 'qrcode'
@@ -66,8 +67,8 @@ export interface OpcoesHistoria {
   textos: TextosHistoria
   /** Endereço que o QR abre e que aparece escrito na assinatura. */
   url: string
-  /** Deitada: 1920×1080, para o feed e o WhatsApp na horizontal. */
-  deitada?: boolean
+  /** A foto em 4:3 (deitada) ou 3:4 (em pé). Não muda o tamanho da imagem. */
+  fotoDeitada: boolean
 }
 
 export async function comporHistoria(
@@ -77,15 +78,14 @@ export async function comporHistoria(
 ): Promise<Blob> {
   await document.fonts?.ready
   const tela = document.createElement('canvas')
-  tela.width = opcoes.deitada ? ALTURA : LARGURA
-  tela.height = opcoes.deitada ? LARGURA : ALTURA
+  tela.width = LARGURA
+  tela.height = ALTURA
   const contexto = tela.getContext('2d')
   if (!contexto) throw new Error('Canvas indisponível')
 
   const { create } = await import('qrcode')
   const desenho = { ...opcoes, qr: create(opcoes.url, { errorCorrectionLevel: 'M' }).modules }
-  if (opcoes.deitada) desenharDeitada(contexto, foto, dados, desenho)
-  else if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, desenho)
+  if (opcoes.layout === 'cabine') desenharCabine(contexto, foto, dados, desenho)
   else desenharFotoCheia(contexto, foto, dados, desenho)
 
   return new Promise((resolver, rejeitar) =>
@@ -103,7 +103,11 @@ export function nomeDoArquivo(agora: Date): string {
   return `riichi-manager-${dia}-${dois(agora.getHours())}${dois(agora.getMinutes())}.jpg`
 }
 
-/** Foto em toda a tela e o cartão do resultado com a assinatura por cima, embaixo. */
+/**
+ * Foto cheia: o cartão do resultado com a assinatura embaixo, por cima da foto.
+ * Em pé, a foto ocupa a tela toda. Deitada, vai em 4:3 na largura toda acima
+ * do cartão, com a própria foto desfocada no fundo.
+ */
 function desenharFotoCheia(
   contexto: CanvasRenderingContext2D,
   foto: ImageBitmap,
@@ -117,10 +121,10 @@ function desenharFotoCheia(
     respiro + alturaDoResultado(contexto, dados, interna, 1) + ESPACO + LADO_QR + respiro
   const y = LIMITE_BAIXO - altura
 
-  if (foto.width > foto.height) {
-    // Foto deitada (a mão em fila): inteira acima do cartão, sem cortar os lados.
+  if (opcoes.fotoDeitada) {
     desenharFundoDesfocado(contexto, foto)
-    desenharContido(contexto, foto, 0, 0, LARGURA, y - 24)
+    const alturaFoto = Math.min(LARGURA * 0.75, y - 24)
+    desenharCobrindo(contexto, foto, 0, (y - 24 - alturaFoto) / 2, LARGURA, alturaFoto)
   } else {
     desenharCobrindo(contexto, foto, 0, 0, LARGURA, ALTURA)
     const gradiente = contexto.createLinearGradient(0, ALTURA * 0.6, 0, ALTURA)
@@ -138,8 +142,8 @@ function desenharFotoCheia(
 
 /**
  * Estilo Cabine, como um vídeo no YouTube: a foto de borda a borda no topo, sem
- * moldura, e o resultado com a assinatura embaixo, no fundo do tema. A foto vai
- * até 4:3 (deitada) ou 1:1 (em pé) e cede altura para o resultado caber.
+ * moldura, em 4:3 (deitada) ou 3:4 (em pé), e o resultado com a assinatura
+ * embaixo, no fundo do tema. A foto cede altura para o resultado caber.
  */
 function desenharCabine(
   contexto: CanvasRenderingContext2D,
@@ -153,7 +157,7 @@ function desenharCabine(
   const yAssinatura = LIMITE_BAIXO - LADO_QR
   const fimResultado = yAssinatura - ESPACO
 
-  const alturaMaxima = foto.width > foto.height ? LARGURA * 0.75 : LARGURA
+  const alturaMaxima = opcoes.fotoDeitada ? LARGURA * 0.75 : (LARGURA * 4) / 3
   const espaco = fimResultado - ESPACO * 2
   const alturaFoto = Math.round(
     Math.min(alturaMaxima, espaco - alturaDoResultado(contexto, dados, interna, 1)),
@@ -162,55 +166,6 @@ function desenharCabine(
   const topo = alturaFoto + ESPACO
   desenharResultadoCabendo(contexto, dados, opcoes, SAFE_SIDE, topo, interna, fimResultado)
   desenharAssinatura(contexto, opcoes, SAFE_SIDE, yAssinatura, interna)
-}
-
-/**
- * Imagem deitada (1920×1080), nos dois estilos: a foto inteira com borda branca
- * à esquerda e o resultado com a assinatura na coluna à direita. Na Foto cheia,
- * o fundo é a própria foto desfocada e a coluna vai num cartão.
- */
-function desenharDeitada(
-  contexto: CanvasRenderingContext2D,
-  foto: ImageBitmap,
-  dados: DadosHistoria,
-  opcoes: OpcoesDesenho,
-) {
-  const larguraTela = ALTURA
-  const alturaTela = LARGURA
-  const margem = 64
-  if (opcoes.layout === 'foto') desenharFundoDesfocado(contexto, foto)
-  else {
-    contexto.fillStyle = opcoes.tema.superficie
-    contexto.fillRect(0, 0, larguraTela, alturaTela)
-  }
-  const larguraColuna = 680
-  const xColuna = larguraTela - margem - larguraColuna
-  const larguraFoto = xColuna - 56 - margem
-  const alturaArea = alturaTela - margem * 2
-  if (opcoes.layout === 'cabine') {
-    // Cabine: a foto de borda a borda, na altura toda, como um vídeo.
-    desenharCobrindo(contexto, foto, 0, 0, xColuna - 56, alturaTela)
-  } else {
-    // A foto entra inteira, sem cortar a mão, e a borda acompanha o tamanho dela.
-    const ajuste = Math.min(larguraFoto / foto.width, alturaArea / foto.height)
-    const [largura, altura] = [foto.width * ajuste, foto.height * ajuste]
-    desenharFotoComBorda(
-      contexto,
-      foto,
-      margem + (larguraFoto - largura) / 2,
-      margem + (alturaArea - altura) / 2,
-      largura,
-      altura,
-    )
-  }
-  if (opcoes.layout === 'foto') {
-    desenharCartao(contexto, opcoes.tema, xColuna - 28, margem, larguraColuna + 56, alturaArea)
-  }
-  const yAssinatura = margem + alturaArea - 24 - LADO_QR
-  const topo = margem + 24
-  const fim = yAssinatura - ESPACO
-  desenharResultadoCabendo(contexto, dados, opcoes, xColuna, topo, larguraColuna, fim, 1.6)
-  desenharAssinatura(contexto, opcoes, xColuna, yAssinatura, larguraColuna)
 }
 
 /** Cartão do tema, 92% opaco, por cima da foto. */
@@ -230,25 +185,6 @@ function desenharCartao(
   contexto.restore()
 }
 
-/** Foto recortada no espaço, com cantos arredondados e borda branca. */
-function desenharFotoComBorda(
-  contexto: CanvasRenderingContext2D,
-  foto: ImageBitmap,
-  x: number,
-  y: number,
-  largura: number,
-  altura: number,
-) {
-  contexto.save()
-  contexto.fillStyle = '#ffffff'
-  retanguloArredondado(contexto, x - 4, y - 4, largura + 8, altura + 8, 36)
-  contexto.fill()
-  retanguloArredondado(contexto, x, y, largura, altura, 32)
-  contexto.clip()
-  desenharCobrindo(contexto, foto, x, y, largura, altura)
-  contexto.restore()
-}
-
 /** A foto ampliada, desfocada e escurecida, para preencher o fundo sem barras. */
 function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageBitmap) {
   const { width: largura, height: altura } = contexto.canvas
@@ -258,27 +194,6 @@ function desenharFundoDesfocado(contexto: CanvasRenderingContext2D, foto: ImageB
   contexto.restore()
   contexto.fillStyle = 'rgba(0,0,0,0.35)'
   contexto.fillRect(0, 0, largura, altura)
-}
-
-/** A foto inteira, centralizada no espaço, sem cortar. */
-function desenharContido(
-  contexto: CanvasRenderingContext2D,
-  foto: ImageBitmap,
-  x: number,
-  y: number,
-  largura: number,
-  altura: number,
-) {
-  const escala = Math.min(largura / foto.width, altura / foto.height)
-  const larguraFinal = foto.width * escala
-  const alturaFinal = foto.height * escala
-  contexto.drawImage(
-    foto,
-    x + (largura - larguraFinal) / 2,
-    y + (altura - alturaFinal) / 2,
-    larguraFinal,
-    alturaFinal,
-  )
 }
 
 /** Recorte do meio, sem esticar. */

@@ -301,74 +301,6 @@
   }
 }
 
-/* Prévia: barra de ícones no topo, a imagem no maior espaço possível e o seletor de estilo embaixo. */
-.historia-mao-barra {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 8px 12px;
-}
-
-.historia-mao-barra-acoes {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.historia-mao-barra .historia-mao-icone {
-  background: transparent;
-}
-
-.historia-mao-barra .historia-mao-icone[aria-pressed='true'] {
-  background: #fff;
-  color: #000;
-}
-
-.historia-mao-barra .historia-mao-icone:disabled {
-  opacity: 0.4;
-}
-
-/* A única ação principal, separada dos ícones (HIG: texto longe de símbolo). */
-/* A ação principal fica na ponta direita, separada dos outros ícones (HIG). */
-.historia-mao-barra .historia-mao-compartilhar {
-  margin-left: 10px;
-}
-
-.historia-mao-barra {
-  padding-right: max(12px, env(safe-area-inset-right));
-  padding-left: max(8px, env(safe-area-inset-left));
-}
-
-.historia-mao-previa .historia-mao-imagem {
-  padding: 4px 8px;
-  touch-action: pan-y;
-  user-select: none;
-}
-
-.historia-mao-montando {
-  opacity: 0.5;
-  transition: opacity 120ms;
-}
-
-.historia-mao-rodape {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
-}
-
-.historia-mao-rodape .historia-mao-dica,
-.historia-mao-rodape .historia-mao-status {
-  margin: 0;
-}
-
-/* Fundo da prévia no roxo escuro do app, no lugar do preto: a imagem deitada se mistura com a tela. */
-.historia-mao-previa {
-  background: #141019;
-}
-
 /* Estilo da imagem: três bolinhas discretas, como páginas. Alvo de 44px, ponto de 8px. */
 .historia-mao-paginas {
   display: flex;
@@ -405,171 +337,114 @@
   }
 }
 
-/* Em pé, as ações são só ícones: o título do cartão e os nomes ficam para a tela dividida. */
-.historia-mao-titulo-painel,
+/*
+ * Prévia: mostra a imagem real que vai ser compartilhada (1080×1920). O layout
+ * segue a orientação do celular: em pé, a imagem e a barra de ações embaixo;
+ * deitado, a imagem e um trilho fino de ícones à direita.
+ */
+.historia-mao-previa {
+  display: grid;
+  height: 100dvh;
+  background: #141019;
+}
+
+.historia-mao-previa .historia-mao-barra,
+.historia-mao-previa .historia-mao-rodape {
+  display: contents;
+}
+
+.historia-mao-previa .historia-mao-imagem {
+  grid-area: imagem;
+  min-height: 0;
+  padding: 0;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.historia-mao-previa .historia-mao-imagem img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.historia-mao-montando {
+  opacity: 0.5;
+  transition: opacity 120ms;
+}
+
+.historia-mao-previa .historia-mao-paginas {
+  grid-area: paginas;
+}
+
+.historia-mao-previa .historia-mao-status {
+  grid-area: status;
+  margin: 0 16px 4px;
+}
+
+.historia-mao-previa .historia-mao-barra-acoes {
+  grid-area: acoes;
+}
+
+.historia-mao-previa .historia-mao-barra .historia-mao-icone {
+  background: transparent;
+}
+
+/* Deitada ligada: o estado aparece nos dois layouts. */
+.historia-mao-previa .historia-mao-barra .historia-mao-icone[aria-pressed='true'] {
+  background: #fff;
+  color: #141019;
+}
+
+.historia-mao-previa .historia-mao-barra .historia-mao-icone:disabled {
+  opacity: 0.4;
+}
+
+/* Lixeira: descarta a foto e volta ao Resultado. Vermelha, como a do Resultado. */
+.historia-mao-previa .historia-mao-barra .historia-mao-descartar {
+  color: var(--cor-perigo, #ef5350);
+}
+
+/* A ação principal, em lilás. */
+.historia-mao-previa .historia-mao-barra .historia-mao-compartilhar {
+  background: var(--primario, #b39ddb);
+  color: #141019;
+}
+
 .historia-mao-rotulo {
   display: none;
 }
 
-/*
- * Celular deitado (e telas largas): tela dividida, como numa página de entrada.
- * À esquerda a imagem com as bolinhas; à direita um painel lilás com o cartão
- * das ações, cada uma com o nome escrito, e o Compartilhar em destaque.
- */
-@media (orientation: landscape) {
-  .historia-mao-previa {
-    display: grid;
-    grid-template-areas:
-      'fechar painel'
-      'imagem painel'
-      'paginas painel';
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 40%);
-    grid-template-rows: auto minmax(0, 1fr) auto;
-    background: linear-gradient(to right, #141019 60%, var(--primario, #b39ddb) 60%);
-  }
-
-  .historia-mao-previa .historia-mao-barra,
-  .historia-mao-previa .historia-mao-rodape {
-    display: contents;
-  }
-
-  .historia-mao-previa .historia-mao-imagem {
-    grid-area: imagem;
-  }
-
-  .historia-mao-previa .historia-mao-paginas {
-    grid-area: paginas;
-  }
-
-  .historia-mao-previa .historia-mao-barra-acoes {
-    display: flex;
-    width: min(320px, 85%);
-    max-height: calc(100% - 24px);
-    grid-area: painel;
-    flex-direction: column;
-    align-items: stretch;
-    align-self: center;
-    justify-self: center;
-    gap: 2px;
-    padding: 16px;
-    overflow-y: auto;
-    border-radius: 20px;
-    background: #141019;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-  }
-
-  .historia-mao-titulo-painel {
-    display: block;
-    margin: 0 0 8px;
-    text-align: center;
-    font-size: 1.0625rem;
-    font-weight: 700;
-  }
-
-  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
-    width: 100%;
-    height: 44px;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 0 12px;
-    border-radius: 12px;
-    font-size: 1rem;
-  }
-
-  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone i {
-    width: 20px;
-    text-align: center;
-  }
-
-  .historia-mao-rotulo {
-    display: inline;
-    font-size: 0.9375rem;
-    font-weight: 600;
-  }
-
-  /* O Compartilhar vai por último, largo e em destaque. */
-  .historia-mao-previa .historia-mao-barra .historia-mao-compartilhar {
-    justify-content: center;
-    margin: 8px 0 0;
-    background: var(--primario, #b39ddb);
-    color: #141019;
-  }
-
-  /* A dica dos Stories some; o aviso (Imagem salva, falha) fica embaixo do cartão. */
-  .historia-mao-previa .historia-mao-dica {
-    display: none;
-  }
-
-  .historia-mao-previa .historia-mao-status {
-    grid-area: painel;
-    align-self: end;
-    justify-self: center;
-    margin-bottom: 12px;
-    color: #141019;
-    font-weight: 600;
-  }
-}
-
-/*
- * Em pé: a imagem em cima com as bolinhas e, embaixo, o painel lilás com o
- * cartão das ações (pedido do usuário em 26/11/2026). As quatro ações ficam lado
- * a lado, com o nome curto embaixo do ícone, e o Compartilhar largo por último.
- */
+/* Em pé: imagem na largura toda, as bolinhas e a barra de ações embaixo. */
 @media (orientation: portrait) {
   .historia-mao-previa {
-    display: grid;
     grid-template-areas:
-      'fechar'
       'imagem'
       'paginas'
       'status'
-      'painel'
+      'acoes'
       'dica';
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
-    overflow: hidden;
+    grid-template-rows: minmax(0, 1fr) auto auto auto auto;
   }
 
-  .historia-mao-previa .historia-mao-barra,
-  .historia-mao-previa .historia-mao-rodape {
-    display: contents;
-  }
-
-  .historia-mao-previa .historia-mao-imagem {
-    grid-area: imagem;
-  }
-
-  .historia-mao-previa .historia-mao-paginas {
-    grid-area: paginas;
-  }
-
-  .historia-mao-previa .historia-mao-status {
-    grid-area: status;
-  }
-
-  /* O cartão escuro; a sombra lilás sem desfoque, cortada acima dele, faz o painel até a base. */
   .historia-mao-previa .historia-mao-barra-acoes {
     display: grid;
-    grid-area: painel;
     grid-template-columns: repeat(4, 1fr);
     gap: 4px;
-    margin: 14px 16px calc(14px + env(safe-area-inset-bottom));
-    padding: 10px;
+    margin: 0 12px;
+    padding: 8px;
     border-radius: 20px;
-    background: #141019;
-    box-shadow:
-      0 0 0 14px var(--primario, #b39ddb),
-      0 0 0 100vmax var(--primario, #b39ddb);
-    clip-path: inset(-14px -100vmax -100vmax -100vmax);
+    background: #1f1a28;
   }
 
-  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
+  .historia-mao-previa .historia-mao-barra .historia-mao-icone {
     width: auto;
     height: auto;
-    min-height: 56px;
+    min-height: 52px;
     flex-direction: column;
     gap: 4px;
-    padding: 6px 2px;
+    padding: 4px 2px;
     border-radius: 12px;
   }
 
@@ -585,9 +460,7 @@
     min-height: 48px;
     flex-direction: row;
     gap: 10px;
-    margin: 4px 0 0;
-    background: var(--primario, #b39ddb);
-    color: #141019;
+    margin-top: 4px;
   }
 
   .historia-mao-previa .historia-mao-compartilhar .historia-mao-rotulo {
@@ -595,17 +468,50 @@
   }
 
   .historia-mao-previa .historia-mao-dica {
-    position: relative;
     grid-area: dica;
     margin: 0;
-    padding: 0 16px calc(10px + env(safe-area-inset-bottom));
-    margin-top: calc(-1 * env(safe-area-inset-bottom));
-    color: #141019;
-    font-weight: 600;
+    padding: 6px 16px max(8px, env(safe-area-inset-bottom));
+    font-size: 0.8125rem;
   }
 }
 
-/* Lixeira da prévia: descarta a foto e volta ao Resultado. Vermelha, como a do Resultado. */
-.historia-mao-previa .historia-mao-descartar {
-  color: var(--cor-perigo, #ef5350);
+/*
+ * Deitado: a imagem ocupa o resto e, à direita, um trilho fino só de ícones
+ * (Refazer, Deitada, Salvar, Descartar), com o Compartilhar redondo no fim.
+ */
+@media (orientation: landscape) {
+  .historia-mao-previa {
+    grid-template-areas:
+      'imagem acoes'
+      'paginas acoes'
+      'status acoes';
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) auto auto;
+  }
+
+  .historia-mao-previa .historia-mao-imagem {
+    padding: 8px 0 0;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px max(8px, env(safe-area-inset-right)) 8px 8px;
+    overflow-y: auto;
+    background: #1f1a28;
+  }
+
+  .historia-mao-previa .historia-mao-barra .historia-mao-compartilhar {
+    width: 52px;
+    height: 52px;
+    margin-top: 6px;
+    font-size: 1.25rem;
+  }
+
+  .historia-mao-previa .historia-mao-dica {
+    display: none;
+  }
 }

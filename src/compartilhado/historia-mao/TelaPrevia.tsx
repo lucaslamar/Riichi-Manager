@@ -40,7 +40,8 @@ export default function TelaPrevia({
 }) {
   const { t } = useI18n()
   const [layout, setLayout] = useState<LayoutHistoria>('foto')
-  const [deitada, setDeitada] = useState(false)
+  // Deitada escolhe a foto em 4:3 ou 3:4 na imagem; começa pelo formato da foto tirada.
+  const [deitada, setDeitada] = useState(foto.width > foto.height)
   const [arquivo, setArquivo] = useState<File | null>(null)
   const [endereco, setEndereco] = useState<string | null>(null)
   const [aviso, setAviso] = useState('')
@@ -54,7 +55,7 @@ export default function TelaPrevia({
     const agora = new Date()
     comporHistoria(foto, dados, {
       layout,
-      deitada,
+      fotoDeitada: deitada,
       tema: temaAtual(),
       url: URL_DO_APP,
       textos: {
@@ -117,8 +118,6 @@ export default function TelaPrevia({
       {/* Barra do topo, como no HIG: fechar à esquerda, ações em ícones e o Compartilhar, a única ação principal, na ponta direita. */}
       <div className="historia-mao-barra">
         <div className="historia-mao-barra-acoes">
-          {/* Título do cartão de ações, só com o celular deitado (tela dividida). */}
-          <p className="historia-mao-titulo-painel">{t('historiaMao.titulo')}</p>
           <button
             type="button"
             className="historia-mao-icone"
@@ -230,8 +229,7 @@ export default function TelaPrevia({
             </button>
           ))}
         </div>
-        {/* A dica é dos Stories, que são em pé. */}
-        {!deitada && <p className="historia-mao-dica">{t('historiaMao.dica')}</p>}
+        <p className="historia-mao-dica">{t('historiaMao.dica')}</p>
         <p className="historia-mao-status" aria-live="polite">
           {aviso}
         </p>
