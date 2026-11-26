@@ -475,22 +475,202 @@
   }
 }
 
+/* Mascote com o QR na placa: caixa 4:5, a arte em tudo e o QR nas medidas da prancheta. */
+.historia-mao-mascote {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+
+.historia-mao-mascote img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.historia-mao-mascote-qr {
+  position: absolute;
+}
+
+.historia-mao-mascote-qr-codigo {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /*
- * Deitado: a imagem ocupa o resto e, à direita, um trilho fino só de ícones
- * (Refazer, Deitada, Salvar, Descartar), com o Compartilhar redondo no fim.
+ * QR pequeno demais na placa: só o QR, com a margem branca que a placa daria.
+ * A caixa continua 4:5 (o mesmo tamanho), para a medida não trocar de lado.
+ */
+.historia-mao-mascote--simples {
+  display: flex;
+  align-items: center;
+}
+
+.historia-mao-mascote-so-qr {
+  width: min(100%, 140px);
+  margin: 0 auto;
+  aspect-ratio: 1;
+  padding: 8%;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* A tela montada só existe com o celular deitado. */
+.historia-mao-deitado-foto,
+.historia-mao-deitado-divisor,
+.historia-mao-deitado-painel {
+  display: none;
+}
+
+/*
+ * Deitado, um layout só (pedido do usuário em 26/11/2026): a foto com metade da
+ * largura útil, uma divisória lilás, o resultado na outra metade e o trilho de
+ * ícones à direita. As bolinhas ficam por cima da base da foto. A imagem
+ * exportada continua separada e não muda com isto.
  */
 @media (orientation: landscape) {
   .historia-mao-previa {
-    grid-template-areas:
-      'imagem acoes'
-      'paginas acoes'
-      'status acoes';
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: minmax(0, 1fr) auto auto;
+    grid-template-areas: 'foto divisor painel acoes';
+    grid-template-columns: minmax(0, 1fr) 2px minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr);
   }
 
-  .historia-mao-previa .historia-mao-imagem {
-    padding: 8px 0 0;
+  .historia-mao-previa .historia-mao-imagem,
+  .historia-mao-previa .historia-mao-dica {
+    display: none;
+  }
+
+  .historia-mao-deitado-foto {
+    display: block;
+    min-height: 0;
+    margin-left: env(safe-area-inset-left);
+    grid-area: foto;
+    overflow: hidden;
+    border-radius: 20px 0 0 20px;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .historia-mao-deitado-foto img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .historia-mao-deitado-divisor {
+    display: block;
+    grid-area: divisor;
+    background: var(--primario, #b39ddb);
+  }
+
+  .historia-mao-previa .historia-mao-paginas {
+    z-index: 1;
+    grid-area: foto;
+    align-self: end;
+    margin-left: env(safe-area-inset-left);
+  }
+
+  .historia-mao-previa .historia-mao-status {
+    z-index: 1;
+    grid-area: painel;
+    align-self: start;
+    justify-self: center;
+    margin: 8px;
+  }
+
+  .historia-mao-deitado-painel {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    grid-area: painel;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    overflow-y: auto;
+    text-align: center;
+  }
+
+  .historia-mao-deitado-painel p {
+    margin: 0;
+  }
+
+  .historia-mao-deitado-patamar {
+    font-size: clamp(1.25rem, 5vh, 1.75rem);
+    font-weight: 600;
+  }
+
+  .historia-mao-deitado-forma {
+    padding: 2px 12px;
+    border-radius: 999px;
+    background: var(--cor-primario-suave, #2a2438);
+    color: var(--primario, #b39ddb);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .historia-mao-deitado-resumo,
+  .historia-mao-deitado-vencedor {
+    font-size: 0.9375rem;
+  }
+
+  .historia-mao-deitado-pontos {
+    color: var(--primario, #b39ddb);
+    font-size: clamp(40px, 9vh, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+  }
+
+  /* Todos os yaku, em chips que quebram linha. */
+  .historia-mao-deitado-yaku {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .historia-mao-deitado-yaku li {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--cor-primario-suave, #2a2438);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .historia-mao-deitado-yaku span {
+    color: var(--primario, #b39ddb);
+  }
+
+  /* Mascote embaixo do painel, com até 40% da altura; ele encolhe antes dos pontos. */
+  .historia-mao-deitado-assinatura {
+    display: flex;
+    min-height: 0;
+    flex: 0 1 40%;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    text-align: left;
+  }
+
+  .historia-mao-deitado-assinatura .historia-mao-mascote {
+    height: 100%;
+    max-height: 40vh;
+  }
+
+  .historia-mao-deitado-assinatura p:first-child {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .historia-mao-deitado-assinatura p {
+    color: var(--cor-texto-suave, #a398b8);
+    font-size: 0.8125rem;
   }
 
   .historia-mao-previa .historia-mao-barra-acoes {
@@ -510,8 +690,21 @@
     margin-top: 6px;
     font-size: 1.25rem;
   }
+}
 
-  .historia-mao-previa .historia-mao-dica {
-    display: none;
+/* Telas baixas: primeiro encolhem os chips e o mascote, depois os pontos. */
+@media (orientation: landscape) and (max-height: 360px) {
+  .historia-mao-deitado-painel {
+    gap: 4px;
+    padding: 16px;
+  }
+
+  .historia-mao-deitado-yaku li {
+    padding: 2px 8px;
+    font-size: 0.75rem;
+  }
+
+  .historia-mao-deitado-assinatura {
+    flex-basis: 34%;
   }
 }

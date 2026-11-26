@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { baixarArquivo, salvarArquivo } from '@/compartilhado/adaptadores/arquivo'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { URL_DO_APP } from '@/compartilhado/marca/url-app'
 import { MASCOTE_QR_SRC } from './mascote'
+import MascoteQr from './MascoteQr'
 import {
   comporHistoria,
   nomeDoArquivo,
@@ -46,6 +47,7 @@ export default function TelaPrevia({
   const [arquivo, setArquivo] = useState<File | null>(null)
   const [endereco, setEndereco] = useState<string | null>(null)
   const [aviso, setAviso] = useState('')
+  const [enderecoFoto, setEnderecoFoto] = useState<string | null>(null)
   const inicioDeslize = useRef<number | null>(null)
 
   // A imagem fica pronta antes do toque: o iOS só abre a folha se o share vier direto do toque.
@@ -73,6 +75,27 @@ export default function TelaPrevia({
       ativo = false
     }
   }, [foto, dados, layout, deitada, t])
+
+  // A foto tirada, para a tela com o celular deitado (foto à esquerda, resultado à direita).
+  useEffect(() => {
+    let url: string | null = null
+    const tela = document.createElement('canvas')
+    tela.width = foto.width
+    tela.height = foto.height
+    tela.getContext('2d')?.drawImage(foto, 0, 0)
+    tela.toBlob(
+      (blob) => {
+        if (!blob) return
+        url = URL.createObjectURL(blob)
+        setEnderecoFoto(url)
+      },
+      'image/jpeg',
+      0.9,
+    )
+    return () => {
+      if (url) URL.revokeObjectURL(url)
+    }
+  }, [foto])
 
   useEffect(() => {
     if (!arquivo) return
@@ -109,6 +132,17 @@ export default function TelaPrevia({
     else return
     evento.preventDefault()
   }
+
+  const gestosDeslize = {
+    onPointerDown: (evento: PointerEvent<HTMLDivElement>) => {
+      inicioDeslize.current = evento.clientX
+    },
+    onPointerUp: (evento: PointerEvent<HTMLDivElement>) => aoSoltar(evento.clientX),
+    onPointerCancel: () => {
+      inicioDeslize.current = null
+    },
+  }
+  const resumoVisivel = dados.resumo.toLowerCase() !== (dados.patamar ?? '').toLowerCase()
 
   return (
     <div
@@ -186,16 +220,7 @@ export default function TelaPrevia({
         </div>
       </div>
 
-      <div
-        className="historia-mao-imagem"
-        onPointerDown={(evento) => {
-          inicioDeslize.current = evento.clientX
-        }}
-        onPointerUp={(evento) => aoSoltar(evento.clientX)}
-        onPointerCancel={() => {
-          inicioDeslize.current = null
-        }}
-      >
+      <div className="historia-mao-imagem" {...gestosDeslize}>
         {endereco ? (
           <img
             src={endereco}
@@ -206,6 +231,35 @@ export default function TelaPrevia({
         ) : (
           <i className="fas fa-spinner fa-spin" aria-label={t('historiaMao.montando')} />
         )}
+      </div>
+
+      {/* Celular deitado: a foto à esquerda e o resultado à direita, montados na tela. */}
+      <div className="historia-mao-deitado-foto" {...gestosDeslize}>
+        {enderecoFoto && <img src={enderecoFoto} alt="" draggable={false} />}
+      </div>
+      <div className="historia-mao-deitado-divisor" aria-hidden="true" />
+      <div className="historia-mao-deitado-painel">
+        {dados.patamar && <p className="historia-mao-deitado-patamar">{dados.patamar}</p>}
+        <span className="historia-mao-deitado-forma">{dados.forma.toUpperCase()}</span>
+        {resumoVisivel && <p className="historia-mao-deitado-resumo">{dados.resumo}</p>}
+        {dados.vencedor && <p className="historia-mao-deitado-vencedor">{dados.vencedor}</p>}
+        <p className="historia-mao-deitado-pontos">{dados.pontos}</p>
+        {dados.yaku.length > 0 && (
+          <ul className="historia-mao-deitado-yaku">
+            {dados.yaku.map((yaku) => (
+              <li key={yaku.nome}>
+                {yaku.nome} <span>{yaku.valor}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="historia-mao-deitado-assinatura">
+          <MascoteQr url={URL_DO_APP} rotulo={t('historiaMao.convite')} />
+          <div>
+            <p>{t('global.appName')}</p>
+            <p>{t('historiaMao.convite')}</p>
+          </div>
+        </div>
       </div>
 
       <div className="historia-mao-rodape">
