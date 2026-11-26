@@ -72,13 +72,10 @@ export default function ModalResultado({
     ? mao.pedras
     : mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
 
-  // O resultado sempre é falado ao abrir. Sem a Narração ligada, só os pontos e os pagamentos.
+  // O resultado é falado ao abrir só com a Narração ligada.
   useEffect(() => {
-    falar(
-      alerta
-        ? descricaoAcessivel
-        : falaDoResultado(resultado, mao.ventoAssento, t, numero, !lerNarracao().ativa),
-    )
+    if (!lerNarracao().ativa) return
+    falar(alerta ? descricaoAcessivel : falaDoResultado(resultado, mao.ventoAssento, t, numero))
     return pararFala
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

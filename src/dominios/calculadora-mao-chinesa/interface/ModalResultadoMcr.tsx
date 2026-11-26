@@ -147,9 +147,9 @@ export default function ModalResultadoMcr({
     acesa(chave) ? ' destaque-yaku' : acesas ? ' apagada' : ''
   const descricaoDe = (chave: string) => (acesa(chave) ? idDescricao : undefined)
 
-  // O resultado é falado ao abrir, como no Riichi. Sem a Narração ligada, só o fan e os pagamentos.
+  // O resultado é falado ao abrir só com a Narração ligada, como no Riichi.
   useEffect(() => {
-    const curta = !lerNarracao().ativa
+    if (!lerNarracao().ativa) return
     const textoPagamentos = pagamento
       ? [
           `${t('mcr.resultado.vencedorRecebe')} ${numero(pagamento.ganhadorRecebe)}`,
@@ -164,14 +164,14 @@ export default function ModalResultadoMcr({
     const resumo = invalida
       ? t(fan.batida ? 'mcr.resultado.invalida' : 'mcr.resultado.naoBate')
       : [
-          ...(curta ? [] : [...linhas].sort((a, b) => b.valor - a.valor).map(nomeDe)),
+          ...[...linhas].sort((a, b) => b.valor - a.valor).map(nomeDe),
           t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) }),
           ...textoPagamentos,
         ].join('. ')
     falarEmPartes([
       // A chamada de vitória em chinês: Hu (ron) ou Zimo (tsumo).
       {
-        texto: invalida || curta ? '' : condicoes.forma === 'tsumo' ? '自摸！' : '胡！',
+        texto: invalida ? '' : condicoes.forma === 'tsumo' ? '自摸！' : '胡！',
         idioma: 'zh-CN',
       },
       { texto: resumo },

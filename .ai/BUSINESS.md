@@ -193,7 +193,7 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Ranking no MCR: soma os pontos MCR dos placares finalizados. Colocação pelo total da partida, com empate dividindo a posição.
 
 - Glossário MCR (`aprender-a-jogar/conteudo/mcr/glossario.ts`): o do guia do CMC, no livro e na aba Glossário do Guia de bolso, sem comparações com o Riichi (elas ficam no módulo 23). No modo Chinês os textos não ganham links para o glossário do Riichi. Os créditos do CMC saíram da tela: o uso foi autorizado sem crédito.
-- Voz MCR: com a Narração ligada, fala as chamadas ao montar ("Chi!", "Peng!", "Gang!", "An Gang!") e a batida ("Hu!" no Dianhe, "Zimo!" no Zimo). No resultado, diz a batida em chinês, os fan, o total e os pagamentos. Sem Narração, só o total e os pagamentos. Mão inválida: só o aviso.
+- Voz MCR: com a Narração ligada, fala as chamadas ao montar ("Chi!", "Peng!", "Gang!", "An Gang!") e a batida ("Hu!" no Dianhe, "Zimo!" no Zimo). No resultado, diz a batida em chinês, os fan, o total e os pagamentos. Mão inválida: só o aviso. Sem Narração, o resultado não fala nada.
 
 - Torneio MCR (decidido com o usuário em 20/11/2026, regra da EMA, e trocado pelo Torneio do Riichi em 21/11/2026): os mesmos formatos, sorteio, timers e ranking do Riichi. Cada mesa dá pontos de mesa 4, 2, 1 e 0 pela colocação. Empatados dividem igualmente os pontos das colocações que ocupam juntos (dois em 1º ficam com 3 cada). A classificação soma os pontos de mesa e desempata pela soma dos pontos das partidas. A regra veio de memória: vale conferir com o regulamento da EMA.
 
@@ -219,3 +219,4 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 
 - Mudar o nome do app inteiro para Mahjong Manager (repositório, endereço, manifesto e ícones).
 - Traduções do modo Chinês: es, ja, ko e lt estão em inglês e o zh-Hans só tem os nomes dos fan. Veja `src/compartilhado/i18n/REVISAR.md`.
+- Voz do Resultado (Riichi e MCR, pedido do usuário em 26/11/2026): só fala com a Narração ligada. Antes, sem a Narração, ele dizia os pontos e os pagamentos ao abrir, o que incomodava quem não usa a narração.

@@ -45,6 +45,8 @@
 
 ### Alterado
 
+- **Resultado em silêncio sem a Narração**: a calculadora do Riichi e a do Chinês só falam o resultado quando a Narração por voz está ligada.
+
 - **Card do jogador no ranking do torneio**: o compartilhar foi para o topo e o Comparar com vem antes da lista.
 - **Posição anterior no ranking do torneio**: embaixo da seta aparece de onde a pessoa veio ("era 2º"), e o card diz em qual rodada.
 - **Barra no registro da partida**: como na Lista, fica presa embaixo com a soma da mesa, o disquete de salvar para continuar e o Registrar.
