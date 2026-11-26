@@ -443,3 +443,8 @@
   font-size: 0.75rem;
   line-height: 1;
 }
+
+/* Fundo da prévia no roxo escuro do app, no lugar do preto: a imagem deitada se mistura com a tela. */
+.historia-mao-previa {
+  background: #141019;
+}

@@ -182,7 +182,9 @@ function desenharFotoNaFaixa(
   contexto.fillStyle = opcoes.tema.superficie
   contexto.fillRect(0, 0, LARGURA, ALTURA)
   const interna = LARGURA - SAFE_SIDE * 2
-  const alturaFoto = 520
+  // Até 520px; com os yaku, a foto cede espaço para o placar não encolher.
+  const espacoTotal = LIMITE_BAIXO - 200 - QUIETA_QR * 2 - ESPACO * 3 - TOPO_FOTO
+  const alturaFoto = Math.min(520, espacoTotal - alturaDoResultado(dados, 1))
   desenharFotoComBorda(contexto, foto, SAFE_SIDE, TOPO_FOTO, interna, alturaFoto)
   desenharColunaResultado(
     contexto,
@@ -454,8 +456,8 @@ function resumoVisivel(dados: DadosHistoria) {
   return dados.resumo.toLowerCase() !== (dados.patamar ?? '').toLowerCase()
 }
 
-const ALTURA_CARTAO_YAKU = 56
-const ESPACO_CARTOES = 8
+const ALTURA_CARTAO_YAKU = 76
+const ESPACO_CARTOES = 12
 
 /** Os cartões que cabem: até 4 yaku; com mais, 3 e um "+N". */
 function cartoesDeYaku(dados: DadosHistoria, textos: TextosHistoria): YakuHistoria[] {
@@ -547,21 +549,21 @@ function desenharCartoesYaku(
   const estreita = largura < 500
   cartoes.forEach((yaku, indice) => {
     const yCartao = y + indice * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
-    retanguloArredondado(contexto, x, yCartao, largura, ALTURA_CARTAO_YAKU, 14)
+    retanguloArredondado(contexto, x, yCartao, largura, ALTURA_CARTAO_YAKU, 20)
     contexto.fillStyle = tema.cartao
     contexto.fill()
     contexto.textBaseline = 'middle'
     const meioCartao = yCartao + ALTURA_CARTAO_YAKU / 2 + 1
-    contexto.font = `700 ${estreita ? 22 : 26}px ${FONTE}`
+    contexto.font = `700 ${estreita ? 24 : 30}px ${FONTE}`
     const larguraValor = yaku.valor ? contexto.measureText(yaku.valor).width : 0
     contexto.textAlign = 'right'
     contexto.fillStyle = tema.primario
-    if (yaku.valor) contexto.fillText(yaku.valor, x + largura - 18, meioCartao)
+    if (yaku.valor) contexto.fillText(yaku.valor, x + largura - 28, meioCartao)
     contexto.textAlign = 'left'
-    contexto.font = `700 ${estreita ? 24 : 28}px ${FONTE}`
+    contexto.font = `700 ${estreita ? 26 : 30}px ${FONTE}`
     contexto.fillStyle = tema.texto
-    const larguraNome = largura - 36 - (larguraValor ? larguraValor + 12 : 0)
-    contexto.fillText(caber(contexto, yaku.nome, larguraNome), x + 18, meioCartao)
+    const larguraNome = largura - 56 - (larguraValor ? larguraValor + 16 : 0)
+    contexto.fillText(caber(contexto, yaku.nome, larguraNome), x + 28, meioCartao)
     contexto.textBaseline = 'top'
   })
   return y + cartoes.length * (ALTURA_CARTAO_YAKU + ESPACO_CARTOES)
