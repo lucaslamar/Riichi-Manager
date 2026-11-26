@@ -79,6 +79,8 @@
 
 ### Corrigido
 
+- **Girar o celular com o Resultado aberto**: o Resultado (e a prévia do Compartilhar a mão) fechava ao virar o celular entre em pé e deitado. Agora continua aberto.
+
 - **Restaurar padrão nas Regras de cálculo**: agora também volta os Yakus locais ao padrão (só o Aniversário do Cerrado ligado). Antes eles continuavam ligados.
 
 - **iPad Pro 13 atual**: com 1376 px, recebe os mesmos ajustes dos outros iPad Pro.
