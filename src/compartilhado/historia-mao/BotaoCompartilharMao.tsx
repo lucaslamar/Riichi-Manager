@@ -17,7 +17,7 @@ export default function BotaoCompartilharMao({ dados }: { dados: () => DadosHist
         title={t('historiaMao.botao')}
         onClick={() => setAberto(dados())}
       >
-        <i className="fas fa-arrow-up-from-bracket" aria-hidden="true" />
+        <i className="fas fa-share-nodes" aria-hidden="true" />
       </button>
       {aberto && <FluxoHistoriaMao dados={aberto} aoFechar={fechar} />}
     </>

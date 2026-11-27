@@ -114,7 +114,7 @@ O Riichi Manager é web e roda em qualquer celular. Por isso valem os princípio
 
 ## Compartilhar a mão (imagem dos Stories)
 
-- Ícone de compartilhar no cabeçalho do Resultado, antes do lápis, com 44px como os outros. O resto do Resultado não muda.
+- Ícone de compartilhar (`fa-share-nodes`, o mesmo do resto do app) no cabeçalho do Resultado, antes do lápis, com 44px como os outros. O Compartilhar da prévia usa o mesmo ícone (pedido do usuário em 26/11/2026). O resto do Resultado não muda.
 - Imagem de 1080×1920. Zonas que o Instagram cobre: 250px no topo, 340px na base e 48px nos lados (`SAFE_TOP`, `SAFE_BOTTOM`, `SAFE_SIDE` em `comporHistoria.ts`). Textos e mascote ficam dentro delas.
 - Nenhuma tela desenha as pedras do app (pedido do usuário em 25/11/2026): a foto que a pessoa tirou é a protagonista e já mostra a mão.
 - A foto é a estrela (pedido do usuário em 26/11/2026): nunca é cortada (sempre contain) nem coberta, em qualquer orientação, na tela e na imagem exportada. Atrás dela vai a própria foto desfocada e escurecida (cover, blur de 24px, brilho 45%, escala 1,1), para não sobrar faixa vazia.

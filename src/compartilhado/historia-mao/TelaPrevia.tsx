@@ -203,7 +203,7 @@ export default function TelaPrevia({
           onClick={compartilhar}
           disabled={!arquivo}
         >
-          <i className="fas fa-arrow-up-from-bracket" aria-hidden="true" />
+          <i className="fas fa-share-nodes" aria-hidden="true" />
           <span className="historia-mao-rotulo" aria-hidden="true">
             {t('historiaMao.compartilhar')}
           </span>
