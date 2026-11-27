@@ -330,7 +330,8 @@
 
 /*
  * O topo do resultado (patamar até os pontos) na largura toda; embaixo, os yaku
- * à esquerda e o mascote no canto direito, sem se cobrirem.
+ * à esquerda e o mascote no canto direito. O carimbo usa o que sobrar embaixo
+ * dos yaku, à esquerda do mascote, sem cobrir nada.
  */
 .historia-mao-painel {
   display: grid;
@@ -339,7 +340,7 @@
   grid-template-areas:
     'texto texto'
     'yaku mascote'
-    'avisos mascote';
+    'carimbo mascote';
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: auto auto 1fr;
   gap: 8px 4px;
@@ -427,22 +428,91 @@
   font-weight: 900;
 }
 
-/* Base do painel: a dica embaixo do resultado e o mascote no canto direito. */
-.historia-mao-painel-base {
-  display: contents;
-}
-
-.historia-mao-painel-avisos {
+/*
+ * Área do carimbo: só o espaço que sobra (não empurra nada). O selo vai até
+ * --carimbo-max e encolhe com a área; abaixo de 72px, some.
+ */
+.historia-mao-carimbo-area {
+  display: flex;
   min-width: 0;
-  grid-area: avisos;
-  align-self: end;
+  min-height: 0;
+  grid-area: carimbo;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 8px 8px 0;
+  container-type: size;
 }
 
-.historia-mao-painel-avisos .historia-mao-dica,
-.historia-mao-painel-avisos .historia-mao-status {
-  margin: 0 0 4px;
-  text-align: left;
-  font-size: 0.8125rem;
+.historia-mao-carimbo {
+  display: block;
+  width: min(var(--carimbo-max, 96px), 88cqh, 88cqw);
+  flex: none;
+  aspect-ratio: 1;
+  color: var(--primario, #b39ddb);
+  overflow: visible;
+  transform: rotate(-8deg);
+  animation: historia-mao-carimbar 300ms ease-out 550ms backwards;
+}
+
+.historia-mao-carimbo text {
+  font-family: inherit;
+}
+
+@container (max-height: 82px) or (max-width: 82px) {
+  .historia-mao-carimbo {
+    visibility: hidden;
+  }
+}
+
+/* Carimbada: entra 200ms depois do mascote, bate e o card treme de leve. */
+@keyframes historia-mao-carimbar {
+  0% {
+    opacity: 0;
+    transform: rotate(-8deg) scale(1.6);
+  }
+  70% {
+    opacity: 1;
+    transform: rotate(-8deg) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-8deg) scale(1);
+  }
+}
+
+.historia-mao-painel--carimbado {
+  animation: historia-mao-tremer 120ms linear 760ms;
+}
+
+@keyframes historia-mao-tremer {
+  25% {
+    transform: translate(2px, -1px);
+  }
+  50% {
+    transform: translate(-2px, 1px);
+  }
+  75% {
+    transform: translate(1px, 2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .historia-mao-carimbo,
+  .historia-mao-painel--carimbado {
+    animation: none;
+  }
+}
+
+/* Fora do card: a dica (só nas primeiras vezes) e o aviso de imagem salva. */
+.historia-mao-rodape .historia-mao-dica,
+.historia-mao-rodape .historia-mao-status {
+  margin: 0 16px 6px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.historia-mao-dica-balao {
+  display: none;
 }
 
 /* Mascote com o QR na placa: caixa 4:5, a arte em tudo e o QR nas medidas da prancheta. */
@@ -537,7 +607,7 @@
 
   .historia-mao-foto {
     height: min(45dvh, calc(100vw / var(--razao-foto, 0.75)));
-    min-height: 22dvh;
+    min-height: 20dvh;
     flex: 0 1000 auto;
   }
 
@@ -549,12 +619,30 @@
     --largura-mascote: min(38vw, 22dvh);
   }
 
+  .historia-mao-carimbo {
+    --carimbo-max: 96px;
+  }
+
+  /* Em pé, o carimbo tem pelo menos 72px garantidos: a foto cede essa altura antes de ele sumir. */
+  .historia-mao-painel--carimbado .historia-mao-carimbo-area {
+    min-height: 92px;
+  }
+
+  .historia-mao-rodape {
+    flex: none;
+    margin-bottom: env(safe-area-inset-bottom);
+  }
+
+  .historia-mao-compartilhar-envoltorio {
+    display: contents;
+  }
+
   .historia-mao-previa .historia-mao-barra-acoes {
     display: grid;
     flex: none;
     grid-template-columns: repeat(3, 1fr);
     gap: 4px;
-    margin: 0 12px max(8px, env(safe-area-inset-bottom));
+    margin: 0 12px 8px;
     padding: 8px;
     border-radius: 20px;
     background: #1f1a28;
@@ -605,8 +693,36 @@
     grid-template-rows: minmax(0, 1fr);
   }
 
+  /*
+   * O desfoque não pode "acender" nos cantos (uma pedra laranja no canto da
+   * foto vazava um brilho): fundo mais escuro e menos saturado, e um degradê
+   * escuro nas bordas da coluna, por baixo da foto.
+   */
   .historia-mao-foto {
     margin-left: env(safe-area-inset-left);
+    overflow: hidden;
+  }
+
+  .historia-mao-foto-fundo {
+    filter: blur(24px) brightness(0.3) saturate(0.6);
+  }
+
+  .historia-mao-foto::after {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, #141019, transparent 18%, transparent 82%, #141019),
+      linear-gradient(to bottom, #141019, transparent 18%, transparent 82%, #141019);
+    content: '';
+    pointer-events: none;
+  }
+
+  .historia-mao-foto-principal {
+    z-index: 1;
+  }
+
+  .historia-mao-carimbo {
+    --carimbo-max: 110px;
   }
 
   .historia-mao-painel {
@@ -644,18 +760,74 @@
     justify-content: center;
     gap: 6px;
     padding: 8px max(8px, env(safe-area-inset-right)) 8px 8px;
-    overflow-y: auto;
     background: #1f1a28;
   }
 
-  /* No trilho, o Compartilhar é só o ícone, em lilás e um pouco maior: sem a bola em volta. */
+  /* O Compartilhar é o botão redondo de destaque, no fim do trilho, 16px abaixo dos outros. */
+  .historia-mao-compartilhar-envoltorio {
+    position: relative;
+    margin-top: 10px;
+  }
+
   .historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
     width: 52px;
     height: 52px;
-    margin-top: 6px;
-    background: transparent;
-    color: var(--primario, #b39ddb);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  /* A dica vira um balão ao lado do Compartilhar e some sozinha depois de alguns segundos. */
+  .historia-mao-dica-balao {
+    position: absolute;
+    top: 50%;
+    right: calc(100% + 12px);
+    z-index: 2;
+    display: block;
+    width: max-content;
+    max-width: 220px;
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: #2a2438;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.75rem;
+    line-height: 1.35;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    transform: translateY(-50%);
+    animation: historia-mao-balao 6s ease-out 900ms both;
+  }
+
+  @keyframes historia-mao-balao {
+    0% {
+      opacity: 0;
+    }
+    8%,
+    88% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  /* Deitado, o aviso de imagem salva aparece por cima da base do painel. */
+  .historia-mao-rodape {
+    position: absolute;
+    right: calc(var(--trilho) + 8px);
+    bottom: 8px;
+    z-index: 2;
+  }
+
+  .historia-mao-rodape .historia-mao-dica {
+    display: none;
+  }
+
+  .historia-mao-rodape .historia-mao-status {
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #2a2438;
   }
 }
 

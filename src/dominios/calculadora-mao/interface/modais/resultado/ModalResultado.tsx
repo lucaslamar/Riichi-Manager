@@ -10,6 +10,7 @@ import {
 } from '../../../logica/mao'
 import BotaoCompartilharMao from '@/compartilhado/historia-mao/BotaoCompartilharMao'
 import type { DadosHistoria } from '@/compartilhado/historia-mao/comporHistoria'
+import { nivelDoCarimbo } from '@/compartilhado/historia-mao/carimbo'
 import { chavePatamar, nomeYakuExibido } from '../../../logica/nomesYaku'
 import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
@@ -95,6 +96,7 @@ export default function ModalResultado({
       pontos: numero(resultado.pontos.total),
       forma: t(resultado.agari === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
       vencedor: contextoCenterpiece?.vencedorNome,
+      nivel: nivelDoCarimbo(resultado.nome),
     }
   }
   // O resultado é falado ao abrir só com a Narração ligada.

@@ -228,4 +228,6 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Só aparece com um resultado válido: some no chombo, na mão sem yaku e na mão MCR inválida.
 - O cartão mostra até 4 yaku ou fan e "+N" para o resto, e o nome de quem bateu quando o resultado vem do Centerpiece.
 - Yaku na imagem (pedido do usuário em 26/11/2026): aparecem sempre, sem botão para tirar, em pílulas compactas embaixo do placar. Um layout só (pedido do usuário em 26/11/2026): os estilos Foto cheia e Cabine saíram (a Faixa já tinha sido descartada).
+- Carimbo das mãos grandes (pedido do usuário em 26/11/2026): Mangan, Haneman, Baiman, Sanbaiman, Yakuman (também os múltiplos) e Kazoe Yakuman ganham um selo hanko na prévia e na imagem. Abaixo de Mangan não há selo. O MCR não tem esses patamares, então não tem carimbo.
+- Dica do Link: aparece só nas 3 primeiras vezes que a pessoa abre o Compartilhar a mão, e nunca na imagem.
 - Formato da imagem (pedido do usuário em 26/11/2026): sempre Story, 1080×1920, em qualquer orientação do celular. A imagem 1920×1080 e o botão Deitada foram tirados. A foto nunca é cortada nem coberta, na tela e na imagem.

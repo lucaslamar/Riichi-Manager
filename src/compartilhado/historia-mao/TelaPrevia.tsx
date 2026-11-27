@@ -4,6 +4,7 @@ import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { URL_DO_APP } from '@/compartilhado/marca/url-app'
 import { MASCOTE_QR_SRC } from './mascote'
 import MascoteQr from './MascoteQr'
+import HanCarimbo from './HanCarimbo'
 import {
   comporHistoria,
   nomeDoArquivo,
@@ -33,11 +34,14 @@ function temaAtual(): TemaHistoria {
 export default function TelaPrevia({
   foto,
   dados,
+  mostrarDica,
   aoRefazer,
   aoFechar,
 }: {
   foto: ImageBitmap
   dados: DadosHistoria
+  /** A dica do Link aparece só nas primeiras vezes (`FluxoHistoriaMao`). */
+  mostrarDica: boolean
   aoRefazer: () => void
   aoFechar: () => void
 }) {
@@ -129,7 +133,7 @@ export default function TelaPrevia({
         )}
       </div>
 
-      <div className="historia-mao-painel">
+      <div className={`historia-mao-painel${dados.nivel ? ' historia-mao-painel--carimbado' : ''}`}>
         <div className="historia-mao-painel-texto">
           {dados.patamar && <p className="historia-mao-patamar">{dados.patamar}</p>}
           <span className="historia-mao-forma">{dados.forma.toUpperCase()}</span>
@@ -146,15 +150,11 @@ export default function TelaPrevia({
             ))}
           </ul>
         )}
-        <div className="historia-mao-painel-base">
-          <div className="historia-mao-painel-avisos">
-            <p className="historia-mao-dica">{t('historiaMao.dica')}</p>
-            <p className="historia-mao-status" aria-live="polite">
-              {aviso}
-            </p>
-          </div>
-          <MascoteQr url={URL_DO_APP} rotulo={t('historiaMao.convite')} />
+        {/* O carimbo usa só o espaço que sobra à esquerda do mascote; sem espaço, some. */}
+        <div className="historia-mao-carimbo-area">
+          <HanCarimbo nivel={dados.nivel} />
         </div>
+        <MascoteQr url={URL_DO_APP} rotulo={t('historiaMao.convite')} />
       </div>
 
       <div className="historia-mao-barra-acoes">
@@ -195,19 +195,30 @@ export default function TelaPrevia({
             {t('historiaMao.rotuloDescartar')}
           </span>
         </button>
-        <button
-          type="button"
-          className="historia-mao-icone historia-mao-compartilhar"
-          aria-label={t('historiaMao.compartilhar')}
-          title={t('historiaMao.compartilhar')}
-          onClick={compartilhar}
-          disabled={!arquivo}
-        >
-          <i className="fas fa-share-nodes" aria-hidden="true" />
-          <span className="historia-mao-rotulo" aria-hidden="true">
-            {t('historiaMao.compartilhar')}
-          </span>
-        </button>
+        <div className="historia-mao-compartilhar-envoltorio">
+          <button
+            type="button"
+            className="historia-mao-icone historia-mao-compartilhar"
+            aria-label={t('historiaMao.compartilhar')}
+            title={t('historiaMao.compartilhar')}
+            onClick={compartilhar}
+            disabled={!arquivo}
+          >
+            <i className="fas fa-share-nodes" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.compartilhar')}
+            </span>
+          </button>
+          {mostrarDica && <p className="historia-mao-dica-balao">{t('historiaMao.dica')}</p>}
+        </div>
+      </div>
+
+      {/* Fora do card: a dica (em pé) e o aviso de imagem salva. */}
+      <div className="historia-mao-rodape">
+        {mostrarDica && <p className="historia-mao-dica">{t('historiaMao.dica')}</p>}
+        <p className="historia-mao-status" aria-live="polite">
+          {aviso}
+        </p>
       </div>
     </div>
   )
