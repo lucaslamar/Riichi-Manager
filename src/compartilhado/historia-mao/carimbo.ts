@@ -1,7 +1,7 @@
 /**
  * Carimbo de borracha das mãos grandes (Mangan para cima), como os selos
- * "ORIGINAL": anel duplo, "RIICHI MAHJONG" curvo em cima, o han/fu curvo
- * embaixo, estrelas e a palavra do nível atravessando o meio. O SVG sai em
+ * "ORIGINAL": anel duplo, o nome do app curvo em cima, o han/fu curvo
+ * embaixo, patinhas de cachorro (do mascote) e a palavra do nível atravessando o meio. O SVG sai em
  * texto (`svgDoCarimbo`) e é o mesmo na prévia e na imagem exportada: com a
  * mesma semente, o desgaste da tinta fica igual nos dois.
  */
@@ -18,13 +18,13 @@ export interface DadosCarimbo {
   semente: number
 }
 
-const NIVEIS: Record<NivelCarimbo, { palavra: string; rotulo: string; estrelas: number }> = {
-  mangan: { palavra: 'MANGAN', rotulo: 'Mangan', estrelas: 1 },
-  haneman: { palavra: 'HANEMAN', rotulo: 'Haneman', estrelas: 2 },
-  baiman: { palavra: 'BAIMAN', rotulo: 'Baiman', estrelas: 3 },
-  sanbaiman: { palavra: 'SANBAIMAN', rotulo: 'Sanbaiman', estrelas: 4 },
-  yakuman: { palavra: 'YAKUMAN', rotulo: 'Yakuman', estrelas: 5 },
-  kazoe: { palavra: 'KAZOE', rotulo: 'Kazoe Yakuman', estrelas: 5 },
+const NIVEIS: Record<NivelCarimbo, { palavra: string; rotulo: string; patinhas: number }> = {
+  mangan: { palavra: 'MANGAN', rotulo: 'Mangan', patinhas: 1 },
+  haneman: { palavra: 'HANEMAN', rotulo: 'Haneman', patinhas: 2 },
+  baiman: { palavra: 'BAIMAN', rotulo: 'Baiman', patinhas: 3 },
+  sanbaiman: { palavra: 'SANBAIMAN', rotulo: 'Sanbaiman', patinhas: 4 },
+  yakuman: { palavra: 'YAKUMAN', rotulo: 'Yakuman', patinhas: 5 },
+  kazoe: { palavra: 'KAZOE', rotulo: 'Kazoe Yakuman', patinhas: 5 },
 }
 
 const VERMELHO = '#E5484D'
@@ -111,23 +111,25 @@ export function carregarFonteCarimbo(): Promise<string | null> {
   return fonte
 }
 
-function estrela(x: number, y: number, raio: number): string {
-  const pontos: string[] = []
-  for (let i = 0; i < 10; i++) {
-    const alcance = i % 2 === 0 ? raio : raio * 0.45
-    const angulo = -Math.PI / 2 + (i * Math.PI) / 5
-    pontos.push(
-      `${(x + alcance * Math.cos(angulo)).toFixed(2)},${(y + alcance * Math.sin(angulo)).toFixed(2)}`,
-    )
-  }
-  return `<polygon points="${pontos.join(' ')}"/>`
+/** Patinha de cachorro: a almofada grande embaixo e os 4 dedos em arco. */
+function patinha(x: number, y: number, raio: number): string {
+  const dedo = (dx: number, dy: number) =>
+    `<ellipse cx="${(x + dx * raio).toFixed(2)}" cy="${(y + dy * raio).toFixed(2)}" rx="${(raio * 0.24).toFixed(2)}" ry="${(raio * 0.3).toFixed(2)}"/>`
+  return (
+    `<ellipse cx="${x}" cy="${(y + raio * 0.3).toFixed(2)}" rx="${(raio * 0.55).toFixed(2)}" ry="${(raio * 0.45).toFixed(2)}"/>` +
+    dedo(-0.68, -0.22) +
+    dedo(-0.25, -0.66) +
+    dedo(0.25, -0.66) +
+    dedo(0.68, -0.22)
+  )
 }
 
-function linhaDeEstrelas(quantidade: number, y: number): string {
-  const passo = 16
+/** A quantidade de patinhas conta o nível; a do meio é um pouco maior. */
+function linhaDePatinhas(quantidade: number, y: number): string {
+  const passo = 18
   const meio = (quantidade - 1) / 2
   return Array.from({ length: quantidade }, (_, i) =>
-    estrela(100 + (i - meio) * passo, y, i === meio ? 8 : 6),
+    patinha(100 + (i - meio) * passo, y, i === meio ? 9 : 7),
   ).join('')
 }
 
@@ -145,14 +147,14 @@ export function svgDoCarimbo(
     lado,
   }: { tinta: string; fundo: string; fonteDados: string | null; lado: number },
 ): string {
-  const { palavra, estrelas } = NIVEIS[dados.nivel]
+  const { palavra, patinhas } = NIVEIS[dados.nivel]
   const fonteFace = fonteDados
     ? `@font-face{font-family:'Anton Carimbo';src:url(${fonteDados}) format('woff2');}`
     : ''
   // Falhas de ~15% da área: o ruído vira alfa com um corte abaixo da média.
   const desgaste = `<filter id="r" x="0" y="0" width="200" height="200" filterUnits="userSpaceOnUse"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="${dados.semente}"/><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 9 0 0 0 -2.8"/></filter><mask id="m" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff" filter="url(#r)"/></mask>`
   const texto = `font-family:${FAMILIA};fill:${tinta}`
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${lado}" height="${lado}" viewBox="0 0 200 200"><defs><style>${fonteFace}</style>${desgaste}<path id="cima" d="M 18.4 100 A 81.6 81.6 0 0 1 181.6 100"/><path id="baixo" d="M 9 100 A 91 91 0 0 0 191 100"/></defs><g transform="rotate(${giroDoCarimbo(dados.semente)} 100 100)"><g mask="url(#m)" fill="none" stroke="${tinta}"><circle cx="100" cy="100" r="94" stroke-width="6"/><circle cx="100" cy="100" r="80" stroke-width="2"/><circle cx="100" cy="100" r="62" stroke-width="3"/><g stroke="none" fill="${tinta}">${linhaDeEstrelas(estrelas, 63)}${linhaDeEstrelas(estrelas, 137)}</g><text style="${texto};font-size:11px;letter-spacing:0.15em" stroke="none" text-anchor="middle"><textPath href="#cima" startOffset="50%">- RIICHI MAHJONG -</textPath></text><text style="${texto};font-size:11px;letter-spacing:0.15em" stroke="none" text-anchor="middle"><textPath href="#baixo" startOffset="50%">${textoDeBaixo(dados)}</textPath></text></g><rect x="22" y="79" width="156" height="42" fill="${fundo}"/><g mask="url(#m)"><text x="100" y="101" style="${texto};font-size:38px" text-anchor="middle" dominant-baseline="central" textLength="150" lengthAdjust="spacingAndGlyphs">${palavra}</text></g></g></svg>`
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${lado}" height="${lado}" viewBox="0 0 200 200"><defs><style>${fonteFace}</style>${desgaste}<path id="cima" d="M 18.4 100 A 81.6 81.6 0 0 1 181.6 100"/><path id="baixo" d="M 9 100 A 91 91 0 0 0 191 100"/></defs><g transform="rotate(${giroDoCarimbo(dados.semente)} 100 100)"><g mask="url(#m)" fill="none" stroke="${tinta}"><circle cx="100" cy="100" r="94" stroke-width="6"/><circle cx="100" cy="100" r="80" stroke-width="2"/><circle cx="100" cy="100" r="62" stroke-width="3"/><g stroke="none" fill="${tinta}">${linhaDePatinhas(patinhas, 63)}${linhaDePatinhas(patinhas, 137)}</g><text style="${texto};font-size:11px;letter-spacing:0.15em" stroke="none" text-anchor="middle"><textPath href="#cima" startOffset="50%">- RIICHI MANAGER -</textPath></text><text style="${texto};font-size:11px;letter-spacing:0.15em" stroke="none" text-anchor="middle"><textPath href="#baixo" startOffset="50%">${textoDeBaixo(dados)}</textPath></text></g><rect x="22" y="79" width="156" height="42" fill="${fundo}"/><g mask="url(#m)"><text x="100" y="101" style="${texto};font-size:38px" text-anchor="middle" dominant-baseline="central" textLength="150" lengthAdjust="spacingAndGlyphs">${palavra}</text></g></g></svg>`
 }
 
 export function enderecoDoSvg(svg: string): string {
