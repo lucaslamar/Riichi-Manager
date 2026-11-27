@@ -3711,8 +3711,6 @@
     "semCamera": "No camera access. You can choose a photo from the gallery.",
     "convite": "Get the app",
     "dica": "Tip: on Instagram, also add the Link sticker.",
-    "layout": "Image layout",
-    "layout_foto": "Full photo",
     "refazer": "Retake",
     "salvar": "Save image",
     "compartilhar": "Share",
@@ -3731,9 +3729,6 @@
     "dicaLuz": "Good light, no glare, and only the hand in the frame.",
     "entendi": "Got it",
     "girar": "Turn your phone sideways",
-    "layout_cabine": "Booth",
-    "deitar": "Landscape photo",
-    "rotuloDeitada": "Landscape",
     "rotuloSalvar": "Save",
     "descartar": "Discard photo",
     "rotuloDescartar": "Discard"

@@ -4,7 +4,7 @@
 
 ### Adicionado
 
-- **Compartilhar a mão**: no Resultado, o ícone de compartilhar abre a câmera para fotografar a mão na mesa (ou escolher da galeria). O app monta uma imagem no formato dos Stories, com a foto e o resultado em dois layouts, e abre a folha do sistema. A foto não sai do aparelho.
+- **Compartilhar a mão**: no Resultado, o ícone de compartilhar abre a câmera para fotografar a mão na mesa (ou escolher da galeria). O app monta uma imagem no formato dos Stories, com a foto inteira, o resultado e o mascote segurando o QR do app, e abre a folha do sistema. A foto não sai do aparelho.
 
 - **Tobi no Guia de bolso e no Aprender**: o verbete explica que a partida acaba quando alguém fica com pontos negativos, e o Aprender passa a dar o nome da regra.
 - **Aniversário do Cerrado**: yakuman local ativado por padrão, em homenagem à fundação do Cerrado Mahjong Club (10/10/2023). Trincas de 白, 西 e 中 com 11 de um naipe e 223 de outro. Pode ser desativado em Regras de cálculo.

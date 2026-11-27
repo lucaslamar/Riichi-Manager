@@ -227,5 +227,5 @@ Na checagem de furiten da mesa, as esperas são informação privada do jogador.
 - Privacidade: a foto nunca sai do aparelho. Sem envio, sem gravar, e a câmera desliga ao capturar, fechar ou sair do app.
 - Só aparece com um resultado válido: some no chombo, na mão sem yaku e na mão MCR inválida.
 - O cartão mostra até 4 yaku ou fan e "+N" para o resto, e o nome de quem bateu quando o resultado vem do Centerpiece.
-- Yaku na imagem (pedido do usuário em 26/11/2026): aparecem sempre, sem botão para tirar, em pílulas compactas embaixo do placar. Dois estilos de imagem: Foto cheia e Cabine (a Faixa foi descartada).
-- Formato da imagem (pedido do usuário em 26/11/2026): sempre Story, 1080×1920, em qualquer orientação do celular. A prévia mostra exatamente a imagem que sai. A imagem 1920×1080 foi tirada.
+- Yaku na imagem (pedido do usuário em 26/11/2026): aparecem sempre, sem botão para tirar, em pílulas compactas embaixo do placar. Um layout só (pedido do usuário em 26/11/2026): os estilos Foto cheia e Cabine saíram (a Faixa já tinha sido descartada).
+- Formato da imagem (pedido do usuário em 26/11/2026): sempre Story, 1080×1920, em qualquer orientação do celular. A imagem 1920×1080 e o botão Deitada foram tirados. A foto nunca é cortada nem coberta, na tela e na imagem.

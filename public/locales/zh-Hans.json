@@ -3669,8 +3669,6 @@
     "semCamera": "无法使用摄像头。你可以从相册选择照片。",
     "convite": "打开应用",
     "dica": "提示：在 Instagram 中也添加链接贴纸。",
-    "layout": "图片布局",
-    "layout_foto": "全屏照片",
     "refazer": "重拍",
     "salvar": "保存图片",
     "compartilhar": "分享",
@@ -3689,9 +3687,6 @@
     "dicaLuz": "光线充足、没有反光，画面里只有手牌。",
     "entendi": "知道了",
     "girar": "请把手机横过来",
-    "layout_cabine": "拍照亭",
-    "deitar": "横向照片",
-    "rotuloDeitada": "横向",
     "rotuloSalvar": "保存",
     "descartar": "丢弃照片",
     "rotuloDescartar": "丢弃"

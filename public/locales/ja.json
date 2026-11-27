@@ -3669,8 +3669,6 @@
     "semCamera": "カメラを使えません。ギャラリーから写真を選べます。",
     "convite": "アプリはこちら",
     "dica": "ヒント：Instagramではリンクスタンプも追加しましょう。",
-    "layout": "画像のレイアウト",
-    "layout_foto": "全面写真",
     "refazer": "撮り直す",
     "salvar": "画像を保存",
     "compartilhar": "共有",
@@ -3689,9 +3687,6 @@
     "dicaLuz": "明るく、反射のない場所で、手牌だけを写す。",
     "entendi": "わかった",
     "girar": "スマホを横向きにしてください",
-    "layout_cabine": "ブース",
-    "deitar": "横向きの写真",
-    "rotuloDeitada": "横向き",
     "rotuloSalvar": "保存",
     "descartar": "写真を破棄",
     "rotuloDescartar": "破棄"
