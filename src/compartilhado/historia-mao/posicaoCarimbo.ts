@@ -37,8 +37,10 @@ function fracaoSobre(cx: number, cy: number, raio: number, caixa: Caixa): number
 /**
  * À esquerda do mascote, com o centro um pouco acima da base dele, no maior
  * tamanho (até `ladoMaximo`) que não cobre o topo do resultado (título e
- * pontos), o QR nem passa do painel, e invade os yaku em até 35%. Abaixo de
- * 110px, não cabe (`null`).
+ * pontos), o QR nem passa do painel, e invade os yaku em até 35%. Com
+ * `podeSubir` (card dividido), se não couber ao lado do mascote, o carimbo sobe
+ * para cima dele e invade mais a lista, ainda sem cobrir título, pontos nem QR.
+ * Abaixo de 110px, não cabe (`null`).
  */
 export function posicionarCarimbo(
   medidas: {
@@ -49,6 +51,7 @@ export function posicionarCarimbo(
     qr: Caixa
   },
   ladoMaximo: number,
+  podeSubir = false,
 ): PosicaoCarimbo | null {
   const { painel, texto, yaku, mascote, qr } = medidas
   for (let lado = ladoMaximo; lado >= LADO_MINIMO; lado -= 2) {
@@ -59,6 +62,16 @@ export function posicionarCarimbo(
     if (cx - raio < 4) continue
     if (cy - raio < texto.y + texto.h + 4) continue
     if (yaku && fracaoSobre(cx, cy, raio, yaku) > INVASAO_MAXIMA) continue
+    return { x: cx - raio, y: cy - raio, lado }
+  }
+  if (!podeSubir) return null
+  for (let lado = ladoMaximo; lado >= LADO_MINIMO; lado -= 2) {
+    const raio = lado / 2
+    const cx = Math.min(mascote.x + mascote.w / 2, painel.w - raio - 4)
+    const cy = mascote.y - raio * 0.6
+    if (cx - raio < 4) continue
+    if (cy - raio < texto.y + texto.h + 4) continue
+    if (cy + raio > qr.y - 4) continue
     return { x: cx - raio, y: cy - raio, lado }
   }
   return null
@@ -100,8 +113,9 @@ export function usePosicaoCarimbo(
         h: qrElemento.offsetHeight,
       }
       // Cada layout diz o tamanho máximo no CSS (160 empilhado, 170 lado a lado, 150 no card).
-      const ladoMaximo =
-        parseFloat(getComputedStyle(painel).getPropertyValue('--carimbo-max')) || 160
+      const estilo = getComputedStyle(painel)
+      const ladoMaximo = parseFloat(estilo.getPropertyValue('--carimbo-max')) || 160
+      const podeSubir = estilo.getPropertyValue('--carimbo-sobe').trim() === '1'
       setPosicao(
         posicionarCarimbo(
           {
@@ -112,6 +126,7 @@ export function usePosicaoCarimbo(
             qr,
           },
           ladoMaximo,
+          podeSubir,
         ),
       )
     }
