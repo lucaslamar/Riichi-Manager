@@ -857,10 +857,10 @@
 /*
  * Card dividido (proporção entre 0,8 e 1,6: iPad deitado, tablets e janelas de
  * desktop). O card fica no meio da tela e abraça a foto: a coluna da foto tem
- * a proporção real dela e a altura do card é a da foto (no mínimo 480px, ou o
- * que o resultado pedir, até 88% da tela). Sem faixas pretas nem desfoque: se
- * sobrar espaço na coluna, ele é da cor do card. As ações saem do trilho e
- * viram uma cápsula de vidro flutuando embaixo do card.
+ * a proporção real dela (até 88% da altura) e o card tem a altura da foto, no
+ * mínimo 480px. Se o resultado pedir mais (o mascote tem prioridade), o card
+ * cresce até o espaço da tela e a foto fica centralizada. Sem faixas pretas nem
+ * desfoque. As ações saem do trilho e viram uma cápsula de vidro embaixo do card.
  */
 @container tela (aspect-ratio > 4 / 5) and (aspect-ratio <= 8 / 5) {
   .historia-mao-previa {
@@ -882,37 +882,63 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
+    padding-block: 12px 20px;
   }
 
+  /* Sem fundo próprio: o painel tem o dele e a coluna da foto só pinta onde a foto não chega. */
   .historia-mao-cartao {
     display: grid;
     grid-template-columns: var(--coluna-foto) var(--resultado);
     grid-template-rows: minmax(0, 1fr);
     min-height: min(var(--altura-max), max(480px, var(--altura-foto)));
-    max-height: var(--altura-max);
+    max-height: calc(100cqh - 84px);
     overflow: hidden;
     border-radius: 28px;
-    background: #141019;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
-  }
-
-  .historia-mao-foto {
-    background: #141019;
   }
 
   .historia-mao-foto-fundo {
     display: none;
   }
 
-  /* Coluna de resultado: topo, os yaku em linhas na largura toda e, na base, carimbo e mascote lado a lado. */
+  /*
+   * A foto no tamanho exibido (não a caixa do contain), para os cantos serem os
+   * dela. Cheia na coluna: os cantos de 28px vêm do card, sem nada atrás. Mais
+   * baixa que o card: cantos de 28px na esquerda da própria foto. Mais estreita
+   * (em pé): os cantos ficam na coluna, que tem o fundo do card.
+   */
+  .historia-mao-foto-principal {
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .historia-mao-foto[data-encaixe='vertical'],
+  .historia-mao-foto[data-encaixe='horizontal'] {
+    background: #141019;
+  }
+
+  .historia-mao-foto[data-encaixe='cheia'] {
+    background: transparent;
+  }
+
+  .historia-mao-foto[data-encaixe='vertical'] .historia-mao-foto-principal {
+    border-radius: 28px 0 0 28px;
+  }
+
+  /* Coluna de resultado: topo, os yaku em linhas na largura toda e, na base, carimbo e mascote. */
   .historia-mao-painel {
     --carimbo-max: 150px;
+    --carimbo-sobe: 1;
     grid-template-areas:
       'texto texto'
       'yaku yaku'
       'carimbo mascote';
-    grid-template-columns: minmax(0, 1fr) 160px;
-    grid-template-rows: auto auto minmax(120px, 1fr);
+    grid-template-columns: minmax(0, 1fr) 240px;
+    grid-template-rows: auto auto minmax(calc(250px + 12px), 1fr);
     gap: 16px 8px;
     padding: 32px;
     overflow: hidden;
@@ -931,23 +957,34 @@
     font-size: 0.875rem;
   }
 
+  /* Com 6 ou mais yaku, as linhas ficam mais baixas antes de o card crescer. */
+  .historia-mao-yaku:has(li:nth-child(6)) li {
+    padding: 4px 14px;
+  }
+
   /*
-   * O mascote pede só 120px ao card (contain: size) e cresce até 200px com o que
-   * sobrar: assim o card fica com a altura da foto sempre que possível. Nunca é cortado.
+   * O mascote tem prioridade: pede 200×250px ao card (QR de 80px, legível por
+   * outra câmera) e cresce até 240×300px com o que sobrar. Nunca é cortado nem
+   * fica menor que o carimbo.
    */
   .historia-mao-painel .historia-mao-mascote {
     width: auto;
     height: 100%;
-    max-height: 200px;
+    min-height: 250px;
+    max-height: 300px;
     contain: size;
     justify-self: end;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     transform: rotate(-5deg);
     animation-name: historia-mao-mascote-entrar-card;
   }
 
+  /* A dica e o aviso ficam embaixo da cápsula, fora do fluxo: não roubam altura do card. */
   .historia-mao-rodape {
-    flex: none;
+    position: absolute;
+    right: 0;
+    bottom: max(4px, env(safe-area-inset-bottom));
+    left: 0;
     text-align: center;
   }
 
@@ -980,15 +1017,41 @@
     font-size: 22px;
   }
 
+  /* O Compartilhar é o único destaque da cápsula: pílula do roxo do app a 18%, em roxo claro. */
   .historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
-    background: transparent;
-    color: var(--primario, #b39ddb);
+    background: color-mix(in srgb, var(--primario, #b39ddb) 18%, transparent);
+    color: color-mix(in srgb, var(--primario, #b39ddb) 70%, #fff);
   }
 
   .historia-mao-previa .historia-mao-rotulo {
     display: block;
     font-size: 0.6875rem;
     font-weight: 600;
+  }
+}
+
+/* Telas baixas no card (iPad de 768px de altura): menos respiro antes de o card crescer. */
+@container tela (aspect-ratio > 4 / 5) and (aspect-ratio <= 8 / 5) and (height < 840px) {
+  .historia-mao-painel {
+    grid-template-rows: auto auto minmax(calc(250px + 8px), 1fr);
+    gap: 8px;
+    padding: 16px 24px;
+  }
+
+  .historia-mao-pontos {
+    font-size: 48px;
+  }
+
+  .historia-mao-yaku {
+    gap: 3px;
+  }
+
+  .historia-mao-yaku:has(li:nth-child(6)) li {
+    padding: 3px 14px;
+  }
+
+  .historia-mao-painel .historia-mao-mascote {
+    margin-bottom: 8px;
   }
 }
 

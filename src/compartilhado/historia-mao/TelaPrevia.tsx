@@ -7,6 +7,7 @@ import MascoteQr from './MascoteQr'
 import HanCarimbo from './HanCarimbo'
 import { tintaDoCarimbo } from './carimbo'
 import { usePosicaoCarimbo } from './posicaoCarimbo'
+import { useEncaixeFoto } from './encaixeFoto'
 import {
   comporHistoria,
   nomeDoArquivo,
@@ -55,6 +56,8 @@ export default function TelaPrevia({
   const [aviso, setAviso] = useState('')
   const [enderecoFoto, setEnderecoFoto] = useState<string | null>(null)
   const painelRef = useRef<HTMLDivElement>(null)
+  const colunaFotoRef = useRef<HTMLDivElement>(null)
+  const encaixeFoto = useEncaixeFoto(colunaFotoRef, !!enderecoFoto)
   const posicaoCarimbo = usePosicaoCarimbo(painelRef, !!dados.carimbo)
 
   // A imagem fica pronta antes do toque: o iOS só abre a folha se o share vier direto do toque.
@@ -126,7 +129,7 @@ export default function TelaPrevia({
     >
       <div className="historia-mao-previa-corpo">
         <div className="historia-mao-cartao">
-          <div className="historia-mao-foto">
+          <div className="historia-mao-foto" ref={colunaFotoRef} data-encaixe={encaixeFoto}>
             {enderecoFoto ? (
               <>
                 <img
