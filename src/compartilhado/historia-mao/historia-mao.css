@@ -285,16 +285,27 @@
 }
 
 /*
- * Prévia montada na tela, em pé e deitado (brief "a foto é a estrela", 26/11/2026).
- * A foto aparece inteira (contain), com ela mesma desfocada atrás, e nada fica
- * por cima dela. Em pé: foto, resultado e a barra de ações, nesta ordem. Deitado:
- * a foto numa coluna com a proporção real dela (até 60%), o resultado ao lado e
- * o trilho de ícones à direita. A imagem exportada é montada à parte.
+ * Prévia montada na tela (brief "a foto é a estrela", 26/11/2026). A foto
+ * aparece inteira, e nada fica por cima dela. O layout não depende da
+ * orientação, e sim da proporção do espaço da tela (container `tela`):
+ * empilhado até 0,8, card dividido entre 0,8 e 1,6 e lado a lado acima de 1,6.
+ * A imagem exportada é montada à parte.
  */
 .historia-mao-previa {
   height: 100dvh;
   background: #141019;
   overflow: hidden;
+  container: tela / size;
+}
+
+.historia-mao-previa-corpo {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+/* O card só existe no layout dividido; nos outros, foto e painel são do corpo. */
+.historia-mao-cartao {
+  display: contents;
 }
 
 .historia-mao-foto {
@@ -423,7 +434,14 @@
   font-weight: 700;
 }
 
-.historia-mao-yaku span {
+.historia-mao-yaku-nome {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.historia-mao-yaku .historia-mao-yaku-valor {
   flex: none;
   color: var(--primario, #b39ddb);
   font-weight: 900;
@@ -581,33 +599,42 @@
 }
 
 /*
- * Em pé: foto em cima (até 45% da altura, ou a altura natural se for deitada),
- * resultado e a barra. Faltando espaço, encolhe primeiro a foto, depois o
- * mascote (pela altura da tela) e por fim os pontos.
+ * Empilhado (proporção até 0,8: celulares e iPad em pé): foto em cima (até 45%
+ * da altura, ou a altura natural se for deitada), resultado e a barra, numa
+ * coluna de no máximo 560px. Faltando espaço, encolhe primeiro a foto, depois o
+ * mascote (pela altura) e por fim os pontos.
  */
-@media (orientation: portrait) {
-  .historia-mao-previa {
+@container tela (aspect-ratio <= 4 / 5) {
+  .historia-mao-previa-corpo {
+    --largura-util: min(100cqw, 560px);
     display: flex;
+    max-width: 560px;
+    margin: 0 auto;
     flex-direction: column;
   }
 
   .historia-mao-foto {
-    height: min(45dvh, calc(100vw / var(--razao-foto, 0.75)));
-    min-height: 20dvh;
+    height: min(45cqh, calc(var(--largura-util) / var(--razao-foto, 0.75)));
+    min-height: 20cqh;
     flex: 0 1000 auto;
   }
 
   .historia-mao-painel {
+    --carimbo-max: 160px;
     flex: 1 1 auto;
   }
 
   .historia-mao-painel .historia-mao-mascote {
-    --largura-mascote: min(38vw, 22dvh);
+    --largura-mascote: min(calc(var(--largura-util) * 0.38), 22cqh, 160px);
+  }
+
+  .historia-mao-pontos {
+    font-size: clamp(36px, 7cqh, 64px);
   }
 
   /*
-   * Em pé, a mão com carimbo reserva 76px embaixo dos yaku: a foto cede essa
-   * altura e o carimbo cabe invadindo a lista em até 35%.
+   * A mão com carimbo reserva 76px embaixo dos yaku: a foto cede essa altura e
+   * o carimbo cabe invadindo a lista em até 35%.
    */
   .historia-mao-painel--com-carimbo .historia-mao-carimbo-area {
     min-height: 76px;
@@ -663,16 +690,21 @@
   }
 }
 
-/* Deitado: foto com a proporção real (até 60% da área útil), painel com o resto (no mínimo 40%). */
-@media (orientation: landscape) {
-  .historia-mao-previa {
+/*
+ * Lado a lado (proporção acima de 1,6: celular deitado): foto com a proporção
+ * real (até 60% da área útil), painel com o resto (no mínimo 40%) e o trilho
+ * de ícones colado à direita.
+ */
+@container tela (aspect-ratio > 8 / 5) {
+  .historia-mao-previa-corpo {
     --trilho: calc(68px + env(safe-area-inset-right));
     display: grid;
+    height: 100%;
     grid-template-columns:
       min(
-        calc(100dvh * var(--razao-foto, 1.33)),
-        calc((100vw - var(--trilho)) * 0.6),
-        calc(100vw - var(--trilho) - 400px)
+        calc(100cqh * var(--razao-foto, 1.33)),
+        calc((100cqw - var(--trilho)) * 0.6),
+        calc(100cqw - var(--trilho) - 400px)
       )
       minmax(0, 1fr) var(--trilho);
     grid-template-rows: minmax(0, 1fr);
@@ -707,20 +739,21 @@
   }
 
   .historia-mao-painel {
+    --carimbo-max: 170px;
     row-gap: 6px;
     padding-top: 12px;
     padding-left: 20px;
   }
 
   .historia-mao-patamar {
-    font-size: clamp(1.125rem, 5dvh, 1.5rem);
+    font-size: clamp(1.125rem, 5cqh, 1.5rem);
   }
 
   .historia-mao-pontos {
-    font-size: clamp(32px, 11dvh, 64px);
+    font-size: clamp(32px, 11cqh, 64px);
   }
 
-  /* Deitado sobra pouca altura: cartões mais baixos, com o mesmo visual. */
+  /* Sobra pouca altura: cartões mais baixos, com o mesmo visual. */
   .historia-mao-yaku {
     gap: 3px;
   }
@@ -731,7 +764,7 @@
   }
 
   .historia-mao-painel .historia-mao-mascote {
-    --largura-mascote: calc(45dvh * 0.8);
+    --largura-mascote: calc(45cqh * 0.8);
   }
 
   .historia-mao-previa .historia-mao-barra-acoes {
@@ -778,21 +811,7 @@
     animation: historia-mao-balao 6s ease-out 900ms both;
   }
 
-  @keyframes historia-mao-balao {
-    0% {
-      opacity: 0;
-    }
-    8%,
-    88% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
-  /* Deitado, o aviso de imagem salva aparece por cima da base do painel. */
+  /* O aviso de imagem salva aparece por cima da base do painel. */
   .historia-mao-rodape {
     position: absolute;
     right: calc(var(--trilho) + 8px);
@@ -812,8 +831,19 @@
   }
 }
 
-/* Telas baixas deitadas: os chips encolhem antes dos pontos. */
-@media (orientation: landscape) and (max-height: 360px) {
+/*
+ * Empilhado numa tela mais larga que a coluna (iPad em pé): a coluna não encosta
+ * na borda da tela, então o mascote não passa dela, só fica inclinado.
+ */
+@container tela (aspect-ratio <= 4 / 5) and (width > 560px) {
+  .historia-mao-painel .historia-mao-mascote {
+    transform: rotate(-5deg);
+    animation-name: historia-mao-mascote-entrar-card;
+  }
+}
+
+/* Telas baixas lado a lado: os cartões encolhem antes dos pontos. */
+@container tela (aspect-ratio > 8 / 5) and (height <= 360px) {
   .historia-mao-painel {
     gap: 4px;
   }
@@ -821,5 +851,169 @@
   .historia-mao-yaku li {
     padding: 4px 10px;
     font-size: 0.75rem;
+  }
+}
+
+/*
+ * Card dividido (proporção entre 0,8 e 1,6: iPad deitado, tablets e janelas de
+ * desktop). O card fica no meio da tela e abraça a foto: a coluna da foto tem
+ * a proporção real dela e a altura do card é a da foto (no mínimo 480px, ou o
+ * que o resultado pedir, até 88% da tela). Sem faixas pretas nem desfoque: se
+ * sobrar espaço na coluna, ele é da cor do card. As ações saem do trilho e
+ * viram uma cápsula de vidro flutuando embaixo do card.
+ */
+@container tela (aspect-ratio > 4 / 5) and (aspect-ratio <= 8 / 5) {
+  .historia-mao-previa {
+    background: #0b0910;
+  }
+
+  .historia-mao-previa-corpo {
+    --resultado: clamp(340px, 32cqw, 420px);
+    --largura-max: min(1100px, 100cqw - 48px);
+    --altura-max: min(88cqh, 100cqh - 120px);
+    --altura-foto: min(
+      var(--altura-max),
+      (var(--largura-max) - var(--resultado)) / var(--razao-foto, 1.33)
+    );
+    --coluna-foto: max(var(--altura-foto) * var(--razao-foto, 1.33), var(--resultado) * 2 / 3);
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .historia-mao-cartao {
+    display: grid;
+    grid-template-columns: var(--coluna-foto) var(--resultado);
+    grid-template-rows: minmax(0, 1fr);
+    min-height: min(var(--altura-max), max(480px, var(--altura-foto)));
+    max-height: var(--altura-max);
+    overflow: hidden;
+    border-radius: 28px;
+    background: #141019;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  }
+
+  .historia-mao-foto {
+    background: #141019;
+  }
+
+  .historia-mao-foto-fundo {
+    display: none;
+  }
+
+  /* Coluna de resultado: topo, os yaku em linhas na largura toda e, na base, carimbo e mascote lado a lado. */
+  .historia-mao-painel {
+    --carimbo-max: 150px;
+    grid-template-areas:
+      'texto texto'
+      'yaku yaku'
+      'carimbo mascote';
+    grid-template-columns: minmax(0, 1fr) 160px;
+    grid-template-rows: auto auto minmax(120px, 1fr);
+    gap: 16px 8px;
+    padding: 32px;
+    overflow: hidden;
+  }
+
+  .historia-mao-painel-texto {
+    padding-right: 0;
+  }
+
+  .historia-mao-pontos {
+    font-size: clamp(48px, 7cqh, 80px);
+  }
+
+  .historia-mao-yaku li {
+    padding: 7px 14px;
+    font-size: 0.875rem;
+  }
+
+  /*
+   * O mascote pede só 120px ao card (contain: size) e cresce até 200px com o que
+   * sobrar: assim o card fica com a altura da foto sempre que possível. Nunca é cortado.
+   */
+  .historia-mao-painel .historia-mao-mascote {
+    width: auto;
+    height: 100%;
+    max-height: 200px;
+    contain: size;
+    justify-self: end;
+    margin-bottom: 16px;
+    transform: rotate(-5deg);
+    animation-name: historia-mao-mascote-entrar-card;
+  }
+
+  .historia-mao-rodape {
+    flex: none;
+    text-align: center;
+  }
+
+  /* Cápsula de vidro, centralizada 16px abaixo do card: ícones de 22px com rótulo, alvo de 44px. */
+  .historia-mao-previa .historia-mao-barra-acoes {
+    display: flex;
+    flex: none;
+    gap: 4px;
+    padding: 6px 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  }
+
+  .historia-mao-compartilhar-envoltorio {
+    display: contents;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
+    width: auto;
+    min-width: 72px;
+    height: auto;
+    min-height: 44px;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 22px;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
+    background: transparent;
+    color: var(--primario, #b39ddb);
+  }
+
+  .historia-mao-previa .historia-mao-rotulo {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+}
+
+@keyframes historia-mao-mascote-entrar-card {
+  0% {
+    transform: translateX(40px) rotate(-5deg) scale(0.9);
+  }
+  70% {
+    transform: rotate(-5deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(-5deg) scale(1);
+  }
+}
+
+@keyframes historia-mao-balao {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
   }
 }

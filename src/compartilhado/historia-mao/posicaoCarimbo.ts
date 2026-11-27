@@ -99,7 +99,9 @@ export function usePosicaoCarimbo(
         w: qrElemento.offsetWidth,
         h: qrElemento.offsetHeight,
       }
-      const deitado = window.matchMedia('(orientation: landscape)').matches
+      // Cada layout diz o tamanho máximo no CSS (160 empilhado, 170 lado a lado, 150 no card).
+      const ladoMaximo =
+        parseFloat(getComputedStyle(painel).getPropertyValue('--carimbo-max')) || 160
       setPosicao(
         posicionarCarimbo(
           {
@@ -109,7 +111,7 @@ export function usePosicaoCarimbo(
             mascote: caixaMascote,
             qr,
           },
-          deitado ? 170 : 160,
+          ladoMaximo,
         ),
       )
     }

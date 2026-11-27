@@ -124,123 +124,133 @@ export default function TelaPrevia({
       aria-label={t('historiaMao.titulo')}
       style={proporcao}
     >
-      <div className="historia-mao-foto">
-        {enderecoFoto ? (
-          <>
-            <img className="historia-mao-foto-fundo" src={enderecoFoto} alt="" draggable={false} />
-            <img
-              className="historia-mao-foto-principal"
-              src={enderecoFoto}
-              alt={t('historiaMao.imagem')}
-              draggable={false}
-            />
-          </>
-        ) : (
-          <i className="fas fa-spinner fa-spin" aria-label={t('historiaMao.montando')} />
-        )}
-      </div>
+      <div className="historia-mao-previa-corpo">
+        <div className="historia-mao-cartao">
+          <div className="historia-mao-foto">
+            {enderecoFoto ? (
+              <>
+                <img
+                  className="historia-mao-foto-fundo"
+                  src={enderecoFoto}
+                  alt=""
+                  draggable={false}
+                />
+                <img
+                  className="historia-mao-foto-principal"
+                  src={enderecoFoto}
+                  alt={t('historiaMao.imagem')}
+                  draggable={false}
+                />
+              </>
+            ) : (
+              <i className="fas fa-spinner fa-spin" aria-label={t('historiaMao.montando')} />
+            )}
+          </div>
 
-      <div
-        ref={painelRef}
-        className={[
-          'historia-mao-painel',
-          dados.carimbo && 'historia-mao-painel--com-carimbo',
-          posicaoCarimbo && 'historia-mao-painel--carimbado',
-        ]
-          .filter(Boolean)
-          .join(' ')}
-      >
-        <div className="historia-mao-painel-texto">
-          {dados.patamar && <p className="historia-mao-patamar">{dados.patamar}</p>}
-          <span className="historia-mao-forma">{dados.forma.toUpperCase()}</span>
-          {resumoVisivel && <p className="historia-mao-resumo">{dados.resumo}</p>}
-          {dados.vencedor && <p className="historia-mao-vencedor">{dados.vencedor}</p>}
-          <p className="historia-mao-pontos">{dados.pontos}</p>
+          <div
+            ref={painelRef}
+            className={[
+              'historia-mao-painel',
+              dados.carimbo && 'historia-mao-painel--com-carimbo',
+              posicaoCarimbo && 'historia-mao-painel--carimbado',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            <div className="historia-mao-painel-texto">
+              {dados.patamar && <p className="historia-mao-patamar">{dados.patamar}</p>}
+              <span className="historia-mao-forma">{dados.forma.toUpperCase()}</span>
+              {resumoVisivel && <p className="historia-mao-resumo">{dados.resumo}</p>}
+              {dados.vencedor && <p className="historia-mao-vencedor">{dados.vencedor}</p>}
+              <p className="historia-mao-pontos">{dados.pontos}</p>
+            </div>
+            {dados.yaku.length > 0 && (
+              <ul className="historia-mao-yaku">
+                {dados.yaku.map((yaku) => (
+                  <li key={yaku.nome}>
+                    <span className="historia-mao-yaku-nome">{yaku.nome}</span>
+                    <span className="historia-mao-yaku-valor">{yaku.valor}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {/* Espaço embaixo dos yaku; o carimbo é posicionado por cima, à esquerda do mascote. */}
+            <div className="historia-mao-carimbo-area" />
+            <MascoteQr url={URL_DO_APP} rotulo={t('historiaMao.convite')} />
+            {dados.carimbo && (
+              <HanCarimbo
+                dados={dados.carimbo}
+                tinta={tintaDoCarimbo(dados.carimbo.nivel, temaAtual().primario)}
+                fundo={FUNDO_DO_PAINEL}
+                posicao={posicaoCarimbo}
+              />
+            )}
+          </div>
         </div>
-        {dados.yaku.length > 0 && (
-          <ul className="historia-mao-yaku">
-            {dados.yaku.map((yaku) => (
-              <li key={yaku.nome}>
-                {yaku.nome} <span>{yaku.valor}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        {/* Espaço embaixo dos yaku; o carimbo é posicionado por cima, à esquerda do mascote. */}
-        <div className="historia-mao-carimbo-area" />
-        <MascoteQr url={URL_DO_APP} rotulo={t('historiaMao.convite')} />
-        {dados.carimbo && (
-          <HanCarimbo
-            dados={dados.carimbo}
-            tinta={tintaDoCarimbo(dados.carimbo.nivel, temaAtual().primario)}
-            fundo={FUNDO_DO_PAINEL}
-            posicao={posicaoCarimbo}
-          />
-        )}
-      </div>
 
-      <div className="historia-mao-barra-acoes">
-        <button
-          type="button"
-          className="historia-mao-icone"
-          aria-label={t('historiaMao.refazer')}
-          title={t('historiaMao.refazer')}
-          onClick={aoRefazer}
-        >
-          <i className="fas fa-camera" aria-hidden="true" />
-          <span className="historia-mao-rotulo" aria-hidden="true">
-            {t('historiaMao.refazer')}
-          </span>
-        </button>
-        <button
-          type="button"
-          className="historia-mao-icone"
-          aria-label={t('historiaMao.salvar')}
-          title={t('historiaMao.salvar')}
-          onClick={salvar}
-          disabled={!arquivo}
-        >
-          <i className="fas fa-download" aria-hidden="true" />
-          <span className="historia-mao-rotulo" aria-hidden="true">
-            {t('historiaMao.rotuloSalvar')}
-          </span>
-        </button>
-        <button
-          type="button"
-          className="historia-mao-icone historia-mao-descartar"
-          aria-label={t('historiaMao.descartar')}
-          title={t('historiaMao.descartar')}
-          onClick={aoFechar}
-        >
-          <i className="fas fa-trash" aria-hidden="true" />
-          <span className="historia-mao-rotulo" aria-hidden="true">
-            {t('historiaMao.rotuloDescartar')}
-          </span>
-        </button>
-        <div className="historia-mao-compartilhar-envoltorio">
+        <div className="historia-mao-barra-acoes">
           <button
             type="button"
-            className="historia-mao-icone historia-mao-compartilhar"
-            aria-label={t('historiaMao.compartilhar')}
-            title={t('historiaMao.compartilhar')}
-            onClick={compartilhar}
-            disabled={!arquivo}
+            className="historia-mao-icone"
+            aria-label={t('historiaMao.refazer')}
+            title={t('historiaMao.refazer')}
+            onClick={aoRefazer}
           >
-            <i className="fas fa-share-nodes" aria-hidden="true" />
+            <i className="fas fa-camera" aria-hidden="true" />
             <span className="historia-mao-rotulo" aria-hidden="true">
-              {t('historiaMao.compartilhar')}
+              {t('historiaMao.refazer')}
             </span>
           </button>
-          {mostrarDica && <p className="historia-mao-dica-balao">{t('historiaMao.dica')}</p>}
+          <button
+            type="button"
+            className="historia-mao-icone"
+            aria-label={t('historiaMao.salvar')}
+            title={t('historiaMao.salvar')}
+            onClick={salvar}
+            disabled={!arquivo}
+          >
+            <i className="fas fa-download" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.rotuloSalvar')}
+            </span>
+          </button>
+          <button
+            type="button"
+            className="historia-mao-icone historia-mao-descartar"
+            aria-label={t('historiaMao.descartar')}
+            title={t('historiaMao.descartar')}
+            onClick={aoFechar}
+          >
+            <i className="fas fa-trash" aria-hidden="true" />
+            <span className="historia-mao-rotulo" aria-hidden="true">
+              {t('historiaMao.rotuloDescartar')}
+            </span>
+          </button>
+          <div className="historia-mao-compartilhar-envoltorio">
+            <button
+              type="button"
+              className="historia-mao-icone historia-mao-compartilhar"
+              aria-label={t('historiaMao.compartilhar')}
+              title={t('historiaMao.compartilhar')}
+              onClick={compartilhar}
+              disabled={!arquivo}
+            >
+              <i className="fas fa-share-nodes" aria-hidden="true" />
+              <span className="historia-mao-rotulo" aria-hidden="true">
+                {t('historiaMao.compartilhar')}
+              </span>
+            </button>
+            {mostrarDica && <p className="historia-mao-dica-balao">{t('historiaMao.dica')}</p>}
+          </div>
         </div>
-      </div>
 
-      {/* Fora do card: a dica (em pé) e o aviso de imagem salva. */}
-      <div className="historia-mao-rodape">
-        {mostrarDica && <p className="historia-mao-dica">{t('historiaMao.dica')}</p>}
-        <p className="historia-mao-status" aria-live="polite">
-          {aviso}
-        </p>
+        {/* Fora do card: a dica (em pé) e o aviso de imagem salva. */}
+        <div className="historia-mao-rodape">
+          {mostrarDica && <p className="historia-mao-dica">{t('historiaMao.dica')}</p>}
+          <p className="historia-mao-status" aria-live="polite">
+            {aviso}
+          </p>
+        </div>
       </div>
     </div>
   )
