@@ -8,6 +8,8 @@ import '@/dominios/calculadora-mao/interface/modais/resultado/modal-resultado.cs
 import { pedrasDaChamada, type CondicoesMcr, type Flor, type MaoChinesa } from '../logica/montagem'
 import type { FanContado } from '../logica/tipos'
 import { PedrasChamada } from './MaoChinesaAtual'
+import BotaoCompartilharMao from '@/compartilhado/historia-mao/BotaoCompartilharMao'
+import type { DadosHistoria } from '@/compartilhado/historia-mao/comporHistoria'
 import { PedraChinesa, PedraFlor } from './PedraChinesa'
 import type { ResultadoCalculoMcr } from './useCalculadoraMaoChinesa'
 
@@ -147,6 +149,21 @@ export default function ModalResultadoMcr({
     acesa(chave) ? ' destaque-yaku' : acesas ? ' apagada' : ''
   const descricaoDe = (chave: string) => (acesa(chave) ? idDescricao : undefined)
 
+  const dadosDaHistoria = (): DadosHistoria => {
+    return {
+      resumo: t('mcr.resultado.fanTotal', { total: numero(fan.fanTotal) }),
+      yaku: linhas.map((linha) => ({
+        nome:
+          linha.vezes > 1
+            ? `${nomeDe(linha)} ${t('mcr.resultado.vezes', { vezes: numero(linha.vezes) })}`
+            : nomeDe(linha),
+        valor: t('mcr.resultado.fanTotal', { total: numero(linha.valor * linha.vezes) }),
+      })),
+      pontos: numero(pagamento?.ganhadorRecebe ?? fan.fanTotal),
+      forma: t(condicoes.forma === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
+    }
+  }
+
   // O resultado é falado ao abrir só com a Narração ligada, como no Riichi.
   useEffect(() => {
     if (!lerNarracao().ativa) return
@@ -191,6 +208,7 @@ export default function ModalResultadoMcr({
       semBotaoFechar
       acoes={
         <>
+          {!invalida && <BotaoCompartilharMao dados={dadosDaHistoria} />}
           <button
             type="button"
             className="modal-acao"

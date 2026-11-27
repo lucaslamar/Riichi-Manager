@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { useMediaQuery } from '@/compartilhado/interface/hooks/useMediaQuery'
 import ConstrutorMao from '../../montagem-mao/componentes/ConstrutorMao'
 import OpcoesMao from '../componentes/OpcoesMao'
@@ -9,7 +10,8 @@ import type { EstadoCalculadoraMao } from '../../hooks/useCalculadoraMao'
 import type { ContextoCenterpieceMao } from '@/dominios/centerpiece/logica/tipos-integracao'
 
 // Mesma faixa do layout de duas colunas do celular deitado em responsivo.css.
-const MEDIA_CELULAR_DEITADO = '(orientation: landscape) and (max-height: 700px) and (max-width: 1200px)'
+const MEDIA_CELULAR_DEITADO =
+  '(orientation: landscape) and (max-height: 700px) and (max-width: 1200px)'
 
 export function PaginaFinalizacaoMao({
   estado,
@@ -26,6 +28,20 @@ export function PaginaFinalizacaoMao({
   const [maoVisivelNaTela, setMaoVisivelNaTela] = useState(true)
   const celularDeitado = useMediaQuery(MEDIA_CELULAR_DEITADO)
   const [destinoFuriten, setDestinoFuriten] = useState<HTMLDivElement | null>(null)
+  // O resultado troca de coluna quando o celular deita. Ele fica sempre na mesma
+  // caixa (portal) e só a caixa muda de lugar: assim não é desmontado, e o
+  // Resultado aberto e a foto do Compartilhar continuam ao girar a tela.
+  const [caixaResultado] = useState(() => {
+    const caixa = document.createElement('div')
+    caixa.style.display = 'contents'
+    return caixa
+  })
+  const lugarNaMao = useRef<HTMLDivElement>(null)
+  const lugarNasOpcoes = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const lugar = celularDeitado ? lugarNaMao.current : lugarNasOpcoes.current
+    lugar?.appendChild(caixaResultado)
+  }, [celularDeitado, caixaResultado])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -70,21 +86,24 @@ export function PaginaFinalizacaoMao({
           {celularDeitado && (
             <>
               <div ref={setDestinoFuriten} className="secoes-junto-da-mao" />
-              {resultado}
+              <div ref={lugarNaMao} style={{ display: 'contents' }} />
             </>
           )}
         </div>
         <div className="coluna-finalizacao-opcoes">
-          {contextoCenterpiece && <AvisoDadosPartida contexto={contextoCenterpiece} mao={estado.mao} />}
+          {contextoCenterpiece && (
+            <AvisoDadosPartida contexto={contextoCenterpiece} mao={estado.mao} />
+          )}
           <OpcoesMao
             estado={estado}
             embutido
             destinoFuriten={celularDeitado ? destinoFuriten : null}
             contextoCenterpiece={contextoCenterpiece}
           />
-          {!celularDeitado && resultado}
+          {!celularDeitado && <div ref={lugarNasOpcoes} style={{ display: 'contents' }} />}
         </div>
       </div>
+      {createPortal(resultado, caixaResultado)}
     </div>
   )
 }

@@ -3659,5 +3659,36 @@
         "other": "최근 {{count}}테이블"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "손패 공유",
+    "titulo": "손패 공유",
+    "virarCamera": "카메라 전환",
+    "galeria": "갤러리에서 선택",
+    "fotografar": "사진 찍기",
+    "semCamera": "카메라에 접근할 수 없습니다. 갤러리에서 사진을 선택할 수 있습니다.",
+    "convite": "앱 바로가기",
+    "dica": "팁: 인스타그램에서는 링크 스티커도 추가하세요.",
+    "refazer": "다시 찍기",
+    "salvar": "이미지 저장",
+    "compartilhar": "공유",
+    "salva": "이미지를 저장했습니다",
+    "imagem": "공유할 이미지 미리보기",
+    "montando": "이미지를 만드는 중",
+    "falhou": "이미지를 만들 수 없습니다.",
+    "zonaMao": "손패",
+    "zonaBatida": "화료패",
+    "zonaChamadas": "부로",
+    "comoFotografar": "손패 촬영 방법",
+    "dicaDeitadas": "패를 앞면이 위로 오게 테이블에 눕히고 모두 같은 방향으로 맞추세요.",
+    "dicaDeCima": "휴대폰을 테이블과 평행하게 들고 위에서 찍으세요.",
+    "dicaOrdem": "손패, 한 칸 띄우고 부로, 다시 띄우고 맨 끝에 화료패.",
+    "dicaChamadas": "치·퐁·깡은 부른 패를 옆으로 눕히세요. 안깡은 양 끝을 뒤집으세요.",
+    "dicaLuz": "밝고 반사가 없는 곳에서 손패만 화면에 담으세요.",
+    "entendi": "확인",
+    "girar": "휴대폰을 가로로 돌려 주세요",
+    "rotuloSalvar": "저장",
+    "descartar": "사진 버리기",
+    "rotuloDescartar": "버리기"
   }
 }

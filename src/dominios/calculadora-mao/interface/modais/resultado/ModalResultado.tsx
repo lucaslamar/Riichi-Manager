@@ -8,6 +8,10 @@ import {
   type CodigoPedra,
   type Mao,
 } from '../../../logica/mao'
+import BotaoCompartilharMao from '@/compartilhado/historia-mao/BotaoCompartilharMao'
+import type { DadosHistoria } from '@/compartilhado/historia-mao/comporHistoria'
+import { nivelDoCarimbo, sementeDoTexto } from '@/compartilhado/historia-mao/carimbo'
+import { chavePatamar, nomeYakuExibido } from '../../../logica/nomesYaku'
 import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
 import ExibicaoCompleta, {
@@ -59,7 +63,7 @@ export default function ModalResultado({
   aoUsarMao,
   contextoCenterpiece,
 }: PropsModalResultado) {
-  const { t, numero } = useI18n()
+  const { t, numero, idioma } = useI18n()
   const [yakuSelecionado, setYakuSelecionado] = useState<string | null>(null)
   // Recalculado a cada render: as cotas são consumidas na ordem das pedras na tela.
   const destaque = yakuSelecionado ? destaqueDoYaku(yakuSelecionado, mao) : null
@@ -71,6 +75,48 @@ export default function ModalResultado({
   const pedrasFechadas = mao.agariMeld
     ? mao.pedras
     : mao.pedras.filter((_pedra, indice) => indice !== mao.indiceAgari)
+
+  const dadosDaHistoria = (): DadosHistoria => {
+    const patamar = resultado.nome ? chavePatamar(resultado.nome) : null
+    const nivel = nivelDoCarimbo(resultado.nome)
+    const nomesYaku = (resultado.yaku ?? []).map(([nome]: [string]) => nome)
+    return {
+      patamar: patamar ? t(patamar.chave, patamar.parametros) : resultado.nome || undefined,
+      resumo:
+        resultado.yakuman > 0
+          ? t('hanFu.limitYakumanTimes', { count: resultado.yakuman })
+          : t('calculator.hanFuSummary', { han: resultado.han, fu: resultado.fu }),
+      // Valor escrito como na lista de yaku do Resultado.
+      yaku: (resultado.yaku ?? []).map(([nome, valor, ehYakuman]: [string, number, boolean]) => ({
+        nome: nomeYakuExibido(nome, idioma),
+        valor: ehYakuman
+          ? t('calculator.yakumanShort', { count: valor })
+          : valor < 0
+            ? `−${t('calculator.hanCount', { count: -valor })}`
+            : t('calculator.hanCount', { count: valor }),
+      })),
+      pontos: numero(resultado.pontos.total),
+      forma: t(resultado.agari === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
+      vencedor: contextoCenterpiece?.vencedorNome,
+      // A semente vem da própria mão: o desgaste do carimbo é igual na prévia e na imagem.
+      carimbo: nivel && {
+        nivel,
+        han: resultado.han,
+        fu: resultado.fu,
+        yakuman: resultado.yakuman,
+        semente: sementeDoTexto(
+          [
+            resultado.nome,
+            resultado.han,
+            resultado.fu,
+            resultado.pontos.total,
+            resultado.agari,
+            ...nomesYaku,
+          ].join('|'),
+        ),
+      },
+    }
+  }
 
   // O resultado é falado ao abrir só com a Narração ligada.
   useEffect(() => {
@@ -98,6 +144,7 @@ export default function ModalResultado({
       semBotaoFechar
       acoes={
         <>
+          {!alerta && <BotaoCompartilharMao dados={dadosDaHistoria} />}
           {/* Lápis: fecha o resultado e volta para a finalização (como o X ou o deslize). */}
           <button
             type="button"

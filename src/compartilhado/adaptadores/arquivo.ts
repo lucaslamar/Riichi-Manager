@@ -23,11 +23,16 @@ export async function salvarArquivo(
       if (erro instanceof DOMException && erro.name === 'AbortError') return 'cancelado'
     }
   }
+  return baixarArquivo(arquivo)
+}
+
+/** Baixa sem passar pela folha do sistema (ex.: Salvar imagem). */
+export function baixarArquivo(arquivo: File): ResultadoArquivo {
   try {
     const url = URL.createObjectURL(arquivo)
     const link = document.createElement('a')
     link.href = url
-    link.download = nome
+    link.download = arquivo.name
     document.body.appendChild(link)
     link.click()
     link.remove()

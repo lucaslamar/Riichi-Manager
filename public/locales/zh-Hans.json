@@ -3659,5 +3659,36 @@
         "other": "最近{{count}}桌"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "分享手牌",
+    "titulo": "分享手牌",
+    "virarCamera": "切换摄像头",
+    "galeria": "从相册选择",
+    "fotografar": "拍照",
+    "semCamera": "无法使用摄像头。你可以从相册选择照片。",
+    "convite": "打开应用",
+    "dica": "提示：在 Instagram 中也添加链接贴纸。",
+    "refazer": "重拍",
+    "salvar": "保存图片",
+    "compartilhar": "分享",
+    "salva": "图片已保存",
+    "imagem": "要分享的图片预览",
+    "montando": "正在生成图片",
+    "falhou": "无法生成图片。",
+    "zonaMao": "手牌",
+    "zonaBatida": "和牌",
+    "zonaChamadas": "副露",
+    "comoFotografar": "如何拍摄手牌",
+    "dicaDeitadas": "牌平放在桌上，正面朝上，全部朝同一方向。",
+    "dicaDeCima": "手机与桌面平行，从正上方拍摄。",
+    "dicaOrdem": "手牌，空一格，副露，再空一格，最后放和牌。",
+    "dicaChamadas": "吃、碰、杠时把吃碰的那张横放。暗杠两端扣下。",
+    "dicaLuz": "光线充足、没有反光，画面里只有手牌。",
+    "entendi": "知道了",
+    "girar": "请把手机横过来",
+    "rotuloSalvar": "保存",
+    "descartar": "丢弃照片",
+    "rotuloDescartar": "丢弃"
   }
 }

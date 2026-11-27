@@ -1,0 +1,1082 @@
+.historia-mao-tela {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  background: #000;
+  color: #fff;
+  animation: historia-mao-entrar 160ms ease-out;
+}
+
+@keyframes historia-mao-entrar {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .historia-mao-tela {
+    animation: none;
+  }
+}
+
+.historia-mao-topo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.historia-mao-icone {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.historia-mao-camera .historia-mao-topo {
+  position: absolute;
+  top: env(safe-area-inset-top);
+  right: 0;
+  left: 0;
+}
+
+.historia-mao-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.historia-mao-guia {
+  position: absolute;
+  right: 4%;
+  bottom: calc(140px + env(safe-area-inset-bottom));
+  left: 4%;
+  display: flex;
+  height: 18%;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.historia-mao-zona {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6px;
+  border: 2px dashed rgba(255, 255, 255, 0.65);
+  border-radius: 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.historia-mao-zona--mao {
+  flex: 5;
+}
+
+.historia-mao-zona--batida {
+  flex: 1.3;
+  border-color: #f48fc8;
+  color: #f9c3e1;
+}
+
+.historia-mao-zona--chamadas {
+  flex: 2.6;
+}
+
+.historia-mao-ajuda {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.historia-mao-ajuda-folha {
+  width: min(100%, 520px);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 20px 20px calc(16px + env(safe-area-inset-bottom));
+  border-radius: 20px 20px 0 0;
+  background: var(--cor-superficie, #1c1724);
+  color: var(--cor-texto, #fff);
+}
+
+.historia-mao-ajuda-folha h2 {
+  margin: 0 0 12px;
+  font-size: 1.25rem;
+}
+
+.historia-mao-ajuda-desenho {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: 11px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.historia-mao-ajuda-desenho text {
+  stroke: none;
+}
+
+.historia-mao-ajuda-face {
+  fill: #f2efe6;
+  stroke: #9a93a8;
+  stroke-width: 0.8;
+}
+
+.historia-mao-ajuda-verso {
+  fill: #d98b2b;
+  stroke: #9a93a8;
+  stroke-width: 0.8;
+}
+
+.historia-mao-ajuda-destaque {
+  color: #e06ab0;
+}
+
+.historia-mao-ajuda-folha ol {
+  margin: 0 0 16px;
+  padding-left: 1.25em;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.historia-mao-ajuda-folha li + li {
+  margin-top: 6px;
+}
+
+.historia-mao-ajuda-folha .btn-primario {
+  width: 100%;
+}
+
+.historia-mao-aviso {
+  margin: auto 24px;
+  text-align: center;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+}
+
+.historia-mao-base {
+  position: absolute;
+  right: 0;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.historia-mao-galeria {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.historia-mao-obturador {
+  width: 72px;
+  height: 72px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0 0 4px #000;
+  cursor: pointer;
+}
+
+.historia-mao-tela :focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+.historia-mao-dica,
+.historia-mao-status {
+  margin: 6px 16px 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.historia-mao-status:empty {
+  display: none;
+}
+
+/* A mão é uma fila: a foto sai melhor com o celular deitado. Em pé, a câmera pede para girar. */
+.historia-mao-girar {
+  position: absolute;
+  top: 42%;
+  right: 16px;
+  left: 16px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  text-align: center;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.historia-mao-girar i {
+  font-size: 2.5rem;
+  animation: historia-mao-girar 1.6s ease-in-out infinite;
+}
+
+@keyframes historia-mao-girar {
+  0%,
+  30% {
+    transform: rotate(0deg);
+  }
+  60%,
+  100% {
+    transform: rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .historia-mao-girar i {
+    animation: none;
+    transform: rotate(90deg);
+  }
+}
+
+@media (orientation: portrait) {
+  .historia-mao-girar {
+    display: flex;
+  }
+}
+
+@media (orientation: landscape) {
+  .historia-mao-guia {
+    top: 18%;
+    bottom: calc(100px + env(safe-area-inset-bottom));
+    height: auto;
+  }
+
+  .historia-mao-base {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/*
+ * Prévia montada na tela (brief "a foto é a estrela", 26/11/2026). A foto
+ * aparece inteira, e nada fica por cima dela. O layout não depende da
+ * orientação, e sim da proporção do espaço da tela (container `tela`):
+ * empilhado até 0,8, card dividido entre 0,8 e 1,6 e lado a lado acima de 1,6.
+ * A imagem exportada é montada à parte.
+ */
+.historia-mao-previa {
+  height: 100dvh;
+  background: #141019;
+  overflow: hidden;
+  container: tela / size;
+}
+
+.historia-mao-previa-corpo {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+/* O card só existe no layout dividido; nos outros, foto e painel são do corpo. */
+.historia-mao-cartao {
+  display: contents;
+}
+
+.historia-mao-foto {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+  font-size: 2rem;
+  user-select: none;
+}
+
+.historia-mao-foto-fundo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(24px) brightness(0.45);
+  transform: scale(1.1);
+}
+
+.historia-mao-foto-principal {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/*
+ * O topo do resultado (patamar até os pontos) na largura toda; embaixo, os yaku
+ * à esquerda e o mascote no canto direito. O carimbo é posicionado por cima,
+ * à esquerda do mascote (`posicaoCarimbo.ts`).
+ */
+.historia-mao-painel {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-areas:
+    'texto texto'
+    'yaku mascote'
+    'carimbo mascote';
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 1fr;
+  gap: 8px 4px;
+  padding: 16px 0 8px 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #141019;
+}
+
+.historia-mao-painel-texto {
+  display: flex;
+  grid-area: texto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding-right: 16px;
+  text-align: left;
+}
+
+/* Forma, resumo e vencedor numa linha só, entre o patamar e os pontos. */
+.historia-mao-patamar,
+.historia-mao-pontos {
+  flex-basis: 100%;
+}
+
+.historia-mao-painel-texto p {
+  margin: 0;
+}
+
+.historia-mao-patamar {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.historia-mao-forma {
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: var(--cor-primario-suave, #2a2438);
+  color: var(--primario, #b39ddb);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.historia-mao-resumo,
+.historia-mao-vencedor {
+  font-size: 0.9375rem;
+}
+
+.historia-mao-pontos {
+  color: var(--primario, #b39ddb);
+  font-size: clamp(36px, 7dvh, 64px);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+/* Todos os yaku, em chips que quebram linha. */
+/* Yaku em cartões, um por linha, como no Resultado: o nome à esquerda e o valor à direita. */
+.historia-mao-yaku {
+  display: grid;
+  min-width: 0;
+  grid-area: yaku;
+  align-content: start;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.historia-mao-yaku li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--cor-primario-suave, #2a2438);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.historia-mao-yaku-nome {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.historia-mao-yaku .historia-mao-yaku-valor {
+  flex: none;
+  color: var(--primario, #b39ddb);
+  font-weight: 900;
+}
+
+/* Espaço embaixo dos yaku (em pé, reservado quando a mão tem carimbo). */
+.historia-mao-carimbo-area {
+  min-height: 0;
+  grid-area: carimbo;
+}
+
+/*
+ * Carimbo de borracha batido por cima do papel: pode invadir os yaku, então
+ * fica a 85% e em tela, para o texto continuar legível por baixo. Não recebe
+ * toques. Posição e tamanho vêm do `usePosicaoCarimbo`.
+ */
+.historia-mao-carimbo {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: historia-mao-carimbar 280ms ease-out 550ms backwards;
+}
+
+/* Carimbada: entra 200ms depois do mascote, bate e o card treme de leve. */
+@keyframes historia-mao-carimbar {
+  0% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  70% {
+    opacity: 0.85;
+    transform: scale(0.94);
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+}
+
+.historia-mao-painel--carimbado {
+  animation: historia-mao-tremer 120ms linear 750ms;
+}
+
+@keyframes historia-mao-tremer {
+  25% {
+    transform: translate(2px, -1px);
+  }
+  50% {
+    transform: translate(-2px, 1px);
+  }
+  75% {
+    transform: translate(1px, 2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .historia-mao-carimbo,
+  .historia-mao-painel--carimbado {
+    animation: none;
+  }
+}
+
+/* Fora do card: a dica (só nas primeiras vezes) e o aviso de imagem salva. */
+.historia-mao-rodape .historia-mao-dica,
+.historia-mao-rodape .historia-mao-status {
+  margin: 0 16px 6px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.historia-mao-dica-balao {
+  display: none;
+}
+
+/* Mascote com o QR na placa: caixa 4:5, a arte em tudo e o QR nas medidas da prancheta. */
+.historia-mao-mascote {
+  position: relative;
+  flex: none;
+  aspect-ratio: 4 / 5;
+}
+
+.historia-mao-mascote img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.historia-mao-mascote-qr {
+  position: absolute;
+}
+
+.historia-mao-mascote-qr svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Inclinado, entrando pela borda direita (passa 10% dela), como numa pose de
+ * vitória. A margem embaixo guarda a ponta que a inclinação desce.
+ */
+.historia-mao-painel .historia-mao-mascote {
+  grid-area: mascote;
+  align-self: end;
+  width: var(--largura-mascote);
+  margin-bottom: calc(var(--largura-mascote) * 0.1);
+  transform: translateX(10%) rotate(-5deg);
+  transform-origin: bottom right;
+  animation: historia-mao-mascote-entrar 350ms ease-out;
+}
+
+@keyframes historia-mao-mascote-entrar {
+  0% {
+    transform: translateX(calc(10% + 40px)) rotate(-5deg) scale(0.9);
+  }
+  70% {
+    transform: translateX(10%) rotate(-5deg) scale(1.05);
+  }
+  100% {
+    transform: translateX(10%) rotate(-5deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .historia-mao-painel .historia-mao-mascote {
+    animation: none;
+  }
+}
+
+.historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
+  background: transparent;
+}
+
+.historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone:disabled {
+  opacity: 0.4;
+}
+
+/* Lixeira: descarta a foto e volta ao Resultado. Vermelha, como a do Resultado. */
+.historia-mao-previa .historia-mao-barra-acoes .historia-mao-descartar {
+  color: var(--cor-perigo, #ef5350);
+}
+
+/* A ação principal, em lilás. */
+.historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
+  background: var(--primario, #b39ddb);
+  color: #141019;
+}
+
+.historia-mao-rotulo {
+  display: none;
+}
+
+/*
+ * Empilhado (proporção até 0,8: celulares e iPad em pé): foto em cima (até 45%
+ * da altura, ou a altura natural se for deitada), resultado e a barra, numa
+ * coluna de no máximo 560px. Faltando espaço, encolhe primeiro a foto, depois o
+ * mascote (pela altura) e por fim os pontos.
+ */
+@container tela (aspect-ratio <= 4 / 5) {
+  .historia-mao-previa-corpo {
+    --largura-util: min(100cqw, 560px);
+    display: flex;
+    max-width: 560px;
+    margin: 0 auto;
+    flex-direction: column;
+  }
+
+  .historia-mao-foto {
+    height: min(45cqh, calc(var(--largura-util) / var(--razao-foto, 0.75)));
+    min-height: 20cqh;
+    flex: 0 1000 auto;
+  }
+
+  .historia-mao-painel {
+    --carimbo-max: 160px;
+    flex: 1 1 auto;
+  }
+
+  .historia-mao-painel .historia-mao-mascote {
+    --largura-mascote: min(calc(var(--largura-util) * 0.38), 22cqh, 160px);
+  }
+
+  .historia-mao-pontos {
+    font-size: clamp(36px, 7cqh, 64px);
+  }
+
+  /*
+   * A mão com carimbo reserva 76px embaixo dos yaku: a foto cede essa altura e
+   * o carimbo cabe invadindo a lista em até 35%.
+   */
+  .historia-mao-painel--com-carimbo .historia-mao-carimbo-area {
+    min-height: 76px;
+  }
+
+  .historia-mao-rodape {
+    flex: none;
+    margin-bottom: env(safe-area-inset-bottom);
+  }
+
+  .historia-mao-compartilhar-envoltorio {
+    display: contents;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes {
+    display: grid;
+    flex: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin: 0 12px 8px;
+    padding: 8px;
+    border-radius: 20px;
+    background: #1f1a28;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
+    width: auto;
+    height: auto;
+    min-height: 52px;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 2px;
+    border-radius: 12px;
+  }
+
+  .historia-mao-previa .historia-mao-rotulo {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
+    grid-column: 1 / -1;
+    min-height: 48px;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .historia-mao-previa .historia-mao-compartilhar .historia-mao-rotulo {
+    font-size: 0.9375rem;
+  }
+}
+
+/*
+ * Lado a lado (proporção acima de 1,6: celular deitado): foto com a proporção
+ * real (até 60% da área útil), painel com o resto (no mínimo 40%) e o trilho
+ * de ícones colado à direita.
+ */
+@container tela (aspect-ratio > 8 / 5) {
+  .historia-mao-previa-corpo {
+    --trilho: calc(68px + env(safe-area-inset-right));
+    display: grid;
+    height: 100%;
+    grid-template-columns:
+      min(
+        calc(100cqh * var(--razao-foto, 1.33)),
+        calc((100cqw - var(--trilho)) * 0.6),
+        calc(100cqw - var(--trilho) - 400px)
+      )
+      minmax(0, 1fr) var(--trilho);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  /*
+   * O desfoque não pode "acender" nos cantos (uma pedra laranja no canto da
+   * foto vazava um brilho): fundo mais escuro e menos saturado, e um degradê
+   * escuro nas bordas da coluna, por baixo da foto.
+   */
+  .historia-mao-foto {
+    margin-left: env(safe-area-inset-left);
+    overflow: hidden;
+  }
+
+  .historia-mao-foto-fundo {
+    filter: blur(24px) brightness(0.3) saturate(0.6);
+  }
+
+  .historia-mao-foto::after {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, #141019, transparent 18%, transparent 82%, #141019),
+      linear-gradient(to bottom, #141019, transparent 18%, transparent 82%, #141019);
+    content: '';
+    pointer-events: none;
+  }
+
+  .historia-mao-foto-principal {
+    z-index: 1;
+  }
+
+  .historia-mao-painel {
+    --carimbo-max: 170px;
+    row-gap: 6px;
+    padding-top: 12px;
+    padding-left: 20px;
+  }
+
+  .historia-mao-patamar {
+    font-size: clamp(1.125rem, 5cqh, 1.5rem);
+  }
+
+  .historia-mao-pontos {
+    font-size: clamp(32px, 11cqh, 64px);
+  }
+
+  /* Sobra pouca altura: cartões mais baixos, com o mesmo visual. */
+  .historia-mao-yaku {
+    gap: 3px;
+  }
+
+  .historia-mao-yaku li {
+    padding: 3px 10px;
+    font-size: 0.75rem;
+  }
+
+  .historia-mao-painel .historia-mao-mascote {
+    --largura-mascote: calc(45cqh * 0.8);
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px max(8px, env(safe-area-inset-right)) 8px 8px;
+    background: #1f1a28;
+  }
+
+  /* O Compartilhar é o botão redondo de destaque, no fim do trilho, 16px abaixo dos outros. */
+  .historia-mao-compartilhar-envoltorio {
+    position: relative;
+    margin-top: 10px;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
+    width: 52px;
+    height: 52px;
+    font-size: 1.25rem;
+  }
+
+  /* A dica vira um balão ao lado do Compartilhar e some sozinha depois de alguns segundos. */
+  .historia-mao-dica-balao {
+    position: absolute;
+    top: 50%;
+    right: calc(100% + 12px);
+    z-index: 2;
+    display: block;
+    width: max-content;
+    max-width: 220px;
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: #2a2438;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.75rem;
+    line-height: 1.35;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+    transform: translateY(-50%);
+    animation: historia-mao-balao 6s ease-out 900ms both;
+  }
+
+  /* O aviso de imagem salva aparece por cima da base do painel. */
+  .historia-mao-rodape {
+    position: absolute;
+    right: calc(var(--trilho) + 8px);
+    bottom: 8px;
+    z-index: 2;
+  }
+
+  .historia-mao-rodape .historia-mao-dica {
+    display: none;
+  }
+
+  .historia-mao-rodape .historia-mao-status {
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #2a2438;
+  }
+}
+
+/*
+ * Empilhado numa tela mais larga que a coluna (iPad em pé): a coluna não encosta
+ * na borda da tela, então o mascote não passa dela, só fica inclinado.
+ */
+@container tela (aspect-ratio <= 4 / 5) and (width > 560px) {
+  .historia-mao-painel .historia-mao-mascote {
+    transform: rotate(-5deg);
+    animation-name: historia-mao-mascote-entrar-card;
+  }
+}
+
+/* Telas baixas lado a lado: os cartões encolhem antes dos pontos. */
+@container tela (aspect-ratio > 8 / 5) and (height <= 360px) {
+  .historia-mao-painel {
+    gap: 4px;
+  }
+
+  .historia-mao-yaku li {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+/*
+ * Card dividido (proporção entre 0,8 e 1,6: iPad deitado, tablets e janelas de
+ * desktop). O card fica no meio da tela e abraça a foto: a coluna da foto tem
+ * a proporção real dela (até 88% da altura) e o card tem a altura da foto, no
+ * mínimo 480px. Se o resultado pedir mais (o mascote tem prioridade), o card
+ * cresce até o espaço da tela e a foto fica centralizada. Sem faixas pretas nem
+ * desfoque. As ações saem do trilho e viram uma cápsula de vidro embaixo do card.
+ */
+@container tela (aspect-ratio > 4 / 5) and (aspect-ratio <= 8 / 5) {
+  .historia-mao-previa {
+    background: #0b0910;
+  }
+
+  .historia-mao-previa-corpo {
+    --resultado: clamp(340px, 32cqw, 420px);
+    --largura-max: min(1100px, 100cqw - 48px);
+    --altura-max: min(88cqh, 100cqh - 120px);
+    --altura-foto: min(
+      var(--altura-max),
+      (var(--largura-max) - var(--resultado)) / var(--razao-foto, 1.33)
+    );
+    --coluna-foto: max(var(--altura-foto) * var(--razao-foto, 1.33), var(--resultado) * 2 / 3);
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-block: 12px 20px;
+  }
+
+  /* Sem fundo próprio: o painel tem o dele e a coluna da foto só pinta onde a foto não chega. */
+  .historia-mao-cartao {
+    display: grid;
+    grid-template-columns: var(--coluna-foto) var(--resultado);
+    grid-template-rows: minmax(0, 1fr);
+    min-height: min(var(--altura-max), max(480px, var(--altura-foto)));
+    max-height: calc(100cqh - 84px);
+    overflow: hidden;
+    border-radius: 28px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  }
+
+  .historia-mao-foto-fundo {
+    display: none;
+  }
+
+  /*
+   * A foto no tamanho exibido (não a caixa do contain), para os cantos serem os
+   * dela. Cheia na coluna: os cantos de 28px vêm do card, sem nada atrás. Mais
+   * baixa que o card: cantos de 28px na esquerda da própria foto. Mais estreita
+   * (em pé): os cantos ficam na coluna, que tem o fundo do card.
+   */
+  .historia-mao-foto-principal {
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .historia-mao-foto[data-encaixe='vertical'],
+  .historia-mao-foto[data-encaixe='horizontal'] {
+    background: #141019;
+  }
+
+  .historia-mao-foto[data-encaixe='cheia'] {
+    background: transparent;
+  }
+
+  .historia-mao-foto[data-encaixe='vertical'] .historia-mao-foto-principal {
+    border-radius: 28px 0 0 28px;
+  }
+
+  /* Coluna de resultado: topo, os yaku em linhas na largura toda e, na base, carimbo e mascote. */
+  .historia-mao-painel {
+    --carimbo-max: 150px;
+    --carimbo-sobe: 1;
+    grid-template-areas:
+      'texto texto'
+      'yaku yaku'
+      'carimbo mascote';
+    grid-template-columns: minmax(0, 1fr) 240px;
+    grid-template-rows: auto auto minmax(calc(250px + 12px), 1fr);
+    gap: 16px 8px;
+    padding: 32px;
+    overflow: hidden;
+  }
+
+  .historia-mao-painel-texto {
+    padding-right: 0;
+  }
+
+  .historia-mao-pontos {
+    font-size: clamp(48px, 7cqh, 80px);
+  }
+
+  .historia-mao-yaku li {
+    padding: 7px 14px;
+    font-size: 0.875rem;
+  }
+
+  /* Com 6 ou mais yaku, as linhas ficam mais baixas antes de o card crescer. */
+  .historia-mao-yaku:has(li:nth-child(6)) li {
+    padding: 4px 14px;
+  }
+
+  /*
+   * O mascote tem prioridade: pede 200×250px ao card (QR de 80px, legível por
+   * outra câmera) e cresce até 240×300px com o que sobrar. Nunca é cortado nem
+   * fica menor que o carimbo.
+   */
+  .historia-mao-painel .historia-mao-mascote {
+    width: auto;
+    height: 100%;
+    min-height: 250px;
+    max-height: 300px;
+    contain: size;
+    justify-self: end;
+    margin-bottom: 12px;
+    transform: rotate(-5deg);
+    animation-name: historia-mao-mascote-entrar-card;
+  }
+
+  /* A dica e o aviso ficam embaixo da cápsula, fora do fluxo: não roubam altura do card. */
+  .historia-mao-rodape {
+    position: absolute;
+    right: 0;
+    bottom: max(4px, env(safe-area-inset-bottom));
+    left: 0;
+    text-align: center;
+  }
+
+  /* Cápsula de vidro, centralizada 16px abaixo do card: ícones de 22px com rótulo, alvo de 44px. */
+  .historia-mao-previa .historia-mao-barra-acoes {
+    display: flex;
+    flex: none;
+    gap: 4px;
+    padding: 6px 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  }
+
+  .historia-mao-compartilhar-envoltorio {
+    display: contents;
+  }
+
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-icone {
+    width: auto;
+    min-width: 72px;
+    height: auto;
+    min-height: 44px;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 22px;
+  }
+
+  /* O Compartilhar é o único destaque da cápsula: pílula do roxo do app a 18%, em roxo claro. */
+  .historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
+    background: color-mix(in srgb, var(--primario, #b39ddb) 18%, transparent);
+    color: color-mix(in srgb, var(--primario, #b39ddb) 70%, #fff);
+  }
+
+  .historia-mao-previa .historia-mao-rotulo {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+}
+
+/* Telas baixas no card (iPad de 768px de altura): menos respiro antes de o card crescer. */
+@container tela (aspect-ratio > 4 / 5) and (aspect-ratio <= 8 / 5) and (height < 840px) {
+  .historia-mao-painel {
+    grid-template-rows: auto auto minmax(calc(250px + 8px), 1fr);
+    gap: 8px;
+    padding: 16px 24px;
+  }
+
+  .historia-mao-pontos {
+    font-size: 48px;
+  }
+
+  .historia-mao-yaku {
+    gap: 3px;
+  }
+
+  .historia-mao-yaku:has(li:nth-child(6)) li {
+    padding: 3px 14px;
+  }
+
+  .historia-mao-painel .historia-mao-mascote {
+    margin-bottom: 8px;
+  }
+}
+
+@keyframes historia-mao-mascote-entrar-card {
+  0% {
+    transform: translateX(40px) rotate(-5deg) scale(0.9);
+  }
+  70% {
+    transform: rotate(-5deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(-5deg) scale(1);
+  }
+}
+
+@keyframes historia-mao-balao {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

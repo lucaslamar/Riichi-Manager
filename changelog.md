@@ -4,6 +4,8 @@
 
 ### Adicionado
 
+- **Compartilhar a mão**: no Resultado, o ícone de compartilhar abre a câmera para fotografar a mão na mesa (ou escolher da galeria). O app monta uma imagem no formato dos Stories, com a foto inteira, o resultado e o mascote segurando o QR do app, e abre a folha do sistema. Mãos de Mangan para cima ganham um carimbo de borracha com o nome do app, o nível, o han/fu e patinhas de cachorro. No iPad deitado, em tablets e no computador, a prévia vira um card centralizado que abraça a foto, com as ações numa cápsula de vidro. A foto não sai do aparelho.
+
 - **Tobi no Guia de bolso e no Aprender**: o verbete explica que a partida acaba quando alguém fica com pontos negativos, e o Aprender passa a dar o nome da regra.
 - **Aniversário do Cerrado**: yakuman local ativado por padrão, em homenagem à fundação do Cerrado Mahjong Club (10/10/2023). Trincas de 白, 西 e 中 com 11 de um naipe e 223 de outro. Pode ser desativado em Regras de cálculo.
 - **Chiitoitsu com quatro iguais**: regra local nas regras de cálculo, desligada por padrão. Com ela, quatro pedras iguais contam como dois pares no Chiitoitsu.
@@ -76,6 +78,8 @@
 - **All Leste só com ventos**: o app sempre sorteia os ventos, também na classificatória do Eliminatório, e a escolha some das configurações. Torneio que já começou segue como estava.
 
 ### Corrigido
+
+- **Girar o celular com o Resultado aberto**: o Resultado (e a prévia do Compartilhar a mão) fechava ao virar o celular entre em pé e deitado. Agora continua aberto.
 
 - **Restaurar padrão nas Regras de cálculo**: agora também volta os Yakus locais ao padrão (só o Aniversário do Cerrado ligado). Antes eles continuavam ligados.
 
