@@ -648,11 +648,14 @@
     background: #1f1a28;
   }
 
+  /* No trilho, o Compartilhar é só o ícone, em lilás e um pouco maior: sem a bola em volta. */
   .historia-mao-previa .historia-mao-barra-acoes .historia-mao-compartilhar {
     width: 52px;
     height: 52px;
     margin-top: 6px;
-    font-size: 1.25rem;
+    background: transparent;
+    color: var(--primario, #b39ddb);
+    font-size: 1.5rem;
   }
 }
 
