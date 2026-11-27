@@ -9,17 +9,18 @@ import type { QRCode } from 'qrcode'
 import { MASCOTE_AREA_QR } from './mascote'
 import {
   carregarFonteCarimbo,
-  DESENHOS,
-  FONTE_KANJI,
-  tamanhoKanji,
-  TINTA_ESCURA,
-  type NivelCarimbo,
+  enderecoDoSvg,
+  svgDoCarimbo,
+  tintaDoCarimbo,
+  type DadosCarimbo,
 } from './carimbo'
 
 /** Opções com o QR e a arte do mascote já carregados. */
 type OpcoesDesenho = OpcoesHistoria & {
   qr: QRCode['modules']
   mascote: HTMLImageElement | null
+  /** O carimbo já em imagem (o mesmo SVG da prévia). */
+  carimbo: HTMLImageElement | null
 }
 
 export const LARGURA = 1080
@@ -40,9 +41,10 @@ const ALTURA_MASCOTE = 500
 const GIRO_MASCOTE = (-5 * Math.PI) / 180
 /** Quanto do mascote passa da borda direita, "entrando" na imagem. */
 const SAIDA_MASCOTE = 0.1
-/** Carimbo hanko à esquerda do mascote, na base dele. */
-const DIAMETRO_CARIMBO = 200
-const GIRO_CARIMBO = (-8 * Math.PI) / 180
+/** Carimbo à esquerda do mascote, com o centro um pouco acima da base dele. */
+const DIAMETRO_CARIMBO = 300
+/** Quanto do carimbo fica abaixo do resultado; o resto pode invadir a base dele (os yaku). */
+const RESERVA_CARIMBO = 0.7
 
 export interface YakuHistoria {
   nome: string
@@ -61,8 +63,8 @@ export interface DadosHistoria {
   /** "Ron" ou "Tsumo". */
   forma: string
   vencedor?: string
-  /** Carimbo hanko, só do Mangan para cima (no MCR não há). */
-  nivel?: NivelCarimbo
+  /** Carimbo de borracha, só do Mangan para cima (no MCR não há). */
+  carimbo?: DadosCarimbo
 }
 
 export interface TemaHistoria {
@@ -94,13 +96,13 @@ export async function comporHistoria(
   const contexto = tela.getContext('2d')
   if (!contexto) throw new Error('Canvas indisponível')
 
-  const [{ create }, mascote] = await Promise.all([
+  const [{ create }, mascote, carimbo] = await Promise.all([
     import('qrcode'),
     carregarImagem(opcoes.mascoteSrc),
-    dados.nivel ? carregarFonteCarimbo() : undefined,
+    imagemDoCarimbo(dados.carimbo, opcoes.tema),
   ])
   const qr = create(opcoes.url, { errorCorrectionLevel: 'M' }).modules
-  desenharHistoria(contexto, foto, dados, { ...opcoes, qr, mascote })
+  desenharHistoria(contexto, foto, dados, { ...opcoes, qr, mascote, carimbo })
 
   return new Promise((resolver, rejeitar) =>
     tela.toBlob(
@@ -134,8 +136,8 @@ function desenharHistoria(
   const larguraMascoteVisivel = LARGURA_MASCOTE * (1 - SAIDA_MASCOTE)
   const larguraResultado = LARGURA - SAFE_SIDE - ESPACO - larguraMascoteVisivel
   const alturaResultado = alturaDoResultado(contexto, dados, larguraResultado, 1)
-  // O carimbo fica embaixo do resultado, com o espaço dele reservado: nunca cobre nada.
-  const reservaCarimbo = dados.nivel ? DIAMETRO_CARIMBO + ESPACO : 0
+  // A maior parte do carimbo fica embaixo do resultado; a ponta de cima pode invadir os yaku.
+  const reservaCarimbo = opcoes.carimbo ? DIAMETRO_CARIMBO * RESERVA_CARIMBO : 0
   // A faixa de baixo tem a altura do que for maior: o resultado (com o carimbo) ou o mascote.
   const alturaFaixa = Math.max(alturaResultado + reservaCarimbo, ALTURA_MASCOTE * 0.92)
   const topoFaixa = LIMITE_BAIXO - alturaFaixa
@@ -153,67 +155,35 @@ function desenharHistoria(
     larguraResultado,
     LIMITE_BAIXO - reservaCarimbo,
   )
-  if (dados.nivel) {
+  if (opcoes.carimbo) {
     const raio = DIAMETRO_CARIMBO / 2
-    const xCarimbo = LARGURA - larguraMascoteVisivel - ESPACO - raio
-    desenharCarimbo(contexto, opcoes.tema, dados.nivel, xCarimbo, LIMITE_BAIXO - raio - 8)
+    contexto.save()
+    contexto.translate(LARGURA - larguraMascoteVisivel - raio, LIMITE_BAIXO - raio - 4)
+    // Como na prévia: tinta a 85% em tela, para os yaku continuarem legíveis por baixo.
+    contexto.globalAlpha = 0.85
+    contexto.globalCompositeOperation = 'screen'
+    contexto.drawImage(opcoes.carimbo, -raio, -raio, DIAMETRO_CARIMBO, DIAMETRO_CARIMBO)
+    contexto.restore()
   }
   // O QR (56% a 88% da altura da arte) termina dentro da área segura.
   const yMascote = LIMITE_BAIXO - ALTURA_MASCOTE * 0.92
   desenharMascote(contexto, opcoes, LARGURA - larguraMascoteVisivel, yMascote)
 }
 
-/**
- * O carimbo hanko nas medidas de um selo de 100 (as mesmas do `HanCarimbo`),
- * ampliado para `DIAMETRO_CARIMBO` e inclinado em -8°. Sem a textura de tinta,
- * que o canvas não tem.
- */
-function desenharCarimbo(
-  contexto: CanvasRenderingContext2D,
+/** O carimbo em imagem, no dobro do tamanho em que é desenhado. */
+async function imagemDoCarimbo(
+  dados: DadosCarimbo | undefined,
   tema: TemaHistoria,
-  nivel: NivelCarimbo,
-  xCentro: number,
-  yCentro: number,
-) {
-  const desenho = DESENHOS[nivel]
-  const tinta = desenho.preenchido ? TINTA_ESCURA : (desenho.tinta ?? tema.primario)
-  contexto.save()
-  contexto.translate(xCentro, yCentro)
-  contexto.rotate(GIRO_CARIMBO)
-  contexto.scale(DIAMETRO_CARIMBO / 100, DIAMETRO_CARIMBO / 100)
-  contexto.translate(-50, -50)
-  contexto.globalAlpha = 0.9
-  const anel = (raio: number, espessura: number) => {
-    contexto.beginPath()
-    contexto.arc(50, 50, raio, 0, Math.PI * 2)
-    contexto.lineWidth = espessura
-    contexto.strokeStyle = tinta
-    contexto.stroke()
-  }
-  if (desenho.preenchido) {
-    contexto.beginPath()
-    contexto.arc(50, 50, 48, 0, Math.PI * 2)
-    contexto.fillStyle = desenho.tinta ?? tema.primario
-    contexto.fill()
-    anel(44, 2.5)
-    anel(40, 1.2)
-  } else {
-    anel(48 - desenho.anel / 2, desenho.anel)
-    if (desenho.anelDuplo) anel(41, 1.5)
-  }
-  contexto.fillStyle = tinta
-  contexto.textAlign = 'center'
-  contexto.textBaseline = 'middle'
-  const fonte = tamanhoKanji(desenho)
-  const topoKanji = desenho.kanji.length > 1 ? 36 : 46
-  contexto.font = `${desenho.pesoKanji} ${fonte}px ${FONTE_KANJI}`
-  desenho.kanji.forEach((linha, indice) =>
-    contexto.fillText(linha, 50, topoKanji + indice * (fonte + 2)),
-  )
-  contexto.font = `700 ${desenho.romaji.length > 9 ? 6 : 7.5}px ${FONTE}`
-  if ('letterSpacing' in contexto) contexto.letterSpacing = '0.1em'
-  contexto.fillText(desenho.romaji, 50, 73)
-  contexto.restore()
+): Promise<HTMLImageElement | null> {
+  if (!dados) return null
+  const fonteDados = await carregarFonteCarimbo()
+  const svg = svgDoCarimbo(dados, {
+    tinta: tintaDoCarimbo(dados.nivel, tema.primario),
+    fundo: tema.superficie,
+    fonteDados,
+    lado: DIAMETRO_CARIMBO * 2,
+  })
+  return carregarImagem(enderecoDoSvg(svg))
 }
 
 /** A foto inteira (sem cortar) no espaço, com ela mesma desfocada e escurecida atrás. */

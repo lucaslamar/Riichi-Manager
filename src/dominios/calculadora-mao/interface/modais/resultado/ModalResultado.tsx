@@ -10,7 +10,7 @@ import {
 } from '../../../logica/mao'
 import BotaoCompartilharMao from '@/compartilhado/historia-mao/BotaoCompartilharMao'
 import type { DadosHistoria } from '@/compartilhado/historia-mao/comporHistoria'
-import { nivelDoCarimbo } from '@/compartilhado/historia-mao/carimbo'
+import { nivelDoCarimbo, sementeDoTexto } from '@/compartilhado/historia-mao/carimbo'
 import { chavePatamar, nomeYakuExibido } from '../../../logica/nomesYaku'
 import { ESTILO_MELD, HONRAS, NAIPES } from '../../constantes'
 import { PedraSvg, PedrasMeld } from '../../compartilhado/componentes/PedraSvg'
@@ -78,6 +78,8 @@ export default function ModalResultado({
 
   const dadosDaHistoria = (): DadosHistoria => {
     const patamar = resultado.nome ? chavePatamar(resultado.nome) : null
+    const nivel = nivelDoCarimbo(resultado.nome)
+    const nomesYaku = (resultado.yaku ?? []).map(([nome]: [string]) => nome)
     return {
       patamar: patamar ? t(patamar.chave, patamar.parametros) : resultado.nome || undefined,
       resumo:
@@ -96,7 +98,23 @@ export default function ModalResultado({
       pontos: numero(resultado.pontos.total),
       forma: t(resultado.agari === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
       vencedor: contextoCenterpiece?.vencedorNome,
-      nivel: nivelDoCarimbo(resultado.nome),
+      // A semente vem da própria mão: o desgaste do carimbo é igual na prévia e na imagem.
+      carimbo: nivel && {
+        nivel,
+        han: resultado.han,
+        fu: resultado.fu,
+        yakuman: resultado.yakuman,
+        semente: sementeDoTexto(
+          [
+            resultado.nome,
+            resultado.han,
+            resultado.fu,
+            resultado.pontos.total,
+            resultado.agari,
+            ...nomesYaku,
+          ].join('|'),
+        ),
+      },
     }
   }
   // O resultado é falado ao abrir só com a Narração ligada.

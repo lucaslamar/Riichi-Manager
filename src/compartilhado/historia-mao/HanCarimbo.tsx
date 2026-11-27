@@ -1,98 +1,56 @@
-import { useEffect, useId } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import {
   carregarFonteCarimbo,
-  DESENHOS,
-  FONTE_KANJI,
-  tamanhoKanji,
-  TINTA_ESCURA,
-  type NivelCarimbo,
+  enderecoDoSvg,
+  rotuloDoCarimbo,
+  svgDoCarimbo,
+  type DadosCarimbo,
 } from './carimbo'
 
 /**
- * Selo hanko das mãos grandes, como um carimbo de tinta: kanji no meio, romaji
- * embaixo e a borda levemente irregular. Sem nível (abaixo de Mangan), não
- * renderiza nada. O tamanho e a inclinação vêm do CSS.
+ * Carimbo de borracha da mão grande, como imagem (o mesmo SVG da imagem
+ * exportada). A posição e o tamanho vêm de fora (`posicao`); sem posição, não
+ * aparece. Não recebe toques.
  */
-export default function HanCarimbo({ nivel }: { nivel?: NivelCarimbo }) {
-  const filtro = `tinta-carimbo${useId().replace(/[^a-zA-Z0-9]/g, '')}`
+export default function HanCarimbo({
+  dados,
+  tinta,
+  fundo,
+  posicao,
+}: {
+  dados: DadosCarimbo
+  tinta: string
+  fundo: string
+  posicao: { x: number; y: number; lado: number } | null
+}) {
+  const [endereco, setEndereco] = useState<string | null>(null)
 
   useEffect(() => {
-    if (nivel) void carregarFonteCarimbo()
-  }, [nivel])
+    let ativo = true
+    void carregarFonteCarimbo().then((fonteDados) => {
+      if (ativo)
+        setEndereco(enderecoDoSvg(svgDoCarimbo(dados, { tinta, fundo, fonteDados, lado: 200 })))
+    })
+    return () => {
+      ativo = false
+    }
+  }, [dados, tinta, fundo])
 
-  if (!nivel) return null
-  const desenho = DESENHOS[nivel]
-  const tinta = desenho.preenchido ? TINTA_ESCURA : 'currentColor'
-  const fonte = tamanhoKanji(desenho)
-  const linhas = desenho.kanji.length
-  const topoKanji = linhas > 1 ? 36 : 46
-  const fonteRomaji = desenho.romaji.length > 9 ? 6 : 7.5
-
+  if (!endereco || !posicao) return null
+  const estilo = {
+    left: posicao.x,
+    top: posicao.y,
+    width: posicao.lado,
+    height: posicao.lado,
+  } satisfies CSSProperties
   return (
-    <svg
+    <img
       className="historia-mao-carimbo"
-      viewBox="0 0 100 100"
+      src={endereco}
       role="img"
-      aria-label={desenho.rotulo}
-      style={desenho.tinta && !desenho.preenchido ? { color: desenho.tinta } : undefined}
-    >
-      <defs>
-        <filter id={filtro} x="-5%" y="-5%" width="110%" height="110%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.9"
-            numOctaves="2"
-            seed="7"
-            result="ruido"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="ruido" scale="2.2" />
-        </filter>
-      </defs>
-      <g filter={`url(#${filtro})`} opacity="0.9">
-        {desenho.preenchido ? (
-          <>
-            <circle cx="50" cy="50" r="48" fill={desenho.tinta ?? undefined} />
-            <circle cx="50" cy="50" r="44" fill="none" stroke={tinta} strokeWidth="2.5" />
-            <circle cx="50" cy="50" r="40" fill="none" stroke={tinta} strokeWidth="1.2" />
-          </>
-        ) : (
-          <>
-            <circle
-              cx="50"
-              cy="50"
-              r={48 - desenho.anel / 2}
-              fill="none"
-              stroke={tinta}
-              strokeWidth={desenho.anel}
-            />
-            {desenho.anelDuplo && (
-              <circle cx="50" cy="50" r="41" fill="none" stroke={tinta} strokeWidth="1.5" />
-            )}
-          </>
-        )}
-        <text
-          fill={tinta}
-          textAnchor="middle"
-          dominantBaseline="central"
-          style={{ fontFamily: FONTE_KANJI, fontWeight: desenho.pesoKanji, fontSize: fonte }}
-        >
-          {desenho.kanji.map((linha, indice) => (
-            <tspan key={linha} x="50" y={topoKanji + indice * (fonte + 2)}>
-              {linha}
-            </tspan>
-          ))}
-        </text>
-        <text
-          x="50"
-          y="73"
-          fill={tinta}
-          textAnchor="middle"
-          dominantBaseline="central"
-          style={{ fontSize: fonteRomaji, fontWeight: 700, letterSpacing: '0.1em' }}
-        >
-          {desenho.romaji}
-        </text>
-      </g>
-    </svg>
+      alt={rotuloDoCarimbo(dados)}
+      draggable={false}
+      style={estilo}
+    />
   )
 }

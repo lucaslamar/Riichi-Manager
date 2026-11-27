@@ -330,10 +330,11 @@
 
 /*
  * O topo do resultado (patamar até os pontos) na largura toda; embaixo, os yaku
- * à esquerda e o mascote no canto direito. O carimbo usa o que sobrar embaixo
- * dos yaku, à esquerda do mascote, sem cobrir nada.
+ * à esquerda e o mascote no canto direito. O carimbo é posicionado por cima,
+ * à esquerda do mascote (`posicaoCarimbo.ts`).
  */
 .historia-mao-painel {
+  position: relative;
   display: grid;
   min-width: 0;
   min-height: 0;
@@ -428,60 +429,45 @@
   font-weight: 900;
 }
 
-/*
- * Área do carimbo: só o espaço que sobra (não empurra nada). O selo vai até
- * --carimbo-max e encolhe com a área; abaixo de 72px, some.
- */
+/* Espaço embaixo dos yaku (em pé, reservado quando a mão tem carimbo). */
 .historia-mao-carimbo-area {
-  display: flex;
-  min-width: 0;
   min-height: 0;
   grid-area: carimbo;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 0 8px 8px 0;
-  container-type: size;
 }
 
+/*
+ * Carimbo de borracha batido por cima do papel: pode invadir os yaku, então
+ * fica a 85% e em tela, para o texto continuar legível por baixo. Não recebe
+ * toques. Posição e tamanho vêm do `usePosicaoCarimbo`.
+ */
 .historia-mao-carimbo {
+  position: absolute;
+  z-index: 2;
   display: block;
-  width: min(var(--carimbo-max, 96px), 88cqh, 88cqw);
-  flex: none;
-  aspect-ratio: 1;
-  color: var(--primario, #b39ddb);
-  overflow: visible;
-  transform: rotate(-8deg);
-  animation: historia-mao-carimbar 300ms ease-out 550ms backwards;
-}
-
-.historia-mao-carimbo text {
-  font-family: inherit;
-}
-
-@container (max-height: 82px) or (max-width: 82px) {
-  .historia-mao-carimbo {
-    visibility: hidden;
-  }
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: historia-mao-carimbar 280ms ease-out 550ms backwards;
 }
 
 /* Carimbada: entra 200ms depois do mascote, bate e o card treme de leve. */
 @keyframes historia-mao-carimbar {
   0% {
     opacity: 0;
-    transform: rotate(-8deg) scale(1.6);
+    transform: scale(1.5);
   }
   70% {
-    opacity: 1;
-    transform: rotate(-8deg) scale(0.95);
+    opacity: 0.85;
+    transform: scale(0.94);
   }
   100% {
-    opacity: 1;
-    transform: rotate(-8deg) scale(1);
+    opacity: 0.85;
+    transform: scale(1);
   }
 }
 
 .historia-mao-painel--carimbado {
-  animation: historia-mao-tremer 120ms linear 760ms;
+  animation: historia-mao-tremer 120ms linear 750ms;
 }
 
 @keyframes historia-mao-tremer {
@@ -619,13 +605,12 @@
     --largura-mascote: min(38vw, 22dvh);
   }
 
-  .historia-mao-carimbo {
-    --carimbo-max: 96px;
-  }
-
-  /* Em pé, o carimbo tem pelo menos 72px garantidos: a foto cede essa altura antes de ele sumir. */
-  .historia-mao-painel--carimbado .historia-mao-carimbo-area {
-    min-height: 92px;
+  /*
+   * Em pé, a mão com carimbo reserva 76px embaixo dos yaku: a foto cede essa
+   * altura e o carimbo cabe invadindo a lista em até 35%.
+   */
+  .historia-mao-painel--com-carimbo .historia-mao-carimbo-area {
+    min-height: 76px;
   }
 
   .historia-mao-rodape {
@@ -719,10 +704,6 @@
 
   .historia-mao-foto-principal {
     z-index: 1;
-  }
-
-  .historia-mao-carimbo {
-    --carimbo-max: 110px;
   }
 
   .historia-mao-painel {

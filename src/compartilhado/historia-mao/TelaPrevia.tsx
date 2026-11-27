@@ -1,16 +1,21 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { baixarArquivo, salvarArquivo } from '@/compartilhado/adaptadores/arquivo'
 import { useI18n } from '@/compartilhado/i18n/I18nProvider'
 import { URL_DO_APP } from '@/compartilhado/marca/url-app'
 import { MASCOTE_QR_SRC } from './mascote'
 import MascoteQr from './MascoteQr'
 import HanCarimbo from './HanCarimbo'
+import { tintaDoCarimbo } from './carimbo'
+import { usePosicaoCarimbo } from './posicaoCarimbo'
 import {
   comporHistoria,
   nomeDoArquivo,
   type DadosHistoria,
   type TemaHistoria,
 } from './comporHistoria'
+
+/** Cor do fundo do painel (a mesma do CSS), usada na faixa do carimbo. */
+const FUNDO_DO_PAINEL = '#141019'
 
 function temaAtual(): TemaHistoria {
   const estilo = getComputedStyle(document.body)
@@ -49,6 +54,8 @@ export default function TelaPrevia({
   const [arquivo, setArquivo] = useState<File | null>(null)
   const [aviso, setAviso] = useState('')
   const [enderecoFoto, setEnderecoFoto] = useState<string | null>(null)
+  const painelRef = useRef<HTMLDivElement>(null)
+  const posicaoCarimbo = usePosicaoCarimbo(painelRef, !!dados.carimbo)
 
   // A imagem fica pronta antes do toque: o iOS só abre a folha se o share vier direto do toque.
   useEffect(() => {
@@ -133,7 +140,16 @@ export default function TelaPrevia({
         )}
       </div>
 
-      <div className={`historia-mao-painel${dados.nivel ? ' historia-mao-painel--carimbado' : ''}`}>
+      <div
+        ref={painelRef}
+        className={[
+          'historia-mao-painel',
+          dados.carimbo && 'historia-mao-painel--com-carimbo',
+          posicaoCarimbo && 'historia-mao-painel--carimbado',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
         <div className="historia-mao-painel-texto">
           {dados.patamar && <p className="historia-mao-patamar">{dados.patamar}</p>}
           <span className="historia-mao-forma">{dados.forma.toUpperCase()}</span>
@@ -150,11 +166,17 @@ export default function TelaPrevia({
             ))}
           </ul>
         )}
-        {/* O carimbo usa só o espaço que sobra à esquerda do mascote; sem espaço, some. */}
-        <div className="historia-mao-carimbo-area">
-          <HanCarimbo nivel={dados.nivel} />
-        </div>
+        {/* Espaço embaixo dos yaku; o carimbo é posicionado por cima, à esquerda do mascote. */}
+        <div className="historia-mao-carimbo-area" />
         <MascoteQr url={URL_DO_APP} rotulo={t('historiaMao.convite')} />
+        {dados.carimbo && (
+          <HanCarimbo
+            dados={dados.carimbo}
+            tinta={tintaDoCarimbo(dados.carimbo.nivel, temaAtual().primario)}
+            fundo={FUNDO_DO_PAINEL}
+            posicao={posicaoCarimbo}
+          />
+        )}
       </div>
 
       <div className="historia-mao-barra-acoes">
