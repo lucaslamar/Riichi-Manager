@@ -163,6 +163,7 @@ export default function ModalResultadoMcr({
       forma: t(condicoes.forma === 'tsumo' ? 'calculator.tsumo' : 'calculator.ron'),
     }
   }
+
   // O resultado é falado ao abrir só com a Narração ligada, como no Riichi.
   useEffect(() => {
     if (!lerNarracao().ativa) return

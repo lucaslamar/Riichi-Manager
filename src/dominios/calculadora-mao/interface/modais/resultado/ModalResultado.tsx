@@ -117,6 +117,7 @@ export default function ModalResultado({
       },
     }
   }
+
   // O resultado é falado ao abrir só com a Narração ligada.
   useEffect(() => {
     if (!lerNarracao().ativa) return
