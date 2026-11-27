@@ -3797,5 +3797,36 @@
         "other": "paskutiniai stalai: {{count}}"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "Dalintis ranka",
+    "titulo": "Dalintis ranka",
+    "virarCamera": "Apversti kamerą",
+    "galeria": "Pasirinkti iš galerijos",
+    "fotografar": "Fotografuoti",
+    "semCamera": "Nėra prieigos prie kameros. Galite pasirinkti nuotrauką iš galerijos.",
+    "convite": "Atidarykite programėlę",
+    "dica": "Patarimas: „Instagram“ pridėkite ir nuorodos lipduką.",
+    "refazer": "Fotografuoti iš naujo",
+    "salvar": "Išsaugoti vaizdą",
+    "compartilhar": "Dalintis",
+    "salva": "Vaizdas išsaugotas",
+    "imagem": "Dalinamo vaizdo peržiūra",
+    "montando": "Kuriamas vaizdas",
+    "falhou": "Nepavyko sukurti vaizdo.",
+    "zonaMao": "Ranka",
+    "zonaBatida": "Laimėjimo plytelė",
+    "zonaChamadas": "Iškvietimai",
+    "comoFotografar": "Kaip nufotografuoti ranką",
+    "dicaDeitadas": "Plytelės gulasčios ant stalo, veidu į viršų ir visos pasuktos ta pačia kryptimi.",
+    "dicaDeCima": "Fotografuokite iš viršaus, telefoną laikydami lygiagrečiai stalui.",
+    "dicaOrdem": "Uždara ranka, tarpas, iškvietimai, dar vienas tarpas ir laimėjimo plytelė gale.",
+    "dicaChamadas": "Chi, Pon ir Kan su iškviesta plytele paguldyta šonu. Uždaras Kan su apverstais galais.",
+    "dicaLuz": "Gera šviesa, be atspindžių, ir kadre tik ranka.",
+    "entendi": "Supratau",
+    "girar": "Pasukite telefoną gulsčiai",
+    "rotuloSalvar": "Išsaugoti",
+    "descartar": "Atmesti nuotrauką",
+    "rotuloDescartar": "Atmesti"
   }
 }

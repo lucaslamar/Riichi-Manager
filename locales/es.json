@@ -3724,5 +3724,36 @@
         "other": "en las últimas {{count}} mesas"
       }
     }
+  },
+  "historiaMao": {
+    "botao": "Compartir mano",
+    "titulo": "Compartir mano",
+    "virarCamera": "Girar cámara",
+    "galeria": "Elegir de la galería",
+    "fotografar": "Tomar foto",
+    "semCamera": "Sin acceso a la cámara. Puedes elegir una foto de la galería.",
+    "convite": "Abre la app",
+    "dica": "Consejo: en Instagram, añade también el sticker de Enlace.",
+    "refazer": "Repetir",
+    "salvar": "Guardar imagen",
+    "compartilhar": "Compartir",
+    "salva": "Imagen guardada",
+    "imagem": "Vista previa de la imagen para compartir",
+    "montando": "Creando la imagen",
+    "falhou": "No se pudo crear la imagen.",
+    "zonaMao": "Mano",
+    "zonaBatida": "Ficha ganadora",
+    "zonaChamadas": "Llamadas",
+    "comoFotografar": "Cómo fotografiar la mano",
+    "dicaDeitadas": "Fichas acostadas en la mesa, boca arriba y todas giradas hacia el mismo lado.",
+    "dicaDeCima": "Foto desde arriba, con el móvil paralelo a la mesa.",
+    "dicaOrdem": "Mano cerrada, un espacio, las llamadas, otro espacio y la ficha ganadora al final.",
+    "dicaChamadas": "Chi, Pon y Kan con la ficha llamada de lado. Kan cerrado con los extremos boca abajo.",
+    "dicaLuz": "Buena luz, sin reflejos, y solo la mano en el cuadro.",
+    "entendi": "Entendido",
+    "girar": "Gira el móvil en horizontal",
+    "rotuloSalvar": "Guardar",
+    "descartar": "Descartar foto",
+    "rotuloDescartar": "Descartar"
   }
 }
